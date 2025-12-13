@@ -17,7 +17,7 @@ framework:
     #fragments: true
     php_errors:
         log: true
-    serializer: {enable_annotations: true}
+    serializer: {enable_attributes: true}
     trusted_proxies: '%env(TRUSTED_PROXIES)%'
     trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port']
     # For legacy code (ending in ".php"), also edit public/main/inc/global.inc.php according to the changes you make here

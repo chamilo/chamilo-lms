@@ -188,7 +188,7 @@
                     {% for item in services %}
                         <tr data-item="{{ item.id }}" data-type="service">
                             <td>
-                                {{ item.title }}
+                                {{ item.name }}
                             </td>
                             <td>
                                 {{ item.description }}

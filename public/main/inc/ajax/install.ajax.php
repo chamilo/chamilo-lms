@@ -2,9 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Address;
@@ -15,7 +15,7 @@ use Symfony\Component\Mime\Email;
  */
 require_once __DIR__.'/../../../../vendor/autoload.php';
 
-$request = Request::createFromGlobals();
+$request = Container::getRequest();
 
 $action = $request->query->getString('a');
 

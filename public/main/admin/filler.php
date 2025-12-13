@@ -129,8 +129,8 @@ Display::display_header($nameTools);
                         <span class="font-medium text-gray-90"><?php echo get_lang('Fill users'); ?></span>
                     </div>
                     <span class="rounded-md bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
-          <?php echo get_lang('Run'); ?>
-        </span>
+                    <?php echo get_lang('Proceed'); ?>
+                    </span>
                 </a>
 
                 <a href="filler.php?fill=courses"
@@ -148,8 +148,8 @@ Display::display_header($nameTools);
                         <span class="font-medium text-gray-90"><?php echo get_lang('Fill courses'); ?></span>
                     </div>
                     <span class="rounded-md bg-secondary/10 px-2 py-1 text-xs font-medium text-secondary">
-          <?php echo get_lang('Run'); ?>
-        </span>
+                    <?php echo get_lang('Proceed'); ?>
+                    </span>
                 </a>
             </div>
         </section>

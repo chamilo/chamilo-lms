@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\LtiBundle\Entity\ExternalTool;
-use Symfony\Component\HttpFoundation\Request;
 
 $cidReset = true;
 
@@ -20,7 +20,7 @@ try {
         throw new Exception(get_lang('NotAllowed'));
     }
 
-    $request = Request::createFromGlobals();
+    $request = Container::getRequest();
     /** @var ExternalTool|null $tool */
     $tool = $em->find(ExternalTool::class, $request->query->getInt('id'));
 

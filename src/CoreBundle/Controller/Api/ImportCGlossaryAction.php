@@ -48,12 +48,17 @@ class ImportCGlossaryAction
         }
 
         $data = [];
-        // include first row
+        // include the first row (except if obviously column titles)
         if ('csv' === $fileType) {
             if (($handle = fopen($file->getPathname(), 'r')) !== false) {
-                while (($row = fgetcsv($handle, 0, ';')) !== false) {
+                while (($row = fgetcsv($handle, 0, ',')) !== false) {
                     $term = isset($row[0]) ? trim($row[0]) : '';
                     $definition = isset($row[1]) ? trim($row[1]) : '';
+                    if (('term' === $term || 'term' === substr($term, 3)) && 'definition' === $definition) {
+                        // Ignore the first row if it is the standard first row from glossary's CSV export.
+                        // Include the case where the 3-characters UTF-8 BOM precedes 'term'
+                        continue;
+                    }
                     $data[$term] = $definition;
                 }
                 fclose($handle);
@@ -71,6 +76,10 @@ class ImportCGlossaryAction
                 }
                 $term = isset($rowData[0]) ? utf8_decode(trim($rowData[0])) : '';
                 $definition = isset($rowData[1]) ? utf8_decode(trim($rowData[1])) : '';
+                if ('term' === $term && 'definition' === $definition) {
+                    // Ignore the first row if it is the standard first row from glossary's XLS export
+                    continue;
+                }
                 $data[$term] = $definition;
             }
         } else {

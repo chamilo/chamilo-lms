@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
+use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -26,7 +27,7 @@ if (!$is_allowedToTrack) {
     api_not_allowed(true);
 }
 
-//keep course_code form as it is loaded (global) by the table's get_user_data
+// Keep course_code form as it is loaded (global) by the table's get_user_data.
 $courseCode = $course->getCode();
 $courseId = $course->getId();
 $parameters['cid'] = isset($_GET['cid']) ? (int) $_GET['cid'] : '';
@@ -34,7 +35,7 @@ $parameters['id_session'] = $sessionId;
 $parameters['from'] = isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
 $parameters['user_active'] = isset($_REQUEST['user_active']) && is_numeric($_REQUEST['user_active']) ? (int) $_REQUEST['user_active'] : null;
 
-// PERSON_NAME_DATA_EXPORT is buggy
+// PERSON_NAME_DATA_EXPORT is buggy.
 $sortByFirstName = api_sort_by_first_name();
 $from_myspace = false;
 $from = $_GET['from'] ?? null;
@@ -56,11 +57,11 @@ if ('myspace' === $from) {
     $this_section = 'session_my_space';
 }
 
-// If the user is a HR director (drh)
+// If the user is a HR director (drh).
 if (api_is_drh()) {
-    // Blocking course for drh
+    // Blocking course for drh.
     if (api_drh_can_access_all_session_content()) {
-        // If the drh has been configured to be allowed to see all session content, give him access to the session courses
+        // If the drh has been configured to be allowed to see all session content, give him access to the session courses.
         $coursesFromSession = SessionManager::getAllCoursesFollowedByUser(api_get_user_id(), null);
         $coursesFromSessionCodeList = [];
         if (!empty($coursesFromSession)) {
@@ -81,7 +82,7 @@ if (api_is_drh()) {
         }
     } else {
         // If the drh has *not* been configured to be allowed to see all session content,
-        // then check if he has also been given access to the corresponding courses
+        // then check if he has also been given access to the corresponding courses.
         $coursesFollowedList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
         $coursesFollowedList = array_keys($coursesFollowedList);
         if (!in_array($courseId, $coursesFollowedList)) {
@@ -122,34 +123,32 @@ $visibleIcon = Display::return_icon(
 
 $exportInactiveUsers = api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq().'&'.$additionalParams;
 
-// Scripts for reporting array hide/show columns
+// Scripts for reporting array hide/show columns.
 $js = "<script>
-    // hide column and display the button to unhide it
+    // Hide column and display the button to unhide it.
     function foldup(id) {
-        var show = function () {\$(this).css('outline', '1px solid red')};
-        var hide = function () {\$(this).css('outline', '1px solid gree')};
+        var show = function () { \$(this).css('outline', '1px solid red') };
+        var hide = function () { \$(this).css('outline', '1px solid gree') };
 
-        $('#reporting_table .data_table tr td:nth-child(' + (id + 1) + ')').toggle();
-        $('#reporting_table .data_table tr th:nth-child(' + (id + 1) + ')').toggle();
-        $('div#unhideButtons a:nth-child(' + (id + 1) + ')').toggle();
+        \$('#reporting_table .data_table tr td:nth-child(' + (id + 1) + ')').toggle();
+        \$('#reporting_table .data_table tr th:nth-child(' + (id + 1) + ')').toggle();
+        \$('div#unhideButtons a:nth-child(' + (id + 1) + ')').toggle();
     }
 
-    // add the red cross on top of each column
+    // Add the red cross on top of each column.
     function init_hide() {
-        $('#reporting_table .data_table tr th').each(
+        \$('#reporting_table .data_table tr th').each(
             function(index) {
-                $(this).prepend(
+                \$(this).prepend(
                     '<div style=\"cursor:pointer\" onclick=\"foldup(' + index + ')\">".Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Hide column'))."</div>'
                 );
             }
         );
     }
 
-    // hide some column at startup
-    // be sure that these columns always exists
-    // see headers = array();
-    // tab of header texts
-    $(function() {
+    // Hide some column at startup.
+    // Be sure that these columns always exist (see headers = array()).
+    \$(function() {
         init_hide();
         var columnsToHide = ".$columnsToHide.";
         if (columnsToHide) {
@@ -157,9 +156,9 @@ $js = "<script>
                 foldup(id);
             });
         }
-        $('#download-csv').on('click', function (e) {
+        \$('#download-csv').on('click', function (e) {
             e.preventDefault();
-            location.href = '".$exportInactiveUsers.'&csv=1&since='."'+$('#reminder_form_since').val();
+            location.href = '".$exportInactiveUsers.'&csv=1&since='."'+\$('#reminder_form_since').val();
         });
     })
 </script>";
@@ -167,36 +166,541 @@ $htmlHeadXtra[] = $js;
 
 $htmlHeadXtra[] = <<<CSSJS
 <style>
-  #advanced_search_options{
-    background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:14px;margin:12px 0;
+  /* Toolbar spacing and compact controls */
+  #course_log {
+    margin-top: 8px;
+    margin-bottom: 8px;
   }
-  #advanced_search_options .form-group{
-    display:grid;grid-template-columns:240px 1fr;gap:8px;align-items:center;margin-bottom:10px;
+
+  #course_log .btn,
+  #course_log .form-control,
+  #course_log select {
+    font-size: 13px;
   }
-  #advanced_search_options .form-group>label{font-weight:600;margin:0;}
-  #advanced_search_options .form-control,#advanced_search_options select{max-width:100%;}
-  @media (max-width: 992px){ #advanced_search_options .form-group{grid-template-columns:1fr;} }
-  #advanced_search_options .has-long-list>div:last-child{
-    max-height:260px;overflow:auto;border:1px solid #e5e7eb;border-radius:8px;padding:8px;background:#fff;
+
+  /* Advanced search container */
+  #advanced_search_options {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 8px 0 12px;
   }
-  @media (min-width: 992px){
-    #advanced_search_options .has-long-list>div:last-child{column-count:2;column-gap:16px;}
-    #advanced_search_options .has-long-list .radio, #advanced_search_options .has-long-list .checkbox{break-inside:avoid;}
+
+  #advanced_search_options .form-group {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
   }
-  #free-users{scroll-margin-top:80px;}
+
+  #advanced_search_options .form-group > label {
+    font-weight: 600;
+    margin: 0;
+    font-size: 13px;
+    color: #374151;
+  }
+
+  #advanced_search_options .form-control,
+  #advanced_search_options select {
+    max-width: 100%;
+    font-size: 13px;
+    padding: 4px 6px;
+    height: auto;
+  }
+
+  #advanced_search_options .btn {
+    font-size: 13px;
+    padding: 4px 10px;
+  }
+
+  @media (max-width: 992px) {
+    #advanced_search_options .form-group {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  #advanced_search_options .has-long-list > div:last-child {
+    max-height: 260px;
+    overflow: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 8px;
+    background: #ffffff;
+  }
+
+  @media (min-width: 992px) {
+    #advanced_search_options .has-long-list > div:last-child {
+      column-count: 2;
+      column-gap: 16px;
+    }
+
+    #advanced_search_options .has-long-list .radio,
+    #advanced_search_options .has-long-list .checkbox {
+      break-inside: avoid;
+    }
+  }
+
+  /* Show hidden columns buttons */
+  #unhideButtons {
+    margin: 8px 0 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  /* Main reporting table */
+  #reporting_table {
+    margin-top: 8px;
+  }
+
+  #reporting_table .data_table {
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  #reporting_table .data_table th,
+  #reporting_table .data_table td {
+    padding: 4px 6px;
+    font-size: 13px;
+    vertical-align: middle;
+  }
+
+  #reporting_table .data_table th {
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  #reporting_table .data_table tr:nth-child(even) td {
+    background: #fdfdfd;
+  }
+
+  /* Free users anchor and button */
+  #free-users {
+    scroll-margin-top: 80px;
+  }
+
+  #free-users .btn {
+    font-size: 13px;
+    padding: 4px 10px;
+  }
+
+  /* Generic grey borders for detailed tables */
+  .table.table-bordered > tbody > tr > td,
+  .table.table-bordered > thead > tr > th {
+    border-color: #e5e7eb;
+  }
+   .user-teacher,
+  .user-coachs {
+    list-style: none;
+    padding-left: 0;
+    margin: 4px 0 0;
+  }
+
+  .user-teacher li,
+  .user-coachs li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    padding: 2px 0;
+  }
+  .course-log-nav {
+     display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+  }
+
+  .course-log-nav-link--active .course-log-nav-icon {
+    color: #ddd;
+  }
+  .course-log-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 12px 0 4px;
+  }
+
+  .course-log-meta__column {
+    flex: 1 1 260px;
+    min-width: 260px;
+  }
+
+  .course-log-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #ffffff;
+    padding: 10px 12px;
+  }
+
+  .course-log-card__header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+
+  .course-log-card__icon {
+    font-size: 18px;
+  }
+
+  .course-log-card__title {
+    font-weight: 600;
+    font-size: 14px;
+    color: #111827;
+  }
+
+  .course-log-card__body {
+    font-size: 13px;
+  }
+
+  .course-log-session-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  .course-log-session-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 0;
+    font-size: 13px;
+  }
 </style>
 <script>
-  $(function(){
-    $('#advanced_search_options .form-group').each(function(){
-      var _inputs = $(this).find('input[type=checkbox], input[type=radio]');
-      if (_inputs.length > 6) { $(this).addClass('has-long-list'); }
+  $(function () {
+    // Mark long lists to render them in multiple columns.
+    $('#advanced_search_options .form-group').each(function () {
+      var inputs = $(this).find('input[type=checkbox], input[type=radio]');
+      if (inputs.length > 6) {
+        $(this).addClass('has-long-list');
+      }
+    });
+  });
+</script>
+CSSJS;
+$htmlHeadXtra[] = <<<CSSJS
+<style>
+
+  /* Extra fields form: grid layout and spacing */
+#advanced_search_options #extra_fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px 18px;
+  align-items: flex-start;
+  margin-top: 6px;
+}
+
+/* Each span behaves like a vertical field block */
+#advanced_search_options #extra_fields > span {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Labels inside extra_fields */
+#advanced_search_options #extra_fields label {
+  font-weight: 600;
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 2px;
+}
+
+#advanced_search_options #extra_hobbies {
+  min-height: 80px;
+}
+#advanced_search_options #extra_fields .field-radiobutton {
+  width: 50%;
+  float: left;
+}
+
+/* Inputs and selects full width */
+#advanced_search_options #extra_fields input[type="text"],
+#advanced_search_options #extra_fields select,
+#advanced_search_options #extra_fields .flatpickr-wrapper,
+#advanced_search_options #extra_fields .p-inputtext,
+#advanced_search_options #extra_fields .p-select {
+  width: 100%;
+}
+
+/* Radio groups in a clean vertical list */
+#advanced_search_options #extra_fields .field-radiobutton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+#advanced_search_options #extra_fields .field-radiobutton label {
+  margin: 0;
+}
+
+.tracking-box-title {
+ font-size: 18px;
+ text-align: center;
+}
+
+  /* Main panel: give some breathing room inside */
+  #course-log-main-panel .panel-body {
+    padding: 18px 22px;
+  }
+
+  #course-log-main-panel .card, .card {
+    padding: 8px;
+  }
+
+  .card .field-checkbox, .card .field-radiobutton {
+    justify-content: normal;
+  }
+
+  /* Toolbar spacing and compact controls */
+  #course_log {
+    margin-top: 8px;
+    margin-bottom: 12px;
+  }
+
+  #course_log .btn,
+  #course_log .form-control,
+  #course_log select {
+    font-size: 13px;
+  }
+
+  /* Advanced search container */
+  #advanced_search_options {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin: 12px 0 16px;
+  }
+
+  #advanced_search_options .form-horizontal {
+    margin-bottom: 0;
+  }
+
+  #advanced_search_options .form-group {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 6px 12px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  #advanced_search_options .form-group:last-child {
+    margin-bottom: 0;
+  }
+
+  #advanced_search_options .control-label,
+  #advanced_search_options label.control-label {
+    font-weight: 600;
+    margin: 0;
+    font-size: 13px;
+    color: #374151;
+    padding-top: 4px;
+  }
+
+  #advanced_search_options .form-control,
+  #advanced_search_options select,
+  #advanced_search_options .select2-container {
+    width: 100% !important;
+    max-width: 100%;
+    font-size: 13px;
+    padding: 4px 6px;
+    height: auto;
+  }
+
+  #advanced_search_options .btn {
+    font-size: 13px;
+    padding: 4px 10px;
+  }
+
+  /* Large radio / checkbox lists: scroll and columns */
+  #advanced_search_options .has-long-list > div:last-child,
+  #advanced_search_options .has-long-list .col-sm-9 {
+    max-height: 260px;
+    overflow: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 6px 8px;
+    background: #ffffff;
+  }
+
+  #advanced_search_options .has-long-list .radio,
+  #advanced_search_options .has-long-list .checkbox {
+    margin: 0 0 4px 0;
+  }
+
+  @media (min-width: 992px) {
+    #advanced_search_options .has-long-list > div:last-child,
+    #advanced_search_options .has-long-list .col-sm-9 {
+      column-count: 2;
+      column-gap: 16px;
+    }
+
+    #advanced_search_options .has-long-list .radio,
+    #advanced_search_options .has-long-list .checkbox {
+      break-inside: avoid;
+    }
+  }
+
+  @media (max-width: 991px) {
+    #advanced_search_options .form-group {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Show hidden columns buttons */
+  #unhideButtons {
+    margin: 12px 0 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  /* Main reporting table */
+  #reporting_table {
+    margin-top: 8px;
+  }
+
+  #reporting_table .data_table {
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  #reporting_table .data_table th,
+  #reporting_table .data_table td {
+    padding: 4px 6px;
+    font-size: 13px;
+    vertical-align: middle;
+  }
+
+  #reporting_table .data_table th {
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  #reporting_table .data_table tr:nth-child(even) td {
+    background: #fdfdfd;
+  }
+
+  /* Free users anchor and button */
+  #free-users {
+    scroll-margin-top: 80px;
+  }
+
+  #free-users .btn {
+    font-size: 13px;
+    padding: 4px 10px;
+  }
+
+  /* Generic grey borders for detailed tables */
+  .table.table-bordered > tbody > tr > td,
+  .table.table-bordered > thead > tr > th {
+    border-color: #e5e7eb;
+  }
+
+  /* Trainers / coaches lists inside cards */
+  .user-teacher,
+  .user-coachs {
+    list-style: none;
+    padding-left: 0;
+    margin: 4px 0 0;
+  }
+
+  .user-teacher li,
+  .user-coachs li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    padding: 2px 0;
+  }
+
+  /* Top meta cards (Trainers / Session list) */
+  .course-log-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 16px 0 8px;
+  }
+
+  .course-log-meta__column {
+    flex: 1 1 280px;
+    min-width: 260px;
+  }
+
+  .course-log-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #ffffff;
+    padding: 12px 14px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  }
+
+  .course-log-card__header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .course-log-card__icon {
+    font-size: 18px;
+  }
+
+  .course-log-card__title {
+    font-weight: 600;
+    font-size: 14px;
+    color: #111827;
+  }
+
+  .course-log-card__subsection-title {
+    font-weight: 600;
+    font-size: 13px;
+    margin-top: 8px;
+    margin-bottom: 2px;
+    color: #4b5563;
+  }
+
+  .course-log-card__body {
+    font-size: 13px;
+  }
+
+  .course-log-session-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  .course-log-session-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 0;
+    font-size: 13px;
+  }
+</style>
+<script>
+  $(function () {
+    // Mark long lists to render them in multiple columns.
+    $('#advanced_search_options .form-group').each(function () {
+      var inputs = $(this).find('input[type=checkbox], input[type=radio]');
+      if (inputs.length > 6) {
+        $(this).addClass('has-long-list');
+      }
     });
   });
 </script>
 CSSJS;
 
+
 // Database table definitions.
-//@todo remove this calls
+// @todo remove these calls.
 $TABLETRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLECOURSE = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -204,6 +708,7 @@ $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $TABLEQUIZ = Database::get_course_table(TABLE_QUIZ_TEST);
 
 $userEditionExtraFieldToCheck = 'true' === api_get_setting('workflows.user_edition_extra_field_to_check');
+
 // Breadcrumbs.
 if ('resume_session' === $origin) {
     $interbreadcrumb[] = [
@@ -224,7 +729,8 @@ $view = isset($_REQUEST['view']) ? $_REQUEST['view'] : '';
 $nameTools = get_lang('Reporting');
 
 $tpl = new Template($nameTools);
-// Getting all the students of the course
+
+// Getting all the students of the course.
 if (empty($sessionId)) {
     // Registered students in a course outside session.
     $studentList = CourseManager::get_student_list_from_course_code($courseCode);
@@ -237,6 +743,7 @@ $nbStudents = count($studentList);
 $user_ids = array_keys($studentList);
 $extra_info = [];
 $userProfileInfo = [];
+
 // Getting all the additional information of an additional profile field.
 if (isset($_GET['additional_profile_field'])) {
     $user_array = [];
@@ -246,7 +753,7 @@ if (isset($_GET['additional_profile_field'])) {
 
     $extraField = new ExtraField('user');
     foreach ($_GET['additional_profile_field'] as $fieldId) {
-        // Fetching only the user that are loaded NOT ALL user in the portal.
+        // Fetching only the users that are loaded, not all users in the portal.
         $userProfileInfo[$fieldId] = TrackingCourseLog::getAdditionalProfileInformationOfFieldByUser(
             $fieldId,
             $user_array
@@ -269,7 +776,7 @@ if (!empty($defaultExtraFieldsFromSettings) && isset($defaultExtraFieldsFromSett
         $extraFieldInfo = UserManager::get_extra_field_information_by_name($fieldName);
 
         if (!empty($extraFieldInfo)) {
-            // Fetching only the user that are loaded NOT ALL user in the portal.
+            // Fetching only the users that are loaded, not all users in the portal.
             $defaultUserProfileInfo[$extraFieldInfo['id']] = TrackingCourseLog::getAdditionalProfileInformationOfFieldByUser(
                 $extraFieldInfo['id'],
                 $user_ids
@@ -303,6 +810,7 @@ if ($showNonRegistered) {
 $actionsRight .= '<a
     href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$additionalParams.$users_tracking_per_page.'">
      '.Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')).'</a>';
+
 // Create a search-box.
 $form_search = new FormValidator(
     'search_simple',
@@ -328,17 +836,53 @@ echo Display::toolbarAction(
 $course_name = get_lang('Course').' '.$course->getTitle();
 
 if ($sessionId) {
-    $titleSession = Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Session')).' '.api_get_session_name($sessionId);
-    $titleCourse = Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course')).' '.$course_name;
+    $titleSession = Display::getMdiIcon(
+            ObjectIcon::SESSION,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Session')
+        ).' '.api_get_session_name($sessionId);
+
+    $titleCourse = Display::getMdiIcon(
+            ObjectIcon::COURSE,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Course')
+        ).' '.$course_name;
 } else {
-    $titleSession = Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course')).' '.$course->getTitle();
+    // When there is no session, show only course info
+    $titleSession = Display::getMdiIcon(
+            ObjectIcon::COURSE,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Course')
+        ).' '.$course->getTitle();
+    $titleCourse = '';
+}
+
+$panelIcon = Display::getMdiIcon(
+    ToolIcon::TRACKING,
+    'ch-tool-icon',
+    null,
+    ICON_SIZE_SMALL,
+    get_lang('Reporting')
+);
+
+// Panel title: tracking icon + course (if any) + session
+if ($sessionId) {
+    $panelTitle = $panelIcon.' '.$titleCourse.' &raquo; '.$titleSession;
+} else {
+    $panelTitle = $panelIcon.' '.$titleSession;
 }
 
 $teacherList = CourseManager::getTeacherListFromCourseCodeToString(
     $courseCode,
     ',',
-    true,
-    true
+    true,  // Add link to profile
+    true   // Render as <ul> list
 );
 
 $coaches = null;
@@ -347,59 +891,121 @@ if (!empty($sessionId)) {
         $sessionId,
         $courseId,
         ',',
-        true,
-        true
+        true,  // Add link to profile
+        true   // Render as <ul> list
     );
 }
-$html = '';
-if (!empty($teacherList)) {
-    $html .= Display::page_subheader2(get_lang('Trainers'));
-    $html .= $teacherList;
-}
 
-if (!empty($coaches)) {
-    $html .= Display::page_subheader2(get_lang('Coaches'));
-    $html .= $coaches;
-}
-
+/** @var string[] $sessionLinks */
+$sessionLinks = [];
 $showReporting = ('false' === api_get_setting('session.hide_reporting_session_list'));
+
 if ($showReporting) {
     $sessionList = SessionManager::get_session_by_course($courseId);
+
     if (!empty($sessionList)) {
-        $html .= Display::page_subheader2(get_lang('Session list'));
         $icon = Display::getMdiIcon(
             ObjectIcon::SESSION,
-            'ch-tool-icon',
+            'ch-tool-icon course-log-session-icon',
             null,
             ICON_SIZE_TINY
         );
 
         $urlWebCode = api_get_path(WEB_CODE_PATH);
         $isAdmin = api_is_platform_admin();
-        $table = new HTML_Table(['class' => 'table']);
-        $row = 0;
-        foreach ($sessionList as $session) {
+
+        foreach ($sessionList as $sessionItem) {
             if (!$isAdmin) {
-                // Check session visibility
-                $visibility = api_get_session_visibility($session['id'], $courseId);
-                if (SESSION_INVISIBLE == $visibility) {
+                // Respect session visibility for non-admin users.
+                $visibility = api_get_session_visibility($sessionItem['id'], $courseId);
+                if (SESSION_INVISIBLE === $visibility) {
                     continue;
                 }
-                // Check if is coach
-                $isCoach = api_is_coach($session['id'], $courseId);
+
+                // Only show sessions where user is coach.
+                $isCoach = api_is_coach($sessionItem['id'], $courseId);
                 if (!$isCoach) {
                     continue;
                 }
             }
-            //$url = $urlWebCode.'my_space/course.php?sid='.$session['id'].'&cid='.$courseId;
-            $url = $urlWebCode.'tracking/courseLog.php?cid='.$courseId.'&sid='.$session['id'].'&gid=0';
-            $table->setCellContents($row++, 0, $icon.' '.Display::url($session['title'], $url));
-        }
-        if ($row > 0) {
-            $html .= $table->toHtml();
+
+            $url = $urlWebCode.'tracking/courseLog.php?cid='.$courseId.'&sid='.$sessionItem['id'].'&gid=0';
+
+            $sessionLinks[] =
+                '<li class="course-log-session-item">'.
+                $icon.
+                Display::url(Security::remove_XSS($sessionItem['title']), $url).
+                '</li>';
         }
     }
 }
+
+$html = '';
+
+if (!empty($teacherList) || !empty($coaches) || !empty($sessionLinks)) {
+    $html .= '<div class="course-log-meta">';
+
+    // Column: trainers / coaches
+    if (!empty($teacherList) || !empty($coaches)) {
+        $html .= '<div class="course-log-meta__column">';
+        $html .= '<div class="course-log-card">';
+
+        $html .= '<div class="course-log-card__header">';
+        $html .= Display::getMdiIcon(
+            'account-tie-outline',
+            'ch-tool-icon course-log-card__icon',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Trainers')
+        );
+        $html .= '<span class="course-log-card__title">'.get_lang('Trainers').'</span>';
+        $html .= '</div>';
+
+        $html .= '<div class="course-log-card__body">';
+
+        // Teacher list (returns an UL when orderList = true)
+        if (!empty($teacherList)) {
+            $html .= $teacherList;
+        }
+
+        // Coaches list
+        if (!empty($coaches)) {
+            $html .= '<div class="course-log-card__subsection-title">'.get_lang('Coaches').'</div>';
+            $html .= $coaches;
+        }
+
+        $html .= '</div>'; // .course-log-card__body
+        $html .= '</div>'; // .course-log-card
+        $html .= '</div>'; // .course-log-meta__column
+    }
+
+    // Column: session list
+    if (!empty($sessionLinks)) {
+        $html .= '<div class="course-log-meta__column">';
+        $html .= '<div class="course-log-card">';
+
+        $html .= '<div class="course-log-card__header">';
+        $html .= Display::getMdiIcon(
+            ObjectIcon::SESSION,
+            'ch-tool-icon course-log-card__icon',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Session list')
+        );
+        $html .= '<span class="course-log-card__title">'.get_lang('Session list').'</span>';
+        $html .= '</div>';
+
+        $html .= '<div class="course-log-card__body">';
+        $html .= '<ul class="course-log-session-list">'.implode('', $sessionLinks).'</ul>';
+        $html .= '</div>'; // .course-log-card__body
+
+        $html .= '</div>'; // .course-log-card
+        $html .= '</div>'; // .course-log-meta__column
+    }
+
+    $html .= '</div>'; // .course-log-meta
+}
+
 
 $trackingColumn = $_GET['users_tracking_column'] ?? null;
 $trackingDirection = $_GET['users_tracking_direction'] ?? null;
@@ -414,9 +1020,9 @@ $classes = $class->get_all();
 
 $bestScoreLabel = get_lang('Score').' - '.get_lang('Best attempt');
 
-// Show the charts part only if there are students subscribed to this course/session
+// Show the charts part only if there are students subscribed to this course/session.
 if ($nbStudents > 0 || isset($parameters['user_active'])) {
-    // Classes
+    // Classes.
     $formClass = new FormValidator(
         'classes',
         'get',
@@ -439,7 +1045,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $select->addOptGroup($groupIdList, get_lang('Group'));
     $formClass->addButtonSearch(get_lang('Search'));
 
-    // Extra fields
+    // Extra fields.
     $formExtraField = new FormValidator(
         'extra_fields',
         'get',
@@ -544,8 +1150,10 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
             $averageStudentTestScore = substr($userTracking[7], 0, -1);
             $averageStudentsTestScore .= $averageStudentTestScore;
 
-            $reducedAverage = ('100' === $averageStudentTestScore) ? 9 : floor((float)$averageStudentTestScore / 10);
-            if (isset($scoresDistribution[$reducedAverage])) { $scoresDistribution[$reducedAverage]++; }
+            $reducedAverage = ('100' === $averageStudentTestScore) ? 9 : floor((float) $averageStudentTestScore / 10);
+            if (isset($scoresDistribution[$reducedAverage])) {
+                $scoresDistribution[$reducedAverage]++;
+            }
 
             $scoreStudent = (float) substr($userTracking[5], 0, -1) + (float) substr($userTracking[7], 0, -1);
             [$hours, $minutes, $seconds] = preg_split('/:/', $userTracking[4]);
@@ -586,7 +1194,16 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     }
 }
 
-$html .= Display::page_subheader2(get_lang('Learner list'));
+$html .= '<div style="margin-top: 16px;"></div>';
+$html .= Display::page_subheader2(
+    Display::getMdiIcon(
+        'account-multiple-outline',
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_TINY,
+        get_lang('Learner list')
+    ).' '.get_lang('Learner list')
+);
 
 $bestScoreLabel = get_lang('Score').' - '.get_lang('Only best attempts');
 if ($nbStudents > 0) {
@@ -648,17 +1265,17 @@ if ($nbStudents > 0) {
 
     if ($export_csv) {
         $csv_content = [];
-        //override the SortableTable "per page" limit if CSV
+        // Override the SortableTable "per page" limit if CSV.
         $_GET['users_tracking_per_page'] = 1000000;
     }
 
     if (false === $hideReports) {
         $table = new SortableTableFromArray(
-        $usersTracking,
-        1,
-        20,
-        'users_tracking'
-    );
+            $usersTracking,
+            1,
+            20,
+            'users_tracking'
+        );
         $table->total_number_of_items = $nbStudents;
     } else {
         $conditions['include_invited_users'] = true;
@@ -679,7 +1296,7 @@ if ($nbStudents > 0) {
 
     $headerCounter = 0;
     $headers = [];
-    // tab of header texts
+    // Tab of header texts.
     $table->set_header($headerCounter++, get_lang('Code'), true);
     $headers['official_code'] = get_lang('Code');
     if ($sortByFirstName) {
@@ -814,7 +1431,7 @@ if ($nbStudents > 0) {
     $parameters['cid'] = api_get_course_int_id();
     $parameters['sid'] = $sessionId;
     $table->set_additional_parameters($parameters);
-    // display buttons to un hide hidden columns
+    // Display buttons to unhide hidden columns.
     $html .= '<div id="unhideButtons" class="btn-toolbar">';
     $index = 0;
     $getLangDisplayColumn = get_lang('Show column');
@@ -843,7 +1460,12 @@ if ($nbStudents > 0) {
     }
 }
 
-echo Display::panel($html, $titleSession);
+// Small top margin between charts (tpl) and info panel
+// Small top margin between charts (tpl) and info panel
+echo '<div id="course-log-main-panel" style="margin-top: 16px;">';
+echo Display::panel($html, $panelTitle);
+echo '</div>';
+
 
 $freeAnchor = 'free-users';
 $toggleUrl  = api_get_self().'?'.api_get_cidreq().'&show_non_registered='.($showNonRegistered ? 0 : 1).'#'.$freeAnchor;
@@ -870,9 +1492,14 @@ $qb = Container::getQuizRepository()->findAllByCourse($course, $session, null, 2
 $exercises = $qb->getQuery()->getResult();
 
 $percentVal = static function ($v): float {
-    if ($v === '' || $v === null) return 0.0;
-    if (is_numeric($v)) return (float)$v;
-    return (float) str_replace('%','', trim((string)$v));
+    if ($v === '' || $v === null) {
+        return 0.0;
+    }
+    if (is_numeric($v)) {
+        return (float) $v;
+    }
+
+    return (float) str_replace('%', '', trim((string) $v));
 };
 
 if (!empty($groupList)) {
@@ -912,7 +1539,7 @@ if (!empty($groupList)) {
                         $results = Event::get_best_exercise_results_by_user(
                             $exerciseData->getIid(),
                             $courseId,
-                            0, // no-session en esta consulta
+                            0, // No-session in this query.
                             $u
                         );
                         $best = 0.0;
@@ -920,14 +1547,16 @@ if (!empty($groupList)) {
                             foreach ($results as $r) {
                                 if (!empty($r['max_score'])) {
                                     $sc = $r['score'] / $r['max_score'];
-                                    if ($sc > $best) { $best = $sc; }
+                                    if ($sc > $best) {
+                                        $best = $sc;
+                                    }
                                 }
                             }
                         }
                         $bestSum += $best;
                     }
                 }
-                $groupBestNum = round(($bestSum / max(count($exercises),1)) * 100 / $count, 2);
+                $groupBestNum = round(($bestSum / max(count($exercises), 1)) * 100 / $count, 2);
             }
             $bestStr = $groupBestNum ? ($groupBestNum.' %') : '';
 
@@ -959,7 +1588,8 @@ if (!empty($groupList)) {
 
             $bestNum = 0.0;
             if (!empty($exercises)) {
-                $sumBestFree = 0.0; $countE = 0;
+                $sumBestFree = 0.0;
+                $countE = 0;
                 foreach ($exercises as $exerciseData) {
                     $results = Event::get_best_exercise_results_by_user(
                         $exerciseData->getIid(),
@@ -972,13 +1602,18 @@ if (!empty($groupList)) {
                         foreach ($results as $r) {
                             if (!empty($r['max_score'])) {
                                 $sc = $r['score'] / $r['max_score'];
-                                if ($sc > $best) { $best = $sc; }
+                                if ($sc > $best) {
+                                    $best = $sc;
+                                }
                             }
                         }
                     }
-                    $sumBestFree += $best; $countE++;
+                    $sumBestFree += $best;
+                    $countE++;
                 }
-                if ($countE > 0) { $bestNum = round(($sumBestFree / $countE) * 100, 2); }
+                if ($countE > 0) {
+                    $bestNum = round(($sumBestFree / $countE) * 100, 2);
+                }
             }
             $bestStr = $bestNum ? ($bestNum.' %') : '';
 
@@ -1031,23 +1666,32 @@ if (!empty($groupList)) {
     $bestSum = 0.0;
     if (!empty($exercises)) {
         foreach ($studentIdList as $uid) {
-            $sumE = 0.0; $countE = 0;
+            $sumE = 0.0;
+            $countE = 0;
             foreach ($exercises as $exerciseData) {
                 $results = Event::get_best_exercise_results_by_user(
-                    $exerciseData->getIid(), $courseId, $sessionId, $uid
+                    $exerciseData->getIid(),
+                    $courseId,
+                    $sessionId,
+                    $uid
                 );
                 $best = 0.0;
                 if (!empty($results)) {
                     foreach ($results as $r) {
                         if (!empty($r['max_score'])) {
                             $sc = $r['score'] / $r['max_score'];
-                            if ($sc > $best) { $best = $sc; }
+                            if ($sc > $best) {
+                                $best = $sc;
+                            }
                         }
                     }
                 }
-                $sumE += $best; $countE++;
+                $sumE += $best;
+                $countE++;
             }
-            if ($countE > 0) { $bestSum += ($sumE / $countE) * 100; }
+            if ($countE > 0) {
+                $bestSum += ($sumE / $countE) * 100;
+            }
         }
     }
     $avgBest = $nbAll ? round($bestSum / $nbAll, 2) : 0.0;
@@ -1068,23 +1712,32 @@ if (!empty($groupList)) {
 
             $bestAvgU = '';
             if (!empty($exercises)) {
-                $sumBestU = 0.0; $countE = 0;
+                $sumBestU = 0.0;
+                $countE = 0;
                 foreach ($exercises as $exerciseData) {
                     $results = Event::get_best_exercise_results_by_user(
-                        $exerciseData->getIid(), $courseId, $sessionId, $uid
+                        $exerciseData->getIid(),
+                        $courseId,
+                        $sessionId,
+                        $uid
                     );
                     $best = 0.0;
                     if (!empty($results)) {
                         foreach ($results as $r) {
                             if (!empty($r['max_score'])) {
                                 $sc = $r['score'] / $r['max_score'];
-                                if ($sc > $best) { $best = $sc; }
+                                if ($sc > $best) {
+                                    $best = $sc;
+                                }
                             }
                         }
                     }
-                    $sumBestU += $best; $countE++;
+                    $sumBestU += $best;
+                    $countE++;
                 }
-                if ($countE > 0) { $bestAvgU = round(($sumBestU / $countE) * 100, 2).' %'; }
+                if ($countE > 0) {
+                    $bestAvgU = round(($sumBestU / $countE) * 100, 2).' %';
+                }
             }
 
             $groupTable->setCellContents($row, $col++, $name);
@@ -1104,8 +1757,15 @@ if (!empty($groupList)) {
     $groupTable->setCellContents($row, $col++, $avgBest.' %');
 }
 
+$groupPanelTitle = Display::getMdiIcon(
+        'chart-bar',
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_TINY,
+        get_lang('Group reporting')
+    ).' '.get_lang('Group reporting');
 
-echo Display::panel($groupTable->toHtml(), '');
+echo Display::panel($groupTable->toHtml(), $groupPanelTitle);
 
 // Send the csv file if asked.
 if ($export_csv) {

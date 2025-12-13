@@ -2,9 +2,10 @@
 
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\PluginBundle\TopLinks\Entity\TopLinkRelTool;
 
-$httpRequest = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+$httpRequest = Container::getRequest();
 
 if ('/main/course_home/course_home.php' === $httpRequest->getScriptName()) {
     $course = api_get_course_entity();

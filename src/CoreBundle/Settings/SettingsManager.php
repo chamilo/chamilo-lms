@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Helpers\SettingsManagerHelper;
+use Chamilo\CoreBundle\Search\SearchEngineFieldSynchronizer;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use InvalidArgumentException;
@@ -61,6 +62,7 @@ class SettingsManager implements SettingsManagerInterface
         EventDispatcherInterface $eventDispatcher,
         RequestStack $request,
         protected readonly SettingsManagerHelper $settingsManagerHelper,
+        private readonly SearchEngineFieldSynchronizer $searchEngineFieldSynchronizer,
     ) {
         $this->schemaRegistry = $schemaRegistry;
         $this->manager = $manager;
@@ -288,7 +290,11 @@ class SettingsManager implements SettingsManagerInterface
         $raw = $settings->getParameters();
         $raw = $this->normalizeNullsBeforeResolve($raw, $settingsBuilder);
         $parameters = $settingsBuilder->resolve($raw);
-
+        // Transform value. Example array to string using transformer. Example:
+        // 1. Setting "tool_visible_by_default_at_creation" it's a multiple select
+        // 2. Is defined as an array in class DocumentSettingsSchema
+        // 3. Add transformer for that variable "ArrayToIdentifierTransformer"
+        // 4. Here we recover the transformer and convert the array to string
         foreach ($parameters as $parameter => $value) {
             $parameters[$parameter] = $this->transformToString($value);
         }
@@ -329,10 +335,21 @@ class SettingsManager implements SettingsManagerInterface
                 $parameter->setCategory($simpleCategoryName);
                 $this->manager->persist($parameter);
             } else {
-                $parameter = $this->createSettingForCurrentUrl($simpleCategoryName, $name, $value);
+                $parameter = (new SettingsCurrent())
+                    ->setVariable($name)
+                    ->setCategory($simpleCategoryName)
+                    ->setTitle($name)
+                    ->setSelectedValue($value)
+                    ->setUrl($url)
+                    ->setAccessUrlChangeable(1)
+                    ->setAccessUrlLocked(1)
+                ;
+
                 $this->manager->persist($parameter);
             }
         }
+
+        $this->applySearchEngineFieldsSyncIfNeeded($simpleCategoryName, $parameters);
 
         $this->manager->flush();
     }
@@ -352,7 +369,11 @@ class SettingsManager implements SettingsManagerInterface
         $raw = $settings->getParameters();
         $raw = $this->normalizeNullsBeforeResolve($raw, $settingsBuilder);
         $parameters = $settingsBuilder->resolve($raw);
-
+        // Transform value. Example array to string using transformer. Example:
+        // 1. Setting "tool_visible_by_default_at_creation" it's a multiple select
+        // 2. Is defined as an array in class DocumentSettingsSchema
+        // 3. Add transformer for that variable "ArrayToIdentifierTransformer"
+        // 4. Here we recover the transformer and convert the array to string
         foreach ($parameters as $parameter => $value) {
             $parameters[$parameter] = $this->transformToString($value);
         }
@@ -385,12 +406,42 @@ class SettingsManager implements SettingsManagerInterface
                 $parameter = $persistedParametersMap[$name];
                 $parameter->setSelectedValue($value);
             } else {
-                $parameter = $this->createSettingForCurrentUrl($simpleCategoryName, $name, $value);
+                $parameter = (new SettingsCurrent())
+                    ->setVariable($name)
+                    ->setCategory($simpleCategoryName)
+                    ->setTitle($name)
+                    ->setSelectedValue($value)
+                    ->setUrl($url)
+                    ->setAccessUrlChangeable(1)
+                    ->setAccessUrlLocked(1)
+                ;
+
                 $this->manager->persist($parameter);
             }
         }
 
+        $this->applySearchEngineFieldsSyncIfNeeded($simpleCategoryName, $parameters);
+
         $this->manager->flush();
+    }
+
+    /**
+     * Sync JSON-defined search fields into search_engine_field table.
+     */
+    private function applySearchEngineFieldsSyncIfNeeded(string $category, array $parameters): void
+    {
+        if ('search' !== $category) {
+            return;
+        }
+
+        if (!\array_key_exists('search_prefilter_prefix', $parameters)) {
+            return;
+        }
+
+        $json = (string) $parameters['search_prefilter_prefix'];
+
+        // Non-destructive by default (no deletes)
+        $this->searchEngineFieldSynchronizer->syncFromJson($json, true);
     }
 
     /**

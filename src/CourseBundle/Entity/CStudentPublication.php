@@ -207,6 +207,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     #[ORM\Column(name: 'default_visibility', type: 'boolean', nullable: true, options: ['default' => 0])]
     protected ?bool $defaultVisibility = null;
 
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
     #[ORM\Column(name: 'extensions', type: 'text', nullable: true)]
     protected ?string $extensions = null;
 

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\PluginBundle\XApi\Lrs;
 
 use Chamilo\CoreBundle\Entity\XApiLrsAuth;
+use Chamilo\CoreBundle\Framework\Container;
 use Database;
 use Exception;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
@@ -29,7 +30,7 @@ class LrsRequest
 
     public function __construct()
     {
-        $this->request = HttpRequest::createFromGlobals();
+        $this->request = Container::getRequest();
     }
 
     public function send(): void

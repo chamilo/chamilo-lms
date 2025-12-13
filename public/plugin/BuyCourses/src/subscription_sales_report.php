@@ -6,6 +6,11 @@ declare(strict_types=1);
 /**
  * List of pending subscriptions payments of the Buy Courses plugin.
  */
+
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\HttpFoundation\Request;
+
 $cidReset = true;
 
 require_once '../config.php';
@@ -13,14 +18,15 @@ require_once '../config.php';
 api_protect_admin_script();
 
 $plugin = BuyCoursesPlugin::create();
+$httpRequest = Container::getRequest();
 
 $paypalEnable = $plugin->get('paypal_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
 $includeServices = $plugin->get('include_services');
 $invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
-if (isset($_GET['order'])) {
-    $sale = $plugin->getSubscriptionSale($_GET['order']);
+if ($orderId = $httpRequest->query->getInt('order')) {
+    $sale = $plugin->getSubscriptionSale($orderId);
 
     if (empty($sale)) {
         api_not_allowed(true);
@@ -28,7 +34,7 @@ if (isset($_GET['order'])) {
 
     $urlToRedirect = api_get_self().'?';
 
-    switch ($_GET['action']) {
+    switch ($httpRequest->query->get('action')) {
         case 'confirm':
             $plugin->completeSubscriptionSale($sale['id']);
             $plugin->storeSubscriptionPayouts($sale['id']);
@@ -71,10 +77,10 @@ $saleStatuses = $plugin->getSaleStatuses();
 $paymentTypes = $plugin->getPaymentTypes();
 
 $selectedFilterType = '0';
-$selectedStatus = isset($_GET['status']) ? $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_PENDING;
-$selectedSale = isset($_GET['sale']) ? (int) ($_GET['sale']) : 0;
-$dateStart = isset($_GET['date_start']) ? $_GET['date_start'] : date('Y-m-d H:i', mktime(0, 0, 0));
-$dateEnd = isset($_GET['date_end']) ? $_GET['date_end'] : date('Y-m-d H:i', mktime(23, 59, 59));
+$selectedStatus = $httpRequest->query->getInt('status', BuyCoursesPlugin::SALE_STATUS_PENDING);
+$selectedSale = $httpRequest->query->getInt('sale');
+$dateStart = $httpRequest->query->get('date_start', date('Y-m-d H:i', mktime(0, 0, 0)));
+$dateEnd = $httpRequest->query->get('date_end', date('Y-m-d H:i', mktime(0, 0, 0)));
 $searchTerm = '';
 $email = '';
 
@@ -82,13 +88,13 @@ $form = new FormValidator('search', 'get');
 
 if ($form->validate()) {
     $selectedFilterType = $form->getSubmitValue('filter_type');
-    $selectedStatus = $form->getSubmitValue('status');
+    $selectedStatus = (int) $form->getSubmitValue('status');
     $searchTerm = $form->getSubmitValue('user');
     $dateStart = $form->getSubmitValue('date_start');
     $dateEnd = $form->getSubmitValue('date_end');
     $email = $form->getSubmitValue('email');
 
-    if (false === $selectedStatus) {
+    if (!$selectedStatus) {
         $selectedStatus = BuyCoursesPlugin::SALE_STATUS_PENDING;
     }
 
@@ -170,7 +176,7 @@ $templateName = $plugin->get_lang('SalesReport');
 $template = new Template($templateName);
 
 $toolbar = Display::url(
-    Display::returnFontAwesomeIcon('file-excel-o').
+    Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET).
     get_lang('GenerateReport'),
     api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/export_subscription_report.php',
     ['class' => 'btn btn-primary']
@@ -204,6 +210,7 @@ $template->assign('sale_status_canceled', BuyCoursesPlugin::SALE_STATUS_CANCELED
 $template->assign('sale_status_pending', BuyCoursesPlugin::SALE_STATUS_PENDING);
 $template->assign('sale_status_completed', BuyCoursesPlugin::SALE_STATUS_COMPLETED);
 $template->assign('invoicing_enable', $invoicingEnable);
+$template->assign('showing_services', false);
 
 $content = $template->fetch('BuyCourses/view/subscription_sales_report.tpl');
 

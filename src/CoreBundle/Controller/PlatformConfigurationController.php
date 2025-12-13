@@ -164,6 +164,9 @@ class PlatformConfigurationController extends AbstractController
                 'social.allow_social_tool',
                 'chat.allow_global_chat',
                 'survey.show_pending_survey_in_menu',
+                'search.search_enabled',
+                'search.search_prefilter_prefix',
+                'search.search_show_unlinked_results',
             ];
 
             $user = $this->userHelper->getCurrent();
@@ -223,6 +226,7 @@ class PlatformConfigurationController extends AbstractController
             'enable_lp_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_lp_auto_launch'),
             'enable_forum_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_forum_auto_launch'),
             'learning_path_generator' => $courseSettingsManager->getCourseSettingValue('learning_path_generator'),
+            'display_info_advance_inside_homecourse' => $courseSettingsManager->getCourseSettingValue('display_info_advance_inside_homecourse'),
         ];
 
         return new JsonResponse(['settings' => $settings]);

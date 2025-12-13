@@ -34,7 +34,7 @@ $selectSession = $form->addSelect('session', get_lang('Session'), [0 => get_lang
 $form->addButtonFilter(get_lang('Filter'));
 
 foreach ($sessionList as $sessionInfo) {
-    $selectSession->addOption($sessionInfo['name'], $sessionInfo['id']);
+    $selectSession->addOption($sessionInfo['title'], $sessionInfo['id']);
 }
 
 $sessionId = isset($_GET['session']) ? (int) $_GET['session'] : 0;

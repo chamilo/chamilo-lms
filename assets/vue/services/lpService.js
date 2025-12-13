@@ -1,15 +1,18 @@
 import { ENTRYPOINT } from "../config/entrypoint"
 import axios from "axios"
+import baseService from "./baseService"
 
 /** Lists learning paths filtered by course/session/title. */
 const getLearningPaths = async (params) => {
   const response = await axios.get(`${ENTRYPOINT}learning_paths/`, { params })
+
   return response.data
 }
 
 /** Fetches a learning path by ID (iid). */
 const getLearningPath = async (lpId) => {
   const response = await axios.get(`${ENTRYPOINT}learning_paths/${lpId}/`)
+
   return response.data
 }
 
@@ -19,8 +22,13 @@ const buildLegacyViewUrl = (lpId, { cid, sid, isStudentView = "true" } = {}) => 
     console.warn("[buildLegacyViewUrl] called with empty lpId!", { lpId, cid, sid })
     console.trace()
   }
+
   const qs = new URLSearchParams({ action: "view", cid, sid, isStudentView })
-  if (lpId) qs.set("lp_id", lpId)
+
+  if (lpId) {
+    qs.set("lp_id", lpId)
+  }
+
   return `/main/lp/lp_controller.php?${qs.toString()}`
 }
 
@@ -33,6 +41,7 @@ const buildLegacyViewUrl = (lpId, { cid, sid, isStudentView = "true" } = {}) => 
  */
 const buildLegacyActionUrl = (arg1, arg2, arg3 = {}) => {
   let lpId, action, opts
+
   if (typeof arg2 === "string") {
     lpId = arg1
     action = arg2
@@ -51,17 +60,23 @@ const buildLegacyActionUrl = (arg1, arg2, arg3 = {}) => {
   if (cid !== undefined && cid !== null && String(cid) !== "" && Number(cid) !== 0) {
     search.set("cid", cid)
   }
+
   if (lpId !== undefined && lpId !== null && String(lpId) !== "" && Number(lpId) !== 0) {
     search.set("lp_id", lpId)
   }
+
   // include sid even if it is 0
   if (sid !== undefined && sid !== null) {
     search.set("sid", Number.isNaN(Number(sid)) ? String(sid) : Number(sid))
   }
+
   search.set("gid", Number(gid))
   search.set("gradebook", Number(gradebook))
   search.set("origin", origin)
-  if (node !== undefined && node !== null) search.set("node", node)
+
+  if (node !== undefined && node !== null) {
+    search.set("node", node)
+  }
 
   Object.entries(params).forEach(([k, v]) => {
     if (v !== undefined && v !== null) search.set(k, String(v))
@@ -72,22 +87,25 @@ const buildLegacyActionUrl = (arg1, arg2, arg3 = {}) => {
 
 /** Navigates immediately to a legacy controller action. */
 const goLegacyAction = (lpId, action, opts = {}) => {
-  const url =
+  window.location.href =
     typeof action === "string"
       ? (opts.absoluteUrl ?? false)
         ? action // allow passing a direct absolute URL
-        : (opts.urlOverride ?? null) ||
-        buildLegacyActionUrl(lpId, action, opts)
+        : (opts.urlOverride ?? null) || buildLegacyActionUrl(lpId, action, opts)
       : ""
-
-  window.location.href = url
 }
 
-/** Lists LP categories for a course (empty included). */
-const getLpCategories = async (params) => {
+/**
+ * Lists LP categories for a course (empty included).
+ *
+ * @param {Object} searchParams
+ * @returns {Promise<Object[]>}
+ */
+const getLpCategories = async (searchParams) => {
   // API Platform resource for CLpCategory (GET collection)
-  const response = await axios.get(`${ENTRYPOINT}learning_path_categories/`, { params })
-  return response.data
+  const { items } = await baseService.getCollection("/api/learning_path_categories/", searchParams)
+
+  return items
 }
 
 export default {

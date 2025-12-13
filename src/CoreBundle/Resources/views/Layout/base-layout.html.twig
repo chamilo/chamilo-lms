@@ -6,7 +6,7 @@
 {% import '@ChamiloCore/Macros/modals.html.twig' as macro_modals %}
 {% set modals_block = macro_modals.global_modal('') %}
 <!DOCTYPE html>
-<html lang="{{ app.request.locale }}" class="no-js h-100">
+<html lang="{{ wcag_locale }}" data-lang="{{ app.request.locale }}" class="no-js h-100">
 {% block chamilo_head %}
     {%- include "@ChamiloCore/Layout/head.html.twig" %}
 {% endblock %}

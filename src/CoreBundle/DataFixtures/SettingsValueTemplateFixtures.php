@@ -28,6 +28,23 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
     public static function getTemplatesGrouped(): array
     {
         return [
+            'search' => [
+                [
+                    'variable' => 'search_prefilter_prefix',
+                    'json_example' => [
+                        'fields' => [
+                            [
+                                'code' => 'T',
+                                'title' => 'Title',
+                            ],
+                            [
+                                'code' => 'D',
+                                'title' => 'Description',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'forum' => [
                 [
                     'variable' => 'community_managers_user_list',

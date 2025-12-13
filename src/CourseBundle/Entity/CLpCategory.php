@@ -11,10 +11,13 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\OpenApi\Model\Operation;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Filter\CidFilter;
+use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -25,28 +28,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    shortName: 'LearningPathCategories',
+    shortName: 'LearningPathCategory',
     operations: [
         new GetCollection(
-            openapiContext: [
-                'summary' => 'List LP categories by course (resourceNode.parent) or sid',
-                'parameters' => [
-                    [
-                        'name' => 'resourceNode.parent',
-                        'in' => 'query',
-                        'required' => true,
-                        'description' => 'Parent ResourceNode (course node id)',
-                        'schema' => ['type' => 'integer'],
-                    ],
-                    [
-                        'name' => 'sid',
-                        'in' => 'query',
-                        'required' => false,
-                        'description' => 'Session id (SidFilter si aplica)',
-                        'schema' => ['type' => 'integer'],
-                    ],
-                ],
-            ],
+            openapi: new Operation(
+                summary: 'List LP categories by course (resourceNode.parent) or sid',
+            ),
         ),
         new Get(security: "is_granted('ROLE_USER')"),
     ],
@@ -60,6 +47,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     'resourceNode.parent' => 'exact',
     'title' => 'partial',
 ])]
+#[ApiFilter(filterClass: CidFilter::class)]
+#[ApiFilter(filterClass: SidFilter::class)]
 #[ORM\Table(name: 'c_lp_category')]
 #[ORM\Entity(repositoryClass: CLpCategoryRepository::class)]
 class CLpCategory extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable

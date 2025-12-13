@@ -53,7 +53,7 @@ async function assignAuthSources() {
       true,
     )
 
-    showSuccessNotification(t("Auth sources assigned successfully"))
+    showSuccessNotification(t("Authentication sources assigned successfully"))
 
     userFinder.value.selectedUsers = []
   } catch (e) {
@@ -67,7 +67,7 @@ listAccessUrl().then((items) => (accessUrlList.value = items))
 </script>
 
 <template>
-  <SectionHeader :title="t('Assign auth sources to users')" />
+  <SectionHeader :title="t('Assign authentication sources to users')" />
 
   <BaseToolbar>
     <template #start>
@@ -102,7 +102,7 @@ listAccessUrl().then((items) => (accessUrlList.value = items))
         id="auth_source"
         v-model="authSource"
         :disabled="0 === authSourceList.length"
-        :label="t('Auth source')"
+        :label="t('Authentication source')"
         :options="authSourceList"
       />
 

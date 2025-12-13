@@ -259,21 +259,9 @@
       $(".droppable")
     );
 
-    // Auto-detect matching questions and init jsPlumb per question (early init)
-    (function autoInitMatching() {
-      // We infer question ids from classes like 'window{qid}_question'
-      var qids = {};
-      $('[class]').each(function () {
-        var classes = (this.className || '').toString().split(/\s+/);
-        classes.forEach(function (c) {
-          var m = c.match(/^window(\d+)_question$/);
-          if (m) { qids[m[1]] = true; }
-        });
-      });
-      Object.keys(qids).forEach(function (qid) {
-        MatchingDraggable.init(qid);
-      });
-    })();
+    // Use the layout-aware initializer so endpoints are placed
+    // only when the question area has its final size.
+    initMatchingWithRetry();
   });
 
   /* -----------------------------
@@ -283,7 +271,7 @@
    * Triggers: jsPlumb.ready, window.load, BFCache pageshow.
    * Also cleans up instances on pagehide.
    */
-  function initMatchingWithRetry(maxTries = 12, delay = 80) {
+  function initMatchingWithRetry(maxTries = 40, delay = 100) {
     let tries = 0;
 
     function ready() {
@@ -323,8 +311,10 @@
         try { MatchingDraggable.init(qid); } catch (e) {}
       });
 
-      // Final repaint in next tick (fonts/scroll may settle)
+      // Extra repaints to cover slow layouts (tests tool, fonts, etc.)
       setTimeout(repaintAllJsPlumbInstances, 0);
+      setTimeout(repaintAllJsPlumbInstances, 300);
+      setTimeout(repaintAllJsPlumbInstances, 800);
     }
 
     ready();

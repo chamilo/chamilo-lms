@@ -2,9 +2,28 @@
 {% block content %}
 
 {% autoescape false %}
-<div class="summary-legend">
-    {{ table }}
-</div>
+    <style>
+        .course-summary-table thead {
+            display: none;
+        }
+        .course-summary-table tbody tr > td:not(:first-child),
+        .course-summary-table tbody tr > th:not(:first-child) {
+            display: none;
+        }
+        .course-summary-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 1.25rem;
+        }
+        .course-summary-table tbody tr > td:first-child {
+            padding: 0;
+            border: 0;
+        }
+    </style>
+
+    <div class="summary-legend">
+        {{ table|replace({'class=\"data_table\"':'class=\"data_table course-summary-table\"'}) }}
+    </div>
 <script>
     $(function() {
         $('.easypiechart-blue').easyPieChart({

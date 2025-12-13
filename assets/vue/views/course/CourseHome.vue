@@ -159,6 +159,8 @@
         </div>
       </div>
 
+      <CourseThematicProgress />
+
       <div class="flex flex-col lg:flex-row gap-6">
         <div :class="showCourseSequence ? 'w-full lg:w-[80%]' : 'w-full'">
           <CourseIntroduction
@@ -276,6 +278,7 @@ import { usePlatformConfig } from "../../store/platformConfig"
 import { useSecurityStore } from "../../store/securityStore"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import NextCourseSequence from "../../components/course/NextCourseSequence.vue"
+import CourseThematicProgress from "../../components/course/CourseThematicProgress.vue"
 
 const { t } = useI18n()
 const cidReqStore = useCidReqStore()
@@ -306,38 +309,60 @@ const lpAutoLaunch = ref(0)
 const forumAutoLaunch = ref(0)
 const courseSettingsStore = useCourseSettings()
 
-courseService.loadCTools(course.value.id, session.value?.id).then((cTools) => {
-  tools.value = cTools.map((element) => {
-    if (routerTools.includes(element.title)) {
-      element.to = element.url
+/**
+ * Load tools for the course, split admin tools into the cog menu
+ * and keep the rest in the main tools grid.
+ * This function is reused on initial load and when toggling student view.
+ */
+async function loadCourseTools(showSkeleton = true) {
+  if (showSkeleton) {
+    isCourseLoading.value = true
+  }
+
+  try {
+    const cTools = await courseService.loadCTools(course.value.id, session.value?.id)
+
+    const normalizedTools = cTools.map((rawTool) => {
+      const tool = { ...rawTool }
+
+      if (routerTools.includes(tool.title)) {
+        tool.to = tool.url
+      }
+
+      // Convenience flag for UI states (e.g. customize mode)
+      tool.isEnabled = tool.resourceNode?.resourceLinks?.[0]?.visibility === 2
+
+      return tool
+    })
+
+    const adminMenuItems = []
+    const regularTools = []
+
+    normalizedTools.forEach((tool) => {
+      if (tool.tool?.category === "admin") {
+        adminMenuItems.push({
+          label: t(tool.tool.titleToShow),
+          url: tool.url,
+        })
+      } else {
+        regularTools.push(tool)
+      }
+    })
+
+    tools.value = regularTools
+    courseItems.value = adminMenuItems
+  } catch (error) {
+    console.error("[CourseHome] Failed to load course tools", error)
+    tools.value = []
+    courseItems.value = []
+  } finally {
+    if (showSkeleton) {
+      isCourseLoading.value = false
     }
+  }
+}
 
-    return element
-  })
-
-  const noAdminToolsIndex = []
-
-  courseItems.value = tools.value
-    .filter((element, index) => {
-      if ("admin" === element.tool.category) {
-        noAdminToolsIndex.push(index)
-
-        return true
-      }
-
-      return false
-    })
-    .map((adminTool) => {
-      return {
-        label: t(adminTool.tool.titleToShow),
-        url: adminTool.url,
-      }
-    })
-
-  noAdminToolsIndex.reverse().forEach((element) => tools.value.splice(element, 1))
-
-  isCourseLoading.value = false
-})
+loadCourseTools(true)
 
 courseService
   .loadTools(course.value.id, session.value?.id)
@@ -405,7 +430,7 @@ watch(isSorting, (isSortingEnabled) => {
     return
   }
   if (sortable === null) {
-    let el = document.getElementById("course-tools")
+    const el = document.getElementById("course-tools")
     sortable = Sortable.create(el, {
       ghostClass: "invisible",
       chosenClass: "cursor-move",
@@ -419,18 +444,14 @@ watch(isSorting, (isSortingEnabled) => {
 })
 
 async function updateDisplayOrder(htmlItem, newIndex) {
-  const tool = htmlItem.dataset.tool
-  let toolItem = null
+  const toolTitle = htmlItem.dataset.tool
+  const toolItem = tools.value.find((element) => element.title === toolTitle)
 
-  if (typeof tools.value !== "undefined" && Array.isArray(tools.value)) {
-    const toolList = tools.value
-    toolItem = toolList.find((element) => element.title === tool)
-  } else {
-    console.error("Error: tools.value is undefined")
+  if (!toolItem || !toolItem.iid) {
+    console.error("[CourseHome] Tool item or iid missing", toolItem)
     return
   }
 
-  console.log(toolItem, newIndex)
 
   // Send the updated values to the server
   await courseService.updateToolOrder(toolItem, newIndex, course.value.id, session.value?.id)
@@ -459,12 +480,7 @@ onMounted(async () => {
 const onStudentViewChanged = async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit()
 
-  courseService.loadCTools(course.value.id, session.value?.id).then((cTools) => {
-    tools.value = cTools.map((element) => ({
-      ...element,
-      isEnabled: element.resourceNode?.resourceLinks[0]?.visibility === 2,
-    }))
-  })
+  await loadCourseTools(false)
 }
 
 const allowEditToolVisibilityInSession = computed(() => {

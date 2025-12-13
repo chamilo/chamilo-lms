@@ -123,7 +123,7 @@ window.RecordAudio = (function () {
                 btnPause.prop('disabled', false).removeClass('hidden');
                 tagAudio.removeClass('show').addClass('hidden');
 
-                $('.exercise  _save_now_button button, .exercise_actions button').prop('disabled', true);
+                $('.exercise_save_now_button button, .exercise_actions button').prop('disabled', true);
             }
 
             function errorCallback(error) {

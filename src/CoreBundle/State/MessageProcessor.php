@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageAttachment;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use LogicException;
@@ -30,6 +31,7 @@ final readonly class MessageProcessor implements ProcessorInterface
         private EntityManagerInterface $entityManager,
         private ResourceNodeRepository $resourceNodeRepository,
         private Security $security,
+        private ResourceFileHelper $resourceFileHelper,
     ) {}
 
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): ?Message
@@ -98,9 +100,14 @@ final readonly class MessageProcessor implements ProcessorInterface
 
         /** @var MessageAttachment $messageAttachment */
         foreach ($message->getAttachments() as $messageAttachment) {
-            $stream = $this->resourceNodeRepository->getResourceNodeFileStream(
-                $messageAttachment->resourceNode
-            );
+            $resourceNode = $messageAttachment->getResourceNode();
+            $resourceFile = $this->resourceFileHelper->resolveResourceFileByAccessUrl($resourceNode);
+
+            if (!$resourceFile) {
+                continue;
+            }
+
+            $stream = $this->resourceNodeRepository->getResourceNodeFileStream($resourceNode, $resourceFile);
 
             $attachmentList[] = [
                 'stream' => $stream,

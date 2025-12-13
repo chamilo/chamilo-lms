@@ -1,4 +1,7 @@
 # Settings parameters that will be used in the 'services' section
+parameters:
+  chamilo.search.xapian_index_dir: '%kernel.project_dir%/var/search'
+
 services:
     _defaults:
         autowire: true
@@ -161,3 +164,11 @@ services:
         $router: '@router'
       tags:
         - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 255 }
+
+    Chamilo\CoreBundle\Search\Xapian\SearchIndexPathResolver:
+      arguments:
+        $indexDir: '%chamilo.search.xapian_index_dir%'
+
+    Chamilo\CoreBundle\Search\Xapian\XapianSearchService:
+      arguments:
+        $indexPathResolver: '@Chamilo\CoreBundle\Search\Xapian\SearchIndexPathResolver'

@@ -515,7 +515,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
   This is probably not supported for Windows setups (untested), but it should work on Linux and macOS.<br>
   To install Xapian (a requirement to use the internal search engine), follow the instructions below.<br>
   <pre>
-      sudo apt install libxapian-dev catdoc html2txt unrtf
+      sudo apt install libxapian-dev catdoc html2text unrtf ghostscript poppler-utils
       cd /tmp
       wget https://oligarchy.co.uk/xapian/1.4.25/xapian-bindings-1.4.25.tar.xz
       # use 1.4.25 because this matches the version of the libxapian-dev package on Ubuntu 25.04
@@ -523,6 +523,11 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
       cd xapian-bindings-1.4.25
       ./configure
       make install
+      cd /etc/php/8.3/mods-available
+      cat "extension=xapian.so" &gt;&gt; xapian.ini
+      cd /etc/php/8.3/apache2/conf.d
+      ln -s ../../mods-available/xapian.ini 26-xapian.ini
+      systemctl restart apache2
   </pre>
   This should make the Xapian extension available from Chamilo.<br>
   Next, go to Settings -&gt; Search -&gt; Enable, and follow the instructions there.<br>

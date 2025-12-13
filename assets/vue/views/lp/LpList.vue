@@ -511,7 +511,7 @@ async function sendReorder(orderedIds, { categoryId } = {}) {
   const payload = {
     courseId: course.value?.id,
     sessionId: session.value?.id,
-    sid: session.value?.id, // keep both, depending on backend/service
+    sid: session.value?.id,
     categoryId: categoryId ?? null,
     ids: orderedIds,
     order: orderedIds,
@@ -623,9 +623,27 @@ const handleTopMenu = (action, ev) => {
       : action === "category"
         ? lpService.buildLegacyActionUrl("add_lp_category", { cid: courseId, sid: sidQ, node, gid, gradebook, origin })
         : action === "import"
-          ? `/main/upload/index.php?${new URLSearchParams({ cid: courseId, sid: sidQ, tool: "learnpath", curdirpath: "/", node, gid, gradebook, origin }).toString()}`
+          ? `/main/upload/index.php?${new URLSearchParams({
+              cid: courseId,
+              sid: sidQ,
+              tool: "learnpath",
+              curdirpath: "/",
+              node,
+              gid,
+              gradebook,
+              origin,
+            }).toString()}`
           : action === "rapid"
-            ? `/main/upload/upload_ppt.php?${new URLSearchParams({ cid: courseId, sid: sidQ, tool: "learnpath", curdirpath: "/", node, gid, gradebook, origin }).toString()}`
+            ? `/main/upload/upload_ppt.php?${new URLSearchParams({
+                cid: courseId,
+                sid: sidQ,
+                tool: "learnpath",
+                curdirpath: "/",
+                node,
+                gid,
+                gradebook,
+                origin,
+              }).toString()}`
             : action === "ai"
               ? lpService.buildLegacyActionUrl("ai_helper", { cid: courseId, sid: sidQ, node, gid, gradebook, origin })
               : null

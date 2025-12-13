@@ -93,6 +93,7 @@ import { useI18n } from "vue-i18n"
 import { useCourseRequirementStatus } from "../../composables/course/useCourseRequirementStatus"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import CatalogueRequirementModal from "./CatalogueRequirementModal.vue"
+import { useUserSessionSubscription } from "../../composables/userPermissions"
 
 const { abbreviatedDatetime } = useFormatDate()
 
@@ -120,23 +121,64 @@ const props = defineProps({
 
 const { t } = useI18n()
 const platformConfigStore = usePlatformConfig()
+const { isCoach } = useUserSessionSubscription(props.session, props.course)
+
 const showRemainingDays = computed(
   () => platformConfigStore.getSetting("session.session_list_view_remaining_days") === "true",
 )
 
 const daysRemainingText = computed(() => {
-  if (!showRemainingDays.value || !props.session?.displayEndDate) return null
+  if (!showRemainingDays.value || !props.session?.displayEndDate) {
+    return null
+  }
 
   const endDate = new Date(props.session.displayEndDate)
-  if (isNaN(endDate)) return null
+  if (isNaN(endDate)) {
+    return null
+  }
 
   const today = new Date()
   const diff = Math.floor((endDate - today) / (1000 * 60 * 60 * 24))
 
-  if (diff > 1) return `${diff} days remaining`
-  if (diff === 1) return t("Ends tomorrow")
-  if (diff === 0) return t("Ends today")
+  if (diff > 1) {
+    return `${diff} days remaining`
+  }
+  if (diff === 1) {
+    return t("Ends tomorrow")
+  }
+  if (diff === 0) {
+    return t("Ends today")
+  }
+
   return t("Expired")
+})
+
+const sessionDurationText = computed(() => {
+  // Only show duration in days when the setting is enabled and the user is a coach
+  if (!showRemainingDays.value || !isCoach.value) {
+    return null
+  }
+
+  if (!props.session?.displayStartDate || !props.session?.displayEndDate) {
+    return null
+  }
+
+  const start = new Date(props.session.displayStartDate)
+  const end = new Date(props.session.displayEndDate)
+
+  if (isNaN(start) || isNaN(end)) {
+    return null
+  }
+
+  const msPerDay = 1000 * 60 * 60 * 24
+  const rawDiff = Math.floor((end - start) / msPerDay) + 1
+  const days = rawDiff > 0 ? rawDiff : 1
+
+  if (days === 1) {
+    return "1 day duration"
+  }
+
+  return `${days} days duration`
 })
 
 const showCourseDuration = computed(() => platformConfigStore.getSetting("course.show_course_duration") === "true")
@@ -159,11 +201,23 @@ const teachers = computed(() => {
 })
 
 const sessionDisplayDate = computed(() => {
-  if (daysRemainingText.value) return daysRemainingText.value
+  // When setting is enabled, decide between duration (for coaches) and remaining days (for regular users)
+  if (sessionDurationText.value) {
+    return sessionDurationText.value
+  }
 
+  if (daysRemainingText.value) {
+    return daysRemainingText.value
+  }
+
+  // Fallback: show the original date range
   const parts = []
-  if (props.session?.displayStartDate) parts.push(abbreviatedDatetime(props.session.displayStartDate))
-  if (props.session?.displayEndDate) parts.push(abbreviatedDatetime(props.session.displayEndDate))
+  if (props.session?.displayStartDate) {
+    parts.push(abbreviatedDatetime(props.session.displayStartDate))
+  }
+  if (props.session?.displayEndDate) {
+    parts.push(abbreviatedDatetime(props.session.displayEndDate))
+  }
 
   return parts.join(" — ")
 })

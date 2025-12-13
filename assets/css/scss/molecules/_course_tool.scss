@@ -11,14 +11,17 @@
   }
 
   &__shadow {
-    @apply absolute w-16 h-16 text-support-1;
+    @apply absolute w-16 h-16 text-primary;
+
+    padding: 1px;
+    opacity: 0.08;
   }
 
   &__icon {
     @apply text-transparent bg-clip-text bg-gradient-to-br from-primary to-primary-gradient leading-none;
 
     &.mdi {
-      font-size: 52px;
+      font-size: 44px;
     }
   }
 

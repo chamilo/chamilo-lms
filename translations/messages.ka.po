@@ -22083,7 +22083,7 @@ msgstr "ტექსტური ველით შერჩევა"
 msgid "Triple select"
 msgstr "ტრიადი შერჩევა"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "თქვენ ადასტურებთ, რომ ნამდვილად გსურთ ამ პლატფორმაზე რეგისტრაცია."
 
 msgid "Add text"
@@ -24986,9 +24986,6 @@ msgstr "ყველა ტესტის ყველა შედეგის
 
 msgid "Click to view details"
 msgstr "დააჭირეთ დეტალების ნახვისთვის"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "ეს ანგარიში ვრცელდება მომხმარებლის ყველა პლატფორმის აქტივობაზე."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

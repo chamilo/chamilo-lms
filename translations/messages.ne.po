@@ -22087,7 +22087,7 @@ msgstr "पाठ क्षेत्रसँग छान्नुहोस्"
 msgid "Triple select"
 msgstr "ट्रिपल छान्नुहोस्"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "तपाईं यो प्लेटफर्ममा सदस्यता लिन चाहनुहुन्छ भन्ने पुष्टि गर्नुहुन्छ।"
 
 msgid "Add text"
@@ -24990,9 +24990,6 @@ msgstr "सबै परीक्षणहरूका सबै परिणा
 
 msgid "Click to view details"
 msgstr "विवरण हेर्न क्लिक गर्नुहोस्"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "यो रिपोर्ट प्रयोगकर्ताको सबै प्लेटफर्म गतिविधिहरूमा लागू हुन्छ।"
 
 msgid "dd/mm/yyyy"
 msgstr "दिन/महिना/वर्ष"

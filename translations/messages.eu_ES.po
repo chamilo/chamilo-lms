@@ -22093,7 +22093,7 @@ msgstr "Hautatu testu eremua batekin"
 msgid "Triple select"
 msgstr "Hiru hautaketa"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Baieztatzen duzu plataforma honetara harpidetu nahi duzula."
 
 msgid "Add text"
@@ -24996,9 +24996,6 @@ msgstr "Esportatu test guztien emaitza guztiak"
 
 msgid "Click to view details"
 msgstr "Egin klik xehetasunak ikusteko"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Txosten hau erabiltzailearen plataforma-jarduera guztiei aplikatzen zaie."
 
 msgid "dd/mm/yyyy"
 msgstr "eg/uz/uuuu"

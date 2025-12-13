@@ -22083,7 +22083,7 @@ msgstr "Seletê cun camp test"
 msgid "Triple select"
 msgstr "Seletripla"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Tu confermis che tu vûs realment iscrîvti a cheste plateform."
 
 msgid "Add text"
@@ -24986,9 +24986,6 @@ msgstr "Esportâ ducj i risultâts di ducj i test"
 
 msgid "Click to view details"
 msgstr "Clic par viodî i detais"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Chest rapuort al aplliche a tutis lis ativitâts de plateform dal utint."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

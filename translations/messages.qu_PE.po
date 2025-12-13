@@ -22088,7 +22088,7 @@ msgstr "Qillqawan ruray"
 msgid "Triple select"
 msgstr "Selección triple"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Kutichisqanki kay platapormaman suyanaqta yachayni."
 
 msgid "Add text"
@@ -24991,9 +24991,6 @@ msgstr "Tukuy pruibakuna ruraykunata apachay"
 
 msgid "Click to view details"
 msgstr "Willakuyta rikunaykipaq thinkiy"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Kay willakuy yachakuqpa platformamanta tukuy ruraykunaman jatukuy."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

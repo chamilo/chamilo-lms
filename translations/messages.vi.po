@@ -22088,7 +22088,7 @@ msgstr "Chọn với trường văn bản"
 msgid "Triple select"
 msgstr "Chọn ba lần"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Bạn xác nhận rằng bạn thực sự muốn đăng ký nền tảng này."
 
 msgid "Add text"
@@ -24991,9 +24991,6 @@ msgstr "Xuất tất cả kết quả của tất cả bài kiểm tra"
 
 msgid "Click to view details"
 msgstr "Nhấp để xem chi tiết"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Báo cáo này áp dụng cho tất cả hoạt động nền tảng của người dùng."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

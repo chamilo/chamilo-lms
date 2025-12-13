@@ -22083,7 +22083,7 @@ msgstr "Vybrat s textovým polem"
 msgid "Triple select"
 msgstr "Trojnásobný výběr"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Potvrzujete, že se skutečně chcete přihlásit na tuto platformu."
 
 msgid "Add text"
@@ -24986,9 +24986,6 @@ msgstr "Exportovat všechny výsledky všech testů"
 
 msgid "Click to view details"
 msgstr "Klikněte pro zobrazení podrobností"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Tato zpráva se vztahuje na všechny aktivity uživatele na platformě."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

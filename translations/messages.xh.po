@@ -22083,7 +22083,7 @@ msgstr "Khetha ngentsimi yombhalo"
 msgid "Triple select"
 msgstr "Khetha kathathu"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Uyaqinisekisa ukuba uyafuna ukubhalisela le platform."
 
 msgid "Add text"
@@ -24986,9 +24986,6 @@ msgstr "Phuma zonke iziphumo zavavanyo zonke"
 
 msgid "Click to view details"
 msgstr "Cofa ukubona iinkcukacha"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Le ngxelo isebenza kuzo zonke izinto zeplatifomu zomsebenzisi."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

@@ -23868,7 +23868,7 @@ msgstr "ເລືອກພ້ອມຊ່ອງຂໍ້ຄວາມ"
 msgid "Triple select"
 msgstr "ເລືອກສາມຊັ້ນ"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "ທ່ານຢືນຢັນວ່າທ່ານຕ້ອງການລົງທະບຽນກັບແພລດຟອມນີ້ແທ້."
 
 #, fuzzy
@@ -26993,9 +26993,6 @@ msgstr "ສົ່ງອອກຜົນທັງໝົດຂອງທຸກກາ
 #, fuzzy
 msgid "Click to view details"
 msgstr "ກົດເພື່ອເບິ່ງລາຍລະອຽດ"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "ລາຍງານນີ້ໃຊ້ກັບທຸກກິດຈະກຳຂອງຜູ້ໃຊ້ໃນແພລດຟອມ."
 
 msgid "dd/mm/yyyy"
 msgstr "ວວ/ດດ/ປປປປ"

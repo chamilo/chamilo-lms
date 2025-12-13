@@ -22101,7 +22101,7 @@ msgstr "اختيار حقل النص"
 msgid "Triple select"
 msgstr "اختيار ثلاثي"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "التأكيد بانك تريد فعلا التسجيل في هذا النظام"
 
 msgid "Add text"
@@ -25004,9 +25004,6 @@ msgstr "تصدير جميع نتائج جميع الاختبارات"
 
 msgid "Click to view details"
 msgstr "انقر لعرض التفاصيل"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "ينطبق هذا التقرير على جميع أنشطة المنصة للمستخدم."
 
 msgid "dd/mm/yyyy"
 msgstr "يي/مم/سسن"

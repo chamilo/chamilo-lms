@@ -22152,7 +22152,7 @@ msgstr "テキストフィールドで選択"
 msgid "Triple select"
 msgstr "トリプル選択"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "このプラットフォームに登録することを確認します。"
 
 msgid "Add text"
@@ -25055,9 +25055,6 @@ msgstr "すべてのテストの全結果をエクスポート"
 
 msgid "Click to view details"
 msgstr "詳細を表示するにはクリック"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "このレポートはユーザーのプラットフォーム上の全アクティビティに適用されます。"
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

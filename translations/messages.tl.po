@@ -22083,7 +22083,7 @@ msgstr "Piliin gamit ang field ng teksto"
 msgid "Triple select"
 msgstr "Triple select"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Kinukumpirma mo na talagang nais mong mag-subscribe sa plataporma na ito."
 
 msgid "Add text"
@@ -24986,9 +24986,6 @@ msgstr "I-export ang lahat ng resulta ng lahat ng pagsusulit"
 
 msgid "Click to view details"
 msgstr "I-klik upang tingnan ang mga detalye"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Ang ulat na ito ay naaaplay sa lahat ng aktibidad ng plataporma ng gumagamit."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

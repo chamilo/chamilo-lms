@@ -22716,7 +22716,7 @@ msgstr "Selecteer met tekstveld"
 msgid "Triple select"
 msgstr "Drievoudige selectie"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "U bevestigt dat u zich echt wilt abonneren op dit platform."
 
 msgid "Add text"
@@ -26012,10 +26012,6 @@ msgstr "Exporteer alle resultaten van alle oefeningen"
 
 msgid "Click to view details"
 msgstr "Klik om details te bekijken"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr ""
-"Dit rapport is van toepassing op alle platformactiviteiten van de gebruiker."
 
 #, fuzzy
 msgid "dd/mm/yyyy"

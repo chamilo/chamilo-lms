@@ -22087,7 +22087,7 @@ msgstr "Roghnaigh le réimse téacs"
 msgid "Triple select"
 msgstr "Roghnaigh triple"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Deimhníonn tú gur mhaith leat súil le an ardán seo i ndáiríre."
 
 msgid "Add text"
@@ -24990,9 +24990,6 @@ msgstr "Easpórtáil gach toradh ó gach tástáil"
 
 msgid "Click to view details"
 msgstr "Cliceáil le mionsonraí a fheiceáil"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Baineann an tuairisc seo le gach gníomhaíocht ardáin an úsáideora."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

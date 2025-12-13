@@ -22078,7 +22078,7 @@ msgstr ""
 msgid "Triple select"
 msgstr ""
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr ""
 
 msgid "Add text"
@@ -24980,9 +24980,6 @@ msgid "Export all results of all tests"
 msgstr ""
 
 msgid "Click to view details"
-msgstr ""
-
-msgid "This report applies to all plateform activities of the user."
 msgstr ""
 
 msgid "dd/mm/yyyy"

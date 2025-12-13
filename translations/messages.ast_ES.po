@@ -22088,7 +22088,7 @@ msgstr "Seleutrar con campu de testu"
 msgid "Triple select"
 msgstr "Seleutrar triple"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Confirma que de veres quies inscribite nesta plataforma."
 
 msgid "Add text"
@@ -24991,9 +24991,6 @@ msgstr "Esportar tolos resultaos de toes les pruebes"
 
 msgid "Click to view details"
 msgstr "Calca pa ver detalles"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Esti informe aplícase a toes les actividáes de la plataforma del usuariu."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

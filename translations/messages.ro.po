@@ -22102,7 +22102,7 @@ msgstr "Selectare cu câmp text"
 msgid "Triple select"
 msgstr "Selectare triplă"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Confirmați că doriți cu adevărat să vă abonați la această platformă."
 
 msgid "Add text"
@@ -25005,9 +25005,6 @@ msgstr "Exportă toate rezultatele tuturor testelor"
 
 msgid "Click to view details"
 msgstr "Faceți clic pentru a vedea detaliile"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Acest raport se aplică tuturor activităților de pe platformă ale utilizatorului."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

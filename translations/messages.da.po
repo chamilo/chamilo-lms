@@ -22088,7 +22088,7 @@ msgstr "Vælg med tekstfelt"
 msgid "Triple select"
 msgstr "Trippel valg"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Du bekræfter at du virkelig vil tilmelde dig denne platform."
 
 msgid "Add text"
@@ -24991,9 +24991,6 @@ msgstr "Eksportér alle resultater fra alle tests"
 
 msgid "Click to view details"
 msgstr "Klik for at se detaljer"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Denne rapport gælder alle platformaktiviter for brugeren."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

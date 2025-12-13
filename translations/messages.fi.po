@@ -22090,7 +22090,7 @@ msgstr "Valitse tekstikentällä"
 msgid "Triple select"
 msgstr "Kolminkertainen valinta"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Vahvistat haluavasi tilautua tälle alustalle."
 
 msgid "Add text"
@@ -24993,9 +24993,6 @@ msgstr "Vie kaikki kaikkien testien tulokset"
 
 msgid "Click to view details"
 msgstr "Napsauta nähdäksesi tiedot"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Tämä raportti koskee kaikkia käyttäjän alustan toimintoja."
 
 msgid "dd/mm/yyyy"
 msgstr "pp.kk.vvvv"

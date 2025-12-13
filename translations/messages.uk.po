@@ -22083,7 +22083,7 @@ msgstr "Вибрати з текстовим полем"
 msgid "Triple select"
 msgstr "Потрійний вибір"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Ви підтверджуєте, що дійсно бажаєте зареєструватися на цій платформі."
 
 msgid "Add text"
@@ -24987,11 +24987,8 @@ msgstr "Експорт усіх результатів усіх тестів"
 msgid "Click to view details"
 msgstr "Натисніть для перегляду деталей"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Цей звіт стосується всіх активностей користувача на платформі."
-
 msgid "dd/mm/yyyy"
-msgstr "дд/мм/рррр"
+msgstr "dd/mm/yyyy"
 
 msgid "Export certificates issue report"
 msgstr "Експорт звіту видачі сертифікатів"

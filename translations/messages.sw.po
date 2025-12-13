@@ -22083,7 +22083,7 @@ msgstr "Chagua na eneo la maandishi"
 msgid "Triple select"
 msgstr "Chagua mara tatu"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Unathibitisha kwamba unataka kweli kujiandikisha katika jukwaa hili."
 
 msgid "Add text"
@@ -24986,9 +24986,6 @@ msgstr "Hamisha matokeo yote ya majaribio yote"
 
 msgid "Click to view details"
 msgstr "Bonyeza ili kuona maelezo"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Ripoti hii inatumika kwa shughuli zote za jukwaa za mtumiaji."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

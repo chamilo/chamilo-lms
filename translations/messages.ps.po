@@ -22083,7 +22083,7 @@ msgstr "د متن فیلډ سره ټاکئ"
 msgid "Triple select"
 msgstr "درې ګونې ټاکنه"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "تاسو تایید کوئ چې تاسو واقعاً غواړئ چې د دې پلیټفارم سره تړل شئ."
 
 msgid "Add text"
@@ -24986,9 +24986,6 @@ msgstr "د ټولو ازموینو ټولې پایلې صادر کړئ"
 
 msgid "Click to view details"
 msgstr "څارټیل کړئ ترڅو تفصیلات وګورئ"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "دا راپور د کاروونکي ټول پلیټفارم فعالیتونو پورې اړه لري."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

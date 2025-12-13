@@ -22083,7 +22083,7 @@ msgstr "Vel við tekstfelti"
 msgid "Triple select"
 msgstr "Trifalt val"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Tú staðfestir at tú í sær vilja melda teg til hesa talgvirkisins."
 
 msgid "Add text"
@@ -24986,9 +24986,6 @@ msgstr "Útflyt allar úrslit av øllum próvum"
 
 msgid "Click to view details"
 msgstr "Klikk fyri at síggja smálutir"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Hendan skýrslan gjaldir fyri allar virkniar á pallinum hjá brúkaranum."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

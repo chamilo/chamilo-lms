@@ -22089,7 +22089,7 @@ msgstr "Izvēlēties ar teksta lauku"
 msgid "Triple select"
 msgstr "Trīskāršā izvēle"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Jūs apstiprināt, ka tiešām vēlaties pieteikties šai platformai."
 
 msgid "Add text"
@@ -24992,9 +24992,6 @@ msgstr "Eksportēt visu testu rezultātus"
 
 msgid "Click to view details"
 msgstr "Noklikšķiniet, lai skatītu detaļas"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Šis ziņojums attiecas uz visām lietotāja platformas aktivitātēm."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

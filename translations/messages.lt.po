@@ -22090,7 +22090,7 @@ msgstr "Pasirinkti su tekstiniu lauku"
 msgid "Triple select"
 msgstr "Trigubas pasirinkimas"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Patvirtinate, kad tikrai norite prenumeruoti šią platformą."
 
 msgid "Add text"
@@ -24993,9 +24993,6 @@ msgstr "Eksportuoti visų testų visus rezultatus"
 
 msgid "Click to view details"
 msgstr "Spustelėkite, kad pamatytumėte išsamią informaciją"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Ši ataskaita taikoma visoms platformos vartotojo veikloms."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

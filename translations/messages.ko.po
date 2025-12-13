@@ -22088,7 +22088,7 @@ msgstr "텍스트 필드와 함께 선택"
 msgid "Triple select"
 msgstr "트리플 선택"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "이 플랫폼에 구독하려는 것을 확인합니다."
 
 msgid "Add text"
@@ -24991,9 +24991,6 @@ msgstr "모든 테스트의 모든 결과 내보내기"
 
 msgid "Click to view details"
 msgstr "상세 정보 보기 클릭"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "이 보고서는 사용자의 모든 플랫폼 활동에 적용됩니다."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

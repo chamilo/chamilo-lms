@@ -22083,7 +22083,7 @@ msgstr "انتخاب با فیلد متنی"
 msgid "Triple select"
 msgstr "انتخاب سه‌گانه"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "تأیید می‌کنید که واقعاً می‌خواهید در این پلتفرم اشتراک کنید."
 
 msgid "Add text"
@@ -24986,9 +24986,6 @@ msgstr "خروجی همه نتایج همه آزمون‌ها"
 
 msgid "Click to view details"
 msgstr "برای مشاهده جزئیات کلیک کنید"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "این گزارش به همه فعالیت‌های پلتفرم کاربر اعمال می‌شود."
 
 msgid "dd/mm/yyyy"
 msgstr "روز/ماه/سال"

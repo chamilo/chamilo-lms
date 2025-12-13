@@ -22088,7 +22088,7 @@ msgstr "Elekti kun teksta kampo"
 msgid "Triple select"
 msgstr "Tripla elekto"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Vi konfirmas, ke vi vere volas aboni ĉi tiun platformon."
 
 msgid "Add text"
@@ -24991,9 +24991,6 @@ msgstr "Eksporti ĉiujn rezultojn de ĉiuj testoj"
 
 msgid "Click to view details"
 msgstr "Klaku por vidi detalojn"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Ĉi tiu raporto validas por ĉiuj platformaj agadoj de la uzanto."
 
 msgid "dd/mm/yyyy"
 msgstr "tt/mm/yyyy"

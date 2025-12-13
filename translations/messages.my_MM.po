@@ -22087,7 +22087,7 @@ msgstr "စာသားနယ်ပယ်ဖြင့် ရွေးချယ�
 msgid "Triple select"
 msgstr "သုံးဆင့်ရွေးချယ်မှု"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "သင်သည် ဤပလပ်ဖောင်းသို့ စာရင်းသွင်းလိုသည်မှာ သေချာကြောင်း အတည်ပြုပါ။"
 
 msgid "Add text"
@@ -24990,9 +24990,6 @@ msgstr "စမ်းသပ်မှုအားလုံး၏ ရလဒ်အ�
 
 msgid "Click to view details"
 msgstr "အသေးစိတ်ကြည့်ရန် နှိပ်ပါ"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "ဤအစီရင်ခံစာသည် အသုဆုံးပြုသူ၏ ပလပ်ဖောင်းလှုပ်ရှားမှုအားလုံးကို အကျုံးဝင်သည်။"
 
 msgid "dd/mm/yyyy"
 msgstr "ရက်စွဲ/လ/နှစ်"

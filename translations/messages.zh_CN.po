@@ -22088,7 +22088,7 @@ msgstr "带文本字段的选择"
 msgid "Triple select"
 msgstr "三重选择"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "您确认要订阅此平台。"
 
 msgid "Add text"
@@ -24991,9 +24991,6 @@ msgstr "导出所有测试的所有结果"
 
 msgid "Click to view details"
 msgstr "点击查看详情"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "此报告适用于用户的所有平台活动。"
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

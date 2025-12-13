@@ -22089,7 +22089,7 @@ msgstr "Odabir s tekstnim poljem"
 msgid "Triple select"
 msgstr "Trostruki odabir"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Potvrđujete da se stvarno želite pretplatiti na ovu platformu."
 
 msgid "Add text"
@@ -24992,9 +24992,6 @@ msgstr "Izvezi sve rezultate svih testova"
 
 msgid "Click to view details"
 msgstr "Kliknite za prikaz detalja"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Ovaj izvještaj se odnosi na sve aktivnosti korisnika na platformi."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

@@ -22083,7 +22083,7 @@ msgstr "Yàn pẹ̀lú ìkànkà ìwé"
 msgid "Triple select"
 msgstr "Yàn mẹ́ta"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "O fi ìdájọ́ ìmọ̀ pé o fẹ́ forúkọ sí pẹ̀lẹ́tì yìí gan-an."
 
 msgid "Add text"
@@ -24986,9 +24986,6 @@ msgstr "Fi gbogbo awọn abajade ti gbogbo awọn idanwo jade"
 
 msgid "Click to view details"
 msgstr "Tẹ lati wo awọn alaye"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Ijabọ yii kan gbogbo awọn iṣẹ ṣiṣe pẹpẹ ti olumulo."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"

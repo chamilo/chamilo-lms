@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:opphavsrett,, nei:ingen opphavsrett"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappe,, application/msword:MsWord,, application/octet-stream:Octet-strøm,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappe,, application/msword:MsWord,, application/octet-stream:Okttell-stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":øving:øving,,      simulering:simulering,,      spørreskjema:spørreskjema,,      diagram:diagram,,      figur:figur,,      graf:graf,,      indeks:indeks,,      lysbilete:lysbilete,,      tabell:tabell,,      forteljande tekst:forteljande tekst,,      eksamen:eksamen,,      eksperiment:eksperiment,,      problemstilling:problemstilling,,      sjølvoppgåve:sjølvoppgåve,,      forelesning:forelesning"
@@ -26598,7 +26598,7 @@ msgid "LDAP connection configuration"
 msgstr "LDAP-tilknytningskonfigurasjon"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Array som definerer vert og port for LDAP-serveren.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Tabell som definerer vert og port for LDAP-serveren.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Sett utløpsdato ved første pålogging"
@@ -30526,13 +30526,13 @@ msgid "ex. root"
 msgstr "t.d. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "OPPRETT TABELL verk"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ENDRE TABELL verk"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "FJERN KOLONNE verk"
 
 msgid "Theme selected as current"
 msgstr "Tema valde som nåverande"
@@ -31220,4 +31220,223 @@ msgstr "Diskusjonstråd"
 
 msgid "Access to this course"
 msgstr "Tilgang til dette kurset"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Denne tilleggsmodulen har ingen konfigurerbare innstillinger. Aktivering administreres fra tilleggsmodullisten."
+
+msgid "Private - access granted by privileged users"
+msgstr "Privat - tilgang gitt av privilegerte brukere"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Ingen detaljert tilbakemelding er tilgjengelig for dette spørsmålet."
+
+msgid "Please select an answer before checking the result."
+msgstr "Velg et svar før du sjekker resultatet."
+
+msgid "Allow PDF export for this item"
+msgstr "Tillat PDF-eksport for dette elementet"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Skjul gratis brukere (ikke meldt på)"
+
+msgid "Question statistics"
+msgstr "Spørsmålsstatistikk"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Genererer fil. Ikke lukk denne fanen..."
+
+msgid "Assign auth source to users"
+msgstr "Tildel autentiseringskilde til brukere"
+
+msgid "There are no questions for this survey"
+msgstr "Det finnes ingen spørsmål for denne undersøkelsen"
+
+msgid "Certificates report"
+msgstr "Sertifikatrapport"
+
+msgid "Course picture"
+msgstr "Kurspicture"
+
+msgid "Current picture"
+msgstr "Noverande bilde"
+
+msgid "Course events log"
+msgstr "Kurshandlingslogg"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Oppdater kategoriinformasjon og valfri tidsbegrensning."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Opprett ein logisk gruppe av samlingar for å halde treningskataloget organisert."
+
+msgid "Generating file, do not close this tab"
+msgstr "Genererer fil, ikkje lukk denne fanen"
+
+msgid "Assign authentication sources to users"
+msgstr "Tildel autentiseringskjelder til brukarar"
+
+msgid "Average completion rate"
+msgstr "Gjennomsnittleg fullføringsrate"
+
+msgid "Average access rate"
+msgstr "Gjennomsnittleg tilgjengeligrate"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Denne tabellen oppsummerer læringsframgang og aktivitet per læringssti i dei nåverande kursa dine."
+
+msgid "Follow up"
+msgstr "Følg opp"
+
+msgid "Tracking for superior"
+msgstr "Sporing for overordnet"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Denne rapporten viser den ukentlege fordelinga av samlingar per generell coach i det valde datointervallet."
+
+msgid "Head manager report"
+msgstr "Hovudleiarrapport"
+
+msgid "Reset or update user password"
+msgstr "Nullstill eller oppdater brukarpassord"
+
+msgid "Active users"
+msgstr "Aktive brukarar"
+
+msgid "Inactive users"
+msgstr "Passive brukarar"
+
+msgid "Report on resources"
+msgstr "Rapport om ressursar"
+
+msgid "Global view"
+msgstr "Global oversikt"
+
+msgid "Available reports"
+msgstr "Tilgjengelege rapportar"
+
+msgid "Current report"
+msgstr "Noverande rapport"
+
+msgid "Back to user assignment page"
+msgstr "Tilbake til brukaroppgåvesida"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Autentiseringskjelder tildeilt med suksess"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Tips: vel «— Berre last opp —» for å lagre utan å sende til nokon."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Vel ein mottakar («— Berre last opp —» eller ei brukar)"
+
+msgid "Sharing"
+msgstr "Deling"
+
+msgid "Selected files"
+msgstr "Valde filer"
+
+msgid "Hide password"
+msgstr "Skjul passord"
+
+msgid "Show password"
+msgstr "Vis passord"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Last opp SVG-logo for e-postar"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Du må flytte eller fjerna alle læringsstiar frå denne kategorien før du slettar den."
+
+msgid "Clear filters"
+msgstr "Nullstill filter"
+
+msgid "Attendances (tablet)"
+msgstr "Framandor (nettbrett)"
+
+msgid "Exit tablet mode"
+msgstr "Gå ut av nettbrettmodus"
+
+msgid "No members found."
+msgstr "Ingen medlemmer funne."
+
+msgid "Health check"
+msgstr "Helsesjekk"
+
+msgid "Export to CC 1.3"
+msgstr "Eksporter til CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Lastar ressursar..."
+
+msgid "Failed to load resources."
+msgstr "Kunne ikkje laste ressursar."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Vel minst ein eksportérbar ressurs (dokument, weblenke, diskusjon,...)."
+
+msgid "Export finished."
+msgstr "Eksportering fullførd."
+
+msgid "Export failed."
+msgstr "Eksportering mislyktes."
+
+msgid "Import failed."
+msgstr "Import mislyktes."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Lokal fil (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Klar for import"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Vi vil gjenopprette sikkerheitskopien i dette kurset. Du kan gå tilbake for å endre innstillingar."
+
+msgid "Select resources to import"
+msgstr "Vel ressursar å importere"
+
+msgid "No resources available in this backup."
+msgstr "Ingen ressursar tilgjengelege i denne sikkerheitskopien."
+
+msgid "Import selection"
+msgstr "Importval"
+
+msgid "Import completed"
+msgstr "Import fullførd"
+
+msgid "Could not load options."
+msgstr "Kunne ikkje laste innstillingar."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Vel ein sikkerheitskopifil (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Vel ein sikkerheitskopi frå serveren"
+
+msgid "Error selecting source."
+msgstr "Feil ved val av kjelde."
+
+msgid "Recycling options"
+msgstr "Resirkuleringsalternativ"
+
+msgid "Type the course code to confirm"
+msgstr "Skriv kurskoden for å stadfeste"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Dette vil fjerna eller nullstille valde ressursar. Denne handlinga kan ikkje angre."
+
+msgid "Select resources to recycle"
+msgstr "Vel ressursar å resirkulere"
+
+msgid "No resources available in this course."
+msgstr "Ingen ressursar tilgjengelege i dette kurset."
+
+msgid "Recycle selected"
+msgstr "Resirkuler valde"
+
+msgid "Error loading resources."
+msgstr "Feil ved lasting av ressursar."
+
+msgid "Clear search"
+msgstr "Nullstill søk"
 

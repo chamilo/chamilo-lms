@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "सादर"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "सूत्र उदाहरण: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "सूत्र नमूना: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "चर सीमाएं"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:कॉपीराइट,, no:कोई कॉपीराइट नहीं"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:फ़ोल्डर,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:फोल्डर,, application/msword:MsWord,, application/octet-stream:ऑक्टेट स्ट्रीम,, application/pdf:पीडीएफ,, application/postscript:पोस्टस्क्रिप्ट,, application/rtf:आरटीएफ,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:एक्सएमएल;iso-8859-1,, application/xml;utf-8:एक्सएमएल;utf-8,, application/zip:ज़िप"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:अभ्यास,,      simulation:सिमुलेशन,,      questionnaire:प्रश्नावली,,      diagram:आरेख,,      figure:चित्र,,      graph:ग्राफ,,      index:सूची,,      slide:स्लाइड,,      table:तालिका,,      narrative text:कथात्मक पाठ,,      exam:परीक्षा,,      experiment:प्रयोग,,      problem statement:समस्या कथन,,      self assessment:स्व-मूल्यांकन,,      lecture:व्याख्यान"
@@ -8629,7 +8629,7 @@ msgid "%A %B %d, %Y"
 msgstr "%A %B %d, %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
-msgstr "%B %d, %Y at %I:%M %p"
+msgstr "%B %d, %Y को %I:%M %p"
 
 msgid "%I:%M %p"
 msgstr "%I:%M %p"
@@ -30520,13 +30520,13 @@ msgid "ex. root"
 msgstr "उदाहरण: root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "CREATE TABLE कार्य"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ALTER TABLE कार्य"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "DROP COLUMN कार्य"
 
 msgid "Theme selected as current"
 msgstr "थीम वर्तमान के रूप में चयनित"
@@ -30730,7 +30730,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (आंतरिक ID)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "एज़ूर आईडी (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "संगठन ईमेल"
@@ -31214,4 +31214,223 @@ msgstr "चर्चा धागा"
 
 msgid "Access to this course"
 msgstr "इस कोर्स तक पहुँच"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "इस प्लगइन में कोई कॉन्फ़िगर करने योग्य सेटिंग्स नहीं हैं। सक्रियण प्लगइन्स सूची से प्रबंधित होता है।"
+
+msgid "Private - access granted by privileged users"
+msgstr "निजी - विशेषाधिकार प्राप्त उपयोगकर्ताओं द्वारा पहुँच प्रदान की गई"
+
+msgid "No detailed feedback is available for this question."
+msgstr "इस प्रश्न के लिए विस्तृत प्रतिपुष्टि उपलब्ध नहीं है।"
+
+msgid "Please select an answer before checking the result."
+msgstr "परिणाम जांचने से पहले कृपया एक उत्तर चुनें।"
+
+msgid "Allow PDF export for this item"
+msgstr "इस आइटम के लिए पीडीएफ निर्यात की अनुमति दें"
+
+msgid "Hide free users (not enrolled)"
+msgstr "मुफ्त उपयोगकर्ताओं (पंजीकृत नहीं) को छिपाएँ"
+
+msgid "Question statistics"
+msgstr "प्रश्न सांख्यिकी"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "फ़ाइल उत्पन्न हो रही है। इस टैब को बंद न करें..."
+
+msgid "Assign auth source to users"
+msgstr "उपयोगकर्ताओं को प्रमाणीकरण स्रोत सौंपें"
+
+msgid "There are no questions for this survey"
+msgstr "इस सर्वेक्षण के लिए कोई प्रश्न नहीं हैं"
+
+msgid "Certificates report"
+msgstr "प्रमाणपत्र रिपोर्ट"
+
+msgid "Course picture"
+msgstr "कोर्स चित्र"
+
+msgid "Current picture"
+msgstr "वर्तमान चित्र"
+
+msgid "Course events log"
+msgstr "कोर्स घटनाओं का लॉग"
+
+msgid "Update the category information and its optional time limit."
+msgstr "श्रेणी जानकारी और उसकी वैकल्पिक समय सीमा को अपडेट करें।"
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "अपने प्रशिक्षण कैटलॉग को व्यवस्थित रखने के लिए सत्रों का एक तार्किक समूह बनाएँ।"
+
+msgid "Generating file, do not close this tab"
+msgstr "फ़ाइल उत्पन्न हो रही है, इस टैब को बंद न करें"
+
+msgid "Assign authentication sources to users"
+msgstr "उपयोगकर्ताओं को प्रमाणीकरण स्रोत सौंपें"
+
+msgid "Average completion rate"
+msgstr "औसत पूर्णता दर"
+
+msgid "Average access rate"
+msgstr "औसत पहुँच दर"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "यह तालिका आपके वर्तमान कोर्सों में प्रत्येक लर्निंग पथ के प्रति शिक्षार्थी प्रगति और गतिविधि का सारांश प्रस्तुत करती है।"
+
+msgid "Follow up"
+msgstr "फ़ॉलो अप"
+
+msgid "Tracking for superior"
+msgstr "ट्रैकिंग वरिष्ठ के लिए"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "यह रिपोर्ट चयनित तिथि सीमा में सामान्य कोच प्रति सत्रों के साप्ताहिक वितरण को दर्शाती है।"
+
+msgid "Head manager report"
+msgstr "मुख्य प्रबंधक रिपोर्ट"
+
+msgid "Reset or update user password"
+msgstr "उपयोगकर्ता पासवर्ड रीसेट या अपडेट करें"
+
+msgid "Active users"
+msgstr "सक्रिय उपयोगकर्ता"
+
+msgid "Inactive users"
+msgstr "निष्क्रिय उपयोगकर्ता"
+
+msgid "Report on resources"
+msgstr "संसाधनों पर रिपोर्ट"
+
+msgid "Global view"
+msgstr "वैश्विक दृश्य"
+
+msgid "Available reports"
+msgstr "उपलब्ध रिपोर्टें"
+
+msgid "Current report"
+msgstr "वर्तमान रिपोर्ट"
+
+msgid "Back to user assignment page"
+msgstr "उपयोगकर्ता सौंपने के पृष्ठ पर वापस जाएँ"
+
+msgid "Authentication sources assigned successfully"
+msgstr "प्रमाणीकरण स्रोत सफलतापूर्वक सौंपे गए"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "सुझाव: किसी को भेजे बिना संग्रहीत करने के लिए “— बस अपलोड करें —” चुनें।"
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "कृपया कम से कम एक प्राप्तकर्ता चुनें (“— केवल अपलोड करें —” या कोई भी उपयोगकर्ता)"
+
+msgid "Sharing"
+msgstr "साझाकरण"
+
+msgid "Selected files"
+msgstr "चयनित फाइलें"
+
+msgid "Hide password"
+msgstr "पासवर्ड छिपाएँ"
+
+msgid "Show password"
+msgstr "पासवर्ड दिखाएँ"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "ईमेल के लिए SVG लोगो अपलोड करें"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "इसे हटाने से पहले इस श्रेणी से सभी लर्निंग पाथ्स को स्थानांतरित या हटाना होगा।"
+
+msgid "Clear filters"
+msgstr "फ़िल्टर साफ़ करें"
+
+msgid "Attendances (tablet)"
+msgstr "उपस्थिति (टैबलेट)"
+
+msgid "Exit tablet mode"
+msgstr "टैबलेट मोड से बाहर निकलें"
+
+msgid "No members found."
+msgstr "कोई सदस्य नहीं मिला।"
+
+msgid "Health check"
+msgstr "स्वास्थ्य जाँच"
+
+msgid "Export to CC 1.3"
+msgstr "CC 1.3 में निर्यात करें"
+
+msgid "Loading resources..."
+msgstr "संसाधन लोड हो रहे हैं..."
+
+msgid "Failed to load resources."
+msgstr "संसाधन लोड करने में विफल।"
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "कृपया कम से कम एक निर्यात योग्य संसाधन चुनें (दस्तावेज़, वेब लिंक, चर्चा,...)।"
+
+msgid "Export finished."
+msgstr "निर्यात समाप्त।"
+
+msgid "Export failed."
+msgstr "निर्यात विफल।"
+
+msgid "Import failed."
+msgstr "आयात विफल।"
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "स्थानीय फ़ाइल (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "आयात के लिए तैयार"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "हम इस कोर्स में बैकअप को पुनर्स्थापित करेंगे। आप विकल्प बदलने के लिए वापस जा सकते हैं।"
+
+msgid "Select resources to import"
+msgstr "आयात करने के लिए संसाधन चुनें"
+
+msgid "No resources available in this backup."
+msgstr "इस बैकअप में कोई संसाधन उपलब्ध नहीं है।"
+
+msgid "Import selection"
+msgstr "आयात चयन"
+
+msgid "Import completed"
+msgstr "आयात पूर्ण"
+
+msgid "Could not load options."
+msgstr "विकल्प लोड नहीं हो सके।"
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "कृपया एक बैकअप फ़ाइल चुनें (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "कृपया सर्वर से एक बैकअप चुनें"
+
+msgid "Error selecting source."
+msgstr "स्रोत चुनने में त्रुटि।"
+
+msgid "Recycling options"
+msgstr "पुनर्चक्रण विकल्प"
+
+msgid "Type the course code to confirm"
+msgstr "पुष्टि के लिए कोर्स कोड टाइप करें"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "यह चयनित संसाधनों को हटा या रीसेट कर देगा। यह क्रिया पूर्ववत नहीं की जा सकती।"
+
+msgid "Select resources to recycle"
+msgstr "पुनर्चक्रण के लिए संसाधन चुनें"
+
+msgid "No resources available in this course."
+msgstr "इस कोर्स में कोई संसाधन उपलब्ध नहीं है।"
+
+msgid "Recycle selected"
+msgstr "चयनित पुनर्चक्रित करें"
+
+msgid "Error loading resources."
+msgstr "संसाधन लोड करने में त्रुटि।"
+
+msgid "Clear search"
+msgstr "खोज साफ़ करें"
 

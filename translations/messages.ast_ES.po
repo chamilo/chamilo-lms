@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":sí:copyright,, no:ensin copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpeta,, application/msword:MsWord,, application/octet-stream:Fluxu octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exerciciu,, simulation:simulación,, questionnaire:cuestionariu,, diagram:diagrama,, figure:figura,, graph:gráficu,, index:índiz,, slide:diapositiva,, table:tabla,, narrative text:testu narrativu,, exam:exame,, experiment:esperimentu,, problem statement:problema,, self assessment:autoevaluación,, lecture:llectura"
@@ -8628,7 +8628,7 @@ msgid "."
 msgstr ","
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%d de %b de %Y"
 
 msgid "%A %B %d, %Y"
 msgstr "%A %d %B %Y"
@@ -16188,7 +16188,7 @@ msgid "Quarterly report"
 msgstr "Informe trimestral"
 
 msgid "%d %B %Y"
-msgstr "%d %B %Y"
+msgstr "%d de %B de %Y"
 
 msgid "%A"
 msgstr "%A"
@@ -20535,7 +20535,7 @@ msgid "Input size of box to fill"
 msgstr "Tamañu d'entrada de la caxella pa rellenar"
 
 msgid "MM dd, yy"
-msgstr "MM dd, yy"
+msgstr "%d/%m/%y"
 
 msgid "HH:mm"
 msgstr "HH:mm"
@@ -26610,7 +26610,7 @@ msgid "Selective display of roles"
 msgstr "Amosamientu selectivu de roles"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "Un array de role => true/false que define si esti rol ha amosase o anubrise.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "Un array de rol => true/false que define si esti rol ha de amosase o escondese.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Opcions d'amosamientu de roles"
@@ -26862,13 +26862,13 @@ msgid "Check password strength"
 msgstr "Comprobar la fortaleza de la contraseña"
 
 msgid "HTTP Strict Transport Security"
-msgstr "HTTP Strict Transport Security"
+msgstr "Seguridá Estreta de Transportu HTTP"
 
 msgid "HTTP Strict Transport Security is an excellent feature to support on your site and strengthens your implementation of TLS by getting the User Agent to enforce the use of HTTPS. Recommended value: 'strict-transport-security: max-age=63072000; includeSubDomains'. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. You can include the 'preload' suffix, but this has consequences on the top level domain (TLD), so probably not to be done lightly. See https://hstspreload.org/. Leave blank to disable."
 msgstr "HTTP Strict Transport Security ye una carauterística excelente pa soportar nel sitiu y fortalece la to implantación de TLS faciendo que l'axente d'usuariu aplique l'usu de HTTPS. Valor recomendáu: 'strict-transport-security: max-age=63072000; includeSubDomains'. Consulta https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. Pues incluyir el sufixu 'preload', pero esto tiene conse cuencies nel dominiu de primer nivel (TLD), polo que probablemente nun hai que facelo a la ligera. Consulta https://hstspreload.org/. Dexar en blancu pa desactivar."
 
 msgid "Content Security Policy"
-msgstr "Content Security Policy"
+msgstr "Política de Seguridá de Conteníu"
 
 msgid "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the 'script-src' argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
 msgstr "Content Security Policy ye una medida efectiva pa protexer el sitiu d'atacos XSS. Whitelisteando les fontes de conteníu aprobáu, pues evitar que'l navegador cargue activos maliciosos. Esta axuste ye particularmente complicáu d'establir con editores WYSIWYG, pero si ametes tolos dominios que quies autorizar pa la inclusón d'iframes na declaració child-src, esti exemplu debería funcionar. Pues evitar que JavaScript s'execute de fontes esternes (incluyíos dentru d'imaxes SVG) usando una llista estricta nel argumentu 'script-src'. Dexar en blancu pa desactivar. Exemplo d'axuste: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
@@ -26880,7 +26880,7 @@ msgid "This setting allows you to experiment by reporting but not enforcing some
 msgstr "Esti axuste permite experimentar informando pero nun aplicando delles Content Security Policy."
 
 msgid "HTTP Public Key Pinning"
-msgstr "HTTP Public Key Pinning"
+msgstr "Fijación de Clave Pública HTTP"
 
 msgid "HTTP Public Key Pinning protects your site from MiTM attacks using rogue X.509 certificates. By whitelisting only the identities that the browser should trust, your users are protected in the event a certificate authority is compromised."
 msgstr "HTTP Public Key Pinning protexe el sitiu d'atacos MiTM usando certificaus X.509 falsos. Whitelisteando namái les identidaes que'l navegador debe confiar, los tos usuarios tan protexíos nel casu de que una autoridá de certificaus sea comprometida."
@@ -30526,13 +30526,13 @@ msgid "ex. root"
 msgstr "ex. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "CREAR TABLA works"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ALTERAR TABLA works"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "ELIMINAR COLUMNA works"
 
 msgid "Theme selected as current"
 msgstr "Tema seleicionáu como actual"
@@ -31202,4 +31202,241 @@ msgstr "Reiniciar Cursos d'Admin"
 
 msgid "Admin Dashboard"
 msgstr "Escritoriu d'Admin"
+
+msgid "Threads"
+msgstr "Fíos"
+
+msgid "Invalid thread"
+msgstr "Fío inválidu"
+
+msgid "View full thread"
+msgstr "Ver el fío completu"
+
+msgid "No post yet"
+msgstr "Encami nengún mensaxe"
+
+msgid "Discussion thread"
+msgstr "Fío de discusión"
+
+msgid "Access to this course"
+msgstr "Accesu a esti cursu"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Esti complementu nun tien axustes configurables. L'activación xestionase dende la llista de complementos."
+
+msgid "Private - access granted by privileged users"
+msgstr "Priváu - accesu concedíu por usuarios privilegiados"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Nun ye disponible retroalimentación detallada pa esta pregunta."
+
+msgid "Please select an answer before checking the result."
+msgstr "Seleiciona una respuestu enantes de comprobar el resultáu."
+
+msgid "Allow PDF export for this item"
+msgstr "Permite l'esportación PDF d'esti elementu"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Anubrir usuarios llibres (non matrículaos)"
+
+msgid "Question statistics"
+msgstr "Estadístiques de les preguntas"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Xenerando ficheru. Nun zarrés esta llingüeta..."
+
+msgid "Assign auth source to users"
+msgstr "Asignar fonte d'autenticación a los usuarios"
+
+msgid "There are no questions for this survey"
+msgstr "Nun hai preguntas pa esta enqueta"
+
+msgid "Certificates report"
+msgstr "Informe de certificáos"
+
+msgid "Course picture"
+msgstr "Imaxe del cursu"
+
+msgid "Current picture"
+msgstr "Imaxe actual"
+
+msgid "Course events log"
+msgstr "Rexistru d'eventos del cursu"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Actualiza la información de la categoría y el so llímite de tempu opcional."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Crea un grupu lóxico de sesiones pa mantener organizaú'l catálogu de formación."
+
+msgid "Generating file, do not close this tab"
+msgstr "Xenerando ficheru, nun zarrés esta llingüeta"
+
+msgid "Assign authentication sources to users"
+msgstr "Asignar fontes d'autenticación a los usuarios"
+
+msgid "Average completion rate"
+msgstr "Tasa media de finalización"
+
+msgid "Average access rate"
+msgstr "Tasa media d'accesu"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Esta tabla resume'l progresu y actividá de los aprendices por camín d'apreendizaxe nos cursos actuals."
+
+msgid "Follow up"
+msgstr "Seguimientu"
+
+msgid "Tracking for superior"
+msgstr "Seguimientu pal xef"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Esti informe amosa la distribución semanal de les sesiones por entrenador xeneral nel intervalu de dates seleicionáu."
+
+msgid "Head manager report"
+msgstr "Informe del xef"
+
+msgid "Reset or update user password"
+msgstr "Restautar o actualizar contraseña d'usuariu"
+
+msgid "Active users"
+msgstr "Usuarios actius"
+
+msgid "Inactive users"
+msgstr "Usuarios inactivos"
+
+msgid "Report on resources"
+msgstr "Informe de recursos"
+
+msgid "Global view"
+msgstr "Vista global"
+
+msgid "Available reports"
+msgstr "Informes disponibles"
+
+msgid "Current report"
+msgstr "Informe actual"
+
+msgid "Back to user assignment page"
+msgstr "Volver a la páxina d'asignación d'usuariu"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Fontes d'autenticación asignaes con èxitu"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Conseyu: escueye «— Namái xubir —» pa guardar ensin enviar a ninguén."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Escueye al menos un destinatariu («— Namái xubir —» o cualesquier usuariu)"
+
+msgid "Sharing"
+msgstr "Compartición"
+
+msgid "Selected files"
+msgstr "Ficherus seleccionaos"
+
+msgid "Hide password"
+msgstr "Anubrir contraseña"
+
+msgid "Show password"
+msgstr "Amosar contraseña"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Xubir logo SVG pa correos-e"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Has de treslladar o desaniciar tolos caminos d'apreendizaxe d'esta categoría enantes de desaniciála."
+
+msgid "Clear filters"
+msgstr "Llindar filtros"
+
+msgid "Attendances (tablet)"
+msgstr "Asistencies (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Zarrar mou tablet"
+
+msgid "No members found."
+msgstr "Nun s'algún miembru."
+
+msgid "Health check"
+msgstr "Comprobación de salú"
+
+msgid "Export to CC 1.3"
+msgstr "Esportar a CC 1.3"
+
+msgid "Loading resources..."
+msgstr " Cargando recursos..."
+
+msgid "Failed to load resources."
+msgstr "Siguió cargar los recursos."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Escueye al menos un recursu esportable (documentu, enllace web, discusión...). "
+
+msgid "Export finished."
+msgstr "Esportación terminada."
+
+msgid "Export failed."
+msgstr "Falló l'esportación."
+
+msgid "Import failed."
+msgstr "Falló la importación."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Ficheru llocal (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Güey pa importar"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Restauraremos la copia de seguridá nesta cursu. Puees volver pa camudar les opciones."
+
+msgid "Select resources to import"
+msgstr "Seleicionar recursos pa importar"
+
+msgid "No resources available in this backup."
+msgstr "Nun hai recursos disponibles nesta copia de seguridá."
+
+msgid "Import selection"
+msgstr "Seleición d'importación"
+
+msgid "Import completed"
+msgstr "Importación completa"
+
+msgid "Could not load options."
+msgstr "Nun ye posible cargar les opciones."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Escueye un ficheru de copia de seguridá (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Escueye una copia de seguridá del sirvidor"
+
+msgid "Error selecting source."
+msgstr "Error seleicionando fonte."
+
+msgid "Recycling options"
+msgstr "Opciones de reciclar"
+
+msgid "Type the course code to confirm"
+msgstr "Escribi'l códigu del cursu pa confirmar"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Esto va desaniciar o restear los recursos seleccionaos. Esta axón nun ye desfaable."
+
+msgid "Select resources to recycle"
+msgstr "Seleicionar recursos pa reciclar"
+
+msgid "No resources available in this course."
+msgstr "Nun hai recursos disponibles nesta cursu."
+
+msgid "Recycle selected"
+msgstr "Reciclar seleicionaos"
+
+msgid "Error loading resources."
+msgstr "Error cargando recursos."
+
+msgid "Clear search"
+msgstr "Llindar gueta"
 

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "په درناوي سره"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "د مثاله فورموله: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "د فرمول نمونه: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "متغیر حدود"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:کاپي راټ,, no:کاپي راټ نشته"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوډر,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوډل,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:مشق,,      simulation:سيموليشن,,      questionnaire: پوښتنليک,,      diagram: ډايګرام,,      figure: انځور,,      graph:ګراف,,      index:اشاره,,      slide:سلایډ,,      table:جدول,,      narrative text:روايتي متن,,      exam: امتحان,,      experiment: تجربې,,      problem statement: ستونزې بيان,,      self assessment: ځان ارزونه,,      lecture: درس"
@@ -30520,13 +30520,13 @@ msgid "ex. root"
 msgstr "مثال root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "جدول جوړول works"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "جدول بدلول works"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "ستونۍ له منځه وړل works"
 
 msgid "Theme selected as current"
 msgstr "تیم د اوسني په توګه غوره شوی"
@@ -31226,4 +31226,211 @@ msgstr "د دې پوښتنې لپاره تفصیلي فیډبیک شتون نل�
 
 msgid "Please select an answer before checking the result."
 msgstr "د پایلې چک کولو دمخه یوه ځواب غوره کړئ."
+
+msgid "Allow PDF export for this item"
+msgstr "د دې توکي لپاره PDF صادرول اجازه ورکړئ"
+
+msgid "Hide free users (not enrolled)"
+msgstr "بې له پاره کاروونکي پټ کړئ (ثبت شوي نه دي)"
+
+msgid "Question statistics"
+msgstr "د پوښتنو آمار"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "د فایل جوړول. دا ټب مه بندوئ..."
+
+msgid "Assign auth source to users"
+msgstr "د تصدیق سرچینې کاروونکو ته وویشئ"
+
+msgid "There are no questions for this survey"
+msgstr "د دې سروې لپاره پوښتنې نشته"
+
+msgid "Certificates report"
+msgstr "د گواهیو راپور"
+
+msgid "Course picture"
+msgstr "د کورس انځور"
+
+msgid "Current picture"
+msgstr "اوسنی انځور"
+
+msgid "Course events log"
+msgstr "د کورس پېښو لېږد"
+
+msgid "Update the category information and its optional time limit."
+msgstr "د وېشنېز معلومات تازه کړئ او د هغې اختیاري وخت محدودیت."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "د روزنې کټالۆګ منظم ساتلو لپاره د غونډو منطقي ډله جوړه کړئ."
+
+msgid "Generating file, do not close this tab"
+msgstr "د فایل جوړول، دا ټب مه بندوئ"
+
+msgid "Assign authentication sources to users"
+msgstr "د تصدیق سرچینې کاروونکو ته وویشئ"
+
+msgid "Average completion rate"
+msgstr "لومړنۍ بشپړتیا کچه"
+
+msgid "Average access rate"
+msgstr "لومړنۍ لاسرسي کچه"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "دا جدول د تاسو د اوسنيو کورسونو کې د زده کړې لارو د زده کوونکو پرمختګ او فعالیت لنډیز کوي."
+
+msgid "Follow up"
+msgstr "تعقیب"
+
+msgid "Tracking for superior"
+msgstr "د لوړ پوړ لپاره تعقیب"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "دا راپور د ټاکلې نیټې په لړ کې د عمومي کوچ هر عمومي کوچ د غونډو د لومړنۍ وېش ښیي."
+
+msgid "Head manager report"
+msgstr "د مشر مدير راپور"
+
+msgid "Reset or update user password"
+msgstr "د کاروونکي پاسورډ بیا تنظیم یا تازه کړئ"
+
+msgid "Active users"
+msgstr "فعال کاروونکي"
+
+msgid "Inactive users"
+msgstr "غیر فعال کاروونکي"
+
+msgid "Report on resources"
+msgstr "د سرچینو راپور"
+
+msgid "Global view"
+msgstr "عمومي لید"
+
+msgid "Available reports"
+msgstr "شته راپورونه"
+
+msgid "Current report"
+msgstr "اوسنی راپور"
+
+msgid "Back to user assignment page"
+msgstr "د کاروونکي ویش صفحې ته بیرته"
+
+msgid "Authentication sources assigned successfully"
+msgstr "د تصدیق سرچینې په بريارۍ سره وویشل شوې"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "لارښوونه: «— یوازې اپلوډ کړئ —» غوره کړئ چې پرته له دې چې چا ته واستوئ یې ذخیره کړئ."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "لږ تر لږه یو ترلاسه کوونکی غوره کړئ («— یوازې اپلوډ کړئ —» یا هر کاروونکی)"
+
+msgid "Sharing"
+msgstr "شریکول"
+
+msgid "Selected files"
+msgstr "غوره شوي فایلونه"
+
+msgid "Hide password"
+msgstr "پاسورډ پټ کړئ"
+
+msgid "Show password"
+msgstr "پاسورډ ښکاره کړئ"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "د برېښنالیکو لپاره SVG لوګو اپلوډ کړئ"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "د دې له منځه وړلو دمخه باید ټول زده کړې لارې له دې وېشنېز څخه لېږد یا له منځه یوسئ."
+
+msgid "Clear filters"
+msgstr "فلټرونه پاک کړئ"
+
+msgid "Attendances (tablet)"
+msgstr "حاضرۍ (ټابلیټ)"
+
+msgid "Exit tablet mode"
+msgstr "ټابلیټ حالت پرېږدئ"
+
+msgid "No members found."
+msgstr "هیڅ غړي ونه موندل شول."
+
+msgid "Health check"
+msgstr "روغتیا معاینه"
+
+msgid "Export to CC 1.3"
+msgstr "د CC 1.3 ته صادرول"
+
+msgid "Loading resources..."
+msgstr "د سرچینو بار کېدل..."
+
+msgid "Failed to load resources."
+msgstr "د سرچینو بار کېدل پاتې راغلل."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "لږ تر لږه یو صادریدونکی سرچینه غوره کړئ (اسناد، ویب لینک، بحث،...). "
+
+msgid "Export finished."
+msgstr "صادرات بشپړ شو."
+
+msgid "Export failed."
+msgstr "صادرات ناکامه شو."
+
+msgid "Import failed."
+msgstr "واردول ناکامه شو."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "محلي فایل (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "د واردولو لپاره چمتو"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "موږ به د دې کورس په نږدې کاپي بحال کړو. تاسو کولای شئ بیرته لاړ شئ ترڅو اختیارونه بدل کړئ."
+
+msgid "Select resources to import"
+msgstr "د واردولو سرچینې غوره کړئ"
+
+msgid "No resources available in this backup."
+msgstr "د دې کاپي کې هیڅ سرچینې شتون نلري."
+
+msgid "Import selection"
+msgstr "د واردولو ټاکل"
+
+msgid "Import completed"
+msgstr "واردول بشپړ شو"
+
+msgid "Could not load options."
+msgstr "اختیارونه بار کېدل نه شول."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "د یوې کاپي فایل غوره کړئ (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "د سرور څخه یوه کاپي غوره کړئ"
+
+msgid "Error selecting source."
+msgstr "د سرچینې ټاکل کې خطا."
+
+msgid "Recycling options"
+msgstr "د بیا کارولو اختیارونه"
+
+msgid "Type the course code to confirm"
+msgstr "د تایید لپاره د کورس کوډ ولیکئ"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "دا به ټاکل شوي سرچینې لرې کړي یا ریست کړي. دا عمل نشي ړنګیدلی."
+
+msgid "Select resources to recycle"
+msgstr "د بیا کارولو سرچینې غوره کړئ"
+
+msgid "No resources available in this course."
+msgstr "د دې کورس کې هیڅ سرچینې شتون نلري."
+
+msgid "Recycle selected"
+msgstr "ټاکل شوي بیا کارول"
+
+msgid "Error loading resources."
+msgstr "د سرچینو بار کېدل کې خطا."
+
+msgid "Clear search"
+msgstr "د لټون پاکول"
 

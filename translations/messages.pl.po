@@ -31227,3 +31227,222 @@ msgstr "Wątek dyskusji"
 msgid "Access to this course"
 msgstr "Dostęp do tego kursu"
 
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Ta wtyczka nie ma konfigurowalnych ustawień. Aktywacja jest zarządzana z listy wtyczek."
+
+msgid "Private - access granted by privileged users"
+msgstr "Prywatne - dostęp przyznawany przez uprzywilejowanych użytkowników"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Brak szczegółowego feedbacku dla tego pytania."
+
+msgid "Please select an answer before checking the result."
+msgstr "Wybierz odpowiedź przed sprawdzeniem wyniku."
+
+msgid "Allow PDF export for this item"
+msgstr "Zezwól na eksport PDF dla tego elementu"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Ukryj darmowych użytkowników (niezapisanych)"
+
+msgid "Question statistics"
+msgstr "Statystyki pytań"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Generowanie pliku. Nie zamykaj tej karty..."
+
+msgid "Assign auth source to users"
+msgstr "Przypisz źródło uwierzytelniania użytkownikom"
+
+msgid "There are no questions for this survey"
+msgstr "Brak pytań w tej ankiecie"
+
+msgid "Certificates report"
+msgstr "Raport certyfikatów"
+
+msgid "Course picture"
+msgstr "Zdjęcie kursu"
+
+msgid "Current picture"
+msgstr "Aktualne zdjęcie"
+
+msgid "Course events log"
+msgstr "Dziennik zdarzeń kursu"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Zaktualizuj informacje o kategorii i jej opcjonalny limit czasu."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Utwórz logiczną grupę sesji, aby uporządkować katalog szkoleń."
+
+msgid "Generating file, do not close this tab"
+msgstr "Generowanie pliku, nie zamykaj tej karty"
+
+msgid "Assign authentication sources to users"
+msgstr "Przypisz źródła uwierzytelniania użytkownikom"
+
+msgid "Average completion rate"
+msgstr "Średni wskaźnik ukończenia"
+
+msgid "Average access rate"
+msgstr "Średni wskaźnik dostępu"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Ta tabela podsumowuje postępy i aktywność uczestników dla ścieżek uczenia się w aktualnych kursach."
+
+msgid "Follow up"
+msgstr "Śledzenie"
+
+msgid "Tracking for superior"
+msgstr "Śledzenie dla przełożonego"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Ten raport pokazuje tygodniowy rozkład sesji na głównego trenera w wybranym zakresie dat."
+
+msgid "Head manager report"
+msgstr "Raport dyrektora"
+
+msgid "Reset or update user password"
+msgstr "Resetuj lub zaktualizuj hasło użytkownika"
+
+msgid "Active users"
+msgstr "Aktywni użytkownicy"
+
+msgid "Inactive users"
+msgstr "Nieaktywni użytkownicy"
+
+msgid "Report on resources"
+msgstr "Raport zasobów"
+
+msgid "Global view"
+msgstr "Widok ogólny"
+
+msgid "Available reports"
+msgstr "Dostępne raporty"
+
+msgid "Current report"
+msgstr "Aktualny raport"
+
+msgid "Back to user assignment page"
+msgstr "Powrót do strony przypisywania użytkowników"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Źródła uwierzytelniania przypisane pomyślnie"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Wskazówka: wybierz „— Tylko prześlij —”, aby zapisać bez wysyłania do kogokolwiek."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Wybierz co najmniej jednego odbiorcę („— Tylko prześlij —” lub dowolnego użytkownika)"
+
+msgid "Sharing"
+msgstr "Udostępnianie"
+
+msgid "Selected files"
+msgstr "Wybrane pliki"
+
+msgid "Hide password"
+msgstr "Ukryj hasło"
+
+msgid "Show password"
+msgstr "Pokaż hasło"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Wczytaj logo SVG dla e-maili"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Musisz przenieść lub usunąć wszystkie ścieżki uczenia z tej kategorii przed jej usunięciem."
+
+msgid "Clear filters"
+msgstr "Wyczyść filtry"
+
+msgid "Attendances (tablet)"
+msgstr "Obecności (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Wyjdź z trybu tabletu"
+
+msgid "No members found."
+msgstr "Nie znaleziono członków."
+
+msgid "Health check"
+msgstr "Sprawdzenie stanu"
+
+msgid "Export to CC 1.3"
+msgstr "Eksport do CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Ładowanie zasobów..."
+
+msgid "Failed to load resources."
+msgstr "Nie udało się załadować zasobów."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Wybierz co najmniej jeden eksportowalny zasób (dokument, link sieciowy, dyskusja,...)."
+
+msgid "Export finished."
+msgstr "Eksport zakończony."
+
+msgid "Export failed."
+msgstr "Eksport nie powiódł się."
+
+msgid "Import failed."
+msgstr "Import nie powiódł się."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Plik lokalny (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Gotowy do importu"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Przywrócimy kopię zapasową do tego kursu. Możesz wrócić, aby zmienić opcje."
+
+msgid "Select resources to import"
+msgstr "Wybierz zasoby do importu"
+
+msgid "No resources available in this backup."
+msgstr "Brak zasobów dostępnych w tej kopii zapasowej."
+
+msgid "Import selection"
+msgstr "Wybór importu"
+
+msgid "Import completed"
+msgstr "Import zakończony"
+
+msgid "Could not load options."
+msgstr "Nie udało się załadować opcji."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Wybierz plik kopii zapasowej (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Wybierz kopię zapasową z serwera"
+
+msgid "Error selecting source."
+msgstr "Błąd wyboru źródła."
+
+msgid "Recycling options"
+msgstr "Opcje recyklingu"
+
+msgid "Type the course code to confirm"
+msgstr "Wpisz kod kursu, aby potwierdzić"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Usunie lub zresetuje wybrane zasoby. Tej czynności nie można cofnąć."
+
+msgid "Select resources to recycle"
+msgstr "Wybierz zasoby do recyklingu"
+
+msgid "No resources available in this course."
+msgstr "Brak zasobów dostępnych w tym kursie."
+
+msgid "Recycle selected"
+msgstr "Zrecyklinguj wybrane"
+
+msgid "Error loading resources."
+msgstr "Błąd ładowania zasobów."
+
+msgid "Clear search"
+msgstr "Wyczyść wyszukiwanie"
+

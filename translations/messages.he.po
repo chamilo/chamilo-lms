@@ -31246,3 +31246,210 @@ msgstr "אין משוב מפורט זמין לשאלה זו."
 msgid "Please select an answer before checking the result."
 msgstr "נא לבחור תשובה לפני בדיקת התוצאה."
 
+msgid "Allow PDF export for this item"
+msgstr "אפשר ייצוא PDF עבור פריט זה"
+
+msgid "Hide free users (not enrolled)"
+msgstr "הסתר משתמשים חופשיים (לא רשומים)"
+
+msgid "Question statistics"
+msgstr "סטטיסטיקות שאלות"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "מייצר קובץ. אל תסגור לשונית זו..."
+
+msgid "Assign auth source to users"
+msgstr "הקצה מקור אימות למשתמשים"
+
+msgid "There are no questions for this survey"
+msgstr "אין שאלות עבור סקר זה"
+
+msgid "Certificates report"
+msgstr "דוח תעודות"
+
+msgid "Course picture"
+msgstr "תמונת קורס"
+
+msgid "Current picture"
+msgstr "תמונה נוכחית"
+
+msgid "Course events log"
+msgstr "יומן אירועי קורס"
+
+msgid "Update the category information and its optional time limit."
+msgstr "עדכן מידע קטגוריה ומגבלת זמן אופציונלית."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "צור קבוצה לוגית של מפגשים כדי לשמור על סדר בקטלוג ההכשרה שלך."
+
+msgid "Generating file, do not close this tab"
+msgstr "מייצר קובץ, אל תסגור לשונית זו"
+
+msgid "Assign authentication sources to users"
+msgstr "הקצה מקורות אימות למשתמשים"
+
+msgid "Average completion rate"
+msgstr "שיעור השלמה ממוצע"
+
+msgid "Average access rate"
+msgstr "שיעור גישה ממוצע"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "טבלה זו מסכמת התקדמות ופעילות של לומדים עבור מסלולי למידה בקורסים הנוכחיים שלך."
+
+msgid "Follow up"
+msgstr "מעקב"
+
+msgid "Tracking for superior"
+msgstr "מעקב לממונה"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "דוח זה מציג את התפלגות המפגשים השבועית עבור מאמן כללי בטווח התאריכים שנבחר."
+
+msgid "Head manager report"
+msgstr "דוח מנהל ראשי"
+
+msgid "Reset or update user password"
+msgstr "אפס או עדכן סיסמת משתמש"
+
+msgid "Active users"
+msgstr "משתמשים פעילים"
+
+msgid "Inactive users"
+msgstr "משתמשים לא פעילים"
+
+msgid "Report on resources"
+msgstr "דוח על משאבים"
+
+msgid "Global view"
+msgstr "תצוגה כללית"
+
+msgid "Available reports"
+msgstr "דוחות זמינים"
+
+msgid "Current report"
+msgstr "דוח נוכחי"
+
+msgid "Back to user assignment page"
+msgstr "חזור לעמוד הקצאת משתמשים"
+
+msgid "Authentication sources assigned successfully"
+msgstr "מקורות אימות הוקצו בהצלחה"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "טיפ: בחר “— העלה בלבד —” כדי לשמור ללא שליחה לאיש."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "נא לבחור לפחות נמען אחד (“— העלה בלבד —” או משתמש כלשהו)"
+
+msgid "Sharing"
+msgstr "שיתוף"
+
+msgid "Selected files"
+msgstr "קבצים שנבחרו"
+
+msgid "Hide password"
+msgstr "הסתר סיסמה"
+
+msgid "Show password"
+msgstr "הצג סיסמה"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "העלה לוגו SVG עבור דוא\"לים"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "עליך להעביר או למחוק את כל מסלולי הלמידה מקטגוריה זו לפני מחיקתה."
+
+msgid "Clear filters"
+msgstr "נקה מסננים"
+
+msgid "Attendances (tablet)"
+msgstr "נוכחות (טאבלט)"
+
+msgid "Exit tablet mode"
+msgstr "צא ממצב טאבלט"
+
+msgid "No members found."
+msgstr "לא נמצאו חברים."
+
+msgid "Health check"
+msgstr "בדיקת בריאות"
+
+msgid "Export to CC 1.3"
+msgstr "ייצא ל-CC 1.3"
+
+msgid "Loading resources..."
+msgstr "טוען משאבים..."
+
+msgid "Failed to load resources."
+msgstr "נכשל בטעינת המשאבים."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "אנא בחרו לפחות משאב אחד לייצוא (מסמך, קישור אינטרנט, דיון,...)."
+
+msgid "Export finished."
+msgstr "הייצוא הושלם."
+
+msgid "Export failed."
+msgstr "הייצוא נכשל."
+
+msgid "Import failed."
+msgstr "היבוא נכשל."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "קובץ מקומי (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "מוכן לייבוא"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "נשחזר את הגיבוי לקורס זה. ניתן לחזור לשנות אפשרויות."
+
+msgid "Select resources to import"
+msgstr "בחירת משאבים לייבוא"
+
+msgid "No resources available in this backup."
+msgstr "אין משאבים זמינים בגיבוי זה."
+
+msgid "Import selection"
+msgstr "בחירת יבוא"
+
+msgid "Import completed"
+msgstr "היבוא הושלם"
+
+msgid "Could not load options."
+msgstr "לא ניתן לטעון אפשרויות."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "אנא בחרו קובץ גיבוי (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "אנא בחרו גיבוי מהשרת"
+
+msgid "Error selecting source."
+msgstr "שגיאה בבחירת מקור."
+
+msgid "Recycling options"
+msgstr "אפשרויות מיחזור"
+
+msgid "Type the course code to confirm"
+msgstr "הקלידו קוד קורס לאישור"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "פעולה זו תמחק או תאפס משאבים נבחרים. לא ניתן לבטל פעולה זו."
+
+msgid "Select resources to recycle"
+msgstr "בחירת משאבים למיחזור"
+
+msgid "No resources available in this course."
+msgstr "אין משאבים זמינים בקורס זה."
+
+msgid "Recycle selected"
+msgstr "מיחזור נבחר"
+
+msgid "Error loading resources."
+msgstr "שגיאה בטעינת משאבים."
+
+msgid "Clear search"
+msgstr "נקה חיפוש"
+

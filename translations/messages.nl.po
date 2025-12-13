@@ -33286,3 +33286,240 @@ msgstr "Admin Herstart Cursussen"
 msgid "Admin Dashboard"
 msgstr "Admin Dashboard"
 
+msgid "Threads"
+msgstr ""
+
+msgid "Invalid thread"
+msgstr ""
+
+msgid "View full thread"
+msgstr ""
+
+msgid "No post yet"
+msgstr ""
+
+msgid "Discussion thread"
+msgstr ""
+
+msgid "Access to this course"
+msgstr ""
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr ""
+
+msgid "Private - access granted by privileged users"
+msgstr ""
+
+msgid "No detailed feedback is available for this question."
+msgstr ""
+
+msgid "Please select an answer before checking the result."
+msgstr ""
+
+msgid "Allow PDF export for this item"
+msgstr ""
+
+msgid "Hide free users (not enrolled)"
+msgstr ""
+
+msgid "Question statistics"
+msgstr ""
+
+msgid "Generating file. Do not close this tab..."
+msgstr ""
+
+msgid "Assign auth source to users"
+msgstr ""
+
+msgid "There are no questions for this survey"
+msgstr ""
+
+msgid "Certificates report"
+msgstr ""
+
+msgid "Course picture"
+msgstr ""
+
+msgid "Current picture"
+msgstr ""
+
+msgid "Course events log"
+msgstr ""
+
+msgid "Update the category information and its optional time limit."
+msgstr ""
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr ""
+
+msgid "Generating file, do not close this tab"
+msgstr ""
+
+msgid "Assign authentication sources to users"
+msgstr ""
+
+msgid "Average completion rate"
+msgstr ""
+
+msgid "Average access rate"
+msgstr ""
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr ""
+
+msgid "Follow up"
+msgstr ""
+
+msgid "Tracking for superior"
+msgstr ""
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr ""
+
+msgid "Head manager report"
+msgstr "Hoofdbeheerder rapport"
+
+msgid "Reset or update user password"
+msgstr "Gebruikerswachtwoord opnieuw instellen of bijwerken"
+
+msgid "Active users"
+msgstr "Actieve gebruikers"
+
+msgid "Inactive users"
+msgstr "Inactieve gebruikers"
+
+msgid "Report on resources"
+msgstr "Rapport over bronnen"
+
+msgid "Global view"
+msgstr "Algemeen overzicht"
+
+msgid "Available reports"
+msgstr "Beschikbare rapporten"
+
+msgid "Current report"
+msgstr "Huidig rapport"
+
+msgid "Back to user assignment page"
+msgstr "Terug naar gebruikers toewijzing pagina"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Authenticatiebronnen succesvol toegewezen"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Tip: kies “— Alleen uploaden —” om op te slaan zonder naar iemand te versturen."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Selecteer minstens één ontvanger (“— Alleen uploaden —” of een gebruiker)"
+
+msgid "Sharing"
+msgstr "Delen"
+
+msgid "Selected files"
+msgstr "Geselecteerde bestanden"
+
+msgid "Hide password"
+msgstr "Wachtwoord verbergen"
+
+msgid "Show password"
+msgstr "Wachtwoord tonen"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "SVG-logo voor e-mails uploaden"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "U moet alle leerpaden uit deze categorie verplaatsen of verwijderen voordat u deze kunt verwijderen."
+
+msgid "Clear filters"
+msgstr "Filters wissen"
+
+msgid "Attendances (tablet)"
+msgstr "Aanwezigheden (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Tabletmodus verlaten"
+
+msgid "No members found."
+msgstr "Geen leden gevonden."
+
+msgid "Health check"
+msgstr "Gezondheidscontrole"
+
+msgid "Export to CC 1.3"
+msgstr "Exporteren naar CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Bronnen laden..."
+
+msgid "Failed to load resources."
+msgstr "Kon bronnen niet laden."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Selecteer minstens één exporteerbare bron (document, webkoppelingen, discussie,...)."
+
+msgid "Export finished."
+msgstr "Export voltooid."
+
+msgid "Export failed."
+msgstr "Export mislukt."
+
+msgid "Import failed."
+msgstr "Import mislukt."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Lokaal bestand (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Klaar om te importeren"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "We zullen de back-up in deze cursus herstellen. U kunt teruggaan om opties te wijzigen."
+
+msgid "Select resources to import"
+msgstr "Bronnen selecteren om te importeren"
+
+msgid "No resources available in this backup."
+msgstr "Geen bronnen beschikbaar in deze back-up."
+
+msgid "Import selection"
+msgstr "Importselectie"
+
+msgid "Import completed"
+msgstr "Import voltooid"
+
+msgid "Could not load options."
+msgstr "Kon opties niet laden."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Selecteer een back-upbestand (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Kies een back-up van de server"
+
+msgid "Error selecting source."
+msgstr "Fout bij selecteren van bron."
+
+msgid "Recycling options"
+msgstr "Herbruikopties"
+
+msgid "Type the course code to confirm"
+msgstr "Typ de cursuscode ter bevestiging"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Dit verwijdert of herstelt geselecteerde bronnen. Deze actie kan niet ongedaan worden gemaakt."
+
+msgid "Select resources to recycle"
+msgstr "Bronnen selecteren om te hergebruiken"
+
+msgid "No resources available in this course."
+msgstr "Geen bronnen beschikbaar in deze cursus."
+
+msgid "Recycle selected"
+msgstr "Geselecteerde hergebruiken"
+
+msgid "Error loading resources."
+msgstr "Fout bij laden van bronnen."
+
+msgid "Clear search"
+msgstr "Zoekopdracht wissen"
+

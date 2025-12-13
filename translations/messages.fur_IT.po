@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Cori lis rispetts"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formule di exemplu: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formule di esempi: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rangs variabii"
@@ -31226,4 +31226,211 @@ msgstr "Nissun feedback detaijât disponibi par cheste domande."
 
 msgid "Please select an answer before checking the result."
 msgstr "Slezzionâ une risposte prime di controlâ il rezultât."
+
+msgid "Allow PDF export for this item"
+msgstr "Permitî l'esportassion PDF par cheste elemint"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Asconî i utents libres (no iscrîts)"
+
+msgid "Question statistics"
+msgstr "Statistichis das domandis"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Stant jenereant il file. No sierâ chiere cheste lenguete..."
+
+msgid "Assign auth source to users"
+msgstr "Asignie la sorgjenti di autenticazion ai utents"
+
+msgid "There are no questions for this survey"
+msgstr "No i è nissune domande par chest indagin"
+
+msgid "Certificates report"
+msgstr "Rapuort dai certificâts"
+
+msgid "Course picture"
+msgstr "Figure dal curs"
+
+msgid "Current picture"
+msgstr "Figure atuâl"
+
+msgid "Course events log"
+msgstr "Log dai events dal curs"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Anjoorne le informazions de categorie e il so limit di tems opsionâl."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Cree un grup logic di sesions par tegnî organizât il to catalog dal formazion."
+
+msgid "Generating file, do not close this tab"
+msgstr "Jenereant il file, no sierâ chiere cheste lenguete"
+
+msgid "Assign authentication sources to users"
+msgstr "Asignie le sorgjenti di autenticazion ai utents"
+
+msgid "Average completion rate"
+msgstr "Rait medije di completament"
+
+msgid "Average access rate"
+msgstr "Rait medije di acès"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Cheste tabule sintegnize il progress e l'ativitât des aprenents par percors didatichs neis to curs atuâi."
+
+msgid "Follow up"
+msgstr "Seuit"
+
+msgid "Tracking for superior"
+msgstr "Tracking par superior"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Chest rapuort mostrâ la distribussion setiminâl des sesions par coach generâl tal intervâl di dât selezionât."
+
+msgid "Head manager report"
+msgstr "Rapuort dal diretor"
+
+msgid "Reset or update user password"
+msgstr "Azzerâ o anjoornâ la password dal utent"
+
+msgid "Active users"
+msgstr "Utents atîfs"
+
+msgid "Inactive users"
+msgstr "Utents no atîfs"
+
+msgid "Report on resources"
+msgstr "Rapuort sui risurs"
+
+msgid "Global view"
+msgstr "Viste globâl"
+
+msgid "Available reports"
+msgstr "Rapuorts disponibii"
+
+msgid "Current report"
+msgstr "Rapuort atuâl"
+
+msgid "Back to user assignment page"
+msgstr "Torna a pâgine de asignazion utents"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Sorgjenti di autenticazion asignadis cu sucès"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Consij: sèlit “— Just upload —” par metî in archiv senz mandâ a nissù."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Ples sèlit al manco un destinatari (“— Just upload —” o un utent)"
+
+msgid "Sharing"
+msgstr "Condution"
+
+msgid "Selected files"
+msgstr "Files selezionâts"
+
+msgid "Hide password"
+msgstr "Asconî password"
+
+msgid "Show password"
+msgstr "Mostre password"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Cjarie logo SVG par i e-mail"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Tu devi displasâ o gjavâti dutis lis percors di aprenint de cheste categorije prime di eliminâla."
+
+msgid "Clear filters"
+msgstr "Nivelle filtirs"
+
+msgid "Attendances (tablet)"
+msgstr "Presenis (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Esci de modalitât tablet"
+
+msgid "No members found."
+msgstr "Nissun membris trombât."
+
+msgid "Health check"
+msgstr "Controle de sâut"
+
+msgid "Export to CC 1.3"
+msgstr "Esporte in CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Cjamant risorsis..."
+
+msgid "Failed to load resources."
+msgstr "Impuit cjamâ risorsis."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Selezione almena un'risorse esportâbil (document, colegament web, discussion,...)."
+
+msgid "Export finished."
+msgstr "Esportazion finîe."
+
+msgid "Export failed."
+msgstr "Esportazion falîe."
+
+msgid "Import failed."
+msgstr "Importazion falîe."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "File local (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Pront par importâ"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Risaurarìn il backup in chest curs. Tu podis tornâ indaê par cangiâ opzionis."
+
+msgid "Select resources to import"
+msgstr "Selezione risorsis da importâ"
+
+msgid "No resources available in this backup."
+msgstr "Nissune risorse disponibile in chest backup."
+
+msgid "Import selection"
+msgstr "Seletzion par import"
+
+msgid "Import completed"
+msgstr "Import completât"
+
+msgid "Could not load options."
+msgstr "Impuit cjamâ opzionis."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Selezione un file backup (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Scealt un backup dal server"
+
+msgid "Error selecting source."
+msgstr "Erôr in selezion de sorgint."
+
+msgid "Recycling options"
+msgstr "Opzionis di ricliclâ"
+
+msgid "Type the course code to confirm"
+msgstr "Scrive il còdec dal curs par confermâ"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Cheste acion gjavare o azzerare le risorsis seletzionadis. Cheste acion no si pù tornâ indaê."
+
+msgid "Select resources to recycle"
+msgstr "Selezione risorsis da ricliclâ"
+
+msgid "No resources available in this course."
+msgstr "Nissune risorse disponibile in chest curs."
+
+msgid "Recycle selected"
+msgstr "Riclicle seletzionât"
+
+msgid "Error loading resources."
+msgstr "Erôr in cjamant risorsis."
+
+msgid "Clear search"
+msgstr "Nivelle cercjhe"
 

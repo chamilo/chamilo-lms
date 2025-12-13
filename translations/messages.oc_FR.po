@@ -25648,7 +25648,7 @@ msgid "Video player renderers"
 msgstr "Renderers de leitor de vídeo"
 
 msgid "Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
-msgstr "Activar los renderers de leitor per YouTube, Vimeo, Facebook, DailyMotion, Twitch"
+msgstr "Activar los renderizadores de reproductors per YouTube, Vimeo, Facebook, DailyMotion, Twitch"
 
 msgid "Allow teachers to edit tests in learning paths"
 msgstr "Permetre als professors modificar los tests dins los parcours d'aprendissatge"
@@ -31226,4 +31226,211 @@ msgstr "Cap de comentari detaillat es disponible per aquesta question."
 
 msgid "Please select an answer before checking the result."
 msgstr "Seleccionatz una responsa abans de verificar lo resultat."
+
+msgid "Allow PDF export for this item"
+msgstr "Permetre l'exportacion PDF d'aqueste element"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Amagar los utilizaires liures (pas inscrits)"
+
+msgid "Question statistics"
+msgstr "Estatisticas de las questions"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Generacion del fichièr. Cauriatz pas tancar aquesta onglet..."
+
+msgid "Assign auth source to users"
+msgstr "Assignar font d'autentificacion als utilizaires"
+
+msgid "There are no questions for this survey"
+msgstr "I a pas de questions per aquesta enquesta"
+
+msgid "Certificates report"
+msgstr "Rapòrt dels certificats"
+
+msgid "Course picture"
+msgstr "Imatge del curs"
+
+msgid "Current picture"
+msgstr "Imatge actuala"
+
+msgid "Course events log"
+msgstr "Jornal dels eveniments del curs"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Actualizar las informacions de la categoria e sa limita de temps opcionau."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Crear un grop logic de sesions per organizar vòstre catalòg de formacion."
+
+msgid "Generating file, do not close this tab"
+msgstr "Generacion del fichièr, cauriatz pas tancar aquesta onglet"
+
+msgid "Assign authentication sources to users"
+msgstr "Assignar fonts d'autentificacion als utilizaires"
+
+msgid "Average completion rate"
+msgstr "Tasa mejana d'achabament"
+
+msgid "Average access rate"
+msgstr "Tasa mejana d'access"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Aquesta taula resume lo progres e l'activitat dels aprentisses per senhier d'aprendissatge dins vòstres cors actuals."
+
+msgid "Follow up"
+msgstr "Seguiment"
+
+msgid "Tracking for superior"
+msgstr "Seguiment per superior"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Aqueste rapòrt mostra la distribucion setmanala de las sesions per coach general dins la franja de datas seleccionada."
+
+msgid "Head manager report"
+msgstr "Rapòrt del cap de gestion"
+
+msgid "Reset or update user password"
+msgstr "Reïnicializar o actualizar senhal de l'utilizaire"
+
+msgid "Active users"
+msgstr "Utilizaires actius"
+
+msgid "Inactive users"
+msgstr "Utilizaires inactius"
+
+msgid "Report on resources"
+msgstr "Rapòrt sus las ressources"
+
+msgid "Global view"
+msgstr "Vision globala"
+
+msgid "Available reports"
+msgstr "Rapòrts disponiblas"
+
+msgid "Current report"
+msgstr "Rapòrt actual"
+
+msgid "Back to user assignment page"
+msgstr "Tornar a la pagina d'assignacion d'utilizaires"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Fonts d'autentificacion assignadas amb succès"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Cònsi: causir «— Simplement cargar —» per estocar sens enviar a persona."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Causissatz al mens un destinatari («— Simplement cargar —» o quicunque utilizaire)"
+
+msgid "Sharing"
+msgstr "Partatge"
+
+msgid "Selected files"
+msgstr "Fichièrs seleccionats"
+
+msgid "Hide password"
+msgstr "Amagar senhal"
+
+msgid "Show password"
+msgstr "Afichar senhal"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Cargar lo logòtipe SVG pels corrièrs electronics"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Vos cal mover o suprimir totes los caminadas d'aprendissatge d'aquesta categoria abans de la suprimir."
+
+msgid "Clear filters"
+msgstr "Escafar los filtres"
+
+msgid "Attendances (tablet)"
+msgstr "Preséncias (tableta)"
+
+msgid "Exit tablet mode"
+msgstr "Quitar lo mòde tableta"
+
+msgid "No members found."
+msgstr "Cap membre pas trobat."
+
+msgid "Health check"
+msgstr "Contraròtle de santat"
+
+msgid "Export to CC 1.3"
+msgstr "Exportar en CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Carga dels recursos..."
+
+msgid "Failed to load resources."
+msgstr "Fracàs de la carga dels recursos."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Seleccionatz al mens un recurso exportable (document, ligam web, discussion,...)."
+
+msgid "Export finished."
+msgstr "Exportacion acabada."
+
+msgid "Export failed."
+msgstr "Fracàs de l'exportacion."
+
+msgid "Import failed."
+msgstr "Fracàs de l'importacion."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Fichièr local (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Prèst per importar"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Restaurom la sècreta dins aquest còrs. Podètz tornar en rèire per cambiar las opcions."
+
+msgid "Select resources to import"
+msgstr "Seleccionar los recursos d'importar"
+
+msgid "No resources available in this backup."
+msgstr "Cap recurso pas disponible dins aquesta sècreta."
+
+msgid "Import selection"
+msgstr "Seleccion d'importacion"
+
+msgid "Import completed"
+msgstr "Importacion acabada"
+
+msgid "Could not load options."
+msgstr "Impossible de cargar las opcions."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Seleccionatz un fichièr de sècreta (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Causissètz una sècreta sul servidor"
+
+msgid "Error selecting source."
+msgstr "Error de seleccion de la font."
+
+msgid "Recycling options"
+msgstr "Opcions de reciclatge"
+
+msgid "Type the course code to confirm"
+msgstr "Picatz lo còde del còrs per confirmar"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Aquò suprimirà o reïnicializarà los recursos seleccionats. Aquesta accion es irreversibla."
+
+msgid "Select resources to recycle"
+msgstr "Seleccionar los recursos a reciclar"
+
+msgid "No resources available in this course."
+msgstr "Cap recurso pas disponible dins aquest còrs."
+
+msgid "Recycle selected"
+msgstr "Reciclar los seleccionats"
+
+msgid "Error loading resources."
+msgstr "Error de carga dels recursos."
+
+msgid "Clear search"
+msgstr "Escafar la recèrca"
 

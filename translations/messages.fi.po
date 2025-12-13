@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavan esimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavakoe: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -30879,7 +30879,7 @@ msgid "Account locked until"
 msgstr "Tili lukittu vuoteen"
 
 msgid "Google Calendar URL"
-msgstr "Google Calendar URL"
+msgstr "Google Calendar -osoite"
 
 msgid "User chat status"
 msgstr "Käyttäjän chat-tila"
@@ -31222,4 +31222,223 @@ msgstr "Keskustelusäie"
 
 msgid "Access to this course"
 msgstr "Pääsy tähän kurssiin"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Tällä liitännäisellä ei ole muokattavia asetuksia. Aktivointi hoidetaan liitännäisten luettelosta."
+
+msgid "Private - access granted by privileged users"
+msgstr "Yksityinen – pääsy myönnetty etuoikeutetuille käyttäjille"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Tälle kysymykselle ei ole saatavilla yksityiskohtaista palautetta."
+
+msgid "Please select an answer before checking the result."
+msgstr "Valitse vastaus ennen tuloksen tarkistamista."
+
+msgid "Allow PDF export for this item"
+msgstr "Salli PDF-vienti tälle kohteelle"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Piilota ilmaiskäyttäjät (ei ilmoittautuneita)"
+
+msgid "Question statistics"
+msgstr "Kysymysten tilastot"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Luodaan tiedostoa. Älä sulje tätä välilehteä..."
+
+msgid "Assign auth source to users"
+msgstr "Määritä tunnistautumislähde käyttäjille"
+
+msgid "There are no questions for this survey"
+msgstr "Tällä kyselyllä ei ole kysymyksiä"
+
+msgid "Certificates report"
+msgstr "Todistusten raportti"
+
+msgid "Course picture"
+msgstr "Kurssin kuva"
+
+msgid "Current picture"
+msgstr "Nykyinen kuva"
+
+msgid "Course events log"
+msgstr "Kurssin tapahtumaloki"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Päivitä luokan tiedot ja valinnainen aikaraja."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Luo looginen ryhmä istunnoille pitääksesi koulutusluettelosi järjestettynä."
+
+msgid "Generating file, do not close this tab"
+msgstr "Luodaan tiedostoa, älä sulje tätä välilehteä"
+
+msgid "Assign authentication sources to users"
+msgstr "Määritä tunnistautumislähteet käyttäjille"
+
+msgid "Average completion rate"
+msgstr "Keskimääräinen valmistumisaste"
+
+msgid "Average access rate"
+msgstr "Keskimääräinen käyttöaste"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Tämä taulukko tiivistää oppijan edistymisen ja toiminnan oppimispolkua kohden nykyisissä kursseissasi."
+
+msgid "Follow up"
+msgstr "Seuranta"
+
+msgid "Tracking for superior"
+msgstr "Seuranta esimiehelle"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Tämä raportti näyttää istuntojen viikoittaisen jakauman päävalmentajaa kohden valitulla aikavälillä."
+
+msgid "Head manager report"
+msgstr "Pääjohtajan raportti"
+
+msgid "Reset or update user password"
+msgstr "Nollaa tai päivitä käyttäjän salasana"
+
+msgid "Active users"
+msgstr "Aktiiviset käyttäjät"
+
+msgid "Inactive users"
+msgstr "Epäaktiiviset käyttäjät"
+
+msgid "Report on resources"
+msgstr "Raportti resursseista"
+
+msgid "Global view"
+msgstr "Yleiskuva"
+
+msgid "Available reports"
+msgstr "Saatavilla olevat raportit"
+
+msgid "Current report"
+msgstr "Nykyinen raportti"
+
+msgid "Back to user assignment page"
+msgstr "Takaisin käyttäjien määrittely-sivulle"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Tunnistautumislähteet määritettiin käyttäjille onnistuneesti"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Vinkki: valitse ”— Vain lataa —” tallentaaksesi ilman lähettämistä kenellekään."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Valitse ainakin yksi vastaanottaja (”— Vain lataa —” tai mikä tahansa käyttäjä)"
+
+msgid "Sharing"
+msgstr "Jakaminen"
+
+msgid "Selected files"
+msgstr "Valitut tiedostot"
+
+msgid "Hide password"
+msgstr "Piilota salasana"
+
+msgid "Show password"
+msgstr "Näytä salasana"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Lataa SVG-logo sähköposteille"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Sinun on siirrettävä tai poistettava kaikki oppimispolut tästä luokasta ennen sen poistamista."
+
+msgid "Clear filters"
+msgstr "Tyhjennä suodattimet"
+
+msgid "Attendances (tablet)"
+msgstr "Läsnäolot (tabletti)"
+
+msgid "Exit tablet mode"
+msgstr "Poistu tablettitilasta"
+
+msgid "No members found."
+msgstr "Jäseniä ei löytynyt."
+
+msgid "Health check"
+msgstr "Terveydentila"
+
+msgid "Export to CC 1.3"
+msgstr "Vie CC 1.3 -muotoon"
+
+msgid "Loading resources..."
+msgstr "Ladataan resursseja..."
+
+msgid "Failed to load resources."
+msgstr "Resurssien lataus epäonnistui."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Valitse vähintään yksi vietävä resurssi (asiakirja, verkkolinkki, keskustelu,...)."
+
+msgid "Export finished."
+msgstr "Vienti valmistui."
+
+msgid "Export failed."
+msgstr "Vienti epäonnistui."
+
+msgid "Import failed."
+msgstr "Tuonti epäonnistui."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Paikallinen tiedosto (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Valmis tuotaan"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Palautamme varmuuskopion tähän kurssiin. Voit palata muuttamaan asetuksia."
+
+msgid "Select resources to import"
+msgstr "Valitse tuodut resurssit"
+
+msgid "No resources available in this backup."
+msgstr "Tässä varmuuskopiossa ei ole resursseja."
+
+msgid "Import selection"
+msgstr "Tuontivalinta"
+
+msgid "Import completed"
+msgstr "Tuonti valmistui"
+
+msgid "Could not load options."
+msgstr "Asetusten lataus epäonnistui."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Valitse varmuuskopiotiedosto (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Valitse varmuuskopio palvelimelta"
+
+msgid "Error selecting source."
+msgstr "Virhe lähdettä valittaessa."
+
+msgid "Recycling options"
+msgstr "Kierrätysasetukset"
+
+msgid "Type the course code to confirm"
+msgstr "Kirjoita kurssikoodi vahvistaaksesi"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Tämä poistaa tai nollaa valitut resurssit. Toimintoa ei voi perua."
+
+msgid "Select resources to recycle"
+msgstr "Valitse kierrätettävät resurssit"
+
+msgid "No resources available in this course."
+msgstr "Tässä kurssissa ei ole resursseja."
+
+msgid "Recycle selected"
+msgstr "Kierrätä valitut"
+
+msgid "Error loading resources."
+msgstr "Resurssien latausvirhe."
+
+msgid "Clear search"
+msgstr "Tyhjennä haku"
 

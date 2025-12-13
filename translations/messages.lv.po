@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Ar cieņu"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulas piemērs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulas paraugs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Mainīgo diapazoni"
@@ -8629,7 +8629,7 @@ msgid "."
 msgstr "."
 
 msgid "%b %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%b %d, %Y"
 
 msgid "%A %B %d, %Y"
 msgstr "%A %B %d, %Y"
@@ -31233,4 +31233,211 @@ msgstr "Šim jautājumam nav pieejama detalizēta atsauksme."
 
 msgid "Please select an answer before checking the result."
 msgstr "Lūdzu, izvēlieties atbildi pirms rezultāta pārbaudes."
+
+msgid "Allow PDF export for this item"
+msgstr "Atļaut PDF eksportu šim vienumam"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Slēpt bezmaksas lietotājus (nav reģistrējušies)"
+
+msgid "Question statistics"
+msgstr "Jautājumu statistika"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Faila ģenerēšana. Neaizveriet šo cilni..."
+
+msgid "Assign auth source to users"
+msgstr "Piešķirt autentifikācijas avotu lietotājiem"
+
+msgid "There are no questions for this survey"
+msgstr "Šai aptaujā nav jautājumu"
+
+msgid "Certificates report"
+msgstr "Sertifikātu pārskats"
+
+msgid "Course picture"
+msgstr "Kursa attēls"
+
+msgid "Current picture"
+msgstr "Pašreizējais attēls"
+
+msgid "Course events log"
+msgstr "Kursa notikumu žurnāls"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Atjaunināt kategorijas informāciju un tās opcionālo laika ierobežojumu."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Izveidot loģisku sesiju grupu, lai sakārtotu savu apmācību katalogu."
+
+msgid "Generating file, do not close this tab"
+msgstr "Faila ģenerēšana, neaizveriet šo cilni"
+
+msgid "Assign authentication sources to users"
+msgstr "Piešķirt autentifikācijas avotus lietotājiem"
+
+msgid "Average completion rate"
+msgstr "Vidējais pabeigšanas līmenis"
+
+msgid "Average access rate"
+msgstr "Vidējais piekļuves līmenis"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Šī tabula apkopo mācīšanās ceļa izpildes un aktivitāšu progresu jūsu pašreizējos kursos."
+
+msgid "Follow up"
+msgstr "Sekot līdzi"
+
+msgid "Tracking for superior"
+msgstr "Sekojums vadītājam"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Šis pārskats parāda sesiju nedēļas sadalījumu pa galvenajiem treneriem izvēlētajā datuma diapazonā."
+
+msgid "Head manager report"
+msgstr "Galvenā vadītāja pārskats"
+
+msgid "Reset or update user password"
+msgstr "Atiestatīt vai atjaunināt lietotāja paroli"
+
+msgid "Active users"
+msgstr "Aktīvie lietotāji"
+
+msgid "Inactive users"
+msgstr "Neaktīvie lietotāji"
+
+msgid "Report on resources"
+msgstr "Pārskats par resursiem"
+
+msgid "Global view"
+msgstr "Vispārējs skats"
+
+msgid "Available reports"
+msgstr "Pieejamie pārskati"
+
+msgid "Current report"
+msgstr "Pašreizējais pārskats"
+
+msgid "Back to user assignment page"
+msgstr "Atpakaļ uz lietotāju piešķiršanas lapu"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Autentifikācijas avoti veiksmīgi piešķirti"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Padoms: izvēlieties “— Tikai augšupielādēt —”, lai saglabātu bez nosūtīšanas."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Lūdzu, izvēlieties vismaz vienu saņēmēju (“— Tikai augšupielādēt —” vai jebkuru lietotāju)"
+
+msgid "Sharing"
+msgstr "Dalīšanās"
+
+msgid "Selected files"
+msgstr "Izvēlētie faili"
+
+msgid "Hide password"
+msgstr "Slēpt paroli"
+
+msgid "Show password"
+msgstr "Rādīt paroli"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Augšupielādēt SVG logotipu e-pastiem"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Jums jāpārvieto vai jāizdzēš visi mācību ceļi no šīs kategorijas pirms tās dzēšanas."
+
+msgid "Clear filters"
+msgstr "Notīrīt filtrus"
+
+msgid "Attendances (tablet)"
+msgstr "Apmeklējumi (planšete)"
+
+msgid "Exit tablet mode"
+msgstr "Iziet planšetes režīmu"
+
+msgid "No members found."
+msgstr "Nav atrasti dalībnieki."
+
+msgid "Health check"
+msgstr "Veselības pārbaude"
+
+msgid "Export to CC 1.3"
+msgstr "Eksportēt uz CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Ielādē resursus..."
+
+msgid "Failed to load resources."
+msgstr "Neizdevās ielādēt resursus."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Lūdzu, izvēlieties vismaz vienu eksportējamu resursu (dokumentu, tīmekļa saiti, diskusiju,...)."
+
+msgid "Export finished."
+msgstr "Eksports pabeigts."
+
+msgid "Export failed."
+msgstr "Eksports neizdevās."
+
+msgid "Import failed."
+msgstr "Imports neizdevās."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Lokāls fails (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Gatavs importam"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Mēs atjaunosim dublējumu šajā kursā. Jūs varat atgriezties, lai mainītu opcijas."
+
+msgid "Select resources to import"
+msgstr "Izvēlēties resursus importam"
+
+msgid "No resources available in this backup."
+msgstr "Šajā dublējumā nav pieejamu resursu."
+
+msgid "Import selection"
+msgstr "Importa atlase"
+
+msgid "Import completed"
+msgstr "Imports pabeigts"
+
+msgid "Could not load options."
+msgstr "Neizdevās ielādēt opcijas."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Lūdzu, izvēlieties dublējuma failu (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Lūdzu, izvēlieties dublējumu no servera"
+
+msgid "Error selecting source."
+msgstr "Kļūda izvēloties avotu."
+
+msgid "Recycling options"
+msgstr "Pārstrādes opcijas"
+
+msgid "Type the course code to confirm"
+msgstr "Ierakstiet kursa kodu, lai apstiprinātu"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Tas izdzēsīs vai atiestatīs izvēlētos resursus. Šo darbību nevar atcelt."
+
+msgid "Select resources to recycle"
+msgstr "Izvēlēties resursus pārstrādei"
+
+msgid "No resources available in this course."
+msgstr "Šajā kursā nav pieejamu resursu."
+
+msgid "Recycle selected"
+msgstr "Pārstrādāt izvēlētos"
+
+msgid "Error loading resources."
+msgstr "Kļūda ielādējot resursus."
+
+msgid "Clear search"
+msgstr "Notīrīt meklēšanu"
 

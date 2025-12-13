@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "С уважение"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример за формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Примерна формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Диапазони на променливите"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:запазени права,, no:свободен"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Octet поток,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Поток от октети,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:тест (упражнение),,      simulation:симулация,,      questionnaire:въпросник,,      diagram:диаграма,,      figure:фигура,,      graph:графика,,      index:индекс,,      slide:слайд,,      table:таблица,,      narrative text:обзор,,      exam:изпит,,      experiment:експеримент,,      problem statement:постановка на проблем,,      self assessment:самостоятелно оценяване,,      lecture:лекция"
@@ -20358,7 +20358,7 @@ msgid "Send a copy to HR managers of selected students"
 msgstr "Изпрати копие до HR мениджърите на избраните студенти"
 
 msgid "Powered by %s"
-msgstr "Powered by %s"
+msgstr "Задвижвано от %s"
 
 msgid "Please select at least one user. The announcement has not been saved."
 msgstr "Моля, изберете поне един потребител. Обявлението не е запазено."
@@ -31202,4 +31202,241 @@ msgstr "Админ Рестартирани курсове"
 
 msgid "Admin Dashboard"
 msgstr "Админ Табло"
+
+msgid "Threads"
+msgstr "Теми"
+
+msgid "Invalid thread"
+msgstr "Невалидна тема"
+
+msgid "View full thread"
+msgstr "Преглед на цялата тема"
+
+msgid "No post yet"
+msgstr "Все още няма публикации"
+
+msgid "Discussion thread"
+msgstr "Тема за дискусия"
+
+msgid "Access to this course"
+msgstr "Достъп до този курс"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Този плъгин няма конфигурируеми настройки. Активирането се управлява от списъка с плъгини."
+
+msgid "Private - access granted by privileged users"
+msgstr "Приватен - достъп предоставен от привилегировани потребители"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Няма налична подробна обратна връзка за този въпрос."
+
+msgid "Please select an answer before checking the result."
+msgstr "Моля, изберете отговор преди да проверите резултата."
+
+msgid "Allow PDF export for this item"
+msgstr "Разреши износ в PDF за този елемент"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Скрий безплатни потребители (не записани)"
+
+msgid "Question statistics"
+msgstr "Статистика на въпросите"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Генериране на файл. Не затваряйте тази раздела..."
+
+msgid "Assign auth source to users"
+msgstr "Присвояване на източник на автентикация на потребители"
+
+msgid "There are no questions for this survey"
+msgstr "Няма въпроси за тази анкета"
+
+msgid "Certificates report"
+msgstr "Доклад за сертификати"
+
+msgid "Course picture"
+msgstr "Картинка на курса"
+
+msgid "Current picture"
+msgstr "Текуща картинка"
+
+msgid "Course events log"
+msgstr "Дневник на събития на курса"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Актуализирайте информацията за категорията и нейния опционален времеви лимит."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Създайте логическа група от сесии, за да подредите каталога си с обучение."
+
+msgid "Generating file, do not close this tab"
+msgstr "Генериране на файл, не затваряйте тази раздела"
+
+msgid "Assign authentication sources to users"
+msgstr "Присвояване на източници на автентикация на потребители"
+
+msgid "Average completion rate"
+msgstr "Среден процент на завършване"
+
+msgid "Average access rate"
+msgstr "Среден процент на достъп"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Тази таблица обобщава напредъка и активността на учащите за всяко учебно пътека в текущите ви курсове."
+
+msgid "Follow up"
+msgstr "Следене"
+
+msgid "Tracking for superior"
+msgstr "Следене за ръководител"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Този доклад показва седмичното разпределение на сесии на общия треньор в избрания времеви диапазон."
+
+msgid "Head manager report"
+msgstr "Доклад на главния мениджър"
+
+msgid "Reset or update user password"
+msgstr "Нулиране или актуализиране на паролата на потребителя"
+
+msgid "Active users"
+msgstr "Активни потребители"
+
+msgid "Inactive users"
+msgstr "Неактивни потребители"
+
+msgid "Report on resources"
+msgstr "Доклад за ресурси"
+
+msgid "Global view"
+msgstr "Глобален изглед"
+
+msgid "Available reports"
+msgstr "Налични доклади"
+
+msgid "Current report"
+msgstr "Текущ отчет"
+
+msgid "Back to user assignment page"
+msgstr "Назад към страницата за задаване на потребители"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Източниците за автентикация са зададени успешно"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Съвет: изберете „— Просто качи —“ за съхранение без изпращане до когото и да е."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Моля, изберете поне един получател ( „— Просто качи —“ или всеки потребител)"
+
+msgid "Sharing"
+msgstr "Споделяне"
+
+msgid "Selected files"
+msgstr "Избрани файлове"
+
+msgid "Hide password"
+msgstr "Скрий паролата"
+
+msgid "Show password"
+msgstr "Покажи паролата"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Качи SVG лого за имейли"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Трябва да преместите или премахнете всички учебни пътеки от тази категория преди да я изтриете."
+
+msgid "Clear filters"
+msgstr "Изчисти филтрите"
+
+msgid "Attendances (tablet)"
+msgstr "Допълнителност (таблет)"
+
+msgid "Exit tablet mode"
+msgstr "Напусни режим на таблет"
+
+msgid "No members found."
+msgstr "Не са намерени членове."
+
+msgid "Health check"
+msgstr "Проверка на здравето"
+
+msgid "Export to CC 1.3"
+msgstr "Експорт към CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Зареждане на ресурси..."
+
+msgid "Failed to load resources."
+msgstr "Грешка при зареждане на ресурси."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Моля, изберете поне един износим ресурс (документ, уеб връзка, дискусия,...)."
+
+msgid "Export finished."
+msgstr "Експортът завърши."
+
+msgid "Export failed."
+msgstr "Експортът се провали."
+
+msgid "Import failed."
+msgstr "Импортът се провали."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Локален файл (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Готов за импортиране"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Ще възстановим резервното копие в този курс. Можете да се върнете, за да промените опциите."
+
+msgid "Select resources to import"
+msgstr "Изберете ресурси за импортиране"
+
+msgid "No resources available in this backup."
+msgstr "Няма налични ресурси в това резервно копие."
+
+msgid "Import selection"
+msgstr "Избор за импорт"
+
+msgid "Import completed"
+msgstr "Импортът завърши"
+
+msgid "Could not load options."
+msgstr "Не може да се заредят опциите."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Моля, изберете резервно копие (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Моля, изберете резервно копие от сървъра"
+
+msgid "Error selecting source."
+msgstr "Грешка при избор на източник."
+
+msgid "Recycling options"
+msgstr "Опции за рециклиране"
+
+msgid "Type the course code to confirm"
+msgstr "Въведете кода на курса за потвърждение"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Това ще премахне или нулира избраните ресурси. Това действие не може да бъде отменено."
+
+msgid "Select resources to recycle"
+msgstr "Изберете ресурси за рециклиране"
+
+msgid "No resources available in this course."
+msgstr "Няма налични ресурси в този курс."
+
+msgid "Recycle selected"
+msgstr "Рециклирай избраните"
+
+msgid "Error loading resources."
+msgstr "Грешка при зареждане на ресурси."
+
+msgid "Clear search"
+msgstr "Изчисти търсенето"
 

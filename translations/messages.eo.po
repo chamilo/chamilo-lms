@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Karule"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ekzemplo de formulo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulo ekzemplo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervaloj de variabloj"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:kopirajto,, no:ne kopirajto"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dosierujo,, application/msword:MsWord,, application/octet-stream:Okteta fluo,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ekzerco,, simulation:simulado,, questionnaire:enketo,, diagram:diagramo,, figure:figuro,, graph:grafiko,, index:indekso,, slide:diapozitivo,, table:tabelo,, narrative text:rakonta teksto,, exam:ekzameno,, experiment:eksperimento,, problem statement:problemstarigo,, self assessment:memtesto,, lecture:prelego"
@@ -31202,4 +31202,241 @@ msgstr "Admin Restarti Kursojn"
 
 msgid "Admin Dashboard"
 msgstr "Admin Paĝaro"
+
+msgid "Threads"
+msgstr "Fadenoj"
+
+msgid "Invalid thread"
+msgstr "Nevalida fadenoj"
+
+msgid "View full thread"
+msgstr "Vidi tutan fadenon"
+
+msgid "No post yet"
+msgstr "Neniu afiŝo ankoraŭ"
+
+msgid "Discussion thread"
+msgstr "Diskuta fadeno"
+
+msgid "Access to this course"
+msgstr "Atingo al ĉi tiu kurso"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Ĉi tiu kromprogramo havas neniujn agordojn. Aktivado estas administrita el la listo de kromprogramoj."
+
+msgid "Private - access granted by privileged users"
+msgstr "Privata - atingopermeso donita de privileĝiaj uzantoj"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Neniu detala بازkadro estas havebla por ĉi tiu demando."
+
+msgid "Please select an answer before checking the result."
+msgstr "Bonvolu selekti respondon antaŭ ol kontroli la rezulton."
+
+msgid "Allow PDF export for this item"
+msgstr "Permesi PDF-eksporton por ĉi tiu elemento"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Kaŝi liberajn uzantojn (ne enskribitaj)"
+
+msgid "Question statistics"
+msgstr "Statistiko de demandoj"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Generante dosieron. Ne fermu ĉi tiun langeton..."
+
+msgid "Assign auth source to users"
+msgstr "Atribui aŭtentigan fonton al uzantoj"
+
+msgid "There are no questions for this survey"
+msgstr "Estas neniuj demandoj por ĉi tiu enketo"
+
+msgid "Certificates report"
+msgstr "Raporto pri atestiloj"
+
+msgid "Course picture"
+msgstr "Bildo de kurso"
+
+msgid "Current picture"
+msgstr "Nuna bildo"
+
+msgid "Course events log"
+msgstr "Protokolo de kurso-okazoj"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Ĝisdatigi informojn de kategorio kaj ĝian oportunan temlimon."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Krei logikan grupon de sesioj por ordigi vian katalogon de trejnado."
+
+msgid "Generating file, do not close this tab"
+msgstr "Generante dosieron, ne fermu ĉi tiun langeton"
+
+msgid "Assign authentication sources to users"
+msgstr "Atribui aŭtentigajn fontojn al uzantoj"
+
+msgid "Average completion rate"
+msgstr "Meza kompleta indico"
+
+msgid "Average access rate"
+msgstr "Meza atinga indico"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Ĉi tiu tabelo resumas progreson kaj agadon de lernantoj por ĉiu lernvojo en viaj nunaj kursoj."
+
+msgid "Follow up"
+msgstr "Sekvi"
+
+msgid "Tracking for superior"
+msgstr "Spurado por supera"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Ĉi tiu raporto montras la semajnan distribuon de sesioj por ĉiu ĝenerala trejnisto en la elektita datintervalo."
+
+msgid "Head manager report"
+msgstr "Raporto de ĉefmanaĝero"
+
+msgid "Reset or update user password"
+msgstr "Restarigi aŭ ĝisdatigi pasvorton de uzanto"
+
+msgid "Active users"
+msgstr "Aktivaj uzantoj"
+
+msgid "Inactive users"
+msgstr "Malaktivaj uzantoj"
+
+msgid "Report on resources"
+msgstr "Raporto pri rimedoj"
+
+msgid "Global view"
+msgstr "Ĝenerala vido"
+
+msgid "Available reports"
+msgstr "Haveblaj raportoj"
+
+msgid "Current report"
+msgstr "Nuna raporto"
+
+msgid "Back to user assignment page"
+msgstr "Reen al paĝo de uzantoj asigno"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Fontaj autentikigoj sukcese asignitaj"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Consejo: elektu „— Nur alŝuti —“ por konservi sen sendi al iu ajn."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Bonvolu selekti almenaŭ unu ricevanton („— Nur alŝuti —“ aŭ iu ajn uzanto)"
+
+msgid "Sharing"
+msgstr "Kunhavigo"
+
+msgid "Selected files"
+msgstr "Selektiĝintaj dosieroj"
+
+msgid "Hide password"
+msgstr "Kaŝi pasvorton"
+
+msgid "Show password"
+msgstr "Montri pasvorton"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Alŝuti SVG-logon por retpoŝtoj"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Vi devas movi aŭ forigi ĉiujn lernvojojn el tiu kategorio antaŭ ol forigi ĝin."
+
+msgid "Clear filters"
+msgstr "Forigi filtrilojn"
+
+msgid "Attendances (tablet)"
+msgstr "Ĉeestoj (tabulo)"
+
+msgid "Exit tablet mode"
+msgstr "Eliri tabulreĝimon"
+
+msgid "No members found."
+msgstr "Neniu membro trovita."
+
+msgid "Health check"
+msgstr "Sana kontrolo"
+
+msgid "Export to CC 1.3"
+msgstr "Eksporti al CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Ŝarĝante rimedojn..."
+
+msgid "Failed to load resources."
+msgstr "Fiaskis ŝargi rimedojn."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Bonvolu selekti almenaŭ unu eksporteblan rimedon (dokumento, retligilo, diskuto,...)."
+
+msgid "Export finished."
+msgstr "Eksporto finita."
+
+msgid "Export failed."
+msgstr "Eksporto fiaskis."
+
+msgid "Import failed."
+msgstr "Importo fiaskis."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Loka dosiero (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Preta por importi"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Ni restarigos la sekurkopion en tiun kurson. Vi povas retroigi por ŝanĝi opciojn."
+
+msgid "Select resources to import"
+msgstr "Selekti rimedojn por importi"
+
+msgid "No resources available in this backup."
+msgstr "Neniu rimedo havebla en tiu sekurkopio."
+
+msgid "Import selection"
+msgstr "Importa selekto"
+
+msgid "Import completed"
+msgstr "Importo finita"
+
+msgid "Could not load options."
+msgstr "Ne povis ŝargi opciojn."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Bonvolu selekti sekurkopia dosieron (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Bonvolu elekti sekurkopion de la servilo"
+
+msgid "Error selecting source."
+msgstr "Eraro selektante fonton."
+
+msgid "Recycling options"
+msgstr "Opcioj de reciklado"
+
+msgid "Type the course code to confirm"
+msgstr "Tajpu la kurson kodon por konfirmi"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Tio forigos aŭ restarigos selektitajn rimedojn. Ĉi tiu ago ne povas esti malfara."
+
+msgid "Select resources to recycle"
+msgstr "Selekti rimedojn por recikli"
+
+msgid "No resources available in this course."
+msgstr "Neniu rimedo havebla en tiu kurso."
+
+msgid "Recycle selected"
+msgstr "Recikli selektitajn"
+
+msgid "Error loading resources."
+msgstr "Eraro ŝargante rimedojn."
+
+msgid "Clear search"
+msgstr "Forigi serĉon"
 

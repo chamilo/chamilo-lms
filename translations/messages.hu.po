@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:jogvédett,, no:nem jogvédett"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappa,, application/msword:MsWord,, application/octet-stream:Oktett stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:feladat,, simulation:szimuláció,, questionnaire:kérdőív,, diagram:diagram,, figure:ábra,, graph:grafikon,, index:tárgymutató,, slide:dia,, table:tábla,, narrative text:narrátor szöveg,, exam:teszt,, experiment:kísérlet,, problem statement:probléma megállapítás,, self assessment:önértékelés,, lecture:előadó"
@@ -26868,7 +26868,7 @@ msgid "HTTP Strict Transport Security is an excellent feature to support on your
 msgstr "Az HTTP Strict Transport Security kiváló funkció a webhelyén, erősíti a TLS implementációt azzal, hogy a felhasználói ügynököt HTTPS használatára kényszeríti. Ajánlott érték: 'strict-transport-security: max-age=63072000; includeSubDomains'. Lásd: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. Beleírhatja a 'preload' utótagot, de ennek következményei vannak a legfelső szintű domainre (TLD), így valószínűleg nem érdemes könnyelműen megtenni. Lásd: https://hstspreload.org/. Hagyja üresen a letiltáshoz."
 
 msgid "Content Security Policy"
-msgstr "Content Security Policy"
+msgstr "Tartalom biztonsági irányelv"
 
 msgid "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the 'script-src' argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
 msgstr "A Content Security Policy hatékony intézkedés a webhely XSS támadások elleni védelmére. A jóváhagyott tartalom forrásainak fehérelistázásával megakadályozhatja, hogy a böngésző rosszindulatú elemeket töltse be. Ez a beállítás különösen bonyolult a WYSIWYG szerkesztőkkel, de ha hozzáadja az összes engedélyezni kívánt domaint az iframes beágyazáshoz a child-src nyilatkozathoz, ez a példa működni fog. Megakadályozhatja a JavaScript végrehajtását külső forrásokból (beleértve az SVG képeket is) a 'script-src' argumentumban szigorú listával. Hagyja üresen a letiltáshoz. Példa beállítás: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
@@ -31220,4 +31220,223 @@ msgstr "Vitaindító téma"
 
 msgid "Access to this course"
 msgstr "Hozzáférés ehhez a kurzushoz"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Ez a bővítménynek nincs konfigurálható beállítása. Az aktiválást a bővítmények listájáról lehet kezelni."
+
+msgid "Private - access granted by privileged users"
+msgstr "Privát - hozzáférés jogosult felhasználóktól"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Nincs részletes visszajelzés ehhez a kérdéshez."
+
+msgid "Please select an answer before checking the result."
+msgstr "Válasszon választ az eredmény ellenőrzése előtt."
+
+msgid "Allow PDF export for this item"
+msgstr "PDF export engedélyezése ehhez az elemhez"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Ingyenes felhasználók elrejtése (nem beiratkozott)"
+
+msgid "Question statistics"
+msgstr "Kérdés statisztikák"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Fájl generálása. Ne zárja be ezt a lapot..."
+
+msgid "Assign auth source to users"
+msgstr "Hitelesítési forrás hozzárendelése felhasználókhoz"
+
+msgid "There are no questions for this survey"
+msgstr "Nincsenek kérdések ehhez a felméréshez"
+
+msgid "Certificates report"
+msgstr "Tanúsítványok jelentés"
+
+msgid "Course picture"
+msgstr "Kurzus kép"
+
+msgid "Current picture"
+msgstr "Jelenlegi kép"
+
+msgid "Course events log"
+msgstr "Kurzus események naplója"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Kategória információk frissítése és opcionális időkorlátja."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Logikai foglalkozás csoport létrehozása a képzési katalógus szervezéséhez."
+
+msgid "Generating file, do not close this tab"
+msgstr "Fájl generálása, ne zárja be ezt a lapot"
+
+msgid "Assign authentication sources to users"
+msgstr "Hitelesítési források hozzárendelése felhasználókhoz"
+
+msgid "Average completion rate"
+msgstr "Átlagos befejezési arány"
+
+msgid "Average access rate"
+msgstr "Átlagos hozzáférési arány"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Ez a táblázat összefoglalja a tanulók előrehaladását és aktivitását kurzusaiban a tanulási útvonalanként."
+
+msgid "Follow up"
+msgstr "Követés"
+
+msgid "Tracking for superior"
+msgstr "Követés felettes számára"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Ez a jelentés a foglalkozások heti eloszlását mutatja a kijelölt dátumtartományban általános edzőnként."
+
+msgid "Head manager report"
+msgstr "Vezetői jelentés"
+
+msgid "Reset or update user password"
+msgstr "Felhasználói jelszó visszaállítása vagy frissítése"
+
+msgid "Active users"
+msgstr "Aktív felhasználók"
+
+msgid "Inactive users"
+msgstr "Inaktív felhasználók"
+
+msgid "Report on resources"
+msgstr "Jelentés erőforrásokról"
+
+msgid "Global view"
+msgstr "Áttekintő nézet"
+
+msgid "Available reports"
+msgstr "Elérhető jelentések"
+
+msgid "Current report"
+msgstr "Jelenlegi jelentés"
+
+msgid "Back to user assignment page"
+msgstr "Vissza a felhasználó hozzárendelés oldalra"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Hitelesítési források sikeresen hozzárendelve"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Tipp: válassza a „— Csak feltöltés —” lehetőséget, ha nem akarja elküldeni senkinek."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Válasszon legalább egy címzettet („— Csak feltöltés —” vagy bármely felhasználó)"
+
+msgid "Sharing"
+msgstr "Megosztás"
+
+msgid "Selected files"
+msgstr "Kiválasztott fájlok"
+
+msgid "Hide password"
+msgstr "Jelszó elrejtése"
+
+msgid "Show password"
+msgstr "Jelszó megjelenítése"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "SVG logó feltöltése e-mailekhez"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Törlés előtt mozgassa át vagy távolítsa el az összes tanulási útvonalat ebből a kategóriából."
+
+msgid "Clear filters"
+msgstr "Szűrők törlése"
+
+msgid "Attendances (tablet)"
+msgstr "Jelenlétik (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Tablet mód kilépése"
+
+msgid "No members found."
+msgstr "Nincs tag található."
+
+msgid "Health check"
+msgstr "Rendszerellenőrzés"
+
+msgid "Export to CC 1.3"
+msgstr "Exportálás CC 1.3 formátumba"
+
+msgid "Loading resources..."
+msgstr "Erőforrások betöltése..."
+
+msgid "Failed to load resources."
+msgstr "Az erőforrások betöltése sikertelen."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Válasszon legalább egy exportálható erőforrást (dokumentum, webes hivatkozás, fórum,...)."
+
+msgid "Export finished."
+msgstr "Exportálás befejezve."
+
+msgid "Export failed."
+msgstr "Exportálás sikertelen."
+
+msgid "Import failed."
+msgstr "Importálás sikertelen."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Helyi fájl (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Kész az importálásra"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Biztonsági mentés visszaállítása ebbe a kurzusba. Visszaléphet az opciók módosításához."
+
+msgid "Select resources to import"
+msgstr "Importálandó erőforrások kiválasztása"
+
+msgid "No resources available in this backup."
+msgstr "Nincs erőforrás elérhető ebben a biztonsági mentésben."
+
+msgid "Import selection"
+msgstr "Importálás kiválasztása"
+
+msgid "Import completed"
+msgstr "Importálás befejezve"
+
+msgid "Could not load options."
+msgstr "Nem sikerült betölteni az opciókat."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Válasszon biztonsági mentési fájlt (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Válasszon biztonsági mentést a szerverről"
+
+msgid "Error selecting source."
+msgstr "Hiba a forrás kiválasztásakor."
+
+msgid "Recycling options"
+msgstr "Újrahasznosítási opciók"
+
+msgid "Type the course code to confirm"
+msgstr "Írja be a kurzuskódot a megerősítéshez"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Ez eltávolítja vagy visszaállítja a kiválasztott erőforrásokat. Ezt a műveletet nem lehet visszavonni."
+
+msgid "Select resources to recycle"
+msgstr "Újrahasznosítandó erőforrások kiválasztása"
+
+msgid "No resources available in this course."
+msgstr "Nincs erőforrás elérhető ebben a kurzusban."
+
+msgid "Recycle selected"
+msgstr "Kiválasztottak újrahasznosítása"
+
+msgid "Error loading resources."
+msgstr "Hiba az erőforrások betöltésekor."
+
+msgid "Clear search"
+msgstr "Keresés törlése"
 

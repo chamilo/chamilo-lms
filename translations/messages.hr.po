@@ -2023,7 +2023,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":da:autorska prava,, ne:nema autorskih prava"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Octetni tok,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:vježba,, simulation:simulacija,, questionnaire:upitnik,, diagram:dijagram,, figure:slika,, graph:graf,, index:indeks,, slide:projekcijska slika,, table:tablica,, narrative text:pripovjedni tekst,, exam:ispit,, experiment:eksperiment,, problem statement:problemska izjava,, self assessment:samoocjenjivanje,, lecture:predavanje"
@@ -30527,13 +30527,13 @@ msgid "ex. root"
 msgstr "npr. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "CREATE TABLE radovi"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ALTER TABLE radovi"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "DROP COLUMN radovi"
 
 msgid "Theme selected as current"
 msgstr "Tema odabrana kao trenutna"
@@ -31221,4 +31221,223 @@ msgstr "Diskusijska nit"
 
 msgid "Access to this course"
 msgstr "Pristup ovom predmetu"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Ovaj dodatak nema podešive postavke. Aktivacija se upravlja s popisa dodataka."
+
+msgid "Private - access granted by privileged users"
+msgstr "Privatno - pristup dodijeljen privilegiranim korisnicima"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Nema dostupne detaljne povratne informacije za ovo pitanje."
+
+msgid "Please select an answer before checking the result."
+msgstr "Odaberite odgovor prije provjere rezultata."
+
+msgid "Allow PDF export for this item"
+msgstr "Dopusti izvoz PDF-a za ovu stavku"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Sakrij besplatne korisnike (nije upisani)"
+
+msgid "Question statistics"
+msgstr "Statistika pitanja"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Stvaram datoteku. Nemojte zatvoriti ovu karticu..."
+
+msgid "Assign auth source to users"
+msgstr "Dodijeli izvor autentifikacije korisnicima"
+
+msgid "There are no questions for this survey"
+msgstr "Nema pitanja za ovu anketu"
+
+msgid "Certificates report"
+msgstr "Izvješće o certifikatima"
+
+msgid "Course picture"
+msgstr "Slika predmeta"
+
+msgid "Current picture"
+msgstr "Trenutna slika"
+
+msgid "Course events log"
+msgstr "Dnevnik događaja predmeta"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Ažurirajte informacije o kategoriji i njezin opcionalni vremenski limit."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Stvorite logičku grupu sesija kako biste organizirali svoj katalog obuke."
+
+msgid "Generating file, do not close this tab"
+msgstr "Stvaram datoteku, nemojte zatvoriti ovu karticu"
+
+msgid "Assign authentication sources to users"
+msgstr "Dodijeli izvore autentifikacije korisnicima"
+
+msgid "Average completion rate"
+msgstr "Prosječna stopa završetka"
+
+msgid "Average access rate"
+msgstr "Prosječna stopa pristupa"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Ova tablica sumira napredak i aktivnost učenika po putu učenja u vašim trenutnim predmetima."
+
+msgid "Follow up"
+msgstr "Praćenje"
+
+msgid "Tracking for superior"
+msgstr "Praćenje za nadređenog"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Ovo izvješće prikazuje tjednu distribuciju sesija po glavnom treneru u odabranom vremenskom rasponu."
+
+msgid "Head manager report"
+msgstr "Izvješće glavnog menadžera"
+
+msgid "Reset or update user password"
+msgstr "Resetiraj ili ažuriraj lozinku korisnika"
+
+msgid "Active users"
+msgstr "Aktivni korisnici"
+
+msgid "Inactive users"
+msgstr "Neaktivni korisnici"
+
+msgid "Report on resources"
+msgstr "Izvješće o resursima"
+
+msgid "Global view"
+msgstr "Globalni pregled"
+
+msgid "Available reports"
+msgstr "Dostupna izvješća"
+
+msgid "Current report"
+msgstr "Trenutno izvješće"
+
+msgid "Back to user assignment page"
+msgstr "Natrag na stranicu dodjele korisnika"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Izvori autentifikacije dodijeljeni uspješno"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Savjet: odaberite „— Samo učitaj —“ za pohranu bez slanja bilo kome."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Odaberite barem jednog primatelja („— Samo učitaj —“ ili bilo kojeg korisnika)"
+
+msgid "Sharing"
+msgstr "Dijeljenje"
+
+msgid "Selected files"
+msgstr "Odabrane datoteke"
+
+msgid "Hide password"
+msgstr "Sakrij lozinku"
+
+msgid "Show password"
+msgstr "Prikaži lozinku"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Učitaj SVG logotip za e-poštu"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Morate premjestiti ili ukloniti sve putove učenja iz ove kategorije prije nego što je izbrišete."
+
+msgid "Clear filters"
+msgstr "Očisti filtre"
+
+msgid "Attendances (tablet)"
+msgstr "Prisutnosti (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Izađi iz načina tableta"
+
+msgid "No members found."
+msgstr "Nema pronađenih članova."
+
+msgid "Health check"
+msgstr "Provjera zdravlja"
+
+msgid "Export to CC 1.3"
+msgstr "Izvezi u CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Učitavam resurse..."
+
+msgid "Failed to load resources."
+msgstr "Neuspješno učitavanje resursa."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Odaberite barem jedan izvozivi resurs (dokument, web poveznica, rasprava,...)."
+
+msgid "Export finished."
+msgstr "Izvoz završen."
+
+msgid "Export failed."
+msgstr "Izvoz neuspješan."
+
+msgid "Import failed."
+msgstr "Uvoz neuspješan."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Lokalna datoteka (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Spremno za uvoz"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Vraćat ćemo sigurnosnu kopiju u ovaj predmet. Možete se vratiti da promijenite opcije."
+
+msgid "Select resources to import"
+msgstr "Odaberite resurse za uvoz"
+
+msgid "No resources available in this backup."
+msgstr "Nema dostupnih resursa u ovoj sigurnosnoj kopiji."
+
+msgid "Import selection"
+msgstr "Odabir za uvoz"
+
+msgid "Import completed"
+msgstr "Uvoz završen"
+
+msgid "Could not load options."
+msgstr "Neuspješno učitavanje opcija."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Odaberite sigurnosnu kopiju (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Odaberite sigurnosnu kopiju s poslužitelja"
+
+msgid "Error selecting source."
+msgstr "Greška pri odabiru izvora."
+
+msgid "Recycling options"
+msgstr "Opcije recikliranja"
+
+msgid "Type the course code to confirm"
+msgstr "Upišite kod predmeta za potvrdu"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Ovo će ukloniti ili resetirati odabrane resurse. Ovu radnju nije moguće poništiti."
+
+msgid "Select resources to recycle"
+msgstr "Odaberite resurse za recikliranje"
+
+msgid "No resources available in this course."
+msgstr "Nema dostupnih resursa u ovom predmetu."
+
+msgid "Recycle selected"
+msgstr "Recikliraj odabrano"
+
+msgid "Error loading resources."
+msgstr "Greška pri učitavanju resursa."
+
+msgid "Clear search"
+msgstr "Očisti pretragu"
 

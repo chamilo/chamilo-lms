@@ -30540,13 +30540,13 @@ msgid "ex. root"
 msgstr "npr. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "USTVARI TABELO dela"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "SPREMENI TABELO dela"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "IZBRISAJ STOLPEC dela"
 
 msgid "Theme selected as current"
 msgstr "Tema izbrana kot trenutna"
@@ -31216,4 +31216,241 @@ msgstr "Admin Ponovni zagon tečajev"
 
 msgid "Admin Dashboard"
 msgstr "Admin Nadzorna plošča"
+
+msgid "Threads"
+msgstr "Niti"
+
+msgid "Invalid thread"
+msgstr "Neveljavna nit"
+
+msgid "View full thread"
+msgstr "Prikaži celotno nit"
+
+msgid "No post yet"
+msgstr "Še ni objav"
+
+msgid "Discussion thread"
+msgstr "Razpravna nit"
+
+msgid "Access to this course"
+msgstr "Dostop do tega tečaja"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Ta vtičnik nima nastavljivih parametrov. Aktivacija se upravlja s seznama vtičnikov."
+
+msgid "Private - access granted by privileged users"
+msgstr "Zasebno - dostop dovolijo privilegirani uporabniki"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Za to vprašanje ni na voljo podrobne povratne informacije."
+
+msgid "Please select an answer before checking the result."
+msgstr "Izberite odgovor, preden preverite rezultat."
+
+msgid "Allow PDF export for this item"
+msgstr "Dovoli izvoz PDF za to postavko"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Skrij brezplačne uporabnike (ne vpisane)"
+
+msgid "Question statistics"
+msgstr "Statistika vprašanj"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Ustvarjam datoteko. Ne zapirajte te zaje."
+
+msgid "Assign auth source to users"
+msgstr "Dodeli vir avtentikacije uporabnikom"
+
+msgid "There are no questions for this survey"
+msgstr "Za to anketo ni vprašanj"
+
+msgid "Certificates report"
+msgstr "Poročilo o certifikatih"
+
+msgid "Course picture"
+msgstr "Slika tečaja"
+
+msgid "Current picture"
+msgstr "Trenutna slika"
+
+msgid "Course events log"
+msgstr "Dnevnik dogodkov tečaja"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Posodobi informacije o kategoriji in njenem neobveznem časovnem omejitvi."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Ustvari logično skupino sej za organizacijo vašega kataloga usposabljanj."
+
+msgid "Generating file, do not close this tab"
+msgstr "Ustvarjam datoteko, ne zapirajte te zaje"
+
+msgid "Assign authentication sources to users"
+msgstr "Dodeli vire avtentikacije uporabnikom"
+
+msgid "Average completion rate"
+msgstr "Povprečna stopnja dokončanja"
+
+msgid "Average access rate"
+msgstr "Povprečna stopnja dostopa"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Ta tabela povzame napredek in aktivnost učečih se po učne poti v vaših trenutnih tečajih."
+
+msgid "Follow up"
+msgstr "Sledenje"
+
+msgid "Tracking for superior"
+msgstr "Sledenje za nadrejene"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "To poročilo prikazuje tedensko porazdelitev sej na splošnega trenerja v izbranem obdobju."
+
+msgid "Head manager report"
+msgstr "Poročilo vodje"
+
+msgid "Reset or update user password"
+msgstr "Ponastavi ali posodobi geslo uporabnika"
+
+msgid "Active users"
+msgstr "Aktivni uporabniki"
+
+msgid "Inactive users"
+msgstr "Neaktivni uporabniki"
+
+msgid "Report on resources"
+msgstr "Poročilo o virih"
+
+msgid "Global view"
+msgstr "Splošni pogled"
+
+msgid "Available reports"
+msgstr "Razpoložljiva poročila"
+
+msgid "Current report"
+msgstr "Trenutno poročilo"
+
+msgid "Back to user assignment page"
+msgstr "Nazaj na stran dodelitve uporabnika"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Viri preverjanja pristnosti uspešno dodeljeni"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Nasvet: izberite „— Samo naloži —“, da shranite brez pošiljanja komurkoli."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Izberite vsaj enega prejemnika („— Samo naloži —“ ali katerega koli uporabnika)"
+
+msgid "Sharing"
+msgstr "Deli"
+
+msgid "Selected files"
+msgstr "Izbrane datoteke"
+
+msgid "Hide password"
+msgstr "Skrij geslo"
+
+msgid "Show password"
+msgstr "Prikaži geslo"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Naloži SVG logotip za e-pošto"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Pred brisanjem kategorije morate premakniti ali odstraniti vse učne poti iz te kategorije."
+
+msgid "Clear filters"
+msgstr "Počisti filtre"
+
+msgid "Attendances (tablet)"
+msgstr "Obiski (tablica)"
+
+msgid "Exit tablet mode"
+msgstr "Izhod iz načina tablice"
+
+msgid "No members found."
+msgstr "Ni najdenih članov."
+
+msgid "Health check"
+msgstr "Preverjanje zdravja"
+
+msgid "Export to CC 1.3"
+msgstr "Izvozi v CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Nalagam vire..."
+
+msgid "Failed to load resources."
+msgstr "Napaka pri nalaganju virov."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Izberite vsaj en izvozljiv vir (dokument, spletna povezava, razprava,...)."
+
+msgid "Export finished."
+msgstr "Izvoz končan."
+
+msgid "Export failed."
+msgstr "Izvoz spodletel."
+
+msgid "Import failed."
+msgstr "Uvoz spodletel."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Lokalna datoteka (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Pripravljen za uvoz"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Varnostno kopijo bomo obnovili v ta tečaj. Lahko se vrnete, da spremenite možnosti."
+
+msgid "Select resources to import"
+msgstr "Izberite vire za uvoz"
+
+msgid "No resources available in this backup."
+msgstr "V tej varnostni kopiji ni razpoložljivih virov."
+
+msgid "Import selection"
+msgstr "Izbira za uvoz"
+
+msgid "Import completed"
+msgstr "Uvoz končan"
+
+msgid "Could not load options."
+msgstr "Ni mogoče naložiti možnosti."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Izberite varnostno kopijo (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Izberite varnostno kopijo s strežnika"
+
+msgid "Error selecting source."
+msgstr "Napaka pri izbiri vira."
+
+msgid "Recycling options"
+msgstr "Možnosti recikliranja"
+
+msgid "Type the course code to confirm"
+msgstr "Vnesite kodo tečaja za potrditev"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "To bo odstranilo ali ponastavilo izbrane vire. Te dejavnosti ni mogoče razveljaviti."
+
+msgid "Select resources to recycle"
+msgstr "Izberite vire za recikliranje"
+
+msgid "No resources available in this course."
+msgstr "V tem tečaju ni razpoložljivih virov."
+
+msgid "Recycle selected"
+msgstr "Recikliraj izbrane"
+
+msgid "Error loading resources."
+msgstr "Napaka pri nalaganju virov."
+
+msgid "Clear search"
+msgstr "Počisti iskanje"
 

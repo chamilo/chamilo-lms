@@ -19389,7 +19389,7 @@ msgid "Webcam Clip allow to users capture images from his webcam and send them t
 msgstr "Klipp Webcam memungkinkan pengguna menangkap gambar dari webcam mereka dan mengirimkannya ke server dalam format JPEG (.jpg atau .jpeg)"
 
 msgid "AUTO RESIZE (default)"
-msgstr "AUTO RESIZE (default)"
+msgstr "OTOMATIS UBAH UKURAN (default)"
 
 msgid "This slideshow will resize automatically to your screen size. This is the default option."
 msgstr "Slideshow ini akan diubah ukurannya secara otomatis ke ukuran layar Anda. Ini adalah opsi default."
@@ -31232,4 +31232,211 @@ msgstr "Tidak ada umpan balik rinci yang tersedia untuk pertanyaan ini."
 
 msgid "Please select an answer before checking the result."
 msgstr "Silakan pilih jawaban sebelum memeriksa hasil."
+
+msgid "Allow PDF export for this item"
+msgstr "Izinkan ekspor PDF untuk item ini"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Sembunyikan pengguna gratis (tidak terdaftar)"
+
+msgid "Question statistics"
+msgstr "Statistik pertanyaan"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Membuat file. Jangan tutup tab ini..."
+
+msgid "Assign auth source to users"
+msgstr "Tetapkan sumber otentikasi ke pengguna"
+
+msgid "There are no questions for this survey"
+msgstr "Tidak ada pertanyaan untuk survei ini"
+
+msgid "Certificates report"
+msgstr "Laporan sertifikat"
+
+msgid "Course picture"
+msgstr "Gambar kursus"
+
+msgid "Current picture"
+msgstr "Gambar saat ini"
+
+msgid "Course events log"
+msgstr "Log peristiwa kursus"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Perbarui informasi kategori dan batas waktu opsionalnya."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Buat grup logis sesi untuk menjaga katalog pelatihan Anda tetap terorganisir."
+
+msgid "Generating file, do not close this tab"
+msgstr "Membuat file, jangan tutup tab ini"
+
+msgid "Assign authentication sources to users"
+msgstr "Tetapkan sumber otentikasi ke pengguna"
+
+msgid "Average completion rate"
+msgstr "Tingkat penyelesaian rata-rata"
+
+msgid "Average access rate"
+msgstr "Tingkat akses rata-rata"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Tabel ini merangkum kemajuan dan aktivitas pembelajar per jalur pembelajaran di kursus Anda saat ini."
+
+msgid "Follow up"
+msgstr "Tindak lanjut"
+
+msgid "Tracking for superior"
+msgstr "Pelacakan untuk atasan"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Laporan ini menunjukkan distribusi mingguan sesi per pelatih umum dalam rentang tanggal yang dipilih."
+
+msgid "Head manager report"
+msgstr "Laporan manajer kepala"
+
+msgid "Reset or update user password"
+msgstr "Atur ulang atau perbarui kata sandi pengguna"
+
+msgid "Active users"
+msgstr "Pengguna aktif"
+
+msgid "Inactive users"
+msgstr "Pengguna tidak aktif"
+
+msgid "Report on resources"
+msgstr "Laporan sumber daya"
+
+msgid "Global view"
+msgstr "Tampilan global"
+
+msgid "Available reports"
+msgstr "Laporan yang tersedia"
+
+msgid "Current report"
+msgstr "Laporan saat ini"
+
+msgid "Back to user assignment page"
+msgstr "Kembali ke halaman penugasan pengguna"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Sumber otentikasi berhasil ditetapkan"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Tips: pilih “— Hanya unggah —” untuk menyimpan tanpa mengirim ke siapa pun."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Pilih setidaknya satu penerima (“— Hanya unggah —” atau pengguna mana pun)"
+
+msgid "Sharing"
+msgstr "Berbagi"
+
+msgid "Selected files"
+msgstr "File yang dipilih"
+
+msgid "Hide password"
+msgstr "Sembunyikan kata sandi"
+
+msgid "Show password"
+msgstr "Tampilkan kata sandi"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Unggah logo SVG untuk email"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Anda harus memindahkan atau menghapus semua jalur pembelajaran dari kategori ini sebelum menghapusnya."
+
+msgid "Clear filters"
+msgstr "Hapus filter"
+
+msgid "Attendances (tablet)"
+msgstr "Absensi (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Keluar dari mode tablet"
+
+msgid "No members found."
+msgstr "Tidak ada anggota yang ditemukan."
+
+msgid "Health check"
+msgstr "Pemeriksaan kesehatan"
+
+msgid "Export to CC 1.3"
+msgstr "Ekspor ke CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Memuat sumber daya..."
+
+msgid "Failed to load resources."
+msgstr "Gagal memuat sumber daya."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Pilih setidaknya satu sumber daya yang dapat diekspor (dokumen, tautan web, diskusi,...)."
+
+msgid "Export finished."
+msgstr "Ekspor selesai."
+
+msgid "Export failed."
+msgstr "Ekspor gagal."
+
+msgid "Import failed."
+msgstr "Impor gagal."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "File lokal (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Siap diimpor"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Kami akan memulihkan cadangan ke kursus ini. Anda dapat kembali untuk mengubah opsi."
+
+msgid "Select resources to import"
+msgstr "Pilih sumber daya untuk diimpor"
+
+msgid "No resources available in this backup."
+msgstr "Tidak ada sumber daya yang tersedia dalam cadangan ini."
+
+msgid "Import selection"
+msgstr "Pemilihan impor"
+
+msgid "Import completed"
+msgstr "Impor selesai"
+
+msgid "Could not load options."
+msgstr "Tidak dapat memuat opsi."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Pilih file cadangan (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Pilih cadangan dari server"
+
+msgid "Error selecting source."
+msgstr "Kesalahan memilih sumber."
+
+msgid "Recycling options"
+msgstr "Opsi daur ulang"
+
+msgid "Type the course code to confirm"
+msgstr "Ketik kode kursus untuk konfirmasi"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Ini akan menghapus atau mereset sumber daya yang dipilih. Tindakan ini tidak dapat dibatalkan."
+
+msgid "Select resources to recycle"
+msgstr "Pilih sumber daya untuk didaur ulang"
+
+msgid "No resources available in this course."
+msgstr "Tidak ada sumber daya yang tersedia dalam kursus ini."
+
+msgid "Recycle selected"
+msgstr "Daur ulang yang dipilih"
+
+msgid "Error loading resources."
+msgstr "Kesalahan memuat sumber daya."
+
+msgid "Clear search"
+msgstr "Hapus pencarian"
 

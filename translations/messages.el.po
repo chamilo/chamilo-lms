@@ -26500,7 +26500,7 @@ msgid "Filter messages between a teacher and a learner between the session start
 msgstr "Φιλτράρισμα μηνυμάτων μεταξύ δασκάλου και μαθητή μεταξύ ημερομηνιών έναρξης και λήξης συνεδρίας"
 
 msgid "UNO converter binaries"
-msgstr "UNO converter binaries"
+msgstr "UNO μετατροπέα δυαδικά αρχεία"
 
 msgid "Give the system path to the UNO converter library to enable some extra exporting features."
 msgstr "Δώστε τη διαδρομή συστήματος προς τη βιβλιοθήκη UNO converter για ενεργοποίηση επιπλέον χαρακτηριστικών εξαγωγής."
@@ -30539,13 +30539,13 @@ msgid "ex. root"
 msgstr "π.χ. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "ΔΗΜΙΟΥΡΓΙΑ ΠΙΝΑΚΑ works"
 
 msgid "ALTER TABLE works"
 msgstr "ALTER TABLE works"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "ΔΙΑΓΡΑΦΗ ΣΤΗΛΗΣ works"
 
 msgid "Theme selected as current"
 msgstr "Θέμα επιλέχθηκε ως τρέχον"
@@ -31215,4 +31215,241 @@ msgstr "Επανεκκίνηση Μαθημάτων Διαχειριστή"
 
 msgid "Admin Dashboard"
 msgstr "Πίνακας Ελέγχου Διαχειριστή"
+
+msgid "Threads"
+msgstr "Θέματα"
+
+msgid "Invalid thread"
+msgstr "Μη έγκυρο θέμα"
+
+msgid "View full thread"
+msgstr "Προβολή πλήρους θέματος"
+
+msgid "No post yet"
+msgstr "Καμία ανάρτηση ακόμα"
+
+msgid "Discussion thread"
+msgstr "Θέμα συζήτησης"
+
+msgid "Access to this course"
+msgstr "Πρόσβαση σε αυτό το μάθημα"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Αυτό το πρόσθετο δεν έχει ρυθμιζόμενες παραμέτρους. Η ενεργοποίηση γίνεται από τη λίστα πρόσθετων."
+
+msgid "Private - access granted by privileged users"
+msgstr "Ιδιωτικό - πρόσβαση από προνομιούχους χρήστες"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Δεν υπάρχει λεπτομερές feedback για αυτή την ερώτηση."
+
+msgid "Please select an answer before checking the result."
+msgstr "Παρακαλούμε επιλέξτε μια απάντηση πριν ελέγξετε το αποτέλεσμα."
+
+msgid "Allow PDF export for this item"
+msgstr "Επιτρέψτε εξαγωγή PDF για αυτό το αντικείμενο"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Απόκρυψη δωρεάν χρηστών (μη εγγεγραμμένοι)"
+
+msgid "Question statistics"
+msgstr "Στατιστικά ερωτήσεων"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Γεννιέται αρχείο. Μην κλείσετε αυτή τη καρτέλα..."
+
+msgid "Assign auth source to users"
+msgstr "Ανάθεση πηγής auth σε χρήστες"
+
+msgid "There are no questions for this survey"
+msgstr "Δεν υπάρχουν ερωτήσεις για αυτή την έρευνα"
+
+msgid "Certificates report"
+msgstr "Αναφορά πιστοποιητικών"
+
+msgid "Course picture"
+msgstr "Εικόνα μαθήματος"
+
+msgid "Current picture"
+msgstr "Τρέχουσα εικόνα"
+
+msgid "Course events log"
+msgstr "Καταγραφή συμβάντων μαθήματος"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Ενημέρωση πληροφοριών κατηγορίας και προαιρετικού χρονικού ορίου."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Δημιουργήστε λογική ομάδα συνεδριών για να οργανώσετε τον κατάλογο εκπαίδευσης."
+
+msgid "Generating file, do not close this tab"
+msgstr "Γεννιέται αρχείο, μην κλείσετε αυτή τη καρτέλα"
+
+msgid "Assign authentication sources to users"
+msgstr "Ανάθεση πηγών πιστοποίησης σε χρήστες"
+
+msgid "Average completion rate"
+msgstr "Μέσος ρυθμός ολοκλήρωσης"
+
+msgid "Average access rate"
+msgstr "Μέσος ρυθμός πρόσβασης"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Αυτός ο πίνακας συνοψίζει την πρόοδο και δραστηριότητα των εκπαιδευομένων ανά μονοπάτι μάθησης στα τρέχοντα μαθήματα."
+
+msgid "Follow up"
+msgstr "Παρακολούθηση"
+
+msgid "Tracking for superior"
+msgstr "Παρακολούθηση για ανώτερο"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Αυτή η αναφορά δείχνει την εβδομαδιαία κατανομή συνεδριών ανά γενικό coach στο επιλεγμένο εύρος ημερομηνιών."
+
+msgid "Head manager report"
+msgstr "Αναφορά κεφαλαιούχου διευθυντή"
+
+msgid "Reset or update user password"
+msgstr "Επαναφορά ή ενημέρωση κωδικού χρήστη"
+
+msgid "Active users"
+msgstr "Ενεργοί χρήστες"
+
+msgid "Inactive users"
+msgstr "Ανενεργοί χρήστες"
+
+msgid "Report on resources"
+msgstr "Αναφορά πόρων"
+
+msgid "Global view"
+msgstr "Γενική προβολή"
+
+msgid "Available reports"
+msgstr "Διαθέσιμες αναφορές"
+
+msgid "Current report"
+msgstr "Τρέχουσα αναφορά"
+
+msgid "Back to user assignment page"
+msgstr "Επιστροφή στη σελίδα ανάθεσης χρήστη"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Πηγές πιστοποίησης ανάθεσης επιτυχώς"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Συμβουλή: επιλέξτε «— Απλώς ανέβασμα —» για αποθήκευση χωρίς αποστολή."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Επιλέξτε τουλάχιστον έναν παραλήπτη («— Απλώς ανέβασμα —» ή οποιονδήποτε χρήστη)"
+
+msgid "Sharing"
+msgstr "Κοινή χρήση"
+
+msgid "Selected files"
+msgstr "Επιλεγμένα αρχεία"
+
+msgid "Hide password"
+msgstr "Απόκρυψη κωδικού πρόσβασης"
+
+msgid "Show password"
+msgstr "Εμφάνιση κωδικού πρόσβασης"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Ανέβασμα SVG λογότυπου για email"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Πρέπει να μετακινήσετε ή να διαγράψετε όλα τα μονοπάτια μάθησης από αυτή την κατηγορία πριν τη διαγραφή της."
+
+msgid "Clear filters"
+msgstr "Καθαρισμός φίλτρων"
+
+msgid "Attendances (tablet)"
+msgstr "Προσέλευση (ταμπλέτα)"
+
+msgid "Exit tablet mode"
+msgstr "Έξοδος από λειτουργία ταμπλέτας"
+
+msgid "No members found."
+msgstr "Δεν βρέθηκαν μέλη."
+
+msgid "Health check"
+msgstr "Έλεγχος υγείας"
+
+msgid "Export to CC 1.3"
+msgstr "Εξαγωγή σε CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Φόρτωση πόρων..."
+
+msgid "Failed to load resources."
+msgstr "Αποτυχία φόρτωσης πόρων."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Επιλέξτε τουλάχιστον έναν εξαγώγιμο πόρο (έγγραφο, σύνδεσμο ιστοσελίδας, συζήτηση,...)."
+
+msgid "Export finished."
+msgstr "Η εξαγωγή ολοκληρώθηκε."
+
+msgid "Export failed."
+msgstr "Η εξαγωγή απέτυχε."
+
+msgid "Import failed."
+msgstr "Η εισαγωγή απέτυχε."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Τοπικό αρχείο (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Έτοιμο για εισαγωγή"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Θα επαναφέρουμε το αντίγραφο ασφαλείας σε αυτό το μάθημα. Μπορείτε να επιστρέψετε για να αλλάξετε επιλογές."
+
+msgid "Select resources to import"
+msgstr "Επιλογή πόρων προς εισαγωγή"
+
+msgid "No resources available in this backup."
+msgstr "Δεν υπάρχουν διαθέσιμοι πόροι σε αυτό το αντίγραφο ασφαλείας."
+
+msgid "Import selection"
+msgstr "Επιλογή εισαγωγής"
+
+msgid "Import completed"
+msgstr "Η εισαγωγή ολοκληρώθηκε"
+
+msgid "Could not load options."
+msgstr "Δεν ήταν δυνατή η φόρτωση των επιλογών."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Επιλέξτε αρχείο αντιγράφου ασφαλείας (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Επιλέξτε αντίγραφο ασφαλείας από τον διακομιστή"
+
+msgid "Error selecting source."
+msgstr "Σφάλμα επιλογής πηγής."
+
+msgid "Recycling options"
+msgstr "Επιλογές ανακύκλωσης"
+
+msgid "Type the course code to confirm"
+msgstr "Πληκτρολογήστε τον κωδικό του μαθήματος για επιβεβαίωση"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Αυτό θα αφαιρέσει ή θα επαναφέρει τους επιλεγμένους πόρους. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
+
+msgid "Select resources to recycle"
+msgstr "Επιλογή πόρων προς ανακύκλωση"
+
+msgid "No resources available in this course."
+msgstr "Δεν υπάρχουν διαθέσιμοι πόροι σε αυτό το μάθημα."
+
+msgid "Recycle selected"
+msgstr "Ανακύκλωση επιλεγμένων"
+
+msgid "Error loading resources."
+msgstr "Σφάλμα φόρτωσης πόρων."
+
+msgid "Clear search"
+msgstr "Καθαρισμός αναζήτησης"
 

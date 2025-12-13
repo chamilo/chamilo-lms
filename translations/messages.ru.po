@@ -2023,7 +2023,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":да:авторское право,, нет:без авторского права"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Поток октетов,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":упражнение:упражнение,, имитация:имитация,, вопросник:вопросник,, диаграмма:диаграмма,, рисунок:рисунок,, график:график,, индекс:индекс,, слайд:слайд,, таблица:таблица,, повествовательный текст:повествовательный текст,, экзамен:экзамен,, эксперимент:эксперимент,, постановка проблемы:постановка проблемы,, самооценка:самооценка,, лекция:лекция"
@@ -8629,10 +8629,10 @@ msgid "."
 msgstr "."
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%d %b %Y"
 
 msgid "%A %B %d, %Y"
-msgstr "%A %B %d, %Y"
+msgstr "%A, %d %B %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
 msgstr "%B %d, %Y в %I:%M %p"
@@ -9466,7 +9466,7 @@ msgid "Not yet begun"
 msgstr "Еще не начато"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d %B %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Недействительная папка: пожалуйста, создайте папку с именем изображений в Ваших инструментах документа, для того, чтобы изображения могли бы быть загружены в эту папку"
@@ -30737,7 +30737,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (внутренний ID)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "Идентификатор Azure (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Электронная почта организации"
@@ -31203,4 +31203,241 @@ msgstr "Перезапущенные курсы администратора"
 
 msgid "Admin Dashboard"
 msgstr "Панель администратора"
+
+msgid "Threads"
+msgstr "Темы"
+
+msgid "Invalid thread"
+msgstr "Недопустимая тема"
+
+msgid "View full thread"
+msgstr "Просмотр полной темы"
+
+msgid "No post yet"
+msgstr "Пока нет сообщений"
+
+msgid "Discussion thread"
+msgstr "Тема обсуждения"
+
+msgid "Access to this course"
+msgstr "Доступ к этому курсу"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "У этого плагина нет настраиваемых параметров. Активация управляется из списка плагинов."
+
+msgid "Private - access granted by privileged users"
+msgstr "Приватный — доступ предоставляется привилегированными пользователями"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Подробная обратная связь по этому вопросу недоступна."
+
+msgid "Please select an answer before checking the result."
+msgstr "Выберите ответ перед проверкой результата."
+
+msgid "Allow PDF export for this item"
+msgstr "Разрешить экспорт в PDF для этого элемента"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Скрыть бесплатных пользователей (не записанных)"
+
+msgid "Question statistics"
+msgstr "Статистика вопросов"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Генерация файла. Не закрывайте эту вкладку..."
+
+msgid "Assign auth source to users"
+msgstr "Назначить источник аутентификации пользователям"
+
+msgid "There are no questions for this survey"
+msgstr "В этом опросе нет вопросов"
+
+msgid "Certificates report"
+msgstr "Отчет по сертификатам"
+
+msgid "Course picture"
+msgstr "Изображение курса"
+
+msgid "Current picture"
+msgstr "Текущее изображение"
+
+msgid "Course events log"
+msgstr "Журнал событий курса"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Обновите информацию о категории и ее опциональное ограничение по времени."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Создайте логическую группу сессий для организации каталога обучения."
+
+msgid "Generating file, do not close this tab"
+msgstr "Генерация файла, не закрывайте эту вкладку"
+
+msgid "Assign authentication sources to users"
+msgstr "Назначить источники аутентификации пользователям"
+
+msgid "Average completion rate"
+msgstr "Средний процент завершения"
+
+msgid "Average access rate"
+msgstr "Средний уровень доступа"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Эта таблица суммирует прогресс учащихся и активность по учебным траекториям в ваших текущих курсах."
+
+msgid "Follow up"
+msgstr "Отслеживание"
+
+msgid "Tracking for superior"
+msgstr "Отслеживание для руководителя"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Этот отчет показывает еженедельное распределение сессий по генеральным тренерам в выбранном диапазоне дат."
+
+msgid "Head manager report"
+msgstr "Отчет руководителя"
+
+msgid "Reset or update user password"
+msgstr "Сбросить или обновить пароль пользователя"
+
+msgid "Active users"
+msgstr "Активные пользователи"
+
+msgid "Inactive users"
+msgstr "Неактивные пользователи"
+
+msgid "Report on resources"
+msgstr "Отчет по ресурсам"
+
+msgid "Global view"
+msgstr "Общий обзор"
+
+msgid "Available reports"
+msgstr "Доступные отчеты"
+
+msgid "Current report"
+msgstr "Текущий отчет"
+
+msgid "Back to user assignment page"
+msgstr "Вернуться на страницу назначения пользователей"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Источники аутентификации назначены успешно"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Подсказка: выберите «— Просто загрузить —», чтобы сохранить без отправки кому-либо."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Выберите хотя бы одного получателя («— Просто загрузить —» или любого пользователя)"
+
+msgid "Sharing"
+msgstr "Общий доступ"
+
+msgid "Selected files"
+msgstr "Выбранные файлы"
+
+msgid "Hide password"
+msgstr "Скрыть пароль"
+
+msgid "Show password"
+msgstr "Показать пароль"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Загрузить SVG-логотип для электронных писем"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Перед удалением категории переместите или удалите из неё все учебные пути."
+
+msgid "Clear filters"
+msgstr "Очистить фильтры"
+
+msgid "Attendances (tablet)"
+msgstr "Посещаемость (планшет)"
+
+msgid "Exit tablet mode"
+msgstr "Выйти из режима планшета"
+
+msgid "No members found."
+msgstr "Участники не найдены."
+
+msgid "Health check"
+msgstr "Проверка работоспособности"
+
+msgid "Export to CC 1.3"
+msgstr "Экспорт в CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Загрузка ресурсов..."
+
+msgid "Failed to load resources."
+msgstr "Не удалось загрузить ресурсы."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Выберите хотя бы один экспортируемый ресурс (документ, веб-ссылка, обсуждение и т.д.)."
+
+msgid "Export finished."
+msgstr "Экспорт завершён."
+
+msgid "Export failed."
+msgstr "Экспорт не удался."
+
+msgid "Import failed."
+msgstr "Импорт не удался."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Локальный файл (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Готов к импорту"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Резервная копия будет восстановлена в этот курс. Вы можете вернуться, чтобы изменить параметры."
+
+msgid "Select resources to import"
+msgstr "Выберите ресурсы для импорта"
+
+msgid "No resources available in this backup."
+msgstr "В этой резервной копии нет доступных ресурсов."
+
+msgid "Import selection"
+msgstr "Выбор для импорта"
+
+msgid "Import completed"
+msgstr "Импорт завершён"
+
+msgid "Could not load options."
+msgstr "Не удалось загрузить параметры."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Выберите файл резервной копии (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Выберите резервную копию с сервера"
+
+msgid "Error selecting source."
+msgstr "Ошибка выбора источника."
+
+msgid "Recycling options"
+msgstr "Параметры переработки"
+
+msgid "Type the course code to confirm"
+msgstr "Введите код курса для подтверждения"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Это удалит или сбросит выбранные ресурсы. Действие нельзя отменить."
+
+msgid "Select resources to recycle"
+msgstr "Выберите ресурсы для переработки"
+
+msgid "No resources available in this course."
+msgstr "В этом курсе нет доступных ресурсов."
+
+msgid "Recycle selected"
+msgstr "Переработать выбранное"
+
+msgid "Error loading resources."
+msgstr "Ошибка загрузки ресурсов."
+
+msgid "Clear search"
+msgstr "Очистить поиск"
 

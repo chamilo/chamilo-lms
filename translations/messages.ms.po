@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:berhak cipta,, no:tiada hak cipta"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Pasta,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Pasta,, application/msword:MsWord,, application/octet-stream:Aliran oktet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:latihan,,      simulation:simulasi,,      questionnaire:soal selidik,,      diagram:diagram,,      figure:gambar,,      graph:graf,,      index:indeks,,      slide:slaid,,      table:jadual,,      narrative text:teks naratif,,      exam:ujian,,      experiment:eksperimen,,      problem statement:penyata masalah,,      self assessment:penilaian diri,,      lecture:kuliah"
@@ -16755,7 +16755,7 @@ msgid "Fill with demo content"
 msgstr "Isi dengan kandungan demo"
 
 msgid "Single Sign On"
-msgstr "Single Sign On"
+msgstr "Log Masuk Tunggal"
 
 msgid "Enabling Single Sign On allows you to connect this platform as a slave of an authentication master, for example a Drupal website with the Drupal-Chamilo plugin or any other similar master setup."
 msgstr "Mengaktifkan Single Sign On membolehkan anda menyambungkan platform ini sebagai hamba kepada tuan autentikasi, contohnya laman web Drupal dengan plugin Drupal-Chamilo atau sebarang persediaan tuan serupa."
@@ -26862,13 +26862,13 @@ msgid "Check password strength"
 msgstr "Semak kekuatan kata laluan"
 
 msgid "HTTP Strict Transport Security"
-msgstr "HTTP Strict Transport Security"
+msgstr "Keselamatan Pengangkutan Ketat HTTP"
 
 msgid "HTTP Strict Transport Security is an excellent feature to support on your site and strengthens your implementation of TLS by getting the User Agent to enforce the use of HTTPS. Recommended value: 'strict-transport-security: max-age=63072000; includeSubDomains'. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. You can include the 'preload' suffix, but this has consequences on the top level domain (TLD), so probably not to be done lightly. See https://hstspreload.org/. Leave blank to disable."
 msgstr "HTTP Strict Transport Security adalah ciri cemerlang untuk disokong di laman anda dan mengukuhkan pelaksanaan TLS anda dengan memaksa agen pengguna menggunakan HTTPS. Nilai disyorkan: 'strict-transport-security: max-age=63072000; includeSubDomains'. Lihat https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. Anda boleh sertakan suffix 'preload', tetapi ini mempunyai akibat pada domain tahap atas (TLD), jadi mungkin tidak dilakukan dengan ringan. Lihat https://hstspreload.org/. Biarkan kosong untuk lumpuhkan."
 
 msgid "Content Security Policy"
-msgstr "Content Security Policy"
+msgstr "Dasar Keselamatan Kandungan"
 
 msgid "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the 'script-src' argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
 msgstr "Content Security Policy adalah langkah efektif untuk melindungi laman anda dari serangan XSS. Dengan menyenaraikan sumber kandungan yang diluluskan, anda boleh halang pelayar dari memuatkan aset berbahaya. Tetapan ini rumit untuk ditetapkan dengan editor WYSIWYG, tetapi jika anda tambah semua domain yang ingin dibenarkan untuk penyertaan iframe dalam pernyataan child-src, contoh ini sepatutnya berfungsi untuk anda. Anda boleh halang JavaScript dari dilaksanakan dari sumber luaran (termasuk dalam imej SVG) dengan menggunakan senarai ketat dalam hujah 'script-src'. Biarkan kosong untuk lumpuhkan. Contoh tetapan: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
@@ -26880,7 +26880,7 @@ msgid "This setting allows you to experiment by reporting but not enforcing some
 msgstr "Tetapan ini membolehkan anda percubaan dengan melaporkan tetapi tidak menguatkuasakan beberapa Content Security Policy."
 
 msgid "HTTP Public Key Pinning"
-msgstr "HTTP Public Key Pinning"
+msgstr "Penyangkalan Kunci Awam HTTP"
 
 msgid "HTTP Public Key Pinning protects your site from MiTM attacks using rogue X.509 certificates. By whitelisting only the identities that the browser should trust, your users are protected in the event a certificate authority is compromised."
 msgstr "HTTP Public Key Pinning melindungi laman anda dari serangan MiTM menggunakan sijil X.509 penipu. Dengan menyenaraikan hanya identiti yang sepatutnya dipercayai oleh pelayar, pengguna anda dilindungi jika pihak berkuasa sijil dikompromi."
@@ -31232,4 +31232,211 @@ msgstr "Tiada maklum balas terperinci tersedia untuk soalan ini."
 
 msgid "Please select an answer before checking the result."
 msgstr "Sila pilih jawapan sebelum menyemak hasil."
+
+msgid "Allow PDF export for this item"
+msgstr "Benarkan eksport PDF untuk item ini"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Sembunyikan pengguna percuma (tidak didaftar)"
+
+msgid "Question statistics"
+msgstr "Statistik soalan"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Menjana fail. Jangan tutup tab ini..."
+
+msgid "Assign auth source to users"
+msgstr "Tugaskan sumber autentikasi kepada pengguna"
+
+msgid "There are no questions for this survey"
+msgstr "Tiada soalan untuk tinjauan ini"
+
+msgid "Certificates report"
+msgstr "Laporan sijil"
+
+msgid "Course picture"
+msgstr "Gambar kursus"
+
+msgid "Current picture"
+msgstr "Gambar semasa"
+
+msgid "Course events log"
+msgstr "Log peristiwa kursus"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Kemas kini maklumat kategori dan had masa pilihan."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Cipta kumpulan logik sesi untuk mengatur katalog latihan anda."
+
+msgid "Generating file, do not close this tab"
+msgstr "Menjana fail, jangan tutup tab ini"
+
+msgid "Assign authentication sources to users"
+msgstr "Tugaskan sumber autentikasi kepada pengguna"
+
+msgid "Average completion rate"
+msgstr "Kadar siap purata"
+
+msgid "Average access rate"
+msgstr "Kadar akses purata"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Jadual ini merumuskan kemajuan dan aktiviti pelajar bagi setiap laluan pembelajaran dalam kursus semasa anda."
+
+msgid "Follow up"
+msgstr "Susulan"
+
+msgid "Tracking for superior"
+msgstr "Jejak untuk superior"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Laporan ini menunjukkan taburan mingguan sesi bagi setiap jurulatih umum dalam julat tarikh yang dipilih."
+
+msgid "Head manager report"
+msgstr "Laporan pengurus utama"
+
+msgid "Reset or update user password"
+msgstr "Set semula atau kemas kini kata laluan pengguna"
+
+msgid "Active users"
+msgstr "Pengguna aktif"
+
+msgid "Inactive users"
+msgstr "Pengguna tidak aktif"
+
+msgid "Report on resources"
+msgstr "Laporan sumber"
+
+msgid "Global view"
+msgstr "Pandangan global"
+
+msgid "Available reports"
+msgstr "Laporan yang tersedia"
+
+msgid "Current report"
+msgstr "Laporan semasa"
+
+msgid "Back to user assignment page"
+msgstr "Kembali ke halaman penugasan pengguna"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Sumber autentikasi ditugaskan dengan jayanya"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Petua: pilih “— Hanya muat naik —” untuk menyimpan tanpa hantar kepada sesiapa."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Sila pilih sekurang-kurangnya satu penerima (“— Hanya muat naik —” atau mana-mana pengguna)"
+
+msgid "Sharing"
+msgstr "Perkongsian"
+
+msgid "Selected files"
+msgstr "Fail yang dipilih"
+
+msgid "Hide password"
+msgstr "Sembunyikan kata laluan"
+
+msgid "Show password"
+msgstr "Tunjukkan kata laluan"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Muat naik logo SVG untuk e-mel"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Anda mesti memindahkan atau membuang semua laluan pembelajaran dari kategori ini sebelum memadamnya."
+
+msgid "Clear filters"
+msgstr "Kosongkan penapis"
+
+msgid "Attendances (tablet)"
+msgstr "Kehadiran (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Keluar mod tablet"
+
+msgid "No members found."
+msgstr "Tiada ahli ditemui."
+
+msgid "Health check"
+msgstr "Pemeriksaan kesihatan"
+
+msgid "Export to CC 1.3"
+msgstr "Eksport ke CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Memuat sumber..."
+
+msgid "Failed to load resources."
+msgstr "Gagal memuat sumber."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Sila pilih sekurang-kurangnya satu sumber yang boleh dieksport (dokumen, pautan web, perbincangan,...)."
+
+msgid "Export finished."
+msgstr "Eksport selesai."
+
+msgid "Export failed."
+msgstr "Eksport gagal."
+
+msgid "Import failed."
+msgstr "Import gagal."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Fail tempatan (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Bersedia untuk diimport"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Kami akan memulihkan sandaran ke dalam kursus ini. Anda boleh kembali untuk menukar pilihan."
+
+msgid "Select resources to import"
+msgstr "Pilih sumber untuk diimport"
+
+msgid "No resources available in this backup."
+msgstr "Tiada sumber tersedia dalam sandaran ini."
+
+msgid "Import selection"
+msgstr "Pilihan import"
+
+msgid "Import completed"
+msgstr "Import selesai"
+
+msgid "Could not load options."
+msgstr "Tidak dapat memuat pilihan."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Sila pilih fail sandaran (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Sila pilih sandaran dari pelayan"
+
+msgid "Error selecting source."
+msgstr "Ralat memilih sumber."
+
+msgid "Recycling options"
+msgstr "Pilihan kitar semula"
+
+msgid "Type the course code to confirm"
+msgstr "Taip kod kursus untuk mengesahkan"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Ini akan memadam atau menetapkan semula sumber yang dipilih. Tindakan ini tidak boleh dibatalkan."
+
+msgid "Select resources to recycle"
+msgstr "Pilih sumber untuk dikitar semula"
+
+msgid "No resources available in this course."
+msgstr "Tiada sumber tersedia dalam kursus ini."
+
+msgid "Recycle selected"
+msgstr "Kitar semula yang dipilih"
+
+msgid "Error loading resources."
+msgstr "Ralat memuat sumber."
+
+msgid "Clear search"
+msgstr "Kosongkan carian"
 

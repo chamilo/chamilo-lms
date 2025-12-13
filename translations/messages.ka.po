@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:საავტორო უფლება,, no:საავტორო უფლება არა"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:ფოლდერი,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ვარჯიში,,      simulation:სიმულაცია,,      questionnaire:ანკეტა,,      diagram:დიაგრამა,,      figure:ფიგურა,,      graph:გრაფიკი,,      index:ინდექსი,,      slide:სლაიდი,,      table:ცხრილი,,      narrative text:ნარატიული ტექსტი,,      exam:გამოცდა,,      experiment:ექსპერიმენტი,,      problem statement:პრობლემის ჩამონათვალი,,      self assessment:თვითშეფასება,,      lecture:ლექცია"
@@ -20836,7 +20836,7 @@ msgid "Write something on your friend's wall"
 msgstr "ცარიელი შაბლონი"
 
 msgid "Blank template"
-msgstr ""
+msgstr "ცარიელი შაბლონი"
 
 msgid "Base course"
 msgstr "საბაზისო კურსი"
@@ -31226,4 +31226,211 @@ msgstr "ამ კითხვისთვის დეტალური უკ
 
 msgid "Please select an answer before checking the result."
 msgstr "შედეგის შემოწმებამდე აირჩიეთ პასუხი."
+
+msgid "Allow PDF export for this item"
+msgstr "PDF-ის ექსპორტის ნებართვა ამ ელემენტისთვის"
+
+msgid "Hide free users (not enrolled)"
+msgstr "უფასო მომხმარებლების დამალვა (არ არიან რეგისტრირებული)"
+
+msgid "Question statistics"
+msgstr "კითხვის სტატისტიკა"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "ფაილის გენერაცია. არ დაახუროთ ეს ჩანართი..."
+
+msgid "Assign auth source to users"
+msgstr "აუთენტიფიკაციის წყაროს მომხმარებლების მინიჭება"
+
+msgid "There are no questions for this survey"
+msgstr "ამ გამოკითხვისთვის კითხვები არ არის"
+
+msgid "Certificates report"
+msgstr "სერტიფიკატების ანგარიში"
+
+msgid "Course picture"
+msgstr "კურსის სურათი"
+
+msgid "Current picture"
+msgstr "მიმდინარე სურათი"
+
+msgid "Course events log"
+msgstr "კურსის მოვლენების ლოგი"
+
+msgid "Update the category information and its optional time limit."
+msgstr "კატეგორიის ინფორმაციის განახლება და მისი ოპციური დროის ლიმიტი."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "სესიების ლოგიკური ჯგუფის შექმნა თქვენი ტრენინგის კატალოგის ორგანიზებისთვის."
+
+msgid "Generating file, do not close this tab"
+msgstr "ფაილის გენერაცია, არ დაახუროთ ეს ჩანართი"
+
+msgid "Assign authentication sources to users"
+msgstr "აუთენტიფიკაციის წყაროების მომხმარებლების მინიჭება"
+
+msgid "Average completion rate"
+msgstr "საშუალო შესრულების მაჩვენებელი"
+
+msgid "Average access rate"
+msgstr "საშუალო წვდომის მაჩვენებელი"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "ეს ცხრილი აჯამებს მსწავლელის პროგრესს და აქტივობას თქვენი მიმდინარე კურსების სწავლის მარშრუტებზე."
+
+msgid "Follow up"
+msgstr "კონტროლი"
+
+msgid "Tracking for superior"
+msgstr "კონტროლი უფროსისთვის"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "ეს ანგარიში 보여ნს სესიების კვირა-კვირაული განაწილება შერჩეულ თარიღობრივ დიაპაზონში ზოგადი ტრენერის მიხედვით."
+
+msgid "Head manager report"
+msgstr "ჰედ მენეჯერის ანგარიში"
+
+msgid "Reset or update user password"
+msgstr "მომხმარებლის პაროლის განახლება ან შეცვლა"
+
+msgid "Active users"
+msgstr "აქტიური მომხმარებლები"
+
+msgid "Inactive users"
+msgstr "არაქტიური მომხმარებლები"
+
+msgid "Report on resources"
+msgstr "რესურსების ანგარიში"
+
+msgid "Global view"
+msgstr "გლობალური ხედი"
+
+msgid "Available reports"
+msgstr "ხელმისაწვდომი ანგარიშები"
+
+msgid "Current report"
+msgstr "მიმდინარე ანგარიში"
+
+msgid "Back to user assignment page"
+msgstr "უკან მომხმარებლის მინიჭების გვერდზე"
+
+msgid "Authentication sources assigned successfully"
+msgstr "აუთენტიფიკაციის წყაროები წარმატებით მინიჭებულია"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "საბჭოთა: აირჩიეთ „— უბრალოდ ატვირთვა —“ შესანახად გაგზავნის გარეშე."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "გთხოვთ, აირჩიოთ მინიმუმ ერთი მიმღები („— უბრალოდ ატვირთვა —“ ან ნებისმიერი მომხმარებელი)"
+
+msgid "Sharing"
+msgstr "გაზიარება"
+
+msgid "Selected files"
+msgstr "შერჩეული ფაილები"
+
+msgid "Hide password"
+msgstr "პაროლის დამალვა"
+
+msgid "Show password"
+msgstr "პაროლის ჩვენება"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "SVG ლოგოს ატვირთვა ელფოსტებისთვის"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "თქვენ უნდა გადაიტანოთ ან ამოიღოთ ყველა სწავლის მარშრუტი ამ კატეგორიიდან მის წაშლამდე."
+
+msgid "Clear filters"
+msgstr "ფილტრების გასუფთავება"
+
+msgid "Attendances (tablet)"
+msgstr "დასწრებები (ტაბლეტი)"
+
+msgid "Exit tablet mode"
+msgstr "ტაბლეტის რეჟიმიდან გასვლა"
+
+msgid "No members found."
+msgstr "წევრები არ მოიძებნა."
+
+msgid "Health check"
+msgstr "ჯანმრთელობის შემოწმება"
+
+msgid "Export to CC 1.3"
+msgstr "ექსპორტი CC 1.3-ში"
+
+msgid "Loading resources..."
+msgstr "რესურსების ჩატვირთვა..."
+
+msgid "Failed to load resources."
+msgstr "რესურსების ჩატვირთვა ვერ მოხერხდა."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "გთხოვთ, აირჩიოთ მინიმუმ ერთი ექსპორტირებადი რესურსი (დოკუმენტი, ვებ ბმული, დისკუსია,...)."
+
+msgid "Export finished."
+msgstr "ექსპორტი დასრულდა."
+
+msgid "Export failed."
+msgstr "ექსპორტი ვერ მოხერხდა."
+
+msgid "Import failed."
+msgstr "იმპორტი ვერ მოხერხდა."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "ლოკალური ფაილი (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "იმპორტისთვის მზად"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "ჩავაბრუნებთ სარეზერვო ასოს ამ კურსში. შეგიძლიათ დაბრუნდეთ ვარიანტების შეცვლისთვის."
+
+msgid "Select resources to import"
+msgstr "იმპორტისთვის რესურსების შერჩევა"
+
+msgid "No resources available in this backup."
+msgstr "ამ სარეზერვო ასოში რესურსები არ არის ხელმისაწვდომი."
+
+msgid "Import selection"
+msgstr "იმპორტის შერჩევა"
+
+msgid "Import completed"
+msgstr "იმპორტი დასრულდა"
+
+msgid "Could not load options."
+msgstr "ვარიანტების ჩატვირთვა ვერ მოხერხდა."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "გთხოვთ, აირჩიოთ სარეზერვო ფაილი (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "გთხოვთ, აირჩიოთ სარეზერვო ასო სერვერიდან"
+
+msgid "Error selecting source."
+msgstr "წყაროს შერჩევის შეცდომა."
+
+msgid "Recycling options"
+msgstr "გადამუშავების ვარიანტები"
+
+msgid "Type the course code to confirm"
+msgstr "კურსის კოდის შეყვანა დასადასტურებლად"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "ეს მოცილებს ან განაახლებს შერჩეულ რესურსებს. ეს მოქმედება ვერ გაუქმდება."
+
+msgid "Select resources to recycle"
+msgstr "გადამუშავებისთვის რესურსების შერჩევა"
+
+msgid "No resources available in this course."
+msgstr "ამ კურსში რესურსები არ არის ხელმისაწვდომი."
+
+msgid "Recycle selected"
+msgstr "შერჩეულის გადამუშავება"
+
+msgid "Error loading resources."
+msgstr "რესურსების ჩატვირთვის შეცდომა."
+
+msgid "Clear search"
+msgstr "ძიების გასუფთავება"
 

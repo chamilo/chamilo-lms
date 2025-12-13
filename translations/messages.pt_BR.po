@@ -25081,7 +25081,7 @@ msgid "The update failed for the following courses"
 msgstr "A atualização falhou para os seguintes cursos"
 
 msgid "%02d h %02d m %02d s"
-msgstr "%02d h %02d m %02d s"
+msgstr "%02d h %02d min %02d s"
 
 msgid "User management"
 msgstr "Gerenciamento de usuários"
@@ -31233,4 +31233,223 @@ msgstr "Tópico de discussão"
 
 msgid "Access to this course"
 msgstr "Acesso a este curso"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Este plugin não possui configurações ajustáveis. A ativação é gerenciada pela lista de plugins."
+
+msgid "Private - access granted by privileged users"
+msgstr "Privado - acesso concedido por usuários privilegiados"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Não há feedback detalhado disponível para esta questão."
+
+msgid "Please select an answer before checking the result."
+msgstr "Selecione uma resposta antes de verificar o resultado."
+
+msgid "Allow PDF export for this item"
+msgstr "Permitir exportação em PDF para este item"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Ocultar usuários gratuitos (não matriculados)"
+
+msgid "Question statistics"
+msgstr "Estatísticas da questão"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Gerando arquivo. Não feche esta aba..."
+
+msgid "Assign auth source to users"
+msgstr "Atribuir fonte de autenticação aos usuários"
+
+msgid "There are no questions for this survey"
+msgstr "Não há questões para esta pesquisa"
+
+msgid "Certificates report"
+msgstr "Relatório de certificados"
+
+msgid "Course picture"
+msgstr "Imagem do curso"
+
+msgid "Current picture"
+msgstr "Imagem atual"
+
+msgid "Course events log"
+msgstr "Log de eventos do curso"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Atualizar as informações da categoria e seu limite de tempo opcional."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Criar um grupo lógico de sessões para manter seu catálogo de treinamentos organizado."
+
+msgid "Generating file, do not close this tab"
+msgstr "Gerando arquivo, não feche esta aba"
+
+msgid "Assign authentication sources to users"
+msgstr "Atribuir fontes de autenticação aos usuários"
+
+msgid "Average completion rate"
+msgstr "Taxa média de conclusão"
+
+msgid "Average access rate"
+msgstr "Taxa média de acesso"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Esta tabela resume o progresso e a atividade do aprendiz por trilha de aprendizagem nos cursos atuais."
+
+msgid "Follow up"
+msgstr "Acompanhamento"
+
+msgid "Tracking for superior"
+msgstr "Rastreamento para superior"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Este relatório mostra a distribuição semanal de sessões por coach geral no intervalo de datas selecionado."
+
+msgid "Head manager report"
+msgstr "Relatório do gerente principal"
+
+msgid "Reset or update user password"
+msgstr "Redefinir ou atualizar senha do usuário"
+
+msgid "Active users"
+msgstr "Usuários ativos"
+
+msgid "Inactive users"
+msgstr "Usuários inativos"
+
+msgid "Report on resources"
+msgstr "Relatório sobre recursos"
+
+msgid "Global view"
+msgstr "Visão global"
+
+msgid "Available reports"
+msgstr "Relatórios disponíveis"
+
+msgid "Current report"
+msgstr "Relatório atual"
+
+msgid "Back to user assignment page"
+msgstr "Voltar à página de atribuição de usuários"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Fontes de autenticação atribuídas com sucesso"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Dica: escolha “— Apenas enviar —” para armazenar sem enviar a ninguém."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Selecione pelo menos um destinatário (“— Apenas enviar —” ou qualquer usuário)"
+
+msgid "Sharing"
+msgstr "Compartilhamento"
+
+msgid "Selected files"
+msgstr "Arquivos selecionados"
+
+msgid "Hide password"
+msgstr "Ocultar senha"
+
+msgid "Show password"
+msgstr "Mostrar senha"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Enviar logo SVG para e-mails"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Você deve mover ou remover todos os trajetos de aprendizagem desta categoria antes de excluí-la."
+
+msgid "Clear filters"
+msgstr "Limpar filtros"
+
+msgid "Attendances (tablet)"
+msgstr "Presenças (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Sair do modo tablet"
+
+msgid "No members found."
+msgstr "Nenhum membro encontrado."
+
+msgid "Health check"
+msgstr "Verificação de saúde"
+
+msgid "Export to CC 1.3"
+msgstr "Exportar para CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Carregando recursos..."
+
+msgid "Failed to load resources."
+msgstr "Falha ao carregar recursos."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Selecione pelo menos um recurso exportável (documento, link web, discussão,...)."
+
+msgid "Export finished."
+msgstr "Exportação concluída."
+
+msgid "Export failed."
+msgstr "Exportação falhou."
+
+msgid "Import failed."
+msgstr "Importação falhou."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Arquivo local (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Pronto para importar"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Vamos restaurar o backup neste curso. Você pode voltar para alterar opções."
+
+msgid "Select resources to import"
+msgstr "Selecionar recursos para importar"
+
+msgid "No resources available in this backup."
+msgstr "Nenhum recurso disponível neste backup."
+
+msgid "Import selection"
+msgstr "Seleção de importação"
+
+msgid "Import completed"
+msgstr "Importação concluída"
+
+msgid "Could not load options."
+msgstr "Não foi possível carregar as opções."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Selecione um arquivo de backup (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Escolha um backup do servidor"
+
+msgid "Error selecting source."
+msgstr "Erro ao selecionar origem."
+
+msgid "Recycling options"
+msgstr "Opções de reciclagem"
+
+msgid "Type the course code to confirm"
+msgstr "Digite o código do curso para confirmar"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Isso removerá ou redefinirá os recursos selecionados. Esta ação não pode ser desfeita."
+
+msgid "Select resources to recycle"
+msgstr "Selecionar recursos para reciclar"
+
+msgid "No resources available in this course."
+msgstr "Nenhum recurso disponível neste curso."
+
+msgid "Recycle selected"
+msgstr "Reciclar selecionados"
+
+msgid "Error loading resources."
+msgstr "Erro ao carregar recursos."
+
+msgid "Clear search"
+msgstr "Limpar pesquisa"
 

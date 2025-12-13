@@ -31227,3 +31227,210 @@ msgstr "Ongin ítarleg tilgjusgiving er til taks fyri henda spurningin."
 msgid "Please select an answer before checking the result."
 msgstr "Vinarliga vel eitt svar, áðrenn tú kekkir úrslitið."
 
+msgid "Allow PDF export for this item"
+msgstr "Leyp PDF-útflutning fyri hesa einastið"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Fjal fríar brúkarar (ikki skrivaðir til)"
+
+msgid "Question statistics"
+msgstr "Spurningastøða"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Vurdir skrá. Lat ikki hesa eykuna..."
+
+msgid "Assign auth source to users"
+msgstr "Nevn innloggingskeiðu til brúkarar"
+
+msgid "There are no questions for this survey"
+msgstr "Tað eru ongar spurningar til henda umsagnarspurningalistans"
+
+msgid "Certificates report"
+msgstr "Skýrsla um loynibrøv"
+
+msgid "Course picture"
+msgstr "Kursamynd"
+
+msgid "Current picture"
+msgstr "Verandi mynd"
+
+msgid "Course events log"
+msgstr "Kursagerðir dagbók"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Dagfør bólkagreining og valfrí tíðarmørk."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Stoð ein logiska bólk av bólkum fyri at halda tann útbúgvingaratalogið skipað."
+
+msgid "Generating file, do not close this tab"
+msgstr "Vurdir skrá, lat ikki hesa eykuna"
+
+msgid "Assign authentication sources to users"
+msgstr "Nevn innloggingskeiður til brúkarar"
+
+msgid "Average completion rate"
+msgstr "Meðal lokna fyrráttan"
+
+msgid "Average access rate"
+msgstr "Meðal atgongd fyrráttan"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Hendan talvan gevur samandrátt um læraraprógv og virknin per lærugang í tínum núverandi kursum."
+
+msgid "Follow up"
+msgstr "Fylgja eftir"
+
+msgid "Tracking for superior"
+msgstr "Eftirlit fyri yvirliggjandi"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Hendan skýrsla vísir vikuliga dreingina av bólkum per yvirtøkur í valda dagatalinum."
+
+msgid "Head manager report"
+msgstr "Skýrsla hjá høvdingastjóra"
+
+msgid "Reset or update user password"
+msgstr "Endurnýggja ella dagfør brúkaraloyniorð"
+
+msgid "Active users"
+msgstr "Virkandi brúkarar"
+
+msgid "Inactive users"
+msgstr "Óvirkandi brúkarar"
+
+msgid "Report on resources"
+msgstr "Skýrsla um tilfar"
+
+msgid "Global view"
+msgstr "Heildarsýn"
+
+msgid "Available reports"
+msgstr "Tøk skýrslur"
+
+msgid "Current report"
+msgstr "Verandi skýrsla"
+
+msgid "Back to user assignment page"
+msgstr "Aftur til brúkaratiltakssíðuna"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Innloggingskeiðar nevndar við ognast"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Ráð: vel “— Bara leggja upp —” til at goyma uttan at senda til nakran."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Vinarliga vel mest ein móttakara (“— Bara leggja upp —” ella nakran brúkara)"
+
+msgid "Sharing"
+msgstr "Deiling"
+
+msgid "Selected files"
+msgstr "Valdar skrár"
+
+msgid "Hide password"
+msgstr "Fjal loyniorð"
+
+msgid "Show password"
+msgstr "Vís loyniorð"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Legg SVG-loga upp fyri t-post"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Tú mást flyta ella strika allar lærugangir úr hesum bólki áðrenn tú slettar honum."
+
+msgid "Clear filters"
+msgstr "Rensa síktir"
+
+msgid "Attendances (tablet)"
+msgstr "Vørur (tilsett)"
+
+msgid "Exit tablet mode"
+msgstr "Far úr tilsettastillinger"
+
+msgid "No members found."
+msgstr "Ongir limir funnir."
+
+msgid "Health check"
+msgstr "Heilsukanning"
+
+msgid "Export to CC 1.3"
+msgstr "Útflyt til CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Innlesur tilfar..."
+
+msgid "Failed to load resources."
+msgstr "Miseygdist at innlesa tilfar."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Vinarliga vel eitt ella fleiri útflytarhædd tilfeingi (skjal, webloyv, samrøða,...)."
+
+msgid "Export finished."
+msgstr "Útflyt liðugt."
+
+msgid "Export failed."
+msgstr "Útflyt miseygdist."
+
+msgid "Import failed."
+msgstr "Innflyt miseygdist."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Lokal fíla (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Tilreið til innflyt"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Vit endurseta varðveitingina í hendan bólkin. Tú kanst fara aftur at broyta innstillingar."
+
+msgid "Select resources to import"
+msgstr "Vel tilfeingi til innflyt"
+
+msgid "No resources available in this backup."
+msgstr "Ongið tilfeingi til taks í hesi varðveitingini."
+
+msgid "Import selection"
+msgstr "Innflyt avmarking"
+
+msgid "Import completed"
+msgstr "Innflyt liðugt"
+
+msgid "Could not load options."
+msgstr "Kundi ikki lesa innstillingar."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Vinarliga vel eina varðveitingarfílu (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Vinarliga vel eina varðveiting frá alþjóninum"
+
+msgid "Error selecting source."
+msgstr "Feilur við at velja keldu."
+
+msgid "Recycling options"
+msgstr "Endurvinningarvalmøguleikar"
+
+msgid "Type the course code to confirm"
+msgstr "Skriva bólkakoytis til staðfesting"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Hetta fer at strika ella endurstilla valda tilfeingi. Henda handlingin kann ikki verða ógjør."
+
+msgid "Select resources to recycle"
+msgstr "Vel tilfeingi til endurvinning"
+
+msgid "No resources available in this course."
+msgstr "Ongið tilfeingi til taks í hesum bólki."
+
+msgid "Recycle selected"
+msgstr "Endurvin valda"
+
+msgid "Error loading resources."
+msgstr "Feilur við at lesa tilfeingi."
+
+msgid "Clear search"
+msgstr "Rensa leiting"
+

@@ -342,7 +342,7 @@ class SettingsManager implements SettingsManagerInterface
                     ->setSelectedValue($value)
                     ->setUrl($url)
                     ->setAccessUrlChangeable(1)
-                    ->setAccessUrlLocked(1)
+                    ->setAccessUrlLocked(0)
                 ;
 
                 $this->manager->persist($parameter);
@@ -413,7 +413,7 @@ class SettingsManager implements SettingsManagerInterface
                     ->setSelectedValue($value)
                     ->setUrl($url)
                     ->setAccessUrlChangeable(1)
-                    ->setAccessUrlLocked(1)
+                    ->setAccessUrlLocked(0)
                 ;
 
                 $this->manager->persist($parameter);

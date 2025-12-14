@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-11-28 10:22+0000\n"
+"PO-Revision-Date: 2025-12-01 12:28+0000\n"
 "Language: sw_KE\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -6213,8 +6213,8 @@ msgstr "Lugha imefanywa kuonekana na sasa inaweza kutumiwa katika jukwaa lote."
 msgid "The language has been hidden. It will not be possible to use it until it becomes visible again."
 msgstr "Lugha imefichwa. Haitakuwa iwezekana kuitumia hadi itaonekana tena."
 
-msgid "The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
-msgstr "Saraka ya /main/lang, inayotumiwa kwenye lango hili kuhifadhi lugha, haiwezi kuandikwa. Tafadhali wasiliana na msimamizi wa jukwaa lako na uripoti ujumbe huu."
+msgid "The var/translations directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
+msgstr "Saraka ya var/translations, inayotumiwa kwenye lango hili kuhifadhi lugha, haiwezi kuandikwa. Tafadhali wasiliana na msimamizi wa jukwaa lako na uripoti ujumbe huu."
 
 msgid "Show glossary terms in documents"
 msgstr "Onyesha maneno ya kamusi katika hati"
@@ -14220,7 +14220,7 @@ msgstr "<p> Zana ya Ajenda inaonekana kama kalenda ndani ya kila kozi na kama di
 msgid "<p> The Announcements tool allows you to send an e-mail to some or all of your students, or to specific groups.  to might want to alert them to the addition of a new document, to remind them of a deadline for submission of an assignment or to highlight and share a particularly good piece of work. Sending such e-mail announcements can also serve as a useful prompt to re-engage students who have not visited the site for some time (as long as it's not overdone!). </p> <b> Contacting specific users </b> <p> In addition to sending a general one to all members of the course, you can send an e-mail to one or more individuals/groups groups. When you create a new announcement, just click <i>Visible to</i> and select users from the left hand lists and and add them as recipients using the arrows.</p>"
 msgstr "<p> Zana ya Matangazo inakuruhusu kutuma barua pepe kwa baadhi au wote wanafunzi wako, au kwa vikundi maalum.  unaweza kutaka kuwatahadharisha kuongezwa kwa hati mpya, kuwaoneza tarehe ya mwisho ya kutoa kazi au kuangazia na kushiriki kazi nzuri sana. Kutuma matangazo haya ya barua pepe pia yanaweza kutumika kama dharura nzuri ya kuwavutia tena wanafunzi ambao hawajatembelea tovuti kwa muda (mradi sio kupita kiasi!). </p> <b> Kuwasiliana na watumiaji maalum </b> <p> Chini ya kutuma moja kwa wote wanachama wa kozi, unaweza kutuma barua pepe kwa mtu mmoja au zaidi/vikundi. Unapounda tangazo jipya, bofya tu <i>Inaonekana kwa</i> na chagua watumiaji kutoka orodha za kushoto na uwaongeze kama wapokeaji kwa kutumia mishale.</p>"
 
-msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remains focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
+msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remain focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
 msgstr "<p>Zana ya Mazungumzo inakuruhusu kuzungumza 'moja kwa moja' na wanafunzi wako wakati halisi. </p> Tofauti na zana nyingi za mazungumzo za kibiashara, mazungumzo katika Chamilo yanatokana na wavuti na hayahitaji kuweka programu yoyote ya ziada (kwa mfano.  MSN® Yahoo Messenger®. Skype® nk.) Faida kuu ya suluhisho hili ni upatikanaji wake wa haraka kwa wanafunzi, inaruhusu mazungumzo kujumuishwa kwa urahisi kwenye kozi. Zaidi ya hayo, zana ya mazungumzo ya Chamilo itahifadhi mazungumzo kiotomatiki na kuyahifadhi kwa ufikiaji wa haraka baadaye kupitia zana ya Hati. (Jihadhari kwamba ujumbe unaweza kuchukua sekunde 1 hadi 5 kurekebishwa na kila ubadilishaji - hii haimaanishi chochote kimeharibika!!). </p> Ikiwa wanafunzi wamepakia picha ya wasifu itaonekana (kupunguzwa saizi) katika safu ya kushoto - vinginevyo, itaonyesha picha ya chaguo-msingi. </p> Ni wajibu wa mwalimu kufuta mikakati inapofikiria inafaa. </p> <b> Matumizi ya Kiufundishaji</b> <p>Kuongeza Mazungumzo kwenye kozi yako si wazo zuri kila wakati. Ili kutumia zana hii vizuri, unahitaji kuhakikisha mazungumzo yanabaki yakilenga maudhui ya kozi. Unaweza, kwa mfano, kuamua kuweka zana ya mazungumzo ikifichwa hadi iwe wakati wa kikao rasmi kilichopangwa. Kwa njia hiyo, wakati uhuru wa mazungumzo unaweza kukatazwa, unaweza kuhakikisha vizuri kwamba mikutano kama hiyo itakuwa na faida.</p>"
 
 msgid "<p>The assignments tool  is a very simple tool that allows your students to upload documents to the course.It can be used to accept responses to open questions from individuals or groups, or for uploading any other form of document</p><p>You can make files visible to all students by default, or only visible to yourself according to the requirements of your course. Making all files visible is useful when, for instance, you want to ask students to share opinions on each others papers, or when you want to give them experience in publishing texts globally. Keep files invisible if, for example, you want ask everybody the same question but to avoid 'cheating'. Making the documents invisible will also allow you to have some form of control over when a document is available to all the other students. </p><p>If you want  students to hand in a document for grading you're best, from within the tool, to assign submissions to a folder.</p> <p>You can use the the tool to set deadlines and instructions for delivery, as well as a maximum grade/score.</p>"
@@ -22083,7 +22083,7 @@ msgstr "Chagua na eneo la maandishi"
 msgid "Triple select"
 msgstr "Chagua mara tatu"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Unathibitisha kwamba unataka kweli kujiandikisha katika jukwaa hili."
 
 msgid "Add text"
@@ -22143,14 +22143,11 @@ msgstr "Uthibitisho wa usajili"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Akaunti yako haifanyi kazi kwa sababu bado hauijathibitisha. Angalia barua pepe yako na ufuate maagizo au bonyeza kiungo hapa chini ili kutuma tena barua pepe"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Ili kukamilisha usajili wako wa jukwaa unahitaji kuthibitisha akaunti yako kwa kubofya kiungo hiki kinachofuata"
 
 msgid "Confirmation for new account"
 msgstr "Thibitisho la akaunti mpya"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Unahitaji kuthibitisha akaunti yako kupitia barua pepe ili kufikia jukwaa"
 
 msgid "Enable Cloud files link addition"
 msgstr "Wezesha kuongeza kiungo cha faili za Cloud"
@@ -24987,9 +24984,6 @@ msgstr "Hamisha matokeo yote ya majaribio yote"
 msgid "Click to view details"
 msgstr "Bonyeza ili kuona maelezo"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Ripoti hii inatumika kwa shughuli zote za jukwaa za mtumiaji."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27546,7 +27540,7 @@ msgstr "Masharti ya matumizi ya jukwaa"
 msgid "Password too easy to guess"
 msgstr "Nenosiri rahisi kukisia"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Unahitaji kuthibitisha akaunti yako kupitia barua pepe ili kufikia jukwaa"
 
 msgid "Redirect to portal home"
@@ -30520,13 +30514,13 @@ msgid "ex. root"
 msgstr "mf. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "CREATE TABLE kazi"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ALTER TABLE kazi"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "DROP COLUMN kazi"
 
 msgid "Theme selected as current"
 msgstr "Mandhari yamechaguliwa kama ya sasa"
@@ -31196,4 +31190,241 @@ msgstr "Anza upya Kozi za Msimamizi"
 
 msgid "Admin Dashboard"
 msgstr "Dashibodi ya Msimamizi"
+
+msgid "Threads"
+msgstr "Mifuatano"
+
+msgid "Invalid thread"
+msgstr "Mifuatano batili"
+
+msgid "View full thread"
+msgstr "Tazama mifuatano kamili"
+
+msgid "No post yet"
+msgstr "Hakuna chapisho bado"
+
+msgid "Discussion thread"
+msgstr "Mifuatano wa majadiliano"
+
+msgid "Access to this course"
+msgstr "Fikiozi la kozi hii"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Plugin hii haina mipangilio inayoweza kubadilishwa. Uwasilishaji unaweza kusimamiwa kutoka orodha ya plugins."
+
+msgid "Private - access granted by privileged users"
+msgstr "Ya kibinafsi - upatikanaji ulipewa na watumiaji wenye mamlaka maalum"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Hakuna maoni ya kina yanayopatikana kwa swali hili."
+
+msgid "Please select an answer before checking the result."
+msgstr "Tafadhali chagua jibu kabla ya kuangalia matokeo."
+
+msgid "Allow PDF export for this item"
+msgstr "Ruhusu uhamisho wa PDF kwa kipengee hiki"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Ficha watumiaji wa bure (wasiojiunga)"
+
+msgid "Question statistics"
+msgstr "Takwimu za maswali"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Inazalisha faili. Usifunge kadi hii..."
+
+msgid "Assign auth source to users"
+msgstr "Weka chanzo cha uthibitisho kwa watumiaji"
+
+msgid "There are no questions for this survey"
+msgstr "Hakuna maswali kwa uchunguzi huu"
+
+msgid "Certificates report"
+msgstr "Ripoti ya vyeti"
+
+msgid "Course picture"
+msgstr "Picha ya kozi"
+
+msgid "Current picture"
+msgstr "Picha ya sasa"
+
+msgid "Course events log"
+msgstr "Rekodi ya matukio ya kozi"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Sasisha taarifa za kategoria na kikomo chake cha wakati cha hiari."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Unda kundi la kimantiki la vipindi ili kupanga katalogi yako ya mafunzo."
+
+msgid "Generating file, do not close this tab"
+msgstr "Inazalisha faili, usifunge kadi hii"
+
+msgid "Assign authentication sources to users"
+msgstr "Weka vyanzo vya uthibitisho kwa watumiaji"
+
+msgid "Average completion rate"
+msgstr "Kiwango cha wastani cha kukamilika"
+
+msgid "Average access rate"
+msgstr "Kiwango cha wastani cha upatikanaji"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Jedwali hili linafupisha maendeleo na shughuli za mwanafunzi kwa kila njia ya kujifunza katika kozi zako za sasa."
+
+msgid "Follow up"
+msgstr "Fuata"
+
+msgid "Tracking for superior"
+msgstr "Ufuatiliaji kwa msimamizi mkuu"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Ripoti hii inaonyesha usambazaji wa kila wiki wa vipindi kwa mkufunzi mkuu katika kipindi kilichochaguliwa."
+
+msgid "Head manager report"
+msgstr "Ripoti ya msimamizi mkuu"
+
+msgid "Reset or update user password"
+msgstr "Seti upya au sasisha nywila ya mtumiaji"
+
+msgid "Active users"
+msgstr "Watumiaji wanaofanya kazi"
+
+msgid "Inactive users"
+msgstr "Watumiaji wasiofanya kazi"
+
+msgid "Report on resources"
+msgstr "Ripoti kuhusu rasilimali"
+
+msgid "Global view"
+msgstr "Mtazamo wa jumla"
+
+msgid "Available reports"
+msgstr "Ripoti zinazopatikana"
+
+msgid "Current report"
+msgstr "Ripoti ya sasa"
+
+msgid "Back to user assignment page"
+msgstr "Rudi kwenye ukurasa wa kuwapa watumiaji"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Vyanzo vya uthibitisho vimepewa kwa mafanikio"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Kidokezo: chagua “— Pakia tu —” ili kuhifadhi bila kutuma kwa mtu yeyote."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Tafadhali chagua angalau mpokeaji mmoja (“— Pakia tu —” au mtumiaji yeyote)"
+
+msgid "Sharing"
+msgstr "Kushiriki"
+
+msgid "Selected files"
+msgstr "Faili zilizochaguliwa"
+
+msgid "Hide password"
+msgstr "Ficha nywila"
+
+msgid "Show password"
+msgstr "Onyesha nywila"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Pakia nembo ya SVG kwa barua pepe"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Lazima uhamishe au uondoe njia zote za kujifunza kutoka katika jamii hii kabla ya kuifuta."
+
+msgid "Clear filters"
+msgstr "Futa vidakuzi"
+
+msgid "Attendances (tablet)"
+msgstr "Hadiriaji (tabilt)"
+
+msgid "Exit tablet mode"
+msgstr "Toka kwenye hali ya tabilt"
+
+msgid "No members found."
+msgstr "Hakuna wanachama walipatikana."
+
+msgid "Health check"
+msgstr "Angalia afya"
+
+msgid "Export to CC 1.3"
+msgstr "Hamisha kwenye CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Inapakia rasilimali..."
+
+msgid "Failed to load resources."
+msgstr "Imeshindwa kupakia rasilimali."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Tafadhali chagua angalau rasilimali moja inayoweza kusafirishwa (hati, kiungo cha wavuti, majadiliano,...)."
+
+msgid "Export finished."
+msgstr "Usafirishaji umekamilika."
+
+msgid "Export failed."
+msgstr "Usafirishaji umeshindwa."
+
+msgid "Import failed."
+msgstr "Uvamizi umeshindwa."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Faili la ndani (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Taiwa kuvamiza"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Tutakomesha nakili ya chelezo katika kozi hii. Unaweza kurudi nyuma ili kubadilisha chaguzi."
+
+msgid "Select resources to import"
+msgstr "Chagua rasilimali za kuvamiza"
+
+msgid "No resources available in this backup."
+msgstr "Hakuna rasilimali zinazopatikana katika chelezo hili."
+
+msgid "Import selection"
+msgstr "Chaguo la uvamizi"
+
+msgid "Import completed"
+msgstr "Uvamizi umekamilika"
+
+msgid "Could not load options."
+msgstr "Haikuweza kupakia chaguzi."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Tafadhali chagua faili la chelezo (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Tafadhali chagua chelezo kutoka kwenye seva"
+
+msgid "Error selecting source."
+msgstr "Kosa la kuchagua chanzo."
+
+msgid "Recycling options"
+msgstr "Chaguzi za kusafisha upya"
+
+msgid "Type the course code to confirm"
+msgstr "Andika msimbo wa kozi ili uthibitishe"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Hii itaondoa au kuweka upya rasilimali zilizochaguliwa. Kitendo hiki hakiwezi kurekebishwa."
+
+msgid "Select resources to recycle"
+msgstr "Chagua rasilimali za kusafisha upya"
+
+msgid "No resources available in this course."
+msgstr "Hakuna rasilimali zinazopatikana katika kozi hii."
+
+msgid "Recycle selected"
+msgstr "Safisha upya zilizochaguliwa"
+
+msgid "Error loading resources."
+msgstr "Kosa la kupakia rasilimali."
+
+msgid "Clear search"
+msgstr "Futa utafutaji"
 

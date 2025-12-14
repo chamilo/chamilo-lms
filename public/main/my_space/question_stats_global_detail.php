@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
+use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuiz;
 
@@ -17,7 +20,7 @@ if (!$allowToTrack) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('Reporting')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
 
 $courseIdList = isset($_REQUEST['courses']) ? $_REQUEST['courses'] : [];
 $exercises = isset($_REQUEST['exercises']) ? $_REQUEST['exercises'] : [];
@@ -25,17 +28,10 @@ $exercises = isset($_REQUEST['exercises']) ? $_REQUEST['exercises'] : [];
 $courseOptions = [];
 $exerciseList = [];
 $selectedExercises = [];
+
 if (!empty($courseIdList)) {
     foreach ($courseIdList as $courseId) {
         $course = api_get_course_entity($courseId);
-        /*$courseExerciseList = ExerciseLib::get_all_exercises(
-            $courseInfo,
-            0,
-            false,
-            null,
-            false,
-            3
-        );*/
 
         $qb = Container::getQuizRepository()->findAllByCourse($course, null, null, 2, false);
         /** @var CQuiz[] $courseExerciseList */
@@ -48,8 +44,10 @@ if (!empty($courseIdList)) {
                     $selectedExercises[$courseId][] = $exerciseId;
                 }
             }
+
             $exerciseList += array_column($courseExerciseList, 'title', 'iid');
         }
+
         $courseOptions[$courseId] = $course->getTitle();
     }
 }
@@ -61,6 +59,9 @@ if (!empty($exerciseList)) {
     });
 }
 
+// -----------------------------------------------------------------------------
+// Search form
+// -----------------------------------------------------------------------------
 $form = new FormValidator('search_form', 'GET', api_get_self());
 $form->addSelectAjax(
     'courses',
@@ -88,6 +89,9 @@ $form->addButtonSearch(get_lang('Search'));
 
 $tableContent = '';
 
+/**
+ * Build a row with question statistics for a given course, exercise and session.
+ */
 function getCourseSessionRow($courseId, Exercise $exercise, $sessionId, $title)
 {
     $correctCount = ExerciseLib::getExerciseResultsCount('correct', $courseId, $exercise, $sessionId);
@@ -105,7 +109,6 @@ function getCourseSessionRow($courseId, Exercise $exercise, $sessionId, $title)
         $sessionId
     );
 
-    //$questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, $sessionId, 10);
     return [
         'title' => $title,
         'correct_count' => $correctCount,
@@ -123,6 +126,7 @@ if ($form->validate()) {
         get_lang('Students with correct answers'),
         get_lang('Students with incorrect answers'),
     ];
+
     $scoreDisplay = new ScoreDisplay();
     $exercises = $form->getSubmitValue('exercises');
 
@@ -137,18 +141,21 @@ if ($form->validate()) {
                 if (false === $result) {
                     continue;
                 }
+
                 $exerciseTitle = $exerciseList[$exerciseId];
                 $tableContent .= Display::page_subheader2($courseTitle.' - '.$exerciseTitle);
+
                 $orderedData = [];
-                $total = [];
                 $correctCount = 0;
                 $wrongCount = 0;
                 $correctCountStudent = 0;
                 $wrongCountStudent = 0;
 
+                // Per-session rows
                 foreach ($sessions as $session) {
                     $sessionId = $session['id'];
                     $row = getCourseSessionRow($courseId, $exerciseObj, $sessionId, $session['name']);
+
                     $correctCount += $row['correct_count'];
                     $wrongCount += $row['wrong_count'];
                     $correctCountStudent += $row['correct_count_student'];
@@ -163,8 +170,9 @@ if ($form->validate()) {
                     ];
                 }
 
-                // Course base
+                // Base course row (no session)
                 $row = getCourseSessionRow($courseId, $exerciseObj, 0, get_lang('Base course'));
+
                 $orderedData[] = [
                     $row['title'],
                     $row['correct_count'],
@@ -177,6 +185,8 @@ if ($form->validate()) {
                 $wrongCount += $row['wrong_count'];
                 $correctCountStudent += $row['correct_count_student'];
                 $wrongCountStudent += $row['wrong_count_student'];
+
+                // Total row
                 $orderedData[] = [
                     get_lang('Total'),
                     $correctCount,
@@ -185,12 +195,7 @@ if ($form->validate()) {
                     $wrongCountStudent,
                 ];
 
-                /*$table = new SortableTableFromArray(
-                    $orderedData,
-                    10,
-                    1000,
-                    uniqid('question_tracking_')
-                );*/
+                // Table rendering
                 $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
                 $table->setHeaders($headers);
                 $table->setData($orderedData);
@@ -201,20 +206,124 @@ if ($form->validate()) {
 }
 
 $nameTools = get_lang('Tests management');
+
 $htmlHeadXtra[] = '<script>
 $(function() {
- $("#search_form").submit();
-    $("#search_form_courses").on("change", function (e) {
-       $("#search_form_exercises").parent().parent().parent().hide();
-       $("#search_form_exercises").each(function() {
+    $("#search_form").submit();
+    $("#search_form_courses").on("change", function () {
+        $("#search_form_exercises").parent().parent().parent().hide();
+        $("#search_form_exercises").each(function() {
             $(this).remove();
         });
     });
 });
 </script>';
 
+// -----------------------------------------------------------------------------
+// Toolbar + navigation (aligned with admin_view / tc_report / ti_report)
+// -----------------------------------------------------------------------------
+$webCodePath = api_get_path(WEB_CODE_PATH);
+
+// Tabs to switch to other question stats reports.
+$currentScript = basename($_SERVER['SCRIPT_NAME'] ?? '');
+$isGlobal = 'question_stats_global.php' === $currentScript;
+$isDetail = 'question_stats_global_detail.php' === $currentScript;
+
+$questionTabs =
+    '<div class="inline-flex items-center ml-4">'.
+    '<div class="inline-flex rounded-full bg-gray-10 border border-gray-25 px-1 py-1 text-body-2">'.
+    '<a href="'.$webCodePath.'my_space/question_stats_global.php"'
+    .' class="px-3 py-1 rounded-full transition '
+    .($isGlobal
+        ? 'bg-white text-gray-90 shadow-sm'
+        : 'text-gray-50 hover:bg-gray-15 hover:text-gray-90').'"'
+    .'>'.get_lang('Question stats').'</a>'.
+
+    '<a href="'.$webCodePath.'my_space/question_stats_global_detail.php"'
+    .' class="ml-1 px-3 py-1 rounded-full transition '
+    .($isDetail
+        ? 'bg-white text-gray-90 shadow-sm'
+        : 'text-gray-50 hover:bg-gray-15 hover:text-gray-90').'"'
+    .'>'.get_lang('Detailed questions stats').'</a>'.
+    '</div>'.
+    '</div>';
+
+// Left side: shared MySpace reporting menu + question tabs.
+$actionsLeft = Display::mySpaceMenu('admin_view');
+$actionsLeft .= $questionTabs;
+
+// Right side: print action.
+$actionsRight = Display::url(
+    Display::getMdiIcon(
+        ActionIcon::PRINT,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_MEDIUM,
+        get_lang('Print')
+    ),
+    'javascript: void(0);',
+    ['onclick' => 'javascript: window.print();']
+);
+
+$toolbar = Display::toolbarAction('toolbar-question-stats', [$actionsLeft, $actionsRight]);
+
+// -----------------------------------------------------------------------------
+// Layout & rendering
+// -----------------------------------------------------------------------------
 Display::display_header($nameTools, get_lang('Test'));
+
+// Shared styles for reporting cards and active admin cards.
+echo '<style>
+    .admin-report-card-active {
+        border-color: #0284c7 !important;
+        background-color: #e0f2fe !important;
+    }
+
+    .reporting-question-card {
+        border-color: #e5e7eb !important;
+        border-width: 1px !important;
+    }
+
+    .reporting-question-card .panel,
+    .reporting-question-card fieldset {
+        border-color: #e5e7eb !important;
+    }
+</style>';
+
+// Main container (full width with padding)
+echo '<div class="w-full px-4 md:px-8 pb-8 space-y-6">';
+
+// Header row with title + toolbar
+// Toolbar row (icons aligned to the left, same as other reporting pages)
+echo '  <div class="flex flex-wrap gap-2">';
+echo        $toolbar;
+echo '  </div>';
+
+// Page header
+echo '  <div class="space-y-1">';
+echo        Display::page_subheader($nameTools);
+echo '  </div>';
+
+// Admin reports cards (Available reports) with active state based on this script.
+$currentScriptName = basename($_SERVER['SCRIPT_NAME'] ?? '');
+echo MySpace::renderAdminReportCardsSection(null, $currentScriptName, true);
+
+// Search form card
+echo '  <section class="reporting-question-card bg-white rounded-xl shadow-sm w-full">';
+echo '      <div class="p-4 md:p-5">';
 $form->display();
-echo $tableContent;
+echo '      </div>';
+echo '  </section>';
+
+// Tables card (only if we have results)
+if (!empty($tableContent)) {
+    echo '  <section class="reporting-question-card bg-white rounded-xl shadow-sm w-full">';
+    echo '      <div class="p-4 md:p-5 overflow-x-auto">';
+    echo            $tableContent;
+    echo '      </div>';
+    echo '  </section>';
+}
+
+echo '</div>';
 
 Display::display_footer();

@@ -2127,7 +2127,7 @@ foreach ($questionList as $questionId) {
             ['class' => 'exercise_save_now_button mb-4']
         );
     }
-    echo Display::div($exerciseActions, ['class' => 'form-actions']);
+    echo Display::div($exerciseActions, ['class' => 'exercise_actions']);
     echo '</div>';
 
     $i++;
@@ -2148,7 +2148,7 @@ if ($prevParent !== null) {
 if (ALL_ON_ONE_PAGE == $objExercise->type || $forceGrouped) {
     //$currentPageIds = implode(',', $pages[$page - 1]);
     $currentPageIds = implode(',', $questionList);
-    echo '<div class="form-actions exercise-pagination mb-4">';
+    echo '<div class="exercise_actions exercise-pagination mb-4">';
     if ($page > 1) {
         $prevUrl = api_get_self() . '?' . api_get_cidreq()
             . "&exerciseId=$exerciseId&page=" . ($page - 1)

@@ -2033,7 +2033,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":sí:copyright,, no:sin copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:texto/plano;iso-8859-1,, text/plain;utf-8:texto/plano;utf-8,, text/html;iso-8859-1:texto/html;iso-8859-1,, text/html;utf-8:texto/html;utf-8,, inode/directory:Directorio,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpeta,, application/msword:MsWord,, application/octet-stream:Flujo de octetos,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación"
@@ -6229,8 +6229,8 @@ msgstr "El idioma ahora es visible"
 msgid "The language has been hidden. It will not be possible to use it until it becomes visible again."
 msgstr "El idioma ahora no es visible"
 
-msgid "The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
-msgstr "El directorio /main/lang usado en éste portal,no tiene permisos de escritura. Por favor contacte con su administrador"
+msgid "The var/translations directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
+msgstr "El directorio var/translations usado en éste portal,no tiene permisos de escritura. Por favor contacte con su administrador"
 
 msgid "Show glossary terms in documents"
 msgstr "Mostrar los términos del glosario en los documentos"
@@ -14236,7 +14236,7 @@ msgstr "<p>La agenda es una herramienta que en cada curso ofrece una visión res
 msgid "<p> The Announcements tool allows you to send an e-mail to some or all of your students, or to specific groups.  to might want to alert them to the addition of a new document, to remind them of a deadline for submission of an assignment or to highlight and share a particularly good piece of work. Sending such e-mail announcements can also serve as a useful prompt to re-engage students who have not visited the site for some time (as long as it's not overdone!). </p> <b> Contacting specific users </b> <p> In addition to sending a general one to all members of the course, you can send an e-mail to one or more individuals/groups groups. When you create a new announcement, just click <i>Visible to</i> and select users from the left hand lists and and add them as recipients using the arrows.</p>"
 msgstr "<p>La herramienta Tablón de anuncios permite a los profesores colocar mensajes en el tablón de anuncios del curso. Puede avisar a sus miembros de la colocación de un nuevo documento, de la proximidad de la fecha para enviar los trabajos, o de que alguien ha realizado un trabajo de especial calidad. Cada miembro verá esta novedad cuando entre en su área de usuario. </p><p><strong>La lista de distribución. </strong> Los anuncios además de ser publicados en el tablón pueden ser enviados automáticamente por correo electrónico si se marca la casilla correspondiente. Si sólo desea utilizar la lista, bastará con que tras enviarlo, borre el anuncio del tablón.</p><p>Además de enviar un correo a todos los miembros, Vd. puede enviarlo a una o varias personas, o a uno o varios grupos que haya formado en el curso. Una vez pulsada la opción, use CTRL+clic para seleccionar varios elementos en el menú de izquierda y después haga clic sobre el botón que apunta a la derecha para enviarlos a la otra lista. Finalmente, escriba su mensaje en el campo inferior de la página y pulse el botón Enviar. Esta utilidad, si es usada con moderación, permite recuperar a miembros que hayan abandonado antes de finalizar.</p>"
 
-msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remains focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
+msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remain focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
 msgstr "<p>La herramienta 'Chat' le permite charlar en vivo con varios miembros del curso.</p><p><p>Este chat no es igual que el usado por programas como MSN® o Yahoo Messenger®, pues al estar basado en la Web, tarda unos segundos en restaurarse. Sin embargo, tiene la ventaja de estar integrado en el curso, de poder archivar sus charlas en la sección documentos y de no requerir que los usuarios tengan instalado ningún software especial.</p><p>Si los usuarios incluyen sus fotografías en su portafolios electrónico (opción 'Mi perfil' de la barra de menú superior del sitio web), esta aparecerá junto a sus mensajes para ayudar a identificarlos.</p><p>El chat es una herramienta de comunicación sincrónica que permite a varios usuarios intervenir en tiempo real. Cuando los usuarios son dos o tres no hay problema en la interacción, pero cuando éstos son muchos los mensajes pueden sucederse vertiginosamente y se puede llegar a perderse el hilo de la discusión. Al igual que en un aula física, en estos casos es necesario un moderador. Este chat basado en la web no ofrece al profesor unas herramientas especiales de moderación, salvo la de suprimir todos los mensajes en pantalla mediante la opción \"Borrar la lista de mensajes\". Esto se realiza cuando el profesor quiere borrar todos los mensajes de la pantalla y comenzar de nuevo una conversación.</p><p>También, los usuarios disponen de una casilla para marcar preguntas importantes, aunque no se debe abusar de ella.</p><p><b>Importancia pedagógica</b></p><p>No siempre es necesario proporcionar un espacio de charla en un curso. Sin embargo, si la idea es fomentar la participación, ésta herramienta puede ayudar. Por ejemplo, habitualmente puede ocultar la herramienta de Chat, haciéndola visible en ciertas épocas en que usted tenga una reunión concertada con el resto de los miembros para contestar a sus preguntas en vivo. De esta manera, los estudiantes tendrán la garantía de poder tener varios interlocutores en ese momento.</p><p>El chat se puede usar combinado con otras herramientas o documentos de nuestro sitio web, que hayamos abierto en otra ventana (clic derecho del ratón sobre el enlace del documento o herramienta y seleccionar abrir en una nueva ventana); de esta forma podemos por ej., ir explicando en el chat determinados documentos que hayamos subido a la plataforma.</p><p>Todas las sesiones del chat son guardadas automáticamente y podrán ser visualizadas por los usuarios del curso si así lo desea el administrador del mismo. Aunque muchas veces las sesiones en el chat pueden ser triviales, en otras pueden ser realmente interesantes y dignas de ser incorporadas como un documento más de trabajo.</p>"
 
 msgid "<p>The assignments tool  is a very simple tool that allows your students to upload documents to the course.It can be used to accept responses to open questions from individuals or groups, or for uploading any other form of document</p><p>You can make files visible to all students by default, or only visible to yourself according to the requirements of your course. Making all files visible is useful when, for instance, you want to ask students to share opinions on each others papers, or when you want to give them experience in publishing texts globally. Keep files invisible if, for example, you want ask everybody the same question but to avoid 'cheating'. Making the documents invisible will also allow you to have some form of control over when a document is available to all the other students. </p><p>If you want  students to hand in a document for grading you're best, from within the tool, to assign submissions to a folder.</p> <p>You can use the the tool to set deadlines and instructions for delivery, as well as a maximum grade/score.</p>"
@@ -22118,7 +22118,7 @@ msgstr "Lista desplegable con campo de texto"
 msgid "Triple select"
 msgstr "Campo de tipo selección triple"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Confirma que realmente deseas suscribirte a esta plataforma."
 
 msgid "Add text"
@@ -22178,14 +22178,11 @@ msgstr "Confirmación de registro"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Su cuenta está inactiva porque aún no la ha confirmado. Revise su correo electrónico y siga las instrucciones o haga click en el siguiente enlace para volver a enviar el correo electrónico de confirmación."
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Para completar su registro en la plataforma, necesita confirmar su cuenta haciendo click en el siguiente enlace"
 
 msgid "Confirmation for new account"
 msgstr "Confirmación de nueva cuenta"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Usted necesita confirmar su cuenta por correo electrónico para acceder a la plataforma"
 
 msgid "Enable Cloud files link addition"
 msgstr "Permitir añadir enlaces a ficheros en la nube"
@@ -23835,7 +23832,7 @@ msgid "Learning path by author"
 msgstr "Lección por autor"
 
 msgid "Import assignments from base course"
-msgstr "Importar los tareas del curso base"
+msgstr "Importar las tareas del curso base"
 
 msgid "Redirect to the platform home page"
 msgstr "Redirigir a la página de inicio de la plataforma"
@@ -25038,9 +25035,6 @@ msgstr "Exportar todos los resultados de todos los ejercicios"
 
 msgid "Click to view details"
 msgstr "Haga clic para más detalles"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Este reporte usa todos los datos del usuario en toda la plataforma."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/aaaa"
@@ -28549,7 +28543,7 @@ msgstr "Condiciones de uso de la plataforma"
 msgid "Password too easy to guess"
 msgstr "Contraseña demasiado fácil de adivinar"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr ""
 "Necesita confirmar su cuenta a través del correo electrónico para acceder a "
 "la plataforma"
@@ -32340,4 +32334,241 @@ msgstr "Reiniciar cursos del administrador"
 
 msgid "Admin Dashboard"
 msgstr "Panel del administrador"
+
+msgid "Threads"
+msgstr "Hilos"
+
+msgid "Invalid thread"
+msgstr "Hilo inválido"
+
+msgid "View full thread"
+msgstr "Ver hilo completo"
+
+msgid "No post yet"
+msgstr "No hay publicaciones aún"
+
+msgid "Discussion thread"
+msgstr "Hilo de discusión"
+
+msgid "Access to this course"
+msgstr "Acceso a este curso"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Este complemento no tiene configuraciones ajustables. La activación se gestiona desde la lista de complementos."
+
+msgid "Private - access granted by privileged users"
+msgstr "Privado - acceso concedido por usuarios privilegiados"
+
+msgid "No detailed feedback is available for this question."
+msgstr "No hay retroalimentación detallada disponible para esta pregunta."
+
+msgid "Please select an answer before checking the result."
+msgstr "Por favor seleccione una respuesta antes de verificar el resultado."
+
+msgid "Allow PDF export for this item"
+msgstr "Permitir exportación PDF para este elemento"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Ocultar usuarios gratuitos (no inscritos)"
+
+msgid "Question statistics"
+msgstr "Estadísticas de preguntas"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Generando archivo. No cierre esta pestaña..."
+
+msgid "Assign auth source to users"
+msgstr "Asignar fuente de autenticación a usuarios"
+
+msgid "There are no questions for this survey"
+msgstr "No hay preguntas para esta encuesta"
+
+msgid "Certificates report"
+msgstr "Informe de certificados"
+
+msgid "Course picture"
+msgstr "Imagen del curso"
+
+msgid "Current picture"
+msgstr "Imagen actual"
+
+msgid "Course events log"
+msgstr "Registro de eventos del curso"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Actualice la información de la categoría y su límite de tiempo opcional."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Cree un grupo lógico de sesiones para mantener organizado su catálogo de formación."
+
+msgid "Generating file, do not close this tab"
+msgstr "Generando archivo, no cierre esta pestaña"
+
+msgid "Assign authentication sources to users"
+msgstr "Asignar fuentes de autenticación a usuarios"
+
+msgid "Average completion rate"
+msgstr "Tasa promedio de finalización"
+
+msgid "Average access rate"
+msgstr "Tasa promedio de acceso"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Esta tabla resume el progreso y la actividad del aprendiz por ruta de aprendizaje en sus cursos actuales."
+
+msgid "Follow up"
+msgstr "Seguimiento"
+
+msgid "Tracking for superior"
+msgstr "Seguimiento para superior"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Este informe muestra la distribución semanal de sesiones por coach general en el rango de fechas seleccionado."
+
+msgid "Head manager report"
+msgstr "Informe de gerente principal"
+
+msgid "Reset or update user password"
+msgstr "Restablecer o actualizar contraseña de usuario"
+
+msgid "Active users"
+msgstr "Usuarios activos"
+
+msgid "Inactive users"
+msgstr "Usuarios inactivos"
+
+msgid "Report on resources"
+msgstr "Informe sobre recursos"
+
+msgid "Global view"
+msgstr "Vista global"
+
+msgid "Available reports"
+msgstr "Informes disponibles"
+
+msgid "Current report"
+msgstr "Informe actual"
+
+msgid "Back to user assignment page"
+msgstr "Volver a la página de asignación de usuarios"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Fuentes de autenticación asignadas exitosamente"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Consejo: elija “— Solo subir —” para guardar sin enviar a nadie."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Por favor seleccione al menos un destinatario (“— Solo subir —” o cualquier usuario)"
+
+msgid "Sharing"
+msgstr "Compartir"
+
+msgid "Selected files"
+msgstr "Archivos seleccionados"
+
+msgid "Hide password"
+msgstr "Ocultar contraseña"
+
+msgid "Show password"
+msgstr "Mostrar contraseña"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Subir logotipo SVG para correos electrónicos"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Debe mover o eliminar todos los itinerarios de aprendizaje de esta categoría antes de eliminarla."
+
+msgid "Clear filters"
+msgstr "Borrar filtros"
+
+msgid "Attendances (tablet)"
+msgstr "Asistencias (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Salir del modo tablet"
+
+msgid "No members found."
+msgstr "No se encontraron miembros."
+
+msgid "Health check"
+msgstr "Comprobación de salud"
+
+msgid "Export to CC 1.3"
+msgstr "Exportar a CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Cargando recursos..."
+
+msgid "Failed to load resources."
+msgstr "Error al cargar recursos."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Seleccione al menos un recurso exportable (documento, enlace web, discusión,...)."
+
+msgid "Export finished."
+msgstr "Exportación finalizada."
+
+msgid "Export failed."
+msgstr "Error en la exportación."
+
+msgid "Import failed."
+msgstr "Error en la importación."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Archivo local (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Listo para importar"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Restauraremos la copia de seguridad en este curso. Puede volver para cambiar opciones."
+
+msgid "Select resources to import"
+msgstr "Seleccionar recursos a importar"
+
+msgid "No resources available in this backup."
+msgstr "No hay recursos disponibles en esta copia de seguridad."
+
+msgid "Import selection"
+msgstr "Selección de importación"
+
+msgid "Import completed"
+msgstr "Importación completada"
+
+msgid "Could not load options."
+msgstr "No se pudieron cargar las opciones."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Seleccione un archivo de copia de seguridad (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Elija una copia de seguridad del servidor"
+
+msgid "Error selecting source."
+msgstr "Error al seleccionar origen."
+
+msgid "Recycling options"
+msgstr "Opciones de reciclaje"
+
+msgid "Type the course code to confirm"
+msgstr "Escriba el código del curso para confirmar"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Esto eliminará o restablecerá los recursos seleccionados. Esta acción no se puede deshacer."
+
+msgid "Select resources to recycle"
+msgstr "Seleccionar recursos a reciclar"
+
+msgid "No resources available in this course."
+msgstr "No hay recursos disponibles en este curso."
+
+msgid "Recycle selected"
+msgstr "Reciclar seleccionados"
+
+msgid "Error loading resources."
+msgstr "Error al cargar recursos."
+
+msgid "Clear search"
+msgstr "Borrar búsqueda"
 

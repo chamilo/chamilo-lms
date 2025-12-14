@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDropboxCategory;
 use Chamilo\CourseBundle\Entity\CDropboxFeedback;
@@ -420,7 +421,7 @@ class DropboxController extends AbstractController
     }
 
     #[Route('/files/{id<\d+>}/download', name: 'dropbox_file_download', methods: ['GET'])]
-    public function download(int $id, Request $r): Response
+    public function download(int $id, Request $r, ResourceFileHelper $resourceFileHelper): Response
     {
         [$cid] = $this->context($r);
 
@@ -431,7 +432,7 @@ class DropboxController extends AbstractController
 
         // Resolve the resource file attached to this dropbox entry
         $resourceNode = $file->getResourceNode();
-        $resourceFile = $resourceNode?->getFirstResourceFile();
+        $resourceFile = $resourceFileHelper->resolveResourceFileByAccessUrl($resourceNode);
 
         if (!$resourceFile) {
             throw $this->createNotFoundException('Resource file not found');

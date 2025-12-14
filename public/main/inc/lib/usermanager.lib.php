@@ -451,9 +451,9 @@ class UserManager
                     $emailBody,
                     $sender_name,
                     $email_admin,
-                    null,
-                    null,
-                    null,
+                    [],
+                    [],
+                    false,
                     [],
                     $creatorEmail
                 );
@@ -1233,10 +1233,10 @@ class UserManager
                 $emailBody,
                 $sender_name,
                 $email_admin,
-                null,
-                null,
-                null,
-                null,
+                [],
+                [],
+                false,
+                [],
                 $creatorEmail
             );
         }
@@ -5598,7 +5598,7 @@ SQL;
             $url .= '&s='.$sessionToRedirect;
         }
         $mailSubject = get_lang('Registration confirmation');
-        $mailBody = get_lang('To complete your platform registration you need confirm your account by clicking the following link')
+        $mailBody = get_lang('To complete your platform registration you need to confirm your account by clicking the following link')
             .PHP_EOL
             .Display::url($url, $url);
 

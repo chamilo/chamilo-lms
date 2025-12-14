@@ -608,9 +608,6 @@ abstract class Question
                     LOG_QUESTION_ID,
                     $this->iid
                 );
-                if ('true' === api_get_setting('search_enabled')) {
-                    $this->search_engine_edit($exerciseId);
-                }
             }
         } else {
             // Creates a new question
@@ -678,10 +675,6 @@ abstract class Question
 
                     $em->persist($quizAnswer);
                     $em->flush();
-                }
-
-                if ('true' === api_get_setting('search_enabled')) {
-                    $this->search_engine_edit($exerciseId, true);
                 }
             }
         }
@@ -1030,10 +1023,6 @@ abstract class Question
         } else {
             // just removes the exercise from the list
             $this->removeFromList($deleteFromEx, $courseId);
-            if ('true' == api_get_setting('search_enabled') && extension_loaded('xapian')) {
-                // disassociate question with this exercise
-                $this->search_engine_edit($deleteFromEx, false, true);
-            }
             /*
             api_item_property_update(
                 $this->course,

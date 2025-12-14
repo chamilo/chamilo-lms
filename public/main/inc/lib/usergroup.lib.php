@@ -1224,44 +1224,70 @@ class UserGroupModel extends Model
         $delete_users_not_present_in_list = true,
         $relationType = 0
     ) {
+        $usergroup_id = (int) $usergroup_id;
+        $relationType = (int) $relationType;
+
         $current_list = $this->get_users_by_usergroup($usergroup_id);
         $course_list = $this->get_courses_by_usergroup($usergroup_id);
         $session_list = $this->get_sessions_by_usergroup($usergroup_id);
         $session_list = array_filter($session_list);
-        $relationType = (int) $relationType;
 
         $delete_items = [];
         $new_items = [];
 
+        // Build new_items = users newly added to the group
         if (!empty($list)) {
             foreach ($list as $user_id) {
-                if (!in_array($user_id, $current_list)) {
+                $user_id = (int) $user_id;
+                if (!in_array($user_id, $current_list, true)) {
                     $new_items[] = $user_id;
                 }
             }
         }
 
+        // Build delete_items = users removed from the group
         if (!empty($current_list)) {
             foreach ($current_list as $user_id) {
-                if (!in_array($user_id, $list)) {
+                if (!in_array($user_id, $list, true)) {
                     $delete_items[] = $user_id;
                 }
             }
         }
 
-        // Deleting items
+        // Global hosting limit check (all or nothing for classes)
+        $globalLimit = CourseManager::getGlobalUsersPerCourseLimit();
+        if ($globalLimit > 0 && !empty($new_items) && !empty($course_list)) {
+            foreach ($course_list as $course_id) {
+                $course_id = (int) $course_id;
+
+                // Only check "direct course" limit; sessions are exempt.
+                if (CourseManager::wouldOperationExceedGlobalLimit($course_id, $new_items)) {
+                    // Do not touch DB if this operation would exceed the limit.
+                    return false;
+                }
+            }
+        }
+
+        // Deleting items (if requested)
         if (!empty($delete_items) && $delete_users_not_present_in_list) {
             foreach ($delete_items as $user_id) {
+                $user_id = (int) $user_id;
+
                 // Removing courses
                 if (!empty($course_list)) {
                     foreach ($course_list as $course_id) {
+                        $course_id = (int) $course_id;
                         $course_info = api_get_course_info_by_id($course_id);
-                        CourseManager::unsubscribe_user($user_id, $course_info['code']);
+                        if (!empty($course_info)) {
+                            CourseManager::unsubscribe_user($user_id, $course_info['code']);
+                        }
                     }
                 }
+
                 // Removing sessions
                 if (!empty($session_list)) {
                     foreach ($session_list as $session_id) {
+                        $session_id = (int) $session_id;
                         SessionManager::unsubscribe_user_from_session($session_id, $user_id);
                     }
                 }
@@ -1293,20 +1319,25 @@ class UserGroupModel extends Model
 
         // Adding new relationships
         if (!empty($new_items)) {
-            // Adding sessions
+            // Subscribe users to sessions (sessions are exempt from global limit)
             if (!empty($session_list)) {
                 foreach ($session_list as $session_id) {
+                    $session_id = (int) $session_id;
                     SessionManager::subscribeUsersToSession($session_id, $new_items, null, false);
                 }
             }
 
+            // Subscribe users to courses (limit already checked above)
             foreach ($new_items as $user_id) {
-                // Adding courses.
+                $user_id = (int) $user_id;
+
                 if (!empty($course_list)) {
                     foreach ($course_list as $course_id) {
+                        $course_id = (int) $course_id;
                         CourseManager::subscribeUser($user_id, $course_id);
                     }
                 }
+
                 $params = [
                     'user_id' => $user_id,
                     'usergroup_id' => $usergroup_id,
@@ -1315,6 +1346,8 @@ class UserGroupModel extends Model
                 Database::insert($this->usergroup_rel_user_table, $params);
             }
         }
+
+        return true;
     }
 
     /**

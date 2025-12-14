@@ -11,13 +11,16 @@
         @template-selected="addTemplateToEditor"
       />
     </div>
+
     <div class="documents-form-container">
       <DocumentsForm
         ref="createForm"
         :errors="errors"
         :values="item"
+        :search-enabled="searchEnabled"
         @submit="onSendFormData"
       />
+
       <Panel
         v-if="$route.query.filetype === 'certificate'"
         :header="
@@ -30,6 +33,7 @@
       </Panel>
     </div>
   </div>
+
   <Loading :visible="isLoading" />
 </template>
 
@@ -42,6 +46,7 @@ import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import Panel from "primevue/panel"
 import TemplateList from "../../components/documents/TemplateList.vue"
 import documentsService from "../../services/documents"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const servicePrefix = "Documents"
 
@@ -56,12 +61,28 @@ export default {
     Panel,
   },
   mixins: [CreateMixin],
+
+  // Read platform search setting once and expose as simple booleans
+  setup() {
+    const platformConfigStore = usePlatformConfig()
+
+    const raw = platformConfigStore.getSetting("search.search_enabled")
+    const searchEnabled = raw !== "false"
+    const defaultIndexDocumentContent = searchEnabled
+
+    return {
+      searchEnabled,
+      defaultIndexDocumentContent,
+    }
+  },
+
   data() {
     const allowedFiletypes = ["file", "video", "audio", "certificate"]
     const filetypeQuery = this.$route.query.filetype
     const filetype = allowedFiletypes.includes(filetypeQuery) ? filetypeQuery : "file"
 
     const finalTags = this.getCertificateTags()
+
     return {
       item: {
         title: "",
@@ -70,6 +91,9 @@ export default {
         filetype: filetype,
         parentResourceNodeId: null,
         resourceLinkList: null,
+
+        // Search-related flag: default depends on global search setting
+        indexDocumentContent: this.defaultIndexDocumentContent,
       },
       templates: [],
       isLoading: false,
@@ -77,6 +101,7 @@ export default {
       finalTags,
     }
   },
+
   created() {
     this.item.parentResourceNodeId = this.$route.params.node
     this.item.resourceLinkList = JSON.stringify([
@@ -88,27 +113,31 @@ export default {
       },
     ])
   },
+
   methods: {
     handleBack() {
       this.$router.back()
     },
+
     addTemplateToEditor(templateContent) {
       this.item.contentFile = templateContent
     },
+
     async fetchTemplates() {
       this.errors = {}
       const courseId = this.$route.query.cid
       try {
-        let data = await documentsService.getTemplates(courseId)
+        const data = await documentsService.getTemplates(courseId)
         this.templates = data
       } catch (error) {
         console.error(error)
         this.errors = error.errors
       }
     },
+
     getCertificateTags() {
       let finalTags = ""
-      let tags = [
+      const tags = [
         "((user_firstname))",
         "((user_lastname))",
         "((user_username))",
@@ -138,12 +167,13 @@ export default {
 
       return finalTags
     },
+
     async createWithFormData(payload) {
       this.isLoading = true
       this.errors = {}
       try {
-        let response = await documentsService.createWithFormData(payload)
-        let data = await response.json()
+        const response = await documentsService.createWithFormData(payload)
+        const data = await response.json()
         console.log(data)
         this.onCreated(data)
       } catch (error) {
@@ -153,6 +183,7 @@ export default {
         this.isLoading = false
       }
     },
+
     onCreated(item) {
       let message
       if (item["resourceNode"]) {
@@ -162,11 +193,13 @@ export default {
             : `${item["resourceNode"].title} created`
       } else {
         message =
-          this.$i18n && this.$i18n.t ? this.$t("{resource} created", { resource: item.title }) : `${item.title} created`
+          this.$i18n && this.$i18n.t
+            ? this.$t("{resource} created", { resource: item.title })
+            : `${item.title} created`
       }
 
       this.showMessage(message)
-      let folderParams = this.$route.query
+      const folderParams = this.$route.query
 
       this.$router.push({
         name: `${this.$options.servicePrefix}List`,
@@ -175,6 +208,7 @@ export default {
       })
     },
   },
+
   mounted() {
     this.fetchTemplates()
   },

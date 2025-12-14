@@ -24,6 +24,7 @@ use Chamilo\CoreBundle\Traits\Repository\RepositoryQueryBuilderTrait;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryProxy;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
@@ -37,6 +38,10 @@ use const PATHINFO_EXTENSION;
 
 /**
  * Extends Resource EntityRepository.
+ *
+ * @template T of object
+ *
+ * @template-extends ServiceEntityRepositoryProxy<T>
  */
 abstract class ResourceRepository extends ServiceEntityRepository
 {
@@ -581,14 +586,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
     public function getResourceNodeFileContent(ResourceNode $resourceNode): string
     {
         return $this->resourceNodeRepository->getResourceNodeFileContent($resourceNode);
-    }
-
-    /**
-     * @return false|resource
-     */
-    public function getResourceNodeFileStream(ResourceNode $resourceNode)
-    {
-        return $this->resourceNodeRepository->getResourceNodeFileStream($resourceNode);
     }
 
     public function getResourceFileDownloadUrl(AbstractResource $resource, array $extraParams = [], ?int $referenceType = null): string

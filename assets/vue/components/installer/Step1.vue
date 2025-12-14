@@ -87,7 +87,7 @@ import languages from "../../utils/languages"
 const { t } = useI18n()
 const installerData = inject("installerData")
 
-const ALLOWED = ["ar", "de", "en_US", "es", "fr_FR", "he_IL", "it", "nl", "pt_BR", "sl_SI"]
+const ALLOWED = ["en_US", "es", "fr_FR", "ar", "zh_CN", "sq", "hy", "ast_ES", "eu_ES", "bn_BD", "bs_BA", "bg", "my_MM", "ca_ES", "hr_HR", "cs_CZ", "da", "fa_AF", "nl", "eo", "fo_FO", "fi_FI", "fur", "gl", "ka_GE", "de", "el", "he_IL", "hi", "hu_HU", "id_ID", "ga", "it", "ja", "ko_KR", "lo", "lv_LV", "lt_LT", "mk_MK", "ms_MY", "ne", "nn_NO", "oc", "ps", "fa_IR", "pl_PL", "pt_PT", "pt_PT", "quz_PE", "ro_RO", "ru_RU", "sr_RS", "sk_SK", "sl_SI", "so_SO", "sw_KE", "sv_SE", "tl_PH", "ta", "th", "bo_CN", "zh_TW", "tr", "uk_UA", "vi_VN", "xh_ZA", "yo_NG"]
 
 const availableLanguages = computed(() => {
   const allow = new Set(ALLOWED.map((x) => x.toLowerCase()))

@@ -6282,8 +6282,8 @@ msgstr "言語を表示しました。プラットフォーム全体で使用す
 msgid "The language has been hidden. It will not be possible to use it until it becomes visible again."
 msgstr "言語を非表示にしました。もう一度表示するまで使用することはできません。"
 
-msgid "The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
-msgstr "このポータルで言語を保存するために使用される /main/lang ディレクトリに書き込み権限がありません。プラットフォーム管理者にお問い合わせください。"
+msgid "The var/translations directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
+msgstr "このポータルで言語を保存するために使用される var/translations ディレクトリに書き込み権限がありません。プラットフォーム管理者にお問い合わせください。"
 
 msgid "Show glossary terms in documents"
 msgstr "ドキュメントの用語集の用語を表示"
@@ -14289,7 +14289,7 @@ msgstr "<p> アジェンダツールは、各コース内のカレンダーと�
 msgid "<p> The Announcements tool allows you to send an e-mail to some or all of your students, or to specific groups.  to might want to alert them to the addition of a new document, to remind them of a deadline for submission of an assignment or to highlight and share a particularly good piece of work. Sending such e-mail announcements can also serve as a useful prompt to re-engage students who have not visited the site for some time (as long as it's not overdone!). </p> <b> Contacting specific users </b> <p> In addition to sending a general one to all members of the course, you can send an e-mail to one or more individuals/groups groups. When you create a new announcement, just click <i>Visible to</i> and select users from the left hand lists and and add them as recipients using the arrows.</p>"
 msgstr "<p>お知らせツールでは、学生の一部または全員、または特定のグループにメールを送信できます。新規ドキュメントの追加を通知したり、課題提出期限を思い出させたり、優れた作品を強調共有したりできます。このようなメールお知らせは、サイトをしばらく訪問していない学生を再参加させる良いきっかけにもなります（過度にしないこと）。 </p> <b> 特定のユーザーに連絡 </b> <p> コースメンバー全員への一般的な送信に加え、個人またはグループにメールを送信できます。新規お知らせ作成時、<i>表示対象</i>をクリックし、左リストからユーザーを選択して矢印で受信者に追加します。"
 
-msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remains focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
+msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remain focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
 msgstr "<p>チャットツールでは、学生とリアルタイムで「ライブ」チャットが可能です。 </p> ほとんどの商用チャットツールとは異なり、Chamiloのチャットはウェブベースで追加インストール不要（例：MSN®、Yahoo Messenger®、Skype®など）です。このソリューションの利点は学生の即時利用可能性で、コースへの簡単統合が可能です。さらに、Chamiloチャットツールは議論を自動アーカイブし、ドキュメントツール経由で後からアクセス可能に保存します。（交換ごとに1〜5秒でメッセージが更新される場合がありますが、問題ありません！）。 </p> 学習者がプロフィール画像をアップロードしている場合、左列に縮小表示されます。それ以外はデフォルト画像が表示されます。 </p> 教師の責任で、適切なタイミングでスレッドを削除します。 </p> <b>教育利用</b> <p>コースにチャットを追加するのは常に良いとは限りません。このツールを最大限活用するには、議論をコースコンテンツに集中させる必要があります。例えば、「正式」な予定セッションの時間までチャット機能を非表示にすると、議論の自由が制限されるものの、ライブミーティングが有益になることを保証しやすくなります。"
 
 msgid "<p>The assignments tool  is a very simple tool that allows your students to upload documents to the course.It can be used to accept responses to open questions from individuals or groups, or for uploading any other form of document</p><p>You can make files visible to all students by default, or only visible to yourself according to the requirements of your course. Making all files visible is useful when, for instance, you want to ask students to share opinions on each others papers, or when you want to give them experience in publishing texts globally. Keep files invisible if, for example, you want ask everybody the same question but to avoid 'cheating'. Making the documents invisible will also allow you to have some form of control over when a document is available to all the other students. </p><p>If you want  students to hand in a document for grading you're best, from within the tool, to assign submissions to a folder.</p> <p>You can use the the tool to set deadlines and instructions for delivery, as well as a maximum grade/score.</p>"
@@ -22152,7 +22152,7 @@ msgstr "テキストフィールドで選択"
 msgid "Triple select"
 msgstr "トリプル選択"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "このプラットフォームに登録することを確認します。"
 
 msgid "Add text"
@@ -22212,14 +22212,11 @@ msgstr "登録確認"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "アカウントが未確認のため非活性です。メールを確認して指示に従ってください。あるいは以下のリンクをクリックしてメールを再送信してください"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "プラットフォーム登録を完了するには、以下のリンクをクリックしてアカウントを確認する必要があります"
 
 msgid "Confirmation for new account"
 msgstr "新規アカウント確認"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "プラットフォームにアクセスするには、メールでアカウントを確認する必要があります"
 
 msgid "Enable Cloud files link addition"
 msgstr "クラウドファイルリンクの追加を有効にする"
@@ -25056,9 +25053,6 @@ msgstr "すべてのテストの全結果をエクスポート"
 msgid "Click to view details"
 msgstr "詳細を表示するにはクリック"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "このレポートはユーザーのプラットフォーム上の全アクティビティに適用されます。"
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27615,7 +27609,7 @@ msgstr "プラットフォーム利用条件"
 msgid "Password too easy to guess"
 msgstr "パスワードが推測されやすい"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "プラットフォームにアクセスするにはメールでアカウントを確認する必要があります"
 
 msgid "Redirect to portal home"
@@ -30590,10 +30584,10 @@ msgid "ex. root"
 msgstr "例: root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "テーブル works を作成"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "テーブル works を変更"
 
 msgid "DROP COLUMN works"
 msgstr "DROP COLUMN が動作しました"
@@ -31266,4 +31260,241 @@ msgstr "管理者再開コース"
 
 msgid "Admin Dashboard"
 msgstr "管理者ダッシュボード"
+
+msgid "Threads"
+msgstr "スレッド"
+
+msgid "Invalid thread"
+msgstr "無効なスレッド"
+
+msgid "View full thread"
+msgstr "スレッド全文を表示"
+
+msgid "No post yet"
+msgstr "投稿なし"
+
+msgid "Discussion thread"
+msgstr "ディスカッション・スレッド"
+
+msgid "Access to this course"
+msgstr "このコースへのアクセス"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "このプラグインには設定可能な項目がありません。アクティベーションはプラグイン一覧から管理されます。"
+
+msgid "Private - access granted by privileged users"
+msgstr "非公開 - 特権ユーザーがアクセスを許可"
+
+msgid "No detailed feedback is available for this question."
+msgstr "この質問には詳細なフィードバックが利用できません。"
+
+msgid "Please select an answer before checking the result."
+msgstr "結果を確認する前に回答を選択してください。"
+
+msgid "Allow PDF export for this item"
+msgstr "この項目のPDFエクスポートを許可"
+
+msgid "Hide free users (not enrolled)"
+msgstr "無料ユーザー（登録なし）を非表示"
+
+msgid "Question statistics"
+msgstr "質問の統計"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "ファイルを生成中。このタブを閉じないでください..."
+
+msgid "Assign auth source to users"
+msgstr "ユーザーに認証ソースを割り当て"
+
+msgid "There are no questions for this survey"
+msgstr "この調査には質問がありません"
+
+msgid "Certificates report"
+msgstr "証明書レポート"
+
+msgid "Course picture"
+msgstr "コース画像"
+
+msgid "Current picture"
+msgstr "現在の画像"
+
+msgid "Course events log"
+msgstr "コースイベントログ"
+
+msgid "Update the category information and its optional time limit."
+msgstr "カテゴリ情報を更新し、オプションの時間制限を設定。"
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "トレーニングカタログを整理するためにセッションの論理グループを作成。"
+
+msgid "Generating file, do not close this tab"
+msgstr "ファイルを生成中、このタブを閉じないでください"
+
+msgid "Assign authentication sources to users"
+msgstr "ユーザーに認証ソースを割り当て"
+
+msgid "Average completion rate"
+msgstr "平均完了率"
+
+msgid "Average access rate"
+msgstr "平均アクセス率"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "この表は、現在のコースの各学習パスごとの学習者の進捗と活動をまとめています。"
+
+msgid "Follow up"
+msgstr "フォローアップ"
+
+msgid "Tracking for superior"
+msgstr "上位者向けトラッキング"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "このレポートは、選択した日付範囲内の一般コーチごとのセッションの週次分布を示します。"
+
+msgid "Head manager report"
+msgstr "責任者レポート"
+
+msgid "Reset or update user password"
+msgstr "ユーザーパスワードをリセットまたは更新"
+
+msgid "Active users"
+msgstr "アクティブユーザー"
+
+msgid "Inactive users"
+msgstr "非アクティブユーザー"
+
+msgid "Report on resources"
+msgstr "リソースレポート"
+
+msgid "Global view"
+msgstr "全体ビュー"
+
+msgid "Available reports"
+msgstr "利用可能なレポート"
+
+msgid "Current report"
+msgstr "現在のレポート"
+
+msgid "Back to user assignment page"
+msgstr "ユーザー割り当てページに戻る"
+
+msgid "Authentication sources assigned successfully"
+msgstr "認証ソースの割り当てが成功しました"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "ヒント：「— ただアップロード —」を選択すると、誰にも送信せずに保存されます。"
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "少なくとも1つの受信者を選択してください（「— アップロードのみ —」または任意のユーザー）"
+
+msgid "Sharing"
+msgstr "共有"
+
+msgid "Selected files"
+msgstr "選択したファイル"
+
+msgid "Hide password"
+msgstr "パスワードを非表示"
+
+msgid "Show password"
+msgstr "パスワードを表示"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "メール用のSVGロゴをアップロード"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "削除する前に、このカテゴリからすべての学習パスを移動または削除する必要があります。"
+
+msgid "Clear filters"
+msgstr "フィルターをクリア"
+
+msgid "Attendances (tablet)"
+msgstr "出欠確認（タブレット）"
+
+msgid "Exit tablet mode"
+msgstr "タブレットモードを終了"
+
+msgid "No members found."
+msgstr "メンバーが見つかりません。"
+
+msgid "Health check"
+msgstr "ヘルスチェック"
+
+msgid "Export to CC 1.3"
+msgstr "CC 1.3にエクスポート"
+
+msgid "Loading resources..."
+msgstr "リソースを読み込み中..."
+
+msgid "Failed to load resources."
+msgstr "リソースの読み込みに失敗しました。"
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "エクスポート可能なリソースを少なくとも1つ選択してください（ドキュメント、ウェブリンク、ディスカッションなど）。"
+
+msgid "Export finished."
+msgstr "エクスポートが完了しました。"
+
+msgid "Export failed."
+msgstr "エクスポートに失敗しました。"
+
+msgid "Import failed."
+msgstr "インポートに失敗しました。"
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "ローカルファイル（.zip, .mbz, .tgz, .gz）"
+
+msgid "Ready to import"
+msgstr "インポート準備完了"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "このコースにバックアップを復元します。オプションを変更するには戻ることができます。"
+
+msgid "Select resources to import"
+msgstr "インポートするリソースを選択"
+
+msgid "No resources available in this backup."
+msgstr "このバックアップに利用可能なリソースがありません。"
+
+msgid "Import selection"
+msgstr "インポート選択"
+
+msgid "Import completed"
+msgstr "インポートが完了しました"
+
+msgid "Could not load options."
+msgstr "オプションを読み込めませんでした。"
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "バックアップファイルを選択してください（.zip, .mbz, .tgz, .gz）"
+
+msgid "Please choose a backup from the server"
+msgstr "サーバーからバックアップを選択してください"
+
+msgid "Error selecting source."
+msgstr "ソース選択エラー。"
+
+msgid "Recycling options"
+msgstr "リサイクルオプション"
+
+msgid "Type the course code to confirm"
+msgstr "確認のためコースコードを入力してください"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "選択したリソースを削除またはリセットします。この操作は元に戻せません。"
+
+msgid "Select resources to recycle"
+msgstr "リサイクルするリソースを選択"
+
+msgid "No resources available in this course."
+msgstr "このコースに利用可能なリソースがありません。"
+
+msgid "Recycle selected"
+msgstr "選択したものをリサイクル"
+
+msgid "Error loading resources."
+msgstr "リソースの読み込みエラー。"
+
+msgid "Clear search"
+msgstr "検索をクリア"
 

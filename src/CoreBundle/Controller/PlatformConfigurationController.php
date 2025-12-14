@@ -164,6 +164,9 @@ class PlatformConfigurationController extends AbstractController
                 'social.allow_social_tool',
                 'chat.allow_global_chat',
                 'survey.show_pending_survey_in_menu',
+                'search.search_enabled',
+                'search.search_prefilter_prefix',
+                'search.search_show_unlinked_results',
             ];
 
             $user = $this->userHelper->getCurrent();

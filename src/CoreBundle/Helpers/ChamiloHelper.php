@@ -113,17 +113,13 @@ class ChamiloHelper
             }
             $themeDir = Template::getThemeDir($theme);
             $customLogoPath = $themeDir.\sprintf('images/header-logo-custom%s.png', $accessUrlId);
-
-            $svgIcons = api_get_setting('icons_mode_svg');
-            if ('true' === $svgIcons) {
-                $customLogoPathSVG = substr($customLogoPath, 0, -3).'svg';
-                if (file_exists(api_get_path(SYS_PUBLIC_PATH).\sprintf('css/%s', $customLogoPathSVG))) {
-                    if ($getSysPath) {
-                        return api_get_path(SYS_PUBLIC_PATH).\sprintf('css/%s', $customLogoPathSVG);
-                    }
-
-                    return api_get_path(WEB_CSS_PATH).$customLogoPathSVG;
+            $customLogoPathSVG = substr($customLogoPath, 0, -3).'svg';
+            if (file_exists(api_get_path(SYS_PUBLIC_PATH).\sprintf('css/%s', $customLogoPathSVG))) {
+                if ($getSysPath) {
+                    return api_get_path(SYS_PUBLIC_PATH).\sprintf('css/%s', $customLogoPathSVG);
                 }
+
+                return api_get_path(WEB_CSS_PATH).$customLogoPathSVG;
             }
             if (file_exists(api_get_path(SYS_PUBLIC_PATH).\sprintf('css/%s', $customLogoPath))) {
                 if ($getSysPath) {

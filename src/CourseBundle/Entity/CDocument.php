@@ -16,6 +16,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
@@ -24,6 +25,7 @@ use ArrayObject;
 use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\DocumentLearningPathUsageAction;
 use Chamilo\CoreBundle\Controller\Api\DownloadSelectedDocumentsAction;
+use Chamilo\CoreBundle\Controller\Api\MoveDocumentAction;
 use Chamilo\CoreBundle\Controller\Api\ReplaceDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityDocument;
@@ -35,6 +37,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
+use Chamilo\CoreBundle\State\DocumentCollectionStateProvider;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -66,12 +69,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Put(
             uriTemplate: '/documents/{iid}/move',
-            controller: UpdateDocumentFileAction::class,
-            openapi: new Operation(
-                summary: 'Move document'
-            ),
+            controller: MoveDocumentAction::class,
+            openapi: new Operation(summary: 'Move document (context-aware using ResourceLink.parent)'),
             security: "is_granted('EDIT', object.resourceNode)",
-            deserialize: true
+            deserialize: false
         ),
         new Post(
             uriTemplate: '/documents/{iid}/replace',
@@ -160,7 +161,22 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Post(
             uriTemplate: '/documents/download-selected',
+            outputFormats: ['zip' => DownloadSelectedDocumentsAction::CONTENT_TYPE],
             controller: DownloadSelectedDocumentsAction::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course grou identifier',
+                ),
+            ],
             openapi: new Operation(
                 summary: 'Download selected documents as a ZIP file.',
                 requestBody: new RequestBody(
@@ -192,7 +208,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                         schema: ['type' => 'integer'],
                     ),
                 ],
-            )
+            ),
+            provider: DocumentCollectionStateProvider::class
         ),
     ],
     normalizationContext: [
@@ -207,7 +224,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CDocumentRepository::class)]
 #[ORM\EntityListeners([ResourceListener::class])]
 #[ApiFilter(filterClass: PropertyFilter::class)]
-#[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial', 'resourceNode.parent' => 'exact', 'filetype' => 'exact'])]
+#[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial', 'filetype' => 'exact'])]
 #[ApiFilter(
     filterClass: OrderFilter::class,
     properties: [

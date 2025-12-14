@@ -182,11 +182,11 @@
 
       <section class="grid grid-cols-1 gap-3">
         <div>
-          <label class="text-xs block mb-1">{{ t('Upload email SVG') }}</label>
+          <label class="text-xs block mb-1">{{ t('Upload SVG logo for e-mails') }}</label>
           <input type="file" accept=".svg,image/svg+xml" @change="onPick($event, 'emailSvg')" />
         </div>
         <div>
-          <label class="text-xs block mb-1">{{ t('Upload email PNG (~540 px width)') }}</label>
+          <label class="text-xs block mb-1">{{ t('Upload PNG logo for e-mails (~540 px width)') }}</label>
           <input type="file" accept="image/png" @change="onPick($event, 'emailPng', { recommendW:540 })" />
         </div>
       </section>

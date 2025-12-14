@@ -444,18 +444,14 @@ watch(isSorting, (isSortingEnabled) => {
 })
 
 async function updateDisplayOrder(htmlItem, newIndex) {
-  const tool = htmlItem.dataset.tool
-  let toolItem = null
+  const toolTitle = htmlItem.dataset.tool
+  const toolItem = tools.value.find((element) => element.title === toolTitle)
 
-  if (typeof tools.value !== "undefined" && Array.isArray(tools.value)) {
-    const toolList = tools.value
-    toolItem = toolList.find((element) => element.title === tool)
-  } else {
-    console.error("Error: tools.value is undefined")
+  if (!toolItem || !toolItem.iid) {
+    console.error("[CourseHome] Tool item or iid missing", toolItem)
     return
   }
 
-  console.log(toolItem, newIndex)
 
   // Send the updated values to the server
   await courseService.updateToolOrder(toolItem, newIndex, course.value.id, session.value?.id)

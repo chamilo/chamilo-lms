@@ -6277,8 +6277,8 @@ msgstr "Die Sprache ist nun sichtbar"
 msgid "The language has been hidden. It will not be possible to use it until it becomes visible again."
 msgstr "Die Sprache ist nun unsichtbar"
 
-msgid "The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
-msgstr "Das Verzeichnis /main/lang dieses Portals ist nicht beschreibbar. Bitte den Administrator verständigen."
+msgid "The var/translations directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
+msgstr "Das Verzeichnis var/translations dieses Portals ist nicht beschreibbar. Bitte den Administrator verständigen."
 
 msgid "Show glossary terms in documents"
 msgstr "Lexikon (Kurs-Wörterbuch)"
@@ -14284,7 +14284,7 @@ msgstr "<p>Den Kalender gibt es sowohl für jeden Kurs als auch als eigenständi
 msgid "<p> The Announcements tool allows you to send an e-mail to some or all of your students, or to specific groups.  to might want to alert them to the addition of a new document, to remind them of a deadline for submission of an assignment or to highlight and share a particularly good piece of work. Sending such e-mail announcements can also serve as a useful prompt to re-engage students who have not visited the site for some time (as long as it's not overdone!). </p> <b> Contacting specific users </b> <p> In addition to sending a general one to all members of the course, you can send an e-mail to one or more individuals/groups groups. When you create a new announcement, just click <i>Visible to</i> and select users from the left hand lists and and add them as recipients using the arrows.</p>"
 msgstr "<p>Die Ankündigungen sind gedacht .... </p>"
 
-msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remains focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
+msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remain focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
 msgstr "<p>Das Chat Werkzeug ermöglicht Diskussion .... </p>"
 
 msgid "<p>The assignments tool  is a very simple tool that allows your students to upload documents to the course.It can be used to accept responses to open questions from individuals or groups, or for uploading any other form of document</p><p>You can make files visible to all students by default, or only visible to yourself according to the requirements of your course. Making all files visible is useful when, for instance, you want to ask students to share opinions on each others papers, or when you want to give them experience in publishing texts globally. Keep files invisible if, for example, you want ask everybody the same question but to avoid 'cheating'. Making the documents invisible will also allow you to have some form of control over when a document is available to all the other students. </p><p>If you want  students to hand in a document for grading you're best, from within the tool, to assign submissions to a folder.</p> <p>You can use the the tool to set deadlines and instructions for delivery, as well as a maximum grade/score.</p>"
@@ -22174,7 +22174,7 @@ msgstr "Auswahl mit Textfeld"
 msgid "Triple select"
 msgstr "Dreifachauswahl"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr ""
 "Sie bestätigen, dass Sie sich wirklich für diese Plattform anmelden möchten."
 
@@ -22240,18 +22240,13 @@ msgstr ""
 "Ihre E-Mails und folgen Sie den Anweisungen oder klicken Sie auf den "
 "folgenden Link, um die E-Mail erneut zu senden"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr ""
 "Um Ihre Plattformregistrierung abzuschließen, müssen Sie Ihr Konto "
 "bestätigen, indem Sie auf den folgenden Link klicken"
 
 msgid "Confirmation for new account"
 msgstr "Bestätigung für neues Konto"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr ""
-"Sie müssen Ihr Konto per E-Mail bestätigen, um Zugang zur Plattform zu "
-"erhalten"
 
 msgid "Enable Cloud files link addition"
 msgstr "Aktivieren Sie das Hinzufügen von Cloud-Dateilinks"
@@ -25468,10 +25463,6 @@ msgstr "Exportieren Sie alle Ergebnisse aller Tests"
 
 msgid "Click to view details"
 msgstr "Klicken Sie, um Details anzuzeigen"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr ""
-"Dieser Bericht bezieht sich auf alle Plattformaktivitäten des Benutzers."
 
 msgid "dd/mm/yyyy"
 msgstr "TT/MM/JJJJ"
@@ -28986,7 +28977,7 @@ msgstr "Nutzungsbedingungen der Plattform"
 msgid "Password too easy to guess"
 msgstr "Passwort zu leicht zu erraten"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr ""
 "Sie müssen Ihr Konto per E-Mail bestätigen, um Zugang zur Plattform zu "
 "erhalten"
@@ -32289,7 +32280,7 @@ msgid "Revision Language"
 msgstr "Revisionssprache"
 
 msgid "Session career link"
-msgstr "Session Career Link"
+msgstr "Sitzung Berufspfad-Verknüpfung"
 
 msgid "Successful authentication handlers"
 msgstr "Erfolgreiche Authentifizierungs-Handler"
@@ -32307,7 +32298,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (interne ID)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "Azure-ID (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Organisations-E-Mail"
@@ -32773,4 +32764,241 @@ msgstr "Admin Kurse neu starten"
 
 msgid "Admin Dashboard"
 msgstr "Admin-Dashboard"
+
+msgid "Threads"
+msgstr "Threads"
+
+msgid "Invalid thread"
+msgstr "Ungültiger Thread"
+
+msgid "View full thread"
+msgstr "Vollständigen Thread anzeigen"
+
+msgid "No post yet"
+msgstr "Noch keine Beiträge"
+
+msgid "Discussion thread"
+msgstr "Diskussionsthread"
+
+msgid "Access to this course"
+msgstr "Zugriff auf diesen Kurs"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Dieses Plugin hat keine konfigurierbaren Einstellungen. Die Aktivierung wird über die Plugin-Liste verwaltet."
+
+msgid "Private - access granted by privileged users"
+msgstr "Privat – Zugriff durch privilegierte Benutzer gewährt"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Für diese Frage ist kein detailliertes Feedback verfügbar."
+
+msgid "Please select an answer before checking the result."
+msgstr "Bitte wählen Sie eine Antwort aus, bevor Sie das Ergebnis prüfen."
+
+msgid "Allow PDF export for this item"
+msgstr "PDF-Export für diesen Eintrag erlauben"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Kostenlose Benutzer (nicht eingeschrieben) ausblenden"
+
+msgid "Question statistics"
+msgstr "Fragenstatistik"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Datei wird generiert. Schließen Sie diesen Tab nicht..."
+
+msgid "Assign auth source to users"
+msgstr "Authentifizierungsquelle Benutzern zuweisen"
+
+msgid "There are no questions for this survey"
+msgstr "Für diese Umfrage gibt es keine Fragen"
+
+msgid "Certificates report"
+msgstr "Zertifikatsbericht"
+
+msgid "Course picture"
+msgstr "Kursbild"
+
+msgid "Current picture"
+msgstr "Aktuelles Bild"
+
+msgid "Course events log"
+msgstr "Kurs-Ereignisprotokoll"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Kategorieinformationen und optionale Zeitbegrenzung aktualisieren."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Erstellen Sie eine logische Gruppe von Sitzungen, um Ihren Trainingskatalog organisiert zu halten."
+
+msgid "Generating file, do not close this tab"
+msgstr "Datei wird generiert, schließen Sie diesen Tab nicht"
+
+msgid "Assign authentication sources to users"
+msgstr "Authentifizierungsquellen Benutzern zuweisen"
+
+msgid "Average completion rate"
+msgstr "Durchschnittliche Abschlussrate"
+
+msgid "Average access rate"
+msgstr "Durchschnittliche Zugriffsrate"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Diese Tabelle fasst den Lernerfortschritt und die Aktivität pro Lernpfad in Ihren aktuellen Kursen zusammen."
+
+msgid "Follow up"
+msgstr "Nachverfolgung"
+
+msgid "Tracking for superior"
+msgstr "Nachverfolgung für Vorgesetzten"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Dieser Bericht zeigt die wöchentliche Verteilung der Sitzungen pro allgemeinem Coach im ausgewählten Datumsbereich."
+
+msgid "Head manager report"
+msgstr "Bericht des Leiters"
+
+msgid "Reset or update user password"
+msgstr "Benutzerpasswort zurücksetzen oder aktualisieren"
+
+msgid "Active users"
+msgstr "Aktive Benutzer"
+
+msgid "Inactive users"
+msgstr "Inaktive Benutzer"
+
+msgid "Report on resources"
+msgstr "Bericht zu Ressourcen"
+
+msgid "Global view"
+msgstr "Gesamtübersicht"
+
+msgid "Available reports"
+msgstr "Verfügbare Berichte"
+
+msgid "Current report"
+msgstr "Aktueller Bericht"
+
+msgid "Back to user assignment page"
+msgstr "Zurück zur Benutzerzuweisungsseite"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Authentifizierungsquellen erfolgreich zugewiesen"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Tipp: Wählen Sie „— Nur hochladen —“, um ohne Versand an jemanden zu speichern."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Bitte wählen Sie mindestens einen Empfänger aus („— Nur hochladen —“ oder einen Benutzer)"
+
+msgid "Sharing"
+msgstr "Teilen"
+
+msgid "Selected files"
+msgstr "Ausgewählte Dateien"
+
+msgid "Hide password"
+msgstr "Passwort ausblenden"
+
+msgid "Show password"
+msgstr "Passwort anzeigen"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "SVG-Logo für E-Mails hochladen"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Sie müssen alle Lernpfade aus dieser Kategorie verschieben oder entfernen, bevor Sie sie löschen."
+
+msgid "Clear filters"
+msgstr "Filter löschen"
+
+msgid "Attendances (tablet)"
+msgstr "Anwesenheiten (Tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Tablet-Modus beenden"
+
+msgid "No members found."
+msgstr "Keine Mitglieder gefunden."
+
+msgid "Health check"
+msgstr "Systemprüfung"
+
+msgid "Export to CC 1.3"
+msgstr "Exportieren nach CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Ressourcen werden geladen…"
+
+msgid "Failed to load resources."
+msgstr "Ressourcen konnten nicht geladen werden."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Bitte wählen Sie mindestens eine exportierbare Ressource aus (Dokument, Web-Link, Diskussion,…)."
+
+msgid "Export finished."
+msgstr "Export abgeschlossen."
+
+msgid "Export failed."
+msgstr "Export fehlgeschlagen."
+
+msgid "Import failed."
+msgstr "Import fehlgeschlagen."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Lokale Datei (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Bereit zum Importieren"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Wir werden das Backup in diesen Kurs wiederherstellen. Sie können zurückgehen, um Optionen zu ändern."
+
+msgid "Select resources to import"
+msgstr "Zu importierende Ressourcen auswählen"
+
+msgid "No resources available in this backup."
+msgstr "Keine Ressourcen in diesem Backup verfügbar."
+
+msgid "Import selection"
+msgstr "Importauswahl"
+
+msgid "Import completed"
+msgstr "Import abgeschlossen"
+
+msgid "Could not load options."
+msgstr "Optionen konnten nicht geladen werden."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Bitte wählen Sie eine Backup-Datei aus (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Bitte wählen Sie ein Backup vom Server aus"
+
+msgid "Error selecting source."
+msgstr "Fehler beim Auswählen der Quelle."
+
+msgid "Recycling options"
+msgstr "Wiederaufbereitungsoptionen"
+
+msgid "Type the course code to confirm"
+msgstr "Kurs-Code zur Bestätigung eingeben"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Dies entfernt oder setzt ausgewählte Ressourcen zurück. Diese Aktion kann nicht rückgängig gemacht werden."
+
+msgid "Select resources to recycle"
+msgstr "Zu wiederaufbereitende Ressourcen auswählen"
+
+msgid "No resources available in this course."
+msgstr "Keine Ressourcen in diesem Kurs verfügbar."
+
+msgid "Recycle selected"
+msgstr "Ausgewählte wiederaufbereiten"
+
+msgid "Error loading resources."
+msgstr "Fehler beim Laden der Ressourcen."
+
+msgid "Clear search"
+msgstr "Suche löschen"
 

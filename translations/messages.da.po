@@ -2022,10 +2022,10 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:Copyright,, nej:ingen Copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappe,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
-msgstr ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
+msgstr ":øvelse:øvelse,,      simulation:simulation,,      spørgeskema:spørgeskema,,      diagram:diagram,,      figur:figur,,      graf:graf,,      indeks:indeks,,      slide:slide,,      tabel:tabel,,      narrativ tekst:narrativ tekst,,      eksamen:eksamen,,      eksperiment:eksperiment,,      problemformulering:problemformulering,,      selvvurdering:selvvurdering,,      forelæsning:forelæsning"
 
 msgid "Please select a backup option"
 msgstr "Vælg venligst en backup-løsning."
@@ -6218,8 +6218,8 @@ msgstr "Sproget er blevet gjort synligt og kan nu bruges på tværs af platforme
 msgid "The language has been hidden. It will not be possible to use it until it becomes visible again."
 msgstr "Sproget er blevet skjult. Det vil ikke være muligt at bruge det, før det bliver synligt igen."
 
-msgid "The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
-msgstr "Mappen /main/lang, der bruges på denne portal til at gemme sprogene, er ikke skrivbar. Kontakt venligst din platformadministrator og rapporter denne besked."
+msgid "The var/translations directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
+msgstr "Mappen var/translations, der bruges på denne portal til at gemme sprogene, er ikke skrivbar. Kontakt venligst din platformadministrator og rapporter denne besked."
 
 msgid "Show glossary terms in documents"
 msgstr "Vis ordlisten i dokumenter"
@@ -14225,7 +14225,7 @@ msgstr "<p>Denne agenda vises i kursusområdet og som værktøj for studerende  
 msgid "<p> The Announcements tool allows you to send an e-mail to some or all of your students, or to specific groups.  to might want to alert them to the addition of a new document, to remind them of a deadline for submission of an assignment or to highlight and share a particularly good piece of work. Sending such e-mail announcements can also serve as a useful prompt to re-engage students who have not visited the site for some time (as long as it's not overdone!). </p> <b> Contacting specific users </b> <p> In addition to sending a general one to all members of the course, you can send an e-mail to one or more individuals/groups groups. When you create a new announcement, just click <i>Visible to</i> and select users from the left hand lists and and add them as recipients using the arrows.</p>"
 msgstr "<p>Meddelelsesværktøjet tillader dig at sende en mail til alle studerende, til enkelte studerende eller grupper.</p> <p>For at sende en meddelelse til nogle brugere og/eller grupper, vælg Meddelelse til valgte brugere, hold derefter CTRL+C knappener nede for at vælge mere end en i den venstre menu og klik herefter på den højre pil for at flytte dem og skriv derefter din besked i feltet nedenfor.</p>"
 
-msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remains focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
+msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remain focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
 msgstr "<p>Chatværktøjet itllader dig at diskutere live med studerende.</p> <p>Denne chat kan ikke sammenlignes med MSN® eller Yahoo Messenger® fordi chaten er webbaseret. Ulempen ved denne chat er, at den kun opdaterer sig hvert 10. sekund (ikke med det samme). Fordelen ved denne chat er, at den er en integreret del af dine kurser. Chatten gemmer dine diskutuiner i Dokumentværktøjet, og chatten kræver ikke nogen plugin - hverken for underviseren eller de studerende.</p> <p>Hvis brugere lægger deres billeder ind i 'Min e-portfolio' (topbanneret), så vises billedet i chatten, når an deltager.</p> <p>Kun underviseren kan slette en diskussion, når denne finer det nødvendigt.</p> <p><b>Pædagogisk relevans</b></p> <p>At tilføje en chat til dit kursus er ikke absolut en god ide, hvis den ikke indgår som en del af det samlede kursusscenarie. Chatten må udelukkende anses som værende en del af det samlede kursusscenarie, så studerende ikke vender sig til kun at benytte den.</p>."
 
 msgid "<p>The assignments tool  is a very simple tool that allows your students to upload documents to the course.It can be used to accept responses to open questions from individuals or groups, or for uploading any other form of document</p><p>You can make files visible to all students by default, or only visible to yourself according to the requirements of your course. Making all files visible is useful when, for instance, you want to ask students to share opinions on each others papers, or when you want to give them experience in publishing texts globally. Keep files invisible if, for example, you want ask everybody the same question but to avoid 'cheating'. Making the documents invisible will also allow you to have some form of control over when a document is available to all the other students. </p><p>If you want  students to hand in a document for grading you're best, from within the tool, to assign submissions to a folder.</p> <p>You can use the the tool to set deadlines and instructions for delivery, as well as a maximum grade/score.</p>"
@@ -16755,7 +16755,7 @@ msgid "Fill with demo content"
 msgstr "Udfyld med demo-indhold"
 
 msgid "Single Sign On"
-msgstr "Single Sign On"
+msgstr "Enkelt pålogning"
 
 msgid "Enabling Single Sign On allows you to connect this platform as a slave of an authentication master, for example a Drupal website with the Drupal-Chamilo plugin or any other similar master setup."
 msgstr "Aktivering af Single Sign On tillader dig at forbinde denne platform som en slave til en autentificeringsmaster, f.eks. et Drupal-websted med Drupal-Chamilo-pluginnet eller en anden lignende masteropsætning."
@@ -22088,7 +22088,7 @@ msgstr "Vælg med tekstfelt"
 msgid "Triple select"
 msgstr "Trippel valg"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Du bekræfter at du virkelig vil tilmelde dig denne platform."
 
 msgid "Add text"
@@ -22148,14 +22148,11 @@ msgstr "Registreringsbekræftelse"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Din konto er inaktiv, fordi du endnu ikke har bekræftet den. Tjek din e-mail og følg instruktionerne eller klik på følgende link for at gensende e-mailen"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "For at fuldføre din platformregistrering skal du bekræfte din konto ved at klikke på følgende link"
 
 msgid "Confirmation for new account"
 msgstr "Bekræftelse for ny konto"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Du skal bekræfte din konto via e-mail for at få adgang til platformen"
 
 msgid "Enable Cloud files link addition"
 msgstr "Aktivér tilføjelse af Cloud-fil-links"
@@ -24992,9 +24989,6 @@ msgstr "Eksportér alle resultater fra alle tests"
 msgid "Click to view details"
 msgstr "Klik for at se detaljer"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Denne rapport gælder alle platformaktiviter for brugeren."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27551,7 +27545,7 @@ msgstr "Platformens brugsbetingelser"
 msgid "Password too easy to guess"
 msgstr "Adgangskode for let at gætte"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Du skal bekræfte din konto via e-mail for at få adgang til platformen"
 
 msgid "Redirect to portal home"
@@ -31202,4 +31196,241 @@ msgstr "Admin Genstart Kurser"
 
 msgid "Admin Dashboard"
 msgstr "Admin Dashboard"
+
+msgid "Threads"
+msgstr "Tråde"
+
+msgid "Invalid thread"
+msgstr "Ugyldig tråd"
+
+msgid "View full thread"
+msgstr "Vis fuld tråd"
+
+msgid "No post yet"
+msgstr "Ingen opslag endnu"
+
+msgid "Discussion thread"
+msgstr "Diskussions tråd"
+
+msgid "Access to this course"
+msgstr "Adgang til dette kursus"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Dette plugin har ingen konfigurerbare indstillinger. Aktivering administreres fra plugin-listen."
+
+msgid "Private - access granted by privileged users"
+msgstr "Privat - adgang giver privilegerede brugere"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Ingen detaljeret feedback er tilgængelig for dette spørgsmål."
+
+msgid "Please select an answer before checking the result."
+msgstr "Vælg venligst et svar før du tjekker resultatet."
+
+msgid "Allow PDF export for this item"
+msgstr "Tillad PDF-eksport for dette element"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Skjul gratis brugere (ikke tilmeldt)"
+
+msgid "Question statistics"
+msgstr "Spørgsmål statistik"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Genererer fil. Luk ikke denne fane..."
+
+msgid "Assign auth source to users"
+msgstr "Tildel auth kilde til brugere"
+
+msgid "There are no questions for this survey"
+msgstr "Der er ingen spørgsmål til denne undersøgelse"
+
+msgid "Certificates report"
+msgstr "Certifikat rapport"
+
+msgid "Course picture"
+msgstr "Kursus billede"
+
+msgid "Current picture"
+msgstr "Nuværende billede"
+
+msgid "Course events log"
+msgstr "Kursus hændelseslog"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Opdater kategori informationen og dens valgfrie tidsgrænse."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Opret en logisk gruppe af sessioner for at holde din uddannelseskatalog organiseret."
+
+msgid "Generating file, do not close this tab"
+msgstr "Genererer fil, luk ikke denne fane"
+
+msgid "Assign authentication sources to users"
+msgstr "Tildel godkendelseskilder til brugere"
+
+msgid "Average completion rate"
+msgstr "Gennemsnitlig færdiggørelsesrate"
+
+msgid "Average access rate"
+msgstr "Gennemsnitlig adgangsrate"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Denne tabel opsummerer læreres fremskridt og aktivitet pr. læringssti i dine nuværende kurser."
+
+msgid "Follow up"
+msgstr "Følg op"
+
+msgid "Tracking for superior"
+msgstr "Sporing for overordnet"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Denne rapport viser den ugentlige fordeling af sessioner pr. generel coach i det valgte datointerval."
+
+msgid "Head manager report"
+msgstr "Afdelingsleder rapport"
+
+msgid "Reset or update user password"
+msgstr "Nulstil eller opdater bruger adgangskode"
+
+msgid "Active users"
+msgstr "Aktive brugere"
+
+msgid "Inactive users"
+msgstr "Inaktive brugere"
+
+msgid "Report on resources"
+msgstr "Rapport om ressourcer"
+
+msgid "Global view"
+msgstr "Global visning"
+
+msgid "Available reports"
+msgstr "Tilgængelige rapporter"
+
+msgid "Current report"
+msgstr "Nuværende rapport"
+
+msgid "Back to user assignment page"
+msgstr "Tilbage til brugeropgave-side"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Godkendelseskilder tildelt succesfuldt"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Tip: vælg “— Kun upload —” for at gemme uden at sende til nogen."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Vælg mindst én modtager (“— Kun upload —” eller en bruger)"
+
+msgid "Sharing"
+msgstr "Deling"
+
+msgid "Selected files"
+msgstr "Valgte filer"
+
+msgid "Hide password"
+msgstr "Skjul adgangskode"
+
+msgid "Show password"
+msgstr "Vis adgangskode"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Upload SVG-logo til e-mails"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Du skal flytte eller fjerne alle læringsstier fra denne kategori, før du sletter den."
+
+msgid "Clear filters"
+msgstr "Ryd filtre"
+
+msgid "Attendances (tablet)"
+msgstr "Deltagelser (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Afslut tablet-tilstand"
+
+msgid "No members found."
+msgstr "Ingen medlemmer fundet."
+
+msgid "Health check"
+msgstr "Helsekontrol"
+
+msgid "Export to CC 1.3"
+msgstr "Eksporter til CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Indlæser ressourcer..."
+
+msgid "Failed to load resources."
+msgstr "Kunne ikke indlæse ressourcer."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Vælg mindst én eksportérbar ressource (dokument, webkæde, diskussion, ...)."
+
+msgid "Export finished."
+msgstr "Eksport fuldført."
+
+msgid "Export failed."
+msgstr "Eksport fejlede."
+
+msgid "Import failed."
+msgstr "Import fejlede."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Lokal fil (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Klar til import"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Vi vil gendanne backuppen i dette kursus. Du kan gå tilbage for at ændre indstillinger."
+
+msgid "Select resources to import"
+msgstr "Vælg ressourcer til import"
+
+msgid "No resources available in this backup."
+msgstr "Ingen ressourcer tilgængelige i denne backup."
+
+msgid "Import selection"
+msgstr "Importvalg"
+
+msgid "Import completed"
+msgstr "Import fuldført"
+
+msgid "Could not load options."
+msgstr "Kunne ikke indlæse indstillinger."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Vælg en backup-fil (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Vælg en backup fra serveren"
+
+msgid "Error selecting source."
+msgstr "Fejl ved valg af kilde."
+
+msgid "Recycling options"
+msgstr "Genbrugningsindstillinger"
+
+msgid "Type the course code to confirm"
+msgstr "Skriv kursuskoden for at bekræfte"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Dette fjerner eller nulstiller valgte ressourcer. Denne handling kan ikke fortrydes."
+
+msgid "Select resources to recycle"
+msgstr "Vælg ressourcer at genbruge"
+
+msgid "No resources available in this course."
+msgstr "Ingen ressourcer tilgængelige i dette kursus."
+
+msgid "Recycle selected"
+msgstr "Genbrug valgte"
+
+msgid "Error loading resources."
+msgstr "Fejl ved indlæsning af ressourcer."
+
+msgid "Clear search"
+msgstr "Ryd søgning"
 

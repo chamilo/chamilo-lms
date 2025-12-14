@@ -6252,8 +6252,8 @@ msgstr "De taal is zichtbaar gemaakt en kan nu overal in het platform worden geb
 msgid "The language has been hidden. It will not be possible to use it until it becomes visible again."
 msgstr "De taal werd verborgen. De taal kan niet meer gebruikt worden tot u deze weer zichtbaar maakt"
 
-msgid "The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
-msgstr "De map /main/lang , waar het systeem de taalvariabelen in bewaart, is niet schrijfbaar. Gelieve de platformbeheerder hiervan op de hoogte te brengen."
+msgid "The var/translations directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
+msgstr "De map var/translations , waar het systeem de taalvariabelen in bewaart, is niet schrijfbaar. Gelieve de platformbeheerder hiervan op de hoogte te brengen."
 
 msgid "Show glossary terms in documents"
 msgstr "Toon verklarende woordenlijst in documenten"
@@ -14268,7 +14268,7 @@ msgstr "<p>De agenda verschijnt niet alleen in elke cursus zelf, maar ook als ee
 msgid "<p> The Announcements tool allows you to send an e-mail to some or all of your students, or to specific groups.  to might want to alert them to the addition of a new document, to remind them of a deadline for submission of an assignment or to highlight and share a particularly good piece of work. Sending such e-mail announcements can also serve as a useful prompt to re-engage students who have not visited the site for some time (as long as it's not overdone!). </p> <b> Contacting specific users </b> <p> In addition to sending a general one to all members of the course, you can send an e-mail to one or more individuals/groups groups. When you create a new announcement, just click <i>Visible to</i> and select users from the left hand lists and and add them as recipients using the arrows.</p>"
 msgstr "<p>Met aankondigingen kan je een e-mailbericht sturen naar alle ingeschreven studenten, naar sommige ervan, of naar een of meer groepen. Zo kan je studenten die niet geregeld de cursuspagina's bezoeken daartoe aansporen.</p><p>Kies 'Aankondiging toevoegen' en selecteer groepen/gebruikers. Gebruik <span style=\"border: 1px solid; border-color: inherit;\"> Ctrl </span>+klik om er meerdere te kiezen, \">>\" om ze aan de bestemmelingen toe te voegen. Vink het hokje aan, vul onderwerp en bericht in en klik OK.</p>"
 
-msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remains focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
+msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remain focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
 msgstr "<p>In deze chatbox kunt u live met uw studenten discussiëren.</p><p>Deze chatfunctie werkt anders dan <acronym title=\"instant messaging\" xml:lang=\"en\" lang=\"en\">IM</acronym>-programma's (zoals MSN® of Yahoo Messenger®) omdat deze chat webgebaseerd is. Het nadeel daarvan is dat het bijwerken (refresh) slechts om de 10 seconden gebeurt, en niet onmiddellijk. Maar de voordelen zijn dat de chat geïntegreerd is in uw cursus, dat uw discussies worden opgeslagen in een map in de documentenmodule, en dat uw studenten geen extra plug-in hoeven te downloaden en te installeren.</p><p>Indien een gebruiker zijn/haar fotootje heeft toegevoegd bij 'Mijn profiel' (menubalk bovenaan), dan zal deze foto in de chatconversatie verschijnen, zodat hij/zij herkenbaar wordt.</p><p>Alleen de cursusbeheerder kan de discussie verwijderen wanneer hij/zij dit verkiest.</p><b>Pedagogische relevantie</b><p>Een chatfunctie in uw cursus heeft niet altijd een toegevoegde waarde, maar indien de chat in uw scenario past, kan de functie nuttig zijn. De docent kan de chatfunctie bijvoorbeeld verbergen, en alleen zichtbaar maken op bepaalde afgesproken tijdstippen, wanneer hij/zij live op vragen en opmerkingen van studenten wenst in te gaan. In een dergelijk scenario is de chat geen 'vrij discussiepaneel', terwijl studenten toch hun voordeel kunnen doen bij een liveontmoeting met de docent.</p>"
 
 msgid "<p>The assignments tool  is a very simple tool that allows your students to upload documents to the course.It can be used to accept responses to open questions from individuals or groups, or for uploading any other form of document</p><p>You can make files visible to all students by default, or only visible to yourself according to the requirements of your course. Making all files visible is useful when, for instance, you want to ask students to share opinions on each others papers, or when you want to give them experience in publishing texts globally. Keep files invisible if, for example, you want ask everybody the same question but to avoid 'cheating'. Making the documents invisible will also allow you to have some form of control over when a document is available to all the other students. </p><p>If you want  students to hand in a document for grading you're best, from within the tool, to assign submissions to a folder.</p> <p>You can use the the tool to set deadlines and instructions for delivery, as well as a maximum grade/score.</p>"
@@ -22716,7 +22716,7 @@ msgstr "Selecteer met tekstveld"
 msgid "Triple select"
 msgstr "Drievoudige selectie"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "U bevestigt dat u zich echt wilt abonneren op dit platform."
 
 msgid "Add text"
@@ -22785,18 +22785,13 @@ msgstr ""
 "e-mail en volg de instructies of klik op de volgende link om de e-mail "
 "opnieuw te verzenden"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr ""
 "Om uw platformregistratie te voltooien, moet u uw account bevestigen door op "
 "de volgende link te klikken"
 
 msgid "Confirmation for new account"
 msgstr "Bevestiging voor nieuw account"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr ""
-"U moet uw account via e-mail bevestigen om toegang te krijgen tot het "
-"platform"
 
 msgid "Enable Cloud files link addition"
 msgstr "Schakel het toevoegen van Cloud-bestanden links in"
@@ -26012,10 +26007,6 @@ msgstr "Exporteer alle resultaten van alle oefeningen"
 
 msgid "Click to view details"
 msgstr "Klik om details te bekijken"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr ""
-"Dit rapport is van toepassing op alle platformactiviteiten van de gebruiker."
 
 #, fuzzy
 msgid "dd/mm/yyyy"
@@ -29511,7 +29502,7 @@ msgstr "Gebruiksvoorwaarden van het platform"
 msgid "Password too easy to guess"
 msgstr "Wachtwoord te makkelijk te raden"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr ""
 "U moet uw account via e-mail bevestigen om toegang te krijgen tot het "
 "platform"
@@ -33285,4 +33276,241 @@ msgstr "Admin Herstart Cursussen"
 
 msgid "Admin Dashboard"
 msgstr "Admin Dashboard"
+
+msgid "Threads"
+msgstr ""
+
+msgid "Invalid thread"
+msgstr ""
+
+msgid "View full thread"
+msgstr ""
+
+msgid "No post yet"
+msgstr ""
+
+msgid "Discussion thread"
+msgstr ""
+
+msgid "Access to this course"
+msgstr ""
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr ""
+
+msgid "Private - access granted by privileged users"
+msgstr ""
+
+msgid "No detailed feedback is available for this question."
+msgstr ""
+
+msgid "Please select an answer before checking the result."
+msgstr ""
+
+msgid "Allow PDF export for this item"
+msgstr ""
+
+msgid "Hide free users (not enrolled)"
+msgstr ""
+
+msgid "Question statistics"
+msgstr ""
+
+msgid "Generating file. Do not close this tab..."
+msgstr ""
+
+msgid "Assign auth source to users"
+msgstr ""
+
+msgid "There are no questions for this survey"
+msgstr ""
+
+msgid "Certificates report"
+msgstr ""
+
+msgid "Course picture"
+msgstr ""
+
+msgid "Current picture"
+msgstr ""
+
+msgid "Course events log"
+msgstr ""
+
+msgid "Update the category information and its optional time limit."
+msgstr ""
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr ""
+
+msgid "Generating file, do not close this tab"
+msgstr ""
+
+msgid "Assign authentication sources to users"
+msgstr ""
+
+msgid "Average completion rate"
+msgstr ""
+
+msgid "Average access rate"
+msgstr ""
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr ""
+
+msgid "Follow up"
+msgstr ""
+
+msgid "Tracking for superior"
+msgstr ""
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr ""
+
+msgid "Head manager report"
+msgstr "Hoofdbeheerder rapport"
+
+msgid "Reset or update user password"
+msgstr "Gebruikerswachtwoord opnieuw instellen of bijwerken"
+
+msgid "Active users"
+msgstr "Actieve gebruikers"
+
+msgid "Inactive users"
+msgstr "Inactieve gebruikers"
+
+msgid "Report on resources"
+msgstr "Rapport over bronnen"
+
+msgid "Global view"
+msgstr "Algemeen overzicht"
+
+msgid "Available reports"
+msgstr "Beschikbare rapporten"
+
+msgid "Current report"
+msgstr "Huidig rapport"
+
+msgid "Back to user assignment page"
+msgstr "Terug naar gebruikers toewijzing pagina"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Authenticatiebronnen succesvol toegewezen"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Tip: kies “— Alleen uploaden —” om op te slaan zonder naar iemand te versturen."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Selecteer minstens één ontvanger (“— Alleen uploaden —” of een gebruiker)"
+
+msgid "Sharing"
+msgstr "Delen"
+
+msgid "Selected files"
+msgstr "Geselecteerde bestanden"
+
+msgid "Hide password"
+msgstr "Wachtwoord verbergen"
+
+msgid "Show password"
+msgstr "Wachtwoord tonen"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "SVG-logo voor e-mails uploaden"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "U moet alle leerpaden uit deze categorie verplaatsen of verwijderen voordat u deze kunt verwijderen."
+
+msgid "Clear filters"
+msgstr "Filters wissen"
+
+msgid "Attendances (tablet)"
+msgstr "Aanwezigheden (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Tabletmodus verlaten"
+
+msgid "No members found."
+msgstr "Geen leden gevonden."
+
+msgid "Health check"
+msgstr "Gezondheidscontrole"
+
+msgid "Export to CC 1.3"
+msgstr "Exporteren naar CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Bronnen laden..."
+
+msgid "Failed to load resources."
+msgstr "Kon bronnen niet laden."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Selecteer minstens één exporteerbare bron (document, webkoppelingen, discussie,...)."
+
+msgid "Export finished."
+msgstr "Export voltooid."
+
+msgid "Export failed."
+msgstr "Export mislukt."
+
+msgid "Import failed."
+msgstr "Import mislukt."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Lokaal bestand (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Klaar om te importeren"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "We zullen de back-up in deze cursus herstellen. U kunt teruggaan om opties te wijzigen."
+
+msgid "Select resources to import"
+msgstr "Bronnen selecteren om te importeren"
+
+msgid "No resources available in this backup."
+msgstr "Geen bronnen beschikbaar in deze back-up."
+
+msgid "Import selection"
+msgstr "Importselectie"
+
+msgid "Import completed"
+msgstr "Import voltooid"
+
+msgid "Could not load options."
+msgstr "Kon opties niet laden."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Selecteer een back-upbestand (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Kies een back-up van de server"
+
+msgid "Error selecting source."
+msgstr "Fout bij selecteren van bron."
+
+msgid "Recycling options"
+msgstr "Herbruikopties"
+
+msgid "Type the course code to confirm"
+msgstr "Typ de cursuscode ter bevestiging"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Dit verwijdert of herstelt geselecteerde bronnen. Deze actie kan niet ongedaan worden gemaakt."
+
+msgid "Select resources to recycle"
+msgstr "Bronnen selecteren om te hergebruiken"
+
+msgid "No resources available in this course."
+msgstr "Geen bronnen beschikbaar in deze cursus."
+
+msgid "Recycle selected"
+msgstr "Geselecteerde hergebruiken"
+
+msgid "Error loading resources."
+msgstr "Fout bij laden van bronnen."
+
+msgid "Clear search"
+msgstr "Zoekopdracht wissen"
 

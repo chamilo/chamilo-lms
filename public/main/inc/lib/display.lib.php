@@ -714,7 +714,7 @@ class Display
         // it checks if there is an SVG version. If so, it uses it.
         // When moving this to production, the return_icon() calls should
         // ask for the SVG version directly
-        $svgIcons = api_get_setting('icons_mode_svg');
+        $svgIcons = 'true';
         if ('true' == $svgIcons && false == $return_only_path) {
             $svgImage = substr($image, 0, -3).'svg';
             if (is_file($code_path.$theme.'svg/'.$svgImage)) {
@@ -1577,7 +1577,7 @@ class Display
             $title .= "<small> $second_title</small>";
         }
 
-        return '<div class="page-header section-header"><'.$size.' class="section-header__title">'.$title.'</'.$size.'></div>';
+        return '<div class="page-header section-header mb-6"><'.$size.' class="section-header__title">'.$title.'</'.$size.'></div>';
     }
 
     public static function page_header_and_translate($title, $second_title = null)
@@ -2203,13 +2203,11 @@ class Display
             $end = $contentList[2];
         }
 
-
-        return '<div id="'.$id.'" class="toolbar-action p-toolbar p-component flex items-center justify-between flex-wrap" role="toolbar">
-                <div class="p-toolbar-group-start p-toolbar-group-left">'.$start.'</div>
-                <div class="p-toolbar-group-center">'.$center.'</div>
-                <div class="p-toolbar-group-end p-toolbar-group-right">'.$end.'</div>
-            </div>
-        ';
+        return '<div id="'.$id.'" class="toolbar-action p-toolbar p-component flex items-center justify-between flex-wrap w-full" role="toolbar">
+            <div class="p-toolbar-group-start p-toolbar-group-left">'.$start.'</div>
+            <div class="p-toolbar-group-center">'.$center.'</div>
+            <div class="p-toolbar-group-end p-toolbar-group-right">'.$end.'</div>
+        </div>';
     }
 
     /**
@@ -2756,6 +2754,128 @@ class Display
             }
         } catch (\Throwable $e) {
             error_log('Display::getFlash error: '.$e->getMessage());
+        }
+
+        return $html;
+    }
+
+    /**
+     * Build the common MySpace / tracking menu (left part of the toolbar).
+     *
+     * $current can be:
+     *  - overview
+     *  - students
+     *  - teachers
+     *  - admin_view
+     *  - exams
+     *  - current_courses
+     *  - courses
+     *  - sessions
+     *  - company_reports
+     *  - company_reports_resumed
+     */
+    public static function mySpaceMenu(string $current): string
+    {
+        $base = api_get_path(WEB_CODE_PATH).'my_space/';
+        $items = [];
+
+        $isPlatformAdmin = api_is_platform_admin();
+        $isDrh = api_is_drh();
+
+        if ($isDrh) {
+            // DRH menu.
+            $items = [
+                'students' => [
+                    'icon' => 'account',
+                    'title' => get_lang('Learners'),
+                    'url' => $base.'student.php',
+                ],
+                'teachers' => [
+                    'icon' => 'human-male-board',
+                    'title' => get_lang('Teachers'),
+                    'url' => $base.'teachers.php',
+                ],
+                'courses' => [
+                    'icon' => 'book-open-page-variant',
+                    'title' => get_lang('Courses'),
+                    'url' => $base.'course.php',
+                ],
+                'sessions' => [
+                    'icon' => 'book-open-page-variant',
+                    'title' => get_lang('Course sessions'),
+                    'url' => $base.'session.php',
+                ],
+                'company_reports' => [
+                    'icon' => 'chart-box',
+                    'title' => get_lang('Corporate report'),
+                    'url' => $base.'company_reports.php',
+                ],
+                'company_reports_resumed' => [
+                    'icon' => 'chart-box-outline',
+                    'title' => get_lang('Corporate report, short version'),
+                    'url' => $base.'company_reports_resumed.php',
+                ],
+            ];
+        } else {
+            // Teacher / platform admin menu.
+            $items = [
+                'overview' => [
+                    'icon' => 'chart-bar',
+                    'title' => get_lang('Global view'),
+                    'url' => $base.'index.php',
+                ],
+                'students' => [
+                    'icon' => 'account-star',
+                    'title' => get_lang('Learners'),
+                    'url' => $base.'student.php',
+                ],
+                'teachers' => [
+                    'icon' => 'human-male-board',
+                    'title' => get_lang('Teachers'),
+                    'url' => $base.'teachers.php',
+                ],
+            ];
+
+            if ($isPlatformAdmin) {
+                $items['admin_view'] = [
+                    'icon' => 'star-outline',
+                    'title' => get_lang('Admin view'),
+                    'url' => $base.'admin_view.php',
+                ];
+                $items['exams'] = [
+                    'icon' => 'order-bool-ascending-variant',
+                    'title' => get_lang('Exam tracking'),
+                    'url' => api_get_path(WEB_CODE_PATH).'tracking/exams.php',
+                ];
+                $items['current_courses'] = [
+                    'icon' => 'book-open-page-variant',
+                    'title' => get_lang('Current courses report'),
+                    'url' => $base.'current_courses.php',
+                ];
+                $items['certificate_report'] = [
+                    'icon' => 'certificate',
+                    'title' => get_lang('See list of learner certificates'),
+                    'url' => api_get_path(WEB_CODE_PATH).'gradebook/certificate_report.php',
+                ];
+            }
+        }
+
+        $html = '';
+
+        foreach ($items as $name => $item) {
+            $iconClass = $name === $current ? 'ch-tool-icon-disabled' : 'ch-tool-icon';
+            $url = $name === $current ? '' : $item['url'];
+
+            $html .= self::url(
+                self::getMdiIcon(
+                    $item['icon'],
+                    $iconClass,
+                    null,
+                    32,
+                    $item['title']
+                ),
+                $url
+            );
         }
 
         return $html;

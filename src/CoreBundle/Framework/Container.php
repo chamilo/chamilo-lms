@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\ContainerHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
+use Chamilo\CoreBundle\Helpers\PortfolioCategoryHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository;
 use Chamilo\CoreBundle\Repository\AssetRepository;
@@ -48,6 +49,7 @@ use Chamilo\CoreBundle\Repository\TrackEDownloadsRepository;
 use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRepository;
+use Chamilo\CoreBundle\Search\Xapian\SearchIndexPathResolver;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
@@ -705,8 +707,17 @@ class Container
     public static function getPortfolioRepository(): PortfolioRepository
     {
         /** @var PortfolioRepository $repo */
-        $repo = self::$container->get(PortfolioRepository::class);
+        return self::$container->get(PortfolioRepository::class);
+    }
 
-        return $repo;
+    public static function getPortfolioCategoryHelper(): PortfolioCategoryHelper
+    {
+        /** @var PortfolioCategoryHelper $helper */
+        return self::$container->get(PortfolioCategoryHelper::class);
+    }
+
+    public static function getSearchIndexPathResolver(): SearchIndexPathResolver
+    {
+        return self::$container->get(SearchIndexPathResolver::class);
     }
 }

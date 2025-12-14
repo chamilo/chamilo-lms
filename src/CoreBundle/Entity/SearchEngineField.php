@@ -9,12 +9,12 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SpecificField.
+ * SearchEngineField.
  */
-#[ORM\Table(name: 'specific_field')]
+#[ORM\Table(name: 'search_engine_field')]
 #[ORM\UniqueConstraint(name: 'unique_specific_field__code', columns: ['code'])]
 #[ORM\Entity]
-class SpecificField
+class SearchEngineField
 {
     #[ORM\Column(name: 'code', type: 'string', length: 1, nullable: false)]
     protected string $code;
@@ -27,57 +27,32 @@ class SpecificField
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    /**
-     * Set code.
-     *
-     * @return SpecificField
-     */
-    public function setCode(string $code)
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setCode(string $code): self
     {
         $this->code = $code;
 
         return $this;
     }
 
-    /**
-     * Get code.
-     *
-     * @return string
-     */
-    public function getCode()
+    public function getCode(): string
     {
         return $this->code;
     }
 
-    /**
-     * Set title.
-     *
-     * @return SpecificField
-     */
-    public function setTitle(string $title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 }

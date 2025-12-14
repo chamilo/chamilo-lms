@@ -6218,8 +6218,8 @@ msgstr "언어가 표시 가능하게 설정되었으며 이제 플랫폼 전반
 msgid "The language has been hidden. It will not be possible to use it until it becomes visible again."
 msgstr "언어가 숨겨졌습니다. 다시 표시될 때까지 사용할 수 없습니다."
 
-msgid "The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
-msgstr "이 포털에서 언어를 저장하는 데 사용되는 /main/lang 디렉토리에 쓰기 권한이 없습니다. 플랫폼 관리자에게 문의하여 이 메시지를 보고해 주세요."
+msgid "The var/translations directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
+msgstr "이 포털에서 언어를 저장하는 데 사용되는 var/translations 디렉토리에 쓰기 권한이 없습니다. 플랫폼 관리자에게 문의하여 이 메시지를 보고해 주세요."
 
 msgid "Show glossary terms in documents"
 msgstr "문서에 용어집 용어 표시"
@@ -14225,7 +14225,7 @@ msgstr "<p> 일정 도구는 각 코스 내 달력과 등록된 코스 이벤트
 msgid "<p> The Announcements tool allows you to send an e-mail to some or all of your students, or to specific groups.  to might want to alert them to the addition of a new document, to remind them of a deadline for submission of an assignment or to highlight and share a particularly good piece of work. Sending such e-mail announcements can also serve as a useful prompt to re-engage students who have not visited the site for some time (as long as it's not overdone!). </p> <b> Contacting specific users </b> <p> In addition to sending a general one to all members of the course, you can send an e-mail to one or more individuals/groups groups. When you create a new announcement, just click <i>Visible to</i> and select users from the left hand lists and and add them as recipients using the arrows.</p>"
 msgstr "<p> 공지 도구는 일부 또는 모든 학생 또는 특정 그룹에게 이메일을 보낼 수 있게 합니다.  새 문서 추가 알림, 과제 제출 마감일 상기 또는 특별히 좋은 작업 강조 및 공유를 위해 사용. 이러한 이메일 공지는 사이트를 오랜만에 방문한 학생 재참여 유도에 유용 (과도하지 않게!). </p> <b> 특정 사용자 연락 </b> <p> 코스 모든 멤버에게 일반 공지 외에 한 명 이상 개인/그룹에게 이메일 전송 가능. 새 공지 생성 시 <i>보이는 대상</i> 클릭하고 왼쪽 목록에서 사용자 선택 후 화살표로 수신자 추가.</p>"
 
-msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remains focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
+msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remain focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
 msgstr "<p>채팅 도구는 학생과 실시간 '라이브' 채팅 가능. </p> 대부분 상용 채팅 도구와 달리 Chamilo 채팅은 웹 기반이며 추가 설치 불필요 (예.  MSN® Yahoo Messenger®. Skype® 등.) 이 솔루션의 주요 장점은 학생에게 즉시 사용 가능하여 코스에 쉽게 통합. 게다가 Chamilo 채팅 도구는 토론을 자동 아카이브하여 문서 도구로 나중에 쉽게 접근. (경고: 각 교환 시 메시지 새로고침에 1~5초 걸릴 수 있음 - 문제 아님!!). </p> 학습자가 프로필 사진 업로드 시 왼쪽 열에 (크기 축소) 표시 - 그렇지 않으면 기본 이미지 표시. </p> 교사가 적절하다고 판단 시 스레드 삭제 책임. </p> <b>교육적 사용</b> <p>코스에 채팅 추가가 항상 좋은 아이디어가 아님. 이 도구를 최적으로 사용하려면 토론이 코스 콘텐츠에 집중되도록 해야 함. 예: '정식' 예정 세션 시간까지 채팅 기능 숨김. 이렇게 하면 토론 자유도가 제한되더라도 라이브 회의가 유익함 보장.</p>"
 
 msgid "<p>The assignments tool  is a very simple tool that allows your students to upload documents to the course.It can be used to accept responses to open questions from individuals or groups, or for uploading any other form of document</p><p>You can make files visible to all students by default, or only visible to yourself according to the requirements of your course. Making all files visible is useful when, for instance, you want to ask students to share opinions on each others papers, or when you want to give them experience in publishing texts globally. Keep files invisible if, for example, you want ask everybody the same question but to avoid 'cheating'. Making the documents invisible will also allow you to have some form of control over when a document is available to all the other students. </p><p>If you want  students to hand in a document for grading you're best, from within the tool, to assign submissions to a folder.</p> <p>You can use the the tool to set deadlines and instructions for delivery, as well as a maximum grade/score.</p>"
@@ -22088,7 +22088,7 @@ msgstr "텍스트 필드와 함께 선택"
 msgid "Triple select"
 msgstr "트리플 선택"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "이 플랫폼에 구독하려는 것을 확인합니다."
 
 msgid "Add text"
@@ -22148,14 +22148,11 @@ msgstr "등록 확인"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "계정이 아직 확인되지 않아 비활성 상태입니다. 이메일을 확인하고 지침을 따르거나 다음 링크를 클릭하여 이메일을 재발송하세요"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "플랫폼 등록을 완료하려면 다음 링크를 클릭하여 계정을 확인해야 합니다"
 
 msgid "Confirmation for new account"
 msgstr "새 계정 확인"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "플랫폼에 액세스하려면 이메일로 계정을 확인해야 합니다"
 
 msgid "Enable Cloud files link addition"
 msgstr "클라우드 파일 링크 추가 활성화"
@@ -24992,9 +24989,6 @@ msgstr "모든 테스트의 모든 결과 내보내기"
 msgid "Click to view details"
 msgstr "상세 정보 보기 클릭"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "이 보고서는 사용자의 모든 플랫폼 활동에 적용됩니다."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27551,7 +27545,7 @@ msgstr "플랫폼 이용 조건"
 msgid "Password too easy to guess"
 msgstr "비밀번호가 너무 쉽게 추측됩니다"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "플랫폼에 접근하려면 이메일로 계정을 확인해야 합니다"
 
 msgid "Redirect to portal home"
@@ -31202,4 +31196,241 @@ msgstr "관리자 재시작 강좌"
 
 msgid "Admin Dashboard"
 msgstr "관리자 대시보드"
+
+msgid "Threads"
+msgstr "스레드"
+
+msgid "Invalid thread"
+msgstr "잘못된 스레드"
+
+msgid "View full thread"
+msgstr "전체 스레드 보기"
+
+msgid "No post yet"
+msgstr "아직 게시물이 없습니다"
+
+msgid "Discussion thread"
+msgstr "토론 스레드"
+
+msgid "Access to this course"
+msgstr "이 강좌 접근"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "이 플러그인은 설정할 수 있는 항목이 없습니다. 활성화는 플러그인 목록에서 관리됩니다."
+
+msgid "Private - access granted by privileged users"
+msgstr "비공개 - 특권 사용자에 의해 접근 허용"
+
+msgid "No detailed feedback is available for this question."
+msgstr "이 질문에 대한 상세 피드백이 없습니다."
+
+msgid "Please select an answer before checking the result."
+msgstr "결과를 확인하기 전에 답변을 선택하십시오."
+
+msgid "Allow PDF export for this item"
+msgstr "이 항목에 대한 PDF 내보내기 허용"
+
+msgid "Hide free users (not enrolled)"
+msgstr "무료 사용자(수강하지 않음) 숨기기"
+
+msgid "Question statistics"
+msgstr "질문 통계"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "파일 생성 중입니다. 이 탭을 닫지 마십시오..."
+
+msgid "Assign auth source to users"
+msgstr "사용자에게 인증 소스 할당"
+
+msgid "There are no questions for this survey"
+msgstr "이 설문조사에 질문이 없습니다"
+
+msgid "Certificates report"
+msgstr "수료증 보고서"
+
+msgid "Course picture"
+msgstr "강좌 이미지"
+
+msgid "Current picture"
+msgstr "현재 이미지"
+
+msgid "Course events log"
+msgstr "강좌 이벤트 로그"
+
+msgid "Update the category information and its optional time limit."
+msgstr "카테고리 정보를 업데이트하고 선택적 시간 제한을 설정하십시오."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "교육 카탈로그를 정리하기 위해 세션의 논리적 그룹을 생성하십시오."
+
+msgid "Generating file, do not close this tab"
+msgstr "파일 생성 중입니다, 이 탭을 닫지 마십시오"
+
+msgid "Assign authentication sources to users"
+msgstr "사용자에게 인증 소스 할당"
+
+msgid "Average completion rate"
+msgstr "평균 완료율"
+
+msgid "Average access rate"
+msgstr "평균 접근율"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "이 표는 현재 강좌의 학습 경로별 학습자 진행 상황과 활동을 요약합니다."
+
+msgid "Follow up"
+msgstr "후속 조치"
+
+msgid "Tracking for superior"
+msgstr "상급자 추적"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "이 보고서는 선택한 날짜 범위에서 일반 코치별 세션의 주간 분포를 보여줍니다."
+
+msgid "Head manager report"
+msgstr "본부장 보고서"
+
+msgid "Reset or update user password"
+msgstr "사용자 비밀번호 재설정 또는 업데이트"
+
+msgid "Active users"
+msgstr "활성 사용자"
+
+msgid "Inactive users"
+msgstr "비활성 사용자"
+
+msgid "Report on resources"
+msgstr "자원 보고서"
+
+msgid "Global view"
+msgstr "전체 보기"
+
+msgid "Available reports"
+msgstr "사용 가능한 보고서"
+
+msgid "Current report"
+msgstr "현재 보고서"
+
+msgid "Back to user assignment page"
+msgstr "사용자 과제 페이지로 돌아가기"
+
+msgid "Authentication sources assigned successfully"
+msgstr "인증 소스가 성공적으로 할당되었습니다"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "팁: 누구에게도 보내지 않고 저장하려면 “— 그냥 업로드 —”를 선택하세요."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "최소 한 명의 수신자를 선택하세요 (“— 그냥 업로드 —” 또는 사용자)"
+
+msgid "Sharing"
+msgstr "공유"
+
+msgid "Selected files"
+msgstr "선택된 파일"
+
+msgid "Hide password"
+msgstr "암호 숨기기"
+
+msgid "Show password"
+msgstr "암호 표시"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "이메일용 SVG 로고 업로드"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "이 카테고리를 삭제하기 전에 모든 학습 경로를 이동하거나 제거해야 합니다."
+
+msgid "Clear filters"
+msgstr "필터 지우기"
+
+msgid "Attendances (tablet)"
+msgstr "출석부 (태블릿)"
+
+msgid "Exit tablet mode"
+msgstr "태블릿 모드 종료"
+
+msgid "No members found."
+msgstr "멤버를 찾을 수 없습니다."
+
+msgid "Health check"
+msgstr "상태 점검"
+
+msgid "Export to CC 1.3"
+msgstr "CC 1.3으로 내보내기"
+
+msgid "Loading resources..."
+msgstr "리소스 로딩 중..."
+
+msgid "Failed to load resources."
+msgstr "리소스 로딩 실패."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "최소 하나의 내보낼 리소스를 선택하세요 (문서, 웹 링크, 토론 등)."
+
+msgid "Export finished."
+msgstr "내보내기 완료."
+
+msgid "Export failed."
+msgstr "내보내기 실패."
+
+msgid "Import failed."
+msgstr "가져오기 실패."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "로컬 파일 (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "가져올 준비 완료"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "이 강좌에 백업을 복원합니다. 옵션을 변경하려면 돌아갈 수 있습니다."
+
+msgid "Select resources to import"
+msgstr "가져올 리소스 선택"
+
+msgid "No resources available in this backup."
+msgstr "이 백업에 사용 가능한 리소스가 없습니다."
+
+msgid "Import selection"
+msgstr "가져오기 선택"
+
+msgid "Import completed"
+msgstr "가져오기 완료"
+
+msgid "Could not load options."
+msgstr "옵션을 로드할 수 없습니다."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "백업 파일을 선택하세요 (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "서버에서 백업을 선택하세요"
+
+msgid "Error selecting source."
+msgstr "소스 선택 오류."
+
+msgid "Recycling options"
+msgstr "재활용 옵션"
+
+msgid "Type the course code to confirm"
+msgstr "확인을 위해 강좌 코드를 입력하세요"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "선택된 리소스를 제거하거나 재설정합니다. 이 작업은 되돌릴 수 없습니다."
+
+msgid "Select resources to recycle"
+msgstr "재활용할 리소스 선택"
+
+msgid "No resources available in this course."
+msgstr "이 강좌에 사용 가능한 리소스가 없습니다."
+
+msgid "Recycle selected"
+msgstr "선택된 항목 재활용"
+
+msgid "Error loading resources."
+msgstr "리소스 로딩 오류."
+
+msgid "Clear search"
+msgstr "검색 지우기"
 

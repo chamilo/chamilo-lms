@@ -64,7 +64,7 @@
       </div>
 
       <div
-        v-if="sessionDisplayDate"
+        v-if="showSessionDisplayDate && sessionDisplayDate"
         class="session__display-date"
         v-text="sessionDisplayDate"
       />
@@ -117,6 +117,11 @@ const props = defineProps({
     required: false,
     default: false,
   },
+  showSessionDisplayDate: {
+    type: Boolean,
+    required: false,
+    default: true,
+  },
 })
 
 const { t } = useI18n()
@@ -128,12 +133,12 @@ const showRemainingDays = computed(
 )
 
 const daysRemainingText = computed(() => {
-  if (!showRemainingDays.value || !props.session?.displayEndDate) {
+  if (!showRemainingDays.value || isCoach.value || !props.session?.displayEndDate) {
     return null
   }
 
   const endDate = new Date(props.session.displayEndDate)
-  if (isNaN(endDate)) {
+  if (isNaN(endDate.getTime())) {
     return null
   }
 
@@ -166,7 +171,7 @@ const sessionDurationText = computed(() => {
   const start = new Date(props.session.displayStartDate)
   const end = new Date(props.session.displayEndDate)
 
-  if (isNaN(start) || isNaN(end)) {
+  if (isNaN(start.getTime()) || isNaN(end.getTime())) {
     return null
   }
 
@@ -174,11 +179,7 @@ const sessionDurationText = computed(() => {
   const rawDiff = Math.floor((end - start) / msPerDay) + 1
   const days = rawDiff > 0 ? rawDiff : 1
 
-  if (days === 1) {
-    return "1 day duration"
-  }
-
-  return `${days} days duration`
+  return days === 1 ? "1 day duration" : `${days} days duration`
 })
 
 const showCourseDuration = computed(() => platformConfigStore.getSetting("course.show_course_duration") === "true")
@@ -201,24 +202,12 @@ const teachers = computed(() => {
 })
 
 const sessionDisplayDate = computed(() => {
-  // When setting is enabled, decide between duration (for coaches) and remaining days (for regular users)
-  if (sessionDurationText.value) {
-    return sessionDurationText.value
-  }
+  if (sessionDurationText.value) return sessionDurationText.value
+  if (daysRemainingText.value) return daysRemainingText.value
 
-  if (daysRemainingText.value) {
-    return daysRemainingText.value
-  }
-
-  // Fallback: show the original date range
   const parts = []
-  if (props.session?.displayStartDate) {
-    parts.push(abbreviatedDatetime(props.session.displayStartDate))
-  }
-  if (props.session?.displayEndDate) {
-    parts.push(abbreviatedDatetime(props.session.displayEndDate))
-  }
-
+  if (props.session?.displayStartDate) parts.push(abbreviatedDatetime(props.session.displayStartDate))
+  if (props.session?.displayEndDate) parts.push(abbreviatedDatetime(props.session.displayEndDate))
   return parts.join(" — ")
 })
 

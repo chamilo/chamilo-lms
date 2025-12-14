@@ -22148,14 +22148,11 @@ msgstr "Xác nhận đăng ký"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Tài khoản của bạn không hoạt động vì bạn chưa xác nhận. Kiểm tra email và làm theo hướng dẫn hoặc nhấp liên kết sau để gửi lại email"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Để hoàn tất đăng ký nền tảng, bạn cần xác nhận tài khoản bằng cách nhấp liên kết sau"
 
 msgid "Confirmation for new account"
 msgstr "Xác nhận tài khoản mới"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Bạn cần xác nhận tài khoản qua email để truy cập nền tảng"
 
 msgid "Enable Cloud files link addition"
 msgstr "Bật thêm liên kết tệp Cloud"
@@ -27548,7 +27545,7 @@ msgstr "Điều khoản sử dụng nền tảng"
 msgid "Password too easy to guess"
 msgstr "Mật khẩu quá dễ đoán"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Bạn cần xác nhận tài khoản qua email để truy cập nền tảng"
 
 msgid "Redirect to portal home"

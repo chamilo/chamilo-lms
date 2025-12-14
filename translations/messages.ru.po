@@ -22149,14 +22149,11 @@ msgstr "Подтверждение регистрации"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Ваш аккаунт неактивен, потому что вы еще не подтвердили его. Проверьте свою электронную почту и следуйте инструкциям или нажмите на следующую ссылку, чтобы переотправить письмо"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Чтобы завершить регистрацию на платформе, вам нужно подтвердить аккаунт, нажав на следующую ссылку"
 
 msgid "Confirmation for new account"
 msgstr "Подтверждение нового аккаунта"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Вам нужно подтвердить аккаунт по email, чтобы получить доступ к платформе"
 
 msgid "Enable Cloud files link addition"
 msgstr "Включить добавление ссылок на файлы Cloud"
@@ -27549,7 +27546,7 @@ msgstr "Условия использования платформы"
 msgid "Password too easy to guess"
 msgstr "Пароль слишком простой"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Вам необходимо подтвердить аккаунт по электронной почте для доступа к платформе"
 
 msgid "Redirect to portal home"

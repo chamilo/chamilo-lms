@@ -23930,15 +23930,12 @@ msgstr "ການຢືນຢັນການລົງທະບຽນ"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "ບັນຊີຂອງທ່ານບໍ່ເຄື່ອນໄຫວ ເພາະທ່ານຍັງບໍ່ໄດ້ຢືນຢັນ. ກວດສອບອີເມວຂອງທ່ານ ແລະ ປະຕິບັດຕາມຄຳແນະນຳ ຫຼື ຄລິກລິ້ງຕໍ່ໄປນີ້ເພື່ອສົ່ງອີເມວຄືນໃໝ່"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "ເພື່ອສຳເລັດການລົງທະບຽນແພລດຟອມຂອງທ່ານ, ທ່ານຕ້ອງຢືນຢັນບັນຊີຂອງທ່ານໂດຍການຄລິກລິ້ງຕໍ່ໄປນີ້"
 
 #, fuzzy
 msgid "Confirmation for new account"
 msgstr "ການຢືນຢັນສຳລັບບັນຊີໃໝ່"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "ທ່ານຕ້ອງຢືນຢັນບັນຊີຂອງທ່ານຜ່ານທາງອີເມວເພື່ອເຂົ້າເຖິງແພລດຟອມ"
 
 msgid "Enable Cloud files link addition"
 msgstr "ເປີດໃຊ້ການເພີ່ມລິ້ງໄຟລ໌ຄລາວ"
@@ -29625,7 +29622,7 @@ msgstr "ເງື່ອນໄຂການນຳໃຊ້ແພລດຟອມ"
 msgid "Password too easy to guess"
 msgstr "ລະຫັດຜ່ານຄາດເດົາງ່າຍເກີນໄປ"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "ທ່ານຕ້ອງຢືນຢັນບັນຊີຂອງທ່ານຜ່ານອີເມວເພື່ອເຂົ້າໃຊ້ແພລດຟອມ"
 
 msgid "Redirect to portal home"

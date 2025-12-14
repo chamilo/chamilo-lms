@@ -22178,14 +22178,11 @@ msgstr "Confirmación de registro"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Su cuenta está inactiva porque aún no la ha confirmado. Revise su correo electrónico y siga las instrucciones o haga click en el siguiente enlace para volver a enviar el correo electrónico de confirmación."
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Para completar su registro en la plataforma, necesita confirmar su cuenta haciendo click en el siguiente enlace"
 
 msgid "Confirmation for new account"
 msgstr "Confirmación de nueva cuenta"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Usted necesita confirmar su cuenta por correo electrónico para acceder a la plataforma"
 
 msgid "Enable Cloud files link addition"
 msgstr "Permitir añadir enlaces a ficheros en la nube"
@@ -28546,7 +28543,7 @@ msgstr "Condiciones de uso de la plataforma"
 msgid "Password too easy to guess"
 msgstr "Contraseña demasiado fácil de adivinar"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr ""
 "Necesita confirmar su cuenta a través del correo electrónico para acceder a "
 "la plataforma"

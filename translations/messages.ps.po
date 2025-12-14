@@ -22143,14 +22143,11 @@ msgstr "د ثبتګ تائید"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "ستاسو حساب غیر فعال دی ځکه چې تاسو یې لا تایید کړی نه دی. خپل برېښنالیک وګورئ او لارښوونې تعقیب کړئ یا لاندې لینک کلیک کړئ ترڅو برېښنالیک بیا واستول شي"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "د پلیټفارم د ثبتګ بشپړولو لپاره تاسو باید خپل حساب د لاندې لینک په کلیک کولو تایید کړئ"
 
 msgid "Confirmation for new account"
 msgstr "د نوي حساب لپاره تائید"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "د پلیټفارم ته د لاسرسي لپاره تاسو باید خپل حساب د برېښنالیک له لارې تایید کړئ"
 
 msgid "Enable Cloud files link addition"
 msgstr "د ګرځنده فایلونو لینک اضافه فعال کړئ"
@@ -27543,7 +27540,7 @@ msgstr "د پلیټفارم استعمال شرطونه"
 msgid "Password too easy to guess"
 msgstr "پاسورور ډېر اسانه حدس کېدونکی دی"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "د پلیټفارم ته لاسرسی لپاره تاسو باید خپل حساب د برېښنالیک له لارې تصدیق کړئ"
 
 msgid "Redirect to portal home"

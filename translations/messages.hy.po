@@ -22147,14 +22147,11 @@ msgstr "Գրանցման հաստատում"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Ձեր հաշիվը անգործունակ է, քանի որ դեռ չեք հաստատել այն: Ստուգեք Ձեր էլ. փոստը և հետևեք հրահանգներին կամ սեղմեք հետևյալ հղումը էլ. նամակը վերուղարկելու համար"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Հարթակի գրանցումն ավարտելու համար պետք է հաստատեք Ձեր հաշիվը սեղմելով հետևյալ հղումը"
 
 msgid "Confirmation for new account"
 msgstr "Հաստատում նոր հաշվի համար"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Հարթակ մուտք գործելու համար պետք է հաստատեք Ձեր հաշիվը էլ. փոստով"
 
 msgid "Enable Cloud files link addition"
 msgstr "Միացնել Cloud ֆայլերի հղումների ավելացումը"
@@ -27547,7 +27544,7 @@ msgstr "Պլատֆորմայի օգտագործման պայմաններ"
 msgid "Password too easy to guess"
 msgstr "Գաղտնաբառը չափազանց հեշտ է հուշել"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Պլատֆորմայի մուտքի համար պետք է հաստատեք Ձեր հաշիվը էլ. փոստով"
 
 msgid "Redirect to portal home"

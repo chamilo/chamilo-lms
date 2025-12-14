@@ -22150,14 +22150,11 @@ msgstr "Registracijos patvirtinimas"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Jūsų paskyra neaktyvi, nes dar nepatvirtinote jos. Patikrinkite el. paštą ir vykdykite nurodymus arba spustelėkite šią nuorodą el. paštui persiųsti"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Norėdami užbaigti platformos registraciją, turite patvirtinti paskyrą spustelėdami šią nuorodą"
 
 msgid "Confirmation for new account"
 msgstr "Patvirtinimas naujai paskyrai"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Norėdami prisijungti prie platformos, turite patvirtinti paskyrą el. paštu"
 
 msgid "Enable Cloud files link addition"
 msgstr "Įjungti debesų failų nuorodų pridėjimą"
@@ -27550,7 +27547,7 @@ msgstr "Platformos naudojimo sąlygos"
 msgid "Password too easy to guess"
 msgstr "Slaptažodis per lengvai atspėjamas"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Norėdami prisijungti prie platformos, turite patvirtinti savo paskyrą el. paštu"
 
 msgid "Redirect to portal home"

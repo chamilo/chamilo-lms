@@ -22148,14 +22148,11 @@ msgstr "Registreringsstadfesting"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Kontoen din er inaktiv fordi du ikkje har stadfesta den enno. Sjekk e-posten din og følg instruksjonane eller klikk på lenka under for å sende e-posten på ny"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "For å fullføre registreringa di på plattforma må du stadfeste kontoen din ved å klikke på lenka under"
 
 msgid "Confirmation for new account"
 msgstr "Stadfesting for ny konto"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Du må stadfeste kontoen din via e-post for å få tilgang til plattforma"
 
 msgid "Enable Cloud files link addition"
 msgstr "Slå på tillegg av lenke til skyfiler"
@@ -27548,7 +27545,7 @@ msgstr "Plattformbruksbetingelser"
 msgid "Password too easy to guess"
 msgstr "Passordet er for lett å gjette"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Du må stadfeste kontoen din via e-post for å få tilgang til plattforma"
 
 msgid "Redirect to portal home"

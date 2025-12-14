@@ -22148,14 +22148,11 @@ msgstr "註冊確認"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "您的帳戶未啟用，因為您尚未確認。請檢查電子郵件並遵循指示，或點擊以下連結重新發送郵件"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "要完成平台註冊，您需點擊以下連結確認帳戶"
 
 msgid "Confirmation for new account"
 msgstr "新帳戶確認"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "您需經電子郵件確認帳戶才能存取平台"
 
 msgid "Enable Cloud files link addition"
 msgstr "啟用雲端檔案連結新增"
@@ -27548,7 +27545,7 @@ msgstr "平台使用條件"
 msgid "Password too easy to guess"
 msgstr "密碼太容易猜測"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "您需要透過電子郵件確認帳戶才能存取平台"
 
 msgid "Redirect to portal home"

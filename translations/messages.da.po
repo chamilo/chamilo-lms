@@ -22148,14 +22148,11 @@ msgstr "Registreringsbekræftelse"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Din konto er inaktiv, fordi du endnu ikke har bekræftet den. Tjek din e-mail og følg instruktionerne eller klik på følgende link for at gensende e-mailen"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "For at fuldføre din platformregistrering skal du bekræfte din konto ved at klikke på følgende link"
 
 msgid "Confirmation for new account"
 msgstr "Bekræftelse for ny konto"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Du skal bekræfte din konto via e-mail for at få adgang til platformen"
 
 msgid "Enable Cloud files link addition"
 msgstr "Aktivér tilføjelse af Cloud-fil-links"
@@ -27548,7 +27545,7 @@ msgstr "Platformens brugsbetingelser"
 msgid "Password too easy to guess"
 msgstr "Adgangskode for let at gætte"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Du skal bekræfte din konto via e-mail for at få adgang til platformen"
 
 msgid "Redirect to portal home"

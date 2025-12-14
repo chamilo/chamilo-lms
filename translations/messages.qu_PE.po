@@ -22148,14 +22148,11 @@ msgstr "Inscripcion confirmacion"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Kutichisqaykiman ruraqniq inactivo, emailni qhawachin yachachisqakunata suyaychu, o hunt'a email kutichinapaq iskuqchata p'akispa"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Platapormaman inscribitsiyta tukuchinapaq, iskuqchata p'akispa ruraqniq kutichiy"
 
 msgid "Confirmation for new account"
 msgstr "Maway ruraqpaq confirmacion"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Platapormaman rinaq emailwan ruraqniq kutichiy"
 
 msgid "Enable Cloud files link addition"
 msgstr "Cloud willakuy qillqata activanaku"
@@ -27548,7 +27545,7 @@ msgstr "Palt'aray willakuykuna"
 msgid "Password too easy to guess"
 msgstr "Yanaqchusqa qillqayuq"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Palt'arayman riy kachkan imaynaqta emailwan qhaway"
 
 msgid "Redirect to portal home"

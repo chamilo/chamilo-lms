@@ -22149,14 +22149,11 @@ msgstr "Potvrda registracije"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Vaš račun je neaktivan jer ga još niste potvrdili. Provjerite svoju e-poštu i slijedite upute ili kliknite na sljedeći link za ponovno slanje e-pošte"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Da biste dovršili registraciju na platformu, potvrdite svoj račun klikom na sljedeći link"
 
 msgid "Confirmation for new account"
 msgstr "Potvrda za novi račun"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Morate potvrditi svoj račun e-poštom za pristup platformi"
 
 msgid "Enable Cloud files link addition"
 msgstr "Omogući dodavanje poveznica na Cloud datoteke"
@@ -27549,7 +27546,7 @@ msgstr "Uvjeti korištenja platforme"
 msgid "Password too easy to guess"
 msgstr "Lozinka je previše laka za pogađanje"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Morate potvrditi svoj račun putem e-pošte za pristup platformi"
 
 msgid "Redirect to portal home"

@@ -22153,14 +22153,11 @@ msgstr "Izen emateko baieztapena"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Zure kontua inaktiboa dago oraindik baieztatu ez duelako. Egiaztatu zure posta eta jarraitu argibideak edo klik egin lotura honetan posta berriro bidaltzeko"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Plataformaren izen ematea osatzeko kontua baieztatu behar duzu lotura honetan klik eginez"
 
 msgid "Confirmation for new account"
 msgstr "Kontu berriaren baieztapena"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Plataformara sartezeko kontua e-postaz baieztatu behar duzu"
 
 msgid "Enable Cloud files link addition"
 msgstr "Gaitu Hodei fitxategien lotura gehiketa"
@@ -27553,7 +27550,7 @@ msgstr "Plataforma erabilera-baldintzak"
 msgid "Password too easy to guess"
 msgstr "Pasahitza iradokizun erraza da"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Plataformara sartzeko kontua e-postaz baieztatu behar duzu"
 
 msgid "Redirect to portal home"

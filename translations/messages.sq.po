@@ -22147,14 +22147,11 @@ msgstr "Konfirmim regjistrimi"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Llogaria juaj është e paaktivizuar sepse nuk e keni konfirmuar ende. Kontrolloni email-in tuaj dhe ndiqni udhëzimet ose klikoni në lidhjen vijuese për të dërguar përsëri email-in"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Për të plotësuar regjistrimin tuaj në platformë duhet të konfirmoni llogarinë duke klikuar në lidhjen vijuese"
 
 msgid "Confirmation for new account"
 msgstr "Konfirmim për llogari të re"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Duhet të konfirmoni llogarinë tuaj me email për të aksesuar platformën"
 
 msgid "Enable Cloud files link addition"
 msgstr "Aktivizo shtimin e lidhjes së skedarëve në Cloud"
@@ -27547,7 +27544,7 @@ msgstr "Kushtet e përdorimit të platformës"
 msgid "Password too easy to guess"
 msgstr "Fjalëkalimi shumë i lehtë për t'u paragjykur"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Duhet të konfirmoni llogarinë tuaj me e-mail për të aksesuar platformën"
 
 msgid "Redirect to portal home"

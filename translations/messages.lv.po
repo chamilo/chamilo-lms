@@ -22149,14 +22149,11 @@ msgstr "Reģistrācijas apstiprinājums"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Jūsu konts ir neaktīvs, jo jūs vēl neesat to apstiprinājis. Pārbaudiet savu e-pastu un sekojiet instrukcijām vai noklikšķiniet uz šīs saites, lai atkārtoti nosūtītu e-pastu"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Lai pabeigtu platformas reģistrāciju, jums jāapstiprina konts, noklikšķinot uz šīs saites"
 
 msgid "Confirmation for new account"
 msgstr "Apstiprinājums jaunam kontam"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Lai piekļūtu platformai, jums jāapstiprina konts caur e-pastu"
 
 msgid "Enable Cloud files link addition"
 msgstr "Iespējot mākoņfailu saišu pievienošanu"
@@ -27549,7 +27546,7 @@ msgstr "Platformas izmantošanas nosacījumi"
 msgid "Password too easy to guess"
 msgstr "Parole ir pārāk viegli uzminama"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Lai piekļūtu platformai, jums jāapstiprina konts pa e-pastu"
 
 msgid "Redirect to portal home"

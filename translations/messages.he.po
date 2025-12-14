@@ -22161,14 +22161,11 @@ msgstr "אישור רישום"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "חשבון שלך לא פעיל מכיוון שעדיין לא אישרת אותו. בדוק את הדוא\"ל שלך ופעל לפי ההוראות או לחץ על הקישור הבא כדי לשלוח שוב את הדוא\"ל"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "כדי להשלים את רישום הפלטפורמה שלך עליך לאשר את חשבונך על ידי לחיצה על הקישור הבא"
 
 msgid "Confirmation for new account"
 msgstr "אישור לחשבון חדש"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "עליך לאשר את חשבונך באמצעות דואר אלקטרוני כדי לגשת לפלטפורמה"
 
 msgid "Enable Cloud files link addition"
 msgstr "אפשר הוספת קישור לקבצי ענן"
@@ -27561,7 +27558,7 @@ msgstr "תנאי שימוש בפלטפורמה"
 msgid "Password too easy to guess"
 msgstr "סיסמה קלה מדי לניחוש"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "עליך לאשר את חשבונך בדוא\"ל כדי לגשת לפלטפורמה"
 
 msgid "Redirect to portal home"

@@ -22148,14 +22148,11 @@ msgstr "Kayıt onayı"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Hesabınız henüz onaylanmadığı için pasif durumda. E-postanızı kontrol edin ve talimatları izleyin veya e-postayı yeniden göndermek için aşağıdaki bağlantıya tıklayın"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Platform kaydınızı tamamlamak için aşağıdaki bağlantıya tıklayarak hesabınızı onaylamanız gerekiyor"
 
 msgid "Confirmation for new account"
 msgstr "Yeni hesap onayı"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Platforma erişmek için hesabınızı e-posta ile onaylamanız gerekiyor"
 
 msgid "Enable Cloud files link addition"
 msgstr "Bulut dosyası bağlantısı eklemeyi etkinleştir"
@@ -27548,7 +27545,7 @@ msgstr "Platform kullanım koşulları"
 msgid "Password too easy to guess"
 msgstr "Şifre tahmin edilmesi çok kolay"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Platforma erişmek için hesabınızı e-posta ile onaylamanız gerekiyor"
 
 msgid "Redirect to portal home"

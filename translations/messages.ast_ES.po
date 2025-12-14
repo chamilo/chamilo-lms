@@ -22148,14 +22148,11 @@ msgstr "Confirmación de rexistru"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "La to cuenta ta inactiva porque nun la confirmasti. Compreba el to correu y sigue les instruiciones o calca nel siguiente enllace pa renviar el correu"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Pa completar el to rexistru na plataforma has de confirmar la to cuenta calcando nel siguiente enllace"
 
 msgid "Confirmation for new account"
 msgstr "Confirmación pa nueva cuenta"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Has de confirmar la to cuenta por correu pa acceder a la plataforma"
 
 msgid "Enable Cloud files link addition"
 msgstr "Activar amestáu d'enllaces a ficherus Cloud"
@@ -27548,7 +27545,7 @@ msgstr "Condiciones d'usu de la plataforma"
 msgid "Password too easy to guess"
 msgstr "Contraseña demasiau fácil de adivinar"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Has confirmar la to cuenta per corréu-e pa acceder a la plataforma"
 
 msgid "Redirect to portal home"

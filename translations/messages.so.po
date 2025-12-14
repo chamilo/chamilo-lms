@@ -22143,14 +22143,11 @@ msgstr "Xaqiijinta diiwaangelinta"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Koonkaagu waa midgaa shaqaynayn sababtoo ah wali ma xaqiijin. Ka hubi iimaylkaaga oo raac tilmaamaha ama guji xiriirka soo socda si aad dib u dirto iimaylka"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Si aad u dhammaystirto diiwaangelinta goobtaada waxaad u baahan tahay in aad xaqiijiso koonkaaga adigoo gujinaya xiriirka soo socda"
 
 msgid "Confirmation for new account"
 msgstr "Xaqiijinta koonka cusub"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Waxaad u baahan tahay in aad ku xaqiijiso koonkaaga iimaylka si aad u geliso goobta"
 
 msgid "Enable Cloud files link addition"
 msgstr "Awood u sii ku darista xiriirka faylalka Cloud"
@@ -27543,7 +27540,7 @@ msgstr "Shuruudaha isticmaalka aaska"
 msgid "Password too easy to guess"
 msgstr "Eebbe sirta waa fudud in la qiyaaso"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Waa inaad ku xaqiijisaa akoonkaaga iimaylka si aad u gasho aaska"
 
 msgid "Redirect to portal home"

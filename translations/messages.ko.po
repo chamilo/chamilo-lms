@@ -22148,14 +22148,11 @@ msgstr "등록 확인"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "계정이 아직 확인되지 않아 비활성 상태입니다. 이메일을 확인하고 지침을 따르거나 다음 링크를 클릭하여 이메일을 재발송하세요"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "플랫폼 등록을 완료하려면 다음 링크를 클릭하여 계정을 확인해야 합니다"
 
 msgid "Confirmation for new account"
 msgstr "새 계정 확인"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "플랫폼에 액세스하려면 이메일로 계정을 확인해야 합니다"
 
 msgid "Enable Cloud files link addition"
 msgstr "클라우드 파일 링크 추가 활성화"
@@ -27548,7 +27545,7 @@ msgstr "플랫폼 이용 조건"
 msgid "Password too easy to guess"
 msgstr "비밀번호가 너무 쉽게 추측됩니다"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "플랫폼에 접근하려면 이메일로 계정을 확인해야 합니다"
 
 msgid "Redirect to portal home"

@@ -22809,14 +22809,11 @@ msgstr "Confirmation d'inscription"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Votre compte n'est pas encore actif parce que vous ne l'avez pas encore confirmé par e-mail. Vérifiez votre boîte mail et suivez les instructions, ou cliquez sur le lien suivant pour renvoyer un e-mail de confirmation."
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Pour compléter votre inscription sur la plateforme, vous devez confirmer votre compte en cliquant sur le lien suivant"
 
 msgid "Confirmation for new account"
 msgstr "Confirmation d'un nouveau compte"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Vous devez confirmer votre compte par e-mail pour accéder à la plateforme"
 
 msgid "Enable Cloud files link addition"
 msgstr "Activer l'ajout de liens vers des fichiers dans le Cloud"
@@ -29308,7 +29305,7 @@ msgstr "Conditions d'utilisation de la plateforme"
 msgid "Password too easy to guess"
 msgstr "Mot de passe trop facile à deviner"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr ""
 "Vous devez confirmer votre compte par e-mail pour accéder à la plateforme"
 

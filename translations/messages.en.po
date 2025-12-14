@@ -22157,14 +22157,11 @@ msgstr "Registration confirmation"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
-msgstr "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
+msgstr "To complete your platform registration you need to confirm your account by clicking the following link"
 
 msgid "Confirmation for new account"
 msgstr "Confirmation for new account"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "You need confirm your account via email to access the platform"
 
 msgid "Enable Cloud files link addition"
 msgstr "Enable Cloud files link addition"
@@ -27557,8 +27554,8 @@ msgstr "Platform use conditions"
 msgid "Password too easy to guess"
 msgstr "Password too easy to guess"
 
-msgid "You need confirm your account via e-mail to access the platform"
-msgstr "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
+msgstr "You need to confirm your account via e-mail to access the platform"
 
 msgid "Redirect to portal home"
 msgstr "Redirect to portal home"

@@ -22143,14 +22143,11 @@ msgstr "Підтвердження реєстрації"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Ваш обліковий запис неактивний, оскільки ви ще не підтвердили його. Перевірте email та дотримуйтесь інструкцій або натисніть на посилання нижче, щоб надіслати email ще раз"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Щоб завершити реєстрацію на платформі, вам потрібно підтвердити обліковий запис, клацнувши на таке посилання"
 
 msgid "Confirmation for new account"
 msgstr "Підтвердження нового облікового запису"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Вам потрібно підтвердити обліковий запис електронною поштою для доступу до платформи"
 
 msgid "Enable Cloud files link addition"
 msgstr "Увімкнути додавання посилань на файли хмари"
@@ -27543,7 +27540,7 @@ msgstr "Умови використання платформи"
 msgid "Password too easy to guess"
 msgstr "Пароль занадто легкий для вгадування"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Вам потрібно підтвердити обліковий запис електронною поштою для доступу до платформи"
 
 msgid "Redirect to portal home"

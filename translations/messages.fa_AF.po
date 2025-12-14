@@ -22143,14 +22143,11 @@ msgstr "تأیید ثبت‌نام"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "حساب شما غیرفعال است زیرا هنوز آن را تأیید نکرده‌اید. ایمیل خود را بررسی کنید و دستورالعمل‌ها را دنبال کنید یا روی لینک زیر کلیک کنید تا ایمیل مجدداً ارسال شود"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "برای تکمیل ثبت‌نام پلتفرم، باید حساب خود را با کلیک روی لینک زیر تأیید کنید"
 
 msgid "Confirmation for new account"
 msgstr "تأیید برای حساب جدید"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "برای دسترسی به پلتفرم باید حساب خود را از طریق ایمیل تأیید کنید"
 
 msgid "Enable Cloud files link addition"
 msgstr "فعال کردن افزودن لینک فایل‌های ابری"
@@ -27543,7 +27540,7 @@ msgstr "شرایط استفاده از پلتفرم"
 msgid "Password too easy to guess"
 msgstr "رمز عبور بیش از حد ساده است"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "برای دسترسی به پلتفرم باید حساب خود را از طریق ایمیل تأیید کنید"
 
 msgid "Redirect to portal home"

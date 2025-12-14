@@ -22161,14 +22161,11 @@ msgstr "Επιβεβαίωση εγγραφής"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Ο λογαριασμός σας είναι ανενεργός επειδή δεν τον έχετε επιβεβαιώσει ακόμα. Ελέγξτε το email σας και ακολουθήστε τις οδηγίες ή κάντε κλικ στον παρακάτω σύνδεσμο για να επαναποσταλεί το email"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Για να ολοκληρώσετε την εγγραφή σας στην πλατφόρμα πρέπει να επιβεβαιώσετε τον λογαριασμό σας κάνοντας κλικ στον παρακάτω σύνδεσμο"
 
 msgid "Confirmation for new account"
 msgstr "Επιβεβαίωση νέου λογαριασμού"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Πρέπει να επιβεβαιώσετε τον λογαριασμό σας μέσω email για να έχετε πρόσβαση στην πλατφόρμα"
 
 msgid "Enable Cloud files link addition"
 msgstr "Ενεργοποίηση προσθήκης συνδέσμου αρχείων Cloud"
@@ -27561,7 +27558,7 @@ msgstr "Όροι χρήσης πλατφόρμας"
 msgid "Password too easy to guess"
 msgstr "Ο κωδικός πρόσβασης είναι πολύ εύκολος στην μαντεψιά"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Πρέπει να επιβεβαιώσετε τον λογαριασμό σας μέσω email για να αποκτήσετε πρόσβαση στην πλατφόρμα"
 
 msgid "Redirect to portal home"

@@ -22148,14 +22148,11 @@ msgstr "Konfirmasi pendaftaran"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Akun Anda tidak aktif karena Anda belum mengonfirmasinya. Periksa email Anda dan ikuti petunjuk atau klik tautan berikut untuk mengirim ulang email"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Untuk menyelesaikan pendaftaran platform Anda, Anda perlu mengonfirmasi akun dengan mengklik tautan berikut"
 
 msgid "Confirmation for new account"
 msgstr "Konfirmasi untuk akun baru"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Anda perlu mengonfirmasi akun Anda melalui email untuk mengakses platform"
 
 msgid "Enable Cloud files link addition"
 msgstr "Aktifkan penambahan tautan file Cloud"
@@ -27548,7 +27545,7 @@ msgstr "Ketentuan penggunaan platform"
 msgid "Password too easy to guess"
 msgstr "Kata sandi terlalu mudah ditebak"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Anda perlu mengonfirmasi akun Anda melalui email untuk mengakses platform"
 
 msgid "Redirect to portal home"

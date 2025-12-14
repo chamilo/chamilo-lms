@@ -22143,14 +22143,11 @@ msgstr "पंजीकरण पुष्टि"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "आपका खाता निष्क्रिय है क्योंकि आपने इसे अभी तक पुष्टि नहीं की है। अपना ईमेल जांचें और निर्देशों का पालन करें या ईमेल पुनः भेजने के लिए निम्नलिखित लिंक पर क्लिक करें"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "अपने प्लेटफ़ॉर्म पंजीकरण को पूरा करने के लिए आपको निम्नलिखित लिंक पर क्लिक करके अपना खाता पुष्टि करने की आवश्यकता है"
 
 msgid "Confirmation for new account"
 msgstr "नए खाते के लिए पुष्टि"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "प्लेटफ़ॉर्म तक पहुँचने के लिए आपको ईमेल के माध्यम से अपना खाता पुष्टि करने की आवश्यकता है"
 
 msgid "Enable Cloud files link addition"
 msgstr "क्लाउड फ़ाइल लिंक जोड़ना सक्षम करें"
@@ -27543,7 +27540,7 @@ msgstr "मंच उपयोग शर्तें"
 msgid "Password too easy to guess"
 msgstr "पासवर्ड अनुमान लगाने में बहुत आसान"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "मंच तक पहुँचने के लिए आपको ईमेल के माध्यम से अपना खाता पुष्टि करने की आवश्यकता है"
 
 msgid "Redirect to portal home"

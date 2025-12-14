@@ -22143,14 +22143,11 @@ msgstr "Ukuqinisekiswa kobhaliso"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "I-akhawunti yakho ayisebenzi kuba awukayiqinisekisanga. Jonga i-imeyile yakho kwaye ulandele imiyalelo okanye cofa kuwo olu khonkco lulandelayo ukuze uthumele i-imeyile kwakhona"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Ukugqibezela ubhaliso lwakho lwe-platform kufuneka uqinisekise i-akhawunti yakho ngokucofa kuwo olu khonkco lulandelayo"
 
 msgid "Confirmation for new account"
 msgstr "Ukuqinisekiswa kwe-akhawunti entsha"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Kufuneka uqinisekise i-akhawunti yakho nge-imeyile ukuze ufikelele kwi-platform"
 
 msgid "Enable Cloud files link addition"
 msgstr "Vula ukugezwa kwekhonkco leefayile zeLifu"
@@ -27543,7 +27540,7 @@ msgstr "Imiqathango yokusetyenziswa kweqonga"
 msgid "Password too easy to guess"
 msgstr "Igama eligqityiweyo licala elilula ukulivela"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Kufuneka uqinisekise i-akhawunti yakho nge-imeyile ukuze ufikelele eqongeni"
 
 msgid "Redirect to portal home"

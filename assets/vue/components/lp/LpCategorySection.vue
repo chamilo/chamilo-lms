@@ -127,6 +127,7 @@ const toggleOpen = () => {
             :aria-label="t('Drag to reorder')"
             :title="t('Drag to reorder')"
             class="w-8 h-8 grid place-content-center rounded-lg text-gray-50 hover:bg-gray-15 hover:text-gray-90"
+            type="button"
           >
             <svg
               aria-hidden
@@ -177,7 +178,6 @@ const toggleOpen = () => {
 
         <h2 class="text-body-1 font-semibold text-gray-90">
           <span>{{ displayTitle }}</span>
-          <!-- Display the star if it's a session category; remove the check on category.type -->
           <span
             v-if="isSessionCategory"
             class="ml-2 text-warning"
@@ -253,6 +253,7 @@ const toggleOpen = () => {
           :aria-expanded="isOpen ? 'true' : 'false'"
           :title="t('Expand') / t('Collapse')"
           class="w-8 h-8 grid place-content-center rounded-lg border border-gray-25 hover:bg-gray-15 transition"
+          type="button"
           @click="toggleOpen"
         >
           <svg

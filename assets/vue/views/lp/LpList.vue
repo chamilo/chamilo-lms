@@ -125,50 +125,50 @@
           @end="onEndUncat"
           @start="draggingUncat = true"
         >
-          <LpRowItem
-            v-for="(element, elIdx) in uncatList"
-            :key="elIdx"
-            :buildDates="buildDates"
-            :canAutoLaunch="canAutoLaunch"
-            :canEdit="canEdit"
-            :canExportPdf="canExportPdf"
-            :canExportScorm="canExportScorm"
-            :lp="element"
-            :ringDash="ringDash"
-            :ringValue="ringValue"
-            @build="onBuild"
-            @delete="onDelete"
-            @edit="goEdit"
-            @open="openLegacy"
-            @report="onReport"
-            @settings="onSettings"
-            @toggle-auto-launch="onToggleAutoLaunch"
-            @toggle-visible="onToggleVisible"
-            @toggle-publish="onTogglePublish"
-            @export-scorm="onExportScorm"
-            @export-pdf="onExportPdf"
-          />
+          <template #item="{ element }">
+            <LpRowItem
+              :buildDates="buildDates"
+              :canAutoLaunch="canAutoLaunch"
+              :canEdit="canEdit"
+              :canExportPdf="canExportPdf"
+              :canExportScorm="canExportScorm"
+              :lp="element"
+              :ringDash="ringDash"
+              :ringValue="ringValue"
+              @build="onBuild"
+              @delete="onDelete"
+              @edit="goEdit"
+              @open="openLegacy"
+              @report="onReport"
+              @settings="onSettings"
+              @toggle-auto-launch="onToggleAutoLaunch"
+              @toggle-visible="onToggleVisible"
+              @toggle-publish="onTogglePublish"
+              @export-scorm="onExportScorm"
+              @export-pdf="onExportPdf"
+            />
+          </template>
         </Draggable>
       </div>
       <LpCategorySection
-        v-for="[cat, list, isSession] in categorizedGroups"
-        :key="cat.iid || cat.title"
+        v-for="group in categorizedGroups"
+        :key="group?.[0]?.iid || group?.[0]?.title"
+        :category="group[0]"
+        :list="group[1]"
+        :isSessionCategory="group[2]"
         :buildDates="buildDates"
         :canAutoLaunch="canAutoLaunch"
         :canEdit="canEdit"
         :canExportPdf="canExportPdf"
         :canExportScorm="canExportScorm"
-        :category="cat"
-        :isSessionCategory="isSession"
-        :list="list"
         :ringDash="ringDash"
         :ringValue="ringValue"
-        :title="cat.title"
+        :title="group[0]?.title"
         @build="onBuild"
         @delete="onDelete"
         @edit="goEdit"
         @open="openLegacy"
-        @reorder="(ids) => onReorderCategory(cat, ids)"
+        @reorder="(ids) => onReorderCategory(group[0], ids)"
         @report="onReport"
         @settings="onSettings"
         @toggle-auto-launch="onToggleAutoLaunch"
@@ -391,10 +391,13 @@ const load = async () => {
 
     rawCanEdit.value = !!allowed
 
-    categories.value = await lpService.getLpCategories({
+    const catRes = await lpService.getLpCategories({
       cid: course.value?.id,
       sid: session.value?.id ?? 0,
     })
+
+    const cats = catRes?.["hydra:member"] ?? catRes ?? []
+    categories.value = Array.isArray(cats) ? cats : []
 
     const res = await lpService.getLearningPaths({
       "resourceNode.parent": node,
@@ -437,14 +440,18 @@ function hasSession(cat) {
 }
 
 const categorizedGroups = computed(() => {
+  const cats = Array.isArray(categories.value) ? categories.value : []
   const rows = []
 
-  for (const cat of categories.value) {
-    const list = catLists.value[cat.iid] ?? []
+  for (const cat of cats) {
+    if (!cat) continue
+
+    const list = catLists.value && cat.iid ? (catLists.value[cat.iid] ?? []) : []
+    const safeList = Array.isArray(list) ? list : []
     const isSessionCategory = hasSession(cat)
 
-    if (canEdit.value || list.length) {
-      rows.push([cat, list, isSessionCategory])
+    if (canEdit.value || safeList.length) {
+      rows.push([cat, safeList, isSessionCategory])
     }
   }
 
@@ -501,30 +508,29 @@ function applyOrderWithinContext(predicate, orderedIds) {
 }
 
 async function sendReorder(orderedIds, { categoryId } = {}) {
+  const payload = {
+    courseId: course.value?.id,
+    sessionId: session.value?.id,
+    sid: session.value?.id,
+    categoryId: categoryId ?? null,
+    ids: orderedIds,
+    order: orderedIds,
+  }
+
   if (lpService?.reorder) {
-    await lpService.reorder({
-      courseId: course.value?.id,
-      sessionId: session.value?.id,
-      categoryId: categoryId ?? null,
-      ids: orderedIds,
-    })
-  } else {
-    const resp = await fetch("/api/learning_paths/reorder", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        courseId: course.value?.id,
-        sid: session.value?.id,
-        categoryId: categoryId ?? null,
-        order: orderedIds,
-      }),
-    })
+    await lpService.reorder(payload)
+    return
+  }
 
-    if (!resp.ok) {
-      const txt = await resp.text().catch(() => "")
+  const resp = await fetch("/api/learning_paths/reorder", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  })
 
-      throw new Error(`Reorder failed: ${resp.status} ${txt}`)
-    }
+  if (!resp.ok) {
+    const txt = await resp.text().catch(() => "")
+    throw new Error(`Reorder failed: ${resp.status} ${txt}`)
   }
 }
 
@@ -617,9 +623,27 @@ const handleTopMenu = (action, ev) => {
       : action === "category"
         ? lpService.buildLegacyActionUrl("add_lp_category", { cid: courseId, sid: sidQ, node, gid, gradebook, origin })
         : action === "import"
-          ? `/main/upload/index.php?${new URLSearchParams({ cid: courseId, sid: sidQ, tool: "learnpath", curdirpath: "/", node, gid, gradebook, origin }).toString()}`
+          ? `/main/upload/index.php?${new URLSearchParams({
+              cid: courseId,
+              sid: sidQ,
+              tool: "learnpath",
+              curdirpath: "/",
+              node,
+              gid,
+              gradebook,
+              origin,
+            }).toString()}`
           : action === "rapid"
-            ? `/main/upload/upload_ppt.php?${new URLSearchParams({ cid: courseId, sid: sidQ, tool: "learnpath", curdirpath: "/", node, gid, gradebook, origin }).toString()}`
+            ? `/main/upload/upload_ppt.php?${new URLSearchParams({
+                cid: courseId,
+                sid: sidQ,
+                tool: "learnpath",
+                curdirpath: "/",
+                node,
+                gid,
+                gradebook,
+                origin,
+              }).toString()}`
             : action === "ai"
               ? lpService.buildLegacyActionUrl("ai_helper", { cid: courseId, sid: sidQ, node, gid, gradebook, origin })
               : null

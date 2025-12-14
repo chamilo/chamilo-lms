@@ -714,7 +714,7 @@ class Display
         // it checks if there is an SVG version. If so, it uses it.
         // When moving this to production, the return_icon() calls should
         // ask for the SVG version directly
-        $svgIcons = api_get_setting('icons_mode_svg');
+        $svgIcons = 'true';
         if ('true' == $svgIcons && false == $return_only_path) {
             $svgImage = substr($image, 0, -3).'svg';
             if (is_file($code_path.$theme.'svg/'.$svgImage)) {

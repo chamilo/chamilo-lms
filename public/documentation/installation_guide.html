@@ -41,6 +41,7 @@
       <li>zip</li>
       <li>zlib</li>
       <li>ldap</li>
+      <li>apcu (optional)</li>
       <li>redis (optional)</li>
       <li>xapian (optional)</li>
   </ul>
@@ -114,7 +115,7 @@
 <pre>
 sudo -s
 apt update && apt -y upgrade
-apt -y install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis-server php8.3-{bcmath,curl,exif,gd,iconv,intl,ldap,mbstring,mysql,opcache,soap,xml,zip,redis}
+apt -y install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis-server php8.3-{apcu,bcmath,curl,exif,gd,iconv,intl,ldap,mbstring,mysql,opcache,soap,xml,zip,redis}
 a2enmod rewrite
 cd /var/www/
 mkdir chamilo
@@ -515,7 +516,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
   This is probably not supported for Windows setups (untested), but it should work on Linux and macOS.<br>
   To install Xapian (a requirement to use the internal search engine), follow the instructions below.<br>
   <pre>
-      sudo apt install libxapian-dev catdoc html2text unrtf ghostscript poppler-utils
+      sudo apt install libxapian-dev catdoc html2text unrtf ghostscript poppler-utils build-essential
       cd /tmp
       wget https://oligarchy.co.uk/xapian/1.4.25/xapian-bindings-1.4.25.tar.xz
       # use 1.4.25 because this matches the version of the libxapian-dev package on Ubuntu 25.04
@@ -524,7 +525,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
       ./configure
       make install
       cd /etc/php/8.3/mods-available
-      cat "extension=xapian.so" &gt;&gt; xapian.ini
+      echo "extension=xapian.so" &gt;&gt; xapian.ini
       cd /etc/php/8.3/apache2/conf.d
       ln -s ../../mods-available/xapian.ini 26-xapian.ini
       systemctl restart apache2

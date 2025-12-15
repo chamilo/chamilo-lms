@@ -75,6 +75,21 @@ class TrackingStatsHelper
 
         return ['avg' => $avg, 'count' => $count];
     }
+    public function getCourseVisits(Course $course, ?Session $session = null): int
+    {
+        $conn = $this->em->getConnection();
+        $sql = 'SELECT COUNT(course_access_id) FROM track_e_course_access WHERE c_id = :cId';
+        $params = ['cId' => $course->getId()];
+        $types = ['cId' => ParameterType::INTEGER];
+
+        if ($session !== null) {
+            $sql .= ' AND session_id = :sessionId';
+            $params['sessionId'] = $session->getId();
+            $types['sessionId'] = ParameterType::INTEGER;
+        }
+        $count = $conn->fetchOne($sql, $params, $types);
+        return (int) $count;
+    }
 
     /**
      * Certificates of a user within a course/session.

@@ -3,17 +3,17 @@
     <template #header>
       <div class="relative aspect-[16/9] w-full overflow-hidden bg-gray-100">
         <img
-          :src="imageUrl"
           :alt="course.title || 'Course illustration'"
+          :src="imageUrl"
           class="absolute inset-0 h-full w-full object-cover"
           loading="lazy"
           referrerpolicy="no-referrer"
           @error="onImgError"
         />
         <button
-          @click.stop="toggleFavorite"
           :aria-label="isFavorite ? t('Unmark favorite') : t('Mark favorite')"
           class="absolute top-2 right-2 grid place-content-center w-10 h-10 rounded-full bg-white/80 backdrop-blur text-yellow-400 hover:text-yellow-500 shadow"
+          @click.stop="toggleFavorite"
         >
           <i :class="isFavorite ? 'pi pi-star-fill' : 'pi pi-star'" />
         </button>
@@ -22,7 +22,10 @@
 
     <template #title>
       <div class="course-card__title flex items-start gap-2">
-        <span class="font-semibold leading-snug line-clamp-2" :title="course.title">
+        <span
+          :title="course.title"
+          class="font-semibold leading-snug line-clamp-2"
+        >
           {{ course.title }}
         </span>
       </div>
@@ -108,4 +111,3 @@ watch(
   { immediate: true },
 )
 </script>
-

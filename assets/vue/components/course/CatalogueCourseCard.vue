@@ -6,20 +6,20 @@
       v-if="localCourse.categories?.length"
       class="absolute top-2 left-2 flex flex-wrap gap-1 z-30"
     >
-     <span
-       v-for="cat in localCourse.categories"
-       :key="cat.id"
-       class="bg-support-5 text-white text-xs font-bold px-2 py-0.5 rounded"
-     >
-       {{ cat.title }}
-     </span>
+      <span
+        v-for="cat in localCourse.categories"
+        :key="cat.id"
+        class="bg-support-5 text-white text-xs font-bold px-2 py-0.5 rounded"
+      >
+        {{ cat.title }}
+      </span>
     </div>
     <span
       v-if="localCourse.courseLanguage"
       class="absolute top-0 right-0 bg-support-4 text-white text-xs px-2 py-0.5 font-semibold rounded-bl-lg z-20"
     >
-     {{ getOriginalLanguageName(localCourse.courseLanguage) }}
-   </span>
+      {{ getOriginalLanguageName(localCourse.courseLanguage) }}
+    </span>
 
     <Button
       v-if="allowDescription && showInfoPopup"
@@ -89,14 +89,13 @@
         {{ localCourse.teachers.map((t) => t.user.fullName).join(", ") }}
       </div>
       <div class="my-1 flex items-baseline gap-2">
-      <span
-       v-if="displayRatingAvg !== null"
-      class="text-sm font-normal leading-none"
-      aria-hidden="true"
-      >
-    {{ formattedRatingAvg }}
-     </span>
-
+        <span
+          v-if="displayRatingAvg !== null"
+          class="text-sm font-normal leading-none"
+          aria-hidden="true"
+        >
+          {{ formattedRatingAvg }}
+        </span>
 
         <Rating
           v-if="props.currentUserId"
@@ -116,9 +115,9 @@
         |
         {{ localCourse.nbVisits || 0 }} Visite<span v-if="localCourse.nbVisits !== 1">s</span>
         <span v-if="localVote">
-         |
-         {{ $t("Your vote") }} [{{ localVote }}]
-       </span>
+          |
+          {{ $t("Your vote") }} [{{ localVote }}]
+        </span>
       </div>
 
       <div
@@ -191,7 +190,12 @@
     :requirements="requirementList"
     :graph-image="graphImage"
   />
-  <Dialog v-model:visible="showDescriptionDialog" :header="localCourse.title" modal class="w-96">
+  <Dialog
+    v-model:visible="showDescriptionDialog"
+    :header="localCourse.title"
+    modal
+    class="w-96"
+  >
     <p class="text-sm text-gray-700 whitespace-pre-line">
       {{ localCourse.description || $t("No description available") }}
     </p>
@@ -235,7 +239,6 @@ const showDescriptionDialog = ref(false)
 const showDependenciesModal = ref(false)
 const ratingResetKey = ref(0)
 
-
 // local copy for display / optimistic updates
 const localCourse = ref(JSON.parse(JSON.stringify(props.course || {})))
 // local reference for the vote
@@ -244,10 +247,7 @@ const localVote = ref(props.course?.userVote?.vote || 0)
 localCourse.value.ratingAvg = Number(localCourse.value.ratingAvg ?? 0)
 // initialize rating count from props if available
 localCourse.value.ratingCount = Number(
-  localCourse.value.ratingCount ??
-  props.course?.count ??
-  props.course?.ratingCount ??
-  0
+  localCourse.value.ratingCount ?? props.course?.count ?? props.course?.ratingCount ?? 0,
 )
 
 // --- fetch rating ---
@@ -255,10 +255,10 @@ localCourse.value.ratingCount = Number(
 const fetchRating = async () => {
   if (!localCourse.value?.id) return
   try {
-    const sessionQuery = localCourse.value?.sessionId ? `?session=${localCourse.value.sessionId}` : ''
+    const sessionQuery = localCourse.value?.sessionId ? `?session=${localCourse.value.sessionId}` : ""
     const res = await fetch(`/catalogue/api/courses/${localCourse.value.id}/rating${sessionQuery}`, {
-      headers: { Accept: 'application/json' },
-      credentials: 'same-origin',
+      headers: { Accept: "application/json" },
+      credentials: "same-origin",
     })
     if (!res.ok) return
     const data = await res.json()
@@ -267,7 +267,7 @@ const fetchRating = async () => {
     // get count if provided by API
     localCourse.value.ratingCount = Number(data.count ?? data.countVotes ?? localCourse.value.ratingCount ?? 0)
   } catch (e) {
-    console.error('fetchRating error', e)
+    console.error("fetchRating error", e)
   }
 }
 
@@ -282,14 +282,10 @@ watch(
   (newVote, oldVote) => {
     if (newVote === oldVote) return
 
-
     // fallback sur la valeur locale stockée puis sur props (toujours numérique).
-    const prevVote = Number(
-      oldVote ?? localCourse.value.userVote?.vote ?? props.course?.userVote?.vote ?? 0
-    )
+    const prevVote = Number(oldVote ?? localCourse.value.userVote?.vote ?? props.course?.userVote?.vote ?? 0)
 
-
-    if ((localCourse.value.popularity === undefined) && props.course?.popularity !== undefined) {
+    if (localCourse.value.popularity === undefined && props.course?.popularity !== undefined) {
       localCourse.value.popularity = props.course.popularity
     }
 
@@ -299,30 +295,27 @@ watch(
     let newCount = oldCount
     let newAvg = oldAvg
 
-
     if (prevVote === 0 && newVote > 0) {
       // new vote added
       newCount = oldCount + 1
-      newAvg = newCount > 0 ? ((oldAvg * oldCount + newVote) / newCount) : newVote
+      newAvg = newCount > 0 ? (oldAvg * oldCount + newVote) / newCount : newVote
     } else if (prevVote > 0 && newVote === 0) {
       // vote removed
       newCount = Math.max(oldCount - 1, 0)
       if (newCount === 0) {
         newAvg = 0
       } else {
-        newAvg = ((oldAvg * oldCount - prevVote) / newCount)
+        newAvg = (oldAvg * oldCount - prevVote) / newCount
       }
     } else if (prevVote > 0 && newVote > 0) {
       // vote changed
       newCount = oldCount
-      newAvg = newCount > 0 ? ((oldAvg * oldCount - prevVote + newVote) / newCount) : newVote
+      newAvg = newCount > 0 ? (oldAvg * oldCount - prevVote + newVote) / newCount : newVote
     }
-
 
     // round like backend (2 decimals)
     localCourse.value.ratingAvg = Number((isFinite(newAvg) ? newAvg : 0).toFixed(2))
     localCourse.value.ratingCount = Math.max(0, Math.round(newCount))
-
 
     if (prevVote === 0 && newVote > 0) {
       localCourse.value.popularity = (localCourse.value.popularity || 0) + 1
@@ -348,16 +341,16 @@ localCourse.value.nbVisits = Number(localCourse.value.nbVisits ?? 0)
 const fetchVisits = async () => {
   if (!localCourse.value?.id) return
   try {
-    const sessionQuery = localCourse.value?.sessionId ? `?session=${localCourse.value.sessionId}` : ''
+    const sessionQuery = localCourse.value?.sessionId ? `?session=${localCourse.value.sessionId}` : ""
     const res = await fetch(`/catalogue/api/courses/${localCourse.value.id}/visits${sessionQuery}`, {
-      headers: { 'Accept': 'application/json' },
-      credentials: 'same-origin',
+      headers: { Accept: "application/json" },
+      credentials: "same-origin",
     })
     if (!res.ok) return
     const data = await res.json()
     localCourse.value.nbVisits = Number(data.visits ?? 0)
   } catch (e) {
-    console.error('fetchVisits error', e)
+    console.error("fetchVisits error", e)
   }
 }
 
@@ -373,16 +366,15 @@ const durationInHours = computed(() => {
   return localCourse.value.durationExtra ? `${duration.toFixed(2)}+ h` : `${duration.toFixed(2)} h`
 })
 
-
 // the display computed to prioritize the local value (optimistic/fetch)
 const displayRatingAvg = computed(() => {
   return Number(
     localCourse.value?.ratingAvg ??
-    props.course?.average ??
-    props.course?.avg ??
-    props.course?.avgRating ??
-    localCourse.value?.avg ??
-    0
+      props.course?.average ??
+      props.course?.avg ??
+      props.course?.avgRating ??
+      localCourse.value?.avg ??
+      0,
   )
 })
 
@@ -413,8 +405,7 @@ const subscribeToCourse = async () => {
   try {
     subscribing.value = true
 
-    const useAutoSession =
-      platformConfigStore.getSetting("catalog.course_subscription_in_user_s_session") === "true"
+    const useAutoSession = platformConfigStore.getSetting("catalog.course_subscription_in_user_s_session") === "true"
 
     let sessionId = null
 

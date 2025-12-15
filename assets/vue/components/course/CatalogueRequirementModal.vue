@@ -1,9 +1,9 @@
 <template>
   <Dialog
     v-model:visible="visible"
-    modal
     :header="t('Session requirements and dependencies')"
     class="w-[30rem] z-[99999] !block !opacity-100"
+    modal
   >
     <div v-if="hasData">
       <div
@@ -22,9 +22,7 @@
           >
             <i
               v-if="req.status !== null"
-              :class="req.status
-            ? 'mdi mdi-check-circle text-green-500'
-            : 'mdi mdi-alert-circle text-red-500'"
+              :class="req.status ? 'mdi mdi-check-circle text-green-500' : 'mdi mdi-alert-circle text-red-500'"
             ></i>
             <span v-html="req.adminLink || req.name"></span>
           </li>

@@ -540,14 +540,18 @@ class CourseRestorer
                 $rel = preg_replace('#^/document/#i', '/', $rel, 1);
             }
 
-            // Flatten "/certificates/{portal}/{course}/..." → "/..."
-            if (preg_match('#^/certificates/[^/]+/[^/]+(?:/(.*))?$#i', $rel, $m)) {
-                $rest = $m[1] ?? '';
-                return $rest === '' ? '/' : '/'.ltrim($rest, '/');
-            }
-            // Fallback: strip generic "certificates/" container if it still shows up
-            if (preg_match('#^/certificates/(.*)$#i', $rel, $m)) {
-                return '/'.ltrim($m[1], '/');
+            // Only flatten certificates in COPY mode (legacy copy flow).
+            // In IMPORT mode (ZIP/package), keep the folder structure intact.
+            if ($copyMode) {
+                // Flatten "/certificates/{portal}/{course}/..." → "/..."
+                if (preg_match('#^/certificates/[^/]+/[^/]+(?:/(.*))?$#i', $rel, $m)) {
+                    $rest = $m[1] ?? '';
+                    return $rest === '' ? '/' : '/'.ltrim($rest, '/');
+                }
+                // Fallback: strip generic "certificates/" container if it still shows up
+                if (preg_match('#^/certificates/(.*)$#i', $rel, $m)) {
+                    return '/'.ltrim($m[1], '/');
+                }
             }
 
             // Flatten "/{host}/{course}/..." → "/..." only in COPY mode
@@ -715,7 +719,23 @@ class CourseRestorer
                 }
 
                 $parentResource = $parentId ? $docRepo->find($parentId) : $courseEntity;
-                $title          = ($i === \count($parts) - 1) ? ($item->title ?: $seg) : $seg;
+                // Use the path segment as the canonical folder title to avoid duplicates like
+                // "certificates" vs "Certificats" (same folder, different localized title).
+                $title = $seg;
+
+                if ($i === \count($parts) - 1 && !empty($item->title)) {
+                    $itemTitle = (string) $item->title;
+
+                    // Keep the original title only if it matches the segment (case-insensitive).
+                    if (0 === strcasecmp($itemTitle, $seg)) {
+                        $title = $itemTitle;
+                    } else {
+                        $DBG('folder.title.normalized', [
+                            'seg' => $seg,
+                            'item_title' => $itemTitle,
+                        ]);
+                    }
+                }
 
                 $existing = $docRepo->findCourseResourceByTitle(
                     $title,
@@ -761,6 +781,8 @@ class CourseRestorer
         // GLOBAL PRE-SCAN: build URL maps for HTML dependencies (only in import-from-package mode)
         $urlMapByRel  = [];
         $urlMapByBase = [];
+        $iidMapByRel  = [];
+        $iidMapByBase = [];
 
         foreach ($this->course->resources[RESOURCE_DOCUMENT] as $k => $item) {
             if (DOCUMENT !== $item->file_type || $copyMode) {
@@ -817,8 +839,38 @@ class CourseRestorer
                     $urlMapByBase[$kBase] = $vUrl;
                 }
             }
+            foreach (($maps['iidByRel'] ?? []) as $kRel => $iid) {
+                if (!isset($iidMapByRel[$kRel])) {
+                    $iidMapByRel[$kRel] = (int) $iid;
+                }
+            }
+            foreach (($maps['iidByBase'] ?? []) as $kBase => $iid) {
+                if (!isset($iidMapByBase[$kBase])) {
+                    $iidMapByBase[$kBase] = (int) $iid;
+                }
+            }
         }
         $DBG('global.map.stats', ['byRel' => \count($urlMapByRel), 'byBase' => \count($urlMapByBase)]);
+
+        // Mark already-created dependency assets to avoid importing them twice (and getting "_1" duplicates).
+        foreach ($this->course->resources[RESOURCE_DOCUMENT] as $k => $item) {
+            if ($copyMode || DOCUMENT !== $item->file_type) {
+                continue;
+            }
+
+            $keyRel = (string) ($item->path ?? '');
+            if ($keyRel !== '' && isset($iidMapByRel[$keyRel])) {
+                $this->course->resources[RESOURCE_DOCUMENT][$k]->destination_id = (int) $iidMapByRel[$keyRel];
+                continue;
+            }
+
+            $base = $keyRel !== '' ? basename($keyRel) : '';
+            if ($base !== '' && isset($iidMapByBase[$base])) {
+                $this->course->resources[RESOURCE_DOCUMENT][$k]->destination_id = (int) $iidMapByBase[$base];
+            }
+        }
+
+        $DBG('global.iid.stats', ['byRel' => \count($iidMapByRel), 'byBase' => \count($iidMapByBase)]);
 
         // Import files from backup (rewrite HTML BEFORE creating the Document)
         foreach ($this->course->resources[RESOURCE_DOCUMENT] as $k => $item) {
@@ -1033,7 +1085,6 @@ class CourseRestorer
             $title = (string) ($obj->cat_title ?? $obj->title ?? "Forum category #$id");
             $comment = (string) ($obj->cat_comment ?? $obj->description ?? '');
 
-            // Reescritura/creación de dependencias en contenido HTML (document/*) vía helper
             $comment = $this->rewriteHtmlForCourse($comment, (int) $session_id, '[forums.cat]');
 
             $existing = $catRepo->findOneBy(['title' => $title, 'resourceNode.parent' => $course->getResourceNode()]);

@@ -130,15 +130,13 @@ class ChamiloHelper
             }
 
             $originalLogoPath = $themeDir.'images/header-logo.png';
-            if ('true' === $svgIcons) {
-                $originalLogoPathSVG = $themeDir.'images/header-logo.svg';
-                if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPathSVG)) {
-                    if ($getSysPath) {
-                        return api_get_path(SYS_CSS_PATH).$originalLogoPathSVG;
-                    }
-
-                    return api_get_path(WEB_CSS_PATH).$originalLogoPathSVG;
+            $originalLogoPathSVG = $themeDir.'images/header-logo.svg';
+            if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPathSVG)) {
+                if ($getSysPath) {
+                    return api_get_path(SYS_CSS_PATH).$originalLogoPathSVG;
                 }
+
+                return api_get_path(WEB_CSS_PATH).$originalLogoPathSVG;
             }
 
             if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPath)) {
@@ -860,11 +858,13 @@ class ChamiloHelper
     ): array {
         $byRel = [];
         $byBase = [];
+        $iidByRel = [];
+        $iidByBase = [];
 
         $DBG = $dbg ?: static function ($m, $c = []): void { /* no-op */ };
 
         // src|href pointing to …/courses/<dir>/document/... (host optional)
-        $depRegex = '/(?P<attr>src|href)\s*=\s*["\'](?P<full>(?:(?P<scheme>https?:)?\/\/[^"\']+)?(?P<path>\/courses\/[^\/]+\/document\/[^"\']+\.[a-z0-9]{1,8}))["\']/i';
+        $depRegex = '/(?P<attr>src|href)\s*=\s*["\'](?P<full>(?:(?P<scheme>https?:)?\/\/[^"\']+)?(?P<path>\/(?:app\/)?courses\/[^\/]+\/document\/[^"\']+\.[a-z0-9]{1,8}))["\']/i';
 
         if (!preg_match_all($depRegex, $html, $mm) || empty($mm['full'])) {
             return ['byRel' => $byRel, 'byBase' => $byBase];
@@ -873,14 +873,19 @@ class ChamiloHelper
         // Normalize a full URL to a "document/..." relative path inside the package
         $toRel = static function (string $full) use ($courseDir): string {
             $urlPath = parse_url(html_entity_decode($full, ENT_QUOTES | ENT_HTML5), PHP_URL_PATH) ?: $full;
-            $urlPath = preg_replace('#^/courses/([^/]+)/#i', '/courses/'.$courseDir.'/', $urlPath);
-            $rel = preg_replace('#^/courses/'.preg_quote($courseDir, '#').'/#i', '', $urlPath) ?: $urlPath;
+            $urlPath = preg_replace('#^/(?:app/)?courses/([^/]+)/#i', '/courses/'.$courseDir.'/', $urlPath);
+            $rel = preg_replace('#^/(?:app/)?courses/'.preg_quote($courseDir, '#').'/#i', '', $urlPath) ?: $urlPath;
 
             return ltrim($rel, '/'); // "document/..."
         };
 
         foreach ($mm['full'] as $fullUrl) {
             $rel = $toRel($fullUrl); // e.g. "document/img.png"
+            // Do not auto-create HTML files here (they are handled by the main import loop).
+            $ext = strtolower(pathinfo($rel, PATHINFO_EXTENSION));
+            if (in_array($ext, ['html', 'htm'], true)) {
+                continue;
+            }
             if (!str_starts_with($rel, 'document/')) {
                 continue;
             }   // STRICT: only /document/*
@@ -933,6 +938,10 @@ class ChamiloHelper
                         if ($url) {
                             $byRel[$rel] = $url;
                             $byBase[$basename] = $byBase[$basename] ?: $url;
+
+                            $iidByRel[$rel] = (int) $existsIid;
+                            $iidByBase[$basename] = $iidByBase[$basename] ?? (int) $existsIid;
+
                             $DBG('helper.dep.reuse', ['rel' => $rel, 'iid' => $existsIid, 'url' => $url]);
                         }
                     }
@@ -971,6 +980,8 @@ class ChamiloHelper
                 );
                 $iid = method_exists($entity, 'getIid') ? $entity->getIid() : 0;
                 $url = $docRepo->getResourceFileUrl($entity);
+                $iidByRel[$rel] = (int) $iid;
+                $iidByBase[$basename] = $iidByBase[$basename] ?? (int) $iid;
 
                 $DBG('helper.dep.created', ['rel' => $rel, 'iid' => $iid, 'url' => $url]);
 
@@ -985,7 +996,12 @@ class ChamiloHelper
 
         $byBase = array_filter($byBase);
 
-        return ['byRel' => $byRel, 'byBase' => $byBase];
+        return [
+            'byRel' => $byRel,
+            'byBase' => $byBase,
+            'iidByRel' => $iidByRel,
+            'iidByBase' => $iidByBase,
+        ];
     }
 
     /**
@@ -1004,7 +1020,7 @@ class ChamiloHelper
         $replaced = 0;
         $misses = 0;
 
-        $pattern = '/(?P<attr>src|href)\s*=\s*["\'](?P<full>(?:(?P<scheme>https?:)?\/\/[^"\']+)?(?P<path>\/courses\/(?P<dir>[^\/]+)\/document\/[^"\']+\.[a-z0-9]{1,8}))["\']/i';
+        $pattern = '/(?P<attr>src|href)\s*=\s*["\'](?P<full>(?:(?P<scheme>https?:)?\/\/[^"\']+)?(?P<path>\/(?:app\/)?courses\/(?P<dir>[^\/]+)\/document\/[^"\']+\.[a-z0-9]{1,8}))["\']/i';
 
         $html = preg_replace_callback($pattern, function ($m) use ($courseDir, $urlMapByRel, $urlMapByBase, &$replaced, &$misses) {
             $attr = $m['attr'];
@@ -1015,11 +1031,19 @@ class ChamiloHelper
             // Normalize to current course directory
             $effectivePath = $path;
             if (0 !== strcasecmp($matchDir, $courseDir)) {
-                $effectivePath = preg_replace('#^/courses/'.preg_quote($matchDir, '#').'/#i', '/courses/'.$courseDir.'/', $path) ?: $path;
+                $effectivePath = preg_replace(
+                    '#^/(?:app/)?courses/'.preg_quote($matchDir, '#').'/#i',
+                    '/courses/'.$courseDir.'/',
+                    $path
+                ) ?: $path;
             }
 
-            // "document/...."
-            $relInPackage = preg_replace('#^/courses/'.preg_quote($courseDir, '#').'/#i', '', $effectivePath) ?: $effectivePath;
+            $relInPackage = preg_replace(
+                '#^/(?:app/)?courses/'.preg_quote($courseDir, '#').'/#i',
+                '',
+                $effectivePath
+            ) ?: $effectivePath;
+
             $relInPackage = ltrim($relInPackage, '/'); // document/...
 
             // 1) exact rel match

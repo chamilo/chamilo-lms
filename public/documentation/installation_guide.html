@@ -516,7 +516,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
   This is probably not supported for Windows setups (untested), but it should work on Linux and macOS.<br>
   To install Xapian (a requirement to use the internal search engine), follow the instructions below.<br>
   <pre>
-      sudo apt install libxapian-dev catdoc html2text unrtf ghostscript poppler-utils build-essential
+      sudo apt install libxapian-dev catdoc html2text unrtf ghostscript poppler-utils build-essential php-dev
       cd /tmp
       wget https://oligarchy.co.uk/xapian/1.4.25/xapian-bindings-1.4.25.tar.xz
       # use 1.4.25 because this matches the version of the libxapian-dev package on Ubuntu 25.04

@@ -19,9 +19,9 @@ use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CoreBundle\Repository\UserRelCourseVoteRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Helpers\TrackingStatsHelper;
-use Chamilo\CoreBundle\Helpers\UserRelCourseVoteHelper;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use ExtraField;
@@ -42,7 +42,7 @@ class CatalogueController extends AbstractController
         private readonly CourseRepository $courseRepository,
         private readonly TrackingStatsHelper $trackingStatsHelper,
         private readonly SessionRepository $sessionRepository,
-        private readonly UserRelCourseVoteHelper $userRelCourseVoteHelper
+        private readonly UserRelCourseVoteRepository $courseVoteRepository,
     ) {}
 
     #[Route('/api/courses/{id}/rating', name: 'api_course_rating', methods: ['GET'])]
@@ -50,12 +50,9 @@ class CatalogueController extends AbstractController
     {
         $sessionId = $request->query->getInt('session', 0);
         $session = $sessionId > 0 ? $this->sessionRepository->find($sessionId) : null;
-        $res = $this->userRelCourseVoteHelper->getCourseRating($course, $session);
+        $rating = $this->courseVoteRepository->getCouseRating($course, $session);
 
-        return $this->json([
-            'average' => $res['avg'],
-            'count' => $res['count'],
-        ]);
+        return $this->json($rating);
     }
     #[Route('/api/courses/{id}/visits', name: 'api_course_visits', methods: ['GET'])]
     public function courseVisits(Course $course, Request $request): JsonResponse

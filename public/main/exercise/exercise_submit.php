@@ -42,20 +42,42 @@ $origin = api_get_origin();
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
-$glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
+$glossaryExtraTools = api_get_setting('glossary.show_glossary_in_extra_tools');
 $allowTimePerQuestion = ('true' === api_get_setting('exercise.allow_time_per_question'));
 if ($allowTimePerQuestion) {
     $htmlHeadXtra[] = api_get_asset('easytimer/easytimer.min.js');
 }
 
 $showPreviousButton = true;
-$showGlossary = in_array($glossaryExtraTools, ['true', 'exercise', 'exercise_and_lp']);
-if ('learnpath' === $origin) {
-    $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
+$showGlossary = false;
+
+switch ($glossaryExtraTools) {
+    case 'exercise':
+        // Only show in standalone exercises, not when launched from LP
+        $showGlossary = ('learnpath' !== $origin);
+        break;
+
+    case 'lp':
+        // Only show when the exercise is launched from a learning path
+        $showGlossary = ('learnpath' === $origin);
+        break;
+
+    case 'exercise_and_lp':
+    case 'true':
+        // Show in both standalone exercises and LP context
+        $showGlossary = true;
+        break;
+
+    default:
+        $showGlossary = false;
+        break;
 }
 if ($showGlossary) {
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?add_ready=1&'.api_get_cidreq().'"></script>';
-    $htmlHeadXtra[] = api_get_js('jquery.highlight.js');
+    $htmlHeadXtra[] = api_get_glossary_auto_snippet(
+        api_get_course_int_id(),
+        api_get_session_id(),
+        null
+    );
 }
 $htmlHeadXtra[] = api_get_build_js('legacy_exercise.js');
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
@@ -409,11 +431,11 @@ if (empty($exercise_stat_info)) {
 
         $clock_expired_time = api_get_utc_datetime($expected_time, false, true);
         if ($debug) {
-            error_log('5.3. $expected_time '.$clock_expired_time);
+            error_log('5.3. $expected_time '.$clock_expired_time->format('Y-m-d H:i:s'));
         }
 
         //Sessions  that contain the expired time
-        $_SESSION['expired_time'][$current_expired_time_key] = $clock_expired_time;
+        $_SESSION['expired_time'][$current_expired_time_key] = $clock_expired_time->format('Y-m-d H:i:s');
         if ($debug) {
             error_log(
                 '5.4. Setting the $_SESSION[expired_time]: '.$_SESSION['expired_time'][$current_expired_time_key]
@@ -567,10 +589,19 @@ if ($time_control) {
     if ($debug) {
         error_log('7.1. Time control is enabled');
         error_log('7.2. $current_expired_time_key  '.$current_expired_time_key);
-        error_log(
-            '7.3. $_SESSION[expired_time][$current_expired_time_key] '.
-            $_SESSION['expired_time'][$current_expired_time_key]
-        );
+        if (isset($_SESSION['expired_time'])) {
+            if ($_SESSION['expired_time'][$current_expired_time_key] instanceof DateTimeInterface) {
+                error_log(
+                    '7.3. $_SESSION[expired_time][$current_expired_time_key] '.
+                    $_SESSION['expired_time'][$current_expired_time_key]->format('Y-m-d H:i:s')
+                );
+            } else {
+                error_log(
+                    '7.3. $_SESSION[expired_time][$current_expired_time_key] '.
+                    $_SESSION['expired_time'][$current_expired_time_key]
+                );
+            }
+        }
     }
 
     if (!isset($_SESSION['expired_time'][$current_expired_time_key])) {
@@ -626,7 +657,11 @@ if ($time_control) {
             }
         }
     } else {
-        $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key]->format('Y-m-d H:i:s');
+        if ($_SESSION['expired_time'][$current_expired_time_key] instanceof DateTimeInterface) {
+            $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key]->format('Y-m-d H:i:s');
+        } else {
+            $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key];
+        }
     }
 }
 
@@ -2092,7 +2127,7 @@ foreach ($questionList as $questionId) {
             ['class' => 'exercise_save_now_button mb-4']
         );
     }
-    echo Display::div($exerciseActions, ['class' => 'form-actions']);
+    echo Display::div($exerciseActions, ['class' => 'exercise_actions']);
     echo '</div>';
 
     $i++;
@@ -2113,7 +2148,7 @@ if ($prevParent !== null) {
 if (ALL_ON_ONE_PAGE == $objExercise->type || $forceGrouped) {
     //$currentPageIds = implode(',', $pages[$page - 1]);
     $currentPageIds = implode(',', $questionList);
-    echo '<div class="form-actions exercise-pagination mb-4">';
+    echo '<div class="exercise_actions exercise-pagination mb-4">';
     if ($page > 1) {
         $prevUrl = api_get_self() . '?' . api_get_cidreq()
             . "&exerciseId=$exerciseId&page=" . ($page - 1)

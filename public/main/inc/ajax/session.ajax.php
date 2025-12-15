@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Responses to AJAX calls.
@@ -183,8 +184,7 @@ switch ($action) {
             'items' => [],
         ];
 
-        $usersRepo = UserManager::getRepository();
-        $users = $usersRepo->findByRole('ROLE_TEACHER', $_GET['q'], api_get_current_access_url_id());
+        $users = Container::getUserRepository()->findByRole('ROLE_TEACHER', $_GET['q'], api_get_current_access_url_id());
         /** @var User $user */
         foreach ($users as $user) {
             $list['items'][] = [

@@ -687,11 +687,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Hide logout button',
                     'comment' => 'Hide the logout button. This is usually only interesting when using an external login/logout method, for example when using Single Sign On of some sort.',
                 ],
-                [
-                    'name' => 'icons_mode_svg',
-                    'title' => 'SVG icons mode',
-                    'comment' => 'By enabling this option, all icons that have an SVG version will prefer the SVG format to PNG. This will give a much better icons quality but some icons might still have some rendering size issue, and some browsers might not support it.',
-                ],
             ],
             'language' => [
                 [
@@ -765,11 +760,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'permissions_for_new_files',
                     'title' => 'Permissions for new files',
                     'comment' => 'The ability to define the permissions settings to assign to every newly-created file lets you improve security against attacks by hackers uploading dangerous content to your portal. The default setting (0550) should be enough to give your server a reasonable protection level. The given format uses the UNIX terminology of Owner-Group-Others with Read-Write-Execute permissions. If you use Oogie, take care that the user who launch LibreOffice can write files in the course folder.',
-                ],
-                [
-                    'name' => 'show_glossary_in_documents',
-                    'title' => 'Show glossary terms in documents',
-                    'comment' => 'From here you can configure how to add links to the glossary terms from the documents',
                 ],
                 [
                     'name' => 'upload_extensions_blacklist',

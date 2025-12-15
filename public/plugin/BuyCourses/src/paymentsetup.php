@@ -46,7 +46,7 @@ if ($globalSettingForm->validate()) {
     $globalSettingFormValues = $globalSettingForm->getSubmitValues();
 
     try {
-        $plugin->saveCurrency($globalSettingFormValues['currency']);
+        $plugin->saveCurrency((int) $globalSettingFormValues['currency']);
 
         unset($globalSettingFormValues['currency']);
         $plugin->saveGlobalParameters($globalSettingFormValues);

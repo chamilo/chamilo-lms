@@ -14,21 +14,22 @@ $toolTable = Database::get_course_table(TABLE_TOOL_LIST);
 $quizTable = Database::get_course_table(TABLE_QUIZ_TEST);
 
 $this_section = SECTION_TRACKING;
-$is_allowedToTrack = api_is_course_admin() || api_is_platform_admin(true) || api_is_session_general_coach();
+
+$is_allowedToTrack =
+    api_is_course_admin() ||
+    api_is_platform_admin(true) ||
+    api_is_session_general_coach();
 
 if (!$is_allowedToTrack) {
     api_not_allowed(true);
 }
 
-$exportToXLS = false;
-if (isset($_GET['export'])) {
-    $exportToXLS = true;
-}
-
+$exportToXLS = isset($_GET['export']);
 $courseInfo = api_get_course_info();
 
 $global = false;
 if (api_is_platform_admin() && empty($_GET['cidReq'])) {
+    // Global reporting: all courses.
     $global = true;
 }
 
@@ -39,6 +40,7 @@ if ($global) {
         $courseList[] = api_get_course_entity($tempCourse['real_id']);
     }
 } else {
+    // Course context: current course only.
     $courseList = [api_get_course_entity()];
 }
 
@@ -50,6 +52,9 @@ if (empty($sessionId)) {
     $sessionCondition = api_get_session_condition($sessionId, true, true);
 }
 
+// -----------------------------------------------------------------------------
+// Filter form
+// -----------------------------------------------------------------------------
 $form = new FormValidator(
     'search_simple',
     'POST',
@@ -58,26 +63,41 @@ $form = new FormValidator(
     null,
     false
 );
-$form->addElement('number', 'score', get_lang('Percentage'));
+
+// Percentage filter – use a narrow input, since the value is between 0 and 100.
+$form->addElement(
+    'number',
+    'score',
+    get_lang('Percentage'),
+    [
+        'min' => 0,
+        'max' => 100,
+        'step' => 1,
+        'style' => 'max-width: 6rem;',
+    ]
+);
+
 if ($global) {
     $form->addElement('hidden', 'view', 'admin');
 } else {
-    // Get exam lists
+    // Course context – add optional test selector.
     $courseId = api_get_course_int_id();
 
-    $sql = "SELECT quiz.title, iid FROM $quizTable AS quiz
+    $sql = "SELECT quiz.title, iid
+            FROM $quizTable AS quiz
             WHERE
                 c_id = $courseId AND
                 active = 1
                 $sessionCondition
             ORDER BY quiz.title ASC";
     $result = Database::query($sql);
-    // Only show select bar if there is more than one test
+
     if (Database::num_rows($result) > 0) {
         $exerciseList = [get_lang('All')];
         while ($row = Database::fetch_array($result)) {
-            $exerciseList[$row['id']] = $row['title'];
+            $exerciseList[$row['iid']] = $row['title'];
         }
+
         $form->addSelect('exercise_id', get_lang('Test'), $exerciseList);
     }
 }
@@ -89,68 +109,22 @@ $form->addButton(
     'primary',
     null,
     null,
-    ['style' => 'margin-top: 5px; margin-left: 15px;']
+    [
+        'style' => 'margin-top: 15px;',
+    ]
 );
 
-$filter_score = isset($_REQUEST['score']) ? intval($_REQUEST['score']) : 70;
-$exerciseId = isset($_REQUEST['exercise_id']) ? intval($_REQUEST['exercise_id']) : 0;
+$filter_score = isset($_REQUEST['score']) ? (int) $_REQUEST['score'] : 70;
+$exerciseId = isset($_REQUEST['exercise_id']) ? (int) $_REQUEST['exercise_id'] : 0;
 
 $form->setDefaults(['score' => $filter_score]);
 
-if (!$exportToXLS) {
-    Display:: display_header(get_lang('Reporting'));
-    $actionsLeft = $actionsRight = '';
-    if ($global) {
-        $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php">'.
-            Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('View my progress'));
-        $actionsLeft .= '</a>';
-
-        $actionsRight .= '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exerciseId.'">'.
-            Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Excel export')).'</a>';
-        $actionsRight .= '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
-            Display::getMdiIcon(ActionIcon::PRINT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Print')).'</a>';
-
-        $menuItems[] = Display::url(
-            Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Trainer View')),
-            api_get_path(WEB_CODE_PATH).'my_space/index.php?view=teacher'
-        );
-        if (api_is_platform_admin()) {
-            $menuItems[] = Display::url(
-                Display::getMdiIcon(ObjectIcon::STAR, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Admin view')),
-                api_get_path(WEB_CODE_PATH).'my_space/admin_view.php'
-            );
-        } else {
-            $menuItems[] = Display::url(
-                Display::getMdiIcon(ObjectIcon::STAR, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Coach interface')),
-                api_get_path(WEB_CODE_PATH).'my_space/index.php?view=coach'
-            );
-        }
-        $menuItems[] = '<a href="#">'.Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Exam tracking')).'</a>';
-
-        $nb_menu_items = count($menuItems);
-        if ($nb_menu_items > 1) {
-            foreach ($menuItems as $key => $item) {
-                $actionsLeft .= $item;
-            }
-        }
-        $actionsLeft = TrackingCourseLog::actionsLeft('exams', $sessionId, false);
-    } else {
-        $actionsLeft = TrackingCourseLog::actionsLeft('exams', api_get_session_id(), false);
-        $actionsRight .= Display::url(
-            Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Excel export')),
-            api_get_self().'?'.api_get_cidreq().'&export=1&score='.$filter_score.'&exercise_id='.$exerciseId
-        );
-    }
-
-    $toolbar = Display::toolbarAction('toolbar-exams', [$actionsLeft, $actionsRight]);
-    echo $toolbar;
-
-    $form->display();
-    echo '<h3>'.sprintf(get_lang('Filtering with score %s'), $filter_score).'%</h3>';
-}
-
+// -----------------------------------------------------------------------------
+// Build main HTML table and export array
+// -----------------------------------------------------------------------------
 $html = '<div class="table-responsive">';
-$html .= '<table  class="table table-hover table-striped data_table">';
+$html .= '<table class="table table-hover table-striped data_table">';
+
 if ($global) {
     $html .= '<tr>';
     $html .= '<th>'.get_lang('Courses').'</th>';
@@ -166,109 +140,58 @@ if ($global) {
     $html .= '<th>'.get_lang('Tests').'</th>';
     $html .= '<th>'.get_lang('User').'</th>';
     $html .= '<th>'.get_lang('Username').'</th>';
-    //$html .= '<th>'.sprintf(get_lang('Pass minimum %s'), $filter_score).'</th>';
     $html .= '<th>'.get_lang('Percentage').' %</th>';
     $html .= '<th>'.get_lang('Status').'</th>';
     $html .= '<th>'.get_lang('Attempts').'</th>';
     $html .= '</tr>';
 }
 
-$export_array_global = $export_array = [];
-$s_css_class = null;
+$export_array_global = [];
 
 if (!empty($courseList)) {
     $quizRepo = Container::getQuizRepository();
+
+    /** @var Course $course */
     foreach ($courseList as $course) {
         $courseId = $course->getId();
-        $sessionList = SessionManager::get_session_by_course($courseId);
+        $courseInfo = api_get_course_info_by_id($courseId);
 
+        if (empty($courseInfo)) {
+            continue;
+        }
+
+        $sessionList = SessionManager::get_session_by_course($courseId);
         $newSessionList = [];
+
         if (!empty($sessionList)) {
             foreach ($sessionList as $session) {
                 $newSessionList[$session['id']] = $session['title'];
             }
         }
 
-        if ($global) {
-            $qb = $quizRepo->getResourcesByCourse($course);
-            $qb->select('count(resource)');
-
-            $exerciseCount = $qb->getQuery()->getSingleScalarResult();
-
-            /*$sql = "SELECT count(iid) as count
-                    FROM $quizTable AS quiz
-                    WHERE c_id = $courseId AND  active = 1 AND (session_id = 0 OR session_id IS NULL)";
-            $result = Database::query($sql);
-            $countExercises = Database::store_result($result);
-            $exerciseCount = $countExercises[0]['count'];*/
-
-            $qb = $quizRepo->getResourcesByCourse($course);
-            $qb->select('count(resource)');
-            $qb->andWhere('links.session IS NOT NULL');
-
-            $exerciseSessionCount = $qb->getQuery()->getSingleScalarResult();
-
-            /*$sql = "SELECT count(iid) as count
-                    FROM $quizTable AS quiz
-                    WHERE c_id = $courseId AND active = 1 AND session_id <> 0";
-            $result = Database::query($sql);
-            $countExercises = Database::store_result($result);
-            $exerciseSessionCount = $countExercises[0]['count'];*/
-
-            $exerciseCount = $exerciseCount + $exerciseCount * count($newSessionList) + $exerciseSessionCount;
-
-            // Add course and session list.
-            if (0 == $exerciseCount) {
-                $exerciseCount = 2;
-            }
-            $html .= "<tr>
-                        <td rowspan=$exerciseCount>";
-            $html .= $course->getTitle();
-            $html .= "</td>";
-        }
-
+        // Check quiz tool visibility in this course.
         $sql = "SELECT visibility FROM $toolTable
                 WHERE c_id = $courseId AND title = 'quiz'";
         $result = Database::query($sql);
+        $toolVisible = (Database::num_rows($result) > 0)
+            ? (int) Database::result($result, 0, 'visibility')
+            : 0;
 
-        // If main tool is visible.
-        if (1 == Database::result($result, 0, 'visibility')) {
-            $exercises = [];
-            // Getting the exam list.
+        if (1 === $toolVisible) {
+            // Fetch exams depending on context.
             if ($global) {
                 $qb = $quizRepo->getResourcesByCourse($course);
                 $exercises = $qb->getQuery()->getResult();
-            /*$sql = "SELECT quiz.title, iid, session_id
-                    FROM $quizTable AS quiz
-                    WHERE c_id = $courseId AND active = 1
-                    ORDER BY session_id, quiz.title ASC";*/
             } else {
-                //$sessionCondition = api_get_session_condition($sessionId, true, false);
                 if (!empty($exerciseId)) {
                     $exercises = [];
-                    $exercises[] = $quizRepo->find($exerciseId);
-                /*
-                $sql = "SELECT quiz.title, iid, session_id
-                        FROM $quizTable AS quiz
-                        WHERE
-                            c_id = $courseId AND
-                            active = 1 AND
-                            id = $exerciseId
-                            $sessionCondition
-                        ORDER BY session_id, quiz.title ASC";
-                */
+                    $found = $quizRepo->find($exerciseId);
+                    if ($found instanceof CQuiz) {
+                        $exercises[] = $found;
+                    }
                 } else {
                     $qb = $quizRepo->getResourcesByCourse($course, api_get_session_entity());
                     $exercises = $qb->getQuery()->getResult();
-                    /*
-                    $sql = "SELECT quiz.title, iid, session_id
-                            FROM $quizTable AS quiz
-                            WHERE
-                                c_id = $courseId AND
-                                active = 1
-                                $sessionCondition
-                            ORDER BY session_id, quiz.title ASC";
-                    */
                 }
             }
 
@@ -285,14 +208,12 @@ if (!empty($courseList)) {
                         }
                     }
 
-                    //$exerciseSessionId = $exercise['session_id'];
-
+                    // Base-course exam replicated across sessions.
                     if (empty($exerciseSessionId)) {
                         if ($global) {
-                            // If the exercise was created in the base course.
-                            // Load all sessions.
+                            // Per session.
                             foreach ($newSessionList as $currentSessionId => $sessionName) {
-                                $result = processStudentList(
+                                $resultRow = processStudentList(
                                     $filter_score,
                                     $global,
                                     $exercise,
@@ -301,15 +222,15 @@ if (!empty($courseList)) {
                                     $newSessionList
                                 );
 
-                                $html .= $result['html'];
+                                $html .= $resultRow['html'];
                                 $export_array_global = array_merge(
                                     $export_array_global,
-                                    $result['export_array_global']
+                                    $resultRow['export_array_global']
                                 );
                             }
 
-                            // Load base course.
-                            $result = processStudentList(
+                            // Base course (no session).
+                            $resultRow = processStudentList(
                                 $filter_score,
                                 $global,
                                 $exercise,
@@ -317,12 +238,16 @@ if (!empty($courseList)) {
                                 0,
                                 $newSessionList
                             );
-                            $html .= $result['html'];
-                            $export_array_global = array_merge($export_array_global, $result['export_array_global']);
+
+                            $html .= $resultRow['html'];
+                            $export_array_global = array_merge(
+                                $export_array_global,
+                                $resultRow['export_array_global']
+                            );
                         } else {
+                            // Course context (teacher view).
                             if (empty($sessionId)) {
-                                // Load base course.
-                                $result = processStudentList(
+                                $resultRow = processStudentList(
                                     $filter_score,
                                     $global,
                                     $exercise,
@@ -330,16 +255,8 @@ if (!empty($courseList)) {
                                     0,
                                     $newSessionList
                                 );
-
-                                $html .= $result['html'];
-                                if (is_array($result['export_array_global'])) {
-                                    $export_array_global = array_merge(
-                                        $export_array_global,
-                                        $result['export_array_global']
-                                    );
-                                }
                             } else {
-                                $result = processStudentList(
+                                $resultRow = processStudentList(
                                     $filter_score,
                                     $global,
                                     $exercise,
@@ -347,17 +264,20 @@ if (!empty($courseList)) {
                                     $sessionId,
                                     $newSessionList
                                 );
+                            }
 
-                                $html .= $result['html'];
+                            $html .= $resultRow['html'];
+
+                            if (is_array($resultRow['export_array_global'])) {
                                 $export_array_global = array_merge(
                                     $export_array_global,
-                                    $result['export_array_global']
+                                    $resultRow['export_array_global']
                                 );
                             }
                         }
                     } else {
-                        // If the exercise only exists in this session.
-                        $result = processStudentList(
+                        // Exam exists only inside a specific session.
+                        $resultRow = processStudentList(
                             $filter_score,
                             $global,
                             $exercise,
@@ -366,28 +286,42 @@ if (!empty($courseList)) {
                             $newSessionList
                         );
 
-                        $html .= $result['html'];
+                        $html .= $resultRow['html'];
                         $export_array_global = array_merge(
                             $export_array_global,
-                            $result['export_array_global']
+                            $resultRow['export_array_global']
                         );
                     }
                 }
             } else {
-                $html .= "<tr>
-                            <td colspan='6'>
-                                ".get_lang('There is no test for the moment')."
-                            </td>
-                        </tr>
-                     ";
+                // No exams in this course.
+                if ($global) {
+                    $html .= '<tr>';
+                    $html .= '<td>'.Security::remove_XSS($course->getTitle()).'</td>';
+                    $html .= '<td colspan="6">'.get_lang('There is no test for the moment').'</td>';
+                    $html .= '</tr>';
+                } else {
+                    $html .= '<tr>
+                                <td colspan="6">'.
+                        get_lang('There is no test for the moment').
+                        '</td>
+                              </tr>';
+                }
             }
         } else {
-            $html .= "<tr>
-                        <td colspan='6'>
-                            ".get_lang('There is no test for the moment')."
-                        </td>
-                    </tr>
-                 ";
+            // Quiz tool is not visible in this course.
+            if ($global) {
+                $html .= '<tr>';
+                $html .= '<td>'.Security::remove_XSS($course->getTitle()).'</td>';
+                $html .= '<td colspan="6">'.get_lang('There is no test for the moment').'</td>';
+                $html .= '</tr>';
+            } else {
+                $html .= '<tr>
+                            <td colspan="6">'.
+                    get_lang('There is no test for the moment').
+                    '</td>
+                          </tr>';
+            }
         }
     }
 }
@@ -395,19 +329,98 @@ if (!empty($courseList)) {
 $html .= '</table>';
 $html .= '</div>';
 
-if (!$exportToXLS) {
-    echo $html;
-}
-
+// -----------------------------------------------------------------------------
+// Export handling
+// -----------------------------------------------------------------------------
 $filename = 'exam-reporting-'.api_get_local_time().'.xlsx';
 
 if ($exportToXLS) {
     export_complete_report_xls($filename, $export_array_global);
+
     exit;
 }
+
+// -----------------------------------------------------------------------------
+// Page rendering (normal HTML view)
+// -----------------------------------------------------------------------------
+Display::display_header(get_lang('Reporting'));
+
+// Top-level My Space menu (main navigation for reporting).
+$primaryMenu = Display::mySpaceMenu('exams');
+
+// Secondary navigation: exam-specific menu (icons row).
+$sessionForToolbar = $global ? 0 : api_get_session_id();
+$examMenu = TrackingCourseLog::actionsLeft('exams', $sessionForToolbar, $global);
+
+// Right side: export + print.
+$queryBase = api_get_self().'?';
+if (!$global) {
+    $queryBase .= api_get_cidreq().'&';
+}
+
+$exportUrl = $queryBase.'export=1&score='.$filter_score.'&exercise_id='.$exerciseId;
+
+$actionsRight = Display::url(
+    Display::getMdiIcon(
+        ActionIcon::EXPORT_SPREADSHEET,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_MEDIUM,
+        get_lang('Excel export')
+    ),
+    $exportUrl
+);
+$actionsRight .= Display::url(
+    Display::getMdiIcon(
+        ActionIcon::PRINT,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_MEDIUM,
+        get_lang('Print')
+    ),
+    'javascript: void(0);',
+    ['onclick' => 'javascript: window.print();']
+);
+
+// Toolbar with exam local menu on the left and actions on the right.
+$toolbar = Display::toolbarAction('toolbar-exams', [$examMenu, $actionsRight]);
+
+// Main layout wrapper.
+echo '<div class="w-full px-4 md:px-8 pb-8 space-y-4">';
+
+// Row 1: primary My Space menu.
+echo '  <div class="flex flex-wrap gap-2">';
+echo        $primaryMenu;
+echo '  </div>';
+
+// Row 2: exam toolbar (local icons + export/print).
+echo '  <div class="flex flex-wrap gap-2">';
+echo        $toolbar;
+echo '  </div>';
+
+// Filter card.
+echo '  <section class="bg-white rounded-xl shadow-sm border border-gray-50">';
+echo '      <div class="p-4 md:p-5">';
+$form->display();
+echo '          <p class="mt-3 font-semibold">'.
+    sprintf(get_lang('Filtering with score %s'), $filter_score).'%</p>';
+echo '      </div>';
+echo '  </section>';
+
+// Results table card.
+echo '  <section class="bg-white rounded-xl shadow-sm border border-gray-50 overflow-x-auto">';
+echo        $html;
+echo '  </section>';
+
+echo '</div>';
+
+Display::display_footer();
+
 /**
- * @param $a
- * @param $b
+ * Compare two users by score (used when sorting student results).
+ *
+ * @param array $a
+ * @param array $b
  *
  * @return int
  */
@@ -425,6 +438,8 @@ function sort_user($a, $b)
 }
 
 /**
+ * Export complete report to XLS.
+ *
  * @param string $filename
  * @param array  $array
  */
@@ -433,7 +448,9 @@ function export_complete_report_xls($filename, $array)
     global $global, $filter_score;
 
     $list = [];
+
     if ($global) {
+        $headers = [];
         $headers[] = get_lang('Courses');
         $headers[] = get_lang('Tests');
         $headers[] = get_lang('Taken');
@@ -443,6 +460,7 @@ function export_complete_report_xls($filename, $array)
         $headers[] = get_lang('Total learners');
 
         $list[] = $headers;
+
         foreach ($array as $row) {
             $listItem = [];
             foreach ($row as $item) {
@@ -451,6 +469,7 @@ function export_complete_report_xls($filename, $array)
             $list[] = $listItem;
         }
     } else {
+        $headers = [];
         $headers[] = get_lang('Tests');
         $headers[] = get_lang('User');
         $headers[] = get_lang('Username');
@@ -467,10 +486,9 @@ function export_complete_report_xls($filename, $array)
             foreach ($row['users'] as $key => $user) {
                 $listItem[] = html_entity_decode(strip_tags($user));
                 $listItem[] = $row['usernames'][$key];
-                foreach ($row['results'][$key] as $result_item) {
-                    $listItem[] = html_entity_decode(strip_tags($result_item));
+                foreach ($row['results'][$key] as $resultItem) {
+                    $listItem[] = html_entity_decode(strip_tags($resultItem));
                 }
-                $line++;
             }
 
             $list[] = $listItem;
@@ -480,18 +498,26 @@ function export_complete_report_xls($filename, $array)
     Export::arrayToXls($list, $filename);
 }
 
-function processStudentList($filter_score, $global, Cquiz $exercise, $courseInfo, $sessionId, $newSessionList)
-{
-    /*if ((isset($exercise['id']) && empty($exercise['id'])) ||
-        !isset($exercise['id'])
-    ) {
-        return [
-            'html' => '',
-            'export_array_global' => [],
-            'total_students' => 0,
-        ];
-    }*/
-
+/**
+ * Process exam statistics for a given exam and session.
+ *
+ * @param int   $filter_score
+ * @param bool  $global
+ * @param CQuiz $exercise
+ * @param array $courseInfo
+ * @param int   $sessionId
+ * @param array $newSessionList
+ *
+ * @return array{html:string, export_array_global:array, total_students:int}
+ */
+function processStudentList(
+    $filter_score,
+    $global,
+    Cquiz $exercise,
+    $courseInfo,
+    $sessionId,
+    $newSessionList
+) {
     $exerciseStatsTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
     $courseId = $courseInfo['real_id'];
 
@@ -515,34 +541,45 @@ function processStudentList($filter_score, $global, Cquiz $exercise, $courseInfo
         );
     }
 
-    $html = null;
+    $html = '';
     $totalStudents = count($students);
 
-    if (!$global) {
-        $html .= "<tr>";
-    }
-
-    if (!$global) {
-        $html .= '<td rowspan="'.$totalStudents.'">';
-    } else {
+    if ($global) {
+        // One row per course + exam (+ session).
+        $html .= '<tr>';
+        $html .= '<td>'.Security::remove_XSS($courseInfo['title']).'</td>';
         $html .= '<td>';
+
+        $html .= Security::remove_XSS($exercise->getTitle());
+
+        if (!empty($sessionId)) {
+            $sessionName = $newSessionList[$sessionId] ?? null;
+            if (!empty($sessionName)) {
+                $html .= ' '.Display::getMdiIcon(
+                        ObjectIcon::STAR,
+                        'ch-tool-icon',
+                        null,
+                        ICON_SIZE_SMALL,
+                        get_lang('Session')
+                    ).' ('.$sessionName.')';
+            }
+        }
+
+        $html .= '</td>';
+    } else {
+        // Course context: first column is the exam title with rowspan.
+        $html .= '<tr>';
+        $html .= '<td rowspan="'.$totalStudents.'">';
+        $html .= Security::remove_XSS($exercise->getTitle());
+        $html .= '</td>';
     }
-
-    $html .= $exercise->getTitle();
-
-    if ($global && !empty($sessionId)) {
-        $sessionName = isset($newSessionList[$sessionId]) ? $newSessionList[$sessionId] : null;
-        $html .= Display::getMdiIcon(ObjectIcon::STAR, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Session')).' ('.$sessionName.')';
-    }
-
-    $html .= '</td>';
 
     $globalRow = [
         $courseInfo['title'],
         $exercise->getTitle(),
     ];
 
-    $total_with_parameter_score = 0;
+    $totalWithParameterScore = 0;
     $taken = 0;
     $export_array_global = [];
     $studentResult = [];
@@ -550,17 +587,17 @@ function processStudentList($filter_score, $global, Cquiz $exercise, $courseInfo
 
     $exerciseId = $exercise->getIid();
     $sessionCondition = api_get_session_condition($sessionId);
+
     foreach ($students as $student) {
-        $studentId = isset($student['user_id']) ? $student['user_id'] : $student['id_user'];
-        $studentId = (int) $studentId;
-        $sql = "SELECT COUNT(exe_id) as count
+        $studentId = isset($student['user_id']) ? (int) $student['user_id'] : (int) $student['id_user'];
+
+        $sql = "SELECT COUNT(exe_id) AS count
                 FROM $exerciseStatsTable
                 WHERE
                     c_id = $courseId AND
                     exe_exo_id = $exerciseId AND
-                    exe_user_id= $studentId
-                    $sessionCondition
-                ";
+                    exe_user_id = $studentId
+                    $sessionCondition";
         $result = Database::query($sql);
         $attempts = Database::fetch_array($result);
 
@@ -569,22 +606,25 @@ function processStudentList($filter_score, $global, Cquiz $exercise, $courseInfo
                 WHERE
                     exe_user_id = $studentId AND
                     c_id = $courseId AND
-                    exe_exo_id = ".$exerciseId." AND
+                    exe_exo_id = $exerciseId AND
                     session_id = $sessionId
                 ORDER BY score DESC
                 LIMIT 1";
         $result = Database::query($sql);
+
         $score = 0;
         $weighting = 0;
+
         while ($scoreInfo = Database::fetch_array($result)) {
-            $score = $score + $scoreInfo['score'];
-            $weighting = $weighting + $scoreInfo['max_score'];
+            $score += $scoreInfo['score'];
+            $weighting += $scoreInfo['max_score'];
         }
 
         $percentageScore = 0;
 
-        if (0 != $weighting) {
-            $percentageScore = round(($score * 100) / $weighting);
+        // Protect against zero or "0" weighting values.
+        if (!empty($weighting) && (float) $weighting !== 0.0) {
+            $percentageScore = round(($score * 100) / (float) $weighting);
         }
 
         if ($attempts['count'] > 0) {
@@ -592,7 +632,7 @@ function processStudentList($filter_score, $global, Cquiz $exercise, $courseInfo
         }
 
         if ($percentageScore >= $filter_score) {
-            $total_with_parameter_score++;
+            $totalWithParameterScore++;
         }
 
         $tempArray = [];
@@ -600,49 +640,37 @@ function processStudentList($filter_score, $global, Cquiz $exercise, $courseInfo
         if (!$global) {
             $userInfo = api_get_user_info($studentId);
 
-            // User
-            $userRow = '<td>';
-            $userRow .= $userInfo['complete_name'];
-            $userRow .= '</td>';
+            $userRow = '<td>'.$userInfo['complete_name'].'</td>';
             $userRow .= '<td>'.$userInfo['username'].'</td>';
 
-            // Best result.
             if (!empty($attempts['count'])) {
-                $userRow .= '<td>';
-                $userRow .= $percentageScore;
+                $userRow .= '<td>'.$percentageScore.'</td>';
                 $tempArray[] = $percentageScore;
-                $userRow .= '</td>';
 
                 if ($percentageScore >= $filter_score) {
                     $userRow .= '<td style="background-color:#DFFFA8">';
                     $userRow .= get_lang('Pass').'</td>';
                     $tempArray[] = get_lang('Pass');
                 } else {
-                    $userRow .= '<td style="background-color:#FC9A9E"  >';
+                    $userRow .= '<td style="background-color:#FC9A9E">';
                     $userRow .= get_lang('Fail').'</td>';
                     $tempArray[] = get_lang('Fail');
                 }
 
-                $userRow .= '<td>';
-                $userRow .= $attempts['count'];
+                $userRow .= '<td>'.$attempts['count'].'</td>';
                 $tempArray[] = $attempts['count'];
-                $userRow .= '</td>';
             } else {
-                $score = '-';
-                $userRow .= '<td>';
-                $userRow .= '-';
+                $userRow .= '<td>-</td>';
                 $tempArray[] = '-';
-                $userRow .= '</td>';
 
                 $userRow .= '<td style="background-color:#FCE89A">';
-                $userRow .= get_lang('No attempts');
+                $userRow .= get_lang('No attempts').'</td>';
                 $tempArray[] = get_lang('No attempts');
-                $userRow .= '</td>';
-                $userRow .= '<td>';
-                $userRow .= 0;
+
+                $userRow .= '<td>0</td>';
                 $tempArray[] = 0;
-                $userRow .= '</td>';
             }
+
             $userRow .= '</tr>';
 
             $studentResult[$studentId] = [
@@ -659,16 +687,18 @@ function processStudentList($filter_score, $global, Cquiz $exercise, $courseInfo
 
     if (!$global) {
         if (!empty($studentResult)) {
-            $studentResultEmpty = $studentResultContent = [];
+            $studentResultEmpty = [];
+            $studentResultContent = [];
+
             foreach ($studentResult as $row) {
-                if ('-' == $row['score']) {
+                if ('-' === $row['score']) {
                     $studentResultEmpty[] = $row;
                 } else {
                     $studentResultContent[] = $row;
                 }
             }
 
-            // Sort only users with content
+            // Sort only users with an actual score.
             usort($studentResultContent, 'sort_user');
             $studentResult = array_merge($studentResultContent, $studentResultEmpty);
 
@@ -678,46 +708,37 @@ function processStudentList($filter_score, $global, Cquiz $exercise, $courseInfo
                 $row_not_global['users'][] = $row['user'];
                 $row_not_global['usernames'][] = $row['username'];
             }
+
             $export_array[] = $row_not_global;
         }
     }
 
     if ($global) {
-        // Exam taken
-        $html .= '<td>';
-        $html .= $taken;
+        // Exam taken.
+        $html .= '<td>'.$taken.'</td>';
         $globalRow[] = $taken;
-        $html .= '</td>';
 
-        // Exam NOT taken
-        $html .= '<td>';
-        $html .= $not_taken = $totalStudents - $taken;
-        $globalRow[] = $not_taken;
-        $html .= '</td>';
+        // Exam not taken.
+        $notTaken = $totalStudents - $taken;
+        $html .= '<td>'.$notTaken.'</td>';
+        $globalRow[] = $notTaken;
 
-        // Exam pass
-        if (!empty($total_with_parameter_score)) {
-            $html .= '<td style="background-color:#DFFFA8" >';
+        // Exam passed (>= filter score).
+        if (!empty($totalWithParameterScore)) {
+            $html .= '<td style="background-color:#DFFFA8">'.$totalWithParameterScore.'</td>';
         } else {
-            $html .= '<td style="background-color:#FCE89A"  >';
+            $html .= '<td style="background-color:#FCE89A">'.$totalWithParameterScore.'</td>';
         }
+        $globalRow[] = $totalWithParameterScore;
 
-        $html .= $total_with_parameter_score;
-        $globalRow[] = $total_with_parameter_score;
-        $html .= '</td>';
-
-        // Exam fail
-        $html .= '<td>';
-
-        $html .= $fail = $taken - $total_with_parameter_score;
+        // Exam failed.
+        $fail = $taken - $totalWithParameterScore;
+        $html .= '<td>'.$fail.'</td>';
         $globalRow[] = $fail;
-        $html .= '</td>';
 
-        $html .= '<td>';
-        $html .= $totalStudents;
+        // Total learners.
+        $html .= '<td>'.$totalStudents.'</td>';
         $globalRow[] = $totalStudents;
-
-        $html .= '</td>';
 
         $html .= '</tr>';
         $export_array_global[] = $globalRow;
@@ -729,5 +750,3 @@ function processStudentList($filter_score, $global, Cquiz $exercise, $courseInfo
         'total_students' => $totalStudents,
     ];
 }
-
-Display:: display_footer();

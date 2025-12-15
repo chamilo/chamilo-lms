@@ -1,5 +1,6 @@
 <template>
   <form>
+    <!-- Title -->
     <BaseInputTextWithVuelidate
       id="item_title"
       v-model.trim="item.title"
@@ -7,6 +8,7 @@
       :vuelidate-property="v$.item.title"
     />
 
+    <!-- Content editor -->
     <BaseTinyEditor
       v-if="
         (item.resourceNode && item.resourceNode.firstResourceFile && item.resourceNode.firstResourceFile.text) ||
@@ -18,9 +20,28 @@
       required
     />
 
-    <!-- For extra content-->
+    <!-- Advanced options: search / indexing -->
+    <BaseAdvancedSettingsButton
+      v-if="searchEnabled"
+      v-model="showAdvancedSettings"
+    >
+      <div class="flex flex-row mb-2">
+        <label class="font-semibold w-40">
+          {{ $t('Options') }}:
+        </label>
+        <BaseCheckbox
+          id="indexDocumentContent"
+          v-model="item.indexDocumentContent"
+          :label="$t('Index document content?')"
+          name="indexDocumentContent"
+        />
+      </div>
+    </BaseAdvancedSettingsButton>
+
+    <!-- For extra content -->
     <slot></slot>
 
+    <!-- Submit -->
     <BaseButton
       type="primary"
       icon="save"
@@ -39,10 +60,18 @@ import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVueli
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 import { useI18n } from "vue-i18n"
 import BaseButton from "../basecomponents/BaseButton.vue"
+import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
+import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 
 export default {
   name: "DocumentsForm",
-  components: { BaseButton, BaseTinyEditor, BaseInputTextWithVuelidate },
+  components: {
+    BaseButton,
+    BaseTinyEditor,
+    BaseInputTextWithVuelidate,
+    BaseAdvancedSettingsButton,
+    BaseCheckbox,
+  },
   props: {
     values: {
       type: Object,
@@ -50,11 +79,16 @@ export default {
     },
     errors: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
     initialValues: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
+    },
+    // Indicates if full-text search is enabled at platform level
+    searchEnabled: {
+      type: Boolean,
+      default: false,
     },
   },
   setup() {
@@ -74,18 +108,18 @@ export default {
       contentFile: this.initialValues ? this.initialValues.contentFile : "",
       parentResourceNodeId: null,
       resourceNode: null,
+      showAdvancedSettings: false,
     }
   },
   computed: {
     item() {
-      return this.initialValues || this.values
+      // Prefer initialValues when present (edit mode), otherwise use values (create mode)
+      return this.initialValues && Object.keys(this.initialValues).length > 0
+        ? this.initialValues
+        : this.values
     },
     titleErrors() {
       const errors = []
-
-      /*if (!this.$v.item.title.$dirty) return errors;
-            has(this.violations, 'title') && errors.push(this.violations.title);
-            !this.$v.item.title.required && errors.push(this.$t('Required field'));*/
 
       if (this.v$.item.title.required) {
         return this.$t("Required field")
@@ -99,12 +133,13 @@ export default {
   },
   watch: {
     contentFile(newContent) {
-      tinymce.get("item_content").setContent(newContent)
+      if (window.tinymce && tinymce.get("item_content")) {
+        tinymce.get("item_content").setContent(newContent)
+      }
     },
   },
   methods: {
     browser(callback, value, meta) {
-      //const route = useRoute();
       let nodeId = this.$route.params["node"]
       let folderParams = this.$route.query
       let url = this.$router.resolve({
@@ -113,7 +148,6 @@ export default {
         query: folderParams,
       })
       url = url.fullPath
-      console.log(url)
 
       if (meta.filetype === "image") {
         url = url + "&type=images"
@@ -121,46 +155,32 @@ export default {
         url = url + "&type=files"
       }
 
-      console.log(url)
-
       window.addEventListener("message", function (event) {
-        var data = event.data
+        const data = event.data
         if (data.url) {
-          url = data.url
-          console.log(meta) // {filetype: "image", fieldname: "src"}
-          callback(url)
+          const finalUrl = data.url
+          callback(finalUrl)
         }
       })
 
       tinymce.activeEditor.windowManager.openUrl(
         {
-          url: url, // use an absolute path!
+          url: url,
           title: "file manager",
-          /*width: 900,
-                  height: 450,
-                  resizable: 'yes'*/
         },
         {
           oninsert: function (file, fm) {
-            var url, info
+            let url = fm.convAbsUrl(file.url)
+            const info = file.name + " (" + fm.formatSize(file.size) + ")"
 
-            // URL normalization
-            url = fm.convAbsUrl(file.url)
-
-            // Make file info
-            info = file.name + " (" + fm.formatSize(file.size) + ")"
-
-            // Provide file and text for the link dialog
             if (meta.filetype === "file") {
               callback(url, { text: info, title: info })
             }
 
-            // Provide image and alt text for the image dialog
             if (meta.filetype === "image") {
               callback(url, { alt: info })
             }
 
-            // Provide alternative source and posted for the media dialog
             if (meta.filetype === "media") {
               callback(url)
             }
@@ -179,7 +199,7 @@ export default {
         required,
       },
       contentFile: {
-        //required,
+        // required,
       },
       parentResourceNodeId: {},
       resourceNode: {},

@@ -89,6 +89,7 @@
         :glossaries="glossaries"
         :is-loading="isLoading"
         :search-term="searchTerm"
+        :can-edit-glossary="canEditGlossary"
         @delete="confirmDeleteTerm($event)"
         @edit="editTerm($event)"
       />
@@ -96,6 +97,7 @@
         v-else
         :glossaries="glossaries"
         :search-term="searchTerm"
+        :can-edit-glossary="canEditGlossary"
         @delete="confirmDeleteTerm($event)"
         @edit="editTerm($event)"
       />

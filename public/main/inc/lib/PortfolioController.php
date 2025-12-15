@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\Portfolio;
@@ -10,6 +11,7 @@ use Chamilo\CoreBundle\Entity\PortfolioAttachment;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\PortfolioComment;
 use Chamilo\CoreBundle\Entity\PortfolioRelTag;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Event\Events;
@@ -37,9 +39,9 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
 class PortfolioController
 {
     public string $baseUrl;
-    private ?\Chamilo\CoreBundle\Entity\Course $course;
-    private ?\Chamilo\CoreBundle\Entity\Session $session;
-    private \Chamilo\CoreBundle\Entity\User $owner;
+    private ?Course $course;
+    private ?Session $session;
+    private User $owner;
     private \Doctrine\ORM\EntityManagerInterface $em;
     private bool $advancedSharingEnabled;
 
@@ -250,7 +252,7 @@ class PortfolioController
 
         $form = new FormValidator('add_category', 'post', "{$this->baseUrl}&action=add_category");
 
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
         } else {
             $form->addText('title', get_lang('Title'));
@@ -334,7 +336,7 @@ class PortfolioController
             $this->baseUrl."action=edit_category&id={$category->getId()}"
         );
 
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
         } else {
             $translateUrl = $this->baseUrl.'action=translate_category&id='.$category->getId();
@@ -455,16 +457,11 @@ class PortfolioController
 
         $this->blockIsNotAllowed();
 
-        $templates = $this->em
-            ->getRepository(Portfolio::class)
-            ->findBy(
-                [
-                    'isTemplate' => true,
-                    'course' => $this->course,
-                    'session' => $this->session,
-                    'user' => $this->owner,
-                ]
-            );
+        $templates = Container::getPortfolioRepository()->findTemplates(
+            $this->owner,
+            $this->course,
+            $this->session
+        );
 
         $form = new FormValidator('add_portfolio', 'post', $this->baseUrl.'action=add_item');
         $form->addSelectFromCollection(
@@ -481,7 +478,7 @@ class PortfolioController
             'getTitle'
         );
 
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
         } else {
             $form->addText('title', get_lang('Title'));
@@ -524,23 +521,18 @@ class PortfolioController
 
         if ($form->validate()) {
             $values = $form->exportValues();
-            $currentTime = new DateTime(
-                api_get_utc_datetime(),
-                new DateTimeZone('UTC')
-            );
 
             $portfolio = new Portfolio();
             $portfolio
                 ->setTitle($values['title'])
                 ->setContent($values['content'])
-                ->setUser($this->owner)
-                ->setCourse($this->course)
-                ->setSession($this->session)
+                ->setCreator($this->owner)
+                ->setParent($this->owner)
+                ->addCourseLink($this->course, $this->session)
                 ->setCategory(
                     $this->em->find(PortfolioCategory::class, $values['category'])
                 )
-                ->setCreationDate($currentTime)
-                ->setUpdateDate($currentTime);
+            ;
 
             $this->em->persist($portfolio);
             $this->em->flush();
@@ -552,9 +544,9 @@ class PortfolioController
 
             $this->processAttachments(
                 $form,
-                $portfolio->getUser(),
+                $this->owner,
                 $portfolio->getId(),
-                PortfolioAttachment::TYPE_ITEM
+                Portfolio::TYPE_ITEM
             );
 
             Container::getEventDispatcher()->dispatch(
@@ -564,7 +556,7 @@ class PortfolioController
 
             if (1 == api_get_course_setting('email_alert_teachers_new_post')) {
                 if ($this->session) {
-                    $messageCourseTitle = "{$this->course->getTitle()} ({$this->session->getName()})";
+                    $messageCourseTitle = "{$this->course->getTitle()} ({$this->session->getTitle()})";
 
                     $teachers = SessionManager::getCoachesByCourseSession(
                         $this->session->getId(),
@@ -709,7 +701,7 @@ class PortfolioController
 
         $form = new FormValidator('edit_portfolio', 'post', $this->baseUrl."action=edit_item&id={$item->getId()}");
 
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
         } else {
             $form->addText('title', get_lang('Title'));
@@ -828,7 +820,7 @@ class PortfolioController
                 $form,
                 $item->getUser(),
                 $item->getId(),
-                PortfolioAttachment::TYPE_ITEM
+                Portfolio::TYPE_ITEM
             );
 
             Display::addFlash(
@@ -956,7 +948,7 @@ class PortfolioController
     /**
      * @throws \Exception
      */
-    public function index(HttpRequest $httpRequest)
+    public function index(HttpRequest $httpRequest): void
     {
         $listByUser = false;
         $listHighlighted = $httpRequest->query->has('list_highlighted');
@@ -971,8 +963,6 @@ class PortfolioController
 
             $listByUser = true;
         }
-
-        $currentUserId = api_get_user_id();
 
         $actions = [];
 
@@ -989,7 +979,7 @@ class PortfolioController
                 Display::return_icon('waiting_list.png', get_lang('Portfolio details'), [], ICON_SIZE_MEDIUM),
                 $this->baseUrl.'action=details'
             );
-        } elseif ($currentUserId == $this->owner->getId()) {
+        } elseif (api_get_user_entity() === $this->owner) {
             if ($this->isAllowed()) {
                 $actions[] = Display::url(
                     Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
@@ -1046,7 +1036,7 @@ class PortfolioController
             $foundComments = $this->getCommentsForIndex($frmTagList);
         }
 
-        // it gets and translate the sub-categories
+        // it gets and translate the subcategories
         $categoryId = $httpRequest->query->getInt('categoryId');
         $subCategoryIdsReq = isset($_REQUEST['subCategoryIds']) ? Security::remove_XSS($_REQUEST['subCategoryIds']) : '';
         $subCategoryIds = $subCategoryIdsReq;
@@ -1574,7 +1564,7 @@ class PortfolioController
 
         $form = new FormValidator('teacher_copy_portfolio', 'post', $this->baseUrl.$actionParams);
 
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
         } else {
             $form->addText('title', get_lang('Title'));
@@ -1665,7 +1655,7 @@ class PortfolioController
 
         $form = new FormValidator('teacher_copy_portfolio', 'post', $this->baseUrl.$actionParams);
 
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
         } else {
             $form->addText('title', get_lang('Title'));
@@ -1846,7 +1836,7 @@ class PortfolioController
             $frmStudent->addButtonFilter(get_lang('Filter'));
         }
 
-        $itemsRepo = $this->em->getRepository(Portfolio::class);
+        $itemsRepo = Container::getPortfolioRepository();
         $commentsRepo = $this->em->getRepository(PortfolioComment::class);
 
         $getItemsTotalNumber = function () use ($itemsRepo, $isAllowedToFilterStudent, $currentUserId) {
@@ -2154,7 +2144,7 @@ class PortfolioController
             $pdfContent .= '<p>'.get_lang('Course').': ';
 
             if ($this->session) {
-                $pdfContent .= $this->session->getName().' ('.$this->course->getTitle().')';
+                $pdfContent .= $this->session->getTitle().' ('.$this->course->getTitle().')';
             } else {
                 $pdfContent .= $this->course->getTitle();
             }
@@ -2169,8 +2159,7 @@ class PortfolioController
             $visibility[] = Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER;
         }
 
-        $items = $this->em
-            ->getRepository(Portfolio::class)
+        $items = Container::getPortfolioRepository()
             ->findItemsByUser(
                 $this->owner,
                 $this->course,
@@ -2269,7 +2258,6 @@ class PortfolioController
             }
         }
 
-        $itemsRepo = $this->em->getRepository(Portfolio::class);
         $commentsRepo = $this->em->getRepository(PortfolioComment::class);
         $attachmentsRepo = $this->em->getRepository(PortfolioAttachment::class);
 
@@ -2280,7 +2268,7 @@ class PortfolioController
             $visibility[] = Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER;
         }
 
-        $items = $itemsRepo->findItemsByUser(
+        $items = Container::getPortfolioRepository()->findItemsByUser(
             $this->owner,
             $this->course,
             $this->session,
@@ -2383,7 +2371,7 @@ class PortfolioController
                 $item->getComments()->count(),
                 $item->getScore(),
                 $itemCourse->getTitle(),
-                $itemSession ? $itemSession->getName() : null,
+                $itemSession ? $itemSession->getTitle() : null,
             ];
         }
 
@@ -2645,11 +2633,11 @@ class PortfolioController
 
         $originOwnerId = 0;
 
-        if (PortfolioAttachment::TYPE_ITEM === $attachment->getOriginType()) {
+        if (Portfolio::TYPE_ITEM === $attachment->getOriginType()) {
             $item = $em->find(Portfolio::class, $attachment->getOrigin());
 
             $originOwnerId = $item->getUser()->getId();
-        } elseif (PortfolioAttachment::TYPE_COMMENT === $attachment->getOriginType()) {
+        } elseif (Portfolio::TYPE_COMMENT === $attachment->getOriginType()) {
             $comment = $em->find(PortfolioComment::class, $attachment->getOrigin());
 
             $originOwnerId = $comment->getAuthor()->getId();
@@ -2699,11 +2687,11 @@ class PortfolioController
         $originOwnerId = 0;
         $itemId = 0;
 
-        if (PortfolioAttachment::TYPE_ITEM === $attachment->getOriginType()) {
+        if (Portfolio::TYPE_ITEM === $attachment->getOriginType()) {
             $item = $em->find(Portfolio::class, $attachment->getOrigin());
             $originOwnerId = $item->getUser()->getId();
             $itemId = $item->getId();
-        } elseif (PortfolioAttachment::TYPE_COMMENT === $attachment->getOriginType()) {
+        } elseif (Portfolio::TYPE_COMMENT === $attachment->getOriginType()) {
             $comment = $em->find(PortfolioComment::class, $attachment->getOrigin());
             $originOwnerId = $comment->getAuthor()->getId();
             $itemId = $comment->getItem()->getId();
@@ -2731,7 +2719,7 @@ class PortfolioController
 
             $url = $this->baseUrl.http_build_query(['action' => 'view', 'id' => $itemId]);
 
-            if (PortfolioAttachment::TYPE_COMMENT === $attachment->getOriginType() && isset($comment)) {
+            if (Portfolio::TYPE_COMMENT === $attachment->getOriginType() && isset($comment)) {
                 $url .= '#comment-'.$comment->getId();
             }
 
@@ -3053,7 +3041,7 @@ class PortfolioController
                 $form,
                 $comment->getAuthor(),
                 $comment->getId(),
-                PortfolioAttachment::TYPE_COMMENT
+                Portfolio::TYPE_COMMENT
             );
 
             Container::getEventDispatcher()->dispatch(
@@ -3806,144 +3794,54 @@ class PortfolioController
             $showBaseContentInSession = $this->session
                 && true === api_get_configuration_value('portfolio_show_base_course_post_in_sessions');
 
-            $queryBuilder = $this->em->createQueryBuilder();
-            $queryBuilder
-                ->select('pi')
-                ->from(Portfolio::class, 'pi')
-                ->where('pi.course = :course');
+            $portfolioRepo = Container::getPortfolioRepository();
+            $portfolioCategoryHelper = Container::getPortfolioCategoryHelper();
 
-            $queryBuilder->setParameter('course', $this->course);
+            $filters = $frmFilterList && $frmFilterList->validate() ? $frmFilterList->exportValues() : [];
 
-            if ($this->session) {
-                $queryBuilder->andWhere(
-                    $showBaseContentInSession ? 'pi.session = :session OR pi.session IS NULL' : 'pi.session = :session'
-                );
-                $queryBuilder->setParameter('session', $this->session);
-            } else {
-                $queryBuilder->andWhere('pi.session IS NULL');
+            $searchInCategories = [];
+
+            if ($categoryId = $filters['categoryId'] ?? null) {
+                $searchInCategories[] = $categoryId;
+
+                foreach ($portfolioCategoryHelper->getListForIndex($categoryId) as $subCategory) {
+                    $searchInCategories[] = $subCategory->getId();
+                }
             }
 
-            if ($frmFilterList && $frmFilterList->validate()) {
-                $values = $frmFilterList->exportValues();
+            $searchNotInCategories = [];
 
-                if (!empty($values['date'])) {
-                    $queryBuilder
-                        ->andWhere('pi.creationDate >= :date')
-                        ->setParameter(':date', api_get_utc_datetime($values['date'], false, true))
-                    ;
-                }
-
-                if (!empty($values['tags'])) {
-                    $queryBuilder
-                        ->innerJoin(ExtraFieldRelTag::class, 'efrt', Join::WITH, 'efrt.itemId = pi.id')
-                        ->innerJoin(ExtraFieldEntity::class, 'ef', Join::WITH, 'ef.id = efrt.fieldId')
-                        ->andWhere('ef.extraFieldType = :efType')
-                        ->andWhere('ef.variable = :variable')
-                        ->andWhere('efrt.tagId IN (:tags)');
-
-                    $queryBuilder->setParameter('efType', ExtraFieldEntity::PORTFOLIO_TYPE);
-                    $queryBuilder->setParameter('variable', 'tags');
-                    $queryBuilder->setParameter('tags', $values['tags']);
-                }
-
-                if (!empty($values['text'])) {
-                    $queryBuilder->andWhere(
-                        $queryBuilder->expr()->orX(
-                            $queryBuilder->expr()->like('pi.title', ':text'),
-                            $queryBuilder->expr()->like('pi.content', ':text')
-                        )
-                    );
-
-                    $queryBuilder->setParameter('text', '%'.$values['text'].'%');
-                }
-
-                // Filters by category level 0
-                $searchCategories = [];
-                if (!empty($values['categoryId'])) {
-                    $searchCategories[] = $values['categoryId'];
-                    $subCategories = $this->getCategoriesForIndex($values['categoryId']);
-                    if (count($subCategories) > 0) {
-                        foreach ($subCategories as $subCategory) {
-                            $searchCategories[] = $subCategory->getId();
-                        }
-                    }
-                    $queryBuilder->andWhere('pi.category IN('.implode(',', $searchCategories).')');
-                }
-
-                // Filters by sub-category, don't show the selected values
+            if ($subCategoryIdList = $filters['subCategoryIds'] ?? '') {
                 $diff = [];
-                if (!empty($values['subCategoryIds']) && !('all' === $values['subCategoryIds'])) {
-                    $subCategoryIds = explode(',', $values['subCategoryIds']);
-                    $diff = array_diff($searchCategories, $subCategoryIds);
-                } else {
-                    if (trim($values['subCategoryIds']) === '') {
-                        $diff = $searchCategories;
-                    }
+
+                if ('all' !== $subCategoryIdList) {
+                    $subCategoryIds = explode(',', $subCategoryIdList);
+                    $diff = array_diff($searchInCategories, $subCategoryIds);
+                } elseif (trim($subCategoryIdList) === '') {
+                    $diff = $searchInCategories;
                 }
+
                 if (!empty($diff)) {
                     unset($diff[0]);
-                    if (!empty($diff)) {
-                        $queryBuilder->andWhere('pi.category NOT IN('.implode(',', $diff).')');
-                    }
+
+                    $searchNotInCategories = $diff;
                 }
             }
 
-            if ($listByUser) {
-                $queryBuilder
-                    ->andWhere('pi.user = :user')
-                    ->setParameter('user', $this->owner);
-            }
-
-            if ($this->advancedSharingEnabled) {
-                $queryBuilder
-                    ->leftJoin(
-                        CItemProperty::class,
-                        'cip',
-                        Join::WITH,
-                        "cip.ref = pi.id
-                            AND cip.tool = :cip_tool
-                            AND cip.course = pi.course
-                            AND cip.lasteditType = 'visible'
-                            AND cip.toUser = :current_user"
-                    )
-                    ->andWhere(
-                        sprintf(
-                            'pi.visibility = %d
-                            OR (
-                                pi.visibility = %d AND cip IS NOT NULL OR pi.user = :current_user
-                            )',
-                            Portfolio::VISIBILITY_VISIBLE,
-                            Portfolio::VISIBILITY_PER_USER
-                        )
-                    )
-                    ->setParameter('cip_tool', TOOL_PORTFOLIO)
-                ;
-            } else {
-                $visibilityCriteria = [Portfolio::VISIBILITY_VISIBLE];
-
-                if (api_is_allowed_to_edit()) {
-                    $visibilityCriteria[] = Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER;
-                }
-
-                $queryBuilder->andWhere(
-                    $queryBuilder->expr()->orX(
-                        'pi.user = :current_user',
-                        $queryBuilder->expr()->andX(
-                            'pi.user != :current_user',
-                            $queryBuilder->expr()->in('pi.visibility', $visibilityCriteria)
-                        )
-                    )
-                );
-            }
-
-            $queryBuilder->setParameter('current_user', $currentUserId);
-            if ($alphabeticalOrder || true === api_get_configuration_value('portfolio_order_post_by_alphabetical_order')) {
-                $queryBuilder->orderBy('pi.title', 'ASC');
-            } else {
-                $queryBuilder->orderBy('pi.creationDate', 'DESC');
-            }
-
-            $items = $queryBuilder->getQuery()->getResult();
+            $items = $portfolioRepo->getIndexCourseItems(
+                api_get_user_entity(),
+                $this->owner,
+                $this->course,
+                $this->session,
+                $showBaseContentInSession,
+                $listByUser,
+                $filters['date'] ?? null,
+                $filters['tags'] ?? [],
+                $filters['text'] ?? '',
+                $searchInCategories,
+                $searchNotInCategories,
+                $this->advancedSharingEnabled
+            );
 
             if ($showBaseContentInSession) {
                 $items = array_filter(
@@ -3962,8 +3860,7 @@ class PortfolioController
                 $itemsCriteria['visibility'] = Portfolio::VISIBILITY_VISIBLE;
             }
 
-            $items = $this->em
-                ->getRepository(Portfolio::class)
+            $items = Container::getPortfolioRepository()
                 ->findBy($itemsCriteria, ['creationDate' => 'DESC']);
         }
 
@@ -4046,7 +3943,7 @@ class PortfolioController
                 $form,
                 $comment->getAuthor(),
                 $comment->getId(),
-                PortfolioAttachment::TYPE_COMMENT
+                Portfolio::TYPE_COMMENT
             );
 
             Container::getEventDispatcher()->dispatch(
@@ -4219,7 +4116,7 @@ class PortfolioController
             $metadata = '<ul class="list-unstyled text-muted">';
 
             if ($itemSession) {
-                $metadata .= '<li>'.get_lang('Course').': '.$itemSession->getName().' ('
+                $metadata .= '<li>'.get_lang('Course').': '.$itemSession->getTitle().' ('
                     .$itemCourse->getTitle().') </li>';
             } elseif ($itemCourse) {
                 $metadata .= '<li>'.get_lang('Course').': '.$itemCourse->getTitle().'</li>';

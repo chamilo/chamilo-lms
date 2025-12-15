@@ -27,6 +27,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
     columns: ['c_id', 'session_id', 'usergroup_id', 'group_id', 'user_id', 'resource_type_group'],
     name: 'idx_resource_link_sortable_groups'
 )]
+#[ORM\Index(
+    columns: ['parent_id'],
+    name: 'idx_resource_link_parent'
+)]
 #[ORM\Entity(repositoryClass: ResourceLinkRepository::class)]
 #[ORM\EntityListeners([ResourceLinkListener::class])]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
@@ -47,6 +51,21 @@ class ResourceLink implements Stringable
     #[ORM\ManyToOne(targetEntity: ResourceNode::class, inversedBy: 'resourceLinks')]
     #[ORM\JoinColumn(name: 'resource_node_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ResourceNode $resourceNode;
+
+    /**
+     * Parent link for the document hierarchy by context (course/session).
+     */
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    private ?self $parent = null;
+
+    /**
+     * @var Collection<int, self>
+     *
+     * Children links in the document hierarchy by context
+     */
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
+    private Collection $children;
 
     #[Gedmo\SortableGroup]
     #[ORM\ManyToOne(targetEntity: Course::class)]
@@ -113,6 +132,7 @@ class ResourceLink implements Stringable
     {
         $this->resourceRights = new ArrayCollection();
         $this->visibility = self::VISIBILITY_DRAFT;
+        $this->children = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -125,57 +145,40 @@ class ResourceLink implements Stringable
         return $this->id;
     }
 
-    public function getStartVisibilityAt(): ?DateTimeInterface
+    public function getResourceNode(): ResourceNode
     {
-        return $this->startVisibilityAt;
+        return $this->resourceNode;
     }
 
-    public function setStartVisibilityAt(?DateTimeInterface $startVisibilityAt): self
+    public function setResourceNode(ResourceNode $resourceNode): self
     {
-        $this->startVisibilityAt = $startVisibilityAt;
-
-        return $this;
-    }
-
-    public function getEndVisibilityAt(): ?DateTimeInterface
-    {
-        return $this->endVisibilityAt;
-    }
-
-    public function setEndVisibilityAt(?DateTimeInterface $endVisibilityAt): self
-    {
-        $this->endVisibilityAt = $endVisibilityAt;
-
-        return $this;
-    }
-
-    public function addResourceRight(ResourceRight $right): self
-    {
-        if (!$this->resourceRights->contains($right)) {
-            $right->setResourceLink($this);
-            $this->resourceRights->add($right);
-        }
+        $this->resourceNode = $resourceNode;
+        $this->resourceTypeGroup = $resourceNode->getResourceType()->getId();
 
         return $this;
     }
 
     /**
-     * @return Collection<int, ResourceRight>
+     * Parent link for the document hierarchy by context.
      */
-    public function getResourceRights(): Collection
+    public function getParent(): ?self
     {
-        return $this->resourceRights;
+        return $this->parent;
     }
 
-    public function setResourceRights(Collection $rights): self
+    public function setParent(?self $parent): self
     {
-        $this->resourceRights = $rights;
-
-        /*foreach ($rights as $right) {
-              $this->addResourceRight($right);
-          }*/
+        $this->parent = $parent;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getChildren(): Collection
+    {
+        return $this->children;
     }
 
     public function getCourse(): ?Course
@@ -258,22 +261,29 @@ class ResourceLink implements Stringable
         return null !== $this->user;
     }
 
-    public function getResourceNode(): ResourceNode
+    public function addResourceRight(ResourceRight $right): self
     {
-        return $this->resourceNode;
-    }
-
-    public function setResourceNode(ResourceNode $resourceNode): self
-    {
-        $this->resourceNode = $resourceNode;
-        $this->resourceTypeGroup = $resourceNode->getResourceType()->getId();
+        if (!$this->resourceRights->contains($right)) {
+            $right->setResourceLink($this);
+            $this->resourceRights->add($right);
+        }
 
         return $this;
     }
 
-    public function isPublished(): bool
+    /**
+     * @return Collection<int, ResourceRight>
+     */
+    public function getResourceRights(): Collection
     {
-        return self::VISIBILITY_PUBLISHED === $this->getVisibility();
+        return $this->resourceRights;
+    }
+
+    public function setResourceRights(Collection $rights): self
+    {
+        $this->resourceRights = $rights;
+
+        return $this;
     }
 
     public function getVisibility(): int
@@ -305,6 +315,11 @@ class ResourceLink implements Stringable
         ];
     }
 
+    public function isPublished(): bool
+    {
+        return self::VISIBILITY_PUBLISHED === $this->getVisibility();
+    }
+
     public function isPending(): bool
     {
         return self::VISIBILITY_PENDING === $this->getVisibility();
@@ -318,6 +333,30 @@ class ResourceLink implements Stringable
     public function getVisibilityName(): string
     {
         return array_flip(static::getVisibilityList())[$this->getVisibility()];
+    }
+
+    public function getStartVisibilityAt(): ?DateTimeInterface
+    {
+        return $this->startVisibilityAt;
+    }
+
+    public function setStartVisibilityAt(?DateTimeInterface $startVisibilityAt): self
+    {
+        $this->startVisibilityAt = $startVisibilityAt;
+
+        return $this;
+    }
+
+    public function getEndVisibilityAt(): ?DateTimeInterface
+    {
+        return $this->endVisibilityAt;
+    }
+
+    public function setEndVisibilityAt(?DateTimeInterface $endVisibilityAt): self
+    {
+        $this->endVisibilityAt = $endVisibilityAt;
+
+        return $this;
     }
 
     public function getDisplayOrder(): int

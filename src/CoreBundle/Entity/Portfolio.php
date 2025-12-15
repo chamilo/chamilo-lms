@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -20,8 +19,6 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity]
 class Portfolio extends AbstractResource implements ResourceInterface, Stringable
 {
-    use UserTrait;
-
     public const TYPE_ITEM = 1;
     public const TYPE_COMMENT = 2;
 

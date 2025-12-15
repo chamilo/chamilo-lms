@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\LtiBundle\Entity\Token;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,7 +13,7 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $plugin = ImsLtiPlugin::create();
 
-$request = Request::createFromGlobals();
+$request = Container::getRequest();
 
 $response = new JsonResponse();
 

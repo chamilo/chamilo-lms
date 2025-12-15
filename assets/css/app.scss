@@ -985,6 +985,34 @@ img.course-tool__icon {
 }
 .app-breadcrumb .p-breadcrumb-separator { padding-inline: .25rem; }
 
+// Glossary auto-highlighted term
+.glossary-term {
+  position: relative;
+  cursor: help;
+  font-weight: 500;
+  color: #2563eb;
+  border-bottom: 1px dotted currentColor;
+  text-decoration: none;
+
+  &::after {
+    content: "ⓘ";
+    font-size: 0.7em;
+    margin-left: 0.15rem;
+    vertical-align: super;
+    opacity: 0.7;
+  }
+
+  &:hover {
+    color: #1d4ed8;
+    border-bottom-style: solid;
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+}
+
 @import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
 @import "~timepicker/jquery.timepicker.min.css";
 @import "~qtip2/dist/jquery.qtip.min.css";

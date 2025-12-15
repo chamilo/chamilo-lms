@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 $_dont_save_user_course_access = true;
 
 /**
@@ -93,8 +95,7 @@ switch ($action) {
             break;
         }
 
-        $repo = UserManager::getRepository();
-        $users = $repo->findUsersToSendMessage(
+        $users = Container::getUserRepository()->findUsersToSendMessage(
             api_get_user_id(),
             $_REQUEST['q'],
             $_REQUEST['page_limit']

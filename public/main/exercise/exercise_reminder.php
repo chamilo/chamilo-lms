@@ -50,7 +50,7 @@ if (0 != $objExercise->expired_time && !empty($clock_expired_time)) {
 
 if ($time_control) {
     // Get time left for expiring time
-    $time_left = api_strtotime($clock_expired_time->format('Y-m-d H:i:s'), 'UTC') - time();
+    $time_left = api_strtotime($clock_expired_time, 'UTC') - time();
     $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
 }
 
@@ -64,7 +64,7 @@ $htmlHeadXtra[] = '<style>
 .exercise_reminder_item label { display: flex; align-items: center; gap: .5rem; margin: .25rem 0; }
 .exercise_reminder_item input[type=checkbox] { margin: 0; }
 .question-check-test { margin-top: .5rem; }
-.form-actions { margin-top: 1rem; }
+.exercise_actions { margin-top: 1rem; }
 </style>';
 
 $exe_id = 0;
@@ -153,7 +153,7 @@ $exerciseActions .= '&nbsp;'.Display::url(
     );
 
 echo Display::div('', ['class' => 'clear']);
-echo Display::div($exerciseActions, ['class' => 'form-actions']);
+echo Display::div($exerciseActions, ['class' => 'exercise_actions']);
 
 if (!$hideHeaderAndFooter) {
     // We are not in learnpath tool or embeddable quiz

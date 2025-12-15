@@ -53,9 +53,7 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
                     'show_hot_courses' => 'true',
                     'hide_home_top_when_connected' => 'false',
                     'hide_logout_button' => 'false',
-                    'icons_mode_svg' => 'false',
                     'hide_social_media_links' => 'false',
-
                     'gravatar_enabled' => 'false',
                     'gravatar_type' => 'mm',
                     'order_user_list_by_official_code' => 'false',
@@ -124,7 +122,6 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
             ->add('show_hot_courses', YesNoType::class)
             ->add('hide_home_top_when_connected', YesNoType::class)
             ->add('hide_logout_button', YesNoType::class)
-            ->add('icons_mode_svg', YesNoType::class)
             ->add('hide_social_media_links', YesNoType::class)
             ->add('gravatar_enabled', YesNoType::class)
             ->add(

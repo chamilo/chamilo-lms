@@ -6,6 +6,7 @@
  */
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\Common\Collections\Criteria;
 
 $cidReset = true;
@@ -71,7 +72,7 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
                 count($uniqueSubmittedUsernames)
             );
         }
-        $matching = UserManager::getRepository()->matching(
+        $matching = Container::getUserRepository()->matching(
             Criteria::create()->where(
                 Criteria::expr()->in('username', $uniqueSubmittedUsernames)
             )
@@ -109,7 +110,7 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
         throw new Exception('preg_split failed');
     }
     printf('<p>'.get_lang('Loading %d users...')."</p>\n", count($usernames));
-    $users = UserManager::getRepository()->matching(
+    $users = Container::getUserRepository()->matching(
         Criteria::create()->where(
             Criteria::expr()->in('username', $usernames)
         )

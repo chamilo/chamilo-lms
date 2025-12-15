@@ -47,7 +47,6 @@ if (isset($_GET['action'], $_GET['d'])) {
 }
 
 $entityManager = Database::getManager();
-$userRepo = UserManager::getRepository();
 $currency = $plugin->getSelectedCurrency();
 
 if (empty($currency)) {

@@ -24,6 +24,7 @@ Encore.setOutputPath("public/build/")
   .addEntry("vue", "./assets/vue/main.js")
   .addEntry("vue_installer", "./assets/vue/main_installer.js")
   .addEntry("translatehtml", "./assets/js/translatehtml.js")
+  .addEntry("glossary_auto", "./assets/js/glossary-auto.js")
 
   .addStyleEntry("app", "./assets/css/app.scss")
   .addStyleEntry("css/chat", "./assets/css/chat.css")
@@ -240,6 +241,17 @@ class CopyUnhashedAssetsPlugin {
         fs.copyFileSync(
           path.join(buildPath, "libs/qtip2/dist", qtipCssFile),
           path.join(buildPath, "libs/qtip2/dist/jquery.qtip.css")
+        )
+      }
+
+      // === COPY glossary_auto.js without hash ===
+      const glossaryFile = fs.readdirSync(buildPath).find((f) =>
+        f.match(/^glossary_auto\.[a-f0-9]+\.js$/)
+      )
+      if (glossaryFile) {
+        fs.copyFileSync(
+          path.join(buildPath, glossaryFile),
+          path.join(buildPath, "glossary_auto.js")
         )
       }
 

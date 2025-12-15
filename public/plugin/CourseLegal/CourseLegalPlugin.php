@@ -278,7 +278,7 @@ class CourseLegalPlugin extends Plugin
                     $message,
                     null,
                     null,
-                    null,
+                    [],
                     $dataFile
                 );
                 //MessageManager::send_message_simple($student['user_id'], $subject, $message);

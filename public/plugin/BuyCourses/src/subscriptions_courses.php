@@ -42,7 +42,7 @@ foreach ($courses as $course) {
 }
 
 $totalItems = count($courses);
-$pagesCount = ceil($totalItems / $pageSize);
+$pagesCount = (int) ceil($totalItems / $pageSize);
 
 $pagination = BuyCoursesPlugin::returnPagination(
     api_get_self(),
@@ -79,7 +79,9 @@ $tpl->assign(
 $tpl->assign('product_type_course', BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
 $tpl->assign('product_type_session', BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
 $tpl->assign('courses', $courses);
+$tpl->assign('sessions', []);
 $tpl->assign('course_pagination', $pagination);
+$tpl->assign('session_pagination', '');
 $tpl->assign('sessions_are_included', $includeSession);
 $tpl->assign('tax_enable', $taxEnable);
 

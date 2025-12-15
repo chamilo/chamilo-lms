@@ -11,6 +11,8 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\PageHelper;
+use Chamilo\CoreBundle\Helpers\ResourceAclHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -19,13 +21,8 @@ use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Entity\CStudentPublicationRelDocument;
 use ChamiloSession;
 use Doctrine\ORM\EntityManagerInterface;
-use Laminas\Permissions\Acl\Acl;
-use Laminas\Permissions\Acl\Resource\GenericResource;
-use Laminas\Permissions\Acl\Role\GenericRole;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-use Symfony\Component\Security\Core\Authentication\Token\NullToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -51,26 +48,19 @@ class ResourceNodeVoter extends Voter
         private Security $security,
         private RequestStack $requestStack,
         private SettingsManager $settingsManager,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private PageHelper $pageHelper,
+        private readonly ResourceAclHelper $resourceAclHelper,
     ) {}
 
     public static function getReaderMask(): int
     {
-        $builder = (new MaskBuilder())
-            ->add(self::VIEW)
-        ;
-
-        return $builder->get();
+        return ResourceAclHelper::getPermissionMask([self::VIEW]);
     }
 
     public static function getEditorMask(): int
     {
-        $builder = (new MaskBuilder())
-            ->add(self::VIEW)
-            ->add(self::EDIT)
-        ;
-
-        return $builder->get();
+        return ResourceAclHelper::getPermissionMask([self::VIEW, self::EDIT]);
     }
 
     protected function supports(string $attribute, $subject): bool
@@ -94,12 +84,6 @@ class ResourceNodeVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
-        // Make sure there is a user object (i.e. that the user is logged in)
-        // Update. No, anons can enter a node depending in the visibility.
-        // $user = $token->getUser();
-        /*if (!$user instanceof UserInterface) {
-            return false;
-        }*/
         /** @var ResourceNode $resourceNode */
         $resourceNode = $subject;
         $resourceTypeName = $resourceNode->getResourceType()->getTitle();
@@ -123,6 +107,11 @@ class ResourceNodeVoter extends Voter
             return true;
         }
 
+        // Special case: allow file assets that are embedded inside a visible system announcement.
+        if (self::VIEW === $attribute && $this->isAnnouncementFileVisibleForCurrentRequest($resourceNode, $token)) {
+            return true;
+        }
+
         // @todo
         switch ($attribute) {
             case self::VIEW:
@@ -135,7 +124,7 @@ class ResourceNodeVoter extends Voter
                 $question = $questionRepo->findOneBy(['resourceNode' => $resourceNode]);
                 if ($question) {
                     // Check if it's a Hotspot-type question
-                    if (\in_array($question->getType(), [6, 7, 8, 20], true)) { // HOT_SPOT, HOT_SPOT_ORDER, HOT_SPOT_DELINEATION, ANNOTATION
+                    if (\in_array($question->getType(), [6, 7, 8, 20, 13], true)) { // HOT_SPOT, HOT_SPOT_ORDER, HOT_SPOT_DELINEATION, ANNOTATION
                         $rel = $this->entityManager
                             ->getRepository(CQuizRelQuestion::class)
                             ->findOneBy(['question' => $question])
@@ -212,20 +201,34 @@ class ResourceNodeVoter extends Voter
         // Checking links connected to this resource.
         $request = $this->requestStack->getCurrentRequest();
 
-        $courseId = (int) $request->get('cid');
-        $sessionId = (int) $request->get('sid');
-        $groupId = (int) $request->get('gid');
+        $courseId = 0;
+        $sessionId = 0;
+        $groupId = 0;
+        $isFromLearningPath = false;
 
-        // Try Session values.
-        if (empty($courseId) && $request->hasSession()) {
-            $courseId = (int) $request->getSession()->get('cid');
-            $sessionId = (int) $request->getSession()->get('sid');
-            $groupId = (int) $request->getSession()->get('gid');
+        if (null !== $request) {
+            $courseId = (int) $request->get('cid');
+            $sessionId = (int) $request->get('sid');
+            $groupId = (int) $request->get('gid');
 
-            if (0 === $courseId) {
-                $courseId = (int) ChamiloSession::read('cid');
-                $sessionId = (int) ChamiloSession::read('sid');
-                $groupId = (int) ChamiloSession::read('gid');
+            // Detect learning path context from request parameters.
+            $lpId = $request->query->getInt('lp_id', 0);
+            $lpItemId = $request->query->getInt('lp_item_id', 0);
+            $origin = (string) $request->query->get('origin', '');
+
+            $isFromLearningPath = $lpId > 0 || $lpItemId > 0 || 'learnpath' === $origin;
+
+            // Try Session values.
+            if (empty($courseId) && $request->hasSession()) {
+                $courseId = (int) $request->getSession()->get('cid');
+                $sessionId = (int) $request->getSession()->get('sid');
+                $groupId = (int) $request->getSession()->get('gid');
+
+                if (0 === $courseId) {
+                    $courseId = (int) ChamiloSession::read('cid');
+                    $sessionId = (int) ChamiloSession::read('sid');
+                    $groupId = (int) ChamiloSession::read('gid');
+                }
             }
         }
 
@@ -340,17 +343,12 @@ class ResourceNodeVoter extends Voter
 
         // Getting rights from the link
         $rightsFromResourceLink = $link->getResourceRights();
-        $allowAnonsToView = false;
 
         $rights = [];
         if ($rightsFromResourceLink->count() > 0) {
             // Taken rights from the link.
             $rights = $rightsFromResourceLink;
         }
-
-        // Taken the rights from context (request + user roles).
-        // $rights = $link->getResourceNode()->getTool()->getToolResourceRight();
-        // $rights = $link->getResourceNode()->getResourceType()->getTool()->getToolResourceRight();
 
         // By default, the rights are:
         // Teachers: CRUD.
@@ -370,8 +368,11 @@ class ResourceNodeVoter extends Voter
             }
 
             // If student.
+            // Normal case: resource must be published.
+            // Exception: when the resource is being opened from a learning path item,
+            // allow VIEW even if the underlying ResourceLink visibility is hidden in the tool.
             if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_STUDENT)
-                && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
+                && (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility() || $isFromLearningPath)
             ) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($readerMask)
@@ -384,7 +385,6 @@ class ResourceNodeVoter extends Voter
             if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
                 && $link->getCourse()->isPublic()
             ) {
-                $allowAnonsToView = true;
                 $resourceRight = (new ResourceRight())
                     ->setMask($readerMask)
                     ->setRole('IS_AUTHENTICATED_ANONYMOUSLY')
@@ -438,89 +438,48 @@ class ResourceNodeVoter extends Voter
             $rights[] = $resourceRight;
         }
 
-        // Asked mask
-        $mask = new MaskBuilder();
-        $mask->add($attribute);
+        return $this->resourceAclHelper->isAllowed($attribute, $link, $rights);
+    }
 
-        $askedMask = (string) $mask->get();
-
-        // Creating roles
-        // @todo move this in a service
-        $anon = new GenericRole('IS_AUTHENTICATED_ANONYMOUSLY');
-        $userRole = new GenericRole('ROLE_USER');
-        $student = new GenericRole('ROLE_STUDENT');
-        $teacher = new GenericRole('ROLE_TEACHER');
-        $studentBoss = new GenericRole('ROLE_STUDENT_BOSS');
-
-        $currentStudent = new GenericRole(self::ROLE_CURRENT_COURSE_STUDENT);
-        $currentTeacher = new GenericRole(self::ROLE_CURRENT_COURSE_TEACHER);
-
-        $currentStudentGroup = new GenericRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT);
-        $currentTeacherGroup = new GenericRole(self::ROLE_CURRENT_COURSE_GROUP_TEACHER);
-
-        $currentStudentSession = new GenericRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT);
-        $currentTeacherSession = new GenericRole(self::ROLE_CURRENT_COURSE_SESSION_TEACHER);
-
-        // Setting Simple ACL.
-        $acl = (new Acl())
-            ->addRole($anon)
-            ->addRole($userRole)
-            ->addRole($student)
-            ->addRole($teacher)
-            ->addRole($studentBoss)
-
-            ->addRole($currentStudent)
-            ->addRole($currentTeacher, self::ROLE_CURRENT_COURSE_STUDENT)
-
-            ->addRole($currentStudentSession)
-            ->addRole($currentTeacherSession, self::ROLE_CURRENT_COURSE_SESSION_STUDENT)
-
-            ->addRole($currentStudentGroup)
-            ->addRole($currentTeacherGroup, self::ROLE_CURRENT_COURSE_GROUP_STUDENT)
-        ;
-
-        // Add a security resource.
-        $linkId = (string) $link->getId();
-        $acl->addResource(new GenericResource($linkId));
-
-        // Check all the right this link has.
-        // Set rights from the ResourceRight.
-        foreach ($rights as $right) {
-            $acl->allow($right->getRole(), null, (string) $right->getMask());
+    /**
+     * Checks if the current request is viewing a document file that is embedded
+     * inside a visible system announcement, delegating the heavy logic to PageHelper.
+     */
+    private function isAnnouncementFileVisibleForCurrentRequest(ResourceNode $resourceNode, TokenInterface $token): bool
+    {
+        $type = $resourceNode->getResourceType()?->getTitle();
+        if ('files' !== $type) {
+            return false;
         }
 
-        // Role and permissions settings
-        // Student can just view (read)
-        // $acl->allow($student, null, self::getReaderMask());
-
-        // Teacher can view/edit
-        /*$acl->allow(
-            $teacher,
-            null,
-            [
-                self::getReaderMask(),
-                self::getEditorMask(),
-            ]
-        );*/
-
-        // Anons can see.
-        if ($allowAnonsToView) {
-            $acl->allow($anon, null, (string) self::getReaderMask());
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return false;
         }
 
-        if ($token instanceof NullToken) {
-            return $acl->isAllowed('IS_AUTHENTICATED_ANONYMOUSLY', $linkId, $askedMask);
+        $pathInfo = (string) $request->getPathInfo();
+        if ('' === $pathInfo) {
+            return false;
         }
 
-        $roles = $user->getRoles();
-
-        foreach ($roles as $role) {
-            if ($acl->isAllowed($role, $linkId, $askedMask)) {
-                return true;
-            }
+        // Extract file identifier from /r/document/files/{identifier}/view.
+        $segments = explode('/', trim($pathInfo, '/'));
+        $identifier = null;
+        if (\count($segments) >= 4) {
+            // ... /r/document/files/{identifier}/view
+            $identifier = $segments[\count($segments) - 2] ?? null;
         }
 
-        return false;
+        $userFromToken = $token->getUser();
+        $user = $userFromToken instanceof UserInterface ? $userFromToken : null;
+        $locale = $request->getLocale();
+
+        return $this->pageHelper->isFilePathExposedByVisibleAnnouncement(
+            $pathInfo,
+            \is_string($identifier) ? $identifier : null,
+            $user,
+            $locale
+        );
     }
 
     private function isBlogResource(ResourceNode $node): bool

@@ -183,7 +183,7 @@ $(function() {
             function (User $user) {
                 return $user->getId();
             },
-            $session->getGeneralCoaches()->getValues()
+            ($session->getGeneralCoaches()->getValues()??[])
         ),
         'days_before_finishing_for_reinscription' => $session->getDaysToReinscription() ?? '',
         'days_before_finishing_to_create_new_repetition' => $session->getDaysToNewRepetition() ?? '',
@@ -238,6 +238,9 @@ $(function() {
         $daysBeforeFinishingToCreateNewRepetition = $params['days_before_finishing_to_create_new_repetition'] ?? null;
         $lastRepetition = isset($params['last_repetition']);
         $validityInDays = $params['validity_in_days'] ?? null;
+        if (empty($coachUsername)) {
+            $coachUsername = [];
+        }
 
         $return = SessionManager::edit_session(
             $id,
@@ -267,7 +270,7 @@ $(function() {
         );
 
         if ($return) {
-            // Delete picture of session
+            // Delete session picture
             $deletePicture = $_POST['delete_picture'] ?? '';
             if ($deletePicture && $return) {
                 SessionManager::deleteAsset($return);

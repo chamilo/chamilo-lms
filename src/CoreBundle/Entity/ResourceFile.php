@@ -13,7 +13,10 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\RequestBody;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
+use ArrayObject;
 use Chamilo\CoreBundle\Controller\AddVariantResourceFileAction;
 use Chamilo\CoreBundle\Controller\CreateResourceFileAction;
 use Chamilo\CoreBundle\Repository\ResourceFileRepository;
@@ -38,10 +41,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         new Get(),
         new Post(
             controller: CreateResourceFileAction::class,
-            openapiContext: [
-                'summary' => 'Create a new resource file',
-                'requestBody' => [
-                    'content' => [
+            openapi: new Operation(
+                summary: 'Create a new resource file',
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',
@@ -53,9 +56,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                                 ],
                             ],
                         ],
-                    ],
-                ],
-            ],
+                    ]),
+                ),
+            ),
             security: 'is_granted(\'ROLE_USER\')',
             validationContext: [
                 'groups' => ['Default', 'media_object_create', 'document:write'],
@@ -65,10 +68,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         new Post(
             uriTemplate: '/resource_files/add_variant',
             controller: AddVariantResourceFileAction::class,
-            openapiContext: [
-                'summary' => 'Add a variant to an existing resource file',
-                'requestBody' => [
-                    'content' => [
+            openapi: new Operation(
+                summary: 'Add a variant to an existing resource file',
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',
@@ -86,9 +89,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                                 ],
                             ],
                         ],
-                    ],
-                ],
-            ],
+                    ]),
+                ),
+            ),
             security: 'is_granted(\'ROLE_USER\')',
             deserialize: false,
             name: 'add_variant'
@@ -136,6 +139,14 @@ class ResourceFile implements Stringable
     #[ORM\Column(type: 'integer')]
     protected ?int $size = 0;
 
+    /**
+     * Optional language for the file variant.
+     * This is used for indexing and future-proof resource variations.
+     */
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'personal_file:read'])]
+    #[ORM\ManyToOne(targetEntity: Language::class)]
+    #[ORM\JoinColumn(name: 'language_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    protected ?Language $language = null;
     #[Vich\UploadableField(
         mapping: 'resources',
         fileNameProperty: 'title',
@@ -188,6 +199,24 @@ class ResourceFile implements Stringable
     public function __toString(): string
     {
         return $this->getOriginalName();
+    }
+
+    /**
+     * Get the file language (can be null if unknown/multilingual).
+     */
+    public function getLanguage(): ?Language
+    {
+        return $this->language;
+    }
+
+    /**
+     * Set the file language (nullable by design).
+     */
+    public function setLanguage(?Language $language): self
+    {
+        $this->language = $language;
+
+        return $this;
     }
     public function isText(): bool
     {
@@ -248,29 +277,11 @@ class ResourceFile implements Stringable
         return $this;
     }
 
-    /*public function isEnabled(): bool
-     * {
-     * return $this->enabled;
-     * }
-     * public function setEnabled(bool $enabled): self
-     * {
-     * $this->enabled = $enabled;
-     * return $this;
-     * }*/
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /*public function getDescription(): string
-     * {
-     * return $this->description;
-     * }
-     * public function setDescription(string $description): self
-     * {
-     * $this->description = $description;
-     * return $this;
-     * }*/
     public function getMimeType(): ?string
     {
         return $this->mimeType;
@@ -305,7 +316,6 @@ class ResourceFile implements Stringable
     {
         $data = $this->getDimensions();
         if ([] !== $data) {
-            // $data = explode(',', $data);
             return (int) $data[0];
         }
 
@@ -315,7 +325,6 @@ class ResourceFile implements Stringable
     {
         $data = $this->getDimensions();
         if ([] !== $data) {
-            // $data = explode(',', $data);
             return (int) $data[1];
         }
 

@@ -77,8 +77,8 @@ parameters:
                 referrals: false
                 dn_string: '{user_identifier}'
                 query_string: null
-                base_dn: 'DC=cblue,DC=be'
-                search_dn: 'CN=admin,dc=cblue,dc=be'
+                base_dn: 'DC=chamilo,DC=org'
+                search_dn: 'CN=admin,dc=chamilo,dc=org'
                 search_password: 'pass'
                 filter: null
                 uid_key: 'uid'

@@ -50,16 +50,6 @@ class UserManager
     }
 
     /**
-     * Repository is use to query the DB, selects, etc.
-     *
-     * @return UserRepository
-     */
-    public static function getRepository()
-    {
-        return Container::getUserRepository();
-    }
-
-    /**
      * Validates the password.
      */
     public static function isPasswordValid(User $user, string $plainPassword): bool
@@ -79,9 +69,8 @@ class UserManager
     public static function updatePassword($userId, $password)
     {
         $user = api_get_user_entity($userId);
-        $userManager = self::getRepository();
         $user->setPlainPassword($password);
-        $userManager->updateUser($user, true);
+        Container::getUserRepository()->updateUser($user, true);
     }
 
     /**
@@ -462,9 +451,9 @@ class UserManager
                     $emailBody,
                     $sender_name,
                     $email_admin,
-                    null,
-                    null,
-                    null,
+                    [],
+                    [],
+                    false,
                     [],
                     $creatorEmail
                 );
@@ -1086,7 +1075,6 @@ class UserManager
             return false;
         }
 
-        $userManager = self::getRepository();
         $user = api_get_user_entity($user_id);
 
         if (null === $user) {
@@ -1163,7 +1151,7 @@ class UserManager
         }
 
         $user->setRoleFromStatus($status);
-        $userManager->updateUser($user, true);
+        Container::getUserRepository()->updateUser($user, true);
         Event::addEvent(LOG_USER_UPDATE, LOG_USER_ID, $user_id);
 
         if (1 == $change_active) {
@@ -1245,10 +1233,10 @@ class UserManager
                 $emailBody,
                 $sender_name,
                 $email_admin,
-                null,
-                null,
-                null,
-                null,
+                [],
+                [],
+                false,
+                [],
                 $creatorEmail
             );
         }
@@ -4989,7 +4977,7 @@ class UserManager
         }
 
         $user->addRole('ROLE_ADMIN');
-        self::getRepository()->updateUser($user, true);
+        Container::getUserRepository()->updateUser($user, true);
     }
 
     public static function removeUserAdmin(User $user)
@@ -5000,7 +4988,7 @@ class UserManager
             $sql = "DELETE FROM $table WHERE user_id = $userId";
             Database::query($sql);
             $user->removeRole('ROLE_ADMIN');
-            self::getRepository()->updateUser($user, true);
+            Container::getUserRepository()->updateUser($user, true);
         }
     }
 
@@ -5610,7 +5598,7 @@ SQL;
             $url .= '&s='.$sessionToRedirect;
         }
         $mailSubject = get_lang('Registration confirmation');
-        $mailBody = get_lang('To complete your platform registration you need confirm your account by clicking the following link')
+        $mailBody = get_lang('To complete your platform registration you need to confirm your account by clicking the following link')
             .PHP_EOL
             .Display::url($url, $url);
 

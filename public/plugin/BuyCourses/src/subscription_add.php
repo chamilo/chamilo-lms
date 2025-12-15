@@ -33,7 +33,6 @@ $plugin = BuyCoursesPlugin::create();
 $includeSession = 'true' === $plugin->get('include_sessions');
 
 $entityManager = Database::getManager();
-$userRepo = UserManager::getRepository();
 $currency = $plugin->getSelectedCurrency();
 
 if (empty($currency)) {

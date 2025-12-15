@@ -16,6 +16,11 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter;
+use ApiPlatform\OpenApi\Model\RequestBody;
+use ApiPlatform\OpenApi\Model\Response;
+use ArrayObject;
 use Chamilo\CoreBundle\Controller\Api\CreateCGlossaryAction;
 use Chamilo\CoreBundle\Controller\Api\ExportCGlossaryAction;
 use Chamilo\CoreBundle\Controller\Api\ExportGlossaryToDocumentsAction;
@@ -50,9 +55,9 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Delete(security: "is_granted('DELETE', object.resourceNode)"),
         new Post(
             controller: CreateCGlossaryAction::class,
-            openapiContext: [
-                'requestBody' => [
-                    'content' => [
+            openapi: new Operation(
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
                         'application/json' => [
                             'schema' => [
                                 'type' => 'object',
@@ -76,61 +81,61 @@ use Symfony\Component\Validator\Constraints as Assert;
                                 'required' => ['name'],
                             ],
                         ],
-                    ],
-                ],
-            ],
+                    ]),
+                ),
+            ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
             validationContext: ['groups' => ['Default', 'media_object_create', 'glossary:write']],
             deserialize: false
         ),
         new GetCollection(
             controller: GetGlossaryCollectionController::class,
-            openapiContext: [
-                'parameters' => [
-                    [
-                        'name' => 'resourceNode.parent',
-                        'in' => 'query',
-                        'required' => true,
-                        'description' => 'Resource node Parent',
-                        'schema' => ['type' => 'integer'],
-                    ],
-                    [
-                        'name' => 'cid',
-                        'in' => 'query',
-                        'required' => true,
-                        'description' => 'Course id',
-                        'schema' => [
+            openapi: new Operation(
+                parameters: [
+                    new Parameter(
+                        name: 'resourceNode.parent',
+                        in: 'query',
+                        description: 'Resource node Parent',
+                        required: true,
+                        schema: ['type' => 'integer'],
+                    ),
+                    new Parameter(
+                        name: 'cid',
+                        in: 'query',
+                        description: 'Course id',
+                        required: true,
+                        schema: [
                             'type' => 'integer',
                         ],
-                    ],
-                    [
-                        'name' => 'sid',
-                        'in' => 'query',
-                        'required' => false,
-                        'description' => 'Session id',
-                        'schema' => [
+                    ),
+                    new Parameter(
+                        name: 'sid',
+                        in: 'query',
+                        description: 'Session id',
+                        required: false,
+                        schema: [
                             'type' => 'integer',
                         ],
-                    ],
-                    [
-                        'name' => 'q',
-                        'in' => 'query',
-                        'required' => false,
-                        'description' => 'Search term',
-                        'schema' => [
+                    ),
+                    new Parameter(
+                        name: 'q',
+                        in: 'query',
+                        description: 'Search term',
+                        required: false,
+                        schema: [
                             'type' => 'string',
                         ],
-                    ],
+                    ),
                 ],
-            ]
+            )
         ),
         new Post(
             uriTemplate: '/glossaries/import',
             controller: ImportCGlossaryAction::class,
-            openapiContext: [
-                'summary' => 'Import a glossary',
-                'requestBody' => [
-                    'content' => [
+            openapi: new Operation(
+                summary: 'Import a glossary',
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',
@@ -142,14 +147,14 @@ use Symfony\Component\Validator\Constraints as Assert;
                                 ],
                             ],
                         ],
-                    ],
+                    ]),
+                ),
+                responses: [
+                    200 => new Response(
+                        description: 'Glossaries imported successfully',
+                    ),
                 ],
-                'responses' => [
-                    '200' => [
-                        'description' => 'Glossaries imported successfully',
-                    ],
-                ],
-            ],
+            ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
             validationContext: ['groups' => ['Default', 'media_object_create', 'glossary:write']],
             deserialize: false

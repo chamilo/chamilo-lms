@@ -1,6 +1,8 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 $token = $_GET['token'] ?? '';
@@ -10,7 +12,7 @@ if (!ctype_alnum($token)) {
 }
 
 /** @var \Chamilo\CoreBundle\Entity\User $user */
-$user = UserManager::getRepository()->findUserByConfirmationToken($token);
+$user = Container::getUserRepository()->findUserByConfirmationToken($token);
 
 if ($user) {
     $user->setActive(1); // Set to 1 to activate the user

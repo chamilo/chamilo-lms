@@ -4,7 +4,7 @@
 
 class SkillRelGradebookModel extends Model
 {
-    public $columns = ['id', 'gradebook_id', 'skill_id'];
+    public $columns = ['id', 'gradebook_id', 'skill_id', 'type'];
 
     public function __construct()
     {

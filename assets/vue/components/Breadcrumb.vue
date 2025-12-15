@@ -303,7 +303,8 @@ watchEffect(() => {
     const toolBase = matchedRoutes[0]
     const currentMatched = matchedRoutes[matchedRoutes.length - 1]
 
-    let toolLabel = formatToolName(mainToolName)
+    let toolLabel = toolBase.meta?.breadcrumb || formatToolName(mainToolName)
+
     if (mainToolName === "ccalendarevent") {
       const cid = Number(route.query?.cid || 0)
       const gid = Number(route.query?.gid || 0)

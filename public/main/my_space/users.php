@@ -207,6 +207,7 @@ if ($export_csv) {
 
 $sort_by_first_name = api_sort_by_first_name();
 $actionsLeft = '';
+$actionsLeft .= Display::mySpaceMenu('students');
 
 if (api_is_drh()) {
     $menu_items = [
@@ -275,7 +276,7 @@ $actionsRight .= Display::url(
     api_get_self().'?export=csv&keyword='.$keyword
 );
 
-$toolbar = Display::toolbarAction('toolbar-user', [$actionsLeft, $actionsRight]);
+$toolbar = Display::toolbarAction('toolbar-student', [$actionsLeft, $actionsRight]);
 
 $itemPerPage = 10;
 $perPage = api_get_setting('profile.my_space_users_items_per_page');
@@ -348,7 +349,7 @@ $form = Tracking::setUserSearchForm($form);
 $form->setDefaults($params);
 
 if ($export_csv) {
-    // send the csv file if asked
+    // Send the csv file if requested
     $content = $table->get_table_data();
     foreach ($content as &$row) {
         unset($row[4]);
@@ -359,18 +360,93 @@ if ($export_csv) {
     exit;
 } else {
     Display::display_header($nameTools);
-    echo $toolbar;
-    echo Display::page_subheader($nameTools);
+
+    // Local layout styles for learners reporting page
+    echo '<style>
+        /* Cards for filters and table */
+        .reporting-students-card {
+            border-color: #e5e7eb !important; /* light gray border */
+            border-width: 1px !important;
+        }
+
+        /* Avoid dark borders inside card */
+        .reporting-students-card .panel,
+        .reporting-students-card fieldset {
+            border-color: #e5e7eb !important;
+        }
+
+        /* Main header (page title) */
+        .reporting-students-header-main > * {
+            margin: 0;
+        }
+
+        /* Subtitle placed above results table */
+        .reporting-students-header-sub > * {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #4b5563; /* softer gray */
+        }
+    </style>';
+
+    // Compute subtitle text (active / disabled accounts)
+    $activeLabel = null;
     if (isset($active)) {
         if ($active) {
             $activeLabel = get_lang('Users with an active account');
         } else {
             $activeLabel = get_lang('Users who\'s account has been disabled');
         }
-        echo Display::page_subheader2($activeLabel);
     }
+
+    echo '<div class="w-full px-4 md:px-8 pb-8 space-y-6">';
+
+    echo '      <div class="flex flex-wrap gap-2">';
+    echo            $toolbar;
+    echo '      </div>';
+
+    // Header + toolbar stacked, icons aligned to the left
+    echo '  <div class="flex flex-col gap-3 md:gap-4">';
+    echo '      <div class="space-y-1">';
+    echo            Display::page_subheader($nameTools);
+
+    if (isset($active)) {
+        if ($active) {
+            $activeLabel = get_lang('Users with an active account');
+        } else {
+            $activeLabel = get_lang('Users who\'s account has been disabled');
+        }
+        echo '  <div class="mt-1">';
+        echo        Display::page_subheader2($activeLabel);
+        echo '  </div>';
+    }
+
+    echo '      </div>';
+    echo '  </div>';
+
+    // ---------- Filters card ----------
+    echo '  <section class="reporting-students-card bg-white rounded-xl shadow-sm w-full">';
+    echo '      <div class="p-4 md:p-5">';
     $form->display();
+    echo '      </div>';
+    echo '  </section>';
+
+    // ---------- Subtitle (context of results) ----------
+    if ($activeLabel) {
+        echo '  <div class="reporting-students-header-sub px-1 mt-2">';
+        echo        Display::page_subheader2($activeLabel);
+        echo '  </div>';
+    }
+
+    // ---------- Table card ----------
+    echo '  <section class="reporting-students-card bg-white rounded-xl shadow-sm w-full">';
+    echo '      <div class="overflow-x-auto">';
     $table->display();
+    echo '      </div>';
+    echo '  </section>';
+
+    echo '</div>';
 }
 
 Display::display_footer();
+

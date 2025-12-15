@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Builder\Cc13Capabilities;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Builder\Cc13Export;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Import\Imscc13Import;
+use Chamilo\CourseBundle\Component\CourseCopy\Course;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRecycler;
@@ -33,6 +34,7 @@ use ZipArchive;
 
 use const ARRAY_FILTER_USE_BOTH;
 use const DIRECTORY_SEPARATOR;
+use const FILTER_VALIDATE_BOOL;
 use const JSON_PARTIAL_OUTPUT_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
@@ -601,7 +603,11 @@ class CourseMaintenanceController extends AbstractController
     public function deleteCourse(int $node, Request $req): JsonResponse
     {
         // Basic permission gate (adjust roles to your policy if needed)
-        if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_TEACHER') && !$this->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
+        if (
+            !$this->isGranted('ROLE_ADMIN')
+            && !$this->isGranted('ROLE_TEACHER')
+            && !$this->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+        ) {
             return $this->json(['error' => 'You are not allowed to delete this course'], 403);
         }
 
@@ -613,6 +619,11 @@ class CourseMaintenanceController extends AbstractController
                 return $this->json(['error' => 'Missing confirmation value'], 400);
             }
 
+            // Optional flag: also delete orphan documents that belong only to this course
+            // Accepts 1/0, true/false, "1"/"0"
+            $deleteDocsRaw = $payload['delete_docs'] ?? 0;
+            $deleteDocs = filter_var($deleteDocsRaw, FILTER_VALIDATE_BOOL);
+
             // Current course
             $courseInfo = api_get_course_info();
             if (empty($courseInfo)) {
@@ -620,8 +631,8 @@ class CourseMaintenanceController extends AbstractController
             }
 
             $officialCode = (string) ($courseInfo['official_code'] ?? '');
-            $runtimeCode = (string) api_get_course_id();                 // often equals official code
-            $sysCode = (string) ($courseInfo['sysCode'] ?? '');       // used by legacy delete
+            $runtimeCode = (string) api_get_course_id(); // often equals official code
+            $sysCode = (string) ($courseInfo['sysCode'] ?? ''); // used by legacy delete
 
             if ('' === $sysCode) {
                 return $this->json(['error' => 'Invalid course system code'], 400);
@@ -634,20 +645,19 @@ class CourseMaintenanceController extends AbstractController
             }
 
             // Legacy delete (removes course data + unregisters members in this course)
-            // Throws on failure or returns void
-            CourseManager::delete_course($sysCode);
+            // Now with optional orphan-docs deletion flag.
+            CourseManager::delete_course($sysCode, $deleteDocs);
 
             // Best-effort cleanup of legacy course session flags
             try {
                 $ses = $req->getSession();
                 $ses?->remove('_cid');
                 $ses?->remove('_real_cid');
-            } catch (Throwable) {
+            } catch (Throwable $e) {
                 // swallow — not critical
             }
 
             // Decide where to send the user afterwards
-            // You can use '/index.php' or a landing page
             $redirectUrl = '/index.php';
 
             return $this->json([
@@ -1013,6 +1023,9 @@ class CourseMaintenanceController extends AbstractController
         $selectionMode = false;
 
         try {
+            /** @var Course|null $courseFull */
+            $courseFull = null;
+
             if ('selected' === $scope) {
                 // Build a full snapshot first to expand any category-only selections.
                 $cbFull = new CourseBuilder();
@@ -1055,10 +1068,14 @@ class CourseMaintenanceController extends AbstractController
                     'forums' => array_fill_keys(array_map('intval', array_keys($normSel['forums'] ?? [])), true),
                 ];
                 // Also include expansions from categories
-                $fullSnapshot = isset($courseFull) ? $courseFull : $course;
+                $fullSnapshot = $courseFull ?: $course;
                 $expandedAll = $this->expandCc13SelectionFromCategories($fullSnapshot, $normSel);
                 foreach (['documents', 'links', 'forums'] as $k) {
-                    foreach (array_keys($expandedAll[$k] ?? []) as $idStr) {
+                    if (!isset($expandedAll[$k])) {
+                        continue;
+                    }
+
+                    foreach (array_keys($expandedAll[$k]) as $idStr) {
                         $safeSelected[$k][(int) $idStr] = true;
                     }
                 }

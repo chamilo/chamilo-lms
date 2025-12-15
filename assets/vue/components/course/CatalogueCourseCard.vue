@@ -497,8 +497,8 @@ const showInfoPopup = computed(() => {
 })
 
 const { isLocked, hasRequirements, requirementList, graphImage, fetchStatus } = useCourseRequirementStatus(
-  () => localCourse.value.id,
-  () => localCourse.value.sessionId || 0,
+  localCourse.value.id,
+  localCourse.value.sessionId || 0,
 )
 
 onMounted(() => {

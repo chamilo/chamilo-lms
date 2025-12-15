@@ -22083,7 +22083,7 @@ msgstr "Odaberi s tekstualnim poljem"
 msgid "Triple select"
 msgstr "Trostruki odabir"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Potvrđujete da stvarno želite da se pretplatite na ovu platformu."
 
 msgid "Add text"
@@ -22143,14 +22143,11 @@ msgstr "Potvrda registracije"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Vaš nalog je neaktivan jer ga još niste potvrdili. Provjerite svoju e-poštu i slijedite upute ili kliknite na sljedeći link da ponovo pošaljete e-poštu"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Da biste završili registraciju na platformi, morate potvrditi svoj nalog klikom na sljedeći link"
 
 msgid "Confirmation for new account"
 msgstr "Potvrda za novi nalog"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Morajte potvrditi svoj nalog preko e-pošte da biste pristupili platformi"
 
 msgid "Enable Cloud files link addition"
 msgstr "Omogući dodavanje linkova na Cloud datoteke"
@@ -24987,9 +24984,6 @@ msgstr "Izvezi sve rezultate svih testova"
 msgid "Click to view details"
 msgstr "Kliknite za pregled detalja"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Ovaj izvještaj se odnosi na sve aktivnosti korisnika na platformi."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27546,7 +27540,7 @@ msgstr "Uvjeti korištenja platforme"
 msgid "Password too easy to guess"
 msgstr "Lozinka je previše laka za pogađanje"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Morate potvrditi svoj račun putem e-pošte da biste pristupili platformi"
 
 msgid "Redirect to portal home"

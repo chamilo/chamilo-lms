@@ -22097,8 +22097,8 @@ msgstr "Select with text field"
 msgid "Triple select"
 msgstr "Triple select"
 
-msgid "You confirm that you really want to subscribe to this plateform."
-msgstr "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
+msgstr "You confirm that you really want to subscribe to this platform."
 
 msgid "Add text"
 msgstr "Add text"
@@ -22157,14 +22157,11 @@ msgstr "Registration confirmation"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
-msgstr "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
+msgstr "To complete your platform registration you need to confirm your account by clicking the following link"
 
 msgid "Confirmation for new account"
 msgstr "Confirmation for new account"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "You need confirm your account via email to access the platform"
 
 msgid "Enable Cloud files link addition"
 msgstr "Enable Cloud files link addition"
@@ -25001,9 +24998,6 @@ msgstr "Export all results of all tests"
 msgid "Click to view details"
 msgstr "Click to view details"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "This report applies to all plateform activities of the user."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27560,8 +27554,8 @@ msgstr "Platform use conditions"
 msgid "Password too easy to guess"
 msgstr "Password too easy to guess"
 
-msgid "You need confirm your account via e-mail to access the platform"
-msgstr "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
+msgstr "You need to confirm your account via e-mail to access the platform"
 
 msgid "Redirect to portal home"
 msgstr "Redirect to portal home"

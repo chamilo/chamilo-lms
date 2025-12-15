@@ -22174,7 +22174,7 @@ msgstr "Auswahl mit Textfeld"
 msgid "Triple select"
 msgstr "Dreifachauswahl"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr ""
 "Sie bestätigen, dass Sie sich wirklich für diese Plattform anmelden möchten."
 
@@ -22240,18 +22240,13 @@ msgstr ""
 "Ihre E-Mails und folgen Sie den Anweisungen oder klicken Sie auf den "
 "folgenden Link, um die E-Mail erneut zu senden"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr ""
 "Um Ihre Plattformregistrierung abzuschließen, müssen Sie Ihr Konto "
 "bestätigen, indem Sie auf den folgenden Link klicken"
 
 msgid "Confirmation for new account"
 msgstr "Bestätigung für neues Konto"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr ""
-"Sie müssen Ihr Konto per E-Mail bestätigen, um Zugang zur Plattform zu "
-"erhalten"
 
 msgid "Enable Cloud files link addition"
 msgstr "Aktivieren Sie das Hinzufügen von Cloud-Dateilinks"
@@ -25468,10 +25463,6 @@ msgstr "Exportieren Sie alle Ergebnisse aller Tests"
 
 msgid "Click to view details"
 msgstr "Klicken Sie, um Details anzuzeigen"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr ""
-"Dieser Bericht bezieht sich auf alle Plattformaktivitäten des Benutzers."
 
 msgid "dd/mm/yyyy"
 msgstr "TT/MM/JJJJ"
@@ -28986,7 +28977,7 @@ msgstr "Nutzungsbedingungen der Plattform"
 msgid "Password too easy to guess"
 msgstr "Passwort zu leicht zu erraten"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr ""
 "Sie müssen Ihr Konto per E-Mail bestätigen, um Zugang zur Plattform zu "
 "erhalten"

@@ -22083,7 +22083,7 @@ msgstr "Seletê cun camp test"
 msgid "Triple select"
 msgstr "Seletripla"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Tu confermis che tu vûs realment iscrîvti a cheste plateform."
 
 msgid "Add text"
@@ -22143,14 +22143,11 @@ msgstr "Conferme di iscrission"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Il to cont e inativ parcê che no tu âs ancor confermât. Controle la tô e-post e seguî lis istruzions o clic sul sècol colêg par rimandâ la e-post"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Par completâ la tô iscrission a la platforme tu devi confermâ il to cont clicant sul sècol colêg"
 
 msgid "Confirmation for new account"
 msgstr "Conferme par gnûf cont"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Tu devi confermâ il to cont tramite e-post par jerî la platforme"
 
 msgid "Enable Cloud files link addition"
 msgstr "Ativâ luncj a file Cloud"
@@ -24987,9 +24984,6 @@ msgstr "Esportâ ducj i risultâts di ducj i test"
 msgid "Click to view details"
 msgstr "Clic par viodî i detais"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Chest rapuort al aplliche a tutis lis ativitâts de plateform dal utint."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27546,7 +27540,7 @@ msgstr "Condizions d'us di la plateform"
 msgid "Password too easy to guess"
 msgstr "Password fasîle da indovinar"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Tu âs dut conferme il to account via e-mail par jentrâ in pla platform"
 
 msgid "Redirect to portal home"

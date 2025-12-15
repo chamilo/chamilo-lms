@@ -22087,7 +22087,7 @@ msgstr "စာသားနယ်ပယ်ဖြင့် ရွေးချယ�
 msgid "Triple select"
 msgstr "သုံးဆင့်ရွေးချယ်မှု"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "သင်သည် ဤပလပ်ဖောင်းသို့ စာရင်းသွင်းလိုသည်မှာ သေချာကြောင်း အတည်ပြုပါ။"
 
 msgid "Add text"
@@ -22147,14 +22147,11 @@ msgstr "မှတ်ပုံတင်ခြင်း အတည်ပြုခ�
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "သင့်အကောင့်သည် အတည်မပြုရသေးသောကြောင့် မလှုပ်ရှားပါ။ သင့်အီးမေးလ်ကို စစ်ဆေးပြီး ညွှန်ကြားချက်များကို လိုက်နာပါ သို့မဟုတ် အီးမေးလ်ကို ပြန်လည်ပေးပို့ရန် အောက်ပါလင့်ခ်ကို နှိပ်ပါ"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "သင့်ပလပ်ဖောင်းမှတ်ပုံတင်ခြင်းကို ပြီးစီးရန်၊ အောက်ပါလင့်ခ်ကို နှိပ်၍ သင့်အကောင့်ကို အတည်ပြုရန် လိုအပ်သည်"
 
 msgid "Confirmation for new account"
 msgstr "အကောင့်အသစ်အတွက် အတည်ပြုချက်"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "ပလပ်ဖောင်းသို့ ဝင်ရောက်ရန် သင့်အကောင့်ကို အီးမေးလ်မှတစ်ဆင့် အတည်ပြုရန် လိုအပ်သည်"
 
 msgid "Enable Cloud files link addition"
 msgstr "ကလောက်ဖိုင်လင့်ခ် ထည့်သွင်းမှုကို ဖွင့်ပါ"
@@ -24991,9 +24988,6 @@ msgstr "စမ်းသပ်မှုအားလုံး၏ ရလဒ်အ�
 msgid "Click to view details"
 msgstr "အသေးစိတ်ကြည့်ရန် နှိပ်ပါ"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "ဤအစီရင်ခံစာသည် အသုဆုံးပြုသူ၏ ပလပ်ဖောင်းလှုပ်ရှားမှုအားလုံးကို အကျုံးဝင်သည်။"
-
 msgid "dd/mm/yyyy"
 msgstr "ရက်စွဲ/လ/နှစ်"
 
@@ -27550,7 +27544,7 @@ msgstr "ပလပ်ဖောင်းအသုံးပြုမှုအခြ
 msgid "Password too easy to guess"
 msgstr "စကားဝှက်သည် ခန့်မှန်းရန် လွယ်ကူလွန်းသည်"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "ပလပ်ဖောင်းကို ဝင်ရောက်ရန် သင့်အကောင့်ကို အီးမေးလ်မှတစ်ဆင့် အတည်ပြုရန်လိုအပ်သည်"
 
 msgid "Redirect to portal home"

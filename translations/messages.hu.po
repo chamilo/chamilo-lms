@@ -22088,7 +22088,7 @@ msgstr "Kiválasztás szövegmezővel"
 msgid "Triple select"
 msgstr "Háromszoros kiválasztás"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Megnyugtatja, hogy valóban fel akar iratkozni erre a platformra."
 
 msgid "Add text"
@@ -22148,14 +22148,11 @@ msgstr "Regisztráció megerősítése"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "A fiókja inaktív, mert még nem erősítette meg. Ellenőrizze az e-mailjét, és kövesse az utasításokat, vagy kattintson a következő linkre az e-mail újraküldéséhez"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "A platform regisztrációjának befejezéséhez erősítse meg a fiókját a következő linkre kattintva"
 
 msgid "Confirmation for new account"
 msgstr "Megerősítés új fiókhoz"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "A platformhoz való hozzáféréshez e-mailben kell megerősítenie a fiókját"
 
 msgid "Enable Cloud files link addition"
 msgstr "Felhőfájl-link hozzáadásának engedélyezése"
@@ -24992,9 +24989,6 @@ msgstr "Összes teszt összes eredményének exportálása"
 msgid "Click to view details"
 msgstr "Kattintson a részletek megtekintéséhez"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Ez a jelentés a felhasználó összes platformtevékenységére vonatkozik."
-
 msgid "dd/mm/yyyy"
 msgstr "nn/hh/éééé"
 
@@ -27551,7 +27545,7 @@ msgstr "Platform használat feltételei"
 msgid "Password too easy to guess"
 msgstr "Túl könnyen kitalálható jelszó"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Erősítse meg fiókját e-mailben a platformhoz való hozzáféréshez"
 
 msgid "Redirect to portal home"

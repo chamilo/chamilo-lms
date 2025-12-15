@@ -5598,7 +5598,7 @@ SQL;
             $url .= '&s='.$sessionToRedirect;
         }
         $mailSubject = get_lang('Registration confirmation');
-        $mailBody = get_lang('To complete your platform registration you need confirm your account by clicking the following link')
+        $mailBody = get_lang('To complete your platform registration you need to confirm your account by clicking the following link')
             .PHP_EOL
             .Display::url($url, $url);
 

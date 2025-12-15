@@ -22088,7 +22088,7 @@ msgstr "Chọn với trường văn bản"
 msgid "Triple select"
 msgstr "Chọn ba lần"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Bạn xác nhận rằng bạn thực sự muốn đăng ký nền tảng này."
 
 msgid "Add text"
@@ -22148,14 +22148,11 @@ msgstr "Xác nhận đăng ký"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Tài khoản của bạn không hoạt động vì bạn chưa xác nhận. Kiểm tra email và làm theo hướng dẫn hoặc nhấp liên kết sau để gửi lại email"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Để hoàn tất đăng ký nền tảng, bạn cần xác nhận tài khoản bằng cách nhấp liên kết sau"
 
 msgid "Confirmation for new account"
 msgstr "Xác nhận tài khoản mới"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Bạn cần xác nhận tài khoản qua email để truy cập nền tảng"
 
 msgid "Enable Cloud files link addition"
 msgstr "Bật thêm liên kết tệp Cloud"
@@ -24992,9 +24989,6 @@ msgstr "Xuất tất cả kết quả của tất cả bài kiểm tra"
 msgid "Click to view details"
 msgstr "Nhấp để xem chi tiết"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Báo cáo này áp dụng cho tất cả hoạt động nền tảng của người dùng."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27551,7 +27545,7 @@ msgstr "Điều khoản sử dụng nền tảng"
 msgid "Password too easy to guess"
 msgstr "Mật khẩu quá dễ đoán"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Bạn cần xác nhận tài khoản qua email để truy cập nền tảng"
 
 msgid "Redirect to portal home"

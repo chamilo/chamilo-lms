@@ -22096,7 +22096,7 @@ msgstr "Selecionar com campo de texto"
 msgid "Triple select"
 msgstr "Seleção tripla"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Você confirma que realmente deseja se inscrever nesta plataforma."
 
 msgid "Add text"
@@ -22156,14 +22156,11 @@ msgstr "Confirmação de registro"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Sua conta está inativa porque você ainda não a confirmou. Verifique seu e-mail e siga as instruções ou clique no link abaixo para reenviar o e-mail"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Para completar seu registro na plataforma, você precisa confirmar sua conta clicando no link abaixo"
 
 msgid "Confirmation for new account"
 msgstr "Confirmação para nova conta"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Você precisa confirmar sua conta via e-mail para acessar a plataforma"
 
 msgid "Enable Cloud files link addition"
 msgstr "Ativar adição de links para arquivos em nuvem"
@@ -25000,9 +24997,6 @@ msgstr "Exportar todos os resultados de todos os testes"
 msgid "Click to view details"
 msgstr "Clique para ver detalhes"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Este relatório aplica-se a todas as atividades da plataforma do usuário."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27559,7 +27553,7 @@ msgstr "Condições de uso da plataforma"
 msgid "Password too easy to guess"
 msgstr "Senha muito fácil de adivinhar"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Você precisa confirmar sua conta por e-mail para acessar a plataforma"
 
 msgid "Redirect to portal home"

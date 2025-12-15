@@ -22101,7 +22101,7 @@ msgstr "Seleccionar con campo de texto"
 msgid "Triple select"
 msgstr "Triple select"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Confirma que realmente quere subscribirse a esta plataforma."
 
 msgid "Add text"
@@ -22161,14 +22161,11 @@ msgstr "Confirmación de rexistro"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "A túa conta está inactiva porque aínda non a confirmaches. Comproba o teu correo-e e segue as instrucións ou fai clic no seguinte enlace para reenviar o correo-e"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Para completar o teu rexistro na plataforma necesitas confirmar a túa conta facendo clic no seguinte enlace"
 
 msgid "Confirmation for new account"
 msgstr "Confirmación para nova conta"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Necesitas confirmar a túa conta por correo-e para acceder á plataforma"
 
 msgid "Enable Cloud files link addition"
 msgstr "Activar a adición de ligazóns a ficheiros na nube"
@@ -25005,9 +25002,6 @@ msgstr "Exportar todos os resultados de todos os testes"
 msgid "Click to view details"
 msgstr "Prema para ver detalles"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Este informe aplícase a todas as actividades da plataforma do usuario."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/aaaa"
 
@@ -27564,7 +27558,7 @@ msgstr "Condicións de uso da plataforma"
 msgid "Password too easy to guess"
 msgstr "Contrasinal moi fácil de adiviñar"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Necesitas confirmar a túa conta por correo-e para acceder á plataforma"
 
 msgid "Redirect to portal home"

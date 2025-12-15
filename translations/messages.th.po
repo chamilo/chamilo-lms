@@ -22088,7 +22088,7 @@ msgstr "เลือกด้วยช่องข้อความ"
 msgid "Triple select"
 msgstr "เลือกสามเท่า"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "คุณยืนยันว่าต้องการสมัครแพลตฟอร์มนี้จริงๆ"
 
 msgid "Add text"
@@ -22148,14 +22148,11 @@ msgstr "การยืนยันการลงทะเบียน"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "บัญชีของคุณไม่ใช้งานเพราะคุณยังไม่ได้ยืนยัน ตรวจสอบอีเมลของคุณและทำตามคำแนะนำหรือคลิกลิงก์ต่อไปนี้เพื่อส่งอีเมลใหม่"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "เพื่อให้การลงทะเบียนแพลตฟอร์มของคุณสมบูรณ์ คุณต้องยืนยันบัญชีโดยคลิกลิงก์ต่อไปนี้"
 
 msgid "Confirmation for new account"
 msgstr "การยืนยันบัญชีใหม่"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "คุณต้องยืนยันบัญชีทางอีเมลเพื่อเข้าถึงแพลตฟอร์ม"
 
 msgid "Enable Cloud files link addition"
 msgstr "เปิดใช้งานการเพิ่มลิงก์ไฟล์คลาวด์"
@@ -24992,11 +24989,8 @@ msgstr "ส่งออกผลลัพธ์ทั้งหมดของแ
 msgid "Click to view details"
 msgstr "คลิกเพื่อดูรายละเอียด"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "รายงานนี้ใช้กับกิจกรรมทั้งหมดของแพลตฟอร์มของผู้ใช้"
-
 msgid "dd/mm/yyyy"
-msgstr "วัน/เดือน/ปี"
+msgstr "dd/mm/yyyy"
 
 msgid "Export certificates issue report"
 msgstr "ส่งออกรายงานการออกใบรับรอง"
@@ -27551,7 +27545,7 @@ msgstr "เงื่อนไขการใช้งานแพลตฟอร
 msgid "Password too easy to guess"
 msgstr "รหัสผ่านเดาง่ายเกินไป"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "คุณต้องยืนยันบัญชีผ่านอีเมลเพื่อเข้าถึงแพลตฟอร์ม"
 
 msgid "Redirect to portal home"

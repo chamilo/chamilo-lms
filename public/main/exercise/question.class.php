@@ -1551,10 +1551,28 @@ abstract class Question
                 // Add all other non-open question types.
                 $allTypes = self::getQuestionTypeList();
 
-                // The task explicitly mentions NOT including free-answer questions.
-                // So we only exclude FREE_ANSWER here.
+                // Exclude the classic open question types from the filter list
+                // as the system cannot provide immediate feedback on these.
                 if (isset($allTypes[FREE_ANSWER])) {
                     unset($allTypes[FREE_ANSWER]);
+                }
+                if (isset($allTypes[ORAL_EXPRESSION])) {
+                    unset($allTypes[ORAL_EXPRESSION]);
+                }
+                if (isset($allTypes[ANNOTATION])) {
+                    unset($allTypes[ANNOTATION]);
+                }
+                if (isset($allTypes[MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY])) {
+                    unset($allTypes[MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY]);
+                }
+                if (isset($allTypes[UPLOAD_ANSWER])) {
+                    unset($allTypes[UPLOAD_ANSWER]);
+                }
+                if (isset($allTypes[ANSWER_IN_OFFICE_DOC])) {
+                    unset($allTypes[ANSWER_IN_OFFICE_DOC]);
+                }
+                if (isset($allTypes[PAGE_BREAK])) {
+                    unset($allTypes[PAGE_BREAK]);
                 }
 
                 // Append remaining types, without overriding the original ones.

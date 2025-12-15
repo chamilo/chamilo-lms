@@ -22083,7 +22083,7 @@ msgstr "Piliin gamit ang field ng teksto"
 msgid "Triple select"
 msgstr "Triple select"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Kinukumpirma mo na talagang nais mong mag-subscribe sa plataporma na ito."
 
 msgid "Add text"
@@ -22143,14 +22143,11 @@ msgstr "Kumpirmasyon ng pagpaparehistro"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Hindi aktibo ang iyong account dahil hindi mo pa ito nakumpirma. Suriin ang iyong email at sundin ang mga tagubilin o i-click ang sumusunod na link upang muling ipadala ang email"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Upang makumpleto ang iyong pagpaparehistro sa plataporma kailangan mong kumpirmahin ang iyong account sa pamamagitan ng pag-klik sa sumusunod na link"
 
 msgid "Confirmation for new account"
 msgstr "Kumpirmasyon para sa bagong account"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Kailangan mong kumpirmahin ang iyong account sa pamamagitan ng email upang ma-access ang plataporma"
 
 msgid "Enable Cloud files link addition"
 msgstr "Pag-enable ng pagdaragdag ng link sa Cloud files"
@@ -24987,9 +24984,6 @@ msgstr "I-export ang lahat ng resulta ng lahat ng pagsusulit"
 msgid "Click to view details"
 msgstr "I-klik upang tingnan ang mga detalye"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Ang ulat na ito ay naaaplay sa lahat ng aktibidad ng plataporma ng gumagamit."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27546,7 +27540,7 @@ msgstr "Mga kondisyon sa paggamit ng platform"
 msgid "Password too easy to guess"
 msgstr "Password ay masyadong madaling hulaan"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Kailangan mong kumpirmahin ang iyong account sa pamamagitan ng e-mail upang ma-access ang platform"
 
 msgid "Redirect to portal home"

@@ -22088,7 +22088,7 @@ msgstr "带文本字段的选择"
 msgid "Triple select"
 msgstr "三重选择"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "您确认要订阅此平台。"
 
 msgid "Add text"
@@ -22148,14 +22148,11 @@ msgstr "注册确认"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "您的帐户处于非活动状态，因为您尚未确认。请检查您的电子邮件并按照指示操作，或点击以下链接重新发送电子邮件"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "要完成平台注册，您需要点击以下链接确认您的帐户"
 
 msgid "Confirmation for new account"
 msgstr "新帐户确认"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "您需要通过电子邮件确认帐户才能访问平台"
 
 msgid "Enable Cloud files link addition"
 msgstr "启用云文件链接添加"
@@ -24992,9 +24989,6 @@ msgstr "导出所有测试的所有结果"
 msgid "Click to view details"
 msgstr "点击查看详情"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "此报告适用于用户的所有平台活动。"
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27551,7 +27545,7 @@ msgstr "平台使用条件"
 msgid "Password too easy to guess"
 msgstr "密码太容易猜测"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "您需要通过电子邮件确认账户才能访问平台"
 
 msgid "Redirect to portal home"

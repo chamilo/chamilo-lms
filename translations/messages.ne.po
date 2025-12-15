@@ -22087,7 +22087,7 @@ msgstr "पाठ क्षेत्रसँग छान्नुहोस्"
 msgid "Triple select"
 msgstr "ट्रिपल छान्नुहोस्"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "तपाईं यो प्लेटफर्ममा सदस्यता लिन चाहनुहुन्छ भन्ने पुष्टि गर्नुहुन्छ।"
 
 msgid "Add text"
@@ -22147,14 +22147,11 @@ msgstr "दर्ता पुष्टिकरण"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "तपाईंको खाता निष्क्रिय छ किनकि तपाईंले अझै पुष्टि गर्नुभएको छैन। आफ्नो इमेल जाँच गर्नुहोस् र निर्देशनहरू पालन गर्नुहोस् वा इमेल फेरि पठाउन निम्न लिङ्क क्लिक गर्नुहोस्"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "आफ्नो प्लेटफर्म दर्ता पूरा गर्न तपाईंले निम्न लिङ्क क्लिक गरेर आफ्नो खाता पुष्टि गर्न आवश्यक छ"
 
 msgid "Confirmation for new account"
 msgstr "नयाँ खाताका लागि पुष्टिकरण"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "प्लेटफर्म पहुँच गर्न इमेल मार्फत आफ्नो खाता पुष्टि गर्न आवश्यक छ"
 
 msgid "Enable Cloud files link addition"
 msgstr "क्लाउड फाइल लिङ्क थप्ने सुविधा सक्षम गर्नुहोस्"
@@ -24991,9 +24988,6 @@ msgstr "सबै परीक्षणहरूका सबै परिणा
 msgid "Click to view details"
 msgstr "विवरण हेर्न क्लिक गर्नुहोस्"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "यो रिपोर्ट प्रयोगकर्ताको सबै प्लेटफर्म गतिविधिहरूमा लागू हुन्छ।"
-
 msgid "dd/mm/yyyy"
 msgstr "दिन/महिना/वर्ष"
 
@@ -27550,7 +27544,7 @@ msgstr "प्लेटफर्म प्रयोग शर्तहरू"
 msgid "Password too easy to guess"
 msgstr "पासवर्ड अनुमान गर्न सजिलो"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "प्लेटफर्म पहुँचका लागि इमेल मार्फत आफ्नो खाता प्रमाणित गर्न आवश्यक छ"
 
 msgid "Redirect to portal home"

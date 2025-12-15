@@ -22090,7 +22090,7 @@ msgstr "Valitse tekstikentällä"
 msgid "Triple select"
 msgstr "Kolminkertainen valinta"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Vahvistat haluavasi tilautua tälle alustalle."
 
 msgid "Add text"
@@ -22150,14 +22150,11 @@ msgstr "Rekisteröitymisvahvistus"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Tili on toimimaton, koska et ole vielä vahvistanut sitä. Tarkista sähköpostisi ja noudata ohjeita tai napsauta seuraavaa linkkiä lähettääksesi sähköpostin uudelleen"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Vahvista tilisi napsauttamalla seuraavaa linkkiä alustan rekisteröinnin täydentämiseksi"
 
 msgid "Confirmation for new account"
 msgstr "Vahvistus uudelle tilille"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Vahvista tilisi sähköpostitse päästäksesi alustalle"
 
 msgid "Enable Cloud files link addition"
 msgstr "Ota käyttöön pilvitiedostojen linkkien lisäys"
@@ -24994,9 +24991,6 @@ msgstr "Vie kaikki kaikkien testien tulokset"
 msgid "Click to view details"
 msgstr "Napsauta nähdäksesi tiedot"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Tämä raportti koskee kaikkia käyttäjän alustan toimintoja."
-
 msgid "dd/mm/yyyy"
 msgstr "pp.kk.vvvv"
 
@@ -27553,7 +27547,7 @@ msgstr "Alustan käyttöehdot"
 msgid "Password too easy to guess"
 msgstr "Salasana liian helppo arvata"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Vahvista tilisi sähköpostitse päästäksesi alustalle"
 
 msgid "Redirect to portal home"

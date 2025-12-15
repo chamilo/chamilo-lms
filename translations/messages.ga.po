@@ -22087,7 +22087,7 @@ msgstr "Roghnaigh le réimse téacs"
 msgid "Triple select"
 msgstr "Roghnaigh triple"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Deimhníonn tú gur mhaith leat súil le an ardán seo i ndáiríre."
 
 msgid "Add text"
@@ -22147,14 +22147,11 @@ msgstr "Deimhniú clárúcháin"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Tá do chuntas neamhghníomhach toisc nár dheimhnigh tú é go fóill. Seiceáil do ríomhphost agus lean na treoracha nó cliceáil an nasc seo a leanas chun an ríomhphost a athsheoladh"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Chun do chlárú ardáin a chríochnú ní miste duit do chuntas a dheimhniú trí chliceáil ar an nasc seo a leanas"
 
 msgid "Confirmation for new account"
 msgstr "Deimhniú do chuntas nua"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Ní miste duit do chuntas a dheimhniú trí ríomhphost chun an ardán a rochtain"
 
 msgid "Enable Cloud files link addition"
 msgstr "Cumasaigh cur leis nasc comhaid Scamall"
@@ -24991,9 +24988,6 @@ msgstr "Easpórtáil gach toradh ó gach tástáil"
 msgid "Click to view details"
 msgstr "Cliceáil le mionsonraí a fheiceáil"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Baineann an tuairisc seo le gach gníomhaíocht ardáin an úsáideora."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27550,7 +27544,7 @@ msgstr "Coinníollacha úsáide an ardáin"
 msgid "Password too easy to guess"
 msgstr "Pasfhocal ró-éasca a thuar"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Ní mór duit do chuntas a dheimhniú trí ríomhphost chun an t-ardán a rochtain"
 
 msgid "Redirect to portal home"

@@ -22088,7 +22088,7 @@ msgstr "انتخاب با فیلد متنی"
 msgid "Triple select"
 msgstr "انتخاب سه‌گانه"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "تأیید می‌کنید که واقعاً می‌خواهید در این پلتفرم ثبت‌نام کنید."
 
 msgid "Add text"
@@ -22148,14 +22148,11 @@ msgstr "تأیید ثبت‌نام"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "حساب شما غیرفعال است زیرا هنوز آن را تأیید نکرده‌اید. ایمیل خود را بررسی کنید و دستورالعمل‌ها را دنبال کنید یا روی لینک زیر کلیک کنید تا ایمیل دوباره ارسال شود"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "برای تکمیل ثبت‌نام در پلتفرم، باید حساب خود را با کلیک روی لینک زیر تأیید کنید"
 
 msgid "Confirmation for new account"
 msgstr "تأیید حساب جدید"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "برای دسترسی به پلتفرم باید حساب خود را از طریق ایمیل تأیید کنید"
 
 msgid "Enable Cloud files link addition"
 msgstr "فعال کردن افزودن لینک فایل‌های ابری"
@@ -24992,9 +24989,6 @@ msgstr "صادر کردن همه نتایج همه آزمون‌ها"
 msgid "Click to view details"
 msgstr "برای مشاهده جزئیات کلیک کنید"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "این گزارش به همه فعالیت‌های پلتفرم کاربر اعمال می‌شود."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27551,7 +27545,7 @@ msgstr "شرایط استفاده از پلتفرم"
 msgid "Password too easy to guess"
 msgstr "رمز عبور بیش از حد ساده است"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "برای دسترسی به پلتفرم باید حساب خود را از طریق ایمیل تأیید کنید"
 
 msgid "Redirect to portal home"

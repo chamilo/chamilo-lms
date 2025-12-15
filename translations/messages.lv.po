@@ -22089,7 +22089,7 @@ msgstr "Izvēlēties ar teksta lauku"
 msgid "Triple select"
 msgstr "Trīskāršā izvēle"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Jūs apstiprināt, ka tiešām vēlaties pieteikties šai platformai."
 
 msgid "Add text"
@@ -22149,14 +22149,11 @@ msgstr "Reģistrācijas apstiprinājums"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Jūsu konts ir neaktīvs, jo jūs vēl neesat to apstiprinājis. Pārbaudiet savu e-pastu un sekojiet instrukcijām vai noklikšķiniet uz šīs saites, lai atkārtoti nosūtītu e-pastu"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Lai pabeigtu platformas reģistrāciju, jums jāapstiprina konts, noklikšķinot uz šīs saites"
 
 msgid "Confirmation for new account"
 msgstr "Apstiprinājums jaunam kontam"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Lai piekļūtu platformai, jums jāapstiprina konts caur e-pastu"
 
 msgid "Enable Cloud files link addition"
 msgstr "Iespējot mākoņfailu saišu pievienošanu"
@@ -24993,9 +24990,6 @@ msgstr "Eksportēt visu testu rezultātus"
 msgid "Click to view details"
 msgstr "Noklikšķiniet, lai skatītu detaļas"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Šis ziņojums attiecas uz visām lietotāja platformas aktivitātēm."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27552,7 +27546,7 @@ msgstr "Platformas izmantošanas nosacījumi"
 msgid "Password too easy to guess"
 msgstr "Parole ir pārāk viegli uzminama"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Lai piekļūtu platformai, jums jāapstiprina konts pa e-pastu"
 
 msgid "Redirect to portal home"

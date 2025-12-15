@@ -22101,7 +22101,7 @@ msgstr "اختيار حقل النص"
 msgid "Triple select"
 msgstr "اختيار ثلاثي"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "التأكيد بانك تريد فعلا التسجيل في هذا النظام"
 
 msgid "Add text"
@@ -22161,14 +22161,11 @@ msgstr "تأكيد التسجيل"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "حسابك معطل بسبب انك لم تقم بتأكيده، تحقق من بريدك واتبع التعليمات او انقر على الرابط التالي لاعادة ارسال البريد"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "من اجل اكمال التسجيل في النظام فان عليك تأكيد حسابك عبر النقر على الرابط التالي"
 
 msgid "Confirmation for new account"
 msgstr "تأكيد الحساب الجديد"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "يجب عليك تأكيد حسابك عبر البريد للدخول في النظام"
 
 msgid "Enable Cloud files link addition"
 msgstr "تفعيل اضافة رابط الملفات السحابية"
@@ -25005,9 +25002,6 @@ msgstr "تصدير جميع نتائج جميع الاختبارات"
 msgid "Click to view details"
 msgstr "انقر لعرض التفاصيل"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "ينطبق هذا التقرير على جميع أنشطة المنصة للمستخدم."
-
 msgid "dd/mm/yyyy"
 msgstr "يي/مم/سسن"
 
@@ -27564,7 +27558,7 @@ msgstr "شروط استخدام المنصة"
 msgid "Password too easy to guess"
 msgstr "كلمة المرور سهلة التخمين"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "يجب تأكيد حسابك عبر البريد الإلكتروني للوصول إلى المنصة"
 
 msgid "Redirect to portal home"

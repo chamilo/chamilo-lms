@@ -22152,7 +22152,7 @@ msgstr "テキストフィールドで選択"
 msgid "Triple select"
 msgstr "トリプル選択"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "このプラットフォームに登録することを確認します。"
 
 msgid "Add text"
@@ -22212,14 +22212,11 @@ msgstr "登録確認"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "アカウントが未確認のため非活性です。メールを確認して指示に従ってください。あるいは以下のリンクをクリックしてメールを再送信してください"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "プラットフォーム登録を完了するには、以下のリンクをクリックしてアカウントを確認する必要があります"
 
 msgid "Confirmation for new account"
 msgstr "新規アカウント確認"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "プラットフォームにアクセスするには、メールでアカウントを確認する必要があります"
 
 msgid "Enable Cloud files link addition"
 msgstr "クラウドファイルリンクの追加を有効にする"
@@ -25056,9 +25053,6 @@ msgstr "すべてのテストの全結果をエクスポート"
 msgid "Click to view details"
 msgstr "詳細を表示するにはクリック"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "このレポートはユーザーのプラットフォーム上の全アクティビティに適用されます。"
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27615,7 +27609,7 @@ msgstr "プラットフォーム利用条件"
 msgid "Password too easy to guess"
 msgstr "パスワードが推測されやすい"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "プラットフォームにアクセスするにはメールでアカウントを確認する必要があります"
 
 msgid "Redirect to portal home"

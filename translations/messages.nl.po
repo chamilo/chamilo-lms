@@ -22716,7 +22716,7 @@ msgstr "Selecteer met tekstveld"
 msgid "Triple select"
 msgstr "Drievoudige selectie"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "U bevestigt dat u zich echt wilt abonneren op dit platform."
 
 msgid "Add text"
@@ -22785,18 +22785,13 @@ msgstr ""
 "e-mail en volg de instructies of klik op de volgende link om de e-mail "
 "opnieuw te verzenden"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr ""
 "Om uw platformregistratie te voltooien, moet u uw account bevestigen door op "
 "de volgende link te klikken"
 
 msgid "Confirmation for new account"
 msgstr "Bevestiging voor nieuw account"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr ""
-"U moet uw account via e-mail bevestigen om toegang te krijgen tot het "
-"platform"
 
 msgid "Enable Cloud files link addition"
 msgstr "Schakel het toevoegen van Cloud-bestanden links in"
@@ -26012,10 +26007,6 @@ msgstr "Exporteer alle resultaten van alle oefeningen"
 
 msgid "Click to view details"
 msgstr "Klik om details te bekijken"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr ""
-"Dit rapport is van toepassing op alle platformactiviteiten van de gebruiker."
 
 #, fuzzy
 msgid "dd/mm/yyyy"
@@ -29511,7 +29502,7 @@ msgstr "Gebruiksvoorwaarden van het platform"
 msgid "Password too easy to guess"
 msgstr "Wachtwoord te makkelijk te raden"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr ""
 "U moet uw account via e-mail bevestigen om toegang te krijgen tot het "
 "platform"

@@ -22083,7 +22083,7 @@ msgstr "Seleccion amb camp de text"
 msgid "Triple select"
 msgstr "Triple seleccion"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Confirmatz que volètz vertadièrament vos abonar a aquesta plataforma."
 
 msgid "Add text"
@@ -22143,14 +22143,11 @@ msgstr "Confirmacion d’inscripcion"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Vòstre compte es inactiu perque l’avètz pas encara confirmat. Verificatz vòstre mail e seguissètz las instruccions o clicatz lo ligam seguent per tornar mandar lo mail"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Per completar vòstra inscripcion a la plataforma, vos cal confirmar vòstre compte en clicant lo ligam seguent"
 
 msgid "Confirmation for new account"
 msgstr "Confirmacion per novèl compte"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Vos cal confirmar vòstre compte via mail per accedir a la plataforma"
 
 msgid "Enable Cloud files link addition"
 msgstr "Activar l’addicion de ligams de fichiers Cloud"
@@ -24987,9 +24984,6 @@ msgstr "Exportar totes los resultats de totes los tèsts"
 msgid "Click to view details"
 msgstr "Clicatz per veire los detajhs"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Aquest rapòrt concern las activitats de la plataforma de l'utilizaire."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27546,7 +27540,7 @@ msgstr "Condicions d'utilizacion de la plataforma"
 msgid "Password too easy to guess"
 msgstr "Senhal tròp fàcil de devinar"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Vos cal confirmar vòstre compte per e-mail per accedir a la plataforma"
 
 msgid "Redirect to portal home"

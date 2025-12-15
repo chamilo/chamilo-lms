@@ -22102,7 +22102,7 @@ msgstr "Seleziona con campo di testo"
 msgid "Triple select"
 msgstr "Tripla selezione"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Confermi di voler aderire realmente a questa piattaforma."
 
 msgid "Add text"
@@ -22162,14 +22162,11 @@ msgstr "Conferma registrazione"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Il tuo account è inattivo perché non l'hai ancora confermato. Controlla la tua e-mail e segui le istruzioni o clicca sul seguente link per reinviare l'e-mail"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Per completare la registrazione alla piattaforma devi confermare il tuo account cliccando sul seguente link"
 
 msgid "Confirmation for new account"
 msgstr "Conferma per nuovo account"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Devi confermare il tuo account via e-mail per accedere alla piattaforma"
 
 msgid "Enable Cloud files link addition"
 msgstr "Abilita aggiunta link file Cloud"
@@ -25006,9 +25003,6 @@ msgstr "Esporta tutti i risultati di tutti i test"
 msgid "Click to view details"
 msgstr "Clicca per vedere i dettagli"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Questa relazione si applica a tutte le attività della piattaforma dell'utente."
-
 msgid "dd/mm/yyyy"
 msgstr "gg/mm/aaaa"
 
@@ -27565,7 +27559,7 @@ msgstr "Condizioni d'uso della piattaforma"
 msgid "Password too easy to guess"
 msgstr "Password troppo facile da indovinare"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Devi confermare il tuo account via e-mail per accedere alla piattaforma"
 
 msgid "Redirect to portal home"

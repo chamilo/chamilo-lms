@@ -22088,7 +22088,7 @@ msgstr "Избор с текстово поле"
 msgid "Triple select"
 msgstr "Троен избор"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Потвърждавате, че наистина искате да се абонирате за тази платформа."
 
 msgid "Add text"
@@ -22148,14 +22148,11 @@ msgstr "Потвърждение за регистрация"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Акаунтът ви е неактивен, защото още не сте го потвърдили. Проверете имейла си и следвайте инструкциите или кликнете на следващата връзка, за да изпратите имейла отново"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "За да завършите регистрацията си в платформата, трябва да потвърдите акаунта си чрез кликване на следващата връзка"
 
 msgid "Confirmation for new account"
 msgstr "Потвърждение за нов акаунт"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Трябва да потвърдите акаунта си чрез имейл, за да получите достъп до платформата"
 
 msgid "Enable Cloud files link addition"
 msgstr "Разреши добавяне на връзки към Cloud файлове"
@@ -24992,8 +24989,6 @@ msgstr "Износ на всички резултати от всички тес
 msgid "Click to view details"
 msgstr "Кликнете за детайли"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Този доклад се отнася за всички дейности на потребителя в платформата."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
@@ -27551,7 +27546,7 @@ msgstr "Условия за използване на платформата"
 msgid "Password too easy to guess"
 msgstr "Паролата е твърде лесна за позоваване"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Трябва да потвърдите акаунта си чрез имейл, за да получите достъп до платформата"
 
 msgid "Redirect to portal home"

@@ -22088,7 +22088,7 @@ msgstr "Metin alanı ile seç"
 msgid "Triple select"
 msgstr "Üçlü seç"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Bu platforma gerçekten abone olmak istediğinizi onaylıyorsunuz."
 
 msgid "Add text"
@@ -22148,14 +22148,11 @@ msgstr "Kayıt onayı"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Hesabınız henüz onaylanmadığı için pasif durumda. E-postanızı kontrol edin ve talimatları izleyin veya e-postayı yeniden göndermek için aşağıdaki bağlantıya tıklayın"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Platform kaydınızı tamamlamak için aşağıdaki bağlantıya tıklayarak hesabınızı onaylamanız gerekiyor"
 
 msgid "Confirmation for new account"
 msgstr "Yeni hesap onayı"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Platforma erişmek için hesabınızı e-posta ile onaylamanız gerekiyor"
 
 msgid "Enable Cloud files link addition"
 msgstr "Bulut dosyası bağlantısı eklemeyi etkinleştir"
@@ -24992,9 +24989,6 @@ msgstr "Tüm testlerin tüm sonuçlarını dışa aktar"
 msgid "Click to view details"
 msgstr "Detayları görmek için tıklayın"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Bu rapor kullanıcının platformdaki tüm etkinliklerine uygulanır."
-
 msgid "dd/mm/yyyy"
 msgstr "gg/aa/yyyy"
 
@@ -27551,7 +27545,7 @@ msgstr "Platform kullanım koşulları"
 msgid "Password too easy to guess"
 msgstr "Şifre tahmin edilmesi çok kolay"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Platforma erişmek için hesabınızı e-posta ile onaylamanız gerekiyor"
 
 msgid "Redirect to portal home"

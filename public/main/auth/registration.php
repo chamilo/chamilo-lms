@@ -686,7 +686,7 @@ if ($blockButton) {
         $form->addHtml('<div id="final_button" style="display: none">');
         $form->addLabel(
             null,
-            Display::return_message(get_lang('You confirm that you really want to subscribe to this plateform.'), 'info', false)
+            Display::return_message(get_lang('You confirm that you really want to subscribe to this platform.'), 'info', false)
         );
         $form->addButton('submit', get_lang('Register'), '', 'primary');
         $form->addHtml('</div>');
@@ -937,7 +937,7 @@ if ($form->validate()) {
 
             Display::addFlash(
                 Display::return_message(
-                    get_lang('You need confirm your account via e-mail to access the platform'),
+                    get_lang('You need to confirm your account via e-mail to access the platform'),
                     'warning'
                 )
             );

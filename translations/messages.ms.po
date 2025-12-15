@@ -22088,7 +22088,7 @@ msgstr "Pilih dengan medan teks"
 msgid "Triple select"
 msgstr "Pilih tiga kali"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Anda mengesahkan bahawa anda benar-benar ingin melanggankan kepada platform ini."
 
 msgid "Add text"
@@ -22148,14 +22148,11 @@ msgstr "Pengesahan pendaftaran"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Akaun anda tidak aktif kerana anda belum mengesahkannya. Semak e-mel anda dan ikuti arahan atau klik pautan berikut untuk hantar semula e-mel"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Untuk melengkapkan pendaftaran platform anda, anda perlu mengesahkan akaun anda dengan mengklik pautan berikut"
 
 msgid "Confirmation for new account"
 msgstr "Pengesahan untuk akaun baru"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Anda perlu mengesahkan akaun anda melalui e-mel untuk mengakses platform"
 
 msgid "Enable Cloud files link addition"
 msgstr "Benarkan penambahan pautan fail awan"
@@ -24992,9 +24989,6 @@ msgstr "Eksport semua hasil semua ujian"
 msgid "Click to view details"
 msgstr "Klik untuk lihat butiran"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Laporan ini merangkumi semua aktiviti platform pengguna."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27551,7 +27545,7 @@ msgstr "Syarat penggunaan platform"
 msgid "Password too easy to guess"
 msgstr "Kata laluan terlalu mudah ditebak"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Anda perlu sahkan akaun anda melalui e-mel untuk mengakses platform"
 
 msgid "Redirect to portal home"

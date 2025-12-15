@@ -22083,7 +22083,7 @@ msgstr "Chagua na eneo la maandishi"
 msgid "Triple select"
 msgstr "Chagua mara tatu"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Unathibitisha kwamba unataka kweli kujiandikisha katika jukwaa hili."
 
 msgid "Add text"
@@ -22143,14 +22143,11 @@ msgstr "Uthibitisho wa usajili"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Akaunti yako haifanyi kazi kwa sababu bado hauijathibitisha. Angalia barua pepe yako na ufuate maagizo au bonyeza kiungo hapa chini ili kutuma tena barua pepe"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Ili kukamilisha usajili wako wa jukwaa unahitaji kuthibitisha akaunti yako kwa kubofya kiungo hiki kinachofuata"
 
 msgid "Confirmation for new account"
 msgstr "Thibitisho la akaunti mpya"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Unahitaji kuthibitisha akaunti yako kupitia barua pepe ili kufikia jukwaa"
 
 msgid "Enable Cloud files link addition"
 msgstr "Wezesha kuongeza kiungo cha faili za Cloud"
@@ -24987,9 +24984,6 @@ msgstr "Hamisha matokeo yote ya majaribio yote"
 msgid "Click to view details"
 msgstr "Bonyeza ili kuona maelezo"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Ripoti hii inatumika kwa shughuli zote za jukwaa za mtumiaji."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27546,7 +27540,7 @@ msgstr "Masharti ya matumizi ya jukwaa"
 msgid "Password too easy to guess"
 msgstr "Nenosiri rahisi kukisia"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Unahitaji kuthibitisha akaunti yako kupitia barua pepe ili kufikia jukwaa"
 
 msgid "Redirect to portal home"

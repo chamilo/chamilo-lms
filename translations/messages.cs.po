@@ -22083,7 +22083,7 @@ msgstr "Vybrat s textovým polem"
 msgid "Triple select"
 msgstr "Trojnásobný výběr"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Potvrzujete, že se skutečně chcete přihlásit na tuto platformu."
 
 msgid "Add text"
@@ -22143,14 +22143,11 @@ msgstr "Potvrzení registrace"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Váš účet je neaktivní, protože jste jej ještě nepotvrdili. Zkontrolujte svůj e-mail a postupujte podle pokynů nebo klikněte na následující odkaz pro odeslání e-mailu znovu"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Pro dokončení registrace na platformě musíte potvrdit svůj účet kliknutím na následující odkaz"
 
 msgid "Confirmation for new account"
 msgstr "Potvrzení nového účtu"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Pro přístup na platformu musíte potvrdit svůj účet e-mailem"
 
 msgid "Enable Cloud files link addition"
 msgstr "Povolit přidávání odkazů na cloudové soubory"
@@ -24987,9 +24984,6 @@ msgstr "Exportovat všechny výsledky všech testů"
 msgid "Click to view details"
 msgstr "Klikněte pro zobrazení podrobností"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Tato zpráva se vztahuje na všechny aktivity uživatele na platformě."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27546,7 +27540,7 @@ msgstr "Podmínky používání platformy"
 msgid "Password too easy to guess"
 msgstr "Heslo je příliš snadno uhodnutelné"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Pro přístup k platformě musíte potvrdit svůj účet e-mailem"
 
 msgid "Redirect to portal home"

@@ -22083,7 +22083,7 @@ msgstr "Yàn pẹ̀lú ìkànkà ìwé"
 msgid "Triple select"
 msgstr "Yàn mẹ́ta"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "O fi ìdájọ́ ìmọ̀ pé o fẹ́ forúkọ sí pẹ̀lẹ́tì yìí gan-an."
 
 msgid "Add text"
@@ -22143,14 +22143,11 @@ msgstr "Ìdáhùn ìforúkọ́"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Àkọọ́ntì rẹ kò ṣiṣẹ́ nítorí o kò tí ì ṣe ìdáhùn. Ṣàyẹ̀wò ìmẹ̀lì rẹ kí o sì tẹ̀lé ìlòyè tàbí tẹ ìnọ́nnì ìtòlẹ́ yìí láti tún ìfi ránṣẹ́ ìmẹ̀lì"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Láti parí ìforúkọ́ ìpìlẹ̀ rẹ o gbọ́dọ̀ ṣe ìdáhùn àkọọ́ntì rẹ nípa títẹ ìnọ́nnì ìtòlẹ́ yìí"
 
 msgid "Confirmation for new account"
 msgstr "Ìdáhùn fún àkọọ́ntì tuntun"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "O gbọ́dọ̀ ṣe ìdáhùn àkọọ́ntì rẹ nípasẹ̀ ìmẹ̀lì láti wọle sínú ìpìlẹ̀"
 
 msgid "Enable Cloud files link addition"
 msgstr "Ṣi ìfọwọ́sowọ́ ìnọ́nnì ìfailẹ̀ awọ̀dùdù ṣiṣẹ́"
@@ -24987,9 +24984,6 @@ msgstr "Fi gbogbo awọn abajade ti gbogbo awọn idanwo jade"
 msgid "Click to view details"
 msgstr "Tẹ lati wo awọn alaye"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Ijabọ yii kan gbogbo awọn iṣẹ ṣiṣe pẹpẹ ti olumulo."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27546,7 +27540,7 @@ msgstr "Àwòrán ìlò pẹpẹ"
 msgid "Password too easy to guess"
 msgstr "Ọrọ ìgbaniwọle rẹ rọrùn jù láti ṣe ìdáhùn"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "O nilo lati fi ìmelì ṣe ìdájọ́ ìdàregistrù rẹ lati wọle si pẹpẹ"
 
 msgid "Redirect to portal home"

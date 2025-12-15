@@ -22101,7 +22101,7 @@ msgstr "Selecciona amb camp de text"
 msgid "Triple select"
 msgstr "Triple selecció"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Confirmeu que realment voleu subscriure-vos a aquesta plataforma."
 
 msgid "Add text"
@@ -22161,14 +22161,11 @@ msgstr "Confirmació de registre"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "El vostre compte està inactiu perquè encara no l'heu confirmat. Comproveu el vostre correu electrònic i seguiu les instruccions o feu clic a l'enllaç següent per reenviar el correu electrònic"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Per completar el vostre registre a la plataforma heu de confirmar el vostre compte fent clic a l'enllaç següent"
 
 msgid "Confirmation for new account"
 msgstr "Confirmació per al nou compte"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Heu de confirmar el vostre compte per correu electrònic per accedir a la plataforma"
 
 msgid "Enable Cloud files link addition"
 msgstr "Activa l'addició d'enllaços a fitxers al núvol"
@@ -25005,9 +25002,6 @@ msgstr "Exportar tots els resultats de tots els tests"
 msgid "Click to view details"
 msgstr "Feu clic per veure detalls"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Aquest informe s'aplica a totes les activitats de la plataforma de l'usuari."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/aaaa"
 
@@ -27564,7 +27558,7 @@ msgstr "Condicions d'ús de la plataforma"
 msgid "Password too easy to guess"
 msgstr "Contrasenya massa fàcil de endevinar"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Heu de confirmar el vostre compte per correu electrònic per accedir a la plataforma"
 
 msgid "Redirect to portal home"

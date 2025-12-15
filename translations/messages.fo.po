@@ -22083,7 +22083,7 @@ msgstr "Vel við tekstfelti"
 msgid "Triple select"
 msgstr "Trifalt val"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Tú staðfestir at tú í sær vilja melda teg til hesa talgvirkisins."
 
 msgid "Add text"
@@ -22143,14 +22143,11 @@ msgstr "Staðfestils tilskráning"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Talið er óvirkið, tí at tú hevur ikki staðfest tað enn. Tak undir við t-postinum og fylg leiðreglunum ella klikk á henda leinkjuna fyri at senda t-postin aftur"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Til at fullfølja tilskráningina á talgvirkinum mást tú staðfesta talið við at klikka á henda leinkju"
 
 msgid "Confirmation for new account"
 msgstr "Staðfestils fyri nýtt talið"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Tú mást staðfesta talið víð t-post at komast inn á talgvirkið"
 
 msgid "Enable Cloud files link addition"
 msgstr "Virk loyniveitingarleinkjur til skýjarfílar"
@@ -24987,9 +24984,6 @@ msgstr "Útflyt allar úrslit av øllum próvum"
 msgid "Click to view details"
 msgstr "Klikk fyri at síggja smálutir"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Hendan skýrslan gjaldir fyri allar virkniar á pallinum hjá brúkaranum."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27546,7 +27540,7 @@ msgstr "Brúkariavgerðir á pallinum"
 msgid "Password too easy to guess"
 msgstr "Loyniorðið er ov einfalt at gita"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Tú mást staðfesta tína kontu víð t-post til at fáa atgongd til pallinum"
 
 msgid "Redirect to portal home"

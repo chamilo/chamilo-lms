@@ -896,21 +896,25 @@ class ChamiloHelper
             $basename = basename(parse_url($fullUrl, PHP_URL_PATH) ?: $fullUrl);
             $byBase[$basename] = $byBase[$basename] ?? null;
 
-            $parentRelPath = '/'.trim(\dirname('/'.$rel), '/'); // "/document" or "/document/foo"
-            $depTitle = basename($rel);
+            // Convert "document/..." (package rel) to destination rel "/..."
+            $dstRel = '/'.ltrim(substr($rel, strlen('document/')), '/'); // e.g. "/Videos/img.png"
+            $depTitle = basename($dstRel);
             $depAbs = rtrim($srcRoot, '/').'/'.$rel;
 
-            // Do NOT create a top-level "/document" root
+            // Destination parent folder (no "/document" prefix in destination)
+            $parentRelPath = rtrim(\dirname($dstRel), '/');
+            if ('' === $parentRelPath || '.' === $parentRelPath) {
+                $parentRelPath = '/';
+            }
+
             $parentId = 0;
-            if ('/document' !== $parentRelPath) {
+            if ('/' !== $parentRelPath) {
                 $parentId = $folders[$parentRelPath] ?? 0;
                 if (!$parentId) {
                     $parentId = $ensureFolder($parentRelPath);
                     $folders[$parentRelPath] = $parentId;
                     $DBG('helper.ensureFolder', ['parentRelPath' => $parentRelPath, 'parentId' => $parentId]);
                 }
-            } else {
-                $parentRelPath = '/';
             }
 
             if (!is_file($depAbs) || !is_readable($depAbs)) {
@@ -963,7 +967,7 @@ class ChamiloHelper
             try {
                 $entity = DocumentManager::addDocument(
                     ['real_id' => $courseEntity->getId(), 'code' => method_exists($courseEntity, 'getCode') ? $courseEntity->getCode() : null],
-                    $parentRelPath, // metadata path (no "/document" root)
+                    $dstRel, // metadata path (no "/document" root)
                     'file',
                     (int) (@filesize($depAbs) ?: 0),
                     $finalTitle,

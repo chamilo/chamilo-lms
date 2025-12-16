@@ -11881,8 +11881,8 @@ msgid "The address of"
 msgstr "ທີ່ຢູ່ຂອງ"
 
 #, fuzzy
-msgid "Your registration on"
-msgstr "ການລົງທະບຽນຂອງທ່ານທີ່"
+msgid "Your registration on %s"
+msgstr "ການລົງທະບຽນຂອງທ່ານທີ່ %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "ຊື່ຜູ້ໃຊ້ນີ້ມີຄົນໃຊ້ແລ້ວ. ໃຊ້ປຸ່ມກັບຄືນຂອງເບຣົາເຊີຂອງທ່ານ ແລະ ເລືອກຊື່ອື່ນ."

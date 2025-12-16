@@ -10920,8 +10920,8 @@ msgstr "є"
 msgid "The address of"
 msgstr "Адреса"
 
-msgid "Your registration on"
-msgstr "Ваша реєстрація на"
+msgid "Your registration on %s"
+msgstr "Ваша реєстрація на %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Цей логін уже зайнятий. Використовуйте кнопку Назад у браузері та оберіть інший."

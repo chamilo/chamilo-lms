@@ -10924,8 +10924,8 @@ msgstr "է"
 msgid "The address of"
 msgstr "Հասցեն"
 
-msgid "Your registration on"
-msgstr "Ձեր գրանցումը"
+msgid "Your registration on %s"
+msgstr "Ձեր գրանցումը %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Այս մուտքի անունը արդեն զբաղված է: Օգտագործեք բրաուզերի հետ-վերադարձ ստեղըն և ընտրեք մեկ ուրիշը:"

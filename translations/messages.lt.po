@@ -10927,8 +10927,8 @@ msgstr "yra"
 msgid "The address of"
 msgstr "Adresas"
 
-msgid "Your registration on"
-msgstr "Jūs užregistruotas"
+msgid "Your registration on %s"
+msgstr "Jūs užregistruotas %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Šis vartotojo vardas jau naudojamas. Spauskite naršyklės \"Atgal\" mygtuką ir bandykite dar kartą."

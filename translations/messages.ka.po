@@ -10920,8 +10920,8 @@ msgstr " არის "
 msgid "The address of"
 msgstr "მისამართი"
 
-msgid "Your registration on"
-msgstr "თქვენი რეგისტრაცია"
+msgid "Your registration on %s"
+msgstr "თქვენი რეგისტრაცია %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "ეს შესვლის სახელი უკვე დაკავებულია. გამოიყენეთ ბრაუზერის უკან დაბრუნების ღილაკი და აირჩიეთ სხვა."

@@ -10924,8 +10924,8 @@ msgstr "அது"
 msgid "The address of"
 msgstr "முகவரி"
 
-msgid "Your registration on"
-msgstr "உங்கள் பதிவு"
+msgid "Your registration on %s"
+msgstr "உங்கள் பதிவு %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "இந்த உள்நுழைவு ஏற்கனவே எடுக்கப்பட்டது. உங்கள் உலாவியின் பின்னோக்கு பொத்தானைப் பயன்படுத்தி வேறு ஒன்றைத் தேர்ந்தெடுக்கவும்."

@@ -1,1 +1,3 @@
-[ {{ 'platform.site_name' | api_get_setting }} ] {{ 'YourReg'|trans  }}  {{ 'platform.site_name' | api_get_setting }}
+{% set user_locale = locale is defined ? locale : 'en' %}
+{% trans_default_domain 'messages' %}
+[ {{ 'platform.site_name' | api_get_setting }} ] {{ 'Your registration on %s'|trans({'%s', 'platform.site_name' | api_get_setting}, 'messages', user_locale) }}

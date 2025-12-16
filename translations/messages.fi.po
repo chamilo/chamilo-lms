@@ -10927,8 +10927,8 @@ msgstr "on"
 msgid "The address of"
 msgstr "Osoite ympäristöön"
 
-msgid "Your registration on"
-msgstr "Rekisteröintisi:"
+msgid "Your registration on %s"
+msgstr "Rekisteröintisi %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Tämä käyttäjänimi on jo käytössä. Mene takaisin ja yritä uudestaan."

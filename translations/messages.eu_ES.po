@@ -10925,8 +10925,8 @@ msgstr "da"
 msgid "The address of"
 msgstr "Noren helbidea:"
 
-msgid "Your registration on"
-msgstr "Zure inskripzioa honetan:"
+msgid "Your registration on %s"
+msgstr "Zure inskripzioa honetan  %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Erabiltzailearen izen hau badago hartuta. Erabili nagitzailearen 'Atzera' joateko botoia eta aukeratu beste bat."

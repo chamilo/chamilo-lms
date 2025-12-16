@@ -10924,8 +10924,8 @@ msgstr "ဖြစ်သည်"
 msgid "The address of"
 msgstr "၏လိပ်စာ"
 
-msgid "Your registration on"
-msgstr "တွင် သင့်မှတ်ပုံတင်ခြင်း"
+msgid "Your registration on %s"
+msgstr "တွင် သင့်မှတ်ပုံတင်ခြင်း %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "ဤအကောင့်အမည်ကို အသုံးပြုပြီးဖြစ်သည်။ သင့်ဘရောက်ဆာ၏ ပြန်သွားခလုတ်ကို အသုံးပြု၍ အခြားတစ်ခုကို ရွေးချယ်ပါ။"

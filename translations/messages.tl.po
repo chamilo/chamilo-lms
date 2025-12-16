@@ -10920,8 +10920,8 @@ msgstr "ay"
 msgid "The address of"
 msgstr "Ang address ng"
 
-msgid "Your registration on"
-msgstr "Ang iyong pagrehistro sa"
+msgid "Your registration on %s"
+msgstr "Ang iyong pagrehistro sa %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Ang login na ito ay naubos na. Gamitin ang back button ng iyong browser at pumili ng iba."

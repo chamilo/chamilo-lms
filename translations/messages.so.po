@@ -10920,8 +10920,8 @@ msgstr "waa"
 msgid "The address of"
 msgstr "Ciwaanka"
 
-msgid "Your registration on"
-msgstr "Diiwaangelintaada"
+msgid "Your registration on %s"
+msgstr "Diiwaangelintaada %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Gal-galkan waa la qaatay. Isticmaal badhanka gadaal ee biraawsarkaaga oo dooro mid kale."

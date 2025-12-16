@@ -10925,8 +10925,8 @@ msgstr "elnevezésű portál az alábbi URL-en érhető el"
 msgid "The address of"
 msgstr "Az"
 
-msgid "Your registration on"
-msgstr "A regisztációja"
+msgid "Your registration on %s"
+msgstr "A regisztációja %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Már van ilyen felhasználói név. Használja a böngészője vissza gombját és próbálja újra."

@@ -10925,11 +10925,11 @@ msgstr "คือ"
 msgid "The address of"
 msgstr "ที่อยู่"
 
-msgid "Your registration on"
-msgstr "ท่านลงทะเบียนวันที่"
+msgid "Your registration on %s"
+msgstr "ท่านลงทะเบียนวันที %s่"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
-msgstr "���ͼ������ �١������� ��ԡ������͹��ѧ ����ͧ��駪��������ա����˹��"
+msgstr ""
 
 msgid "You left some fields empty. Use your browser's back button and try again."
 msgstr "คุณปล่อยบางช่องไว้ว่างเปล่า คลิกปุ่มย้อนหลัง และลองอีกครั้งหนึ่ง"

@@ -10925,8 +10925,8 @@ msgstr "은"
 msgid "The address of"
 msgstr "주소"
 
-msgid "Your registration on"
-msgstr "등록정보"
+msgid "Your registration on %s"
+msgstr "등록정보 %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "이 유저명은 이미 사용중입니다. 되돌아 가서 다른 것으로 선택해주십시오."

@@ -10933,8 +10933,8 @@ msgstr "és"
 msgid "The address of"
 msgstr "L'adresa de"
 
-msgid "Your registration on"
-msgstr "El teu enregistrament a"
+msgid "Your registration on %s"
+msgstr "El teu enregistrament a %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Aquest número de matrícula ja es troba enregistrat. Utilitza el bot enrera del teu navegador i escull-ne un altre."

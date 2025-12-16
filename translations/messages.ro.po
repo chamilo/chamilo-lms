@@ -10934,8 +10934,8 @@ msgstr "este"
 msgid "The address of"
 msgstr "Adresa"
 
-msgid "Your registration on"
-msgstr "Inregistrarea ta la"
+msgid "Your registration on %s"
+msgstr "Inregistrarea ta la %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Acest nume de utilizator este deja folosit. Foloseste butonul BACK al browser-ului pentru a alege alt nume."

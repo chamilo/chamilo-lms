@@ -10920,8 +10920,8 @@ msgstr "ni"
 msgid "The address of"
 msgstr "Adirẹsi ti"
 
-msgid "Your registration on"
-msgstr "Iforukọsilẹ rẹ lori"
+msgid "Your registration on %s"
+msgstr "Iforukọsilẹ rẹ lori %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Idasile yii ti gba tẹlẹ. Lo bọtini pada ẹrọ ṣe afẹlẹ rẹ ki o yan ekeji."

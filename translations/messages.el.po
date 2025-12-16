@@ -10933,8 +10933,8 @@ msgstr "Οι αλλαγές σας αποθηκεύτηκαν"
 msgid "The address of"
 msgstr "Διεύθυνση"
 
-msgid "Your registration on"
-msgstr "Η εγγραφή σας στην πλατφόρμα"
+msgid "Your registration on %s"
+msgstr "Η εγγραφή σας στην πλατφόρμα %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Το όνομα χρήστη που επιλέξατε χρησιμοποιείται! Χρησιμοποιήστε το πλήκτρο «επιστροφή» του browser σας και ξαναδοκιμάστε."

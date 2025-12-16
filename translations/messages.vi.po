@@ -10925,8 +10925,8 @@ msgstr "is"
 msgid "The address of"
 msgstr "địa chỉ của"
 
-msgid "Your registration on"
-msgstr "Đăng ký của bạn trên"
+msgid "Your registration on %s"
+msgstr "Đăng ký của bạn trên %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Tên đăng nhập đã có người sử dụng. Sử dụng nút quay lại của trình duyệt và chọn 1 kết quả khac"

@@ -10926,8 +10926,8 @@ msgstr "иметь место (это)"
 msgid "The address of"
 msgstr "Адрес"
 
-msgid "Your registration on"
-msgstr "Ваша регистрация на"
+msgid "Your registration on %s"
+msgstr "Ваша регистрация на %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Такое имя пользователя уже взято. Используйте  кнопку \"Назад\" Вашего браузера и выбирите другое имя."

@@ -10926,8 +10926,8 @@ msgstr "ir"
 msgid "The address of"
 msgstr "Interneta adrese, e-mācību videi"
 
-msgid "Your registration on"
-msgstr "Jūsu reģistrācija e-mācību vidē"
+msgid "Your registration on %s"
+msgstr "Jūsu reģistrācija e-mācību vidē %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Šis lietotājvārds jau ir aizņemts. Noklikšķiniet pārlūkprogrammas \"Back\" pogu un izvēlieties citu."

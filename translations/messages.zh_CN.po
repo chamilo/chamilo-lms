@@ -10925,8 +10925,8 @@ msgstr "是"
 msgid "The address of"
 msgstr "地址"
 
-msgid "Your registration on"
-msgstr "您的注册信息"
+msgid "Your registration on %s"
+msgstr "您的注册信息 %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "用户名已经存在, 点击浏览器的退回按纽重新选择用户名。"

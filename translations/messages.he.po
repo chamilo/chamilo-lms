@@ -10934,8 +10934,8 @@ msgstr "הוא"
 msgid "The address of"
 msgstr "הכתובת של"
 
-msgid "Your registration on"
-msgstr "הרישום שלך ב"
+msgid "Your registration on %s"
+msgstr "הרישום שלך ב %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "כניסה זו כבר בוצעה. השתמש בלחצן החזרה של הדפדפן שלך ובחר אחר."

@@ -1,0 +1,34 @@
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            <p>
+                <strong>{{ 'Mailer DSN'|trans }}</strong><br>
+                <code>{{ mailer_dsn }}</code>
+            </p>
+            <br>
+
+            {{ form_start(form) }}
+            {{ form_row(form.destination) }}
+            {{ form_row(form.subject) }}
+            {{ form_row(form.content) }}
+
+            <button class="btn btn--primary">{{ 'Send test email'|trans }}</button>
+            {{ form_end(form) }}
+        </div>
+        <div class="col-md-6">
+            {% if errors is not empty %}
+                <h4 class="page-header">{{ 'Errors'|get_lang }}</h4>
+                <ul>
+                    {% for error in errors %}
+                        <li>
+                            {{ 'Email: %s. %s ago'|format(error.mail, error.time) }}
+                            <pre>{{ error.reason|replace({'\n': '<br>'}) }}</pre>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

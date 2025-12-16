@@ -613,7 +613,7 @@ class IndexBlocksController extends BaseController
         if (is_dir(api_get_path(SYS_TEST_PATH))) {
             $items[] = [
                 'class' => 'item-email-tester',
-                'url' => '/main/admin/email_tester.php',
+                'url' => '/admin/email_tester',
                 'label' => $this->translator->trans('E-mail tester'),
             ];
         }

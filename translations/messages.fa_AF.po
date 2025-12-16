@@ -10920,8 +10920,8 @@ msgstr "است"
 msgid "The address of"
 msgstr "آدرس"
 
-msgid "Your registration on"
-msgstr "ثبت‌نام شما در"
+msgid "Your registration on %s"
+msgstr "ثبت‌نام شما در %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "این نام کاربری قبلاً گرفته شده است. از دکمه بازگشت مرورگر استفاده کنید و دیگری انتخاب کنید."

@@ -10933,8 +10933,8 @@ msgstr "é"
 msgid "The address of"
 msgstr "O endereço do"
 
-msgid "Your registration on"
-msgstr "Sua inscrição no"
+msgid "Your registration on %s"
+msgstr "Sua inscrição no %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Esse codinome já está sendo utilizado. Use o botão voltar do seu navegador e escolha outro."

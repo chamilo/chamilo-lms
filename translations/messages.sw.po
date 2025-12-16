@@ -10920,8 +10920,8 @@ msgstr "ni"
 msgid "The address of"
 msgstr "Anwani ya"
 
-msgid "Your registration on"
-msgstr "Usajili wako kwenye"
+msgid "Your registration on %s"
+msgstr "Usajili wako kwenye %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Ingia hili tayari limechukuliwa. Tumia kitufe cha kurudi cha kivinjari chako na uchague lingine."

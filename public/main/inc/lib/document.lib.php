@@ -3263,6 +3263,9 @@ This folder contains all sessions that have been opened in the chat. Although th
 
         // Document already exists
         if (null !== $document) {
+            // Keep the contextual tree consistent: set ResourceLink.parent when needed.
+            self::syncResourceLinkParentForContext($document, $parentResource, $courseEntity, $session, $group);
+
             return $document;
         }
 
@@ -3280,6 +3283,9 @@ This folder contains all sessions that have been opened in the chat. Although th
         $em = Database::getManager();
         $em->persist($document);
         $em->flush();
+
+        // Ensure contextual hierarchy (course/session/group) uses ResourceLink.parent.
+        self::syncResourceLinkParentForContext($document, $parentResource, $courseEntity, $session, $group);
 
         $repo = Container::getDocumentRepository();
         if (!empty($content)) {
@@ -3317,5 +3323,109 @@ This folder contains all sessions that have been opened in the chat. Although th
         }
 
         return false;
+    }
+
+    private static function syncResourceLinkParentForContext(
+        CDocument $child,
+                  $parentResource,
+                  $courseEntity,
+                  $session,
+                  $group
+    ): void {
+        // Only set a parent link when the parent is another document (folder).
+        if (!$parentResource instanceof CDocument) {
+            return; // Root items must keep rl.parent = NULL
+        }
+
+        if (!method_exists($child, 'getResourceNode') || !method_exists($parentResource, 'getResourceNode')) {
+            return;
+        }
+
+        $childNode = $child->getResourceNode();
+        $parentNode = $parentResource->getResourceNode();
+
+        if (!$childNode instanceof ResourceNode || !$parentNode instanceof ResourceNode) {
+            return;
+        }
+
+        try {
+            $em = Database::getManager();
+
+            $childLink = self::findResourceLinkForContext($em, $childNode, $courseEntity, $session, $group);
+            $parentLink = self::findResourceLinkForContext($em, $parentNode, $courseEntity, $session, $group);
+
+            if (!$childLink instanceof ResourceLink || !$parentLink instanceof ResourceLink) {
+                // If a link is missing, we don't hard-fail the import.
+                error_log('[IMPORT] ResourceLink not found for context when syncing parent.', [
+                    'childNodeId' => method_exists($childNode, 'getId') ? $childNode->getId() : null,
+                    'parentNodeId' => method_exists($parentNode, 'getId') ? $parentNode->getId() : null,
+                ]);
+
+                return;
+            }
+
+            $currentParent = method_exists($childLink, 'getParent') ? $childLink->getParent() : null;
+
+            // Avoid useless flushes
+            if ($currentParent && method_exists($currentParent, 'getId') && method_exists($parentLink, 'getId')) {
+                if ((int) $currentParent->getId() === (int) $parentLink->getId()) {
+                    return;
+                }
+            }
+
+            $childLink->setParent($parentLink);
+            $em->persist($childLink);
+            $em->flush();
+        } catch (\Throwable $e) {
+            error_log('[IMPORT] Failed to sync ResourceLink.parent for context: '.$e->getMessage());
+        }
+    }
+
+    private static function findResourceLinkForContext(
+        $em,
+        ResourceNode $node,
+        $courseEntity,
+        $session,
+        $group
+    ): ?ResourceLink {
+        try {
+            $qb = $em->createQueryBuilder()
+                ->select('rl')
+                ->from(ResourceLink::class, 'rl')
+                ->andWhere('rl.resourceNode = :node')
+                ->setParameter('node', $node);
+
+            // Course context
+            if ($courseEntity) {
+                $qb->andWhere('rl.course = :course')->setParameter('course', $courseEntity);
+            } else {
+                $qb->andWhere('rl.course IS NULL');
+            }
+
+            // Session context
+            if ($session) {
+                $qb->andWhere('rl.session = :session')->setParameter('session', $session);
+            } else {
+                $qb->andWhere('rl.session IS NULL');
+            }
+
+            // Group context
+            if ($group) {
+                $qb->andWhere('rl.group = :group')->setParameter('group', $group);
+            } else {
+                $qb->andWhere('rl.group IS NULL');
+            }
+
+            $qb->setMaxResults(1);
+
+            /** @var ResourceLink|null $link */
+            $link = $qb->getQuery()->getOneOrNullResult();
+
+            return $link;
+        } catch (\Throwable $e) {
+            error_log('[IMPORT] Failed to find ResourceLink for context: '.$e->getMessage());
+
+            return null;
+        }
     }
 }

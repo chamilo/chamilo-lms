@@ -10925,8 +10925,8 @@ msgstr "e"
 msgid "The address of"
 msgstr "Адресата на"
 
-msgid "Your registration on"
-msgstr "Вашата регистрација на"
+msgid "Your registration on %s"
+msgstr "Вашата регистрација на %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Ова корисничко_име веќе е земено. Ползувајте го копчето Назад на Вашиот прелистувач и изберете друго."

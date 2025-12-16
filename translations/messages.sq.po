@@ -10924,8 +10924,8 @@ msgstr "është"
 msgid "The address of"
 msgstr "Adresa e"
 
-msgid "Your registration on"
-msgstr "Regjistrimi juaj në"
+msgid "Your registration on %s"
+msgstr "Regjistrimi juaj në %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Kjo hyrje është tashmë e zënë. Përdorni butonin back të shfletuesit tuaj dhe zgjidhni një tjetër."

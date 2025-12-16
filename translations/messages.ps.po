@@ -10920,8 +10920,8 @@ msgstr "دی"
 msgid "The address of"
 msgstr "د ... پتې"
 
-msgid "Your registration on"
-msgstr "ستاسو ثبت پر"
+msgid "Your registration on %s"
+msgstr "ستاسو ثبت پر %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "دا لاس انډاز دمخه نيول شوی دی. له براوزر بېک بوټن څخه کار واخلئ او بل يې غوره کړئ."

@@ -206,7 +206,7 @@ switch ($action) {
                         PERSON_NAME_EMAIL_ADDRESS
                     );
 
-                    $subject = '['.api_get_setting('siteName').'] '.get_lang('Your registration on').' '.api_get_setting('siteName');
+                    $subject = '['.api_get_setting('siteName').'] '.sprintf(get_lang('Your registration on %s'), api_get_setting('site_name'));
                     $emailAdmin = api_get_setting('emailAdministrator');
                     $sender_name = api_get_person_name(
                         api_get_setting('administratorName'),

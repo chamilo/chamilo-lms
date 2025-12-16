@@ -10989,8 +10989,8 @@ msgstr "は"
 msgid "The address of"
 msgstr "アドレス::"
 
-msgid "Your registration on"
-msgstr "判峡されました:"
+msgid "Your registration on %s"
+msgstr "判峡されました %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "このユ〖ザ叹はすでに、戮の客がつかっています。ボタンで提って、侍の叹涟で判峡してください。"

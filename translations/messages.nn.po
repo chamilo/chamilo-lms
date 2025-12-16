@@ -10925,8 +10925,8 @@ msgstr "er"
 msgid "The address of"
 msgstr "Adressa til"
 
-msgid "Your registration on"
-msgstr "Registreringa di på"
+msgid "Your registration on %s"
+msgstr "Registreringa di på %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Denne innlogginga er allereie tatt. Bruk nettlesarens tilbakeknapp og vel ein annan."

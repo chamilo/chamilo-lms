@@ -1175,7 +1175,7 @@ class UserManager
 
         if (!empty($email) && $send_email) {
             $recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
-            $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('Your registration on').' '.api_get_setting('siteName');
+            $emailsubject = '['.api_get_setting('site_name').'] '.sprintf(get_lang('Your registration on %s'), api_get_setting('site_name'));
             $sender_name = api_get_person_name(
                 api_get_setting('administratorName'),
                 api_get_setting('administratorSurname'),

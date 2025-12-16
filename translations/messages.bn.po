@@ -10920,8 +10920,8 @@ msgstr "হল"
 msgid "The address of"
 msgstr "ঠিকানা"
 
-msgid "Your registration on"
-msgstr "আপনার নিবন্ধন"
+msgid "Your registration on %s"
+msgstr "আপনার নিবন্ধন %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "এই লগইনটি ইতিমধ্যে নেওয়া হয়েছে। ব্রাউজারের ব্যাক বোতাম ব্যবহার করে অন্যটি বেছে নিন।"

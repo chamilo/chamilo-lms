@@ -11165,8 +11165,8 @@ msgstr "est"
 msgid "The address of"
 msgstr "L'adresse de"
 
-msgid "Your registration on"
-msgstr "Votre inscription sur"
+msgid "Your registration on %s"
+msgstr "Votre inscription sur %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "L'identifiant que vous avez choisi est déjà pris.Utilisez le bouton de retour en arrière de votre navigateuret choisissez-en un autre."

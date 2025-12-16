@@ -10925,8 +10925,8 @@ msgstr "es"
 msgid "The address of"
 msgstr "Piqpa maypi kaqnin"
 
-msgid "Your registration on"
-msgstr "Qelqachikusqaykiqa kaypin"
+msgid "Your registration on %s"
+msgstr "Qelqachikusqaykiqa kaypin %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Hakuqmasiq sutin ajllasqaykiqa ña kasha q'apiy 'Qepa' nisqata wanpuqniykimanta chaymantaqa ajllay hoqta."

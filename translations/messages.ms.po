@@ -10925,8 +10925,8 @@ msgstr "ialah"
 msgid "The address of"
 msgstr "Alamat"
 
-msgid "Your registration on"
-msgstr "Pendaftaran anda pada"
+msgid "Your registration on %s"
+msgstr "Pendaftaran anda pada %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "ID Pengguna telah wujud. Sila daftar dengan ID Pengguna yang lain."

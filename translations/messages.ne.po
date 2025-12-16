@@ -10924,8 +10924,8 @@ msgstr "छ"
 msgid "The address of"
 msgstr "को ठेगाना"
 
-msgid "Your registration on"
-msgstr "मा तपाईंको दर्ता"
+msgid "Your registration on %s"
+msgstr "मा तपाईंको दर्ता %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "यो लगइन पहिले नै लिइएको छ। तपाईंको ब्राउजरको पछाडि बटन प्रयोग गर्नुहोस् र अर्को छान्नुहोस्।"

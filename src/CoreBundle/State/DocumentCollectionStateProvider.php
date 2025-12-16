@@ -48,6 +48,16 @@ final class DocumentCollectionStateProvider implements ProviderInterface
             ->addSelect('rn')
         ;
 
+        // Hide certificates system folder (and its children) from the document tool.
+        // Allow debugging by passing ?showSystemCertificates=1
+        $showSystemCertificates = (bool) $request->query->get('showSystemCertificates', false);
+        if (!$showSystemCertificates) {
+            $qb
+                ->andWhere('rn.path IS NULL OR rn.path NOT LIKE :certificatesPath')
+                ->setParameter('certificatesPath', '%/certificates-%')
+            ;
+        }
+
         // Filetype filtering: filetype[]=file&filetype[]=folder&filetype[]=video OR filetype=folder
         $filetypes = $request->query->all('filetype');
 

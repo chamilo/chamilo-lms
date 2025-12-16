@@ -10921,7 +10921,7 @@ msgstr ""
 msgid "The address of"
 msgstr ""
 
-msgid "Your registration on"
+msgid "Your registration on %s"
 msgstr ""
 
 msgid "This login is already taken. Use your browser's back button and choose another."

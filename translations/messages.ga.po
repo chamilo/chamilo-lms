@@ -10924,8 +10924,8 @@ msgstr "is"
 msgid "The address of"
 msgstr "Seoladh"
 
-msgid "Your registration on"
-msgstr "Do chlárú ar"
+msgid "Your registration on %s"
+msgstr "Do chlárú ar %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Tá an logáil isteach seo glactha cheana. Úsáid cnaipe ar ais an bhrabhsóra agus roghnaigh ceann eile."

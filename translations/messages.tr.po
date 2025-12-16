@@ -10925,11 +10925,11 @@ msgstr "dır"
 msgid "The address of"
 msgstr "Adres"
 
-msgid "Your registration on"
-msgstr "Kaydınız"
+msgid "Your registration on %s"
+msgstr "Kaydınız %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
-msgstr "Bu kullan�c� ad� daha �nce al�nm��t�r. Geri d�n�p ba�ka bir ad yaz�n�z."
+msgstr ""
 
 msgid "You left some fields empty. Use your browser's back button and try again."
 msgstr "Bazı alanları boş bıraktınız. Geri dönüp doldurunuz."

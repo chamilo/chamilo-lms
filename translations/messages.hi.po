@@ -10920,8 +10920,8 @@ msgstr "है"
 msgid "The address of"
 msgstr "का पता"
 
-msgid "Your registration on"
-msgstr "पर आपका पंजीकरण"
+msgid "Your registration on %s"
+msgstr "पर आपका पंजीकरण %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "यह लॉगिन पहले से लिया गया है। ब्राउज़र का बैक बटन दबाएं और दूसरा चुनें।"

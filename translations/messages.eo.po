@@ -10925,8 +10925,8 @@ msgstr "estas"
 msgid "The address of"
 msgstr "La adreso de"
 
-msgid "Your registration on"
-msgstr "Via registriĝo je"
+msgid "Your registration on %s"
+msgstr "Via registriĝo je %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "La enigita uzulnomo estas jam uzata. Uzu la retroiran butonon de via foliumilo ka provu denove."

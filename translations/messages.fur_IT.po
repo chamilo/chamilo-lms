@@ -10920,8 +10920,8 @@ msgstr "e je"
 msgid "The address of"
 msgstr "L indiriz di"
 
-msgid "Your registration on"
-msgstr "La to registrassion su"
+msgid "Your registration on %s"
+msgstr "La to registrassion su %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Chest login e je za pres. Torne inda tal to navigadôr e scjais un altri."

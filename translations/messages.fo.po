@@ -10920,8 +10920,8 @@ msgstr "er"
 msgid "The address of"
 msgstr "Adressa til"
 
-msgid "Your registration on"
-msgstr "Tín registrering á"
+msgid "Your registration on %s"
+msgstr "Tín registrering á %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Hendan innskraningin er longu tikin. Brúka tilbakaknøttina á kagafløðuni og velja aðra."

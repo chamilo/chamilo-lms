@@ -10920,8 +10920,8 @@ msgstr "je"
 msgid "The address of"
 msgstr "Adresa"
 
-msgid "Your registration on"
-msgstr "Vaša registracija na"
+msgid "Your registration on %s"
+msgstr "Vaša registracija na %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Ovaj login je već zauzet. Koristite gumb Nazad u pregledniku i odaberite drugi."

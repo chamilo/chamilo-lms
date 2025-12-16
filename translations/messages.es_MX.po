@@ -10925,8 +10925,8 @@ msgstr "es"
 msgid "The address of"
 msgstr "La dirección de"
 
-msgid "Your registration on"
-msgstr "Su inscripción en"
+msgid "Your registration on %s"
+msgstr "Su inscripción en %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "El nombre de usuario que eligió ya existe. Use el botón 'Atrás'  del navegador y elija uno diferente."

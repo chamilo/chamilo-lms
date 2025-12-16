@@ -10920,8 +10920,8 @@ msgstr "yi"
 msgid "The address of"
 msgstr "Idilesi ye"
 
-msgid "Your registration on"
-msgstr "Ubhaliso lwakho ku"
+msgid "Your registration on %s"
+msgstr "Ubhaliso lwakho ku %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Eli login selithathwe. Sebenzisa iqhosha elibuyela umva kwibhrawuza yakho kwaye ukhethe enye."

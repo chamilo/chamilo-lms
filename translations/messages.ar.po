@@ -10934,8 +10934,8 @@ msgstr "is"
 msgid "The address of"
 msgstr "عنوان الـ"
 
-msgid "Your registration on"
-msgstr "تسجيلك في"
+msgid "Your registration on %s"
+msgstr "تسجيلك في%s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "اسم المستخدم هذا مستخدم من قبل شخص آخر. فضلا استخدم زر الرجوع في متصفحك للتراجع"

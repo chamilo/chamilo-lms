@@ -10926,8 +10926,8 @@ msgstr "je"
 msgid "The address of"
 msgstr "Adresa"
 
-msgid "Your registration on"
-msgstr "Vaša prijava je"
+msgid "Your registration on %s"
+msgstr "Vaša prijava je %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Ovo korisničko ime već postoji. Kliknite na opciju Povratak i izaberite neko drugo."

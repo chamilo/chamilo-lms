@@ -55,6 +55,8 @@ window.RecordAudio = (function () {
         var buttonsToDisable = [
             ".exercise_save_now_button button",
             ".exercise_actions button",
+            ".question-answer-result button[name='show_ck']",
+            "#form-email button",
         ].join(', ');
 
         function saveAudio() {

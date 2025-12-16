@@ -437,7 +437,7 @@ define('GROUP_PERMISSION_CLOSED', '2');
 
 // Group user permissions
 define('GROUP_USER_PERMISSION_ADMIN', 1); // the admin of a group
-define('GROUP_USER_PERMISSION_READER', 2); // a normal user
+define('GROUP_USER_PERMISSION_READER', 0); // a normal user
 define('GROUP_USER_PERMISSION_PENDING_INVITATION', 3); // When an admin/moderator invites a user
 define('GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER', 4); // an user joins a group
 define('GROUP_USER_PERMISSION_MODERATOR', 5); // a moderator

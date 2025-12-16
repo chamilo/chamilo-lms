@@ -10,19 +10,19 @@
     </div>
     <img
       v-else
-      :src="thumbnail"
       :alt="session.title"
+      :src="thumbnail"
       class="w-full h-40 object-cover"
       @error="onImageError"
     />
     <Button
       v-if="allowDescription"
-      icon="pi pi-info-circle"
-      @click="showDescriptionDialog = true"
+      aria-label="Session info"
       class="absolute top-2 left-2 z-20"
+      icon="pi pi-info-circle"
       size="small"
       text
-      aria-label="Session info"
+      @click="showDescriptionDialog = true"
     />
     <span
       v-if="languages.length"
@@ -66,11 +66,11 @@
       </div>
 
       <Rating
+        :cancel="false"
         :model-value="session.userVote?.vote || 0"
         :stars="5"
-        :cancel="false"
-        @change="emitRating"
         class="mt-2"
+        @change="emitRating"
       />
       <div class="text-xs text-gray-600 mt-1">
         {{ session.popularity || 0 }} Vote<span v-if="session.popularity !== 1">s</span>
@@ -86,65 +86,65 @@
         <Button
           v-if="requirementStatusLoading"
           :label="$t('Loading...')"
-          icon="pi pi-spin pi-spinner"
           class="w-full"
           disabled
+          icon="pi pi-spin pi-spinner"
         />
 
         <Button
           v-else-if="isPast"
           :label="$t('Not available')"
-          icon="pi pi-lock"
           class="w-full"
           disabled
+          icon="pi pi-lock"
         />
 
         <template v-else-if="session.buyButtonHtml">
           <div
-            v-html="session.buyButtonHtml"
             class="w-full text-center mb-2"
+            v-html="session.buyButtonHtml"
           ></div>
         </template>
 
         <Button
           v-else-if="isSessionLocked"
           :label="$t('Check requirements')"
-          icon="mdi mdi-shield-check"
           class="w-full p-button-warning"
+          icon="mdi mdi-shield-check"
           @click="openSessionRequirementModal"
         />
 
         <Button
           v-else-if="allowAutoSubscription && !session.isSubscribed"
-          :label="isLoading ? $t('Subscribing...') : $t('Subscribe')"
-          :icon="isLoading ? 'pi pi-spin pi-spinner' : 'pi pi-user-plus'"
-          class="w-full p-button-success"
           :disabled="isLoading"
+          :icon="isLoading ? 'pi pi-spin pi-spinner' : 'pi pi-user-plus'"
+          :label="isLoading ? $t('Subscribing...') : $t('Subscribe')"
+          class="w-full p-button-success"
           @click="subscribeToSession"
         />
 
         <Button
           v-else-if="session.isSubscribed && isFuture"
           :label="$t('Registered')"
-          icon="pi pi-check"
           class="w-full p-button-outlined"
           disabled
+          icon="pi pi-check"
         />
 
         <Button
           v-else-if="session.isSubscribed"
           :label="$t('Go to the session')"
-          icon="pi pi-external-link"
           class="w-full"
+          icon="pi pi-external-link"
           @click="showGoDialog = true"
         />
 
         <Button
           v-else
           :label="$t('Not available')"
-          icon="pi pi-lock"
           class="w-full"
           disabled
+          icon="pi pi-lock"
         />
       </div>
     </div>
@@ -152,8 +152,8 @@
     <Dialog
       v-model:visible="showCourseDialog"
       :header="$t('Courses')"
-      modal
       class="w-96"
+      modal
     >
       <ul class="list-disc pl-5 text-sm text-gray-700">
         <template v-if="validCourses.length">
@@ -172,8 +172,8 @@
     <Dialog
       v-model:visible="showGoDialog"
       :header="$t('Select a course')"
-      modal
       class="w-96"
+      modal
     >
       <ul class="pl-2 text-sm text-gray-800 space-y-3">
         <template v-if="validCourses.length">
@@ -188,10 +188,10 @@
               target="_blank"
             >
               <Button
-                icon="pi pi-sign-in"
                 :label="$t('Go')"
-                size="small"
                 class="p-button-sm p-button-text"
+                icon="pi pi-sign-in"
+                size="small"
               />
             </a>
           </li>
@@ -205,8 +205,8 @@
   <Dialog
     v-model:visible="showDescriptionDialog"
     :header="session.title"
-    modal
     class="w-96"
+    modal
   >
     <p
       class="text-sm text-gray-700 whitespace-pre-line"
@@ -217,16 +217,16 @@
     v-if="!requirementStatusLoading && isSessionLocked"
     v-model="showRequirementModal"
     :course-id="null"
-    :session-id="props.session.id"
+    :graph-image="sessionRequirementStatus.graphImage.value"
     :requirements="[
       ...(sessionRequirementStatus.requirementList.value || []),
       ...(sessionRequirementStatus.dependencyList.value || []),
     ]"
-    :graph-image="sessionRequirementStatus.graphImage.value"
+    :session-id="props.session.id"
   />
 </template>
 <script setup>
-import { ref, computed, watchEffect, onMounted } from "vue"
+import { computed, onMounted, ref, watchEffect } from "vue"
 import Rating from "primevue/rating"
 import Button from "primevue/button"
 import Dialog from "primevue/dialog"

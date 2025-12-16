@@ -894,8 +894,10 @@ class UserGroupModel extends Model
             $relationConditionArray = [];
             foreach ($roles as $relation) {
                 $relation = (int) $relation;
-                if (empty($relation)) {
-                    $relationConditionArray[] = " (relation_type = 0 OR relation_type IS NULL OR relation_type = '') ";
+
+                if (0 === $relation) {
+                    $relationConditionArray[] =
+                        ' (relation_type = '.GROUP_USER_PERMISSION_READER.' OR relation_type = 2 OR relation_type IS NULL OR relation_type = \'\') ';
                 } else {
                     $relationConditionArray[] = " relation_type = $relation ";
                 }
@@ -928,20 +930,33 @@ class UserGroupModel extends Model
     }
 
     /**
-     * Gets a list of user ids by user group.
+     * Gets a list of user ids by user group and relation type.
      *
      * @param int $id       user group id
-     * @param int $relation
+     * @param int $relation relation type
      *
      * @return array with a list of user ids
      */
     public function getUsersByUsergroupAndRelation($id, $relation = 0)
     {
         $relation = (int) $relation;
-        if (empty($relation)) {
-            $conditions = ['where' => ['usergroup_id = ? AND (relation_type = 0 OR relation_type IS NULL OR relation_type = "") ' => [$id]]];
+
+        if (0 === $relation) {
+            // Default reader role: include canonical (0) + legacy (2) + null / empty
+            $conditions = [
+                'where' => [
+                    'usergroup_id = ? AND (relation_type = ? OR relation_type = 2 OR relation_type IS NULL OR relation_type = \'\') ' => [
+                        $id,
+                        GROUP_USER_PERMISSION_READER,
+                    ],
+                ],
+            ];
         } else {
-            $conditions = ['where' => ['usergroup_id = ? AND relation_type = ?' => [$id, $relation]]];
+            $conditions = [
+                'where' => [
+                    'usergroup_id = ? AND relation_type = ?' => [$id, $relation],
+                ],
+            ];
         }
 
         $results = Database::select(
@@ -1224,92 +1239,100 @@ class UserGroupModel extends Model
         $delete_users_not_present_in_list = true,
         $relationType = 0
     ) {
-        $usergroup_id = (int) $usergroup_id;
+        // Normalize relation type
         $relationType = (int) $relationType;
 
-        $current_list = $this->get_users_by_usergroup($usergroup_id);
-        $course_list = $this->get_courses_by_usergroup($usergroup_id);
+        // Detect group type to keep legacy behaviour for classic classes
+        $groupInfo = $this->get($usergroup_id);
+        $isSocialGroup = isset($groupInfo['group_type']) && (int) $groupInfo['group_type'] === Usergroup::SOCIAL_CLASS;
+        $isClassGroup  = isset($groupInfo['group_type']) && (int) $groupInfo['group_type'] === Usergroup::NORMAL_CLASS;
+
+        if ($isSocialGroup) {
+            $current_list = $this->getUsersByUsergroupAndRelation($usergroup_id, $relationType);
+        } else {
+            $current_list = $this->get_users_by_usergroup($usergroup_id);
+        }
+
+        $course_list  = $this->get_courses_by_usergroup($usergroup_id);
         $session_list = $this->get_sessions_by_usergroup($usergroup_id);
         $session_list = array_filter($session_list);
 
         $delete_items = [];
-        $new_items = [];
+        $new_items    = [];
 
-        // Build new_items = users newly added to the group
+        // Compute new users to add
         if (!empty($list)) {
             foreach ($list as $user_id) {
-                $user_id = (int) $user_id;
-                if (!in_array($user_id, $current_list, true)) {
+                if (!in_array($user_id, $current_list)) {
                     $new_items[] = $user_id;
                 }
             }
         }
 
-        // Build delete_items = users removed from the group
+        // Compute users to delete (present before, not present now)
         if (!empty($current_list)) {
             foreach ($current_list as $user_id) {
-                if (!in_array($user_id, $list, true)) {
+                if (!in_array($user_id, $list)) {
                     $delete_items[] = $user_id;
                 }
             }
         }
 
-        // Global hosting limit check (all or nothing for classes)
-        $globalLimit = CourseManager::getGlobalUsersPerCourseLimit();
-        if ($globalLimit > 0 && !empty($new_items) && !empty($course_list)) {
-            foreach ($course_list as $course_id) {
-                $course_id = (int) $course_id;
-
-                // Only check "direct course" limit; sessions are exempt.
-                if (CourseManager::wouldOperationExceedGlobalLimit($course_id, $new_items)) {
-                    // Do not touch DB if this operation would exceed the limit.
-                    return false;
-                }
-            }
-        }
-
-        // Deleting items (if requested)
+        // Deleting items
         if (!empty($delete_items) && $delete_users_not_present_in_list) {
             foreach ($delete_items as $user_id) {
-                $user_id = (int) $user_id;
-
-                // Removing courses
+                // Remove course subscriptions
                 if (!empty($course_list)) {
                     foreach ($course_list as $course_id) {
-                        $course_id = (int) $course_id;
                         $course_info = api_get_course_info_by_id($course_id);
-                        if (!empty($course_info)) {
-                            CourseManager::unsubscribe_user($user_id, $course_info['code']);
-                        }
+                        CourseManager::unsubscribe_user($user_id, $course_info['code']);
                     }
                 }
 
-                // Removing sessions
+                // Remove session subscriptions
                 if (!empty($session_list)) {
                     foreach ($session_list as $session_id) {
-                        $session_id = (int) $session_id;
                         SessionManager::unsubscribe_user_from_session($session_id, $user_id);
                     }
                 }
 
-                if (empty($relationType)) {
-                    Database::delete(
-                        $this->usergroup_rel_user_table,
-                        [
-                            'usergroup_id = ? AND user_id = ? AND (relation_type = "0" OR relation_type IS NULL OR relation_type = "")' => [
-                                $usergroup_id,
-                                $user_id,
-                            ],
-                        ]
-                    );
+                // Remove from usergroup_rel_user:
+                // - Social groups: delete exactly this role (even if it is 0 = reader).
+                // - Normal classes: keep legacy default behaviour.
+                if ($isSocialGroup) {
+                    // Strict per-role deletion, with reader-role legacy tolerance
+                    if ($relationType === 0) {
+                        // Default reader role: treat legacy 2 as equivalent
+                        Database::delete(
+                            $this->usergroup_rel_user_table,
+                            [
+                                'usergroup_id = ? AND user_id = ? AND (relation_type = "0" OR relation_type = "2" OR relation_type IS NULL OR relation_type = "")' => [
+                                    $usergroup_id,
+                                    $user_id,
+                                ],
+                            ]
+                        );
+                    } else {
+                        // Other roles: delete only this specific role
+                        Database::delete(
+                            $this->usergroup_rel_user_table,
+                            [
+                                'usergroup_id = ? AND user_id = ? AND relation_type = ?' => [
+                                    $usergroup_id,
+                                    $user_id,
+                                    $relationType,
+                                ],
+                            ]
+                        );
+                    }
                 } else {
+                    // Legacy: default/empty relation_type
                     Database::delete(
                         $this->usergroup_rel_user_table,
                         [
-                            'usergroup_id = ? AND user_id = ? AND relation_type = ?' => [
+                            'usergroup_id = ? AND (relation_type = "0" OR relation_type = "2" OR relation_type IS NULL OR relation_type = "")' => [
                                 $usergroup_id,
                                 $user_id,
-                                $relationType,
                             ],
                         ]
                     );
@@ -1319,35 +1342,31 @@ class UserGroupModel extends Model
 
         // Adding new relationships
         if (!empty($new_items)) {
-            // Subscribe users to sessions (sessions are exempt from global limit)
+            // Add sessions
             if (!empty($session_list)) {
                 foreach ($session_list as $session_id) {
-                    $session_id = (int) $session_id;
                     SessionManager::subscribeUsersToSession($session_id, $new_items, null, false);
                 }
             }
 
-            // Subscribe users to courses (limit already checked above)
             foreach ($new_items as $user_id) {
-                $user_id = (int) $user_id;
-
+                // Add courses
                 if (!empty($course_list)) {
                     foreach ($course_list as $course_id) {
-                        $course_id = (int) $course_id;
                         CourseManager::subscribeUser($user_id, $course_id);
                     }
                 }
 
+                // Persist relation in usergroup_rel_user
                 $params = [
-                    'user_id' => $user_id,
+                    'user_id'      => $user_id,
                     'usergroup_id' => $usergroup_id,
-                    'relation_type' => $relationType,
+                    'relation_type'=> $relationType,
                 ];
+
                 Database::insert($this->usergroup_rel_user_table, $params);
             }
         }
-
-        return true;
     }
 
     /**
@@ -1833,7 +1852,7 @@ class UserGroupModel extends Model
                 INNER JOIN $this->usergroup_rel_user_table c
                 ON c.user_id = u.id
                 WHERE u.active <> ".USER_SOFT_DELETED." AND c.usergroup_id = $id"
-                ;
+        ;
         if (!empty($orderBy)) {
             $orderBy = Database::escape_string($orderBy);
             $sql .= " ORDER BY $orderBy ";
@@ -1869,10 +1888,10 @@ class UserGroupModel extends Model
         $form->addHtmlEditor(
             'description',
             get_lang('Description'),
-            false,
+            true,
             false,
             [
-            'ToolbarSet' => 'Minimal',
+                'ToolbarSet' => 'Minimal',
             ]
         );
         $form->applyFilter('description', 'trim');
@@ -2090,8 +2109,8 @@ class UserGroupModel extends Model
      * @param int $user_id
      * @param int $group_id
      *
-     * @return int 0 if there are not relationship otherwise returns the user group
-     * */
+     * @return int 0 if there is no relationship; otherwise the normalized role
+     */
     public function get_user_group_role($user_id, $group_id)
     {
         $table_group_rel_user = $this->usergroup_rel_user_table;
@@ -2104,11 +2123,18 @@ class UserGroupModel extends Model
                     FROM $table_group_rel_user
                     WHERE
                         usergroup_id = $group_id AND
-                        user_id = $user_id ";
+                        user_id = $user_id";
             $result = Database::query($sql);
             if (Database::num_rows($result) > 0) {
                 $row = Database::fetch_assoc($result);
-                $return_value = $row['relation_type'];
+                $relationType = (int) $row['relation_type'];
+
+                // Normalize legacy reader (2) to the canonical reader role
+                if (2 === $relationType) {
+                    $relationType = GROUP_USER_PERMISSION_READER;
+                }
+
+                $return_value = $relationType;
             }
         }
 
@@ -2234,21 +2260,50 @@ class UserGroupModel extends Model
      */
     public function add_user_to_group($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER)
     {
-        $table_url_rel_group = $this->usergroup_rel_user_table;
-        if (!empty($user_id) && !empty($group_id)) {
-            $role = $this->get_user_group_role($user_id, $group_id);
+        $table_rel = $this->usergroup_rel_user_table;
+        $user_id = (int) $user_id;
+        $group_id = (int) $group_id;
+        $relation_type = (int) $relation_type;
 
-            if (0 == $role) {
-                $sql = "INSERT INTO $table_url_rel_group
-           				SET
-           				    user_id = ".intval($user_id).",
-           				    usergroup_id = ".intval($group_id).",
-           				    relation_type = ".intval($relation_type);
-                Database::query($sql);
-            } elseif (GROUP_USER_PERMISSION_PENDING_INVITATION == $role) {
-                //if somebody already invited me I can be added
-                self::update_user_role($user_id, $group_id, GROUP_USER_PERMISSION_READER);
+        if (empty($user_id) || empty($group_id)) {
+            return false;
+        }
+
+        // Normalize relation type for classes vs social groups
+        $groupInfo = $this->get($group_id); // returns ['group_type' => ...] among others
+        if (!empty($groupInfo) && isset($groupInfo['group_type'])) {
+            if ((int) $groupInfo['group_type'] === self::NORMAL_CLASS) {
+                // For class memberships, we want relation_type = 0 as the canonical "reader"
+                if ($relation_type === GROUP_USER_PERMISSION_READER) {
+                    $relation_type = 0;
+                }
             }
+        }
+
+        // Current role (raw value from usergroup_rel_user)
+        $role = $this->get_user_group_role($user_id, $group_id);
+
+        if (0 === $role) {
+            // No relationship yet → insert normalized relation_type
+            $sql = "INSERT INTO $table_rel
+                SET
+                    user_id = $user_id,
+                    usergroup_id = $group_id,
+                    relation_type = $relation_type";
+            Database::query($sql);
+        } elseif (GROUP_USER_PERMISSION_PENDING_INVITATION === $role) {
+            // If somebody already invited the user, upgrade to final role
+            self::update_user_role(
+                $user_id,
+                $group_id,
+                $relation_type ?: GROUP_USER_PERMISSION_READER
+            );
+        } elseif (
+            // Backward-compatibility: old "reader = 2" for classes → normalize to 0
+            GROUP_USER_PERMISSION_READER === $role
+            && $relation_type === 0
+        ) {
+            self::update_user_role($user_id, $group_id, 0);
         }
 
         return true;
@@ -2621,7 +2676,7 @@ class UserGroupModel extends Model
                 // I'm just a reader
                 $relation_group_title = get_lang('I am a reader');
                 $links .= '<li class="'.('invite_friends' == $show ? 'active' : '').'"><a href="group_invitation.php?id='.$group_id.'">'.
-                            Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
+                    Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
                 if (self::canLeave($group_info)) {
                     $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
                         Display::getMdiIcon(ActionIcon::EXIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Leave group')).get_lang('Leave group').'</a></li>';
@@ -2630,11 +2685,11 @@ class UserGroupModel extends Model
             case GROUP_USER_PERMISSION_ADMIN:
                 $relation_group_title = get_lang('I am an admin');
                 $links .= '<li class="'.('group_edit' == $show ? 'active' : '').'"><a href="group_edit.php?id='.$group_id.'">'.
-                            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit this group')).get_lang('Edit this group').'</a></li>';
+                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit this group')).get_lang('Edit this group').'</a></li>';
                 $links .= '<li class="'.('member_list' == $show ? 'active' : '').'"><a href="group_waiting_list.php?id='.$group_id.'">'.
-                            Display::getMdiIcon(ObjectIcon::WAITING_LIST, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Waiting list')).get_lang('Waiting list').'</a></li>';
+                    Display::getMdiIcon(ObjectIcon::WAITING_LIST, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Waiting list')).get_lang('Waiting list').'</a></li>';
                 $links .= '<li class="'.('invite_friends' == $show ? 'active' : '').'"><a href="group_invitation.php?id='.$group_id.'">'.
-                            Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
+                    Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
                 if (self::canLeave($group_info)) {
                     $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
                         Display::getMdiIcon(ActionIcon::EXIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Leave group')).get_lang('Leave group').'</a></li>';
@@ -2653,10 +2708,10 @@ class UserGroupModel extends Model
                 //$links .=  '<li><a href="group_members.php?id='.$group_id.'">'.		Display::getMdiIcon(ObjectIcon::GROUP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Members list')).'<span class="'.($show=='member_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Members list').'</span></a></li>';
                 if (GROUP_PERMISSION_CLOSED == $group_info['visibility']) {
                     $links .= '<li><a href="group_waiting_list.php?id='.$group_id.'">'.
-                                Display::getMdiIcon(ObjectIcon::WAITING_LIST, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Waiting list')).get_lang('Waiting list').'</a></li>';
+                        Display::getMdiIcon(ObjectIcon::WAITING_LIST, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Waiting list')).get_lang('Waiting list').'</a></li>';
                 }
                 $links .= '<li><a href="group_invitation.php?id='.$group_id.'">'.
-                            Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
+                    Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
                 if (self::canLeave($group_info)) {
                     $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
                         Display::getMdiIcon(ActionIcon::EXIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Leave group')).get_lang('Leave group').'</a></li>';
@@ -2665,15 +2720,15 @@ class UserGroupModel extends Model
             case GROUP_USER_PERMISSION_HRM:
                 $relation_group_title = get_lang('I am a human resources manager');
                 $links .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="ajax" title="'.get_lang('Compose message').'" data-size="lg" data-title="'.get_lang('Compose message').'">'.
-                            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Create thread')).get_lang('Create thread').'</a></li>';
+                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Create thread')).get_lang('Create thread').'</a></li>';
                 $links .= '<li><a href="group_view.php?id='.$group_id.'">'.
-                            Display::getMdiIcon(ToolIcon::MESSAGE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Messages list')).get_lang('Messages list').'</a></li>';
+                    Display::getMdiIcon(ToolIcon::MESSAGE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Messages list')).get_lang('Messages list').'</a></li>';
                 $links .= '<li><a href="group_invitation.php?id='.$group_id.'">'.
-                            Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
+                    Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
                 $links .= '<li><a href="group_members.php?id='.$group_id.'">'.
-                            Display::getMdiIcon(ObjectIcon::GROUP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Members list')).get_lang('Members list').'</a></li>';
+                    Display::getMdiIcon(ObjectIcon::GROUP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Members list')).get_lang('Members list').'</a></li>';
                 $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
-                            Display::getMdiIcon(ActionIcon::EXIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Leave group')).get_lang('Leave group').'</a></li>';
+                    Display::getMdiIcon(ActionIcon::EXIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Leave group')).get_lang('Leave group').'</a></li>';
                 break;
             default:
                 //$links .=  '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('addd.gif', get_lang('Join group'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('Join group').'</a></span></li>';

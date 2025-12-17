@@ -211,9 +211,7 @@ class UserManager
             if (in_array(UserAuthSource::PLATFORM, $authSources)) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('Required field').': '.get_lang(
-                            'Password'
-                        ),
+                        get_lang('Required field').': '.get_lang('Password'),
                         'warning'
                     )
                 );
@@ -299,9 +297,7 @@ class UserManager
         if (is_array($extra) && count($extra) > 0) {
             $extra['item_id'] = $userId;
             $userFieldValue = new ExtraFieldValue('user');
-            /* Force saving of extra fields (otherwise, if the current
-￼                user is not admin, fields not visible to the user - most
-￼                of them - are just ignored) */
+            /* Force saving of extra fields (otherwise fields not visible are ignored) */
             $userFieldValue->saveFieldValues(
                 $extra,
                 true,
@@ -312,28 +308,12 @@ class UserManager
             );
         } else {
             // Create notify settings by default
-            self::update_extra_field_value(
-                $userId,
-                'mail_notify_invitation',
-                '1'
-            );
-            self::update_extra_field_value(
-                $userId,
-                'mail_notify_message',
-                '1'
-            );
-            self::update_extra_field_value(
-                $userId,
-                'mail_notify_group_message',
-                '1'
-            );
+            self::update_extra_field_value($userId, 'mail_notify_invitation', '1');
+            self::update_extra_field_value($userId, 'mail_notify_message', '1');
+            self::update_extra_field_value($userId, 'mail_notify_group_message', '1');
         }
 
-        self::update_extra_field_value(
-            $userId,
-            'already_logged_in',
-            'false'
-        );
+        self::update_extra_field_value($userId, 'already_logged_in', 'false');
 
         if (!empty($redirectToURLAfterLogin) && ('true' === api_get_setting('workflows.plugin_redirection_enabled'))) {
             RedirectionPlugin::insert($userId, $redirectToURLAfterLogin);
@@ -347,7 +327,12 @@ class UserManager
                 PERSON_NAME_EMAIL_ADDRESS
             );
             $tpl = Container::getTwig();
-            $emailSubject = $tpl->render('@ChamiloCore/Mailer/Legacy/subject_registration_platform.html.twig', ['locale' => $userLocale]);
+
+            $emailSubject = $tpl->render(
+                '@ChamiloCore/Mailer/Legacy/subject_registration_platform.html.twig',
+                ['locale' => $userLocale]
+            );
+
             $sender_name = api_get_person_name(
                 api_get_setting('administratorName'),
                 api_get_setting('administratorSurname'),
@@ -367,32 +352,35 @@ class UserManager
                 }
             }
 
-            // variables for the default template
+            // Variables for the default template
             $params = [
                 'complete_name' => stripslashes(api_get_person_name($firstName, $lastName)),
                 'login_name' => $loginName,
-                'original_password' => stripslashes($original_password),
+                'original_password' => stripslashes((string) $original_password),
                 'mailWebPath' => $url,
                 'new_user' => $user,
                 'search_link' => $url,
                 'locale' => $userLocale,
             ];
 
-            // ofaj
             if ('true' === api_get_setting('session.allow_search_diagnostic')) {
                 $urlSearch = api_get_path(WEB_CODE_PATH).'search/search.php';
                 $linkSearch = Display::url($urlSearch, $urlSearch);
                 $params['search_link'] = $linkSearch;
             }
 
-            $emailBody = $tpl->render(
+            // Default Twig bodies: one for email (with password) and one for inbox (without password)
+            $emailBodyEmail = $tpl->render(
                 '@ChamiloCore/Mailer/Legacy/content_registration_platform.html.twig',
-                $params
+                $params + ['show_password' => true]
+            );
+            $emailBodyInbox = $tpl->render(
+                '@ChamiloCore/Mailer/Legacy/content_registration_platform.html.twig',
+                $params + ['show_password' => false]
             );
 
             $userInfo = api_get_user_info($userId);
             $mailTemplateManager = new MailTemplateManager();
-            $phoneNumber = $extra['mobile_phone_number'] ?? null;
 
             $emailBodyTemplate = '';
             if (!empty($emailTemplate)) {
@@ -406,8 +394,15 @@ class UserManager
                 }
             }
 
+            // If a custom email template is provided, use it only for the email (inbox copy stays sanitized Twig)
+            if (!empty($emailBodyTemplate)) {
+                $emailBodyEmail = $emailBodyTemplate;
+            }
+
             $twoEmail = ('true' === api_get_setting('mail.send_two_inscription_confirmation_mail'));
+
             if (true === $twoEmail) {
+                // Keep existing 2-email behavior (no structural changes)
                 $emailBody = $tpl->render('@ChamiloCore/Mailer/Legacy/new_user_first_email_confirmation.html.twig');
                 if (!empty($emailBodyTemplate) &&
                     isset($emailTemplate['new_user_first_email_confirmation.tpl']) &&
@@ -457,10 +452,8 @@ class UserManager
                     [],
                     $creatorEmail
                 );
-            } else {
-                if (!empty($emailBodyTemplate)) {
-                    $emailBody = $emailBodyTemplate;
-                }
+
+                // Optional inbox copy (sanitized, and no email notification)
                 $sendToInbox = ('true' === api_get_setting('registration.send_inscription_msg_to_inbox'));
                 if ($sendToInbox) {
                     $adminList = self::get_all_administrators();
@@ -473,32 +466,68 @@ class UserManager
                     MessageManager::send_message_simple(
                         $userId,
                         $emailSubject,
-                        $emailBody,
-                        $senderId
-                    );
-                } else {
-                    api_mail_html(
-                        $recipient_name,
-                        $email,
-                        $emailSubject,
-                        $emailBody,
-                        $sender_name,
-                        $email_admin,
-                        [],
-                        [],
+                        $emailBodyInbox,
+                        $senderId,
+                        false,
+                        false,
                         false,
                         [],
-                        $creatorEmail
+                        false
+                    );
+                }
+            } else {
+                // 1) Always send the registration email
+                api_mail_html(
+                    $recipient_name,
+                    $email,
+                    $emailSubject,
+                    $emailBodyEmail,
+                    $sender_name,
+                    $email_admin,
+                    [],
+                    [],
+                    false,
+                    [],
+                    $creatorEmail
+                );
+
+                // 2) Optionally copy to Chamilo inbox (sanitized, no email notification)
+                $sendToInbox = ('true' === api_get_setting('registration.send_inscription_msg_to_inbox'));
+                if ($sendToInbox) {
+                    $adminList = self::get_all_administrators();
+                    $senderId = 1;
+                    if (!empty($adminList)) {
+                        $adminInfo = current($adminList);
+                        $senderId = $adminInfo['user_id'];
+                    }
+
+                    MessageManager::send_message_simple(
+                        $userId,
+                        $emailSubject,
+                        $emailBodyInbox,
+                        $senderId,
+                        false,
+                        false,
+                        false,
+                        [],
+                        false
                     );
                 }
             }
 
+            // Admin notifications (keep behavior; use the email version as the reference body)
             $notification = api_get_setting('profile.send_notification_when_user_added', true);
             if (!empty($notification) && isset($notification['admins']) && is_array($notification['admins'])) {
                 foreach ($notification['admins'] as $adminId) {
                     $emailSubjectToAdmin = get_lang('The user has been added').': '.
                         api_get_person_name($firstName, $lastName);
-                    MessageManager::send_message_simple($adminId, $emailSubjectToAdmin, $emailBody, $userId);
+
+                    MessageManager::send_message_simple(
+                        $adminId,
+                        $emailSubjectToAdmin,
+                        $emailBodyEmail,
+                        $userId
+                    );
                 }
             }
 

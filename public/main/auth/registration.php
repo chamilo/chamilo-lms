@@ -764,36 +764,82 @@ EOD;
     // EXTRA FIELDS
     if (array_key_exists('extra_fields', $allowedFields) || in_array('extra_fields', $allowedFields, true)) {
         $extraField = new ExtraField('user');
+
+        // Extra fields that must NEVER be shown on the registration form.
+        // These are internal notification preferences; they belong to the profile settings.
+        $registrationExtraFieldBlacklist = [
+            'mail_notify_invitation',
+            'mail_notify_message',
+            'mail_notify_group_message',
+        ];
+
+        // Build the whitelist of extra fields allowed on registration.
         $extraFieldList = [];
         if (isset($allowedFields['extra_fields']) && is_array($allowedFields['extra_fields'])) {
             $extraFieldList = $allowedFields['extra_fields'];
         }
+
+        // Ensure condition fields (profile.show_conditions_to_user) are still displayed even if the whitelist is empty.
+        if (!empty($extraConditions) && is_array($extraConditions)) {
+            foreach ($extraConditions as $condition) {
+                if (!empty($condition['variable'])) {
+                    $extraFieldList[] = (string) $condition['variable'];
+                }
+            }
+        }
+
+        // Apply blacklist + normalize list.
+        $extraFieldList = array_values(array_unique(array_filter($extraFieldList, static function ($v) use ($registrationExtraFieldBlacklist) {
+            $v = (string) $v;
+
+            // Remove technical keys and blacklisted fields.
+            if ($v === '' || in_array($v, $registrationExtraFieldBlacklist, true)) {
+                return false;
+            }
+
+            return true;
+        })));
+
+        // Required extra fields (if configured) - also apply blacklist to avoid making hidden fields "required".
         $settingRequiredFields = api_get_setting('registration.required_extra_fields_in_inscription', true);
         $requiredFields = 'false' !== $settingRequiredFields ? $settingRequiredFields : [];
 
-        if (!empty($requiredFields) && $requiredFields['options']) {
+        if (!empty($requiredFields) && isset($requiredFields['options']) && is_array($requiredFields['options'])) {
             $requiredFields = $requiredFields['options'];
         }
 
-        $extraField->addElements(
-            $form,
-            0,
-            [],
-            false,
-            false,
-            $extraFieldList,
-            [],
-            [],
-            false,
-            false,
-            [],
-            [],
-            false,
-            [],
-            $requiredFields,
-            true
-        );
-        $extraFieldsLoaded = true;
+        if (is_array($requiredFields) && !empty($requiredFields)) {
+            $requiredFields = array_values(array_filter($requiredFields, static function ($v) use ($registrationExtraFieldBlacklist) {
+                $v = (string) $v;
+                return $v !== '' && !in_array($v, $registrationExtraFieldBlacklist, true);
+            }));
+        } else {
+            $requiredFields = [];
+        }
+
+        // Only load extra fields if we have at least one allowed field to show.
+        // This prevents showing internal fields like mail_notify_* when no whitelist is configured.
+        if (!empty($extraFieldList)) {
+            $extraField->addElements(
+                $form,
+                0,
+                [],
+                false,
+                false,
+                $extraFieldList,
+                [],
+                [],
+                false,
+                false,
+                [],
+                [],
+                false,
+                [],
+                $requiredFields,
+                true
+            );
+            $extraFieldsLoaded = true;
+        }
     }
 
     // CAPTCHA

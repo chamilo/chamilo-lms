@@ -28,115 +28,55 @@ class LegalController
     ): Response {
         $data = json_decode($request->getContent(), true);
 
-        $lang = $data['lang'] ?? null;
-        $content = $data['content'] ?? null;
-        $type = isset($data['type']) ? (int) $data['type'] : null;
-        $changes = $data['changes'] ?? '';
-        $extraFields = $data['extraFields'] ?? [];
+        $languageId = (int) ($data['lang'] ?? 0);
+        if ($languageId <= 0) {
+            return new JsonResponse(['message' => 'Invalid language id'], Response::HTTP_BAD_REQUEST);
+        }
 
-        $lastLegal = $legalRepository->findLastConditionByLanguage($lang);
-        $extraFieldValue = new ExtraFieldValue('terms_and_condition');
+        $changes = (string) ($data['changes'] ?? '');
+        $sections = $data['sections'] ?? null;
 
-        $newVersionRequired = !$lastLegal || $lastLegal->getContent() !== $content || $this->hasExtraFieldsChanged($extraFieldValue, $lastLegal->getId(), $extraFields);
-        $typeUpdateRequired = $lastLegal && $lastLegal->getType() !== $type;
+        if (!is_array($sections)) {
+            return new JsonResponse(['message' => 'Missing sections payload'], Response::HTTP_BAD_REQUEST);
+        }
 
-        $legalToUpdate = $lastLegal;
-        if ($newVersionRequired) {
+        $lastVersion = $legalRepository->findLatestVersionByLanguage($languageId);
+        $newVersion = $lastVersion + 1;
+        $timestamp = time();
+
+        for ($type = 0; $type <= 15; $type++) {
+            $key = (string) $type;
+            $content = $sections[$key] ?? ($sections[$type] ?? '');
+            $content = is_string($content) ? $content : '';
+
             $legal = new Legal();
-            $legal->setLanguageId($lang);
-            $legal->setContent($content);
+            $legal->setLanguageId($languageId);
+            $legal->setVersion($newVersion);
             $legal->setType($type);
+            $legal->setDate($timestamp);
             $legal->setChanges($changes);
-            $legal->setDate(time());
-            $version = $lastLegal ? $lastLegal->getVersion() + 1 : 1;
-            $legal->setVersion($version);
+            $legal->setContent($content === '' ? null : $content);
 
             $entityManager->persist($legal);
-            $legalToUpdate = $legal;
-        } elseif ($typeUpdateRequired) {
-            $lastLegal->setType($type);
-            $lastLegal->setChanges($changes);
         }
 
         $entityManager->flush();
 
-        if ($newVersionRequired || $typeUpdateRequired) {
-            $this->updateExtraFields($extraFieldValue, $legalToUpdate->getId(), $extraFields);
-        }
-
-        return new Response('Term and condition saved or updated successfully', Response::HTTP_OK);
+        return new JsonResponse([
+            'message' => 'Terms saved successfully',
+            'version' => $newVersion,
+        ], Response::HTTP_OK);
     }
 
     #[Route('/extra-fields', name: 'chamilo_core_get_extra_fields')]
     public function getExtraFields(Request $request): JsonResponse
     {
-        $extraField = new ExtraField('terms_and_condition');
-        $types = LegalManager::getTreatmentTypeList();
-
-        foreach ($types as $variable => $name) {
-            $label = 'PersonalData'.ucfirst($name).'Title';
-            $params = [
-                'variable' => $variable,
-                'display_text' => $label,
-                'value_type' => ExtraField::FIELD_TYPE_TEXTAREA,
-                'default_value' => '',
-                'visible' => true,
-                'changeable' => true,
-                'filter' => true,
-                'visible_to_self' => true,
-                'visible_to_others' => true,
-            ];
-            $extraField->save($params);
-        }
-
-        $termId = $request->query->get('termId');
-        $extraData = $extraField->get_handler_extra_data($termId ?? 0);
-        $extraFieldsDefinition = $extraField->get_all();
-        $fieldsData = $extraField->getExtraFieldsData(
-            $extraData,
-            true,
-            $extraFieldsDefinition
-        );
-
-        $prefix = 'extra_';
-        $extraFields = [];
-        foreach ($fieldsData as $field) {
-            $fieldType = $this->mapFieldType($field['type']);
-            $extraField = [
-                'id' => $prefix.$field['variable'],
-                'type' => $fieldType,
-                'props' => [
-                    'title' => $field['title'],
-                    'defaultValue' => $field['defaultValue'],
-                ],
-            ];
-
-            switch ($fieldType) {
-                case 'editor':
-                    $extraField['props']['editorId'] = $prefix.$field['variable'];
-                    $extraField['props']['modelValue'] = $field['value'] ?? '';
-                    $extraField['props']['helpText'] = 'Specific help text for '.$field['title'];
-
-                    break;
-
-                case 'text':
-                    $extraField['props']['label'] = $field['title'];
-                    $extraField['props']['modelValue'] = $field['value'] ?? '';
-
-                    break;
-
-                case 'select':
-                    $extraField['props']['label'] = $field['title'];
-                    $extraField['props']['options'] = [];
-                    $extraField['props']['modelValue'] = $field['value'] ?? '';
-
-                    break;
-            }
-
-            $extraFields[] = $extraField;
-        }
-
-        return new JsonResponse($extraFields);
+        return new JsonResponse([
+            ['type' => 0, 'title' => 'Terms and Conditions', 'subtitle' => ''],
+            ['type' => 1, 'title' => 'Personal data collection', 'subtitle' => 'Why do we collect this data?'],
+            // ...
+            ['type' => 15, 'title' => 'Personal data profiling', 'subtitle' => 'For what purpose do we process personal data?'],
+        ]);
     }
 
     /**

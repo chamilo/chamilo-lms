@@ -10133,15 +10133,18 @@ class Exercise
             $exercise->read($row_dates['exe_exo_id']);
             $status = 'completed';
 
-            if (!empty($exercise->pass_percentage)) {
-                $status = 'failed';
-                $success = ExerciseLib::isSuccessExerciseResult(
-                    $score,
-                    $max_score,
-                    $exercise->pass_percentage
-                );
-                if ($success) {
-                    $status = 'passed';
+            // Adaptive / self-evaluation quizzes must always complete the LP item
+            if ($exercise->getFeedbackType() !== EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                if (!empty($exercise->pass_percentage)) {
+                    $status = 'failed';
+                    $success = ExerciseLib::isSuccessExerciseResult(
+                        $score,
+                        $max_score,
+                        $exercise->pass_percentage
+                    );
+                    if ($success) {
+                        $status = 'passed';
+                    }
                 }
             }
 

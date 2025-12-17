@@ -391,7 +391,7 @@ function needsTranslationUpdate(string $msgid, string $msgstr, string $targetLan
     $tgtWordCount = count($tgtWords);
     $srcWordCount = count($srcWords);
 
-    if ($tgtWordCount > 2 && $srcWordCount > 0 && $tgt === $src) {
+    if ($tgtWordCount > 1 && $srcWordCount > 0 && $tgt === $src) {
         return true;
     }
 

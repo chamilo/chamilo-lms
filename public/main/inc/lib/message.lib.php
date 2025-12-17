@@ -133,7 +133,8 @@ class MessageManager
         $checkCurrentAudioId = false,
         $forceTitleWhenSendingEmail = false,
         $msgType = null,
-        $baseUrl = null
+        $baseUrl = null,
+        $sendEmailNotification = true
     ) {
         $group_id = (int) $group_id;
         $receiverUserId = (int) $receiverUserId;
@@ -164,9 +165,15 @@ class MessageManager
             return false;
         }
 
+        // Email notifications are enabled by default, but can be explicitly disabled (e.g., inbox copy after registration).
         $sendEmail = true;
-        // Disabling messages depending the pausetraining plugin.
+        if (false === (bool) $sendEmailNotification) {
+            $sendEmail = false;
+        }
+
+        // Disabling messages depending the pausetraining plugin (only relevant if email notifications are enabled).
         $allowPauseFormation =
+            $sendEmail &&
             Container::getPluginHelper()->isPluginEnabled('PauseTraining') &&
             'true' === api_get_plugin_setting('PauseTraining', 'allow_users_to_edit_pause_formation');
 
@@ -322,7 +329,7 @@ class MessageManager
             // Save attachment file for inbox messages
             if (is_array($attachmentList)) {
                 foreach ($attachmentList as $attachment) {
-                    if (0 === $attachment['error']) {
+                    if (0 === ($attachment['error'] ?? 0)) {
                         self::saveMessageAttachmentFile(
                             $attachment,
                             $attachment['comment'] ?? '',
@@ -349,18 +356,19 @@ class MessageManager
                 $em->flush();
             }
 
+            // Email notification (optional)
             if ($sendEmail) {
                 $notification = new Notification();
                 $sender_info = api_get_user_info($user_sender_id);
                 $baseUrl = $baseUrl ?? api_get_path(WEB_PATH);
-                $content = self::processRelativeLinks($content, $baseUrl);
+                $contentForEmail = self::processRelativeLinks($content, $baseUrl);
 
-                // add file attachment additional attributes
+                // Add file attachment additional attributes
                 $attachmentAddedByMail = [];
                 foreach ($attachmentList as $attachment) {
                     $attachmentAddedByMail[] = [
-                        'path' => $attachment['tmp_name'],
-                        'filename' => $attachment['name'],
+                        'path' => $attachment['tmp_name'] ?? '',
+                        'filename' => $attachment['name'] ?? '',
                     ];
                 }
 
@@ -374,7 +382,7 @@ class MessageManager
                         $type,
                         [$receiverUserId],
                         $subject,
-                        $content,
+                        $contentForEmail,
                         $sender_info,
                         $attachmentAddedByMail,
                         $forceTitleWhenSendingEmail,
@@ -394,23 +402,25 @@ class MessageManager
                         1000
                     );
 
-                    // Adding more sense to the message group
-                    $subject = sprintf(get_lang('There is a new message in group %s'), $group_info['title']);
+                    // Add more context for group message subject
+                    $subjectGroup = sprintf(get_lang('There is a new message in group %s'), $group_info['title']);
                     $new_user_list = [];
                     foreach ($user_list as $user_data) {
                         $new_user_list[] = $user_data['id'];
                     }
-                    $group_info = [
+
+                    $groupPayload = [
                         'group_info' => $group_info,
                         'user_info' => $sender_info,
                     ];
+
                     $notification->saveNotification(
                         $messageId,
                         Notification::NOTIFICATION_TYPE_GROUP,
                         $new_user_list,
-                        $subject,
-                        $content,
-                        $group_info,
+                        $subjectGroup,
+                        $contentForEmail,
+                        $groupPayload,
                         $attachmentAddedByMail,
                         $forceTitleWhenSendingEmail,
                         $baseUrl
@@ -458,7 +468,8 @@ class MessageManager
         $sendCopyToDrhUsers = false,
         $directMessage = false,
         $uploadFiles = true,
-        $attachmentList = []
+        $attachmentList = [],
+        $sendEmailNotification = true
     ) {
         $files = $_FILES ? $_FILES : [];
         if (false === $uploadFiles) {
@@ -479,7 +490,13 @@ class MessageManager
             null,
             null,
             $sender_id,
-            $directMessage
+            $directMessage,
+            0,
+            false,
+            false,
+            null,
+            null,
+            $sendEmailNotification
         );
 
         if ($sendCopyToDrhUsers) {
@@ -488,9 +505,9 @@ class MessageManager
             if (!empty($drhList)) {
                 foreach ($drhList as $drhInfo) {
                     $message = sprintf(
-                        get_lang('Copy of message sent to %s'),
-                        $userInfo['complete_name']
-                    ).' <br />'.$message;
+                            get_lang('Copy of message sent to %s'),
+                            $userInfo['complete_name']
+                        ).' <br />'.$message;
 
                     self::send_message_simple(
                         $drhInfo['id'],

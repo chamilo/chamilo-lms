@@ -4,132 +4,107 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
-use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
-use Chamilo\CourseBundle\Repository\CGroupRepository;
-use DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 
-
 #[AsController]
-class DocumentUsageAction extends AbstractController
+final class DocumentUsageAction extends AbstractController
 {
+    /**
+     * Fallback quota (MB) when the course quota is empty or not set.
+     */
+    private const DEFAULT_QUOTA_MB = 100;
 
     public function __construct(
         private readonly CourseRepository $courseRepository,
         private readonly CDocumentRepository $documentRepository,
-        private readonly CGroupRepository $groupRepository,
-    ) {
-    }
+    ) {}
 
     public function __invoke($cid): JsonResponse
     {
         $courseId = (int) $cid;
-        
-        $courseEntity = $this->courseRepository->find($courseId);
-        if (!$courseEntity) {
+
+        $course = $this->courseRepository->find($courseId);
+        if (null === $course) {
             return new JsonResponse(['error' => 'Course not found'], 404);
         }
 
-        $totalQuotaBytes = ($courseEntity->getDiskQuota() * 1024 * 1024) ?? DEFAULT_DOCUMENT_QUOTA;
-        $usedQuotaBytes = $this->documentRepository->getTotalSpaceByCourse($courseEntity);
-
-        $chartData = [];
-
-        // Process sessions
-        $this->processCourseSessions($courseEntity, $totalQuotaBytes, $usedQuotaBytes, $chartData);
-
-        // Process groups
-        $this->processCourseGroups($courseEntity, $totalQuotaBytes, $usedQuotaBytes, $chartData);
-
-        // Process user documents
-        $users = $this->courseRepository->getUsersByCourse($courseEntity);
-        foreach ($users as $user) {
-            $this->processUserDocuments($courseEntity, $user, $totalQuotaBytes, $chartData);
+        // Resolve quota in MB safely (avoid "($x * ...) ?? fallback").
+        $quotaMb = (int) ($course->getDiskQuota() ?? 0);
+        if ($quotaMb <= 0) {
+            $quotaMb = self::DEFAULT_QUOTA_MB;
         }
 
-        // Add available space
-        $availableBytes = $totalQuotaBytes - $usedQuotaBytes;
-        $availablePercentage = $this->calculatePercentage($availableBytes, $totalQuotaBytes);
+        $totalQuotaBytes = $quotaMb * 1024 * 1024;
 
-        $chartData[] = [
-            'label' => addslashes(get_lang('Available space')) . ' (' . format_file_size($availableBytes) . ')',
-            'percentage' => $availablePercentage,
-        ];
+        // Compute usage using repository logic (deduplicated).
+        $usage = $this->documentRepository->getDocumentUsageBreakdownByCourse($course);
+
+        $bytesCourse = (int) ($usage['course'] ?? 0);
+        $bytesSessions = (int) ($usage['sessions'] ?? 0);
+        $bytesGroups = (int) ($usage['groups'] ?? 0);
+
+        $usedBytes = (int) ($usage['used'] ?? ($bytesCourse + $bytesSessions + $bytesGroups));
+
+        // Keep the pie meaningful even when used > quota.
+        $denomBytes = max($totalQuotaBytes, $usedBytes, 1);
+
+        $availableBytes = max($totalQuotaBytes - $usedBytes, 0);
+
+        $labels = [];
+        $data = [];
+
+        if ($bytesCourse > 0) {
+            $labels[] = get_lang('Course').' ('.$this->formatBytes($bytesCourse).')';
+            $data[] = $this->pct($bytesCourse, $denomBytes);
+        }
+
+        if ($bytesSessions > 0) {
+            $labels[] = get_lang('Session').' ('.$this->formatBytes($bytesSessions).')';
+            $data[] = $this->pct($bytesSessions, $denomBytes);
+        }
+
+        if ($bytesGroups > 0) {
+            $labels[] = get_lang('Group').' ('.$this->formatBytes($bytesGroups).')';
+            $data[] = $this->pct($bytesGroups, $denomBytes);
+        }
+
+        $labels[] = get_lang('Available space').' ('.$this->formatBytes($availableBytes).')';
+        $data[] = $this->pct($availableBytes, $denomBytes);
 
         return new JsonResponse([
             'datasets' => [
-                ['data' => array_column($chartData, 'percentage')],
+                ['data' => $data],
             ],
-            'labels' => array_column($chartData, 'label'),
+            'labels' => $labels,
         ]);
     }
 
-    private function processCourseSessions($courseEntity, int $totalQuotaBytes, int &$usedQuotaBytes, array &$chartData): void
+    private function pct(int $part, int $total): float
     {
-        foreach ($courseEntity->getSessions() as $sessionRel) {
-            $session = $sessionRel->getSession();
-            $quotaBytes = $this->documentRepository->getTotalSpaceByCourse($courseEntity, null, $session);
-
-            if ($quotaBytes > 0) {
-                $usedQuotaBytes += $quotaBytes;
-                $chartData[] = [
-                    'label' => addslashes(get_lang('Session') . ': ' . $session->getTitle()) . ' (' . format_file_size($quotaBytes) . ')',
-                    'percentage' => $this->calculatePercentage($quotaBytes, $totalQuotaBytes),
-                ];
-            }
-        }
-    }
-
-    private function processCourseGroups($courseEntity, int $totalQuotaBytes, int &$usedQuotaBytes, array &$chartData): void
-    {
-        $groupsList = $this->groupRepository->findAllByCourse($courseEntity)->getQuery()->getResult();
-        
-        foreach ($groupsList as $groupEntity) {
-            $quotaBytes = $this->documentRepository->getTotalSpaceByCourse($courseEntity, $groupEntity->getIid());
-
-            if ($quotaBytes > 0) {
-                $usedQuotaBytes += $quotaBytes;
-                $chartData[] = [
-                    'label' => addslashes(get_lang('Group') . ': ' . $groupEntity->getTitle() . ' (' . format_file_size($quotaBytes) . ')'),
-                    'percentage' => $this->calculatePercentage($quotaBytes, $totalQuotaBytes),
-                ];
-            }
-        }
-    }
-
-    private function processUserDocuments($courseEntity, $user, int $totalQuotaBytes, array &$chartData): void
-    {
-        $documentsList = $this->documentRepository->getAllDocumentDataByUserAndGroup($courseEntity);
-        $userQuotaBytes = 0;
-
-        foreach ($documentsList as $documentEntity) {
-            if ($documentEntity->getResourceNode()->getCreator()?->getId() === $user->getId()
-                && $documentEntity->getFiletype() === 'file') {
-                $resourceFiles = $documentEntity->getResourceNode()->getResourceFiles();
-                if (!$resourceFiles->isEmpty()) {
-                    $userQuotaBytes += $resourceFiles->first()->getSize();
-                }
-            }
-        }
-
-        if ($userQuotaBytes > 0) {
-            $chartData[] = [
-                'label' => addslashes(get_lang('Teacher') . ': ' . $user->getFullName()) . ' (' . format_file_size($userQuotaBytes) . ')',
-                'percentage' => $this->calculatePercentage($userQuotaBytes, $totalQuotaBytes),
-            ];
-        }
-    }
-
-    private function calculatePercentage(int $bytes, int $totalBytes): float
-    {
-        if ($totalBytes === 0) {
+        if ($total <= 0) {
             return 0.0;
         }
 
-        return round(($bytes / $totalBytes) * 100, 2);
+        return round(($part / $total) * 100, 2);
+    }
+
+    private function formatBytes(int $bytes): string
+    {
+        // Simple dependency-free formatter for API responses.
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+        $size = (float) max($bytes, 0);
+        $i = 0;
+
+        $max = count($units) - 1;
+        while ($size >= 1024 && $i < $max) {
+            $size /= 1024;
+            $i++;
+        }
+
+        return round($size, 2).' '.$units[$i];
     }
 }

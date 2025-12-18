@@ -11,6 +11,7 @@ Feature: Document tool
   Scenario: Create a folder
     Then I should see "New folder"
     Then I press "New folder"
+    And I wait for the page to be loaded
     Then I fill in the following:
       | title | My new directory |
     And I press "Save"
@@ -20,6 +21,7 @@ Feature: Document tool
   Scenario: Create a folder that already exists
     Then I should see "New folder"
     Then I press "New folder"
+    And I wait for the page to be loaded
     And I fill in the following:
       | title | My new directory |
     And I press "Save"
@@ -32,7 +34,7 @@ Feature: Document tool
     Then I fill in the following:
       | Title   | My first document |
     And I fill in tinymce field "item_content" with "This is my first document!"
-    And I press "Submit"
+    And I press "Save"
     And wait for the page to be loaded
     Then I should see "created"
     And I should see "My first document"

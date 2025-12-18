@@ -18,6 +18,8 @@ Feature: System Announcements
 
   Scenario: Delete system announcement
     Given I am on "/main/admin/system_announcements.php"
+    And I wait for the page to be loaded
     When I follow "Delete"
-    Then I press "Yes"
-    Then I should see "Announcement has been deleted"
+    Then I confirm the popup
+    Then I should not see "Announcement system test"
+    And I should not see an error

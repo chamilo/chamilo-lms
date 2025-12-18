@@ -29,6 +29,86 @@ if (!empty($_POST['language'])) {
 $hideHeaders = isset($_GET['hide_headers']);
 
 /**
+ * Helper: normalize a settings value into a list of strings.
+ * Supports CSV storage, JSON arrays, and Sylius settings payloads (options/fields).
+ */
+$normalizeSettingList = static function ($raw): array {
+    if (null === $raw || false === $raw) {
+        return [];
+    }
+
+    // Some settings can return the string "false"
+    if (is_string($raw)) {
+        $rawTrim = trim($raw);
+        if ($rawTrim === '' || strtolower($rawTrim) === 'false') {
+            return [];
+        }
+
+        // JSON payload support
+        $firstChar = $rawTrim[0] ?? '';
+        if ($firstChar === '[' || $firstChar === '{') {
+            $decoded = json_decode($rawTrim, true);
+            if (is_array($decoded)) {
+                $raw = $decoded;
+            }
+        }
+    }
+
+    // Sylius-like payloads: ['options' => [...]] or ['fields' => [...]]
+    if (is_array($raw)) {
+        if (isset($raw['options']) && is_array($raw['options'])) {
+            $raw = $raw['options'];
+        } elseif (isset($raw['fields']) && is_array($raw['fields'])) {
+            $raw = $raw['fields'];
+        }
+    }
+
+    // Plain array
+    if (is_array($raw)) {
+        $list = [];
+        foreach ($raw as $v) {
+            if (is_string($v)) {
+                $v = trim($v);
+                if ($v !== '') {
+                    $list[] = $v;
+                }
+            }
+        }
+        return array_values(array_unique($list));
+    }
+
+    // CSV / newline-separated string
+    if (is_string($raw)) {
+        $raw = str_replace(["\r\n", "\n", "\r", ";"], [",", ",", ",", ","], $raw);
+        $parts = array_map('trim', explode(',', $raw));
+        $parts = array_values(array_filter($parts, static function ($v) {
+            return is_string($v) && $v !== '' && strtolower($v) !== 'false';
+        }));
+        return array_values(array_unique($parts));
+    }
+
+    return [];
+};
+
+/**
+ * Helper: mark a QuickForm element as required so templates can render the "*" marker.
+ */
+$markRequired = static function (FormValidator $form, string $name): void {
+    if (!method_exists($form, 'getElement') || !method_exists($form, 'setRequired')) {
+        return;
+    }
+
+    try {
+        $element = $form->getElement($name);
+        if ($element) {
+            $form->setRequired($element);
+        }
+    } catch (\Throwable $e) {
+        // Do nothing: element might not exist in some contexts.
+    }
+};
+
+/**
  * Registration settings (backward-compatible).
  * Note: We ALWAYS show the role selector (UI requirement),
  * but we still enforce platform rules (security) by disabling teacher role
@@ -54,13 +134,74 @@ $allowedFields = [
 
 $allowedFieldsConfiguration = api_get_setting('registration.allow_fields_inscription', true);
 if ('false' !== $allowedFieldsConfiguration) {
-    $allowedFields = $allowedFieldsConfiguration['fields'] ?? [];
-    $allowedFields['extra_fields'] = $allowedFieldsConfiguration['extra_fields'] ?? [];
+    $fieldsFromConfig = $allowedFieldsConfiguration['fields'] ?? [];
+    if (!is_array($fieldsFromConfig)) {
+        $fieldsFromConfig = $normalizeSettingList($fieldsFromConfig);
+    }
+
+    $allowedFields = $fieldsFromConfig;
+
+    $extraFromConfig = $allowedFieldsConfiguration['extra_fields'] ?? [];
+    if (!is_array($extraFromConfig)) {
+        $extraFromConfig = $normalizeSettingList($extraFromConfig);
+    }
+    $allowedFields['extra_fields'] = $extraFromConfig;
 }
 
 // UI requirement: always show role selector even if config removes it.
 if (!in_array('status', $allowedFields, true)) {
     $allowedFields[] = 'status';
+}
+
+$requiredProfileFieldsRaw = api_get_setting('registration.required_profile_fields', true);
+$requiredProfileFieldsTokens = $normalizeSettingList($requiredProfileFieldsRaw);
+
+$fieldKeyMap = [
+    // Settings schema values
+    'officialcode' => 'official_code',
+    'email' => 'email',
+    'language' => 'language',
+    'phone' => 'phone',
+
+    // Also accept already-normalized keys (defensive)
+    'official_code' => 'official_code',
+];
+
+$requiredProfileFields = [];
+foreach ($requiredProfileFieldsTokens as $token) {
+    $t = strtolower(trim((string) $token));
+    if ($t === '') {
+        continue;
+    }
+    if (isset($fieldKeyMap[$t])) {
+        $requiredProfileFields[$fieldKeyMap[$t]] = true;
+    }
+}
+
+$hasRequiredProfileConfig = !empty($requiredProfileFields);
+
+// Required flags derived from required_profile_fields (authoritative if configured)
+$isEmailRequiredFromRequiredProfile = $hasRequiredProfileConfig && isset($requiredProfileFields['email']);
+$isLanguageRequiredFromRequiredProfile = $hasRequiredProfileConfig && isset($requiredProfileFields['language']);
+$isPhoneRequiredFromRequiredProfile = $hasRequiredProfileConfig && isset($requiredProfileFields['phone']);
+$isOfficialCodeRequiredFromRequiredProfile = $hasRequiredProfileConfig && isset($requiredProfileFields['official_code']);
+
+// Force mandatory fields to be visible in the registration form
+$forcedVisibleFields = [];
+if ($isLanguageRequiredFromRequiredProfile) {
+    $forcedVisibleFields[] = 'language';
+}
+if ($isPhoneRequiredFromRequiredProfile) {
+    $forcedVisibleFields[] = 'phone';
+}
+if ($isOfficialCodeRequiredFromRequiredProfile) {
+    $forcedVisibleFields[] = 'official_code';
+}
+
+foreach ($forcedVisibleFields as $f) {
+    if (!in_array($f, $allowedFields, true)) {
+        $allowedFields[] = $f;
+    }
 }
 
 $pluginTccDirectoryPath = api_get_path(SYS_PLUGIN_PATH) . 'logintcc';
@@ -479,20 +620,20 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function hideNativeStatusUI() {
-  statusRadios.forEach(r => {
-    // Your generated HTML uses <div class="field"> as the wrapper for radios
-    const wrapper =
-      r.closest('.field') ||
-      r.closest('.form-group') ||
-      r.closest('.control-group') ||
-      r.closest('.row') ||
-      r.parentElement;
+    statusRadios.forEach(r => {
+      // Your generated HTML uses <div class="field"> as the wrapper for radios
+      const wrapper =
+        r.closest('.field') ||
+        r.closest('.form-group') ||
+        r.closest('.control-group') ||
+        r.closest('.row') ||
+        r.parentElement;
 
-    if (wrapper && wrapper !== form && wrapper !== cardsRoot) {
-      wrapper.style.display = 'none';
-    }
-  });
-}
+      if (wrapper && wrapper !== form && wrapper !== cardsRoot) {
+        wrapper.style.display = 'none';
+      }
+    });
+  }
 
   hideNativeStatusUI();
 
@@ -547,10 +688,18 @@ document.addEventListener('DOMContentLoaded', function () {
 EOD;
     }
 
+    $emailLegacyRequired = ('true' === api_get_setting('registration', 'email'));
+    $isEmailRequired = $emailLegacyRequired || $isEmailRequiredFromRequiredProfile;
+
+    $isPhoneRequired = $hasRequiredProfileConfig ? $isPhoneRequiredFromRequiredProfile : true;
+    $isOfficialCodeRequired = $hasRequiredProfileConfig ? $isOfficialCodeRequiredFromRequiredProfile : true;
+    $isLanguageRequired = $hasRequiredProfileConfig ? $isLanguageRequiredFromRequiredProfile : false;
+
     // EMAIL
     $form->addElement('text', 'email', get_lang('E-mail'), ['size' => 40]);
-    if ('true' === api_get_setting('registration', 'email')) {
+    if ($isEmailRequired) {
         $form->addRule('email', get_lang('Required field'), 'required');
+        $markRequired($form, 'email');
     }
 
     if ($isTccEnabled) {
@@ -576,8 +725,12 @@ EOD;
 
     if ('true' === api_get_setting('login_is_email')) {
         $form->applyFilter('email', 'trim');
-        if ('true' != api_get_setting('registration', 'email')) {
+
+        // Ensure email is required when used as login (legacy behavior), or when required_profile_fields asks for it.
+        if (!$isEmailRequired) {
             $form->addRule('email', get_lang('Required field'), 'required');
+            $markRequired($form, 'email');
+            $isEmailRequired = true;
         }
         $form->addRule(
             'email',
@@ -669,17 +822,27 @@ EOD;
     // PHONE
     if (in_array('phone', $allowedFields, true)) {
         $form->addElement('text', 'phone', get_lang('Phone'), ['size' => 20]);
-        $form->addRule('phone', get_lang('Required field'), 'required');
+        if ($isPhoneRequired) {
+            $form->addRule('phone', get_lang('Required field'), 'required');
+            $markRequired($form, 'phone');
+        }
     }
 
     // Language
     if (in_array('language', $allowedFields, true)) {
         $form->addSelectLanguage('language', get_lang('Language'), [], ['id' => 'language']);
+        if ($isLanguageRequired) {
+            $form->addRule('language', get_lang('Required field'), 'required');
+            $markRequired($form, 'language');
+        }
     }
 
     if (in_array('official_code', $allowedFields, true)) {
         $form->addElement('text', 'official_code', get_lang('Official code'), ['size' => 40]);
-        $form->addRule('official_code', get_lang('Required field'), 'required');
+        if ($isOfficialCodeRequired) {
+            $form->addRule('official_code', get_lang('Required field'), 'required');
+            $markRequired($form, 'official_code');
+        }
     }
 
     if (in_array('date_of_birth', $allowedFields, true)) {

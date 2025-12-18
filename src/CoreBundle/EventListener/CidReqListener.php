@@ -22,10 +22,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -138,7 +138,7 @@ class CidReqListener
                     // Check if user is allowed to this course-session
                     // See SessionVoter.php
                     if (false === $checker->isGranted(SessionVoter::VIEW, $session)) {
-                        throw new AccessDeniedException($this->translator->trans("You're not allowed in this session"));
+                        throw new AccessDeniedHttpException($this->translator->trans("You're not allowed in this session"));
                     }
                     $sessionHandler->set('session_name', $session->getTitle());
                     $sessionHandler->set('sid', $session->getId());
@@ -168,7 +168,7 @@ class CidReqListener
                 $group->setParent($course);
 
                 if (false === $checker->isGranted(GroupVoter::VIEW, $group)) {
-                    throw new AccessDeniedException($this->translator->trans("You're not allowed in this group"));
+                    throw new AccessDeniedHttpException($this->translator->trans("You're not allowed in this group"));
                 }
 
                 $sessionHandler->set('group', $group);
@@ -178,11 +178,11 @@ class CidReqListener
                     // Check if user is allowed to this course-group
                     // See GroupVoter.php
                     if (false === $checker->isGranted(GroupVoter::VIEW, $group)) {
-                        throw new AccessDeniedException($this->translator->trans('Unauthorised access to group'));
+                        throw new AccessDeniedHttpException($this->translator->trans('Unauthorised access to group'));
                     }
                     $sessionHandler->set('gid', $groupId);
                 } else {
-                    throw new AccessDeniedException($this->translator->trans('Group does not exist in course'));
+                    throw new AccessDeniedHttpException($this->translator->trans('Group does not exist in course'));
                 }*/
             }
 

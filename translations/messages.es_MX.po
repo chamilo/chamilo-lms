@@ -8628,10 +8628,10 @@ msgid "."
 msgstr ","
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%d de %b, %Y"
 
 msgid "%A %B %d, %Y"
-msgstr "%A %B %d, %Y"
+msgstr "%d de %B de %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
 msgstr "%B %d, %Y a las %I:%M %p"
@@ -9465,7 +9465,7 @@ msgid "Not yet begun"
 msgstr "Aún no iniciado"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d de %B de %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Carpeta inválida: Por favor crea una carpeta con el nombre images en tu herramienta de documentos para que las imágenes puedan subirse en esta carpeta"
@@ -13920,10 +13920,10 @@ msgid "Learning paths"
 msgstr "Learning Path"
 
 msgid "level up"
-msgstr "level up"
+msgstr "subir de nivel"
 
 msgid "main category"
-msgstr "main category"
+msgstr "categoría principal"
 
 msgid "Add to the course links"
 msgstr "Agregar a los enlaces del curso"
@@ -13935,13 +13935,13 @@ msgid "Resources added"
 msgstr "Added new resources"
 
 msgid "External resources"
-msgstr "External resources"
+msgstr "Recursos externos"
 
 msgid "Course resources"
-msgstr "Course resources"
+msgstr "Recursos del curso"
 
 msgid "External link"
-msgstr "External link"
+msgstr "Enlace externo"
 
 msgid "Add the dropbox to this section."
 msgstr "Add the dropbox page to this chapter."
@@ -30523,10 +30523,10 @@ msgid "CREATE TABLE works"
 msgstr "CREAR TABLA works"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ALTER TABLE funciona"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "DROP COLUMN funciona"
 
 msgid "Theme selected as current"
 msgstr "Tema seleccionado como actual"
@@ -31433,4 +31433,10 @@ msgstr "Error al cargar recursos."
 
 msgid "Clear search"
 msgstr "Limpiar búsqueda"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Solo se permiten letras, dígitos y guión bajo (_) en el nombre de la base de datos. Los caracteres inválidos se eliminarán automáticamente."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "¿Qué términos y condiciones generales se dan a los usuarios para usar esta plataforma?"
 

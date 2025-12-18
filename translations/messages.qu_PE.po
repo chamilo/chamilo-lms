@@ -16191,25 +16191,25 @@ msgid "%d %B %Y"
 msgstr ""
 
 msgid "%A"
-msgstr ""
+msgstr "%A"
 
 msgid "Return to the course list"
-msgstr ""
+msgstr "Kursokuna rurayman kutimuy"
 
 msgid "%d/%m"
-msgstr ""
+msgstr "%d/%m"
 
 msgid "Course tutor"
-msgstr ""
+msgstr "Kursopi yachay"
 
 msgid "Student in session course"
-msgstr ""
+msgstr "Yachakuq sessionpi kursopi"
 
 msgid "Student in course"
-msgstr ""
+msgstr "Yachakuq kursopi"
 
 msgid "Session general coach"
-msgstr ""
+msgstr "Sessionpi kamachisqa yachay"
 
 msgid "Session course coach"
 msgstr "Yachayniyuq wasi session yachachiq"
@@ -16794,7 +16794,7 @@ msgid "File export as"
 msgstr "Willay export as"
 
 msgid "Spell check"
-msgstr "Spell check"
+msgstr "Kamay yachana"
 
 msgid "Enable spell check"
 msgstr "Spell check amawtachay"
@@ -19362,7 +19362,7 @@ msgid "Exercise average"
 msgstr "Ejerciciotaq promedio"
 
 msgid "Webcam Clip"
-msgstr "Webcam clip"
+msgstr "Kámara clip"
 
 msgid "Snapshot"
 msgstr "Foto instantánea"
@@ -21000,40 +21000,40 @@ msgid "Redirect to forums list"
 msgstr "Forokuna listoqman kamachiy"
 
 msgid "Enable forum auto-launch"
-msgstr ""
+msgstr "Foropi kichakuyta kamachiy"
 
 msgid "You can now download your certificate by clicking here"
-msgstr ""
+msgstr "Kaymanta qillqaykip kichakunki"
 
 msgid "Additionally, you have achieved the following skills"
-msgstr ""
+msgstr "Kay yachanakunata qhapaq kasqayki"
 
 msgid "I have achieved skill %s on %s"
-msgstr ""
+msgstr "Yachana %s qhapaq kani %s"
 
 msgid "Another attempt"
-msgstr ""
+msgstr "Huk uyakuy"
 
 msgid "Remaining %d attempts"
-msgstr ""
+msgstr "%d uyakuykuna kashkan"
 
 msgid "Map"
-msgstr ""
+msgstr "Pukyu"
 
 msgid "My location"
-msgstr ""
+msgstr "Ñoqap pukyu"
 
 msgid "Show course in user's language"
-msgstr ""
+msgstr "Kursota runap simipi rikuchiy"
 
 msgid "Access data"
-msgstr ""
+msgstr "Chaskipuni willakuy"
 
 msgid "Image dimensions do not match the requirements. Please check the suggestions next to the image field."
-msgstr ""
+msgstr "Rimapakuna requisitokuna hina mana allinchakuchu. Rimap willakuyta qhaway."
 
 msgid "Could not reset password, contact your helpdesk."
-msgstr ""
+msgstr "Mana allinchu contraseñapi qhapaq kachkan, yachaypi yuyarikuy."
 
 msgid "Quote"
 msgstr "Yupay"
@@ -22833,76 +22833,76 @@ msgid "Minimum time (in minutes) a student must remain in the learning path to g
 msgstr "Kam p'unchay (phutukuna) yachaywasiq ñanpi kani hinaptapusqa ñanman riyta atin."
 
 msgid "You didn't spend the minimum time required in the learning path."
-msgstr ""
+msgstr "Yachay ñawpaqpi mana pisi pacha kachkanki."
 
 msgid "You have spent %s"
-msgstr ""
+msgstr "%s kachkanki"
 
 msgid "Time spent in the learning path"
-msgstr ""
+msgstr "Yachay ñawpaqpi kachkan pacha"
 
 msgid "Student %s has completed his/her learning paths."
-msgstr ""
+msgstr "Yachakuq %s yachay ñawpaqkunata qhapaq kachkan."
 
 msgid "I have finished the lessons, notify the teacher"
-msgstr ""
+msgstr "Yachanakuna qhapaq kani, yachachisqata avisapuy"
 
 msgid "The student <b>%s</b> has finished the learning paths from the course <b>%s</b>"
-msgstr ""
+msgstr "Yachakuq <b>%s</b> kursopi <b>%s</b> yachay ñawpaqkunata qhapaq kachkan"
 
 msgid "This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question."
-msgstr ""
+msgstr "Kay paqarina huk rurakunapi kachkan. Rurakuyta seguinapaqqa, tukuchinakuna tukuy rurakunaman afetakun."
 
 msgid "Time spent / Time required"
-msgstr ""
+msgstr "Kachkan pacha / Pisi pacha"
 
 msgid "In session %s, you had the following results"
-msgstr ""
+msgstr "Session %s pi kay hallp'ankuna kachkan"
 
 msgid "Formation unit"
-msgstr ""
+msgstr "Yachay suti"
 
 msgid "Global progress"
-msgstr ""
+msgstr "Rikch'ay hallp'a"
 
 msgid "Attestation of attendance"
-msgstr ""
+msgstr "Chinkana qillqay"
 
 msgid "Do not show the score (only when user finishes all attempts) but show feedback for each attempt."
-msgstr ""
+msgstr "Mana rikuchiychu hallp'a (uyakuykuna tukuyqa) uyakuy hunt'aq willakuy rikuchiychu."
 
 msgid "Ranking mode: Do not show results details question by question and show a table with the ranking of all other users."
-msgstr ""
+msgstr "Ranking: Mana rikuchiychu paqarina hunt'aq hallp'akuna, mesa rikuchiychu runakuna rankingwan."
 
 msgid "Back to top"
-msgstr ""
+msgstr "Sayaqman kutimuy"
 
 msgid "What do we consider personal data?"
-msgstr ""
+msgstr "¿Ima personal willakuy?"
 
 msgid "Why do we collect this data?"
-msgstr ""
+msgstr "¿Imaraykuta q'illqakuy?"
 
 msgid "Where do we record the data? (in which system, hosted where, accessible by which company that handles the servers, etc.)"
-msgstr ""
+msgstr "¿Maypi q'illqakuy willakuy? (maypi sistema, maypi servidorkuna, ¿imayna empresa servidorkunata kamachisqa?)"
 
 msgid "How is the data structured? To what extent does the organization of the data protect your security? ... Do you have established processes that ensure that a hacker will not be able to collect all the personal data on the first attempt? Are they encrypted?"
-msgstr ""
+msgstr "¿Imayna willakuy organizasqa? ¿Imayna organizasqakuna amawt yachayta amparan? ¿Procesokuna kanchu hacker ñawpaq intentopi tukuy personal willakuy q'illqakunata?"
 
 msgid "How is the data structured in this software? (one tab for all the data, it has some categorization / label, ...)"
-msgstr ""
+msgstr "¿Kay programa pi imayna willakuy organizasqa? (tukuy willakuyta ñawpaq tab, kategorizasion, label...)"
 
 msgid "How long do we save the data? Is there data that expires even though the account is still active? How much time do we keep the data after the last use of the system?"
-msgstr ""
+msgstr "¿Qam pacha kama willakuyta q'illqakunki? ¿Konta activa kachkanpas willakuy k'uchikun? ¿Sistema ñawpaq llank'aqpi pacha kama q'illqakunki?"
 
 msgid "What changes can we make to the data? What changes can be made to the data without affecting the service?"
-msgstr ""
+msgstr "¿Imayna tukuchinakuna willakuyta ruwakun? ¿Servisiomantapas tukuchinakuna?"
 
 msgid "What do we extract data for (towards other internal processes) and which data is it?"
-msgstr ""
+msgstr "¿Imakuna willakuyta saqikuy (huk ñawpaq prosesokunaman) ¿imayna willakuy?"
 
 msgid "Who can consult the personal data? For what purpose?"
-msgstr ""
+msgstr "¿Piwakuna personal willakuyta qhawachikun? ¿Imaraykuta?"
 
 msgid "How and for what can we use the personal data?"
 msgstr ""
@@ -30226,67 +30226,67 @@ msgid "Semicolon (;) delimiter detected. This version of Chamilo requires comma 
 msgstr ""
 
 msgid "Replication"
-msgstr ""
+msgstr "Replikasyon"
 
 msgid "Schedule changed"
-msgstr ""
+msgstr "Horario oqllakurqan"
 
 msgid "Classroom changed"
-msgstr ""
+msgstr "Salan oqllakurqan"
 
 msgid "Location changed"
-msgstr ""
+msgstr "Lug'ar oqllakurqan"
 
 msgid "Enrollment cancelled"
-msgstr ""
+msgstr "Inskrisyon kansellarqan"
 
 msgid "Parent session"
-msgstr ""
+msgstr "Mamakuna sesion"
 
 msgid "The field must be a positive integer"
-msgstr ""
+msgstr "Kutxan musuq kamayuq ñawpaq sunqun"
 
 msgid "Validity (days)"
-msgstr ""
+msgstr "Musuq kay (p'unchaykuna)"
 
 msgid "Last repetition"
-msgstr ""
+msgstr "Ñawpaq repetisyon"
 
 msgid "The field must be empty or a positive integer"
-msgstr ""
+msgstr "Kutxan pachak utaq musuq kamayuq ñawpaq sunqun kanman"
 
 msgid "Days before finishing automated creation of new repetitions"
-msgstr ""
+msgstr "Musuq repetisyon suyana p'unchaykuna qhatukurqanmanta ñawpaq"
 
 msgid "Notify subscription of user to student boss"
-msgstr ""
+msgstr "Yachakuq sutininsuta yachakuq patsakunata avisapay"
 
 msgid "User does not exist"
-msgstr ""
+msgstr "Yachakuq manam kanchu"
 
 msgid "(Percentage of file analysis)"
-msgstr ""
+msgstr "(Pishtuy yachaykuna suyasqa)"
 
 msgid "Pause training"
-msgstr ""
+msgstr "Yachachisyan qhatuy"
 
 msgid "Date of birth"
-msgstr ""
+msgstr "Nawpaq p'unchay"
 
 msgid "A user creator is required"
-msgstr ""
+msgstr "Yachakuq kamayuqmuwan kanman"
 
 msgid "Save links"
-msgstr ""
+msgstr "Yukuynakunata qhatuy"
 
 msgid "Links moved"
-msgstr ""
+msgstr "Yukuynakuna karkarqan"
 
 msgid "No option available"
-msgstr ""
+msgstr "Manam imayna ruraykunchu"
 
 msgid "Remove this value when anonymizing a user, because it could otherwise help identify the user despite the anonymization."
-msgstr ""
+msgstr "Yachakuqta anonimizakuyqa kay qhatuytan hap'inkuy, kayllawan anonimizakusqanpaq yachakuqta yachakusqanmanta uyariy"
 
 msgid "Remove on anonymization"
 msgstr "Qhipaq yachayniyawanpi q'uchuy"
@@ -31433,4 +31433,10 @@ msgstr "Yachaykuna cargayta pantasqan."
 
 msgid "Clear search"
 msgstr "Rimashwan q'echay"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Sutisapaq hallp'a, ñawpaq sunqun, utaq ch'usa (_ )mi kachkanman. Mana allin hallp'akuna kawsaypi qhatukusqan."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "¿Imayna ruray willakuykuna yachakuqkuna platformata qhawayta atinman?"
 

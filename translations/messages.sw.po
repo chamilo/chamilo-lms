@@ -67,37 +67,37 @@ msgid "Cosecant:\t\t\t\tcsc(x)"
 msgstr "Cosecant:\t\t\t\tcsc(x)"
 
 msgid "Hyperbolic cosecant:\t\tcsch(x)"
-msgstr "Hyperbolic cosecant:\t\tcsch(x)"
+msgstr "Cosecant hyperbolic:\t\tcsch(x)"
 
 msgid "Arccosecant:\t\t\tarccsc(x)"
 msgstr "Arccosecant:\t\t\tarccsc(x)"
 
 msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
-msgstr "Hyperbolic arccosecant:\t\tarccsch(x)"
+msgstr "Arc cosecant hyperbolic:\t\tarccsch(x)"
 
 msgid "Secant:\t\t\t\tsec(x)"
 msgstr "Secant:\t\t\t\tsec(x)"
 
 msgid "Hyperbolic secant:\t\tsech(x)"
-msgstr "Hyperbolic secant:\t\tsech(x)"
+msgstr "Secant hyperbolic:\t\tsech(x)"
 
 msgid "Arcsecant:\t\t\tarcsec(x)"
 msgstr "Arcsecant:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
-msgstr "Hyperbolic arcsecant:\t\tarcsech(x)"
+msgstr "Arc secant hyperbolic:\t\tarcsech(x)"
 
 msgid "Cotangent:\t\t\tcot(x)"
 msgstr "Cotangent:\t\t\tcot(x)"
 
 msgid "Hyperbolic cotangent:\t\tcoth(x)"
-msgstr "Hyperbolic cotangent:\t\tcoth(x)"
+msgstr "Cotangent hyperbolic:\t\tcoth(x)"
 
 msgid "Arccotangent:\t\t\tarccot(x)"
 msgstr "Arccotangent:\t\t\tarccot(x)"
 
 msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
-msgstr "Hyperbolic arccotangent:\t\tarccoth(x)"
+msgstr "Arc cotangent hyperbolic:\t\tarccoth(x)"
 
 msgid "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />\nIf needed, the Help section of your browser indicates how to configure cookies.<br /><br />\nFor more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website."
 msgstr "Ili tovuti hii ifanye kazi na iweze kupima matumizi ya maudhui, jukwaa hili linatumia vidakuzi.<br /><br />\nKama inahitajika, sehemu ya Msaada ya kivinjari chako inaonyesha jinsi ya kusanidi vidakuzi.<br /><br />\nKwa maelezo zaidi kuhusu vidakuzi, unaweza kutembelea tovuti <a href=\"http://www.aboutcookies.org/\">About Cookies</a>."
@@ -226,7 +226,7 @@ msgid "The session duration allows you to set a number of days of access startin
 msgstr "Muda wa sesheni inakuruhusu kuweka idadi ya siku za ufikiaji kuanzia tarehe ya ufikiaji wa kwanza wa mtumiaji kwenye sesheni. Kwa njia hii, unaweza kuweka sesheni 'ya kudumu siku 15' badala ya kuanza kwa tarehe iliyowekwa kwa wanafunzi wote."
 
 msgid "Hyperbolic arctangent:\t\tarctanh(x)"
-msgstr "Hyperbolic arctangent:\t\tarctanh(x)"
+msgstr "Arc tangent hyperbolic:\t\tarctanh(x)"
 
 msgid "Session duration"
 msgstr "Muda wa sesheni"
@@ -235,7 +235,7 @@ msgid "Arctangent:\t\t\tarctan(x)"
 msgstr "Arctangent:\t\t\tarctan(x)"
 
 msgid "Hyperbolic tangent:\t\ttanh(x)"
-msgstr "Hyperbolic tangent:\t\ttanh(x)"
+msgstr "Tangent hyperbolic:\t\ttanh(x)"
 
 msgid "Tangent:\t\t\ttan(x)"
 msgstr "Tangent:\t\t\ttan(x)"
@@ -247,13 +247,13 @@ msgid "Series"
 msgstr "Mfululizo"
 
 msgid "Hyperbolic arccosine:\t\tarccosh(x)"
-msgstr "Hyperbolic arccosine:\t\tarccosh(x)"
+msgstr "Arc cosine hyperbolic:\t\tarccosh(x)"
 
 msgid "Arccosine:\t\t\tarccos(x)"
 msgstr "Arccosine:\t\t\tarccos(x)"
 
 msgid "Hyperbolic cosine:\t\tcosh(x)"
-msgstr "Hyperbolic cosine:\t\tcosh(x)"
+msgstr "Cosine hyperbolic:\t\tcosh(x)"
 
 msgid "Cosine:\t\t\t\tcos(x)"
 msgstr "Cosine:\t\t\t\tcos(x)"
@@ -262,7 +262,7 @@ msgid "Teachers time report"
 msgstr "Ripoti ya muda wa walimu"
 
 msgid "Hyperbolic arcsine:\t\tarcsinh(x)"
-msgstr "Hyperbolic arcsine:\t\tarcsinh(x)"
+msgstr "Arc sine hyperbolic:\t\tarcsinh(x)"
 
 msgid "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator."
 msgstr "Haukuona lugha yako katika orodha? Wasiliana nasi kwa info@chamilo.org ili kuchangia kama mtafsiri."
@@ -271,7 +271,7 @@ msgid "Arcsine:\t\t\tarcsin(x)"
 msgstr "Arcsine:\t\t\tarcsin(x)"
 
 msgid "Hyperbolic sine:\t\tsinh(x)"
-msgstr "Hyperbolic sine:\t\tsinh(x)"
+msgstr "Sine hyperbolic:\t\tsinh(x)"
 
 msgid "Sine:\t\t\t\tsin(x)"
 msgstr "Sine:\t\t\t\tsin(x)"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ndiyo:nakala,, hapana:hakuna nakala"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folda,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":mazoezi:mazoezi,,      uigaji:uigaji,,      dodoso:dodoso,,      mchoro:mchoro,,      picha:picha,,      grafu:grafu,,      faharasa:faharasa,,      slaidi:slaidi,,      jedwali:jedwali,,      maandishi ya hadithi:maandishi ya hadithi,,      mtihani:mtihani,,      majaribio:majaribio,,      taarifa ya tatizo:taarifa ya tatizo,,      tathmini ya kibinafsi:tathmini ya kibinafsi,,      mhadhara:mhadhara"
@@ -24694,7 +24694,7 @@ msgid "*: Current quarter, incomplete data"
 msgstr "*: Robo ya sasa, data isiyokamilika"
 
 msgid "Q%s %s"
-msgstr "Q%s %s"
+msgstr "Sw.%s %s"
 
 msgid "YoY"
 msgstr "YoY"
@@ -31427,4 +31427,10 @@ msgstr "Kosa la kupakia rasilimali."
 
 msgid "Clear search"
 msgstr "Futa utafutaji"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Herufi, nambari na underscore (_) pekee zinazoruhusiwa katika jina la hifadhidata. Herufi zisizofaa zitaondolewa kiotomatiki."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Sheria na masharti ya jumla ni yapi yanayotolewa kwa watumiaji kutumia jukwaa hili?"
 

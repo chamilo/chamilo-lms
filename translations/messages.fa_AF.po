@@ -5569,10 +5569,10 @@ msgid "Please select the version of the LDAP server you want to use. Using the r
 msgstr "لطفاً نسخه سرور LDAP مورد نظر را انتخاب کنید. استفاده از نسخه درست بستگی به پیکربندی سرور LDAP شما دارد."
 
 msgid "LDAP 2"
-msgstr "LDAP 2"
+msgstr "LDAP ۲"
 
 msgid "LDAP 3"
-msgstr "LDAP 3"
+msgstr "LDAP ۳"
 
 msgid "Tutor identification field"
 msgstr "فیلد شناسایی مربی"
@@ -18688,10 +18688,10 @@ msgid "Main CAS server protocol"
 msgstr "پروتکل سرور اصلی CAS"
 
 msgid "CAS 1"
-msgstr "CAS 1"
+msgstr "CAS ۱"
 
 msgid "CAS 2"
-msgstr "CAS 2"
+msgstr "CAS ۲"
 
 msgid "SAML"
 msgstr "SAML"
@@ -23200,7 +23200,7 @@ msgid "No status"
 msgstr "بدون وضعیت"
 
 msgid "CAS 3"
-msgstr "CAS 3"
+msgstr "CAS ۳"
 
 msgid "Go back to video"
 msgstr "بازگشت به ویدیو"
@@ -31427,4 +31427,10 @@ msgstr "خطا در بارگیری منابع."
 
 msgid "Clear search"
 msgstr "پاک کردن جستجو"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "فقط حروف، ارقام و زیرخط (_) در نام پایگاه داده مجاز است. کاراکترهای نامعتبر به طور خودکار حذف می‌شوند."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "چه شرایط و قوانین کلی به کاربران برای استفاده از این پلتفرم داده می‌شود؟"
 

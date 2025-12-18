@@ -31432,3 +31432,9 @@ msgstr "Gabim në ngarkimin e burimeve."
 msgid "Clear search"
 msgstr "Pastro kërkimin"
 
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Vetëm shkronja, shifra dhe nënvija (_) lejohen në emrin e bazës së të dhënave. Karakteret e pavlefshme do të hiqen automatikisht."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Çfarë kushtesh të përgjithshme dhe kushtesh përdorimi u jepen përdoruesve për të përdorur këtë platformë?"
+

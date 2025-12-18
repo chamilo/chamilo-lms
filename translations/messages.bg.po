@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:запазени права,, no:свободен"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Поток от октети,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Octet поток,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:тест (упражнение),,      simulation:симулация,,      questionnaire:въпросник,,      diagram:диаграма,,      figure:фигура,,      graph:графика,,      index:индекс,,      slide:слайд,,      table:таблица,,      narrative text:обзор,,      exam:изпит,,      experiment:експеримент,,      problem statement:постановка на проблем,,      self assessment:самостоятелно оценяване,,      lecture:лекция"
@@ -9180,7 +9180,7 @@ msgid "You did not select a user / group. The announcement is visible for every 
 msgstr "Не избрахте група/потребители. Ще бъде видимо за всички потребители."
 
 msgid "Group wiki"
-msgstr "Group wiki"
+msgstr "Групово уики"
 
 msgid "Complete"
 msgstr "Изпълнено"
@@ -9465,7 +9465,7 @@ msgid "Not yet begun"
 msgstr "Очаква се"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d %B %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Невалидна папка: Моля, създайте папка с името <i>images</i> в инструмента \"Документи\". Графичните файлове ще се качват там."
@@ -24989,7 +24989,6 @@ msgstr "Износ на всички резултати от всички тес
 msgid "Click to view details"
 msgstr "Кликнете за детайли"
 
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -31434,4 +31433,10 @@ msgstr "Грешка при зареждане на ресурси."
 
 msgid "Clear search"
 msgstr "Изчисти търсенето"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "В името на базата данни са разрешени само букви, цифри и долна черта (_). Невалидните символи ще бъдат премахнати автоматично."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Какви общи условия и правила са дадени на потребителите за ползване на тази платформа?"
 

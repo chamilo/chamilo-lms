@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Egoki"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula adibide: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula adibidea: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Aldagaien tarteak"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr "bai:copyright,, ez: copyright gabe"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Karpetak,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Karpeta,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ariketa,, simulation:simulazioa,, questionnaire:galdeketa,, diagram:diagrama,, figure:irudia,, graph:grafikoa,, index:indexa,, slide:diapositiba,, table:taula,, narrative text:testu narratiboa,, exam:azterketa,, experiment:saioa,, problem statement:problemaren egoera,, self assessment:autoebaluazioa,, lecture:irakurketa"
@@ -9528,7 +9528,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "Fitxategiaren kargak huts egin du: fitxategi luzapen hau edo fitxategi mota hau debekatuta dago"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "OpenID URLa"
 
 msgid "The file is too big to upload."
 msgstr "Kargatu beharreko fitxategia handiegia da!"
@@ -15054,7 +15054,7 @@ msgid "Install Chamilo"
 msgstr "Instalatu Chamilo"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "Chamilo URLa"
 
 msgid "You have no session in your sessions history"
 msgstr "Ez duzu saio bat ere saioen historian"
@@ -28182,7 +28182,7 @@ msgid "Session expired. Redirecting to login…"
 msgstr "Saioa iraungi da. Birbideratzen login-era…"
 
 msgid "Super admin"
-msgstr "Super admin"
+msgstr "Super administratzailea"
 
 msgid "Global admin"
 msgstr "Admin globalea"
@@ -31438,4 +31438,10 @@ msgstr "Errorea gertatu da baliabideak kargatzean."
 
 msgid "Clear search"
 msgstr "Garbitu bilaketa"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Letra, digitu eta azpimarril (_) bakarrik onartzen dira datu-basearen izenean. Karakter baliogabeak ezabatu egingo dira automatikoki."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Zeintzuk dira erabiltzaileei plataforma hau erabiltzeko ematen zaizkien baldintza orokorrak?"
 

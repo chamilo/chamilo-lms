@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:कपीराइट,, no:कपीराइट नभएको"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:फोल्डर,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:व्यायाम,,      simulation:सिमुलेशन,,      questionnaire:प्रश्नावली,,      diagram:डायाग्राम,,      figure:चित्र,,      graph:ग्राफ,,      index:सूची,,      slide:स्लाइड,,      table:तालिका,,      narrative text:कथन पाठ,,      exam:परीक्षा,,      experiment:प्रयोग,,      problem statement:समस्या कथन,,      self assessment:आत्म मूल्याङ्कन,,      lecture:व्याख्यान"
@@ -31431,4 +31431,10 @@ msgstr "स्रोतहरू लोड गर्दा त्रुटि।
 
 msgid "Clear search"
 msgstr "खोजी सफा गर्नुहोस्"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "डेटाबेस नाममा मात्र अक्षरहरू, अंकहरू र अन्डरस्कोर (_) अनुमति छ। अवैध अक्षरहरू स्वतः हटाइनेछन्।"
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "यो प्लेटफर्म प्रयोग गर्न प्रयोगकर्ताहरूलाई दिइने सामान्य शर्तहरू के हुन्?"
 

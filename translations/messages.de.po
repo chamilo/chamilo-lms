@@ -1651,7 +1651,7 @@ msgid "Move the current section"
 msgstr "Das aktive Kapitel verschieben"
 
 msgid "Generic SCORM"
-msgstr "Generic SCORM"
+msgstr "Generisches SCORM"
 
 msgid "The format of this package could not be recognized. Please check this is a valid package."
 msgstr "Das Format des Paktes wird nicht erkannt. Vergewissern Sie sich, dass es korrekt formatiert ist und keine Fehler enthält. Probleme können durch proprietäre ZIP Formate oder die Verwendung langer Dateinamen enstehen. Bei Unklarheiten bzgl. ZIP, versuchen Sie es bitte mit minimalen ZIP Funktionen."
@@ -2315,7 +2315,7 @@ msgid "Already in"
 msgstr "Bereits in"
 
 msgid "Check in"
-msgstr "Check in"
+msgstr "Check-in"
 
 msgid "The Moderator of this Conference has left the room."
 msgstr "Der Moderator dieser Konferenz hat den Raum verlassen."
@@ -2609,7 +2609,7 @@ msgid "Other properties found in the archive"
 msgstr "Andere Einstellungen im Archiv bearbeiten"
 
 msgid "System ID"
-msgstr "System ID"
+msgstr "System-ID"
 
 msgid "Show score"
 msgstr "Punkte anzeigen"
@@ -3209,7 +3209,7 @@ msgid "Edit Link"
 msgstr "Link bearbeiten"
 
 msgid "CSV import"
-msgstr "CSV Import"
+msgstr "CSV-Import"
 
 msgid "CSV import file could not be opened (e.g. empty, too big)"
 msgstr "CSV Datei konnte nicht geöffnet werden (z.B. leer, zu groß)"
@@ -3299,7 +3299,7 @@ msgid "Corresponding local path"
 msgstr "entsprechender lokaler Pfad"
 
 msgid "Administrator e-mail"
-msgstr "Administrator E-Mail"
+msgstr "Administrator-E-Mail"
 
 msgid "Administrator Name"
 msgstr "Administrator Nachname"
@@ -3308,7 +3308,7 @@ msgid "Surname of the Administrator"
 msgstr "Administrator Vorname"
 
 msgid "Administrator login"
-msgstr "Administrator Login"
+msgstr "Administrator-Login"
 
 msgid "Your portal name"
 msgstr "Der Name Ihres Portals"
@@ -3368,7 +3368,7 @@ msgid "(recommended)"
 msgstr "(empfohlen)"
 
 msgid "SCORM DB"
-msgstr "SCORM DB"
+msgstr "SCORM-DB"
 
 msgid "Administrator last name"
 msgstr "Administrator Nachname"
@@ -4199,10 +4199,10 @@ msgid "works"
 msgstr "funktioniert"
 
 msgid "MySql Client"
-msgstr "MySql Client"
+msgstr "MySQL-Client"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "MySQL-Server"
 
 msgid "Owner"
 msgstr "Besitzer"
@@ -4241,7 +4241,7 @@ msgid "Visual code"
 msgstr "Sichtbarer Code"
 
 msgid "System Code"
-msgstr "System Code"
+msgstr "Systemcode"
 
 msgid "visual code"
 msgstr "sichtbarer Code"
@@ -4793,7 +4793,7 @@ msgid "Make unavailable"
 msgstr "nicht verfügbar machen"
 
 msgid "Style sheets"
-msgstr "Style Sheets"
+msgstr "Stylesheets"
 
 msgid "Should the navigation menu show the different tool icons?"
 msgstr "Sollen die Icons für die Funktionen (Tools) im Navigationsmenü angezeigt werden?"
@@ -5435,7 +5435,7 @@ msgid "The Assessments tool allows you to assess competences in your organizatio
 msgstr " ermöglicht, Lernziele mit Noten festzulegen; falls es nicht benötigt wird, könnte es die Benutzeroberfläche zu komplex machen. Soll dieses Werkzeug aktiviert werden?"
 
 msgid "Theme (stylesheet)"
-msgstr "Theme (Stylesheet)"
+msgstr "Thema (Stylesheet)"
 
 msgid "User theme selection"
 msgstr "Benutzer Theme Auswahl"
@@ -5603,7 +5603,7 @@ msgid "The port on which the main LDAP server will respond (usually 389). This i
 msgstr "Der Port des Haupt LDAP Servers (normalerweise 389). Diese Einstellung ist erforderlich"
 
 msgid "LDAP domain"
-msgstr "LDAP Domain"
+msgstr "LDAP-Domäne"
 
 msgid "This is the LDAP domain (dc) that will be used to find the contacts on the LDAP server. For example: dc=xx, dc=yy, dc=zz"
 msgstr "Dies ist die LDAP Domain (dc), die zum Auffinden von Kontakten auf dem LDAP Server benutzt wird. Z.B.: dc=xx, dc=yy, dc=zz"
@@ -5627,7 +5627,7 @@ msgid "This term will be used to filter the search for contacts on the LDAP serv
 msgstr "Dieser Begriff wird zur Filterung der Suche nach Kontakten auf dem LDAP Server benutzt. Ist man nicht sicher, was hier eingegeben werden soll, bitte in der LDAP Server Dokumentation und Konfiguration nachschauen."
 
 msgid "LDAP version"
-msgstr "LDAP Version"
+msgstr "LDAP-Version"
 
 msgid "Please select the version of the LDAP server you want to use. Using the right version depends on your LDAP server's configuration."
 msgstr "LDAP Server Version auswählen, die benutzt werden soll. Auswahl der richtigen Version hängt ab von der LDAP Server Konfiguration"
@@ -5657,7 +5657,7 @@ msgid "If you are using an LDAP server that does not support or accept anonymous
 msgstr "Bei Nutzung eines LDAP Servers, der keinen Anonymous Zugriff erlaubt, das nachfolgende Felde für Benutzerpasswort benutzen"
 
 msgid "LDAP Import"
-msgstr "LDAP Import"
+msgstr "LDAP-Import"
 
 msgid "Notify subscribed users by e-mail"
 msgstr "Angemeldete Benutzer per E-Mail benachrichtigen"
@@ -6803,7 +6803,7 @@ msgid "View this user"
 msgstr "Diesen Benutzer anzeigen"
 
 msgid "RSS feed"
-msgstr "RSS Feed"
+msgstr "RSS-Feed"
 
 msgid "No friends in your contact list"
 msgstr "Keine Freunde in Ihrer Kontaktliste"
@@ -9587,7 +9587,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "Datei Upload Fehler: Dateityp  nicht erlaubt."
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "OpenID-URL"
 
 msgid "The file is too big to upload."
 msgstr "Datei ist zu groß!"
@@ -9821,10 +9821,10 @@ msgid "Width"
 msgstr "Breite"
 
 msgid "V Space"
-msgstr "V Space"
+msgstr "V-Abstand"
 
 msgid "H Space"
-msgstr "H Space"
+msgstr "H-Abstand"
 
 msgid "Border"
 msgstr "Rand"
@@ -10127,7 +10127,7 @@ msgid "Overview"
 msgstr "Übersicht"
 
 msgid "API keys"
-msgstr "API Keys"
+msgstr "API-Schlüssel"
 
 msgid "Generate API key"
 msgstr "API Key erzeugen"
@@ -10757,7 +10757,7 @@ msgid "click here to get this course from your old portal"
 msgstr "Klicken Sie hier, um den Kurs von ihrem alten Portal zu übernehmen"
 
 msgid "Support forum"
-msgstr "Support Forum"
+msgstr "Support-Forum"
 
 msgid "Categories Overview"
 msgstr "Kategorie-Übersicht"
@@ -11984,7 +11984,7 @@ msgid "Empty (or NULL)"
 msgstr "Leer (or NULL)"
 
 msgid "Traffic Details"
-msgstr "Traffic Details"
+msgstr "Traffic-Details"
 
 msgid "For individual tracking see <a href=../user/user.php>Users</a> tool."
 msgstr "Für individuelle Auswertungen siehe <a href=../user/user.php>Nutzer-Verwaltung</a>."
@@ -12029,7 +12029,7 @@ msgid "Success"
 msgstr "Erfolg"
 
 msgid "Excel format"
-msgstr "Excel Format"
+msgstr "Excel-Format"
 
 msgid "My learnpath"
 msgstr "Mein Lernpfad"
@@ -12560,7 +12560,7 @@ msgid "Image alone"
 msgstr "Nur Bild"
 
 msgid "Flash animation"
-msgstr "Flash Animation"
+msgstr "Flash-Animation"
 
 msgid "Animation + introduction text"
 msgstr "Animation + Beschreibung"
@@ -13739,7 +13739,7 @@ msgid "Navigation"
 msgstr "Navigation"
 
 msgid "Top ten"
-msgstr "Top Ten"
+msgstr "Top 10"
 
 msgid "This project"
 msgstr "Dieses Blog"
@@ -14363,7 +14363,7 @@ msgid "Your server must provide the following libraries to enable all features o
 msgstr "Bibliotheken und Funktionen, die der Server bereitstellen muss, damit Chamilo voll genutzt werden kann. Die fehlenden optionalen Bibliotheken sind in orange, jedoch sind einige Funktionen in Chamilo dadurch nicht verfügbar. Diese lassen sich später jederzeit nachinstallieren und aktivieren."
 
 msgid "PHP version"
-msgstr "PHP Version"
+msgstr "PHP-Version"
 
 msgid "Support"
 msgstr "Support"
@@ -14492,43 +14492,43 @@ msgid "Baby Orange"
 msgstr "Baby Orange"
 
 msgid "Blue lagoon"
-msgstr "Blue lagoon"
+msgstr "Blue Lagoon"
 
 msgid "Cool blue"
-msgstr "Cool blue"
+msgstr "Cool Blau"
 
 msgid "Corporate"
 msgstr "Corporate"
 
 msgid "Cosmic campus"
-msgstr "Cosmic campus"
+msgstr "Cosmic Campus"
 
 msgid "Delicious Bordeaux"
 msgstr "Delicious Bordeaux"
 
 msgid "Empire green"
-msgstr "Empire green"
+msgstr "Empire Grün"
 
 msgid "Fruity orange"
-msgstr "Fruity orange"
+msgstr "Fruity Orange"
 
 msgid "Medical"
 msgstr "Medical"
 
 msgid "Royal purple"
-msgstr "Royal Purple"
+msgstr "Royal Purpur"
 
 msgid "Silver line"
-msgstr "Silver line"
+msgstr "Silver Line"
 
 msgid "Sober brown"
-msgstr "Sober brown"
+msgstr "Sober Braun"
 
 msgid "Steel grey"
-msgstr "Steel grey"
+msgstr "Stahl Grau"
 
 msgid "Tasty olive"
-msgstr "tasty olive"
+msgstr "Tasty Olive"
 
 msgid "In this report you see the results of all questions"
 msgstr "In diesem Bericht sehen Sie die Ergebnisse aller Fragen"
@@ -14600,7 +14600,7 @@ msgid "traditional chinese"
 msgstr "chinesisch traditionell"
 
 msgid "Chamilo installation"
-msgstr "Chamilo Installation"
+msgstr "Chamilo-Installation"
 
 msgid "Pending invitations"
 msgstr "Offene Einladungen"
@@ -14744,19 +14744,19 @@ msgid "Maximum size for file uploads in the messaging tool (in Bytes)"
 msgstr "Erlaubte Dateigröße für Uploads im Nachrichten-Werkzeug (in Bytes)"
 
 msgid "Chamilo homepage"
-msgstr "Chamilo Homepage"
+msgstr "Chamilo-Startseite"
 
 msgid "Chamilo forum"
-msgstr "Chamilo Forum"
+msgstr "Chamilo-Forum"
 
 msgid "Chamilo extensions"
 msgstr "Chamilo Erweiterungen"
 
 msgid "Chamilo Green"
-msgstr "Chamilo Green"
+msgstr "Chamilo Grün"
 
 msgid "Chamilo red"
-msgstr "Chamilo Red"
+msgstr "Chamilo Rot"
 
 msgid "Number of messages sent"
 msgstr "Anzahl versendeter Nachrichten"
@@ -15113,7 +15113,7 @@ msgid "Install Chamilo"
 msgstr "Chamilo installieren"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "Chamilo-URL"
 
 msgid "You have no session in your sessions history"
 msgstr "Sie haben keine Session in Ihrer Session-Liste"
@@ -15152,7 +15152,7 @@ msgid "Data sent"
 msgstr "Die Daten wurden übertragen"
 
 msgid "Download link"
-msgstr "Download Link"
+msgstr "Download-Link"
 
 msgid "Assignments received"
 msgstr "Erhaltene Ausarbeitungen"
@@ -15350,7 +15350,7 @@ msgid "Time spent last week"
 msgstr "Aktivität der letzten Woche"
 
 msgid "System status"
-msgstr "System Status"
+msgstr "Systemstatus"
 
 msgid "Is writable"
 msgstr "ist beschreibbar"
@@ -15431,7 +15431,7 @@ msgid "MySQL server information"
 msgstr "MySQL-Server-Informationen"
 
 msgid "MySQL client"
-msgstr "MySQL Client"
+msgstr "MySQL-Client"
 
 msgid "Protocol used by this server"
 msgstr "Protokoll, das vom Server verwendet wird"
@@ -15446,7 +15446,7 @@ msgid "Server name (as used in your request)"
 msgstr "Server Name (Wie er in ihrer Anfrage verwendet wird)"
 
 msgid "Server port"
-msgstr "Server Port"
+msgstr "Serverport"
 
 msgid "Your user agent as received by the server"
 msgstr " wie er auf dem  Server ermpfangen wurde"
@@ -18002,7 +18002,7 @@ msgid "Information about the last finished step and the next unfinished one."
 msgstr "Informationen über den letzten beendeten und den nächsten unbeendeten Schritt."
 
 msgid "LaTeX code"
-msgstr "LaTeX Code"
+msgstr "LaTeX-Code"
 
 msgid "LaTeX formula"
 msgstr "LaTeX Formel"
@@ -19100,7 +19100,7 @@ msgid "Select an action"
 msgstr "Auswahl treffen"
 
 msgid "Login: %s"
-msgstr "Login: %s"
+msgstr "Anmeldung: %s"
 
 msgid "Database <b>%s</b> will be created"
 msgstr "Datenbank <b>%s</b> wird erstellt"
@@ -33001,4 +33001,10 @@ msgstr "Fehler beim Laden der Ressourcen."
 
 msgid "Clear search"
 msgstr "Suche löschen"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Im Datenbanknamen sind nur Buchstaben, Ziffern und Unterstriche (_) erlaubt. Ungültige Zeichen werden automatisch entfernt."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Welche allgemeinen Geschäftsbedingungen werden den Nutzern für die Nutzung dieser Plattform mitgeteilt?"
 

@@ -1447,7 +1447,7 @@ msgid "View original event"
 msgstr "Zobrazit původní událost"
 
 msgid "Outlook import"
-msgstr "Outlook import"
+msgstr "Import Outlook"
 
 msgid "All system users"
 msgstr "Všichni systémoví uživatelé"
@@ -4138,7 +4138,7 @@ msgid "MySql Client"
 msgstr "MySql Klient"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "MySQL Server"
 
 msgid "Owner"
 msgstr "Vlastník"
@@ -4345,7 +4345,7 @@ msgid "Production Server"
 msgstr "Server (Produkce)"
 
 msgid "Test Server"
-msgstr "Test Server"
+msgstr "Testovací server"
 
 msgid "Who's Online"
 msgstr "Kdo je Online"
@@ -4804,7 +4804,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "AWStats umožňuje prozkoumat statistiky vašeho portálu: navštěvy, zobrazené stránky, příspěvky"
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "Chamilo KNIHOVNA"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "Chamilo LIBRARY je vyhledávací nástroj nabízející multikrytériovou indexaci a výzkum. Je součástí Chamilo Medical vlastností"
@@ -5593,7 +5593,7 @@ msgid "If you are using an LDAP server that does not support or accept anonymous
 msgstr "Pokud používáte LDAP server, který nepodporuje nebo neumažňuje anonymní přístup, vyplňte následující pole s uživatelským heslem."
 
 msgid "LDAP Import"
-msgstr "LDAP import"
+msgstr "LDAP Import"
 
 msgid "Notify subscribed users by e-mail"
 msgstr "Informujte zapsané uživatele emailem"
@@ -14425,46 +14425,46 @@ msgid "Compose"
 msgstr "Napsat"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Dětská oranžová"
 
 msgid "Blue lagoon"
-msgstr "Blue lagoon"
+msgstr "Modrá laguna"
 
 msgid "Cool blue"
-msgstr "Cool blue"
+msgstr "Chladná modrá"
 
 msgid "Corporate"
 msgstr "Korporátní"
 
 msgid "Cosmic campus"
-msgstr "Cosmic campus"
+msgstr "Kosmická kampus"
 
 msgid "Delicious Bordeaux"
-msgstr "Delicious Bordeaux"
+msgstr "Lahodné bordó"
 
 msgid "Empire green"
-msgstr "Empire green"
+msgstr "Císařsky zelená"
 
 msgid "Fruity orange"
-msgstr "Fruity orange"
+msgstr "Ovocná oranžová"
 
 msgid "Medical"
 msgstr "Lékařský"
 
 msgid "Royal purple"
-msgstr "Royal purple"
+msgstr "Královská fialová"
 
 msgid "Silver line"
-msgstr "Silver line"
+msgstr "Stříbrná čára"
 
 msgid "Sober brown"
-msgstr "Sober brown"
+msgstr "Střízlivá hněď"
 
 msgid "Steel grey"
-msgstr "Steel grey"
+msgstr "Ocelově šedá"
 
 msgid "Tasty olive"
-msgstr "Tasty olive"
+msgstr "Chuťová oliva"
 
 msgid "In this report you see the results of all questions"
 msgstr "V této zprávě vidíte výsledky všech otázek"
@@ -20281,7 +20281,7 @@ msgid "Start video call"
 msgstr "Spustit videohovor"
 
 msgid "Video URL"
-msgstr "Video URL"
+msgstr "URL videa"
 
 msgid "Insert a valid URL"
 msgstr "Vložte platnou URL"
@@ -31427,4 +31427,10 @@ msgstr "Chyba při načítání zdrojů."
 
 msgid "Clear search"
 msgstr "Vyčistit vyhledávání"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "V názvu databáze jsou povoleny pouze písmena, číslice a podtržítko (_). Neplatné znaky budou automaticky odstraněny."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Jaké obecné podmínky používání této platformy jsou uživatelům poskytnuty?"
 

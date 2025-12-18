@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med vänliga hälsningar,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formel-exempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formel exempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervall"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:copyright,, nej:ingen copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapp,, application/msword:MsWord,, application/octet-stream:Okteström,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapp,, application/msword:MsWord,, application/octet-stream:Okettström,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:övning,, simulation:simulering,, questionnaire:frågeställningar,, diagram:diagram,, figure:figur,, graph:graf,, index:index,, slide:slide,, table:bordläggning,, narrative text:berättartext,, exam:examen,, experiment:experiment,, problem statement:problemställning,, self assessment:självbedömning,, lecture:föreläsning"
@@ -2256,7 +2256,7 @@ msgid "Already in"
 msgstr "Redan inne"
 
 msgid "Check in"
-msgstr "Check in"
+msgstr "Checka in"
 
 msgid "The Moderator of this Conference has left the room."
 msgstr "Moderatorn för konferensen har lämnat rummet."
@@ -3150,7 +3150,7 @@ msgid "Edit Link"
 msgstr "Modifiera länk"
 
 msgid "CSV import"
-msgstr "CSV import"
+msgstr "CSV-import"
 
 msgid "CSV import file could not be opened (e.g. empty, too big)"
 msgstr "Importerad CSV kunde inte öppnas (den kan vara tom, för stor el. likn.)"
@@ -3309,7 +3309,7 @@ msgid "(recommended)"
 msgstr "(rekommenderad)"
 
 msgid "SCORM DB"
-msgstr "Scorm DB"
+msgstr "SCORM DB"
 
 msgid "Administrator last name"
 msgstr "Administratörens efternamn"
@@ -5598,7 +5598,7 @@ msgid "If you are using an LDAP server that does not support or accept anonymous
 msgstr "Om du använder LDAP-server som inte stöder anonym förfrågan kan du här fylla i det lösenord som isåfall ska användas."
 
 msgid "LDAP Import"
-msgstr "LDAP import"
+msgstr "LDAP-import"
 
 msgid "Notify subscribed users by e-mail"
 msgstr "Skicka meddelande till nya användare med e-post"
@@ -6744,7 +6744,7 @@ msgid "View this user"
 msgstr "Visa användaren"
 
 msgid "RSS feed"
-msgstr "Rss feed"
+msgstr "RSS-flöde"
 
 msgid "No friends in your contact list"
 msgstr "Inga vänner i din kontaktlista"
@@ -13647,13 +13647,13 @@ msgid "Show all images in their original size. No resizing is done. Scrollbars w
 msgstr "Visa alla bilder i originalstorlek. Ingen storleksändring görs. Rullningslistar visas automatiskt om bilden är större än skärmstorleken."
 
 msgid "Show Thumbnails"
-msgstr "Show Thumbnails"
+msgstr "Visa miniatyrbilder"
 
 msgid "Gallery settings"
 msgstr "Set Slideshow Options"
 
 msgid "Slideshow Options"
-msgstr "Slideshow Options"
+msgstr "Bildspelsalternativ"
 
 msgid "NO RESIZING"
 msgstr "NO RESIZING (default)"
@@ -13668,7 +13668,7 @@ msgid "Published end date"
 msgstr "Publicerad slutdatum"
 
 msgid "View Slideshow"
-msgstr "View Slideshow"
+msgstr "Visa bildspel"
 
 msgid "My tasks"
 msgstr "Mina uppgifter"
@@ -13920,10 +13920,10 @@ msgid "Learning paths"
 msgstr "Inlärningsvägar"
 
 msgid "level up"
-msgstr "level up"
+msgstr "nivå upp"
 
 msgid "main category"
-msgstr "main category"
+msgstr "huvudkategori"
 
 msgid "Add to the course links"
 msgstr "Lägg till i kurslänkar"
@@ -13935,13 +13935,13 @@ msgid "Resources added"
 msgstr "Added new resources"
 
 msgid "External resources"
-msgstr "External resources"
+msgstr "Externa resurser"
 
 msgid "Course resources"
-msgstr "Course resources"
+msgstr "Kursresurser"
 
 msgid "External link"
-msgstr "External link"
+msgstr "Extern länk"
 
 msgid "Add the dropbox to this section."
 msgstr "Add the dropbox page to this chapter."
@@ -14688,7 +14688,7 @@ msgid "Chamilo homepage"
 msgstr "Chamilo startsida"
 
 msgid "Chamilo forum"
-msgstr "Chamilo forum"
+msgstr "Chamilo-forum"
 
 msgid "Chamilo extensions"
 msgstr "Chamilo-tillägg"
@@ -28777,7 +28777,7 @@ msgid "Diagnosis of user %s (language: %s) with link %s. Contact at %s"
 msgstr "Diagnos för användare %s (språk: %s) med länk %s. Kontakta på %s"
 
 msgid "%s support"
-msgstr "%s support"
+msgstr "%s-stöd"
 
 msgid "This option is not available because this activity is contained by an assessment."
 msgstr "Detta alternativ är inte tillgängligt eftersom denna aktivitet ingår i en bedömning."
@@ -31433,4 +31433,10 @@ msgstr "Fel vid laddning av resurser."
 
 msgid "Clear search"
 msgstr "Rensa sökning"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Endast bokstäver, siffror och understreck (_) är tillåtna i databasnamnet. Ogiltiga tecken kommer att tas bort automatiskt."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Vilka allmänna användarvillkor ges till användare för att använda denna plattform?"
 

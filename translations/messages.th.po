@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "ด้วยความเคารพ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ตัวอย่างสูตร: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "สูตรตัวอย่าง: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ช่วงตัวแปร"
@@ -4107,7 +4107,7 @@ msgid "My Profile tab"
 msgstr "แท็บโปรไฟล์ของฉัน"
 
 msgid "Global Role"
-msgstr "Global Role"
+msgstr "บทบาททั่วไป"
 
 msgid "Manage Todo list"
 msgstr "สิ่งควรปรับปรุง"
@@ -10929,7 +10929,7 @@ msgid "Your registration on %s"
 msgstr "ท่านลงทะเบียนวันที %s่"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
-msgstr ""
+msgstr "ชื่อผู้ใช้เข้าสู่ระบบนี้ถูกใช้งานแล้ว ใช้ปุ่มย้อนกลับของเบราว์เซอร์และเลือกชื่ออื่น"
 
 msgid "You left some fields empty. Use your browser's back button and try again."
 msgstr "คุณปล่อยบางช่องไว้ว่างเปล่า คลิกปุ่มย้อนหลัง และลองอีกครั้งหนึ่ง"
@@ -11934,7 +11934,7 @@ msgid "This path was never opened by anybody."
 msgstr "äÁèÁÕã€Ãà»ÔŽà¢éÒÁÒŽÙàÅÂ"
 
 msgid "Synthesis view"
-msgstr "Synthesis view"
+msgstr "มุมมองสรุป"
 
 msgid "Visited"
 msgstr "มาเยี่ยม"
@@ -13617,7 +13617,7 @@ msgid "Presentation of the activities (conference, papers, group research, labs.
 msgstr "การนำเสนอกิจกรรม (การบรรยาย เอกสาร การวิจัยกลุ่ม ห้องปฏิบัติการ...)"
 
 msgid "Course material"
-msgstr "Course material"
+msgstr "เนื้อหาคอร์ส"
 
 msgid "Is there a course book, a collection of papers, a bibliography, a list of links on the internet?"
 msgstr "มีหนังสือหลักสูตร คอลเลกชันเอกสาร บรรณานุกรม รายการลิงก์บนอินเทอร์เน็ตหรือไม่?"
@@ -31433,4 +31433,10 @@ msgstr "เกิดข้อผิดพลาดในการโหลดท
 
 msgid "Clear search"
 msgstr "ล้างการค้นหา"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "ชื่อฐานข้อมูลอนุญาตให้ใช้เฉพาะตัวอักษร เลข และขีดลำดับ (_) เท่านั้น ตัวอักษรที่ไม่ถูกต้องจะถูกลบออกโดยอัตโนมัติ"
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "เงื่อนไขทั่วไปใดที่ให้ผู้ใช้เพื่อใช้งานแพลตฟอร์มนี้?"
 

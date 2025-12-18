@@ -4649,7 +4649,7 @@ msgid "Invalid end date was given."
 msgstr "Data de fin inválida"
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(d/m/a h:m)"
 
 msgid "Homepage-files are not writable!"
 msgstr "¡Os ficheiros das páxinas de inicio non son editables!"
@@ -9458,7 +9458,7 @@ msgid "No document downloaded"
 msgstr "Non se descargou ningún documento"
 
 msgid "%d clicks"
-msgstr "%d clicks"
+msgstr "%d clics"
 
 msgid "Search results"
 msgstr "Resultados da busca"
@@ -19375,7 +19375,7 @@ msgid "Exercise average"
 msgstr "Media do exercicio"
 
 msgid "Webcam Clip"
-msgstr "Webcam Clip"
+msgstr "Clip da Webcam"
 
 msgid "Snapshot"
 msgstr "Capturar"
@@ -22099,7 +22099,7 @@ msgid "Select with text field"
 msgstr "Seleccionar con campo de texto"
 
 msgid "Triple select"
-msgstr "Triple select"
+msgstr "Triple selección"
 
 msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Confirma que realmente quere subscribirse a esta plataforma."
@@ -31446,4 +31446,10 @@ msgstr "Erro ao cargar recursos."
 
 msgid "Clear search"
 msgstr "Limpar busca"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Só se permiten letras, díxitos e guión baixo (_) no nome da base de datos. Os caracteres non válidos eliminaranse automaticamente."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Que termos e condicións xerais se dan aos usuarios para usar esta plataforma?"
 

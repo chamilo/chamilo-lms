@@ -30677,7 +30677,7 @@ msgid "Upload optional header and email logos. The SVG format is preferred. PNG 
 msgstr "ရွေးချယ်နိုင်သော ခေါင်းစီးနှင့် အီးမေးလ်လိုဂိုများကို တင်သွင်းပါ။ SVG ပုံစံကို ဦးစားပေးသည်။ PNG ကို အရန်အဖြစ် အသုံးပြုသည်။"
 
 msgid "Write a short and striking course name, for example: Innovation Management"
-msgstr ""
+msgstr "သင်တန်းနာမည်ကို တိုတို ထင်ရှားစွာ ရေးပါ၊ ဥပမာ- ဆန်းသစ်တီထွင်မှု စီမံခန့်ခွဲမှု"
 
 msgid "Show advanced settings"
 msgstr "အဆင့်မြင့်ဆက်တင်များကို ပြသပါ"
@@ -30686,22 +30686,22 @@ msgid "Hide advanced settings"
 msgstr "အဆင့်မြင့်ဆက်တင်များကို ဖျောက်ထားပါ"
 
 msgid "Quality"
-msgstr ""
+msgstr "အရည်အသွေး"
 
 msgid "Remedial courses list"
-msgstr ""
+msgstr "ပြုပြင်သင်တန်းများ စာရင်း"
 
 msgid "Request account deletion"
-msgstr ""
+msgstr "အကောင့်ဖျက်ရန် တောင်းဆိုခြင်း"
 
 msgid "Justification for account deletion"
-msgstr ""
+msgstr "အကောင့်ဖျက်ရန် အကြောင်းပြချက်"
 
 msgid "Request for legal agreement's consent removal"
-msgstr ""
+msgstr "ဥပဒေစာချုပ်ခွင့်ပြုချက် ဖယ်ရှားရန် တောင်းဆိုခြင်း"
 
 msgid "Justification for consent removal"
-msgstr ""
+msgstr "ခွင့်ပြုချက် ဖယ်ရှားရန် အကြောင်းပြချက်"
 
 msgid "Terms enabled"
 msgstr "စည်းမျဉ်းများ ဖွင့်ထားသည်"
@@ -31013,7 +31013,7 @@ msgid "Create your first note to get started."
 msgstr "စတင်ရန် သင်၏ပထမဆုံး မှတ်စုတစ်ခုဖန်တီးပါ။"
 
 msgid "F d, Y"
-msgstr "F d, Y"
+msgstr "သ%မ။ %d၊ %Y"
 
 msgid "Could not load support info at this time."
 msgstr "ယခုအချိန်တွင် ပံ့ပိုးမှုအချက်အလက်များကို မဖွင့်လှစ်နိုင်ပါ။"
@@ -31431,4 +31431,10 @@ msgstr "အရင်းအမြစ်များ ဖွင့်ရာတွ�
 
 msgid "Clear search"
 msgstr "ရှာဖွေမှု ရှင်းရန်"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "ဒေတာဘေ့စ်နာမည်တွင် အက္ခရာ၊ ဂဏန်း နှင့် အောက်လိုင်း (_) သာ ခွင့်ပြုထားသည်။ မမှန်ကန်သော ဇယားများကို အလိုအလျောက် ဖယ်ရှားပါမည်။"
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "ဤပလက်ဖောင်းကို အသုံးပြုရန် အသုံးပြုသူများအား ပေးထားသော ယေဘုယျ စည်းမျဉ်းများနှင့် အခြေအနေများမှာ အဘယ်နည်း?"
 

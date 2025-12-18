@@ -67,37 +67,37 @@ msgid "Cosecant:\t\t\t\tcsc(x)"
 msgstr "Cosecant:\t\t\t\tcsc(x)"
 
 msgid "Hyperbolic cosecant:\t\tcsch(x)"
-msgstr "Hyperbolic cosecant:\t\tcsch(x)"
+msgstr "Cosecant hyperbolic:\t\tcsch(x)"
 
 msgid "Arccosecant:\t\t\tarccsc(x)"
 msgstr "Arccosecant:\t\t\tarccsc(x)"
 
 msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
-msgstr "Hyperbolic arccosecant:\t\tarccsch(x)"
+msgstr "Arc cosecant hyperbolic:\t\tarccsch(x)"
 
 msgid "Secant:\t\t\t\tsec(x)"
 msgstr "Secant:\t\t\t\tsec(x)"
 
 msgid "Hyperbolic secant:\t\tsech(x)"
-msgstr "Hyperbolic secant:\t\tsech(x)"
+msgstr "Secant hyperbolic:\t\tsech(x)"
 
 msgid "Arcsecant:\t\t\tarcsec(x)"
 msgstr "Arcsecant:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
-msgstr "Hyperbolic arcsecant:\t\tarcsech(x)"
+msgstr "Arc secant hyperbolic:\t\tarcsech(x)"
 
 msgid "Cotangent:\t\t\tcot(x)"
 msgstr "Cotangent:\t\t\tcot(x)"
 
 msgid "Hyperbolic cotangent:\t\tcoth(x)"
-msgstr "Hyperbolic cotangent:\t\tcoth(x)"
+msgstr "Cotangent hyperbolic:\t\tcoth(x)"
 
 msgid "Arccotangent:\t\t\tarccot(x)"
 msgstr "Arccotangent:\t\t\tarccot(x)"
 
 msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
-msgstr "Hyperbolic arccotangent:\t\tarccoth(x)"
+msgstr "Arc cotangent hyperbolic:\t\tarccoth(x)"
 
 msgid "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />\nIf needed, the Help section of your browser indicates how to configure cookies.<br /><br />\nFor more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website."
 msgstr "Si ay goobtani u shaqeyso oo ay u cabbirto isticmaalka waxyaabaha, platform-kani wuxuu isticmaalaa cookies-ka.<br /><br />\nHaddii loo baahdo, qaybta Caawimada ee biraawsarkaaga waxay tilmaamaysaa sida loo sameeyo cookies-ka.<br /><br />\nMacluumaad dheeraad ah cookies-ka, waxaad booqan kartaa <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website-ka."
@@ -226,7 +226,7 @@ msgid "The session duration allows you to set a number of days of access startin
 msgstr "Dhererka fadhiga waxay kuu ogolaanaysaa inaad dejiso tirada maalmo ka bilaabma taariikhda gelitaanka ugu horreysa ee isticmaale ee fadhiga. Sidaas darteed, waxaad dejin kartaa fadhiga 'sug 15 maalmood' halkii aad ka bilaabi lahayd taariikh go'an dhammaan ardayda."
 
 msgid "Hyperbolic arctangent:\t\tarctanh(x)"
-msgstr "Hyperbolic arctangent:\t\tarctanh(x)"
+msgstr "Arc tangent hyperbolic:\t\tarctanh(x)"
 
 msgid "Session duration"
 msgstr "Dhererka fadhiga"
@@ -235,7 +235,7 @@ msgid "Arctangent:\t\t\tarctan(x)"
 msgstr "Arctangent:\t\t\tarctan(x)"
 
 msgid "Hyperbolic tangent:\t\ttanh(x)"
-msgstr "Hyperbolic tangent:\t\ttanh(x)"
+msgstr "Tangent hyperbolic:\t\ttanh(x)"
 
 msgid "Tangent:\t\t\ttan(x)"
 msgstr "Tangent:\t\t\ttan(x)"
@@ -247,13 +247,13 @@ msgid "Series"
 msgstr "Taxane"
 
 msgid "Hyperbolic arccosine:\t\tarccosh(x)"
-msgstr "Hyperbolic arccosine:\t\tarccosh(x)"
+msgstr "Arc cosine hyperbolic:\t\tarccosh(x)"
 
 msgid "Arccosine:\t\t\tarccos(x)"
 msgstr "Arccosine:\t\t\tarccos(x)"
 
 msgid "Hyperbolic cosine:\t\tcosh(x)"
-msgstr "Hyperbolic cosine:\t\tcosh(x)"
+msgstr "Cosine hyperbolic:\t\tcosh(x)"
 
 msgid "Cosine:\t\t\t\tcos(x)"
 msgstr "Cosine:\t\t\t\tcos(x)"
@@ -262,7 +262,7 @@ msgid "Teachers time report"
 msgstr "War-bixinta waqtiga macallimiinta"
 
 msgid "Hyperbolic arcsine:\t\tarcsinh(x)"
-msgstr "Hyperbolic arcsine:\t\tarcsinh(x)"
+msgstr "Arc sine hyperbolic:\t\tarcsinh(x)"
 
 msgid "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator."
 msgstr "Ma aadan ka heli luqadaada liiska? La xidhiidh info@chamilo.org si aad uga qaybqaato tarjumaane ahaan."
@@ -271,7 +271,7 @@ msgid "Arcsine:\t\t\tarcsin(x)"
 msgstr "Arcsine:\t\t\tarcsin(x)"
 
 msgid "Hyperbolic sine:\t\tsinh(x)"
-msgstr "Hyperbolic sine:\t\tsinh(x)"
+msgstr "Sine hyperbolic:\t\tsinh(x)"
 
 msgid "Sine:\t\t\t\tsin(x)"
 msgstr "Sine:\t\t\t\tsin(x)"
@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Foomuulaha tusaale: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Muqaalka tusaale: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -1219,7 +1219,7 @@ msgid "Show or hide the breadcrumb navigation, the one appearing just below the 
 msgstr "Muuj ama qari breadcrumb navigation-ka, kan ka muuqda hoos ka midabka navigation-ga ugu weyn. Waxaa aad u talinayaa in navigation-kaas la muujiyo isticmaale, maadaama ay u oggolaanayso inay ogaadaan meesha ay hadda joogaan oo ay si fudud ugu dhex socdaan bogagga hore. Mararka qaarkood, si kastaba ha ahaatee, waxaa laga yaabaa inay lagama maarmaan tahay in la qariyo (tusaale ahaan kiisaska imtixaanka) si looga fogaado inay isticmaalayaashu u socdaan bogagga aanay arag."
 
 msgid "Breadcrumb navigation"
-msgstr "Breadcrumb navigation"
+msgstr "Tilmaamaha tareenka"
 
 msgid "The PHP setting \"allow_url_fopen\" is set to off. This prevents the registration mechanism to work properly. This setting can be changed in you PHP configuration file (php.ini) or in the Apache Virtual Host configuration, using the php_admin_value directive"
 msgstr "Dejinta PHP \"allow_url_fopen\" ayaa loo dejiyay off. Tani waxay ka hortagtaa habka diiwaangelinta inuu si sax ah u shaqeeyo. Dejintan waxaa lagu bedeli karaa faylka dejinta PHP-ga (php.ini) ama dejinta Apache Virtual Host, iyadoo la isticmaalayo php_admin_value directive"
@@ -1447,7 +1447,7 @@ msgid "View original event"
 msgstr "Eeg dhacdo asalka ah"
 
 msgid "Outlook import"
-msgstr "Outlook import"
+msgstr "Soogal Outlook"
 
 msgid "All system users"
 msgstr "Dhammaan isticmaaleyaasha nidaamka"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes: xuquuqda daabacaadda ,, no: xuquuqda daabacaadda maaha"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: Folder ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise: layli ,,      simulation: simulation ,,      questionnaire: su'aalo ,,      diagram: jaantus ,,      figure: jaantus ,,      graph: graf ,,      index: index ,,      slide: slide ,,      table: miis ,,      narrative text: qoraal sheeko ah ,,      exam: imtixaan ,,      experiment: tijaabo ,,      problem statement: bayaan dhibaato ,,      self assessment: is-qiimeyn ,,      lecture: cashar"
@@ -2251,7 +2251,7 @@ msgid "Already in"
 msgstr "Horeyba wuu ku jiray"
 
 msgid "Check in"
-msgstr "Check in"
+msgstr "Soo gal"
 
 msgid "The Moderator of this Conference has left the room."
 msgstr "Dhexdhexaadiyaha Shirka qolkii wuu ka tagay."
@@ -3196,7 +3196,7 @@ msgid "Select the \"target\" which shows the link on the homepage of the course"
 msgstr "Dooro \"target\" taasoo muujineysa xiriirka bogga hore ee koorsada"
 
 msgid "Tracking DB."
-msgstr "Tracking DB."
+msgstr "La socoshada DB."
 
 msgid "Enable Tracking"
 msgstr "Oggolow la socodka"
@@ -5311,7 +5311,7 @@ msgid "The email cannot be empty"
 msgstr "Iimaylka ma noqon karo mid madhan"
 
 msgid "Agenda tab"
-msgstr "Agenda tab"
+msgstr "Bogga Agenda"
 
 msgid "The notice will be not displayed on the homepage"
 msgstr "Ogeysiiska lama muujin doono bogga hore"
@@ -5371,7 +5371,7 @@ msgid "The Assessments tool allows you to assess competences in your organizatio
 msgstr "Qalabka qiimeynta waxaa kuu oggol inaad qiimeyso kartida ururkaaga adigoo isku daraya qiimeynta fasalka iyo waxqabadka onlayn ee warbixinta Waxqabadka. Ma rabtaa inaad shaqeyso?"
 
 msgid "Theme (stylesheet)"
-msgstr "Theme (stylesheet)"
+msgstr "Qaabka (stylesheet)"
 
 msgid "User theme selection"
 msgstr "Doorashada mawduuca isticmaale"
@@ -5593,7 +5593,7 @@ msgid "If you are using an LDAP server that does not support or accept anonymous
 msgstr "Haddii aad isticmaaleyso server LDAP aan taageerin ama aqbalin gelitaanka qarsoodiga ah, buuxi goobta soo socota eebbe isticmaale ee la isticmaali doono."
 
 msgid "LDAP Import"
-msgstr "LDAP Import"
+msgstr "Soogal LDAP"
 
 msgid "Notify subscribed users by e-mail"
 msgstr "Ogeysii isticmaale diiwaangashan iimaylka"
@@ -9508,7 +9508,7 @@ msgid "Dear user,<br /><br /> you are not active on %s since more than %s days."
 msgstr "User gacaliye,<br /><br /> kuma firfircoonayn %s tan iyo in ka badan %s maalmood."
 
 msgid "OpenID authentication"
-msgstr "OpenID authentication"
+msgstr "Xaqiijinta OpenID"
 
 msgid "Upload max size"
 msgstr "Xajmka ugu badan ee la raro"
@@ -9523,7 +9523,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "Upload file-ku waygu guuldarroostay: qaybta faylkan ama nooca faylka waa mamnuuc"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "URL-ka OpenID"
 
 msgid "The file is too big to upload."
 msgstr "Faylku aad buu u weyn yahay si loo raro."
@@ -9544,7 +9544,7 @@ msgid "No administrator"
 msgstr "Ma jiro maamule"
 
 msgid "iCal export"
-msgstr "iCal export"
+msgstr "Dhoofinta iCal"
 
 msgid "Export in iCal format as public event"
 msgstr "Ku dajin qaabka iCal dhacdo dadwayne"
@@ -11248,7 +11248,7 @@ msgid "Discuss this page"
 msgstr "Ka hadal boggan"
 
 msgid "Wiki home"
-msgstr "Wiki home"
+msgstr "Bogga Wiki"
 
 msgid "Delete all"
 msgstr "Tirtir dhammaan"
@@ -11356,7 +11356,7 @@ msgid "deleted by"
 msgstr "tirtiray"
 
 msgid "Wiki mode"
-msgstr "Wiki mode"
+msgstr "Qaabka Wiki"
 
 msgid "Coach and group member"
 msgstr "Tababare iyo xubin koox"
@@ -11368,7 +11368,7 @@ msgid "Individual assignment mode"
 msgstr "Qaabka shaqada shaqsiga"
 
 msgid "Default config"
-msgstr "Default config"
+msgstr "Qaabayada caadiga ah"
 
 msgid "Unprotect"
 msgstr "Fur"
@@ -11449,7 +11449,7 @@ msgid "Define this page as an individual assignment"
 msgstr "Ku qeex boggan shaqo shaqsiyeed"
 
 msgid "Assignment description"
-msgstr "Assignment description"
+msgstr "Sharaxaadda shaqada"
 
 msgid "Now all members can rate this page"
 msgstr "Hadda dhammaan xubnahu qiimeyn karaan boggan"
@@ -14161,13 +14161,13 @@ msgid "The file is now visible"
 msgstr "Faylku hadda waa muuqdaa"
 
 msgid "Create assignment"
-msgstr "Create assignment"
+msgstr "Abuur shaqada"
 
 msgid "Assignment name"
-msgstr "Assignment name"
+msgstr "Magaca shaqada"
 
 msgid "Folder edited"
-msgstr "Folder edited"
+msgstr "Foldarka la tafatiray"
 
 msgid "Update this task"
 msgstr "Cusboonaysii hawshan"
@@ -14185,7 +14185,7 @@ msgid "URL of this company"
 msgstr "URL-ka shirkaddaada"
 
 msgid "User DB"
-msgstr "User DB"
+msgstr "DB-ga isticmaale"
 
 msgid "Please check these values"
 msgstr "Fadlan hubi qiimayaashaas"
@@ -14443,7 +14443,7 @@ msgid "Delicious Bordeaux"
 msgstr "Delicious Bordeaux"
 
 msgid "Empire green"
-msgstr "Empire green"
+msgstr "Empire cagaar"
 
 msgid "Fruity orange"
 msgstr "Fruity orange"
@@ -14482,7 +14482,7 @@ msgid "dari"
 msgstr "dari"
 
 msgid "dutch corporate"
-msgstr "dutch corporate"
+msgstr "shirkadda holland"
 
 msgid "english for organisations"
 msgstr "Ingiriisiga ururada"
@@ -19357,7 +19357,7 @@ msgid "Exercise average"
 msgstr "Celceliska layliga"
 
 msgid "Webcam Clip"
-msgstr "Webcam Clip"
+msgstr "Clip-ka Webcam"
 
 msgid "Snapshot"
 msgstr "Sawir qaade"
@@ -19822,7 +19822,7 @@ msgid "The system was unable to log you in. Please contact your administrator."
 msgstr "Nidaamku ma ku galin karin. Fadlan la xiriir maamulahaaga."
 
 msgid "Shibboleth Login"
-msgstr "Shibboleth Login"
+msgstr "Gal-shibboleth"
 
 msgid "New status"
 msgstr "Xaalad cusub"
@@ -23578,16 +23578,16 @@ msgid "LDAP connect operation failed."
 msgstr "Hawlgalka ku-xirnaanshaha LDAP wuu fashilmay."
 
 msgid "ldap_bind() failed."
-msgstr "ldap_bind() failed."
+msgstr "ldap_bind() fashilmay."
 
 msgid "ldap_search() failed."
-msgstr "ldap_search() failed."
+msgstr "ldap_search() fashilmay."
 
 msgid "ldap_first_entry() failed."
-msgstr "ldap_first_entry() failed."
+msgstr "ldap_first_entry() fashilmay."
 
 msgid "ldap_get_values() failed."
-msgstr "ldap_get_values() failed."
+msgstr "ldap_get_values() fashilmay."
 
 msgid "More than one attribute value was found."
 msgstr "Qiimeynta sifaha badan ayaa la helay."
@@ -31427,4 +31427,10 @@ msgstr "Qalad la carguuraayo agabka."
 
 msgid "Clear search"
 msgstr "nadiifi raadinta"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Harakadyada xuruufta ah, nambarrada iyo hoostaga (_) kaliya ayaa loo oggol yahay magaca database-ka. Xuruufta aan sax ahayn ayaa si toos ah loo tixraacayaa."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Waa maxay shuruudaha guud ee la siiyo isticmaale si ay u isticmaalaan platformkan?"
 

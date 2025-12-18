@@ -5598,7 +5598,7 @@ msgid "If you are using an LDAP server that does not support or accept anonymous
 msgstr "Ha olyan LDAP szervert használ, amely nem támogatja vagy nem fogadja el a névtelen hozzáférést, töltse ki a következő mezőt a használandó felhasználói jelszóval."
 
 msgid "LDAP Import"
-msgstr "LDAP Import"
+msgstr "LDAP import"
 
 msgid "Notify subscribed users by e-mail"
 msgstr "Feliratkozott felhasználók értesítése e-mailben"
@@ -9465,7 +9465,7 @@ msgid "Not yet begun"
 msgstr "Nem kezdődött el"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%Y. %B %d."
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Érvénytelen mappa: kérem, hozzon létre egy \"images\" nevű mappát a dokumentumok eszközben, csak ezután tud feltölteni képeket"
@@ -16188,7 +16188,7 @@ msgid "Quarterly report"
 msgstr "Negyedéves jelentés"
 
 msgid "%d %B %Y"
-msgstr "%d %B %Y"
+msgstr "%Y. %B %d."
 
 msgid "%A"
 msgstr "%A"
@@ -18963,7 +18963,7 @@ msgid "%b %d, %Y at %I:%M %p"
 msgstr "%b %d, %Y %I:%M %p"
 
 msgid "%I:%M %p, %b %d %Y"
-msgstr "%I:%M %p, %b %d %Y"
+msgstr "%I:%M %p, %Y. %b %d."
 
 msgid "Login to vote"
 msgstr "Bejelentkezés a szavazáshoz"
@@ -30052,7 +30052,7 @@ msgid "Save diagnostic changes"
 msgstr "Diagnosztikai változtatások mentése"
 
 msgid "Domain %s"
-msgstr "Domain %s"
+msgstr "Tartomány %s"
 
 msgid "Topic %s"
 msgstr "Téma %s"
@@ -30565,7 +30565,7 @@ msgid "Save header logo"
 msgstr "Fejléc logo mentése"
 
 msgid "Email logo"
-msgstr "Email logo"
+msgstr "E-mail logó"
 
 msgid "Save email logo"
 msgstr "Email logo mentése"
@@ -31433,4 +31433,10 @@ msgstr "Hiba az erőforrások betöltésekor."
 
 msgid "Clear search"
 msgstr "Keresés törlése"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Az adatbázis nevében csak betűk, számjegyek és aláhúzás (_) megengedettek. A érvénytelen karakterek automatikusan eltávolításra kerülnek."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Milyen általános feltételeket kapnak a felhasználók ehhez a platformhoz?"
 

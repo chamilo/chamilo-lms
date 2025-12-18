@@ -2186,7 +2186,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ແມ່ນ:ມີລິຂະສິດ,, ບໍ່:ບໍ່ມີລິຂະສິດ"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:ໂຟນເດີ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":ບົດເຝິກຫັດ:ບົດເຝິກຫັດ,,      ຈຳລອງ:ຈຳລອງ,,      ແບບສອບຖາມ:ແບບສອບຖາມ,,      ແຜນວາດ:ແຜນວາດ,,      ຮູບ:ຮູບ,,      ກຣາຟ:ກຣາຟ,,      ດັດຊະນີ:ດັດຊະນີ,,      ສະໄລ້:ສະໄລ້,,      ຕາຕະລາງ:ຕາຕະລາງ,,      ຂໍ້ຄວາມບັນຍາຍ:ຂໍ້ຄວາມບັນຍາຍ,,      ສອບເສັງ:ສອບເສັງ,,      ທົດລອງ:ທົດລອງ,,      ບັນຫາ:ບັນຫາ,,      ປະເມີນຕົນເອງ:ປະເມີນຕົນເອງ,,      ບັນຍາຍ:ບັນຍາຍ"
@@ -20264,7 +20264,6 @@ msgstr "ພອດທີ່ຈະເຊື່ອມຕໍ່ກັບເຊີບ
 msgid "Main CAS server protocol"
 msgstr "ໂປຣໂຕຄໍຂອງເຊີບເວີ CAS ຫຼັກ"
 
-#, fuzzy
 msgid "CAS 1"
 msgstr "CAS 1"
 
@@ -22118,7 +22117,6 @@ msgstr "ໂຫຼດຄຳເຫັນເພີ່ມເຕີມ"
 msgid "Show progress"
 msgstr "ສະແດງຄວາມຄືບໜ້າ"
 
-#, fuzzy
 msgid "%s %%"
 msgstr "%s %%"
 
@@ -33783,4 +33781,10 @@ msgstr "ຂໍ້ຜິດພາດໃນການໂຫຼດຊັບພະຍ
 
 msgid "Clear search"
 msgstr "ລ້າງການຄົ້ນຫາ"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "ຊື່ຖານຂໍ້ມູນຈະໃຊ້ໄດ້ພຽງຕົວອັກສອນ, ຕົວເລກ ແລະ underscore (_) ເທົ່ານັ້ນ. ຕົວອັກສອນທີ່ບໍ່ຖືກຕ້ອງຈະຖືກລຶບອັດຕະໂນມັດ."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "ຂໍ້ກຳນົດແລະເງື່ອນໄຂທົ່ວໄປທີ່ໃຫ້ກັບຜູ້ໃຊ້ເພື່ອໃຊ້ແພລັດຟອມນີ້ແມ່ນຫຍັງ?"
 

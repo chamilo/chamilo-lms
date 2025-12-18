@@ -207,7 +207,7 @@ msgid "Delete comment"
 msgstr "Cancella il commento"
 
 msgid "Social wall"
-msgstr "Social wall"
+msgstr "Muro sociale"
 
 msgid "Buy courses"
 msgstr "Acquista corsi"
@@ -285,7 +285,7 @@ msgid "Pi number:\t\t\tpi"
 msgstr "Pi greco:\t\t\tpi"
 
 msgid "E number:\t\t\te"
-msgstr "E number:\t\t\te"
+msgstr "Numero E:\t\t\te"
 
 msgid "Logarithm:\t\t\tlog(x)"
 msgstr "Logaritmo:\t\t\tlog(x)"
@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Cordialmente"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Esempio di formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Esempio formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervalli variabili"
@@ -2031,7 +2031,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:senza copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Cartella,, application/msword:MsWord,, application/octet-stream:Flusso octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Cartella,, application/msword:MsWord,, application/octet-stream:Flusso ottetti,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exercizio,, simulation:simulazione,, questionnaire:questionario,, diagram:diagramma,, figure:figura,, graph:grafico,, index:indice,, slide:slide,, table:tabella,, narrative text:narrazione,, exam:esame,, experiment:esperimento,, problem statement:enunciato di problema,, self assessment:autovalutazione,, lecture:lezione"
@@ -3228,13 +3228,13 @@ msgid "ex."
 msgstr "es."
 
 msgid "Database Host"
-msgstr "Database Host"
+msgstr "Host database"
 
 msgid "Database user"
 msgstr "Database Username"
 
 msgid "Database Password"
-msgstr "Database Password"
+msgstr "Password database"
 
 msgid "Main Chamilo database (DB)"
 msgstr "Database principale"
@@ -4104,7 +4104,7 @@ msgid "Users number"
 msgstr "Numero di utenti"
 
 msgid "Public administration"
-msgstr "Public administration"
+msgstr "Amministrazione pubblica"
 
 msgid "Page after login"
 msgstr "Pagina di benvenuto"
@@ -4158,7 +4158,7 @@ msgid "Owner"
 msgstr "Proprietario"
 
 msgid "Upgrade database"
-msgstr "Upgrade database"
+msgstr "Aggiorna database"
 
 msgid "errors found"
 msgstr "trovati errori"
@@ -4650,7 +4650,7 @@ msgid "Invalid end date was given."
 msgstr "Data di fine errata"
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(g/m/a h:m)"
 
 msgid "Homepage-files are not writable!"
 msgstr "Non è possibile scrivere sui documenti della pagina principale!"
@@ -10098,7 +10098,7 @@ msgid "There are no unqualified learners"
 msgstr "Non ci sono corsisti senza valutazione"
 
 msgid "Social network"
-msgstr "Social network"
+msgstr "Rete sociale"
 
 msgid "Back to outbox"
 msgstr "Ritorna ai messaggi in uscita"
@@ -14439,46 +14439,46 @@ msgid "Compose"
 msgstr "Scrivi"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Baby Arancione"
 
 msgid "Blue lagoon"
-msgstr "Blue lagoon"
+msgstr "Laguna blu"
 
 msgid "Cool blue"
-msgstr "Cool blue"
+msgstr "Blu freddo"
 
 msgid "Corporate"
 msgstr "Corporate"
 
 msgid "Cosmic campus"
-msgstr "Cosmic campus"
+msgstr "Campus cosmico"
 
 msgid "Delicious Bordeaux"
-msgstr "Delicious Bordeaux"
+msgstr "Bordeaux delizioso"
 
 msgid "Empire green"
-msgstr "Empire green"
+msgstr "Verde impero"
 
 msgid "Fruity orange"
-msgstr "Fruity orange"
+msgstr "Arancione fruttato"
 
 msgid "Medical"
 msgstr "Medical"
 
 msgid "Royal purple"
-msgstr "Royal purple"
+msgstr "Viola reale"
 
 msgid "Silver line"
-msgstr "Silver line"
+msgstr "Linea argento"
 
 msgid "Sober brown"
-msgstr "Sober brown"
+msgstr "Marrone sobrio"
 
 msgid "Steel grey"
-msgstr "Steel grey"
+msgstr "Grigio acciaio"
 
 msgid "Tasty olive"
-msgstr "Tasty olive"
+msgstr "Oliva saporito"
 
 msgid "In this report you see the results of all questions"
 msgstr "In questo resoconto ci sono i risultati di tutti i quesiti"
@@ -16404,7 +16404,7 @@ msgid "Off"
 msgstr "Off"
 
 msgid "Web server"
-msgstr "Web Server"
+msgstr "Server web"
 
 msgid "Not inserted"
 msgstr "Non inserito"
@@ -20300,7 +20300,7 @@ msgid "Start video call"
 msgstr "Inizia video chiamata"
 
 msgid "Video URL"
-msgstr "Video URL"
+msgstr "URL video"
 
 msgid "Insert a valid URL"
 msgstr "Inserisci URL valido"
@@ -24530,7 +24530,7 @@ msgid "Minimum score"
 msgstr "Punteggio minimo"
 
 msgid "In LP"
-msgstr "In LP"
+msgstr "Nel LP"
 
 msgid "Courses reports"
 msgstr "Report corsi"
@@ -31447,4 +31447,10 @@ msgstr "Errore nel caricamento delle risorse."
 
 msgid "Clear search"
 msgstr "Cancella ricerca"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Nel nome del database sono consentite solo lettere, cifre e underscore (_). I caratteri non validi verranno rimossi automaticamente."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Quali condizioni generali vengono fornite agli utenti per utilizzare questa piattaforma?"
 

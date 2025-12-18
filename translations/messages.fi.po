@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavakoe: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavan esimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -2552,7 +2552,7 @@ msgid "Other properties found in the archive"
 msgstr "Muitakin materiaaleja löydetty"
 
 msgid "System ID"
-msgstr "System ID"
+msgstr "Järjestelmän tunnus"
 
 msgid "Show score"
 msgstr "Näytä pisteet"
@@ -4811,7 +4811,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "AWStats mahdollistaa portaalin tilastojen tarkastelun: kävijät, sivunäytöt, viittaajat..."
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "Chamilo KIRJASTO"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "Chamilo LIBRARY on hakukone, joka tarjoaa monikriteerisen indeksoinnin ja haun. Se on osa Chamilo Medical -toimintoja."
@@ -8501,7 +8501,7 @@ msgid "Too short"
 msgstr "Liian lyhyt"
 
 msgid "To do"
-msgstr "To do"
+msgstr "Tehtävälista"
 
 msgid "Time report including all courses and sessions, by teacher"
 msgstr "Aikaraportti kaikista kursseista ja istunnoista opettajan mukaan"
@@ -9530,7 +9530,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "Tiedoston tallennus epäonnistui: tiedoston tyyppi ei ole sallittu"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "OpenID-URL"
 
 msgid "The file is too big to upload."
 msgstr "Tiedosto on liian suuri."
@@ -13649,13 +13649,13 @@ msgid "Show all images in their original size. No resizing is done. Scrollbars w
 msgstr "Näytä kaikki kuvat alkuperäisessä koossa. Ei muuteta kokoa. Vierityspalkit ilmestyvät automaattisesti, jos kuva on suurempi kuin näytön koko."
 
 msgid "Show Thumbnails"
-msgstr "Show Thumbnails"
+msgstr "Näytä esikatselukuvat"
 
 msgid "Gallery settings"
 msgstr "Set Slideshow Options"
 
 msgid "Slideshow Options"
-msgstr "Slideshow Options"
+msgstr "Diaesityksen asetukset"
 
 msgid "NO RESIZING"
 msgstr "NO RESIZING (default)"
@@ -13922,10 +13922,10 @@ msgid "Learning paths"
 msgstr "Learning Path"
 
 msgid "level up"
-msgstr "level up"
+msgstr "taso ylös"
 
 msgid "main category"
-msgstr "main category"
+msgstr "pääkategoria"
 
 msgid "Add to the course links"
 msgstr "Lisää kurssin linkkeihin"
@@ -13937,13 +13937,13 @@ msgid "Resources added"
 msgstr "Added new resources"
 
 msgid "External resources"
-msgstr "External resources"
+msgstr "Ulkoiset resurssit"
 
 msgid "Course resources"
-msgstr "Course resources"
+msgstr "Kurssin resurssit"
 
 msgid "External link"
-msgstr "External link"
+msgstr "Ulkoinen linkki"
 
 msgid "Add the dropbox to this section."
 msgstr "Add the dropbox page to this chapter."
@@ -30732,7 +30732,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (sisäinen tunnus)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "Azure-tunnus (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Organisaation sähköposti"
@@ -31435,4 +31435,10 @@ msgstr "Resurssien latausvirhe."
 
 msgid "Clear search"
 msgstr "Tyhjennä haku"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Tietokannan nimessä sallitaan vain kirjaimet, numerot ja alaviiva (_). Virheelliset merkit poistetaan automaattisesti."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Mitkä yleiset käyttöehdot annetaan käyttäjille tämän alustan käyttöön?"
 

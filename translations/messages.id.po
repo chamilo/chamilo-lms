@@ -1557,7 +1557,7 @@ msgid "Back to normal screen"
 msgstr "Kembali ke layar normal"
 
 msgid "Full screen"
-msgstr "Full screen"
+msgstr "Layar penuh"
 
 msgid "Not attempted"
 msgstr "Belum diupayakan"
@@ -2046,7 +2046,7 @@ msgid "Select a backup file"
 msgstr "pilih file backup"
 
 msgid "Import backup"
-msgstr "Import backup"
+msgstr "Impor cadangan"
 
 msgid "Import full backup"
 msgstr "Impor cadangan lengkap"
@@ -2091,13 +2091,13 @@ msgid "Rename file (eg file.pdf becomes file_1.pdf)"
 msgstr "Ganti nama file (misal  file.pdf menjadi file_1.pdf)"
 
 msgid "Overwrite file"
-msgstr "Overwrite file"
+msgstr "Timpa berkas"
 
 msgid "Select target course"
 msgstr "Pilih mata kuliah target"
 
 msgid "Full copy"
-msgstr "Full copy"
+msgstr "Salinan lengkap"
 
 msgid "There are no resources to backup"
 msgstr "Tidak ada resources untuk dibackup"
@@ -2484,7 +2484,7 @@ msgid "General introduction to project management"
 msgstr "General introduction to philosophy and methodology principles"
 
 msgid "Street interviews"
-msgstr "Street interviews"
+msgstr "Wawancara jalanan"
 
 msgid "Quick and powerful search engine"
 msgstr "Search engine terunggul"
@@ -3066,7 +3066,7 @@ msgid "Edit forum"
 msgstr "Edit forum"
 
 msgid "Edit thread"
-msgstr "Edit thread"
+msgstr "Edit utas"
 
 msgid "Back to forum"
 msgstr "Kembali ke forum"
@@ -4149,7 +4149,7 @@ msgid "Owner"
 msgstr "Pemilik"
 
 msgid "Upgrade database"
-msgstr "Upgrade database"
+msgstr "Upgrade basis data"
 
 msgid "errors found"
 msgstr "error ditemukan"
@@ -4347,7 +4347,7 @@ msgid "You can determine the platform languages in a different part of the platf
 msgstr "Anda dapat menentukan bahasa platform dalam bagian berbeda pada administrasi platform, yaitu pada: <a href=\"languages.php\">Bahasa Platform Chamilo</a>"
 
 msgid "Production Server"
-msgstr "Production Server"
+msgstr "Server Produksi"
 
 msgid "Test Server"
 msgstr "Server Ujicoba"
@@ -4545,7 +4545,7 @@ msgid "Wanted course code"
 msgstr "kode mata kuliah yang diinginkan"
 
 msgid "Reset password"
-msgstr "Reset password"
+msgstr "Atur ulang kata sandi"
 
 msgid "Check to send new password"
 msgstr "Conteng untuk mengirim password baru"
@@ -4734,7 +4734,7 @@ msgid "Make unavailable"
 msgstr "Buat tidak tersedia"
 
 msgid "Style sheets"
-msgstr "Style sheets"
+msgstr "Lembar gaya"
 
 msgid "Should the navigation menu show the different tool icons?"
 msgstr "Apakah menu navigasi menampilkan ikon tool yang berbeda?"
@@ -7203,7 +7203,7 @@ msgid "back to normal screen"
 msgstr "kembali ke layar normal"
 
 msgid "full screen"
-msgstr "full screen"
+msgstr "layar penuh"
 
 msgid "There was a"
 msgstr "Ada sebuah"
@@ -12267,7 +12267,7 @@ msgid "Store documents"
 msgstr "Simpan dokumen"
 
 msgid "No frames"
-msgstr "No frames"
+msgstr "Tanpa bingkai"
 
 msgid "Upload file"
 msgstr "Unggah berkas"
@@ -13359,7 +13359,7 @@ msgid "Invited"
 msgstr "Diundang"
 
 msgid "Reset filter"
-msgstr "Reset filter"
+msgstr "Atur ulang filter"
 
 msgid "Export current report"
 msgstr "Ekspor laporan saat ini"
@@ -14025,7 +14025,7 @@ msgid "Test : Answers"
 msgstr "Latihan: Jawaban"
 
 msgid "Forum: reply"
-msgstr "Forum: reply"
+msgstr "Forum: balas"
 
 msgid "Descending"
 msgstr "Menurun"
@@ -20217,7 +20217,7 @@ msgid "Activate the stars achievement in learning paths"
 msgstr "Aktifkan pencapaian bintang di jalur pembelajaran"
 
 msgid "Level %s"
-msgstr "Level %s"
+msgstr "Tingkat %s"
 
 msgid "%s points"
 msgstr "%s poin"
@@ -22230,7 +22230,7 @@ msgid "Cloud file link"
 msgstr "Tautan file Cloud"
 
 msgid "Reset %s"
-msgstr "Reset %s"
+msgstr "Atur ulang %s"
 
 msgid "My global certificate"
 msgstr "Sertifikat global saya"
@@ -30520,7 +30520,7 @@ msgid "ex. root"
 msgstr "contoh: root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "CREATE TABLE berhasil"
 
 msgid "ALTER TABLE works"
 msgstr "UBAH TABEL works"
@@ -30730,7 +30730,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (ID internal)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "ID Azure (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Email organisasi"
@@ -31433,4 +31433,10 @@ msgstr "Kesalahan memuat sumber daya."
 
 msgid "Clear search"
 msgstr "Hapus pencarian"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Hanya huruf, angka dan garis bawah (_) yang diizinkan dalam nama database. Karakter tidak valid akan dihapus secara otomatis."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Persyaratan dan ketentuan umum apa yang diberikan kepada pengguna untuk menggunakan platform ini?"
 

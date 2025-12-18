@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:opphavsrett,, nei:ingen opphavsrett"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappe,, application/msword:MsWord,, application/octet-stream:Okttell-stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappe,, application/msword:MsWord,, application/octet-stream:Okettstrøm,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":øving:øving,,      simulering:simulering,,      spørreskjema:spørreskjema,,      diagram:diagram,,      figur:figur,,      graf:graf,,      indeks:indeks,,      lysbilete:lysbilete,,      tabell:tabell,,      forteljande tekst:forteljande tekst,,      eksamen:eksamen,,      eksperiment:eksperiment,,      problemstilling:problemstilling,,      sjølvoppgåve:sjølvoppgåve,,      forelesning:forelesning"
@@ -4809,7 +4809,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "AWStats lar deg sjå statistikken for plattforma di: besøkande, sidevisningar, henvisningar..."
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "Chamilo BIBLIOTEK"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "Chamilo LIBRARY er ein søkemotor som tilbyr multi-kriteria indeksering og søk. Den er ein del av Chamilo Medical-funksjonane."
@@ -14469,7 +14469,7 @@ msgid "Steel grey"
 msgstr "Stål grå"
 
 msgid "Tasty olive"
-msgstr "Tasty olive"
+msgstr "Smakfull oliven"
 
 msgid "In this report you see the results of all questions"
 msgstr "I denne rapporten ser du resultata av alle spørsmåla"
@@ -31433,4 +31433,10 @@ msgstr "Feil ved lasting av ressursar."
 
 msgid "Clear search"
 msgstr "Nullstill søk"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Berre bokstavar, siffer og understrek (_) er tillente i databasenamnet. Ugyldige teikn vert fjerna automatiske."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Kvar er dei generelle vilkåra som gis til brukarar for å bruke denne plattforma?"
 

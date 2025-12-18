@@ -72,37 +72,37 @@ msgid "Cosecant:\t\t\t\tcsc(x)"
 msgstr "Cosecant:\t\t\t\tcsc(x)"
 
 msgid "Hyperbolic cosecant:\t\tcsch(x)"
-msgstr "Hyperbolic cosecant:\t\tcsch(x)"
+msgstr "Hàm cosec hyperbolic:\t\tcsch(x)"
 
 msgid "Arccosecant:\t\t\tarccsc(x)"
 msgstr "Arccosecant:\t\t\tarccsc(x)"
 
 msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
-msgstr "Hyperbolic arccosecant:\t\tarccsch(x)"
+msgstr "Hàm arccosec hyperbolic:\t\tarccsch(x)"
 
 msgid "Secant:\t\t\t\tsec(x)"
 msgstr "Secant:\t\t\t\tsec(x)"
 
 msgid "Hyperbolic secant:\t\tsech(x)"
-msgstr "Hyperbolic secant:\t\tsech(x)"
+msgstr "Hàm sec hyperbolic:\t\tsech(x)"
 
 msgid "Arcsecant:\t\t\tarcsec(x)"
 msgstr "Arcsecant:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
-msgstr "Hyperbolic arcsecant:\t\tarcsech(x)"
+msgstr "Hàm arcsec hyperbolic:\t\tarcsech(x)"
 
 msgid "Cotangent:\t\t\tcot(x)"
 msgstr "Cotangent:\t\t\tcot(x)"
 
 msgid "Hyperbolic cotangent:\t\tcoth(x)"
-msgstr "Hyperbolic cotangent:\t\tcoth(x)"
+msgstr "Hàm cotanh hyperbolic:\t\tcoth(x)"
 
 msgid "Arccotangent:\t\t\tarccot(x)"
 msgstr "Arccotangent:\t\t\tarccot(x)"
 
 msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
-msgstr "Hyperbolic arccotangent:\t\tarccoth(x)"
+msgstr "Hàm arccotanh hyperbolic:\t\tarccoth(x)"
 
 msgid "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />\nIf needed, the Help section of your browser indicates how to configure cookies.<br /><br />\nFor more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website."
 msgstr "Để trang web này hoạt động và đo lường việc sử dụng nội dung, nền tảng này sử dụng cookies.<br /><br />\nNếu cần, phần Trợ giúp của trình duyệt chỉ ra cách cấu hình cookies.<br /><br />\nĐể biết thêm thông tin về cookies, bạn có thể truy cập trang web <a href=\"http://www.aboutcookies.org/\">About Cookies</a>."
@@ -231,7 +231,7 @@ msgid "The session duration allows you to set a number of days of access startin
 msgstr "Thời lượng phiên cho phép bạn đặt số ngày truy cập bắt đầu từ ngày truy cập đầu tiên của người dùng vào phiên. Cách này, bạn có thể đặt phiên 'kéo dài 15 ngày' thay vì bắt đầu từ ngày cố định cho tất cả học viên."
 
 msgid "Hyperbolic arctangent:\t\tarctanh(x)"
-msgstr "Hyperbolic arctangent:\t\tarctanh(x)"
+msgstr "Hàm arctanh hyperbolic:\t\tarctanh(x)"
 
 msgid "Session duration"
 msgstr "Thời lượng phiên"
@@ -240,7 +240,7 @@ msgid "Arctangent:\t\t\tarctan(x)"
 msgstr "Arctangent:\t\t\tarctan(x)"
 
 msgid "Hyperbolic tangent:\t\ttanh(x)"
-msgstr "Hyperbolic tangent:\t\ttanh(x)"
+msgstr "Hàm tanh hyperbolic:\t\ttanh(x)"
 
 msgid "Tangent:\t\t\ttan(x)"
 msgstr "Tangent:\t\t\ttan(x)"
@@ -252,13 +252,13 @@ msgid "Series"
 msgstr "Chuỗi"
 
 msgid "Hyperbolic arccosine:\t\tarccosh(x)"
-msgstr "Hyperbolic arccosine:\t\tarccosh(x)"
+msgstr "Hàm arccosh hyperbolic:\t\tarccosh(x)"
 
 msgid "Arccosine:\t\t\tarccos(x)"
 msgstr "Arccosine:\t\t\tarccos(x)"
 
 msgid "Hyperbolic cosine:\t\tcosh(x)"
-msgstr "Hyperbolic cosine:\t\tcosh(x)"
+msgstr "Hàm cosh hyperbolic:\t\tcosh(x)"
 
 msgid "Cosine:\t\t\t\tcos(x)"
 msgstr "Cosine:\t\t\t\tcos(x)"
@@ -267,7 +267,7 @@ msgid "Teachers time report"
 msgstr "Báo cáo thời gian giảng viên"
 
 msgid "Hyperbolic arcsine:\t\tarcsinh(x)"
-msgstr "Hyperbolic arcsine:\t\tarcsinh(x)"
+msgstr "Hàm arcsinh hyperbolic:\t\tarcsinh(x)"
 
 msgid "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator."
 msgstr "Không tìm thấy ngôn ngữ của bạn trong danh sách? Liên hệ chúng tôi tại info@chamilo.org để đóng góp làm dịch giả."
@@ -276,7 +276,7 @@ msgid "Arcsine:\t\t\tarcsin(x)"
 msgstr "Arcsine:\t\t\tarcsin(x)"
 
 msgid "Hyperbolic sine:\t\tsinh(x)"
-msgstr "Hyperbolic sine:\t\tsinh(x)"
+msgstr "Hàm sinh hyperbolic:\t\tsinh(x)"
 
 msgid "Sine:\t\t\t\tsin(x)"
 msgstr "Sine:\t\t\t\tsin(x)"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:bản quyền,, no:không bản quyền"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Thư mục,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Thư mục,, application/msword:MsWord,, application/octet-stream:Dòng octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:bài tập,,      simulation:mô phỏng,,      questionnaire:bảng câu hỏi,,      diagram:sơ đồ,,      figure:hình vẽ,,      graph:đồ thị,,      index:chỉ mục,,      slide:slide,,      table:bảng,,      narrative text:văn bản kể chuyện,,      exam:kỳ thi,,      experiment:thí nghiệm,,      problem statement:đề bài,,      self assessment:tự đánh giá,,      lecture:bài giảng"
@@ -3204,7 +3204,7 @@ msgid "Tracking DB."
 msgstr "Tracking DB.  Useful only if several DB"
 
 msgid "Enable Tracking"
-msgstr "Enable Tracking"
+msgstr "Bật Theo dõi"
 
 msgid "Your company short name"
 msgstr "Organisation short name"
@@ -3219,13 +3219,13 @@ msgid "ex."
 msgstr "e. g."
 
 msgid "Database Host"
-msgstr "Database Host"
+msgstr "Máy chủ Cơ sở dữ liệu"
 
 msgid "Database user"
 msgstr "Database Username"
 
 msgid "Database Password"
-msgstr "Database Password"
+msgstr "Mật khẩu Cơ sở dữ liệu"
 
 msgid "Main Chamilo database (DB)"
 msgstr "Main Chamilo DB"
@@ -3234,7 +3234,7 @@ msgid "all fields required"
 msgstr "tất cả các trường bắt buộc"
 
 msgid "Printable version"
-msgstr "Printable version"
+msgstr "Phiên bản in được"
 
 msgid "Corresponding local path"
 msgstr "Đường dẫn cục bộ tương ứng"
@@ -3243,13 +3243,13 @@ msgid "Administrator e-mail"
 msgstr "Administrator email"
 
 msgid "Administrator Name"
-msgstr "Administrator name"
+msgstr "Tên Quản trị viên"
 
 msgid "Surname of the Administrator"
 msgstr "Administrator surname"
 
 msgid "Administrator login"
-msgstr "Administrator login"
+msgstr "Đăng nhập Quản trị viên"
 
 msgid "Your portal name"
 msgstr "Your campus' name"
@@ -3273,13 +3273,13 @@ msgid "Step 6"
 msgstr "Step 6 of 6"
 
 msgid "Config settings"
-msgstr "Config settings"
+msgstr "Cài đặt cấu hình"
 
 msgid "MySQL database settings"
 msgstr "Cài đặt cơ sở dữ liệu MySQL"
 
 msgid "Main language"
-msgstr "Main language"
+msgstr "Ngôn ngữ chính"
 
 msgid "License"
 msgstr "License"
@@ -6564,7 +6564,7 @@ msgid "Teachers only"
 msgstr "Chỉ dành cho người quản trị"
 
 msgid "Define Headings"
-msgstr "Define Headings"
+msgstr "Xác định Tiêu đề"
 
 msgid "change rights of"
 msgstr "thay đổi quyền của"
@@ -6774,7 +6774,7 @@ msgid "max. 20 characters, e.g. <i>INNOV21</i>"
 msgstr "tối đa 12 kí tự, v.d. <i>TOAN12</i>"
 
 msgid "seats (optional)"
-msgstr "seats (optional)"
+msgstr "ghế (tùy chọn)"
 
 msgid "group(s) has (have) been added"
 msgstr "đã thêm nhóm mới"
@@ -6831,7 +6831,7 @@ msgid "my group"
 msgstr "Nhóm của tôi"
 
 msgid "my supervision"
-msgstr "my supervision"
+msgstr "giám sát của tôi"
 
 msgid "register"
 msgstr "register"
@@ -10812,7 +10812,7 @@ msgid "Confirm user unsubscription"
 msgstr "Xác nhận đăng kí"
 
 msgid "Go to"
-msgstr "Go to"
+msgstr "Đi đến"
 
 msgid "My latest visits"
 msgstr "Lần ghé thăm gần đây nhất"
@@ -11835,7 +11835,7 @@ msgid "Group Area"
 msgstr "Không gian của nhóm"
 
 msgid "Admin Stats"
-msgstr "Admin Stats"
+msgstr "Thống kê Quản trị"
 
 msgid "Portal Statistics"
 msgstr "Trạng thái hệ thống"
@@ -11925,7 +11925,7 @@ msgid "Empty (or NULL)"
 msgstr "Không có giá trị"
 
 msgid "Traffic Details"
-msgstr "Traffic Details"
+msgstr "Chi tiết Lưu lượng"
 
 msgid "For individual tracking see <a href=../user/user.php>Users</a> tool."
 msgstr "Để theo dõi cá nhân, xem công cụ <a href=../user/user.php>Người dùng</a>."
@@ -13920,7 +13920,7 @@ msgid "Learning paths"
 msgstr "Quá trình học tập"
 
 msgid "level up"
-msgstr "level up"
+msgstr "lên cấp"
 
 msgid "main category"
 msgstr "Danh mục chính"
@@ -20508,7 +20508,7 @@ msgid "Thanks for your subscription"
 msgstr "Cảm ơn bạn đã đăng ký"
 
 msgid "%s team."
-msgstr "%s team."
+msgstr "đội %s."
 
 msgid "You can start subscribing to courses entering to %s"
 msgstr "Bạn có thể bắt đầu đăng ký khóa học bằng cách vào %s"
@@ -24699,7 +24699,7 @@ msgid "*: Current quarter, incomplete data"
 msgstr "*: Quý hiện tại, dữ liệu chưa đầy đủ"
 
 msgid "Q%s %s"
-msgstr "Q%s %s"
+msgstr "Câu hỏi %s %s"
 
 msgid "YoY"
 msgstr "YoY"
@@ -26856,13 +26856,13 @@ msgid "Check password strength"
 msgstr "Kiểm tra độ mạnh mật khẩu"
 
 msgid "HTTP Strict Transport Security"
-msgstr "HTTP Strict Transport Security"
+msgstr "Bảo mật truyền tải nghiêm ngặt HTTP"
 
 msgid "HTTP Strict Transport Security is an excellent feature to support on your site and strengthens your implementation of TLS by getting the User Agent to enforce the use of HTTPS. Recommended value: 'strict-transport-security: max-age=63072000; includeSubDomains'. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. You can include the 'preload' suffix, but this has consequences on the top level domain (TLD), so probably not to be done lightly. See https://hstspreload.org/. Leave blank to disable."
 msgstr "HTTP Strict Transport Security là tính năng tuyệt vời để hỗ trợ trên trang web của bạn và tăng cường triển khai TLS bằng cách yêu cầu User Agent thực thi sử dụng HTTPS. Giá trị khuyến nghị: 'strict-transport-security: max-age=63072000; includeSubDomains'. Xem https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. Bạn có thể bao gồm hậu tố 'preload', nhưng điều này có hậu quả với tên miền cấp cao (TLD), nên không làm nhẹ tay. Xem https://hstspreload.org/. Để trống để tắt."
 
 msgid "Content Security Policy"
-msgstr "Content Security Policy"
+msgstr "Chính sách bảo mật nội dung"
 
 msgid "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the 'script-src' argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
 msgstr "Content Security Policy là biện pháp hiệu quả bảo vệ trang web khỏi tấn công XSS. Bằng cách liệt kê nguồn nội dung được phê duyệt, bạn ngăn trình duyệt tải tài nguyên độc hại. Cài đặt này phức tạp với trình soạn thảo WYSIWYG, nhưng nếu thêm tất cả tên miền cho phép iframe vào child-src, ví dụ này sẽ hoạt động. Bạn có thể ngăn JavaScript thực thi từ nguồn ngoài (bao gồm trong hình SVG) bằng danh sách nghiêm ngặt trong 'script-src'. Để trống để tắt. Ví dụ: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
@@ -26874,7 +26874,7 @@ msgid "This setting allows you to experiment by reporting but not enforcing some
 msgstr "Cài đặt này cho phép thử nghiệm bằng cách báo cáo nhưng không thực thi Content Security Policy."
 
 msgid "HTTP Public Key Pinning"
-msgstr "HTTP Public Key Pinning"
+msgstr "Ghim khóa công khai HTTP"
 
 msgid "HTTP Public Key Pinning protects your site from MiTM attacks using rogue X.509 certificates. By whitelisting only the identities that the browser should trust, your users are protected in the event a certificate authority is compromised."
 msgstr "HTTP Public Key Pinning bảo vệ trang web khỏi tấn công MiTM sử dụng chứng chỉ X.509 giả mạo. Bằng cách chỉ liệt kê danh tính trình duyệt nên tin cậy, người dùng được bảo vệ nếu cơ quan chứng chỉ bị xâm phạm."
@@ -30520,13 +30520,13 @@ msgid "ex. root"
 msgstr "vd. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "TẠO BẢNG works"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "SỬA ĐỔI BẢNG works"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "XÓA CỘT works"
 
 msgid "Theme selected as current"
 msgstr "Chủ đề được chọn làm hiện tại"
@@ -30730,7 +30730,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (ID nội bộ)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "ID Azure (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Email tổ chức"
@@ -31214,4 +31214,229 @@ msgstr "Luồng thảo luận"
 
 msgid "Access to this course"
 msgstr "Truy cập khóa học này"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Plugin này không có thiết lập có thể cấu hình. Kích hoạt được quản lý từ danh sách plugin."
+
+msgid "Private - access granted by privileged users"
+msgstr "Riêng tư - quyền truy cập được cấp bởi người dùng đặc quyền"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Không có phản hồi chi tiết nào cho câu hỏi này."
+
+msgid "Please select an answer before checking the result."
+msgstr "Vui lòng chọn một đáp án trước khi kiểm tra kết quả."
+
+msgid "Allow PDF export for this item"
+msgstr "Cho phép xuất PDF cho mục này"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Ẩn người dùng miễn phí (chưa đăng ký)"
+
+msgid "Question statistics"
+msgstr "Thống kê câu hỏi"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Đang tạo file. Không đóng tab này..."
+
+msgid "Assign auth source to users"
+msgstr "Gán nguồn xác thực cho người dùng"
+
+msgid "There are no questions for this survey"
+msgstr "Không có câu hỏi nào cho khảo sát này"
+
+msgid "Certificates report"
+msgstr "Báo cáo chứng chỉ"
+
+msgid "Course picture"
+msgstr "Hình ảnh khóa học"
+
+msgid "Current picture"
+msgstr "Hình ảnh hiện tại"
+
+msgid "Course events log"
+msgstr "Nhật ký sự kiện khóa học"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Cập nhật thông tin danh mục và giới hạn thời gian tùy chọn của nó."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Tạo nhóm logic các phiên để tổ chức danh mục đào tạo của bạn."
+
+msgid "Generating file, do not close this tab"
+msgstr "Đang tạo file, không đóng tab này"
+
+msgid "Assign authentication sources to users"
+msgstr "Gán nguồn xác thực cho người dùng"
+
+msgid "Average completion rate"
+msgstr "Tỷ lệ hoàn thành trung bình"
+
+msgid "Average access rate"
+msgstr "Tỷ lệ truy cập trung bình"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Bảng này tóm tắt tiến độ và hoạt động của người học theo lộ trình học tập trong các khóa học hiện tại của bạn."
+
+msgid "Follow up"
+msgstr "Theo dõi"
+
+msgid "Tracking for superior"
+msgstr "Theo dõi cho cấp trên"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Báo cáo này hiển thị phân bố hàng tuần của các phiên theo huấn luyện viên tổng quát trong khoảng thời gian ngày được chọn."
+
+msgid "Head manager report"
+msgstr "Báo cáo quản lý cấp cao"
+
+msgid "Reset or update user password"
+msgstr "Đặt lại hoặc cập nhật mật khẩu người dùng"
+
+msgid "Active users"
+msgstr "Người dùng hoạt động"
+
+msgid "Inactive users"
+msgstr "Người dùng không hoạt động"
+
+msgid "Report on resources"
+msgstr "Báo cáo tài nguyên"
+
+msgid "Global view"
+msgstr "Chế độ xem tổng quát"
+
+msgid "Available reports"
+msgstr "Báo cáo có sẵn"
+
+msgid "Current report"
+msgstr "Báo cáo hiện tại"
+
+msgid "Back to user assignment page"
+msgstr "Quay lại trang gán người dùng"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Gán nguồn xác thực thành công"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Mẹo: chọn “— Chỉ tải lên —” để lưu mà không gửi cho ai."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Vui lòng chọn ít nhất một người nhận (“— Chỉ tải lên —” hoặc bất kỳ người dùng nào)"
+
+msgid "Sharing"
+msgstr "Chia sẻ"
+
+msgid "Selected files"
+msgstr "Tệp đã chọn"
+
+msgid "Hide password"
+msgstr "Ẩn mật khẩu"
+
+msgid "Show password"
+msgstr "Hiện mật khẩu"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Tải lên logo SVG cho email"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Bạn phải di chuyển hoặc xóa tất cả lộ trình học tập khỏi danh mục này trước khi xóa nó."
+
+msgid "Clear filters"
+msgstr "Xóa bộ lọc"
+
+msgid "Attendances (tablet)"
+msgstr "Điểm danh (máy tính bảng)"
+
+msgid "Exit tablet mode"
+msgstr "Thoát chế độ máy tính bảng"
+
+msgid "No members found."
+msgstr "Không tìm thấy thành viên."
+
+msgid "Health check"
+msgstr "Kiểm tra sức khỏe"
+
+msgid "Export to CC 1.3"
+msgstr "Xuất sang CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Đang tải tài nguyên..."
+
+msgid "Failed to load resources."
+msgstr "Không tải được tài nguyên."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Vui lòng chọn ít nhất một tài nguyên có thể xuất (tài liệu, liên kết web, thảo luận,...)."
+
+msgid "Export finished."
+msgstr "Xuất hoàn tất."
+
+msgid "Export failed."
+msgstr "Xuất thất bại."
+
+msgid "Import failed."
+msgstr "Nhập thất bại."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Tệp cục bộ (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Sẵn sàng nhập"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Chúng tôi sẽ khôi phục bản sao lưu vào khóa học này. Bạn có thể quay lại để thay đổi tùy chọn."
+
+msgid "Select resources to import"
+msgstr "Chọn tài nguyên để nhập"
+
+msgid "No resources available in this backup."
+msgstr "Không có tài nguyên nào có sẵn trong bản sao lưu này."
+
+msgid "Import selection"
+msgstr "Lựa chọn nhập"
+
+msgid "Import completed"
+msgstr "Nhập hoàn tất"
+
+msgid "Could not load options."
+msgstr "Không tải được tùy chọn."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Vui lòng chọn tệp sao lưu (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Vui lòng chọn bản sao lưu từ máy chủ"
+
+msgid "Error selecting source."
+msgstr "Lỗi chọn nguồn."
+
+msgid "Recycling options"
+msgstr "Tùy chọn tái chế"
+
+msgid "Type the course code to confirm"
+msgstr "Nhập mã khóa học để xác nhận"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Thao tác này sẽ xóa hoặc đặt lại các tài nguyên đã chọn. Thao tác này không thể hoàn tác."
+
+msgid "Select resources to recycle"
+msgstr "Chọn tài nguyên để tái chế"
+
+msgid "No resources available in this course."
+msgstr "Không có tài nguyên nào có sẵn trong khóa học này."
+
+msgid "Recycle selected"
+msgstr "Tái chế các mục đã chọn"
+
+msgid "Error loading resources."
+msgstr "Lỗi tải tài nguyên."
+
+msgid "Clear search"
+msgstr "Xóa tìm kiếm"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Tên cơ sở dữ liệu chỉ cho phép chữ cái, chữ số và dấu gạch dưới (_). Các ký tự không hợp lệ sẽ bị xóa tự động."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Điều khoản và điều kiện chung nào được cung cấp cho người dùng để sử dụng nền tảng này?"
 

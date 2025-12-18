@@ -73,37 +73,37 @@ msgid "Cosecant:\t\t\t\tcsc(x)"
 msgstr "Cosecant:\t\t\t\tcsc(x)"
 
 msgid "Hyperbolic cosecant:\t\tcsch(x)"
-msgstr "Hyperbolic cosecant:\t\tcsch(x)"
+msgstr "קוסקנט היפרבולי:\t\tcsch(x)"
 
 msgid "Arccosecant:\t\t\tarccsc(x)"
 msgstr "Arccosecant:\t\t\tarccsc(x)"
 
 msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
-msgstr "Hyperbolic arccosecant:\t\tarccsch(x)"
+msgstr "ארקקוסקנט היפרבולי:\t\tarccsch(x)"
 
 msgid "Secant:\t\t\t\tsec(x)"
 msgstr "Secant:\t\t\t\tsec(x)"
 
 msgid "Hyperbolic secant:\t\tsech(x)"
-msgstr "Hyperbolic secant:\t\tsech(x)"
+msgstr "סקנט היפרבולי:\t\tsech(x)"
 
 msgid "Arcsecant:\t\t\tarcsec(x)"
 msgstr "Arcsecant:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
-msgstr "Hyperbolic arcsecant:\t\tarcsech(x)"
+msgstr "ארקסקנט היפרבולי:\t\tarcsech(x)"
 
 msgid "Cotangent:\t\t\tcot(x)"
 msgstr "Cotangent:\t\t\tcot(x)"
 
 msgid "Hyperbolic cotangent:\t\tcoth(x)"
-msgstr "Hyperbolic cotangent:\t\tcoth(x)"
+msgstr "קוטנגנס היפרבולי:\t\tcoth(x)"
 
 msgid "Arccotangent:\t\t\tarccot(x)"
 msgstr "Arccotangent:\t\t\tarccot(x)"
 
 msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
-msgstr "Hyperbolic arccotangent:\t\tarccoth(x)"
+msgstr "ארקקוטנגנס היפרבולי:\t\tarccoth(x)"
 
 msgid "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />\nIf needed, the Help section of your browser indicates how to configure cookies.<br /><br />\nFor more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website."
 msgstr "על מנת שהאתר הזה יעבוד ויוכל למדוד את השימוש בתוכן, פלטפורמה זו משתמשת בקובצי Cookie.<br /><br />\nבמידת הצורך, קטע העזרה בדפדפן שלך מציין כיצד להגדיר קובצי Cookie.<br /> <br />\nלמידע נוסף על קובצי Cookie, אתה יכול לבקר באתר <a href=\"http://www.aboutcookies.org/\">אודות קובצי Cookie</a>."
@@ -232,7 +232,7 @@ msgid "The session duration allows you to set a number of days of access startin
 msgstr "משך ההפעלה מאפשר לך להגדיר מספר ימי גישה החל מתאריך הגישה הראשון של המשתמש לסשן. כך תוכלו להגדיר מפגש \"למשך 15 ימים\" במקום להתחיל בתאריך קבוע לכל התלמידים."
 
 msgid "Hyperbolic arctangent:\t\tarctanh(x)"
-msgstr "Hyperbolic arctangent:\t\tarctanh(x)"
+msgstr "ארקטנגנס היפרבולי:\t\tarctanh(x)"
 
 msgid "Session duration"
 msgstr "משך הפגישה"
@@ -241,7 +241,7 @@ msgid "Arctangent:\t\t\tarctan(x)"
 msgstr "Arctangent:\t\t\tarctan(x)"
 
 msgid "Hyperbolic tangent:\t\ttanh(x)"
-msgstr "Hyperbolic tangent:\t\ttanh(x)"
+msgstr "טנגנס היפרבולי:\t\ttanh(x)"
 
 msgid "Tangent:\t\t\ttan(x)"
 msgstr "Tangent:\t\t\ttan(x)"
@@ -253,13 +253,13 @@ msgid "Series"
 msgstr "סדרות"
 
 msgid "Hyperbolic arccosine:\t\tarccosh(x)"
-msgstr "Hyperbolic arccosine:\t\tarccosh(x)"
+msgstr "ארקקוסינוס היפרבולי:\t\tarccosh(x)"
 
 msgid "Arccosine:\t\t\tarccos(x)"
 msgstr "Arccosine:\t\t\tarccos(x)"
 
 msgid "Hyperbolic cosine:\t\tcosh(x)"
-msgstr "Hyperbolic cosine:\t\tcosh(x)"
+msgstr "קוסינוס היפרבולי:\t\tcosh(x)"
 
 msgid "Cosine:\t\t\t\tcos(x)"
 msgstr "Cosine:\t\t\t\tcos(x)"
@@ -268,7 +268,7 @@ msgid "Teachers time report"
 msgstr "דוח זמן של המורים"
 
 msgid "Hyperbolic arcsine:\t\tarcsinh(x)"
-msgstr "Hyperbolic arcsine:\t\tarcsinh(x)"
+msgstr "ארקסינוס היפרבולי:\t\tarcsinh(x)"
 
 msgid "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator."
 msgstr "לא מוצא את השפה שלך ברשימה? צור איתנו קשר בכתובת info@chamilo.org כדי לתרום כמתרגם."
@@ -277,28 +277,28 @@ msgid "Arcsine:\t\t\tarcsin(x)"
 msgstr "Arcsine:\t\t\tarcsin(x)"
 
 msgid "Hyperbolic sine:\t\tsinh(x)"
-msgstr "Hyperbolic sine:\t\tsinh(x)"
+msgstr "סינוס היפרבולי:\t\tsinh(x)"
 
 msgid "Sine:\t\t\t\tsin(x)"
 msgstr "Sine:\t\t\t\tsin(x)"
 
 msgid "Pi number:\t\t\tpi"
-msgstr "Pi number:\t\t\tpi"
+msgstr "מספר פאי:\t\t\tpi"
 
 msgid "E number:\t\t\te"
-msgstr "E number:\t\t\te"
+msgstr "מספר אֵי:\t\t\te"
 
 msgid "Logarithm:\t\t\tlog(x)"
 msgstr "Logarithm:\t\t\tlog(x)"
 
 msgid "Natural logarithm:\t\tln(x)"
-msgstr "Natural logarithm:\t\tln(x)"
+msgstr "לוגריתם טבעי:\t\tln(x)"
 
 msgid "Absolute value:\t\t\tabs(x)"
-msgstr "Absolute value:\t\t\tabs(x)"
+msgstr "ערך מוחלט:\t\t\tabs(x)"
 
 msgid "Square root:\t\t\tsqrt(x)"
-msgstr "Square root:\t\t\tsqrt(x)"
+msgstr "שורש ריבועי:\t\t\tsqrt(x)"
 
 msgid "Exponentiation:\t\t\t^"
 msgstr "Exponentiation:\t\t\t^"
@@ -2031,7 +2031,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":כן:זכויות יוצרים,, לא:ללא זכויות יוצרים"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:תיקייה,, application/msword:MsWord,, application/octet-stream:זרם אוקטט,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":תרגיל:תרגיל,,      סימולציה:סימולציה,,      שאלון:שאלון,,      דיאגרמה:דיאגרמה,,      איור:איור,,      גרף:גרף,,      אינדקס:אינדקס,,      שקופית:שקופית,,      טבלה:טבלה,,      טקסט נרטיבי:טקסט נרטיבי,,      מבחן:מבחן,,      ניסוי:ניסוי,,      ניסוח בעיה:ניסוח בעיה,,      הערכה עצמית:הערכה עצמית,,      הרצאה:הרצאה"
@@ -16410,7 +16410,7 @@ msgid "Not inserted"
 msgstr "לא הוכנס"
 
 msgid "Superior (n+1)"
-msgstr "Superior (n+1)"
+msgstr "עליון (n+1)"
 
 msgid "Enable the MathJax library to visualize mathematical formulas. This is only useful if either ASCIIMathML or ASCIISVG settings are enabled."
 msgstr "אפשר לספריית MathJax להמחיש נוסחאות מתמטיות. זה שימושי רק אם הגדרות ASCIIMathML או ASCIISVG מופעלות."
@@ -31446,4 +31446,10 @@ msgstr "שגיאה בטעינת משאבים."
 
 msgid "Clear search"
 msgstr "נקה חיפוש"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "רק אותיות, ספרות וקו תחתון (_) מותרות בשם מסד הנתונים. תווים לא חוקיים יוסרו אוטומטית."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "אילו תנאים כלליים וכללי משתמש ניתנים למשתמשים לשימוש בפלטפורמה זו?"
 

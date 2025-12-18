@@ -2133,7 +2133,7 @@ msgid "Create a backup. You can select the learning objects to integrate in the 
 msgstr "Yedek oluştur. Yedek dosyaya dahil edilecek öğrenme nesnelerini seçebilirsiniz."
 
 msgid "Tool introduction"
-msgstr "Tool introduction"
+msgstr "Araç tanıtımı"
 
 msgid "Upload failed, please check maximum file size limits and folder rights."
 msgstr "Yükleme başarısız oldu. Lütfen maksimum dosya boyutunu ve klasör haklarını kontrol ediniz"
@@ -2484,7 +2484,7 @@ msgid "General introduction to project management"
 msgstr "General introduction to philosophy and methodology principles"
 
 msgid "Street interviews"
-msgstr "Street interviews"
+msgstr "Sokak röportajları"
 
 msgid "Quick and powerful search engine"
 msgstr "Quick and powerfull search engine"
@@ -2694,7 +2694,7 @@ msgid "---Just upload---"
 msgstr "--SadeceGönder--"
 
 msgid "Nothing for"
-msgstr "Nothing for"
+msgstr "İçin hiçbir şey"
 
 msgid "(not registered to this course)"
 msgstr "(bu derse kayıtlı değil)"
@@ -2703,7 +2703,7 @@ msgid "sent to"
 msgstr "gideceği yer"
 
 msgid "is for"
-msgstr "is for"
+msgstr "için"
 
 msgid "Click a keyword in the tree to select or deselect it."
 msgstr "Seçmek veya seçimi iptal için bir anahtar kelimeye tıklayın"
@@ -3219,7 +3219,7 @@ msgid "ex."
 msgstr "örn."
 
 msgid "Database Host"
-msgstr "Database Host"
+msgstr "Veritabanı Sunucusu"
 
 msgid "Database user"
 msgstr "Veritabanı Kullanıcı Adı"
@@ -3309,7 +3309,7 @@ msgid "(recommended)"
 msgstr "(tavsiye edilen)"
 
 msgid "SCORM DB"
-msgstr "Scorm DB"
+msgstr "SCORM DB"
 
 msgid "Administrator last name"
 msgstr "Yönetici soyadı"
@@ -4659,7 +4659,7 @@ msgid "Insert this link"
 msgstr "Bu bağlantıyı ekle"
 
 msgid "First place"
-msgstr "First place"
+msgstr "Birinci yer"
 
 msgid "Dropbox: allow group"
 msgstr "GelenKutusu: grup izni"
@@ -10929,7 +10929,7 @@ msgid "Your registration on %s"
 msgstr "Kaydınız %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
-msgstr ""
+msgstr "Bu giriş adı zaten alınmış. Tarayıcınızın geri düğmesine basın ve başka birini seçin."
 
 msgid "You left some fields empty. Use your browser's back button and try again."
 msgstr "Bazı alanları boş bıraktınız. Geri dönüp doldurunuz."
@@ -13920,10 +13920,10 @@ msgid "Learning paths"
 msgstr "Kurs yolu"
 
 msgid "level up"
-msgstr "level up"
+msgstr "seviye atla"
 
 msgid "main category"
-msgstr "main category"
+msgstr "ana kategori"
 
 msgid "Add to the course links"
 msgstr "Ders bağlantılarına ekle"
@@ -13935,13 +13935,13 @@ msgid "Resources added"
 msgstr "Added new resources"
 
 msgid "External resources"
-msgstr "External resources"
+msgstr "Dış kaynaklar"
 
 msgid "Course resources"
-msgstr "Course resources"
+msgstr "Ders kaynakları"
 
 msgid "External link"
-msgstr "External link"
+msgstr "Dış bağlantı"
 
 msgid "Add the dropbox to this section."
 msgstr "Add the dropbox page to this chapter."
@@ -31433,4 +31433,10 @@ msgstr "Kaynaklar yüklenirken hata oluştu."
 
 msgid "Clear search"
 msgstr "Aramayı temizle"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Veritabanı adında yalnızca harfler, rakamlar ve alt çizgi (_) izinlidir. Geçersiz karakterler otomatik olarak kaldırılacaktır."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Kullanıcılara bu platformu kullanmak için verilen genel şartlar ve koşullar nelerdir?"
 

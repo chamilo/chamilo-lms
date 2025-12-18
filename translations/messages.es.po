@@ -14618,7 +14618,7 @@ msgid "The time limit of a category is referential, will not affect the boundari
 msgstr "El plazo de una categoría es referencial, no afectará a los límites de una sesión de formación"
 
 msgid "User tag"
-msgstr "User tag"
+msgstr "Etiqueta de usuario"
 
 msgid "E-mail alert on course creation"
 msgstr "Aviso e-mail a la creación de nuevos cursos"
@@ -19392,7 +19392,7 @@ msgid "Exercise average"
 msgstr "Media del ejercicio"
 
 msgid "Webcam Clip"
-msgstr "Webcam Clip"
+msgstr "Clip de Webcam"
 
 msgid "Snapshot"
 msgstr "Capturar"
@@ -32571,4 +32571,10 @@ msgstr "Error al cargar recursos."
 
 msgid "Clear search"
 msgstr "Borrar búsqueda"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Solo se permiten letras, dígitos y guión bajo (_) en el nombre de la base de datos. Los caracteres inválidos se eliminarán automáticamente."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "¿Qué términos y condiciones generales se dan a los usuarios para usar esta plataforma?"
 

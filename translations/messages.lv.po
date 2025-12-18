@@ -8629,10 +8629,10 @@ msgid "."
 msgstr "."
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%d. %b, %Y"
 
 msgid "%A %B %d, %Y"
-msgstr "%A %B %d, %Y"
+msgstr "%A, %d. %B, %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
 msgstr "%B %d, %Y plkst. %I:%M %p"
@@ -9346,7 +9346,7 @@ msgid "Tel"
 msgstr "Telefona Nr."
 
 msgid "No tel"
-msgstr "No tel"
+msgstr "Nav tāl."
 
 msgid "Send mail"
 msgstr "Sūtīt vēstuli"
@@ -9466,7 +9466,7 @@ msgid "Not yet begun"
 msgstr "Patreiz nesāksies"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d. %B, %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Nederīga mape: Lūdzu izveidojiet, dokumentu instrumentā, mapi attēliem, lai attēlus var lejupielādēt tieši šajā mapē."
@@ -15769,16 +15769,16 @@ msgid "By copying the link below and pasting it in an e-mail or on a website, yo
 msgstr "Kopējot saiti zemāk un ielīmējot to e-pastā vai mājaslapā, jūs ļausiet jebkurai anonīmai personai ievadīt un atbildēt uz šo aptauju."
 
 msgid "Open self"
-msgstr "Open self"
+msgstr "Atvērt sevi"
 
 msgid "Open blank"
 msgstr "Atvērt tukšā logā"
 
 msgid "Open parent"
-msgstr "Open parent"
+msgstr "Atvērt vecāku"
 
 msgid "Open top"
-msgstr "Open top"
+msgstr "Atvērt augšējo"
 
 msgid "Thematic section has been created successfully"
 msgstr "Tematiskā plāna nodaļa ir izveidota veiksmīgi"
@@ -31434,4 +31434,10 @@ msgstr "Kļūda ielādējot resursus."
 
 msgid "Clear search"
 msgstr "Notīrīt meklēšanu"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Datubāzes nosaukumā drīkst izmantot tikai burtus, ciparus un apakšsvītru (_). Nederīgie simboli tiks automātiski noņemti."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Kādi vispārēji noteikumi un nosacījumi tiek doti lietotājiem, lai izmantotu šo platformu?"
 

@@ -2209,7 +2209,7 @@ msgid "Yes / No"
 msgstr "Oc / Non"
 
 msgid "Numeric 1-10"
-msgstr "Numeric 1-10"
+msgstr "Numèric 1-10"
 
 msgid "Poll"
 msgstr "Sondatge"
@@ -31427,4 +31427,10 @@ msgstr "Error de carga dels recursos."
 
 msgid "Clear search"
 msgstr "Escafar la recèrca"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Solament las letras, las ciffres e lo soslinh (_) son autorizats dins lo nom de la basa de donadas. Los caractèrs invalids seràn suprimits automaticament."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Quinas condicions generals son donadas als utilizaires per utilizar aquesta plataforma ?"
 

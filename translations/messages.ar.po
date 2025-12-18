@@ -79,31 +79,31 @@ msgid "Arccosecant:\t\t\tarccsc(x)"
 msgstr "Arccosecant:\t\t\tarccsc(x)"
 
 msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
-msgstr "Hyperbolic arccosecant:\t\tarccsch(x)"
+msgstr "القاطع المكمل الزائدي:\t\tarccsch(x)"
 
 msgid "Secant:\t\t\t\tsec(x)"
 msgstr "Secant:\t\t\t\tsec(x)"
 
 msgid "Hyperbolic secant:\t\tsech(x)"
-msgstr "Hyperbolic secant:\t\tsech(x)"
+msgstr "القاطع الزائدي:\t\tsech(x)"
 
 msgid "Arcsecant:\t\t\tarcsec(x)"
 msgstr "Arcsecant:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
-msgstr "Hyperbolic arcsecant:\t\tarcsech(x)"
+msgstr "القاطع المكمل الزائدي:\t\tarcsech(x)"
 
 msgid "Cotangent:\t\t\tcot(x)"
 msgstr "Cotangent:\t\t\tcot(x)"
 
 msgid "Hyperbolic cotangent:\t\tcoth(x)"
-msgstr "Hyperbolic cotangent:\t\tcoth(x)"
+msgstr "الظل الزائدي:\t\tcoth(x)"
 
 msgid "Arccotangent:\t\t\tarccot(x)"
 msgstr "Arccotangent:\t\t\tarccot(x)"
 
 msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
-msgstr "Hyperbolic arccotangent:\t\tarccoth(x)"
+msgstr "الظل المكمل الزائدي:\t\tarccoth(x)"
 
 msgid "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />\nIf needed, the Help section of your browser indicates how to configure cookies.<br /><br />\nFor more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website."
 msgstr "cookies لغرض استخدام هذا الموقع ولقياس مستوى الاستخدام فان النظام يستخدم"
@@ -232,7 +232,7 @@ msgid "The session duration allows you to set a number of days of access startin
 msgstr "تسمح مدة الدورة في تحديد عدد ايام الدخول للدورة بدلا من تاريخ محدد، فمثلا يمكنك تحديد مدة 15 يوم للدورة بدون تحديد تاريخ ليوم البداية لكافة الطلبة"
 
 msgid "Hyperbolic arctangent:\t\tarctanh(x)"
-msgstr "Hyperbolic arctangent:\t\tarctanh(x)"
+msgstr "الظل المكمل الزائدي:\t\tarctanh(x)"
 
 msgid "Session duration"
 msgstr "مدة الدورة"
@@ -241,7 +241,7 @@ msgid "Arctangent:\t\t\tarctan(x)"
 msgstr "Arctangent:\t\t\tarctan(x)"
 
 msgid "Hyperbolic tangent:\t\ttanh(x)"
-msgstr "Hyperbolic tangent:\t\ttanh(x)"
+msgstr "الظل الزائدي:\t\ttanh(x)"
 
 msgid "Tangent:\t\t\ttan(x)"
 msgstr "Tangent:\t\t\ttan(x)"
@@ -253,13 +253,13 @@ msgid "Series"
 msgstr "السلسلة"
 
 msgid "Hyperbolic arccosine:\t\tarccosh(x)"
-msgstr "Hyperbolic arccosine:\t\tarccosh(x)"
+msgstr "الجيب المكمل الزائدي:\t\tarccosh(x)"
 
 msgid "Arccosine:\t\t\tarccos(x)"
 msgstr "Arccosine:\t\t\tarccos(x)"
 
 msgid "Hyperbolic cosine:\t\tcosh(x)"
-msgstr "Hyperbolic cosine:\t\tcosh(x)"
+msgstr "الجيب الزائدي:\t\tcosh(x)"
 
 msgid "Cosine:\t\t\t\tcos(x)"
 msgstr "Cosine:\t\t\t\tcos(x)"
@@ -268,7 +268,7 @@ msgid "Teachers time report"
 msgstr "تقرير الوقت للمدرسين"
 
 msgid "Hyperbolic arcsine:\t\tarcsinh(x)"
-msgstr "Hyperbolic arcsine:\t\tarcsinh(x)"
+msgstr "الجيب المكمل الزائدي:\t\tarcsinh(x)"
 
 msgid "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator."
 msgstr "info@chamilo.org لا يمكن العثور على لغتك في القائمة؟ يمكنك الاتصال بنا والمساهمة كمترجم"
@@ -277,7 +277,7 @@ msgid "Arcsine:\t\t\tarcsin(x)"
 msgstr "Arcsine:\t\t\tarcsin(x)"
 
 msgid "Hyperbolic sine:\t\tsinh(x)"
-msgstr "Hyperbolic sine:\t\tsinh(x)"
+msgstr "الجيب الزائدي:\t\tsinh(x)"
 
 msgid "Sine:\t\t\t\tsin(x)"
 msgstr "Sine:\t\t\t\tsin(x)"
@@ -3213,28 +3213,28 @@ msgid "Tracking DB."
 msgstr "قاعدة بيانات التتبع."
 
 msgid "Enable Tracking"
-msgstr "Enable Tracking"
+msgstr "تفعيل التتبع"
 
 msgid "Your company short name"
-msgstr "Your organisation short name"
+msgstr "الاسم المختصر لشركتك"
 
 msgid "Use this script only after backup. The Chamilo team is not responsible for lost or corrupted data."
 msgstr "استخدم هذا السكريبت فقط بعد النسخ الاحتياطي. فريق Chamilo غير مسؤول عن البيانات المفقودة أو التالفة."
 
 msgid "Allow self-registration as a trainer"
-msgstr "Allow self-registration as course creator"
+msgstr "السماح بالتسجيل الذاتي كمدرب"
 
 msgid "ex."
 msgstr "ex."
 
 msgid "Database Host"
-msgstr "Database Host"
+msgstr "مضيف قاعدة البيانات"
 
 msgid "Database user"
-msgstr "Database Username"
+msgstr "مستخدم قاعدة البيانات"
 
 msgid "Database Password"
-msgstr "Database Password"
+msgstr "كلمة مرور قاعدة البيانات"
 
 msgid "Main Chamilo database (DB)"
 msgstr "قاعدة بيانات تشاميلو الرئيسية (DB)"
@@ -3249,7 +3249,7 @@ msgid "Corresponding local path"
 msgstr "المسار المحلي المقابل"
 
 msgid "Administrator e-mail"
-msgstr "Administrator email"
+msgstr "بريد إلكتروني المسؤول"
 
 msgid "Administrator Name"
 msgstr "اسم المسؤول"
@@ -3264,25 +3264,25 @@ msgid "Your portal name"
 msgstr "اسم بوابتك"
 
 msgid "The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues."
-msgstr "The install script will create the Chamilo main database(s). Please note that Chamilo will need to create several databases. If you are allowed to use only one database by your Hosting Service, Chamilo will not work, unless you chose the option \"One database\"."
+msgstr "سوف يقوم سكريبت التثبيت بإنشاء (أو استخدام) قاعدة بيانات Chamilo باستخدام اسم قاعدة البيانات المحدد هنا. يرجى التأكد من أن المستخدم الذي تقدمه لديه الحق في إنشاء قاعدة البيانات بهذا الاسم. إذا كانت قاعدة بيانات بهذا الاسم موجودة، فسيتم الكتابة فوقها. يرجى عدم استخدام مستخدم root كمستخدم قاعدة بيانات Chamilo. هذا قد يؤدي إلى مشكلات أمنية خطيرة."
 
 msgid "Time spent by students in courses"
 msgstr "الوقت المبذول من قبل الطلبة في المقرر"
 
 msgid "Step 3"
-msgstr "Step 3 of 6"
+msgstr "الخطوة 3"
 
 msgid "Step 4"
-msgstr "Step 4 of 6"
+msgstr "الخطوة 4"
 
 msgid "Step 5"
-msgstr "Step 5 of 6"
+msgstr "الخطوة 5"
 
 msgid "Step 6"
-msgstr "Step 6 of 6"
+msgstr "الخطوة 6"
 
 msgid "Config settings"
-msgstr "Config settings"
+msgstr "إعدادات التكوين"
 
 msgid "MySQL database settings"
 msgstr "إعدادات قاعدة بيانات MySQL"
@@ -3318,7 +3318,7 @@ msgid "(recommended)"
 msgstr "(موصى به)"
 
 msgid "SCORM DB"
-msgstr "Scorm DB"
+msgstr "قاعدة بيانات SCORM"
 
 msgid "Administrator last name"
 msgstr "لقب المسؤول"
@@ -6573,7 +6573,7 @@ msgid "Teachers only"
 msgstr "مدرسين فقط"
 
 msgid "Define Headings"
-msgstr "Define Headings"
+msgstr "تحديد العناوين"
 
 msgid "change rights of"
 msgstr "غير صلاحيات"
@@ -8868,7 +8868,7 @@ msgid "Unselect all"
 msgstr "إلغاء تحديد الكل"
 
 msgid "With selected"
-msgstr "With selected"
+msgstr "مع المحدد"
 
 msgid "Online"
 msgstr "متصل"
@@ -11052,7 +11052,7 @@ msgid "Approval for new account"
 msgstr "الموافقة على حساب جديد"
 
 msgid "Manage user"
-msgstr "Manage user"
+msgstr "إدارة المستخدم"
 
 msgid "Enroll teachers"
 msgstr "سجل المستخدمين كمدرسين في هذا المقرر"
@@ -11793,7 +11793,7 @@ msgid "Logins and access to tools"
 msgstr "مرات الدخول والوصول إلى الأدوات"
 
 msgid "Contributions uploads"
-msgstr "Contributions uploads"
+msgstr "رفع المساهمات"
 
 msgid "Invalid user : this user doesn't exist in your group"
 msgstr "مستخدم غير صالح : هذا المستخدم غير موجود ضمن مجموعتك"
@@ -11862,7 +11862,7 @@ msgid "Countries Providers Browsers Os Referers"
 msgstr "دول مزودي الخدمة متصفحات أنظمة تشغيل"
 
 msgid "Problematic cases"
-msgstr "Problematic cases"
+msgstr "حالات مشكلة"
 
 msgid "Click Here"
 msgstr "انقر هنا"
@@ -13392,7 +13392,7 @@ msgid "Select user who filled the survey"
 msgstr " اختر المستخدم الذي قام بملأ الاستطلاع"
 
 msgid "User report"
-msgstr "User report"
+msgstr "تقرير المستخدم"
 
 msgid "Graphic"
 msgstr " رسومي"
@@ -14196,7 +14196,7 @@ msgid "Administrator first name"
 msgstr "اسم المسؤول الأول"
 
 msgid "URL of this company"
-msgstr "URL of this organisation"
+msgstr "رابط شركة هذه"
 
 msgid "User DB"
 msgstr "قاعدة بيانات المستخدم"
@@ -14256,7 +14256,7 @@ msgid "<p>Chamilo is a modular tool. You can hide and show tools whenever you wa
 msgstr "<p>Chamilo أداة معيارية. يمكنك إخفاء وإظهار الأدوات متى شئت، حسب متطلبات مشروعك أو جزء زمني معين منه. لكن يمكنك أيضًا إضافة أدوات أو صفحات إلى صفحتك الرئيسية قمت بإنشائها بنفسك أو جاءت من خارج بوابة Chamilo. بهذه الطريقة، يمكنك تخصيص صفحة الدورة الرئيسية لتجعلها خاصة بك.</p><p>في هذه الحالة، ستود بالتأكيد إضافة روابطك الخاصة إلى الصفحة. يمكن أن تكون الروابط من نوعين:<ul><li><b>رابط خارجي</b>: تنشئ رابطًا على صفحتك الرئيسية إلى موقع خارج منطقة دورتك. في هذه الحالة، حدد 'Target= في نافذة جديدة' لأنك لا تريد أن يحل هذا الموقع محل بيئة Chamilo.</li><li><b>رابط داخلي</b>: تربط بصفحة أو أداة داخل دورتك في Chamilo. للقيام بذلك، اذهب أولاً إلى الصفحة ذات الصلة (أو المستند، أو الأداة)، انسخ عنوان URL من شريط العنوان في متصفحك (CTRL+C)، ثم اذهب إلى 'إضافة رابط' والصق هذا العنوان في حقل URL، مع إعطائه أي اسم تريده. في هذه الحالة، حدد 'Target=نفس النافذة' لأنك تريد الاحتفاظ بشريط Chamilo في الأعلى والصفحة المرتبطة في نفس البيئة.</li></ul>بمجرد الإنشاء، لا يمكن تعديل الروابط. لتعديلها، الحل الوحيد هو إلغاء تفعيلها وحذفها، ثم البدء من جديد.</p>"
 
 msgid "Clear content"
-msgstr "Clear content"
+msgstr "مسح المحتوى"
 
 msgid "Groups Help"
 msgstr "Groups"
@@ -14283,7 +14283,7 @@ msgid "Installation language"
 msgstr "لغة التثبيت"
 
 msgid "Please read the following requirements thoroughly."
-msgstr "Read thoroughly"
+msgstr "يرجى قراءة المتطلبات التالية بعناية فائقة."
 
 msgid "Warning! The installer has detected an existing Chamilo platform on your system."
 msgstr "تحذير! اكتشف مثبت البرنامج منصة تشاميلو موجودة على نظامك."
@@ -14307,7 +14307,7 @@ msgid "For more details"
 msgstr "لمزيد من التفاصيل"
 
 msgid "Server requirements"
-msgstr "Server requirements"
+msgstr "متطلبات الخادم"
 
 msgid "Your server must provide the following libraries to enable all features of Chamilo. The missing libraries shown in orange letters are optional, but some features of Chamilo might be disabled if they are not installed. You can still install those libraries later on to enable the missing features."
 msgstr "Libraries and features the server must provide to use Chamilo to its full extent"
@@ -14319,10 +14319,10 @@ msgid "Support"
 msgstr "support"
 
 msgid "Your PHP version matches the minimum requirement:"
-msgstr "PHP version is OK"
+msgstr "إصدار PHP الخاص بك يتوافق مع الحد الأدنى المطلوب:"
 
 msgid "Recommended settings"
-msgstr "Recommended settings"
+msgstr "الإعدادات الموصى بها"
 
 msgid "Recommended settings for your server configuration. These settings are set in the php.ini configuration file on your server."
 msgstr "الإعدادات الموصى بها لتكوين خادمك. يتم تعيين هذه الإعدادات في ملف تكوين php.ini على خادمك."
@@ -14352,7 +14352,7 @@ msgid "Chamilo is free software distributed under the GNU General Public licence
 msgstr "تشاميلو برمجيات حرة موزعة تحت رخصة GPL العامة لـ GNU."
 
 msgid "I accept"
-msgstr "I accept"
+msgstr "أقبل"
 
 msgid "The following values will be written into your configuration file"
 msgstr "سيتم كتابة القيم التالية في ملف التكوين الخاص بك"
@@ -27589,7 +27589,7 @@ msgid "Step 2 - Requirements"
 msgstr "الخطوة 2 - المتطلبات"
 
 msgid "Please read the following requirements thoroughly."
-msgstr "Read thoroughly"
+msgstr "يرجى قراءة المتطلبات التالية بعناية فائقة."
 
 msgid "For more details %s"
 msgstr "لمزيد من التفاصيل %s"
@@ -27960,9 +27960,8 @@ msgstr "تفعيل الملفات الخاصة بالرابط"
 msgid "When this feature is enabled on a multi-URL configuration, you can go to the main URL and provide URL-specific versions of any file (in the documents tool). The original file will be replaced by the alternative whenever seeing it from a different URL. This allows you to customize each URL even further, while enjoying the advantage of re-using the same courses many times."
 msgstr "عند تفعيل هذه الميزة في تكوين متعدد الروابط، يمكنك الذهاب إلى الرابط الرئيسي وتوفير إصدارات خاصة بالرابط لأي ملف (في أداة المستندات). سيتم استبدال الملف الأصلي بالبديل كلما تم رؤيته من رابط مختلف. يتيح ذلك تخصيص كل رابط بشكل أكبر، مع الاستفادة من إعادة استخدام الدورات نفسها مرات عديدة."
 
-#, fuzzy
 msgid "Project manager"
-msgstr "Project manager"
+msgstr "مدير المشروع"
 
 msgid "Select classes for which this course will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
 msgstr "اختر الفصول التي ستكون الدورة مرئية للاشتراك فيها في الكتالوج. لا تزال قواعد الاشتراك ستنطبق بالإضافة إلى كونها مرئية في الكتالوج."
@@ -31446,4 +31445,10 @@ msgstr "خطأ في تحميل الموارد."
 
 msgid "Clear search"
 msgstr "مسح البحث"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "يُسمح فقط بالحروف والأرقام وشرطة سفلية (_) في اسم قاعدة البيانات. سيتم إزالة الأحرف غير الصالحة تلقائيًا."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "ما هي الشروط والأحكام العامة المقدمة للمستخدمين لاستخدام هذه المنصة؟"
 

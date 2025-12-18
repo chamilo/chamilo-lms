@@ -30511,13 +30511,13 @@ msgid "Loading..."
 msgstr "Cargando..."
 
 msgid "ex. localhost"
-msgstr "ex. localhost"
+msgstr "es. localhost"
 
 msgid "ex. 3306"
-msgstr "ex. 3306"
+msgstr "es. 3306"
 
 msgid "ex. root"
-msgstr "ex. root"
+msgstr "es. root"
 
 msgid "CREATE TABLE works"
 msgstr "CREAR TABLA works"
@@ -31433,4 +31433,10 @@ msgstr "Error cargando recursos."
 
 msgid "Clear search"
 msgstr "Llindar gueta"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Namái güiones baixos (_), díxitos y lletres tán permitíos nel nome de la base de datos. Los carauteres inválidos desanemase-y automáticamente."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "¿Qué términos y condicions xenerales se dan a los usuarios pa usar esta plataforma?"
 

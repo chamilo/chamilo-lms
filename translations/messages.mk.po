@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Со почит"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример на формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример за формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Опсези на променливи"
@@ -31433,4 +31433,10 @@ msgstr "Грешка при вчитување на ресурси."
 
 msgid "Clear search"
 msgstr "Исчисти пребарување"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Во името на базата на податоци се дозволени само букви, цифри и долна црта (_). Неважечките знаци ќе бидат отстранети автоматски."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Кои општи услови и правила им се даваат на корисниците за користење на оваа платформа?"
 

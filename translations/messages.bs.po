@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autorska prava,, no:bez autorskih prava"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fascikla,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:vježba,,      simulation:simulacija,,      questionnaire:upitnik,,      diagram:diagram,,      figure:slika,,      graph:grafikon,,      index:indeks,,      slide:slajd,,      table:tabela,,      narrative text:narrativni tekst,,      exam:ispit,,      experiment:eksperiment,,      problem statement:izjava problema,,      self assessment:samoprocjena,,      lecture:predavanje"
@@ -4345,7 +4345,7 @@ msgid "Production Server"
 msgstr "Proizvodni server"
 
 msgid "Test Server"
-msgstr "Test server"
+msgstr "Test Server"
 
 msgid "Who's Online"
 msgstr "Tko je online"
@@ -9460,7 +9460,7 @@ msgid "Not yet begun"
 msgstr "Još nije počelo"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d. %B %Y."
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Nevažeća mapa: Molimo napravite mapu s imenom images u alatu za dokumente kako bi se slike mogle učitati u ovu mapu"
@@ -16183,7 +16183,7 @@ msgid "Quarterly report"
 msgstr "Kvartalni izvještaj"
 
 msgid "%d %B %Y"
-msgstr "%d %B %Y"
+msgstr "%d. %B %Y."
 
 msgid "%A"
 msgstr "%A"
@@ -31427,4 +31427,10 @@ msgstr "Greška pri učitavanju resursa."
 
 msgid "Clear search"
 msgstr "Očisti pretragu"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Samo slova, cifre i podvučena crta (_) su dopušteni u nazivu baze podataka. Neispravni znakovi će biti automatski uklonjeni."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Koji opći uvjeti korištenja se daju korisnicima za korištenje ove platforme?"
 

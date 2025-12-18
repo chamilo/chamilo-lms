@@ -108,8 +108,6 @@ if (file_exists($envFile)) {
             echo '<!doctype html><meta charset="utf-8"><title>Chamilo already installed</title>';
             echo '<div style="font-family:system-ui;max-width:760px;margin:64px auto;padding:24px;border:1px solid #e5e7eb;border-radius:12px">';
             echo '<h1>Chamilo is already installed</h1>';
-            echo '<p>Database version: <strong>'.htmlspecialchars($dbVersion).'</strong>. '
-                .'Installer version: <strong>'.htmlspecialchars($installerVersion).'</strong>.</p>';
             echo '<p>The install wizard is disabled because the platform is already installed and up-to-date.</p>';
             echo '<p>If you need a fresh install, set <code>APP_INSTALLED=0</code> or remove <code>.env</code> first.</p>';
             echo '</div>';

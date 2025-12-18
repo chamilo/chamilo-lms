@@ -33320,3 +33320,5 @@ msgstr "Seules les lettres, les chiffres et le tiret bas (_) sont autorisés dan
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Quelles conditions générales d'utilisation sont données aux utilisateurs pour utiliser cette plateforme ?"
 
+msgid "Welcome to Chamilo!"
+msgstr "Bienvenue dans Chamilo!"

@@ -31382,3 +31382,6 @@ msgstr ""
 
 msgid "ex. {examplePassword}"
 msgstr ""
+
+msgid "Welcome to Chamilo!"
+msgstr ""

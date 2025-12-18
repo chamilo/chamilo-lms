@@ -31450,3 +31450,6 @@ msgstr "What general terms and conditions are given to users to use this platfor
 
 msgid "ex. {examplePassword}"
 msgstr "ex. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Welcome to Chamilo!"

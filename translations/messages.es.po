@@ -32578,3 +32578,5 @@ msgstr "Solo se permiten letras, dígitos y guión bajo (_) en el nombre de la b
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "¿Qué términos y condiciones generales se dan a los usuarios para usar esta plataforma?"
 
+msgid "Welcome to Chamilo!"
+msgstr "Bienvenid@ en Chamilo!"

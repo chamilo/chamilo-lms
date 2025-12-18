@@ -350,8 +350,8 @@
         size="big"
       />
       <span v-if="item"
-        >{{ t("Are you sure you want to delete") }} <b>{{ item.title }}</b
-        >?</span
+      >{{ t("Are you sure you want to delete") }} <b>{{ item.title }}</b
+      >?</span
       >
     </div>
   </BaseDialogConfirmCancel>
@@ -956,32 +956,22 @@ function showSlideShowWithFirstImage() {
 async function showUsageDialog() {
   try {
     const response = await axios.get(`/api/documents/${cid}/usage`, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
+      headers: { Accept: 'application/json' },
+      params: { sid, gid },
     })
 
     usageData.value = response.data
   } catch (error) {
-    console.error("Error fetching storage usage:", error)
-
+    console.error('Error fetching documents quota usage:', error)
     usageData.value = {
-      datasets: [{
-        data: [100],
-        backgroundColor: ['#CCCCCC', '#CCCCCC', '#CCCCCC'],
-        borderWidth: 2,
-        borderColor: '#E0E0E0'
-      }],
-      labels: [
-        t('Course storage (unavailable)'), 
-        t('Teacher storage (unavailable)'), 
-        t('Total storage (unavailable)')
-      ],
+      datasets: [{ data: [100] }],
+      labels: [t('Storage usage unavailable')],
     }
   }
+
   isFileUsageDialogVisible.value = true
 }
+
 
 function showRecordAudioDialog() {
   isRecordAudioDialogVisible.value = true
@@ -1018,22 +1008,6 @@ function normalizeResourceNodeId(value) {
 
   return null
 }
-
-function getRootNodeIdForFolders() {
-  let node = resourceNode.value
-  let fallback =
-    normalizeResourceNodeId(node?.id) ??
-    normalizeResourceNodeId(route.params.node) ??
-    normalizeResourceNodeId(route.query.node)
-
-  while (node?.parent) {
-    if (node?.resourceType?.title === "courses") break
-    node = node.parent
-  }
-
-  return normalizeResourceNodeId(node?.id) ?? fallback
-}
-
 async function fetchFolders(nodeId = null, parentPath = "") {
   const startId = normalizeResourceNodeId(nodeId || route.params.node || route.query.node)
 

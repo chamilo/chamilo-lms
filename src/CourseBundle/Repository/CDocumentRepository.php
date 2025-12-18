@@ -889,4 +889,103 @@ final class CDocumentRepository extends ResourceRepository
 
         return $pathCache[$id] = $path;
     }
+
+    /**
+     * Compute document storage usage breakdown for a course.
+     *
+     * - Counts only the "document" tool (resource_type_group = document resource type id).
+     * - Deduplicates by ResourceFile ID to avoid double counting when the same file is linked multiple times.
+     * - Classifies each file into the most specific context:
+     *   group > session > course
+     *
+     * @return array{
+     *   course: int,
+     *   sessions: int,
+     *   groups: int,
+     *   used: int
+     * }
+     */
+    public function getDocumentUsageBreakdownByCourse(Course $course): array
+    {
+        $courseId = (int) $course->getId();
+        $typeGroupId = (int) $this->getResourceType()->getId();
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = <<<SQL
+SELECT
+    rf.id        AS file_id,
+    rf.size      AS file_size,
+    rl.session_id AS session_id,
+    rl.group_id   AS group_id
+FROM resource_file rf
+INNER JOIN resource_node rn ON rn.id = rf.resource_node_id
+INNER JOIN resource_link rl ON rl.resource_node_id = rn.id
+WHERE rl.deleted_at IS NULL
+  AND rl.c_id = :courseId
+  AND rl.resource_type_group = :typeGroupId
+  AND rf.size IS NOT NULL
+SQL;
+
+        $rows = $conn->fetchAllAssociative($sql, [
+            'courseId' => $courseId,
+            'typeGroupId' => $typeGroupId,
+        ]);
+
+        $fileSizes = [];   // file_id => size
+        $hasSession = [];  // file_id => bool
+        $hasGroup = [];    // file_id => bool
+
+        foreach ($rows as $row) {
+            $fileId = (int) ($row['file_id'] ?? 0);
+            if ($fileId <= 0) {
+                continue;
+            }
+
+            $size = (int) ($row['file_size'] ?? 0);
+
+            if (!isset($fileSizes[$fileId])) {
+                $fileSizes[$fileId] = $size;
+                $hasSession[$fileId] = false;
+                $hasGroup[$fileId] = false;
+            }
+
+            $sid = (int) ($row['session_id'] ?? 0);
+            $gid = (int) ($row['group_id'] ?? 0);
+
+            if ($sid > 0) {
+                $hasSession[$fileId] = true;
+            }
+            if ($gid > 0) {
+                $hasGroup[$fileId] = true;
+            }
+        }
+
+        $bytesCourse = 0;
+        $bytesSessions = 0;
+        $bytesGroups = 0;
+
+        foreach ($fileSizes as $fileId => $size) {
+            if (($hasGroup[$fileId] ?? false) === true) {
+                $bytesGroups += $size;
+                continue;
+            }
+
+            if (($hasSession[$fileId] ?? false) === true) {
+                $bytesSessions += $size;
+                continue;
+            }
+
+            $bytesCourse += $size;
+        }
+
+        $used = $bytesCourse + $bytesSessions + $bytesGroups;
+
+        return [
+            'course' => $bytesCourse,
+            'sessions' => $bytesSessions,
+            'groups' => $bytesGroups,
+            'used' => $used,
+        ];
+    }
 }

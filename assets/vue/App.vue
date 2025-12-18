@@ -20,17 +20,14 @@
       </div>
     </div>
 
-    <!-- Page content; optionally dim/disable when forbidden -->
-    <div :class="{ 'opacity-50 pointer-events-none': !!forbiddenMsg }">
-      <slot />
-      <div
-        id="legacy_content"
-        ref="legacyContainer"
-      />
-      <ConfirmDialog />
-      <AccessUrlChooser v-if="!showAccessUrlChosserLayout" />
-      <DockedChat v-if="showGlobalChat" />
-    </div>
+    <slot />
+    <div
+      id="legacy_content"
+      ref="legacyContainer"
+    />
+    <ConfirmDialog />
+    <AccessUrlChooser v-if="!showAccessUrlChosserLayout" />
+    <DockedChat v-if="showGlobalChat" />
   </component>
 
   <!-- Toasts -->

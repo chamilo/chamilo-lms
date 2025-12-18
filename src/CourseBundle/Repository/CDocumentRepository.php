@@ -378,86 +378,6 @@ final class CDocumentRepository extends ResourceRepository
     }
 
     /**
-     * Fetches all document data for the given user/group using Doctrine ORM.
-     *
-     * @param Course      $course
-     * @param string      $path
-     * @param int         $toGroupId
-     * @param int|null    $toUserId
-     * @param bool        $search
-     * @param Session|null $session
-     *
-     * @return CDocument[]
-     */
-    public function getAllDocumentDataByUserAndGroup(
-        Course $course,
-        string $path = '/',
-        int $toGroupId = 0,
-        ?int $toUserId = null,
-        bool $search = false,
-        ?Session $session = null
-    ): array {
-        $qb = $this->createQueryBuilder('d');
-        
-        $qb->innerJoin('d.resourceNode', 'rn')
-            ->innerJoin('rn.resourceLinks', 'rl')
-            ->where('rl.course = :course')
-            ->setParameter('course', $course);
-        
-        // Session filtering
-        if ($session) {
-            $qb->andWhere('(rl.session = :session OR rl.session IS NULL)')
-            ->setParameter('session', $session);
-        } else {
-            $qb->andWhere('rl.session IS NULL');
-        }
-        
-        // Path filtering - convert document.lib.php logic to Doctrine
-        if ($path !== '/') {
-            // The original uses LIKE with path patterns
-            $pathPattern = rtrim($path, '/') . '/%';
-            $qb->andWhere('rn.title LIKE :pathPattern OR rn.title = :exactPath')
-            ->setParameter('pathPattern', $pathPattern)
-            ->setParameter('exactPath', ltrim($path, '/'));
-            
-            // Exclude deeper nested paths if not searching
-            if (!$search) {
-                // Exclude paths with additional slashes beyond the current level
-                $excludePattern = rtrim($path, '/') . '/%/%';
-                $qb->andWhere('rn.title NOT LIKE :excludePattern')
-                ->setParameter('excludePattern', $excludePattern);
-            }
-        }
-        
-        // User/Group filtering
-        if ($toUserId !== null) {
-            if ($toUserId > 0) {
-                $qb->andWhere('rl.user = :userId')
-                ->setParameter('userId', $toUserId);
-            } else {
-                $qb->andWhere('rl.user IS NULL');
-            }
-        } else {
-            if ($toGroupId > 0) {
-                $qb->andWhere('rl.group = :groupId')
-                ->setParameter('groupId', $toGroupId);
-            } else {
-                $qb->andWhere('rl.group IS NULL');
-            }
-        }
-        
-        // Exclude deleted documents (like %_DELETED_% in original)
-        $qb->andWhere('rn.title NOT LIKE :deletedPattern')
-        ->setParameter('deletedPattern', '%_DELETED_%');
-        
-        // Order by creation date (equivalent to last.iid DESC)
-        $qb->orderBy('rn.createdAt', 'DESC')
-        ->addOrderBy('rn.id', 'DESC');
-        
-        return $qb->getQuery()->getResult();
-    }
-    
-    /**
      * Ensure "Learning paths" exists directly under the course resource node.
      * Links are created for course (and optional session) context.
      */
@@ -968,5 +888,104 @@ final class CDocumentRepository extends ResourceRepository
         $path = implode('/', $segments);
 
         return $pathCache[$id] = $path;
+    }
+
+    /**
+     * Compute document storage usage breakdown for a course.
+     *
+     * - Counts only the "document" tool (resource_type_group = document resource type id).
+     * - Deduplicates by ResourceFile ID to avoid double counting when the same file is linked multiple times.
+     * - Classifies each file into the most specific context:
+     *   group > session > course
+     *
+     * @return array{
+     *   course: int,
+     *   sessions: int,
+     *   groups: int,
+     *   used: int
+     * }
+     */
+    public function getDocumentUsageBreakdownByCourse(Course $course): array
+    {
+        $courseId = (int) $course->getId();
+        $typeGroupId = (int) $this->getResourceType()->getId();
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = <<<SQL
+SELECT
+    rf.id        AS file_id,
+    rf.size      AS file_size,
+    rl.session_id AS session_id,
+    rl.group_id   AS group_id
+FROM resource_file rf
+INNER JOIN resource_node rn ON rn.id = rf.resource_node_id
+INNER JOIN resource_link rl ON rl.resource_node_id = rn.id
+WHERE rl.deleted_at IS NULL
+  AND rl.c_id = :courseId
+  AND rl.resource_type_group = :typeGroupId
+  AND rf.size IS NOT NULL
+SQL;
+
+        $rows = $conn->fetchAllAssociative($sql, [
+            'courseId' => $courseId,
+            'typeGroupId' => $typeGroupId,
+        ]);
+
+        $fileSizes = [];   // file_id => size
+        $hasSession = [];  // file_id => bool
+        $hasGroup = [];    // file_id => bool
+
+        foreach ($rows as $row) {
+            $fileId = (int) ($row['file_id'] ?? 0);
+            if ($fileId <= 0) {
+                continue;
+            }
+
+            $size = (int) ($row['file_size'] ?? 0);
+
+            if (!isset($fileSizes[$fileId])) {
+                $fileSizes[$fileId] = $size;
+                $hasSession[$fileId] = false;
+                $hasGroup[$fileId] = false;
+            }
+
+            $sid = (int) ($row['session_id'] ?? 0);
+            $gid = (int) ($row['group_id'] ?? 0);
+
+            if ($sid > 0) {
+                $hasSession[$fileId] = true;
+            }
+            if ($gid > 0) {
+                $hasGroup[$fileId] = true;
+            }
+        }
+
+        $bytesCourse = 0;
+        $bytesSessions = 0;
+        $bytesGroups = 0;
+
+        foreach ($fileSizes as $fileId => $size) {
+            if (($hasGroup[$fileId] ?? false) === true) {
+                $bytesGroups += $size;
+                continue;
+            }
+
+            if (($hasSession[$fileId] ?? false) === true) {
+                $bytesSessions += $size;
+                continue;
+            }
+
+            $bytesCourse += $size;
+        }
+
+        $used = $bytesCourse + $bytesSessions + $bytesGroups;
+
+        return [
+            'course' => $bytesCourse,
+            'sessions' => $bytesSessions,
+            'groups' => $bytesGroups,
+            'used' => $used,
+        ];
     }
 }

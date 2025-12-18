@@ -4,7 +4,7 @@ Feature: Attendance tool
     Given I am a platform administrator
 
   Scenario: Create
-    Given I am on "/main/attendance/index.php?cid=6&action=attendance_add"
+    Given I am on "/main/attendance/index.php?cid=1&action=attendance_add"
     And I wait for the page to be loaded
     Then I fill in the following:
       | title |Attendance 1|
@@ -15,7 +15,7 @@ Feature: Attendance tool
     Then I should see "Add a date time"
 
   Scenario: Read
-    Given I am on "/main/attendance/index.php?cid=6"
+    Given I am on "/main/attendance/index.php?cid=1"
     And I wait for the page to be loaded
     Then I should see "Attendance 1"
     Then I follow "Attendance 1"
@@ -23,7 +23,7 @@ Feature: Attendance tool
     Then I should see "The attendance sheets allow you to specify a list of dates"
 
   Scenario: Update
-    Given I am on "/main/attendance/index.php?cid=6&action=attendance_edit&attendance_id=1"
+    Given I am on "/main/attendance/index.php?cid=1  &action=attendance_edit&attendance_id=1"
     And I wait for the page to be loaded
     Then I should see "Edit"
     And I wait for the page to be loaded
@@ -35,7 +35,7 @@ Feature: Attendance tool
     Then I should not see an error
 
   Scenario: Delete
-    Given I am on "/main/attendance/index.php?cid=6&sid=0"
+    Given I am on "/main/attendance/index.php?cid=1&sid=0"
     And I wait for the page to be loaded
     Then I should see "Attendance 1 edited"
     Then I follow "Delete"

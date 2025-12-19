@@ -143,7 +143,7 @@ final class ExportGlossaryToDocumentsAction
         $pdfFileName = 'glossary_'.$date.'_'.$suffix.'.pdf';
         $pdfFilePath = rtrim($exportPath, '/').'/'.$pdfFileName;
 
-        $mpdf = new Mpdf();
+        $mpdf = new \PDF();
 
         $html = '<h1>'.$translator->trans('Glossary').'</h1>';
         $html .= '<table border="1" cellpadding="6" cellspacing="0" width="100%">';
@@ -160,9 +160,9 @@ final class ExportGlossaryToDocumentsAction
         }
         $html .= '</table>';
 
-        $mpdf->WriteHTML($html);
+        $mpdf->pdf->WriteHTML($html);
 
-        $mpdf->Output($pdfFilePath, 'F');
+        $mpdf->pdf->Output($pdfFilePath, 'F');
 
         return $pdfFilePath;
     }

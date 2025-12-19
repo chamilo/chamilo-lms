@@ -68,9 +68,10 @@
       <div>
         <a
           href="#"
-          @click="openTermsDialog"
-          >{{ t("Read the Terms and Conditions") }}</a
+          @click.prevent="openTermsDialog"
         >
+          {{ t("Read the Terms and Conditions") }}
+        </a>
       </div>
     </BaseCard>
 
@@ -96,7 +97,7 @@
           </p>
           <p>{{ t("Date") }}: {{ legalStatus.acceptDate }}</p>
 
-          <div v-if="termsAndConditions">
+          <div v-if="termsAndConditions?.items?.length">
             <div class="p-4">
               <p class="text-sm text-gray-600">
                 {{ t("Why you want to delete your Legal Agreement") }}
@@ -155,27 +156,47 @@
   </div>
 
   <BaseDialog
-    v-if="termsAndConditions"
+    v-if="termsAndConditions?.items?.length"
     v-model:is-visible="termsAndConditionsDialogVisible"
     :style="{ width: '52rem', maxWidth: '95vw' }"
     :title="t('Read the Terms and Conditions')"
   >
     <div class="overflow-y-auto max-h-[70vh] pr-2">
       <template
-        v-for="(term, index) in termsAndConditions"
+        v-for="(term, index) in termsAndConditions.items"
         :key="`term-${index}`"
       >
         <h3 class="text-lg font-semibold mb-2">{{ term.title }}</h3>
-        <div v-html="term.content" class="mb-2"></div>
-        <p class="text-sm text-gray-500 mb-4">{{ term.date_text }}</p>
+
+        <!-- Optional subtitle if backend returns it -->
+        <p
+          v-if="term.subtitle"
+          class="text-sm text-gray-500 mb-2"
+        >
+          <em>{{ term.subtitle }}</em>
+        </p>
+
+        <div
+          v-html="term.content"
+          class="mb-4"
+        ></div>
+        <hr class="my-4" />
       </template>
+
+      <p
+        v-if="termsAndConditions.date_text"
+        class="text-sm text-gray-500 mt-4"
+      >
+        {{ termsAndConditions.date_text }}
+      </p>
     </div>
   </BaseDialog>
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from "vue"
+import { onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
+
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
@@ -196,8 +217,13 @@ const personalData = reactive({
 })
 
 const termsAndConditions = ref({
-  content: [],
+  items: [],
   date_text: "",
+  version: null,
+  language_id: null,
+  showing_accepted: false,
+
+  content: [],
 })
 
 const legalStatus = reactive({
@@ -212,6 +238,11 @@ const deleteTermExplanation = ref("")
 const deleteAccountExplanation = ref("")
 
 const openTermsDialog = () => {
+  if (!termsAndConditions.value?.items?.length) {
+    console.warn("No terms available to display in dialog.")
+    showErrorNotification("No terms and conditions available.")
+    return
+  }
   termsAndConditionsDialogVisible.value = true
 }
 
@@ -228,41 +259,74 @@ function toggleCategory(categoryName) {
 }
 
 async function fetchPersonalData() {
-  if (!securityStore.user) {
-    console.error("User ID is not available.")
+  const userId = securityStore.user?.id
+  if (!userId) {
+    console.warn("User ID is not available yet (fetchPersonalData).")
     return
   }
+
   try {
-    personalData.data = await socialService.fetchPersonalData(securityStore.user.id)
+    personalData.data = await socialService.fetchPersonalData(userId)
   } catch (error) {
-    showErrorNotification("Error fetching personal data:", error)
+    console.error("Error fetching personal data:", error)
+    showErrorNotification("Error fetching personal data.")
   }
 }
 
 async function fetchTermsAndConditions() {
-  if (!securityStore.user) {
-    console.error("User ID is not available.")
+  const userId = securityStore.user?.id
+  if (!userId) {
+    console.warn("User ID is not available yet (fetchTermsAndConditions).")
     return
   }
+
   try {
-    termsAndConditions.value = await socialService.fetchTermsAndConditions(securityStore.user.id)
+    const res = await socialService.fetchTermsAndConditions(userId)
+
+    // Normalize + keep backward compatibility
+    termsAndConditions.value = {
+      ...termsAndConditions.value,
+      ...res,
+      items: res?.items ?? [],
+      content: res?.items ?? [],
+      date_text: res?.date_text ?? "",
+    }
   } catch (error) {
-    showErrorNotification("Error fetching terms and conditions:", error)
+    console.error("Error fetching terms and conditions:", error)
+    showErrorNotification("Error fetching terms and conditions.")
+
+    termsAndConditions.value = {
+      items: [],
+      content: [],
+      date_text: "",
+      version: null,
+      language_id: null,
+      showing_accepted: false,
+    }
   }
 }
 
 async function submitPrivacyRequest(requestType) {
-  const explanation = requestType === "delete_account" ? deleteAccountExplanation.value : deleteTermExplanation.value
-  if (explanation.trim() === "") {
-    showErrorNotification("Explanation is required")
+  const userId = securityStore.user?.id
+  if (!userId) {
+    console.warn("User ID is not available yet (submitPrivacyRequest).")
+    showErrorNotification("User ID is not available.")
     return
   }
+
+  const explanation = requestType === "delete_account" ? deleteAccountExplanation.value : deleteTermExplanation.value
+  if (explanation.trim() === "") {
+    showErrorNotification("Explanation is required.")
+    return
+  }
+
   try {
     const response = await socialService.submitPrivacyRequest({
-      userId: securityStore.user.id,
+      userId,
       explanation,
       requestType,
     })
+
     if (response.success) {
       showSuccessNotification(response.message)
       deleteTermExplanation.value = ""
@@ -272,13 +336,21 @@ async function submitPrivacyRequest(requestType) {
       showErrorNotification(response.message)
     }
   } catch (error) {
-    showErrorNotification("Error submitting privacy request:", error)
+    console.error("Error submitting privacy request:", error)
+    showErrorNotification("Error submitting privacy request.")
   }
 }
 
 async function submitAcceptTerm() {
+  const userId = securityStore.user?.id
+  if (!userId) {
+    console.warn("User ID is not available yet (submitAcceptTerm).")
+    showErrorNotification("User ID is not available.")
+    return
+  }
+
   try {
-    const response = await socialService.submitAcceptTerm(securityStore.user.id)
+    const response = await socialService.submitAcceptTerm(userId)
 
     if (response.success) {
       showSuccessNotification(response.message)
@@ -287,20 +359,24 @@ async function submitAcceptTerm() {
       showErrorNotification(response.message)
     }
   } catch (error) {
-    showErrorNotification("Error accepting the term:", error)
+    console.error("Error accepting the term:", error)
+    showErrorNotification("Error accepting the term.")
   }
 }
 
 async function fetchLegalStatus() {
-  if (!securityStore.user) {
-    console.error("User ID is not available.")
+  const userId = securityStore.user?.id
+  if (!userId) {
+    console.warn("User ID is not available yet (fetchLegalStatus).")
     return
   }
+
   try {
-    const legalStatusData = await socialService.fetchLegalStatus(securityStore.user.id)
+    const legalStatusData = await socialService.fetchLegalStatus(userId)
     Object.assign(legalStatus, legalStatusData)
   } catch (error) {
-    showErrorNotification("Error fetching legal status:", error)
+    console.error("Error fetching legal status:", error)
+    showErrorNotification("Error fetching legal status.")
   }
 }
 
@@ -308,11 +384,25 @@ async function updateUserData() {
   try {
     await Promise.all([fetchPersonalData(), fetchTermsAndConditions(), fetchLegalStatus()])
   } catch (error) {
-    showErrorNotification("Error updating user data:", error)
+    console.error("Error updating user data:", error)
+    showErrorNotification("Error updating user data.")
   }
 }
 
+watch(
+  () => securityStore.user?.id,
+  async (id) => {
+    if (!id) return
+    await updateUserData()
+  },
+  { immediate: true },
+)
+
 onMounted(async () => {
+  if (!securityStore.user?.id) {
+    console.warn("User is not available onMounted. Waiting for watcher to trigger.")
+    return
+  }
   await updateUserData()
 })
 </script>

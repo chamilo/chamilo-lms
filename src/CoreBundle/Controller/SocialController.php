@@ -50,6 +50,25 @@ use UserManager;
 #[Route('/social-network')]
 class SocialController extends AbstractController
 {
+    private const TERMS_SECTIONS = [
+        0 => ['title' => 'Terms and Conditions', 'subtitle' => null],
+        1 => ['title' => 'Personal data collection', 'subtitle' => 'Why do we collect this data?'],
+        2 => ['title' => 'Personal data recording', 'subtitle' => 'Where do we record the data?'],
+        3 => ['title' => 'Personal data organization', 'subtitle' => 'How is the data structured?'],
+        4 => ['title' => 'Personal data structure', 'subtitle' => 'How is the data structured in this software?'],
+        5 => ['title' => 'Personal data conservation', 'subtitle' => 'How long do we save the data?'],
+        6 => ['title' => 'Personal data adaptation or modification', 'subtitle' => 'What changes can we make to the data?'],
+        7 => ['title' => 'Personal data extraction', 'subtitle' => 'What do we extract data for and which data is it?'],
+        8 => ['title' => 'Personal data queries', 'subtitle' => 'Who can consult the personal data? For what purpose?'],
+        9 => ['title' => 'Personal data use', 'subtitle' => 'How and for what can we use the personal data?'],
+        10 => ['title' => 'Personal data communication and sharing', 'subtitle' => 'With whom can we share them?'],
+        11 => ['title' => 'Personal data interconnection', 'subtitle' => 'Do we have another system with which Chamilo interacts?'],
+        12 => ['title' => 'Personal data limitation', 'subtitle' => 'What are the limits that we will always respect?'],
+        13 => ['title' => 'Personal data deletion', 'subtitle' => 'After how long do we erase the data?'],
+        14 => ['title' => 'Personal data destruction', 'subtitle' => 'What happens if the data is destroyed?'],
+        15 => ['title' => 'Personal data profiling', 'subtitle' => 'For what purpose do we process personal data?'],
+    ];
+
     public function __construct(
         private readonly UserHelper $userHelper,
     ) {}
@@ -80,6 +99,7 @@ class SocialController extends AbstractController
     #[Route('/terms-and-conditions/{userId}', name: 'chamilo_core_social_terms')]
     public function getLegalTerms(
         int $userId,
+        Request $request,
         SettingsManager $settingsManager,
         TranslatorInterface $translator,
         LegalRepository $legalTermsRepo,
@@ -88,51 +108,68 @@ class SocialController extends AbstractController
     ): JsonResponse {
         $user = $userRepo->find($userId);
         if (!$user) {
-            return $this->json(['error' => 'User not found']);
+            return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
 
         $isoCode = $user->getLocale();
-        $extraFieldValue = new ExtraFieldValue('user');
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
-        if ($value && !empty($value['value'])) {
-            [$legalVersionId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
-            $term = $legalTermsRepo->findOneByVersionAndLanguage((int) $legalVersionId, (int) $legalLanguageId);
-        } else {
-            $term = $this->getLastConditionByLanguage($languageRepo, $isoCode, $legalTermsRepo, $settingsManager);
-        }
+        $showAccepted = '1' === (string) $request->query->get('accepted', '0');
 
-        if (!$term) {
-            return $this->json(['error' => 'Terms not found']);
-        }
+        $languageId = 0;
+        $version = 0;
 
-        $termExtraFields = new ExtraFieldValue('terms_and_condition');
-        $values = $termExtraFields->getAllValuesByItem($term->getId());
+        if ($showAccepted) {
+            $extraFieldValue = new ExtraFieldValue('user');
+            $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
 
-        $termsContent = [];
-        foreach ($values as $value) {
             if (!empty($value['value'])) {
-                $termsContent[] = [
-                    'title' => $translator->trans($value['display_text'], [], 'messages', $isoCode),
-                    'content' => $value['value'],
-                ];
+                [$acceptedVersion, $acceptedLanguageId] = explode(':', $value['value']);
+                $languageId = (int) $acceptedLanguageId;
+                $version = (int) $acceptedVersion;
+            } else {
+                return $this->json(['error' => 'No accepted terms found'], Response::HTTP_NOT_FOUND);
             }
+        } else {
+            $resolved = $this->resolveLatestTermsVersion($isoCode, $languageRepo, $legalTermsRepo, $settingsManager);
+            if (!$resolved) {
+                return $this->json(['error' => 'Terms not found'], Response::HTTP_NOT_FOUND);
+            }
+            $languageId = (int) $resolved['languageId'];
+            $version = (int) $resolved['version'];
         }
 
-        if (empty($termsContent)) {
-            $termsContent[] = [
-                'title' => $translator->trans('Terms and Conditions', [], 'messages', $isoCode),
-                'content' => $term->getContent(),
+        $rows = $legalTermsRepo->findByLanguageAndVersion($languageId, $version);
+        if (empty($rows)) {
+            return $this->json(['error' => 'Terms not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $terms = [];
+        foreach ($rows as $row) {
+            $type = $row->getType();
+            $section = self::TERMS_SECTIONS[$type] ?? self::TERMS_SECTIONS[0];
+
+            $content = $row->getContent() ?? '';
+            if ('' === trim($content)) {
+                continue;
+            }
+
+            $terms[] = [
+                'title' => $translator->trans($section['title'], [], 'messages', $isoCode),
+                'subtitle' => $section['subtitle']
+                    ? $translator->trans($section['subtitle'], [], 'messages', $isoCode)
+                    : null,
+                'content' => $content,
             ];
         }
 
-        $formattedDate = new DateTime('@'.$term->getDate());
+        $date = new DateTime('@'.$rows[0]->getDate());
 
-        $dataForVue = [
-            'terms' => $termsContent,
-            'date_text' => $translator->trans('Publication date', [], 'messages', $isoCode).': '.$formattedDate->format('Y-m-d H:i:s'),
-        ];
-
-        return $this->json($dataForVue);
+        return $this->json([
+            'terms' => $terms,
+            'date_text' => $translator->trans('Publication date', [], 'messages', $isoCode).': '.$date->format('Y-m-d H:i:s'),
+            'version' => $version,
+            'language_id' => $languageId,
+            'showing_accepted' => $showAccepted,
+        ]);
     }
 
     #[Route('/legal-status/{userId}', name: 'chamilo_core_social_legal_status')]
@@ -141,9 +178,10 @@ class SocialController extends AbstractController
         SettingsManager $settingsManager,
         TranslatorInterface $translator,
         UserRepository $userRepo,
+        LanguageRepository $languageRepo,
+        LegalRepository $legalTermsRepo
     ): JsonResponse {
         $allowTermsConditions = 'true' === $settingsManager->getSetting('registration.allow_terms_conditions');
-
         if (!$allowTermsConditions) {
             return $this->json([
                 'message' => $translator->trans('No terms and conditions available', [], 'messages'),
@@ -152,8 +190,12 @@ class SocialController extends AbstractController
 
         $user = $userRepo->find($userId);
         if (!$user) {
-            return $this->json(['error' => 'User not found']);
+            return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
+
+        $isoCode = $user->getLocale();
+        $latestLanguageId = $this->resolveLegalLanguageId($languageRepo, $isoCode, $settingsManager);
+        $latestVersion = 0 !== $latestLanguageId ? $legalTermsRepo->getLastVersionByLanguage($latestLanguageId) : null;
 
         $extraFieldValue = new ExtraFieldValue('user');
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
@@ -165,15 +207,26 @@ class SocialController extends AbstractController
             ]);
         }
 
-        [$legalId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
-        $dateTime = new DateTime("@$legalTime");
-        $response = [
+        [$acceptedVersion, $acceptedLanguageId, $acceptedTime] = explode(':', $value['value']);
+        $dateTime = new DateTime('@'.(int) $acceptedTime);
+
+        $isLatestAccepted = null !== $latestVersion
+            && (int) $acceptedLanguageId === (int) $latestLanguageId
+            && (int) $acceptedVersion === (int) $latestVersion;
+
+        if (!$isLatestAccepted) {
+            return $this->json([
+                'isAccepted' => false,
+                'acceptDate' => $dateTime->format('Y-m-d H:i:s'),
+                'message' => $translator->trans('Please accept the latest version of the terms and conditions.', [], 'messages'),
+            ]);
+        }
+
+        return $this->json([
             'isAccepted' => true,
             'acceptDate' => $dateTime->format('Y-m-d H:i:s'),
             'message' => '',
-        ];
-
-        return $this->json($response);
+        ]);
     }
 
     #[Route('/send-legal-term', name: 'chamilo_core_social_send_legal_term')]
@@ -188,54 +241,51 @@ class SocialController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $userId = $data['userId'] ?? null;
 
-        /** @var User $user */
         $user = $userRepo->find($userId);
         if (!$user) {
-            return $this->json(['error' => 'User not found']);
+            return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
 
         $isoCode = $user->getLocale();
-
-        /** @var Legal $term */
-        $term = $this->getLastConditionByLanguage($languageRepo, $isoCode, $legalTermsRepo, $settingsManager);
-
-        if (!$term) {
-            return $this->json(['error' => 'Terms not found']);
+        $languageId = $this->resolveLegalLanguageId($languageRepo, $isoCode, $settingsManager);
+        if (0 === $languageId) {
+            return $this->json(['error' => 'Language not found'], Response::HTTP_BAD_REQUEST);
         }
 
-        $legalAcceptType = $term->getVersion().':'.$term->getLanguageId().':'.time();
-        UserManager::update_extra_field_value(
-            $userId,
-            'legal_accept',
-            $legalAcceptType
-        );
+        $version = $legalTermsRepo->getLastVersionByLanguage($languageId);
+        if (null === $version) {
+            return $this->json(['error' => 'Terms not found'], Response::HTTP_NOT_FOUND);
+        }
 
-        $bossList = UserManager::getStudentBossList($userId);
+        $legalAcceptType = $version.':'.$languageId.':'.time();
+        UserManager::update_extra_field_value((int) $userId, 'legal_accept', $legalAcceptType);
+
+        $bossList = UserManager::getStudentBossList((int) $userId);
         if (!empty($bossList)) {
             $bossList = array_column($bossList, 'boss_id');
             foreach ($bossList as $bossId) {
                 $subjectEmail = \sprintf(
-                    $translator->trans('User %s signed the agreement.'),
+                    $translator->trans('User %s signed the agreement.', [], 'messages'),
                     $user->getFullName()
                 );
                 $contentEmail = \sprintf(
-                    $translator->trans('User %s signed the agreement the %s.'),
+                    $translator->trans('User %s signed the agreement the %s.', [], 'messages'),
                     $user->getFullName(),
                     api_get_local_time()
                 );
 
                 MessageManager::send_message_simple(
-                    $bossId,
+                    (int) $bossId,
                     $subjectEmail,
                     $contentEmail,
-                    $userId
+                    (int) $userId
                 );
             }
         }
 
         return $this->json([
             'success' => true,
-            'message' => $translator->trans('Terms accepted successfully.'),
+            'message' => $translator->trans('Terms accepted successfully.', [], 'messages'),
         ]);
     }
 
@@ -1193,5 +1243,68 @@ class SocialController extends AbstractController
         }
 
         return $term;
+    }
+
+    private function resolveLegalLanguageId(
+        LanguageRepository $languageRepo,
+        string $isoCode,
+        SettingsManager $settingsManager
+    ): int {
+        $candidates = [
+            $isoCode,
+            (string) $settingsManager->getSetting('language.platform_language'),
+            'en_US',
+        ];
+
+        foreach ($candidates as $code) {
+            if ('' === trim((string) $code)) {
+                continue;
+            }
+
+            $language = $languageRepo->findByIsoCode($code);
+            if ($language) {
+                return (int) $language->getId();
+            }
+        }
+
+        return 0;
+    }
+
+    private function resolveLatestTermsVersion(
+        string $isoCode,
+        LanguageRepository $languageRepo,
+        LegalRepository $legalRepo,
+        SettingsManager $settingsManager
+    ): ?array {
+        $candidates = [];
+
+        $lang = $languageRepo->findByIsoCode($isoCode);
+        if ($lang) {
+            $candidates[] = (int) $lang->getId();
+        }
+
+        $platformIso = (string) $settingsManager->getSetting('language.platform_language');
+        if ($platformIso !== '') {
+            $platformLang = $languageRepo->findByIsoCode($platformIso);
+            if ($platformLang) {
+                $candidates[] = (int) $platformLang->getId();
+            }
+        }
+
+        $en = $languageRepo->findByIsoCode('en_US');
+        if ($en) {
+            $candidates[] = (int) $en->getId();
+        }
+
+        $candidates = array_values(array_unique(array_filter($candidates)));
+
+        foreach ($candidates as $languageId) {
+            $version = $legalRepo->findLatestVersionByLanguage($languageId);
+            if ($version > 0) {
+                return ['languageId' => $languageId, 'version' => $version];
+            }
+        }
+
+        return null;
     }
 }

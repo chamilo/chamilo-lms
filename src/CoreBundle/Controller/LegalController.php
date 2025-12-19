@@ -40,32 +40,95 @@ class LegalController
             return new JsonResponse(['message' => 'Missing sections payload'], Response::HTTP_BAD_REQUEST);
         }
 
-        $lastVersion = $legalRepository->findLatestVersionByLanguage($languageId);
-        $newVersion = $lastVersion + 1;
-        $timestamp = time();
+        // Normalize & hash incoming payload (idempotency).
+        $normalize = static function ($v): string {
+            $s = is_string($v) ? $v : '';
+            $s = str_replace(["\r\n", "\r"], "\n", $s);
+            $s = trim($s);
 
+            return $s;
+        };
+
+        $incoming = [];
         for ($type = 0; $type <= 15; $type++) {
             $key = (string) $type;
-            $content = $sections[$key] ?? ($sections[$type] ?? '');
-            $content = is_string($content) ? $content : '';
-
-            $legal = new Legal();
-            $legal->setLanguageId($languageId);
-            $legal->setVersion($newVersion);
-            $legal->setType($type);
-            $legal->setDate($timestamp);
-            $legal->setChanges($changes);
-            $legal->setContent($content === '' ? null : $content);
-
-            $entityManager->persist($legal);
+            $incoming[$type] = $normalize($sections[$key] ?? ($sections[$type] ?? ''));
         }
+        $incomingHash = hash('sha256', json_encode($incoming, JSON_UNESCAPED_UNICODE));
 
-        $entityManager->flush();
+        $conn = $entityManager->getConnection();
+        $conn->beginTransaction();
 
-        return new JsonResponse([
-            'message' => 'Terms saved successfully',
-            'version' => $newVersion,
-        ], Response::HTTP_OK);
+        try {
+            // Generic concurrency control: lock the language row.
+            // This prevents two concurrent saves for the same language.
+            $conn->executeStatement(
+                'SELECT id FROM language WHERE id = :id FOR UPDATE',
+                ['id' => $languageId]
+            );
+
+            // Get latest version (inside the lock).
+            $lastVersion = (int) $legalRepository->findLatestVersionByLanguage($languageId);
+
+            if ($lastVersion > 0) {
+                // Load last saved sections to compare.
+                $rows = $conn->fetchAllAssociative(
+                    'SELECT type, content
+                 FROM legal
+                 WHERE language_id = :lang AND version = :ver
+                 ORDER BY type ASC',
+                    ['lang' => $languageId, 'ver' => $lastVersion]
+                );
+
+                $existing = array_fill(0, 16, '');
+                foreach ($rows as $r) {
+                    $t = (int) ($r['type'] ?? -1);
+                    if ($t >= 0 && $t <= 15) {
+                        $existing[$t] = $normalize($r['content'] ?? '');
+                    }
+                }
+                $existingHash = hash('sha256', json_encode($existing, JSON_UNESCAPED_UNICODE));
+
+                // No changes => do NOT create a new version.
+                if ($existingHash === $incomingHash) {
+                    $conn->commit();
+
+                    return new JsonResponse([
+                        'message' => 'No changes detected',
+                        'version' => $lastVersion,
+                    ], Response::HTTP_OK);
+                }
+            }
+
+            // Create new version only when changed.
+            $newVersion = $lastVersion + 1;
+            $timestamp = time();
+
+            for ($type = 0; $type <= 15; $type++) {
+                $content = $incoming[$type];
+
+                $legal = new Legal();
+                $legal->setLanguageId($languageId);
+                $legal->setVersion($newVersion);
+                $legal->setType($type);
+                $legal->setDate($timestamp);
+                $legal->setChanges($changes);
+                $legal->setContent($content === '' ? null : $content);
+
+                $entityManager->persist($legal);
+            }
+
+            $entityManager->flush();
+            $conn->commit();
+
+            return new JsonResponse([
+                'message' => 'Terms saved successfully',
+                'version' => $newVersion,
+            ], Response::HTTP_OK);
+        } catch (\Throwable $e) {
+            $conn->rollBack();
+            throw $e;
+        }
     }
 
     #[Route('/extra-fields', name: 'chamilo_core_get_extra_fields')]

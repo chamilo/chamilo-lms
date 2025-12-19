@@ -261,7 +261,7 @@
                   :label="t('Save')"
                   type="success"
                   isSubmit
-                  :disabled="isLoading || !selectedLanguage"
+                  :disabled="isLoading || isSaving || !selectedLanguage"
                 />
               </div>
             </div>
@@ -306,6 +306,7 @@ const previewContent = ref("")
 
 const activeIndex = ref(0)
 const mountedEditorIndexes = ref(new Set([0]))
+const isSaving = ref(false)
 
 const buildEmptySections = () => {
   const sections = {}
@@ -446,6 +447,9 @@ const loadTermsByLanguage = async () => {
 }
 const saveTerms = async () => {
   if (!selectedLanguage.value) return
+  if (isSaving.value) return
+
+  isSaving.value = true
 
   const payload = {
     lang: selectedLanguage.value,
@@ -458,12 +462,15 @@ const saveTerms = async () => {
     if (response.ok) {
       await router.push({ name: "TermsConditionsList" })
     } else {
-      console.error("Error saving legal terms.")
+      console.error("Failed to save legal terms.")
     }
   } catch (error) {
-    console.error("Error when saving legal terms:", error)
+    console.error("Error while saving legal terms:", error)
+  } finally {
+    isSaving.value = false
   }
 }
+
 const previewTerms = () => {
   const parts = []
   for (const section of sectionsDefinition.value) {

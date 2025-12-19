@@ -493,73 +493,97 @@ class ChamiloHelper
             return;
         }
 
-        // Check if T&C should be shown during registration
-        $loadMode = api_get_setting('workflows.load_term_conditions_section');
-
-        if ('course' === $loadMode) {
-            // skip adding terms on registration page
-            return;
-        }
-
         $languageIso = api_get_language_isocode();
         $languageId = api_get_language_id($languageIso);
-
         $termPreview = LegalManager::get_last_condition($languageId);
 
         if (!$termPreview) {
-            // Do NOT load fallback terms in another language
-            return;
+            $defaultIso = (string) api_get_setting('language.platform_language');
+            if ($defaultIso === '' || $defaultIso === 'false') {
+                $defaultIso = (string) api_get_setting('platformLanguage');
+            }
+
+            $defaultLangId = api_get_language_id($defaultIso);
+            if ($defaultLangId > 0 && $defaultLangId !== $languageId) {
+                $languageId = $defaultLangId;
+                $termPreview = LegalManager::get_last_condition($languageId);
+            }
         }
 
         if (!$termPreview) {
+            return; // Still nothing -> show nothing
+        }
+
+        $version = (int) ($termPreview['version'] ?? 0);
+        $langId  = (int) ($termPreview['language_id'] ?? $languageId);
+
+        // Track acceptance context
+        $form->addElement('hidden', 'legal_accept_type', $version.':'.$langId);
+        $form->addElement('hidden', 'legal_info', ((int) ($termPreview['id'] ?? 0)).':'.$langId);
+
+        // Fetch ALL legal records for the same version + language (includes GDPR sections now)
+        $table = Database::get_main_table(TABLE_MAIN_LEGAL);
+
+        $rows = Database::select(
+            '*',
+            $table,
+            [
+                'where' => [
+                    'language_id = ? AND version = ?' => [$langId, $version],
+                ],
+                'order' => 'id ASC',
+            ]
+        );
+
+        if (!is_array($rows) || empty($rows)) {
             return;
         }
 
-        // hidden inputs to track version/language
-        $form->addElement('hidden', 'legal_accept_type', $termPreview['version'].':'.$termPreview['language_id']);
-        $form->addElement('hidden', 'legal_info', $termPreview['id'].':'.$termPreview['language_id']);
+        $fullHtml = '';
 
-        if (1 == $termPreview['type']) {
-            // simple checkbox linking out to full T&C
-            $form->addElement(
-                'checkbox',
-                'legal_accept',
-                null,
-                'I have read and agree to the <a href="tc.php" target="_blank">Terms and Conditions</a>'
-            );
-            $form->addRule('legal_accept', 'This field is required', 'required');
-        } else {
-            // full inline T&C panel with scroll
-            $preview = LegalManager::show_last_condition($termPreview);
-            $form->addHtml(
-                '<div style="
-                background-color: #f3f4f6;
-                border: 1px solid #d1d5db;
-                padding: 1rem;
-                max-height: 16rem;
-                overflow-y: auto;
-                border-radius: 0.375rem;
-                margin-bottom: 1rem;
-            ">'
-                .$preview.
-                '</div>'
-            );
-
-            // any extra labels
-            $extra = new ExtraFieldValue('terms_and_condition');
-            $values = $extra->getAllValuesByItem($termPreview['id']);
-            foreach ($values as $value) {
-                if (!empty($value['field_value'])) {
-                    $form->addLabel($value['display_text'], $value['field_value']);
-                }
+        foreach ($rows as $row) {
+            $content = trim((string) ($row['content'] ?? ''));
+            if ($content === '') {
+                continue;
             }
 
-            // acceptance checkbox
+            // Optional title support if available in the table/schema
+            $title = trim((string) ($row['title'] ?? ($row['name'] ?? '')));
+            if ($title !== '') {
+                $fullHtml .= '<div class="mt-4">';
+                $fullHtml .= '<h4 class="text-base font-semibold text-gray-90">'.htmlspecialchars($title, ENT_QUOTES | ENT_HTML5).'</h4>';
+                $fullHtml .= '<div class="mt-1 text-sm text-gray-90">'.$content.'</div>';
+                $fullHtml .= '</div>';
+            } else {
+                $fullHtml .= '<div class="mt-4 text-sm text-gray-90">'.$content.'</div>';
+            }
+        }
+
+        if (trim(strip_tags($fullHtml)) === '') {
+            // Nothing meaningful to show
+            return;
+        }
+
+        // Render the whole block at the bottom
+        $form->addHtml('
+        <div class="mt-6">
+            <div class="text-lg font-semibold text-gray-90 mb-2">'.get_lang('Terms and Conditions').'</div>
+            <div class="bg-gray-15 border border-gray-25 rounded-xl p-4 max-h-72 overflow-y-auto shadow-sm">
+                '.$fullHtml.'
+            </div>
+        </div>
+    ');
+
+        // Acceptance checkbox (or hidden accept if configured)
+        $hideAccept = 'true' === api_get_setting('registration.hide_legal_accept_checkbox');
+        if ($hideAccept) {
+            $form->addElement('hidden', 'legal_accept', '1');
+        } else {
             $form->addElement(
                 'checkbox',
                 'legal_accept',
                 null,
-                'I have read and agree to the Terms and Conditions'
+                'I have read and agree to the <a href="tc.php" target="_blank" rel="noopener noreferrer">Terms and Conditions</a>'
             );
             $form->addRule('legal_accept', 'This field is required', 'required');
         }

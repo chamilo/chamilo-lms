@@ -7,6 +7,7 @@ Feature: Install portal
     Then I press "Next"
     Then I should see "Step 2 - Requirements"
     Then I press "New installation"
+    Then I wait for the page to be loaded
     Then I should see "Step 3 - License"
     Then I check "accept_licence"
     Then I press "license-next"

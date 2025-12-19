@@ -35,7 +35,7 @@ export function useNotification() {
     toast.add({
       severity: severity,
       detail: message,
-      life: 3500,
+      life: "error" === severity ? undefined : 3500,
     })
   }
 

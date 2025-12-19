@@ -1350,7 +1350,7 @@ class CourseController extends ToolBaseController
         // Load all tools for this course + (optional) session ordered by current position
         $qb = $toolRepo->createQueryBuilder('t')
             ->andWhere('t.course = :course')
-            ->setParameter('course', $course)
+            ->setParameter('course', $course->getId())
             ->orderBy('t.position', 'ASC')
             ->addOrderBy('t.iid', 'ASC')
         ;

@@ -154,11 +154,7 @@ export function useSidebarMenu() {
       }
     }
 
-    items.push(
-      createMenuItem("my_agenda", "mdi-calendar-text", "Events", {
-        url: "/resources/ccalendarevent",
-      }),
-    )
+    items.push(createMenuItem("my_agenda", "mdi-calendar-text", "Events", "CCalendarEventList"))
 
     // Global search (Xapian)
     if (allowSearchFeature.value) {

@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "உண்மையாகவே"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "பூரணசமனின் மாதிரி: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "சூத்திர நட样: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "மாறியின் வரம்புகள்"
@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:பதிப்புரிமை,, no:பதிப்புரிமை இல்லை"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:பாக்கெட்,, application/msword:MsWord,, application/octet-stream:அக்டெட் ஸ்ட்ரீம்,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:பாக்கெடு,, application/msword:MsWord,, application/octet-stream:அக்டெட் ஸ்ட்ரீம்,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:பயிற்சி,,      simulation:மெய்யப்படுத்தல்,,      questionnaire:கேள்வித்தாள்,,      diagram:சித்திரம்,,      figure:உருவம்,,      graph:படம்,,      index:அட்டவணை,,      slide:இன்னுசைடு,,      table:அட்டவணை,,      narrative text:கதை உரை,,      exam:தேர்வு,,      experiment:பரிசோதனை,,      problem statement:பிரச்சினை அறிக்கை,,      self assessment:சுய மதிப்பீடு,,      lecture:உபதேசம்"
@@ -4790,7 +4790,7 @@ msgid "Chamilo LIVE is a videoconferencing tool that offers: Slides sharing, whi
 msgstr "Chamilo LIVE ஒரு வீடியோ கான்பரன்ஸிங் கருவி: ஸ்லைடுகள் பகிர்வு, ஸ்லைடுகளின் மேல் வரைவு செய்யும் வெள்ளை பலகை, ஆடியோ/வீடியோ டூப்ளக்ஸ் மற்றும் சாட் ஆகியவற்றை வழங்குகிறது. இது Flash® பிளேயர் 9+ தேவைப்படுகிறது மற்றும் 2 மோடுகளை வழங்குகிறது: ஒன்றுக்கு பல மற்றும் பலுக்கு பல."
 
 msgid "Chamilo RAPID"
-msgstr "Chamilo RAPID"
+msgstr "சாமிலோ விரைவு"
 
 msgid "Chamilo RAPID is a Rapid Learning tool available in Chamilo Pro and Chamilo Medical. It allows you to convert Powerpoint or LibreOffice presentations to SCORM-compliant courses. After the conversion, you end up in the Courses authoring tool and are able to add audio comments on slides and pages, tests and activities between the slides or pages and interaction activities like forum discussions or assignment upload. Every step becomes an independent and removable learning object. And the whole course generates accurate SCORM reporting for further coaching."
 msgstr "Chamilo RAPID Chamilo Pro மற்றும் Chamilo Medical இல் கிடைக்கும் விரைவான கற்றல் கருவி. இது Powerpoint அல்லது LibreOffice வழங்கல்களை SCORM இணக்கமான பாடங்களாக மாற்ற அனுமதிக்கிறது. மாற்றத்திற்குப் பின், நீங்கள் பாடங்கள் உருவாக்கும் கருவியில் இருக்கிறீர்கள் மற்றும் ஸ்லைடுகள் மற்றும் பக்கங்களில் ஆடியோ கருத்துக்களை சேர்க்க, ஸ்லைடுகள் அல்லது பக்கங்களுக்கு இடையே சோதனைகள் மற்றும் செயல்பாடுகள், மன்ற விவாதங்கள் அல்லது பணி அணுகல் போன்ற தொடர்பு செயல்பாடுகளை சேர்க்க முடியும். ஒவ்வொரு படியும் சுதந்திரமான மற்றும் அகற்றக்கூடிய கற்றல் பொருளாகிறது. முழு பாடமும் மேலும் பயிற்சிக்கான துல்லியமான SCORM அறிக்கையை உருவாக்குகிறது."
@@ -4808,7 +4808,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "AWStats உங்கள் தளத்தின் புள்ளிவிவரங்களை பார்க்க அனுமதிக்கிறது: பார்வையாளர்கள், பக்க பார்வைகள், குறிப்புகள்..."
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "சாமிலோ நூலகம்"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "சாமிலோ நூலகம் பல அளவுகோல்களைக் கொண்ட இன்டெக்சிங் மற்றும் தேடல் வழங்கும் தேடுபொறியாகும். இது சாமிலோ மருத்துவ அம்சங்களின் ஒரு பகுதியாகும்."
@@ -15053,7 +15053,7 @@ msgid "Install Chamilo"
 msgstr "Chamilo நிறுவவும்"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "சாமிலோ URL"
 
 msgid "You have no session in your sessions history"
 msgstr "உங்கள் அமர்வுகள் வரலாற்றில் எந்த அமர்வும் இல்லை"
@@ -27374,7 +27374,7 @@ msgid "Obtained the following skills"
 msgstr "பின்வரும் திறன்களைப் பெற்றார்"
 
 msgid "Chamilo LMS"
-msgstr "Chamilo LMS"
+msgstr "சாமிலோ LMS"
 
 msgid "No course sessions for this user"
 msgstr "இந்த பயனருக்கு படிப்பு அமர்வுகள் இல்லை"
@@ -31431,4 +31431,10 @@ msgstr "வளங்களை ஏற்றும் பிழை."
 
 msgid "Clear search"
 msgstr "தேடலை அழி"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "தரவுத்தள பெயரில் எழுத்துகள், எண்கள் மற்றும் அண்டர்ஸ்கோர் (_) மட்டுமே அனுமதிக்கப்படுகின்றன. செல்லாத எழுத்துகள் தானாக அகற்றப்படும்."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "இந்த தளத்தைப் பயன்படுத்துவதற்கு பயனர்களுக்கு வழங்கப்படும் பொது நிபந்தனைகள் என்ன?"
 

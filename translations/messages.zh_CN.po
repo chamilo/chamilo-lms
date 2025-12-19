@@ -31434,3 +31434,9 @@ msgstr "加载资源出错。"
 msgid "Clear search"
 msgstr "清除搜索"
 
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "数据库名称仅允许使用字母、数字和下划线 (_)。无效字符将被自动移除。"
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "使用此平台时，用户需遵守哪些一般条款和条件？"
+

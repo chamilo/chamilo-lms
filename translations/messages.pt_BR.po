@@ -3317,7 +3317,7 @@ msgid "(recommended)"
 msgstr "(recomendado)"
 
 msgid "SCORM DB"
-msgstr "Scorm DB"
+msgstr "SCORM DB"
 
 msgid "Administrator last name"
 msgstr "Administrador sobrenome"
@@ -9536,7 +9536,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "O upload do arquivo falhou: esta extensão de arquivo ou tipo de arquivo é proibida"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "URL do OpenID"
 
 msgid "The file is too big to upload."
 msgstr "O arquivo é muito grande para carregar."
@@ -12806,7 +12806,7 @@ msgid "Close feedback"
 msgstr "Fechar o feedback"
 
 msgid "Add feedback"
-msgstr "Add feedback"
+msgstr "Adicionar feedback"
 
 msgid "The feedback message has been stored"
 msgstr "A mensagem de feedback foi armazenado"
@@ -14450,7 +14450,7 @@ msgid "Corporate"
 msgstr "Corporativo"
 
 msgid "Cosmic campus"
-msgstr "Cosmic campus"
+msgstr "Campus Cósmico"
 
 msgid "Delicious Bordeaux"
 msgstr "Delicious Bordeaux"
@@ -15062,7 +15062,7 @@ msgid "Install Chamilo"
 msgstr "Instalar Chamilo"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "URL do Chamilo"
 
 msgid "You have no session in your sessions history"
 msgstr "Você não tem sessão na sua história sessões"
@@ -15563,7 +15563,7 @@ msgid "Import exercises Qti2"
 msgstr "Importar exrecícios Qti2"
 
 msgid "ISO code"
-msgstr "ISO code"
+msgstr "Código ISO"
 
 msgid "The sub-language of this language has been added"
 msgstr "Um sub-idioma desta língua foi adicionado"
@@ -15782,10 +15782,10 @@ msgid "Open blank"
 msgstr "Abrir em outra página"
 
 msgid "Open parent"
-msgstr "Open parent"
+msgstr "Abrir pai"
 
 msgid "Open top"
-msgstr "Open top"
+msgstr "Abrir topo"
 
 msgid "Thematic section has been created successfully"
 msgstr "Seção de conteúdo foi criada completamente com sucesso"
@@ -17753,7 +17753,7 @@ msgid "A course category with the same name already exists."
 msgstr "Uma categoria de curso já existe com este mesmo nome."
 
 msgid "OpenID redirect"
-msgstr "OpenID redirect"
+msgstr "Redirecionamento OpenID"
 
 msgid "Blogs"
 msgstr "Blogs"
@@ -17864,7 +17864,7 @@ msgid "Insert qualification corresponding to max score"
 msgstr "Inserir qualificação correspondente a pontuação máxima"
 
 msgid "Thread moved"
-msgstr "Thread moved"
+msgstr "Tópico movido"
 
 msgid "Migrate forum"
 msgstr "Migrate fórum"
@@ -19093,7 +19093,7 @@ msgid "Send record"
 msgstr "Enviar record"
 
 msgid "Download record"
-msgstr "Download record"
+msgstr "Baixar registro"
 
 msgid "Oral expression"
 msgstr "expressão oral"
@@ -19375,7 +19375,7 @@ msgid "Exercise average"
 msgstr "Promédio do exercício"
 
 msgid "Webcam Clip"
-msgstr "Webcam Clip"
+msgstr "Clipe da Webcam"
 
 msgid "Snapshot"
 msgstr "Imagem instantânea"
@@ -20299,7 +20299,7 @@ msgid "Start video call"
 msgstr "Iniciar chamada de vídeo"
 
 msgid "Video URL"
-msgstr "Video URL"
+msgstr "URL do vídeo"
 
 msgid "Insert a valid URL"
 msgstr "Insira um URL válido"
@@ -22615,7 +22615,7 @@ msgid "Total learnpath time"
 msgstr "Tempo total de aprendizado"
 
 msgid "Add status"
-msgstr "Add status"
+msgstr "Adicionar status"
 
 msgid "Add project"
 msgstr "Adicionar projeto"
@@ -25660,7 +25660,7 @@ msgid "Video player renderers"
 msgstr "Renderizadores do player de vídeo"
 
 msgid "Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
-msgstr "Ativar renderizadores de player para mídias do YouTube, Vimeo, Facebook, DailyMotion, Twitch"
+msgstr "Ativar renderizadores de player para mídias YouTube, Vimeo, Facebook, DailyMotion, Twitch"
 
 msgid "Allow teachers to edit tests in learning paths"
 msgstr "Permitir que professores editem testes em trajetórias de aprendizagem"
@@ -31446,4 +31446,10 @@ msgstr "Erro ao carregar recursos."
 
 msgid "Clear search"
 msgstr "Limpar pesquisa"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Apenas letras, dígitos e underscore (_) são permitidos no nome do banco de dados. Caracteres inválidos serão removidos automaticamente."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Quais termos e condições gerais são fornecidos aos usuários para usar esta plataforma?"
 

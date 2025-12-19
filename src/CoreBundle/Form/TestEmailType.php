@@ -4,7 +4,6 @@
 
 namespace Chamilo\CoreBundle\Form;
 
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -13,6 +12,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @extends AbstractType<array>
+ */
 class TestEmailType extends AbstractType
 {
     public function __construct(

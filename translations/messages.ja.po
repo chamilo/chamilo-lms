@@ -10930,7 +10930,7 @@ msgid "has been added. An e-mail has been sent to give him his login"
 msgstr "が追加されました。ログイン情報を記したメールが送信されました"
 
 msgid "The user"
-msgstr "The user"
+msgstr "ユーザー"
 
 msgid "has registered you to this course"
 msgstr "has registered you on this course"
@@ -13711,13 +13711,13 @@ msgid "Show all images in their original size. No resizing is done. Scrollbars w
 msgstr "すべての画像を元のサイズで表示。リサイズは行われません。画像がモニターサイズより大きい場合、スクロールバーが自動的に表示されます。"
 
 msgid "Show Thumbnails"
-msgstr "Show Thumbnails"
+msgstr "サムネイルを表示"
 
 msgid "Gallery settings"
 msgstr "Set Slideshow Options"
 
 msgid "Slideshow Options"
-msgstr "Slideshow Options"
+msgstr "スライドショーのオプション"
 
 msgid "NO RESIZING"
 msgstr "NO RESIZING (default)"
@@ -13732,7 +13732,7 @@ msgid "Published end date"
 msgstr "公開終了日"
 
 msgid "View Slideshow"
-msgstr "View Slideshow"
+msgstr "スライドショーを表示"
 
 msgid "My tasks"
 msgstr "タスク"
@@ -13984,10 +13984,10 @@ msgid "Learning paths"
 msgstr "学習パス"
 
 msgid "level up"
-msgstr "level up"
+msgstr "レベルアップ"
 
 msgid "main category"
-msgstr "main category"
+msgstr "メインカテゴリ"
 
 msgid "Add to the course links"
 msgstr "コースリンクに追加"
@@ -13999,13 +13999,13 @@ msgid "Resources added"
 msgstr "Added new resources"
 
 msgid "External resources"
-msgstr "External resources"
+msgstr "外部リソース"
 
 msgid "Course resources"
-msgstr "Course resources"
+msgstr "コースリソース"
 
 msgid "External link"
-msgstr "External link"
+msgstr "外部リンク"
 
 msgid "Add the dropbox to this section."
 msgstr "Add the dropbox page to this chapter."
@@ -31497,4 +31497,10 @@ msgstr "リソースの読み込みエラー。"
 
 msgid "Clear search"
 msgstr "検索をクリア"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "データベース名には文字、数字、アンダースコア (_) のみ使用できます。無効な文字は自動的に削除されます。"
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "このプラットフォームを使用するユーザーに提供される一般的な利用規約は何ですか？"
 

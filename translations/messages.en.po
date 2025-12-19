@@ -31442,3 +31442,14 @@ msgstr "Error loading resources."
 msgid "Clear search"
 msgstr "Clear search"
 
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "What general terms and conditions are given to users to use this platform?"
+
+msgid "ex. {examplePassword}"
+msgstr "ex. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Welcome to Chamilo!"

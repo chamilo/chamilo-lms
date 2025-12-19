@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "সূত্রের নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "সূত্র নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -31427,4 +31427,10 @@ msgstr "সম্পদ লোড করতে ত্রুটি।"
 
 msgid "Clear search"
 msgstr "অনুসন্ধান পরিষ্কার করুন"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "ডাটাবেসের নামে শুধুমাত্র অক্ষর, সংখ্যা এবং আন্ডারস্কোর (_) অনুমোদিত। অবৈধ অক্ষর স্বয়ংক্রিয়ভাবে সরিয়ে ফেলা হবে।"
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "ব্যবহারকারীদের এই প্ল্যাটফর্ম ব্যবহারের জন্য কী সাধারণ শর্তাবলী দেওয়া হয়েছে?"
 

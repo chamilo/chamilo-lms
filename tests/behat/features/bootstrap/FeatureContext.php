@@ -473,11 +473,19 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @When /^wait the page to be loaded when ready$/
+     * @When /^(?:|I )wait for the page to be loaded when ready$/
      */
-    public function waitVeryLongForThePageToBeLoadedWhenReady()
+    public function waitForThePageToBeLoadedWhenReady()
     {
         $this->getSession()->wait(9000, "document.readyState === 'complete'");
+    }
+
+    /**
+     * @When /^(?:|I )wait one minute for the page to be loaded$/
+     */
+    public function waitOneMinuteForThePageToBeLoaded()
+    {
+        $this->getSession()->wait(60000);
     }
 
     /**

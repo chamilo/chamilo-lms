@@ -1134,49 +1134,78 @@ class UserGroupModel extends Model
         $current_list = $this->get_courses_by_usergroup($usergroup_id);
         $user_list = $this->get_users_by_usergroup($usergroup_id);
 
-        $delete_items = $new_items = [];
+        $delete_items = [];
+        $new_items    = [];
+
+        // Detect new course assignments
         if (!empty($list)) {
-            foreach ($list as $id) {
-                if (!in_array($id, $current_list)) {
-                    $new_items[] = $id;
+            foreach ($list as $course_id) {
+                if (!in_array($course_id, $current_list)) {
+                    $new_items[] = (int) $course_id;
                 }
             }
         }
 
+        // Detect removed course assignments
         if (!empty($current_list)) {
-            foreach ($current_list as $id) {
-                if (!in_array($id, $list)) {
-                    $delete_items[] = $id;
+            foreach ($current_list as $course_id) {
+                if (!in_array($course_id, $list)) {
+                    $delete_items[] = (int) $course_id;
                 }
             }
         }
 
-        if ($delete_groups) {
+        // Remove old relations if required
+        if ($delete_groups && !empty($delete_items)) {
             $this->unsubscribe_courses_from_usergroup($usergroup_id, $delete_items);
         }
 
-        // Adding new relationships
+        // Hosting / platform user limit
+        $userLimit = (int) api_get_setting('platform.hosting_limit_users_per_course');
+
+        // Add new course relations
         if (!empty($new_items)) {
             foreach ($new_items as $course_id) {
                 $course_info = api_get_course_info_by_id($course_id);
-                if ($course_info) {
-                    if (!empty($user_list)) {
-                        foreach ($user_list as $user_id) {
-                            CourseManager::subscribeUser(
-                                $user_id,
-                                $course_id
-                            );
-                        }
-                    }
-                    $params = [
-                        'course_id' => $course_id,
-                        'usergroup_id' => $usergroup_id,
-                    ];
-                    Database::insert(
-                        $this->usergroup_rel_course_table,
-                        $params
-                    );
+                if (empty($course_info)) {
+                    continue;
                 }
+
+                // Count current users already subscribed to the course
+                $currentCourseUsers = CourseManager::get_user_list_from_course_code(
+                    $course_info['code'],
+                    null,
+                    null,
+                    null,
+                    true
+                );
+                $currentUserCount = is_array($currentCourseUsers) ? count($currentCourseUsers) : 0;
+
+                // Number of users coming from the class
+                $incomingUsersCount = is_array($user_list) ? count($user_list) : 0;
+
+                // Validate hosting user limit
+                if ($userLimit > 0 && ($currentUserCount + $incomingUsersCount) > $userLimit) {
+                    // Skip this course assignment silently
+                    // Reason: assigning this class would exceed the user limit
+                    continue;
+                }
+
+                // Subscribe users to course
+                if (!empty($user_list)) {
+                    foreach ($user_list as $user_id) {
+                        CourseManager::subscribeUser($user_id, $course_id);
+                    }
+                }
+
+                // Persist relation usergroup ↔ course
+                Database::insert(
+                    $this->usergroup_rel_course_table,
+                    [
+                        'course_id'    => $course_id,
+                        'usergroup_id' => $usergroup_id,
+                    ]
+                );
             }
         }
     }
@@ -1447,7 +1476,8 @@ class UserGroupModel extends Model
         if (!empty($result)) {
             foreach ($result as $group) {
                 $group['sessions'] = count($this->get_sessions_by_usergroup($group['id']));
-                $group['courses'] = count($this->get_courses_by_usergroup($group['id']));
+                $validCourses = $this->get_courses_by_usergroup($group['id'], true);
+                $group['courses'] = is_array($validCourses) ? count($validCourses) : 0;
                 $roles = [];
                 switch ($group['group_type']) {
                     case 0:

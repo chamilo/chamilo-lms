@@ -1424,7 +1424,7 @@ msgid "Copied as announcement"
 msgstr "Nukopijuota kaip pranešimas"
 
 msgid "New announcement"
-msgstr "New announcement"
+msgstr "Naujas pranešimas"
 
 msgid "Upcoming events"
 msgstr "Artėjantys įvykiai"
@@ -1562,7 +1562,7 @@ msgid "Full screen"
 msgstr "Vaizdas per visą ekraną"
 
 msgid "Not attempted"
-msgstr "Not attempted"
+msgstr "Nepradėtas"
 
 msgid "Local"
 msgstr "Vietinis"
@@ -1598,7 +1598,7 @@ msgid "Move the current section"
 msgstr "Move the current chapter"
 
 msgid "Generic SCORM"
-msgstr "Generic Scorm"
+msgstr "Bendrasis SCORM"
 
 msgid "The format of this package could not be recognized. Please check this is a valid package."
 msgstr "The package format cannot be recognized. Please make sure it is well formed and doesn't contain errors. Problems may be due to proprietary ZIP format or transfer of long files. If unsure about the ZIP, please try to use minimal zipping features."
@@ -1928,7 +1928,7 @@ msgid "Disable edition by users"
 msgstr "Išjungti redagavimo galimybę vartotojams"
 
 msgid "Or in"
-msgstr "Or in"
+msgstr "Arba per"
 
 msgid "Course registration password"
 msgstr "Kurso registracijos slaptažodis"
@@ -2024,7 +2024,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autoriaus teisės,, no:be autoriaus teisių"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplankas,, application/msword:MsWord,, application/octet-stream:Okto duomenų srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplankas ,, application/msword:MsWord,, application/octet-stream:Oktobaitų srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":testas:testas,,      simuliacija:simuliacija,,      klausimynas:klausimynas,,      diagrama:diagrama,,      paveikslėlis:paveikslėlis,,      grafikas:grafikas,,      indeksas:indeksas,,      skaidrė:skaidrė,,      lentelė:lentelė,,      naratyvinis tekstas:naratyvinis tekstas,,      egzaminas:egzaminas,,      eksperimentas:eksperimentas,,      problemos teiginys:problemos teiginys,,      savęs vertinimas:savęs vertinimas,,      paskaita:paskaita"
@@ -2486,7 +2486,7 @@ msgid "General introduction to project management"
 msgstr "Bendras pristatymas apie projektų valdymą"
 
 msgid "Street interviews"
-msgstr "Street interviews"
+msgstr "Gatvės interviu"
 
 msgid "Quick and powerful search engine"
 msgstr "Greita ir galinga paieškos sistema"
@@ -2729,10 +2729,10 @@ msgid "keywords used in MD"
 msgstr "raktažodžiai, naudojami MD"
 
 msgid "keyword references"
-msgstr "keyword references"
+msgstr "raktinio žodžio nuorodos"
 
 msgid "Non-course keywords"
-msgstr "Non-course keywords"
+msgstr "Ne kurso raktiniai žodžiai"
 
 msgid "Course keywords (bold = not used)"
 msgstr "Kurso raktažodžiai (bold = not used)"
@@ -2741,13 +2741,13 @@ msgid "Total number of Links MD entries:"
 msgstr "Bendras Nuorodų MD įrašų skaičius:"
 
 msgid "Forum deleted"
-msgstr "Forum deleted"
+msgstr "Forumas ištrintas"
 
 msgid "Forum category deleted"
 msgstr "Forumo kategorija ištrinta"
 
 msgid "Forum blocked"
-msgstr "Forum blocked"
+msgstr "Forumas užblokuotas"
 
 msgid "Add forum category"
 msgstr "Sukurti naują forumo kategoriją"
@@ -2843,10 +2843,10 @@ msgid "List View"
 msgstr "Flat View"
 
 msgid "Threaded View"
-msgstr "Threaded View"
+msgstr "Temų vaizdas"
 
 msgid "Nested View"
-msgstr "Nested View"
+msgstr "Įterptinis vaizdas"
 
 msgid "Structure"
 msgstr "Struktūra"
@@ -3203,10 +3203,10 @@ msgid "Select the \"target\" which shows the link on the homepage of the course"
 msgstr "Pasirinkite \"taikinį\", kuriame nuoroda rodoma kurso pradžios puslapyje"
 
 msgid "Tracking DB."
-msgstr "Tracking DB."
+msgstr "Sekimo DB."
 
 msgid "Enable Tracking"
-msgstr "Enable Tracking"
+msgstr "Įjungti sekimą"
 
 msgid "Your company short name"
 msgstr "Your organisation short name"
@@ -3221,13 +3221,13 @@ msgid "ex."
 msgstr "ex."
 
 msgid "Database Host"
-msgstr "Database Host"
+msgstr "Duomenų bazės serveris"
 
 msgid "Database user"
 msgstr "Database Username"
 
 msgid "Database Password"
-msgstr "Database Password"
+msgstr "Duomenų bazės slaptažodis"
 
 msgid "Main Chamilo database (DB)"
 msgstr "Pagrindinė Chamilo duomenų bazė (DB)"
@@ -3236,7 +3236,7 @@ msgid "all fields required"
 msgstr "visi laukai privalomi"
 
 msgid "Printable version"
-msgstr "Printable version"
+msgstr "Spaudinama versija"
 
 msgid "Corresponding local path"
 msgstr "Atsakingas vietinis kelias"
@@ -3245,13 +3245,13 @@ msgid "Administrator e-mail"
 msgstr "Administrator email"
 
 msgid "Administrator Name"
-msgstr "Administrator Name"
+msgstr "Administratoriaus vardas"
 
 msgid "Surname of the Administrator"
 msgstr "Administratoriaus pavardė"
 
 msgid "Administrator login"
-msgstr "Administrator login"
+msgstr "Administratoriaus prisijungimas"
 
 msgid "Your portal name"
 msgstr "Jūsų portalo pavadinimas"
@@ -3275,13 +3275,13 @@ msgid "Step 6"
 msgstr "Step 6 of 6"
 
 msgid "Config settings"
-msgstr "Config settings"
+msgstr "Konfigūracijos nustatymai"
 
 msgid "MySQL database settings"
 msgstr "MySQL duomenų bazės nustatymai"
 
 msgid "Main language"
-msgstr "Main language"
+msgstr "Pagrindinė kalba"
 
 msgid "License"
 msgstr "License"
@@ -3305,19 +3305,19 @@ msgid "Use one or several DB for Chamilo"
 msgstr "Naudoti vieną ar kelias DB Chamilo"
 
 msgid "Allow self-registration"
-msgstr "Allow self-registration"
+msgstr "Leisti savarankišką registraciją"
 
 msgid "(recommended)"
 msgstr "(recommended)"
 
 msgid "SCORM DB"
-msgstr "Scorm DB"
+msgstr "SCORM DB"
 
 msgid "Administrator last name"
 msgstr "Administratoriaus pavardė"
 
 msgid "Administrator telephone"
-msgstr "Administrator telephone"
+msgstr "Administratoriaus telefonas"
 
 msgid "New note"
 msgstr "Nauja pastaba"
@@ -4643,7 +4643,7 @@ msgid "Invalid end date was given."
 msgstr "Įrašyta neteisinga pabaigos data."
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(d/m/m. h:m)"
 
 msgid "Homepage-files are not writable!"
 msgstr "Namų puslapio failas nėra įrašomi!"
@@ -5252,7 +5252,7 @@ msgid "If you choose to skip, the files filtered through the blacklist or whitel
 msgstr "Jei pasirinksite praleisti, juodojo ar baltojo sąrašo filtruoti failai nebus įkelti į sistemą. Jei pasirinksite pervadinti, jų plėtinys bus pakeistas tuo, kuris apibrėžtas plėtinių pakeitimo nustatyme. Atsargiai: pervadinimas tikrai neapsaugo jūsų ir gali sukelti vardų koliziją, jei yra keli failai su tuo pačiu vardu, bet skirtingais plėtiniais."
 
 msgid "Replacement extension"
-msgstr "Replacement extension"
+msgstr "Pakeitimo plėtinys"
 
 msgid "Enter the extension that you want to use to replace the dangerous extensions detected by the filter. Only needed if you have selected a filter by replacement."
 msgstr "Įveskite plėtinį, kurį norite naudoti pavojingiems plėtiniams, aptiktas filtro, pakeisti. Reikalinga tik jei pasirinkote pakeitimo filtrą."
@@ -5297,7 +5297,7 @@ msgid "Portal homepage tab"
 msgstr "Campus homepage tab"
 
 msgid "Reporting tab"
-msgstr "Reporting tab"
+msgstr "Ataskaitų skirtukas"
 
 msgid "Platform Administration tab"
 msgstr "Platformos administravimo kortelė"
@@ -5330,7 +5330,7 @@ msgid "The voice recording feature in the course editor relies on a Red5 streami
 msgstr "Balso įrašymo funkcija kurso redaktoriuje remiasi Red5 srautinio perdavimo serveriu. Šio serverio parametrai gali būti sukonfigūruoti vaizdo konferencijų skyriuje šiame puslapyje."
 
 msgid "Character set"
-msgstr "Character set"
+msgstr "Ženklų rinkinys"
 
 msgid "The character set is what pilots the way specific languages can be displayed in Chamilo. If you use Russian or Japanese characters, for example, you might want to change this. For all english, latin and west-european characters, the default UTF-8 should be alright."
 msgstr "Ženklų rinkinys valdo, kaip konkrečios kalbos gali būti rodomos Chamilo. Jei naudojate rusų ar japonų simbolius, pavyzdžiui, galite norėti tai pakeisti. Visiems anglų, lotynų ir Vakarų Europos simboliams numatytasis UTF-8 turėtų būti tinkamas."
@@ -6566,7 +6566,7 @@ msgid "Teachers only"
 msgstr "tik dėstytojas"
 
 msgid "Define Headings"
-msgstr "Define Headings"
+msgstr "Apibrėžti antraštes"
 
 msgid "change rights of"
 msgstr "pakeisti teises vartotojo"
@@ -6776,7 +6776,7 @@ msgid "max. 20 characters, e.g. <i>INNOV21</i>"
 msgstr "max. 20 simbolių, pvz. <i>INNOV21</i>"
 
 msgid "seats (optional)"
-msgstr "seats (optional)"
+msgstr "vietos (neprivaloma)"
 
 msgid "group(s) has (have) been added"
 msgstr "Grupė(ės) įrašyta"
@@ -6833,7 +6833,7 @@ msgid "my group"
 msgstr "mano grupė"
 
 msgid "my supervision"
-msgstr "my supervision"
+msgstr "mano priežiūra"
 
 msgid "register"
 msgstr "rgistruoti"
@@ -7187,10 +7187,10 @@ msgid "Current view mode: fullscreen"
 msgstr "Peržiūros būdas: per visą ekraną"
 
 msgid "Show debug"
-msgstr "Show debug"
+msgstr "Rodyti derinimą"
 
 msgid "Hide debug"
-msgstr "Hide debug"
+msgstr "Slėpti derinimą"
 
 msgid "This document is not editable"
 msgstr "Šis dokumentas neredaguojamas"
@@ -7343,19 +7343,19 @@ msgid "MS Word conversion"
 msgstr "Word conversion"
 
 msgid "Interaction ID"
-msgstr "Interaction ID"
+msgstr "Sąveikos ID"
 
 msgid "Time (finished at...)"
 msgstr "Laikas (baigtas...)"
 
 msgid "Correct answers"
-msgstr "Correct answers"
+msgstr "Teisingi atsakymai"
 
 msgid "Learner answers"
 msgstr "Student responses"
 
 msgid "Time spent"
-msgstr "Time spent"
+msgstr "Praleistas laikas"
 
 msgid "A page, a learning object"
 msgstr "Puslapis, mokymosi objektas"
@@ -8054,7 +8054,7 @@ msgid "To create a new question, choose the type above"
 msgstr "Norėdami sukurti naują klausimą, pasirinkite tipą viršuje"
 
 msgid "Matches To"
-msgstr "Matches To"
+msgstr "Atitinka"
 
 msgid "Add element"
 msgstr "+ elementas"
@@ -8096,10 +8096,10 @@ msgid "A learner has answered an open question"
 msgstr "Mokinys atsakė į atvirą klausimą"
 
 msgid "Attempt details"
-msgstr "Attempt details"
+msgstr "Bandymo detalės"
 
 msgid "Test attempted"
-msgstr "Test attempted"
+msgstr "Testas pradėtas"
 
 msgid "Learner name"
 msgstr "Student's name"
@@ -8477,7 +8477,7 @@ msgid "Remove picture"
 msgstr "Pašalinti nuotrauką"
 
 msgid "Course code"
-msgstr "Course code"
+msgstr "Kurso kodas"
 
 msgid "down"
 msgstr "žemyn"
@@ -9347,7 +9347,7 @@ msgid "Tel"
 msgstr "Tel"
 
 msgid "No tel"
-msgstr "No tel"
+msgstr "Tel. nėra"
 
 msgid "Send mail"
 msgstr "Siūsti laišką"
@@ -9467,7 +9467,7 @@ msgid "Not yet begun"
 msgstr "Dar nepradėta"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d %B, %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Neteisingas aplankas: prašome sukurti aplanką pavadinimu images jūsų dokumentų įrankyje, kad vaizdai galėtų būti įkelti į šį aplanką"
@@ -9476,7 +9476,7 @@ msgid "Online in my sessions"
 msgstr "See all users connected to my sessions"
 
 msgid "Dear user"
-msgstr "Dear user"
+msgstr "Gerbiamas vartotojau"
 
 msgid "Your registration data"
 msgstr "Jūsų registracijos duomenys"
@@ -9488,10 +9488,10 @@ msgid "The visibility has been changed."
 msgstr "Matomumas buvo pakeistas."
 
 msgid "Main navigation"
-msgstr "Main navigation"
+msgstr "Pagrindinė navigacija"
 
 msgid "See detail"
-msgstr "See detail"
+msgstr "Žiūrėti išsamią informaciją"
 
 msgid "Please try to login again from the homepage"
 msgstr "Prašome bandyti prisijungti iš naujo iš pradžios puslapio"
@@ -10835,7 +10835,7 @@ msgid "He (she) will receive e-mail confirmation with login and password"
 msgstr "Jis (ji) gaus patvirtinimo laišką su prisijungimo vardu ir slaptažodžiu"
 
 msgid "Make coach"
-msgstr "Make coach"
+msgstr "Padaryti dėstytoju"
 
 msgid "Remove this right"
 msgstr "Pašalinti šią teisę"
@@ -11786,7 +11786,7 @@ msgid "Logins and access to tools"
 msgstr "Prisijungimai ir prieiga prie įrankių"
 
 msgid "Contributions uploads"
-msgstr "Contributions uploads"
+msgstr "Įkeltų darbų įvertinimai"
 
 msgid "Invalid user : this user doesn't exist in your group"
 msgstr "Tokio vartotojo nėra Jūsų grupėje"
@@ -11855,7 +11855,7 @@ msgid "Countries Providers Browsers Os Referers"
 msgstr "Šalys Tiekėjai Naršyklės OS Referuotojai"
 
 msgid "Problematic cases"
-msgstr "Problematic cases"
+msgstr "Probleminiai atvejai"
 
 msgid "Click Here"
 msgstr "Spauskite čia"
@@ -11936,7 +11936,7 @@ msgid "This path was never opened by anybody."
 msgstr "Šis kelias niekada nebuvo atidarytas nieko."
 
 msgid "Synthesis view"
-msgstr "Synthesis view"
+msgstr "Sintezės vaizdas"
 
 msgid "Visited"
 msgstr "Aplankyta"
@@ -12065,13 +12065,13 @@ msgid "Learnpath details"
 msgstr "Teorinės kursų medžiagos detalės"
 
 msgid "No connection"
-msgstr "No connection"
+msgstr "Nėra ryšio"
 
 msgid "Trainer View"
 msgstr "Teacher interface"
 
 msgid "Coach interface"
-msgstr "Coach interface"
+msgstr "Dėstytojo sąsaja"
 
 msgid "Admin view"
 msgstr "Administrator interface"
@@ -12083,7 +12083,7 @@ msgid "Your courses"
 msgstr "Your courses list"
 
 msgid "Your statistics"
-msgstr "Your statistics"
+msgstr "Jūsų statistika"
 
 msgid "Trainer list"
 msgstr "Coaches list"
@@ -13040,7 +13040,7 @@ msgid "The GoogleMaps plugin needs to be enabled by the platform administrator i
 msgstr "GoogleMaps įskiepis turi būti įjungtas platformos administratoriaus, kad būtų rodomas žemėlapis."
 
 msgid "Chamilo Help"
-msgstr "Chamilo Help"
+msgstr "Chamilo pagalba"
 
 msgid "Documents Help"
 msgstr "Help Documents"
@@ -13256,7 +13256,7 @@ msgid "Save and exit"
 msgstr "Išsaugoti ir išeiti"
 
 msgid "View answers"
-msgstr "View answers"
+msgstr "Žiūrėti atsakymus"
 
 msgid "Create from an existing survey"
 msgstr "Sukurti iš jau egzistuojančios apklausos"
@@ -13265,7 +13265,7 @@ msgid "Survey name"
 msgstr "Apklausos pavadinimas"
 
 msgid "Survey subtitle"
-msgstr "Survey subtitle"
+msgstr "Apokopų antrasis pavadinimas"
 
 msgid "Share survey"
 msgstr "Dalintis apklausa"
@@ -13331,7 +13331,7 @@ msgid "Page break"
 msgstr "Puslapio pabaiga"
 
 msgid "Survey invitations"
-msgstr "Survey invitations"
+msgstr "Apokopų pakvietimai"
 
 msgid "Invitation code"
 msgstr "Pakvietimo kodas"
@@ -13457,13 +13457,13 @@ msgid "Click here to answer the survey"
 msgstr "Spustelėkite čia, kad atsakytumėte į apklausą"
 
 msgid "Unknow user"
-msgstr "Unknow user"
+msgstr "Nežinomas vartotojas"
 
 msgid "have answered"
-msgstr "have answered"
+msgstr "atsakė"
 
 msgid "were invited"
-msgstr "were invited"
+msgstr "buvo pakviesti"
 
 msgid "The page break cannot be the first"
 msgstr "Puslapio pertrauka negali būti pirmoji"
@@ -13649,7 +13649,7 @@ msgid "Show all images in their original size. No resizing is done. Scrollbars w
 msgstr "Rodyti visas nuotraukas originaliu dydžiu. Nėra dydžio keitimo. Slankikliai automatiškai pasirodys, jei paveikslėlis didesnis už jūsų monitoriaus dydį."
 
 msgid "Show Thumbnails"
-msgstr "Show Thumbnails"
+msgstr "Rodyti miniatiūras"
 
 msgid "Gallery settings"
 msgstr "Set Slideshow Options"
@@ -14192,7 +14192,7 @@ msgid "URL of this company"
 msgstr "URL of this organisation"
 
 msgid "User DB"
-msgstr "User DB"
+msgstr "Vartotojų DB"
 
 msgid "Please check these values"
 msgstr "Prašome patikrinti šias reikšmes"
@@ -14249,7 +14249,7 @@ msgid "<p>Chamilo is a modular tool. You can hide and show tools whenever you wa
 msgstr "<p>Chamilo yra modulinis įrankis. Galite slėpti ir rodyti įrankius kada norite, pagal savo projekto reikalavimus ar tam tikrą jo chronologinę dalį. Bet taip pat galite pridėti įrankius ar puslapius į savo pradžios puslapį, kuriuos sukūrėte patys ar kurie ateina iš išorės jūsų Chamilo portalo. Šiuo būdu galite pritaikyti savo kurso pradžios puslapį, kad jis taptų jūsų.</p><p>Darydami tai, tikriausiai norėsite pridėti savo nuorodas į puslapį. Nuorodos gali būti dviejų tipų:<ul><li><b>Išorinė nuoroda</b>: kuriate nuorodą savo pradžios puslapyje į svetainę už jūsų kurso srities ribų. Šiuo atveju pasirinksite „Target= Naujas langas“, nes nenorite, kad ta svetainė pakeistų jūsų Chamilo aplinką.</li><li><b>Vidinė nuoroda</b>: susiejate su puslapiu ar įrankiu viduje jūsų Chamilo kurso. Tam pirmiausia eikite į atitinkamą puslapį (ar dokumentą, ar įrankį), nukopijuokite jo URL iš adreso juostos savo naršyklėje (CTRL+C), tada eikite į „Pridėti nuorodą“ ir įklijuokite šį URL į URL lauką, suteikdami jam bet kokį norimą pavadinimą. Šiuo atveju pasirinksite „Target=Tas pats langas“, nes norite išlaikyti Chamilo banerį viršuje ir nuorodos puslapį toje pačioje aplinkoje.</li></ul>Sukūrus nuorodas, jų negalima redaguoti. Norėdami jas modifikuoti, vienintelis sprendimas yra jas deaktyvuoti ir ištrinti, tada pradėti iš naujo.</p>"
 
 msgid "Clear content"
-msgstr "Clear content"
+msgstr "Išvalyti turinį"
 
 msgid "Groups Help"
 msgstr "Groups"
@@ -14273,7 +14273,7 @@ msgid "The teacher is set as you for now. You can change this setting later in t
 msgstr "Mokytojas šiuo metu nustatytas jums. Galite pakeisti šį nustatymą vėliau kurso konfigūracijos nustatymuose"
 
 msgid "Installation language"
-msgstr "Installation language"
+msgstr "Įdiegimo kalba"
 
 msgid "Please read the following requirements thoroughly."
 msgstr "Read thoroughly"
@@ -14282,13 +14282,13 @@ msgid "Warning! The installer has detected an existing Chamilo platform on your 
 msgstr "Įspėjimas! Įdiegimo programa aptiko esamą Chamilo platformą jūsų sistemoje."
 
 msgid "New installation"
-msgstr "New installation"
+msgstr "Nauja instaliacija"
 
 msgid "Check database connection"
 msgstr "Patikrinti duomenų bazės ryšį"
 
 msgid "Show Overview"
-msgstr "Show Overview"
+msgstr "Rodyti apžvalgą"
 
 msgid "Install"
 msgstr "Install"
@@ -14300,22 +14300,22 @@ msgid "For more details"
 msgstr "Daugiau detalių"
 
 msgid "Server requirements"
-msgstr "Server requirements"
+msgstr "Serverio reikalavimai"
 
 msgid "Your server must provide the following libraries to enable all features of Chamilo. The missing libraries shown in orange letters are optional, but some features of Chamilo might be disabled if they are not installed. You can still install those libraries later on to enable the missing features."
 msgstr "Libraries and features the server must provide to use Chamilo to its full extent"
 
 msgid "PHP version"
-msgstr "PHP version"
+msgstr "PHP versija"
 
 msgid "Support"
 msgstr "support"
 
 msgid "Your PHP version matches the minimum requirement:"
-msgstr "PHP version is OK"
+msgstr "Jūsų PHP versija atitinka minimalų reikalavimą:"
 
 msgid "Recommended settings"
-msgstr "Recommended settings"
+msgstr "Rekomenduojami nustatymai"
 
 msgid "Recommended settings for your server configuration. These settings are set in the php.ini configuration file on your server."
 msgstr "Rekomenduojami jūsų serverio konfigūracijos nustatymai. Šie nustatymai nustatomi php.ini konfigūracijos faile jūsų serveryje."
@@ -14330,7 +14330,7 @@ msgid "Some directories and the files they include must be writable by the web s
 msgstr "Kai kurie katalogai ir juose esantys failai turi būti rašomi žiniatinklio serveriui, kad Chamilo veiktų (naudotojo įkelta failai, pradžios puslapio html failai, ...). Tai gali reikšti rankinį pakeitimą jūsų serveryje (už šios sąsajos ribų)."
 
 msgid "Not writable"
-msgstr "Not writable"
+msgstr "Nerrašomas"
 
 msgid "Writable"
 msgstr "Writable"
@@ -14345,7 +14345,7 @@ msgid "Chamilo is free software distributed under the GNU General Public licence
 msgstr "Chamilo yra laisva programinė įranga, platinama pagal GNU General Public licenciją (GPL)."
 
 msgid "I accept"
-msgstr "I accept"
+msgstr "Aš sutinku"
 
 msgid "The following values will be written into your configuration file"
 msgstr "Šios reikšmės bus įrašytos į jūsų konfigūracijos failą"
@@ -14381,7 +14381,7 @@ msgid "read warning below"
 msgstr "perskaitykite įspėjimą žemiau"
 
 msgid "Security advice"
-msgstr "Security advice"
+msgstr "Saugumo rekomendacijos"
 
 msgid "You have more than %d courses on your Chamilo platform ! Only %d courses have been updated. To update the other courses, %sclick here %s"
 msgstr "Jūsų Chamilo platformoje yra daugiau nei %d kursų! Atnaujinta tik %d kursai. Norėdami atnaujinti kitus kursus, %sspustelėkite čia %s"
@@ -20537,7 +20537,7 @@ msgid "Input size of box to fill"
 msgstr "Įvesties laukelio užpildymo dydis"
 
 msgid "MM dd, yy"
-msgstr "MM dd, yy"
+msgstr "%m-%d, %y"
 
 msgid "HH:mm"
 msgstr "HH:mm"
@@ -27949,9 +27949,8 @@ msgstr "Įjungti URL-specifinius failus"
 msgid "When this feature is enabled on a multi-URL configuration, you can go to the main URL and provide URL-specific versions of any file (in the documents tool). The original file will be replaced by the alternative whenever seeing it from a different URL. This allows you to customize each URL even further, while enjoying the advantage of re-using the same courses many times."
 msgstr "Kai ši funkcija įjungta multi-URL konfigūracijoje, galite eiti į pagrindinį URL ir pateikti URL-specifines bet kokio failo versijas (dokumentų įrankyje). Originalus failas bus pakeistas alternatyviu, kai jį matysite iš kito URL. Tai leidžia dar labiau pritaikyti kiekvieną URL, tuo pačiu mėgaudantis pranašumu naudoti tuos pačius kursus daug kartų."
 
-#, fuzzy
 msgid "Project manager"
-msgstr "Project manager"
+msgstr "Projekto vadovas"
 
 msgid "Select classes for which this course will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
 msgstr "Pasirinkite klases, kurioms šis kursas bus matomas prenumeratai kataloge. Prenumeratos taisyklės vis tiek galioja, išskyrus matomumą kataloge."
@@ -28410,7 +28409,7 @@ msgid "A database with the same name already exists. It will be deleted."
 msgstr "Duomenų bazė tuo pačiu pavadinimu jau egzistuoja. Ji bus ištrinta."
 
 msgid "Dear user"
-msgstr "Dear user"
+msgstr "Gerbiamas vartotojau"
 
 msgid "You are about to start using one of the best Open Source e-learning platforms on the market. Like many other Open Source projects, Chamilo is backed up by a large community of students, teachers, developers, content creators and businesses who would like to promote the project better."
 msgstr "Jūs ketinate pradėti naudoti vieną geriausių atvirojo kodo e. mokymosi platformų rinkoje. Kaip ir daugelis kitų atvirojo kodo projektų, Chamilo remia didelė studentų, dėstytojų, kūrėjų, turinio kūrėjų ir įmonių bendruomenė, kuri nori geriau reklamuoti projektą."
@@ -31435,4 +31434,10 @@ msgstr "Klaida įkeliant išteklius."
 
 msgid "Clear search"
 msgstr "Išvalyti paiešką"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Duomenų bazės pavadinime leidžiamos tik raidės, skaitmenys ir pabraukimo ženklas (_). Netinkami simboliai bus automatiškai pašalinti."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Kokios bendrosios naudojimo sąlygos pateikiamos vartotojams šiai platformai naudoti?"
 

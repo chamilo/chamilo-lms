@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Cori lis rispetts"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formule di esempi: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Esempi di formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rangs variabii"
@@ -4804,7 +4804,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "AWStats al ti permit di consultâ lis statistichis dal to platform : vizitadôrs, vizualizazionis pàgines, referers..."
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "Chamilo BIBLIOTECA"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "Chamilo LIBRARY j è un Motôr di Recherche che ofrir indissajamento e recèrche multi-criteri. Al è part de lis funsions medidis di Chamilo."
@@ -7252,7 +7252,7 @@ msgid "Add/edit prerequisites"
 msgstr "Zonte/modifiche i prerequisîts"
 
 msgid "No documents"
-msgstr "No documents"
+msgstr "Nissun ducument"
 
 msgid "No tests available"
 msgstr "No tests disponibii"
@@ -8134,7 +8134,7 @@ msgid "Results disabled for learners"
 msgstr "Risultâts disativâts pars agnsidôrs"
 
 msgid "Include profiling"
-msgstr "Include profiling"
+msgstr "Includi profiling"
 
 msgid "Exclude profiling"
 msgstr "Esclude profiling"
@@ -8623,10 +8623,10 @@ msgid "."
 msgstr "."
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%d di %b dal %Y"
 
 msgid "%A %B %d, %Y"
-msgstr "%A %B %d, %Y"
+msgstr "%A, il %d di %B dal %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
 msgstr "%B %d, %Y a lis %I:%M %p"
@@ -9460,7 +9460,7 @@ msgid "Not yet begun"
 msgstr "Anc no inizjât"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d di %B dal %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Cartelle no valide: Creâ une cartelle cognûme images tal strûl documents par podê cariâ le immagini in cheste cartelle"
@@ -18958,7 +18958,7 @@ msgid "%b %d, %Y at %I:%M %p"
 msgstr "%b %d, %Y a lis %I:%M %p"
 
 msgid "%I:%M %p, %b %d %Y"
-msgstr "%I:%M %p, %b %d %Y"
+msgstr "%I:%M %p, %d %b %Y"
 
 msgid "Login to vote"
 msgstr "Jentrâ par vutâ"
@@ -19726,7 +19726,7 @@ msgid "Your browser doesn't support the Nanogong player"
 msgstr "Il to browser nol supuarte il letôr Nanogong"
 
 msgid "Import CSV"
-msgstr "Import CSV"
+msgstr "Importe CSV"
 
 msgid "Table length"
 msgstr "Longjude de tabie"
@@ -19798,7 +19798,7 @@ msgid "Current badges"
 msgstr "Badge atuâls"
 
 msgid "Save badge"
-msgstr "Save badge"
+msgstr "Salve badge"
 
 msgid "Badge measures 200x200 pixels in PNG"
 msgstr "Il badge al meuse 200x200 pixel in PNG"
@@ -31427,4 +31427,10 @@ msgstr "Erôr in cjamant risorsis."
 
 msgid "Clear search"
 msgstr "Nivelle cercjhe"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Dentot i letaris, cifris e il trat sotsbar ( _) a son permitûts int nûl dal base di dâts. I carateris no valids a vignaran eliminâts automatichement."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Che condizions generâls e condizions d'ûs a son dâdis ai utents par doprâ chesti plateform?"
 

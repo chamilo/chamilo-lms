@@ -3317,7 +3317,7 @@ msgid "(recommended)"
 msgstr "(doporučený)"
 
 msgid "SCORM DB"
-msgstr "Scorm DB"
+msgstr "SCORM DB"
 
 msgid "Administrator last name"
 msgstr "Priezvisko administrátora"
@@ -5606,7 +5606,7 @@ msgid "If you are using an LDAP server that does not support or accept anonymous
 msgstr "Ak používate LDAP server, ktorý nepodporuje alebo neakceptuje anonymný prístup, vyplnte nasledujúce pole heslom používateľa, ktoré má byť použité."
 
 msgid "LDAP Import"
-msgstr "LDAP import"
+msgstr "LDAP Import"
 
 msgid "Notify subscribed users by e-mail"
 msgstr "Informovať zaradených používateľov e-mailom"
@@ -14441,16 +14441,16 @@ msgid "Baby Orange"
 msgstr "Baby Orange"
 
 msgid "Blue lagoon"
-msgstr "Blue lagoon"
+msgstr "Modrá lagúna"
 
 msgid "Cool blue"
-msgstr "Cool blue"
+msgstr "Chladná modrá"
 
 msgid "Corporate"
 msgstr "Corporate"
 
 msgid "Cosmic campus"
-msgstr "Cosmic campus"
+msgstr "Kozmický kampus"
 
 msgid "Delicious Bordeaux"
 msgstr "Lahodný Bordeaux"
@@ -17645,7 +17645,7 @@ msgid "Some of the classes could not be deleted."
 msgstr "Niektoré triedy sa nedajú odstrániť."
 
 msgid "Don't uncheck"
-msgstr "Don't uncheck"
+msgstr "Neodškrtnúť"
 
 msgid "Modified"
 msgstr "Zmenené"
@@ -20299,7 +20299,7 @@ msgid "Start video call"
 msgstr "Začať video volanie"
 
 msgid "Video URL"
-msgstr "Video URL"
+msgstr "URL videa"
 
 msgid "Insert a valid URL"
 msgstr "Vložte platnú adresu URL"
@@ -31446,4 +31446,10 @@ msgstr "Chyba pri načítavaní zdrojov."
 
 msgid "Clear search"
 msgstr "Vymazať vyhľadávanie"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "V názve databázy sú povolené iba písmená, číslice a podčiarkovník (_). Neplatné znaky budú automaticky odstránené."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Aké všeobecné podmienky používania tejto platformy sú poskytnuté používateľom?"
 

@@ -2023,7 +2023,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":da:autorska prava,, ne:nema autorskih prava"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Octetni tok,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:vježba,, simulation:simulacija,, questionnaire:upitnik,, diagram:dijagram,, figure:slika,, graph:graf,, index:indeks,, slide:projekcijska slika,, table:tablica,, narrative text:pripovjedni tekst,, exam:ispit,, experiment:eksperiment,, problem statement:problemska izjava,, self assessment:samoocjenjivanje,, lecture:predavanje"
@@ -4144,7 +4144,7 @@ msgid "MySql Client"
 msgstr "MySql Klijent"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "MySql poslužitelj"
 
 msgid "Owner"
 msgstr "Naslovni"
@@ -4810,7 +4810,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "AWStats vam omogućuje pregled statistika vaše platforme: posjetitelji, pregledi stranica, refereri..."
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "Chamilo KNJIŽNICA"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "Chamilo LIBRARY je pretraživač koji nudi indeksiranje i pretraživanje više kriterija. Dio je značajki Chamilo Medical."
@@ -9466,7 +9466,7 @@ msgid "Not yet begun"
 msgstr "Buduća"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d. %B %Y."
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Nedozvoljena mapa: Molim napravite mapu s imenom <b>images</b> u vašem dokument alatu da se mogu slike prenjeti u mapu"
@@ -31434,4 +31434,10 @@ msgstr "Greška pri učitavanju resursa."
 
 msgid "Clear search"
 msgstr "Očisti pretragu"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "U nazivu baze podataka su dopušteni samo slova, znamenke i podvlaka (_). Neispravni znakovi će biti automatski uklonjeni."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Koji opći uvjeti korištenja se daju korisnicima za korištenje ove platforme?"
 

@@ -1558,7 +1558,7 @@ msgid "Back to normal screen"
 msgstr "Nazad na normalan ekran"
 
 msgid "Full screen"
-msgstr "Full screen"
+msgstr "Ceo ekran"
 
 msgid "Not attempted"
 msgstr "Bez pokušaja"
@@ -4144,7 +4144,7 @@ msgid "MySql Client"
 msgstr "MySql klijent"
 
 msgid "MySql Server"
-msgstr "MySql server"
+msgstr "MySql Server"
 
 msgid "Owner"
 msgstr "Vlasnik"
@@ -4159,7 +4159,7 @@ msgid "Backup"
 msgstr "Održavanje"
 
 msgid "Upgrade Chamilo"
-msgstr "Upgrade Chamilo"
+msgstr "Nadogradite Chamilo"
 
 msgid "Website"
 msgstr "Web"
@@ -4351,7 +4351,7 @@ msgid "Production Server"
 msgstr "Produkcioni server"
 
 msgid "Test Server"
-msgstr "Test server"
+msgstr "Test Server"
 
 msgid "Who's Online"
 msgstr "Ko je Online"
@@ -7204,7 +7204,7 @@ msgid "back to normal screen"
 msgstr "povratak na normalan ekran"
 
 msgid "full screen"
-msgstr "full screen"
+msgstr "ceo ekran"
 
 msgid "There was a"
 msgstr "Bila je"
@@ -15094,7 +15094,7 @@ msgid "Data sent"
 msgstr "Podaci poslati"
 
 msgid "Download link"
-msgstr "Download link"
+msgstr "Link za preuzimanje"
 
 msgid "Assignments received"
 msgstr "Fajl već dostavljen"
@@ -31434,4 +31434,10 @@ msgstr "Greška pri učitavanju resursa."
 
 msgid "Clear search"
 msgstr "Očisti pretragu"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "U nazivu baze podataka su dozvoljena samo slova, cifre i donja crta (_). Neispravni znakovi će biti automatski uklonjeni."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Koji opšti uslovi korišćenja se daju korisnicima za korišćenje ove platforme?"
 

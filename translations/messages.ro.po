@@ -4149,10 +4149,10 @@ msgid "works"
 msgstr "lucrari"
 
 msgid "MySql Client"
-msgstr "MySql Client"
+msgstr "Client MySql"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "Server MySql"
 
 msgid "Owner"
 msgstr "Propietar"
@@ -8286,7 +8286,7 @@ msgid "Display"
 msgstr "Prezentarea"
 
 msgid "Multiple choice"
-msgstr "Multiple choice"
+msgstr "Alegere multiplă"
 
 msgid "Multiple answer"
 msgstr "Raspunsuri multiple"
@@ -9354,7 +9354,7 @@ msgid "Tel"
 msgstr "Tel"
 
 msgid "No tel"
-msgstr "No tel"
+msgstr "Fără tel"
 
 msgid "Send mail"
 msgstr "Trimite mail"
@@ -14439,7 +14439,7 @@ msgid "Compose"
 msgstr "Scrie"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Portocaliu bebeluș"
 
 msgid "Blue lagoon"
 msgstr "Albastru laguna"
@@ -14454,19 +14454,19 @@ msgid "Cosmic campus"
 msgstr "Campus cosmic"
 
 msgid "Delicious Bordeaux"
-msgstr "Delicious Bordeaux"
+msgstr "Bordeaux delicios"
 
 msgid "Empire green"
 msgstr "Verde imperial"
 
 msgid "Fruity orange"
-msgstr "Fruity orange"
+msgstr "Portocaliu fructat"
 
 msgid "Medical"
 msgstr "Medical"
 
 msgid "Royal purple"
-msgstr "Royal purple"
+msgstr "Violet regal"
 
 msgid "Silver line"
 msgstr "Linie argitie"
@@ -14475,7 +14475,7 @@ msgid "Sober brown"
 msgstr "Maro sobru"
 
 msgid "Steel grey"
-msgstr "Steel Grey"
+msgstr "Gri oțel"
 
 msgid "Tasty olive"
 msgstr "Maslina gustoasa"
@@ -19376,7 +19376,7 @@ msgid "Exercise average"
 msgstr "Media exercitiului"
 
 msgid "Webcam Clip"
-msgstr "Webcam Clip"
+msgstr "Clip Webcam"
 
 msgid "Snapshot"
 msgstr "Capturati"
@@ -31447,4 +31447,10 @@ msgstr "Eroare la încărcarea resurselor."
 
 msgid "Clear search"
 msgstr "Șterge căutarea"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "În numele bazei de date sunt permise doar litere, cifre și underscore (_). Caracteristicile invalide vor fi eliminate automat."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Ce termeni și condiții generale sunt acordați utilizatorilor pentru a utiliza această platformă?"
 

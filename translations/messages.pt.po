@@ -2738,7 +2738,7 @@ msgid "keyword references"
 msgstr "referências das palavras-chave"
 
 msgid "Non-course keywords"
-msgstr "Non-course keywords"
+msgstr "Palavras-chave não relacionadas a cursos"
 
 msgid "Course keywords (bold = not used)"
 msgstr "Palavras-chave do curso (negrito = não usada)"
@@ -4103,7 +4103,7 @@ msgid "Users number"
 msgstr "Número de utilizadores"
 
 msgid "Public administration"
-msgstr "Public administration"
+msgstr "Administração pública"
 
 msgid "Page after login"
 msgstr "Página após login/acesso"
@@ -6752,7 +6752,7 @@ msgid "View this user"
 msgstr "Visualizar este utilizador"
 
 msgid "RSS feed"
-msgstr "RSS feed"
+msgstr "Feed RSS"
 
 msgid "No friends in your contact list"
 msgstr "Não existem amigos na sua lista de contactos"
@@ -14438,46 +14438,46 @@ msgid "Compose"
 msgstr "Escrever"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Laranja bebê"
 
 msgid "Blue lagoon"
-msgstr "Blue lagoon"
+msgstr "Laguna azul"
 
 msgid "Cool blue"
-msgstr "Cool blue"
+msgstr "Azul frio"
 
 msgid "Corporate"
 msgstr "Corporate"
 
 msgid "Cosmic campus"
-msgstr "Cosmic campus"
+msgstr "Campus cósmico"
 
 msgid "Delicious Bordeaux"
-msgstr "Delicious Bordeaux"
+msgstr "Delicioso Bordeaux"
 
 msgid "Empire green"
-msgstr "Empire green"
+msgstr "Verde império"
 
 msgid "Fruity orange"
-msgstr "Fruity orange"
+msgstr "Laranja frutada"
 
 msgid "Medical"
 msgstr "Medical"
 
 msgid "Royal purple"
-msgstr "Royal purple"
+msgstr "Roxo real"
 
 msgid "Silver line"
-msgstr "Silver line"
+msgstr "Linha prateada"
 
 msgid "Sober brown"
-msgstr "Sober brown"
+msgstr "Marrom sóbrio"
 
 msgid "Steel grey"
-msgstr "Steel grey"
+msgstr "Cinza aço"
 
 msgid "Tasty olive"
-msgstr "Tasty olive"
+msgstr "Azeitona saborosa"
 
 msgid "In this report you see the results of all questions"
 msgstr "Neste relatório, você vê os resultados de todas as questões"
@@ -14702,10 +14702,10 @@ msgid "Chamilo extensions"
 msgstr "Extensões Chamilo"
 
 msgid "Chamilo Green"
-msgstr "Chamilo Green"
+msgstr "Chamilo Verde"
 
 msgid "Chamilo red"
-msgstr "Chamilo red"
+msgstr "Chamilo vermelho"
 
 msgid "Number of messages sent"
 msgstr "Número de mensagens enviadas"
@@ -15062,7 +15062,7 @@ msgid "Install Chamilo"
 msgstr "Instalar Chamilo"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "URL do Chamilo"
 
 msgid "You have no session in your sessions history"
 msgstr "Não possui qualquer sessão do curso no seu histórico"
@@ -26612,7 +26612,7 @@ msgid "Selective display of roles"
 msgstr "Exibição seletiva de papéis"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "Um array de role => true/false que define se esse role deve ser mostrado ou ocultado.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "Um array de role => true/false que define se esse papel deve ser mostrado ou ocultado.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Opções de exibição de papéis"
@@ -30681,7 +30681,7 @@ msgid "Visual theme (assets)"
 msgstr "Tema visual (assets)"
 
 msgid "Branding (logos)"
-msgstr "Branding (logos)"
+msgstr "Marca (logotipos)"
 
 msgid "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback."
 msgstr "Carregue logos opcionais de cabeçalho e e-mail. O formato SVG é preferido. PNG é usado como fallback."
@@ -31441,4 +31441,10 @@ msgstr "Erro ao carregar recursos."
 
 msgid "Clear search"
 msgstr "Limpar pesquisa"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Apenas letras, dígitos e sublinhado (_) são permitidos no nome do banco de dados. Caracteres inválidos serão removidos automaticamente."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Quais termos e condições gerais são fornecidos aos usuários para usar esta plataforma?"
 

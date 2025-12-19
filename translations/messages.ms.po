@@ -72,37 +72,37 @@ msgid "Cosecant:\t\t\t\tcsc(x)"
 msgstr "Cosecant:\t\t\t\tcsc(x)"
 
 msgid "Hyperbolic cosecant:\t\tcsch(x)"
-msgstr "Hyperbolic cosecant:\t\tcsch(x)"
+msgstr "Koseken hiperbolik:\t\tcsch(x)"
 
 msgid "Arccosecant:\t\t\tarccsc(x)"
 msgstr "Arccosecant:\t\t\tarccsc(x)"
 
 msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
-msgstr "Hyperbolic arccosecant:\t\tarccsch(x)"
+msgstr "Koseken hiperbolik songsang:\t\tarccsch(x)"
 
 msgid "Secant:\t\t\t\tsec(x)"
 msgstr "Secant:\t\t\t\tsec(x)"
 
 msgid "Hyperbolic secant:\t\tsech(x)"
-msgstr "Hyperbolic secant:\t\tsech(x)"
+msgstr "Sekan hiperbolik:\t\tsech(x)"
 
 msgid "Arcsecant:\t\t\tarcsec(x)"
 msgstr "Arcsecant:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
-msgstr "Hyperbolic arcsecant:\t\tarcsech(x)"
+msgstr "Sekan hiperbolik songsang:\t\tarcsech(x)"
 
 msgid "Cotangent:\t\t\tcot(x)"
 msgstr "Cotangent:\t\t\tcot(x)"
 
 msgid "Hyperbolic cotangent:\t\tcoth(x)"
-msgstr "Hyperbolic cotangent:\t\tcoth(x)"
+msgstr "Kotangen hiperbolik:\t\tcoth(x)"
 
 msgid "Arccotangent:\t\t\tarccot(x)"
 msgstr "Arccotangent:\t\t\tarccot(x)"
 
 msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
-msgstr "Hyperbolic arccotangent:\t\tarccoth(x)"
+msgstr "Kotangen hiperbolik songsang:\t\tarccoth(x)"
 
 msgid "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />\nIf needed, the Help section of your browser indicates how to configure cookies.<br /><br />\nFor more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website."
 msgstr "Supaya laman web ini berfungsi dan boleh mengukur penggunaan kandungan, platform ini menggunakan kuki.<br /><br />\nJika diperlukan, bahagian Bantuan pelayar anda menunjukkan cara menyusun kuki.<br /><br />\nUntuk maklumat lanjut mengenai kuki, anda boleh melawat laman web <a href=\"http://www.aboutcookies.org/\">About Cookies</a>."
@@ -1809,7 +1809,7 @@ msgid "Archive location"
 msgstr "Lokasi Arkib"
 
 msgid "Size of"
-msgstr "Size of"
+msgstr "Saiz"
 
 msgid "Archive name"
 msgstr "Nama Arkib"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:berhak cipta,, no:tiada hak cipta"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Pasta,, application/msword:MsWord,, application/octet-stream:Aliran oktet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:latihan,,      simulation:simulasi,,      questionnaire:soal selidik,,      diagram:diagram,,      figure:gambar,,      graph:graf,,      index:indeks,,      slide:slaid,,      table:jadual,,      narrative text:teks naratif,,      exam:ujian,,      experiment:eksperimen,,      problem statement:penyata masalah,,      self assessment:penilaian diri,,      lecture:kuliah"
@@ -2484,7 +2484,7 @@ msgid "General introduction to project management"
 msgstr "General introduction to philosophy and methodology principles"
 
 msgid "Street interviews"
-msgstr "Street interviews"
+msgstr "Temubual jalanan"
 
 msgid "Quick and powerful search engine"
 msgstr "Enjin carian yang pantas dan berkuasa"
@@ -3204,7 +3204,7 @@ msgid "Tracking DB."
 msgstr "Tracking DB.  Useful only if several DB"
 
 msgid "Enable Tracking"
-msgstr "Enable Tracking"
+msgstr "Dayakan Penjejak"
 
 msgid "Your company short name"
 msgstr "Organisation short name"
@@ -3219,13 +3219,13 @@ msgid "ex."
 msgstr "e. g."
 
 msgid "Database Host"
-msgstr "Database Host"
+msgstr "Hos Pangkalan Data"
 
 msgid "Database user"
 msgstr "Database Username"
 
 msgid "Database Password"
-msgstr "Database Password"
+msgstr "Kata Laluan Pangkalan Data"
 
 msgid "Main Chamilo database (DB)"
 msgstr "Main Chamilo DB"
@@ -3234,7 +3234,7 @@ msgid "all fields required"
 msgstr "semua medan diperlukan"
 
 msgid "Printable version"
-msgstr "Printable version"
+msgstr "Versi boleh dicetak"
 
 msgid "Corresponding local path"
 msgstr "Laluan tempatan yang sepadan"
@@ -3243,13 +3243,13 @@ msgid "Administrator e-mail"
 msgstr "Administrator email"
 
 msgid "Administrator Name"
-msgstr "Administrator name"
+msgstr "Nama Pentadbir"
 
 msgid "Surname of the Administrator"
 msgstr "Administrator surname"
 
 msgid "Administrator login"
-msgstr "Administrator login"
+msgstr "Log masuk Pentadbir"
 
 msgid "Your portal name"
 msgstr "Your campus' name"
@@ -3273,13 +3273,13 @@ msgid "Step 6"
 msgstr "Step 6 of 6"
 
 msgid "Config settings"
-msgstr "Config settings"
+msgstr "Tetapan konfigurasi"
 
 msgid "MySQL database settings"
 msgstr "Tetapan pangkalan data MySQL"
 
 msgid "Main language"
-msgstr "Main language"
+msgstr "Bahasa utama"
 
 msgid "License"
 msgstr "License"
@@ -3303,7 +3303,7 @@ msgid "Use one or several DB for Chamilo"
 msgstr "Gunakan satu atau beberapa DB untuk Chamilo"
 
 msgid "Allow self-registration"
-msgstr "Allow self-registration"
+msgstr "Benarkan pendaftaran sendiri"
 
 msgid "(recommended)"
 msgstr "(recommended)"
@@ -4140,10 +4140,10 @@ msgid "works"
 msgstr "work"
 
 msgid "MySql Client"
-msgstr "MySql Client"
+msgstr "Klien MySql"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "Pelayan MySql"
 
 msgid "Owner"
 msgstr "Pemilik"
@@ -4158,7 +4158,7 @@ msgid "Backup"
 msgstr "Penyelenggaraan"
 
 msgid "Upgrade Chamilo"
-msgstr "Upgrade Chamilo"
+msgstr "Naik taraf Chamilo"
 
 msgid "Website"
 msgstr "Website"
@@ -4641,7 +4641,7 @@ msgid "Invalid end date was given."
 msgstr "Tarikh akhir tidak sah diberikan."
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(t/b/t h:m)"
 
 msgid "Homepage-files are not writable!"
 msgstr "Fail-laman utama tidak boleh ditulis!"
@@ -4809,7 +4809,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "AWStats membolehkan anda melihat statistik platform anda: pelawat, tontonan halaman, rujukan..."
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "Chamilo PERPUSTAKAAN"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "Chamilo LIBRARY ialah Enjin Carian yang menawarkan pengindeksan dan penyelidikan pelbagai kriteria. Ia sebahagian daripada ciri-ciri Chamilo Medical."
@@ -6831,7 +6831,7 @@ msgid "my group"
 msgstr "Kumpulan Pelajar"
 
 msgid "my supervision"
-msgstr "my supervision"
+msgstr "penyeliaan saya"
 
 msgid "register"
 msgstr "daftar"
@@ -7755,7 +7755,7 @@ msgid "Elements list"
 msgstr "Element list"
 
 msgid "Corresponds to"
-msgstr "Corresponds to"
+msgstr "Sepadan dengan"
 
 msgid "Expected choice"
 msgstr "Pilihan Jangkaan"
@@ -8913,7 +8913,7 @@ msgid "Document"
 msgstr "Dokumen"
 
 msgid "Portal Admin"
-msgstr "Portal Admin"
+msgstr "Pentadbir Portal"
 
 msgid "none"
 msgstr "tiada"
@@ -13647,13 +13647,13 @@ msgid "Show all images in their original size. No resizing is done. Scrollbars w
 msgstr "Tunjuk semua imej dalam saiz asal. Tiada pembesaran saiz dilakukan. Bar skrol akan muncul secara automatik jika imej lebih besar daripada saiz monitor anda."
 
 msgid "Show Thumbnails"
-msgstr "Show Thumbnails"
+msgstr "Tunjukkan Thumbnail"
 
 msgid "Gallery settings"
 msgstr "Set Slideshow Options"
 
 msgid "Slideshow Options"
-msgstr "Slideshow Options"
+msgstr "Pilihan Tayangan Gelongsor"
 
 msgid "NO RESIZING"
 msgstr "NO RESIZING (default)"
@@ -13668,7 +13668,7 @@ msgid "Published end date"
 msgstr "Tarikh tamat penerbitan"
 
 msgid "View Slideshow"
-msgstr "View Slideshow"
+msgstr "Lihat Tayangan Gelongsor"
 
 msgid "My tasks"
 msgstr "Tugasan saya"
@@ -13920,10 +13920,10 @@ msgid "Learning paths"
 msgstr "Learning Path"
 
 msgid "level up"
-msgstr "level up"
+msgstr "naik tahap"
 
 msgid "main category"
-msgstr "main category"
+msgstr "kategori utama"
 
 msgid "Add to the course links"
 msgstr "Tambah kepada pautan kursus"
@@ -13935,13 +13935,13 @@ msgid "Resources added"
 msgstr "Added new resources"
 
 msgid "External resources"
-msgstr "External resources"
+msgstr "Sumber luaran"
 
 msgid "Course resources"
-msgstr "Course resources"
+msgstr "Sumber kursus"
 
 msgid "External link"
-msgstr "External link"
+msgstr "Pautan luaran"
 
 msgid "Add the dropbox to this section."
 msgstr "Add the dropbox page to this chapter."
@@ -28177,7 +28177,7 @@ msgid "Session expired. Redirecting to login…"
 msgstr "Sesi tamat masa. Mengarahkan semula ke log masuk…"
 
 msgid "Super admin"
-msgstr "Super admin"
+msgstr "Super pentadbir"
 
 msgid "Global admin"
 msgstr "Admin global"
@@ -31433,4 +31433,10 @@ msgstr "Ralat memuat sumber."
 
 msgid "Clear search"
 msgstr "Kosongkan carian"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Hanya huruf, digit dan underscore (_) dibenarkan dalam nama pangkalan data. Aksara tidak sah akan dialih keluar secara automatik."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Apakah syarat dan peraturan umum yang diberikan kepada pengguna untuk menggunakan platform ini?"
 

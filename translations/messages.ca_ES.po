@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Sincerament"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Fórmula de mostra: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemple de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervals de variables"
@@ -13943,13 +13943,13 @@ msgid "Resources added"
 msgstr "Added new resources"
 
 msgid "External resources"
-msgstr "External resources"
+msgstr "Recursos externs"
 
 msgid "Course resources"
-msgstr "Course resources"
+msgstr "Recursos del curs"
 
 msgid "External link"
-msgstr "External link"
+msgstr "Enllaç extern"
 
 msgid "Add the dropbox to this section."
 msgstr "Add the dropbox page to this chapter."
@@ -19375,7 +19375,7 @@ msgid "Exercise average"
 msgstr "Mitjana de l'exercici"
 
 msgid "Webcam Clip"
-msgstr "Webcam Clip"
+msgstr "Clip de la càmera web"
 
 msgid "Snapshot"
 msgstr "Captura"
@@ -31446,4 +31446,10 @@ msgstr "Error en carregar recursos."
 
 msgid "Clear search"
 msgstr "Netejar cerca"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Només es permeten lletres, dígits i guió baix (_) en el nom de la base de dades. Els caràcters no vàlids s'eliminaran automàticament."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Quines condicions generals s'indiquen als usuaris per utilitzar aquesta plataforma?"
 

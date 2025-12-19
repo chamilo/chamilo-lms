@@ -2256,7 +2256,7 @@ msgid "Already in"
 msgstr "Allerede i"
 
 msgid "Check in"
-msgstr "Check in"
+msgstr "Tjek ind"
 
 msgid "The Moderator of this Conference has left the room."
 msgstr "Moderatoren har forladt konferencen"
@@ -2484,7 +2484,7 @@ msgid "General introduction to project management"
 msgstr "General introduction to philosophy and methodology principles"
 
 msgid "Street interviews"
-msgstr "Street interviews"
+msgstr "Gadeinterviews"
 
 msgid "Quick and powerful search engine"
 msgstr "Hurtig og stærk søgemaskine"
@@ -2550,7 +2550,7 @@ msgid "Other properties found in the archive"
 msgstr "Andre egenskaber fundet i arkivet"
 
 msgid "System ID"
-msgstr "System ID"
+msgstr "System-ID"
 
 msgid "Show score"
 msgstr "Vis score"
@@ -3150,7 +3150,7 @@ msgid "Edit Link"
 msgstr "Rediger link"
 
 msgid "CSV import"
-msgstr "CSV import"
+msgstr "CSV-import"
 
 msgid "CSV import file could not be opened (e.g. empty, too big)"
 msgstr "Den importerede CSV fil kunne ikke åbnes (filen er evt. tom eller fylder for meget)"
@@ -3219,7 +3219,7 @@ msgid "ex."
 msgstr "f.eks."
 
 msgid "Database Host"
-msgstr "Database Host"
+msgstr "Databasevært"
 
 msgid "Database user"
 msgstr "Database Brugernavn"
@@ -3309,7 +3309,7 @@ msgid "(recommended)"
 msgstr "(anbefales)"
 
 msgid "SCORM DB"
-msgstr "Scorm DB"
+msgstr "SCORM DB"
 
 msgid "Administrator last name"
 msgstr "Administrators efternavn"
@@ -4074,7 +4074,7 @@ msgid "Technical"
 msgstr "Teknisk"
 
 msgid "System config"
-msgstr "System config"
+msgstr "Systemkonfiguration"
 
 msgid "Login list (extended)"
 msgstr "Login liste (udvidet)"
@@ -4170,7 +4170,7 @@ msgid "Contribute"
 msgstr "Bidrag"
 
 msgid "Server Information"
-msgstr "Server Information"
+msgstr "Serverinformation"
 
 msgid "Send a mail to users"
 msgstr "Send en e-mail til brugere"
@@ -4245,7 +4245,7 @@ msgid "What sort of server is this? This enables or disables some specific optio
 msgstr "Hvilken type server er dette? Dette aktiverer eller deaktiverer specifikke indstillinger. På en udviklings-server er der en oversættelses-funktion som indikerer ikke oversatte tekst-strenge"
 
 msgid "Server Type"
-msgstr "Server Type"
+msgstr "Servertype"
 
 msgid "Chamilo Portal Languages"
 msgstr "Chamilo Platform Sprog"
@@ -4350,7 +4350,7 @@ msgid "Production Server"
 msgstr "Produktions server"
 
 msgid "Test Server"
-msgstr "Test server"
+msgstr "Testserver"
 
 msgid "Who's Online"
 msgstr "Hvem er online"
@@ -4734,7 +4734,7 @@ msgid "Make unavailable"
 msgstr "Gør utilgængelig"
 
 msgid "Style sheets"
-msgstr "Style sheets"
+msgstr "Stilark"
 
 msgid "Should the navigation menu show the different tool icons?"
 msgstr "Bør navigations menu vise de forskellige væktøjs ikoner?"
@@ -9513,7 +9513,7 @@ msgid "Dear user,<br /><br /> you are not active on %s since more than %s days."
 msgstr "Kære bruger,Du har ikke været % aktiv i % dage."
 
 msgid "OpenID authentication"
-msgstr "OpenID authentication"
+msgstr "OpenID-godkendelse"
 
 msgid "Upload max size"
 msgstr "Max størrelse ved upload"
@@ -26862,7 +26862,7 @@ msgid "HTTP Strict Transport Security is an excellent feature to support on your
 msgstr "HTTP Strict Transport Security er en fremragende funktion at aktivere på din side og styrker din implementering af TLS ved at få User Agent til at håndhæve brugen af HTTPS. Anbefalet værdi: 'strict-transport-security: max-age=63072000; includeSubDomains'. Se https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. Du kan inkludere 'preload'-suffixet, men dette har konsekvenser for top-level-domænet (TLD), så det skal ikke gøres lettevis. Se https://hstspreload.org/. Lad være tom for at deaktivere."
 
 msgid "Content Security Policy"
-msgstr "Content Security Policy"
+msgstr "Indholds Sikkerhedspolitik"
 
 msgid "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the 'script-src' argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
 msgstr "Content Security Policy er et effektivt middel til at beskytte din side mod XSS-angreb. Ved at whitelist'e kilder til godkendt indhold kan du forhindre browseren i at indlæse ondsindede ressourcer. Denne indstilling er særligt kompliceret at sætte med WYSIWYG-redaktører, men hvis du tilføjer alle domæner, du vil autorisere til iframe-indlæsning i child-src-udtrykket, burde dette eksempel fungere for dig. Du kan forhindre JavaScript fra at udføres fra eksterne kilder (inklusive inde i SVG-billeder) ved at bruge en streng liste i 'script-src'-argumentet. Lad være tom for at deaktivere. Eksempelindstilling: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
@@ -26904,7 +26904,7 @@ msgid "X-Content-Type-Options stops a browser from trying to MIME-sniff the cont
 msgstr "X-Content-Type-Options stopper en browser fra at forsøge MIME-sniffing af indholdstypen og tvinger den til at holde sig til den deklarerede indholdstype. Den eneste gyldige værdi for denne header er 'nosniff'."
 
 msgid "Security Referrer Policy"
-msgstr "Security Referrer Policy"
+msgstr "Sikkerheds Henvisningspolitik"
 
 msgid "Referrer Policy is a new header that allows a site to control how much information the browser includes with navigation away from a document and should be set by all sites."
 msgstr "Referrer Policy er en ny header, der tillader en side at kontrollere, hvor meget information browseren inkluderer ved navigation væk fra et dokument, og den bør sættes af alle sider."
@@ -31433,4 +31433,10 @@ msgstr "Fejl ved indlæsning af ressourcer."
 
 msgid "Clear search"
 msgstr "Ryd søgning"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Kun bogstaver, cifre og understregning (_) er tilladt i databasenavnet. Ugyldige tegn fjernes automatisk."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Hvilke generelle vilkår og betingelser gives til brugerne for at bruge denne platform?"
 

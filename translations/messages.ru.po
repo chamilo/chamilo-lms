@@ -9763,10 +9763,10 @@ msgid "Width"
 msgstr "Ширина"
 
 msgid "V Space"
-msgstr "V Space"
+msgstr "V Пространство"
 
 msgid "H Space"
-msgstr "H Space"
+msgstr "H Пространство"
 
 msgid "Border"
 msgstr "Граница"
@@ -14695,10 +14695,10 @@ msgid "Chamilo extensions"
 msgstr "Расширения Chamilo"
 
 msgid "Chamilo Green"
-msgstr "Chamilo Green"
+msgstr "Зелёный Chamilo"
 
 msgid "Chamilo red"
-msgstr "Chamilo red"
+msgstr "Красный Chamilo"
 
 msgid "Number of messages sent"
 msgstr "Количество отправленных сообщений"
@@ -31434,4 +31434,10 @@ msgstr "Ошибка загрузки ресурсов."
 
 msgid "Clear search"
 msgstr "Очистить поиск"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "В имени базы данных разрешены только буквы, цифры и подчёркивание (_). Недопустимые символы будут удалены автоматически."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Какие общие условия предоставляются пользователям для использования этой платформы?"
 

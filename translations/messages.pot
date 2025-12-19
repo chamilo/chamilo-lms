@@ -31373,3 +31373,15 @@ msgstr ""
 
 msgid "Clear search"
 msgstr ""
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr ""
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr ""
+
+msgid "ex. {examplePassword}"
+msgstr ""
+
+msgid "Welcome to Chamilo!"
+msgstr ""

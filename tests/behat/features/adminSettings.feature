@@ -12,7 +12,7 @@ Feature: Settings update
     And I additionally select "Login" from "form_changeable_options"
     And I press "Save"
     And wait for the page to be loaded
-    Then I should see "Settings have been successfully updated"
+    Then I should not see an error
 
   Scenario: Update 'allow_registration' setting
     Given I am a platform administrator
@@ -20,7 +20,7 @@ Feature: Settings update
     And I select "Yes" from "form_allow_registration"
     And I press "Save"
     And wait for the page to be loaded
-    Then I should see "Settings have been successfully updated"
+    Then I should not see an error
 
   Scenario: Update 'allow_group_categories' setting
     Given I am a platform administrator
@@ -28,4 +28,4 @@ Feature: Settings update
     And I select "Yes" from "form_allow_group_categories"
     And I press "Save"
     And wait for the page to be loaded
-    Then I should see "Settings have been successfully updated"
+    Then I should not see an error

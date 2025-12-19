@@ -11879,7 +11879,7 @@ msgid "Add guidance messages associated with the progress on the page"
 msgstr "Ajouter des messages d'aide associés au progrès de la page"
 
 msgid "Second message"
-msgstr "Second message"
+msgstr "Deuxième message"
 
 msgid "Third message"
 msgstr "Troisième message"
@@ -19977,7 +19977,7 @@ msgid "Exercise average"
 msgstr "Moyenne de l'exercice"
 
 msgid "Webcam Clip"
-msgstr "Webcam Clip"
+msgstr "Clip Webcam"
 
 msgid "Snapshot"
 msgstr "Capturer"
@@ -20347,7 +20347,7 @@ msgid "Your browser doesn't support the Nanogong player"
 msgstr "Votre navigateur ne supporte pas le player Nanogong"
 
 msgid "Import CSV"
-msgstr "Import CSV"
+msgstr "Importer CSV"
 
 msgid "Table length"
 msgstr "Lignes de la table"
@@ -30020,7 +30020,7 @@ msgid "Session expired. Redirecting to login…"
 msgstr "Session expirée. Redirection vers la page d'authentification…"
 
 msgid "Super admin"
-msgstr "Super admin"
+msgstr "Super administrateur"
 
 msgid "Global admin"
 msgstr "Administrateur global"
@@ -32553,7 +32553,7 @@ msgid "Visual theme (assets)"
 msgstr "Thème visuel (ressources)"
 
 msgid "Branding (logos)"
-msgstr "Branding (logos)"
+msgstr "Personnalisation (logos)"
 
 msgid "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback."
 msgstr "Téléchargez des logos optionnels pour l'en-tête et les e-mails. Le format SVG est préféré. PNG est utilisé en secours."
@@ -33314,3 +33314,11 @@ msgstr "Erreur lors du chargement des ressources."
 msgid "Clear search"
 msgstr "Effacer la recherche"
 
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Seules les lettres, les chiffres et le tiret bas (_) sont autorisés dans le nom de la base de données. Les caractères invalides seront supprimés automatiquement."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Quelles conditions générales d'utilisation sont données aux utilisateurs pour utiliser cette plateforme ?"
+
+msgid "Welcome to Chamilo!"
+msgstr "Bienvenue dans Chamilo!"

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "په درناوي سره"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "د فرمول نمونه: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "د فورمولې نمونې: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "متغیر حدود"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:کاپي راټ,, no:کاپي راټ نشته"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوډل,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوښه,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:مشق,,      simulation:سيموليشن,,      questionnaire: پوښتنليک,,      diagram: ډايګرام,,      figure: انځور,,      graph:ګراف,,      index:اشاره,,      slide:سلایډ,,      table:جدول,,      narrative text:روايتي متن,,      exam: امتحان,,      experiment: تجربې,,      problem statement: ستونزې بيان,,      self assessment: ځان ارزونه,,      lecture: درس"
@@ -4786,7 +4786,7 @@ msgid "Chamilo LIVE is a videoconferencing tool that offers: Slides sharing, whi
 msgstr "Chamilo LIVE د ویډیو کنفرانس وسیل دی چې وړاندې کوي: اسلایډونو شریکول، ویته بورډ د اسلایډونو پر سر رسم او لیکلو لپاره، غږ/ویډیو دوه اړخیز او چټ. دا Flash® پلیر ۹+ ته اړتیا لري او ۲ حالتونه وړاندې کوي: یو ډول ډېر او ډېر ډول ډېر."
 
 msgid "Chamilo RAPID"
-msgstr "Chamilo RAPID"
+msgstr "چامیلو RAPID"
 
 msgid "Chamilo RAPID is a Rapid Learning tool available in Chamilo Pro and Chamilo Medical. It allows you to convert Powerpoint or LibreOffice presentations to SCORM-compliant courses. After the conversion, you end up in the Courses authoring tool and are able to add audio comments on slides and pages, tests and activities between the slides or pages and interaction activities like forum discussions or assignment upload. Every step becomes an independent and removable learning object. And the whole course generates accurate SCORM reporting for further coaching."
 msgstr "Chamilo RAPID د چټک زده کړې وسیل دی چې په Chamilo Pro او Chamilo Medical کې شتون لري. دا تاسو ته اجازه درکوي چې پاورپاینټ یا LibreOffice پریزنټیشنونه SCORM مطابقو کورسونو ته بدل کړئ. د بدلون وروسته، تاسو د کورسونو لیکلو وسیل کې ځای پر ځای کېږئ او کولی شئ غږیز تبصرې اسلایډونو او پاڼو کې اضافه کړئ، ازموینې او فعالیتونه اسلایډونو یا پاڼو ترمنځ او تعاملي فعالیتونه لکه فورم بحثونه یا دندې اپلوډ. هر ګام یو خپلواک او لرې کېدونکی زده کړې شی کېږي. او ټول کورس دقیق SCORM راپور جوړوي د نورو روزنې لپاره."
@@ -4804,7 +4804,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "AWStats تاسو ته اجازه درکوي چې د پلیټ فارم احصایې وګورئ: لیدونکي، پاڼې لیدل، ریفررونه..."
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "چامیلو لایبرري"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "چامیلو لایبرري یو څو معیارونو انډیکس کولو او څیړنې وړاندیز کوونکی څرنګوالی دی. دا د چامیلو طبي ځانګړتیاوو برخه ده."
@@ -9523,7 +9523,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "د فایل اپلوډ پاتې راغلی: دا فایل وسعت یا فایل ډول منع دی"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "اوپن آیدی URL"
 
 msgid "The file is too big to upload."
 msgstr "فایل د اپلوډ لپاره ډېر لوی دی."
@@ -27370,7 +27370,7 @@ msgid "Obtained the following skills"
 msgstr "لاندې مهارتونه ترلاسه کړي دي"
 
 msgid "Chamilo LMS"
-msgstr "Chamilo LMS"
+msgstr "چامیلو LMS"
 
 msgid "No course sessions for this user"
 msgstr "د دې کاروونکي لپاره هیڅ کورس غونډې نشته"
@@ -31427,4 +31427,10 @@ msgstr "د سرچینو بار کېدل کې خطا."
 
 msgid "Clear search"
 msgstr "د لټون پاکول"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "پایگاه ډاټا کې یوازې لیکي، شمېرې او لاندې لاین (_) اجازه لري. ناسم اړخونه به په اتومات ډول له منځه لاړ شي."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "څه عمومي شرایط او مقررات کاروونکو ته ورکول کېږي چې دا پلیټفارم وکاروي؟"
 

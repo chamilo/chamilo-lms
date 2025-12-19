@@ -4818,7 +4818,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "AWStats omogoča vpogled v statistiko platforme : število obiskovalcev, število obiskov posameznih strani, ...."
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "Chamilo KNJIŽNICA"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "Chamilo LIBRARY je iskalnik po besedilu (Full Text Search Engine). Omogoča iskanje želenega preko vsebine celotne platforme. Dnevno indeksiranje vsebine zagotavlja kvalitetne rezultate iskanja."
@@ -14496,7 +14496,7 @@ msgid "dari"
 msgstr "dari"
 
 msgid "dutch corporate"
-msgstr "dutch corporate"
+msgstr "nizozemsko korporativno"
 
 msgid "english for organisations"
 msgstr "angleščina za organizacije"
@@ -14547,7 +14547,7 @@ msgid "swahili"
 msgstr "swahili"
 
 msgid "traditional chinese"
-msgstr "traditional chinese"
+msgstr "tradicionalna kitajščina"
 
 msgid "Chamilo installation"
 msgstr "Chamilo - namestitev"
@@ -15777,13 +15777,13 @@ msgid "By copying the link below and pasting it in an e-mail or on a website, yo
 msgstr "S kopiranjem povezave spodaj in njenim lepljenjem v e-poštno sporočilo oz. v vsebino spletne strani boste omogočili anonimnim uporabnikom dostop do vprašalnika in njegovega izpolnjevanja. Test delovanja vprašalnika lahko izvedete s klikom na podano povezavo. Opisana funkcionalnost je še posebej uporabna v primerih, ko želite, da določena skupina izpolni vprašalnik, pa ne poznate njihovih e-poštnih naslovov."
 
 msgid "Open self"
-msgstr "Open self"
+msgstr "Odpri sebe"
 
 msgid "Open blank"
-msgstr "Open blank"
+msgstr "Odpri prazno"
 
 msgid "Open parent"
-msgstr "Open parent"
+msgstr "Odpri starša"
 
 msgid "Open top"
 msgstr "Odpri na vrhu (open top)"
@@ -31447,4 +31447,10 @@ msgstr "Napaka pri nalaganju virov."
 
 msgid "Clear search"
 msgstr "Počisti iskanje"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "V imenu podatkovne baze so dovoljeni samo črke, številke in podčrtaja (_). Neveljavni znaki bodo samodejno odstranjeni."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Kakšni splošni pogoji in določila so podani uporabnikom za uporabo te platforme?"
 

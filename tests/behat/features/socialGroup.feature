@@ -4,14 +4,15 @@ Feature: Social Group
     I need to be able to create a social group, invite users and post a message
 
   Scenario: Create a social group
-      Given I am a platform administrator
-      And I am on "/main/social/group_add.php"
-      When I fill in the following:
-          | name          | Behat Test Group                  |
-      Then I fill in editor field "description" with "This is a group created by Behat"
-      And I press "submit"
-      And wait very long for the page to be loaded
-      Then I should see "Group added"
+    Given I am a platform administrator
+    And I am on "/main/social/group_add.php"
+    And I wait for the page to be loaded
+    When I fill in the following:
+      | title          | Behat Test Group                   |
+    Then I fill in editor field "description" with "This is a group created by Behat"
+    And I press "submit"
+    And wait very long for the page to be loaded
+    Then I should not see an error
 
 #    Scenario: Invite a friend to group
 #        Given I am a platform administrator

@@ -2058,7 +2058,7 @@ msgid "Tests"
 msgstr "테스트"
 
 msgid "Courses"
-msgstr "Learnpaths"
+msgstr "강의"
 
 msgid "Copy course"
 msgstr "과정 복사"
@@ -3201,7 +3201,7 @@ msgid "Select the \"target\" which shows the link on the homepage of the course"
 msgstr "코스 홈페이지에 링크를 표시하는 \"대상\"을 선택하세요"
 
 msgid "Tracking DB."
-msgstr "Tracking DB."
+msgstr "추적 DB."
 
 msgid "Enable Tracking"
 msgstr "Tracking 활성화"
@@ -3309,7 +3309,7 @@ msgid "(recommended)"
 msgstr "(권장)"
 
 msgid "SCORM DB"
-msgstr "Scorm DB"
+msgstr "SCORM DB"
 
 msgid "Administrator last name"
 msgstr "관리자 성(last name)"
@@ -4641,7 +4641,7 @@ msgid "Invalid end date was given."
 msgstr "유효하지 않은 종료일입니다."
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(n/m/y h:m)"
 
 msgid "Homepage-files are not writable!"
 msgstr "홈페이지 파일에는 쓰기가 불가능합니다 !"
@@ -6453,7 +6453,7 @@ msgid "Announcement has been deleted"
 msgstr "공지사항이 삭제되었습니다"
 
 msgid "Published on"
-msgstr "Published on"
+msgstr "게시일"
 
 msgid "Add an announcement"
 msgstr "공지사항 추가"
@@ -7800,10 +7800,10 @@ msgid "My answer"
 msgstr "나의 답"
 
 msgid "+ answer"
-msgstr "+ answer"
+msgstr "+ 답변"
 
 msgid "- answer"
-msgstr "- answer"
+msgstr "- 답변"
 
 msgid "Save test"
 msgstr "시험 저장"
@@ -7872,10 +7872,10 @@ msgid "Show score to learner:"
 msgstr "학생에게 평가를 보여주기"
 
 msgid "Step 1"
-msgstr "Step 1"
+msgstr "1단계"
 
 msgid "Step 2"
-msgstr "Step 2"
+msgstr "2단계"
 
 msgid "Import Hotpotatoes"
 msgstr "HotPotatoes 테스트 불러오기"
@@ -8628,10 +8628,10 @@ msgid "."
 msgstr "."
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%Y년 %m월 %d일"
 
 msgid "%A %B %d, %Y"
-msgstr "%A %B %d, %Y"
+msgstr "%Y년 %m월 %d일 %A"
 
 msgid "%B %d, %Y at %I:%M %p"
 msgstr "%B %d, %Y %I:%M %p"
@@ -9465,7 +9465,7 @@ msgid "Not yet begun"
 msgstr "아직 시작되지 않음"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%Y년 %m월 %d일"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "잘못된 폴더: 문서 도구에 images라는 이름의 폴더를 생성하여 이미지를 이 폴더에 업로드할 수 있도록 하십시오"
@@ -11742,7 +11742,7 @@ msgid "Authors"
 msgstr "저자"
 
 msgid "Tracking of"
-msgstr "Tracking of"
+msgstr "%s의 추적"
 
 msgid "No e-mail address specified"
 msgstr "이메일 주소가 지정되지 않았습니다"
@@ -13920,7 +13920,7 @@ msgid "Learning paths"
 msgstr "Learning path"
 
 msgid "level up"
-msgstr "level up"
+msgstr "레벨 업"
 
 msgid "main category"
 msgstr "메인 카테고리"
@@ -16188,7 +16188,7 @@ msgid "Quarterly report"
 msgstr "분기 보고서"
 
 msgid "%d %B %Y"
-msgstr "%d %B %Y"
+msgstr "%Y년 %m월 %d일"
 
 msgid "%A"
 msgstr "%A"
@@ -18963,7 +18963,7 @@ msgid "%b %d, %Y at %I:%M %p"
 msgstr "%b %d, %Y %I:%M %p"
 
 msgid "%I:%M %p, %b %d %Y"
-msgstr "%I:%M %p, %b %d %Y"
+msgstr "%I:%M %p, %Y년 %m월 %d일"
 
 msgid "Login to vote"
 msgstr "투표하려면 로그인하세요"
@@ -20535,7 +20535,7 @@ msgid "Input size of box to fill"
 msgstr "입력 상자 크기"
 
 msgid "MM dd, yy"
-msgstr "MM dd, yy"
+msgstr "MM월 dd일, yy년"
 
 msgid "HH:mm"
 msgstr "HH:mm"
@@ -24699,7 +24699,7 @@ msgid "*: Current quarter, incomplete data"
 msgstr "*: 현재 분기, 불완전한 데이터"
 
 msgid "Q%s %s"
-msgstr "Q%s %s"
+msgstr "질문%s %s"
 
 msgid "YoY"
 msgstr "전년 대비"
@@ -31433,4 +31433,13 @@ msgstr "리소스 로딩 오류."
 
 msgid "Clear search"
 msgstr "검색 지우기"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "데이터베이스 이름에는 문자, 숫자, 밑줄(_)만 허용됩니다. 잘못된 문자는 자동으로 제거됩니다."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "이 플랫폼을 사용하기 위해 사용자에게 제공되는 일반 이용약관은 무엇인가요?"
+
+msgid "ex. {examplePassword}"
+msgstr "예. {examplePassword}"
 

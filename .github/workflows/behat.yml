@@ -35,7 +35,7 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php-versions }}
-                  extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, gd, json, soap, zip, bcmath, opcache
+                  extensions: bcmath, ctype, curl, dom, gd, iconv, intl, json, ldap, mbstring, mysql, opcache, soap, xml, zip
                   ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M, date.timezone=Europe/Paris, opcache.enable=1, opcache.memory_consumption=64M
 
             - name: Get composer cache directory

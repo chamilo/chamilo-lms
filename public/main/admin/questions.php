@@ -22,7 +22,6 @@ $user = api_get_current_user();
 
 if (!api_is_platform_admin() && (!$user || !$user->hasRole('ROLE_QUESTION_MANAGER'))) {
     api_not_allowed(true);
-    return false;
 }
 
 api_block_inactive_user();
@@ -30,6 +29,13 @@ api_block_inactive_user();
 Session::erase('objExercise');
 Session::erase('objQuestion');
 Session::erase('objAnswer');
+
+$deleteTokenPrefix = 'admin_questions_delete';
+$deleteTokenVar = $deleteTokenPrefix . '_sec_token';
+$deleteToken = Security::get_existing_token($deleteTokenPrefix);
+
+// Ensure a CSRF token exists for destructive actions (delete, etc).
+$token = Security::get_token();
 
 $interbreadcrumb[] = [
     'url' => Container::getRouter()->generate('admin'),
@@ -685,6 +691,7 @@ if ($formSent) {
                         'courseId' => $resolvedCourseId,
                         'questionId' => $questionId,
                         'action' => 'delete',
+                        $deleteTokenVar => $deleteToken,
                     ]);
             }
 
@@ -863,33 +870,115 @@ switch ($action) {
         exit;
 
     case 'delete':
+        $deleteTokenPrefix = 'admin_questions_delete';
+
+        // CSRF protection for delete action (GET-based link).
+        if (!Security::check_token('get', null, $deleteTokenPrefix)) {
+            api_not_allowed(true);
+        }
+
         $questionId = isset($_REQUEST['questionId']) ? (int) $_REQUEST['questionId'] : 0;
         $courseId = isset($_REQUEST['courseId']) ? (int) $_REQUEST['courseId'] : 0;
         $courseInfo = $courseId > 0 ? api_get_course_info_by_id($courseId) : [];
 
         if (empty($courseInfo) || $questionId <= 0) {
-            Display::addFlash(
-                Display::return_message(
-                    get_lang('Delete failed: missing course context or invalid question id.'),
-                    'warning'
-                )
-            );
+            Display::addFlash(Display::return_message(get_lang('Delete failed: missing course context or invalid question id.'), 'warning'));
+            Security::clear_token($deleteTokenPrefix);
             header('Location: ' . $url);
             exit;
         }
 
-        $objQuestionTmp = Question::read($questionId, $courseInfo);
-        if (!empty($objQuestionTmp)) {
-            $result = $objQuestionTmp->delete();
-            if ($result) {
-                Display::addFlash(
-                    Display::return_message(
-                        get_lang('Deleted') . ' #' . $questionId . ' - "' . $objQuestionTmp->question . '"'
-                    )
-                );
+        $em = Database::getManager();
+        $conn = Database::getConnection();
+
+        try {
+            /** @var CQuizQuestion|null $questionEntity */
+            $questionEntity = $em->getRepository(CQuizQuestion::class)->find($questionId);
+
+            if (!$questionEntity) {
+                Display::addFlash(Display::return_message(get_lang('Delete failed: question not found.'), 'warning'));
+                Security::clear_token($deleteTokenPrefix);
+                header('Location: ' . $url);
+                exit;
             }
+
+            $conn->beginTransaction();
+
+            // Unlink from quizzes and keep orders to reindex later
+            $toReindex = [];
+            foreach ($questionEntity->getRelQuizzes() as $rel) {
+                $quizId = (int) $rel->getQuiz()->getIid();
+                $order = (int) $rel->getQuestionOrder();
+
+                if ($quizId > 0 && $order > 0) {
+                    $toReindex[$quizId][] = $order;
+                }
+
+                $em->remove($rel);
+            }
+            $em->flush();
+
+            // Reindex question_order per quiz to avoid gaps (legacy behavior)
+            foreach ($toReindex as $quizId => $orders) {
+                // If the same question is linked multiple times (shouldn't), reindex from highest order first
+                rsort($orders);
+
+                foreach ($orders as $order) {
+                    $conn->executeStatement(
+                        'UPDATE c_quiz_rel_question
+                     SET question_order = question_order - 1
+                     WHERE quiz_id = :quizId AND question_order > :order',
+                        ['quizId' => $quizId, 'order' => $order]
+                    );
+                }
+            }
+
+            // Remove answers/options if any (prevents FK blocks)
+            foreach ($questionEntity->getAnswers() as $answer) {
+                $em->remove($answer);
+            }
+            foreach ($questionEntity->getOptions() as $option) {
+                $em->remove($option);
+            }
+
+            // Detach categories (join table rows)
+            foreach ($questionEntity->getCategories() as $category) {
+                $questionEntity->removeCategory($category);
+            }
+
+            // Reset parent_media_id references (legacy behavior)
+            $conn->executeStatement(
+                'UPDATE c_quiz_question SET parent_media_id = NULL WHERE parent_media_id = :qid',
+                ['qid' => $questionId]
+            );
+
+            // Finally remove the question
+            $em->remove($questionEntity);
+            $em->flush();
+
+            $conn->commit();
+
+            Display::addFlash(Display::return_message(get_lang('Deleted') . ' #' . $questionId, 'confirmation'));
+        } catch (\Throwable $e) {
+            try {
+                if ($conn->isTransactionActive()) {
+                    $conn->rollBack();
+                }
+            } catch (\Throwable $rollbackError) {
+                // Ignore rollback errors
+            }
+
+            error_log('Admin questions delete failed: ' . $e->getMessage());
+
+            $debug = 'test' === api_get_setting('server_type');
+            $msg = $debug
+                ? ('Delete failed: ' . $e->getMessage())
+                : get_lang('Delete failed: this question is still referenced by other data.');
+
+            Display::addFlash(Display::return_message($msg, 'warning'));
         }
 
+        Security::clear_token($deleteTokenPrefix);
         header('Location: ' . $url);
         exit;
 }

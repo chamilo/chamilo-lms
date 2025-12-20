@@ -105,11 +105,12 @@ final class DocumentXapianIndexer
 
         error_log('[Xapian] indexDocument: terms='.json_encode($terms));
 
-        // 7) Existing mapping?
+        $resourceNodeRef = $this->em->getReference(ResourceNode::class, (int) $resourceNode->getId());
+
         /** @var SearchEngineRef|null $existingRef */
         $existingRef = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNodeId' => $resourceNode->getId()])
+            ->findOneBy(['resourceNode' => $resourceNodeRef])
         ;
 
         $existingDocId = $existingRef?->getSearchDid();
@@ -153,13 +154,12 @@ final class DocumentXapianIndexer
             .var_export($docId, true)
         );
 
-        // 9) Persist mapping resource_node_id <-> search_did
         if ($existingRef instanceof SearchEngineRef) {
             $existingRef->setSearchDid($docId);
             error_log('[Xapian] indexDocument: updating existing SearchEngineRef id='.$existingRef->getId());
         } else {
             $existingRef = new SearchEngineRef();
-            $existingRef->setResourceNodeId((int) $resourceNode->getId());
+            $existingRef->setResourceNode($resourceNodeRef);
             $existingRef->setSearchDid($docId);
             $this->em->persist($existingRef);
             error_log(
@@ -180,12 +180,19 @@ final class DocumentXapianIndexer
      */
     public function deleteForResourceNodeId(int $resourceNodeId): void
     {
-        error_log('[Xapian] deleteForResourceNodeId: start, resource_node_id='.$resourceNodeId);
+        $enabled = (string) $this->settingsManager->getSetting('search.search_enabled', true);
+        if ('true' !== $enabled) {
+            error_log('[Xapian] deleteForResourceNodeId: search is disabled, skipping');
+
+            return;
+        }
+
+        $resourceNodeRef = $this->em->getReference(ResourceNode::class, $resourceNodeId);
 
         /** @var SearchEngineRef|null $ref */
         $ref = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNodeId' => $resourceNodeId])
+            ->findOneBy(['resourceNode' => $resourceNodeRef])
         ;
 
         if (!$ref instanceof SearchEngineRef) {
@@ -195,11 +202,6 @@ final class DocumentXapianIndexer
         }
 
         $docId = $ref->getSearchDid();
-        error_log(
-            '[Xapian] deleteForResourceNodeId: found SearchEngineRef id='.$ref->getId()
-            .', search_did='.var_export($docId, true)
-        );
-
         if (null !== $docId) {
             try {
                 $this->xapianIndexService->deleteDocument($docId);
@@ -265,16 +267,6 @@ final class DocumentXapianIndexer
 
     /**
      * Apply configured prefilter prefixes to Xapian terms.
-     *
-     * Expected JSON structure in search.search_prefilter_prefix, for example:
-     *
-     * {
-     *   "course":  { "prefix": "C", "title": "Course" },
-     *   "session": { "prefix": "S", "title": "Session" },
-     *   "filetype": { "prefix": "F", "title": "File type" }
-     * }
-     *
-     * "title" is meant for UI labels, "prefix" is used here for terms.
      */
     private function applyPrefilterConfigToTerms(
         array &$terms,

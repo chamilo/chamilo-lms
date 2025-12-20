@@ -61,10 +61,6 @@ final class QuestionXapianIndexer
         // Index only the question itself (title + description), not the answers
         $content = trim($title.' '.$description);
 
-        // IMPORTANT: keep field names consistent with the quiz indexer:
-        // - kind
-        // - tool
-        // - quiz_id  (here we store the primary quiz of the question)
         $fields = [
             'kind' => 'question',
             'tool' => 'quiz_question',
@@ -73,7 +69,6 @@ final class QuestionXapianIndexer
             'content' => $content,
             'resource_node_id' => (string) $resourceNode->getId(),
             'question_id' => (string) $question->getIid(),
-            // This is what Twig will use to build the link for questions
             'quiz_id' => null !== $primaryQuizId ? (string) $primaryQuizId : '',
             'course_id' => null !== $courseId ? (string) $courseId : '',
             'session_id' => null !== $sessionId ? (string) $sessionId : '',
@@ -99,11 +94,12 @@ final class QuestionXapianIndexer
             $terms[] = 'Q'.$primaryQuizId;
         }
 
-        // Look for an existing SearchEngineRef for this resource node
+        $resourceNodeRef = $this->em->getReference(ResourceNode::class, (int) $resourceNode->getId());
+
         /** @var SearchEngineRef|null $existingRef */
         $existingRef = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNodeId' => $resourceNode->getId()])
+            ->findOneBy(['resourceNode' => $resourceNodeRef])
         ;
 
         $existingDocId = $existingRef?->getSearchDid();
@@ -126,7 +122,7 @@ final class QuestionXapianIndexer
             $existingRef->setSearchDid($docId);
         } else {
             $existingRef = new SearchEngineRef();
-            $existingRef->setResourceNodeId((int) $resourceNode->getId());
+            $existingRef->setResourceNode($resourceNodeRef);
             $existingRef->setSearchDid($docId);
             $this->em->persist($existingRef);
         }
@@ -146,10 +142,17 @@ final class QuestionXapianIndexer
             return;
         }
 
+        $enabled = (string) $this->settingsManager->getSetting('search.search_enabled', true);
+        if ('true' !== $enabled) {
+            return;
+        }
+
+        $resourceNodeRef = $this->em->getReference(ResourceNode::class, (int) $resourceNode->getId());
+
         /** @var SearchEngineRef|null $ref */
         $ref = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNodeId' => $resourceNode->getId()])
+            ->findOneBy(['resourceNode' => $resourceNodeRef])
         ;
 
         if (!$ref) {

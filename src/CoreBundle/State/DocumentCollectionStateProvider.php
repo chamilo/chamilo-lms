@@ -73,6 +73,15 @@ final class DocumentCollectionStateProvider implements ProviderInterface
                 $filetypes = [$filetypes];
             }
 
+            // Normalize values and keep unique entries
+            $filetypes = array_values(array_unique(array_filter(array_map('strval', $filetypes))));
+
+            // Compatibility: treat "html" as a subtype of "file" for listing purposes.
+            // This prevents "html" rows from disappearing when the UI filters by filetype=file.
+            if (\in_array('file', $filetypes, true) && !\in_array('html', $filetypes, true)) {
+                $filetypes[] = 'html';
+            }
+
             $qb
                 ->andWhere($qb->expr()->in('d.filetype', ':filetypes'))
                 ->setParameter('filetypes', $filetypes)

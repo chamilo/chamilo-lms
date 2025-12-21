@@ -17,7 +17,7 @@ Feature: Install portal
       | dbPassForm | root |
       | dbNameForm | master |
     Then I press "Check database connection"
-    Then wait the page to be loaded when ready
+    Then wait for the page to be loaded when ready
     Then I press "step4"
     Then I should see "Step 5 - Configuration settings"
     Then I fill in the following:
@@ -28,11 +28,9 @@ Feature: Install portal
       | mailerFromName  | Chamilo Behat install |
     Then I press "step5"
     Then I should see "Step 6 - Last check before install"
-    Then wait the page to be loaded when ready
+    Then wait for the page to be loaded when ready
     Then I press "button_step6"
-    Then wait the page to be loaded when ready
-    Then wait the page to be loaded when ready
-    Then wait the page to be loaded when ready
+    Then wait one minute for the page to be loaded
     Then I should see "Step 7"
     Then I should see "Go to your newly created portal"
 

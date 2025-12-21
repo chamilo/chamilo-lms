@@ -23,7 +23,7 @@
                     <div class="col-md-12 w-full max-w-none">
                         <div class="box box-primary">
                             <div class="box-body w-full max-w-none">
-                            {% if namespace == 'ai_helpers' %}
+                                {% if namespace == 'ai_helpers' %}
                                     <div class="mb-6 p-5 rounded-lg border border-gray-50 shadow-sm bg-white hover:shadow transition" style="width:100%;max-width:none;">
                                         <div class="flex justify-between items-start mb-3 border-l-4 border-primary pl-4">
                                             <h3 class="text-gray-90 text-body-1 font-semibold">
@@ -62,15 +62,41 @@
                                     {% for field in form %}
                                         {% set fieldName = field.vars.name %}
                                         {% set isHidden  = 'hidden' in field.vars.block_prefixes %}
+
+                                        {% set isLockedOnMain =
+                                            locked_map is defined
+                                            and locked_map[fieldName] is defined
+                                            and locked_map[fieldName] == 1
+                                        %}
+
+                                        {% set hideOnSubUrlBecauseLocked =
+                                            current_url_id is defined
+                                            and current_url_id != 1
+                                            and isLockedOnMain
+                                        %}
+
                                         {% set isDisabledOnSubUrl =
                                             current_url_id is defined
                                             and current_url_id != 1
-                                            and changeable_map is defined
-                                            and changeable_map[fieldName] is defined
-                                            and not changeable_map[fieldName]
+                                            and (
+                                            (changeable_map is defined and changeable_map[fieldName] is defined and not changeable_map[fieldName])
+                                            or isLockedOnMain
+                                            )
                                         %}
 
-                                        {% if isHidden %}
+                                        {% if hideOnSubUrlBecauseLocked %}
+                                            {# Do not show locked settings on sub-URLs.
+                                               Render them hidden/disabled so Symfony does not re-render them elsewhere. #}
+                                            <div class="hidden">
+                                                {% if field.vars.compound is defined and field.vars.compound %}
+                                                    {% for child in field %}
+                                                        {{ form_widget(child, { attr: { disabled: 'disabled' } }) }}
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {{ form_widget(field, { attr: { disabled: 'disabled' } }) }}
+                                                {% endif %}
+                                            </div>
+                                        {% elseif isHidden %}
                                             {{ form_widget(field) }}
                                         {% else %}
                                             <div class="mb-6 p-5 rounded-lg border border-gray-50 shadow-sm bg-white hover:shadow transition" style="width:100%;max-width:none;">
@@ -109,11 +135,20 @@
                                                             </span>
                                                         {% endif %}
 
-                                                        {# MultiURL changeable eye #}
+                                                        {# MultiURL changeable eye + access_url_locked behavior #}
                                                         {% if changeable_map is defined %}
                                                             {% set changeable = changeable_map[fieldName] is defined ? changeable_map[fieldName] : 1 %}
 
-                                                            {% if can_toggle_multiurl_setting %}
+                                                            {% if isLockedOnMain %}
+                                                                {# Main URL: show eye-off but NOT clickable when access_url_locked=1 #}
+                                                                <span
+                                                                        class="ml-1 text-gray-50 text-lg flex items-center cursor-not-allowed"
+                                                                        title="{{ 'Setting is globally locked (access_url_locked=1)'|trans }}"
+                                                                >
+                                                                    <i class="mdi mdi-eye-off text-gray-50 text-xl"></i>
+                                                                    <i class="mdi mdi-lock-outline text-gray-50 text-lg ml-1"></i>
+                                                                </span>
+                                                            {% elseif can_toggle_multiurl_setting %}
                                                                 {# Main URL + admin: clickable toggle #}
                                                                 <button
                                                                         type="button"

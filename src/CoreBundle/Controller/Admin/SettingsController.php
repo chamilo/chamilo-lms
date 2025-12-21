@@ -49,13 +49,13 @@ class SettingsController extends BaseController
 
     /**
      * Toggle access_url_changeable for a given setting variable.
-     * Only platform admins on the main URL (ID = 1) are allowed to change it,
+     * Only platform admins on the main URL (ID = 1) are allowed to change it.
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/settings/toggle_changeable', name: 'settings_toggle_changeable', methods: ['POST'])]
     public function toggleChangeable(Request $request, AccessUrlHelper $accessUrlHelper): JsonResponse
     {
-        // Security: only admins.
+        // Security: only admins (defense-in-depth; attribute already protects this route).
         if (!$this->isGranted('ROLE_ADMIN')) {
             return $this->json([
                 'error' => 'Only platform admins can modify this flag.',
@@ -70,52 +70,111 @@ class SettingsController extends BaseController
         }
 
         $currentUrlId = (int) $currentUrl->getId();
-
         if (1 !== $currentUrlId) {
             return $this->json([
                 'error' => 'Only the main URL (ID 1) can toggle this setting.',
             ], 403);
         }
 
-        $payload = json_decode($request->getContent(), true);
-
-        if (!\is_array($payload) || !isset($payload['variable'], $payload['status'])) {
+        $payload = json_decode((string) $request->getContent(), true);
+        if (!\is_array($payload)) {
             return $this->json([
-                'error' => 'Invalid payload.',
+                'error' => 'Invalid JSON payload.',
             ], 400);
         }
 
-        $variable = trim((string) $payload['variable']);
-        $status = (int) $payload['status'];
-        $status = $status === 1 ? 1 : 0;
+        $variable = isset($payload['variable']) ? trim((string) $payload['variable']) : '';
+        $statusRaw = $payload['status'] ?? null;
+
+        // Optional: category/namespace helps avoid collisions when the same variable exists in multiple schemas.
+        $category = null;
+        if (isset($payload['category'])) {
+            $category = trim((string) $payload['category']);
+        } elseif (isset($payload['namespace'])) {
+            $category = trim((string) $payload['namespace']);
+        }
 
         if ('' === $variable) {
             return $this->json([
-                'error' => 'Invalid variable.',
+                'error' => 'Missing "variable".',
             ], 400);
         }
 
+        // Basic hardening: setting variable names are typically snake_case.
+        if (!preg_match('/^[a-zA-Z0-9_]+$/', $variable)) {
+            return $this->json([
+                'error' => 'Invalid variable name.',
+            ], 400);
+        }
+
+        $status = ((int) $statusRaw) === 1 ? 1 : 0;
+
         $repo = $this->entityManager->getRepository(SettingsCurrent::class);
 
-        // We search by variable + current main AccessUrl entity.
-        $setting = $repo->findOneBy([
-            'variable' => $variable,
-            'url' => $currentUrl,
-        ]);
-
-        if (!$setting) {
+        // Ensure we always update canonical rows on main URL (ID=1).
+        $mainUrl = $this->entityManager->getRepository(AccessUrl::class)->find(1);
+        if (!$mainUrl instanceof AccessUrl) {
             return $this->json([
-                'error' => 'Setting not found.',
+                'error' => 'Main URL (ID 1) not found.',
+            ], 500);
+        }
+
+        // Find rows: either a specific category, or all rows matching the variable on main URL.
+        $rows = [];
+        if (null !== $category && '' !== $category) {
+            $rows = array_merge(
+                $repo->findBy(['variable' => $variable, 'url' => $mainUrl, 'category' => $category]),
+                $repo->findBy(['variable' => $variable, 'url' => $mainUrl, 'category' => ucfirst($category)])
+            );
+            // Remove duplicates
+            $rows = array_values(array_unique($rows, SORT_REGULAR));
+        } else {
+            $rows = $repo->findBy(['variable' => $variable, 'url' => $mainUrl]);
+        }
+
+        if (empty($rows)) {
+            return $this->json([
+                'error' => 'Setting not found on main URL.',
             ], 404);
         }
 
         try {
-            $setting->setAccessUrlChangeable($status);
+            $updated = 0;
+
+            foreach ($rows as $setting) {
+                if (!$setting instanceof SettingsCurrent) {
+                    continue;
+                }
+
+                // Locked settings must not be toggled (even on main URL).
+                if (method_exists($setting, 'getAccessUrlLocked') && 1 === (int) $setting->getAccessUrlLocked()) {
+                    return $this->json([
+                        'error' => 'This setting is locked and cannot be toggled.',
+                    ], 403);
+                }
+
+                $setting->setAccessUrlChangeable($status);
+                $this->entityManager->persist($setting);
+                $updated++;
+            }
+
             $this->entityManager->flush();
+
+            // Clear session schema caches so admin UI reflects the change immediately.
+            if ($request->hasSession()) {
+                $session = $request->getSession();
+                foreach (array_keys((array) $session->all()) as $key) {
+                    if ('schemas' === $key || str_starts_with((string) $key, 'schemas_url_')) {
+                        $session->remove($key);
+                    }
+                }
+            }
 
             return $this->json([
                 'result' => 1,
+                'variable' => $variable,
                 'status' => $status,
+                'updated_rows' => $updated,
             ]);
         } catch (\Throwable $e) {
             return $this->json([
@@ -154,13 +213,12 @@ class SettingsController extends BaseController
         $schemas = $manager->getSchemas();
         [$ordered, $labelMap] = $this->computeOrderedNamespacesByTranslatedLabel($schemas, $request);
 
-        // Template map for current URL (existing behavior – JSON helper)
         $settingsRepo = $this->entityManager->getRepository(SettingsCurrent::class);
 
-        // Build template map: current URL overrides main URL when missing.
         $currentUrlId = (int) $url->getId();
         $mainUrl = $this->entityManager->getRepository(AccessUrl::class)->find(1);
 
+        // Build template map: current URL overrides main URL when missing.
         if ($mainUrl instanceof AccessUrl && 1 !== $currentUrlId) {
             $mainRows = $settingsRepo->findBy(['url' => $mainUrl]);
             foreach ($mainRows as $s) {
@@ -177,8 +235,10 @@ class SettingsController extends BaseController
             }
         }
 
-        // MultiURL changeable flags: read from main URL (ID = 1) only
+        // MultiURL flags: read from main URL (ID = 1) only
         $changeableMap = [];
+        $lockedMap = [];
+
         $mainUrlRows = $settingsRepo->createQueryBuilder('sc')
             ->join('sc.url', 'u')
             ->andWhere('u.id = :mainId')
@@ -188,7 +248,10 @@ class SettingsController extends BaseController
 
         foreach ($mainUrlRows as $row) {
             if ($row instanceof SettingsCurrent) {
-                $changeableMap[$row->getVariable()] = $row->getAccessUrlChangeable();
+                $changeableMap[$row->getVariable()] = (int) $row->getAccessUrlChangeable();
+                $lockedMap[$row->getVariable()] = method_exists($row, 'getAccessUrlLocked')
+                    ? (int) $row->getAccessUrlLocked()
+                    : 0;
             }
         }
 
@@ -207,6 +270,7 @@ class SettingsController extends BaseController
                 'ordered_namespaces' => $ordered,
                 'namespace_labels' => $labelMap,
                 'changeable_map' => $changeableMap,
+                'locked_map' => $lockedMap,
                 'current_url_id' => $currentUrlId,
                 'can_toggle_multiurl_setting' => $canToggleMultiUrlSetting,
             ]);
@@ -222,16 +286,22 @@ class SettingsController extends BaseController
                 $variablesInCategory = [];
                 foreach ($parameterList as $parameter) {
                     $var = $parameter->getVariable();
+
+                    // Hide locked settings from child URLs (do not show them at all).
+                    if (1 !== $currentUrlId && 1 === (int) ($lockedMap[$var] ?? 0)) {
+                        continue;
+                    }
+
                     $variablesInCategory[] = $var;
+
                     if (isset($templateMap[$var])) {
                         $templateMapByCategory[$category][$var] = $templateMap[$var];
                     }
                 }
 
-                // Convert category to schema alias and validate it BEFORE loading/creating the form
                 $schemaAlias = $manager->convertNameSpaceToService($category);
 
-                // skip unknown/legacy categories (e.g., "tools")
+                // Skip unknown/legacy categories (e.g., "tools")
                 if (!isset($schemas[$schemaAlias])) {
                     continue;
                 }
@@ -239,12 +309,18 @@ class SettingsController extends BaseController
                 $settings = $manager->load($category);
                 $form = $this->getSettingsFormFactory()->create($schemaAlias);
 
+                // Keep only keyword-matching variables, and also remove locked ones for child URLs.
                 foreach (array_keys($settings->getParameters()) as $name) {
-                    if (!\in_array($name, $variablesInCategory, true)) {
-                        $form->remove($name);
+                    $isLockedForChild = (1 !== $currentUrlId) && (1 === (int) ($lockedMap[$name] ?? 0));
+
+                    if ($isLockedForChild || !\in_array($name, $variablesInCategory, true)) {
+                        if ($form->has($name)) {
+                            $form->remove($name);
+                        }
                         $settings->remove($name);
                     }
                 }
+
                 $form->setData($settings);
                 $formList[$category] = $form->createView();
             }
@@ -261,6 +337,7 @@ class SettingsController extends BaseController
             'ordered_namespaces' => $ordered,
             'namespace_labels' => $labelMap,
             'changeable_map' => $changeableMap,
+            'locked_map' => $lockedMap,
             'current_url_id' => $currentUrlId,
             'can_toggle_multiurl_setting' => $canToggleMultiUrlSetting,
         ]);
@@ -276,10 +353,10 @@ class SettingsController extends BaseController
         $manager = $this->getSettingsManager();
         $url = $accessUrlHelper->getCurrent();
         $manager->setUrl($url);
+
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
 
         $keyword = (string) $request->query->get('keyword', '');
-        // Extra diagnostics used only for the "search" namespace
         $searchDiagnostics = null;
 
         // Validate schema BEFORE load/create to avoid NonExistingServiceException
@@ -292,6 +369,31 @@ class SettingsController extends BaseController
             ]);
         }
 
+        $settingsRepo = $this->entityManager->getRepository(SettingsCurrent::class);
+
+        $currentUrlId = (int) $url->getId();
+        $mainUrl = $this->entityManager->getRepository(AccessUrl::class)->find(1);
+
+        // MultiURL flags: read from main URL (ID = 1) only
+        $changeableMap = [];
+        $lockedMap = [];
+
+        $mainUrlRows = $settingsRepo->createQueryBuilder('sc')
+            ->join('sc.url', 'u')
+            ->andWhere('u.id = :mainId')
+            ->setParameter('mainId', 1)
+            ->getQuery()
+            ->getResult();
+
+        foreach ($mainUrlRows as $row) {
+            if ($row instanceof SettingsCurrent) {
+                $changeableMap[$row->getVariable()] = (int) $row->getAccessUrlChangeable();
+                $lockedMap[$row->getVariable()] = method_exists($row, 'getAccessUrlLocked')
+                    ? (int) $row->getAccessUrlLocked()
+                    : 0;
+            }
+        }
+
         $settings = $manager->load($namespace);
 
         $form = $this->getSettingsFormFactory()->create(
@@ -299,6 +401,18 @@ class SettingsController extends BaseController
             null,
             ['allow_extra_fields' => true]
         );
+
+        // Hide locked settings from child URLs (do not show them at all).
+        if (1 !== $currentUrlId) {
+            foreach (array_keys($settings->getParameters()) as $name) {
+                if (1 === (int) ($lockedMap[$name] ?? 0)) {
+                    if ($form->has($name)) {
+                        $form->remove($name);
+                    }
+                    $settings->remove($name);
+                }
+            }
+        }
 
         $form->setData($settings);
 
@@ -346,10 +460,6 @@ class SettingsController extends BaseController
         [$ordered, $labelMap] = $this->computeOrderedNamespacesByTranslatedLabel($schemas, $request);
 
         $templateMap = [];
-        $settingsRepo = $this->entityManager->getRepository(SettingsCurrent::class);
-
-        $currentUrlId = (int) $url->getId();
-        $mainUrl = $this->entityManager->getRepository(AccessUrl::class)->find(1);
 
         // Build template map: fallback to main URL templates when sub-URL has no row for a locked setting.
         if ($mainUrl instanceof AccessUrl && 1 !== $currentUrlId) {
@@ -365,21 +475,6 @@ class SettingsController extends BaseController
         foreach ($settingsWithTemplate as $s) {
             if ($s->getValueTemplate()) {
                 $templateMap[$s->getVariable()] = $s->getValueTemplate()->getId();
-            }
-        }
-
-        // MultiURL changeable flags: read from main URL (ID = 1) only
-        $changeableMap = [];
-        $mainUrlRows = $settingsRepo->createQueryBuilder('sc')
-            ->join('sc.url', 'u')
-            ->andWhere('u.id = :mainId')
-            ->setParameter('mainId', 1)
-            ->getQuery()
-            ->getResult();
-
-        foreach ($mainUrlRows as $row) {
-            if ($row instanceof SettingsCurrent) {
-                $changeableMap[$row->getVariable()] = $row->getAccessUrlChangeable();
             }
         }
 
@@ -401,6 +496,7 @@ class SettingsController extends BaseController
             'namespace_labels' => $labelMap,
             'platform' => $platform,
             'changeable_map' => $changeableMap,
+            'locked_map' => $lockedMap,
             'current_url_id' => $currentUrlId,
             'can_toggle_multiurl_setting' => $canToggleMultiUrlSetting,
             'search_diagnostics' => $searchDiagnostics,

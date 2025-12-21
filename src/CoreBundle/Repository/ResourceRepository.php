@@ -24,6 +24,7 @@ use Chamilo\CoreBundle\Traits\Repository\RepositoryQueryBuilderTrait;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryProxy;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
@@ -37,6 +38,10 @@ use const PATHINFO_EXTENSION;
 
 /**
  * Extends Resource EntityRepository.
+ *
+ * @template T of object
+ *
+ * @template-extends ServiceEntityRepositoryProxy<T>
  */
 abstract class ResourceRepository extends ServiceEntityRepository
 {
@@ -305,8 +310,38 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function addCourseSessionGroupQueryBuilder(Course $course, ?Session $session = null, ?CGroup $group = null, ?QueryBuilder $qb = null): QueryBuilder
+    public function addSessionNullQueryBuilder(QueryBuilder $qb): QueryBuilder
     {
+        return $qb->andWhere(
+            $qb->expr()->orX(
+                $qb->expr()->isNull('links.session'),
+                $qb->expr()->eq('links.session', 0)
+            )
+        );
+    }
+
+    public function addSessionAndBaseContentQueryBuilder(Session $session, QueryBuilder $qb): QueryBuilder
+    {
+        return $qb
+            ->andWhere('links.session = :session OR links.session IS NULL')
+            ->setParameter('session', $session)
+        ;
+    }
+
+    public function addSessionOnlyQueryBuilder(Session $session, QueryBuilder $qb): QueryBuilder
+    {
+        return $qb
+            ->andWhere('links.session = :session')
+            ->setParameter('session', $session)
+        ;
+    }
+
+    public function addCourseSessionGroupQueryBuilder(
+        ?Course $course = null,
+        ?Session $session = null,
+        ?CGroup $group = null,
+        ?QueryBuilder $qb = null
+    ): QueryBuilder {
         $reflectionClass = $this->getClassMetadata()->getReflectionClass();
 
         // Check if this resource type requires to load the base course resources when using a session
@@ -316,23 +351,18 @@ abstract class ResourceRepository extends ServiceEntityRepository
             true
         );
 
-        $this->addCourseQueryBuilder($course, $qb);
+        if ($course) {
+            $this->addCourseQueryBuilder($course, $qb);
+        }
 
         if (null === $session) {
-            $qb->andWhere(
-                $qb->expr()->orX(
-                    $qb->expr()->isNull('links.session'),
-                    $qb->expr()->eq('links.session', 0)
-                )
-            );
+            $this->addSessionNullQueryBuilder($qb);
         } elseif ($loadBaseSessionContent) {
             // Load course base content.
-            $qb->andWhere('links.session = :session OR links.session IS NULL');
-            $qb->setParameter('session', $session);
+            $this->addSessionAndBaseContentQueryBuilder($session, $qb);
         } else {
             // Load only session resources.
-            $qb->andWhere('links.session = :session');
-            $qb->setParameter('session', $session);
+            $this->addSessionOnlyQueryBuilder($session, $qb);
         }
 
         if (null === $group) {
@@ -381,11 +411,34 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function getResourcesByCourse(Course $course, ?Session $session = null, ?CGroup $group = null, ?ResourceNode $parentNode = null, bool $displayOnlyPublished = true, bool $displayOrder = false): QueryBuilder
-    {
+    public function getResourcesByCourse(
+        ?Course $course = null,
+        ?Session $session = null,
+        ?CGroup $group = null,
+        ?ResourceNode $parentNode = null,
+        bool $displayOnlyPublished = true,
+        bool $displayOrder = false
+    ): QueryBuilder {
         $qb = $this->getResources($parentNode);
         $this->addVisibilityQueryBuilder($qb, true, $displayOnlyPublished);
         $this->addCourseSessionGroupQueryBuilder($course, $session, $group, $qb);
+
+        if ($displayOrder) {
+            $qb->orderBy('links.displayOrder', 'ASC');
+        }
+
+        return $qb;
+    }
+
+    public function getResourcesBySession(
+        ?Session $session = null,
+        ?ResourceNode $parentNode = null,
+        bool $displayOnlyPublished = true,
+        bool $displayOrder = false
+    ): QueryBuilder {
+        $qb = $this->getResources($parentNode);
+        $this->addVisibilityQueryBuilder($qb, true, $displayOnlyPublished);
+        $this->addCourseSessionGroupQueryBuilder(null, $session, null, $qb);
 
         if ($displayOrder) {
             $qb->orderBy('links.displayOrder', 'ASC');
@@ -535,14 +588,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this->resourceNodeRepository->getResourceNodeFileContent($resourceNode);
     }
 
-    /**
-     * @return false|resource
-     */
-    public function getResourceNodeFileStream(ResourceNode $resourceNode)
-    {
-        return $this->resourceNodeRepository->getResourceNodeFileStream($resourceNode);
-    }
-
     public function getResourceFileDownloadUrl(AbstractResource $resource, array $extraParams = [], ?int $referenceType = null): string
     {
         $extraParams['mode'] = 'download';
@@ -588,7 +633,17 @@ abstract class ResourceRepository extends ServiceEntityRepository
         ?Course $course = null,
         ?Session $session = null
     ): void {
-        $firstLink = $resource->getFirstResourceLink();
+        $firstLink = null;
+
+        if (null !== $course) {
+            $firstLink = $resource->getFirstResourceLinkFromCourseSession($course, $session);
+        }
+
+        $firstLink ??= $resource->getFirstResourceLink();
+
+        if (null === $firstLink) {
+            return;
+        }
 
         if (ResourceLink::VISIBILITY_PUBLISHED === $firstLink->getVisibility()) {
             $this->setVisibilityDraft($resource, $course, $session);
@@ -880,12 +935,12 @@ abstract class ResourceRepository extends ServiceEntityRepository
                 ];
                 $childDocument = $this->findOneBy($criteria);
                 if ($childDocument) {
-                    $this->setLinkVisibility($childDocument, $visibility);
+                    $this->setLinkVisibility($childDocument, $visibility, true, $course, $session, $group, $user);
                 }
             }
         }
 
-        if ($resource instanceof ResourceShowCourseResourcesInSessionInterface) {
+        if ($resource instanceof ResourceShowCourseResourcesInSessionInterface && null !== $course) {
             $link = $resource->getFirstResourceLinkFromCourseSession($course, $session);
 
             if (!$link) {

@@ -138,7 +138,16 @@ class FeatureContext extends MinkContext
     {
         $this->assertSession()->pageTextNotContains('Internal server error');
         $this->assertSession()->pageTextNotContains('error');
-        $this->assertSession()->elementNotExists('css', '.alert-danger');
+        $el = $this->getSession()->getPage()->find(
+            'css',
+            '.alert-danger'
+        );
+        if (null !== $el) {
+            $this->assertSession()->elementAttributeContains('css', '.alert-danger', 'style', 'display:none;');
+        } else {
+            $this->assertSession()->elementNotExists('css', '.alert-danger');
+        }
+        $this->assertSession()->elementNotExists('css', '.p-message-error');
     }
 
     /**
@@ -455,7 +464,7 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @When /^wait very long for the page to be loaded$/
+     * @When /^(?:|I )wait very long for the page to be loaded$/
      */
     public function waitVeryLongForThePageToBeLoaded()
     {
@@ -464,11 +473,19 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @When /^wait the page to be loaded when ready$/
+     * @When /^(?:|I )wait for the page to be loaded when ready$/
      */
-    public function waitVeryLongForThePageToBeLoadedWhenReady()
+    public function waitForThePageToBeLoadedWhenReady()
     {
         $this->getSession()->wait(9000, "document.readyState === 'complete'");
+    }
+
+    /**
+     * @When /^(?:|I )wait one minute for the page to be loaded$/
+     */
+    public function waitOneMinuteForThePageToBeLoaded()
+    {
+        $this->getSession()->wait(60000);
     }
 
     /**

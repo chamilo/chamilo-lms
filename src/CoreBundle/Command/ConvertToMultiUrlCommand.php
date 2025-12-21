@@ -6,7 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Command;
 
-use DateTimeImmutable;
+use DateTime;
+use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
@@ -23,7 +24,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 /**
  * MultiURL Converter (Single → Multi)
  * Usage:
- *   php bin/console app:multi-url:convert "https://admin.example.com/" [--admin-username=admin] [--preserve-admin-id] [--dry-run] [--force]
+ *   php bin/console app:multi-url:convert "https://admin.example.com/" [--admin-username=admin] [--preserve-admin-id] [--dry-run] [--force].
  *
  * What it does:
  *   • Default: adds a NEW ADMIN URL; keeps current URL as SECONDARY; links the chosen admin user.
@@ -35,9 +36,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
  *
  * After running:
  *   • Enable multi-URL in configuration and clear caches if needed. Non-existent tables/columns are skipped.
- *
  */
-
 #[AsCommand(
     name: 'app:multi-url:convert',
     description: 'Convert a single-URL Chamilo portal to MultiURL. Optionally preserve current access_url ID as admin and move foreign keys.'
@@ -58,49 +57,51 @@ class ConvertToMultiUrlCommand extends Command
             ->addOption('admin-username', null, InputOption::VALUE_REQUIRED, 'Global admin username (default: user id 1)')
             ->addOption('preserve-admin-id', null, InputOption::VALUE_NONE, 'Legacy migration: keep current access_url id as ADMIN and insert secondary with id+1, moving foreign keys')
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Do not write; only show planned changes')
-            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Skip single-URL safety check (use with caution)');
+            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Skip single-URL safety check (use with caution)')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io          = new SymfonyStyle($input, $output);
+        $io = new SymfonyStyle($input, $output);
         $newAdminUrl = (string) $input->getArgument('admin-url');
-        $username    = (string) ($input->getOption('admin-username') ?? '');
-        $preserveId  = (bool) $input->getOption('preserve-admin-id');
-        $dryRun      = (bool) $input->getOption('dry-run');
-        $force       = (bool) $input->getOption('force');
+        $username = (string) ($input->getOption('admin-username') ?? '');
+        $preserveId = (bool) $input->getOption('preserve-admin-id');
+        $dryRun = (bool) $input->getOption('dry-run');
+        $force = (bool) $input->getOption('force');
 
         $prefix = (string) ($this->params->has('database_prefix') ? $this->params->get('database_prefix') : '');
-        $T = static fn(string $name) => $prefix.$name;
+        $T = static fn (string $name) => $prefix.$name;
 
         /** @var AbstractSchemaManager $sm */
         $sm = $this->conn->createSchemaManager();
-        $exists = fn(string $table) => $sm->tablesExist([$table]);
+        $exists = fn (string $table) => $sm->tablesExist([$table]);
 
         // Canonical tables (based on your entities)
-        $accessUrl             = $T('access_url');
-        $relCourse             = $T('access_url_rel_course');
-        $relCourseCategory     = $T('access_url_rel_course_category');
-        $relSession            = $T('access_url_rel_session');
-        $relUser               = $T('access_url_rel_user');
-        $relUsergroup          = $T('access_url_rel_usergroup');
+        $accessUrl = $T('access_url');
+        $relCourse = $T('access_url_rel_course');
+        $relCourseCategory = $T('access_url_rel_course_category');
+        $relSession = $T('access_url_rel_session');
+        $relUser = $T('access_url_rel_user');
+        $relUsergroup = $T('access_url_rel_usergroup');
 
-        $userRelCourseVote     = $T('user_rel_course_vote');   // url_id
-        $trackOnline           = $T('track_e_online');         // access_url_id
-        $sysAnnouncement       = $T('sys_announcement');       // access_url_id
-        $skill                 = $T('skill');                   // access_url_id
-        $branchSync            = $T('branch_sync');             // access_url_id
-        $sessionCategory       = $T('session_category');        // access_url_id
+        $userRelCourseVote = $T('user_rel_course_vote');   // url_id
+        $trackOnline = $T('track_e_online');         // access_url_id
+        $sysAnnouncement = $T('sys_announcement');       // access_url_id
+        $skill = $T('skill');                   // access_url_id
+        $branchSync = $T('branch_sync');             // access_url_id
+        $sessionCategory = $T('session_category');        // access_url_id
 
         // Optional/legacy extras (existence-checked)
-        $systemCalendar        = $T('system_calendar');         // access_url_id (if present)
-        $trackCourseRanking    = $T('track_course_ranking');    // url_id (if present)
-        $userTable             = $T('user');
+        $systemCalendar = $T('system_calendar');         // access_url_id (if present)
+        $trackCourseRanking = $T('track_course_ranking');    // url_id (if present)
+        $userTable = $T('user');
 
         // Safety: expect single URL unless --force
         $countUrl = (int) $this->conn->fetchOne("SELECT COUNT(*) FROM {$accessUrl}");
-        if (!$force && $countUrl !== 1) {
+        if (!$force && 1 !== $countUrl) {
             $io->error("Aborting: expected exactly 1 row in access_url; found {$countUrl}. Use --force if you know what you are doing.");
+
             return Command::FAILURE;
         }
 
@@ -108,20 +109,21 @@ class ConvertToMultiUrlCommand extends Command
         $row = $this->conn->fetchAssociative("SELECT * FROM {$accessUrl} ORDER BY id ASC LIMIT 1");
         if (!$row) {
             $io->error('No access_url row found. Nothing to convert.');
+
             return Command::FAILURE;
         }
-        $currentId  = (int) $row['id'];
+        $currentId = (int) $row['id'];
         $currentUrl = (string) $row['url'];
 
         // Resolve admin user id from username (fallback to 1)
         $adminUserId = 1;
-        if ($username !== '') {
+        if ('' !== $username) {
             $adminUserId = (int) ($this->conn->fetchOne(
                 "SELECT id FROM {$userTable} WHERE username = :u",
                 ['u' => $username],
                 ['u' => Types::STRING]
             ) ?: 1);
-            if ($adminUserId === 1 && $username !== '') {
+            if (1 === $adminUserId && '' !== $username) {
                 $io->warning("Username '{$username}' not found. Falling back to user id 1.");
             }
         } else {
@@ -143,7 +145,7 @@ class ConvertToMultiUrlCommand extends Command
         $io->section('Current / Planned URLs');
         if ($preserveId) {
             $adminUrlId = $currentId;         // stays admin
-            $oldUrlId   = $currentId + 1;     // secondary row
+            $oldUrlId = $currentId + 1;     // secondary row
             $io->listing([
                 "Keep current row as ADMIN: id={$adminUrlId} url will become {$newAdminUrl}",
                 "Insert SECONDARY URL: id={$oldUrlId} url will be {$currentUrl}",
@@ -153,7 +155,7 @@ class ConvertToMultiUrlCommand extends Command
             $io->listing([
                 "Keep current URL as SECONDARY: id={$currentId} url={$currentUrl}",
                 "Insert new ADMIN URL with auto id: url={$newAdminUrl}",
-                "No FK moves; only link admin user to new admin URL.",
+                'No FK moves; only link admin user to new admin URL.',
             ]);
         }
 
@@ -161,47 +163,49 @@ class ConvertToMultiUrlCommand extends Command
         if ($dryRun) {
             $io->success('Dry-run complete. No changes were committed.');
             $io->note('If you proceed for real, remember to enable multiple_access_urls afterwards.');
+
             return Command::SUCCESS;
         }
 
         $this->conn->beginTransaction();
+
         try {
             if ($preserveId) {
                 // 1) Make current row ADMIN
                 $sql = "UPDATE {$accessUrl} SET url = :adminUrl, description = :descr WHERE id = :id";
-                $io->text("∙ Update current access_url -> ADMIN");
+                $io->text('∙ Update current access_url -> ADMIN');
                 $this->conn->executeStatement($sql, [
                     'adminUrl' => $newAdminUrl,
-                    'descr'    => 'The main admin URL',
-                    'id'       => $currentId,
+                    'descr' => 'The main admin URL',
+                    'id' => $currentId,
                 ], [
                     'adminUrl' => Types::STRING,
-                    'descr'    => Types::STRING,
-                    'id'       => Types::INTEGER,
+                    'descr' => Types::STRING,
+                    'id' => Types::INTEGER,
                 ]);
 
                 // 2) Insert SECONDARY with explicit id = currentId+1 (old URL)
                 $adminUrlId = $currentId;
-                $oldUrlId   = $currentId + 1;
+                $oldUrlId = $currentId + 1;
 
-                $insertCols = ['id','url','description','active','created_by','tms','url_type'];
-                $params     = [
-                    'id'          => $oldUrlId,
-                    'url'         => $currentUrl,
+                $insertCols = ['id', 'url', 'description', 'active', 'created_by', 'tms', 'url_type'];
+                $params = [
+                    'id' => $oldUrlId,
+                    'url' => $currentUrl,
                     'description' => '',
-                    'active'      => 1,
-                    'created_by'  => 1,
-                    'tms'         => new \DateTime('now', new \DateTimeZone('UTC')),
-                    'url_type'    => null,
+                    'active' => 1,
+                    'created_by' => 1,
+                    'tms' => new DateTime('now', new DateTimeZone('UTC')),
+                    'url_type' => null,
                 ];
-                $types      = [
-                    'id'          => Types::INTEGER,
-                    'url'         => Types::STRING,
+                $types = [
+                    'id' => Types::INTEGER,
+                    'url' => Types::STRING,
                     'description' => Types::STRING,
-                    'active'      => Types::BOOLEAN,
-                    'created_by'  => Types::INTEGER,
-                    'tms'         => Types::DATETIME_MUTABLE,
-                    'url_type'    => Types::BOOLEAN,
+                    'active' => Types::BOOLEAN,
+                    'created_by' => Types::INTEGER,
+                    'tms' => Types::DATETIME_MUTABLE,
+                    'url_type' => Types::BOOLEAN,
                 ];
 
                 if ($hasTree) {
@@ -220,7 +224,7 @@ class ConvertToMultiUrlCommand extends Command
                     // Insert NULL for root; we will UPDATE to self id right after
                     $insertCols[] = $rootCol;
                     $params[$rootCol] = null;
-                    $types[$rootCol]  = Types::INTEGER;
+                    $types[$rootCol] = Types::INTEGER;
                 }
 
                 $io->text("∙ Insert SECONDARY access_url (explicit id = {$oldUrlId})");
@@ -229,14 +233,14 @@ class ConvertToMultiUrlCommand extends Command
                     $placeholders[] = ':'.$c;
                 }
                 $this->conn->executeStatement(
-                    "INSERT INTO {$accessUrl} (".implode(',', $insertCols).") VALUES (".implode(',', $placeholders).")",
+                    "INSERT INTO {$accessUrl} (".implode(',', $insertCols).') VALUES ('.implode(',', $placeholders).')',
                     $params,
                     $types
                 );
 
                 // Initialize root column to self id if present
                 if ($rootCol) {
-                    $io->text("∙ Initialize tree root column for SECONDARY");
+                    $io->text('∙ Initialize tree root column for SECONDARY');
                     $this->conn->executeStatement(
                         "UPDATE {$accessUrl} SET {$rootCol} = :self WHERE id = :self",
                         ['self' => $oldUrlId],
@@ -245,7 +249,7 @@ class ConvertToMultiUrlCommand extends Command
                 }
 
                 // 3) Move FKs from ADMIN to SECONDARY
-                $move = function (string $table, string $col) use ($io, $adminUrlId, $oldUrlId, $exists) {
+                $move = function (string $table, string $col) use ($io, $adminUrlId, $oldUrlId, $exists): void {
                     if (!$exists($table)) {
                         return;
                     }
@@ -258,16 +262,16 @@ class ConvertToMultiUrlCommand extends Command
                 };
 
                 $move($userRelCourseVote, 'url_id');
-                $move($trackOnline,       'access_url_id');
-                $move($sysAnnouncement,   'access_url_id');
-                $move($skill,             'access_url_id');
-                $move($relCourse,         'access_url_id');
+                $move($trackOnline, 'access_url_id');
+                $move($sysAnnouncement, 'access_url_id');
+                $move($skill, 'access_url_id');
+                $move($relCourse, 'access_url_id');
                 $move($relCourseCategory, 'access_url_id');
-                $move($relSession,        'access_url_id');
-                $move($relUser,           'access_url_id');
-                $move($relUsergroup,      'access_url_id');
-                $move($branchSync,        'access_url_id');
-                $move($sessionCategory,   'access_url_id');
+                $move($relSession, 'access_url_id');
+                $move($relUser, 'access_url_id');
+                $move($relUsergroup, 'access_url_id');
+                $move($branchSync, 'access_url_id');
+                $move($sessionCategory, 'access_url_id');
 
                 if ($exists($systemCalendar)) {
                     $move($systemCalendar, 'access_url_id');
@@ -277,7 +281,7 @@ class ConvertToMultiUrlCommand extends Command
                 }
 
                 // 4) Ensure admin user is linked to ADMIN url
-                $io->text("∙ Ensure admin user has relation to ADMIN url");
+                $io->text('∙ Ensure admin user has relation to ADMIN url');
                 $this->conn->executeStatement(
                     "INSERT INTO {$relUser} (access_url_id, user_id)
                      SELECT :adminId, :userId
@@ -289,24 +293,24 @@ class ConvertToMultiUrlCommand extends Command
                 );
             } else {
                 // SAFER: Insert ADMIN with auto id; keep current as SECONDARY (no FK moves)
-                $io->text("∙ Insert ADMIN access_url (auto id)");
+                $io->text('∙ Insert ADMIN access_url (auto id)');
 
-                $insertCols = ['url','description','active','created_by','tms','url_type'];
-                $params     = [
-                    'url'         => $newAdminUrl,
+                $insertCols = ['url', 'description', 'active', 'created_by', 'tms', 'url_type'];
+                $params = [
+                    'url' => $newAdminUrl,
                     'description' => 'The main admin URL',
-                    'active'      => 1,
-                    'created_by'  => 1,
-                    'tms'         => new \DateTime('now', new \DateTimeZone('UTC')),
-                    'url_type'    => null,
+                    'active' => 1,
+                    'created_by' => 1,
+                    'tms' => new DateTime('now', new DateTimeZone('UTC')),
+                    'url_type' => null,
                 ];
-                $types      = [
-                    'url'         => Types::STRING,
+                $types = [
+                    'url' => Types::STRING,
                     'description' => Types::STRING,
-                    'active'      => Types::BOOLEAN,
-                    'created_by'  => Types::INTEGER,
-                    'tms'         => Types::DATETIME_MUTABLE,
-                    'url_type'    => Types::BOOLEAN,
+                    'active' => Types::BOOLEAN,
+                    'created_by' => Types::INTEGER,
+                    'tms' => Types::DATETIME_MUTABLE,
+                    'url_type' => Types::BOOLEAN,
                 ];
 
                 if ($hasTree) {
@@ -324,7 +328,7 @@ class ConvertToMultiUrlCommand extends Command
                 if ($rootCol) {
                     $insertCols[] = $rootCol;
                     $params[$rootCol] = null; // set later to self id
-                    $types[$rootCol]  = Types::INTEGER;
+                    $types[$rootCol] = Types::INTEGER;
                 }
 
                 $placeholders = [];
@@ -333,7 +337,7 @@ class ConvertToMultiUrlCommand extends Command
                 }
 
                 $this->conn->executeStatement(
-                    "INSERT INTO {$accessUrl} (".implode(',', $insertCols).") VALUES (".implode(',', $placeholders).")",
+                    "INSERT INTO {$accessUrl} (".implode(',', $insertCols).') VALUES ('.implode(',', $placeholders).')',
                     $params,
                     $types
                 );
@@ -347,7 +351,7 @@ class ConvertToMultiUrlCommand extends Command
 
                 // Initialize tree root to self id if present
                 if ($rootCol) {
-                    $io->text("∙ Initialize tree root column for ADMIN access_url");
+                    $io->text('∙ Initialize tree root column for ADMIN access_url');
                     $this->conn->executeStatement(
                         "UPDATE {$accessUrl}
                          SET {$rootCol} = :self
@@ -358,7 +362,7 @@ class ConvertToMultiUrlCommand extends Command
                 }
 
                 // Ensure admin user is linked to new ADMIN url
-                $io->text("∙ Ensure admin user has relation to ADMIN url");
+                $io->text('∙ Ensure admin user has relation to ADMIN url');
                 $this->conn->executeStatement(
                     "INSERT INTO {$relUser} (access_url_id, user_id)
                      SELECT :adminId, :userId
@@ -373,10 +377,12 @@ class ConvertToMultiUrlCommand extends Command
             $this->conn->commit();
             $io->success('Portal converted to MultiURL successfully.');
             $io->note('Remember to enable multi-URL mode in configuration (e.g., configuration.php or platform setting).');
+
             return Command::SUCCESS;
         } catch (DBALException $e) {
             $this->conn->rollBack();
             $io->error('Conversion failed: '.$e->getMessage());
+
             return Command::FAILURE;
         }
     }

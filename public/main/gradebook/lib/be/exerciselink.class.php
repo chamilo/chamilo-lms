@@ -72,9 +72,7 @@ class ExerciseLink extends AbstractLink
                   FROM $exerciseTable e
                   INNER JOIN $lpItemTable i
                   ON (e.iid = i.path)
-				  WHERE
-				    active = 0 AND
-				    item_type = 'quiz'
+				  WHERE item_type = 'quiz'
 				  ";
         $resultLp = Database::query($sqlLp);
         $exerciseInLP = Database::store_result($resultLp);
@@ -267,9 +265,7 @@ class ExerciseLink extends AbstractLink
             $sql = "SELECT * FROM $tblHp hp
                     INNER JOIN $tblDoc doc
                     ON (hp.title = doc.path)
-                    WHERE
-                        hp.c_id = $courseId AND
-                        doc.iid = $exerciseId";
+                    WHERE doc.iid = $exerciseId";
 
             if (!empty($studentId)) {
                 $sql .= " AND hp.exe_user_id = $studentId ";

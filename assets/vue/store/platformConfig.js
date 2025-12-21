@@ -48,6 +48,15 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
 
   const isStudentViewActive = computed(() => "studentview" === studentView.value)
 
+  function setStudentViewEnabled(enabled) {
+    studentView.value = enabled ? "studentview" : "teacherview"
+  }
+
+  function setStudentViewMode(mode) {
+    const m = (mode || "").toString().toLowerCase() === "studentview" ? "studentview" : "teacherview"
+    studentView.value = m
+  }
+
   return {
     isLoading,
     settings,
@@ -60,5 +69,7 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
     oauth2Providers,
     ldapAuth,
     forcedLoginMethod,
+    setStudentViewEnabled,
+    setStudentViewMode,
   }
 })

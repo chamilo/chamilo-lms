@@ -13,14 +13,13 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_global_admin_script();
 
-$httpRequest = HttpRequest::createFromGlobals();
+$httpRequest = Container::getRequest();
 
 $translator = Container::$container->get('translator');;
 
@@ -172,7 +171,7 @@ if (api_get_multiple_access_url()) {
         api_get_path(WEB_CODE_PATH).'admin/access_url_edit_course_category_to_url.php'
     );
     $actions .= Display::url(
-        Display::getMdiIcon('clipboard-account', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assign auth sources to users')),
+        Display::getMdiIcon('clipboard-account', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assign authentication sources to users')),
         "/access-url/auth-sources"
     );
 }

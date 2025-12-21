@@ -14,11 +14,11 @@
 
     <!-- STEP 1: Options -->
     <section v-if="step===1" class="rounded-lg border border-gray-25 p-4 space-y-4">
-      <h3 class="text-sm font-semibold text-gray-90">{{ t('Recycle options') }}</h3>
+      <h3 class="text-sm font-semibold text-gray-90">{{ t('Recycling options') }}</h3>
 
       <label class="flex items-center gap-2">
         <input type="radio" value="full_recycle" v-model="recycleOption" />
-        <span class="text-sm text-gray-90">{{ t('Delete everything (irreversible)') }}</span>
+        <span class="text-sm text-gray-90">{{ t("Delete everything") }}</span>
       </label>
       <label class="flex items-center gap-2">
         <input type="radio" value="select_items" v-model="recycleOption" />
@@ -36,12 +36,12 @@
       </div>
 
       <CMAlert type="warning"
-               :text="t('This will remove or reset selected resources. Action cannot be undone.')" />
+               :text="t('This will remove or reset selected resources. This action cannot be undone.')" />
 
       <div class="flex justify-end gap-3">
         <button class="btn-primary" @click="nextFromStep1" :disabled="loading">
           <i class="mdi" :class="recycleOption==='select_items' ? 'mdi-arrow-right' : 'mdi-recycle'"></i>
-          {{ recycleOption==='select_items' ? t('Continue') : t('Recycle') }}
+          {{ recycleOption==='select_items' ? t('Continue') : t('Recycle course') }}
         </button>
       </div>
     </section>
@@ -67,7 +67,7 @@
 
     <!-- STEP 3: Done -->
     <section v-if="step===3">
-      <CMInfo :title="t('Recycle completed')" />
+      <CMInfo :title="t('Recycle is finished')" />
     </section>
 
     <CMLoader v-if="loading" />
@@ -144,7 +144,7 @@ async function doRecycle() {
       resources: recycleOption.value === "select_items" ? selections.value : undefined,
     }
     const res = await svc.recycleExecute(node.value, payload)
-    notice.value = res?.message || t("Recycle finished.")
+    notice.value = res?.message || t("Recycle is finished")
     step.value = 3
   } catch (e) {
     error.value = e?.response?.data?.error || t("Failed to recycle course.")

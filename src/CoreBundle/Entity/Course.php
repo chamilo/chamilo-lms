@@ -14,6 +14,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\Controller\Api\GetCourseStatsAction;
 use Chamilo\CoreBundle\Entity\Listener\CourseListener;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
@@ -44,33 +46,33 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'metric' => 'course-avg-score|course-avg-progress',
             ],
             controller: GetCourseStatsAction::class,
-            openapiContext: [
-                'summary' => 'Course-wide statistics, switched by {metric}',
-                'parameters' => [
-                    [
-                        'name' => 'metric',
-                        'in' => 'path',
-                        'required' => true,
-                        'schema' => [
+            openapi: new Operation(
+                summary: 'Course-wide statistics, switched by {metric}',
+                parameters: [
+                    new Parameter(
+                        name: 'metric',
+                        in: 'path',
+                        description: 'Metric selector',
+                        required: true,
+                        schema: [
                             'type' => 'string',
                             'enum' => ['course-avg-score', 'course-avg-progress'],
                         ],
-                        'description' => 'Metric selector',
-                    ],
-                    [
-                        'name' => 'sessionId',
-                        'in' => 'query',
-                        'required' => false,
-                        'schema' => ['type' => 'integer'],
-                        'description' => 'Optional Session ID',
-                    ],
+                    ),
+                    new Parameter(
+                        name: 'sessionId',
+                        in: 'query',
+                        description: 'Optional Session ID',
+                        required: false,
+                        schema: ['type' => 'integer'],
+                    ),
                 ],
-            ],
+            ),
             read: false,
             deserialize: false,
         ),
-        new Post(security: "is_granted('ROLE_USER')"),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new Post(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"),
+        new GetCollection(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"),
         new GetCollection(
             uriTemplate: '/public_courses',
             normalizationContext: ['groups' => ['course:read']],
@@ -240,26 +242,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected Collection $trackEHotspots;
 
     /**
-     * @var Collection<int, SearchEngineRef>
-     */
-    #[ORM\OneToMany(mappedBy: 'course', targetEntity: SearchEngineRef::class, cascade: ['persist', 'remove'])]
-    protected Collection $searchEngineRefs;
-
-    /**
      * @var Collection<int, Templates>
      */
     #[ORM\OneToMany(mappedBy: 'course', targetEntity: Templates::class, cascade: ['persist', 'remove'])]
     protected Collection $templates;
-
-    /**
-     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SpecificFieldValues", mappedBy="course").
-     */
-    // protected $specificFieldValues;
-
-    /**
-     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SharedSurvey", mappedBy="course").
-     */
-    // protected $sharedSurveys;
 
     #[ORM\Column(name: 'directory', type: 'string', length: 40, unique: false, nullable: true)]
     protected ?string $directory = null;
@@ -378,10 +364,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public bool $subscribed = false;
 
     #[SerializedName('allowSelfSignup')]
-    #[Groups(['course:read','session:read'])]
+    #[Groups(['course:read', 'session:read'])]
     public function getAllowSelfSignup(): bool
     {
-        return $this->visibility !== self::REGISTERED;
+        return self::REGISTERED !== $this->visibility;
     }
 
     public function __construct()
@@ -408,7 +394,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->gradebookEvaluations = new ArrayCollection();
         $this->gradebookLinks = new ArrayCollection();
         $this->trackEHotspots = new ArrayCollection();
-        $this->searchEngineRefs = new ArrayCollection();
         $this->templates = new ArrayCollection();
         $this->activateLegal = 0;
         $this->addTeachersToSessionsCourses = false;
@@ -418,8 +403,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->subscribe = true;
         $this->unsubscribe = false;
         $this->sticky = false;
-        // $this->specificFieldValues = new ArrayCollection();
-        // $this->sharedSurveys = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -1132,21 +1115,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public function setTrackEHotspots(Collection $trackEHotspots): self
     {
         $this->trackEHotspots = $trackEHotspots;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, SearchEngineRef>
-     */
-    public function getSearchEngineRefs(): Collection
-    {
-        return $this->searchEngineRefs;
-    }
-
-    public function setSearchEngineRefs(Collection $searchEngineRefs): self
-    {
-        $this->searchEngineRefs = $searchEngineRefs;
 
         return $this;
     }

@@ -32,7 +32,7 @@
         <BaseInputNumber
           v-model="formData.repeatDays"
           :label="t('Number of days')"
-          min="1"
+          :min="1"
           id="xdays_number"
         />
       </div>
@@ -47,11 +47,12 @@
       />
     </div>
 
+    <!-- Duration in minutes -->
     <BaseInputNumber
-      id="end_date_time"
+      id="duration_minutes"
       v-model="formData.duration"
       :label="t('Duration (minutes)')"
-      min="1"
+      :min="1"
     />
 
     <!-- Group -->
@@ -82,13 +83,13 @@
 <script setup>
 import { onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
+import { useRoute } from "vue-router"
 import attendanceService from "../../services/attendanceService"
 import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import LayoutFormButtons from "../../components/layout/LayoutFormButtons.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import { useRoute } from "vue-router"
 import BaseInputNumber from "../basecomponents/BaseInputNumber.vue"
 
 const { t } = useI18n()
@@ -103,7 +104,7 @@ const formData = reactive({
   repeatEndDate: "",
   repeatDays: 0,
   group: "",
-  duration: null,
+  duration: 60,
 })
 
 const repeatTypeOptions = [
@@ -116,6 +117,58 @@ const repeatTypeOptions = [
 
 const groupOptions = ref([])
 
+/**
+ * Normalize a value coming from BaseCalendar into a local date-time string
+ * without timezone information.
+ *
+ * Goal:
+ * - Treat picked time as local time.
+ * - Avoid sending UTC with Z or offsets to the backend.
+ */
+const normalizeToLocalDateTime = (value) => {
+  if (!value) {
+    return null
+  }
+
+  // Case 1: Date instance -> build local "YYYY-MM-DDTHH:mm:ss"
+  if (value instanceof Date) {
+    const year = value.getFullYear()
+    const month = String(value.getMonth() + 1).padStart(2, "0")
+    const day = String(value.getDate()).padStart(2, "0")
+    const hours = String(value.getHours()).padStart(2, "0")
+    const minutes = String(value.getMinutes()).padStart(2, "0")
+    const seconds = String(value.getSeconds()).padStart(2, "0")
+
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
+  }
+
+  // Case 2: string -> strip timezone/offset, keep local time
+  if (typeof value === "string") {
+    // Examples:
+    // - "2025-11-20T13:00"
+    // - "2025-11-20T13:00:00"
+    // - "2025-11-20T13:00:00.000Z"
+    // - "2025-11-20T13:00:00+01:00"
+    const match = value.match(/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?)/)
+
+    if (match) {
+      const base = match[1]
+      // If we only have "YYYY-MM-DDTHH:mm", add ":00" for seconds
+      if (base.length === 16) {
+        return `${base}:00`
+      }
+
+      return base
+    }
+
+    // Fallback: if unknown format, send as-is
+    return value
+  }
+
+  // Fallback for unsupported types
+  return null
+}
+
 const toggleRepeatOptions = () => {
   if (!formData.repeatDate) {
     formData.repeatType = ""
@@ -124,22 +177,36 @@ const toggleRepeatOptions = () => {
   }
 }
 
-const submitForm = async () => {
+const submitForm = async (event) => {
+  // Prevent default form submit behavior
+  if (event && typeof event.preventDefault === "function") {
+    event.preventDefault()
+  }
+
+  // Basic required fields checks
   if (!formData.startDate) {
+    console.error("[Attendance] Start date is required.")
     return
   }
 
   if (formData.repeatDate && (!formData.repeatType || !formData.repeatEndDate)) {
+    console.error("[Attendance] Repeat settings are incomplete.")
     return
   }
 
+  // Normalize date/time values as local strings without timezone
+  const normalizedStartDate = normalizeToLocalDateTime(formData.startDate)
+  const normalizedRepeatEndDate = formData.repeatDate
+    ? normalizeToLocalDateTime(formData.repeatEndDate)
+    : null
+
   const payload = {
-    startDate: formData.startDate,
+    startDate: normalizedStartDate,
     repeatDate: formData.repeatDate,
-    repeatType: formData.repeatType,
-    repeatEndDate: formData.repeatEndDate,
+    repeatType: formData.repeatType || null,
+    repeatEndDate: normalizedRepeatEndDate,
     repeatDays: formData.repeatType === "every-x-days" ? formData.repeatDays : null,
-    group: formData.group ? parseInt(formData.group) : null,
+    group: formData.group ? parseInt(formData.group, 10) : null,
     duration: formData.duration,
   }
 

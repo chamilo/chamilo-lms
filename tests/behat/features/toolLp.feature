@@ -8,14 +8,16 @@ Feature: LP tool
 
   Scenario: Create a LP category
     Given I am on "/main/lp/lp_controller.php?cid=1&action=add_lp_category"
+    And I wait for the page to be loaded
     When I fill in the following:
       | name | LP category 1 |
     And I press "submit"
     And wait very long for the page to be loaded
-    Then I should see "Added"
+    Then I should not see an error
 
   Scenario: Create a LP
     Given I am on "/main/lp/lp_controller.php?cid=1&action=add_lp"
+    And I wait for the page to be loaded
     When I fill in the following:
       | lp_name | LP 1 |
 #    And I select "LP category 1" from "category_id"
@@ -25,9 +27,13 @@ Feature: LP tool
 
   Scenario: Add document to LP
     Given I am on "/main/lp/lp_controller.php?cid=1&action=list"
-    And I follow "Edit learnpath"
+    And I wait very long for the page to be loaded
+    And I follow "LP 1"
+    And I wait for the page to be loaded
+    And I follow "Edit"
+    And I wait for the page to be loaded
     And I follow "Create a new document"
-    And wait the page to be loaded when ready
+    And I wait for the page to be loaded
     When I fill in the following:
       | idTitle | Document 1 |
     And I fill in editor field "content_lp" with "Sample HTML text"

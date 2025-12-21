@@ -28,7 +28,6 @@ use Chamilo\CoreBundle\Helpers\QueryCacheHelper;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Datetime;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query\Expr\Join;
@@ -1315,11 +1314,14 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         ;
     }
 
-    public function findByAuthsource(string $authentication): void
+    /**
+     * @return array<int, User>
+     */
+    public function findByAuthsource(string $authentication): array
     {
         $qb = $this->getOrCreateQueryBuilder(null, 'u');
 
-        $qb
+        return $qb
             ->innerJoin('u.authSources', 'as')
             ->where(
                 $qb->expr()->eq('as.authentication', ':authentication')

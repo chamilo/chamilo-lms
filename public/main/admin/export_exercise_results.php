@@ -79,7 +79,7 @@ $isPlatformAdmin = api_is_platform_admin();
 // -----------------------------------------------------------------------------
 if (isset($_GET['ajax'])) {
     if (!api_is_allowed_to_edit(null, true)) {
-        send_json(['ok' => false, 'message' => get_lang('NotAllowed')], 403);
+        send_json(['ok' => false, 'message' => get_lang('Not allowed')], 403);
     }
 
     $ajax = (string) $_GET['ajax'];
@@ -413,7 +413,7 @@ $(function () {
       '<div id=\"export-overlay\">' +
         '<div class=\"box\">' +
           '<div class=\"spinner\"></div>' +
-          '<div class=\"label\">".addslashes(get_lang('Please wait this could take a while'))."</div>' +
+          '<div class=\"label\">".addslashes(get_lang('Please wait. This could take a while...'))."</div>' +
           '<div class=\"hint\">".addslashes(get_lang('Generating file, do not close this tab'))."</div>' +
         '</div>' +
       '</div>'
@@ -579,7 +579,7 @@ $form->addDateTimePicker('end_date', get_lang('End date'));
 // Validation
 $form->addRule('start_date', get_lang('Invalid date'), 'datetime');
 $form->addRule('end_date', get_lang('Invalid date'), 'datetime');
-$form->addRule(['start_date','end_date'], get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
+$form->addRule(['start_date','end_date'], get_lang('Start date must be before the end date'), 'date_compare', 'lte');
 
 // Required (session can be 0)
 $form->addRule('selected_course', get_lang('Required field'), 'required');

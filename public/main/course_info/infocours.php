@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Chamilo\CoreBundle\Entity\Course;
 
 /**
  * Code to display the course settings form (for the course admin)
@@ -69,7 +70,6 @@ $form = new FormValidator(
 
 $image = '';
 $illustrationUrl = $illustrationRepo->getIllustrationUrl($courseEntity, 'course_picture_medium');
-
 if (!empty($illustrationUrl)) {
     $image = '<div class="row">
                 <label class="col-md-2 control-label">'.get_lang('Image').'</label>
@@ -79,17 +79,13 @@ if (!empty($illustrationUrl)) {
             </div>';
 }
 
+$form->addElement('html', '<div id="course-main-settings-legacy-start"></div>');
+
+// --- Main course settings fields (legacy block) ---
 $form->addText('title', get_lang('Title'), true);
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
-/*$form->addElement(
-    'select',
-    'category_id',
-    get_lang('Category'),
-    $categories,
-    ['style' => 'width:350px', 'id' => 'category_id']
-);*/
 $form->addSelectLanguage(
     'course_language',
     [get_lang('Language'), get_lang('This language will be valid for every visitor of your courses portal')]
@@ -122,7 +118,7 @@ $extra = $extra_field->addElements(
     $showOnlyTheseFields
 );
 
-//Tags ExtraField
+// Tags ExtraField (JS)
 $htmlHeadXtra[] = '
 <script>
 $(function() {
@@ -130,31 +126,67 @@ $(function() {
 });
 </script>';
 
-// Picture
+// Picture preview HTML
+$image = '';
+$illustrationUrl = $illustrationRepo->getIllustrationUrl($courseEntity, 'course_picture_medium');
+
+if (!empty($illustrationUrl)) {
+    $image = '
+        <div class="row course-picture-preview-row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="course-picture-preview ml-4">
+                    <span class="help-block small">'.get_lang('Current picture').'</span>
+                    <img class="img-thumbnail" src="'.$illustrationUrl.'" alt="'.get_lang('Current picture').'" />
+                </div>
+            </div>
+        </div>';
+}
+
+// Picture file input
 $form->addFile(
     'picture',
-    get_lang('Add a picture'),
-    ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true]
+    get_lang('Course picture'),
+    [
+        'id' => 'picture',
+        'class' => 'picture-form',
+        'crop_image' => true,
+    ]
 );
 
 $allowed_picture_types = api_get_supported_image_extensions(false);
 
+// Preview below the file input
 $form->addHtml($image);
-
 $form->addRule(
     'picture',
     get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowed_picture_types).')',
     'filetype',
     $allowed_picture_types
 );
-$form->addElement('checkbox', 'delete_picture', null, get_lang('Delete picture'));
+
+// Delete checkbox
+$form->addElement(
+    'checkbox',
+    'delete_picture',
+    null,
+    get_lang('Delete picture')
+);
+
 
 if ('true' === api_get_setting('pdf_export_watermark_by_course')) {
     $url = PDF::get_watermark($course_code);
     $form->addText('pdf_export_watermark_text', get_lang('PDF watermark text'), false, ['size' => '60']);
     $form->addElement('file', 'pdf_export_watermark_path', get_lang('Upload a watermark image'));
     if (false != $url) {
-        $delete_url = '<a href="?delete_watermark">'.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove picture')).'</a>';
+        $delete_url = '<a href="?delete_watermark">'.Display::getMdiIcon(
+                ActionIcon::DELETE,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Remove picture')
+            ).'</a>';
+
         $form->addElement(
             'html',
             '<div class="row"><div class="form"><a href="'.$url.'">'.$url.' '.$delete_url.'</a></div></div>'
@@ -189,12 +221,33 @@ $aiOptions = [
     'tutor_chatbot' => 'Enable Tutor Chatbot',
     'task_grader' => 'Enable Task Grader',
     'content_analyser' => 'Enable Content Analyser',
-    'image_generator' => 'Enable Image Generator'
+    'image_generator' => 'Enable Image Generator',
 ];
 
+// This global "Save settings" button belongs to the main course settings block
 $form->addButtonSave(get_lang('Save settings'), 'submit_save');
 
-CourseManager::addVisibilityOptions($form);
+// Marker: end of legacy main settings block
+$form->addElement('html', '<div id="course-main-settings-legacy-end"></div>');
+$mainPanelGroup = [
+    '' => [
+        $form->createElement(
+            'html',
+            '<!-- Main course settings will be moved into this panel via JavaScript -->'
+        ),
+    ],
+];
+
+$form->addPanelOption(
+    'course_main',
+    get_lang('Course settings'),
+    $mainPanelGroup,
+    ActionIcon::INFORMATION,
+    true
+);
+
+
+// --- End of legacy block, from here panels start as usual ---
 
 $url = api_get_path(WEB_CODE_PATH)."auth/inscription.php?c=$course_code&e=1";
 $url = Display::url($url, $url);
@@ -209,6 +262,47 @@ $label = $form->addLabel(
     true
 );
 
+$groupAccess = [];
+$groupAccess[] = $form->createElement(
+    'radio',
+    'visibility',
+    get_lang('Course access'),
+    get_lang('Public - access allowed for the whole world'),
+    Course::OPEN_WORLD
+);
+$groupAccess[] = $form->createElement(
+    'radio',
+    'visibility',
+    null,
+    get_lang('Open - access allowed for users registered on the platform'),
+    Course::OPEN_PLATFORM
+);
+$groupAccess[] = $form->createElement(
+    'radio',
+    'visibility',
+    null,
+    get_lang('Private - access granted by privileged users'),
+    Course::REGISTERED
+);
+$groupAccess[] = $form->createElement(
+    'radio',
+    'visibility',
+    null,
+    get_lang('Closed - the course is only accessible to the teachers'),
+    Course::CLOSED
+);
+
+// The "hidden" visibility is only available to portal admins
+if (api_is_platform_admin()) {
+    $groupAccess[] = $form->createElement(
+        'radio',
+        'visibility',
+        null,
+        get_lang('Hidden - Completely hidden to all users except the administrators'),
+        Course::HIDDEN
+    );
+}
+
 $group2 = [];
 $group2[] = $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
 $group2[] = $form->createElement(
@@ -221,6 +315,7 @@ $group2[] = $form->createElement(
 
 $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
 
+$group3 = [];
 $group3[] = $form->createElement(
     'radio',
     'unsubscribe',
@@ -252,8 +347,12 @@ $checkBoxActiveLegal = $form->createElement(
 );
 $textAreaLegal = $form->createElement('textarea', 'legal', get_lang('Legal agreement for this course'), ['rows' => 8]);
 
+// Anchor inside "Course access" panel used by JS to potentially move the visibility block
+$courseAccessAnchor = $form->createElement('html', '<div id="course-access-panel-anchor"></div>');
+
 $elements = [
-    //$groupElement,
+    '' => [$courseAccessAnchor],
+    get_lang('Course access') => $groupAccess,
     $label,
     get_lang('Subscription') => $group2,
     get_lang('Unsubscribe') => $group3,
@@ -300,6 +399,7 @@ $form->addPanelOption(
     false
 );
 
+// E-mail notifications
 $globalGroup = [];
 $group = [];
 $group[] = $form->createElement(
@@ -395,7 +495,6 @@ $group[] = $form->createElement(
     get_lang('Disable'),
     0
 );
-
 $globalGroup[get_lang('E-mail on assignments submission by students')] = $group;
 
 $group = [];
@@ -413,7 +512,6 @@ $group[] = $form->createElement(
     get_lang('Disable'),
     0
 );
-
 $globalGroup[get_lang('E-mail users on dropbox file reception')] = $group;
 
 // Exercises notifications
@@ -428,7 +526,6 @@ foreach ($emailAlerts as $itemId => $label) {
         ['value' => $itemId]
     );
 }
-
 $globalGroup[get_lang('Tests')] = $group;
 
 $group = [];
@@ -446,7 +543,6 @@ $group[] = $form->createElement(
     get_lang('No'),
     2
 );
-
 $globalGroup[get_lang('E-mail to teachers on new user\'s student publication feedback.')] = $group;
 
 $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
@@ -460,6 +556,7 @@ $form->addPanelOption(
     false
 );
 
+// User rights
 $group = [];
 $group[] = $form->createElement(
     'radio',
@@ -523,6 +620,7 @@ $group4[] = $form->createElement(
     get_lang('Disable'),
     0
 );
+
 $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
 
 $globalGroup = [
@@ -541,7 +639,7 @@ $form->addPanelOption(
     false
 );
 
-// CHAT SETTINGS
+// Chat settings
 $group = [];
 $group[] = $form->createElement(
     'radio',
@@ -572,6 +670,7 @@ $form->addPanelOption(
     false
 );
 
+// Learning path settings
 $globalGroup = [];
 
 if ('true' === api_get_setting('allow_course_theme')) {
@@ -592,7 +691,7 @@ if ('true' === api_get_setting('allow_course_theme')) {
         0
     );
 
-    $globalGroup[get_lang("Enable course themes")] = $group;
+    $globalGroup[get_lang('Enable course themes')] = $group;
 }
 
 $allowLPReturnLink = api_get_setting('lp.allow_lp_return_link');
@@ -634,7 +733,7 @@ if ('true' === $allowLPReturnLink) {
             3
         ),
     ];
-    $globalGroup[get_lang("Learning path return link")] = $group;
+    $globalGroup[get_lang('Learning path return link')] = $group;
 }
 
 $exerciseInvisible = api_get_setting('exercise_invisible_in_session');
@@ -660,7 +759,7 @@ if ('true' === $exerciseInvisible &&
         ),
     ];
 
-    $globalGroup[get_lang("Test invisible in session")] = $group;
+    $globalGroup[get_lang('Test invisible in session')] = $group;
 }
 
 if ($isEditable) {
@@ -669,7 +768,7 @@ if ($isEditable) {
 } else {
     // Is it allowed to edit the course settings?
     if (!$isEditable) {
-        $disabled_output = "disabled";
+        $disabled_output = 'disabled';
     }
     $form->freeze();
 }
@@ -727,6 +826,7 @@ $form->addPanelOption(
     false
 );
 
+// Certificates
 if ('true' === api_get_setting('certificate.allow_public_certificates')) {
     $group = [];
     $group[] = $form->createElement(
@@ -736,7 +836,13 @@ if ('true' === api_get_setting('certificate.allow_public_certificates')) {
         get_lang('Yes'),
         1
     );
-    $group[] = $form->createElement('radio', 'allow_public_certificates', null, get_lang('No'), 0);
+    $group[] = $form->createElement(
+        'radio',
+        'allow_public_certificates',
+        null,
+        get_lang('No'),
+        0
+    );
     $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
 
     $globalGroup = [
@@ -756,7 +862,6 @@ if ('true' === api_get_setting('certificate.allow_public_certificates')) {
 // Forum settings
 $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
 
-// Forum settings
 $groupNotification = [
     $form->createElement('radio', 'hide_forum_notifications', null, get_lang('Yes'), 1),
     $form->createElement('radio', 'hide_forum_notifications', null, get_lang('No'), 2),
@@ -781,15 +886,23 @@ $form->addPanelOption(
     false
 );
 
-// Student publication
+// Assignments / Student publications
 $group = [
     $form->createElement('radio', 'show_score', null, get_lang('New documents are visible for all users'), 0),
-    $form->createElement('radio', 'show_score', null, get_lang('New documents are only visible for the teacher(s)'), 1),
+    $form->createElement(
+        'radio',
+        'show_score',
+        null,
+        get_lang('New documents are only visible for the teacher(s)'),
+        1
+    ),
 ];
+
 $group2 = [
     $form->createElement('radio', 'student_delete_own_publication', null, get_lang('Yes'), 1),
     $form->createElement('radio', 'student_delete_own_publication', null, get_lang('No'), 0),
 ];
+
 $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
 
 $globalGroup = [
@@ -806,7 +919,7 @@ $form->addPanelOption(
     false
 );
 
-// Auto-launch settings for documents, exercises, learning paths, and forums
+// Auto-launch settings
 $globalGroup = [];
 $group = [];
 
@@ -860,7 +973,7 @@ $group[] = $form->createElement(
     'enable_forum_auto_launch'
 );
 
-// Option to deactivate all auto-launch options
+// Disable all auto-launch options
 $group[] = $form->createElement(
     'radio',
     'auto_launch_option',
@@ -870,6 +983,7 @@ $group[] = $form->createElement(
 );
 
 $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
+
 $globalGroup = [
     get_lang('Auto-launch') => $group,
     '' => $myButton,
@@ -883,7 +997,7 @@ $form->addPanelOption(
     false
 );
 
-// Ai helpers
+// AI helpers
 if ($enableAiHelpers) {
     $globalAiGroup = [];
 
@@ -910,6 +1024,7 @@ if ($enableAiHelpers) {
     }
 }
 
+// External tools (LTI) info
 $button = Display::toolbarButton(
     get_lang('External tools (LTI)'),
     $router->generate('chamilo_lti_configure', ['cid' => $courseId]).'?'.api_get_cidreq(),
@@ -917,23 +1032,25 @@ $button = Display::toolbarButton(
     'primary'
 );
 $html = [
-    $form->createElement('html', '<p>'.get_lang('LTI tools allow your students to access external tools directly from your course. They can be enabled in your course if configured at the platform level.').'</p>'.$button),
+    $form->createElement(
+        'html',
+        '<p>'.get_lang('LTI tools allow your students to access external tools directly from your course. They can be enabled in your course if configured at the platform level.').'</p>'.$button
+    ),
 ];
 
-// Set the default values of the form
+// Set default values
 $values = [];
-$values['title'] = $_course['name'];
-//$values['category_id'] = $_course['category_id'];
-$values['course_language'] = $_course['language'];
-$values['department_name'] = $_course['extLink']['name'];
-$values['department_url'] = $_course['extLink']['url'];
-$values['visibility'] = $_course['visibility'];
-$values['subscribe'] = $_course['subscribe'];
-$values['unsubscribe'] = $_course['unsubscribe'];
-$values['course_registration_password'] = $_course['registration_code'];
-$values['legal'] = $_course['legal'];
-$values['activate_legal'] = $_course['activate_legal'];
-$values['show_score'] = $_course['show_score'];
+$values['title'] = $courseEntity->getTitle();
+$values['course_language'] = $courseEntity->getCourseLanguage();
+$values['department_name'] = $courseEntity->getDepartmentName();
+$values['department_url'] = $courseEntity->getDepartmentUrl();
+$values['visibility'] = $courseEntity->getVisibility();
+$values['subscribe'] = $courseEntity->getSubscribe();
+$values['unsubscribe'] = $courseEntity->getUnsubscribe();
+$values['course_registration_password'] = $courseEntity->getRegistrationCode();
+$values['legal'] = $courseEntity->getLegal();
+$values['activate_legal'] = $courseEntity->getActivateLegal();
+$values['show_score'] = $_course['show_score'] ?? 0;
 
 $courseSettings = CourseManager::getCourseSettingVariables();
 foreach ($courseSettings as $setting) {
@@ -942,7 +1059,8 @@ foreach ($courseSettings as $setting) {
         $values[$setting] = $result;
     }
 }
-// make sure new settings have a clear default value
+
+// Make sure new settings have a clear default value
 if (!isset($values['student_delete_own_publication'])) {
     $values['student_delete_own_publication'] = 0;
 }
@@ -981,19 +1099,104 @@ if ($enableAiHelpers) {
 
 $form->setDefaults($values);
 
-// Validate form
+// JS helpers: move legacy main block into the "Course settings" panel
+$htmlHeadXtra[] = '
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var form = document.getElementById("update_course");
+    if (!form) {
+        return;
+    }
+
+    // Move legacy main settings into the "Course settings" panel body
+    var start = document.getElementById("course-main-settings-legacy-start");
+    var end = document.getElementById("course-main-settings-legacy-end");
+    var panelBody = document.getElementById("collapse_course_main");
+
+    if (start && end && panelBody) {
+        var nodesToMove = [];
+        var node = start.nextSibling;
+
+        // Collect nodes between start and end (exclusive)
+        while (node && node !== end) {
+            var next = node.nextSibling;
+            nodesToMove.push(node);
+            node = next;
+        }
+
+        // Move nodes into the panel body
+        nodesToMove.forEach(function (n) {
+            panelBody.appendChild(n);
+        });
+
+        // Remove markers to keep DOM clean
+        if (start.parentNode) {
+            start.parentNode.removeChild(start);
+        }
+        if (end.parentNode) {
+            end.parentNode.removeChild(end);
+        }
+    }
+});
+</script>
+';
+$htmlHeadXtra[] = '
+<style>
+    .course-picture-preview-row {
+        margin-top: 0.5rem;
+    }
+
+    .course-picture-preview img {
+        max-width: 320px;
+        height: auto;
+        display: block;
+    }
+
+    .course-picture-preview .help-block {
+        margin-bottom: 0.25rem;
+    }
+</style>
+';
+
+// Handle form submission
 if ($form->validate()) {
-    $updateValues = $form->getSubmitValues();
+    $updateValues = $form->exportValues();
+
+    $updateValues['visibility'] = isset($updateValues['visibility'])
+        ? (int) $updateValues['visibility']
+        : $courseEntity->getVisibility();
+
+    $updateValues['subscribe'] = isset($updateValues['subscribe'])
+        ? (int) $updateValues['subscribe']
+        : $courseEntity->getSubscribe();
+
+    $updateValues['unsubscribe'] = isset($updateValues['unsubscribe'])
+        ? (int) $updateValues['unsubscribe']
+        : $courseEntity->getUnsubscribe();
+
+    $updateValues['legal'] = array_key_exists('legal', $updateValues)
+        ? $updateValues['legal']
+        : $courseEntity->getLegal();
+
+    $updateValues['course_registration_password'] =
+        array_key_exists('course_registration_password', $updateValues)
+            ? $updateValues['course_registration_password']
+            : $courseEntity->getRegistrationCode();
+
+    $visibility = $updateValues['visibility'] ?? $courseEntity->getVisibility();
+    $deletePicture = !empty($updateValues['delete_picture'] ?? null);
 
     $request = Container::getRequest();
-    /** @var UploadedFile $uploadFile */
+    /** @var UploadedFile|null $uploadFile */
     $uploadFile = $request->files->get('picture');
 
+    // Handle course picture upload / update
     if (null !== $uploadFile) {
-        $hasIllustration = $illustrationRepo->hasIllustration($courseEntity);
-        if ($hasIllustration) {
+        // Replace existing illustration with the new one
+        if ($illustrationRepo->hasIllustration($courseEntity)) {
             $illustrationRepo->deleteIllustration($courseEntity);
         }
+
         $file = $illustrationRepo->addIllustration(
             $courseEntity,
             api_get_user_entity(api_get_user_id()),
@@ -1001,9 +1204,14 @@ if ($form->validate()) {
         );
 
         if ($file) {
-            $file->setCrop($updateValues['picture_crop_result']);
+            // Crop info is provided by the crop widget (hidden field)
+            if (!empty($updateValues['picture_crop_result'])) {
+                $file->setCrop($updateValues['picture_crop_result']);
+            }
+
             $em->persist($file);
             $em->flush();
+
             Event::addEvent(
                 LOG_COURSE_SETTINGS_CHANGED,
                 'course_picture',
@@ -1016,7 +1224,9 @@ if ($form->validate()) {
     $deletePicture = $updateValues['delete_picture'] ?? '';
 
     if ($deletePicture) {
-        $illustrationRepo->deleteIllustration($courseEntity);
+        if ($illustrationRepo->hasIllustration($courseEntity)) {
+            $illustrationRepo->deleteIllustration($courseEntity);
+        }
     }
 
     $access_url_id = api_get_current_access_url_id();
@@ -1060,6 +1270,7 @@ if ($form->validate()) {
 
     $activeLegal = $updateValues['activate_legal'] ?? 0;
 
+    // Normalize auto-launch flags from the single radio value
     $autoLaunchOption = $updateValues['auto_launch_option'] ?? 'disable_auto_launch';
     $updateValues['enable_document_auto_launch'] = 0;
     $updateValues['enable_lp_auto_launch'] = 0;
@@ -1092,10 +1303,10 @@ if ($form->validate()) {
             break;
     }
 
+    // Persist main course entity
     $courseEntity
         ->setTitle($updateValues['title'])
         ->setCourseLanguage($updateValues['course_language'])
-        //->setCategory($category)
         ->setDepartmentName($updateValues['department_name'])
         ->setDepartmentUrl($updateValues['department_url'])
         ->setVisibility($updateValues['visibility'])
@@ -1103,13 +1314,12 @@ if ($form->validate()) {
         ->setUnsubscribe($updateValues['unsubscribe'])
         ->setLegal($updateValues['legal'])
         ->setActivateLegal($activeLegal)
-        ->setRegistrationCode($updateValues['course_registration_password'])
-    //    ->setShowScore($updateValues['show_score'])
-    ;
+        ->setRegistrationCode($updateValues['course_registration_password']);
 
     $em->persist($courseEntity);
     $em->flush();
 
+    // Persist AI helper per-course settings
     if ($enableAiHelpers) {
         foreach ($aiOptions as $key => $label) {
             if (isset($updateValues[$key])) {
@@ -1118,7 +1328,7 @@ if ($form->validate()) {
         }
     }
 
-    // Insert/Updates course_settings table
+    // Insert/Update course_settings table
     foreach ($courseSettings as $setting) {
         $value = $updateValues[$setting] ?? null;
         CourseManager::saveCourseConfigurationSetting(
@@ -1127,9 +1337,12 @@ if ($form->validate()) {
             api_get_course_int_id()
         );
     }
-    // update the extra fields
+
+    // Update course extra fields
     $courseFieldValue = new ExtraFieldValue('course');
-    $courseFieldValue->saveFieldValues($updateValues, true);
+    $extraValues = $form->getSubmitValues();
+    $extraValues['item_id'] = $courseId;
+    $courseFieldValue->saveFieldValues($extraValues, true);
 
     //$appPlugin->saveCourseSettingsHook($updateValues);
     $courseParams = api_get_cidreq();
@@ -1147,12 +1360,12 @@ if ($show_delete_watermark_text_message) {
     );
 }
 
-//Template Course Info
+// Template rendering
 $tpl = new Template($nameTools);
 
 Display::display_header($nameTools, 'Settings');
 $tpl->assign('course_settings', $form->returnForm());
-$courseInfoLayout = $tpl->get_template("course_info/index.html.twig");
+$courseInfoLayout = $tpl->get_template('course_info/index.html.twig');
 $content = $tpl->fetch($courseInfoLayout);
 echo $content;
 

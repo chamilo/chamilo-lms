@@ -9,7 +9,7 @@ use ChamiloSession as Session;
  * Exercise administration
  * This script allows to manage (create, modify) an exercise and its questions.
  *
- *  Following scripts are includes for a best code understanding :
+ * Following scripts are includes for a best code understanding :
  *
  * - exercise.class.php : for the creation of an Exercise object
  * - question.class.php : for the creation of a Question object
@@ -49,6 +49,7 @@ $this_section = SECTION_COURSES;
 if (isset($_GET['r']) && 1 == $_GET['r']) {
     Exercise::cleanSessionVariables();
 }
+
 // Access control
 api_protect_course_script(true);
 
@@ -62,28 +63,33 @@ if (!$is_allowedToEdit) {
 }
 
 $exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : 0;
+if (0 === $exerciseId && isset($_POST['exerciseId'])) {
+    $exerciseId = (int) $_POST['exerciseId'];
+}
+
 $newQuestion = $_GET['newQuestion'] ?? 0;
-$modifyAnswers = isset($_GET['modifyAnswers']) ? $_GET['modifyAnswers'] : 0;
-$editQuestion = isset($_GET['editQuestion']) ? $_GET['editQuestion'] : 0;
+$modifyAnswers = $_GET['modifyAnswers'] ?? 0;
+$editQuestion = $_GET['editQuestion'] ?? 0;
 $page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
-$modifyQuestion = isset($_GET['modifyQuestion']) ? $_GET['modifyQuestion'] : 0;
-$deleteQuestion = isset($_GET['deleteQuestion']) ? $_GET['deleteQuestion'] : 0;
-$cloneQuestion = isset($_REQUEST['clone_question']) ? $_REQUEST['clone_question'] : 0;
+$modifyQuestion = $_GET['modifyQuestion'] ?? 0;
+$deleteQuestion = $_GET['deleteQuestion'] ?? 0;
+$cloneQuestion = $_REQUEST['clone_question'] ?? 0;
+
 if (empty($questionId)) {
     $questionId = Session::read('questionId');
 }
 if (empty($modifyExercise)) {
-    $modifyExercise = isset($_GET['modifyExercise']) ? $_GET['modifyExercise'] : null;
+    $modifyExercise = $_GET['modifyExercise'] ?? null;
 }
 
-$fromExercise = isset($fromExercise) ? $fromExercise : null;
-$cancelExercise = isset($cancelExercise) ? $cancelExercise : null;
-$cancelAnswers = isset($cancelAnswers) ? $cancelAnswers : null;
-$modifyIn = isset($modifyIn) ? $modifyIn : null;
-$cancelQuestion = isset($cancelQuestion) ? $cancelQuestion : null;
+$fromExercise = $fromExercise ?? null;
+$cancelExercise = $cancelExercise ?? null;
+$cancelAnswers = $cancelAnswers ?? null;
+$modifyIn = $modifyIn ?? null;
+$cancelQuestion = $cancelQuestion ?? null;
 
 /* Cleaning all incomplete attempts of the admin/teacher to avoid weird problems
-    when changing the exercise settings, number of questions, etc */
+   when changing the exercise settings, number of questions, etc */
 Event::delete_all_incomplete_attempts(
     api_get_user_id(),
     $exerciseId,
@@ -95,10 +101,33 @@ Event::delete_all_incomplete_attempts(
 $objExercise = Session::read('objExercise');
 $objQuestion = Session::read('objQuestion');
 
+/**
+ * IMPORTANT:
+ * admin.php must allow editing/creating questions without an exercise context.
+ * This is required by the global question bank (and question pool) use-case where
+ * exerciseId=0 but editQuestion/newQuestion is provided.
+ *
+ * Without this, the script redirects to exercise.php because objExercise is empty,
+ * which makes the behavior depend on an existing session state.
+ */
+$isStandaloneQuestionFlow = (0 === (int) $exerciseId) && (
+        !empty($editQuestion) || !empty($newQuestion)
+    );
+
+if ($isStandaloneQuestionFlow && !($objExercise instanceof Exercise)) {
+    // Create a minimal Exercise context to avoid redirecting to the test list.
+    $objExercise = new Exercise();
+    $objExercise->course_id = api_get_course_int_id();
+    $objExercise->course = api_get_course_info();
+    $objExercise->sessionId = $sessionId;
+    Session::write('objExercise', $objExercise);
+}
+
 if (isset($_REQUEST['convertAnswer'])) {
     $objQuestion = $objQuestion->swapSimpleAnswerTypes();
     Session::write('objQuestion', $objQuestion);
 }
+
 $objAnswer = Session::read('objAnswer');
 $_course = api_get_course_info();
 
@@ -128,6 +157,7 @@ if (!($objExercise instanceof Exercise)) {
         Session::write('objExercise', $objExercise);
     }
 }
+
 // Exercise can be edited in their course.
 if (empty($objExercise)) {
     Session::erase('objExercise');
@@ -140,8 +170,9 @@ if ($objExercise->sessionId != $sessionId) {
     api_not_allowed(true);
 }
 
-// doesn't select the exercise ID if we come from the question pool
-if (!$fromExercise) {
+// doesn't select the exercise ID if we come from the question pool / global bank
+// (avoid forcing modifyExercise='yes' when exerciseId=0)
+if ($exerciseId > 0 && !$fromExercise) {
     // gets the right exercise ID, and if 0 creates a new exercise
     if (!$exerciseId = $objExercise->getId()) {
         $modifyExercise = 'yes';
@@ -216,7 +247,7 @@ if (!empty($cloneQuestion) && !empty($objExercise->getId())) {
     $newAnswerObj->read();
     $newAnswerObj->duplicate($newQuestionObj);
 
-    // Reloading tne $objExercise obj
+    // Reloading the $objExercise obj
     $objExercise->read($objExercise->getId(), false);
 
     Display::addFlash(Display::return_message(get_lang('Item copied')));
@@ -249,15 +280,25 @@ $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq(),
     'name' => get_lang('Tests'),
 ];
+
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
+    // When editing a question without a real exercise, avoid relying on selectTitle()
+    $exerciseTitle = get_lang('Questions');
+    $exerciseLink = '#';
+
+    if ($objExercise instanceof Exercise && (int) $objExercise->getId() > 0) {
+        $exerciseTitle = $objExercise->selectTitle(true);
+        $exerciseLink = api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$objExercise->getId().'&'.api_get_cidreq();
+    }
+
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$objExercise->getId().'&'.api_get_cidreq(),
-        'name' => $objExercise->selectTitle(true),
+        'url' => $exerciseLink,
+        'name' => $exerciseTitle,
     ];
 } else {
     $interbreadcrumb[] = [
         'url' => '#',
-        'name' => $objExercise->selectTitle(true),
+        'name' => ($objExercise instanceof Exercise) ? $objExercise->selectTitle(true) : get_lang('Tests'),
     ];
 }
 
@@ -349,61 +390,131 @@ if ($inATest) {
     if ($editQuestion && $objQuestion->existsInAnotherExercise()) {
         echo Display::return_message(
             Display::getMdiIcon('alert', 'ch-tool-icon', null, ICON_SIZE_SMALL)
-                .get_lang('This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question.'),
+            .get_lang('This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question.'),
             'warning',
             false
         );
     }
 
-    $isHotspotEdit = is_object($objQuestion) && in_array((int)$objQuestion->selectType(), [HOT_SPOT, HOT_SPOT_COMBINATION, HOT_SPOT_DELINEATION], true);
+    $isHotspotEdit = is_object($objQuestion) && in_array((int) $objQuestion->selectType(), [HOT_SPOT, HOT_SPOT_COMBINATION, HOT_SPOT_DELINEATION], true);
     $alert = '';
     if (false === $showPagination && !$isHotspotEdit) {
         $originalSelectionType = $objExercise->questionSelectionType;
         $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
 
-        $outMaxScore = 0;
-        $outMaxScore = array_reduce(
-            $objExercise->selectQuestionList(true, true),
-            function ($acc, $questionId) {
-                $objQuestionTmp = Question::read($questionId);
+        // Get the full list of question IDs (as configured in this exercise).
+        /** @var int[] $allIds */
+        $allIds = (array) $objExercise->selectQuestionList(true, true);
 
-                return $acc + $objQuestionTmp->selectWeighting();
-            },
-            0
-        );
+        // Load questions and build a children map to detect "media" containers reliably.
+        $questionsById = [];
+        $childrenByParent = []; // parentId => [childId, ...]
+        foreach ($allIds as $qid) {
+            $q = Question::read($qid);
+            if (!$q) {
+                continue;
+            }
+            $questionsById[$qid] = $q;
 
+            // some DBs might store parent_id as string/null
+            $pid = (int) ($q->parent_id ?? 0);
+            if ($pid > 0) {
+                if (!isset($childrenByParent[$pid])) {
+                    $childrenByParent[$pid] = [];
+                }
+                $childrenByParent[$pid][] = $qid;
+            }
+        }
+
+        // is this question a media/container?
+        $isMediaContainer = static function ($q, $qid, $childrenByParent) {
+            // Case 1: explicit MEDIA_QUESTION type (when constant exists)
+            $isMediaType = (defined('MEDIA_QUESTION') && (int) $q->selectType() === MEDIA_QUESTION);
+
+            // Case 2: it is a parent of other questions within this exercise
+            $isParent = isset($childrenByParent[$qid]) && !empty($childrenByParent[$qid]);
+
+            // Case 3: some forks expose a method isMedia()
+            $hasMethod = method_exists($q, 'isMedia') && $q->isMedia();
+
+            return $isMediaType || $isParent || $hasMethod;
+        };
+
+        // Build the effective set of answerable questions (exclude media containers).
+        $effectiveQuestions = []; // id => Question
+        foreach ($questionsById as $qid => $q) {
+            if ($isMediaContainer($q, $qid, $childrenByParent)) {
+                continue; // skip media/parent containers
+            }
+            $effectiveQuestions[$qid] = $q;
+        }
+
+        // Compute counts and totals using only effective questions.
+        $effectiveNbrQuestions = count($effectiveQuestions);
+        $effectiveTotalScore = 0.0;
+        foreach ($effectiveQuestions as $q) {
+            $effectiveTotalScore += (float) $q->selectWeighting();
+        }
+
+        // Restore original selection type.
         $objExercise->questionSelectionType = $originalSelectionType;
+
+        // First line: "X questions, total score Y." (media excluded)
         $alert .= sprintf(
             get_lang('%d questions, for a total score (all questions) of %s.'),
-            $nbrQuestions,
-            $outMaxScore
+            $effectiveNbrQuestions,
+            $effectiveTotalScore
         );
-    }
-    if ($objExercise->random > 0) {
-        $alert .= '<br />'.sprintf(get_lang('Only %s questions will be picked randomly following the quiz configuration.'), $objExercise->random);
-        $alert .= sprintf(
-            '<br>'.get_lang('Only %d questions will be selected based on the test configuration, for a total score of %s.'),
-            $objExercise->random,
-            $maxScoreAllQuestions
-        );
-    }
-    if ($objExercise->random > 0) {
-        $alert .= '<br />'.sprintf(get_lang('Only %s questions will be picked randomly following the quiz configuration.'), $objExercise->random);
-        $alert .= sprintf(
-            '<br>'.get_lang('Only %d questions will be selected based on the test configuration, for a total score of %s.'),
-            $objExercise->random,
-            $maxScoreAllQuestions
-        );
-    }
-    if (false === $showPagination) {
+
+        // If random selection is enabled, display the limit and an informative max total
+        if ($objExercise->random > 0) {
+            $limit = min((int) $objExercise->random, $effectiveNbrQuestions);
+
+            // Gather weights and take top-N.
+            $weights = [];
+            foreach ($effectiveQuestions as $id => $q) {
+                $weights[$id] = (float) $q->selectWeighting();
+            }
+            arsort($weights, SORT_NUMERIC); // highest first
+
+            $maxScoreSelected = 0.0;
+            $i = 0;
+            foreach ($weights as $w) {
+                $maxScoreSelected += $w;
+                if (++$i >= $limit) {
+                    break;
+                }
+            }
+
+            $alert .= '<br />'.sprintf(
+                    get_lang('Only %s questions will be picked randomly following the quiz configuration.'),
+                    $limit
+                );
+            $alert .= sprintf(
+                '<br>'.get_lang('Only %d questions will be selected based on the test configuration, for a total score of %s.'),
+                $limit,
+                $maxScoreSelected
+            );
+        }
+
+        // Category-based ordered selection: use effective counts/totals as well.
         if ($objExercise->questionSelectionType >= EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED) {
             $alert .= sprintf(
                 '<br>'.get_lang(
                     'Only %d questions will be selected based on the test configuration, for a total score of %s.'
                 ),
-                count($questionList),
-                $maxScoreAllQuestions
+                $effectiveNbrQuestions,
+                $effectiveTotalScore
             );
+        }
+    } else {
+        // Pagination enabled or hotspot edit: keep a minimal, safe notice for random selection.
+        if ($objExercise->random > 0) {
+            $limit = min((int) $objExercise->random, (int) $nbrQuestions);
+            $alert .= '<br />'.sprintf(
+                    get_lang('Only %s questions will be picked randomly following the quiz configuration.'),
+                    $limit
+                );
         }
     }
     if (!empty($alert)) {

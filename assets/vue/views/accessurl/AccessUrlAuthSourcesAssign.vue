@@ -6,11 +6,11 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
-import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import baseService from "../../services/baseService"
 import { findAll as listAccessUrl } from "../../services/accessurlService"
-import userService from "../../services/userService"
 import { useNotification } from "../../composables/notification"
+import BaseAvatarList from "../../components/basecomponents/BaseAvatarList.vue"
+import BaseUserFinder from "../../components/basecomponents/BaseUserFinder.vue"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -19,14 +19,12 @@ const { showErrorNotification, showSuccessNotification } = useNotification()
 
 const accessUrlList = ref([])
 const authSourceList = ref([])
-const userList = ref([])
-const userListTotal = ref(0)
 
 const accessUrl = ref(null)
 const authSource = ref(null)
-const selectedUsers = ref([])
-const isLoadingUserList = ref(true)
 const isLoadingAssign = ref(false)
+
+const userFinder = ref({ selectedUsers: [] })
 
 async function listAuthSourcesByAccessUrl({ value: accessUrlIri }) {
   authSourceList.value = []
@@ -41,28 +39,6 @@ async function listAuthSourcesByAccessUrl({ value: accessUrlIri }) {
   }
 }
 
-async function listUsers({ page, rows }) {
-  isLoadingUserList.value = true
-
-  try {
-    const { totalItems, items } = await userService.findAll({
-      page: page + 1,
-      itemsPerPage: rows,
-    })
-
-    userListTotal.value = totalItems
-    userList.value = items
-  } catch (error) {
-    showErrorNotification(error)
-  } finally {
-    isLoadingUserList.value = false
-  }
-}
-
-async function onPage({ page, rows }) {
-  await listUsers({ page, rows })
-}
-
 async function assignAuthSources() {
   isLoadingAssign.value = true
 
@@ -70,16 +46,16 @@ async function assignAuthSources() {
     await baseService.post(
       "/access-url/auth-sources/assign",
       {
-        users: selectedUsers.value.map((userInfo) => userInfo["@id"]),
+        users: userFinder.value.selectedUsers.map((userInfo) => userInfo["@id"]),
         auth_source: authSource.value,
         access_url: accessUrl.value,
       },
       true,
     )
 
-    showSuccessNotification(t("Auth sources assigned successfully"))
+    showSuccessNotification(t("Authentication sources assigned successfully"))
 
-    selectedUsers.value = []
+    userFinder.value.selectedUsers = []
   } catch (e) {
     showErrorNotification(e)
   } finally {
@@ -88,11 +64,10 @@ async function assignAuthSources() {
 }
 
 listAccessUrl().then((items) => (accessUrlList.value = items))
-listUsers({ page: 0, rows: 20 })
 </script>
 
 <template>
-  <SectionHeader :title="t('Assign auth sources to users')" />
+  <SectionHeader :title="t('Assign authentication sources to users')" />
 
   <BaseToolbar>
     <template #start>
@@ -106,27 +81,12 @@ listUsers({ page: 0, rows: 20 })
     </template>
   </BaseToolbar>
 
-  <div class="grid grid-flow-row-dense md:grid-cols-3 gap-4">
-    <div class="md:col-span-2">
-      <BaseTable
-        v-model:selected-items="selectedUsers"
-        :is-loading="isLoadingUserList"
-        :total-items="userListTotal"
-        :values="userList"
-        data-key="@id"
-        lazy
-        @page="onPage"
-      >
-        <Column selectionMode="multiple" />
-
-        <Column
-          field="fullName"
-          :header="t('Full name')"
-        />
-      </BaseTable>
+  <div class="grid grid-flow-row-dense md:grid-cols-5 gap-4">
+    <div class="md:col-span-3">
+      <BaseUserFinder ref="userFinder" />
     </div>
 
-    <div>
+    <div class="md:col-span-2">
       <BaseSelect
         id="access_url"
         v-model="accessUrl"
@@ -142,12 +102,19 @@ listUsers({ page: 0, rows: 20 })
         id="auth_source"
         v-model="authSource"
         :disabled="0 === authSourceList.length"
-        :label="t('Auth source')"
+        :label="t('Authentication source')"
         :options="authSourceList"
       />
 
+      <div class="field">
+        <BaseAvatarList
+          :count-several="userFinder.selectedUsers.length || 0"
+          :users="userFinder.selectedUsers || []"
+        />
+      </div>
+
       <BaseButton
-        :disabled="!accessUrl || !authSource || 0 === selectedUsers.length || isLoadingAssign"
+        :disabled="!accessUrl || !authSource || 0 === userFinder.selectedUsers.length || isLoadingAssign"
         :is-loading="isLoadingAssign"
         :label="t('Assign')"
         icon="save"

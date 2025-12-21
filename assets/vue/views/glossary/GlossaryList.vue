@@ -1,5 +1,13 @@
 <template>
   <div>
+    <SectionHeader :title="t('Glossary')">
+      <template #end>
+        <StudentViewButton
+          v-if="securityStore.isAuthenticated"
+          @change="onStudentViewChange"
+        />
+      </template>
+    </SectionHeader>
     <BaseToolbar v-if="securityStore.isAuthenticated">
       <template v-if="canEditGlossary">
         <BaseButton
@@ -33,10 +41,6 @@
           @click="exportToDocuments"
         />
       </template>
-      <StudentViewButton
-        v-if="course"
-        @change="onStudentViewChange"
-      />
     </BaseToolbar>
 
     <BaseInputText
@@ -69,6 +73,7 @@
         summary="Add your first term glossary to this course"
       >
         <BaseButton
+          v-if="canEditGlossary"
           :label="t('Add new glossary term')"
           class="mt-4"
           icon="plus"
@@ -84,6 +89,7 @@
         :glossaries="glossaries"
         :is-loading="isLoading"
         :search-term="searchTerm"
+        :can-edit-glossary="canEditGlossary"
         @delete="confirmDeleteTerm($event)"
         @edit="editTerm($event)"
       />
@@ -91,6 +97,7 @@
         v-else
         :glossaries="glossaries"
         :search-term="searchTerm"
+        :can-edit-glossary="canEditGlossary"
         @delete="confirmDeleteTerm($event)"
         @edit="editTerm($event)"
       />
@@ -109,7 +116,7 @@
 import EmptyState from "../../components/EmptyState.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
-import { computed, onMounted, ref } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
@@ -120,7 +127,6 @@ import { useCidReq } from "../../composables/cidReq"
 import glossaryService from "../../services/glossaryService"
 import { useNotification } from "../../composables/notification"
 import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.vue"
-import StudentViewButton from "../../components/StudentViewButton.vue"
 import { debounce } from "lodash"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import Skeleton from "primevue/skeleton"
@@ -128,11 +134,15 @@ import { useSecurityStore } from "../../store/securityStore"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
+import { usePlatformConfig } from "../../store/platformConfig"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
+import StudentViewButton from "../../components/StudentViewButton.vue"
 
 const route = useRoute()
 const router = useRouter()
 const securityStore = useSecurityStore()
 const notifications = useNotification()
+const platform = usePlatformConfig()
 
 const { t } = useI18n()
 
@@ -173,15 +183,27 @@ const termToDeleteString = computed(() => {
 const isAllowedToEdit = ref(false)
 
 const canEditGlossary = computed(() => {
-  const sid = route.query.sid
-  return isAllowedToEdit.value || (isCurrentTeacher.value && !sid)
+  const inSession = !!route.query.sid
+  const basePermission = isAllowedToEdit.value || (securityStore.isCurrentTeacher && !inSession)
+  return basePermission && !platform.isStudentViewActive
 })
+
+const isAdminOrTeacher = computed(() => securityStore.isAdmin || securityStore.isTeacher)
 
 onMounted(async () => {
   isLoading.value = true
   await fetchGlossaries()
   await onStudentViewChange()
 })
+
+watch(
+  () => platform.isStudentViewActive,
+  async () => {
+    await onStudentViewChange()
+    await fetchGlossaries()
+    await onStudentViewChange()
+  },
+)
 
 async function onStudentViewChange() {
   isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
@@ -194,6 +216,7 @@ const debouncedSearch = debounce(() => {
 }, 500)
 
 function addNewTerm() {
+  if (!canEditGlossary.value) return
   router.push({
     name: "CreateTerm",
     query: route.query,
@@ -201,6 +224,7 @@ function addNewTerm() {
 }
 
 function editTerm(term) {
+  if (!canEditGlossary.value) return
   router.push({
     name: "UpdateTerm",
     params: { id: term.iid },
@@ -209,11 +233,13 @@ function editTerm(term) {
 }
 
 async function confirmDeleteTerm(term) {
+  if (!canEditGlossary.value) return
   termToDelete.value = term
   isDeleteItemDialogVisible.value = true
 }
 
 async function deleteTerm() {
+  if (!canEditGlossary.value) return
   try {
     await glossaryService.deleteTerm(termToDelete.value.iid)
     notifications.showSuccessNotification(t("Term removed"))
@@ -227,6 +253,7 @@ async function deleteTerm() {
 }
 
 function importGlossary() {
+  if (!canEditGlossary.value) return
   router.push({
     name: "ImportGlossary",
     query: route.query,
@@ -234,6 +261,7 @@ function importGlossary() {
 }
 
 function exportGlossary() {
+  if (!canEditGlossary.value) return
   router.push({
     name: "ExportGlossary",
     query: route.query,
@@ -241,11 +269,11 @@ function exportGlossary() {
 }
 
 function changeView(newView) {
-  // Handle changing the view (e.g., table view)
   view.value = newView === "table" ? "list" : "table"
 }
 
 async function exportToDocuments() {
+  if (!canEditGlossary.value) return
   const postData = {
     parentResourceNodeId: parentResourceNodeId.value,
     resourceLinkList: resourceLinkList.value,

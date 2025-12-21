@@ -7,8 +7,8 @@
       class="rounded-xl border border-gray-25 bg-gray-10 shadow-sm transition-all duration-200 hover:shadow-md overflow-hidden"
     >
       <div
-        @click="toggleExpand(session.id)"
         class="flex cursor-pointer"
+        @click="toggleExpand(session.id)"
       >
         <div class="w-1.5 bg-primary rounded-l-xl" />
 
@@ -32,18 +32,18 @@
               {{ t("Edit") }}
             </div>
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 text-gray-400 transform transition-transform"
               :class="{ 'rotate-180': expandedSessions.has(session.id) }"
+              class="h-5 w-5 text-gray-400 transform transition-transform"
               fill="none"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <path
+                d="M19 9l-7 7-7-7"
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M19 9l-7 7-7-7"
               />
             </svg>
           </div>

@@ -12,6 +12,14 @@
 
     <h1 class="text-2xl font-bold">{{ t("Upload your assignment") }} – {{ publicationTitle }}</h1>
 
+    <p
+      v-if="allowedExtensions.length > 0"
+      class="text-gray-600"
+    >
+      <span class="font-semibold">{{ t('Allowed file formats:') }}</span>
+      {{ allowedExtensions.map(ext => '.' + ext).join(', ') }}
+    </p>
+
     <div
       v-if="allowText && !allowFile"
       class="space-y-4"
@@ -129,6 +137,7 @@ const publicationTitle = ref("")
 const text = ref("")
 const submissionTitle = ref("")
 const activeTab = ref(allowText ? "text" : "file")
+const allowedExtensions = ref([])
 
 onMounted(loadPublicationTitle)
 async function loadPublicationTitle() {
@@ -138,10 +147,26 @@ async function loadPublicationTitle() {
     })
     publicationTitle.value = data.title
     submissionTitle.value = data.title
+
+    if (data.extensions) {
+      allowedExtensions.value = data.extensions
+        .split(' ')
+        .map(ext => ext.trim().toLowerCase())
+        .filter(ext => ext.length > 0) }
   } catch (e) {
     console.error("Error loading publication metadata", e)
   }
 }
+
+function isFileExtensionAllowed(filename) {
+  if (allowedExtensions.value.length === 0) {
+    return true
+  }
+
+  const fileExtension = filename.split('.').pop().toLowerCase()
+  return allowedExtensions.value.includes(fileExtension)
+}
+
 
 const queryParams = new URLSearchParams({
   cid,
@@ -159,6 +184,14 @@ uppy.use(XHRUpload, {
   fieldName: "uploadFile",
 })
 uppy.on("file-added", (file) => {
+  if (!isFileExtensionAllowed(file.name)) {
+    uppy.removeFile(file.id)
+    showErrorNotification(
+      t('File type not allowed. Allowed extensions') + ': ' +
+      allowedExtensions.value.map(ext => '.' + ext).join(', ')
+    )
+    return
+  }
   uppy.setMeta({
     title: file.name,
     filetype: "file",

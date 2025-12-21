@@ -54,6 +54,7 @@ class Template
     public $force_plugin_load = false;
     public $responseCode = 0;
     private $themeDir;
+    private bool $hide_global_chat = false;
 
     /**
      * @param string $title

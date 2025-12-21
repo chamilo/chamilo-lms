@@ -5,8 +5,8 @@
 /**
  * This script contains the data to fill (or empty) the database using
  * the fillers in this directory.
- * It contains more than 10 courses, to enable testing pagination in the
- * courses catalog. Courses are distributed in several languages and categories.
+ * It contains more than 10 courses to enable testing pagination in the
+ * course catalogue. Courses are distributed in several languages and categories.
  *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
@@ -19,7 +19,7 @@ $courses[] = [
     'category_code' => 'LANG',
     'course_language' => 'en_US',
     'user_id' => 1,
-    'expiration_date' => '2020-09-01 00:00:00',
+    'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => true,
 ];
 // 2
@@ -30,7 +30,7 @@ $courses[] = [
     'category_code' => 'LANG',
     'course_language' => 'es',
     'user_id' => 1,
-    'expiration_date' => '2020-09-01 00:00:00',
+    'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => true,
 ];
 // 3
@@ -41,18 +41,18 @@ $courses[] = [
     'category_code' => 'LANG',
     'course_language' => 'fr_FR',
     'user_id' => 1,
-    'expiration_date' => '2020-09-01 00:00:00',
+    'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => true,
 ];
 // 4
 $courses[] = [
-    'code' => 'HISTLIT',
-    'title' => 'History of litterature',
-    'description' => 'History of English litterature from the Middle Ages to our times',
-    'category_code' => 'PROJ',
-    'course_language' => 'en_US',
+    'code' => 'ARABIC101',
+    'title' => 'العربية للمبتدئين',
+    'description' => 'دورة العربية للمبتدئين',
+    'category_code' => 'LANG',
+    'course_language' => 'ar',
     'user_id' => 1,
-    'expiration_date' => '2020-09-01 00:00:00',
+    'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => true,
 ];
 // 5
@@ -63,7 +63,7 @@ $courses[] = [
     'category_code' => 'PROJ',
     'course_language' => 'en_US',
     'user_id' => 1,
-    'expiration_date' => '2020-09-01 00:00:00',
+    'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => true,
 ];
 // 6
@@ -74,7 +74,7 @@ $courses[] = [
     'category_code' => 'PROJ',
     'course_language' => 'en_US',
     'user_id' => 1,
-    'expiration_date' => '2020-09-01 00:00:00',
+    'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => true,
 ];
 // 7
@@ -85,7 +85,7 @@ $courses[] = [
     'category_code' => 'PROJ',
     'course_language' => 'en_US',
     'user_id' => 1,
-    'expiration_date' => '2020-09-01 00:00:00',
+    'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => true,
 ];
 // 8
@@ -96,7 +96,7 @@ $courses[] = [
     'category_code' => 'LANG',
     'course_language' => 'ja',
     'user_id' => 1,
-    'expiration_date' => '2020-09-01 00:00:00',
+    'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => true,
 ];
 // 9
@@ -107,28 +107,39 @@ $courses[] = [
     'category_code' => 'PROJ',
     'course_language' => 'en_US',
     'user_id' => 1,
-    'expiration_date' => '2020-09-01 00:00:00',
+    'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => true,
 ];
 // 10
 $courses[] = [
-    'code' => 'SCRUM',
-    'title' => 'SCRUM project management basics',
-    'description' => 'Introduction to SCRUM project management for busy people',
-    'category_code' => 'PROJ',
-    'course_language' => 'en_US',
+    'code' => 'HEBREW101',
+    'title' => 'עברית למתחילים',
+    'description' => '',
+    'category_code' => 'LANG',
+    'course_language' => 'he',
     'user_id' => 1,
-    'expiration_date' => '2020-09-01 00:00:00',
+    'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => true,
 ];
 // 11
 $courses[] = [
-    'code' => 'D2DMATHS',
-    'title' => 'Day to day mathematics',
-    'description' => 'Mathematics for busy people',
-    'category_code' => 'PROJ',
-    'course_language' => 'en_US',
+    'code' => 'CHINESE101',
+    'title' => '初级汉语',
+    'description' => '初级汉语课程',
+    'category_code' => 'LANG',
+    'course_language' => 'zh_CN',
     'user_id' => 1,
-    'expiration_date' => '2020-09-01 00:00:00',
+    'expiration_date' => '2030-09-01 00:00:00',
+    'exemplary_content' => true,
+];
+// 12
+$courses[] = [
+    'code' => 'MYANMAR101',
+    'title' => 'မြန်မာဘာသာ ဝါနှုများ အတွက်',
+    'description' => 'မြန်မာဘာသာ သင်တန်း ဝါနှုများ အတွက်',
+    'category_code' => 'LANG',
+    'course_language' => 'my_MM',
+    'user_id' => 1,
+    'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => true,
 ];

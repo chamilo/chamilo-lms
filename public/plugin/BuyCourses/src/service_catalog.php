@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * List of services.
  */
@@ -26,10 +29,10 @@ $form = new FormValidator(
 
 if ($form->validate()) {
     $formValues = $form->getSubmitValues();
-    $nameFilter = $formValues['name'] ?? null;
-    $minFilter = $formValues['min'] ?? 0;
-    $maxFilter = $formValues['max'] ?? 0;
-    $appliesToFilter = $formValues['applies_to'] ?? '';
+    $nameFilter = isset($formValues['name']) ? $formValues['name'] : null;
+    $minFilter = isset($formValues['min']) ? $formValues['min'] : 0;
+    $maxFilter = isset($formValues['max']) ? $formValues['max'] : 0;
+    $appliesToFilter = isset($formValues['applies_to']) ? $formValues['applies_to'] : '';
 }
 
 $form->addHeader($plugin->get_lang('SearchFilter'));
@@ -63,9 +66,8 @@ $currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $first = $pageSize * ($currentPage - 1);
 $serviceList = $plugin->getCatalogServiceList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, $appliesToFilter);
 $totalItems = $plugin->getCatalogServiceList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, $appliesToFilter, 'count');
-$pagesCount = ceil($totalItems / $pageSize);
-$url = api_get_self().'?';
-$pagination = Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
+$pagesCount = (int) ceil($totalItems / $pageSize);
+$pagination = BuyCoursesPlugin::returnPagination(api_get_self(), $currentPage, $pagesCount, $totalItems);
 
 // View
 if (api_is_platform_admin()) {
@@ -95,10 +97,8 @@ $tpl->assign('sessions_are_included', $includeSessions);
 $tpl->assign('services_are_included', $includeServices);
 $tpl->assign('pagination', $pagination);
 
-$countSessions = $plugin->getCatalogSessionList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'count');
-
-$tpl->assign('coursesExist', true);
-$tpl->assign('sessionExist', $countSessions > 0);
+$tpl->assign('coursesExist', false);
+$tpl->assign('sessionExist', false);
 
 $content = $tpl->fetch('BuyCourses/view/catalog.tpl');
 

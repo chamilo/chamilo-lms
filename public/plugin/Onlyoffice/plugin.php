@@ -14,6 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../../main/inc/global.inc.php';
 require_once __DIR__.'/lib/onlyofficeSettingsFormBuilder.php';
 require_once __DIR__.'/lib/onlyofficeAppSettings.php';
@@ -24,7 +27,12 @@ require_once __DIR__.'/lib/onlyofficeAppSettings.php';
 $plugin = OnlyofficePlugin::create();
 $appSettings = new OnlyofficeAppsettings($plugin);
 $plugin_info = $plugin->get_info();
-$plugin_info['settings_form'] = OnlyofficeSettingsFormBuilder::buildSettingsForm($appSettings);
-if ($plugin_info['settings_form']->validate()) {
-    $plugin = OnlyofficeSettingsFormBuilder::validateSettingsForm($appSettings);
+
+$installed = Container::getPluginRepository()->isInstalledByName($plugin->get_name());
+
+if ($installed) {
+    $plugin_info['settings_form'] = OnlyofficeSettingsFormBuilder::buildSettingsForm($appSettings);
+    if ($plugin_info['settings_form']->validate()) {
+        $plugin = OnlyofficeSettingsFormBuilder::validateSettingsForm($appSettings);
+    }
 }

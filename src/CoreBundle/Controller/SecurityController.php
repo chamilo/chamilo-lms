@@ -35,6 +35,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -177,17 +178,14 @@ class SecurityController extends AbstractController
         return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/check-session', name: 'check_session', methods: ['GET'])]
     public function checkSession(): JsonResponse
     {
-        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
-            $user = $this->userHelper->getCurrent();
-            $data = $this->serializer->serialize($user, 'jsonld', ['groups' => ['user_json:read']]);
+        $user = $this->userHelper->getCurrent();
+        $data = $this->serializer->serialize($user, 'jsonld', ['groups' => ['user_json:read']]);
 
-            return new JsonResponse(['isAuthenticated' => true, 'user' => json_decode($data)], Response::HTTP_OK);
-        }
-
-        throw $this->createAccessDeniedException();
+        return new JsonResponse(['isAuthenticated' => true, 'user' => json_decode($data)], Response::HTTP_OK);
     }
 
     #[Route('/login/token/request', name: 'login_token_request', methods: ['GET'])]
@@ -224,7 +222,7 @@ class SecurityController extends AbstractController
     /**
      * @see LdapAuthenticator
      */
-    #[Route('/login/ldap/check', name: 'login_ldap_check', methods: ['POST'])]
+    #[Route('/login/ldap/check', name: 'login_ldap_check', methods: ['POST'], format: 'json')]
     public function ldapLoginCheck(AuthenticationConfigHelper $authConfigHelper): Response
     {
         $ldapConfig = $authConfigHelper->getLdapConfig();

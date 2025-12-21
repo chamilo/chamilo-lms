@@ -12,6 +12,12 @@ use Doctrine\Persistence\ObjectManager;
 
 class LanguageFixtures extends Fixture
 {
+    public static function getGroups(): array
+    {
+        // This fixture must only be executed on fresh installs.
+        return ['install'];
+    }
+
     public function load(ObjectManager $manager): void
     {
         $list = self::getLanguages();
@@ -20,7 +26,8 @@ class LanguageFixtures extends Fixture
                 ->setOriginalName($data['original_name'])
                 ->setEnglishName($data['english_name'])
                 ->setIsocode($data['isocode'])
-                ->setAvailable(1 === $data['available'])
+                // Enable all languages by default on new installations.
+                ->setAvailable(true)
             ;
             $manager->persist($lang);
         }
@@ -524,7 +531,6 @@ class LanguageFixtures extends Fixture
                 'english_name' => 'vietnamese',
                 'isocode' => 'vi_VN',
                 'available' => 0,
-
                 'format' => 'title last_name first_name',
                 'sort_by' => 'last_name',
             ],
@@ -548,6 +554,54 @@ class LanguageFixtures extends Fixture
                 'original_name' => 'မြန်မာဘာသာ',
                 'english_name' => 'burmese',
                 'isocode' => 'my_MM',
+                'available' => 0,
+                'format' => 'title first_name last_name',
+                'sort_by' => 'first_name',
+            ],
+            [
+                'original_name' => 'ພາສາລາວ',
+                'english_name' => 'lao',
+                'isocode' => 'lo',
+                'available' => 0,
+                'format' => 'title first_name last_name',
+                'sort_by' => 'first_name',
+            ],
+            [
+                'original_name' => 'հայերեն',
+                'english_name' => 'armenian',
+                'isocode' => 'hy',
+                'available' => 0,
+                'format' => 'title first_name last_name',
+                'sort_by' => 'first_name',
+            ],
+            [
+                'original_name' => 'Gaeilge',
+                'english_name' => 'irish',
+                'isocode' => 'ga',
+                'available' => 0,
+                'format' => 'title first_name last_name',
+                'sort_by' => 'first_name',
+            ],
+            [
+                'original_name' => 'नेपाली',
+                'english_name' => 'nepali',
+                'isocode' => 'ne',
+                'available' => 0,
+                'format' => 'title first_name last_name',
+                'sort_by' => 'first_name',
+            ],
+            [
+                'original_name' => 'shqip',
+                'english_name' => 'albanian',
+                'isocode' => 'sq',
+                'available' => 0,
+                'format' => 'title first_name last_name',
+                'sort_by' => 'first_name',
+            ],
+            [
+                'original_name' => 'தமிழ்',
+                'english_name' => 'tamil',
+                'isocode' => 'ta',
                 'available' => 0,
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',

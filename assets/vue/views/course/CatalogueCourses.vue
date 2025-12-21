@@ -97,7 +97,6 @@ import Button from "primevue/button"
 import Dropdown from "primevue/dropdown"
 import { FilterMatchMode } from "@primevue/core/api"
 import { useNotification } from "../../composables/notification"
-import { useLanguage } from "../../composables/language"
 import { useSecurityStore } from "../../store/securityStore"
 import CatalogueCourseCard from "../../components/course/CatalogueCourseCard.vue"
 import * as userRelCourseVoteService from "../../services/userRelCourseVoteService"
@@ -162,8 +161,6 @@ const loadingMore = ref(false)
 
 const extraFields = ref([])
 const { showErrorNotification } = useNotification()
-const { languageList } = useLanguage()
-const languages = languageList
 
 const loadExtraFields = async () => {
   try {

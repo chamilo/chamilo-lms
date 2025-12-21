@@ -5,15 +5,14 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
-
+use Chamilo\CoreBundle\Framework\Container;
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script(false, true);
 SkillModel::isAllowed();
 
-$httpRequest = HttpRequest::createFromGlobals();
+$httpRequest = Container::getRequest();
 
 
 //Adds the JS needed to use the jqgrid

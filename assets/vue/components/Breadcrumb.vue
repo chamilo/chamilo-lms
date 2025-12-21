@@ -12,9 +12,12 @@
           v-bind="props.action"
           @click="handleBreadcrumbClick(item)"
         >
-          {{ item.label }}
+          {{ stripHtml(item.label) }}
         </BaseAppLink>
-        <span v-else>{{ item.label }}</span>
+        <span
+          v-else
+          v-text="stripHtml(item.label)"
+        ></span>
       </template>
 
       <template #separator> /</template>
@@ -300,7 +303,8 @@ watchEffect(() => {
     const toolBase = matchedRoutes[0]
     const currentMatched = matchedRoutes[matchedRoutes.length - 1]
 
-    let toolLabel = formatToolName(mainToolName)
+    let toolLabel = toolBase.meta?.breadcrumb || formatToolName(mainToolName)
+
     if (mainToolName === "ccalendarevent") {
       const cid = Number(route.query?.cid || 0)
       const gid = Number(route.query?.gid || 0)
@@ -421,5 +425,10 @@ function handleBreadcrumbClick(item) {
   if (itemSegment === currentSegment && allowedSegments.includes(itemSegment)) {
     window.location.href = router.resolve(item.route).href
   }
+}
+
+function stripHtml(value) {
+  if (!value || typeof value !== "string") return ""
+  return value.replace(/<[^>]*>?/gm, "").trim()
 }
 </script>

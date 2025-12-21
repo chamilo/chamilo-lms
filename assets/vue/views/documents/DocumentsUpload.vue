@@ -45,6 +45,20 @@
           name="fileExistsOption"
         />
       </div>
+
+      <!-- Search / Xapian options (only when global search is enabled) -->
+      <div
+        v-if="isSearchEnabled"
+        class="flex flex-row mb-2"
+      >
+        <label class="font-semibold w-28">{{ t("Search") }}:</label>
+        <BaseCheckbox
+          id="indexContent"
+          v-model="indexDocumentContent"
+          :label="t('Index document content?')"
+          name="indexContent"
+        />
+      </div>
     </BaseAdvancedSettingsButton>
   </div>
 </template>
@@ -72,6 +86,7 @@ import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdva
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { useStore } from "vuex"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const store = useStore()
 const route = useRoute()
@@ -79,6 +94,8 @@ const router = useRouter()
 const { gid, sid, cid } = useCidReq()
 const { onCreated } = useUpload()
 const { t } = useI18n()
+const platformConfigStore = usePlatformConfig()
+
 const allowedFiletypes = ["file", "video", "certificate"]
 const filetypeQuery = route.query.filetype
 const filetype = allowedFiletypes.includes(filetypeQuery) ? filetypeQuery : "file"
@@ -86,6 +103,12 @@ const filetype = allowedFiletypes.includes(filetypeQuery) ? filetypeQuery : "fil
 const showAdvancedSettings = ref(false)
 const isUncompressZipEnabled = ref(false)
 const fileExistsOption = ref("rename")
+
+// Global search enabled flag, based on setting "search.search_enabled"
+const isSearchEnabled = computed(() => "false" !== platformConfigStore.getSetting("search.search_enabled"))
+
+// Default indexContent = true when search is enabled, false otherwise
+const indexDocumentContent = ref(isSearchEnabled.value)
 
 const resourceNode = computed(() => store.getters["resourcenode/getResourceNode"])
 const parentResourceNodeId = ref(Number(route.query.parentResourceNodeId || route.params.node))
@@ -146,12 +169,14 @@ const uppy = new Uppy({ autoProceed: false })
     }, 2000)
   })
 
+// Initial meta for Uppy, including search-related flag
 uppy.setMeta({
   filetype,
   parentResourceNodeId: parentResourceNodeId.value,
   resourceLinkList: resourceLinkList.value,
   isUncompressZipEnabled: isUncompressZipEnabled.value,
   fileExistsOption: fileExistsOption.value,
+  indexDocumentContent: indexDocumentContent.value,
 })
 
 if (filetype === "certificate") {
@@ -162,16 +187,17 @@ if (filetype === "certificate") {
   uppy.setOptions({ restrictions: { allowedFileTypes: null } })
 }
 
-watch(isUncompressZipEnabled, () => {
-  uppy.setOptions({
-    meta: { isUncompressZipEnabled: isUncompressZipEnabled.value },
-  })
+// Update only the changed meta keys, keeping other meta intact
+watch(isUncompressZipEnabled, (value) => {
+  uppy.setMeta({ isUncompressZipEnabled: value })
 })
 
-watch(fileExistsOption, () => {
-  uppy.setOptions({
-    meta: { fileExistsOption: fileExistsOption.value },
-  })
+watch(fileExistsOption, (value) => {
+  uppy.setMeta({ fileExistsOption: value })
+})
+
+watch(indexDocumentContent, (value) => {
+  uppy.setMeta({ indexDocumentContent: value })
 })
 
 function back() {
@@ -188,6 +214,10 @@ function back() {
 }
 
 onBeforeUnmount(() => {
-  try { uppy.close() } catch {}
+  try {
+    uppy.close()
+  } catch {
+    // Ignore Uppy closing errors
+  }
 })
 </script>

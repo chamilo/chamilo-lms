@@ -110,6 +110,7 @@ class SortableTable extends HTML_Table
     private $dataFunctionParams;
     private $defaultColumn;
     private $defaultItemsPerPage;
+    private ?string $checkbox_name;
 
     /**
      * Create a new SortableTable.
@@ -977,9 +978,9 @@ class SortableTable extends HTML_Table
      * Add a filter to a column. If another filter was already defined for the
      * given column, it will be overwritten.
      *
-     * @param int    $column   The number of the column
-     * @param string $function The name of the filter-function. This should be a
-     *                         function wich requires 1 parameter and returns the filtered value.
+     * @param int    $column     The number of the column
+     * @param callable $function The name of the filter-function. This should be a
+     *                           function wich requires 1 parameter and returns the filtered value.
      */
     public function set_column_filter($column, $function)
     {

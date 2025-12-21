@@ -35,16 +35,22 @@
 
       <div
         v-if="'new' === installerData.installType"
-        class="formgroup-inline"
+        class="formgroup-inline items-center gap-2"
       >
         <div
           v-t="'Administrator password'"
           class="field text-body-2 font-semibold"
         />
-        <div
-          class="field text-body-2"
-          v-text="installerData.stepData.passForm"
-        />
+        <div class="field text-body-2 flex items-center">
+          <span v-if="!showAdminPass">********</span>
+          <span v-else>{{ installerData.stepData.passForm }}</span>
+          <Button
+            icon="mdi mdi-eye"
+            class="p-button-text ml-2"
+            @click="toggleAdminPass"
+            :aria-label="showAdminPass ? t('Hide password') : t('Show password')"
+          />
+        </div>
         <div
           v-t="'You may want to change this'"
           class="field text-body-2 text-error"
@@ -220,7 +226,7 @@
         />
         <div
           class="field text-body-2"
-          v-text="installerData.stepData.dbNameForm"
+          v-text="sanitizedDbName"
         />
       </div>
 
@@ -373,7 +379,7 @@
 </template>
 
 <script setup>
-import { inject, ref } from "vue"
+import { inject, ref, computed } from "vue"
 import { useI18n } from "vue-i18n"
 
 import Message from "primevue/message"
@@ -386,6 +392,19 @@ const { t } = useI18n()
 
 const installerData = inject("installerData")
 
+// Compute the sanitized database name as it will be created on the server.
+const sanitizedDbName = computed(() => {
+  const raw = installerData.value?.stepData?.dbNameForm || ""
+
+  // For updates we trust the existing database name as-is.
+  if (installerData.value.installType === "update" || installerData.value.isUpdateAvailable) {
+    return raw
+  }
+
+  // Same rule as backend: only letters, digits and underscore are kept.
+  return raw.replace(/[^a-zA-Z0-9_]/g, "")
+})
+
 const loading = ref(false)
 const isButtonDisabled = ref(installerData.value.isUpdateAvailable)
 const isExecutable = ref("")
@@ -395,6 +414,11 @@ const currentMigration = ref("")
 const successDialogVisible = ref(false)
 const errorDialogVisible = ref(false)
 const errorMessage = ref("")
+
+const showAdminPass = ref(false)
+const toggleAdminPass = () => {
+  showAdminPass.value = !showAdminPass.value
+}
 
 function btnStep6OnClick() {
   loading.value = true
@@ -412,7 +436,7 @@ function btnStep6OnClick() {
 }
 
 function startMigration(updatePath) {
-  var xhr = new XMLHttpRequest()
+  const xhr = new XMLHttpRequest()
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status !== 200) {
       loading.value = false
@@ -431,7 +455,7 @@ function startMigration(updatePath) {
 
 function pollMigrationStatus() {
   setTimeout(() => {
-    var xhr = new XMLHttpRequest()
+    const xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4 && xhr.status === 200) {
         const response = JSON.parse(xhr.responseText)

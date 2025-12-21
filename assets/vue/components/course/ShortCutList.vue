@@ -1,11 +1,11 @@
 <template>
   <div class="course-tool">
     <BaseAppLink
-      :url="resolvedUrl"
-      :target="props.shortcut.target || '_self'"
-      rel="noopener"
-      class="course-tool__link"
       :aria-label="shortcut.title"
+      :target="props.shortcut.target || '_self'"
+      :url="resolvedUrl"
+      class="course-tool__link"
+      rel="noopener"
     >
       <!-- Custom image has priority -->
       <img
@@ -18,18 +18,18 @@
       <!-- Icon from payload (or type-based fallback) -->
       <i
         v-else
-        class="mdi course-tool__icon"
         :class="iconClasses"
         :title="shortcut.title"
         aria-hidden="true"
+        class="mdi course-tool__icon"
       ></i>
     </BaseAppLink>
 
     <BaseAppLink
-      :url="resolvedUrl"
       :target="props.shortcut.target || '_self'"
-      rel="noopener"
+      :url="resolvedUrl"
       class="course-tool__title"
+      rel="noopener"
     >
       {{ shortcut.title }}
     </BaseAppLink>

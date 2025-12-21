@@ -453,20 +453,25 @@ class AppPlugin
         $plugin_info = [];
         $pluginPath  = api_get_path(SYS_PLUGIN_PATH);
 
-        $pluginDir = null;
         $posibleName = [
             $pluginName,
             strtolower($pluginName),
             ucfirst(strtolower($pluginName)),
         ];
+
+        $plugin_file = null;
+
         foreach ($posibleName as $dir) {
             $path = $pluginPath."$dir/plugin.php";
             if (is_file($path)) {
-                $fileToLoad = true;
-                include_once $path;
-                $pluginDir = $dir;
+                $plugin_file = $path;
                 break;
             }
+        }
+
+        if ($plugin_file) {
+            $fileToLoad = true;
+            require $plugin_file;
         }
 
         if (isset($plugin_info['plugin_class']) && class_exists($plugin_info['plugin_class'], false)) {

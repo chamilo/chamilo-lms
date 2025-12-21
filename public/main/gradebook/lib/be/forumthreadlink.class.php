@@ -52,13 +52,6 @@ class ForumThreadLink extends AbstractLink
 
         $tbl_grade_links = Database::get_course_table(TABLE_FORUM_THREAD);
         $sessionId = $this->get_session_id();
-
-        if ($sessionId) {
-            $session_condition = 'tl.session_id='.$sessionId;
-        } else {
-            $session_condition = '(tl.session_id = 0 OR tl.session_id IS NULL)';
-        }
-
         $repo = Container::getForumThreadRepository();
         $course = api_get_course_entity($this->course_id);
         $session = api_get_session_entity($sessionId);
@@ -66,14 +59,6 @@ class ForumThreadLink extends AbstractLink
         $qb = $repo->findAllByCourse($course, $session);
         /** @var CForumThread[] $threads */
         $threads = $qb->getQuery()->getResult();
-
-        /*$sql = 'SELECT tl.iid as thread_id, tl.thread_title, tl.thread_title_qualify
-                FROM '.$tbl_grade_links.' tl
-                WHERE
-                    tl.c_id = '.$this->course_id.' AND
-                    '.$session_condition.'
-                ';
-        $result = Database::query($sql);*/
         $cats = [];
         foreach ($threads as $thread) {
             $title = $thread->getTitle();
@@ -97,10 +82,7 @@ class ForumThreadLink extends AbstractLink
         $table = Database::get_course_table(TABLE_FORUM_POST);
 
         $sql = "SELECT count(*) AS number FROM $table
-                WHERE
-                    c_id = ".$this->course_id." AND
-                    iid = '".$this->get_ref_id()."'
-                ";
+                WHERE iid = '".$this->get_ref_id();
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
@@ -126,21 +108,13 @@ class ForumThreadLink extends AbstractLink
         );
 
         $sql = 'SELECT thread_qualify_max
-                FROM '.Database::get_course_table(TABLE_FORUM_THREAD)."
-                WHERE
-                    c_id = ".$this->course_id." AND
-                    iid = '".$this->get_ref_id()."'
-                    $sessionCondition
-                ";
+                FROM '.Database::get_course_table(TABLE_FORUM_THREAD).'
+                WHERE iid = '.$this->get_ref_id();
         $query = Database::query($sql);
         $assignment = Database::fetch_array($query);
 
         $sql = "SELECT * FROM $thread_qualify
-                WHERE
-                    c_id = ".$this->course_id." AND
-                    iid = ".$this->get_ref_id()."
-                    $sessionCondition
-                ";
+                WHERE iid = ".$this->get_ref_id();
         if (isset($studentId)) {
             $sql .= ' AND user_id = '.intval($studentId);
         }
@@ -270,10 +244,7 @@ class ForumThreadLink extends AbstractLink
     {
         $sessionId = $this->get_session_id();
         $sql = 'SELECT count(iid) FROM '.$this->get_forum_thread_table().'
-                WHERE
-                    c_id = '.$this->course_id.' AND
-                    iid = '.$this->get_ref_id().' AND
-                    session_id='.$sessionId;
+                WHERE iid = '.$this->get_ref_id();
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
@@ -283,11 +254,8 @@ class ForumThreadLink extends AbstractLink
     public function get_link()
     {
         $sessionId = $this->get_session_id();
-        $sql = 'SELECT * FROM '.$this->get_forum_thread_table()."
-                WHERE
-                    c_id = {$this->course_id} AND
-                    iid = '".$this->get_ref_id()."' AND
-                    session_id = $sessionId ";
+        $sql = 'SELECT * FROM '.$this->get_forum_thread_table().'
+                WHERE iid = '.$this->get_ref_id();
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
 
@@ -315,7 +283,7 @@ class ForumThreadLink extends AbstractLink
         if (!empty($ref_id)) {
             $sql = 'UPDATE '.$this->get_forum_thread_table().' SET
                     thread_weight='.api_float_val($weight).'
-                    WHERE c_id = '.$this->course_id.' AND iid = '.$ref_id;
+                    WHERE iid = '.$ref_id;
             Database::query($sql);
         }
     }
@@ -329,7 +297,7 @@ class ForumThreadLink extends AbstractLink
                     thread_qualify_max = 0,
                     thread_weight = 0,
                     thread_title_qualify = ""
-                    WHERE c_id = '.$this->course_id.' AND iid = '.$ref_id;
+                    WHERE iid = '.$ref_id;
             Database::query($sql);
         }
     }
@@ -344,19 +312,9 @@ class ForumThreadLink extends AbstractLink
 
     private function getThreadData()
     {
-        $sessionId = $this->get_session_id();
-        if ($sessionId) {
-            $session_condition = 'session_id = '.$sessionId;
-        } else {
-            $session_condition = '(session_id = 0 OR session_id IS NULL)';
-        }
-
         if (!isset($this->exercise_data)) {
             $sql = 'SELECT * FROM '.$this->get_forum_thread_table().'
-                    WHERE
-                        c_id = '.$this->course_id.' AND
-                        iid = '.$this->get_ref_id().' AND
-                        '.$session_condition;
+                    WHERE iid = '.$this->get_ref_id();
             $query = Database::query($sql);
             $this->exercise_data = Database::fetch_array($query);
         }

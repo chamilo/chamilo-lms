@@ -1,5 +1,6 @@
 {% extends '@ChamiloCore/Layout/base-layout.html.twig' %}
 {%- block page_content %}
+    {# --- Raw JS injections (already-escaped upstream) --- #}
     {%- autoescape false %}
         {% if js is defined %}
             {%- for item in js %}
@@ -7,6 +8,7 @@
             {% endfor %}
         {% endif %}
 
+        {# --- Plugin slots (top/main) --- #}
         {% if plugin_main_top %}
             <div id="plugin_main_top" class="col-md-12">
                 {{ plugin_main_top }}
@@ -19,6 +21,7 @@
             </div>
         {% endif %}
 
+        {# --- Course shortcuts navbar (if any) --- #}
         {% if show_course_shortcut is not null %}
             <div class="nav-tools">
                 {{ show_course_shortcut }}
@@ -26,25 +29,53 @@
         {% endif %}
     {% endautoescape -%}
 
+    {# --- Vue base setup (keep escaped) --- #}
     {%- autoescape %}
         {%- include '@ChamiloCore/Layout/vue_setup.html.twig' %}
     {% endautoescape -%}
 
+    {# --- Main content area --- #}
     {%- autoescape false %}
-        <section id="sectionMainContent" class="section-content" style="display: none;">
+        <section
+                id="sectionMainContent"
+                class="section-content"
+                style="display: none;"
+                {# data-flag helps small CSS/JS hooks without breaking old behavior #}
+                {% if student_view_active is defined %}
+                    data-student-view="{{ student_view_active ? '1' : '0' }}"
+                {% endif %}
+        >
+            {# --- Optional banner when Student View is active --- #}
+            {# Rendered above actions to clearly indicate read-only mode #}
+            {% if student_view_active is defined and student_view_active %}
+                <div
+                        class="alert alert-info ch-student-view-banner"
+                        role="status"
+                        style="margin-bottom: 12px"
+                >
+                    <strong>{{ 'Student view'|trans }}</strong> — {{ 'Edition actions are hidden. Switch back to Teacher view to edit.'|trans }}
+                </div>
+            {% endif %}
+
+            {# --- Page introduction (if provided by controller) --- #}
             {% if introduction is defined %}
                 {{ introduction }}
             {% endif %}
 
-            {% if actions != '' %}
-                {{ actions }}
+            {# --- Global actions toolbar (includes the view toggle button) --- #}
+            {% if actions is defined and actions != '' %}
+                <div class="ch-actions-wrapper" aria-label="{{ 'Page actions'|trans }}">
+                    {{ actions }}
+                </div>
             {% endif %}
 
+            {# --- Actual page content --- #}
             {%- block content %}
                 {{ content }}
             {% endblock -%}
         </section>
 
+        {# --- Plugin slots (bottom/content & bottom/main) --- #}
         {% if plugin_content_bottom %}
             <div id="plugin_content_bottom" class="col-md-12">
                 {{ plugin_content_bottom }}

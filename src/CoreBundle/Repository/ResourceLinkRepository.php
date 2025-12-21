@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Repository;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
@@ -169,5 +170,156 @@ class ResourceLinkRepository extends SortableRepository
                 'link' => $link,
             ];
         }, $result);
+    }
+
+    /**
+     * Find the parent link (folder link) for a given parent node in a specific context.
+     *
+     * This is used when creating new document links so that the link hierarchy
+     * is context-aware (course/session/group/usergroup/user).
+     */
+    public function findParentLinkForContext(
+        ResourceNode $parentNode,
+        ?Course $course,
+        ?Session $session,
+        ?CGroup $group,
+        ?Usergroup $usergroup,
+        ?User $user
+    ): ?ResourceLink {
+        $qb = $this->createQueryBuilder('rl')
+            ->andWhere('rl.resourceNode = :parentNode')
+            ->setParameter('parentNode', $parentNode->getId())
+            ->andWhere('rl.deletedAt IS NULL')
+            ->setMaxResults(1)
+        ;
+
+        // Match course context
+        if (null !== $course) {
+            $qb
+                ->andWhere('rl.course = :course')
+                ->setParameter('course', $course->getId())
+            ;
+        } else {
+            $qb->andWhere('rl.course IS NULL');
+        }
+
+        // Match session context
+        if (null !== $session) {
+            $qb
+                ->andWhere('rl.session = :session')
+                ->setParameter('session', $session->getId())
+            ;
+        } else {
+            $qb->andWhere('rl.session IS NULL');
+        }
+
+        // Match group context
+        if (null !== $group) {
+            $qb
+                ->andWhere('rl.group = :group')
+                ->setParameter('group', $group->getIid())
+            ;
+        } else {
+            $qb->andWhere('rl.group IS NULL');
+        }
+
+        if (null !== $usergroup) {
+            $qb
+                ->andWhere('rl.userGroup = :usergroup')
+                ->setParameter('usergroup', $usergroup->getId())
+            ;
+        } else {
+            $qb->andWhere('rl.userGroup IS NULL');
+        }
+
+        // Match user context
+        if (null !== $user) {
+            $qb
+                ->andWhere('rl.user = :user')
+                ->setParameter('user', $user->getId())
+            ;
+        } else {
+            $qb->andWhere('rl.user IS NULL');
+        }
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * Find the link of a resource in a given context.
+     *
+     * This is mostly used by document move operations to update the link parent
+     * only in the current context.
+     */
+    public function findLinkForResourceInContext(
+        AbstractResource $resource,
+        ?Course $course,
+        ?Session $session,
+        ?CGroup $group,
+        ?Usergroup $usergroup,
+        ?User $user
+    ): ?ResourceLink {
+        $resourceNode = $resource->getResourceNode();
+        if (null === $resourceNode) {
+            return null;
+        }
+
+        $qb = $this->createQueryBuilder('rl')
+            ->andWhere('rl.resourceNode = :resourceNode')
+            ->setParameter('resourceNode', $resourceNode->getId())
+            ->andWhere('rl.deletedAt IS NULL')
+            ->setMaxResults(1)
+        ;
+
+        // Match course context
+        if (null !== $course) {
+            $qb
+                ->andWhere('rl.course = :course')
+                ->setParameter('course', $course->getId())
+            ;
+        } else {
+            $qb->andWhere('rl.course IS NULL');
+        }
+
+        // Match session context
+        if (null !== $session) {
+            $qb
+                ->andWhere('rl.session = :session')
+                ->setParameter('session', $session)
+            ;
+        } else {
+            $qb->andWhere('rl.session IS NULL');
+        }
+
+        // Match group context
+        if (null !== $group) {
+            $qb
+                ->andWhere('rl.group = :group')
+                ->setParameter('group', $group)
+            ;
+        } else {
+            $qb->andWhere('rl.group IS NULL');
+        }
+
+        if (null !== $usergroup) {
+            $qb
+                ->andWhere('rl.userGroup = :usergroup')
+                ->setParameter('usergroup', $usergroup)
+            ;
+        } else {
+            $qb->andWhere('rl.userGroup IS NULL');
+        }
+
+        // Match user context
+        if (null !== $user) {
+            $qb
+                ->andWhere('rl.user = :user')
+                ->setParameter('user', $user)
+            ;
+        } else {
+            $qb->andWhere('rl.user IS NULL');
+        }
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 }

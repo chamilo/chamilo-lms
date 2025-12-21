@@ -57,6 +57,25 @@ class AttendanceController extends AbstractController
 
         $data = $this->attendanceCalendarRepository->findAttendanceWithData($attendanceId);
 
+        if (isset($data['attendanceDates']) && \is_array($data['attendanceDates'])) {
+            foreach ($data['attendanceDates'] as &$date) {
+                if (!isset($date['id'])) {
+                    continue;
+                }
+
+                $calendar = $this->attendanceCalendarRepository->find((int) $date['id']);
+                if (!$calendar instanceof CAttendanceCalendar) {
+                    continue;
+                }
+
+                $duration = $calendar->getDuration();
+                if (null !== $duration) {
+                    $date['duration'] = $duration;
+                }
+            }
+            unset($date);
+        }
+
         return $this->json($data, 200);
     }
 
@@ -82,7 +101,7 @@ class AttendanceController extends AbstractController
 
         $users = $userRepository->findUsersByContext($courseId, $sessionId, $groupId);
 
-        $formattedUsers = array_map(function ($user) use ($userRepository, $sheetRepository, $calendars) {
+        $formattedUsers = array_map(function ($user) use ($userRepository, $sheetRepository, $calendars, $totalCalendars) {
             $absences = 0;
 
             foreach ($calendars as $calendar) {
@@ -95,12 +114,13 @@ class AttendanceController extends AbstractController
                     continue;
                 }
 
-                if (1 !== $sheet->getPresence()) {
+                // Only count full absences, same logic as in PDF/XLS export
+                if (CAttendanceSheet::ABSENT === $sheet->getPresence()) {
                     $absences++;
                 }
             }
 
-            $percentage = \count($calendars) > 0 ? round(($absences * 100) / \count($calendars)) : 0;
+            $percentage = $totalCalendars > 0 ? round(($absences * 100) / $totalCalendars) : 0;
 
             return [
                 'id' => $user->getId(),
@@ -109,7 +129,7 @@ class AttendanceController extends AbstractController
                 'email' => $user->getEmail(),
                 'username' => $user->getUsername(),
                 'photo' => $userRepository->getUserPicture($user->getId()),
-                'notAttended' => "$absences/".\count($calendars)." ({$percentage}%)",
+                'notAttended' => $absences.'/'.$totalCalendars." ({$percentage}%)",
             ];
         }, $users);
 
@@ -549,6 +569,7 @@ class AttendanceController extends AbstractController
                 'presence' => $sheet ? $sheet->getPresence() : null,
                 'sheetId' => $sheet?->getIid(),
                 'signature' => $sheet?->getSignature(),
+                'duration' => $calendar->getDuration(),
             ];
         })->toArray();
 
@@ -571,14 +592,67 @@ class AttendanceController extends AbstractController
         }
 
         return $this->json([
-            'attendanceDates' => array_map(fn ($d) => [
-                'id' => $d['id'],
-                'label' => $d['label'],
-                'done' => $d['done'],
-            ], $dates),
+            'attendanceDates' => array_map(
+                static fn ($d) => [
+                    'id' => $d['id'],
+                    'label' => $d['label'],
+                    'done' => $d['done'],
+                    'duration' => $d['duration'],
+                ],
+                $dates
+            ),
             'attendanceData' => $attendanceData,
             'commentData' => $commentData,
             'signatureData' => $signatureData,
+        ]);
+    }
+
+    #[Route('/{attendanceId}/date/{calendarId}/sheet', name: 'attendance_date_sheet', methods: ['GET'])]
+    public function getDateSheet(
+        int $attendanceId,
+        int $calendarId,
+        Request $request,
+        UserRepository $userRepository,
+        CAttendanceCalendarRepository $calendarRepo,
+        CAttendanceSheetRepository $sheetRepo
+    ): JsonResponse {
+        $cid = (int) $request->query->get('cid', 0);
+        $sid = $request->query->get('sid') ? (int) $request->query->get('sid') : null;
+        $gid = $request->query->get('gid') ? (int) $request->query->get('gid') : null;
+
+        $calendar = $calendarRepo->find($calendarId);
+        if (!$calendar || $calendar->getAttendance()?->getIid() !== $attendanceId) {
+            return $this->json(['error' => 'Calendar not found'], 404);
+        }
+
+        $users = $userRepository->findUsersByContext($cid, $sid, $gid);
+        $presence = [];
+        $comments = [];
+        $signatures = [];
+
+        foreach ($users as $u) {
+            $sheet = $sheetRepo->findOneBy(['user' => $u, 'attendanceCalendar' => $calendar]);
+            $k = $u->getId().'-'.$calendarId;
+            if ($sheet) {
+                $presence[$k] = $sheet->getPresence();
+                $signatures[$k] = $sheet->getSignature();
+            }
+        }
+
+        $formatted = array_map(static fn ($u) => [
+            'id' => $u->getId(),
+            'firstName' => $u->getFirstname(),
+            'lastName' => $u->getLastname(),
+            'photo' => $userRepository->getUserPicture($u->getId()),
+        ], $users);
+
+        return $this->json([
+            'dateLabel' => $calendar->getDateTime()->format('M d, Y - h:i A'),
+            'isLocked' => true === (bool) $calendar->getDoneAttendance(),
+            'users' => $formatted,
+            'presence' => $presence,
+            'comments' => $comments,
+            'signatures' => $signatures,
         ]);
     }
 

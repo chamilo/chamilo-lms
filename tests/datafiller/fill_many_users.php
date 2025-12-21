@@ -28,7 +28,7 @@ function fill_many_users($num)
     $em = Database::getManager();
 
     while ($i < $num) {
-        $output[] = array('title' => 'Users filling report');
+        $output[] = array('title' => get_lang('Users filling report'));
         foreach ($users as $j => $user) {
             //first check that the first item doesn't exist already
             $output[$i]['line-init'] = $user['firstname'];

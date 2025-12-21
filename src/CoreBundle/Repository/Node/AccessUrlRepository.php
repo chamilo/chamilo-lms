@@ -124,4 +124,12 @@ class AccessUrlRepository extends ResourceRepository
 
         return $count > 0;
     }
+
+    /**
+     * @return array<int, AccessUrl>
+     */
+    public function findAll(string $orientation = 'ASC'): array
+    {
+        return parent::findBy([], ['url' => $orientation]);
+    }
 }

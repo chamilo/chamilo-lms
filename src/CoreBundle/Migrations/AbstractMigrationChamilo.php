@@ -115,7 +115,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         $subKeyText = '',
         $accessUrl = 1,
         $accessUrlChangeable = false,
-        $accessUrlLocked = true,
+        $accessUrlLocked = false,
         $options = []
     ): void {
         $accessUrl = $this->entityManager->find(AccessUrl::class, $accessUrl);

@@ -228,7 +228,7 @@ class AccessUrlController extends AbstractController
 
         $authSources = $authConfigHelper->getAuthSourceAuthentications($accessUrl);
 
-        if (!in_array($data['auth_source'], $authSources)) {
+        if (!\in_array($data['auth_source'], $authSources)) {
             throw new Exception('User authentication method not allowed');
         }
 

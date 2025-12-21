@@ -12,14 +12,13 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceFileRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Repository\TrackEDownloadsRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
@@ -48,6 +47,8 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
+
+use const PHP_EOL;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>.
@@ -144,8 +145,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function view(
         Request $request,
         TrackEDownloadsRepository $trackEDownloadsRepository,
-        SettingsManager $settingsManager,
-        AccessUrlHelper $accessUrlHelper
+        ResourceFileHelper $resourceFileHelper,
     ): Response {
         $id = $request->get('id');
         $resourceFileId = $request->get('resourceFileId');
@@ -161,26 +161,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $resourceFile = $this->resourceFileRepository->find($resourceFileId);
         }
 
-        if (!$resourceFile) {
-            $accessUrlSpecificFiles = $settingsManager->getSetting('document.access_url_specific_files') && $accessUrlHelper->isMultiple();
-            $currentUrl = $accessUrlHelper->getCurrent()?->getUrl();
-
-            $resourceFiles = $resourceNode->getResourceFiles();
-
-            if ($accessUrlSpecificFiles) {
-                foreach ($resourceFiles as $file) {
-                    if ($file->getAccessUrl() && $file->getAccessUrl()->getUrl() === $currentUrl) {
-                        $resourceFile = $file;
-
-                        break;
-                    }
-                }
-            }
-
-            if (!$resourceFile) {
-                $resourceFile = $resourceFiles->filter(fn ($file) => null === $file->getAccessUrl())->first();
-            }
-        }
+        $resourceFile ??= $resourceFileHelper->resolveResourceFileByAccessUrl($resourceNode);
 
         if (!$resourceFile) {
             throw new FileNotFoundException($this->trans('Resource file not found for the given resource node'));
@@ -205,7 +186,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             );
         }
 
-        return $this->processFile($request, $resourceNode, 'show', $filter, $allUserInfo, $resourceFile);
+        return $this->processFile($request, $resourceNode, $resourceFile, 'show', $filter, $allUserInfo);
     }
 
     /**
@@ -254,8 +235,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function download(
         Request $request,
         TrackEDownloadsRepository $trackEDownloadsRepository,
-        SettingsManager $settingsManager,
-        AccessUrlHelper $accessUrlHelper
+        ResourceFileHelper $resourceFileHelper,
+        ResourceNodeRepository $resourceNodeRepository,
     ): Response {
         $id = $request->get('id');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);
@@ -272,23 +253,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised access to resource')
         );
 
-        $accessUrlSpecificFiles = $settingsManager->getSetting('document.access_url_specific_files') && $accessUrlHelper->isMultiple();
-        $currentUrl = $accessUrlHelper->getCurrent()?->getUrl();
-
-        $resourceFiles = $resourceNode->getResourceFiles();
-        $resourceFile = null;
-
-        if ($accessUrlSpecificFiles) {
-            foreach ($resourceFiles as $file) {
-                if ($file->getAccessUrl() && $file->getAccessUrl()->getUrl() === $currentUrl) {
-                    $resourceFile = $file;
-
-                    break;
-                }
-            }
-        }
-
-        $resourceFile ??= $resourceFiles->filter(fn ($file) => null === $file->getAccessUrl())->first();
+        $resourceFile = $resourceFileHelper->resolveResourceFileByAccessUrl($resourceNode);
 
         // If resource node has a file just download it. Don't download the children.
         if ($resourceFile) {
@@ -301,7 +266,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
 
             // Redirect to download single file.
-            return $this->processFile($request, $resourceNode, 'download', '', null, $resourceFile);
+            return $this->processFile($request, $resourceNode, $resourceFile, 'download', '', null);
         }
 
         $zipName = $resourceNode->getSlug().'.zip';
@@ -334,7 +299,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }
 
         $response = new StreamedResponse(
-            function () use ($zipName, $children, $repo): void {
+            function () use ($zipName, $children, $resourceFileHelper, $resourceNodeRepository): void {
                 // Define suitable options for ZipStream Archive.
                 $options = new Archive();
                 $options->setContentType('application/octet-stream');
@@ -343,11 +308,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
                 /** @var ResourceNode $node */
                 foreach ($children as $node) {
-                    $resourceFiles = $node->getResourceFiles();
-                    $resourceFile = $resourceFiles->filter(fn ($file) => null === $file->getAccessUrl())->first();
+                    $resourceFile = $resourceFileHelper->resolveResourceFileByAccessUrl($node);
 
                     if ($resourceFile) {
-                        $stream = $repo->getResourceNodeFileStream($node);
+                        $stream = $resourceNodeRepository->getResourceNodeFileStream($node, $resourceFile);
                         $fileName = $resourceFile->getOriginalName();
                         $zip->addFileFromStream($fileName, $stream);
                     }
@@ -573,19 +537,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
         return $this->json(['success' => true]);
     }
 
-    private function processFile(Request $request, ResourceNode $resourceNode, string $mode = 'show', string $filter = '', ?array $allUserInfo = null, ?ResourceFile $resourceFile = null): mixed
+    private function processFile(Request $request, ResourceNode $resourceNode, ResourceFile $resourceFile, string $mode = 'show', string $filter = '', ?array $allUserInfo = null): mixed
     {
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $resourceNode,
             $this->trans('Unauthorised view access to resource')
         );
-
-        $resourceFile ??= $resourceNode->getResourceFiles()->first();
-
-        if (!$resourceFile) {
-            throw $this->createNotFoundException($this->trans('File not found for resource'));
-        }
 
         $fileName = $resourceFile->getOriginalName();
         $fileSize = $resourceFile->getSize();
@@ -598,7 +556,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         // MIME normalization for HTML
         $looksLikeHtmlByExt = (bool) preg_match('/\.x?html?$/i', (string) $fileName);
-        if ($mimeType === '' || stripos($mimeType, 'html') === false) {
+        if ('' === $mimeType || false === stripos($mimeType, 'html')) {
             if ($looksLikeHtmlByExt) {
                 $mimeType = 'text/html; charset=UTF-8';
             }
@@ -654,6 +612,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         $content = str_replace($tagsToReplace, $replacementValues, $content);
                     }
 
+                    $content = $this->injectGlossaryJs($request, $content, $resourceNode);
+
                     $response = new Response();
                     $disposition = $response->headers->makeDisposition(
                         ResponseHeaderBag::DISPOSITION_INLINE,
@@ -662,7 +622,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     $response->headers->set('Content-Disposition', $disposition);
                     $response->headers->set('Content-Type', 'text/html; charset=UTF-8');
 
-                    // @todo move into a function/class
+                    // Existing translate_html logic
                     if ('true' === $this->getSettingsManager()->getSetting('editor.translate_html')) {
                         $user = $this->userHelper->getCurrent();
                         if (null !== $user) {
@@ -686,7 +646,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $response = new StreamedResponse(
             function () use ($resourceNodeRepo, $resourceFile, $start, $length): void {
-                $this->streamFileContent($resourceNodeRepo, $resourceFile, $start, $length);
+                $stream = $resourceNodeRepo->getResourceNodeFileStream(
+                    $resourceFile->getResourceNode(),
+                    $resourceFile
+                );
+
+                $this->echoBuffer($stream, $start, $length);
             }
         );
 
@@ -694,6 +659,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
             $fileName
         );
+
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
         $response->headers->set('Content-Length', (string) $length);
@@ -706,43 +672,139 @@ class ResourceController extends AbstractResourceController implements CourseCon
         return $response;
     }
 
-    private function getRange(Request $request, int $fileSize): array
-    {
-        $range = $request->headers->get('Range');
+    private function injectGlossaryJs(
+        Request $request,
+        string $content,
+        ?ResourceNode $resourceNode = null
+    ): string {
+        // First normalize broken HTML coming from templates/editors
+        $content = $this->normalizeGeneratedHtml($content);
 
-        if ($range) {
-            [, $range] = explode('=', $range, 2);
-            [$start, $end] = explode('-', $range);
-
-            $start = (int) $start;
-            $end = ('' === $end) ? $fileSize - 1 : (int) $end;
-
-            $length = $end - $start + 1;
-        } else {
-            $start = 0;
-            $end = $fileSize - 1;
-            $length = $fileSize;
+        $tool = (string) $request->attributes->get('tool');
+        if ('document' !== $tool) {
+            return $content;
         }
 
-        return [$start, $end, $length];
+        // Global kill switch (applies to all tools/contexts)
+        $settingsManager = $this->getSettingsManager();
+        $modeRaw = (string) $settingsManager->getSetting('glossary.show_glossary_in_extra_tools', true);
+        $mode = strtolower(trim($modeRaw));
+
+        if (in_array($mode, ['', 'none', 'false', '0'], true)) {
+            return $content;
+        }
+
+        // Detect when this document is being displayed from a Learning Path context
+        $origin = strtolower(trim((string) $request->query->get('origin', '')));
+        $isLpContext =
+            $request->query->has('lp_id')
+            || $request->query->has('learnpath_id')
+            || $request->query->has('learnpath_item_id')
+            || ('learnpath' === $origin);
+
+        // Only inject for LP when the mode allows it
+        if ($isLpContext) {
+            if (!in_array($mode, ['true', 'lp', 'exercise_and_lp'], true)) {
+                return $content;
+            }
+        } else {
+            // Do not inject in the standalone Documents tool (prevents unwanted highlights outside LP/exercises)
+            return $content;
+        }
+
+        $course = $this->getCourse();
+        $session = $this->getSession();
+
+        $resourceNodeParentId = null;
+        if ($resourceNode && $resourceNode->getParent()) {
+            $resourceNodeParentId = $resourceNode->getParent()->getId();
+        }
+
+        $jsConfig = $this->renderView(
+            '@ChamiloCore/Glossary/glossary_auto.html.twig',
+            [
+                'course' => $course,
+                'session' => $session,
+                'resourceNodeParentId' => $resourceNodeParentId,
+            ]
+        );
+
+        if (false !== stripos($content, '</body>')) {
+            return str_ireplace('</body>', $jsConfig.'</body>', $content);
+        }
+
+        return $content.$jsConfig;
     }
 
-    private function streamFileContent(ResourceNodeRepository $resourceNodeRepo, ResourceFile $resourceFile, int $start, int $length): void
+    /**
+     * Normalize generated HTML documents coming from templates/editors.
+     *
+     * This method tries to fix the pattern:
+     * <head>...</head><!DOCTYPE html><html>...<head>...</head><body>...</body></html>
+     *
+     * It will:
+     * - Extract the first <head>...</head> block (if it appears before <!DOCTYPE).
+     * - Keep the proper <!DOCTYPE html><html>... document.
+     * - Inject the inner content of the first head into the main <head> of the document.
+     */
+    private function normalizeGeneratedHtml(string $content): string
     {
-        $stream = $resourceNodeRepo->getResourceNodeFileStream($resourceFile->getResourceNode(), $resourceFile);
+        $upper = strtoupper($content);
 
-        fseek($stream, $start);
+        $firstHeadStart = stripos($upper, '<HEAD');
+        $firstHeadEnd = stripos($upper, '</HEAD>');
+        $doctypePos = stripos($upper, '<!DOCTYPE');
+        $htmlPos = stripos($upper, '<HTML');
 
-        $bytesSent = 0;
-
-        while ($bytesSent < $length && !feof($stream)) {
-            $buffer = fread($stream, min(1024 * 8, $length - $bytesSent));
-
-            echo $buffer;
-
-            $bytesSent += \strlen($buffer);
+        // If we do not have the pattern <head>...</head> before <!DOCTYPE html>, do nothing.
+        if (false === $firstHeadStart || false === $firstHeadEnd || false === $doctypePos) {
+            return $content;
         }
 
-        fclose($stream);
+        if (!($firstHeadStart <= $firstHeadEnd && $firstHeadEnd < $doctypePos)) {
+            // The first <head> is not clearly before the <!DOCTYPE>, keep content as-is.
+            return $content;
+        }
+
+        // Extract the first <head>...</head> block (including tags).
+        $headBlockLength = $firstHeadEnd + \strlen('</head>') - $firstHeadStart;
+        $headBlock = substr($content, $firstHeadStart, $headBlockLength);
+
+        // Remove that first <head> block from the beginning part.
+        // Everything from <!DOCTYPE ...> will be treated as the "real" document.
+        $baseDoc = substr($content, $doctypePos);
+
+        // Extract only the inner content of the first head (we do not want nested <head> tags).
+        $innerHead = preg_replace('~^.*?<head[^>]*>|</head>.*$~is', '', $headBlock);
+        if (null === $innerHead) {
+            // preg_replace error or something weird, bail out and keep original content.
+            return $content;
+        }
+        $innerHead = trim($innerHead);
+
+        // If there is nothing interesting inside the first head, just return the base document.
+        if ('' === $innerHead) {
+            return $baseDoc;
+        }
+
+        // Now inject innerHead into the main <head> of the base document.
+        $upperBase = strtoupper($baseDoc);
+        $secondHeadStart = stripos($upperBase, '<HEAD');
+        if (false === $secondHeadStart) {
+            // No <head> in the base document, return base doc unchanged.
+            return $baseDoc;
+        }
+
+        $secondHeadTagEnd = strpos($baseDoc, '>', $secondHeadStart);
+        if (false === $secondHeadTagEnd) {
+            // Malformed head tag, do not touch.
+            return $baseDoc;
+        }
+
+        $insertionPos = $secondHeadTagEnd + 1;
+
+        return substr($baseDoc, 0, $insertionPos)
+            .PHP_EOL.$innerHead.PHP_EOL
+            .substr($baseDoc, $insertionPos);
     }
 }

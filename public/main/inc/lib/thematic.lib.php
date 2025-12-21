@@ -159,6 +159,7 @@ class Thematic
                 ->setContent($content)
                 ->setParent($course)
                 ->addCourseLink($course, $session)
+                ->setActive(true)
             ;
 
             $repo->create($thematic);
@@ -198,55 +199,66 @@ class Thematic
     }
 
     /**
-     * @param int $thematicId
+     * Duplicate a thematic (title, content, plans and advances) into the same Course/Session.
      */
-    public function copy($thematicId)
+    public function copy(int $thematicId, ?Course $course = null, ?Session $session = null): ?CThematic
     {
         $repo = Container::getThematicRepository();
-        /** @var CThematic $thematic */
-        $thematic = $repo->find($thematicId);
-        if (null === $thematic) {
-            return false;
+        /** @var CThematic|null $source */
+        $source = $repo->find($thematicId);
+        if (!$source) {
+            return null;
         }
 
-        $thematicManager = new Thematic();
+        // Resolve context if not provided
+        $course  = $course   ?: api_get_course_entity();
+        $session = $session  ?: api_get_session_entity();
 
-        $newThematic = $thematicManager->thematicSave(
+        // Create the new thematic using the existing helper (keeps linking logic consistent)
+        $new = $this->thematicSave(
             null,
-            $thematic->getTitle().' - '.get_lang('Copy'),
-            $thematic->getContent(),
-            api_get_course_entity(),
-            api_get_session_entity()
+            (string) $source->getTitle(),
+            (string) $source->getContent(),
+            $course,
+            $session
         );
 
-        if (!empty($newThematic->getIid())) {
-            $thematic_advanced = $thematic->getAdvances();
-            if (!empty($thematic_advanced)) {
-                foreach ($thematic_advanced as $item) {
-                    $thematic = new Thematic();
-                    $thematic->thematicAdvanceSave(
-                        $newThematic,
-                        $item->getAttendance(),
-                        null,
-                        $item->getContent(),
-                        $item->getStartDate()->format('Y-m-d H:i:s'),
-                        $item->getDuration()
-                    );
-                }
+        if (!$new) {
+            return null;
+        }
+
+        // Copy advances
+        foreach ($source->getAdvances() as $adv) {
+            // Normalize start date to string Y-m-d H:i:s for thematicAdvanceSave
+            $startDate = $adv->getStartDate();
+            if ($startDate instanceof \DateTimeInterface) {
+                $startDate = $startDate->format('Y-m-d H:i:s');
+            } else {
+                $startDate = (string) $startDate;
             }
 
-            $thematic_plan = $thematic->getPlans();
-            if (!empty($thematic_plan)) {
-                foreach ($thematic_plan as $item) {
-                    $thematic->thematicPlanSave(
-                        $newThematic,
-                        $item->getTitle(),
-                        $item->getDescription(),
-                        $item->getDescriptionType()
-                    );
-                }
-            }
+            // Keep the same attendance relation if any (same course/session context)
+            $this->thematicAdvanceSave(
+                $new,
+                $adv->getAttendance(),
+                null,
+                (string) $adv->getContent(),
+                $startDate,
+                (float) $adv->getDuration()
+            );
         }
+
+        // Copy plans
+        foreach ($source->getPlans() as $plan) {
+            $this->thematicPlanSave(
+                $new,
+                (string) $plan->getTitle(),
+                (string) $plan->getDescription(),
+                (int) $plan->getDescriptionType()
+            );
+        }
+
+        return $new;
     }
 
     /**

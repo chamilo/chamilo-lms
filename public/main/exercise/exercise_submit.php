@@ -42,20 +42,42 @@ $origin = api_get_origin();
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
-$glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
+$glossaryExtraTools = api_get_setting('glossary.show_glossary_in_extra_tools');
 $allowTimePerQuestion = ('true' === api_get_setting('exercise.allow_time_per_question'));
 if ($allowTimePerQuestion) {
     $htmlHeadXtra[] = api_get_asset('easytimer/easytimer.min.js');
 }
 
 $showPreviousButton = true;
-$showGlossary = in_array($glossaryExtraTools, ['true', 'exercise', 'exercise_and_lp']);
-if ('learnpath' === $origin) {
-    $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
+$showGlossary = false;
+
+switch ($glossaryExtraTools) {
+    case 'exercise':
+        // Only show in standalone exercises, not when launched from LP
+        $showGlossary = ('learnpath' !== $origin);
+        break;
+
+    case 'lp':
+        // Only show when the exercise is launched from a learning path
+        $showGlossary = ('learnpath' === $origin);
+        break;
+
+    case 'exercise_and_lp':
+    case 'true':
+        // Show in both standalone exercises and LP context
+        $showGlossary = true;
+        break;
+
+    default:
+        $showGlossary = false;
+        break;
 }
 if ($showGlossary) {
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?add_ready=1&'.api_get_cidreq().'"></script>';
-    $htmlHeadXtra[] = api_get_js('jquery.highlight.js');
+    $htmlHeadXtra[] = api_get_glossary_auto_snippet(
+        api_get_course_int_id(),
+        api_get_session_id(),
+        null
+    );
 }
 $htmlHeadXtra[] = api_get_build_js('legacy_exercise.js');
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
@@ -104,6 +126,60 @@ $template = new Template();
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
 $learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
+
+// If we are not explicitly in LP context, ignore any leaked LP params and clear persisted context.
+// This avoids attaching standalone exercises to the last learning path attempt.
+if ('learnpath' !== $origin) {
+    Session::erase('learnpath_id');
+    Session::erase('lp_id');
+    Session::erase('learnpath_item_id');
+    Session::erase('lp_item_id');
+    Session::erase('learnpath_item_view_id');
+    Session::erase('lp_item_view_id');
+
+    $learnpath_id = 0;
+    $learnpath_item_id = 0;
+    $learnpath_item_view_id = 0;
+}
+
+if ('learnpath' === $origin) {
+    // Normalize common aliases used by LP tool
+    $learnpath_id = $learnpath_id > 0 ? $learnpath_id : (int) ($_REQUEST['lp_id'] ?? 0);
+
+    // Some links use item_id instead of learnpath_item_id
+    $learnpath_item_id = $learnpath_item_id > 0
+        ? $learnpath_item_id
+        : (int) ($_REQUEST['item_id'] ?? ($_REQUEST['lp_item_id'] ?? 0));
+
+    $learnpath_item_view_id = $learnpath_item_view_id > 0
+        ? $learnpath_item_view_id
+        : (int) ($_REQUEST['lp_item_view_id'] ?? 0);
+
+    // Restore from session when modal/navigation loses query params
+    if ($learnpath_id <= 0) {
+        $learnpath_id = (int) (Session::read('learnpath_id') ?? Session::read('lp_id') ?? 0);
+    }
+    if ($learnpath_item_id <= 0) {
+        $learnpath_item_id = (int) (Session::read('learnpath_item_id') ?? Session::read('lp_item_id') ?? 0);
+    }
+    if ($learnpath_item_view_id <= 0) {
+        $learnpath_item_view_id = (int) (Session::read('learnpath_item_view_id') ?? Session::read('lp_item_view_id') ?? 0);
+    }
+
+    // Persist context for future requests (modal, JS navigation, session resume)
+    if ($learnpath_id > 0) {
+        Session::write('learnpath_id', $learnpath_id);
+        Session::write('lp_id', $learnpath_id);
+    }
+    if ($learnpath_item_id > 0) {
+        Session::write('learnpath_item_id', $learnpath_item_id);
+        Session::write('lp_item_id', $learnpath_item_id);
+    }
+    if ($learnpath_item_view_id > 0) {
+        Session::write('learnpath_item_view_id', $learnpath_item_view_id);
+        Session::write('lp_item_view_id', $learnpath_item_view_id);
+    }
+}
 
 $reminder = isset($_REQUEST['reminder']) ? (int) $_REQUEST['reminder'] : 0;
 $remind_question_id = isset($_REQUEST['remind_question_id']) ? (int) $_REQUEST['remind_question_id'] : 0;
@@ -409,11 +485,11 @@ if (empty($exercise_stat_info)) {
 
         $clock_expired_time = api_get_utc_datetime($expected_time, false, true);
         if ($debug) {
-            error_log('5.3. $expected_time '.$clock_expired_time);
+            error_log('5.3. $expected_time '.$clock_expired_time->format('Y-m-d H:i:s'));
         }
 
         //Sessions  that contain the expired time
-        $_SESSION['expired_time'][$current_expired_time_key] = $clock_expired_time;
+        $_SESSION['expired_time'][$current_expired_time_key] = $clock_expired_time->format('Y-m-d H:i:s');
         if ($debug) {
             error_log(
                 '5.4. Setting the $_SESSION[expired_time]: '.$_SESSION['expired_time'][$current_expired_time_key]
@@ -550,6 +626,20 @@ $params = "exe_id=$exe_id&exerciseId=$exerciseId&learnpath_id=$learnpath_id"
     . "&page=" . ($page ?? 1)
     . "&" . api_get_cidreq();
 
+// Base query strings used by JS navigation (keep LP context on every click).
+$submitBaseQuery = "exe_id=$exe_id&exerciseId=$exerciseId"
+    . "&learnpath_id=$learnpath_id"
+    . "&learnpath_item_id=$learnpath_item_id"
+    . "&learnpath_item_view_id=$learnpath_item_view_id"
+    . "&reminder=$reminder"
+    . "&" . api_get_cidreq();
+
+$resultBaseQuery = "exe_id=$exe_id"
+    . "&learnpath_id=$learnpath_id"
+    . "&learnpath_item_id=$learnpath_item_id"
+    . "&learnpath_item_view_id=$learnpath_item_view_id"
+    . "&" . api_get_cidreq();
+
 
 if (2 === $reminder && empty($myRemindList)) {
     if ($debug) {
@@ -567,10 +657,19 @@ if ($time_control) {
     if ($debug) {
         error_log('7.1. Time control is enabled');
         error_log('7.2. $current_expired_time_key  '.$current_expired_time_key);
-        error_log(
-            '7.3. $_SESSION[expired_time][$current_expired_time_key] '.
-            $_SESSION['expired_time'][$current_expired_time_key]
-        );
+        if (isset($_SESSION['expired_time'])) {
+            if ($_SESSION['expired_time'][$current_expired_time_key] instanceof DateTimeInterface) {
+                error_log(
+                    '7.3. $_SESSION[expired_time][$current_expired_time_key] '.
+                    $_SESSION['expired_time'][$current_expired_time_key]->format('Y-m-d H:i:s')
+                );
+            } else {
+                error_log(
+                    '7.3. $_SESSION[expired_time][$current_expired_time_key] '.
+                    $_SESSION['expired_time'][$current_expired_time_key]
+                );
+            }
+        }
     }
 
     if (!isset($_SESSION['expired_time'][$current_expired_time_key])) {
@@ -626,7 +725,11 @@ if ($time_control) {
             }
         }
     } else {
-        $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key]->format('Y-m-d H:i:s');
+        if ($_SESSION['expired_time'][$current_expired_time_key] instanceof DateTimeInterface) {
+            $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key]->format('Y-m-d H:i:s');
+        } else {
+            $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key];
+        }
     }
 }
 
@@ -737,25 +840,25 @@ if (ALL_ON_ONE_PAGE === $objExercise->type || $forceGrouped) {
     });
 
     if ($hasMediaWithChildren) {
-        $groups  = [];
-        $seen    = [];
+        $pages = [];
+        $groupIndexByParent = [];
         foreach ($flat as $qid) {
             $q = Question::read($qid);
-            if ($q->parent_id > 0) {
-                $pid = $q->parent_id;
-                $groups[$pid]['questions'][] = $qid;
-                $seen[$qid] = true;
+            if ($q && $q->parent_id > 0) {
+                $pid = (int) $q->parent_id;
+                if (!array_key_exists($pid, $groupIndexByParent)) {
+                    $groupIndexByParent[$pid] = count($pages);
+                    $pages[] = ['parent' => $pid, 'questions' => []];
+                }
+                $pages[$groupIndexByParent[$pid]]['questions'][] = $qid;
+            } else {
+                $pages[] = ['parent' => null, 'questions' => [$qid]];
             }
         }
-        foreach ($flat as $qid) {
-            if (!isset($seen[$qid])) {
-                $groups[$qid]['questions'] = [$qid];
-            }
-        }
-        $pages = array_values($groups);
-        $totalPages = count($pages);
-        $page       = min(max(1, $page), $totalPages);
-        $questionList  = $pages[$page - 1]['questions'];
+
+        $totalPages   = count($pages);
+        $page         = min(max(1, $page), $totalPages);
+        $questionList = $pages[$page - 1]['questions'];
         $currentBreakId = null;
     } else {
         $pages    = [[]];
@@ -773,6 +876,16 @@ if (ALL_ON_ONE_PAGE === $objExercise->type || $forceGrouped) {
         $page          = min(max(1, $page), $totalPages);
         $questionList  = $pages[$page - 1];
         $currentBreakId = ($page > 1 ? $breakIds[$page - 1] : null);
+    }
+
+    $questionNumberOffset = 0;
+    if (isset($pages) && is_array($pages) && isset($page)) {
+        for ($p = 0; $p < max(0, $page - 1); $p++) {
+            $chunk = $pages[$p];
+            $questionNumberOffset += (is_array($chunk) && array_key_exists('questions', $chunk))
+                ? count($chunk['questions'])
+                : (is_array($chunk) ? count($chunk) : 0);
+        }
     }
 }
 
@@ -1488,12 +1601,14 @@ echo '<script>
 
         var page = '.(int) $page.';
         var totalPages = '.(int) ($totalPages ?? 1).';
+        var chSubmitBaseUrl = "'.api_get_self().'?'.$submitBaseQuery.'";
+        var chResultUrl = "exercise_result.php?'.$resultBaseQuery.'";
         function navigateNext() {
             var url;
             if (page === totalPages) {
-                url = "exercise_result.php?'.api_get_cidreq().'&exe_id='.$exe_id.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpath_item_view_id.'";
+                url = chResultUrl;
             } else {
-                url = "'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&page=" + (page + 1) + "&reminder='.$reminder.'";
+                url = chSubmitBaseUrl + "&page=" + (page + 1);
             }
             window.location = url;
         }
@@ -1637,11 +1752,8 @@ echo '<script>
         }
 
         function previous_question_and_save(previous_question_id, question_id_to_save) {
-          var url = \'exercise_submit.php?'.api_get_cidreq().'\'
-                  + \'&exerciseId='.$exerciseId.'\'
-                  + \'&num=\' + previous_question_id
-                  + \'&reminder='.$reminder.'\';
-          save_now(question_id_to_save, url);
+            var url = chSubmitBaseUrl + "&num=" + previous_question_id;
+            save_now(question_id_to_save, url);
         }
 
         function redirectExerciseToResult()
@@ -1852,7 +1964,7 @@ echo '<form id="exercise_form" method="post" action="'
          <input type="hidden" name="learnpath_item_view_id" value="'.$learnpath_item_view_id.'" />';
 
 // Show list of questions
-$i = 1;
+$i = 1 + (isset($questionNumberOffset) ? (int) $questionNumberOffset : 0);
 $attempt_list = [];
 if (isset($exe_id)) {
     $attempt_list = Event::getAllExerciseEventByExeId($exe_id);
@@ -2082,7 +2194,7 @@ foreach ($questionList as $questionId) {
             ['class' => 'exercise_save_now_button mb-4']
         );
     }
-    echo Display::div($exerciseActions, ['class' => 'form-actions']);
+    echo Display::div($exerciseActions, ['class' => 'exercise_actions']);
     echo '</div>';
 
     $i++;
@@ -2103,11 +2215,9 @@ if ($prevParent !== null) {
 if (ALL_ON_ONE_PAGE == $objExercise->type || $forceGrouped) {
     //$currentPageIds = implode(',', $pages[$page - 1]);
     $currentPageIds = implode(',', $questionList);
-    echo '<div class="form-actions exercise-pagination mb-4">';
+    echo '<div class="exercise_actions exercise-pagination mb-4">';
     if ($page > 1) {
-        $prevUrl = api_get_self() . '?' . api_get_cidreq()
-            . "&exerciseId=$exerciseId&page=" . ($page - 1)
-            . "&reminder=$reminder";
+        $prevUrl = api_get_self() . '?' . $submitBaseQuery . "&page=" . ($page - 1);
         echo '<button type="button" class="btn btn--secondary" '
             . "onclick=\"window.location='$prevUrl'\">"
             . '‹ ' . get_lang('Previous')

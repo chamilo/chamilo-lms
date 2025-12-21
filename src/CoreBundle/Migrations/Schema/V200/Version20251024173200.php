@@ -14,7 +14,9 @@ use Exception;
 
 final class Version20251024173200 extends AbstractMigrationChamilo
 {
-    /** Enable this to log changes without writing them to the database. */
+    /**
+     * Enable this to log changes without writing them to the database.
+     */
     private const DRY_RUN = false;
 
     public function getDescription(): string
@@ -27,12 +29,13 @@ final class Version20251024173200 extends AbstractMigrationChamilo
         $this->entityManager->clear();
 
         /** @var CDocumentRepository $documentRepo */
-        $documentRepo     = $this->container->get(CDocumentRepository::class);
+        $documentRepo = $this->container->get(CDocumentRepository::class);
+
         /** @var ResourceNodeRepository $resourceNodeRepo */
         $resourceNodeRepo = $this->container->get(ResourceNodeRepository::class);
 
         // Course certificates saved as documents
-        $certSql   = "SELECT iid FROM c_document WHERE filetype = 'certificate'";
+        $certSql = "SELECT iid FROM c_document WHERE filetype = 'certificate'";
         $certItems = $this->connection->executeQuery($certSql)->fetchAllAssociative();
         $this->processHtmlDocuments($certItems, $documentRepo, $resourceNodeRepo, 'certificate');
     }
@@ -47,9 +50,9 @@ final class Version20251024173200 extends AbstractMigrationChamilo
         ResourceNodeRepository $resourceNodeRepo,
         string $context
     ): void {
-        $total     = \count($items);
+        $total = \count($items);
         $processed = 0;
-        $changed   = 0;
+        $changed = 0;
 
         foreach ($items as $item) {
             $processed++;
@@ -73,12 +76,12 @@ final class Version20251024173200 extends AbstractMigrationChamilo
 
                 // Update HTML only (skip binaries and non-HTML text)
                 $mime = $resourceFile->getMimeType();
-                if (!\is_string($mime) || stripos($mime, 'text/html') === false) {
+                if (!\is_string($mime) || false === stripos($mime, 'text/html')) {
                     continue;
                 }
 
                 $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
-                if (!\is_string($content) || trim($content) === '') {
+                if (!\is_string($content) || '' === trim($content)) {
                     continue;
                 }
 
@@ -99,7 +102,7 @@ final class Version20251024173200 extends AbstractMigrationChamilo
             }
         }
 
-        error_log(sprintf('[MIGRATION][%s] Processed=%d, Updated=%d (Total candidates=%d)', $context, $processed, $changed, $total));
+        error_log(\sprintf('[MIGRATION][%s] Processed=%d, Updated=%d (Total candidates=%d)', $context, $processed, $changed, $total));
     }
 
     /**
@@ -111,21 +114,19 @@ final class Version20251024173200 extends AbstractMigrationChamilo
     {
         // Targeted replacements first, to cover common attribute and CSS forms
         $map = [
-            'src="/main/img/'   => 'src="/img/',
-            "src='/main/img/"   => "src='/img/",
-            'href="/main/img/'  => 'href="/img/',
-            "href='/main/img/"  => "href='/img/",
-            'url(/main/img/'    => 'url(/img/',
-            'url("/main/img/'   => 'url("/img/',
-            "url('/main/img/"   => "url('/img/",
+            'src="/main/img/' => 'src="/img/',
+            "src='/main/img/" => "src='/img/",
+            'href="/main/img/' => 'href="/img/',
+            "href='/main/img/" => "href='/img/",
+            'url(/main/img/' => 'url(/img/',
+            'url("/main/img/' => 'url("/img/',
+            "url('/main/img/" => "url('/img/",
         ];
 
         $updated = strtr($html, $map);
 
         // Fallback replacement to catch any remaining occurrences (absolute local paths only)
-        $updated = str_replace('/main/img/', '/img/', $updated);
-
-        return $updated;
+        return str_replace('/main/img/', '/img/', $updated);
     }
 
     public function down(Schema $schema): void {}

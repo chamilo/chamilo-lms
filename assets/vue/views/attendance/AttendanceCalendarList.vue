@@ -47,7 +47,12 @@
       >
         <div class="flex items-center gap-2">
           <i class="pi pi-calendar text-primary text-lg"></i>
-          <span class="text-gray-90">{{ formatDateTime(event.dateTime) }}</span>
+          <span class="text-gray-90">
+            {{ formatDateTime(event.dateTime) }}
+            <template v-if="event.duration !== null && event.duration !== undefined">
+              · {{ event.duration }} {{ t("min") }}
+            </template>
+          </span>
         </div>
         <div class="calendar-actions flex gap-2">
           <BaseButton
@@ -71,15 +76,32 @@
       :modal="true"
       :closable="false"
     >
-      <div class="p-fluid">
+      <div class="p-fluid flex flex-col gap-4">
         <BaseCalendar
           id="date_time"
           v-model="selectedEventDate"
           :label="t('Date')"
           :show-time="true"
         />
+
+        <div class="field">
+          <label
+            class="block mb-1 text-gray-90"
+            :for="`duration-${selectedEvent?.id || ''}`"
+          >
+            {{ t("Duration") }}
+          </label>
+          <input
+            :id="`duration-${selectedEvent?.id || ''}`"
+            v-model.number="selectedEventDuration"
+            type="number"
+            min="0"
+            class="w-full rounded border border-gray-25 px-3 py-2 text-sm text-gray-90 focus:outline-none"
+            :placeholder="t('Duration in minutes')"
+          />
+        </div>
       </div>
-      <div class="dialog-actions">
+      <div class="dialog-actions mt-4">
         <BaseButton
           :label="t('Save')"
           icon="check"
@@ -138,20 +160,33 @@ const isLoading = ref(false)
 const editDialogVisible = ref(false)
 const deleteDialogVisible = ref(false)
 const selectedEvent = ref(null)
-const selectedEventDate = ref("")
+
+const selectedEventDate = ref(null)
+const selectedEventDuration = ref(null)
+
 const eventIdToDelete = ref(null)
 
-const formatDateTime = (dateTime) => new Date(dateTime).toLocaleString()
+const formatDateTime = (dateTime) => {
+  const date = dateTime instanceof Date ? dateTime : new Date(dateTime)
+  return date.toLocaleString()
+}
 
 const fetchCalendarEvents = async () => {
   try {
     isLoading.value = true
     const response = await attendanceService.getAttendance(route.params.id)
+
     if (response.calendars && Array.isArray(response.calendars)) {
       calendarEvents.value = response.calendars.map((calendar) => ({
         id: calendar.iid || calendar["@id"].split("/").pop(),
         title: calendar.title || "Unnamed Event",
-        dateTime: calendar.dateTime || new Date(),
+        dateTime: calendar.dateTime ? new Date(calendar.dateTime) : new Date(),
+        duration:
+          typeof calendar.duration === "number"
+            ? calendar.duration
+            : calendar.duration !== undefined && calendar.duration !== null
+              ? Number(calendar.duration)
+              : null,
       }))
     } else {
       calendarEvents.value = []
@@ -165,15 +200,43 @@ const fetchCalendarEvents = async () => {
 
 const openEditDialog = (event) => {
   selectedEvent.value = event
-  selectedEventDate.value = event.dateTime
+  // Ensure BaseCalendar/DatePicker receives a Date instance or null
+  selectedEventDate.value = event?.dateTime ? new Date(event.dateTime) : null
+
+  // Initialize duration from event, keeping numeric type
+  if (event && event.duration !== undefined && event.duration !== null) {
+    selectedEventDuration.value = Number(event.duration)
+  } else {
+    selectedEventDuration.value = null
+  }
+
   editDialogVisible.value = true
 }
 
 const updateCalendarEvent = async () => {
+  if (!selectedEvent.value || !selectedEventDate.value) {
+    console.warn("Calendar event or date is missing. Update aborted.")
+    return
+  }
+
   try {
-    await attendanceService.updateCalendarEvent(selectedEvent.value.id, { dateTime: selectedEventDate.value })
+    const payload = {
+      dateTime: selectedEventDate.value,
+      duration: selectedEventDuration.value,
+    }
+
+    await attendanceService.updateCalendarEvent(selectedEvent.value.id, payload)
+
+    const index = calendarEvents.value.findIndex((e) => e.id === selectedEvent.value.id)
+    if (index !== -1) {
+      calendarEvents.value[index] = {
+        ...calendarEvents.value[index],
+        dateTime: selectedEventDate.value,
+        duration: selectedEventDuration.value,
+      }
+    }
+
     closeEditDialog()
-    await fetchCalendarEvents()
   } catch (error) {
     console.error("Error updating calendar event:", error)
   }
@@ -182,7 +245,8 @@ const updateCalendarEvent = async () => {
 const closeEditDialog = () => {
   editDialogVisible.value = false
   selectedEvent.value = null
-  selectedEventDate.value = ""
+  selectedEventDate.value = null
+  selectedEventDuration.value = null
 }
 
 const openDeleteDialog = (id) => {
@@ -190,7 +254,6 @@ const openDeleteDialog = (id) => {
   deleteDialogVisible.value = true
 }
 
-// Delete Calendar Event
 const deleteCalendarEventConfirmed = async () => {
   try {
     await attendanceService.deleteCalendarEvent(eventIdToDelete.value)
@@ -223,7 +286,11 @@ const redirectToAttendanceSheet = () => {
   router.push({
     name: "AttendanceSheetList",
     params: { id: route.params.id },
-    query: { cid: route.query.cid, sid: route.query.sid, gid: route.query.gid },
+    query: {
+      cid: route.query.cid,
+      sid: route.query.sid,
+      gid: route.query.gid,
+    },
   })
 }
 
@@ -231,7 +298,11 @@ const redirectToAddCalendarEvent = () => {
   router.push({
     name: "AttendanceAddCalendarEvent",
     params: { node: route.params.node, id: route.params.id },
-    query: { cid: route.query.cid, sid: route.query.sid, gid: route.query.gid },
+    query: {
+      cid: route.query.cid,
+      sid: route.query.sid,
+      gid: route.query.gid,
+    },
   })
 }
 
@@ -243,7 +314,6 @@ onMounted(fetchCalendarEvents)
   flex-direction: column;
   gap: 1rem;
 }
-
 .calendar-item {
   display: flex;
   justify-content: space-between;
@@ -253,12 +323,10 @@ onMounted(fetchCalendarEvents)
   border-radius: 8px;
   background-color: #f9f9f9;
 }
-
 .calendar-actions {
   display: flex;
   gap: 0.5rem;
 }
-
 .dialog-actions {
   display: flex;
   justify-content: flex-end;

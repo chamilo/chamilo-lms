@@ -29,6 +29,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_SESSION_MANAGER")'))]
 #[Route('/admin/index', name: 'admin_index_blocks')]
@@ -612,7 +613,7 @@ class IndexBlocksController extends BaseController
         if (is_dir(api_get_path(SYS_TEST_PATH))) {
             $items[] = [
                 'class' => 'item-email-tester',
-                'url' => '/main/admin/email_tester.php',
+                'url' => '/admin/email_tester',
                 'label' => $this->translator->trans('E-mail tester'),
             ];
         }
@@ -900,7 +901,8 @@ class IndexBlocksController extends BaseController
             // Normalize/fallbacks
             if (!\is_array($pluginInfo)) {
                 // Defensive: unexpected structure → skip
-                error_log(sprintf('[admin:index] Plugin "%s" has no pluginInfo array, skipping.', $plugin->getTitle()));
+                error_log(\sprintf('[admin:index] Plugin "%s" has no pluginInfo array, skipping.', $plugin->getTitle()));
+
                 continue;
             }
 
@@ -909,30 +911,30 @@ class IndexBlocksController extends BaseController
 
             if (!$objPlugin instanceof Plugin) {
                 // Defensive: plugin could not be instantiated (e.g. throws in constructor)
-                error_log(sprintf('[admin:index] Plugin "%s" has no valid "obj" (instance of Plugin), skipping.', $plugin->getTitle()));
+                error_log(\sprintf('[admin:index] Plugin "%s" has no valid "obj" (instance of Plugin), skipping.', $plugin->getTitle()));
+
                 continue;
             }
 
             // Per-URL configuration
             $pluginInUrl = $plugin->getOrCreatePluginConfiguration($accessUrl);
-            $configuration = (array) ($pluginInUrl?->getConfiguration() ?? []);
+            $configuration = $pluginInUrl->getConfiguration() ?: [];
 
-            // Ensure we are looking at the same URL id
-            if ($accessUrl->getId() !== ($pluginInUrl?->getUrl()?->getId())) {
+            if (!$configuration || !isset($configuration['regions'])) {
                 continue;
             }
 
             // Only show plugins that declare the admin menu region
-            $regions = (array) ($configuration['regions'] ?? []);
-            if (!\in_array('menu_administrator', $regions, true)) {
+            if (!\in_array('menu_administrator', $configuration['regions'], true)) {
                 continue;
             }
 
             // Build admin URL defensively (some plugins may throw when building URLs)
             try {
                 $adminUrl = $objPlugin->getAdminUrl();
-            } catch (\Throwable $e) {
-                error_log(sprintf('[admin:index] Plugin "%s" getAdminUrl() failed: %s', $plugin->getTitle(), $e->getMessage()));
+            } catch (Throwable $e) {
+                error_log(\sprintf('[admin:index] Plugin "%s" getAdminUrl() failed: %s', $plugin->getTitle(), $e->getMessage()));
+
                 continue;
             }
 
@@ -941,7 +943,7 @@ class IndexBlocksController extends BaseController
 
             $items[] = [
                 'class' => 'item-plugin-'.strtolower($plugin->getTitle()),
-                'url'   => $adminUrl,
+                'url' => $adminUrl,
                 'label' => $label,
             ];
         }
@@ -956,7 +958,8 @@ class IndexBlocksController extends BaseController
         // Check if dsn or email is defined :
         $mailDsn = $this->settingsManager->getSetting('mail.mailer_dsn', true);
         $mailSender = $this->settingsManager->getSetting('mail.mailer_from_email', true);
-        if ((empty($mailDsn) || 'null://null' == $mailDsn) && empty($mailSender)) {
+        $nameSender = $this->settingsManager->getSetting('mail.mailer_from_name', true);
+        if ((empty($mailDsn) || 'null://null' == $mailDsn) || empty($mailSender) || empty($nameSender)) {
             $items[] = [
                 'className' => 'item-health-check-mail-settings text-error',
                 'url' => '/admin/settings/mail',

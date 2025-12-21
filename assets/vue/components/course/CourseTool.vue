@@ -7,6 +7,18 @@
       :url="tool.url"
       class="course-tool__link hover:primary-gradient"
     >
+      <svg
+        class="course-tool__shadow"
+        fill="none"
+        viewBox="0 0 117 105"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          class="fill-current"
+          d="M104.167 20.2899C104.167 43.3465 116.11 59.1799 116.11 70.2899C116.11 81.3999 109.723 104.733 58.6133 104.733C7.50333 104.733 0 73.3432 0 61.1232C0 3.89987 104.167 -20.5435 104.167 20.2899Z"
+        />
+      </svg>
+
       <span
         :class="tool.tool.icon + ' ' + iconCustomClass"
         aria-hidden="true"

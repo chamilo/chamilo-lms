@@ -248,7 +248,7 @@ if ('learnpath' !== $origin) {
     echo Display::toolbarAction('toolbar', [$actionsLeft]);
 }
 /* New display forum div */
-echo '<div class="forum_title">';
+echo '<div class="forum_title mb-8">';
 echo '<h1>';
 echo Display::url(
     prepare4display($forum->getTitle()),

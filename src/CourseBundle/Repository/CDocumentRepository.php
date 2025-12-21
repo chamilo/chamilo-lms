@@ -18,12 +18,17 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Throwable;
 
+/**
+ * @extends ResourceRepository<CDocument>
+ */
 final class CDocumentRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -292,7 +297,7 @@ final class CDocumentRepository extends ResourceRepository
             $doc->setParentResourceNode($parent->getId());
 
             $link = [
-                'cid'        => $course->getId(),
+                'cid' => $course->getId(),
                 'visibility' => $visibility,
             ];
             if ($session && method_exists($session, 'getId')) {
@@ -308,11 +313,10 @@ final class CDocumentRepository extends ResourceRepository
             $em->persist($doc);
             $em->flush();
 
-            $node   = $doc->getResourceNode();
-
-            return $node;
-        } catch (\Throwable $e) {
+            return $doc->getResourceNode();
+        } catch (Throwable $e) {
             error_log('[CDocumentRepo.ensureFolder] ERROR '.$e->getMessage());
+
             throw $e;
         }
     }
@@ -510,7 +514,7 @@ final class CDocumentRepository extends ResourceRepository
 
     public function findChildDocumentFolderByTitle(ResourceNode $parent, string $title): ?ResourceNode
     {
-        $em    = $this->em();
+        $em = $this->em();
         $docRt = $this->getResourceType();
         $qb = $em->createQueryBuilder()
             ->select('rn')
@@ -519,26 +523,27 @@ final class CDocumentRepository extends ResourceRepository
             ->where('rn.parent = :parent AND rn.title = :title AND rn.resourceType = :rt AND d.filetype = :ft')
             ->setParameters([
                 'parent' => $parent,
-                'title'  => $title,
-                'rt'     => $docRt,
-                'ft'     => 'folder',
+                'title' => $title,
+                'rt' => $docRt,
+                'ft' => 'folder',
             ])
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         /** @var ResourceNode|null $node */
-        $node = $qb->getQuery()->getOneOrNullResult();
-
-        return $node;
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     public function ensureChatSystemFolderUnderCourseRoot(Course $course, ?Session $session = null): ResourceNode
     {
         $em = $this->em();
+
         try {
             $courseRoot = $course->getResourceNode();
             if (!$courseRoot) {
                 error_log('[CDocumentRepo.ensureChatSystemFolderUnderCourseRoot] ERROR: Course has no ResourceNode root.');
-                throw new \RuntimeException('Course has no ResourceNode root.');
+
+                throw new RuntimeException('Course has no ResourceNode root.');
             }
             if ($child = $this->findChildDocumentFolderByTitle($courseRoot, 'chat_conversations')) {
                 return $child;
@@ -554,29 +559,28 @@ final class CDocumentRepository extends ResourceRepository
                     if (method_exists($rnRepo, 'rebuildPaths')) {
                         $rnRepo->rebuildPaths($courseRoot);
                     }
+
                     return $legacy;
                 }
             }
 
-            $node = $this->ensureFolder(
+            return $this->ensureFolder(
                 $course,
                 $courseRoot,
                 'chat_conversations',
                 ResourceLink::VISIBILITY_DRAFT,
                 $session
             );
-
-            return $node;
-
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             error_log('[CDocumentRepo.ensureChatSystemFolderUnderCourseRoot] ERROR '.$e->getMessage());
+
             throw $e;
         }
     }
 
     public function findChildDocumentFileByTitle(ResourceNode $parent, string $title): ?ResourceNode
     {
-        $em    = $this->em();
+        $em = $this->em();
         $docRt = $this->getResourceType();
 
         $qb = $em->createQueryBuilder()
@@ -589,11 +593,12 @@ final class CDocumentRepository extends ResourceRepository
             ->andWhere('d.filetype = :ft')
             ->setParameters([
                 'parent' => $parent,
-                'title'  => $title,
-                'rt'     => $docRt,
-                'ft'     => 'file',
+                'title' => $title,
+                'rt' => $docRt,
+                'ft' => 'file',
             ])
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         /** @var ResourceNode|null $node */
         return $qb->getQuery()->getOneOrNullResult();
@@ -643,5 +648,344 @@ final class CDocumentRepository extends ResourceRepository
     {
         /** @var EntityManagerInterface $em */
         return $this->getEntityManager();
+    }
+
+    /**
+     * Returns the document folders for a given course/session/group context,
+     * as [ document_iid => "Full/Path/To/Folder" ].
+     *
+     * This implementation uses ResourceLink as the main source,
+     * assuming ResourceLink has a parent (context-aware hierarchy).
+     */
+    public function getAllFoldersForContext(
+        Course $course,
+        ?Session $session = null,
+        ?CGroup $group = null,
+        bool $canSeeInvisible = false,
+        bool $getInvisibleList = false
+    ): array {
+        $em = $this->getEntityManager();
+
+        $qb = $em->createQueryBuilder()
+            ->select('d')
+            ->from(CDocument::class, 'd')
+            ->innerJoin('d.resourceNode', 'rn')
+            ->innerJoin('rn.resourceLinks', 'rl')
+            ->where('rl.course = :course')
+            ->andWhere('d.filetype = :folderType')
+            ->andWhere('rl.deletedAt IS NULL')
+            ->setParameter('course', $course)
+            ->setParameter('folderType', 'folder')
+        ;
+
+        // Session filter
+        if (null !== $session) {
+            $qb
+                ->andWhere('rl.session = :session')
+                ->setParameter('session', $session)
+            ;
+        } else {
+            // In C2 many "global course documents" have session = NULL
+            $qb->andWhere('rl.session IS NULL');
+        }
+
+        // Group filter
+        if (null !== $group) {
+            $qb
+                ->andWhere('rl.group = :group')
+                ->setParameter('group', $group)
+            ;
+        } else {
+            $qb->andWhere('rl.group IS NULL');
+        }
+
+        // Visibility
+        if (!$canSeeInvisible) {
+            if ($getInvisibleList) {
+                // Only non-published folders (hidden/pending/etc.)
+                $qb
+                    ->andWhere('rl.visibility <> :published')
+                    ->setParameter('published', ResourceLink::VISIBILITY_PUBLISHED)
+                ;
+            } else {
+                // Only visible folders
+                $qb
+                    ->andWhere('rl.visibility = :published')
+                    ->setParameter('published', ResourceLink::VISIBILITY_PUBLISHED)
+                ;
+            }
+        }
+        // If $canSeeInvisible = true, do not filter by visibility (see everything).
+
+        /** @var CDocument[] $documents */
+        $documents = $qb->getQuery()->getResult();
+
+        if (empty($documents)) {
+            return [];
+        }
+
+        // 1) Index by ResourceLink id to be able to rebuild the path using the parent link
+        $linksById = [];
+
+        foreach ($documents as $doc) {
+            if (!$doc instanceof CDocument) {
+                continue;
+            }
+
+            $node = $doc->getResourceNode();
+            if (!$node instanceof ResourceNode) {
+                continue;
+            }
+
+            $links = $node->getResourceLinks();
+            if (!$links instanceof Collection) {
+                continue;
+            }
+
+            $matchingLink = null;
+
+            foreach ($links as $candidate) {
+                if (!$candidate instanceof ResourceLink) {
+                    continue;
+                }
+
+                // Deleted links must be ignored
+                if (null !== $candidate->getDeletedAt()) {
+                    continue;
+                }
+
+                // Match same course
+                if ($candidate->getCourse()?->getId() !== $course->getId()) {
+                    continue;
+                }
+
+                // Match same session context
+                if (null !== $session) {
+                    if ($candidate->getSession()?->getId() !== $session->getId()) {
+                        continue;
+                    }
+                } else {
+                    if (null !== $candidate->getSession()) {
+                        continue;
+                    }
+                }
+
+                // Match same group context
+                if (null !== $group) {
+                    if ($candidate->getGroup()?->getIid() !== $group->getIid()) {
+                        continue;
+                    }
+                } else {
+                    if (null !== $candidate->getGroup()) {
+                        continue;
+                    }
+                }
+
+                // Visibility filter (when not allowed to see invisible items)
+                if (!$canSeeInvisible) {
+                    $visibility = $candidate->getVisibility();
+
+                    if ($getInvisibleList) {
+                        // We only want non-published items
+                        if (ResourceLink::VISIBILITY_PUBLISHED === $visibility) {
+                            continue;
+                        }
+                    } else {
+                        // We only want published items
+                        if (ResourceLink::VISIBILITY_PUBLISHED !== $visibility) {
+                            continue;
+                        }
+                    }
+                }
+
+                $matchingLink = $candidate;
+
+                break;
+            }
+
+            if (!$matchingLink instanceof ResourceLink) {
+                // No valid link for this context, skip
+                continue;
+            }
+
+            $linksById[$matchingLink->getId()] = [
+                'doc' => $doc,
+                'link' => $matchingLink,
+                'node' => $node,
+                'parent_id' => $matchingLink->getParent()?->getId(),
+                'title' => $node->getTitle(),
+            ];
+        }
+
+        if (empty($linksById)) {
+            return [];
+        }
+
+        // 2) Build full folder paths per context (using ResourceLink.parent)
+        $pathCache = [];
+        $folders = [];
+
+        foreach ($linksById as $id => $data) {
+            $path = $this->buildFolderPathForLink($id, $linksById, $pathCache);
+
+            if ('' === $path) {
+                continue;
+            }
+
+            /** @var CDocument $doc */
+            $doc = $data['doc'];
+
+            // Keep the key as CDocument iid (as before)
+            $folders[$doc->getIid()] = $path;
+        }
+
+        if (empty($folders)) {
+            return [];
+        }
+
+        // Natural sort so that paths appear in a human-friendly order
+        natsort($folders);
+
+        // If the caller explicitly requested the invisible list, the filtering was done above
+        return $folders;
+    }
+
+    /**
+     * Rebuild the "Parent folder/Child folder/..." path for a folder ResourceLink,
+     * walking up the parent chain until a link without parent is found.
+     *
+     * Uses a small cache to avoid recalculating the same paths many times.
+     *
+     * @param array<int, array<string,mixed>> $linksById
+     * @param array<int, string>              $pathCache
+     */
+    private function buildFolderPathForLink(
+        int $id,
+        array $linksById,
+        array &$pathCache
+    ): string {
+        if (isset($pathCache[$id])) {
+            return $pathCache[$id];
+        }
+
+        if (!isset($linksById[$id])) {
+            return $pathCache[$id] = '';
+        }
+
+        $current = $linksById[$id];
+        $segments = [$current['title']];
+
+        $parentId = $current['parent_id'] ?? null;
+        $guard = 0;
+
+        while (null !== $parentId && isset($linksById[$parentId]) && $guard < 50) {
+            $parent = $linksById[$parentId];
+            array_unshift($segments, $parent['title']);
+            $parentId = $parent['parent_id'] ?? null;
+            $guard++;
+        }
+
+        $path = implode('/', $segments);
+
+        return $pathCache[$id] = $path;
+    }
+
+    /**
+     * Compute document storage usage breakdown for a course.
+     *
+     * - Counts only the "document" tool (resource_type_group = document resource type id).
+     * - Deduplicates by ResourceFile ID to avoid double counting when the same file is linked multiple times.
+     * - Classifies each file into the most specific context:
+     *   group > session > course
+     *
+     * @return array{
+     *   course: int,
+     *   sessions: int,
+     *   groups: int,
+     *   used: int
+     * }
+     */
+    public function getDocumentUsageBreakdownByCourse(Course $course): array
+    {
+        $courseId = (int) $course->getId();
+        $typeGroupId = (int) $this->getResourceType()->getId();
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = <<<SQL
+SELECT
+    rf.id        AS file_id,
+    rf.size      AS file_size,
+    rl.session_id AS session_id,
+    rl.group_id   AS group_id
+FROM resource_file rf
+INNER JOIN resource_node rn ON rn.id = rf.resource_node_id
+INNER JOIN resource_link rl ON rl.resource_node_id = rn.id
+WHERE rl.deleted_at IS NULL
+  AND rl.c_id = :courseId
+  AND rl.resource_type_group = :typeGroupId
+  AND rf.size IS NOT NULL
+SQL;
+
+        $rows = $conn->fetchAllAssociative($sql, [
+            'courseId' => $courseId,
+            'typeGroupId' => $typeGroupId,
+        ]);
+
+        $fileSizes = [];   // file_id => size
+        $hasSession = [];  // file_id => bool
+        $hasGroup = [];    // file_id => bool
+
+        foreach ($rows as $row) {
+            $fileId = (int) ($row['file_id'] ?? 0);
+            if ($fileId <= 0) {
+                continue;
+            }
+
+            $size = (int) ($row['file_size'] ?? 0);
+
+            if (!isset($fileSizes[$fileId])) {
+                $fileSizes[$fileId] = $size;
+                $hasSession[$fileId] = false;
+                $hasGroup[$fileId] = false;
+            }
+
+            $sid = (int) ($row['session_id'] ?? 0);
+            $gid = (int) ($row['group_id'] ?? 0);
+
+            if ($sid > 0) {
+                $hasSession[$fileId] = true;
+            }
+            if ($gid > 0) {
+                $hasGroup[$fileId] = true;
+            }
+        }
+
+        $bytesCourse = 0;
+        $bytesSessions = 0;
+        $bytesGroups = 0;
+
+        foreach ($fileSizes as $fileId => $size) {
+            if (($hasGroup[$fileId] ?? false) === true) {
+                $bytesGroups += $size;
+                continue;
+            }
+
+            if (($hasSession[$fileId] ?? false) === true) {
+                $bytesSessions += $size;
+                continue;
+            }
+
+            $bytesCourse += $size;
+        }
+
+        $used = $bytesCourse + $bytesSessions + $bytesGroups;
+
+        return [
+            'course' => $bytesCourse,
+            'sessions' => $bytesSessions,
+            'groups' => $bytesGroups,
+            'used' => $used,
+        ];
     }
 }

@@ -34,10 +34,10 @@
         validation-message="Only letters (a-z) and numbers (0-9) are allowed."
       />
       <BaseSelect
+        id="language-dropdowns"
         v-model="courseLanguage"
         :label="t('Language')"
         :options="languageOptions"
-        id="language-dropdowns"
         name="language"
         option-label="name"
         option-value="id"
@@ -58,9 +58,9 @@
     <!-- Form Footer -->
     <div class="form-footer">
       <BaseButton
+        :label="t('Back')"
         class="mr-4"
         icon="back"
-        :label="t('Back')"
         type="secondary"
         @click="goBack"
       />

@@ -372,13 +372,23 @@ class FeatureContext extends MinkContext
      */
     public function confirmPopup()
     {
-        // See
-        // https://gist.github.com/blazarecki/2888851
-        /** @var \Behat\Mink\Driver\Selenium2Driver $driver Needed because no cross-driver way yet */
-        $this->getSession()->getDriver()->getWebDriverSession()->accept_alert();
+       $session = $this->getSession();
+
+        // 1) tenter accept_alert() (alert native)
+        try {
+            $driver = $session->getDriver();
+
+                try {
+                    $driver->getWebDriverSession()->accept_alert();
+                    return;
+                } catch (\Exception $e) {}
+
+        } catch (\Exception $e) {
+            // ignore
+        }
 
         // wait for the HTML modal
-        $this->getSession()->wait(5000, "document.querySelector('.swal2-container') !== null");
+        $session->wait(5000, "document.querySelector('.swal2-container') !== null");
 
         // JS: attempt to click a visible confirmation button inside the modal
         $js = <<<'JS'
@@ -405,13 +415,12 @@ class FeatureContext extends MinkContext
 })();
 JS;
         try {
-            $clicked = (bool) $this->getSession()->executeScript($js);
+            $clicked = (bool) $session->executeScript($js);
+            if ($clicked)
+                return;
         } catch (\Exception $e) {
-            $clicked = false;
+            throw new \Exception('confirmPopup: no confirmation button found or clickable');
         }
-
-        throw new \Exception('confirmPopup: no confirmation button found or clickable');
-
     }
 
     /**

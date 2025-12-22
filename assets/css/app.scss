@@ -23,7 +23,7 @@
 
 @layer components {
   .card {
-    @apply rounded bg-white drop-shadow-lg w-full;
+    @apply rounded bg-white shadow-lg w-full;
   }
 
   // Buttons with icons.

@@ -36,7 +36,6 @@
                             <div class="box-body min-w-0">
                                 {{ form_errors(form) }}
 
-                                {# Make inner form container full width, no max constraint #}
                                 <div class="{{ content_width }} max-w-none">
 
                                     {{ form_start(form, {
@@ -50,14 +49,39 @@
                                     {% for field in form %}
                                         {% set fieldName = field.vars.name %}
                                         {% set isHidden  = 'hidden' in field.vars.block_prefixes %}
+
+                                        {% set isLockedOnMain =
+                                            locked_map is defined
+                                            and locked_map[fieldName] is defined
+                                            and locked_map[fieldName] == 1
+                                        %}
+
+                                        {% set hideOnSubUrlBecauseLocked =
+                                            current_url_id is defined
+                                            and current_url_id != 1
+                                            and isLockedOnMain
+                                        %}
+
                                         {% set isDisabledOnSubUrl =
                                             current_url_id is defined
                                             and current_url_id != 1
-                                            and changeable_map is defined
-                                            and changeable_map[fieldName] is defined
-                                            and changeable_map[fieldName] == 0
+                                            and (
+                                            (changeable_map is defined and changeable_map[fieldName] is defined and changeable_map[fieldName] == 0)
+                                            or isLockedOnMain
+                                            )
                                         %}
-                                        {% if isHidden %}
+
+                                        {% if hideOnSubUrlBecauseLocked %}
+                                            <div class="hidden">
+                                                {% if field.vars.compound is defined and field.vars.compound %}
+                                                    {% for child in field %}
+                                                        {{ form_widget(child, { attr: { disabled: 'disabled' } }) }}
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {{ form_widget(field, { attr: { disabled: 'disabled' } }) }}
+                                                {% endif %}
+                                            </div>
+                                        {% elseif isHidden %}
                                             {{ form_widget(field) }}
                                         {% else %}
                                             <div class="mb-6 p-5 rounded-lg border border-gray-50 shadow-sm bg-white hover:shadow transition">
@@ -87,7 +111,15 @@
                                                         {% if changeable_map is defined %}
                                                             {% set changeable = changeable_map[fieldName] is defined ? changeable_map[fieldName] : 1 %}
 
-                                                            {% if can_toggle_multiurl_setting %}
+                                                            {% if isLockedOnMain %}
+                                                                <span
+                                                                        class="ml-1 text-gray-50 text-lg flex items-center cursor-not-allowed"
+                                                                        title="{{ 'Setting is globally locked (access_url_locked=1)'|trans }}"
+                                                                >
+                                                                    <i class="mdi mdi-eye-off text-gray-50 text-xl"></i>
+                                                                    <i class="mdi mdi-lock-outline text-gray-50 text-lg ml-1"></i>
+                                                                </span>
+                                                            {% elseif can_toggle_multiurl_setting %}
                                                                 <button
                                                                         type="button"
                                                                         class="ml-1 toggle-changeable flex items-center justify-center"

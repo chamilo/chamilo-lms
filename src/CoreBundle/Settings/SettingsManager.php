@@ -700,7 +700,7 @@ class SettingsManager implements SettingsManagerInterface
             return $parameters;
         }
 
-        // Sub-URL: merge main + current according to access_url_changeable on main.
+        // Sub-URL: merge main + current according to access_url_changeable/access_url_locked on main.
         $mainUrl = $this->getMainUrlEntity();
         if (null === $mainUrl) {
             // Fallback: restrict to current URL if main URL cannot be resolved.
@@ -722,10 +722,13 @@ class SettingsManager implements SettingsManagerInterface
 
         $mainValueByVar = [];
         $changeableByVar = [];
+        $lockedByVar = [];
 
         foreach ($mainRows as $row) {
-            $mainValueByVar[$row->getVariable()] = $row->getSelectedValue();
-            $changeableByVar[$row->getVariable()] = (int) $row->getAccessUrlChangeable();
+            $var = $row->getVariable();
+            $mainValueByVar[$var] = $row->getSelectedValue();
+            $changeableByVar[$var] = (int) $row->getAccessUrlChangeable();
+            $lockedByVar[$var] = (int) $row->getAccessUrlLocked();
         }
 
         // Start with main values
@@ -733,9 +736,14 @@ class SettingsManager implements SettingsManagerInterface
             $parameters[$var] = $val;
         }
 
-        // Override only for changeable variables
+        // Override only for changeable variables AND not locked on main
         foreach ($currentRows as $row) {
             $var = $row->getVariable();
+
+            $isLocked = isset($lockedByVar[$var]) && 1 === (int) $lockedByVar[$var];
+            if ($isLocked) {
+                continue;
+            }
 
             $isChangeable = !isset($changeableByVar[$var]) || 1 === (int) $changeableByVar[$var];
             if ($isChangeable) {
@@ -776,7 +784,7 @@ class SettingsManager implements SettingsManagerInterface
             return $parameters;
         }
 
-        // Sub-URL: merge main + current according to access_url_changeable on main.
+        // Sub-URL: merge main + current according to access_url_changeable/access_url_locked on main.
         $mainUrl = $this->getMainUrlEntity();
         if (null === $mainUrl) {
             $all = $this->repository->findBy(['url' => $this->url]);
@@ -796,6 +804,7 @@ class SettingsManager implements SettingsManagerInterface
         $currentRows = $this->repository->findBy(['url' => $this->url]);
 
         $changeableByVar = [];
+        $lockedByVar = [];
 
         // Start with main values
         foreach ($mainRows as $row) {
@@ -804,12 +813,18 @@ class SettingsManager implements SettingsManagerInterface
 
             $parameters[$cat][$var] = $row->getSelectedValue();
             $changeableByVar[$var] = (int) $row->getAccessUrlChangeable();
+            $lockedByVar[$var] = (int) $row->getAccessUrlLocked();
         }
 
-        // Override with current values only for changeable variables (or unknown variables).
+        // Override with current values only for changeable variables AND not locked on main.
         foreach ($currentRows as $row) {
             $cat = (string) $row->getCategory();
             $var = $row->getVariable();
+
+            $isLocked = isset($lockedByVar[$var]) && 1 === (int) $lockedByVar[$var];
+            if ($isLocked) {
+                continue;
+            }
 
             $isChangeable = !isset($changeableByVar[$var]) || 1 === (int) $changeableByVar[$var];
             if ($isChangeable) {
@@ -823,6 +838,9 @@ class SettingsManager implements SettingsManagerInterface
     /**
      * Check if a setting is changeable for the current URL, using the
      * access_url_changeable flag from the main URL (ID = 1).
+     *
+     * Note: if access_url_locked = 1 on main URL, it is considered NOT changeable
+     * for sub-URLs (and it should not even be listed in sub-URLs).
      */
     private function isSettingChangeableForCurrentUrl(string $category, string $variable): bool
     {
@@ -855,6 +873,11 @@ class SettingsManager implements SettingsManagerInterface
         if (null === $mainSetting) {
             // If there is no canonical row, do not block changes.
             return true;
+        }
+
+        // If the setting is globally locked on main URL, sub-URLs must not override it.
+        if (1 === (int) $mainSetting->getAccessUrlLocked()) {
+            return false;
         }
 
         // When access_url_changeable is false/0 on main URL,
@@ -1555,8 +1578,9 @@ class SettingsManager implements SettingsManagerInterface
      * Deduplicate a list of SettingsCurrent rows by variable, using effective MultiURL logic:
      * - If current URL is main or not set => return rows as-is.
      * - If on a sub-URL:
-     *   - If main says access_url_changeable = 0 => keep main row
-     *   - else => keep current row when available, fallback to main
+     *   - If main says access_url_locked = 1 => keep main row
+     *   - Else if main says access_url_changeable = 0 => keep main row
+     *   - Else => keep current row when available, fallback to main
      *
      * @param array<int, mixed> $rows
      *
@@ -1575,6 +1599,7 @@ class SettingsManager implements SettingsManagerInterface
 
         $byVar = [];
         $mainChangeable = [];
+        $mainLocked = [];
         $mainRowByVar = [];
         $currentRowByVar = [];
 
@@ -1589,6 +1614,7 @@ class SettingsManager implements SettingsManagerInterface
             if (1 === $rUrlId) {
                 $mainRowByVar[$var] = $r;
                 $mainChangeable[$var] = (int) $r->getAccessUrlChangeable();
+                $mainLocked[$var] = (int) $r->getAccessUrlLocked();
             } elseif (null !== $this->url && $rUrlId === $this->url->getId()) {
                 $currentRowByVar[$var] = $r;
             }
@@ -1597,9 +1623,18 @@ class SettingsManager implements SettingsManagerInterface
         $vars = array_unique(array_merge(array_keys($mainRowByVar), array_keys($currentRowByVar)));
 
         foreach ($vars as $var) {
-            $locked = isset($mainChangeable[$var]) && 0 === (int) $mainChangeable[$var];
+            $isLocked = isset($mainLocked[$var]) && 1 === (int) $mainLocked[$var];
+            if ($isLocked) {
+                if (isset($mainRowByVar[$var])) {
+                    $byVar[$var] = $mainRowByVar[$var];
+                } elseif (isset($currentRowByVar[$var])) {
+                    $byVar[$var] = $currentRowByVar[$var];
+                }
+                continue;
+            }
 
-            if ($locked) {
+            $isNotChangeable = isset($mainChangeable[$var]) && 0 === (int) $mainChangeable[$var];
+            if ($isNotChangeable) {
                 if (isset($mainRowByVar[$var])) {
                     $byVar[$var] = $mainRowByVar[$var];
                 } elseif (isset($currentRowByVar[$var])) {
@@ -1658,7 +1693,7 @@ class SettingsManager implements SettingsManagerInterface
      * Keep the row metadata consistent across URLs.
      * - Sync title/comment/type/scope/subkey/subkeytext/value_template_id from canonical row when available
      * - Never overwrite existing metadata if canonical is missing (prevents "title reset to variable")
-     * - Always set access_url_locked = 0 (requested behavior)
+     * - Sync access_url_changeable + access_url_locked from canonical row when available
      */
     private function syncSettingMetadataFromCanonical(
         SettingsCurrent $setting,
@@ -1672,13 +1707,11 @@ class SettingsManager implements SettingsManagerInterface
         if (!$canonical instanceof SettingsCurrent) {
             if ($isNew) {
                 $setting->setTitle($fallbackVariable);
-                if (null === $setting->getAccessUrlChangeable()) {
-                    $setting->setAccessUrlChangeable(1);
-                }
-            }
 
-            // Always unlock (requested global behavior).
-            $setting->setAccessUrlLocked(0);
+                // Safe defaults for new rows.
+                $setting->setAccessUrlChangeable(1);
+                $setting->setAccessUrlLocked(0);
+            }
 
             return;
         }
@@ -1735,10 +1768,9 @@ class SettingsManager implements SettingsManagerInterface
             }
         }
 
+        // Sync MultiURL flags from canonical.
         $setting->setAccessUrlChangeable((int) $canonical->getAccessUrlChangeable());
-
-        // Always unlock (requested global behavior).
-        $setting->setAccessUrlLocked(0);
+        $setting->setAccessUrlLocked((int) $canonical->getAccessUrlLocked());
     }
 
     /**

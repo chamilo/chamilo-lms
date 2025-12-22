@@ -19,7 +19,7 @@ Feature: Promotions
   Scenario: Edit a promotion
     Given I am a platform administrator
     And I am on "/main/admin/promotions.php"
-    And I wait for the page to be loaded
+    And I wait very long for the page to be loaded
     Then I should not see an error
     And I should see "Developer"
     And I click the "i.mdi-pencil" element
@@ -37,7 +37,6 @@ Feature: Promotions
     And I should see "Developer"
     And I click the "i.mdi-text-box-plus" element
     And I confirm the popup
-    And I wait for the page to be loaded
     Then I should not see an error
     And I should see "Developer Copy"
 

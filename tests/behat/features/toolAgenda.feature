@@ -7,9 +7,9 @@ Feature: Agenda tool
 
   Scenario: Create a personal event
     Given I am on "/main/calendar/agenda.php?action=add&type=personal"
+    And I wait for the page to be loaded
     When I fill in the following:
       | title | Event 1 |
-    Then wait for the page to be loaded
     And I focus "date_range"
     And I fill in "date_range" with "2017-03-07 12:15 / 2017-03-07 12:15"
     Then I fill in editor field "content" with "Description event"

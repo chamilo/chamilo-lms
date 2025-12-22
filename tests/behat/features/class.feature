@@ -17,7 +17,7 @@ Feature: Classes
   Scenario: Update a class
     Given I am a platform administrator
     And I am on "/main/admin/usergroups.php"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     Then I should see "Class 1"
     And I click the "i.mdi-pencil" element
     And I wait for the page to be loaded

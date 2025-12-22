@@ -23,8 +23,6 @@ Feature: Thematic tool
     Then I fill in the following:
       | title[1] | Objective |
     Then I fill in editor field "description1" with "Objective 1"
-    And I scroll to the bottom of the page
-    And I wait for the page to be loaded
     And I press "Save"
     And I wait for the page to be loaded
     Then I should see "Objective 1"
@@ -37,12 +35,13 @@ Feature: Thematic tool
       | title | Thematic 1 edited |
     Then I fill in editor field "content" with "Description edited"
     Then I press "Save"
+    And I wait for the page to be loaded
     Then I should see "Thematic 1 edited"
 
   Scenario: Delete
     Given I am on "/main/course_progress/index.php?cid=1&"
     And I wait for the page to be loaded
     Then I should see "Thematic 1 edited"
-    Then I follow "Delete"
+    Then I click the "i.mdi-delete" element
     Then I confirm the popup
     Then I should not see "Thematic 1 edited"

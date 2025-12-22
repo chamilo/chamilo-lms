@@ -13,6 +13,7 @@ Feature: LP tool
       | name | LP category 1 |
     And I press "submit"
     And wait very long for the page to be loaded
+    Then I should see "LP category 1"
     Then I should not see an error
 
   Scenario: Create a LP
@@ -28,7 +29,7 @@ Feature: LP tool
   Scenario: Add document to LP
     Given I am on "/main/lp/lp_controller.php?cid=1&action=list"
     And I wait very long for the page to be loaded
-    And I follow "LP 1"
+    And I press "LP 1"
     And I wait for the page to be loaded
     And I follow "Edit"
     And I wait for the page to be loaded

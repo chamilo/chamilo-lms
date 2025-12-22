@@ -13,6 +13,8 @@ Feature: Forum tool
       | forum_category_title   | Forum Category Test |
     And I fill in editor field "forum_category_comment" with "This is the first forum category for test"
     And I press "SubmitForumCategory"
+    And wait for the page to be loaded
+    And I should see "Forum Category Test"
     Then I should not see an error
 
   Scenario: Create a forum
@@ -23,7 +25,8 @@ Feature: Forum tool
     And I fill in editor field "forum_comment" with "This is the first forum for test"
     And I press "SubmitForum"
     And wait very long for the page to be loaded
-    Then I should not see an error
+    Then I should see "Forum Test"
+    And I should not see an error
 
   Scenario: Create a forum thread
     Given I am on "/main/forum/index.php?cid=1"
@@ -37,7 +40,8 @@ Feature: Forum tool
     And I fill in editor field "post_text" with "This is a the first thread in a forum for test"
     And I press "SubmitPost"
     And wait for the page to be loaded
-    Then I should not see an error
+    Then I should see "Thread One"
+    And I should not see an error
 
   Scenario: Reply to forum message
     Given I am on "/main/forum/index.php?cid=1"
@@ -53,6 +57,7 @@ Feature: Forum tool
     And I fill in editor field "post_text" with "This is a reply to the first message for test"
     And I press "SubmitPost"
     And wait for the page to be loaded
+    Then I should see "Reply"
     Then I should not see an error
 
   Scenario: Delete a forum thread

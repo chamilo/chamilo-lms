@@ -70,7 +70,7 @@ if (0 === $exerciseId && isset($_POST['exerciseId'])) {
 $newQuestion = $_GET['newQuestion'] ?? 0;
 $modifyAnswers = $_GET['modifyAnswers'] ?? 0;
 $editQuestion = $_GET['editQuestion'] ?? 0;
-$page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
+$page = isset($_REQUEST['page']) ? max(1, (int) $_REQUEST['page']) : 1;
 $modifyQuestion = $_GET['modifyQuestion'] ?? 0;
 $deleteQuestion = $_GET['deleteQuestion'] ?? 0;
 $cloneQuestion = $_REQUEST['clone_question'] ?? 0;
@@ -229,30 +229,80 @@ if ($cancelQuestion) {
     }
 }
 
-if (!empty($cloneQuestion) && !empty($objExercise->getId())) {
+if (!empty($cloneQuestion)) {
+    $cloneQuestion = (int) $cloneQuestion;
+
+    // Determine destination exercise id (if any)
+    $targetExerciseId = 0;
+    if (!empty($exerciseId)) {
+        $targetExerciseId = (int) $exerciseId;
+    } elseif ($objExercise instanceof Exercise && (int) $objExercise->getId() > 0) {
+        $targetExerciseId = (int) $objExercise->getId();
+    }
+
     $oldQuestionObj = Question::read($cloneQuestion);
+    if (!$oldQuestionObj) {
+        Display::addFlash(Display::return_message(get_lang('Question not found'), 'error'));
+        exit;
+    }
+
     $oldQuestionObj->question = $oldQuestionObj->question.' - '.get_lang('Copy');
 
-    $newId = $oldQuestionObj->duplicate(api_get_course_info());
-    $newQuestionObj = Question::read($newId);
-    $newQuestionObj->addToList($exerciseId);
+    try {
+        $newId = $oldQuestionObj->duplicate(api_get_course_info());
+    } catch (Throwable $e) {
+        Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
+        exit;
+    }
 
-    // Save category to the destination course
+    $newId = (int) $newId;
+    if ($newId <= 0) {
+        Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
+        exit;
+    }
+
+    $newQuestionObj = Question::read($newId);
+    if (!$newQuestionObj) {
+        Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
+        exit;
+    }
+
+    // Attach to exercise only if we have a valid target exercise id
+    if ($targetExerciseId > 0) {
+        $newQuestionObj->addToList($targetExerciseId);
+    }
+
+    // Save category to the destination course (always)
     if (!empty($oldQuestionObj->category)) {
         $newQuestionObj->saveCategory($oldQuestionObj->category);
     }
 
-    // This should be moved to the duplicate function
-    $newAnswerObj = new Answer($cloneQuestion);
-    $newAnswerObj->read();
-    $newAnswerObj->duplicate($newQuestionObj);
+    // Duplicate answers
+    try {
+        $newAnswerObj = new Answer($cloneQuestion);
+        $newAnswerObj->read();
+        $newAnswerObj->duplicate($newQuestionObj);
+    } catch (Throwable $e) {
+        error_log('[exercise] clone_question exception during answers duplicate(): '.$e->getMessage());
+    }
 
-    // Reloading the $objExercise obj
-    $objExercise->read($objExercise->getId(), false);
+    // Reload exercise if we cloned inside a test
+    if ($targetExerciseId > 0) {
+        if (!($objExercise instanceof Exercise)) {
+            $objExercise = new Exercise();
+        }
+        $objExercise->read($targetExerciseId, false);
+        Session::write('objExercise', $objExercise);
+    }
 
     Display::addFlash(Display::return_message(get_lang('Item copied')));
 
-    header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId().'&page='.$page);
+    // Redirect depending on context
+    if ($targetExerciseId > 0) {
+        header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$targetExerciseId.'&page='.$page);
+    } else {
+        header('Location: question_pool.php?'.api_get_cidreq().'&page='.$page);
+    }
     exit;
 }
 

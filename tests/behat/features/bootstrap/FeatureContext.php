@@ -373,8 +373,7 @@ class FeatureContext extends MinkContext
     public function confirmPopup()
     {
        $session = $this->getSession();
-
-        // 1) tenter accept_alert() (alert native)
+        // 1) accept_alert() (alert native)
         try {
             $driver = $session->getDriver();
 
@@ -392,28 +391,28 @@ class FeatureContext extends MinkContext
 
         // JS: attempt to click a visible confirmation button inside the modal
         $js = <<<'JS'
-(function(){
-  function isVisible(el){
-    if(!el) return false;
-    var rect = el.getBoundingClientRect();
-    return !!(rect.width || rect.height) && window.getComputedStyle(el).visibility !== 'hidden' && window.getComputedStyle(el).display !== 'none';
-  }
-  function clickEl(el){
-    if(!el) return false;
-    try { el.style.pointerEvents = 'auto'; el.style.zIndex = 999999; } catch(e){}
-    try { if(el.focus) el.focus(); el.click(); return true; } catch(e){
-    }
-  }
-  // attempt to click a visible confirmation button inside the modal
-  var modal = document.querySelector('.swal2-container');
+        (function(){
+         function isVisible(el){
+         if(!el) return false;
+         var rect = el.getBoundingClientRect();
+         return !!(rect.width || rect.height) && window.getComputedStyle(el).visibility !== 'hidden' && window.getComputedStyle(el).display !== 'none';
+         }
+         function clickEl(el){
+         if(!el) return false;
+         try { el.style.pointerEvents = 'auto'; el.style.zIndex = 999999; } catch(e){}
+        try { if(el.focus) el.focus(); el.click(); return true; } catch(e){
+        }
+        }
+       // attempt to click a visible confirmation button inside the modal
+       var modal = document.querySelector('.swal2-container');
 
-  var el = modal.querySelector('.swal2-confirm');
-  if (el && isVisible(el)) {
-  if (clickEl(el)) return true;
-}
-  return false;
-})();
-JS;
+       var el = modal.querySelector('.swal2-confirm');
+       if (el && isVisible(el)) {
+       if (clickEl(el)) return true;
+       }
+       return false;
+       })();
+       JS;
         try {
             $clicked = (bool) $session->executeScript($js);
             if ($clicked)

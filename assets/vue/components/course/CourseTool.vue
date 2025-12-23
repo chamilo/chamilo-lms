@@ -57,7 +57,7 @@
         />
       </button>
 
-      <a
+      <!-- a
         v-if="securityStore.isCurrentTeacher && isCustomizing"
         href="#"
       >
@@ -65,7 +65,7 @@
           icon="edit"
           size="small"
         />
-      </a>
+      </a -->
     </div>
   </div>
 </template>
@@ -73,12 +73,10 @@
 <script setup>
 import { computed, inject } from "vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
-import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
 
-const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
 const cidReqStore = useCidReqStore()
 

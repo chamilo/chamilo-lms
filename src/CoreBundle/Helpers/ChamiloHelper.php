@@ -532,13 +532,36 @@ class ChamiloHelper
                 'where' => [
                     'language_id = ? AND version = ?' => [$langId, $version],
                 ],
-                'order' => 'id ASC',
+                'order' => 'type ASC, id ASC',
             ]
         );
 
         if (!\is_array($rows) || empty($rows)) {
             return;
         }
+
+        // GDPR section titles indexed by "type" (1..15).
+        $getSectionTitle = static function (int $type): string {
+            $map = [
+                1  => 'Personal data collection',
+                2  => 'Personal data recording',
+                3  => 'Personal data organization',
+                4  => 'Personal data structure',
+                5  => 'Personal data conservation',
+                6  => 'Personal data adaptation or modification',
+                7  => 'Personal data extraction',
+                8  => 'Personal data queries',
+                9  => 'Personal data use',
+                10 => 'Personal data communication and sharing',
+                11 => 'Personal data interconnection',
+                12 => 'Personal data limitation',
+                13 => 'Personal data deletion',
+                14 => 'Personal data destruction',
+                15 => 'Personal data profiling',
+            ];
+
+            return $map[$type] ?? '';
+        };
 
         $fullHtml = '';
 
@@ -548,16 +571,21 @@ class ChamiloHelper
                 continue;
             }
 
-            // Optional title support if available in the table/schema
-            $title = trim((string) ($row['title'] ?? ($row['name'] ?? '')));
-            if ('' !== $title) {
-                $fullHtml .= '<div class="mt-4">';
-                $fullHtml .= '<h4 class="text-base font-semibold text-gray-90">'.htmlspecialchars($title, ENT_QUOTES | ENT_HTML5).'</h4>';
-                $fullHtml .= '<div class="mt-1 text-sm text-gray-90">'.$content.'</div>';
-                $fullHtml .= '</div>';
-            } else {
-                $fullHtml .= '<div class="mt-4 text-sm text-gray-90">'.$content.'</div>';
+            $type = (int) ($row['type'] ?? 0);
+            $dbTitle = trim((string) ($row['title'] ?? ($row['name'] ?? '')));
+            $title = $dbTitle !== '' ? $dbTitle : $getSectionTitle($type);
+
+            $fullHtml .= '<div class="mt-4">';
+
+            if ($title !== '') {
+                $fullHtml .= '<h4 class="text-base font-semibold text-gray-90">'
+                    .htmlspecialchars($title, ENT_QUOTES | ENT_HTML5)
+                    .'</h4>';
             }
+
+            // Content may contain HTML (kept as-is by design).
+            $fullHtml .= '<div class="mt-2 text-sm text-gray-90">'.$content.'</div>';
+            $fullHtml .= '</div>';
         }
 
         if ('' === trim(strip_tags($fullHtml))) {

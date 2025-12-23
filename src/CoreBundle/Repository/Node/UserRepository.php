@@ -44,6 +44,9 @@ use Throwable;
 
 use const MB_CASE_LOWER;
 
+/**
+ * @extends ResourceRepository<User>
+ */
 class UserRepository extends ResourceRepository implements PasswordUpgraderInterface
 {
     protected ?UserPasswordHasherInterface $hasher = null;

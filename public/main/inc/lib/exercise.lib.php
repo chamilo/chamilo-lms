@@ -7038,4 +7038,112 @@ EOT;
         }
     }
 
+    /**
+     * Normalize the attempt question list:
+     * - Media questions are containers and must NOT be counted as real questions.
+     * - When random questions are enabled ($objExercise->random > 0),
+     *   ensure we have exactly N answerable questions by topping up from the exercise pool.
+     *
+     * @param Exercise $objExercise
+     * @param int[]    $ids
+     *
+     * @return int[]
+     */
+    public static function normalizeAttemptQuestionList(Exercise $objExercise, array $ids): array
+    {
+        $ids = array_values(array_unique(array_map('intval', $ids)));
+
+        $randomCount = isset($objExercise->random) ? (int) $objExercise->random : 0;
+
+        // Remove media questions from the list (and page breaks only in random mode).
+        $normalized = [];
+        foreach ($ids as $qid) {
+            $q = Question::read((int) $qid);
+            if (!$q) {
+                continue;
+            }
+
+            // Media questions are not answerable.
+            if ((int) $q->type === MEDIA_QUESTION) {
+                continue;
+            }
+
+            // Random selection applies to answerable questions, not structural breaks.
+            if ($randomCount > 0 && (int) $q->type === PAGE_BREAK) {
+                continue;
+            }
+
+            $normalized[] = (int) $qid;
+        }
+
+        if ($randomCount <= 0) {
+            return $normalized;
+        }
+
+        // Trim if we somehow have too many.
+        if (count($normalized) > $randomCount) {
+            return array_slice($normalized, 0, $randomCount);
+        }
+
+        // Top up if we have too few after removing media questions.
+        if (count($normalized) < $randomCount) {
+            $pool = [];
+            foreach ((array) $objExercise->getQuestionOrderedList() as $qid) {
+                $qid = (int) $qid;
+                $q = Question::read($qid);
+                if (!$q) {
+                    continue;
+                }
+
+                if ((int) $q->type === MEDIA_QUESTION || (int) $q->type === PAGE_BREAK) {
+                    continue;
+                }
+
+                $pool[] = $qid;
+            }
+
+            // Remove already selected.
+            $pool = array_values(array_diff($pool, $normalized));
+
+            if (!empty($pool)) {
+                shuffle($pool);
+            }
+
+            $needed = $randomCount - count($normalized);
+            if ($needed > 0) {
+                $normalized = array_merge($normalized, array_slice($pool, 0, $needed));
+            }
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * Persist corrected data_tracking back to DB so the attempt stays stable.
+     *
+     * @param int   $exeId
+     * @param int[] $questionList
+     * @param array $exerciseStatInfo
+     */
+    public static function updateAttemptDataTrackingIfNeeded(int $exeId, array $questionList, array &$exerciseStatInfo): void
+    {
+        if ($exeId <= 0) {
+            return;
+        }
+
+        $newTracking = implode(',', array_map('intval', $questionList));
+        $oldTracking = isset($exerciseStatInfo['data_tracking']) ? (string) $exerciseStatInfo['data_tracking'] : '';
+
+        if ($newTracking === $oldTracking) {
+            return;
+        }
+
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $sql = "UPDATE $table
+            SET data_tracking = '".Database::escape_string($newTracking)."'
+            WHERE exe_id = ".(int) $exeId;
+        Database::query($sql);
+
+        $exerciseStatInfo['data_tracking'] = $newTracking;
+    }
 }

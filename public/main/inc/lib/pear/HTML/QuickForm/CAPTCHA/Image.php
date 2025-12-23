@@ -94,12 +94,12 @@ class HTML_QuickForm_CAPTCHA_Image extends HTML_QuickForm_CAPTCHA
 
     /**
      * Code based in HTML_QuickForm_text::getTemplate()
-     * In order to render correctly the captcha in different layouts
+     * To correctly render the captcha in different layouts
      * @param string $layout
      *
      * @return string
      */
-    public static function getTemplate($layout)
+    public function getTemplate($layout): string
     {
         $size = 8;
         switch ($layout) {
@@ -112,7 +112,6 @@ class HTML_QuickForm_CAPTCHA_Image extends HTML_QuickForm_CAPTCHA
                     </label>
                     {element}
                 </div>';
-                break;
             case FormValidator::LAYOUT_HORIZONTAL:
                 return '
                 <div class="form-group {error_class}">
@@ -138,14 +137,13 @@ class HTML_QuickForm_CAPTCHA_Image extends HTML_QuickForm_CAPTCHA
                         <!-- END label_3 -->
                     </div>
                 </div>';
-                break;
             case FormValidator::LAYOUT_BOX_NO_LABEL:
+            default:
                 return '
                         <div class="input-group">
                             {icon}
                             {element}
                         </div>';
-                break;
         }
     }
 
@@ -181,6 +179,7 @@ class HTML_QuickForm_CAPTCHA_Image extends HTML_QuickForm_CAPTCHA
         unset($attr['type']);
         unset($attr['value']);
         unset($attr['name']);
+        $title = htmlspecialchars($this->_options['alt']);
 
         $html = $tabs.'<a href="'.$this->_options['callback']
                .'" target="_blank" '
@@ -188,10 +187,11 @@ class HTML_QuickForm_CAPTCHA_Image extends HTML_QuickForm_CAPTCHA
                .' onclick="var cancelClick = false; '
                .$this->getOnclickJs($imgName)
                .' return !cancelClick;"><img src="'
-               .$this->_options['callback'].'" name="'.$imgName
+               .$this->_options['callback'].'" '
                .'" id="'.$imgName.'" width="'.$this->_options['width']
-               .'" height="'.$this->_options['height'].'" title="'
-               .htmlspecialchars($this->_options['alt']).'" /></a>';
+               .'" height="'.$this->_options['height']
+               .'" title="'.$title.'" alt="'.$title.'" /></a>';
+
 
         return $html;
     }

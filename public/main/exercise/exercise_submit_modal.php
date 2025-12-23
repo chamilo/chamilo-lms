@@ -46,9 +46,37 @@ if (!in_array($feedbackType, [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_T
     api_not_allowed();
 }
 
-$learnpath_id = (int) ($_REQUEST['learnpath_id'] ?? 0);
-$learnpath_item_id = (int) ($_REQUEST['learnpath_item_id'] ?? 0);
-$learnpath_item_view_id = (int) ($_REQUEST['learnpath_item_view_id'] ?? 0);
+$learnpath_id = (int) ($_REQUEST['learnpath_id'] ?? ($_REQUEST['lp_id'] ?? 0));
+$learnpath_item_id = (int) ($_REQUEST['learnpath_item_id'] ?? ($_REQUEST['item_id'] ?? ($_REQUEST['lp_item_id'] ?? 0)));
+$learnpath_item_view_id = (int) ($_REQUEST['learnpath_item_view_id'] ?? ($_REQUEST['lp_item_view_id'] ?? 0));
+
+$origin = api_get_origin();
+
+// Only restore LP context from session when we are really in learnpath origin.
+// Otherwise, stale LP session values can leak into standalone exercises.
+if ('learnpath' === $origin) {
+    if ($learnpath_id <= 0) {
+        $learnpath_id = (int) (Session::read('learnpath_id') ?? Session::read('lp_id') ?? 0);
+    }
+    if ($learnpath_item_id <= 0) {
+        $learnpath_item_id = (int) (Session::read('learnpath_item_id') ?? Session::read('lp_item_id') ?? 0);
+    }
+    if ($learnpath_item_view_id <= 0) {
+        $learnpath_item_view_id = (int) (Session::read('learnpath_item_view_id') ?? Session::read('lp_item_view_id') ?? 0);
+    }
+} else {
+    Session::erase('learnpath_id');
+    Session::erase('lp_id');
+    Session::erase('learnpath_item_id');
+    Session::erase('lp_item_id');
+    Session::erase('learnpath_item_view_id');
+    Session::erase('lp_item_view_id');
+
+    $learnpath_id = 0;
+    $learnpath_item_id = 0;
+    $learnpath_item_view_id = 0;
+}
+
 $exerciseId = (int) ($_GET['exerciseId'] ?? 0);
 $exeId = (int) (Session::read('exe_id') ?? 0);
 $preview = (int) ($_GET['preview'] ?? 0);

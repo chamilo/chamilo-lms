@@ -135,6 +135,10 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
     #[ORM\Column(name: 'locked', type: 'integer', nullable: false)]
     protected int $locked;
 
+    #[ORM\Column(name: 'require_unique', type: 'boolean', options: ['default' => false])]
+    #[Groups(['attendance:read', 'attendance:write'])]
+    protected bool $requireUnique = false;
+
     /**
      * @var Collection|CAttendanceCalendar[]
      */
@@ -338,6 +342,18 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
     public function setResults(Collection $results): self
     {
         $this->results = $results;
+
+        return $this;
+    }
+
+    public function isRequireUnique(): bool
+    {
+        return $this->requireUnique;
+    }
+
+    public function setRequireUnique(bool $requireUnique): self
+    {
+        $this->requireUnique = $requireUnique;
 
         return $this;
     }

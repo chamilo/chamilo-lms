@@ -80,10 +80,12 @@ final class CourseDescriptionXapianIndexer
             $terms[] = 'S'.$sessionId;
         }
 
+        $resourceNodeRef = $this->em->getReference(ResourceNode::class, (int) $resourceNode->getId());
+
         /** @var SearchEngineRef|null $existingRef */
         $existingRef = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNodeId' => $resourceNode->getId()])
+            ->findOneBy(['resourceNode' => $resourceNodeRef])
         ;
 
         $existingDocId = $existingRef?->getSearchDid();
@@ -106,7 +108,7 @@ final class CourseDescriptionXapianIndexer
             $existingRef->setSearchDid($docId);
         } else {
             $existingRef = new SearchEngineRef();
-            $existingRef->setResourceNodeId((int) $resourceNode->getId());
+            $existingRef->setResourceNode($resourceNodeRef);
             $existingRef->setSearchDid($docId);
             $this->em->persist($existingRef);
         }
@@ -123,10 +125,12 @@ final class CourseDescriptionXapianIndexer
             return;
         }
 
+        $resourceNodeRef = $this->em->getReference(ResourceNode::class, (int) $resourceNode->getId());
+
         /** @var SearchEngineRef|null $ref */
         $ref = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNodeId' => $resourceNode->getId()])
+            ->findOneBy(['resourceNode' => $resourceNodeRef])
         ;
 
         if (!$ref) {

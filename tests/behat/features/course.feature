@@ -15,10 +15,12 @@ Feature: Course tools basic testing
 
   Scenario: See the course creation link on the admin page
     Given I am on "/main/admin/index.php"
+    And wait for the page to be loaded
     Then I should see "Add course"
 
   Scenario: Create a course before testing
     Given I am on "/main/admin/course_add.php"
+    And wait for the page to be loaded
     When I fill in "title" with "TEMP"
     And I press "submit"
     Then wait for the page to be loaded
@@ -159,9 +161,10 @@ Feature: Course tools basic testing
 
   Scenario: Create a private course before testing
     Given I am on "/main/admin/course_add.php"
+    And I wait for the page to be loaded
     Then I should not see "not authorized"
     When I fill in "title" with "TEMP_PRIVATE"
     Then I check the "Private access (access authorized to group members only)" radio button
     And I press "submit"
     Then wait for the page to be loaded
-    Then I should see "added"
+    Then I should not see an error

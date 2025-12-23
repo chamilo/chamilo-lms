@@ -13,9 +13,9 @@
           <div class="mt-1 flex items-center gap-2">
             <div class="flex-1 h-1.5 rounded-full bg-gray-50 overflow-hidden">
               <div
+                :style="{ width: progress.score || '0%' }"
                 class="h-1.5 rounded-full"
                 style="background-color: var(--color-primary, #2563eb)"
-                :style="{ width: progress.score || '0%' }"
               />
             </div>
 
@@ -49,17 +49,9 @@
 
             <span>• {{ item.startDate }}</span>
 
-            <span v-if="item.content">
-              • {{ item.content }}
-            </span>
+            <span v-if="item.content"> • {{ item.content }} </span>
 
-            <span>
-              • {{
-                (progress.labels?.duration || t("Duration in hours")) +
-                ": " +
-                item.duration
-              }}
-            </span>
+            <span> • {{ (progress.labels?.duration || t("Duration in hours")) + ": " + item.duration }} </span>
           </template>
         </div>
       </div>
@@ -82,7 +74,7 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from "vue"
+import { onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
@@ -101,10 +93,7 @@ onMounted(async () => {
   }
 
   try {
-    const data = await courseService.loadThematicProgress(
-      course.value.id,
-      session.value?.id || 0
-    )
+    const data = await courseService.loadThematicProgress(course.value.id, session.value?.id || 0)
 
     if (data && data.enabled) {
       progress.value = data

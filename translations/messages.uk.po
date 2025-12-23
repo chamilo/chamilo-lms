@@ -9523,7 +9523,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "Помилка завантаження файлу: це розширення файлу або тип файлу заборонено"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "URL OpenID"
 
 msgid "The file is too big to upload."
 msgstr "Файл занадто великий для завантаження."
@@ -10920,8 +10920,8 @@ msgstr "є"
 msgid "The address of"
 msgstr "Адреса"
 
-msgid "Your registration on"
-msgstr "Ваша реєстрація на"
+msgid "Your registration on %s"
+msgstr "Ваша реєстрація на %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Цей логін уже зайнятий. Використовуйте кнопку Назад у браузері та оберіть інший."
@@ -31427,4 +31427,10 @@ msgstr "Помилка завантаження ресурсів."
 
 msgid "Clear search"
 msgstr "Очистити пошук"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "У назві бази даних дозволені лише літери, цифри та підкреслення (_). Недопустимі символи будуть автоматично видалені."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Які загальні умови та правила надаються користувачам для використання цієї платформи?"
 

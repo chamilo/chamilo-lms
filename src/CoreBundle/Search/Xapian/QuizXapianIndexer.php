@@ -58,12 +58,8 @@ final class QuizXapianIndexer
 
         $title = (string) $quiz->getTitle();
         $description = (string) ($quiz->getDescription() ?? '');
-
-        // For now: description only. If later you implement "specific fields"
-        // for quizzes in C2, you can concatenate them here like in v1.
         $content = trim($description);
 
-        // Data that will appear in search results under "data"
         $fields = [
             'kind' => 'quiz',
             'tool' => 'quiz',
@@ -74,7 +70,6 @@ final class QuizXapianIndexer
             'quiz_id' => (string) $quiz->getIid(),
             'course_id' => null !== $courseId ? (string) $courseId : '',
             'session_id' => null !== $sessionId ? (string) $sessionId : '',
-            // Legacy-like metadata, if you want them later:
             'xapian_data' => json_encode([
                 'type' => 'exercise',
                 'exercise_id' => (int) $quiz->getIid(),
@@ -82,7 +77,6 @@ final class QuizXapianIndexer
             ]),
         ];
 
-        // Terms: allow filtering by kind, course, session
         $terms = ['Tquiz'];
         if (null !== $courseId) {
             $terms[] = 'C'.$courseId;
@@ -91,11 +85,12 @@ final class QuizXapianIndexer
             $terms[] = 'S'.$sessionId;
         }
 
-        // Look for existing SearchEngineRef for this resource node
+        $resourceNodeRef = $this->em->getReference(ResourceNode::class, (int) $resourceNode->getId());
+
         /** @var SearchEngineRef|null $existingRef */
         $existingRef = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNodeId' => $resourceNode->getId()])
+            ->findOneBy(['resourceNode' => $resourceNodeRef])
         ;
 
         $existingDocId = $existingRef?->getSearchDid();
@@ -112,7 +107,6 @@ final class QuizXapianIndexer
             }
         }
 
-        // Index in Xapian
         try {
             $docId = $this->xapianIndexService->indexDocument($fields, $terms);
         } catch (Throwable $e) {
@@ -121,12 +115,11 @@ final class QuizXapianIndexer
             return null;
         }
 
-        // Update mapping
         if ($existingRef instanceof SearchEngineRef) {
             $existingRef->setSearchDid($docId);
         } else {
             $existingRef = new SearchEngineRef();
-            $existingRef->setResourceNodeId((int) $resourceNode->getId());
+            $existingRef->setResourceNode($resourceNodeRef);
             $existingRef->setSearchDid($docId);
             $this->em->persist($existingRef);
         }
@@ -151,10 +144,17 @@ final class QuizXapianIndexer
             return;
         }
 
+        $enabled = (string) $this->settingsManager->getSetting('search.search_enabled', true);
+        if ('true' !== $enabled) {
+            return;
+        }
+
+        $resourceNodeRef = $this->em->getReference(ResourceNode::class, (int) $resourceNode->getId());
+
         /** @var SearchEngineRef|null $ref */
         $ref = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNodeId' => $resourceNode->getId()])
+            ->findOneBy(['resourceNode' => $resourceNodeRef])
         ;
 
         if (!$ref) {

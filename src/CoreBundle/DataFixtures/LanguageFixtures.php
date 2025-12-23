@@ -12,6 +12,12 @@ use Doctrine\Persistence\ObjectManager;
 
 class LanguageFixtures extends Fixture
 {
+    public static function getGroups(): array
+    {
+        // This fixture must only be executed on fresh installs.
+        return ['install'];
+    }
+
     public function load(ObjectManager $manager): void
     {
         $list = self::getLanguages();
@@ -20,7 +26,8 @@ class LanguageFixtures extends Fixture
                 ->setOriginalName($data['original_name'])
                 ->setEnglishName($data['english_name'])
                 ->setIsocode($data['isocode'])
-                ->setAvailable(1 === $data['available'])
+                // Enable all languages by default on new installations.
+                ->setAvailable(true)
             ;
             $manager->persist($lang);
         }

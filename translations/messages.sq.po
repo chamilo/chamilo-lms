@@ -10924,8 +10924,8 @@ msgstr "është"
 msgid "The address of"
 msgstr "Adresa e"
 
-msgid "Your registration on"
-msgstr "Regjistrimi juaj në"
+msgid "Your registration on %s"
+msgstr "Regjistrimi juaj në %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Kjo hyrje është tashmë e zënë. Përdorni butonin back të shfletuesit tuaj dhe zgjidhni një tjetër."
@@ -31431,4 +31431,10 @@ msgstr "Gabim në ngarkimin e burimeve."
 
 msgid "Clear search"
 msgstr "Pastro kërkimin"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Vetëm shkronja, shifra dhe nënvija (_) lejohen në emrin e bazës së të dhënave. Karakteret e pavlefshme do të hiqen automatikisht."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Çfarë kushtesh të përgjithshme dhe kushtesh përdorimi u jepen përdoruesve për të përdorur këtë platformë?"
 

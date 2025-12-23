@@ -35,6 +35,8 @@ class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
          * ];
          * return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);*/
 
+        $request->getSession()->getFlashBag()->add('error', $authException->getMessage());
+
         return new RedirectResponse($this->urlGenerator->generate('login'));
     }
 }

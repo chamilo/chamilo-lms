@@ -48,6 +48,16 @@ final class DocumentCollectionStateProvider implements ProviderInterface
             ->addSelect('rn')
         ;
 
+        // Hide certificates system folder (and its children) from the document tool.
+        // Allow debugging by passing ?showSystemCertificates=1
+        $showSystemCertificates = (bool) $request->query->get('showSystemCertificates', false);
+        if (!$showSystemCertificates) {
+            $qb
+                ->andWhere('rn.path IS NULL OR rn.path NOT LIKE :certificatesPath')
+                ->setParameter('certificatesPath', '%/certificates-%')
+            ;
+        }
+
         // Filetype filtering: filetype[]=file&filetype[]=folder&filetype[]=video OR filetype=folder
         $filetypes = $request->query->all('filetype');
 
@@ -61,6 +71,15 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         if (!empty($filetypes)) {
             if (!\is_array($filetypes)) {
                 $filetypes = [$filetypes];
+            }
+
+            // Normalize values and keep unique entries
+            $filetypes = array_values(array_unique(array_filter(array_map('strval', $filetypes))));
+
+            // Compatibility: treat "html" as a subtype of "file" for listing purposes.
+            // This prevents "html" rows from disappearing when the UI filters by filetype=file.
+            if (\in_array('file', $filetypes, true) && !\in_array('html', $filetypes, true)) {
+                $filetypes[] = 'html';
             }
 
             $qb
@@ -156,7 +175,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
                         // Children inside this folder in this context
                         $qb
                             ->andWhere('rl.parent = :parentLink')
-                            ->setParameter('parentLink', $parentLink)
+                            ->setParameter('parentLink', $parentLink->getId())
                         ;
                     }
                 } else {

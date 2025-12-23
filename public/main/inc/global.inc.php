@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Controller\ExceptionController;
+use Chamilo\CoreBundle\Controller\ErrorController;
 use Chamilo\CoreBundle\EventListener\ExceptionListener;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
@@ -144,14 +144,8 @@ if ($isCli) {
         }
         $response = $event->getResponse();
         if (!$response) {
-            $statusCode = $exception instanceof NotAllowedException
-                ? Response::HTTP_OK
-                : Response::HTTP_INTERNAL_SERVER_ERROR;
-
-            $response = new Response(
-                $exception->getMessage(),
-                $statusCode
-            );
+            $controller = Container::$container->get(ErrorController::class);
+            $response = $controller->show($request, $exception, null);
         }
         $response->send();
     });
@@ -183,35 +177,30 @@ if ($isCli) {
 
     $context->setBaseUrl($newBaseUrl);
 
-    try {
-        // Do not over-use this variable. It is only for this script's local use.
-        $libraryPath = __DIR__.'/lib/';
-        $container = $kernel->getContainer();
+    // Do not over-use this variable. It is only for this script's local use.
+    $libraryPath = __DIR__.'/lib/';
+    $container = $kernel->getContainer();
 
-        // Symfony uses request_stack now
-        $container->get('request_stack')->push($request);
-        $container->get('translator')->setLocale($request->getLocale());
+    // Symfony uses request_stack now
+    $container->get('request_stack')->push($request);
+    $container->get('translator')->setLocale($request->getLocale());
 
-        $container->get('stof_doctrine_extensions.tool.locale_synchronizer')->setLocale($request->getLocale());
+    $container->get('stof_doctrine_extensions.tool.locale_synchronizer')->setLocale($request->getLocale());
 
-        /** @var FlashBag $flashBag */
-        $flashBag = $request->getSession()->getFlashBag();
-        $saveFlashBag = !empty($flashBag->keys()) ? $flashBag->all() : null;
+    /** @var FlashBag $flashBag */
+    $flashBag = $request->getSession()->getFlashBag();
+    $saveFlashBag = !empty($flashBag->keys()) ? $flashBag->all() : null;
 
-        if (!empty($saveFlashBag)) {
-            foreach ($saveFlashBag as $typeMessage => $messageList) {
-                foreach ($messageList as $message) {
-                    Container::getSession()->getFlashBag()->add($typeMessage, $message);
-                }
+    if (!empty($saveFlashBag)) {
+        foreach ($saveFlashBag as $typeMessage => $messageList) {
+            foreach ($messageList as $message) {
+                Container::getSession()->getFlashBag()->add($typeMessage, $message);
             }
         }
-
-        $charset = 'UTF-8';
-        ini_set('log_errors', '1');
-        $this_section = SECTION_GLOBAL;
-        define('DEFAULT_DOCUMENT_QUOTA', 100000000);
-    } catch (Exception $e) {
-        $controller = new ExceptionController();
-        $controller->show($e);
     }
+
+    $charset = 'UTF-8';
+    ini_set('log_errors', '1');
+    $this_section = SECTION_GLOBAL;
+    define('DEFAULT_DOCUMENT_QUOTA', 100000000);
 }

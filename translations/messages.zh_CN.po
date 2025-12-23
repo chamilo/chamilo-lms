@@ -10925,8 +10925,8 @@ msgstr "是"
 msgid "The address of"
 msgstr "地址"
 
-msgid "Your registration on"
-msgstr "您的注册信息"
+msgid "Your registration on %s"
+msgstr "您的注册信息 %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "用户名已经存在, 点击浏览器的退回按纽重新选择用户名。"
@@ -31433,4 +31433,10 @@ msgstr "加载资源出错。"
 
 msgid "Clear search"
 msgstr "清除搜索"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "数据库名称仅允许使用字母、数字和下划线 (_)。无效字符将被自动移除。"
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "使用此平台时，用户需遵守哪些一般条款和条件？"
 

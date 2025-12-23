@@ -13,7 +13,7 @@
       :closable="false"
       severity="warn"
     >
-      {{ t("You should create the \"Term and Conditions\" for all the available languages.") }}
+      {{ t('You should create the "Term and Conditions" for all the available languages.') }}
     </Message>
 
     <BaseTable
@@ -88,7 +88,7 @@ async function fetchLanguageName(languageId) {
 onMounted(async () => {
   isLoading.value = true
   try {
-    const response = await legalService.findAll()
+    const response = await legalService.findAllType0()
     if (response.ok) {
       const data = await response.json()
       terms.value = await Promise.all(

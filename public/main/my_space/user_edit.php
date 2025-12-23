@@ -155,7 +155,7 @@ if ($form->validate()) {
         );
 
         if (!empty($email) && $send_mail) {
-            $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('Your registration on').' '.api_get_setting('siteName');
+            $emailsubject = '['.api_get_setting('site_name').'] '.sprintf(get_lang('Your registration on %s'), api_get_setting('site_name'));
             $portal_url = api_get_path(WEB_PATH);
             if (api_is_multiple_url_enabled()) {
                 $access_url_id = api_get_current_access_url_id();
@@ -167,11 +167,11 @@ if ($form->validate()) {
 
             $emailbody = get_lang('Dear')." ".
                 stripslashes(api_get_person_name($userInfo['firstname'], $userInfo['lastname'])).",\n\n".
-                get_lang('You are registered to')." ".api_get_setting('siteName')." ".
+                get_lang('You are registered to')." ".api_get_setting('site_name')." ".
                 get_lang('with the following settings:')."\n\n".
                 get_lang('Username')." : ".$username."\n".
                 get_lang('Pass')." : ".stripslashes($password)."\n\n".
-                get_lang('The address of')." ".api_get_setting('siteName')." ".
+                get_lang('The address of')." ".api_get_setting('site_name')." ".
                 get_lang('is')." : ".$portal_url."\n\n".
                 get_lang('In case of trouble, contact us.')."\n\n".
                 get_lang('Sincerely').",\n\n".
@@ -180,7 +180,7 @@ if ($form->validate()) {
                     api_get_setting('administratorSurname')
                 )."\n".
                 get_lang('Administrator')." ".
-                api_get_setting('siteName')."\nT. ".
+                api_get_setting('site_name')."\nT. ".
                 api_get_setting('administratorTelephone')."\n".
                 get_lang('E-mail')." : ".api_get_setting('emailAdministrator');
 

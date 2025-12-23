@@ -84,11 +84,12 @@ final class LpXapianIndexer
             $terms[] = 'L'.$lp->getIid();
         }
 
-        // Reuse SearchEngineRef per resource node (same pattern as questions)
+        $resourceNodeRef = $this->em->getReference(ResourceNode::class, (int) $resourceNode->getId());
+
         /** @var SearchEngineRef|null $existingRef */
         $existingRef = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNodeId' => $resourceNode->getId()])
+            ->findOneBy(['resourceNode' => $resourceNodeRef])
         ;
 
         $existingDocId = $existingRef?->getSearchDid();
@@ -111,7 +112,7 @@ final class LpXapianIndexer
             $existingRef->setSearchDid($docId);
         } else {
             $existingRef = new SearchEngineRef();
-            $existingRef->setResourceNodeId((int) $resourceNode->getId());
+            $existingRef->setResourceNode($resourceNodeRef);
             $existingRef->setSearchDid($docId);
             $this->em->persist($existingRef);
         }
@@ -131,10 +132,17 @@ final class LpXapianIndexer
             return;
         }
 
+        $enabled = (string) $this->settingsManager->getSetting('search.search_enabled', true);
+        if ('true' !== $enabled) {
+            return;
+        }
+
+        $resourceNodeRef = $this->em->getReference(ResourceNode::class, (int) $resourceNode->getId());
+
         /** @var SearchEngineRef|null $ref */
         $ref = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNodeId' => $resourceNode->getId()])
+            ->findOneBy(['resourceNode' => $resourceNodeRef])
         ;
 
         if (!$ref) {

@@ -13,9 +13,11 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceType;
+use Chamilo\CoreBundle\Form\TestEmailType;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\MailHelper;
 use Chamilo\CoreBundle\Helpers\QueryCacheHelper;
 use Chamilo\CoreBundle\Helpers\TempUploadHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
@@ -27,13 +29,16 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
+use MessageManager;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
+use UserManager;
 
 #[Route('/admin')]
 class AdminController extends BaseController
@@ -725,6 +730,50 @@ class AdminController extends BaseController
         }
 
         return $this->redirectToRoute('admin_cleanup_temp_uploads', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/email_tester', name: 'admin_email_tester')]
+    public function testEmail(
+        Request $request,
+        MailHelper $mailHelper,
+        TranslatorInterface $translator,
+        SettingsManager $settingsManager,
+        UserHelper $userHelper,
+    ): Response {
+        $errorsInfo = MessageManager::failedSentMailErrors();
+
+        $form = $this->createForm(TestEmailType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            $mailHelper->send(
+                $translator->trans('User testing of e-mail configuration'),
+                $data['destination'],
+                $data['subject'],
+                $data['content'],
+                UserManager::formatUserFullName($userHelper->getCurrent()),
+                $settingsManager->getSetting('mail.mailer_from_email')
+            );
+
+            $this->addFlash(
+                'success',
+                $translator->trans('E-mail sent. This procedure works in all aspects similarly to the normal e-mail sending of Chamilo, but allows for more flexibility in terms of destination e-mail and message body.')
+            );
+
+            return $this->redirectToRoute('admin_email_tester');
+        }
+
+        return $this->render(
+            '@ChamiloCore/Admin/email_tester.html.twig',
+            [
+                'mailer_dsn' => $settingsManager->getSetting('mail.mailer_dsn'),
+                'form' => $form,
+                'errors' => $errorsInfo,
+            ]
+        );
     }
 
     /**

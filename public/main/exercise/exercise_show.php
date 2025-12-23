@@ -1078,8 +1078,11 @@ if ($isFeedbackAllowed) {
 }
 
 if ($isFeedbackAllowed && 'learnpath' !== $origin && 'student_progress' !== $origin) {
+    $formUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&';
+
+    $emailForm = new FormValidator('form-email', 'post', $formUrl, '', ['id' => 'form-email']);
+
     if (in_array($origin, ['tracking_course', 'user_course', 'correct_exercise_in_lp'])) {
-        $formUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&';
         $formUrl .= http_build_query([
             'exerciseId' => $exercise_id,
             'filter' => 2,
@@ -1089,14 +1092,13 @@ if ($isFeedbackAllowed && 'learnpath' !== $origin && 'student_progress' !== $ori
             'details' => 'true',
         ]);
 
-        $emailForm = new FormValidator('form-email', 'post', $formUrl, '', ['id' => 'form-email']);
+        $emailForm->setAttribute('action', $formUrl);
         $emailForm->addHidden('lp_item_id', $learnpath_id);
         $emailForm->addHidden('lp_item_view_id', $lp_item_view_id);
         $emailForm->addHidden('student_id', $student_id);
         $emailForm->addHidden('total_score', $totalScore);
         $emailForm->addHidden('my_exe_exo_id', $exercise_id);
     } else {
-        $formUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&';
         $formUrl .= http_build_query([
             'exerciseId' => $exercise_id,
             'filter' => 1,
@@ -1104,13 +1106,7 @@ if ($isFeedbackAllowed && 'learnpath' !== $origin && 'student_progress' !== $ori
             'exeid' => $id,
         ]);
 
-        $emailForm = new FormValidator(
-            'form-email',
-            'post',
-            $formUrl,
-            '',
-            ['id' => 'form-email']
-        );
+        $emailForm->setAttribute('action', $formUrl);
     }
 
     if (RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS != $objExercise->results_disabled) {

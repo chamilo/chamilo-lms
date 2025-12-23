@@ -20,17 +20,14 @@
       </div>
     </div>
 
-    <!-- Page content; optionally dim/disable when forbidden -->
-    <div :class="{ 'opacity-50 pointer-events-none': !!forbiddenMsg }">
-      <slot />
-      <div
-        id="legacy_content"
-        ref="legacyContainer"
-      />
-      <ConfirmDialog />
-      <AccessUrlChooser v-if="!showAccessUrlChosserLayout" />
-      <DockedChat v-if="showGlobalChat" />
-    </div>
+    <slot />
+    <div
+      id="legacy_content"
+      ref="legacyContainer"
+    />
+    <ConfirmDialog />
+    <AccessUrlChooser v-if="!showAccessUrlChosserLayout" />
+    <DockedChat v-if="showGlobalChat" />
   </component>
 
   <!-- Toasts -->
@@ -96,10 +93,6 @@ const router = useRouter()
 
 // Use global i18n scope and expose a reactive locale for keying the layout
 const { locale } = useI18n({ useScope: "global" })
-const currentLocale = computed(() => locale.value)
-
-const { loader: mejsLoader } = useMediaElementLoader()
-
 const { loadComponent: accessUrlChooserVisible } = useAccessUrlChooser()
 const securityStore = useSecurityStore()
 const notification = useNotification()

@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
 use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUserGroup;
+use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\ORM\NonUniqueResultException;
@@ -98,12 +99,13 @@ class UrlManager
 
         /*
          * $tableCourseCategory = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-        $sql = "DELETE FROM $tableCourseCategory WHERE access_url_id = ".$id;
-        Database::query($sql);
-        */
+         * $sql = "DELETE FROM $tableCourseCategory WHERE access_url_id = ".$id;
+         * Database::query($sql);
+         */
         $em = Container::getEntityManager();
 
         $relEntities = [
+            SettingsCurrent::class,
             AccessUrlRelCourse::class,
             AccessUrlRelSession::class,
             AccessUrlRelUserGroup::class,

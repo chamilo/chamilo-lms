@@ -3015,17 +3015,17 @@ class MySpace
         $addedto = '';
         if ($sendMail) {
             foreach ($users as $index => $user) {
-                $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('Your registration on').' '.api_get_setting('siteName');
+                $emailsubject = '['.api_get_setting('site_name').'] '.sprintf(get_lang('Your registration on %s'), api_get_setting('site_name'));
                 $emailbody = get_lang('Dear').' '.
                     api_get_person_name($user['First name'], $user['Last name']).",\n\n".
-                    get_lang('You are registered to')." ".api_get_setting('siteName')." ".get_lang('with the following settings:')."\n\n".
+                    get_lang('You are registered to')." ".api_get_setting('site_name')." ".get_lang('with the following settings:')."\n\n".
                     get_lang('Username')." : $user[UserName]\n".
                     get_lang('Pass')." : $user[Password]\n\n".
-                    get_lang('The address of')." ".api_get_setting('siteName')." ".get_lang('is')." : ".api_get_path(WEB_PATH)." \n\n".
+                    get_lang('The address of')." ".api_get_setting('site_name')." ".get_lang('is')." : ".api_get_path(WEB_PATH)." \n\n".
                     get_lang('In case of trouble, contact us.')."\n\n".
                     get_lang('Sincerely').",\n\n".
                     api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
-                    get_lang('Administrator')." ".api_get_setting('siteName')."\nT. ".
+                    get_lang('Administrator')." ".api_get_setting('site_name')."\nT. ".
                     api_get_setting('administratorTelephone')."\n".get_lang('E-mail')." : ".api_get_setting('emailAdministrator');
 
                 api_mail_html(

@@ -8,37 +8,35 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * SearchEngineRef.
- */
 #[ORM\Table(name: 'search_engine_ref')]
 #[ORM\Entity]
 class SearchEngineRef
 {
-    #[ORM\Column(name: 'resource_node_id', type: 'integer', nullable: true)]
-    protected ?int $resourceNodeId = null;
+    #[ORM\ManyToOne(targetEntity: ResourceNode::class)]
+    #[ORM\JoinColumn(name: 'resource_node_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
+    private ?ResourceNode $resourceNode = null;
 
     #[ORM\Column(name: 'search_did', type: 'integer', nullable: false)]
-    protected int $searchDid;
+    private int $searchDid;
 
-    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
+    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    protected ?int $id = null;
+    private ?int $id = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getResourceNodeId(): ?int
+    public function getResourceNode(): ?ResourceNode
     {
-        return $this->resourceNodeId;
+        return $this->resourceNode;
     }
 
-    public function setResourceNodeId(?int $resourceNodeId): self
+    public function setResourceNode(?ResourceNode $resourceNode): self
     {
-        $this->resourceNodeId = $resourceNodeId;
+        $this->resourceNode = $resourceNode;
 
         return $this;
     }

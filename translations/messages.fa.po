@@ -4140,10 +4140,10 @@ msgid "works"
 msgstr "کار می کند"
 
 msgid "MySql Client"
-msgstr "MySql Client"
+msgstr "کلاینت MySql"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "سرور MySql"
 
 msgid "Owner"
 msgstr "دارنده"
@@ -10925,8 +10925,8 @@ msgstr "هست"
 msgid "The address of"
 msgstr "آدرس"
 
-msgid "Your registration on"
-msgstr "ثبت نام شما در"
+msgid "Your registration on %s"
+msgstr "ثبت نام شما در %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "  این نام کاربری قبلاً به وسیله فرد دیگری انتخاب شده است. لطفاً با استفاده از دکمۀ بازگشت بر روی مرورگر خود به عقب بازگردید و نام دیگری وارد کنید"
@@ -31433,4 +31433,10 @@ msgstr "خطا در بارگذاری منابع."
 
 msgid "Clear search"
 msgstr "پاک کردن جستجو"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "فقط حروف، ارقام و زیرخط (_) در نام پایگاه داده مجاز است. کاراکترهای نامعتبر به طور خودکار حذف می‌شوند."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "چه شرایط و قوانین کلی به کاربران برای استفاده از این پلتفرم ارائه می‌شود؟"
 

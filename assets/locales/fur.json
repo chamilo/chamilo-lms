@@ -1252,5 +1252,14 @@
     "Recycle selected": "Recycle selected",
     "Recycle is finished": "Recycle is finished",
     "Error loading resources.": "Error loading resources.",
-    "Clear search": "Clear search"
+    "Clear search": "Clear search",
+    "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically.": "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically.",
+    "Question manager": "Question manager",
+    "Questions": "Questions",
+    "Security": "Security",
+    "What general terms and conditions are given to users to use this platform?": "What general terms and conditions are given to users to use this platform?",
+    "ex. {examplePassword}": "ex. {examplePassword}",
+    "Blogs": "Blogs",
+    "Blog": "Blog",
+    "Dropbox": "Dropbox"
 }

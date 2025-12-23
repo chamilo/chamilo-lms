@@ -20,6 +20,9 @@ framework:
     serializer: {enable_attributes: true}
     trusted_proxies: '%env(TRUSTED_PROXIES)%'
     trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port']
+
+    error_controller: 'Chamilo\CoreBundle\Controller\ErrorController::show'
+
     # For legacy code (ending in ".php"), also edit public/main/inc/global.inc.php according to the changes you make here
 
 when@test:

@@ -341,9 +341,17 @@ class Certificate extends Model
                 $params['hide_print_button']
             );
 
-            $score = 100.0;
-            if (is_array($gb) && isset($gb['score'])) {
-                $score = (float)$gb['score'];
+            $score = null;
+            if (is_array($gb) && isset($gb['score']) && $gb['score'] !== '' && $gb['score'] !== null) {
+                $score = (float) $gb['score'];
+            }
+
+            if (null === $score && isset($this->certificate_data['score_certificate']) && $this->certificate_data['score_certificate'] !== '') {
+                $score = (float) $this->certificate_data['score_certificate'];
+            }
+
+            if (null === $score) {
+                $score = 100.0;
             }
 
             $html   = '';

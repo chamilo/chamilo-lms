@@ -10921,7 +10921,7 @@ msgstr ""
 msgid "The address of"
 msgstr ""
 
-msgid "Your registration on"
+msgid "Your registration on %s"
 msgstr ""
 
 msgid "This login is already taken. Use your browser's back button and choose another."
@@ -31372,4 +31372,16 @@ msgid "Error loading resources."
 msgstr ""
 
 msgid "Clear search"
+msgstr ""
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr ""
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr ""
+
+msgid "ex. {examplePassword}"
+msgstr ""
+
+msgid "Welcome to Chamilo!"
 msgstr ""

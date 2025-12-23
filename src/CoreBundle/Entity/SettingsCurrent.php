@@ -58,7 +58,7 @@ class SettingsCurrent
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'access_url_changeable', type: 'integer', nullable: false)]
-    protected int $accessUrlChangeable;
+    private int $accessUrlChangeable = 0;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'access_url_locked', type: 'integer', nullable: false, options: ['default' => 0])]

@@ -175,7 +175,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
                         // Children inside this folder in this context
                         $qb
                             ->andWhere('rl.parent = :parentLink')
-                            ->setParameter('parentLink', $parentLink)
+                            ->setParameter('parentLink', $parentLink->getId())
                         ;
                     }
                 } else {

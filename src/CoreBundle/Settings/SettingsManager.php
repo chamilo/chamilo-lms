@@ -1673,7 +1673,7 @@ class SettingsManager implements SettingsManagerInterface
         $qb
             ->where('s.url = :url')
             ->andWhere('s.category IN (:cats)')
-            ->setParameter('url', $mainUrl)
+            ->setParameter('url', $mainUrl->getId())
             ->setParameter('cats', $categories)
         ;
 

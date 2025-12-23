@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
+use Throwable;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -34,7 +35,7 @@ class ErrorController
      */
     public function show(
         Request $request,
-        \Throwable $exception,
+        Throwable $exception,
         ?DebugLoggerInterface $logger = null,
     ): Response {
         $statusCode = 500;
@@ -43,7 +44,7 @@ class ErrorController
             $statusCode = $exception->getStatusCode();
         }
 
-        if (in_array($this->environment, ['dev', 'test'])) {
+        if (\in_array($this->environment, ['dev', 'test'])) {
             $exception = $this->errorRenderer->render($exception);
 
             $content = $exception->getAsString();

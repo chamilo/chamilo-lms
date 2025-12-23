@@ -690,7 +690,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $modeRaw = (string) $settingsManager->getSetting('glossary.show_glossary_in_extra_tools', true);
         $mode = strtolower(trim($modeRaw));
 
-        if (in_array($mode, ['', 'none', 'false', '0'], true)) {
+        if (\in_array($mode, ['', 'none', 'false', '0'], true)) {
             return $content;
         }
 
@@ -704,7 +704,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         // Only inject for LP when the mode allows it
         if ($isLpContext) {
-            if (!in_array($mode, ['true', 'lp', 'exercise_and_lp'], true)) {
+            if (!\in_array($mode, ['true', 'lp', 'exercise_and_lp'], true)) {
                 return $content;
             }
         } else {

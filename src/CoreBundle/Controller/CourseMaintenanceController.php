@@ -4016,13 +4016,13 @@ class CourseMaintenanceController extends AbstractController
         // Use the strictest PHP limit (min of upload_max_filesize and post_max_size).
         $limits = [];
 
-        $u = ini_get('upload_max_filesize');
-        if (is_string($u)) {
+        $u = \ini_get('upload_max_filesize');
+        if (\is_string($u)) {
             $limits[] = self::iniSizeToBytes($u);
         }
 
-        $p = ini_get('post_max_size');
-        if (is_string($p)) {
+        $p = \ini_get('post_max_size');
+        if (\is_string($p)) {
             $limits[] = self::iniSizeToBytes($p);
         }
 
@@ -4036,10 +4036,10 @@ class CourseMaintenanceController extends AbstractController
     {
         // Parses values like "2G", "512M", "900K", "1048576".
         $val = trim($val);
-        if ($val === '') {
+        if ('' === $val) {
             return 0;
         }
-        if ($val === '0') {
+        if ('0' === $val) {
             return 0; // "no limit" for upload/post.
         }
 
@@ -4053,15 +4053,19 @@ class CourseMaintenanceController extends AbstractController
         switch ($unit) {
             case 't':
                 $num *= 1024;
-            // no break
+
+                // no break
             case 'g':
                 $num *= 1024;
-            // no break
+
+                // no break
             case 'm':
                 $num *= 1024;
-            // no break
+
+                // no break
             case 'k':
                 $num *= 1024;
+
                 break;
         }
 

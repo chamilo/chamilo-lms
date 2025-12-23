@@ -912,7 +912,7 @@ final class CDocumentRepository extends ResourceRepository
 
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = <<<SQL
+        $sql = <<<'SQL'
 SELECT
     rf.id        AS file_id,
     rf.size      AS file_size,
@@ -968,11 +968,13 @@ SQL;
         foreach ($fileSizes as $fileId => $size) {
             if (($hasGroup[$fileId] ?? false) === true) {
                 $bytesGroups += $size;
+
                 continue;
             }
 
             if (($hasSession[$fileId] ?? false) === true) {
                 $bytesSessions += $size;
+
                 continue;
             }
 

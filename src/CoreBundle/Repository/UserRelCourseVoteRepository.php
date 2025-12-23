@@ -28,8 +28,8 @@ class UserRelCourseVoteRepository extends ServiceEntityRepository
     /**
      * Retrieves the average vote and the count of votes for a specific course.
      *
-     * @return array The first element of the array is the average vote (rounded to 2 decimal places),
-     *               and the second element is the count of votes.
+     * @return array the first element of the array is the average vote (rounded to 2 decimal places),
+     *               and the second element is the count of votes
      */
     public function getCouseRating(Course $course, ?Session $session = null): array
     {
@@ -38,13 +38,13 @@ class UserRelCourseVoteRepository extends ServiceEntityRepository
         $qb
             ->select([
                 $qb->expr()->avg('v.vote'),
-                $qb->expr()->count('v.id')
+                $qb->expr()->count('v.id'),
             ])
             ->where($qb->expr()->eq('v.course', ':course'))
             ->setParameter('course', $course->getId(), ParameterType::INTEGER)
         ;
 
-        if ($session !== null) {
+        if (null !== $session) {
             $qb
                 ->andWhere($qb->expr()->eq('v.session', ':session'))
                 ->setParameter('session', $session->getId(), ParameterType::INTEGER)
@@ -57,14 +57,15 @@ class UserRelCourseVoteRepository extends ServiceEntityRepository
             $result = $qb
                 ->setMaxResults(1)
                 ->getQuery()
-                ->getSingleResult();
-        } catch (NoResultException|NonUniqueResultException) {
+                ->getSingleResult()
+            ;
+        } catch (NonUniqueResultException|NoResultException) {
             $result = [1 => 0, 2 => 0];
         }
 
         return [
             'average' => round((float) $result[1], 2),
-            'count' => $result[2]
+            'count' => $result[2],
         ];
     }
 }

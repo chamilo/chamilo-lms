@@ -14,6 +14,8 @@ use Chamilo\CoreBundle\Search\SearchEngineFieldSynchronizer;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use InvalidArgumentException;
+use ReflectionMethod;
+use ReflectionNamedType;
 use Sylius\Bundle\SettingsBundle\Manager\SettingsManagerInterface;
 use Sylius\Bundle\SettingsBundle\Model\Settings;
 use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
@@ -25,6 +27,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Exception\ValidatorException;
 
 use const ARRAY_FILTER_USE_KEY;
+use const PHP_URL_HOST;
 
 /**
  * Handles the platform settings.
@@ -183,6 +186,7 @@ class SettingsManager implements SettingsManagerInterface
             }
 
             error_log("Attempted to access undefined setting '$variable' in category '$category'.");
+
             return null;
         }
 
@@ -509,7 +513,8 @@ class SettingsManager implements SettingsManagerInterface
 
         $qb = $this->repository->createQueryBuilder('s')
             ->where('s.variable LIKE :keyword OR s.title LIKE :keyword')
-            ->setParameter('keyword', "%{$keyword}%");
+            ->setParameter('keyword', "%{$keyword}%")
+        ;
 
         // MultiURL: when on a sub-URL, include both current + main URL rows.
         if (null !== $this->url && !$this->isMainUrlContext()) {
@@ -517,16 +522,19 @@ class SettingsManager implements SettingsManagerInterface
             if ($mainUrl) {
                 $qb
                     ->andWhere('s.url IN (:urls)')
-                    ->setParameter('urls', [$this->url, $mainUrl]);
+                    ->setParameter('urls', [$this->url, $mainUrl])
+                ;
             } else {
                 $qb
                     ->andWhere('s.url = :url')
-                    ->setParameter('url', $this->url);
+                    ->setParameter('url', $this->url)
+                ;
             }
         } elseif (null !== $this->url) {
             $qb
                 ->andWhere('s.url = :url')
-                ->setParameter('url', $this->url);
+                ->setParameter('url', $this->url)
+            ;
         }
 
         $parametersFromDb = $qb->getQuery()->getResult();
@@ -583,7 +591,8 @@ class SettingsManager implements SettingsManagerInterface
                         ->where('s.category = :cat')
                         ->andWhere('s.url IN (:urls)')
                         ->setParameter('cat', $namespace)
-                        ->setParameter('urls', [$this->url, $mainUrl]);
+                        ->setParameter('urls', [$this->url, $mainUrl])
+                    ;
 
                     $parametersFromDb = $qb->getQuery()->getResult();
                 } else {
@@ -601,20 +610,24 @@ class SettingsManager implements SettingsManagerInterface
                 ->where('s.variable LIKE :keyword')
                 ->andWhere('s.category = :cat')
                 ->setParameter('keyword', "%{$keyword}%")
-                ->setParameter('cat', $namespace);
+                ->setParameter('cat', $namespace)
+            ;
 
             if (null !== $this->url && !$this->isMainUrlContext()) {
                 $mainUrl = $this->getMainUrlEntity();
                 if ($mainUrl) {
                     $qb->andWhere('s.url IN (:urls)')
-                        ->setParameter('urls', [$this->url, $mainUrl]);
+                        ->setParameter('urls', [$this->url, $mainUrl])
+                    ;
                 } else {
                     $qb->andWhere('s.url = :url')
-                        ->setParameter('url', $this->url);
+                        ->setParameter('url', $this->url)
+                    ;
                 }
             } elseif (null !== $this->url) {
                 $qb->andWhere('s.url = :url')
-                    ->setParameter('url', $this->url);
+                    ->setParameter('url', $this->url)
+                ;
             }
 
             $parametersFromDb = $qb->getQuery()->getResult();
@@ -1475,6 +1488,7 @@ class SettingsManager implements SettingsManagerInterface
                 $found = $repo->findOneBy(['url' => $candidate]);
                 if ($found instanceof AccessUrl) {
                     $this->url = $found;
+
                     return;
                 }
             }
@@ -1492,6 +1506,7 @@ class SettingsManager implements SettingsManagerInterface
 
                 if (null !== $dbHost && strtolower($dbHost) === strtolower($host)) {
                     $this->url = $u;
+
                     return;
                 }
             }
@@ -1501,6 +1516,7 @@ class SettingsManager implements SettingsManagerInterface
         $main = $repo->find(1);
         if ($main instanceof AccessUrl) {
             $this->url = $main;
+
             return;
         }
 
@@ -1630,6 +1646,7 @@ class SettingsManager implements SettingsManagerInterface
                 } elseif (isset($currentRowByVar[$var])) {
                     $byVar[$var] = $currentRowByVar[$var];
                 }
+
                 continue;
             }
 
@@ -1640,6 +1657,7 @@ class SettingsManager implements SettingsManagerInterface
                 } elseif (isset($currentRowByVar[$var])) {
                     $byVar[$var] = $currentRowByVar[$var];
                 }
+
                 continue;
             }
 
@@ -1693,7 +1711,7 @@ class SettingsManager implements SettingsManagerInterface
      * Keep the row metadata consistent across URLs.
      * - Sync title/comment/type/scope/subkey/subkeytext/value_template_id from canonical row when available
      * - Never overwrite existing metadata if canonical is missing (prevents "title reset to variable")
-     * - Sync access_url_changeable + access_url_locked from canonical row when available
+     * - Sync access_url_changeable + access_url_locked from canonical row when available.
      */
     private function syncSettingMetadataFromCanonical(
         SettingsCurrent $setting,
@@ -1783,7 +1801,7 @@ class SettingsManager implements SettingsManagerInterface
             return;
         }
 
-        $ref = new \ReflectionMethod($target, $setter);
+        $ref = new ReflectionMethod($target, $setter);
         $param = $ref->getParameters()[0] ?? null;
 
         if (null === $param) {
@@ -1793,12 +1811,13 @@ class SettingsManager implements SettingsManagerInterface
         $type = $param->getType();
         $allowsNull = true;
 
-        if ($type instanceof \ReflectionNamedType) {
+        if ($type instanceof ReflectionNamedType) {
             $allowsNull = $type->allowsNull();
         }
 
         if (null === $value && !$allowsNull) {
             $target->{$setter}('');
+
             return;
         }
 

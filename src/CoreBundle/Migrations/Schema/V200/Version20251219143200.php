@@ -30,12 +30,13 @@ final class Version20251219143200 extends AbstractMigrationChamilo
         $template = null;
         foreach ($templatesGrouped as $category => $list) {
             foreach ($list as $tpl) {
-                if (!is_array($tpl)) {
+                if (!\is_array($tpl)) {
                     continue;
                 }
 
                 if (($tpl['variable'] ?? null) === $targetVariable) {
                     $template = $tpl;
+
                     break 2;
                 }
             }
@@ -48,14 +49,14 @@ final class Version20251219143200 extends AbstractMigrationChamilo
         }
 
         $jsonExampleRaw = $template['json_example'] ?? null;
-        if (!is_array($jsonExampleRaw) && !is_string($jsonExampleRaw)) {
+        if (!\is_array($jsonExampleRaw) && !\is_string($jsonExampleRaw)) {
             $this->write("Template '{$targetVariable}' has no usable json_example payload. No changes applied.");
 
             return;
         }
 
         // Store JSON example as a string in DB.
-        $jsonExample = is_string($jsonExampleRaw)
+        $jsonExample = \is_string($jsonExampleRaw)
             ? $jsonExampleRaw
             : (string) json_encode($jsonExampleRaw, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 

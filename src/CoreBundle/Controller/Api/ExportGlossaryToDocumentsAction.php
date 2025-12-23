@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
@@ -11,11 +12,14 @@ use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Mpdf\Mpdf;
+use PDF;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 
 final class ExportGlossaryToDocumentsAction
 {
@@ -32,7 +36,7 @@ final class ExportGlossaryToDocumentsAction
 
         // The frontend may send resourceLinkList as a JSON string or as an array.
         $resourceLinkListRaw = $data['resourceLinkList'] ?? [];
-        if (is_string($resourceLinkListRaw)) {
+        if (\is_string($resourceLinkListRaw)) {
             $resourceLinkListRaw = json_decode($resourceLinkListRaw, true) ?: [];
         }
 
@@ -106,19 +110,18 @@ final class ExportGlossaryToDocumentsAction
     }
 
     /**
-     * @param mixed $links
      * @return array<int, array{cid:int,sid:int,gid:int,visibility:int}>
      */
     private function normalizeResourceLinks(mixed $links): array
     {
-        if (!is_array($links)) {
+        if (!\is_array($links)) {
             return [];
         }
 
         $normalized = [];
 
         foreach ($links as $link) {
-            if (!is_array($link)) {
+            if (!\is_array($link)) {
                 continue;
             }
 
@@ -143,7 +146,7 @@ final class ExportGlossaryToDocumentsAction
         $pdfFileName = 'glossary_'.$date.'_'.$suffix.'.pdf';
         $pdfFilePath = rtrim($exportPath, '/').'/'.$pdfFileName;
 
-        $mpdf = new \PDF();
+        $mpdf = new PDF();
 
         $html = '<h1>'.$translator->trans('Glossary').'</h1>';
         $html .= '<table border="1" cellpadding="6" cellspacing="0" width="100%">';

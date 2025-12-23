@@ -27,8 +27,10 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 use const DIRECTORY_SEPARATOR;
+use const SORT_REGULAR;
 
 #[Route('/admin')]
 class SettingsController extends BaseController
@@ -176,7 +178,7 @@ class SettingsController extends BaseController
                 'status' => $status,
                 'updated_rows' => $updated,
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->json([
                 'error' => 'Unable to update setting.',
                 'details' => $e->getMessage(),
@@ -244,7 +246,8 @@ class SettingsController extends BaseController
             ->andWhere('u.id = :mainId')
             ->setParameter('mainId', 1)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
 
         foreach ($mainUrlRows as $row) {
             if ($row instanceof SettingsCurrent) {
@@ -383,7 +386,8 @@ class SettingsController extends BaseController
             ->andWhere('u.id = :mainId')
             ->setParameter('mainId', 1)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
 
         foreach ($mainUrlRows as $row) {
             if ($row instanceof SettingsCurrent) {

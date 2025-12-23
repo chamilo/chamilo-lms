@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource]
@@ -108,12 +109,7 @@ class Legal
     public static function assertValidType(int $type): void
     {
         if (!self::isValidType($type)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Invalid legal type "%d". Allowed range is %d..%d.',
-                $type,
-                self::MIN_TYPE,
-                self::MAX_TYPE
-            ));
+            throw new InvalidArgumentException(\sprintf('Invalid legal type "%d". Allowed range is %d..%d.', $type, self::MIN_TYPE, self::MAX_TYPE));
         }
     }
 

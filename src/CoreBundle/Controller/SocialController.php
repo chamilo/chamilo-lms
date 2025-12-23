@@ -1284,7 +1284,7 @@ class SocialController extends AbstractController
         }
 
         $platformIso = (string) $settingsManager->getSetting('language.platform_language');
-        if ($platformIso !== '') {
+        if ('' !== $platformIso) {
             $platformLang = $languageRepo->findByIsoCode($platformIso);
             if ($platformLang) {
                 $candidates[] = (int) $platformLang->getId();

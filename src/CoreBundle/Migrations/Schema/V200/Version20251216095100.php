@@ -19,7 +19,7 @@ final class Version20251216095100 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         // Ensure the FK can be created (remove orphan references).
-        $this->addSql("
+        $this->addSql('
             UPDATE search_engine_ref ser
             SET resource_node_id = NULL
             WHERE ser.resource_node_id IS NOT NULL
@@ -28,19 +28,19 @@ final class Version20251216095100 extends AbstractMigrationChamilo
                   FROM resource_node rn
                   WHERE rn.id = ser.resource_node_id
               )
-        ");
+        ');
 
         // Add index for faster joins and stable naming.
         $this->addSql('CREATE INDEX IDX_473F03781BAD783F ON search_engine_ref (resource_node_id)');
 
         // Add FK constraint.
-        $this->addSql("
+        $this->addSql('
             ALTER TABLE search_engine_ref
             ADD CONSTRAINT FK_473F03781BAD783F
             FOREIGN KEY (resource_node_id)
             REFERENCES resource_node (id)
             ON DELETE CASCADE
-        ");
+        ');
     }
 
     public function down(Schema $schema): void

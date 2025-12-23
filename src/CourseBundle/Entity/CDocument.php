@@ -221,7 +221,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('ROLE_USER')",
             read: false,
             name: 'api_documents_usage'
-        )
+        ),
     ],
     normalizationContext: [
         'groups' => ['document:read', 'resource_node:read'],

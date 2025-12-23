@@ -142,7 +142,7 @@ class LanguageRepository extends ServiceEntityRepository
 
         try {
             return $qb->getQuery()->getSingleResult();
-        } catch (NoResultException|NonUniqueResultException) {
+        } catch (NonUniqueResultException|NoResultException) {
             return null;
         }
     }

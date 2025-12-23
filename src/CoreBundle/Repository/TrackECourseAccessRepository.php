@@ -155,8 +155,9 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
             $result = $qb
                 ->setMaxResults(1)
                 ->getQuery()
-                ->getSingleScalarResult();
-        } catch (NoResultException|NonUniqueResultException) {
+                ->getSingleScalarResult()
+            ;
+        } catch (NonUniqueResultException|NoResultException) {
             $result = 0;
         }
 

@@ -99,7 +99,7 @@ final class DocumentUsageAction extends AbstractController
         $size = (float) max($bytes, 0);
         $i = 0;
 
-        $max = count($units) - 1;
+        $max = \count($units) - 1;
         while ($size >= 1024 && $i < $max) {
             $size /= 1024;
             $i++;

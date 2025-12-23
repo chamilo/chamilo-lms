@@ -11,11 +11,13 @@ use Chamilo\CoreBundle\Repository\LegalRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use ExtraField;
 use ExtraFieldValue;
-use LegalManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Throwable;
+
+use const JSON_UNESCAPED_UNICODE;
 
 #[Route('/legal')]
 class LegalController
@@ -36,17 +38,16 @@ class LegalController
         $changes = (string) ($data['changes'] ?? '');
         $sections = $data['sections'] ?? null;
 
-        if (!is_array($sections)) {
+        if (!\is_array($sections)) {
             return new JsonResponse(['message' => 'Missing sections payload'], Response::HTTP_BAD_REQUEST);
         }
 
         // Normalize & hash incoming payload (idempotency).
         $normalize = static function ($v): string {
-            $s = is_string($v) ? $v : '';
+            $s = \is_string($v) ? $v : '';
             $s = str_replace(["\r\n", "\r"], "\n", $s);
-            $s = trim($s);
 
-            return $s;
+            return trim($s);
         };
 
         $incoming = [];
@@ -113,7 +114,7 @@ class LegalController
                 $legal->setType($type);
                 $legal->setDate($timestamp);
                 $legal->setChanges($changes);
-                $legal->setContent($content === '' ? null : $content);
+                $legal->setContent('' === $content ? null : $content);
 
                 $entityManager->persist($legal);
             }
@@ -125,8 +126,9 @@ class LegalController
                 'message' => 'Terms saved successfully',
                 'version' => $newVersion,
             ], Response::HTTP_OK);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $conn->rollBack();
+
             throw $e;
         }
     }

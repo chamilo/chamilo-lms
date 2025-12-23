@@ -94,7 +94,8 @@ class SessionRepository extends ServiceEntityRepository
             ->innerJoin('s.courses', 'src')
             ->where($qb->expr()->eq('src.course', ':course'))
             ->setParameter('course', $course)
-            ->getQuery()->getResult();
+            ->getQuery()->getResult()
+        ;
     }
 
     /**

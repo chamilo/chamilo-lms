@@ -30,6 +30,7 @@ use UserManager;
 
 use const ENT_HTML5;
 use const ENT_QUOTES;
+use const PATHINFO_EXTENSION;
 use const PHP_ROUND_HALF_UP;
 use const PHP_SAPI;
 use const PHP_URL_PATH;
@@ -499,7 +500,7 @@ class ChamiloHelper
 
         if (!$termPreview) {
             $defaultIso = (string) api_get_setting('language.platform_language');
-            if ($defaultIso === '' || $defaultIso === 'false') {
+            if ('' === $defaultIso || 'false' === $defaultIso) {
                 $defaultIso = (string) api_get_setting('platformLanguage');
             }
 
@@ -515,7 +516,7 @@ class ChamiloHelper
         }
 
         $version = (int) ($termPreview['version'] ?? 0);
-        $langId  = (int) ($termPreview['language_id'] ?? $languageId);
+        $langId = (int) ($termPreview['language_id'] ?? $languageId);
 
         // Track acceptance context
         $form->addElement('hidden', 'legal_accept_type', $version.':'.$langId);
@@ -535,7 +536,7 @@ class ChamiloHelper
             ]
         );
 
-        if (!is_array($rows) || empty($rows)) {
+        if (!\is_array($rows) || empty($rows)) {
             return;
         }
 
@@ -543,13 +544,13 @@ class ChamiloHelper
 
         foreach ($rows as $row) {
             $content = trim((string) ($row['content'] ?? ''));
-            if ($content === '') {
+            if ('' === $content) {
                 continue;
             }
 
             // Optional title support if available in the table/schema
             $title = trim((string) ($row['title'] ?? ($row['name'] ?? '')));
-            if ($title !== '') {
+            if ('' !== $title) {
                 $fullHtml .= '<div class="mt-4">';
                 $fullHtml .= '<h4 class="text-base font-semibold text-gray-90">'.htmlspecialchars($title, ENT_QUOTES | ENT_HTML5).'</h4>';
                 $fullHtml .= '<div class="mt-1 text-sm text-gray-90">'.$content.'</div>';
@@ -559,7 +560,7 @@ class ChamiloHelper
             }
         }
 
-        if (trim(strip_tags($fullHtml)) === '') {
+        if ('' === trim(strip_tags($fullHtml))) {
             // Nothing meaningful to show
             return;
         }
@@ -907,7 +908,7 @@ class ChamiloHelper
             $rel = $toRel($fullUrl); // e.g. "document/img.png"
             // Do not auto-create HTML files here (they are handled by the main import loop).
             $ext = strtolower(pathinfo($rel, PATHINFO_EXTENSION));
-            if (in_array($ext, ['html', 'htm'], true)) {
+            if (\in_array($ext, ['html', 'htm'], true)) {
                 continue;
             }
             if (!str_starts_with($rel, 'document/')) {
@@ -921,7 +922,7 @@ class ChamiloHelper
             $byBase[$basename] = $byBase[$basename] ?? null;
 
             // Convert "document/..." (package rel) to destination rel "/..."
-            $dstRel = '/'.ltrim(substr($rel, strlen('document/')), '/'); // e.g. "/Videos/img.png"
+            $dstRel = '/'.ltrim(substr($rel, \strlen('document/')), '/'); // e.g. "/Videos/img.png"
             $depTitle = basename($dstRel);
             $depAbs = rtrim($srcRoot, '/').'/'.$rel;
 

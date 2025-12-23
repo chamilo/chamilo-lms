@@ -66,6 +66,10 @@ services:
         tags:
             - {name: kernel.event_listener, event: kernel.exception}
 
+    Chamilo\CoreBundle\EventListener\ScimExceptionListener:
+        tags:
+            - {name: kernel.event_listener, event: kernel.exception}
+
     # Entity listeners
     Chamilo\CoreBundle\Entity\Listener\ResourceListener:
         tags:

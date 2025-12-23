@@ -393,6 +393,7 @@ if (isset($_POST['step2'])) {
             '{{PACKAGER}}' => 'chamilo',
             '{{DEFAULT_TEMPLATE}}' => 'default',
             '{{ADMIN_CHAMILO_ANNOUNCEMENTS_DISABLE}}' => '0',
+            '{{SCIM_TOKEN}}' => bin2hex(random_bytes(64)),
         ];
         error_log('Update env file');
         updateEnvFile($distFile, $envFile, $params);
@@ -612,6 +613,7 @@ if (isset($_POST['step2'])) {
             '{{PACKAGER}}' => 'chamilo',
             '{{DEFAULT_TEMPLATE}}' => 'default',
             '{{ADMIN_CHAMILO_ANNOUNCEMENTS_DISABLE}}' => '0',
+            '{{SCIM_TOKEN}}' => bin2hex(random_bytes(64)),
         ];
 
         updateEnvFile($distFile, $envFile, $params);

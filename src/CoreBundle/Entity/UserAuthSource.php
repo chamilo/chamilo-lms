@@ -20,6 +20,7 @@ class UserAuthSource
     public const FACEBOOK = 'facebook';
     public const KEYCLOAK = 'keycloak';
     public const OAUTH2 = 'oauth2';
+    public const SCIM = 'scim';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

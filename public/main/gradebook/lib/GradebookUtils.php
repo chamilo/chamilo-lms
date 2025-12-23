@@ -627,27 +627,14 @@ class GradebookUtils
         $score_certificate,
         $date_certificate
     ) {
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $cat_id = (int) $cat_id;
-        $user_id = (int) $user_id;
+        $repository = Container::getGradeBookCertificateRepository();
 
-        $sql = "SELECT COUNT(id) as count
-                FROM $table gc
-                WHERE gc.cat_id = $cat_id AND user_id = $user_id ";
-        $rs_exist = Database::query($sql);
-        $row = Database::fetch_array($rs_exist);
-        if (0 == $row['count']) {
-            if ($cat_id === 0) {
-                $cat_id = Null;
-            }
-            $params = [
-                'cat_id' => $cat_id,
-                'user_id' => $user_id,
-                'score_certificate' => $score_certificate,
-                'created_at' => $date_certificate,
-            ];
-            Database::insert($table, $params);
-        }
+        $repository->registerUserInfoAboutCertificate(
+            (int) $cat_id,
+            (int) $user_id,
+            (float) api_float_val($score_certificate),
+            ''
+        );
     }
 
     /**

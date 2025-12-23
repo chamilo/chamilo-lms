@@ -23,7 +23,7 @@ Feature: Attendance tool
     Then I should see "The attendance sheets allow you to specify a list of dates"
 
   Scenario: Update
-    Given I am on "/main/attendance/index.php?cid=1  &action=attendance_edit&attendance_id=1"
+    Given I am on "/main/attendance/index.php?cid=1&action=attendance_edit&attendance_id=1"
     And I wait for the page to be loaded
     Then I should see "Edit"
     And I wait for the page to be loaded

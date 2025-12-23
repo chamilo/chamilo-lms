@@ -58,7 +58,18 @@ Feature: Users management as admin
     And wait very long for the page to be loaded
     Then I should see "The email address is not complete or contains some invalid characters"
 
-  Scenario: Search and delete a user
+
+  Scenario: Search a user
+    Given I am on "/main/admin/user_list.php"
+    And wait the page to be loaded when ready
+    And I fill in "keyword" with "smarshall"
+    And I press "submit"
+    And wait for the page to be loaded
+    Then I should see "Sammy"
+    And I should see "Marshall"
+
+
+  Scenario: Delete a user
     Given I am on "/main/admin/user_list.php?keyword=smarshall"
     And wait very long for the page to be loaded
     And I click the "i.mdi-delete" element

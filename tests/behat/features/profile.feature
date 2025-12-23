@@ -24,4 +24,10 @@ Feature: Profile page
       | profile_lastname  | Costea |
     And I press "update_profile"
     And wait for the page to be loaded
-    Then I should not see an error
+    And I press "Edit profile"
+    And wait for the page to be loaded
+    Then I should see "Andrew"
+    And I should see "Doe"
+    And I should not see an error
+
+

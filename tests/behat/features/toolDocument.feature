@@ -2,11 +2,6 @@ Feature: Document tool
   In order to use the document tool
   The teachers should be able to create and upload files
 
-  Background:
-    Given I am a platform administrator
-    And I am on course "TEMP" homepage
-
-
   Scenario: Create a folder
     Given I am a platform administrator
     And I am on course "TEMP" homepage

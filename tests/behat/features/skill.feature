@@ -8,7 +8,7 @@ Feature: Skills
     And I am on "main/skills/skill_create.php"
     And wait very long for the page to be loaded
     When I fill in the following:
-      | Name | skill1 |
+      | title | skill1 |
       | short_code | s1 |
       | description | description |
       | criteria | criteria |
@@ -21,7 +21,7 @@ Feature: Skills
     And I am on "main/skills/skill_create.php"
     And wait very long for the page to be loaded
     When I fill in the following:
-      | Name | skill11 |
+      | title | skill11 |
       | short_code | s11 |
       | description | description 11 |
       | criteria | criteria 11 |
@@ -35,7 +35,7 @@ Feature: Skills
     And I am on "main/skills/skill_create.php"
     And wait very long for the page to be loaded
     When I fill in the following:
-      | Name | skilldis |
+      | title | skilldis |
       | short_code | sdis |
       | description | description |
       | criteria | criteria |
@@ -83,7 +83,7 @@ Feature: Skills
     Then I follow "Edit"
     And wait very long for the page to be loaded
     When I fill in the following:
-      | Name | skill1 Edited |
+      | title | skill1 Edited |
       | description | description Edited |
     And I press "submit"
     And wait for the page to be loaded

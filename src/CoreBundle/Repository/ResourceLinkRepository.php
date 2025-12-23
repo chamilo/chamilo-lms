@@ -285,7 +285,7 @@ class ResourceLinkRepository extends SortableRepository
         if (null !== $session) {
             $qb
                 ->andWhere('rl.session = :session')
-                ->setParameter('session', $session)
+                ->setParameter('session', $session->getId())
             ;
         } else {
             $qb->andWhere('rl.session IS NULL');
@@ -295,7 +295,7 @@ class ResourceLinkRepository extends SortableRepository
         if (null !== $group) {
             $qb
                 ->andWhere('rl.group = :group')
-                ->setParameter('group', $group)
+                ->setParameter('group', $group->getIid())
             ;
         } else {
             $qb->andWhere('rl.group IS NULL');
@@ -304,7 +304,7 @@ class ResourceLinkRepository extends SortableRepository
         if (null !== $usergroup) {
             $qb
                 ->andWhere('rl.userGroup = :usergroup')
-                ->setParameter('usergroup', $usergroup)
+                ->setParameter('usergroup', $usergroup->getId())
             ;
         } else {
             $qb->andWhere('rl.userGroup IS NULL');
@@ -314,7 +314,7 @@ class ResourceLinkRepository extends SortableRepository
         if (null !== $user) {
             $qb
                 ->andWhere('rl.user = :user')
-                ->setParameter('user', $user)
+                ->setParameter('user', $user->getId())
             ;
         } else {
             $qb->andWhere('rl.user IS NULL');

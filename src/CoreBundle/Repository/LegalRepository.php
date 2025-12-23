@@ -249,6 +249,7 @@ class LegalRepository extends ServiceEntityRepository
             ])
             ->orderBy('l.type', 'ASC')
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 }

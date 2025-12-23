@@ -14,6 +14,7 @@ Feature: Link tool
     And I fill in editor field "description" with "Category description"
     And I press "submitCategory"
     And wait for the page to be loaded
+    Then I should see "Category 1"
     Then I should not see an error
 
   Scenario: Create a link
@@ -24,7 +25,8 @@ Feature: Link tool
       | title | Chamilo |
     And I press "submitLink"
     And wait for the page to be loaded
-    Then I should not see an error
+    Then I should see "Chamilo"
+    And I should not see an error
 
 #  Scenario: Create a link with category
 #    Given I am on "/main/link/link.php?action=addlink&cid=1"
@@ -38,7 +40,7 @@ Feature: Link tool
   Scenario: Delete link
     Given I am on "/main/link/link.php?cid=1"
     And I wait for the page to be loaded
-    And I follow "Delete"
+    And I click the "i.mdi-delete" element
     And I confirm the popup
     And wait very long for the page to be loaded
     Then I should not see an error
@@ -47,5 +49,6 @@ Feature: Link tool
     Given I am on "/main/link/link.php?cid=1"
     And I wait for the page to be loaded
     And I click the "i.mdi-delete" element
+    And I confirm the popup
     And wait very long for the page to be loaded
     Then I should not see an error

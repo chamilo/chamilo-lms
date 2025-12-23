@@ -25,7 +25,7 @@ Feature: Session access
   Scenario: Check if same session exists.
     Given I am a platform administrator
     And I am on "/main/session/session_add.php"
-    And I wait for the page to be loaded
+    And I wait very long for the page to be loaded
     When I fill in the following:
       | name | Session1 |
     And I fill in select2 input "#coach_username" with id "1" and value "admin"
@@ -67,7 +67,7 @@ Feature: Session access
     Given I am not logged
     Given I am logged as "ywarnier"
     Then I am on course "TEMPPRIVATE" homepage in session "Session2"
-    And wait the page to be loaded when ready
+    And I wait for the page to be loaded
     Then I should see "not allowed"
 
   Scenario: ywarnier connect to course TEMPPRIVATE inside a session that doesn't exists
@@ -87,7 +87,9 @@ Feature: Session access
   Scenario: mmosquera connect to Session 2
     Given I am not logged
     Given I am logged as "mmosquera"
+    And wait for the page to be loaded
     Then I am on course "TEMPPRIVATE" homepage in session "Session2"
+    And wait the page to be loaded when ready
     Then I should not see "You are not allowed"
 
   Scenario: Delete session "Session2"

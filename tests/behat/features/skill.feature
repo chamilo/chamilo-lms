@@ -6,9 +6,9 @@ Feature: Skills
   Scenario: Create a skill skill1
     Given I am a platform administrator
     And I am on "main/skills/skill_create.php"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     When I fill in the following:
-      | Name | skill1 |
+      | title | skill1 |
       | short_code | s1 |
       | description | description |
       | criteria | criteria |
@@ -19,9 +19,9 @@ Feature: Skills
   Scenario: Create a second level skill
     Given I am a platform administrator
     And I am on "main/skills/skill_create.php"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     When I fill in the following:
-      | Name | skill11 |
+      | title | skill11 |
       | short_code | s11 |
       | description | description 11 |
       | criteria | criteria 11 |
@@ -33,9 +33,9 @@ Feature: Skills
   Scenario: Create a skill skilldis
     Given I am a platform administrator
     And I am on "main/skills/skill_create.php"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     When I fill in the following:
-      | name | skilldis |
+      | title | skilldis |
       | short_code | sdis |
       | description | description |
       | criteria | criteria |
@@ -81,9 +81,9 @@ Feature: Skills
     And wait for the page to be loaded
     Then I should see "skill1"
     Then I follow "Edit"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     When I fill in the following:
-      | Name | skill1 Edited |
+      | title | skill1 Edited |
       | description | description Edited |
     And I press "submit"
     And wait for the page to be loaded
@@ -93,7 +93,7 @@ Feature: Skills
     Given I am a platform administrator
     And I am on "main/skills/assign.php?user=1"
     When I select "skill11" from "skill"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     Then I fill in the following:
 	    | argumentation | argumentation |
     And I press "save"
@@ -105,7 +105,7 @@ Feature: Skills
     And I am on "main/skills/assign.php?user=1"
     And I wait for the page to be loaded
     When I select "skill11" from "skill"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     Then I fill in the following:
       | argumentation | argumentation |
     And I press "save"

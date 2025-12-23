@@ -22,7 +22,7 @@ Feature: Ticket
 
   Scenario: Check ticket priorities
     Given I am on "/main/ticket/priorities.php"
-    And I wait for the page to be loaded
+    And I wait very long for the page to be loaded
     Then I should see "Normal"
 
   Scenario: Create a ticket

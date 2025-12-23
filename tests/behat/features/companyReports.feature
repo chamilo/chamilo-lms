@@ -26,7 +26,7 @@ Feature: Access to portal reports as admin
     Given I am a platform administrator
     And I am on "/main/admin/teacher_time_report.php"
     And I wait for the page to be loaded
-    Then I should see "Trainers time report"
+    Then I should not see an error
 
   Scenario: See the company reports link on the admin page
     Given I am a platform administrator

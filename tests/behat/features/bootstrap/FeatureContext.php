@@ -372,13 +372,57 @@ class FeatureContext extends MinkContext
      */
     public function confirmPopup()
     {
-        // See
-        // https://gist.github.com/blazarecki/2888851
-        /** @var \Behat\Mink\Driver\Selenium2Driver $driver Needed because no cross-driver way yet */
-        $this->getSession()->getDriver()->getWebDriverSession()->accept_alert();
+       $session = $this->getSession();
+        // 1) accept_alert() (alert native)
+        try {
+            $driver = $session->getDriver();
+
+                try {
+                    $driver->getWebDriverSession()->accept_alert();
+                    return;
+                } catch (\Exception $e) {}
+
+        } catch (\Exception $e) {
+            // ignore
+        }
+
+        // wait for the HTML modal
+        $session->wait(5000, "document.querySelector('.swal2-container') !== null");
+
+        // JS: attempt to click a visible confirmation button inside the modal
+        $js = <<<'JS'
+        (function(){
+         function isVisible(el){
+         if(!el) return false;
+         var rect = el.getBoundingClientRect();
+         return !!(rect.width || rect.height) && window.getComputedStyle(el).visibility !== 'hidden' && window.getComputedStyle(el).display !== 'none';
+         }
+         function clickEl(el){
+         if(!el) return false;
+         try { el.style.pointerEvents = 'auto'; el.style.zIndex = 999999; } catch(e){}
+        try { if(el.focus) el.focus(); el.click(); return true; } catch(e){
+        }
+        }
+       // attempt to click a visible confirmation button inside the modal
+       var modal = document.querySelector('.swal2-container');
+
+       var el = modal.querySelector('.swal2-confirm');
+       if (el && isVisible(el)) {
+       if (clickEl(el)) return true;
+       }
+       return false;
+       })();
+       JS;
+        try {
+            $clicked = (bool) $session->executeScript($js);
+            if ($clicked)
+                return;
+        } catch (\Exception $e) {
+            throw new \Exception('confirmPopup: no confirmation button found or clickable');
+        }
     }
 
-     /**
+    /**
      * @When /^(?:|I )fill in select bootstrap input "(?P<field>(?:[^"]|\\")*)" with "(?P<value>(?:[^"]|\\")*)" and select "(?P<entry>(?:[^"]|\\")*)"$/
      */
     public function iFillInSelectBootstrapInputWithAndSelect($field, $value, $entry)

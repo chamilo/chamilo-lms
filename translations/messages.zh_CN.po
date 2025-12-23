@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":是:有版权,, 否:无版权"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:文件夹,, application/msword:MsWord,, application/octet-stream:八位字节流,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":练习:练习,, 模拟:模拟,, 问卷:问卷,, 图表:图表,, 图:图,, 图:图,, 索引:索引,, 幻灯:幻灯,, 表:表,, 描述文本:描述文本,, 考试:考试,, 实验:实验,, 问题声明:问题声明,, 自我评价:自我评价,, 演讲:演讲"
@@ -10925,8 +10925,8 @@ msgstr "是"
 msgid "The address of"
 msgstr "地址"
 
-msgid "Your registration on"
-msgstr "您的注册信息"
+msgid "Your registration on %s"
+msgstr "您的注册信息 %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "用户名已经存在, 点击浏览器的退回按纽重新选择用户名。"
@@ -22088,7 +22088,7 @@ msgstr "带文本字段的选择"
 msgid "Triple select"
 msgstr "三重选择"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "您确认要订阅此平台。"
 
 msgid "Add text"
@@ -22148,14 +22148,11 @@ msgstr "注册确认"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "您的帐户处于非活动状态，因为您尚未确认。请检查您的电子邮件并按照指示操作，或点击以下链接重新发送电子邮件"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "要完成平台注册，您需要点击以下链接确认您的帐户"
 
 msgid "Confirmation for new account"
 msgstr "新帐户确认"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "您需要通过电子邮件确认帐户才能访问平台"
 
 msgid "Enable Cloud files link addition"
 msgstr "启用云文件链接添加"
@@ -24992,9 +24989,6 @@ msgstr "导出所有测试的所有结果"
 msgid "Click to view details"
 msgstr "点击查看详情"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "此报告适用于用户的所有平台活动。"
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27551,7 +27545,7 @@ msgstr "平台使用条件"
 msgid "Password too easy to guess"
 msgstr "密码太容易猜测"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "您需要通过电子邮件确认账户才能访问平台"
 
 msgid "Redirect to portal home"
@@ -30526,13 +30520,13 @@ msgid "ex. root"
 msgstr "例如：root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "创建表 works"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "修改表 works"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "删除列 works"
 
 msgid "Theme selected as current"
 msgstr "主题已选为当前"
@@ -31202,4 +31196,247 @@ msgstr "管理员重启课程"
 
 msgid "Admin Dashboard"
 msgstr "管理员仪表板"
+
+msgid "Threads"
+msgstr "主题"
+
+msgid "Invalid thread"
+msgstr "无效主题"
+
+msgid "View full thread"
+msgstr "查看完整主题"
+
+msgid "No post yet"
+msgstr "暂无帖子"
+
+msgid "Discussion thread"
+msgstr "讨论主题"
+
+msgid "Access to this course"
+msgstr "访问此课程"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "此插件无可配置设置。激活从插件列表管理。"
+
+msgid "Private - access granted by privileged users"
+msgstr "私有 - 由特权用户授予访问权限"
+
+msgid "No detailed feedback is available for this question."
+msgstr "此问题无详细反馈可用。"
+
+msgid "Please select an answer before checking the result."
+msgstr "请先选择答案再检查结果。"
+
+msgid "Allow PDF export for this item"
+msgstr "允许此项目导出 PDF"
+
+msgid "Hide free users (not enrolled)"
+msgstr "隐藏免费用户（未注册）"
+
+msgid "Question statistics"
+msgstr "问题统计"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "生成文件中。请勿关闭此标签页..."
+
+msgid "Assign auth source to users"
+msgstr "为用户分配认证源"
+
+msgid "There are no questions for this survey"
+msgstr "此调查无问题"
+
+msgid "Certificates report"
+msgstr "证书报告"
+
+msgid "Course picture"
+msgstr "课程图片"
+
+msgid "Current picture"
+msgstr "当前图片"
+
+msgid "Course events log"
+msgstr "课程事件日志"
+
+msgid "Update the category information and its optional time limit."
+msgstr "更新类别信息及其可选时间限制。"
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "创建会话逻辑组以保持培训目录有序。"
+
+msgid "Generating file, do not close this tab"
+msgstr "生成文件中，请勿关闭此标签页"
+
+msgid "Assign authentication sources to users"
+msgstr "为用户分配认证源"
+
+msgid "Average completion rate"
+msgstr "平均完成率"
+
+msgid "Average access rate"
+msgstr "平均访问率"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "此表总结当前课程中每个学习路径的学习者进度和活动。"
+
+msgid "Follow up"
+msgstr "跟进"
+
+msgid "Tracking for superior"
+msgstr "上级跟踪"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "此报告显示选定日期范围内各总教练的会话周分布。"
+
+msgid "Head manager report"
+msgstr "首席经理报告"
+
+msgid "Reset or update user password"
+msgstr "重置或更新用户密码"
+
+msgid "Active users"
+msgstr "活跃用户"
+
+msgid "Inactive users"
+msgstr "非活跃用户"
+
+msgid "Report on resources"
+msgstr "资源报告"
+
+msgid "Global view"
+msgstr "全局视图"
+
+msgid "Available reports"
+msgstr "可用报告"
+
+msgid "Current report"
+msgstr "当前报告"
+
+msgid "Back to user assignment page"
+msgstr "返回用户分配页面"
+
+msgid "Authentication sources assigned successfully"
+msgstr "认证源分配成功"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "提示：选择“— 仅上传 —”以存储而不发送给任何人。"
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "请选择至少一个收件人（“— 仅上传 —”或任何用户）"
+
+msgid "Sharing"
+msgstr "分享"
+
+msgid "Selected files"
+msgstr "已选文件"
+
+msgid "Hide password"
+msgstr "隐藏密码"
+
+msgid "Show password"
+msgstr "显示密码"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "上传电子邮件SVG标志"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "删除前必须将此类别中的所有学习路径移动或移除。"
+
+msgid "Clear filters"
+msgstr "清除筛选"
+
+msgid "Attendances (tablet)"
+msgstr "出勤（平板）"
+
+msgid "Exit tablet mode"
+msgstr "退出平板模式"
+
+msgid "No members found."
+msgstr "未找到成员。"
+
+msgid "Health check"
+msgstr "健康检查"
+
+msgid "Export to CC 1.3"
+msgstr "导出为CC 1.3"
+
+msgid "Loading resources..."
+msgstr "正在加载资源..."
+
+msgid "Failed to load resources."
+msgstr "加载资源失败。"
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "请选择至少一个可导出资源（文档、网络链接、讨论等）。"
+
+msgid "Export finished."
+msgstr "导出完成。"
+
+msgid "Export failed."
+msgstr "导出失败。"
+
+msgid "Import failed."
+msgstr "导入失败。"
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "本地文件（.zip, .mbz, .tgz, .gz）"
+
+msgid "Ready to import"
+msgstr "准备导入"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "我们将恢复此课程的备份。您可以返回更改选项。"
+
+msgid "Select resources to import"
+msgstr "选择要导入的资源"
+
+msgid "No resources available in this backup."
+msgstr "此备份中没有可用资源。"
+
+msgid "Import selection"
+msgstr "导入选择"
+
+msgid "Import completed"
+msgstr "导入完成"
+
+msgid "Could not load options."
+msgstr "无法加载选项。"
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "请选择备份文件（.zip, .mbz, .tgz, .gz）"
+
+msgid "Please choose a backup from the server"
+msgstr "请选择服务器上的备份"
+
+msgid "Error selecting source."
+msgstr "选择源出错。"
+
+msgid "Recycling options"
+msgstr "回收选项"
+
+msgid "Type the course code to confirm"
+msgstr "输入课程代码以确认"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "这将移除或重置选定资源。此操作不可撤销。"
+
+msgid "Select resources to recycle"
+msgstr "选择要回收的资源"
+
+msgid "No resources available in this course."
+msgstr "此课程中没有可用资源。"
+
+msgid "Recycle selected"
+msgstr "回收选定资源"
+
+msgid "Error loading resources."
+msgstr "加载资源出错。"
+
+msgid "Clear search"
+msgstr "清除搜索"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "数据库名称仅允许使用字母、数字和下划线 (_)。无效字符将被自动移除。"
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "使用此平台时，用户需遵守哪些一般条款和条件？"
 

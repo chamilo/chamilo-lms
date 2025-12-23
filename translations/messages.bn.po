@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "সূত্রের নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "সূত্র নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -2008,19 +2008,19 @@ msgid "Format"
 msgstr "ফরম্যাট"
 
 msgid ":draft:draft,,      final:final,,      revised:revised,,      unavailable:unavailable"
-msgstr ":draft:draft,,      final:final,,      revised:revised,,      unavailable:unavailable"
+msgstr ":খসড়া:খসড়া,,      চূড়ান্ত:চূড়ান্ত,,      সংশোধিত:সংশোধিত,,      অনুপলব্ধ:অনুপলব্ধ"
 
 msgid ":no:free, no cost,, yes:not free, cost"
-msgstr ":no:free, no cost,, yes:not free, cost"
+msgstr ":না:বিনামূল্যে, কোন খরচ নেই,, হ্যাঁ:বিনামূল্যে নয়, খরচ আছে"
 
 msgid ":yes:copyright,, no:no copyright"
-msgstr ":yes:copyright,, no:no copyright"
+msgstr ":হ্যাঁ:কপিরাইট,, না:কপিরাইট নেই"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:ফোল্ডার,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
-msgstr ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
+msgstr ":ব্যায়াম:ব্যায়াম,,      সিমুলেশন:সিমুলেশন,,      প্রশ্নপত্র:প্রশ্নপত্র,,      ডায়াগ্রাম:ডায়াগ্রাম,,      চিত্র:চিত্র,,      গ্রাফ:গ্রাফ,,      সূচিপত্র:সূচিপত্র,,      স্লাইড:স্লাইড,,      টেবিল:টেবিল,,      বর্ণনামূলক পাঠ্য:বর্ণনামূলক পাঠ্য,,      পরীক্ষা:পরীক্ষা,,      পরীক্ষণ:পরীক্ষণ,,      সমস্যার বিবৃতি:সমস্যার বিবৃতি,,      স্ব-মূল্যায়ন:স্ব-মূল্যায়ন,,      বক্তৃতা:বক্তৃতা"
 
 msgid "Please select a backup option"
 msgstr "দয়া করে একটি ব্যাকআপ অপশন নির্বাচন করুন"
@@ -8623,13 +8623,13 @@ msgid "."
 msgstr "."
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%d %b, %Y"
 
 msgid "%A %B %d, %Y"
-msgstr "%A %B %d, %Y"
+msgstr "%A %d %B, %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
-msgstr "%B %d, %Y at %I:%M %p"
+msgstr "%d %B, %Y সকাল/বিকেল %I:%M"
 
 msgid "%I:%M %p"
 msgstr "%I:%M %p"
@@ -9460,7 +9460,7 @@ msgid "Not yet begun"
 msgstr "এখনও শুরু হয়নি"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d %B, %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "অবৈধ ফোল্ডার: দয়া করে আপনার ডকুমেন্টস টুলে images নামে একটি ফোল্ডার তৈরি করুন যাতে ছবিগুলো এই ফোল্ডারে আপলোড করা যায়"
@@ -10920,8 +10920,8 @@ msgstr "হল"
 msgid "The address of"
 msgstr "ঠিকানা"
 
-msgid "Your registration on"
-msgstr "আপনার নিবন্ধন"
+msgid "Your registration on %s"
+msgstr "আপনার নিবন্ধন %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "এই লগইনটি ইতিমধ্যে নেওয়া হয়েছে। ব্রাউজারের ব্যাক বোতাম ব্যবহার করে অন্যটি বেছে নিন।"
@@ -18589,7 +18589,7 @@ msgid "%m/%d/%Y"
 msgstr "%m/%d/%Y"
 
 msgid "%B %d, %Y at %H:%M"
-msgstr "%B %d, %Y at %H:%M"
+msgstr "%d %B, %Y সকাল/বিকেল %H:%M"
 
 msgid "Enable legal terms"
 msgstr "আইনি শর্তাবলী সক্রিয় করুন"
@@ -18955,10 +18955,10 @@ msgid "Sent at: %s"
 msgstr "পাঠানো হয়েছে: %s"
 
 msgid "%b %d, %Y at %I:%M %p"
-msgstr "%b %d, %Y at %I:%M %p"
+msgstr "%d %b, %Y সকাল/বিকেল %I:%M"
 
 msgid "%I:%M %p, %b %d %Y"
-msgstr "%I:%M %p, %b %d %Y"
+msgstr "%I:%M %p, %d %b %Y"
 
 msgid "Login to vote"
 msgstr "ভোটদান করতে লগইন করুন"
@@ -20530,7 +20530,7 @@ msgid "Input size of box to fill"
 msgstr "ভর্তি করার বক্সের সাইজ"
 
 msgid "MM dd, yy"
-msgstr "MM dd, yy"
+msgstr "dd MM, yy"
 
 msgid "HH:mm"
 msgstr "HH:mm"
@@ -22083,7 +22083,7 @@ msgstr "টেক্সট ফিল্ড সহ নির্বাচন ক�
 msgid "Triple select"
 msgstr "ট্রিপল সিলেক্ট"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "আপনি নিশ্চিত করছেন যে আপনি সত্যিই এই প্ল্যাটফর্মে সাবস্ক্রাইব করতে চান।"
 
 msgid "Add text"
@@ -22143,14 +22143,11 @@ msgstr "নিবন্ধন নিশ্চিতকরণ"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "আপনার অ্যাকাউন্ট নিষ্ক্রিয় কারণ আপনি এখনও এটি নিশ্চিত করেননি। আপনার ইমেইল চেক করুন এবং নির্দেশনা অনুসরণ করুন অথবা ইমেইল পুনরায় পাঠানোর জন্য নিম্নলিখিত লিঙ্কে ক্লিক করুন"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "আপনার প্ল্যাটফর্ম নিবন্ধন সম্পূর্ণ করতে নিম্নলিখিত লিঙ্কে ক্লিক করে আপনার অ্যাকাউন্ট নিশ্চিত করতে হবে"
 
 msgid "Confirmation for new account"
 msgstr "নতুন অ্যাকাউন্টের জন্য নিশ্চিতকরণ"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "প্ল্যাটফর্মে প্রবেশ করতে আপনাকে ইমেইলের মাধ্যমে আপনার অ্যাকাউন্ট নিশ্চিত করতে হবে"
 
 msgid "Enable Cloud files link addition"
 msgstr "ক্লাউড ফাইল লিঙ্ক যোগ সক্ষম করুন"
@@ -24987,9 +24984,6 @@ msgstr "সমস্ত পরীক্ষার সমস্ত ফলাফল
 msgid "Click to view details"
 msgstr "বিস্তারিত দেখতে ক্লিক করুন"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "এই রিপোর্টটি ব্যবহারকারীর সমস্ত প্ল্যাটফর্ম কার্যক্রমের উপর প্রযোজ্য।"
-
 msgid "dd/mm/yyyy"
 msgstr "দিন/মাস/বছর"
 
@@ -26857,13 +26851,13 @@ msgid "Check password strength"
 msgstr "পাসওয়ার্ড শক্তি পরীক্ষা করুন"
 
 msgid "HTTP Strict Transport Security"
-msgstr "HTTP Strict Transport Security"
+msgstr "HTTP কঠোর পরিবহন নিরাপত্তা"
 
 msgid "HTTP Strict Transport Security is an excellent feature to support on your site and strengthens your implementation of TLS by getting the User Agent to enforce the use of HTTPS. Recommended value: 'strict-transport-security: max-age=63072000; includeSubDomains'. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. You can include the 'preload' suffix, but this has consequences on the top level domain (TLD), so probably not to be done lightly. See https://hstspreload.org/. Leave blank to disable."
 msgstr "HTTP Strict Transport Security আপনার সাইটে সমর্থনের জন্য চমৎকার বৈশিষ্ট্য এবং TLS বাস্তবায়নকে শক্তিশালী করে User Agent-কে HTTPS ব্যবহার জোর করে। প্রস্তাবিত মান: 'strict-transport-security: max-age=63072000; includeSubDomains'। দেখুন https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security। আপনি 'preload' সাফিক্স অন্তর্ভুক্ত করতে পারেন, কিন্তু এর টপ লেভেল ডোমেইন (TLD)-এ পরিণতি রয়েছে, তাই সম্ভবত হালকাভাবে করবেন না। দেখুন https://hstspreload.org/। নিষ্ক্রিয় করতে খালি রাখুন।"
 
 msgid "Content Security Policy"
-msgstr "Content Security Policy"
+msgstr "কন্টেন্ট নিরাপত্তা নীতি"
 
 msgid "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the 'script-src' argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
 msgstr "Content Security Policy আপনার সাইটকে XSS আক্রমণ থেকে রক্ষা করার কার্যকর ব্যবস্থা। অনুমোদিত কনটেন্টের উৎস হোয়াইটলিস্ট করে, আপনি ব্রাউজারকে ক্ষতিকর অ্যাসেট লোড করতে বাধা দিতে পারেন। WYSIWYG এডিটরের সাথে এটি সেট করা বিশেষভাবে জটিল, কিন্তু যদি আপনি child-src বিবৃতিতে iframe অন্তর্ভুক্তির জন্য অনুমোদিত সকল ডোমেইন যোগ করেন, তাহলে এই উদাহরণ আপনার জন্য কাজ করবে। 'script-src' আর্গুমেন্টে কঠোর তালিকা ব্যবহার করে বাহ্যিক উৎস থেকে (SVG ইমেজের ভিতর সহ) JavaScript এক্সিকিউট হওয়া বন্ধ করতে পারেন। নিষ্ক্রিয় করতে খালি রাখুন। উদাহরণ সেটিং: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
@@ -26875,7 +26869,7 @@ msgid "This setting allows you to experiment by reporting but not enforcing some
 msgstr "এই সেটিং আপনাকে Content Security Policy কিছু রিপোর্ট করে কিন্তু জোর করে না প্রয়োগ করে পরীক্ষা করতে দেয়।"
 
 msgid "HTTP Public Key Pinning"
-msgstr "HTTP Public Key Pinning"
+msgstr "HTTP সর্বজনীন কী পিনিং"
 
 msgid "HTTP Public Key Pinning protects your site from MiTM attacks using rogue X.509 certificates. By whitelisting only the identities that the browser should trust, your users are protected in the event a certificate authority is compromised."
 msgstr "HTTP Public Key Pinning আপনার সাইটকে দুশ্মন X.509 সার্টিফিকেট ব্যবহার করে MiTM আক্রমণ থেকে রক্ষা করে। শুধুমাত্র ব্রাউজারের বিশ্বাস করা পরিচয়গুলো হোয়াইটলিস্ট করে, আপনার ব্যবহারকারীরা সার্টিফিকেট কর্তৃপক্ষ আপস করলে সুরক্ষিত থাকে।"
@@ -26905,7 +26899,7 @@ msgid "X-Content-Type-Options stops a browser from trying to MIME-sniff the cont
 msgstr "X-Content-Type-Options ব্রাউজারকে কনটেন্ট টাইপ MIME-স্নিফ করার চেষ্টা বন্ধ করে এবং ঘোষিত কনটেন্ট-টাইপের সাথে আটকে থাকতে জোর করে। এই হেডারের একমাত্র বৈধ মান 'nosniff'।"
 
 msgid "Security Referrer Policy"
-msgstr "Security Referrer Policy"
+msgstr "নিরাপত্তা রেফারার নীতি"
 
 msgid "Referrer Policy is a new header that allows a site to control how much information the browser includes with navigation away from a document and should be set by all sites."
 msgstr "Referrer Policy একটি নতুন হেডার যা একটি সাইটকে নিয়ন্ত্রণ করতে দেয় ব্রাউজার ডকুমেন্ট থেকে নেভিগেশনের সময় কত তথ্য অন্তর্ভুক্ত করে এবং সকল সাইট দ্বারা সেট করা উচিত।"
@@ -27546,7 +27540,7 @@ msgstr "প্ল্যাটফর্ম ব্যবহারের শর্�
 msgid "Password too easy to guess"
 msgstr "পাসওয়ার্ড অনুমান করা খুব সহজ"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "প্ল্যাটফর্মে প্রবেশ করতে ইমেইলের মাধ্যমে আপনার অ্যাকাউন্ট নিশ্চিত করতে হবে"
 
 msgid "Redirect to portal home"
@@ -30520,13 +30514,13 @@ msgid "ex. root"
 msgstr "যেমন root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "টেবিল তৈরি করুন কাজ"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "টেবিল পরিবর্তন করুন কাজ"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "কলাম মুছে ফেলুন কাজ"
 
 msgid "Theme selected as current"
 msgstr "থিমটি বর্তমান হিসেবে নির্বাচিত"
@@ -31196,4 +31190,247 @@ msgstr "প্রশাসকের পুনরায় শুরু কোর
 
 msgid "Admin Dashboard"
 msgstr "প্রশাসক ড্যাশবোর্ড"
+
+msgid "Threads"
+msgstr "থ্রেড"
+
+msgid "Invalid thread"
+msgstr "অবৈধ থ্রেড"
+
+msgid "View full thread"
+msgstr "পূর্ণ থ্রেড দেখুন"
+
+msgid "No post yet"
+msgstr "এখনও কোন পোস্ট নেই"
+
+msgid "Discussion thread"
+msgstr "আলোচনা থ্রেড"
+
+msgid "Access to this course"
+msgstr "এই কোর্সে প্রবেশাধিকার"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "এই প্লাগইনের কোন কনফিগারেবল সেটিংস নেই। সক্রিয়করণ প্লাগইন তালিকা থেকে পরিচালিত হয়।"
+
+msgid "Private - access granted by privileged users"
+msgstr "ব্যক্তিগত - বিশেষাধিকারী ব্যবহারকারীদের দ্বারা প্রবেশাধিকার প্রদান করা হয়"
+
+msgid "No detailed feedback is available for this question."
+msgstr "এই প্রশ্নের জন্য বিস্তারিত প্রতিক্রিয়া উপলব্ধ নয়।"
+
+msgid "Please select an answer before checking the result."
+msgstr "ফলাফল চেক করার আগে একটি উত্তর নির্বাচন করুন।"
+
+msgid "Allow PDF export for this item"
+msgstr "এই আইটেমের জন্য PDF রপ্তানি অনুমোদন করুন"
+
+msgid "Hide free users (not enrolled)"
+msgstr "বিনামূল্যের ব্যবহারকারীদের লুকান (ভর্তি নয়)"
+
+msgid "Question statistics"
+msgstr "প্রশ্ন পরিসংখ্যান"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "ফাইল তৈরি হচ্ছে। এই ট্যাব বন্ধ করবেন না..."
+
+msgid "Assign auth source to users"
+msgstr "ব্যবহারকারীদের অথেনটিকেশন উৎস বরাদ্দ করুন"
+
+msgid "There are no questions for this survey"
+msgstr "এই জরিপের জন্য কোন প্রশ্ন নেই"
+
+msgid "Certificates report"
+msgstr "সার্টিফিকেট রিপোর্ট"
+
+msgid "Course picture"
+msgstr "কোর্সের ছবি"
+
+msgid "Current picture"
+msgstr "বর্তমান ছবি"
+
+msgid "Course events log"
+msgstr "কোর্স ইভেন্ট লগ"
+
+msgid "Update the category information and its optional time limit."
+msgstr "ক্যাটাগরির তথ্য এবং তার ঐচ্ছিক সময়সীমা আপডেট করুন।"
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "আপনার প্রশিক্ষণ ক্যাটালগ সংগঠিত রাখার জন্য সেশনের একটি লজিক্যাল গ্রুপ তৈরি করুন।"
+
+msgid "Generating file, do not close this tab"
+msgstr "ফাইল তৈরি হচ্ছে, এই ট্যাব বন্ধ করবেন না"
+
+msgid "Assign authentication sources to users"
+msgstr "ব্যবহারকারীদের অথেনটিকেশন উৎস বরাদ্দ করুন"
+
+msgid "Average completion rate"
+msgstr "গড় সম্পন্ন হার"
+
+msgid "Average access rate"
+msgstr "গড় প্রবেশ হার"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "এই টেবিলটি আপনার বর্তমান কোর্সের প্রতিটি শেখার পথে শিক্ষার্থীর অগ্রগতি এবং কার্যকলাপের সারাংশ প্রদান করে।"
+
+msgid "Follow up"
+msgstr "অনুসরণ করুন"
+
+msgid "Tracking for superior"
+msgstr "উর্ধ্বতনের জন্য ট্র্যাকিং"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "এই রিপোর্টটি নির্বাচিত তারিখের পরিসরে সাধারণ কোচ প্রতি সেশনের সাপ্তাহিক বিতরণ দেখায়।"
+
+msgid "Head manager report"
+msgstr "প্রধান ব্যবস্থাপক রিপোর্ট"
+
+msgid "Reset or update user password"
+msgstr "ব্যবহারকারীর পাসওয়ার্ড রিসেট বা আপডেট করুন"
+
+msgid "Active users"
+msgstr "সক্রিয় ব্যবহারকারী"
+
+msgid "Inactive users"
+msgstr "নিষ্ক্রিয় ব্যবহারকারী"
+
+msgid "Report on resources"
+msgstr "সম্পদের রিপোর্ট"
+
+msgid "Global view"
+msgstr "সামগ্রিক দৃশ্য"
+
+msgid "Available reports"
+msgstr "উপলব্ধ রিপোর্ট"
+
+msgid "Current report"
+msgstr "বর্তমান রিপোর্ট"
+
+msgid "Back to user assignment page"
+msgstr "ব্যবহারকারী নিয়োগ পৃষ্ঠায় ফিরুন"
+
+msgid "Authentication sources assigned successfully"
+msgstr "প্রমাণীকরণ উৎসগুলি সফলভাবে নিয়োগ করা হয়েছে"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "পরামর্শ: “— শুধু আপলোড করুন —” নির্বাচন করুন কাউকে না পাঠিয়ে সংরক্ষণ করতে।"
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "অন্তত একজন প্রাপক নির্বাচন করুন (“— শুধু আপলোড করুন —” বা যেকোনো ব্যবহারকারী)"
+
+msgid "Sharing"
+msgstr "শেয়ারিং"
+
+msgid "Selected files"
+msgstr "নির্বাচিত ফাইল"
+
+msgid "Hide password"
+msgstr "পাসওয়ার্ড লুকান"
+
+msgid "Show password"
+msgstr "পাসওয়ার্ড দেখান"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "ইমেইলের জন্য SVG লোগো আপলোড করুন"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "এটি মুছে ফেলার আগে এই বিভাগ থেকে সকল শেখার পথ সরিয়ে নিন বা সরান।"
+
+msgid "Clear filters"
+msgstr "ফিল্টার পরিষ্কার করুন"
+
+msgid "Attendances (tablet)"
+msgstr "উপস্থিতি (ট্যাবলেট)"
+
+msgid "Exit tablet mode"
+msgstr "ট্যাবলেট মোড থেকে বেরিয়ে আসুন"
+
+msgid "No members found."
+msgstr "কোনো সদস্য পাওয়া যায়নি।"
+
+msgid "Health check"
+msgstr "স্বাস্থ্য পরীক্ষা"
+
+msgid "Export to CC 1.3"
+msgstr "CC 1.3-এ রপ্তানি করুন"
+
+msgid "Loading resources..."
+msgstr "সম্পদ লোড হচ্ছে..."
+
+msgid "Failed to load resources."
+msgstr "সম্পদ লোড করতে ব্যর্থ।"
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "অন্তত একটি রপ্তানীয় সম্পদ নির্বাচন করুন (ডকুমেন্ট, ওয়েব লিঙ্ক, আলোচনা,...)।"
+
+msgid "Export finished."
+msgstr "রপ্তানি সম্পন্ন।"
+
+msgid "Export failed."
+msgstr "রপ্তানি ব্যর্থ।"
+
+msgid "Import failed."
+msgstr "আমদানি ব্যর্থ।"
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "স্থানীয় ফাইল (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "আমদানির জন্য প্রস্তুত"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "আমরা এই কোর্সে ব্যাকআপ পুনরুদ্ধার করব। আপনি অপশন পরিবর্তন করতে পিছনে যেতে পারেন।"
+
+msgid "Select resources to import"
+msgstr "আমদানি করার জন্য সম্পদ নির্বাচন করুন"
+
+msgid "No resources available in this backup."
+msgstr "এই ব্যাকআপে কোনো সম্পদ উপলব্ধ নেই।"
+
+msgid "Import selection"
+msgstr "আমদানি নির্বাচন"
+
+msgid "Import completed"
+msgstr "আমদানি সম্পন্ন"
+
+msgid "Could not load options."
+msgstr "অপশন লোড করতে পারেনি।"
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "একটি ব্যাকআপ ফাইল নির্বাচন করুন (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "সার্ভার থেকে একটি ব্যাকআপ নির্বাচন করুন"
+
+msgid "Error selecting source."
+msgstr "উৎস নির্বাচন করতে ত্রুটি।"
+
+msgid "Recycling options"
+msgstr "পুনর্ব্যবহার অপশন"
+
+msgid "Type the course code to confirm"
+msgstr "নিশ্চিত করতে কোর্স কোড টাইপ করুন"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "এটি নির্বাচিত সম্পদগুলি সরাবে বা রিসেট করবে। এই ক্রিয়াটি পূর্বাবস্থায় ফিরিয়ে আনা যাবে না।"
+
+msgid "Select resources to recycle"
+msgstr "পুনর্ব্যবহারের জন্য সম্পদ নির্বাচন করুন"
+
+msgid "No resources available in this course."
+msgstr "এই কোর্সে কোনো সম্পদ উপলব্ধ নেই।"
+
+msgid "Recycle selected"
+msgstr "নির্বাচিত পুনর্ব্যবহার করুন"
+
+msgid "Error loading resources."
+msgstr "সম্পদ লোড করতে ত্রুটি।"
+
+msgid "Clear search"
+msgstr "অনুসন্ধান পরিষ্কার করুন"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "ডাটাবেসের নামে শুধুমাত্র অক্ষর, সংখ্যা এবং আন্ডারস্কোর (_) অনুমোদিত। অবৈধ অক্ষর স্বয়ংক্রিয়ভাবে সরিয়ে ফেলা হবে।"
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "ব্যবহারকারীদের এই প্ল্যাটফর্ম ব্যবহারের জন্য কী সাধারণ শর্তাবলী দেওয়া হয়েছে?"
 

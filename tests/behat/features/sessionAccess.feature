@@ -22,7 +22,6 @@ Feature: Session access
     Then I should see "Session1"
     Then I should see "TEMPPRIVATE"
     Then I should see "fapple"
-
   Scenario: Check if same session exists.
     Given I am a platform administrator
     And I am on "/main/session/session_add.php"

@@ -10930,7 +10930,7 @@ msgid "has been added. An e-mail has been sent to give him his login"
 msgstr "が追加されました。ログイン情報を記したメールが送信されました"
 
 msgid "The user"
-msgstr "The user"
+msgstr "ユーザー"
 
 msgid "has registered you to this course"
 msgstr "has registered you on this course"
@@ -10989,8 +10989,8 @@ msgstr "は"
 msgid "The address of"
 msgstr "アドレス::"
 
-msgid "Your registration on"
-msgstr "判峡されました:"
+msgid "Your registration on %s"
+msgstr "判峡されました %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "このユ〖ザ叹はすでに、戮の客がつかっています。ボタンで提って、侍の叹涟で判峡してください。"
@@ -13711,13 +13711,13 @@ msgid "Show all images in their original size. No resizing is done. Scrollbars w
 msgstr "すべての画像を元のサイズで表示。リサイズは行われません。画像がモニターサイズより大きい場合、スクロールバーが自動的に表示されます。"
 
 msgid "Show Thumbnails"
-msgstr "Show Thumbnails"
+msgstr "サムネイルを表示"
 
 msgid "Gallery settings"
 msgstr "Set Slideshow Options"
 
 msgid "Slideshow Options"
-msgstr "Slideshow Options"
+msgstr "スライドショーのオプション"
 
 msgid "NO RESIZING"
 msgstr "NO RESIZING (default)"
@@ -13732,7 +13732,7 @@ msgid "Published end date"
 msgstr "公開終了日"
 
 msgid "View Slideshow"
-msgstr "View Slideshow"
+msgstr "スライドショーを表示"
 
 msgid "My tasks"
 msgstr "タスク"
@@ -13984,10 +13984,10 @@ msgid "Learning paths"
 msgstr "学習パス"
 
 msgid "level up"
-msgstr "level up"
+msgstr "レベルアップ"
 
 msgid "main category"
-msgstr "main category"
+msgstr "メインカテゴリ"
 
 msgid "Add to the course links"
 msgstr "コースリンクに追加"
@@ -13999,13 +13999,13 @@ msgid "Resources added"
 msgstr "Added new resources"
 
 msgid "External resources"
-msgstr "External resources"
+msgstr "外部リソース"
 
 msgid "Course resources"
-msgstr "Course resources"
+msgstr "コースリソース"
 
 msgid "External link"
-msgstr "External link"
+msgstr "外部リンク"
 
 msgid "Add the dropbox to this section."
 msgstr "Add the dropbox page to this chapter."
@@ -22152,7 +22152,7 @@ msgstr "テキストフィールドで選択"
 msgid "Triple select"
 msgstr "トリプル選択"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "このプラットフォームに登録することを確認します。"
 
 msgid "Add text"
@@ -22212,14 +22212,11 @@ msgstr "登録確認"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "アカウントが未確認のため非活性です。メールを確認して指示に従ってください。あるいは以下のリンクをクリックしてメールを再送信してください"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "プラットフォーム登録を完了するには、以下のリンクをクリックしてアカウントを確認する必要があります"
 
 msgid "Confirmation for new account"
 msgstr "新規アカウント確認"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "プラットフォームにアクセスするには、メールでアカウントを確認する必要があります"
 
 msgid "Enable Cloud files link addition"
 msgstr "クラウドファイルリンクの追加を有効にする"
@@ -25056,9 +25053,6 @@ msgstr "すべてのテストの全結果をエクスポート"
 msgid "Click to view details"
 msgstr "詳細を表示するにはクリック"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "このレポートはユーザーのプラットフォーム上の全アクティビティに適用されます。"
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27615,7 +27609,7 @@ msgstr "プラットフォーム利用条件"
 msgid "Password too easy to guess"
 msgstr "パスワードが推測されやすい"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "プラットフォームにアクセスするにはメールでアカウントを確認する必要があります"
 
 msgid "Redirect to portal home"
@@ -30590,10 +30584,10 @@ msgid "ex. root"
 msgstr "例: root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "テーブル works を作成"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "テーブル works を変更"
 
 msgid "DROP COLUMN works"
 msgstr "DROP COLUMN が動作しました"
@@ -31266,4 +31260,247 @@ msgstr "管理者再開コース"
 
 msgid "Admin Dashboard"
 msgstr "管理者ダッシュボード"
+
+msgid "Threads"
+msgstr "スレッド"
+
+msgid "Invalid thread"
+msgstr "無効なスレッド"
+
+msgid "View full thread"
+msgstr "スレッド全文を表示"
+
+msgid "No post yet"
+msgstr "投稿なし"
+
+msgid "Discussion thread"
+msgstr "ディスカッション・スレッド"
+
+msgid "Access to this course"
+msgstr "このコースへのアクセス"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "このプラグインには設定可能な項目がありません。アクティベーションはプラグイン一覧から管理されます。"
+
+msgid "Private - access granted by privileged users"
+msgstr "非公開 - 特権ユーザーがアクセスを許可"
+
+msgid "No detailed feedback is available for this question."
+msgstr "この質問には詳細なフィードバックが利用できません。"
+
+msgid "Please select an answer before checking the result."
+msgstr "結果を確認する前に回答を選択してください。"
+
+msgid "Allow PDF export for this item"
+msgstr "この項目のPDFエクスポートを許可"
+
+msgid "Hide free users (not enrolled)"
+msgstr "無料ユーザー（登録なし）を非表示"
+
+msgid "Question statistics"
+msgstr "質問の統計"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "ファイルを生成中。このタブを閉じないでください..."
+
+msgid "Assign auth source to users"
+msgstr "ユーザーに認証ソースを割り当て"
+
+msgid "There are no questions for this survey"
+msgstr "この調査には質問がありません"
+
+msgid "Certificates report"
+msgstr "証明書レポート"
+
+msgid "Course picture"
+msgstr "コース画像"
+
+msgid "Current picture"
+msgstr "現在の画像"
+
+msgid "Course events log"
+msgstr "コースイベントログ"
+
+msgid "Update the category information and its optional time limit."
+msgstr "カテゴリ情報を更新し、オプションの時間制限を設定。"
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "トレーニングカタログを整理するためにセッションの論理グループを作成。"
+
+msgid "Generating file, do not close this tab"
+msgstr "ファイルを生成中、このタブを閉じないでください"
+
+msgid "Assign authentication sources to users"
+msgstr "ユーザーに認証ソースを割り当て"
+
+msgid "Average completion rate"
+msgstr "平均完了率"
+
+msgid "Average access rate"
+msgstr "平均アクセス率"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "この表は、現在のコースの各学習パスごとの学習者の進捗と活動をまとめています。"
+
+msgid "Follow up"
+msgstr "フォローアップ"
+
+msgid "Tracking for superior"
+msgstr "上位者向けトラッキング"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "このレポートは、選択した日付範囲内の一般コーチごとのセッションの週次分布を示します。"
+
+msgid "Head manager report"
+msgstr "責任者レポート"
+
+msgid "Reset or update user password"
+msgstr "ユーザーパスワードをリセットまたは更新"
+
+msgid "Active users"
+msgstr "アクティブユーザー"
+
+msgid "Inactive users"
+msgstr "非アクティブユーザー"
+
+msgid "Report on resources"
+msgstr "リソースレポート"
+
+msgid "Global view"
+msgstr "全体ビュー"
+
+msgid "Available reports"
+msgstr "利用可能なレポート"
+
+msgid "Current report"
+msgstr "現在のレポート"
+
+msgid "Back to user assignment page"
+msgstr "ユーザー割り当てページに戻る"
+
+msgid "Authentication sources assigned successfully"
+msgstr "認証ソースの割り当てが成功しました"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "ヒント：「— ただアップロード —」を選択すると、誰にも送信せずに保存されます。"
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "少なくとも1つの受信者を選択してください（「— アップロードのみ —」または任意のユーザー）"
+
+msgid "Sharing"
+msgstr "共有"
+
+msgid "Selected files"
+msgstr "選択したファイル"
+
+msgid "Hide password"
+msgstr "パスワードを非表示"
+
+msgid "Show password"
+msgstr "パスワードを表示"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "メール用のSVGロゴをアップロード"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "削除する前に、このカテゴリからすべての学習パスを移動または削除する必要があります。"
+
+msgid "Clear filters"
+msgstr "フィルターをクリア"
+
+msgid "Attendances (tablet)"
+msgstr "出欠確認（タブレット）"
+
+msgid "Exit tablet mode"
+msgstr "タブレットモードを終了"
+
+msgid "No members found."
+msgstr "メンバーが見つかりません。"
+
+msgid "Health check"
+msgstr "ヘルスチェック"
+
+msgid "Export to CC 1.3"
+msgstr "CC 1.3にエクスポート"
+
+msgid "Loading resources..."
+msgstr "リソースを読み込み中..."
+
+msgid "Failed to load resources."
+msgstr "リソースの読み込みに失敗しました。"
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "エクスポート可能なリソースを少なくとも1つ選択してください（ドキュメント、ウェブリンク、ディスカッションなど）。"
+
+msgid "Export finished."
+msgstr "エクスポートが完了しました。"
+
+msgid "Export failed."
+msgstr "エクスポートに失敗しました。"
+
+msgid "Import failed."
+msgstr "インポートに失敗しました。"
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "ローカルファイル（.zip, .mbz, .tgz, .gz）"
+
+msgid "Ready to import"
+msgstr "インポート準備完了"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "このコースにバックアップを復元します。オプションを変更するには戻ることができます。"
+
+msgid "Select resources to import"
+msgstr "インポートするリソースを選択"
+
+msgid "No resources available in this backup."
+msgstr "このバックアップに利用可能なリソースがありません。"
+
+msgid "Import selection"
+msgstr "インポート選択"
+
+msgid "Import completed"
+msgstr "インポートが完了しました"
+
+msgid "Could not load options."
+msgstr "オプションを読み込めませんでした。"
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "バックアップファイルを選択してください（.zip, .mbz, .tgz, .gz）"
+
+msgid "Please choose a backup from the server"
+msgstr "サーバーからバックアップを選択してください"
+
+msgid "Error selecting source."
+msgstr "ソース選択エラー。"
+
+msgid "Recycling options"
+msgstr "リサイクルオプション"
+
+msgid "Type the course code to confirm"
+msgstr "確認のためコースコードを入力してください"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "選択したリソースを削除またはリセットします。この操作は元に戻せません。"
+
+msgid "Select resources to recycle"
+msgstr "リサイクルするリソースを選択"
+
+msgid "No resources available in this course."
+msgstr "このコースに利用可能なリソースがありません。"
+
+msgid "Recycle selected"
+msgstr "選択したものをリサイクル"
+
+msgid "Error loading resources."
+msgstr "リソースの読み込みエラー。"
+
+msgid "Clear search"
+msgstr "検索をクリア"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "データベース名には文字、数字、アンダースコア (_) のみ使用できます。無効な文字は自動的に削除されます。"
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "このプラットフォームを使用するユーザーに提供される一般的な利用規約は何ですか？"
 

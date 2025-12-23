@@ -1651,7 +1651,7 @@ msgid "Move the current section"
 msgstr "Das aktive Kapitel verschieben"
 
 msgid "Generic SCORM"
-msgstr "Generic SCORM"
+msgstr "Generisches SCORM"
 
 msgid "The format of this package could not be recognized. Please check this is a valid package."
 msgstr "Das Format des Paktes wird nicht erkannt. Vergewissern Sie sich, dass es korrekt formatiert ist und keine Fehler enthält. Probleme können durch proprietäre ZIP Formate oder die Verwendung langer Dateinamen enstehen. Bei Unklarheiten bzgl. ZIP, versuchen Sie es bitte mit minimalen ZIP Funktionen."
@@ -2315,7 +2315,7 @@ msgid "Already in"
 msgstr "Bereits in"
 
 msgid "Check in"
-msgstr "Check in"
+msgstr "Check-in"
 
 msgid "The Moderator of this Conference has left the room."
 msgstr "Der Moderator dieser Konferenz hat den Raum verlassen."
@@ -2609,7 +2609,7 @@ msgid "Other properties found in the archive"
 msgstr "Andere Einstellungen im Archiv bearbeiten"
 
 msgid "System ID"
-msgstr "System ID"
+msgstr "System-ID"
 
 msgid "Show score"
 msgstr "Punkte anzeigen"
@@ -3209,7 +3209,7 @@ msgid "Edit Link"
 msgstr "Link bearbeiten"
 
 msgid "CSV import"
-msgstr "CSV Import"
+msgstr "CSV-Import"
 
 msgid "CSV import file could not be opened (e.g. empty, too big)"
 msgstr "CSV Datei konnte nicht geöffnet werden (z.B. leer, zu groß)"
@@ -3299,7 +3299,7 @@ msgid "Corresponding local path"
 msgstr "entsprechender lokaler Pfad"
 
 msgid "Administrator e-mail"
-msgstr "Administrator E-Mail"
+msgstr "Administrator-E-Mail"
 
 msgid "Administrator Name"
 msgstr "Administrator Nachname"
@@ -3308,7 +3308,7 @@ msgid "Surname of the Administrator"
 msgstr "Administrator Vorname"
 
 msgid "Administrator login"
-msgstr "Administrator Login"
+msgstr "Administrator-Login"
 
 msgid "Your portal name"
 msgstr "Der Name Ihres Portals"
@@ -3368,7 +3368,7 @@ msgid "(recommended)"
 msgstr "(empfohlen)"
 
 msgid "SCORM DB"
-msgstr "SCORM DB"
+msgstr "SCORM-DB"
 
 msgid "Administrator last name"
 msgstr "Administrator Nachname"
@@ -4199,10 +4199,10 @@ msgid "works"
 msgstr "funktioniert"
 
 msgid "MySql Client"
-msgstr "MySql Client"
+msgstr "MySQL-Client"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "MySQL-Server"
 
 msgid "Owner"
 msgstr "Besitzer"
@@ -4241,7 +4241,7 @@ msgid "Visual code"
 msgstr "Sichtbarer Code"
 
 msgid "System Code"
-msgstr "System Code"
+msgstr "Systemcode"
 
 msgid "visual code"
 msgstr "sichtbarer Code"
@@ -4793,7 +4793,7 @@ msgid "Make unavailable"
 msgstr "nicht verfügbar machen"
 
 msgid "Style sheets"
-msgstr "Style Sheets"
+msgstr "Stylesheets"
 
 msgid "Should the navigation menu show the different tool icons?"
 msgstr "Sollen die Icons für die Funktionen (Tools) im Navigationsmenü angezeigt werden?"
@@ -5435,7 +5435,7 @@ msgid "The Assessments tool allows you to assess competences in your organizatio
 msgstr " ermöglicht, Lernziele mit Noten festzulegen; falls es nicht benötigt wird, könnte es die Benutzeroberfläche zu komplex machen. Soll dieses Werkzeug aktiviert werden?"
 
 msgid "Theme (stylesheet)"
-msgstr "Theme (Stylesheet)"
+msgstr "Thema (Stylesheet)"
 
 msgid "User theme selection"
 msgstr "Benutzer Theme Auswahl"
@@ -5603,7 +5603,7 @@ msgid "The port on which the main LDAP server will respond (usually 389). This i
 msgstr "Der Port des Haupt LDAP Servers (normalerweise 389). Diese Einstellung ist erforderlich"
 
 msgid "LDAP domain"
-msgstr "LDAP Domain"
+msgstr "LDAP-Domäne"
 
 msgid "This is the LDAP domain (dc) that will be used to find the contacts on the LDAP server. For example: dc=xx, dc=yy, dc=zz"
 msgstr "Dies ist die LDAP Domain (dc), die zum Auffinden von Kontakten auf dem LDAP Server benutzt wird. Z.B.: dc=xx, dc=yy, dc=zz"
@@ -5627,7 +5627,7 @@ msgid "This term will be used to filter the search for contacts on the LDAP serv
 msgstr "Dieser Begriff wird zur Filterung der Suche nach Kontakten auf dem LDAP Server benutzt. Ist man nicht sicher, was hier eingegeben werden soll, bitte in der LDAP Server Dokumentation und Konfiguration nachschauen."
 
 msgid "LDAP version"
-msgstr "LDAP Version"
+msgstr "LDAP-Version"
 
 msgid "Please select the version of the LDAP server you want to use. Using the right version depends on your LDAP server's configuration."
 msgstr "LDAP Server Version auswählen, die benutzt werden soll. Auswahl der richtigen Version hängt ab von der LDAP Server Konfiguration"
@@ -5657,7 +5657,7 @@ msgid "If you are using an LDAP server that does not support or accept anonymous
 msgstr "Bei Nutzung eines LDAP Servers, der keinen Anonymous Zugriff erlaubt, das nachfolgende Felde für Benutzerpasswort benutzen"
 
 msgid "LDAP Import"
-msgstr "LDAP Import"
+msgstr "LDAP-Import"
 
 msgid "Notify subscribed users by e-mail"
 msgstr "Angemeldete Benutzer per E-Mail benachrichtigen"
@@ -6803,7 +6803,7 @@ msgid "View this user"
 msgstr "Diesen Benutzer anzeigen"
 
 msgid "RSS feed"
-msgstr "RSS Feed"
+msgstr "RSS-Feed"
 
 msgid "No friends in your contact list"
 msgstr "Keine Freunde in Ihrer Kontaktliste"
@@ -9587,7 +9587,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "Datei Upload Fehler: Dateityp  nicht erlaubt."
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "OpenID-URL"
 
 msgid "The file is too big to upload."
 msgstr "Datei ist zu groß!"
@@ -9821,10 +9821,10 @@ msgid "Width"
 msgstr "Breite"
 
 msgid "V Space"
-msgstr "V Space"
+msgstr "V-Abstand"
 
 msgid "H Space"
-msgstr "H Space"
+msgstr "H-Abstand"
 
 msgid "Border"
 msgstr "Rand"
@@ -10127,7 +10127,7 @@ msgid "Overview"
 msgstr "Übersicht"
 
 msgid "API keys"
-msgstr "API Keys"
+msgstr "API-Schlüssel"
 
 msgid "Generate API key"
 msgstr "API Key erzeugen"
@@ -10757,7 +10757,7 @@ msgid "click here to get this course from your old portal"
 msgstr "Klicken Sie hier, um den Kurs von ihrem alten Portal zu übernehmen"
 
 msgid "Support forum"
-msgstr "Support Forum"
+msgstr "Support-Forum"
 
 msgid "Categories Overview"
 msgstr "Kategorie-Übersicht"
@@ -10984,8 +10984,8 @@ msgstr "ist"
 msgid "The address of"
 msgstr "Die Adresse von"
 
-msgid "Your registration on"
-msgstr "Ihre Registrierung am"
+msgid "Your registration on %s"
+msgstr "Ihre Registrierung am %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Dieser Benutzername ist bereits vergeben. Gehen Sie zurück und wählen einen anderen."
@@ -11984,7 +11984,7 @@ msgid "Empty (or NULL)"
 msgstr "Leer (or NULL)"
 
 msgid "Traffic Details"
-msgstr "Traffic Details"
+msgstr "Traffic-Details"
 
 msgid "For individual tracking see <a href=../user/user.php>Users</a> tool."
 msgstr "Für individuelle Auswertungen siehe <a href=../user/user.php>Nutzer-Verwaltung</a>."
@@ -12029,7 +12029,7 @@ msgid "Success"
 msgstr "Erfolg"
 
 msgid "Excel format"
-msgstr "Excel Format"
+msgstr "Excel-Format"
 
 msgid "My learnpath"
 msgstr "Mein Lernpfad"
@@ -12560,7 +12560,7 @@ msgid "Image alone"
 msgstr "Nur Bild"
 
 msgid "Flash animation"
-msgstr "Flash Animation"
+msgstr "Flash-Animation"
 
 msgid "Animation + introduction text"
 msgstr "Animation + Beschreibung"
@@ -13739,7 +13739,7 @@ msgid "Navigation"
 msgstr "Navigation"
 
 msgid "Top ten"
-msgstr "Top Ten"
+msgstr "Top 10"
 
 msgid "This project"
 msgstr "Dieses Blog"
@@ -14363,7 +14363,7 @@ msgid "Your server must provide the following libraries to enable all features o
 msgstr "Bibliotheken und Funktionen, die der Server bereitstellen muss, damit Chamilo voll genutzt werden kann. Die fehlenden optionalen Bibliotheken sind in orange, jedoch sind einige Funktionen in Chamilo dadurch nicht verfügbar. Diese lassen sich später jederzeit nachinstallieren und aktivieren."
 
 msgid "PHP version"
-msgstr "PHP Version"
+msgstr "PHP-Version"
 
 msgid "Support"
 msgstr "Support"
@@ -14492,43 +14492,43 @@ msgid "Baby Orange"
 msgstr "Baby Orange"
 
 msgid "Blue lagoon"
-msgstr "Blue lagoon"
+msgstr "Blue Lagoon"
 
 msgid "Cool blue"
-msgstr "Cool blue"
+msgstr "Cool Blau"
 
 msgid "Corporate"
 msgstr "Corporate"
 
 msgid "Cosmic campus"
-msgstr "Cosmic campus"
+msgstr "Cosmic Campus"
 
 msgid "Delicious Bordeaux"
 msgstr "Delicious Bordeaux"
 
 msgid "Empire green"
-msgstr "Empire green"
+msgstr "Empire Grün"
 
 msgid "Fruity orange"
-msgstr "Fruity orange"
+msgstr "Fruity Orange"
 
 msgid "Medical"
 msgstr "Medical"
 
 msgid "Royal purple"
-msgstr "Royal Purple"
+msgstr "Royal Purpur"
 
 msgid "Silver line"
-msgstr "Silver line"
+msgstr "Silver Line"
 
 msgid "Sober brown"
-msgstr "Sober brown"
+msgstr "Sober Braun"
 
 msgid "Steel grey"
-msgstr "Steel grey"
+msgstr "Stahl Grau"
 
 msgid "Tasty olive"
-msgstr "tasty olive"
+msgstr "Tasty Olive"
 
 msgid "In this report you see the results of all questions"
 msgstr "In diesem Bericht sehen Sie die Ergebnisse aller Fragen"
@@ -14600,7 +14600,7 @@ msgid "traditional chinese"
 msgstr "chinesisch traditionell"
 
 msgid "Chamilo installation"
-msgstr "Chamilo Installation"
+msgstr "Chamilo-Installation"
 
 msgid "Pending invitations"
 msgstr "Offene Einladungen"
@@ -14744,19 +14744,19 @@ msgid "Maximum size for file uploads in the messaging tool (in Bytes)"
 msgstr "Erlaubte Dateigröße für Uploads im Nachrichten-Werkzeug (in Bytes)"
 
 msgid "Chamilo homepage"
-msgstr "Chamilo Homepage"
+msgstr "Chamilo-Startseite"
 
 msgid "Chamilo forum"
-msgstr "Chamilo Forum"
+msgstr "Chamilo-Forum"
 
 msgid "Chamilo extensions"
 msgstr "Chamilo Erweiterungen"
 
 msgid "Chamilo Green"
-msgstr "Chamilo Green"
+msgstr "Chamilo Grün"
 
 msgid "Chamilo red"
-msgstr "Chamilo Red"
+msgstr "Chamilo Rot"
 
 msgid "Number of messages sent"
 msgstr "Anzahl versendeter Nachrichten"
@@ -15113,7 +15113,7 @@ msgid "Install Chamilo"
 msgstr "Chamilo installieren"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "Chamilo-URL"
 
 msgid "You have no session in your sessions history"
 msgstr "Sie haben keine Session in Ihrer Session-Liste"
@@ -15152,7 +15152,7 @@ msgid "Data sent"
 msgstr "Die Daten wurden übertragen"
 
 msgid "Download link"
-msgstr "Download Link"
+msgstr "Download-Link"
 
 msgid "Assignments received"
 msgstr "Erhaltene Ausarbeitungen"
@@ -15350,7 +15350,7 @@ msgid "Time spent last week"
 msgstr "Aktivität der letzten Woche"
 
 msgid "System status"
-msgstr "System Status"
+msgstr "Systemstatus"
 
 msgid "Is writable"
 msgstr "ist beschreibbar"
@@ -15431,7 +15431,7 @@ msgid "MySQL server information"
 msgstr "MySQL-Server-Informationen"
 
 msgid "MySQL client"
-msgstr "MySQL Client"
+msgstr "MySQL-Client"
 
 msgid "Protocol used by this server"
 msgstr "Protokoll, das vom Server verwendet wird"
@@ -15446,7 +15446,7 @@ msgid "Server name (as used in your request)"
 msgstr "Server Name (Wie er in ihrer Anfrage verwendet wird)"
 
 msgid "Server port"
-msgstr "Server Port"
+msgstr "Serverport"
 
 msgid "Your user agent as received by the server"
 msgstr " wie er auf dem  Server ermpfangen wurde"
@@ -18002,7 +18002,7 @@ msgid "Information about the last finished step and the next unfinished one."
 msgstr "Informationen über den letzten beendeten und den nächsten unbeendeten Schritt."
 
 msgid "LaTeX code"
-msgstr "LaTeX Code"
+msgstr "LaTeX-Code"
 
 msgid "LaTeX formula"
 msgstr "LaTeX Formel"
@@ -19100,7 +19100,7 @@ msgid "Select an action"
 msgstr "Auswahl treffen"
 
 msgid "Login: %s"
-msgstr "Login: %s"
+msgstr "Anmeldung: %s"
 
 msgid "Database <b>%s</b> will be created"
 msgstr "Datenbank <b>%s</b> wird erstellt"
@@ -22174,7 +22174,7 @@ msgstr "Auswahl mit Textfeld"
 msgid "Triple select"
 msgstr "Dreifachauswahl"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr ""
 "Sie bestätigen, dass Sie sich wirklich für diese Plattform anmelden möchten."
 
@@ -22240,18 +22240,13 @@ msgstr ""
 "Ihre E-Mails und folgen Sie den Anweisungen oder klicken Sie auf den "
 "folgenden Link, um die E-Mail erneut zu senden"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr ""
 "Um Ihre Plattformregistrierung abzuschließen, müssen Sie Ihr Konto "
 "bestätigen, indem Sie auf den folgenden Link klicken"
 
 msgid "Confirmation for new account"
 msgstr "Bestätigung für neues Konto"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr ""
-"Sie müssen Ihr Konto per E-Mail bestätigen, um Zugang zur Plattform zu "
-"erhalten"
 
 msgid "Enable Cloud files link addition"
 msgstr "Aktivieren Sie das Hinzufügen von Cloud-Dateilinks"
@@ -25468,10 +25463,6 @@ msgstr "Exportieren Sie alle Ergebnisse aller Tests"
 
 msgid "Click to view details"
 msgstr "Klicken Sie, um Details anzuzeigen"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr ""
-"Dieser Bericht bezieht sich auf alle Plattformaktivitäten des Benutzers."
 
 msgid "dd/mm/yyyy"
 msgstr "TT/MM/JJJJ"
@@ -28986,7 +28977,7 @@ msgstr "Nutzungsbedingungen der Plattform"
 msgid "Password too easy to guess"
 msgstr "Passwort zu leicht zu erraten"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr ""
 "Sie müssen Ihr Konto per E-Mail bestätigen, um Zugang zur Plattform zu "
 "erhalten"
@@ -32289,7 +32280,7 @@ msgid "Revision Language"
 msgstr "Revisionssprache"
 
 msgid "Session career link"
-msgstr "Session Career Link"
+msgstr "Sitzung Berufspfad-Verknüpfung"
 
 msgid "Successful authentication handlers"
 msgstr "Erfolgreiche Authentifizierungs-Handler"
@@ -32307,7 +32298,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (interne ID)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "Azure-ID (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Organisations-E-Mail"
@@ -32773,4 +32764,247 @@ msgstr "Admin Kurse neu starten"
 
 msgid "Admin Dashboard"
 msgstr "Admin-Dashboard"
+
+msgid "Threads"
+msgstr "Threads"
+
+msgid "Invalid thread"
+msgstr "Ungültiger Thread"
+
+msgid "View full thread"
+msgstr "Vollständigen Thread anzeigen"
+
+msgid "No post yet"
+msgstr "Noch keine Beiträge"
+
+msgid "Discussion thread"
+msgstr "Diskussionsthread"
+
+msgid "Access to this course"
+msgstr "Zugriff auf diesen Kurs"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Dieses Plugin hat keine konfigurierbaren Einstellungen. Die Aktivierung wird über die Plugin-Liste verwaltet."
+
+msgid "Private - access granted by privileged users"
+msgstr "Privat – Zugriff durch privilegierte Benutzer gewährt"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Für diese Frage ist kein detailliertes Feedback verfügbar."
+
+msgid "Please select an answer before checking the result."
+msgstr "Bitte wählen Sie eine Antwort aus, bevor Sie das Ergebnis prüfen."
+
+msgid "Allow PDF export for this item"
+msgstr "PDF-Export für diesen Eintrag erlauben"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Kostenlose Benutzer (nicht eingeschrieben) ausblenden"
+
+msgid "Question statistics"
+msgstr "Fragenstatistik"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Datei wird generiert. Schließen Sie diesen Tab nicht..."
+
+msgid "Assign auth source to users"
+msgstr "Authentifizierungsquelle Benutzern zuweisen"
+
+msgid "There are no questions for this survey"
+msgstr "Für diese Umfrage gibt es keine Fragen"
+
+msgid "Certificates report"
+msgstr "Zertifikatsbericht"
+
+msgid "Course picture"
+msgstr "Kursbild"
+
+msgid "Current picture"
+msgstr "Aktuelles Bild"
+
+msgid "Course events log"
+msgstr "Kurs-Ereignisprotokoll"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Kategorieinformationen und optionale Zeitbegrenzung aktualisieren."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Erstellen Sie eine logische Gruppe von Sitzungen, um Ihren Trainingskatalog organisiert zu halten."
+
+msgid "Generating file, do not close this tab"
+msgstr "Datei wird generiert, schließen Sie diesen Tab nicht"
+
+msgid "Assign authentication sources to users"
+msgstr "Authentifizierungsquellen Benutzern zuweisen"
+
+msgid "Average completion rate"
+msgstr "Durchschnittliche Abschlussrate"
+
+msgid "Average access rate"
+msgstr "Durchschnittliche Zugriffsrate"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Diese Tabelle fasst den Lernerfortschritt und die Aktivität pro Lernpfad in Ihren aktuellen Kursen zusammen."
+
+msgid "Follow up"
+msgstr "Nachverfolgung"
+
+msgid "Tracking for superior"
+msgstr "Nachverfolgung für Vorgesetzten"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Dieser Bericht zeigt die wöchentliche Verteilung der Sitzungen pro allgemeinem Coach im ausgewählten Datumsbereich."
+
+msgid "Head manager report"
+msgstr "Bericht des Leiters"
+
+msgid "Reset or update user password"
+msgstr "Benutzerpasswort zurücksetzen oder aktualisieren"
+
+msgid "Active users"
+msgstr "Aktive Benutzer"
+
+msgid "Inactive users"
+msgstr "Inaktive Benutzer"
+
+msgid "Report on resources"
+msgstr "Bericht zu Ressourcen"
+
+msgid "Global view"
+msgstr "Gesamtübersicht"
+
+msgid "Available reports"
+msgstr "Verfügbare Berichte"
+
+msgid "Current report"
+msgstr "Aktueller Bericht"
+
+msgid "Back to user assignment page"
+msgstr "Zurück zur Benutzerzuweisungsseite"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Authentifizierungsquellen erfolgreich zugewiesen"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Tipp: Wählen Sie „— Nur hochladen —“, um ohne Versand an jemanden zu speichern."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Bitte wählen Sie mindestens einen Empfänger aus („— Nur hochladen —“ oder einen Benutzer)"
+
+msgid "Sharing"
+msgstr "Teilen"
+
+msgid "Selected files"
+msgstr "Ausgewählte Dateien"
+
+msgid "Hide password"
+msgstr "Passwort ausblenden"
+
+msgid "Show password"
+msgstr "Passwort anzeigen"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "SVG-Logo für E-Mails hochladen"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Sie müssen alle Lernpfade aus dieser Kategorie verschieben oder entfernen, bevor Sie sie löschen."
+
+msgid "Clear filters"
+msgstr "Filter löschen"
+
+msgid "Attendances (tablet)"
+msgstr "Anwesenheiten (Tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Tablet-Modus beenden"
+
+msgid "No members found."
+msgstr "Keine Mitglieder gefunden."
+
+msgid "Health check"
+msgstr "Systemprüfung"
+
+msgid "Export to CC 1.3"
+msgstr "Exportieren nach CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Ressourcen werden geladen…"
+
+msgid "Failed to load resources."
+msgstr "Ressourcen konnten nicht geladen werden."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Bitte wählen Sie mindestens eine exportierbare Ressource aus (Dokument, Web-Link, Diskussion,…)."
+
+msgid "Export finished."
+msgstr "Export abgeschlossen."
+
+msgid "Export failed."
+msgstr "Export fehlgeschlagen."
+
+msgid "Import failed."
+msgstr "Import fehlgeschlagen."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Lokale Datei (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Bereit zum Importieren"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Wir werden das Backup in diesen Kurs wiederherstellen. Sie können zurückgehen, um Optionen zu ändern."
+
+msgid "Select resources to import"
+msgstr "Zu importierende Ressourcen auswählen"
+
+msgid "No resources available in this backup."
+msgstr "Keine Ressourcen in diesem Backup verfügbar."
+
+msgid "Import selection"
+msgstr "Importauswahl"
+
+msgid "Import completed"
+msgstr "Import abgeschlossen"
+
+msgid "Could not load options."
+msgstr "Optionen konnten nicht geladen werden."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Bitte wählen Sie eine Backup-Datei aus (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Bitte wählen Sie ein Backup vom Server aus"
+
+msgid "Error selecting source."
+msgstr "Fehler beim Auswählen der Quelle."
+
+msgid "Recycling options"
+msgstr "Wiederaufbereitungsoptionen"
+
+msgid "Type the course code to confirm"
+msgstr "Kurs-Code zur Bestätigung eingeben"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Dies entfernt oder setzt ausgewählte Ressourcen zurück. Diese Aktion kann nicht rückgängig gemacht werden."
+
+msgid "Select resources to recycle"
+msgstr "Zu wiederaufbereitende Ressourcen auswählen"
+
+msgid "No resources available in this course."
+msgstr "Keine Ressourcen in diesem Kurs verfügbar."
+
+msgid "Recycle selected"
+msgstr "Ausgewählte wiederaufbereiten"
+
+msgid "Error loading resources."
+msgstr "Fehler beim Laden der Ressourcen."
+
+msgid "Clear search"
+msgstr "Suche löschen"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Im Datenbanknamen sind nur Buchstaben, Ziffern und Unterstriche (_) erlaubt. Ungültige Zeichen werden automatisch entfernt."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Welche allgemeinen Geschäftsbedingungen werden den Nutzern für die Nutzung dieser Plattform mitgeteilt?"
 

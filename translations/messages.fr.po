@@ -2111,7 +2111,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:sans copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dossier,, application/msword:MsWord,, application/octet-stream:Flux octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exercice,,      simulation:simulation,,      questionnaire:enquête,,      diagram:diagramme,,      figure:figure,,      graph:graphe,,      index:index,,      slide:diapo,,      table:table,,      narrative text:texte narratif,,      exam:examen,,      experiment:expérience,,      problem statement:problème,,      self assessment:auto-évaluation,,      lecture:présentation"
@@ -11165,8 +11165,8 @@ msgstr "est"
 msgid "The address of"
 msgstr "L'adresse de"
 
-msgid "Your registration on"
-msgstr "Votre inscription sur"
+msgid "Your registration on %s"
+msgstr "Votre inscription sur %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "L'identifiant que vous avez choisi est déjà pris.Utilisez le bouton de retour en arrière de votre navigateuret choisissez-en un autre."
@@ -11879,7 +11879,7 @@ msgid "Add guidance messages associated with the progress on the page"
 msgstr "Ajouter des messages d'aide associés au progrès de la page"
 
 msgid "Second message"
-msgstr "Second message"
+msgstr "Deuxième message"
 
 msgid "Third message"
 msgstr "Troisième message"
@@ -19977,7 +19977,7 @@ msgid "Exercise average"
 msgstr "Moyenne de l'exercice"
 
 msgid "Webcam Clip"
-msgstr "Webcam Clip"
+msgstr "Clip Webcam"
 
 msgid "Snapshot"
 msgstr "Capturer"
@@ -20347,7 +20347,7 @@ msgid "Your browser doesn't support the Nanogong player"
 msgstr "Votre navigateur ne supporte pas le player Nanogong"
 
 msgid "Import CSV"
-msgstr "Import CSV"
+msgstr "Importer CSV"
 
 msgid "Table length"
 msgstr "Lignes de la table"
@@ -22749,7 +22749,7 @@ msgstr "Sélecteur avec des champs texte"
 msgid "Triple select"
 msgstr "Triple sélecteur"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Vous confirmez que vous souhaitez vraiment vous inscrire à cette plateforme."
 
 msgid "Add text"
@@ -22809,14 +22809,11 @@ msgstr "Confirmation d'inscription"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Votre compte n'est pas encore actif parce que vous ne l'avez pas encore confirmé par e-mail. Vérifiez votre boîte mail et suivez les instructions, ou cliquez sur le lien suivant pour renvoyer un e-mail de confirmation."
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Pour compléter votre inscription sur la plateforme, vous devez confirmer votre compte en cliquant sur le lien suivant"
 
 msgid "Confirmation for new account"
 msgstr "Confirmation d'un nouveau compte"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Vous devez confirmer votre compte par e-mail pour accéder à la plateforme"
 
 msgid "Enable Cloud files link addition"
 msgstr "Activer l'ajout de liens vers des fichiers dans le Cloud"
@@ -23541,8 +23538,8 @@ msgstr "J'ai terminé les parcours du cours. Prévenir l'enseignant."
 msgid "The student <b>%s</b> has finished the learning paths from the course <b>%s</b>"
 msgstr "L'apprenant <b>%s</b> a terminé les parcours du cours <b>%s</b>"
 
-msgid "This question is used in at least one other exercise. If you continue its edition, the changes will affect all exercises that contain this question."
-msgstr "Cette question est utilisée dans d'autres exercices. Si vous l'éditez, les modifications affecteront tous les exercices qui contiennent cette question."
+msgid "This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question."
+msgstr "Cette question est utilisée dans d'autres exercices. Si vous continuez son édition, les modifications affecteront tous les exercices contenant cette question."
 
 msgid "Time spent / Time required"
 msgstr "Temps passé / Temps requis"
@@ -24642,8 +24639,8 @@ msgstr "Supprimer également les tentatives des exercices concernés"
 msgid "Only show a radar of scores by category, instead of a table of categories. Do not show individual scores or feedback."
 msgstr "Afficher uniquement un radar des scores par catégorie, au lieu d'un tableau de catégories. Ne montre pas les scores ou les commentaires individuels."
 
-msgid "All attempts blocked because you did not reach the minimum score of %s %% at one of your attempts."
-msgstr "Toutes les tentatives ont été bloquées car vous n’avez pas atteint le score minimum de %s %% à l’une de vos tentatives."
+msgid "All attempts blocked because you did not reach the minimum score of %s % at one of your attempts."
+msgstr "Tous les essais bloqués car vous n'avez pas atteint le score minimum de %s % lors d'un de vos essais."
 
 msgid "Authors that have been registered :"
 msgstr "Auteurs qui ont été enregistrés :"
@@ -25217,8 +25214,8 @@ msgstr "Bonjour %s,"
 msgid "You are registered in the training %s since the %s"
 msgstr "Vous êtes inscrit au module de formation %s depuis le %s."
 
-msgid "You are receiving this message because you have completed a learning path with a %s% progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer."
-msgstr "Vous recevez ce message car vous avez réalisé %s% de votre formation. <br/> Votre parcours de formation doit être de 100% pour considérer que la formation est réalisée. <br/> Si vous rencontrez le moindre problème, vous devez prendre contact avec le centre de formation."
+msgid "You are receiving this message because you have completed a learning path with a %s%% progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer."
+msgstr "Vous recevez ce message car vous avez terminé un parcours d'apprentissage avec une progression de %s%% de votre formation.<br/>Votre progression doit être de 100 pour considérer que votre formation a été réalisée.<br/>En cas de problème, contactez votre formateur."
 
 msgid "As a reminder, to access the training platform:<br/>1. Connect to the platform at the address: %s <br/>2. Then enter: <br/>Your username: %s <br/>Your password: This was emailed to you.<br/>if you forgot it and can't find it, you can retrieve it by going to %s <br/><br/>Thank you for doing what is necessary."
 msgstr "Pour rappel, pour accéder à la plateforme de formation :<br/>1. Connectez-vous à la plateforme à l’adresse : %s <br/> 2. Renseignez ensuite :<br/>"
@@ -25755,9 +25752,6 @@ msgstr "Exporter tous les résultats de tous les exercices"
 msgid "Click to view details"
 msgstr "Cliquez pour voir les détails"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Ce rapport s'applique sur toutes les données de l'utilisateur sur la plateforme."
-
 msgid "dd/mm/yyyy"
 msgstr "jj/mm/aaaa"
 
@@ -25831,7 +25825,7 @@ msgid "The update failed for the following courses"
 msgstr "La mise à jour a échoué pour les cours suivants"
 
 msgid "%02d h %02d m %02d s"
-msgstr "%02d h %02d m %02d s"
+msgstr "%02d h %02d min %02d s"
 
 msgid "User management"
 msgstr "Gestion des utilisateurs"
@@ -29311,7 +29305,7 @@ msgstr "Conditions d'utilisation de la plateforme"
 msgid "Password too easy to guess"
 msgstr "Mot de passe trop facile à deviner"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr ""
 "Vous devez confirmer votre compte par e-mail pour accéder à la plateforme"
 
@@ -30026,7 +30020,7 @@ msgid "Session expired. Redirecting to login…"
 msgstr "Session expirée. Redirection vers la page d'authentification…"
 
 msgid "Super admin"
-msgstr "Super admin"
+msgstr "Super administrateur"
 
 msgid "Global admin"
 msgstr "Administrateur global"
@@ -32559,7 +32553,7 @@ msgid "Visual theme (assets)"
 msgstr "Thème visuel (ressources)"
 
 msgid "Branding (logos)"
-msgstr "Branding (logos)"
+msgstr "Personnalisation (logos)"
 
 msgid "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback."
 msgstr "Téléchargez des logos optionnels pour l'en-tête et les e-mails. Le format SVG est préféré. PNG est utilisé en secours."
@@ -33083,3 +33077,248 @@ msgstr "Cours à recommencer"
 msgid "Admin Dashboard"
 msgstr "Panneau de contrôle"
 
+msgid "Threads"
+msgstr "Discussions"
+
+msgid "Invalid thread"
+msgstr "Discussion invalide"
+
+msgid "View full thread"
+msgstr "Voir la discussion complète"
+
+msgid "No post yet"
+msgstr "Aucun message"
+
+msgid "Discussion thread"
+msgstr "Fil de discussion"
+
+msgid "Access to this course"
+msgstr "Accès à ce cours"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Ce plugin n'a pas de paramètres configurables. L'activation est gérée depuis la liste des plugins."
+
+msgid "Private - access granted by privileged users"
+msgstr "Privé - accès accordé par les utilisateurs privilégiés"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Aucun retour détaillé n'est disponible pour cette question."
+
+msgid "Please select an answer before checking the result."
+msgstr "Veuillez sélectionner une réponse avant de vérifier le résultat."
+
+msgid "Allow PDF export for this item"
+msgstr "Autoriser l'export PDF pour cet élément"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Masquer les utilisateurs gratuits (non inscrits)"
+
+msgid "Question statistics"
+msgstr "Statistiques des questions"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Génération du fichier. Ne fermez pas cet onglet..."
+
+msgid "Assign auth source to users"
+msgstr "Assigner une source d'authentification aux utilisateurs"
+
+msgid "There are no questions for this survey"
+msgstr "Aucune question pour ce sondage"
+
+msgid "Certificates report"
+msgstr "Rapport des certificats"
+
+msgid "Course picture"
+msgstr "Image du cours"
+
+msgid "Current picture"
+msgstr "Image actuelle"
+
+msgid "Course events log"
+msgstr "Journal des événements du cours"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Mettre à jour les informations de la catégorie et sa limite de temps optionnelle."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Créez un groupe logique de sessions pour organiser votre catalogue de formations."
+
+msgid "Generating file, do not close this tab"
+msgstr "Génération du fichier, ne fermez pas cet onglet"
+
+msgid "Assign authentication sources to users"
+msgstr "Assigner des sources d'authentification aux utilisateurs"
+
+msgid "Average completion rate"
+msgstr "Taux de complétion moyen"
+
+msgid "Average access rate"
+msgstr "Taux d'accès moyen"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Ce tableau résume la progression et l'activité des apprenants par parcours d'apprentissage dans vos cours actuels."
+
+msgid "Follow up"
+msgstr "Suivi"
+
+msgid "Tracking for superior"
+msgstr "Suivi pour supérieur"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Ce rapport montre la distribution hebdomadaire des sessions par coach général dans la plage de dates sélectionnée."
+
+msgid "Head manager report"
+msgstr "Rapport du responsable principal"
+
+msgid "Reset or update user password"
+msgstr "Réinitialiser ou mettre à jour le mot de passe de l'utilisateur"
+
+msgid "Active users"
+msgstr "Utilisateurs actifs"
+
+msgid "Inactive users"
+msgstr "Utilisateurs inactifs"
+
+msgid "Report on resources"
+msgstr "Rapport sur les ressources"
+
+msgid "Global view"
+msgstr "Vue globale"
+
+msgid "Available reports"
+msgstr "Rapports disponibles"
+
+msgid "Current report"
+msgstr "Rapport actuel"
+
+msgid "Back to user assignment page"
+msgstr "Retour à la page des affectations d'utilisateurs"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Sources d'authentification affectées avec succès"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Astuce : choisissez « — Juste uploader — » pour stocker sans envoyer à personne."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Veuillez sélectionner au moins un destinataire (« — Juste uploader — » ou un utilisateur)"
+
+msgid "Sharing"
+msgstr "Partage"
+
+msgid "Selected files"
+msgstr "Fichiers sélectionnés"
+
+msgid "Hide password"
+msgstr "Masquer le mot de passe"
+
+msgid "Show password"
+msgstr "Afficher le mot de passe"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Téléverser un logo SVG pour les e-mails"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Vous devez déplacer ou supprimer tous les parcours d'apprentissage de cette catégorie avant de la supprimer."
+
+msgid "Clear filters"
+msgstr "Effacer les filtres"
+
+msgid "Attendances (tablet)"
+msgstr "Présences (tablette)"
+
+msgid "Exit tablet mode"
+msgstr "Quitter le mode tablette"
+
+msgid "No members found."
+msgstr "Aucun membre trouvé."
+
+msgid "Health check"
+msgstr "Vérification de santé"
+
+msgid "Export to CC 1.3"
+msgstr "Exporter vers CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Chargement des ressources..."
+
+msgid "Failed to load resources."
+msgstr "Échec du chargement des ressources."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Veuillez sélectionner au moins une ressource exportable (document, lien web, discussion,...)."
+
+msgid "Export finished."
+msgstr "Export terminé."
+
+msgid "Export failed."
+msgstr "Échec de l'export."
+
+msgid "Import failed."
+msgstr "Échec de l'import."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Fichier local (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Prêt à importer"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Nous allons restaurer la sauvegarde dans ce cours. Vous pouvez revenir en arrière pour changer les options."
+
+msgid "Select resources to import"
+msgstr "Sélectionner les ressources à importer"
+
+msgid "No resources available in this backup."
+msgstr "Aucune ressource disponible dans cette sauvegarde."
+
+msgid "Import selection"
+msgstr "Sélection d'import"
+
+msgid "Import completed"
+msgstr "Import terminé"
+
+msgid "Could not load options."
+msgstr "Impossible de charger les options."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Veuillez sélectionner un fichier de sauvegarde (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Veuillez choisir une sauvegarde sur le serveur"
+
+msgid "Error selecting source."
+msgstr "Erreur lors de la sélection de la source."
+
+msgid "Recycling options"
+msgstr "Options de recyclage"
+
+msgid "Type the course code to confirm"
+msgstr "Tapez le code du cours pour confirmer"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Cela supprimera ou réinitialisera les ressources sélectionnées. Cette action est irréversible."
+
+msgid "Select resources to recycle"
+msgstr "Sélectionner les ressources à recycler"
+
+msgid "No resources available in this course."
+msgstr "Aucune ressource disponible dans ce cours."
+
+msgid "Recycle selected"
+msgstr "Recycler la sélection"
+
+msgid "Error loading resources."
+msgstr "Erreur lors du chargement des ressources."
+
+msgid "Clear search"
+msgstr "Effacer la recherche"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Seules les lettres, les chiffres et le tiret bas (_) sont autorisés dans le nom de la base de données. Les caractères invalides seront supprimés automatiquement."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Quelles conditions générales d'utilisation sont données aux utilisateurs pour utiliser cette plateforme ?"
+
+msgid "Welcome to Chamilo!"
+msgstr "Bienvenue dans Chamilo!"

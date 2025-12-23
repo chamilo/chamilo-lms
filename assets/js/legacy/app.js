@@ -9,7 +9,7 @@ global.$ = global.jQuery = $
 
 //Routing.setRoutingData(routes);
 
-const locale = document.querySelector("html").lang
+const locale = document.documentElement.dataset.lang
 // moment
 const { DateTime } = require("luxon")
 window.luxon = global.luxon = DateTime

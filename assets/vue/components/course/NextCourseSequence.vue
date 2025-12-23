@@ -27,24 +27,24 @@
             <p class="mt-2 text-sm font-semibold">
               <span
                 v-if="course.status"
-                @click="goToCourse(course.id)"
                 class="text-green-700 cursor-pointer hover:underline"
+                @click="goToCourse(course.id)"
               >
                 {{ course.name }}
               </span>
 
               <span
                 v-else
-                class="text-red-700 cursor-not-allowed opacity-60"
                 :title="t('This course is locked. You must complete the prerequisite(s) first.')"
+                class="text-red-700 cursor-not-allowed opacity-60"
               >
                 {{ course.name }}
               </span>
             </p>
 
             <span
-              class="mt-1 text-xs px-2 py-1 rounded font-medium"
               :class="course.status ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
+              class="mt-1 text-xs px-2 py-1 rounded font-medium"
             >
               <i
                 :class="course.status ? 'mdi mdi-check' : 'mdi mdi-alert-circle'"
@@ -76,7 +76,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue"
+import { onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useCidReqStore } from "../../store/cidReq"
 import courseService from "../../services/courseService"

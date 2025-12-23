@@ -10921,7 +10921,7 @@ msgstr ""
 msgid "The address of"
 msgstr ""
 
-msgid "Your registration on"
+msgid "Your registration on %s"
 msgstr ""
 
 msgid "This login is already taken. Use your browser's back button and choose another."
@@ -22078,7 +22078,7 @@ msgstr ""
 msgid "Triple select"
 msgstr ""
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr ""
 
 msgid "Add text"
@@ -22138,13 +22138,10 @@ msgstr ""
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr ""
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr ""
 
 msgid "Confirmation for new account"
-msgstr ""
-
-msgid "You need confirm your account via email to access the platform"
 msgstr ""
 
 msgid "Enable Cloud files link addition"
@@ -24982,9 +24979,6 @@ msgstr ""
 msgid "Click to view details"
 msgstr ""
 
-msgid "This report applies to all plateform activities of the user."
-msgstr ""
-
 msgid "dd/mm/yyyy"
 msgstr ""
 
@@ -27540,7 +27534,7 @@ msgstr ""
 msgid "Password too easy to guess"
 msgstr ""
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr ""
 
 msgid "Redirect to portal home"
@@ -31189,4 +31183,205 @@ msgid "Generating file. Do not close this tab..."
 msgstr ""
 
 msgid "There are no questions for this survey"
+msgstr ""
+
+msgid "Certificates report"
+msgstr ""
+
+msgid "Course picture"
+msgstr ""
+
+msgid "Current picture"
+msgstr ""
+
+msgid "Course events log"
+msgstr ""
+
+msgid "Update the category information and its optional time limit."
+msgstr ""
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr ""
+
+msgid "Generating file, do not close this tab"
+msgstr ""
+
+msgid "Assign authentication sources to users"
+msgstr ""
+
+msgid "Average completion rate"
+msgstr ""
+
+msgid "Average access rate"
+msgstr ""
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr ""
+
+msgid "Follow up"
+msgstr ""
+
+msgid "Tracking for superior"
+msgstr ""
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr ""
+
+msgid "Head manager report"
+msgstr ""
+
+msgid "Reset or update user password"
+msgstr ""
+
+msgid "Active users"
+msgstr ""
+
+msgid "Inactive users"
+msgstr ""
+
+msgid "Report on resources"
+msgstr ""
+
+msgid "Global view"
+msgstr ""
+
+msgid "Available reports"
+msgstr ""
+
+msgid "Current report"
+msgstr ""
+
+msgid "Back to user assignment page"
+msgstr ""
+
+msgid "Authentication sources assigned successfully"
+msgstr ""
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr ""
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr ""
+
+msgid "Sharing"
+msgstr ""
+
+msgid "Selected files"
+msgstr ""
+
+msgid "Hide password"
+msgstr ""
+
+msgid "Show password"
+msgstr ""
+
+msgid "Upload SVG logo for e-mails"
+msgstr ""
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr ""
+
+msgid "Clear filters"
+msgstr ""
+
+msgid "Attendances (tablet)"
+msgstr ""
+
+msgid "Exit tablet mode"
+msgstr ""
+
+msgid "No members found."
+msgstr ""
+
+msgid "Health check"
+msgstr ""
+
+msgid "Export to CC 1.3"
+msgstr ""
+
+msgid "Loading resources..."
+msgstr ""
+
+msgid "Failed to load resources."
+msgstr ""
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr ""
+
+msgid "Export finished."
+msgstr ""
+
+msgid "Export failed."
+msgstr ""
+
+msgid "Import failed."
+msgstr ""
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr ""
+
+msgid "Ready to import"
+msgstr ""
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr ""
+
+msgid "Select resources to import"
+msgstr ""
+
+msgid "No resources available in this backup."
+msgstr ""
+
+msgid "Import selection"
+msgstr ""
+
+msgid "Import completed"
+msgstr ""
+
+msgid "Could not load options."
+msgstr ""
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr ""
+
+msgid "Please choose a backup from the server"
+msgstr ""
+
+msgid "Error selecting source."
+msgstr ""
+
+msgid "Recycling options"
+msgstr ""
+
+msgid "Type the course code to confirm"
+msgstr ""
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr ""
+
+msgid "Select resources to recycle"
+msgstr ""
+
+msgid "No resources available in this course."
+msgstr ""
+
+msgid "Recycle selected"
+msgstr ""
+
+msgid "Error loading resources."
+msgstr ""
+
+msgid "Clear search"
+msgstr ""
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr ""
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr ""
+
+msgid "ex. {examplePassword}"
+msgstr ""
+
+msgid "Welcome to Chamilo!"
 msgstr ""

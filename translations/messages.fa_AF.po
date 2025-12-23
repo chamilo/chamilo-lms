@@ -5569,10 +5569,10 @@ msgid "Please select the version of the LDAP server you want to use. Using the r
 msgstr "لطفاً نسخه سرور LDAP مورد نظر را انتخاب کنید. استفاده از نسخه درست بستگی به پیکربندی سرور LDAP شما دارد."
 
 msgid "LDAP 2"
-msgstr "LDAP 2"
+msgstr "LDAP ۲"
 
 msgid "LDAP 3"
-msgstr "LDAP 3"
+msgstr "LDAP ۳"
 
 msgid "Tutor identification field"
 msgstr "فیلد شناسایی مربی"
@@ -10920,8 +10920,8 @@ msgstr "است"
 msgid "The address of"
 msgstr "آدرس"
 
-msgid "Your registration on"
-msgstr "ثبت‌نام شما در"
+msgid "Your registration on %s"
+msgstr "ثبت‌نام شما در %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "این نام کاربری قبلاً گرفته شده است. از دکمه بازگشت مرورگر استفاده کنید و دیگری انتخاب کنید."
@@ -18688,10 +18688,10 @@ msgid "Main CAS server protocol"
 msgstr "پروتکل سرور اصلی CAS"
 
 msgid "CAS 1"
-msgstr "CAS 1"
+msgstr "CAS ۱"
 
 msgid "CAS 2"
-msgstr "CAS 2"
+msgstr "CAS ۲"
 
 msgid "SAML"
 msgstr "SAML"
@@ -22083,7 +22083,7 @@ msgstr "انتخاب با فیلد متنی"
 msgid "Triple select"
 msgstr "انتخاب سه‌گانه"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "تأیید می‌کنید که واقعاً می‌خواهید در این پلتفرم اشتراک کنید."
 
 msgid "Add text"
@@ -22143,14 +22143,11 @@ msgstr "تأیید ثبت‌نام"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "حساب شما غیرفعال است زیرا هنوز آن را تأیید نکرده‌اید. ایمیل خود را بررسی کنید و دستورالعمل‌ها را دنبال کنید یا روی لینک زیر کلیک کنید تا ایمیل مجدداً ارسال شود"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "برای تکمیل ثبت‌نام پلتفرم، باید حساب خود را با کلیک روی لینک زیر تأیید کنید"
 
 msgid "Confirmation for new account"
 msgstr "تأیید برای حساب جدید"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "برای دسترسی به پلتفرم باید حساب خود را از طریق ایمیل تأیید کنید"
 
 msgid "Enable Cloud files link addition"
 msgstr "فعال کردن افزودن لینک فایل‌های ابری"
@@ -23203,7 +23200,7 @@ msgid "No status"
 msgstr "بدون وضعیت"
 
 msgid "CAS 3"
-msgstr "CAS 3"
+msgstr "CAS ۳"
 
 msgid "Go back to video"
 msgstr "بازگشت به ویدیو"
@@ -24986,9 +24983,6 @@ msgstr "خروجی همه نتایج همه آزمون‌ها"
 
 msgid "Click to view details"
 msgstr "برای مشاهده جزئیات کلیک کنید"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "این گزارش به همه فعالیت‌های پلتفرم کاربر اعمال می‌شود."
 
 msgid "dd/mm/yyyy"
 msgstr "روز/ماه/سال"
@@ -27546,7 +27540,7 @@ msgstr "شرایط استفاده از پلتفرم"
 msgid "Password too easy to guess"
 msgstr "رمز عبور بیش از حد ساده است"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "برای دسترسی به پلتفرم باید حساب خود را از طریق ایمیل تأیید کنید"
 
 msgid "Redirect to portal home"
@@ -31214,4 +31208,229 @@ msgstr "رشته بحث"
 
 msgid "Access to this course"
 msgstr "دسترسی به این درس"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "این افزونه تنظیمات قابل پیکربندی ندارد. فعال‌سازی از لیست افزونه‌ها مدیریت می‌شود."
+
+msgid "Private - access granted by privileged users"
+msgstr "خصوصی - دسترسی توسط کاربران ویژه اعطا می‌شود"
+
+msgid "No detailed feedback is available for this question."
+msgstr "بازخورد تفصیلی برای این سؤال در دسترس نیست."
+
+msgid "Please select an answer before checking the result."
+msgstr "لطفاً قبل از بررسی نتیجه، یک پاسخ انتخاب کنید."
+
+msgid "Allow PDF export for this item"
+msgstr "اجازه صادرات PDF برای این مورد"
+
+msgid "Hide free users (not enrolled)"
+msgstr "پنهان کردن کاربران رایگان (ثبت‌نام نشده)"
+
+msgid "Question statistics"
+msgstr "آمار سؤالات"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "در حال تولید فایل. این تب را نبندید..."
+
+msgid "Assign auth source to users"
+msgstr "اختصاص منبع احراز هویت به کاربران"
+
+msgid "There are no questions for this survey"
+msgstr "هیچ سؤالی برای این نظرسنجی وجود ندارد"
+
+msgid "Certificates report"
+msgstr "گزارش گواهینامه‌ها"
+
+msgid "Course picture"
+msgstr "تصویر دوره"
+
+msgid "Current picture"
+msgstr "تصویر فعلی"
+
+msgid "Course events log"
+msgstr "گزارش وقایع دوره"
+
+msgid "Update the category information and its optional time limit."
+msgstr "به‌روزرسانی اطلاعات دسته‌بندی و محدودیت زمانی اختیاری آن."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "ایجاد گروه منطقی از جلسات برای سازماندهی کاتالوگ آموزشی خود."
+
+msgid "Generating file, do not close this tab"
+msgstr "در حال تولید فایل، این تب را نبندید"
+
+msgid "Assign authentication sources to users"
+msgstr "اختصاص منابع احراز هویت به کاربران"
+
+msgid "Average completion rate"
+msgstr "نرخ تکمیل متوسط"
+
+msgid "Average access rate"
+msgstr "نرخ دسترسی متوسط"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "این جدول پیشرفت و فعالیت یادگیرنده را به ازای هر مسیر یادگیری در دوره‌های فعلی شما خلاصه می‌کند."
+
+msgid "Follow up"
+msgstr "پیگیری"
+
+msgid "Tracking for superior"
+msgstr "پیگیری برای مدیر ارشد"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "این گزارش توزیع هفتگی جلسات به ازای مربی عمومی در بازه زمانی انتخاب‌شده را نشان می‌دهد."
+
+msgid "Head manager report"
+msgstr "گزارش مدیر ارشد"
+
+msgid "Reset or update user password"
+msgstr "بازنشانی یا به‌روزرسانی رمز عبور کاربر"
+
+msgid "Active users"
+msgstr "کاربران فعال"
+
+msgid "Inactive users"
+msgstr "کاربران غیرفعال"
+
+msgid "Report on resources"
+msgstr "گزارش منابع"
+
+msgid "Global view"
+msgstr "نمایش کلی"
+
+msgid "Available reports"
+msgstr "گزارش‌های در دسترس"
+
+msgid "Current report"
+msgstr "گزارش فعلی"
+
+msgid "Back to user assignment page"
+msgstr "بازگشت به صفحه اختصاص کاربر"
+
+msgid "Authentication sources assigned successfully"
+msgstr "منابع احراز هویت با موفقیت اختصاص یافت"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "نکته: «— فقط بارگذاری —» را انتخاب کنید تا بدون ارسال به کسی ذخیره شود."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "لطفاً حداقل یک گیرنده انتخاب کنید («— فقط بارگذاری —» یا هر کاربر)"
+
+msgid "Sharing"
+msgstr "اشتراک‌گذاری"
+
+msgid "Selected files"
+msgstr "فایل‌های انتخاب‌شده"
+
+msgid "Hide password"
+msgstr "پنهان کردن رمز عبور"
+
+msgid "Show password"
+msgstr "نمایش رمز عبور"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "بارگذاری لوگوی SVG برای ایمیل‌ها"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "باید تمام مسیرهای یادگیری را از این دسته‌بندی منتقل یا حذف کنید قبل از حذف آن."
+
+msgid "Clear filters"
+msgstr "پاک کردن فیلترها"
+
+msgid "Attendances (tablet)"
+msgstr "حضور و غیاب (لوح)"
+
+msgid "Exit tablet mode"
+msgstr "خروج از حالت لوح"
+
+msgid "No members found."
+msgstr "هیچ عضوی یافت نشد."
+
+msgid "Health check"
+msgstr "بررسی سلامت"
+
+msgid "Export to CC 1.3"
+msgstr "خروجی به CC 1.3"
+
+msgid "Loading resources..."
+msgstr "در حال بارگیری منابع..."
+
+msgid "Failed to load resources."
+msgstr "بارگیری منابع ناموفق بود."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "لطفاً حداقل یک منبع قابل خروجی (سند، پیوند وب، بحث،...) را انتخاب کنید."
+
+msgid "Export finished."
+msgstr "خروجی کامل شد."
+
+msgid "Export failed."
+msgstr "خروجی ناموفق بود."
+
+msgid "Import failed."
+msgstr "وارد کردن ناموفق بود."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "فایل محلی (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "آماده برای وارد کردن"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "پشتیبان را در این درس بازسازی خواهیم کرد. می‌توانید برگردید تا گزینه‌ها را تغییر دهید."
+
+msgid "Select resources to import"
+msgstr "انتخاب منابع برای وارد کردن"
+
+msgid "No resources available in this backup."
+msgstr "هیچ منبعی در این پشتیبان موجود نیست."
+
+msgid "Import selection"
+msgstr "انتخاب وارد کردن"
+
+msgid "Import completed"
+msgstr "وارد کردن کامل شد"
+
+msgid "Could not load options."
+msgstr "بارگیری گزینه‌ها ممکن نشد."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "لطفاً یک فایل پشتیبان (.zip, .mbz, .tgz, .gz) انتخاب کنید"
+
+msgid "Please choose a backup from the server"
+msgstr "لطفاً یک پشتیبان از سرور انتخاب کنید"
+
+msgid "Error selecting source."
+msgstr "خطا در انتخاب منبع."
+
+msgid "Recycling options"
+msgstr "گزینه‌های بازیافت"
+
+msgid "Type the course code to confirm"
+msgstr "کد درس را برای تأیید وارد کنید"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "این منابع انتخاب‌شده را حذف یا بازنشانی خواهد کرد. این عمل قابل بازگشت نیست."
+
+msgid "Select resources to recycle"
+msgstr "انتخاب منابع برای بازیافت"
+
+msgid "No resources available in this course."
+msgstr "هیچ منبعی در این درس موجود نیست."
+
+msgid "Recycle selected"
+msgstr "بازیافت انتخاب‌شده‌ها"
+
+msgid "Error loading resources."
+msgstr "خطا در بارگیری منابع."
+
+msgid "Clear search"
+msgstr "پاک کردن جستجو"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "فقط حروف، ارقام و زیرخط (_) در نام پایگاه داده مجاز است. کاراکترهای نامعتبر به طور خودکار حذف می‌شوند."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "چه شرایط و قوانین کلی به کاربران برای استفاده از این پلتفرم داده می‌شود؟"
 

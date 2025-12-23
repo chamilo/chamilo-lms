@@ -73,37 +73,37 @@ msgid "Cosecant:\t\t\t\tcsc(x)"
 msgstr "Cosecant:\t\t\t\tcsc(x)"
 
 msgid "Hyperbolic cosecant:\t\tcsch(x)"
-msgstr "Hyperbolic cosecant:\t\tcsch(x)"
+msgstr "קוסקנט היפרבולי:\t\tcsch(x)"
 
 msgid "Arccosecant:\t\t\tarccsc(x)"
 msgstr "Arccosecant:\t\t\tarccsc(x)"
 
 msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
-msgstr "Hyperbolic arccosecant:\t\tarccsch(x)"
+msgstr "ארקקוסקנט היפרבולי:\t\tarccsch(x)"
 
 msgid "Secant:\t\t\t\tsec(x)"
 msgstr "Secant:\t\t\t\tsec(x)"
 
 msgid "Hyperbolic secant:\t\tsech(x)"
-msgstr "Hyperbolic secant:\t\tsech(x)"
+msgstr "סקנט היפרבולי:\t\tsech(x)"
 
 msgid "Arcsecant:\t\t\tarcsec(x)"
 msgstr "Arcsecant:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
-msgstr "Hyperbolic arcsecant:\t\tarcsech(x)"
+msgstr "ארקסקנט היפרבולי:\t\tarcsech(x)"
 
 msgid "Cotangent:\t\t\tcot(x)"
 msgstr "Cotangent:\t\t\tcot(x)"
 
 msgid "Hyperbolic cotangent:\t\tcoth(x)"
-msgstr "Hyperbolic cotangent:\t\tcoth(x)"
+msgstr "קוטנגנס היפרבולי:\t\tcoth(x)"
 
 msgid "Arccotangent:\t\t\tarccot(x)"
 msgstr "Arccotangent:\t\t\tarccot(x)"
 
 msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
-msgstr "Hyperbolic arccotangent:\t\tarccoth(x)"
+msgstr "ארקקוטנגנס היפרבולי:\t\tarccoth(x)"
 
 msgid "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />\nIf needed, the Help section of your browser indicates how to configure cookies.<br /><br />\nFor more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website."
 msgstr "על מנת שהאתר הזה יעבוד ויוכל למדוד את השימוש בתוכן, פלטפורמה זו משתמשת בקובצי Cookie.<br /><br />\nבמידת הצורך, קטע העזרה בדפדפן שלך מציין כיצד להגדיר קובצי Cookie.<br /> <br />\nלמידע נוסף על קובצי Cookie, אתה יכול לבקר באתר <a href=\"http://www.aboutcookies.org/\">אודות קובצי Cookie</a>."
@@ -232,7 +232,7 @@ msgid "The session duration allows you to set a number of days of access startin
 msgstr "משך ההפעלה מאפשר לך להגדיר מספר ימי גישה החל מתאריך הגישה הראשון של המשתמש לסשן. כך תוכלו להגדיר מפגש \"למשך 15 ימים\" במקום להתחיל בתאריך קבוע לכל התלמידים."
 
 msgid "Hyperbolic arctangent:\t\tarctanh(x)"
-msgstr "Hyperbolic arctangent:\t\tarctanh(x)"
+msgstr "ארקטנגנס היפרבולי:\t\tarctanh(x)"
 
 msgid "Session duration"
 msgstr "משך הפגישה"
@@ -241,7 +241,7 @@ msgid "Arctangent:\t\t\tarctan(x)"
 msgstr "Arctangent:\t\t\tarctan(x)"
 
 msgid "Hyperbolic tangent:\t\ttanh(x)"
-msgstr "Hyperbolic tangent:\t\ttanh(x)"
+msgstr "טנגנס היפרבולי:\t\ttanh(x)"
 
 msgid "Tangent:\t\t\ttan(x)"
 msgstr "Tangent:\t\t\ttan(x)"
@@ -253,13 +253,13 @@ msgid "Series"
 msgstr "סדרות"
 
 msgid "Hyperbolic arccosine:\t\tarccosh(x)"
-msgstr "Hyperbolic arccosine:\t\tarccosh(x)"
+msgstr "ארקקוסינוס היפרבולי:\t\tarccosh(x)"
 
 msgid "Arccosine:\t\t\tarccos(x)"
 msgstr "Arccosine:\t\t\tarccos(x)"
 
 msgid "Hyperbolic cosine:\t\tcosh(x)"
-msgstr "Hyperbolic cosine:\t\tcosh(x)"
+msgstr "קוסינוס היפרבולי:\t\tcosh(x)"
 
 msgid "Cosine:\t\t\t\tcos(x)"
 msgstr "Cosine:\t\t\t\tcos(x)"
@@ -268,7 +268,7 @@ msgid "Teachers time report"
 msgstr "דוח זמן של המורים"
 
 msgid "Hyperbolic arcsine:\t\tarcsinh(x)"
-msgstr "Hyperbolic arcsine:\t\tarcsinh(x)"
+msgstr "ארקסינוס היפרבולי:\t\tarcsinh(x)"
 
 msgid "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator."
 msgstr "לא מוצא את השפה שלך ברשימה? צור איתנו קשר בכתובת info@chamilo.org כדי לתרום כמתרגם."
@@ -277,28 +277,28 @@ msgid "Arcsine:\t\t\tarcsin(x)"
 msgstr "Arcsine:\t\t\tarcsin(x)"
 
 msgid "Hyperbolic sine:\t\tsinh(x)"
-msgstr "Hyperbolic sine:\t\tsinh(x)"
+msgstr "סינוס היפרבולי:\t\tsinh(x)"
 
 msgid "Sine:\t\t\t\tsin(x)"
 msgstr "Sine:\t\t\t\tsin(x)"
 
 msgid "Pi number:\t\t\tpi"
-msgstr "Pi number:\t\t\tpi"
+msgstr "מספר פאי:\t\t\tpi"
 
 msgid "E number:\t\t\te"
-msgstr "E number:\t\t\te"
+msgstr "מספר אֵי:\t\t\te"
 
 msgid "Logarithm:\t\t\tlog(x)"
 msgstr "Logarithm:\t\t\tlog(x)"
 
 msgid "Natural logarithm:\t\tln(x)"
-msgstr "Natural logarithm:\t\tln(x)"
+msgstr "לוגריתם טבעי:\t\tln(x)"
 
 msgid "Absolute value:\t\t\tabs(x)"
-msgstr "Absolute value:\t\t\tabs(x)"
+msgstr "ערך מוחלט:\t\t\tabs(x)"
 
 msgid "Square root:\t\t\tsqrt(x)"
-msgstr "Square root:\t\t\tsqrt(x)"
+msgstr "שורש ריבועי:\t\t\tsqrt(x)"
 
 msgid "Exponentiation:\t\t\t^"
 msgstr "Exponentiation:\t\t\t^"
@@ -2031,7 +2031,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":כן:זכויות יוצרים,, לא:ללא זכויות יוצרים"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:תיקייה,, application/msword:MsWord,, application/octet-stream:זרם אוקטט,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":תרגיל:תרגיל,,      סימולציה:סימולציה,,      שאלון:שאלון,,      דיאגרמה:דיאגרמה,,      איור:איור,,      גרף:גרף,,      אינדקס:אינדקס,,      שקופית:שקופית,,      טבלה:טבלה,,      טקסט נרטיבי:טקסט נרטיבי,,      מבחן:מבחן,,      ניסוי:ניסוי,,      ניסוח בעיה:ניסוח בעיה,,      הערכה עצמית:הערכה עצמית,,      הרצאה:הרצאה"
@@ -10934,8 +10934,8 @@ msgstr "הוא"
 msgid "The address of"
 msgstr "הכתובת של"
 
-msgid "Your registration on"
-msgstr "הרישום שלך ב"
+msgid "Your registration on %s"
+msgstr "הרישום שלך ב %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "כניסה זו כבר בוצעה. השתמש בלחצן החזרה של הדפדפן שלך ובחר אחר."
@@ -16410,7 +16410,7 @@ msgid "Not inserted"
 msgstr "לא הוכנס"
 
 msgid "Superior (n+1)"
-msgstr "Superior (n+1)"
+msgstr "עליון (n+1)"
 
 msgid "Enable the MathJax library to visualize mathematical formulas. This is only useful if either ASCIIMathML or ASCIISVG settings are enabled."
 msgstr "אפשר לספריית MathJax להמחיש נוסחאות מתמטיות. זה שימושי רק אם הגדרות ASCIIMathML או ASCIISVG מופעלות."
@@ -22101,7 +22101,7 @@ msgstr "בחר עם שדה טקסט"
 msgid "Triple select"
 msgstr "בחירה משולשת"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "אתה מאשר שאתה באמת רוצה להירשם לפלטפורמה זו."
 
 msgid "Add text"
@@ -22161,14 +22161,11 @@ msgstr "אישור רישום"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "חשבון שלך לא פעיל מכיוון שעדיין לא אישרת אותו. בדוק את הדוא\"ל שלך ופעל לפי ההוראות או לחץ על הקישור הבא כדי לשלוח שוב את הדוא\"ל"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "כדי להשלים את רישום הפלטפורמה שלך עליך לאשר את חשבונך על ידי לחיצה על הקישור הבא"
 
 msgid "Confirmation for new account"
 msgstr "אישור לחשבון חדש"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "עליך לאשר את חשבונך באמצעות דואר אלקטרוני כדי לגשת לפלטפורמה"
 
 msgid "Enable Cloud files link addition"
 msgstr "אפשר הוספת קישור לקבצי ענן"
@@ -25005,9 +25002,6 @@ msgstr "ייצא את כל תוצאות כל המבחנים"
 msgid "Click to view details"
 msgstr "לחץ כדי לראות פרטים"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "דוח זה חל על כל פעילויות הפלטפורמה של המשתמש."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27564,7 +27558,7 @@ msgstr "תנאי שימוש בפלטפורמה"
 msgid "Password too easy to guess"
 msgstr "סיסמה קלה מדי לניחוש"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "עליך לאשר את חשבונך בדוא\"ל כדי לגשת לפלטפורמה"
 
 msgid "Redirect to portal home"
@@ -31245,4 +31239,217 @@ msgstr "אין משוב מפורט זמין לשאלה זו."
 
 msgid "Please select an answer before checking the result."
 msgstr "נא לבחור תשובה לפני בדיקת התוצאה."
+
+msgid "Allow PDF export for this item"
+msgstr "אפשר ייצוא PDF עבור פריט זה"
+
+msgid "Hide free users (not enrolled)"
+msgstr "הסתר משתמשים חופשיים (לא רשומים)"
+
+msgid "Question statistics"
+msgstr "סטטיסטיקות שאלות"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "מייצר קובץ. אל תסגור לשונית זו..."
+
+msgid "Assign auth source to users"
+msgstr "הקצה מקור אימות למשתמשים"
+
+msgid "There are no questions for this survey"
+msgstr "אין שאלות עבור סקר זה"
+
+msgid "Certificates report"
+msgstr "דוח תעודות"
+
+msgid "Course picture"
+msgstr "תמונת קורס"
+
+msgid "Current picture"
+msgstr "תמונה נוכחית"
+
+msgid "Course events log"
+msgstr "יומן אירועי קורס"
+
+msgid "Update the category information and its optional time limit."
+msgstr "עדכן מידע קטגוריה ומגבלת זמן אופציונלית."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "צור קבוצה לוגית של מפגשים כדי לשמור על סדר בקטלוג ההכשרה שלך."
+
+msgid "Generating file, do not close this tab"
+msgstr "מייצר קובץ, אל תסגור לשונית זו"
+
+msgid "Assign authentication sources to users"
+msgstr "הקצה מקורות אימות למשתמשים"
+
+msgid "Average completion rate"
+msgstr "שיעור השלמה ממוצע"
+
+msgid "Average access rate"
+msgstr "שיעור גישה ממוצע"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "טבלה זו מסכמת התקדמות ופעילות של לומדים עבור מסלולי למידה בקורסים הנוכחיים שלך."
+
+msgid "Follow up"
+msgstr "מעקב"
+
+msgid "Tracking for superior"
+msgstr "מעקב לממונה"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "דוח זה מציג את התפלגות המפגשים השבועית עבור מאמן כללי בטווח התאריכים שנבחר."
+
+msgid "Head manager report"
+msgstr "דוח מנהל ראשי"
+
+msgid "Reset or update user password"
+msgstr "אפס או עדכן סיסמת משתמש"
+
+msgid "Active users"
+msgstr "משתמשים פעילים"
+
+msgid "Inactive users"
+msgstr "משתמשים לא פעילים"
+
+msgid "Report on resources"
+msgstr "דוח על משאבים"
+
+msgid "Global view"
+msgstr "תצוגה כללית"
+
+msgid "Available reports"
+msgstr "דוחות זמינים"
+
+msgid "Current report"
+msgstr "דוח נוכחי"
+
+msgid "Back to user assignment page"
+msgstr "חזור לעמוד הקצאת משתמשים"
+
+msgid "Authentication sources assigned successfully"
+msgstr "מקורות אימות הוקצו בהצלחה"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "טיפ: בחר “— העלה בלבד —” כדי לשמור ללא שליחה לאיש."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "נא לבחור לפחות נמען אחד (“— העלה בלבד —” או משתמש כלשהו)"
+
+msgid "Sharing"
+msgstr "שיתוף"
+
+msgid "Selected files"
+msgstr "קבצים שנבחרו"
+
+msgid "Hide password"
+msgstr "הסתר סיסמה"
+
+msgid "Show password"
+msgstr "הצג סיסמה"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "העלה לוגו SVG עבור דוא\"לים"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "עליך להעביר או למחוק את כל מסלולי הלמידה מקטגוריה זו לפני מחיקתה."
+
+msgid "Clear filters"
+msgstr "נקה מסננים"
+
+msgid "Attendances (tablet)"
+msgstr "נוכחות (טאבלט)"
+
+msgid "Exit tablet mode"
+msgstr "צא ממצב טאבלט"
+
+msgid "No members found."
+msgstr "לא נמצאו חברים."
+
+msgid "Health check"
+msgstr "בדיקת בריאות"
+
+msgid "Export to CC 1.3"
+msgstr "ייצא ל-CC 1.3"
+
+msgid "Loading resources..."
+msgstr "טוען משאבים..."
+
+msgid "Failed to load resources."
+msgstr "נכשל בטעינת המשאבים."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "אנא בחרו לפחות משאב אחד לייצוא (מסמך, קישור אינטרנט, דיון,...)."
+
+msgid "Export finished."
+msgstr "הייצוא הושלם."
+
+msgid "Export failed."
+msgstr "הייצוא נכשל."
+
+msgid "Import failed."
+msgstr "היבוא נכשל."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "קובץ מקומי (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "מוכן לייבוא"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "נשחזר את הגיבוי לקורס זה. ניתן לחזור לשנות אפשרויות."
+
+msgid "Select resources to import"
+msgstr "בחירת משאבים לייבוא"
+
+msgid "No resources available in this backup."
+msgstr "אין משאבים זמינים בגיבוי זה."
+
+msgid "Import selection"
+msgstr "בחירת יבוא"
+
+msgid "Import completed"
+msgstr "היבוא הושלם"
+
+msgid "Could not load options."
+msgstr "לא ניתן לטעון אפשרויות."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "אנא בחרו קובץ גיבוי (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "אנא בחרו גיבוי מהשרת"
+
+msgid "Error selecting source."
+msgstr "שגיאה בבחירת מקור."
+
+msgid "Recycling options"
+msgstr "אפשרויות מיחזור"
+
+msgid "Type the course code to confirm"
+msgstr "הקלידו קוד קורס לאישור"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "פעולה זו תמחק או תאפס משאבים נבחרים. לא ניתן לבטל פעולה זו."
+
+msgid "Select resources to recycle"
+msgstr "בחירת משאבים למיחזור"
+
+msgid "No resources available in this course."
+msgstr "אין משאבים זמינים בקורס זה."
+
+msgid "Recycle selected"
+msgstr "מיחזור נבחר"
+
+msgid "Error loading resources."
+msgstr "שגיאה בטעינת משאבים."
+
+msgid "Clear search"
+msgstr "נקה חיפוש"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "רק אותיות, ספרות וקו תחתון (_) מותרות בשם מסד הנתונים. תווים לא חוקיים יוסרו אוטומטית."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "אילו תנאים כלליים וכללי משתמש ניתנים למשתמשים לשימוש בפלטפורמה זו?"
 

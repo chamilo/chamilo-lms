@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "په درناوي سره"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "د مثاله فورموله: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "د فورمولې نمونې: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "متغیر حدود"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:کاپي راټ,, no:کاپي راټ نشته"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوډر,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوښه,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:مشق,,      simulation:سيموليشن,,      questionnaire: پوښتنليک,,      diagram: ډايګرام,,      figure: انځور,,      graph:ګراف,,      index:اشاره,,      slide:سلایډ,,      table:جدول,,      narrative text:روايتي متن,,      exam: امتحان,,      experiment: تجربې,,      problem statement: ستونزې بيان,,      self assessment: ځان ارزونه,,      lecture: درس"
@@ -4786,7 +4786,7 @@ msgid "Chamilo LIVE is a videoconferencing tool that offers: Slides sharing, whi
 msgstr "Chamilo LIVE د ویډیو کنفرانس وسیل دی چې وړاندې کوي: اسلایډونو شریکول، ویته بورډ د اسلایډونو پر سر رسم او لیکلو لپاره، غږ/ویډیو دوه اړخیز او چټ. دا Flash® پلیر ۹+ ته اړتیا لري او ۲ حالتونه وړاندې کوي: یو ډول ډېر او ډېر ډول ډېر."
 
 msgid "Chamilo RAPID"
-msgstr "Chamilo RAPID"
+msgstr "چامیلو RAPID"
 
 msgid "Chamilo RAPID is a Rapid Learning tool available in Chamilo Pro and Chamilo Medical. It allows you to convert Powerpoint or LibreOffice presentations to SCORM-compliant courses. After the conversion, you end up in the Courses authoring tool and are able to add audio comments on slides and pages, tests and activities between the slides or pages and interaction activities like forum discussions or assignment upload. Every step becomes an independent and removable learning object. And the whole course generates accurate SCORM reporting for further coaching."
 msgstr "Chamilo RAPID د چټک زده کړې وسیل دی چې په Chamilo Pro او Chamilo Medical کې شتون لري. دا تاسو ته اجازه درکوي چې پاورپاینټ یا LibreOffice پریزنټیشنونه SCORM مطابقو کورسونو ته بدل کړئ. د بدلون وروسته، تاسو د کورسونو لیکلو وسیل کې ځای پر ځای کېږئ او کولی شئ غږیز تبصرې اسلایډونو او پاڼو کې اضافه کړئ، ازموینې او فعالیتونه اسلایډونو یا پاڼو ترمنځ او تعاملي فعالیتونه لکه فورم بحثونه یا دندې اپلوډ. هر ګام یو خپلواک او لرې کېدونکی زده کړې شی کېږي. او ټول کورس دقیق SCORM راپور جوړوي د نورو روزنې لپاره."
@@ -4804,7 +4804,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "AWStats تاسو ته اجازه درکوي چې د پلیټ فارم احصایې وګورئ: لیدونکي، پاڼې لیدل، ریفررونه..."
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "چامیلو لایبرري"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "چامیلو لایبرري یو څو معیارونو انډیکس کولو او څیړنې وړاندیز کوونکی څرنګوالی دی. دا د چامیلو طبي ځانګړتیاوو برخه ده."
@@ -9523,7 +9523,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "د فایل اپلوډ پاتې راغلی: دا فایل وسعت یا فایل ډول منع دی"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "اوپن آیدی URL"
 
 msgid "The file is too big to upload."
 msgstr "فایل د اپلوډ لپاره ډېر لوی دی."
@@ -10920,8 +10920,8 @@ msgstr "دی"
 msgid "The address of"
 msgstr "د ... پتې"
 
-msgid "Your registration on"
-msgstr "ستاسو ثبت پر"
+msgid "Your registration on %s"
+msgstr "ستاسو ثبت پر %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "دا لاس انډاز دمخه نيول شوی دی. له براوزر بېک بوټن څخه کار واخلئ او بل يې غوره کړئ."
@@ -22083,7 +22083,7 @@ msgstr "د متن فیلډ سره ټاکئ"
 msgid "Triple select"
 msgstr "درې ګونې ټاکنه"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "تاسو تایید کوئ چې تاسو واقعاً غواړئ چې د دې پلیټفارم سره تړل شئ."
 
 msgid "Add text"
@@ -22143,14 +22143,11 @@ msgstr "د ثبتګ تائید"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "ستاسو حساب غیر فعال دی ځکه چې تاسو یې لا تایید کړی نه دی. خپل برېښنالیک وګورئ او لارښوونې تعقیب کړئ یا لاندې لینک کلیک کړئ ترڅو برېښنالیک بیا واستول شي"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "د پلیټفارم د ثبتګ بشپړولو لپاره تاسو باید خپل حساب د لاندې لینک په کلیک کولو تایید کړئ"
 
 msgid "Confirmation for new account"
 msgstr "د نوي حساب لپاره تائید"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "د پلیټفارم ته د لاسرسي لپاره تاسو باید خپل حساب د برېښنالیک له لارې تایید کړئ"
 
 msgid "Enable Cloud files link addition"
 msgstr "د ګرځنده فایلونو لینک اضافه فعال کړئ"
@@ -24987,9 +24984,6 @@ msgstr "د ټولو ازموینو ټولې پایلې صادر کړئ"
 msgid "Click to view details"
 msgstr "څارټیل کړئ ترڅو تفصیلات وګورئ"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "دا راپور د کاروونکي ټول پلیټفارم فعالیتونو پورې اړه لري."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27376,7 +27370,7 @@ msgid "Obtained the following skills"
 msgstr "لاندې مهارتونه ترلاسه کړي دي"
 
 msgid "Chamilo LMS"
-msgstr "Chamilo LMS"
+msgstr "چامیلو LMS"
 
 msgid "No course sessions for this user"
 msgstr "د دې کاروونکي لپاره هیڅ کورس غونډې نشته"
@@ -27546,7 +27540,7 @@ msgstr "د پلیټفارم استعمال شرطونه"
 msgid "Password too easy to guess"
 msgstr "پاسورور ډېر اسانه حدس کېدونکی دی"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "د پلیټفارم ته لاسرسی لپاره تاسو باید خپل حساب د برېښنالیک له لارې تصدیق کړئ"
 
 msgid "Redirect to portal home"
@@ -30520,13 +30514,13 @@ msgid "ex. root"
 msgstr "مثال root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "جدول جوړول works"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "جدول بدلول works"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "ستونۍ له منځه وړل works"
 
 msgid "Theme selected as current"
 msgstr "تیم د اوسني په توګه غوره شوی"
@@ -31226,4 +31220,217 @@ msgstr "د دې پوښتنې لپاره تفصیلي فیډبیک شتون نل�
 
 msgid "Please select an answer before checking the result."
 msgstr "د پایلې چک کولو دمخه یوه ځواب غوره کړئ."
+
+msgid "Allow PDF export for this item"
+msgstr "د دې توکي لپاره PDF صادرول اجازه ورکړئ"
+
+msgid "Hide free users (not enrolled)"
+msgstr "بې له پاره کاروونکي پټ کړئ (ثبت شوي نه دي)"
+
+msgid "Question statistics"
+msgstr "د پوښتنو آمار"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "د فایل جوړول. دا ټب مه بندوئ..."
+
+msgid "Assign auth source to users"
+msgstr "د تصدیق سرچینې کاروونکو ته وویشئ"
+
+msgid "There are no questions for this survey"
+msgstr "د دې سروې لپاره پوښتنې نشته"
+
+msgid "Certificates report"
+msgstr "د گواهیو راپور"
+
+msgid "Course picture"
+msgstr "د کورس انځور"
+
+msgid "Current picture"
+msgstr "اوسنی انځور"
+
+msgid "Course events log"
+msgstr "د کورس پېښو لېږد"
+
+msgid "Update the category information and its optional time limit."
+msgstr "د وېشنېز معلومات تازه کړئ او د هغې اختیاري وخت محدودیت."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "د روزنې کټالۆګ منظم ساتلو لپاره د غونډو منطقي ډله جوړه کړئ."
+
+msgid "Generating file, do not close this tab"
+msgstr "د فایل جوړول، دا ټب مه بندوئ"
+
+msgid "Assign authentication sources to users"
+msgstr "د تصدیق سرچینې کاروونکو ته وویشئ"
+
+msgid "Average completion rate"
+msgstr "لومړنۍ بشپړتیا کچه"
+
+msgid "Average access rate"
+msgstr "لومړنۍ لاسرسي کچه"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "دا جدول د تاسو د اوسنيو کورسونو کې د زده کړې لارو د زده کوونکو پرمختګ او فعالیت لنډیز کوي."
+
+msgid "Follow up"
+msgstr "تعقیب"
+
+msgid "Tracking for superior"
+msgstr "د لوړ پوړ لپاره تعقیب"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "دا راپور د ټاکلې نیټې په لړ کې د عمومي کوچ هر عمومي کوچ د غونډو د لومړنۍ وېش ښیي."
+
+msgid "Head manager report"
+msgstr "د مشر مدير راپور"
+
+msgid "Reset or update user password"
+msgstr "د کاروونکي پاسورډ بیا تنظیم یا تازه کړئ"
+
+msgid "Active users"
+msgstr "فعال کاروونکي"
+
+msgid "Inactive users"
+msgstr "غیر فعال کاروونکي"
+
+msgid "Report on resources"
+msgstr "د سرچینو راپور"
+
+msgid "Global view"
+msgstr "عمومي لید"
+
+msgid "Available reports"
+msgstr "شته راپورونه"
+
+msgid "Current report"
+msgstr "اوسنی راپور"
+
+msgid "Back to user assignment page"
+msgstr "د کاروونکي ویش صفحې ته بیرته"
+
+msgid "Authentication sources assigned successfully"
+msgstr "د تصدیق سرچینې په بريارۍ سره وویشل شوې"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "لارښوونه: «— یوازې اپلوډ کړئ —» غوره کړئ چې پرته له دې چې چا ته واستوئ یې ذخیره کړئ."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "لږ تر لږه یو ترلاسه کوونکی غوره کړئ («— یوازې اپلوډ کړئ —» یا هر کاروونکی)"
+
+msgid "Sharing"
+msgstr "شریکول"
+
+msgid "Selected files"
+msgstr "غوره شوي فایلونه"
+
+msgid "Hide password"
+msgstr "پاسورډ پټ کړئ"
+
+msgid "Show password"
+msgstr "پاسورډ ښکاره کړئ"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "د برېښنالیکو لپاره SVG لوګو اپلوډ کړئ"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "د دې له منځه وړلو دمخه باید ټول زده کړې لارې له دې وېشنېز څخه لېږد یا له منځه یوسئ."
+
+msgid "Clear filters"
+msgstr "فلټرونه پاک کړئ"
+
+msgid "Attendances (tablet)"
+msgstr "حاضرۍ (ټابلیټ)"
+
+msgid "Exit tablet mode"
+msgstr "ټابلیټ حالت پرېږدئ"
+
+msgid "No members found."
+msgstr "هیڅ غړي ونه موندل شول."
+
+msgid "Health check"
+msgstr "روغتیا معاینه"
+
+msgid "Export to CC 1.3"
+msgstr "د CC 1.3 ته صادرول"
+
+msgid "Loading resources..."
+msgstr "د سرچینو بار کېدل..."
+
+msgid "Failed to load resources."
+msgstr "د سرچینو بار کېدل پاتې راغلل."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "لږ تر لږه یو صادریدونکی سرچینه غوره کړئ (اسناد، ویب لینک، بحث،...). "
+
+msgid "Export finished."
+msgstr "صادرات بشپړ شو."
+
+msgid "Export failed."
+msgstr "صادرات ناکامه شو."
+
+msgid "Import failed."
+msgstr "واردول ناکامه شو."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "محلي فایل (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "د واردولو لپاره چمتو"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "موږ به د دې کورس په نږدې کاپي بحال کړو. تاسو کولای شئ بیرته لاړ شئ ترڅو اختیارونه بدل کړئ."
+
+msgid "Select resources to import"
+msgstr "د واردولو سرچینې غوره کړئ"
+
+msgid "No resources available in this backup."
+msgstr "د دې کاپي کې هیڅ سرچینې شتون نلري."
+
+msgid "Import selection"
+msgstr "د واردولو ټاکل"
+
+msgid "Import completed"
+msgstr "واردول بشپړ شو"
+
+msgid "Could not load options."
+msgstr "اختیارونه بار کېدل نه شول."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "د یوې کاپي فایل غوره کړئ (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "د سرور څخه یوه کاپي غوره کړئ"
+
+msgid "Error selecting source."
+msgstr "د سرچینې ټاکل کې خطا."
+
+msgid "Recycling options"
+msgstr "د بیا کارولو اختیارونه"
+
+msgid "Type the course code to confirm"
+msgstr "د تایید لپاره د کورس کوډ ولیکئ"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "دا به ټاکل شوي سرچینې لرې کړي یا ریست کړي. دا عمل نشي ړنګیدلی."
+
+msgid "Select resources to recycle"
+msgstr "د بیا کارولو سرچینې غوره کړئ"
+
+msgid "No resources available in this course."
+msgstr "د دې کورس کې هیڅ سرچینې شتون نلري."
+
+msgid "Recycle selected"
+msgstr "ټاکل شوي بیا کارول"
+
+msgid "Error loading resources."
+msgstr "د سرچینو بار کېدل کې خطا."
+
+msgid "Clear search"
+msgstr "د لټون پاکول"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "پایگاه ډاټا کې یوازې لیکي، شمېرې او لاندې لاین (_) اجازه لري. ناسم اړخونه به په اتومات ډول له منځه لاړ شي."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "څه عمومي شرایط او مقررات کاروونکو ته ورکول کېږي چې دا پلیټفارم وکاروي؟"
 

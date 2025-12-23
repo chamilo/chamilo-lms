@@ -67,37 +67,37 @@ msgid "Cosecant:\t\t\t\tcsc(x)"
 msgstr "Cosecant:\t\t\t\tcsc(x)"
 
 msgid "Hyperbolic cosecant:\t\tcsch(x)"
-msgstr "Hyperbolic cosecant:\t\tcsch(x)"
+msgstr "Cosecant hyperbolic:\t\tcsch(x)"
 
 msgid "Arccosecant:\t\t\tarccsc(x)"
 msgstr "Arccosecant:\t\t\tarccsc(x)"
 
 msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
-msgstr "Hyperbolic arccosecant:\t\tarccsch(x)"
+msgstr "Arc cosecant hyperbolic:\t\tarccsch(x)"
 
 msgid "Secant:\t\t\t\tsec(x)"
 msgstr "Secant:\t\t\t\tsec(x)"
 
 msgid "Hyperbolic secant:\t\tsech(x)"
-msgstr "Hyperbolic secant:\t\tsech(x)"
+msgstr "Secant hyperbolic:\t\tsech(x)"
 
 msgid "Arcsecant:\t\t\tarcsec(x)"
 msgstr "Arcsecant:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
-msgstr "Hyperbolic arcsecant:\t\tarcsech(x)"
+msgstr "Arc secant hyperbolic:\t\tarcsech(x)"
 
 msgid "Cotangent:\t\t\tcot(x)"
 msgstr "Cotangent:\t\t\tcot(x)"
 
 msgid "Hyperbolic cotangent:\t\tcoth(x)"
-msgstr "Hyperbolic cotangent:\t\tcoth(x)"
+msgstr "Cotangent hyperbolic:\t\tcoth(x)"
 
 msgid "Arccotangent:\t\t\tarccot(x)"
 msgstr "Arccotangent:\t\t\tarccot(x)"
 
 msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
-msgstr "Hyperbolic arccotangent:\t\tarccoth(x)"
+msgstr "Arc cotangent hyperbolic:\t\tarccoth(x)"
 
 msgid "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />\nIf needed, the Help section of your browser indicates how to configure cookies.<br /><br />\nFor more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website."
 msgstr "Ili tovuti hii ifanye kazi na iweze kupima matumizi ya maudhui, jukwaa hili linatumia vidakuzi.<br /><br />\nKama inahitajika, sehemu ya Msaada ya kivinjari chako inaonyesha jinsi ya kusanidi vidakuzi.<br /><br />\nKwa maelezo zaidi kuhusu vidakuzi, unaweza kutembelea tovuti <a href=\"http://www.aboutcookies.org/\">About Cookies</a>."
@@ -226,7 +226,7 @@ msgid "The session duration allows you to set a number of days of access startin
 msgstr "Muda wa sesheni inakuruhusu kuweka idadi ya siku za ufikiaji kuanzia tarehe ya ufikiaji wa kwanza wa mtumiaji kwenye sesheni. Kwa njia hii, unaweza kuweka sesheni 'ya kudumu siku 15' badala ya kuanza kwa tarehe iliyowekwa kwa wanafunzi wote."
 
 msgid "Hyperbolic arctangent:\t\tarctanh(x)"
-msgstr "Hyperbolic arctangent:\t\tarctanh(x)"
+msgstr "Arc tangent hyperbolic:\t\tarctanh(x)"
 
 msgid "Session duration"
 msgstr "Muda wa sesheni"
@@ -235,7 +235,7 @@ msgid "Arctangent:\t\t\tarctan(x)"
 msgstr "Arctangent:\t\t\tarctan(x)"
 
 msgid "Hyperbolic tangent:\t\ttanh(x)"
-msgstr "Hyperbolic tangent:\t\ttanh(x)"
+msgstr "Tangent hyperbolic:\t\ttanh(x)"
 
 msgid "Tangent:\t\t\ttan(x)"
 msgstr "Tangent:\t\t\ttan(x)"
@@ -247,13 +247,13 @@ msgid "Series"
 msgstr "Mfululizo"
 
 msgid "Hyperbolic arccosine:\t\tarccosh(x)"
-msgstr "Hyperbolic arccosine:\t\tarccosh(x)"
+msgstr "Arc cosine hyperbolic:\t\tarccosh(x)"
 
 msgid "Arccosine:\t\t\tarccos(x)"
 msgstr "Arccosine:\t\t\tarccos(x)"
 
 msgid "Hyperbolic cosine:\t\tcosh(x)"
-msgstr "Hyperbolic cosine:\t\tcosh(x)"
+msgstr "Cosine hyperbolic:\t\tcosh(x)"
 
 msgid "Cosine:\t\t\t\tcos(x)"
 msgstr "Cosine:\t\t\t\tcos(x)"
@@ -262,7 +262,7 @@ msgid "Teachers time report"
 msgstr "Ripoti ya muda wa walimu"
 
 msgid "Hyperbolic arcsine:\t\tarcsinh(x)"
-msgstr "Hyperbolic arcsine:\t\tarcsinh(x)"
+msgstr "Arc sine hyperbolic:\t\tarcsinh(x)"
 
 msgid "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator."
 msgstr "Haukuona lugha yako katika orodha? Wasiliana nasi kwa info@chamilo.org ili kuchangia kama mtafsiri."
@@ -271,7 +271,7 @@ msgid "Arcsine:\t\t\tarcsin(x)"
 msgstr "Arcsine:\t\t\tarcsin(x)"
 
 msgid "Hyperbolic sine:\t\tsinh(x)"
-msgstr "Hyperbolic sine:\t\tsinh(x)"
+msgstr "Sine hyperbolic:\t\tsinh(x)"
 
 msgid "Sine:\t\t\t\tsin(x)"
 msgstr "Sine:\t\t\t\tsin(x)"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ndiyo:nakala,, hapana:hakuna nakala"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folda,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":mazoezi:mazoezi,,      uigaji:uigaji,,      dodoso:dodoso,,      mchoro:mchoro,,      picha:picha,,      grafu:grafu,,      faharasa:faharasa,,      slaidi:slaidi,,      jedwali:jedwali,,      maandishi ya hadithi:maandishi ya hadithi,,      mtihani:mtihani,,      majaribio:majaribio,,      taarifa ya tatizo:taarifa ya tatizo,,      tathmini ya kibinafsi:tathmini ya kibinafsi,,      mhadhara:mhadhara"
@@ -10920,8 +10920,8 @@ msgstr "ni"
 msgid "The address of"
 msgstr "Anwani ya"
 
-msgid "Your registration on"
-msgstr "Usajili wako kwenye"
+msgid "Your registration on %s"
+msgstr "Usajili wako kwenye %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Ingia hili tayari limechukuliwa. Tumia kitufe cha kurudi cha kivinjari chako na uchague lingine."
@@ -22083,7 +22083,7 @@ msgstr "Chagua na eneo la maandishi"
 msgid "Triple select"
 msgstr "Chagua mara tatu"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Unathibitisha kwamba unataka kweli kujiandikisha katika jukwaa hili."
 
 msgid "Add text"
@@ -22143,14 +22143,11 @@ msgstr "Uthibitisho wa usajili"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Akaunti yako haifanyi kazi kwa sababu bado hauijathibitisha. Angalia barua pepe yako na ufuate maagizo au bonyeza kiungo hapa chini ili kutuma tena barua pepe"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Ili kukamilisha usajili wako wa jukwaa unahitaji kuthibitisha akaunti yako kwa kubofya kiungo hiki kinachofuata"
 
 msgid "Confirmation for new account"
 msgstr "Thibitisho la akaunti mpya"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Unahitaji kuthibitisha akaunti yako kupitia barua pepe ili kufikia jukwaa"
 
 msgid "Enable Cloud files link addition"
 msgstr "Wezesha kuongeza kiungo cha faili za Cloud"
@@ -24697,7 +24694,7 @@ msgid "*: Current quarter, incomplete data"
 msgstr "*: Robo ya sasa, data isiyokamilika"
 
 msgid "Q%s %s"
-msgstr "Q%s %s"
+msgstr "Sw.%s %s"
 
 msgid "YoY"
 msgstr "YoY"
@@ -24986,9 +24983,6 @@ msgstr "Hamisha matokeo yote ya majaribio yote"
 
 msgid "Click to view details"
 msgstr "Bonyeza ili kuona maelezo"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Ripoti hii inatumika kwa shughuli zote za jukwaa za mtumiaji."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
@@ -27546,7 +27540,7 @@ msgstr "Masharti ya matumizi ya jukwaa"
 msgid "Password too easy to guess"
 msgstr "Nenosiri rahisi kukisia"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Unahitaji kuthibitisha akaunti yako kupitia barua pepe ili kufikia jukwaa"
 
 msgid "Redirect to portal home"
@@ -31214,4 +31208,229 @@ msgstr "Mifuatano wa majadiliano"
 
 msgid "Access to this course"
 msgstr "Fikiozi la kozi hii"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Plugin hii haina mipangilio inayoweza kubadilishwa. Uwasilishaji unaweza kusimamiwa kutoka orodha ya plugins."
+
+msgid "Private - access granted by privileged users"
+msgstr "Ya kibinafsi - upatikanaji ulipewa na watumiaji wenye mamlaka maalum"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Hakuna maoni ya kina yanayopatikana kwa swali hili."
+
+msgid "Please select an answer before checking the result."
+msgstr "Tafadhali chagua jibu kabla ya kuangalia matokeo."
+
+msgid "Allow PDF export for this item"
+msgstr "Ruhusu uhamisho wa PDF kwa kipengee hiki"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Ficha watumiaji wa bure (wasiojiunga)"
+
+msgid "Question statistics"
+msgstr "Takwimu za maswali"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Inazalisha faili. Usifunge kadi hii..."
+
+msgid "Assign auth source to users"
+msgstr "Weka chanzo cha uthibitisho kwa watumiaji"
+
+msgid "There are no questions for this survey"
+msgstr "Hakuna maswali kwa uchunguzi huu"
+
+msgid "Certificates report"
+msgstr "Ripoti ya vyeti"
+
+msgid "Course picture"
+msgstr "Picha ya kozi"
+
+msgid "Current picture"
+msgstr "Picha ya sasa"
+
+msgid "Course events log"
+msgstr "Rekodi ya matukio ya kozi"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Sasisha taarifa za kategoria na kikomo chake cha wakati cha hiari."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Unda kundi la kimantiki la vipindi ili kupanga katalogi yako ya mafunzo."
+
+msgid "Generating file, do not close this tab"
+msgstr "Inazalisha faili, usifunge kadi hii"
+
+msgid "Assign authentication sources to users"
+msgstr "Weka vyanzo vya uthibitisho kwa watumiaji"
+
+msgid "Average completion rate"
+msgstr "Kiwango cha wastani cha kukamilika"
+
+msgid "Average access rate"
+msgstr "Kiwango cha wastani cha upatikanaji"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Jedwali hili linafupisha maendeleo na shughuli za mwanafunzi kwa kila njia ya kujifunza katika kozi zako za sasa."
+
+msgid "Follow up"
+msgstr "Fuata"
+
+msgid "Tracking for superior"
+msgstr "Ufuatiliaji kwa msimamizi mkuu"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Ripoti hii inaonyesha usambazaji wa kila wiki wa vipindi kwa mkufunzi mkuu katika kipindi kilichochaguliwa."
+
+msgid "Head manager report"
+msgstr "Ripoti ya msimamizi mkuu"
+
+msgid "Reset or update user password"
+msgstr "Seti upya au sasisha nywila ya mtumiaji"
+
+msgid "Active users"
+msgstr "Watumiaji wanaofanya kazi"
+
+msgid "Inactive users"
+msgstr "Watumiaji wasiofanya kazi"
+
+msgid "Report on resources"
+msgstr "Ripoti kuhusu rasilimali"
+
+msgid "Global view"
+msgstr "Mtazamo wa jumla"
+
+msgid "Available reports"
+msgstr "Ripoti zinazopatikana"
+
+msgid "Current report"
+msgstr "Ripoti ya sasa"
+
+msgid "Back to user assignment page"
+msgstr "Rudi kwenye ukurasa wa kuwapa watumiaji"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Vyanzo vya uthibitisho vimepewa kwa mafanikio"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Kidokezo: chagua “— Pakia tu —” ili kuhifadhi bila kutuma kwa mtu yeyote."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Tafadhali chagua angalau mpokeaji mmoja (“— Pakia tu —” au mtumiaji yeyote)"
+
+msgid "Sharing"
+msgstr "Kushiriki"
+
+msgid "Selected files"
+msgstr "Faili zilizochaguliwa"
+
+msgid "Hide password"
+msgstr "Ficha nywila"
+
+msgid "Show password"
+msgstr "Onyesha nywila"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Pakia nembo ya SVG kwa barua pepe"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Lazima uhamishe au uondoe njia zote za kujifunza kutoka katika jamii hii kabla ya kuifuta."
+
+msgid "Clear filters"
+msgstr "Futa vidakuzi"
+
+msgid "Attendances (tablet)"
+msgstr "Hadiriaji (tabilt)"
+
+msgid "Exit tablet mode"
+msgstr "Toka kwenye hali ya tabilt"
+
+msgid "No members found."
+msgstr "Hakuna wanachama walipatikana."
+
+msgid "Health check"
+msgstr "Angalia afya"
+
+msgid "Export to CC 1.3"
+msgstr "Hamisha kwenye CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Inapakia rasilimali..."
+
+msgid "Failed to load resources."
+msgstr "Imeshindwa kupakia rasilimali."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Tafadhali chagua angalau rasilimali moja inayoweza kusafirishwa (hati, kiungo cha wavuti, majadiliano,...)."
+
+msgid "Export finished."
+msgstr "Usafirishaji umekamilika."
+
+msgid "Export failed."
+msgstr "Usafirishaji umeshindwa."
+
+msgid "Import failed."
+msgstr "Uvamizi umeshindwa."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Faili la ndani (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Taiwa kuvamiza"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Tutakomesha nakili ya chelezo katika kozi hii. Unaweza kurudi nyuma ili kubadilisha chaguzi."
+
+msgid "Select resources to import"
+msgstr "Chagua rasilimali za kuvamiza"
+
+msgid "No resources available in this backup."
+msgstr "Hakuna rasilimali zinazopatikana katika chelezo hili."
+
+msgid "Import selection"
+msgstr "Chaguo la uvamizi"
+
+msgid "Import completed"
+msgstr "Uvamizi umekamilika"
+
+msgid "Could not load options."
+msgstr "Haikuweza kupakia chaguzi."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Tafadhali chagua faili la chelezo (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Tafadhali chagua chelezo kutoka kwenye seva"
+
+msgid "Error selecting source."
+msgstr "Kosa la kuchagua chanzo."
+
+msgid "Recycling options"
+msgstr "Chaguzi za kusafisha upya"
+
+msgid "Type the course code to confirm"
+msgstr "Andika msimbo wa kozi ili uthibitishe"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Hii itaondoa au kuweka upya rasilimali zilizochaguliwa. Kitendo hiki hakiwezi kurekebishwa."
+
+msgid "Select resources to recycle"
+msgstr "Chagua rasilimali za kusafisha upya"
+
+msgid "No resources available in this course."
+msgstr "Hakuna rasilimali zinazopatikana katika kozi hii."
+
+msgid "Recycle selected"
+msgstr "Safisha upya zilizochaguliwa"
+
+msgid "Error loading resources."
+msgstr "Kosa la kupakia rasilimali."
+
+msgid "Clear search"
+msgstr "Futa utafutaji"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Herufi, nambari na underscore (_) pekee zinazoruhusiwa katika jina la hifadhidata. Herufi zisizofaa zitaondolewa kiotomatiki."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Sheria na masharti ya jumla ni yapi yanayotolewa kwa watumiaji kutumia jukwaa hili?"
 

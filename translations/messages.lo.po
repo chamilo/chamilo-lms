@@ -27,7 +27,7 @@ msgid "Backpack details"
 msgstr "ລາຍລະອຽດ Backpack"
 
 msgid "Criteria to earn the badge"
-msgstr ""
+msgstr "ເງື່ອນໄຂເພື່ອຮັບສັນຍາລັກ"
 
 msgid "Badge preview"
 msgstr "ຕົວຢ່າງໃບຢັ້ງຢືນ"
@@ -3528,9 +3528,6 @@ msgstr "ນາມສະກຸນຂອງຜູ້ເບິ່ງແຍງລະ
 msgid "Administrator login"
 msgstr "ຊື່ເຂົ້າໃຊ້ຂອງຜູ້ເບິ່ງແຍງລະບົບ"
 
-msgid "Project manager"
-msgstr "ຜູ້ຈັດການໂຄງການ"
-
 #, fuzzy
 msgid "Your portal name"
 msgstr "ຊື່ປະຕູເວັບໄຊທ໌ຂອງທ່ານ"
@@ -4992,8 +4989,8 @@ msgstr "ເອກະສານຕົ້ນສະບັບສາມາດຖືກ
 msgid "Dropbox: Upload to own dropbox space?"
 msgstr "Dropbox: ອັບໂຫຼດໃສ່ພື້ນທີ່ Dropbox ຂອງຕົນເອງບໍ່?"
 
-msgid "Allow trainers and users to upload documents to their dropbox without sending the documents to themselves"
-msgstr "ອະນຸຍາດໃຫ້ຄູຝຶກ ແລະ ຜູ້ໃຊ້ອັບໂຫຼດເອກະສານໃສ່ Dropbox ຂອງພວກເຂົາໂດຍບໍ່ຕ້ອງສົ່ງເອກະສານໃຫ້ຕົວເອງ"
+msgid "Allow trainers and users to upload documents to their dropbox without sending  the documents to themselves"
+msgstr "ອະນຸຍາດໃຫ້ຄູຝຶກສອນ ແລະ ຜູ້ໃຊ້ອັບໂຫລດເອກະສານໄປຫ້ອງ dropbox ຂອງເຂົາເຈົ້າໂດຍບໍ່ຕ້ອງສົ່ງເອກະສານໄປໃຫ້ຕົວເຂົາເຈົ້າ"
 
 msgid "Dropbox: Learner <-> Learner"
 msgstr "Dropbox: ຜູ້ຮຽນ <-> ຜູ້ຮຽນ"
@@ -5700,11 +5697,11 @@ msgstr "ບັນຊີດຳ - ການຕັ້ງຄ່າ"
 msgid "Whitelist - setting"
 msgstr "ບັນຊີຂາວ - ການຕັ້ງຄ່າ"
 
-msgid "The blacklist is used to filter the files extensions by removing (or renaming) any file which extension figures in the blacklist below. The extensions should figure without the leading dot (.) and separated by semi-colon (;) like the following:  exe;com;bat;scr;php. Files without extension are accepted. Letter casing (uppercase/lowercase) doesn't matter."
-msgstr "ບັນຊີດຳຖືກໃຊ້ເພື່ອການກັ່ນຕອງນາມສະກຸນໄຟລ໌ໂດຍການລຶບ (ຫຼື ປ່ຽນຊື່) ໄຟລ໌ໃດໆທີ່ນາມສະກຸນຂອງມັນຢູ່ໃນບັນຊີດຳດ້ານລຸ່ມ. ນາມສະກຸນຄວນຈະບໍ່ມີຈຸດ (.) ນຳໜ້າ ແລະ ຂັ້ນດ້ວຍຈໍ້າຈຸດ (;) ເຊັ່ນ: exe;com;bat;scr;php. ໄຟລ໌ທີ່ບໍ່ມີນາມສະກຸນຈະຖືກຍອມຮັບ. ການໃຊ້ຕົວພິມໃຫຍ່/ນ້ອຍບໍ່ມີຜົນ."
+msgid "The blacklist is used to filter the files extensions by removing (or renaming) any file which extension figures in the blacklist below. The extensions should figure without the leading dot (.) and separated by semi-column (;) like the following:  exe;com;bat;scr;php. Files without extension are accepted. Letter casing (uppercase/lowercase) doesn't matter."
+msgstr "ລາຍການດຳປ່ຽງໃຊ້ເພື່ອກັດກຳປາຍງານໄຟລ໌ດ້ວຍການລຶບ (ຫຼືປ່ຽນຊື່) ໄຟລ໌ທີ່ມີປາຍງານຢູ່ໃນລາຍການດຳປ່ຽງຂ້າງລຸ່ມນີ້. ປາຍງານຄວນຂຽນສິ່ງບໍ່ມີຈຸດນຳໜ້າ (.) ແລະແຍກດ້ວຍອັກສອນ semicolon (;) ເຊັ່ນ:  exe;com;bat;scr;php. ໄຟລ໌ທີ່ບໍ່ມີປາຍງານຖືກຍອມຮັບ. ການໃຊ້ຕົວອັກສອນຂະໜາດໃຫຍ່/ນ້ອຍບໍ່ສຳຄັນ."
 
-msgid "The whitelist is used to filter the file extensions by removing (or renaming) any file whose extension does *NOT* figure in the whitelist below. It is generally considered as a safer but more restrictive approach to filtering. The extensions should figure without the leading dot (.) and separated by semi-colon (;) such as the following:  htm;html;txt;doc;xls;ppt;jpg;jpeg;gif;sxw. Files without extension are accepted. Letter casing (uppercase/lowercase) doesn't matter."
-msgstr "ບັນຊີຂາວຖືກໃຊ້ເພື່ອການກັ່ນຕອງນາມສະກຸນໄຟລ໌ໂດຍການລຶບ (ຫຼື ປ່ຽນຊື່) ໄຟລ໌ໃດໆທີ່ນາມສະກຸນຂອງມັນ *ບໍ່* ຢູ່ໃນບັນຊີຂາວດ້ານລຸ່ມ. ໂດຍທົ່ວໄປແລ້ວມັນຖືກຖືວ່າເປັນວິທີການກັ່ນຕອງທີ່ປອດໄພກວ່າແຕ່ມີຂໍ້ຈຳກັດຫຼາຍກວ່າ. ນາມສະກຸນຄວນຈະບໍ່ມີຈຸດ (.) ນຳໜ້າ ແລະ ຂັ້ນດ້ວຍຈໍ້າຈຸດ (;) ເຊັ່ນ: htm;html;txt;doc;xls;ppt;jpg;jpeg;gif;sxw. ໄຟລ໌ທີ່ບໍ່ມີນາມສະກຸນຈະຖືກຍອມຮັບ. ການໃຊ້ຕົວພິມໃຫຍ່/ນ້ອຍບໍ່ມີຜົນ."
+msgid "The whitelist is used to filter the file extensions by removing (or renaming) any file whose extension does *NOT* figure in the whitelist below. It is generally considered as a safer but more restrictive approach to filtering. The extensions should figure without the leading dot (.) and separated by semi-column (;) such as the following:  htm;html;txt;doc;xls;ppt;jpg;jpeg;gif;sxw. Files without extension are accepted. Letter casing (uppercase/lowercase) doesn't matter."
+msgstr "ລາຍການຂາວໃຊ້ເພື່ອກັດກຳປາຍງານໄຟລ໌ດ້ວຍການລຶບ (ຫຼືປ່ຽນຊື່) ໄຟລ໌ທີ່ປາຍງານ *ບໍ່* ຢູ່ໃນລາຍການຂາວຂ້າງລຸ່ມນີ້. ມັນຖືກພິຈາລະນາເປັນວິທີການກັດກຳທີ່ປອດໄພກວ່າແຕ່ຈຳກັດກວ່າ. ປາຯງານຄວນຂຽນສິ່ງບໍ່ມີຈຸດນຳໜ້າ (.) ແລະແຍກດ້ວຍ semicolon (;) ເຊັ່ນ:  htm;html;txt;doc;xls;ppt;jpg;jpeg;gif;sxw. ໄຟລ໌ທີ່ບໍ່ມີປາຍງານຖືກຍອມຮັບ. ການໃຊ້ຕົວອັກສອນຂະໜາດໃຫຍ່/ນ້ອຍບໍ່ສຳຄັນ."
 
 msgid "Filtering behaviour (skip/rename)"
 msgstr "ພຶດຕິກຳການກັ່ນຕອງ (ຂ້າມ/ປ່ຽນຊື່)"
@@ -8336,8 +8333,8 @@ msgstr "-ອົງປະກອບ"
 msgid "Please type your text below"
 msgstr "ກະລຸນາພິມຂໍ້ຄວາມຂອງທ່ານດ້ານລຸ່ມ"
 
-msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\"> years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\"> BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ຕົວຢ່າງກິດຈະກຳຕື່ມໃສ່ແບບຟອມ: ຄິດໄລ່ດັດຊະນີມວນສານຮ່າງກາຍ</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ອາຍຸ</strong></td>            <td width=\"75%\" style=\"\"> ປີ</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ເພດ</strong></td>            <td style=\"\" text-align:=\"\">[ຊ] (ຊ ຫຼື ຍ)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ນ້ຳໜັກ</strong></td>            <td style=\"\" text-align:=\"\">95 ກກ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ລວງສູງ</strong></td>            <td style=\"vertical-align: top;\">1.81 ມ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ດັດຊະນີມວນສານຮ່າງກາຍ</strong></td>            <td style=\"vertical-align: top;\"> BMI = ນ້ຳໜັກ/ລວງສູງ<sup>2</sup> (ເບິ່ງ<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ບົດຄວາມ Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ຕົວຢ່າງກິດຈະກຳຕົວໃຫມ່ແບບຟອມ: ຄຳນວນດັດສານມະຫາພາກຂອງຮ່າງກາຍ</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ອາຍຸ</strong></td>            <td width=\"75%\" style=\"\">[25] ປີ</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ເພດ</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ຫຼື F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ນ້ຳໜັກ</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ສູງ</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ດັດສານມະຫາພາກຂອງຮ່າງກາຍ</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =ນ້ຳໜັກ/ສູງ<sup>2</sup> (ເບິ່ງ.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ບົດຄວາມ Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 #, fuzzy
 msgid "Note down the address"
@@ -8825,14 +8822,14 @@ msgstr "ເອກະສານສອບເສັງໄດ້ຖືກເບິ່
 msgid "Your following attempt has been viewed/commented/corrected by the trainer"
 msgstr "ການທົດລອງຄັ້ງຕໍ່ໄປຂອງທ່ານໄດ້ຖືກເບິ່ງ/ໃຫ້ຄຳເຫັນ/ແກ້ໄຂໂດຍຜູ້ສອນແລ້ວ"
 
-msgid "Click the link below to access your account and view your commented Examsheet."
-msgstr "ຄລິກລິ້ງດ້ານລຸ່ມເພື່ອເຂົ້າສູ່ບັນຊີຂອງທ່ານ ແລະ ເບິ່ງເອກະສານສອບເສັງທີ່ໄດ້ຮັບຄຳເຫັນ."
+msgid "Click the link below to access  your account and view your commented Examsheet."
+msgstr "ກົດລິ້ງຂ້າງລຸ່ມນີ້ເພື່ອເຂົ້າເຖິງບັນຊີຂອງທ່ານ ແລະ ເບິ່ງໃບສຳຮອງສົມທົບທີ່ມີຄຳພັດ"
 
 msgid "Regards"
 msgstr "ດ້ວຍຄວາມນັບຖື"
 
-msgid "You attempt for the test %s has been viewed/commented/corrected by the trainer. Click the link below to access your account and view your Examsheet."
-msgstr "ການທົດລອງຂອງທ່ານສຳລັບບົດທົດສອບ %s ໄດ້ຖືກເບິ່ງ/ໃຫ້ຄຳເຫັນ/ແກ້ໄຂໂດຍຜູ້ສອນແລ້ວ. ຄລິກລິ້ງດ້ານລຸ່ມເພື່ອເຂົ້າສູ່ບັນຊີຂອງທ່ານ ແລະ ເບິ່ງເອກະສານສອບເສັງຂອງທ່ານ."
+msgid "You attempt for the test %s has been viewed/commented/corrected by the trainer. Click the link below to access  your account and view your Examsheet."
+msgstr "ການທົດສອບ %s ຂອງທ່ານຖືກຄູຝຶກສອນຊົມ/ຄຳພັດ/ແກ້ໄຂແລ້ວ. ກົດລິ້ງຂ້າງລຸ່ມນີ້ເພື່ອເຂົ້າເຖິງບັນຊີຂອງທ່ານ ແລະ ເບິ່ງໃບສຳຮອງສົມທົບຂອງທ່ານ."
 
 msgid "Dear learner,"
 msgstr "ຮຽນ ຜູ້ຮຽນ,"
@@ -11766,8 +11763,8 @@ msgstr "ການເຂົ້າເບິ່ງຫຼ້າສຸດຂອງຂ
 msgid "If you want to add a list of users in your course, please contact your web administrator."
 msgstr "ຖ້າທ່ານຕ້ອງການເພີ່ມລາຍຊື່ຜູ້ໃຊ້ໃນຫຼັກສູດຂອງທ່ານ, ກະລຸນາຕິດຕໍ່ຜູ້ດູແລເວັບຂອງທ່ານ."
 
-msgid "this password is too simple. Use a pass like this"
-msgstr "ລະຫັດຜ່ານນີ້ງ່າຍເກີນໄປ. ໃຊ້ລະຫັດຜ່ານເຊັ່ນນີ້"
+msgid "this password  is too simple. Use a pass like this"
+msgstr "ລະຫັດຜ່ານທີ່ນີ້ງ່າຍເກີນໄປ. ໃຊ້ລະຫັດຜ່ານປະປະຫຼືດັ່ງນີ້"
 
 msgid "has been registered to your course"
 msgstr "ໄດ້ລົງທະບຽນໃນລາຍວິຊາຂອງທ່ານແລ້ວ"
@@ -11884,8 +11881,8 @@ msgid "The address of"
 msgstr "ທີ່ຢູ່ຂອງ"
 
 #, fuzzy
-msgid "Your registration on"
-msgstr "ການລົງທະບຽນຂອງທ່ານທີ່"
+msgid "Your registration on %s"
+msgstr "ການລົງທະບຽນຂອງທ່ານທີ່ %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "ຊື່ຜູ້ໃຊ້ນີ້ມີຄົນໃຊ້ແລ້ວ. ໃຊ້ປຸ່ມກັບຄືນຂອງເບຣົາເຊີຂອງທ່ານ ແລະ ເລືອກຊື່ອື່ນ."
@@ -13222,6 +13219,10 @@ msgstr "ຂໍ້ມູນລາຍວິຊາ"
 msgid "No additional fields will be exported"
 msgstr "ຈະບໍ່ມີຟິວເພີ່ມເຕີມຖືກສົ່ງອອກ"
 
+#, fuzzy
+msgid "Time in course"
+msgstr "ເວລາໃນຫຼັກສູດ"
+
 msgid "Average of all learners in all courses"
 msgstr "ຄະແນນສະເລ່ຍຂອງຜູ້ຮຽນທັງໝົດໃນທຸກລາຍວິຊາ"
 
@@ -13371,9 +13372,8 @@ msgstr "ໂຄຕ້າສຳລັບລາຍວິຊານີ້ແມ່ນ
 msgid "delete"
 msgstr "ລຶບ"
 
-#, fuzzy
-msgid "Space available"
-msgstr "ພື້ນທີ່ວ່າງ"
+msgid "Space Available"
+msgstr "ພື້ນທີ່ທີ່ມີຢູ່"
 
 msgid "This course currently uses"
 msgstr "ລາຍວິຊານີ້ກຳລັງໃຊ້"
@@ -16543,6 +16543,10 @@ msgstr "ລາຍຊື່ຜູ້ໃຊ້ທີ່ມອບໝາຍໃຫ້
 msgid "Assign courses to %s"
 msgstr "ມອບໝາຍລາຍວິຊາໃຫ້ %s"
 
+#, fuzzy
+msgid "List of sessions on the platform"
+msgstr "ລາຍການຊ່ວງເວລາຮຽນໃນລະບົບ"
+
 msgid "Assign sessions to Human Resources manager"
 msgstr "ມອບໝາຍພາກຮຽນໃຫ້ຜູ້ຈັດການຝ່າຍບຸກຄົນ"
 
@@ -17564,7 +17568,13 @@ msgstr "ລຶບໃບຢັ້ງຢືນທັງໝົດ"
 msgid "There are users using this language. Do you want to disable this language and set all this users with the default portal language?"
 msgstr "ມີຜູ້ໃຊ້ກຳລັງໃຊ້ພາສານີ້ຢູ່. ທ່ານຕ້ອງການປິດໃຊ້ງານພາສານີ້ ແລະ ຕັ້ງຄ່າຜູ້ໃຊ້ທັງໝົດເຫຼົ່ານີ້ເປັນພາສາເລີ່ມຕົ້ນຂອງລະບົບບໍ່?"
 
+msgid "Click to show graphics"
+msgstr "ກົດເພື່ອສະແດງພາບປະກອບ"
+
 #, fuzzy
+msgid "Quarterly report"
+msgstr "ລາຍງານປະຈຳໄຕຣມາດ"
+
 msgid "%d %B %Y"
 msgstr "%d %B %Y"
 
@@ -20254,7 +20264,6 @@ msgstr "ພອດທີ່ຈະເຊື່ອມຕໍ່ກັບເຊີບ
 msgid "Main CAS server protocol"
 msgstr "ໂປຣໂຕຄໍຂອງເຊີບເວີ CAS ຫຼັກ"
 
-#, fuzzy
 msgid "CAS 1"
 msgstr "CAS 1"
 
@@ -20603,6 +20612,9 @@ msgstr "ສະແດງສະເພາະຜູ້ເບິ່ງແຍງລະ
 msgid "Show to admins and teachers"
 msgstr "ສະແດງໃຫ້ຜູ້ເບິ່ງແຍງລະບົບ ແລະ ອາຈານ"
 
+msgid "Show to all  users"
+msgstr "ສະແດງໃຫ້ຜູ້ໃຊ້ທັງໝົດເຫັນ"
+
 msgid "Import glossary"
 msgstr "ນຳເຂົ້າຄຳສັບ"
 
@@ -20842,7 +20854,7 @@ msgid "Shibboleth authentication"
 msgstr "ການຢືນຢັນຕົວຕົນ Shibboleth"
 
 msgid "<p>First of all, you have to configure Shibboleth for your web server.</p>To configure it for Chamilo<h5>edit file main/auth/shibboleth/config/aai.class.php</h5><p>Modify object &#36;result values with the name of your Shibboleth attributes</p><ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Go to <a href='settings.php?category=Shibboleth'>Plugin</a> to add a configurable 'Shibboleth Login' button for your Chamilo campus."
-msgstr ""
+msgstr "<p>ທຳອິດທັງໝົດ, ທ່ານຕ້ອງການຕັ້ງຄ່າ Shibboleth ສຳລັບເວັບເຊີເວີຂອງທ່ານ.</p>ເພື່ອຕັ້ງຄ່າມັນເພື່ອ Chamilo<h5>ແກ້ໄຂໄຟລ໌ main/auth/shibboleth/config/aai.class.php</h5><p>ປ່ຽນແຕ່ຄ່າຂອງອັດເຈັກ &#36;result ດ້ວຍຊື່ຂອງ Shibboleth attributes ຂອງທ່ານ</p><ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>ໄປທີ່ <a href='settings.php?category=Shibboleth'>Plugin</a> ເພື່ອເພີ່ມປຸ່ມ 'Shibboleth Login' ທີ່ສາມາດຕັ້ງຄ່າໄດ້ສຳລັບຖານປະຈຳການຮຽນຂອງ Chamilo ຂອງທ່ານ."
 
 msgid "LDAP authentication"
 msgstr "ການຢືນຢັນຕົວຕົນ LDAP"
@@ -20851,7 +20863,7 @@ msgid "Facebook authentication"
 msgstr "ການຢືນຢັນຕົວຕົນ Facebook"
 
 msgid "<p><h5>Create your Facebook Application</h5>First of all, you have to create a Facebook Application (see <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) with your Facebook account. In the Facebook Apps settings, the site URL value should be the URL of this campus. Enable the Web OAuth Login option. And add the site URL of your campus to the Valid OAuth redirect URIs field</p><p>Uncomment the line <code>&#36;_configuration['facebook_auth'] = 1;</code> to enable the Facebook Auth.</p><p>Then, edit the <code>app/config/auth.conf.php</code> file and enter '<code>appId</code>' and '<code>secret</code>' values for <code>&#36;facebook_config</code>.</p><p>Go to <a href='settings.php?category=Plugins'>Plugins</a> to add a configurable <em>Facebook Login</em> button for your Chamilo campus.</p>"
-msgstr ""
+msgstr "<p><h5>ສ້າງ Facebook Application ຂອງທ່ານ</h5>ທຳອິດທັງໝົດ, ທ່ານຕ້ອງສ້າງ Facebook Application (ເບິ່ງ <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) ດ້ວຍບັນຊີ Facebook ຂອງທ່ານ. ໃນການຕັ້ງຄ່າ Facebook Apps, ຄ່າ site URL ຄວນເປັນ URL ຂອງຖານປະຈຳການຮຽນນີ້. ເປີດໃຊ້ຕົວເລືອກ Web OAuth Login. ແລະເພີ່ມ site URL ຂອງຖານປະຈຳການຮຽນຂອງທ່ານໄປໃນກ້ອນຕອບ Valid OAuth redirect URIs</p><p>ຍົກໃຫ້ບັນຊີ <code>&#36;_configuration['facebook_auth'] = 1;</code> ເພື່ອເປີດໃຊ້ Facebook Auth.</p><p>ຈາກນັ້ນ, ແກ້ໄຂໄຟລ໌ <code>app/config/auth.conf.php</code> ແລະໃສ່ຄ່າ '<code>appId</code>' ແລະ '<code>secret</code>' ສຳລັບ <code>&#36;facebook_config</code>.</p><p>ໄປທີ່ <a href='settings.php?category=Plugins'>Plugins</a> ເພື່ອເພີ່ມປຸ່ມ <em>Facebook Login</em> ທີ່ສາມາດຕັ້ງຄ່າໄດ້ສຳລັບຖານປະຈຳການຮຽນຂອງ Chamilo ຂອງທ່ານ.</p>"
 
 msgid "Announcement for a group"
 msgstr "ປະກາດສຳລັບກຸ່ມ"
@@ -22105,7 +22117,6 @@ msgstr "ໂຫຼດຄຳເຫັນເພີ່ມເຕີມ"
 msgid "Show progress"
 msgstr "ສະແດງຄວາມຄືບໜ້າ"
 
-#, fuzzy
 msgid "%s %%"
 msgstr "%s %%"
 
@@ -23855,7 +23866,7 @@ msgstr "ເລືອກພ້ອມຊ່ອງຂໍ້ຄວາມ"
 msgid "Triple select"
 msgstr "ເລືອກສາມຊັ້ນ"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "ທ່ານຢືນຢັນວ່າທ່ານຕ້ອງການລົງທະບຽນກັບແພລດຟອມນີ້ແທ້."
 
 #, fuzzy
@@ -23917,15 +23928,12 @@ msgstr "ການຢືນຢັນການລົງທະບຽນ"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "ບັນຊີຂອງທ່ານບໍ່ເຄື່ອນໄຫວ ເພາະທ່ານຍັງບໍ່ໄດ້ຢືນຢັນ. ກວດສອບອີເມວຂອງທ່ານ ແລະ ປະຕິບັດຕາມຄຳແນະນຳ ຫຼື ຄລິກລິ້ງຕໍ່ໄປນີ້ເພື່ອສົ່ງອີເມວຄືນໃໝ່"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "ເພື່ອສຳເລັດການລົງທະບຽນແພລດຟອມຂອງທ່ານ, ທ່ານຕ້ອງຢືນຢັນບັນຊີຂອງທ່ານໂດຍການຄລິກລິ້ງຕໍ່ໄປນີ້"
 
 #, fuzzy
 msgid "Confirmation for new account"
 msgstr "ການຢືນຢັນສຳລັບບັນຊີໃໝ່"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "ທ່ານຕ້ອງຢືນຢັນບັນຊີຂອງທ່ານຜ່ານທາງອີເມວເພື່ອເຂົ້າເຖິງແພລດຟອມ"
 
 msgid "Enable Cloud files link addition"
 msgstr "ເປີດໃຊ້ການເພີ່ມລິ້ງໄຟລ໌ຄລາວ"
@@ -24536,8 +24544,8 @@ msgstr "ການເຊື່ອມໂຍງຫຼັກສູດ-ທັກສ�
 msgid "A user is waiting for an action about his/her personal data request"
 msgstr "ມີຜູ້ໃຊ້ກຳລັງລໍຖ້າການດຳເນີນການກ່ຽວກັບຄຳຂໍຂໍ້ມູນສ່ວນບຸກຄົນຂອງລາວ"
 
-msgid "The user %s is waiting for an action about it's personal data request. To manage personal data requests you can follow this link : %s"
-msgstr "ຜູ້ໃຊ້ %s ກຳລັງລໍຖ້າການດຳເນີນການກ່ຽວກັບຄຳຂໍຂໍ້ມູນສ່ວນບຸກຄົນຂອງລາວ. ເພື່ອຈັດການຄຳຂໍຂໍ້ມູນສ່ວນບຸກຄົນ, ທ່ານສາມາດຕິດຕາມລິ້ງນີ້: %s"
+msgid "The user %s is waiting for an action about it's personal data request. \n\n To manage personal data requests you can follow this link : %s"
+msgstr "ຜູ້ໃຊ້ %s ກຳລັງລໍຖ້າການກະທຳກ່ຽວກັບຄຳຂໍຂໍ້ມູນສ່ວນຕົວຂອງມັນ. \n\n ເພື່ອຈັດການຄຳຂໍຂໍ້ມູນສ່ວນຕົວ ທ່ານສາມາດຕິດຕາມລິ້ງນີ້: %s"
 
 #, fuzzy
 msgid "Request type"
@@ -24558,8 +24566,8 @@ msgstr "ກະລຸນາບອກພວກເຮົາວ່າເປັນຫ
 msgid "Explain in this box why you want your account deleted"
 msgstr "ອະທິບາຍໃນກ່ອງນີ້ວ່າເປັນຫຍັງທ່ານຈຶ່ງຕ້ອງການລຶບບັນຊີຂອງທ່ານ"
 
-msgid "You can ask below for your legal agreement to be deleted or your account to be deleted. In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data. In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
-msgstr "ທ່ານສາມາດຮ້ອງຂໍຂ້າງລຸ່ມນີ້ເພື່ອລຶບຂໍ້ຕົກລົງທາງກົດໝາຍຂອງທ່ານ ຫຼື ລຶບບັນຊີຂອງທ່ານ.<br>ໃນກໍລະນີຂໍ້ຕົກລົງທາງກົດໝາຍ, ເມື່ອຖືກລຶບແລ້ວ, ທ່ານຈະຕ້ອງຍອມຮັບມັນອີກຄັ້ງໃນການເຂົ້າສູ່ລະບົບຄັ້ງຕໍ່ໄປເພື່ອເຂົ້າເຖິງແພລດຟອມ ແລະ ກູ້ຄືນການເຂົ້າເຖິງຂອງທ່ານ, ເພາະວ່າພວກເຮົາບໍ່ສາມາດໃຫ້ສະພາບແວດລ້ອມສ່ວນຕົວແກ່ທ່ານ ແລະ ບໍ່ປະມວນຜົນຂໍ້ມູນສ່ວນຕົວຂອງທ່ານໃນເວລາດຽວກັນໄດ້ຢ່າງສົມເຫດສົມຜົນ.<br>ໃນກໍລະນີການລຶບບັນຊີ, ບັນຊີຂອງທ່ານຈະຖືກລຶບພ້ອມກັບການລົງທະບຽນຫຼັກສູດທັງໝົດຂອງທ່ານ ແລະ ຂໍ້ມູນທັງໝົດທີ່ກ່ຽວຂ້ອງກັບບັນຊີຂອງທ່ານ. ກະລຸນາເລືອກຕົວເລືອກທີ່ສອດຄ່ອງຢ່າງລະມັດລະວັງ. ໃນທັງສອງກໍລະນີ, ໜຶ່ງໃນຜູ້ເບິ່ງແຍງລະບົບຂອງພວກເຮົາຈະກວດສອບຄຳຂໍຂອງທ່ານກ່ອນທີ່ມັນຈະມີຜົນ, ເພື່ອຫຼີກລ່ຽງຄວາມເຂົ້າໃຈຜິດ ແລະ ການສູນເສຍຂໍ້ມູນຂອງທ່ານຢ່າງຖາວອນ."
+msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgstr "ທ່ານສາມາດຂໍການລຶບກົດລະບຽບທາງກົດໝາຍຫຼືການລຶບບັນຊີຂອງທ່ານຂ້າງລຸ່ມນີ້.<br>ໃນບັນຫາຂອງກົດລະບຽບທາງກົດໝາຍ, ເມື່ອລຶບແລ້ວ ທ່ານຈະຕ້ອງຍອມຮັບມັນໃໝ່ອີກເມື່ອທ່ານລ໋ອກຄັ້ງຕໍ່ໄປເພື່ອເຂົ້າເຖິງແຜ່ນທີ່ ແລະ ດຶງກັບການເຂົ້າເຖິງຂອງທ່ານ, ເພາະພວກເຮົາບໍ່ສາມາດໃຫ້ສິ່ງແວດລ້ອມສ່ວນຕົວແລະບໍ່ປະຕິບັດກັບຂໍ້ມູນສ່ວນຕົວຂອງທ່ານໄດ້ໃນຖານະເປັນສິ່ງທີ່ສົມຄວນ.<br>ໃນບັນຫາການລຶບບັນຊີ, ບັນຊີຂອງທ່ານຈະຖືກລຶບພ້ອມກັບການສະໝັກຮັບພາກຮຽນທັງໝົດ ແລະ ຂໍ້ມູນທັງໝົດທີ່ກ່ຽວຂ້ອງກັບບັນຊີຂອງທ່ານ. ກະລຸນາເລືອກຕົວເລືອກທີ່ກ່ຽວຂ້ອງດ້ວຍຄວາມລະມັດລະວັງ. ໃນທັງສອງກໍລະນີ, ຜູ້ບັນຊາໜຶ່ງໃນພວກເຮົາຈະກວດກາຄຳຂໍຂອງທ່ານກ່ອນທີ່ມັນຈະມີຜົນ, ເພື່ອຫຼີກລ່ຽງການເຂົ້າໃຈຜິດ ແລະ ການສູນເສຍຂໍ້ມູນຢ່າງຖາວດ."
 
 #, fuzzy
 msgid "Personal data protection"
@@ -26981,9 +26989,6 @@ msgstr "ສົ່ງອອກຜົນທັງໝົດຂອງທຸກກາ
 msgid "Click to view details"
 msgstr "ກົດເພື່ອເບິ່ງລາຍລະອຽດ"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "ລາຍງານນີ້ໃຊ້ກັບທຸກກິດຈະກຳຂອງຜູ້ໃຊ້ໃນແພລດຟອມ."
-
 msgid "dd/mm/yyyy"
 msgstr "ວວ/ດດ/ປປປປ"
 
@@ -28295,8 +28300,8 @@ msgstr "ຕັ້ງຄ່າຕົວເລືອກເພີ່ມເຕີມ
 msgid "Download button after finishing learning paths"
 msgstr "ປຸ່ມດາວໂຫຼດຫຼັງຈາກສຳເລັດເສັ້ນທາງການຮຽນຮູ້"
 
-msgid "Show download files button after finishing all LP. Example: if ABC is the course code, and 1 and 100 are the doc id, choose: ['courses' => ['ABC' =>]]."
-msgstr "ສະແດງປຸ່ມດາວໂຫຼດໄຟລ໌ຫຼັງຈາກສຳເລັດ LP ທັງໝົດ. ຕົວຢ່າງ: ຖ້າ ABC ເປັນລະຫັດລາຍການຮຽນ, ແລະ 1 ແລະ 100 ເປັນ doc id, ເລືອກ: ['courses' => ['ABC' =>]]."
+msgid "Show download files button after finishing all LP. Example: if ABC is the course code, and 1 and 100 are the doc id, choose: ['courses' => ['ABC' => [1, 100]]]."
+msgstr "ສະແດງປຸ່ມດາວໂຫລດໄຟລ໌ຫຼັງຈາກສຳເລັດ LP ທັງໝົດ. ຕົວຢ່າງ: ຖ້າ ABC ເປັນໄຄໂຄດຄອສ, ແລະ 1 ແລະ 100 ເປັນ doc id, ເລືອກ: ['courses' => ['ABC' => [1, 100]]]."
 
 msgid "Learning paths subscription for classes"
 msgstr "ການລົງທະບຽນເສັ້ນທາງການຮຽນຮູ້ສຳລັບຫ້ອງຮຽນ"
@@ -28382,8 +28387,8 @@ msgstr "ເຊື່ອງໄອຄອນເປີເຊັນໃນຕົວຊ
 msgid "Add acquisition column in learner follow-up"
 msgstr "ເພີ່ມຖັນການໄດ້ຮັບໃນການຕິດຕາມຜູ້ຮຽນ"
 
-msgid "Add column to learner follow--up page to show acquisition status by a learner on a learning path."
-msgstr "ເພີ່ມຖັນໃສ່ໜ້າຕິດຕາມຜູ້ຮຽນເພື່ອສະແດງສະຖານະການໄດ້ຮັບຂອງຜູ້ຮຽນໃນເສັ້ນທາງການຮຽນຮູ້."
+msgid "Add column to learner follow-up page to show acquisition status by a learner on a learning path."
+msgstr "ເພີ່ມຄອລັມໃນໜ້າຕິດຕາມຜູ້ຮຽນເພື່ອສະແດງສະຖານະການໄດ້ຮັບຈາກຜູ້ຮຽນໃນທາງຮຽນ."
 
 msgid "Add visibility information for learning paths on learner follow-up page"
 msgstr "ເພີ່ມຂໍ້ມູນການເບິ່ງເຫັນສຳລັບເສັ້ນທາງການຮຽນຮູ້ໃນໜ້າຕິດຕາມຜູ້ຮຽນ"
@@ -28571,8 +28576,8 @@ msgstr "ອາເຣຂອງຄຸນສົມບັດເພີ່ມເຕີ
 msgid "Default offered pagination numbers in tables"
 msgstr "ຕົວເລກການແບ່ງໜ້າທີ່ສະເໜີເລີ່ມຕົ້ນໃນຕາຕະລາງ"
 
-msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g..<br><pre> ['options' =>] </pre>"
-msgstr "ຕັ້ງຄ່າຕົວເລືອກທີ່ທ່ານຕ້ອງການໃຫ້ປາກົດໃນການນຳທາງຮອບຕາຕະລາງເພື່ອສະແດງແຖວໜ້ອຍລົງ ຫຼື ຫຼາຍຂຶ້ນໃນໜ້າດຽວ. ເຊັ່ນ.<br><pre> ['options' =>] </pre>"
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500].<br><pre> ['options' => [50, 100, 200, 500]] </pre>"
+msgstr "ຕັ້ງຕົວເລືອກທີ່ທ່ານຕ້ອງການໃຫ້ປະກົດໃນການທີຊີງຮອບແລ່ມຕາຕະລາງເພື່ອສະແດງແຖວນັ້ນໜ້ອຍຫຼືຫຼາຍກວ່າໃນໜ້າໜຶ່ງ. ຕົວຢ່າງ [50, 100, 200, 500].<br><pre> ['options' => [50, 100, 200, 500]] </pre>"
 
 #, fuzzy
 msgid "Webservices return user field"
@@ -28898,7 +28903,6 @@ msgstr "ລາຍງານນະໂຍບາຍຄວາມປອດໄພຂອ
 msgid "This setting allows you to experiment by reporting but not enforcing some Content Security Policy."
 msgstr "ການຕັ້ງຄ່ານີ້ອະນຸຍາດໃຫ້ທ່ານທົດລອງໂດຍການລາຍງານແຕ່ບໍ່ບັງຄັບໃຊ້ນະໂຍບາຍຄວາມປອດໄພຂອງເນື້ອໃນບາງຢ່າງ."
 
-#, fuzzy
 msgid "HTTP Public Key Pinning"
 msgstr "HTTP Public Key Pinning"
 
@@ -29284,6 +29288,12 @@ msgstr "ຊ້າຍ"
 msgid "Right"
 msgstr "ຂວາ"
 
+msgid "Month"
+msgstr "ເດືອນ"
+
+msgid "Week"
+msgstr "ອາທິດ"
+
 msgid "Icons text"
 msgstr "ຂໍ້ຄວາມໄອຄອນ"
 
@@ -29337,6 +29347,9 @@ msgstr "ເປີເຊັນຄະແນນ"
 
 msgid "Score div percent"
 msgstr "ເປີເຊັນການຫານຄະແນນ"
+
+msgid "Exercise and learning path"
+msgstr "ບົດຝຶກຫັດ ແລະ ເສັ້ນທາງການຮຽນຮູ້"
 
 msgid "Hide catalogue"
 msgstr "ເຊື່ອງລາຍການ"
@@ -29410,6 +29423,9 @@ msgstr "Chamilo LMS"
 #, fuzzy
 msgid "No course sessions for this user"
 msgstr "ບໍ່ມີພາກຮຽນຫຼັກສູດສຳລັບຜູ້ໃຊ້ນີ້"
+
+msgid "The attempted oral questions are %s"
+msgstr "ຄຳຖາມປາກເປົ່າທີ່ພະຍາຍາມຕອບແມ່ນ %s"
 
 #, fuzzy
 msgid "Configure Chamilo colors"
@@ -29604,7 +29620,7 @@ msgstr "ເງື່ອນໄຂການນຳໃຊ້ແພລດຟອມ"
 msgid "Password too easy to guess"
 msgstr "ລະຫັດຜ່ານຄາດເດົາງ່າຍເກີນໄປ"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "ທ່ານຕ້ອງຢືນຢັນບັນຊີຂອງທ່ານຜ່ານອີເມວເພື່ອເຂົ້າໃຊ້ແພລດຟອມ"
 
 msgid "Redirect to portal home"
@@ -29629,8 +29645,14 @@ msgstr "ຂັ້ນຕອນທີ 1 - ພາສາການຕິດຕັ້�
 msgid "Please select installation language"
 msgstr "ກະລຸນາເລືອກພາສາການຕິດຕັ້ງ"
 
+msgid "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator."
+msgstr "ບໍ່ເຫັນພາສາຂອງທ່ານໃນລາຍການ? ຕິດຕໍ່ພວກເຮົາທີ່ info@chamilo.org ເພື່ອຮ່ວມເປັນນັກແປ."
+
 msgid "Step 2 - Requirements"
 msgstr "ຂັ້ນຕອນທີ 2 - ຄວາມຕ້ອງການ"
+
+msgid "Please read the following requirements thoroughly."
+msgstr "ກະລຸນາອ່ານຂໍ້ກຳນົດຕໍ່ໄປນີ້ຢ່າງລະອຽດ."
 
 #, fuzzy
 msgid "For more details %s"
@@ -29754,6 +29776,10 @@ msgstr "ກັບໄປຫາເດືອນ"
 #, fuzzy
 msgid "User registrations by creator"
 msgstr "ການລົງທະບຽນຜູ້ໃຊ້ຕາມຜູ້ສ້າງ"
+
+#, fuzzy
+msgid "Tools access"
+msgstr "ການເຂົ້າເຖິງເຄື່ອງມື"
 
 msgid "Courses count"
 msgstr "ຈຳນວນຫຼັກສູດ"
@@ -30026,14 +30052,14 @@ msgstr "ເປີດໃຊ້ໄຟລ໌ສະເພາະ URL"
 msgid "When this feature is enabled on a multi-URL configuration, you can go to the main URL and provide URL-specific versions of any file (in the documents tool). The original file will be replaced by the alternative whenever seeing it from a different URL. This allows you to customize each URL even further, while enjoying the advantage of re-using the same courses many times."
 msgstr "ເມື່ອຄຸນສົມບັດນີ້ຖືກເປີດໃຊ້ໃນການຕັ້ງຄ່າແບບຫຼາຍ URL, ທ່ານສາມາດໄປທີ່ URL ຫຼັກ ແລະ ໃຫ້ເວີຊັນສະເພາະ URL ຂອງໄຟລ໌ໃດກໍໄດ້ (ໃນເຄື່ອງມືເອກະສານ). ໄຟລ໌ຕົ້ນສະບັບຈະຖືກແທນທີ່ດ້ວຍທາງເລືອກທຸກຄັ້ງທີ່ເບິ່ງຈາກ URL ທີ່ແຕກຕ່າງ. ນີ້ຊ່ວຍໃຫ້ທ່ານສາມາດປັບແຕ່ງແຕ່ລະ URL ໄດ້ຫຼາຍຂຶ້ນ, ໃນຂະນະທີ່ໄດ້ຮັບປະໂຫຍດຈາກການນຳໃຊ້ຫຼັກສູດດຽວກັນຫຼາຍຄັ້ງ."
 
+msgid "Project manager"
+msgstr "ຜູ້ຈັດການໂຄງການ"
+
 msgid "Select classes for which this course will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
 msgstr "ເລືອກຫ້ອງຮຽນທີ່ຫຼັກສູດນີ້ຈະປາກົດໃຫ້ລົງທະບຽນໃນລາຍການ. ກົດລະບຽບການລົງທະບຽນຍັງຄົງມີຜົນບັງຄັບໃຊ້ນອກເໜືອຈາກການເບິ່ງເຫັນໃນລາຍການ."
 
 msgid "Remove the checkbox to enable sending announcements to users with HR roles (still requires to confirm in the announcements tool)."
 msgstr "ລຶບເຄື່ອງໝາຍຖືກເພື່ອເປີດໃຊ້ການສົ່ງປະກາດໃຫ້ຜູ້ໃຊ້ທີ່ມີບົດບາດ HR (ຍັງຕ້ອງຢືນຢັນໃນເຄື່ອງມືປະກາດ)."
-
-msgid "ID of the user who officially sends the agenda reminders"
-msgstr "ໄອດີຂອງຜູ້ໃຊ້ທີ່ສົ່ງການແຈ້ງເຕືອນວາລະຢ່າງເປັນທາງການ"
 
 msgid "Sets which user appears as the sender of agenda reminder emails."
 msgstr "ກຳນົດວ່າຜູ້ໃຊ້ໃດຈະປາກົດເປັນຜູ້ສົ່ງອີເມວແຈ້ງເຕືອນວາລະ."
@@ -30123,6 +30149,15 @@ msgstr "ຈັດຫາຜູ້ໃຊ້ນິລະນາມເພີ່ມເ
 
 msgid "Dynamically creates new anonymous users to support high visitor traffic."
 msgstr "ສ້າງຜູ້ໃຊ້ນິລະນາມໃໝ່ແບບໄດນາມິກເພື່ອຮອງຮັບການເຂົ້າຊົມຈຳນວນຫຼາຍ."
+
+msgid "Access to personal file for all"
+msgstr "ເຂົ້າເຖິງໄຟລ໌ສ່ວນຕົວສຳລັບທັງໝົດ"
+
+msgid "Allows all users to access, view, and manage their personal files within the system."
+msgstr "ອະນຸຍາດໃຫ້ຜູ້ໃຊ້ທັງໝົດເຂົ້າເຖິງ, ເບິ່ງ, ແລະຈັດການໄຟລ໌ສ່ວນຕົວຂອງເຂົາເຈົ້າໃນລະບົບ."
+
+msgid "Enable the copy of session-specific content to another session"
+msgstr "ເປີດໃຊ້ການຄັດລອກເນື້ອຫ້າສະເພາະເຊັຊັ່ນໄປອີກເຊັຊັ່ນໜຶ່ງ"
 
 msgid "Allows duplication of resources that were created in the session when duplicating the session."
 msgstr "ອະນຸຍາດໃຫ້ສຳເນົາຊັບພະຍາກອນທີ່ຖືກສ້າງຂຶ້ນໃນພາກຮຽນເມື່ອມີການສຳເນົາພາກຮຽນ."
@@ -30244,6 +30279,9 @@ msgstr "ແຖບເທິງທັກສະ"
 msgid "Ai_helpers"
 msgstr "ຜູ້ຊ່ວຍ AI"
 
+msgid "ID of the user who officially sends the agenda reminders"
+msgstr "ໄອດີຂອງຜູ້ໃຊ້ທີ່ສົ່ງການແຈ້ງເຕືອນວາລະຢ່າງເປັນທາງການ"
+
 msgid "Session expired. Redirecting to login…"
 msgstr "ພາກຮຽນໝົດອາຍຸ. ກຳລັງປ່ຽນເສັ້ນທາງໄປທີ່ໜ້າເຂົ້າສູ່ລະບົບ…"
 
@@ -30298,6 +30336,9 @@ msgstr "ການຢືນຢັນ"
 
 msgid "Days"
 msgstr "ວັນ"
+
+msgid "Notification to remind the event"
+msgstr "ການແຈ້ງເຕືອນເພື່ອເຕືອນກິດຈະກຳ"
 
 msgid "Checking push subscription..."
 msgstr "ກຳລັງກວດສອບການສະໝັກຮັບການແຈ້ງເຕືອນ..."
@@ -30488,6 +30529,9 @@ msgstr "ປາຍທາງຂອງອີເມລທົດສອບ"
 
 msgid "A database with the same name already exists. It will be deleted."
 msgstr "ມີຖານຂໍ້ມູນທີ່ມີຊື່ດຽວກັນຢູ່ແລ້ວ. ມັນຈະຖືກລຶບອອກ."
+
+msgid "Dear user"
+msgstr "ຮຽນ ຜູ້ໃຊ້"
 
 msgid "You are about to start using one of the best Open Source e-learning platforms on the market. Like many other Open Source projects, Chamilo is backed up by a large community of students, teachers, developers, content creators and businesses who would like to promote the project better."
 msgstr "ທ່ານກຳລັງຈະເລີ່ມໃຊ້ໜຶ່ງໃນແພລດຟອມການຮຽນຮູ້ອີເລັກໂທຣນິກແບບໂອເພນຊອດທີ່ດີທີ່ສຸດໃນຕະຫຼາດ. ເຊັ່ນດຽວກັບໂຄງການໂອເພນຊອດອື່ນໆ, Chamilo ໄດ້ຮັບການສະໜັບສະໜູນຈາກຊຸມຊົນຂະໜາດໃຫຍ່ຂອງນັກຮຽນ, ຄູສອນ, ນັກພັດທະນາ, ຜູ້ສ້າງເນື້ອຫາ ແລະ ທຸລະກິດທີ່ຕ້ອງການສົ່ງເສີມໂຄງການໃຫ້ດີຂຶ້ນ."
@@ -30772,6 +30816,9 @@ msgstr "ນ້ຳໜັກຄະແນນ"
 
 msgid "No invitations or records found"
 msgstr "ບໍ່ພົບຄຳເຊີນ ຫຼື ບັນທຶກ"
+
+msgid "Accept invitation"
+msgstr "ຍອມຮັບຄຳເຊີນ"
 
 msgid "Reject invitation"
 msgstr "ປະຕິເສດຄຳເຊີນ"
@@ -31400,7 +31447,7 @@ msgid "Add users to selected URLs"
 msgstr "ເພີ່ມຜູ້ໃຊ້ໃສ່ URL ທີ່ເລືອກ"
 
 #, fuzzy
-msgid "User search"
+msgid "Search users"
 msgstr "ຄົ້ນຫາຜູ້ໃຊ້"
 
 msgid "The user accounts have been unassigned from the URL"
@@ -31442,6 +31489,9 @@ msgstr "ຊ່ອງຂໍ້ມູນທີ່ບັງຄັບ"
 
 msgid "%s extension not available"
 msgstr "ສ່ວນຂະຫຍາຍ %s ບໍ່ສາມາດໃຊ້ໄດ້"
+
+msgid "Unknown"
+msgstr "ບໍ່ຮູ້ຈັກ"
 
 msgid "The following users have accessed one or more courses without being officially registered. They generated activity in open courses but are not listed in the course subscription tables."
 msgstr "ຜູ້ໃຊ້ຕໍ່ໄປນີ້ໄດ້ເຂົ້າເຖິງຫຼັກສູດໜຶ່ງ ຫຼື ຫຼາຍຫຼັກສູດໂດຍບໍ່ໄດ້ລົງທະບຽນຢ່າງເປັນທາງການ. ພວກເຂົາສ້າງກິດຈະກຳໃນຫຼັກສູດເປີດ ແຕ່ບໍ່ມີລາຍຊື່ໃນຕາຕະລາງການລົງທະບຽນຫຼັກສູດ."
@@ -31894,6 +31944,9 @@ msgstr "ຕ້ອງມີ URL"
 msgid "Optional - e.g. ROLE_TEACHER"
 msgstr "ບໍ່ບັງຄັບ - ເຊັ່ນ ROLE_TEACHER"
 
+msgid "Layout template"
+msgstr "ແມ່ແບບໂຄງຮ່າງ"
+
 msgid "Loading templates..."
 msgstr "ກຳລັງໂຫຼດແມ່ແບບ..."
 
@@ -31902,6 +31955,10 @@ msgstr "ເລືອກແມ່ແບບ"
 
 msgid "Layout templates"
 msgstr "ແມ່ແບບໂຄງຮ່າງ"
+
+#, fuzzy
+msgid "Create template"
+msgstr "ສ້າງແມ່ແບບ"
 
 msgid "Back to layouts"
 msgstr "ກັບໄປທີ່ໂຄງຮ່າງ"
@@ -31921,6 +31978,9 @@ msgstr "ເບິ່ງ JSON"
 #, fuzzy
 msgid "Layout JSON details"
 msgstr "ລາຍລະອຽດ JSON ຂອງໂຄງຮ່າງ"
+
+msgid "Confirm deletion"
+msgstr "ຢືນຢັນການລຶບ"
 
 #, fuzzy
 msgid "Are you sure you want to delete this template?"
@@ -31961,6 +32021,9 @@ msgstr "ລາຍລະອຽດໂຄງຮ່າງໜ້າ"
 
 msgid "Loading layout..."
 msgstr "ກຳລັງໂຫຼດໂຄງຮ່າງ..."
+
+msgid "Page layouts"
+msgstr "ໂຄງຮ່າງໜ້າ"
 
 #, fuzzy
 msgid "Create layout"
@@ -32534,6 +32597,9 @@ msgstr "ສົ່ງທາງອີເມວ"
 msgid "Question also used in the following tests"
 msgstr "ຄຳຖາມນີ້ຍັງຖືກໃຊ້ໃນການສອບເສັງຕໍ່ໄປນີ້"
 
+msgid "Add glossary item"
+msgstr "ເພີ່ມລາຍການກົດຄຳ"
+
 msgid "Missing chart library, please check web server logs."
 msgstr "ບໍ່ພົບຄັງຂອງແຜນວາດ, ກະລຸນາກວດສອບບັນທຶກຂອງເວັບເຊີບເວີ."
 
@@ -32736,6 +32802,9 @@ msgstr "ປ້າຍກຽດຕິຍົດ"
 msgid "Question media"
 msgstr "ສື່ຂອງຄຳຖາມ"
 
+msgid "Loading..."
+msgstr "ກຳລັງໂຫຼດ..."
+
 msgid "ex. localhost"
 msgstr "ຕົວຢ່າງ. localhost"
 
@@ -32915,6 +32984,14 @@ msgstr "ອັບໂຫລດໂລໂກ້ສ່ວນຫົວ ແລະ ອ�
 
 msgid "Write a short and striking course name, for example: Innovation Management"
 msgstr "ຂຽນຊື່ລາຍວິຊາທີ່ສັ້ນ ແລະ ໜ້າສົນໃຈ, ຕົວຢ່າງ: ການຈັດການນະວັດຕະກຳ"
+
+#, fuzzy
+msgid "Show advanced settings"
+msgstr "ສະແດງການຕັ້ງຄ່າຂັ້ນສູງ"
+
+#, fuzzy
+msgid "Hide advanced settings"
+msgstr "ເຊື່ອງການຕັ້ງຄ່າຂັ້ນສູງ"
 
 msgid "Quality"
 msgstr "ຄຸນນະພາບ"
@@ -33295,6 +33372,9 @@ msgstr "ກຳລັງອັບໂຫລດ... ກະລຸນາເປີດ�
 msgid "Recipients"
 msgstr "ຜູ້ຮັບ"
 
+msgid "Sharing"
+msgstr "ແບ່ງປັນ"
+
 #, fuzzy
 msgid "Enter a value here"
 msgstr "ປ້ອນຄ່າທີ່ນີ້"
@@ -33436,3 +33516,275 @@ msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລ້
 #, fuzzy
 msgid "New messages"
 msgstr "ຂໍ້ຄວາມໃໝ່"
+
+msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
+msgstr "ສະບາຍດີ %s,<br><br>ທ່ານໄດ້ລົງທະບຽນໃນ %s.<br>ທ່ານສາມາດເຂົ້າເຖິງບັນຊີຂອງທ່ານໄດ້ຈາກ <a href=\"%s\">ທີ່ນີ້</a>.<br><br>ຂໍ້ມູນການເຂົ້າສູ່ລະບົບຂອງທ່ານແມ່ນ:<br>ຊື່ຜູ້ໃຊ້: <strong>%s</strong><br>ລະຫັດຜ່ານ: <strong>%s</strong><br><br>ດ້ວຍຄວາມນັບຖື,<br>%s"
+
+#, fuzzy
+msgid "You are registered on %s"
+msgstr "ທ່ານໄດ້ລົງທະບຽນໃນ %s"
+
+msgid "You have been enrolled in a new course"
+msgstr "ທ່ານໄດ້ຖືກລົງທະບຽນໃນຫຼັກສູດໃໝ່ແລ້ວ"
+
+msgid "Hello %s,<br><br>You have been enrolled in a new session: <strong>%s</strong>.<br>You can access your courses from <a href=\"%s\">here</a>.<br><br>Your current active sessions are:<br><ul>%s</ul><br>Best regards,<br>Chamilo"
+msgstr "ສະບາຍດີ %s,<br><br>ທ່ານຖືກສະໝັກໃນເຊັຊັ່ນໃໝ່: <strong>%s</strong>.<br>ທ່ານສາມາດເຂົ້າເຖິງຄອສຂອງທ່ານຈາກ <a href=\"%s\">ທີ່ນີ້</a>.<br><br>ເຊັຊັ່ນທີ່ເຄື່ອນໄຫວປະຈຸບັນຂອງທ່ານຄື:<br><ul>%s</ul><br>ດ້ວຍຄວາມຄິດຕອບ,<br>Chamilo"
+
+msgid "Admin Favorites Courses"
+msgstr "ຄອສທີ່ມັກຂອງ Admin"
+
+msgid "Admin Completed Courses"
+msgstr "ຄອສທີ່ສຳເລັດຂອງ Admin"
+
+msgid "Admin Incomplete Courses"
+msgstr "ຄອສທີ່ບໍ່ສຳເລັດຂອງ Admin"
+
+msgid "Admin Restart Courses"
+msgstr "ຄອສທີ່ເລີ່ມໃໝ່ຂອງ Admin"
+
+msgid "Admin Dashboard"
+msgstr "ໜ້າປັດໄລດັສ Admin"
+
+msgid "Threads"
+msgstr "ເລື້ອງ"
+
+msgid "Invalid thread"
+msgstr "ເລື້ອງບໍ່ຖືກຕ້ອງ"
+
+msgid "View full thread"
+msgstr "ເບິ່ງເລື້ອງທັງໝົດ"
+
+msgid "No post yet"
+msgstr "ຍັງບໍ່ມີບົດລາຍງານ"
+
+msgid "Discussion thread"
+msgstr "ເລື້ອງກອງປະຊຸມ"
+
+msgid "Access to this course"
+msgstr "ເຂົ້າເຖິງຄອສນີ້"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "ພລັກອິນນີ້ບໍ່ມີການຕັ້ງຄ່າທີ່ສາມາດປັບໄດ້. ການເປີດໃຊ້ຈັດການຈາກລາຍການພລັກອິນ."
+
+msgid "Private - access granted by privileged users"
+msgstr "ສ່ວນຕົວ - ເຂົ້າເຖິງຖືກອະນຸຍາດໂດຍຜູ້ໃຊ້ທີ່ມີສິດພິເສດ"
+
+msgid "No detailed feedback is available for this question."
+msgstr "ບໍ່ມີຄຳປັບປຸງລາຍລະອຽດສຳລັບຄຳຖາມນີ້."
+
+msgid "Please select an answer before checking the result."
+msgstr "ກະລຸນາເລືອກຄຳຕອບກ່ອນກວດສອບຜົນ."
+
+msgid "Allow PDF export for this item"
+msgstr "ອະນຸຍາດໃຫ້ສົ່ງອອກ PDF ສຳລັບລາຍການນີ້"
+
+msgid "Hide free users (not enrolled)"
+msgstr "ຊ້ອມຜູ້ໃຊ້ຟຣີ (ບໍ່ໄດ້ສະໝັກ)"
+
+msgid "Question statistics"
+msgstr "ສະຖິຕິຄຳຖາມ"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "ກຳລັງສ້າງໄຟລ໌. ກະລຸນາບໍ່ປິດແທັບນີ້..."
+
+msgid "Assign auth source to users"
+msgstr "ຈັດຕັ້ງແຫຼ່ງການຢືນຢັນສຳລັບຜູ້ໃຊ້"
+
+msgid "There are no questions for this survey"
+msgstr "ບໍ່ມີຄຳຖາມສຳລັບການສຳຫຼວດນີ້"
+
+msgid "Certificates report"
+msgstr "ລາຍງານປະກັນຍ້ອນ"
+
+msgid "Course picture"
+msgstr "ຮູບພາບຄອສ"
+
+msgid "Current picture"
+msgstr "ຮູບປັດຈຸບັນ"
+
+msgid "Course events log"
+msgstr "ບັນທຶກເຫດການຄອສ"
+
+msgid "Update the category information and its optional time limit."
+msgstr "ອັບເດດຂໍ້ມູນຫມື່ນປະເພດ ແລະ ເວລາຈຳກັດເລືອກ."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "ສ້າງກຸ່ມລອຈິກຂອງຊັ້ນຮຽນເພື່ອຈັດການບັນນະທຶກການຝຶກອົບຮົມ."
+
+msgid "Generating file, do not close this tab"
+msgstr "ກຳລັງສ້າງໄຟລ໌, ກະລຸນາບໍ່ປິດຕ່າວນີ້"
+
+msgid "Assign authentication sources to users"
+msgstr "ຈັດຕັ້ງແຫຼ່ງການຢືນຢັນໃຫ້ກັບຜູ້ໃຊ້"
+
+msgid "Average completion rate"
+msgstr "ອັດຕາສະເລ່າເສີມສົມທີ່ສຳເລັດ"
+
+msgid "Average access rate"
+msgstr "ອັດຕາສະເລ່າເຂົ້າເຖິງ"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "ຕາຕະລາງນີ້ສະຫຼຸບການຍົກມາກຄວາມຄືບໜ້າ ແລະ ກິດຈະກຳຂອງຜູ້ຮຽນຕໍ່ທາງການຮຽນຢູ່ໃນຄອສປັດຈຸບັນ."
+
+msgid "Follow up"
+msgstr "ຕິດຕາມ"
+
+msgid "Tracking for superior"
+msgstr "ການຕິດຕາມສຳລັບເຈ້ຍຕົວຫຼັກ"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "ລາຍງານນີ້ສະແດງການແຕ່ງກຸ່ມລະຫວ່າງຊັ້ນຮຽນຕໍ່ໂຄຈຣຕົວໃຫຍ່ໃນຊ່ວງເວລາທີ່ເລືອກ."
+
+msgid "Head manager report"
+msgstr "ລາຍງານຜູ້ຈັດການຫຼັກ"
+
+msgid "Reset or update user password"
+msgstr "ລັບລົບ ຫຼື ອັບເດດລະຫັດຜ່ານຂອງຜູ້ໃຊ້"
+
+msgid "Active users"
+msgstr "ຜູ້ໃຊ້ທີ່ເຮັດວຽກ"
+
+msgid "Inactive users"
+msgstr "ຜູ້ໃຊ້ທີ່ບໍ່ເຮັດວຽກ"
+
+msgid "Report on resources"
+msgstr "ລາຍງານຊັບພະຍາກອນ"
+
+msgid "Global view"
+msgstr "ມຸມມອງທັງໝົດ"
+
+msgid "Available reports"
+msgstr "ລາຍງານທີ່ມີຢູ່"
+
+msgid "Current report"
+msgstr "ລາຍງານປັດຈຸບັນ"
+
+msgid "Back to user assignment page"
+msgstr "ກັບໄປຫນ້າຈັດຕັ້ງຜູ້ໃຊ້"
+
+msgid "Authentication sources assigned successfully"
+msgstr "ຈັດຕັ້ງແຫຼ່ງການຢືນຢັນສຳເລັດ"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "ແນະນຳ: ເລືອກ “— ອັບໂຫລດເທົ່ານັ້ນ —” ເພື່ອເກັບໄວ້ໂດຍບໍ່ສົ່ງໃຫ້ໃຜ."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "ກະລຸນາເລືອກຜູ້ຮັບຢ່າງນ້ອຍໜຶ່ງ (“— ອັບໂຫລດເທົ່ານັ້ນ —” ຫຼື ຜູ້ໃຊ້ໃດກໍ່ໄດ້)"
+
+msgid "Sharing"
+msgstr "ແບ່ງປັນ"
+
+msgid "Selected files"
+msgstr "ໄຟລ໌ທີ່ເລືອກ"
+
+msgid "Hide password"
+msgstr "ລັບລະຫັດ"
+
+msgid "Show password"
+msgstr "ສະແດງລະຫັດຜ່ານ"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "ອັບໂຫລດ SVG ໂລໂກ້ສຳລັບອີເມວ"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "ທ່ານຕ້ອງເຄື່ອນຫຼືລຶບທາງການຮຽນທັງໝົດອອກຈາກຫມູ່ນປະເພດນີ້ກ່ອນລຶບມັນ."
+
+msgid "Clear filters"
+msgstr "ລ້າງຕົວກອ່ນ"
+
+msgid "Attendances (tablet)"
+msgstr "ການເຂົ້າຮ່ວມ (ແທັບເລັດ)"
+
+msgid "Exit tablet mode"
+msgstr "ອອກຈາກໂໝດແທັບເລັດ"
+
+msgid "No members found."
+msgstr "ບໍ່ພົບສະມາຊິກ."
+
+msgid "Health check"
+msgstr "ການກວດກາສຸຂະພາບ"
+
+msgid "Export to CC 1.3"
+msgstr "ສົ່ງອອກໄປ CC 1.3"
+
+msgid "Loading resources..."
+msgstr "ກຳລັງໂຫລດຊັບພະຍາກອນ..."
+
+msgid "Failed to load resources."
+msgstr "ໂຫລດຊັບພະຍາກອນລົ້ມເຫລວ."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "ກະລຸນາເລືອກຊັບພະຍາກອນທີ່ສົ່ງອອກໄດ້ ຢ່າງນ້ອຍໜຶ່ງ (ເອກະສານ, ລິ້ງເວັບ, ການສົນທະນາ,...)."
+
+msgid "Export finished."
+msgstr "ການສົ່ງອອກສຳເລັດ."
+
+msgid "Export failed."
+msgstr "ການສົ່ງອອກລົ້ມເຫລວ."
+
+msgid "Import failed."
+msgstr "ການນຳເຂົ້າລົ້ມເຫລວ."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "ໄຟລ໌ທ້ອງຖິ່ນ (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "ພ້ອມສຳລັບນຳເຂົ້າ"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "ພວກເຮົາຈະກູ້ຄືນສຳເນົາສຳຮອງໄປໃນຄອສນີ້. ທ່ານສາມາດກັບໄປປ່ຽນເລືອກຕັ້ງ."
+
+msgid "Select resources to import"
+msgstr "ເລືອກຊັບພະຍາກອນສຳລັບນຳເຂົ້າ"
+
+msgid "No resources available in this backup."
+msgstr "ບໍ່ມີຊັບພະຍາກອນທີ່ມີຢູ່ໃນການເກັບຮັກສານີ້."
+
+msgid "Import selection"
+msgstr "ເລືອກນຳເຂົ້າ"
+
+msgid "Import completed"
+msgstr "ການນຳເຂົ້າເສີມສົມບູນ"
+
+msgid "Could not load options."
+msgstr "ບໍ່ສາມາດໂຫຼດຕົວເລືອກໄດ້."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "ກະລຸນາເລືອກໄຟລ໌ການເກັບຮັກສາ (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "ກະລຸນາເລືອກການເກັບຮັກສາຈາກເຊີເວີ"
+
+msgid "Error selecting source."
+msgstr "ຂໍ້ຜິດພາດໃນການເລືອກແຫຼ່ງ."
+
+msgid "Recycling options"
+msgstr "ຕົວເລືອກການລືບ"
+
+msgid "Type the course code to confirm"
+msgstr "ພິມລະຫັດວິຊາເພື່ອຢືນຢັນ"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "ນີ້ຈະລືບຫຼືລັບຊັບພະຍາກອນທີ່ເລືອກ. ການເຮັດນີ້ບໍ່ສາມາດຍົກເລີກໄດ້."
+
+msgid "Select resources to recycle"
+msgstr "ເລືອກຊັບພະຍາກອນທີ່ຈະລືບ"
+
+msgid "No resources available in this course."
+msgstr "ບໍ່ມີຊັບພະຍາກອນໃນກອງປະລະນີ້."
+
+msgid "Recycle selected"
+msgstr "ລືບທີ່ເລືອກ"
+
+msgid "Error loading resources."
+msgstr "ຂໍ້ຜິດພາດໃນການໂຫຼດຊັບພະຍາກອນ."
+
+msgid "Clear search"
+msgstr "ລ້າງການຄົ້ນຫາ"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "ຊື່ຖານຂໍ້ມູນຈະໃຊ້ໄດ້ພຽງຕົວອັກສອນ, ຕົວເລກ ແລະ underscore (_) ເທົ່ານັ້ນ. ຕົວອັກສອນທີ່ບໍ່ຖືກຕ້ອງຈະຖືກລຶບອັດຕະໂນມັດ."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "ຂໍ້ກຳນົດແລະເງື່ອນໄຂທົ່ວໄປທີ່ໃຫ້ກັບຜູ້ໃຊ້ເພື່ອໃຊ້ແພລັດຟອມນີ້ແມ່ນຫຍັງ?"
+

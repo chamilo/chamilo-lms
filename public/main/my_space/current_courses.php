@@ -170,7 +170,7 @@ function build_current_courses_rows(int $userId, int $sessionId = 0): array
             // Course without learning paths: still add one row so the course
             // is visible in the report (all stats = 0).
             $rows[$rowIndex] = [
-                'lp' => get_lang('No learning paths'),
+                'lp' => get_lang('No learning path'),
                 'teachers' => !empty($teacherNames) ? implode(', ', $teacherNames) : '',
                 'course_name' => $course['title'],
                 'count_students' => $studentCount,
@@ -500,7 +500,7 @@ echo '<div id="current-courses-summary" class="row mb-3">';
 echo '  <div class="col-6 col-md-3 mb-2">';
 echo '      <div class="card shadow-sm h-100 border-0">';
 echo '          <div class="card-body text-center p-2">';
-echo '              <div class="small text-muted">'.get_lang('Number of courses').'</div>';
+echo '              <div class="small text-muted">'.get_lang('Total number of courses').'</div>';
 echo '              <div id="current-courses-kpi-courses" class="h4 mb-0">-</div>';
 echo '          </div>';
 echo '      </div>';
@@ -555,7 +555,7 @@ echo '</div>';
 // Simple JS loader that calls the AJAX endpoint, fills the table and updates KPIs.
 $ajaxUrl = api_get_path(WEB_CODE_PATH).'my_space/current_courses.php?ajax=1';
 $noDataText = addslashes(get_lang('No data available'));
-$errorText = addslashes(get_lang('Error while loading data'));
+$errorText = addslashes(get_lang('Error loading courses'));
 
 echo '<script>
 document.addEventListener("DOMContentLoaded", function () {

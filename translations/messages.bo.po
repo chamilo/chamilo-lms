@@ -10920,8 +10920,8 @@ msgstr "ཡིན་"
 msgid "The address of"
 msgstr "གནས་གྲོགས་ཀྱི་"
 
-msgid "Your registration on"
-msgstr "ལ་ཁྱེད་ཀྱི་རྒྱ་སྤྲོད་"
+msgid "Your registration on%s "
+msgstr "ལ་ཁྱེད་ཀྱི་རྒྱ་སྤྲོད་ %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "འཛུལ་ཕོ་འདི་རང་གིས་འབྲུག་རེ་ཞིག་ བྲའུ་ཛར་གྱི་ལོག་ལ་འགྲོ་བར་འབྲེལ་རེ་འབྲུག་རེ་གཞན་པ་འཚོལ་རེ་འབྱུང་"
@@ -22083,7 +22083,7 @@ msgstr ""
 msgid "Triple select"
 msgstr ""
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr ""
 
 msgid "Add text"
@@ -22143,13 +22143,10 @@ msgstr ""
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr ""
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr ""
 
 msgid "Confirmation for new account"
-msgstr ""
-
-msgid "You need confirm your account via email to access the platform"
 msgstr ""
 
 msgid "Enable Cloud files link addition"
@@ -24987,9 +24984,6 @@ msgstr ""
 msgid "Click to view details"
 msgstr ""
 
-msgid "This report applies to all plateform activities of the user."
-msgstr ""
-
 msgid "dd/mm/yyyy"
 msgstr ""
 
@@ -27546,7 +27540,7 @@ msgstr ""
 msgid "Password too easy to guess"
 msgstr ""
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr ""
 
 msgid "Redirect to portal home"

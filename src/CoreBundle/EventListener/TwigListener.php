@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\LanguageHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
@@ -24,6 +25,7 @@ class TwigListener
         private readonly LanguageRepository $languageRepository,
         private readonly UserHelper $userHelper,
         private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly LanguageHelper $languageHelper,
     ) {}
 
     public function __invoke(ControllerEvent $event): void
@@ -54,5 +56,6 @@ class TwigListener
             $this->twig->addGlobal('access_url_id', 1);
         }
         $this->twig->addGlobal('languages_json', json_encode($languages));
+        $this->twig->addGlobal('wcag_locale', $this->languageHelper->getWcagIso());
     }
 }

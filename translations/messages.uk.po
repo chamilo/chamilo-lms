@@ -9523,7 +9523,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "Помилка завантаження файлу: це розширення файлу або тип файлу заборонено"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "URL OpenID"
 
 msgid "The file is too big to upload."
 msgstr "Файл занадто великий для завантаження."
@@ -10920,8 +10920,8 @@ msgstr "є"
 msgid "The address of"
 msgstr "Адреса"
 
-msgid "Your registration on"
-msgstr "Ваша реєстрація на"
+msgid "Your registration on %s"
+msgstr "Ваша реєстрація на %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Цей логін уже зайнятий. Використовуйте кнопку Назад у браузері та оберіть інший."
@@ -22083,7 +22083,7 @@ msgstr "Вибрати з текстовим полем"
 msgid "Triple select"
 msgstr "Потрійний вибір"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Ви підтверджуєте, що дійсно бажаєте зареєструватися на цій платформі."
 
 msgid "Add text"
@@ -22143,14 +22143,11 @@ msgstr "Підтвердження реєстрації"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Ваш обліковий запис неактивний, оскільки ви ще не підтвердили його. Перевірте email та дотримуйтесь інструкцій або натисніть на посилання нижче, щоб надіслати email ще раз"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Щоб завершити реєстрацію на платформі, вам потрібно підтвердити обліковий запис, клацнувши на таке посилання"
 
 msgid "Confirmation for new account"
 msgstr "Підтвердження нового облікового запису"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Вам потрібно підтвердити обліковий запис електронною поштою для доступу до платформи"
 
 msgid "Enable Cloud files link addition"
 msgstr "Увімкнути додавання посилань на файли хмари"
@@ -24987,11 +24984,8 @@ msgstr "Експорт усіх результатів усіх тестів"
 msgid "Click to view details"
 msgstr "Натисніть для перегляду деталей"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Цей звіт стосується всіх активностей користувача на платформі."
-
 msgid "dd/mm/yyyy"
-msgstr "дд/мм/рррр"
+msgstr "dd/mm/yyyy"
 
 msgid "Export certificates issue report"
 msgstr "Експорт звіту видачі сертифікатів"
@@ -27546,7 +27540,7 @@ msgstr "Умови використання платформи"
 msgid "Password too easy to guess"
 msgstr "Пароль занадто легкий для вгадування"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Вам потрібно підтвердити обліковий запис електронною поштою для доступу до платформи"
 
 msgid "Redirect to portal home"
@@ -31196,4 +31190,247 @@ msgstr "Перезапустити курси адміністратора"
 
 msgid "Admin Dashboard"
 msgstr "Панель адміністратора"
+
+msgid "Threads"
+msgstr "Потоки"
+
+msgid "Invalid thread"
+msgstr "Недійсний потік"
+
+msgid "View full thread"
+msgstr "Переглянути повний потік"
+
+msgid "No post yet"
+msgstr "Ще немає повідомлень"
+
+msgid "Discussion thread"
+msgstr "Потік обговорення"
+
+msgid "Access to this course"
+msgstr "Доступ до цього курсу"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Цей плагін не має налаштувань. Активація керується зі списку плагінів."
+
+msgid "Private - access granted by privileged users"
+msgstr "Приватний - доступ надається привілейованими користувачами"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Детальний зворотний зв’язок для цього запитання недоступний."
+
+msgid "Please select an answer before checking the result."
+msgstr "Будь ласка, виберіть відповідь перед перевіркою результату."
+
+msgid "Allow PDF export for this item"
+msgstr "Дозволити експорт у PDF для цього елемента"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Приховати безкоштовних користувачів (не зареєстрованих)"
+
+msgid "Question statistics"
+msgstr "Статистика запитань"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Генерування файлу. Не закривайте цю вкладку..."
+
+msgid "Assign auth source to users"
+msgstr "Призначити джерело авторизації користувачам"
+
+msgid "There are no questions for this survey"
+msgstr "Для цієї опитування немає запитань"
+
+msgid "Certificates report"
+msgstr "Звіт про сертифікати"
+
+msgid "Course picture"
+msgstr "Зображення курсу"
+
+msgid "Current picture"
+msgstr "Поточне зображення"
+
+msgid "Course events log"
+msgstr "Журнал подій курсу"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Оновіть інформацію про категорію та її необов’язковий ліміт часу."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Створіть логічну групу сесій, щоб тримати каталог навчання впорядкованим."
+
+msgid "Generating file, do not close this tab"
+msgstr "Генерування файлу, не закривайте цю вкладку"
+
+msgid "Assign authentication sources to users"
+msgstr "Призначити джерела авторизації користувачам"
+
+msgid "Average completion rate"
+msgstr "Середній рівень завершення"
+
+msgid "Average access rate"
+msgstr "Середній рівень доступу"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Ця таблиця підсумовує прогрес та активність учня для кожного навчального шляху у ваших поточних курсах."
+
+msgid "Follow up"
+msgstr "Контроль"
+
+msgid "Tracking for superior"
+msgstr "Відстеження для керівника"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Цей звіт показує тижневий розподіл сесій на генерального тренера у вибраному діапазоні дат."
+
+msgid "Head manager report"
+msgstr "Звіт головного менеджера"
+
+msgid "Reset or update user password"
+msgstr "Скинути або оновити пароль користувача"
+
+msgid "Active users"
+msgstr "Активні користувачі"
+
+msgid "Inactive users"
+msgstr "Неактивні користувачі"
+
+msgid "Report on resources"
+msgstr "Звіт про ресурси"
+
+msgid "Global view"
+msgstr "Загальний огляд"
+
+msgid "Available reports"
+msgstr "Доступні звіти"
+
+msgid "Current report"
+msgstr "Поточний звіт"
+
+msgid "Back to user assignment page"
+msgstr "Повернутися до сторінки призначення користувача"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Джерела автентифікації призначено успішно"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Порада: оберіть «— Просто завантажити —» для збереження без надсилання комусь."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Будь ласка, оберіть щонайменше одного отримувача («— Просто завантажити —» або будь-якого користувача)"
+
+msgid "Sharing"
+msgstr "Спільний доступ"
+
+msgid "Selected files"
+msgstr "Обрані файли"
+
+msgid "Hide password"
+msgstr "Приховати пароль"
+
+msgid "Show password"
+msgstr "Показати пароль"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Завантажити SVG-логотип для електронних листів"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Ви повинні перемістити або видалити всі навчальні шляхи з цієї категорії перед її видаленням."
+
+msgid "Clear filters"
+msgstr "Очистити фільтри"
+
+msgid "Attendances (tablet)"
+msgstr "Відвідування (планшет)"
+
+msgid "Exit tablet mode"
+msgstr "Вийти з режиму планшета"
+
+msgid "No members found."
+msgstr "Членів не знайдено."
+
+msgid "Health check"
+msgstr "Перевірка стану"
+
+msgid "Export to CC 1.3"
+msgstr "Експорт у CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Завантаження ресурсів..."
+
+msgid "Failed to load resources."
+msgstr "Не вдалося завантажити ресурси."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Будь ласка, оберіть щонайменше один ресурс для експорту (документ, вебпосилання, обговорення тощо)."
+
+msgid "Export finished."
+msgstr "Експорт завершено."
+
+msgid "Export failed."
+msgstr "Експорт не вдався."
+
+msgid "Import failed."
+msgstr "Імпорт не вдався."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Локальний файл (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Готовий до імпорту"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Ми відновимо резервну копію в цей курс. Ви можете повернутися, щоб змінити параметри."
+
+msgid "Select resources to import"
+msgstr "Оберіть ресурси для імпорту"
+
+msgid "No resources available in this backup."
+msgstr "У цій резервній копії немає доступних ресурсів."
+
+msgid "Import selection"
+msgstr "Вибір для імпорту"
+
+msgid "Import completed"
+msgstr "Імпорт завершено"
+
+msgid "Could not load options."
+msgstr "Не вдалося завантажити параметри."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Будь ласка, оберіть файл резервної копії (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Будь ласка, оберіть резервну копію з сервера"
+
+msgid "Error selecting source."
+msgstr "Помилка вибору джерела."
+
+msgid "Recycling options"
+msgstr "Параметри переробки"
+
+msgid "Type the course code to confirm"
+msgstr "Введіть код курсу для підтвердження"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Це видалить або скине обрані ресурси. Цю дію не можна скасувати."
+
+msgid "Select resources to recycle"
+msgstr "Оберіть ресурси для переробки"
+
+msgid "No resources available in this course."
+msgstr "У цьому курсі немає доступних ресурсів."
+
+msgid "Recycle selected"
+msgstr "Переробити обране"
+
+msgid "Error loading resources."
+msgstr "Помилка завантаження ресурсів."
+
+msgid "Clear search"
+msgstr "Очистити пошук"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "У назві бази даних дозволені лише літери, цифри та підкреслення (_). Недопустимі символи будуть автоматично видалені."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Які загальні умови та правила надаються користувачам для використання цієї платформи?"
 

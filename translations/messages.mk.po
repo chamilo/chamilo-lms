@@ -10925,8 +10925,8 @@ msgstr "e"
 msgid "The address of"
 msgstr "Адресата на"
 
-msgid "Your registration on"
-msgstr "Вашата регистрација на"
+msgid "Your registration on %s"
+msgstr "Вашата регистрација на %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Ова корисничко_име веќе е земено. Ползувајте го копчето Назад на Вашиот прелистувач и изберете друго."
@@ -20100,7 +20100,7 @@ msgid "When enabled, and when using the WSCertificatesList webservice, this opti
 msgstr "Кога е овозможено, и кога се користи вебсервисот WSCertificatesList, оваа опција ќе се погрижи сите сертификати да бидат генерирани од корисници ако достигнале доволна оценка во сите ставки дефинирани во дневниците на оценки за сите курсеви и сесии (ова може да потроши значителни процесорски ресурси на твојот сервер)."
 
 msgid "OpenBadges backpack URL"
-msgstr "OpenBadges backpack URL"
+msgstr "OpenBadges ранец URL"
 
 msgid "The URL of the OpenBadges backpack server that will be used by default for all users wanting to export their badges. This defaults to the open and free Mozilla Foundation backpack repository: https://backpack.openbadges.org/"
 msgstr "URL-то на серверот OpenBadges backpack што ќе се користи по подразбирање за сите корисници кои сакаат да ги извезат своите значки. Ова по подразбирање е отвореното и бесплатното складиште на Mozilla Foundation: https://backpack.openbadges.org/"
@@ -22088,7 +22088,7 @@ msgstr "Избери со текстуално поле"
 msgid "Triple select"
 msgstr "Тројно избирање"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Потврдувате дека навистина сакате да се регистрирате на оваа платформа."
 
 msgid "Add text"
@@ -22148,14 +22148,11 @@ msgstr "Потврда за регистрација"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Вашиот профил е неактивен бидејќи сè уште не сте го потврдиле. Проверете ја вашата е-пошта и следете ги инструкциите или кликнете на следната врска за да ја пратите е-поштата повторно"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "За да ја завршите вашата регистрација на платформата, треба да го потврдите вашиот профил со кликнување на следната врска"
 
 msgid "Confirmation for new account"
 msgstr "Потврда за нов кориснички профил"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Треба да го потврдите вашиот профил преку е-пошта за да пристапите до платформата"
 
 msgid "Enable Cloud files link addition"
 msgstr "Овозможи додавање линк до Cloud датотеки"
@@ -24992,9 +24989,6 @@ msgstr "Извози ги сите резултати од сите тестов
 msgid "Click to view details"
 msgstr "Кликни за детали"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Овој извештај се однесува на сите активности на платформата на корисникот."
-
 msgid "dd/mm/yyyy"
 msgstr "ден/мес/год"
 
@@ -27551,7 +27545,7 @@ msgstr "Услови за користење на платформата"
 msgid "Password too easy to guess"
 msgstr "Лозинката е премногу лесна за претпоставување"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Треба да ја потврдите сметката преку е-пошта за да пристапите до платформата"
 
 msgid "Redirect to portal home"
@@ -30526,13 +30520,13 @@ msgid "ex. root"
 msgstr "пр. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "CREATE TABLE дела"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ALTER TABLE дела"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "DROP COLUMN дела"
 
 msgid "Theme selected as current"
 msgstr "Темата е селектирана како тековна"
@@ -31232,4 +31226,217 @@ msgstr "Нема детална повратна информација за о�
 
 msgid "Please select an answer before checking the result."
 msgstr "Изберете одговор пред да го проверите резултатот."
+
+msgid "Allow PDF export for this item"
+msgstr "Дозволи извоз во PDF за оваа ставка"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Скриј бесплатни корисници (не запишани)"
+
+msgid "Question statistics"
+msgstr "Статистика на прашања"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Генерирање на датотека. Не затворајте ја оваа јазичка..."
+
+msgid "Assign auth source to users"
+msgstr "Додели извор на автентикација на корисници"
+
+msgid "There are no questions for this survey"
+msgstr "Нема прашања за оваа анкета"
+
+msgid "Certificates report"
+msgstr "Извештај за сертификати"
+
+msgid "Course picture"
+msgstr "Слика на курсот"
+
+msgid "Current picture"
+msgstr "Тековна слика"
+
+msgid "Course events log"
+msgstr "Дневник на настани на курсот"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Ажурирај ги информациите за категоријата и нејзиниот опционален временски лимит."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Создади логичка група на сесии за да го организираш каталогот на обуки."
+
+msgid "Generating file, do not close this tab"
+msgstr "Генерирање на датотека, не затворај ја оваа јазичка"
+
+msgid "Assign authentication sources to users"
+msgstr "Додели извори на автентикација на корисници"
+
+msgid "Average completion rate"
+msgstr "Просечна стапка на завршување"
+
+msgid "Average access rate"
+msgstr "Просечна стапка на пристап"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Оваа табела ги сумира напредокот и активноста на учениците по патека за учење во вашите тековни курсеви."
+
+msgid "Follow up"
+msgstr "Следење"
+
+msgid "Tracking for superior"
+msgstr "Следење за претпоставен"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Овој извештај ја прикажува неделната распределба на сесии по генерален тренер во избраниот временски период."
+
+msgid "Head manager report"
+msgstr "Извештај на раководителот"
+
+msgid "Reset or update user password"
+msgstr "Ресетирај или ажурирај корисничка лозинка"
+
+msgid "Active users"
+msgstr "Активни корисници"
+
+msgid "Inactive users"
+msgstr "Неактивни корисници"
+
+msgid "Report on resources"
+msgstr "Извештај за ресурси"
+
+msgid "Global view"
+msgstr "Глобален преглед"
+
+msgid "Available reports"
+msgstr "Достапни извештаи"
+
+msgid "Current report"
+msgstr "Тековен извештај"
+
+msgid "Back to user assignment page"
+msgstr "Назад на страницата за доделување корисници"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Изворите на автентикација се доделија успешно"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Совет: избери „— Само испрати —“ за да зачуваш без испраќање до било кој."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Избери барем еден примател („— Само испрати —“ или било кој корисник)"
+
+msgid "Sharing"
+msgstr "Спојување"
+
+msgid "Selected files"
+msgstr "Избрани датотеки"
+
+msgid "Hide password"
+msgstr "Скриј лозинка"
+
+msgid "Show password"
+msgstr "Прикажи лозинка"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Подигни SVG лого за е-пошта"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Мора да ги преместите или отстраните сите патеки за учење од оваа категорија пред да ја избришете."
+
+msgid "Clear filters"
+msgstr "Исчисти филтри"
+
+msgid "Attendances (tablet)"
+msgstr "Присуства (таблет)"
+
+msgid "Exit tablet mode"
+msgstr "Изајди од таблет режим"
+
+msgid "No members found."
+msgstr "Нема пронајдени членови."
+
+msgid "Health check"
+msgstr "Проверка на здравје"
+
+msgid "Export to CC 1.3"
+msgstr "Извоз во CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Вчитувам ресурси..."
+
+msgid "Failed to load resources."
+msgstr "Неуспешно вчитување на ресурси."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Изберете барем еден ресурс за извоз (документ, веб-врска, дискусија,...)."
+
+msgid "Export finished."
+msgstr "Извозот заврши."
+
+msgid "Export failed."
+msgstr "Извозот неуспешен."
+
+msgid "Import failed."
+msgstr "Увозот неуспешен."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Локална датотека (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Подготвен за увоз"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Ќе го вратите резервното копија во овој курс. Можете да се вратите за да ги промените опциите."
+
+msgid "Select resources to import"
+msgstr "Изберете ресурси за увоз"
+
+msgid "No resources available in this backup."
+msgstr "Нема достапни ресурси во оваа резервна копија."
+
+msgid "Import selection"
+msgstr "Избор за увоз"
+
+msgid "Import completed"
+msgstr "Увозот завршен"
+
+msgid "Could not load options."
+msgstr "Не можев да ги вчитам опциите."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Изберете резервна датотека (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Изберете резервна копија од серверот"
+
+msgid "Error selecting source."
+msgstr "Грешка при избирање на изворот."
+
+msgid "Recycling options"
+msgstr "Опции за рециклирање"
+
+msgid "Type the course code to confirm"
+msgstr "Внесете го кодот на курсот за потврда"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Ова ќе ги отстрани или ресетира избраната ресурси. Оваа акција не може да се врати."
+
+msgid "Select resources to recycle"
+msgstr "Изберете ресурси за рециклирање"
+
+msgid "No resources available in this course."
+msgstr "Нема достапни ресурси во овој курс."
+
+msgid "Recycle selected"
+msgstr "Рециклирај избран"
+
+msgid "Error loading resources."
+msgstr "Грешка при вчитување на ресурси."
+
+msgid "Clear search"
+msgstr "Исчисти пребарување"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Во името на базата на податоци се дозволени само букви, цифри и долна црта (_). Неважечките знаци ќе бидат отстранети автоматски."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Кои општи услови и правила им се даваат на корисниците за користење на оваа платформа?"
 

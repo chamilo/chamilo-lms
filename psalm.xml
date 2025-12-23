@@ -154,6 +154,8 @@
             <directory name="src/CourseBundle/Component/CourseCopy"/>
             <directory name="src/LtiBundle"/>
 
+            <directory name="src/CoreBundle/Search/Xapian" />
+
             <file name="public/main/**/**"/>
 
             <file name="public/main/lp/openoffice_presentation.class.php"/>

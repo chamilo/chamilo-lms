@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Cordial"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemplu de formulă: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemplu formulă: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Domenii de variabile"
@@ -4149,10 +4149,10 @@ msgid "works"
 msgstr "lucrari"
 
 msgid "MySql Client"
-msgstr "MySql Client"
+msgstr "Client MySql"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "Server MySql"
 
 msgid "Owner"
 msgstr "Propietar"
@@ -8286,7 +8286,7 @@ msgid "Display"
 msgstr "Prezentarea"
 
 msgid "Multiple choice"
-msgstr "Multiple choice"
+msgstr "Alegere multiplă"
 
 msgid "Multiple answer"
 msgstr "Raspunsuri multiple"
@@ -8637,10 +8637,10 @@ msgid "."
 msgstr ","
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%d %b %Y"
 
 msgid "%A %B %d, %Y"
-msgstr "%A %B %d, %Y"
+msgstr "%A, %d %B %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
 msgstr "%B %d, %Y la %I:%M %p"
@@ -9354,7 +9354,7 @@ msgid "Tel"
 msgstr "Tel"
 
 msgid "No tel"
-msgstr "No tel"
+msgstr "Fără tel"
 
 msgid "Send mail"
 msgstr "Trimite mail"
@@ -10934,8 +10934,8 @@ msgstr "este"
 msgid "The address of"
 msgstr "Adresa"
 
-msgid "Your registration on"
-msgstr "Inregistrarea ta la"
+msgid "Your registration on %s"
+msgstr "Inregistrarea ta la %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Acest nume de utilizator este deja folosit. Foloseste butonul BACK al browser-ului pentru a alege alt nume."
@@ -14439,7 +14439,7 @@ msgid "Compose"
 msgstr "Scrie"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Portocaliu bebeluș"
 
 msgid "Blue lagoon"
 msgstr "Albastru laguna"
@@ -14454,19 +14454,19 @@ msgid "Cosmic campus"
 msgstr "Campus cosmic"
 
 msgid "Delicious Bordeaux"
-msgstr "Delicious Bordeaux"
+msgstr "Bordeaux delicios"
 
 msgid "Empire green"
 msgstr "Verde imperial"
 
 msgid "Fruity orange"
-msgstr "Fruity orange"
+msgstr "Portocaliu fructat"
 
 msgid "Medical"
 msgstr "Medical"
 
 msgid "Royal purple"
-msgstr "Royal purple"
+msgstr "Violet regal"
 
 msgid "Silver line"
 msgstr "Linie argitie"
@@ -14475,7 +14475,7 @@ msgid "Sober brown"
 msgstr "Maro sobru"
 
 msgid "Steel grey"
-msgstr "Steel Grey"
+msgstr "Gri oțel"
 
 msgid "Tasty olive"
 msgstr "Maslina gustoasa"
@@ -19376,7 +19376,7 @@ msgid "Exercise average"
 msgstr "Media exercitiului"
 
 msgid "Webcam Clip"
-msgstr "Webcam Clip"
+msgstr "Clip Webcam"
 
 msgid "Snapshot"
 msgstr "Capturati"
@@ -22102,7 +22102,7 @@ msgstr "Selectare cu câmp text"
 msgid "Triple select"
 msgstr "Selectare triplă"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Confirmați că doriți cu adevărat să vă abonați la această platformă."
 
 msgid "Add text"
@@ -22162,14 +22162,11 @@ msgstr "Confirmare înregistrare"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Contul dvs. este inactiv deoarece nu l-ați confirmat încă. Verificați e-mailul și urmați instrucțiunile sau faceți clic pe linkul următor pentru a retrimite e-mailul"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Pentru a finaliza înregistrarea pe platformă, trebuie să vă confirmați contul făcând clic pe linkul următor"
 
 msgid "Confirmation for new account"
 msgstr "Confirmare pentru cont nou"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Trebuie să vă confirmați contul prin e-mail pentru a accesa platforma"
 
 msgid "Enable Cloud files link addition"
 msgstr "Permite adăugarea de linkuri la fișiere Cloud"
@@ -25006,9 +25003,6 @@ msgstr "Exportă toate rezultatele tuturor testelor"
 msgid "Click to view details"
 msgstr "Faceți clic pentru a vedea detaliile"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Acest raport se aplică tuturor activităților de pe platformă ale utilizatorului."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -26876,13 +26870,13 @@ msgid "Check password strength"
 msgstr "Verificați puterea parolei"
 
 msgid "HTTP Strict Transport Security"
-msgstr "HTTP Strict Transport Security"
+msgstr "Securitate strictă de transport HTTP"
 
 msgid "HTTP Strict Transport Security is an excellent feature to support on your site and strengthens your implementation of TLS by getting the User Agent to enforce the use of HTTPS. Recommended value: 'strict-transport-security: max-age=63072000; includeSubDomains'. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. You can include the 'preload' suffix, but this has consequences on the top level domain (TLD), so probably not to be done lightly. See https://hstspreload.org/. Leave blank to disable."
 msgstr "HTTP Strict Transport Security este o funcționalitate excelentă de suportat pe site-ul dvs. și întărește implementarea TLS prin obligarea Agentului Utilizator să folosească HTTPS. Valoare recomandată: 'strict-transport-security: max-age=63072000; includeSubDomains'. Vedeți https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. Puteți include sufixul 'preload', dar acesta are consecințe pe domeniul de nivel superior (TLD), deci probabil nu să fie făcut ușor. Vedeți https://hstspreload.org/. Lăsați gol pentru a dezactiva."
 
 msgid "Content Security Policy"
-msgstr "Content Security Policy"
+msgstr "Politica de securitate a conținutului"
 
 msgid "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the 'script-src' argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
 msgstr "Content Security Policy este o măsură eficientă pentru a vă proteja site-ul de atacuri XSS. Prin albirea surselor de conținut aprobat, puteți preveni browserul să încarce active malițioase. Această setare este deosebit de complicată de setat cu editoare WYSIWYG, dar dacă adăugați toate domeniile pe care doriți să le autorizați pentru includerea iframe-urilor în declarația child-src, acest exemplu ar trebui să funcționeze pentru dvs. Puteți preveni executarea JavaScript din surse externe (inclusiv în interiorul imaginilor SVG) folosind o listă strictă în argumentul 'script-src'. Lăsați gol pentru a dezactiva. Exemplu de setare: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
@@ -26894,7 +26888,7 @@ msgid "This setting allows you to experiment by reporting but not enforcing some
 msgstr "Această setare vă permite să experimentați prin raportare, dar fără a impune o anumită Content Security Policy."
 
 msgid "HTTP Public Key Pinning"
-msgstr "HTTP Public Key Pinning"
+msgstr "Fixare chei publice HTTP"
 
 msgid "HTTP Public Key Pinning protects your site from MiTM attacks using rogue X.509 certificates. By whitelisting only the identities that the browser should trust, your users are protected in the event a certificate authority is compromised."
 msgstr "HTTP Public Key Pinning vă protejează site-ul de atacuri MiTM folosind certificate X.509 rogue. Prin albirea doar identităților în care browserul ar trebui să aibă încredere, utilizatorii dvs. sunt protejați în cazul în care o autoritate de certificare este compromisă."
@@ -26924,7 +26918,7 @@ msgid "X-Content-Type-Options stops a browser from trying to MIME-sniff the cont
 msgstr "X-Content-Type-Options oprește browserul să încerce să detecteze tipul MIME al conținutului și îl obligă să rămână la tipul de conținut declarat. Singura valoare validă pentru acest header este 'nosniff'."
 
 msgid "Security Referrer Policy"
-msgstr "Security Referrer Policy"
+msgstr "Politica de referire securizată"
 
 msgid "Referrer Policy is a new header that allows a site to control how much information the browser includes with navigation away from a document and should be set by all sites."
 msgstr "Referrer Policy este un header nou care permite unui site să controleze câtă informație include browserul cu navigarea departe de un document și ar trebui setat de toate site-urile."
@@ -27565,7 +27559,7 @@ msgstr "Conditii de utilizare platformă"
 msgid "Password too easy to guess"
 msgstr "Parolă prea ușor de ghicit"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Trebuie să confirmați contul prin e-mail pentru a accesa platforma"
 
 msgid "Redirect to portal home"
@@ -30540,13 +30534,13 @@ msgid "ex. root"
 msgstr "ex. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "CREARE TABEL lucrări"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "MODIFICARE TABEL lucrări"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "ȘTERGERE COLOANĂ lucrări"
 
 msgid "Theme selected as current"
 msgstr "Temă selectată ca actuală"
@@ -31216,4 +31210,247 @@ msgstr "Redarea cursurilor admin"
 
 msgid "Admin Dashboard"
 msgstr "Panou de control admin"
+
+msgid "Threads"
+msgstr "Subiecte"
+
+msgid "Invalid thread"
+msgstr "Subiect invalid"
+
+msgid "View full thread"
+msgstr "Vizualizează subiectul complet"
+
+msgid "No post yet"
+msgstr "Niciun mesaj încă"
+
+msgid "Discussion thread"
+msgstr "Subiect de discuție"
+
+msgid "Access to this course"
+msgstr "Acces la acest curs"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Acest plugin nu are setări configurabile. Activarea se gestionează din lista de plugin-uri."
+
+msgid "Private - access granted by privileged users"
+msgstr "Privat - acces acordat de utilizatorii privilegiați"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Nu este disponibil feedback detaliat pentru această întrebare."
+
+msgid "Please select an answer before checking the result."
+msgstr "Selectați un răspuns înainte de a verifica rezultatul."
+
+msgid "Allow PDF export for this item"
+msgstr "Permite export PDF pentru acest element"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Ascunde utilizatorii gratuiti (nenișați)"
+
+msgid "Question statistics"
+msgstr "Statistici întrebări"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Se generează fișierul. Nu închideți această filă..."
+
+msgid "Assign auth source to users"
+msgstr "Atribuie sursa de autentificare utilizatorilor"
+
+msgid "There are no questions for this survey"
+msgstr "Nu există întrebări pentru acest sondaj"
+
+msgid "Certificates report"
+msgstr "Raport certificate"
+
+msgid "Course picture"
+msgstr "Imagine curs"
+
+msgid "Current picture"
+msgstr "Imagine curentă"
+
+msgid "Course events log"
+msgstr "Jurnal evenimente curs"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Actualizează informațiile categoriei și limita sa de timp opțională."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Creează un grup logic de sesiuni pentru a-ți organiza catalogul de training."
+
+msgid "Generating file, do not close this tab"
+msgstr "Se generează fișierul, nu închideți această filă"
+
+msgid "Assign authentication sources to users"
+msgstr "Atribuie surse de autentificare utilizatorilor"
+
+msgid "Average completion rate"
+msgstr "Rata medie de finalizare"
+
+msgid "Average access rate"
+msgstr "Rata medie de acces"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Acest tabel rezumă progresul și activitatea cursanților pe fiecare traseu de învățare din cursurile curente."
+
+msgid "Follow up"
+msgstr "Urmărire"
+
+msgid "Tracking for superior"
+msgstr "Urmărire pentru superior"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Acest raport arată distribuția săptămânală a sesiunilor pe antrenor general în intervalul de date selectat."
+
+msgid "Head manager report"
+msgstr "Raport manager șef"
+
+msgid "Reset or update user password"
+msgstr "Resetează sau actualizează parola utilizatorului"
+
+msgid "Active users"
+msgstr "Utilizatori activi"
+
+msgid "Inactive users"
+msgstr "Utilizatori inactivi"
+
+msgid "Report on resources"
+msgstr "Raport privind resursele"
+
+msgid "Global view"
+msgstr "Vedere generală"
+
+msgid "Available reports"
+msgstr "Raportări disponibile"
+
+msgid "Current report"
+msgstr "Raport curent"
+
+msgid "Back to user assignment page"
+msgstr "Înapoi la pagina de atribuire utilizatori"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Surse de autentificare atribuite cu succes"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Sfat: alegeți „— Doar încărcare —” pentru a stoca fără a trimite cuiva."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Selectați cel puțin un destinatar („— Doar încărcare —” sau orice utilizator)"
+
+msgid "Sharing"
+msgstr "Partajare"
+
+msgid "Selected files"
+msgstr "Fișiere selectate"
+
+msgid "Hide password"
+msgstr "Ascunde parolă"
+
+msgid "Show password"
+msgstr "Arată parolă"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Încarcă logo SVG pentru e-mailuri"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Trebuie să mutați sau să eliminați toate traseele de învățare din această categorie înainte de a o șterge."
+
+msgid "Clear filters"
+msgstr "Șterge filtrele"
+
+msgid "Attendances (tablet)"
+msgstr "Prezențe (tabletă)"
+
+msgid "Exit tablet mode"
+msgstr "Ieși din modul tabletă"
+
+msgid "No members found."
+msgstr "Niciun membru găsit."
+
+msgid "Health check"
+msgstr "Verificare sănătate"
+
+msgid "Export to CC 1.3"
+msgstr "Exportă în CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Se încarcă resursele..."
+
+msgid "Failed to load resources."
+msgstr "Încărcarea resurselor a eșuat."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Selectați cel puțin o resursă exportabilă (document, link web, discuție,...)."
+
+msgid "Export finished."
+msgstr "Export finalizat."
+
+msgid "Export failed."
+msgstr "Export eșuat."
+
+msgid "Import failed."
+msgstr "Import eșuat."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Fișier local (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Gata de import"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Vom restaura copia de rezervă în acest curs. Puteți reveni pentru a schimba opțiunile."
+
+msgid "Select resources to import"
+msgstr "Selectați resursele de importat"
+
+msgid "No resources available in this backup."
+msgstr "Nicio resursă disponibilă în această copie de rezervă."
+
+msgid "Import selection"
+msgstr "Selecție import"
+
+msgid "Import completed"
+msgstr "Import finalizat"
+
+msgid "Could not load options."
+msgstr "Nu s-au putut încărca opțiunile."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Selectați un fișier de rezervă (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Alegeți o copie de rezervă de pe server"
+
+msgid "Error selecting source."
+msgstr "Eroare la selectarea sursei."
+
+msgid "Recycling options"
+msgstr "Opțiuni de reciclare"
+
+msgid "Type the course code to confirm"
+msgstr "Introduceți codul cursului pentru confirmare"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Aceasta va elimina sau reseta resursele selectate. Această acțiune nu poate fi anulată."
+
+msgid "Select resources to recycle"
+msgstr "Selectați resursele de reciclat"
+
+msgid "No resources available in this course."
+msgstr "Nicio resursă disponibilă în acest curs."
+
+msgid "Recycle selected"
+msgstr "Reciclează selectate"
+
+msgid "Error loading resources."
+msgstr "Eroare la încărcarea resurselor."
+
+msgid "Clear search"
+msgstr "Șterge căutarea"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "În numele bazei de date sunt permise doar litere, cifre și underscore (_). Caracteristicile invalide vor fi eliminate automat."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Ce termeni și condiții generale sunt acordați utilizatorilor pentru a utiliza această platformă?"
 

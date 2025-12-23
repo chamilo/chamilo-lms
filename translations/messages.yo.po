@@ -10920,8 +10920,8 @@ msgstr "ni"
 msgid "The address of"
 msgstr "Adirẹsi ti"
 
-msgid "Your registration on"
-msgstr "Iforukọsilẹ rẹ lori"
+msgid "Your registration on %s"
+msgstr "Iforukọsilẹ rẹ lori %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Idasile yii ti gba tẹlẹ. Lo bọtini pada ẹrọ ṣe afẹlẹ rẹ ki o yan ekeji."
@@ -17020,76 +17020,76 @@ msgid "Please select a language"
 msgstr ""
 
 msgid "Move users results from/to a session"
-msgstr ""
+msgstr "Gbe awọn abajade olumulo lati/tu kan igba"
 
 msgid "This advanced tool allows you to manually improve the tracking of users results when moving from courses methodology to sessions methodology. In most cases, you won't need to use it.<br />"
-msgstr ""
+msgstr "Ohun elo to ti ni ilọsiwaju yii gba ọ laaye lati ṣe ilọsiwaju itọpa awọn abajade olumulo ni ọna ifọwọ nigbati o ba n gbe lati ilana awọn iṣẹ-ẹkọ si ilana awọn igba. Ni ọpọlọpọ igba, iwọ kii yoo nilo lati lo o.<br />"
 
 msgid "Enable watermark in PDF export"
-msgstr ""
+msgstr "Ṣiṣẹ watermark ni PDF okeere"
 
 msgid "By enabling this option, you can upload an image or a text that will be automatically added as watermark to all PDF exports of documents on the system."
-msgstr ""
+msgstr "Nipasẹ ṣiṣẹ aṣayan yii, o le ṣe igbasilẹ aworan tabi ọrọ ti yoo ṣe afikun laifọwọ bi watermark si gbogbo awọn okeere PDF ti awọn iwe-ipamọ lori eto."
 
 msgid "Upload a watermark image"
-msgstr ""
+msgstr "Gbasilẹ aworan watermark"
 
 msgid "Enable watermark definition by course"
-msgstr ""
+msgstr "Ṣiṣẹ ìdásílẹ̀ watermark nipasẹ iṣẹ-ẹkọ"
 
 msgid "When this option is enabled, teachers can define their own watermark for the documents in their courses."
-msgstr ""
+msgstr "Nigbati a ba ṣiṣẹ aṣayan yii, awọn olukọ le ṣalaye watermark tiwọn fun awọn iwe-ipamọ ni awọn iṣẹ-ẹkọ wọn."
 
 msgid "PDF watermark text"
-msgstr ""
+msgstr "Ọrọ watermark PDF"
 
 msgid "This text will be added as a watermark to the documents exports as PDF."
-msgstr ""
+msgstr "Ọrọ yii yoo ṣe afikun bi watermark si awọn okeere awọn iwe-ipamọ bi PDF."
 
 msgid "Minimum score of exercises"
-msgstr ""
+msgstr "Doubulẹ ti o kere julọ ti awọn adaṣe"
 
 msgid "Define a minimum score (generally 0) for all the exercises on the platform. This will define how final results are shown to users and teachers."
-msgstr ""
+msgstr "Ṣalaye doubulẹ ti o kere julọ (gbogbogbo 0) fun gbogbo awọn adaṣe lori pẹpẹ. Eyi yoo ṣalaye bi awọn abajade ikẹhin ṣe han si awọn olumulo ati awọn olukọ."
 
 msgid "Maximum score of exercises"
-msgstr ""
+msgstr "Doubulẹ ti o pọ julọ ti awọn adaṣe"
 
 msgid "Define a maximum score (generally 10,20 or 100) for all the exercises on the platform. This will define how final results are shown to users and teachers."
-msgstr ""
+msgstr "Ṣalaye doubulẹ ti o pọ julọ (gbogbogbo 10,20 tabi 100) fun gbogbo awọn adaṣe lori pẹpẹ. Eyi yoo ṣalaye bi awọn abajade ikẹhin ṣe han si awọn olumulo ati awọn olukọ."
 
 msgid "Add a picture"
-msgstr ""
+msgstr "Fi aworan kun"
 
 msgid "Enable learning path auto-launch"
-msgstr ""
+msgstr "Ṣiṣẹ ìdásílẹ̀ ìdíwò ìmọ̀ ìdíwò ìdásílẹ̀"
 
 msgid "Use default maximum score of 100"
-msgstr ""
+msgstr "Lo doubulẹ ti o pọ julọ 100 ti aṣayan"
 
 msgid "Disable learning path auto-launch"
-msgstr ""
+msgstr "Pa ìdásílẹ̀ ìdíwò ìmọ̀ ìdásílẹ̀"
 
 msgid "The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch."
-msgstr ""
+msgstr "Ètò ìdásílẹ̀ ìdíwò ìmọ̀ ìdásílẹ̀ ti wa ní ìhámọ́. Nigbati awọn akẹ́kọ̀ọ́ wọ iṣẹ́-ẹ̀kọ́ yìí, wọ́n yóò ṣe ìdarí ìdásílẹ̀ sí ìdíwò ìmọ̀ tí a fi ìdásílẹ̀ ìdíwò."
 
 msgid "Unique answer with unknown"
-msgstr ""
+msgstr "Idahun alailẹgbẹ pẹlu aimọ"
 
 msgid "Multiple answer true/false/don't know"
-msgstr ""
+msgstr "Idahun pupọ otitọ/ewe/ko mọ"
 
 msgid "Combination true/false/don't-know"
-msgstr ""
+msgstr "Apapo otitọ/ewe/ko-mọ"
 
 msgid "Don't know"
-msgstr ""
+msgstr "Emi ko mọ"
 
 msgid "Exam not available at this time"
-msgstr ""
+msgstr "Idanwo ko si ni akoko yii"
 
 msgid "Username or e-mail address"
-msgstr ""
+msgstr "Orukọ olumulo tabi adirẹsi imeeli"
 
 msgid "Enable MathJax"
 msgstr "Ṣi MathJax ṣiṣẹ"
@@ -19336,16 +19336,16 @@ msgid "Don't forget to select the media files if your resource need it"
 msgstr "Maṣe gbàgbé lati yan awọn faili media ti orisun rẹ ba nilo rẹ"
 
 msgid "No learner certificate available yet. Please note that, to generate his certificate, a learner has to go to the assessments tool and click the certificate icon, which will only appear when he reached the course objectives."
-msgstr ""
+msgstr "Ko si iwe-ẹri akẹẹkọ ti o wa sibẹsibẹ. Jọwọ ṣakiyẹ pe, lati ṣẹda iwe-ẹri rẹ, akẹẹkọ ni lati lọ si ohun elo awọn igbelewọn ki o tẹ aami iwe-ẹri, eyiti yoo han nikan nigbati o ba de awọn ibi-afẹde iṣẹ-ẹkọ."
 
 msgid "The requested certificate exists on this portal, but it has not been made public. Please login to view it."
-msgstr ""
+msgstr "Iwe-ẹri ti a beere wa lori ọna abalo yii, ṣugbọn ko ti ṣe ikede. Jọwọ wọle lati wo o."
 
 msgid "Default"
-msgstr ""
+msgstr "Aṣayan"
 
 msgid "A test course has been created successfully"
-msgstr ""
+msgstr "Iṣẹ-ẹkọ idanwo ti ṣẹda ni aṣeyọri"
 
 msgid "No category selected"
 msgstr "Ko si yan kaẹlẹ kan"
@@ -19948,61 +19948,61 @@ msgid "Display group forums in the forum tool at the course level. This option i
 msgstr "Fi awọn apejọ ẹgbẹ han ni ohun elo apejọ ni ipele iṣẹ-ẹkọ. Aṣayan yii ti ṣiṣẹ nipasẹ aṣaaju (ninu ọran yii, awọn wiwo ẹgbẹ apejọ kọọkan tun ṣiṣẹ bi ami afikun). Ti a ba pa, awọn apejọ ẹgbẹ yoo han nikan nipasẹ ohun elo ẹgbẹ, boya wọn jẹ ti gbogbo eniyan tabi rara."
 
 msgid "Tutors can assign students to sessions"
-msgstr ""
+msgstr "Awọn olutọju le yan awọn ọmọ ile-iwe si awọn igba"
 
 msgid "When enabled, course coaches/tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
-msgstr ""
+msgstr "Nigbati a ba ṣiṣẹ, awọn olukọni igba/tutors ni awọn igba le forukọsilẹ awọn olumulo tuntun si igba wọn. Aṣayan yii wa nikan fun awọn alabojuto ati awọn alabojuto igba bibẹẹkọ."
 
 msgid "Images will be resized (up or down) to 200x150 pixels. For a better rendering of the question, we recommend you upload only images of this size."
-msgstr ""
+msgstr "Awọn aworan yoo ṣe atunṣe (oke tabi isalẹ) si awọn piksẹli 200x150. Fun iṣafihan ti o dara julọ ti ibeere, a ṣe iṣeduro pe o gbasilẹ awọn aworan iwọn yii nikan."
 
 msgid "Show learning paths return link"
-msgstr ""
+msgstr "Fi awọn ìdíwò ìmọ̀ ìdápò ìdápò hàn"
 
 msgid "Disable this option to hide the 'Return to homepage' button in the learning paths"
-msgstr ""
+msgstr "Pa aṣayan yii lati fi pamọ bọtini 'Pada si ojú-ile' ni awọn ìdíwò ìmọ̀"
 
 msgid "Hide SCORM Export"
-msgstr ""
+msgstr "Fi SCORM Export pamọ"
 
 msgid "Hide the SCORM Export icon from the Learning Paths list"
-msgstr ""
+msgstr "Fi aami SCORM Export pamọ lati akojọ Awọn Ìdíwò Ìmọ̀"
 
 msgid "Hide SCORM Copy"
-msgstr ""
+msgstr "Fi SCORM Copy pamọ"
 
 msgid "Hide the Learning Path Copy icon from the Learning Paths list"
-msgstr ""
+msgstr "Fi aami Ẹda Ìdíwò Ìmọ̀ pamọ lati akojọ Awọn Ìdíwò Ìmọ̀"
 
 msgid "Hide Learning Path PDF export"
-msgstr ""
+msgstr "Fi Ìdíwò Ìmọ̀ PDF okeere pamọ"
 
 msgid "Hide the Learning Path PDF Export icon from the Learning Paths list"
-msgstr ""
+msgstr "Fi aami Ìdíwò Ìmọ̀ PDF Export pamọ lati akojọ Awọn Ìdíwò Ìmọ̀"
 
 msgid "Default coach access days before session"
-msgstr ""
+msgstr "Awọn ọjọ iwọle olukọni aṣayan ṣaaju igba"
 
 msgid "Default number of days a coach can access his session before the official session start date"
-msgstr ""
+msgstr "Nọmba ọjọ aṣayan ti olukọni le wọle si igba rẹ ṣaaju ọjọ ibẹrẹ igba osise"
 
 msgid "Default coach access days after session"
-msgstr ""
+msgstr "Awọn ọjọ iwọle olukọni aṣayan lẹhin igba"
 
 msgid "Default number of days a coach can access his session after the official session end date"
-msgstr ""
+msgstr "Nọmba ọjọ aṣayan ti olukọni le wọle si igba rẹ lẹhin ọjọ ipari igba osise"
 
 msgid "PDF header logo"
-msgstr ""
+msgstr "Logo akọsori PDF"
 
 msgid "Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
-msgstr ""
+msgstr "Boyá lati lo aworan ni var/themes/[your-theme]/images/pdf_logo_header.png bi logo akọsori PDF fun gbogbo awọn okeere PDF (dipọ ti logo ọna abalo deede)"
 
 msgid "Order users by official code"
-msgstr ""
+msgstr "Ṣe lẹsẹsẹ awọn olumulo nipasẹ koodu osise"
 
 msgid "Use the 'official code' to sort most students list on the platform, instead of their lastname or firstname."
-msgstr ""
+msgstr "Lo 'koodu osise' lati to awọn akojọ ọmọ ile-iwe julọ lori pẹpẹ, dipọ ti orukọ-idile wọn tabi orukọ akọkọ."
 
 msgid "Default e-mail alert setting on new quiz"
 msgstr ""
@@ -20077,25 +20077,25 @@ msgid "Add a filter on the students official code to the certificates list."
 msgstr ""
 
 msgid "Max editors in exercise result screen"
-msgstr ""
+msgstr "Maxi awon onipinnu ni iboju abajade adaṣe"
 
 msgid "Because of the sheer number of questions that might appear in an exercise, the correction screen, allowing the teacher to add comments to each answer, might be very slow to load. Set this number to 5 to ask the platform to only show WYSIWYG editors up to a certain number of answers on the screen. This will speed up the correction page loading time considerably, but will remove WYSIWYG editors and leave only a plain text editor."
-msgstr ""
+msgstr "Nitori nọmba pataki ti awọn ibeere ti o le han ni adaṣe, iboju atunṣe, ti n gba olukọ laaye lati ṣafikun awọn asọye si idahun kọọkan, le lọra pupọ lati ṣe gbejade. Ṣeto nọmba yii si 5 lati beere lọwọ pẹpẹ lati ṣafihan awọn onipinnu WYSIWYG nikan titi di nọmba kan pato ti awọn idahun lori iboju. Eyi yoo yara akoko gbejade oju-iwe atunṣe pupọ, ṣugbọn yoo yọ awọn onipinnu WYSIWYG kuro ki o fi onipinnu ọrọ pẹlẹpẹlẹ nikan silẹ."
 
 msgid "Default document upload mode"
-msgstr ""
+msgstr "Ipilẹṣẹ ipo igbejade iwe-ipamọ"
 
 msgid "Default upload method in the courses documents. This setting can be changed at upload time for all users. It only represents a default setting."
-msgstr ""
+msgstr "Ọna igbejade aiyipada ni awọn iwe-ipamọ awọn akoko. Eyi a le yipada ni akoko igbejade fun gbogbo awọn olumulo. O jẹ ipilẹṣẹ ipilẹṣẹ nikan."
 
 msgid "Certificates auto-generation on WS call"
-msgstr ""
+msgstr "Iṣẹjade certificates laifọwọyi lori ipe WS"
 
 msgid "When enabled, and when using the WSCertificatesList webservice, this option will make sure that all certificates have been generated by users if they reached the sufficient score in all items defined in gradebooks for all courses and sessions (this might consume considerable processing resources on your server)."
-msgstr ""
+msgstr "Nigbati a ba ṣiṣẹ, ati nigbati lilo iṣẹ WSCertificatesList webservice, aṣayan yii yoo rii daju pe gbogbo awọn iwe-ẹri ti ipilẹṣẹ nipasẹ awọn olumulo ti wọn ba de ami ti o to ni gbogbo awọn ohun kan ti a ṣalaye ni awọn iwe-igbakọ fun gbogbo awọn akoko ati awọn akoko (eyini le gba awọn orisun ṣiṣe pataki lori olupin rẹ)."
 
 msgid "OpenBadges backpack URL"
-msgstr ""
+msgstr "OpenBadges backpack URL"
 
 msgid "The URL of the OpenBadges backpack server that will be used by default for all users wanting to export their badges. This defaults to the open and free Mozilla Foundation backpack repository: https://backpack.openbadges.org/"
 msgstr "URL ti olupin OpenBadges backpack server ti yoo ṣe lilo nipasẹ aiyipada fun gbogbo awọn olumulo ti o fẹ lati ṣe agbejade awọn baaji wọn. Eyi ṣe aiyipada si ibi ipamọ backpack ti ipilẹ Mozilla ti o ṣii ati ọfẹ: https://backpack.openbadges.org/"
@@ -22083,7 +22083,7 @@ msgstr "Yàn pẹ̀lú ìkànkà ìwé"
 msgid "Triple select"
 msgstr "Yàn mẹ́ta"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "O fi ìdájọ́ ìmọ̀ pé o fẹ́ forúkọ sí pẹ̀lẹ́tì yìí gan-an."
 
 msgid "Add text"
@@ -22143,14 +22143,11 @@ msgstr "Ìdáhùn ìforúkọ́"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Àkọọ́ntì rẹ kò ṣiṣẹ́ nítorí o kò tí ì ṣe ìdáhùn. Ṣàyẹ̀wò ìmẹ̀lì rẹ kí o sì tẹ̀lé ìlòyè tàbí tẹ ìnọ́nnì ìtòlẹ́ yìí láti tún ìfi ránṣẹ́ ìmẹ̀lì"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Láti parí ìforúkọ́ ìpìlẹ̀ rẹ o gbọ́dọ̀ ṣe ìdáhùn àkọọ́ntì rẹ nípa títẹ ìnọ́nnì ìtòlẹ́ yìí"
 
 msgid "Confirmation for new account"
 msgstr "Ìdáhùn fún àkọọ́ntì tuntun"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "O gbọ́dọ̀ ṣe ìdáhùn àkọọ́ntì rẹ nípasẹ̀ ìmẹ̀lì láti wọle sínú ìpìlẹ̀"
 
 msgid "Enable Cloud files link addition"
 msgstr "Ṣi ìfọwọ́sowọ́ ìnọ́nnì ìfailẹ̀ awọ̀dùdù ṣiṣẹ́"
@@ -22645,55 +22642,55 @@ msgid "If you want to get the certificate and/or skills associated with this cou
 msgstr "Ti o ba fẹ gba iwe-ẹri ati/tabi awọn ogbon ti o ni nkan ṣe pẹlu iṣẹ-ẹkọ yii, o nilo lati ra iṣẹ iwe-ẹri. O le lọ si akojọ awọn iṣẹ nipa titẹ ìsokọ yii: %s"
 
 msgid "Sub-skill"
-msgstr ""
+msgstr "Sub-ogbon"
 
 msgid "Add multiple users to calendar"
-msgstr ""
+msgstr "Fi awọn olumulo pupọ kun kalẹnda"
 
 msgid "Update calendar"
-msgstr ""
+msgstr "Ṣe imudojuiwọ kalẹnda"
 
 msgid "Control point"
-msgstr ""
+msgstr "Aaye iṣakoso"
 
 msgid "Please follow the instructions below to check your results for test %s.<br /><br />"
-msgstr ""
+msgstr "Jọwọ tẹle awọn ilana ti o wa ni isalẹ lati ṣayẹwo awọn abajade rẹ fun idanwọ %s.<br /><br />"
 
 msgid "Session min duration"
-msgstr ""
+msgstr "Akoko kukuru ti akoko"
 
 msgid "Could not translate"
-msgstr ""
+msgstr "Ko le tumọ"
 
 msgid "Add skills"
-msgstr ""
+msgstr "Fi awọn ogbon kun"
 
 msgid "Dictionary"
-msgstr ""
+msgstr "Iwe-itumọ"
 
 msgid "Category exists"
-msgstr ""
+msgstr "Ẹka wa"
 
 msgid "Minimum to validate"
-msgstr ""
+msgstr "Kukuru lati ṣe idaniloju"
 
 msgid "Number of gradebooks to validate in dependencies"
-msgstr ""
+msgstr "Nọmba awọn iwe-igbakọ lati ṣe idaniloju ni awọn igbẹkẹle"
 
 msgid "Depends on gradebook"
-msgstr ""
+msgstr "Gbẹkẹle iwe-igbakọ"
 
 msgid "This gradebook has no dependency"
-msgstr ""
+msgstr "Iwe-igbakọ yii ko ni igbẹkẹle"
 
 msgid "Course introductions all imported successfully."
-msgstr ""
+msgstr "Awọn ifihan akoko gbogbo wọle ni aṣeyọri."
 
 msgid "Filter sessions"
-msgstr ""
+msgstr "Ṣàlẹ awọn akoko"
 
 msgid "Score model"
-msgstr ""
+msgstr "Awoṣe ami"
 
 msgid "Synchronize the database with the schema"
 msgstr "Ẹsì ìdàbọ̀ ìkọ́wé pẹ̀lú ìlànà"
@@ -24796,76 +24793,76 @@ msgid "You can only copy this course to a course for which you are a teacher"
 msgstr "O le ṣe ẹ̀dà ìdàrì yìí sínú ìdàrì kan ṣoṣo tí o jẹ́ olùkọ́ fún rẹ̀"
 
 msgid "Remove users"
-msgstr ""
+msgstr "Yọ awọn olumulo kuro"
 
 msgid "Send file to other users"
-msgstr ""
+msgstr "Fi faili ranṣẹ si awọn olumulo miiran"
 
 msgid "Remove file from selected users"
-msgstr ""
+msgstr "Yọ faili kuro lati awọn olumulo ti a yan"
 
 msgid "Send to other users"
-msgstr ""
+msgstr "Fi ranṣẹ si awọn olumulo miiran"
 
 msgid "Send to users"
-msgstr ""
+msgstr "Fi ranṣẹ si awọn olumulo"
 
 msgid "Force users to change their password when they first log in"
-msgstr ""
+msgstr "Fi ipa ṣe awọn olumulo lati yi ọrọ igbaniwọle wọn pada nigbati wọn ba kọwọle ni akoko akọkọ"
 
 msgid "Please note that your username to access is %s"
-msgstr ""
+msgstr "Jọwọ ṣakiyesi pe orukọ olumulo rẹ lati wọle jẹ %s"
 
 msgid "Note: If you do not remember your password, click on <a href=\"%s\">\"Forgot your password?\"</a>, enter your username and follow the instructions."
-msgstr ""
+msgstr "Akiyesi: Ti o ko ba ranti ọrọ igbaniwọle rẹ, tẹ lori <a href=\"%s\">\"Gbagbe ọrọ igbaniwọle rẹ?\"</a>, tẹ orukọ olumulo rẹ sii ki o tẹle awọn ilana."
 
 msgid "Bi-weekly"
-msgstr ""
+msgstr "Bi-osu-meji"
 
 msgid "Every x days"
-msgstr ""
+msgstr "Gbogbo x ọjọ"
 
 msgid "Number of days"
-msgstr ""
+msgstr "Nọmba awọn ọjọ"
 
 msgid "Leave a comment"
-msgstr ""
+msgstr "Fi asọye kan silẹ"
 
 msgid "Please leave a comment first"
-msgstr ""
+msgstr "Jọwọ fi asọye kan silẹ ni akọkọ"
 
 msgid "Last quiz finalization date"
-msgstr ""
+msgstr "Ọjọ ipari idanwọ ti o kẹhin"
 
 msgid "Last lp's finalization date"
-msgstr ""
+msgstr "Ọjọ ipari lp ti o kẹhin"
 
 msgid "Must be in ALL the selected categories"
-msgstr ""
+msgstr "Gbọdọ wa NI GBOGBO awọn ẹka ti a yan"
 
 msgid "Report by attempts"
-msgstr ""
+msgstr "Iroyin nipasẹ awọn igbiyanju"
 
 msgid "Questions topic"
-msgstr ""
+msgstr "Koko-ọrọ awọn ibeere"
 
 msgid "The questions topic will be used as the name of the test and will be sent to the AI generator to generate questions in the language configured for this course, asking for them to be generated in the Aiken format so they can easily be imported into this course."
-msgstr ""
+msgstr "Koko-ọrọ awọn ibeere yoo ṣee lo gẹgẹ bi orukọ idanwọ naa ati pe yoo fi ranṣẹ si ẹrọ AI lati ṣẹda awọn ibeere ni ede ti a ṣeto fun akoko yii, bere fun wọn lati ṣẹda ni ọna Aiken ki wọn le fi wọle si akoko yii ni irọrun."
 
 msgid "AI Questions Generator"
-msgstr ""
+msgstr "AI Awọn Ẹrọ Iṣẹjade Ibeere"
 
 msgid "Most AI generators are limited in the number of characters they can return, and often your organization will be charged based on the number of characters returned, so please use with moderation, asking for smaller numbers first, then extending as you gain confidence."
-msgstr ""
+msgstr "Ọpọlọpọ awọn ẹrọ AI ni opin ni nọmba awọn ohun kikọ ti wọn le da pada, ati nigbagbogbo ajumọṣe rẹ yoo gba idiyele da lori nọmba awọn ohun kikọ ti o pada, nitorinaa jọwọ lo pẹlu iwọntunwọnsi, bere fun awọn nọmba kekere ni akọkọ, lẹhinna fa si bi o ṣe n ni igboya."
 
 msgid "Use one (or more) of the following proposed tags to automatically generate a certificate or a skill and show them here when the student gets to this step, which requires all other steps to be finished first."
-msgstr ""
+msgstr "Lo ọkan (tabi diẹ sii) ti awọn aami ti a dabaa wọnyi lati ṣẹda iwe-ẹri tabi ogbon laifọwọyi ati ṣafihan wọn nibi nigbati ọmọ ile-iwe de igbesẹ yii, eyiti o nilo gbogbo awọn igbesẹ miiran lati pari ni akọkọ."
 
 msgid "Hi ((user_complete_name))."
-msgstr ""
+msgstr "Bawo ni ((user_complete_name))."
 
 msgid "Invitation to session ((session_name))"
-msgstr ""
+msgstr "Ifiwepe si akoko ((session_name))"
 
 msgid "Fill blanks or form with exact selection"
 msgstr ""
@@ -24986,9 +24983,6 @@ msgstr "Fi gbogbo awọn abajade ti gbogbo awọn idanwo jade"
 
 msgid "Click to view details"
 msgstr "Tẹ lati wo awọn alaye"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Ijabọ yii kan gbogbo awọn iṣẹ ṣiṣe pẹpẹ ti olumulo."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
@@ -27546,7 +27540,7 @@ msgstr "Àwòrán ìlò pẹpẹ"
 msgid "Password too easy to guess"
 msgstr "Ọrọ ìgbaniwọle rẹ rọrùn jù láti ṣe ìdáhùn"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "O nilo lati fi ìmelì ṣe ìdájọ́ ìdàregistrù rẹ lati wọle si pẹpẹ"
 
 msgid "Redirect to portal home"
@@ -31229,4 +31223,214 @@ msgstr "Jowo yan idahun kan ki o to ṣayẹwo abajade."
 
 msgid "Allow PDF export for this item"
 msgstr "Gba laaye fun iṣagbe PDF fun nkan yii"
+
+msgid "Hide free users (not enrolled)"
+msgstr ""
+
+msgid "Question statistics"
+msgstr ""
+
+msgid "Generating file. Do not close this tab..."
+msgstr ""
+
+msgid "Assign auth source to users"
+msgstr ""
+
+msgid "There are no questions for this survey"
+msgstr ""
+
+msgid "Certificates report"
+msgstr ""
+
+msgid "Course picture"
+msgstr ""
+
+msgid "Current picture"
+msgstr ""
+
+msgid "Course events log"
+msgstr ""
+
+msgid "Update the category information and its optional time limit."
+msgstr ""
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr ""
+
+msgid "Generating file, do not close this tab"
+msgstr ""
+
+msgid "Assign authentication sources to users"
+msgstr ""
+
+msgid "Average completion rate"
+msgstr ""
+
+msgid "Average access rate"
+msgstr ""
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr ""
+
+msgid "Follow up"
+msgstr ""
+
+msgid "Tracking for superior"
+msgstr ""
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr ""
+
+msgid "Head manager report"
+msgstr ""
+
+msgid "Reset or update user password"
+msgstr ""
+
+msgid "Active users"
+msgstr ""
+
+msgid "Inactive users"
+msgstr ""
+
+msgid "Report on resources"
+msgstr ""
+
+msgid "Global view"
+msgstr ""
+
+msgid "Available reports"
+msgstr ""
+
+msgid "Current report"
+msgstr ""
+
+msgid "Back to user assignment page"
+msgstr ""
+
+msgid "Authentication sources assigned successfully"
+msgstr ""
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr ""
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr ""
+
+msgid "Sharing"
+msgstr "Pinpin"
+
+msgid "Selected files"
+msgstr ""
+
+msgid "Hide password"
+msgstr ""
+
+msgid "Show password"
+msgstr ""
+
+msgid "Upload SVG logo for e-mails"
+msgstr ""
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr ""
+
+msgid "Clear filters"
+msgstr ""
+
+msgid "Attendances (tablet)"
+msgstr ""
+
+msgid "Exit tablet mode"
+msgstr ""
+
+msgid "No members found."
+msgstr ""
+
+msgid "Health check"
+msgstr ""
+
+msgid "Export to CC 1.3"
+msgstr ""
+
+msgid "Loading resources..."
+msgstr ""
+
+msgid "Failed to load resources."
+msgstr ""
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr ""
+
+msgid "Export finished."
+msgstr "Ìtẹ́jáde ti parí."
+
+msgid "Export failed."
+msgstr "Ìtẹ́jáde kùnà."
+
+msgid "Import failed."
+msgstr "Ìkọ̀wọ̀lẹ̀ kùnà."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Faili agbègbè (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Ṣe ìmúra láti ṣe ìkọ̀wọ̀lẹ̀"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "A óò padà sọ ìdábòbò pada sínú ìdàrú yìí. Ṣe ìyọpadà láti yí àwọn àṣàyàn padà."
+
+msgid "Select resources to import"
+msgstr "Yan àwùn àwùn ìpamọ́ láti ṣe ìkọ̀wọ̀lẹ̀"
+
+msgid "No resources available in this backup."
+msgstr "Kò sí àwùn ìpamọ́ kankan nínú ìdábòbò yìí."
+
+msgid "Import selection"
+msgstr "Ìdí ìkọ̀wọ̀lẹ̀"
+
+msgid "Import completed"
+msgstr "Ìkọ̀wọ̀lẹ̀ ti parí"
+
+msgid "Could not load options."
+msgstr "Kò le ṣe ìkọ́wẹ̀ àwọn àṣàyàn."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Jọ̀wọ́ yan faili ìdábòbò (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Jọ̀wọ́ yan ìdábòbò kan láti ojú ìkànnì"
+
+msgid "Error selecting source."
+msgstr "Àṣìṣe yíyan ìpìlẹ̀."
+
+msgid "Recycling options"
+msgstr "Àwọn àṣàyàn ìtúpalẹ̀"
+
+msgid "Type the course code to confirm"
+msgstr "Tẹ koodu ẹkọ lati ṣe idaniloju"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Èyí yóò yọ tàbí tún àwùn ìpamọ́ yí padà. Ìṣe yìí kò ṣeé fa padà."
+
+msgid "Select resources to recycle"
+msgstr "Yan àwùn ìpamọ́ láti tún ṣe ìtúpalẹ̀"
+
+msgid "No resources available in this course."
+msgstr "Kò sí àwùn ìpamọ́ kankan nínú ìdàrú yìí."
+
+msgid "Recycle selected"
+msgstr "Tún ìdí yí ṣe ìtúpalẹ̀"
+
+msgid "Error loading resources."
+msgstr "Àṣìṣe ìkọ́wẹ̀ àwùn ìpamọ́."
+
+msgid "Clear search"
+msgstr "Pa ìwádìí mọ́"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr ""
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr ""
 

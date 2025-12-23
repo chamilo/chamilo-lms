@@ -30,6 +30,7 @@ use UserManager;
 
 use const ENT_HTML5;
 use const ENT_QUOTES;
+use const PATHINFO_EXTENSION;
 use const PHP_ROUND_HALF_UP;
 use const PHP_SAPI;
 use const PHP_URL_PATH;
@@ -113,17 +114,13 @@ class ChamiloHelper
             }
             $themeDir = Template::getThemeDir($theme);
             $customLogoPath = $themeDir.\sprintf('images/header-logo-custom%s.png', $accessUrlId);
-
-            $svgIcons = api_get_setting('icons_mode_svg');
-            if ('true' === $svgIcons) {
-                $customLogoPathSVG = substr($customLogoPath, 0, -3).'svg';
-                if (file_exists(api_get_path(SYS_PUBLIC_PATH).\sprintf('css/%s', $customLogoPathSVG))) {
-                    if ($getSysPath) {
-                        return api_get_path(SYS_PUBLIC_PATH).\sprintf('css/%s', $customLogoPathSVG);
-                    }
-
-                    return api_get_path(WEB_CSS_PATH).$customLogoPathSVG;
+            $customLogoPathSVG = substr($customLogoPath, 0, -3).'svg';
+            if (file_exists(api_get_path(SYS_PUBLIC_PATH).\sprintf('css/%s', $customLogoPathSVG))) {
+                if ($getSysPath) {
+                    return api_get_path(SYS_PUBLIC_PATH).\sprintf('css/%s', $customLogoPathSVG);
                 }
+
+                return api_get_path(WEB_CSS_PATH).$customLogoPathSVG;
             }
             if (file_exists(api_get_path(SYS_PUBLIC_PATH).\sprintf('css/%s', $customLogoPath))) {
                 if ($getSysPath) {
@@ -134,15 +131,13 @@ class ChamiloHelper
             }
 
             $originalLogoPath = $themeDir.'images/header-logo.png';
-            if ('true' === $svgIcons) {
-                $originalLogoPathSVG = $themeDir.'images/header-logo.svg';
-                if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPathSVG)) {
-                    if ($getSysPath) {
-                        return api_get_path(SYS_CSS_PATH).$originalLogoPathSVG;
-                    }
-
-                    return api_get_path(WEB_CSS_PATH).$originalLogoPathSVG;
+            $originalLogoPathSVG = $themeDir.'images/header-logo.svg';
+            if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPathSVG)) {
+                if ($getSysPath) {
+                    return api_get_path(SYS_CSS_PATH).$originalLogoPathSVG;
                 }
+
+                return api_get_path(WEB_CSS_PATH).$originalLogoPathSVG;
             }
 
             if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPath)) {
@@ -499,73 +494,125 @@ class ChamiloHelper
             return;
         }
 
-        // Check if T&C should be shown during registration
-        $loadMode = api_get_setting('workflows.load_term_conditions_section');
-
-        if ('course' === $loadMode) {
-            // skip adding terms on registration page
-            return;
-        }
-
         $languageIso = api_get_language_isocode();
         $languageId = api_get_language_id($languageIso);
-
         $termPreview = LegalManager::get_last_condition($languageId);
 
         if (!$termPreview) {
-            // Do NOT load fallback terms in another language
-            return;
+            $defaultIso = (string) api_get_setting('language.platform_language');
+            if ('' === $defaultIso || 'false' === $defaultIso) {
+                $defaultIso = (string) api_get_setting('platformLanguage');
+            }
+
+            $defaultLangId = api_get_language_id($defaultIso);
+            if ($defaultLangId > 0 && $defaultLangId !== $languageId) {
+                $languageId = $defaultLangId;
+                $termPreview = LegalManager::get_last_condition($languageId);
+            }
         }
 
         if (!$termPreview) {
+            return; // Still nothing -> show nothing
+        }
+
+        $version = (int) ($termPreview['version'] ?? 0);
+        $langId = (int) ($termPreview['language_id'] ?? $languageId);
+
+        // Track acceptance context
+        $form->addElement('hidden', 'legal_accept_type', $version.':'.$langId);
+        $form->addElement('hidden', 'legal_info', ((int) ($termPreview['id'] ?? 0)).':'.$langId);
+
+        // Fetch ALL legal records for the same version + language (includes GDPR sections now)
+        $table = Database::get_main_table(TABLE_MAIN_LEGAL);
+
+        $rows = Database::select(
+            '*',
+            $table,
+            [
+                'where' => [
+                    'language_id = ? AND version = ?' => [$langId, $version],
+                ],
+                'order' => 'type ASC, id ASC',
+            ]
+        );
+
+        if (!\is_array($rows) || empty($rows)) {
             return;
         }
 
-        // hidden inputs to track version/language
-        $form->addElement('hidden', 'legal_accept_type', $termPreview['version'].':'.$termPreview['language_id']);
-        $form->addElement('hidden', 'legal_info', $termPreview['id'].':'.$termPreview['language_id']);
+        // GDPR section titles indexed by "type" (1..15).
+        $getSectionTitle = static function (int $type): string {
+            $map = [
+                1  => 'Personal data collection',
+                2  => 'Personal data recording',
+                3  => 'Personal data organization',
+                4  => 'Personal data structure',
+                5  => 'Personal data conservation',
+                6  => 'Personal data adaptation or modification',
+                7  => 'Personal data extraction',
+                8  => 'Personal data queries',
+                9  => 'Personal data use',
+                10 => 'Personal data communication and sharing',
+                11 => 'Personal data interconnection',
+                12 => 'Personal data limitation',
+                13 => 'Personal data deletion',
+                14 => 'Personal data destruction',
+                15 => 'Personal data profiling',
+            ];
 
-        if (1 == $termPreview['type']) {
-            // simple checkbox linking out to full T&C
-            $form->addElement(
-                'checkbox',
-                'legal_accept',
-                null,
-                'I have read and agree to the <a href="tc.php" target="_blank">Terms and Conditions</a>'
-            );
-            $form->addRule('legal_accept', 'This field is required', 'required');
-        } else {
-            // full inline T&C panel with scroll
-            $preview = LegalManager::show_last_condition($termPreview);
-            $form->addHtml(
-                '<div style="
-                background-color: #f3f4f6;
-                border: 1px solid #d1d5db;
-                padding: 1rem;
-                max-height: 16rem;
-                overflow-y: auto;
-                border-radius: 0.375rem;
-                margin-bottom: 1rem;
-            ">'
-                .$preview.
-                '</div>'
-            );
+            return $map[$type] ?? '';
+        };
 
-            // any extra labels
-            $extra = new ExtraFieldValue('terms_and_condition');
-            $values = $extra->getAllValuesByItem($termPreview['id']);
-            foreach ($values as $value) {
-                if (!empty($value['field_value'])) {
-                    $form->addLabel($value['display_text'], $value['field_value']);
-                }
+        $fullHtml = '';
+
+        foreach ($rows as $row) {
+            $content = trim((string) ($row['content'] ?? ''));
+            if ('' === $content) {
+                continue;
             }
 
-            // acceptance checkbox
+            $type = (int) ($row['type'] ?? 0);
+            $dbTitle = trim((string) ($row['title'] ?? ($row['name'] ?? '')));
+            $title = $dbTitle !== '' ? $dbTitle : $getSectionTitle($type);
+
+            $fullHtml .= '<div class="mt-4">';
+
+            if ($title !== '') {
+                $fullHtml .= '<h4 class="text-base font-semibold text-gray-90">'
+                    .htmlspecialchars($title, ENT_QUOTES | ENT_HTML5)
+                    .'</h4>';
+            }
+
+            // Content may contain HTML (kept as-is by design).
+            $fullHtml .= '<div class="mt-2 text-sm text-gray-90">'.$content.'</div>';
+            $fullHtml .= '</div>';
+        }
+
+        if ('' === trim(strip_tags($fullHtml))) {
+            // Nothing meaningful to show
+            return;
+        }
+
+        // Render the whole block at the bottom
+        $form->addHtml('
+        <div class="mt-6">
+            <div class="text-lg font-semibold text-gray-90 mb-2">'.get_lang('Terms and Conditions').'</div>
+            <div class="bg-gray-15 border border-gray-25 rounded-xl p-4 max-h-72 overflow-y-auto shadow-sm">
+                '.$fullHtml.'
+            </div>
+        </div>
+    ');
+
+        // Acceptance checkbox (or hidden accept if configured)
+        $hideAccept = 'true' === api_get_setting('registration.hide_legal_accept_checkbox');
+        if ($hideAccept) {
+            $form->addElement('hidden', 'legal_accept', '1');
+        } else {
             $form->addElement(
                 'checkbox',
                 'legal_accept',
                 null,
-                'I have read and agree to the Terms and Conditions'
+                'I have read and agree to the <a href="tc.php" target="_blank" rel="noopener noreferrer">Terms and Conditions</a>'
             );
             $form->addRule('legal_accept', 'This field is required', 'required');
         }
@@ -864,11 +911,13 @@ class ChamiloHelper
     ): array {
         $byRel = [];
         $byBase = [];
+        $iidByRel = [];
+        $iidByBase = [];
 
         $DBG = $dbg ?: static function ($m, $c = []): void { /* no-op */ };
 
         // src|href pointing to …/courses/<dir>/document/... (host optional)
-        $depRegex = '/(?P<attr>src|href)\s*=\s*["\'](?P<full>(?:(?P<scheme>https?:)?\/\/[^"\']+)?(?P<path>\/courses\/[^\/]+\/document\/[^"\']+\.[a-z0-9]{1,8}))["\']/i';
+        $depRegex = '/(?P<attr>src|href)\s*=\s*["\'](?P<full>(?:(?P<scheme>https?:)?\/\/[^"\']+)?(?P<path>\/(?:app\/)?courses\/[^\/]+\/document\/[^"\']+\.[a-z0-9]{1,8}))["\']/i';
 
         if (!preg_match_all($depRegex, $html, $mm) || empty($mm['full'])) {
             return ['byRel' => $byRel, 'byBase' => $byBase];
@@ -877,14 +926,19 @@ class ChamiloHelper
         // Normalize a full URL to a "document/..." relative path inside the package
         $toRel = static function (string $full) use ($courseDir): string {
             $urlPath = parse_url(html_entity_decode($full, ENT_QUOTES | ENT_HTML5), PHP_URL_PATH) ?: $full;
-            $urlPath = preg_replace('#^/courses/([^/]+)/#i', '/courses/'.$courseDir.'/', $urlPath);
-            $rel = preg_replace('#^/courses/'.preg_quote($courseDir, '#').'/#i', '', $urlPath) ?: $urlPath;
+            $urlPath = preg_replace('#^/(?:app/)?courses/([^/]+)/#i', '/courses/'.$courseDir.'/', $urlPath);
+            $rel = preg_replace('#^/(?:app/)?courses/'.preg_quote($courseDir, '#').'/#i', '', $urlPath) ?: $urlPath;
 
             return ltrim($rel, '/'); // "document/..."
         };
 
         foreach ($mm['full'] as $fullUrl) {
             $rel = $toRel($fullUrl); // e.g. "document/img.png"
+            // Do not auto-create HTML files here (they are handled by the main import loop).
+            $ext = strtolower(pathinfo($rel, PATHINFO_EXTENSION));
+            if (\in_array($ext, ['html', 'htm'], true)) {
+                continue;
+            }
             if (!str_starts_with($rel, 'document/')) {
                 continue;
             }   // STRICT: only /document/*
@@ -895,21 +949,25 @@ class ChamiloHelper
             $basename = basename(parse_url($fullUrl, PHP_URL_PATH) ?: $fullUrl);
             $byBase[$basename] = $byBase[$basename] ?? null;
 
-            $parentRelPath = '/'.trim(\dirname('/'.$rel), '/'); // "/document" or "/document/foo"
-            $depTitle = basename($rel);
+            // Convert "document/..." (package rel) to destination rel "/..."
+            $dstRel = '/'.ltrim(substr($rel, \strlen('document/')), '/'); // e.g. "/Videos/img.png"
+            $depTitle = basename($dstRel);
             $depAbs = rtrim($srcRoot, '/').'/'.$rel;
 
-            // Do NOT create a top-level "/document" root
+            // Destination parent folder (no "/document" prefix in destination)
+            $parentRelPath = rtrim(\dirname($dstRel), '/');
+            if ('' === $parentRelPath || '.' === $parentRelPath) {
+                $parentRelPath = '/';
+            }
+
             $parentId = 0;
-            if ('/document' !== $parentRelPath) {
+            if ('/' !== $parentRelPath) {
                 $parentId = $folders[$parentRelPath] ?? 0;
                 if (!$parentId) {
                     $parentId = $ensureFolder($parentRelPath);
                     $folders[$parentRelPath] = $parentId;
                     $DBG('helper.ensureFolder', ['parentRelPath' => $parentRelPath, 'parentId' => $parentId]);
                 }
-            } else {
-                $parentRelPath = '/';
             }
 
             if (!is_file($depAbs) || !is_readable($depAbs)) {
@@ -937,6 +995,10 @@ class ChamiloHelper
                         if ($url) {
                             $byRel[$rel] = $url;
                             $byBase[$basename] = $byBase[$basename] ?: $url;
+
+                            $iidByRel[$rel] = (int) $existsIid;
+                            $iidByBase[$basename] = $iidByBase[$basename] ?? (int) $existsIid;
+
                             $DBG('helper.dep.reuse', ['rel' => $rel, 'iid' => $existsIid, 'url' => $url]);
                         }
                     }
@@ -958,7 +1020,7 @@ class ChamiloHelper
             try {
                 $entity = DocumentManager::addDocument(
                     ['real_id' => $courseEntity->getId(), 'code' => method_exists($courseEntity, 'getCode') ? $courseEntity->getCode() : null],
-                    $parentRelPath, // metadata path (no "/document" root)
+                    $dstRel, // metadata path (no "/document" root)
                     'file',
                     (int) (@filesize($depAbs) ?: 0),
                     $finalTitle,
@@ -975,6 +1037,8 @@ class ChamiloHelper
                 );
                 $iid = method_exists($entity, 'getIid') ? $entity->getIid() : 0;
                 $url = $docRepo->getResourceFileUrl($entity);
+                $iidByRel[$rel] = (int) $iid;
+                $iidByBase[$basename] = $iidByBase[$basename] ?? (int) $iid;
 
                 $DBG('helper.dep.created', ['rel' => $rel, 'iid' => $iid, 'url' => $url]);
 
@@ -989,7 +1053,12 @@ class ChamiloHelper
 
         $byBase = array_filter($byBase);
 
-        return ['byRel' => $byRel, 'byBase' => $byBase];
+        return [
+            'byRel' => $byRel,
+            'byBase' => $byBase,
+            'iidByRel' => $iidByRel,
+            'iidByBase' => $iidByBase,
+        ];
     }
 
     /**
@@ -1008,7 +1077,7 @@ class ChamiloHelper
         $replaced = 0;
         $misses = 0;
 
-        $pattern = '/(?P<attr>src|href)\s*=\s*["\'](?P<full>(?:(?P<scheme>https?:)?\/\/[^"\']+)?(?P<path>\/courses\/(?P<dir>[^\/]+)\/document\/[^"\']+\.[a-z0-9]{1,8}))["\']/i';
+        $pattern = '/(?P<attr>src|href)\s*=\s*["\'](?P<full>(?:(?P<scheme>https?:)?\/\/[^"\']+)?(?P<path>\/(?:app\/)?courses\/(?P<dir>[^\/]+)\/document\/[^"\']+\.[a-z0-9]{1,8}))["\']/i';
 
         $html = preg_replace_callback($pattern, function ($m) use ($courseDir, $urlMapByRel, $urlMapByBase, &$replaced, &$misses) {
             $attr = $m['attr'];
@@ -1019,11 +1088,19 @@ class ChamiloHelper
             // Normalize to current course directory
             $effectivePath = $path;
             if (0 !== strcasecmp($matchDir, $courseDir)) {
-                $effectivePath = preg_replace('#^/courses/'.preg_quote($matchDir, '#').'/#i', '/courses/'.$courseDir.'/', $path) ?: $path;
+                $effectivePath = preg_replace(
+                    '#^/(?:app/)?courses/'.preg_quote($matchDir, '#').'/#i',
+                    '/courses/'.$courseDir.'/',
+                    $path
+                ) ?: $path;
             }
 
-            // "document/...."
-            $relInPackage = preg_replace('#^/courses/'.preg_quote($courseDir, '#').'/#i', '', $effectivePath) ?: $effectivePath;
+            $relInPackage = preg_replace(
+                '#^/(?:app/)?courses/'.preg_quote($courseDir, '#').'/#i',
+                '',
+                $effectivePath
+            ) ?: $effectivePath;
+
             $relInPackage = ltrim($relInPackage, '/'); // document/...
 
             // 1) exact rel match

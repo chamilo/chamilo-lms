@@ -49,6 +49,7 @@ use Chamilo\CoreBundle\Repository\TrackEDownloadsRepository;
 use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRepository;
+use Chamilo\CoreBundle\Search\Xapian\SearchIndexPathResolver;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
@@ -713,5 +714,10 @@ class Container
     {
         /** @var PortfolioCategoryHelper $helper */
         return self::$container->get(PortfolioCategoryHelper::class);
+    }
+
+    public static function getSearchIndexPathResolver(): SearchIndexPathResolver
+    {
+        return self::$container->get(SearchIndexPathResolver::class);
     }
 }

@@ -176,6 +176,23 @@ if (Database::num_rows($result) < 1) {
 $survey_invitation = Database::fetch_assoc($result);
 $surveyUserFromSession = Session::read('surveyuser');
 
+// Determine the correct key used to store/load answers.
+// - Non-anonymous surveys use the numeric user_id from the invitation.
+// - Anonymous surveys store answers under a per-session identifier ("surveyuser").
+$answerUserKey = (int) ($survey_invitation['user_id'] ?? 0);
+
+if (1 == (int) $survey->getAnonymous()) {
+    $answerUserKey = (string) ($surveyUserFromSession ?? '');
+
+    if ('' === $answerUserKey) {
+        // Create a stable identifier for this anonymous attempt.
+        $answerUserKey = 'surveyuser_'.sha1(uniqid('', true));
+        Session::write('surveyuser', $answerUserKey);
+        $surveyUserFromSession = $answerUserKey;
+    }
+}
+
+
 // Block if already answered
 if (
     !isset($_POST['finish_survey'])
@@ -490,7 +507,7 @@ $htmlHeadXtra[] = survey_question::getJs();
 // -----------------------------------------------------------------------------
 Display::display_header(get_lang('Surveys'));
 
-echo '<div class="mx-auto mt-8 bg-white shadow rounded-2xl p-6 border border-gray-50">';
+echo '<div class="mx-auto mt-8 bg-white shadow rounded-2xl p-6 border border-gray-20">';
 echo '<h2 class="text-2xl font-bold text-gray-800 mb-2">'.Security::remove_XSS(strip_tags($survey->getTitle(), '<span>')).'</h2>';
 
 if (!empty($survey->getSubtitle())) {
@@ -1099,17 +1116,22 @@ if (isset($questions) && is_array($questions)) {
 
         $js .= survey_question::getQuestionJs($question);
 
-        $form->addHtml('<div class="survey_question '.$ch_type.' '.$parentClass.' mb-6 p-4 bg-gray-10 rounded-lg border border-gray-50">');
+        $form->addHtml('<div class="survey_question '.$ch_type.' '.$parentClass.' mb-6 p-4 bg-gray-10 rounded-lg border border-gray-20">');
         if ($showNumber && $survey->isDisplayQuestionNumber()) {
             $form->addHtml('<div class="font-semibold text-blue-700 mb-1"> '.$questionNumber.'. </div>');
         }
         $form->addHtml('<div class="text-gray-800 mb-2">'.Security::remove_XSS($question['survey_question']).'</div>');
 
         // Prefill user answer if exists
-        $userAnswerData = SurveyUtil::get_answers_of_question_by_user($question['survey_id'], $question['question_id'], $lpItemId);
+        $userAnswerData = SurveyUtil::get_answers_of_question_by_user(
+            $question['survey_id'],
+            $question['question_id'],
+            $lpItemId
+        );
+
         $finalAnswer = null;
-        if (!empty($userAnswerData[$user_id])) {
-            $userAnswer = $userAnswerData[$user_id];
+        if (!empty($userAnswerData[$answerUserKey])) {
+            $userAnswer = $userAnswerData[$answerUserKey];
 
             switch ($question['type']) {
                 case 'score':

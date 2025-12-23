@@ -5,20 +5,18 @@
     {% autoescape false %}
         {{ toolbar }}
         {{ form }}
-    {#    {% for question in pagination %}#}
-        {% for i in start..end %}
-            {% if pagination[i] is defined %}
-                {% set question = pagination[i] %}
+
+        {% if pagination %}
+            {% for question in pagination %}
                 {{ display.collapse(
                     question.iid,
-                    '#' ~ question.courseCode ~'-'~  question.iid ~ ' - ' ~ question.question,
+                    '#' ~ question.courseCode ~ '-' ~ question.iid ~ ' - ' ~ question.question,
                     question.questionData,
                     false,
                     false
-                    )
-                }}
-            {% endif %}
-        {% endfor %}
+                ) }}
+            {% endfor %}
+        {% endif %}
 
         {% if question_count > pagination_length %}
             {{ pagination }}

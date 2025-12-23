@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "С уважение"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример за формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Примерна формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Диапазони на променливите"
@@ -9180,7 +9180,7 @@ msgid "You did not select a user / group. The announcement is visible for every 
 msgstr "Не избрахте група/потребители. Ще бъде видимо за всички потребители."
 
 msgid "Group wiki"
-msgstr "Group wiki"
+msgstr "Групово уики"
 
 msgid "Complete"
 msgstr "Изпълнено"
@@ -9465,7 +9465,7 @@ msgid "Not yet begun"
 msgstr "Очаква се"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d %B %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Невалидна папка: Моля, създайте папка с името <i>images</i> в инструмента \"Документи\". Графичните файлове ще се качват там."
@@ -10925,8 +10925,8 @@ msgstr "е"
 msgid "The address of"
 msgstr "Адресът на"
 
-msgid "Your registration on"
-msgstr "Вашата регистрация"
+msgid "Your registration on %s"
+msgstr "Вашата регистрация %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Това потребителско име вече е заето. Използвайте бутона \"Назад\" на вашия браузър и изберете друго име."
@@ -20358,7 +20358,7 @@ msgid "Send a copy to HR managers of selected students"
 msgstr "Изпрати копие до HR мениджърите на избраните студенти"
 
 msgid "Powered by %s"
-msgstr "Powered by %s"
+msgstr "Задвижвано от %s"
 
 msgid "Please select at least one user. The announcement has not been saved."
 msgstr "Моля, изберете поне един потребител. Обявлението не е запазено."
@@ -22088,7 +22088,7 @@ msgstr "Избор с текстово поле"
 msgid "Triple select"
 msgstr "Троен избор"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Потвърждавате, че наистина искате да се абонирате за тази платформа."
 
 msgid "Add text"
@@ -22148,14 +22148,11 @@ msgstr "Потвърждение за регистрация"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Акаунтът ви е неактивен, защото още не сте го потвърдили. Проверете имейла си и следвайте инструкциите или кликнете на следващата връзка, за да изпратите имейла отново"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "За да завършите регистрацията си в платформата, трябва да потвърдите акаунта си чрез кликване на следващата връзка"
 
 msgid "Confirmation for new account"
 msgstr "Потвърждение за нов акаунт"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Трябва да потвърдите акаунта си чрез имейл, за да получите достъп до платформата"
 
 msgid "Enable Cloud files link addition"
 msgstr "Разреши добавяне на връзки към Cloud файлове"
@@ -24992,9 +24989,6 @@ msgstr "Износ на всички резултати от всички тес
 msgid "Click to view details"
 msgstr "Кликнете за детайли"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Този доклад се отнася за всички дейности на потребителя в платформата."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27551,7 +27545,7 @@ msgstr "Условия за използване на платформата"
 msgid "Password too easy to guess"
 msgstr "Паролата е твърде лесна за позоваване"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Трябва да потвърдите акаунта си чрез имейл, за да получите достъп до платформата"
 
 msgid "Redirect to portal home"
@@ -31202,4 +31196,247 @@ msgstr "Админ Рестартирани курсове"
 
 msgid "Admin Dashboard"
 msgstr "Админ Табло"
+
+msgid "Threads"
+msgstr "Теми"
+
+msgid "Invalid thread"
+msgstr "Невалидна тема"
+
+msgid "View full thread"
+msgstr "Преглед на цялата тема"
+
+msgid "No post yet"
+msgstr "Все още няма публикации"
+
+msgid "Discussion thread"
+msgstr "Тема за дискусия"
+
+msgid "Access to this course"
+msgstr "Достъп до този курс"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Този плъгин няма конфигурируеми настройки. Активирането се управлява от списъка с плъгини."
+
+msgid "Private - access granted by privileged users"
+msgstr "Приватен - достъп предоставен от привилегировани потребители"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Няма налична подробна обратна връзка за този въпрос."
+
+msgid "Please select an answer before checking the result."
+msgstr "Моля, изберете отговор преди да проверите резултата."
+
+msgid "Allow PDF export for this item"
+msgstr "Разреши износ в PDF за този елемент"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Скрий безплатни потребители (не записани)"
+
+msgid "Question statistics"
+msgstr "Статистика на въпросите"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Генериране на файл. Не затваряйте тази раздела..."
+
+msgid "Assign auth source to users"
+msgstr "Присвояване на източник на автентикация на потребители"
+
+msgid "There are no questions for this survey"
+msgstr "Няма въпроси за тази анкета"
+
+msgid "Certificates report"
+msgstr "Доклад за сертификати"
+
+msgid "Course picture"
+msgstr "Картинка на курса"
+
+msgid "Current picture"
+msgstr "Текуща картинка"
+
+msgid "Course events log"
+msgstr "Дневник на събития на курса"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Актуализирайте информацията за категорията и нейния опционален времеви лимит."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Създайте логическа група от сесии, за да подредите каталога си с обучение."
+
+msgid "Generating file, do not close this tab"
+msgstr "Генериране на файл, не затваряйте тази раздела"
+
+msgid "Assign authentication sources to users"
+msgstr "Присвояване на източници на автентикация на потребители"
+
+msgid "Average completion rate"
+msgstr "Среден процент на завършване"
+
+msgid "Average access rate"
+msgstr "Среден процент на достъп"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Тази таблица обобщава напредъка и активността на учащите за всяко учебно пътека в текущите ви курсове."
+
+msgid "Follow up"
+msgstr "Следене"
+
+msgid "Tracking for superior"
+msgstr "Следене за ръководител"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Този доклад показва седмичното разпределение на сесии на общия треньор в избрания времеви диапазон."
+
+msgid "Head manager report"
+msgstr "Доклад на главния мениджър"
+
+msgid "Reset or update user password"
+msgstr "Нулиране или актуализиране на паролата на потребителя"
+
+msgid "Active users"
+msgstr "Активни потребители"
+
+msgid "Inactive users"
+msgstr "Неактивни потребители"
+
+msgid "Report on resources"
+msgstr "Доклад за ресурси"
+
+msgid "Global view"
+msgstr "Глобален изглед"
+
+msgid "Available reports"
+msgstr "Налични доклади"
+
+msgid "Current report"
+msgstr "Текущ отчет"
+
+msgid "Back to user assignment page"
+msgstr "Назад към страницата за задаване на потребители"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Източниците за автентикация са зададени успешно"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Съвет: изберете „— Просто качи —“ за съхранение без изпращане до когото и да е."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Моля, изберете поне един получател ( „— Просто качи —“ или всеки потребител)"
+
+msgid "Sharing"
+msgstr "Споделяне"
+
+msgid "Selected files"
+msgstr "Избрани файлове"
+
+msgid "Hide password"
+msgstr "Скрий паролата"
+
+msgid "Show password"
+msgstr "Покажи паролата"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Качи SVG лого за имейли"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Трябва да преместите или премахнете всички учебни пътеки от тази категория преди да я изтриете."
+
+msgid "Clear filters"
+msgstr "Изчисти филтрите"
+
+msgid "Attendances (tablet)"
+msgstr "Допълнителност (таблет)"
+
+msgid "Exit tablet mode"
+msgstr "Напусни режим на таблет"
+
+msgid "No members found."
+msgstr "Не са намерени членове."
+
+msgid "Health check"
+msgstr "Проверка на здравето"
+
+msgid "Export to CC 1.3"
+msgstr "Експорт към CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Зареждане на ресурси..."
+
+msgid "Failed to load resources."
+msgstr "Грешка при зареждане на ресурси."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Моля, изберете поне един износим ресурс (документ, уеб връзка, дискусия,...)."
+
+msgid "Export finished."
+msgstr "Експортът завърши."
+
+msgid "Export failed."
+msgstr "Експортът се провали."
+
+msgid "Import failed."
+msgstr "Импортът се провали."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Локален файл (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Готов за импортиране"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Ще възстановим резервното копие в този курс. Можете да се върнете, за да промените опциите."
+
+msgid "Select resources to import"
+msgstr "Изберете ресурси за импортиране"
+
+msgid "No resources available in this backup."
+msgstr "Няма налични ресурси в това резервно копие."
+
+msgid "Import selection"
+msgstr "Избор за импорт"
+
+msgid "Import completed"
+msgstr "Импортът завърши"
+
+msgid "Could not load options."
+msgstr "Не може да се заредят опциите."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Моля, изберете резервно копие (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Моля, изберете резервно копие от сървъра"
+
+msgid "Error selecting source."
+msgstr "Грешка при избор на източник."
+
+msgid "Recycling options"
+msgstr "Опции за рециклиране"
+
+msgid "Type the course code to confirm"
+msgstr "Въведете кода на курса за потвърждение"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Това ще премахне или нулира избраните ресурси. Това действие не може да бъде отменено."
+
+msgid "Select resources to recycle"
+msgstr "Изберете ресурси за рециклиране"
+
+msgid "No resources available in this course."
+msgstr "Няма налични ресурси в този курс."
+
+msgid "Recycle selected"
+msgstr "Рециклирай избраните"
+
+msgid "Error loading resources."
+msgstr "Грешка при зареждане на ресурси."
+
+msgid "Clear search"
+msgstr "Изчисти търсенето"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "В името на базата данни са разрешени само букви, цифри и долна черта (_). Невалидните символи ще бъдат премахнати автоматично."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Какви общи условия и правила са дадени на потребителите за ползване на тази платформа?"
 

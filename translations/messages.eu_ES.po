@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Egoki"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula adibide: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula adibidea: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Aldagaien tarteak"
@@ -9528,7 +9528,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "Fitxategiaren kargak huts egin du: fitxategi luzapen hau edo fitxategi mota hau debekatuta dago"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "OpenID URLa"
 
 msgid "The file is too big to upload."
 msgstr "Kargatu beharreko fitxategia handiegia da!"
@@ -10925,8 +10925,8 @@ msgstr "da"
 msgid "The address of"
 msgstr "Noren helbidea:"
 
-msgid "Your registration on"
-msgstr "Zure inskripzioa honetan:"
+msgid "Your registration on %s"
+msgstr "Zure inskripzioa honetan  %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Erabiltzailearen izen hau badago hartuta. Erabili nagitzailearen 'Atzera' joateko botoia eta aukeratu beste bat."
@@ -15054,7 +15054,7 @@ msgid "Install Chamilo"
 msgstr "Instalatu Chamilo"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "Chamilo URLa"
 
 msgid "You have no session in your sessions history"
 msgstr "Ez duzu saio bat ere saioen historian"
@@ -22093,7 +22093,7 @@ msgstr "Hautatu testu eremua batekin"
 msgid "Triple select"
 msgstr "Hiru hautaketa"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Baieztatzen duzu plataforma honetara harpidetu nahi duzula."
 
 msgid "Add text"
@@ -22153,14 +22153,11 @@ msgstr "Izen emateko baieztapena"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Zure kontua inaktiboa dago oraindik baieztatu ez duelako. Egiaztatu zure posta eta jarraitu argibideak edo klik egin lotura honetan posta berriro bidaltzeko"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Plataformaren izen ematea osatzeko kontua baieztatu behar duzu lotura honetan klik eginez"
 
 msgid "Confirmation for new account"
 msgstr "Kontu berriaren baieztapena"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Plataformara sartezeko kontua e-postaz baieztatu behar duzu"
 
 msgid "Enable Cloud files link addition"
 msgstr "Gaitu Hodei fitxategien lotura gehiketa"
@@ -24997,9 +24994,6 @@ msgstr "Esportatu test guztien emaitza guztiak"
 msgid "Click to view details"
 msgstr "Egin klik xehetasunak ikusteko"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Txosten hau erabiltzailearen plataforma-jarduera guztiei aplikatzen zaie."
-
 msgid "dd/mm/yyyy"
 msgstr "eg/uz/uuuu"
 
@@ -27556,7 +27550,7 @@ msgstr "Plataforma erabilera-baldintzak"
 msgid "Password too easy to guess"
 msgstr "Pasahitza iradokizun erraza da"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Plataformara sartzeko kontua e-postaz baieztatu behar duzu"
 
 msgid "Redirect to portal home"
@@ -28188,7 +28182,7 @@ msgid "Session expired. Redirecting to login…"
 msgstr "Saioa iraungi da. Birbideratzen login-era…"
 
 msgid "Super admin"
-msgstr "Super admin"
+msgstr "Super administratzailea"
 
 msgid "Global admin"
 msgstr "Admin globalea"
@@ -31225,4 +31219,229 @@ msgstr "Eztabaida-haria"
 
 msgid "Access to this course"
 msgstr "Sarbidea ikastarora"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Pluginak ez du ezer konfiguragarri. Aktibazioa plugin zerrendatik kudeatzen da."
+
+msgid "Private - access granted by privileged users"
+msgstr "Pribatua - sarbidea privilegiozko erabiltzaileek emana"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Galdera honetarako ez dago feedback xehearik."
+
+msgid "Please select an answer before checking the result."
+msgstr "Hautatu erantzun bat emaitza egiaztatzen duzun lehenago."
+
+msgid "Allow PDF export for this item"
+msgstr "Baimendu PDF esportapena elementu honetarako"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Ezkutatu doako erabiltzaileak (matrikulatuta ez daudenak)"
+
+msgid "Question statistics"
+msgstr "Galdera estatistikak"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Fitxategia sortzen. Itxi ez ezazu pestaña hau..."
+
+msgid "Assign auth source to users"
+msgstr "Esleitu auth iturria erabiltzaileei"
+
+msgid "There are no questions for this survey"
+msgstr "Inkesta honetarako ez dago galderarik"
+
+msgid "Certificates report"
+msgstr "Ziurtagiri txostena"
+
+msgid "Course picture"
+msgstr "Ikastaro irudia"
+
+msgid "Current picture"
+msgstr "Oraingo irudia"
+
+msgid "Course events log"
+msgstr "Ikastaro gertaeren erregistroa"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Eguneratu kategoria informazioa eta bere aukerako denbora muga."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Sortu saio talde logiko bat zure prestakuntza katalogoa antolatzeko."
+
+msgid "Generating file, do not close this tab"
+msgstr "Fitxategia sortzen, itxi ez ezazu pestaña hau"
+
+msgid "Assign authentication sources to users"
+msgstr "Esleitu autentifikazio iturriak erabiltzaileei"
+
+msgid "Average completion rate"
+msgstr "Bukatze tasa promedioa"
+
+msgid "Average access rate"
+msgstr "Sarbide tasa promedioa"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Taula honek laburpena ematen du ikasle aurrerapenaz eta jardueraz ikastaroetako ikaste bide bakoitzean."
+
+msgid "Follow up"
+msgstr "Jarraitu"
+
+msgid "Tracking for superior"
+msgstr "Jarraitua goi mailakoentzat"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Txosten honek saio banaketa astero erakusten du aukeratutako data tartean entrenatzaile orokorrekin."
+
+msgid "Head manager report"
+msgstr "Buru kudeatzaile txostena"
+
+msgid "Reset or update user password"
+msgstr "Berrezarri edo eguneratu erabiltzaile pasahitza"
+
+msgid "Active users"
+msgstr "Erabiltzaile aktiboak"
+
+msgid "Inactive users"
+msgstr "Erabiltzaile inaktiboak"
+
+msgid "Report on resources"
+msgstr "Baliabide txostena"
+
+msgid "Global view"
+msgstr "Ikuspegi globala"
+
+msgid "Available reports"
+msgstr "Txosten eskuragarriak"
+
+msgid "Current report"
+msgstr "Oraingo txostena"
+
+msgid "Back to user assignment page"
+msgstr "Itzuli erabiltzaile esleipen orrialdera"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Autentifikazio iturriak ongi esleitu dira"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Aholku: hautatu «— soilik igo —» inorentzat bidali gabe gordetzeko."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Hautatu behintz gutxienez hartzaile bat («— soilik igo —» edo edozein erabiltzaile)"
+
+msgid "Sharing"
+msgstr "Partekatzea"
+
+msgid "Selected files"
+msgstr "Hautatutako fitxategiak"
+
+msgid "Hide password"
+msgstr "Ezkutatu pasahitza"
+
+msgid "Show password"
+msgstr "Erakutsi pasahitza"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Igo SVG logoa e-postetarako"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Kategoria ezabatu aurretik, mugitu edo kendu kategoria honetako ikastaro-bide guztiak."
+
+msgid "Clear filters"
+msgstr "Garbitu iragazkiak"
+
+msgid "Attendances (tablet)"
+msgstr "Asistentziak (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Irten tablet modutik"
+
+msgid "No members found."
+msgstr "Ez da kiderik aurkitu."
+
+msgid "Health check"
+msgstr "Osasun egiaztapena"
+
+msgid "Export to CC 1.3"
+msgstr "Esportatu CC 1.3(e)ra"
+
+msgid "Loading resources..."
+msgstr "Baliabideak kargatzen..."
+
+msgid "Failed to load resources."
+msgstr "Hutsegitea gertatu da baliabideak kargatzean."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Hautatu behintz gutxienez esportagarri bat baliabide (dokumentua, web esteka, eztabaida,...)."
+
+msgid "Export finished."
+msgstr "Esportazioa amaitu da."
+
+msgid "Export failed."
+msgstr "Esportazioak huts egin du."
+
+msgid "Import failed."
+msgstr "Inportazioak huts egin du."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Tokiko fitxategia (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Inportatzeko prest"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Berrezarriko dugu babeskopia ikastarion. Itzuli zaitezke aukerak aldatzeko."
+
+msgid "Select resources to import"
+msgstr "Hautatu inportatzeko baliabideak"
+
+msgid "No resources available in this backup."
+msgstr "Ez dago baliabiderik babeskopia honetan."
+
+msgid "Import selection"
+msgstr "Inportazio hautapena"
+
+msgid "Import completed"
+msgstr "Inportazioa osatu da"
+
+msgid "Could not load options."
+msgstr "Ezin dira aukerak kargatu."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Hautatu babeskopia fitxategi bat (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Hautatu zerbitzaritik babeskopia bat"
+
+msgid "Error selecting source."
+msgstr "Errorea iturria hautatzean."
+
+msgid "Recycling options"
+msgstr "Birziklapen aukerak"
+
+msgid "Type the course code to confirm"
+msgstr "Idatzi ikastaro kodea baieztatzeko"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Hau kenduko du edo berrezarriko hautatutako baliabideak. Ekintza hau ezin da desegin."
+
+msgid "Select resources to recycle"
+msgstr "Hautatu birziklatzeko baliabideak"
+
+msgid "No resources available in this course."
+msgstr "Ez dago baliabiderik ikastaro honetan."
+
+msgid "Recycle selected"
+msgstr "Birziklatu hautatutakoak"
+
+msgid "Error loading resources."
+msgstr "Errorea gertatu da baliabideak kargatzean."
+
+msgid "Clear search"
+msgstr "Garbitu bilaketa"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Letra, digitu eta azpimarril (_) bakarrik onartzen dira datu-basearen izenean. Karakter baliogabeak ezabatu egingo dira automatikoki."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Zeintzuk dira erabiltzaileei plataforma hau erabiltzeko ematen zaizkien baldintza orokorrak?"
 

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Cori lis rispetts"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formule di exemplu: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Esempi di formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rangs variabii"
@@ -4804,7 +4804,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "AWStats al ti permit di consultâ lis statistichis dal to platform : vizitadôrs, vizualizazionis pàgines, referers..."
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "Chamilo BIBLIOTECA"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "Chamilo LIBRARY j è un Motôr di Recherche che ofrir indissajamento e recèrche multi-criteri. Al è part de lis funsions medidis di Chamilo."
@@ -7252,7 +7252,7 @@ msgid "Add/edit prerequisites"
 msgstr "Zonte/modifiche i prerequisîts"
 
 msgid "No documents"
-msgstr "No documents"
+msgstr "Nissun ducument"
 
 msgid "No tests available"
 msgstr "No tests disponibii"
@@ -8134,7 +8134,7 @@ msgid "Results disabled for learners"
 msgstr "Risultâts disativâts pars agnsidôrs"
 
 msgid "Include profiling"
-msgstr "Include profiling"
+msgstr "Includi profiling"
 
 msgid "Exclude profiling"
 msgstr "Esclude profiling"
@@ -8623,10 +8623,10 @@ msgid "."
 msgstr "."
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%d di %b dal %Y"
 
 msgid "%A %B %d, %Y"
-msgstr "%A %B %d, %Y"
+msgstr "%A, il %d di %B dal %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
 msgstr "%B %d, %Y a lis %I:%M %p"
@@ -9460,7 +9460,7 @@ msgid "Not yet begun"
 msgstr "Anc no inizjât"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d di %B dal %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Cartelle no valide: Creâ une cartelle cognûme images tal strûl documents par podê cariâ le immagini in cheste cartelle"
@@ -10920,8 +10920,8 @@ msgstr "e je"
 msgid "The address of"
 msgstr "L indiriz di"
 
-msgid "Your registration on"
-msgstr "La to registrassion su"
+msgid "Your registration on %s"
+msgstr "La to registrassion su %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Chest login e je za pres. Torne inda tal to navigadôr e scjais un altri."
@@ -18958,7 +18958,7 @@ msgid "%b %d, %Y at %I:%M %p"
 msgstr "%b %d, %Y a lis %I:%M %p"
 
 msgid "%I:%M %p, %b %d %Y"
-msgstr "%I:%M %p, %b %d %Y"
+msgstr "%I:%M %p, %d %b %Y"
 
 msgid "Login to vote"
 msgstr "Jentrâ par vutâ"
@@ -19726,7 +19726,7 @@ msgid "Your browser doesn't support the Nanogong player"
 msgstr "Il to browser nol supuarte il letôr Nanogong"
 
 msgid "Import CSV"
-msgstr "Import CSV"
+msgstr "Importe CSV"
 
 msgid "Table length"
 msgstr "Longjude de tabie"
@@ -19798,7 +19798,7 @@ msgid "Current badges"
 msgstr "Badge atuâls"
 
 msgid "Save badge"
-msgstr "Save badge"
+msgstr "Salve badge"
 
 msgid "Badge measures 200x200 pixels in PNG"
 msgstr "Il badge al meuse 200x200 pixel in PNG"
@@ -22083,7 +22083,7 @@ msgstr "Seletê cun camp test"
 msgid "Triple select"
 msgstr "Seletripla"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Tu confermis che tu vûs realment iscrîvti a cheste plateform."
 
 msgid "Add text"
@@ -22143,14 +22143,11 @@ msgstr "Conferme di iscrission"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Il to cont e inativ parcê che no tu âs ancor confermât. Controle la tô e-post e seguî lis istruzions o clic sul sècol colêg par rimandâ la e-post"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Par completâ la tô iscrission a la platforme tu devi confermâ il to cont clicant sul sècol colêg"
 
 msgid "Confirmation for new account"
 msgstr "Conferme par gnûf cont"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Tu devi confermâ il to cont tramite e-post par jerî la platforme"
 
 msgid "Enable Cloud files link addition"
 msgstr "Ativâ luncj a file Cloud"
@@ -24987,9 +24984,6 @@ msgstr "Esportâ ducj i risultâts di ducj i test"
 msgid "Click to view details"
 msgstr "Clic par viodî i detais"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Chest rapuort al aplliche a tutis lis ativitâts de plateform dal utint."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27546,7 +27540,7 @@ msgstr "Condizions d'us di la plateform"
 msgid "Password too easy to guess"
 msgstr "Password fasîle da indovinar"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Tu âs dut conferme il to account via e-mail par jentrâ in pla platform"
 
 msgid "Redirect to portal home"
@@ -31226,4 +31220,217 @@ msgstr "Nissun feedback detaijât disponibi par cheste domande."
 
 msgid "Please select an answer before checking the result."
 msgstr "Slezzionâ une risposte prime di controlâ il rezultât."
+
+msgid "Allow PDF export for this item"
+msgstr "Permitî l'esportassion PDF par cheste elemint"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Asconî i utents libres (no iscrîts)"
+
+msgid "Question statistics"
+msgstr "Statistichis das domandis"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Stant jenereant il file. No sierâ chiere cheste lenguete..."
+
+msgid "Assign auth source to users"
+msgstr "Asignie la sorgjenti di autenticazion ai utents"
+
+msgid "There are no questions for this survey"
+msgstr "No i è nissune domande par chest indagin"
+
+msgid "Certificates report"
+msgstr "Rapuort dai certificâts"
+
+msgid "Course picture"
+msgstr "Figure dal curs"
+
+msgid "Current picture"
+msgstr "Figure atuâl"
+
+msgid "Course events log"
+msgstr "Log dai events dal curs"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Anjoorne le informazions de categorie e il so limit di tems opsionâl."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Cree un grup logic di sesions par tegnî organizât il to catalog dal formazion."
+
+msgid "Generating file, do not close this tab"
+msgstr "Jenereant il file, no sierâ chiere cheste lenguete"
+
+msgid "Assign authentication sources to users"
+msgstr "Asignie le sorgjenti di autenticazion ai utents"
+
+msgid "Average completion rate"
+msgstr "Rait medije di completament"
+
+msgid "Average access rate"
+msgstr "Rait medije di acès"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Cheste tabule sintegnize il progress e l'ativitât des aprenents par percors didatichs neis to curs atuâi."
+
+msgid "Follow up"
+msgstr "Seuit"
+
+msgid "Tracking for superior"
+msgstr "Tracking par superior"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Chest rapuort mostrâ la distribussion setiminâl des sesions par coach generâl tal intervâl di dât selezionât."
+
+msgid "Head manager report"
+msgstr "Rapuort dal diretor"
+
+msgid "Reset or update user password"
+msgstr "Azzerâ o anjoornâ la password dal utent"
+
+msgid "Active users"
+msgstr "Utents atîfs"
+
+msgid "Inactive users"
+msgstr "Utents no atîfs"
+
+msgid "Report on resources"
+msgstr "Rapuort sui risurs"
+
+msgid "Global view"
+msgstr "Viste globâl"
+
+msgid "Available reports"
+msgstr "Rapuorts disponibii"
+
+msgid "Current report"
+msgstr "Rapuort atuâl"
+
+msgid "Back to user assignment page"
+msgstr "Torna a pâgine de asignazion utents"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Sorgjenti di autenticazion asignadis cu sucès"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Consij: sèlit “— Just upload —” par metî in archiv senz mandâ a nissù."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Ples sèlit al manco un destinatari (“— Just upload —” o un utent)"
+
+msgid "Sharing"
+msgstr "Condution"
+
+msgid "Selected files"
+msgstr "Files selezionâts"
+
+msgid "Hide password"
+msgstr "Asconî password"
+
+msgid "Show password"
+msgstr "Mostre password"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Cjarie logo SVG par i e-mail"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Tu devi displasâ o gjavâti dutis lis percors di aprenint de cheste categorije prime di eliminâla."
+
+msgid "Clear filters"
+msgstr "Nivelle filtirs"
+
+msgid "Attendances (tablet)"
+msgstr "Presenis (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Esci de modalitât tablet"
+
+msgid "No members found."
+msgstr "Nissun membris trombât."
+
+msgid "Health check"
+msgstr "Controle de sâut"
+
+msgid "Export to CC 1.3"
+msgstr "Esporte in CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Cjamant risorsis..."
+
+msgid "Failed to load resources."
+msgstr "Impuit cjamâ risorsis."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Selezione almena un'risorse esportâbil (document, colegament web, discussion,...)."
+
+msgid "Export finished."
+msgstr "Esportazion finîe."
+
+msgid "Export failed."
+msgstr "Esportazion falîe."
+
+msgid "Import failed."
+msgstr "Importazion falîe."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "File local (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Pront par importâ"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Risaurarìn il backup in chest curs. Tu podis tornâ indaê par cangiâ opzionis."
+
+msgid "Select resources to import"
+msgstr "Selezione risorsis da importâ"
+
+msgid "No resources available in this backup."
+msgstr "Nissune risorse disponibile in chest backup."
+
+msgid "Import selection"
+msgstr "Seletzion par import"
+
+msgid "Import completed"
+msgstr "Import completât"
+
+msgid "Could not load options."
+msgstr "Impuit cjamâ opzionis."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Selezione un file backup (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Scealt un backup dal server"
+
+msgid "Error selecting source."
+msgstr "Erôr in selezion de sorgint."
+
+msgid "Recycling options"
+msgstr "Opzionis di ricliclâ"
+
+msgid "Type the course code to confirm"
+msgstr "Scrive il còdec dal curs par confermâ"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Cheste acion gjavare o azzerare le risorsis seletzionadis. Cheste acion no si pù tornâ indaê."
+
+msgid "Select resources to recycle"
+msgstr "Selezione risorsis da ricliclâ"
+
+msgid "No resources available in this course."
+msgstr "Nissune risorse disponibile in chest curs."
+
+msgid "Recycle selected"
+msgstr "Riclicle seletzionât"
+
+msgid "Error loading resources."
+msgstr "Erôr in cjamant risorsis."
+
+msgid "Clear search"
+msgstr "Nivelle cercjhe"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Dentot i letaris, cifris e il trat sotsbar ( _) a son permitûts int nûl dal base di dâts. I carateris no valids a vignaran eliminâts automatichement."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Che condizions generâls e condizions d'ûs a son dâdis ai utents par doprâ chesti plateform?"
 

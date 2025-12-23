@@ -3317,7 +3317,7 @@ msgid "(recommended)"
 msgstr "(doporučený)"
 
 msgid "SCORM DB"
-msgstr "Scorm DB"
+msgstr "SCORM DB"
 
 msgid "Administrator last name"
 msgstr "Priezvisko administrátora"
@@ -5606,7 +5606,7 @@ msgid "If you are using an LDAP server that does not support or accept anonymous
 msgstr "Ak používate LDAP server, ktorý nepodporuje alebo neakceptuje anonymný prístup, vyplnte nasledujúce pole heslom používateľa, ktoré má byť použité."
 
 msgid "LDAP Import"
-msgstr "LDAP import"
+msgstr "LDAP Import"
 
 msgid "Notify subscribed users by e-mail"
 msgstr "Informovať zaradených používateľov e-mailom"
@@ -10933,8 +10933,8 @@ msgstr "je"
 msgid "The address of"
 msgstr "Adresa"
 
-msgid "Your registration on"
-msgstr "Vaša registrácia na"
+msgid "Your registration on %s"
+msgstr "Vaša registrácia na %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Toto meno používateľa je už obsadené. Použite tlačidlo Späť a vyberte iné."
@@ -14441,16 +14441,16 @@ msgid "Baby Orange"
 msgstr "Baby Orange"
 
 msgid "Blue lagoon"
-msgstr "Blue lagoon"
+msgstr "Modrá lagúna"
 
 msgid "Cool blue"
-msgstr "Cool blue"
+msgstr "Chladná modrá"
 
 msgid "Corporate"
 msgstr "Corporate"
 
 msgid "Cosmic campus"
-msgstr "Cosmic campus"
+msgstr "Kozmický kampus"
 
 msgid "Delicious Bordeaux"
 msgstr "Lahodný Bordeaux"
@@ -16763,7 +16763,7 @@ msgid "Fill with demo content"
 msgstr "Naplniť s ukážkovým obsahom"
 
 msgid "Single Sign On"
-msgstr "Single Sign On"
+msgstr "Jednorazové prihlásenie"
 
 msgid "Enabling Single Sign On allows you to connect this platform as a slave of an authentication master, for example a Drupal website with the Drupal-Chamilo plugin or any other similar master setup."
 msgstr "Povoliť Single Sign On pripojiť túto platformu ako podriadenú z nadriadeného overovania, napríklad Drupal web stránka s Drupal-Chamilo zásuvným modulom alebo iné podobné nadradené nastavenie."
@@ -17645,7 +17645,7 @@ msgid "Some of the classes could not be deleted."
 msgstr "Niektoré triedy sa nedajú odstrániť."
 
 msgid "Don't uncheck"
-msgstr "Don't uncheck"
+msgstr "Neodškrtnúť"
 
 msgid "Modified"
 msgstr "Zmenené"
@@ -20299,7 +20299,7 @@ msgid "Start video call"
 msgstr "Začať video volanie"
 
 msgid "Video URL"
-msgstr "Video URL"
+msgstr "URL videa"
 
 msgid "Insert a valid URL"
 msgstr "Vložte platnú adresu URL"
@@ -22101,7 +22101,7 @@ msgstr "Vybrať s textovým poľom"
 msgid "Triple select"
 msgstr "Trojnásobný výber"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Potvrdzujete, že sa skutočne chcete prihlásiť na túto platformu."
 
 msgid "Add text"
@@ -22161,14 +22161,11 @@ msgstr "Potvrdenie registrácie"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Váš účet je neaktívny, pretože ste ho ešte nepotvrdili. Skontrolujte svoj e-mail a postupujte podľa pokynov alebo kliknite na nasledujúci odkaz na opätovné odoslanie e-mailu"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Na dokončenie registrácie na platforme musíte potvrdiť svoj účet kliknutím na nasledujúci odkaz"
 
 msgid "Confirmation for new account"
 msgstr "Potvrdenie pre nový účet"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Na prístup na platformu musíte potvrdiť svoj účet e-mailom"
 
 msgid "Enable Cloud files link addition"
 msgstr "Povoliť pridávanie odkazov na cloudové súbory"
@@ -25005,9 +25002,6 @@ msgstr "Exportovať všetky výsledky všetkých testov"
 msgid "Click to view details"
 msgstr "Kliknite na zobrazenie detailov"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Táto správa sa vzťahuje na všetky aktivity používateľa na platforme."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -26938,7 +26932,7 @@ msgid "Session cookie samesite"
 msgstr "Session cookie samesite"
 
 msgid "Enable samesite:None parameter for session cookie. More info: https://www.chromium.org/updates/same-site and https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
-msgstr "Povoliť parameter samesite:None pre session cookie. Viac info: https://www.chromium.org/updates/same-site a https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
+msgstr "Povoliť parameter samesite:None pre session cookie. Viac informácií: https://www.chromium.org/updates/same-site a https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
 
 msgid "Hide link to session page"
 msgstr "Skryť odkaz na stránku relácie"
@@ -27564,7 +27558,7 @@ msgstr "Podmienky používania platformy"
 msgid "Password too easy to guess"
 msgstr "Heslo je príliš ľahko uhádnuteľné"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Na prístup k platforme musíte potvrdiť svoj účet e-mailom"
 
 msgid "Redirect to portal home"
@@ -31215,4 +31209,247 @@ msgstr "Admin Reštartovať kurzy"
 
 msgid "Admin Dashboard"
 msgstr "Admin Nástrojová doska"
+
+msgid "Threads"
+msgstr "Vlákna"
+
+msgid "Invalid thread"
+msgstr "Neplatné vlákno"
+
+msgid "View full thread"
+msgstr "Zobraziť celé vlákno"
+
+msgid "No post yet"
+msgstr "Žiadny príspevok zatiaľ"
+
+msgid "Discussion thread"
+msgstr "Diskusné vlákno"
+
+msgid "Access to this course"
+msgstr "Prístup k tomuto kurzu"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Tento plugin nemá nastaviteľné parametre. Aktivácia sa riadi zo zoznamu pluginov."
+
+msgid "Private - access granted by privileged users"
+msgstr "Súkromné - prístup udelený privilegovanými používateľmi"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Pre túto otázku nie je k dispozícii podrobná spätná väzba."
+
+msgid "Please select an answer before checking the result."
+msgstr "Vyberte odpoveď pred kontrolou výsledku."
+
+msgid "Allow PDF export for this item"
+msgstr "Povoliť export PDF pre túto položku"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Skryť bezplatných používateľov (nezapísaných)"
+
+msgid "Question statistics"
+msgstr "Štatistika otázok"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Generovanie súboru. Nezatvárajte túto kartu..."
+
+msgid "Assign auth source to users"
+msgstr "Priradiť zdroj autentifikácie používateľom"
+
+msgid "There are no questions for this survey"
+msgstr "Pre tento prieskum nie sú žiadne otázky"
+
+msgid "Certificates report"
+msgstr "Hlásenie certifikátov"
+
+msgid "Course picture"
+msgstr "Obrázok kurzu"
+
+msgid "Current picture"
+msgstr "Aktuálny obrázok"
+
+msgid "Course events log"
+msgstr "Záznam udalostí kurzu"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Aktualizovať informácie o kategórii a jej voliteľný časový limit."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Vytvorte logickú skupinu sedení pre organizáciu vášho katalógu vzdelávania."
+
+msgid "Generating file, do not close this tab"
+msgstr "Generovanie súboru, nezatvárajte túto kartu"
+
+msgid "Assign authentication sources to users"
+msgstr "Priradiť zdroje autentifikácie používateľom"
+
+msgid "Average completion rate"
+msgstr "Priemerná miera dokončenia"
+
+msgid "Average access rate"
+msgstr "Priemerná miera prístupu"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Táto tabuľka sumarizuje pokrok a aktivitu študentov pre učebné cesty vo vašich aktuálnych kurzoch."
+
+msgid "Follow up"
+msgstr "Sledovanie"
+
+msgid "Tracking for superior"
+msgstr "Sledovanie pre nadriadeného"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Táto správa ukazuje týždenné rozloženie sedení pre hlavného trénera v zvolenom rozsahu dátumov."
+
+msgid "Head manager report"
+msgstr "Hlásenie hlavného manažéra"
+
+msgid "Reset or update user password"
+msgstr "Resetovať alebo aktualizovať heslo používateľa"
+
+msgid "Active users"
+msgstr "Aktívni používatelia"
+
+msgid "Inactive users"
+msgstr "Neaktívni používatelia"
+
+msgid "Report on resources"
+msgstr "Hlásenie o zdrojoch"
+
+msgid "Global view"
+msgstr "Celkový pohľad"
+
+msgid "Available reports"
+msgstr "Dostupné hlásenia"
+
+msgid "Current report"
+msgstr "Aktuálne hlásenie"
+
+msgid "Back to user assignment page"
+msgstr "Späť na stránku priradenia používateľov"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Zdroje autentifikácie boli úspešne priradené"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Tip: vyberte „— Len nahrať —“ na uloženie bez odoslania komukoľvek."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Vyberte aspoň jedného príjemcu („— Len nahrať —“ alebo akéhokoľvek používateľa)"
+
+msgid "Sharing"
+msgstr "Zdieľanie"
+
+msgid "Selected files"
+msgstr "Vybrané súbory"
+
+msgid "Hide password"
+msgstr "Skryť heslo"
+
+msgid "Show password"
+msgstr "Zobraziť heslo"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Nahrať SVG logo pre e-maily"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Musíte presunúť alebo odstrániť všetky učebné cesty z tejto kategórie pred jej vymazaním."
+
+msgid "Clear filters"
+msgstr "Vymazať filtre"
+
+msgid "Attendances (tablet)"
+msgstr "Účasti (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Ukončiť režim tabletu"
+
+msgid "No members found."
+msgstr "Žiadni členovia nenájdení."
+
+msgid "Health check"
+msgstr "Kontrola zdravia"
+
+msgid "Export to CC 1.3"
+msgstr "Exportovať do CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Načítavajú sa zdroje..."
+
+msgid "Failed to load resources."
+msgstr "Nepodarilo sa načítať zdroje."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Vyberte aspoň jeden exportovateľný zdroj (dokument, webový odkaz, diskusia,...)."
+
+msgid "Export finished."
+msgstr "Export dokončený."
+
+msgid "Export failed."
+msgstr "Export zlyhal."
+
+msgid "Import failed."
+msgstr "Import zlyhal."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Lokálny súbor (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Pripravený na import"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Obnovíme zálohu do tohto kurzu. Môžete sa vrátiť a zmeniť možnosti."
+
+msgid "Select resources to import"
+msgstr "Vybrať zdroje na import"
+
+msgid "No resources available in this backup."
+msgstr "V tejto zálohe nie sú žiadne zdroje."
+
+msgid "Import selection"
+msgstr "Výber importu"
+
+msgid "Import completed"
+msgstr "Import dokončený"
+
+msgid "Could not load options."
+msgstr "Nepodarilo sa načítať možnosti."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Vyberte zálohový súbor (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Vyberte zálohu zo servera"
+
+msgid "Error selecting source."
+msgstr "Chyba pri výbere zdroja."
+
+msgid "Recycling options"
+msgstr "Možnosti recyklácie"
+
+msgid "Type the course code to confirm"
+msgstr "Zadajte kód kurzu na potvrdenie"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Toto odstráni alebo resetuje vybrané zdroje. Túto akciu nie je možné vrátiť späť."
+
+msgid "Select resources to recycle"
+msgstr "Vybrať zdroje na recykláciu"
+
+msgid "No resources available in this course."
+msgstr "V tomto kurze nie sú žiadne zdroje."
+
+msgid "Recycle selected"
+msgstr "Recyklovať vybrané"
+
+msgid "Error loading resources."
+msgstr "Chyba pri načítavaní zdrojov."
+
+msgid "Clear search"
+msgstr "Vymazať vyhľadávanie"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "V názve databázy sú povolené iba písmená, číslice a podčiarkovník (_). Neplatné znaky budú automaticky odstránené."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Aké všeobecné podmienky používania tejto platformy sú poskytnuté používateľom?"
 

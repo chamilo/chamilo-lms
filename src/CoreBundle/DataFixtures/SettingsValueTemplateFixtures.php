@@ -28,6 +28,23 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
     public static function getTemplatesGrouped(): array
     {
         return [
+            'search' => [
+                [
+                    'variable' => 'search_prefilter_prefix',
+                    'json_example' => [
+                        'fields' => [
+                            [
+                                'code' => 'T',
+                                'title' => 'Title',
+                            ],
+                            [
+                                'code' => 'D',
+                                'title' => 'Description',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'forum' => [
                 [
                     'variable' => 'community_managers_user_list',
@@ -362,11 +379,11 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                         'models' => [
                             [
                                 'id' => 1,
-                                'variable' => 'ThisIsMyModel',
+                                'variable' => 'My score grading model',
                                 'display_score_name' => 0,
                                 'score_list' => [
                                     [
-                                        'variable' => 'VeryBad',
+                                        'variable' => 'Very bad',
                                         'css_class' => 'btn-danger',
                                         'min' => 0,
                                         'max' => 20,
@@ -387,7 +404,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                                         'score_to_qualify' => 60,
                                     ],
                                     [
-                                        'variable' => 'VeryGood',
+                                        'variable' => 'Very good',
                                         'css_class' => 'btn-success',
                                         'min' => 71,
                                         'max' => 100,

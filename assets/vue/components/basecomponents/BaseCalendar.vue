@@ -178,7 +178,7 @@ const onCancelClick = () => {
               class="base-calendar-footer__button base-calendar-footer__button--primary"
               @click="onApplyClick"
             >
-              {{ t("Ok") }}
+              {{ t("OK") }}
             </button>
           </div>
         </template>

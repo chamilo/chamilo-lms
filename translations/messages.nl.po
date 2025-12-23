@@ -39,7 +39,7 @@ msgid "Total: %s"
 msgstr "Totaal: %s"
 
 msgid "Download badges"
-msgstr "Download badges"
+msgstr "Badges downloaden"
 
 msgid "Badges issuer details"
 msgstr "Badge uitgever details"
@@ -215,7 +215,7 @@ msgid "Delete comment"
 msgstr "Verwijder commentaar"
 
 msgid "Social wall"
-msgstr "Social wall"
+msgstr "Sociale muur"
 
 msgid "Buy courses"
 msgstr "Inschrijven"
@@ -499,7 +499,7 @@ msgid "List view"
 msgstr "Lijstweergave"
 
 msgid "Human Resources Manager"
-msgstr "Human Resources Manager"
+msgstr "HR-manager"
 
 msgid "Global"
 msgstr "Global"
@@ -514,13 +514,13 @@ msgid "ExerciseId"
 msgstr "OefeningID"
 
 msgid "Excel export"
-msgstr "Excel export"
+msgstr "Excel-export"
 
 msgid "Corporate report, short version"
 msgstr "Corporate report, korte versie"
 
 msgid "Corporate report"
-msgstr "Corporate report"
+msgstr "Bedrijfsrapport"
 
 msgid "Report"
 msgstr "Rapport"
@@ -650,7 +650,7 @@ msgid "Calendar"
 msgstr "Kalender"
 
 msgid "Custom range"
-msgstr "Custom range"
+msgstr "Aangepast bereik"
 
 msgid "This week"
 msgstr "Deze week"
@@ -689,7 +689,7 @@ msgid "Account blocked by captcha."
 msgstr "Account geblokkeerd door captcha"
 
 msgid "Capture screenshot/screencast"
-msgstr "Capture screenshot/screencast"
+msgstr "Schermafbeelding/-opname maken"
 
 msgid "View"
 msgstr "Weergave"
@@ -821,7 +821,7 @@ msgid "<p> The forum is an discussion tool for asynchronous written work.  In co
 msgstr " The forum is an discussion tool for asynchronous written work. In contrast to email, a forum is for public, or semi-public, group discussion."
 
 msgid "Forum help"
-msgstr "Forum help"
+msgstr "Forumhulp"
 
 msgid "Please login to go to this course"
 msgstr "Gelieve in te loggen om de cursus te bekijken"
@@ -2282,7 +2282,7 @@ msgid "Already in"
 msgstr "Reeds aanwezig"
 
 msgid "Check in"
-msgstr "Check in"
+msgstr "Inchecken"
 
 msgid "The Moderator of this Conference has left the room."
 msgstr "De moderator van deze conferentie heeft de ruimte verlaten."
@@ -4122,7 +4122,7 @@ msgid "Users number"
 msgstr "Gebruikersnummer"
 
 msgid "Public administration"
-msgstr "Public administration"
+msgstr "Publiek bestuur"
 
 msgid "Page after login"
 msgstr "Pagina na aanmelden"
@@ -4745,7 +4745,7 @@ msgid "Focus on location"
 msgstr "Bekijk alle rollen en rechten voor specifieke locatie"
 
 msgid "Twitter Creator account"
-msgstr "Twitter Creator account"
+msgstr "Twitter Creator-account"
 
 msgid "The selected classes were subscribed to the selected course"
 msgstr "De geselecteerde klassen zijn ingeschreven in de geselecteerde groepen."
@@ -5630,7 +5630,7 @@ msgid "If you are using an LDAP server that does not support or accept anonymous
 msgstr "Als u een LDAP server gebruikt die geen anonieme toegang ondersteunt of aanvaard dan kunt u onderstaand veld gebruiken om het wachtwoord van de LDAP server in te geven."
 
 msgid "LDAP Import"
-msgstr "LDAP import"
+msgstr "LDAP-import"
 
 msgid "Notify subscribed users by e-mail"
 msgstr "Verwittig gebruikers via e-mail"
@@ -6778,7 +6778,7 @@ msgid "View this user"
 msgstr "Bekijk deze gebruiker"
 
 msgid "RSS feed"
-msgstr "RSS feed"
+msgstr "RSS-feed"
 
 msgid "No friends in your contact list"
 msgstr "Geen vrienden in uw contactenlijst"
@@ -7982,7 +7982,7 @@ msgid "This answer has not yet been corrected. Meanwhile, your score for this qu
 msgstr "Dit antwoord is nog niet verbeterd. Tot dit gebeurt, wordt uw score voor deze vraag als 0 gerekend."
 
 msgid "Hot Potatoes Admin"
-msgstr "Hot Potatoes Admin"
+msgstr "Hot Potatoes-beheer"
 
 msgid "New question"
 msgstr "Nieuwe vraag"
@@ -8318,10 +8318,10 @@ msgid "Display"
 msgstr "Toon"
 
 msgid "Multiple choice"
-msgstr "Multiple choice"
+msgstr "Meervoudige keuze"
 
 msgid "Multiple answer"
-msgstr "Multiple answer"
+msgstr "Meervoudig antwoord"
 
 msgid "You can not take this test because you have already reached one attempt"
 msgstr "U kan deze test niet maken omdat u al een poging hebt ondernomen"
@@ -8414,7 +8414,7 @@ msgid "This message, as well as the results table, will appear to the learner if
 msgstr "Deze boodschap en de resultatentabel zal aan de cursist getoond worden als hij in deze stap faalt."
 
 msgid "Minimum overlap"
-msgstr "Minimum overlap"
+msgstr "Minimale overlap"
 
 msgid "Maximum excess"
 msgstr "Maximum teveel"
@@ -9569,7 +9569,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "Upload van bestand is mislukt: bestandsextensie of bestandstype niet toegestaan"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "OpenID-URL"
 
 msgid "The file is too big to upload."
 msgstr "Het bestand is te groot om door te sturen."
@@ -10966,8 +10966,8 @@ msgstr "is"
 msgid "The address of"
 msgstr "Het adres van"
 
-msgid "Your registration on"
-msgstr "Uw registratie op"
+msgid "Your registration on %s"
+msgstr "Uw registratie op %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "De ingevoerde gebruikersnaam is al in gebruik. Gebruik de terugknop van uw browser en probeer opnieuw."
@@ -11402,7 +11402,7 @@ msgid "deleted by"
 msgstr "gewist door"
 
 msgid "Wiki mode"
-msgstr "Wiki mode"
+msgstr "Wikimodus"
 
 msgid "Coach and group member"
 msgstr "Coach en groepslid"
@@ -11624,7 +11624,7 @@ msgid "Restored from version"
 msgstr "Hersteld van versie"
 
 msgid "Help: wiki"
-msgstr "Help: wiki"
+msgstr "Hulp: wiki"
 
 msgid "Please select a page first"
 msgstr "Selecteer eerst een pagina"
@@ -14475,46 +14475,46 @@ msgid "Compose"
 msgstr "Opstellen"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Baby Oranje"
 
 msgid "Blue lagoon"
-msgstr "Blue lagoon"
+msgstr "Blauwe lagune"
 
 msgid "Cool blue"
-msgstr "Cool blue"
+msgstr "Koel blauw"
 
 msgid "Corporate"
 msgstr "Corporate"
 
 msgid "Cosmic campus"
-msgstr "Cosmic campus"
+msgstr "Kosmos campus"
 
 msgid "Delicious Bordeaux"
-msgstr "Delicious Bordeaux"
+msgstr "Heerlijke Bordeaux"
 
 msgid "Empire green"
-msgstr "Empire green"
+msgstr "Keizerlijk groen"
 
 msgid "Fruity orange"
-msgstr "Fruity orange"
+msgstr "Fris oranje"
 
 msgid "Medical"
 msgstr "Medical"
 
 msgid "Royal purple"
-msgstr "Royal purple"
+msgstr "Koninklijk paars"
 
 msgid "Silver line"
-msgstr "Silver line"
+msgstr "Zilveren lijn"
 
 msgid "Sober brown"
-msgstr "Sober brown"
+msgstr "Rustig bruin"
 
 msgid "Steel grey"
-msgstr "Steel grey"
+msgstr "Stalen grijs"
 
 msgid "Tasty olive"
-msgstr "Tasty olive"
+msgstr "Lekkere olijf"
 
 msgid "In this report you see the results of all questions"
 msgstr "In dit rapport ziet u de resultaten van alle vragen"
@@ -14697,7 +14697,7 @@ msgid "Enable button bars extended when the WYSIWYG editor is maximized"
 msgstr "Gebruik de geavanceerde knoppenbalk als de WYSIWYG editor is gemaximaliseerd"
 
 msgid "HTML Editor"
-msgstr "HTML Editor"
+msgstr "HTML-editor"
 
 msgid "Go directly to the course after login"
 msgstr "Ga direct na het aanmelden naar de cursus"
@@ -14733,7 +14733,7 @@ msgid "Chamilo homepage"
 msgstr "Chamilo startpagina"
 
 msgid "Chamilo forum"
-msgstr "Chamilo forum"
+msgstr "Chamilo-forum"
 
 msgid "Chamilo extensions"
 msgstr "Chamilo uitbreidingen"
@@ -15099,7 +15099,7 @@ msgid "Install Chamilo"
 msgstr "Installeer Chamilo"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "Chamilo-URL"
 
 msgid "You have no session in your sessions history"
 msgstr "U hebt geen sessie in uw sessie geschiedenis"
@@ -15138,7 +15138,7 @@ msgid "Data sent"
 msgstr "Gegevens verstuurd"
 
 msgid "Download link"
-msgstr "Download link"
+msgstr "Downloadlink"
 
 msgid "Assignments received"
 msgstr "Ontvangen opgaven"
@@ -15174,7 +15174,7 @@ msgid "The blocks have been updated"
 msgstr "De blokken zijn geüpdatet"
 
 msgid "Dashboard plugins"
-msgstr "Dashboard plugins"
+msgstr "Dashboard-plugins"
 
 msgid "This plugin has been deleted from the dashboard plugin directory"
 msgstr "Deze plugin werd verwijderd uit de dashboard plugin map"
@@ -15408,16 +15408,16 @@ msgid "This extension must be loaded."
 msgstr "Deze extensie moet geladen worden."
 
 msgid "MySQL protocol"
-msgstr "MySQL protocol"
+msgstr "MySQL-protocol"
 
 msgid "MySQL server host"
-msgstr "MySQL server host"
+msgstr "MySQL-serverhost"
 
 msgid "MySQL server information"
 msgstr "MySQL server informatie"
 
 msgid "MySQL client"
-msgstr "MySQL client"
+msgstr "MySQL-client"
 
 msgid "Protocol used by this server"
 msgstr "Protocol gebruikt door deze server"
@@ -15614,7 +15614,7 @@ msgid "Import exercises Qti2"
 msgstr "Importeer oefeningen Qti2"
 
 msgid "ISO code"
-msgstr "ISO code"
+msgstr "ISO-code"
 
 msgid "The sub-language of this language has been added"
 msgstr "De sub-taal van deze taal is toegevoegd."
@@ -15863,7 +15863,7 @@ msgid "Selecting another learning path as a prerequisite will hide the current p
 msgstr "Het selecteren  van een ander leerpad als voorkennis zal de huidige voorkennis verbergen tot die in de voorkennis volledig afgewerkt is (100%)"
 
 msgid "Maximum score"
-msgstr "Maximum score"
+msgstr "Maximumscore"
 
 msgid "Score average from all attempts"
 msgstr "Gemiddelde score van alle pogingen"
@@ -16054,7 +16054,7 @@ msgid "Import skills from a CSV file"
 msgstr "Importeer skills met een CSV bestand"
 
 msgid "Skills import"
-msgstr "Skills import"
+msgstr "Vaardigheden importeren"
 
 msgid "Skills wheel"
 msgstr "Skills wiel"
@@ -16096,7 +16096,7 @@ msgid "Relative score"
 msgstr "Relatieve score"
 
 msgid "Absolute score"
-msgstr "Absolute score"
+msgstr "Absoluute score"
 
 msgid "Prerequisites options"
 msgstr "Instellen vereisten"
@@ -16368,7 +16368,7 @@ msgid "The package you are uploading doesn't seem to be in SCORM format. Please 
 msgstr "Het pakket dat u wilt uploaden lijkt niet in SCORM formaat te zijn. Controleer of het imsmanifest.xml in het zip bestand zit dat je probeert te uploaden."
 
 msgid "Data filler"
-msgstr "Data filler"
+msgstr "Gegevensvuller"
 
 msgid "Enable competence level labelling in order to set custom score information"
 msgstr "Schakel de competentieniveau-labelling in om de custom score informatie in te stellen."
@@ -17489,7 +17489,7 @@ msgid "Notify by mail on new message received in group"
 msgstr "Stuur email bij bericht in groep"
 
 msgid "Fulltext search"
-msgstr "Fulltext search"
+msgstr "Volledige tekst zoeken"
 
 msgid "This feature allows you to index most of the documents uploaded to your portal, then provide a search feature for users.<br />This feature will not index documents that have already been uploaded, so it is important to enable (if wanted) at the beginning of your implementation.<br />Once enabled, a search box will appear in the courses list of every user. Searching for a specific term will bring a list of corresponding documents, exercises or forum topics, filtered depending on the availability of these contents to the user."
 msgstr "Met deze functie kunt u de meeste documenten die naar uw portal zijn geüpload, indexeren en vervolgens gebruikers een zoekfunctie bieden. Deze functie indexeert geen documenten die al zijn geüpload, dus het is belangrijk om deze in te schakelen (indien gewenst) aan het begin van uw implementatie. Eenmaal ingeschakeld, verschijnt er een zoekvak in de cursuslijst van elke gebruiker. Als u naar een specifieke term zoekt, krijgt u een lijst met bijbehorende documenten, oefeningen of forumonderwerpen, gefilterd op basis van de beschikbaarheid van deze inhoud voor de gebruiker."
@@ -17693,7 +17693,7 @@ msgid "Course homepage"
 msgstr "Cursus homepage"
 
 msgid "Coming soon..."
-msgstr "Coming soon..."
+msgstr "Binnenkort beschikbaar..."
 
 msgid "Dummy course content - only available on test platforms."
 msgstr "Dummy cursus inhoud - alleen beschikbaar op testplatforms"
@@ -17789,7 +17789,7 @@ msgid "This user doesn't have a related URL."
 msgstr "Deze gebruiker heeft geen gerelateerde URL"
 
 msgid "Extra data"
-msgstr "Extra data"
+msgstr "Extra gegevens"
 
 msgid "Tests in learning paths"
 msgstr "Oefeningen in leerpaden"
@@ -18248,7 +18248,7 @@ msgid "Total weight"
 msgstr "Totaal gewicht"
 
 msgid "Random pick"
-msgstr "Random pick"
+msgstr "Willekeurige selectie"
 
 msgid "The sum of all activity weights must be equal to the total weight indicated in your assessment settings, otherwise the learners will not be able to reach the sufficient score to achieve their certification."
 msgstr "De som van alle gewichten van de activiteit moet gelijk zijn aan het totale gewicht dat werd aangegeven in de instellingen van de puntenlijst. De cursisten kunnen anders niet genoeg scoren om hun certificaat te behalen."
@@ -18290,19 +18290,19 @@ msgid "Reply"
 msgstr "Antwoord"
 
 msgid "Installation guide"
-msgstr "Installation guide"
+msgstr "Installatiehandleiding"
 
 msgid "Changes in last version"
 msgstr "Wijzigingen in de laatste versie"
 
 msgid "Contributors list"
-msgstr "Contributors list"
+msgstr "Lijst van bijdragers"
 
 msgid "Security guide"
-msgstr "Security guide"
+msgstr "Beveiligingshandleiding"
 
 msgid "Optimization guide"
-msgstr "Optimization guide"
+msgstr "Optimalisatiehandleiding"
 
 msgid "Free/Busy calendar"
 msgstr "Vrij/Bezet agenda"
@@ -18686,7 +18686,7 @@ msgid "Add test category"
 msgstr "Voeg testcategorie toe"
 
 msgid "Nb categories"
-msgstr "Nb categories"
+msgstr "Aantal categorieën"
 
 msgid "Are you sure you want to delete this category?"
 msgstr "Bent u zeker dat u deze categorie wenst te verwijderen?"
@@ -21268,7 +21268,7 @@ msgid "Issued badge information"
 msgstr "Verleende badge informatie"
 
 msgid "Recipient details"
-msgstr "Recipient details"
+msgstr "Ontvanger details"
 
 msgid "Skill acquired at"
 msgstr "Competentie verworven op"
@@ -21386,7 +21386,7 @@ msgid "Crop your picture"
 msgstr "Snijd uw foto bij"
 
 msgid "Download badge"
-msgstr "Download badge"
+msgstr "Badge downloaden"
 
 msgid "No XML file found in the zip archive. This is a requirement for this type of import."
 msgstr ""
@@ -22716,7 +22716,7 @@ msgstr "Selecteer met tekstveld"
 msgid "Triple select"
 msgstr "Drievoudige selectie"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "U bevestigt dat u zich echt wilt abonneren op dit platform."
 
 msgid "Add text"
@@ -22785,18 +22785,13 @@ msgstr ""
 "e-mail en volg de instructies of klik op de volgende link om de e-mail "
 "opnieuw te verzenden"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr ""
 "Om uw platformregistratie te voltooien, moet u uw account bevestigen door op "
 "de volgende link te klikken"
 
 msgid "Confirmation for new account"
 msgstr "Bevestiging voor nieuw account"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr ""
-"U moet uw account via e-mail bevestigen om toegang te krijgen tot het "
-"platform"
 
 msgid "Enable Cloud files link addition"
 msgstr "Schakel het toevoegen van Cloud-bestanden links in"
@@ -25689,7 +25684,7 @@ msgid "*: Current quarter, incomplete data"
 msgstr "*: Huidig kwartaal, onvolledige gegevens"
 
 msgid "Q%s %s"
-msgstr "Q%s %s"
+msgstr "V%s %s"
 
 msgid "YoY"
 msgstr "Jaar op jaar"
@@ -26012,10 +26007,6 @@ msgstr "Exporteer alle resultaten van alle oefeningen"
 
 msgid "Click to view details"
 msgstr "Klik om details te bekijken"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr ""
-"Dit rapport is van toepassing op alle platformactiviteiten van de gebruiker."
 
 #, fuzzy
 msgid "dd/mm/yyyy"
@@ -29511,7 +29502,7 @@ msgstr "Gebruiksvoorwaarden van het platform"
 msgid "Password too easy to guess"
 msgstr "Wachtwoord te makkelijk te raden"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr ""
 "U moet uw account via e-mail bevestigen om toegang te krijgen tot het "
 "platform"
@@ -32627,7 +32618,7 @@ msgid "You are editing logos for visual theme"
 msgstr "Je bewerkt logo's voor visueel thema"
 
 msgid "Header logo"
-msgstr "Header logo"
+msgstr "Koplogo"
 
 msgid "Effective preview"
 msgstr "Effectieve voorbeeldweergave"
@@ -32762,7 +32753,7 @@ msgid "Visual theme (assets)"
 msgstr "Visueel thema (assets)"
 
 msgid "Branding (logos)"
-msgstr "Branding (logos)"
+msgstr "Merkidentiteit (logo's)"
 
 msgid "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback."
 msgstr "Upload optionele header- en e-mail logos. SVG-formaat is voorkeur. PNG wordt gebruikt als reservemogelijkheid."
@@ -33285,4 +33276,247 @@ msgstr "Admin Herstart Cursussen"
 
 msgid "Admin Dashboard"
 msgstr "Admin Dashboard"
+
+msgid "Threads"
+msgstr "Threads"
+
+msgid "Invalid thread"
+msgstr "Ongeldige thread"
+
+msgid "View full thread"
+msgstr "Volledige thread bekijken"
+
+msgid "No post yet"
+msgstr "Nog geen berichten"
+
+msgid "Discussion thread"
+msgstr "Discussie-thread"
+
+msgid "Access to this course"
+msgstr "Toegang tot deze cursus"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Deze plugin heeft geen configureerbare instellingen. Activering wordt beheerd vanuit de pluginlijst."
+
+msgid "Private - access granted by privileged users"
+msgstr "Privé - toegang verleend door bevoorrechte gebruikers"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Geen gedetailleerde feedback beschikbaar voor deze vraag."
+
+msgid "Please select an answer before checking the result."
+msgstr "Selecteer een antwoord voordat u het resultaat controleert."
+
+msgid "Allow PDF export for this item"
+msgstr "PDF-export toestaan voor dit item"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Gratis gebruikers verbergen (niet ingeschreven)"
+
+msgid "Question statistics"
+msgstr "Vraagstatistieken"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Bestand genereren. Sluit dit tabblad niet..."
+
+msgid "Assign auth source to users"
+msgstr "Authenticatiebron toewijzen aan gebruikers"
+
+msgid "There are no questions for this survey"
+msgstr "Er zijn geen vragen voor deze enquête"
+
+msgid "Certificates report"
+msgstr "Certificatenrapport"
+
+msgid "Course picture"
+msgstr "Cursusafbeelding"
+
+msgid "Current picture"
+msgstr "Huidige afbeelding"
+
+msgid "Course events log"
+msgstr "Cursusgebeurtenislogboek"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Update de categorieweergave en de optionele tijdslimiet."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Maak een logische groep sessies om uw trainingscatalogus georganiseerd te houden."
+
+msgid "Generating file, do not close this tab"
+msgstr "Bestand genereren, sluit dit tabblad niet"
+
+msgid "Assign authentication sources to users"
+msgstr "Authenticatiebronnen toewijzen aan gebruikers"
+
+msgid "Average completion rate"
+msgstr "Gemiddelde voltooiingsgraad"
+
+msgid "Average access rate"
+msgstr "Gemiddelde toegangspercentage"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Deze tabel vat de voortgang en activiteit van leerlingen samen per leerpad in uw huidige cursussen."
+
+msgid "Follow up"
+msgstr "Opvolging"
+
+msgid "Tracking for superior"
+msgstr "Volgen voor meerdere"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Dit rapport toont de wekelijkse verdeling van sessies per algemene coach in het geselecteerde datumbereik."
+
+msgid "Head manager report"
+msgstr "Hoofdbeheerder rapport"
+
+msgid "Reset or update user password"
+msgstr "Gebruikerswachtwoord opnieuw instellen of bijwerken"
+
+msgid "Active users"
+msgstr "Actieve gebruikers"
+
+msgid "Inactive users"
+msgstr "Inactieve gebruikers"
+
+msgid "Report on resources"
+msgstr "Rapport over bronnen"
+
+msgid "Global view"
+msgstr "Algemeen overzicht"
+
+msgid "Available reports"
+msgstr "Beschikbare rapporten"
+
+msgid "Current report"
+msgstr "Huidig rapport"
+
+msgid "Back to user assignment page"
+msgstr "Terug naar gebruikers toewijzing pagina"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Authenticatiebronnen succesvol toegewezen"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Tip: kies “— Alleen uploaden —” om op te slaan zonder naar iemand te versturen."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Selecteer minstens één ontvanger (“— Alleen uploaden —” of een gebruiker)"
+
+msgid "Sharing"
+msgstr "Delen"
+
+msgid "Selected files"
+msgstr "Geselecteerde bestanden"
+
+msgid "Hide password"
+msgstr "Wachtwoord verbergen"
+
+msgid "Show password"
+msgstr "Wachtwoord tonen"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "SVG-logo voor e-mails uploaden"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "U moet alle leerpaden uit deze categorie verplaatsen of verwijderen voordat u deze kunt verwijderen."
+
+msgid "Clear filters"
+msgstr "Filters wissen"
+
+msgid "Attendances (tablet)"
+msgstr "Aanwezigheden (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Tabletmodus verlaten"
+
+msgid "No members found."
+msgstr "Geen leden gevonden."
+
+msgid "Health check"
+msgstr "Gezondheidscontrole"
+
+msgid "Export to CC 1.3"
+msgstr "Exporteren naar CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Bronnen laden..."
+
+msgid "Failed to load resources."
+msgstr "Kon bronnen niet laden."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Selecteer minstens één exporteerbare bron (document, webkoppelingen, discussie,...)."
+
+msgid "Export finished."
+msgstr "Export voltooid."
+
+msgid "Export failed."
+msgstr "Export mislukt."
+
+msgid "Import failed."
+msgstr "Import mislukt."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Lokaal bestand (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Klaar om te importeren"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "We zullen de back-up in deze cursus herstellen. U kunt teruggaan om opties te wijzigen."
+
+msgid "Select resources to import"
+msgstr "Bronnen selecteren om te importeren"
+
+msgid "No resources available in this backup."
+msgstr "Geen bronnen beschikbaar in deze back-up."
+
+msgid "Import selection"
+msgstr "Importselectie"
+
+msgid "Import completed"
+msgstr "Import voltooid"
+
+msgid "Could not load options."
+msgstr "Kon opties niet laden."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Selecteer een back-upbestand (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Kies een back-up van de server"
+
+msgid "Error selecting source."
+msgstr "Fout bij selecteren van bron."
+
+msgid "Recycling options"
+msgstr "Herbruikopties"
+
+msgid "Type the course code to confirm"
+msgstr "Typ de cursuscode ter bevestiging"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Dit verwijdert of herstelt geselecteerde bronnen. Deze actie kan niet ongedaan worden gemaakt."
+
+msgid "Select resources to recycle"
+msgstr "Bronnen selecteren om te hergebruiken"
+
+msgid "No resources available in this course."
+msgstr "Geen bronnen beschikbaar in deze cursus."
+
+msgid "Recycle selected"
+msgstr "Geselecteerde hergebruiken"
+
+msgid "Error loading resources."
+msgstr "Fout bij laden van bronnen."
+
+msgid "Clear search"
+msgstr "Zoekopdracht wissen"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Alleen letters, cijfers en onderstrepingsteken (_) zijn toegestaan in de databasetnaam. Ongeldige tekens worden automatisch verwijderd."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Welke algemene voorwaarden worden aan gebruikers gegeven om dit platform te gebruiken?"
 

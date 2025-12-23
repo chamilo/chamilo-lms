@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Ar cieņu"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulas piemērs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulas paraugs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Mainīgo diapazoni"
@@ -8629,10 +8629,10 @@ msgid "."
 msgstr "."
 
 msgid "%b %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d. %b, %Y"
 
 msgid "%A %B %d, %Y"
-msgstr "%A %B %d, %Y"
+msgstr "%A, %d. %B, %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
 msgstr "%B %d, %Y plkst. %I:%M %p"
@@ -9346,7 +9346,7 @@ msgid "Tel"
 msgstr "Telefona Nr."
 
 msgid "No tel"
-msgstr "No tel"
+msgstr "Nav tāl."
 
 msgid "Send mail"
 msgstr "Sūtīt vēstuli"
@@ -9466,7 +9466,7 @@ msgid "Not yet begun"
 msgstr "Patreiz nesāksies"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d. %B, %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Nederīga mape: Lūdzu izveidojiet, dokumentu instrumentā, mapi attēliem, lai attēlus var lejupielādēt tieši šajā mapē."
@@ -10926,8 +10926,8 @@ msgstr "ir"
 msgid "The address of"
 msgstr "Interneta adrese, e-mācību videi"
 
-msgid "Your registration on"
-msgstr "Jūsu reģistrācija e-mācību vidē"
+msgid "Your registration on %s"
+msgstr "Jūsu reģistrācija e-mācību vidē %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Šis lietotājvārds jau ir aizņemts. Noklikšķiniet pārlūkprogrammas \"Back\" pogu un izvēlieties citu."
@@ -15769,16 +15769,16 @@ msgid "By copying the link below and pasting it in an e-mail or on a website, yo
 msgstr "Kopējot saiti zemāk un ielīmējot to e-pastā vai mājaslapā, jūs ļausiet jebkurai anonīmai personai ievadīt un atbildēt uz šo aptauju."
 
 msgid "Open self"
-msgstr "Open self"
+msgstr "Atvērt sevi"
 
 msgid "Open blank"
 msgstr "Atvērt tukšā logā"
 
 msgid "Open parent"
-msgstr "Open parent"
+msgstr "Atvērt vecāku"
 
 msgid "Open top"
-msgstr "Open top"
+msgstr "Atvērt augšējo"
 
 msgid "Thematic section has been created successfully"
 msgstr "Tematiskā plāna nodaļa ir izveidota veiksmīgi"
@@ -22089,7 +22089,7 @@ msgstr "Izvēlēties ar teksta lauku"
 msgid "Triple select"
 msgstr "Trīskāršā izvēle"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Jūs apstiprināt, ka tiešām vēlaties pieteikties šai platformai."
 
 msgid "Add text"
@@ -22149,14 +22149,11 @@ msgstr "Reģistrācijas apstiprinājums"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Jūsu konts ir neaktīvs, jo jūs vēl neesat to apstiprinājis. Pārbaudiet savu e-pastu un sekojiet instrukcijām vai noklikšķiniet uz šīs saites, lai atkārtoti nosūtītu e-pastu"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Lai pabeigtu platformas reģistrāciju, jums jāapstiprina konts, noklikšķinot uz šīs saites"
 
 msgid "Confirmation for new account"
 msgstr "Apstiprinājums jaunam kontam"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Lai piekļūtu platformai, jums jāapstiprina konts caur e-pastu"
 
 msgid "Enable Cloud files link addition"
 msgstr "Iespējot mākoņfailu saišu pievienošanu"
@@ -24993,9 +24990,6 @@ msgstr "Eksportēt visu testu rezultātus"
 msgid "Click to view details"
 msgstr "Noklikšķiniet, lai skatītu detaļas"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Šis ziņojums attiecas uz visām lietotāja platformas aktivitātēm."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27552,7 +27546,7 @@ msgstr "Platformas izmantošanas nosacījumi"
 msgid "Password too easy to guess"
 msgstr "Parole ir pārāk viegli uzminama"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Lai piekļūtu platformai, jums jāapstiprina konts pa e-pastu"
 
 msgid "Redirect to portal home"
@@ -31233,4 +31227,217 @@ msgstr "Šim jautājumam nav pieejama detalizēta atsauksme."
 
 msgid "Please select an answer before checking the result."
 msgstr "Lūdzu, izvēlieties atbildi pirms rezultāta pārbaudes."
+
+msgid "Allow PDF export for this item"
+msgstr "Atļaut PDF eksportu šim vienumam"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Slēpt bezmaksas lietotājus (nav reģistrējušies)"
+
+msgid "Question statistics"
+msgstr "Jautājumu statistika"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Faila ģenerēšana. Neaizveriet šo cilni..."
+
+msgid "Assign auth source to users"
+msgstr "Piešķirt autentifikācijas avotu lietotājiem"
+
+msgid "There are no questions for this survey"
+msgstr "Šai aptaujā nav jautājumu"
+
+msgid "Certificates report"
+msgstr "Sertifikātu pārskats"
+
+msgid "Course picture"
+msgstr "Kursa attēls"
+
+msgid "Current picture"
+msgstr "Pašreizējais attēls"
+
+msgid "Course events log"
+msgstr "Kursa notikumu žurnāls"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Atjaunināt kategorijas informāciju un tās opcionālo laika ierobežojumu."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Izveidot loģisku sesiju grupu, lai sakārtotu savu apmācību katalogu."
+
+msgid "Generating file, do not close this tab"
+msgstr "Faila ģenerēšana, neaizveriet šo cilni"
+
+msgid "Assign authentication sources to users"
+msgstr "Piešķirt autentifikācijas avotus lietotājiem"
+
+msgid "Average completion rate"
+msgstr "Vidējais pabeigšanas līmenis"
+
+msgid "Average access rate"
+msgstr "Vidējais piekļuves līmenis"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Šī tabula apkopo mācīšanās ceļa izpildes un aktivitāšu progresu jūsu pašreizējos kursos."
+
+msgid "Follow up"
+msgstr "Sekot līdzi"
+
+msgid "Tracking for superior"
+msgstr "Sekojums vadītājam"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Šis pārskats parāda sesiju nedēļas sadalījumu pa galvenajiem treneriem izvēlētajā datuma diapazonā."
+
+msgid "Head manager report"
+msgstr "Galvenā vadītāja pārskats"
+
+msgid "Reset or update user password"
+msgstr "Atiestatīt vai atjaunināt lietotāja paroli"
+
+msgid "Active users"
+msgstr "Aktīvie lietotāji"
+
+msgid "Inactive users"
+msgstr "Neaktīvie lietotāji"
+
+msgid "Report on resources"
+msgstr "Pārskats par resursiem"
+
+msgid "Global view"
+msgstr "Vispārējs skats"
+
+msgid "Available reports"
+msgstr "Pieejamie pārskati"
+
+msgid "Current report"
+msgstr "Pašreizējais pārskats"
+
+msgid "Back to user assignment page"
+msgstr "Atpakaļ uz lietotāju piešķiršanas lapu"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Autentifikācijas avoti veiksmīgi piešķirti"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Padoms: izvēlieties “— Tikai augšupielādēt —”, lai saglabātu bez nosūtīšanas."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Lūdzu, izvēlieties vismaz vienu saņēmēju (“— Tikai augšupielādēt —” vai jebkuru lietotāju)"
+
+msgid "Sharing"
+msgstr "Dalīšanās"
+
+msgid "Selected files"
+msgstr "Izvēlētie faili"
+
+msgid "Hide password"
+msgstr "Slēpt paroli"
+
+msgid "Show password"
+msgstr "Rādīt paroli"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Augšupielādēt SVG logotipu e-pastiem"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Jums jāpārvieto vai jāizdzēš visi mācību ceļi no šīs kategorijas pirms tās dzēšanas."
+
+msgid "Clear filters"
+msgstr "Notīrīt filtrus"
+
+msgid "Attendances (tablet)"
+msgstr "Apmeklējumi (planšete)"
+
+msgid "Exit tablet mode"
+msgstr "Iziet planšetes režīmu"
+
+msgid "No members found."
+msgstr "Nav atrasti dalībnieki."
+
+msgid "Health check"
+msgstr "Veselības pārbaude"
+
+msgid "Export to CC 1.3"
+msgstr "Eksportēt uz CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Ielādē resursus..."
+
+msgid "Failed to load resources."
+msgstr "Neizdevās ielādēt resursus."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Lūdzu, izvēlieties vismaz vienu eksportējamu resursu (dokumentu, tīmekļa saiti, diskusiju,...)."
+
+msgid "Export finished."
+msgstr "Eksports pabeigts."
+
+msgid "Export failed."
+msgstr "Eksports neizdevās."
+
+msgid "Import failed."
+msgstr "Imports neizdevās."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Lokāls fails (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Gatavs importam"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Mēs atjaunosim dublējumu šajā kursā. Jūs varat atgriezties, lai mainītu opcijas."
+
+msgid "Select resources to import"
+msgstr "Izvēlēties resursus importam"
+
+msgid "No resources available in this backup."
+msgstr "Šajā dublējumā nav pieejamu resursu."
+
+msgid "Import selection"
+msgstr "Importa atlase"
+
+msgid "Import completed"
+msgstr "Imports pabeigts"
+
+msgid "Could not load options."
+msgstr "Neizdevās ielādēt opcijas."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Lūdzu, izvēlieties dublējuma failu (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Lūdzu, izvēlieties dublējumu no servera"
+
+msgid "Error selecting source."
+msgstr "Kļūda izvēloties avotu."
+
+msgid "Recycling options"
+msgstr "Pārstrādes opcijas"
+
+msgid "Type the course code to confirm"
+msgstr "Ierakstiet kursa kodu, lai apstiprinātu"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Tas izdzēsīs vai atiestatīs izvēlētos resursus. Šo darbību nevar atcelt."
+
+msgid "Select resources to recycle"
+msgstr "Izvēlēties resursus pārstrādei"
+
+msgid "No resources available in this course."
+msgstr "Šajā kursā nav pieejamu resursu."
+
+msgid "Recycle selected"
+msgstr "Pārstrādāt izvēlētos"
+
+msgid "Error loading resources."
+msgstr "Kļūda ielādējot resursus."
+
+msgid "Clear search"
+msgstr "Notīrīt meklēšanu"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Datubāzes nosaukumā drīkst izmantot tikai burtus, ciparus un apakšsvītru (_). Nederīgie simboli tiks automātiski noņemti."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Kādi vispārēji noteikumi un nosacījumi tiek doti lietotājiem, lai izmantotu šo platformu?"
 

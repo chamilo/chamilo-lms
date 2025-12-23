@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Settings;
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class SearchSettingsSchema extends AbstractSettingsSchema
@@ -24,7 +25,11 @@ class SearchSettingsSchema extends AbstractSettingsSchema
                 ]
             )
         ;
-        $allowedTypes = [];
+
+        $allowedTypes = [
+            'search_prefilter_prefix' => ['string'],
+        ];
+
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
@@ -32,7 +37,18 @@ class SearchSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->add('search_enabled', YesNoType::class)
-            ->add('search_prefilter_prefix', YesNoType::class)
+            ->add(
+                'search_prefilter_prefix',
+                TextareaType::class,
+                [
+                    'required' => false,
+                    'attr' => [
+                        'rows' => 6,
+                        'class' => 'font-monospace',
+                    ],
+                    'help' => 'JSON configuration for search prefilter fields.',
+                ]
+            )
             ->add(
                 'search_show_unlinked_results',
                 ChoiceType::class,

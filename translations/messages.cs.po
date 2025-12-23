@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "S pozdravem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Vzorek vzorce: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Vzorník vzorce: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy proměnných"
@@ -1447,7 +1447,7 @@ msgid "View original event"
 msgstr "Zobrazit původní událost"
 
 msgid "Outlook import"
-msgstr "Outlook import"
+msgstr "Import Outlook"
 
 msgid "All system users"
 msgstr "Všichni systémoví uživatelé"
@@ -4138,7 +4138,7 @@ msgid "MySql Client"
 msgstr "MySql Klient"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "MySQL Server"
 
 msgid "Owner"
 msgstr "Vlastník"
@@ -4345,7 +4345,7 @@ msgid "Production Server"
 msgstr "Server (Produkce)"
 
 msgid "Test Server"
-msgstr "Test Server"
+msgstr "Testovací server"
 
 msgid "Who's Online"
 msgstr "Kdo je Online"
@@ -4804,7 +4804,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "AWStats umožňuje prozkoumat statistiky vašeho portálu: navštěvy, zobrazené stránky, příspěvky"
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "Chamilo KNIHOVNA"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "Chamilo LIBRARY je vyhledávací nástroj nabízející multikrytériovou indexaci a výzkum. Je součástí Chamilo Medical vlastností"
@@ -5593,7 +5593,7 @@ msgid "If you are using an LDAP server that does not support or accept anonymous
 msgstr "Pokud používáte LDAP server, který nepodporuje nebo neumažňuje anonymní přístup, vyplňte následující pole s uživatelským heslem."
 
 msgid "LDAP Import"
-msgstr "LDAP import"
+msgstr "LDAP Import"
 
 msgid "Notify subscribed users by e-mail"
 msgstr "Informujte zapsané uživatele emailem"
@@ -8623,10 +8623,10 @@ msgid "."
 msgstr "."
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%d. %b %Y"
 
 msgid "%A %B %d, %Y"
-msgstr "%A %B %d, %Y"
+msgstr "%A %d. %B %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
 msgstr "%B %d, %Y v %I:%M %p"
@@ -9460,7 +9460,7 @@ msgid "Not yet begun"
 msgstr "Ještě nezačato"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d. %B %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Neplatná složka: Vytvořte prosím složku s názvem images ve vašem nástroji dokumentů, aby bylo možné obrázky nahrát do této složky"
@@ -10920,8 +10920,8 @@ msgstr "je"
 msgid "The address of"
 msgstr "Adresa"
 
-msgid "Your registration on"
-msgstr "Vaše registrace na"
+msgid "Your registration on %s"
+msgstr "Vaše registrace na %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Toto přihlašovací jméno je již obsazené. Použijte tlačítko zpět v prohlížeči a zvolte jiné."
@@ -14425,46 +14425,46 @@ msgid "Compose"
 msgstr "Napsat"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Dětská oranžová"
 
 msgid "Blue lagoon"
-msgstr "Blue lagoon"
+msgstr "Modrá laguna"
 
 msgid "Cool blue"
-msgstr "Cool blue"
+msgstr "Chladná modrá"
 
 msgid "Corporate"
 msgstr "Korporátní"
 
 msgid "Cosmic campus"
-msgstr "Cosmic campus"
+msgstr "Kosmická kampus"
 
 msgid "Delicious Bordeaux"
-msgstr "Delicious Bordeaux"
+msgstr "Lahodné bordó"
 
 msgid "Empire green"
-msgstr "Empire green"
+msgstr "Císařsky zelená"
 
 msgid "Fruity orange"
-msgstr "Fruity orange"
+msgstr "Ovocná oranžová"
 
 msgid "Medical"
 msgstr "Lékařský"
 
 msgid "Royal purple"
-msgstr "Royal purple"
+msgstr "Královská fialová"
 
 msgid "Silver line"
-msgstr "Silver line"
+msgstr "Stříbrná čára"
 
 msgid "Sober brown"
-msgstr "Sober brown"
+msgstr "Střízlivá hněď"
 
 msgid "Steel grey"
-msgstr "Steel grey"
+msgstr "Ocelově šedá"
 
 msgid "Tasty olive"
-msgstr "Tasty olive"
+msgstr "Chuťová oliva"
 
 msgid "In this report you see the results of all questions"
 msgstr "V této zprávě vidíte výsledky všech otázek"
@@ -16183,7 +16183,7 @@ msgid "Quarterly report"
 msgstr "Čtvrtletní zpráva"
 
 msgid "%d %B %Y"
-msgstr "%d %B %Y"
+msgstr "%d. %B %Y"
 
 msgid "%A"
 msgstr "%A"
@@ -20281,7 +20281,7 @@ msgid "Start video call"
 msgstr "Spustit videohovor"
 
 msgid "Video URL"
-msgstr "Video URL"
+msgstr "URL videa"
 
 msgid "Insert a valid URL"
 msgstr "Vložte platnou URL"
@@ -22083,7 +22083,7 @@ msgstr "Vybrat s textovým polem"
 msgid "Triple select"
 msgstr "Trojnásobný výběr"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Potvrzujete, že se skutečně chcete přihlásit na tuto platformu."
 
 msgid "Add text"
@@ -22143,14 +22143,11 @@ msgstr "Potvrzení registrace"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Váš účet je neaktivní, protože jste jej ještě nepotvrdili. Zkontrolujte svůj e-mail a postupujte podle pokynů nebo klikněte na následující odkaz pro odeslání e-mailu znovu"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Pro dokončení registrace na platformě musíte potvrdit svůj účet kliknutím na následující odkaz"
 
 msgid "Confirmation for new account"
 msgstr "Potvrzení nového účtu"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Pro přístup na platformu musíte potvrdit svůj účet e-mailem"
 
 msgid "Enable Cloud files link addition"
 msgstr "Povolit přidávání odkazů na cloudové soubory"
@@ -24316,10 +24313,10 @@ msgid "Apprenticeship contract"
 msgstr "Učební smlouva"
 
 msgid "Export Common Cartridge v1.3"
-msgstr "Export Common Cartridge v1.3"
+msgstr "Exportovat Common Cartridge v1.3"
 
 msgid "Import Common Cartridge v1.3"
-msgstr "Import Common Cartridge v1.3"
+msgstr "Importovat Common Cartridge v1.3"
 
 msgid "Export your course content in the IMS Common Cartridge 1.3 format, to share it on other platforms."
 msgstr "Exportovat obsah kurzu ve formátu IMS Common Cartridge 1.3 pro sdílení na jiných platformách."
@@ -24987,9 +24984,6 @@ msgstr "Exportovat všechny výsledky všech testů"
 msgid "Click to view details"
 msgstr "Klikněte pro zobrazení podrobností"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Tato zpráva se vztahuje na všechny aktivity uživatele na platformě."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -25063,7 +25057,7 @@ msgid "The update failed for the following courses"
 msgstr "Aktualizace selhala pro následující kurzy"
 
 msgid "%02d h %02d m %02d s"
-msgstr "%02d h %02d m %02d s"
+msgstr "%02d h %02d min %02d s"
 
 msgid "User management"
 msgstr "Správa uživatelů"
@@ -27546,7 +27540,7 @@ msgstr "Podmínky používání platformy"
 msgid "Password too easy to guess"
 msgstr "Heslo je příliš snadno uhodnutelné"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Pro přístup k platformě musíte potvrdit svůj účet e-mailem"
 
 msgid "Redirect to portal home"
@@ -31196,4 +31190,247 @@ msgstr "Restartované kurzy administrátora"
 
 msgid "Admin Dashboard"
 msgstr "Přehled administrátora"
+
+msgid "Threads"
+msgstr "Vlákna"
+
+msgid "Invalid thread"
+msgstr "Neplatné vlákno"
+
+msgid "View full thread"
+msgstr "Zobrazit celé vlákno"
+
+msgid "No post yet"
+msgstr "Zatím žádný příspěvek"
+
+msgid "Discussion thread"
+msgstr "Diskusní vlákno"
+
+msgid "Access to this course"
+msgstr "Přístup k tomuto kurzu"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Tento plugin nemá žádná konfigurovatelná nastavení. Aktivace je spravována ze seznamu pluginů."
+
+msgid "Private - access granted by privileged users"
+msgstr "Soukromé - přístup udělen privilegovanými uživateli"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Pro tuto otázku není k dispozici podrobná zpětná vazba."
+
+msgid "Please select an answer before checking the result."
+msgstr "Vyberte odpověď před kontrolou výsledku."
+
+msgid "Allow PDF export for this item"
+msgstr "Povolit export PDF pro tuto položku"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Skrýt volné uživatele (nezapsané)"
+
+msgid "Question statistics"
+msgstr "Statistika otázek"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Generování souboru. Nezavírejte tuto kartu..."
+
+msgid "Assign auth source to users"
+msgstr "Přiřadit zdroj autentizace uživatelům"
+
+msgid "There are no questions for this survey"
+msgstr "Tato anketa nemá žádné otázky"
+
+msgid "Certificates report"
+msgstr "Zpráva o certifikátech"
+
+msgid "Course picture"
+msgstr "Obrázek kurzu"
+
+msgid "Current picture"
+msgstr "Aktuální obrázek"
+
+msgid "Course events log"
+msgstr "Protokol událostí kurzu"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Aktualizovat informace o kategorii a její volitelný časový limit."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Vytvořte logickou skupinu sezení pro organizaci vašeho katalogu školení."
+
+msgid "Generating file, do not close this tab"
+msgstr "Generování souboru, nezavírejte tuto kartu"
+
+msgid "Assign authentication sources to users"
+msgstr "Přiřadit zdroje autentizace uživatelům"
+
+msgid "Average completion rate"
+msgstr "Průměrná míra dokončení"
+
+msgid "Average access rate"
+msgstr "Průměrná míra přístupu"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Tato tabulka shrnuje pokrok a aktivitu studentů pro jednotlivé výukové cesty ve vašich aktuálních kurzech."
+
+msgid "Follow up"
+msgstr "Sledování"
+
+msgid "Tracking for superior"
+msgstr "Sledování pro nadřízeného"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Tato zpráva ukazuje týdenní rozložení sezení na hlavního trenéra v vybraném časovém rozmezí."
+
+msgid "Head manager report"
+msgstr "Zpráva hlavního manažera"
+
+msgid "Reset or update user password"
+msgstr "Resetovat nebo aktualizovat heslo uživatele"
+
+msgid "Active users"
+msgstr "Aktivní uživatelé"
+
+msgid "Inactive users"
+msgstr "Neaktivní uživatelé"
+
+msgid "Report on resources"
+msgstr "Zpráva o zdrojích"
+
+msgid "Global view"
+msgstr "Globální pohled"
+
+msgid "Available reports"
+msgstr "Dostupné zprávy"
+
+msgid "Current report"
+msgstr "Aktuální zpráva"
+
+msgid "Back to user assignment page"
+msgstr "Zpět na stránku přiřazení uživatelů"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Zdroje autentizace úspěšně přiřazeny"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Tip: zvolte „— Pouze nahrát —“ pro uložení bez odeslání komukoli."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Vyberte nejméně jednoho příjemce („— Pouze nahrát —“ nebo jakéhokoli uživatele)"
+
+msgid "Sharing"
+msgstr "Sdílení"
+
+msgid "Selected files"
+msgstr "Vybrané soubory"
+
+msgid "Hide password"
+msgstr "Skrýt heslo"
+
+msgid "Show password"
+msgstr "Zobrazit heslo"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Nahrát SVG logo pro e-maily"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Před smazáním kategorie musíte přesunout nebo odstranit všechny výukové cesty z této kategorie."
+
+msgid "Clear filters"
+msgstr "Vyčistit filtry"
+
+msgid "Attendances (tablet)"
+msgstr "Účasti (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Ukončit režim tabletu"
+
+msgid "No members found."
+msgstr "Žádní členové nenalezeni."
+
+msgid "Health check"
+msgstr "Kontrola zdraví"
+
+msgid "Export to CC 1.3"
+msgstr "Export do CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Načítání zdrojů..."
+
+msgid "Failed to load resources."
+msgstr "Selhání načítání zdrojů."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Vyberte nejméně jeden exportovatelný zdroj (dokument, webový odkaz, diskuse,...)."
+
+msgid "Export finished."
+msgstr "Export dokončen."
+
+msgid "Export failed."
+msgstr "Export selhal."
+
+msgid "Import failed."
+msgstr "Import selhal."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Lokální soubor (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Připraveno k importu"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Obnovíme zálohu do tohoto kurzu. Můžete se vrátit a změnit volby."
+
+msgid "Select resources to import"
+msgstr "Vybrat zdroje k importu"
+
+msgid "No resources available in this backup."
+msgstr "V této záloze nejsou k dispozici žádné zdroje."
+
+msgid "Import selection"
+msgstr "Výběr importu"
+
+msgid "Import completed"
+msgstr "Import dokončen"
+
+msgid "Could not load options."
+msgstr "Nelze načíst volby."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Vyberte zálohový soubor (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Vyberte zálohu ze serveru"
+
+msgid "Error selecting source."
+msgstr "Chyba při výběru zdroje."
+
+msgid "Recycling options"
+msgstr "Volby recyklace"
+
+msgid "Type the course code to confirm"
+msgstr "Zadejte kód kurzu pro potvrzení"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Toto odstraní nebo resetuje vybrané zdroje. Tuto akci nelze vrátit zpět."
+
+msgid "Select resources to recycle"
+msgstr "Vybrat zdroje k recyklaci"
+
+msgid "No resources available in this course."
+msgstr "V tomto kurzu nejsou k dispozici žádné zdroje."
+
+msgid "Recycle selected"
+msgstr "Recyklovat vybrané"
+
+msgid "Error loading resources."
+msgstr "Chyba při načítání zdrojů."
+
+msgid "Clear search"
+msgstr "Vyčistit vyhledávání"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "V názvu databáze jsou povoleny pouze písmena, číslice a podtržítko (_). Neplatné znaky budou automaticky odstraněny."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Jaké obecné podmínky používání této platformy jsou uživatelům poskytnuty?"
 

@@ -44,6 +44,22 @@ $filterOfficialCodeGet = isset($_GET['filter']) ? Security::remove_XSS($_GET['fi
 
 $url = api_get_self().'?'.api_get_cidreq().'&cat_id='.$categoryId.'&filter='.$filterOfficialCode;
 $courseInfo = api_get_course_info();
+$sessionId = api_get_session_id();
+$statusToFilter = empty($sessionId) ? STUDENT : 0;
+$courseLearners = CourseManager::getUserListFromCourseId(
+    api_get_course_int_id(),
+    $sessionId,
+    null,
+    null,
+    $statusToFilter
+);
+
+$courseLearnerIds = array_values(array_filter(array_unique(array_map(
+    static function (array $u): int {
+        return (int) ($u['user_id'] ?? $u['id'] ?? 0);
+    },
+    $courseLearners
+))));
 
 $filter = api_get_setting('certificate.certificate_filter_by_official_code');
 $userList = [];
@@ -63,22 +79,29 @@ if ('true' === $filter) {
 
     if ($form->validate()) {
         $officialCode = $form->getSubmitValue('filter');
-        if ('all' == $officialCode) {
-            $certificate_list = GradebookUtils::get_list_users_certificates($categoryId);
+
+        if ('all' === $officialCode) {
+            $certificate_list = GradebookUtils::get_list_users_certificates($categoryId, $courseLearnerIds);
         } else {
-            $userList = UserManager::getUsersByOfficialCode($officialCode);
-            if (!empty($userList)) {
-                $certificate_list = GradebookUtils::get_list_users_certificates(
-                    $categoryId,
-                    $userList
-                );
-            }
+            $rows = UserManager::getUsersByOfficialCode($officialCode);
+
+            $idsByCode = array_values(array_filter(array_unique(array_map(
+                static function (array $u): int {
+                    return (int) ($u['user_id'] ?? $u['id'] ?? 0);
+                },
+                $rows ?: []
+            ))));
+
+            // Only keep learners from this course/session
+            $finalIds = array_values(array_intersect($courseLearnerIds, $idsByCode));
+
+            $certificate_list = GradebookUtils::get_list_users_certificates($categoryId, $finalIds);
         }
     } else {
-        $certificate_list = GradebookUtils::get_list_users_certificates($categoryId);
+        $certificate_list = GradebookUtils::get_list_users_certificates($categoryId, $courseLearnerIds);
     }
 } else {
-    $certificate_list = GradebookUtils::get_list_users_certificates($categoryId);
+    $certificate_list = GradebookUtils::get_list_users_certificates($categoryId, $courseLearnerIds);
 }
 
 $content = '';
@@ -170,7 +193,13 @@ switch ($action) {
         }
         exit;
     case 'generate_all_certificates':
-        $userList = CourseManager::getUserListFromCourseId(api_get_course_int_id(), api_get_session_id());
+        $userList = CourseManager::getUserListFromCourseId(
+            api_get_course_int_id(),
+            api_get_session_id(),
+            null,
+            null,
+            $statusToFilter
+        );
         if (!empty($userList)) {
             foreach ($userList as $userInfo) {
                 if (INVITEE == $userInfo['status']) {
@@ -343,7 +372,7 @@ if (0 == count($certificate_list)) {
              * - If no Resource exists, use legacy path_certificate (HTML/PDF in /certificates/).
              * - Keep publish flag behavior; platform admins bypass publish.
              */
-            $isPublished = !empty($valueCertificate['publish']) || api_is_platform_admin();
+            $isPublished = !empty($valueCertificate['publish']) || api_is_allowed_to_edit() || api_is_platform_admin();
 
             $certRepo = Container::getGradeBookCertificateRepository();
             $router   = null;
@@ -384,7 +413,6 @@ if (0 == count($certificate_list)) {
                                     'catId'  => (int) $categoryId,
                                 ]);
                             } catch (\Throwable $e2) {
-                                // Route not found or wrong signature: leave $pdfUrl empty.
                                 error_log('[gradebook_display_certificate] PDF route resolution failed: '.$e2->getMessage());
                             }
                         }

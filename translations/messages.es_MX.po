@@ -8628,10 +8628,10 @@ msgid "."
 msgstr ","
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%d de %b, %Y"
 
 msgid "%A %B %d, %Y"
-msgstr "%A %B %d, %Y"
+msgstr "%d de %B de %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
 msgstr "%B %d, %Y a las %I:%M %p"
@@ -9465,7 +9465,7 @@ msgid "Not yet begun"
 msgstr "Aún no iniciado"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d de %B de %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Carpeta inválida: Por favor crea una carpeta con el nombre images en tu herramienta de documentos para que las imágenes puedan subirse en esta carpeta"
@@ -10925,8 +10925,8 @@ msgstr "es"
 msgid "The address of"
 msgstr "La dirección de"
 
-msgid "Your registration on"
-msgstr "Su inscripción en"
+msgid "Your registration on %s"
+msgstr "Su inscripción en %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "El nombre de usuario que eligió ya existe. Use el botón 'Atrás'  del navegador y elija uno diferente."
@@ -13920,10 +13920,10 @@ msgid "Learning paths"
 msgstr "Learning Path"
 
 msgid "level up"
-msgstr "level up"
+msgstr "subir de nivel"
 
 msgid "main category"
-msgstr "main category"
+msgstr "categoría principal"
 
 msgid "Add to the course links"
 msgstr "Agregar a los enlaces del curso"
@@ -13935,13 +13935,13 @@ msgid "Resources added"
 msgstr "Added new resources"
 
 msgid "External resources"
-msgstr "External resources"
+msgstr "Recursos externos"
 
 msgid "Course resources"
-msgstr "Course resources"
+msgstr "Recursos del curso"
 
 msgid "External link"
-msgstr "External link"
+msgstr "Enlace externo"
 
 msgid "Add the dropbox to this section."
 msgstr "Add the dropbox page to this chapter."
@@ -22088,7 +22088,7 @@ msgstr "Seleccionar con campo de texto"
 msgid "Triple select"
 msgstr "Selección triple"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Confirmas que realmente deseas inscribirte en esta plataforma."
 
 msgid "Add text"
@@ -22148,14 +22148,11 @@ msgstr "Confirmación de registro"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Tu cuenta está inactiva porque aún no la has confirmado. Revisa tu correo y sigue las instrucciones o haz clic en el siguiente enlace para reenviar el correo"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Para completar tu registro en la plataforma necesitas confirmar tu cuenta haciendo clic en el siguiente enlace"
 
 msgid "Confirmation for new account"
 msgstr "Confirmación para nueva cuenta"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Necesitas confirmar tu cuenta vía correo electrónico para acceder a la plataforma"
 
 msgid "Enable Cloud files link addition"
 msgstr "Habilitar adición de enlaces a archivos en la nube"
@@ -24992,9 +24989,6 @@ msgstr "Exportar todos los resultados de todas las pruebas"
 msgid "Click to view details"
 msgstr "Haz clic para ver detalles"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Este informe aplica a todas las actividades de la plataforma del usuario."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27551,7 +27545,7 @@ msgstr "Condiciones de uso de la plataforma"
 msgid "Password too easy to guess"
 msgstr "Contraseña demasiado fácil de adivinar"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Necesitas confirmar tu cuenta por correo electrónico para acceder a la plataforma"
 
 msgid "Redirect to portal home"
@@ -30526,13 +30520,13 @@ msgid "ex. root"
 msgstr "p. ej. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "CREAR TABLA works"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ALTER TABLE funciona"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "DROP COLUMN funciona"
 
 msgid "Theme selected as current"
 msgstr "Tema seleccionado como actual"
@@ -31202,4 +31196,247 @@ msgstr "Reiniciar cursos del administrador"
 
 msgid "Admin Dashboard"
 msgstr "Panel del administrador"
+
+msgid "Threads"
+msgstr "Hilos"
+
+msgid "Invalid thread"
+msgstr "Hilo inválido"
+
+msgid "View full thread"
+msgstr "Ver hilo completo"
+
+msgid "No post yet"
+msgstr "No hay publicaciones aún"
+
+msgid "Discussion thread"
+msgstr "Hilo de discusión"
+
+msgid "Access to this course"
+msgstr "Acceso a este curso"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Este complemento no tiene configuraciones ajustables. La activación se gestiona desde la lista de complementos."
+
+msgid "Private - access granted by privileged users"
+msgstr "Privado - acceso concedido por usuarios privilegiados"
+
+msgid "No detailed feedback is available for this question."
+msgstr "No hay retroalimentación detallada disponible para esta pregunta."
+
+msgid "Please select an answer before checking the result."
+msgstr "Selecciona una respuesta antes de verificar el resultado."
+
+msgid "Allow PDF export for this item"
+msgstr "Permitir exportación PDF para este elemento"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Ocultar usuarios gratuitos (no inscritos)"
+
+msgid "Question statistics"
+msgstr "Estadísticas de preguntas"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Generando archivo. No cierres esta pestaña..."
+
+msgid "Assign auth source to users"
+msgstr "Asignar fuente de autenticación a usuarios"
+
+msgid "There are no questions for this survey"
+msgstr "No hay preguntas para esta encuesta"
+
+msgid "Certificates report"
+msgstr "Reporte de certificados"
+
+msgid "Course picture"
+msgstr "Imagen del curso"
+
+msgid "Current picture"
+msgstr "Imagen actual"
+
+msgid "Course events log"
+msgstr "Registro de eventos del curso"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Actualiza la información de la categoría y su límite de tiempo opcional."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Crea un grupo lógico de sesiones para mantener organizado tu catálogo de formación."
+
+msgid "Generating file, do not close this tab"
+msgstr "Generando archivo, no cierres esta pestaña"
+
+msgid "Assign authentication sources to users"
+msgstr "Asignar fuentes de autenticación a usuarios"
+
+msgid "Average completion rate"
+msgstr "Tasa promedio de finalización"
+
+msgid "Average access rate"
+msgstr "Tasa promedio de acceso"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Esta tabla resume el progreso y actividad del aprendiz por ruta de aprendizaje en tus cursos actuales."
+
+msgid "Follow up"
+msgstr "Seguimiento"
+
+msgid "Tracking for superior"
+msgstr "Seguimiento para superior"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Este reporte muestra la distribución semanal de sesiones por coach general en el rango de fechas seleccionado."
+
+msgid "Head manager report"
+msgstr "Reporte de gerente principal"
+
+msgid "Reset or update user password"
+msgstr "Restablecer o actualizar contraseña de usuario"
+
+msgid "Active users"
+msgstr "Usuarios activos"
+
+msgid "Inactive users"
+msgstr "Usuarios inactivos"
+
+msgid "Report on resources"
+msgstr "Reporte de recursos"
+
+msgid "Global view"
+msgstr "Vista global"
+
+msgid "Available reports"
+msgstr "Reportes disponibles"
+
+msgid "Current report"
+msgstr "Reporte actual"
+
+msgid "Back to user assignment page"
+msgstr "Volver a la página de asignación de usuarios"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Fuentes de autenticación asignadas exitosamente"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Tip: elige “— Solo subir —” para guardar sin enviar a nadie."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Selecciona al menos un destinatario (“— Solo subir —” o cualquier usuario)"
+
+msgid "Sharing"
+msgstr "Compartir"
+
+msgid "Selected files"
+msgstr "Archivos seleccionados"
+
+msgid "Hide password"
+msgstr "Ocultar contraseña"
+
+msgid "Show password"
+msgstr "Mostrar contraseña"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Subir logo SVG para correos electrónicos"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Debes mover o eliminar todos los itinerarios de aprendizaje de esta categoría antes de eliminarla."
+
+msgid "Clear filters"
+msgstr "Limpiar filtros"
+
+msgid "Attendances (tablet)"
+msgstr "Asistencias (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Salir del modo tablet"
+
+msgid "No members found."
+msgstr "No se encontraron miembros."
+
+msgid "Health check"
+msgstr "Verificación de salud"
+
+msgid "Export to CC 1.3"
+msgstr "Exportar a CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Cargando recursos..."
+
+msgid "Failed to load resources."
+msgstr "Error al cargar recursos."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Selecciona al menos un recurso exportable (documento, enlace web, discusión,...)."
+
+msgid "Export finished."
+msgstr "Exportación terminada."
+
+msgid "Export failed."
+msgstr "Error en la exportación."
+
+msgid "Import failed."
+msgstr "Error en la importación."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Archivo local (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Listo para importar"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Restauraremos la copia de seguridad en este curso. Puedes regresar para cambiar opciones."
+
+msgid "Select resources to import"
+msgstr "Seleccionar recursos a importar"
+
+msgid "No resources available in this backup."
+msgstr "No hay recursos disponibles en esta copia de seguridad."
+
+msgid "Import selection"
+msgstr "Selección de importación"
+
+msgid "Import completed"
+msgstr "Importación completada"
+
+msgid "Could not load options."
+msgstr "No se pudieron cargar las opciones."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Selecciona un archivo de copia de seguridad (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Elige una copia de seguridad del servidor"
+
+msgid "Error selecting source."
+msgstr "Error al seleccionar la fuente."
+
+msgid "Recycling options"
+msgstr "Opciones de reciclaje"
+
+msgid "Type the course code to confirm"
+msgstr "Escribe el código del curso para confirmar"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Esto eliminará o restablecerá los recursos seleccionados. Esta acción no se puede deshacer."
+
+msgid "Select resources to recycle"
+msgstr "Seleccionar recursos a reciclar"
+
+msgid "No resources available in this course."
+msgstr "No hay recursos disponibles en este curso."
+
+msgid "Recycle selected"
+msgstr "Reciclar seleccionados"
+
+msgid "Error loading resources."
+msgstr "Error al cargar recursos."
+
+msgid "Clear search"
+msgstr "Limpiar búsqueda"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Solo se permiten letras, dígitos y guión bajo (_) en el nombre de la base de datos. Los caracteres inválidos se eliminarán automáticamente."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "¿Qué términos y condiciones generales se dan a los usuarios para usar esta plataforma?"
 

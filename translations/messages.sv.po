@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med vänliga hälsningar,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formel-exempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formel exempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervall"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:copyright,, nej:ingen copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapp,, application/msword:MsWord,, application/octet-stream:Octetströmmar,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapp,, application/msword:MsWord,, application/octet-stream:Okettström,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:övning,, simulation:simulering,, questionnaire:frågeställningar,, diagram:diagram,, figure:figur,, graph:graf,, index:index,, slide:slide,, table:bordläggning,, narrative text:berättartext,, exam:examen,, experiment:experiment,, problem statement:problemställning,, self assessment:självbedömning,, lecture:föreläsning"
@@ -2256,7 +2256,7 @@ msgid "Already in"
 msgstr "Redan inne"
 
 msgid "Check in"
-msgstr "Check in"
+msgstr "Checka in"
 
 msgid "The Moderator of this Conference has left the room."
 msgstr "Moderatorn för konferensen har lämnat rummet."
@@ -3150,7 +3150,7 @@ msgid "Edit Link"
 msgstr "Modifiera länk"
 
 msgid "CSV import"
-msgstr "CSV import"
+msgstr "CSV-import"
 
 msgid "CSV import file could not be opened (e.g. empty, too big)"
 msgstr "Importerad CSV kunde inte öppnas (den kan vara tom, för stor el. likn.)"
@@ -3309,7 +3309,7 @@ msgid "(recommended)"
 msgstr "(rekommenderad)"
 
 msgid "SCORM DB"
-msgstr "Scorm DB"
+msgstr "SCORM DB"
 
 msgid "Administrator last name"
 msgstr "Administratörens efternamn"
@@ -5598,7 +5598,7 @@ msgid "If you are using an LDAP server that does not support or accept anonymous
 msgstr "Om du använder LDAP-server som inte stöder anonym förfrågan kan du här fylla i det lösenord som isåfall ska användas."
 
 msgid "LDAP Import"
-msgstr "LDAP import"
+msgstr "LDAP-import"
 
 msgid "Notify subscribed users by e-mail"
 msgstr "Skicka meddelande till nya användare med e-post"
@@ -6744,7 +6744,7 @@ msgid "View this user"
 msgstr "Visa användaren"
 
 msgid "RSS feed"
-msgstr "Rss feed"
+msgstr "RSS-flöde"
 
 msgid "No friends in your contact list"
 msgstr "Inga vänner i din kontaktlista"
@@ -10925,8 +10925,8 @@ msgstr "är"
 msgid "The address of"
 msgstr "Adressen till"
 
-msgid "Your registration on"
-msgstr "Din registrering vid"
+msgid "Your registration on %s"
+msgstr "Din registrering vid %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Ditt anv�ndarnamn �r redan upptaget. Anv�nda webbl�saren tillbakaknapp och f�rs�k igen med ett annat."
@@ -13647,13 +13647,13 @@ msgid "Show all images in their original size. No resizing is done. Scrollbars w
 msgstr "Visa alla bilder i originalstorlek. Ingen storleksändring görs. Rullningslistar visas automatiskt om bilden är större än skärmstorleken."
 
 msgid "Show Thumbnails"
-msgstr "Show Thumbnails"
+msgstr "Visa miniatyrbilder"
 
 msgid "Gallery settings"
 msgstr "Set Slideshow Options"
 
 msgid "Slideshow Options"
-msgstr "Slideshow Options"
+msgstr "Bildspelsalternativ"
 
 msgid "NO RESIZING"
 msgstr "NO RESIZING (default)"
@@ -13668,7 +13668,7 @@ msgid "Published end date"
 msgstr "Publicerad slutdatum"
 
 msgid "View Slideshow"
-msgstr "View Slideshow"
+msgstr "Visa bildspel"
 
 msgid "My tasks"
 msgstr "Mina uppgifter"
@@ -13920,10 +13920,10 @@ msgid "Learning paths"
 msgstr "Inlärningsvägar"
 
 msgid "level up"
-msgstr "level up"
+msgstr "nivå upp"
 
 msgid "main category"
-msgstr "main category"
+msgstr "huvudkategori"
 
 msgid "Add to the course links"
 msgstr "Lägg till i kurslänkar"
@@ -13935,13 +13935,13 @@ msgid "Resources added"
 msgstr "Added new resources"
 
 msgid "External resources"
-msgstr "External resources"
+msgstr "Externa resurser"
 
 msgid "Course resources"
-msgstr "Course resources"
+msgstr "Kursresurser"
 
 msgid "External link"
-msgstr "External link"
+msgstr "Extern länk"
 
 msgid "Add the dropbox to this section."
 msgstr "Add the dropbox page to this chapter."
@@ -14688,7 +14688,7 @@ msgid "Chamilo homepage"
 msgstr "Chamilo startsida"
 
 msgid "Chamilo forum"
-msgstr "Chamilo forum"
+msgstr "Chamilo-forum"
 
 msgid "Chamilo extensions"
 msgstr "Chamilo-tillägg"
@@ -22088,7 +22088,7 @@ msgstr "Välj med textfält"
 msgid "Triple select"
 msgstr "Trippelvälj"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Du bekräftar att du verkligen vill anmäla dig till denna plattform."
 
 msgid "Add text"
@@ -22148,14 +22148,11 @@ msgstr "Registreringsbekräftelse"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Ditt konto är inaktivt eftersom du inte har bekräftat det ännu. Kontrollera din e-post och följ instruktionerna eller klicka på följande länk för att skicka e-posten igen"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "För att slutföra din plattformsregistrering behöver du bekräfta ditt konto genom att klicka på följande länk"
 
 msgid "Confirmation for new account"
 msgstr "Bekräftelse för nytt konto"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Du behöver bekräfta ditt konto via e-post för att komma åt plattformen"
 
 msgid "Enable Cloud files link addition"
 msgstr "Aktivera tillägg av molnfilslänkar"
@@ -24992,9 +24989,6 @@ msgstr "Exportera alla resultat från alla tester"
 msgid "Click to view details"
 msgstr "Klicka för att visa detaljer"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Denna rapport gäller alla plattformsaktiviteter för användaren."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27551,7 +27545,7 @@ msgstr "Plattformens användningsvillkor"
 msgid "Password too easy to guess"
 msgstr "Lösenordet är för lätt att gissa"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Du behöver bekräfta ditt konto via e-post för att få tillgång till plattformen"
 
 msgid "Redirect to portal home"
@@ -28783,7 +28777,7 @@ msgid "Diagnosis of user %s (language: %s) with link %s. Contact at %s"
 msgstr "Diagnos för användare %s (språk: %s) med länk %s. Kontakta på %s"
 
 msgid "%s support"
-msgstr "%s support"
+msgstr "%s-stöd"
 
 msgid "This option is not available because this activity is contained by an assessment."
 msgstr "Detta alternativ är inte tillgängligt eftersom denna aktivitet ingår i en bedömning."
@@ -30526,13 +30520,13 @@ msgid "ex. root"
 msgstr "t.ex. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "SKAPA TABELL verk"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ÄNDRA TABELL verk"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "TA BORT KOLUMN verk"
 
 msgid "Theme selected as current"
 msgstr "Tema valt som aktuellt"
@@ -30736,7 +30730,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (internt ID)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "Azure-ID (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Organisations-e-post"
@@ -31220,4 +31214,229 @@ msgstr "Diskussionstråd"
 
 msgid "Access to this course"
 msgstr "Tillgång till denna kurs"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Detta tillägg har inga konfigurerbara inställningar. Aktivering hanteras från listan över tillägg."
+
+msgid "Private - access granted by privileged users"
+msgstr "Privat - åtkomst beviljad av privilegierade användare"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Ingen detaljerad feedback finns tillgänglig för denna fråga."
+
+msgid "Please select an answer before checking the result."
+msgstr "Välj ett svar innan du kontrollerar resultatet."
+
+msgid "Allow PDF export for this item"
+msgstr "Tillåt PDF-export för detta objekt"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Dölj gratis användare (ej anmälda)"
+
+msgid "Question statistics"
+msgstr "Frågestatistik"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Genererar fil. Stäng inte denna flik..."
+
+msgid "Assign auth source to users"
+msgstr "Tilldela autentiseringskälla till användare"
+
+msgid "There are no questions for this survey"
+msgstr "Det finns inga frågor för denna undersökning"
+
+msgid "Certificates report"
+msgstr "Certifikatrapport"
+
+msgid "Course picture"
+msgstr "Kursbild"
+
+msgid "Current picture"
+msgstr "Nuvarande bild"
+
+msgid "Course events log"
+msgstr "Kursens händelseloggar"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Uppdatera kategorins information och dess valfria tidsgräns."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Skapa en logisk grupp sessioner för att hålla din träningskatalog organiserad."
+
+msgid "Generating file, do not close this tab"
+msgstr "Genererar fil, stäng inte denna flik"
+
+msgid "Assign authentication sources to users"
+msgstr "Tilldela autentiseringskällor till användare"
+
+msgid "Average completion rate"
+msgstr "Genomsnittlig slutförningsgrad"
+
+msgid "Average access rate"
+msgstr "Genomsnittlig åtkomstfrekvens"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Denna tabell summerar elevframsteg och aktivitet per inlärningsväg i dina aktuella kurser."
+
+msgid "Follow up"
+msgstr "Uppföljning"
+
+msgid "Tracking for superior"
+msgstr "Spårning för överordnad"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Denna rapport visar veckovis fördelning av sessioner per generell coach inom det valda datumintervallet."
+
+msgid "Head manager report"
+msgstr "Rapport för chef"
+
+msgid "Reset or update user password"
+msgstr "Återställ eller uppdatera användarlösenord"
+
+msgid "Active users"
+msgstr "Aktiva användare"
+
+msgid "Inactive users"
+msgstr "Inaktiva användare"
+
+msgid "Report on resources"
+msgstr "Rapport om resurser"
+
+msgid "Global view"
+msgstr "Global vy"
+
+msgid "Available reports"
+msgstr "Tillgängliga rapporter"
+
+msgid "Current report"
+msgstr "Aktuell rapport"
+
+msgid "Back to user assignment page"
+msgstr "Tillbaka till användaruppdragssidan"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Autentiseringskällor tilldelade framgångsrikt"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Tips: välj “— Bara ladda upp —” för att spara utan att skicka till någon."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Välj minst en mottagare (“— Bara ladda upp —” eller någon användare)"
+
+msgid "Sharing"
+msgstr "Dela"
+
+msgid "Selected files"
+msgstr "Valda filer"
+
+msgid "Hide password"
+msgstr "Dölj lösenord"
+
+msgid "Show password"
+msgstr "Visa lösenord"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Ladda upp SVG-logo för e-post"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Du måste flytta eller ta bort alla lärstigar från denna kategori innan du raderar den."
+
+msgid "Clear filters"
+msgstr "Rensa filter"
+
+msgid "Attendances (tablet)"
+msgstr "Deltagarlistor (platta)"
+
+msgid "Exit tablet mode"
+msgstr "Avsluta platteläge"
+
+msgid "No members found."
+msgstr "Inga medlemmar hittades."
+
+msgid "Health check"
+msgstr "Hälsokontroll"
+
+msgid "Export to CC 1.3"
+msgstr "Exportera till CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Laddar resurser..."
+
+msgid "Failed to load resources."
+msgstr "Kunde inte ladda resurser."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Välj minst en exporterbar resurs (dokument, webblänk, diskussion,...)."
+
+msgid "Export finished."
+msgstr "Export klar."
+
+msgid "Export failed."
+msgstr "Export misslyckades."
+
+msgid "Import failed."
+msgstr "Import misslyckades."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Lokal fil (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Redo att importera"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Vi kommer att återställa säkerhetskopian till denna kurs. Du kan gå tillbaka för att ändra alternativ."
+
+msgid "Select resources to import"
+msgstr "Välj resurser att importera"
+
+msgid "No resources available in this backup."
+msgstr "Inga resurser tillgängliga i denna säkerhetskopia."
+
+msgid "Import selection"
+msgstr "Importval"
+
+msgid "Import completed"
+msgstr "Import slutförd"
+
+msgid "Could not load options."
+msgstr "Kunde inte ladda alternativ."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Välj en säkerhetskopieringsfil (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Välj en säkerhetskopia från servern"
+
+msgid "Error selecting source."
+msgstr "Fel vid val av källa."
+
+msgid "Recycling options"
+msgstr "Återvinningsalternativ"
+
+msgid "Type the course code to confirm"
+msgstr "Skriv kurskoden för att bekräfta"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Detta kommer att ta bort eller återställa valda resurser. Denna åtgärd kan inte ångras."
+
+msgid "Select resources to recycle"
+msgstr "Välj resurser att återvinna"
+
+msgid "No resources available in this course."
+msgstr "Inga resurser tillgängliga i denna kurs."
+
+msgid "Recycle selected"
+msgstr "Återvinn valda"
+
+msgid "Error loading resources."
+msgstr "Fel vid laddning av resurser."
+
+msgid "Clear search"
+msgstr "Rensa sökning"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Endast bokstäver, siffror och understreck (_) är tillåtna i databasnamnet. Ogiltiga tecken kommer att tas bort automatiskt."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Vilka allmänna användarvillkor ges till användare för att använda denna plattform?"
 

@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Srdačno"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Primer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula primer: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Opsezi varijabli"
@@ -1558,7 +1558,7 @@ msgid "Back to normal screen"
 msgstr "Nazad na normalan ekran"
 
 msgid "Full screen"
-msgstr "Full screen"
+msgstr "Ceo ekran"
 
 msgid "Not attempted"
 msgstr "Bez pokušaja"
@@ -4144,7 +4144,7 @@ msgid "MySql Client"
 msgstr "MySql klijent"
 
 msgid "MySql Server"
-msgstr "MySql server"
+msgstr "MySql Server"
 
 msgid "Owner"
 msgstr "Vlasnik"
@@ -4159,7 +4159,7 @@ msgid "Backup"
 msgstr "Održavanje"
 
 msgid "Upgrade Chamilo"
-msgstr "Upgrade Chamilo"
+msgstr "Nadogradite Chamilo"
 
 msgid "Website"
 msgstr "Web"
@@ -4351,7 +4351,7 @@ msgid "Production Server"
 msgstr "Produkcioni server"
 
 msgid "Test Server"
-msgstr "Test server"
+msgstr "Test Server"
 
 msgid "Who's Online"
 msgstr "Ko je Online"
@@ -7204,7 +7204,7 @@ msgid "back to normal screen"
 msgstr "povratak na normalan ekran"
 
 msgid "full screen"
-msgstr "full screen"
+msgstr "ceo ekran"
 
 msgid "There was a"
 msgstr "Bila je"
@@ -8629,10 +8629,10 @@ msgid "."
 msgstr "."
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%d. %b %Y."
 
 msgid "%A %B %d, %Y"
-msgstr "%A %B %d, %Y"
+msgstr "%A, %d. %B %Y."
 
 msgid "%B %d, %Y at %I:%M %p"
 msgstr "%B %d, %Y у %I:%M %p"
@@ -10926,8 +10926,8 @@ msgstr "je"
 msgid "The address of"
 msgstr "Adresa"
 
-msgid "Your registration on"
-msgstr "Vaša prijava na"
+msgid "Your registration on %s"
+msgstr "Vaša prijava na %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Ovo korisničko ime je već zauzeto. Upotrebite dugme Back va�eg pretra�ivača i izaberite drugo."
@@ -15094,7 +15094,7 @@ msgid "Data sent"
 msgstr "Podaci poslati"
 
 msgid "Download link"
-msgstr "Download link"
+msgstr "Link za preuzimanje"
 
 msgid "Assignments received"
 msgstr "Fajl već dostavljen"
@@ -16189,7 +16189,7 @@ msgid "Quarterly report"
 msgstr "Kvartalni izveštaj"
 
 msgid "%d %B %Y"
-msgstr "%d %B %Y"
+msgstr "%d. %B %Y."
 
 msgid "%A"
 msgstr "%A"
@@ -20536,7 +20536,7 @@ msgid "Input size of box to fill"
 msgstr "Unesite veličinu polja za popunjavanje"
 
 msgid "MM dd, yy"
-msgstr "MM dd, yy"
+msgstr "dd.MM.yy"
 
 msgid "HH:mm"
 msgstr "HH:mm"
@@ -22089,7 +22089,7 @@ msgstr "Izaberi sa tekst poljem"
 msgid "Triple select"
 msgstr "Trostruko izaberi"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Potvrđujete da zaista želite da se upišete na ovu platformu."
 
 msgid "Add text"
@@ -22149,14 +22149,11 @@ msgstr "Potvrda registracije"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Vaš nalog je neaktivan jer ga još uvek niste potvrdili. Proverite svoju e-poštu i pratite uputstva ili kliknite na sledeći link da ponovo pošaljete e-poštu"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Da biste završili registraciju na platformi, morate potvrditi svoj nalog klikom na sledeći link"
 
 msgid "Confirmation for new account"
 msgstr "Potvrda za novi nalog"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Morate potvrditi svoj nalog e-poštom da biste pristupili platformi"
 
 msgid "Enable Cloud files link addition"
 msgstr "Omogući dodavanje linkova ka Cloud fajlovima"
@@ -22231,7 +22228,7 @@ msgid "Session template"
 msgstr "Šablon sesije"
 
 msgid "Cloud file link"
-msgstr "Cloud file link"
+msgstr "Link ka oblaka datoteke"
 
 msgid "Reset %s"
 msgstr "Resetuj %s"
@@ -24993,9 +24990,6 @@ msgstr "Izvezi sve rezultate svih testova"
 msgid "Click to view details"
 msgstr "Kliknite za pregled detalja"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Ovaj izveštaj se odnosi na sve aktivnosti korisnika na platformi."
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27552,7 +27546,7 @@ msgstr "Uslovi korišćenja platforme"
 msgid "Password too easy to guess"
 msgstr "Lozinka je previše laka za pogađanje"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Morate potvrditi nalog putem e-pošte da biste pristupili platformi"
 
 msgid "Redirect to portal home"
@@ -30527,13 +30521,13 @@ msgid "ex. root"
 msgstr "npr. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "CREATE TABLE radovi"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ALTER TABLE radovi"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "DROP COLUMN radovi"
 
 msgid "Theme selected as current"
 msgstr "Tema postavljena kao trenutna"
@@ -31221,4 +31215,229 @@ msgstr "Nit diskusije"
 
 msgid "Access to this course"
 msgstr "Pristup ovom kursu"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Ovaj dodatak nema podešavane opcije. Aktivacija se upravlja sa liste dodataka."
+
+msgid "Private - access granted by privileged users"
+msgstr "Privatno - pristup dozvoljen privilegovanim korisnicima"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Nema detaljne povratne informacije za ovo pitanje."
+
+msgid "Please select an answer before checking the result."
+msgstr "Molimo izaberite odgovor pre provere rezultata."
+
+msgid "Allow PDF export for this item"
+msgstr "Dozvoli PDF izvoz za ovu stavku"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Sakrij besplatne korisnike (neupisane)"
+
+msgid "Question statistics"
+msgstr "Statistika pitanja"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Generisanje datoteke. Nemojte zatvarati ovu karticu..."
+
+msgid "Assign auth source to users"
+msgstr "Dodeli izvor autentifikacije korisnicima"
+
+msgid "There are no questions for this survey"
+msgstr "Nema pitanja za ovu anketu"
+
+msgid "Certificates report"
+msgstr "Izveštaj o sertifikatima"
+
+msgid "Course picture"
+msgstr "Slika kursa"
+
+msgid "Current picture"
+msgstr "Trenutna slika"
+
+msgid "Course events log"
+msgstr "Dnevnik događaja kursa"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Ažurirajte informacije o kategoriji i opciono vremensko ograničenje."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Kreirajte logičku grupu sesija da biste organizovali katalog obuke."
+
+msgid "Generating file, do not close this tab"
+msgstr "Generisanje datoteke, nemojte zatvarati ovu karticu"
+
+msgid "Assign authentication sources to users"
+msgstr "Dodeli izvore autentifikacije korisnicima"
+
+msgid "Average completion rate"
+msgstr "Prosečna stopa završetka"
+
+msgid "Average access rate"
+msgstr "Prosečna stopa pristupa"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Ova tabela sumira napredak i aktivnost učenika po stazi učenja u vašim trenutnim kursevima."
+
+msgid "Follow up"
+msgstr "Praćenje"
+
+msgid "Tracking for superior"
+msgstr "Praćenje za nadređenog"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Ovaj izveštaj prikazuje nedeljnu distribuciju sesija po glavnom treneru u izabranom vremenskom periodu."
+
+msgid "Head manager report"
+msgstr "Izveštaj glavnog menadžera"
+
+msgid "Reset or update user password"
+msgstr "Resetuj ili ažuriraj lozinku korisnika"
+
+msgid "Active users"
+msgstr "Aktivni korisnici"
+
+msgid "Inactive users"
+msgstr "Neaktivni korisnici"
+
+msgid "Report on resources"
+msgstr "Izveštaj o resursima"
+
+msgid "Global view"
+msgstr "Globalni pregled"
+
+msgid "Available reports"
+msgstr "Dostupni izveštaji"
+
+msgid "Current report"
+msgstr "Trenutni izveštaj"
+
+msgid "Back to user assignment page"
+msgstr "Nazad na stranu dodela korisnika"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Izvori autentifikacije uspešno dodeljeni"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Savet: izaberite „— Samo otpremi —“ za čuvanje bez slanja bilo kome."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Molimo izaberite bar jednog primaoca („— Samo otpremi —“ ili bilo kog korisnika)"
+
+msgid "Sharing"
+msgstr "Podela"
+
+msgid "Selected files"
+msgstr "Izabrane datoteke"
+
+msgid "Hide password"
+msgstr "Sakrij lozinku"
+
+msgid "Show password"
+msgstr "Prikaži lozinku"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Otpremi SVG logo za e-poruke"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Morate premestiti ili ukloniti sve staze učenja iz ove kategorije pre nego što je obrišete."
+
+msgid "Clear filters"
+msgstr "Očisti filtere"
+
+msgid "Attendances (tablet)"
+msgstr "Prisustva (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Izađi iz tabletnog režima"
+
+msgid "No members found."
+msgstr "Nisu pronađeni članovi."
+
+msgid "Health check"
+msgstr "Provera zdravlja"
+
+msgid "Export to CC 1.3"
+msgstr "Izvezi u CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Učitavanje resursa..."
+
+msgid "Failed to load resources."
+msgstr "Neuspešno učitavanje resursa."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Molimo izaberite bar jedan izvozivi resurs (dokument, veb link, diskusija,...)."
+
+msgid "Export finished."
+msgstr "Izvoz završen."
+
+msgid "Export failed."
+msgstr "Izvoz neuspešan."
+
+msgid "Import failed."
+msgstr "Uvoz neuspešan."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Lokalna datoteka (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Spremno za uvoz"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Učitaćemo rezervnu kopiju u ovaj kurs. Možete se vratiti da promenite opcije."
+
+msgid "Select resources to import"
+msgstr "Izaberite resurse za uvoz"
+
+msgid "No resources available in this backup."
+msgstr "Nema dostupnih resursa u ovoj rezervnoj kopiji."
+
+msgid "Import selection"
+msgstr "Izbor za uvoz"
+
+msgid "Import completed"
+msgstr "Uvoz završen"
+
+msgid "Could not load options."
+msgstr "Ne mogu učitati opcije."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Molimo izaberite rezervnu kopiju (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Molimo izaberite rezervnu kopiju sa servera"
+
+msgid "Error selecting source."
+msgstr "Greška pri izboru izvora."
+
+msgid "Recycling options"
+msgstr "Opcije za reciklažu"
+
+msgid "Type the course code to confirm"
+msgstr "Utipkajte kod kursa za potvrdu"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Ovo će ukloniti ili resetovati izabrane resurse. Ova radnja se ne može poništiti."
+
+msgid "Select resources to recycle"
+msgstr "Izaberite resurse za reciklažu"
+
+msgid "No resources available in this course."
+msgstr "Nema dostupnih resursa u ovom kursu."
+
+msgid "Recycle selected"
+msgstr "Recikliraj izabrano"
+
+msgid "Error loading resources."
+msgstr "Greška pri učitavanju resursa."
+
+msgid "Clear search"
+msgstr "Očisti pretragu"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "U nazivu baze podataka su dozvoljena samo slova, cifre i donja crta (_). Neispravni znakovi će biti automatski uklonjeni."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Koji opšti uslovi korišćenja se daju korisnicima za korišćenje ove platforme?"
 

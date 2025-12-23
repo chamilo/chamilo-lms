@@ -9,7 +9,7 @@ use ChamiloSession as Session;
  * Exercise administration
  * This script allows to manage (create, modify) an exercise and its questions.
  *
- *  Following scripts are includes for a best code understanding :
+ * Following scripts are includes for a best code understanding :
  *
  * - exercise.class.php : for the creation of an Exercise object
  * - question.class.php : for the creation of a Question object
@@ -49,6 +49,7 @@ $this_section = SECTION_COURSES;
 if (isset($_GET['r']) && 1 == $_GET['r']) {
     Exercise::cleanSessionVariables();
 }
+
 // Access control
 api_protect_course_script(true);
 
@@ -65,13 +66,15 @@ $exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : 0;
 if (0 === $exerciseId && isset($_POST['exerciseId'])) {
     $exerciseId = (int) $_POST['exerciseId'];
 }
+
 $newQuestion = $_GET['newQuestion'] ?? 0;
 $modifyAnswers = $_GET['modifyAnswers'] ?? 0;
 $editQuestion = $_GET['editQuestion'] ?? 0;
-$page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
+$page = isset($_REQUEST['page']) ? max(1, (int) $_REQUEST['page']) : 1;
 $modifyQuestion = $_GET['modifyQuestion'] ?? 0;
 $deleteQuestion = $_GET['deleteQuestion'] ?? 0;
 $cloneQuestion = $_REQUEST['clone_question'] ?? 0;
+
 if (empty($questionId)) {
     $questionId = Session::read('questionId');
 }
@@ -86,7 +89,7 @@ $modifyIn = $modifyIn ?? null;
 $cancelQuestion = $cancelQuestion ?? null;
 
 /* Cleaning all incomplete attempts of the admin/teacher to avoid weird problems
-    when changing the exercise settings, number of questions, etc */
+   when changing the exercise settings, number of questions, etc */
 Event::delete_all_incomplete_attempts(
     api_get_user_id(),
     $exerciseId,
@@ -98,10 +101,33 @@ Event::delete_all_incomplete_attempts(
 $objExercise = Session::read('objExercise');
 $objQuestion = Session::read('objQuestion');
 
+/**
+ * IMPORTANT:
+ * admin.php must allow editing/creating questions without an exercise context.
+ * This is required by the global question bank (and question pool) use-case where
+ * exerciseId=0 but editQuestion/newQuestion is provided.
+ *
+ * Without this, the script redirects to exercise.php because objExercise is empty,
+ * which makes the behavior depend on an existing session state.
+ */
+$isStandaloneQuestionFlow = (0 === (int) $exerciseId) && (
+        !empty($editQuestion) || !empty($newQuestion)
+    );
+
+if ($isStandaloneQuestionFlow && !($objExercise instanceof Exercise)) {
+    // Create a minimal Exercise context to avoid redirecting to the test list.
+    $objExercise = new Exercise();
+    $objExercise->course_id = api_get_course_int_id();
+    $objExercise->course = api_get_course_info();
+    $objExercise->sessionId = $sessionId;
+    Session::write('objExercise', $objExercise);
+}
+
 if (isset($_REQUEST['convertAnswer'])) {
     $objQuestion = $objQuestion->swapSimpleAnswerTypes();
     Session::write('objQuestion', $objQuestion);
 }
+
 $objAnswer = Session::read('objAnswer');
 $_course = api_get_course_info();
 
@@ -131,6 +157,7 @@ if (!($objExercise instanceof Exercise)) {
         Session::write('objExercise', $objExercise);
     }
 }
+
 // Exercise can be edited in their course.
 if (empty($objExercise)) {
     Session::erase('objExercise');
@@ -143,8 +170,9 @@ if ($objExercise->sessionId != $sessionId) {
     api_not_allowed(true);
 }
 
-// doesn't select the exercise ID if we come from the question pool
-if (!$fromExercise) {
+// doesn't select the exercise ID if we come from the question pool / global bank
+// (avoid forcing modifyExercise='yes' when exerciseId=0)
+if ($exerciseId > 0 && !$fromExercise) {
     // gets the right exercise ID, and if 0 creates a new exercise
     if (!$exerciseId = $objExercise->getId()) {
         $modifyExercise = 'yes';
@@ -201,30 +229,80 @@ if ($cancelQuestion) {
     }
 }
 
-if (!empty($cloneQuestion) && !empty($objExercise->getId())) {
+if (!empty($cloneQuestion)) {
+    $cloneQuestion = (int) $cloneQuestion;
+
+    // Determine destination exercise id (if any)
+    $targetExerciseId = 0;
+    if (!empty($exerciseId)) {
+        $targetExerciseId = (int) $exerciseId;
+    } elseif ($objExercise instanceof Exercise && (int) $objExercise->getId() > 0) {
+        $targetExerciseId = (int) $objExercise->getId();
+    }
+
     $oldQuestionObj = Question::read($cloneQuestion);
+    if (!$oldQuestionObj) {
+        Display::addFlash(Display::return_message(get_lang('Question not found'), 'error'));
+        exit;
+    }
+
     $oldQuestionObj->question = $oldQuestionObj->question.' - '.get_lang('Copy');
 
-    $newId = $oldQuestionObj->duplicate(api_get_course_info());
-    $newQuestionObj = Question::read($newId);
-    $newQuestionObj->addToList($exerciseId);
+    try {
+        $newId = $oldQuestionObj->duplicate(api_get_course_info());
+    } catch (Throwable $e) {
+        Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
+        exit;
+    }
 
-    // Save category to the destination course
+    $newId = (int) $newId;
+    if ($newId <= 0) {
+        Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
+        exit;
+    }
+
+    $newQuestionObj = Question::read($newId);
+    if (!$newQuestionObj) {
+        Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
+        exit;
+    }
+
+    // Attach to exercise only if we have a valid target exercise id
+    if ($targetExerciseId > 0) {
+        $newQuestionObj->addToList($targetExerciseId);
+    }
+
+    // Save category to the destination course (always)
     if (!empty($oldQuestionObj->category)) {
         $newQuestionObj->saveCategory($oldQuestionObj->category);
     }
 
-    // This should be moved to the duplicate function
-    $newAnswerObj = new Answer($cloneQuestion);
-    $newAnswerObj->read();
-    $newAnswerObj->duplicate($newQuestionObj);
+    // Duplicate answers
+    try {
+        $newAnswerObj = new Answer($cloneQuestion);
+        $newAnswerObj->read();
+        $newAnswerObj->duplicate($newQuestionObj);
+    } catch (Throwable $e) {
+        error_log('[exercise] clone_question exception during answers duplicate(): '.$e->getMessage());
+    }
 
-    // Reloading tne $objExercise obj
-    $objExercise->read($objExercise->getId(), false);
+    // Reload exercise if we cloned inside a test
+    if ($targetExerciseId > 0) {
+        if (!($objExercise instanceof Exercise)) {
+            $objExercise = new Exercise();
+        }
+        $objExercise->read($targetExerciseId, false);
+        Session::write('objExercise', $objExercise);
+    }
 
     Display::addFlash(Display::return_message(get_lang('Item copied')));
 
-    header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId().'&page='.$page);
+    // Redirect depending on context
+    if ($targetExerciseId > 0) {
+        header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$targetExerciseId.'&page='.$page);
+    } else {
+        header('Location: question_pool.php?'.api_get_cidreq().'&page='.$page);
+    }
     exit;
 }
 
@@ -252,15 +330,25 @@ $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq(),
     'name' => get_lang('Tests'),
 ];
+
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
+    // When editing a question without a real exercise, avoid relying on selectTitle()
+    $exerciseTitle = get_lang('Questions');
+    $exerciseLink = '#';
+
+    if ($objExercise instanceof Exercise && (int) $objExercise->getId() > 0) {
+        $exerciseTitle = $objExercise->selectTitle(true);
+        $exerciseLink = api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$objExercise->getId().'&'.api_get_cidreq();
+    }
+
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$objExercise->getId().'&'.api_get_cidreq(),
-        'name' => $objExercise->selectTitle(true),
+        'url' => $exerciseLink,
+        'name' => $exerciseTitle,
     ];
 } else {
     $interbreadcrumb[] = [
         'url' => '#',
-        'name' => $objExercise->selectTitle(true),
+        'name' => ($objExercise instanceof Exercise) ? $objExercise->selectTitle(true) : get_lang('Tests'),
     ];
 }
 
@@ -358,7 +446,7 @@ if ($inATest) {
         );
     }
 
-    $isHotspotEdit = is_object($objQuestion) && in_array((int)$objQuestion->selectType(), [HOT_SPOT, HOT_SPOT_COMBINATION, HOT_SPOT_DELINEATION], true);
+    $isHotspotEdit = is_object($objQuestion) && in_array((int) $objQuestion->selectType(), [HOT_SPOT, HOT_SPOT_COMBINATION, HOT_SPOT_DELINEATION], true);
     $alert = '';
     if (false === $showPagination && !$isHotspotEdit) {
         $originalSelectionType = $objExercise->questionSelectionType;
@@ -443,7 +531,9 @@ if ($inATest) {
             $i = 0;
             foreach ($weights as $w) {
                 $maxScoreSelected += $w;
-                if (++$i >= $limit) { break; }
+                if (++$i >= $limit) {
+                    break;
+                }
             }
 
             $alert .= '<br />'.sprintf(

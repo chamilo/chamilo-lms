@@ -681,8 +681,34 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $content = $this->normalizeGeneratedHtml($content);
 
         $tool = (string) $request->attributes->get('tool');
-
         if ('document' !== $tool) {
+            return $content;
+        }
+
+        // Global kill switch (applies to all tools/contexts)
+        $settingsManager = $this->getSettingsManager();
+        $modeRaw = (string) $settingsManager->getSetting('glossary.show_glossary_in_extra_tools', true);
+        $mode = strtolower(trim($modeRaw));
+
+        if (\in_array($mode, ['', 'none', 'false', '0'], true)) {
+            return $content;
+        }
+
+        // Detect when this document is being displayed from a Learning Path context
+        $origin = strtolower(trim((string) $request->query->get('origin', '')));
+        $isLpContext =
+            $request->query->has('lp_id')
+            || $request->query->has('learnpath_id')
+            || $request->query->has('learnpath_item_id')
+            || ('learnpath' === $origin);
+
+        // Only inject for LP when the mode allows it
+        if ($isLpContext) {
+            if (!\in_array($mode, ['true', 'lp', 'exercise_and_lp'], true)) {
+                return $content;
+            }
+        } else {
+            // Do not inject in the standalone Documents tool (prevents unwanted highlights outside LP/exercises)
             return $content;
         }
 

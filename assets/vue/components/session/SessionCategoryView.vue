@@ -26,9 +26,9 @@ const displayMode = computed(() => platformConfigStore.getSetting("session.user_
 
   <template v-else>
     <SessionListView
-      :uncategorized-sessions="uncategorizedSessions"
       :categories="categories"
       :categories-with-sessions="categoriesWithSessions"
+      :uncategorized-sessions="uncategorizedSessions"
     />
   </template>
 </template>

@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":evet:telif hakkı,, hayır:telif hakkı yok"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Klasör,, application/msword:MsWord,, application/octet-stream:Octet akış,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Klasör,, application/msword:MsWord,, application/octet-stream:Octet akışı,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":egzersiz:egzersiz,,      simülasyon:simülasyon,,      anket:anket,,      diyagram:diyagram,,      şekil:şekil,,      grafik:grafik,,      indeks:indeks,,      slayt:slayt,,      tablo:tablo,,      anlatı metni:anlatı metni,,      sınav:sınav,,      deney:deney,,      problem ifadesi:problem ifadesi,,      öz değerlendirme:öz değerlendirme,,      ders:ders"
@@ -2133,7 +2133,7 @@ msgid "Create a backup. You can select the learning objects to integrate in the 
 msgstr "Yedek oluştur. Yedek dosyaya dahil edilecek öğrenme nesnelerini seçebilirsiniz."
 
 msgid "Tool introduction"
-msgstr "Tool introduction"
+msgstr "Araç tanıtımı"
 
 msgid "Upload failed, please check maximum file size limits and folder rights."
 msgstr "Yükleme başarısız oldu. Lütfen maksimum dosya boyutunu ve klasör haklarını kontrol ediniz"
@@ -2484,7 +2484,7 @@ msgid "General introduction to project management"
 msgstr "General introduction to philosophy and methodology principles"
 
 msgid "Street interviews"
-msgstr "Street interviews"
+msgstr "Sokak röportajları"
 
 msgid "Quick and powerful search engine"
 msgstr "Quick and powerfull search engine"
@@ -2694,7 +2694,7 @@ msgid "---Just upload---"
 msgstr "--SadeceGönder--"
 
 msgid "Nothing for"
-msgstr "Nothing for"
+msgstr "İçin hiçbir şey"
 
 msgid "(not registered to this course)"
 msgstr "(bu derse kayıtlı değil)"
@@ -2703,7 +2703,7 @@ msgid "sent to"
 msgstr "gideceği yer"
 
 msgid "is for"
-msgstr "is for"
+msgstr "için"
 
 msgid "Click a keyword in the tree to select or deselect it."
 msgstr "Seçmek veya seçimi iptal için bir anahtar kelimeye tıklayın"
@@ -3219,7 +3219,7 @@ msgid "ex."
 msgstr "örn."
 
 msgid "Database Host"
-msgstr "Database Host"
+msgstr "Veritabanı Sunucusu"
 
 msgid "Database user"
 msgstr "Veritabanı Kullanıcı Adı"
@@ -3309,7 +3309,7 @@ msgid "(recommended)"
 msgstr "(tavsiye edilen)"
 
 msgid "SCORM DB"
-msgstr "Scorm DB"
+msgstr "SCORM DB"
 
 msgid "Administrator last name"
 msgstr "Yönetici soyadı"
@@ -4659,7 +4659,7 @@ msgid "Insert this link"
 msgstr "Bu bağlantıyı ekle"
 
 msgid "First place"
-msgstr "First place"
+msgstr "Birinci yer"
 
 msgid "Dropbox: allow group"
 msgstr "GelenKutusu: grup izni"
@@ -9465,7 +9465,7 @@ msgid "Not yet begun"
 msgstr "Henüz başlamadı"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d %B %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Geçersiz klasör: Belgeler aracınızda images adlı bir klasör oluşturun ki resimler bu klasöre yüklenebilsin"
@@ -10925,11 +10925,11 @@ msgstr "dır"
 msgid "The address of"
 msgstr "Adres"
 
-msgid "Your registration on"
-msgstr "Kaydınız"
+msgid "Your registration on %s"
+msgstr "Kaydınız %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
-msgstr "Bu kullan�c� ad� daha �nce al�nm��t�r. Geri d�n�p ba�ka bir ad yaz�n�z."
+msgstr "Bu giriş adı zaten alınmış. Tarayıcınızın geri düğmesine basın ve başka birini seçin."
 
 msgid "You left some fields empty. Use your browser's back button and try again."
 msgstr "Bazı alanları boş bıraktınız. Geri dönüp doldurunuz."
@@ -13920,10 +13920,10 @@ msgid "Learning paths"
 msgstr "Kurs yolu"
 
 msgid "level up"
-msgstr "level up"
+msgstr "seviye atla"
 
 msgid "main category"
-msgstr "main category"
+msgstr "ana kategori"
 
 msgid "Add to the course links"
 msgstr "Ders bağlantılarına ekle"
@@ -13935,13 +13935,13 @@ msgid "Resources added"
 msgstr "Added new resources"
 
 msgid "External resources"
-msgstr "External resources"
+msgstr "Dış kaynaklar"
 
 msgid "Course resources"
-msgstr "Course resources"
+msgstr "Ders kaynakları"
 
 msgid "External link"
-msgstr "External link"
+msgstr "Dış bağlantı"
 
 msgid "Add the dropbox to this section."
 msgstr "Add the dropbox page to this chapter."
@@ -22088,7 +22088,7 @@ msgstr "Metin alanı ile seç"
 msgid "Triple select"
 msgstr "Üçlü seç"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Bu platforma gerçekten abone olmak istediğinizi onaylıyorsunuz."
 
 msgid "Add text"
@@ -22148,14 +22148,11 @@ msgstr "Kayıt onayı"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Hesabınız henüz onaylanmadığı için pasif durumda. E-postanızı kontrol edin ve talimatları izleyin veya e-postayı yeniden göndermek için aşağıdaki bağlantıya tıklayın"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Platform kaydınızı tamamlamak için aşağıdaki bağlantıya tıklayarak hesabınızı onaylamanız gerekiyor"
 
 msgid "Confirmation for new account"
 msgstr "Yeni hesap onayı"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Platforma erişmek için hesabınızı e-posta ile onaylamanız gerekiyor"
 
 msgid "Enable Cloud files link addition"
 msgstr "Bulut dosyası bağlantısı eklemeyi etkinleştir"
@@ -24992,9 +24989,6 @@ msgstr "Tüm testlerin tüm sonuçlarını dışa aktar"
 msgid "Click to view details"
 msgstr "Detayları görmek için tıklayın"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "Bu rapor kullanıcının platformdaki tüm etkinliklerine uygulanır."
-
 msgid "dd/mm/yyyy"
 msgstr "gg/aa/yyyy"
 
@@ -27551,7 +27545,7 @@ msgstr "Platform kullanım koşulları"
 msgid "Password too easy to guess"
 msgstr "Şifre tahmin edilmesi çok kolay"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Platforma erişmek için hesabınızı e-posta ile onaylamanız gerekiyor"
 
 msgid "Redirect to portal home"
@@ -31220,4 +31214,229 @@ msgstr "Tartışma konusu"
 
 msgid "Access to this course"
 msgstr "Bu kursa erişim"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Bu eklentinin yapılandırılabilir ayarı yoktur. Etkinleştirme eklentiler listesinden yönetilir."
+
+msgid "Private - access granted by privileged users"
+msgstr "Özel - ayrıcalıklı kullanıcılar tarafından erişim verilir"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Bu soru için ayrıntılı geri bildirim mevcut değil."
+
+msgid "Please select an answer before checking the result."
+msgstr "Sonucu kontrol etmeden önce bir cevap seçin."
+
+msgid "Allow PDF export for this item"
+msgstr "Bu öğe için PDF dışa aktarmaya izin ver"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Ücretsiz kullanıcıları gizle (kaydedilmemiş)"
+
+msgid "Question statistics"
+msgstr "Soru istatistikleri"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Dosya oluşturuluyor. Bu sekmeyi kapatmayın..."
+
+msgid "Assign auth source to users"
+msgstr "Kullanıcılara kimlik doğrulama kaynağı ata"
+
+msgid "There are no questions for this survey"
+msgstr "Bu anket için soru yok"
+
+msgid "Certificates report"
+msgstr "Sertifika raporu"
+
+msgid "Course picture"
+msgstr "Ders resmi"
+
+msgid "Current picture"
+msgstr "Mevcut resim"
+
+msgid "Course events log"
+msgstr "Ders etkinlik günlüğü"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Kategori bilgilerini ve isteğe bağlı zaman sınırını güncelleyin."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Eğitim kataloğunuzu düzenli tutmak için oturumların mantıksal bir grubunu oluşturun."
+
+msgid "Generating file, do not close this tab"
+msgstr "Dosya oluşturuluyor, bu sekmeyi kapatmayın"
+
+msgid "Assign authentication sources to users"
+msgstr "Kullanıcılara kimlik doğrulama kaynakları ata"
+
+msgid "Average completion rate"
+msgstr "Ortalama tamamlama oranı"
+
+msgid "Average access rate"
+msgstr "Ortalama erişim oranı"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Bu tablo mevcut derslerinizdeki her öğrenme yolu için öğrenen ilerlemesini ve etkinliğini özetler."
+
+msgid "Follow up"
+msgstr "Takip"
+
+msgid "Tracking for superior"
+msgstr "Üst için takip"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Bu rapor, seçilen tarih aralığında genel antrenör başına oturumların haftalık dağılımını gösterir."
+
+msgid "Head manager report"
+msgstr "Baş yönetici raporu"
+
+msgid "Reset or update user password"
+msgstr "Kullanıcı şifresini sıfırla veya güncelle"
+
+msgid "Active users"
+msgstr "Aktif kullanıcılar"
+
+msgid "Inactive users"
+msgstr "Etkin olmayan kullanıcılar"
+
+msgid "Report on resources"
+msgstr "Kaynaklar raporu"
+
+msgid "Global view"
+msgstr "Genel görünüm"
+
+msgid "Available reports"
+msgstr "Mevcut raporlar"
+
+msgid "Current report"
+msgstr "Mevcut rapor"
+
+msgid "Back to user assignment page"
+msgstr "Kullanıcı atama sayfasına dön"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Kimlik doğrulama kaynakları başarıyla atandı"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "İpucu: Kimseye göndermeden saklamak için “— Yükle —” seçin."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "En az bir alıcı seçin (“— Yükle —” veya herhangi bir kullanıcı)"
+
+msgid "Sharing"
+msgstr "Paylaşım"
+
+msgid "Selected files"
+msgstr "Seçilen dosyalar"
+
+msgid "Hide password"
+msgstr "Şifreyi gizle"
+
+msgid "Show password"
+msgstr "Şifreyi göster"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "E-postalar için SVG logo yükle"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Silmeden önce bu kategoriden tüm öğrenme yollarını taşımanız veya kaldırmanız gerekir."
+
+msgid "Clear filters"
+msgstr "Filtreleri temizle"
+
+msgid "Attendances (tablet)"
+msgstr "Devam Çizelgeleri (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Tablet modundan çık"
+
+msgid "No members found."
+msgstr "Üye bulunamadı."
+
+msgid "Health check"
+msgstr "Sağlık kontrolü"
+
+msgid "Export to CC 1.3"
+msgstr "CC 1.3'e Dışa Aktar"
+
+msgid "Loading resources..."
+msgstr "Kaynaklar yükleniyor..."
+
+msgid "Failed to load resources."
+msgstr "Kaynaklar yüklenemedi."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Lütfen en az bir dışa aktarılabilir kaynak seçin (belge, web bağlantısı, tartışma,...)."
+
+msgid "Export finished."
+msgstr "Dışa aktarma tamamlandı."
+
+msgid "Export failed."
+msgstr "Dışa aktarma başarısız."
+
+msgid "Import failed."
+msgstr "İçe aktarma başarısız."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Yerel dosya (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "İçe aktarmaya hazır"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Yedeği bu dersin içine geri yükleyeceğiz. Seçenekleri değiştirmek için geri dönebilirsiniz."
+
+msgid "Select resources to import"
+msgstr "İçe aktarılacak kaynakları seçin"
+
+msgid "No resources available in this backup."
+msgstr "Bu yedekte kaynak bulunmuyor."
+
+msgid "Import selection"
+msgstr "İçe aktarma seçimi"
+
+msgid "Import completed"
+msgstr "İçe aktarma tamamlandı"
+
+msgid "Could not load options."
+msgstr "Seçenekler yüklenemedi."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Lütfen bir yedek dosya seçin (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Lütfen sunucudan bir yedek seçin"
+
+msgid "Error selecting source."
+msgstr "Kaynak seçme hatası."
+
+msgid "Recycling options"
+msgstr "Geri Dönüşüm seçenekleri"
+
+msgid "Type the course code to confirm"
+msgstr "Onaylamak için ders kodunu yazın"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Bu, seçilen kaynakları kaldıracak veya sıfırlayacaktır. Bu işlem geri alınamaz."
+
+msgid "Select resources to recycle"
+msgstr "Geri dönüştürülecek kaynakları seçin"
+
+msgid "No resources available in this course."
+msgstr "Bu derste kaynak bulunmuyor."
+
+msgid "Recycle selected"
+msgstr "Seçilenleri geri dönüştür"
+
+msgid "Error loading resources."
+msgstr "Kaynaklar yüklenirken hata oluştu."
+
+msgid "Clear search"
+msgstr "Aramayı temizle"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Veritabanı adında yalnızca harfler, rakamlar ve alt çizgi (_) izinlidir. Geçersiz karakterler otomatik olarak kaldırılacaktır."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Kullanıcılara bu platformu kullanmak için verilen genel şartlar ve koşullar nelerdir?"
 

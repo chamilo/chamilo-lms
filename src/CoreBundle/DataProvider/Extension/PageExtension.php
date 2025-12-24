@@ -10,6 +10,7 @@ use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\Page;
+use Chamilo\CoreBundle\Entity\PageCategory;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\PageHelper;
 use Doctrine\ORM\QueryBuilder;
@@ -52,7 +53,7 @@ final class PageExtension implements QueryCollectionExtensionInterface // , Quer
                 ->andWhere(
                     $queryBuilder->expr()->notIn(
                         'category.title',
-                        PageHelper::getCategoriesForAdminBlocks()
+                        PageCategory::ADMIN_BLOCKS_CATEGORIES,
                     )
                 )
             ;
@@ -65,13 +66,7 @@ final class PageExtension implements QueryCollectionExtensionInterface // , Quer
                 )
                 ->setParameter(
                     'anon_categories',
-                    [
-                        'faq',
-                        'demo',
-                        'home',
-                        'public',
-                        'footer_public',
-                    ]
+                    PageCategory::ANONYMOUS_CATEGORIES
                 )
             ;
         }

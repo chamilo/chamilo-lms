@@ -144,7 +144,7 @@ class ExerciseFocusedPlugin extends Plugin
         );
 
         $url = api_get_path(WEB_PLUGIN_PATH)
-            .'exercisefocused/pages/reporting.php?'
+            .'ExerciseFocused/pages/reporting.php?'
             .api_get_cidreq().'&'.http_build_query(['id' => $exerciseId]);
 
         return Display::url($icon, $url);

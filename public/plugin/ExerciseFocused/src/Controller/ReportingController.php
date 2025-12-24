@@ -88,12 +88,12 @@ class ReportingController extends BaseController
 
             $actionLeft = Display::url(
                 Display::return_icon('export_excel.png', get_lang('ExportExcel'), [], ICON_SIZE_MEDIUM),
-                api_get_path(WEB_PLUGIN_PATH).'exercisefocused/pages/export.php?'.http_build_query($formValues)
+                api_get_path(WEB_PLUGIN_PATH).'ExerciseFocused/pages/export.php?'.http_build_query($formValues)
             );
             $actionRight = Display::toolbarButton(
                 get_lang('Clean'),
                 api_get_path(WEB_PLUGIN_PATH)
-                .'exercisefocused/pages/reporting.php?'
+                .'ExerciseFocused/pages/reporting.php?'
                 .api_get_cidreq().'&'.http_build_query(['id' => $exercise->getId(), 'submit' => '']),
                 'search'
             );

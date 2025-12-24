@@ -209,7 +209,7 @@ trait ReportingFilterTrait
 
         $detailIcon = Display::return_icon('forum_listview.png', get_lang('Detail'));
 
-        $urlDetail = api_get_path(WEB_PLUGIN_PATH).'exercisefocused/pages/detail.php?'.api_get_cidreq().'&';
+        $urlDetail = api_get_path(WEB_PLUGIN_PATH).'ExerciseFocused/pages/detail.php?'.api_get_cidreq().'&';
 
         $tableHeaders = [];
         $tableHeaders[] = get_lang('LoginName');

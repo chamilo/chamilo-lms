@@ -32580,3 +32580,12 @@ msgstr "¿Qué términos y condiciones generales se dan a los usuarios para usar
 
 msgid "Welcome to Chamilo!"
 msgstr "Bienvenid@ en Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Bienvenid@ a esta plataforma"
+
+msgid "For more details visit %s"
+msgstr "Para más detalles visite %s"
+
+msgid "Manager"
+msgstr "Responsable"

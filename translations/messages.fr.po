@@ -33322,3 +33322,12 @@ msgstr "Quelles conditions générales d'utilisation sont données aux utilisate
 
 msgid "Welcome to Chamilo!"
 msgstr "Bienvenue dans Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Bienvenue sur cette plateforme"
+
+msgid "For more details visit %s"
+msgstr "Pour plus d'information visiter %s"
+
+msgid "Manager"
+msgstr "Responsable"

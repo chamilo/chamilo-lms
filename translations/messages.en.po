@@ -31453,3 +31453,12 @@ msgstr "ex. {examplePassword}"
 
 msgid "Welcome to Chamilo!"
 msgstr "Welcome to Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Welcome to this platform"
+
+msgid "For more details visit %s"
+msgstr "For more details visit %s"
+
+msgid "Manager"
+msgstr "Manager"

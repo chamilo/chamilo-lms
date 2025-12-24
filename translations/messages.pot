@@ -31385,3 +31385,12 @@ msgstr ""
 
 msgid "Welcome to Chamilo!"
 msgstr ""
+
+msgid "Welcome to this platform"
+msgstr ""
+
+msgid "For more details visit %s"
+msgstr ""
+
+msgid "Manager"
+msgstr ""

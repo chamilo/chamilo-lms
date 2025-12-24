@@ -333,13 +333,8 @@ class UserManager
                 ['locale' => $userLocale]
             );
 
-            $sender_name = api_get_person_name(
-                api_get_setting('administratorName'),
-                api_get_setting('administratorSurname'),
-                null,
-                PERSON_NAME_EMAIL_ADDRESS
-            );
-            $email_admin = api_get_setting('emailAdministrator');
+            $sender_name = api_get_setting('mail.mailer_from_name');
+            $email_admin = api_get_setting('mail.mailer_from_email');
 
             $url = api_get_path(WEB_PATH);
             if (api_is_multiple_url_enabled()) {

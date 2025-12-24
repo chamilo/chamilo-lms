@@ -31440,3 +31440,18 @@ msgstr "Kun bogstaver, cifre og understregning (_) er tilladt i databasenavnet. 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Hvilke generelle vilkår og betingelser gives til brugerne for at bruge denne platform?"
 
+msgid "ex. {examplePassword}"
+msgstr ""
+
+msgid "Welcome to Chamilo!"
+msgstr "Velkommen til Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Velkommen til denne platform"
+
+msgid "For more details visit %s"
+msgstr "For flere detaljer besøg %s"
+
+msgid "Manager"
+msgstr "Administrer"
+

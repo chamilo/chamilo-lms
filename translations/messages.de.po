@@ -14492,7 +14492,7 @@ msgid "Baby Orange"
 msgstr "Baby Orange"
 
 msgid "Blue lagoon"
-msgstr "Blue Lagoon"
+msgstr "Blauer Lagunen"
 
 msgid "Cool blue"
 msgstr "Cool Blau"
@@ -14501,16 +14501,16 @@ msgid "Corporate"
 msgstr "Corporate"
 
 msgid "Cosmic campus"
-msgstr "Cosmic Campus"
+msgstr "Kosmische Campus"
 
 msgid "Delicious Bordeaux"
-msgstr "Delicious Bordeaux"
+msgstr "Leckerer Bordeaux"
 
 msgid "Empire green"
 msgstr "Empire Grün"
 
 msgid "Fruity orange"
-msgstr "Fruity Orange"
+msgstr "Fruchtige Orange"
 
 msgid "Medical"
 msgstr "Medical"
@@ -14519,7 +14519,7 @@ msgid "Royal purple"
 msgstr "Royal Purpur"
 
 msgid "Silver line"
-msgstr "Silver Line"
+msgstr "Silberne Linie"
 
 msgid "Sober brown"
 msgstr "Sober Braun"
@@ -14528,7 +14528,7 @@ msgid "Steel grey"
 msgstr "Stahl Grau"
 
 msgid "Tasty olive"
-msgstr "Tasty Olive"
+msgstr "Leckere Olive"
 
 msgid "In this report you see the results of all questions"
 msgstr "In diesem Bericht sehen Sie die Ergebnisse aller Fragen"
@@ -33007,4 +33007,19 @@ msgstr "Im Datenbanknamen sind nur Buchstaben, Ziffern und Unterstriche (_) erla
 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Welche allgemeinen Geschäftsbedingungen werden den Nutzern für die Nutzung dieser Plattform mitgeteilt?"
+
+msgid "ex. {examplePassword}"
+msgstr "z. B. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Willkommen bei Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Willkommen auf dieser Plattform"
+
+msgid "For more details visit %s"
+msgstr "Für weitere Details besuchen Sie %s"
+
+msgid "Manager"
+msgstr "Manager"
 

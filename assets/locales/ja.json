@@ -1259,7 +1259,7 @@
     "Questions": "\u554f\u984c",
     "Security": "\u30bb\u30ad\u30e5\u30ea\u30c6\u30a3",
     "What general terms and conditions are given to users to use this platform?": "\u3053\u306e\u30d7\u30e9\u30c3\u30c8\u30d5\u30a9\u30fc\u30e0\u3092\u4f7f\u7528\u3059\u308b\u30e6\u30fc\u30b6\u30fc\u306b\u63d0\u4f9b\u3055\u308c\u308b\u4e00\u822c\u7684\u306a\u5229\u7528\u898f\u7d04\u306f\u4f55\u3067\u3059\u304b\uff1f",
-    "ex. {examplePassword}": "ex. {examplePassword}",
+    "ex. {examplePassword}": "\u4f8b: {examplePassword}",
     "Blogs": "\u30d6\u30ed\u30b0",
     "Blog": "\u30d6\u30ed\u30b0",
     "Dropbox": "\u8ab2\u984c\u63d0\u51fa\u7bb1"

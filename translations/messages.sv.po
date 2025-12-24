@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:copyright,, nej:ingen copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapp,, application/msword:MsWord,, application/octet-stream:Okettström,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapp,, application/msword:MsWord,, application/octet-stream:Octetströmmar,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:övning,, simulation:simulering,, questionnaire:frågeställningar,, diagram:diagram,, figure:figur,, graph:graf,, index:index,, slide:slide,, table:bordläggning,, narrative text:berättartext,, exam:examen,, experiment:experiment,, problem statement:problemställning,, self assessment:självbedömning,, lecture:föreläsning"
@@ -8628,10 +8628,10 @@ msgid "."
 msgstr ","
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%e %b %Y"
 
 msgid "%A %B %d, %Y"
-msgstr "%A %B %d, %Y"
+msgstr "%A %e %B %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
 msgstr "%B %d, %Y kl. %I:%M %p"
@@ -18963,7 +18963,7 @@ msgid "%b %d, %Y at %I:%M %p"
 msgstr "%b %d, %Y kl. %I:%M %p"
 
 msgid "%I:%M %p, %b %d %Y"
-msgstr "%I:%M %p, %b %d %Y"
+msgstr "%I:%M %p, %e %b %Y"
 
 msgid "Login to vote"
 msgstr "Logga in för att rösta"
@@ -20535,7 +20535,7 @@ msgid "Input size of box to fill"
 msgstr "Indatastorlek för ruta att fylla i"
 
 msgid "MM dd, yy"
-msgstr "MM dd, yy"
+msgstr "%m %d, %y"
 
 msgid "HH:mm"
 msgstr "HH:mm"
@@ -31439,4 +31439,19 @@ msgstr "Endast bokstäver, siffror och understreck (_) är tillåtna i databasna
 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Vilka allmänna användarvillkor ges till användare för att använda denna plattform?"
+
+msgid "ex. {examplePassword}"
+msgstr "t.ex. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Välkommen till Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Välkommen till denna plattform"
+
+msgid "For more details visit %s"
+msgstr "För mer information besök %s"
+
+msgid "Manager"
+msgstr "Administratör"
 

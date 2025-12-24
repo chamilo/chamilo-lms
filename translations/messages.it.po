@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Cordialmente"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Esempio formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula di esempio: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervalli variabili"
@@ -2031,7 +2031,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:senza copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Cartella,, application/msword:MsWord,, application/octet-stream:Flusso ottetti,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Cartella,, application/msword:MsWord,, application/octet-stream:Flusso octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exercizio,, simulation:simulazione,, questionnaire:questionario,, diagram:diagramma,, figure:figura,, graph:grafico,, index:indice,, slide:slide,, table:tabella,, narrative text:narrazione,, exam:esame,, experiment:esperimento,, problem statement:enunciato di problema,, self assessment:autovalutazione,, lecture:lezione"
@@ -19049,7 +19049,7 @@ msgid "Select an action"
 msgstr "Seleziona un'azione"
 
 msgid "Login: %s"
-msgstr "Login: %s"
+msgstr "Accesso: %s"
 
 msgid "Database <b>%s</b> will be created"
 msgstr "Il database %s sarà creato"
@@ -20372,7 +20372,7 @@ msgid "Send a copy to HR managers of selected students"
 msgstr "Invia una copia agli amministratori risorse umane degli studenti selezionati"
 
 msgid "Powered by %s"
-msgstr "Powered by %s"
+msgstr "Offrire da %s"
 
 msgid "Please select at least one user. The announcement has not been saved."
 msgstr "Seleziona almeno un utente. L'avviso non è stato salvato."
@@ -30534,13 +30534,13 @@ msgid "ex. root"
 msgstr "es. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "CREATE TABLE lavori"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ALTER TABLE lavori"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "DROP COLUMN lavori"
 
 msgid "Theme selected as current"
 msgstr "Tema selezionato come corrente"
@@ -31453,4 +31453,19 @@ msgstr "Nel nome del database sono consentite solo lettere, cifre e underscore (
 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Quali condizioni generali vengono fornite agli utenti per utilizzare questa piattaforma?"
+
+msgid "ex. {examplePassword}"
+msgstr "es. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Benvenuti in Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Benvenuti in questa piattaforma"
+
+msgid "For more details visit %s"
+msgstr "Per maggiori dettagli visita %s"
+
+msgid "Manager"
+msgstr "Amministratore"
 

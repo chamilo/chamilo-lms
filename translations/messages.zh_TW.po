@@ -27375,7 +27375,7 @@ msgid "Obtained the following skills"
 msgstr "獲得以下技能"
 
 msgid "Chamilo LMS"
-msgstr "Chamilo LMS"
+msgstr "Chamilo 學習管理系統"
 
 msgid "No course sessions for this user"
 msgstr "此使用者無課程工作坊"
@@ -31439,4 +31439,19 @@ msgstr "資料庫名稱僅允許字母、數字和底線 (_)。無效字元將�
 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "提供給使用者使用此平台的通用條款和條件是什麼？"
+
+msgid "ex. {examplePassword}"
+msgstr "例如 {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "歡迎來到 Chamilo！"
+
+msgid "Welcome to this platform"
+msgstr "歡迎來到此平台"
+
+msgid "For more details visit %s"
+msgstr "欲瞭解更多詳情，請造訪 %s"
+
+msgid "Manager"
+msgstr "管理員"
 

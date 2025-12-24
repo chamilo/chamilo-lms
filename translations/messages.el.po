@@ -31453,3 +31453,18 @@ msgstr "Μόνο γράμματα, ψηφία και κάτω παύλα (_) ε�
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Ποιοι γενικοί όροι και συνθήκες δίνονται στους χρήστες για χρήση αυτής της πλατφόρμας;"
 
+msgid "ex. {examplePassword}"
+msgstr "π.χ. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Καλώς ήρθατε στο Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Καλώς ήρθατε σε αυτή την πλατφόρμα"
+
+msgid "For more details visit %s"
+msgstr "Για περισσότερες λεπτομέρειες επισκεφθείτε το %s"
+
+msgid "Manager"
+msgstr "Διαχειριστής"
+

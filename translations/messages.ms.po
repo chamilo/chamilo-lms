@@ -9465,7 +9465,7 @@ msgid "Not yet begun"
 msgstr "Belum bermula"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d %B, %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Folder tidak sah: Sila buat folder bernama images dalam alat dokumen anda supaya imej boleh dimuat naik ke dalam folder ini"
@@ -31439,4 +31439,19 @@ msgstr "Hanya huruf, digit dan underscore (_) dibenarkan dalam nama pangkalan da
 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Apakah syarat dan peraturan umum yang diberikan kepada pengguna untuk menggunakan platform ini?"
+
+msgid "ex. {examplePassword}"
+msgstr "contoh. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Selamat datang ke Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Selamat datang ke platform ini"
+
+msgid "For more details visit %s"
+msgstr "Untuk maklumat lanjut lawati %s"
+
+msgid "Manager"
+msgstr "Pengurus"
 

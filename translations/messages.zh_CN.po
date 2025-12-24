@@ -31440,3 +31440,18 @@ msgstr "数据库名称仅允许使用字母、数字和下划线 (_)。无效�
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "使用此平台时，用户需遵守哪些一般条款和条件？"
 
+msgid "ex. {examplePassword}"
+msgstr "例如 {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "欢迎来到 Chamilo！"
+
+msgid "Welcome to this platform"
+msgstr "欢迎来到此平台"
+
+msgid "For more details visit %s"
+msgstr "更多详情请访问 %s"
+
+msgid "Manager"
+msgstr "管理员"
+

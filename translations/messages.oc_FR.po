@@ -9460,7 +9460,7 @@ msgid "Not yet begun"
 msgstr "Pas encara començat"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d %B %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Dossièr invalid : Creatz un dossièr apelat images dins vòstre ostil documents perque las images pòden èsser telecargadas dins aqueste dossièr"
@@ -31433,4 +31433,19 @@ msgstr "Solament las letras, las ciffres e lo soslinh (_) son autorizats dins lo
 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Quinas condicions generals son donadas als utilizaires per utilizar aquesta plataforma ?"
+
+msgid "ex. {examplePassword}"
+msgstr "ex. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Benvenguda a Chamilo !"
+
+msgid "Welcome to this platform"
+msgstr "Benvenguda sus aquesta plataforma"
+
+msgid "For more details visit %s"
+msgstr "Per mai de detalhs visitatz %s"
+
+msgid "Manager"
+msgstr "Gerent"
 

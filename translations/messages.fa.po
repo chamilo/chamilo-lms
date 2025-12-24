@@ -31440,3 +31440,18 @@ msgstr "فقط حروف، ارقام و زیرخط (_) در نام پایگاه 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "چه شرایط و قوانین کلی به کاربران برای استفاده از این پلتفرم ارائه می‌شود؟"
 
+msgid "ex. {examplePassword}"
+msgstr "مثال: {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "به Chamilo خوش آمدید!"
+
+msgid "Welcome to this platform"
+msgstr "به این پلتفرم خوش آمدید"
+
+msgid "For more details visit %s"
+msgstr "برای جزئیات بیشتر به %s مراجعه کنید"
+
+msgid "Manager"
+msgstr "مدیر"
+

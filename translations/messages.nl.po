@@ -16853,7 +16853,7 @@ msgid "Fill with demo content"
 msgstr "Opvullen met demo-inhoud"
 
 msgid "Single Sign On"
-msgstr "Single Sign On"
+msgstr "Enkele aanmelding"
 
 msgid "Enabling Single Sign On allows you to connect this platform as a slave of an authentication master, for example a Drupal website with the Drupal-Chamilo plugin or any other similar master setup."
 msgstr "Single Sign On inschakelen maakt het mogelijk om aan te melden op dit platform door middel van een authenticatie-server. Dit kan bijvoorbeeld een Drupal website zijn, door middel van de Drupal-Chamilo plugin, of een gelijkaardige extensie."
@@ -19128,7 +19128,7 @@ msgid "%b %d, %Y at %I:%M %p"
 msgstr "%b %d, %Y om %I:%M %p"
 
 msgid "%I:%M %p, %b %d %Y"
-msgstr "%I:%M %p, %b %d %Y"
+msgstr "%I:%M %p, %e %b %Y"
 
 msgid "Login to vote"
 msgstr "Meld aan om te stemmen"
@@ -33519,4 +33519,19 @@ msgstr "Alleen letters, cijfers en onderstrepingsteken (_) zijn toegestaan in de
 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Welke algemene voorwaarden worden aan gebruikers gegeven om dit platform te gebruiken?"
+
+msgid "ex. {examplePassword}"
+msgstr "bijv. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Welkom bij Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Welkom op dit platform"
+
+msgid "For more details visit %s"
+msgstr "Voor meer details bezoek %s"
+
+msgid "Manager"
+msgstr "Beheerder"
 

@@ -31434,3 +31434,18 @@ msgstr "V názvu databáze jsou povoleny pouze písmena, číslice a podtržítk
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Jaké obecné podmínky používání této platformy jsou uživatelům poskytnuty?"
 
+msgid "ex. {examplePassword}"
+msgstr "např. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Vítejte v Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Vítejte na této platformě"
+
+msgid "For more details visit %s"
+msgstr "Pro více detailů navštivte %s"
+
+msgid "Manager"
+msgstr "Správce"
+

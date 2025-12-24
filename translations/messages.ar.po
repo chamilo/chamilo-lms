@@ -31452,3 +31452,18 @@ msgstr "يُسمح فقط بالحروف والأرقام وشرطة سفلية 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "ما هي الشروط والأحكام العامة المقدمة للمستخدمين لاستخدام هذه المنصة؟"
 
+msgid "ex. {examplePassword}"
+msgstr "مثال: {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "مرحباً بك في Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "مرحباً بك في هذه المنصة"
+
+msgid "For more details visit %s"
+msgstr "لمزيد من التفاصيل، قم بزيارة %s"
+
+msgid "Manager"
+msgstr "مدير"
+

@@ -25655,7 +25655,7 @@ msgid "Video player renderers"
 msgstr "Renderizadores do player de vídeo"
 
 msgid "Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
-msgstr "Ativar renderizadores de player para mídias YouTube, Vimeo, Facebook, DailyMotion, Twitch"
+msgstr "Ativar renderizadores de player para YouTube, Vimeo, Facebook, DailyMotion, Twitch"
 
 msgid "Allow teachers to edit tests in learning paths"
 msgstr "Permitir que professores editem testes em trilhas de aprendizagem"
@@ -31447,4 +31447,19 @@ msgstr "Apenas letras, dígitos e sublinhado (_) são permitidos no nome do banc
 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Quais termos e condições gerais são fornecidos aos usuários para usar esta plataforma?"
+
+msgid "ex. {examplePassword}"
+msgstr "ex. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Bem-vindo ao Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Bem-vindo a esta plataforma"
+
+msgid "For more details visit %s"
+msgstr "Para mais detalhes visite %s"
+
+msgid "Manager"
+msgstr "Gestor"
 

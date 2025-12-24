@@ -31443,3 +31443,15 @@ msgstr "이 플랫폼을 사용하기 위해 사용자에게 제공되는 일반
 msgid "ex. {examplePassword}"
 msgstr "예. {examplePassword}"
 
+msgid "Welcome to Chamilo!"
+msgstr "Chamilo에 오신 것을 환영합니다!"
+
+msgid "Welcome to this platform"
+msgstr "이 플랫폼에 오신 것을 환영합니다"
+
+msgid "For more details visit %s"
+msgstr "자세한 내용은 %s를 방문하세요"
+
+msgid "Manager"
+msgstr "관리자"
+

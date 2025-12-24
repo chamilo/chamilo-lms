@@ -8633,7 +8633,7 @@ msgid "%A %B %d, %Y"
 msgstr "%A %B %d, %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
-msgstr "%B %d, %Y at %I:%M %p"
+msgstr "%B %d, %Y र %I:%M %p मा"
 
 msgid "%I:%M %p"
 msgstr "%I:%M %p"
@@ -18593,7 +18593,7 @@ msgid "%m/%d/%Y"
 msgstr "%m/%d/%Y"
 
 msgid "%B %d, %Y at %H:%M"
-msgstr "%B %d, %Y at %H:%M"
+msgstr "%B %d, %Y र %H:%M मा"
 
 msgid "Enable legal terms"
 msgstr "कानुनी सर्तहरू सक्षम गर्नुहोस्"
@@ -18959,7 +18959,7 @@ msgid "Sent at: %s"
 msgstr "पाठाइएको: %s"
 
 msgid "%b %d, %Y at %I:%M %p"
-msgstr "%b %d, %Y at %I:%M %p"
+msgstr "%b %d, %Y र %I:%M %p मा"
 
 msgid "%I:%M %p, %b %d %Y"
 msgstr "%I:%M %p, %b %d %Y"
@@ -31437,4 +31437,19 @@ msgstr "डेटाबेस नाममा मात्र अक्षरह
 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "यो प्लेटफर्म प्रयोग गर्न प्रयोगकर्ताहरूलाई दिइने सामान्य शर्तहरू के हुन्?"
+
+msgid "ex. {examplePassword}"
+msgstr "उदा. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Chamilo मा स्वागत छ!"
+
+msgid "Welcome to this platform"
+msgstr "यो प्लेटफर्ममा स्वागत छ"
+
+msgid "For more details visit %s"
+msgstr "थप विवरणको लागि %s भ्रमण गर्नुहोस्"
+
+msgid "Manager"
+msgstr "प्रबन्धक"
 

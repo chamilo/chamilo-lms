@@ -31446,3 +31446,18 @@ msgstr "W nazwie bazy danych dozwolone są tylko litery, cyfry i znak podkreśle
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Jakie ogólne warunki i regulaminy są podawane użytkownikom do korzystania z tej platformy?"
 
+msgid "ex. {examplePassword}"
+msgstr "np. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Witamy w Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Witamy na tej platformie"
+
+msgid "For more details visit %s"
+msgstr "Aby uzyskać więcej szczegółów odwiedź %s"
+
+msgid "Manager"
+msgstr "Menedżer"
+

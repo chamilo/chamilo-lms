@@ -31438,3 +31438,18 @@ msgstr "Vetëm shkronja, shifra dhe nënvija (_) lejohen në emrin e bazës së 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Çfarë kushtesh të përgjithshme dhe kushtesh përdorimi u jepen përdoruesve për të përdorur këtë platformë?"
 
+msgid "ex. {examplePassword}"
+msgstr "p.sh. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Mirësevini në Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Mirësevini në këtë platformë"
+
+msgid "For more details visit %s"
+msgstr "Për më shumë detaje vizitoni %s"
+
+msgid "Manager"
+msgstr "Menaxher"
+

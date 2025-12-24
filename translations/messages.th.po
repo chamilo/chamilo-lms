@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "ด้วยความเคารพ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "สูตรตัวอย่าง: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ตัวอย่างสูตร: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ช่วงตัวแปร"
@@ -31439,4 +31439,19 @@ msgstr "ชื่อฐานข้อมูลอนุญาตให้ใช
 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "เงื่อนไขทั่วไปใดที่ให้ผู้ใช้เพื่อใช้งานแพลตฟอร์มนี้?"
+
+msgid "ex. {examplePassword}"
+msgstr "เช่น {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "ยินดีต้อนรับสู่ Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "ยินดีต้อนรับสู่แพลตฟอร์มนี้"
+
+msgid "For more details visit %s"
+msgstr "สำหรับรายละเอียดเพิ่มเติมโปรดเยี่ยมชม %s"
+
+msgid "Manager"
+msgstr "ผู้จัดการ"
 

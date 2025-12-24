@@ -33320,6 +33320,9 @@ msgstr "Seules les lettres, les chiffres et le tiret bas (_) sont autorisés dan
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Quelles conditions générales d'utilisation sont données aux utilisateurs pour utiliser cette plateforme ?"
 
+msgid "ex. {examplePassword}"
+msgstr "ex. {examplePassword}"
+
 msgid "Welcome to Chamilo!"
 msgstr "Bienvenue dans Chamilo!"
 
@@ -33331,3 +33334,4 @@ msgstr "Pour plus d'information visiter %s"
 
 msgid "Manager"
 msgstr "Responsable"
+

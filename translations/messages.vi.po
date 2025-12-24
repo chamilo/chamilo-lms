@@ -9465,7 +9465,7 @@ msgid "Not yet begun"
 msgstr "Chưa bắt đầu"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d %B, %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Thư mục không hợp lệ: Vui lòng tạo thư mục có tên images trong công cụ tài liệu của bạn để hình ảnh có thể được tải lên vào thư mục này"
@@ -31439,4 +31439,19 @@ msgstr "Tên cơ sở dữ liệu chỉ cho phép chữ cái, chữ số và d�
 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Điều khoản và điều kiện chung nào được cung cấp cho người dùng để sử dụng nền tảng này?"
+
+msgid "ex. {examplePassword}"
+msgstr "vd. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Chào mừng đến với Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Chào mừng đến với nền tảng này"
+
+msgid "For more details visit %s"
+msgstr "Để biết thêm chi tiết, truy cập %s"
+
+msgid "Manager"
+msgstr "Quản lý"
 

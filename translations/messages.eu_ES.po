@@ -31445,3 +31445,18 @@ msgstr "Letra, digitu eta azpimarril (_) bakarrik onartzen dira datu-basearen iz
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Zeintzuk dira erabiltzaileei plataforma hau erabiltzeko ematen zaizkien baldintza orokorrak?"
 
+msgid "ex. {examplePassword}"
+msgstr "ad. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Ongi etorri Chamilorat!"
+
+msgid "Welcome to this platform"
+msgstr "Ongi etorri plataforma honetara"
+
+msgid "For more details visit %s"
+msgstr "Xehetasun gehiagok %s bisitatu"
+
+msgid "Manager"
+msgstr "Kudeatzailea"
+

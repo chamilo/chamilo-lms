@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Muqaalka tusaale: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Foomulaha tusaale: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -24109,7 +24109,7 @@ msgid "Course code to be entered in capital letters to confirm the deletion: %s"
 msgstr "Koodka kursiga ee lagu gelinayo xuruufta sare si loo xaqiijiyo tirtirka: %s"
 
 msgid "Badge: %s"
-msgstr "Badge: %s"
+msgstr "Baajin: %s"
 
 msgid "Comment by %s"
 msgstr "Faallo uu qoray %s"
@@ -24448,7 +24448,7 @@ msgid "Reminder number %s for the course %s"
 msgstr "Xasuusin lambarka %s ee koorsada %s"
 
 msgid "Hello %s"
-msgstr "Hello %s"
+msgstr "Salaan %s"
 
 msgid "You are registered in the training %s since the %s"
 msgstr "Waxaad isku diiwaan gelisay tababarka %s ilaa %s"
@@ -31433,4 +31433,19 @@ msgstr "Harakadyada xuruufta ah, nambarrada iyo hoostaga (_) kaliya ayaa loo ogg
 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Waa maxay shuruudaha guud ee la siiyo isticmaale si ay u isticmaalaan platformkan?"
+
+msgid "ex. {examplePassword}"
+msgstr "tusa. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Ku soo dhawow Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Ku soo dhawow platformkan"
+
+msgid "For more details visit %s"
+msgstr "Faahfaahin dheeraad ah booqo %s"
+
+msgid "Manager"
+msgstr "Maamule"
 

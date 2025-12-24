@@ -31440,3 +31440,18 @@ msgstr "Во името на базата на податоци се дозво�
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Кои општи услови и правила им се даваат на корисниците за користење на оваа платформа?"
 
+msgid "ex. {examplePassword}"
+msgstr "нпр. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Добредојдовте во Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Добредојдовте на оваа платформа"
+
+msgid "For more details visit %s"
+msgstr "За повеќе детали посетете %s"
+
+msgid "Manager"
+msgstr "Менаџер"
+

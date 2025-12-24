@@ -31440,3 +31440,18 @@ msgstr "Az adatbázis nevében csak betűk, számjegyek és aláhúzás (_) mege
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Milyen általános feltételeket kapnak a felhasználók ehhez a platformhoz?"
 
+msgid "ex. {examplePassword}"
+msgstr "pl. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Üdvözöljük a Chamilo-ban!"
+
+msgid "Welcome to this platform"
+msgstr "Üdvözöljük ezen a platformon"
+
+msgid "For more details visit %s"
+msgstr "További részletekért látogasson el ide: %s"
+
+msgid "Manager"
+msgstr "Menedzser"
+

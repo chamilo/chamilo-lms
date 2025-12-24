@@ -2031,7 +2031,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":כן:זכויות יוצרים,, לא:ללא זכויות יוצרים"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:תיקייה,, application/msword:MsWord,, application/octet-stream:זרם אוקטט,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":תרגיל:תרגיל,,      סימולציה:סימולציה,,      שאלון:שאלון,,      דיאגרמה:דיאגרמה,,      איור:איור,,      גרף:גרף,,      אינדקס:אינדקס,,      שקופית:שקופית,,      טבלה:טבלה,,      טקסט נרטיבי:טקסט נרטיבי,,      מבחן:מבחן,,      ניסוי:ניסוי,,      ניסוח בעיה:ניסוח בעיה,,      הערכה עצמית:הערכה עצמית,,      הרצאה:הרצאה"
@@ -4650,7 +4650,7 @@ msgid "Invalid end date was given."
 msgstr "ניתן תאריך סיום לא חוקי."
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(ד/מ/ש ש:מ)"
 
 msgid "Homepage-files are not writable!"
 msgstr "קבצי דף הבית אינם ניתנים לכתיבה!"
@@ -14439,7 +14439,7 @@ msgid "Compose"
 msgstr "צור הודעה"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "כתום תינוק"
 
 msgid "Blue lagoon"
 msgstr "לגונה כחולה"
@@ -31452,4 +31452,19 @@ msgstr "רק אותיות, ספרות וקו תחתון (_) מותרות בשם 
 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "אילו תנאים כלליים וכללי משתמש ניתנים למשתמשים לשימוש בפלטפורמה זו?"
+
+msgid "ex. {examplePassword}"
+msgstr "למשל. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "ברוכים הבאים ל-Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "ברוכים הבאים לפלטפורמה זו"
+
+msgid "For more details visit %s"
+msgstr "לפרטים נוספים בקרו ב-%s"
+
+msgid "Manager"
+msgstr "מנהל"
 

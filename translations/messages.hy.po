@@ -4808,7 +4808,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "AWStats-ը թույլ է տալիս դիտել ձեր հարթակի վիճակագրությունը՝ այցելուներ, էջերի դիտումներ, հղումներ..."
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "Chamilo Գրադարան"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "Chamilo LIBRARY-ն որոնման համակարգ է, որը առաջարկում է բազմակրիտերիում ինդեքսավորում և հետազոտություն: Այն Chamilo-ի բժշկական ֆունկցիոնալության մաս է:"
@@ -31437,4 +31437,19 @@ msgstr "Տվյալների բազայի անվանումում թույլատր�
 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Ի՞նչ ընդհանուր պայմաններ և կանոններ են տրվում օգտատերերին այս հարթակն օգտագործելու համար:"
+
+msgid "ex. {examplePassword}"
+msgstr "օր. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Բարի գալուստ Chamilo-ում:"
+
+msgid "Welcome to this platform"
+msgstr "Բարի գալուստ այս հարթակում"
+
+msgid "For more details visit %s"
+msgstr "Մանրամասների համար այցելեք %s"
+
+msgid "Manager"
+msgstr "Մենեջեր"
 

@@ -31441,3 +31441,18 @@ msgstr "В имени базы данных разрешены только бу
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Какие общие условия предоставляются пользователям для использования этой платформы?"
 
+msgid "ex. {examplePassword}"
+msgstr "напр. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Добро пожаловать в Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Добро пожаловать на эту платформу"
+
+msgid "For more details visit %s"
+msgstr "Для получения дополнительной информации посетите %s"
+
+msgid "Manager"
+msgstr "Менеджер"
+

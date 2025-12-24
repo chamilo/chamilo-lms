@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Srdačno"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula primer: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Opsezi varijabli"
@@ -4261,7 +4261,7 @@ msgid "English name"
 msgstr "Englesko ime"
 
 msgid "Chamilo folder"
-msgstr "Chamilo folder"
+msgstr "Chamilo fascikla"
 
 msgid "Properties"
 msgstr "Svojstva"
@@ -14653,7 +14653,7 @@ msgid "Enable button bars extended when the WYSIWYG editor is maximized"
 msgstr "Omogući proširene trake dugmadi kada je WYSIWYG editor maksimizovan"
 
 msgid "HTML Editor"
-msgstr "HTML Editor"
+msgstr "HTML Uređivač"
 
 msgid "Go directly to the course after login"
 msgstr "Idi direktno na kurs posle prijave"
@@ -31440,4 +31440,19 @@ msgstr "U nazivu baze podataka su dozvoljena samo slova, cifre i donja crta (_).
 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Koji opšti uslovi korišćenja se daju korisnicima za korišćenje ove platforme?"
+
+msgid "ex. {examplePassword}"
+msgstr "npr. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Dobrodošli u Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Dobrodošli na ovu platformu"
+
+msgid "For more details visit %s"
+msgstr "Za više detalja posetite %s"
+
+msgid "Manager"
+msgstr "Menadžer"
 

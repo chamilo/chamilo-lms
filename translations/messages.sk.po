@@ -14660,7 +14660,7 @@ msgid "Enable button bars extended when the WYSIWYG editor is maximized"
 msgstr "Povoliť tlačidlo rozšírené, pokiaľ je editor WYSIWYG maximalizovaný"
 
 msgid "HTML Editor"
-msgstr "HTML editor"
+msgstr "HTML Editor"
 
 msgid "Go directly to the course after login"
 msgstr "Priamo prejdite do kurzu po prihlásení"
@@ -31452,4 +31452,19 @@ msgstr "V názve databázy sú povolené iba písmená, číslice a podčiarkovn
 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Aké všeobecné podmienky používania tejto platformy sú poskytnuté používateľom?"
+
+msgid "ex. {examplePassword}"
+msgstr "napr. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Vitajte v Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Vitajte na tejto platforme"
+
+msgid "For more details visit %s"
+msgstr "Pre viac detailov navštívte %s"
+
+msgid "Manager"
+msgstr "Správca"
 

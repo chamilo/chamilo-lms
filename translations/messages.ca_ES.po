@@ -31453,3 +31453,18 @@ msgstr "Només es permeten lletres, dígits i guió baix (_) en el nom de la bas
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Quines condicions generals s'indiquen als usuaris per utilitzar aquesta plataforma?"
 
+msgid "ex. {examplePassword}"
+msgstr "p. ex. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Benvingut a Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Benvingut a aquesta plataforma"
+
+msgid "For more details visit %s"
+msgstr "Per a més detalls, visiteu %s"
+
+msgid "Manager"
+msgstr "Gestor"
+

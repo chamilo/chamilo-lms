@@ -31453,3 +31453,18 @@ msgstr "Apenas letras, dígitos e underscore (_) são permitidos no nome do banc
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Quais termos e condições gerais são fornecidos aos usuários para usar esta plataforma?"
 
+msgid "ex. {examplePassword}"
+msgstr "ex. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Bem-vindo ao Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Bem-vindo a esta plataforma"
+
+msgid "For more details visit %s"
+msgstr "Para mais detalhes visite %s"
+
+msgid "Manager"
+msgstr "Gerente"
+

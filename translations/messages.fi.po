@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavan esimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavakoe: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -31441,4 +31441,19 @@ msgstr "Tietokannan nimessä sallitaan vain kirjaimet, numerot ja alaviiva (_). 
 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Mitkä yleiset käyttöehdot annetaan käyttäjille tämän alustan käyttöön?"
+
+msgid "ex. {examplePassword}"
+msgstr "esim. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Tervetuloa Chamilo-hon!"
+
+msgid "Welcome to this platform"
+msgstr "Tervetuloa alustalle"
+
+msgid "For more details visit %s"
+msgstr "Lisätietoja sivustolta %s"
+
+msgid "Manager"
+msgstr "Pääkäyttäjä"
 

@@ -31434,3 +31434,18 @@ msgstr "Samo slova, cifre i podvučena crta (_) su dopušteni u nazivu baze poda
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Koji opći uvjeti korištenja se daju korisnicima za korištenje ove platforme?"
 
+msgid "ex. {examplePassword}"
+msgstr "npr. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Dobrodošli u Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Dobrodošli na ovu platformu"
+
+msgid "For more details visit %s"
+msgstr "Za više detalja posjetite %s"
+
+msgid "Manager"
+msgstr "Menadžer"
+

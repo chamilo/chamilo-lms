@@ -31434,3 +31434,18 @@ msgstr "پایگاه ډاټا کې یوازې لیکي، شمېرې او لان�
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "څه عمومي شرایط او مقررات کاروونکو ته ورکول کېږي چې دا پلیټفارم وکاروي؟"
 
+msgid "ex. {examplePassword}"
+msgstr "مثال. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "د Chamilo ښه راغلاست!"
+
+msgid "Welcome to this platform"
+msgstr "د دې پلیټفارم ښه راغلاست"
+
+msgid "For more details visit %s"
+msgstr "د نورو تفصیلاتو لپاره %s لیدنه وکړئ"
+
+msgid "Manager"
+msgstr "مدیره"
+

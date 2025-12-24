@@ -14425,7 +14425,7 @@ msgid "Compose"
 msgstr "Skriva boð"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Barni Appulsína"
 
 msgid "Blue lagoon"
 msgstr "Bláur lagún"
@@ -31433,4 +31433,19 @@ msgstr "Bert bókstavir, tøl og undirstrik (_) eru loypt í dátagrunnarnavninu
 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Hvílkar almennar skilmálar verða givnir brúkarum fyri at nýta hetta talgvirkið?"
+
+msgid "ex. {examplePassword}"
+msgstr "t.d. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Velkomin til Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Velkomin til hesa talvu"
+
+msgid "For more details visit %s"
+msgstr "Fyri meira kunning vitja %s"
+
+msgid "Manager"
+msgstr "Stjóri"
 

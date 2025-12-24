@@ -31454,3 +31454,18 @@ msgstr "În numele bazei de date sunt permise doar litere, cifre și underscore 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Ce termeni și condiții generale sunt acordați utilizatorilor pentru a utiliza această platformă?"
 
+msgid "ex. {examplePassword}"
+msgstr "ex. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Bine ați venit la Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Bine ați venit pe această platformă"
+
+msgid "For more details visit %s"
+msgstr "Pentru mai multe detalii vizitați %s"
+
+msgid "Manager"
+msgstr "Manager"
+

@@ -31441,3 +31441,18 @@ msgstr "Duomenų bazės pavadinime leidžiamos tik raidės, skaitmenys ir pabrau
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Kokios bendrosios naudojimo sąlygos pateikiamos vartotojams šiai platformai naudoti?"
 
+msgid "ex. {examplePassword}"
+msgstr "pvz. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Sveiki atvykę į Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Sveiki atvykę į šią platformą"
+
+msgid "For more details visit %s"
+msgstr "Daugiau informacijos: %s"
+
+msgid "Manager"
+msgstr "Valdytojas"
+

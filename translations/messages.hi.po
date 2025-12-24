@@ -31434,3 +31434,18 @@ msgstr "डेटाबेस नाम में केवल अक्षर, 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "उपयोगकर्ताओं को इस प्लेटफॉर्म का उपयोग करने के लिए कौन से सामान्य नियम व शर्तें दी जाती हैं?"
 
+msgid "ex. {examplePassword}"
+msgstr "उदाहरण: {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Chamilo में आपका स्वागत है!"
+
+msgid "Welcome to this platform"
+msgstr "इस प्लेटफॉर्म में आपका स्वागत है"
+
+msgid "For more details visit %s"
+msgstr "अधिक विवरण के लिए %s पर जाएँ"
+
+msgid "Manager"
+msgstr "प्रबंधक"
+

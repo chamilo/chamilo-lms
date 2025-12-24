@@ -31440,3 +31440,18 @@ msgstr "Hanya huruf, angka dan garis bawah (_) yang diizinkan dalam nama databas
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Persyaratan dan ketentuan umum apa yang diberikan kepada pengguna untuk menggunakan platform ini?"
 
+msgid "ex. {examplePassword}"
+msgstr "con. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Selamat datang di Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Selamat datang di platform ini"
+
+msgid "For more details visit %s"
+msgstr "Untuk detail lebih lanjut kunjungi %s"
+
+msgid "Manager"
+msgstr "Manajer"
+

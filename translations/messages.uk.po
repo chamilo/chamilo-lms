@@ -31434,3 +31434,18 @@ msgstr "У назві бази даних дозволені лише літер
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Які загальні умови та правила надаються користувачам для використання цієї платформи?"
 
+msgid "ex. {examplePassword}"
+msgstr "наприклад. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Ласкаво просимо до Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Ласкаво просимо на цю платформу"
+
+msgid "For more details visit %s"
+msgstr "Для отримання детальнішої інформації відвідайте %s"
+
+msgid "Manager"
+msgstr "Менеджер"
+

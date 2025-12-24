@@ -31504,3 +31504,18 @@ msgstr "データベース名には文字、数字、アンダースコア (_) �
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "このプラットフォームを使用するユーザーに提供される一般的な利用規約は何ですか？"
 
+msgid "ex. {examplePassword}"
+msgstr "例: {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Chamilo へようこそ！"
+
+msgid "Welcome to this platform"
+msgstr "このプラットフォームへようこそ"
+
+msgid "For more details visit %s"
+msgstr "詳細は %s をご覧ください"
+
+msgid "Manager"
+msgstr "管理者"
+

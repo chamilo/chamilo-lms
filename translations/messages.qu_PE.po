@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Rurasqa willakuy: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Rurasqa rakiy: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ari:copyright nisqawan,, mana:mana copyright nisqawan"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Phuru,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación"
@@ -6744,7 +6744,7 @@ msgid "View this user"
 msgstr "Ver usuario"
 
 msgid "RSS feed"
-msgstr "RSS feed"
+msgstr "RSS willakuy"
 
 msgid "No friends in your contact list"
 msgstr "Manam warmikuna kay kontakt listaqpi"
@@ -14652,7 +14652,7 @@ msgid "Enable button bars extended when the WYSIWYG editor is maximized"
 msgstr "WYSIWYG editor maximizakuspaq boton barras k'anchay rurachiy"
 
 msgid "HTML Editor"
-msgstr "HTML Editor"
+msgstr "HTML Yapasapuy"
 
 msgid "Go directly to the course after login"
 msgstr "Qhawayku loginman qatiy yachayninjopi"
@@ -15129,7 +15129,7 @@ msgid "The blocks have been updated"
 msgstr "Killakuna qhispichirqan"
 
 msgid "Dashboard plugins"
-msgstr "Dashboard plugins"
+msgstr "Ruwanakuna yapasapuykuna"
 
 msgid "This plugin has been deleted from the dashboard plugin directory"
 msgstr "Kay pluginta dashboard plugin killamanta q'echirqan"
@@ -15924,16 +15924,16 @@ msgid "Dear user,"
 msgstr "Kuyay runa,"
 
 msgid "Session fields"
-msgstr ""
+msgstr "Huñunakuna killaqkuna"
 
 msgid "Copy"
-msgstr ""
+msgstr "Kutichiy"
 
 msgid "Date on which the session is closed to coaches. The additional delay will allow them to export all relevant tracking information"
-msgstr ""
+msgstr "Huñunakuna qhawayninakunata chinkachispaq. Yapasqa ñawpaqtiykunaq willakuykunata apachiyta atikuyku"
 
 msgid "Date on which the session is made available to coaches, so they can prepare it before the students get connected"
-msgstr ""
+msgstr "Huñunakuna yachachisqakunata qhawayninkupaq, yachachisqakuna ñawpaqta qhawayninkuwan"
 
 msgid "Date on which the session is closed"
 msgstr "Sutinchakuy pacha, llimphisqan sessionpaq"
@@ -16086,109 +16086,109 @@ msgid "Profile search"
 msgstr "Propiyuy maskhay"
 
 msgid "If your course is public or open, you can use the direct link below to send an invitation to new users, so after registration, they will be sent directly to the course. Also, you can add the e=1 parameter to the URL, replacing \"1\" by an exercise ID to send them directly to a specific exam. The exercise ID can be discovered in the URL when clicking on an exercise to open it.<br/>%s"
-msgstr ""
+msgstr "Yachaywasiykikuna huk pachakamaq utaq kichay, qatiq URLwan yapa runakunata kachakuspaq, kachaspaq yachaywasiyta qhawayninkuman. Humpaq, e=1 sutita URLwan yapaspaq, \"1\"ta ruray IDwanmaskawan, rurayta qatiq. Ruray ID yachaywasiyta kichaspaykitan URLwan rikunki.<br/>%s"
 
 msgid "Direct link"
-msgstr ""
+msgstr "Qatiq URL"
 
 msgid "<p>Go ahead and browse our course catalog %s to register to any course you like. Once registered, you will see the course appear right %s, instead of this message.</p>"
-msgstr ""
+msgstr "<p>Yachaywasiykuna qhaway %s kachakuspaq. Kachaspaq, yachaywasiyta %s rikunki, kay willakuykunawan.</p>"
 
 msgid "<p>Hello <strong>%s</strong> and welcome,</p>"
-msgstr ""
+msgstr "<p>Imaynalla <strong>%s</strong>, sumaqkama,</p>"
 
 msgid "Unsubscribe users already added"
-msgstr ""
+msgstr "Yapakunakunata qichuy"
 
 msgid "Import users"
-msgstr ""
+msgstr "Runakunata apachiy"
 
 msgid "INFORMATION VISIBLE TO THE TEACHER ONLY:\nThis folder contains documents which are created by the Learning Path tool. Inside this folder you can edit the HTML file which are generated by importing content from the Learning Path, as the ones imported by Chamilo Rapid, for example. We recommend hiding this folder to your students."
-msgstr ""
+msgstr "YACHACHIQKUNAPAQQARQAN WILLAPUWAN:\nKay phuru yachakuy yapasapuywan rurasqa willakuykunata hap'ipun. Kay phuru HTML willakuykunata yapasapuyta atikuy, yachakuykutam apachispaq, Chamilo Rapidwan apachisqa sapa. Estudianteswan qamñata pukaq kachkan."
 
 msgid "Just a moment, please. You will be redirected in %s seconds..."
-msgstr ""
+msgstr "Sapaq pisi, %s pachakwata qhawachkan..."
 
 msgid "To protect your site, make the whole %s directory read-only (chmod -R 0555 on Linux) and delete the %s directory."
-msgstr ""
+msgstr "Sitiykita amachaspaq, %s phuruta qhawaynita qhaway (chmod -R 0555 Linuxwan) %s phuruta qichuy."
 
 msgid "Number of public courses"
-msgstr ""
+msgstr "Pachakamaq yachaywasikuna número"
 
 msgid "Number of open courses"
-msgstr ""
+msgstr "Kichay yachaywasikuna número"
 
 msgid "Number of private courses"
-msgstr ""
+msgstr "Huk yachaywasikuna número"
 
 msgid "Number of closed courses"
-msgstr ""
+msgstr "Puka yachaywasikuna número"
 
 msgid "Total number of courses"
-msgstr ""
+msgstr "Yachaywasikuna número total"
 
 msgid "Number of active users"
-msgstr ""
+msgstr "Qhaway runakuna número"
 
 msgid "Certificates count"
-msgstr ""
+msgstr "Yapasqakuna número"
 
 msgid "Avg hours/student"
-msgstr ""
+msgstr "Prom. horaq / yachakuq"
 
 msgid "Subscribed users count"
-msgstr ""
+msgstr "Kachakunakuna número"
 
 msgid "Hours of accumulated training"
-msgstr ""
+msgstr "Yapakunakuna horaq"
 
 msgid "Approved"
-msgstr ""
+msgstr "Aprobado"
 
 msgid "Edit questions"
-msgstr ""
+msgstr "Pusqusqakunata yapasapuy"
 
 msgid "Man hours"
-msgstr ""
+msgstr "Runa horaq"
 
 msgid "Notes obtained"
-msgstr ""
+msgstr "Yapasqa notaq"
 
 msgid "Click on the [Learner view] button to see your learning path"
-msgstr ""
+msgstr "[Yachakuq qhawana] butonpi kikin yachakuy ruramanki"
 
 msgid "This value can't be changed."
-msgstr ""
+msgstr "Kay valor nillakunman."
 
 msgid "This value is used in the course URL"
-msgstr ""
+msgstr "Kay valor yachaywasi URLpi llamkan"
 
 msgid "Total available users"
-msgstr ""
+msgstr "Runakuna total"
 
 msgid "user"
-msgstr ""
+msgstr "runa"
 
 msgid "Generate certificates"
-msgstr ""
+msgstr "Yapasqakuna ruray"
 
 msgid "Export all certificates to PDF"
-msgstr ""
+msgstr "Yapasqakuna PDFman apachiy"
 
 msgid "Delete all certificates"
-msgstr ""
+msgstr "Yapasqakuna qichuy"
 
 msgid "There are users using this language. Do you want to disable this language and set all this users with the default portal language?"
-msgstr ""
+msgstr "Kay rimaypi runakuna kachkan. ¿Kay rimayta qamñataq qamñataq willakuywan qamñakunata qamñataq?"
 
 msgid "Click to show graphics"
-msgstr ""
+msgstr "Grafikukunata rikunaykipaq kikin"
 
 msgid "Quarterly report"
-msgstr ""
+msgstr "Pachak killapi willakuy"
 
 msgid "%d %B %Y"
-msgstr ""
+msgstr "%d %B %Y"
 
 msgid "%A"
 msgstr "%A"
@@ -17946,7 +17946,7 @@ msgid "LaTeX code"
 msgstr "LaTeX rimay"
 
 msgid "LaTeX formula"
-msgstr "LaTeX formula"
+msgstr "Fórmula LaTeX"
 
 msgid "Are you sure you want to lock the attendance?"
 msgstr "Manam allinchu qispichiy assistenciyta?"
@@ -22905,61 +22905,61 @@ msgid "Who can consult the personal data? For what purpose?"
 msgstr "¿Piwakuna personal willakuyta qhawachikun? ¿Imaraykuta?"
 
 msgid "How and for what can we use the personal data?"
-msgstr ""
+msgstr "¿Imayna y imaykitaq runakunaq willakuykunata qhawachisqankuna?"
 
 msgid "With whom can we share them? In what opportunities? Through what processes (safe or not)?"
-msgstr ""
+msgstr "¿Piq sisitakunawan qhatarichisqankuna? ¿Imayna pachaqkunapi? ¿Imayna prusisukunawan (lluqsisqa mana allinchakchu)?"
 
 msgid "Do we have another system with which Chamilo interacts? What is the interconnection process? What are the data pieces exchanged and in what way?"
-msgstr ""
+msgstr "¿Huk sisitemi kanchu Chamilo hinawan yachakusqan? ¿Ima prusisukunmi? ¿Imayna willakuykunata cambianku y imayna?"
 
 msgid "What are the limits that we will always respect when using personal data? How far can we go?"
-msgstr ""
+msgstr "¿Imayna kanchaykunata allinmi runakunaq willakuykunata qhawachispa? ¿Hayk'aqmi?"
 
 msgid "After how long do we erase the data? (event, last use, contract validity, etc.) What are the elimination processes?"
-msgstr ""
+msgstr "¿Hayk'aqmi willakuykunata chinkachisqankuna? (hukpi, ñawpaq qhawachisqa, contrato validez, etc.) ¿Imayna chinkachisqa prusisukunakuna?"
 
 msgid "What happens if the data is destroyed as a result of a technical failure? (unauthorized deletion or loss of material, for example)"
-msgstr ""
+msgstr "¿Imayna kasqan willakuykunata qhawayku mana allinchakunataq yachaywan? (mana ruwarisqa chinkachisqa utqi material rakinakuna, hukkunataq)"
 
 msgid "For what purpose do we process personal data? Do we use it to filter the access users have to certain parts of our application? (negative or positive discrimination)"
-msgstr ""
+msgstr "¿Imaraykutaq runakunaq willakuykunata llamkan? ¿Qhawachinchu yachachisqakunata yachachinankupaq? (manam allinchakchu utqi allinchakchu)"
 
 msgid "By name"
-msgstr ""
+msgstr "Sutiwan"
 
 msgid "Ask for a revision"
-msgstr ""
+msgstr "Kamachiyta mañakuy"
 
 msgid "This feature has been disabled because the libraries it depends on are no longer unmaintained."
-msgstr ""
+msgstr "Kay llank'ayqa mana llank'achkan, kaymanta yachakusqan librokunaqa mana amparakunachu."
 
 msgid "By geolocalization"
-msgstr ""
+msgstr "Geolocalizaciónwan"
 
 msgid "Give revision"
-msgstr ""
+msgstr "Kamachiyta qispichiy"
 
 msgid "Post reported"
-msgstr ""
+msgstr "Yachachisqa willakuy"
 
 msgid "User %s has reported the message %s in the forum %s"
-msgstr ""
+msgstr "Yachakuq %sqa %s willakuyta qispichirqa %s foromanpi"
 
 msgid "My communities"
-msgstr ""
+msgstr "Ñoqap yachachisqakuna"
 
 msgid "See all communities"
-msgstr ""
+msgstr "Tukuy yachachisqakunata qhaway"
 
 msgid "Hide forum notifications"
-msgstr ""
+msgstr "Foro willakuy notisakunata pakay"
 
 msgid "Forum Category fields"
-msgstr ""
+msgstr "Foro iyar willakuykuna"
 
 msgid "Forum post fields"
-msgstr ""
+msgstr "Foro willakuy willakuykuna"
 
 msgid "Show only global score (not question score) and show only the correct answers, do not show incorrect answers at all"
 msgstr "Qhapaq puyñu yachayniyutawan (mana suyana puyñu yachayniyutawan) qhawarina, allin suyakunatayachin qhawarina, mana mana allinchu suyakunata qhawarinachu"
@@ -26481,7 +26481,7 @@ msgid "Filter messages between a teacher and a learner between the session start
 msgstr "Amawt' yachakuq rimayninkuna session qallariy y tukuy p'unchaykunapim filtray"
 
 msgid "UNO converter binaries"
-msgstr "UNO converter binaries"
+msgstr "UNO kamachiyta binarios"
 
 msgid "Give the system path to the UNO converter library to enable some extra exporting features."
 msgstr "Sistema ñanqa UNO converter library qispinapaq yarpay extra exporting features kamachispaq."
@@ -26493,7 +26493,7 @@ msgid "When using Chamilo for a specific purpose (like one massive online exam),
 msgstr "Chamiloq rumi imata uspaykipaq (huk massive online examllataq), distraction reduciy yantaq side menu qhallayta munanki."
 
 msgid "PDF export resolution"
-msgstr "PDF export resolution"
+msgstr "PDF raphi kamachiy"
 
 msgid "This represents the resolution of generated PDF files (in dot per inch, or dpi). The default is 96. Increasing it will give you better resolution PDF files but will also increase the weight and generation time of the files."
 msgstr "Kayqa generachisqa PDF willakuykuna resolutionninta rikuchin (dot per inch, dpi). Kamachisqallaq 96. Yarpasqaqa better resolution PDF willakuykuna qispinchu, hamut'ayuq peso y generacion tiemponita yarpasqa."
@@ -26535,49 +26535,49 @@ msgid "When importing users (batch processes), automatically generate a random s
 msgstr "Runa importaspayki (batch processes), usernamepaq random string automatically generay. Mana kasqanman, username firstname y lastname nisqakuna, o e-mail prefixmanta generasqa."
 
 msgid "Timepicker increment"
-msgstr "Timepicker increment"
+msgstr "Pachaq kamachiy ñawinchay"
 
 msgid "Minimal time increment (in minutes) when selecting a date and time with the timepicker widget. For example, it might not be useful to have less than 5 or 15 minutes increments when talking about assignment submission, availability of a test, start time of a session, etc."
 msgstr "Timepicker widgetwan p'unchay y hora qhawaytaq minimal time increment (phutapi). Qhepalla, assignment submission, test availability, session qallariy tiemponapi 5 o 15 phutakuna increment mana munakun."
 
 msgid "Proxy settings"
-msgstr "Proxy settings"
+msgstr "Proxy kamachiykuna"
 
 msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it.<br><pre> [ 'stream_context_create' => [ 'http' => [ 'proxy' => 'tcp://example.com:8080', 'request_fulluri' => true ] ], 'curl_setopt_array' => [ 'CURLOPT_PROXY' => 'http://example.com', 'CURLOPT_PROXYPORT' => '8080' ] ] </pre>"
 msgstr "Chamilo featuresqa servermanta paqarimanta conectan. Qhepalla link kamachispaq o learning pathpi embedded p'anqa rikuchispaq external content kanchusqanta yachachiy. Chamilo serverq proxy usqanman, kaypi proxyta qhaway.<br><pre> [ 'stream_context_create' => [ 'http' => [ 'proxy' => 'tcp://example.com:8080', 'request_fulluri' => true ] ], 'curl_setopt_array' => [ 'CURLOPT_PROXY' => 'http://example.com', 'CURLOPT_PROXYPORT' => '8080' ] ] </pre>"
 
 msgid "Video features"
-msgstr "Video features"
+msgstr "Willakuy vidiyo llank'aykuna"
 
 msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video.<br><pre> ['features' => ['speed']] </pre>"
 msgstr "Chamilo video playerpaq extra features array kamachiy. Optionsqa 'speed' nisqan, video playback speed cambianapaq.<br><pre> ['features' => ['speed']] </pre>"
 
 msgid "Default offered pagination numbers in tables"
-msgstr ""
+msgstr "Tablaqanpi ñawinchakunapaq ñawpaq willakuykuna"
 
 msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500].<br><pre> ['options' => [50, 100, 200, 500]] </pre>"
-msgstr ""
+msgstr "Tabla watapi ñawinchakunata kamachiy imakunata munaspayki qawachinapaq. hukkunataq [50, 100, 200, 500].<br><pre> ['options' => [50, 100, 200, 500]] </pre>"
 
 msgid "Webservices return user field"
-msgstr ""
+msgstr "Webservices yachakuq willakuy qispin"
 
 msgid "Ask REST webservices (v2.php) to return another identifier for fields related to user ID. This is useful if the external system doesn't really deal with user IDs as they are in Chamilo, as it helps the external system match the user data return with some external data that is know to Chamilo. For example, if you use an external authentication system, you can return the extra field used to match the user with the external authentication system rather than user.id."
-msgstr ""
+msgstr "REST webservices (v2.php)ta kamachiy yachakuq ID willakuykunaq huk identificador qispichiy. Kayqa allinchakmi mana Chamilo hina yachakuq IDkunawan yachakunachu, kayqa yachakuq willakuykunata yachachisqawan yachakunata qhatarichinapaq. Rikch'aq, mana allinchakunaq yachakuy sisitemita qhaspalla, yachakuqta qhatarichiy extra willakuy qispichiy mana yachakuq.id hinalla."
 
 msgid "Hide disabled settings in sub-URLs"
-msgstr ""
+msgstr "Mana llank'achka kamachiykuna sub-URLpi pakay"
 
 msgid "Set to yes to hide settings completely in a sub-URL if the setting is disabled in the main URL (where the access_url_changeable field = 0)"
-msgstr ""
+msgstr "Ari niyspalla kamachiyqa mana llank'achka main URLpi (access_url_changeable = 0) mana qawachinchu sub-URLpi."
 
 msgid "Max login attempts before lockdown"
-msgstr ""
+msgstr "Qhaway lockdown munay ñawinchakuna"
 
 msgid "Number of failed login attempts to tolerate before the user account is locked and has to be unlocked by an admin."
-msgstr ""
+msgstr "Mana rurasqa qhawachisqa ñawinchakuna yachakuq iñiqta qullqachiy adminwan qullqachisqa."
 
 msgid "Force password renewal at first login"
-msgstr ""
+msgstr "Ñawpaq qhawachisqapi qhawachisqa willakuy qhaway"
 
 msgid "This is one simple measure to increase the security of your portal by asking users to immediately change their password, so the one that was transfered by e-mail is no longer valid and they then will use one that they came up with and that they are the only person to know."
 msgstr "Kay qhapa pukaq yachayniyukuywan portalniq seguridatata allichanapaq, ruraqkunata pascaskanki chakramanta sutinmanta askachakunata mañakunapaq, imataq e-chaskipi yachachasqankunamanta mana allinchakunapas, chaymantaqa qhapaq sutinta kamarun, paykunaqllam yachakun."
@@ -29314,7 +29314,7 @@ msgid "Subscriptions vs unsubscriptions, by day"
 msgstr "Qispikuy vs mana qispikuy, p'unchaypaq"
 
 msgid "Quarterly report"
-msgstr ""
+msgstr "Pachak killapi willakuy"
 
 msgid "Course/Session subscriptions, by day"
 msgstr "Killakuna/Sesion qispikuykunapas, p'unchaypaq"
@@ -30052,7 +30052,7 @@ msgid "Save diagnostic changes"
 msgstr "Diagnostic cambioskunata qhipalla"
 
 msgid "Domain %s"
-msgstr "Domain %s"
+msgstr "Dominiyo %s"
 
 msgid "Topic %s"
 msgstr "Runa %s"
@@ -30205,25 +30205,25 @@ msgid "You have been enrolled in the course"
 msgstr "Yachaywasiman inscrito kanki"
 
 msgid "Hello %s, you have been enrolled in the course %s."
-msgstr ""
+msgstr "Allillay %s, %s kursopi qatamusqankiraq."
 
 msgid "Acquisition"
-msgstr ""
+msgstr "Kamachiy"
 
 msgid "Session display dates"
-msgstr ""
+msgstr "Runakuna rurakuna paqchin"
 
 msgid "Session access dates"
-msgstr ""
+msgstr "Runakuna yachachisqa paqchin"
 
 msgid "Hello %s, you have been enrolled in the course %s for the session %s."
-msgstr ""
+msgstr "Allillay %s, %s yachaypi %s runakunamanta qallariwayki."
 
 msgid "You have been enrolled in the course %s for the session %s"
-msgstr ""
+msgstr "%s yachaypi %s runakunamanta qallariwayki"
 
 msgid "Semicolon (;) delimiter detected. This version of Chamilo requires comma (,) as the CSV separator. Please export your file again as CSV (comma-separated)."
-msgstr ""
+msgstr "Semicolon (;) hallallasqakuna. Kë Chamilo versiyön coma (,) CSV rurakunata mañakun. Favur yachachinikuq fileta CSV (coma-separated) munakunata qallariy."
 
 msgid "Replication"
 msgstr "Replikasyon"
@@ -31439,4 +31439,19 @@ msgstr "Sutisapaq hallp'a, ñawpaq sunqun, utaq ch'usa (_ )mi kachkanman. Mana a
 
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "¿Imayna ruray willakuykuna yachakuqkuna platformata qhawayta atinman?"
+
+msgid "ex. {examplePassword}"
+msgstr "jt. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "¡Chamilo hunt'a kankichik!"
+
+msgid "Welcome to this platform"
+msgstr "Kay platformamanta kankichik"
+
+msgid "For more details visit %s"
+msgstr "Yäqin yachachisqatam ñawinchay %s"
+
+msgid "Manager"
+msgstr "Kamachiq"
 

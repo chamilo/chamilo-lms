@@ -31440,3 +31440,18 @@ msgstr "Veritabanı adında yalnızca harfler, rakamlar ve alt çizgi (_) izinli
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Kullanıcılara bu platformu kullanmak için verilen genel şartlar ve koşullar nelerdir?"
 
+msgid "ex. {examplePassword}"
+msgstr "ör. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Chamilo'ya hoş geldiniz!"
+
+msgid "Welcome to this platform"
+msgstr "Bu platforma hoş geldiniz"
+
+msgid "For more details visit %s"
+msgstr "Daha fazla detay için %s adresini ziyaret edin"
+
+msgid "Manager"
+msgstr "Yönetici"
+

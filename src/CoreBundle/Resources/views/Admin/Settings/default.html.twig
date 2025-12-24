@@ -314,6 +314,106 @@
                                                 {% endfor %}
                                                 </tbody>
                                             </table>
+
+                                            {# --- Add this block right after the tools table --- #}
+                                            <div class="mt-4 p-4 rounded-lg border border-gray-25 bg-gray-10">
+                                                <h4 class="text-gray-90 text-body-2 font-semibold mb-2">
+                                                    {{ 'Supported file formats and required programs'|trans }}
+                                                </h4>
+
+                                                <p class="text-body-2 text-gray-70 mb-3">
+                                                    {{ 'Xapian indexes plain text only. For binary/external formats, Chamilo must first extract text using the programs below.'|trans }}
+                                                </p>
+
+                                                <table class="min-w-full text-sm border border-gray-25 rounded overflow-hidden bg-white">
+                                                    <thead class="bg-gray-10">
+                                                    <tr>
+                                                        <th class="px-3 py-2 text-left">{{ 'File extension(s)'|trans }}</th>
+                                                        <th class="px-3 py-2 text-left">{{ 'Extractor program'|trans }}</th>
+                                                        <th class="px-3 py-2 text-left">{{ 'Typical source formats'|trans }}</th>
+                                                        <th class="px-3 py-2 text-left">{{ 'Notes'|trans }}</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr class="border-t border-gray-15">
+                                                        <td class="px-3 py-2"><code>.pdf</code></td>
+                                                        <td class="px-3 py-2"><code>pdftotext</code></td>
+                                                        <td class="px-3 py-2">{{ 'PDF documents'|trans }}</td>
+                                                        <td class="px-3 py-2 text-gray-70">
+                                                            {{ 'Works on text-based PDFs. Scanned/image-only PDFs may return empty output unless OCR is used.'|trans }}
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr class="border-t border-gray-15">
+                                                        <td class="px-3 py-2"><code>.ps</code></td>
+                                                        <td class="px-3 py-2"><code>ps2pdf</code></td>
+                                                        <td class="px-3 py-2">{{ 'PostScript files'|trans }}</td>
+                                                        <td class="px-3 py-2 text-gray-70">
+                                                            {{ 'Used for PostScript-to-PDF conversion when needed by the extraction pipeline.'|trans }}
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr class="border-t border-gray-15">
+                                                        <td class="px-3 py-2"><code>.doc</code></td>
+                                                        <td class="px-3 py-2"><code>catdoc</code></td>
+                                                        <td class="px-3 py-2">{{ 'Legacy Microsoft Word (binary)'|trans }}</td>
+                                                        <td class="px-3 py-2 text-gray-70">
+                                                            {{ 'Applies to older .doc files (not .docx).'|trans }}
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr class="border-t border-gray-15">
+                                                        <td class="px-3 py-2"><code>.rtf</code></td>
+                                                        <td class="px-3 py-2"><code>unrtf</code></td>
+                                                        <td class="px-3 py-2">{{ 'Rich Text Format'|trans }}</td>
+                                                        <td class="px-3 py-2 text-gray-70">
+                                                            {{ 'Extracts text content from RTF documents.'|trans }}
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr class="border-t border-gray-15">
+                                                        <td class="px-3 py-2"><code>.ppt</code></td>
+                                                        <td class="px-3 py-2"><code>catppt</code></td>
+                                                        <td class="px-3 py-2">{{ 'Legacy Microsoft PowerPoint (binary)'|trans }}</td>
+                                                        <td class="px-3 py-2 text-gray-70">
+                                                            {{ 'Applies to older .ppt files (not .pptx).'|trans }}
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr class="border-t border-gray-15">
+                                                        <td class="px-3 py-2"><code>.xls</code></td>
+                                                        <td class="px-3 py-2"><code>xls2csv</code></td>
+                                                        <td class="px-3 py-2">{{ 'Legacy Microsoft Excel (binary)'|trans }}</td>
+                                                        <td class="px-3 py-2 text-gray-70">
+                                                            {{ 'Converts spreadsheets to CSV so text can be indexed.'|trans }}
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr class="border-t border-gray-15">
+                                                        <td class="px-3 py-2"><code>.html</code>, <code>.htm</code></td>
+                                                        <td class="px-3 py-2"><code>html2text</code></td>
+                                                        <td class="px-3 py-2">{{ 'HTML documents'|trans }}</td>
+                                                        <td class="px-3 py-2 text-gray-70">
+                                                            {{ 'Converts HTML to plain text (tags removed) before indexing.'|trans }}
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr class="border-t border-gray-15">
+                                                        <td class="px-3 py-2"><code>.txt</code>, <code>.md</code>, <code>.csv</code></td>
+                                                        <td class="px-3 py-2">{{ 'None (direct read)'|trans }}</td>
+                                                        <td class="px-3 py-2">{{ 'Plain text formats'|trans }}</td>
+                                                        <td class="px-3 py-2 text-gray-70">
+                                                            {{ 'These formats are already plain text and do not require external converters.'|trans }}
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                                <p class="text-body-2 text-gray-60 mt-3 mb-0">
+                                                    {{ 'Note: modern Office formats like .docx/.pptx/.xlsx require a different extraction method (ZIP/XML parsing, LibreOffice conversion, or a dedicated parser service).'|trans }}
+                                                </p>
+                                            </div>
+                                            {# --- End block --- #}
                                         </div>
                                     {% endif %}
                                 {% endif %}

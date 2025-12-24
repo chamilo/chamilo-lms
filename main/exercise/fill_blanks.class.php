@@ -1449,7 +1449,17 @@ class FillBlanks extends Question
     private static function trimOption($text)
     {
         $text = trim($text);
-
+        
+        // Remove invisible Unicode characters that can cause comparison issues
+        // U+200B = ZERO WIDTH SPACE
+        // U+200C = ZERO WIDTH NON-JOINER
+        // U+200D = ZERO WIDTH JOINER
+        // U+FEFF = ZERO WIDTH NO-BREAK SPACE (BOM)
+        $text = str_replace("\u{200B}", '', $text);
+        $text = str_replace("\u{200C}", '', $text);
+        $text = str_replace("\u{200D}", '', $text);
+        $text = str_replace("\u{FEFF}", '', $text);
+        
         return preg_replace("/\s+/", ' ', $text);
     }
 }

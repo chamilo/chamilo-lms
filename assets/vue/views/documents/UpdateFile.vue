@@ -1,6 +1,5 @@
 <template>
   <div v-if="!isLoading && item && canEditItem">
-    <!--    :handle-delete="del"-->
     <Toolbar
       :handle-back="handleBack"
       :handle-reset="resetForm"
@@ -17,6 +16,7 @@
           ref="updateForm"
           :errors="violations"
           :values="item"
+          :search-enabled="isSearchEnabled"
           @submit="onSendFormData"
         >
           <EditLinks
@@ -25,6 +25,7 @@
             links-type="users"
           />
         </DocumentsForm>
+
         <Panel
           v-if="filetype === 'certificate'"
           :header="
@@ -43,7 +44,8 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue"
+import { computed, onMounted, ref } from "vue"
+import { usePlatformConfig } from "../../store/platformConfig"
 import { mapActions, mapGetters } from "vuex"
 import { mapFields } from "vuex-map-fields"
 import DocumentsForm from "../../components/documents/FormNewDocument.vue"
@@ -59,6 +61,9 @@ import { useSecurityStore } from "../../store/securityStore"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 
 const servicePrefix = "Documents"
+
+const platformConfigStore = usePlatformConfig()
+const isSearchEnabled = computed(() => "false" !== platformConfigStore.getSetting("search.search_enabled"))
 
 export default {
   name: "DocumentsUpdate",
@@ -90,6 +95,7 @@ export default {
       isAllowedToEdit,
       route,
       checkEditPermissions,
+      isSearchEnabled,
     }
   },
   data() {
@@ -142,10 +148,10 @@ export default {
         .get(`/template/all-templates/${cid}`)
         .then((response) => {
           this.templates = response.data
-          console.log("Templates fetched successfully:", this.templates)
+          console.log("[Documents] Templates fetched successfully:", this.templates)
         })
         .catch((error) => {
-          console.error("Error fetching the templates:", error)
+          console.error("[Documents] Error fetching templates:", error)
         })
     },
     addTemplateToEditor(templateContent) {

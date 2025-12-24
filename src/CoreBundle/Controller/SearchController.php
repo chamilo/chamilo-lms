@@ -82,12 +82,14 @@ final class SearchController extends AbstractController
     }
 
     #[Route(
-        path: '/search/xapian/ui',
-        name: 'chamilo_core.search_xapian_ui',
+        path: '/search/ui',
+        name: 'chamilo_core.search_ui',
         methods: ['GET']
     )]
     public function xapianSearchPageAction(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
         $q = trim((string) $request->query->get('q', ''));
 
         $estimatedTotal = 0;
@@ -208,10 +210,9 @@ final class SearchController extends AbstractController
 
     /**
      * For question results, resolve the related quiz from c_quiz_rel_question
-     * and attach quiz_id into the result data so the Twig can build the link.
+     * and attach quiz_id (and quiz_title) into the result data so Twig can build safer links/UI.
      *
      * @param array<int, array<string, mixed>> $results
-     *
      * @return array<int, array<string, mixed>>
      */
     private function hydrateQuestionResultsWithQuizIds(array $results): array
@@ -236,11 +237,7 @@ final class SearchController extends AbstractController
                 continue;
             }
 
-            if (!empty($data['quiz_id'])) {
-                $result['data'] = $data;
-                continue;
-            }
-
+            // If already present, keep it (but still try to enrich quiz_title if missing).
             $questionId = isset($data['question_id']) && '' !== (string) $data['question_id']
                 ? (int) $data['question_id']
                 : null;
@@ -266,7 +263,19 @@ final class SearchController extends AbstractController
                 continue;
             }
 
-            $data['quiz_id'] = (string) $quiz->getIid();
+            // Attach quiz id for linking.
+            if (empty($data['quiz_id'])) {
+                $data['quiz_id'] = (string) $quiz->getIid();
+            }
+
+            // Attach quiz title so we can display it instead of exposing full question text.
+            if (empty($data['quiz_title']) && method_exists($quiz, 'getTitle')) {
+                $quizTitle = (string) $quiz->getTitle();
+                if ('' !== $quizTitle) {
+                    $data['quiz_title'] = $quizTitle;
+                }
+            }
+
             $result['data'] = $data;
         }
 
@@ -362,7 +371,9 @@ final class SearchController extends AbstractController
      * Adds UI-friendly fields:
      * - file icon based on extension
      * - excerpt with highlighted terms
-     * - is_accessible flag (when resource_node_id exists)
+     * - is_accessible flag (session-aware)
+     *
+     * Important: for question results, do NOT expose full question text.
      *
      * @param array<int, array<string, mixed>> $results
      * @return array<int, array<string, mixed>>
@@ -381,24 +392,135 @@ final class SearchController extends AbstractController
                 $data = [];
             }
 
-            $title = isset($data['title']) ? (string) $data['title'] : '';
+            $kind = (string) ($data['kind'] ?? '');
+            $tool = (string) ($data['tool'] ?? '');
+            $isQuestion = ('question' === $kind) || ('quiz_question' === $tool);
+
+            $title    = isset($data['title']) ? (string) $data['title'] : '';
             $fullPath = isset($data['full_path']) ? (string) $data['full_path'] : '';
-            $content = isset($data['content']) ? (string) $data['content'] : '';
+            $content  = isset($data['content']) ? (string) $data['content'] : '';
 
             $ext = $this->guessFileExtension($fullPath, $title);
             $data['file_ext'] = $ext;
             $data['file_icon'] = $this->guessFileIconMdi($ext, (string) ($data['filetype'] ?? ''));
 
-            $data['excerpt_html'] = $this->buildExcerptHtml($content, $terms, 220);
-
+            // Resolve session context first (used for access checks + link building).
             $resolvedSid = $this->resolveSessionIdForResult($data);
             $data['resolved_session_id'] = $resolvedSid;
+
+            // Build excerpt safely.
+            if ($isQuestion) {
+                // Use quiz title as the main visible title if available.
+                if (!empty($data['quiz_title'])) {
+                    $data['title'] = (string) $data['quiz_title'];
+                }
+
+                // Show only a tiny context around the match, never the full question content.
+                $data['excerpt_html'] = $this->buildSafeQuestionExcerptHtml($content, $terms, 3);
+            } else {
+                $data['excerpt_html'] = $this->buildExcerptHtml($content, $terms, 220);
+            }
+
+            // Session-aware access flag.
             $data['is_accessible'] = $this->isResultAccessible($data, $resolvedSid);
 
             $result['data'] = $data;
         }
 
         return $results;
+    }
+
+    /**
+     * Builds a safe excerpt for question-like content:
+     * show only a few words around the first matched term, with <mark> highlight.
+     * Never returns the full text.
+     *
+     * @param string   $content Raw indexed content (question text may be here)
+     * @param string[] $terms   Query terms
+     * @param int      $radiusWords Number of words before/after the match
+     */
+    private function buildSafeQuestionExcerptHtml(string $content, array $terms, int $radiusWords = 3): string
+    {
+        $plain = html_entity_decode(strip_tags($content), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $plain = preg_replace('/\s+/u', ' ', $plain) ?? $plain;
+        $plain = trim($plain);
+
+        if ('' === $plain || empty($terms)) {
+            return '';
+        }
+
+        $lower = mb_strtolower($plain, 'UTF-8');
+
+        $matchPos = null;
+        $matchedTerm = null;
+
+        foreach ($terms as $t) {
+            $t = trim($t);
+            if ('' === $t) {
+                continue;
+            }
+            $p = mb_stripos($lower, mb_strtolower($t, 'UTF-8'), 0, 'UTF-8');
+            if ($p !== false) {
+                $matchPos = (int) $p;
+                $matchedTerm = $t;
+                break;
+            }
+        }
+
+        if (null === $matchPos || null === $matchedTerm) {
+            // If we cannot locate a match safely, do not reveal anything.
+            return '';
+        }
+
+        // Split into words, find the word index that contains the match.
+        $words = preg_split('/\s+/u', $plain) ?: [];
+        if (empty($words)) {
+            return '';
+        }
+
+        $charCount = 0;
+        $matchWordIndex = 0;
+
+        foreach ($words as $i => $w) {
+            $wLen = mb_strlen($w, 'UTF-8');
+            // Approximate char span with 1 whitespace between words.
+            $spanStart = $charCount;
+            $spanEnd = $charCount + $wLen;
+
+            if ($matchPos >= $spanStart && $matchPos <= $spanEnd) {
+                $matchWordIndex = (int) $i;
+                break;
+            }
+
+            $charCount = $spanEnd + 1;
+        }
+
+        $start = max(0, $matchWordIndex - $radiusWords);
+        $end   = min(count($words) - 1, $matchWordIndex + $radiusWords);
+
+        $slice = array_slice($words, $start, ($end - $start) + 1);
+        $snippet = implode(' ', $slice);
+
+        $escaped = htmlspecialchars($snippet, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+        // Highlight terms (small snippet, safe).
+        foreach ($terms as $t) {
+            $t = trim($t);
+            if ('' === $t) {
+                continue;
+            }
+            $pattern = '/(' . preg_quote(htmlspecialchars($t, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), '/') . ')/iu';
+            $escaped = preg_replace($pattern, '<mark class="px-1 rounded bg-yellow-200">$1</mark>', $escaped) ?? $escaped;
+        }
+
+        if ($start > 0) {
+            $escaped = '…' . $escaped;
+        }
+        if ($end < (count($words) - 1)) {
+            $escaped .= '…';
+        }
+
+        return $escaped;
     }
 
     /**

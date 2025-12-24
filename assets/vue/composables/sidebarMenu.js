@@ -161,7 +161,7 @@ export function useSidebarMenu() {
       items.push({
         icon: "mdi mdi-magnify",
         label: t("Search"),
-        url: "/search/xapian/ui",
+        url: "/search/ui",
       })
     }
 

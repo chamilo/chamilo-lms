@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use ChamiloSession as Session;
 
 $cidReset = true;
 
@@ -35,6 +36,198 @@ $warn = null;
 $updatesession = null;
 $userInfo = api_get_user_info();
 
+/**
+ * Normalize CSV header keys (remove BOM + trim) to match importCSV() behavior.
+ */
+function sessionImportNormalizeKey(string $k): string
+{
+    return trim(ltrim($k, "\xEF\xBB\xBF"));
+}
+
+/**
+ * Parse the uploaded CSV using the same Import::csvToArray() used by importCSV().
+ *
+ * @return array<int, array<string, mixed>>
+ */
+function sessionImportReadCsvRows(string $file): array
+{
+    $rows = Import::csvToArray($file);
+    if (empty($rows) || !is_array($rows)) {
+        return [];
+    }
+
+    $normalizedRows = [];
+    foreach ($rows as $r) {
+        $nr = [];
+        foreach ($r as $k => $v) {
+            $nr[sessionImportNormalizeKey((string) $k)] = $v;
+        }
+        $normalizedRows[] = $nr;
+    }
+
+    return $normalizedRows;
+}
+
+/**
+ * Split a pipe-separated list (e.g. "u1|u2|u3") into trimmed values.
+ *
+ * @return string[]
+ */
+function sessionImportSplitPipe(string $raw): array
+{
+    $raw = trim((string) $raw);
+    if ('' === $raw) {
+        return [];
+    }
+
+    $parts = array_map('trim', explode('|', $raw));
+    $parts = array_values(array_filter($parts, 'strlen'));
+
+    // Unique while preserving order
+    $seen = [];
+    $out = [];
+    foreach ($parts as $p) {
+        if (!isset($seen[$p])) {
+            $seen[$p] = true;
+            $out[] = $p;
+        }
+    }
+
+    return $out;
+}
+
+/**
+ * Extract course codes from the Courses column.
+ * Supports "CODE" and "CODE[coach][users]" formats.
+ *
+ * @return string[]
+ */
+function sessionImportExtractCourseCodes(string $rawCourses): array
+{
+    $items = sessionImportSplitPipe($rawCourses);
+    $codes = [];
+
+    foreach ($items as $item) {
+        // Same helper used in importCSV()
+        $arr = bracketsToArray($item);
+        $code = trim((string) ($arr[0] ?? ''));
+
+        if ('' !== $code) {
+            $codes[] = $code;
+        }
+    }
+
+    // Unique
+    $codes = array_values(array_unique($codes));
+
+    return $codes;
+}
+
+/**
+ * Post-step:
+ * Ensure session users (from Users column) are also subscribed to each session course (session_rel_course_rel_user).
+ * Then refresh session_rel_course.nbr_users (counts students per course-session).
+ *
+ * This fixes the current core bug where $userList is never populated in importCSV().
+ */
+function sessionImportEnsureCourseSubscriptionsFromCsv(string $csvFile, array $sessionIdList): void
+{
+    $tblSessionCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE); // session_rel_course
+    $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER); // session_rel_course_rel_user
+
+    $rows = sessionImportReadCsvRows($csvFile);
+    if (empty($rows) || empty($sessionIdList)) {
+        return;
+    }
+
+    // Map rows to session IDs in the same order importCSV() produced them.
+    $idIndex = 0;
+
+    foreach ($rows as $row) {
+        $sessionName = trim((string) ($row['SessionName'] ?? ''));
+
+        // importCSV() skips empty session names
+        if ('' === $sessionName) {
+            continue;
+        }
+
+        if (!isset($sessionIdList[$idIndex])) {
+            // Nothing else to map
+            break;
+        }
+
+        $sessionId = (int) $sessionIdList[$idIndex];
+        $idIndex++;
+
+        if ($sessionId <= 0) {
+            continue;
+        }
+
+        $usernames = sessionImportSplitPipe((string) ($row['Users'] ?? ''));
+        $courseCodes = sessionImportExtractCourseCodes((string) ($row['Courses'] ?? ''));
+
+        if (empty($usernames) || empty($courseCodes)) {
+            continue;
+        }
+
+        // Resolve user IDs once per row
+        $userIds = [];
+        foreach ($usernames as $username) {
+            $uid = UserManager::get_user_id_from_username($username);
+            if (false !== $uid) {
+                $userIds[] = (int) $uid;
+            } else {
+                error_log("[SessionImport] User '$username' not found while post-subscribing to courses (session_id=$sessionId).");
+            }
+        }
+        $userIds = array_values(array_unique($userIds));
+
+        if (empty($userIds)) {
+            continue;
+        }
+
+        foreach ($courseCodes as $courseCode) {
+            if (!CourseManager::course_exists($courseCode)) {
+                error_log("[SessionImport] Course '$courseCode' not found while post-subscribing users (session_id=$sessionId).");
+                continue;
+            }
+
+            $courseInfo = api_get_course_info($courseCode);
+            $courseId = (int) ($courseInfo['real_id'] ?? 0);
+            if ($courseId <= 0) {
+                continue;
+            }
+
+            // Make sure the course is linked to the session (idempotent).
+            Database::query(
+                "INSERT IGNORE INTO $tblSessionCourse (c_id, session_id, position, nbr_users)
+                 VALUES ($courseId, $sessionId, 0, 0)"
+            );
+
+            // Insert session-course-user for each student (idempotent).
+            foreach ($userIds as $userId) {
+                Database::query(
+                    "INSERT IGNORE INTO $tblSessionCourseUser (user_id, session_id, c_id, status, visibility, legal_agreement, progress)
+                     VALUES ($userId, $sessionId, $courseId, ".STUDENT.", 1, 0, 0)"
+                );
+            }
+
+            // Refresh nbr_users in session_rel_course (count students only).
+            Database::query(
+                "UPDATE $tblSessionCourse sc
+                 SET sc.nbr_users = (
+                     SELECT COUNT(*)
+                     FROM $tblSessionCourseUser scu
+                     WHERE scu.session_id = $sessionId
+                       AND scu.c_id = $courseId
+                       AND scu.status = ".STUDENT."
+                 )
+                 WHERE sc.session_id = $sessionId AND sc.c_id = $courseId"
+            );
+        }
+    }
+}
+
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     if (!empty($_FILES['import_file']['tmp_name'])) {
         $fileType = $_POST['file_type'] ?? null;
@@ -66,34 +259,64 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                 }
             }
 
-            if ($fileType === 'xml') {
-                $result = SessionManager::importXML(
-                    $_FILES['import_file']['tmp_name'],
-                    $isOverwrite,
-                    api_get_user_id(),
-                    $sendMail,
-                    SESSION_VISIBLE,
-                    $insertedInCourse,
-                    $errorMessage
-                );
-            } elseif (empty($topStaticErrorHtml)) {
-                $result = SessionManager::importCSV(
-                    $_FILES['import_file']['tmp_name'],
-                    $isOverwrite,
-                    api_get_user_id(),
-                    null,
-                    [],
-                    null,
-                    null,
-                    null,
-                    SESSION_VISIBLE,
-                    [],
-                    $deleteUsersNotInList,
-                    !empty($_POST['update_course_coaches']),
-                    false,
-                    !empty($_POST['add_me_as_coach']),
-                    false
-                );
+            try {
+                if ($fileType === 'xml') {
+                    $result = SessionManager::importXML(
+                        $_FILES['import_file']['tmp_name'],
+                        $isOverwrite,
+                        api_get_user_id(),
+                        $sendMail,
+                        SESSION_VISIBLE,
+                        $insertedInCourse,
+                        $errorMessage
+                    );
+
+                    // Defensive flush (no-op if nothing pending).
+                    $em = Database::getManager();
+                    $em->flush();
+                    $em->clear();
+                } elseif (empty($topStaticErrorHtml)) {
+                    $result = SessionManager::importCSV(
+                        $_FILES['import_file']['tmp_name'],
+                        $isOverwrite,
+                        api_get_user_id(),
+                        null,
+                        [],
+                        null,
+                        null,
+                        null,
+                        SESSION_VISIBLE,
+                        [],
+                        $deleteUsersNotInList,
+                        !empty($_POST['update_course_coaches']),
+                        false,
+                        !empty($_POST['add_me_as_coach']),
+                        false
+                    );
+
+                    // IMPORTANT:
+                    // importCSV() adds students via Doctrine but does not flush at the end of the whole import.
+                    // This can make the last row appear as "not subscribed".
+                    $em = Database::getManager();
+                    $em->flush();
+                    $em->clear();
+
+                    // IMPORTANT (core bug workaround):
+                    // importCSV() never fills $userList, so users are not subscribed to session courses.
+                    // We post-process the CSV and insert into session_rel_course_rel_user (idempotent).
+                    $sessionListForPost = $result['session_list'] ?? [];
+                    if (!empty($sessionListForPost)) {
+                        sessionImportEnsureCourseSubscriptionsFromCsv(
+                            $_FILES['import_file']['tmp_name'],
+                            $sessionListForPost
+                        );
+                    }
+                }
+            } catch (Throwable $e) {
+                error_log('[SessionImport] Import failed: '.$e->getMessage());
+
+                $result = ['session_counter' => 0, 'session_list' => [], 'error_message' => ''];
+                $errorMessage .= 'Import failed due to an unexpected error. Please check server logs for details.';
             }
 
             $sessionCounter = $result['session_counter'] ?? 0;
@@ -229,7 +452,7 @@ document.addEventListener("DOMContentLoaded", function () {
 ?>
     <div id="csv-example" class="mt-6 rounded-lg border border-gray-300 bg-gray-100 p-4 overflow-auto">
         <h3 class="font-bold text-lg mb-2"><?php echo get_lang('Example CSV file'); ?>:</h3>
-        <pre class="whitespace-nowrap text-sm">
+        <pre class="whitespace-pre text-sm">
 <strong>SessionName</strong>,Coach,<strong>DateStart</strong>,<strong>DateEnd</strong>,Users,Courses,VisibilityAfterExpiration,DisplayStartDate,DisplayEndDate,CoachStartDate,CoachEndDate,Classes
 <strong>Example 1</strong>,username,<strong>2025/04/01</strong>,<strong>2025/04/30</strong>,username1|username2,course1[coach1][username1,...],read_only,2025/04/01,2025/04/30,2025/04/01,2025/04/30,class1
 <strong>Example 2</strong>,username,<strong>2025-04-01</strong>,<strong>2025-04-30</strong>,username1|username2,course1[coach1][username1,...],accessible,2025-04-01,2025-04-30,2025-04-01,2025-04-30,class2
@@ -238,7 +461,7 @@ document.addEventListener("DOMContentLoaded", function () {
     </div>
     <div id="xml-example" class="mt-6 rounded-lg border border-gray-300 bg-gray-100 p-4 overflow-auto hidden">
         <h3 class="font-bold text-lg mb-2"><?php echo get_lang('Example XML file'); ?>:</h3>
-        <pre class="whitespace-nowrap text-sm">
+        <pre class="whitespace-pre text-sm">
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;Sessions&gt;
     &lt;Session&gt;

@@ -58,6 +58,7 @@ class PageCategory
         'home',
         'public',
         'footer_public',
+        'index',
     ];
 
     #[Groups(['page_category:read', 'page_category:write'])]

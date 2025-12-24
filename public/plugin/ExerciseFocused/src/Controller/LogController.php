@@ -4,16 +4,17 @@
 
 namespace Chamilo\PluginBundle\ExerciseFocused\Controller;
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\PluginBundle\ExerciseFocused\Entity\Log;
 use ChamiloSession;
-use Exception;
 use Exercise;
 use ExerciseFocusedPlugin;
 use Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class LogController extends BaseController
 {
@@ -24,9 +25,6 @@ class LogController extends BaseController
         Log::TYPE_TIME_LIMIT,
     ];
 
-    /**
-     * @throws Exception
-     */
     public function __invoke(): Response
     {
         parent::__invoke();
@@ -34,7 +32,7 @@ class LogController extends BaseController
         $tokenIsValid = Security::check_token('get', null, 'exercisefocused');
 
         if (!$tokenIsValid) {
-            throw new Exception('token invalid');
+            throw new AccessDeniedHttpException('token invalid');
         }
 
         $action = $this->request->query->get('action');
@@ -43,13 +41,13 @@ class LogController extends BaseController
         $exeId = (int) ChamiloSession::read('exe_id');
 
         if (!in_array($action, self::VALID_ACTIONS)) {
-            throw new Exception('action invalid');
+            throw new AccessDeniedHttpException('action invalid');
         }
 
-        $trackingExercise = $this->em->find(TrackEExercises::class, $exeId);
+        $trackingExercise = $this->em->find(TrackEExercise::class, $exeId);
 
         if (!$trackingExercise) {
-            throw new Exception('no exercise attempt');
+            throw new NotFoundHttpException('no exercise attempt');
         }
 
         $objExercise = new Exercise($trackingExercise->getCId());
@@ -61,7 +59,7 @@ class LogController extends BaseController
             $question = $this->em->find(CQuizQuestion::class, $levelId);
 
             if (!$question) {
-                throw new Exception('Invalid level');
+                throw new NotFoundHttpException('Invalid level');
             }
 
             $level = $question->getIid();
@@ -92,6 +90,6 @@ class LogController extends BaseController
             'remainingOutfocused' => $remainingOutfocused,
         ];
 
-        return JsonResponse::create($json);
+        return new JsonResponse($json);
     }
 }

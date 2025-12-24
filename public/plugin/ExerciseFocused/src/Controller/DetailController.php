@@ -4,17 +4,17 @@
 
 namespace Chamilo\PluginBundle\ExerciseFocused\Controller;
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\PluginBundle\ExerciseFocused\Entity\Log;
 use Chamilo\PluginBundle\ExerciseFocused\Traits\DetailControllerTrait;
 use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Doctrine\ORM\TransactionRequiredException;
 use Exception;
 use Exercise;
 use HTML_Table;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DetailController extends BaseController
 {
@@ -23,39 +23,36 @@ class DetailController extends BaseController
     /**
      * @throws OptimisticLockException
      * @throws TransactionRequiredException
-     * @throws ORMException
      * @throws Exception
      */
-    public function __invoke(): HttpResponse
+    public function __invoke(): Response
     {
         parent::__invoke();
 
         $exeId = $this->request->query->getInt('id');
-        $exe = $this->em->find(TrackEExercises::class, $exeId);
+        $exe = $this->em->find(TrackEExercise::class, $exeId);
 
         if (!$exe) {
-            throw new Exception();
+            throw new NotFoundHttpException(
+                Response::$statusTexts[Response::HTTP_NOT_FOUND]
+            );
         }
 
-        $user = api_get_user_entity($exe->getExeUserId());
-
-        $objExercise = new Exercise($exe->getCId());
-        $objExercise->read($exe->getExeExoId());
+        $objExercise = new Exercise($exe->getCourse()->getId());
+        $objExercise->read($exe->getQuiz()->getIid());
 
         $logs = $this->logRepository->findBy(['exe' => $exe], ['updatedAt' => 'ASC']);
         $table = $this->getTable($objExercise, $logs);
 
-        $content = $this->generateHeader($objExercise, $user, $exe)
+        $content = $this->generateHeader($objExercise, $exe->getUser(), $exe)
             .'<hr>'
             .$table->toHtml();
 
-        return HttpResponse::create($content);
+        return new Response($content);
     }
 
     /**
      * @param array<int, Log> $logs
-     *
-     * @return void
      */
     private function getTable(Exercise $objExercise, array $logs): HTML_Table
     {
@@ -71,10 +68,11 @@ class DetailController extends BaseController
 
             if (ONE_PER_PAGE == $objExercise->selectType()) {
                 try {
-                    $question = $this->em->find(CQuizQuestion::class, $log->getLevel());
-
-                    $strLevel = $question->getQuestion();
-                } catch (Exception $exception) {
+                    $strLevel = $this->em
+                        ->find(CQuizQuestion::class, $log->getLevel())
+                        ?->getQuestion()
+                    ;
+                } catch (Exception) {
                 }
             }
 

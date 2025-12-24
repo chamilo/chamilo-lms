@@ -2,10 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\PluginBundle\ExerciseMonitoring\Controller\DetailController;
 use Chamilo\PluginBundle\ExerciseMonitoring\Entity\Log;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
@@ -18,15 +17,10 @@ $logRepository = $em->getRepository(Log::class);
 
 $detailController = new DetailController(
     ExerciseMonitoringPlugin::create(),
-    HttpRequest::createFromGlobals(),
+    Container::getRequest(),
     $em,
     $logRepository
 );
 
-try {
-    $response = $detailController();
-} catch (Exception $e) {
-    $response = HttpResponse::create('', HttpResponse::HTTP_FORBIDDEN);
-}
-
+$response = $detailController();
 $response->send();

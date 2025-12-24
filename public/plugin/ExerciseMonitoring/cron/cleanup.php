@@ -2,7 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
 use Chamilo\PluginBundle\ExerciseMonitoring\Entity\Log;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -12,12 +13,14 @@ if ('cli' !== PHP_SAPI) {
     exit('For security reasons, this script can only be launched from cron or from the command line');
 }
 
-exit;
+//exit;
 
 $plugin = ExerciseMonitoringPlugin::create();
 $em = Database::getManager();
+/** @var Log $repo */
 $repo = $em->getRepository(Log::class);
-$trackExeRepo = $em->getRepository(TrackEExercises::class);
+/** @var TrackEExerciseRepository $trackExeRepo */
+$trackExeRepo = $em->getRepository(TrackEExercise::class);
 
 $lifetimeDays = (int) $plugin->get(ExerciseMonitoringPlugin::SETTING_SNAPSHOTS_LIFETIME);
 
@@ -89,7 +92,7 @@ function findLogsBeforeThan(DateTime $timeLimit): array
     return $rows;
 }
 
-function logging(string $message)
+function logging(string $message): void
 {
     $time = time();
 

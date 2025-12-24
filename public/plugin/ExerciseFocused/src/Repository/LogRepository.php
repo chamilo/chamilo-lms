@@ -4,12 +4,12 @@
 
 namespace Chamilo\PluginBundle\ExerciseFocused\Repository;
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Doctrine\ORM\EntityRepository;
 
 class LogRepository extends EntityRepository
 {
-    public function countByActionInExe(TrackEExercises $exe, string $action): int
+    public function countByActionInExe(TrackEExercise $exe, string $action): int
     {
         return $this->count([
             'exe' => $exe,
@@ -17,7 +17,7 @@ class LogRepository extends EntityRepository
         ]);
     }
 
-    public function countByActionAndLevel(TrackEExercises $exe, string $action, int $level): int
+    public function countByActionAndLevel(TrackEExercise $exe, string $action, int $level): int
     {
         return $this->count([
             'exe' => $exe,

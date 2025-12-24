@@ -49,12 +49,13 @@ class ExerciseFocusedPlugin extends Plugin
 
     /**
      * @throws ToolsException
+     * @throws \Doctrine\DBAL\Exception
      */
-    public function install()
+    public function install(): void
     {
         $em = Database::getManager();
 
-        if ($em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_LOG])) {
+        if ($em->getConnection()->createSchemaManager()->tablesExist([self::TABLE_LOG])) {
             return;
         }
 
@@ -76,11 +77,14 @@ class ExerciseFocusedPlugin extends Plugin
         ]);
     }
 
-    public function uninstall()
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function uninstall(): void
     {
         $em = Database::getManager();
 
-        if (!$em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_LOG])) {
+        if (!$em->getConnection()->createSchemaManager()->tablesExist([self::TABLE_LOG])) {
             return;
         }
 
@@ -162,7 +166,7 @@ class ExerciseFocusedPlugin extends Plugin
     public function isEnableForExercise(int $exerciseId): bool
     {
         $renderRegion = $this->isEnabled(true)
-            && strpos($_SERVER['SCRIPT_NAME'], '/main/exercise/exercise_submit.php') !== false;
+            && str_contains($_SERVER['SCRIPT_NAME'], '/main/exercise/exercise_submit.php');
 
         if (!$renderRegion) {
             return false;
@@ -177,7 +181,7 @@ class ExerciseFocusedPlugin extends Plugin
         return $values && (bool) $values['value'];
     }
 
-    public function calculateMotive(int $outfocusedLimitCount, int $timeLimitCount)
+    public function calculateMotive(int $outfocusedLimitCount, int $timeLimitCount): string
     {
         $motive = $this->get_lang('MotiveExerciseFinished');
 
@@ -192,16 +196,22 @@ class ExerciseFocusedPlugin extends Plugin
         return $motive;
     }
 
-    protected function createLinkToCourseTool($name, $courseId, $iconName = null, $link = null, $sessionId = 0, $category = 'plugin'): ?CTool
-    {
+    protected function createLinkToCourseTool(
+        $name,
+        $courseId,
+        $iconName = null,
+        $link = null,
+        $sessionId = 0,
+        $category = 'plugin'
+    ): ?CTool {
         $tool = parent::createLinkToCourseTool($name, $courseId, $iconName, $link, $sessionId, $category);
 
         if (!$tool) {
             return null;
         }
 
-        $tool->setName(
-            $tool->getName().':teacher'
+        $tool->setTitle(
+            $tool->getTitle().':teacher'
         );
 
         $em = Database::getManager();

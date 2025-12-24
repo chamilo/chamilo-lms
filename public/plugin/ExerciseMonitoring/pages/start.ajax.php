@@ -2,17 +2,20 @@
 
 /* For license terms, see /license.txt */
 
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
+use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 api_protect_course_script();
 
 $plugin = ExerciseMonitoringPlugin::create();
-$request = HttpRequest::createFromGlobals();
 $em = Database::getManager();
 
-$startController = new StartController($plugin, $request, $em);
+$startController = new StartController(
+    $plugin,
+    Container::getRequest(),
+    $em
+);
 
 $response = $startController();
 $response->send();

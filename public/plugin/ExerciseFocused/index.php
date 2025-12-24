@@ -2,12 +2,16 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\PluginBundle\ExerciseFocused\Entity\Log;
+use Chamilo\PluginBundle\ExerciseFocused\Repository\LogRepository;
 
 $plugin = ExerciseFocusedPlugin::create();
 
-$exerciseId = (int) ($_GET['exerciseId'] ?? 0);
+$request = Container::getRequest();
+
+$exerciseId = $request->query->getInt('exerciseId');
 
 $renderRegion = $plugin->isEnableForExercise($exerciseId);
 
@@ -20,18 +24,18 @@ if ($renderRegion) {
     $trackingExercise = null;
 
     if ($existingExeId) {
-        $trackingExercise = $em->find(TrackEExercises::class, $existingExeId);
+        $trackingExercise = $em->find(TrackEExercise::class, $existingExeId);
     }
 
     $_template['sec_token'] = Security::get_token('exercisefocused');
 
     if ('true' === $plugin->get(ExerciseFocusedPlugin::SETTING_ENABLE_OUTFOCUSED_LIMIT)) {
+        $countOutfocused = 0;
+        /** @var LogRepository $logRepository */
         $logRepository = $em->getRepository(Log::class);
 
         if ($trackingExercise) {
             $countOutfocused = $logRepository->countByActionInExe($trackingExercise, Log::TYPE_OUTFOCUSED);
-        } else {
-            $countOutfocused = 0;
         }
 
         $_template['count_outfocused'] = $countOutfocused;

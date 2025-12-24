@@ -4,9 +4,10 @@
 
 namespace Chamilo\PluginBundle\ExerciseMonitoring\Controller;
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\PluginBundle\ExerciseFocused\Traits\DetailControllerTrait;
+use Chamilo\PluginBundle\ExerciseMonitoring\Repository\LogRepository;
 use Display;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -15,66 +16,45 @@ use Exercise;
 use ExerciseMonitoringPlugin;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DetailController
 {
     use DetailControllerTrait;
 
-    /**
-     * @var ExerciseMonitoringPlugin
-     */
-    private $plugin;
-
-    /**
-     * @var HttpRequest
-     */
-    private $request;
-
-    /**
-     * @var EntityManager
-     */
-    private $em;
-
-    /**
-     * @var EntityRepository
-     */
-    private $logRepository;
 
     public function __construct(
-        ExerciseMonitoringPlugin $plugin,
-        HttpRequest $request,
-        EntityManager $em,
-        EntityRepository $logRepository
-    ) {
-        $this->plugin = $plugin;
-        $this->request = $request;
-        $this->em = $em;
-        $this->logRepository = $logRepository;
-    }
+        private readonly ExerciseMonitoringPlugin $plugin,
+        private readonly HttpRequest $request,
+        private readonly EntityManager $em,
+        private readonly LogRepository $logRepository,
+    ) {}
 
-    /**
-     * @throws Exception
-     */
     public function __invoke(): HttpResponse
     {
         if (!$this->plugin->isEnabled(true)) {
-            throw new Exception();
+            throw new AccessDeniedHttpException(
+                HttpResponse::$statusTexts[HttpResponse::HTTP_FORBIDDEN],
+            );
         }
 
         $trackExe = $this->em->find(
-            TrackEExercises::class,
+            TrackEExercise::class,
             $this->request->query->getInt('id')
         );
 
         if (!$trackExe) {
-            throw new Exception();
+            throw new NotFoundHttpException(
+                HttpResponse::$statusTexts[HttpResponse::HTTP_NOT_FOUND],
+            );
         }
 
-        $exercise = $this->em->find(CQuiz::class, $trackExe->getExeExoId());
-        $user = api_get_user_entity($trackExe->getExeUserId());
+        $quiz = $trackExe->getQuiz();
+        $user = $trackExe->getUser();
 
         $objExercise = new Exercise($trackExe->getCId());
-        $objExercise->read($trackExe->getExeExoId());
+        $objExercise->read($quiz->getIid());
 
         $logs = $this->logRepository->findSnapshots($objExercise, $trackExe);
 
@@ -82,7 +62,7 @@ class DetailController
             .'<hr>'
             .$this->generateSnapshotList($logs, $trackExe->getExeUserId());
 
-        return HttpResponse::create($content);
+        return new HttpResponse($content);
     }
 
     private function generateSnapshotList(array $logs, int $userId): string

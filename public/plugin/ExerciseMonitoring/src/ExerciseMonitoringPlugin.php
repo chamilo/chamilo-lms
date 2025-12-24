@@ -53,12 +53,13 @@ class ExerciseMonitoringPlugin extends Plugin
 
     /**
      * @throws ToolsException
+     * @throws \Doctrine\DBAL\Exception
      */
-    public function install()
+    public function install(): void
     {
         $em = Database::getManager();
 
-        if ($em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_LOG])) {
+        if ($em->getConnection()->createSchemaManager()->tablesExist([self::TABLE_LOG])) {
             return;
         }
 
@@ -88,11 +89,14 @@ class ExerciseMonitoringPlugin extends Plugin
         ]);
     }
 
-    public function uninstall()
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function uninstall(): void
     {
         $em = Database::getManager();
 
-        if (!$em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_LOG])) {
+        if (!$em->getConnection()->createSchemaManager()->tablesExist([self::TABLE_LOG])) {
             return;
         }
 

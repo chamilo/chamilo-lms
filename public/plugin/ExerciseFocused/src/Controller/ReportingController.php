@@ -4,7 +4,6 @@
 
 namespace Chamilo\PluginBundle\ExerciseFocused\Controller;
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\PluginBundle\ExerciseFocused\Traits\ReportingFilterTrait;
 use Display;
@@ -61,7 +60,7 @@ class ReportingController extends BaseController
 
     private function generateTabResume(CQuiz $exercise): string
     {
-        $results = $this->findResultsInCourse($exercise->getId());
+        $results = $this->findResultsInCourse($exercise->getIid());
 
         return $this->createTable($results)->toHtml();
     }
@@ -72,13 +71,13 @@ class ReportingController extends BaseController
     private function generateTabSearch(CQuiz $exercise, string $courseCode, int $sessionId): string
     {
         $form = $this->createForm();
-        $form->updateAttributes(['action' => api_get_self().'?'.api_get_cidreq().'&id='.$exercise->getId()]);
+        $form->updateAttributes(['action' => api_get_self().'?'.api_get_cidreq().'&id='.$exercise->getIid()]);
         $form->addHidden('cidReq', $courseCode);
         $form->addHidden('id_session', $sessionId);
         $form->addHidden('gidReq', 0);
         $form->addHidden('gradebook', 0);
         $form->addHidden('origin', api_get_origin());
-        $form->addHidden('id', $exercise->getId());
+        $form->addHidden('id', $exercise->getIid());
 
         $tableHtml = '';
         $actions = '';
@@ -94,7 +93,7 @@ class ReportingController extends BaseController
                 get_lang('Clean'),
                 api_get_path(WEB_PLUGIN_PATH)
                 .'ExerciseFocused/pages/reporting.php?'
-                .api_get_cidreq().'&'.http_build_query(['id' => $exercise->getId(), 'submit' => '']),
+                .api_get_cidreq().'&'.http_build_query(['id' => $exercise->getIid(), 'submit' => '']),
                 'search'
             );
 
@@ -113,14 +112,11 @@ class ReportingController extends BaseController
 
     private function generateTabSampling(CQuiz $exercise): string
     {
-        $results = $this->findRandomResults($exercise->getId());
+        $results = $this->findRandomResults($exercise->getIid());
 
         return $this->createTable($results)->toHtml();
     }
 
-    /**
-     * @return array<int, TrackEExercises>
-     */
     private function setBreadcrumb($exerciseId): void
     {
         $codePath = api_get_path('WEB_CODE_PATH');

@@ -2,7 +2,7 @@
 
 /* For license terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\PluginBundle\ExerciseMonitoring\Entity\Log;
@@ -44,7 +44,7 @@ class ExerciseSubmitController
         $objExercise = new Exercise();
         $objExercise->read($exerciseId);
 
-        $trackingExercise = $this->em->find(TrackEExercises::class, $existingExeId);
+        $trackingExercise = $this->em->find(TrackEExercise::class, $existingExeId);
 
         $newFilename = '';
         $level = 0;
@@ -94,7 +94,7 @@ class ExerciseSubmitController
         return $userDirName;
     }
 
-    private function updateOrphanSnapshots(CQuiz $exercise, TrackEExercises $trackingExe)
+    private function updateOrphanSnapshots(CQuiz $exercise, TrackEExercise $trackingExe)
     {
         $repo = $this->em->getRepository(Log::class);
 

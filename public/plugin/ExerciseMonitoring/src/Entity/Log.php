@@ -4,69 +4,39 @@
 
 namespace Chamilo\PluginBundle\ExerciseMonitoring\Entity;
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\PluginBundle\ExerciseMonitoring\Repository\LogRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\ExerciseMonitoring\Repository\LogRepository")
- * @ORM\Table(name="plugin_exercisemonitoring_log")
- */
+#[ORM\Entity(repositoryClass: LogRepository::class)]
+#[ORM\Table(name: 'plugin_exercisemonitoring_log')]
 class Log
 {
     use TimestampableTypedEntity;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    protected ?int $id;
 
-    /**
-     * @var CQuiz
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CQuiz")
-     * @ORM\JoinColumn(name="exercise_id", referencedColumnName="iid")
-     */
-    protected $exercise;
+    #[ORM\ManyToOne(targetEntity: CQuiz::class)]
+    #[ORM\JoinColumn(name: 'exercise_id', referencedColumnName: 'iid')]
+    protected ?CQuiz $exercise;
 
-    /**
-     * @var TrackEExercises
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TrackEExercises")
-     * @ORM\JoinColumn(name="exe_id", referencedColumnName="exe_id")
-     */
-    private $exe;
+    #[ORM\ManyToOne(targetEntity: TrackEExercise::class)]
+    #[ORM\JoinColumn(name: 'exe_id', referencedColumnName: 'exe_id')]
+    private ?TrackEExercise $exe;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="level", type="integer")
-     */
-    private $level;
+    #[ORM\Column(name: 'level', type: 'integer')]
+    private int $level;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="image_filename", type="string")
-     */
-    private $imageFilename;
+    #[ORM\Column(name: 'image_filename', type: 'string')]
+    private string $imageFilename;
 
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="removed", type="boolean", nullable=false, options={"default": false})
-     */
-    private $removed;
-
-    public function __construct()
-    {
-        $this->removed = false;
-    }
+    #[ORM\Column(name: 'removed', type: 'boolean', nullable: false, options: ['default' => false])]
+    private bool $removed = false;
 
     public function getId(): int
     {
@@ -85,12 +55,12 @@ class Log
         return $this;
     }
 
-    public function getExe(): ?TrackEExercises
+    public function getExe(): ?TrackEExercise
     {
         return $this->exe;
     }
 
-    public function setExe(?TrackEExercises $exe): Log
+    public function setExe(?TrackEExercise $exe): Log
     {
         $this->exe = $exe;
 

@@ -2,12 +2,16 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 $plugin = ExerciseMonitoringPlugin::create();
 $em = Database::getManager();
 
+$request = Container::getRequest();
+
 $isEnabled = $plugin->isEnabled(true);
-$showOverviewRegion = $isEnabled && strpos($_SERVER['SCRIPT_NAME'], '/main/exercise/overview.php') !== false;
-$showSubmitRegion = $isEnabled && strpos($_SERVER['SCRIPT_NAME'], '/main/exercise/exercise_submit.php') !== false;
+$showOverviewRegion = $isEnabled && str_contains($request->getScriptName(), '/main/exercise/overview.php');
+$showSubmitRegion = $isEnabled && str_contains($request->getScriptName(), '/main/exercise/exercise_submit.php');
 
 $_template['enabled'] = false;
 $_template['show_overview_region'] = $showOverviewRegion;

@@ -6,59 +6,37 @@ use Chamilo\PluginBundle\ExerciseFocused\Repository\LogRepository;
 use Doctrine\ORM\EntityManager;
 use Exception;
 use ExerciseFocusedPlugin;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Template;
 
 abstract class BaseController
 {
-    /**
-     * @var ExerciseFocusedPlugin
-     */
-    protected $plugin;
-
-    /**
-     * @var HttpRequest
-     */
-    protected $request;
-
-    /**
-     * @var EntityManager
-     */
-    protected $em;
-
-    /**
-     * @var LogRepository
-     */
-    protected $logRepository;
-
     /**
      * @var Template
      */
     protected $template;
 
     public function __construct(
-        ExerciseFocusedPlugin $plugin,
-        HttpRequest $request,
-        EntityManager $em,
-        LogRepository $logRepository
-    ) {
-        $this->plugin = $plugin;
-        $this->request = $request;
-        $this->em = $em;
-        $this->logRepository = $logRepository;
-    }
+        protected readonly ExerciseFocusedPlugin $plugin,
+        protected readonly Request $request,
+        protected readonly EntityManager $em,
+        protected readonly LogRepository $logRepository
+    ) {}
 
     /**
      * @throws Exception
      */
-    public function __invoke(): HttpResponse
+    public function __invoke(): Response
     {
         if (!$this->plugin->isEnabled(true)) {
-            throw new Exception();
+            throw new AccessDeniedHttpException(
+                Response::$statusTexts[Response::HTTP_FORBIDDEN]
+            );
         }
 
-        return HttpResponse::create();
+        return new Response();
     }
 
     protected function renderView(
@@ -66,7 +44,7 @@ abstract class BaseController
         string $content,
         ?string $header = null,
         array $actions = []
-    ): HttpResponse {
+    ): Response {
         if (!$header) {
             $header = $title;
         }
@@ -81,6 +59,6 @@ abstract class BaseController
         $html = ob_get_contents();
         ob_end_clean();
 
-        return HttpResponse::create($html);
+        return new Response($html);
     }
 }

@@ -4,18 +4,13 @@
 
 namespace Chamilo\PluginBundle\ExerciseFocused\Entity;
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
+use Chamilo\PluginBundle\ExerciseFocused\Repository\LogRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class EmbedRegistry.
- *
- * @package Chamilo\PluginBundle\Entity\EmbedRegistry
- *
- * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\ExerciseFocused\Repository\LogRepository")
- * @ORM\Table(name="plugin_exercisefocused_log")
- */
+#[ORM\Entity(repositoryClass: LogRepository::class)]
+#[ORM\Table(name: 'plugin_exercisefocused_log')]
 class Log
 {
     use TimestampableTypedEntity;
@@ -25,48 +20,32 @@ class Log
     public const TYPE_OUTFOCUSED_LIMIT = 'outfocused_limit';
     public const TYPE_TIME_LIMIT = 'time_limit';
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    private $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    private ?int $id;
 
-    /**
-     * @var TrackEExercises
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TrackEExercises")
-     * @ORM\JoinColumn(name="exe_id", referencedColumnName="exe_id", onDelete="SET NULL")
-     */
-    private $exe;
+    #[ORM\ManyToOne(targetEntity: TrackEExercise::class)]
+    #[ORM\JoinColumn(name: 'exe_id', referencedColumnName: 'exe_id', onDelete: 'SET NULL')]
+    private TrackEExercise $exe;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="level", type="integer")
-     */
-    private $level;
+    #[ORM\Column(name: 'level', type: 'integer')]
+    private int $level;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="action", type="string", nullable=false)
-     */
-    private $action;
+    #[ORM\Column(name: 'action', type: 'string', nullable: false)]
+    private string $action;
 
     public function getId(): int
     {
         return $this->id;
     }
 
-    public function getExe(): TrackEExercises
+    public function getExe(): TrackEExercise
     {
         return $this->exe;
     }
 
-    public function setExe(TrackEExercises $exe): Log
+    public function setExe(TrackEExercise $exe): Log
     {
         $this->exe = $exe;
 

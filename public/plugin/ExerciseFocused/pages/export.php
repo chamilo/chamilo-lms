@@ -3,14 +3,11 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
-use Chamilo\CoreBundle\Entity\TrackEExercises;
-use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\PluginBundle\ExerciseFocused\Entity\Log as FocusedLog;
 use Chamilo\PluginBundle\ExerciseMonitoring\Entity\Log as MonitoringLog;
-use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\Expr\Join;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
@@ -23,8 +20,8 @@ if (!api_is_allowed_to_edit()) {
 $plugin = ExerciseFocusedPlugin::create();
 $monitoringPlugin = ExerciseMonitoringPlugin::create();
 $monitoringPluginIsEnabled = $monitoringPlugin->isEnabled(true);
-$request = HttpRequest::createFromGlobals();
 $em = Database::getManager();
+/** @var FocusedLog $focusedLogRepository */
 $focusedLogRepository = $em->getRepository(FocusedLog::class);
 $attempsRepository = $em->getRepository(TrackEAttempt::class);
 
@@ -32,7 +29,7 @@ if (!$plugin->isEnabled(true)) {
     api_not_allowed(true);
 }
 
-$params = $request->query->all();
+$params = Container::getRequest()->query->all();
 
 $results = findResults($params, $em, $plugin);
 
@@ -40,9 +37,9 @@ $data = [];
 
 /** @var array<string, mixed> $result */
 foreach ($results as $result) {
-    /** @var TrackEExercises $trackExe */
+    /** @var TrackEExercise $trackExe */
     $trackExe = $result['exe'];
-    $user = api_get_user_entity($trackExe->getExeUserId());
+    $user = $trackExe->getUser();
 
     $outfocusedLimitCount = $focusedLogRepository->countByActionInExe($trackExe, FocusedLog::TYPE_OUTFOCUSED_LIMIT);
     $timeLimitCount = $focusedLogRepository->countByActionInExe($trackExe, FocusedLog::TYPE_TIME_LIMIT);
@@ -77,16 +74,16 @@ foreach ($results as $result) {
         ];
     }
 
-    if ($trackExe->getSessionId()) {
+    if ($trackExe->getSession()) {
         $data[] = [
             get_lang('SessionName'),
-            api_get_session_entity($trackExe->getSessionId())->getName(),
+            $trackExe->getSession()->getTitle(),
         ];
     }
 
     $data[] = [
         get_lang('CourseTitle'),
-        api_get_course_entity($trackExe->getCId())->getTitle(),
+        $trackExe->getCourse()->getTitle(),
     ];
     $data[] = [
         get_lang('ExerciseName'),
@@ -199,9 +196,9 @@ function findResults(array $formValues, EntityManagerInterface $em, ExerciseFocu
     $qb = $em->createQueryBuilder();
     $qb
         ->select('te AS exe, q.title, te.startDate , u.firstname, u.lastname, u.username')
-        ->from(TrackEExercises::class, 'te')
-        ->innerJoin(CQuiz::class, 'q', Join::WITH, 'te.exeExoId = q.iid')
-        ->innerJoin(User::class, 'u', Join::WITH, 'te.exeUserId = u.id');
+        ->from(TrackEExercise::class, 'te')
+        ->innerJoin('te.quiz', 'q')
+        ->innerJoin('te.user', 'u');
 
     $params = [];
 
@@ -219,7 +216,7 @@ function findResults(array $formValues, EntityManagerInterface $em, ExerciseFocu
     }
 
     if ($sessionItemIdList) {
-        $qb->andWhere($qb->expr()->in('te.sessionId', ':sessionItemIdList'));
+        $qb->andWhere($qb->expr()->in('te.session', ':sessionItemIdList'));
 
         $params['sessionItemIdList'] = $sessionItemIdList;
     }
@@ -271,7 +268,7 @@ function findResults(array $formValues, EntityManagerInterface $em, ExerciseFocu
     return $query->getResult();
 }
 
-function getSnapshotListForLevel(int $level, TrackEExercises $trackExe): string
+function getSnapshotListForLevel(int $level, TrackEExercise $trackExe): string
 {
     $monitoringPluginIsEnabled = ExerciseMonitoringPlugin::create()->isEnabled(true);
 
@@ -279,7 +276,8 @@ function getSnapshotListForLevel(int $level, TrackEExercises $trackExe): string
         return '';
     }
 
-    $user = api_get_user_entity($trackExe->getExeUserId());
+    $user = $trackExe->getUser();
+    /** @var MonitoringLog $monitoringLogRepository */
     $monitoringLogRepository = Database::getManager()->getRepository(MonitoringLog::class);
 
     $monitoringLogsByQuestion = $monitoringLogRepository->findByLevelAndExe($level, $trackExe);

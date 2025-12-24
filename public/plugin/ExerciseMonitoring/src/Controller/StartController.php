@@ -7,23 +7,18 @@ use Chamilo\PluginBundle\ExerciseMonitoring\Entity\Log;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class StartController
 {
-    private $plugin;
-    private $request;
-    private $em;
+    public function __construct(
+        private readonly ExerciseMonitoringPlugin $plugin,
+        private readonly Request $request,
+        private readonly EntityManager $em
+    ) {}
 
-    public function __construct(ExerciseMonitoringPlugin $plugin, HttpRequest $request, EntityManager $em)
-    {
-        $this->plugin = $plugin;
-        $this->request = $request;
-        $this->em = $em;
-    }
-
-    public function __invoke(): HttpResponse
+    public function __invoke(): Response
     {
         $userDirName = $this->createDirectory();
 
@@ -72,7 +67,7 @@ class StartController
 
         ChamiloSession::write($this->plugin->get_name().'_orphan_snapshots', $fileNamesToUpdate);
 
-        return HttpResponse::create();
+        return new Response();
     }
 
     private function createDirectory(): string

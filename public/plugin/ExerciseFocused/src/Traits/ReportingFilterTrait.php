@@ -4,10 +4,9 @@
 
 namespace Chamilo\PluginBundle\ExerciseFocused\Traits;
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\PluginBundle\ExerciseFocused\Entity\Log;
-use Chamilo\UserBundle\Entity\User;
 use Database;
 use Display;
 use Doctrine\ORM\Query\Expr\Join;
@@ -75,9 +74,10 @@ trait ReportingFilterTrait
         $qb = $this->em->createQueryBuilder();
         $qb
             ->select('te AS exe, q.title, te.startDate, u.id AS user_id, u.firstname, u.lastname, u.username, te.sessionId, te.cId')
-            ->from(TrackEExercises::class, 'te')
-            ->innerJoin(CQuiz::class, 'q', Join::WITH, 'te.exeExoId = q.iid')
-            ->innerJoin(User::class, 'u', Join::WITH, 'te.exeUserId = u.id');
+            ->from(TrackEExercise::class, 'te')
+            ->innerJoin('te.quiz', 'q')
+            ->innerJoin('te.user', 'u')
+        ;
 
         $params = [];
 
@@ -302,9 +302,9 @@ trait ReportingFilterTrait
         $qb = $this->em->createQueryBuilder();
         $qb
             ->select('te AS exe, q.title, te.startDate, u.id AS user_id, u.firstname, u.lastname, u.username, te.sessionId, te.cId')
-            ->from(TrackEExercises::class, 'te')
-            ->innerJoin(CQuiz::class, 'q', Join::WITH, 'te.exeExoId = q.iid')
-            ->innerJoin(User::class, 'u', Join::WITH, 'te.exeUserId = u.id')
+            ->from(TrackEExercise::class, 'te')
+            ->innerJoin('te.quiz', 'q')
+            ->innerJoin('te.user', 'u')
             ->andWhere(
                 $qb->expr()->in('te.exeId', $exeIdList)
             )

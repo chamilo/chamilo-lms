@@ -6,13 +6,13 @@ namespace Chamilo\PluginBundle\ExerciseFocused\Controller;
 
 use Chamilo\PluginBundle\ExerciseFocused\Traits\ReportingFilterTrait;
 use Display;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminController extends BaseController
 {
     use ReportingFilterTrait;
 
-    public function __invoke(): HttpResponse
+    public function __invoke(): Response
     {
         parent::__invoke();
 
@@ -40,7 +40,7 @@ class AdminController extends BaseController
         );
     }
 
-    private function setBreadcrumb()
+    private function setBreadcrumb(): void
     {
         $codePath = api_get_path(WEB_CODE_PATH);
 

@@ -4,7 +4,7 @@
 
 namespace Chamilo\PluginBundle\ExerciseMonitoring\Repository;
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
@@ -12,7 +12,7 @@ use Exercise;
 
 class LogRepository extends EntityRepository
 {
-    public function findByLevelAndExe(int $level, TrackEExercises $exe): array
+    public function findByLevelAndExe(int $level, TrackEExercise $exe): array
     {
         return $this->findBy(
             [
@@ -23,7 +23,7 @@ class LogRepository extends EntityRepository
         );
     }
 
-    public function findSnapshots(Exercise $objExercise, TrackEExercises $trackExe)
+    public function findSnapshots(Exercise $objExercise, TrackEExercise $trackExe)
     {
         $qb = $this->createQueryBuilder('l');
 

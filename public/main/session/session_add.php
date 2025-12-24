@@ -277,6 +277,16 @@ if ($form->validate()) {
     $coachStartDate = $params['coach_access_start_date'] ?? $displayStartDate;
     $coachEndDate = $params['coach_access_end_date'];
     $coachUsername = $params['coach_username'] ?? [];
+
+    if (empty($coachUsername)) {
+        // Keep the historical default behavior: current user becomes the coach
+        $coachUsername = [api_get_user_id()];
+    }
+
+    if (!is_array($coachUsername)) {
+        $coachUsername = [$coachUsername];
+    }
+
     $id_session_category = (int) $params['session_category'];
     $id_visibility = $params['session_visibility'];
     $duration = $params['duration'] ?? null;

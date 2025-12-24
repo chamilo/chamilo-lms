@@ -115,8 +115,6 @@ class SessionRepository extends ServiceEntityRepository
             // Check if the session has a duration
             if ($session->getDuration() > 0) {
                 $daysLeft = $session->getDaysLeftByUser($user);
-                $session->setTitle($session->getTitle().'<-'.$daysLeft);
-
                 return $daysLeft < 0 && !$userIsCoach;
             }
 

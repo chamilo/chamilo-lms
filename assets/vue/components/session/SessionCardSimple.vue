@@ -38,6 +38,7 @@ function normalizeCourse(course) {
         :disabled="!isEnabled"
         :session="session"
         :session-id="session.id"
+        :show-session-display-date="false"
       />
     </div>
   </div>

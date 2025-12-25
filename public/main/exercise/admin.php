@@ -379,10 +379,16 @@ $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_PATH).'build/
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_PATH).'build/libs/select2/js/select2.min.js"></script>';
 $htmlHeadXtra[] = '<script>$(function(){ if ($.fn.select2){ $(".ch-select2").select2({width:"100%"}); } });</script>';
 
-if (isset($_GET['message'])) {
-    if (in_array($_GET['message'], ['ExerciseStored', 'ItemUpdated', 'ItemAdded'])) {
-        Display::addFlash(Display::return_message(get_lang($_GET['message']), 'confirmation'));
-    }
+$messageMap = [
+    'ExerciseStored' => 'Exercise stored',
+    'ItemUpdated' => 'Item updated',
+    'ItemAdded' => 'Item added',
+];
+
+if (isset($_GET['message']) && isset($messageMap[$_GET['message']])) {
+    Display::addFlash(
+        Display::return_message(get_lang($messageMap[$_GET['message']]), 'confirmation')
+    );
 }
 
 Display::display_header($nameTools, 'Exercise');
@@ -619,11 +625,16 @@ if ($newQuestion || $editQuestion) {
 
 if (isset($_GET['hotspotadmin'])) {
     if (!is_object($objQuestion)) {
-        $objQuestion = Question::read($_GET['hotspotadmin']);
+        $objQuestion = Question::read((int) $_GET['hotspotadmin']);
     }
     if (!$objQuestion) {
         api_not_allowed();
     }
+
+    // If we already processed POST above, don't process it again here (avoid double-save).
+    $hotspot_skip_processing = !empty($hotspotAlreadyProcessed);
+    $hotspot_skip_display = false;
+
     require 'hotspot_admin.inc.php';
 }
 

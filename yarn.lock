@@ -1224,7 +1224,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:9.39.2, @eslint/js@npm:^9.39.1":
+"@eslint/js@npm:9.39.2, @eslint/js@npm:^9.39.2":
   version: 9.39.2
   resolution: "@eslint/js@npm:9.39.2"
   checksum: 10c0/00f51c52b04ac79faebfaa65a9652b2093b9c924e945479f1f3945473f78aee83cbc76c8d70bbffbf06f7024626575b16d97b66eab16182e1d0d39daff2f26f5
@@ -1999,7 +1999,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tailwindcss/forms@npm:^0.5.10":
+"@tailwindcss/forms@npm:^0.5.11":
   version: 0.5.11
   resolution: "@tailwindcss/forms@npm:0.5.11"
   dependencies:
@@ -3154,7 +3154,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/compiler-sfc@npm:3.5.26, @vue/compiler-sfc@npm:^3.5.25":
+"@vue/compiler-sfc@npm:3.5.26, @vue/compiler-sfc@npm:^3.5.26":
   version: 3.5.26
   resolution: "@vue/compiler-sfc@npm:3.5.26"
   dependencies:
@@ -3689,7 +3689,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"alpinejs@npm:^3.15.2":
+"alpinejs@npm:^3.15.3":
   version: 3.15.3
   resolution: "alpinejs@npm:3.15.3"
   dependencies:
@@ -4220,7 +4220,7 @@ __metadata:
     "@apollo/client": "npm:^3.14.0"
     "@babel/core": "npm:^7.28.5"
     "@babel/preset-env": "npm:^7.28.5"
-    "@eslint/js": "npm:^9.39.1"
+    "@eslint/js": "npm:^9.39.2"
     "@fancyapps/fancybox": "npm:^3.5.7"
     "@fullcalendar/core": "npm:^5.11.5"
     "@fullcalendar/daygrid": "npm:^5.11.5"
@@ -4230,7 +4230,7 @@ __metadata:
     "@maxgraph/core": "npm:^0.15.1"
     "@mdi/font": "npm:^7.4.47"
     "@symfony/webpack-encore": "npm:^5.3.1"
-    "@tailwindcss/forms": "npm:^0.5.10"
+    "@tailwindcss/forms": "npm:^0.5.11"
     "@tailwindcss/line-clamp": "npm:^0.4.4"
     "@tailwindcss/typography": "npm:^0.5.19"
     "@tinymce/tinymce-vue": "npm:^5.1.1"
@@ -4248,11 +4248,11 @@ __metadata:
     "@uppy/webcam": "npm:^4.3.2"
     "@uppy/xhr-upload": "npm:^4.4.2"
     "@vue/apollo-composable": "npm:^4.2.2"
-    "@vue/compiler-sfc": "npm:^3.5.25"
+    "@vue/compiler-sfc": "npm:^3.5.26"
     "@vuelidate/core": "npm:^2.0.3"
     "@vuelidate/validators": "npm:^2.0.4"
-    alpinejs: "npm:^3.15.2"
-    autoprefixer: "npm:^10.4.22"
+    alpinejs: "npm:^3.15.3"
+    autoprefixer: "npm:^10.4.23"
     axios: "npm:^1.13.2"
     baseline-browser-mapping: "npm:^2.9.11"
     blueimp-file-upload: "npm:^10.32.0"
@@ -4270,7 +4270,7 @@ __metadata:
     dropzone: "npm:^5.9.3"
     easy-pie-chart: "npm:^2.1.7"
     easytimer.js: "npm:^1.3.2"
-    eslint: "npm:^9.39.1"
+    eslint: "npm:^9.39.2"
     eslint-config-prettier: "npm:^10.1.8"
     eslint-plugin-prettier: "npm:^5.5.4"
     eslint-plugin-vue: "npm:^10.6.2"
@@ -4308,24 +4308,24 @@ __metadata:
     postcss: "npm:^8.5.6"
     postcss-loader: "npm:^8.2.0"
     postcss-prefix-selector: "npm:^2.1.1"
-    prettier: "npm:3.7.1"
+    prettier: "npm:3.7.4"
     prettier-plugin-tailwindcss: "npm:^0.6.14"
     pretty-bytes: "npm:^5.6.0"
     primeflex: "npm:^4.0.0"
     primeicons: "npm:^7.0.0"
-    primevue: "npm:^4.4.1"
+    primevue: "npm:^4.5.4"
     purgecss-webpack-plugin: "npm:^7.0.2"
     pwstrength-bootstrap: "npm:3.1.3"
     qtip2: "npm:3.0.3"
     readmore-js: "npm:^2.2.1"
     recordrtc: "npm:^5.6.2"
-    sass: "npm:^1.94.2"
+    sass: "npm:^1.97.1"
     sass-loader: "npm:^16.0.6"
     select2: "npm:^4.1.0-rc.0"
     signature_pad: "npm:^3.0.0-beta.4"
     sortablejs: "npm:^1.15.6"
-    sweetalert2: "npm:^11.26.3"
-    tailwindcss: "npm:^3.4.18"
+    sweetalert2: "npm:^11.26.17"
+    tailwindcss: "npm:^3.4.19"
     textcomplete: "npm:^0.18.2"
     timeago: "npm:^1.6.7"
     timepicker: "npm:^1.14.1"
@@ -4333,19 +4333,19 @@ __metadata:
     ts-loader: "npm:^9.5.4"
     typescript: "npm:^5.9.3"
     video.js: "npm:^7.21.7"
-    vue: "npm:^3.5.25"
+    vue: "npm:^3.5.26"
     vue-eslint-parser: "npm:^10.2.0"
     vue-flatpickr-component: "npm:^9.0.8"
     vue-i18n: "npm:10.0.8"
     vue-loader: "npm:^17.4.2"
     vue-multiselect: "npm:^3.4.0"
     vue-perfect-scrollbar: "npm:^0.2.1"
-    vue-router: "npm:4.6.3"
+    vue-router: "npm:4.6.4"
     vue-toastification: "npm:^2.0.0-rc.5"
     vuedraggable: "npm:^4.1.0"
     vuex: "npm:^4.1.0"
     vuex-map-fields: "npm:^1.4.1"
-    webpack: "npm:^5.103.0"
+    webpack: "npm:^5.104.1"
     webpack-cli: "npm:^6.0.1"
     webpack-dev-server: "npm:^5.2.2"
     webpack-notifier: "npm:^1.15.0"
@@ -5819,7 +5819,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^9.39.1":
+"eslint@npm:^9.39.2":
   version: 9.39.2
   resolution: "eslint@npm:9.39.2"
   dependencies:
@@ -9017,12 +9017,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:3.7.1":
-  version: 3.7.1
-  resolution: "prettier@npm:3.7.1"
+"prettier@npm:3.7.4":
+  version: 3.7.4
+  resolution: "prettier@npm:3.7.4"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 10c0/a6610043ee0a64a3251a948bf82fad3e59d984a8e8dea206400cfa190585417e3343b32c1f6ae7d8f40798a9b4bd91affc08fa7795dd99a9dec5c9bccdf31500
+  checksum: 10c0/9675d2cd08eacb1faf1d1a2dbfe24bfab6a912b059fc9defdb380a408893d88213e794a40a2700bd29b140eb3172e0b07c852853f6e22f16f3374659a1a13389
   languageName: node
   linkType: hard
 
@@ -9064,7 +9064,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"primevue@npm:^4.4.1":
+"primevue@npm:^4.5.4":
   version: 4.5.4
   resolution: "primevue@npm:4.5.4"
   dependencies:
@@ -9635,7 +9635,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.94.2":
+"sass@npm:^1.97.1":
   version: 1.97.1
   resolution: "sass@npm:1.97.1"
   dependencies:
@@ -10250,7 +10250,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sweetalert2@npm:^11.26.3":
+"sweetalert2@npm:^11.26.17":
   version: 11.26.17
   resolution: "sweetalert2@npm:11.26.17"
   checksum: 10c0/00cbc4c394895f5ea2c9766ced2bb11bc73405c66a850e2981673aac27b55c98ba4e968cd3db25bd52087d3c6243ca4f3bf3b4e3269b8705c1a5c6e5405fb18d
@@ -10273,7 +10273,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:^3.4.18":
+"tailwindcss@npm:^3.4.19":
   version: 3.4.19
   resolution: "tailwindcss@npm:3.4.19"
   dependencies:
@@ -10890,14 +10890,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-router@npm:4.6.3":
-  version: 4.6.3
-  resolution: "vue-router@npm:4.6.3"
+"vue-router@npm:4.6.4":
+  version: 4.6.4
+  resolution: "vue-router@npm:4.6.4"
   dependencies:
     "@vue/devtools-api": "npm:^6.6.4"
   peerDependencies:
     vue: ^3.5.0
-  checksum: 10c0/4528f4fded4b45b07d4e096116e9b5fd602af463e735f7e5133b1a258ce325ebc894dd7bc962a937556615fd42d06b0fb290dfae90e96f237862b7f74baa22a0
+  checksum: 10c0/9dcbe1124f1f444ae263ca37914829eea1ebff3feaa182559efee611dfd4436bbebe0ebffdcb60e37fecfb2fbdc691346df00996eeba708485e9ea9b8a7dd193
   languageName: node
   linkType: hard
 
@@ -10910,7 +10910,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue@npm:^3.5.25":
+"vue@npm:^3.5.26":
   version: 3.5.26
   resolution: "vue@npm:3.5.26"
   dependencies:
@@ -11135,7 +11135,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:>=5.95.0, webpack@npm:^5.103.0":
+"webpack@npm:>=5.95.0, webpack@npm:^5.104.1":
   version: 5.104.1
   resolution: "webpack@npm:5.104.1"
   dependencies:

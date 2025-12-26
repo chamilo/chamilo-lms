@@ -25,13 +25,24 @@ use ZipArchive;
  */
 final class DocumentXapianIndexer
 {
+    private bool $isEnabled;
+    private array $preFilterPrefix;
+
     public function __construct(
         private readonly XapianIndexService $xapianIndexService,
         private readonly EntityManagerInterface $em,
-        private readonly SettingsManager $settingsManager,
+        SettingsManager $settingsManager,
         private readonly DocumentRawTextExtractor $rawTextExtractor,
         private readonly RequestStack $requestStack,
-    ) {}
+    ) {
+        $this->isEnabled = "true" === $settingsManager->getSetting('search.search_enabled', true);
+
+        $raw = (string) $settingsManager->getSetting('search.search_prefilter_prefix', true);
+
+        if (!empty($raw)) {
+            $this->preFilterPrefix = json_decode($raw, true);
+        }
+    }
 
     /**
      * Index a CDocument into Xapian.
@@ -42,9 +53,7 @@ final class DocumentXapianIndexer
     {
         $resourceNode = $document->getResourceNode();
 
-        $enabled = (string) $this->settingsManager->getSetting('search.search_enabled', true);
-
-        if ('true' !== $enabled) {
+        if (!$this->isEnabled) {
             error_log('[Xapian] indexDocument: search is disabled, skipping indexing');
             return null;
         }
@@ -151,8 +160,7 @@ final class DocumentXapianIndexer
 
     public function deleteForResourceNodeId(int $resourceNodeId): void
     {
-        $enabled = (string) $this->settingsManager->getSetting('search.search_enabled', true);
-        if ('true' !== $enabled) {
+        if (!$this->isEnabled) {
             error_log('[Xapian] deleteForResourceNodeId: search is disabled, skipping');
             return;
         }
@@ -563,17 +571,7 @@ final class DocumentXapianIndexer
         ?int $sessionId,
         CDocument $document
     ): void {
-        $raw = (string) $this->settingsManager->getSetting('search.search_prefilter_prefix', true);
-        if ('' === $raw) {
-            return;
-        }
-
-        $config = json_decode($raw, true);
-        if (!\is_array($config)) {
-            return;
-        }
-
-        foreach ($config as $key => $item) {
+        foreach ($this->preFilterPrefix as $key => $item) {
             if (!\is_array($item)) {
                 continue;
             }

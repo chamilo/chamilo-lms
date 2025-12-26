@@ -1,5 +1,8 @@
 <template>
-  <div class="course-form-container">
+  <form
+    class="course-form-container"
+    @submit.prevent="submitForm"
+  >
     <div class="form-header">
       <BaseInputText
         id="course-name"
@@ -10,7 +13,8 @@
         :label="t('Course name')"
         required
       />
-      <BaseAdvancedSettingsButton v-model="showAdvancedSettings"></BaseAdvancedSettingsButton>
+
+      <BaseAdvancedSettingsButton v-model="showAdvancedSettings" />
     </div>
     <div
       v-if="showAdvancedSettings"
@@ -68,14 +72,14 @@
         :label="t('Create this course')"
         icon="plus"
         type="primary"
-        @click="submitForm"
+        :is-submit="true"
       />
     </div>
-  </div>
+  </form>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue"
+import { onMounted, ref, nextTick } from "vue"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
@@ -116,6 +120,8 @@ const validateCourseCode = () => {
     courseCodeError.value = "Only letters (a-z) and numbers (0-9) are allowed."
     return false
   }
+
+  isCodeInvalid.value = false
   courseCodeError.value = ""
   return true
 }
@@ -127,6 +133,9 @@ const submitForm = () => {
     courseNameError.value = "This field is required"
     return
   }
+
+  isCourseNameInvalid.value = false
+  courseNameError.value = ""
 
   if (!validateCourseCode()) {
     return
@@ -142,7 +151,30 @@ const submitForm = () => {
   })
 }
 
+const focusCourseNameField = async () => {
+  // Focus the first meaningful field as soon as the component is mounted.
+  // BaseInputText may render different DOM structures, so we try multiple selectors.
+  await nextTick()
+
+  const candidates = [
+    "#course-name", // if id is applied to an <input>
+    "#course-name input", // if id is on a wrapper and the input is inside
+    'input[id="course-name"]',
+    'input[name="course-name"]',
+  ]
+
+  for (const selector of candidates) {
+    const el = document.querySelector(selector)
+    if (el && typeof el.focus === "function") {
+      el.focus()
+      return
+    }
+  }
+}
+
 onMounted(async () => {
+  await focusCourseNameField()
+
   try {
     const categoriesResponse = await courseService.getCategories("categories")
     categoryOptions.value = categoriesResponse.map((category) => ({
@@ -157,6 +189,7 @@ onMounted(async () => {
       id: language.isocode,
     }))
   } catch (error) {
+    // Keep messages in English
     console.error("Failed to load dropdown data", error)
   }
 })
@@ -164,9 +197,8 @@ onMounted(async () => {
 const searchTemplates = async (query) => {
   if (query && query.length >= 3) {
     return courseService.searchTemplates(query)
-  } else {
-    return []
   }
+  return []
 }
 
 const goBack = () => {

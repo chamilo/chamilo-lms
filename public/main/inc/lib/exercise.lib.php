@@ -1641,7 +1641,7 @@ HTML;
             $hotspotColor = 0;
             if (HOT_SPOT_DELINEATION != $answerType) {
                 $answerList = '
-        <div class="p-4 rounded-md border border-gray-25">
+        <div class="card p-4 rounded-md border border-gray-25">
             <h5 class="font-bold text-lg mb-2 text-primary">'.get_lang('Image zones').'</h5>
             <ol class="list-decimal ml-6 space-y-2 text-primary">
         ';
@@ -1667,12 +1667,12 @@ HTML;
             if ($freeze) {
                 $relPath = api_get_path(WEB_CODE_PATH);
                 echo "
-        <div class=\"flex space-x-4\">
-            <div class=\"w-3/4\">
-                <div id=\"hotspot-preview-$questionId\" class=\"bg-gray-10 w-full bg-center bg-no-repeat bg-contain border border-gray-25\"></div>
-            </div>
-            <div class=\"w-1/4\">
+        <div class=\"w-100\">
                 $answerList
+            </div>
+        <div class=\"flex space-x-4\">
+            <div class=\"w-100\">
+                <div id=\"hotspot-preview-$questionId\" class=\"bg-gray-10 w-full bg-center bg-no-repeat bg-contain border border-gray-25\"></div>
             </div>
         </div>
         <script>
@@ -1702,12 +1702,15 @@ HTML;
         <input type="hidden" name="hidden_hotspot_id" value="$questionId" />
         <div class="exercise_questions">
             $questionDescription
+            <div class="mb-4">
+              $answerList
+            </div>
             <div class="flex space-x-4">
 HOTSPOT;
             }
 
             $relPath = api_get_path(WEB_CODE_PATH);
-            $s .= "<div class=\"w-3/4\">
+            $s .= "<div>
            <div class=\"hotspot-image bg-gray-10 border border-gray-25 bg-center bg-no-repeat bg-contain\"></div>
             <script>
                 $(function() {
@@ -1721,9 +1724,6 @@ HOTSPOT;
                     });
                 });
             </script>
-        </div>
-        <div class=\"w-1/4\">
-            $answerList
         </div>
     ";
 

@@ -45,18 +45,12 @@ class ExtraFieldOptions
     #[Gedmo\Locale]
     private ?string $locale = null;
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
-    public function getOptionOrder()
+    public function getOptionOrder(): ?int
     {
         return $this->optionOrder;
     }
@@ -80,10 +74,7 @@ class ExtraFieldOptions
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getValue()
+    public function getValue(): ?string
     {
         return $this->value;
     }
@@ -131,6 +122,18 @@ class ExtraFieldOptions
         return $this;
     }
 
+    /**
+     * Backward-compatibility alias for legacy code calling setLocale().
+     * Gedmo Translatable expects the locale to be injected through the "Locale" field.
+     */
+    public function setLocale(string $locale): self
+    {
+        return $this->setTranslatableLocale($locale);
+    }
+
+    /**
+     * Sets the locale used by Gedmo Translatable for this entity.
+     */
     public function setTranslatableLocale(string $locale): self
     {
         $this->locale = $locale;

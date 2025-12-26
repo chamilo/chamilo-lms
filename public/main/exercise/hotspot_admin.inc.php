@@ -20,6 +20,9 @@ $questionName = $objQuestion->selectTitle();
 $answerType = $objQuestion->selectType();
 
 $debug = 0;
+$hotspot_skip_processing = $hotspot_skip_processing ?? false;
+$hotspot_skip_display = $hotspot_skip_display ?? false;
+
 
 $reponse = $_REQUEST['reponse'] ?? null;
 $comment = $_REQUEST['comment'] ?? null;
@@ -76,7 +79,7 @@ $submitAnswers = isset($_POST['submitAnswers']) ? true : false;
 $buttonBack = isset($_POST['buttonBack']) ? true : false;
 $nbrAnswers = isset($_POST['nbrAnswers']) ? (int) $_POST['nbrAnswers'] : 0;
 
-if ($submitAnswers || $buttonBack) {
+if (!$hotspot_skip_processing && ($submitAnswers || $buttonBack)) {
     if (in_array($answerType, [HOT_SPOT, HOT_SPOT_COMBINATION])) {
         if ($debug > 0) {
             echo '$submitAnswers or $buttonBack was set'."<br />\n";
@@ -181,8 +184,7 @@ if ($submitAnswers || $buttonBack) {
             $editQuestion = $objQuestion->iid;
             unset($modifyAnswers);
             $redirect = $hotspot_admin_url.'&message=ItemUpdated';
-            echo '<meta http-equiv="refresh" content="0;url='.htmlspecialchars($redirect, ENT_QUOTES).'">';
-            echo '<script>top.location.replace("'.addslashes($redirect).'");</script>';
+            api_location($redirect);
             exit;
         }
 
@@ -382,11 +384,14 @@ if ($submitAnswers || $buttonBack) {
             $editQuestion = $objQuestion->iid;
             unset($modifyAnswers);
             $redirect = $hotspot_admin_url.'&message=ItemUpdated';
-            echo '<meta http-equiv="refresh" content="0;url='.htmlspecialchars($redirect, ENT_QUOTES).'">';
-            echo '<script>top.location.replace("'.addslashes($redirect).'");</script>';
+            api_location($redirect);
             exit;
         }
     }
+}
+
+if ($hotspot_skip_display) {
+    return;
 }
 
 echo Display::page_header(get_lang('Question').': '.$objQuestion->selectTitle());

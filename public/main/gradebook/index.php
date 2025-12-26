@@ -1052,7 +1052,7 @@ api_set_in_gradebook();
 $contents = ob_get_contents();
 
 ob_end_clean();
-
+Event::event_access_tool(TOOL_GRADEBOOK);
 $view = new Template($viewTitle);
 $view->assign('content', $contents);
 $view->display_one_col_template();

@@ -12,7 +12,12 @@ const props = defineProps({
 })
 
 const platformConfigStore = usePlatformConfig()
-const displayMode = computed(() => platformConfigStore.getSetting("session.user_session_display_mode") ?? "card")
+const displayMode = computed(() => {
+  const raw = platformConfigStore.getSetting("session.user_session_display_mode")
+  const mode = String(raw ?? "card").toLowerCase()
+
+  return mode === "list" || mode === "card" ? mode : "card"
+})
 </script>
 
 <template>

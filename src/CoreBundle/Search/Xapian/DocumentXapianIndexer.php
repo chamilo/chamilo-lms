@@ -26,7 +26,7 @@ use ZipArchive;
 final class DocumentXapianIndexer
 {
     private bool $isEnabled;
-    private array $preFilterPrefix;
+    private array $preFilterPrefix = [];
 
     public function __construct(
         private readonly XapianIndexService $xapianIndexService,

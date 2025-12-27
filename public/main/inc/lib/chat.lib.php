@@ -538,18 +538,27 @@ class Chat extends Model
         $sinceId = max(0, (int) $sinceId);
 
         $tbl = Database::get_main_table(TABLE_MAIN_CHAT);
-        $sql = "
-        SELECT
-            MAX(id) AS last_id,
-            SUM(CASE WHEN recd < 2 THEN 1 ELSE 0 END) AS unread
-        FROM {$tbl}
-        WHERE to_user = {$uid} AND id > {$sinceId}
-    ";
-        $res = Database::query($sql);
-        $row = Database::fetch_array($res) ?: ['last_id' => 0, 'unread' => 0];
 
-        $lastId = (int) ($row['last_id'] ?? 0);
-        $unread = (int) ($row['unread'] ?? 0);
+        // Latest id (index-friendly with (to_user, id))
+        $sqlLast = "SELECT MAX(id) AS last_id
+        FROM {$tbl}
+        WHERE to_user = {$uid} AND id > {$sinceId}";
+        $resLast = Database::query($sqlLast);
+        $rowLast = Database::fetch_array($resLast) ?: ['last_id' => 0];
+        $lastId = (int) ($rowLast['last_id'] ?? 0);
+
+        // Unread count (index-friendly with (to_user, recd, id))
+        $unread = 0;
+        if ($lastId > 0) {
+            $sqlUnread = "SELECT COUNT(*) AS unread
+            FROM {$tbl}
+            WHERE to_user = {$uid}
+              AND recd < 2
+              AND id > {$sinceId}";
+            $resUnread = Database::query($sqlUnread);
+            $rowUnread = Database::fetch_array($resUnread) ?: ['unread' => 0];
+            $unread = (int) ($rowUnread['unread'] ?? 0);
+        }
 
         return [
             'has_new'  => $lastId > $sinceId,

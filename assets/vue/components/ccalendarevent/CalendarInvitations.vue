@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from "vue"
+import { computed, ref, watch, onMounted } from "vue"
 import { useI18n } from "vue-i18n"
 import Fieldset from "primevue/fieldset"
 import SelectButton from "primevue/selectbutton"
@@ -12,38 +12,14 @@ import BaseAutocomplete from "../basecomponents/BaseAutocomplete.vue"
 import usergrupService from "../../services/usergroupService"
 import { subscriptionVisibility, type } from "../../constants/entity/ccalendarevent"
 
-const model = defineModel({
-  type: Object,
-})
-
+const model = defineModel({ type: Object })
 const { t } = useI18n()
-
 const { allowCollectiveInvitations, allowSubscriptions } = useCalendarInvitations()
 
-const showInvitationsFieldset = computed(() => {
-  if (allowCollectiveInvitations && !allowSubscriptions) {
-    return true
-  }
-
-  return allowSubscriptions && type.invitation === model.value?.invitationType
-})
-
-const showSubscriptionsFieldset = computed(() => {
-  if (allowSubscriptions && !allowCollectiveInvitations) {
-    return true
-  }
-
-  return allowCollectiveInvitations && type.subscription === model.value?.invitationType
-})
-
 const invitationTypeList = [
-  { name: t("Invitations"), value: type.invitation },
+  { name: t("My invitations"), value: type.invitation },
   { name: t("Subscriptions"), value: type.subscription },
 ]
-
-const invitationTypeSelected = ref()
-
-model.value.invitationType = computed(() => invitationTypeSelected.value)
 
 const subscriptionVisibilityList = [
   { label: t("No"), value: subscriptionVisibility.no },
@@ -51,47 +27,102 @@ const subscriptionVisibilityList = [
   { label: t("Users inside the class"), value: subscriptionVisibility.class },
 ]
 
-const subscriptionVisibilitySelected = ref(0)
+const invitationTypeSelected = ref(type.invitation)
+const subscriptionVisibilitySelected = ref(subscriptionVisibility.no)
+const subscriptionItemSelected = ref(null)
 
-model.value.subscriptionVisibility = computed(() => subscriptionVisibilitySelected.value)
+const showInvitationsFieldset = computed(() => {
+  if (allowCollectiveInvitations && !allowSubscriptions) return true
+  return allowSubscriptions && type.invitation === model.value?.invitationType
+})
 
-const subscriptionItemSelected = ref()
+const showSubscriptionsFieldset = computed(() => {
+  if (allowSubscriptions && !allowCollectiveInvitations) return true
+  return allowCollectiveInvitations && type.subscription === model.value?.invitationType
+})
 
-const subscriptionItemDisabled = computed(() => 2 !== subscriptionVisibilitySelected.value)
+const subscriptionItemDisabled = computed(() => subscriptionVisibility.class !== subscriptionVisibilitySelected.value)
+const maxSubscriptionsDisabled = computed(() => subscriptionVisibility.no === subscriptionVisibilitySelected.value)
 
-const onSubscriptionItemSelected = (event) => (model.value.subscriptionItemId = event.value.id)
+function syncFromModel() {
+  const it = model.value?.invitationType
+  if (it && it !== invitationTypeSelected.value) invitationTypeSelected.value = it
+
+  const sv = model.value?.subscriptionVisibility
+  if (typeof sv === "number" && sv !== subscriptionVisibilitySelected.value) subscriptionVisibilitySelected.value = sv
+
+  // Ensure defaults exist for new items
+  if (!model.value?.invitationType) model.value.invitationType = invitationTypeSelected.value
+  if (typeof model.value?.subscriptionVisibility !== "number") {
+    model.value.subscriptionVisibility = subscriptionVisibilitySelected.value
+  }
+}
+
+watch(
+  () => model.value,
+  () => syncFromModel(),
+  { immediate: true },
+)
+
+onMounted(() => syncFromModel())
+
+watch(
+  invitationTypeSelected,
+  (newValue) => {
+    // Store plain value (not a computed/ref)
+    model.value.invitationType = newValue
+  },
+  { immediate: true },
+)
+
+watch(
+  subscriptionVisibilitySelected,
+  (newValue) => {
+    model.value.subscriptionVisibility = newValue
+    if (subscriptionVisibility.class !== newValue) {
+      model.value.subscriptionItemId = undefined
+      subscriptionItemSelected.value = null
+    }
+  },
+  { immediate: true },
+)
+
+const onSubscriptionItemSelected = (event) => {
+  const selected = event?.value
+  model.value.subscriptionItemId = selected?.id
+}
 
 watch(subscriptionItemSelected, (newValue) => {
-  if (!newValue) {
-    model.value.subscriptionItemId = undefined
-  }
+  if (!newValue) model.value.subscriptionItemId = undefined
 })
 
 const findUsergroup = async (query) => {
   const response = await usergrupService.search(query)
-
   return response.items
 }
-
-const maxSubscriptionsDisabled = computed(() => 0 === subscriptionVisibilitySelected.value)
 </script>
 
 <template>
   <div
     v-if="allowCollectiveInvitations && allowSubscriptions"
-    class="field"
+    class="mb-3"
   >
-    <SelectButton
-      v-model="invitationTypeSelected"
-      :options="invitationTypeList"
-      option-label="name"
-      option-value="value"
-    />
+    <div class="inline-flex items-center rounded-full border border-gray-300 bg-gray-100/90 p-1">
+      <SelectButton
+        v-model="invitationTypeSelected"
+        :options="invitationTypeList"
+        option-label="name"
+        option-value="value"
+        class="calendar-mode-toggle"
+        aria-label="Invitation mode selector"
+        size="small"
+      />
+    </div>
   </div>
 
   <Fieldset
     v-if="showInvitationsFieldset"
-    :legend="t('Invitations')"
+    :legend="t('My invitations')"
   >
     <EditLinks
       v-model="model"
@@ -122,7 +153,7 @@ const maxSubscriptionsDisabled = computed(() => 0 === subscriptionVisibilitySele
       id="subscription_item"
       v-model="subscriptionItemSelected"
       :disabled="subscriptionItemDisabled"
-      :label="t('Social group')"
+      :label="t('Class')"
       :search="findUsergroup"
       option-label="title"
       @item-select="onSubscriptionItemSelected"

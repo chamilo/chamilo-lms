@@ -1071,6 +1071,12 @@ img.course-tool__icon {
     box-shadow: 0 0 0 2px rgba(29, 78, 216, .35) !important;
     border-radius: .5rem !important;
   }
+  a:focus:not(:focus-visible),
+  [role="button"]:focus:not(:focus-visible),
+  .p-button:focus:not(:focus-visible) {
+    box-shadow: none !important;
+    outline: 0 !important;
+  }
 }
 @layer components {
   .form-group:focus-within,

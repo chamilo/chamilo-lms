@@ -84,7 +84,7 @@ if ($is_allowedToEdit) {
             $new_id = $old_question_obj->duplicate($current_course);
             //Reading new question
             $new_question_obj = Question::read($new_id);
-            $new_question_obj->addToList($fromExercise);
+            $new_question_obj->addToList($fromExercise, true);
             //Reading Answers obj of the current course
             $new_answer_obj = new Answer($old_question_id, $origin_course_id);
             $new_answer_obj->read();

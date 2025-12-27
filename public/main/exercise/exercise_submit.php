@@ -1116,7 +1116,17 @@ if ($formSent && isset($_POST)) {
                         }
                     }
                 }
-                header('Location: exercise_result.php?'.api_get_cidreq()."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+
+                // Final redirect: if "Review my answers" is enabled, go to reminder list first.
+                $endUrl = $objExercise->review_answers
+                    ? 'exercise_reminder.php?'.$params
+                    : 'exercise_result.php?'.api_get_cidreq()
+                    ."&exe_id=$exe_id"
+                    ."&learnpath_id=$learnpath_id"
+                    ."&learnpath_item_id=$learnpath_item_id"
+                    ."&learnpath_item_view_id=$learnpath_item_view_id";
+
+                header('Location: '.$endUrl);
                 exit;
             } else {
                 if ($debug) {
@@ -1166,12 +1176,19 @@ $question_count = !empty($questionList) ? count($questionList) : 0;
 if ($_SERVER['REQUEST_METHOD'] === 'GET'
     && $reqGetNum !== null
     && $question_count > 0
-    && $reqGetNum > $question_count) {
-    header('Location: exercise_result.php?'.api_get_cidreq()
-        ."&exe_id=$exe_id"
-        ."&learnpath_id=$learnpath_id"
-        ."&learnpath_item_id=$learnpath_item_id"
-        ."&learnpath_item_view_id=$learnpath_item_view_id");
+    && $reqGetNum > $question_count
+) {
+    // If review answers is enabled, show reminder list instead of results.
+    if ($objExercise->review_answers) {
+        header('Location: exercise_reminder.php?'.$params);
+    } else {
+        header('Location: exercise_result.php?'.api_get_cidreq()
+            ."&exe_id=$exe_id"
+            ."&learnpath_id=$learnpath_id"
+            ."&learnpath_item_id=$learnpath_item_id"
+            ."&learnpath_item_view_id=$learnpath_item_view_id"
+        );
+    }
     exit;
 }
 
@@ -1613,7 +1630,8 @@ echo '<script>
         var page = '.(int) $page.';
         var totalPages = '.(int) ($totalPages ?? 1).';
         var chSubmitBaseUrl = "'.api_get_self().'?'.$submitBaseQuery.'";
-        var chResultUrl = "exercise_result.php?'.$resultBaseQuery.'";
+        var chResultUrl = "'.$script_php.'?'.$params.'";
+
         function navigateNext() {
             var url;
             if (page === totalPages) {

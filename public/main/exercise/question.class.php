@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Search\Xapian\XapianIndexService;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
@@ -696,6 +697,10 @@ abstract class Question
         $addQs = false,
         $rmQs = false
     ) {
+        // Chamilo 2 uses Symfony-based indexing. Legacy indexer (course_code) is not compatible.
+        if (class_exists(XapianIndexService::class)) {
+            return;
+        }
         // update search engine and its values table if enabled
         if (!empty($exerciseId) && 'true' == api_get_setting('search_enabled') &&
             extension_loaded('xapian')

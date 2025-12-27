@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Search\Xapian;
 
+use Chamilo\CoreBundle\Entity\SearchEngineRef;
 use DateTimeImmutable;
+use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
 use Throwable;
 use Xapian;
@@ -26,6 +28,7 @@ final class XapianIndexService
 
     public function __construct(
         private readonly SearchIndexPathResolver $indexPathResolver,
+        private readonly EntityManagerInterface $em,
     ) {}
 
     /**
@@ -251,5 +254,47 @@ final class XapianIndexService
         ];
 
         return $map[$iso] ?? self::DEFAULT_LANGUAGE;
+    }
+
+    public function purgeCourseIndex(int $courseId): void
+    {
+        // Get all Xapian document ids (search_did) linked to this course
+        $rows = $this->em->createQueryBuilder()
+            ->select('DISTINCT ser.searchDid AS searchDid')
+            ->from(SearchEngineRef::class, 'ser')
+            ->join('ser.resourceNode', 'rn')
+            ->join('rn.resourceLinks', 'rl')
+            ->join('rl.course', 'c')
+            ->where('c.id = :courseId')
+            ->setParameter('courseId', $courseId)
+            ->getQuery()
+            ->getScalarResult();
+
+        foreach ($rows as $row) {
+            $did = (int) ($row['searchDid'] ?? 0);
+            if ($did <= 0) {
+                continue;
+            }
+
+            // Delete the Xapian entry by its search_did (Xapian docid)
+            $this->deleteBySearchDid($did);
+        }
+    }
+
+    private function deleteBySearchDid(int $did): void
+    {
+        if ($did <= 0) {
+            return;
+        }
+
+        try {
+            // search_did == Xapian internal docid
+            $this->deleteDocument($did);
+        } catch (\Throwable $e) {
+            error_log(
+                '[Xapian] deleteBySearchDid: delete failed for search_did='.$did.': '.
+                $e->getMessage().' in '.$e->getFile().':'.$e->getLine()
+            );
+        }
     }
 }

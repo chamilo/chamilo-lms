@@ -40,6 +40,9 @@ class CourseChatUtils
     /** Debug flag */
     private $debug = false;
 
+    private bool $restrictToCoachSetting = false;
+    private bool $savePrivateConversationsInDocuments = false;
+
     public function __construct($courseId, $userId, $sessionId, $groupId, ResourceNode $resourceNode, ResourceRepository $repository)
     {
         $this->courseId     = (int) $courseId;
@@ -49,6 +52,9 @@ class CourseChatUtils
         $this->resourceNode = $resourceNode;
         $this->repository   = $repository;
 
+        $this->restrictToCoachSetting = ('true' === api_get_setting('chat.course_chat_restrict_to_coach'));
+        $this->savePrivateConversationsInDocuments = ('true' === api_get_setting('chat.save_private_conversations_in_documents'));
+
         $this->dbg('construct', [
             'courseId'     => $courseId,
             'userId'       => $userId,
@@ -57,6 +63,17 @@ class CourseChatUtils
             'parentNodeId' => $resourceNode->getId() ?? null,
             'repo'         => get_class($repository),
         ]);
+    }
+
+    private function shouldMirrorToDocuments(int $friendId): bool
+    {
+        // Private 1:1 conversations should NOT be mirrored by default.
+        if ($friendId > 0) {
+            return $this->savePrivateConversationsInDocuments;
+        }
+
+        // General / session / group chat: keep current behavior (mirrored).
+        return true;
     }
 
     /** Simple debug helper */
@@ -498,8 +515,10 @@ class CourseChatUtils
                 $em->flush();
             }
 
-            // Mirror in Documents (unchanged call; see method below updated with lock)
-            $this->mirrorDailyCopyToDocuments($fileTitle, $newContent);
+            // Mirror in Documents only when allowed by admin setting
+            if ($this->shouldMirrorToDocuments((int) $friendId)) {
+                $this->mirrorDailyCopyToDocuments($fileTitle, $newContent);
+            }
 
             $this->dbg('saveMessage.append.ok', ['nodeId' => $node->getId(), 'bytes' => strlen($newContent)]);
             return true;
@@ -510,6 +529,40 @@ class CourseChatUtils
         } finally {
             if ($lockH) { @flock($lockH, LOCK_UN); @fclose($lockH); }
         }
+    }
+
+    private function getConnectedUserIdSet(): array
+    {
+        $date = new \DateTime(api_get_utc_datetime(), new \DateTimeZone('UTC'));
+        $date->modify('-5 seconds');
+
+        $extraCondition = $this->groupId
+            ? 'AND ccc.toGroupId = '.$this->groupId
+            : 'AND ccc.sessionId = '.$this->sessionId;
+
+        $rows = Database::getManager()
+            ->createQuery("
+            SELECT ccc.userId AS uid
+            FROM ChamiloCourseBundle:CChatConnected ccc
+            WHERE ccc.lastConnection > :date
+              AND ccc.cId = :course
+              $extraCondition
+        ")
+            ->setParameters([
+                'date' => $date,
+                'course' => $this->courseId,
+            ])
+            ->getArrayResult();
+
+        $set = [];
+        foreach ($rows as $r) {
+            $id = (int) ($r['uid'] ?? 0);
+            if ($id > 0) {
+                $set[$id] = true;
+            }
+        }
+
+        return $set;
     }
 
     /**
@@ -633,16 +686,18 @@ class CourseChatUtils
                 continue;
             }
 
-            $em
-                ->createQuery('
-                    DELETE FROM ChamiloCourseBundle:CChatConnected ccc
-                    WHERE ccc.cId = :course AND ccc.userId = :user AND ccc.toGroupId = :group
-                ')
-                ->execute([
-                    'course' => $this->courseId,
-                    'user'   => $connection->getUserId(),
-                    'group'  => $this->groupId,
-                ]);
+            $em->createQuery('
+                DELETE FROM ChamiloCourseBundle:CChatConnected ccc
+                WHERE ccc.cId = :course
+                  AND ccc.userId = :user
+                  AND ccc.sessionId = :sid
+                  AND ccc.toGroupId = :gid
+            ')->execute([
+                'course' => $this->courseId,
+                'user'   => $connection->getUserId(),
+                'sid'    => $this->sessionId,
+                'gid'    => $this->groupId,
+            ]);
         }
     }
 
@@ -734,10 +789,11 @@ class CourseChatUtils
         $subscriptions = $this->getUsersSubscriptions();
         $usersInfo = [];
 
+        $connectedSet = $this->getConnectedUserIdSet();
         if ($this->groupId) {
             /** @var User $groupUser */
             foreach ($subscriptions as $groupUser) {
-                $usersInfo[] = $this->formatUser($groupUser, $groupUser->getStatus());
+                $usersInfo[] = $this->formatUser($groupUser, $groupUser->getStatus(), $connectedSet);
             }
         } else {
             /** @var CourseRelUser|SessionRelCourseRelUser $subscription */
@@ -745,7 +801,8 @@ class CourseChatUtils
                 $user = $subscription->getUser();
                 $usersInfo[] = $this->formatUser(
                     $user,
-                    $this->sessionId ? $user->getStatus() : $subscription->getStatus()
+                    $this->sessionId ? $user->getStatus() : $subscription->getStatus(),
+                    $connectedSet
                 );
             }
         }
@@ -754,7 +811,7 @@ class CourseChatUtils
     }
 
     /** Normalize user card info */
-    private function formatUser(User $user, $status): array
+    private function formatUser(User $user, $status, array $connectedSet): array
     {
         return [
             'id'            => $user->getId(),
@@ -766,7 +823,7 @@ class CourseChatUtils
             'complete_name' => UserManager::formatUserFullName($user),
             'username'      => $user->getUsername(),
             'email'         => $user->getEmail(),
-            'isConnected'   => $this->userIsConnected($user->getId()),
+            'isConnected'   => isset($connectedSet[$user->getId()]),
         ];
     }
 

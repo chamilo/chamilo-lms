@@ -33,3 +33,22 @@
     }
   }
 }
+.calendar-mode-toggle {
+  @apply inline-flex gap-2;
+}
+.calendar-mode-toggle:deep(.p-togglebutton) {
+  margin-left: 0 !important;
+  @apply rounded-full border border-gray-300 bg-transparent;
+  @apply px-4 py-2 font-semibold text-gray-25;
+  @apply transition-colors;
+  @apply hover:bg-white/70 hover:text-gray-50;
+  @apply min-w-[10rem] justify-center;
+}
+.calendar-mode-toggle:deep(.p-togglebutton[aria-pressed="true"]) {
+  @apply bg-white text-gray-90 border-gray-25 shadow-sm;
+  @apply ring-1 ring-gray-20;
+}
+.p-togglebutton-checked {
+  font-weight: bold;
+  text-decoration: underline;
+}

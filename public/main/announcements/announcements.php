@@ -57,12 +57,8 @@ $isTutor = false;
 if (!empty($group_id)) {
     $groupEntity = api_get_group_entity($group_id);
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
-        'name' => get_lang('Groups'),
-    ];
-    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$groupEntity->getTitle(),
+        'name' => $groupEntity->getTitle(),
     ];
 
     if (false === $allowToEdit) {

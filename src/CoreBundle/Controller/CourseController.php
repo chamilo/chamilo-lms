@@ -53,6 +53,7 @@ use Database;
 use DateTimeInterface;
 use Display;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Event;
 use Exception;
 use Exercise;
@@ -83,7 +84,19 @@ class CourseController extends ToolBaseController
         private readonly EntityManagerInterface $em,
         private readonly SerializerInterface $serializer,
         private readonly UserHelper $userHelper,
+        private readonly ManagerRegistry $doctrine,
     ) {}
+
+    /**
+     * Extend the controller service locator to include "doctrine".
+     * This prevents runtime errors when legacy code tries to access it through the controller container.
+     */
+    public static function getSubscribedServices(): array
+    {
+        return array_merge(parent::getSubscribedServices(), [
+            'doctrine' => ManagerRegistry::class,
+        ]);
+    }
 
     #[IsGranted('ROLE_USER')]
     #[Route('/{cid}/checkLegal.json', name: 'chamilo_core_course_check_legal_json')]
@@ -483,6 +496,7 @@ class CourseController extends ToolBaseController
         return new JsonResponse($payload);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/{courseId}/next-course', name: 'chamilo_course_next_course')]
     public function getNextCourse(
         int $courseId,
@@ -495,6 +509,11 @@ class CourseController extends ToolBaseController
         $sessionId = $request->query->getInt('sid');
         $useDependents = $request->query->getBoolean('dependents', false);
         $user = $security->getUser();
+
+        if (null === $user || !method_exists($user, 'getId')) {
+            return new JsonResponse(['error' => 'Authentication required.'], Response::HTTP_UNAUTHORIZED);
+        }
+
         $userId = $user->getId();
 
         if ($useDependents) {
@@ -581,24 +600,6 @@ class CourseController extends ToolBaseController
 
         return $this->redirect($url);
     }
-
-    /*public function redirectToShortCut(string $toolName, CToolRepository $repo, ToolChain $toolChain): RedirectResponse
-     * {
-     * $tool = $repo->findOneBy([
-     * 'name' => $toolName,
-     * ]);
-     * if (null === $tool) {
-     * throw new NotFoundHttpException($this->trans('Tool not found'));
-     * }
-     * $tool = $toolChain->getToolFromName($tool->getTool()->getTitle());
-     * $link = $tool->getLink();
-     * if (strpos($link, 'nodeId')) {
-     * $nodeId = (string) $this->getCourse()->getResourceNode()->getId();
-     * $link = str_replace(':nodeId', $nodeId, $link);
-     * }
-     * $url = $link.'?'.$this->getCourseUrlQuery();
-     * return $this->redirect($url);
-     * }*/
 
     /**
      * Edit configuration with given namespace.
@@ -840,7 +841,6 @@ class CourseController extends ToolBaseController
     {
         $sessionId = (int) $request->get('sid');
 
-        // $session = $this->getSession();
         $responseData = [];
         $ctoolRepo = $em->getRepository(CTool::class);
         $sessionRepo = $em->getRepository(Session::class);
@@ -1350,7 +1350,7 @@ class CourseController extends ToolBaseController
         // Load all tools for this course + (optional) session ordered by current position
         $qb = $toolRepo->createQueryBuilder('t')
             ->andWhere('t.course = :course')
-            ->setParameter('course', $course->getId())
+            ->setParameter('course', $course)
             ->orderBy('t.position', 'ASC')
             ->addOrderBy('t.iid', 'ASC')
         ;

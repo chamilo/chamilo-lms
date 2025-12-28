@@ -15,8 +15,8 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Search\Xapian\XapianIndexService;
 use Chamilo\CoreBundle\Search\Xapian\XapianSearchService;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,6 +26,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
+
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+use const PATHINFO_EXTENSION;
 
 final class SearchController extends AbstractController
 {
@@ -182,6 +187,7 @@ final class SearchController extends AbstractController
 
             if (!empty($data['course_root_node_id'])) {
                 $result['data'] = $data;
+
                 continue;
             }
 
@@ -191,6 +197,7 @@ final class SearchController extends AbstractController
 
             if (!$courseId) {
                 $result['data'] = $data;
+
                 continue;
             }
 
@@ -198,6 +205,7 @@ final class SearchController extends AbstractController
             $course = $this->em->find(Course::class, $courseId);
             if (!$course || !$course->getResourceNode()) {
                 $result['data'] = $data;
+
                 continue;
             }
 
@@ -213,6 +221,7 @@ final class SearchController extends AbstractController
      * and attach quiz_id (and quiz_title) into the result data so Twig can build safer links/UI.
      *
      * @param array<int, array<string, mixed>> $results
+     *
      * @return array<int, array<string, mixed>>
      */
     private function hydrateQuestionResultsWithQuizIds(array $results): array
@@ -234,6 +243,7 @@ final class SearchController extends AbstractController
 
             if (!$isQuestion) {
                 $result['data'] = $data;
+
                 continue;
             }
 
@@ -244,22 +254,26 @@ final class SearchController extends AbstractController
 
             if (null === $questionId) {
                 $result['data'] = $data;
+
                 continue;
             }
 
             /** @var CQuizRelQuestion|null $rel */
             $rel = $this->em
                 ->getRepository(CQuizRelQuestion::class)
-                ->findOneBy(['question' => $questionId]);
+                ->findOneBy(['question' => $questionId])
+            ;
 
             if (!$rel) {
                 $result['data'] = $data;
+
                 continue;
             }
 
             $quiz = $rel->getQuiz();
             if (!$quiz || null === $quiz->getIid()) {
                 $result['data'] = $data;
+
                 continue;
             }
 
@@ -286,6 +300,7 @@ final class SearchController extends AbstractController
      * Adds course title/code/image to result data for nicer UI.
      *
      * @param array<int, array<string, mixed>> $results
+     *
      * @return array<int, array<string, mixed>>
      */
     private function hydrateResultsWithCourseMeta(array $results): array
@@ -319,6 +334,7 @@ final class SearchController extends AbstractController
             $courseId = !empty($data['course_id']) ? (int) $data['course_id'] : null;
             if (!$courseId) {
                 $result['data'] = $data;
+
                 continue;
             }
 
@@ -326,6 +342,7 @@ final class SearchController extends AbstractController
             $course = $this->em->find(Course::class, $courseId);
             if (!$course) {
                 $result['data'] = $data;
+
                 continue;
             }
 
@@ -363,6 +380,7 @@ final class SearchController extends AbstractController
             );
         } catch (Throwable $e) {
             error_log('[Search] resolveCourseImageUrl: failed: '.$e->getMessage());
+
             return null;
         }
     }
@@ -376,6 +394,7 @@ final class SearchController extends AbstractController
      * Important: for question results, do NOT expose full question text.
      *
      * @param array<int, array<string, mixed>> $results
+     *
      * @return array<int, array<string, mixed>>
      */
     private function decorateResultsForUi(array $results, string $queryString): array
@@ -396,9 +415,9 @@ final class SearchController extends AbstractController
             $tool = (string) ($data['tool'] ?? '');
             $isQuestion = ('question' === $kind) || ('quiz_question' === $tool);
 
-            $title    = isset($data['title']) ? (string) $data['title'] : '';
+            $title = isset($data['title']) ? (string) $data['title'] : '';
             $fullPath = isset($data['full_path']) ? (string) $data['full_path'] : '';
-            $content  = isset($data['content']) ? (string) $data['content'] : '';
+            $content = isset($data['content']) ? (string) $data['content'] : '';
 
             $ext = $this->guessFileExtension($fullPath, $title);
             $data['file_ext'] = $ext;
@@ -435,8 +454,8 @@ final class SearchController extends AbstractController
      * show only a few words around the first matched term, with <mark> highlight.
      * Never returns the full text.
      *
-     * @param string   $content Raw indexed content (question text may be here)
-     * @param string[] $terms   Query terms
+     * @param string   $content     Raw indexed content (question text may be here)
+     * @param string[] $terms       Query terms
      * @param int      $radiusWords Number of words before/after the match
      */
     private function buildSafeQuestionExcerptHtml(string $content, array $terms, int $radiusWords = 3): string
@@ -460,9 +479,10 @@ final class SearchController extends AbstractController
                 continue;
             }
             $p = mb_stripos($lower, mb_strtolower($t, 'UTF-8'), 0, 'UTF-8');
-            if ($p !== false) {
+            if (false !== $p) {
                 $matchPos = (int) $p;
                 $matchedTerm = $t;
+
                 break;
             }
         }
@@ -489,6 +509,7 @@ final class SearchController extends AbstractController
 
             if ($matchPos >= $spanStart && $matchPos <= $spanEnd) {
                 $matchWordIndex = (int) $i;
+
                 break;
             }
 
@@ -496,9 +517,9 @@ final class SearchController extends AbstractController
         }
 
         $start = max(0, $matchWordIndex - $radiusWords);
-        $end   = min(count($words) - 1, $matchWordIndex + $radiusWords);
+        $end = min(\count($words) - 1, $matchWordIndex + $radiusWords);
 
-        $slice = array_slice($words, $start, ($end - $start) + 1);
+        $slice = \array_slice($words, $start, ($end - $start) + 1);
         $snippet = implode(' ', $slice);
 
         $escaped = htmlspecialchars($snippet, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -509,14 +530,14 @@ final class SearchController extends AbstractController
             if ('' === $t) {
                 continue;
             }
-            $pattern = '/(' . preg_quote(htmlspecialchars($t, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), '/') . ')/iu';
+            $pattern = '/('.preg_quote(htmlspecialchars($t, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), '/').')/iu';
             $escaped = preg_replace($pattern, '<mark class="px-1 rounded bg-yellow-200">$1</mark>', $escaped) ?? $escaped;
         }
 
         if ($start > 0) {
-            $escaped = '…' . $escaped;
+            $escaped = '…'.$escaped;
         }
-        if ($end < (count($words) - 1)) {
+        if ($end < (\count($words) - 1)) {
             $escaped .= '…';
         }
 
@@ -612,7 +633,6 @@ final class SearchController extends AbstractController
 
         // Public course => visible (but may be locked by prerequisites for students)
         if ($course->isPublic()) {
-
             $this->applyCourseContextRoles($user, $course, $session);
 
             if ($this->isStudentInContext($user, $course, $session)) {
@@ -626,7 +646,6 @@ final class SearchController extends AbstractController
 
         // Open platform => any logged-in user
         if (Course::OPEN_PLATFORM === $course->getVisibility()) {
-
             $this->applyCourseContextRoles($user, $course, $session);
 
             if ($this->isStudentInContext($user, $course, $session)) {
@@ -641,11 +660,12 @@ final class SearchController extends AbstractController
         // Session-specific subscription
         if ($session) {
             $userIsGeneralCoach = $session->hasUserAsGeneralCoach($user);
-            $userIsCourseCoach  = $session->hasCourseCoachInCourse($user, $course);
-            $userIsStudent      = $session->hasUserInCourse($user, $course, Session::STUDENT);
+            $userIsCourseCoach = $session->hasCourseCoachInCourse($user, $course);
+            $userIsStudent = $session->hasUserInCourse($user, $course, Session::STUDENT);
 
             if ($userIsGeneralCoach || $userIsCourseCoach) {
                 $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
+
                 return true;
             }
 
@@ -730,7 +750,6 @@ final class SearchController extends AbstractController
         return $course->hasUserAsStudent($user);
     }
 
-
     /**
      * Extract query terms for snippet highlighting.
      *
@@ -778,8 +797,9 @@ final class SearchController extends AbstractController
 
     private function guessFileExtension(string $fullPath, string $title): string
     {
-        $candidate = $fullPath !== '' ? $fullPath : $title;
+        $candidate = '' !== $fullPath ? $fullPath : $title;
         $ext = strtolower((string) pathinfo($candidate, PATHINFO_EXTENSION));
+
         return $ext ?: '';
     }
 
@@ -826,9 +846,10 @@ final class SearchController extends AbstractController
 
         foreach ($terms as $t) {
             $p = mb_stripos($plain, $t, 0, 'UTF-8');
-            if ($p !== false) {
+            if (false !== $p) {
                 $pos = (int) $p;
                 $matchedTerm = $t;
+
                 break;
             }
         }
@@ -854,7 +875,7 @@ final class SearchController extends AbstractController
             if ('' === $t) {
                 continue;
             }
-            $pattern = '/(' . preg_quote(htmlspecialchars($t, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), '/') . ')/iu';
+            $pattern = '/('.preg_quote(htmlspecialchars($t, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), '/').')/iu';
             $escaped = preg_replace($pattern, '<mark class="px-1 rounded bg-yellow-200">$1</mark>', $escaped) ?? $escaped;
         }
 
@@ -926,18 +947,18 @@ final class SearchController extends AbstractController
                 : $conn->getSchemaManager();
 
             $columns = array_map(
-                static fn($c) => strtolower($c->getName()),
+                static fn ($c) => strtolower($c->getName()),
                 $sm->listTableColumns($table)
             );
 
-            $userCol = in_array('user_id', $columns, true) ? 'user_id' : null;
-            $sessionCol = in_array('session_id', $columns, true) ? 'session_id' : null;
+            $userCol = \in_array('user_id', $columns, true) ? 'user_id' : null;
+            $sessionCol = \in_array('session_id', $columns, true) ? 'session_id' : null;
 
             // Course column can be c_id or course_id depending on schema.
             $courseCol = null;
-            if (in_array('c_id', $columns, true)) {
+            if (\in_array('c_id', $columns, true)) {
                 $courseCol = 'c_id';
-            } elseif (in_array('course_id', $columns, true)) {
+            } elseif (\in_array('course_id', $columns, true)) {
                 $courseCol = 'course_id';
             }
 
@@ -954,8 +975,9 @@ final class SearchController extends AbstractController
             $sid = (int) $conn->fetchOne($sql, ['uid' => $userId, 'cid' => $courseId]);
 
             return $sid > 0 ? $sid : 0;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             error_log('[Search] Failed to resolve session id: '.$e->getMessage());
+
             return 0;
         }
     }

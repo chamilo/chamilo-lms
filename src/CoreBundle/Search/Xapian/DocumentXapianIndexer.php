@@ -14,11 +14,17 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
+use SplFileInfo;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Process\Process;
 use Throwable;
 use ZipArchive;
+
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const PATHINFO_EXTENSION;
 
 /**
  * Handles Xapian indexing for CDocument entities.
@@ -35,7 +41,7 @@ final class DocumentXapianIndexer
         private readonly DocumentRawTextExtractor $rawTextExtractor,
         private readonly RequestStack $requestStack,
     ) {
-        $this->isEnabled = "true" === $settingsManager->getSetting('search.search_enabled', true);
+        $this->isEnabled = 'true' === $settingsManager->getSetting('search.search_enabled', true);
 
         $raw = (string) $settingsManager->getSetting('search.search_prefilter_prefix', true);
 
@@ -55,16 +61,19 @@ final class DocumentXapianIndexer
 
         if (!$this->isEnabled) {
             error_log('[Xapian] indexDocument: search is disabled, skipping indexing');
+
             return null;
         }
 
         if (!$resourceNode instanceof ResourceNode) {
             error_log('[Xapian] indexDocument: missing ResourceNode, skipping');
+
             return null;
         }
 
         if ('folder' === $document->getFiletype()) {
             error_log('[Xapian] indexDocument: skipping folder document, resource_node_id='.$resourceNode->getId());
+
             return null;
         }
 
@@ -101,7 +110,8 @@ final class DocumentXapianIndexer
         /** @var SearchEngineRef|null $existingRef */
         $existingRef = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNode' => $resourceNodeRef]);
+            ->findOneBy(['resourceNode' => $resourceNodeRef])
+        ;
 
         $existingDocId = $existingRef?->getSearchDid();
 
@@ -138,6 +148,7 @@ final class DocumentXapianIndexer
             );
         } catch (Throwable $e) {
             error_log('[Xapian] indexDocument: Xapian indexing failed: '.$e->getMessage());
+
             return null;
         }
 
@@ -162,6 +173,7 @@ final class DocumentXapianIndexer
     {
         if (!$this->isEnabled) {
             error_log('[Xapian] deleteForResourceNodeId: search is disabled, skipping');
+
             return;
         }
 
@@ -179,10 +191,12 @@ final class DocumentXapianIndexer
         /** @var SearchEngineRef|null $ref */
         $ref = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNode' => $resourceNodeRef]);
+            ->findOneBy(['resourceNode' => $resourceNodeRef])
+        ;
 
         if (!$ref instanceof SearchEngineRef) {
             error_log('[Xapian] deleteForResourceNodeId: no SearchEngineRef found, nothing to delete');
+
             return;
         }
 
@@ -217,6 +231,7 @@ final class DocumentXapianIndexer
 
         if (empty($byCode)) {
             error_log('[Xapian] syncSearchEngineFieldValues: no search_engine_field rows found, skipping');
+
             return;
         }
 
@@ -239,6 +254,7 @@ final class DocumentXapianIndexer
             error_log(
                 '[Xapian] syncSearchEngineFieldValues: no input received, keeping existing values for resource_node_id='.$resourceNodeId
             );
+
             return;
         }
 
@@ -323,6 +339,7 @@ final class DocumentXapianIndexer
             $rows = $conn->fetchAllAssociative('SELECT id, code, title FROM search_engine_field');
         } catch (Throwable $e) {
             error_log('[Xapian] fetchSearchEngineFields: query failed: '.$e->getMessage());
+
             return ['byCode' => [], 'byId' => []];
         }
 
@@ -375,7 +392,7 @@ final class DocumentXapianIndexer
             // Safe fallback: if DB read fails, keep only string codes as-is
             $out = [];
             foreach ($rawValues as $k => $v) {
-                if (!is_string($k)) {
+                if (!\is_string($k)) {
                     continue;
                 }
                 $code = strtolower(trim($k));
@@ -384,6 +401,7 @@ final class DocumentXapianIndexer
                 }
                 $out[$code] = trim((string) $v);
             }
+
             return $out;
         }
 
@@ -438,16 +456,17 @@ final class DocumentXapianIndexer
 
         // Standard multipart parsed array: searchFieldValues[t]=...
         $fromForm = $req->get('searchFieldValues');
-        if (is_array($fromForm)) {
+        if (\is_array($fromForm)) {
             $out = [];
             foreach ($fromForm as $k => $v) {
                 $out[$k] = (string) $v;
             }
+
             return $out;
         }
 
         // If it's a string, it might be JSON (or broken "[object Object]")
-        if (is_string($fromForm) && '' !== trim($fromForm)) {
+        if (\is_string($fromForm) && '' !== trim($fromForm)) {
             $raw = trim($fromForm);
 
             if ('[object Object]' === $raw) {
@@ -455,15 +474,17 @@ final class DocumentXapianIndexer
                     '[Xapian] extractSearchFieldValuesFromRequest: searchFieldValues arrived as "[object Object]". '.
                     'Frontend must JSON.stringify() or send searchFieldValues[code]=...'
                 );
+
                 return [];
             }
 
             $decoded = json_decode($raw, true);
-            if (is_array($decoded)) {
+            if (\is_array($decoded)) {
                 $out = [];
                 foreach ($decoded as $k => $v) {
                     $out[$k] = (string) $v;
                 }
+
                 return $out;
             }
         }
@@ -472,15 +493,16 @@ final class DocumentXapianIndexer
         $contentType = (string) $req->headers->get('Content-Type', '');
         if (str_contains($contentType, 'application/json')) {
             $body = $req->getContent();
-            if (is_string($body) && '' !== trim($body)) {
+            if (\is_string($body) && '' !== trim($body)) {
                 $decoded = json_decode($body, true);
-                if (is_array($decoded)) {
+                if (\is_array($decoded)) {
                     $blob = $decoded['searchFieldValues'] ?? null;
-                    if (is_array($blob)) {
+                    if (\is_array($blob)) {
                         $out = [];
                         foreach ($blob as $k => $v) {
                             $out[$k] = (string) $v;
                         }
+
                         return $out;
                     }
                 }
@@ -696,11 +718,11 @@ final class DocumentXapianIndexer
         if (method_exists($resourceFile, 'getFile')) {
             $file = $resourceFile->getFile();
 
-            if ($file instanceof \Symfony\Component\HttpFoundation\File\File) {
+            if ($file instanceof File) {
                 return $file->getPathname();
             }
 
-            if ($file instanceof \SplFileInfo) {
+            if ($file instanceof SplFileInfo) {
                 return $file->getPathname();
             }
         }
@@ -735,7 +757,7 @@ final class DocumentXapianIndexer
             fclose($handle);
 
             return \is_string($data) ? $data : '';
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             error_log('[Xapian] safeReadFile: read failed: '.$e->getMessage());
 
             return '';
@@ -832,7 +854,7 @@ final class DocumentXapianIndexer
             $text = $this->safeReadFile($tmp, 2_000_000);
 
             return trim($text);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             error_log('[Xapian] extractPdfWithPdftotext: failed: '.$e->getMessage());
 
             return '';
@@ -857,6 +879,7 @@ final class DocumentXapianIndexer
             );
         } catch (Throwable $e) {
             error_log('[Xapian] fetchStoredSearchFieldValuesByCode: query failed: '.$e->getMessage());
+
             return [];
         }
 

@@ -139,36 +139,28 @@ final class CAttendanceStateProcessor implements ProcessorInterface
      * Examples accepted:
      * - 2025-12-01T18:55
      * - 2025-12-01T18:55:00
-     * - 2025-12-01T18:55:00.000Z (timezone part will be ignored safely)
+     * - 2025-12-01T18:55:00.000Z (timezone part will be ignored safely).
      */
     private function parseLocalIsoDateTime(mixed $value, string $fieldName): DateTimeImmutable
     {
         if (!\is_string($value) || '' === trim($value)) {
-            throw new BadRequestHttpException(sprintf('[Attendance] "%s" is required and must be a string.', $fieldName));
+            throw new BadRequestHttpException(\sprintf('[Attendance] "%s" is required and must be a string.', $fieldName));
         }
 
         $raw = trim($value);
 
         // Extract "YYYY-MM-DDTHH:mm" and optional ":ss" from the beginning, ignore trailing timezone/offset/millis
         if (!preg_match('/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})(?::(\d{2}))?/', $raw, $m)) {
-            throw new BadRequestHttpException(sprintf(
-                '[Attendance] Invalid "%s". Expected local ISO "YYYY-MM-DDTHH:mm(:ss)". Got "%s".',
-                $fieldName,
-                $raw
-            ));
+            throw new BadRequestHttpException(\sprintf('[Attendance] Invalid "%s". Expected local ISO "YYYY-MM-DDTHH:mm(:ss)". Got "%s".', $fieldName, $raw));
         }
 
         $base = $m[1];
         $seconds = isset($m[2]) ? $m[2] : '00';
-        $normalized = $base . ':' . $seconds;
+        $normalized = $base.':'.$seconds;
 
         $dt = DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s', $normalized);
         if (false === $dt) {
-            throw new BadRequestHttpException(sprintf(
-                '[Attendance] Invalid "%s". Failed to parse "%s".',
-                $fieldName,
-                $normalized
-            ));
+            throw new BadRequestHttpException(\sprintf('[Attendance] Invalid "%s". Failed to parse "%s".', $fieldName, $normalized));
         }
 
         return $dt;
@@ -222,7 +214,7 @@ final class CAttendanceStateProcessor implements ProcessorInterface
             'weekly' => new DateInterval('P7D'),
             'bi-weekly' => new DateInterval('P14D'),
             'monthly-by-date' => new DateInterval('P1M'),
-            default => throw new BadRequestHttpException(sprintf('[Attendance] Invalid repeat type "%s".', $repeatType)),
+            default => throw new BadRequestHttpException(\sprintf('[Attendance] Invalid repeat type "%s".', $repeatType)),
         };
     }
 }

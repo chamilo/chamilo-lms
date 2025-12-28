@@ -14,6 +14,10 @@ use Symfony\Component\Process\Process;
 use Throwable;
 use ZipArchive;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const PATHINFO_EXTENSION;
+
 final class DocumentRawTextExtractor
 {
     private const MAX_ARCHIVE_BYTES = 30_000_000; // 30MB safety limit for zip-based docs
@@ -109,7 +113,7 @@ final class DocumentRawTextExtractor
         return match ($ext) {
             // External tools
             'pdf' => $this->extractPdf($tmpIn),
-            'ps'  => $this->extractPs($tmpIn),
+            'ps' => $this->extractPs($tmpIn),
 
             'doc' => $this->runToStdout(['catdoc', $tmpIn], 10),
             'ppt' => $this->runToStdout(['catppt', $tmpIn], 10),
@@ -296,6 +300,7 @@ final class DocumentRawTextExtractor
             foreach ($patterns as $pattern) {
                 if (preg_match($pattern, $name)) {
                     $names[] = $name;
+
                     break;
                 }
             }

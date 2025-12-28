@@ -103,7 +103,7 @@ class SearchEngineFieldValue
         $value = trim($value);
 
         // Avoid DB errors if someone passes a very long string.
-        if (strlen($value) > 200) {
+        if (\strlen($value) > 200) {
             $value = substr($value, 0, 200);
         }
 

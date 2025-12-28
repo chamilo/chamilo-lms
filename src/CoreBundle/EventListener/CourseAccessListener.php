@@ -197,7 +197,7 @@ class CourseAccessListener
         // Heuristic: prefer HTML navigation (avoid assets, etc.)
         $accept = (string) $request->headers->get('accept', '');
         $format = (string) $request->getRequestFormat('');
-        if (!str_contains($accept, 'text/html') && $format !== 'html' && $format !== '') {
+        if (!str_contains($accept, 'text/html') && 'html' !== $format && '' !== $format) {
             return false;
         }
 
@@ -251,13 +251,11 @@ class CourseAccessListener
         $tool = strtolower(trim($tool));
 
         // Avoid unexpected long values.
-        if (strlen($tool) > 15) {
+        if (\strlen($tool) > 15) {
             $tool = substr($tool, 0, 15);
         }
 
         // Defensive: allow only simple chars.
-        $tool = preg_replace('/[^a-z0-9_-]/', '', $tool) ?? '';
-
-        return $tool;
+        return preg_replace('/[^a-z0-9_-]/', '', $tool) ?? '';
     }
 }

@@ -543,15 +543,15 @@ class ChamiloHelper
         // GDPR section titles indexed by "type" (1..15).
         $getSectionTitle = static function (int $type): string {
             $map = [
-                1  => 'Personal data collection',
-                2  => 'Personal data recording',
-                3  => 'Personal data organization',
-                4  => 'Personal data structure',
-                5  => 'Personal data conservation',
-                6  => 'Personal data adaptation or modification',
-                7  => 'Personal data extraction',
-                8  => 'Personal data queries',
-                9  => 'Personal data use',
+                1 => 'Personal data collection',
+                2 => 'Personal data recording',
+                3 => 'Personal data organization',
+                4 => 'Personal data structure',
+                5 => 'Personal data conservation',
+                6 => 'Personal data adaptation or modification',
+                7 => 'Personal data extraction',
+                8 => 'Personal data queries',
+                9 => 'Personal data use',
                 10 => 'Personal data communication and sharing',
                 11 => 'Personal data interconnection',
                 12 => 'Personal data limitation',
@@ -573,11 +573,11 @@ class ChamiloHelper
 
             $type = (int) ($row['type'] ?? 0);
             $dbTitle = trim((string) ($row['title'] ?? ($row['name'] ?? '')));
-            $title = $dbTitle !== '' ? $dbTitle : $getSectionTitle($type);
+            $title = '' !== $dbTitle ? $dbTitle : $getSectionTitle($type);
 
             $fullHtml .= '<div class="mt-4">';
 
-            if ($title !== '') {
+            if ('' !== $title) {
                 $fullHtml .= '<h4 class="text-base font-semibold text-gray-90">'
                     .htmlspecialchars($title, ENT_QUOTES | ENT_HTML5)
                     .'</h4>';

@@ -56,11 +56,7 @@ final class XapianSearchService
         try {
             $db = new XapianDatabase($indexDir);
         } catch (Throwable $e) {
-            throw new RuntimeException(
-                sprintf('Unable to open Xapian database at "%s": %s', $indexDir, $e->getMessage()),
-                0,
-                $e
-            );
+            throw new RuntimeException(\sprintf('Unable to open Xapian database at "%s": %s', $indexDir, $e->getMessage()), 0, $e);
         }
 
         $enquire = new XapianEnquire($db);
@@ -73,8 +69,9 @@ final class XapianSearchService
             // - $extra['locale'] (e.g. "es_PE")
             $languageRaw = null;
             foreach (['language', 'language_iso', 'locale'] as $k) {
-                if (isset($extra[$k]) && is_string($extra[$k]) && '' !== trim($extra[$k])) {
+                if (isset($extra[$k]) && \is_string($extra[$k]) && '' !== trim($extra[$k])) {
                     $languageRaw = trim((string) $extra[$k]);
+
                     break;
                 }
             }
@@ -163,7 +160,7 @@ final class XapianSearchService
             'turkish', 'romanian', 'hungarian', 'indonesian',
         ];
 
-        if (in_array($raw, $known, true)) {
+        if (\in_array($raw, $known, true)) {
             return $raw;
         }
 
@@ -239,8 +236,8 @@ final class XapianSearchService
         $flags = 0;
 
         $defaultConst = XapianQueryParser::class.'::FLAG_DEFAULT';
-        if (defined($defaultConst)) {
-            $flags = constant($defaultConst);
+        if (\defined($defaultConst)) {
+            $flags = \constant($defaultConst);
         }
 
         // Add common useful flags if present in the binding
@@ -256,8 +253,8 @@ final class XapianSearchService
 
         foreach ($flagNames as $name) {
             $const = XapianQueryParser::class.'::'.$name;
-            if (defined($const)) {
-                $flags |= constant($const);
+            if (\defined($const)) {
+                $flags |= \constant($const);
             }
         }
 

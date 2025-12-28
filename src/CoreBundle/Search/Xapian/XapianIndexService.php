@@ -106,7 +106,7 @@ final class XapianIndexService
             if (null === $value) {
                 continue;
             }
-            $value = is_string($value) ? $value : (string) $value;
+            $value = \is_string($value) ? $value : (string) $value;
             $value = trim($value);
             if ('' === $value) {
                 continue;
@@ -124,7 +124,7 @@ final class XapianIndexService
                     continue;
                 }
 
-                $val = is_string($val) ? $val : (string) $val;
+                $val = \is_string($val) ? $val : (string) $val;
                 $val = trim($val);
                 if ('' === $val) {
                     continue;
@@ -160,7 +160,7 @@ final class XapianIndexService
 
             return $docId;
         } catch (Throwable $e) {
-            throw new RuntimeException(sprintf('Failed to index document in Xapian: %s', $e->getMessage()), 0, $e);
+            throw new RuntimeException(\sprintf('Failed to index document in Xapian: %s', $e->getMessage()), 0, $e);
         }
     }
 
@@ -218,7 +218,7 @@ final class XapianIndexService
             'turkish', 'romanian', 'hungarian', 'indonesian',
         ];
 
-        if (in_array($raw, $known, true)) {
+        if (\in_array($raw, $known, true)) {
             return $raw;
         }
 
@@ -268,7 +268,8 @@ final class XapianIndexService
             ->where('c.id = :courseId')
             ->setParameter('courseId', $courseId)
             ->getQuery()
-            ->getScalarResult();
+            ->getScalarResult()
+        ;
 
         foreach ($rows as $row) {
             $did = (int) ($row['searchDid'] ?? 0);
@@ -290,7 +291,7 @@ final class XapianIndexService
         try {
             // search_did == Xapian internal docid
             $this->deleteDocument($did);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             error_log(
                 '[Xapian] deleteBySearchDid: delete failed for search_did='.$did.': '.
                 $e->getMessage().' in '.$e->getFile().':'.$e->getLine()

@@ -44,6 +44,7 @@ final class ResourceNodeDocumentSearchEntityListener
         foreach ($changeset as $field => $_) {
             if (isset($watched[$field])) {
                 $shouldReindex = true;
+
                 break;
             }
         }

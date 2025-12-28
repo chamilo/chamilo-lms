@@ -5,14 +5,28 @@
     <link href="https://chamilo.org/the-association/" rel="copyright" />
     <link rel="apple-touch-icon" href="{{ url('index') ~ 'apple-touch-icon.png' }}" />
     <link rel="shortcut icon" href="{{ theme_asset('images/favicon.ico') }}" type="image/x-icon" />
+
+    {# Tracking meta settings (used for OpenGraph/Twitter and optional <title> override). #}
+    {% set meta_title = chamilo_settings_get('tracking.meta_title')|default('') %}
+    {% set meta_description = chamilo_settings_get('tracking.meta_description')|default('') %}
+    {% set meta_image_path = chamilo_settings_get('tracking.meta_image_path')|default('') %}
+    {% set meta_twitter_site = chamilo_settings_get('tracking.meta_twitter_site')|default('') %}
+    {% set meta_twitter_creator = chamilo_settings_get('tracking.meta_twitter_creator')|default('') %}
+
     <title>
-        {%- block title %}
-            {{ chamilo_settings_get('platform.institution') }} - {{ chamilo_settings_get('platform.site_name') }}
+        {%- block title -%}
+            {# Default <title>. If tracking.meta_title is set, use it as an override. #}
+            {% if meta_title and meta_title != 'false' %}
+                {{ meta_title }}
+            {% else %}
+                {{ chamilo_settings_get('platform.institution') }} - {{ chamilo_settings_get('platform.site_name') }}
+            {% endif %}
         {%- endblock -%}
     </title>
+
     {% set bug_notification_link = '' %}
     {% set help_content = '' %}
-    {% set header_extra_content = header_extra_content|default(chamilo_settings_get('tracking.header_extra_content')) %}
+    {% set header_extra_content = header_extra_content|default(chamilo_settings_get('tracking.header_extra_content')|default('')) %}
     {% set template = 'default' %}
     {% set notification_menu = '' %}
     {% set accessibility = '' %}
@@ -22,6 +36,7 @@
     {% set message_url = '' %}
     {% set profile_link = '' %}
     {% set message_link = '' %}
+
     {%- block stylesheets %}
         {{ encore_entry_link_tags('legacy_free-jqgrid') }}
         {{ encore_entry_link_tags('legacy_app') }}
@@ -36,7 +51,6 @@
         {% endif %}
 
         {{ theme_asset_link_tag('colors.css') }}
-
         {# <link rel="stylesheet" href="theme_asset('print.css')" media="print" /> #}
     {% endblock %}
 
@@ -51,43 +65,47 @@
     {{ encore_entry_script_tags('legacy_lp') }}
     {{ encore_entry_script_tags('legacy_exercise') }}
     {{ encore_entry_script_tags('legacy_document') }}
+
     {# Add third party js libraries that can't be loaded using webpack #}
     {# <script src="{{ asset('libs/readmore-js/readmore.js') }}"></script> #}
     {# <script src="{{ url('index') ~ 'build/libs/js-cookie/src/js.cookie.js' }}"></script> #}
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    {% set meta_title = chamilo_settings_get('tracking.meta_title')|default('') %}
-    {% set meta_description = chamilo_settings_get('tracking.meta_description')|default('') %}
-    {% set meta_image_path = chamilo_settings_get('tracking.meta_image_path')|default('') %}
-    {% set meta_twitter_site = chamilo_settings_get('tracking.meta_twitter_site')|default('') %}
-    {% set meta_twitter_creator = chamilo_settings_get('tracking.meta_twitter_creator')|default('') %}
 
-    {# description (SEO) #}
-    {% if meta_description %}
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {# Meta description (SEO) #}
+    {% if meta_description and meta_description != 'false' %}
         <meta name="description" content="{{ meta_description|e('html_attr') }}">
     {% endif %}
 
-    {# OpenGraph base #}
+    {# OpenGraph tags #}
     <meta property="og:url" content="{{ absolute_url(app.request.uri) }}">
-    {% if meta_title %}
+    <meta property="og:type" content="website">
+    {% if meta_title and meta_title != 'false' %}
         <meta property="og:title" content="{{ meta_title|e('html_attr') }}">
     {% endif %}
-    {% if meta_description %}
+    {% if meta_description and meta_description != 'false' %}
         <meta property="og:description" content="{{ meta_description|e('html_attr') }}">
     {% endif %}
 
-    {# image (OG + Twitter) -> ideal que sea absoluta #}
-    {% if meta_image_path %}
+    {# OG/Twitter image: prefer absolute URL #}
+    {% if meta_image_path and meta_image_path != 'false' %}
         {% set meta_image_url = meta_image_path starts with 'http' ? meta_image_path : absolute_url(asset(meta_image_path)) %}
         <meta property="og:image" content="{{ meta_image_url|e('html_attr') }}">
         <meta name="twitter:image" content="{{ meta_image_url|e('html_attr') }}">
     {% endif %}
 
-    {# Twitter/X Cards: siguen siendo meta tags twitter:* en el <head> #}
+    {# Twitter/X cards: meta tags remain twitter:* #}
     <meta name="twitter:card" content="summary_large_image">
-    {% if meta_twitter_site %}
+    {% if meta_title and meta_title != 'false' %}
+        <meta name="twitter:title" content="{{ meta_title|e('html_attr') }}">
+    {% endif %}
+    {% if meta_description and meta_description != 'false' %}
+        <meta name="twitter:description" content="{{ meta_description|e('html_attr') }}">
+    {% endif %}
+    {% if meta_twitter_site and meta_twitter_site != 'false' %}
         <meta name="twitter:site" content="{{ meta_twitter_site|e('html_attr') }}">
     {% endif %}
-    {% if meta_twitter_creator %}
+    {% if meta_twitter_creator and meta_twitter_creator != 'false' %}
         <meta name="twitter:creator" content="{{ meta_twitter_creator|e('html_attr') }}">
     {% endif %}
 
@@ -104,7 +122,9 @@
     {% endblock %}
 
     <link rel="manifest" href="/manifest.json">
-    {% if header_extra_content %}
+
+    {# tracking.header_extra_content: inject raw HTML inside <head> #}
+    {% if header_extra_content and header_extra_content != 'false' %}
         {{ header_extra_content|raw }}
     {% endif %}
 </head>

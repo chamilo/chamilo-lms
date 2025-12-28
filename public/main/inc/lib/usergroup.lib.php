@@ -1359,7 +1359,7 @@ class UserGroupModel extends Model
                     Database::delete(
                         $this->usergroup_rel_user_table,
                         [
-                            'usergroup_id = ? AND (relation_type = "0" OR relation_type = "2" OR relation_type IS NULL OR relation_type = "")' => [
+                            'usergroup_id = ? AND user_id = ? AND (relation_type = "0" OR relation_type = "2" OR relation_type IS NULL OR relation_type = "")' => [
                                 $usergroup_id,
                                 $user_id,
                             ],

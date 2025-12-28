@@ -101,6 +101,15 @@ onMounted(() => {
   }
 })
 
+// When showTime is enabled, do NOT allow manual input.
+// Manual typing can produce ambiguous strings like "09/01/2025" which might be sent to backend.
+const allowManualInput = computed(() => {
+  if (props.type === "range") {
+    return false
+  }
+  return !props.showTime
+})
+
 // When showTime is false, we keep the old behavior: update parent immediately
 watch(
   () => internalValue.value,
@@ -152,7 +161,7 @@ const onCancelClick = () => {
         :input-id="id"
         :invalid="isInvalid"
         :locale="selectedLocale"
-        :manual-input="type !== 'range'"
+        :manual-input="allowManualInput"
         :selection-mode="type"
         :show-time="showTime"
         :step-minute="timepicketIncrement"

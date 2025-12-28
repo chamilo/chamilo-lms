@@ -46,4 +46,6 @@
 {% endautoescape %}
 
 {{ execution_stats }}
-{{ footer_extra_content }}
+{% if footer_extra_content is defined and footer_extra_content %}
+    {{ footer_extra_content|raw }}
+{% endif %}

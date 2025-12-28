@@ -12,11 +12,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ContactController extends AbstractController
 {
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/contact', name: 'contact')]
+    #[Route(path: '/contact', name: 'contact')]
     public function index(Request $request, MailerInterface $mailer, SettingsManager $settingsManager)
     {
         $form = $this->createForm(ContactType::class);

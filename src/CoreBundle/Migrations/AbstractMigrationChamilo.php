@@ -37,6 +37,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
 
     protected ?EntityManagerInterface $entityManager = null;
     protected ?ContainerInterface $container = null;
+    private array $itemPropertyInconsistencySeen = [];
 
     private LoggerInterface $logger;
 
@@ -252,8 +253,13 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
             $items = $result->fetchAllAssociative();
         }
 
-        // For some reason the resource doesn't have a c_item_property value.
+        // The resource has no c_item_property row in the legacy database: skip it and log the inconsistency.
         if (empty($items)) {
+            $path = $this->guessResourcePathForLog($resource);
+            $this->logItemPropertyInconsistency((string) $tool, (int) $id, $path);
+
+            $this->warnIf(true, "Missing c_item_property for tool '{$tool}', ref '{$id}'. Resource skipped.");
+
             return false;
         }
 
@@ -493,5 +499,56 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
             'xapi' => 'XApi',
             'zoom' => 'Zoom',
         ];
+    }
+
+    protected function logItemPropertyInconsistency(string $tool, int $iid, string $path): void
+    {
+        $tool = trim($tool);
+        $path = trim($path);
+
+        $key = $tool.'|'.$iid.'|'.$path;
+        if (isset($this->itemPropertyInconsistencySeen[$key])) {
+            return;
+        }
+        $this->itemPropertyInconsistencySeen[$key] = true;
+
+        $date = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->format('Y-m-d H:i:s');
+        $line = $date."\t".$tool."\t".$iid."\t".$path."\n";
+
+        $baseDir = null;
+        if (null !== $this->container && $this->container->has('kernel')) {
+            $kernel = $this->container->get('kernel');
+            if (method_exists($kernel, 'getLogDir')) {
+                $baseDir = $kernel->getLogDir();
+            }
+            if (empty($baseDir) && method_exists($kernel, 'getCacheDir')) {
+                $baseDir = $kernel->getCacheDir();
+            }
+        }
+
+        if (empty($baseDir)) {
+            $baseDir = sys_get_temp_dir();
+        }
+
+        $file = rtrim($baseDir, '/').'/itempropertyinconsistency.log';
+        @file_put_contents($file, $line, FILE_APPEND | LOCK_EX);
+    }
+
+    protected function guessResourcePathForLog(ResourceInterface $resource): string
+    {
+        foreach (['getPath', 'getPathname', 'getFilePath', 'getRelativePath', 'getFilename', 'getTitle', '__toString'] as $method) {
+            if (method_exists($resource, $method)) {
+                try {
+                    $value = (string) $resource->{$method}();
+                    if ('' !== trim($value)) {
+                        return $value;
+                    }
+                } catch (\Throwable) {
+                    // Ignore and try next method.
+                }
+            }
+        }
+
+        return '';
     }
 }

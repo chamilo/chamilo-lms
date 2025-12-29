@@ -39,28 +39,6 @@ if (isset($_POST['convert'])) {
         if (in_array(strtolower(pathinfo($_FILES['user_file']['name'], PATHINFO_EXTENSION)), $allowed_extensions)) {
             require '../lp/lp_upload.php';
             if (isset($o_doc) && 0 != $first_item_id) {
-                // Search-related section
-                if ('true' == api_get_setting('search_enabled')) {
-                    $specific_fields = get_specific_field_list();
-
-                    foreach ($specific_fields as $specific_field) {
-                        $values = explode(',', trim($_POST[$specific_field['code']]));
-                        if (!empty($values)) {
-                            foreach ($values as $value) {
-                                $value = trim($value);
-                                if (!empty($value)) {
-                                    add_specific_field_value(
-                                        $specific_field['id'],
-                                        api_get_course_id(),
-                                        TOOL_LEARNPATH,
-                                        $o_doc->lp_id,
-                                        $value
-                                    );
-                                }
-                            }
-                        }
-                    }
-                } //end of search-related section
                 header('Location: ../lp/lp_controller.php?'.api_get_cidreq().'&lp_id='.$o_doc->lp_id.'&action=view_item&id='.$first_item_id);
             } else {
                 if (!empty($o_doc->error)) {

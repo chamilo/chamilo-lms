@@ -229,6 +229,9 @@ $aiOptions = [
     'task_grader' => 'Enable Task Grader',
     'content_analyser' => 'Enable Content Analyser',
     'image_generator' => 'Enable Image Generator',
+    'glossary_terms_generator' => 'Enable Gloss Terms Generator',
+    'video_generator' => 'Enable Video Generator',
+    'course_analyser' => 'Enable Course Analyser',
 ];
 
 // This global "Save settings" button belongs to the main course settings block

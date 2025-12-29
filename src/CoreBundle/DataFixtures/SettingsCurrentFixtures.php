@@ -1229,6 +1229,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Show the history folder of chat conversations',
                     'comment' => 'This will show to theacher the folder that contains all sessions that have been made in the chat, the teacher can make them visible or not learners and use them as a resource',
                 ],
+                [
+                    'name' => 'save_private_conversations_in_documents',
+                    'title' => 'Save private conversations in documents',
+                    'comment' => 'If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy.',
+                ],
             ],
             'skill' => [
                 [

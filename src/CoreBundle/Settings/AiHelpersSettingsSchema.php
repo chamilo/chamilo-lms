@@ -26,6 +26,9 @@ class AiHelpersSettingsSchema extends AbstractSettingsSchema
                 'task_grader' => 'false',
                 'content_analyser' => 'false',
                 'image_generator' => 'false',
+                'glossary_terms_generator' => 'false',
+                'video_generator' => 'false',
+                'course_analyser' => 'false',
                 'disclose_ai_assistance' => 'true',
             ])
         ;
@@ -49,6 +52,9 @@ class AiHelpersSettingsSchema extends AbstractSettingsSchema
             ->add('task_grader', YesNoType::class)
             ->add('content_analyser', YesNoType::class)
             ->add('image_generator', YesNoType::class)
+            ->add('glossary_terms_generator', YesNoType::class)
+            ->add('video_generator', YesNoType::class)
+            ->add('course_analyser', YesNoType::class)
             ->add('disclose_ai_assistance', YesNoType::class)
         ;
 

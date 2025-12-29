@@ -42,6 +42,12 @@ class AiProviderFactory
                 $this->providers[$providerName] = new OpenAiProvider($httpClient, $settingsManager, $this->aiRequestsRepository, $this->security);
             } elseif ('deepseek' === $providerName) {
                 $this->providers[$providerName] = new DeepSeekAiProvider($httpClient, $settingsManager, $this->aiRequestsRepository, $this->security);
+            } elseif ('grok' === $providerName) {
+                $this->providers[$providerName] = new GrokAiProvider($httpClient, $settingsManager, $this->aiRequestsRepository, $this->security);
+            } elseif ('mistral' === $providerName) {
+                $this->providers[$providerName] = new MistralAiProvider($httpClient, $settingsManager, $this->aiRequestsRepository, $this->security);
+            } elseif ('gemini' === $providerName) {
+                $this->providers[$providerName] = new GeminiAiProvider($httpClient, $settingsManager, $this->aiRequestsRepository, $this->security);
             }
         }
 

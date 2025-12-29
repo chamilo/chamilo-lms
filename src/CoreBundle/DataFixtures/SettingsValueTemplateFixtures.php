@@ -219,6 +219,21 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                             'organization_id' => 'org456',
                             'monthly_token_limit' => 5000,
                         ],
+                        'grok' => [
+                            'url' => 'https://api.x.ai/v1/responses',
+                            'api_key' => 'your-key',
+                            'model' => 'grok-4-1-fast-reasoning',
+                        ],
+                        'mistral' => [
+                            'url' => 'https://api.mistral.ai/v1/chat/completions',
+                            'api_key' => 'your-key',
+                            'model' => 'mistral-large-latest',
+                        ],
+                        'gemini' => [
+                            'url' => 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent',
+                            'api_key' => 'your-key',
+                            'model' => 'gemini-2.5-flash',
+                        ],
                     ],
                 ],
             ],

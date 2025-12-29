@@ -2283,7 +2283,7 @@ switch ($action) {
             if (!empty($skills)) {
                 $item['skills'] = '';
                 foreach ($skills as $skill) {
-                    $item['skills'] .= Display::span($skill['title'], ['class' => 'label_tag skill']);
+                    $item['skills'] .= Display::span($skill['name'], ['class' => 'label_tag skill']);
                 }
             }
             $new_result[] = $item;

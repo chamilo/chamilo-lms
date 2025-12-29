@@ -46,6 +46,6 @@
 {{ execution_stats }}
 
 {# Backward-compatible footer extra content (if provided by legacy controllers/layouts). #}
-{% if footer_extra_content is defined and footer_extra_content and footer_extra_content != 'false' %}
+{% if footer_extra_content is defined and footer_extra_content|default('')|trim %}
     {{ footer_extra_content|raw }}
 {% endif %}

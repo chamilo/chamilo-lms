@@ -2277,11 +2277,14 @@ class DocumentManager
      * @param   string  Course code
      * @param   int     Session ID (not used yet)
      * @param   string  Language of document's content (defaults to course language)
-     * @param   array   Array of specific fields (['code'=>'value',...])
+     * @param   array   Array of specific fields (['code'=>'value',...]) @deprecated Not used anymore in Chamilo 2
      * @param   string  What to do if the file already exists (default or overwrite)
      * @param   bool    When set to true, this runs the indexer without actually saving anything to any database
      *
      * @return bool Returns true on presumed success, false on failure
+     *
+     * @deprecated since Chamilo 2.0. Specific fields indexing is removed in Chamilo 2.
+     *             Use the Xapian indexers (e.g. Chamilo\CoreBundle\Search\Xapian\DocumentXapianIndexer / LpXapianIndexer).
      */
     public static function index_document(
         $docid,

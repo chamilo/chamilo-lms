@@ -624,17 +624,6 @@ if ($newQuestion || $editQuestion) {
 }
 
 if (isset($_GET['hotspotadmin'])) {
-    if (!is_object($objQuestion)) {
-        $objQuestion = Question::read((int) $_GET['hotspotadmin']);
-    }
-    if (!$objQuestion) {
-        api_not_allowed();
-    }
-
-    // If we already processed POST above, don't process it again here (avoid double-save).
-    $hotspot_skip_processing = !empty($hotspotAlreadyProcessed);
-    $hotspot_skip_display = false;
-
     require 'hotspot_admin.inc.php';
 }
 

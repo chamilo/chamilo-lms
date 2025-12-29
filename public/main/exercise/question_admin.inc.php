@@ -80,7 +80,7 @@ if (is_object($objQuestion)) {
         }
 
         if (in_array($objQuestion->type, [HOT_SPOT, HOT_SPOT_COMBINATION, HOT_SPOT_DELINEATION])) {
-            $qid = (int) ($objQuestion->iid ?? 0);
+            $qid = (int) ($objQuestion->id ?? 0);
 
             $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?'
                 .api_get_cidreq()
@@ -89,7 +89,6 @@ if (is_object($objQuestion)) {
                 .'&hotspotadmin='.$qid;
 
             api_location($url);
-            exit;
         }
 
         if (isset($_GET['editQuestion'])) {

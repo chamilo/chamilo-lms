@@ -345,20 +345,25 @@ class SkillModel extends Model
         $skills = [];
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_assoc($result)) {
-                $skillId = $row['id'];
+                $skillId = (int) $row['id'];
                 $skill = $skillRepo->find($skillId);
 
                 $row['asset'] = '';
-                if ($skill->getAsset()) {
+                if ($skill && $skill->getAsset()) {
                     $row['asset'] = $assetRepo->getAssetUrl($skill->getAsset());
                 }
 
-                $row['title'] = $skill->getTitle();
-                $row['short_code'] = $skill->getShortCode();
+                if ($skill) {
+                    $row['title'] = $skill->getTitle();
+                }
+
+                $row['short_code'] = isset($row['short_code']) ? trim((string) $row['short_code']) : '';
+
                 $skillRelSkill = new SkillRelSkillModel();
                 $parents = $skillRelSkill->getSkillParents($skillId);
                 $row['level'] = count($parents) - 1;
                 $row['gradebooks'] = $this->getGradebooksBySkill($skillId);
+
                 $skills[$row['id']] = $row;
             }
         }

@@ -193,7 +193,6 @@ class ToolChain
                 $courseTool = (new CTool())
                     ->setTool($toolEntity)
                     ->setTitle($tool->getTitle())
-                    ->setVisibility($visibility)
                     ->setParent($course)
                     ->setCreator($course->getCreator())
                     ->addCourseLink($course, null, null, $linkVisibility)

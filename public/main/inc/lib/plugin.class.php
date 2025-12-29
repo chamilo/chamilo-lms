@@ -1039,7 +1039,6 @@ class Plugin
             $cTool
                 ->setTool($tool)
                 ->setTitle($name.$visibilityPerStatus)
-                ->setVisibility($visibility)
                 ->setParent($course)
                 ->setCreator($user)
                 ->addCourseLink(

@@ -1952,7 +1952,6 @@ class CourseRestorer
                     ->setCourse($course)
                     ->setSession($session)
                     ->setPosition(1)
-                    ->setVisibility(true)
                     ->setParent($course)
                     ->setCreator($course->getCreator() ?? null)
                     ->addCourseLink($course, $session);

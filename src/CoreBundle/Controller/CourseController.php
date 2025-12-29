@@ -911,7 +911,6 @@ class CourseController extends ToolBaseController
                     ->setTitle('course_homepage')
                     ->setCourse($course)
                     ->setPosition(1)
-                    ->setVisibility(true)
                     ->setParent($course)
                     ->setCreator($course->getCreator())
                     ->setSession($session)

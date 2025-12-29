@@ -83,7 +83,7 @@ $subscribe_group = '';
 if (GroupManager::is_self_registration_allowed($user_id, $groupEntity)) {
     $subscribe_group = '<a
             class="btn btn--plain"
-            href="'.api_get_self().'?selfReg=1&group_id='.$group_id.'"
+            href="'.api_get_self().'?'.api_get_cidreq().'&selfReg=1&group_id='.$group_id.'"
             onclick="javascript: if(!confirm('."'".$confirmationMessage."'".')) return false;">'.
         get_lang('Add me to this group').
     '</a>';

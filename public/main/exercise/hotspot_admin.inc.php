@@ -14,7 +14,7 @@ use ChamiloSession as Session;
  *
  * @author  Toon Keppens
  */
-$modifyAnswers = (int) $_GET['hotspotadmin'];
+$modifyAnswers = (int) ($_GET['hotspotadmin'] ?? 0);
 $objQuestion = Question::read($modifyAnswers);
 $questionName = $objQuestion->selectTitle();
 $answerType = $objQuestion->selectType();
@@ -59,7 +59,7 @@ if ($modifyIn) {
         $objAnswer->duplicate($objQuestion);
 
         // construction of the duplicated Answers
-        $objAnswer = new Answer($questionId);
+        $objAnswer = new Answer($questionId, api_get_course_int_id(), $objExercise);
     }
 
     $color = UnserializeApi::unserialize('not_allowed_classes', $color);
@@ -79,7 +79,7 @@ $submitAnswers = isset($_POST['submitAnswers']) ? true : false;
 $buttonBack = isset($_POST['buttonBack']) ? true : false;
 $nbrAnswers = isset($_POST['nbrAnswers']) ? (int) $_POST['nbrAnswers'] : 0;
 
-if (!$hotspot_skip_processing && ($submitAnswers || $buttonBack)) {
+if ($submitAnswers || $buttonBack) {
     if (in_array($answerType, [HOT_SPOT, HOT_SPOT_COMBINATION])) {
         if ($debug > 0) {
             echo '$submitAnswers or $buttonBack was set'."<br />\n";
@@ -181,7 +181,7 @@ if (!$hotspot_skip_processing && ($submitAnswers || $buttonBack)) {
                 }
             }
 
-            $editQuestion = $objQuestion->iid;
+            $editQuestion = $objQuestion->id;
             unset($modifyAnswers);
             $redirect = $hotspot_admin_url.'&message=ItemUpdated';
             api_location($redirect);
@@ -381,17 +381,13 @@ if (!$hotspot_skip_processing && ($submitAnswers || $buttonBack)) {
                 }
             }
 
-            $editQuestion = $objQuestion->iid;
+            $editQuestion = $objQuestion->id;
             unset($modifyAnswers);
             $redirect = $hotspot_admin_url.'&message=ItemUpdated';
             api_location($redirect);
             exit;
         }
     }
-}
-
-if ($hotspot_skip_display) {
-    return;
 }
 
 echo Display::page_header(get_lang('Question').': '.$objQuestion->selectTitle());

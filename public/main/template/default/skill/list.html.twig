@@ -1,92 +1,147 @@
 {% autoescape false %}
-    {% if tags %}
-        <div class="row">
-            <div class="col-md-3">
-                <select id="tag-filter" class="chzn-select form-control">
-                    <option value="0">{{ 'Please make a choice'|trans }}</option>
-                    {% for tag in tags %}
-                        <option value="{{ tag.id }}">{{ tag.tag }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-3">
-                <a id="filter-button" class="btn btn--plain">{{ 'Filter by tags'|trans }}</a>
-            </div>
-        </div>
-        <br />
-    {% endif %}
+    <div class="w-full">
 
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th>{{ "Badges"|trans }}</th>
-            <th>{{ "Name"|trans }}</th>
-            <th class="text-center">{{ "Short code"|trans }}</th>
-            <th class="text-center">{{ "Description"|trans }}</th>
-            <th class="text-center">{{ "Options"|trans }}</th>
-        </tr>
-        </thead>
-        <tfoot>
-        <tr>
-            <th>{{ "Badges"|trans }}</th>
-            <th>{{ "Name"|trans }}</th>
-            <th class="text-center">{{ "Short code"|trans }}</th>
-            <th class="text-center">{{ "Description"|trans }}</th>
-            <th class="text-center">{{ "Options"|trans }}</th>
-        </tr>
-        </tfoot>
-        <tbody>
-        {% for skill in skills %}
-            <tr>
-                <td width="50">
-                    {% if skill.asset %}
-                        <img src="{{ skill.asset }}?w=50" />
-                    {% endif %}
-                </td>
-                <td>{{ skill.title }}</td>
-                <td class="text-center">{{ skill.short_code }}</td>
-                <td>{{ skill.description }}</td>
-                <td class="text-right">
-                    <div class="btn-group btn-group-sm" role="group" aria-label="">
-                        <a href="/main/skills/skill_edit.php?{{ { 'id' : skill.id }|url_encode }}"
-                           class="btn btn--primary btn-sm" title="{{ "Edit"|trans }}">
-                            {{ 'ActionIcon::EDIT'|mdi_icon }}
-                        </a>
-                        <a href="/main/skills/skill_create.php?{{ { 'parent' : skill.id }|url_encode }}"
-                           class="btn btn--plain btn-sm" title="{{ "Create child skill"|trans }}">
-                            {{ 'ActionIcon::ADD'|mdi_icon }}
-                        </a>
-                        <a href="/main/skills/skill_badge_create.php?{{ { 'id' : skill.id }|url_encode }}"
-                           class="btn btn-light btn-sm" title="{{ "Create badge"|trans }}">
-                            {{ 'ObjectIcon::BADGE'|mdi_icon }}
-                        </a>
-                        {% if skill.status == 0 %}
-                            <a href="/main/skills/skill_list.php?{{ { 'id' : skill.id, 'action': 'enable' }|url_encode }}"
-                               class="btn btn--success btn-sm" title="{{ 'Enable' }}">
-                                {{ 'StateIcon::INACTIVE'|mdi_icon }}
-                            </a>
-                        {% else %}
-                            <a href="/main/skills/skill_list.php?{{ { 'id' : skill.id, 'action': 'disable' }|url_encode }}"
-                               class="btn btn-sm" title="{{ 'Disable' }}">
-                                {{ 'StateIcon::ACTIVE'|mdi_icon }}
-                            </a>
-                        {% endif %}
+        {% if tags %}
+            <div class="mb-4 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+                <div class="grid grid-cols-1 md:grid-cols-[minmax(220px,320px)_auto] gap-2 items-end">
+                    <div>
+                        <label class="block text-body-2 font-semibold text-gray-90 mb-1">
+                            {{ 'Filter by tags'|trans }}
+                        </label>
+                        <select id="tag-filter"
+                                class="chzn-select form-control w-full rounded-xl bg-white px-3 py-2 text-body-2 text-gray-90 ring-1 ring-gray-20">
+                            <option value="0">{{ 'Please make a choice'|trans }}</option>
+                            {% for tag in tags %}
+                                <option value="{{ tag.id }}">{{ tag.tag }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+
+                    <div class="flex">
+                        <button id="filter-button"
+                                type="button"
+                                class="inline-flex items-center gap-2 rounded-xl bg-white px-3 py-2 text-body-2 font-semibold text-gray-90 ring-1 ring-gray-20 hover:bg-gray-10">
+                            {{ 'Filter'|trans }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-20">
+                <thead class="bg-gray-10">
+                <tr>
+                    <th class="px-4 py-3 text-left text-body-2 font-semibold text-gray-90 w-[72px]">
+                        {{ "Badges"|trans }}
+                    </th>
+                    <th class="px-4 py-3 text-left text-body-2 font-semibold text-gray-90">
+                        {{ "Name"|trans }}
+                    </th>
+                    <th class="px-4 py-3 text-center text-body-2 font-semibold text-gray-90 whitespace-nowrap">
+                        {{ "Short code"|trans }}
+                    </th>
+                    <th class="px-4 py-3 text-left text-body-2 font-semibold text-gray-90">
+                        {{ "Description"|trans }}
+                    </th>
+                    <th class="px-4 py-3 text-right text-body-2 font-semibold text-gray-90 whitespace-nowrap">
+                        {{ "Options"|trans }}
+                    </th>
+                </tr>
+                </thead>
+
+                {# Fix: do NOT render <tfoot>, it duplicates headers when list is empty #}
+
+                <tbody class="divide-y divide-gray-20 bg-white">
+                {% for skill in skills %}
+                    <tr class="hover:bg-gray-10/60">
+                        <td class="px-4 py-3">
+                            {% if skill.asset %}
+                                <img src="{{ skill.asset }}?w=50"
+                                     alt=""
+                                     class="h-10 w-10 rounded-lg object-cover ring-1 ring-gray-20" />
+                            {% endif %}
+                        </td>
+
+                        <td class="px-4 py-3 text-body-2 text-gray-90 font-medium">
+                            {{ skill.title }}
+                        </td>
+
+                        <td class="px-4 py-3 text-center text-body-2 text-gray-70 whitespace-nowrap">
+                            {% if skill.short_code is not empty %}
+                                {{ skill.short_code }}
+                            {% else %}
+                                <span class="text-gray-40">—</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="px-4 py-3 text-body-2 text-gray-70">
+                            {{ skill.description }}
+                        </td>
+
+                        <td class="px-4 py-3">
+                            <div class="flex items-center justify-end gap-2">
+
+                                <a href="/main/skills/skill_edit.php?{{ { 'id' : skill.id }|url_encode }}"
+                                   class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white text-primary ring-1 ring-gray-20 hover:bg-gray-10"
+                                   title="{{ "Edit"|trans }}">
+                                    {{ 'ActionIcon::EDIT'|mdi_icon }}
+                                </a>
+
+                                <a href="/main/skills/skill_create.php?{{ { 'parent' : skill.id }|url_encode }}"
+                                   class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white text-primary ring-1 ring-gray-20 hover:bg-gray-10"
+                                   title="{{ "Create child skill"|trans }}">
+                                    {{ 'ActionIcon::ADD'|mdi_icon }}
+                                </a>
+
+                                <a href="/main/skills/skill_badge_create.php?{{ { 'id' : skill.id }|url_encode }}"
+                                   class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white text-primary ring-1 ring-gray-20 hover:bg-gray-10"
+                                   title="{{ "Create badge"|trans }}">
+                                    {{ 'ObjectIcon::BADGE'|mdi_icon }}
+                                </a>
+
+                                {% if skill.status == 0 %}
+                                    <a href="/main/skills/skill_list.php?{{ { 'id' : skill.id, 'action': 'enable' }|url_encode }}"
+                                       class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white text-gray-90 ring-1 ring-gray-20 hover:bg-gray-10"
+                                       title="{{ 'Enable'|trans }}">
+                                        {{ 'StateIcon::INACTIVE'|mdi_icon }}
+                                    </a>
+                                {% else %}
+                                    <a href="/main/skills/skill_list.php?{{ { 'id' : skill.id, 'action': 'disable' }|url_encode }}"
+                                       class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white text-gray-90 ring-1 ring-gray-20 hover:bg-gray-10"
+                                       title="{{ 'Disable'|trans }}">
+                                        {{ 'StateIcon::ACTIVE'|mdi_icon }}
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="px-4 py-10 text-center text-body-2 text-gray-50">
+                            {{ 'No skills found'|trans }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <script>
-      $(function() {
+      $(function () {
         $("#tag-filter").val("{{ current_tag_id }}")
-        $("#filter-button").click(function() {
-          var tagId = $("#tag-filter option:selected").val()
-          $(location).attr(
-            "href",
-            '/main/skills/skill_list.php?' + tagId
-          )
+        $("#filter-button").on("click", function (e) {
+          e.preventDefault()
+
+          var tagId = $("#tag-filter").val() || "0"
+          var url = "/main/skills/skill_list.php"
+
+          if (tagId !== "0") {
+            url += "?tag_id=" + encodeURIComponent(tagId)
+          }
+
+          window.location.href = url
         })
       })
     </script>

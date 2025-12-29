@@ -64,6 +64,13 @@ const specialRouteNames = [
 
 const itemList = ref([])
 
+/**
+ * Group breadcrumb support (no API calls)
+ * - Detect gid in query and insert a group crumb after the course crumb.
+ * - Label uses "Group 0001" style to be user-friendly even without fetching the real name.
+ */
+const gid = computed(() => getQueryInt("gid", 0))
+
 onMounted(() => {
   const wb = (window && window.breadcrumb) || []
   if (Array.isArray(wb) && wb.length > 0) {
@@ -154,7 +161,7 @@ function watchResourceNodeLoader() {
             sid: session.value?.id,
           })
         } catch (e) {
-          console.error("[Breadcrumb WATCH] failed to load resourceNode", e)
+          console.error("[Breadcrumb] failed to load resourceNode", e)
         }
       }
     },
@@ -197,6 +204,64 @@ function addDocumentBreadcrumb() {
       })
     }
   }
+}
+
+/**
+ * Insert a Group crumb when we are inside a group context (gid=...).
+ * This appears after the course title crumb and before the tool crumb.
+ * No API calls: we show "Group 0001" style label.
+ */
+function addGroupBreadcrumbIfNeeded() {
+  const currentGid = gid.value
+  if (!currentGid || currentGid <= 0) return
+
+  const labelBase = translateOrFallback("Group", "Group")
+  const padded = String(currentGid).padStart(4, "0")
+  const label = `${labelBase} ${padded}`
+
+  // Avoid duplicates (e.g. if some legacy breadcrumb already includes it)
+  const alreadyExists = itemList.value.some((it) => stripHtml(it.label) === stripHtml(label))
+  if (alreadyExists) return
+
+  // Legacy group space URL, works even if there is no Vue route for group space
+  const url = buildGroupSpaceUrl(currentGid)
+
+  itemList.value.push({
+    label,
+    url: url || undefined,
+  })
+}
+
+/**
+ * Build a legacy group space URL. Adjust this path if your installation uses a different entry point.
+ */
+function buildGroupSpaceUrl(currentGid) {
+  // Keep 0 values if present (sid=0 is valid)
+  const cidRaw = route.query?.cid ?? course.value?.id ?? 0
+  const sidRaw = route.query?.sid ?? session.value?.id ?? 0
+
+  const cid = String(cidRaw ?? "0")
+  const sid = String(sidRaw ?? "0")
+  const gidStr = String(currentGid)
+
+  const qs = new URLSearchParams()
+  qs.set("cid", cid)
+  qs.set("sid", sid)
+  qs.set("gid", gidStr)
+
+  return `/main/group/group_space.php?${qs.toString()}`
+}
+
+/**
+ * Resolve translated label safely.
+ */
+function translateOrFallback(key, fallback) {
+  try {
+    if (typeof te === "function" && te(key)) {
+      return t(key)
+    }
+  } catch (e) {}
+  return fallback
 }
 
 /**
@@ -265,14 +330,20 @@ watchEffect(() => {
       itemList.value.push({ label: item.name, url: newUrl || undefined })
     })
     legacyItems.value = []
-  } else if (course.value && route.name !== "CourseHome") {
+    return
+  }
+
+  // Standard: add course title crumb
+  if (course.value && route.name !== "CourseHome") {
     itemList.value.push({
       label: course.value.title,
       route: { name: "CourseHome", params: { id: course.value.id }, query: route.query },
     })
   }
 
-  // Detect and render tool-specific breadcrumb
+  // NEW: Group crumb if gid is present
+  addGroupBreadcrumbIfNeeded()
+
   const mainToolName = route.matched?.[0]?.name
   const currentRouteName = route.name || ""
   const nodeId = route.params.node || route.query.node
@@ -307,8 +378,8 @@ watchEffect(() => {
 
     if (mainToolName === "ccalendarevent") {
       const cid = Number(route.query?.cid || 0)
-      const gid = Number(route.query?.gid || 0)
-      toolLabel = gid > 0 ? "Group agenda" : cid > 0 ? "Agenda" : "Personal agenda"
+      const gidVal = Number(route.query?.gid || 0)
+      toolLabel = gidVal > 0 ? "Group agenda" : cid > 0 ? "Agenda" : "Personal agenda"
     }
     itemList.value.push({
       label: t(toolLabel),
@@ -453,5 +524,15 @@ function handleBreadcrumbClick(item, event) {
 function stripHtml(value) {
   if (!value || typeof value !== "string") return ""
   return value.replace(/<[^>]*>?/gm, "").trim()
+}
+
+/**
+ * Safe integer query getter (keeps "0" as valid).
+ */
+function getQueryInt(key, fallback = 0) {
+  const raw = route.query?.[key]
+  if (raw === undefined || raw === null || raw === "") return fallback
+  const n = Number(Array.isArray(raw) ? raw[0] : raw)
+  return Number.isFinite(n) ? n : fallback
 }
 </script>

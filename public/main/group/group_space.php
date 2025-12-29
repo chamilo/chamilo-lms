@@ -170,9 +170,13 @@ if (api_is_allowed_to_edit(false, true) ||
     }
 
     if (GroupManager::TOOL_NOT_AVAILABLE != $groupEntity->getWorkState()) {
-        // Link to the works area of this group
+        $params = [
+            'toolName' => 'student_publication',
+            'cid' => $courseId,
+        ];
+        $url = Container::getRouter()->generate('chamilo_core_course_redirect_tool', $params).'?'.api_get_cidreq();
         $actions_array[] = [
-            'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
+            'url' => $url,
             'content' => Display::getMdiIcon(ToolIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assignments')),
         ];
     }

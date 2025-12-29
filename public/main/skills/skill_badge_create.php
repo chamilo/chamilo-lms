@@ -36,26 +36,38 @@ $badgeStudio = [
 ];
 
 if ('POST' === $_SERVER['REQUEST_METHOD']) {
-    if ((isset($_FILES['image']) && 0 == $_FILES['image']['error']) ||
-        (isset($_POST['badge_studio_image']) && !empty($_POST['badge_studio_image']))
-    ) {
+    $hasStudio = !empty($_POST['badge_studio_image'] ?? '');
+
+    $hasUpload = isset($_FILES['image'])
+        && is_array($_FILES['image'])
+        && ($_FILES['image']['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK;
+
+    if ($hasStudio || $hasUpload) {
         $assetRepo = Container::getAssetRepository();
+
+        // Remove previous asset (if any) to avoid orphaned files and stale references
         $skillRepo->deleteAsset($skill);
-        $title = sprintf("%s.png", $skill->getTitle());
+
+        // Use a unique title to help avoid browser cache showing an old image
+        $title = sprintf('%s-%s.png', $skill->getTitle(), date('YmdHis'));
 
         $asset = (new Asset())
             ->setCategory(Asset::SKILL)
-            ->setTitle($title)
-        ;
+            ->setTitle($title);
 
-        if (isset($_POST['badge_studio_image']) && !empty($_POST['badge_studio_image'])) {
-            $badgeImage = base64_decode(
-                preg_replace('#^data:image/\w+;base64,#i', '', $_POST['badge_studio_image'])
-            );
+        if ($hasStudio) {
+            $raw = (string) ($_POST['badge_studio_image'] ?? '');
+            $raw = preg_replace('#^data:image/\w+;base64,#i', '', $raw);
+
+            $badgeImage = base64_decode($raw, true);
+            if (false === $badgeImage) {
+                Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
+                api_location(api_get_path(WEB_CODE_PATH).'skills/skill_list.php');
+            }
+
             $asset = $assetRepo->createFromString($asset, 'image/png', $badgeImage);
-        }
-
-        if (isset($_FILES['image'])) {
+        } else {
+            // Only executed when a real file was uploaded successfully
             $asset = $assetRepo->createFromRequest($asset, $_FILES['image']);
         }
 

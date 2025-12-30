@@ -592,6 +592,9 @@ class SkillModel extends Model
                         'acquired_skill_at' => api_get_utc_datetime(),
                         'course_id' => (int) $courseId,
                         'session_id' => $sessionId ? (int) $sessionId : null,
+                        'validation_status' => 1,
+                        'argumentation' => '',
+                        'argumentation_author_id' => $userId
                     ];
                     $skill_rel_user->save($params);
                 }
@@ -1355,7 +1358,7 @@ class SkillModel extends Model
      * @param int $courseId  Optional. The course id
      * @param int $sessionId Optional. The session id
      *
-     * @return bool Whether the user has the skill return true. Otherwise return false
+     * @return bool Whether the user has the skill return true. Otherwise, return false
      */
     public function userHasSkill($userId, $skillId, $courseId = 0, $sessionId = 0)
     {
@@ -1369,7 +1372,11 @@ class SkillModel extends Model
 
         if ($courseId > 0) {
             $whereConditions['AND course_id = ? '] = $courseId;
-            $whereConditions['AND session_id = ? '] = $sessionId ? $sessionId : null;
+            if ($sessionId > 0) {
+                $whereConditions['AND session_id = ? '] = $sessionId ? $sessionId : null;
+            } else {
+                $whereConditions['AND session_id IS NULL'] = null;
+            }
         }
 
         $result = Database::select(

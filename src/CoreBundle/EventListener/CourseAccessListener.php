@@ -211,9 +211,9 @@ class CourseAccessListener
         // Expected Vue routes:
         // /resources/document/:node/
         // /resources/lp/:node
-        // /resources/assignment/:node
+        // /resources/ccalendarevent
         // etc.
-        if (!preg_match('#^/resources/([^/]+)/#', $path, $m)) {
+        if (!preg_match('#^/resources/([^/]+)(?:/|$)#', $path, $m)) {
             return null;
         }
 
@@ -223,24 +223,19 @@ class CourseAccessListener
         }
 
         // Map Vue route segment -> legacy-ish tool name stored in track_e_access.access_tool
-        // Keep these values aligned with existing legacy names when possible.
         $map = [
             'lp' => 'learnpath',
             'learnpath' => 'learnpath',
-
             'document' => 'document',
             'documents' => 'document',
-
             'assignment' => 'work',
             'assignments' => 'work',
-
             'attendance' => 'attendance',
-
             'dropbox' => 'dropbox',
             'glossary' => 'glossary',
-
             'links' => 'link',
             'link' => 'link',
+            'ccalendarevent' => 'agenda',
         ];
 
         return $map[$segment] ?? $segment;

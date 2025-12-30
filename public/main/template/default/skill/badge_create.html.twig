@@ -174,10 +174,8 @@
                                                             <option value="">{{ "None"|trans }}</option>
 
                                                             {% if badge_studio.glyph_options is defined and badge_studio.glyph_options is not empty %}
-                                                                {# Keep backend options only (avoid duplicated huge HTML) #}
                                                                 {{ badge_studio.glyph_options|raw }}
                                                             {% else %}
-                                                                {# Fallback: expanded curated list (PrimeIcons-friendly names) #}
                                                                 <optgroup label="Basics">
                                                                     <option value="check">Check</option>
                                                                     <option value="times">Times</option>
@@ -337,19 +335,19 @@
                         <div class="w-[240px] max-w-full">
                             <div
                                     id="badge-container"
-                                    class="{% if skill.asset is empty %}hidden{% endif %} rounded-2xl border border-gray-30 bg-gray-10 p-3"
+                                    class="{% if (badge_url|default('')) is empty %}hidden{% endif %} rounded-2xl border border-gray-30 bg-gray-10 p-3"
                             >
                                 <img
                                         id="badge-preview"
-                                        src="{{ skill.asset }}"
+                                        src="{{ badge_url|default('') }}"
                                         alt="{{ "Badge preview"|trans }}"
-                                        class="w-full h-auto rounded-xl {% if skill.asset is empty %}hidden{% endif %}"
+                                        class="w-full h-auto rounded-xl {% if (badge_url|default('')) is empty %}hidden{% endif %}"
                                 />
                             </div>
 
                             <div
                                     id="badge-placeholder"
-                                    class="{% if skill.asset is not empty %}hidden{% endif %} rounded-2xl border border-dashed border-gray-300 bg-gray-10 p-6 text-center"
+                                    class="{% if (badge_url|default('')) is not empty %}hidden{% endif %} rounded-2xl border border-dashed border-gray-300 bg-gray-10 p-6 text-center"
                             >
                                 <div class="text-gray-500 text-sm">{{ "No image selected"|trans }}</div>
                             </div>
@@ -425,8 +423,8 @@
     // ---------------------------
     // Initial state from backend
     // ---------------------------
-    const INITIAL_HAS_BADGE = {{ skill.asset is not empty ? 'true' : 'false' }};
-    const INITIAL_BADGE_SRC = {{ (skill.asset is not empty ? skill.asset : '')|json_encode|raw }};
+    const INITIAL_HAS_BADGE = {{ (badge_url|default('')) is not empty ? 'true' : 'false' }};
+    const INITIAL_BADGE_SRC = {{ ((badge_url|default('')) is not empty ? (badge_url|default('')) : '')|json_encode|raw }};
 
     const TEXT_NO_IMAGE = {{ "No image selected"|trans|json_encode|raw }};
     const TEXT_CURRENT_BADGE = {{ "Current badge set"|trans|json_encode|raw }};
@@ -591,15 +589,9 @@
     // Preview helpers
     // ---------------------------
     function applyPreview(src) {
-      // Right preview
       const preview = $("badge-preview");
       const container = $("badge-container");
       const placeholder = $("badge-placeholder");
-
-      // Inline preview (left side)
-      const previewInline = $("badge-preview-inline");
-      const containerInline = $("badge-container-inline");
-      const placeholderInline = $("badge-placeholder-inline");
 
       if (preview) {
         preview.src = src;
@@ -607,13 +599,6 @@
       }
       if (container) container.classList.remove("hidden");
       if (placeholder) placeholder.classList.add("hidden");
-
-      if (previewInline) {
-        previewInline.src = src;
-        previewInline.classList.remove("hidden");
-      }
-      if (containerInline) containerInline.classList.remove("hidden");
-      if (placeholderInline) placeholderInline.classList.add("hidden");
     }
 
     function clearStudioHiddenImage() {

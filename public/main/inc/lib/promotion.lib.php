@@ -309,17 +309,26 @@ class Promotion extends Model
      */
     public function delete($id)
     {
-        if (parent::delete($id)) {
-            SessionManager::clear_session_ref_promotion($id);
-            Event::addEvent(
-                LOG_PROMOTION_DELETE,
-                LOG_PROMOTION_ID,
-                $id,
-                api_get_utc_datetime(),
-                api_get_user_id()
-            );
-        } else {
+        $id = (int) $id;
+        if ($id <= 0) {
             return false;
         }
+
+        // Unassign sessions first, otherwise DB constraints may block deletion.
+        SessionManager::clear_session_ref_promotion($id);
+
+        if (!parent::delete($id)) {
+            return false;
+        }
+
+        Event::addEvent(
+            LOG_PROMOTION_DELETE,
+            LOG_PROMOTION_ID,
+            $id,
+            api_get_utc_datetime(),
+            api_get_user_id()
+        );
+
+        return true;
     }
 }

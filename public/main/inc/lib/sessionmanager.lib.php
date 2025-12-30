@@ -2113,18 +2113,19 @@ class SessionManager
      *
      * @return bool
      */
-    public static function clear_session_ref_promotion($id)
+    public static function clear_session_ref_promotion(int $promotionId): bool
     {
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $id = intval($id);
-        $sql = "UPDATE $tbl_session
-                SET promotion_id = 0
-                WHERE promotion_id = $id";
-        if (Database::query($sql)) {
-            return true;
-        } else {
+        if ($promotionId <= 0) {
             return false;
         }
+
+        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+
+        return (bool) Database::update(
+            $sessionTable,
+            ['promotion_id' => null],
+            ['promotion_id = ?' => $promotionId]
+        );
     }
 
     /**

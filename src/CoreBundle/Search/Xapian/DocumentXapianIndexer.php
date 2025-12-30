@@ -45,7 +45,7 @@ final class DocumentXapianIndexer
 
         $raw = (string) $settingsManager->getSetting('search.search_prefilter_prefix', true);
 
-        if (!empty($raw)) {
+        if (!empty($raw) && 'false' !== $raw) {
             $this->preFilterPrefix = json_decode($raw, true);
         }
     }

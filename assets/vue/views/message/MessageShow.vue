@@ -26,8 +26,8 @@
         icon="reply"
         only-icon
         type="black"
-        :title="t('Reply')"
-        :aria-label="t('Reply')"
+        :title="t('Reply to this message')"
+        :aria-label="t('Reply to this message')"
         @click="reply"
       />
 

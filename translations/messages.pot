@@ -31394,3 +31394,9 @@ msgstr ""
 
 msgid "Manager"
 msgstr ""
+
+msgid "Mark as"
+msgstr ""
+
+msgid "Reply to all"
+msgstr ""

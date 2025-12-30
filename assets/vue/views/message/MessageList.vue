@@ -5,8 +5,8 @@
         icon="email-plus"
         only-icon
         type="black"
-        :title="t('Compose')"
-        :aria-label="t('Compose')"
+        :title="t('New message')"
+        :aria-label="t('New message')"
         @click="goToCompose"
       />
 

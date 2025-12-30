@@ -31462,3 +31462,9 @@ msgstr "For more details visit %s"
 
 msgid "Manager"
 msgstr "Manager"
+
+msgid "Mark as"
+msgstr "Mark as"
+
+msgid "Reply to all"
+msgstr "Reply to all"

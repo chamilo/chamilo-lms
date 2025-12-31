@@ -58,10 +58,10 @@
           v-if="!forceStudentView"
           id="qualification"
           :label="t('Score')"
-          v-model.number="qualification"
+          v-model="qualification"
           :min="0"
-          :max="maxQualification"
-          :help-text="maxQualification ? t('Max score') + maxQualification : null"
+          :max="maxQualification ?? undefined"
+          :help-text="maxHelpText"
         />
 
         <template v-else>
@@ -196,7 +196,22 @@ watch(
   },
 )
 
-const maxQualification = computed(() => props.item?.publicationParent?.qualification ?? null)
+const maxQualification = computed(() => {
+  const raw = props.item?.publicationParent?.qualification
+
+  // Treat 0 / empty / invalid as "no max"
+  if (raw === null || raw === undefined || raw === "") return null
+
+  const n = Number(raw)
+  if (!Number.isFinite(n) || n <= 0) return null
+
+  return n
+})
+
+const maxHelpText = computed(() => {
+  if (maxQualification.value === null) return null
+  return `${t("Max score")}: ${maxQualification.value}`
+})
 
 function onHide() {
   emit("update:modelValue", false)
@@ -217,7 +232,9 @@ async function submit() {
   const trimmed = comment.value.trim()
   const hasComment = trimmed.length > 0
   const hasFile = !!selectedFile.value
-  const hasQualificationChange = qualification.value !== props.item.qualification
+  const currentQ = qualification.value === "" ? null : qualification.value
+  const originalQ = props.item.qualification ?? null
+  const hasQualificationChange = currentQ !== originalQ
 
   if (!hasComment && !hasFile && !hasQualificationChange) {
     notification.showErrorNotification(t("Please add a comment, a grade or a file"))
@@ -232,6 +249,7 @@ async function submit() {
       emit("commentSent")
       close()
     } catch (e) {
+      console.warn("[Assignments][CorrectAndRateModal] Failed to update score", e)
       notification.showErrorNotification(e)
     } finally {
       submitting.value = false
@@ -259,7 +277,9 @@ async function submit() {
     comment.value = ""
     selectedFile.value = null
     emit("commentSent")
+    close()
   } catch (e) {
+    console.warn("[Assignments][CorrectAndRateModal] Failed to submit comment/grade/file", e)
     notification.showErrorNotification(e)
   } finally {
     submitting.value = false

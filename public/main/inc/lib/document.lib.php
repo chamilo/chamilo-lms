@@ -2664,28 +2664,38 @@ class DocumentManager
             return false;
         }
 
+        $courseRealId = (int) ($courseData['real_id'] ?? 0);
+        $sessionId = (int) $sessionId;
+        $existingDefaultCertificateId = self::get_default_certificate_id($courseRealId, $sessionId);
+        if (!empty($existingDefaultCertificateId)) {
+            return $existingDefaultCertificateId;
+        }
+
         global $css, $img_dir, $default_course_dir, $js;
         $codePath = api_get_path(REL_CODE_PATH);
-        $imgPath = api_get_path(WEB_PATH).'img/';
+        $imgPath = api_get_path(WEB_PATH) . 'img/';
         $dir = '/certificates';
         $comment = null;
         $title = get_lang('Default certificate');
         $fileName = api_replace_dangerous_char($title);
         $fileType = 'certificate';
-        $templateContent = file_get_contents(api_get_path(SYS_CODE_PATH).'gradebook/certificate_template/template.html');
+        $templateContent = file_get_contents(
+            api_get_path(SYS_CODE_PATH) . 'gradebook/certificate_template/template.html'
+        );
 
         $search = ['{CSS}', '{IMG_DIR}', '{REL_CODE_PATH}', '{IMG_PATH}'];
-        $replace = [$css.$js, $img_dir, $codePath, $imgPath];
+        $replace = [$css . $js, $img_dir, $codePath, $imgPath];
 
         $fileContent = str_replace($search, $replace, $templateContent);
         $saveFilePath = "$dir/$fileName.html";
 
         if ($fromBaseCourse) {
-            $defaultCertificateId = self::get_default_certificate_id($courseData['real_id'], 0);
-            if (!empty($defaultCertificateId)) {
+            $baseDefaultCertificateId = self::get_default_certificate_id($courseRealId, 0);
+
+            if (!empty($baseDefaultCertificateId)) {
                 // We have a certificate from the course base
                 $documentData = self::get_document_data_by_id(
-                    $defaultCertificateId,
+                    $baseDefaultCertificateId,
                     $courseData['code'],
                     false,
                     0
@@ -2704,24 +2714,30 @@ class DocumentManager
             0,
             $title,
             $comment,
-            0, //$readonly = 0,
-            true, //$save_visibility = true,
-            null, //$group_id = null,
+            0,      // $readonly = 0
+            true,   // $save_visibility = true
+            null,   // $group_id = null
             $sessionId,
             0,
             false,
             $fileContent
         );
 
-        $defaultCertificateId = self::get_default_certificate_id($courseData['real_id'], $sessionId);
+        // Re-check and attach only if still missing (and the document was created).
+        $defaultCertificateId = self::get_default_certificate_id($courseRealId, $sessionId);
 
-        if (!isset($defaultCertificateId)) {
+        // ✅ Use empty() (not isset) to avoid wrong truthiness edge cases
+        if (empty($defaultCertificateId) && $document) {
             self::attach_gradebook_certificate(
-                $courseData['real_id'],
-                $document->getIid(),
+                $courseRealId,
+                (int) $document->getIid(),
                 $sessionId
             );
+
+            $defaultCertificateId = (int) $document->getIid();
         }
+
+        return $defaultCertificateId ?: false;
     }
 
     /**

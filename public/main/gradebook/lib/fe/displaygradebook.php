@@ -90,10 +90,12 @@ class DisplayGradebook
             $description = get_lang('Description').' :<b> '.$evalobj->get_description().'</b><br>';
         }
 
-        if (!empty($evalobj->getCourseId())) {
+        $courseId = (int) $evalobj->getCourseId();
+        if (empty($courseId)) {
             $course = get_lang('Independent from course');
         } else {
-            $course = api_get_course_info_by_id($evalobj->getCourseId())['title'];
+            $courseInfo = api_get_course_info_by_id($courseId);
+            $course = !empty($courseInfo['title']) ? $courseInfo['title'] : get_lang('Unknown course');
         }
 
         $evalinfo = '<h2>'.$evalobj->get_name().'</h2><hr>';

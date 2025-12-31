@@ -819,8 +819,20 @@ if (!empty($selectCat)) {
         // Student
         if (!api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
             if (null !== $category) {
-                $certificate = Category::generateUserCertificate($category, $stud_id);
-                if ('true' !== $hideCertificateExport && isset($certificate['pdf_url'])) {
+                $certificate = [];
+                $list = GradebookUtils::get_list_gradebook_certificates_by_user_id(
+                    $stud_id,
+                    $selectCat
+                );
+                if (isset($list[0])) {
+                    $certificate = $list[0];
+                }
+                if ('true' !== $hideCertificateExport && isset($certificate['path_certificate'])) {
+                    $pathRaw = isset($certificate['path_certificate']) ? (string) $certificate['path_certificate'] : '';
+                    $path    = ltrim($pathRaw, '/'); // normalize: remove leading slash if present
+                    $hasPath = $path !== '';
+                    $hash    = $hasPath ? pathinfo($path, PATHINFO_FILENAME) : '';
+                    $certificate['pdf_url'] = api_get_path(WEB_PATH).'certificates/'.$hash.'.pdf';
                     $actionsLeft .= Display::url(
                         Display::getMdiIcon('file-pdf-box').get_lang('Download certificate in PDF'),
                         $certificate['pdf_url'],

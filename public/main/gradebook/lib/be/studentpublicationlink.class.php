@@ -192,12 +192,25 @@ class StudentPublicationLink extends AbstractLink
     public function get_link()
     {
         $studentPublication = $this->getStudentPublication();
-        $sessionId = $this->get_session_id();
-        $url = api_get_path(WEB_PATH).'main/work/work.php?'.
-            api_get_cidreq_params($this->getCourseId(), $sessionId).
-            '&id='.$studentPublication->getIid().'&gradebook=view';
 
-        return $url;
+        if (
+            !$studentPublication ||
+            !method_exists($studentPublication, 'getResourceNode') ||
+            null === $studentPublication->getResourceNode()
+        ) {
+            return '';
+        }
+
+        $nodeId = (int) $studentPublication->getResourceNode()->getId();
+
+        $query = [
+            'cid' => (int) $this->getCourseId(),
+            'sid' => (int) $this->get_session_id(),
+            'gid' => 0,
+            'gradebook' => 'view',
+        ];
+
+        return api_get_path(WEB_PATH).'resources/assignment/'.$nodeId.'/?'.http_build_query($query);
     }
 
     public function needs_max()

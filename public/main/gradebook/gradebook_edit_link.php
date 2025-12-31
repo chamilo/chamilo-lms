@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -58,8 +60,8 @@ if ($form->validate()) {
         $link->set_category_id($values['select_gradebook']);
     }
     $link->set_visible(empty($values['visible']) ? 0 : 1);
-    if (isset($values['min_score']) && !is_null($link->entity)) {
-        $link->entity->setMinScore($values['min_score']);
+    if (isset($values['min_score']) && $values['min_score'] !== '') {
+        $link->set_min_score(api_float_val($values['min_score']));
     }
     $link->save();
 
@@ -139,6 +141,24 @@ $(function() {
 });
 </script>';
 
-Display::display_header(get_lang('Edit link'));
+$pageTitle = get_lang('Edit link');
+Display::display_header($pageTitle);
+
+$backUrl = Category::getUrl().'selectcat='.(int) $linkcat;
+echo '<div class="w-full mx-auto px-4 sm:px-6 lg:px-8">';
+echo '<div class="mb-4">';
+echo Display::toolbarAction('actions', [
+    Display::url(
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
+        $backUrl,
+        ['class' => 'inline-flex items-center']
+    ),
+]);
+echo '</div>';
+
+// Form
 $form->display();
+
+echo '</div>';
+
 Display::display_footer();

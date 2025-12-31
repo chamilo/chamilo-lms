@@ -222,12 +222,26 @@ class Certificate extends Model
         }
 
         $categoryId = isset($this->certificate_data['cat_id']) ? (int) $this->certificate_data['cat_id'] : 0;
-        $certRepo   = Container::getGradeBookCertificateRepository();
+        $userId = isset($this->certificate_data['user_id']) ? (int) $this->certificate_data['user_id'] : 0;
+
+        if ($userId <= 0) {
+            return false;
+        }
+
+        $certRepo = Container::getGradeBookCertificateRepository();
 
         try {
-            $certRepo->deleteCertificateResource($this->certificate_data['user_id'], $categoryId);
+            // Prefer the real method name (resource-first + legacy fallback)
+            if (method_exists($certRepo, 'deleteCertificateAndRelatedFiles')) {
+                return (bool) $certRepo->deleteCertificateAndRelatedFiles($userId, $categoryId);
+            }
 
-            return true;
+            // Backward compatible fallback
+            if (method_exists($certRepo, 'deleteCertificateResource')) {
+                return (bool) $certRepo->deleteCertificateResource($userId, $categoryId);
+            }
+
+            return false;
         } catch (\Throwable $e) {
             error_log('[CERTIFICATE::deleteCertificate] delete error: '.$e->getMessage());
             return false;

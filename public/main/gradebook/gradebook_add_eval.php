@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
@@ -44,7 +46,7 @@ if ($form->validate()) {
     }
 
     // Todo: Fix this assignment that ignores the block above
-    //Always add the gradebook to the course
+    // Always add the gradebook to the course
     $eval->setCourseId(api_get_course_int_id());
     $eval->set_category_id($values['hid_category_id']);
 
@@ -103,8 +105,8 @@ Event::registerLog($logInfo);
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$select_cat,
-    'name' => get_lang('Assessments'), ]
-;
+    'name' => get_lang('Assessments'),
+];
 $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = '<script>
@@ -132,5 +134,30 @@ if (null == $evaladd->getCourseId()) {
 
 Display::display_header(get_lang('Add classroom activity'));
 
+$defaultBackUrl = Category::getUrl().'selectcat='.$select_cat;
+$backUrl = $defaultBackUrl;
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+if (!empty($referer)) {
+    $platformHost = (string) parse_url(api_get_path(WEB_PATH), PHP_URL_HOST);
+    $refererHost = (string) parse_url($referer, PHP_URL_HOST);
+    if (empty($refererHost)) {
+        $backUrl = $referer;
+    } elseif (!empty($platformHost) && $refererHost === $platformHost) {
+        $backUrl = $referer;
+    }
+}
+
+echo '<div class="mb-4">';
+
+// Back icon only
+echo '<div class="mb-2">';
+echo Display::url(
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
+    $backUrl
+);
+echo '</div>';
+
+echo '</div>';
+
 $form->display();
-Display :: display_footer();
+Display::display_footer();

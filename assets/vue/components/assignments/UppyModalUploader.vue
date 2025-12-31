@@ -7,8 +7,8 @@
     @hide="onDialogHide"
   >
     <Dashboard
-      v-if="uppy"
-      :uppy="uppy"
+      v-if="uppyInstance"
+      :uppy="uppyInstance"
       :height="300"
       :showProgressDetails="true"
       :hideUploadButton="false"
@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onBeforeUnmount } from "vue"
+import { ref, watch, onBeforeUnmount, shallowRef, markRaw, computed } from "vue"
 import { Dashboard } from "@uppy/vue"
 import Uppy from "@uppy/core"
 import Dialog from "primevue/dialog"
@@ -48,7 +48,10 @@ const props = defineProps({
 const emit = defineEmits(["close", "uploaded"])
 
 const isVisible = ref(false)
-const uppy = ref(null)
+
+const uppy = shallowRef(null)
+const uppyInstance = computed(() => uppy.value)
+
 const { showErrorNotification, showSuccessNotification } = useNotification()
 
 watch(
@@ -64,19 +67,26 @@ watch(
 )
 
 function setupUppy() {
+  // Always recreate to guarantee clean state per open.
   destroyUppy()
 
-  uppy.value = new Uppy({
-    restrictions: { maxNumberOfFiles: 1 },
-    autoProceed: true,
-  })
+  const instance = markRaw(
+    new Uppy({
+      restrictions: { maxNumberOfFiles: 1 },
+      autoProceed: true,
+    }),
+  )
 
-  uppy.value.on("file-added", async (file) => {
+  instance.on("file-added", async (file) => {
     try {
       const formData = new FormData()
       formData.append("uploadFile", file.data)
 
-      const uploadUrl = `${ENTRYPOINT}c_student_publication_corrections/upload?parentResourceNodeId=${props.parentResourceNodeId}&submissionId=${props.submissionId}&filetype=file`
+      const uploadUrl =
+        `${ENTRYPOINT}c_student_publication_corrections/upload` +
+        `?parentResourceNodeId=${props.parentResourceNodeId}` +
+        `&submissionId=${props.submissionId}` +
+        `&filetype=file`
 
       await axios.post(uploadUrl, formData, {
         headers: {
@@ -89,18 +99,29 @@ function setupUppy() {
       emit("uploaded", file)
       closeUploader()
     } catch (error) {
-      console.error(error)
+      // Keep console output for debugging, but show a user-friendly notification.
+      console.error("[UppyModalUploader] Upload failed", error)
       showErrorNotification(error)
     }
   })
+
+  uppy.value = instance
 }
 
 function destroyUppy() {
-  if (uppy.value) {
+  if (!uppy.value) return
+
+  try {
+    // Cancel running uploads (if any) before closing.
     uppy.value.cancelAll()
+
+    // Uppy provides close() for cleanup.
     if (typeof uppy.value.close === "function") {
-      uppy.value.close()
+      uppy.value.close({ reason: "unmount" })
     }
+  } catch (e) {
+    console.warn("[UppyModalUploader] Failed to destroy Uppy instance", e)
+  } finally {
     uppy.value = null
   }
 }

@@ -20,9 +20,27 @@
         class="bg-white border p-3 rounded"
       >
         <h5 class="font-semibold text-sm">{{ t("Student's submission") }}</h5>
+
+        <!-- Full HTML document: render safely inside sandboxed iframe -->
+        <iframe
+          v-if="isFullHtmlDocument"
+          class="w-full min-h-[260px] border border-gray-20 rounded bg-white"
+          sandbox=""
+          :srcdoc="submissionSrcDoc"
+        />
+
+        <!-- HTML fragment: render sanitized -->
         <div
+          v-else-if="isHtmlFragment"
+          class="text-sm text-gray-800 prose max-w-none"
+          v-html="submissionHtml"
+        />
+
+        <!-- Plain text -->
+        <div
+          v-else
           class="text-sm text-gray-800 whitespace-pre-wrap"
-          v-text="props.item.description"
+          v-text="submissionText"
         />
       </div>
 

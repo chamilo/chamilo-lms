@@ -673,13 +673,13 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                 [
                     'variable' => 'redirect_after_login',
                     'json_example' => [
-                        'COURSEMANAGER' => '',
-                        'STUDENT' => '',
+                        'COURSEMANAGER' => 'courses',
+                        'STUDENT' => 'courses',
                         'DRH' => '',
                         'SESSIONADMIN' => 'admin-dashboard',
-                        'STUDENT_BOSS' => '',
-                        'INVITEE' => '',
-                        'ADMIN' => 'admin-dashboard',
+                        'STUDENT_BOSS' => 'main/my_space/student.php',
+                        'INVITEE' => 'courses',
+                        'ADMIN' => 'admin',
                     ],
                 ],
             ],

@@ -59,20 +59,20 @@
     >
       <table class="min-w-full text-left">
         <thead>
-        <tr>
-          <th class="px-6 py-3 text-gray-700 font-bold">{{ t("Learners") }}</th>
-          <th class="px-6 py-3 text-gray-700 font-bold text-center">{{ t("Assignments") }}</th>
-        </tr>
+          <tr>
+            <th class="px-6 py-3 text-gray-700 font-bold">{{ t("Learners") }}</th>
+            <th class="px-6 py-3 text-gray-700 font-bold text-center">{{ t("Assignments") }}</th>
+          </tr>
         </thead>
         <tbody>
-        <tr
-          v-for="student in studentProgress"
-          :key="student.id"
-          class="border-b last:border-b-0"
-        >
-          <td class="px-6 py-3">{{ student.firstname }} {{ student.lastname }}</td>
-          <td class="px-6 py-3 text-center">{{ student.submissions }} / {{ student.totalAssignments }}</td>
-        </tr>
+          <tr
+            v-for="student in studentProgress"
+            :key="student.id"
+            class="border-b last:border-b-0"
+          >
+            <td class="px-6 py-3">{{ student.firstname }} {{ student.lastname }}</td>
+            <td class="px-6 py-3 text-center">{{ student.submissions }} / {{ student.totalAssignments }}</td>
+          </tr>
         </tbody>
       </table>
     </div>

@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -205,71 +206,111 @@ $interbreadcrumb[] = [
     'url' => Category::getUrl(),
     'name' => get_lang('Assessments'),
 ];
-$interbreadcrumb[] = [
-    'url' => '#',
-    'name' => get_lang('Students list report'),
-];
 
 $this_section = SECTION_COURSES;
-Display::display_header('');
-$token = Security::get_token();
-echo Display::page_header(get_lang('Students list report'));
 
-echo '<div class="btn-group">';
+$pageTitle = get_lang('Students list report');
+Display::display_header($pageTitle);
+
+$defaultBackUrl = Category::getUrl();
+if (null !== $cat_id) {
+    $defaultBackUrl .= 'selectcat='.(int) $cat_id;
+}
+
+$backUrl = $defaultBackUrl;
+
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+if (!empty($referer)) {
+    $platformHost = (string) parse_url(api_get_path(WEB_PATH), PHP_URL_HOST);
+    $refererHost = (string) parse_url($referer, PHP_URL_HOST);
+    if (empty($refererHost)) {
+        $backUrl = $referer;
+    } elseif (!empty($platformHost) && $refererHost === $platformHost) {
+        $backUrl = $referer;
+    }
+}
+
+echo '<div class="mb-4">';
+echo Display::url(
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
+    $backUrl,
+    ['class' => 'inline-flex items-center']
+);
+echo '</div>';
+
+echo '<div class="mb-4">';
+echo Display::page_header($pageTitle);
+echo '</div>';
+
+$allowSkillRelItem = ('true' === api_get_setting('skill.allow_skill_rel_items'));
+
+echo '<div class="flex justify-end mb-4">';
 if (count($userList) > 0) {
     $url = api_get_self().'?action=export_all&'.api_get_cidreq().'&selectcat='.$cat_id;
     echo Display::url(get_lang('Export all to PDF'), $url, ['class' => 'btn btn--plain']);
 }
 echo '</div>';
 
-$allowSkillRelItem = ('true' === api_get_setting('skill.allow_skill_rel_items'));
-
 if (0 == count($userList)) {
     echo Display::return_message(get_lang('No results available'), 'warning');
 } else {
-    echo '<br /><br /><div class="table-responsive">
-            <table class="table table-hover table-striped table-bordered data_table">';
-    echo '<tr><th>';
-    echo get_lang('Learner');
-    echo '</th>';
-    echo '<th>';
-    echo get_lang('Action');
-    echo '</th></tr>';
     $allowComments = ('true' === api_get_setting('gradebook.allow_gradebook_comments'));
+
+    echo '<div class="mt-4 overflow-x-auto">';
+    echo '<table class="table table-hover table-striped table-bordered data_table w-full">';
+    echo '<thead>';
+    echo '<tr>';
+    echo '<th>'.get_lang('Learner').'</th>';
+    echo '<th style="width: 30%;">'.get_lang('Action').'</th>';
+    echo '</tr>';
+    echo '</thead>';
+    echo '<tbody>';
+
     foreach ($userList as $index => $value) {
         $userData = api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].')';
-        echo '<tr>
-                <td width="70%">'.$userData.'</td>';
+
+        echo '<tr>';
+        echo '<td>'.$userData.'</td>';
+
         echo '<td>';
-        $link = '';
+        echo '<div class="flex flex-wrap gap-2">';
+
         if ($allowSkillRelItem) {
             $url = api_get_path(WEB_CODE_PATH).
                 'gradebook/skill_rel_user.php?'.api_get_cidreq().'&user_id='.$value['user_id'].'&selectcat='.$cat_id;
-            $link = Display::url(
+
+            echo Display::url(
                 get_lang('Skills'),
                 $url,
                 ['class' => 'btn btn--plain']
-            ).'&nbsp;';
+            );
         }
 
         $url = api_get_self().'?'.api_get_cidreq().'&action=download&user_id='.$value['user_id'].'&selectcat='.$cat_id;
-        $link .= Display::url(
+        echo Display::url(
             get_lang('Export to PDF'),
             $url,
             ['target' => '_blank', 'class' => 'btn btn--plain']
         );
+
         if ($allowComments) {
             $url = api_get_self().'?'.api_get_cidreq().'&action=add_comment&user_id='.$value['user_id'].'&gradebook_id='.$cat_id;
-            $link .= '&nbsp;'.Display::url(
+            echo Display::url(
                 get_lang('Add gradebook comment'),
                 $url,
                 ['target' => '_blank', 'class' => 'ajax btn btn--plain']
             );
         }
-        echo $link;
-        echo '</td></tr>';
+
+        echo '</div>';
+        echo '</td>';
+
+        echo '</tr>';
     }
-    echo '</table></div>';
+
+    echo '</tbody>';
+    echo '</table>';
+    echo '</div>';
 }
 
 Display::display_footer();

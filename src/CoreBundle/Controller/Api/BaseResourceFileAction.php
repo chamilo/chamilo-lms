@@ -311,6 +311,7 @@ class BaseResourceFileAction
                             if ('overwrite' === $fileExistsOption) {
                                 $existingDocument->setTitle($title);
                                 $existingDocument->setComment($comment);
+                                $existingDocument->setFiletype($fileType);
 
                                 $resourceNode = $existingDocument->getResourceNode();
 
@@ -328,10 +329,9 @@ class BaseResourceFileAction
                                 $em->persist($existingDocument);
                                 $em->flush();
 
-                                // Return any data you need for further processing
                                 return [
                                     'title' => $title,
-                                    'filetype' => 'file',
+                                    'filetype' => $fileType,
                                     'comment' => $comment,
                                 ];
                             }
@@ -350,7 +350,7 @@ class BaseResourceFileAction
                                 // Return any data you need for further processing
                                 return [
                                     'title' => $newTitle,
-                                    'filetype' => 'file',
+                                    'filetype' => $fileType,
                                     'comment' => $comment,
                                 ];
                             }

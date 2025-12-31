@@ -605,6 +605,12 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
             ],
+            [
+                'variable' => 'scim_external_id',
+                'display_text' => 'SCIM external ID',
+                'item_type' => ExtraField::USER_FIELD_TYPE,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
+            ],
         ];
     }
 

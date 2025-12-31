@@ -93,6 +93,14 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             $setting->setTitle($settingData['title']);
             $setting->setComment($settingData['comment']);
 
+            // Only set default value when current value is empty (do not override admins)
+            if (array_key_exists('selected_value', $settingData)) {
+                $currentValue = $setting->getSelectedValue();
+                if ($currentValue === null || $currentValue === '') {
+                    $setting->setSelectedValue((string) $settingData['selected_value']);
+                }
+            }
+
             $manager->persist($setting);
         }
 
@@ -141,6 +149,17 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
 
     public static function getExistingSettings(): array
     {
+        // registration.redirect_after_login (default for new installations only)
+        $redirectAfterLoginDefault = json_encode([
+            'COURSEMANAGER' => 'courses',
+            'STUDENT' => 'courses',
+            'DRH' => '',
+            'SESSIONADMIN' => 'admin-dashboard',
+            'STUDENT_BOSS' => 'main/my_space/student.php',
+            'INVITEE' => 'courses',
+            'ADMIN' => 'admin',
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
         return [
             'profile' => [
                 [
@@ -569,6 +588,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'redirect_after_login',
                     'title' => 'Redirect after login (per profile)',
                     'comment' => 'Define redirection per profile after login using a JSON object like {"STUDENT":"", "ADMIN":"admin-dashboard"}',
+                    'selected_value' => $redirectAfterLoginDefault,
                 ],
                 [
                     'name' => 'allow_lostpassword',

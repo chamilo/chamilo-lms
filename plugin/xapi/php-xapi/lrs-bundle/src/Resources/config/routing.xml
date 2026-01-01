@@ -13,7 +13,7 @@
     </route>
 
     <route id="xapi_lrs.statement.post" path="/statements" methods="POST">
-        <default key="_controller">xapi_lrs.controller.statement.post:postStatement</default>
+        <default key="_controller">xapi_lrs.controller.statement.post:postStatements</default>
         <default key="xapi_serializer">statement</default>
         <default key="xapi_lrs.route">
             <bool>true</bool>

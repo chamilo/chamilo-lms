@@ -228,7 +228,14 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                                 'url' => 'https://api.openai.com/v1/chat/completions',
                                 'model' => 'gpt-4o',
                                 'temperature' => 0.7,
-                            ]
+                            ],
+                            'document_process' => [
+                                'upload_url' => 'https://api.openai.com/v1/files',
+                                'purpose' => 'assistants',
+                                'query_url' => 'https://api.openai.com/v1/threads',
+                                'model' => 'gpt-4o',
+                                'temperature' => 0.7,
+                            ],
                         ],
                         'deepseek' => [
                             'api_key' => 'your-key',
@@ -263,6 +270,13 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                                 'model' => 'grok-4-1-fast-reasoning',
                                 'temperature' => 0.7,
                             ],
+                            'document_process' => [
+                                'upload_url' => 'https://api.x.ai/v1/files',
+                                'query_url' => 'https://api.x.ai/v1/responses',
+                                'model' => 'grok-4-1-fast-reasoning',
+                                'temperature' => 0.7,
+                                'max_file_size_mb' => 30,
+                            ],
                         ],
                         'mistral' => [
                             'api_key' => 'your-key',
@@ -276,6 +290,13 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                                 'model' => 'mistral-large-latest',
                                 'temperature' => 0.7,
                             ],
+                            'document_process' => [
+                                'upload_url' => 'https://api.mistral.ai/v1/files',
+                                'ocr_url' => 'https://api.mistral.ai/v1/ocr',
+                                'query_url' => 'https://api.mistral.ai/v1/chat/completions',
+                                'model' => 'mistral-large-latest',
+                                'temperature' => 0.7,
+                            ]
                         ],
                         'gemini' => [
                             'api_key' => 'your-key',
@@ -296,6 +317,12 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                             ],
                             'document' => [
                                 'url' => 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent',
+                                'model' => 'gemini-2.5-flash',
+                                'temperature' => 0.7,
+                            ],
+                            'document_process' => [
+                                'upload_url' => 'https://generativelanguage.googleapis.com/upload/v1beta/files',
+                                'query_url' => 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent',
                                 'model' => 'gemini-2.5-flash',
                                 'temperature' => 0.7,
                             ],

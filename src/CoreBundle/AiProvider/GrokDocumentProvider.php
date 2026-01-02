@@ -7,10 +7,10 @@ namespace Chamilo\CoreBundle\AiProvider;
 use Chamilo\CoreBundle\Entity\AiRequests;
 use Chamilo\CoreBundle\Repository\AiRequestsRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Exception;
 use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Grok (xAI) provider for document generation.
@@ -51,11 +51,11 @@ class GrokDocumentProvider implements AiDocumentProviderInterface
         $grokConfig = $config['grok'];
 
         $this->apiUrl = $grokConfig['url'] ?? 'https://api.x.ai/v1/responses';
-        $this->apiKey = $grokConfig['api_key'] ??'';
+        $this->apiKey = $grokConfig['api_key'] ?? '';
         $this->model = $grokConfig['model'] ?? 'grok-4-1-fast-reasoning';
 
         if (empty($this->apiKey)) {
-            throw new \RuntimeException('Grok API key is missing.');
+            throw new RuntimeException('Grok API key is missing.');
         }
 
         $this->defaultOptions = [
@@ -73,7 +73,7 @@ class GrokDocumentProvider implements AiDocumentProviderInterface
     {
         $userId = $this->getUserId();
         if (!$userId) {
-            throw new \RuntimeException('User not authenticated.');
+            throw new RuntimeException('User not authenticated.');
         }
 
         // Build system prompt to instruct document generation
@@ -98,22 +98,22 @@ class GrokDocumentProvider implements AiDocumentProviderInterface
         try {
             $response = $this->httpClient->request('POST', $this->apiUrl, [
                 'headers' => [
-                    'Authorization' => 'Bearer ' . $this->apiKey,
+                    'Authorization' => 'Bearer '.$this->apiKey,
                     'Content-Type' => 'application/json',
                 ],
                 'json' => $payload,
             ]);
 
             $statusCode = $response->getStatusCode();
-            if ($statusCode !== 200) {
-                throw new \RuntimeException('API request failed with status: ' . $statusCode);
+            if (200 !== $statusCode) {
+                throw new RuntimeException('API request failed with status: ' . $statusCode);
             }
 
             $data = $response->toArray();
 
             // Check for error key first
             if (isset($data['error'])) {
-                throw new \RuntimeException('API error: ' . $data['error']['message']);
+                throw new RuntimeException('API error: ' . $data['error']['message']);
             }
 
             // Extract generated content from response structure
@@ -140,8 +140,9 @@ class GrokDocumentProvider implements AiDocumentProviderInterface
             }
 
             return null;
-        } catch (\Exception $e) {
-            error_log('[AI][Grok] Exception: ' . $e->getMessage());
+        } catch (Exception $e) {
+            error_log('[AI][Grok] Exception: '.$e->getMessage());
+
             return null;
         }
     }

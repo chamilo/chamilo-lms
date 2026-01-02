@@ -65,7 +65,7 @@ class GrokImageProvider implements AiImageProviderInterface
     {
         $userId = $this->getUserId();
         if (!$userId) {
-            throw new \RuntimeException('User not authenticated.');
+            throw new RuntimeException('User not authenticated.');
         }
 
         $payload = [
@@ -84,15 +84,15 @@ class GrokImageProvider implements AiImageProviderInterface
             ]);
 
             $statusCode = $response->getStatusCode();
-            if ($statusCode !== 200) {
-                throw new \RuntimeException('API request failed with status: ' . $statusCode);
+            if (200 !== $statusCode) {
+                throw new RuntimeException('API request failed with status: ' . $statusCode);
             }
 
             $data = $response->toArray();
 
             // Check for error key first
             if (isset($data['error'])) {
-                throw new \RuntimeException('API error: ' . $data['error']['message']);
+                throw new RuntimeException('API error: ' . $data['error']['message']);
             }
 
             // Proper access: assuming response_format 'b64_json'
@@ -119,8 +119,9 @@ class GrokImageProvider implements AiImageProviderInterface
             }
 
             return null;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             error_log('[AI][Grok] Exception: '.$e->getMessage());
+
             return null;
         }
     }

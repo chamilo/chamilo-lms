@@ -9,7 +9,8 @@ namespace Chamilo\CoreBundle\AiProvider;
 interface AiImageProviderInterface
 {
     /**
-     * Generate an image
+     * Generate an image.
+     *
      * @param string $prompt   The complete prompt, with language, question, context and answer
      * @param string $toolName A tag, e.g. 'open_answer_grade'.
      * @param ?array $options  An array of options (format etc.)
@@ -17,5 +18,4 @@ interface AiImageProviderInterface
      * @return ?string The raw text of the image in base64, or a URL
      */
     public function generateImage(string $prompt, string $toolName, ?array $options = []): ?string;
-
 }

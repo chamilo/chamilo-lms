@@ -47,8 +47,8 @@ class GeminiProvider implements AiProviderInterface
         $this->apiKey = $config['gemini']['api_key'] ?? '';
         // Gemini expects endpoint like: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
         $this->model = $config['gemini']['text']['model'] ?? 'gemini-2.5-flash';
-        $tempApiUrl = $config['gemini']['text']['url'] ?? "https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent";
-        $this->apiUrl = sprintf($tempApiUrl, $this->model);
+        $tempApiUrl = $config['gemini']['text']['url'] ?? 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent';
+        $this->apiUrl = \sprintf($tempApiUrl, $this->model);
         $this->temperature = $config['gemini']['text']['temperature'] ?? 0.7;
 
         if (empty($this->apiKey)) {
@@ -188,7 +188,7 @@ class GeminiProvider implements AiProviderInterface
             }
 
             $options = \array_slice($lines, 1, 4);
-            $validOptions = array_filter($options, fn($line) => preg_match('/^[A-D]\. .+/', $line));
+            $validOptions = array_filter($options, fn ($line) => preg_match('/^[A-D]\. .+/', $line));
 
             $answerLine = end($lines);
             if (4 === \count($validOptions) && preg_match('/^ANSWER: [A-D]$/', $answerLine)) {
@@ -211,9 +211,9 @@ class GeminiProvider implements AiProviderInterface
             'contents' => [
                 [
                     'parts' => [
-                        ['text' => $prompt]
-                    ]
-                ]
+                        ['text' => $prompt],
+                    ],
+                ],
             ],
             'generationConfig' => [
                 'temperature' => $this->temperature,
@@ -248,7 +248,8 @@ class GeminiProvider implements AiProviderInterface
                     ->setPromptTokens($data['usage']['prompt_tokens'] ?? 0)
                     ->setCompletionTokens($data['usage']['completion_tokens'] ?? 0)
                     ->setTotalTokens($data['usage']['total_tokens'] ?? 0)
-                    ->setAiProvider('gemini');
+                    ->setAiProvider('gemini')
+                ;
 
                 $this->aiRequestsRepository->save($aiRequest);
 
@@ -258,6 +259,7 @@ class GeminiProvider implements AiProviderInterface
             return null;
         } catch (Exception $e) {
             error_log('[AI][Gemini] Exception: '.$e->getMessage());
+
             return null;
         }
     }

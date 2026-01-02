@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\AiProvider;
 
 use Chamilo\CoreBundle\Repository\AiRequestsRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Gedmo\Exception;
 use InvalidArgumentException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -21,12 +20,6 @@ class AiProviderFactory
     private AiRequestsRepository $aiRequestsRepository;
     private Security $security;
 
-    /**
-     * @param HttpClientInterface  $httpClient
-     * @param SettingsManager      $settingsManager
-     * @param AiRequestsRepository $aiRequestsRepository
-     * @param Security             $security
-     */
     public function __construct(
         HttpClientInterface $httpClient,
         SettingsManager $settingsManager,
@@ -66,15 +59,15 @@ class AiProviderFactory
         $this->providersByType = [];
         foreach ($config as $providerName => $providerConfig) {
             // Check if the provider appears in the config, otherwise ignore this provider
-            if (in_array($providerName, array_keys($possibleProviders))) {
+            if (\in_array($providerName, array_keys($possibleProviders))) {
                 $providerPrefix = $possibleProviders[$providerName];
                 foreach ($serviceTypes as $type => $serviceName) {
                     // Check if the service (text, image, etc.) appears in the provider config, otherwise ignore this service
-                    if (in_array($type, array_keys($providerConfig))) {
+                    if (\in_array($type, array_keys($providerConfig))) {
                         $className = $providerPrefix.$serviceName.'Provider';
                         $filePath = __DIR__.'/'.$className.'.php';
                         // For some reason, dynamically loading the class without the fully qualified class name doesn't work
-                        $fullyQualifiedClassName = "Chamilo\\CoreBundle\\AiProvider\\".$className;
+                        $fullyQualifiedClassName = 'Chamilo\\CoreBundle\\AiProvider\\'.$className;
                         if (class_exists($fullyQualifiedClassName)) {
                             try {
                                 $providerObject = new $fullyQualifiedClassName(

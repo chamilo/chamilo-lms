@@ -221,7 +221,7 @@ class GrokProvider implements AiProviderInterface
             $statusCode = $response->getStatusCode();
             $data = $response->toArray();
 
-            if (200 === $statusCode && isset($data['output'][0]['content'][0]['text']) && $data['status'] === 'completed') {  // Updated parsing and status check
+            if (200 === $statusCode && isset($data['output'][0]['content'][0]['text']) && 'completed' === $data['status']) {  // Updated parsing and status check
                 $generatedContent = $data['output'][0]['content'][0]['text'];
 
                 $aiRequest = new AiRequests();

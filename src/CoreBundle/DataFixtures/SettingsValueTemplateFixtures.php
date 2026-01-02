@@ -262,13 +262,13 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                             'image' => [
                                 'url' => 'https://api.x.ai/v1/images/generations',
                                 'model' => 'grok-2-image',
-                                'size' => '1024x1024',
-                                'image_format' => 'base64',
+                                'response_format' => 'base64',
                             ],
                             'document' => [
                                 'url' => 'https://api.x.ai/v1/responses',
                                 'model' => 'grok-4-1-fast-reasoning',
                                 'temperature' => 0.7,
+                                'format' => 'pdf',
                             ],
                             'document_process' => [
                                 'upload_url' => 'https://api.x.ai/v1/files',

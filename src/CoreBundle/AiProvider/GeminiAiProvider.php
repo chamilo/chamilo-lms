@@ -40,12 +40,15 @@ class GeminiAiProvider implements AiProviderInterface
         if (!isset($config['gemini'])) {
             throw new RuntimeException('Gemini configuration is missing.');
         }
+        if (!isset($config['gemini']['text'])) {
+            throw new RuntimeException('Gemini configuration for text processing is missing.');
+        }
 
-        // Gemini expects endpoint like: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
-        $this->model = $config['gemini']['model'] ?? 'gemini-2.5-flash';
-        $this->apiUrl = $config['gemini']['url'] ?? "https://generativelanguage.googleapis.com/v1beta/models/{$this->model}:generateContent";
         $this->apiKey = $config['gemini']['api_key'] ?? '';
-        $this->temperature = $config['gemini']['temperature'] ?? 0.7;
+        // Gemini expects endpoint like: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
+        $this->model = $config['gemini']['text']['model'] ?? 'gemini-2.5-flash';
+        $this->apiUrl = $config['gemini']['text']['url'] ?? "https://generativelanguage.googleapis.com/v1beta/models/{$this->model}:generateContent";
+        $this->temperature = $config['gemini']['text']['temperature'] ?? 0.7;
 
         if (empty($this->apiKey)) {
             throw new RuntimeException('Gemini API key is missing.');

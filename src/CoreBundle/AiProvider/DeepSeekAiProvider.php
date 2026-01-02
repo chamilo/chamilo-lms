@@ -44,13 +44,16 @@ class DeepSeekAiProvider implements AiProviderInterface
         if (!isset($config['deepseek'])) {
             throw new RuntimeException('DeepSeek configuration is missing.');
         }
+        if (!isset($config['deepseek']['text'])) {
+            throw new RuntimeException('DeepSeek configuration for text processing is missing.');
+        }
 
-        $this->apiUrl = $config['deepseek']['url'] ?? 'https://api.deepseek.com/chat/completions';
         $this->apiKey = $config['deepseek']['api_key'] ?? '';
-        $this->model = $config['deepseek']['model'] ?? 'deepseek-chat';
-        $this->temperature = $config['deepseek']['temperature'] ?? 0.7;
         $this->organizationId = $config['deepseek']['organization_id'] ?? '';
         $this->monthlyTokenLimit = $config['deepseek']['monthly_token_limit'] ?? 1000;
+        $this->apiUrl = $config['deepseek']['text']['url'] ?? 'https://api.deepseek.com/chat/completions';
+        $this->model = $config['deepseek']['text']['model'] ?? 'deepseek-chat';
+        $this->temperature = $config['deepseek']['text']['temperature'] ?? 0.7;
 
         if (empty($this->apiKey)) {
             throw new RuntimeException('DeepSeek API key is missing.');

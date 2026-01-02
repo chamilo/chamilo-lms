@@ -40,11 +40,14 @@ class MistralAiProvider implements AiProviderInterface
         if (!isset($config['mistral'])) {
             throw new RuntimeException('Mistral configuration is missing.');
         }
+        if (!isset($config['mistral']['text'])) {
+            throw new RuntimeException('DeepSeek configuration for text processing is missing.');
+        }
 
-        $this->apiUrl = $config['mistral']['url'] ?? 'https://api.mistral.ai/v1/chat/completions';
         $this->apiKey = $config['mistral']['api_key'] ?? '';
-        $this->model = $config['mistral']['model'] ?? 'mistral-large-latest';
-        $this->temperature = $config['mistral']['temperature'] ?? 0.7;
+        $this->apiUrl = $config['mistral']['text']['url'] ?? 'https://api.mistral.ai/v1/chat/completions';
+        $this->model = $config['mistral']['text']['model'] ?? 'mistral-large-latest';
+        $this->temperature = $config['mistral']['text']['temperature'] ?? 0.7;
 
         if (empty($this->apiKey)) {
             throw new RuntimeException('Mistral API key is missing.');

@@ -40,11 +40,14 @@ class GrokAiProvider implements AiProviderInterface
         if (!isset($config['grok'])) {
             throw new RuntimeException('Grok configuration is missing.');
         }
+        if (!isset($config['grok']['text'])) {
+            throw new RuntimeException('Grok configuration for text processing is missing.');
+        }
 
-        $this->apiUrl = $config['grok']['url'] ?? 'https://api.x.ai/v1/chat/completions';
         $this->apiKey = $config['grok']['api_key'] ?? '';
-        $this->model = $config['grok']['model'] ?? 'grok-beta';
-        $this->temperature = $config['grok']['temperature'] ?? 0.7;
+        $this->apiUrl = $config['grok']['text']['url'] ?? 'https://api.x.ai/v1/chat/completions';
+        $this->model = $config['grok']['text']['model'] ?? 'grok-beta';
+        $this->temperature = $config['grok']['text']['temperature'] ?? 0.7;
 
         if (empty($this->apiKey)) {
             throw new RuntimeException('Grok API key is missing.');

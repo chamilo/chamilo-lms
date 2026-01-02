@@ -65,15 +65,12 @@ class GrokImageProvider implements AiImageProviderInterface
     {
         $userId = $this->getUserId();
         if (!$userId) {
-            throw new RuntimeException('User not authenticated.');
+            throw new \RuntimeException('User not authenticated.');
         }
 
         $payload = [
             'model' => $this->model,
-            'input' => [  // Changed from 'messages'
-                ['role' => 'system', 'content' => 'You are a helpful AI assistant that generates structured educational content.'],
-                ['role' => 'user', 'content' => $prompt],
-            ],
+            'prompt' => $prompt,  // Direct prompt string, no messages array
             ...array_merge($this->defaultOptions, $options),
         ];
 
@@ -87,19 +84,32 @@ class GrokImageProvider implements AiImageProviderInterface
             ]);
 
             $statusCode = $response->getStatusCode();
+            if ($statusCode !== 200) {
+                throw new \RuntimeException('API request failed with status: ' . $statusCode);
+            }
+
             $data = $response->toArray();
 
-            if (200 === $statusCode && isset($data[0]['b64_json'])) {  // Parsing and status check
-                $generatedContent = $data[0]['b64_json'];
+            // Check for error key first
+            if (isset($data['error'])) {
+                throw new \RuntimeException('API error: ' . $data['error']['message']);
+            }
 
-                // Keep a log of this request
+            // Proper access: assuming response_format 'b64_json'
+            if (isset($data['data'][0]['b64_json'])) {
+                $generatedContent = $data['data'][0]['b64_json'];
+
+                // Usage might not exist for images; default to 0
+                $usage = $data['usage'] ?? ['prompt_tokens' => 0, 'completion_tokens' => 0, 'total_tokens' => 0];
+
+                // Log request
                 $aiRequest = new AiRequests();
                 $aiRequest->setUserId($userId)
                     ->setToolName($toolName)
                     ->setRequestText($prompt)
-                    ->setPromptTokens($data['usage']['prompt_tokens'] ?? 0)
-                    ->setCompletionTokens($data['usage']['completion_tokens'] ?? 0)
-                    ->setTotalTokens($data['usage']['total_tokens'] ?? 0)
+                    ->setPromptTokens($usage['prompt_tokens'])
+                    ->setCompletionTokens($usage['completion_tokens'])
+                    ->setTotalTokens($usage['total_tokens'])
                     ->setAiProvider('grok')
                 ;
 
@@ -109,9 +119,8 @@ class GrokImageProvider implements AiImageProviderInterface
             }
 
             return null;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             error_log('[AI][Grok] Exception: '.$e->getMessage());
-
             return null;
         }
     }

@@ -87,7 +87,7 @@ class UserDenormalizer implements DenormalizerInterface, DenormalizerAwareInterf
 
     public static function getPrimaryValue(array $values, string $propertyName, string $subPropertyName = 'value'): mixed
     {
-        if (!isset($values[$propertyName]) || !is_array($values[$propertyName])) {
+        if (!isset($values[$propertyName]) || !\is_array($values[$propertyName])) {
             return null;
         }
 

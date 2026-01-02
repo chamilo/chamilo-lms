@@ -82,7 +82,7 @@ class UserNormalizer implements NormalizerInterface, NormalizerAwareInterface
                 [
                     'type' => 'work',
                     'formatted' => $address,
-                ]
+                ],
             ];
         }
 

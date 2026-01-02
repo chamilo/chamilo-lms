@@ -7,8 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Scim;
 
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Entity\UserAuthSource;
-use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Serializer\Denormalizer\Scim\UserDenormalizer;
 use Chamilo\CoreBundle\Serializer\Normalizer\Scim\UserNormalizer;

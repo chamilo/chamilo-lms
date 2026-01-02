@@ -30,9 +30,7 @@ final class Version20260102115400 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 
     private function getEnvFilepath(): string
     {

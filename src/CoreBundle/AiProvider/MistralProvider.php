@@ -13,7 +13,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class GrokAiProvider implements AiProviderInterface
+class MistralProvider implements AiProviderInterface
 {
     private string $apiUrl;
     private string $apiKey;
@@ -37,17 +37,20 @@ class GrokAiProvider implements AiProviderInterface
         $configJson = $settingsManager->getSetting('ai_helpers.ai_providers', true);
         $config = json_decode($configJson, true) ?? [];
 
-        if (!isset($config['grok'])) {
-            throw new RuntimeException('Grok configuration is missing.');
+        if (!isset($config['mistral'])) {
+            throw new RuntimeException('Mistral configuration is missing.');
+        }
+        if (!isset($config['mistral']['text'])) {
+            throw new RuntimeException('DeepSeek configuration for text processing is missing.');
         }
 
-        $this->apiUrl = $config['grok']['url'] ?? 'https://api.x.ai/v1/chat/completions';
-        $this->apiKey = $config['grok']['api_key'] ?? '';
-        $this->model = $config['grok']['model'] ?? 'grok-beta';
-        $this->temperature = $config['grok']['temperature'] ?? 0.7;
+        $this->apiKey = $config['mistral']['api_key'] ?? '';
+        $this->apiUrl = $config['mistral']['text']['url'] ?? 'https://api.mistral.ai/v1/chat/completions';
+        $this->model = $config['mistral']['text']['model'] ?? 'mistral-large-latest';
+        $this->temperature = $config['mistral']['text']['temperature'] ?? 0.7;
 
         if (empty($this->apiKey)) {
-            throw new RuntimeException('Grok API key is missing.');
+            throw new RuntimeException('Mistral API key is missing.');
         }
     }
 
@@ -71,7 +74,7 @@ class GrokAiProvider implements AiProviderInterface
             $topic
         );
 
-        return $this->requestGrokAI($prompt, 'quiz');
+        return $this->requestMistralAI($prompt, 'quiz');
     }
 
     public function generateLearnPath(string $topic, int $chaptersCount, string $language, int $wordsCount, bool $addTests, int $numQuestions): ?array
@@ -85,7 +88,7 @@ class GrokAiProvider implements AiProviderInterface
             $topic
         );
 
-        $lpStructure = $this->requestGrokAI($tableOfContentsPrompt, 'learnpath');
+        $lpStructure = $this->requestMistralAI($tableOfContentsPrompt, 'learnpath');
         if (!$lpStructure) {
             return ['success' => false, 'message' => 'Failed to generate course structure.'];
         }
@@ -108,7 +111,7 @@ class GrokAiProvider implements AiProviderInterface
                 $chapterTitle
             );
 
-            $chapterContent = $this->requestGrokAI($chapterPrompt, 'learnpath');
+            $chapterContent = $this->requestMistralAI($chapterPrompt, 'learnpath');
             if (!$chapterContent) {
                 continue;
             }
@@ -141,7 +144,7 @@ class GrokAiProvider implements AiProviderInterface
                     $chapter['title']
                 );
 
-                $quizContent = $this->requestGrokAI($quizPrompt, 'learnpath');
+                $quizContent = $this->requestMistralAI($quizPrompt, 'learnpath');
 
                 if ($quizContent) {
                     $validQuestions = $this->filterValidAikenQuestions($quizContent);
@@ -188,7 +191,7 @@ class GrokAiProvider implements AiProviderInterface
         return $validQuestions;
     }
 
-    private function requestGrokAI(string $prompt, string $toolName): ?string
+    private function requestMistralAI(string $prompt, string $toolName): ?string
     {
         $userId = $this->getUserId();
         if (!$userId) {
@@ -197,13 +200,12 @@ class GrokAiProvider implements AiProviderInterface
 
         $payload = [
             'model' => $this->model,
-            'input' => [  // Changed from 'messages'
+            'messages' => [
                 ['role' => 'system', 'content' => 'You are a helpful AI assistant that generates structured educational content.'],
                 ['role' => 'user', 'content' => $prompt],
             ],
             'temperature' => $this->temperature,
             'max_tokens' => 1000,
-            // Optional: Add if needed, e.g., 'store' => true, 'parallel_tool_calls' => false
         ];
 
         try {
@@ -218,8 +220,8 @@ class GrokAiProvider implements AiProviderInterface
             $statusCode = $response->getStatusCode();
             $data = $response->toArray();
 
-            if (200 === $statusCode && isset($data['output'][0]['content'][0]['text']) && 'completed' === $data['status']) {  // Updated parsing and status check
-                $generatedContent = $data['output'][0]['content'][0]['text'];
+            if (200 === $statusCode && isset($data['choices'][0]['message']['content'])) {
+                $generatedContent = $data['choices'][0]['message']['content'];
 
                 $aiRequest = new AiRequests();
                 $aiRequest->setUserId($userId)
@@ -228,7 +230,7 @@ class GrokAiProvider implements AiProviderInterface
                     ->setPromptTokens($data['usage']['prompt_tokens'] ?? 0)
                     ->setCompletionTokens($data['usage']['completion_tokens'] ?? 0)
                     ->setTotalTokens($data['usage']['total_tokens'] ?? 0)
-                    ->setAiProvider('grok')
+                    ->setAiProvider('mistral')
                 ;
 
                 $this->aiRequestsRepository->save($aiRequest);
@@ -238,7 +240,7 @@ class GrokAiProvider implements AiProviderInterface
 
             return null;
         } catch (Exception $e) {
-            error_log('[AI][Grok] Exception: '.$e->getMessage());
+            error_log('[AI][Mistral] Exception: '.$e->getMessage());
 
             return null;
         }
@@ -246,7 +248,7 @@ class GrokAiProvider implements AiProviderInterface
 
     public function gradeOpenAnswer(string $prompt, string $toolName): ?string
     {
-        return $this->requestGrokAI($prompt, $toolName);
+        return $this->requestMistralAI($prompt, $toolName);
     }
 
     private function getUserId(): ?int

@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
+use Chamilo\CourseBundle\Entity\CGroup;
 
 /**
  * @author Frederik Vermeire <frederik.vermeire@pandora.be>, UGent Internship
@@ -150,6 +151,12 @@ switch ($action) {
 
         break;
     case 'list':
+
+        $gid = (int) ($_GET['gid'] ?? 0);
+        $group = null;
+        if ($gid > 0) {
+            $group = Database::getManager()->getRepository(CGroup::class)->find($gid); // PK = iid
+        }
         $searchForm = new FormValidator(
             'search_simple',
             'post',

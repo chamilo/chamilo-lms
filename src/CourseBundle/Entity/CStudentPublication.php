@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Controller\Api\CreateStudentPublicationFileAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\ResourceRestrictToGroupContextInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Filter\CidFilter;
@@ -86,7 +87,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(ParentNullFilter::class, properties: ['publicationParent.iid' => null])]
 #[ApiFilter(filterClass: CidFilter::class)]
 #[ApiFilter(filterClass: SidFilter::class)]
-class CStudentPublication extends AbstractResource implements ResourceInterface, Stringable
+class CStudentPublication extends AbstractResource implements ResourceInterface, ResourceRestrictToGroupContextInterface, Stringable
 {
     #[Groups(['c_student_publication:write', 'student_publication:read'])]
     public bool $addToGradebook = false;

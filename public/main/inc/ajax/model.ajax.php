@@ -18,6 +18,7 @@ $page = isset($_REQUEST['page']) ? (int) $_REQUEST['page'] : 1;
 $limit = isset($_REQUEST['rows']) ? (int) $_REQUEST['rows'] : 20;
 $cid = isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : null;
 $sid = isset($_REQUEST['sid']) ? (int) $_REQUEST['sid'] : null;
+$gid = isset($_REQUEST['gid']) ? (int) $_REQUEST['gid'] : null;
 
 // Makes max row persistence after refreshing the grid
 $savedRows = Session::read('max_rows_'.$action);
@@ -553,7 +554,10 @@ switch ($action) {
         $count = $skill->getUserListSkillRankingCount();
         break;
     case 'get_course_announcements':
-        $count = AnnouncementManager::getNumberAnnouncements($cid, $sid);
+        $courseId = !empty($cid) ? $cid : api_get_course_int_id();
+        $sessionId = !empty($sid) ? $sid : api_get_session_id();
+        $groupId = !empty($gid) ? $gid : api_get_group_id();
+        $count = AnnouncementManager::getNumberAnnouncements($courseId, $sessionId, $groupId);
         break;
     case 'get_work_teacher':
         $countResult = getWorkListTeacher(0, $limit, null, null, $whereCondition, true);
@@ -1369,16 +1373,14 @@ switch ($action) {
             'actions',
         ];
 
+        $courseId = !empty($cid) ? $cid : api_get_course_int_id();
+        $sessionId = !empty($sid) ? $sid : api_get_session_id();
+        $groupId = !empty($gid) ? $gid : api_get_group_id();
+
         $titleToSearch = $_REQUEST['title_to_search'] ?? '';
         $userIdToSearch = $_REQUEST['user_id_to_search'] ?? 0;
 
-        $result = AnnouncementManager::getAnnouncements(
-            null,
-            null,
-            $cid,
-            $sid
-        );
-
+        $result = AnnouncementManager::getAnnouncements(null, null, $courseId, $sessionId, $groupId);
         break;
     case 'get_work_teacher':
         $columns = [

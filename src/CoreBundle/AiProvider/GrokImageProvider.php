@@ -15,7 +15,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class GrokImageProvider implements AiImageProviderInterface
 {
-    private string $url;
+    private string $apiUrl;
     private string $apiKey;
     private string $model;
     private array $defaultOptions;
@@ -45,20 +45,23 @@ class GrokImageProvider implements AiImageProviderInterface
         }
 
         $this->apiKey = $config['grok']['api_key'] ?? '';
-        $this->apiUrl = $config['grok']['image']['url'] ?? 'https://api.x.ai/v1/chat/completions';
-        $this->model = $config['grok']['image']['model'] ?? 'grok-beta';
-        $this->temperature = $config['grok']['image']['temperature'] ?? 0.7;
+        $this->apiUrl = $config['grok']['image']['url'] ?? 'https://api.x.ai/v1/images/generations';
+        $this->model = $config['grok']['image']['model'] ?? 'grok-2-image';
+        $this->defaultOptions = [
+            'response_format' => $config['grok']['image']['response_format'] ?? 'b64_json',
+            'n' => 1, // Number of images is fixed until we add an interface for choosing
+        ];
 
         if (empty($this->apiKey)) {
             throw new RuntimeException('Grok API key is missing.');
         }
     }
 
-    public function generateImage(string $prompt, ?array $options = []): ?string
+    public function generateImage(string $prompt, string $toolName, ?array $options = []): ?string
     {
-        return $this->requestGrokAI($prompt, $options);
+        return $this->requestGrokAI($prompt, $toolName, $options);
     }
-    private function requestGrokAI(string $prompt, string $toolName): ?string
+    private function requestGrokAI(string $prompt, string $toolName, array $options = []): ?string
     {
         $userId = $this->getUserId();
         if (!$userId) {
@@ -71,9 +74,7 @@ class GrokImageProvider implements AiImageProviderInterface
                 ['role' => 'system', 'content' => 'You are a helpful AI assistant that generates structured educational content.'],
                 ['role' => 'user', 'content' => $prompt],
             ],
-            'temperature' => $this->temperature,
-            'max_tokens' => 1000,
-            // Optional: Add if needed, e.g., 'store' => true, 'parallel_tool_calls' => false
+            ...array_merge($this->defaultOptions, $options),
         ];
 
         try {
@@ -88,9 +89,10 @@ class GrokImageProvider implements AiImageProviderInterface
             $statusCode = $response->getStatusCode();
             $data = $response->toArray();
 
-            if (200 === $statusCode && isset($data['output'][0]['content'][0]['text']) && $data['status'] === 'completed') {  // Updated parsing and status check
-                $generatedContent = $data['output'][0]['content'][0]['text'];
+            if (200 === $statusCode && isset($data[0]['b64_json'])) {  // Parsing and status check
+                $generatedContent = $data[0]['b64_json'];
 
+                // Keep a log of this request
                 $aiRequest = new AiRequests();
                 $aiRequest->setUserId($userId)
                     ->setToolName($toolName)

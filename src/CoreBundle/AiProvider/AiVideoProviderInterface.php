@@ -6,16 +6,17 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\AiProvider;
 
-interface AiImageProviderInterface
+interface AiVideoProviderInterface
 {
     /**
-     * Generate an image
+     * Generate a video
      * @param string $prompt   The complete prompt, with language, question, context and answer
      * @param string $toolName A tag, e.g. 'open_answer_grade'.
      * @param ?array $options  An array of options (format etc.)
      *
-     * @return ?string The raw text of the image in base64, or a URL
+     * @return string The raw text of the video in base64, or a URL
      */
-    public function generateImage(string $prompt, string $toolName, ?array $options = []): ?string;
+    public function generateVideo(string $prompt, string $toolName,  ?array $options = []): string;
+
 
 }

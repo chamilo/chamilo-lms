@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\AiProvider;
 
-interface AiImageProviderInterface
+interface AiDocumentProviderInterface
 {
     /**
      * Generate an image
@@ -14,8 +14,8 @@ interface AiImageProviderInterface
      * @param string $toolName A tag, e.g. 'open_answer_grade'.
      * @param ?array $options  An array of options (format etc.)
      *
-     * @return ?string The raw text of the image in base64, or a URL
+     * @return string The raw text of the image in base64, or a URL
      */
-    public function generateImage(string $prompt, string $toolName, ?array $options = []): ?string;
+    public function generateDocument(string $prompt, string $toolName,  ?array $options = []): string;
 
 }

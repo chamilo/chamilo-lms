@@ -960,7 +960,12 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     public function getIsActive(): bool
     {
-        return 1 === $this->active;
+        return self::ACTIVE === $this->active;
+    }
+
+    public function isSoftDeleted(): bool
+    {
+        return self::SOFT_DELETED === $this->active;
     }
 
     public function isEnabled(): bool

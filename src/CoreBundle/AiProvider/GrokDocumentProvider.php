@@ -106,14 +106,14 @@ class GrokDocumentProvider implements AiDocumentProviderInterface
 
             $statusCode = $response->getStatusCode();
             if (200 !== $statusCode) {
-                throw new RuntimeException('API request failed with status: ' . $statusCode);
+                throw new RuntimeException('API request failed with status: '.$statusCode);
             }
 
             $data = $response->toArray();
 
             // Check for error key first
             if (isset($data['error'])) {
-                throw new RuntimeException('API error: ' . $data['error']['message']);
+                throw new RuntimeException('API error: '.$data['error']['message']);
             }
 
             // Extract generated content from response structure

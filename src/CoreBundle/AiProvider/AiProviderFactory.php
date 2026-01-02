@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\AiProvider;
 
 use Chamilo\CoreBundle\Repository\AiRequestsRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Exception;
 use InvalidArgumentException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -67,7 +68,7 @@ class AiProviderFactory
                         $className = $providerPrefix.$serviceName.'Provider';
                         $filePath = __DIR__.'/'.$className.'.php';
                         // For some reason, dynamically loading the class without the fully qualified class name doesn't work
-                        $fullyQualifiedClassName = 'Chamilo\\CoreBundle\\AiProvider\\'.$className;
+                        $fullyQualifiedClassName = 'Chamilo\CoreBundle\AiProvider\\'.$className;
                         if (class_exists($fullyQualifiedClassName)) {
                             try {
                                 $providerObject = new $fullyQualifiedClassName(
@@ -78,7 +79,7 @@ class AiProviderFactory
                                 );
                                 $this->providers[$providerName][$type] = $providerObject;
                                 $this->providersByType[$type][$providerName] = $providerObject;
-                            } catch (\Exception $e) {
+                            } catch (Exception $e) {
                                 error_log('Could not create instance of class '.$className.': '.$e->getMessage());
                             }
                         } else {

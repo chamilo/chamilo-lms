@@ -5816,14 +5816,7 @@ SQL;
         return $message;
     }
 
-    /**
-     * @param int $userId
-     *
-     * @throws Exception
-     *
-     * @return string
-     */
-    public static function deleteUserWithVerification($userId, bool $destroy = false)
+    public static function deleteUserWithVerification(int $userId, bool $destroy = false): string
     {
         $allowDelete = ('true' === api_get_setting('session.allow_delete_user_for_session_admin'));
         $message = Display::return_message(get_lang('You cannot delete this user'), 'error');

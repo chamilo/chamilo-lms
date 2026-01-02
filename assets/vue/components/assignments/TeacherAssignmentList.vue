@@ -98,7 +98,7 @@
             only-icon
             size="normal"
             type="success"
-            :title="t('Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext')"
+            :title="`${t('Upload corrections package')} — ${t('Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext')}`"
             @click="() => uploadCorrections(slotProps.data)"
           />
           <BaseButton
@@ -108,6 +108,7 @@
             only-icon
             size="normal"
             type="primary"
+            :title="t('Download assignments package')"
             @click="() => downloadAssignments(slotProps.data)"
           />
           <BaseButton

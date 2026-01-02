@@ -200,15 +200,15 @@ const notification = useNotification()
 const assignmentId = parseInt(route.params.id, 10)
 const fromLearnpath = route.query.origin === "learnpath"
 
-const isTeacherUser = computed(
+const isTeacherUI = computed(
   () =>
-    securityStore.isCourseAdmin || securityStore.isTeacher || securityStore.isAdmin || securityStore.isCurrentTeacher,
+    (securityStore.isCurrentTeacher || securityStore.isCourseAdmin || securityStore.isAdmin) &&
+    !platformConfigStore.isStudentViewActive,
 )
-const isTeacherUI = computed(() => isTeacherUser.value && !platformConfigStore.isStudentViewActive)
-const forceStudentView = computed(() => !isTeacherUser.value || platformConfigStore.isStudentViewActive)
 
-function onStudentViewChange() {
-}
+const forceStudentView = computed(() => !isTeacherUI.value || platformConfigStore.isStudentViewActive)
+
+function onStudentViewChange() {}
 
 const assignment = ref(null)
 const addedDocuments = ref([])

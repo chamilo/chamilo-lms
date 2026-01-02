@@ -16,6 +16,6 @@ interface AiDocumentProviderInterface
      *
      * @return string The raw text of the image in base64, or a URL
      */
-    public function generateDocument(string $prompt, string $toolName,  ?array $options = []): string;
+    public function generateDocument(string $prompt, string $toolName,  ?array $options = []): ?string;
 
 }

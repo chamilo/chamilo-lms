@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+/* For licensing terms, see /license.txt */
+
 namespace Chamilo\CoreBundle\AiProvider;
 
 use Chamilo\CoreBundle\Entity\AiRequests;
@@ -13,12 +15,14 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class MistralAiProvider implements AiProviderInterface
+class DeepSeekProvider implements AiProviderInterface
 {
     private string $apiUrl;
     private string $apiKey;
     private string $model;
     private float $temperature;
+    private string $organizationId;
+    private int $monthlyTokenLimit;
     private HttpClientInterface $httpClient;
     private AiRequestsRepository $aiRequestsRepository;
     private Security $security;
@@ -37,20 +41,22 @@ class MistralAiProvider implements AiProviderInterface
         $configJson = $settingsManager->getSetting('ai_helpers.ai_providers', true);
         $config = json_decode($configJson, true) ?? [];
 
-        if (!isset($config['mistral'])) {
-            throw new RuntimeException('Mistral configuration is missing.');
+        if (!isset($config['deepseek'])) {
+            throw new RuntimeException('DeepSeek configuration is missing.');
         }
-        if (!isset($config['mistral']['text'])) {
+        if (!isset($config['deepseek']['text'])) {
             throw new RuntimeException('DeepSeek configuration for text processing is missing.');
         }
 
-        $this->apiKey = $config['mistral']['api_key'] ?? '';
-        $this->apiUrl = $config['mistral']['text']['url'] ?? 'https://api.mistral.ai/v1/chat/completions';
-        $this->model = $config['mistral']['text']['model'] ?? 'mistral-large-latest';
-        $this->temperature = $config['mistral']['text']['temperature'] ?? 0.7;
+        $this->apiKey = $config['deepseek']['api_key'] ?? '';
+        $this->organizationId = $config['deepseek']['organization_id'] ?? '';
+        $this->monthlyTokenLimit = $config['deepseek']['monthly_token_limit'] ?? 1000;
+        $this->apiUrl = $config['deepseek']['text']['url'] ?? 'https://api.deepseek.com/chat/completions';
+        $this->model = $config['deepseek']['text']['model'] ?? 'deepseek-chat';
+        $this->temperature = $config['deepseek']['text']['temperature'] ?? 0.7;
 
         if (empty($this->apiKey)) {
-            throw new RuntimeException('Mistral API key is missing.');
+            throw new RuntimeException('DeepSeek API key is missing.');
         }
     }
 
@@ -74,7 +80,7 @@ class MistralAiProvider implements AiProviderInterface
             $topic
         );
 
-        return $this->requestMistralAI($prompt, 'quiz');
+        return $this->requestDeepSeekAI($prompt, 'quiz');
     }
 
     public function generateLearnPath(string $topic, int $chaptersCount, string $language, int $wordsCount, bool $addTests, int $numQuestions): ?array
@@ -88,7 +94,7 @@ class MistralAiProvider implements AiProviderInterface
             $topic
         );
 
-        $lpStructure = $this->requestMistralAI($tableOfContentsPrompt, 'learnpath');
+        $lpStructure = $this->requestDeepSeekAI($tableOfContentsPrompt, 'learnpath');
         if (!$lpStructure) {
             return ['success' => false, 'message' => 'Failed to generate course structure.'];
         }
@@ -111,7 +117,7 @@ class MistralAiProvider implements AiProviderInterface
                 $chapterTitle
             );
 
-            $chapterContent = $this->requestMistralAI($chapterPrompt, 'learnpath');
+            $chapterContent = $this->requestDeepSeekAI($chapterPrompt, 'learnpath');
             if (!$chapterContent) {
                 continue;
             }
@@ -128,23 +134,23 @@ class MistralAiProvider implements AiProviderInterface
             foreach ($lpItems as &$chapter) {
                 $quizPrompt = \sprintf(
                     'Generate %d multiple-choice questions in Aiken format in %s about "%s".
-            Ensure each question follows this format:
+        Ensure each question follows this format:
 
-            1. The question text.
-            A. Option A
-            B. Option B
-            C. Option C
-            D. Option D
-            ANSWER: (Correct answer letter)
+        1. The question text.
+        A. Option A
+        B. Option B
+        C. Option C
+        D. Option D
+        ANSWER: (Correct answer letter)
 
-            Each question must have exactly 4 options and one answer line.
-            Return only valid questions without extra text.',
+        Each question must have exactly 4 options and one answer line.
+        Return only valid questions without extra text.',
                     $numQuestions,
                     $language,
                     $chapter['title']
                 );
 
-                $quizContent = $this->requestMistralAI($quizPrompt, 'learnpath');
+                $quizContent = $this->requestDeepSeekAI($quizPrompt, 'learnpath');
 
                 if ($quizContent) {
                     $validQuestions = $this->filterValidAikenQuestions($quizContent);
@@ -191,7 +197,7 @@ class MistralAiProvider implements AiProviderInterface
         return $validQuestions;
     }
 
-    private function requestMistralAI(string $prompt, string $toolName): ?string
+    private function requestDeepSeekAI(string $prompt, string $toolName): ?string
     {
         $userId = $this->getUserId();
         if (!$userId) {
@@ -205,7 +211,7 @@ class MistralAiProvider implements AiProviderInterface
                 ['role' => 'user', 'content' => $prompt],
             ],
             'temperature' => $this->temperature,
-            'max_tokens' => 1000,
+            'max_tokens' => 300,
         ];
 
         try {
@@ -230,7 +236,7 @@ class MistralAiProvider implements AiProviderInterface
                     ->setPromptTokens($data['usage']['prompt_tokens'] ?? 0)
                     ->setCompletionTokens($data['usage']['completion_tokens'] ?? 0)
                     ->setTotalTokens($data['usage']['total_tokens'] ?? 0)
-                    ->setAiProvider('mistral')
+                    ->setAiProvider('deepseek')
                 ;
 
                 $this->aiRequestsRepository->save($aiRequest);
@@ -240,7 +246,7 @@ class MistralAiProvider implements AiProviderInterface
 
             return null;
         } catch (Exception $e) {
-            error_log('[AI][Mistral] Exception: '.$e->getMessage());
+            error_log('[AI][DeepSeek] Exception: '.$e->getMessage());
 
             return null;
         }
@@ -248,7 +254,7 @@ class MistralAiProvider implements AiProviderInterface
 
     public function gradeOpenAnswer(string $prompt, string $toolName): ?string
     {
-        return $this->requestMistralAI($prompt, $toolName);
+        return $this->requestDeepSeekAI($prompt, $toolName);
     }
 
     private function getUserId(): ?int

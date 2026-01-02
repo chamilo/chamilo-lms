@@ -13,7 +13,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class GeminiAiProvider implements AiProviderInterface
+class MistralProvider implements AiProviderInterface
 {
     private string $apiUrl;
     private string $apiKey;
@@ -37,21 +37,20 @@ class GeminiAiProvider implements AiProviderInterface
         $configJson = $settingsManager->getSetting('ai_helpers.ai_providers', true);
         $config = json_decode($configJson, true) ?? [];
 
-        if (!isset($config['gemini'])) {
-            throw new RuntimeException('Gemini configuration is missing.');
+        if (!isset($config['mistral'])) {
+            throw new RuntimeException('Mistral configuration is missing.');
         }
-        if (!isset($config['gemini']['text'])) {
-            throw new RuntimeException('Gemini configuration for text processing is missing.');
+        if (!isset($config['mistral']['text'])) {
+            throw new RuntimeException('DeepSeek configuration for text processing is missing.');
         }
 
-        $this->apiKey = $config['gemini']['api_key'] ?? '';
-        // Gemini expects endpoint like: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
-        $this->model = $config['gemini']['text']['model'] ?? 'gemini-2.5-flash';
-        $this->apiUrl = $config['gemini']['text']['url'] ?? "https://generativelanguage.googleapis.com/v1beta/models/{$this->model}:generateContent";
-        $this->temperature = $config['gemini']['text']['temperature'] ?? 0.7;
+        $this->apiKey = $config['mistral']['api_key'] ?? '';
+        $this->apiUrl = $config['mistral']['text']['url'] ?? 'https://api.mistral.ai/v1/chat/completions';
+        $this->model = $config['mistral']['text']['model'] ?? 'mistral-large-latest';
+        $this->temperature = $config['mistral']['text']['temperature'] ?? 0.7;
 
         if (empty($this->apiKey)) {
-            throw new RuntimeException('Gemini API key is missing.');
+            throw new RuntimeException('Mistral API key is missing.');
         }
     }
 
@@ -75,17 +74,11 @@ class GeminiAiProvider implements AiProviderInterface
             $topic
         );
 
-        return $this->requestGemini($prompt, 'quiz');
+        return $this->requestMistralAI($prompt, 'quiz');
     }
 
-    public function generateLearnPath(
-        string $topic,
-        int $chaptersCount,
-        string $language,
-        int $wordsCount,
-        bool $addTests,
-        int $numQuestions
-    ): ?array {
+    public function generateLearnPath(string $topic, int $chaptersCount, string $language, int $wordsCount, bool $addTests, int $numQuestions): ?array
+    {
         // Step 1: Generate the Table of Contents
         $tableOfContentsPrompt = \sprintf(
             'Generate a structured table of contents for a course in "%s" with %d chapters on "%s".
@@ -95,7 +88,7 @@ class GeminiAiProvider implements AiProviderInterface
             $topic
         );
 
-        $lpStructure = $this->requestGemini($tableOfContentsPrompt, 'learnpath');
+        $lpStructure = $this->requestMistralAI($tableOfContentsPrompt, 'learnpath');
         if (!$lpStructure) {
             return ['success' => false, 'message' => 'Failed to generate course structure.'];
         }
@@ -118,7 +111,7 @@ class GeminiAiProvider implements AiProviderInterface
                 $chapterTitle
             );
 
-            $chapterContent = $this->requestGemini($chapterPrompt, 'learnpath');
+            $chapterContent = $this->requestMistralAI($chapterPrompt, 'learnpath');
             if (!$chapterContent) {
                 continue;
             }
@@ -151,7 +144,7 @@ class GeminiAiProvider implements AiProviderInterface
                     $chapter['title']
                 );
 
-                $quizContent = $this->requestGemini($quizPrompt, 'learnpath');
+                $quizContent = $this->requestMistralAI($quizPrompt, 'learnpath');
 
                 if ($quizContent) {
                     $validQuestions = $this->filterValidAikenQuestions($quizContent);
@@ -187,7 +180,7 @@ class GeminiAiProvider implements AiProviderInterface
             }
 
             $options = \array_slice($lines, 1, 4);
-            $validOptions = array_filter($options, fn($line) => preg_match('/^[A-D]\. .+/', $line));
+            $validOptions = array_filter($options, fn ($line) => preg_match('/^[A-D]\. .+/', $line));
 
             $answerLine = end($lines);
             if (4 === \count($validOptions) && preg_match('/^ANSWER: [A-D]$/', $answerLine)) {
@@ -198,32 +191,27 @@ class GeminiAiProvider implements AiProviderInterface
         return $validQuestions;
     }
 
-    private function requestGemini(string $prompt, string $toolName): ?string
+    private function requestMistralAI(string $prompt, string $toolName): ?string
     {
         $userId = $this->getUserId();
         if (!$userId) {
             throw new RuntimeException('User not authenticated.');
         }
 
-        // Gemini expects a "contents" array (of turns), with inner "parts" [{"text": "..."}]
         $payload = [
-            'contents' => [
-                [
-                    'parts' => [
-                        ['text' => $prompt]
-                    ]
-                ]
+            'model' => $this->model,
+            'messages' => [
+                ['role' => 'system', 'content' => 'You are a helpful AI assistant that generates structured educational content.'],
+                ['role' => 'user', 'content' => $prompt],
             ],
-            'generationConfig' => [
-                'temperature' => $this->temperature,
-                'maxOutputTokens' => 1000,
-            ],
+            'temperature' => $this->temperature,
+            'max_tokens' => 1000,
         ];
 
         try {
             $response = $this->httpClient->request('POST', $this->apiUrl, [
                 'headers' => [
-                    'x-goog-api-key' => $this->apiKey,
+                    'Authorization' => 'Bearer '.$this->apiKey,
                     'Content-Type' => 'application/json',
                 ],
                 'json' => $payload,
@@ -232,22 +220,18 @@ class GeminiAiProvider implements AiProviderInterface
             $statusCode = $response->getStatusCode();
             $data = $response->toArray();
 
-            // Gemini returns "candidates" (array), first candidate, first part of content
-            if (
-                200 === $statusCode
-                && isset($data['candidates'][0]['content']['parts'][0]['text'])
-            ) {
-                $generatedContent = $data['candidates'][0]['content']['parts'][0]['text'];
+            if (200 === $statusCode && isset($data['choices'][0]['message']['content'])) {
+                $generatedContent = $data['choices'][0]['message']['content'];
 
                 $aiRequest = new AiRequests();
                 $aiRequest->setUserId($userId)
                     ->setToolName($toolName)
                     ->setRequestText($prompt)
-                    // Gemini does not currently return token counts, so we set to 0
                     ->setPromptTokens($data['usage']['prompt_tokens'] ?? 0)
                     ->setCompletionTokens($data['usage']['completion_tokens'] ?? 0)
                     ->setTotalTokens($data['usage']['total_tokens'] ?? 0)
-                    ->setAiProvider('gemini');
+                    ->setAiProvider('mistral')
+                ;
 
                 $this->aiRequestsRepository->save($aiRequest);
 
@@ -256,14 +240,15 @@ class GeminiAiProvider implements AiProviderInterface
 
             return null;
         } catch (Exception $e) {
-            error_log('[AI][Gemini] Exception: '.$e->getMessage());
+            error_log('[AI][Mistral] Exception: '.$e->getMessage());
+
             return null;
         }
     }
 
     public function gradeOpenAnswer(string $prompt, string $toolName): ?string
     {
-        return $this->requestGemini($prompt, $toolName);
+        return $this->requestMistralAI($prompt, $toolName);
     }
 
     private function getUserId(): ?int

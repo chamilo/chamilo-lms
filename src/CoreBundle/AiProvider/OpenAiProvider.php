@@ -40,11 +40,14 @@ class OpenAiProvider implements AiProviderInterface
         if (!isset($config['openai'])) {
             throw new RuntimeException('OpenAI configuration is missing.');
         }
+        if (!isset($config['openai']['text'])) {
+            throw new RuntimeException('Gemini configuration for text processing is missing.');
+        }
 
-        $this->apiUrl = $config['openai']['url'] ?? 'https://api.openai.com/v1/chat/completions';
         $this->apiKey = $config['openai']['api_key'] ?? '';
-        $this->model = $config['openai']['model'] ?? 'gpt-3.5-turbo';
-        $this->temperature = $config['openai']['temperature'] ?? 0.7;
+        $this->apiUrl = $config['openai']['text']['url'] ?? 'https://api.openai.com/v1/chat/completions';
+        $this->model = $config['openai']['text']['model'] ?? 'gpt-3.5-turbo';
+        $this->temperature = $config['openai']['text']['temperature'] ?? 0.7;
 
         if (empty($this->apiKey)) {
             throw new RuntimeException('OpenAI API key is missing.');

@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+/* For licensing terms, see /license.txt */
+
 namespace Chamilo\CoreBundle\AiProvider;
 
 use Chamilo\CoreBundle\Entity\AiRequests;
@@ -13,12 +15,14 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class GrokAiProvider implements AiProviderInterface
+class DeepSeekProvider implements AiProviderInterface
 {
     private string $apiUrl;
     private string $apiKey;
     private string $model;
     private float $temperature;
+    private string $organizationId;
+    private int $monthlyTokenLimit;
     private HttpClientInterface $httpClient;
     private AiRequestsRepository $aiRequestsRepository;
     private Security $security;
@@ -37,17 +41,22 @@ class GrokAiProvider implements AiProviderInterface
         $configJson = $settingsManager->getSetting('ai_helpers.ai_providers', true);
         $config = json_decode($configJson, true) ?? [];
 
-        if (!isset($config['grok'])) {
-            throw new RuntimeException('Grok configuration is missing.');
+        if (!isset($config['deepseek'])) {
+            throw new RuntimeException('DeepSeek configuration is missing.');
+        }
+        if (!isset($config['deepseek']['text'])) {
+            throw new RuntimeException('DeepSeek configuration for text processing is missing.');
         }
 
-        $this->apiUrl = $config['grok']['url'] ?? 'https://api.x.ai/v1/chat/completions';
-        $this->apiKey = $config['grok']['api_key'] ?? '';
-        $this->model = $config['grok']['model'] ?? 'grok-beta';
-        $this->temperature = $config['grok']['temperature'] ?? 0.7;
+        $this->apiKey = $config['deepseek']['api_key'] ?? '';
+        $this->organizationId = $config['deepseek']['organization_id'] ?? '';
+        $this->monthlyTokenLimit = $config['deepseek']['monthly_token_limit'] ?? 1000;
+        $this->apiUrl = $config['deepseek']['text']['url'] ?? 'https://api.deepseek.com/chat/completions';
+        $this->model = $config['deepseek']['text']['model'] ?? 'deepseek-chat';
+        $this->temperature = $config['deepseek']['text']['temperature'] ?? 0.7;
 
         if (empty($this->apiKey)) {
-            throw new RuntimeException('Grok API key is missing.');
+            throw new RuntimeException('DeepSeek API key is missing.');
         }
     }
 
@@ -71,7 +80,7 @@ class GrokAiProvider implements AiProviderInterface
             $topic
         );
 
-        return $this->requestGrokAI($prompt, 'quiz');
+        return $this->requestDeepSeekAI($prompt, 'quiz');
     }
 
     public function generateLearnPath(string $topic, int $chaptersCount, string $language, int $wordsCount, bool $addTests, int $numQuestions): ?array
@@ -85,7 +94,7 @@ class GrokAiProvider implements AiProviderInterface
             $topic
         );
 
-        $lpStructure = $this->requestGrokAI($tableOfContentsPrompt, 'learnpath');
+        $lpStructure = $this->requestDeepSeekAI($tableOfContentsPrompt, 'learnpath');
         if (!$lpStructure) {
             return ['success' => false, 'message' => 'Failed to generate course structure.'];
         }
@@ -108,7 +117,7 @@ class GrokAiProvider implements AiProviderInterface
                 $chapterTitle
             );
 
-            $chapterContent = $this->requestGrokAI($chapterPrompt, 'learnpath');
+            $chapterContent = $this->requestDeepSeekAI($chapterPrompt, 'learnpath');
             if (!$chapterContent) {
                 continue;
             }
@@ -125,23 +134,23 @@ class GrokAiProvider implements AiProviderInterface
             foreach ($lpItems as &$chapter) {
                 $quizPrompt = \sprintf(
                     'Generate %d multiple-choice questions in Aiken format in %s about "%s".
-            Ensure each question follows this format:
+        Ensure each question follows this format:
 
-            1. The question text.
-            A. Option A
-            B. Option B
-            C. Option C
-            D. Option D
-            ANSWER: (Correct answer letter)
+        1. The question text.
+        A. Option A
+        B. Option B
+        C. Option C
+        D. Option D
+        ANSWER: (Correct answer letter)
 
-            Each question must have exactly 4 options and one answer line.
-            Return only valid questions without extra text.',
+        Each question must have exactly 4 options and one answer line.
+        Return only valid questions without extra text.',
                     $numQuestions,
                     $language,
                     $chapter['title']
                 );
 
-                $quizContent = $this->requestGrokAI($quizPrompt, 'learnpath');
+                $quizContent = $this->requestDeepSeekAI($quizPrompt, 'learnpath');
 
                 if ($quizContent) {
                     $validQuestions = $this->filterValidAikenQuestions($quizContent);
@@ -188,7 +197,7 @@ class GrokAiProvider implements AiProviderInterface
         return $validQuestions;
     }
 
-    private function requestGrokAI(string $prompt, string $toolName): ?string
+    private function requestDeepSeekAI(string $prompt, string $toolName): ?string
     {
         $userId = $this->getUserId();
         if (!$userId) {
@@ -197,13 +206,12 @@ class GrokAiProvider implements AiProviderInterface
 
         $payload = [
             'model' => $this->model,
-            'input' => [  // Changed from 'messages'
+            'messages' => [
                 ['role' => 'system', 'content' => 'You are a helpful AI assistant that generates structured educational content.'],
                 ['role' => 'user', 'content' => $prompt],
             ],
             'temperature' => $this->temperature,
-            'max_tokens' => 1000,
-            // Optional: Add if needed, e.g., 'store' => true, 'parallel_tool_calls' => false
+            'max_tokens' => 300,
         ];
 
         try {
@@ -218,8 +226,8 @@ class GrokAiProvider implements AiProviderInterface
             $statusCode = $response->getStatusCode();
             $data = $response->toArray();
 
-            if (200 === $statusCode && isset($data['output'][0]['content'][0]['text']) && $data['status'] === 'completed') {  // Updated parsing and status check
-                $generatedContent = $data['output'][0]['content'][0]['text'];
+            if (200 === $statusCode && isset($data['choices'][0]['message']['content'])) {
+                $generatedContent = $data['choices'][0]['message']['content'];
 
                 $aiRequest = new AiRequests();
                 $aiRequest->setUserId($userId)
@@ -228,7 +236,7 @@ class GrokAiProvider implements AiProviderInterface
                     ->setPromptTokens($data['usage']['prompt_tokens'] ?? 0)
                     ->setCompletionTokens($data['usage']['completion_tokens'] ?? 0)
                     ->setTotalTokens($data['usage']['total_tokens'] ?? 0)
-                    ->setAiProvider('grok')
+                    ->setAiProvider('deepseek')
                 ;
 
                 $this->aiRequestsRepository->save($aiRequest);
@@ -238,7 +246,7 @@ class GrokAiProvider implements AiProviderInterface
 
             return null;
         } catch (Exception $e) {
-            error_log('[AI][Grok] Exception: '.$e->getMessage());
+            error_log('[AI][DeepSeek] Exception: '.$e->getMessage());
 
             return null;
         }
@@ -246,7 +254,7 @@ class GrokAiProvider implements AiProviderInterface
 
     public function gradeOpenAnswer(string $prompt, string $toolName): ?string
     {
-        return $this->requestGrokAI($prompt, $toolName);
+        return $this->requestDeepSeekAI($prompt, $toolName);
     }
 
     private function getUserId(): ?int

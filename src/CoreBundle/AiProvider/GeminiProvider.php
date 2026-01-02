@@ -13,7 +13,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class MistralAiProvider implements AiProviderInterface
+class GeminiProvider implements AiProviderInterface
 {
     private string $apiUrl;
     private string $apiKey;
@@ -37,17 +37,22 @@ class MistralAiProvider implements AiProviderInterface
         $configJson = $settingsManager->getSetting('ai_helpers.ai_providers', true);
         $config = json_decode($configJson, true) ?? [];
 
-        if (!isset($config['mistral'])) {
-            throw new RuntimeException('Mistral configuration is missing.');
+        if (!isset($config['gemini'])) {
+            throw new RuntimeException('Gemini configuration is missing.');
+        }
+        if (!isset($config['gemini']['text'])) {
+            throw new RuntimeException('Gemini configuration for text processing is missing.');
         }
 
-        $this->apiUrl = $config['mistral']['url'] ?? 'https://api.mistral.ai/v1/chat/completions';
-        $this->apiKey = $config['mistral']['api_key'] ?? '';
-        $this->model = $config['mistral']['model'] ?? 'mistral-large-latest';
-        $this->temperature = $config['mistral']['temperature'] ?? 0.7;
+        $this->apiKey = $config['gemini']['api_key'] ?? '';
+        // Gemini expects endpoint like: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
+        $this->model = $config['gemini']['text']['model'] ?? 'gemini-2.5-flash';
+        $tempApiUrl = $config['gemini']['text']['url'] ?? 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent';
+        $this->apiUrl = \sprintf($tempApiUrl, $this->model);
+        $this->temperature = $config['gemini']['text']['temperature'] ?? 0.7;
 
         if (empty($this->apiKey)) {
-            throw new RuntimeException('Mistral API key is missing.');
+            throw new RuntimeException('Gemini API key is missing.');
         }
     }
 
@@ -71,11 +76,17 @@ class MistralAiProvider implements AiProviderInterface
             $topic
         );
 
-        return $this->requestMistralAI($prompt, 'quiz');
+        return $this->requestGemini($prompt, 'quiz');
     }
 
-    public function generateLearnPath(string $topic, int $chaptersCount, string $language, int $wordsCount, bool $addTests, int $numQuestions): ?array
-    {
+    public function generateLearnPath(
+        string $topic,
+        int $chaptersCount,
+        string $language,
+        int $wordsCount,
+        bool $addTests,
+        int $numQuestions
+    ): ?array {
         // Step 1: Generate the Table of Contents
         $tableOfContentsPrompt = \sprintf(
             'Generate a structured table of contents for a course in "%s" with %d chapters on "%s".
@@ -85,7 +96,7 @@ class MistralAiProvider implements AiProviderInterface
             $topic
         );
 
-        $lpStructure = $this->requestMistralAI($tableOfContentsPrompt, 'learnpath');
+        $lpStructure = $this->requestGemini($tableOfContentsPrompt, 'learnpath');
         if (!$lpStructure) {
             return ['success' => false, 'message' => 'Failed to generate course structure.'];
         }
@@ -108,7 +119,7 @@ class MistralAiProvider implements AiProviderInterface
                 $chapterTitle
             );
 
-            $chapterContent = $this->requestMistralAI($chapterPrompt, 'learnpath');
+            $chapterContent = $this->requestGemini($chapterPrompt, 'learnpath');
             if (!$chapterContent) {
                 continue;
             }
@@ -141,7 +152,7 @@ class MistralAiProvider implements AiProviderInterface
                     $chapter['title']
                 );
 
-                $quizContent = $this->requestMistralAI($quizPrompt, 'learnpath');
+                $quizContent = $this->requestGemini($quizPrompt, 'learnpath');
 
                 if ($quizContent) {
                     $validQuestions = $this->filterValidAikenQuestions($quizContent);
@@ -188,27 +199,32 @@ class MistralAiProvider implements AiProviderInterface
         return $validQuestions;
     }
 
-    private function requestMistralAI(string $prompt, string $toolName): ?string
+    private function requestGemini(string $prompt, string $toolName): ?string
     {
         $userId = $this->getUserId();
         if (!$userId) {
             throw new RuntimeException('User not authenticated.');
         }
 
+        // Gemini expects a "contents" array (of turns), with inner "parts" [{"text": "..."}]
         $payload = [
-            'model' => $this->model,
-            'messages' => [
-                ['role' => 'system', 'content' => 'You are a helpful AI assistant that generates structured educational content.'],
-                ['role' => 'user', 'content' => $prompt],
+            'contents' => [
+                [
+                    'parts' => [
+                        ['text' => $prompt],
+                    ],
+                ],
             ],
-            'temperature' => $this->temperature,
-            'max_tokens' => 1000,
+            'generationConfig' => [
+                'temperature' => $this->temperature,
+                'maxOutputTokens' => 1000,
+            ],
         ];
 
         try {
             $response = $this->httpClient->request('POST', $this->apiUrl, [
                 'headers' => [
-                    'Authorization' => 'Bearer '.$this->apiKey,
+                    'x-goog-api-key' => $this->apiKey,
                     'Content-Type' => 'application/json',
                 ],
                 'json' => $payload,
@@ -217,17 +233,22 @@ class MistralAiProvider implements AiProviderInterface
             $statusCode = $response->getStatusCode();
             $data = $response->toArray();
 
-            if (200 === $statusCode && isset($data['choices'][0]['message']['content'])) {
-                $generatedContent = $data['choices'][0]['message']['content'];
+            // Gemini returns "candidates" (array), first candidate, first part of content
+            if (
+                200 === $statusCode
+                && isset($data['candidates'][0]['content']['parts'][0]['text'])
+            ) {
+                $generatedContent = $data['candidates'][0]['content']['parts'][0]['text'];
 
                 $aiRequest = new AiRequests();
                 $aiRequest->setUserId($userId)
                     ->setToolName($toolName)
                     ->setRequestText($prompt)
+                    // Gemini does not currently return token counts, so we set to 0
                     ->setPromptTokens($data['usage']['prompt_tokens'] ?? 0)
                     ->setCompletionTokens($data['usage']['completion_tokens'] ?? 0)
                     ->setTotalTokens($data['usage']['total_tokens'] ?? 0)
-                    ->setAiProvider('mistral')
+                    ->setAiProvider('gemini')
                 ;
 
                 $this->aiRequestsRepository->save($aiRequest);
@@ -237,7 +258,7 @@ class MistralAiProvider implements AiProviderInterface
 
             return null;
         } catch (Exception $e) {
-            error_log('[AI][Mistral] Exception: '.$e->getMessage());
+            error_log('[AI][Gemini] Exception: '.$e->getMessage());
 
             return null;
         }
@@ -245,7 +266,7 @@ class MistralAiProvider implements AiProviderInterface
 
     public function gradeOpenAnswer(string $prompt, string $toolName): ?string
     {
-        return $this->requestMistralAI($prompt, $toolName);
+        return $this->requestGemini($prompt, $toolName);
     }
 
     private function getUserId(): ?int

@@ -47,7 +47,8 @@ class GeminiProvider implements AiProviderInterface
         $this->apiKey = $config['gemini']['api_key'] ?? '';
         // Gemini expects endpoint like: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
         $this->model = $config['gemini']['text']['model'] ?? 'gemini-2.5-flash';
-        $this->apiUrl = $config['gemini']['text']['url'] ?? "https://generativelanguage.googleapis.com/v1beta/models/{$this->model}:generateContent";
+        $tempApiUrl = $config['gemini']['text']['url'] ?? "https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent";
+        $this->apiUrl = sprintf($tempApiUrl, $this->model);
         $this->temperature = $config['gemini']['text']['temperature'] ?? 0.7;
 
         if (empty($this->apiKey)) {

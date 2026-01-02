@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\DataFixtures;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Chamilo\CoreBundle\Helpers\AzureAuthenticatorHelper;
+use Chamilo\CoreBundle\Helpers\ScimHelper;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -606,7 +607,7 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
             ],
             [
-                'variable' => 'scim_external_id',
+                'variable' => ScimHelper::SCIM_FIELD,
                 'display_text' => 'SCIM external ID',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,

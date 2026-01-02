@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\ScimHelper;
 use Chamilo\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -393,6 +394,7 @@ if (isset($_POST['step2'])) {
             '{{PACKAGER}}' => 'chamilo',
             '{{DEFAULT_TEMPLATE}}' => 'default',
             '{{ADMIN_CHAMILO_ANNOUNCEMENTS_DISABLE}}' => '0',
+            '{{SCIM_TOKEN}}' => ScimHelper::createToken(),
         ];
         error_log('Update env file');
         updateEnvFile($distFile, $envFile, $params);
@@ -612,6 +614,7 @@ if (isset($_POST['step2'])) {
             '{{PACKAGER}}' => 'chamilo',
             '{{DEFAULT_TEMPLATE}}' => 'default',
             '{{ADMIN_CHAMILO_ANNOUNCEMENTS_DISABLE}}' => '0',
+            '{{SCIM_TOKEN}}' => ScimHelper::createToken(),
         ];
 
         updateEnvFile($distFile, $envFile, $params);

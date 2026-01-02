@@ -6,8 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\AiProvider;
 
+use Chamilo\CoreBundle\AiProvider\GrokProvider;
 use Chamilo\CoreBundle\Repository\AiRequestsRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Gedmo\Exception;
 use InvalidArgumentException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -55,20 +57,28 @@ class AiProviderFactory
         // Each available provider will have a form like ['deepseek']['image'] = Chamilo\CoreBundle\AiProvider\DeepSeekImageProvider $object;
         $this->providers = [];
         // For practical purposes, we also build a providersByType array in reverse order: ['image']['deepseek'] = Chamilo\CoreBundle\AiProvider\DeepSeekImageProvider $object;
+        $this->providersByType = [];
         foreach ($config as $providerName => $providerConfig) {
             if (in_array($providerName, array_keys($possibleProviders))) {
                 $providerPrefix = $possibleProviders[$providerName];
                 foreach ($serviceTypes as $type => $name) {
                     $className = $providerPrefix.$name.'Provider';
-                    if (class_exists($className)) {
-                        $providerObject = new $className($httpClient, $settingsManager, $this->aiRequestsRepository, $this->security);
+                    $filePath = __DIR__.'/'.$className.'.php';
+                    if (is_file($filePath)) {
+                        try {
+                            $providerObject = new $className($httpClient, $settingsManager, $this->aiRequestsRepository,
+                                $this->security);
+                        } catch (\Exception $e) {
+                            error_log('Object of class '.$className.' not instanciated. '.$e->getMessage());
+                        }
                         $this->providers[$providerName][$type] = $providerObject;
                         $this->providersByType[$type][$providerName] = $providerObject;
+                    } else {
+                        error_log('Could not find class at '.$filePath);
                     }
                 }
             }
         }
-
         // Ensure the selected default provider exists
         if (!isset($this->providers[$this->defaultProvider])) {
             throw new InvalidArgumentException("The default AI provider '{$this->defaultProvider}' is not configured properly.");

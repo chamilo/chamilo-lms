@@ -219,10 +219,10 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                                 'quality' => 'standard',
                             ],
                             'video' => [
-                                  'url' => 'https://api.openai.com/v1/videos/generations',
-                                  'model' => 'sora-1.0',
-                                  'duration' => 10,
-                                  'resolution' => '1920x1080'
+                                'url' => 'https://api.openai.com/v1/videos/generations',
+                                'model' => 'sora-1.0',
+                                'duration' => 10,
+                                'resolution' => '1920x1080',
                             ],
                             'document' => [
                                 'url' => 'https://api.openai.com/v1/chat/completions',
@@ -250,7 +250,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                                 'url' => 'https://api.deepseek.com/chat/completions',
                                 'model' => 'deepseek-chat',
                                 'temperature' => 0.7,
-                            ]
+                            ],
                         ],
                         'grok' => [
                             'api_key' => 'your-key',
@@ -296,7 +296,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                                 'query_url' => 'https://api.mistral.ai/v1/chat/completions',
                                 'model' => 'mistral-large-latest',
                                 'temperature' => 0.7,
-                            ]
+                            ],
                         ],
                         'gemini' => [
                             'api_key' => 'your-key',

@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use DateTime;
+use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use Doctrine\Migrations\AbstractMigration;
@@ -30,6 +31,10 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Throwable;
+
+use const FILE_APPEND;
+use const LOCK_EX;
 
 abstract class AbstractMigrationChamilo extends AbstractMigration
 {
@@ -512,7 +517,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         }
         $this->itemPropertyInconsistencySeen[$key] = true;
 
-        $date = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->format('Y-m-d H:i:s');
+        $date = (new DateTimeImmutable('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
         $line = $date."\t".$tool."\t".$iid."\t".$path."\n";
 
         $baseDir = null;
@@ -543,7 +548,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
                     if ('' !== trim($value)) {
                         return $value;
                     }
-                } catch (\Throwable) {
+                } catch (Throwable) {
                     // Ignore and try next method.
                 }
             }

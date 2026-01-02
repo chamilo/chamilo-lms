@@ -11,6 +11,9 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+
 class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
 {
     /**
@@ -94,9 +97,9 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             $setting->setComment($settingData['comment']);
 
             // Only set default value when current value is empty (do not override admins)
-            if (array_key_exists('selected_value', $settingData)) {
+            if (\array_key_exists('selected_value', $settingData)) {
                 $currentValue = $setting->getSelectedValue();
-                if ($currentValue === null || $currentValue === '') {
+                if (null === $currentValue || '' === $currentValue) {
                     $setting->setSelectedValue((string) $settingData['selected_value']);
                 }
             }

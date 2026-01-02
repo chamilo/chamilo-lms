@@ -184,7 +184,7 @@ class GeminiAiProvider implements AiProviderInterface
             }
 
             $options = \array_slice($lines, 1, 4);
-            $validOptions = array_filter($options, fn($line) => preg_match('/^[A-D]\. .+/', $line));
+            $validOptions = array_filter($options, fn ($line) => preg_match('/^[A-D]\. .+/', $line));
 
             $answerLine = end($lines);
             if (4 === \count($validOptions) && preg_match('/^ANSWER: [A-D]$/', $answerLine)) {
@@ -207,9 +207,9 @@ class GeminiAiProvider implements AiProviderInterface
             'contents' => [
                 [
                     'parts' => [
-                        ['text' => $prompt]
-                    ]
-                ]
+                        ['text' => $prompt],
+                    ],
+                ],
             ],
             'generationConfig' => [
                 'temperature' => $this->temperature,
@@ -244,7 +244,8 @@ class GeminiAiProvider implements AiProviderInterface
                     ->setPromptTokens($data['usage']['prompt_tokens'] ?? 0)
                     ->setCompletionTokens($data['usage']['completion_tokens'] ?? 0)
                     ->setTotalTokens($data['usage']['total_tokens'] ?? 0)
-                    ->setAiProvider('gemini');
+                    ->setAiProvider('gemini')
+                ;
 
                 $this->aiRequestsRepository->save($aiRequest);
 
@@ -254,6 +255,7 @@ class GeminiAiProvider implements AiProviderInterface
             return null;
         } catch (Exception $e) {
             error_log('[AI][Gemini] Exception: '.$e->getMessage());
+
             return null;
         }
     }

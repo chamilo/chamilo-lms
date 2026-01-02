@@ -226,6 +226,7 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
                 if ($link->getSession()?->getId() === $sessionId) {
                     return $link;
                 }
+
                 continue;
             }
 

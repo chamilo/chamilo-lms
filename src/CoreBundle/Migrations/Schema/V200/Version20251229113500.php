@@ -27,6 +27,7 @@ final class Version20251229113500 extends AbstractMigrationChamilo
 
         if (!isset($cToolCols['visibility'])) {
             $this->write('c_tool.visibility not found, skipping migration.');
+
             return;
         }
 
@@ -35,19 +36,21 @@ final class Version20251229113500 extends AbstractMigrationChamilo
         foreach (['resource_node_id', 'resourceNode_id'] as $candidate) {
             if (isset($cToolCols[$candidate])) {
                 $nodeCol = $candidate;
+
                 break;
             }
         }
 
         if (null === $nodeCol) {
             $this->write('Could not detect resource node column on c_tool (expected resource_node_id). Aborting.');
+
             return;
         }
 
         // Update existing ResourceLinks matching the same context as CTool
         // Mapping: boolean -> int visibility
-        $sqlUpdate = sprintf(
-            "UPDATE resource_link rl
+        $sqlUpdate = \sprintf(
+            'UPDATE resource_link rl
              INNER JOIN c_tool ct
                 ON rl.resource_node_id = ct.%s
                AND rl.c_id = ct.c_id
@@ -63,18 +66,18 @@ final class Version20251229113500 extends AbstractMigrationChamilo
                  WHEN ct.visibility = 1 THEN %d
                  ELSE %d
              END
-             WHERE ct.visibility IS NOT NULL",
+             WHERE ct.visibility IS NOT NULL',
             $nodeCol,
             ResourceLink::VISIBILITY_PUBLISHED,
             ResourceLink::VISIBILITY_DRAFT
         );
 
         $affected = $this->connection->executeStatement($sqlUpdate);
-        $this->write(sprintf('Updated resource_link rows: %d', $affected));
+        $this->write(\sprintf('Updated resource_link rows: %d', $affected));
 
         //  Create missing links (rare, but safe)
-        $sqlMissing = sprintf(
-            "SELECT ct.iid, ct.c_id, ct.session_id, ct.%s AS node_id, ct.visibility
+        $sqlMissing = \sprintf(
+            'SELECT ct.iid, ct.c_id, ct.session_id, ct.%s AS node_id, ct.visibility
                FROM c_tool ct
                LEFT JOIN resource_link rl
                  ON rl.resource_node_id = ct.%s
@@ -88,7 +91,7 @@ final class Version20251229113500 extends AbstractMigrationChamilo
                 AND rl.group_id IS NULL
                 AND rl.deleted_at IS NULL
               WHERE ct.visibility IS NOT NULL
-                AND rl.id IS NULL",
+                AND rl.id IS NULL',
             $nodeCol,
             $nodeCol
         );
@@ -135,7 +138,7 @@ final class Version20251229113500 extends AbstractMigrationChamilo
         $this->entityManager->flush();
         $this->entityManager->clear();
 
-        $this->write(sprintf('Created missing resource_link rows: %d', $created));
+        $this->write(\sprintf('Created missing resource_link rows: %d', $created));
 
         // Drop legacy column
         $this->addSql('ALTER TABLE c_tool DROP COLUMN visibility');

@@ -31,7 +31,10 @@
       </template>
     </Column>
 
-    <Column :header="t('Feedback')">
+    <Column
+      v-if="showMetaColumns"
+      :header="t('Feedback')"
+    >
       <template #body="slotProps">
         <div
           v-if="slotProps.data.feedbackCount > 0"
@@ -51,7 +54,10 @@
       </template>
     </Column>
 
-    <Column :header="t('Last upload')">
+    <Column
+      v-if="showMetaColumns"
+      :header="t('Last upload')"
+    >
       <template #body="slotProps">
         {{ abbreviatedDatetime(slotProps.data.sentDate) || "-" }}
       </template>
@@ -68,7 +74,7 @@
 
 <script setup>
 import Column from "primevue/column"
-import { ref, onMounted, nextTick } from "vue"
+import { ref, onMounted, nextTick, computed } from "vue"
 import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
 import { useRoute, useRouter } from "vue-router"
@@ -89,6 +95,7 @@ const loading = ref(false)
 
 const showCorrectAndRateDialog = ref(false)
 const correctingItem = ref(null)
+const showMetaColumns = computed(() => false)
 
 function openCommentDialog(item) {
   correctingItem.value = null

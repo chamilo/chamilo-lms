@@ -923,6 +923,11 @@ class GradebookUtils
         $mainCourseCategory = null
     ) {
         $cat = $cat[0] ?? null;
+
+        if (!$cat instanceof Category) {
+            return;
+        }
+
         // Getting data
         $printable_data = self::get_printable_data(
             $cat,

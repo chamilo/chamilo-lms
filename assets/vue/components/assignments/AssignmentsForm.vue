@@ -39,6 +39,7 @@
           id="gradebook-gradebook-id"
           name="gradebook_category_id"
           option-label="name"
+          option-value="id"
         />
 
         <BaseInputNumber
@@ -201,7 +202,7 @@ const assignment = reactive({
   title: "",
   description: "",
   qualification: 0,
-  gradebookId: gradebookCategories.value[0],
+  gradebookId: Number(gradebookCategories.value?.[0]?.id ?? 1),
   weight: 0,
   expiresOn: new Date(),
   endsOn: new Date(),
@@ -210,6 +211,21 @@ const assignment = reactive({
   allowedExtensions: [],
   customExtensions: "",
 })
+
+function extractGradebookCategoryId(def) {
+  // Support multiple possible backend shapes.
+  // We return a number or null.
+  const direct = def?.gradebookCategoryId
+  if (direct !== undefined && direct !== null && direct !== "") return Number(direct)
+
+  const nested = def?.gradebookCategory?.id
+  if (nested !== undefined && nested !== null && nested !== "") return Number(nested)
+
+  const legacy = def?.gradebookId?.id
+  if (legacy !== undefined && legacy !== null && legacy !== "") return Number(legacy)
+
+  return null
+}
 
 watchEffect(() => {
   const def = props.defaultAssignment
@@ -223,6 +239,10 @@ watchEffect(() => {
   if (def.weight > 0) {
     chkAddToGradebook.value = true
     assignment.weight = def.weight
+    const gbId = extractGradebookCategoryId(def)
+    assignment.gradebookId = gbId ?? Number(gradebookCategories.value?.[0]?.id ?? 1)
+  } else {
+    assignment.gradebookId = Number(gradebookCategories.value?.[0]?.id ?? 1)
   }
   if (def.assignment.expiresOn) {
     chkExpiresOn.value = true
@@ -309,7 +329,7 @@ async function onSubmit() {
   }
 
   if (chkAddToGradebook.value) {
-    payload.gradebookCategoryId = assignment.gradebookId.id
+    payload.gradebookCategoryId = Number(assignment.gradebookId)
     payload.weight = assignment.weight
   }
   if (chkExpiresOn.value) {
@@ -335,7 +355,7 @@ async function onSubmit() {
     }
 
     if (extensions.length > 0) {
-      payload.extensions = extensions.join(" ") // "pdf docx rar ai"
+      payload.extensions = extensions.join(" ") // Example: "pdf docx rar ai"
     }
   }
   if (props.defaultAssignment?.["@id"]) {

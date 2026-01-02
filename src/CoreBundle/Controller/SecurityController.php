@@ -133,9 +133,11 @@ class SecurityController extends AbstractController
                 $request->getSession()->start();
                 $request->getSession()->set('term_and_condition', $tempTermAndCondition);
 
+                $afterLogin = $this->getRedirectAfterLoginPath($user);
+
                 return $this->json([
                     'load_terms' => true,
-                    'redirect' => '/main/auth/tc.php?return='.urlencode('/home'),
+                    'redirect' => '/main/auth/tc.php?return='.urlencode($afterLogin),
                 ]);
             }
             $request->getSession()->remove('term_and_condition');
@@ -332,5 +334,56 @@ class SecurityController extends AbstractController
         }
 
         return null;
+    }
+
+    private function getRedirectAfterLoginPath(User $user): string
+    {
+        $setting = $this->settingsManager->getSetting('registration.redirect_after_login');
+
+        if (!\is_string($setting) || '' === trim($setting)) {
+            return '/home';
+        }
+
+        $map = json_decode($setting, true);
+        if (!\is_array($map)) {
+            return '/home';
+        }
+
+        $roles = $user->getRoles();
+
+        $profile = null;
+        if (\in_array('ROLE_ADMIN', $roles, true)) {
+            $profile = 'ADMIN';
+        } elseif (\in_array('ROLE_SESSION_MANAGER', $roles, true)) {
+            $profile = 'SESSIONADMIN';
+        } elseif (\in_array('ROLE_TEACHER', $roles, true)) {
+            $profile = 'COURSEMANAGER';
+        } elseif (\in_array('ROLE_STUDENT_BOSS', $roles, true)) {
+            $profile = 'STUDENT_BOSS';
+        } elseif (\in_array('ROLE_DRH', $roles, true)) {
+            $profile = 'DRH';
+        } elseif (\in_array('ROLE_INVITEE', $roles, true)) {
+            $profile = 'INVITEE';
+        } elseif (\in_array('ROLE_STUDENT', $roles, true)) {
+            $profile = 'STUDENT';
+        }
+
+        $value = $profile && \array_key_exists($profile, $map) ? (string) $map[$profile] : '';
+        if ('' === trim($value)) {
+            return '/home';
+        }
+
+        // Normalize a relative path
+        $value = ltrim($value, '/');
+
+        // Keep backward compatibility with old known values
+        if ('index.php' === $value || 'user_portal.php' === $value) {
+            return '/home';
+        }
+        if ('main/auth/courses.php' === $value) {
+            return '/courses';
+        }
+
+        return '/'.$value;
     }
 }

@@ -49,7 +49,7 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
         $publication = $data;
         $isUpdate = null !== $publication->getIid();
         $previous = $context['previous_data'] ?? null;
-        $originalUser = $previous instanceof CStudentPublication ? $previous->getUser() : $publication->getUser();
+        $originalUser = $previous instanceof CStudentPublication ? $previous->getUser() : null;
 
         /** @var User|null $currentUser */
         $currentUser = $this->security->getUser();

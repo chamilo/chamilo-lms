@@ -46,6 +46,8 @@ class UserDenormalizer implements DenormalizerInterface, DenormalizerAwareInterf
 
         if ($email = self::getPrimaryValue($data, 'emails')) {
             $user->setEmail($email);
+        } else {
+            $user->setEmail($data['userName'] ?? '');
         }
 
         if ($phone = self::getPrimaryValue($data, 'phoneNumbers')) {

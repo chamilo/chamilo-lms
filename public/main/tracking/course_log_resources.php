@@ -239,7 +239,7 @@ echo '  </div>';
 // Row 3: search form in a small card.
 echo '  <section class="bg-white rounded-xl shadow-sm border border-gray-50">';
 echo '      <div class="p-4 md:p-5">';
-echo '          <h2 class="text-base font-semibold mb-3">'.get_lang('Search in resources log').'</h2>';
+echo '          <h2 class="text-base font-semibold mb-3">'.get_lang('Search in resource logs').'</h2>';
 echo            $searchFormHtml;
 echo '      </div>';
 echo '  </section>';

@@ -1717,6 +1717,15 @@ function switch_item(current_item, next_item)
             1
         );
 
+        // Keep TOC highlight and LMS context in sync when switching from non-SCO items
+        xajax_switch_item_toc(
+            olms.lms_lp_id,
+            olms.lms_user_id,
+            olms.lms_view_id,
+            olms.lms_item_id,
+            next_item
+        );
+
         /*if (saveAjax) {
             $.when(saveAjax).done(function(results) {
                 xajax_switch_item_details(
@@ -1825,7 +1834,7 @@ function switch_item(current_item, next_item)
 
     // @todo add loadForumThread inside lp_nav.php to do only one request instead of 3!
     //loadForumThread(olms.lms_lp_id, next_item);
-    checkCurrentItemPosition(olms.lms_item_id);
+    checkCurrentItemPosition(next_item);
 
     return true;
 }

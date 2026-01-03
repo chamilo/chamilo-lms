@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:jogvédett,, no:nem jogvédett"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappa,, application/msword:MsWord,, application/octet-stream:Oktett stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappa,, application/msword:MsWord,, application/octet-stream:Okte stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:feladat,, simulation:szimuláció,, questionnaire:kérdőív,, diagram:diagram,, figure:ábra,, graph:grafikon,, index:tárgymutató,, slide:dia,, table:tábla,, narrative text:narrátor szöveg,, exam:teszt,, experiment:kísérlet,, problem statement:probléma megállapítás,, self assessment:önértékelés,, lecture:előadó"
@@ -28426,7 +28426,7 @@ msgid "In person"
 msgstr "Személyesen"
 
 msgid "Blended learning"
-msgstr "Blended learning"
+msgstr "Kevert tanulás"
 
 msgid "Centralised"
 msgstr "Centralizált"
@@ -30730,7 +30730,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (belső azonosító)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "Azure azonosító (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Szervezeti e-mail"
@@ -31454,4 +31454,142 @@ msgstr "További részletekért látogasson el ide: %s"
 
 msgid "Manager"
 msgstr "Menedzser"
+
+msgid "Mark as"
+msgstr "Megjelölés mint"
+
+msgid "Reply to all"
+msgstr "Válasz mindenkinek"
+
+msgid "SCIM external ID"
+msgstr "SCIM külső azonosító"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 azonosító"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Kérjük, fogadja el a felhasználási feltételek legfrissebb verzióját."
+
+msgid "Required value for operation without path"
+msgstr "Kötelező érték útvonal nélküli művelethez"
+
+msgid "Available space (%s)"
+msgstr "Elérhető hely (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Leírás indexelése a globális kereséshez"
+
+msgid "Unknown course"
+msgstr "Ismeretlen kurzus"
+
+msgid "Certificate not found."
+msgstr "Tanúsítvány nem található."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Biztonsági token lejárt. Kérjük, frissítse az oldalt és próbálja újra."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Csak a platform rendszergazdák változtathatják meg a kurzus láthatóságát."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Váratlan hiba történt a felhasználó feliratkozása során"
+
+msgid "Search in resource logs"
+msgstr "Keresés az erőforrás naplókban"
+
+msgid "Include this learning path in the global search results"
+msgstr "Tanulási útvonal bevonása a globális keresési eredményekbe"
+
+msgid "The course code already exists"
+msgstr "A kurzus kód már létezik"
+
+msgid "Latest news"
+msgstr "Legfrissebb hírek"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Szerezze be a Chamilo legfrissebb híreit, beleértve a biztonsági réseket és eseményeket, közvetlenül az adminisztrációs panelben. Ezek a hírek minden adminisztrációs oldal betöltésekor ellenőrizve lesznek a Chamilo hír szerverén, és csak a rendszergazdák számára láthatók."
+
+msgid "Chamilo support block"
+msgstr "Chamilo támogatás blokk"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Szakmai tippek és könnyű mód a hivatalos szolgáltatókkal való kapcsolatfelvételre professzionális támogatásért, közvetlenül a Chamilo készítőitől. Ez a blokk az adminisztrációs oldalon jelenik meg, csak rendszergazdák láthatják, és minden oldalbetöltéskor frissül."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "HR felhasználóknak történő bejelentések küldésének opciójának elrejtése"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Session adminisztrátorok számára engedélyezni a privát tanúsítványok letöltését"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Ha engedélyezve van, a session adminisztrátorok letölthetik a tanúsítványokat, még ha azok nincsenek nyilvánosan közzétéve."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Ha nem üres, a kurzus létrehozási folyamat a felhasználói profil egyes mezőit keresi és automatikusan kitölti őket a kurzus számára. Például egy digitális marketing szakos tanár automatikusan beállíthat egy „digitális marketing” jelölést minden általa létrehozott kurzushoz."
+
+msgid "Main menu entries"
+msgstr "Főmenü elemek"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Jelölje be azokat a bejegyzéseket, amelyeket meg szeretne jeleníteni a főmenüben"
+
+msgid "Main menu entries per role"
+msgstr "Főmenü elemek szerepenként"
+
+msgid "Define header tabs visibility per role."
+msgstr "Határozza meg a fejléc fülök láthatóságát szerepenként."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Állítsa be a tábla körüli navigációs beállításokat, hogy kevesebb vagy több sort jelenítsen meg egy oldalon. pl. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Tömb a Chamilo videólejátszóhoz engedélyezhető extra funkciókból. Opciók: 'speed', amely lehetővé teszi a videó lejátszási sebességének változtatását."
+
+msgid "Mail: character set"
+msgstr "Levél: karakterkészlet"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Ha meg kell határozni a karakterkészletet az e-mailek küldéséhez. Hagyja üresen, ha nem biztos benne."
+
+msgid "Mail: Debug"
+msgstr "Levél: Hibakeresés"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Válassza ki, hogy engedélyezi-e az e-mail küldési hibakeresési naplózást. Ezek több információt adnak a levelezési szolgáltatáshoz való csatlakozás során történtekről, de nem elegánsak és megzavarhatják az oldal dizájnját. Csak akkor használja, ha nincs felhasználói aktivitás."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Levél: LD+JSON kerülése"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Néhány e-mail kliens nem érti a leíró LD+JSON formátumot, és laza JSON sztringként jeleníti meg a végfelhasználónak. Ha ez a helyzet, állítsa az alábbi változót 'false'-ra ennek a fejlécnek a letiltásához."
+
+msgid "Mail: DKIM headers"
+msgstr "Levél: DKIM fejléc"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Írja be a DKIM konfigurációs beállítások JSON tömbjét (lásd példa)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Levél: XOAuth2 beállítások"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Ha XOAuth2-alapú e-mail szolgáltatást használ, használja ezt a JSON beállítást a specifikus konfiguráció mentéséhez (lásd példa), és válassza az XOAuth2-t a levelezési szolgáltatás beállításában."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Meghatározza a környezeti típust: \"prod\" (normál termelés), \"validation\" (hasonló a termeléshez, de statisztikák jelentése nélkül), vagy \"test\" (hibakeresési mód fejlesztői eszközökkel, pl. lefordítatlan sztring mutatókkal)."
+
+msgid "Global limit of users per course"
+msgstr "Globális felhasználói korlát kurzasonként"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Meghatározza a platformon egyetlen kurzusra feliratkozható felhasználók (beleértve a tanárokat) globális maximális számát. Állítsa 0-ra a korlát letiltásához. Ez segít elkerülni a kurzusok túlterhelését nyílt portálokon."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Engedélyezze, ha tömbbel szeretné meghatározni, mely szerepek legyenek egyértelműen megjelenítve és melyek rejtve."
+
+msgid "Show base course posts in session course"
+msgstr "Alapkurzus bejegyzések megjelenítése munkamenet kurzushoz"
+
+msgid "Limit identical email usage"
+msgstr "Azonos e-mail használat korlátozása"
 

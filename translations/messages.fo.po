@@ -31449,3 +31449,141 @@ msgstr "Fyri meira kunning vitja %s"
 msgid "Manager"
 msgstr "Stjóri"
 
+msgid "Mark as"
+msgstr "Merk sum"
+
+msgid "Reply to all"
+msgstr "Svara øllum"
+
+msgid "SCIM external ID"
+msgstr "SCIM ytri ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Vinarliga góðtaka nýggjastu útgávuna av reglugreinum og viðkomandi skilmálum."
+
+msgid "Required value for operation without path"
+msgstr "Kravd virði fyri virknan uttan slóð"
+
+msgid "Available space (%s)"
+msgstr "Tøk pláss (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Vís hesa lýsingina í global leit"
+
+msgid "Unknown course"
+msgstr "Ókendur kursus"
+
+msgid "Certificate not found."
+msgstr "Vísindaptr notin."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Örtøkutókn útløpt. Vinarliga endurnýggja síðuna og royn aftur."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Bert pallur-stjórar kunnu broyta sýniligheitin hjá kursinum."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Óvæntur feil við at melda brúkarin inn"
+
+msgid "Search in resource logs"
+msgstr "Leita í loggum fyri tilfar"
+
+msgid "Include this learning path in the global search results"
+msgstr "Tak hesum lærugonginum við í global leit"
+
+msgid "The course code already exists"
+msgstr "Kursuskókodin er long tí"
+
+msgid "Latest news"
+msgstr "Seinastu tíðindir"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Fá seinastu tíðindirnar frá Chamilo, íroknaði ølvissuleikar og tiltæk, beinleiðis í stjórnarkassan. Hesar tíðindirnar verða royndar á Chamilo tíðindaservaranum hvørja ferð tú lesir stjórnarsíðuna og eru bert sjáanlegar fyri stjórar."
+
+msgid "Chamilo support block"
+msgstr "Chamilo stuðul blokk"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Fá proff ráð og ein einfaldan veg til at seta samband við almenna tænastulegara fyri yrkja stuðul, beinleiðis frá týðarunum av Chamilo. Hesur blokkurin birtist á stjórnarsíðuni, er bert sjáanlegur fyri stjórar og endurnýggjast hvørja ferð tú lesir stjórnarsíðuna."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Fjal møguleika at senda kunngjøringar til HR brúkarar"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Leyp bólka stjórum at fáa niðurtøtt privatu vísindaptr"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Um virkin, kunnu bólka stjórar fáa niðurtóttir vísindaptr, sjálvt um tey ikki eru opinliga løgd út."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Um ikki tómur, so fer kursus-upprættanarferlið at leita eftir teimum teimum børum í brúkaraprofli og fylla tey sjálvvirkandi fyri kursin. Til dømis, ein lærar sum er serfrøðingur í digital marknaðarføringer, kundi sjálvvirkandi sett ein « digital marknaðarføringer » flagg á hvønn kursus (sum) hann upprættar."
+
+msgid "Main menu entries"
+msgstr "Innsløg í høvuðsmatnarinum"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Merk tey innsløgini tú ynskir at síggja í høvuðsmatnarinum"
+
+msgid "Main menu entries per role"
+msgstr "Innsløg í høvuðsmatnarinum eftir ról"
+
+msgid "Define header tabs visibility per role."
+msgstr "Stovna sýniligheit av header tabs eftir ról."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Set valmøguleikarnar tú ynskir at vísa í navigatiónini kring tað talvið fyri at vísa færri ella fleiri røðir á einari síðu. t.d. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Array við viðbótarfunksjónum tú kanst aktivera fyri video spælaran í Chamilo. Valmøguleikar innihalda 'speed', sum loyvir tær at broyta avspelingarhørvuna á einari video."
+
+msgid "Mail: character set"
+msgstr "Póstur: tegnsett"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Um tú hevur tørv á at stovna charsetið, sum skal nýtast tá ið tær sendir hesar t-postirnar. Lat tómugt um tú ert ikki vís."
+
+msgid "Mail: Debug"
+msgstr "Póstur: Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Vel hvørt tú ynskir at aktivera debug logs fyri t-post sending. Hesir geva tær meira kunngóring um hvørt er at gera tá ið tú tengist við t-post tænastuna, men eru ikki elegante og kunnu bróta síðuskap. Bert nýt tá ið tað ikki er nekkar brúkarvirkni."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Póstur: Forðoyggja LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Onkur t-post klientar skilja ikki lýsingarformatið LD+JSON, og vísa tað sum ein løys JSON streng til endabrúkaran. Um hetta er tilfellet hjá tær, kanst tú seta variabluna niðaní til 'false' fyri at deaktivera henda header."
+
+msgid "Mail: DKIM headers"
+msgstr "Póstur: DKIM headers"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Skriva eitt JSON array við tíni DKIM-uppseting (sjekk dæmið)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Póstur: XOAuth2 valmøguleikar"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Um tú nýtir eina XOAuth2-bundna t-post tænastu, nýt hesa uppseting í JSON til at goyma tín serstøku uppseting (sjekk dæmið) og vel XOAuth2 í t-post tænastu-uppsetingini."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Stovnar umhvørvisgerðina: \"prod\" (venjuleg framleiðsla), \"validation\" (sum framleiðsla men uttan at senda statistikk), ella \"test\" (debug-støða við developer verkførum sum ósamskildar strengur vísar)."
+
+msgid "Global limit of users per course"
+msgstr "Global tak av brúkarum per kursus"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Stovnar eitt globalt mánaðartal av brúkarum (lærarar viðtaldir) loyvd at vera skrásettir í hvørjum einstøkum kursi á pallinum. Set hesa værdin til 0 fyri at deaktivera takið. Hetta hjálpir við at forða fyri at kursus verða yvirbelast í opnum portum."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Aktivera fyri at nýta eitt array til at stovna hvilkar rólir skulu vísað greitt og hvilkar skulu fjalast."
+
+msgid "Show base course posts in session course"
+msgstr "Vís grundleggjandi kursus innlegg í tessu sess kursi"
+
+msgid "Limit identical email usage"
+msgstr "Tak einslik t-post notkun"
+

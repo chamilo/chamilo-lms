@@ -31455,3 +31455,141 @@ msgstr "자세한 내용은 %s를 방문하세요"
 msgid "Manager"
 msgstr "관리자"
 
+msgid "Mark as"
+msgstr "다음으로 표시"
+
+msgid "Reply to all"
+msgstr "모두에게 답장"
+
+msgid "SCIM external ID"
+msgstr "SCIM 외부 ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "최신 이용 약관을 수락하십시오."
+
+msgid "Required value for operation without path"
+msgstr "경로 없이 작업을 수행하기 위한 필수 값"
+
+msgid "Available space (%s)"
+msgstr "사용 가능 공간 (%s)"
+
+msgid "Index this description for the global search"
+msgstr "글로벌 검색을 위해 이 설명을 색인화"
+
+msgid "Unknown course"
+msgstr "알 수 없는 강좌"
+
+msgid "Certificate not found."
+msgstr "수료증을 찾을 수 없습니다."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "보안 토큰이 만료되었습니다. 페이지를 새로고침한 후 다시 시도하십시오."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "플랫폼 관리자만 강좌 가시성을 변경할 수 있습니다."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "사용자 등록 중 예기치 않은 오류가 발생했습니다"
+
+msgid "Search in resource logs"
+msgstr "리소스 로그에서 검색"
+
+msgid "Include this learning path in the global search results"
+msgstr "글로벌 검색 결과에 이 학습 경로 포함"
+
+msgid "The course code already exists"
+msgstr "강좌 코드가 이미 존재합니다"
+
+msgid "Latest news"
+msgstr "최신 뉴스"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Chamilo에서 최신 뉴스, 보안 취약점 및 이벤트를 관리 패널에서 직접 확인하세요. 이 뉴스는 관리 페이지 로드 시마다 Chamilo 뉴스 서버에서 확인되며 관리자에게만 표시됩니다."
+
+msgid "Chamilo support block"
+msgstr "Chamilo 지원 블록"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Chamilo 제작자로부터 전문 지원을 위한 공식 서비스 제공업체와 프로 팁을 쉽게 연락하세요. 이 블록은 관리 페이지에 나타나며 관리자에게만 표시되고 관리 페이지 로드 시마다 새로고침됩니다."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "HR 사용자에게 공지 전송 옵션 숨기기"
+
+msgid "Allow session admins to download private certificates"
+msgstr "세션 관리자가 비공개 수료증 다운로드 허용"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "활성화 시, 세션 관리자는 공개 게시되지 않은 수료증도 다운로드할 수 있습니다."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "비어 있지 않으면, 강좌 생성 과정에서 사용자 프로필의 일부 필드를 찾아 강좌에 자동으로 채웁니다. 예를 들어, 디지털 마케팅 전문 교사는 생성하는 각 강좌에 «디지털 마케팅» 플래그를 자동으로 설정할 수 있습니다."
+
+msgid "Main menu entries"
+msgstr "메인 메뉴 항목"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "메인 메뉴에 표시할 항목을 선택하세요"
+
+msgid "Main menu entries per role"
+msgstr "역할별 메인 메뉴 항목"
+
+msgid "Define header tabs visibility per role."
+msgstr "역할별 헤더 탭 가시성 정의."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "한 페이지에 표시할 행 수를 더 적거나 더 많이 표시하기 위해 테이블 주변 탐색에 나타날 옵션을 설정하세요. 예: [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Chamilo 비디오 플레이어에 활성화할 추가 기능 배열입니다. 옵션에는 비디오 재생 속도를 변경할 수 있는 'speed'가 포함됩니다."
+
+msgid "Mail: character set"
+msgstr "메일: 문자 세트"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "이메일을 보낼 때 사용할 문자셋을 정의해야 하는 경우. 확실하지 않으면 비워 두세요."
+
+msgid "Mail: Debug"
+msgstr "메일: 디버그"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "이메일 전송 디버그 로그를 활성화할지 선택하세요. 메일 서비스 연결 시 발생하는 사항에 대한 더 많은 정보를 제공하지만, 우아하지 않고 페이지 디자인을 깨뜨릴 수 있습니다. 사용자 활동이 없을 때만 사용하세요."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "메일: LD+JSON 사용 피하기"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "일부 이메일 클라이언트는 설명적인 LD+JSON 형식을 이해하지 못해 최종 사용자에게 느슨한 JSON 문자열로 표시합니다. 이 경우 아래 변수를 'false'로 설정하여 이 헤더를 비활성화할 수 있습니다."
+
+msgid "Mail: DKIM headers"
+msgstr "메일: DKIM 헤더"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "DKIM 구성 설정의 JSON 배열을 입력하세요 (예시 참조)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "메일: XOAuth2 옵션"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "XOAuth2 기반 이메일 서비스를 사용하는 경우, 이 JSON 설정을 사용하여 특정 구성을 저장하세요 (예시 참조)하고 메일 서비스 설정에서 XOAuth2를 선택하세요."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "환경 유형을 정의합니다: \"prod\" (일반 프로덕션), \"validation\" (통계 보고 제외 프로덕션과 유사), 또는 \"test\" (미번역 문자열 표시 등 개발자 도구가 포함된 디버그 모드)."
+
+msgid "Global limit of users per course"
+msgstr "코스당 사용자 전역 제한"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "플랫폼의 단일 코스에 가입할 수 있는 사용자(교사 포함)의 전역 최대 수를 정의합니다. 제한을 비활성화하려면 0으로 설정하세요. 이는 오픈 포털에서 코스가 과부하되지 않도록 합니다."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "어떤 역할은 명확히 표시하고 어떤 역할은 숨길지 정의하기 위해 배열을 사용하도록 활성화하세요."
+
+msgid "Show base course posts in session course"
+msgstr "세션 코스에 기본 코스 게시물 표시"
+
+msgid "Limit identical email usage"
+msgstr "동일 이메일 사용 제한"
+

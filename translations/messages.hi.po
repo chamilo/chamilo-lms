@@ -31449,3 +31449,141 @@ msgstr "अधिक विवरण के लिए %s पर जाएँ"
 msgid "Manager"
 msgstr "प्रबंधक"
 
+msgid "Mark as"
+msgstr "चिह्नित करें"
+
+msgid "Reply to all"
+msgstr "सभी को उत्तर दें"
+
+msgid "SCIM external ID"
+msgstr "SCIM बाहरी आईडी"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 आईडी"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "कृपया नियम और शर्तों का नवीनतम संस्करण स्वीकार करें।"
+
+msgid "Required value for operation without path"
+msgstr "पथ के बिना संचालन के लिए आवश्यक मान"
+
+msgid "Available space (%s)"
+msgstr "उपलब्ध स्थान (%s)"
+
+msgid "Index this description for the global search"
+msgstr "वैश्विक खोज के लिए इस विवरण को अनुक्रमित करें"
+
+msgid "Unknown course"
+msgstr "अज्ञात पाठ्यक्रम"
+
+msgid "Certificate not found."
+msgstr "प्रमाणपत्र नहीं मिला।"
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "सुरक्षा टोकन समाप्त हो गया। कृपया पृष्ठ को पुनः लोड करें और पुनः प्रयास करें।"
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "केवल प्लेटफ़ॉर्म प्रशासक पाठ्यक्रम दृश्यता बदल सकते हैं।"
+
+msgid "Unexpected error while subscribing the user"
+msgstr "उपयोगकर्ता को सदस्यता लेते समय अप्रत्याशित त्रुटि"
+
+msgid "Search in resource logs"
+msgstr "संसाधन लॉग में खोजें"
+
+msgid "Include this learning path in the global search results"
+msgstr "वैश्विक खोज परिणामों में इस लर्निंग पथ को शामिल करें"
+
+msgid "The course code already exists"
+msgstr "पाठ्यक्रम कोड पहले से मौजूद है"
+
+msgid "Latest news"
+msgstr "नवीनतम समाचार"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Chamilo से नवीनतम समाचार प्राप्त करें, जिसमें सुरक्षा कमजोरियाँ और घटनाएँ शामिल हैं, सीधे आपके प्रशासन पैनल में। ये समाचार हर बार जब आप प्रशासन पृष्ठ लोड करते हैं तो Chamilo समाचार सर्वर पर जाँचे जाते हैं और केवल प्रशासकों को दिखाई देते हैं।"
+
+msgid "Chamilo support block"
+msgstr "Chamilo समर्थन ब्लॉक"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "पेशेवर समर्थन के लिए आधिकारिक सेवा प्रदाताओं से संपर्क करने का आसान तरीका और प्रो टिप्स प्राप्त करें, सीधे Chamilo के निर्माताओं से। यह ब्लॉक आपके प्रशासन पृष्ठ पर दिखाई देता है, केवल प्रशासकों को दिखाई देता है, और हर बार जब आप प्रशासन पृष्ठ लोड करते हैं तो ताज़ा होता है।"
+
+msgid "Hide option to send announcements to HR users"
+msgstr "HR उपयोगकर्ताओं को घोषणाएँ भेजने का विकल्प छिपाएँ"
+
+msgid "Allow session admins to download private certificates"
+msgstr "सत्र प्रशासकों को निजी प्रमाणपत्र डाउनलोड करने की अनुमति दें"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "यदि सक्षम किया गया, तो सत्र प्रशासक प्रमाणपत्र डाउनलोड कर सकते हैं भले ही वे सार्वजनिक रूप से प्रकाशित न हों।"
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "यदि खाली न हो, तो पाठ्यक्रम निर्माण प्रक्रिया उपयोगकर्ता प्रोफ़ाइल में कुछ फ़ील्ड्स की खोज करेगी और पाठ्यक्रम के लिए उन्हें स्वचालित रूप से भर देगी। उदाहरण के लिए, डिजिटल मार्केटिंग में विशेषज्ञ शिक्षक प्रत्येक पाठ्यक्रम पर स्वचालित रूप से «डिजिटल मार्केटिंग» फ्लैग सेट कर सकता है जो (वह) बनाता है।"
+
+msgid "Main menu entries"
+msgstr "मुख्य मेनू प्रविष्टियाँ"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "मुख्य मेनू में दिखाने के लिए प्रविष्टियों को चिह्नित करें"
+
+msgid "Main menu entries per role"
+msgstr "भूमिका प्रति मुख्य मेनू प्रविष्टियाँ"
+
+msgid "Define header tabs visibility per role."
+msgstr "भूमिका प्रति हेडर टैब दृश्यता परिभाषित करें।"
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "तालिका के चारों ओर नेविगेशन में दिखाई देने वाले विकल्प सेट करें ताकि एक पृष्ठ पर कम या अधिक पंक्तियाँ दिखाई दें। उदाहरण: [50, 100, 200, 500]।"
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Chamilo में वीडियो प्लेयर के लिए सक्षम करने योग्य अतिरिक्त सुविधाओं का सरणी। विकल्पों में 'speed' शामिल है, जो वीडियो की प्लेबैक गति बदलने की अनुमति देता है।"
+
+msgid "Mail: character set"
+msgstr "मेल: चरित्र सेट"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "यदि आपको उन ईमेल भेजते समय उपयोग करने के लिए charset परिभाषित करने की आवश्यकता हो। यदि निश्चित न हों तो खाली छोड़ दें।"
+
+msgid "Mail: Debug"
+msgstr "मेल: डिबग"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "ईमेल भेजने के डिबग लॉग सक्षम करने का चयन करें। ये मेल सेवा से कनेक्ट होते समय होने वाली घटनाओं के बारे में अधिक जानकारी देंगे, लेकिन ये सुंदर नहीं हैं और पृष्ठ डिज़ाइन तोड़ सकते हैं। केवल तब उपयोग करें जब कोई उपयोगकर्ता गतिविधि न हो।"
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "मेल: LD+JSON का उपयोग न करें"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "कुछ ईमेल क्लाइंट वर्णनात्मक LD+JSON प्रारूप को समझ नहीं पाते, इसे अंतिम उपयोगकर्ता को ढीली JSON स्ट्रिंग के रूप में दिखाते हैं। यदि ऐसा है, तो नीचे दिए गए चर को 'false' सेट करके इस हेडर को अक्षम करना चाह सकते हैं।"
+
+msgid "Mail: DKIM headers"
+msgstr "मेल: DKIM हेडर"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "अपने DKIM कॉन्फ़िगरेशन सेटिंग्स का JSON सरणी दर्ज करें (उदाहरण देखें)।"
+
+msgid "Mail: XOAuth2 options"
+msgstr "मेल: XOAuth2 विकल्प"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "यदि आप XOAuth2-आधारित ईमेल सेवा का उपयोग करते हैं, तो अपनी विशिष्ट कॉन्फ़िगरेशन को JSON में सहेजने के लिए यह सेटिंग उपयोग करें (उदाहरण देखें) और मेल सेवा सेटिंग में XOAuth2 चुनें।"
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "परिवेश प्रकार परिभाषित करता है: \"prod\" (सामान्य उत्पादन), \"validation\" (उत्पादन जैसा लेकिन सांख्यिकी रिपोर्टिंग के बिना), या \"test\" (डिबग मोड जिसमें अनुवादित स्ट्रिंग संकेतक जैसे डेवलपर टूल्स)।"
+
+msgid "Global limit of users per course"
+msgstr "कोर्स प्रति उपयोगकर्ताओं की वैश्विक सीमा"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "मंच में किसी एकल कोर्स में सदस्यता लेने की अनुमति वाले उपयोगकर्ताओं (शिक्षकों सहित) की वैश्विक अधिकतम संख्या परिभाषित करता है। सीमा अक्षम करने के लिए इस मान को 0 सेट करें। यह खुले पोर्टलों में कोर्सों के अधिभारित होने से बचाता है।"
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "स्पष्ट रूप से प्रदर्शित होने वाले और छिपे रहने वाले भूमिकाओं को परिभाषित करने के लिए सरणी उपयोग करने के लिए सक्षम करें।"
+
+msgid "Show base course posts in session course"
+msgstr "सत्र कोर्स में आधार कोर्स पोस्ट दिखाएँ"
+
+msgid "Limit identical email usage"
+msgstr "एक समान ईमेल उपयोग सीमित करें"
+

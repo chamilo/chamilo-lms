@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "مع التقدير"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "مثال على الصيغة: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "نموذج صيغة: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "مدى المتغير"
@@ -31466,4 +31466,142 @@ msgstr "لمزيد من التفاصيل، قم بزيارة %s"
 
 msgid "Manager"
 msgstr "مدير"
+
+msgid "Mark as"
+msgstr "وضع علامة كـ"
+
+msgid "Reply to all"
+msgstr "الرد على الجميع"
+
+msgid "SCIM external ID"
+msgstr "معرف خارجي SCIM"
+
+msgid "OAuth2 ID"
+msgstr "معرف OAuth2"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "يرجى قبول النسخة الأحدث من شروط الاستخدام."
+
+msgid "Required value for operation without path"
+msgstr "قيمة مطلوبة للعملية بدون مسار"
+
+msgid "Available space (%s)"
+msgstr "المساحة المتاحة (%s)"
+
+msgid "Index this description for the global search"
+msgstr "فهرسة هذا الوصف للبحث العام"
+
+msgid "Unknown course"
+msgstr "مساق غير معروف"
+
+msgid "Certificate not found."
+msgstr "لم يتم العثور على الشهادة."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "انتهت صلاحية رمز الأمان. يرجى إعادة تحميل الصفحة والمحاولة مرة أخرى."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "يُسمح لمديري المنصة فقط بتغيير رؤية المساق."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "خطأ غير متوقع أثناء تسجيل المستخدم"
+
+msgid "Search in resource logs"
+msgstr "البحث في سجلات الموارد"
+
+msgid "Include this learning path in the global search results"
+msgstr "تضمين هذا المسار التعليمي في نتائج البحث العام"
+
+msgid "The course code already exists"
+msgstr "رمز المساق موجود بالفعل"
+
+msgid "Latest news"
+msgstr "آخر الأخبار"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "احصل على أحدث أخبار Chamilo، بما في ذلك الثغرات الأمنية والأحداث، مباشرة داخل لوحة الإدارة الخاصة بك. سيتم التحقق من هذه الأخبار على خادم أخبار Chamilo في كل مرة تقوم فيها بتحميل صفحة الإدارة وهي مرئية للمديرين فقط."
+
+msgid "Chamilo support block"
+msgstr "كتلة دعم Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "احصل على نصائح احترافية وطريقة سهلة للاتصال بمزودي الخدمات الرسميين للحصول على دعم احترافي، مباشرة من صانعي Chamilo. تظهر هذه الكتلة في صفحة الإدارة الخاصة بك، وهي مرئية للمديرين فقط، وتُحدث في كل مرة تقوم فيها بتحميل صفحة الإدارة."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "إخفاء خيار إرسال الإعلانات إلى مستخدمي الموارد البشرية"
+
+msgid "Allow session admins to download private certificates"
+msgstr "السماح لمديري الجلسات بتحميل الشهادات الخاصة"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "إذا تم تفعيلها، يمكن لمديري الجلسات تحميل الشهادات حتى لو لم يتم نشرها علنًا."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "إذا لم تكن فارغة، فإن عملية إنشاء المساق ستبحث عن بعض الحقول في ملف تعريف المستخدم وتملأها تلقائيًا للمساق. على سبيل المثال، يمكن لمعلم متخصص في التسويق الرقمي تعيين علامة «التسويق الرقمي» تلقائيًا على كل مساق ينشئه."
+
+msgid "Main menu entries"
+msgstr "مدخلات القائمة الرئيسية"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "حدد المدخلات التي تريد رؤيتها في القائمة الرئيسية"
+
+msgid "Main menu entries per role"
+msgstr "مدخلات القائمة الرئيسية حسب الدور"
+
+msgid "Define header tabs visibility per role."
+msgstr "تحديد رؤية علامات الرأس حسب الدور."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "حدد الخيارات التي تريد ظهورها في التنقل حول الجدول لإظهار صفوف أقل أو أكثر في صفحة واحدة. مثال: [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "مصفوفة من الميزات الإضافية التي يمكنك تفعيلها لمشغل الفيديو في Chamilo. تشمل الخيارات 'speed'، والتي تسمح لك بتغيير سرعة تشغيل الفيديو."
+
+msgid "Mail: character set"
+msgstr "البريد: مجموعة الأحرف"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "في حالة الحاجة إلى تحديد مجموعة الأحرف المستخدمة عند إرسال هذه الرسائل الإلكترونية. اتركها فارغة إذا لم تكن متأكدًا."
+
+msgid "Mail: Debug"
+msgstr "البريد: تصحيح الأخطاء"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "حدد ما إذا كنت تريد تفعيل سجلات تصحيح أخطاء إرسال البريد الإلكتروني. ستوفر هذه السجلات معلومات أكثر حول ما يحدث عند الاتصال بخدمة البريد، لكنها غير أنيقة وقد تكسر تصميم الصفحة. استخدمها فقط عند عدم وجود نشاط مستخدم."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "البريد: تجنب استخدام LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "بعض عملاء البريد الإلكتروني لا يفهمون تنسيق LD+JSON الوصفي، ويعرضونه كسلسلة JSON مفككة للمستخدم النهائي. إذا كان هذا هو حالتك، قد ترغب في تعيين المتغير أدناه إلى 'false' لتعطيل هذا الرأس."
+
+msgid "Mail: DKIM headers"
+msgstr "البريد: رؤوس DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "أدخل مصفوفة JSON لإعدادات تكوين DKIM الخاصة بك (انظر المثال)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "البريد: خيارات XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "إذا كنت تستخدم خدمة بريد إلكتروني تعتمد على XOAuth2، استخدم هذا الإعداد بتنسيق JSON لحفظ تكوينك الخاص (انظر المثال) واختر XOAuth2 في إعداد خدمة البريد."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "يحدد نوع البيئة: \"prod\" (الإنتاج العادي)، \"validation\" (مثل الإنتاج لكن بدون إحصاءات التقارير)، أو \"test\" (وضع التصحيح مع أدوات المطور مثل مؤشرات النصوص غير المترجمة)."
+
+msgid "Global limit of users per course"
+msgstr "الحد الأقصى العام لعدد المستخدمين لكل مساق"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "يحدد الحد الأقصى العام لعدد المستخدمين (بما في ذلك المعلمين) المسموح لهم بالاشتراك في أي مساق واحد في المنصة. اضبط هذه القيمة على 0 لتعطيل الحد. يساعد هذا في تجنب تحميل المساقات بشكل زائد في البوابات المفتوحة."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "فعّل لاستخدام مصفوفة لتحديد الأدوار التي يجب عرضها بوضوح والتي يجب إخفاؤها."
+
+msgid "Show base course posts in session course"
+msgstr "عرض منشورات المساق الأساسي في مساق الجلسة"
+
+msgid "Limit identical email usage"
+msgstr "حد استخدام البريد الإلكتروني المتطابق"
 

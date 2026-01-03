@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:запазени права,, no:свободен"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Поток от октети,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Octet поток,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:тест (упражнение),,      simulation:симулация,,      questionnaire:въпросник,,      diagram:диаграма,,      figure:фигура,,      graph:графика,,      index:индекс,,      slide:слайд,,      table:таблица,,      narrative text:обзор,,      exam:изпит,,      experiment:експеримент,,      problem statement:постановка на проблем,,      self assessment:самостоятелно оценяване,,      lecture:лекция"
@@ -31454,4 +31454,142 @@ msgstr "За повече детайли посетете %s"
 
 msgid "Manager"
 msgstr "Мениджър"
+
+msgid "Mark as"
+msgstr "Маркирай като"
+
+msgid "Reply to all"
+msgstr "Отговори на всички"
+
+msgid "SCIM external ID"
+msgstr "SCIM външен ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Моля, приемете най-новата версия на условията и правилата."
+
+msgid "Required value for operation without path"
+msgstr "Задължителна стойност за операция без път"
+
+msgid "Available space (%s)"
+msgstr "Налично място (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Индексирай това описание за глобалното търсене"
+
+msgid "Unknown course"
+msgstr "Неизвестен курс"
+
+msgid "Certificate not found."
+msgstr "Сертификатът не е намерен."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Токенът за сигурност е изтекъл. Моля, презаредете страницата и опитайте отново."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Само администраторите на платформата могат да променят видимостта на курса."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Неочаквана грешка при записването на потребителя"
+
+msgid "Search in resource logs"
+msgstr "Търсене в дневниците на ресурсите"
+
+msgid "Include this learning path in the global search results"
+msgstr "Включи този учебен път в резултатите от глобалното търсене"
+
+msgid "The course code already exists"
+msgstr "Кодът на курса вече съществува"
+
+msgid "Latest news"
+msgstr "Най-новите новини"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Получавайте най-новите новини от Chamilo, включително уязвимости в сигурността и събития, директно в панела за администрация. Тези новини ще се проверяват на сървъра за новини на Chamilo всеки път, когато заредите страницата за администрация, и са видими само за администраторите."
+
+msgid "Chamilo support block"
+msgstr "Блок за поддръжка на Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Получавайте професионални съвети и лесен начин за свързване с официални доставчици на услуги за професионална поддръжка директно от създателите на Chamilo. Този блок се появява на страницата за администрация, е видим само за администраторите и се опреснява всеки път, когато заредите страницата за администрация."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Скрий опцията за изпращане на обяви към HR потребители"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Разреши на администраторите на сесии да изтеглят частни сертификати"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Ако е активирано, администраторите на сесии могат да изтеглят сертификати дори ако не са публично публикувани."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Ако не е празно, процесът на създаване на курс ще търси някои полета в профила на потребителя и ще ги попълни автоматично за курса. Например, учител, специализиран в дигитален маркетинг, може автоматично да зададе флаг „дигитален маркетинг“ на всеки курс, който създава."
+
+msgid "Main menu entries"
+msgstr "Входове в главното меню"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Отбележете записите, които искате да се появят в главното меню"
+
+msgid "Main menu entries per role"
+msgstr "Входове в главното меню на роля"
+
+msgid "Define header tabs visibility per role."
+msgstr "Дефинирайте видимостта на заглавните разделители на роля."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Задайте опциите, които искате да се появят в навигацията около таблица, за да покажете по-малко или повече редове на страница. н. пр. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Масив от допълнителни функции, които можете да активирате за видео плейъра в Chamilo. Опциите включват 'speed', която позволява да промените скоростта на възпроизвеждане на видео."
+
+msgid "Mail: character set"
+msgstr "Поща: набор от символи"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "В случай че трябва да дефинирате набора от символи за използване при изпращане на тези имейли. Оставете празно, ако не сте сигурни."
+
+msgid "Mail: Debug"
+msgstr "Поща: Отстраняване на грешки"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Изберете дали искате да активирате записите за отстраняване на грешки при изпращане на имейли. Те ще ви предоставят повече информация за това какво се случва при свързване с пощенската услуга, но не са елегантни и могат да нарушат дизайна на страницата. Използвайте само когато няма потребителска активност."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Имейл: Избягвайте използването на LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Някои имейл клиенти не разбират описателния формат LD+JSON и го показват като свободен JSON низ на крайния потребител. Ако това е вашият случай, може би ще искате да зададете променливата по-долу на 'false', за да деактивирате този заглавен ред."
+
+msgid "Mail: DKIM headers"
+msgstr "Имейл: DKIM заглавки"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Въведете JSON масив с настройките на вашата DKIM конфигурация (вижте примера)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Имейл: XOAuth2 опции"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Ако използвате пощенска услуга на базата XOAuth2, използвайте тази настройка в JSON, за да запазите вашата специфична конфигурация (вижте примера) и изберете XOAuth2 в настройката за пощенската услуга."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Дефинира типа на средата: \"prod\" (нормален продукцион), \"validation\" (като продукцион, но без докладване на статистики) или \"test\" (режим за отстраняване на грешки с инструменти за разработчици като индикатори за непревлечени низове)."
+
+msgid "Global limit of users per course"
+msgstr "Глобален лимит на потребители на курс"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Дефинира глобален максимален брой потребители (включително преподаватели), които могат да бъдат абонирани към един курс в платформата. Задайте тази стойност на 0, за да деактивирате лимита. Това помага да се избегне претоварване на курсовете в отворени портали."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Активирайте, за да използвате масив за дефиниране на ролите, които трябва да се показват ясно, и тези, които трябва да се скрият."
+
+msgid "Show base course posts in session course"
+msgstr "Показвай публикациите от базовия курс в курса на сесията"
+
+msgid "Limit identical email usage"
+msgstr "Ограничи използването на идентични имейли"
 

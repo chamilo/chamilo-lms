@@ -31468,3 +31468,141 @@ msgstr "Για περισσότερες λεπτομέρειες επισκεφ�
 msgid "Manager"
 msgstr "Διαχειριστής"
 
+msgid "Mark as"
+msgstr "Σημείωση ως"
+
+msgid "Reply to all"
+msgstr "Απάντηση σε όλους"
+
+msgid "SCIM external ID"
+msgstr "SCIM εξωτερικό ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Παρακαλούμε αποδεχθείτε την τελευταία έκδοση των όρων και προϋποθέσεων."
+
+msgid "Required value for operation without path"
+msgstr "Απαιτούμενη τιμή για λειτουργία χωρίς διαδρομή"
+
+msgid "Available space (%s)"
+msgstr "Διαθέσιμος χώρος (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Ενταγμένη αυτή την περιγραφή στην παγκόσμια αναζήτηση"
+
+msgid "Unknown course"
+msgstr "Άγνωστο μάθημα"
+
+msgid "Certificate not found."
+msgstr "Πιστοποιητικό δεν βρέθηκε."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Το διακριτικό ασφαλείας εξέπνευσε. Παρακαλούμε επαναφορτώστε τη σελίδα και δοκιμάστε ξανά."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Μόνο οι διαχειριστές της πλατφόρμας μπορούν να αλλάξουν την ορατότητα του μαθήματος."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Απροσδόκητο σφάλμα κατά την εγγραφή του χρήστη"
+
+msgid "Search in resource logs"
+msgstr "Αναζήτηση στα αρχεία πόρων"
+
+msgid "Include this learning path in the global search results"
+msgstr "Συμπερίληψη αυτού του μονοπατιού μάθησης στα αποτελέσματα παγκόσμιας αναζήτησης"
+
+msgid "The course code already exists"
+msgstr "Ο κωδικός του μαθήματος υπάρχει ήδη"
+
+msgid "Latest news"
+msgstr "Τελευταία νέα"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Λάβετε τα τελευταία νέα από το Chamilo, συμπεριλαμβανομένων ευπαθειών ασφαλείας και εκδηλώσεων, απευθείας στο πάνελ διαχείρισής σας. Αυτά τα νέα ελέγχονται στον διακομιστή νέων του Chamilo κάθε φορά που φορτώνετε τη σελίδα διαχείρισης και είναι ορατά μόνο στους διαχειριστές."
+
+msgid "Chamilo support block"
+msgstr "Τμήμα υποστήριξης Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Λάβετε επαγγελματικές συμβουλές και εύκολο τρόπο επικοινωνίας με επίσημους παρόχους υπηρεσιών για επαγγελματική υποστήριξη, απευθείας από τους δημιουργούς του Chamilo. Αυτό το τμήμα εμφανίζεται στη σελίδα διαχείρισής σας, είναι ορατό μόνο από διαχειριστές και ανανεώνεται κάθε φορά που φορτώνετε τη σελίδα διαχείρισης."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Απόκρυψη επιλογής αποστολής ανακοινώσεων σε χρήστες HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Επιτρέψτε στους διαχειριστές συνεδρίας να κατεβάσουν ιδιωτικά πιστοποιητικά"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Αν είναι ενεργοποιημένο, οι διαχειριστές συνεδρίας μπορούν να κατεβάσουν πιστοποιητικά ακόμα και αν δεν έχουν δημοσιευθεί δημόσια."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Αν δεν είναι κενό, η διαδικασία δημιουργίας μαθήματος θα αναζητήσει ορισμένα πεδία στο προφίλ του χρήστη και θα τα συμπληρώσει αυτόματα για το μάθημα. Για παράδειγμα, ένας δάσκαλος εξειδικευμένος στο ψηφιακό μάρκετινγκ θα μπορούσε αυτόματα να ορίσει μια σημαία «ψηφιακό μάρκετινγκ» σε κάθε μάθημα που δημιουργεί."
+
+msgid "Main menu entries"
+msgstr "Καταχωρήσεις κύριου μενού"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Επιλέξτε τις καταχωρήσεις που θέλετε να εμφανιστούν στο κύριο μενού"
+
+msgid "Main menu entries per role"
+msgstr "Καταχωρήσεις κύριου μενού ανά ρόλο"
+
+msgid "Define header tabs visibility per role."
+msgstr "Ορίστε την ορατότητα καρτελών κεφαλίδας ανά ρόλο."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Ορίστε τις επιλογές που θέλετε να εμφανιστούν στη πλοήγηση γύρω από έναν πίνακα για να δείξετε λιγότερες ή περισσότερες γραμμές σε μία σελίδα. π.χ. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Πίνακας επιπλέον χαρακτηριστικών που μπορείτε να ενεργοποιήσετε για τον αναπαραγωγέα βίντεο στο Chamilo. Οι επιλογές περιλαμβάνουν 'speed', που σας επιτρέπει να αλλάξετε την ταχύτητα αναπαραγωγής ενός βίντεο."
+
+msgid "Mail: character set"
+msgstr "Ταχυδρομείο: σύνολο χαρακτήρων"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Σε περίπτωση που χρειάζεται να ορίσετε το charset που θα χρησιμοποιηθεί κατά την αποστολή αυτών των email. Αφήστε κενό αν δεν είστε σίγουροι."
+
+msgid "Mail: Debug"
+msgstr "Ταχυδρομείο: Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Επιλέξτε αν θέλετε να ενεργοποιήσετε τα αρχεία καταγραφής debug αποστολής email. Αυτά θα σας δώσουν περισσότερες πληροφορίες για το τι συμβαίνει κατά τη σύνδεση στην υπηρεσία ταχυδρομείου, αλλά δεν είναι κομψά και μπορεί να σπάσουν τον σχεδιασμό της σελίδας. Χρησιμοποιήστε μόνο όταν δεν υπάρχει δραστηριότητα χρηστών."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Ταχυδρομείο: Αποφυγή χρήσης LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Μερικοί πελάτες email δεν κατανοούν τη μορφή LD+JSON περιγραφής, εμφανίζοντάς την ως χαλαρή συμβολοσειρά JSON στον τελικό χρήστη. Αν ισχύει αυτό για εσάς, ίσως θέλετε να ορίσετε τη μεταβλητή παρακάτω σε 'false' για να απενεργοποιήσετε αυτήν την κεφαλίδα."
+
+msgid "Mail: DKIM headers"
+msgstr "Ταχυδρομείο: Κεφαλίδες DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Εισαγάγετε έναν πίνακα JSON με τις ρυθμίσεις διαμόρφωσης DKIM σας (δείτε παράδειγμα)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Ταχυδρομείο: Επιλογές XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Αν χρησιμοποιείτε υπηρεσία email βασισμένη σε XOAuth2, χρησιμοποιήστε αυτήν τη ρύθμιση σε JSON για να αποθηκεύσετε τη συγκεκριμένη διαμόρφωσή σας (δείτε παράδειγμα) και επιλέξτε XOAuth2 στη ρύθμιση υπηρεσίας ταχυδρομείου."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Ορίζει τον τύπο περιβάλλοντος: \"prod\" (κανονική παραγωγή), \"validation\" (όπως παραγωγή αλλά χωρίς αναφορά στατιστικών), ή \"test\" (κατάσταση debug με εργαλεία προγραμματιστή όπως δείκτες μη μεταφρασμένων συμβολοσειρών)."
+
+msgid "Global limit of users per course"
+msgstr "Γlobal όριο χρηστών ανά μάθημα"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Ορίζει έναν παγκόσμιο μέγιστο αριθμό χρηστών (συμπεριλαμβανομένων δασκάλων) που επιτρέπεται να εγγραφούν σε οποιοδήποτε μεμονωμένο μάθημα στην πλατφόρμα. Ορίστε αυτήν την τιμή σε 0 για να απενεργοποιήσετε το όριο. Αυτό βοηθά στην αποφυγή υπερφόρτωσης μαθημάτων σε ανοιχτά portals."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Ενεργοποιήστε για να χρησιμοποιήσετε έναν πίνακα που ορίζει ποιους ρόλους θα εμφανίζονται ξεκάθαρα και ποιους θα κρύβονται."
+
+msgid "Show base course posts in session course"
+msgstr "Εμφάνιση αναρτήσεων βασικού μαθήματος σε μάθημα συνεδρίας"
+
+msgid "Limit identical email usage"
+msgstr "Περιορισμός χρήσης ίδιου email"
+

@@ -31455,3 +31455,141 @@ msgstr "Untuk detail lebih lanjut kunjungi %s"
 msgid "Manager"
 msgstr "Manajer"
 
+msgid "Mark as"
+msgstr "Tandai sebagai"
+
+msgid "Reply to all"
+msgstr "Balas ke semua"
+
+msgid "SCIM external ID"
+msgstr "SCIM external ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Silakan terima versi terbaru dari syarat dan ketentuan."
+
+msgid "Required value for operation without path"
+msgstr "Nilai yang diperlukan untuk operasi tanpa path"
+
+msgid "Available space (%s)"
+msgstr "Ruang tersedia (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Indeks deskripsi ini untuk pencarian global"
+
+msgid "Unknown course"
+msgstr "Kursus tidak dikenal"
+
+msgid "Certificate not found."
+msgstr "Sertifikat tidak ditemukan."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Token keamanan kedaluwarsa. Silakan muat ulang halaman dan coba lagi."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Hanya administrator platform yang dapat mengubah visibilitas kursus."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Kesalahan tak terduga saat mendaftarkan pengguna"
+
+msgid "Search in resource logs"
+msgstr "Cari di log sumber daya"
+
+msgid "Include this learning path in the global search results"
+msgstr "Sertakan jalur pembelajaran ini dalam hasil pencarian global"
+
+msgid "The course code already exists"
+msgstr "Kode kursus sudah ada"
+
+msgid "Latest news"
+msgstr "Berita terbaru"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Dapatkan berita terbaru dari Chamilo, termasuk kerentanan keamanan dan acara, langsung di panel administrasi Anda. Berita ini akan diperiksa di server berita Chamilo setiap kali Anda memuat halaman administrasi dan hanya terlihat oleh administrator."
+
+msgid "Chamilo support block"
+msgstr "Blok dukungan Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Dapatkan tips pro dan cara mudah menghubungi penyedia layanan resmi untuk dukungan profesional, langsung dari pembuat Chamilo. Blok ini muncul di halaman administrasi Anda, hanya terlihat oleh administrator, dan diperbarui setiap kali Anda memuat halaman administrasi."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Sembunyikan opsi kirim pengumuman ke pengguna HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Izinkan admin sesi mengunduh sertifikat pribadi"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Jika diaktifkan, administrator sesi dapat mengunduh sertifikat meskipun tidak dipublikasikan secara publik."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Jika tidak kosong, proses pembuatan kursus akan mencari beberapa field di profil pengguna dan mengisi secara otomatis untuk kursus. Misalnya, seorang guru spesialis pemasaran digital dapat secara otomatis mengatur flag « pemasaran digital » pada setiap kursus yang dibuat."
+
+msgid "Main menu entries"
+msgstr "Entri menu utama"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Centang entri yang ingin Anda lihat muncul di menu utama"
+
+msgid "Main menu entries per role"
+msgstr "Entri menu utama per peran"
+
+msgid "Define header tabs visibility per role."
+msgstr "Tentukan visibilitas tab header per peran."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Atur opsi yang ingin muncul di navigasi sekitar tabel untuk menampilkan lebih sedikit atau lebih banyak baris di satu halaman. misalnya [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Array fitur tambahan yang dapat Anda aktifkan untuk pemutar video di Chamilo. Opsi termasuk 'speed', yang memungkinkan Anda mengubah kecepatan pemutaran video."
+
+msgid "Mail: character set"
+msgstr "Surat: set karakter"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Jika Anda perlu menentukan charset yang digunakan saat mengirim email tersebut. Biarkan kosong jika tidak yakin."
+
+msgid "Mail: Debug"
+msgstr "Surat: Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Pilih apakah Anda ingin mengaktifkan log debug pengiriman email. Ini akan memberikan informasi lebih lanjut tentang apa yang terjadi saat terhubung ke layanan email, tetapi tidak elegan dan mungkin merusak desain halaman. Hanya gunakan saat tidak ada aktivitas pengguna."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Surat: Hindari penggunaan LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Beberapa klien email tidak memahami format deskriptif LD+JSON, menampilkannya sebagai string JSON longgar kepada pengguna akhir. Jika ini kasus Anda, Anda mungkin ingin mengatur variabel di bawah ini menjadi 'false' untuk menonaktifkan header ini."
+
+msgid "Mail: DKIM headers"
+msgstr "Surat: Header DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Masukkan array JSON pengaturan konfigurasi DKIM Anda (lihat contoh)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Surat: Opsi XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Jika Anda menggunakan layanan email berbasis XOAuth2, gunakan pengaturan ini dalam JSON untuk menyimpan konfigurasi spesifik Anda (lihat contoh) dan pilih XOAuth2 di pengaturan layanan email."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Menentukan tipe lingkungan: \"prod\" (produksi normal), \"validation\" (seperti produksi tetapi tanpa pelaporan statistik), atau \"test\" (mode debug dengan alat pengembang seperti indikator string yang belum diterjemahkan)."
+
+msgid "Global limit of users per course"
+msgstr "Batas global pengguna per kursus"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Menentukan jumlah maksimum global pengguna (termasuk guru) yang diizinkan terdaftar di satu kursus di platform. Atur nilai ini ke 0 untuk menonaktifkan batas. Ini membantu menghindari kursus kelebihan beban di portal terbuka."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Aktifkan untuk menggunakan array yang menentukan peran mana yang harus ditampilkan dengan jelas dan mana yang harus disembunyikan."
+
+msgid "Show base course posts in session course"
+msgstr "Tampilkan posting kursus dasar di kursus sesi"
+
+msgid "Limit identical email usage"
+msgstr "Batasi penggunaan email identik"
+

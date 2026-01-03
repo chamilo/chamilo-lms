@@ -31449,3 +31449,141 @@ msgstr "Par plui detals visitâ %s"
 msgid "Manager"
 msgstr "Manager"
 
+msgid "Mark as"
+msgstr "Marcî come"
+
+msgid "Reply to all"
+msgstr "Rispondi a tuti"
+
+msgid "SCIM external ID"
+msgstr "SCIM external ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Acceptait la version ultime des condizions generâls."
+
+msgid "Required value for operation without path"
+msgstr "Valôr obligatori par l'operazion senz chemin"
+
+msgid "Available space (%s)"
+msgstr "Spazi disponibil (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Indizê cheste descrizion par la riecherche globale"
+
+msgid "Unknown course"
+msgstr "Cors indeteminât"
+
+msgid "Certificate not found."
+msgstr "Certificât nu je vûr dut."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Token di sicurêsse scadû. Plese tornâ a cjarjâ la pâgine e proâ une vot autre."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Sulament i aministradors dla plate-forme jus podin cambiâ la visibilitât dal curs."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Erôr inaspetât durant la sutiscrizion dal utent"
+
+msgid "Search in resource logs"
+msgstr "Kêrce nei logs des ressoris"
+
+msgid "Include this learning path in the global search results"
+msgstr "Include cheste tiere di aprument dal percors di apriment par i risultâts de riecherche globâl"
+
+msgid "The course code already exists"
+msgstr "Il cûd dal curs esist chi"
+
+msgid "Latest news"
+msgstr "ultime novitâts"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Pigliâ lis ultime novitâts di Chamilo, inclusîs lis vulnerabilitâts di sicurêsse e jûts, drettament dentri il to pârel di aministrazion. Chestis novitâts a vignaran controladis sul server des novitâts di Chamilo ogni vot che si cjarie la pâgine di aministrazion e a son vizibîs sulament ai aministradors."
+
+msgid "Chamilo support block"
+msgstr "Blòc di supuart par Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Pigliâ consigjis profesjonâls e un mêtôt fasil di contatâ furnidôrs di servizis uficiâls par supuart profesjonâl, drettament dai creatôrs di Chamilo. Chest blòc comparît te pâgine di aministrazion, è vizîs sulament ai aministradors, e si anoveva ogni vot che si cjarie la pâgine di aministrazion."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Scondi opzion par inviâ annunci a utents HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Permit ai administradors di sesion di dulonjâ certificâts privâts"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Se ativât, i administradors di sesion pues dulonjâ certificâts ancôr che no siân publicât publicamente."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Se no stât vuôt, il process di creazion dal curs jerche cualchi camp tal profîl utent e lu autocumpìne par il curs. Par esempi, un ducj che si specialize in marketing digital podê automatichement stâi un bandiêr « marketing digital » su ogni curs che (j) creê."
+
+msgid "Main menu entries"
+msgstr "Vois dal menu prinçipâl"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Sèile le vois che vûl che a jerin visibîs tal menu prinçipâl"
+
+msgid "Main menu entries per role"
+msgstr "Vois dal menu prinçipâl par rol"
+
+msgid "Define header tabs visibility per role."
+msgstr "Definîs la visibilitât des tabs dal header par rol."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Stâi lis opçions che vûl che a jerin visibîs intûr a une tabêl par mostrâ minûs o plui rîis su une pâge. par es. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Arê di funçions extrac che ti pues ativâ par il player video in Chamilo. Lis opçions includin 'speed', che ti permit di cambiâ la velochitât di riproduzion di un video."
+
+msgid "Mail: character set"
+msgstr "Post: grup di caratars"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Se âs bisôn di definî il charset da doprâ cuând si inviân chei post. Lâs vuôt se nô suni sigûrs."
+
+msgid "Mail: Debug"
+msgstr "Post: Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Sèile se vûl ativâ lis logs di debug par l'invio dai post. Chei ti dîn plui informazions su ce che a suçede cuând si conet a servis di post, ma nâ son elegants e pues ruinâ il design dal pâge. Doprâju solo cuant che no i è ativitât di utents."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Post: Evitâ l'usât di LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Cualche client di post no capìs il formât descriutîf LD+JSON, mostrantju come une stringhe JSON scielte al utent finâl. Se chest è il to cas, podaressis vulê stâi la variâbe sot 'false' par disativâ chest header."
+
+msgid "Mail: DKIM headers"
+msgstr "Post: Headers DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Inserîs un arê JSON des impostaturs di configurazion DKIM (vê esempi)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Post: opçions XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Se dopris un servis di post basât su XOAuth2, dopra chest impostatûr in JSON par salvâ la tô configurazion specifeche (vê esempi) e sèile XOAuth2 intal impostatûr dal servis di post."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Definîs il tip di ambient: \"prod\" (produzion normâl), \"validation\" (come produzion ma senza rapuarts statistichs), o \"test\" (mòd debug cun strûts par diziuleters come indicadôrs di stringhis no tradûts)."
+
+msgid "Global limit of users per course"
+msgstr "Limit globâl di utents par curs"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Definîs un nu mar tal utents (ducj inclusîs) permetûts par iscrîust a un curs singulâr tal plateform. Stâ chest valor a 0 par disativâ il limit. Chest juide a evitâ che i curs si cjargjin tai portâls aprîts."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Ative par doprâ un arê par definî chei rols a deuin mostrâ clâr e chei a deuin scondûts."
+
+msgid "Show base course posts in session course"
+msgstr "Mostre i post dal curs base tal curs di sesion"
+
+msgid "Limit identical email usage"
+msgstr "Limitâ l'usât di parets email identichs"
+

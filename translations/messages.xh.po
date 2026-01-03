@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -31448,4 +31448,142 @@ msgstr "Ngakwimbalasane ezongezelelweyo undwendwele %s"
 
 msgid "Manager"
 msgstr "Mlawuli"
+
+msgid "Mark as"
+msgstr "Phawula njengo"
+
+msgid "Reply to all"
+msgstr "Phendula kubo bonke"
+
+msgid "SCIM external ID"
+msgstr "SCIM external ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Nceda uamkele uhlobo lwamva nje lwezifundela nezigqibo."
+
+msgid "Required value for operation without path"
+msgstr "Ixabiso eliyimfuneko kuqhubeko ngaphandle kwendlela"
+
+msgid "Available space (%s)"
+msgstr "Indawo ekhona (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Index ngolu chale kuza kufunyanwa jikelele"
+
+msgid "Unknown course"
+msgstr "Izifundo ezingaziwayo"
+
+msgid "Certificate not found."
+msgstr "Isatifikethi asifunyaneki."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Itokheni yokhuseleko liphelelwe lixesha. Nceda ulayishe ipheji kwakhona kwaye uzame ngokutsha."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Abalawuli beqonga kuphela abanokutshintsha ukubonakala kwesifundo."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Impazamo engalindelekanga ngexesha lokubhalisela umsebenzisi"
+
+msgid "Search in resource logs"
+msgstr "Gqiba kwii-log zezixhobo"
+
+msgid "Include this learning path in the global search results"
+msgstr "Qulathe le ndlela yokufunda kwiziphumo zokugqiba kwiqonga eliphela"
+
+msgid "The course code already exists"
+msgstr "Ikhowudi yesifundo sele ikhona"
+
+msgid "Latest news"
+msgstr "Iindaba zakamuva"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Fumana iindaba zakamuva zikaChamilo, kuquka iingozi zokhuseleko kunye nemicimbi, ngqo ngaphakathi kwipaneli yolawulo lwakho. Ezi ndawo zeendaba ziya kuhlolwa kwiserver yeendaba zeChamilo ngalo lonke ixesha ulayisha ipheji yolawulo kwaye zibonakala kubalawuli kuphela."
+
+msgid "Chamilo support block"
+msgstr "IBhloko lokuxhasa iChamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Fumana iingcebiso zobuchwepheshe kunye nendlela elula yokunxibelelana nababonelelisi beenkonzo ezisemthethweni ukuze baxhase ngobuchwepheshe, ngqo kubavelisi beChamilo. Esi bhloko sivelaphaya kwipheji yakho yolawulo, sibonakala kubalawuli kuphela, kwaye sihlaziywa ngalo lonke ixesha ulayisha ipheji yolawulo."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Fihla ukhetho lokuthumela izaziso kubasebenzisi be-HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Vumela abalawuli beeseshini ukuba bakhuphele iisatifikethi zabucala"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Ukuba ivuliwe, abalawuli beeseshini bangakhuphela iisatifikethi nasitsho bengapapashwa esidlangalaleni."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Ukuba ayingaqheyi, inkqubo yokudala isifundo iya kufuna amasimi kwiprofayili yomsebenzisi kwaye iwagcwalise ngokuzenzekelayo kwisifundo. Umzekelo, utitshala ogxile kwintengiso yedijithali unokusetra iflegi « intengiso yedijithali » ngokuzenzekelayo kwisifundo ngasinye asidala."
+
+msgid "Main menu entries"
+msgstr "Amangenelo emenyu ephambili"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Hlola ingenelo ofuna ukuyibona ivele kwimenyu ephambili"
+
+msgid "Main menu entries per role"
+msgstr "Amangenelo emenyu ephambili ngendima nganye"
+
+msgid "Define header tabs visibility per role."
+msgstr "Chaza ukubonakala kweethebhu zentloko ngendima nganye."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Seta iinketho ofuna ukuzibonisa kwimphezulu yokuhamba etafileni ukuze ubonise imigca encinci okanye eninzi kwipheji enye. umz. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Uluhlu lwezinto ezongezelelweyo onokuzivulela kumdlali wevidiyo eChamilo. Iinketho ziquka 'ispeed', evumela ukutshintsha isantya sokudlala ividiyo."
+
+msgid "Mail: character set"
+msgstr "Iposi: isethi yoomlinganiselo"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Ukuba kufuneka uchaze i-charset ekuthumeleni ezi posi. Shiya ixande ukuba awunaqiniseki."
+
+msgid "Mail: Debug"
+msgstr "Iposi: Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Khetha ukuba uyafuna ukuvula iilog zokudibaga zokuthumela iimeyile. Ezi ziya kukunika ulwazi olongezelelweyo ngokwenzekayo xa uqhagamshelana nenkonzo yeposi, kodwa azintle kwaye zinokwaphula uyilo lweepheji. Sebenzisa kuphela xa kungekho umsebenzi womsebenzisi."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Iposi: Thintle ukusebenzisa LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Abanye abasebenzisi beposi abayiqondi ifomathi echazayo yeLD+JSON, beyibonisa njengomtya weJSON ohlaziyekileyo kumsebenzisi wokugqibela. Ukuba yimeko yakho, ungafuna ukusetra iguqulelo elandelayo 'false' ukuze ukhuphelele isihloko esi."
+
+msgid "Mail: DKIM headers"
+msgstr "Iposi: Izihloko zeDKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Faka uluhlu lweJSON lwezicwangqiso zakho zeDKIM (jonga umzekelo)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Iposi: Iinketho zeXOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Ukuba usebenzisa inkonzo yeposi esekwe kwiXOAuth2, sebenzisa esi sethi kwiiJSON ukuze ugcine ulungevaniso lwakho olukhethekileyo (jonga umzekelo) kwaye ukhethe iXOAuth2 kwiseting yenkonto yeposi."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Ichaza uhlobo lwemo: \"prod\" (imveliso eqhelekileyo), \"validation\" (njengemveliso kodwa ngaphandle kokuxela iinkcukacha zamanani), okanye \"test\" (imo yokudibaga enezixhobo somphuhlisi ezifana nezaziso zezichaziwa ngokungafundwa)."
+
+msgid "Global limit of users per course"
+msgstr "Umlinganiselo weqonga wabasebenzisi ngesifundo"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Ichaza inani eliphezulu lamaqonga labasebenzisi (kuquka ootitshala) abavunyelwe ukubhaliselwa kwisifundo esinye seqonga. Seta eli xabiso ku-0 ukuze ukhuphelele umda. Oku kunceda ukunqanda izifundo zixhuzeke kumaqonga avulelekileyo."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Vula ukuze usebenzise uluhlu lokuchaza eziphi iindima kufuneka ziboniswe ngokucacileyo kwaye eziphi kufuneka zifihlwe."
+
+msgid "Show base course posts in session course"
+msgstr "Bonisa iiposti zesifundo esisisiseko kwisifundo seeseshini"
+
+msgid "Limit identical email usage"
+msgstr "Linganisa ukusetyenziswa kweemejile ezifanayo"
 

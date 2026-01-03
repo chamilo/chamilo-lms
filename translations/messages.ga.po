@@ -31439,7 +31439,7 @@ msgid "What general terms and conditions are given to users to use this platform
 msgstr "Cé na téarmaí agus coinníollacha ginearálta a thugtar d'úsáideoirí chun an t-ardán seo a úsáid?"
 
 msgid "ex. {examplePassword}"
-msgstr "ex. {examplePassword}"
+msgstr "m.sh. {examplePassword}"
 
 msgid "Welcome to Chamilo!"
 msgstr "Fáilte chuig Chamilo!"
@@ -31452,4 +31452,142 @@ msgstr "Le haghaidh tuilleadh sonraí tabhair cuairt ar %s"
 
 msgid "Manager"
 msgstr "Bainisteoir"
+
+msgid "Mark as"
+msgstr "Marcáil mar"
+
+msgid "Reply to all"
+msgstr "Freagair do chách"
+
+msgid "SCIM external ID"
+msgstr "ID seachtrach SCIM"
+
+msgid "OAuth2 ID"
+msgstr "ID OAuth2"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Glac le leagan is déanaí de na téarmaí agus coiníollacha."
+
+msgid "Required value for operation without path"
+msgstr "Luach riachtanach le haghaidh oibríochta gan cosán"
+
+msgid "Available space (%s)"
+msgstr "Spás ar fáil (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Innéacs an cur síos seo le haghaidh an chuardaigh dhomhanda"
+
+msgid "Unknown course"
+msgstr "Cúrsa anaithnid"
+
+msgid "Certificate not found."
+msgstr "Deimhniú neofaighte."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Tháinig comhartha slándála in éag. Athlódáil an leathanach agus déan iarracht arís."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Ní féidir ach riarthóirí an ardáin infheictheacht an chúrsa a athrú."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Earráid gan choinne agus an túsúspóir á chlárú"
+
+msgid "Search in resource logs"
+msgstr "Cuardaigh i logaí acmhainní"
+
+msgid "Include this learning path in the global search results"
+msgstr "Cuir an cosán foghlama seo san áireamh i dtorthaí an chuardaigh dhomhanda"
+
+msgid "The course code already exists"
+msgstr "Tá cód an chúrsa ann cheana féin"
+
+msgid "Latest news"
+msgstr "Nuacht is déanaí"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Faigh an nuacht is déanaí ó Chamilo, lena n-áirítear leochaileachtaí slándála agus imeachtaí, go díreach i do phainéal riaracháin. Déanfar na píosaí nuachta seo a sheiceáil ar fhreastalaí nuachta Chamilo gach uair a athlódálann tú an leathanach riaracháin agus beidh siad infheicthe d'riaróirí amháin."
+
+msgid "Chamilo support block"
+msgstr "Bloc tacaíochta Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Faigh leideanna pro agus bealach éasca chun teagmháil a dhéanamh le soláthróirí seirbhíse oifigiúla le haghaidh tacaíochta gairmiúla, go díreach ó dhéantóirí Chamilo. Tá an bloc seo ar do leathanach riaracháin, infheicthe ag riarthóirí amháin, agus athnuaitear é gach uair a athlódálann tú an leathanach riaracháin."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Folaigh rogha chun fógraí a sheoladh chuig úsáideoirí HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Ceadaigh do riarthóirí seisiún deimhníochtaí príobháideacha a íoslódáil"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Má chumasaítear é, is féidir le riarthóirí seisiún deimhníochtaí a íoslódáil fiú mura bhfuil siad foilsithe go poiblí."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Mura bhfuil sé folamh, féachfaidh próiseas cruthaithe an chúrsa le haghaidh roinnt réimsí i bpróifíl an úsáideora agus iad a líonadh go huathoibríoch don chúrsa. Mar shampla, d'fhéadfadh múinteoir atá speisialaithe i margaíocht dhigiteach brat « margaíocht dhigiteach » a shocrú go huathoibríoch ar gach cúrsa a chruthaíonn sé/sí."
+
+msgid "Main menu entries"
+msgstr "Iontrálacha príomhroghchlár"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Marcáil na hiontrálacha is mian leat a fheiceáil sa phríomhroghchlár"
+
+msgid "Main menu entries per role"
+msgstr "Iontrálacha príomhroghchlár in aghaidh ról"
+
+msgid "Define header tabs visibility per role."
+msgstr "Sainmhínigh infheictheacht cluaisíní ceanntítile in aghaidh ról."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Socraigh na roghanna is mian leat a bheith sa nascleanúint timpeall tábla chun níos lú nó níos mó sraitheanna a thaispeáint ar leathanach amháin. m.sh. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Eagar de ghnéithe breise is féidir leat a chur ar chumas d'imreoir físeáin i Chamilo. I measc na roghanna tá 'speed', a ligeann duit luas athchúlaíochta físeáin a athrú."
+
+msgid "Mail: character set"
+msgstr "Post: sraith carachtar"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Sa chás go gcaithfidh tú an charset a shainiú le húsáid agus na r-phoist sin á seoladh. Fág folamh mura bhfuil tú cinnte."
+
+msgid "Mail: Debug"
+msgstr "Post: Dífhabhtaithe"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Roghnaigh an bhfuil tú ag iarraidh logaí dífhabhtaithe seoltaí ríomhphost a chur ar chumas. Tabharfaidh siad seo faisnéis níos mó duit faoi cad atá ag tarlú agus ceangal leis an tseirbhís phoist, ach níl siad galánta agus d'fhéadfadh siad dearadh leathanaigh a bhriseadh. Úsáid amháin nuair nach bhfuil gníomhaíocht úsáideora ann."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Post: Seachain úsáid LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Ní thuigeann roinnt cliant ríomhphost formáid tuairisciúil LD+JSON, á thaispeáint mar shreang JSON scaoilte don úsáideoir deiridh. Más é seo do chás, b'fhéidir gur mhaith leat an athróg thíos a shocrú go 'false' chun an ceanntásc seo a dhíchumasú."
+
+msgid "Mail: DKIM headers"
+msgstr "Post: Ceanntáiscí DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Iontráil eagar JSON de do shocruithe cumraíochta DKIM (féach sampla)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Post: Roghanna XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Más seirbhís ríomhphost XOAuth2-bhunaithe atá á úsáid agat, úsáid an socrú seo i JSON chun do chumraíocht shonrach a shábháil (féach sampla) agus roghnaigh XOAuth2 i socrú na seirbhíse poiste."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Sainmhíníonn sé cineál na timpeallachta: \"prod\" (gnáththáirgeadh), \"validation\" (cosúil le táirgeadh ach gan staitisticí a thuairisciú), nó \"test\" (modh dífhabhtaithe le huirlisí forbróirí mar thaispeáiní teaghráin nea-aistrithe)."
+
+msgid "Global limit of users per course"
+msgstr "Teorainn dhomhanda úsáideoirí in aghaidh an chúrsa"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Sainmhíníonn sé uasmhéid domhanda úsáideoirí (múinteoirí san áireamh) ceadaithe a bheith suscríofa le haon chúrsa amháin ar an ardán. Socraigh an luach seo go 0 chun an teorainn a dhíchumasú. Cuidíonn sé seo le cúrsaí a sheachaint a bheith ró-ualaithe i tairseacha oscailte."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Cumasaigh chun eagar a úsáid chun a shainiú cé na róil ba chóir a thaispeáint go soiléir agus cé acu ba chóir a cheilt."
+
+msgid "Show base course posts in session course"
+msgstr "Taispeáin poist chúrsa bun i gcúrsa seisiúin"
+
+msgid "Limit identical email usage"
+msgstr "Teorainn úsáid ríomhphost chomhionanna"
 

@@ -31519,3 +31519,141 @@ msgstr "詳細は %s をご覧ください"
 msgid "Manager"
 msgstr "管理者"
 
+msgid "Mark as"
+msgstr "マークとして"
+
+msgid "Reply to all"
+msgstr "すべてに返信"
+
+msgid "SCIM external ID"
+msgstr "SCIM 外部 ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "最新の利用規約に同意してください。"
+
+msgid "Required value for operation without path"
+msgstr "パスなしでの操作に必要な値"
+
+msgid "Available space (%s)"
+msgstr "使用可能容量 (%s)"
+
+msgid "Index this description for the global search"
+msgstr "この説明をグローバル検索にインデックスする"
+
+msgid "Unknown course"
+msgstr "不明なコース"
+
+msgid "Certificate not found."
+msgstr "証明書が見つかりません。"
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "セキュリティトークンが期限切れです。ページを再読み込みして再度お試しください。"
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "コースの表示設定はプラットフォーム管理者だけが変更できます。"
+
+msgid "Unexpected error while subscribing the user"
+msgstr "ユーザーの登録中に予期しないエラーが発生しました"
+
+msgid "Search in resource logs"
+msgstr "リソースログで検索"
+
+msgid "Include this learning path in the global search results"
+msgstr "この学習パスをグローバル検索結果に含める"
+
+msgid "The course code already exists"
+msgstr "コースコードが既に存在します"
+
+msgid "Latest news"
+msgstr "最新ニュース"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Chamiloから最新ニュース（セキュリティ脆弱性やイベントを含む）を取得し、管理パネル内に直接表示します。これらのニュースは管理ページを読み込むたびにChamiloニュースサーバーでチェックされ、管理者のみが見ることができます。"
+
+msgid "Chamilo support block"
+msgstr "Chamiloサポートブロック"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "プロのヒントと公式サービスプロバイダーへの簡単な連絡方法を取得し、Chamiloの開発者から直接提供します。このブロックは管理ページに表示され、管理者のみが見ることができ、管理ページを読み込むたびに更新されます。"
+
+msgid "Hide option to send announcements to HR users"
+msgstr "HRユーザーにアナウンスメントを送信するオプションを非表示にする"
+
+msgid "Allow session admins to download private certificates"
+msgstr "セッション管理者が非公開証明書をダウンロードできるようにする"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "有効にすると、セッション管理者は公開されていない証明書もダウンロードできます。"
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "空でない場合、コース作成プロセスはユーザープロファイルのフィールドを検索し、コースに自動入力します。例えば、デジタルマーケティング専門の教師は作成する各コースに「デジタルマーケティング」フラグを自動設定できます。"
+
+msgid "Main menu entries"
+msgstr "メインメニュー項目"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "メインメニューに表示したい項目を選択してください"
+
+msgid "Main menu entries per role"
+msgstr "ロールごとのメインメニュー項目"
+
+msgid "Define header tabs visibility per role."
+msgstr "ロールごとにヘッダータブの表示を設定します。"
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "テーブル周りのナビゲーションに表示するオプションを設定し、1ページあたりの行数を少なくまたは多く表示します。例えば [50, 100, 200, 500]。"
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Chamiloのビデオプレーヤーで有効にできる追加機能の配列です。オプションには「speed」（ビデオの再生速度を変更可能）が含まれます。"
+
+msgid "Mail: character set"
+msgstr "メール: 文字セット"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "メール送信時に使用する文字セットを定義する必要がある場合に設定します。不明な場合は空のままにしてください。"
+
+msgid "Mail: Debug"
+msgstr "メール: デバッグ"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "メール送信デバッグログを有効にするかどうかを選択します。これによりメールサービスへの接続時の詳細情報が得られますが、ページデザインを崩す可能性があります。ユーザー活動がない場合のみ使用してください。"
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "メール: LD+JSON の使用を避ける"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "一部のメールクライアントは記述的な LD+JSON 形式を理解せず、最終ユーザーに緩い JSON 文字列として表示します。この場合、下記の変数を「false」に設定してこのヘッダーを無効にしてください。"
+
+msgid "Mail: DKIM headers"
+msgstr "メール: DKIM ヘッダー"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "DKIM 設定の JSON 配列を入力してください（例を参照）。"
+
+msgid "Mail: XOAuth2 options"
+msgstr "メール: XOAuth2 オプション"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "XOAuth2 ベースのメールサービスを使用する場合、この JSON 設定で特定の構成を保存し（例を参照）、メールサービス設定で XOAuth2 を選択してください。"
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "環境タイプを定義します: \"prod\"（通常の運用）、\"validation\"（統計レポートなしの運用に類似）、または \"test\"（未翻訳文字列インジケーターなどの開発者ツール付きデバッグモード）。"
+
+msgid "Global limit of users per course"
+msgstr "コースあたりのユーザーのグローバル上限"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "プラットフォーム内の任意の単一コースに登録可能なユーザー（教師を含む）の最大数を定義します。制限を無効にするには 0 に設定してください。オープンなポータルでコースの過負荷を防ぎます。"
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "表示する役割と非表示にする役割を配列で定義するために有効にします。"
+
+msgid "Show base course posts in session course"
+msgstr "セッションコースで基本コースの投稿を表示"
+
+msgid "Limit identical email usage"
+msgstr "同一メールアドレスの使用を制限"
+

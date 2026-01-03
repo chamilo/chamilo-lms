@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:berhak cipta,, no:tiada hak cipta"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Pasta,, application/msword:MsWord,, application/octet-stream:Aliran oktet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:latihan,,      simulation:simulasi,,      questionnaire:soal selidik,,      diagram:diagram,,      figure:gambar,,      graph:graf,,      index:indeks,,      slide:slaid,,      table:jadual,,      narrative text:teks naratif,,      exam:ujian,,      experiment:eksperimen,,      problem statement:penyata masalah,,      self assessment:penilaian diri,,      lecture:kuliah"
@@ -31454,4 +31454,142 @@ msgstr "Untuk maklumat lanjut lawati %s"
 
 msgid "Manager"
 msgstr "Pengurus"
+
+msgid "Mark as"
+msgstr "Tandakan sebagai"
+
+msgid "Reply to all"
+msgstr "Balas kepada semua"
+
+msgid "SCIM external ID"
+msgstr "ID luaran SCIM"
+
+msgid "OAuth2 ID"
+msgstr "ID OAuth2"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Sila terima versi terkini syarat dan peraturan."
+
+msgid "Required value for operation without path"
+msgstr "Nilai diperlukan untuk operasi tanpa laluan"
+
+msgid "Available space (%s)"
+msgstr "Ruang tersedia (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Indeks penerangan ini untuk carian global"
+
+msgid "Unknown course"
+msgstr "Kursus tidak diketahui"
+
+msgid "Certificate not found."
+msgstr "Sijil tidak dijumpai."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Jejak keselamatan tamat tempoh. Sila muat semula halaman dan cuba lagi."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Hanya pentadbir platform boleh mengubah kebolehlihatan kursus."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Ralat tidak dijangka semasa melanggan pengguna"
+
+msgid "Search in resource logs"
+msgstr "Cari dalam log sumber"
+
+msgid "Include this learning path in the global search results"
+msgstr "Sertakan laluan pembelajaran ini dalam hasil carian global"
+
+msgid "The course code already exists"
+msgstr "Kod kursus sudah wujud"
+
+msgid "Latest news"
+msgstr "Berita terkini"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Dapatkan berita terkini dari Chamilo, termasuk kelemahan keselamatan dan acara, terus di dalam panel pentadbiran anda. Berita ini akan disemak pada pelayan berita Chamilo setiap kali anda memuat halaman pentadbiran dan hanya kelihatan kepada pentadbir."
+
+msgid "Chamilo support block"
+msgstr "Blok sokongan Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Dapatkan petua pro dan cara mudah untuk menghubungi penyedia perkhidmatan rasmi untuk sokongan profesional, terus dari pencipta Chamilo. Blok ini muncul di halaman pentadbiran anda, hanya kelihatan oleh pentadbir, dan dimuat semula setiap kali anda memuat halaman pentadbiran."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Sembunyikan pilihan untuk hantar pengumuman kepada pengguna HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Benarkan pentadbir sesi memuat turun sijil persendirian"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Jika diaktifkan, pentadbir sesi boleh memuat turun sijil walaupun ia tidak diterbitkan secara awam."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Jika tidak kosong, proses penciptaan kursus akan mencari beberapa medan dalam profil pengguna dan auto-isi untuk kursus tersebut. Contohnya, seorang guru yang pakar dalam pemasaran digital boleh secara automatik tetapkan bendera « pemasaran digital » pada setiap kursus yang diciptanya."
+
+msgid "Main menu entries"
+msgstr "Item menu utama"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Tandakan item yang anda mahu muncul dalam menu utama"
+
+msgid "Main menu entries per role"
+msgstr "Item menu utama mengikut peranan"
+
+msgid "Define header tabs visibility per role."
+msgstr "Tetapkan kebolehlihatan tab header mengikut peranan."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Tetapkan pilihan yang anda mahu muncul dalam navigasi sekeliling jadual untuk tunjuk kurang atau lebih baris pada satu halaman. cth. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Susunan ciri tambahan yang boleh anda aktifkan untuk pemain video dalam Chamilo. Pilihan termasuk 'speed', yang membolehkan anda tukar kelajuan putaran video."
+
+msgid "Mail: character set"
+msgstr "E-mel: set watak"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Sekiranya anda perlu tentukan charset untuk digunakan apabila hantar e-mel tersebut. Biarkan kosong jika anda tidak pasti."
+
+msgid "Mail: Debug"
+msgstr "E-mel: Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Pilih sama ada anda mahu aktifkan log debug penghantaran e-mel. Ini akan beri anda lebih maklumat tentang apa yang berlaku apabila bersambung ke perkhidmatan e-mel, tetapi tidak elok dan mungkin rosakkan reka bentuk halaman. Hanya gunakan apabila tiada aktiviti pengguna."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "E-mel: Elak guna LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Sesetengah klien e-mel tidak faham format LD+JSON deskriptif, menunjukkannya sebagai rentetan JSON longgar kepada pengguna akhir. Jika ini kes anda, anda mungkin mahu tetapkan pemboleh ubah di bawah kepada 'false' untuk lumpuhkan header ini."
+
+msgid "Mail: DKIM headers"
+msgstr "E-mel: Header DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Masukkan susunan JSON tetapan konfigurasi DKIM anda (lihat contoh)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "E-mel: Pilihan XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Jika anda guna perkhidmatan e-mel berasaskan XOAuth2, gunakan tetapan ini dalam JSON untuk simpan konfigurasi khusus anda (lihat contoh) dan pilih XOAuth2 dalam tetapan perkhidmatan e-mel."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Tentukan jenis persekitaran: \"prod\" (pengeluaran normal), \"validation\" (seperti pengeluaran tetapi tanpa laporan statistik), atau \"test\" (mod debug dengan alat pembangun seperti penunjuk rentetan tidak diterjemah)."
+
+msgid "Global limit of users per course"
+msgstr "Had global pengguna bagi setiap kursus"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Tentukan bilangan maksimum global pengguna (termasuk guru) yang dibenarkan disubsribe ke mana-mana kursus tunggal dalam platform. Tetapkan nilai ini kepada 0 untuk lumpuhkan had. Ini membantu elak kursus terbeban dalam portal terbuka."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Aktifkan untuk guna susunan tentukan peranan mana yang patut dipaparkan dengan jelas dan mana yang patut disembunyikan."
+
+msgid "Show base course posts in session course"
+msgstr "Tunjuk siaran kursus asas dalam kursus sesi"
+
+msgid "Limit identical email usage"
+msgstr "Had penggunaan e-mel yang sama"
 

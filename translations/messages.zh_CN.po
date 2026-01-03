@@ -31455,3 +31455,141 @@ msgstr "更多详情请访问 %s"
 msgid "Manager"
 msgstr "管理员"
 
+msgid "Mark as"
+msgstr "标记为"
+
+msgid "Reply to all"
+msgstr "回复所有人"
+
+msgid "SCIM external ID"
+msgstr "SCIM 外部 ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "请接受最新的条款和条件。"
+
+msgid "Required value for operation without path"
+msgstr "无路径操作所需的必填值"
+
+msgid "Available space (%s)"
+msgstr "可用空间 (%s)"
+
+msgid "Index this description for the global search"
+msgstr "将此描述索引到全局搜索中"
+
+msgid "Unknown course"
+msgstr "未知课程"
+
+msgid "Certificate not found."
+msgstr "未找到证书。"
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "安全令牌已过期。请重新加载页面并重试。"
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "只有平台管理员可以更改课程可见性。"
+
+msgid "Unexpected error while subscribing the user"
+msgstr "订阅用户时出现意外错误"
+
+msgid "Search in resource logs"
+msgstr "在资源日志中搜索"
+
+msgid "Include this learning path in the global search results"
+msgstr "将此学习路径包含在全局搜索结果中"
+
+msgid "The course code already exists"
+msgstr "课程代码已存在"
+
+msgid "Latest news"
+msgstr "最新新闻"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "从 Chamilo 获取最新新闻，包括安全漏洞和事件，直接在您的管理面板中查看。这些新闻每次加载管理页面时都会在 Chamilo 新闻服务器上检查，仅对管理员可见。"
+
+msgid "Chamilo support block"
+msgstr "Chamilo 支持块"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "获取专业提示和联系官方服务提供商的专业支持的便捷方式，直接来自 Chamilo 的制作者。此块显示在您的管理页面上，仅对管理员可见，并每次加载管理页面时刷新。"
+
+msgid "Hide option to send announcements to HR users"
+msgstr "隐藏向 HR 用户发送公告的选项"
+
+msgid "Allow session admins to download private certificates"
+msgstr "允许会话管理员下载私人证书"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "如果启用，会话管理员即使证书未公开发布也可以下载证书。"
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "如果不为空，课程创建过程将从用户资料中查找某些字段并自动为课程填充它们。例如，专攻数字营销的教师可以自动为每个(他/她)创建的课程设置“数字营销”标志。"
+
+msgid "Main menu entries"
+msgstr "主菜单条目"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "选中您希望在主菜单中显示的条目"
+
+msgid "Main menu entries per role"
+msgstr "按角色划分的主菜单条目"
+
+msgid "Define header tabs visibility per role."
+msgstr "按角色定义标题选项卡可见性。"
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "设置要在表格周围导航中显示的选项，以显示每页更少或更多行。例如 [50, 100, 200, 500]。"
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Chamilo 视频播放器可启用的额外功能数组。选项包括 'speed'，允许更改视频播放速度。"
+
+msgid "Mail: character set"
+msgstr "邮件：字符集"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "如果需要定义发送这些电子邮件时使用的字符集，请在此设置。不确定则留空。"
+
+msgid "Mail: Debug"
+msgstr "邮件：调试"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "选择是否启用电子邮件发送调试日志。这些日志将提供连接邮件服务时的更多信息，但不够优雅，可能破坏页面设计。仅在无用户活动时使用。"
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "邮件：避免使用 LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "某些电子邮件客户端无法理解描述性 LD+JSON 格式，会将其显示为松散的 JSON 字符串。如果遇到这种情况，可将以下变量设置为 'false' 以禁用此标头。"
+
+msgid "Mail: DKIM headers"
+msgstr "邮件：DKIM 标头"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "输入您的 DKIM 配置设置的 JSON 数组（参见示例）。"
+
+msgid "Mail: XOAuth2 options"
+msgstr "邮件：XOAuth2 选项"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "如果使用基于 XOAuth2 的电子邮件服务，请使用此 JSON 设置保存特定配置（参见示例），并在邮件服务设置中选择 XOAuth2。"
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "定义环境类型：\"prod\"（正常生产）、\"validation\"（类似生产但不报告统计）或 \"test\"（调试模式，包含开发者工具如未翻译字符串指示器）。"
+
+msgid "Global limit of users per course"
+msgstr "课程每用户全局限制"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "定义平台中任一课程允许订阅的用户（包括教师）的全局最大数量。将此值设置为 0 以禁用限制。这有助于避免开放门户中的课程过载。"
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "启用以使用数组定义哪些角色应明确显示，哪些应隐藏。"
+
+msgid "Show base course posts in session course"
+msgstr "在会话课程中显示基础课程帖子"
+
+msgid "Limit identical email usage"
+msgstr "限制相同电子邮件使用"
+

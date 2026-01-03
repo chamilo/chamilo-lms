@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:հեղինակային իրավունք,, no:առանց հեղինակային իրավունքի"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Թղթապանակ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Թերթիկ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:վարժություն,,      simulation:մոդելավորում,,      questionnaire:հարցաթերթիկ,,      diagram:սխեմա,,      figure:նկար,,      graph:գրաֆիկ,,      index:հիմնական ցուցիչ,,      slide:սլայդ,,      table:तालिका,,      narrative text:նարատիվ տեքստ,,      exam:քննություն,,      experiment:փորձ,,      problem statement:պրոբլեմի ձևակերպում,,      self assessment:ինքնագնահատում,,      lecture:դասախոսություն"
@@ -31452,4 +31452,142 @@ msgstr "Մանրամասների համար այցելեք %s"
 
 msgid "Manager"
 msgstr "Մենեջեր"
+
+msgid "Mark as"
+msgstr "Նշել որպես"
+
+msgid "Reply to all"
+msgstr "Պատասխանել բոլորին"
+
+msgid "SCIM external ID"
+msgstr "SCIM արտաքին ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Խնդրում ենք ընդունել օգտագործման պայմանների վերջին տարբերակը:"
+
+msgid "Required value for operation without path"
+msgstr "Պարտադիր արժեք ուղի չունեցող գործողության համար"
+
+msgid "Available space (%s)"
+msgstr "Օգտագործելի տարածք (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Գլոբալ որոնման համար ինդեքսավորել այս նկարագրությունը"
+
+msgid "Unknown course"
+msgstr "Անհայտ դասընթաց"
+
+msgid "Certificate not found."
+msgstr "Վկայականը չի գտնվել:"
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Անվտանգության ժետոնի ժամկետն ավարտվել է: Խնդրում ենք վերաբեռնել էջը և կրկին փորձել:"
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Միայն հարթակի ադմինիստրատորները կարող են փոխել դասընթացի տեսանելիությունը:"
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Սպասված սխալ օգտատիրոջ բաժանորդագրության ժամանակ"
+
+msgid "Search in resource logs"
+msgstr "Որոնել ռեսուրսների լոգերում"
+
+msgid "Include this learning path in the global search results"
+msgstr "Ներառել այս ուսուցման ուղին գլոբալ որոնման արդյունքներում"
+
+msgid "The course code already exists"
+msgstr "Դասընթացի կոդն արդեն գոյություն ունի"
+
+msgid "Latest news"
+msgstr "Վերջին նորություններ"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Ստացեք Chamilo-ի վերջին նորությունները, ներառյալ անվտանգության խոցելիությունները և իրադարձությունները, ուղղակիորեն Ձեր ադմինիստրատորական վահանակում: Այս նորությունները կստուգվեն Chamilo նորությունների սերվերում յուրաքանչյուր անգամ, երբ բեռնեք ադմինիստրատորական էջը և տեսանելի են միայն ադմինիստրատորների համար:"
+
+msgid "Chamilo support block"
+msgstr "Chamilo աջակցության բլոկ"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Ստացեք պրո խորհուրդներ և հեշտ միջոց պաշտոնական ծառայությունների մատակարարներին կապվելու համար մասնագիտական աջակցության համար, ուղղակիորեն Chamilo-ի ստեղծողներից: Այս բլոկը հայտնվում է Ձեր ադմինիստրատորական էջում, տեսանելի է միայն ադմինիստրատորների համար և թարմացվում է յուրաքանչյուր անգամ, երբ բեռնեք ադմինիստրատորական էջը:"
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Թաքցնել հայտարարություններ ուղարկելու HR օգտատերերին տարբերակը"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Թույլ տալ սեսիայի ադմինիստրատորներին ներբեռնել անձնական վկայականները"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Եթե 활성화ված է, սեսիայի ադմինիստրատորները կարող են ներբեռնել վկայականները նույնիսկ, եթե դրանք հանրային հրապարակված չեն:"
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Եթե դատարկ չէ, դասընթացի ստեղծման գործընթացը կորոնի օգտատիրոջ профիլում որոշ դաշտեր և կլրացնի դրանք դասընթացի համար: Օրինակ՝ թվային մարքեթինգով մասնագիտացած ուսուցիչը կարող է ավտոմատ կերպով «թվային մարքեթինգ» դրոշակ նշել յուրաքանչյուր դասընթացի վրա, որը (նա) ստեղծում է:"
+
+msgid "Main menu entries"
+msgstr "Հիմնական մենյուի մուտքեր"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Ընտրեք այն մուտքերը, որոնք ցանկանում եք տեսնել հիմնական մենյուում"
+
+msgid "Main menu entries per role"
+msgstr "Հիմնական մենյուի մուտքեր դերով"
+
+msgid "Define header tabs visibility per role."
+msgstr "Սահմանեք վերնագրի ներդիրների տեսանելիությունը դերով:"
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Սահմանեք այն տարբերակները, որոնք ցանկանում եք ցուցադրել աղյուսակի շուրջ նավիգացիայում՝ մեկ էջում ցույց տալու համար ավելի քիչ կամ ավելի շատ տողեր: օր. [50, 100, 200, 500]:"
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Լրացուցիչ հնարավորությունների զանգված, որոնք կարող եք فعالացնել Chamilo-ի վիդեոդեպլայերի համար: Տարբերակները ներառում են 'speed'-ը, որը թույլ է տալիս փոխել վիդեոյի վերարտադրության արագությունը:"
+
+msgid "Mail: character set"
+msgstr "Նամակ. բնութագրերի խմբագիր"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Եթե պետք է սահմանեք charset-ը էլ. փոստերն ուղարկելիս: Թողեք դատարկ, եթե չգիտեք:"
+
+msgid "Mail: Debug"
+msgstr "Նամակ. Դիագնոստիկա"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Ընտրեք, արդյոք ցանկանում եք فعالացնել էլ. փոստի ուղարկման դիագնոստիկայի լոգերը: Սրանք կտրամադրեն ավելի շատ տեղեկություններ փոստի ծառայության հետ կապակցվելիս, սակայն չեն համարվում էլեգանտ և կարող են խախտել էջի դիզայնը: Օգտագործեք միայն առանց օգտատերերի ակտիվության:"
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Նամակ. Խուսափել LD+JSON-ից"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Որոշ էլ. փոստի հաճախորդներ չեն հասկանում նկարագրական LD+JSON ձևաչափը և ցուցադրում են այն որպես ազատ JSON տող վերջնական օգտատիրոջը: Եթե սա ձեր դեպքն է, կարող եք ստորև տարբերակը սահմանել 'false'-ի՝ ան활ացնելով այս վերնագիրը:"
+
+msgid "Mail: DKIM headers"
+msgstr "Նամակ. DKIM վերնագրեր"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Մուտքագրեք ձեր DKIM կարգավորումների JSON զանգված (տես օրինակը):"
+
+msgid "Mail: XOAuth2 options"
+msgstr "Նամակ. XOAuth2 տարբերակներ"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Եթե օգտագործում եք XOAuth2- 기반 էլ. փոստի ծառայություն, օգտագործեք այս JSON կարգավորումը ձեր հատուկ կարգավորումները պահպանելու համար (տես օրինակը) և ընտրեք XOAuth2 փոստի ծառայության կարգավորումներում:"
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Սահմանում է միջավայրի տեսակը՝ \"prod\" (սովորական արտադրություն), \"validation\" (ինչպես արտադրությունը, բայց առանց վիճակագրության հաշվետվությունների), կամ \"test\" (դիագնոստիկայի ռեժիմը՝ մշակողական գործիքներով, ինչպես չթարգմանված տողերի ցուցիչներ):"
+
+msgid "Global limit of users per course"
+msgstr "Կուրսում օգտատերերի գլոբալ սահմանափակում"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Սահմանում է գլոբալ առավելագույն օգտատերերի թիվը (ներառյալ ուսուցիչները), որոնք կարող են գրանցվել հարթակի ցանկացած առանձին կուրսում: Սահմանեք 0՝ սահմանափակումը ան활ացնելու համար: Սա օգնում է խուսափել բաց պորտալներում կուրսերի գերբեռնվածությունից:"
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Ակտիվացրեք՝ զանգված օգտագործելու համար, որը սահմանում է, թե որ դերերը պետք է հստակ ցուցադրվեն և որոնք՝ թաքցված:"
+
+msgid "Show base course posts in session course"
+msgstr "Ցուցադրել հիմնական կուրսի գրառումները սեսիայի կուրսում"
+
+msgid "Limit identical email usage"
+msgstr "Սահմանափակել նույնական էլ. փոստի օգտագործումը"
 

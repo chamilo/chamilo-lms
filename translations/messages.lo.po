@@ -2186,7 +2186,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ແມ່ນ:ມີລິຂະສິດ,, ບໍ່:ບໍ່ມີລິຂະສິດ"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:ແຟ້ວເຟີ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":ບົດເຝິກຫັດ:ບົດເຝິກຫັດ,,      ຈຳລອງ:ຈຳລອງ,,      ແບບສອບຖາມ:ແບບສອບຖາມ,,      ແຜນວາດ:ແຜນວາດ,,      ຮູບ:ຮູບ,,      ກຣາຟ:ກຣາຟ,,      ດັດຊະນີ:ດັດຊະນີ,,      ສະໄລ້:ສະໄລ້,,      ຕາຕະລາງ:ຕາຕະລາງ,,      ຂໍ້ຄວາມບັນຍາຍ:ຂໍ້ຄວາມບັນຍາຍ,,      ສອບເສັງ:ສອບເສັງ,,      ທົດລອງ:ທົດລອງ,,      ບັນຫາ:ບັນຫາ,,      ປະເມີນຕົນເອງ:ປະເມີນຕົນເອງ,,      ບັນຍາຍ:ບັນຍາຍ"
@@ -33802,4 +33802,142 @@ msgstr "ເພື່ອລາຍລະອຽດເພີ່ມເຕີມ ໃ�
 
 msgid "Manager"
 msgstr "ຜູ້ຈັດການ"
+
+msgid "Mark as"
+msgstr "ມີແຕ້ມການ"
+
+msgid "Reply to all"
+msgstr "ຕອບກັບທັງໝົດ"
+
+msgid "SCIM external ID"
+msgstr "SCIM external ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "ກະລຸນາຍອມຮັບເອກະສານຂໍ້ເລື່ອງແລະເງື່ອນໄຂລ่าสຸດ."
+
+msgid "Required value for operation without path"
+msgstr "ຄ່າທີ່ຕ້ອງການສຳລັບການເຮັດວຽກໂດຍບໍ່ມີເສັ້ນທາງ"
+
+msgid "Available space (%s)"
+msgstr "ຊ່ອງຫວ່າງທີ່ມີຢູ່ (%s)"
+
+msgid "Index this description for the global search"
+msgstr "ຈັດດັດເດັກນີ້ສຳລັບການຄົ້ນຫາທົ່ວໄປ"
+
+msgid "Unknown course"
+msgstr "ຄອສທີ່ບໍ່ຮູ້ຈັກ"
+
+msgid "Certificate not found."
+msgstr "ບໍ່ພົບປະກັນຍ້ານ."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "ໂທເຄັນການປ້ອງກັນຄວາມປອດໄພສິ້ນສຸດ. ກະລຸນາໂຫຼດໜ້າອີກເທື່ອໜຶ່ງແລະລອງອີກເທື່ອ."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "ພຽງແຕ່ຜູ້ຈັດການແພລັດຟອມເທົ່ານັ້ນທີ່ສາມາດປ່ຽນການເບິ່ງເຫັນຂອງຄອສ."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "ຂໍ້ຜິດພາດທີ່ບໍ່ຄາດຄິດໃນຂະນະທີ່ລົງทะເຍີນຜູ້ໃຊ້"
+
+msgid "Search in resource logs"
+msgstr "ຄົ້ນຫາໃນໄລລອກຊັບພະຍາກອນ"
+
+msgid "Include this learning path in the global search results"
+msgstr "ລວມເຖດທາງການຮຽນຮູ້ນີ້ໃນການຄົ້ນຫາທົ່ວໄປ"
+
+msgid "The course code already exists"
+msgstr "ລະຫັດຄອສມີຢູ່ແລ້ວ"
+
+msgid "Latest news"
+msgstr "ຂ່າວສານລ້າສຸດ"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "ເອົາຂ່າວສານລ້າສຸດຈາກ Chamilo, ລວມທັງມີບັນຫາຄວາມປອດໄພແລະເຫດການ, ໂດຍກົງໃນແຜ່ນຄວບຄຸມການຈັດການຂອງເຈົ້າ. ຂ່າວນີ້ຈະຖືກກວດສອບຢູ່ເຊີເວີຂ່າວ Chamilo ທຸກຄັ້ງທີ່ເຈົ້າໂຫຼດໜ້າການຈັດການ ແລະ ເບິ່ງເຫັນແຕ່ຜູ້ຈັດການເທົ່ານັ້ນ."
+
+msgid "Chamilo support block"
+msgstr "ບລັອກສະໜັບສະໜຸນຂອງ Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "ເອົາຄຳແນະນຳມືອາຊີບແລະວິທີງ່າຍໆເພື່ອຕິດຕໍ່ຜູ້ໃຫ້ບໍລິການທາງການສຳລັບການສະໜັບສະໜຸນການເຮັດວຽກມືອາຊີບ, ໂດຍກົງຈາກຜູ້ສ້າງ Chamilo. ບລັອກນີ້ປະກົດໃນໜ້າການຈັດການຂອງເຈົ້າ, ເບິ່ງເຫັນແຕ່ຜູ້ຈັດການເທົ່ານັ້ນ, ແລະ ອັບເດດທຸກຄັ້ງທີ່ເຈົ້າໂຫຼດໜ້າການຈັດການ."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "ປິດການສົ່ງປະກາດໄປຫາຜູ້ໃຊ້ HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "ອະນຸຍາດໃຫ້ຜູ້ຈັດການຊັ້ນເຊັິງໂຫຼດປະກັນຍ້ານສ່ວນຕົວ"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "ຖ້າເປີດໃຊ້, ຜູ້ຈັດການຊັ້ນເຊັິງສາມາດໂຫຼດປະກັນຍ້ານໄດ້ເຖິງແມ່ນວ່າມັນບໍ່ໄດ້ປະກາສະເໜີສາທາລະນະ."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "ຖ້າບໍ່ເປັນຫວ່າງ, ຂະບວນການສ້າງຄອສຈະຊອກຫາບາງຊ່ອງໃນໂປຣໄຟລ໌ຜູ້ໃຊ້ ແລະ ເຕີບຕົວອັດຕະໂນມັດສຳລັບຄອສ. ຕົວຢ່າງ, ຄູທີ່ຊ່ຽວຊານໃນການຕະຫຼາດດິຈິຕອລສາມາດຕັ້ງຄ່າສັນຍາລັກ « ການຕະຫຼາດດິຈິຕອລ » ອັດຕະໂນມັດໃນຄອສທີ່ສ້າງ."
+
+msgid "Main menu entries"
+msgstr "ຂໍ້ມູນເຂົ້າຫຼັກແມ່ນະມະນັດ"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "ເລືອກຂໍ້ມູນເຂົ້າທີ່ເຈົ້າຢາກໃຫ້ປະກົດໃນເນີມຫຼັກ"
+
+msgid "Main menu entries per role"
+msgstr "ຂໍ້ມູນເຂົ້າຫຼັກແມ່ນະມະນັດຕາມບົດບາດ"
+
+msgid "Define header tabs visibility per role."
+msgstr "ກຳນົດການເບິ່ງເຫັນຊັ້ນແຖວເຈື້ອນຕາມບົດບາດ."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "ຕັ້ງຄ່າຕົວເລືອກທີ່ເຈົ້າຢາກໃຫ້ປະກົດໃນການທີ່ຈະໄປຮອດຕາຕະລາງເພື່ອສະແດງແຖວນັ້ນໜ້ອຍຫຼືຫຼາຍກວ່າໃນໜ້າໜຶ່ງ. ຕົວຢ່າງ [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "ອາເຣທີ່ມີຄຸນສົມບັດເພີ່ມເຕີມທີ່ເຈົ້າສາມາດເປີດໃຊ້ສຳລັບເຄື່ອງເມີນວີດີໂອໃນ Chamilo. ຕົວເລືອກລວມທັງ 'speed', ທີ່ອະນຸຍາດໃຫ້ເຈົ້າเปลี่ยนຄວາມໄວການເກັບກຳວີດີໂອ."
+
+msgid "Mail: character set"
+msgstr "ອີເມວ: ຊຸດອັກສອນ"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "ຖ້າທ່ານຕ້ອງການກົหนด charset ທີ່ຈະໃຊ້ເມື່ອສົ່ງອີເມວເຫຼົ່ານີ້. ປ່ອຍໄວ້ເປົ່າ ຖ້າທ່ານບໍ່ແນ່ໃຈ."
+
+msgid "Mail: Debug"
+msgstr "ອີເມວ: Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "ເລືອກວ່າທ່ານຕ້ອງການເປີດໃຊ້ log debug ການສົ່ງອີເມວ ຫຼືບໍ່. ເຫຼົ່ານີ້ຈະໃຫ້ຂໍ້ມູນເພີ່ມເຕີມກ່ຽວກັບສິ່ງທີ່ເກີດຂຶ້ນເມື່ອເຊື່ອມຕໍ່ກັບບໍລິການອີເມວ, ແຕ່ບໍ່ງາມ ແລະອາດທຳລາຍການອອກແບບໜ້າ. ໃຊ້ເທົ່ານັ້ນເມື່ອບໍ່ມີກິດຈະກຳຜູ້ໃຊ້."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "ອີເມວ: ຫຼີກເວັ້ນການໃຊ້ LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "ບາງ client ອີເມວບໍ່ເຂົ້າໃຈຮູບແບບ LD+JSON ທີ່ອະທິບາຍ, ສະແດງເປັນ JSON string ທີ່ແລ່ນເປົ່າໃຫ້ຜູ້ໃຊ້ສຸດທ້າຍ. ຖ້າເປັນກໍລະນີຂອງທ່ານ, ທ່ານອາດຈະຕ້ອງການກົດຕັ້ງຕົວແປນດ້ານລຸ່ມນີ້ເປັນ 'false' ເພື່ອປິດ header ນີ້."
+
+msgid "Mail: DKIM headers"
+msgstr "ອີເມວ: DKIM headers"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "ໃສ່ JSON array ຂອງການຕັ້ງຄ່າ DKIM ຂອງທ່ານ (ເບິ່ງຕົວຢ່າງ)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "ອີເມວ: XOAuth2 options"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "ຖ້າທ່ານໃຊ້ບໍລິການອີເມວທີ່ອີງໃສ່ XOAuth2, ໃຊ້ການຕັ້ງນີ້ໃນ JSON ເພື່ອບັນທຶກການຕັ້ງຄ່າເປັນພິເສດຂອງທ່ານ (ເບິ່ງຕົວຢ່າງ) ແລະເລືອກ XOAuth2 ໃນການຕັ້ງຄ່າບໍລິການອີເມວ."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "ກົດລະຫັດປະເພດສິ່ງແວດລ້ອມ: \"prod\" (ການຜະລິດປົກກະຕິ), \"validation\" (ຄ້າຍກັບການຜະລິດແຕ່ບໍ່ລາຍງານສະຖິຕິ), ຫຼື \"test\" (ໂໝດ debug ດ້ວຍເຄື່ອງມືນັກພັດທະນາເຊັ່ນ ເຄື່ອງບຽງບໍ່ແປ)."
+
+msgid "Global limit of users per course"
+msgstr "ຂອບເຂດສູງສຸດຜູ້ໃຊ້ທັງໝົດຕໍ່ຄອສ"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "ກົດລະຫັດຈຳນວນເຢື້ອສູງສຸດຂອງຜູ້ໃຊ້ (ຮວມທັງອາຈານ) ທີ່ອະນຸຍາດໃຫ້ລົງทะບຽນໃນຄອສດຽວກັນໃນພລັດຟອມ. ກົດຄ່ານີ້ເປັນ 0 ເພື່ອປິດການຈຳກັດ. ນີ້ຊ່ວຍຫຼີກເວັ້ນຄອສທີ່ໂຫວດໃນປະຕູເປີດ."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "ເປີດໃຊ້ເພື່ອໃຊ້ array ເພື່ອກົດລະຫັດບົດບາດໃດທີ່ຄວນแสดงຢ່າງຈະແຈ້ງ ແລະໃດທີ່ຄວນປົກພູດ."
+
+msgid "Show base course posts in session course"
+msgstr "ສະແດງບັນຫຼັກຄອສໃນຄອສຊັ້ນການຮຽນ"
+
+msgid "Limit identical email usage"
+msgstr "ຈຳກັດການໃຊ້ອີເມວທີ່ເທົ່າເທົ່າກັນ"
 

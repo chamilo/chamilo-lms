@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavakoe: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavamalli: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -31456,4 +31456,142 @@ msgstr "Lisätietoja sivustolta %s"
 
 msgid "Manager"
 msgstr "Pääkäyttäjä"
+
+msgid "Mark as"
+msgstr "Merkitse"
+
+msgid "Reply to all"
+msgstr "Vastaa kaikille"
+
+msgid "SCIM external ID"
+msgstr "SCIM ulkoinen tunnus"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2-tunnus"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Hyväksy käyttöehdot uusin versio."
+
+msgid "Required value for operation without path"
+msgstr "Pakollinen arvo toiminnolle ilman polkua"
+
+msgid "Available space (%s)"
+msgstr "Saatavilla oleva tila (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Indeksoi tämä kuvaus globaaliin hakuun"
+
+msgid "Unknown course"
+msgstr "Tuntematon kurssi"
+
+msgid "Certificate not found."
+msgstr "Varmennetta ei löytynyt."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Turvatunnus on vanhentunut. Lataa sivu uudelleen ja yritä uudelleen."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Vain alustanhallinnoijat voivat muuttaa kurssin näkyvyyttä."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Odottamaton virhe käyttäjän tilauksessa"
+
+msgid "Search in resource logs"
+msgstr "Hae resurssilokeista"
+
+msgid "Include this learning path in the global search results"
+msgstr "Sisällytä tämä oppimispolku globaaleihin hakutuloksiin"
+
+msgid "The course code already exists"
+msgstr "Kurssikoodi on jo olemassa"
+
+msgid "Latest news"
+msgstr "Uusimmat uutiset"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Hae uusimmat Chamilo-uutiset, mukaan lukien tietoturva-aukot ja tapahtumat, suoraan hallintapaneelistasi. Nämä uutiset tarkistetaan Chamilo-uutispalvelimelta joka kerta kun lataat hallintasivun, ja ne ovat näkyvissä vain hallinnoijille."
+
+msgid "Chamilo support block"
+msgstr "Chamilo-tukilohko"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Hae vinkkejä ja helppo tapa ottaa yhteyttä virallisiin palveluntarjoajiin ammattitukeen suoraan Chamilon tekijöiltä. Tämä lohko näkyy hallintasivullasi, vain hallinnoijille, ja se päivittyy joka kerta kun lataat hallintasivun."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Piilota ilmoitusten lähetyksen vaihtoehto HR-käyttäjille"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Salli istuntotallinnoijien ladata yksityiset varmenteet"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Jos käytössä, istuntotallinnoijat voivat ladata varmenteita vaikka ne eivät ole julkaistu julkisesti."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Jos ei tyhjä, kurssin luontiprosessi etsii joitakin kenttiä käyttäjäprofiilista ja täyttää ne automaattisesti kurssille. Esimerkiksi digitaaliseen markkinointiin erikoistunut opettaja voisi automaattisesti asettaa \"digitaalinen markkinointi\" -lipun joka kurssille, jonka hän luo."
+
+msgid "Main menu entries"
+msgstr "Päävalikon kohdat"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Valitse kohdat, jotka haluat näkyvän päävalikossa"
+
+msgid "Main menu entries per role"
+msgstr "Päävalikon kohdat roolikohtaisesti"
+
+msgid "Define header tabs visibility per role."
+msgstr "Määritä otsikkovälilehtien näkyvyys roolikohtaisesti."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Aseta vaihtoehdot, jotka haluat näkyvän navigoinnissa taulukon ympärillä näyttääkseen vähemmän tai enemmän rivejä yhdellä sivulla. esim. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Lisäominaisuuksien taulukko, jotka voit ottaa käyttöön videosoittimelle Chamilosssa. Vaihtoehtoja ovat 'speed', joka mahdollistaa videon toistonopeuden muuttamisen."
+
+msgid "Mail: character set"
+msgstr "Sähköposti: merkistö"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Jos tarvitset määrittää merkistön käytettäväksi näiden sähköpostien lähettämiseen. Jätä tyhjäksi jos et ole varma."
+
+msgid "Mail: Debug"
+msgstr "Sähköposti: Virheenkorjaus"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Valitse, haluatko ottaa käyttöön sähköpostin lähettämisen virheenkorjauslokit. Nämä antavat lisätietoa siitä mitä tapahtuu yhteyden muodostettaessa sähköpostipalveluun, mutta eivät ole tyylikkäitä ja voivat rikkoa sivun muotoilua. Käytä vain kun ei ole käyttäjätoimintaa."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Sähköposti: Vältä LD+JSON-käyttöä"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Jotkut sähköpostiohjelmat eivät ymmärrä kuvaavaa LD+JSON-muotoa, vaan näyttävät sen löysänä JSON-merkkijonona loppukäyttäjälle. Jos näin on, voit haluta asettaa alla olevan muuttujan arvoksi 'false' poistaaksesi tämän otsikon käytöstä."
+
+msgid "Mail: DKIM headers"
+msgstr "Sähköposti: DKIM-otsikot"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Anna JSON-taulukko DKIM-asetuksistasi (katso esimerkki)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Sähköposti: XOAuth2-vaihtoehdot"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Jos käytät XOAuth2-pohjaista sähköpostipalvelua, käytä tätä JSON-asetusta tallentaaksesi erityiset asetuksesi (katso esimerkki) ja valitse XOAuth2 sähköpostipalvelun asetuksessa."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Määrittää ympäristötyypin: \"prod\" (normaali tuotanto), \"validation\" (kuten tuotanto mutta ilman tilastoraportointia) tai \"test\" (vianetsintätila kehittäjätyökaluilla kuten käännettyjen merkkijonojen indikaattoreilla)."
+
+msgid "Global limit of users per course"
+msgstr "Globaali käyttäjien enimmäismäärä kurssia kohden"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Määrittää alustan yksittäiselle kurssille sallitun maksimimäärän käyttäjiä (opettajat mukaan lukien). Aseta tämä arvo 0:ksi rajoituksen poistamiseksi. Tämä auttaa estämään kurssien ylikuormituksen avoimissa portaaleissa."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Ota käyttöön käyttääksesi taulukkoa määrittämään, mitkä roolit näytetään selkeästi ja mitkä piilotetaan."
+
+msgid "Show base course posts in session course"
+msgstr "Näytä peruskurssin viestit istuntokurssissa"
+
+msgid "Limit identical email usage"
+msgstr "Rajoita saman sähköpostin käyttöä"
 

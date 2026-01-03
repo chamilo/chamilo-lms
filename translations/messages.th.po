@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "ด้วยความเคารพ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ตัวอย่างสูตร: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "สูตรตัวอย่าง: sqrt( [x] / [ย] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ช่วงตัวแปร"
@@ -31454,4 +31454,142 @@ msgstr "สำหรับรายละเอียดเพิ่มเติ
 
 msgid "Manager"
 msgstr "ผู้จัดการ"
+
+msgid "Mark as"
+msgstr "ทำเครื่องหมายเป็น"
+
+msgid "Reply to all"
+msgstr "ตอบกลับทั้งหมด"
+
+msgid "SCIM external ID"
+msgstr "SCIM external ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "กรุณายอมรับเวอร์ชันล่าสุดของข้อกำหนดและเงื่อนไข"
+
+msgid "Required value for operation without path"
+msgstr "ค่าที่จำเป็นสำหรับการดำเนินการโดยไม่มีเส้นทาง"
+
+msgid "Available space (%s)"
+msgstr "พื้นที่ว่างที่มี (%s)"
+
+msgid "Index this description for the global search"
+msgstr "รวมคำอธิบายนี้ในดัชนีสำหรับการค้นหาทั่วโลก"
+
+msgid "Unknown course"
+msgstr "คอร์สที่ไม่รู้จัก"
+
+msgid "Certificate not found."
+msgstr "ไม่พบใบรับรอง"
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "โทเค็นความปลอดภัยหมดอายุ กรุณาโหลดหน้าใหม่และลองอีกครั้ง"
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "เฉพาะผู้ดูแลระบบแพลตฟอร์มเท่านั้นที่สามารถเปลี่ยนการมองเห็นของคอร์สได้"
+
+msgid "Unexpected error while subscribing the user"
+msgstr "เกิดข้อผิดพลาดไม่คาดคิดขณะสมัครสมาชิกผู้ใช้"
+
+msgid "Search in resource logs"
+msgstr "ค้นหาในบันทึกทรัพยากร"
+
+msgid "Include this learning path in the global search results"
+msgstr "รวมเส้นทางการเรียนรู้นี้ในผลการค้นหาทั่วโลก"
+
+msgid "The course code already exists"
+msgstr "รหัสคอร์สมีอยู่แล้ว"
+
+msgid "Latest news"
+msgstr "ข่าวล่าสุด"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "รับข่าวสารล่าสุดจาก Chamilo รวมถึงช่องโหว่ด้านความปลอดภัยและเหตุการณ์ โดยตรงในแผงผู้ดูแลระบบของคุณ ข่าวเหล่านี้จะถูกตรวจสอบจากเซิร์ฟเวอร์ข่าว Chamilo ทุกครั้งที่คุณโหลดหน้าแอดมินและมองเห็นได้เฉพาะผู้ดูแลระบบเท่านั้น"
+
+msgid "Chamilo support block"
+msgstr "บล็อกสนับสนุน Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "รับเคล็ดลับโปรและวิธีง่ายๆ ในการติดต่อผู้ให้บริการอย่างเป็นทางการสำหรับการสนับสนุนระดับมืออาชีพ โดยตรงจากผู้สร้าง Chamilo บล็อกนี้จะปรากฏในหน้าแอดมินของคุณ มองเห็นได้เฉพาะผู้ดูแลระบบ และจะรีเฟรชทุกครั้งที่คุณโหลดหน้าแอดมิน"
+
+msgid "Hide option to send announcements to HR users"
+msgstr "ซ่อนตัวเลือกในการส่งประกาศไปยังผู้ใช้ HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "อนุญาตให้ผู้ดูแลเซสชันดาวน์โหลดใบรับรองส่วนตัว"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "หากเปิดใช้งาน ผู้ดูแลเซสชันสามารถดาวน์โหลดใบรับรองได้แม้ว่าจะไม่ได้เผยแพร่สู่สาธารณะ"
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "หากไม่ว่างเปล่า กระบวนการสร้างหลักสูตรจะค้นหาช่องข้อมูลบางส่วนในโปรไฟล์ผู้ใช้และกรอกข้อมูลอัตโนมัติสำหรับหลักสูตร ตัวอย่างเช่น ครูผู้เชี่ยวชาญด้านการตลาดดิจิทัลสามารถตั้งค่าธง «การตลาดดิจิทัล» อัตโนมัติในแต่ละหลักสูตรที่สร้าง"
+
+msgid "Main menu entries"
+msgstr "รายการเมนูหลัก"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "เลือกเรกคอร์ดที่ต้องการให้ปรากฏในเมนูหลัก"
+
+msgid "Main menu entries per role"
+msgstr "รายการเมนูหลักตามบทบาท"
+
+msgid "Define header tabs visibility per role."
+msgstr "กำหนดการมองเห็นแท็บส่วนหัวตามบทบาท"
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "ตั้งค่าตัวเลือกที่ต้องการให้ปรากฏในการนำทางรอบตารางเพื่อแสดงแถวน้อยลงหรือมากขึ้นต่อหน้า เช่น [50, 100, 200, 500]"
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "อาร์เรย์ของฟีเจอร์พิเศษที่สามารถเปิดใช้งานสำหรับตัวเล่นวิดีโอใน Chamilo ตัวเลือก ได้แก่ 'speed' ซึ่งช่วยให้คุณเปลี่ยนความเร็วการเล่นวิดีโอ"
+
+msgid "Mail: character set"
+msgstr "อีเมล: ชุดอักขระ"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "ในกรณีที่ต้องกำหนดชุดอักขระสำหรับส่งอีเมลเหล่านั้น ทิ้งว่างไว้หากไม่แน่ใจ"
+
+msgid "Mail: Debug"
+msgstr "อีเมล: Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "เลือกว่าต้องการเปิดใช้งานบันทึกการดีบักการส่งอีเมลหรือไม่ สิ่งเหล่านี้จะให้ข้อมูลเพิ่มเติมเกี่ยวกับสิ่งที่เกิดขึ้นเมื่อเชื่อมต่อกับบริการอีเมล แต่ไม่สวยงามและอาจทำให้การออกแบบหน้าทำลาย ใช้เฉพาะเมื่อไม่มีกิจกรรมผู้ใช้"
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "อีเมล: หลีกเลี่ยงการใช้ LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "ไคลเอนต์อีเมลบางตัวไม่เข้าใจรูปแบบ LD+JSON ที่อธิบาย แสดงเป็นสตริง JSON หลวมๆ ให้ผู้ใช้ปลายทาง หากเป็นกรณีของคุณ อาจตั้งค่าตัวแปรด้านล่างเป็น 'false' เพื่อปิดส่วนหัวนี้"
+
+msgid "Mail: DKIM headers"
+msgstr "อีเมล: ส่วนหัว DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "ป้อนอาร์เรย์ JSON ของการตั้งค่า DKIM ของคุณ (ดูตัวอย่าง)"
+
+msgid "Mail: XOAuth2 options"
+msgstr "อีเมล: ตัวเลือก XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "หากใช้บริการอีเมลที่ใช้ XOAuth2 ใช้การตั้งค่านี้ใน JSON เพื่อบันทึกการกำหนดค่าพิเศษของคุณ (ดูตัวอย่าง) และเลือก XOAuth2 ในการตั้งค่าบริการอีเมล"
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "กำหนดประเภทสภาพแวดล้อม: \"prod\" (การผลิตปกติ), \"validation\" (เหมือนการผลิตแต่ไม่รายงานสถิติ), หรือ \"test\" (โหมดดีบักพร้อมเครื่องมือนักพัฒนา เช่น ตัวบ่งชี้สตริงที่ยังไม่แปล)"
+
+msgid "Global limit of users per course"
+msgstr "ขีดจำกัดผู้ใช้ทั้งหมดต่อหลักสูตร"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "กำหนดจำนวนสูงสุดผู้ใช้ทั้งหมด (รวมครู) ที่อนุญาตให้สมัครในหลักสูตรเดียวในแพลตฟอร์ม ตั้งค่านี้เป็น 0 เพื่อปิดขีดจำกัด ช่วยหลีกเลี่ยงหลักสูตรที่โหลดเกินในพอร์ทัลเปิด"
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "เปิดใช้งานเพื่อใช้อาร์เรย์กำหนดบทบาทที่ควรแสดงชัดเจนและบทบาทที่ควรซ่อน"
+
+msgid "Show base course posts in session course"
+msgstr "แสดงโพสต์หลักสูตรฐานในหลักสูตรเซสชัน"
+
+msgid "Limit identical email usage"
+msgstr "จำกัดการใช้อีเมลซ้ำ"
 

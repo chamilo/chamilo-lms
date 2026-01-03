@@ -31453,3 +31453,141 @@ msgstr "மேலும் விவரங்களுக்கு %s ஐப் 
 msgid "Manager"
 msgstr "நிர்வாகி"
 
+msgid "Mark as"
+msgstr "என்று குறி வை"
+
+msgid "Reply to all"
+msgstr "எல்லாருக்கும் பதில்"
+
+msgid "SCIM external ID"
+msgstr "SCIM வெளி ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "விதிமுறைகள் மற்றும் நிபந்தனைகளின் சமீபத்திய பதிப்பை ஏற்பத் தயாராகவும்."
+
+msgid "Required value for operation without path"
+msgstr "பாதை இன்றி செயல்படுவதற்கான தேவையான மதிப்பு"
+
+msgid "Available space (%s)"
+msgstr "கிடைக்கும் இடம் (%s)"
+
+msgid "Index this description for the global search"
+msgstr "உலகளாவிய தேடலுக்காக இந்த விளக்கத்தை பட்டியலிடவும்"
+
+msgid "Unknown course"
+msgstr "தெரியாத பாடம்"
+
+msgid "Certificate not found."
+msgstr "சான்றிதழ் காணப்படவில்லை."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "பாதுகாப்பு டோக்கன் காலாவதியானது. பக்கத்தை மீண்டும் ஏற்றி முயற்சிக்கவும்."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "பாடத்தின் தெரிவுநிலையை மாற்ற மெய்யப்படி நிர்வாகிகள் மட்டுமே முடியும்."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "பயனரை பதிவு செய்வதில் எதிர்பாராத பிழை"
+
+msgid "Search in resource logs"
+msgstr "வள பதிவுகளில் தேடல்"
+
+msgid "Include this learning path in the global search results"
+msgstr "உலகளாவிய தேடல் முடிவுகளில் இந்த கற்றல் பாதையை சேர்க்கவும்"
+
+msgid "The course code already exists"
+msgstr "பாட குறியீடு ஏற்கனவே உள்ளது"
+
+msgid "Latest news"
+msgstr "சமீபத்திய செய்திகள்"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Chamilo இலிருந்து சமீபத்திய செய்திகளைப் பெறுங்கள், பாதுகாப்பு பிழைகள் மற்றும் நிகழ்வுகள் உட்பட, உங்கள் நிர்வாக பலகையில் நேரடியாக. இந்த செய்திகள் நிர்வாக பக்கத்தை ஏற்றும் ஒவ்வொரு முறையும் Chamilo செய்தி சர்வரில் சரிபார்க்கப்படும் மற்றும் நிர்வாகிகளுக்கு மட்டுமே தெரியும்."
+
+msgid "Chamilo support block"
+msgstr "Chamilo ஆதரவு பிளாக்"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Chamilo உருவாக்குபவர்களிடமிருந்து தொழில்முறை ஆதரவுக்கான அதிகாரப்பூர்வ சேவை வழங்குநர்களை தொடர்பு கொள்ள எளிய வழி மற்றும் நிபுணர் குறிப்புகளைப் பெறுங்கள். இந்த பிளாக் உங்கள் நிர்வாக பக்கத்தில் தோன்றும், நிர்வாகிகளுக்கு மட்டுமே தெரியும் மற்றும் நிர்வாக பக்கத்தை ஏற்றும் ஒவ்வொரு முறையும் புதுப்பிக்கப்படும்."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "HR பயனர்களுக்கு அறிவிப்புகளை அனுப்புவதற்கான விருப்பத்தை மறை"
+
+msgid "Allow session admins to download private certificates"
+msgstr "அமர்வு நிர்வாகிகளுக்கு தனியார் சான்றிதழ்களை பதிவிறக்க அனுமதி"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "இயக்கப்பட்டால், அமர்வு நிர்வாகிகள் சான்றிதழ்கள் பொது வெளியிடப்படாதபோதும் பதிவிறக்க செய்யலாம்."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "காலியாக இல்லையெனில், பாட உருவாக்கும் செயல்முறை பயனர் சுயவிவரத்தில் சில புலங்களைத் தேடி பாடத்திற்காக அவற்றை தானாக நிரப்பும். உதாரணமாக, டிஜிட்டல் மார்க்கெட்டிங்கில் நிபுணத்துவம் பெற்ற ஆசிரியர் உருவாக்கும் ஒவ்வொரு பாடத்திலும் « டிஜிட்டல் மார்க்கெட்டிங் » குறியை தானாக அமைக்கலாம்."
+
+msgid "Main menu entries"
+msgstr "முதன்மை மெனு உள்ளீடுகள்"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "முதன்மை மெனுவில் தோன்ற வேண்டிய உள்ளீட்டை சரிபார்க்கவும்"
+
+msgid "Main menu entries per role"
+msgstr "பாத்திரத்திற்கான முதன்மை மெனு உள்ளீடுகள்"
+
+msgid "Define header tabs visibility per role."
+msgstr "பாத்திரத்திற்கு தலைப்பு டேப்கள் தெரிவுநிலையை வரையறுக்கவும்."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "ஒரு பக்கத்தில் குறைவான அல்லது அதிக வரிகளைக் காட்டுவதற்கான அட்டவணைச் சுற்றியுள்ள வழிசெலுத்தலில் தோன்ற விரும்பும் விருப்பங்களை அமைக்கவும். உ.அ. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Chamilo இல் வீடியோ பிளேயருக்கு இயக்கலாம் உள்ள கூடுதல் அம்சங்களின் அம்சம். விருப்பங்கள் 'speed' ஐ உள்ளடக்கியது, இது வீடியோவின் மீண்டும் அனைத்தல் வேகத்தை மாற்ற அனுமதிக்கிறது."
+
+msgid "Mail: character set"
+msgstr "மின்னஞ்சல்: எழுத்துச் சரம்"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "இந்த மின்னஞ்சல்களை அனுப்பும்போது பயன்படுத்த வேண்டிய charset-ஐ வரையறுக்க வேண்டுமானால். உறுதியில்லை என்றால் காலியாக விடவும்."
+
+msgid "Mail: Debug"
+msgstr "மின்னஞ்சல்: அனுபவிப்பு"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "மின்னஞ்சல் அனுப்புதல் அனுபவிப்பு பதிவுகளை செயல்படுத்த வேண்டுமா எனத் தேர்ந்தெடுக்கவும். இவை மெயில் சேவையுடன் இணைப்பதில் என்ன நடக்கிறது என்பது பற்றிய மேலும் தகவல்களைத் தரும், ஆனால் அழகாக இருக்காது மற்றும் பக்க வடிவமைப்பை உடைக்கலாம். பயனர் செயல்பாடு இல்லாதபோது மட்டும் பயன்படுத்தவும்."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "மின்னஞ்சல்: LD+JSON பயன்படுத்த வேண்டாம்"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "சில மின்னஞ்சல் கிளையன்டுகள் விளக்கவுரை LD+JSON வடிவத்தைப் புரிந்துகொள்ளாது, இறுதி பயனருக்கு த鬆 JSON சரமாகக் காட்டும். இது உங்கள் சூழ்நிலை என்றால், இந்தத் தலைப்பை முடக்குவதற்காக கீழே உள்ள மாறியை 'false' ஆக அமைக்கலாம்."
+
+msgid "Mail: DKIM headers"
+msgstr "மின்னஞ்சல்: DKIM தலைப்புகள்"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "உங்கள் DKIM அமைப்பு அமைப்புகளின் JSON அமுக்கத்தை உள்ளிடவும் (எடுத்துக்காட்டு பார்)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "மின்னஞ்சல்: XOAuth2 விருப்பங்கள்"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "XOAuth2 அடிப்படையிலான மின்னஞ்சல் சேவையைப் பயன்படுத்தினால், உங்கள் குறிப்பிட்ட அமைப்பைச் சேமிக்க JSON-இல் இந்த அமைப்பைப் பயன்படுத்தவும் (எடுத்துக்காட்டு பார்) மற்றும் மெயில் சேவை அமைப்பில் XOAuth2-ஐத் தேர்ந்தெடுக்கவும்."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "சூழல் வகையை வரையறுக்கிறது: \"prod\" (இயல்புநிலை உற்பத்தி), \"validation\" (புள்ளிவிவரம் அறிக்கை இல்லாத உற்பத்தி போன்று), அல்லது \"test\" (மொழிபெயர்க்கப்படாத சரம் குறிகாட்டிகள் போன்ற உருவாக்கியாளர் கருவிகளுடன் அனுபவிப்பு நிலை)."
+
+msgid "Global limit of users per course"
+msgstr "பாடநிலைக்கு பயனர்களின் உலகளாவிய வரம்பு"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "தளத்தில் ஒரு ஒற்றை பாடநிலைக்கு பதிவு செய்ய அனுமதிக்கப்படும் பயனர்களின் (ஆசிரியர்கள் உட்பட) உலகளாவிய அதிகபட்ச எண்ணிக்கையை வரையறுக்கிறது. வரம்பை முடக்க 0 ஆக அமைக்கவும். இது திறந்த போர்டல்களில் பாடநிலைகள் அதிகமைக்கப்படுவதைத் தவிர்க்க உதவுகிறது."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "எந்த பாத்திரங்கள் தெளிவாகக் காட்டப்பட வேண்டும் மற்றும் எவை மறைக்கப்பட வேண்டும் என வரையறுக்க அமுக்கத்தைப் பயன்படுத்த செயல்படுத்தவும்."
+
+msgid "Show base course posts in session course"
+msgstr "அமர்வு பாடநிலையில் அடிப்படை பாடநிலை பதிவுகளைக் காட்டு"
+
+msgid "Limit identical email usage"
+msgstr "ஒரே மின்னஞ்சல் பயன்பாட்டை வரம்பிடு"
+

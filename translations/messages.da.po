@@ -31455,3 +31455,141 @@ msgstr "For flere detaljer besøg %s"
 msgid "Manager"
 msgstr "Administrer"
 
+msgid "Mark as"
+msgstr "Markér som"
+
+msgid "Reply to all"
+msgstr "Svar til alle"
+
+msgid "SCIM external ID"
+msgstr "SCIM ekstern ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Acceptér venligst den nyeste version af betingelserne."
+
+msgid "Required value for operation without path"
+msgstr "Påkrævet værdi for handling uden sti"
+
+msgid "Available space (%s)"
+msgstr "Tilgængeligt plads (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Indekser denne beskrivelse for global søgning"
+
+msgid "Unknown course"
+msgstr "Ukendt kursus"
+
+msgid "Certificate not found."
+msgstr "Certifikat ikke fundet."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Sikkerhedstoken udløbet. Genindlæs venligst siden og prøv igen."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Kun platformadministratorer kan ændre kursus synlighed."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Uventet fejl under tilmelding af brugeren"
+
+msgid "Search in resource logs"
+msgstr "Søg i ressourcelogfiler"
+
+msgid "Include this learning path in the global search results"
+msgstr "Inkluder denne læringssti i globale søgeresultater"
+
+msgid "The course code already exists"
+msgstr "Kursus koden findes allerede"
+
+msgid "Latest news"
+msgstr "Seneste nyheder"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Få de nyeste nyheder fra Chamilo, inklusive sikkerhedshuller og events, direkte i dit administrationspanel. Disse nyheder tjekkes på Chamilo nyhedsserveren hver gang du indlæser administrationssiden og er kun synlige for administratorer."
+
+msgid "Chamilo support block"
+msgstr "Chamilo support blok"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Få pro tips og en nem måde at kontakte officielle serviceudbydere for professionel support, direkte fra Chamilos skabere. Denne blok vises på din administrationsside, er kun synlig for administratorer og opdateres hver gang du indlæser administrationssiden."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Skjul mulighed for at sende kunngørelser til HR-brugere"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Tillad sessionadministratorer at downloade private certifikater"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Hvis aktiveret, kan sessionadministratorer downloade certifikater selvom de ikke er offentligt offentliggjort."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Hvis ikke tom, vil kursusoprettelsesprocessen kigge efter nogle felter i brugerprofilen og auto-udfylde dem for kurset. For eksempel kunne en lærer specialiseret i digital markedsføring automatisk sætte et « digital markedsføring » flag på hvert kursus (han/hun) opretter."
+
+msgid "Main menu entries"
+msgstr "Hovedmenu poster"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Vælg de poster du vil have til at vises i hovedmenuen"
+
+msgid "Main menu entries per role"
+msgstr "Hovedmenu poster pr. rolle"
+
+msgid "Define header tabs visibility per role."
+msgstr "Definer header faner synlighed pr. rolle."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Indstil de muligheder du vil have til at vises i navigationen omkring en tabel for at vise færre eller flere rækker på en side. f.eks. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Array af ekstra funktioner du kan aktivere for videoafspilleren i Chamilo. Muligheder inkluderer 'speed', som tillader dig at ændre afspilningshastigheden af en video."
+
+msgid "Mail: character set"
+msgstr "Mail: tegnsæt"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Hvis du skal definere tegnsættet til brug ved afsendelse af disse e-mails. Efterlad tomt hvis du ikke er sikker."
+
+msgid "Mail: Debug"
+msgstr "Mail: Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Vælg om du vil aktivere e-mail afsendelses debug logs. Disse giver dig mere information om hvad der sker ved tilslutning til mailtjenesten, men er ikke elegante og kan bryde sideskabelonen. Brug kun når der ikke er brugeraktivitet."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Mail: Undgå at bruge LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Nogle e-mail klienter forstår ikke det beskrivende LD+JSON format og viser det som en løs JSON streng til slutbrugeren. Hvis dette er dit tilfælde, kan du sætte variablen nedenfor til 'false' for at deaktivere denne header."
+
+msgid "Mail: DKIM headers"
+msgstr "Mail: DKIM headers"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Indtast et JSON array af dine DKIM konfigurationsindstillinger (se eksempel)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Mail: XOAuth2 muligheder"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Hvis du bruger en XOAuth2-baseret e-mail tjeneste, brug denne indstilling i JSON til at gemme din specifikke konfiguration (se eksempel) og vælg XOAuth2 i mailtjeneste indstillingen."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Definerer miljøtypen: \"prod\" (normal produktion), \"validation\" (som produktion men uden rapportering af statistik), eller \"test\" (debug tilstand med udviklerværktøjer som uoversatte streng indikatorer)."
+
+msgid "Global limit of users per course"
+msgstr "Global grænse for brugere pr. kursus"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Definerer et globalt maksimum antal brugere (lærere inkluderet) tilladt at tilmeldes et enkelt kursus på platformen. Sæt denne værdi til 0 for at deaktivere grænsen. Dette hjælper med at undgå overbelastede kurser i åbne portaler."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Aktivér for at bruge et array til at definere hvilke roller der skal vises klart og hvilke der skal skjules."
+
+msgid "Show base course posts in session course"
+msgstr "Vis basis kursus opslag i session kursus"
+
+msgid "Limit identical email usage"
+msgstr "Begræns identisk e-mail brug"
+

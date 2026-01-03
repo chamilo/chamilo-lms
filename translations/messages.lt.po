@@ -2024,7 +2024,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autoriaus teisės,, no:be autoriaus teisių"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplankas ,, application/msword:MsWord,, application/octet-stream:Oktobaitų srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplankas,, application/msword:MsWord,, application/octet-stream:Oktobaitų srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":testas:testas,,      simuliacija:simuliacija,,      klausimynas:klausimynas,,      diagrama:diagrama,,      paveikslėlis:paveikslėlis,,      grafikas:grafikas,,      indeksas:indeksas,,      skaidrė:skaidrė,,      lentelė:lentelė,,      naratyvinis tekstas:naratyvinis tekstas,,      egzaminas:egzaminas,,      eksperimentas:eksperimentas,,      problemos teiginys:problemos teiginys,,      savęs vertinimas:savęs vertinimas,,      paskaita:paskaita"
@@ -31455,4 +31455,142 @@ msgstr "Daugiau informacijos: %s"
 
 msgid "Manager"
 msgstr "Valdytojas"
+
+msgid "Mark as"
+msgstr "Pažymėti kaip"
+
+msgid "Reply to all"
+msgstr "Atsakyti visiems"
+
+msgid "SCIM external ID"
+msgstr "SCIM išorinis ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Prašome priimti naujausią naudojimo sąlygų versiją."
+
+msgid "Required value for operation without path"
+msgstr "Būtina reikšmė operacijai be kelio"
+
+msgid "Available space (%s)"
+msgstr "Laisva vieta (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Įtraukti šį aprašymą į globalią paiešką"
+
+msgid "Unknown course"
+msgstr "Nežinomas kursas"
+
+msgid "Certificate not found."
+msgstr "Sertifikatas nerastas."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Saugos prieigos raktas pasibaigė. Prašome perkrauti puslapį ir bandyti iš naujo."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Tik platformos administratoriai gali keisti kurso matomumą."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Netikėta klaida prisiregistruojant vartotoją"
+
+msgid "Search in resource logs"
+msgstr "Ieškoti išteklių žurnaluose"
+
+msgid "Include this learning path in the global search results"
+msgstr "Įtraukti šį mokymosi kelią į globalios paieškos rezultatus"
+
+msgid "The course code already exists"
+msgstr "Kursų kodas jau egzistuoja"
+
+msgid "Latest news"
+msgstr "Naujausios naujienos"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Gaukite naujausias Chamilo naujienas, įskaitant saugumo spragas ir renginius, tiesiogiai savo administravimo skydelyje. Šios naujienos bus tikrinamos Chamilo naujienų serveryje kiekvieną kartą įkeliant administravimo puslapį ir matomos tik administratoriams."
+
+msgid "Chamilo support block"
+msgstr "Chamilo palaikymo blokas"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Gaukite profesionalius patarimus ir lengvą būdą susisiekti su oficialiais paslaugų teikėjais profesionaliai pagalbai, tiesiogiai iš Chamilo kūrėjų. Šis blokas pasirodo jūsų administravimo puslapyje, matomas tik administratoriams ir atnaujinamas kiekvieną kartą įkeliant administravimo puslapį."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Slėpti parinktį siųsti pranešimus HR vartotojams"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Leisti sesijos administratoriams atsisiųsti privačius sertifikatus"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Jei įjungta, sesijos administratoriai gali atsisiųsti sertifikatus net jei jie nėra viešai publikuoti."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Jei neužpildyta, kurso kūrimo procesas ieškos tam tikrų laukų vartotojo profilyje ir automatiškai juos užpildys kursui. Pavyzdžiui, skaitmeninės rinkodaros mokytojas galėtų automatiškai nustatyti „skaitmeninės rinkodaros“ žymę kiekvienam sukurtam kursui."
+
+msgid "Main menu entries"
+msgstr "Pagrindinio meniu įrašai"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Pažymėkite įrašus, kuriuos norite matyti pagrindiniame meniu"
+
+msgid "Main menu entries per role"
+msgstr "Pagrindinio meniu įrašai pagal vaidmenį"
+
+msgid "Define header tabs visibility per role."
+msgstr "Nustatykite antrastės skirtukų matomumą pagal vaidmenį."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Nustatykite parinktis, kurias norite matyti navigacijoje aplink lentelę, kad parodytų mažiau ar daugiau eilučių viename puslapyje. Pvz., [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Papildomų funkcijų masyvai, kurias galite įjungti vaizdo grotuve Chamilo. Parinktys apima 'speed', kuri leidžia keisti vaizdo atkūrimo greitį."
+
+msgid "Mail: character set"
+msgstr "Paštas: simbolių rinkinys"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Jei reikia nustatyti simbolių rinkinį, naudojamą siunčiant tuos el. laiškus. Palikite tuščią, jei nesate tikri."
+
+msgid "Mail: Debug"
+msgstr "Paštas: Derinimas"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Pasirinkite, ar norite įjungti el. pašto siuntimo derinimo žurnalus. Jie suteiks daugiau informacijos apie tai, kas vyksta jungiantis prie pašto tarnybos, bet nėra elegantiški ir gali sugadinti puslapio dizainą. Naudokite tik tada, kai nėra vartotojų veiklos."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Paštas: Venkite naudoti LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Kai kurie el. pašto klientai nesupranta aprašomojo LD+JSON formato ir rodo jį kaip atvirą JSON eilutę galutiniam vartotojui. Jei taip yra jūsų atveju, galite nustatyti žemiau esančią kintamąjį į „false“, kad išjungtumėte šį antraštę."
+
+msgid "Mail: DKIM headers"
+msgstr "Paštas: DKIM antraštės"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Įveskite savo DKIM konfigūracijos nustatymų JSON masyvą (žr. pavyzdį)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Paštas: XOAuth2 parinktys"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Jei naudojate XOAuth2 pagrįstą el. pašto tarnybą, naudokite šį JSON nustatymą savo specifinei konfigūracijai išsaugoti (žr. pavyzdį) ir pasirinkite XOAuth2 pašto tarnybos nustatyme."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Nustato aplinkos tipą: \"prod\" (normali gamyba), \"validation\" (kaip gamyba, bet be statistikos ataskaitų) arba \"test\" (derinimo režimas su kūrėjo įrankiais, pvz., nevertimo eilutės rodikliais)."
+
+msgid "Global limit of users per course"
+msgstr "Visuotinis vartotojų per kursą limitas"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Nustato visuotini maksimalų leidžiamą vartotojų (įskaitant dėstytojus) skaičių, kurie gali būti užsiregistravę į vieną kursą platformoje. Nustatykite šią reikšmę į 0, kad išjungtumėte limitą. Tai padeda išvengti kursų perkrovimo atvirose portaluose."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Įjunkite, kad naudotumėte masyvą, kuriame apibrėžtumėte, kurios rolės turėtų būti aiškiai rodomos, o kurios paslėptos."
+
+msgid "Show base course posts in session course"
+msgstr "Rodyti bazinio kurso įrašus sesijos kurse"
+
+msgid "Limit identical email usage"
+msgstr "Riboti identiško el. pašto naudojimą"
 

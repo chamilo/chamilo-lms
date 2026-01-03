@@ -26612,7 +26612,7 @@ msgid "Selective display of roles"
 msgstr "Exibição seletiva de papéis"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "Um array de role => true/false que define se esse papel deve ser mostrado ou ocultado.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "Um array de role => true/false que define se esse role deve ser mostrado ou ocultado.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Opções de exibição de papéis"
@@ -31462,4 +31462,142 @@ msgstr "Para mais detalhes visite %s"
 
 msgid "Manager"
 msgstr "Gestor"
+
+msgid "Mark as"
+msgstr "Marcar como"
+
+msgid "Reply to all"
+msgstr "Responder a todos"
+
+msgid "SCIM external ID"
+msgstr "SCIM ID externo"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Por favor, aceite a versão mais recente dos termos e condições."
+
+msgid "Required value for operation without path"
+msgstr "Valor obrigatório para operação sem caminho"
+
+msgid "Available space (%s)"
+msgstr "Espaço disponível (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Indexar esta descrição para a pesquisa global"
+
+msgid "Unknown course"
+msgstr "Curso desconhecido"
+
+msgid "Certificate not found."
+msgstr "Certificado não encontrado."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Token de segurança expirado. Por favor, recarregue a página e tente novamente."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Apenas administradores da plataforma podem alterar a visibilidade do curso."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Erro inesperado ao inscrever o usuário"
+
+msgid "Search in resource logs"
+msgstr "Pesquisar em logs de recursos"
+
+msgid "Include this learning path in the global search results"
+msgstr "Incluir este percurso de aprendizagem nos resultados da pesquisa global"
+
+msgid "The course code already exists"
+msgstr "O código do curso já existe"
+
+msgid "Latest news"
+msgstr "Últimas notícias"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Obtenha as últimas notícias do Chamilo, incluindo vulnerabilidades de segurança e eventos, diretamente no seu painel de administração. Essas notícias serão verificadas no servidor de notícias do Chamilo toda vez que você carregar a página de administração e são visíveis apenas para administradores."
+
+msgid "Chamilo support block"
+msgstr "Bloco de suporte do Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Obtenha dicas profissionais e uma maneira fácil de contatar provedores de serviços oficiais para suporte profissional, diretamente dos criadores do Chamilo. Este bloco aparece na sua página de administração, é visível apenas por administradores e é atualizado toda vez que você carrega a página de administração."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Ocultar opção para enviar anúncios a usuários de RH"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Permitir que administradores de sessão baixem certificados privados"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Se ativado, administradores de sessão podem baixar certificados mesmo se não estiverem publicados publicamente."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Se não estiver vazio, o processo de criação do curso buscará alguns campos no perfil do usuário e os preencherá automaticamente para o curso. Por exemplo, um professor especializado em marketing digital poderia definir automaticamente uma marca « marketing digital » em cada curso que cria."
+
+msgid "Main menu entries"
+msgstr "Entradas do menu principal"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Marque as entradas que deseja ver aparecer no menu principal"
+
+msgid "Main menu entries per role"
+msgstr "Entradas do menu principal por função"
+
+msgid "Define header tabs visibility per role."
+msgstr "Definir visibilidade das abas do cabeçalho por função."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Defina as opções que deseja aparecer na navegação ao redor de uma tabela para mostrar menos ou mais linhas em uma página. ex: [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Array de recursos extras que você pode ativar para o reprodutor de vídeo no Chamilo. Opções incluem 'speed', que permite alterar a velocidade de reprodução de um vídeo."
+
+msgid "Mail: character set"
+msgstr "E-mail: conjunto de caracteres"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Caso precise definir o charset a ser usado ao enviar esses e-mails. Deixe vazio se não tiver certeza."
+
+msgid "Mail: Debug"
+msgstr "E-mail: Depuração"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Selecione se deseja ativar os logs de depuração do envio de e-mail. Eles fornecerão mais informações sobre o que está acontecendo ao conectar ao serviço de e-mail, mas não são elegantes e podem quebrar o design da página. Use apenas quando não houver atividade de usuários."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "E-mail: Evitar uso de LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Alguns clientes de e-mail não entendem o formato descritivo LD+JSON, exibindo-o como uma string JSON solta para o usuário final. Se for o seu caso, você pode definir a variável abaixo como 'false' para desativar este cabeçalho."
+
+msgid "Mail: DKIM headers"
+msgstr "E-mail: Cabeçalhos DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Insira um array JSON das suas configurações DKIM (veja exemplo)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "E-mail: Opções XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Se você usa um serviço de e-mail baseado em XOAuth2, use esta configuração em JSON para salvar sua configuração específica (veja exemplo) e selecione XOAuth2 na configuração do serviço de e-mail."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Define o tipo de ambiente: \"prod\" (produção normal), \"validation\" (como produção mas sem relatórios de estatísticas), ou \"test\" (modo de depuração com ferramentas de desenvolvedor como indicadores de strings não traduzidas)."
+
+msgid "Global limit of users per course"
+msgstr "Limite global de usuários por curso"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Define um número máximo global de usuários (incluindo professores) permitidos para inscrição em qualquer curso único na plataforma. Defina este valor como 0 para desativar o limite. Isso ajuda a evitar que cursos fiquem sobrecarregados em portais abertos."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Ative para usar um array definindo quais funções devem ser exibidas claramente e quais devem ser ocultas."
+
+msgid "Show base course posts in session course"
+msgstr "Mostrar postagens do curso base no curso de sessão"
+
+msgid "Limit identical email usage"
+msgstr "Limitar uso de e-mails idênticos"
 

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Rurasqa rakiy: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ruraynipas ñawpaq: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ari:copyright nisqawan,, mana:mana copyright nisqawan"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Phuru,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Puqyu,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación"
@@ -31454,4 +31454,142 @@ msgstr "Yäqin yachachisqatam ñawinchay %s"
 
 msgid "Manager"
 msgstr "Kamachiq"
+
+msgid "Mark as"
+msgstr "Rimarichiy"
+
+msgid "Reply to all"
+msgstr "Tukuyta rimanakuy"
+
+msgid "SCIM external ID"
+msgstr "SCIM maqollanqan ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Ñawpaq willakuykunata qhananchay."
+
+msgid "Required value for operation without path"
+msgstr "Willakuyninayuq ñawpaq willakuykunata mana pukaq"
+
+msgid "Available space (%s)"
+msgstr "Kutichisqa kuti (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Kay qillqasqanta tukuy rimanakuypi qillqachiy"
+
+msgid "Unknown course"
+msgstr "Mana riqsirqan kursu"
+
+msgid "Certificate not found."
+msgstr "Yachay willakuyqa mana tukuq."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Imakuna willakuyqa kutiq. Paqta musuqyachiy hamuy."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Plataforma kamachisqakunamllataq kursu qhawinachinakuyta hwanachinkuna."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Runata qatunchasqanpi mana suyusqan kasqan"
+
+msgid "Search in resource logs"
+msgstr "Willakuy yachachikuy qillqakunapi rimanakuy"
+
+msgid "Include this learning path in the global search results"
+msgstr "Kay yachay ñanmanta tukuy rimanakuy yachachikuykunaman qillqachiy"
+
+msgid "The course code already exists"
+msgstr "Kursu kutiqa kituq"
+
+msgid "Latest news"
+msgstr "Musuq willakuykuna"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Chamilo servermanta musuq willakuykuna, imakuna imakuna willakuykuna huchallaq willakuykuna, kamachinaq willakuykuna, kamachisqa panelmantaq. Kay willakuykuna kamachisqa paqta kutiq Chamilo willakuy serverpi qhawachinakunku kamachisqakunamantataq."
+
+msgid "Chamilo support block"
+msgstr "Chamilo yuyay block"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Chamilo ruwachakunaq pro tips hinaspa qhapaq yuyay willakuykunaq qhapaq yuyay willakuykunaq kamachisqa panelmantaq. Kay block kamachisqa paqtamantaq, kamachisqakunamantataq, kamachisqa paqta kutiq."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "HR runakunaman willakuy yachanata pakachiy"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Sesion kamachisqakuna maqollanqan yachay willakuykuna qatunchiy"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Kamachisqaqa, sesion kamachisqakuna yachay willakuykuna qatunchinkuna mana tukuykamaq."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Mana kikinmantaqa, kursu kamachiyqa runa qillqasqanpi willakuykunata qhawachinakuyqa kursupaq willakuykuna kusqakuy."
+
+msgid "Main menu entries"
+msgstr "Qhapaq menu willakuykuna"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Qhapaq menupi rishqakuyniykit qhawachinakuy"
+
+msgid "Main menu entries per role"
+msgstr "Qhapaq menu willakuykuna runakunaq rollpaq"
+
+msgid "Define header tabs visibility per role."
+msgstr "Yachachisqa rurakunaq header tabs rikch'ayninta qillqasqa yarpakunapaq."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Ñawpaq p'akichisqakunata saqillay, mesaq watukunaq p'akichisqata kamayta manta rikunaykipaq utaq aswan. Samay: [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Chamiloq videota rikukunapaq yapasqa rurakunaq k'anchaq. Rurakuna \"speed\"ta hamuq, videota t'inkiyta hurrachiyta saqillanki."
+
+msgid "Mail: character set"
+msgstr "Rimal: ñawpaq simikuna"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Rimalkuna ruraypi simikunata saqillakuykispapuni. Manam yachankichuqa, kawakuy."
+
+msgid "Mail: Debug"
+msgstr "Rimal: Ñawpaq qhaway"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Rimal ruraypi ñawpaq qhawachisqa qillqakunata kamachiyta munaspayki. Rimal ruraqwan q'illqasqakunamanta aswan yachayniyuq, ichaqa manam sumaqchu yachachisqa rurakunapi p'akichisqa. Rurakunapaq maqanakunamanta maqanakunachu."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Rimal: LD+JSONta kaniy"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Rimal rurakunaq qillqakuna LD+JSON qillqasqa formatninta manam yachanchu, JSON qillqasqa sapaq runakunaman rikuchin. Kaykunaqllapi, kay variableta \"false\"man qillqay LD+JSON header q'echk'achiy."
+
+msgid "Mail: DKIM headers"
+msgstr "Rimal: DKIM headerkuna"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "DKIM q'illqasqakunapaq JSON k'anchaq qillqay (misaqta qhawariy)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Rimal: XOAuth2 rurakuna"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "XOAuth2 ruraq rimal ruraqta kachkankiqa, kay JSONta saqillay q'illqasqakunapaq (misaqta qhawariy) rimal ruraqta XOAuth2man saqillay."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Suyukunaq rikch'ayninta qillqachin: \"prod\" (ñawpaq ruraq), \"validation\" (ñawpaq ruraqqa, ichaqa estadistikanata manam ruranchu), utawa \"test\" (ñawpaq qhaway ñawpaq simikuna rikch'akunaq kamachiq)."
+
+msgid "Global limit of users per course"
+msgstr "Yachachisqa rurakunapaq runakunaq ñawpaq k'anchay"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Platformap yachachisqa rurakunapaq ñawpaq runakunaq k'anchay (yachachiqkunaq hamuq) qillqachin. Kay valorta 0man qillqay k'anchayta q'echk'achiy. Kaykunaq ñawpaq suyukunaq yachachisqa rurakunata k'anchakunata yachachinchik."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "K'anchay yarpakunata qhaway rikch'ay yachachisqa rurakunata qillqachiy."
+
+msgid "Show base course posts in session course"
+msgstr "Suyukuna yachachisqa rurakunapi ñawpaq yachachisqa rurakunaq willakuykuna rikuchiy"
+
+msgid "Limit identical email usage"
+msgstr "Rimal rurakunaq tupankunata k'anchay"
 

@@ -31453,3 +31453,141 @@ msgstr "အသေးစိတ်အချက်အလက်များအတွ
 msgid "Manager"
 msgstr "မန်နေဂျာ"
 
+msgid "Mark as"
+msgstr ""
+
+msgid "Reply to all"
+msgstr ""
+
+msgid "SCIM external ID"
+msgstr ""
+
+msgid "OAuth2 ID"
+msgstr ""
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr ""
+
+msgid "Required value for operation without path"
+msgstr ""
+
+msgid "Available space (%s)"
+msgstr ""
+
+msgid "Index this description for the global search"
+msgstr ""
+
+msgid "Unknown course"
+msgstr ""
+
+msgid "Certificate not found."
+msgstr ""
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr ""
+
+msgid "Only platform administrators can change the course visibility."
+msgstr ""
+
+msgid "Unexpected error while subscribing the user"
+msgstr ""
+
+msgid "Search in resource logs"
+msgstr ""
+
+msgid "Include this learning path in the global search results"
+msgstr ""
+
+msgid "The course code already exists"
+msgstr ""
+
+msgid "Latest news"
+msgstr ""
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr ""
+
+msgid "Chamilo support block"
+msgstr ""
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr ""
+
+msgid "Hide option to send announcements to HR users"
+msgstr ""
+
+msgid "Allow session admins to download private certificates"
+msgstr ""
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr ""
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr ""
+
+msgid "Main menu entries"
+msgstr ""
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr ""
+
+msgid "Main menu entries per role"
+msgstr ""
+
+msgid "Define header tabs visibility per role."
+msgstr ""
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr ""
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr ""
+
+msgid "Mail: character set"
+msgstr ""
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr ""
+
+msgid "Mail: Debug"
+msgstr ""
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr ""
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr ""
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr ""
+
+msgid "Mail: DKIM headers"
+msgstr ""
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr ""
+
+msgid "Mail: XOAuth2 options"
+msgstr ""
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr ""
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr ""
+
+msgid "Global limit of users per course"
+msgstr ""
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr ""
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr ""
+
+msgid "Show base course posts in session course"
+msgstr ""
+
+msgid "Limit identical email usage"
+msgstr ""
+

@@ -31455,3 +31455,141 @@ msgstr "För mer information besök %s"
 msgid "Manager"
 msgstr "Administratör"
 
+msgid "Mark as"
+msgstr ""
+
+msgid "Reply to all"
+msgstr ""
+
+msgid "SCIM external ID"
+msgstr ""
+
+msgid "OAuth2 ID"
+msgstr ""
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr ""
+
+msgid "Required value for operation without path"
+msgstr ""
+
+msgid "Available space (%s)"
+msgstr ""
+
+msgid "Index this description for the global search"
+msgstr ""
+
+msgid "Unknown course"
+msgstr ""
+
+msgid "Certificate not found."
+msgstr ""
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr ""
+
+msgid "Only platform administrators can change the course visibility."
+msgstr ""
+
+msgid "Unexpected error while subscribing the user"
+msgstr ""
+
+msgid "Search in resource logs"
+msgstr ""
+
+msgid "Include this learning path in the global search results"
+msgstr ""
+
+msgid "The course code already exists"
+msgstr ""
+
+msgid "Latest news"
+msgstr ""
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr ""
+
+msgid "Chamilo support block"
+msgstr ""
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr ""
+
+msgid "Hide option to send announcements to HR users"
+msgstr ""
+
+msgid "Allow session admins to download private certificates"
+msgstr ""
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr ""
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr ""
+
+msgid "Main menu entries"
+msgstr "Huvudmenyposter"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Markera de poster du vill ska visas i huvudmenyn"
+
+msgid "Main menu entries per role"
+msgstr "Huvudmenyposter per roll"
+
+msgid "Define header tabs visibility per role."
+msgstr "Definiera synlighet för rubrikmenuer per roll."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Ange alternativen du vill ska visas i navigeringen runt en tabell för att visa färre eller fler rader på en sida. t.ex. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Array med extra funktioner du kan aktivera för videospelaren i Chamilo. Alternativ inkluderar 'speed', som låter dig ändra uppspelningshastigheten för en video."
+
+msgid "Mail: character set"
+msgstr "E-post: teckenuppsättning"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Om du behöver definiera teckenuppsättningen som ska användas vid sändning av dessa e-postmeddelanden. Lämna tomt om du inte är säker."
+
+msgid "Mail: Debug"
+msgstr "E-post: Felsökning"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Välj om du vill aktivera felsökningsloggar för e-postsändning. Dessa ger mer information om vad som händer vid anslutning till e-posttjänsten, men är inte eleganta och kan bryta sidlayouten. Använd endast när det inte finns användaraktivitet."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "E-post: Undvik LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Vissa e-postklienter förstår inte det beskrivande LD+JSON-formatet och visar det som en lös JSON-sträng för slut-användaren. Om detta är ditt fall, sätt variabeln nedan till 'false' för att inaktivera denna rubrik."
+
+msgid "Mail: DKIM headers"
+msgstr "E-post: DKIM-rubriker"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Ange en JSON-array med dina DKIM-konfigurationsinställningar (se exempel)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "E-post: XOAuth2-alternativ"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Om du använder en XOAuth2-baserad e-posttjänst, använd denna inställning i JSON för att spara din specifika konfiguration (se exempel) och välj XOAuth2 i e-posttjänstinställningen."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Definierar miljötyp: \"prod\" (normal produktion), \"validation\" (som produktion men utan statistikrapportering), eller \"test\" (felsökningsläge med utvecklarverktyg som indikatorer för oöversatta strängar)."
+
+msgid "Global limit of users per course"
+msgstr "Global gräns för användare per kurs"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Definierar ett globalt maximalt antal användare (inklusive lärare) som får prenumerera på en enskild kurs på plattformen. Sätt detta värde till 0 för att inaktivera gränsen. Detta hjälper till att undvika överbelastade kurser i öppna portaler."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Aktivera för att använda en array för att definiera vilka roller som ska visas tydligt och vilka som ska döljas."
+
+msgid "Show base course posts in session course"
+msgstr "Visa bas kursinlägg i sessionskurs"
+
+msgid "Limit identical email usage"
+msgstr "Begränsa identisk e-postanvändning"
+

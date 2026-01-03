@@ -31468,3 +31468,141 @@ msgstr "לפרטים נוספים בקרו ב-%s"
 msgid "Manager"
 msgstr "מנהל"
 
+msgid "Mark as"
+msgstr "סמן כ"
+
+msgid "Reply to all"
+msgstr "השב לכולם"
+
+msgid "SCIM external ID"
+msgstr "SCIM מזהה חיצוני"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 מזהה"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "אנא קבל את הגרסה העדכנית ביותר של תנאי השימוש."
+
+msgid "Required value for operation without path"
+msgstr "ערך נדרש לפעולה ללא נתיב"
+
+msgid "Available space (%s)"
+msgstr "שטח זמין (%s)"
+
+msgid "Index this description for the global search"
+msgstr "אנדקס תיאור זה לחיפוש גלובלי"
+
+msgid "Unknown course"
+msgstr "קורס לא ידוע"
+
+msgid "Certificate not found."
+msgstr "תעודה לא נמצאה."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "אסימון אבטחה פג תוקף. אנא טען מחדש את הדף וניסה שוב."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "רק מנהלי הפלטפורמה יכולים לשנות את נראות הקורס."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "שגיאה בלתי צפויה בעת הרשמת המשתמש"
+
+msgid "Search in resource logs"
+msgstr "חפש ביומני משאבים"
+
+msgid "Include this learning path in the global search results"
+msgstr "כלול מסלול למידה זה בתוצאות החיפוש הגלובליות"
+
+msgid "The course code already exists"
+msgstr "קוד הקורס כבר קיים"
+
+msgid "Latest news"
+msgstr "חדשות אחרונות"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "קבל את החדשות העדכניות מחמilo, כולל פרצות אבטחה ואירועים, ישירות בפאנל הניהול שלך. פריטי חדשות אלה ייבדקו בשרת החדשות של Chamilo בכל פעם שתטען את דף הניהול ויהיו גלויים רק למנהלים."
+
+msgid "Chamilo support block"
+msgstr "בלוק תמיכה Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "קבל טיפים מקצועיים ודרך קלה ליצור קשר עם ספקי שירות רשמיים לתמיכה מקצועית, ישירות מהיוצרים של Chamilo. בלוק זה מופיע בדף הניהול שלך, גלוי רק למנהלים, ומתרענן בכל פעם שתטען את דף הניהול."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "הסתר אפשרות לשלוח הודעות למשתמשי HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "אפשר למנהלי סשן להוריד תעודות פרטיות"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "אם מופעל, מנהלי סשן יכולים להוריד תעודות גם אם הן לא פורסמו לציבור."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "אם לא ריק, תהליך יצירת הקורס יחפש שדות מסוימים בפרופיל המשתמש וימלא אותם אוטומטית עבור הקורס. לדוגמה, מורה המתמחה בשיווק דיגיטלי יכול להגדיר אוטומטית דגל «שיווק דיגיטלי» בכל קורס שהוא יוצר."
+
+msgid "Main menu entries"
+msgstr "ערכות תפריט ראשי"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "בחר את הערכות שברצונך שיופיעו בתפריט הראשי"
+
+msgid "Main menu entries per role"
+msgstr "ערכות תפריט ראשי לפי תפקיד"
+
+msgid "Define header tabs visibility per role."
+msgstr "הגדר נראות לשוניות כותרת לפי תפקיד."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "הגדר את האפשרויות שברצונך שיופיעו בניווט סביב טבלה כדי להציג פחות או יותר שורות בעמוד אחד. לדוגמה: [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "מערך של תכונות נוספות שאתה יכול להפעיל עבור נגן הווידאו ב-Chamilo. האפשרויות כוללות 'speed', המאפשרות לשנות את מהירות ההשמעה של וידאו."
+
+msgid "Mail: character set"
+msgstr "דוא\"ל: קידוד תווים"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "במקרה שצריך להגדיר את קידוד התווים לשימוש בשליחת האימיילים הללו. השאר ריק אם אינך בטוח."
+
+msgid "Mail: Debug"
+msgstr "דוא\"ל: ניפוי שגיאות"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "בחר אם ברצונך להפעיל יומני ניפוי שגיאות לשליחת דוא\"ל. אלה יספקו מידע נוסף על מה שקורה בעת חיבור לשירות הדוא\"ל, אך אינם אלגנטיים ועלולים לשבור את עיצוב הדף. השתמש רק כאשר אין פעילות משתמשים."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "דוא\"ל: הימנע משימוש ב-LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "חלק מלקוחות הדוא\"ל אינם מבינים את הפורמט התיאורי LD+JSON, ומציגים אותו כמחרוזת JSON רופפת למשתמש הסופי. אם זה המקרה שלך, ייתכן שתרצה להגדיר את המשתנה למטה ל-'false' כדי לבטל כותרת זו."
+
+msgid "Mail: DKIM headers"
+msgstr "דוא\"ל: כותרות DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "הזן מערך JSON של הגדרות תצורת DKIM שלך (ראה דוגמה)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "דוא\"ל: אפשרויות XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "אם אתה משתמש בשירות דוא\"ל מבוסס XOAuth2, השתמש בהגדרה זו ב-JSON כדי לשמור את התצורה הספציפית שלך (ראה דוגמה) ובחר XOAuth2 בהגדרת שירות הדוא\"ל."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "מגדיר את סוג הסביבה: \"prod\" (ייצור רגיל), \"validation\" (כמו ייצור אך ללא דיווח סטטיסטיקות), או \"test\" (מצב ניפוי עם כלי מפתחים כמו מחווני מחרוזות לא מתורגמות)."
+
+msgid "Global limit of users per course"
+msgstr "מגבלה גלובלית של משתמשים לקורס"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "מגדיר מספר מקסימלי גלובלי של משתמשים (כולל מורים) המותרים להרשמה לקורס בודד בפלטפורמה. הגדר ערך זה ל-0 כדי לבטל את המגבלה. זה עוזר למנוע עומס בקורסים בפורטלים פתוחים."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "הפעל כדי להשתמש במערך להגדרת התפקידים שיש להציג בבירור ואלה שיש להסתיר."
+
+msgid "Show base course posts in session course"
+msgstr "הצג פוסטים בסיסיים של קורס בקורס סשן"
+
+msgid "Limit identical email usage"
+msgstr "הגבל שימוש חוזר באותו כתובת אימייל"
+

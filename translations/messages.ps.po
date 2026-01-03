@@ -31449,3 +31449,141 @@ msgstr "د نورو تفصیلاتو لپاره %s لیدنه وکړئ"
 msgid "Manager"
 msgstr "مدیره"
 
+msgid "Mark as"
+msgstr "د علامې لګولو په توګه"
+
+msgid "Reply to all"
+msgstr "ټولو ته ځواب"
+
+msgid "SCIM external ID"
+msgstr "SCIM بهرنۍ ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "مهموه، د شرایطو او ضوابطو وروستی نسخه ومنئ."
+
+msgid "Required value for operation without path"
+msgstr "د مسیر پرته عملیاتو لپاره اړین ارزښت"
+
+msgid "Available space (%s)"
+msgstr "شته ځای (%s)"
+
+msgid "Index this description for the global search"
+msgstr "دا توضیحات د عمومي لټون لپاره انډیکس کړئ"
+
+msgid "Unknown course"
+msgstr "نامعلوم کورس"
+
+msgid "Certificate not found."
+msgstr "سرٹیفکیټ ونه موندل شو."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "د امنیت ټوکن موده پای ته رسیدلې. مهرباني وکړئ پاڼه بیا لوډ کړئ او بیا هڅه وکړئ."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "یوازې پلیټفارم ادمینسټریټرز کولی شي د کورس د څرنګوالي بدلون وکړي."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "د کاروونکي د راجستر کولو پر مهال غیر متوقع خطا"
+
+msgid "Search in resource logs"
+msgstr "د سرچینو لوګونو کې لټون"
+
+msgid "Include this learning path in the global search results"
+msgstr "دا زده کړې لاره د عمومي لټون پایلو کې شامل کړئ"
+
+msgid "The course code already exists"
+msgstr "د کورس کوډ له مخکې شته"
+
+msgid "Latest news"
+msgstr "وروستۍ خبرې"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "د Chamilo وروستۍ خبرې ترلاسه کړئ، په شمول د امنیتي نیمګړتیاوې او پیښې، مستقیم ستاسو ادارې پینل کې. دا خبرې به هر ځل چې تاسو ادارې پاڼه لوډ کړئ، د Chamilo خبر سرور کې چک شي او یوازې ادمینسټریټرز ته ښکاره شي."
+
+msgid "Chamilo support block"
+msgstr "د Chamilo ملاتړ بلاک"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "پرو ټیپونه او اسانه لاره د رسمي خدمتونو وړاندې کوونکو سره اړیکه ونیسئ د مسلکي ملاتړ لپاره، مستقیم د Chamilo جوړوونکو څخه. دا بلاک ستاسو ادارې پاڼې کې ښکاره شي، یوازې ادمینسټریټرز ته ښکاره شي، او هر ځل چې تاسو ادارې پاڼه لوډ کړئ تازه شي."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "د HR کاروونکو ته اعلانونه واستولو اختیار پټ کړئ"
+
+msgid "Allow session admins to download private certificates"
+msgstr "د سیشن ادمینسټریټرز ته خصوصي سرٹیفکیټونه ډاونلوډ کولو اجازه ورکړئ"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "که فعال شوی، سیشن ادمینسټریټرز کولی شي سرٹیفکیټونه ډاونلوډ کړي تر څو چې دوی عمومي خپر شوي نه وي."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "که خالي نه وي، د کورس جوړولو پروسه به د کاروونکي پروفایل کې ځینې ساحې لټون وکړي او د کورس لپاره یې اتومات ډک کړي. د بیلګې په توګه، یو ښوونکی چې په ډیجیټل مارکټینګ کې تخصص لري کولی شي اتومات \"ډیجیټل مارکټینګ\" نښه د هغه هر کورس کې واچوي چې هغه جوړوي."
+
+msgid "Main menu entries"
+msgstr "د اصلي منیو مدخلې"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "هغه مدخلې چک کړئ چې تاسو غواړئ په اصلي منو کې ښکاره شي"
+
+msgid "Main menu entries per role"
+msgstr "د رول په اساس د اصلي منیو مدخلې"
+
+msgid "Define header tabs visibility per role."
+msgstr "د رول په اساس د هېډر ټبونو څرنګوالي ټاکئ."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "هغه انتخابونه واټکل کړئ چې تاسو غواړئ د جدول شاوخوا نیویګیشن کې ښکاره شي چې لږ یا ډیر قطارونه په یوه پاڼه کې ښکاره کړي. بیلګه: [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "د ویډیو پلیر لپاره اضافي ځانګړتیاوو مجموعې چې تاسو کولی شئ په Chamilo کې فعال کړئ. انتخابونه پکې 'speed' شامل دي، چې تاسو ته اجازه درکوي د ویډیو پخش سرعت بدل کړئ."
+
+msgid "Mail: character set"
+msgstr "برېښنالیک: کاراکټ سیټ"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "که تاسو ته اړتیا وي د برېښنالیکو واستولو پر مهال کاراکټ سیټ ټاکئ. که پوه نه یاست خالي پریږدئ."
+
+msgid "Mail: Debug"
+msgstr "برېښنالیک: ډیبګ"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "ټاکئ چې ایا تاسو غواړئ د برېښنالیک واستولو ډیبګ لوګونه فعال کړئ. دا به تاسو ته نور معلومات درکوي چې څه پیښیږي کله چې برېښنالیک خدمت سره تړل کیږي، مګر ښه نه دي او ممکن پاڼې ډیزاین خراب کړي. یوازې کاروونکي فعالیت نه وي پر مهال وکاروئ."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "برېښنالیک: د LD+JSON استعمال مخنیوي وکړئ"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "ځینې برېښنالیک مشتریان د تشریحي LD+JSON بڼه پوهیږي نه، چې دا د یوې آزادې JSON متن په توګه وروستي کاروونکي ته ښیي. که دا ستاسو حالت وي، تاسو کیدای شي لاندې متغیر ته 'false' وټاکئ ترڅو دا سرلیک غیرفعال کړئ."
+
+msgid "Mail: DKIM headers"
+msgstr "برېښنالیک: DKIM سرلیکونه"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "د خپل DKIM ترتیب سیټینګونو JSON آرې داخل کړئ (مثال وګورئ)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "برېښنالیک: XOAuth2 اختیارونه"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "که تاسو د XOAuth2 پر بنسټ برېښنالیک خدمت استعمالوئ، د خپل ځانګړي ترتیب د خوندي کولو لپاره دا سیټینګ په JSON کې استعمال کړئ (مثال وګورئ) او په برېښنالیک خدمت سیټینګ کې XOAuth2 غوره کړئ."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "د چاپېریال ډول ټاکي: \"prod\" (عادی تولید)، \"validation\" (لکه تولید خو پرته له احصایې راپور ورکولو)، یا \"test\" (غونډال موډ سره د پراختیايي وسیلو لکه د نه ژباړل شوي متن نښانونو)."
+
+msgid "Global limit of users per course"
+msgstr "د کورس فی کاروونکي عمومي حد"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "پلاتفورم کې د هرې یوې کورس ته د تېر شوو کاروونکو (معلمان شامل) عمومي اعظمي شمېر ټاکي. دا ارزښت 0 ته وټاکئ ترڅو حد غیرفعال کړئ. دا د خلاصو پورتالونو کې د کورسونو زیات بار مخنیوي کې مرسته کوي."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "فعال کړئ ترڅو آرې استعمال کړئ چې کوم رولونه باید روښانه ښودل شي او کومې پټې شي."
+
+msgid "Show base course posts in session course"
+msgstr "د سیشن کورس کې بنسټیز کورس پوسټونه ښکاره کړئ"
+
+msgid "Limit identical email usage"
+msgstr "د ورته برېښنالیک استعمال محدود کړئ"
+

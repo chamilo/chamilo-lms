@@ -31456,3 +31456,141 @@ msgstr "Za više detalja posjetite %s"
 msgid "Manager"
 msgstr "Menadžer"
 
+msgid "Mark as"
+msgstr "Označi kao"
+
+msgid "Reply to all"
+msgstr "Odgovori svima"
+
+msgid "SCIM external ID"
+msgstr "SCIM vanjski ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Molimo prihvatite najnoviju verziju uvjeta i odredbi."
+
+msgid "Required value for operation without path"
+msgstr "Obvezna vrijednost za operaciju bez putanje"
+
+msgid "Available space (%s)"
+msgstr "Dostupni prostor (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Indeksiraj ovaj opis za globalnu pretragu"
+
+msgid "Unknown course"
+msgstr "Nepoznati predmet"
+
+msgid "Certificate not found."
+msgstr "Potrvrda nije pronađena."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Sigurnosni token je istekao. Molimo osvježite stranicu i pokušajte ponovno."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Samo administratori platforme mogu promijeniti vidljivost predmeta."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Neočekivana greška prilikom pretplate korisnika"
+
+msgid "Search in resource logs"
+msgstr "Pretraži dnevnik resursa"
+
+msgid "Include this learning path in the global search results"
+msgstr "Uključi ovu putu učenja u rezultate globalne pretrage"
+
+msgid "The course code already exists"
+msgstr "Kod predmeta već postoji"
+
+msgid "Latest news"
+msgstr "Najnovije vijesti"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Dobijte najnovije vijesti iz Chamiloa, uključujući sigurnosne ranjivosti i događaje, izravno u vašem administratorskom panelu. Ove vijesti će se provjeravati na Chamilo news poslužitelju svaki put kada učitate administratorsku stranicu i vidljive su samo administratorima."
+
+msgid "Chamilo support block"
+msgstr "Chamilo blok podrške"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Dobijte profesionalne savjete i jednostavan način kontaktiranja službenih pružatelja usluga za profesionalnu podršku, izravno od stvaratelja Chamiloa. Ovaj blok se pojavljuje na vašoj administratorskoj stranici, vidljiv je samo administratorima i osvježava se svaki put kada učitate administratorsku stranicu."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Sakrij opciju slanja obavijesti HR korisnicima"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Dopusti administratorima sesije preuzimanje privatnih certifikata"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Ako je omogućeno, administratori sesije mogu preuzeti certifikate čak i ako nisu javno objavljeni."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Ako nije prazno, proces stvaranja kursa potražit će neka polja u korisničkom profilu i automatski ih ispuniti za kurs. Na primjer, nastavnik specijaliziran za digitalni marketing može automatski postaviti oznaku « digital marketing » na svaki kurs koji stvara."
+
+msgid "Main menu entries"
+msgstr "Unosi glavnog izbornika"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Označite unose koje želite vidjeti u glavnom izborniku"
+
+msgid "Main menu entries per role"
+msgstr "Unosi glavnog izbornika po ulozi"
+
+msgid "Define header tabs visibility per role."
+msgstr "Definirajte vidljivost kartica zaglavlja po ulozi."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Postavite opcije koje želite prikazati u navigaciji oko tablice za prikazivanje manje ili više redaka na jednoj stranici. npr. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Niz dodatnih značajki koje možete omogućiti za video player u Chamilo. Opcije uključuju 'speed', što omogućuje promjenu brzine reprodukcije videa."
+
+msgid "Mail: character set"
+msgstr "E-pošta: skup znakova"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "U slučaju da trebate definirati skup znakova za slanje e-pošte. Ostavite prazno ako niste sigurni."
+
+msgid "Mail: Debug"
+msgstr "E-pošta: Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Odaberite želite li omogućiti dnevnik debug slanja e-pošte. Ovo će vam dati više informacija o tome što se događa pri povezivanju na uslugu e-pošte, ali nije elegantno i može narušiti dizajn stranice. Koristite samo kada nema korisničke aktivnosti."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "E-pošta: Izbjegavaj LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Neki klijenti e-pošte ne razumiju opisni format LD+JSON, prikazujući ga kao labavi JSON string krajnjem korisniku. Ako je to vaš slučaj, možda želite postaviti varijablu ispod na 'false' kako biste onemogućili ovaj zaglavlje."
+
+msgid "Mail: DKIM headers"
+msgstr "E-pošta: DKIM zaglavlja"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Unesite JSON niz postavki vaše DKIM konfiguracije (vidi primjer)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "E-pošta: XOAuth2 opcije"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Ako koristite uslugu e-pošte temeljenu na XOAuth2, koristite ovo postavku u JSON-u za spremanje vaše specifične konfiguracije (vidi primjer) i odaberite XOAuth2 u postavci usluge e-pošte."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Definira vrstu okruženja: \"prod\" (normalna proizvodnja), \"validation\" (kao proizvodnja ali bez izvješćivanja statistike), ili \"test\" (debug mod s alatima za developere kao što su indikatori neprevedenih stringova)."
+
+msgid "Global limit of users per course"
+msgstr "Globalno ograničenje korisnika po kursu"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Definira globalni maksimalni broj korisnika (uključujući nastavnike) dopuštenih za upis u bilo koji jedan kurs na platformi. Postavite ovu vrijednost na 0 za onemogućavanje ograničenja. Ovo pomaže izbjeći preopterećenje kurseva u otvorenim portalima."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Omogući za korištenje niza za definiranje koje uloge treba jasno prikazati, a koje sakriti."
+
+msgid "Show base course posts in session course"
+msgstr "Prikaži objave osnovnog kursa u kursu sesije"
+
+msgid "Limit identical email usage"
+msgstr "Ograniči upotrebu identičnih e-pošta adresa"
+

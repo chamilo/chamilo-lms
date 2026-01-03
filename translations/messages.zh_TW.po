@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":是:有版權,, 否:無版權"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:資料夾,, application/msword:MsWord,, application/octet-stream:八位元組串流,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:資料夾,, application/msword:MsWord,, application/octet-stream:八位元組流,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":練習:練習,, 類比:類比,, 問卷:問卷,, 圖表:圖表,, 圖:圖,, 圖:圖,, 索引:索引,, 幻燈:幻燈,, 表:表,, 描述文本:描述文本,, 考試:考試,, 實驗:實驗,, 問題聲明:問題聲明,, 自我評價:自我評價,, 演講:演講"
@@ -31454,4 +31454,142 @@ msgstr "欲瞭解更多詳情，請造訪 %s"
 
 msgid "Manager"
 msgstr "管理員"
+
+msgid "Mark as"
+msgstr "標記為"
+
+msgid "Reply to all"
+msgstr "回覆所有人"
+
+msgid "SCIM external ID"
+msgstr "SCIM 外部 ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "請接受最新版本的條款與條件。"
+
+msgid "Required value for operation without path"
+msgstr "無路徑操作所需的必要值"
+
+msgid "Available space (%s)"
+msgstr "可用空間 (%s)"
+
+msgid "Index this description for the global search"
+msgstr "將此描述索引至全域搜尋"
+
+msgid "Unknown course"
+msgstr "未知課程"
+
+msgid "Certificate not found."
+msgstr "找不到憑證。"
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "安全性權杖已過期。請重新載入頁面並再試一次。"
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "只有平台管理員可以變更課程可見度。"
+
+msgid "Unexpected error while subscribing the user"
+msgstr "訂閱使用者時發生未預期的錯誤"
+
+msgid "Search in resource logs"
+msgstr "在資源記錄中搜尋"
+
+msgid "Include this learning path in the global search results"
+msgstr "將此學習路徑包含在全域搜尋結果中"
+
+msgid "The course code already exists"
+msgstr "課程代碼已存在"
+
+msgid "Latest news"
+msgstr "最新消息"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "從 Chamilo 取得最新消息，包括安全性漏洞和活動，直接在您的管理面板內。這些消息將在您載入管理頁面時檢查 Chamilo 新聞伺服器，且僅對管理員可見。"
+
+msgid "Chamilo support block"
+msgstr "Chamilo 支援區塊"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "取得專業提示以及輕鬆聯繫官方服務提供者的方式，以取得專業支援，直接來自 Chamilo 的製作團隊。此區塊會出現在您的管理頁面，僅管理員可見，並在您載入管理頁面時重新整理。"
+
+msgid "Hide option to send announcements to HR users"
+msgstr "隱藏發送公告給 HR 使用者的選項"
+
+msgid "Allow session admins to download private certificates"
+msgstr "允許課程管理員下載私人憑證"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "若啟用，課程管理員即使憑證未公開發布仍可下載憑證。"
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "若不為空，課程建立程序將在使用者設定檔中尋找某些欄位並自動填入課程。例如，專攻數位行銷的老師可以自動在每個課程上設定「數位行銷」旗標。"
+
+msgid "Main menu entries"
+msgstr "主要選單項目"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "勾選您希望出現在主要選單的項目"
+
+msgid "Main menu entries per role"
+msgstr "依角色設定主要選單項目"
+
+msgid "Define header tabs visibility per role."
+msgstr "依角色定義標頭索引標籤可見度。"
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "設定您希望出現在表格周圍導覽的選項，以顯示每頁較少或較多列。例如 [50, 100, 200, 500]。"
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Chamilo 影片播放器可啟用的額外功能陣列。選項包括「speed」，可變更影片播放速度。"
+
+msgid "Mail: character set"
+msgstr "郵件：字元集"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "如需定義寄送電子郵件時使用的字元集，請設定此項。不確定時請留空。"
+
+msgid "Mail: Debug"
+msgstr "郵件：除錯"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "選擇是否啟用電子郵件寄送除錯記錄。此記錄提供連接郵件服務時的詳細資訊，但不優雅且可能破壞頁面設計。僅在無使用者活動時使用。"
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "郵件：避免使用 LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "某些電子郵件客戶端無法理解描述性 LD+JSON 格式，會將其顯示為鬆散的 JSON 字串。若發生此情況，可將下列變數設為「false」以停用此標頭。"
+
+msgid "Mail: DKIM headers"
+msgstr "郵件：DKIM 標頭"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "輸入您的 DKIM 設定 JSON 陣列（參見範例）。"
+
+msgid "Mail: XOAuth2 options"
+msgstr "郵件：XOAuth2 選項"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "若使用 XOAuth2 電子郵件服務，請使用此 JSON 設定儲存特定組態（參見範例），並在郵件服務設定中選擇 XOAuth2。"
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "定義環境類型：\"prod\"（一般生產環境）、\"validation\"（類似生產環境但不回報統計資料），或 \"test\"（除錯模式，包含開發人員工具如未翻譯字串指示器）。"
+
+msgid "Global limit of users per course"
+msgstr "每門課程使用者總數上限"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "定義平台中單一課程（包含教師）允許註冊的最大使用者數上限。設為 0 以停用限制。此設定有助避免開放入口網站的課程過載。"
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "啟用以使用陣列定義哪些角色應清楚顯示及哪些應隱藏。"
+
+msgid "Show base course posts in session course"
+msgstr "在工作坊課程中顯示基礎課程貼文"
+
+msgid "Limit identical email usage"
+msgstr "限制相同電子郵件使用"
 

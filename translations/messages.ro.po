@@ -31469,3 +31469,141 @@ msgstr "Pentru mai multe detalii vizitați %s"
 msgid "Manager"
 msgstr "Manager"
 
+msgid "Mark as"
+msgstr "Marchează ca"
+
+msgid "Reply to all"
+msgstr "Răspunde tuturor"
+
+msgid "SCIM external ID"
+msgstr "SCIM ID extern"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Vă rugăm să acceptați cea mai recentă versiune a termenilor și condițiilor."
+
+msgid "Required value for operation without path"
+msgstr "Valoare obligatorie pentru operațiune fără cale"
+
+msgid "Available space (%s)"
+msgstr "Spațiu disponibil (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Indexează această descriere pentru căutarea globală"
+
+msgid "Unknown course"
+msgstr "Curs necunoscut"
+
+msgid "Certificate not found."
+msgstr "Certificat negăsit."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Jeton de securitate expirat. Vă rugăm să reîncărcați pagina și să încercați din nou."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Doar administratorii platformei pot schimba vizibilitatea cursului."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Eroare neașteptată la înscrierea utilizatorului"
+
+msgid "Search in resource logs"
+msgstr "Căutare în jurnalele de resurse"
+
+msgid "Include this learning path in the global search results"
+msgstr "Includeți această traiectorie de învățare în rezultatele căutării globale"
+
+msgid "The course code already exists"
+msgstr "Codul cursului există deja"
+
+msgid "Latest news"
+msgstr "Știri recente"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Obțineți cele mai recente știri de la Chamilo, inclusiv vulnerabilități de securitate și evenimente, direct în panoul dvs. de administrare. Aceste știri vor fi verificate pe serverul de știri Chamilo de fiecare dată când încărcați pagina de administrare și sunt vizibile doar administratorilor."
+
+msgid "Chamilo support block"
+msgstr "Bloc suport Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Obțineți sfaturi pro și o modalitate ușoară de a contacta furnizorii de servicii oficiali pentru suport profesional, direct de la creatorii Chamilo. Acest bloc apare pe pagina dvs. de administrare, este vizibil doar administratorilor și se actualizează de fiecare dată când încărcați pagina de administrare."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Ascunde opțiunea de trimitere a anunțurilor către utilizatorii HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Permite administratorilor de sesiune să descarce certificate private"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Dacă este activat, administratorii de sesiune pot descărca certificate chiar dacă nu sunt publicate public."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Dacă nu este gol, procesul de creare a cursului va căuta unele câmpuri în profilul utilizatorului și le va completa automat pentru curs. De exemplu, un profesor specializat în marketing digital ar putea seta automat un steag « marketing digital » pe fiecare curs pe care îl creează."
+
+msgid "Main menu entries"
+msgstr "Intrări meniu principal"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Bifați intrările pe care doriți să le vedeți în meniul principal"
+
+msgid "Main menu entries per role"
+msgstr "Intrări meniu principal pe rol"
+
+msgid "Define header tabs visibility per role."
+msgstr "Definiți vizibilitatea tab-urilor de antet pe rol."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Setați opțiunile pe care doriți să apară în navigarea din jurul unei tabele pentru a afișa mai puține sau mai multe rânduri pe o pagină. ex. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Matrice de funcții suplimentare pe care le puteți activa pentru redarea video în Chamilo. Opțiunile includ 'speed', care vă permite să schimbați viteza de redare a unui video."
+
+msgid "Mail: character set"
+msgstr "E-mail: set de caractere"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "În cazul în care trebuie să definiți setul de caractere de utilizat la trimiterea acelor e-mailuri. Lăsați gol dacă nu sunteți sigur."
+
+msgid "Mail: Debug"
+msgstr "E-mail: Depanare"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Selectați dacă doriți să activați jurnalele de depanare pentru trimiterea e-mailurilor. Acestea vă vor oferi mai multe informații despre ceea ce se întâmplă la conectarea la serviciul de e-mail, dar nu sunt elegante și pot afecta designul paginii. Utilizați doar când nu există activitate a utilizatorilor."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "E-mail: Evitați utilizarea LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Unele clienți de e-mail nu înțeleg formatul descriptiv LD+JSON, afișându-l ca un șir JSON liber utilizatorului final. Dacă este cazul dvs., puteți seta variabila de mai jos la 'false' pentru a dezactiva acest antet."
+
+msgid "Mail: DKIM headers"
+msgstr "E-mail: Antete DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Introduceți o matrice JSON cu setările de configurare DKIM (vezi exemplu)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "E-mail: Opțiuni XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Dacă utilizați un serviciu de e-mail bazat pe XOAuth2, utilizați această setare în JSON pentru a salva configurația specifică (vezi exemplu) și selectați XOAuth2 în setarea serviciului de e-mail."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Definește tipul de mediu: \"prod\" (producție normală), \"validation\" (ca producție dar fără raportarea statisticilor), sau \"test\" (mod depanare cu instrumente pentru dezvoltatori precum indicatori de șiruri netraduse)."
+
+msgid "Global limit of users per course"
+msgstr "Limită globală de utilizatori pe curs"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Definește un număr maxim global de utilizatori (inclusiv profesori) permis să fie înscriși într-un singur curs pe platformă. Setați această valoare la 0 pentru a dezactiva limita. Aceasta ajută la evitarea suprasolicitării cursurilor în portalurile deschise."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Activați pentru a utiliza o matrice care definește ce roluri ar trebui afișate clar și care ar trebui ascunse."
+
+msgid "Show base course posts in session course"
+msgstr "Afișați postările de bază ale cursului în cursul de sesiune"
+
+msgid "Limit identical email usage"
+msgstr "Limitați utilizarea identică a e-mailurilor"
+

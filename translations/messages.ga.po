@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:cóipcheart,, no:gan cóipcheart"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fillteán,, application/msword:MsWord,, application/octet-stream:Sruth Octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fillteán,, application/msword:MsWord,, application/octet-stream:Sruth Octad,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:cleachtadh,,      simulation:insamhal,,      questionnaire:fiosrúchán,,      diagram:léaráid,,      figure:figiúr,,      graph:graf,,      index:innéacs,,      slide:sleamhnán,,      table:tábla,,      narrative text:téacs insinte,,      exam:scrúdú,,      experiment:turgnamh,,      problem statement:ráiteas fadhb,,      self assessment:féimmeasúnú,,      lecture:léacht"
@@ -31800,4 +31800,28 @@ msgstr "Cinntigh nach bhfuil ach an leagan PHP a úsáideann tú i ndáiríre (m
 
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Nuair a bhíonn an síntéise luchtaithe go ceart don CLI agus don fhreastalaí gréasáin araon, ba chóir go dtuairiscíonn diagnóstaí an chuardaigh thuas go bhfuil modúl Xapian suiteáilte."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Glan uaslóidí sealadacha agus taisce"
+
+msgid "Directory"
+msgstr "Eolaire"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Scrios comhaid níos sine ná (nóiméad)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Socraigh 0 chun gach comhad a scriosadh. Úsáid luach dearfach (m.sh., 60) chun comhaid atá á n-uaslódáil fós a sheachaint."
+
+msgid "Preview only (do not delete)"
+msgstr "Réamhamharc amháin (ná scrios)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Rabhadh: tá tú ar tí GACH comhad sealadach a scriosadh. Ní féidir an gníomh seo a chealú."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Scriosfaidh sé seo gach comhad sealadach. Lean ar aghaidh?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Scriosfaidh sé seo comhaid níos sine ná %minutes% nóiméad. Lean ar aghaidh?"
 

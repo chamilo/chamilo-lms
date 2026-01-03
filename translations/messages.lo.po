@@ -34151,3 +34151,27 @@ msgstr "ໃຫ້ແນ່ໃຈວ່າເຈົ້າມີພຽງແຕ່
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "ເມື່ອເຄັດເຊັນໄດ້ໂຫຼດຖືກຕ້ອງສຳລັບທັງ CLI ແລະເວັບເຊີເວີ, ການກວດສອບການຊອກຫາຂ້າງເທິງຄວນລາຍງານວ່າໂມດູນ Xapian ໄດ້ຕິດຕັ້ງແລ້ວ."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "ລ້າງຟາຍອັພໂຫດຊົ່ວຄາວ ແລະ ແຄຊ"
+
+msgid "Directory"
+msgstr "ໂຟນເດີ໌"
+
+msgid "Only delete files older than (minutes)"
+msgstr "ລ້າງພຽງຟາຍທີ່ເກົ່າກວ່າ (ນາທີ)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "ຕັ້ງ 0 ເພື່ອລ້າງທັງໝົດຟາຍ. ໃຊ້ຄ່າບວກ (ຕົວຢ່າງ, 60) ເພື່ອຫຼີກລ່ຽງການລຶບຟາຍທີ່ຍັງກຳລັງອັພໂຫດ."
+
+msgid "Preview only (do not delete)"
+msgstr "ເບິ່ງກ່ອນ (ບໍ່ລ້າງ)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "ຄຳເຕືອນ: ເຈົ້າກຳລັງຈະລ້າງທັງໝົດຟາຍຊົ່ວຄາວ. ການເຄື່ອນໄຫວນີ້ບໍ່ສາມາດຍົກເລີກໄດ້."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "ນີ້ຈະລ້າງທັງໝົດຟາຍຊົ່ວຄາວ. ດຳເນີນການ?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "ນີ້ຈະລ້າງຟາຍທີ່ເກົ່າກວ່າ %minutes% ນາທີ. ດຳເນີນການ?"
+

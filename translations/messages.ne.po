@@ -31801,3 +31801,27 @@ msgstr "निश्चित गर्नुहोस् कि तपाईं
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "एकपटक एक्सटेन्सन CLI र वेब सर्वर दुवैका लागि सही रूपमा लोड भएपछि, माथिका खोज निदानहरूले Xapian मोडेल स्थापित भएको रिपोर्ट गर्नुपर्छ।"
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "अस्थायी अपलोडहरू र क्यास सफा गर्नुहोस्"
+
+msgid "Directory"
+msgstr "डाइरेक्टरी"
+
+msgid "Only delete files older than (minutes)"
+msgstr "केवल (मिनेट) भन्दा पुराना फाइलहरू मेटाउनुहोस्"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "सबै फाइलहरू मेटाउन ० सेट गर्नुहोस्। अझै अपलोड भइरहेका फाइलहरू हटाउन नदिन सकारात्मक मान प्रयोग गर्नुहोस् (उदाहरण: ६०)।"
+
+msgid "Preview only (do not delete)"
+msgstr "पूर्वावलोकन मात्र (मेटाउनुहुन्न)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "चेतावनी: तपाईं सबै अस्थायी फाइलहरू मेटाउन लाग्नुभएको छ। यो कार्यलाई पूर्ववत गर्न सकिँदैन।"
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "योले सबै अस्थायी फाइलहरू मेटाउनेछ। जारी राख्ने?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "योले %minutes% मिनेट भन्दा पुराना फाइलहरू मेटाउनेछ। जारी राख्ने?"
+

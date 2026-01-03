@@ -31797,3 +31797,27 @@ msgstr "Sér til at tú bert hevur PHP útgávuna tú virkeliga brúkar (t.d. 8.
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Tá eykan er rættiliga løgd inn fyri bæði CLI og vevþjónin, skulu søkdiagnostikkarnir omanfyri melda, at Xapian modulurin er innsett."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "Rensa fyribilsupplýtingar og cache"
+
+msgid "Directory"
+msgstr "Mappa"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Einans slett fyri %d minuttir gamlar skrár (minuttir)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Set 0 fyri at sletta allar skrár. Brúka dươnglig værdi (t.d. 60) fyri at sleppa skrøvum sum enn verða løttræddar upp."
+
+msgid "Preview only (do not delete)"
+msgstr "Forsýn bert (ikki slett)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Ávaring: tú ert í ferð við at sletta ALLAR fyribils skrár. Henda handlingin kann ikki verða ógjør."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Hetta slettur allar fyribils skrár. Halda fram?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Hetta slettur skrár eldri enn %minutes% minuttir. Halda fram?"
+

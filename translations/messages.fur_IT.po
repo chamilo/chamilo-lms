@@ -31797,3 +31797,27 @@ msgstr "Asseguriti che esistîs dome la version di PHP che tal ream veri usi (pa
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Une ce l'estension e cargjade coretament tant par il CLI che par il server web, lis diagnosticis di busie de dusore jê diu dutâ che il modul Xapian e instalê."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "Pulizia uploads temporaneis e cache"
+
+msgid "Directory"
+msgstr "Directory"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Scancele scjampe pli vecjis che (minuts)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Meter 0 par scancelâ ducj i scjampe. Dopre un valor positîf (par es., 60) par evitar di scancelâ scjampe che si stin caricant."
+
+msgid "Preview only (do not delete)"
+msgstr "Antevisjon dome (no scancelâ)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Atention: si jest a scancelâ ducj i scjampe temporaneis. Cheste aczion no si po revuadi."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Cheste scancelarà ducj i scjampe temporaneis. Continuâ?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Cheste scancelarà i scjampe pli vecjis che %minutes% minuts. Continuâ?"
+

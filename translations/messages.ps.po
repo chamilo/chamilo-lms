@@ -31797,3 +31797,27 @@ msgstr "ډاډ ترلاسه کړئ چې تاسو یوازې هغه PHP نسخې 
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "کله چې توسیعه د CLI او ویب سرور دواړو لپاره سم بار شي، د لټون تشخیص باید راپور ورکړي چې Xapian ماډل نصب دی."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "د عارضي بار پورته کولو او کیچ صافول"
+
+msgid "Directory"
+msgstr "پوښه"
+
+msgid "Only delete files older than (minutes)"
+msgstr "یوازې هغه فایلونه پاک کړئ چې له (دقیقه) څخه زاړه وي"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "ټول فایلونه پاک کړئ لپاره ٠ ټاکئ. د لا د بار پورته کېدونکي فایلونو له لرې کولو څخه مخنیوي لپاره یو مثبت ارزښت وکاروئ (د بیلګې په توګه، 60)."
+
+msgid "Preview only (do not delete)"
+msgstr "یوازې مخلیډ (پاک مه کوئ)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "ګواښنه: تاسو غواړئ ټول عارضي فایلونه پاک کړئ. دا عمل نشي بیا کیدلای."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "دا به ټول عارضي فایلونه پاک کړي. دوام ورکړئ؟"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "دا به له %minutes% دقيقو څخه زاړه فایلونه پاک کړي. دوام ورکړئ؟"
+

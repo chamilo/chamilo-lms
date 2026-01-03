@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:jogvédett,, no:nem jogvédett"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappa,, application/msword:MsWord,, application/octet-stream:Oktet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappa,, application/msword:MsWord,, application/octet-stream:Oktett stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:feladat,, simulation:szimuláció,, questionnaire:kérdőív,, diagram:diagram,, figure:ábra,, graph:grafikon,, index:tárgymutató,, slide:dia,, table:tábla,, narrative text:narrátor szöveg,, exam:teszt,, experiment:kísérlet,, problem statement:probléma megállapítás,, self assessment:önértékelés,, lecture:előadó"
@@ -31802,4 +31802,28 @@ msgstr "Győződjön meg róla, hogy csak azt a PHP verziót használja, amit t�
 
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Ha a kiterjesztés megfelelően betöltődött mind a CLI, mind a webszerver számára, a fenti keresési diagnosztika jeleznie kell, hogy a Xapian modul telepítve van."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Ideiglenes feltöltések és gyorsítótár takarítása"
+
+msgid "Directory"
+msgstr "Könyvtár"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Csak a %d percnél régebbi fájlok törlése (perc)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "0 beállításával minden fájl törlődik. Pozitív érték (pl. 60) használata megakadályozza a még feltöltés alatt álló fájlok eltávolítását."
+
+msgid "Preview only (do not delete)"
+msgstr "Csak előnézet (ne törölje)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Figyelem: ÖSSZES ideiglenes fájl törlésére készül. Ezt a műveletet nem lehet visszavonni."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Ez törli az összes ideiglenes fájlt. Folytatja?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Ez a %minutes% percnél régebbi fájlokat törli. Folytatja?"
 

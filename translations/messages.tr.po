@@ -31803,3 +31803,27 @@ msgstr "Gerçekten kullandığınız PHP sürümünün (örneğin 8.3) yalnızca
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Uzantı hem CLI hem de web sunucusu için doğru yüklendiğinde, yukarıdaki arama tanıları Xapian modülünün yüklendiğini bildirmelidir."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "Geçici yüklemeleri ve önbelleği temizle"
+
+msgid "Directory"
+msgstr "Dizin"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Yalnızca şu yaştan eski dosyaları sil (dakika)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Tüm dosyaları silmek için 0 ayarlayın. Hala yüklenmekte olan dosyaları kaldırmamak için pozitif bir değer kullanın (ör., 60)."
+
+msgid "Preview only (do not delete)"
+msgstr "Yalnızca önizleme (silme)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Uyarı: TÜM geçici dosyaları silmek üzeresiniz. Bu işlem geri alınamaz."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Bu işlem tüm geçici dosyaları silecektir. Devam etmek istiyor musunuz?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Bu işlem %minutes% dakikadan eski dosyaları silecektir. Devam etmek istiyor musunuz?"
+

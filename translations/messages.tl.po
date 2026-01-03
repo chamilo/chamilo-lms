@@ -17938,7 +17938,7 @@ msgid "Information about the last finished step and the next unfinished one."
 msgstr "Impormasyon tungkol sa huling natapos na hakbang at sa susunod na hindi natapos."
 
 msgid "LaTeX code"
-msgstr "LaTeX code"
+msgstr "Kodong LaTeX"
 
 msgid "LaTeX formula"
 msgstr "Formula ng LaTeX"
@@ -18406,10 +18406,10 @@ msgid "Number of tasks"
 msgstr "Bilang ng mga gawain"
 
 msgid "Portfolio mode"
-msgstr "Portfolio mode"
+msgstr "Mode ng Portfolio"
 
 msgid "Standard Task mode"
-msgstr "Standard Task mode"
+msgstr "Pangkaraniwang mode ng Lugarang Pagsasagawa"
 
 msgid "Information about the content of the pages"
 msgstr "Impormasyon tungkol sa nilalaman ng mga pahina"
@@ -19678,7 +19678,7 @@ msgid "Slider title"
 msgstr "Pamagat ng slider"
 
 msgid "Single Sign On error"
-msgstr "Single Sign On error"
+msgstr "Mali sa Single Sign On"
 
 msgid "Sent"
 msgstr "Ipinadala"
@@ -19978,7 +19978,7 @@ msgid "Hide Learning Path PDF export"
 msgstr "Itago ang Learning Path PDF export"
 
 msgid "Hide the Learning Path PDF Export icon from the Learning Paths list"
-msgstr "Itago ang Learning Path PDF Export icon mula sa listahan ng Learning Paths"
+msgstr "Itago ang icon ng PDF Export ng Learning Path mula sa listahan ng Learning Paths"
 
 msgid "Default coach access days before session"
 msgstr "Default coach access days bago ang session"
@@ -19993,7 +19993,7 @@ msgid "Default number of days a coach can access his session after the official 
 msgstr "Default na bilang ng mga araw na maaaring ma-access ng coach ang kanyang session pagkatapos ng opisyal na end date ng session"
 
 msgid "PDF header logo"
-msgstr "PDF header logo"
+msgstr "Logo ng PDF header"
 
 msgid "Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
 msgstr "Gumamit ng image sa var/themes/[your-theme]/images/pdf_logo_header.png bilang PDF header logo para sa lahat ng PDF exports (sa halip na normal portal logo)"
@@ -20281,7 +20281,7 @@ msgid "Start video call"
 msgstr "Simulan ang video call"
 
 msgid "Video URL"
-msgstr "Video URL"
+msgstr "URL ng Video"
 
 msgid "Insert a valid URL"
 msgstr "Maglagay ng valid na URL"
@@ -20335,7 +20335,7 @@ msgid "You may add an introduction to this course here by clicking the edition i
 msgstr "Maaari kang magdagdag ng introduction sa kursong ito dito sa pamamagitan ng pag-klik sa edition icon"
 
 msgid "Social group"
-msgstr "Social group"
+msgstr "Lupong panlipunan"
 
 msgid "Required sessions"
 msgstr "Kinakailangang mga sesyon"
@@ -20353,7 +20353,7 @@ msgid "Send a copy to HR managers of selected students"
 msgstr "Ipadala ang kopya sa HR managers ng napiling mga mag-aaral"
 
 msgid "Powered by %s"
-msgstr "Powered by %s"
+msgstr "Pinapatakbo ng %s"
 
 msgid "Please select at least one user. The announcement has not been saved."
 msgstr "Pumili ng hindi bababa sa isang user. Ang announcement ay hindi naisave."
@@ -20374,7 +20374,7 @@ msgid "Checkbox options"
 msgstr "Mga opsyon sa checkbox"
 
 msgid "Integer value"
-msgstr "Integer value"
+msgstr "Buhisang buong bilang"
 
 msgid "Image file"
 msgstr "File ng larawan"
@@ -21406,7 +21406,7 @@ msgid "Import from Moodle"
 msgstr "I-import mula sa Moodle"
 
 msgid "Import a Moodle course backup file (.mbz) into this Chamilo course"
-msgstr "Mag-import ng Moodle course backup file (.mbz) sa kursong ito ng Chamilo"
+msgstr "I-import ang backup file ng kurso ng Moodle (.mbz) sa kurso ng Chamilo na ito"
 
 msgid "The Moodle import feature might not support all content types from Moodle, given the fact that not all features are the same, and that Moodle and Chamilo both evolve continuously and rapidly. This import feature should be considered a work in progress. Please check https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import for more information."
 msgstr "Ang Moodle import feature ay maaaring hindi suportahan ang lahat ng content types mula sa Moodle, dahil hindi pareho ang lahat ng features, at patuloy na nag-e-evolve ang Moodle at Chamilo nang mabilis. Ang import feature na ito ay dapat ituring na work in progress. Mangyaring suriin ang https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import para sa karagdagang impormasyon."
@@ -21856,7 +21856,7 @@ msgid "This session has a maximum duration of %s days."
 msgstr "Ang session na ito ay may maximum na tagal ng %s araw."
 
 msgid "Score: %s %%"
-msgstr "Score: %s %%"
+msgstr "Marka: %s %%"
 
 msgid "Certificate: %s"
 msgstr "Sertipiko: %s"
@@ -22192,7 +22192,7 @@ msgid "URL field format invalid. Example of expected format: http://dropbox.com/
 msgstr "Hindi valid ang format ng URL field. Halimbawa ng inaasahang format: http://dropbox.com/sh/loremipsum/loremipsum?dl=0"
 
 msgid "File extension"
-msgstr "File extension"
+msgstr "Extension ng file"
 
 msgid "Audit report"
 msgstr "Ulat ng Audit"
@@ -22222,7 +22222,7 @@ msgid "Session template"
 msgstr "Template ng Session"
 
 msgid "Cloud file link"
-msgstr "Cloud file link"
+msgstr "Link ng ulap na file"
 
 msgid "Reset %s"
 msgstr "I-reset ang %s"
@@ -22231,7 +22231,7 @@ msgid "My global certificate"
 msgstr "Ang aking global na sertipiko"
 
 msgid "Message tracking"
-msgstr "Message tracking"
+msgstr "Pagsubaybay ng mensahe"
 
 msgid "Messages exchange between %s and %s"
 msgstr "Mga palitan ng mensahe sa pagitan ng %s at %s"
@@ -22333,7 +22333,7 @@ msgid "This month"
 msgstr "Buwang ito"
 
 msgid "Portal user session stats"
-msgstr "Portal user session stats"
+msgstr "Mga estadistika ng sesyon ng gumagamit ng Portal"
 
 msgid "You may add an introduction to this tool page as a helper text for your students. Simply click the edit icon to add some text. This short info text here is invisible to students and you can just leave this block empty, but what you will type will be visible to them."
 msgstr "Maaari kang magdagdag ng panimula sa pahina ng tool na ito bilang teksto na tumutulong para sa iyong mga mag-aaral. I-click lamang ang icon ng pag-edit upang magdagdag ng teksto. Ang maikling teksto ng impormasyon na ito ay hindi nakikita ng mga mag-aaral at maaari mong iwanang walang laman ang bloke na ito, ngunit ang iyong isusulat ay makikita nila."
@@ -23482,7 +23482,7 @@ msgid "Add to editor"
 msgstr "Idagdag sa editor"
 
 msgid "Image URL"
-msgstr "Image URL"
+msgstr "URL ng Larawan"
 
 msgid "px width"
 msgstr "px lapad"
@@ -23524,10 +23524,10 @@ msgid "Required courses"
 msgstr "Mga kinakailangang kurso"
 
 msgid "Standard List"
-msgstr "Standard List"
+msgstr "Pangkaraniwang Listahan"
 
 msgid "Management List"
-msgstr "Management List"
+msgstr "Listahan ng Pamamahala"
 
 msgid "Anonymize user's sessions"
 msgstr "Anonymize mga session ng gumagamit"
@@ -25642,7 +25642,7 @@ msgid "Video player renderers"
 msgstr "Mga renderer ng video player"
 
 msgid "Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
-msgstr "I-enable ang mga renderer ng player para sa YouTube, Vimeo, Facebook, DailyMotion, Twitch na media"
+msgstr "Pag-activate ng mga renderer ng player para sa YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
 
 msgid "Allow teachers to edit tests in learning paths"
 msgstr "Payagan ang mga guro na mag-edit ng mga pagsusulit sa learning paths"
@@ -26875,7 +26875,7 @@ msgid "HTTP Public Key Pinning protects your site from MiTM attacks using rogue 
 msgstr "Pinoprotektahan ng HTTP Public Key Pinning ang iyong site mula sa MiTM attacks gamit ang rogue X.509 certificates. Sa pamamagitan ng pag-whitelist lamang ng mga identity na dapat pinagkakatiwalaan ng browser, pinoprotektahan ang iyong mga user sa kaso ng compromised certificate authority."
 
 msgid "HTTP Public Key Pinning report only"
-msgstr "HTTP Public Key Pinning report only"
+msgstr "HTTP Public Key Pinning report lang"
 
 msgid "This setting allows you to experiment by reporting but not enforcing some HTTP Public Key Pinning."
 msgstr "Nagbibigay-daan ang setting na ito sa iyo na mag-eksperimento sa pamamagitan ng pag-report ngunit hindi pagpapatupad ng ilang HTTP Public Key Pinning."
@@ -26899,7 +26899,7 @@ msgid "X-Content-Type-Options stops a browser from trying to MIME-sniff the cont
 msgstr "Pinipigilan ng X-Content-Type-Options ang browser na subukan ang MIME-sniff ng content type at pinipilit itong manatili sa declared content-type. Ang tanging valid na halaga para sa header na ito ay 'nosniff'."
 
 msgid "Security Referrer Policy"
-msgstr "Security Referrer Policy"
+msgstr "Patakaran ng Referrer ng Seguridad"
 
 msgid "Referrer Policy is a new header that allows a site to control how much information the browser includes with navigation away from a document and should be set by all sites."
 msgstr "Ang Referrer Policy ay isang bagong header na nagbibigay-daan sa site na kontrolin kung gaano karaming impormasyon isasama ng browser sa navigation palayo mula sa dokumento at dapat itong itakda ng lahat ng site."
@@ -27049,7 +27049,7 @@ msgid "Show all learner publications (from base course and from all sessions) in
 msgstr "Ipakita ang lahat ng learner publications (mula sa base course at mula sa lahat ng sessions) sa work/pending.php page ng base course."
 
 msgid "Session admin can access batch user import, update and export"
-msgstr "Maaaring ma-access ng session admin ang batch user import, update at export"
+msgstr "Maaaring ma-access ng Session admin ang batch user import, update at export"
 
 msgid "Hide session chart in My progress"
 msgstr "Itago ang session chart sa My progress"
@@ -27079,7 +27079,7 @@ msgid "Add username to e-mail notification of subscription to session"
 msgstr "Idagdag ang username sa e-mail notification ng subscription sa session"
 
 msgid "Add reset password link to e-mail notification of subscription to session"
-msgstr "Magdagdag ng link sa reset ng password sa e-mail notification ng subscription sa session"
+msgstr "Magdagdag ng reset password link sa e-mail notification ng subscription sa session"
 
 msgid "Pre-fill session fields with user fields"
 msgstr "Pre-fill ang session fields gamit ang user fields"
@@ -31796,4 +31796,28 @@ msgstr "Siguraduhing iisa lamang ang bersyon ng PHP na ginagamit mo (halimbawa 8
 
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Kapag na-load nang tama ang extension para sa parehong CLI at web server, dapat mag-ulat ang search diagnostics sa itaas na naka-install na ang Xapian module."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Linisin ang temporary uploads at cache"
+
+msgid "Directory"
+msgstr "Directory"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Burahin lamang ang mga file na mas luma kaysa (minutes)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Itakda sa 0 upang burahin ang lahat ng file. Gumamit ng positibong value (hal., 60) upang maiwasan ang pagbura ng mga file na nag-u-upload pa."
+
+msgid "Preview only (do not delete)"
+msgstr "Preview only (huwag mag-delete)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Babala: ikaw ay magsasagawa ng pagbura ng LAHAT ng pansamantalang mga file. Ang aksyong ito ay hindi na maaaring baligtarin."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Ito ay magbabura ng lahat ng pansamantalang mga file. Magpatuloy?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Ito ay magbabura ng mga file na mas matanda kaysa %minutes% minuto. Magpatuloy?"
 

@@ -31817,3 +31817,27 @@ msgstr "Asigurați-vă că aveți doar versiunea PHP pe care o utilizați cu ade
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Odată ce extensia este încărcată corect atât pentru CLI, cât și pentru serverul web, diagnosticul de căutare de mai sus ar trebui să raporteze că modulul Xapian este instalat."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "Curățare încărcări temporare și cache"
+
+msgid "Directory"
+msgstr "Director"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Șterge doar fișiere mai vechi de (minute)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Setează 0 pentru a șterge toate fișierele. Folosește o valoare pozitivă (ex. 60) pentru a evita ștergerea fișierelor în curs de încărcare."
+
+msgid "Preview only (do not delete)"
+msgstr "Previzualizare doar (nu șterge)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Atenție: ești pe cale să ștergi TOATE fișierele temporare. Această acțiune nu poate fi anulată."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Aceasta va șterge toate fișierele temporare. Continuă?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Aceasta va șterge fișiere mai vechi de %minutes% minute. Continuă?"
+

@@ -31803,3 +31803,27 @@ msgstr "실제 사용하는 PHP 버전(예: 8.3)만 설치되어 있고 서로 �
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "CLI와 웹 서버 모두에서 확장이 올바르게 로드되면 위의 검색 진단이 Xapian 모듈이 설치되었다고 보고해야 합니다."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "임시 업로드 및 캐시 정리"
+
+msgid "Directory"
+msgstr "디렉터리"
+
+msgid "Only delete files older than (minutes)"
+msgstr "%d분보다 오래된 파일만 삭제"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "0으로 설정하면 모든 파일 삭제. 업로드 중인 파일을 제거하지 않으려면 양수 값(예: 60) 사용."
+
+msgid "Preview only (do not delete)"
+msgstr "미리보기만 (삭제 안 함)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "경고: 모든 임시 파일을 삭제합니다. 이 작업은 되돌릴 수 없습니다."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "모든 임시 파일을 삭제합니다. 계속하시겠습니까?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "%minutes%분보다 오래된 파일을 삭제합니다. 계속하시겠습니까?"
+

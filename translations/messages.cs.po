@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autorské právo,, no:bez autorského práva"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Složka,, application/msword:MsWord,, application/octet-stream:Okteťový proud,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Složka,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:cvičení,,      simulation:simulace,,      questionnaire:dotazník,,      diagram:diagram,,      figure:obrázek,,      graph:graf,,      index:index,,      slide:slide,,      table:tabulka,,      narrative text:narrativní text,,      exam:zkouška,,      experiment:experiment,,      problem statement:zadání problému,,      self assessment:sám sebehodnocení,,      lecture:přednáška"
@@ -31796,4 +31796,28 @@ msgstr "Ujistěte se, že máte pouze PHP verzi, kterou skutečně používáte 
 
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Jakmile je rozšíření správně načteno pro CLI i webový server, diagnostika vyhledávání výše by měla hlásit, že je modul Xapian nainstalován."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Vyčistit dočasná nahrávání a mezipaměť"
+
+msgid "Directory"
+msgstr "Adresář"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Smazat pouze soubory starší než (minuty)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Nastavte 0 pro smazání všech souborů. Použijte kladnou hodnotu (např. 60), aby se nesmazaly soubory ještě nahrávané."
+
+msgid "Preview only (do not delete)"
+msgstr "Pouze náhled (nesmazat)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Varování: chystáte se smazat VŠECHNY dočasné soubory. Tuto akci nelze vrátit zpět."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Tímto se smažou všechny dočasné soubory. Pokračovat?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Tímto se smažou soubory starší než %minutes% minut. Pokračovat?"
 

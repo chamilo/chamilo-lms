@@ -31803,3 +31803,27 @@ msgstr "Pastikan Anda hanya memiliki versi PHP yang benar-benar digunakan (misal
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Setelah ekstensi dimuat dengan benar untuk CLI dan server web, diagnostik pencarian di atas seharusnya melaporkan bahwa modul Xapian telah terpasang."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr ""
+
+msgid "Directory"
+msgstr ""
+
+msgid "Only delete files older than (minutes)"
+msgstr ""
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr ""
+
+msgid "Preview only (do not delete)"
+msgstr ""
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr ""
+
+msgid "This will delete all temporary files. Continue?"
+msgstr ""
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr ""
+

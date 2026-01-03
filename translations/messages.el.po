@@ -9473,7 +9473,7 @@ msgid "Not yet begun"
 msgstr "Δεν έχει ξεκινήσει ακόμα"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d %B %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Μη έγκυρος φάκελος: Παρακαλούμε δημιουργήστε έναν φάκελο με όνομα images στο εργαλείο έγγραφα σας ώστε οι εικόνες να μπορούν να ανέβουν σε αυτόν τον φάκελο"
@@ -9536,7 +9536,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "Η αποστολή αρχείου απέτυχε: αυτή η επέκταση αρχείου ή τύπος αρχείου απαγορεύεται"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "Διεύθυνση URL OpenID"
 
 msgid "The file is too big to upload."
 msgstr "Το αρχείο είναι πολύ μεγάλο για αποστολή."
@@ -15062,7 +15062,7 @@ msgid "Install Chamilo"
 msgstr "Εγκατάσταση chamilo"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "Διεύθυνση URL Chamilo"
 
 msgid "You have no session in your sessions history"
 msgstr "Δεν υπάρχουν συνεδρίες στο ιστορικό συνεδριών σας."
@@ -31815,4 +31815,28 @@ msgstr "Βεβαιωθείτε ότι έχετε μόνο την έκδοση PH
 
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Μόλις η επέκταση φορτωθεί σωστά τόσο για CLI όσο και για τον web server, οι διαγνωστικές αναζήτησης παραπάνω θα πρέπει να αναφέρουν ότι το άρθρωμα Xapian είναι εγκατεστημένο."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Καθαρισμός προσωρινών μεταφορτώσεων και cache"
+
+msgid "Directory"
+msgstr "Κατάλογος"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Διαγραφή μόνο αρχείων παλαιότερων από (λεπτά)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Ορισμός 0 για διαγραφή όλων των αρχείων. Χρήση θετικής τιμής (π.χ., 60) για αποφυγή διαγραφής αρχείων που ανεβαίνουν ακόμα."
+
+msgid "Preview only (do not delete)"
+msgstr "Προεπισκόπηση μόνο (μη διαγραφή)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Προειδοποίηση: πρόκειται να διαγράψετε ΟΛΑ τα προσωρινά αρχεία. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Αυτό θα διαγράψει όλα τα προσωρινά αρχεία. Συνεχίσετε;"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Αυτό θα διαγράψει αρχεία παλαιότερα από %minutes% λεπτά. Συνεχίσετε;"
 

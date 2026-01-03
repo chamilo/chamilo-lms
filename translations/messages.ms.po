@@ -31803,3 +31803,27 @@ msgstr "Pastikan anda hanya mempunyai versi PHP yang benar-benar digunakan (cont
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Setelah sambungan dimuatkan dengan betul untuk CLI dan pelayan web, diagnostik carian di atas sepatutnya melaporkan bahawa modul Xapian telah dipasang."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "Bersihkan muat naik sementara dan cache"
+
+msgid "Directory"
+msgstr "Direktori"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Hanya padam fail yang lebih tua daripada (minit)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Tetapkan 0 untuk memadam semua fail. Gunakan nilai positif (contohnya, 60) untuk mengelakkan memadam fail yang masih dimuat naik."
+
+msgid "Preview only (do not delete)"
+msgstr "Pratonton sahaja (jangan padam)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Amaran: anda akan memadam SEMUA fail sementara. Tindakan ini tidak boleh dibatalkan."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Ini akan memadam semua fail sementara. Teruskan?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Ini akan memadam fail yang lebih tua daripada %minutes% minit. Teruskan?"
+

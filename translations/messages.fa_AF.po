@@ -31797,3 +31797,27 @@ msgstr "اطمینان حاصل کنید که فقط نسخه PHP که واقع�
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "پس از اینکه افزونه به درستی برای CLI و سرور وب بارگذاری شد، تشخیص جستجوهای بالا باید گزارش دهد که ماژول Xapian نصب شده است."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "پاکسازی بارگذاری‌های موقتی و کش"
+
+msgid "Directory"
+msgstr "پوشه"
+
+msgid "Only delete files older than (minutes)"
+msgstr "فقط فایل‌های قدیمی‌تر از (دقیقه) را حذف کن"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "برای حذف همه فایل‌ها ۰ قرار دهید. از مقدار مثبت (مثل ۶۰) استفاده کنید تا فایل‌های در حال بارگذاری حذف نشوند."
+
+msgid "Preview only (do not delete)"
+msgstr "فقط پیش‌نمایش (حذف نکن)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "هشدار: در حال حذف همه فایل‌های موقتی هستید. این عمل قابل بازگشت نیست."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "این همه فایل‌های موقتی را حذف می‌کند. ادامه دهید؟"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "این فایل‌های قدیمی‌تر از %minutes% دقیقه را حذف می‌کند. ادامه دهید؟"
+

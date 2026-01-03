@@ -31803,3 +31803,27 @@ msgstr "Asegúrate de tener namái la versión de PHP que realmente uses (por ex
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Una vegada que la esixensión tea cargada correutamente tantu pa CLI como pal sirvidor web, los diagnósticos de gueta de cimientu deuen informar que'l moudu Xapian ta instaláu."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "Nuber subíes temporales y caché"
+
+msgid "Directory"
+msgstr "Direutoriu"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Desaniciar namái archivos más vieyos que (minutos)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Estayar 0 pa desaniciar tolos archivos. Usar un valor positivu (ex., 60) pa evitar desaniciar archivos que tán subiéndose."
+
+msgid "Preview only (do not delete)"
+msgstr "Previsualizar namái (nun desaniciar)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Avisu: vas desaniciar TOSOS los archivos temporales. Esta axón nun ye desfacible."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Esto desaniciará tolos archivos temporales. ¿Continuar?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Esto desaniciará archivos más vieyos que %minutes% minutos. ¿Continuar?"
+

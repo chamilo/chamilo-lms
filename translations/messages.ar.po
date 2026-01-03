@@ -31815,3 +31815,27 @@ msgstr "تأكد من أن لديك إصدار PHP الذي تستخدمه فق�
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "بمجرد تحميل الامتداد بشكل صحيح لكل من CLI وخادم الويب، يجب أن يبلغ تشخيص البحث أعلاه أن وحدة Xapian مثبتة."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "تنظيف الرفع المؤقت وذاكرة التخزين المؤقت"
+
+msgid "Directory"
+msgstr "دليل"
+
+msgid "Only delete files older than (minutes)"
+msgstr "احذف الملفات الأقدم من (دقائق)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "اضبط 0 لحذف جميع الملفات. استخدم قيمة إيجابية (مثل 60) لتجنب حذف الملفات التي لا تزال قيد الرفع."
+
+msgid "Preview only (do not delete)"
+msgstr "معاينة فقط (لا تحذف)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "تحذير: أنت على وشك حذف جميع الملفات المؤقتة. لا يمكن التراجع عن هذا الإجراء."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "سيحذف هذا جميع الملفات المؤقتة. هل تتابع؟"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "سيحذف هذا الملفات الأقدم من %minutes% دقيقة. هل تتابع؟"
+

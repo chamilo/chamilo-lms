@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:հեղինակային իրավունք,, no:առանց հեղինակային իրավունքի"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Թերթիկ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Թղթապանակ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:վարժություն,,      simulation:մոդելավորում,,      questionnaire:հարցաթերթիկ,,      diagram:սխեմա,,      figure:նկար,,      graph:գրաֆիկ,,      index:հիմնական ցուցիչ,,      slide:սլայդ,,      table:तालिका,,      narrative text:նարատիվ տեքստ,,      exam:քննություն,,      experiment:փորձ,,      problem statement:պրոբլեմի ձևակերպում,,      self assessment:ինքնագնահատում,,      lecture:դասախոսություն"
@@ -31800,4 +31800,28 @@ msgstr "Ապահովեք, որ ունեք միայն իսկապես օգտագո
 
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Միացնել ընդլայնումը CLI-ի և վեբ սերվերի համար, որոնք վերևի որոնման ախտորոշումները պետք է հաշվետվություն տան, որ Xapian մոդուլը տեղադրված է:"
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Մաքրել ժամանակավոր վերբեռնումները և կուշպը"
+
+msgid "Directory"
+msgstr "Թղթապանակ"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Միայն հին ֆայլերը ջնջել (րոպեներով)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Սահմանեք 0՝ բոլոր ֆայլերը ջնջելու համար: Օգտագործեք դրական արժեք (օրինակ՝ 60)՝ դեռ վերբեռնվող ֆայլերը չջնջելու համար:"
+
+msgid "Preview only (do not delete)"
+msgstr "Նախադիտում միայն (չջնջել)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Զգուշացում. դուք պատրաստվում եք ջնջել ԲՈԼՈՐ ժամանակավոր ֆայլերը: Այս գործողությունը չի կարող հետ շրջանառվել:"
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Սա կջնջի բոլոր ժամանակավոր ֆայլերը: Շարունակե՞ք:"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Սա կջնջի %minutes% րոպեից հին ֆայլերը: Շարունակե՞ք:"
 

@@ -31816,3 +31816,27 @@ msgstr "Asegúrense de ter só a versión de PHP que realmente usan (por exemplo
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Unha vez que a extensión estea correctamente cargada para CLI e o servidor web, os diagnósticos de busca de arriba deberían informar que o módulo Xapian está instalado."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "Limpar cargas temporais e caché"
+
+msgid "Directory"
+msgstr "Directorio"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Eliminar só ficheiros con máis antigüidade que (minutos)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Estableza 0 para eliminar todos os ficheiros. Use un valor positivo (p. ex., 60) para evitar eliminar ficheiros que aínda se están cargando."
+
+msgid "Preview only (do not delete)"
+msgstr "Vista previa só (non eliminar)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Aviso: está a piques de eliminar TÓDOLOS ficheiros temporais. Esta acción non se pode desfacer."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Isto eliminará todos os ficheiros temporais. Continuar?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Isto eliminará os ficheiros con máis antigüidade que %minutes% minutos. Continuar?"
+

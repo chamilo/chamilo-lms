@@ -31867,3 +31867,27 @@ msgstr "実際に使用するPHPバージョン（例：8.3）のみをインス
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "CLIとウェブサーバーの両方で拡張が正しくロードされたら、上記の検索診断でXapianモジュールがインストールされていると報告されるはずです。"
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "一時アップロードとキャッシュのクリーンアップ"
+
+msgid "Directory"
+msgstr "ディレクトリ"
+
+msgid "Only delete files older than (minutes)"
+msgstr "それ以上の古いファイルのみ削除 (分)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "0に設定するとすべてのファイルを削除します。アップロード中のファイルを削除しないよう、陽数値 (例: 60) を使用してください。"
+
+msgid "Preview only (do not delete)"
+msgstr "プレビューのみ (削除しない)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "警告: すべての一時ファイルを削除しようとしています。この操作は元に戻せません。"
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "すべての一時ファイルを削除します。続行しますか？"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "%minutes% 分より古いファイルを削除します。続行しますか？"
+

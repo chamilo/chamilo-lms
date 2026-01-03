@@ -31797,3 +31797,27 @@ msgstr "Переконайтеся, що у вас встановлена лиш
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Після того, як розширення буде правильно завантажене для CLI та вебсервера, діагностика пошуку вище повинна повідомити, що модуль Xapian встановлено."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "Очищення тимчасових завантажень та кешу"
+
+msgid "Directory"
+msgstr "Каталог"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Видаляти лише файли старші за (хвилини)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Встановіть 0, щоб видалити всі файли. Використовуйте додатне значення (наприклад, 60), щоб уникнути видалення файлів, які ще завантажуються."
+
+msgid "Preview only (do not delete)"
+msgstr "Попередній перегляд лише (не видаляти)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Увага: ви збираєтеся видалити ВСІ тимчасові файли. Цю дію не можна скасувати."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Це видалить усі тимчасові файли. Продовжити?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Це видалить файли старші за %minutes% хвилин. Продовжити?"
+

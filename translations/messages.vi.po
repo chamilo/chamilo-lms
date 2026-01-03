@@ -31803,3 +31803,27 @@ msgstr "Đảm bảo bạn chỉ có phiên bản PHP thực sự sử dụng (v
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Khi phần mở rộng đã được tải đúng cho cả CLI và máy chủ web, chẩn đoán tìm kiếm ở trên nên báo cáo rằng mô-đun Xapian đã được cài đặt."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "Dọn dẹp tải lên tạm thời và bộ nhớ đệm"
+
+msgid "Directory"
+msgstr "Thư mục"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Chỉ xóa các tệp cũ hơn (phút)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Đặt 0 để xóa tất cả tệp. Sử dụng giá trị dương (ví dụ: 60) để tránh xóa các tệp vẫn đang được tải lên."
+
+msgid "Preview only (do not delete)"
+msgstr "Chỉ xem trước (không xóa)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Cảnh báo: bạn sắp xóa TẤT CẢ các tệp tạm thời. Hành động này không thể hoàn tác."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Thao tác này sẽ xóa tất cả tệp tạm thời. Tiếp tục?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Thao tác này sẽ xóa các tệp cũ hơn %minutes% phút. Tiếp tục?"
+

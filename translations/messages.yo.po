@@ -31797,3 +31797,27 @@ msgstr "Ràn án lọ́wọ́ láti rí i dájú pé o kàn ni ẹya PHP tí o �
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Ni kete ti ìdàgbàsókè náà ti gbe wọ́n lọ́nà tọ́ fún CLI àti ìwẹ̀wẹ̀ àwùjọ, ìdílé ìwádìí ìwádìí loke yóò ṣe ìròyìn pé a ti fi ìdàgbàsókè Xapian sínú."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "Pa awọn ikojọpọ igba ati cache daradara"
+
+msgid "Directory"
+msgstr "Kakiri"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Pa awọn faili ti o dagba ju (awọn iṣẹju)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Ṣeto 0 lati pa gbogbo awọn faili. Lo iye rere (fun apẹẹrẹ, 60) lati yago fun yiyọ awọn faili ti a ṣe ikojọpọ lọwọlọwọ."
+
+msgid "Preview only (do not delete)"
+msgstr "Iwo tẹlẹ nikan (maṣe paarẹ)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Ìkìlọ̀: o fẹ́ pa Gbogbo awọn faili igba. Iṣe yii ko le ṣe iyipada."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Eyi yoo pa gbogbo awọn faili igba. Tẹsiwaju?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Eyi yoo pa awọn faili ti o dagba ju %minutes% iṣẹju. Tẹsiwaju?"
+

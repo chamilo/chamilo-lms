@@ -31803,3 +31803,27 @@ msgstr "Sørg for, at du kun har den PHP-version, du virkelig bruger (f.eks. 8.3
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Når extensionen er korrekt indlæst for både CLI og webserveren, bør søgediagnostikken ovenfor rapportere, at Xapian-modulen er installeret."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "Ryd op i midlertidige uploads og cache"
+
+msgid "Directory"
+msgstr "Mappe"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Slet kun filer ældre end (minutter)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Sæt 0 for at slette alle filer. Brug en positiv værdi (f.eks. 60) for at undgå at fjerne filer, der stadig uploades."
+
+msgid "Preview only (do not delete)"
+msgstr "Forhåndsvisning kun (slet ikke)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Advarsel: Du er ved at slette ALLE midlertidige filer. Denne handling kan ikke fortrydes."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Dette vil slette alle midlertidige filer. Fortsæt?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Dette vil slette filer ældre end %minutes% minutter. Fortsæt?"
+

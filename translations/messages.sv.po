@@ -31803,3 +31803,27 @@ msgstr "Se till att du endast har den PHP-version du verkligen använder (t.ex. 
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "När tillägget är korrekt laddat för både CLI och webbservern bör sökdiagnostiken ovan rapportera att Xapian-modulen är installerad."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "Rensa temporära uppladdningar och cache"
+
+msgid "Directory"
+msgstr "Katalog"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Radera endast filer äldre än (minuter)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Ange 0 för att radera alla filer. Använd ett positivt värde (t.ex. 60) för att undvika att ta bort filer som fortfarande laddas upp."
+
+msgid "Preview only (do not delete)"
+msgstr "Förhandsgranska endast (radera inte)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Varning: du är på väg att radera ALLA temporära filer. Denna åtgärd kan inte ångras."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Detta raderar alla temporära filer. Fortsätta?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Detta raderar filer äldre än %minutes% minuter. Fortsätta?"
+

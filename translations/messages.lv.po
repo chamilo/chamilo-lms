@@ -31804,3 +31804,27 @@ msgstr "Pārliecinieties, ka jums ir tikai tā PHP versija, kuru patiešām izma
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Kad paplašinājums ir pareizi ielādēts gan CLI, gan tīmekļa serverī, meklēšanas diagnostika iepriekš vajadzētu ziņot, ka Xapian modulis ir instalēts."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "Notīrīt pagaidu augšupielādes un kešatmiņu"
+
+msgid "Directory"
+msgstr "Mape"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Dzēst tikai failus, kas vecāki par (minūtēm)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Iestatiet 0, lai dzēstu visus failus. Izmantojiet pozitīvu vērtību (piem., 60), lai izvairītos no failu dzēšanas, kas joprojām tiek augšupielādēti."
+
+msgid "Preview only (do not delete)"
+msgstr "Tikai priekšskatīt (nedzēst)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Brīdinājums: jūs gatavāties dzēst VISUS pagaidu failus. Šo darbību nevar atcelt."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Tas dzēsīs visus pagaidu failus. Turpināt?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Tas dzēsīs failus, kas vecāki par %minutes% minūtēm. Turpināt?"
+

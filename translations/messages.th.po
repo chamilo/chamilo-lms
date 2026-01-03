@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "ด้วยความเคารพ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ตัวอย่างสูตร: sqrt( [x] / [ย] ) * ( e ^ ( ln(pi) ) )"
+msgstr "สูตรตัวอย่าง: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ช่วงตัวแปร"
@@ -17745,7 +17745,7 @@ msgid "A course category with the same name already exists."
 msgstr "หมวดหมู่คอร์สชื่อเดียวกันมีอยู่แล้ว"
 
 msgid "OpenID redirect"
-msgstr "OpenID redirect"
+msgstr "การเปลี่ยนเส้นทาง OpenID"
 
 msgid "Blogs"
 msgstr "บล็อก"
@@ -21825,7 +21825,7 @@ msgid "Assignment work time"
 msgstr "เวลาทำงานมอบหมาย"
 
 msgid "Document ID"
-msgstr "Document ID"
+msgstr "รหัสเอกสาร"
 
 msgid "Social data"
 msgstr "ข้อมูลสังคม"
@@ -26862,7 +26862,7 @@ msgid "HTTP Strict Transport Security is an excellent feature to support on your
 msgstr "HTTP Strict Transport Security เป็นคุณสมบัติที่ยอดเยี่ยมสำหรับเว็บไซต์ของคุณและเสริมการใช้งาน TLS โดยบังคับให้ User Agent ใช้ HTTPS ค่าที่แนะนำ: 'strict-transport-security: max-age=63072000; includeSubDomains' ดู https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security สามารถเพิ่ม 'preload' ได้ แต่มีผลต่อโดเมนหลัก (TLD) ดังนั้นควรพิจารณาให้รอบคอบ ดู https://hstspreload.org/ ทิ้งว่างเพื่อปิดใช้งาน"
 
 msgid "Content Security Policy"
-msgstr "Content Security Policy"
+msgstr "นโยบายความปลอดภัยเนื้อหา"
 
 msgid "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the 'script-src' argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
 msgstr "Content Security Policy เป็นมาตรการที่มีประสิทธิภาพในการป้องกันเว็บไซต์จาก XSS โดยการกำหนดแหล่งที่มาของเนื้อหาที่อนุญาต สามารถป้องกันเบราว์เซอร์จากการโหลดเนื้อหาที่เป็นอันตราย การตั้งค่านี้ซับซ้อนเมื่อใช้ WYSIWYG editor แต่หากเพิ่มโดเมนที่ต้องการอนุญาตสำหรับ iframe ใน child-src ตัวอย่างนี้จะใช้งานได้ สามารถป้องกัน JavaScript จากแหล่งภายนอก (รวม SVG) โดยใช้รายการเข้มงวดใน 'script-src' ทิ้งว่างเพื่อปิดใช้งาน ตัวอย่าง: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
@@ -26904,7 +26904,7 @@ msgid "X-Content-Type-Options stops a browser from trying to MIME-sniff the cont
 msgstr "X-Content-Type-Options หยุดเบราว์เซอร์จากการ MIME-sniff content type และบังคับใช้ declared content-type ค่าเดียวที่ถูกต้องคือ 'nosniff'"
 
 msgid "Security Referrer Policy"
-msgstr "Security Referrer Policy"
+msgstr "นโยบายการอ้างอิงความปลอดภัย"
 
 msgid "Referrer Policy is a new header that allows a site to control how much information the browser includes with navigation away from a document and should be set by all sites."
 msgstr "Referrer Policy เป็น header ใหม่ที่ควบคุมข้อมูลที่เบราว์เซอร์ส่งเมื่อออกจากเอกสาร ควรตั้งค่าทุกเว็บไซต์"
@@ -26916,7 +26916,7 @@ msgid "Immediately block users who have been disabled by the admin through users
 msgstr "บล็อกผู้ใช้ที่ถูกปิดใช้งานโดยผู้ดูแลทันที มิเช่นนั้นผู้ใช้จะคงสิทธิ์เดิมจนกว่าจะล็อกเอาท์"
 
 msgid "Session cookie samesite"
-msgstr "Session cookie samesite"
+msgstr "คุกกี้เซสชัน samesite"
 
 msgid "Enable samesite:None parameter for session cookie. More info: https://www.chromium.org/updates/same-site and https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
 msgstr "เปิดใช้งาน samesite:None สำหรับ session cookie ดูข้อมูลเพิ่มเติม: https://www.chromium.org/updates/same-site และ https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
@@ -31802,4 +31802,28 @@ msgstr "ตรวจสอบให้แน่ใจว่ามีเวอร
 
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "เมื่อส่วนขยายโหลดถูกต้องทั้ง CLI และเว็บเซิร์ฟเวอร์ การวินิจฉัยการค้นหาข้างต้นควรรายงานว่าโมดูล Xapian ติดตั้งแล้ว"
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "ล้างไฟล์อัปโหลดชั่วคราวและแคช"
+
+msgid "Directory"
+msgstr "ไดเรกทอรี"
+
+msgid "Only delete files older than (minutes)"
+msgstr "ลบเฉพาะไฟล์ที่เก่ากว่า (นาที)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "ตั้งค่า 0 เพื่อลบไฟล์ทั้งหมด ใช้ค่าบวก (เช่น 60) เพื่อหลีกเลี่ยงการลบไฟล์ที่กำลังอัปโหลดอยู่"
+
+msgid "Preview only (do not delete)"
+msgstr "ดูตัวอย่างเท่านั้น (ไม่ลบ)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "คำเตือน: คุณกำลังจะลบไฟล์ชั่วคราวทั้งหมด การดำเนินการนี้ไม่สามารถย้อนกลับได้"
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "สิ่งนี้จะลบไฟล์ชั่วคราวทั้งหมด ดำเนินการต่อ?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "สิ่งนี้จะลบไฟล์ที่เก่ากว่า %minutes% นาที ดำเนินการต่อ?"
 

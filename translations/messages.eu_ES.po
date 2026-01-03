@@ -31808,3 +31808,27 @@ msgstr "Ziurtatu PHP bertsio bakarra duzula erabiltzen duzuna (adib. 8.3) eta sa
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Hedapena ondo kargatuta dagoenean CLI eta web zerbitzarirako, goiko bilaketa diagnostikoek Xapian modula instalatuta dagoela adierazi beharko dute."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "Garbitu aldi baterako igoerak eta cache-a"
+
+msgid "Directory"
+msgstr "Direktorioa"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Ez ezazu ezabatu %minutes% minutu baino zaharragoak diren fitxategiak bakarrik"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Ezarri 0 fitxategi guztiak ezabatzeko. Balio positiboa erabili (adib. 60) igoeran dauden fitxategiak ez kentzeko."
+
+msgid "Preview only (do not delete)"
+msgstr "Aurrebista soilik (ez ezabatu)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Abisua: aldi baterako fitxategi guztiak ezabatzen ari zara. Ekintza hau ezin da desegin."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Aldi baterako fitxategi guztiak ezabatuko dira. Jarraitu?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "%minutes% minutu baino zaharragoak diren fitxategiak ezabatuko dira. Jarraitu?"
+

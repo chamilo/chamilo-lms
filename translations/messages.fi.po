@@ -31805,3 +31805,27 @@ msgstr "Varmista, että sinulla on vain PHP-versio, jota todella käytät (esim.
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Kun laajennus on oikein ladattu sekä CLI:lle että verkkopalvelimelle, yllä olevien hakudiagnostiikkojen tulisi ilmoittaa, että Xapian-moduuli on asennettu."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "Puhdista väliaikaiset lataukset ja välimuisti"
+
+msgid "Directory"
+msgstr "Hakemisto"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Poista vain tiedostot, jotka ovat vanhempia kuin (minuuttia)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Aseta 0 poistaaksesi kaikki tiedostot. Käytä positiivista arvoa (esim. 60) välttääksesi latauksessa olevien tiedostojen poistamisen."
+
+msgid "Preview only (do not delete)"
+msgstr "Esikatselu vain (älä poista)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Varoitus: olet poistamassa KAIKKIA väliaikaisia tiedostoja. Tätä toimintoa ei voi perua."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Tämä poistaa kaikki väliaikaiset tiedostot. Jatka?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Tämä poistaa tiedostot, jotka ovat vanhempia kuin %minutes% minuuttia. Jatka?"
+

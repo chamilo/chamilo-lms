@@ -31803,3 +31803,27 @@ msgstr "Уверете се дека имате само PHP верзијата 
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Откако проширувањето е правилно вчитано и за CLI и за веб серверот, дијагностиката за пребарување погоре треба да извести дека Xapian модулот е инсталиран."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "Исчисти привремени испорачани датотеки и кеш"
+
+msgid "Directory"
+msgstr "Директориум"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Бриши само датотеки постари од (минути)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Постави 0 за бришење на сите датотеки. Користи позитивна вредност (на пр. 60) за да избегнеш бришење на датотеки кои сè уште се испорачуваат."
+
+msgid "Preview only (do not delete)"
+msgstr "Преглед само (не бриши)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Предупредување: на пат сте да ги избришете СИТЕ привремени датотеки. Оваа акција не може да се врати."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Ова ќе ги избрише сите привремени датотеки. Продолжи?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Ова ќе ги избрише датотеките постари од %minutes% минути. Продолжи?"
+

@@ -31797,3 +31797,27 @@ msgstr "Hakikisha una toleo la PHP tu unalotumia kweli (kwa mfano 8.3) na epuka 
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "Mara tu kiapanuzi kitakapopakiwa vizuri kwa CLI na seva ya wavuti, uchunguzi wa utafutaji hapo juu unapaswa kuripoti kuwa moduli ya Xapian imesakinishwa."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "Safisha upakiaji wa muda na kache"
+
+msgid "Directory"
+msgstr "Direktori"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Futa tu faili zinazochukua muda mrefu kuliko (dakika)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Weka 0 kufuta faili zote. Tumia thamani chanya (k.m., 60) kuepuka kufuta faili zinazoongezwa bado."
+
+msgid "Preview only (do not delete)"
+msgstr "Onyesha hakikisho tu (usifute)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Onyo: Uko karibu kufuta faili zote za muda. Kitendo hiki hakiwezi kurekebishwa."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Hii itafuta faili zote za muda. Endelea?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Hii itafuta faili zinazochukua zaidi ya dakika %minutes%. Endelea?"
+

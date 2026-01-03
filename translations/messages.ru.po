@@ -31804,3 +31804,27 @@ msgstr "Убедитесь, что у вас установлена только
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "После того как расширение корректно загружено для CLI и веб-сервера, диагностика поиска выше должна сообщить, что модуль Xapian установлен."
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "Очистка временных загрузок и кэша"
+
+msgid "Directory"
+msgstr "Каталог"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Удалять только файлы старше (минуты)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Установите 0 для удаления всех файлов. Используйте положительное значение (например, 60), чтобы избежать удаления файлов, которые еще загружаются."
+
+msgid "Preview only (do not delete)"
+msgstr "Только предварительный просмотр (не удалять)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Внимание: вы собираетесь удалить ВСЕ временные файлы. Это действие нельзя отменить."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Это удалит все временные файлы. Продолжить?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Это удалит файлы старше %minutes% минут. Продолжить?"
+

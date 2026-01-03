@@ -31801,3 +31801,27 @@ msgstr "သင်အမှန်တကယ် အသုံးပြုသော P
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "ချဲ့ထွင်မှုကို CLI နှင့် ဝက်ဘ်ဆာဗာအတွက် မှန်ကန်စွာ တင်သွင်းပြီးသည်နှင့် အထက်ပါ ရှာဖွေရေး ရှာဖွေရေးဆိုင်ရာ အစီရင်ခံစာက ရှာဖွေရေး မော်ဂျူး Xapian ကို ထည့်သွင်းပြီဟု အစီရင်ခံရမည်။"
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "ယာယီအပ်လုဒ်များနှင့် ကက်ရှ်ကို ရှင်းလင်းရန်"
+
+msgid "Directory"
+msgstr "ဖိုလ်ဒါ"
+
+msgid "Only delete files older than (minutes)"
+msgstr "အသက်ရှိနေသော ဖိုင်များကို ဖျက်ရန် (မိနစ်)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "ဖိုင်အားလုံးကို ဖျက်ရန် ၀ သတ်မှတ်ပါ။ အပ်လုဒ်လုပ်နေသေးသော ဖိုင်များကို မဖယ်ရှားရန် အပေါင်း တန်ဖိုး (ဥပမာ၊ ၆၀) သုံးပါ။"
+
+msgid "Preview only (do not delete)"
+msgstr "ကြည့်ရှုရန်သာ (မဖျက်ရန်)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "သတိပေးချက်။ ယာယီ ဖိုင်များ အားလုံးကို ဖျက်ရန် လုပ်နေပါသည်။ ဤလုပ်ဆောင်မှုကို ပြန်လည်မလုပ်နိုင်ပါ။"
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "ယာယီ ဖိုင်များ အားလုံးကို ဖျက်ပါမည်။ ဆက်လက်လုပ်ဆောင်မလား?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "%minutes% မိနစ်ထက် ဟောင်းနေသော ဖိုင်များကို ဖျက်ပါမည်။ ဆက်လက်လုပ်ဆောင်မလား?"
+

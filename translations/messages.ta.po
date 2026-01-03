@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "உண்மையாகவே"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "பூரணச் சமன்பாடு: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "புரோகா மாதிரி: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "மாறியின் வரம்புகள்"
@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:பதிப்புரிமை,, no:பதிப்புரிமை இல்லை"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:பாக்கெட்,, application/msword:MsWord,, application/octet-stream:அக்டெட் ஸ்ட்ரீம்,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:பாக்கெடு,, application/msword:MsWord,, application/octet-stream:அக்டெட் ஸ்ட்ரீம்,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:பயிற்சி,,      simulation:மெய்யப்படுத்தல்,,      questionnaire:கேள்வித்தாள்,,      diagram:சித்திரம்,,      figure:உருவம்,,      graph:படம்,,      index:அட்டவணை,,      slide:இன்னுசைடு,,      table:அட்டவணை,,      narrative text:கதை உரை,,      exam:தேர்வு,,      experiment:பரிசோதனை,,      problem statement:பிரச்சினை அறிக்கை,,      self assessment:சுய மதிப்பீடு,,      lecture:உபதேசம்"
@@ -31800,4 +31800,28 @@ msgstr "நீங்கள் உண்மையில் பயன்படு�
 
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "நீட்டி CLI மற்றும் வலை சர்வருக்கானது சரியாக ஏற்றப்பட்டவுடன், மேலே உள்ள தேடல் நோயறிதல்கள் Xapian தொகுதி நிறுவப்பட்டுள்ளது என்று அறிவிக்க வேண்டும்."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "தற்காலிக பதிவேற்றங்கள் மற்றும் தாற்காலிக சேமிப்பை அகற்றுதல்"
+
+msgid "Directory"
+msgstr "பாக்கெடு"
+
+msgid "Only delete files older than (minutes)"
+msgstr "வெறும் பழைய கோப்புகளை மட்டும் அகற்றவும் (நிமிடங்கள்)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "எல்லா கோப்புகளையும் அகற்ற 0 அமைக்கவும். இன்னும் பதிவேற்றப்படும் கோப்புகளை அகற்றுவதை தவிர்க்க எண்ணிக்கையான மதிப்பை பயன்படுத்தவும் (எ.கா., 60)."
+
+msgid "Preview only (do not delete)"
+msgstr "முன்னோட்டம் மட்டும் (அகற்ற வேண்டாம்)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "எச்சரிக்கை: நீங்கள் எல்லா தற்காலிக கோப்புகளையும் அகற்ற உள்ளீர்கள். இந்த செயல் மீள முடியாது."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "இது எல்லா தற்காலிக கோப்புகளையும் அகற்றும். தொடர வேண்டுமா?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "இது %minutes% நிமிடங்களுக்கு முந்தைய கோப்புகளை அகற்றும். தொடர வேண்டுமா?"
 

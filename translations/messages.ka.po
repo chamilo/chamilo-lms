@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:საავტორო უფლება,, no:საავტორო უფლება არა"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:ფოლდერი,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ვარჯიში,,      simulation:სიმულაცია,,      questionnaire:ანკეტა,,      diagram:დიაგრამა,,      figure:ფიგურა,,      graph:გრაფიკი,,      index:ინდექსი,,      slide:სლაიდი,,      table:ცხრილი,,      narrative text:ნარატიული ტექსტი,,      exam:გამოცდა,,      experiment:ექსპერიმენტი,,      problem statement:პრობლემის ჩამონათვალი,,      self assessment:თვითშეფასება,,      lecture:ლექცია"
@@ -31796,4 +31796,28 @@ msgstr "დარწმუნდით, რომ გაქვთ მხოლ�
 
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "გაფართოება სწორად ჩაიტვირთება როგორც CLI-ში, ასევე ვებ-სერვერზე, ზემოთ მოყვანილი ძიების დიაგნოსტიკა უნდა აჩვენოს, რომ Xapian მოდული დაყენებულია."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "დროებითი ატვირთვებისა და ქეშის გაწმენდა"
+
+msgid "Directory"
+msgstr "კატალოგი"
+
+msgid "Only delete files older than (minutes)"
+msgstr "მხოლოდ უფროსი ფაილების წაშლა (წუთებში)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "დააყენეთ 0 ყველა ფაილის წასაშლელად. გამოიყენეთ დადებითი მნიშვნელობა (მაგ., 60) იმის თავიდან ასაცილებლად, რომ წაიშალოს ჯერ კიდევ ატვირთვადი ფაილები."
+
+msgid "Preview only (do not delete)"
+msgstr "მხოლოდ წინასწარი გამოცხადება (არ წაშალოთ)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "გაფრთხილება: შეხედავთ წაშალოთ ყველა დროებითი ფაილი. ეს მოქმედება ვერ გააუქმებთ."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "ეს წაშლის ყველა დროებით ფაილს. გავაგრძელოთ?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "ეს წაშლის %minutes% წუთზე უფროს ფაილებს. გავაგრძელოთ?"
 

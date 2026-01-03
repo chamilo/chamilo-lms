@@ -31803,3 +31803,27 @@ msgstr "確保僅安裝您實際使用的 PHP 版本（例如 8.3），避免混
 msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
 msgstr "一旦 CLI 與網頁伺服器均正確載入擴充，上方的搜尋診斷應報告 Xapian 模組已安裝。"
 
+msgid "Cleanup temporary uploads and cache"
+msgstr "清理暫存上傳檔案與快取"
+
+msgid "Directory"
+msgstr "目錄"
+
+msgid "Only delete files older than (minutes)"
+msgstr "僅刪除早於 (分鐘) 的檔案"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "設為 0 以刪除所有檔案。使用正值 (例如 60) 以避免刪除仍在上傳的檔案。"
+
+msgid "Preview only (do not delete)"
+msgstr "僅預覽 (不刪除)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "警告：您即將刪除所有暫存檔案。此動作無法復原。"
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "這將刪除所有暫存檔案。繼續？"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "這將刪除早於 %minutes% 分鐘的檔案。繼續？"
+

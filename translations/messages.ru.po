@@ -31594,3 +31594,213 @@ msgstr "Показывать базовые сообщения курса в к�
 msgid "Limit identical email usage"
 msgstr "Ограничить использование одинаковых email"
 
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Максимальное количество учетных записей, которым разрешено использовать один и тот же адрес электронной почты. Установите 0, чтобы отключить это ограничение."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Разрешить администраторам сессий видеть всех пользователей на всех URL"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Если включено, администраторы сессий могут искать и просматривать пользователей со всех URL доступа, независимо от текущего URL."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Разрешить пользователям выбирать свой часовой пояс. После настройки пользователи смогут видеть сроки заданий и другие временные ссылки в своем часовом поясе, что уменьшит ошибки при сдаче."
+
+msgid "Redirect after login (per profile)"
+msgstr "Перенаправление после входа (по профилю)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Определите перенаправление по профилю после входа с помощью JSON-объекта, например {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Скрыть флажок согласия с юридической информацией на странице Условий и положений"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Если установлено в true, удаляет флажок \"Я прочитал и принимаю\" в процессе страницы Условий и положений."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Массив, определяющий хост и порт для сервера LDAP."
+
+msgid "Enable 2FA"
+msgstr "Включить 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Добавить поля на странице обновления пароля для включения 2FA с помощью приложения-аутентификатора TOTP. При глобальном отключении пользователи не увидят поля 2FA и не будут запрошены для 2FA при входе, даже если ранее включили это."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Некоторые функции Chamilo будут подключаться к внешним ресурсам с сервера. Например, чтобы убедиться, что внешний контент существует при создании ссылки или отображении встроенной страницы в учебном пути. Если сервер Chamilo использует прокси для выхода из сети, здесь можно его настроить."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Включить или отключить автоматическую повторную регистрацию при истечении срока действия курса. Связанная cron-задача также должна быть активирована."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Показывать оставшиеся дни в Мои сессии"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Если включено, даты сессий на странице \"Мои сессии\" будут заменены количеством оставшихся дней."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Показывать \"Ожидающие опросы\" в меню"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Отобразить пункт меню, позволяющий пользователям получить доступ к ожидающим опросам."
+
+msgid "Disclose AI assistance"
+msgstr "Раскрывать помощь ИИ"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Показывать тег на любом контенте или отзыве, сгенерированном или соавторски созданном любой системой ИИ, подтверждая пользователю, что контент был создан с помощью какой-либо системы ИИ. Детали о том, какая система ИИ использовалась в каком случае, хранятся в базе данных для аудита, но не доступны напрямую конечному пользователю."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "JSON-конфигурация для каталога курсов: настройки ссылок, фильтры, опции сортировки и многое другое."
+
+msgid "Session Catalog Settings"
+msgstr "Настройки каталога сессий"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "JSON-конфигурация для каталога сессий: фильтры и опции отображения."
+
+msgid "Show Course Descriptions"
+msgstr "Показывать описания курсов"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Отображать описания курсов в списке каталога."
+
+msgid "Published Courses Only"
+msgstr "Только опубликованные курсы"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Ограничить каталог только курсами, помеченными как опубликованные."
+
+msgid "Display Catalog on Homepage"
+msgstr "Отображать каталог на главной странице"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Показывать блок каталога курсов на главной странице платформы."
+
+msgid "Hide Public Link"
+msgstr "Скрыть публичную ссылку"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Удалить ссылку на публичный URL из карточек курсов."
+
+msgid "Only Selected Courses"
+msgstr "Только выбранные курсы"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Показывать в каталоге только вручную выбранные курсы."
+
+msgid "Allow Student Browsing"
+msgstr "Разрешить студентам просмотр"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Разрешить студентам просматривать и фильтровать каталог курсов."
+
+msgid "Hide Private Courses"
+msgstr "Скрыть приватные курсы"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Исключить приватные курсы из отображения каталога."
+
+msgid "Show Courses & Sessions"
+msgstr "Показывать курсы и сессии"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Включать курсы и сессии в результаты каталога."
+
+msgid "Auto Session Subscription"
+msgstr "Автоматическая подписка на сессии"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Включить автоматическую подписку пользователей на сессии."
+
+msgid "Subscription in Session View"
+msgstr "Подписка на странице сессии"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Разрешить пользователям подписываться на курсы прямо со страницы сессии."
+
+msgid "Enable redirection plugin"
+msgstr "Включить плагин перенаправления"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Массив, определяющий 'дни' и 'месяцы' для установки даты истечения срока действия учетной записи при первом входе пользователя."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Массив роль => число, представляющий количество дней до истечения срока действия учетной записи в зависимости от роли."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Дополнительное поле пользователя, используемое для поиска и именования сессий"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Эта настройка определяет ключ дополнительного поля пользователя (например, \"company\"), который будет использоваться для поиска пользователей и определения имени сессии при регистрации студентов из /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Генератор терминов глоссария"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Разрешить преподавателям запрашивать термины глоссария, сгенерированные ИИ, в своем курсе. Это сгенерирует 20 терминов на основе названия курса и общего описания в инструменте описания курса. При повторном использовании исключит уже присутствующие в глоссарии термины (убедитесь, что контент может быть передан настроенным сервисам ИИ)."
+
+msgid "Video generator"
+msgstr "Генератор видео"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Генерирует видео на основе подсказок или контента с использованием ИИ (это может потреблять много токенов)."
+
+msgid "Course analyser"
+msgstr "Анализатор курсов"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Анализирует все ресурсы в одном или нескольких курсах и предварительно обучает модель ИИ для ответа на любые вопросы по этому или этим курсам (убедитесь, что контент может быть передан настроенным сервисам ИИ)."
+
+msgid "Test/development"
+msgstr "Тестирование/разработка"
+
+msgid "Crons"
+msgstr "Кроны"
+
+msgid "Editor"
+msgstr "Редактор"
+
+msgid "Gradebook"
+msgstr "Журнал оценок"
+
+msgid "Internationalization"
+msgstr "Интернационализация"
+
+msgid "User profiles"
+msgstr "Профили пользователей"
+
+msgid "Support tickets"
+msgstr "Заявки на поддержку"
+
+msgid "Webservices"
+msgstr "Веб-сервисы"
+
+msgid "Catalogue"
+msgstr "Каталог"
+
+msgid "Workflows"
+msgstr "Рабочие процессы"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Настройка редактируема в под-URL"
+
+msgid "Show JSON Template"
+msgstr "Показать шаблон JSON"
+
+msgid "JSON Template"
+msgstr "Шаблон JSON"
+
+msgid "Installing Xapian bindings"
+msgstr "Установка привязок Xapian"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Следующий фрагмент показывает пример установки привязок Xapian для PHP на Ubuntu 25.04 с PHP 8.3. Адаптируйте пути и версии под вашу среду."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Убедитесь, что у вас установлена только используемая версия PHP (например, 8.3) и избегайте смешивания нескольких версий с разными каталогами расширений."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "После того как расширение корректно загружено для CLI и веб-сервера, диагностика поиска выше должна сообщить, что модуль Xapian установлен."
+

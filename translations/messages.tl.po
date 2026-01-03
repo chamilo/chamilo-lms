@@ -17503,7 +17503,7 @@ msgid "To start recording press the red button"
 msgstr "Upang magsimula ng recording, pindutin ang pulang button"
 
 msgid "Voice record"
-msgstr "Voice record"
+msgstr "Rekord ng boses"
 
 msgid "Your browser does not send your recording to the platform, although you can save on your computer disk and send it later. To have all the features, we recommend using advanced browsers such as Firefox or Chrome."
 msgstr "Ang iyong browser ay hindi nagpapadala ng iyong recording sa platform, bagaman maaari mong i-save sa iyong computer disk at i-send ito mamaya. Upang magkaroon ng lahat ng tampok, inirerekomenda namin ang paggamit ng advanced browser tulad ng Firefox o Chrome."
@@ -17740,7 +17740,7 @@ msgid "A course category with the same name already exists."
 msgstr "May umiiral nang course category na may parehong pangalan."
 
 msgid "OpenID redirect"
-msgstr "OpenID redirect"
+msgstr "OpenID na muling idirekta"
 
 msgid "Blogs"
 msgstr "Mga Blog"
@@ -17830,13 +17830,13 @@ msgid "Import exercise"
 msgstr "I-import ang exercise"
 
 msgid "Multiple choice, multiple answers"
-msgstr "Multiple choice, multiple answers"
+msgstr "Multiple choice, maraming sagot"
 
 msgid "Multiple choice, unique answer"
-msgstr "Multiple choice, unique answer"
+msgstr "Multiple choice, iisang sagot"
 
 msgid "HotPotatoes files"
-msgstr "HotPotatoes files"
+msgstr "Mga file ng HotPotatoes"
 
 msgid "Area to avoid"
 msgstr "Area na dapat iwasan"
@@ -17941,7 +17941,7 @@ msgid "LaTeX code"
 msgstr "LaTeX code"
 
 msgid "LaTeX formula"
-msgstr "LaTeX formula"
+msgstr "Formula ng LaTeX"
 
 msgid "Are you sure you want to lock the attendance?"
 msgstr "Sigurado ka bang gusto mong i-lock ang attendance?"
@@ -18097,7 +18097,7 @@ msgid "Pages most linked"
 msgstr "Pinakamaraming nalink na pahina"
 
 msgid "Dead end pages"
-msgstr "Dead end pages"
+msgstr "Mga patay na dulo ng pahina"
 
 msgid "Newest pages"
 msgstr "Pinakabagong pahina"
@@ -19978,7 +19978,7 @@ msgid "Hide Learning Path PDF export"
 msgstr "Itago ang Learning Path PDF export"
 
 msgid "Hide the Learning Path PDF Export icon from the Learning Paths list"
-msgstr "Itago ang icon ng PDF Export ng Learning Path mula sa listahan ng Learning Paths"
+msgstr "Itago ang Learning Path PDF Export icon mula sa listahan ng Learning Paths"
 
 msgid "Default coach access days before session"
 msgstr "Default coach access days bago ang session"
@@ -21406,7 +21406,7 @@ msgid "Import from Moodle"
 msgstr "I-import mula sa Moodle"
 
 msgid "Import a Moodle course backup file (.mbz) into this Chamilo course"
-msgstr "I-import ang Moodle course backup file (.mbz) sa kurso ng Chamilo na ito"
+msgstr "Mag-import ng Moodle course backup file (.mbz) sa kursong ito ng Chamilo"
 
 msgid "The Moodle import feature might not support all content types from Moodle, given the fact that not all features are the same, and that Moodle and Chamilo both evolve continuously and rapidly. This import feature should be considered a work in progress. Please check https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import for more information."
 msgstr "Ang Moodle import feature ay maaaring hindi suportahan ang lahat ng content types mula sa Moodle, dahil hindi pareho ang lahat ng features, at patuloy na nag-e-evolve ang Moodle at Chamilo nang mabilis. Ang import feature na ito ay dapat ituring na work in progress. Mangyaring suriin ang https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import para sa karagdagang impormasyon."
@@ -24631,7 +24631,7 @@ msgid "Portfolio item unset as template"
 msgstr "Portfolio item na hindi na template"
 
 msgid "Global multiple answer dropdown"
-msgstr "Global multiple answer dropdown"
+msgstr "Global na dropdown ng maraming sagot"
 
 msgid "[Portfolio] New comment in post %s"
 msgstr "[Portfolio] Bagong komento sa post %s"
@@ -24880,7 +24880,7 @@ msgid "Multiple answer dropdown with exact selection"
 msgstr "Multiple answer dropdown na may eksaktong seleksyon"
 
 msgid "AI learning path generator"
-msgstr "AI learning path generator"
+msgstr "AI tagagawad ng landas ng pag-aaral"
 
 msgid "Topic"
 msgstr "Paksa"
@@ -25225,7 +25225,7 @@ msgid "Set HTML-code colours for each type of event to change the colour when di
 msgstr "Itakda ang mga kulay ng HTML-code para sa bawat uri ng event upang baguhin ang kulay kapag nagpapakita ng event."
 
 msgid "Agenda hover info"
-msgstr "Agenda hover info"
+msgstr "Impormasyon sa pag-hover ng Agenda"
 
 msgid "Customize the agenda on cursor hovering. Show agenda comment and/or description."
 msgstr "I-customize ang agenda sa cursor hovering. Ipakita ang agenda comment at/o opisyon."
@@ -25639,10 +25639,10 @@ msgid "Hide the context menu on video player"
 msgstr "Itago ang context menu sa video player"
 
 msgid "Video player renderers"
-msgstr "Video player renderers"
+msgstr "Mga renderer ng video player"
 
 msgid "Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
-msgstr "I-enable ang player renderers para sa YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
+msgstr "I-enable ang mga renderer ng player para sa YouTube, Vimeo, Facebook, DailyMotion, Twitch na media"
 
 msgid "Allow teachers to edit tests in learning paths"
 msgstr "Payagan ang mga guro na mag-edit ng mga pagsusulit sa learning paths"
@@ -25867,7 +25867,7 @@ msgid "Define an array with the list of user extra fields to add to the report."
 msgstr "I-define ang array na may listahan ng mga user extra fields na idadagdag sa report."
 
 msgid "Score grades model"
-msgstr "Score grades model"
+msgstr "Modelo ng grado ng marka"
 
 msgid "Define an array of score ranges and colors to display reports using this model. This allows you to show colors rather than numerical grades."
 msgstr "I-define ang array ng mga score ranges at colors upang ipakita ang mga reports gamit ang modelong ito. Nagbibigay-daan ito sa iyo na magpakita ng colors kaysa sa numerical grades."
@@ -27079,7 +27079,7 @@ msgid "Add username to e-mail notification of subscription to session"
 msgstr "Idagdag ang username sa e-mail notification ng subscription sa session"
 
 msgid "Add reset password link to e-mail notification of subscription to session"
-msgstr "Magdagdag ng reset password link sa e-mail notification ng subscription sa session"
+msgstr "Magdagdag ng link sa reset ng password sa e-mail notification ng subscription sa session"
 
 msgid "Pre-fill session fields with user fields"
 msgstr "Pre-fill ang session fields gamit ang user fields"
@@ -31558,7 +31558,7 @@ msgid "Some e-mail clients do not understand the descriptive LD+JSON format, sho
 msgstr "Hindi naiintindihan ng ilang e-mail client ang deskriptibong format ng LD+JSON, na ipinapakita ito bilang maluwag na JSON string sa huling user. Kung ito ang iyong kaso, maaari mong itakda ang variable sa ibaba sa 'false' upang hindi paganahin ang header na ito."
 
 msgid "Mail: DKIM headers"
-msgstr "Mail: DKIM headers"
+msgstr "E-mail: Mga header ng DKIM"
 
 msgid "Enter a JSON array of your DKIM configuration settings (see example)."
 msgstr "Magpasok ng JSON array ng iyong mga setting ng DKIM configuration (tingnan ang halimbawa)."
@@ -31586,4 +31586,214 @@ msgstr "Ipakita ang mga post ng base course sa session course"
 
 msgid "Limit identical email usage"
 msgstr "Limitahan ang paggamit ng parehong email"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Pinakamataas na bilang ng mga account na pinapayagan na magbahagi ng parehong address ng e-mail. Itakda sa 0 upang hindi paganahin ang limitasyong ito."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Payagan ang mga admin ng session na makita ang lahat ng user sa lahat ng URL"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Kung pinagana, ang mga admin ng session ay makakapaghanap at maglista ng mga user mula sa lahat ng access URL, kahit na sa kanilang kasalukuyang URL."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Paganahin ang posibilidad para sa mga user na pumili ng kanilang sariling timezone. Kapag na-configure, ang mga user ay makakakita ng mga deadline ng assignment at iba pang reference ng oras sa kanilang sariling timezone, na magbabawas ng mga error sa oras ng paghahatid."
+
+msgid "Redirect after login (per profile)"
+msgstr "I-redirect pagkatapos mag-login (bawat profile)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "I-define ang redirection bawat profile pagkatapos mag-login gamit ang JSON object tulad ng {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Itago ang checkbox ng pagtanggap sa legal sa pahina ng Terms and Conditions"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Kung itakda sa true, alisin ang checkbox na \"Nabasa ko at tinatanggap ko\" sa daloy ng pahina ng Terms and Conditions."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Array na nagdedepina ng host at port para sa LDAP server."
+
+msgid "Enable 2FA"
+msgstr "Paganahin ang 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Magdagdag ng mga field sa pahina ng pag-update ng password upang paganahin ang 2FA gamit ang TOTP authenticator app. Kapag hindi pinagana globally, hindi makikita ng mga user ang mga field ng 2FA at hindi hihilingin ng 2FA sa login, kahit na na-enable ito dati."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Ang ilang tampok ng Chamilo ay magko-connect sa exterior mula sa server. Halimbawa, upang masiguro na umiiral ang external content kapag gumagawa ng link o nagpapakita ng embedded page sa learning path. Kung gumagamit ang iyong Chamilo server ng proxy upang lumabas ng network nito, dito ang lugar upang i-configure ito."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Paganahin o hindi paganahin ang awtomatikong muling pagrehistro kapag nag-e-expire ang validity ng course. Dapat din paganahin ang kaugnay na cron job."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Ipakita ang natitirang araw sa My Sessions"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Kung pinagana, ang mga petsa ng session sa pahina ng \"My Sessions\" ay papalitan ng bilang ng natitirang araw."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Ipakita ang \"Pending surveys\" sa menu"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "I-display ang menu item na nagpapahintulot sa mga user na ma-access ang kanilang mga pending survey."
+
+msgid "Disclose AI assistance"
+msgstr "I-disclose ang tulong ng AI"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Ipakita ang tag sa anumang content o feedback na nabuo o na-co-generate ng anumang sistema ng AI, na nagpapatunay sa user na ang content ay binuo gamit ang tulong ng ilang sistema ng AI. Ang mga detalye tungkol sa aling AI system ang ginamit sa anong kaso ay napanatili sa loob ng database para sa audit, ngunit hindi direktang accessible ng final user."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "JSON configuration para sa course catalog: link settings, filters, sort options, at higit pa."
+
+msgid "Session Catalog Settings"
+msgstr "Session Catalog Settings"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "JSON configuration para sa session catalog: filters at display options."
+
+msgid "Show Course Descriptions"
+msgstr "Ipakita ang Course Descriptions"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "I-display ang mga description ng course sa loob ng catalog listing."
+
+msgid "Published Courses Only"
+msgstr "Published Courses Only"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Limitahan ang catalog sa mga course lamang na minarkahan bilang published."
+
+msgid "Display Catalog on Homepage"
+msgstr "Ipakita ang Catalog sa Homepage"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Ipakita ang course catalog block sa platform homepage."
+
+msgid "Hide Public Link"
+msgstr "Itago ang Public Link"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Alisin ang public URL link mula sa mga course card."
+
+msgid "Only Selected Courses"
+msgstr "Only Selected Courses"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Ipakita lamang ang manually selected courses sa catalog."
+
+msgid "Allow Student Browsing"
+msgstr "Payagan ang Student Browsing"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Payagan ang mga estudyante na mag-browse at mag-filter ng course catalog."
+
+msgid "Hide Private Courses"
+msgstr "Itago ang Private Courses"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "I-exclude ang mga private course mula sa catalog display."
+
+msgid "Show Courses & Sessions"
+msgstr "Ipakita ang Courses & Sessions"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Isama ang parehong courses at sessions sa catalog results."
+
+msgid "Auto Session Subscription"
+msgstr "Auto Session Subscription"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Paganahin ang awtomatikong subscription sa sessions para sa mga user."
+
+msgid "Subscription in Session View"
+msgstr "Subscription sa Session View"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Payagan ang mga user na mag-subscribe sa courses nang direkta mula sa kanilang session page."
+
+msgid "Enable redirection plugin"
+msgstr "Paganahin ang redirection plugin"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Array na nagdedepina ng 'days' at 'months' upang itakda ang account expiration date kapag unang nag-log in ang user."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Isang array ng role => number na kumakatawan sa bilang ng araw na may hawak ang account bago mag-expire, depende sa role."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Extra user field na ginagamit upang maghanap at pangalanan ng sessions"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Itinatakdang ito ng extra user field key (hal., \"company\") na gagamitin upang maghanap ng mga user at upang i-define ang pangalan ng session kapag nagre-register ng mga estudyante mula sa /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Glossary terms generator"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Payagan ang mga guro na humingi ng AI-generated glossary terms sa kanilang course. Ito ay magge-generate ng 20 terms batay sa course title at general description sa course description tool. Kung ginamit ng higit sa isang beses, ito ay mag-e-exclude ng mga terms na na present na sa glossary na iyon (siguraduhing ma-share ang content sa na-configure na AI services)."
+
+msgid "Video generator"
+msgstr "Generator ng video"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Gumagawa ng mga video batay sa mga prompt o nilalaman gamit ang AI (maaaring gumamit ng maraming token ito)."
+
+msgid "Course analyser"
+msgstr "Tagapag-analisa ng kurso"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Pinag-aaralan ang lahat ng resources sa isang o maraming kurso at pre-train ang AI model upang masagot ang anumang tanong tungkol sa kurso o mga kursong ito (tiyakin na ang nilalaman ay maaaring i-share sa nakukumpigura na AI services)."
+
+msgid "Test/development"
+msgstr "Pagsubok/pagtuklas"
+
+msgid "Crons"
+msgstr "Crons"
+
+msgid "Editor"
+msgstr "Editor"
+
+msgid "Gradebook"
+msgstr "Gradebook"
+
+msgid "Internationalization"
+msgstr "Internasyonalisasyon"
+
+msgid "User profiles"
+msgstr "Mga profile ng gumagamit"
+
+msgid "Support tickets"
+msgstr "Mga ticket ng suporta"
+
+msgid "Webservices"
+msgstr "Webservices"
+
+msgid "Catalogue"
+msgstr "Katalog"
+
+msgid "Workflows"
+msgstr "Mga workflow"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Maa-edit ang setting sa sub-URL"
+
+msgid "Show JSON Template"
+msgstr "Ipakita ang JSON Template"
+
+msgid "JSON Template"
+msgstr "JSON Template"
+
+msgid "Installing Xapian bindings"
+msgstr "Pag-install ng Xapian bindings"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Ang sumusunod na snippet ay nagpapakita ng halimbawa ng pag-install ng Xapian PHP bindings sa Ubuntu 25.04 na may PHP 8.3. I-adapt ang mga path at bersyon sa iyong sariling kapaligiran."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Siguraduhing iisa lamang ang bersyon ng PHP na ginagamit mo (halimbawa 8.3) at iwasan ang paghahalo ng maraming bersyon na may iba't ibang direktoryo ng extension."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Kapag na-load nang tama ang extension para sa parehong CLI at web server, dapat mag-ulat ang search diagnostics sa itaas na naka-install na ang Xapian module."
 

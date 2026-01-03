@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":是:有版權,, 否:無版權"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:資料夾,, application/msword:MsWord,, application/octet-stream:八位元組流,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:資料夾,, application/msword:MsWord,, application/octet-stream:八位元組串流,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":練習:練習,, 類比:類比,, 問卷:問卷,, 圖表:圖表,, 圖:圖,, 圖:圖,, 索引:索引,, 幻燈:幻燈,, 表:表,, 描述文本:描述文本,, 考試:考試,, 實驗:實驗,, 問題聲明:問題聲明,, 自我評價:自我評價,, 演講:演講"
@@ -31592,4 +31592,214 @@ msgstr "在工作坊課程中顯示基礎課程貼文"
 
 msgid "Limit identical email usage"
 msgstr "限制相同電子郵件使用"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "允許共用相同電子郵件地址的最大帳戶數。設為 0 以停用此限制。"
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "允許工作坊管理員查看所有 URL 的所有使用者"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "若啟用，工作坊管理員可搜尋並列出所有存取 URL 的使用者，無關其目前 URL。"
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "啟用使用者選擇自身時區的可能性。一旦設定，使用者即可在其自身時區查看作業截止日期及其他時間參考，減少提交時的錯誤。"
+
+msgid "Redirect after login (per profile)"
+msgstr "登入後重新導向（依角色）"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "使用 JSON 物件定義登入後依角色的重新導向，例如 {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "在條款與條件頁面隱藏法律接受核取方塊"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "若設為 true，將移除條款與條件頁面流程中的「我已閱讀並接受」核取方塊。"
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "定義 LDAP 伺服器的主機與連接埠陣列。"
+
+msgid "Enable 2FA"
+msgstr "啟用 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "在密碼更新頁面新增欄位，以使用 TOTP 驗證應用程式啟用 2FA。全球停用時，使用者不會看到 2FA 欄位，且登入時不會被要求 2FA，即使先前已啟用。"
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Chamilo 的某些功能將從伺服器連接到外部。例如，於建立連結或在學習路徑中顯示嵌入頁面時確認外部內容是否存在。若您的 Chamilo 伺服器使用代理伺服器離開其網路，此處即可設定。"
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "啟用或停用課程有效期屆滿時的自動重新註冊。相關 cron 工作也必須啟用。"
+
+msgid "Show remaining days in My Sessions"
+msgstr "在我的工作坊顯示剩餘天數"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "若啟用，「我的工作坊」頁面的工作坊日期將被取代為剩餘天數。"
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "在選單顯示「待完成問卷」"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "顯示選單項目，讓使用者存取其待完成問卷。"
+
+msgid "Disclose AI assistance"
+msgstr "揭露 AI 協助"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "在任何由 AI 系統生成或共同生成的內容或回饋上顯示標籤，向使用者證明內容是由某 AI 系統協助建置。關於使用哪個 AI 系統的細節保存在資料庫中以供稽核，但最終使用者無法直接存取。"
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "課程目錄的 JSON 設定：連結設定、篩選器、排序選項等。"
+
+msgid "Session Catalog Settings"
+msgstr "工作坊目錄設定"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "工作坊目錄的 JSON 設定：篩選器與顯示選項。"
+
+msgid "Show Course Descriptions"
+msgstr "顯示課程描述"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "在目錄清單中顯示課程描述。"
+
+msgid "Published Courses Only"
+msgstr "僅已發佈課程"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "將目錄限制為僅標記為已發佈的課程。"
+
+msgid "Display Catalog on Homepage"
+msgstr "在首頁顯示目錄"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "在平台首頁顯示課程目錄區塊。"
+
+msgid "Hide Public Link"
+msgstr "隱藏公開連結"
+
+msgid "Remove the public URL link from course cards."
+msgstr "從課程卡片中移除公開 URL 連結。"
+
+msgid "Only Selected Courses"
+msgstr "僅選取的課程"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "在目錄中僅顯示手動選取的課程。"
+
+msgid "Allow Student Browsing"
+msgstr "允許學生瀏覽"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "允許學生瀏覽並篩選課程目錄。"
+
+msgid "Hide Private Courses"
+msgstr "隱藏私人課程"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "從目錄顯示中排除私人課程。"
+
+msgid "Show Courses & Sessions"
+msgstr "顯示課程與班級"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "在目錄結果中包含課程與班級。"
+
+msgid "Auto Session Subscription"
+msgstr "自動班級訂閱"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "啟用使用者對班級的自動訂閱。"
+
+msgid "Subscription in Session View"
+msgstr "班級檢視中的訂閱"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "允許使用者從班級頁面直接訂閱課程。"
+
+msgid "Enable redirection plugin"
+msgstr "啟用重新導向外掛"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "定義使用者首次登入時設定帳戶到期日的「天數」與「月份」的陣列。"
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "表示依角色帳戶到期前天數的角色 => 數字陣列。"
+
+msgid "Extra user field used to search and name sessions"
+msgstr "用於搜尋與命名班級的額外使用者欄位"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "此設定定義額外使用者欄位金鑰（例如「company」），用於搜尋使用者，並在 /admin-dashboard/register 註冊學生時定義班級名稱。"
+
+msgid "Glossary terms generator"
+msgstr "詞彙生成器"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "允許教師在課程中要求 AI 生成詞彙詞條。此功能將根據課程標題與課程描述工具中的一般描述生成 20 個詞條。若多次使用，將排除該詞彙中已存在的詞條（確保內容可與設定的 AI 服務分享）。"
+
+msgid "Video generator"
+msgstr "影片生成器"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "使用 AI 根據提示或內容生成影片（這可能消耗大量權杖）。"
+
+msgid "Course analyser"
+msgstr "課程分析器"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "分析一或多個課程中的所有資源，並預訓練 AI 模型以回答關於此或這些課程的任何問題（確保內容可與設定的 AI 服務分享）。"
+
+msgid "Test/development"
+msgstr "測試／開發"
+
+msgid "Crons"
+msgstr "排程任務"
+
+msgid "Editor"
+msgstr "編輯器"
+
+msgid "Gradebook"
+msgstr "成績簿"
+
+msgid "Internationalization"
+msgstr "國際化"
+
+msgid "User profiles"
+msgstr "使用者個人資料"
+
+msgid "Support tickets"
+msgstr "支援票券"
+
+msgid "Webservices"
+msgstr "網路服務"
+
+msgid "Catalogue"
+msgstr "目錄"
+
+msgid "Workflows"
+msgstr "工作流程"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "子 URL 可編輯設定"
+
+msgid "Show JSON Template"
+msgstr "顯示 JSON 範本"
+
+msgid "JSON Template"
+msgstr "JSON 範本"
+
+msgid "Installing Xapian bindings"
+msgstr "安裝 Xapian 綁定"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "以下片段顯示在 Ubuntu 25.04 上搭配 PHP 8.3 安裝 Xapian PHP 綁定的範例。請依您的環境調整路徑與版本。"
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "確保僅安裝您實際使用的 PHP 版本（例如 8.3），避免混合多個版本的不同擴充目錄。"
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "一旦 CLI 與網頁伺服器均正確載入擴充，上方的搜尋診斷應報告 Xapian 模組已安裝。"
 

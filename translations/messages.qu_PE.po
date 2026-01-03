@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ruraynipas ñawpaq: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Rurasqa rakina: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ari:copyright nisqawan,, mana:mana copyright nisqawan"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Puqyu,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Phuru,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación"
@@ -31592,4 +31592,214 @@ msgstr "Suyukuna yachachisqa rurakunapi ñawpaq yachachisqa rurakunaq willakuyku
 
 msgid "Limit identical email usage"
 msgstr "Rimal rurakunaq tupankunata k'anchay"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Ima yuraq runakunaq email nisqapakama allin. 0 kaqman qillayqa manam kanchu."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Session adminsqa tukuy URLmanta runakunata rikunayku"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Kikin munayniykama, session adminsqa tukuy access URLkunamanta runakunata maskhaytawan qillqayta atinanku, manam kunaq URLmantaqa."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Runakunaq pacha zonaqta munaspaykunata qallariy. Kamarispa, runakunaq wasi pacha zonasnqmanta qatiykuna, kasqataq qatiykuna rikunku, hinamanta willakuytaq kasqakunamanta pantasqakuna pisqakunamanta."
+
+msgid "Redirect after login (per profile)"
+msgstr "Riwanakuytaq qatiy (profile by profile)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "JSON nisqawan riwanakuyta qatiy profile by profile {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Legal accept checkboxta pakasiy Terms and Conditions p'anqapi"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Manam kanchuqa, \"Ñawinchisqaniwan munani\" checkboxta Terms and Conditions p'anqapi qispilla."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Array nisqawan hostwan puerto LDAP serverpaq."
+
+msgid "Enable 2FA"
+msgstr "2FA qallariy"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Contraseña willakuy p'anqapi camposnita 2FA qallariy TOTP authenticator appwan. Tukuykama manam qallarqanqa, runakuna manam 2FA camposnitaq rikunkunachu, manam riwanakuytaq 2FA qispillakunachu, kamarispaq 2FA qallarqanku."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Chamiloq featuresqa servermanta llanqapi hinaq. Rurasqakunamanta linkta kamachispaq utaq learning pathpi embedded p'anqata rikuispaq. Mana proxyqa, Chamilo serverqa redmanta lluqsiyqa, kaypi kamarikuy."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Kursotaq kuti chispaq cron jobqa qallarisqa kasqa."
+
+msgid "Show remaining days in My Sessions"
+msgstr "My Sessionspi kuti p'unchaykuna rikuy"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Qallarisqaqa, \"My Sessions\" p'anqapi session p'unchaykuna kuti p'unchaykunawanmaskhan."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Menuqpi \"Pending surveys\" rikuy"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Menu itemta rikuy runakunaq pending surveysninta maskhan."
+
+msgid "Disclose AI assistance"
+msgstr "AI yanapayta qawachiy"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "AI systemwan ruraq utaq co-ruraq contentwan feedbackwan tagta rikuy, runapaq yachanakuy AI systemwan ruraq. AI system imatawan imapi kamarisqa databasepi, auditpaq, manam final userpaqqa."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "JSON configuration course catalogpaq: link settings, filters, sort options, imataq."
+
+msgid "Session Catalog Settings"
+msgstr "Session Catalog Settings"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "JSON configuration session catalogpaq: filterswan display options."
+
+msgid "Show Course Descriptions"
+msgstr "Course Descriptions rikuy"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Course descriptions rikuy catalog listingpi."
+
+msgid "Published Courses Only"
+msgstr "Published Courses Only"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Catalogta published courseswanma kamarichiy."
+
+msgid "Display Catalog on Homepage"
+msgstr "Katalugu ruraq päninpi rikuchiy"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Yachay wasipi kursu katalugu bloketa rikuchiy."
+
+msgid "Hide Public Link"
+msgstr "Pukyukunata qulluy"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Kursu kartakunamanta pukyu URL suyuta qichuy."
+
+msgid "Only Selected Courses"
+msgstr "Ñawpaqichisqa kursokunamanta qhatik"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Katalogupi qhatikunapaq yachaytaq ñawpaqichisqa kursokunataq rikuchiy."
+
+msgid "Allow Student Browsing"
+msgstr "Yachasqakunata phawachiy"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Yachasqakunata kursu kataloguta phawayta hapiyta kutichiy."
+
+msgid "Hide Private Courses"
+msgstr "Suyukuy kursokunata qulluy"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Katalogu rikuchisqamanta suyukuy kursokunata qispichiy."
+
+msgid "Show Courses & Sessions"
+msgstr "Kursokuna & Suyukuykunata rikuchiy"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Katalogu risulkunaman kursokunaq suyukuykunataq ykupamanchay."
+
+msgid "Auto Session Subscription"
+msgstr "Suyukuyta qhatichisqa qillqay"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Rakinakunaman suyukuykunata qhatichisqa qillqayta masachinay."
+
+msgid "Subscription in Session View"
+msgstr "Suyukuy rikch'aynipi qillqay"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Rakinakunata suyukuy päninmanta kursokunaman qillqayta kutichiy."
+
+msgid "Enable redirection plugin"
+msgstr "Redirección plugin masachinay"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Rakinakuna ñawpaq rurayninpi suyuku kutichisqa pachaq 'p'anchakunaq' phallchakunaq array."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Kutichisqa pachaq suyukuq rakinamanta ñawpaq kutichisqa pachaq roll => número array."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Suyukuykunata maskhayta sutichaytaq yusupak phuruq"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Kay kutichisqa yusupak phuruq llawquta (sutipaq \"kamipañakuy\") /admin-dashboard/register-manta yachasqakunata qillqaypi rakinakunata maskhayta suyukuy sutita qillqaytaq ñawpaq qillqay."
+
+msgid "Glossary terms generator"
+msgstr "Simi qillqakunaq generaduri"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Yachaytaqkunata kursopi AI-generadokuna simi qillqakunata mañachinay. Kay 20 qillqakunata kursu sutimanta kursu sutipakunamantaq generachiy. Ñawpaqqa rurakunapaq, glossarypi kashpan qillqakunata qispichiy (kutichisqa AI serviçiokunawan contenido compartiyta allinchay)."
+
+msgid "Video generator"
+msgstr "Willakuy generaduri"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "AIwan promtukunaq utaq contenido nisqamanta willakuykunata generachiy (kay tokenkunaqa achkha kanchay)."
+
+msgid "Course analyser"
+msgstr "Kursu analizaduri"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Huk kutikamaq kursopi willakuykunata analizachiy, AI modelta pre-entrenachiy kaymantaq kursokunamanta rurakunapaq mañakunapaq (kutichisqa AI serviçiokunawan contenido compartiyta allinchay)."
+
+msgid "Test/development"
+msgstr "Prueba/desarrollu"
+
+msgid "Crons"
+msgstr "Cronkuna"
+
+msgid "Editor"
+msgstr "Editor"
+
+msgid "Gradebook"
+msgstr "Notakuna"
+
+msgid "Internationalization"
+msgstr "Internasionalisatsiyun"
+
+msgid "User profiles"
+msgstr "Rakinakuna perfilkuna"
+
+msgid "Support tickets"
+msgstr "Yachay tiketkuna"
+
+msgid "Webservices"
+msgstr "Web serviçiokuna"
+
+msgid "Catalogue"
+msgstr "Katalugu"
+
+msgid "Workflows"
+msgstr "Willakuykuna"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Sub-URLkunapi editachinakuy"
+
+msgid "Show JSON Template"
+msgstr "JSON plantillata rikuchiy"
+
+msgid "JSON Template"
+msgstr "JSON plantilla"
+
+msgid "Installing Xapian bindings"
+msgstr "Xapian bindings instalachiy"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Kay fragmentu Xapian PHP bindings instalacion nisqata rikuchiy Ubuntu 25.04pi PHP 8.3wan. Ñawpaqkamayuq pachaq versyonkunaq ñawpaqkamayuqkamayuqta adaptachiy."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Manam kay PHP versyunkaqchu allin kashpaq (sutipaq 8.3) extension direkturyukunaq phinakunata qispichiy."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Extension CLIwan web serverwanqam correctly cargadokunapaq, search diagnostics Xapian módulo instaladokunata willan."
 

@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:bản quyền,, no:không bản quyền"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Thư mục,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Thư mục,, application/msword:MsWord,, application/octet-stream:Dòng octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:bài tập,,      simulation:mô phỏng,,      questionnaire:bảng câu hỏi,,      diagram:sơ đồ,,      figure:hình vẽ,,      graph:đồ thị,,      index:chỉ mục,,      slide:slide,,      table:bảng,,      narrative text:văn bản kể chuyện,,      exam:kỳ thi,,      experiment:thí nghiệm,,      problem statement:đề bài,,      self assessment:tự đánh giá,,      lecture:bài giảng"
@@ -31592,4 +31592,214 @@ msgstr "Hiển thị bài đăng khóa học cơ bản trong khóa học phiên"
 
 msgid "Limit identical email usage"
 msgstr "Giới hạn sử dụng email trùng lặp"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Số lượng tài khoản tối đa được phép chia sẻ cùng một địa chỉ e-mail. Đặt thành 0 để vô hiệu hóa giới hạn này."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Cho phép quản trị viên phiên xem tất cả người dùng trên tất cả URL"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Nếu được kích hoạt, quản trị viên phiên có thể tìm kiếm và liệt kê người dùng từ tất cả URL truy cập, bất kể URL hiện tại của họ."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Kích hoạt khả năng người dùng chọn múi giờ của riêng họ. Khi được cấu hình, người dùng sẽ có thể xem hạn chót bài tập và các tham chiếu thời gian khác theo múi giờ của họ, giúp giảm lỗi khi nộp bài."
+
+msgid "Redirect after login (per profile)"
+msgstr "Chuyển hướng sau đăng nhập (theo hồ sơ)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Xác định chuyển hướng theo hồ sơ sau đăng nhập sử dụng đối tượng JSON như {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Ẩn hộp kiểm chấp nhận pháp lý trên trang Điều khoản và Điều kiện"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Nếu đặt thành true, loại bỏ hộp kiểm \"Tôi đã đọc và chấp nhận\" trong quy trình trang Điều khoản và Điều kiện."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Mảng xác định máy chủ và cổng cho máy chủ LDAP."
+
+msgid "Enable 2FA"
+msgstr "Kích hoạt 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Thêm các trường trên trang cập nhật mật khẩu để kích hoạt 2FA sử dụng ứng dụng xác thực TOTP. Khi vô hiệu hóa toàn cục, người dùng sẽ không thấy các trường 2FA và không được yêu cầu 2FA khi đăng nhập, ngay cả nếu họ đã kích hoạt trước đó."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Một số tính năng của Chamilo sẽ kết nối ra ngoài từ máy chủ. Ví dụ để đảm bảo nội dung bên ngoài tồn tại khi tạo liên kết hoặc hiển thị trang nhúng trong lộ trình học tập. Nếu máy chủ Chamilo của bạn sử dụng proxy để ra khỏi mạng, đây là nơi cấu hình nó."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Kích hoạt hoặc vô hiệu hóa tự động tái đăng ký khi hiệu lực khóa học hết hạn. Công việc cron liên quan cũng phải được kích hoạt."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Hiển thị số ngày còn lại trong Phiên của tôi"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Nếu được kích hoạt, ngày phiên trên trang \"Phiên của tôi\" sẽ được thay thế bằng số ngày còn lại."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Hiển thị \"Khảo sát đang chờ\" trong menu"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Hiển thị mục menu cho phép người dùng truy cập các khảo sát đang chờ của họ."
+
+msgid "Disclose AI assistance"
+msgstr "Công khai hỗ trợ AI"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Hiển thị thẻ trên bất kỳ nội dung hoặc phản hồi nào được tạo hoặc đồng tạo bởi hệ thống AI, chứng minh cho người dùng rằng nội dung được xây dựng với sự hỗ trợ của hệ thống AI. Chi tiết về hệ thống AI nào được sử dụng trong trường hợp nào được lưu trong cơ sở dữ liệu để kiểm toán, nhưng không trực tiếp truy cập bởi người dùng cuối."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "Cấu hình JSON cho danh mục khóa học: cài đặt liên kết, bộ lọc, tùy chọn sắp xếp, và hơn thế."
+
+msgid "Session Catalog Settings"
+msgstr "Cài đặt Danh mục Phiên"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "Cấu hình JSON cho danh mục phiên: bộ lọc và tùy chọn hiển thị."
+
+msgid "Show Course Descriptions"
+msgstr "Hiển thị Mô tả Khóa học"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Hiển thị mô tả khóa học trong danh sách danh mục."
+
+msgid "Published Courses Only"
+msgstr "Chỉ Khóa học Đã Xuất bản"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Giới hạn danh mục chỉ các khóa học được đánh dấu là đã xuất bản."
+
+msgid "Display Catalog on Homepage"
+msgstr "Hiển thị Danh mục trên Trang chủ"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Hiển thị khối danh mục khóa học trên trang chủ nền tảng."
+
+msgid "Hide Public Link"
+msgstr "Ẩn Liên kết Công khai"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Xóa liên kết URL công khai khỏi thẻ khóa học."
+
+msgid "Only Selected Courses"
+msgstr "Chỉ Các Khóa Học Được Chọn"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Hiển thị chỉ các khóa học được chọn thủ công trong danh mục."
+
+msgid "Allow Student Browsing"
+msgstr "Cho Phép Học Sinh Duyệt"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Cho phép học sinh duyệt và lọc danh mục khóa học."
+
+msgid "Hide Private Courses"
+msgstr "Ẩn Khóa Học Riêng Tư"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Loại trừ các khóa học riêng tư khỏi hiển thị danh mục."
+
+msgid "Show Courses & Sessions"
+msgstr "Hiển Thị Khóa Học & Phiên"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Bao gồm cả khóa học và phiên trong kết quả danh mục."
+
+msgid "Auto Session Subscription"
+msgstr "Đăng Ký Phiên Tự Động"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Bật đăng ký phiên tự động cho người dùng."
+
+msgid "Subscription in Session View"
+msgstr "Đăng Ký Trong Trang Phiên"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Cho phép người dùng đăng ký khóa học trực tiếp từ trang phiên của họ."
+
+msgid "Enable redirection plugin"
+msgstr "Bật plugin chuyển hướng"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Mảng định nghĩa 'days' và 'months' để đặt ngày hết hạn tài khoản khi người dùng đăng nhập lần đầu."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Mảng vai trò => số đại diện cho số ngày tài khoản tồn tại trước khi hết hạn, tùy thuộc vào vai trò."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Trường người dùng bổ sung dùng để tìm kiếm và đặt tên phiên"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Cài đặt này định nghĩa khóa trường người dùng bổ sung (ví dụ: \"company\") sẽ được dùng để tìm kiếm người dùng và định nghĩa tên phiên khi đăng ký học sinh từ /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Trình tạo thuật ngữ từ điển"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Cho phép giáo viên yêu cầu thuật ngữ từ điển được tạo bởi AI trong khóa học của họ. Điều này sẽ tạo 20 thuật ngữ dựa trên tiêu đề khóa học và mô tả chung trong công cụ mô tả khóa học. Nếu sử dụng nhiều hơn một lần, nó sẽ loại trừ các thuật ngữ đã có trong từ điển đó (đảm bảo nội dung có thể chia sẻ với các dịch vụ AI đã cấu hình)."
+
+msgid "Video generator"
+msgstr "Trình tạo video"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Tạo video dựa trên gợi ý hoặc nội dung bằng AI (có thể tiêu tốn nhiều token)."
+
+msgid "Course analyser"
+msgstr "Trình phân tích khóa học"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Phân tích tất cả tài nguyên trong một hoặc nhiều khóa học và huấn luyện trước mô hình AI để trả lời bất kỳ câu hỏi nào về khóa học này hoặc các khóa học đó (đảm bảo nội dung có thể chia sẻ với các dịch vụ AI đã cấu hình)."
+
+msgid "Test/development"
+msgstr "Kiểm tra/phát triển"
+
+msgid "Crons"
+msgstr "Crons"
+
+msgid "Editor"
+msgstr "Trình soạn thảo"
+
+msgid "Gradebook"
+msgstr "Sổ điểm"
+
+msgid "Internationalization"
+msgstr "Quốc tế hóa"
+
+msgid "User profiles"
+msgstr "Hồ sơ người dùng"
+
+msgid "Support tickets"
+msgstr "Vé hỗ trợ"
+
+msgid "Webservices"
+msgstr "Dịch vụ web"
+
+msgid "Catalogue"
+msgstr "Danh mục"
+
+msgid "Workflows"
+msgstr "Quy trình làm việc"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Cài đặt có thể chỉnh sửa trên các URL con"
+
+msgid "Show JSON Template"
+msgstr "Hiển thị Mẫu JSON"
+
+msgid "JSON Template"
+msgstr "Mẫu JSON"
+
+msgid "Installing Xapian bindings"
+msgstr "Cài đặt Xapian bindings"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Đoạn mã sau cho thấy ví dụ cài đặt Xapian PHP bindings trên Ubuntu 25.04 với PHP 8.3. Điều chỉnh đường dẫn và phiên bản phù hợp với môi trường của bạn."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Đảm bảo bạn chỉ có phiên bản PHP thực sự sử dụng (ví dụ 8.3) và tránh trộn lẫn nhiều phiên bản với các thư mục phần mở rộng khác nhau."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Khi phần mở rộng đã được tải đúng cho cả CLI và máy chủ web, chẩn đoán tìm kiếm ở trên nên báo cáo rằng mô-đun Xapian đã được cài đặt."
 

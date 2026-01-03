@@ -31587,3 +31587,213 @@ msgstr "د سیشن کورس کې بنسټیز کورس پوسټونه ښکار�
 msgid "Limit identical email usage"
 msgstr "د ورته برېښنالیک استعمال محدود کړئ"
 
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "د ورته برېښنالیک پتې شریکولو لپاره اجازه شوي حسابونو اعظمي شمېر. د دې محدودیت غیرفعال کولو لپاره ۰ ته واچوئ."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "د ټولو URL کې ټولو کاروونکو ته د غونډې ادمینانو ته اجازه ورکړئ"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "که فعال وي، غونډې ادمینان کولی شي د ټولو لاسرسي URL څخه کاروونکي وپلټي او فهرست کړي، پرته له دې چې دوی د اوسني URL څخه وي."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "کاروونکو ته د خپل وختي زون انتخاب کولو امکان فعال کړئ. یوځل چې ترتیب شي، کاروونکي به وکولای شي د دوی د وختي زون کې د تکالیفو وروستیو نیټو او نورو وختي حوالو وګوري، چې د لیږلو وخت کې غلطۍ به کمې کړي."
+
+msgid "Redirect after login (per profile)"
+msgstr "د لاګین وروسته لارښوونه (د پروفایل له مخې)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "د لاګین وروسته د پروفایل له مخې لارښوونه وټاکئ د JSON شی په کارولو سره لکه {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "د شرایطو او ضمانتونو پاڼه کې قانوني قبوله کولو چک باکس پټ کړئ"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "که حقیقت ته واچول شي، د شرایطو او ضمانتونو پاڼې جریان کې \"ما لوستلي او منلي یم\" چک باکس لرې کړي."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "د LDAP سرور لپاره د کوربه او پورت د ټاکلو ډله."
+
+msgid "Enable 2FA"
+msgstr "۲FA فعال کړئ"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "د پاسورډ تازه کولو پاڼه کې د TOTP تصدیق کوونکي ایپ کارولو سره ۲FA فعالولو لپاره ساحې اضافه کړئ. کله چې عمومي غیرفعال وي، کاروونکي به ۲FA ساحې ونه ګوري او د لاګین پر مهال به د ۲FA لپاره ونه غوښتل شي، حتی که دوی یې مخکې فعال کړي وي."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "د Chamilo ځینې ځانګړتیاوې به د سرور څخه بهر ته وصل شي. د بېلګې په توګه د لینک جوړولو یا د زده کړې لاره کې یو嵌入 شوې پاڼه ښودلو لپاره چې ډاډ ترلاسه کړي چې بهرني محتوا شته. که ستاسې Chamilo سرور د خپلې شبکې څخه بهر کېدلو لپاره پروکسي کاروي، دا به د هغه ترتیب کولو ځای وي."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "د کورس اعتبار پای ته رسیدلو وخت کې اتومات بیا ثبت کولو امکان فعال یا غیرفعال کړئ. اړوند کرون کار هم باید فعال وي."
+
+msgid "Show remaining days in My Sessions"
+msgstr "په زما غونډو کې پاتې ورځې ښکاره کړئ"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "که فعال وي، د \"زما غونډې\" پاڼې کې غونډې نیټې به د پاتې ورځو شمېر لخوا ځای پر ځای شي."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "په مینو کې \"باقي پاتې سروې\" ښکاره کړئ"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "یو مینو آیت ښکاره کړئ چې کاروونکو ته د دوی باقي پاتې سروېو ته لاسرسی ورکوي."
+
+msgid "Disclose AI assistance"
+msgstr "AI مرسته علني کړئ"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "په هر محتوا یا فیډبیک باندې چې د هر AI سیسټم لخوا جوړ یا مشترک جوړ شوی وي، یو ټګ ښکاره کړئ، چې کاروونکي ته ثابته کړي چې محتوا د ځینې AI سیسټم په مرسته جوړ شوی دی. د هغه AI سیسټم په اړه چې په کوم حالت کې کارول شوی تفصیلات په ډیټابیس کې د تفتیش لپاره ساتل کېږي، خو د وروستي کاروونکي لخوا مستقیم لاسرسي نشته."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "د کورس کټالاګ لپاره JSON ترتیب: لینک ترتیبونه، فلټرونه، ترتیب اختیارونه او نور."
+
+msgid "Session Catalog Settings"
+msgstr "د غونډې کټالاګ ترتیبونه"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "د غونډې کټالاګ لپاره JSON ترتیب: فلټرونه او ښودلو اختیارونه."
+
+msgid "Show Course Descriptions"
+msgstr "د کورس بیانات ښکاره کړئ"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "د کټالاګ فهرست کې د کورس بیانات ښکاره کړئ."
+
+msgid "Published Courses Only"
+msgstr "یونو صرف خپور شوي کورسونه"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "کټالاګ یوازې هغو کورسونو ته محدود کړئ چې خپور شوي ګڼل کېږي."
+
+msgid "Display Catalog on Homepage"
+msgstr "په کور پاڼه کې کټالاګ ښکاره کړئ"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "په پلیټفارم کور پاڼه کې د کورس کټالاګ بلاک ښکاره کړئ."
+
+msgid "Hide Public Link"
+msgstr "عام لینک پټ کړئ"
+
+msgid "Remove the public URL link from course cards."
+msgstr "د کورس کارډونو څخه عام URL لینک لرې کړئ."
+
+msgid "Only Selected Courses"
+msgstr "یونو ټاکل شوي کورسونه"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "په کټالاګ کې یوازې لاسي ټاکل شوي کورسونه ښکاره کړئ."
+
+msgid "Allow Student Browsing"
+msgstr "د زده کونکي کتنه اجازه ورکړئ"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "د زده‌کوونکو اجازه ورکول چې د کورس کیټالۍګ وګوري او فلټر کړي."
+
+msgid "Hide Private Courses"
+msgstr "خصوصي کورسونه پټ کړئ"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "خصوصي کورسونه د کیټالۍګ ښودلو څخه ګټه ورکړئ."
+
+msgid "Show Courses & Sessions"
+msgstr "کورسونه او غونډې ښکاره کړئ"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "د کیټالۍګ پایلو کې کورسونه او غونډې دواړه شامل کړئ."
+
+msgid "Auto Session Subscription"
+msgstr "آټو غونډې ګډون"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "د کاروونکو لپاره غونډو ته اتومات ګډون فعال کړئ."
+
+msgid "Subscription in Session View"
+msgstr "د غونډې لید کې ګډون"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "کاروونکو ته اجازه ورکړئ چې د خپلې غونډې پاڼې څخه مستقیم کورسونو ته ګډون وکړي."
+
+msgid "Enable redirection plugin"
+msgstr "د بیا لارښوونې پلګین فعال کړئ"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "د 'ورځې' او 'میاشتې' ډله چې د کاروونکي لومړی ګډون پر مهال د حسابی پای ته رسیدو نیټه ټاکي."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "د رول => شمېره ډله چې د حسابی پای ته رسیدو دمخه د ورځو شمېر ښیي، د رول پورې اړوند."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "اضافي کاروونکي ډګر چې د غونډو لټون او نومولو لپاره کارول کیږي"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "دا ترتیب د اضافي کاروونکي ډګر کلید ټاکي (د بیلګې په توګه، \"شرکت\") چې د کاروونکو لټون لپاره او د زده‌کوونکو د ګډون پر مهال د غونډې نوم ټاکلو لپاره د /admin-dashboard/register څخه کارول کیږي."
+
+msgid "Glossary terms generator"
+msgstr "د اصطلاحاتو قاموس جوړوونکی"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "استادانو ته اجازه ورکړئ چې د خپل کورس کې د AI جوړ شوي قاموس اصطلاحات غواړي. دا به د کورس سرلیک او د کورس تشریحي وسیلې کې عمومي تشریح پر بنسټ ۲۰ اصطلاحات جوړ کړي. که څو ځله کارول شي، هغه اصطلاحات به ګټه ورکړي چې په هغه قاموس کې موجود دي (ډاډ ترلاسه کړئ چې منځپانګه د تنظیم شوي AI خدماتو سره شریکیدای شي)."
+
+msgid "Video generator"
+msgstr "ویدیو جوړوونکی"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "د لارښوونو یا منځپانګې پر بنسټ ویډیوګانې جوړوي د AI په کارولو سره (دا ممکن ډېر ټوکنونه مصرف کړي)."
+
+msgid "Course analyser"
+msgstr "کورس تحلیل کوونکی"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "د یو یا ډېرو کورسونو ټولې سرچینې تحلیل کوي او AI ماډل مخکیني روزنه ورکوي چې د دې یا دې کورسونو په اړه هرې پوښتنې ته ځواب ووایي (ډاډ ترلاسه کړئ چې منځپانګه د تنظیم شوي AI خدماتو سره شریکیدای شي)."
+
+msgid "Test/development"
+msgstr "ازموینه/پراختیا"
+
+msgid "Crons"
+msgstr "کرونونه"
+
+msgid "Editor"
+msgstr "سمادیتونکی"
+
+msgid "Gradebook"
+msgstr "درجه‌ګذارن"
+
+msgid "Internationalization"
+msgstr "نړیوال化"
+
+msgid "User profiles"
+msgstr "کاروونکي پروفایلونه"
+
+msgid "Support tickets"
+msgstr "ملاتړ ټکټونه"
+
+msgid "Webservices"
+msgstr "ويب خدمات"
+
+msgid "Catalogue"
+msgstr "کیټالۍګ"
+
+msgid "Workflows"
+msgstr "کاري بهیرونه"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "ترتیب په فرعي URL کې سمادیتلی دی"
+
+msgid "Show JSON Template"
+msgstr "JSON قالب ښکاره کړئ"
+
+msgid "JSON Template"
+msgstr "JSON قالب"
+
+msgid "Installing Xapian bindings"
+msgstr "د Xapian اتصالات نصب کول"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "لاندې ټوټه د Xapian PHP اتصالاتو د Ubuntu 25.04 کې د PHP 8.3 سره د نصبولو یوه بیلګه ښیي. لارې او نسخې خپلې چاپیریال ته ورته کړئ."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "ډاډ ترلاسه کړئ چې تاسو یوازې هغه PHP نسخې لرئ چې واقعاً کاروئ (د بیلګې په توګه 8.3) او ډېر نسخې د مختلفو توسیعي ډایریکټريونو سره مخلوط مه کوئ."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "کله چې توسیعه د CLI او ویب سرور دواړو لپاره سم بار شي، د لټون تشخیص باید راپور ورکړي چې Xapian ماډل نصب دی."
+

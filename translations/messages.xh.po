@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : balaza iBody Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -31586,4 +31586,214 @@ msgstr "Bonisa iiposti zesifundo esisisiseko kwisifundo seeseshini"
 
 msgid "Limit identical email usage"
 msgstr "Linganisa ukusetyenziswa kweemejile ezifanayo"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Inani eliphezulu lama-akhawunti avunyelwe ukwabelwana ngenombolo ye-imeyile efanayo. Misela ku-0 ukuze ukhuphele phantsi umda woku."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Vumela abalawuli beeseshini ukuba babone bonke abasebenzisi kuyo yonke ii-URLs"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Ukuba ivuliwe, abalawuli beeseshini bayakwazi ukukhangela kunye nokudwelisa abasebenzisi kubo bonke ama-URL okufikelela, kungakhathaleli i-URL yabo yangoku."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Vula amathuba okuba abasebenzisi bakhethe i-timezone yabo. Nje ukuba iqwalaselwe, abasebenzisi baya kuba nakho ukubona imihla yokugqibezela izinto ezinikezelwayo kunye nezinye iireferensi zexesha kwizifunga zabo, eziza kunciphisa iimpazamo ngexesha lokuhanjiswa."
+
+msgid "Redirect after login (per profile)"
+msgstr "Qondisa emva kokungena (ngephrofayili)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Chaza ukubuyiselwa ngokweprofayili emva kokungena usebenzisa i-JSON object enje {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Fihla ibhokisi lokuvuma ezomthetho kwiphepha leMigaqo neMiqathango"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Ukuba isetiwe kwi-true, isusa ibhokisi le-\"Ndifunde kwaye ndamkelela\" kwiphepha leMigaqo neMiqathango."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Uluhlu oluchaza umkhosi kunye nezitshixo ze-LDAP server."
+
+msgid "Enable 2FA"
+msgstr "Vula 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Faka iintsima kwiphepha lokuhlaziywa kwephasiwedi ukuze kuvulwe 2FA usebenzisa i-TOTP authenticator app. Xa ikhutshelwe kancinci, abasebenzisi abayi kubona iintsima ze-2FA kwaye abayi kucelwa 2FA ekungeni, nditye ndaba babeyivule ngaphambili."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Ezinye iimpawu ze-Chamilo ziya kudibanisa ngaphandle kweseva. Umzekelo ukuqinisekisa ukuba umxholo wangaphandle ukhona xa udala ikhonkco okanye ubonisa iphepha elidityaniswe kwindlela yokufunda. Ukuba iseva yakho ye-Chamilo isebenzisa i-proxy ukuze iphume kwinethiwekhi yayo, le yindawo yokuyiqulunqa."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Vula okanye khupha ubhaliso oluzenzekelayo oluthe chu xa uphelelwa lixesha lokusebenza kwikhosi. Umsebenzi we-cron onxulumene kufuneka uvinjwe."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Bonisa iintsuku ezisele kwi-My Sessions"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Ukuba ivuliwe, imihla yeseshini kwiphepha le-\"My Sessions\" iya kuthenjwa ngenani leentsuku ezisele."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Bonisa \"Ihlwlelwa phantsi kwezophando\" kwimenyu"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Bonisa into yemenyu evumela abasebenzisi ukuba bafikelele kwiiphando zabo ezilindelekileyo."
+
+msgid "Disclose AI assistance"
+msgstr "Bhenga uncedo lwe-AI"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Bonisa ithegi kuyo nayiphi na imixholo okanye ingxelo eyenziwe okanye eyenziwe ngokudibeneyo yinkqubo ye-AI, ibonisa kumsebenzisi ukuba umxholo wakhiwe ngoncedo lwenkqubo ethile ye-AI. Iinkcukacha malunga nenkqubo eyini eyayisetyenziswe kwezinye iimeko zigcinwa ngaphakathi kwedatha yokuphicotha, kodwa azifikeleli ngokuthe ngqo kumsebenzisi wokugqibela."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "Uqulunqo lwe-JSON lwekataloji yekhosi: iisetingi zelinki, izihluzi, izikhetho zokulungisa, kunye nokunye."
+
+msgid "Session Catalog Settings"
+msgstr "Iisetingi zeKataloji yeSeshini"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "Uqulunqo lwe-JSON lwekataloji yeseshini: izihluzi kunye nokubonisa izikhetho."
+
+msgid "Show Course Descriptions"
+msgstr "Bonisa Iinkcazo zeKhosi"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Bonisa iinkcazo zekhosi ngaphakathi koluhlu lwekataloji."
+
+msgid "Published Courses Only"
+msgstr "Iikhosi Ezipapashiweyo Kuphela"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Linganisa ikataloji kuphela kwiikhosi eziphawulwe njengzipapashiweyo."
+
+msgid "Display Catalog on Homepage"
+msgstr "Bonisa iKataloji kwiphepha lasekhaya"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Bonisa ibhloko yekataloji yekhosi kwiphepha lasekhaya leqonga."
+
+msgid "Hide Public Link"
+msgstr "Fihla iKhonkco loLuntu"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Susa ikhonkco le-URL loLuntu kumakhadi ekhosi."
+
+msgid "Only Selected Courses"
+msgstr "Iikhosi Ezikhethiweyo Kuphela"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Bonisa kuphela iikhosi ezikhethiweyo ngokwemanani kwi-kataloji."
+
+msgid "Allow Student Browsing"
+msgstr "Vumela uKhenketho lwabafundi"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Vumela abafundi ukuba babhengeze kwaye bahluzeke ikataloji yekhosi."
+
+msgid "Hide Private Courses"
+msgstr "Fihla Iikhosi Zabucala"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Khetha iikhosi zabucala ekubonakaliseni kwikataloji."
+
+msgid "Show Courses & Sessions"
+msgstr "Bonisa Iikhosi & Iiseshini"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Qulunqa zombini iikhosi kunye neeseshini kwiziphumo zekataloji."
+
+msgid "Auto Session Subscription"
+msgstr "Ubhaliselo lweSeshini oluzenzekelayo"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Vula ubhaliselo oluzenzekelayo lweeseshini kubasebenzisi."
+
+msgid "Subscription in Session View"
+msgstr "Ubhaliselo kwiSeshini yokujongwa"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Vumela abasebenzisi ukuba babhalise kwikhosi ngokuthe ngqo kwiphepha leseshini yabo."
+
+msgid "Enable redirection plugin"
+msgstr "Vula iplagi yokuphinda thumelela"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Uluhlu oluchaza '\'days\'' kunye '\'months\'' ukuze kusethwe umhla wokuphelelwa kwexesha lwe-akhawunti xa umsebenzisi engena okokuqala."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Uluhlu lwe-role => inani elimele inani leentsuku i-akhawunti inayo phambi kokuphelelwa, kuxhomekeke kwindima."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Intsimi yomsebenzisi eyongezelelweyo esetyenziswa ukukhangela kunye negama leseshini"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Esi sethi sichaza isitshixo sentsimi yomsebenzisi eyongezelelweyo (umz., \"company\") esiya kusetyenziswa ukukhangela abasebenzisi kunye nokuchaza igama leseshini xa ubhalisa abafundi kwi /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Umvelisi wamagama eGlossary"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Vumela ootitshala ukuba bacele amagama eglossary aveliswe yi-AI kwikhosi yabo. Oku kuya kuvelisa amagama angama-20 ngokusekelwe kwisihloko sekhosi kunye nenkcazo ngokubanzi kwisixhobo senkcazo yekhosi. Ukuba isetyenziswe ngaphezulu kwesinye, iya kukhupha amagama sele khona kwelo glossary (qinisekisa ukuba umxholo unokwabelwana naweenkonzo ze-AI ezilungisiweyo)."
+
+msgid "Video generator"
+msgstr "Umvelisi wevidiyo"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Uvelisa iividiyo ngokusekelwe kwizikhuthazo okanye umxholo usebenzisa i-AI (oku kunokusebenzisa amatokhini amaninzi)."
+
+msgid "Course analyser"
+msgstr "Umhlalutyi wekhosi"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Hlalutya zonke izixhobo kwikhosi enye okanye ezininzi kwaye iqeqeshe imodeli ye-AI phambili ukuze iphendule nawuphi na umbuzo kule khosi okanye ezi khosi (qinisekisa ukuba umxholo unokwabelwana naweenkonzo ze-AI ezilungisiweyo)."
+
+msgid "Test/development"
+msgstr "Uvivinyo/uphuhliso"
+
+msgid "Crons"
+msgstr "Iicrons"
+
+msgid "Editor"
+msgstr "Umhleli"
+
+msgid "Gradebook"
+msgstr "Incwadi yamanqaku"
+
+msgid "Internationalization"
+msgstr "Ukuhlelwa kweNkcubeko yeHlabathi"
+
+msgid "User profiles"
+msgstr "Iipروفayli zabasebenzisi"
+
+msgid "Support tickets"
+msgstr "Amaxwebhu enkxaso"
+
+msgid "Webservices"
+msgstr "I-Webservices"
+
+msgid "Catalogue"
+msgstr "Ikhathalogu"
+
+msgid "Workflows"
+msgstr "I-Workflows"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Usetingu lunokuguqulwa kwii-URLs ezingaphantsi"
+
+msgid "Show JSON Template"
+msgstr "Bonisa iTemplethi yeJSON"
+
+msgid "JSON Template"
+msgstr "iTemplet yesiJSON"
+
+msgid "Installing Xapian bindings"
+msgstr "Ukufakela iibhindi zeXapian"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Esi siqokoqo esilandelayo sibonisa umzekelo wokufakela iibhindi zeXapian PHP kwi-Ubuntu 25.04 kunye nePHP 8.3. Qulungisa iindlela kunye neenguqu kwi ndawo yakho."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Qinisekisa ukuba unaye kuphela inguqu yePHP oyisebenzisayo ngokwenene (umzekelo 8.3) kwaye ugwabele phantsi ukuxuba iinguqu ezininzi ezineendlela ezahlukeneyo zokwandisa."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Ngesinye isihlandlo isandiso silayishwe kakuhle kuzo zombini i-CLI kunye nomncedisi wewebhu, uhlalutyo lokukhangela ngasentla kufuneka luxele ukuba imodyuli yeXapian ifakiwe."
 

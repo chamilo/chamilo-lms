@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Foomilada tusaale: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Foomulaha tusaale: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes: xuquuqda daabacaadda ,, no: xuquuqda daabacaadda maaha"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Galka,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise: layli ,,      simulation: simulation ,,      questionnaire: su'aalo ,,      diagram: jaantus ,,      figure: jaantus ,,      graph: graf ,,      index: index ,,      slide: slide ,,      table: miis ,,      narrative text: qoraal sheeko ah ,,      exam: imtixaan ,,      experiment: tijaabo ,,      problem statement: bayaan dhibaato ,,      self assessment: is-qiimeyn ,,      lecture: cashar"
@@ -31586,4 +31586,214 @@ msgstr "Muujin kooraska hoose ee kalfadhiga koorsada"
 
 msgid "Limit identical email usage"
 msgstr "Xaddid isticmaalka isku midka ah ee iimaylka"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Tirada ugu badan ee xisaabaadka ee loo ogol yahay inay wadaagaan isla cinwaanka e-mail. Deji 0 si aad u joojiso xadkan."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Oggolaw maamulayaasha fadhiga inay arkaan dhammaan isticmaaleyaasha dhammaan URL-yada"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Haddii la shaqeeyo, maamulayaasha fadhiga waxay raadin karaan oo liis garayn karaan isticmaaleeyaal ka yimaada dhammaan URL-yada gelitaanka, iyadoon loo eegin URL-ka hadda."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Fursad u ogolow dadka isticmaala inay doortaan aaggooda wakhtiga. Marka la habeeyo, dadka isticmaala waxay arki doonaan wakhtiyada ugu dambeeya ee shaqada iyo tixraacyada kale ee wakhtiga aaggooda wakhtiga, taas oo yarayn doonta khalada marka la keenayo."
+
+msgid "Redirect after login (per profile)"
+msgstr "U gudbi ka dib marka la galo (ku salaysan profile-ka)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Qeex u gudbida ku salaysan profile-ka ka dib marka la galo adigoo isticmaalaya shey JSON sida {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Qari sanduuqa oggolaanshaha sharciga ee bogga Shuruudaha iyo Xaaladaha"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Haddii loo dejiyo run, waxay meeshaha sanduuqa \"Waxaan akhriyay oo waan oggolahay\" ee socodka bogga Shuruudaha iyo Xaaladaha."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Array qeexaya martigeliyaha iyo dekedda serverka LDAP."
+
+msgid "Enable 2FA"
+msgstr "Fursad gel 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Ku dar goobaha bogga cusboonaysiinta ereyga sirta ah si aad u fursad geliso 2FA adigoo isticmaalaya app-ka xaqiijinta TOTP. Marka la curyo si caalami ah, dadka isticmaala ma arki doonaan goobaha 2FA oo lama weydiisan doono 2FA marka la galo, xitaa haddii ay hore u fursmeen."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Qaar ka mid ah astaamaha Chamilo waxay la xidhiidhi doonaan dibadda serverka. Tusaale ahaan si loo hubiyo in nuxulka dibadda jiro marka la samaynayo xiriir ama muujinaya bogga gudaha ee wadada waxbarashada. Haddii serverka Chamilo uu isticmaalo wakiil si uu uga baxo shabakadiisa, tani waxay noqon doontaa meesha lagu habeeyo."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Fursad gel ama curyo dib-u-qorista tooska ah marka ansaxnimada koorsada dhacdo. Shaqada cron la xidhiidha waa in sidoo kale la shaqeeyaa."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Muujin maalmo soo haray ee Fadhiyadayda"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Haddii la fursmeeyo, taariikhaha fadhiga bogga \"Fadhiyadayda\" waxa lagu bedeli doonaa tirada maalmo soo hartay."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Muujin \"Baaritaannada sugaya\" ee menu"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Muujin shey menu oo u oggolaanaya dadka isticmaala inay galaan baaritaannadooda sugaya."
+
+msgid "Disclose AI assistance"
+msgstr "Daah-fur gargaarka AI"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Muujin calaamad nuxul kasta ama jawaab-celin la soo saaray ama la-soo-saaray nidaamka AI, taasoo caddaynaysa isticmaalaha in nuxulka lagu dhisay gargaarka nidaamka AI. Faahfaahinta ku saabsan nidaamka AI ee la isticmaalay kiis kasta waxa lagu hayaa keydka database si loo baadho, laakiin si toos ah uma heli karo isticmaalaha ugu dambeeya."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "Habeynta JSON ee buugga koorsada: goobaha xiriirka, shaandhaynta, doorashooyinka kala soocida, iyo in ka badan."
+
+msgid "Session Catalog Settings"
+msgstr "Habeynta Buugga Fadhiga"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "Habeynta JSON ee buugga fadhiga: shaandhaynta iyo doorashooyinka muujinta."
+
+msgid "Show Course Descriptions"
+msgstr "Muujin Sharaxaada Koorsada"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Muujin sharaxaada koorsada gudaha liiska buugga."
+
+msgid "Published Courses Only"
+msgstr "Koorsadaha La Daabacay Kaliya"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Xaddid buugga oo kaliya koorsadaha loo calaamadeeyay in la daabaco."
+
+msgid "Display Catalog on Homepage"
+msgstr "Muujin Buugga Bogga Hore"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Muujin blokka buugga koorsada bogga hore ee platformka."
+
+msgid "Hide Public Link"
+msgstr "Qari Xiriirka Dadweynaha"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Ka saar xiriirka URL-ka dadweynaha kaararka koorsada."
+
+msgid "Only Selected Courses"
+msgstr "Koorsadaha La Doortay Kaliya"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Muujin kaliya koorsadaha gacanta loo doortay ee buugga."
+
+msgid "Allow Student Browsing"
+msgstr "Oggolow Aragtida Ardayda"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Oggolow ardayda inay baadhaan oo shaandheeyaan buugga koorsada."
+
+msgid "Hide Private Courses"
+msgstr "Qari Koorsadaha Gaarka ah"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Ka saar koorsadaha gaarka ah muujinta buugga."
+
+msgid "Show Courses & Sessions"
+msgstr "Muujin Koorsadaha & Fadhiyada"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Ku dar labada koorsado iyo fadhiyada natiijooyinka buugga."
+
+msgid "Auto Session Subscription"
+msgstr "Fursi-gal Fadhiga Tooska ah"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Fursad gel fur-si-gal otomaatig ah ee fadhiyada dadka isticmaala."
+
+msgid "Subscription in Session View"
+msgstr "Fursi-gal ee Muuqaalka Fadhiga"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Oggolow dadka isticmaala inay isu xiraan koorsadaha si toos ah bogga fadhigooda."
+
+msgid "Enable redirection plugin"
+msgstr "Fursad gel plugin-ka u gudbida"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Array qeexaya 'maalmaha' iyo 'bilaha' si loo dejiyo taariikhda dhicitaanka xisaabta marka isticmaaluhu markii ugu horreysay uu galo."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Array ka mid ah door => nambar taasoo matalaysa tirada maalmo xisaabtu leedahay ka hor inta aan la dhicin, ku xidhan doorashada."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Goob dheeraad ah oo isticmaale loo isticmaalo raadinta iyo magaca fadhiyada"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Habeyntan waxay qeexaysaa furaha goobta dheeraadka ah ee isticmaalaha (tusaale, \"shirkad\") oo loo isticmaali doono raadinta dadka isticmaala iyo qeexida magaca fadhiga marka la diiwaangelinayo ardayda /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Tilmaamaha glossary generator"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Oggolow macallimiinta inay weydiistaan tilmaamo AI-gu-soo-saaray ee koorsadooda. Tani waxay soo saari doontaa 20 tilmaamo ku salaysan ciwaanka koorsada iyo sharaxaadda guud ee qalabka sharaxaada koorsada. Haddii la isticmaalo in ka badan hal jeer, waxay ka saari doontaa tilmaamo horeba uga jiray glossary-gaas (hubi in nuxulka la la heli karo adeegyada AI ee la habeeyay)."
+
+msgid "Video generator"
+msgstr "Video generator"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Waxay soo saartaa fiidiyowyada ku salaysan tilmaamo ama nuxul isticoolaya AI (tani waxay cuni kartaa calaamooyin badan)."
+
+msgid "Course analyser"
+msgstr "Koorsada analyser"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Waxay falanqaysaa dhammaan agabka hal ama koorsado badan oo horay u tababarta qaabka AI si ay uga jawaabto su'aal kasta oo ku saabsan koorsadan ama kuwan (hubi in nuxulka la la heli karo adeegyada AI ee la habeeyay)."
+
+msgid "Test/development"
+msgstr "Tijaabo/habaynta"
+
+msgid "Crons"
+msgstr "Crons"
+
+msgid "Editor"
+msgstr "Tifaftiraha"
+
+msgid "Gradebook"
+msgstr "Buugga buundooyinka"
+
+msgid "Internationalization"
+msgstr "Caalamiyaynta"
+
+msgid "User profiles"
+msgstr "Astaha isticmaale"
+
+msgid "Support tickets"
+msgstr "Tikitooyinka taageerada"
+
+msgid "Webservices"
+msgstr "Webservices"
+
+msgid "Catalogue"
+msgstr "Kataloog"
+
+msgid "Workflows"
+msgstr "Workflows"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Dejinta waa la beddeli karaa ee URL-yada hoose"
+
+msgid "Show JSON Template"
+msgstr "Muuji Qaabka JSON"
+
+msgid "JSON Template"
+msgstr "Qaabka JSON"
+
+msgid "Installing Xapian bindings"
+msgstr "rakibayaal Xapian"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Qaybta soo socota waxay muujinaysaa tusaale rakibidda Xapian PHP bindings ee Ubuntu 25.04 oo leh PHP 8.3. La qabsii waddooyinka iyo noocyada deegaankaaga."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Hubi inaad leedahay oo kaliya nooca PHP ee aad runtii isticmaasho (tusaale 8.3) oo ka ilaali isku darka noocyo badan oo leh hagaro kala duwan oo fidinta."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Marka la fidinayo si sax ah loo raro labada CLI iyo serverka webka, baaritaanka raadinta sare waa inuu sheegaa in module-ka Xapian la rakibay."
 

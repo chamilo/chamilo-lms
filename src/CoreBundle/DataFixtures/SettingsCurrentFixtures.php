@@ -1597,7 +1597,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             'catalog' => [
                 [
                     'name' => 'course_catalog_settings',
-                    'title' => 'Course Catalog Settings',
+                    'title' => 'Course catalogue settings',
                     'comment' => 'JSON configuration for course catalog: link settings, filters, sort options, and more.',
                 ],
                 [

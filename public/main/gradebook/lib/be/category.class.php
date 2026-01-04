@@ -2778,14 +2778,7 @@ class Category implements GradebookItem
             return 0;
         }
 
-        $categoryList = self::load(
-            null,
-            null,
-            $courseId,
-            null,
-            null,
-            $sessionId
-        );
+        $categoryList = self::load((int) $category->getId(), null, 0, null, null, null, null);
 
         /* @var Category $category */
         $category = $categoryList[0] ?? null;

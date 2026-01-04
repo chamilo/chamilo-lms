@@ -10,7 +10,7 @@ export default {
         requiresAdmin: true,
         requiresSessionAdmin: false,
         requiresHR: true,
-        showBreadcrumb: false,
+        showBreadcrumb: true,
       },
       component: () => import("../views/skill/SkillWheel.vue"),
     },

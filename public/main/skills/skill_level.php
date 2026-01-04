@@ -59,6 +59,10 @@ $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'n
 $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'skills/skill.php', 'name' => get_lang('Manage skills levels')];
 $interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('Skill level')];
 
+$tpl = new Template('');
+// Active tab for the shared header navigation.
+$tpl->assign('current_tab', 'levels');
+
 switch ($action) {
     case 'add':
         $formToDisplay = $form->returnForm();
@@ -127,16 +131,11 @@ switch ($action) {
         header('Location: '.$listAction);
         exit;
 
-        break;
     default:
-        $toolbarAction = Display::url(
-            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')),
-            api_get_self().'?action=add',
-            ['title' => get_lang('Add')]
-        );
+        $toolbarAction = '';
+
 }
 
-$tpl = new Template($action);
 $tpl->assign('form', $formToDisplay);
 $tpl->assign('list', $list);
 $templateName = $tpl->get_template('skills/skill_level.tpl');

@@ -298,6 +298,8 @@ watchEffect(() => {
   if ("/" === route.fullPath) return
   itemList.value = []
 
+  if (buildSkillBreadcrumbIfNeeded()) return
+
   if (buildManualBreadcrumbIfNeeded()) return
 
   // Static route categories (must use "route" or "url" for our slot)
@@ -534,5 +536,44 @@ function getQueryInt(key, fallback = 0) {
   if (raw === undefined || raw === null || raw === "") return fallback
   const n = Number(Array.isArray(raw) ? raw[0] : raw)
   return Number.isFinite(n) ? n : fallback
+}
+
+function buildSkillBreadcrumbIfNeeded() {
+  // Only for the skill module (and especially /skill/wheel)
+  if (!route.path?.startsWith("/skill")) return false
+
+  const origin = getSafeOriginPath()
+  const isSocial = origin.includes("/social")
+
+  const rootLabel = isSocial
+    ? translateOrFallback("Social network", "Social network")
+    : translateOrFallback("Admin", "Admin")
+
+  const rootUrl = origin || (isSocial ? "/social" : "/admin")
+
+  itemList.value.push({
+    label: rootLabel,
+    url: rootUrl,
+  })
+
+  // Final crumb label
+  const lastLabel =
+    route.name === "SkillWheel" ? translateOrFallback("Skills wheel", "Skills wheel") : formatToolName(route.name)
+
+  itemList.value.push({ label: lastLabel })
+
+  return true
+}
+
+function getSafeOriginPath() {
+  const origin = route.query?.origin
+  if (typeof origin !== "string" || !origin) return ""
+
+  // Allow only same-site absolute paths (legacy PHP or Vue paths)
+  if (!origin.startsWith("/")) return ""
+  if (origin.startsWith("//")) return ""
+  if (origin.includes("://")) return ""
+
+  return origin
 }
 </script>

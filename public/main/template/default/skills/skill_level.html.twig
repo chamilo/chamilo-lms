@@ -1,33 +1,132 @@
-{% autoescape false %}
+<div class="w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    {% set tab = current_tab|default('levels') %}
 
-{% if form is defined %}
-    {{ form }}
-{% endif %}
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h1 class="text-2xl font-semibold text-gray-900">{{ 'Skills'|trans }}</h1>
+            <p class="mt-1 text-sm text-gray-500">{{ 'Levels can be assigned to profiles.'|trans }}</p>
+        </div>
 
-<table class="table">
-    <tr>
-        <th>{{ 'Name' | trans }}</th>
-        <th>{{ 'Short name' | trans }}</th>
-        <th>{{ 'Profile' | trans }}</th>
-        <th>{{ 'Actions' | trans }}</th>
-    </tr>
-    {% for item in list %}
-        <tr>
-            <td>{{ item.title }}</td>
-            <td>{{ item.shortTitle }}</td>
-            <td> {{ item.profile }}</td>
-            <td>
-                <a href="/main/skills/skill_level.php?action=edit&id={{ item.id }}">
-                    {{ 'ActionIcon::EDIT'|mdi_icon(22) }}
+        <div class="flex flex-wrap items-center gap-3">
+            <div class="inline-flex rounded-2xl border border-gray-20 bg-white p-1 shadow-sm">
+                <a href="/main/skills/skill.php"
+                   class="px-4 py-2 text-sm font-semibold rounded-xl transition
+                   {{ tab == 'skills' ? 'bg-gray-20 text-gray-900' : 'text-gray-600 hover:bg-gray-10' }}">
+                    {{ 'Skills'|trans }}
                 </a>
-
-                <a
-                    href="/main/skills/skill_level.php?action=delete&id={{ item.id }}"
-                >
-                    {{ 'ActionIcon::DELETE'|mdi_icon(22) }}
+                <a href="/main/skills/skill_profile.php"
+                   class="px-4 py-2 text-sm font-semibold rounded-xl transition
+                   {{ tab == 'profiles' ? 'bg-gray-20 text-gray-900' : 'text-gray-600 hover:bg-gray-10' }}">
+                    {{ 'Profiles'|trans }}
                 </a>
-            </td>
-        </tr>
-    {% endfor %}
-</table>
-{% endautoescape %}
+                <a href="/main/skills/skill_level.php"
+                   class="px-4 py-2 text-sm font-semibold rounded-xl transition
+                   {{ tab == 'levels' ? 'bg-gray-20 text-gray-900' : 'text-gray-600 hover:bg-gray-10' }}">
+                    {{ 'Levels'|trans }}
+                </a>
+            </div>
+
+            <a
+                    href="/main/skills/skill_level.php?action=add"
+                    class="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/30"
+            >
+                {{ 'ActionIcon::ADD'|mdi_icon(18, 'text-white')|raw }}
+                <span>{{ 'Add level'|trans }}</span>
+            </a>
+        </div>
+    </div>
+
+    {% if form is defined and form is not empty %}
+        <div class="mt-6 rounded-2xl border border-gray-20 bg-white shadow-sm overflow-hidden">
+            <div class="flex items-center justify-between border-b border-gray-10 px-6 py-4">
+                <div class="text-sm font-semibold text-gray-900">{{ 'Edit'|trans }}</div>
+                <span class="text-xs text-gray-500">{{ 'Create or update a level.'|trans }}</span>
+            </div>
+            <div class="p-6">
+                {{ form|raw }}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="mt-6 rounded-2xl border border-gray-20 bg-white shadow-sm overflow-hidden">
+        <div class="flex items-center justify-between border-b border-gray-10 px-6 py-4">
+            <div class="text-sm font-semibold text-gray-900">{{ 'Levels'|trans }}</div>
+            <div class="text-xs text-gray-500">{{ list|length }} {{ 'items'|trans }}</div>
+        </div>
+
+        {% if list is empty %}
+            <div class="p-6 text-sm text-gray-500">{{ 'No results found'|trans }}</div>
+        {% else %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-10">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            {{ 'Name'|trans }}
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            {{ 'Short name'|trans }}
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            {{ 'Profile'|trans }}
+                        </th>
+                        <th class="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            {{ 'Actions'|trans }}
+                        </th>
+                    </tr>
+                    </thead>
+
+                    <tbody class="divide-y divide-gray-100 bg-white">
+                    {% for item in list %}
+                        <tr class="hover:bg-gray-10">
+                            <td class="px-6 py-4">
+                                <div class="text-sm font-semibold text-gray-900">{{ item.title }}</div>
+                            </td>
+
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {% if item.shortTitle %}
+                                    <span class="inline-flex items-center rounded-lg bg-gray-10 px-2 py-1 text-xs font-semibold text-gray-700">
+                                        {{ item.shortTitle }}
+                                    </span>
+                                {% else %}
+                                    <span class="text-sm text-gray-400">—</span>
+                                {% endif %}
+                            </td>
+
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {% if item.profile %}
+                                    <span class="inline-flex items-center rounded-lg bg-primary/10 px-2 py-1 text-xs font-semibold text-primary ring-1 ring-inset ring-primary/20">
+                                        {{ item.profile }}
+                                    </span>
+                                {% else %}
+                                    <span class="text-sm text-gray-400">—</span>
+                                {% endif %}
+                            </td>
+
+                            <td class="px-6 py-4 whitespace-nowrap text-right">
+                                <div class="inline-flex items-center gap-2">
+                                    <a
+                                            href="/main/skills/skill_level.php?action=edit&id={{ item.id }}"
+                                            class="inline-flex items-center justify-center rounded-xl border border-gray-20 bg-white px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-10"
+                                            title="{{ 'Edit'|trans }}"
+                                    >
+                                        {{ 'ActionIcon::EDIT'|mdi_icon(18)|raw }}
+                                    </a>
+
+                                    <a
+                                            href="/main/skills/skill_level.php?action=delete&id={{ item.id }}"
+                                            class="inline-flex items-center justify-center rounded-xl border border-gray-20 bg-white px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-10"
+                                            title="{{ 'Delete'|trans }}"
+                                    >
+                                        {{ 'ActionIcon::DELETE'|mdi_icon(18)|raw }}
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</div>

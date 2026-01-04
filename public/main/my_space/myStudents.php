@@ -821,6 +821,72 @@ Display::display_header($nameTools);
 
 // Local layout styles for learner detail page
 echo '<style>
+.skills-badges .skill-badge-wrapper .item > a,
+.skills-badges .skill-badge-wrapper .caption > a {
+  display: inline-block;
+  width: auto;
+}
+#skillList {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.skills-badges.skills-badges--cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1rem;
+}
+.skills-badges.skills-badges--cards .skill-badge-wrapper {
+    border: 1px solid #e5e7eb; /* gray-200 */
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+    padding: 1.25rem 1rem;
+    text-align: center;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+.skills-badges.skills-badges--cards .skill-badge-wrapper:hover {
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.10);
+    transform: translateY(-1px);
+}
+.skills-badges.skills-badges--cards .skill-badge-wrapper .item {
+    margin: 0 auto;
+    width: 96px;
+    height: 96px;
+    border-radius: 1rem;
+    background: #f9fafb;
+    border: 1px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.skills-badges.skills-badges--cards .skill-badge-wrapper .item img {
+    width: 64px !important;
+    height: 64px !important;
+    object-fit: contain;
+}
+.skills-badges.skills-badges--cards .skill-badge-wrapper .caption {
+    margin-top: 0.75rem;
+    font-weight: 600;
+    color: #111827;
+    font-size: 0.95rem;
+}
+.skills-badges.skills-badges--cards .skill-badge-wrapper .skill-badge-action {
+    margin-top: 0.25rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #2563eb;
+}
+.skills-badges.skills-badges--cards .skill-badge-wrapper .skill-badge-action a {
+    color: inherit;
+    text-decoration: none;
+}
+.skills-badges.skills-badges--cards .skill-badge-wrapper:hover .skill-badge-action a {
+    text-decoration: underline;
+}
 /* Main container */
 .learner-page-container {
     max-width: 100%;
@@ -841,13 +907,9 @@ echo '<style>
     box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
     padding: 1rem 1rem;
 }
-
-/* Vertical spacing between sections */
 .learner-section-spacing {
     margin-top: 1.75rem;
 }
-
-/* Titles inside cards: slightly smaller and consistent */
 .learner-card h1,
 .learner-card h2,
 .learner-card h3 {
@@ -856,8 +918,6 @@ echo '<style>
     font-weight: 600;
     font-size: 1.1rem;
 }
-
-/* Section header for blocks like sessions, classes, etc. */
 .learner-section-title {
     font-size: 1rem;
     font-weight: 600;
@@ -867,15 +927,11 @@ echo '<style>
     align-items: center;
     gap: 0.5rem;
 }
-
-/* Subtexts under titles */
 .learner-subtitle {
     font-size: 0.875rem;
     color: #6b7280;
     margin-top: 0.25rem;
 }
-
-/* Card for tables */
 .learner-table-card {
     margin-top: 0.75rem;
     background-color: #ffffff;
@@ -884,23 +940,15 @@ echo '<style>
     box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
     padding: 0.75rem 1rem 1.25rem;
 }
-
-/* Wrapper to allow horizontal scroll on small screens */
 .learner-table-wrapper {
     overflow-x: auto;
 }
-
-/* Remove bottom margin for inner tables */
 .learner-table-card .table {
     margin-bottom: 0;
 }
-
-/* Extra spacing above messages and tracking sections */
 .learner-messages-header {
     margin-top: 2rem;
 }
-
-/* Slightly tighten default h3 spacing in this page */
 .learner-page-container h3 {
     margin-top: 1.25rem;
     margin-bottom: 0.75rem;

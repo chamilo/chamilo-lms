@@ -24,6 +24,7 @@ use GradebookUtils;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 /**
  * @implements ProcessorInterface<CStudentPublication, CStudentPublication>
@@ -76,7 +77,7 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
         if (isset($context['request'])) {
             try {
                 $payload = $context['request']->toArray();
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // Non-fatal: keep processing without payload.
                 $payload = [];
             }

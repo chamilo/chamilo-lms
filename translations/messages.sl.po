@@ -2031,7 +2031,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":da:avtorske pravice,, ne:brez avtorskih pravic"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Okteetni tok,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Okteatni tok,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":vaja:vaja,,      simulacija:simulacija,,      vprašalnik:vprašalnik,,      diagram:diagram,,      slika:slika,,      graf:graf,,      kazalo:kazalo,,      diapozitiv:diapozitiv,,      tabela:tabela,,      pripovedno besedilo:narrativno besedilo,,      izpit:izpit,,      poskus:poskus,,      izjava problema:izjava problema,,      samopredstavitev:samopredstavitev,,      predavanje:predavanje"
@@ -31468,4 +31468,376 @@ msgstr "Za več podrobnosti obiščite %s"
 
 msgid "Manager"
 msgstr "Upravitelj"
+
+msgid "Mark as"
+msgstr "Označi kot"
+
+msgid "Reply to all"
+msgstr "Odgovori vsem"
+
+msgid "SCIM external ID"
+msgstr "SCIM zunanji ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Prosimo, sprejmite najnovejšo različico pogojev in določil."
+
+msgid "Required value for operation without path"
+msgstr "Zahtevana vrednost za operacijo brez poti"
+
+msgid "Available space (%s)"
+msgstr "Razpoložljiv prostor (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Indeksiraj ta opis za globalno iskanje"
+
+msgid "Unknown course"
+msgstr "Neznan tečaj"
+
+msgid "Certificate not found."
+msgstr "Potrjevanje ni najdeno."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Varnostni žeton je potekel. Prosimo, osvežite stran in poskusite znova."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Samo administratorji platforme lahko spremenijo vidnost tečaja."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Nepričakovana napaka pri naročanju uporabnika"
+
+msgid "Search in resource logs"
+msgstr "Išči v dnevnikih virov"
+
+msgid "Include this learning path in the global search results"
+msgstr "Vključi to učno pot v rezultate globalnega iskanja"
+
+msgid "The course code already exists"
+msgstr "Koda tečaja že obstaja"
+
+msgid "Latest news"
+msgstr "Najnovejše novice"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Pridobite najnovejše novice iz Chamila, vključno z varnostnimi ranljivostmi in dogodki, neposredno v vaši upravni plošči. Te novice se bodo preverjale na strežniku Chamilo novic vsakič, ko naložite upravno stran, in bodo vidne samo administratorjem."
+
+msgid "Chamilo support block"
+msgstr "Chamilo blok za podporo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Pridobite profesionalne nasvete in enostaven način za stik z uradnimi ponudniki storitev za strokovno podporo, neposredno od ustvarjalcev Chamila. Ta blok se prikaže na vaši upravni strani, je viden samo administratorjem in se osveži vsakič, ko naložite upravno stran."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Skrij možnost pošiljanja obvestil HR uporabnikom"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Dovoli administratorjem sej prenos zasebnih potrdil"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Če je omogočeno, lahko administratorji sej prenesejo potrdila, tudi če niso javno objavljena."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Če ni prazno, bo proces ustvarjanja tečaja iskal neka polja v uporabniškem profilu in jih samodejno izpolnil za tečaj. Na primer, učitelj, specializiran za digitalni marketing, bi lahko samodejno nastavil oznako »digitalni marketing« na vsak tečaj, ki ga ustvari."
+
+msgid "Main menu entries"
+msgstr "Vnos glavnega menija"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Označite vnose, ki jih želite videti v glavnem meniju"
+
+msgid "Main menu entries per role"
+msgstr "Vnesi glavnega menija na vlogo"
+
+msgid "Define header tabs visibility per role."
+msgstr "Določite vidnost zavihkov glave na vlogo."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Nastavite možnosti, ki se bodo pojavile v navigaciji okoli tabele za prikaz manj ali več vrstic na strani. npr. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Miza dodatnih funkcij, ki jih lahko omogočite za predvajalnik videa v Chamilo. Možnosti vključujejo 'speed', ki omogoča spremembo hitrosti predvajanja videa."
+
+msgid "Mail: character set"
+msgstr "Pošta: nabor znakov"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Če morate določiti nabor znakov za pošiljanje teh e-pošt. Pustite prazno, če niste prepričani."
+
+msgid "Mail: Debug"
+msgstr "Pošta: Razhroščevanje"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Izberite, ali želite omogočiti dnevnike razhroščevanja pošiljanja e-pošte. Ti vam bodo dali več informacij o tem, kaj se dogaja pri povezovanju s storitvijo pošte, vendar niso elegantni in lahko pokvarijo oblikovanje strani. Uporabite samo, ko ni aktivnosti uporabnikov."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Pošta: Izogibajte se uporabi LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Nekateri odjemalci e-pošte ne razumejo opisnega formata LD+JSON in ga prikažejo kot ohlapen niz JSON končnemu uporabniku. Če je to vaš primer, nastavite spodnjo spremenljivko na 'false', da onemogočite ta glava."
+
+msgid "Mail: DKIM headers"
+msgstr "Pošta: DKIM glave"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Vnesite JSON mizo svojih nastavitev DKIM (glejte primer)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Pošta: XOAuth2 možnosti"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Če uporabljate storitev e-pošte na osnovi XOAuth2, uporabite to nastavitev v JSON za shranjevanje svoje specifične konfiguracije (glejte primer) in izberite XOAuth2 v nastavitvi storitve pošte."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Določa vrsto okolja: \"prod\" (normalna proizvodnja), \"validation\" (kot proizvodnja, vendar brez poročanja statistik) ali \"test\" (način razhroščevanja z orodji za razvijalce, kot so kazalniki neprevedenih nizov)."
+
+msgid "Global limit of users per course"
+msgstr "Globalna omejitev uporabnikov na tečaj"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Določa globalno največje število uporabnikov (vključno z učitelji), ki se smejo prijaviti na katerikoli posamezen tečaj na platformi. Nastavite to vrednost na 0, da onemogočite omejitev. To pomaga preprečiti preobremenitev tečajev v odprtih portalih."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Omogočite za uporabo mize za določitev, katere vloge naj bodo jasno prikazane in katere skrite."
+
+msgid "Show base course posts in session course"
+msgstr "Prikaži osnovne objave tečaja v seji tečaja"
+
+msgid "Limit identical email usage"
+msgstr "Omeji uporabo identičnih e-pošt"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Največje število računov, ki lahko delijo isti e-poštni naslov. Nastavite na 0, da onemogočite to omejitev."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Dovoli administratorjem sej dostop do vseh uporabnikov na vseh URL-jih"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Če je omogočeno, lahko administratorji sej iščejo in prikazujejo uporabnike z vseh dostopnih URL-jev, ne glede na trenutni URL."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Omogoči uporabnikom izbiro lastnega časovnega pasu. Ko je konfigurirano, bodo uporabniki lahko videli roke nalog in druge časovne reference v svojem časovnem pasu, kar bo zmanjšalo napake pri oddaji."
+
+msgid "Redirect after login (per profile)"
+msgstr "Preusmeritev po prijavi (po profilu)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Določite preusmeritev po profilu po prijavi z uporabo JSON objekta, kot je {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Skrij potrditveno polje za sprejetje pogojev na strani Splošni pogoji"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Če je nastavljeno na res, odstrani potrditveno polje \"Prebral sem in sprejem\" v postopku strani Splošni pogoji."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Miza, ki določa gostitelja in vrata za LDAP strežnik."
+
+msgid "Enable 2FA"
+msgstr "Omogoči 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Dodaj polja na stran posodabljanja gesla za omogočanje 2FA z uporabo TOTP avtentikacijske aplikacije. Ko je onemogočeno globalno, uporabniki ne bodo videli polj 2FA in ne bodo pozvani za 2FA pri prijavi, tudi če so ga prej omogočili."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Nekatere funkcije Chamila se bodo povezale z zunanjostjo iz strežnika. Na primer, da preverijo, ali zunanja vsebina obstaja pri ustvarjanju povezave ali prikazovanju vgrajene strani v učne poti. Če vaš Chamilo strežnik uporablja proxy za izhod iz omrežja, je to mesto za njegovo konfiguracijo."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Omogoči ali onemogoči samodejno ponovno vpoklicanje, ko poteče veljavnost tečaja. Povezani cron job mora biti tudi aktiviran."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Prikaži preostale dni v Moje seje"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Če je omogočeno, bodo datumi sej na strani \"Moje seje\" zamenjani s številom preostalih dni."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Prikaži \"Čakajoče ankete\" v meniju"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Prikaži element menija, ki uporabnikom omogoča dostop do njihovih čakajočih anket."
+
+msgid "Disclose AI assistance"
+msgstr "Razkrij pomoč AI"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Prikaži oznako na kateri koli vsebini ali povratnih informacijah, ki so bile ustvarjene ali soustvarjene z uporabo katerega koli AI sistema, kar dokazuje uporabniku, da je bila vsebina ustvarjena s pomočjo nekega AI sistema. Podrobnosti o tem, kateri AI sistem je bil uporabljen v katerem primeru, so shranjene v podatkovni zbirki za revizijo, vendar niso neposredno dostopne končnemu uporabniku."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "JSON konfiguracija za katalog tečajev: nastavitve povezav, filtri, možnosti razvrščanja in več."
+
+msgid "Session Catalog Settings"
+msgstr "Nastavitve kataloga sej"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "JSON konfiguracija za katalog sej: filtri in možnosti prikaza."
+
+msgid "Show Course Descriptions"
+msgstr "Prikaži opise tečajev"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Prikaži opise tečajev v seznamu kataloga."
+
+msgid "Published Courses Only"
+msgstr "Samo objavljeni tečaji"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Omejite katalog samo na tečaje, označene kot objavljene."
+
+msgid "Display Catalog on Homepage"
+msgstr "Prikaži katalog na domači strani"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Prikaži blok kataloga tečajev na domači strani platforme."
+
+msgid "Hide Public Link"
+msgstr "Skrij javno povezavo"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Odstrani javno URL povezavo s kartic tečajev."
+
+msgid "Only Selected Courses"
+msgstr "Samo izbrani tečaji"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Prikaži samo ročno izbrane tečaje v katalogu."
+
+msgid "Allow Student Browsing"
+msgstr "Dovoli brskanje študentom"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Dovoli študentom brskanje in filtriranje kataloga tečajev."
+
+msgid "Hide Private Courses"
+msgstr "Skrij zasebne tečaje"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Izključi zasebne tečaje iz prikaza kataloga."
+
+msgid "Show Courses & Sessions"
+msgstr "Prikaži tečaje in seje"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Vključi tečaje in seje v rezultate kataloga."
+
+msgid "Auto Session Subscription"
+msgstr "Samodejna prijava na sejo"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Omogoči samodejno prijavo na seje za uporabnike."
+
+msgid "Subscription in Session View"
+msgstr "Prijava na seji"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Dovoli uporabnikom prijavo na tečaje neposredno s strani seje."
+
+msgid "Enable redirection plugin"
+msgstr "Omogoči vtičnik za preusmeritev"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Polje, ki določa 'dni' in 'mesece' za nastavitev datuma poteka računa ob prvi prijavi uporabnika."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Polje vloge => število, ki predstavlja število dni pred potekom računa, odvisno od vloge."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Dodatno uporabniško polje za iskanje in poimenovanje sej"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Ta nastavitev določa ključ dodatnega uporabniškega polja (npr. \"podjetje\"), ki se bo uporabilo za iskanje uporabnikov in določitev imena seje pri registraciji študentov iz /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Generator pojmov slovarja"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Dovoli učiteljem, da zahtevajo AI-generirane pojme slovarja v svojem tečaju. To bo generiralo 20 pojmov na podlagi naslova tečaja in splošnega opisa v orodju za opis tečaja. Če se uporabi večkrat, bo izključil že obstoječe pojme v tem slovarju (poskrbite, da lahko vsebina deli z nastavljenimi AI-storitevmi)."
+
+msgid "Video generator"
+msgstr "Generator videov"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Generira videe na podlagi pozivov ali vsebine z uporabo AI (to lahko porabi veliko žetonov)."
+
+msgid "Course analyser"
+msgstr "Analizator tečaja"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Analizira vse vire v enem ali več tečajih in preduči AI model za odgovarjanje na katero koli vprašanje o tem ali teh tečajih (poskrbite, da lahko vsebina deli z nastavljenimi AI-storitevmi)."
+
+msgid "Test/development"
+msgstr "Test/razvoj"
+
+msgid "Crons"
+msgstr "Cron opravila"
+
+msgid "Editor"
+msgstr "Urejevalnik"
+
+msgid "Gradebook"
+msgstr "Knjiga ocen"
+
+msgid "Internationalization"
+msgstr "Mednarodna prilagoditev"
+
+msgid "User profiles"
+msgstr "Uporabniški profili"
+
+msgid "Support tickets"
+msgstr "Vstopnice za podporo"
+
+msgid "Webservices"
+msgstr "Spletne storitve"
+
+msgid "Catalogue"
+msgstr "Katalog"
+
+msgid "Workflows"
+msgstr "Delovni tokovi"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Nastavitev je ureljiva na podURL-jih"
+
+msgid "Show JSON Template"
+msgstr "Prikaži JSON predlogo"
+
+msgid "JSON Template"
+msgstr "JSON predloga"
+
+msgid "Installing Xapian bindings"
+msgstr "Namestitev Xapian zavezav"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Naslednji izsek prikazuje primer namestitve Xapian PHP zavezav na Ubuntu 25.04 s PHP 8.3. Prilagodite poti in različice svojemu okolju."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Poskrbite, da imate samo PHP različico, ki jo res uporabljate (npr. 8.3) in se izogibajte mešanju več različic z različnimi imeniki razširitev."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Ko je razširitev pravilno naložena za CLI in spletni strežnik, bi morala diagnostična orodja za iskanje zgoraj poročati, da je modul Xapian nameščen."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Počisti začasne nalaganja in predpomnilnik"
+
+msgid "Directory"
+msgstr "Mapa"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Briši samo datoteke stare več kot (minute)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Nastavi 0 za brisanje vseh datotek. Uporabi pozitivno vrednost (npr. 60), da se izogneš odstranjevanju datotek, ki se še nalagajo."
+
+msgid "Preview only (do not delete)"
+msgstr "Samo predogled (ne briši)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Opozorilo: sắp boste izbrisali VSE začasne datoteke. Te akcije ni mogoče razveljaviti."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "To bo izbrisalo vse začasne datoteke. Nadaljuj?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "To bo izbrisalo datoteke stare več kot %minutes% minut. Nadaljuj?"
 

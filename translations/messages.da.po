@@ -31455,3 +31455,375 @@ msgstr "For flere detaljer besøg %s"
 msgid "Manager"
 msgstr "Administrer"
 
+msgid "Mark as"
+msgstr "Markér som"
+
+msgid "Reply to all"
+msgstr "Svar til alle"
+
+msgid "SCIM external ID"
+msgstr "SCIM ekstern ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Acceptér venligst den nyeste version af betingelserne."
+
+msgid "Required value for operation without path"
+msgstr "Påkrævet værdi for handling uden sti"
+
+msgid "Available space (%s)"
+msgstr "Tilgængeligt plads (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Indekser denne beskrivelse for global søgning"
+
+msgid "Unknown course"
+msgstr "Ukendt kursus"
+
+msgid "Certificate not found."
+msgstr "Certifikat ikke fundet."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Sikkerhedstoken udløbet. Genindlæs venligst siden og prøv igen."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Kun platformadministratorer kan ændre kursus synlighed."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Uventet fejl under tilmelding af brugeren"
+
+msgid "Search in resource logs"
+msgstr "Søg i ressourcelogfiler"
+
+msgid "Include this learning path in the global search results"
+msgstr "Inkluder denne læringssti i globale søgeresultater"
+
+msgid "The course code already exists"
+msgstr "Kursus koden findes allerede"
+
+msgid "Latest news"
+msgstr "Seneste nyheder"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Få de nyeste nyheder fra Chamilo, inklusive sikkerhedshuller og events, direkte i dit administrationspanel. Disse nyheder tjekkes på Chamilo nyhedsserveren hver gang du indlæser administrationssiden og er kun synlige for administratorer."
+
+msgid "Chamilo support block"
+msgstr "Chamilo support blok"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Få pro tips og en nem måde at kontakte officielle serviceudbydere for professionel support, direkte fra Chamilos skabere. Denne blok vises på din administrationsside, er kun synlig for administratorer og opdateres hver gang du indlæser administrationssiden."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Skjul mulighed for at sende kunngørelser til HR-brugere"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Tillad sessionadministratorer at downloade private certifikater"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Hvis aktiveret, kan sessionadministratorer downloade certifikater selvom de ikke er offentligt offentliggjort."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Hvis ikke tom, vil kursusoprettelsesprocessen kigge efter nogle felter i brugerprofilen og auto-udfylde dem for kurset. For eksempel kunne en lærer specialiseret i digital markedsføring automatisk sætte et « digital markedsføring » flag på hvert kursus (han/hun) opretter."
+
+msgid "Main menu entries"
+msgstr "Hovedmenu poster"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Vælg de poster du vil have til at vises i hovedmenuen"
+
+msgid "Main menu entries per role"
+msgstr "Hovedmenu poster pr. rolle"
+
+msgid "Define header tabs visibility per role."
+msgstr "Definer header faner synlighed pr. rolle."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Indstil de muligheder du vil have til at vises i navigationen omkring en tabel for at vise færre eller flere rækker på en side. f.eks. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Array af ekstra funktioner du kan aktivere for videoafspilleren i Chamilo. Muligheder inkluderer 'speed', som tillader dig at ændre afspilningshastigheden af en video."
+
+msgid "Mail: character set"
+msgstr "Mail: tegnsæt"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Hvis du skal definere tegnsættet til brug ved afsendelse af disse e-mails. Efterlad tomt hvis du ikke er sikker."
+
+msgid "Mail: Debug"
+msgstr "Mail: Fejlfinding"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Vælg om du vil aktivere e-mail afsendelses debug logs. Disse giver dig mere information om hvad der sker ved tilslutning til mailtjenesten, men er ikke elegante og kan bryde sideskabelonen. Brug kun når der ikke er brugeraktivitet."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Mail: Undgå at bruge LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Nogle e-mail klienter forstår ikke det beskrivende LD+JSON format og viser det som en løs JSON streng til slutbrugeren. Hvis dette er dit tilfælde, kan du sætte variablen nedenfor til 'false' for at deaktivere denne header."
+
+msgid "Mail: DKIM headers"
+msgstr "Mail: DKIM-hoveder"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Indtast et JSON array af dine DKIM konfigurationsindstillinger (se eksempel)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Mail: XOAuth2 muligheder"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Hvis du bruger en XOAuth2-baseret e-mail tjeneste, brug denne indstilling i JSON til at gemme din specifikke konfiguration (se eksempel) og vælg XOAuth2 i mailtjeneste indstillingen."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Definerer miljøtypen: \"prod\" (normal produktion), \"validation\" (som produktion men uden rapportering af statistik), eller \"test\" (debug tilstand med udviklerværktøjer som uoversatte streng indikatorer)."
+
+msgid "Global limit of users per course"
+msgstr "Global grænse for brugere pr. kursus"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Definerer et globalt maksimum antal brugere (lærere inkluderet) tilladt at tilmeldes et enkelt kursus på platformen. Sæt denne værdi til 0 for at deaktivere grænsen. Dette hjælper med at undgå overbelastede kurser i åbne portaler."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Aktivér for at bruge et array til at definere hvilke roller der skal vises klart og hvilke der skal skjules."
+
+msgid "Show base course posts in session course"
+msgstr "Vis basis kursus opslag i session kursus"
+
+msgid "Limit identical email usage"
+msgstr "Begræns identisk e-mail brug"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Maksimalt antal konti, der må dele samme e-mail-adresse. Sæt til 0 for at deaktivere denne grænse."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Tillad session-admins at se alle brugere på alle URL'er"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Hvis aktiveret, kan session-admins søge og vise brugere fra alle adgangs-URL'er, uanset deres nuværende URL."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Aktivér muligheden for, at brugere vælger deres egen tidszone. Når det er konfigureret, kan brugere se opgavefrister og andre tidsreferencer i deres egen tidszone, hvilket reducerer fejl ved indlevering."
+
+msgid "Redirect after login (per profile)"
+msgstr "Omdirigering efter login (pr. profil)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Definer omdirigering pr. profil efter login ved hjælp af et JSON-objekt som {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Skjul juridisk accept-afkrydsningsfelt på betingelsessiden"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Hvis sat til true, fjernes \"Jeg har læst og accepterer\"-afkrydsningsfeltet i betingelsesflowet."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Array, der definerer værtsnavn og port for LDAP-serveren."
+
+msgid "Enable 2FA"
+msgstr "Aktivér 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Tilføj felter på adgangskodeopdateringssiden for at aktivere 2FA med en TOTP-autentificeringsapp. Når deaktiveret globalt, ses 2FA-felter ikke, og brugere bedes ikke om 2FA ved login, selvom de tidligere har aktiveret det."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Nogle Chamilo-funktioner forbinder til eksterne servere. Fx for at sikre, at eksternt indhold findes ved oprettelse af link eller visning af indsat side i læringssti. Hvis din Chamilo-server bruger en proxy til at forlade netværket, konfigureres det her."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Aktivér eller deaktivér automatisk genindskrivning, når kursusgyldighed udløber. Relateret cron-job skal også aktiveres."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Vis resterende dage i Mine sessioner"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Hvis aktiveret, erstattes sessiondatoerne på \"Mine sessioner\"-siden af antallet af resterende dage."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Vis \"Afventende spørgeskemaer\" i menuen"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Vis menu-element, der giver brugere adgang til deres afventende spørgeskemaer."
+
+msgid "Disclose AI assistance"
+msgstr "Afslør AI-bistand"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Vis en mærke på indhold eller feedback genereret eller medgenereret af AI-system, der viser, at indholdet er lavet med AI-hjælp. Detaljer om hvilket AI-system der er brugt, gemmes i databasen til revision, men er ikke direkte tilgængelige for brugeren."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "JSON-konfiguration for kursuskatalog: link-indstillinger, filtre, sorteringsmuligheder mv."
+
+msgid "Session Catalog Settings"
+msgstr "Sessionkatalogindstillinger"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "JSON-konfiguration for sessionkatalog: filtre og visningsmuligheder."
+
+msgid "Show Course Descriptions"
+msgstr "Vis kursusbeskrivelser"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Vis kursusbeskrivelser i kataloglisten."
+
+msgid "Published Courses Only"
+msgstr "Kun publicerede kurser"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Begræns kataloget til kun publicerede kurser."
+
+msgid "Display Catalog on Homepage"
+msgstr "Vis katalog på forsiden"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Vis kursuskatalogblok på platformens forside."
+
+msgid "Hide Public Link"
+msgstr "Skjul offentligt link"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Fjern det offentlige URL-link fra kursuskort."
+
+msgid "Only Selected Courses"
+msgstr "Kun valgte kurser"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Vis kun manuelt valgte kurser i kataloget."
+
+msgid "Allow Student Browsing"
+msgstr "Tillad elevgennemgang"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Tillad elever at gennemse og filtrere kursuskataloget."
+
+msgid "Hide Private Courses"
+msgstr "Skjul private kurser"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Udeluk private kurser fra katalogvisning."
+
+msgid "Show Courses & Sessions"
+msgstr "Vis kurser & sessioner"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Inkluder både kurser og sessioner i katalogresultater."
+
+msgid "Auto Session Subscription"
+msgstr "Automatisk sessiontilmelding"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Aktivér automatisk tilmelding til sessioner for brugere."
+
+msgid "Subscription in Session View"
+msgstr "Tilmelding i sessionsvisning"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Tillad brugere at tilmelde sig kurser direkte fra deres sessionsside."
+
+msgid "Enable redirection plugin"
+msgstr "Aktivér omdirigeringsplugin"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Array, der definerer 'dage' og 'måneder' til at sætte kontoudløbsdatoen ved første login."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Et array med rolle => tal, der angiver antallet af dage, et konto har før udløb, afhængig af rollen."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Ekstra brugerfelt til søgning og navngivning af sessioner"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Denne indstilling definerer nøglen for det ekstra brugerfelt (fx \"company\"), der bruges til at søge brugere og definere sessionnavnet ved tilmelding af elever fra /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Generator for ordlisteord"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Tillad lærere at anmode om AI-genererede ordlisteord i deres kursus. Dette genererer 20 termer baseret på kursustitlen og den generelle beskrivelse i kursusbeskrivelsesværktøjet. Hvis det bruges mere end én gang, vil det udelukke termer, der allerede findes i den ordliste (sørg for, at indhold kan deles med de konfigurerede AI-tjenester)."
+
+msgid "Video generator"
+msgstr "Videogenerator"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Genererer videoer baseret på prompts eller indhold ved hjælp af AI (dette kan forbruge mange tokens)."
+
+msgid "Course analyser"
+msgstr "Kursusanalysator"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Analyserer alle ressourcer i ét eller flere kurser og fortræner AI-modellen til at besvare ethvert spørgsmål om dette eller disse kurser (sørg for, at indhold kan deles med de konfigurerede AI-tjenester)."
+
+msgid "Test/development"
+msgstr "Test/udvikling"
+
+msgid "Crons"
+msgstr "Crons"
+
+msgid "Editor"
+msgstr "Editor"
+
+msgid "Gradebook"
+msgstr "Karakterbog"
+
+msgid "Internationalization"
+msgstr "Internationalisering"
+
+msgid "User profiles"
+msgstr "Brugerprofiler"
+
+msgid "Support tickets"
+msgstr "Supportbilletter"
+
+msgid "Webservices"
+msgstr "Webservices"
+
+msgid "Catalogue"
+msgstr "Katalog"
+
+msgid "Workflows"
+msgstr "Workflows"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Indstillingen kan redigeres på under-URL'er"
+
+msgid "Show JSON Template"
+msgstr "Vis JSON-skabelon"
+
+msgid "JSON Template"
+msgstr "JSON-skabelon"
+
+msgid "Installing Xapian bindings"
+msgstr "Installation af Xapian-bindings"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Følgende kodeudsnit viser et eksempel på installation af Xapian PHP-bindings på Ubuntu 25.04 med PHP 8.3. Tilpas stier og versioner til dit eget miljø."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Sørg for, at du kun har den PHP-version, du virkelig bruger (f.eks. 8.3), og undgå at blande flere versioner med forskellige extensionsmapper."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Når extensionen er korrekt indlæst for både CLI og webserveren, bør søgediagnostikken ovenfor rapportere, at Xapian-modulen er installeret."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Ryd op i midlertidige uploads og cache"
+
+msgid "Directory"
+msgstr "Mappe"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Slet kun filer ældre end (minutter)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Sæt 0 for at slette alle filer. Brug en positiv værdi (f.eks. 60) for at undgå at fjerne filer, der stadig uploades."
+
+msgid "Preview only (do not delete)"
+msgstr "Forhåndsvisning kun (slet ikke)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Advarsel: Du er ved at slette ALLE midlertidige filer. Denne handling kan ikke fortrydes."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Dette vil slette alle midlertidige filer. Fortsæt?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Dette vil slette filer ældre end %minutes% minutter. Fortsæt?"
+

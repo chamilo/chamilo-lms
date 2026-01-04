@@ -2931,6 +2931,7 @@ class UserManager
         $tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_url_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
         $user_id = (int) $user_id;
 
@@ -2944,34 +2945,34 @@ class UserManager
         $url = null;
         $formattedUserName = Container::$container->get(NameConventionHelper::class)->getPersonName($user);
 
-        // We filter the courses from the URL
+        // We filter the courses from the URL (MultiURL)
         $join_access_url = $where_access_url = '';
+        $access_url_id = -1;
+
         if (api_get_multiple_access_url()) {
             $access_url_id = api_get_current_access_url_id();
             if (-1 != $access_url_id) {
                 $url = api_get_url_entity($access_url_id);
-                $tbl_url_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $join_access_url = "LEFT JOIN $tbl_url_course url_rel_course ON url_rel_course.c_id = course.id";
-                $where_access_url = " AND access_url_id = $access_url_id ";
+                $join_access_url = " LEFT JOIN $tbl_url_course url_rel_course ON url_rel_course.c_id = course.id ";
+                $where_access_url = " AND url_rel_course.access_url_id = $access_url_id ";
             }
         }
 
         // Courses in which we subscribed out of any session
-
         $sql = "SELECT
-                    course.code,
-                    course_rel_user.status course_rel_status,
-                    course_rel_user.sort sort,
-                    course_rel_user.user_course_cat user_course_cat
-                 FROM $tbl_course_user course_rel_user
-                 LEFT JOIN $tbl_course course
-                 ON course.id = course_rel_user.c_id
-                 $join_access_url
-                 WHERE
-                    course_rel_user.user_id = '".$user_id."' AND
-                    course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
-                    $where_access_url
-                 ORDER BY course_rel_user.sort, course.title ASC";
+                course.code,
+                course_rel_user.status course_rel_status,
+                course_rel_user.sort sort,
+                course_rel_user.user_course_cat user_course_cat
+            FROM $tbl_course_user course_rel_user
+            LEFT JOIN $tbl_course course
+                ON course.id = course_rel_user.c_id
+            $join_access_url
+            WHERE
+                course_rel_user.user_id = '".$user_id."' AND
+                course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+                $where_access_url
+            ORDER BY course_rel_user.sort, course.title ASC";
 
         $course_list_sql_result = Database::query($sql);
         $personal_course_list = [];
@@ -2988,8 +2989,8 @@ class UserManager
         if (api_is_allowed_to_create_course()) {
             $sessionListFromCourseCoach = [];
             $sql = " SELECT DISTINCT session_id
-                    FROM $tbl_session_course_user
-                    WHERE user_id = $user_id AND status = ".SessionEntity::COURSE_COACH;
+                FROM $tbl_session_course_user
+                WHERE user_id = $user_id AND status = ".SessionEntity::COURSE_COACH;
 
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
@@ -3013,17 +3014,22 @@ class UserManager
             $sessionLimitRestriction = "LIMIT $sessionLimit";
         }
 
-        $sql = "SELECT DISTINCT s.id, s.title, access_start_date, access_end_date
-                FROM $tbl_session_user su INNER JOIN $tbl_session s
-                ON (s.id = su.session_id)
+        $sql = "SELECT DISTINCT
+                    s.id,
+                    s.title,
+                    su.access_start_date AS access_start_date,
+                    su.access_end_date AS access_end_date
+                FROM $tbl_session_user su
+                INNER JOIN $tbl_session s ON (s.id = su.session_id)
                 WHERE (
                     su.user_id = $user_id AND
                     su.relation_type = ".SessionEntity::STUDENT."
                 )
                 $coachCourseConditions
-                ORDER BY access_start_date, access_end_date, s.title
+                ORDER BY su.access_start_date, su.access_end_date, s.title
                 $sessionLimitRestriction
         ";
+
 
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -3033,14 +3039,14 @@ class UserManager
         }
 
         $sql = "SELECT DISTINCT
-                s.id, s.title, s.access_start_date, s.access_end_date
-                FROM $tbl_session s
-                INNER JOIN $tbl_session_user sru ON sru.session_id = s.id
-                WHERE (
-                    sru.user_id = $user_id AND sru.relation_type = ".SessionEntity::GENERAL_COACH."
-                )
-                $coachCourseConditions
-                ORDER BY s.access_start_date, s.access_end_date, s.title";
+            s.id, s.title, s.access_start_date, s.access_end_date
+            FROM $tbl_session s
+            INNER JOIN $tbl_session_user sru ON sru.session_id = s.id
+            WHERE (
+                sru.user_id = $user_id AND sru.relation_type = ".SessionEntity::GENERAL_COACH."
+            )
+            $coachCourseConditions
+            ORDER BY s.access_start_date, s.access_end_date, s.title";
 
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -3074,8 +3080,37 @@ class UserManager
                     $url
                 );
 
-                // This query is horribly slow when more than a few thousand
-                // users and just a few sessions to which they are subscribed
+                $sessionRelCourses = array_merge($coursesAsGeneralCoach, $coursesAsCourseCoach);
+
+                // MultiURL: ensure courses are filtered by access_url_rel_course (same behavior as legacy SQL above)
+                if (api_get_multiple_access_url() && -1 != $access_url_id && !empty($sessionRelCourses)) {
+                    $courseIds = [];
+                    foreach ($sessionRelCourses as $src) {
+                        $courseIds[] = (int) $src->getCourse()->getId();
+                    }
+                    $courseIds = array_values(array_unique($courseIds));
+
+                    if (!empty($courseIds)) {
+                        $ids = implode(',', $courseIds);
+                        $sqlAllowed = "SELECT c_id FROM $tbl_url_course WHERE access_url_id = $access_url_id AND c_id IN ($ids)";
+                        $resAllowed = Database::query($sqlAllowed);
+
+                        $allowed = [];
+                        while ($r = Database::fetch_assoc($resAllowed)) {
+                            $allowed[(int) $r['c_id']] = true;
+                        }
+
+                        $sessionRelCourses = array_values(array_filter(
+                            $sessionRelCourses,
+                            function (SessionRelCourse $src) use ($allowed) {
+                                return isset($allowed[(int) $src->getCourse()->getId()]);
+                            }
+                        ));
+                    } else {
+                        $sessionRelCourses = [];
+                    }
+                }
+
                 $coursesInSession = array_map(
                     function (SessionRelCourse $courseInSession) {
                         $course = $courseInSession->getCourse();
@@ -3087,7 +3122,7 @@ class UserManager
                             'sort' => 1,
                         ];
                     },
-                    array_merge($coursesAsGeneralCoach, $coursesAsCourseCoach)
+                    $sessionRelCourses
                 );
 
                 foreach ($coursesInSession as $result_row) {
@@ -3111,27 +3146,35 @@ class UserManager
                 continue;
             }
 
-            /* This query is very similar to the above query,
-               but it will check the session_rel_course_user table if there are courses registered to our user or not */
+            // MultiURL filter for this legacy SQL too (otherwise it may return courses from other URLs)
+            $join_access_url_2 = '';
+            $where_access_url_2 = '';
+            if (api_get_multiple_access_url() && -1 != $access_url_id) {
+                $join_access_url_2 = " INNER JOIN $tbl_url_course url_rel_course ON url_rel_course.c_id = course.id ";
+                $where_access_url_2 = " AND url_rel_course.access_url_id = $access_url_id ";
+            }
+
             $sql = "SELECT DISTINCT
-                course.code code,
-                course.title i, CONCAT(user.lastname,' ',user.firstname) t,
-                email,
-                course.course_language l,
-                1 sort,
-                access_start_date,
-                access_end_date,
-                session.id as session_id,
-                session.title as session_name,
-                IF((session_course_user.user_id = 3 AND session_course_user.status = ".SessionEntity::COURSE_COACH."),'2', '5')
-            FROM $tbl_session_course_user as session_course_user
-            INNER JOIN $tbl_course AS course
+            course.code code,
+            course.title i, CONCAT(user.lastname,' ',user.firstname) t,
+            email,
+            course.course_language l,
+            1 sort,
+            access_start_date,
+            access_end_date,
+            session.id as session_id,
+            session.title as session_name,
+            IF((session_course_user.user_id = $user_id AND session_course_user.status = ".SessionEntity::COURSE_COACH."),'2', '5')
+        FROM $tbl_session_course_user as session_course_user
+        INNER JOIN $tbl_course AS course
             ON course.id = session_course_user.c_id AND session_course_user.session_id = $session_id
-            INNER JOIN $tbl_session as session
+        $join_access_url_2
+        INNER JOIN $tbl_session as session
             ON session_course_user.session_id = session.id
-            LEFT JOIN $tbl_user as user ON user.id = session_course_user.user_id
-            WHERE session_course_user.user_id = $user_id
-            ORDER BY i";
+        LEFT JOIN $tbl_user as user ON user.id = session_course_user.user_id
+        WHERE session_course_user.user_id = $user_id
+            $where_access_url_2
+        ORDER BY i";
 
             $course_list_sql_result = Database::query($sql);
             while ($result_row = Database::fetch_assoc($course_list_sql_result)) {

@@ -9601,7 +9601,7 @@ msgid "Forum attachment added"
 msgstr ""
 
 msgid "directory"
-msgstr ""
+msgstr "folda"
 
 msgid "directories"
 msgstr "awọn folda"
@@ -14482,7 +14482,7 @@ msgid "dari"
 msgstr "Dari"
 
 msgid "dutch corporate"
-msgstr "Dutch corporate"
+msgstr "dutch ajumọṣe"
 
 msgid "english for organisations"
 msgstr "Èdè Gẹ̀ẹ́sì fún àwùjọ"
@@ -15448,13 +15448,13 @@ msgid "Poor"
 msgstr "Ko dara"
 
 msgid "Not linked to media"
-msgstr ""
+msgstr "Ko so pọ si media"
 
 msgid "Attach to media"
-msgstr ""
+msgstr "Fi pọ si media"
 
 msgid "Show only final score, with categories if available"
-msgstr ""
+msgstr "Han aami ipari nikan, pẹlu awọn ẹka ti o ba wa"
 
 msgid "Media"
 msgstr "Media"
@@ -16504,46 +16504,46 @@ msgid "Social network link"
 msgstr "Asopọ nẹtiwọọki awujọ"
 
 msgid "Handing over of task %s"
-msgstr ""
+msgstr "Ifijiṣẹ iṣẹ %s"
 
 msgid "Copy to my private file area"
-msgstr ""
+msgstr "Daakọ si agbegbe faili ikọkọ mi"
 
 msgid "Export to PDF format"
-msgstr ""
+msgstr "Fi jade si ọna kika PDF"
 
 msgid "Resource shared"
-msgstr ""
+msgstr "Ohun elo pinpin"
 
 msgid "There are a file with the same name in your private user file area. Do you want replace it?"
-msgstr ""
+msgstr "Faili kan wa pẹlu orukọ kanna ni agbegbe faili olumulo ikọkọ rẹ. Ṣe o fẹ rọpa rẹ?"
 
 msgid "Copy failed"
-msgstr ""
+msgstr "Daakọ kuna"
 
 msgid "The copy has been made"
-msgstr ""
+msgstr "Daakọ ti ṣe"
 
 msgid "File replaced"
-msgstr ""
+msgstr "Faili ti rọpa"
 
 msgid "My files"
-msgstr ""
+msgstr "Awọn faili mi"
 
 msgid "Allow users to copy files from a course in your personal file area"
-msgstr ""
+msgstr "Gba awọn olumulo laaye lati daakọ awọn faili lati ẹkọ kan sinu agbegbe faili ara ẹni rẹ"
 
 msgid "Allows users to copy files from a course in your personal file area, visible through the Social Network or through the HTML editor when they are out of a course"
-msgstr ""
+msgstr "Gba awọn olumulo laaye lati daakọ awọn faili lati ẹkọ kan sinu agbegbe faili ara ẹni rẹ, ti o han nipasẹ Nẹtiwọọki Awujọ tabi nipasẹ olootu HTML nigbati wọn ba jade kuro ninu ẹkọ kan"
 
 msgid "Update Image"
-msgstr ""
+msgstr "Ṣe imudojuiwọn aworan"
 
 msgid "Enable time limits"
-msgstr ""
+msgstr "Ṣe amulẹ awọn aala akoko"
 
 msgid "Protected Document"
-msgstr ""
+msgstr "Iwe-ipamọ Ti a daabobo"
 
 msgid "Last logins"
 msgstr "Àwọn ìwọle ìkẹ́yìn"
@@ -16996,28 +16996,28 @@ msgid "Open in a new window"
 msgstr "Ṣí nínú fèrèsì tuntun"
 
 msgid "Speed"
-msgstr ""
+msgstr "Iyara"
 
 msgid "Faster"
-msgstr ""
+msgstr "Yara ju"
 
 msgid "Fast"
-msgstr ""
+msgstr "Yara"
 
 msgid "Slow"
-msgstr ""
+msgstr "Lọra"
 
 msgid "Slower"
-msgstr ""
+msgstr "Lọra ju"
 
 msgid "Use Pediaphon audio services"
-msgstr ""
+msgstr "Lo awọn iṣẹ ohun Pediaphon"
 
 msgid "Supports text with several thousands characters, in various types of male and female voices (depending on the language). Audio files will be generated and automatically saved to the Chamilo directory in which you are."
-msgstr ""
+msgstr "Ţẹ ṣe atilẹyin ọrọ pẹlu ọpọlọpọ ẹgbẹrun awọn ohun kikọ, ni awọn oriṣi awọn ohun ọkùnrin ati abo (da lori ede). Awọn faili ohun yoo ṣẹda ati fi pamọ laifọwọsi si folda Chamilo nibiti o wa."
 
 msgid "Please select a language"
-msgstr ""
+msgstr "Jọwọ yan ede kan"
 
 msgid "Move users results from/to a session"
 msgstr "Gbe awọn abajade olumulo lati/tu kan igba"
@@ -20005,61 +20005,61 @@ msgid "Use the 'official code' to sort most students list on the platform, inste
 msgstr "Lo 'koodu osise' lati to awọn akojọ ọmọ ile-iwe julọ lori pẹpẹ, dipọ ti orukọ-idile wọn tabi orukọ akọkọ."
 
 msgid "Default e-mail alert setting on new quiz"
-msgstr ""
+msgstr "Eto itaniji imeeli aiyipada lori idanwo tuntun"
 
 msgid "Whether you want course managers (teachers) to be notified by e-mail when a quiz is answered by a student. This is the default value to be given to all new courses, but each teacher can still change this setting in his/her own course."
-msgstr ""
+msgstr "Boyá o fẹ ki awọn alajọ ẹkọ (olukọ) jẹ ifitonileti nipasẹ imeeli nigbati ọmọ ile-iwe kan ba dahun idanwo kan. Eyi ni iye aiyipada ti yoo fun gbogbo awọn ẹkọ tuntun, ṣugbọn olukọ kọọkan le tun yi eto yii pada ninu ẹkọ tirẹ."
 
 msgid "Display official code in exercises results"
-msgstr ""
+msgstr "Han koodu osise ni awọn abajade adaṣe"
 
 msgid "Whether to show the students' official code in the exercises results reports"
-msgstr ""
+msgstr "Boyá lati han koodu osise awọn ọmọ ile-iwe ni awọn ijabọ abajade adaṣe"
 
 msgid "Hide private courses from catalogue"
-msgstr ""
+msgstr "Fi awọn ẹkọ ikọkọ pamọ kuro ninu iwe-akọọkọ"
 
 msgid "Whether to hide the private courses from the courses catalogue. This makes sense when you use the course catalogue mainly to allow students to auto-subscribe to the courses."
-msgstr ""
+msgstr "Boyá lati fi awọn ẹkọ ikọkọ pamọ kuro ninu iwe-akọọkọ ẹkọ. Eyi ṣe oye nigbati o ba lo iwe-akọọkọ ẹkọ ni pataki lati gba awọn ọmọ ile-iwe laaye lati forukọsilẹ laifọwọsi si awọn ẹkọ."
 
 msgid "Sessions and courses catalogue"
-msgstr ""
+msgstr "Iwe-akọọkọ awọn akoko ati awọn ẹkọ"
 
 msgid "Whether you want to show only courses, only sessions or both courses *and* sessions in the courses catalogue."
-msgstr ""
+msgstr "Boyá o fẹ han awọn ẹkọ nikan, awọn akoko nikan tabi awọn ẹkọ *ati* awọn akoko ninu iwe-akọọkọ ẹkọ."
 
 msgid "Enable language auto-detect in custom pages"
-msgstr ""
+msgstr "Ṣe amulẹ idaniloju ede laifọwọsi ni awọn oju-iwe aṣa"
 
 msgid "If you use custom pages, enable this if you want to have a language detector there present the page in the user's browser language, or disable to force the language to be the default platform language."
-msgstr ""
+msgstr "Ti o ba lo awọn oju-iwe aṣa, ṣe amulẹ eyi ti o ba fẹ lati ni awoṣawọ ede nibẹ lati ṣe afihan oju-iwe ni ede ẹrín olumulo, tabi pa lati fi ede le ede platform aiyipada."
 
 msgid "Learning paths: show reduced report"
-msgstr ""
+msgstr "Awọn ọna ẹkọ: han ijabọ ti o dinku"
 
 msgid "Inside the learning paths tool, when a user reviews his own progress (through the stats icon), show a shorten (less detailed) version of the progress report."
-msgstr ""
+msgstr "Laarin ohun elo awọn ọna ẹkọ, nigbati olumulo kan ṣe atunyẹwo ilọsiwaju tirẹ (nipasẹ aami stats), han ẹya ti o kuru (alaye ti o kere si) ti ijabọ ilọsiwaju."
 
 msgid "Allow session-to-session copy for teachers"
-msgstr ""
+msgstr "Gba ẹda akoko-si-akoko laaye fun awọn olukọ"
 
 msgid "Enable this option to let teachers copy their content from one course in a session to a course in another session. By default, this option is only available to platform administrators."
-msgstr ""
+msgstr "Ṣe amulẹ aṣayan yii lati jẹ ki awọn olukọ daakọ akoonu wọn lati ẹkọ kan ninu akoko kan si ẹkọ kan ninu akoko miiran. Nipa aiyipada, aṣayan yii wa fun awọn alabojuto platform nikan."
 
 msgid "Hide logout button"
-msgstr ""
+msgstr "Fi bọtini ijade pamọ"
 
 msgid "Hide the logout button. This is usually only interesting when using an external login/logout method, for example when using Single Sign On of some sort."
-msgstr ""
+msgstr "Fi bọtini ijade pamọ. Eyi nigbagbogbo n ṣe iwulo nikan nigbati lilo ọna ibọwọle ita/ijade, fun apẹẹrẹ nigbati lilo Ẹyọkan Sign On ti iru kan."
 
 msgid "Redirect admin to courses list"
-msgstr ""
+msgstr "Darí alabojuto si akojọ awọn ẹkọ"
 
 msgid "The default behaviour is to send administrators directly to the administration panel (while teachers and students are sent to the courses list or the platform homepage). Enable to redirect the administrator also to his/her courses list."
-msgstr ""
+msgstr "Ihùwàsì aiyipada ni lati fi awọn alabojuto ranṣẹ taara si panẹli iṣakoso (lakoko ti awọn olukọ ati awọn ọmọ ile-iwe ti ranṣẹ si akojọ awọn ẹkọ tabi oju-iwe akọkọ platform). Ṣe amulẹ lati darí alabojuto naa tun si akojọ awọn ẹkọ rẹ."
 
 msgid "Courses custom icons"
-msgstr ""
+msgstr "Awọn aami ẹkọ aṣa"
 
 msgid "Use course images as the course icon in courses lists (instead of the default green blackboard icon)."
 msgstr ""
@@ -25879,43 +25879,43 @@ msgid "By default, it is only possible to limit the time per test. Limiting it p
 msgstr ""
 
 msgid "Global pending tests list"
-msgstr ""
+msgstr "Àkójọ àwọn ìdánwò tí kò tíì ṣe pátápátá"
 
 msgid "Enable to display to the final user a page with the list of pending tests across all courses."
-msgstr ""
+msgstr "Ṣàpẹẹrẹ láti ṣàfihàn fún olùpẹ̀ lò ìkójọpọ̀ ìkójọpọ̀ àwọn ìdánwò tí kò tíì ṣe pátápátá láàrín gbogbo àwọn ẹ̀kà."
 
 msgid "Quick image addition to question"
-msgstr ""
+msgstr "Ṣàfihàn àwòrán kánkán sí ìbéèrè"
 
 msgid "Enable an additional icon in the test questions list to add an image as question description. This vastly accelerates question edition when the questions are in the title and the description only includes an image."
-msgstr ""
+msgstr "Ṣàpẹẹrẹ àwòrán àfikún nínú ìkójọpọ̀ ìbéèrè ìdánwò láti ṣàfihàn àwòrán gẹ́gẹ́ ìbéèrè. Èyí ń yára ìdásílẹ̀ ìbéèrè gan-an nigbà tí ìbéèrè wà nínú akọ̀lé àti ìtumọ̀ nìkan ní àwòrán."
 
 msgid "Hide user IP from test reports"
-msgstr ""
+msgstr "Fi ìpààrọ̀ olùpẹ̀ ìdásílẹ̀ ìdánwò pamọ́"
 
 msgid "By default, we show user information and its IP address, but this might be considered personal data, so this option allows you to remove this info from all test reports."
-msgstr ""
+msgstr "Ní ìpilẹ̀, a ṣàfihàn ìròye olùpẹ̀ àti ìpààrọ̀ IP rẹ̀, ṣùgbọ́n èyí lè jẹ́ ìròye àdáni, nítorí náà àṣàyàn yìí yọ ìròye yìí kúrò nínú gbogbo ìròyìn ìdánwò."
 
 msgid "Show deleted tests in 'My progress'"
-msgstr ""
+msgstr "Fi ìdánwò tí a ti pa rẹ̀ hàn nínú 'Ìlọsí mi'"
 
 msgid "Enable this option to display, on the 'My progress' page, the results of all tests you have taken, even the ones that have been deleted."
-msgstr ""
+msgstr "Ṣàpẹẹrẹ àṣàyàn yìí láti ṣàfihàn, lórí ìkójọpọ̀ 'Ìlọsí mi', àwọn ìpinnu gbogbo ìdánwò tí o ti ṣe, àti àwọn tí a ti pa rẹ̀."
 
 msgid "Show test attempts from all sessions in pending tests report"
-msgstr ""
+msgstr "Fi ìgbìyànjú ìdánwò látàrí gbogbo àwùjọ pàtàkì hàn nínú ìròyìn ìdánwò tí kò tíì ṣe"
 
 msgid "Show test attempts from users in all sessions where the general coach has access in pending tests report."
-msgstr ""
+msgstr "Fi ìgbìyànjú ìdánwò látàrí àwùjọ pàtàkì gbogbo ìpàdé tí olùdàá gbogbogbò ni ìwọlé hàn nínú ìròyìn ìdánwò tí kò tíì ṣe."
 
 msgid "Show test attempts from all sessions in base course"
-msgstr ""
+msgstr "Fi ìgbìyànjú ìdánwò látàrí gbogbo àwùjọ pàtàkì hàn nínú ìdàbọ̀ ìdàbọ̀"
 
 msgid "Show test attempts from users in all sessions to the teacher in the base course."
-msgstr ""
+msgstr "Fi ìgbìyànjú ìdánwò látàrí àwùjọ pàtàkì gbogbo ìpàdé hàn fún olùkọ nínú ìdàbọ̀ ìpìlẹ̀."
 
 msgid "Check all answers before submitting test"
-msgstr ""
+msgstr "Ṣàyẹ̀wò gbogbo ìdáhùn kí o to fi ìdánwò ránṣẹ́"
 
 msgid "Display a popup with the list of answered/unanswered questions before submitting the test."
 msgstr "Ṣàfihàn àpòpù pẹ̀lú àtòjọ àwọn ìbéèrè tí a ti dáhùn/tí a kò tíì dáhùn ṣáájú ìfiwọ̀rán ìdánwò."
@@ -26068,49 +26068,49 @@ msgid "Cache results in the gradebook"
 msgstr "Ìpamọ́ ìdí ìdíbọ̀ nínú ìdí ìdíbọ̀"
 
 msgid "Put some of the large calculations of averages in cached fields for the links and evaluations to increase speed (considerably). The potential negative impact is that it can take some time to refresh the gradebook results tables."
-msgstr ""
+msgstr "Fi àwùjọ ìṣirò ìpínyà ńlá kan sínú àwùjọ ìpamọ́ fún ìsopọ̀ àti ìdáwò láti pọ̀ ìyara (púpọ̀). Ìpa ìdààmú tí ó ṣeeṣe ni pé yóò gba ìṣẹ́ju díẹ̀ láti tún ìtabà ìpinnu ìkẹ́kọ̀ọ́ ìdíwò."
 
 msgid "User extra fields in gradebook flat view"
-msgstr ""
+msgstr "Àwùjọ ìdíwò ìpìlẹ̀ ìdíwò olùpẹ̀"
 
 msgid "Add the given columns ('variables' array) to the main results table in the gradebook."
-msgstr ""
+msgstr "Ṣàfikún àwùjọ ('ìyàwòrán') tí a fún sí ìtabà ìpinnu pàtàkì nínú ìkẹ́kọ̀ọ́ ìdíwò."
 
 msgid "Gradebook PDF export options"
-msgstr ""
+msgstr "Àwùjọ ìdásílẹ̀ PDF ìkẹ́kọ̀ọ́ ìdíwò"
 
 msgid "Change the PDF export for learners based on the provided settings ('hide_score_weight', 'hide_feedback_textarea', ...)"
-msgstr ""
+msgstr "Yí ìdásílẹ̀ PDF fún àwùjọ ìmọ̀ gẹ́gẹ́ ìṣètò tí a pèsè ('fi ìpinnu ìdíwò pamọ́', 'fi ìfọwéràn ìròyìn pamọ́', ...)"
 
 msgid "Gradebook comments"
-msgstr ""
+msgstr "Àwùjọ ìròyìn ìkẹ́kọ̀ọ́ ìdíwò"
 
 msgid "Enable gradebook comments so teachers can add a comment to the overall performance of the learner in this course. The comment will appear in the PDF export for the learner."
-msgstr ""
+msgstr "Ṣàpẹẹrẹ ìròyìn ìkẹ́kọ̀ọ́ ìdíwò kí olùkọ le fi ìròyìn kun ìṣẹ̀ ìdàgbàsókè ìdàgbàsókè olùmọ̀ nínú ìdàbọ̀ yìí. Ìròyìn yí yóò han nínú ìdásílẹ̀ PDF fún olùmọ̀."
 
 msgid "Gradebook extra statistics"
-msgstr ""
+msgstr "Àwùjọ ìṣirò ìdíwò ìdíwò"
 
 msgid "Add additional columns to the gradebook's main report (1 = ranking, 2 = best score, 3 = average)."
-msgstr ""
+msgstr "Ṣàfikún àwùjọ ìdíwò sí ìròyìn pàtàkì ìkẹ́kọ̀ọ́ ìdíwò (1 = ìdásílẹ̀, 2 = ìpinnu ìdáríjì, 3 = ìpínyà)."
 
 msgid "Hide gradebook table for learners"
-msgstr ""
+msgstr "Fi ìtabà ìkẹ́kọ̀ọ́ ìdíwò pamọ́ fún àwùjọ ìmọ̀"
 
 msgid "Reduce gradebook load time by hiding the results table (but still giving access to certificates, skills, etc)."
-msgstr ""
+msgstr "Dín ìṣẹ̀ ìdàgbàsókè ìkẹ́kọ̀ọ́ ìdíwò pẹ̀lú fífi ìtabà ìpinnu pamọ́ (ṣùgbọ́n ṣì fun ìwọlé sí ìjẹ́rẹ́, ìmọ̀, àbẹ̀)."
 
 msgid "Hide item links for learners in gradebook"
-msgstr ""
+msgstr "Fi ìsopọ̀ ohun kan pamọ́ fún àwùjọ ìmọ̀ nínú ìkẹ́kọ̀ọ́ ìdíwò"
 
 msgid "Avoid learners clicking on items from the gradebook by removing the links on the items."
-msgstr ""
+msgstr "Yẹ̀wò àwùjọ ìmọ̀ tí kò ṣe ìtẹ̀síwájú lórí àwùjọ látàrí ìkẹ́kọ̀ọ́ ìdíwò pẹ̀lú yíyọ ìsopọ̀ lórí àwùjọ."
 
 msgid "Enable skills by gradebook's subcategory"
-msgstr ""
+msgstr "Ṣàpẹẹrẹ ìmọ̀ pẹ̀lú ìpìlẹ̀ ìkẹ́kọ̀ọ́ ìdíwò"
 
 msgid "Skills are normally attributed for completing a whole gradebook. By enabling this option, you allow skills to be attached to sub-sections of gradebooks."
-msgstr ""
+msgstr "Ìmọ̀ wà pàtàkì fún ìparí ìkẹ́kọ̀ọ́ ìdíwò kan. Pẹ̀lú ìfọwọ́ṣe yìí, o yọ ìmọ̀ láti so pọ̀ sí àwùjọ ìpìlẹ̀ ìkẹ́kọ̀ọ́ ìdíwò."
 
 msgid "Language switcher in main menu"
 msgstr "Yipada ede ni akojọ akọkọ"
@@ -31448,4 +31448,376 @@ msgstr "Fún ìròyìn púpọ̀ ṣàyèwò %s"
 
 msgid "Manager"
 msgstr "Olùdírímọ́"
+
+msgid "Mark as"
+msgstr "Ṣàmì gẹ́gẹ́"
+
+msgid "Reply to all"
+msgstr "Dáhùn sí gbogbo"
+
+msgid "SCIM external ID"
+msgstr "SCIM ID ìtàpá"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Jọ̀wọ́ gbà ìtumọ̀ ìlànà ìdásílẹ̀ tuntun."
+
+msgid "Required value for operation without path"
+msgstr "Ìyàwòrán ìdíwò fún ìṣiṣẹ́ láìsí ìlọlọ wàyí"
+
+msgid "Available space (%s)"
+msgstr "Àyè tí ó ṣeé ṣe (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Ṣàtúnwò ìtumọ̀ yìí fún ìwádìí ìpìlẹ̀"
+
+msgid "Unknown course"
+msgstr "Ìdàbọ̀ tí kò mọ̀"
+
+msgid "Certificate not found."
+msgstr "Ìjẹ́rẹ́ kò rí."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Àmì ìdààmú tí ó ti kọjá. Jọ̀wọ́ tún ìkójọpọ̀ ìkójọpọ̀ ṣe kí o tún ìdọwọ́ ṣe."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Àwùjọ ìṣàkóso pẹ̀lú nìkan ni a lè yí ìrí ìdàbọ̀ padà."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Àṣìṣe tí kò yẹ nigba ìfọwọ́sowọpọ̀ olùpẹ̀"
+
+msgid "Search in resource logs"
+msgstr "Ṣàwádìí nínú àwùjọ ìpamọ́ ìtìlẹ̀yìn"
+
+msgid "Include this learning path in the global search results"
+msgstr "Kọ ìlọlọ ìmọ̀ yìí sínú ìpìlẹ̀ ìwádìí ìpìlẹ̀"
+
+msgid "The course code already exists"
+msgstr "Kọ ìdàbọ̀ ìdàbọ̀ ti wà tẹ́lẹ̀"
+
+msgid "Latest news"
+msgstr "Ìròyìn tuntun"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Gba awọn iroyin tuntun lati Chamilo, pẹlu awọn iṣoro aabo ati awọn iṣẹlẹ, taara sinu panẹli iṣakoso rẹ. Awọn akoko iroyin wọnyi yoo ṣayẹwo lori olupin iroyin Chamilo ni gbogbo igba ti o ba ṣe gbejade oju-iwe iṣakoso ati pe o han si awọn olutọju nikan."
+
+msgid "Chamilo support block"
+msgstr "Àwòtẹ́lẹ̀ ìdààmú Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Gba awọn imọran pro ati ọna irọrun lati kan si awọn olupese iṣẹ osise fun atilẹyin alamọdaju, taara lati ọdọ awọn ṣẹda Chamilo. Àwòtẹ́lẹ̀ yìí yoo han lori oju-iwe iṣakoso rẹ, han si awọn olutọju nikan, ati pe o tunse ni gbogbo igba ti o ba ṣe gbejade oju-iwe iṣakoso."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Fi aṣayan pamọ lati fi awọn ìkéde ranṣẹ si awọn olummo HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Gba awọn olutọju igba laaye lati ṣe igbasilẹ awọn iwe-ẹri ikọkọ"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Ti o ba ṣiṣẹ, awọn olutọju igba le ṣe igbasilẹ awọn iwe-ẹri paapaa ti wọn ko ba ṣe atẹjade ni gbangba."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Ti ko ba ṣofo, ilana ṣiṣẹ-ọnkurasi yoo wa fun diẹ ninu awọn aaye ninu profaili olummo ati ṣa-kọ wọn fun iṣẹ-ẹkọ. Fun apẹẹrẹ, olukọ ti o ṣe amọja ni tita tita oni-nọmba le ṣeto aṣaya « tita tita oni-nọmba » laifọwọyi lori gbogbo iṣẹ-ẹkọ (s)he ṣẹda."
+
+msgid "Main menu entries"
+msgstr "Awọn titẹ si inu akọrin akọkọ"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Ṣayẹwo awọn titẹ ti o fẹ lati han ni akọrin akọkọ"
+
+msgid "Main menu entries per role"
+msgstr "Awọn titẹ si inu akọrin akọkọ fun ipa kọọkan"
+
+msgid "Define header tabs visibility per role."
+msgstr "Ṣalaye hihan awọn taabu akọle fun ipa kọọkan."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Ṣeto awọn aṣayan ti o fẹ lati han ni lilọ kiri ni ayika tabili lati ṣafihan diẹ tabi diẹ sii awọn ila lori oju-iwe kan. bọ. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Àwùjọ ìdààmú àfikún tí o lè ṣíṣẹ́ fún ẹrìn ìdàgbàsókè fídíò nínú Chamilo. Àwùjọ ìdààmú pẹ̀lú 'speed', èyí tí ń jẹ́ kí o yí ìdáàbòbò ìdáṣe fídíò padà."
+
+msgid "Mail: character set"
+msgstr "Imeeli: ṣeto ohun kikọ"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Ni ṣẹlẹ ti o ba nilo lati ṣalaye ṣeto charset lati lo nigbati o ba n firanṣẹ awọn imeeli yẹn. Fi sofo silẹ ti o ko ba mọ."
+
+msgid "Mail: Debug"
+msgstr "Imeeli: Ṣayẹwo"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Yan boya o fẹ lati ṣiṣẹ awọn akọsilẹ ṣayẹwo fifiranṣẹ imeeli. Awọn wọnyi yoo fun ọ ni alaye diẹ sii lori kini o n ṣẹlẹ nigbati o npọ si iṣẹ imeeli, ṣugbọn wọn kii ṣe ẹwa ati pe wọn le bajẹ apẹrẹ oju-iwe. Lo nikan nigbati ko si iṣẹ olummo."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Imeeli: Yago fun LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Diẹ ninu awọn onibara imeeli ko loye ọna LD+JSON alaye, ti n ṣafihan bi okun JSON alaitọ si olummo ikẹhin. Ti eyi ba jẹ ọran rẹ, o le fẹ lati ṣeto oniyipada isalẹ si 'false' lati pa akọle yii."
+
+msgid "Mail: DKIM headers"
+msgstr "Imeeli: Awọn akọle DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Tẹ inu àwùjọ JSON ìdààmú ìṣètò DKIM rẹ (wo àpẹẹrẹ)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Imeeli: Awọn aṣayan XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Ti o ba lo diẹ ninu iṣẹ imeeli ti o da lori XOAuth2, lo eto yii ni JSON lati fi ipilẹṣẹ rẹ pamọ (wo apẹẹrẹ) ati yan XOAuth2 ni eto iṣẹ imeeli."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Ṣalaye iru agbegbe: \"prod\" (iṣẹ ṣiṣe deede), \"validation\" (bii iṣẹ ṣiṣe ṣugbọn laisi iṣiro iṣiro), tabi \"test\" (ipo ṣayẹwo pẹlu awọn ohun elo idagbasoke gẹgẹbi awọn itọkasi okun ti ko tumọ si)."
+
+msgid "Global limit of users per course"
+msgstr "Aala agbaye ti awọn olummo fun iṣẹ-ẹkọ kọọkan"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Ṣalaye nọmba ti o pọ julọ agbaye ti awọn olummo (awọn olukọ pẹlu) ti a gba laaye lati forukọsilẹ si eyikeyi iṣẹ-ẹkọ ẹyọkan lori pẹpẹ. Ṣeto iye yii si 0 lati pa aala naa. Eyi ṣe iranlọwọ lati yago fun awọn iṣẹ-ẹkọ ti o kún fun awọn ọna abule ṣiṣi."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Ṣiṣẹ lati lo àwùjọ láti ṣàpèjúwe àwùjọ ipa tí ó yẹ kí a fi hàn kedere àti àwùjọ tí yóò fi pamọ́."
+
+msgid "Show base course posts in session course"
+msgstr "Fi awọn ifiweranṣẹ iṣẹ-ẹkọ ipilẹ han ni iṣẹ-ẹkọ igba"
+
+msgid "Limit identical email usage"
+msgstr "Dinku lilo imeeli kanna"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr ""
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr ""
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr ""
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr ""
+
+msgid "Redirect after login (per profile)"
+msgstr ""
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr ""
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr ""
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr ""
+
+msgid "Array defining host and port for the LDAP server."
+msgstr ""
+
+msgid "Enable 2FA"
+msgstr ""
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr ""
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr ""
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr ""
+
+msgid "Show remaining days in My Sessions"
+msgstr ""
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr ""
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr ""
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr ""
+
+msgid "Disclose AI assistance"
+msgstr ""
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr ""
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr ""
+
+msgid "Session Catalog Settings"
+msgstr ""
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr ""
+
+msgid "Show Course Descriptions"
+msgstr ""
+
+msgid "Display course descriptions within the catalog listing."
+msgstr ""
+
+msgid "Published Courses Only"
+msgstr ""
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr ""
+
+msgid "Display Catalog on Homepage"
+msgstr ""
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr ""
+
+msgid "Hide Public Link"
+msgstr ""
+
+msgid "Remove the public URL link from course cards."
+msgstr ""
+
+msgid "Only Selected Courses"
+msgstr ""
+
+msgid "Show only manually selected courses in the catalog."
+msgstr ""
+
+msgid "Allow Student Browsing"
+msgstr ""
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr ""
+
+msgid "Hide Private Courses"
+msgstr ""
+
+msgid "Exclude private courses from the catalog display."
+msgstr ""
+
+msgid "Show Courses & Sessions"
+msgstr ""
+
+msgid "Include both courses and sessions in catalog results."
+msgstr ""
+
+msgid "Auto Session Subscription"
+msgstr ""
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr ""
+
+msgid "Subscription in Session View"
+msgstr "Ẹfiwe ni Wiwo Igbakọ"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Gba awọn olummoṣiṣẹ laaye lati forukọsilẹ si awọn iṣẹ-ẹkọ taara lati oju-iwe igbakọ wọn."
+
+msgid "Enable redirection plugin"
+msgstr "Ṣiṣẹ plugin ìdarípadà"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Array ti n ṣalaye 'ọjọ' ati 'osu' lati ṣeto ọjọ ipari akọọlẹ nigbati olummoṣiṣẹ ba wọle ni akọkọ."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Array ti ipa => nọmba eyiti o ṣe aṣoju nọmba awọn ọjọ ti akọọlẹ kan ni ṣaaju ipari, da lori ipa."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Aaye olummoṣiṣẹ afikun ti a lo lati wa ati pe awọn igba"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Ètò yìí ṣe ìdàrù bọtini aaye olummoṣiṣẹ afikun (fun apẹẹrẹ, \"ile-iṣẹ\") ti yoo lo lati wa awọn olummoṣiṣẹ ati lati ṣalaye orukọ igba nigbati a forukọsilẹ awọn ọmọ ile-iwe lati /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Ẹlẹ́dàá ìtumọ̀ ìdílé ìròyìn"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Gba awọn olùkọ́ laaye láti béèrè fún ìtumọ̀ ìdílé ìròyìn tí AI ṣẹ̀dá nínú ìdàgbàsókè wọn. Èyí yóò ṣẹ̀dá 20 ìtumọ̀ lórí orúkọ ìdàgbàsókè àti ìròyìn ìbáàtàn nínú ohun èlò ìròyìn ìdàgbàsókè. Ti a lo ju ẹ̀kan lọ, yóò yọ ìtumọ̀ tí ó ti wà nínú ìdílé ìròyìn yẹn kúrò (ràn án lọ́wọ́ láti rí i dájú pé àkíì yóò le pin pẹ̀lú àwùjọ AI tí a ṣètò.)."
+
+msgid "Video generator"
+msgstr "Ẹlẹ́dàá fídíò"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Ṣẹ̀dá àwòrán fídíò lórí ìwà ìdásílẹ̀ tàbí àkíì pẹ̀lú AI (èyí lè gba ọ̀pọ̀ àwọn àmì.)."
+
+msgid "Course analyser"
+msgstr "Àlùfáàsɛ ìdàgbàsókè"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Ṣàyẹ̀wò gbogbo àwùjọ ìṣòwò nínú ìdàgbàsókè kan tàbí ọ̀pọ̀ ìdàgbàsókè kí o sì kọ́ ẹ̀kọ́ ìdíwò AI láti dáhùn ìbéèrè èyí tàbí àwùjọ wọ̀nyí (ràn án lọ́wọ́ láti rí i dájú pé àkíì yóò le pin pẹ̀lú àwùjọ AI tí a ṣètò.)."
+
+msgid "Test/development"
+msgstr "Ìdánwò/Ìdàgbàsókè"
+
+msgid "Crons"
+msgstr "Crons"
+
+msgid "Editor"
+msgstr "Ẹ̀dítà"
+
+msgid "Gradebook"
+msgstr "Iwe-akowe igba"
+
+msgid "Internationalization"
+msgstr "Ìdàpọ̀pọ̀ orílẹ̀-èdè"
+
+msgid "User profiles"
+msgstr "Àwòrán olummoṣiṣẹ"
+
+msgid "Support tickets"
+msgstr "Tikẹ̀tì ìrànlọ́wọ́"
+
+msgid "Webservices"
+msgstr "Àwùjọ ìwẹ̀wẹ̀"
+
+msgid "Catalogue"
+msgstr "Àkàtà"
+
+msgid "Workflows"
+msgstr "Ṣiṣẹ́ ìlò"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Ètò jẹ́ ìdàsílẹ̀ lórí àwùjọ ìwò"
+
+msgid "Show JSON Template"
+msgstr "Fi Ìlò JSON Hàn"
+
+msgid "JSON Template"
+msgstr "Ìlò JSON"
+
+msgid "Installing Xapian bindings"
+msgstr "Fifi ìdọ̀mọ Xapian sínú"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Àpẹẹrẹ ìdílé ìròyìn tí ó tẹ̀ lé ìdílé ìdọ̀mọ PHP Xapian lórí Ubuntu 25.04 pẹ̀lú PHP 8.3. Ṣàdàpọ̀ ìlò àti ẹya ìdílé rẹ."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Ràn án lọ́wọ́ láti rí i dájú pé o kàn ni ẹya PHP tí o ń lo gan-an (fún àpẹẹrẹ 8.3) kí o sì yàgò fún ìpapọ̀ ọ̀pọ̀ ẹya pẹ̀lú àwùjọ ìfọwọ́sowọpọ ìdílé ìdàgbàsókè tí ó yàtọ̀."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Ni kete ti ìdàgbàsókè náà ti gbe wọ́n lọ́nà tọ́ fún CLI àti ìwẹ̀wẹ̀ àwùjọ, ìdílé ìwádìí ìwádìí loke yóò ṣe ìròyìn pé a ti fi ìdàgbàsókè Xapian sínú."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Pa awọn ikojọpọ igba ati cache daradara"
+
+msgid "Directory"
+msgstr "Kakiri"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Pa awọn faili ti o dagba ju (awọn iṣẹju)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Ṣeto 0 lati pa gbogbo awọn faili. Lo iye rere (fun apẹẹrẹ, 60) lati yago fun yiyọ awọn faili ti a ṣe ikojọpọ lọwọlọwọ."
+
+msgid "Preview only (do not delete)"
+msgstr "Iwo tẹlẹ nikan (maṣe paarẹ)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Ìkìlọ̀: o fẹ́ pa Gbogbo awọn faili igba. Iṣe yii ko le ṣe iyipada."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Eyi yoo pa gbogbo awọn faili igba. Tẹsiwaju?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Eyi yoo pa awọn faili ti o dagba ju %minutes% iṣẹju. Tẹsiwaju?"
 

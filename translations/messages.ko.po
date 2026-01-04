@@ -31455,3 +31455,375 @@ msgstr "자세한 내용은 %s를 방문하세요"
 msgid "Manager"
 msgstr "관리자"
 
+msgid "Mark as"
+msgstr "다음으로 표시"
+
+msgid "Reply to all"
+msgstr "모두에게 답장"
+
+msgid "SCIM external ID"
+msgstr "SCIM 외부 ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "최신 이용 약관을 수락하십시오."
+
+msgid "Required value for operation without path"
+msgstr "경로 없이 작업을 수행하기 위한 필수 값"
+
+msgid "Available space (%s)"
+msgstr "사용 가능 공간 (%s)"
+
+msgid "Index this description for the global search"
+msgstr "글로벌 검색을 위해 이 설명을 색인화"
+
+msgid "Unknown course"
+msgstr "알 수 없는 강좌"
+
+msgid "Certificate not found."
+msgstr "수료증을 찾을 수 없습니다."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "보안 토큰이 만료되었습니다. 페이지를 새로고침한 후 다시 시도하십시오."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "플랫폼 관리자만 강좌 가시성을 변경할 수 있습니다."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "사용자 등록 중 예기치 않은 오류가 발생했습니다"
+
+msgid "Search in resource logs"
+msgstr "리소스 로그에서 검색"
+
+msgid "Include this learning path in the global search results"
+msgstr "글로벌 검색 결과에 이 학습 경로 포함"
+
+msgid "The course code already exists"
+msgstr "강좌 코드가 이미 존재합니다"
+
+msgid "Latest news"
+msgstr "최신 뉴스"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Chamilo에서 최신 뉴스, 보안 취약점 및 이벤트를 관리 패널에서 직접 확인하세요. 이 뉴스는 관리 페이지 로드 시마다 Chamilo 뉴스 서버에서 확인되며 관리자에게만 표시됩니다."
+
+msgid "Chamilo support block"
+msgstr "Chamilo 지원 블록"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Chamilo 제작자로부터 전문 지원을 위한 공식 서비스 제공업체와 프로 팁을 쉽게 연락하세요. 이 블록은 관리 페이지에 나타나며 관리자에게만 표시되고 관리 페이지 로드 시마다 새로고침됩니다."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "HR 사용자에게 공지 전송 옵션 숨기기"
+
+msgid "Allow session admins to download private certificates"
+msgstr "세션 관리자가 비공개 수료증 다운로드 허용"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "활성화 시, 세션 관리자는 공개 게시되지 않은 수료증도 다운로드할 수 있습니다."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "비어 있지 않으면, 강좌 생성 과정에서 사용자 프로필의 일부 필드를 찾아 강좌에 자동으로 채웁니다. 예를 들어, 디지털 마케팅 전문 교사는 생성하는 각 강좌에 «디지털 마케팅» 플래그를 자동으로 설정할 수 있습니다."
+
+msgid "Main menu entries"
+msgstr "메인 메뉴 항목"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "메인 메뉴에 표시할 항목을 선택하세요"
+
+msgid "Main menu entries per role"
+msgstr "역할별 메인 메뉴 항목"
+
+msgid "Define header tabs visibility per role."
+msgstr "역할별 헤더 탭 가시성 정의."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "한 페이지에 표시할 행 수를 더 적거나 더 많이 표시하기 위해 테이블 주변 탐색에 나타날 옵션을 설정하세요. 예: [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Chamilo 비디오 플레이어에 활성화할 추가 기능 배열입니다. 옵션에는 비디오 재생 속도를 변경할 수 있는 'speed'가 포함됩니다."
+
+msgid "Mail: character set"
+msgstr "메일: 문자 세트"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "이메일을 보낼 때 사용할 문자셋을 정의해야 하는 경우. 확실하지 않으면 비워 두세요."
+
+msgid "Mail: Debug"
+msgstr "메일: 디버그"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "이메일 전송 디버그 로그를 활성화할지 선택하세요. 메일 서비스 연결 시 발생하는 사항에 대한 더 많은 정보를 제공하지만, 우아하지 않고 페이지 디자인을 깨뜨릴 수 있습니다. 사용자 활동이 없을 때만 사용하세요."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "메일: LD+JSON 사용 피하기"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "일부 이메일 클라이언트는 설명적인 LD+JSON 형식을 이해하지 못해 최종 사용자에게 느슨한 JSON 문자열로 표시합니다. 이 경우 아래 변수를 'false'로 설정하여 이 헤더를 비활성화할 수 있습니다."
+
+msgid "Mail: DKIM headers"
+msgstr "메일: DKIM 헤더"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "DKIM 구성 설정의 JSON 배열을 입력하세요 (예시 참조)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "메일: XOAuth2 옵션"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "XOAuth2 기반 이메일 서비스를 사용하는 경우, 이 JSON 설정을 사용하여 특정 구성을 저장하세요 (예시 참조)하고 메일 서비스 설정에서 XOAuth2를 선택하세요."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "환경 유형을 정의합니다: \"prod\" (일반 프로덕션), \"validation\" (통계 보고 제외 프로덕션과 유사), 또는 \"test\" (미번역 문자열 표시 등 개발자 도구가 포함된 디버그 모드)."
+
+msgid "Global limit of users per course"
+msgstr "코스당 사용자 전역 제한"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "플랫폼의 단일 코스에 가입할 수 있는 사용자(교사 포함)의 전역 최대 수를 정의합니다. 제한을 비활성화하려면 0으로 설정하세요. 이는 오픈 포털에서 코스가 과부하되지 않도록 합니다."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "어떤 역할은 명확히 표시하고 어떤 역할은 숨길지 정의하기 위해 배열을 사용하도록 활성화하세요."
+
+msgid "Show base course posts in session course"
+msgstr "세션 코스에 기본 코스 게시물 표시"
+
+msgid "Limit identical email usage"
+msgstr "동일 이메일 사용 제한"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "동일한 이메일 주소를 공유할 수 있는 계정의 최대 수. 이 제한을 비활성화하려면 0으로 설정하세요."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "세션 관리자가 모든 URL의 모든 사용자를 볼 수 있도록 허용"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "활성화되면 세션 관리자는 현재 URL과 관계없이 모든 액세스 URL의 사용자를 검색하고 나열할 수 있습니다."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "사용자가 자신의 시간대를 선택할 수 있도록 활성화. 설정 후 사용자는 과제 마감일 및 기타 시간 참조를 자신의 시간대에 맞춰 볼 수 있으며, 제출 시 오류를 줄일 수 있습니다."
+
+msgid "Redirect after login (per profile)"
+msgstr "로그인 후 리디렉션 (프로필별)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "로그인 후 프로필별 리디렉션을 {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}와 같은 JSON 객체로 정의"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "이용약관 페이지에서 법적 동의 체크박스 숨기기"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "true로 설정하면 이용약관 페이지 흐름에서 \"읽고 동의합니다\" 체크박스를 제거합니다."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "LDAP 서버의 호스트와 포트를 정의하는 배열."
+
+msgid "Enable 2FA"
+msgstr "2FA 활성화"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "비밀번호 업데이트 페이지에 TOTP 인증 앱을 사용한 2FA 활성화 필드를 추가. 전역적으로 비활성화되면 사용자는 2FA 필드를 보지 못하고 로그인 시 2FA를 요구받지 않습니다. 이전에 활성화했더라도 마찬가지입니다."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Chamilo의 일부 기능은 서버에서 외부로 연결됩니다. 예를 들어 학습 경로에서 링크 생성 또는 내장 페이지 표시 시 외부 콘텐츠 존재를 확인합니다. Chamilo 서버가 네트워크 외부로 나가기 위해 프록시를 사용하는 경우 여기에 설정하세요."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "과정 유효 기간 만료 시 자동 재등록 활성화 또는 비활성화. 관련 크론 작업도 활성화해야 합니다."
+
+msgid "Show remaining days in My Sessions"
+msgstr "내 세션에 남은 일수 표시"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "활성화되면 \"내 세션\" 페이지의 세션 날짜가 남은 일수로 대체됩니다."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "메뉴에 \"대기 중인 설문\" 표시"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "사용자가 대기 중인 설문에 액세스할 수 있는 메뉴 항목을 표시합니다."
+
+msgid "Disclose AI assistance"
+msgstr "AI 지원 공개"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "AI 시스템으로 생성되거나 공동 생성된 모든 콘텐츠 또는 피드백에 태그를 표시하여 사용자에게 AI 시스템의 도움을 받아 콘텐츠가 생성되었음을 증명합니다. 사용된 AI 시스템에 대한 세부 정보는 감사 목적으로 데이터베이스에 보관되지만 최종 사용자에게 직접 액세스되지 않습니다."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "과정 카탈로그를 위한 JSON 구성: 링크 설정, 필터, 정렬 옵션 등."
+
+msgid "Session Catalog Settings"
+msgstr "세션 카탈로그 설정"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "세션 카탈로그를 위한 JSON 구성: 필터 및 표시 옵션."
+
+msgid "Show Course Descriptions"
+msgstr "과정 설명 표시"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "카탈로그 목록 내에 과정 설명을 표시합니다."
+
+msgid "Published Courses Only"
+msgstr "게시된 과정만"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "카탈로그를 게시로 표시된 과정으로만 제한합니다."
+
+msgid "Display Catalog on Homepage"
+msgstr "홈페이지에 카탈로그 표시"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "플랫폼 홈페이지에 과정 카탈로그 블록을 표시합니다."
+
+msgid "Hide Public Link"
+msgstr "공개 링크 숨기기"
+
+msgid "Remove the public URL link from course cards."
+msgstr "과정 카드에서 공개 URL 링크를 제거합니다."
+
+msgid "Only Selected Courses"
+msgstr "선택된 강의만"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "카탈로그에서 수동으로 선택된 강의만 표시합니다."
+
+msgid "Allow Student Browsing"
+msgstr "학생 탐색 허용"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "학생이 강의 카탈로그를 탐색하고 필터링할 수 있도록 허용합니다."
+
+msgid "Hide Private Courses"
+msgstr "비공개 강의 숨기기"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "카탈로그 표시에서 비공개 강의를 제외합니다."
+
+msgid "Show Courses & Sessions"
+msgstr "강의 및 세션 표시"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "카탈로그 결과에 강의와 세션을 모두 포함합니다."
+
+msgid "Auto Session Subscription"
+msgstr "세션 자동 구독"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "사용자의 세션 자동 구독을 활성화합니다."
+
+msgid "Subscription in Session View"
+msgstr "세션 보기에서의 구독"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "사용자가 세션 페이지에서 직접 강의에 구독할 수 있도록 허용합니다."
+
+msgid "Enable redirection plugin"
+msgstr "리디렉션 플러그인 활성화"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "사용자가 처음 로그인할 때 계정 만료 날짜를 설정하기 위한 'days'와 'months'를 정의하는 배열입니다."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "역할에 따라 계정 만료 전 일수를 나타내는 역할 => 숫자 배열입니다."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "세션 검색 및 명명에 사용되는 추가 사용자 필드"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "사용자 검색에 사용되며 /admin-dashboard/register에서 학생 등록 시 세션 이름을 정의하는 추가 사용자 필드 키(예: \"company\")를 정의합니다."
+
+msgid "Glossary terms generator"
+msgstr "용어집 용어 생성기"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "교사가 강의에서 AI 생성 용어집 용어를 요청할 수 있도록 합니다. 강의 제목과 강의 설명 도구의 일반 설명을 기반으로 20개의 용어를 생성합니다. 여러 번 사용 시 해당 용어집에 이미 있는 용어를 제외합니다(구성된 AI 서비스와 콘텐츠를 공유할 수 있도록 하세요)."
+
+msgid "Video generator"
+msgstr "비디오 생성기"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "프롬프트나 콘텐츠를 기반으로 AI를 사용하여 비디오를 생성합니다(많은 토큰을 소비할 수 있습니다)."
+
+msgid "Course analyser"
+msgstr "강의 분석기"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "하나 이상의 강의의 모든 리소스를 분석하고 AI 모델을 사전 훈련하여 이 강의 또는 이러한 강의에 대한 모든 질문에 답변할 수 있도록 합니다(구성된 AI 서비스와 콘텐츠를 공유할 수 있도록 하세요)."
+
+msgid "Test/development"
+msgstr "테스트/개발"
+
+msgid "Crons"
+msgstr "크론 작업"
+
+msgid "Editor"
+msgstr "편집기"
+
+msgid "Gradebook"
+msgstr "성적부"
+
+msgid "Internationalization"
+msgstr "국제화"
+
+msgid "User profiles"
+msgstr "사용자 프로필"
+
+msgid "Support tickets"
+msgstr "지원 티켓"
+
+msgid "Webservices"
+msgstr "웹 서비스"
+
+msgid "Catalogue"
+msgstr "카탈로그"
+
+msgid "Workflows"
+msgstr "워크플로"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "하위 URL에서 설정 편집 가능"
+
+msgid "Show JSON Template"
+msgstr "JSON 템플릿 표시"
+
+msgid "JSON Template"
+msgstr "JSON 템플릿"
+
+msgid "Installing Xapian bindings"
+msgstr "Xapian 바인딩 설치"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "다음 스니펫은 Ubuntu 25.04에서 PHP 8.3과 함께 Xapian PHP 바인딩을 설치하는 예를 보여줍니다. 자신의 환경에 맞게 경로와 버전을 조정하세요."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "실제 사용하는 PHP 버전(예: 8.3)만 설치되어 있고 서로 다른 확장 디렉토리를 가진 여러 버전을 혼합하지 않도록 하세요."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "CLI와 웹 서버 모두에서 확장이 올바르게 로드되면 위의 검색 진단이 Xapian 모듈이 설치되었다고 보고해야 합니다."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "임시 업로드 및 캐시 정리"
+
+msgid "Directory"
+msgstr "디렉터리"
+
+msgid "Only delete files older than (minutes)"
+msgstr "%d분보다 오래된 파일만 삭제"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "0으로 설정하면 모든 파일 삭제. 업로드 중인 파일을 제거하지 않으려면 양수 값(예: 60) 사용."
+
+msgid "Preview only (do not delete)"
+msgstr "미리보기만 (삭제 안 함)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "경고: 모든 임시 파일을 삭제합니다. 이 작업은 되돌릴 수 없습니다."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "모든 임시 파일을 삭제합니다. 계속하시겠습니까?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "%minutes%분보다 오래된 파일을 삭제합니다. 계속하시겠습니까?"
+

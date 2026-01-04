@@ -63,7 +63,7 @@ if (false === $visibility &&
 }
 
 $lp_item_id = $oLP->get_current_item_id();
-$lpCurrentItemId = isset($_GET['lp_item_id']) ? (int) $_GET['lp_item_id'] : $oLP->get_current_item_id();
+$lpCurrentItemId = $lp_item_id;
 $lpType = $lp->getLpType();
 
 if (!api_is_allowed_to_edit(null, true)) {
@@ -559,7 +559,7 @@ $template->assign('data_list', $oLP->getListArrayToc());
 //var_dump($oLP->getListArrayToc($get_toc_list));
 
 $template->assign('lp_id', $lp->getIid());
-$template->assign('lp_current_item_id', isset($_GET['lp_item_id']) ? (int) $_GET['lp_item_id'] : $oLP->get_current_item_id());
+$template->assign('lp_current_item_id', $lpCurrentItemId);
 
 $menuLocation = 'left';
 if ('false' !== api_get_setting('lp.lp_menu_location')) {

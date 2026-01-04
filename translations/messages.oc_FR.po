@@ -31449,3 +31449,375 @@ msgstr "Per mai de detalhs visitatz %s"
 msgid "Manager"
 msgstr "Gerent"
 
+msgid "Mark as"
+msgstr "Marcar coma"
+
+msgid "Reply to all"
+msgstr "Respons a totes"
+
+msgid "SCIM external ID"
+msgstr "ID extèrn SCIM"
+
+msgid "OAuth2 ID"
+msgstr "ID OAuth2"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Acceptatz la darrièra version dels termos e condicions."
+
+msgid "Required value for operation without path"
+msgstr "Valor requesida per l'operacion sens cami"
+
+msgid "Available space (%s)"
+msgstr "Espaci disponible (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Indexar aquesta descripcion per la recèrca globala"
+
+msgid "Unknown course"
+msgstr "Còrs desconegut"
+
+msgid "Certificate not found."
+msgstr "Certificat pas trobat."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Token de seguretat expirat. Cargatz la pagina e ensajatz torna."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Simplament los administrators de la plataforma pòdon cambiar la visibilitat del còrs."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Error inesperat pendent l'inscripcion de l'utilizaire"
+
+msgid "Search in resource logs"
+msgstr "Recercar dins los jornals de las ressources"
+
+msgid "Include this learning path in the global search results"
+msgstr "Inclure aqueste camin d'aprendissatge dins los resultats de recèrca globala"
+
+msgid "The course code already exists"
+msgstr "Lo còde del còrs existís ja"
+
+msgid "Latest news"
+msgstr "Darrièras novetats"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Obtenètz las darrièras novetats de Chamilo, incluent las vulnerabilitats de seguretat e los eveniments, directament dins vòstre panèl d'administracion. Aquestas informacions seràn verificadas sul servidor de novetats Chamilo cada còp que cargatz la pagina d'administracion e son visibles que pels administrators."
+
+msgid "Chamilo support block"
+msgstr "Bloc de supòrt Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Obtenètz de cònsihs pro e una manera fàcil de contacar los furnidors de servici oficials per un supòrt profesional, directament dels creators de Chamilo. Aquest bloc aparètz sus vòstra pagina d'administracion, es visible que pels administrators, e se refresc d'ambuo las vexes que cargatz la pagina d'administracion."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Amagar l'opcion d'enviar anoncis als utilizaires HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Permetre als administrators de sesion de telecargar los certificats privats"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Se activat, los administrators de sesion pòden telecargar los certificats fins e se son pas publicats publicament."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Se pas void, lo process de creacion del curs buscarà d'elements dins lo perfil de l'utilizaire e los auto-remplirà pel curs. Per exemple, un professor especializat en marketing digital pòt automaticament fixar un indici « marketing digital » sus cada curs que crea."
+
+msgid "Main menu entries"
+msgstr "Entradas del menú principal"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Marcatz las entradas que volètz veire aparéisser dins lo menú principal"
+
+msgid "Main menu entries per role"
+msgstr "Entradas del menú principal per ròtle"
+
+msgid "Define header tabs visibility per role."
+msgstr "Definir la visibilitat de las onglets d'en-tèsta per ròtle."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Fixatz las opcions que volètz veire aparéisser dins la navegacion al volta d'una taula per mostrar mens o mai de linhas sus una pagina. ex. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Tablèu de foncionalitats suplementàrias que podètz activar pel lector de vidèu dins Chamilo. Las opcions inclion 'speed', que permet de cambiar la velocitat de lectura d'un vidèu."
+
+msgid "Mail: character set"
+msgstr "Mail : conjunt de caractèrs"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "En cas que vos calga definir lo charset d'utilizar en enviant aquestes e-mails. Laissatz void se sètz pas segur."
+
+msgid "Mail: Debug"
+msgstr "Mail : Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Selectatz se volètz activar los jornals de debug de l'enviament d'e-mails. Aquò vos donarà mai d'informacions sus çò que se passa en se connectant al servici de mail, mas es pas elegant e pòt rompre lo diseñ de la pagina. Utilizatz que quand i a pas d'activitat d'utilizaires."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Mail : Evitar d'utilizar LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "D'unes clients e-mail comprenon pas lo format descriptiu LD+JSON, l'afichant coma una cadena JSON lassa a l'utilizaire final. Se es vòstre cas, podètz voler fixar la variable çaijós a 'false' per desactivar aquesta en-tèsta."
+
+msgid "Mail: DKIM headers"
+msgstr "Mail : en-tèstas DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Picatz un tablèu JSON de vòstres paramètres de configuracion DKIM (vedètz l'exemple)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Mail : opcions XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Se utilizatz un servici e-mail basat sus XOAuth2, utilizatz aqueste paramètre en JSON per enregistrar vòstra configuracion específica (vedètz l'exemple) e selectatz XOAuth2 dins lo paramètre del servici de mail."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Definitz lo tipe d'environ : \"prod\" (produccion normala), \"validation\" (coma produccion mas sens reportar las estatisticas), o \"test\" (mòde debug amb instruments de desvolopaire coma los indicadors de cadenas pas traduchidas)."
+
+msgid "Global limit of users per course"
+msgstr "Limit global d'utilizaires per curs"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Definitz un nombre maximal global d'utilizaires (professors inclusos) autorizats a èsser inscrits a quicun que curs sus la plataforma. Fixatz aquesta valor a 0 per desactivar lo limit. Aquò ajuda a evitar que los curs se sèrquon en los portals abèrts."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Activatz per utilizar un tablèu per definir quins ròtles devon èsser afichats clarament e quins devon èsser amagats."
+
+msgid "Show base course posts in session course"
+msgstr "Afichar las publicacions de base del curs dins lo curs de sesion"
+
+msgid "Limit identical email usage"
+msgstr "Limitar l'utilizacion identica d'e-mails"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Nombre maximum de comptes autorizat a partejar la mesma adreça electronica. Fixatz a 0 per desactivar aquesta limita."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Permetre als administrators de session de veire totes los utilizadors sus totes las URLs"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Se activat, los administrators de session pòden recerchar e listar los utilizadors de totas las URLs d'accès, sens tenir en compte lor URL correnta."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Activar la possibilitat per los utilizadors de seleccionar lor fusa oraria. Un còp configurat, los utilizadors poiràn veire las limits de las missions e autras referéncias de temps dins la lor fusa oraria, quò qu'a reduirà las errors al moment de la remission."
+
+msgid "Redirect after login (per profile)"
+msgstr "Redirigir après connexion (per perfil)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Definir la redireccion per perfil après connexion en utilizant un objècte JSON coma {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Amagar la casa de seleccion 'Acceptar las condicions legals' dins la pagina de Terms and Conditions"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Se fixat a true, suprime la casa de seleccion \"I ai legit e accept\" dins lo flux de la pagina de Terms and Conditions."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Tablèu definissent l'òste e lo pòrt pel servidor LDAP."
+
+msgid "Enable 2FA"
+msgstr "Activar 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Apondre de camps dins la pagina de mesa a jorn del senhal per activar 2FA en utilizant una aplicacion d'autentificacion TOTP. Quand desactivat globalment, los utilizadors veràn pas los camps 2FA e seràn pas demandats per 2FA a la connexion, fins e si l'avián activat anteriorament."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "D'umas foncionalitats de Chamilo se connectaràn a l'extèrior del servidor. Per exemple per verificar qu'un contengut extèrior existís quand se crea un ligam o se mostra una pagina integrada dins lo camin d'aprendissatge. Se vòstre servidor Chamilo utiliza un proxy per sortir de sa ret, aquò seriat lo lòch per lo configurar."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Activar o desactivar la reinscripcion automatica quand la validitat del curs expira. Lo job cron associat deu tanben èsser activat."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Afichar los jorns restants dins Mis Sessions"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Se activat, las datas de session dins la pagina \"Mis Sessions\" seràn remplaçadas pel nombre de jorns restants."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Afichar \"Sondatges en atèra\" dins lo menú"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Afichar un element de menú qu'autoriza los utilizadors a accedir a lors sondatges en atèra."
+
+msgid "Disclose AI assistance"
+msgstr "Revelar l'assisténcia IA"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Afichar una etiqueta sus tot contengut o comentari generat o co-generat per quicòm de sistèma IA, provant a l’utilizaire que lo contengut es estat construït amb l’ajuda d’un sistèma IA. Los detalhs sul sistèma IA utilizat son gardats dins la basa de donadas per audit, mas son pas directament accessibles per l’utilizaire final."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "Configuracion JSON pel catalòg de cors : paramètres de ligams, filtres, opcions de triada, e mai."
+
+msgid "Session Catalog Settings"
+msgstr "Paramètres del catalòg de sesions"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "Configuracion JSON pel catalòg de sesions : filtres e opcions d’afichatge."
+
+msgid "Show Course Descriptions"
+msgstr "Afichar las descripcions de cors"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Afichar las descripcions de cors dins la lista del catalòg."
+
+msgid "Published Courses Only"
+msgstr "Pas que los cors publicats"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Limitar lo catalòg ais cors marcats coma publicats."
+
+msgid "Display Catalog on Homepage"
+msgstr "Afichar lo catalòg sus la pagina d’acuèlh"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Afichar lo bloc del catalòg de cors sus la pagina d’acuèlh de la plataforma."
+
+msgid "Hide Public Link"
+msgstr "Amagar lo ligam public"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Suprimir lo ligam URL public de las cartelas de cors."
+
+msgid "Only Selected Courses"
+msgstr "Pas que los cors seleccionats"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Afichar pas que los cors seleccionats manualament dins lo catalòg."
+
+msgid "Allow Student Browsing"
+msgstr "Permetre la navegacion dels estudiants"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Permetre ais estudiants de navegar e filtrar lo catalòg de cors."
+
+msgid "Hide Private Courses"
+msgstr "Amagar los cors privats"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Exclure los cors privats de l’afichatge del catalòg."
+
+msgid "Show Courses & Sessions"
+msgstr "Afichar cors e sesions"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Inclure cors e sesions dins los resultats del catalòg."
+
+msgid "Auto Session Subscription"
+msgstr "Inscripcion automatica a las sesions"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Activar l’inscripcion automatica a las sesions pels utilizaires."
+
+msgid "Subscription in Session View"
+msgstr "Inscripcion dins la vista de sesion"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Permetre ais utilizaires de s’inscriure ais cors directament dempuèi la pagina de sesion."
+
+msgid "Enable redirection plugin"
+msgstr "Activar lo plugin de redireccion"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Tablèu definissent los « jorns » e « meses » per fixar la data d’expiracion del compte quand l’utilizaire se connecte la prima vez."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Un tablèu de ròtle => nombre que representa lo nombre de jorns qu’un compte a abans d’expirar, segon lo ròtle."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Camp suplementari d’utilizaire utilizat per cercar e nomenar las sesions"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Aqueste paramètres definís la clau del camp suplementari d’utilizaire (ex. \"company\") que serà utilizada per cercar los utilizaires e per definir lo nom de la sesion quand se registren los estudiants dempuèi /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Generator de termes del glosari"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Permetre ais professors de demandar de termes de glosari generats per IA dins lor cors. Aquò generarà 20 termes basats sul titel del cors e la descripcion generica dins l’òpti de descripcion del cors. Se utilizat mai d’un còp, excluirà los termes ja presents dins aqueste glosari (assegurar que lo contengut pòt èsser partejat amb los services IA configurats)."
+
+msgid "Video generator"
+msgstr "Generator de vidèos"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Genera vidèos basats sus invitacions o contengut amb IA (aquò pòt consumir fòrt de jetons)."
+
+msgid "Course analyser"
+msgstr "Analisador de cors"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Analiza totas las ressources d’un o mantun cors e pre-entrena lo modèl IA per respondre a quina que sieja question sur aqueste cors o aqueles cors (assegurar que lo contengut pòt èsser partejat amb los services IA configurats)."
+
+msgid "Test/development"
+msgstr "Tèst /desvolopament"
+
+msgid "Crons"
+msgstr "Crons"
+
+msgid "Editor"
+msgstr "Editor"
+
+msgid "Gradebook"
+msgstr "Carnet de notas"
+
+msgid "Internationalization"
+msgstr "Internacionalizacion"
+
+msgid "User profiles"
+msgstr "Perfiles d’utilizaires"
+
+msgid "Support tickets"
+msgstr "Tickets de supòrt"
+
+msgid "Webservices"
+msgstr "Servicis web"
+
+msgid "Catalogue"
+msgstr "Catalòg"
+
+msgid "Workflows"
+msgstr "Flux de trabalh"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Paramètre modificable sus las sous-URLs"
+
+msgid "Show JSON Template"
+msgstr "Afichar lo modèl JSON"
+
+msgid "JSON Template"
+msgstr "Modèl JSON"
+
+msgid "Installing Xapian bindings"
+msgstr "Installacion dels ligams Xapian"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Lo fragment seguent mòstra un exemple d’installacion dels ligams PHP Xapian sus Ubuntu 25.04 amb PHP 8.3. Adaptar los camins e las versions a vòstre ambient."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Asseguratz-vos de ne gardar que la version PHP que utilizatz vertadièrament (per exemple 8.3) e evitatz de mesclar de versions diversas amb de repertòris d’extensions diferents."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Un còp que l’extension es corrèctament cargada per CLI e pel servidor web, los diagnòstics de recèrca susmensionats devon indicar que lo modul Xapian es installat."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Netatjar las cargas temporàrias e lo cache"
+
+msgid "Directory"
+msgstr "Dossiè"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Suprimir que los fchièrs mai vièlhs que (minutas)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Apondre 0 per suprimir totes los fchièrs. Utilizar una valor positiva (ex: 60) per evitar de suprimir los fchièrs qu'estan en cors de carga."
+
+msgid "Preview only (do not delete)"
+msgstr "Apèrcebut unicament (pas suprimir)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Avís: sètz a punhet de suprimir TOTS los fchièrs temporaris. Aquesta accion es irreversibla."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Aquò suprimirà totes los fchièrs temporaris. Contunhar?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Aquò suprimirà los fchièrs mai vièlhs que %minutes% minutas. Contunhar?"
+

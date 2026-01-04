@@ -56,7 +56,10 @@ $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'n
 $interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('Manage skills levels')];
 
 // Use a stable page title instead of the raw action name.
-$tpl = new Template(get_lang('Skills'));
+$tpl = new Template('');
+
+// Active tab for the shared header navigation.
+$tpl->assign('current_tab', 'skills');
 
 switch ($action) {
     case 'edit':

@@ -28426,7 +28426,7 @@ msgid "In person"
 msgstr "Személyesen"
 
 msgid "Blended learning"
-msgstr "Blended learning"
+msgstr "Kevert tanulás"
 
 msgid "Centralised"
 msgstr "Centralizált"
@@ -30730,7 +30730,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (belső azonosító)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "Azure azonosító (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Szervezeti e-mail"
@@ -31454,4 +31454,376 @@ msgstr "További részletekért látogasson el ide: %s"
 
 msgid "Manager"
 msgstr "Menedzser"
+
+msgid "Mark as"
+msgstr "Megjelölés mint"
+
+msgid "Reply to all"
+msgstr "Válasz mindenkinek"
+
+msgid "SCIM external ID"
+msgstr "SCIM külső azonosító"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 azonosító"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Kérjük, fogadja el a felhasználási feltételek legfrissebb verzióját."
+
+msgid "Required value for operation without path"
+msgstr "Kötelező érték útvonal nélküli művelethez"
+
+msgid "Available space (%s)"
+msgstr "Elérhető hely (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Leírás indexelése a globális kereséshez"
+
+msgid "Unknown course"
+msgstr "Ismeretlen kurzus"
+
+msgid "Certificate not found."
+msgstr "Tanúsítvány nem található."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Biztonsági token lejárt. Kérjük, frissítse az oldalt és próbálja újra."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Csak a platform rendszergazdák változtathatják meg a kurzus láthatóságát."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Váratlan hiba történt a felhasználó feliratkozása során"
+
+msgid "Search in resource logs"
+msgstr "Keresés az erőforrás naplókban"
+
+msgid "Include this learning path in the global search results"
+msgstr "Tanulási útvonal bevonása a globális keresési eredményekbe"
+
+msgid "The course code already exists"
+msgstr "A kurzus kód már létezik"
+
+msgid "Latest news"
+msgstr "Legfrissebb hírek"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Szerezze be a Chamilo legfrissebb híreit, beleértve a biztonsági réseket és eseményeket, közvetlenül az adminisztrációs panelben. Ezek a hírek minden adminisztrációs oldal betöltésekor ellenőrizve lesznek a Chamilo hír szerverén, és csak a rendszergazdák számára láthatók."
+
+msgid "Chamilo support block"
+msgstr "Chamilo támogatás blokk"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Szakmai tippek és könnyű mód a hivatalos szolgáltatókkal való kapcsolatfelvételre professzionális támogatásért, közvetlenül a Chamilo készítőitől. Ez a blokk az adminisztrációs oldalon jelenik meg, csak rendszergazdák láthatják, és minden oldalbetöltéskor frissül."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "HR felhasználóknak történő bejelentések küldésének opciójának elrejtése"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Session adminisztrátorok számára engedélyezni a privát tanúsítványok letöltését"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Ha engedélyezve van, a session adminisztrátorok letölthetik a tanúsítványokat, még ha azok nincsenek nyilvánosan közzétéve."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Ha nem üres, a kurzus létrehozási folyamat a felhasználói profil egyes mezőit keresi és automatikusan kitölti őket a kurzus számára. Például egy digitális marketing szakos tanár automatikusan beállíthat egy „digitális marketing” jelölést minden általa létrehozott kurzushoz."
+
+msgid "Main menu entries"
+msgstr "Főmenü elemek"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Jelölje be azokat a bejegyzéseket, amelyeket meg szeretne jeleníteni a főmenüben"
+
+msgid "Main menu entries per role"
+msgstr "Főmenü elemek szerepenként"
+
+msgid "Define header tabs visibility per role."
+msgstr "Határozza meg a fejléc fülök láthatóságát szerepenként."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Állítsa be a tábla körüli navigációs beállításokat, hogy kevesebb vagy több sort jelenítsen meg egy oldalon. pl. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Tömb a Chamilo videólejátszóhoz engedélyezhető extra funkciókból. Opciók: 'speed', amely lehetővé teszi a videó lejátszási sebességének változtatását."
+
+msgid "Mail: character set"
+msgstr "Levél: karakterkészlet"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Ha meg kell határozni a karakterkészletet az e-mailek küldéséhez. Hagyja üresen, ha nem biztos benne."
+
+msgid "Mail: Debug"
+msgstr "Levél: Hibakeresés"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Válassza ki, hogy engedélyezi-e az e-mail küldési hibakeresési naplózást. Ezek több információt adnak a levelezési szolgáltatáshoz való csatlakozás során történtekről, de nem elegánsak és megzavarhatják az oldal dizájnját. Csak akkor használja, ha nincs felhasználói aktivitás."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Levél: LD+JSON kerülése"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Néhány e-mail kliens nem érti a leíró LD+JSON formátumot, és laza JSON sztringként jeleníti meg a végfelhasználónak. Ha ez a helyzet, állítsa az alábbi változót 'false'-ra ennek a fejlécnek a letiltásához."
+
+msgid "Mail: DKIM headers"
+msgstr "Levél: DKIM fejléc"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Írja be a DKIM konfigurációs beállítások JSON tömbjét (lásd példa)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Levél: XOAuth2 beállítások"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Ha XOAuth2-alapú e-mail szolgáltatást használ, használja ezt a JSON beállítást a specifikus konfiguráció mentéséhez (lásd példa), és válassza az XOAuth2-t a levelezési szolgáltatás beállításában."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Meghatározza a környezeti típust: \"prod\" (normál termelés), \"validation\" (hasonló a termeléshez, de statisztikák jelentése nélkül), vagy \"test\" (hibakeresési mód fejlesztői eszközökkel, pl. lefordítatlan sztring mutatókkal)."
+
+msgid "Global limit of users per course"
+msgstr "Globális felhasználói korlát kurzasonként"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Meghatározza a platformon egyetlen kurzusra feliratkozható felhasználók (beleértve a tanárokat) globális maximális számát. Állítsa 0-ra a korlát letiltásához. Ez segít elkerülni a kurzusok túlterhelését nyílt portálokon."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Engedélyezze, ha tömbbel szeretné meghatározni, mely szerepek legyenek egyértelműen megjelenítve és melyek rejtve."
+
+msgid "Show base course posts in session course"
+msgstr "Alapkurzus bejegyzések megjelenítése munkamenet kurzushoz"
+
+msgid "Limit identical email usage"
+msgstr "Azonos e-mail használat korlátozása"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Azonos e-mail címmel megosztható fiókok maximális száma. Állítsa 0-ra a korlát kikapcsolásához."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Lehetővé tenni a munkamenet adminisztrátorok számára, hogy minden URL-en lássák az összes felhasználót"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Ha engedélyezve van, a munkamenet adminisztrátorok kereshetnek és listázhatnak felhasználókat minden hozzáférési URL-ről, függetlenül a jelenlegi URL-től."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Lehetővé tenni a felhasználók számára, hogy saját időzónájukat válasszák. Ha be van állítva, a felhasználók a saját időzónájukban láthatják a feladatok határidejét és egyéb időpontokat, ami csökkenti a kézbesítési hibákat."
+
+msgid "Redirect after login (per profile)"
+msgstr "Átirányítás bejelentkezés után (profilonként)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Határozza meg a profilonkénti átirányítást bejelentkezés után JSON objektummal, pl. {\"TANULÓ\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Jogi elfogadás jelölőnégyzet elrejtése a Szerződési feltételek oldalon"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Ha igaz értékre van állítva, eltávolítja az \"Elolvastam és elfogadom\" jelölőnégyzetet a Szerződési feltételek oldal folyamatából."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Tömb a LDAP szerver hostjának és portjának meghatározására."
+
+msgid "Enable 2FA"
+msgstr "2FA engedélyezése"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Mezők hozzáadása a jelszófrissítési oldalon a 2FA engedélyezéséhez TOTP hitelesítő alkalmazással. Ha globálisan ki van kapcsolva, a felhasználók nem látják a 2FA mezőket, és nem kapnak 2FA kérést bejelentkezéskor, még ha korábban engedélyezték is."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "A Chamilo egyes funkciói a szerverről külső kapcsolatot létesítenek. Például link létrehozásakor vagy beágyazott oldal megjelenítésekor a tanulási útvonalban. Ha a Chamilo szerver proxy-t használ a hálózat elhagyásához, itt lehet konfigurálni."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Kurzushasználat lejárta esetén az automatikus újrafeliratkozás engedélyezése vagy letiltása. A kapcsolódó cron feladatot is aktiválni kell."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Hátralévő napok megjelenítése az Én munkameneteimben"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Ha engedélyezve van, az \"Én munkameneteim\" oldalon a munkamenet dátumokat a hátralévő napok száma helyettesíti."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "\"Függőben lévő felmérések\" megjelenítése a menüben"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Menüpont megjelenítése, amely lehetővé teszi a felhasználók számára függőben lévő felméréseik elérését."
+
+msgid "Disclose AI assistance"
+msgstr "AI segítség feltárása"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Címke megjelenítése minden olyan tartalomon vagy visszajelzésen, amelyet bármely AI rendszer generált vagy együtt generált, bizonyítva a felhasználó számára, hogy a tartalom AI rendszer segítségével készült. Az egyes esetekben használt AI rendszerek részletei az adatbázisban vannak auditálva, de a végfelhasználó számára közvetlenül nem hozzáférhetők."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "JSON konfiguráció a kurzuskatalógushoz: link beállítások, szűrők, rendezési opciók stb."
+
+msgid "Session Catalog Settings"
+msgstr "Munkamenet katalógus beállítások"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "JSON konfiguráció a munkamenet katalógushoz: szűrők és megjelenítési opciók."
+
+msgid "Show Course Descriptions"
+msgstr "Kurzusleírások megjelenítése"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Kurzusleírások megjelenítése a katalógus listában."
+
+msgid "Published Courses Only"
+msgstr "Csak közzétett kurzusok"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "A katalógus korlátozása a közzétettként jelölt kurzusokra."
+
+msgid "Display Catalog on Homepage"
+msgstr "Katalógus megjelenítése a kezdőlapon"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Kurzuskatalógus blokk megjelenítése a platform kezdőlapján."
+
+msgid "Hide Public Link"
+msgstr "Nyilvános hivatkozás elrejtése"
+
+msgid "Remove the public URL link from course cards."
+msgstr "A nyilvános URL-hivatkozás eltávolítása a kurzuskártyákról."
+
+msgid "Only Selected Courses"
+msgstr "Csak a kiválasztott kurzusok"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Csak a manuálisan kiválasztott kurzusok megjelenítése a katalógusban."
+
+msgid "Allow Student Browsing"
+msgstr "Diák böngészés engedélyezése"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Diákok engedélyezése a kurzuskatalógus böngészésére és szűrésére."
+
+msgid "Hide Private Courses"
+msgstr "Privát kurzusok elrejtése"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Privát kurzusok kizárása a katalógus megjelenítéséből."
+
+msgid "Show Courses & Sessions"
+msgstr "Kurzusok és foglalkozások megjelenítése"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Kurzusok és foglalkozások is bekerülése a katalógus eredményekbe."
+
+msgid "Auto Session Subscription"
+msgstr "Automatikus foglalkozás feliratkozás"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Automatikus feliratkozás engedélyezése foglalkozásokra a felhasználóknak."
+
+msgid "Subscription in Session View"
+msgstr "Feliratkozás a foglalkozás nézetben"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Felhasználók engedélyezése kurzusokra való feliratkozásra közvetlenül a foglalkozás oldalról."
+
+msgid "Enable redirection plugin"
+msgstr "Átirányítás bővítmény engedélyezése"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Tömb, amely a 'napok' és 'hónapok' értékeket határozza meg a fiók lejárati dátumának beállításához, amikor a felhasználó először bejelentkezik."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Szerep => szám tömb, amely a fiók lejárata előtti napok számát jelöli a szereptől függően."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Extra felhasználói mező foglalkozások kereséséhez és elnevezéséhez"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Ez a beállítás meghatározza az extra felhasználói mező kulcsát (pl. \"company\") , amely a felhasználók keresésére és a foglalkozás nevének meghatározására szolgál a /admin-dashboard/register oldalról történő diákregisztrációkor."
+
+msgid "Glossary terms generator"
+msgstr "Szójegyzék kifejezések generálója"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Tanárok engedélyezése AI-generált szójegyzék kifejezések kérésére kurzusukban. Ez 20 kifejezést generál a kurzuscím és a kurzuleírás eszköz általános leírása alapján. Ha többször használják, kizárja a már meglévő kifejezéseket abban a szójegyzékben (győződjön meg róla, hogy a tartalom megosztható a beállított AI szolgáltatásokkal)."
+
+msgid "Video generator"
+msgstr "Videó generáló"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Videók generálása promptok vagy tartalom alapján AI-val (ez sok tokent fogyaszthat)."
+
+msgid "Course analyser"
+msgstr "Kurzus elemző"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Elemzi az összes erőforrást egy vagy több kurzusban, és előképzi az AI modellt bármilyen kérdésre a kurzus(ok)ról (győződjön meg róla, hogy a tartalom megosztható a beállított AI szolgáltatásokkal)."
+
+msgid "Test/development"
+msgstr "Teszt/fejlesztés"
+
+msgid "Crons"
+msgstr "Cront"
+
+msgid "Editor"
+msgstr "Szerkesztő"
+
+msgid "Gradebook"
+msgstr "Jegyzetfüzet"
+
+msgid "Internationalization"
+msgstr "Nemzetköziesítés"
+
+msgid "User profiles"
+msgstr "Felhasználói profilok"
+
+msgid "Support tickets"
+msgstr "Támogatási jegyek"
+
+msgid "Webservices"
+msgstr "Webszolgáltatások"
+
+msgid "Catalogue"
+msgstr "Katalógus"
+
+msgid "Workflows"
+msgstr "Munkafolyamatok"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "A beállítás szerkeszthető alküldési URL-eken"
+
+msgid "Show JSON Template"
+msgstr "JSON sablon megjelenítése"
+
+msgid "JSON Template"
+msgstr "JSON sablon"
+
+msgid "Installing Xapian bindings"
+msgstr "Xapian kötések telepítése"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "A következő kódrészlet egy példát mutat a Xapian PHP kötések telepítésére Ubuntu 25.04-en PHP 8.3-mal. Illessze saját környezetéhez az elérési utakat és verziókat."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Győződjön meg róla, hogy csak azt a PHP verziót használja, amit ténylegesen (pl. 8.3), és kerülje el több verzió keverését eltérő kiterjesztés könyvtárakkal."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Ha a kiterjesztés megfelelően betöltődött mind a CLI, mind a webszerver számára, a fenti keresési diagnosztika jeleznie kell, hogy a Xapian modul telepítve van."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Ideiglenes feltöltések és gyorsítótár takarítása"
+
+msgid "Directory"
+msgstr "Könyvtár"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Csak a %d percnél régebbi fájlok törlése (perc)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "0 beállításával minden fájl törlődik. Pozitív érték (pl. 60) használata megakadályozza a még feltöltés alatt álló fájlok eltávolítását."
+
+msgid "Preview only (do not delete)"
+msgstr "Csak előnézet (ne törölje)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Figyelem: ÖSSZES ideiglenes fájl törlésére készül. Ezt a műveletet nem lehet visszavonni."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Ez törli az összes ideiglenes fájlt. Folytatja?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Ez a %minutes% percnél régebbi fájlokat törli. Folytatja?"
 

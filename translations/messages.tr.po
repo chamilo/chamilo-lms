@@ -31455,3 +31455,375 @@ msgstr "Daha fazla detay için %s adresini ziyaret edin"
 msgid "Manager"
 msgstr "Yönetici"
 
+msgid "Mark as"
+msgstr "İşaretle olarak"
+
+msgid "Reply to all"
+msgstr "Herkese yanıtla"
+
+msgid "SCIM external ID"
+msgstr "SCIM harici ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Lütfen şartlar ve koşulların en son sürümünü kabul edin."
+
+msgid "Required value for operation without path"
+msgstr "Yol olmadan işlem için gerekli değer"
+
+msgid "Available space (%s)"
+msgstr "Kullanılabilir alan (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Bu açıklamayı genel aramada indeksle"
+
+msgid "Unknown course"
+msgstr "Bilinmeyen ders"
+
+msgid "Certificate not found."
+msgstr "Sertifika bulunamadı."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Güvenlik jetonu süresi doldu. Lütfen sayfayı yeniden yükleyin ve tekrar deneyin."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Yalnızca platform yöneticileri ders görünürlüğünü değiştirebilir."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Kullanıcı abonelik sırasında beklenmeyen hata"
+
+msgid "Search in resource logs"
+msgstr "Kaynak günlüklerinde ara"
+
+msgid "Include this learning path in the global search results"
+msgstr "Bu öğrenme yolunu genel arama sonuçlarına dahil et"
+
+msgid "The course code already exists"
+msgstr "Ders kodu zaten mevcut"
+
+msgid "Latest news"
+msgstr "Son haberler"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Chamilo'dan en son haberleri alın, güvenlik açıkları ve etkinlikler dahil, doğrudan yönetim panelinizde. Bu haberler, yönetim sayfasını her yüklediğinizde Chamilo haber sunucusunda kontrol edilir ve yalnızca yöneticilere görünür."
+
+msgid "Chamilo support block"
+msgstr "Chamilo destek bloğu"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Profesyonel destek için resmi hizmet sağlayıcılarla kolay iletişim kurmak ve pro ipuçları alın, doğrudan Chamilo yapımcılarından. Bu blok yönetim sayfanızda görünür, yalnızca yöneticilere görünür ve yönetim sayfasını her yüklediğinizde yenilenir."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "HR kullanıcılarına duyuru gönderme seçeneğini gizle"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Oturum yöneticilerinin özel sertifikaları indirmesine izin ver"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Etkinleştirilirse, oturum yöneticileri sertifikalar kamuya açık yayınlanmamış olsa bile indirebilir."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Boş değilse, ders oluşturma işlemi kullanıcı profilindeki bazı alanları arar ve bunları ders için otomatik doldurur. Örneğin, dijital pazarlama konusunda uzman bir öğretmen, oluşturduğu her derse otomatik olarak « dijital pazarlama » bayrağı koyabilir."
+
+msgid "Main menu entries"
+msgstr "Ana menü öğeleri"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Ana menüde görünmesini istediğiniz öğeleri işaretleyin"
+
+msgid "Main menu entries per role"
+msgstr "Rol başına ana menü öğeleri"
+
+msgid "Define header tabs visibility per role."
+msgstr "Rol başına başlık sekmeleri görünürlüğünü tanımlayın."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Bir sayfada daha az veya daha fazla satır göstermek için tablo çevresindeki gezinme seçeneklerini ayarlayın. örn. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Chamilo'daki video oynatıcı için etkinleştirebileceğiniz ekstra özellikler dizisi. Seçenekler arasında 'speed' bulunur, bu video oynatma hızını değiştirmenize olanak tanır."
+
+msgid "Mail: character set"
+msgstr "Posta: karakter kümesi"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Bu e-postaları gönderirken kullanılacak karakter kümesini tanımlamanız gerekiyorsa. Emin değilseniz boş bırakın."
+
+msgid "Mail: Debug"
+msgstr "Posta: Hata ayıklama"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "E-posta gönderme hata ayıklama günlüklerini etkinleştirmek isteyip istemediğinizi seçin. Bunlar posta hizmetine bağlanırken neler olduğunu daha fazla bilgi verir, ancak zarif değildir ve sayfa tasarımını bozabilir. Kullanıcı etkinliği olmadığında yalnızca kullanın."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Posta: LD+JSON kullanımından kaçının"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Bazı e-posta istemcileri açıklayıcı LD+JSON formatını anlamaz ve bunu son kullanıcıya gevşek bir JSON dizesi olarak gösterir. Eğer durumunuz buysa, bu başlığı devre dışı bırakmak için aşağıdaki değişkeni 'false' olarak ayarlayabilirsiniz."
+
+msgid "Mail: DKIM headers"
+msgstr "Posta: DKIM başlıkları"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "DKIM yapılandırma ayarlarınızın JSON dizisini girin (örneğe bakın)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Posta: XOAuth2 seçenekleri"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "XOAuth2 tabanlı bir e-posta servisi kullanıyorsanız, özel yapılandırmanızı kaydetmek için bu JSON ayarını kullanın (örneğe bakın) ve posta servisi ayarında XOAuth2'yi seçin."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Ortam türünü tanımlar: \"prod\" (normal üretim), \"validation\" (üretim gibi ancak istatistik raporlama olmadan), veya \"test\" (geliştirici araçlarıyla hata ayıklama modu, örneğin çevrilmemiş dize göstergeleri)."
+
+msgid "Global limit of users per course"
+msgstr "Ders başına genel kullanıcı limiti"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Platformdaki herhangi bir tek ders için abone olabilecek kullanıcıların (öğretmenler dahil) global maksimum sayısını tanımlar. Limiti devre dışı bırakmak için bu değeri 0 olarak ayarlayın. Bu, açık portallarda derslerin aşırı yüklenmesini önlemeye yardımcı olur."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Hangi rollerin açıkça görüntüleneceğini ve hangilerinin gizleneceğini tanımlamak için bir dizi kullanmak üzere etkinleştirin."
+
+msgid "Show base course posts in session course"
+msgstr "Oturum dersinde temel ders gönderilerini göster"
+
+msgid "Limit identical email usage"
+msgstr "Aynı e-posta kullanımını sınırla"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Aynı e-posta adresini paylaşabilecek hesapların maksimum sayısı. Bu sınırı devre dışı bırakmak için 0 olarak ayarlayın."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Oturum yöneticilerinin tüm URL'lerdeki tüm kullanıcıları görmesine izin ver"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Etkinleştirilirse, oturum yöneticileri mevcut URL'lerinden bağımsız olarak tüm erişim URL'lerindeki kullanıcıları arayabilir ve listeleyebilir."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Kullanıcıların kendi saat dilimlerini seçme olasılığını etkinleştirin. Yapılandırıldıktan sonra, kullanıcılar ödev teslim tarihlerini ve diğer zaman referanslarını kendi saat dilimlerinde görebilecek, bu da teslim zamanında hataları azaltacaktır."
+
+msgid "Redirect after login (per profile)"
+msgstr "Giriş sonrası yönlendirme (profili başına)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Giriş sonrası profili başına yönlendirme tanımlayın, {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"} gibi bir JSON nesnesi kullanarak"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Şartlar ve Koşullar sayfasında yasal kabul kutusunu gizle"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "True olarak ayarlanırsa, Şartlar ve Koşullar sayfa akışındaki \"Okudum ve kabul ediyorum\" kutusunu kaldırır."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "LDAP sunucusu için ana bilgisayar ve portu tanımlayan dizi."
+
+msgid "Enable 2FA"
+msgstr "2FA'yı etkinleştir"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Şifre güncelleme sayfasında TOTP doğrulayıcı uygulaması kullanarak 2FA'yı etkinleştirmek için alanlar ekleyin. Küresel olarak devre dışı bırakıldığında, kullanıcılar 2FA alanlarını görmez ve daha önce etkinleştirmiş olsalar bile girişte 2FA için istenirler."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Chamilo'nun bazı özellikleri sunucudan dışarıya bağlanacaktır. Örneğin, bir bağlantı oluştururken veya öğrenme yolunda gömülü bir sayfa gösterirken harici bir içeriğin var olduğunu doğrulamak için. Chamilo sunucunuz ağından çıkmak için bir proxy kullanıyorsa, bunu yapılandırmak için yer burasıdır."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Kurs geçerlilik süresi dolduğunda otomatik yeniden kayıt olmayı etkinleştirin veya devre dışı bırakın. İlgili cron işi de etkinleştirilmelidir."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Oturumlarımda kalan günleri göster"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Etkinleştirilirse, \"Oturumlarım\" sayfasındaki oturum tarihleri kalan gün sayısı ile değiştirilecektir."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Menüde \"Bekleyen anketler\" göster"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Kullanıcıların bekleyen anketlerine erişmelerini sağlayan bir menü öğesi görüntüleyin."
+
+msgid "Disclose AI assistance"
+msgstr "YZ desteğini ifşa et"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Herhangi bir YZ sistemi tarafından üretilen veya ortak üretilen herhangi bir içerik veya geri bildirimde kullanıcıya içeriğin bir YZ sistemi yardımıyla oluşturulduğunu gösteren bir etiket gösterin. Hangi YZ sisteminin hangi durumda kullanıldığına dair detaylar denetim için veritabanında saklanır, ancak son kullanıcı tarafından doğrudan erişilebilir değildir."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "Kurs kataloğu için JSON yapılandırması: bağlantı ayarları, filtreler, sıralama seçenekleri ve daha fazlası."
+
+msgid "Session Catalog Settings"
+msgstr "Oturum Kataloğu Ayarları"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "Oturum kataloğu için JSON yapılandırması: filtreler ve görüntüleme seçenekleri."
+
+msgid "Show Course Descriptions"
+msgstr "Kurs Açıklamalarını Göster"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Katalog listesinde kurs açıklamalarını görüntüleyin."
+
+msgid "Published Courses Only"
+msgstr "Yalnızca Yayınlanmış Kurslar"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Kataloğu yalnızca yayınlanmış olarak işaretlenmiş kurslarla sınırlayın."
+
+msgid "Display Catalog on Homepage"
+msgstr "Ana Sayfada Kataloğu Görüntüle"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Platform ana sayfasında kurs kataloğu bloğunu gösterin."
+
+msgid "Hide Public Link"
+msgstr "Genel Bağlantıyı Gizle"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Kurs kartlarından genel URL bağlantısını kaldırın."
+
+msgid "Only Selected Courses"
+msgstr "Yalnızca Seçilen Kurslar"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Katalogda yalnızca manuel olarak seçilen kursları gösterin."
+
+msgid "Allow Student Browsing"
+msgstr "Öğrenci Tarama İznine İzin Ver"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Öğrencilerin kurs kataloğunu taramasına ve filtrelemesine izin verin."
+
+msgid "Hide Private Courses"
+msgstr "Özel Kursları Gizle"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Özel kursları katalog görünümünden hariç tutun."
+
+msgid "Show Courses & Sessions"
+msgstr "Kursları ve Oturumları Göster"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Katalog sonuçlarında hem kursları hem de oturumları dahil edin."
+
+msgid "Auto Session Subscription"
+msgstr "Otomatik Oturum Aboneliği"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Kullanıcılar için oturumlara otomatik abonelik etkinleştirin."
+
+msgid "Subscription in Session View"
+msgstr "Oturum Görünümünde Abonelik"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Kullanıcıların oturum sayfalarından doğrudan kurslara abone olmasına izin verin."
+
+msgid "Enable redirection plugin"
+msgstr "Yönlendirme eklentisini etkinleştir"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Kullanıcının ilk giriş yaptığında hesap son kullanma tarihini ayarlamak için 'günler' ve 'aylar'ı tanımlayan dizi."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Rol => sayı dizisi; role göre hesap son kullanma tarihinden önceki gün sayısını temsil eder."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Oturumları aramak ve adlandırmak için kullanılan ekstra kullanıcı alanı"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Kullanıcıları aramak ve /admin-dashboard/register'den öğrenci kaydederken oturum adını tanımlamak için kullanılan ekstra kullanıcı alanı anahtarı (ör. \"company\") tanımlayan ayar."
+
+msgid "Glossary terms generator"
+msgstr "Terim üreticisi"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Öğretmenlerin kurslarında AI tarafından üretilen terimler istemesine izin verin. Bu, kurs başlığına ve kurs açıklama aracındaki genel açıklamaya dayalı 20 terim üretir. Birden fazla kullanılırsa, o sözlükteki mevcut terimleri hariç tutar (içeriğin yapılandırılmış AI hizmetleriyle paylaşılabileceğinden emin olun)."
+
+msgid "Video generator"
+msgstr "Video üreticisi"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "İsteksiz veya içerikle AI kullanarak video üretir (bu birçok jeton tüketebilir)."
+
+msgid "Course analyser"
+msgstr "Kurs analizörü"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Bir veya birden fazla kursun tüm kaynaklarını analiz eder ve AI modelini bu kurs(lar) hakkında herhangi bir soruya yanıt verecek şekilde önceden eğitir (içeriğin yapılandırılmış AI hizmetleriyle paylaşılabileceğinden emin olun)."
+
+msgid "Test/development"
+msgstr "Test/geliştirme"
+
+msgid "Crons"
+msgstr "Cron'lar"
+
+msgid "Editor"
+msgstr "Düzenleyici"
+
+msgid "Gradebook"
+msgstr "Not defteri"
+
+msgid "Internationalization"
+msgstr "Uluslararasılaştırma"
+
+msgid "User profiles"
+msgstr "Kullanıcı profilleri"
+
+msgid "Support tickets"
+msgstr "Destek biletleri"
+
+msgid "Webservices"
+msgstr "Web servisleri"
+
+msgid "Catalogue"
+msgstr "Katalog"
+
+msgid "Workflows"
+msgstr "İş akışları"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Ayar alt URL'lerde düzenlenebilir"
+
+msgid "Show JSON Template"
+msgstr "JSON Şablonunu Göster"
+
+msgid "JSON Template"
+msgstr "JSON Şablonu"
+
+msgid "Installing Xapian bindings"
+msgstr "Xapian bağlarını yükleme"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Aşağıdaki kod parçası, Ubuntu 25.04'te PHP 8.3 ile Xapian PHP bağlarının örnek kurulumunu gösterir. Yolları ve sürümleri kendi ortamınıza uyarlayın."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Gerçekten kullandığınız PHP sürümünün (örneğin 8.3) yalnızca bir tane olduğundan emin olun ve farklı uzantı dizinleriyle birden fazla sürümü karıştırmaktan kaçının."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Uzantı hem CLI hem de web sunucusu için doğru yüklendiğinde, yukarıdaki arama tanıları Xapian modülünün yüklendiğini bildirmelidir."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Geçici yüklemeleri ve önbelleği temizle"
+
+msgid "Directory"
+msgstr "Dizin"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Yalnızca şu yaştan eski dosyaları sil (dakika)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Tüm dosyaları silmek için 0 ayarlayın. Hala yüklenmekte olan dosyaları kaldırmamak için pozitif bir değer kullanın (ör., 60)."
+
+msgid "Preview only (do not delete)"
+msgstr "Yalnızca önizleme (silme)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Uyarı: TÜM geçici dosyaları silmek üzeresiniz. Bu işlem geri alınamaz."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Bu işlem tüm geçici dosyaları silecektir. Devam etmek istiyor musunuz?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Bu işlem %minutes% dakikadan eski dosyaları silecektir. Devam etmek istiyor musunuz?"
+

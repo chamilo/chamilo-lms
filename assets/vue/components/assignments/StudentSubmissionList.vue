@@ -66,16 +66,17 @@
 
       <Column :header="t('Score')">
         <template #body="{ data }">
-          <template v-if="data.qualification !== null && data.publicationParent?.qualification">
+          <template v-if="hasReceivedGrade(data) && data.publicationParent?.qualification">
             <span
               :class="{
                 'bg-success/10 text-success font-semibold text-sm px-2 py-1 rounded':
-                  data.qualification > data.publicationParent.qualification / 2,
+                  Number(data.qualification) > Number(data.publicationParent.qualification) / 2,
                 'bg-danger/10 text-danger font-semibold text-sm px-2 py-1 rounded':
-                  data.qualification <= data.publicationParent.qualification / 2,
+                  Number(data.qualification) <= Number(data.publicationParent.qualification) / 2,
               }"
             >
-              {{ data.qualification.toFixed(1) }} / {{ data.publicationParent.qualification.toFixed(1) }}
+              {{ Number(data.qualification).toFixed(1) }} /
+              {{ Number(data.publicationParent.qualification).toFixed(1) }}
             </span>
           </template>
           <template v-else>
@@ -116,6 +117,16 @@
               @click="correctAndRate(data)"
               type="success"
             />
+            <BaseButton
+              v-if="canDeleteSubmission(data)"
+              icon="delete"
+              only-icon
+              size="normal"
+              :class="actionBtnClass"
+              :label="t('Delete')"
+              @click="deleteSubmission(data)"
+              type="danger"
+            />
             <span
               v-if="!flags.allowFile && !flags.allowText"
               class="text-gray-400"
@@ -137,7 +148,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, nextTick } from "vue"
+import { nextTick, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import Column from "primevue/column"
 import BaseButton from "../basecomponents/BaseButton.vue"
@@ -177,6 +188,52 @@ const correctingItem = ref(null)
  */
 const actionBtnClass = "w-10 h-10 !p-2"
 
+/**
+ * Some APIs send qualification = 0.0 by default even if not graded yet.
+ * Prefer grading metadata (qualificator/qualification date) when available.
+ */
+function getQualificatorId(row) {
+  const v = row?.qualificatorId ?? row?.qualificator_id ?? row?.qualifiedById ?? row?.qualified_by_id ?? 0
+
+  const n = Number(v)
+  return Number.isFinite(n) ? n : 0
+}
+
+function getQualificationDate(row) {
+  return (
+    row?.qualificationDate ??
+    row?.qualification_date ??
+    row?.qualifiedAt ??
+    row?.qualified_at ??
+    row?.dateOfQualification ??
+    row?.date_of_qualification ??
+    null
+  )
+}
+
+function hasReceivedGrade(row) {
+  // Best signals: who graded it and/or when it was graded
+  if (getQualificatorId(row) > 0) return true
+  if (getQualificationDate(row)) return true
+
+  // Fallback: if API does not provide metadata, infer carefully
+  const q = row?.qualification
+  if (q === null || q === undefined || q === "") return false
+
+  const qNum = Number(q)
+  if (!Number.isFinite(qNum)) return false
+
+  // Any non-zero score implies grading happened
+  if (qNum !== 0) return true
+
+  // Score is 0: only treat as graded if there is clear teacher feedback metadata
+  return (row?.comments?.length ?? 0) > 0 || !!row?.correctionTitle
+}
+
+function canDeleteSubmission(row) {
+  return !hasReceivedGrade(row)
+}
+
 watch(
   loadParams,
   () => {
@@ -201,6 +258,25 @@ async function loadData() {
     notification.showErrorNotification(error)
   } finally {
     loading.value = false
+  }
+}
+
+async function deleteSubmission(item) {
+  if (!item?.iid) {
+    notification.showErrorNotification(t("Invalid submission"))
+    return
+  }
+
+  const confirmed = window.confirm(t("Are you sure you want to delete this submission?"))
+  if (!confirmed) return
+
+  try {
+    await cStudentPublicationService.deleteAssignmentSubmission(item.iid)
+    notification.showSuccessNotification(t("Submission deleted successfully!"))
+    await loadData()
+  } catch (e) {
+    console.warn("[Assignments][StudentSubmissionList] Failed to delete submission", e)
+    notification.showErrorNotification(e)
   }
 }
 

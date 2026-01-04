@@ -45,7 +45,8 @@ final class DocumentCollectionStateProvider implements ProviderInterface
             ->getRepository(CDocument::class)
             ->createQueryBuilder('d')
             ->innerJoin('d.resourceNode', 'rn')
-            ->addSelect('rn');
+            ->addSelect('rn')
+        ;
 
         $query = $request->query->all();
         $cid = (int) ($query['cid'] ?? 0);
@@ -55,7 +56,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         $hasContext = $cid > 0 || $sid > 0 || $gid > 0;
 
         // Gradebook mode (e.g. gradebook=1)
-        $isGradebook = !empty($query['gradebook']) && (int) $query['gradebook'] === 1;
+        $isGradebook = !empty($query['gradebook']) && 1 === (int) $query['gradebook'];
         $rawFiletype = $query['filetype'] ?? null;
         $filetypes = [];
 
@@ -76,22 +77,24 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         if (!empty($filetypes)) {
             $qb
                 ->andWhere($qb->expr()->in('d.filetype', ':filetypes'))
-                ->setParameter('filetypes', $filetypes);
+                ->setParameter('filetypes', $filetypes)
+            ;
         }
 
         $wantsCertificateList = \in_array('certificate', $filetypes, true);
-        $showSystemCertificates = !empty($query['showSystemCertificates']) && (int) $query['showSystemCertificates'] === 1;
+        $showSystemCertificates = !empty($query['showSystemCertificates']) && 1 === (int) $query['showSystemCertificates'];
 
         if (!$showSystemCertificates && !($isGradebook && $wantsCertificateList)) {
             $meta = $this->entityManager->getClassMetadata(ResourceNode::class);
             if ($meta->hasField('path')) {
                 $qb
                     ->andWhere('rn.path IS NULL OR rn.path NOT LIKE :certificatesPath')
-                    ->setParameter('certificatesPath', '%/certificates-%');
+                    ->setParameter('certificatesPath', '%/certificates-%')
+                ;
             }
         }
 
-        $loadNode = !empty($query['loadNode']) && (int) $query['loadNode'] === 1;
+        $loadNode = !empty($query['loadNode']) && 1 === (int) $query['loadNode'];
 
         $parentNodeId = 0;
         if (isset($query['resourceNode.parent'])) {
@@ -150,12 +153,14 @@ final class DocumentCollectionStateProvider implements ProviderInterface
                                 )
                             )
                             ->setParameter('parentLinkId', (int) $parentLink->getId())
-                            ->setParameter('parentNodeId', $parentNodeId);
+                            ->setParameter('parentNodeId', $parentNodeId)
+                        ;
                     } else {
                         // No parent link in this context -> fallback to legacy tree
                         $qb
                             ->andWhere('IDENTITY(rn.parent) = :parentNodeId')
-                            ->setParameter('parentNodeId', $parentNodeId);
+                            ->setParameter('parentNodeId', $parentNodeId)
+                        ;
                     }
                 } else {
                     // Context root
@@ -169,7 +174,8 @@ final class DocumentCollectionStateProvider implements ProviderInterface
             if ($parentNodeId > 0) {
                 $qb
                     ->andWhere('IDENTITY(rn.parent) = :parentId')
-                    ->setParameter('parentId', $parentNodeId);
+                    ->setParameter('parentId', $parentNodeId)
+                ;
             }
         }
 
@@ -192,7 +198,8 @@ final class DocumentCollectionStateProvider implements ProviderInterface
 
         $qb
             ->setFirstResult(($page - 1) * $itemsPerPage)
-            ->setMaxResults($itemsPerPage);
+            ->setMaxResults($itemsPerPage)
+        ;
 
         return $qb->getQuery()->getResult();
     }

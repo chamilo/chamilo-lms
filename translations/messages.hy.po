@@ -31453,3 +31453,375 @@ msgstr "Մանրամասների համար այցելեք %s"
 msgid "Manager"
 msgstr "Մենեջեր"
 
+msgid "Mark as"
+msgstr "Նշել որպես"
+
+msgid "Reply to all"
+msgstr "Պատասխանել բոլորին"
+
+msgid "SCIM external ID"
+msgstr "SCIM արտաքին ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Խնդրում ենք ընդունել օգտագործման պայմանների վերջին տարբերակը:"
+
+msgid "Required value for operation without path"
+msgstr "Պարտադիր արժեք ուղի չունեցող գործողության համար"
+
+msgid "Available space (%s)"
+msgstr "Օգտագործելի տարածք (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Գլոբալ որոնման համար ինդեքսավորել այս նկարագրությունը"
+
+msgid "Unknown course"
+msgstr "Անհայտ դասընթաց"
+
+msgid "Certificate not found."
+msgstr "Վկայականը չի գտնվել:"
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Անվտանգության ժետոնի ժամկետն ավարտվել է: Խնդրում ենք վերաբեռնել էջը և կրկին փորձել:"
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Միայն հարթակի ադմինիստրատորները կարող են փոխել դասընթացի տեսանելիությունը:"
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Սպասված սխալ օգտատիրոջ բաժանորդագրության ժամանակ"
+
+msgid "Search in resource logs"
+msgstr "Որոնել ռեսուրսների լոգերում"
+
+msgid "Include this learning path in the global search results"
+msgstr "Ներառել այս ուսուցման ուղին գլոբալ որոնման արդյունքներում"
+
+msgid "The course code already exists"
+msgstr "Դասընթացի կոդն արդեն գոյություն ունի"
+
+msgid "Latest news"
+msgstr "Վերջին նորություններ"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Ստացեք Chamilo-ի վերջին նորությունները, ներառյալ անվտանգության խոցելիությունները և իրադարձությունները, ուղղակիորեն Ձեր ադմինիստրատորական վահանակում: Այս նորությունները կստուգվեն Chamilo նորությունների սերվերում յուրաքանչյուր անգամ, երբ բեռնեք ադմինիստրատորական էջը և տեսանելի են միայն ադմինիստրատորների համար:"
+
+msgid "Chamilo support block"
+msgstr "Chamilo աջակցության բլոկ"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Ստացեք պրո խորհուրդներ և հեշտ միջոց պաշտոնական ծառայությունների մատակարարներին կապվելու համար մասնագիտական աջակցության համար, ուղղակիորեն Chamilo-ի ստեղծողներից: Այս բլոկը հայտնվում է Ձեր ադմինիստրատորական էջում, տեսանելի է միայն ադմինիստրատորների համար և թարմացվում է յուրաքանչյուր անգամ, երբ բեռնեք ադմինիստրատորական էջը:"
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Թաքցնել հայտարարություններ ուղարկելու HR օգտատերերին տարբերակը"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Թույլ տալ սեսիայի ադմինիստրատորներին ներբեռնել անձնական վկայականները"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Եթե 활성화ված է, սեսիայի ադմինիստրատորները կարող են ներբեռնել վկայականները նույնիսկ, եթե դրանք հանրային հրապարակված չեն:"
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Եթե դատարկ չէ, դասընթացի ստեղծման գործընթացը կորոնի օգտատիրոջ профիլում որոշ դաշտեր և կլրացնի դրանք դասընթացի համար: Օրինակ՝ թվային մարքեթինգով մասնագիտացած ուսուցիչը կարող է ավտոմատ կերպով «թվային մարքեթինգ» դրոշակ նշել յուրաքանչյուր դասընթացի վրա, որը (նա) ստեղծում է:"
+
+msgid "Main menu entries"
+msgstr "Հիմնական մենյուի մուտքեր"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Ընտրեք այն մուտքերը, որոնք ցանկանում եք տեսնել հիմնական մենյուում"
+
+msgid "Main menu entries per role"
+msgstr "Հիմնական մենյուի մուտքեր դերով"
+
+msgid "Define header tabs visibility per role."
+msgstr "Սահմանեք վերնագրի ներդիրների տեսանելիությունը դերով:"
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Սահմանեք այն տարբերակները, որոնք ցանկանում եք ցուցադրել աղյուսակի շուրջ նավիգացիայում՝ մեկ էջում ցույց տալու համար ավելի քիչ կամ ավելի շատ տողեր: օր. [50, 100, 200, 500]:"
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Լրացուցիչ հնարավորությունների զանգված, որոնք կարող եք فعالացնել Chamilo-ի վիդեոդեպլայերի համար: Տարբերակները ներառում են 'speed'-ը, որը թույլ է տալիս փոխել վիդեոյի վերարտադրության արագությունը:"
+
+msgid "Mail: character set"
+msgstr "Նամակ. բնութագրերի խմբագիր"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Եթե պետք է սահմանեք charset-ը էլ. փոստերն ուղարկելիս: Թողեք դատարկ, եթե չգիտեք:"
+
+msgid "Mail: Debug"
+msgstr "Նամակ. Դիագնոստիկա"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Ընտրեք, արդյոք ցանկանում եք فعالացնել էլ. փոստի ուղարկման դիագնոստիկայի լոգերը: Սրանք կտրամադրեն ավելի շատ տեղեկություններ փոստի ծառայության հետ կապակցվելիս, սակայն չեն համարվում էլեգանտ և կարող են խախտել էջի դիզայնը: Օգտագործեք միայն առանց օգտատերերի ակտիվության:"
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Նամակ. Խուսափել LD+JSON-ից"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Որոշ էլ. փոստի հաճախորդներ չեն հասկանում նկարագրական LD+JSON ձևաչափը և ցուցադրում են այն որպես ազատ JSON տող վերջնական օգտատիրոջը: Եթե սա ձեր դեպքն է, կարող եք ստորև տարբերակը սահմանել 'false'-ի՝ ան활ացնելով այս վերնագիրը:"
+
+msgid "Mail: DKIM headers"
+msgstr "Նամակ. DKIM վերնագրեր"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Մուտքագրեք ձեր DKIM կարգավորումների JSON զանգված (տես օրինակը):"
+
+msgid "Mail: XOAuth2 options"
+msgstr "Նամակ. XOAuth2 տարբերակներ"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Եթե օգտագործում եք XOAuth2- 기반 էլ. փոստի ծառայություն, օգտագործեք այս JSON կարգավորումը ձեր հատուկ կարգավորումները պահպանելու համար (տես օրինակը) և ընտրեք XOAuth2 փոստի ծառայության կարգավորումներում:"
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Սահմանում է միջավայրի տեսակը՝ \"prod\" (սովորական արտադրություն), \"validation\" (ինչպես արտադրությունը, բայց առանց վիճակագրության հաշվետվությունների), կամ \"test\" (դիագնոստիկայի ռեժիմը՝ մշակողական գործիքներով, ինչպես չթարգմանված տողերի ցուցիչներ):"
+
+msgid "Global limit of users per course"
+msgstr "Կուրսում օգտատերերի գլոբալ սահմանափակում"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Սահմանում է գլոբալ առավելագույն օգտատերերի թիվը (ներառյալ ուսուցիչները), որոնք կարող են գրանցվել հարթակի ցանկացած առանձին կուրսում: Սահմանեք 0՝ սահմանափակումը ան활ացնելու համար: Սա օգնում է խուսափել բաց պորտալներում կուրսերի գերբեռնվածությունից:"
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Ակտիվացրեք՝ զանգված օգտագործելու համար, որը սահմանում է, թե որ դերերը պետք է հստակ ցուցադրվեն և որոնք՝ թաքցված:"
+
+msgid "Show base course posts in session course"
+msgstr "Ցուցադրել հիմնական կուրսի գրառումները սեսիայի կուրսում"
+
+msgid "Limit identical email usage"
+msgstr "Սահմանափակել նույնական էլ. փոստի օգտագործումը"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Առավելագույն թույլատրվող հաշիվների քանակը, որոնք կարող են կիսել նույն էլ. փոստի հասցեն: Սահմանեք 0՝ սահմանափակումը անջատելու համար:"
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Թույլ տալ սեսիայի ադմիններին տեսնել բոլոր օգտատերերին բոլոր URL-ների վրա"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Եթե 활성화ված է, սեսիայի ադմինները կարող են փնտրել և ցուցադրել օգտատերերին բոլոր մուտքի URL-ներից, անկախ նրանց ընթացիկ URL-ից:"
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Ավտոմատացնել օգտատերերի ժամանակի գոտու ընտրությունը: Կարգավորվածից հետո օգտատերերը կարող են տեսնել առաջադրանքների վերջնաժամկետները իրենց ժամանակի գոտում, ինչը կնվազեցնի առաքման ժամանակի սխալները:"
+
+msgid "Redirect after login (per profile)"
+msgstr "Վերահղում մուտքից հետո (մեկը մեկ պրոֆիլի համար)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Սահմանել վերահղումը պրոֆիլի համար մուտքից հետո JSON օբյեկտով, ինչպես {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Թաքցնել օրինական ընդունման կտրամադրիչը Պայմանների և կանոնակարգերի էջում"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Եթե true է, հեռացնում է «Ես կարդացել և ընդունում եմ» կտրամադրիչը Պայմանների և կանոնակարգերի էջի հոսքից:"
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Масիվ, որը սահմանում է LDAP սերվերի հոսթը և պորտը:"
+
+msgid "Enable 2FA"
+msgstr "Միացնել 2FA-ն"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Ավելացնել դաշտեր գաղտնաբառի թարմացման էջում՝ 2FA-ն ակտիվացնելու համար TOTP հաստատման հավելվածով: Երբ գլոբալ անջատված է, օգտատերերը չեն տեսնի 2FA դաշտերը և չեն պահանջվի 2FA մուտքի ժամանակ, նույնիսկ եթե նախկինում ակտիվացրել են:"
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Chamilo-ի որոշ հնարավորություններ կապահովեն կապը սերվերից դուրս: Օրինակ՝ համոզվելու, որ արտաքին բովանդակությունը գոյություն ունի հղում ստեղծելիս կամ ցուցադրելիս դասավանդման ուղու ներդրված էջը: Եթե Ձեր Chamilo սերվերը օգտագործում է proxy իր ցանցից դուրս գալու համար, ահա տեղը դրա կարգավորման համար:"
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Միացնել կամ անջատել կուրսի վավերականության ավարտի ժամանակ ավտոմատ վերագրանցումը: Համապատասխան cron աշխատանքը նույնպես պետք է ակտիվացվի:"
+
+msgid "Show remaining days in My Sessions"
+msgstr "Ցուցադրել մնացած օրերը «Իմ սեսիաներում»"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Եթե ակտիվացված է, «Իմ սեսիաներ» էջի սեսիայի ամսաթվերը կփոխարինվեն մնացած օրերի քանակով:"
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Ցուցադրել «Սպասվող հարցումներ» ընտրացանկում"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Ցուցադրել ընտրացանկի կետ, որը թույլ է տալիս օգտատերերին մուտք գործել իրենց սպասվող հարցումներին:"
+
+msgid "Disclose AI assistance"
+msgstr "Գովազդել AI օգնությունը"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Ցուցադրել պիտակ ցանկացած բովանդակության կամ արձագանքի վրա, որը ստեղծվել կամ համահեղինակվել է AI համակարգով՝ ապացուցելով օգտատիրոջը, որ բովանդակությունը ստեղծվել է AI-ի օգնությամբ: Որ AI-ն օգտագործվել է որ դեպքում՝ պահվում է տվյալների բազայում աուդիտի համար, բայց անմիջապես հասանելի չէ վերջնական օգտատիրոջ համար:"
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "JSON կարգավորումներ կուրսերի կատալոգի համար՝ հղումներ, զտիչներ, տեսակավորման տարբերակներ և այլն:"
+
+msgid "Session Catalog Settings"
+msgstr "Սեսիայի կատալոգի կարգավորումներ"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "JSON կարգավորումներ սեսիայի կատալոգի համար՝ զտիչներ և ցուցադրման տարբերակներ:"
+
+msgid "Show Course Descriptions"
+msgstr "Ցուցադրել կուրսերի նկարագրությունները"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Ցուցադրել դասընթացների նկարագրությունները կատալոգի ցուցակում:"
+
+msgid "Published Courses Only"
+msgstr "Միայն հրապարակված դասընթացներ"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Սահմանափակել կատալոգը միայն հրապարակված դասընթացներով:"
+
+msgid "Display Catalog on Homepage"
+msgstr "Ցուցադրել կատալոգը գլխավոր էջում"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Ցուցադրել դասընթացների կատալոգի բլոկը հարթակի գլխավոր էջում:"
+
+msgid "Hide Public Link"
+msgstr "Թաքցնել հանրային հղումը"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Հեռացնել հանրային URL հղումը դասընթացների քարտերից:"
+
+msgid "Only Selected Courses"
+msgstr "Միայն ընտրված դասընթացներ"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Ցուցադրել կատալոգում միայն ձեռքով ընտրված դասընթացները:"
+
+msgid "Allow Student Browsing"
+msgstr "Թույլ տալ ուսանողների դիտումը"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Թույլ տալ ուսանողներին դիտել և զտել դասընթացների կատալոգը:"
+
+msgid "Hide Private Courses"
+msgstr "Թաքցնել մասնավոր դասընթացները"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Բացառել մասնավոր դասընթացները կատալոգի ցուցադրությունից:"
+
+msgid "Show Courses & Sessions"
+msgstr "Ցուցադրել դասընթացներն ու սեսիաները"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Ներառել կատալոգի արդյունքներում և՛ դասընթացները, և՛ սեսիաները:"
+
+msgid "Auto Session Subscription"
+msgstr "Ավտոմատ սեսիայի բաժանորդագրում"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Միացնել օգտատերերի համար սեսիաների ավտոմատ բաժանորդագրումը:"
+
+msgid "Subscription in Session View"
+msgstr "Բաժանորդագրում սեսիայի տեսքում"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Թույլ տալ օգտատերերին բաժանորդագրվել դասընթացներին ուղղակիորեն սեսիայի էջից:"
+
+msgid "Enable redirection plugin"
+msgstr "Միացնել վերահղձման հավելվածը"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Ցուցակ, որը սահմանում է 'օրերն' ու 'ամիսները' օգտատիրոջ առաջին մուտք գործելուն պահին հաշվի 만료ման ամսաթիվը սահմանելու համար:"
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Դեր => թիվ ցուցակ, որը ներկայացնում է հաշվի 만որդման նախքան ժամկետի օրերի քանակը՝ կախված դերից:"
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Լրացուցիչ օգտատիրոջ դաշտ՝ սեսիաներ փնտրելու և անվանելու համար"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Այս պարամետրը սահմանում է լրացուցիչ օգտատիրոջ դաշտի բանալին (օրինակ՝ \"company\") , որը կօգտագործվի օգտատերեր փնտրելու և սեսիայի անունը սահմանելու համար՝ /admin-dashboard/register-ից ուսանողներ գրանցելիս:"
+
+msgid "Glossary terms generator"
+msgstr "Բառարանային տերմինների գեներատոր"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Թույլ տալ ուսուցիչներին խնդրել AI-ով գեներացված բառարանային տերմիններ իրենց դասընթացում: Սա կգեներացնի 20 տերմին՝ հիմնվելով դասընթացի վերնագրի և դասընթացի նկարագրության գործիքի ընդհանուր նկարագրության վրա: Եթե օգտագործվի ավելի քան մեկ անգամ, այն կբացառի արդեն առկա տերմինները այդ բառարանում (ապահովեք, որ բովանդակությունը կարող է կիսվել կարգավորված AI ծառայությունների հետ):"
+
+msgid "Video generator"
+msgstr "Վիդեո գեներատոր"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "AI-ով վիդեոներ գեներացնում հրահանգների կամ բովանդակության հիման վրա (սա կարող է շատ տոկեններ սպառել):"
+
+msgid "Course analyser"
+msgstr "Դասընթացի վերլուծիչ"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Վերլուծում է մեկ կամ մի քանի դասընթացների բոլոր ռեսուրսները և նախապես ուսուցանում AI մոդելը՝ պատասխանելու ցանկացած հարցի այս կամ այդ դասընթացների վերաբերյալ (ապահովեք, որ բովանդակությունը կարող է կիսվել կարգավորված AI ծառայությունների հետ):"
+
+msgid "Test/development"
+msgstr "Փորձարկում/զարգացում"
+
+msgid "Crons"
+msgstr "Կրոններ"
+
+msgid "Editor"
+msgstr "Նշիչ"
+
+msgid "Gradebook"
+msgstr "Վկայական"
+
+msgid "Internationalization"
+msgstr "Ինտերնացիոնալիզացիա"
+
+msgid "User profiles"
+msgstr "Օգտատիրոջ профիլներ"
+
+msgid "Support tickets"
+msgstr "Աջակցության տոմսեր"
+
+msgid "Webservices"
+msgstr "Վեբ ծառայություններ"
+
+msgid "Catalogue"
+msgstr "Կատալոգ"
+
+msgid "Workflows"
+msgstr "Օբյեկտների հոսքեր"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Պարամետրը խմբագրելի է ենթա-URL-ներում"
+
+msgid "Show JSON Template"
+msgstr "Ցուցադրել JSON ձևանմուշը"
+
+msgid "JSON Template"
+msgstr "JSON ձևանմուշ"
+
+msgid "Installing Xapian bindings"
+msgstr "Xapian կապերի տեղադրում"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Հետևյալ հատվածը ցույց է տալիս Xapian PHP կապերի օրինակ տեղադրումը Ubuntu 25.04-ում PHP 8.3-ով: Ադապտացրեք ուղիներն ու տարբերակները ձեր միջավայրին:"
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Ապահովեք, որ ունեք միայն իսկապես օգտագործվող PHP տարբերակը (օրինակ՝ 8.3) և խուսափեք մի քանի տարբերակների խառնումից տարբեր ընդլայնման թղթապանակներով:"
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Միացնել ընդլայնումը CLI-ի և վեբ սերվերի համար, որոնք վերևի որոնման ախտորոշումները պետք է հաշվետվություն տան, որ Xapian մոդուլը տեղադրված է:"
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Մաքրել ժամանակավոր վերբեռնումները և կուշպը"
+
+msgid "Directory"
+msgstr "Թղթապանակ"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Միայն հին ֆայլերը ջնջել (րոպեներով)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Սահմանեք 0՝ բոլոր ֆայլերը ջնջելու համար: Օգտագործեք դրական արժեք (օրինակ՝ 60)՝ դեռ վերբեռնվող ֆայլերը չջնջելու համար:"
+
+msgid "Preview only (do not delete)"
+msgstr "Նախադիտում միայն (չջնջել)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Զգուշացում. դուք պատրաստվում եք ջնջել ԲՈԼՈՐ ժամանակավոր ֆայլերը: Այս գործողությունը չի կարող հետ շրջանառվել:"
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Սա կջնջի բոլոր ժամանակավոր ֆայլերը: Շարունակե՞ք:"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Սա կջնջի %minutes% րոպեից հին ֆայլերը: Շարունակե՞ք:"
+

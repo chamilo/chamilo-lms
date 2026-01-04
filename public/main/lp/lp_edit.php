@@ -150,7 +150,7 @@ if ('true' === api_get_setting('search_enabled')) {
         'checkbox',
         'search_index_enabled',
         null,
-        get_lang('Include this learning path in global search')
+        get_lang('Include this learning path in the global search results')
     );
 
     // Default: enabled

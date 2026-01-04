@@ -31449,3 +31449,375 @@ msgstr "Для отримання детальнішої інформації в
 msgid "Manager"
 msgstr "Менеджер"
 
+msgid "Mark as"
+msgstr "Позначити як"
+
+msgid "Reply to all"
+msgstr "Відповісти всім"
+
+msgid "SCIM external ID"
+msgstr "SCIM зовнішній ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Будь ласка, прийміть останню версію умов та правил."
+
+msgid "Required value for operation without path"
+msgstr "Необхідне значення для операції без шляху"
+
+msgid "Available space (%s)"
+msgstr "Доступний простір (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Індексувати цей опис для глобального пошуку"
+
+msgid "Unknown course"
+msgstr "Невідомий курс"
+
+msgid "Certificate not found."
+msgstr "Сертифікат не знайдено."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Термін дії токена безпеки минув. Будь ласка, перезавантажте сторінку та спробуйте ще раз."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Тільки адміністратори платформи можуть змінювати видимість курсу."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Несподівана помилка під час реєстрації користувача"
+
+msgid "Search in resource logs"
+msgstr "Пошук у журналах ресурсів"
+
+msgid "Include this learning path in the global search results"
+msgstr "Включити цей навчальний шлях до результатів глобального пошуку"
+
+msgid "The course code already exists"
+msgstr "Код курсу вже існує"
+
+msgid "Latest news"
+msgstr "Останні новини"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Отримуйте останні новини від Chamilo, включно з вразливостями безпеки та подіями, безпосередньо в панелі адміністратора. Ці новини перевірятимуться на сервері новин Chamilo щоразу, коли ви завантажуєте сторінку адміністратора, і видимі тільки адміністраторам."
+
+msgid "Chamilo support block"
+msgstr "Блок підтримки Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Отримуйте професійні поради та зручний спосіб зв’язку з офіційними постачальниками послуг для професійної підтримки безпосередньо від творців Chamilo. Цей блок з’являється на сторінці адміністратора, видимий тільки адміністраторам і оновлюється щоразу при завантаженні сторінки адміністратора."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Приховати опцію надсилання оголошень користувачам HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Дозволити адміністраторам сесій завантажувати приватні сертифікати"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Якщо увімкнено, адміністратори сесій можуть завантажувати сертифікати, навіть якщо вони не опубліковані публічно."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Якщо не порожнє, процес створення курсу шукатиме деякі поля в профілі користувача та автоматично заповнить їх для курсу. Наприклад, викладач, що спеціалізується на цифровому маркетингу, може автоматично встановити прапорець «цифровий маркетинг» для кожного створеного курсу."
+
+msgid "Main menu entries"
+msgstr "Пункти головного меню"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Позначте пункти, які ви хочете бачити в головному меню"
+
+msgid "Main menu entries per role"
+msgstr "Пункти головного меню за ролями"
+
+msgid "Define header tabs visibility per role."
+msgstr "Визначте видимість вкладок заголовка за ролями."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Встановіть опції, які ви хочете бачити в навігації навколо таблиці, щоб показувати менше або більше рядків на одній сторінці. напр. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Масив додаткових функцій, які можна увімкнути для відеоплеєра в Chamilo. Опції включають 'speed', яка дозволяє змінювати швидкість відтворення відео."
+
+msgid "Mail: character set"
+msgstr "Пошта: набір символів"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "У разі потреби визначте набір символів для використання під час надсилання електронних листів. Залиште порожнім, якщо не впевнені."
+
+msgid "Mail: Debug"
+msgstr "Пошта: Налагодження"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Виберіть, чи хочете увімкнути журнали налагодження надсилання електронної пошти. Вони нададуть більше інформації про те, що відбувається під час підключення до поштової служби, але не є елегантними та можуть порушити дизайн сторінки. Використовуйте лише за відсутності активності користувачів."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Пошта: Уникати використання LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Деякі поштові клієнти не розуміють описовий формат LD+JSON, відображаючи його як розрізнений рядок JSON кінцевому користувачеві. У такому випадку встановіть змінну нижче в 'false', щоб вимкнути цей заголовок."
+
+msgid "Mail: DKIM headers"
+msgstr "Пошта: Заголовки DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Введіть масив JSON з налаштуваннями конфігурації DKIM (див. приклад)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Пошта: Опції XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Якщо ви використовуєте поштову службу на основі XOAuth2, скористайтеся цим налаштуванням у форматі JSON для збереження вашої специфічної конфігурації (див. приклад) та виберіть XOAuth2 у налаштуванні поштової служби."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Визначає тип середовища: \"prod\" (звичайне виробництво), \"validation\" (як виробництво, але без звітності статистики) або \"test\" (режим налагодження з інструментами розробника, такими як індикатори неперекладених рядків)."
+
+msgid "Global limit of users per course"
+msgstr "Глобальний ліміт користувачів на курс"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Визначає глобальну максимальну кількість користувачів (включно з викладачами), дозволених для реєстрації на один курс на платформі. Встановіть значення 0, щоб вимкнути ліміт. Це допомагає уникнути перевантаження курсів у відкритих порталах."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Увімкніть, щоб використовувати масив для визначення ролей, які слід чітко відображати, а які приховувати."
+
+msgid "Show base course posts in session course"
+msgstr "Показувати базові повідомлення курсу в сесійному курсі"
+
+msgid "Limit identical email usage"
+msgstr "Обмежити використання однакових адрес електронної пошти"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Максимальна кількість облікових записів, які можуть використовувати одну електронну адресу. Встановіть 0, щоб вимкнути це обмеження."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Дозволити адміністраторам сесій бачити всіх користувачів на всіх URL"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Якщо увімкнено, адміністратори сесій можуть шукати та переглядати користувачів з усіх URL доступу, незалежно від поточного URL."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Дозволити користувачам вибирати власний часовий пояс. Після налаштування користувачі зможуть бачити терміни завдань та інші часові посилання у своєму часовому поясі, що зменшить помилки під час подання."
+
+msgid "Redirect after login (per profile)"
+msgstr "Перенаправлення після входу (за профілем)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Визначте перенаправлення за профілем після входу за допомогою JSON-об'єкта, наприклад {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Приховати прапорець згоди з юридичними умовами на сторінці Умов та правил"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Якщо встановлено true, видаляє прапорець \"Я прочитав і приймаю\" у процесі сторінки Умов та правил."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Масив, що визначає хост та порт для LDAP-сервера."
+
+msgid "Enable 2FA"
+msgstr "Увімкнути 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Додати поля на сторінці оновлення пароля для увімкнення 2FA за допомогою додатка-аутентифікатора TOTP. Коли вимкнено глобально, користувачі не бачитимуть поля 2FA і не запитуватимуться для 2FA під час входу, навіть якщо вони увімкнули це раніше."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Деякі функції Chamilo підключатимуться до зовнішніх ресурсів з сервера. Наприклад, щоб переконатися, що зовнішній контент існує під час створення посилання або показу вбудованої сторінки в навчальному шляху. Якщо ваш сервер Chamilo використовує проксі для виходу з мережі, тут можна його налаштувати."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Увімкнути або вимкнути автоматичне повторне записування при закінченні терміну дії курсу. Пов'язане завдання cron також має бути активоване."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Показувати решту днів у Моїх сесіях"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Якщо увімкнено, дати сесій на сторінці \"Мої сесії\" будуть замінені кількістю днів, що залишилися."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Показувати \"Очікувані опитування\" у меню"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Відображати пункт меню, що дозволяє користувачам отримати доступ до своїх очікуваних опитувань."
+
+msgid "Disclose AI assistance"
+msgstr "Розкривати допомогу ШІ"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Показувати тег на будь-якому контенті чи зворотному зв'язку, що був згенерований або співгенерований будь-якою системою ШІ, засвідчуючи користувачу, що контент було створено за допомогою певної системи ШІ. Деталі про те, яка система ШІ використовувалася в якому випадку, зберігаються в базі даних для аудиту, але не є безпосередньо доступними для кінцевого користувача."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "JSON-конфігурація для каталогу курсів: налаштування посилань, фільтри, опції сортування тощо."
+
+msgid "Session Catalog Settings"
+msgstr "Налаштування каталогу сесій"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "JSON-конфігурація для каталогу сесій: фільтри та опції відображення."
+
+msgid "Show Course Descriptions"
+msgstr "Показувати описи курсів"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Відображати описи курсів у списку каталогу."
+
+msgid "Published Courses Only"
+msgstr "Тільки опубліковані курси"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Обмежити каталог тільки курсами, позначеними як опубліковані."
+
+msgid "Display Catalog on Homepage"
+msgstr "Відображати каталог на головній сторінці"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Показувати блок каталогу курсів на головній сторінці платформи."
+
+msgid "Hide Public Link"
+msgstr "Приховати публічне посилання"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Видалити публічне URL-посилання з карток курсів."
+
+msgid "Only Selected Courses"
+msgstr "Тільки вибрані курси"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Показувати в каталозі лише вручну вибрані курси."
+
+msgid "Allow Student Browsing"
+msgstr "Дозволити студентам переглядати"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Дозволити студентам переглядати та фільтрувати каталог курсів."
+
+msgid "Hide Private Courses"
+msgstr "Приховати приватні курси"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Виключити приватні курси з відображення в каталозі."
+
+msgid "Show Courses & Sessions"
+msgstr "Показувати курси та сесії"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Включати до результатів каталогу як курси, так і сесії."
+
+msgid "Auto Session Subscription"
+msgstr "Автоматична підписка на сесію"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Увімкнути автоматичну підписку користувачів на сесії."
+
+msgid "Subscription in Session View"
+msgstr "Підписка на сторінці сесії"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Дозволити користувачам підписуватися на курси безпосередньо зі сторінки сесії."
+
+msgid "Enable redirection plugin"
+msgstr "Увімкнути плагін перенаправлення"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Масив, що визначає 'дні' та 'місяці' для встановлення дати закінчення терміну дії облікового запису під час першого входу користувача."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Масив роль => число, що представляє кількість днів до закінчення терміну дії облікового запису залежно від ролі."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Додаткове поле користувача, що використовується для пошуку та назви сесій"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Цей параметр визначає ключ додаткового поля користувача (наприклад, \"company\") , який буде використовуватися для пошуку користувачів та визначення назви сесії під час реєстрації студентів з /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Генератор термінів глосарію"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Дозволити викладачам запитувати терміни глосарію, згенеровані ШІ, у своєму курсі. Це згенерує 20 термінів на основі назви курсу та загального опису в інструменті опису курсу. Якщо використовувати більше одного разу, виключить терміни, які вже є в цьому глосарії (переконайтеся, що вміст можна поділитися з налаштованими службами ШІ)."
+
+msgid "Video generator"
+msgstr "Генератор відео"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Генерує відео на основі підказок або вмісту за допомогою ШІ (це може споживати багато токенів)."
+
+msgid "Course analyser"
+msgstr "Аналізатор курсу"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Аналізує всі ресурси в одному або кількох курсах і попередньо навчає модель ШІ для відповіді на будь-які запитання щодо цього або цих курсів (переконайтеся, що вміст можна поділитися з налаштованими службами ШІ)."
+
+msgid "Test/development"
+msgstr "Тестування/розробка"
+
+msgid "Crons"
+msgstr "Крони"
+
+msgid "Editor"
+msgstr "Редактор"
+
+msgid "Gradebook"
+msgstr "Журнал оцінок"
+
+msgid "Internationalization"
+msgstr "Інтернаціоналізація"
+
+msgid "User profiles"
+msgstr "Профілі користувачів"
+
+msgid "Support tickets"
+msgstr "Запити до служби підтримки"
+
+msgid "Webservices"
+msgstr "Вебсервіси"
+
+msgid "Catalogue"
+msgstr "Каталог"
+
+msgid "Workflows"
+msgstr "Робочі процеси"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Параметр можна редагувати на під-URL"
+
+msgid "Show JSON Template"
+msgstr "Показати шаблон JSON"
+
+msgid "JSON Template"
+msgstr "Шаблон JSON"
+
+msgid "Installing Xapian bindings"
+msgstr "Встановлення зв'язків Xapian"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Наступний фрагмент показує приклад встановлення зв'язків Xapian для PHP на Ubuntu 25.04 з PHP 8.3. Адаптуйте шляхи та версії до вашого середовища."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Переконайтеся, що у вас встановлена лише версія PHP, яку ви дійсно використовуєте (наприклад, 8.3), і уникайте змішування кількох версій з різними каталогами розширень."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Після того, як розширення буде правильно завантажене для CLI та вебсервера, діагностика пошуку вище повинна повідомити, що модуль Xapian встановлено."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Очищення тимчасових завантажень та кешу"
+
+msgid "Directory"
+msgstr "Каталог"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Видаляти лише файли старші за (хвилини)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Встановіть 0, щоб видалити всі файли. Використовуйте додатне значення (наприклад, 60), щоб уникнути видалення файлів, які ще завантажуються."
+
+msgid "Preview only (do not delete)"
+msgstr "Попередній перегляд лише (не видаляти)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Увага: ви збираєтеся видалити ВСІ тимчасові файли. Цю дію не можна скасувати."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Це видалить усі тимчасові файли. Продовжити?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Це видалить файли старші за %minutes% хвилин. Продовжити?"
+

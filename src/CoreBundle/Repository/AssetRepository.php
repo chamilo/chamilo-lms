@@ -218,4 +218,19 @@ class AssetRepository extends ServiceEntityRepository
         $em->remove($asset);
         $em->flush();
     }
+
+    public function assetFileExists(Asset $asset): bool
+    {
+        // This checks the physical file existence in the configured filesystem (Flysystem).
+        if (!$asset->hasFile()) {
+            return false;
+        }
+
+        $path = (string) $this->storage->resolveUri($asset);
+        if ('' === trim($path)) {
+            return false;
+        }
+
+        return $this->filesystem->fileExists($path);
+    }
 }

@@ -21,6 +21,6 @@ class SettingsHelper extends SylusSettingsHelper
      */
     public function getSettingsParameter(string $parameter)
     {
-        return $this->settingsManager instanceof SettingsManager ? $this->settingsManager->getSetting($parameter) : '';
+        return $this->settingsManager instanceof SettingsManager ? $this->settingsManager->getSetting($parameter, true) : '';
     }
 }

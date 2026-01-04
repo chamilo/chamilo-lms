@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:berhak cipta,, no:tiada hak cipta"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Pasta,, application/msword:MsWord,, application/octet-stream:Aliran oktet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:latihan,,      simulation:simulasi,,      questionnaire:soal selidik,,      diagram:diagram,,      figure:gambar,,      graph:graf,,      index:indeks,,      slide:slaid,,      table:jadual,,      narrative text:teks naratif,,      exam:ujian,,      experiment:eksperimen,,      problem statement:penyata masalah,,      self assessment:penilaian diri,,      lecture:kuliah"
@@ -31454,4 +31454,376 @@ msgstr "Untuk maklumat lanjut lawati %s"
 
 msgid "Manager"
 msgstr "Pengurus"
+
+msgid "Mark as"
+msgstr "Tandakan sebagai"
+
+msgid "Reply to all"
+msgstr "Balas kepada semua"
+
+msgid "SCIM external ID"
+msgstr "ID luaran SCIM"
+
+msgid "OAuth2 ID"
+msgstr "ID OAuth2"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Sila terima versi terkini syarat dan peraturan."
+
+msgid "Required value for operation without path"
+msgstr "Nilai diperlukan untuk operasi tanpa laluan"
+
+msgid "Available space (%s)"
+msgstr "Ruang tersedia (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Indeks penerangan ini untuk carian global"
+
+msgid "Unknown course"
+msgstr "Kursus tidak diketahui"
+
+msgid "Certificate not found."
+msgstr "Sijil tidak dijumpai."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Jejak keselamatan tamat tempoh. Sila muat semula halaman dan cuba lagi."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Hanya pentadbir platform boleh mengubah kebolehlihatan kursus."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Ralat tidak dijangka semasa melanggan pengguna"
+
+msgid "Search in resource logs"
+msgstr "Cari dalam log sumber"
+
+msgid "Include this learning path in the global search results"
+msgstr "Sertakan laluan pembelajaran ini dalam hasil carian global"
+
+msgid "The course code already exists"
+msgstr "Kod kursus sudah wujud"
+
+msgid "Latest news"
+msgstr "Berita terkini"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Dapatkan berita terkini dari Chamilo, termasuk kelemahan keselamatan dan acara, terus di dalam panel pentadbiran anda. Berita ini akan disemak pada pelayan berita Chamilo setiap kali anda memuat halaman pentadbiran dan hanya kelihatan kepada pentadbir."
+
+msgid "Chamilo support block"
+msgstr "Blok sokongan Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Dapatkan petua pro dan cara mudah untuk menghubungi penyedia perkhidmatan rasmi untuk sokongan profesional, terus dari pencipta Chamilo. Blok ini muncul di halaman pentadbiran anda, hanya kelihatan oleh pentadbir, dan dimuat semula setiap kali anda memuat halaman pentadbiran."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Sembunyikan pilihan untuk hantar pengumuman kepada pengguna HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Benarkan pentadbir sesi memuat turun sijil persendirian"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Jika diaktifkan, pentadbir sesi boleh memuat turun sijil walaupun ia tidak diterbitkan secara awam."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Jika tidak kosong, proses penciptaan kursus akan mencari beberapa medan dalam profil pengguna dan auto-isi untuk kursus tersebut. Contohnya, seorang guru yang pakar dalam pemasaran digital boleh secara automatik tetapkan bendera « pemasaran digital » pada setiap kursus yang diciptanya."
+
+msgid "Main menu entries"
+msgstr "Item menu utama"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Tandakan item yang anda mahu muncul dalam menu utama"
+
+msgid "Main menu entries per role"
+msgstr "Item menu utama mengikut peranan"
+
+msgid "Define header tabs visibility per role."
+msgstr "Tetapkan kebolehlihatan tab header mengikut peranan."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Tetapkan pilihan yang anda mahu muncul dalam navigasi sekeliling jadual untuk tunjuk kurang atau lebih baris pada satu halaman. cth. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Susunan ciri tambahan yang boleh anda aktifkan untuk pemain video dalam Chamilo. Pilihan termasuk 'speed', yang membolehkan anda tukar kelajuan putaran video."
+
+msgid "Mail: character set"
+msgstr "E-mel: set watak"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Sekiranya anda perlu tentukan charset untuk digunakan apabila hantar e-mel tersebut. Biarkan kosong jika anda tidak pasti."
+
+msgid "Mail: Debug"
+msgstr "E-mel: Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Pilih sama ada anda mahu aktifkan log debug penghantaran e-mel. Ini akan beri anda lebih maklumat tentang apa yang berlaku apabila bersambung ke perkhidmatan e-mel, tetapi tidak elok dan mungkin rosakkan reka bentuk halaman. Hanya gunakan apabila tiada aktiviti pengguna."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "E-mel: Elak guna LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Sesetengah klien e-mel tidak faham format LD+JSON deskriptif, menunjukkannya sebagai rentetan JSON longgar kepada pengguna akhir. Jika ini kes anda, anda mungkin mahu tetapkan pemboleh ubah di bawah kepada 'false' untuk lumpuhkan header ini."
+
+msgid "Mail: DKIM headers"
+msgstr "E-mel: Header DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Masukkan susunan JSON tetapan konfigurasi DKIM anda (lihat contoh)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "E-mel: Pilihan XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Jika anda guna perkhidmatan e-mel berasaskan XOAuth2, gunakan tetapan ini dalam JSON untuk simpan konfigurasi khusus anda (lihat contoh) dan pilih XOAuth2 dalam tetapan perkhidmatan e-mel."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Tentukan jenis persekitaran: \"prod\" (pengeluaran normal), \"validation\" (seperti pengeluaran tetapi tanpa laporan statistik), atau \"test\" (mod debug dengan alat pembangun seperti penunjuk rentetan tidak diterjemah)."
+
+msgid "Global limit of users per course"
+msgstr "Had global pengguna bagi setiap kursus"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Tentukan bilangan maksimum global pengguna (termasuk guru) yang dibenarkan disubsribe ke mana-mana kursus tunggal dalam platform. Tetapkan nilai ini kepada 0 untuk lumpuhkan had. Ini membantu elak kursus terbeban dalam portal terbuka."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Aktifkan untuk guna susunan tentukan peranan mana yang patut dipaparkan dengan jelas dan mana yang patut disembunyikan."
+
+msgid "Show base course posts in session course"
+msgstr "Tunjuk siaran kursus asas dalam kursus sesi"
+
+msgid "Limit identical email usage"
+msgstr "Had penggunaan e-mel yang sama"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Bilangan maksimum akaun yang dibenarkan berkongsi alamat e-mel yang sama. Tetapkan kepada 0 untuk melumpuhkan had ini."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Benarkan pentadbir sesi melihat semua pengguna pada semua URL"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Jika diaktifkan, pentadbir sesi boleh mencari dan menyenaraikan pengguna dari semua URL akses, tanpa mengira URL semasa mereka."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Benarkan pengguna memilih zon masa mereka sendiri. Setelah dikonfigurasi, pengguna boleh melihat tarikh akhir tugasan dan rujukan masa lain dalam zon masa mereka sendiri, yang akan mengurangkan kesilapan semasa penghantaran."
+
+msgid "Redirect after login (per profile)"
+msgstr "Alih semula selepas log masuk (mengikut profil)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Tentukan pemindahan semula mengikut profil selepas log masuk menggunakan objek JSON seperti {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Sembunyikan petak semak terima undang-undang dalam halaman Syarat dan Peraturan"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Jika ditetapkan kepada benar, alih keluar petak semak \"Saya telah membaca dan menerima\" dalam aliran halaman Syarat dan Peraturan."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Array yang mentakrifkan hos dan port untuk pelayan LDAP."
+
+msgid "Enable 2FA"
+msgstr "Aktifkan 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Tambah medan dalam halaman kemas kini kata laluan untuk mengaktifkan 2FA menggunakan aplikasi pengesah TOTP. Apabila dilumpuhkan secara global, pengguna tidak akan melihat medan 2FA dan tidak akan diminta untuk 2FA semasa log masuk, walaupun mereka telah mengaktifkannya sebelum ini."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Sesetengah ciri Chamilo akan bersambung ke luar dari pelayan. Contohnya untuk memastikan kandungan luaran wujud semasa mencipta pautan atau memaparkan halaman terbenam dalam laluan pembelajaran. Jika pelayan Chamilo anda menggunakan proksi untuk keluar dari rangkaiannya, ini adalah tempat untuk menyusunnya."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Aktifkan atau lumpuhkan pendaftaran semula automatik apabila sah kursus tamat tempoh. Pekerja cron berkaitan juga mesti diaktifkan."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Tunjukkan hari baki dalam Sesi Saya"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Jika diaktifkan, tarikh sesi pada halaman \"Sesi Saya\" akan digantikan dengan bilangan hari baki."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Tunjukkan \"Tinjauan Menunggu\" dalam menu"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Paparkan item menu yang membenarkan pengguna mengakses tinjauan menunggu mereka."
+
+msgid "Disclose AI assistance"
+msgstr "Wahyukan bantuan AI"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Tunjukkan tag pada mana-mana kandungan atau maklum balas yang dihasilkan atau dihasilkan bersama oleh mana-mana sistem AI, membuktikan kepada pengguna bahawa kandungan itu dibina dengan bantuan sesetengah sistem AI. Butiran tentang sistem AI mana yang digunakan dalam kes mana disimpan dalam pangkalan data untuk audit, tetapi tidak boleh diakses secara langsung oleh pengguna akhir."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "Konfigurasi JSON untuk katalog kursus: tetapan pautan, penapis, pilihan susun atur, dan banyak lagi."
+
+msgid "Session Catalog Settings"
+msgstr "Tetapan Katalog Sesi"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "Konfigurasi JSON untuk katalog sesi: penapis dan pilihan paparan."
+
+msgid "Show Course Descriptions"
+msgstr "Tunjuk Penerangan Kursus"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Paparkan penerangan kursus dalam senarai katalog."
+
+msgid "Published Courses Only"
+msgstr "Kursus Diterbitkan Sahaja"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Hadkan katalog kepada kursus yang ditandakan sebagai diterbitkan sahaja."
+
+msgid "Display Catalog on Homepage"
+msgstr "Paparkan Katalog di Laman Utama"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Tunjuk blok katalog kursus di laman utama platform."
+
+msgid "Hide Public Link"
+msgstr "Sembunyikan Pautan Awam"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Alih keluar pautan URL awam dari kad kursus."
+
+msgid "Only Selected Courses"
+msgstr "Kursus Terpilih Sahaja"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Tunjuk hanya kursus yang dipilih secara manual dalam katalog."
+
+msgid "Allow Student Browsing"
+msgstr "Benarkan Pelajar Melayari"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Benarkan pelajar melayari dan menapis katalog kursus."
+
+msgid "Hide Private Courses"
+msgstr "Sembunyikan Kursus Persendirian"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Kecualikan kursus persendirian daripada paparan katalog."
+
+msgid "Show Courses & Sessions"
+msgstr "Tunjuk Kursus & Sesi"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Sertakan kedua-dua kursus dan sesi dalam hasil katalog."
+
+msgid "Auto Session Subscription"
+msgstr "Penyertaan Sesi Automatik"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Dayakan penyertaan automatik kepada sesi untuk pengguna."
+
+msgid "Subscription in Session View"
+msgstr "Penyertaan di Paparan Sesi"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Benarkan pengguna menyertai kursus terus dari laman sesi mereka."
+
+msgid "Enable redirection plugin"
+msgstr "Dayakan plugin pemindahan"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Array yang mentakrif 'hari' dan 'bulan' untuk tetapkan tarikh tamat tempoh akaun apabila pengguna log masuk pertama kali."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Array peranan => nombor yang mewakili bilangan hari akaun sebelum tamat tempoh, bergantung pada peranan."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Medan pengguna tambahan yang digunakan untuk mencari dan menamakan sesi"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Tetapan ini mentakrif kunci medan pengguna tambahan (contohnya, \"syarikat\") yang akan digunakan untuk mencari pengguna dan mentakrif nama sesi apabila mendaftar pelajar dari /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Pembangun istilah glosari"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Benarkan guru meminta istilah glosari yang dijana AI dalam kursus mereka. Ini akan menjana 20 istilah berdasarkan tajuk kursus dan penerangan umum dalam alat penerangan kursus. Jika digunakan lebih daripada sekali, ia akan mengkecualikan istilah yang sudah ada dalam glosari tersebut (pastikan kandungan boleh dikongsi dengan perkhidmatan AI yang dikonfigurasi)."
+
+msgid "Video generator"
+msgstr "Pembangun video"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Menjana video berdasarkan prompt atau kandungan menggunakan AI (ini mungkin menggunakan banyak token)."
+
+msgid "Course analyser"
+msgstr "Penganalisis kursus"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Menganalisis semua sumber dalam satu atau banyak kursus dan melatih model AI terlebih dahulu untuk menjawab sebarang soalan mengenai kursus ini atau kursus-kursus tersebut (pastikan kandungan boleh dikongsi dengan perkhidmatan AI yang dikonfigurasi)."
+
+msgid "Test/development"
+msgstr "Ujian/pembangunan"
+
+msgid "Crons"
+msgstr "Crons"
+
+msgid "Editor"
+msgstr "Editor"
+
+msgid "Gradebook"
+msgstr "Buku Markah"
+
+msgid "Internationalization"
+msgstr "Antarabangsa"
+
+msgid "User profiles"
+msgstr "Profil pengguna"
+
+msgid "Support tickets"
+msgstr "Tiketing sokongan"
+
+msgid "Webservices"
+msgstr "Servis web"
+
+msgid "Catalogue"
+msgstr "Katalog"
+
+msgid "Workflows"
+msgstr "Aliran kerja"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Tetapan boleh diubah suai pada sub-URL"
+
+msgid "Show JSON Template"
+msgstr "Tunjuk Templat JSON"
+
+msgid "JSON Template"
+msgstr "Templat JSON"
+
+msgid "Installing Xapian bindings"
+msgstr "Memasang pengikatan Xapian"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Petikan berikut menunjukkan contoh pemasangan pengikatan PHP Xapian pada Ubuntu 25.04 dengan PHP 8.3. Sesuaikan laluan dan versi kepada persekitaran anda sendiri."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Pastikan anda hanya mempunyai versi PHP yang benar-benar digunakan (contohnya 8.3) dan elakkan campuran beberapa versi dengan direktori sambungan yang berbeza."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Setelah sambungan dimuatkan dengan betul untuk CLI dan pelayan web, diagnostik carian di atas sepatutnya melaporkan bahawa modul Xapian telah dipasang."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Bersihkan muat naik sementara dan cache"
+
+msgid "Directory"
+msgstr "Direktori"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Hanya padam fail yang lebih tua daripada (minit)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Tetapkan 0 untuk memadam semua fail. Gunakan nilai positif (contohnya, 60) untuk mengelakkan memadam fail yang masih dimuat naik."
+
+msgid "Preview only (do not delete)"
+msgstr "Pratonton sahaja (jangan padam)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Amaran: anda akan memadam SEMUA fail sementara. Tindakan ini tidak boleh dibatalkan."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Ini akan memadam semua fail sementara. Teruskan?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Ini akan memadam fail yang lebih tua daripada %minutes% minit. Teruskan?"
 

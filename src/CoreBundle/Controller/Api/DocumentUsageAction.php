@@ -72,7 +72,7 @@ final class DocumentUsageAction extends AbstractController
             $data[] = $this->pct($bytesGroups, $denomBytes);
         }
 
-        $labels[] = get_lang('Available space').' ('.$this->formatBytes($availableBytes).')';
+        $labels[] = sprintf(get_lang('Available space (%s)'), $this->formatBytes($availableBytes));
         $data[] = $this->pct($availableBytes, $denomBytes);
 
         return new JsonResponse([

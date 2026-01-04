@@ -9473,7 +9473,7 @@ msgid "Not yet begun"
 msgstr "Δεν έχει ξεκινήσει ακόμα"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d %B %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Μη έγκυρος φάκελος: Παρακαλούμε δημιουργήστε έναν φάκελο με όνομα images στο εργαλείο έγγραφα σας ώστε οι εικόνες να μπορούν να ανέβουν σε αυτόν τον φάκελο"
@@ -9536,7 +9536,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "Η αποστολή αρχείου απέτυχε: αυτή η επέκταση αρχείου ή τύπος αρχείου απαγορεύεται"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "Διεύθυνση URL OpenID"
 
 msgid "The file is too big to upload."
 msgstr "Το αρχείο είναι πολύ μεγάλο για αποστολή."
@@ -15062,7 +15062,7 @@ msgid "Install Chamilo"
 msgstr "Εγκατάσταση chamilo"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "Διεύθυνση URL Chamilo"
 
 msgid "You have no session in your sessions history"
 msgstr "Δεν υπάρχουν συνεδρίες στο ιστορικό συνεδριών σας."
@@ -31467,4 +31467,376 @@ msgstr "Για περισσότερες λεπτομέρειες επισκεφ�
 
 msgid "Manager"
 msgstr "Διαχειριστής"
+
+msgid "Mark as"
+msgstr "Σημείωση ως"
+
+msgid "Reply to all"
+msgstr "Απάντηση σε όλους"
+
+msgid "SCIM external ID"
+msgstr "SCIM εξωτερικό ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Παρακαλούμε αποδεχθείτε την τελευταία έκδοση των όρων και προϋποθέσεων."
+
+msgid "Required value for operation without path"
+msgstr "Απαιτούμενη τιμή για λειτουργία χωρίς διαδρομή"
+
+msgid "Available space (%s)"
+msgstr "Διαθέσιμος χώρος (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Ενταγμένη αυτή την περιγραφή στην παγκόσμια αναζήτηση"
+
+msgid "Unknown course"
+msgstr "Άγνωστο μάθημα"
+
+msgid "Certificate not found."
+msgstr "Πιστοποιητικό δεν βρέθηκε."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Το διακριτικό ασφαλείας εξέπνευσε. Παρακαλούμε επαναφορτώστε τη σελίδα και δοκιμάστε ξανά."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Μόνο οι διαχειριστές της πλατφόρμας μπορούν να αλλάξουν την ορατότητα του μαθήματος."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Απροσδόκητο σφάλμα κατά την εγγραφή του χρήστη"
+
+msgid "Search in resource logs"
+msgstr "Αναζήτηση στα αρχεία πόρων"
+
+msgid "Include this learning path in the global search results"
+msgstr "Συμπερίληψη αυτού του μονοπατιού μάθησης στα αποτελέσματα παγκόσμιας αναζήτησης"
+
+msgid "The course code already exists"
+msgstr "Ο κωδικός του μαθήματος υπάρχει ήδη"
+
+msgid "Latest news"
+msgstr "Τελευταία νέα"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Λάβετε τα τελευταία νέα από το Chamilo, συμπεριλαμβανομένων ευπαθειών ασφαλείας και εκδηλώσεων, απευθείας στο πάνελ διαχείρισής σας. Αυτά τα νέα ελέγχονται στον διακομιστή νέων του Chamilo κάθε φορά που φορτώνετε τη σελίδα διαχείρισης και είναι ορατά μόνο στους διαχειριστές."
+
+msgid "Chamilo support block"
+msgstr "Τμήμα υποστήριξης Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Λάβετε επαγγελματικές συμβουλές και εύκολο τρόπο επικοινωνίας με επίσημους παρόχους υπηρεσιών για επαγγελματική υποστήριξη, απευθείας από τους δημιουργούς του Chamilo. Αυτό το τμήμα εμφανίζεται στη σελίδα διαχείρισής σας, είναι ορατό μόνο από διαχειριστές και ανανεώνεται κάθε φορά που φορτώνετε τη σελίδα διαχείρισης."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Απόκρυψη επιλογής αποστολής ανακοινώσεων σε χρήστες HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Επιτρέψτε στους διαχειριστές συνεδρίας να κατεβάσουν ιδιωτικά πιστοποιητικά"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Αν είναι ενεργοποιημένο, οι διαχειριστές συνεδρίας μπορούν να κατεβάσουν πιστοποιητικά ακόμα και αν δεν έχουν δημοσιευθεί δημόσια."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Αν δεν είναι κενό, η διαδικασία δημιουργίας μαθήματος θα αναζητήσει ορισμένα πεδία στο προφίλ του χρήστη και θα τα συμπληρώσει αυτόματα για το μάθημα. Για παράδειγμα, ένας δάσκαλος εξειδικευμένος στο ψηφιακό μάρκετινγκ θα μπορούσε αυτόματα να ορίσει μια σημαία «ψηφιακό μάρκετινγκ» σε κάθε μάθημα που δημιουργεί."
+
+msgid "Main menu entries"
+msgstr "Καταχωρήσεις κύριου μενού"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Επιλέξτε τις καταχωρήσεις που θέλετε να εμφανιστούν στο κύριο μενού"
+
+msgid "Main menu entries per role"
+msgstr "Καταχωρήσεις κύριου μενού ανά ρόλο"
+
+msgid "Define header tabs visibility per role."
+msgstr "Ορίστε την ορατότητα καρτελών κεφαλίδας ανά ρόλο."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Ορίστε τις επιλογές που θέλετε να εμφανιστούν στη πλοήγηση γύρω από έναν πίνακα για να δείξετε λιγότερες ή περισσότερες γραμμές σε μία σελίδα. π.χ. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Πίνακας επιπλέον χαρακτηριστικών που μπορείτε να ενεργοποιήσετε για τον αναπαραγωγέα βίντεο στο Chamilo. Οι επιλογές περιλαμβάνουν 'speed', που σας επιτρέπει να αλλάξετε την ταχύτητα αναπαραγωγής ενός βίντεο."
+
+msgid "Mail: character set"
+msgstr "Ταχυδρομείο: σύνολο χαρακτήρων"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Σε περίπτωση που χρειάζεται να ορίσετε το charset που θα χρησιμοποιηθεί κατά την αποστολή αυτών των email. Αφήστε κενό αν δεν είστε σίγουροι."
+
+msgid "Mail: Debug"
+msgstr "Ταχυδρομείο: Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Επιλέξτε αν θέλετε να ενεργοποιήσετε τα αρχεία καταγραφής debug αποστολής email. Αυτά θα σας δώσουν περισσότερες πληροφορίες για το τι συμβαίνει κατά τη σύνδεση στην υπηρεσία ταχυδρομείου, αλλά δεν είναι κομψά και μπορεί να σπάσουν τον σχεδιασμό της σελίδας. Χρησιμοποιήστε μόνο όταν δεν υπάρχει δραστηριότητα χρηστών."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Ταχυδρομείο: Αποφυγή χρήσης LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Μερικοί πελάτες email δεν κατανοούν τη μορφή LD+JSON περιγραφής, εμφανίζοντάς την ως χαλαρή συμβολοσειρά JSON στον τελικό χρήστη. Αν ισχύει αυτό για εσάς, ίσως θέλετε να ορίσετε τη μεταβλητή παρακάτω σε 'false' για να απενεργοποιήσετε αυτήν την κεφαλίδα."
+
+msgid "Mail: DKIM headers"
+msgstr "Ταχυδρομείο: Κεφαλίδες DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Εισαγάγετε έναν πίνακα JSON με τις ρυθμίσεις διαμόρφωσης DKIM σας (δείτε παράδειγμα)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Ταχυδρομείο: Επιλογές XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Αν χρησιμοποιείτε υπηρεσία email βασισμένη σε XOAuth2, χρησιμοποιήστε αυτήν τη ρύθμιση σε JSON για να αποθηκεύσετε τη συγκεκριμένη διαμόρφωσή σας (δείτε παράδειγμα) και επιλέξτε XOAuth2 στη ρύθμιση υπηρεσίας ταχυδρομείου."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Ορίζει τον τύπο περιβάλλοντος: \"prod\" (κανονική παραγωγή), \"validation\" (όπως παραγωγή αλλά χωρίς αναφορά στατιστικών), ή \"test\" (κατάσταση debug με εργαλεία προγραμματιστή όπως δείκτες μη μεταφρασμένων συμβολοσειρών)."
+
+msgid "Global limit of users per course"
+msgstr "Γlobal όριο χρηστών ανά μάθημα"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Ορίζει έναν παγκόσμιο μέγιστο αριθμό χρηστών (συμπεριλαμβανομένων δασκάλων) που επιτρέπεται να εγγραφούν σε οποιοδήποτε μεμονωμένο μάθημα στην πλατφόρμα. Ορίστε αυτήν την τιμή σε 0 για να απενεργοποιήσετε το όριο. Αυτό βοηθά στην αποφυγή υπερφόρτωσης μαθημάτων σε ανοιχτά portals."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Ενεργοποιήστε για να χρησιμοποιήσετε έναν πίνακα που ορίζει ποιους ρόλους θα εμφανίζονται ξεκάθαρα και ποιους θα κρύβονται."
+
+msgid "Show base course posts in session course"
+msgstr "Εμφάνιση αναρτήσεων βασικού μαθήματος σε μάθημα συνεδρίας"
+
+msgid "Limit identical email usage"
+msgstr "Περιορισμός χρήσης ίδιου email"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Μέγιστος αριθμός λογαριασμών που επιτρέπεται να μοιράζονται την ίδια διεύθυνση e-mail. Ορισμός σε 0 για απενεργοποίηση αυτού του ορίου."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Επιτρέψτε στους διαχειριστές συνεδρίας να βλέπουν όλους τους χρήστες σε όλες τις URLs"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Αν ενεργοποιηθεί, οι διαχειριστές συνεδρίας μπορούν να αναζητούν και να παρατίθενται χρήστες από όλες τις URLs πρόσβασης, ανεξαρτήτως της τρέχουσας URL τους."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Ενεργοποιήστε τη δυνατότητα στους χρήστες να επιλέγουν τη δική τους ζώνη ώρας. Μόλις ρυθμιστεί, οι χρήστες θα μπορούν να βλέπουν προθεσμίες εργασιών και άλλες χρονικές αναφορές στη δική τους ζώνη ώρας, μειώνοντας λάθη κατά την παράδοση."
+
+msgid "Redirect after login (per profile)"
+msgstr "Ανακατεύθυνση μετά τη σύνδεση (ανά προφίλ)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Ορίστε ανακατεύθυνση ανά προφίλ μετά τη σύνδεση χρησιμοποιώντας αντικείμενο JSON όπως {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Απόκρυψη κουτιού ελέγχου αποδοχής νομικών όρων στη σελίδα Όρων και Προϋποθέσεων"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Αν οριστεί σε true, αφαιρεί το κουτί ελέγχου \"Έχω διαβάσει και αποδέχομαι\" στη ροή σελίδας Όρων και Προϋποθέσεων."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Πίνακας που ορίζει host και θύρα για τον διακομιστή LDAP."
+
+msgid "Enable 2FA"
+msgstr "Ενεργοποίηση 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Προσθήκη πεδίων στη σελίδα ενημέρωσης κωδικού πρόσβασης για ενεργοποίηση 2FA χρησιμοποιώντας εφαρμογή TOTP. Όταν απενεργοποιημένο παγκοσμίως, οι χρήστες δεν θα βλέπουν πεδία 2FA και δεν θα ζητούνται για 2FA κατά τη σύνδεση, ακόμα κι αν το είχαν ενεργοποιήσει προηγουμένως."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Ορισμένα χαρακτηριστικά του Chamilo θα συνδέονται εξωτερικά από τον διακομιστή. Π.χ. για έλεγχο ύπαρξης εξωτερικού περιεχομένου κατά τη δημιουργία συνδέσμου ή εμφάνιση ενσωματωμένης σελίδας σε μονοπάτι μάθησης. Αν ο διακομιστής Chamilo χρησιμοποιεί proxy για έξοδο από το δίκτυο, εδώ ρυθμίζεται."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Ενεργοποίηση ή απενεργοποίηση αυτόματης επανεγγραφής όταν λήγει η εγκυρότητα μαθήματος. Η σχετική εργασία cron πρέπει επίσης να ενεργοποιηθεί."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Εμφάνιση εναπομεινάντων ημερών στις Συνεδρίες μου"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Αν ενεργοποιηθεί, οι ημερομηνίες συνεδρίας στη σελίδα \"Οι Συνεδρίες μου\" θα αντικατασταθούν από τον αριθμό εναπομεινάντων ημερών."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Εμφάνιση \"Εκκρεμείς έρευνες\" στο μενού"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Εμφάνιση στοιχείου μενού που επιτρέπει στους χρήστες πρόσβαση στις εκκρεμείς έρευνές τους."
+
+msgid "Disclose AI assistance"
+msgstr "Αποκάλυψη βοήθειας ΤΝ"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Εμφάνιση ετικέτας σε οποιοδήποτε περιεχόμενο ή ανατροφοδότηση που έχει δημιουργηθεί ή συνδημιουργηθεί από σύστημα ΤΝ, αποδεικνύοντας στον χρήστη ότι το περιεχόμενο δημιουργήθηκε με βοήθεια ΤΝ. Λεπτομέρειες για το ποιο σύστημα ΤΝ χρησιμοποιήθηκε αποθηκεύονται στη βάση δεδομένων για έλεγχο, αλλά δεν είναι άμεσα προσβάσιμες από τον τελικό χρήστη."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "Ρύθμιση JSON για κατάλογο μαθημάτων: ρυθμίσεις συνδέσμων, φίλτρα, επιλογές ταξινόμησης κ.λπ."
+
+msgid "Session Catalog Settings"
+msgstr "Ρυθμίσεις Καταλόγου Συνεδριών"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "Ρύθμιση JSON για κατάλογο συνεδριών: φίλτρα και επιλογές εμφάνισης."
+
+msgid "Show Course Descriptions"
+msgstr "Εμφάνιση Περιγραφών Μαθημάτων"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Εμφάνιση περιγραφών μαθημάτων στον κατάλογο."
+
+msgid "Published Courses Only"
+msgstr "Μόνο Δημοσιευμένα Μαθήματα"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Περιορισμός του καταλόγου μόνο σε μαθήματα που έχουν επιλεγεί ως δημοσιευμένα."
+
+msgid "Display Catalog on Homepage"
+msgstr "Εμφάνιση Καταλόγου στην Αρχική Σελίδα"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Εμφάνιση μπλοκ καταλόγου μαθημάτων στην αρχική σελίδα της πλατφόρμας."
+
+msgid "Hide Public Link"
+msgstr "Απόκρυψη Δημόσιου Συνδέσμου"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Αφαίρεση του δημόσιου συνδέσμου URL από τις κάρτες μαθήματος."
+
+msgid "Only Selected Courses"
+msgstr "Μόνο Επιλεγμένα Μαθήματα"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Εμφάνιση μόνο χειροκίνητα επιλεγμένων μαθημάτων στον κατάλογο."
+
+msgid "Allow Student Browsing"
+msgstr "Επιτρέψτε την Περιήγηση Μαθητών"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Επιτρέψτε στους μαθητές να περιηγούνται και να φιλτράρουν τον κατάλογο μαθημάτων."
+
+msgid "Hide Private Courses"
+msgstr "Απόκρυψη Ιδιωτικών Μαθημάτων"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Αποκλεισμός ιδιωτικών μαθημάτων από την εμφάνιση του καταλόγου."
+
+msgid "Show Courses & Sessions"
+msgstr "Εμφάνιση Μαθημάτων & Συνεδριών"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Συμπερίληψη μαθημάτων και συνεδριών στα αποτελέσματα του καταλόγου."
+
+msgid "Auto Session Subscription"
+msgstr "Αυτόματη Εγγραφή Συνεδρίας"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Ενεργοποίηση αυτόματης εγγραφής σε συνεδρίες για χρήστες."
+
+msgid "Subscription in Session View"
+msgstr "Εγγραφή στην Προβολή Συνεδρίας"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Επιτρέψτε στους χρήστες να εγγράφονται σε μαθήματα απευθείας από τη σελίδα της συνεδρίας τους."
+
+msgid "Enable redirection plugin"
+msgstr "Ενεργοποίηση προσθήκης ανακατεύθυνσης"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Πίνακας που ορίζει τις 'ημέρες' και 'μήνες' για την ημερομηνία λήξης του λογαριασμού κατά την πρώτη σύνδεση του χρήστη."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Πίνακας με ρόλο => αριθμό που αντιπροσωπεύει τον αριθμό ημερών πριν τη λήξη του λογαριασμού, ανάλογα με τον ρόλο."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Επιπλέον πεδίο χρήστη που χρησιμοποιείται για αναζήτηση και ονομασία συνεδριών"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Αυτή η ρύθμιση ορίζει το κλειδί του επιπλέον πεδίου χρήστη (π.χ. \"company\") που θα χρησιμοποιηθεί για αναζήτηση χρηστών και ορισμό ονόματος συνεδρίας κατά την εγγραφή μαθητών από /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Γεννήτρια όρων Γλωσσαρίου"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Επιτρέψτε στους διδάσκοντες να ζητούν όρους γλωσσαρίου που παράγονται από AI στο μάθημά τους. Αυτό θα παράγει 20 όρους βασισμένους στον τίτλο του μαθήματος και την γενική περιγραφή στο εργαλείο περιγραφής μαθήματος. Αν χρησιμοποιηθεί περισσότερο από μία φορά, θα αποκλείει όρους ήδη παρόντες στο γλωσσάριο (βεβαιωθείτε ότι το περιεχόμενο μπορεί να κοινοποιηθεί στις ρυθμισμένες υπηρεσίες AI)."
+
+msgid "Video generator"
+msgstr "Γεννήτρια Βίντεο"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Παραγωγή βίντεο βασισμένων σε προτροπές ή περιεχόμενο χρησιμοποιώντας AI (αυτό μπορεί να καταναλώσει πολλά tokens)."
+
+msgid "Course analyser"
+msgstr "Αναλυτής Μαθήματος"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Ανάλυση όλων των πόρων σε ένα ή πολλά μαθήματα και προ-εκπαίδευση του μοντέλου AI για απάντηση σε οποιαδήποτε ερώτηση σχετικά με αυτό ή αυτά τα μαθήματα (βεβαιωθείτε ότι το περιεχόμενο μπορεί να κοινοποιηθεί στις ρυθμισμένες υπηρεσίες AI)."
+
+msgid "Test/development"
+msgstr "Δοκιμές/Ανάπτυξη"
+
+msgid "Crons"
+msgstr "Crons"
+
+msgid "Editor"
+msgstr "Επεξεργαστής"
+
+msgid "Gradebook"
+msgstr "Βαθμολογία"
+
+msgid "Internationalization"
+msgstr "Διεθνοποίηση"
+
+msgid "User profiles"
+msgstr "Προφίλ Χρηστών"
+
+msgid "Support tickets"
+msgstr "Εισιτήρια Υποστήριξης"
+
+msgid "Webservices"
+msgstr "Υπηρεσίες Web"
+
+msgid "Catalogue"
+msgstr "Κατάλογος"
+
+msgid "Workflows"
+msgstr "Ροές Εργασιών"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Η ρύθμιση είναι επεξεργάσιμη σε υπο-URLs"
+
+msgid "Show JSON Template"
+msgstr "Εμφάνιση Προτύπου JSON"
+
+msgid "JSON Template"
+msgstr "Πρότυπο JSON"
+
+msgid "Installing Xapian bindings"
+msgstr "Εγκατάσταση Xapian bindings"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Το παρακάτω απόσπασμα δείχνει ένα παράδειγμα εγκατάστασης των Xapian PHP bindings στο Ubuntu 25.04 με PHP 8.3. Προσαρμόστε μονοπάτια και εκδόσεις στο δικό σας περιβάλλον."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Βεβαιωθείτε ότι έχετε μόνο την έκδοση PHP που χρησιμοποιείτε πραγματικά (π.χ. 8.3) και αποφύγετε τον συνδυασμό πολλών εκδόσεων με διαφορετικούς καταλόγους επεκτάσεων."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Μόλις η επέκταση φορτωθεί σωστά τόσο για CLI όσο και για τον web server, οι διαγνωστικές αναζήτησης παραπάνω θα πρέπει να αναφέρουν ότι το άρθρωμα Xapian είναι εγκατεστημένο."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Καθαρισμός προσωρινών μεταφορτώσεων και cache"
+
+msgid "Directory"
+msgstr "Κατάλογος"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Διαγραφή μόνο αρχείων παλαιότερων από (λεπτά)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Ορισμός 0 για διαγραφή όλων των αρχείων. Χρήση θετικής τιμής (π.χ., 60) για αποφυγή διαγραφής αρχείων που ανεβαίνουν ακόμα."
+
+msgid "Preview only (do not delete)"
+msgstr "Προεπισκόπηση μόνο (μη διαγραφή)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Προειδοποίηση: πρόκειται να διαγράψετε ΟΛΑ τα προσωρινά αρχεία. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Αυτό θα διαγράψει όλα τα προσωρινά αρχεία. Συνεχίσετε;"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Αυτό θα διαγράψει αρχεία παλαιότερα από %minutes% λεπτά. Συνεχίσετε;"
 

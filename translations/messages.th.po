@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "ด้วยความเคารพ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ตัวอย่างสูตร: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "สูตรตัวอย่าง: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ช่วงตัวแปร"
@@ -17745,7 +17745,7 @@ msgid "A course category with the same name already exists."
 msgstr "หมวดหมู่คอร์สชื่อเดียวกันมีอยู่แล้ว"
 
 msgid "OpenID redirect"
-msgstr "OpenID redirect"
+msgstr "การเปลี่ยนเส้นทาง OpenID"
 
 msgid "Blogs"
 msgstr "บล็อก"
@@ -21825,7 +21825,7 @@ msgid "Assignment work time"
 msgstr "เวลาทำงานมอบหมาย"
 
 msgid "Document ID"
-msgstr "Document ID"
+msgstr "รหัสเอกสาร"
 
 msgid "Social data"
 msgstr "ข้อมูลสังคม"
@@ -26862,7 +26862,7 @@ msgid "HTTP Strict Transport Security is an excellent feature to support on your
 msgstr "HTTP Strict Transport Security เป็นคุณสมบัติที่ยอดเยี่ยมสำหรับเว็บไซต์ของคุณและเสริมการใช้งาน TLS โดยบังคับให้ User Agent ใช้ HTTPS ค่าที่แนะนำ: 'strict-transport-security: max-age=63072000; includeSubDomains' ดู https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security สามารถเพิ่ม 'preload' ได้ แต่มีผลต่อโดเมนหลัก (TLD) ดังนั้นควรพิจารณาให้รอบคอบ ดู https://hstspreload.org/ ทิ้งว่างเพื่อปิดใช้งาน"
 
 msgid "Content Security Policy"
-msgstr "Content Security Policy"
+msgstr "นโยบายความปลอดภัยเนื้อหา"
 
 msgid "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the 'script-src' argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
 msgstr "Content Security Policy เป็นมาตรการที่มีประสิทธิภาพในการป้องกันเว็บไซต์จาก XSS โดยการกำหนดแหล่งที่มาของเนื้อหาที่อนุญาต สามารถป้องกันเบราว์เซอร์จากการโหลดเนื้อหาที่เป็นอันตราย การตั้งค่านี้ซับซ้อนเมื่อใช้ WYSIWYG editor แต่หากเพิ่มโดเมนที่ต้องการอนุญาตสำหรับ iframe ใน child-src ตัวอย่างนี้จะใช้งานได้ สามารถป้องกัน JavaScript จากแหล่งภายนอก (รวม SVG) โดยใช้รายการเข้มงวดใน 'script-src' ทิ้งว่างเพื่อปิดใช้งาน ตัวอย่าง: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
@@ -26904,7 +26904,7 @@ msgid "X-Content-Type-Options stops a browser from trying to MIME-sniff the cont
 msgstr "X-Content-Type-Options หยุดเบราว์เซอร์จากการ MIME-sniff content type และบังคับใช้ declared content-type ค่าเดียวที่ถูกต้องคือ 'nosniff'"
 
 msgid "Security Referrer Policy"
-msgstr "Security Referrer Policy"
+msgstr "นโยบายการอ้างอิงความปลอดภัย"
 
 msgid "Referrer Policy is a new header that allows a site to control how much information the browser includes with navigation away from a document and should be set by all sites."
 msgstr "Referrer Policy เป็น header ใหม่ที่ควบคุมข้อมูลที่เบราว์เซอร์ส่งเมื่อออกจากเอกสาร ควรตั้งค่าทุกเว็บไซต์"
@@ -26916,7 +26916,7 @@ msgid "Immediately block users who have been disabled by the admin through users
 msgstr "บล็อกผู้ใช้ที่ถูกปิดใช้งานโดยผู้ดูแลทันที มิเช่นนั้นผู้ใช้จะคงสิทธิ์เดิมจนกว่าจะล็อกเอาท์"
 
 msgid "Session cookie samesite"
-msgstr "Session cookie samesite"
+msgstr "คุกกี้เซสชัน samesite"
 
 msgid "Enable samesite:None parameter for session cookie. More info: https://www.chromium.org/updates/same-site and https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
 msgstr "เปิดใช้งาน samesite:None สำหรับ session cookie ดูข้อมูลเพิ่มเติม: https://www.chromium.org/updates/same-site และ https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
@@ -31454,4 +31454,376 @@ msgstr "สำหรับรายละเอียดเพิ่มเติ
 
 msgid "Manager"
 msgstr "ผู้จัดการ"
+
+msgid "Mark as"
+msgstr "ทำเครื่องหมายเป็น"
+
+msgid "Reply to all"
+msgstr "ตอบกลับทั้งหมด"
+
+msgid "SCIM external ID"
+msgstr "SCIM external ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "กรุณายอมรับเวอร์ชันล่าสุดของข้อกำหนดและเงื่อนไข"
+
+msgid "Required value for operation without path"
+msgstr "ค่าที่จำเป็นสำหรับการดำเนินการโดยไม่มีเส้นทาง"
+
+msgid "Available space (%s)"
+msgstr "พื้นที่ว่างที่มี (%s)"
+
+msgid "Index this description for the global search"
+msgstr "รวมคำอธิบายนี้ในดัชนีสำหรับการค้นหาทั่วโลก"
+
+msgid "Unknown course"
+msgstr "คอร์สที่ไม่รู้จัก"
+
+msgid "Certificate not found."
+msgstr "ไม่พบใบรับรอง"
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "โทเค็นความปลอดภัยหมดอายุ กรุณาโหลดหน้าใหม่และลองอีกครั้ง"
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "เฉพาะผู้ดูแลระบบแพลตฟอร์มเท่านั้นที่สามารถเปลี่ยนการมองเห็นของคอร์สได้"
+
+msgid "Unexpected error while subscribing the user"
+msgstr "เกิดข้อผิดพลาดไม่คาดคิดขณะสมัครสมาชิกผู้ใช้"
+
+msgid "Search in resource logs"
+msgstr "ค้นหาในบันทึกทรัพยากร"
+
+msgid "Include this learning path in the global search results"
+msgstr "รวมเส้นทางการเรียนรู้นี้ในผลการค้นหาทั่วโลก"
+
+msgid "The course code already exists"
+msgstr "รหัสคอร์สมีอยู่แล้ว"
+
+msgid "Latest news"
+msgstr "ข่าวล่าสุด"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "รับข่าวสารล่าสุดจาก Chamilo รวมถึงช่องโหว่ด้านความปลอดภัยและเหตุการณ์ โดยตรงในแผงผู้ดูแลระบบของคุณ ข่าวเหล่านี้จะถูกตรวจสอบจากเซิร์ฟเวอร์ข่าว Chamilo ทุกครั้งที่คุณโหลดหน้าแอดมินและมองเห็นได้เฉพาะผู้ดูแลระบบเท่านั้น"
+
+msgid "Chamilo support block"
+msgstr "บล็อกสนับสนุน Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "รับเคล็ดลับโปรและวิธีง่ายๆ ในการติดต่อผู้ให้บริการอย่างเป็นทางการสำหรับการสนับสนุนระดับมืออาชีพ โดยตรงจากผู้สร้าง Chamilo บล็อกนี้จะปรากฏในหน้าแอดมินของคุณ มองเห็นได้เฉพาะผู้ดูแลระบบ และจะรีเฟรชทุกครั้งที่คุณโหลดหน้าแอดมิน"
+
+msgid "Hide option to send announcements to HR users"
+msgstr "ซ่อนตัวเลือกในการส่งประกาศไปยังผู้ใช้ HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "อนุญาตให้ผู้ดูแลเซสชันดาวน์โหลดใบรับรองส่วนตัว"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "หากเปิดใช้งาน ผู้ดูแลเซสชันสามารถดาวน์โหลดใบรับรองได้แม้ว่าจะไม่ได้เผยแพร่สู่สาธารณะ"
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "หากไม่ว่างเปล่า กระบวนการสร้างหลักสูตรจะค้นหาช่องข้อมูลบางส่วนในโปรไฟล์ผู้ใช้และกรอกข้อมูลอัตโนมัติสำหรับหลักสูตร ตัวอย่างเช่น ครูผู้เชี่ยวชาญด้านการตลาดดิจิทัลสามารถตั้งค่าธง «การตลาดดิจิทัล» อัตโนมัติในแต่ละหลักสูตรที่สร้าง"
+
+msgid "Main menu entries"
+msgstr "รายการเมนูหลัก"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "เลือกเรกคอร์ดที่ต้องการให้ปรากฏในเมนูหลัก"
+
+msgid "Main menu entries per role"
+msgstr "รายการเมนูหลักตามบทบาท"
+
+msgid "Define header tabs visibility per role."
+msgstr "กำหนดการมองเห็นแท็บส่วนหัวตามบทบาท"
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "ตั้งค่าตัวเลือกที่ต้องการให้ปรากฏในการนำทางรอบตารางเพื่อแสดงแถวน้อยลงหรือมากขึ้นต่อหน้า เช่น [50, 100, 200, 500]"
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "อาร์เรย์ของฟีเจอร์พิเศษที่สามารถเปิดใช้งานสำหรับตัวเล่นวิดีโอใน Chamilo ตัวเลือก ได้แก่ 'speed' ซึ่งช่วยให้คุณเปลี่ยนความเร็วการเล่นวิดีโอ"
+
+msgid "Mail: character set"
+msgstr "อีเมล: ชุดอักขระ"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "ในกรณีที่ต้องกำหนดชุดอักขระสำหรับส่งอีเมลเหล่านั้น ทิ้งว่างไว้หากไม่แน่ใจ"
+
+msgid "Mail: Debug"
+msgstr "อีเมล: Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "เลือกว่าต้องการเปิดใช้งานบันทึกการดีบักการส่งอีเมลหรือไม่ สิ่งเหล่านี้จะให้ข้อมูลเพิ่มเติมเกี่ยวกับสิ่งที่เกิดขึ้นเมื่อเชื่อมต่อกับบริการอีเมล แต่ไม่สวยงามและอาจทำให้การออกแบบหน้าทำลาย ใช้เฉพาะเมื่อไม่มีกิจกรรมผู้ใช้"
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "อีเมล: หลีกเลี่ยงการใช้ LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "ไคลเอนต์อีเมลบางตัวไม่เข้าใจรูปแบบ LD+JSON ที่อธิบาย แสดงเป็นสตริง JSON หลวมๆ ให้ผู้ใช้ปลายทาง หากเป็นกรณีของคุณ อาจตั้งค่าตัวแปรด้านล่างเป็น 'false' เพื่อปิดส่วนหัวนี้"
+
+msgid "Mail: DKIM headers"
+msgstr "อีเมล: ส่วนหัว DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "ป้อนอาร์เรย์ JSON ของการตั้งค่า DKIM ของคุณ (ดูตัวอย่าง)"
+
+msgid "Mail: XOAuth2 options"
+msgstr "อีเมล: ตัวเลือก XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "หากใช้บริการอีเมลที่ใช้ XOAuth2 ใช้การตั้งค่านี้ใน JSON เพื่อบันทึกการกำหนดค่าพิเศษของคุณ (ดูตัวอย่าง) และเลือก XOAuth2 ในการตั้งค่าบริการอีเมล"
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "กำหนดประเภทสภาพแวดล้อม: \"prod\" (การผลิตปกติ), \"validation\" (เหมือนการผลิตแต่ไม่รายงานสถิติ), หรือ \"test\" (โหมดดีบักพร้อมเครื่องมือนักพัฒนา เช่น ตัวบ่งชี้สตริงที่ยังไม่แปล)"
+
+msgid "Global limit of users per course"
+msgstr "ขีดจำกัดผู้ใช้ทั้งหมดต่อหลักสูตร"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "กำหนดจำนวนสูงสุดผู้ใช้ทั้งหมด (รวมครู) ที่อนุญาตให้สมัครในหลักสูตรเดียวในแพลตฟอร์ม ตั้งค่านี้เป็น 0 เพื่อปิดขีดจำกัด ช่วยหลีกเลี่ยงหลักสูตรที่โหลดเกินในพอร์ทัลเปิด"
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "เปิดใช้งานเพื่อใช้อาร์เรย์กำหนดบทบาทที่ควรแสดงชัดเจนและบทบาทที่ควรซ่อน"
+
+msgid "Show base course posts in session course"
+msgstr "แสดงโพสต์หลักสูตรฐานในหลักสูตรเซสชัน"
+
+msgid "Limit identical email usage"
+msgstr "จำกัดการใช้อีเมลซ้ำ"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "จำนวนบัญชีสูงสุดที่อนุญาตให้ใช้ที่อยู่อีเมลเดียวกัน ตั้งค่าเป็น 0 เพื่อปิดการจำกัดนี้"
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "อนุญาตให้ผู้ดูแลเซสชันเห็นผู้ใช้ทั้งหมดในทุก URL"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "หากเปิดใช้งาน ผู้ดูแลเซสชันสามารถค้นหาและแสดงรายการผู้ใช้จากทุก URL เข้าถึง โดยไม่คำนึงถึง URL ปัจจุบัน"
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "เปิดใช้งานให้ผู้ใช้เลือกเขตเวลาของตนเอง เมื่อกำหนดค่าแล้ว ผู้ใช้จะสามารถดูกำหนดเวลาการส่งงานและการอ้างอิงเวลาอื่นๆ ในเขตเวลาของตน ซึ่งจะลดข้อผิดพลาดในเวลาการส่ง"
+
+msgid "Redirect after login (per profile)"
+msgstr "Redirect หลังเข้าสู่ระบบ (ต่อโปรไฟล์)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "กำหนดการเปลี่ยนเส้นทางต่อโปรไฟล์หลังเข้าสู่ระบบโดยใช้ JSON object เช่น {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "ซ่อนช่องทำเครื่องหมายยอมรับทางกฎหมายในหน้าข้อกำหนดและเงื่อนไข"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "หากตั้งค่าเป็น true จะลบช่องทำเครื่องหมาย \"ฉันได้อ่านและยอมรับ\" ในขั้นตอนหน้าข้อกำหนดและเงื่อนไข"
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Array ที่กำหนดโฮสต์และพอร์ตสำหรับเซิร์ฟเวอร์ LDAP"
+
+msgid "Enable 2FA"
+msgstr "เปิดใช้งาน 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "เพิ่มฟิลด์ในหน้าอัปเดตパスワードเพื่อเปิดใช้งาน 2FA โดยใช้แอปยืนยัน TOTP เมื่อปิดใช้งานทั่วโลก ผู้ใช้จะไม่เห็นฟิลด์ 2FA และจะไม่ถูกถามให้ยืนยัน 2FA เมื่อเข้าสู่ระบบ แม้จะเปิดใช้งานก่อนหน้านี้"
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "คุณสมบัติบางอย่างของ Chamilo จะเชื่อมต่อภายนอกจากเซิร์ฟเวอร์ เช่น เพื่อยืนยันว่าคอนเทนต์ภายนอกมีอยู่เมื่อสร้างลิงก์หรือแสดงเพจฝังในเส้นทางการเรียน หากเซิร์ฟเวอร์ Chamilo ของคุณใช้ proxy เพื่อออกจากเครือข่าย นี่คือสถานที่สำหรับกำหนดค่า"
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "เปิดหรือปิดการลงทะเบียนใหม่โดยอัตโนมัติเมื่อความถูกต้องของคอร์สหมดอายุ ต้องเปิดใช้งาน cron job ที่เกี่ยวข้องด้วย"
+
+msgid "Show remaining days in My Sessions"
+msgstr "แสดงจำนวนวันคงเหลือในเซสชันของฉัน"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "หากเปิดใช้งาน วันที่เซสชันในหน้าทำ \"เซสชันของฉัน\" จะถูกแทนที่ด้วยจำนวนวันคงเหลือ"
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "แสดง \"แบบสำรวจที่รอดำเนินการ\" ในเมนู"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "แสดงรายการเมนูที่ให้ผู้ใช้เข้าถึงแบบสำรวจที่รอดำเนินการของตน"
+
+msgid "Disclose AI assistance"
+msgstr "เปิดเผยการช่วยเหลือ AI"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "แสดงแท็กบนคอนเทนต์หรือข้อเสนอแนะใดๆ ที่สร้างหรือร่วมสร้างโดยระบบ AI ใดๆ เพื่อแจ้งผู้ใช้ว่าคอนเทนต์ถูกสร้างด้วยความช่วยเหลือจากระบบ AI บางระบบ รายละเอียดเกี่ยวกับระบบ AI ที่ใช้ในแต่ละกรณีเก็บไว้ในฐานข้อมูลสำหรับการตรวจสอบ แต่ผู้ใช้ปลายทางไม่สามารถเข้าถึงได้โดยตรง"
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "การกำหนดค่า JSON สำหรับแคตตาล็อกคอร์ส: การตั้งค่าลิงก์ ตัวกรอง ตัวเลือกการเรียงลำดับ และอื่นๆ"
+
+msgid "Session Catalog Settings"
+msgstr "การตั้งค่าแคตตาล็อกเซสชัน"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "การกำหนดค่าคอนฟิก JSON สำหรับแคตตาล็อกเซสชัน: ตัวกรองและตัวเลือกการแสดงผล"
+
+msgid "Show Course Descriptions"
+msgstr "แสดงคำอธิบายหลักสูตร"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "แสดงคำอธิบายหลักสูตรในรายการแคตตาล็อก"
+
+msgid "Published Courses Only"
+msgstr "เฉพาะหลักสูตรที่เผยแพร่"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "จำกัดแคตตาล็อกเฉพาะหลักสูตรที่標記ว่าเผยแพร่แล้ว"
+
+msgid "Display Catalog on Homepage"
+msgstr "แสดงแคตตาล็อกบนหน้าหลัก"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "แสดงบล็อกแคตตาล็อกหลักสูตรบนหน้าหลักของแพลตฟอร์ม"
+
+msgid "Hide Public Link"
+msgstr "ซ่อนลิงก์สาธารณะ"
+
+msgid "Remove the public URL link from course cards."
+msgstr "ลบลิงก์ URL สาธารณะออกจากการ์ดหลักสูตร"
+
+msgid "Only Selected Courses"
+msgstr "เฉพาะหลักสูตรที่เลือก"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "แสดงเฉพาะหลักสูตรที่เลือกด้วยตนเองในแคตตาล็อก"
+
+msgid "Allow Student Browsing"
+msgstr "อนุญาตให้นักเรียนเรียกดู"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "อนุญาตให้นักเรียนเรียกดูและกรองแคตตาล็อกหลักสูตร"
+
+msgid "Hide Private Courses"
+msgstr "ซ่อนหลักสูตรส่วนตัว"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "ไม่รวมหลักสูตรส่วนตัวจากการแสดงผลแคตตาล็อก"
+
+msgid "Show Courses & Sessions"
+msgstr "แสดงหลักสูตรและเซสชัน"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "รวมทั้งหลักสูตรและเซสชันในผลลัพธ์แคตตาล็อก"
+
+msgid "Auto Session Subscription"
+msgstr "การสมัครสมาชิกเซสชันอัตโนมัติ"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "เปิดใช้งานการสมัครสมาชิกเซสชันอัตโนมัติสำหรับผู้ใช้"
+
+msgid "Subscription in Session View"
+msgstr "การสมัครสมาชิกในมุมมองเซสชัน"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "อนุญาตให้ผู้ใช้สมัครสมาชิกหลักสูตรโดยตรงจากหน้าหลักสูตรของเซสชัน"
+
+msgid "Enable redirection plugin"
+msgstr "เปิดใช้งานปลั๊กอินการเปลี่ยนเส้นทาง"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "อาร์เรย์ที่กำหนด 'days' และ 'months' เพื่อตั้งค่าวันที่หมดอายุบัญชีเมื่อผู้ใช้ล็อกอินครั้งแรก"
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "อาร์เรย์ของ role => number ซึ่งแสดงจำนวนวันก่อนหมดอายุของบัญชี ขึ้นอยู่กับบทบาท"
+
+msgid "Extra user field used to search and name sessions"
+msgstr "ฟิลด์ผู้ใช้เพิ่มเติมที่ใช้ค้นหาและตั้งชื่อเซสชัน"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "การตั้งค่านี้กำหนดคีย์ฟิลด์ผู้ใช้เพิ่มเติม (เช่น \"company\") ที่จะใช้ค้นหาผู้ใช้และกำหนดชื่อเซสชันเมื่อลงทะเบียนนักเรียนจาก /admin-dashboard/register"
+
+msgid "Glossary terms generator"
+msgstr "เครื่องสร้างคำศัพท์คำอธิบาย"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "อนุญาตให้ครูขอคำศัพท์คำอธิบายที่สร้างโดย AI ในหลักสูตรของตน จะสร้าง 20 คำศัพท์จากชื่อหลักสูตรและคำอธิบายทั่วไปในเครื่องมือคำอธิบายหลักสูตร หากใช้มากกว่า 1 ครั้ง จะไม่รวมคำศัพท์ที่มีอยู่แล้วในพจนานุกรมนั้น (ตรวจสอบให้แน่ใจว่าสามารถแชร์เนื้อหากับบริการ AI ที่กำหนดได้)"
+
+msgid "Video generator"
+msgstr "เครื่องสร้างวิดีโอ"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "สร้างวิดีโอจากพรอมต์หรือเนื้อหาโดยใช้ AI (อาจใช้โทเค็นจำนวนมาก)"
+
+msgid "Course analyser"
+msgstr "ตัววิเคราะห์หลักสูตร"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "วิเคราะห์ทรัพยากรทั้งหมดในหลักสูตรหนึ่งหรือหลายหลักสูตรและฝึกโมเดล AI ล่วงหน้าเพื่อตอบคำถามเกี่ยวกับหลักสูตรเหล่านี้ (ตรวจสอบให้แน่ใจว่าสามารถแชร์เนื้อหากับบริการ AI ที่กำหนดได้)"
+
+msgid "Test/development"
+msgstr "ทดสอบ/พัฒนา"
+
+msgid "Crons"
+msgstr "Crons"
+
+msgid "Editor"
+msgstr "ตัวแก้ไข"
+
+msgid "Gradebook"
+msgstr "สมุดเกรด"
+
+msgid "Internationalization"
+msgstr "นานาชาติ"
+
+msgid "User profiles"
+msgstr "โปรไฟล์ผู้ใช้"
+
+msgid "Support tickets"
+msgstr "ตั๋วสนับสนุน"
+
+msgid "Webservices"
+msgstr "Webservices"
+
+msgid "Catalogue"
+msgstr "แคตตาล็อก"
+
+msgid "Workflows"
+msgstr "เวิร์กโฟลว์"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "การตั้งค่าสามารถแก้ไขได้ใน sub-URLs"
+
+msgid "Show JSON Template"
+msgstr "แสดงเทมเพลต JSON"
+
+msgid "JSON Template"
+msgstr "เทมเพลต JSON"
+
+msgid "Installing Xapian bindings"
+msgstr "การติดตั้ง Xapian bindings"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "โค้ดตัวอย่างต่อไปนี้แสดงการติดตั้ง Xapian PHP bindings บน Ubuntu 25.04 ด้วย PHP 8.3 ปรับเส้นทางและเวอร์ชันให้เหมาะกับสภาพแวดล้อมของคุณ"
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "ตรวจสอบให้แน่ใจว่ามีเวอร์ชัน PHP ที่ใช้จริงเท่านั้น (เช่น 8.3) และหลีกเลี่ยงการผสมหลายเวอร์ชันที่มีไดเรกทอรีส่วนขยายต่างกัน"
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "เมื่อส่วนขยายโหลดถูกต้องทั้ง CLI และเว็บเซิร์ฟเวอร์ การวินิจฉัยการค้นหาข้างต้นควรรายงานว่าโมดูล Xapian ติดตั้งแล้ว"
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "ล้างไฟล์อัปโหลดชั่วคราวและแคช"
+
+msgid "Directory"
+msgstr "ไดเรกทอรี"
+
+msgid "Only delete files older than (minutes)"
+msgstr "ลบเฉพาะไฟล์ที่เก่ากว่า (นาที)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "ตั้งค่า 0 เพื่อลบไฟล์ทั้งหมด ใช้ค่าบวก (เช่น 60) เพื่อหลีกเลี่ยงการลบไฟล์ที่กำลังอัปโหลดอยู่"
+
+msgid "Preview only (do not delete)"
+msgstr "ดูตัวอย่างเท่านั้น (ไม่ลบ)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "คำเตือน: คุณกำลังจะลบไฟล์ชั่วคราวทั้งหมด การดำเนินการนี้ไม่สามารถย้อนกลับได้"
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "สิ่งนี้จะลบไฟล์ชั่วคราวทั้งหมด ดำเนินการต่อ?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "สิ่งนี้จะลบไฟล์ที่เก่ากว่า %minutes% นาที ดำเนินการต่อ?"
 

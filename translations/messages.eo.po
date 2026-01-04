@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:kopirajto,, no:ne kopirajto"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Okta flugo,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ekzerco,, simulation:simulado,, questionnaire:enketo,, diagram:diagramo,, figure:figuro,, graph:grafiko,, index:indekso,, slide:diapozitivo,, table:tabelo,, narrative text:rakonta teksto,, exam:ekzameno,, experiment:eksperimento,, problem statement:problemstarigo,, self assessment:memtesto,, lecture:prelego"
@@ -31454,4 +31454,376 @@ msgstr "Por pli da detaloj vizitu %s"
 
 msgid "Manager"
 msgstr "Mastristo"
+
+msgid "Mark as"
+msgstr "Marki kiel"
+
+msgid "Reply to all"
+msgstr "Rilabori al ĉiuj"
+
+msgid "SCIM external ID"
+msgstr "SCIM eksterna ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Bonvolu akcepti la plej novan version de la kondiĉoj."
+
+msgid "Required value for operation without path"
+msgstr "Postulata valoro por operacio sen vojo"
+
+msgid "Available space (%s)"
+msgstr "Havebla spaco (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Indeksi ĉi tiun priskribon por la tutmonda serĉo"
+
+msgid "Unknown course"
+msgstr "Nekonata kurso"
+
+msgid "Certificate not found."
+msgstr "Atestilo ne trovita."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Sekureca ĵetono eksvalidiĝis. Bonvolu reŝargi la paĝon kaj reprovi."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Nur platformaj administrantoj povas ŝanĝi la videblecon de la kurso."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Neatendita eraro dum aliĝado de la uzanto"
+
+msgid "Search in resource logs"
+msgstr "Serĉi en protokoloj de rimedoj"
+
+msgid "Include this learning path in the global search results"
+msgstr "Inkluzivi ĉi tiun lernvojon en la rezultojn de tutmonda serĉo"
+
+msgid "The course code already exists"
+msgstr "La kodo de la kurso jam ekzistas"
+
+msgid "Latest news"
+msgstr "Plej novaj novaĵoj"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Ricevu la plej novajn novaĵojn de Chamilo, inkluzive sekurajn vulneraĵojn kaj eventojn, rekte en via administra panelo. Ĉi tiuj novaĵoj estos kontrolitaj sur la novaĵ-servilo de Chamilo ĉiufoje kiam vi ŝargas la administran paĝon kaj estas videblaj nur al administrantoj."
+
+msgid "Chamilo support block"
+msgstr "Bloko de subteno por Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Ricevu profajn konsilojn kaj facilon kontakti oficialajn servofarantojn por profesia subteno, rekte de la kreantoj de Chamilo. Ĉi tiu bloko aperas en via administra paĝo, estas videbla nur al administrantoj kaj refreŝas ĉiufoje kiam vi ŝargas la administran paĝon."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Kaŝi opcion sendi anoncojn al HR-uzantoj"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Permesi al administrantoj de sesio elŝuti privatajn atestilojn"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Se ĉe-switched, administrantoj de sesioj povas elŝuti atestilojn eĉ se ili ne estas publike publikigitaj."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Se ne malplena, la procezo de kreado de kurso serĉos kelkajn kampojn en la uzula profilo kaj aŭtomate plenigos ilin por la kurso. Ekzemple, instruisto specialigita pri digitala merkatado povus aŭtomate agordi markon « digitala merkatado » por ĉiu kurso, kiun li/kŭ kreis."
+
+msgid "Main menu entries"
+msgstr "Eniroj de la ĉefa menuo"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Marku la enirojn, kiujn vi volas vidi aperi en la ĉefa menuo"
+
+msgid "Main menu entries per role"
+msgstr "Eniroj de la ĉefa menuo laŭ rolo"
+
+msgid "Define header tabs visibility per role."
+msgstr "Definu videblecon de la kapliniaj langetoj laŭ rolo."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Agordu la opciojn, kiujn vi volas aperigi en la navigado ĉirkaŭ tabelo por montri malpli aŭ pli da vicoj en unu paĝo. ekz. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Aro de kromaj trajtoj, kiujn vi povas aktivigi por la videoludilo en Chamilo. Opcioj inkluzivas 'speed', kiu permesas ŝanĝi la reprodukta rapideco de video."
+
+msgid "Mail: character set"
+msgstr "Poŝto: signaro"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Se vi bezonas defini la signaron uzotan por sendi tiujn retpoŝtojn. Lasu malplenan se vi ne certas."
+
+msgid "Mail: Debug"
+msgstr "Poŝto: Malkovrado"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Elektu ĉu vi volas aktivigi la protokolojn de malkovrado por sendado de retpoŝtoj. Ili donos al vi pli da informoj pri kio okazas dum konektado al la poŝtservo, sed ili ne estas elegantaj kaj povas rompi la paĝodezajnon. Uzu nur kiam ne estas uzula agado."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Poŝto: Eviti uzadon de LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Kelkaj retpoŝta klientoj ne komprenas la priskriban formaton LD+JSON, montras ĝin kiel senligan JSON-signaron al la finuzanto. Se tio estas via kazo, vi povus agordi la variablon sube al 'false' por malaktivigi tiun kaplinion."
+
+msgid "Mail: DKIM headers"
+msgstr "Poŝto: DKIM-kaplinioj"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Enigu JSON-aron de viaj agordoj por DKIM (vidu ekzemplon)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Poŝto: XOAuth2-opcioj"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Se vi uzas XOAuth2-bazitan retpoŝtan servon, uzu tiun agordon en JSON por konservi vian specifan konfiguracion (vidu ekzemplon) kaj elektu XOAuth2 en la agordo de poŝtservo."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Definas la mediotipon: \"prod\" (normala produktado), \"validation\" (kiel produktado sed sen raportado de statistikoj), aŭ \"test\" (malkovra reĝimo kun iloj por programistoj kiel indikiloj de ne tradukitaj signaroj)."
+
+msgid "Global limit of users per course"
+msgstr "Tutmonda limo de uzantoj po kurso"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Definas tutmondan maksimuman nombron da uzantoj (inkluzive instruistoj) permesataj aboni iun ajn unuopan kurson en la platformo. Agordu tiun valoron al 0 por malaktivigi la limon. Tio helpas eviti troŝarĝitajn kursojn en malfermaj portalo."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Aktivigu por uzi aron por defini, kiuj roloj devus esti klare montritaj kaj kiuj kaŝitaj."
+
+msgid "Show base course posts in session course"
+msgstr "Montru bazajn kurspostenojn en sesia kurso"
+
+msgid "Limit identical email usage"
+msgstr "Limigu uzadon de identaj retpoŝtadreso"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Maksimuma nombro da kontoj permesataj por uzi la saman retpoŝtadreson. Starigu je 0 por malŝalti tiun limon."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Permesi al sesio-administroj vidi ĉiujn uzantojn en ĉiuj URL-oj"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Se ĉeŝaltita, sesio-administroj povas serĉi kaj listo uzantojn el ĉiuj alira URL-oj, sendepende de ilia nuna URL."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Ŝalti eblon por uzantoj elekti sian propran horzonon. Post agordo, uzantoj povos vidi limdatojn de taskoj kaj aliajn tempo-referencojn en sia propra horzono, kio reduktos erarojn dum liverado."
+
+msgid "Redirect after login (per profile)"
+msgstr "Redirigi post ensaluto (laŭ profilo)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Defini redirekton laŭ profilo post ensaluto uzante JSON-objekton kiel {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Kaŝi akcepta ĉekskaton en paĝo de Uzokondiĉoj"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Se metita je vero, forigas la \"Mi legis kaj akceptas\" ĉekskaton en la fluo de paĝo Uzokondiĉoj."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Aro definanta gastigon kaj pordon por la LDAP-servilo."
+
+msgid "Enable 2FA"
+msgstr "Ŝalti 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Aldoni kampojn en paĝo de paŝvorto ĝisdatigo por ŝalti 2FA uzante TOTP aŭtentikilo aplikaĵon. Kiam malŝaltita tutmonde, uzantoj ne vidos 2FA kampojn kaj ne estos petataj por 2FA dum ensaluto, eĉ se ili antaŭe ĉeŝaltis ĝin."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Kelkaj trajtoj de Chamilo konektos al ekstero de la servilo. Ekzemple por certigi ke ekstera enhavo ekzistas dum kreado de ligo aŭ montrado enkorpiga paĝo en lernvojo. Se via Chamilo-servilo uzas prokurilon por eliri sian reto, ĉi tie estas la loko por agordi ĝin."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Ŝalti aŭ malŝalti aŭtomatan reenroligon kiam valideco de kurso finas. La rilata korn-jobo ankaŭ devas esti aktivigita."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Montradi restintajn tagojn en Miaj Sesioj"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Se ĉeŝaltita, la sesio-datoj en paĝo \"Miaj Sesioj\" estos anstataŭigitaj per nombro da restintaj tagoj."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Montradi \"Pendetaj enketoj\" en menuo"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Monta menu-punkton kiu permesas al uzantoj aliri siajn pendetajn enketojn."
+
+msgid "Disclose AI assistance"
+msgstr "Malkovri helpon de IA"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Montradi etikedon sur iu ajn enhavo aŭ retpoŝto generita aŭ kun-generita de iu ajn IA-sistemo, pruvante al la uzanto ke la enhavo estis konstruita kun la helpo de ia IA-sistemo. Detaloj pri kiu IA-sistemo estis uzita en kiu kazo estas konservitaj en datumbazo por aŭditado, sed ne rekte alireblaj de la fina uzanto."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "JSON-agordo por kurskataloguro: ligilaj agordoj, filtriloj, ordigo-opcioj kaj pli."
+
+msgid "Session Catalog Settings"
+msgstr "Agordoj de Sesio-Kataloguro"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "JSON-agordo por sesio-kataloguro: filtriloj kaj vidigaj opcioj."
+
+msgid "Show Course Descriptions"
+msgstr "Montri Priskribojn de Kursoj"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Afiŝi priskribojn de kursoj ene de la listo de katalogo."
+
+msgid "Published Courses Only"
+msgstr "Nur Publikigitaj Kursoj"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Limigi la katalogon al nur kursoj markitaj kiel publikigitaj."
+
+msgid "Display Catalog on Homepage"
+msgstr "Afiŝi Katalogon en Hejmpaĝo"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Montri la blokon de katalogo de kursoj en la hejmpaĝo de la platformo."
+
+msgid "Hide Public Link"
+msgstr "Kaŝi Publikan Ligilon"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Forigi la publikan URL-ligilon el la kartoj de kursoj."
+
+msgid "Only Selected Courses"
+msgstr "Nur Selektitaj Kursoj"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Montri nur mane selektitajn kursojn en la katalogo."
+
+msgid "Allow Student Browsing"
+msgstr "Permesi Studentan Foliumadon"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Permesi al studentoj foliumi kaj filtri la katalogon de kursoj."
+
+msgid "Hide Private Courses"
+msgstr "Kaŝi Privatajn Kursojn"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Ekskludi privatajn kursojn el la afiŝado de la katalogo."
+
+msgid "Show Courses & Sessions"
+msgstr "Montri Kursojn & Sesiojn"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Inkluzivi kaj kursojn kaj sesiojn en rezultojn de katalogo."
+
+msgid "Auto Session Subscription"
+msgstr "Aŭtomata Abono al Sesio"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Aktivigi aŭtomatan abonon al sesioj por uzantoj."
+
+msgid "Subscription in Session View"
+msgstr "Abono en Vido de Sesio"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Permesi al uzantoj aboni kursojn rekte el paĝo de sia sesio."
+
+msgid "Enable redirection plugin"
+msgstr "Aktivigi pluginon de alidirektado"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Aro difinanta la 'tagojn' kaj 'monatojn' por agordi daton de eksvalidiĝo de konto kiam la uzanto unuafoje ensalutas."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Aro de rolo => nombro kiu reprezentas la nombron da tagoj antaŭ eksvalidiĝo de konto, depende de la rolo."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Ekstra kampo de uzanto uzata por serĉi kaj nomi sesiojn"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Ĉi tiu agordo difinas la ŝlosilon de ekstra kampo de uzanto (ekz., \"company\") kiu estos uzata por serĉi uzantojn kaj difini la nomon de la sesio kiam registritas studentojn el /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Generilo de terminoj de glosaro"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Permesi al instruistoj peti AI-generitajn terminojn de glosaro en sia kurso. Ĉi tio generos 20 terminojn bazitajn sur titolo de la kurso kaj ĝenerala priskribo en ilo de priskribo de kurso. Se uzita pli ol unu fojon, ĝi ekskluzivos terminojn jam ĉeestantajn en tiu glosaro (certe ke enhavo povas esti kunhavigita kun la agorditaj AI-servoj)."
+
+msgid "Video generator"
+msgstr "Generilo de vidbendoj"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Generas vidbendojn bazitajn sur promptoj aŭ enhavo uzante AI (ĉi tio povas konsumi multajn tokenojn)."
+
+msgid "Course analyser"
+msgstr "Analizilo de kurso"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Analizas ĉiujn risurcojn en unu aŭ multaj kursoj kaj antaŭtrejnas la modelon de AI por respondi al iu ajn demando pri ĉi tiu aŭ ĉi tiuj kursoj (certe ke enhavo povas esti kunhavigita kun la agorditaj AI-servoj)."
+
+msgid "Test/development"
+msgstr "Testo/evoluado"
+
+msgid "Crons"
+msgstr "Kronoj"
+
+msgid "Editor"
+msgstr "Redaktilo"
+
+msgid "Gradebook"
+msgstr "Notlibro de notoj"
+
+msgid "Internationalization"
+msgstr "Internaciigo"
+
+msgid "User profiles"
+msgstr "Profiloj de uzantoj"
+
+msgid "Support tickets"
+msgstr "Ticketoj de subteno"
+
+msgid "Webservices"
+msgstr "TTT-servoj"
+
+msgid "Catalogue"
+msgstr "Katalogo"
+
+msgid "Workflows"
+msgstr "Laborfluoj"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Agordo estas redaktebla en sub-URL-oj"
+
+msgid "Show JSON Template"
+msgstr "Montri Ŝablonon JSON"
+
+msgid "JSON Template"
+msgstr "Ŝablono JSON"
+
+msgid "Installing Xapian bindings"
+msgstr "Instalado de ligiloj Xapian"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "La sekva peceto montras ekzemplan instaladon de la ligiloj Xapian PHP en Ubuntu 25.04 kun PHP 8.3. Adapti vojojn kaj versiojn al via propra medio."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Certigi ke vi havas nur la version de PHP kiun vi vere uzas (ekzemple 8.3) kaj eviti miksi plurajn versiojn kun malsamaj dosierujoj de etendoj."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Post kiam la etendo estas korekte ŝargita por kaj CLI kaj la TTT-servilo, la diagnostikoj de serĉado supre devus raporti ke la modulo Xapian estas instalita."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Forigi provizoraj alŝutoj kaj kaŝmemo"
+
+msgid "Directory"
+msgstr "Dosierujon"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Forigi nur dosierojn pli maljunaj ol (minutoj)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Starigu 0 por forigi ĉiujn dosierojn. Uzu pozitivan valoron (ekz., 60) por eviti forigi dosierojn kiuj ankoraŭ alŝutiĝas."
+
+msgid "Preview only (do not delete)"
+msgstr "Antaŭrigardo nur (ne forigi)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Averto: vi estas preta forigi ĈIUJN provizoraj dosierojn. Ĉi tiu ago ne povas esti malfarata."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Ĉi tio forigos ĉiujn provizoraj dosierojn. Daŭrigi?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Ĉi tio forigos dosierojn pli maljunaj ol %minutes% minutoj. Daŭrigi?"
 

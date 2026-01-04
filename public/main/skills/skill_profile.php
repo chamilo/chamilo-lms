@@ -52,7 +52,10 @@ $interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('Skill profile
 
 $toolbar = null;
 
-$tpl = new Template($action);
+$tpl = new Template('');
+// Active tab for the shared header navigation.
+$tpl->assign('current_tab', 'profiles');
+
 switch ($action) {
     case 'move_up':
         /** @var Level $item */
@@ -69,7 +72,7 @@ switch ($action) {
 
         header('Location: '.$listAction);
         exit;
-        break;
+
     case 'move_down':
         /** @var Level $item */
         $item = $em->getRepository(Level::class)->find($_GET['level_id']);
@@ -83,7 +86,7 @@ switch ($action) {
 
         header('Location: '.$listAction);
         exit;
-        break;
+
     case 'add':
         $tpl->assign('form', $formToDisplay);
         if ($form->validate()) {
@@ -103,6 +106,7 @@ switch ($action) {
             ['title' => get_lang('List')]
         );
         break;
+
     case 'edit':
         $tpl->assign('form', $formToDisplay);
         $toolbar = Display::url(
@@ -120,8 +124,8 @@ switch ($action) {
             header('Location: '.$listAction);
             exit;
         }
-
         break;
+
     case 'delete':
         $toolbar = Display::url(
             Display::getMdiIcon(ObjectIcon::LIST, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('List')),
@@ -138,13 +142,9 @@ switch ($action) {
         }
         header('Location: '.$listAction);
         exit;
-        break;
+
     default:
-        $toolbar = Display::url(
-            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')),
-            api_get_self().'?action=add',
-            ['title' => get_lang('Add')]
-        );
+        $toolbar = '';
 }
 
 $tpl->assign('list', $list);
@@ -152,10 +152,7 @@ $templateName = $tpl->get_template('skills/skill_profile.tpl');
 $contentTemplate = $tpl->fetch($templateName);
 
 if ($toolbar) {
-    $tpl->assign(
-        'actions',
-        Display::toolbarAction('toolbar', [$toolbar])
-    );
+    $tpl->assign('actions', Display::toolbarAction('toolbar', [$toolbar]));
 }
 
 $tpl->assign('content', $contentTemplate);

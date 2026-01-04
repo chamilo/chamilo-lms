@@ -996,7 +996,12 @@ switch ($action) {
             $goList();
         } else {
             $oLP->save_last();
-            $oLP->set_current_item($_GET['item_id']);
+
+            $requestedItemId = (int) ($_GET['item_id'] ?? $_GET['lp_item_id'] ?? $_GET['id'] ?? 0);
+            if ($requestedItemId > 0) {
+                $oLP->set_current_item($requestedItemId);
+            }
+
             $oLP->start_current_item();
             require 'lp_content.php';
         }
@@ -1005,8 +1010,10 @@ switch ($action) {
         if (!$lp_found) {
             $goList();
         } else {
-            if (!empty($_REQUEST['item_id'])) {
-                $oLP->set_current_item($_REQUEST['item_id']);
+            // Accept multiple parameter names for the requested LP item (backward/legacy compat)
+            $requestedItemId = (int) ($_REQUEST['item_id'] ?? $_REQUEST['lp_item_id'] ?? $_REQUEST['id'] ?? 0);
+            if ($requestedItemId > 0) {
+                $oLP->set_current_item($requestedItemId);
             }
             require 'lp_view.php';
         }

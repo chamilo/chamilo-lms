@@ -649,7 +649,12 @@ class AttendanceController
 
         // Get data table
         $data_table = [];
-        $head_table = ['#', get_lang('Name')];
+        $addOfficialCode = api_get_configuration_value('attendance_add_official_code');
+        if ($addOfficialCode) {
+            $head_table = ['#', get_lang('OfficialCode'), get_lang('Name')];
+        } else {
+            $head_table = ['#', get_lang('Name')];
+        }
         foreach ($data_array['attendant_calendar'] as $class_day) {
             $labelDuration = !empty($class_day['duration']) ? get_lang('Duration').' : '.$class_day['duration'] : '';
             $head_table[] =
@@ -667,6 +672,9 @@ class AttendanceController
                 $cols = 1;
                 $result = [];
                 $result['count'] = $count;
+                if ($addOfficialCode) {
+                    $result['official_code'] = $user['official_code'];
+                }
                 $result['full_name'] = api_get_person_name($user['firstname'], $user['lastname']);
                 foreach ($data_array['attendant_calendar'] as $class_day) {
                     if ($class_day['done_attendance'] == 1) {

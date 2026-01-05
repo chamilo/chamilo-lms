@@ -307,10 +307,10 @@ class CourseArchiver
         $zip = new \PclZip($unzip_dir.'/backup.zip');
         @chdir($unzip_dir);
 
+        // For course backups we must preserve original filenames so that
+        // paths in course_info.dat still match the files in backup_path.
         $zip->extract(
-            PCLZIP_OPT_TEMP_FILE_ON,
-            PCLZIP_CB_PRE_EXTRACT,
-            'clean_up_files_in_zip'
+            PCLZIP_OPT_TEMP_FILE_ON
         );
 
         // remove the archive-file

@@ -3250,9 +3250,6 @@ HOTSPOT;
                                 if (api_is_drh() && !api_is_platform_admin()) {
                                     $delete_link = null;
                                 }
-                                if (api_is_session_admin()) {
-                                    $delete_link = '';
-                                }
                                 if ($revised == 3) {
                                     $delete_link = null;
                                 }

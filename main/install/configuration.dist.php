@@ -533,6 +533,7 @@ ALTER TABLE c_lp_item CHANGE title title LONGTEXT NOT NULL;
 // Session admin access to all course content
 //$_configuration['session_admins_access_all_content'] = false;
 // Session admin allowed to edit all courses content
+// including all exercises attemps results edition, calculation and deletion
 //$_configuration['session_admins_edit_courses_content'] = false;
 // Adds roles to the system announcements (requires DB change BT#12476)
 /*
@@ -1445,6 +1446,12 @@ $_configuration['profile_fields_visibility'] = [
 
 // Disallow the login-as feature to HRM users
 //$_configuration['disallow_hrm_login_as'] = false;
+
+// Disallow the login-as feature to session admin users
+//$_configuration['disallow_session_admin_login_as'] = false;
+
+// Disallow user edition to session admin users
+//$_configuration['disallow_session_admin_edit_users'] = false;
 
 // Allow gradebook stats
 // Requires to edit the GradebookLink.php And GradebookEvaluation.php files adding the "@" in the ORM phpdoc block
@@ -2505,6 +2512,9 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 //CREATE INDEX c_attendance_sheet_user ON track_e_access_complete (attendance_sheet_id, user_id);
 // Then add the "@" symbol to CAttendanceResultComment class in the ORM\Entity() line.
 //$_configuration['attendance_allow_comments'] = false;
+
+// Add the official code of students in the attendance table, pdf and xls export
+//$_configuration['attendance_add_official_code'] = false;
 
 // Enable categories in Wiki tool.
 // 1. Run the following DB changes:

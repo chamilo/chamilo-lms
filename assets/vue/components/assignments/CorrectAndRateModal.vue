@@ -21,7 +21,6 @@
       >
         <h5 class="font-semibold text-sm">{{ t("Student's submission") }}</h5>
 
-        <!-- Full HTML document: render safely inside sandboxed iframe -->
         <iframe
           v-if="isFullHtmlDocument"
           class="w-full min-h-[260px] border border-gray-20 rounded bg-white"
@@ -29,14 +28,12 @@
           :srcdoc="submissionSrcDoc"
         />
 
-        <!-- HTML fragment: render sanitized -->
         <div
           v-else-if="isHtmlFragment"
           class="text-sm text-gray-800 prose max-w-none"
           v-html="submissionHtml"
         />
 
-        <!-- Plain text -->
         <div
           v-else
           class="text-sm text-gray-800 whitespace-pre-wrap"
@@ -52,28 +49,34 @@
       />
 
       <div class="flex flex-col gap-2">
-        <label>{{ t("Score") }}</label>
-
-        <InputNumber
-          v-if="!forceStudentView"
-          v-model="qualification"
-          inputId="qualification"
-          class="w-full"
-          :min="0"
-          :max="maxQualification ?? undefined"
-          :step="0.1"
-          :minFractionDigits="0"
-          :maxFractionDigits="1"
-          :useGrouping="false"
-          :locale="locale"
-        />
-
-        <small
-          v-if="!forceStudentView && maxHelpText"
-          class="text-xs text-gray-50"
+        <label
+          for="qualification"
+          class="text-sm font-medium"
         >
-          {{ maxHelpText }}
-        </small>
+          {{ t("Score") }}
+        </label>
+
+        <template v-if="!forceStudentView">
+          <InputNumber
+            v-model="qualification"
+            inputId="qualification"
+            class="w-full"
+            :min="0"
+            :max="maxQualification ?? undefined"
+            :step="0.1"
+            :minFractionDigits="0"
+            :maxFractionDigits="1"
+            :useGrouping="false"
+            :locale="primeLocale"
+          />
+
+          <small
+            v-if="maxHelpText"
+            class="text-xs text-gray-50"
+          >
+            {{ maxHelpText }}
+          </small>
+        </template>
 
         <template v-else>
           <span class="border p-2 rounded bg-gray-100 text-sm">
@@ -176,7 +179,7 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue", "commentSent"])
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const notification = useNotification()
 const visible = ref(false)
 const comment = ref("")
@@ -193,6 +196,15 @@ const forceStudentView = !isEditor || isStudentView
 
 const { relativeDatetime } = useFormatDate()
 const comments = ref([])
+
+const primeLocale = computed(() => {
+  const l = String(locale.value || "en").toLowerCase()
+  if (l.startsWith("fr")) return "fr-FR"
+  if (l.startsWith("es")) return "es-ES"
+  if (l.startsWith("pt")) return "pt-BR"
+  return "en-US"
+})
+
 watch(
   () => props.modelValue,
   async (newVal) => {
@@ -201,7 +213,14 @@ watch(
       comment.value = ""
       sendMail.value = false
       selectedFile.value = null
-      qualification.value = props.item.qualification ?? null
+
+      qualification.value =
+        props.item?.qualification === null ||
+        props.item?.qualification === undefined ||
+        props.item?.qualification === ""
+          ? null
+          : Number(props.item.qualification)
+
       comments.value = await cStudentPublicationService.loadComments(props.item.iid)
     }
   },
@@ -209,8 +228,6 @@ watch(
 
 const maxQualification = computed(() => {
   const raw = props.item?.publicationParent?.qualification
-
-  // Treat 0 / empty / invalid as "no max"
   if (raw === null || raw === undefined || raw === "") return null
 
   const n = Number(raw)
@@ -233,7 +250,7 @@ function close() {
 }
 
 function handleFileUpload(event) {
-  selectedFile.value = event.target.files[0] || null
+  selectedFile.value = event.target.files?.[0] || null
 }
 
 async function submit() {
@@ -243,8 +260,17 @@ async function submit() {
   const trimmed = comment.value.trim()
   const hasComment = trimmed.length > 0
   const hasFile = !!selectedFile.value
-  const currentQ = qualification.value === "" ? null : qualification.value
-  const originalQ = props.item.qualification ?? null
+
+  const currentQ =
+    qualification.value === null || qualification.value === undefined || qualification.value === ""
+      ? null
+      : Number(qualification.value)
+
+  const originalQ =
+    props.item?.qualification === null || props.item?.qualification === undefined || props.item?.qualification === ""
+      ? null
+      : Number(props.item.qualification)
+
   const hasQualificationChange = currentQ !== originalQ
 
   if (!hasComment && !hasFile && !hasQualificationChange) {
@@ -255,7 +281,7 @@ async function submit() {
 
   if (!hasComment && !hasFile && hasQualificationChange) {
     try {
-      await cStudentPublicationService.updateScore(props.item.iid, qualification.value)
+      await cStudentPublicationService.updateScore(props.item.iid, currentQ)
       notification.showSuccessNotification(t("Score updated successfully"))
       emit("commentSent")
       close()
@@ -271,7 +297,7 @@ async function submit() {
   try {
     const formData = new FormData()
     formData.append("submissionId", props.item.iid)
-    formData.append("qualification", qualification.value ?? "")
+    formData.append("qualification", currentQ === null ? "" : String(currentQ))
 
     if (selectedFile.value) {
       formData.append("uploadFile", selectedFile.value)

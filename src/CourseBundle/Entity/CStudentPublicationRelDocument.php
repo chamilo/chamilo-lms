@@ -27,8 +27,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     denormalizationContext: ['groups' => ['student_publication_rel_document:write']]
 )]
 #[ApiFilter(SearchFilter::class, properties: [
-    'publication' => 'exact',
-    'publication.id' => 'exact',
+    'publication.iid' => 'exact',
+    'document.iid' => 'exact',
 ])]
 #[ORM\Table(name: 'c_student_publication_rel_document')]
 #[ORM\Entity]

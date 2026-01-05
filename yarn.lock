@@ -4291,7 +4291,7 @@ __metadata:
     jquery-ui-timepicker-addon: "npm:^1.6.3"
     jquery-ui-touch-punch: "npm:^0.2.3"
     js-cookie: "npm:^2.2.1"
-    jspdf: "npm:^3.0.4"
+    jspdf: "npm:^4.0.0"
     jsplumb: "npm:^2.15.6"
     linkifyjs: "npm:4.3.2"
     litepicker: "npm:^2.0.12"
@@ -7286,9 +7286,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jspdf@npm:^3.0.4":
-  version: 3.0.4
-  resolution: "jspdf@npm:3.0.4"
+"jspdf@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "jspdf@npm:4.0.0"
   dependencies:
     "@babel/runtime": "npm:^7.28.4"
     canvg: "npm:^3.0.11"
@@ -7306,7 +7306,7 @@ __metadata:
       optional: true
     html2canvas:
       optional: true
-  checksum: 10c0/08e6cdb38319b68725d9b13072aac554b07aa66cbd490b0db6571ba74bbf356a56dac06ee758fe10f9e9640b5f5c209ab44801f34c6eeedab14c0f2bc90439e9
+  checksum: 10c0/042fef72dd71353bbe5ba57c8a7bbadfd62bdcdf33f5a81276fd4c66034cb43fe112b04940d02c7d31402fa645390312a5bc854ea4a179f71257ed6d2dec75e8
   languageName: node
   linkType: hard
 
@@ -9180,11 +9180,11 @@ __metadata:
   linkType: hard
 
 "qs@npm:~6.14.0":
-  version: 6.14.0
-  resolution: "qs@npm:6.14.0"
+  version: 6.14.1
+  resolution: "qs@npm:6.14.1"
   dependencies:
     side-channel: "npm:^1.1.0"
-  checksum: 10c0/8ea5d91bf34f440598ee389d4a7d95820e3b837d3fd9f433871f7924801becaa0cd3b3b4628d49a7784d06a8aea9bc4554d2b6d8d584e2d221dc06238a42909c
+  checksum: 10c0/0e3b22dc451f48ce5940cbbc7c7d9068d895074f8c969c0801ac15c1313d1859c4d738e46dc4da2f498f41a9ffd8c201bd9fb12df67799b827db94cc373d2613
   languageName: node
   linkType: hard
 

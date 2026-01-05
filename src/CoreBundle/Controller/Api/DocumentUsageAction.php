@@ -9,6 +9,7 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsController]
 final class DocumentUsageAction extends AbstractController
@@ -21,6 +22,7 @@ final class DocumentUsageAction extends AbstractController
     public function __construct(
         private readonly CourseRepository $courseRepository,
         private readonly CDocumentRepository $documentRepository,
+        private readonly TranslatorInterface $translator,
     ) {}
 
     public function __invoke($cid): JsonResponse
@@ -58,21 +60,24 @@ final class DocumentUsageAction extends AbstractController
         $data = [];
 
         if ($bytesCourse > 0) {
-            $labels[] = get_lang('Course').' ('.$this->formatBytes($bytesCourse).')';
+            $labels[] = $this->translator->trans('Course').' ('.$this->formatBytes($bytesCourse).')';
             $data[] = $this->pct($bytesCourse, $denomBytes);
         }
 
         if ($bytesSessions > 0) {
-            $labels[] = get_lang('Session').' ('.$this->formatBytes($bytesSessions).')';
+            $labels[] = $this->translator->trans('Session').' ('.$this->formatBytes($bytesSessions).')';
             $data[] = $this->pct($bytesSessions, $denomBytes);
         }
 
         if ($bytesGroups > 0) {
-            $labels[] = get_lang('Group').' ('.$this->formatBytes($bytesGroups).')';
+            $labels[] = $this->translator->trans('Group').' ('.$this->formatBytes($bytesGroups).')';
             $data[] = $this->pct($bytesGroups, $denomBytes);
         }
 
-        $labels[] = sprintf(get_lang('Available space (%s)'), $this->formatBytes($availableBytes));
+        $labels[] = \sprintf(
+            $this->translator->trans('Available space (%s)'),
+            $this->formatBytes($availableBytes)
+        );
         $data[] = $this->pct($availableBytes, $denomBytes);
 
         return new JsonResponse([

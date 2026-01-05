@@ -1,43 +1,141 @@
-{% autoescape false %}
+<div class="w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    {% set tab = current_tab|default('profiles') %}
 
-{% if form is defined %}
-    {{ form }}
-{% endif %}
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h1 class="text-2xl font-semibold text-gray-900">{{ 'Skills'|trans }}</h1>
+            <p class="mt-1 text-sm text-gray-500">{{ 'Profiles define how levels are grouped and ordered.'|trans }}</p>
+        </div>
 
-{% for profile in list %}
-    <h4>{{ profile.title }}
-        {#<a href="{{ _p.web_main }}skills/skill_level.php?action=add_level&id={{ profile.id }}">#}
-        {#{{ 'ActionIcon::ADD'|mdi_icon }}#}
-        {#</a>#}
-        <a href="/main/skills/skill_profile.php?action=edit&id={{ profile.id }}">
-            {{ 'ActionIcon::EDIT'|mdi_icon }}
-        </a>
+        <div class="flex flex-wrap items-center gap-3">
+            <div class="inline-flex rounded-2xl border border-gray-20 bg-white p-1 shadow-sm">
+                <a href="/main/skills/skill.php"
+                   class="px-4 py-2 text-sm font-semibold rounded-xl transition
+                   {{ tab == 'skills' ? 'bg-gray-20 text-gray-900' : 'text-gray-600 hover:bg-gray-10' }}">
+                    {{ 'Skills'|trans }}
+                </a>
+                <a href="/main/skills/skill_profile.php"
+                   class="px-4 py-2 text-sm font-semibold rounded-xl transition
+                   {{ tab == 'profiles' ? 'bg-gray-20 text-gray-900' : 'text-gray-600 hover:bg-gray-10' }}">
+                    {{ 'Profiles'|trans }}
+                </a>
+                <a href="/main/skills/skill_level.php"
+                   class="px-4 py-2 text-sm font-semibold rounded-xl transition
+                   {{ tab == 'levels' ? 'bg-gray-20 text-gray-900' : 'text-gray-600 hover:bg-gray-10' }}">
+                    {{ 'Levels'|trans }}
+                </a>
+            </div>
 
-        <a href="/main/skills/skill_profile.php?action=delete&id={{ profile.id }}">
-            {{ 'ActionIcon::DELETE'|mdi_icon }}
-        </a>
-    </h4>
-    <ul>
-        {% for level in profile.levels %}
-            <li>
-                {{ level }}
-                {% if loop.first %}
-                    {{ 'ActionIcon::UP'|mdi_icon(22, 'ch-tool-icon-disabled') }}
-                {% else %}
-                    <a href="/main/skills/skill_profile.php?action=move_up&level_id={{ level.id }}&id={{ profile.id }}">
-                        {{ 'ActionIcon::UP'|mdi_icon(22) }}
-                    </a>
-                {% endif %}
+            <a
+                    href="/main/skills/skill_profile.php?action=add"
+                    class="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/30"
+            >
+                {{ 'ActionIcon::ADD'|mdi_icon(18, 'text-white')|raw }}
+                <span>{{ 'Add profile'|trans }}</span>
+            </a>
+        </div>
+    </div>
 
-                {% if loop.last %}
-                    {{ 'ActionIcon::DOWN'|mdi_icon(22, 'ch-tool-icon-disabled') }}
-                {% else %}
-                    <a href="/main/skills/skill_profile.php?action=move_down&level_id={{ level.id }}&id={{ profile.id }}">
-                        {{ 'ActionIcon::DOWN'|mdi_icon(22) }}
-                    </a>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
-{% endfor %}
-{% endautoescape %}
+    {% if form is defined %}
+        <div class="mt-6 rounded-2xl border border-gray-20 bg-white shadow-sm overflow-hidden">
+            <div class="flex items-center justify-between border-b border-gray-10 px-6 py-4">
+                <div class="text-sm font-semibold text-gray-900">{{ 'Edit'|trans }}</div>
+                <span class="text-xs text-gray-500">{{ 'Create or update a profile name.'|trans }}</span>
+            </div>
+            <div class="p-6">
+                {{ form|raw }}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="mt-6 rounded-2xl border border-gray-20 bg-white shadow-sm overflow-hidden">
+        <div class="border-b border-gray-10 px-6 py-4">
+            <div class="text-sm font-semibold text-gray-900">{{ 'Profiles'|trans }}</div>
+            <div class="mt-1 text-xs text-gray-500">
+                {{ 'Use the arrows to reorder levels inside a profile.'|trans }}
+            </div>
+        </div>
+
+        {% if list is empty %}
+            <div class="p-6 text-sm text-gray-500">{{ 'No results found'|trans }}</div>
+        {% else %}
+            <div class="p-6 space-y-4">
+                {% for profile in list %}
+                    <div class="rounded-2xl border border-gray-20 bg-white shadow-sm overflow-hidden">
+                        <div class="flex items-center justify-between border-b border-gray-10 px-5 py-4">
+                            <div class="text-sm font-semibold text-gray-900">
+                                {{ profile.title }}
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <a
+                                        href="/main/skills/skill_profile.php?action=edit&id={{ profile.id }}"
+                                        class="inline-flex items-center justify-center rounded-xl border border-gray-20 bg-white px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-10"
+                                        title="{{ 'Edit'|trans }}"
+                                >
+                                    {{ 'ActionIcon::EDIT'|mdi_icon(18)|raw }}
+                                </a>
+
+                                <a
+                                        href="/main/skills/skill_profile.php?action=delete&id={{ profile.id }}"
+                                        class="inline-flex items-center justify-center rounded-xl border border-gray-20 bg-white px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-10"
+                                        title="{{ 'Delete'|trans }}"
+                                >
+                                    {{ 'ActionIcon::DELETE'|mdi_icon(18)|raw }}
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="p-5">
+                            {% if profile.levels is empty %}
+                                <div class="text-sm text-gray-500">
+                                    {{ 'No levels assigned to this profile yet. Go to Levels to create some.'|trans }}
+                                </div>
+                            {% else %}
+                                <ul class="divide-y divide-gray-100">
+                                    {% for level in profile.levels %}
+                                        <li class="flex items-center justify-between py-2">
+                                            <div class="text-sm font-medium text-gray-800">
+                                                {{ level }}
+                                            </div>
+
+                                            <div class="flex items-center gap-2">
+                                                {% if loop.first %}
+                                                    <span class="opacity-40" title="{{ 'Move up'|trans }}">
+                                                        {{ 'ActionIcon::UP'|mdi_icon(22, 'ch-tool-icon-disabled')|raw }}
+                                                    </span>
+                                                {% else %}
+                                                    <a
+                                                            href="/main/skills/skill_profile.php?action=move_up&level_id={{ level.id }}&id={{ profile.id }}"
+                                                            class="hover:opacity-80"
+                                                            title="{{ 'Move up'|trans }}"
+                                                    >
+                                                        {{ 'ActionIcon::UP'|mdi_icon(22)|raw }}
+                                                    </a>
+                                                {% endif %}
+
+                                                {% if loop.last %}
+                                                    <span class="opacity-40" title="{{ 'Move down'|trans }}">
+                                                        {{ 'ActionIcon::DOWN'|mdi_icon(22, 'ch-tool-icon-disabled')|raw }}
+                                                    </span>
+                                                {% else %}
+                                                    <a
+                                                            href="/main/skills/skill_profile.php?action=move_down&level_id={{ level.id }}&id={{ profile.id }}"
+                                                            class="hover:opacity-80"
+                                                            title="{{ 'Move down'|trans }}"
+                                                    >
+                                                        {{ 'ActionIcon::DOWN'|mdi_icon(22)|raw }}
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>

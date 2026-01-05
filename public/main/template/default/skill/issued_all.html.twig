@@ -1,11 +1,23 @@
 {% import '@ChamiloCore/Macros/box.html.twig' as display %}
 
+{% if origin_url %}
+    <div class="mb-4">
+        <a
+                href="{{ origin_url }}"
+                class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-gray-200 bg-white hover:bg-gray-15 transition text-sm font-semibold"
+        >
+            <em class="fa fa-arrow-left" aria-hidden="true"></em>
+            {{ 'Back'|trans }}
+        </a>
+    </div>
+{% endif %}
+
 {% for badge in user_badges %}
     <div class="flex flex-col md:flex-row gap-6 issued">
         <div class="w-full md:w-1/5 flex flex-col items-center">
             <div class="border rounded-lg shadow-md p-4 w-full">
                 <figure class="flex flex-col items-center text-center">
-                    <img class="w-32 md:w-40" src="{{ badge.issue_info.skill_badge_image }}?w=120"
+                    <img class="w-32 md:w-40" src="{{ badge.issue_info.skill_badge_image }}?w=180"
                          alt="{{ badge.issue_info.skill_name }}" />
                     <figcaption class="mt-2">
                         <p class="text-lg font-semibold">{{ badge.issue_info.skill_name }}</p>
@@ -32,18 +44,20 @@
                                 download
                         >
                             <em class="fa fa-download fa-fw" aria-hidden="true"></em>
-                            {{ 'Download badges'|trans }}
+                            {{ 'Download badge'|trans }}
                         </a>
 
-                        <button
-                                type="button"
+                        <a
+                                href="{{ badge.issue_info.badge_assertion }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 id="badge-export-button-{{ badge.issue_info.id }}"
                                 class="btn btn--success w-full block max-w-full text-center whitespace-normal break-words leading-snug"
                                 aria-label="{{ 'Export badge'|trans }}"
                         >
                             <em class="fa fa-external-link-square fa-fw" aria-hidden="true"></em>
                             {{ 'Export badge'|trans }}
-                        </button>
+                        </a>
                     </div>
                     {% if "display.hide_social_media_links"|api_get_setting == 'false' %}
                         <div class="mt-4 text-center">
@@ -173,11 +187,37 @@
     </div>
     {% if badge.allow_download_export %}
         <script>
-          $(function() {
-            $('#badge-export-button-{{ badge.issue_info.id }}').on("click", function(e) {
-              e.preventDefault()
-              OpenBadges.issue('{{ badge.issue_info.badge_assertion|json_encode() }}')
-            })
+          $(function () {
+            function tryCopyToClipboard(text) {
+              try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                  navigator.clipboard.writeText(text).catch(function () {
+                    // Ignore clipboard errors
+                  })
+                }
+              } catch (e) {
+                // Ignore clipboard errors
+              }
+            }
+
+            var assertionUrl = {{ badge.issue_info.badge_assertion|json_encode|raw }}
+
+              $('#badge-export-button-{{ badge.issue_info.id }}').on('click', function (e) {
+                tryCopyToClipboard(assertionUrl)
+
+                if (window.OpenBadges && typeof window.OpenBadges.issue === 'function') {
+                  e.preventDefault()
+
+                  try {
+                    window.OpenBadges.issue([assertionUrl])
+                  } catch (err) {
+                    console.warn('OpenBadges.issue failed. Falling back to assertion URL.', err)
+                    window.open(assertionUrl, '_blank', 'noopener,noreferrer')
+                  }
+
+                  return
+                }
+              })
           })
         </script>
     {% endif %}

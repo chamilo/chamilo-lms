@@ -253,19 +253,7 @@ if (false) {
     $wallMessagesPosted = SocialManager::getCountWallPostedMessages($userId);
     $data[] = [get_lang('Wall messages posted by him/herself'), $wallMessagesPosted];
 
-    //$friends = SocialManager::getCountFriends($userId);
-    //$data[] = [get_lang('Friends'), $friends];
-
-    //$countSent = SocialManager::getCountInvitationSent($userId);
-    //$data[] = [get_lang('Invitation sent'), $countSent];
-
-    //$countReceived = SocialManager::get_message_number_invitation_by_user_id($userId);
-    //$data[] = [get_lang('Invitation received'), $countReceived];
-
     $params['social'] = [
-        ///'friends' => $friends,
-      //  'invitation_sent' => $countSent,
-        //'invitation_received' => $countReceived,
         'messages_posted' => $wallMessagesPosted,
         'messages_sent' => $messagesSent,
         'messages_received' => $messagesReceived,
@@ -337,12 +325,6 @@ if (count($sessions) > 0) {
                 Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Overview')).'</a>'.
                 '<a href="'.$courseUrl.'">'.
                 Display::getMdiIcon(ToolIcon::COURSE_HOME, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course home')).'</a>';
-
-            /*if (!empty($my_course['status']) && STUDENT == $my_course['status']) {
-                $tools .= '<a
-                    href="user_information.php?action=unsubscribe_session_course&course_id='.$courseId.'&user_id='.$userId.'&id_session='.$sessionId.'">'.
-                    Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
-            }*/
 
             $timeSpent = api_time_to_hms(
                 Tracking::get_time_spent_on_the_course(
@@ -473,14 +455,6 @@ if (count($courseRelUserList) > 0) {
 
         $csvContent[] = array_map('strip_tags', $row);
         $data[] = $row;
-
-        /*$result = Tracking::getToolInformation(
-            $userId,
-            $courseInfo,
-            0
-        );
-        $courseToolInformationTotal .= $result['html'];
-        $csvContent = array_merge($csvContent, $result['array']);*/
     }
 
     $courseInformation = Display::return_sortable_table(
@@ -569,7 +543,6 @@ if (isset($_GET['action'])) {
             }
             header('Location: '.$currentUrl);
             exit;
-            break;
         case 'unsubscribe_session_course':
             $courseId = !empty($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
             $sessionId = !empty($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
@@ -582,14 +555,12 @@ if (isset($_GET['action'])) {
             Display::addFlash(Display::return_message(get_lang('User is now unsubscribed')));
             header('Location: '.$currentUrl);
             exit;
-            break;
         case 'export':
             Export::arrayToCsv(
                 $csvContent,
                 'user_information_'.$userId
             );
             exit;
-            break;
     }
 }
 
@@ -603,6 +574,14 @@ if (!empty($_SESSION['flash_message'])) {
 Display::display_header($tool_name);
 echo Display::toolbarAction('toolbar-user-information', [implode(PHP_EOL, $actions)]);
 echo $flashMessage;
+
+$achievedSkillsTitle = get_lang('Achieved skills');
+$viewBadgeLabel = get_lang('View badge');
+$defaultBadge = api_get_path(WEB_PATH).'img/icons/32/badges-default.png';
+$apiUserSkillsUrl = api_get_path(WEB_PATH).'api/users/'.$userId.'/skills';
+
+echo '<div class="space-y-8">';
+
 $fullUrlBig = UserManager::getUserPicture(
     $userId,
     USER_IMAGE_SIZE_BIG
@@ -682,22 +661,51 @@ $layoutTemplate = $tpl->get_template('admin/user_information.tpl');
 $content = $tpl->fetch($layoutTemplate);
 echo $content;
 
-echo Display::page_subheader(get_lang('Session list'), null, 'h3', ['class' => 'section-title']);
+// Sessions
+echo '<div class="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">';
+echo Display::page_subheader(get_lang('Session list'), null, 'h3', ['class' => 'section-title mb-4']);
+echo '<div class="overflow-x-auto">';
 echo $sessionInformation;
+echo '</div>';
+echo '</div>';
 
-echo Display::page_subheader(get_lang('Course list'), null, 'h3', ['class' => 'section-title']);
+// Courses
+echo '<div class="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">';
+echo Display::page_subheader(get_lang('Course list'), null, 'h3', ['class' => 'section-title mb-4']);
+echo '<div class="overflow-x-auto">';
 echo $courseInformation;
 echo $urlInformation;
+echo '</div>';
+echo '</div>';
 
-echo Tracking::displayUserSkills(
-    $userId,
-    0,
-    0
-);
+// Achieved skills (keep legacy output, enhance visually when possible)
+$legacySkillsHtml = Tracking::displayUserSkills($userId, 0, 0);
+
+echo '<div class="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">';
+echo '<div id="achieved-skills-section"'
+    .' data-api-url="'.htmlspecialchars($apiUserSkillsUrl, ENT_QUOTES).'"'
+    .' data-user-id="'.htmlspecialchars((string) $userId, ENT_QUOTES).'"'
+    .' data-default-badge="'.htmlspecialchars($defaultBadge, ENT_QUOTES).'"'
+    .' data-title="'.htmlspecialchars($achievedSkillsTitle, ENT_QUOTES).'"'
+    .' data-view-badge="'.htmlspecialchars($viewBadgeLabel, ENT_QUOTES).'"'
+    .' data-origin="'.htmlspecialchars($currentUrl, ENT_QUOTES).'"'
+    .'>';
+
+// Enhanced container (hidden until rendered)
+echo '<div id="achieved-skills-enhanced" class="hidden"></div>';
+
+// Legacy container (always rendered, can be hidden by JS after enhanced view is ready)
+echo '<div id="achieved-skills-legacy">'.$legacySkillsHtml.'</div>';
+
+echo '</div>';
+echo '</div>';
+
+// Careers
 if ('true' === api_get_setting('session.allow_career_users')) {
     $careers = UserManager::getUserCareers($userId);
     if (!empty($careers)) {
-        echo Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
+        echo '<div class="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">';
+        echo Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title mb-4']);
         $table = new HTML_Table(['class' => 'data_table']);
         $table->setHeaderContents(0, 0, get_lang('Career'));
         $row = 1;
@@ -705,8 +713,118 @@ if ('true' === api_get_setting('session.allow_career_users')) {
             $table->setCellContents($row, 0, $carerData['title']);
             $row++;
         }
-        echo $table->toHtml();
+        echo '<div class="overflow-x-auto">'.$table->toHtml().'</div>';
+        echo '</div>';
     }
 }
+
+// Close spacing wrapper
+echo '</div>';
+
+// Client-side enhancement: show badges grid using the API, keep legacy as fallback.
+echo '<script>
+(function () {
+  var root = document.getElementById("achieved-skills-section");
+  if (!root) return;
+
+  var apiUrl = root.getAttribute("data-api-url") || "";
+  var userId = root.getAttribute("data-user-id") || "";
+  var defaultBadge = root.getAttribute("data-default-badge") || "/img/icons/32/badges-default.png";
+  var titleText = root.getAttribute("data-title") || "Achieved skills";
+  var viewBadgeText = root.getAttribute("data-view-badge") || "View badge";
+  var enhanced = document.getElementById("achieved-skills-enhanced");
+  var legacy = document.getElementById("achieved-skills-legacy");
+
+  if (!apiUrl || !userId || !enhanced || !legacy) return;
+
+  var origin = window.location.pathname + window.location.search;
+
+  function normalizeImageUrl(url) {
+    if (!url || typeof url !== "string") return "";
+    if (url.indexOf("http://") === 0 || url.indexOf("https://") === 0 || url.indexOf("/") === 0) return url;
+    return "/" + url;
+  }
+
+  function safeId(value) {
+    if (value === null || value === undefined) return "";
+    return String(value);
+  }
+
+  function createEl(tag, className, text) {
+    var el = document.createElement(tag);
+    if (className) el.className = className;
+    if (text !== undefined && text !== null) el.textContent = text;
+    return el;
+  }
+
+  function buildGrid(skills) {
+    var container = createEl("div", "space-y-4");
+
+    var header = createEl("div", "flex items-center justify-between gap-3");
+    var title = createEl("h3", "text-lg font-semibold text-gray-900", titleText);
+    header.appendChild(title);
+    container.appendChild(header);
+
+    var grid = createEl("div", "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6");
+    skills.forEach(function (s) {
+      var id = safeId(s.id ?? s.skillId ?? s.skill_id);
+      var name = (s.name ?? s.title ?? "").toString();
+      var image = normalizeImageUrl(s.image ?? s.badge ?? s.illustrationUrl ?? "");
+      if (!image) image = defaultBadge;
+
+      var a = document.createElement("a");
+      a.className = "group flex flex-col items-center text-center p-3 rounded-2xl border border-gray-100 bg-white hover:bg-gray-15 hover:border-gray-200 transition";
+      a.title = name || "";
+      a.href = "/main/skills/issued_all.php?skill=" + encodeURIComponent(id) +
+        "&user=" + encodeURIComponent(userId) +
+        "&origin=" + encodeURIComponent(origin);
+
+      var badgeWrap = createEl("div", "w-16 h-16 sm:w-18 sm:h-18 flex items-center justify-center rounded-2xl bg-gray-15 border border-gray-100 shadow-sm overflow-hidden");
+
+      var img = document.createElement("img");
+      img.className = "w-12 h-12 sm:w-14 sm:h-14 object-contain";
+      img.loading = "lazy";
+      img.alt = name || "";
+      img.src = image;
+      img.onerror = function () {
+        if (img.src && img.src.indexOf(defaultBadge) === -1) {
+          img.src = defaultBadge;
+        }
+      };
+
+      badgeWrap.appendChild(img);
+
+      var nameEl = createEl("div", "mt-2 text-sm font-semibold text-gray-900 leading-snug line-clamp-2", name || "");
+      var hintEl = createEl("div", "mt-1 text-xs text-gray-600 group-hover:text-gray-700", viewBadgeText);
+
+      a.appendChild(badgeWrap);
+      a.appendChild(nameEl);
+      a.appendChild(hintEl);
+
+      grid.appendChild(a);
+    });
+
+    container.appendChild(grid);
+    return container;
+  }
+
+  fetch(apiUrl, { credentials: "same-origin" })
+    .then(function (res) {
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return res.json();
+    })
+    .then(function (data) {
+      if (!Array.isArray(data) || data.length === 0) return;
+
+      enhanced.innerHTML = "";
+      enhanced.appendChild(buildGrid(data));
+      enhanced.classList.remove("hidden");
+      legacy.classList.add("hidden");
+    })
+    .catch(function (err) {
+      console.warn("Unable to load achieved skills badges:", err);
+    });
+})();
+</script>';
 
 Display::display_footer();

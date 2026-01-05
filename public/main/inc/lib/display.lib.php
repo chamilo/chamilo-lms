@@ -709,13 +709,7 @@ class Display
             }
         }
 
-        // Special code to enable SVG - refs #7359 - Needs more work
-        // The code below does something else to "test out" SVG: for each icon,
-        // it checks if there is an SVG version. If so, it uses it.
-        // When moving this to production, the return_icon() calls should
-        // ask for the SVG version directly
-        $svgIcons = 'true';
-        if ('true' == $svgIcons && false == $return_only_path) {
+        if ($return_only_path) {
             $svgImage = substr($image, 0, -3).'svg';
             if (is_file($code_path.$theme.'svg/'.$svgImage)) {
                 $icon = $w_code_path.$theme.'svg/'.$svgImage;
@@ -736,7 +730,7 @@ class Display
         }
 
         $img = self::img($icon, $alt_text, $additional_attributes);
-        if (SHOW_TEXT_NEAR_ICONS == true && !empty($alt_text)) {
+        if (SHOW_TEXT_NEAR_ICONS && !empty($alt_text)) {
             if ($show_text) {
                 $img = "$img $alt_text";
             }

@@ -3380,6 +3380,20 @@ function api_is_allowed_to_edit(
         }
     }
 
+    // ---------------------------------------------------------------------
+    // Explicit student subscription guard (no session context).
+    // If the user is subscribed as a learner in the course, do NOT grant edit
+    // rights even if "current course teacher" roles are polluted/persisted.
+    // ---------------------------------------------------------------------
+    $courseCode = api_get_course_id();
+    $inCourse = !empty($courseCode) && $courseCode != -1;
+
+    if ($inCourse && empty($sessionId)) {
+        if (api_is_explicit_course_student(api_get_user_id(), api_get_course_int_id())) {
+            return false;
+        }
+    }
+
     $isCourseAdmin = api_is_course_admin();
     $isCoach = api_is_coach(0, null, $check_student_view);
 
@@ -3442,6 +3456,35 @@ function api_is_allowed_to_edit(
     }
 
     return $isAllowed;
+}
+
+/**
+ * UI/legacy safeguard: returns true if the user is explicitly subscribed as STUDENT
+ * in the current course (course_rel_user), regardless of Symfony/serialized roles.
+ *
+ * This is intentionally a low-level check to avoid polluted context roles.
+ */
+function api_is_explicit_course_student(?int $userId = null, ?int $courseIntId = null): bool
+{
+    $userId = $userId ?? api_get_user_id();
+    $courseIntId = $courseIntId ?? api_get_course_int_id();
+
+    if (empty($userId) || empty($courseIntId)) {
+        return false;
+    }
+
+    $studentStatus = defined('STUDENT') ? (int) STUDENT : 5;
+    $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $sql = "SELECT status
+            FROM $table
+            WHERE c_id = ".((int) $courseIntId)."
+              AND user_id = ".((int) $userId)."
+            LIMIT 1";
+
+    $res = Database::query($sql);
+    $row = Database::fetch_array($res, 'ASSOC');
+
+    return !empty($row) && (int) $row['status'] === $studentStatus;
 }
 
 /**

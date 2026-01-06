@@ -1262,5 +1262,6 @@
     "ex. {examplePassword}": "ad. {examplePassword}",
     "Blogs": "Blogak",
     "Blog": "Blog",
-    "Dropbox": "Dokumentuak partekatzeko kutxa"
+    "Dropbox": "Dokumentuak partekatzeko kutxa",
+    "Your browser does not support Javascript": "Zure nabigatzaileak ez du Javascript onartzen"
 }

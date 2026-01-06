@@ -81,7 +81,7 @@ class MoodleExport
         $fileExport->exportFiles($filesData, $tempDir);
 
         // Export sections of the course
-        $this->exportSections($tempDir);
+        $this->exportSections($tempDir, $activities);
 
         // Export all root XML files
         $this->exportRootXmlFiles($tempDir);
@@ -277,9 +277,10 @@ class MoodleExport
         $activities = $this->getActivities();
         $questionsData = [];
         foreach ($activities as $activity) {
-            if ($activity['modulename'] === 'quiz') {
+            if (($activity['modulename'] ?? '') === 'quiz') {
                 $quizExport = new QuizExport($this->course);
-                $quizData = $quizExport->getData($activity['id'], $activity['sectionid']);
+                $quizData = $quizExport->getData((int) $activity['id'], (int) $activity['sectionid']);
+                $quizData['moduleid'] = (int) $activity['moduleid'];
                 $questionsData[] = $quizData;
             }
         }
@@ -408,11 +409,22 @@ class MoodleExport
 
     /**
      * Get all sections from the course ordered by LP display_order.
+     * Uses the SAME activities list (and moduleid) as moodle_backup.xml.
      */
-    private function getSections(): array
+    private function getSections(?array $activities = null): array
     {
-        $sectionExport = new SectionExport($this->course);
         $sections = [];
+
+        // Compute activities once if not provided
+        if ($activities === null) {
+            $activities = $this->getActivities();
+        }
+
+        $activitiesBySection = $this->groupActivitiesBySection($activities);
+
+        // We only need SectionExport for metadata (name/summary/visible/timemodified),
+        // but it MUST reuse the precomputed activities to keep moduleid consistent.
+        $sectionExport = new SectionExport($this->course, $activitiesBySection);
 
         // Safety: if there is no learnpath resource, return only the general section
         $learnpaths = $this->course->resources[RESOURCE_LEARNPATH] ?? [];
@@ -453,335 +465,196 @@ class MoodleExport
      */
     private function getActivities(): array
     {
-        $activities   = [];
-        $glossaryAdded = false;
-
-        // -----------------------------------------------------------------
-        // 1) Build LP index: titles + display_order per section/type/resource
-        // -----------------------------------------------------------------
-        $lpIndex = [];
-        if (!empty($this->course->resources[RESOURCE_LEARNPATH])) {
-            foreach ($this->course->resources[RESOURCE_LEARNPATH] as $lp) {
-                $sid = (int) $lp->source_id;
-
-                foreach ($lp->items ?? [] as $it) {
-                    $type = $it['item_type'] ?? '';
-                    if ($type === 'student_publication') {
-                        $type = 'assign';
-                    } elseif ($type === 'link') {
-                        $type = 'url';
-                    } elseif ($type === 'survey') {
-                        $type = 'feedback';
-                    } elseif ($type === 'document') {
-                        $type = 'document';
-                    }
-
-                    $rid   = $it['path'] ?? '';
-                    $title = $it['title'] ?? '';
-                    $order = isset($it['display_order']) ? (int) $it['display_order'] : 0;
-
-                    $entry = [
-                        'title' => $title,
-                        'order' => $order,
-                    ];
-
-                    if (ctype_digit((string) $rid)) {
-                        $rid = (int) $rid;
-
-                        // If the same resource appears multiple times, keep the lowest order.
-                        if (!isset($lpIndex[$sid][$type]['id'][$rid])) {
-                            $lpIndex[$sid][$type]['id'][$rid] = $entry;
-                        } else {
-                            $existingOrder = (int) ($lpIndex[$sid][$type]['id'][$rid]['order'] ?? 0);
-                            if ($order > 0 && ($existingOrder === 0 || $order < $existingOrder)) {
-                                $lpIndex[$sid][$type]['id'][$rid]['order'] = $order;
-                            }
-                            // Keep the first title to avoid random renames.
-                        }
-                    } else {
-                        $rid = (string) $rid;
-
-                        if (!isset($lpIndex[$sid][$type]['path'][$rid])) {
-                            $lpIndex[$sid][$type]['path'][$rid] = $entry;
-                        } else {
-                            $existingOrder = (int) ($lpIndex[$sid][$type]['path'][$rid]['order'] ?? 0);
-                            if ($order > 0 && ($existingOrder === 0 || $order < $existingOrder)) {
-                                $lpIndex[$sid][$type]['path'][$rid]['order'] = $order;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // Helper: get title from LP index.
-        $titleFromLp = function (int $sectionId, string $moduleName, int $resourceId, string $fallback) use ($lpIndex) {
-            $type = in_array($moduleName, ['page', 'resource'], true) ? 'document' : $moduleName;
-
-            $entry = $lpIndex[$sectionId][$type]['id'][$resourceId] ?? null;
-            if (is_array($entry) && !empty($entry['title'])) {
-                return $entry['title'];
-            }
-
-            if ($type === 'assign') {
-                $entry = $lpIndex[$sectionId]['student_publication']['id'][$resourceId] ?? null;
-                if (is_array($entry) && !empty($entry['title'])) {
-                    return $entry['title'];
-                }
-            }
-
-            if ($type === 'document') {
-                $doc = \DocumentManager::get_document_data_by_id($resourceId, $this->course->code);
-                if (!empty($doc['path'])) {
-                    $p = (string) $doc['path'];
-                    foreach ([$p, 'document/'.$p, '/'.$p] as $cand) {
-                        $entry = $lpIndex[$sectionId]['document']['path'][$cand] ?? null;
-                        if (is_array($entry) && !empty($entry['title'])) {
-                            return $entry['title'];
-                        }
-                    }
-                }
-            }
-
-            return $fallback;
-        };
-
-        // Helper: get display_order from LP index.
-        $orderFromLp = function (int $sectionId, string $moduleName, int $resourceId) use ($lpIndex): int {
-            $type = in_array($moduleName, ['page', 'resource'], true) ? 'document' : $moduleName;
-
-            $entry = $lpIndex[$sectionId][$type]['id'][$resourceId] ?? null;
-            if (is_array($entry) && !empty($entry['order'])) {
-                return (int) $entry['order'];
-            }
-
-            if ($type === 'assign') {
-                $entry = $lpIndex[$sectionId]['student_publication']['id'][$resourceId] ?? null;
-                if (is_array($entry) && !empty($entry['order'])) {
-                    return (int) $entry['order'];
-                }
-            }
-
-            if ($type === 'document') {
-                $doc = \DocumentManager::get_document_data_by_id($resourceId, $this->course->code);
-                if (!empty($doc['path'])) {
-                    $p = (string) $doc['path'];
-                    foreach ([$p, 'document/'.$p, '/'.$p] as $cand) {
-                        $entry = $lpIndex[$sectionId]['document']['path'][$cand] ?? null;
-                        if (is_array($entry) && !empty($entry['order'])) {
-                            return (int) $entry['order'];
-                        }
-                    }
-                }
-            }
-
-            return 0;
-        };
-
-        // -----------------------------------------------------------------
-        // 2) "Documents" folder pseudo-activity (section 0)
-        // -----------------------------------------------------------------
+        $activities = [];
+        // "Documents" folder pseudo-activity (always in section 0)
         $activities[] = [
-            'id'        => ActivityExport::DOCS_MODULE_ID,
-            'sectionid' => 0,
-            'modulename'=> 'folder',
-            'moduleid'  => ActivityExport::DOCS_MODULE_ID,
-            'title'     => 'Documents',
-            'order'     => 0,
+            'id'         => ActivityExport::DOCS_MODULE_ID,
+            'sectionid'  => 0,
+            'modulename' => 'folder',
+            'moduleid'   => ActivityExport::DOCS_MODULE_ID,
+            'title'      => 'Documents',
+            'order'      => 0,
         ];
 
-        // -----------------------------------------------------------------
-        // 3) Loop over all course resources (original logic)
-        // -----------------------------------------------------------------
-        $htmlPageIds = [];
-        foreach ($this->course->resources as $resourceType => $resources) {
-            foreach ($resources as $resource) {
-                $exportClass = null;
-                $moduleName  = '';
-                $title       = '';
-                $id          = 0;
-                $sectionId   = 0;
+        // Build activities from LP items (one course module per LP item)
+        $learnpaths = $this->course->resources[RESOURCE_LEARNPATH] ?? [];
 
-                // QUIZ
-                if ($resourceType === RESOURCE_QUIZ && $resource->obj->iid > 0) {
-                    $exportClass = QuizExport::class;
-                    $moduleName  = 'quiz';
-                    $id          = (int) $resource->obj->iid;
-                    $title       = $resource->obj->title ?? '';
-                    $sectionId   = (new QuizExport($this->course))
-                        ->getSectionIdForActivity($id, $resourceType);
-                    $title       = $titleFromLp($sectionId, $moduleName, $id, $title);
-                }
-                // URL
-                elseif ($resourceType === RESOURCE_LINK && $resource->source_id > 0) {
-                    $exportClass = UrlExport::class;
-                    $moduleName  = 'url';
-                    $id          = (int) $resource->source_id;
-                    $title       = $resource->title ?? '';
-                    $sectionId   = (new UrlExport($this->course))
-                        ->getSectionIdForActivity($id, $resourceType);
-                    $title       = $titleFromLp($sectionId, $moduleName, $id, $title);
-                }
-                // GLOSSARY (only one)
-                elseif ($resourceType === RESOURCE_GLOSSARY && $resource->glossary_id > 0 && !$glossaryAdded) {
-                    $exportClass   = GlossaryExport::class;
-                    $moduleName    = 'glossary';
-                    $id            = 1;
-                    $title         = get_lang('Glossary');
-                    $sectionId     = 0;
-                    $glossaryAdded = true;
-                }
-                // FORUM
-                elseif ($resourceType === RESOURCE_FORUM && $resource->source_id > 0) {
-                    $exportClass = ForumExport::class;
-                    $moduleName  = 'forum';
-                    $id          = (int) $resource->obj->iid;
-                    $title       = $resource->obj->forum_title ?? '';
-                    $sectionId   = (new ForumExport($this->course))
-                        ->getSectionIdForActivity($id, $resourceType);
-                    $title       = $titleFromLp($sectionId, $moduleName, $id, $title);
-                }
-                // DOCUMENTS
-                elseif ($resourceType === RESOURCE_DOCUMENT && $resource->source_id > 0) {
-                    $document = \DocumentManager::get_document_data_by_id(
-                        $resource->source_id,
-                        $this->course->code
-                    );
-                    $ext = strtolower(pathinfo($document['path'] ?? '', PATHINFO_EXTENSION));
+        // Sort by LP display_order to respect c_lp order
+        usort($learnpaths, static function ($a, $b): int {
+            return (int)($a->display_order ?? 0) <=> (int)($b->display_order ?? 0);
+        });
 
-                    // HTML → Moodle "page"
-                    if ($ext === 'html' || $ext === 'htm') {
-                        $exportClass = PageExport::class;
-                        $moduleName  = 'page';
-                        $id          = (int) $resource->source_id;
-                        $title       = $document['title'] ?? '';
-                        $sectionId   = (new PageExport($this->course))
-                            ->getSectionIdForActivity($id, $resourceType);
-                        $title       = $titleFromLp($sectionId, $moduleName, $id, $title);
-                        $htmlPageIds[] = $id;
-                    }
+        foreach ($learnpaths as $lp) {
+            // Only "real" LPs
+            if ((int)($lp->lp_type ?? 0) !== 1) {
+                continue;
+            }
 
-                    // Other files → Moodle "resource" (but not if already exported as page)
-                    if ($resource->file_type === 'file'
-                        && !in_array($resource->source_id, $htmlPageIds, true)
-                    ) {
-                        $resourceExport = new ResourceExport($this->course);
-                        $sectionTmp     = $resourceExport
-                            ->getSectionIdForActivity((int) $resource->source_id, $resourceType);
+            $sectionId = (int)($lp->source_id ?? 0);
+            if ($sectionId <= 0 || empty($lp->items)) {
+                continue;
+            }
 
-                        if ($sectionTmp > 0) {
-                            $exportClass = ResourceExport::class;
-                            $moduleName  = 'resource';
-                            $id          = (int) $resource->source_id;
-                            $title       = $resource->title ?? '';
-                            $sectionId   = $sectionTmp;
-                            $title       = $titleFromLp($sectionId, $moduleName, $id, $title);
+            foreach ($lp->items as $it) {
+                $lpItemId = isset($it['id']) ? (int)$it['id'] : 0;
+                $itemType = (string)($it['item_type'] ?? '');
+                $path     = $it['path'] ?? null;
+                $title    = (string)($it['title'] ?? '');
+                $order    = isset($it['display_order']) ? (int)$it['display_order'] : 0;
+
+                // Map LP item_type to Moodle modulename
+                $moduleName = null;
+                $instanceId = null;
+
+                if ($itemType === 'quiz') {
+                    $moduleName = 'quiz';
+                    $instanceId = is_numeric($path) ? (int)$path : null;
+                } elseif ($itemType === 'link') {
+                    $moduleName = 'url';
+                    $instanceId = is_numeric($path) ? (int)$path : null;
+                } elseif ($itemType === 'student_publication') {
+                    $moduleName = 'assign';
+                    $instanceId = is_numeric($path) ? (int)$path : null;
+                } elseif ($itemType === 'survey') {
+                    $moduleName = 'feedback';
+                    $instanceId = is_numeric($path) ? (int)$path : null;
+                } elseif ($itemType === 'forum') {
+                    $moduleName = 'forum';
+                    $instanceId = is_numeric($path) ? (int)$path : null;
+                } elseif ($itemType === 'document') {
+                    $docId = is_numeric($path) ? (int)$path : 0;
+                    if ($docId > 0) {
+                        $doc = \DocumentManager::get_document_data_by_id($docId, $this->course->code);
+                        if (!empty($doc)) {
+                            $docPath = (string)($doc['path'] ?? '');
+                            $ext = strtolower(pathinfo($docPath, PATHINFO_EXTENSION));
+
+                            if ($ext === 'html' || $ext === 'htm') {
+                                $moduleName = 'page';
+                                $instanceId = $docId;
+                                if ($title === '') {
+                                    $title = (string)($doc['title'] ?? '');
+                                }
+                            } elseif (($doc['filetype'] ?? '') === 'file') {
+                                $moduleName = 'resource';
+                                $instanceId = $docId;
+                                if ($title === '') {
+                                    $title = (string)($doc['title'] ?? '');
+                                }
+                            }
                         }
                     }
                 }
-                // INTRODUCTION → Moodle "page"
-                elseif ($resourceType === RESOURCE_TOOL_INTRO
-                    && $resource->source_id === 'course_homepage'
-                ) {
-                    $exportClass = PageExport::class;
-                    $moduleName  = 'page';
-                    $id          = 0;
-                    $title       = get_lang('Introduction');
-                    $sectionId   = 0;
-                }
-                // ASSIGN
-                elseif ($resourceType === RESOURCE_WORK && $resource->source_id > 0) {
-                    $exportClass = AssignExport::class;
-                    $moduleName  = 'assign';
-                    $id          = (int) $resource->source_id;
-                    $title       = $resource->params['title'] ?? '';
-                    $sectionId   = (new AssignExport($this->course))
-                        ->getSectionIdForActivity($id, $resourceType);
-                    $title       = $titleFromLp($sectionId, $moduleName, $id, $title);
-                }
-                // FEEDBACK / SURVEY
-                elseif ($resourceType === RESOURCE_SURVEY && $resource->source_id > 0) {
-                    $exportClass = FeedbackExport::class;
-                    $moduleName  = 'feedback';
-                    $id          = (int) $resource->source_id;
-                    $title       = $resource->params['title'] ?? '';
-                    $sectionId   = (new FeedbackExport($this->course))
-                        ->getSectionIdForActivity($id, $resourceType);
-                    $title       = $titleFromLp($sectionId, $moduleName, $id, $title);
+
+                // Skip unsupported / invalid
+                if (empty($moduleName) || empty($instanceId)) {
+                    continue;
                 }
 
-                if ($exportClass && $moduleName) {
-                    $order = $orderFromLp($sectionId, $moduleName, $id);
+                // Generic unique course module id per LP occurrence
+                $moduleId = $this->resolveLpModuleId($moduleName, $lpItemId, (int)$instanceId);
 
-                    $activities[] = [
-                        'id'        => $id,
-                        'sectionid' => $sectionId,
-                        'modulename'=> $moduleName,
-                        'moduleid'  => $id,
-                        'title'     => $title,
-                        'order'     => $order,
-                    ];
-                }
+                $activities[] = [
+                    'id'         => (int)$instanceId,
+                    'sectionid'  => $sectionId,
+                    'modulename' => $moduleName,
+                    'moduleid'   => $moduleId,
+                    'title'      => $title !== '' ? $title : $moduleName,
+                    'order'      => $order,
+                ];
             }
         }
 
-        // -----------------------------------------------------------------
-        // 4) Sort activities per section by LP order (display_order)
-        // -----------------------------------------------------------------
-        if (!empty($activities)) {
-            $grouped   = [];
-            $seqBySec  = [];
+        // Add general section activities (items not in any LP)
+        $sectionExport = new SectionExport($this->course);
+        $generalActivities = $sectionExport->getActivitiesForGeneral();
 
-            foreach ($activities as $activity) {
-                $sid = (int) ($activity['sectionid'] ?? 0);
-
-                if (!isset($grouped[$sid])) {
-                    $grouped[$sid]  = [];
-                    $seqBySec[$sid] = 0;
-                }
-
-                $order = (int) ($activity['order'] ?? 0);
-                if ($order <= 0) {
-                    // Keep relative insertion order for items without LP order,
-                    // but make sure they come *after* the LP-ordered items.
-                    $seqBySec[$sid]++;
-                    $order = 1000 + $seqBySec[$sid];
-                }
-
-                $activity['_sort'] = $order;
-                $grouped[$sid][]   = $activity;
+        foreach ($generalActivities as $ga) {
+            // Avoid duplicating the Documents folder (we added it already)
+            if (($ga['modulename'] ?? '') === 'folder') {
+                continue;
             }
 
-            $activities = [];
-            foreach ($grouped as $sid => $list) {
-                usort(
-                    $list,
-                    static function (array $a, array $b): int {
-                        return $a['_sort'] <=> $b['_sort'];
-                    }
-                );
+            $activities[] = [
+                'id'         => (int)($ga['id'] ?? 0),
+                'sectionid'  => 0,
+                'modulename' => (string)($ga['modulename'] ?? ''),
+                'moduleid'   => (int)($ga['moduleid'] ?? 0),
+                'title'      => (string)($ga['name'] ?? ''),
+                'order'      => 0,
+            ];
+        }
 
-                foreach ($list as $item) {
-                    unset($item['order'], $item['_sort']);
-                    $activities[] = $item;
-                }
+        // Sort activities per section by LP display_order
+        $grouped  = [];
+        $seqBySec = [];
+
+        foreach ($activities as $a) {
+            $sid = (int)($a['sectionid'] ?? 0);
+            if (!isset($grouped[$sid])) {
+                $grouped[$sid] = [];
+                $seqBySec[$sid] = 0;
+            }
+
+            $ord = (int)($a['order'] ?? 0);
+            if ($ord <= 0) {
+                $seqBySec[$sid]++;
+                $ord = 1000 + $seqBySec[$sid];
+            }
+
+            $a['_sort'] = $ord;
+            $grouped[$sid][] = $a;
+        }
+
+        $sorted = [];
+        foreach ($grouped as $sid => $list) {
+            usort($list, static fn(array $x, array $y): int => $x['_sort'] <=> $y['_sort']);
+            foreach ($list as $x) {
+                unset($x['_sort'], $x['order']);
+                $sorted[] = $x;
             }
         }
 
-        return $activities;
+        return $sorted;
     }
 
     /**
      * Export the sections of the course.
      */
-    private function exportSections(string $exportDir): void
+    private function exportSections(string $exportDir, array $activities): void
     {
-        $sections = $this->getSections();
+        $sections = $this->getSections($activities);
+        $activitiesBySection = $this->groupActivitiesBySection($activities);
+
+        // Reuse ONE instance to keep any internal caches stable
+        $sectionExport = new SectionExport($this->course, $activitiesBySection);
 
         foreach ($sections as $section) {
-            $sectionExport = new SectionExport($this->course);
-            $sectionExport->exportSection($section['id'], $exportDir);
+            $sectionExport->exportSection((int) $section['id'], $exportDir);
         }
+    }
+
+    /**
+     * Convert MoodleExport::getActivities() output into the structure SectionExport expects.
+     * Ensures section.xml sequence uses the same moduleid as moodle_backup.xml.
+     */
+    private function groupActivitiesBySection(array $activities): array
+    {
+        $bySection = [];
+
+        foreach ($activities as $a) {
+            $sid = (int) ($a['sectionid'] ?? 0);
+
+            $bySection[$sid][] = [
+                'id'        => (int) ($a['id'] ?? 0),
+                'moduleid'  => (int) ($a['moduleid'] ?? 0),
+                'modulename'=> (string) ($a['modulename'] ?? ''),
+                'name'      => (string) ($a['title'] ?? ''),
+                'sectionid' => $sid,
+            ];
+        }
+
+        return $bySection;
     }
 
     /**
@@ -1127,5 +1000,23 @@ class MoodleExport
         $type = $this->mapToLpItemType($moduleName);
         $rid  = (string) $resourceId;
         return $idx[$sectionId][$type][$rid] ?? $fallback;
+    }
+
+    /**
+     * Generic resolver for Moodle course module id from an LP item occurrence.
+     * Keep folder/glossary stable (if you treat glossary as singleton).
+     */
+    private function resolveLpModuleId(string $moduleName, int $lpItemId, int $fallback): int
+    {
+        if ($lpItemId <= 0) {
+            return $fallback;
+        }
+
+        // Keep special/singleton modules stable if needed
+        if (in_array($moduleName, ['folder', 'glossary'], true)) {
+            return $fallback;
+        }
+
+        return 900000000 + $lpItemId;
     }
 }

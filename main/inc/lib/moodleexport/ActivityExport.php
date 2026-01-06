@@ -14,7 +14,7 @@ use Exception;
 abstract class ActivityExport
 {
     protected $course;
-    public const DOCS_MODULE_ID = 1000000;
+    public const DOCS_MODULE_ID = 0;
 
     public function __construct($course)
     {

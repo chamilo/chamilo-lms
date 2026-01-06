@@ -27,9 +27,6 @@ exit;
 // Change this to the absolute path to chamilo root folder if you move the script out of tests/scripts
 $chamiloRoot = __DIR__.'/../..';
 
-// Set to true in order to get a trace of changes made by this script
-$debug = false;
-
 // Set to test mode by default to only show the output, put this test variable to 0 to enable creation, modificaction and deletion of users
 $test = 1;
 
@@ -46,6 +43,9 @@ $anonymizeUserAccountsDisbaledFor3Years = false;
 // List of username of accounts that should not be disabled or deleted if not present in LDAP 
 // For exemple the first admin and the anonymous user that has no username ('')
 //$usernameListNotToTouchEvenIfNotInLDAP = ['admin','','test'];
+if (!isset($usernameListNotToTouchEvenIfNotInLDAP)){
+     $usernameListNotToTouchEvenIfNotInLDAP = [];
+}
 
 // List of LDAP attributes that are not in extldap_user_correspondance but are needed in this script
 //$extraLdapAttributes[0][] = 'description';
@@ -72,12 +72,14 @@ require_once $chamiloRoot.'/app/config/auth.conf.php';
 require_once $chamiloRoot.'/main/inc/lib/database.constants.inc.php';
 require_once $chamiloRoot.'/main/auth/external_login/ldap.inc.php';
 
+// Set to true in order to get a trace of changes made by this script
+$debug = false;
+
 ini_set('memory_limit', -1);
 
 // Retreive information from $extldap_user_correspondance and extra fields
 // into $tableFields, $extraFields, $allFields and $ldapAttributes
 
-$generalTableFieldMap = $extldap_user_correspondance;
 $multipleUrlLDAPConfig = false;
 $allLdapUsers = [];
 const EXTRA_ARRAY_KEY = 'extra';
@@ -106,6 +108,7 @@ if (api_is_multiple_url_enabled()) {
 }
 
 if (!$multipleUrlLDAPConfig) {
+    $generalTableFieldMap = $extldap_user_correspondance;
     $accessUrls[0]['id'] = 0;
     $generalTableFieldMap[0] = $generalTableFieldMap;
 }
@@ -121,7 +124,9 @@ foreach ($accessUrls as $accessUrl) {
     $_configuration['access_url'] = $accessUrlId;
     $extldap_config[$accessUrlId] = api_get_configuration_value('extldap_config');
     $generalTableFieldMap[$accessUrlId] = $extldap_user_correspondance[$accessUrlId] = api_get_configuration_value('extldap_user_correspondance');
-    $ldapAttributes = $extraLdapAttributes[$accessUrlId];
+    if (isset($extraLdapAttributes[$accessUrlId])) {
+        $ldapAttributes = $extraLdapAttributes[$accessUrlId];
+    }
     if (array_key_exists($accessUrlId, $generalTableFieldMap) && is_array($generalTableFieldMap[$accessUrlId])) {
         $tableFieldMap = $generalTableFieldMap[$accessUrlId];
         if (array_key_exists(EXTRA_ARRAY_KEY, $tableFieldMap) and is_array($tableFieldMap[EXTRA_ARRAY_KEY])) {

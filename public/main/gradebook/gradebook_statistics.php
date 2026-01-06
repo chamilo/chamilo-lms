@@ -48,7 +48,9 @@ $displays = $displayScore->get_custom_score_display_settings();
 
 if (!$displayScore->is_custom() || empty($displays)) {
     if (api_is_platform_admin() || api_is_course_admin()) {
+        echo '<div class="tw-gradebook-edit-container mx-auto w-full mt-4 px-4 sm:px-4 lg:px-4">';
         echo Display::return_message(get_lang('Please enable Skills ranking'), 'error', false);
+        echo '</div>';
     }
 } else {
     $allresults = Result::load(null, null, $eval->get_id());
@@ -104,6 +106,8 @@ if (!$displayScore->is_custom() || empty($displays)) {
         $counter++;
     }
     $html .= '</table>';
+    echo '<div class="tw-gradebook-edit-container mx-auto w-full mt-4 px-4 sm:px-4 lg:px-4">';
     echo $html;
+    echo '</div>';
 }
 Display :: display_footer();

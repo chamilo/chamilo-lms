@@ -1262,5 +1262,6 @@
     "ex. {examplePassword}": "z. B. {examplePassword}",
     "Blogs": "Projekte",
     "Blog": "Projekt",
-    "Dropbox": "Dateikiste"
+    "Dropbox": "Dateikiste",
+    "Your browser does not support Javascript": "Ihr Browser unterst\u00fctzt kein JavaScript"
 }

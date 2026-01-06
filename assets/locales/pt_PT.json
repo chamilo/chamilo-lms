@@ -1262,5 +1262,6 @@
     "ex. {examplePassword}": "ex. {examplePassword}",
     "Blogs": "Blogs",
     "Blog": "Blog",
-    "Dropbox": "Caixa de entrega"
+    "Dropbox": "Caixa de entrega",
+    "Your browser does not support Javascript": "Seu navegador n\u00e3o suporta Javascript"
 }

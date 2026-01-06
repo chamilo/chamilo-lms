@@ -1253,5 +1253,6 @@
     "ex. {examplePassword}": "t.d. {examplePassword}",
     "Blogs": "Bloggar",
     "Blog": "Bloggur",
-    "Dropbox": "Dropbox"
+    "Dropbox": "Dropbox",
+    "Your browser does not support Javascript": "T\u00edn kaga st\u00f8ttar ikki Javascript"
 }

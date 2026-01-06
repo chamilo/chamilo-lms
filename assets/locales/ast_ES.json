@@ -1262,5 +1262,6 @@
     "ex. {examplePassword}": "ex. {examplePassword}",
     "Blogs": "Blogues",
     "Blog": "Blog",
-    "Dropbox": "Compartir documentos"
+    "Dropbox": "Compartir documentos",
+    "Your browser does not support Javascript": "El to navegador nun soporta Javascript"
 }

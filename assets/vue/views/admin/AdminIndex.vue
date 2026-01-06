@@ -113,7 +113,7 @@
       :description="t('Learn more about Chamilo and its use, official references links')"
       :editable="blockChamilo.editable"
       :items="blockChamilo.items"
-      icon="admin-settings"
+      icon="promotion"
       title="Chamilo.org"
     />
 
@@ -141,7 +141,7 @@
       :id="blockHealthCheck.id"
       :items="blockHealthCheck.items"
       :title="t('Health check')"
-      icon="multiple-marked"
+      icon="health-check"
     />
 
     <div
@@ -149,7 +149,7 @@
       class="admin-index__block-container block-admin-version"
     >
       <div class="admin-index__block">
-        <h4 v-t="'Version check'" />
+        <h4><i class="mdi mdi-checkbox-multiple-marked text-xl" /> {{t('Version check')}}</h4>
 
         <div
           v-if="blockVersionStatusEl"
@@ -214,7 +214,7 @@
       class="admin-index__block-container block-admin-support"
     >
       <div class="admin-index__block">
-        <h4 v-t="'Professional support'" />
+        <h4><i class="mdi mdi-face-agent text-xl" /> {{t('Professional support')}}</h4>
 
         <div
           v-if="blockSupportStatusEl"
@@ -240,7 +240,7 @@
       class="admin-index__block-container block-admin-news"
     >
       <div class="admin-index__block">
-        <h4 v-t="'News from Chamilo'" />
+        <h4><i class="mdi mdi-bullhorn text-xl" /> {{t('News from Chamilo')}}</h4>
 
         <div
           v-if="blockNewsStatusEl"
@@ -268,6 +268,7 @@ import AdminBlock from "../../components/admin/AdminBlock"
 import { useSecurityStore } from "../../store/securityStore"
 
 import { useIndexBlocks } from "../../composables/admin/indexBlocks"
+import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 
 const { t } = useI18n()
 

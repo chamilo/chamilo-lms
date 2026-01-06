@@ -73,5 +73,7 @@ $interbreadcrumb[] = [
 ];
 Display::display_header(get_lang('Grade learners'));
 DisplayGradebook::display_header_result($evaluation[0], null, 0, 0);
+echo '<div class="tw-gradebook-edit-container mx-auto w-full px-4 sm:px-4 lg:px-4">';
 echo $table;
+echo '</div>';
 Display::display_footer();

@@ -62,6 +62,7 @@ class Rest extends WebService
     public const GET_COURSE_WORKS = 'course_works';
     public const GET_COURSE_EXERCISES = 'course_exercises';
     public const GET_COURSES_DETAILS_BY_EXTRA_FIELD = 'courses_details_by_extra_field';
+    public const GET_COURSE_BY_CODE = 'course_details_by_code';
 
     public const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
 
@@ -496,6 +497,27 @@ class Rest extends WebService
         }
 
         return $data;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getCourseByCode(string $q, int $sessionId = 0): array
+    {
+        if (!api_is_teacher() && !api_is_platform_admin()) {
+            self::throwNotAllowedException();
+        }
+
+        if (strlen($q) < 3) {
+            throw new Exception(get_lang('TooShort'));
+        }
+
+        $courseList = CourseManager::searchCourse($q, $sessionId);
+
+        return array_map(
+            fn($course) => api_get_course_info_by_id($course['id']),
+            $courseList
+        );
     }
 
     /**

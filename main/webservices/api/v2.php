@@ -230,6 +230,13 @@ try {
             Event::addEvent(LOG_WS.$action, 'username', $username);
             $restApi->viewCourseHome();
             break;
+        case REST::GET_COURSE_BY_CODE:
+            $courses = $restApi->getCourseByCode(
+                $httpRequest->query->get('q'),
+                $httpRequest->query->getInt('session_id')
+            );
+            $restResponse->setData($courses);
+            break;
         case Rest::GET_COURSE_INFO:
             Event::addEvent(LOG_WS.$action, 'course_id', (int) $_POST['course']);
             $courseInfo = $restApi->getCourseInfo();

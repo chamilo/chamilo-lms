@@ -7514,4 +7514,52 @@ class CourseManager
         $courseFieldValue = new ExtraFieldValue('course');
         $courseFieldValue->saveFieldValues($params);
     }
+
+    public static function searchCourse(string $searchTerm, ?int $sessionId = null): array
+    {
+        if (!empty($sessionId)) {
+            //if session is defined, lets find only courses of this session
+            return SessionManager::get_course_list_by_session_id(
+                $sessionId,
+                $searchTerm
+            );
+        }
+
+        //if session is not defined lets search all courses STARTING with $searchTerm
+        //TODO change this function to search not only courses STARTING with $searchTerm
+        if (api_is_platform_admin()) {
+            return CourseManager::get_courses_list(
+                0,
+                0,
+                'title',
+                'ASC',
+                -1,
+                $searchTerm,
+                null,
+                true
+            );
+        }
+
+        if (api_is_teacher()) {
+            $courseList = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id(), $searchTerm);
+            $category = api_get_configuration_value('course_category_code_to_use_as_model');
+
+            if (!empty($category)) {
+                $alreadyAdded = [];
+                if (!empty($courseList)) {
+                    $alreadyAdded = array_column($courseList, 'id');
+                }
+                $coursesInCategory = CourseCategory::getCoursesInCategory($category, $searchTerm);
+                foreach ($coursesInCategory as $course) {
+                    if (!in_array($course['id'], $alreadyAdded)) {
+                        $courseList[] = $course;
+                    }
+                }
+            }
+
+            return $courseList;
+        }
+
+        return [];
+    }
 }

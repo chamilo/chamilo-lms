@@ -145,43 +145,10 @@ switch ($action) {
         break;
     case 'search_course':
         if (api_is_teacher() || api_is_platform_admin()) {
-            if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
-                //if session is defined, lets find only courses of this session
-                $courseList = SessionManager::get_course_list_by_session_id(
-                    $_GET['session_id'],
-                    $_GET['q']
-                );
-            } else {
-                //if session is not defined lets search all courses STARTING with $_GET['q']
-                //TODO change this function to search not only courses STARTING with $_GET['q']
-                if (api_is_platform_admin()) {
-                    $courseList = CourseManager::get_courses_list(
-                        0,
-                        0,
-                        'title',
-                        'ASC',
-                        -1,
-                        $_GET['q'],
-                        null,
-                        true
-                    );
-                } elseif (api_is_teacher()) {
-                    $courseList = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id(), $_GET['q']);
-                    $category = api_get_configuration_value('course_category_code_to_use_as_model');
-                    if (!empty($category)) {
-                        $alreadyAdded = [];
-                        if (!empty($courseList)) {
-                            $alreadyAdded = array_column($courseList, 'id');
-                        }
-                        $coursesInCategory = CourseCategory::getCoursesInCategory($category, $_GET['q']);
-                        foreach ($coursesInCategory as $course) {
-                            if (!in_array($course['id'], $alreadyAdded)) {
-                                $courseList[] = $course;
-                            }
-                        }
-                    }
-                }
-            }
+            $courseList = CourseManager::searchCourse(
+                $_REQUEST['q'],
+                isset($_GET['session_id']) ? (int) $_GET['session_id']: 0
+            );
 
             $results = [];
             if (empty($courseList)) {

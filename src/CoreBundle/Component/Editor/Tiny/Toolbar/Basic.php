@@ -75,7 +75,7 @@ class Basic extends Toolbar
             $candidates[] = 'ckeditor_vimeo_embed';
         }
 
-        if ('true' === api_get_setting('editor.ck_editor_block_image_copy_paste')) {
+        if ('true' === api_get_setting('editor.editor_block_image_copy_paste')) {
             $candidates[] = 'blockimagepaste';
         }
 

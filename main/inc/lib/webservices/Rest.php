@@ -241,12 +241,7 @@ class Rest extends WebService
         }
     }
 
-    /**
-     * @param string $encoded
-     *
-     * @return array
-     */
-    public static function decodeParams($encoded)
+    public static function decodeParams(string $encoded): array
     {
         return json_decode($encoded);
     }

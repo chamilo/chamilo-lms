@@ -25,38 +25,31 @@ $httpRequest = HttpRequest::createFromGlobals();
 
 $jsonContent = 'application/json' === $httpRequest->headers->get('Content-Type')
     ? json_decode($httpRequest->getContent(), true)
-    : null;
+    : [];
 
-if ($jsonContent) {
-    foreach ($jsonContent as $key => $value) {
-        $value = Security::remove_XSS($value);
+foreach ($jsonContent as $key => $value) {
+    $value = Security::remove_XSS($value);
 
-        $httpRequest->query->set($key, $value);
-        $httpRequest->request->set($key, $value);
-        $httpRequest->overrideGlobals();
+    $httpRequest->query->set($key, $value);
+    $httpRequest->request->set($key, $value);
+    $httpRequest->overrideGlobals();
+}
+
+if ($hash = $httpRequest->query->get('hash')) {
+    foreach (Rest::decodeParams($hash) as $key => $value) {
+        $httpRequest->query->set($key, Security::remove_XSS($value));
     }
 }
 
-$hash = $httpRequest->query->get('hash');
-
-if ($hash) {
-    $hashParams = Rest::decodeParams($hash);
-    if (!empty($hashParams)) {
-        foreach ($hashParams as $key => $value) {
-            $httpRequest->query->set($key, Security::remove_XSS($value));
-        }
-    }
-}
-
-$action = $httpRequest->query->get('action') ?: $httpRequest->request->get('action');
+$action = $httpRequest->query->get('action', $httpRequest->request->get('action'));
 $username = Security::remove_XSS(
-    $httpRequest->query->get('username') ?: $httpRequest->request->get('username')
+    $httpRequest->query->get('username', $httpRequest->request->get('username'))
 );
 $apiKey = Security::remove_XSS(
-    $httpRequest->query->get('api_key') ?: $httpRequest->request->get('api_key')
+    $httpRequest->query->get('api_key', $httpRequest->request->get('api_key'))
 );
-$course = $httpRequest->query->getInt('course') ?: $httpRequest->request->getInt('course');
-$session = $httpRequest->query->getInt('session') ?: $httpRequest->request->getInt('session');
+$course = $httpRequest->query->getInt('course', $httpRequest->request->getInt('course'));
+$session = $httpRequest->query->getInt('session', $httpRequest->request->getInt('session'));
 
 $restResponse = new RestResponse();
 

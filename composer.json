@@ -1,0 +1,202 @@
+{
+    "name": "chamilo/chamilo-lms",
+    "description": "E-learning and collaboration software",
+    "type": "project",
+    "homepage": "http://www.chamilo.org",
+    "license": "GPL-3.0",
+    "support": {
+        "docs": "https://docs.chamilo.org/",
+        "forum": "https://forum.chamilo.org/",
+        "issues": "https://github.com/chamilo/chamilo-lms/issues",
+        "source": "https://github.com/chamilo/chamilo-lms"
+    },
+    "autoload": {
+        "psr-4": {
+            "Application\\": "app/",
+            "Chamilo\\": "src/Chamilo/"
+        },
+        "classmap": [
+            "main/admin",
+            "main/auth",
+            "main/course_description",
+            "main/cron/lang",
+            "main/dropbox",
+            "main/exercise",
+            "main/gradebook/lib",
+            "main/inc/lib",
+            "main/inc/lib/hook",
+            "main/install",
+            "main/lp",
+            "main/survey",
+	    "main/common_cartridge/export",
+	    "main/common_cartridge/import",
+	    "plugin"
+        ]
+    },
+    "require": {
+        "php": "^7.4",
+        "ext-curl": "*",
+        "ext-dom": "*",
+        "ext-fileinfo": "*",
+        "ext-gd": "*",
+        "ext-intl": "*",
+        "ext-json": "*",
+        "ext-libxml": "*",
+        "ext-mbstring": "*",
+        "ext-xml": "*",
+        "ext-zip": "*",
+        "ext-zlib": "*",
+        "angelfqc/vimeo-api": "2.0.6",
+        "apereo/phpcas": "^1.6",
+        "chamilo/pclzip": "~2.8",
+        "clue/graph": "~0.9.0",
+        "culqi/culqi-php": "1.3.4",
+        "ddeboer/data-import": "@stable",
+        "doctrine/data-fixtures": "~1.0@dev",
+        "doctrine/dbal": "~2.5",
+        "doctrine/migrations": "~1.0@dev",
+        "doctrine/orm": "~2.5",
+        "emojione/emojione": "1.3.0",
+        "endroid/qr-code": "2.5.*",
+        "enshrined/svg-sanitize": "^0.16.0",
+        "essence/essence": "2.6.1",
+        "ezyang/htmlpurifier": "~4.9",
+        "facebook/graph-sdk": "^5.7",
+        "firebase/php-jwt": "~5.0",
+        "gedmo/doctrine-extensions": "~2.3",
+        "graphp/algorithms": "~0.8.0",
+        "graphp/graphviz": "~0.2.0",
+        "guzzlehttp/guzzle": "~6.0",
+        "h5p/h5p-core": "*",
+        "imagine/imagine": "0.6.3",
+        "ircmaxell/password-compat": "~1.0.4",
+        "jbroadway/urlify": "1.1.0-stable",
+        "jeroendesloovere/vcard": "~1.7",
+        "jimmiw/php-time-ago": "0.4.15",
+        "kigkonsult/icalcreator": "2.24",
+        "knplabs/doctrine-behaviors": "~1.1",
+        "knplabs/gaufrette": "~0.3",
+        "knplabs/knp-components": "~1.3",
+        "league/csv": "~8.0",
+        "media-alchemyst/media-alchemyst": "~0.5",
+        "michelf/php-markdown": "~1.7",
+        "monolog/monolog": "~1.0",
+        "mpdf/mpdf": "^8.0",
+        "ocramius/proxy-manager": "~1.0|2.0.*",
+        "onelogin/php-saml": "^3.0",
+        "paragonie/random-lib": "2.0.0",
+        "patchwork/utf8": "~1.2",
+        "php-ffmpeg/php-ffmpeg": "0.5.1",
+        "php-http/guzzle6-adapter": "^2.0",
+        "php-xapi/client": "0.7.x-dev",
+        "php-xapi/repository-api": "dev-master as 0.3.1",
+        "php-xapi/repository-doctrine": "dev-master",
+        "php-xapi/symfony-serializer": "2.1.0 as 2.0",
+        "phpmailer/phpmailer": "~6.1",
+        "phpoffice/phpexcel": "~1.8",
+        "phpoffice/phpword": "~0.14",
+        "phpseclib/phpseclib": "^2.0",
+        "robrichards/xmlseclibs": "3.0.*",
+        "sabre/vobject": "~3.1",
+        "sonata-project/admin-bundle": "~3.1|~4.0",
+        "sonata-project/core-bundle": "~3.1|~4.0",
+        "sonata-project/user-bundle": "~3.0|~4.0",
+        "stripe/stripe-php": "*",
+        "studio-42/elfinder": "2.1.*",
+        "sunra/php-simple-html-dom-parser": "~1.5.0",
+        "sylius/attribute": "0.13.0",
+        "sylius/translation": "0.13.0",
+        "symfony/console": "~3.0|~4.0",
+        "symfony/doctrine-bridge": "~2.8",
+        "symfony/dom-crawler": "~3.4|~4.0",
+        "symfony/filesystem": "~3.0|~4.0",
+        "symfony/http-foundation": "~2.8|~3.0",
+        "symfony/security": "~3.0|~4.0",
+        "symfony/serializer": "~3.0|~4.0",
+        "symfony/validator": "~3.0|~4.0",
+        "symfony/yaml": "~3.0|~4.0",
+        "szymach/c-pchart": "~3.0",
+        "thenetworg/oauth2-azure": "^1.4",
+        "twig/extensions": "~1.0",
+        "twig/twig": "1.*",
+        "webit/eval-math": "1.0.1",
+        "yuloh/bccomp-polyfill": "dev-master",
+	    "packbackbooks/lti-1p3-tool": "1.1.1.x-dev",
+        "zendframework/zend-config": "~3.0",
+        "zendframework/zend-feed": "~2.6|^3.0",
+        "zendframework/zend-http": "~2.6|^3.0",
+        "zendframework/zend-soap": "~2.6|^3.0"
+    },
+    "require-dev": {
+        "behat/behat": "~3.5",
+        "behat/mink": "1.7.1",
+        "behat/mink-extension": "*",
+        "behat/mink-goutte-driver": "*",
+        "behat/mink-selenium2-driver": "*",
+        "phpunit/phpunit": "*"
+    },
+    "scripts": {
+        "pre-install-cmd": [
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
+        ],
+        "pre-update-cmd": [
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
+        ],
+        "post-install-cmd": [
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles",
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::generateDoctrineProxies"
+        ],
+        "post-update-cmd": [
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles",
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::generateDoctrineProxies"
+        ],
+        "update-css": "Chamilo\\CoreBundle\\Composer\\ScriptHandler::updateCss"
+    },
+    "extra": {
+        "asset-installer-paths": {
+            "bower-asset-library": "web/assets/"
+        },
+        "branch-alias": {
+            "dev-master": "1.11.x-dev"
+        },
+        "incenteev-parameters": {
+            "file": "app/config/parameters.yml"
+        },
+        "symfony-app-dir": "app",
+        "symfony-assets-install": "relative",
+        "symfony-bin-dir": "bin",
+        "symfony-tests-dir": "tests",
+        "symfony-web-dir": "web"
+    },
+    "repositories": [
+        {
+            "type": "github",
+            "url": "https://github.com/AngelFQC/vimeo.php.git",
+            "no-api": true
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/AngelFQC/xapi-model.git",
+            "no-api": true
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/AngelFQC/xapi-repository-doctrine.git",
+            "no-api": true
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/AngelFQC/xapi-symfony-serializer.git",
+            "no-api": true
+        },
+	    {
+            "type": "github",
+            "url": "https://github.com/chamilo/lti-1-3-php-library.git",
+            "no-api": true
+        }
+    ],
+    "config": {
+        "sort-packages": true,
+        "component-dir": "web/assets"
+    }
+}

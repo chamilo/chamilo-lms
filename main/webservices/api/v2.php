@@ -568,10 +568,16 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::GET_USER_INFO_FROM_USERNAME:
-            if (empty($_POST['loginname'])) {
+            $loginname = trim($httpRequest->request->get('loginname'));
+            if (empty($loginname)) {
                 throw new Exception(get_lang('NoData'));
             }
-            $item = api_get_user_info_from_username($_POST['loginname']);
+            $item = api_get_user_info_from_username($loginname);
+
+            if (!$item) {
+                throw new Exception(get_lang('NoUser'));
+            }
+
             $userInfo = [
                 'id' => $item['user_id'],
                 'firstname' => $item['firstname'],
@@ -583,7 +589,7 @@ try {
             Event::addEvent(
                 LOG_WS.$action,
                 'username',
-                Database::escape_string($_POST['loginname'])
+                Database::escape_string($loginname)
             );
             $restResponse->setData($userInfo);
             break;

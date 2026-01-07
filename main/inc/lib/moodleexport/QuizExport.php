@@ -49,19 +49,23 @@ class QuizExport extends ActivityExport
      */
     public function getData(int $quizId, int $sectionId): array
     {
-        $quizResources = $this->course->resources[RESOURCE_QUIZ];
+        $quizResources = $this->course->resources[RESOURCE_QUIZ] ?? [];
 
         foreach ($quizResources as $quiz) {
             if ($quiz->obj->iid == -1) {
                 continue;
             }
-
-            if ($quiz->obj->iid == $quizId) {
+            if ((int) $quiz->obj->iid === $quizId) {
                 $contextid = $quiz->obj->c_id;
+
+                $name = $quiz->obj->title ?? '';
+                if ($sectionId > 0) {
+                    $name = $this->lpItemTitle($sectionId, RESOURCE_QUIZ, $quizId, $name);
+                }
 
                 return [
                     'id' => $quiz->obj->iid,
-                    'name' => $quiz->obj->title,
+                    'name' => $name,
                     'intro' => $quiz->obj->description,
                     'timeopen' => $quiz->obj->start_time ?? 0,
                     'timeclose' => $quiz->obj->end_time ?? 0,
@@ -105,6 +109,7 @@ class QuizExport extends ActivityExport
                     'completionpass' => $quiz->obj->completionpass ?? 0,
                     'completionminattempts' => $quiz->obj->completionminattempts ?? 0,
                     'allowofflineattempts' => $quiz->obj->allowofflineattempts ?? 0,
+                    'navmethod' => $quiz->obj->navmethod ?? 'free',
                     'users' => [],
                     'files' => [],
                 ];

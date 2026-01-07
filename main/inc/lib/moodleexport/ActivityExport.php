@@ -14,6 +14,7 @@ use Exception;
 abstract class ActivityExport
 {
     protected $course;
+    public const DOCS_MODULE_ID = 0;
 
     public function __construct($course)
     {
@@ -27,15 +28,44 @@ abstract class ActivityExport
     abstract public function export($activityId, $exportDir, $moduleId, $sectionId);
 
     /**
-     * Get the section ID for a given activity ID.
+     * Get the section ID (learnpath source_id) for a given activity.
      */
     public function getSectionIdForActivity(int $activityId, string $itemType): int
     {
+        if (empty($this->course->resources[RESOURCE_LEARNPATH])) {
+            return 0;
+        }
+
         foreach ($this->course->resources[RESOURCE_LEARNPATH] as $learnpath) {
+            if (empty($learnpath->items)) {
+                continue;
+            }
+
             foreach ($learnpath->items as $item) {
-                $item['item_type'] = $item['item_type'] === 'student_publication' ? 'work' : $item['item_type'];
-                if ($item['item_type'] == $itemType && $item['path'] == $activityId) {
-                    return $learnpath->source_id;
+                $normalizedType = $item['item_type'] === 'student_publication'
+                    ? 'work'
+                    : $item['item_type'];
+
+                if ($normalizedType !== $itemType) {
+                    continue;
+                }
+
+                // Classic case: LP stores the numeric id in "path"
+                if (ctype_digit((string) $item['path']) && (int) $item['path'] === $activityId) {
+                    return (int) $learnpath->source_id;
+                }
+
+                // Fallback for documents when LP stores the path instead of the id
+                if ($itemType === RESOURCE_DOCUMENT) {
+                    $doc = \DocumentManager::get_document_data_by_id($activityId, $this->course->code);
+                    if (!empty($doc['path'])) {
+                        $p = (string) $doc['path'];
+                        foreach ([$p, 'document/'.$p, '/'.$p] as $candidate) {
+                            if ((string) $item['path'] === $candidate) {
+                                return (int) $learnpath->source_id;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -251,5 +281,27 @@ abstract class ActivityExport
         $xmlContent .= '</calendar>'.PHP_EOL;
 
         $this->createXmlFile('calendar', $xmlContent, $destinationDir);
+    }
+
+    /**
+     * Returns the title of the item in the LP (if it exists); otherwise, $fallback.
+     */
+    protected function lpItemTitle(int $sectionId, string $itemType, int $resourceId, ?string $fallback): string
+    {
+        if (!isset($this->course->resources[RESOURCE_LEARNPATH])) {
+            return $fallback ?? '';
+        }
+        foreach ($this->course->resources[RESOURCE_LEARNPATH] as $lp) {
+            if ((int) $lp->source_id !== $sectionId || empty($lp->items)) {
+                continue;
+            }
+            foreach ($lp->items as $it) {
+                $type = $it['item_type'] === 'student_publication' ? 'work' : $it['item_type'];
+                if ($type === $itemType && (int) $it['path'] === $resourceId) {
+                    return $it['title'] ?? ($fallback ?? '');
+                }
+            }
+        }
+        return $fallback ?? '';
     }
 }

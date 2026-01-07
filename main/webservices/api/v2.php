@@ -15,6 +15,7 @@
  * although it is not recommended to do so (for security reasons).
  */
 
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 require_once __DIR__.'/../../inc/global.inc.php';
@@ -586,6 +587,13 @@ try {
                 'username' => $item['username'],
                 'active' => $item['active'],
             ];
+
+            if (api_is_teacher()) {
+                $extraInfo = (new ExtraFieldValue('user'))->getAllValuesForAnItem($item['user_id'], true);
+
+                $userInfo['extra'] = ExtraFieldValue::formatValues($extraInfo);
+            }
+
             Event::addEvent(
                 LOG_WS.$action,
                 'username',

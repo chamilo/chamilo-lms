@@ -1256,20 +1256,11 @@ class Rest extends WebService
             'username' => $this->user->getUsername(),
             'officialCode' => $this->user->getOfficialCode(),
             'phone' => $this->user->getPhone(),
-            'extra' => [],
         ];
 
-        $fieldValue = new ExtraFieldValue('user');
-        $extraInfo = $fieldValue->getAllValuesForAnItem($this->user->getId(), true);
+        $extraInfo = (new ExtraFieldValue('user'))->getAllValuesForAnItem($this->user->getId(), true);
 
-        foreach ($extraInfo as $extra) {
-            /** @var ExtraFieldValues $extraValue */
-            $extraValue = $extra['value'];
-            $result['extra'][] = [
-                'title' => $extraValue->getField()->getDisplayText(true),
-                'value' => $extraValue->getValue(),
-            ];
-        }
+        $result['extra'] = ExtraFieldValue::formatValues($extraInfo);
 
         return $result;
     }

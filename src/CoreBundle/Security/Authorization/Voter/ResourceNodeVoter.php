@@ -302,8 +302,10 @@ class ResourceNodeVoter extends Voter
             if (null === $linkUser
                 && empty($sessionId)
                 && $linkGroup instanceof CGroup && !empty($groupId)
-                && $linkCourse instanceof Course && ($linkCourse->getId() === $courseId
-                && $linkGroup->getIid() === $groupId)
+                && $linkCourse instanceof Course
+                && ($linkCourse->getId() === $courseId && $linkGroup->getIid() === $groupId)
+                // Prevent matching a session-scoped group link as a base-course group link.
+                && null === $linkSession
             ) {
                 $linkFound = 4;
 
@@ -313,17 +315,24 @@ class ResourceNodeVoter extends Voter
             // Check if resource was sent to a course inside a session.
             if (null === $linkUser
                 && $linkSession instanceof Session && !empty($sessionId)
-                && $linkCourse instanceof Course && ($linkCourse->getId() === $courseId
-                && $linkSession->getId() === $sessionId)
+                && $linkCourse instanceof Course
+                && ($linkCourse->getId() === $courseId && $linkSession->getId() === $sessionId)
+                // Prevent leaking group-scoped resources into the session course context.
+                && null === $linkGroup
             ) {
                 $linkFound = 5;
 
                 break;
             }
 
-            // Check if resource was sent to a course.
+            // Check if resource was sent to a course (course context only).
             if (null === $linkUser
-                && $linkCourse instanceof Course && $linkCourse->getId() === $courseId
+                && $linkCourse instanceof Course
+                && $linkCourse->getId() === $courseId
+                // Important: a link can belong to the course AND to a group/session.
+                // Without these guards, group/session resources may become visible in the global tool context (gid=0).
+                && null === $linkSession
+                && null === $linkGroup
             ) {
                 $linkFound = 6;
 

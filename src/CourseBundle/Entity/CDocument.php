@@ -47,6 +47,7 @@ use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
+use Chamilo\CoreBundle\Entity\ResourceRestrictToGroupContextInterface;
 
 #[ApiResource(
     shortName: 'Document',
@@ -249,7 +250,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiFilter(filterClass: CidFilter::class)]
 #[ApiFilter(filterClass: SidFilter::class)]
-class CDocument extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
+class CDocument extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, ResourceRestrictToGroupContextInterface, Stringable
 {
     #[ApiProperty(identifier: true)]
     #[Groups(['document:read'])]

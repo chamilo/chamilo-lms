@@ -115,6 +115,8 @@ final class DocumentCollectionStateProvider implements ProviderInterface
             }
             if ($gid > 0) {
                 $qb->andWhere('IDENTITY(rl.group) = :gid')->setParameter('gid', $gid);
+            } else {
+                $qb->andWhere('rl.group IS NULL');
             }
 
             if ($loadNode) {

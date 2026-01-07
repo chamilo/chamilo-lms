@@ -851,6 +851,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
                     && $linkItem->getSession() === $link->getSession()
                     && $linkItem->getCourse() === $link->getCourse()
                     && $linkItem->getUserGroup() === $link->getUserGroup()
+                    && $linkItem->getGroup() === $link->getGroup()
                 ) {
                     $linkItem->setVisibility($link->getVisibility());
                     $em->persist($linkItem);

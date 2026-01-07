@@ -232,10 +232,16 @@ try {
             $restApi->viewCourseHome();
             break;
         case REST::GET_COURSE_BY_CODE:
-            $courses = $restApi->getCourseByCode(
-                $httpRequest->query->get('q'),
-                $httpRequest->query->getInt('session_id')
+            $q = $httpRequest->query->get('q');
+            $sessionId = $httpRequest->query->getInt('session_id');
+
+            Event::addEvent(
+                LOG_WS.$action,
+                'course_code_session_id',
+                $q.'__'.$sessionId
             );
+
+            $courses = $restApi->getCourseByCode($q, $sessionId);
             $restResponse->setData($courses);
             break;
         case Rest::GET_COURSE_INFO:

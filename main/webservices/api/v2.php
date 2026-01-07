@@ -768,7 +768,7 @@ try {
             $restResponse->setData($courseList);
             break;
         case Rest::SAVE_COURSE:
-            $data = $restApi->addCourse($_POST);
+            $data = $restApi->addCourse($httpRequest->request);
             Event::addEvent(LOG_WS.$action, 'course_id', $data['id']);
             $restResponse->setData($data);
             break;

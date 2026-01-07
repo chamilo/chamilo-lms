@@ -94,7 +94,7 @@ class CourseManager
 
         // Create the course keys
         $keys = AddCourse::define_course_keys($params['wanted_code']);
-        $params['exemplary_content'] = isset($params['exemplary_content']) ? $params['exemplary_content'] : false;
+        $params['exemplary_content'] = $params['exemplary_content'] ?? false;
 
         if (count($keys)) {
             $params['code'] = $keys['currentCourseCode'];

@@ -9,6 +9,7 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Entity\Repository\CNotebookRepository;
 use Chamilo\UserBundle\Entity\User;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
@@ -1848,25 +1849,23 @@ class Rest extends WebService
         return $out;
     }
 
-    public function addCourse(array $courseParam): array
+    /**
+     * @throws Exception
+     */
+    public function addCourse(ParameterBag $request): array
     {
         self::protectAdminEndpoint();
 
-        $idCampus = isset($courseParam['id_campus']) ? $courseParam['id_campus'] : 1;
-        $title = isset($courseParam['title']) ? $courseParam['title'] : '';
-        $wantedCode = isset($courseParam['wanted_code']) ? $courseParam['wanted_code'] : null;
-        $diskQuota = isset($courseParam['disk_quota']) ? $courseParam['disk_quota'] : '100';
-        $visibility = isset($courseParam['visibility']) ? (int) $courseParam['visibility'] : null;
-        $removeCampusId = $courseParam['remove_campus_id_from_wanted_code'] ?? 0;
-        $language = $courseParam['language'] ?? '';
+        $idCampus = $request->getInt('id_campus', 1);
+        $title = $request->get('title');
+        $wantedCode = $request->get('wanted_code');
+        $diskQuota = $request->getInt('disk_quota', 100);
+        $visibility = $request->getInt('visibility');
+        $removeCampusId = $request->getBoolean('remove_campus_id_from_wanted_code');
+        $language = $request->get('language');
 
-        if (isset($courseParam['visibility'])) {
-            if ($courseParam['visibility'] &&
-                $courseParam['visibility'] >= 0 &&
-                $courseParam['visibility'] <= 3
-            ) {
-                $visibility = (int) $courseParam['visibility'];
-            }
+        if (!isset(Course::getStatusList()[$visibility] )) {
+            throw new Exception(get_lang('VisibilityCannotBeChanged'));
         }
 
         $params = [];
@@ -1880,7 +1879,7 @@ class Rest extends WebService
         $params['disk_quota'] = $diskQuota;
         $params['course_language'] = $language;
 
-        foreach ($courseParam as $key => $value) {
+        foreach ($request->all() as $key => $value) {
             if (substr($key, 0, 6) === 'extra_') { //an extra field
                 $params[$key] = $value;
             }

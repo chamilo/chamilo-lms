@@ -1885,6 +1885,10 @@ class Rest extends WebService
             }
         }
 
+        if ('true' === api_get_setting('teacher_can_select_course_template')) {
+            $params['course_template'] = $request->getInt('course_template');
+        }
+
         $courseInfo = CourseManager::create_course($params, $params['user_id'], $idCampus);
         $results = [];
         if (!empty($courseInfo)) {

@@ -2,10 +2,12 @@
   <div class="field">
     <div class="p-float-label">
       <InputText
+        v-bind="$attrs"
         :id="id"
         :aria-label="label"
         :class="{ 'p-invalid': isInvalid, [inputClass]: true }"
         :disabled="disabled"
+        :required="required"
         :model-value="modelValue"
         type="text"
         @update:model-value="updateValue"
@@ -32,10 +34,12 @@
 <script setup>
 import InputText from "primevue/inputtext"
 
+defineOptions({ inheritAttrs: false })
+
 defineProps({
   id: {
     type: String,
-    require: true,
+    required: true,
     default: "",
   },
   label: {

@@ -633,7 +633,17 @@ abstract class ResourceRepository extends ServiceEntityRepository
         ?Course $course = null,
         ?Session $session = null
     ): void {
-        $firstLink = $resource->getFirstResourceLink();
+        $firstLink = null;
+
+        if (null !== $course) {
+            $firstLink = $resource->getFirstResourceLinkFromCourseSession($course, $session);
+        }
+
+        $firstLink ??= $resource->getFirstResourceLink();
+
+        if (null === $firstLink) {
+            return;
+        }
 
         if (ResourceLink::VISIBILITY_PUBLISHED === $firstLink->getVisibility()) {
             $this->setVisibilityDraft($resource, $course, $session);
@@ -841,6 +851,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
                     && $linkItem->getSession() === $link->getSession()
                     && $linkItem->getCourse() === $link->getCourse()
                     && $linkItem->getUserGroup() === $link->getUserGroup()
+                    && $linkItem->getGroup() === $link->getGroup()
                 ) {
                     $linkItem->setVisibility($link->getVisibility());
                     $em->persist($linkItem);
@@ -925,12 +936,12 @@ abstract class ResourceRepository extends ServiceEntityRepository
                 ];
                 $childDocument = $this->findOneBy($criteria);
                 if ($childDocument) {
-                    $this->setLinkVisibility($childDocument, $visibility);
+                    $this->setLinkVisibility($childDocument, $visibility, true, $course, $session, $group, $user);
                 }
             }
         }
 
-        if ($resource instanceof ResourceShowCourseResourcesInSessionInterface) {
+        if ($resource instanceof ResourceShowCourseResourcesInSessionInterface && null !== $course) {
             $link = $resource->getFirstResourceLinkFromCourseSession($course, $session);
 
             if (!$link) {

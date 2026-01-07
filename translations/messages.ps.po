@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "په درناوي سره"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "د فرمول نمونه: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "د فورمولې نمونې: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "متغیر حدود"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:کاپي راټ,, no:کاپي راټ نشته"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوډل,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوښه,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:مشق,,      simulation:سيموليشن,,      questionnaire: پوښتنليک,,      diagram: ډايګرام,,      figure: انځور,,      graph:ګراف,,      index:اشاره,,      slide:سلایډ,,      table:جدول,,      narrative text:روايتي متن,,      exam: امتحان,,      experiment: تجربې,,      problem statement: ستونزې بيان,,      self assessment: ځان ارزونه,,      lecture: درس"
@@ -4786,7 +4786,7 @@ msgid "Chamilo LIVE is a videoconferencing tool that offers: Slides sharing, whi
 msgstr "Chamilo LIVE د ویډیو کنفرانس وسیل دی چې وړاندې کوي: اسلایډونو شریکول، ویته بورډ د اسلایډونو پر سر رسم او لیکلو لپاره، غږ/ویډیو دوه اړخیز او چټ. دا Flash® پلیر ۹+ ته اړتیا لري او ۲ حالتونه وړاندې کوي: یو ډول ډېر او ډېر ډول ډېر."
 
 msgid "Chamilo RAPID"
-msgstr "Chamilo RAPID"
+msgstr "چامیلو RAPID"
 
 msgid "Chamilo RAPID is a Rapid Learning tool available in Chamilo Pro and Chamilo Medical. It allows you to convert Powerpoint or LibreOffice presentations to SCORM-compliant courses. After the conversion, you end up in the Courses authoring tool and are able to add audio comments on slides and pages, tests and activities between the slides or pages and interaction activities like forum discussions or assignment upload. Every step becomes an independent and removable learning object. And the whole course generates accurate SCORM reporting for further coaching."
 msgstr "Chamilo RAPID د چټک زده کړې وسیل دی چې په Chamilo Pro او Chamilo Medical کې شتون لري. دا تاسو ته اجازه درکوي چې پاورپاینټ یا LibreOffice پریزنټیشنونه SCORM مطابقو کورسونو ته بدل کړئ. د بدلون وروسته، تاسو د کورسونو لیکلو وسیل کې ځای پر ځای کېږئ او کولی شئ غږیز تبصرې اسلایډونو او پاڼو کې اضافه کړئ، ازموینې او فعالیتونه اسلایډونو یا پاڼو ترمنځ او تعاملي فعالیتونه لکه فورم بحثونه یا دندې اپلوډ. هر ګام یو خپلواک او لرې کېدونکی زده کړې شی کېږي. او ټول کورس دقیق SCORM راپور جوړوي د نورو روزنې لپاره."
@@ -4804,7 +4804,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "AWStats تاسو ته اجازه درکوي چې د پلیټ فارم احصایې وګورئ: لیدونکي، پاڼې لیدل، ریفررونه..."
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "چامیلو لایبرري"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "چامیلو لایبرري یو څو معیارونو انډیکس کولو او څیړنې وړاندیز کوونکی څرنګوالی دی. دا د چامیلو طبي ځانګړتیاوو برخه ده."
@@ -9523,7 +9523,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "د فایل اپلوډ پاتې راغلی: دا فایل وسعت یا فایل ډول منع دی"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "اوپن آیدی URL"
 
 msgid "The file is too big to upload."
 msgstr "فایل د اپلوډ لپاره ډېر لوی دی."
@@ -10920,8 +10920,8 @@ msgstr "دی"
 msgid "The address of"
 msgstr "د ... پتې"
 
-msgid "Your registration on"
-msgstr "ستاسو ثبت پر"
+msgid "Your registration on %s"
+msgstr "ستاسو ثبت پر %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "دا لاس انډاز دمخه نيول شوی دی. له براوزر بېک بوټن څخه کار واخلئ او بل يې غوره کړئ."
@@ -27370,7 +27370,7 @@ msgid "Obtained the following skills"
 msgstr "لاندې مهارتونه ترلاسه کړي دي"
 
 msgid "Chamilo LMS"
-msgstr "Chamilo LMS"
+msgstr "چامیلو LMS"
 
 msgid "No course sessions for this user"
 msgstr "د دې کاروونکي لپاره هیڅ کورس غونډې نشته"
@@ -31427,4 +31427,397 @@ msgstr "د سرچینو بار کېدل کې خطا."
 
 msgid "Clear search"
 msgstr "د لټون پاکول"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "پایگاه ډاټا کې یوازې لیکي، شمېرې او لاندې لاین (_) اجازه لري. ناسم اړخونه به په اتومات ډول له منځه لاړ شي."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "څه عمومي شرایط او مقررات کاروونکو ته ورکول کېږي چې دا پلیټفارم وکاروي؟"
+
+msgid "ex. {examplePassword}"
+msgstr "مثال. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "د Chamilo ښه راغلاست!"
+
+msgid "Welcome to this platform"
+msgstr "د دې پلیټفارم ښه راغلاست"
+
+msgid "For more details visit %s"
+msgstr "د نورو تفصیلاتو لپاره %s لیدنه وکړئ"
+
+msgid "Manager"
+msgstr "مدیره"
+
+msgid "Mark as"
+msgstr "د علامې لګولو په توګه"
+
+msgid "Reply to all"
+msgstr "ټولو ته ځواب"
+
+msgid "SCIM external ID"
+msgstr "SCIM بهرنۍ ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "مهموه، د شرایطو او ضوابطو وروستی نسخه ومنئ."
+
+msgid "Required value for operation without path"
+msgstr "د مسیر پرته عملیاتو لپاره اړین ارزښت"
+
+msgid "Available space (%s)"
+msgstr "شته ځای (%s)"
+
+msgid "Index this description for the global search"
+msgstr "دا توضیحات د عمومي لټون لپاره انډیکس کړئ"
+
+msgid "Unknown course"
+msgstr "نامعلوم کورس"
+
+msgid "Certificate not found."
+msgstr "سرٹیفکیټ ونه موندل شو."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "د امنیت ټوکن موده پای ته رسیدلې. مهرباني وکړئ پاڼه بیا لوډ کړئ او بیا هڅه وکړئ."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "یوازې پلیټفارم ادمینسټریټرز کولی شي د کورس د څرنګوالي بدلون وکړي."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "د کاروونکي د راجستر کولو پر مهال غیر متوقع خطا"
+
+msgid "Search in resource logs"
+msgstr "د سرچینو لوګونو کې لټون"
+
+msgid "Include this learning path in the global search results"
+msgstr "دا زده کړې لاره د عمومي لټون پایلو کې شامل کړئ"
+
+msgid "The course code already exists"
+msgstr "د کورس کوډ له مخکې شته"
+
+msgid "Latest news"
+msgstr "وروستۍ خبرې"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "د Chamilo وروستۍ خبرې ترلاسه کړئ، په شمول د امنیتي نیمګړتیاوې او پیښې، مستقیم ستاسو ادارې پینل کې. دا خبرې به هر ځل چې تاسو ادارې پاڼه لوډ کړئ، د Chamilo خبر سرور کې چک شي او یوازې ادمینسټریټرز ته ښکاره شي."
+
+msgid "Chamilo support block"
+msgstr "د Chamilo ملاتړ بلاک"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "پرو ټیپونه او اسانه لاره د رسمي خدمتونو وړاندې کوونکو سره اړیکه ونیسئ د مسلکي ملاتړ لپاره، مستقیم د Chamilo جوړوونکو څخه. دا بلاک ستاسو ادارې پاڼې کې ښکاره شي، یوازې ادمینسټریټرز ته ښکاره شي، او هر ځل چې تاسو ادارې پاڼه لوډ کړئ تازه شي."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "د HR کاروونکو ته اعلانونه واستولو اختیار پټ کړئ"
+
+msgid "Allow session admins to download private certificates"
+msgstr "د سیشن ادمینسټریټرز ته خصوصي سرٹیفکیټونه ډاونلوډ کولو اجازه ورکړئ"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "که فعال شوی، سیشن ادمینسټریټرز کولی شي سرٹیفکیټونه ډاونلوډ کړي تر څو چې دوی عمومي خپر شوي نه وي."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "که خالي نه وي، د کورس جوړولو پروسه به د کاروونکي پروفایل کې ځینې ساحې لټون وکړي او د کورس لپاره یې اتومات ډک کړي. د بیلګې په توګه، یو ښوونکی چې په ډیجیټل مارکټینګ کې تخصص لري کولی شي اتومات \"ډیجیټل مارکټینګ\" نښه د هغه هر کورس کې واچوي چې هغه جوړوي."
+
+msgid "Main menu entries"
+msgstr "د اصلي منیو مدخلې"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "هغه مدخلې چک کړئ چې تاسو غواړئ په اصلي منو کې ښکاره شي"
+
+msgid "Main menu entries per role"
+msgstr "د رول په اساس د اصلي منیو مدخلې"
+
+msgid "Define header tabs visibility per role."
+msgstr "د رول په اساس د هېډر ټبونو څرنګوالي ټاکئ."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "هغه انتخابونه واټکل کړئ چې تاسو غواړئ د جدول شاوخوا نیویګیشن کې ښکاره شي چې لږ یا ډیر قطارونه په یوه پاڼه کې ښکاره کړي. بیلګه: [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "د ویډیو پلیر لپاره اضافي ځانګړتیاوو مجموعې چې تاسو کولی شئ په Chamilo کې فعال کړئ. انتخابونه پکې 'speed' شامل دي، چې تاسو ته اجازه درکوي د ویډیو پخش سرعت بدل کړئ."
+
+msgid "Mail: character set"
+msgstr "برېښنالیک: کاراکټ سیټ"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "که تاسو ته اړتیا وي د برېښنالیکو واستولو پر مهال کاراکټ سیټ ټاکئ. که پوه نه یاست خالي پریږدئ."
+
+msgid "Mail: Debug"
+msgstr "برېښنالیک: ډیبګ"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "ټاکئ چې ایا تاسو غواړئ د برېښنالیک واستولو ډیبګ لوګونه فعال کړئ. دا به تاسو ته نور معلومات درکوي چې څه پیښیږي کله چې برېښنالیک خدمت سره تړل کیږي، مګر ښه نه دي او ممکن پاڼې ډیزاین خراب کړي. یوازې کاروونکي فعالیت نه وي پر مهال وکاروئ."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "برېښنالیک: د LD+JSON استعمال مخنیوي وکړئ"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "ځینې برېښنالیک مشتریان د تشریحي LD+JSON بڼه پوهیږي نه، چې دا د یوې آزادې JSON متن په توګه وروستي کاروونکي ته ښیي. که دا ستاسو حالت وي، تاسو کیدای شي لاندې متغیر ته 'false' وټاکئ ترڅو دا سرلیک غیرفعال کړئ."
+
+msgid "Mail: DKIM headers"
+msgstr "برېښنالیک: DKIM سرلیکونه"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "د خپل DKIM ترتیب سیټینګونو JSON آرې داخل کړئ (مثال وګورئ)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "برېښنالیک: XOAuth2 اختیارونه"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "که تاسو د XOAuth2 پر بنسټ برېښنالیک خدمت استعمالوئ، د خپل ځانګړي ترتیب د خوندي کولو لپاره دا سیټینګ په JSON کې استعمال کړئ (مثال وګورئ) او په برېښنالیک خدمت سیټینګ کې XOAuth2 غوره کړئ."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "د چاپېریال ډول ټاکي: \"prod\" (عادی تولید)، \"validation\" (لکه تولید خو پرته له احصایې راپور ورکولو)، یا \"test\" (غونډال موډ سره د پراختیايي وسیلو لکه د نه ژباړل شوي متن نښانونو)."
+
+msgid "Global limit of users per course"
+msgstr "د کورس فی کاروونکي عمومي حد"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "پلاتفورم کې د هرې یوې کورس ته د تېر شوو کاروونکو (معلمان شامل) عمومي اعظمي شمېر ټاکي. دا ارزښت 0 ته وټاکئ ترڅو حد غیرفعال کړئ. دا د خلاصو پورتالونو کې د کورسونو زیات بار مخنیوي کې مرسته کوي."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "فعال کړئ ترڅو آرې استعمال کړئ چې کوم رولونه باید روښانه ښودل شي او کومې پټې شي."
+
+msgid "Show base course posts in session course"
+msgstr "د سیشن کورس کې بنسټیز کورس پوسټونه ښکاره کړئ"
+
+msgid "Limit identical email usage"
+msgstr "د ورته برېښنالیک استعمال محدود کړئ"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "د ورته برېښنالیک پتې شریکولو لپاره اجازه شوي حسابونو اعظمي شمېر. د دې محدودیت غیرفعال کولو لپاره ۰ ته واچوئ."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "د ټولو URL کې ټولو کاروونکو ته د غونډې ادمینانو ته اجازه ورکړئ"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "که فعال وي، غونډې ادمینان کولی شي د ټولو لاسرسي URL څخه کاروونکي وپلټي او فهرست کړي، پرته له دې چې دوی د اوسني URL څخه وي."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "کاروونکو ته د خپل وختي زون انتخاب کولو امکان فعال کړئ. یوځل چې ترتیب شي، کاروونکي به وکولای شي د دوی د وختي زون کې د تکالیفو وروستیو نیټو او نورو وختي حوالو وګوري، چې د لیږلو وخت کې غلطۍ به کمې کړي."
+
+msgid "Redirect after login (per profile)"
+msgstr "د لاګین وروسته لارښوونه (د پروفایل له مخې)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "د لاګین وروسته د پروفایل له مخې لارښوونه وټاکئ د JSON شی په کارولو سره لکه {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "د شرایطو او ضمانتونو پاڼه کې قانوني قبوله کولو چک باکس پټ کړئ"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "که حقیقت ته واچول شي، د شرایطو او ضمانتونو پاڼې جریان کې \"ما لوستلي او منلي یم\" چک باکس لرې کړي."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "د LDAP سرور لپاره د کوربه او پورت د ټاکلو ډله."
+
+msgid "Enable 2FA"
+msgstr "۲FA فعال کړئ"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "د پاسورډ تازه کولو پاڼه کې د TOTP تصدیق کوونکي ایپ کارولو سره ۲FA فعالولو لپاره ساحې اضافه کړئ. کله چې عمومي غیرفعال وي، کاروونکي به ۲FA ساحې ونه ګوري او د لاګین پر مهال به د ۲FA لپاره ونه غوښتل شي، حتی که دوی یې مخکې فعال کړي وي."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "د Chamilo ځینې ځانګړتیاوې به د سرور څخه بهر ته وصل شي. د بېلګې په توګه د لینک جوړولو یا د زده کړې لاره کې یو嵌入 شوې پاڼه ښودلو لپاره چې ډاډ ترلاسه کړي چې بهرني محتوا شته. که ستاسې Chamilo سرور د خپلې شبکې څخه بهر کېدلو لپاره پروکسي کاروي، دا به د هغه ترتیب کولو ځای وي."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "د کورس اعتبار پای ته رسیدلو وخت کې اتومات بیا ثبت کولو امکان فعال یا غیرفعال کړئ. اړوند کرون کار هم باید فعال وي."
+
+msgid "Show remaining days in My Sessions"
+msgstr "په زما غونډو کې پاتې ورځې ښکاره کړئ"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "که فعال وي، د \"زما غونډې\" پاڼې کې غونډې نیټې به د پاتې ورځو شمېر لخوا ځای پر ځای شي."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "په مینو کې \"باقي پاتې سروې\" ښکاره کړئ"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "یو مینو آیت ښکاره کړئ چې کاروونکو ته د دوی باقي پاتې سروېو ته لاسرسی ورکوي."
+
+msgid "Disclose AI assistance"
+msgstr "AI مرسته علني کړئ"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "په هر محتوا یا فیډبیک باندې چې د هر AI سیسټم لخوا جوړ یا مشترک جوړ شوی وي، یو ټګ ښکاره کړئ، چې کاروونکي ته ثابته کړي چې محتوا د ځینې AI سیسټم په مرسته جوړ شوی دی. د هغه AI سیسټم په اړه چې په کوم حالت کې کارول شوی تفصیلات په ډیټابیس کې د تفتیش لپاره ساتل کېږي، خو د وروستي کاروونکي لخوا مستقیم لاسرسي نشته."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "د کورس کټالاګ لپاره JSON ترتیب: لینک ترتیبونه، فلټرونه، ترتیب اختیارونه او نور."
+
+msgid "Session Catalog Settings"
+msgstr "د غونډې کټالاګ ترتیبونه"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "د غونډې کټالاګ لپاره JSON ترتیب: فلټرونه او ښودلو اختیارونه."
+
+msgid "Show Course Descriptions"
+msgstr "د کورس بیانات ښکاره کړئ"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "د کټالاګ فهرست کې د کورس بیانات ښکاره کړئ."
+
+msgid "Published Courses Only"
+msgstr "یونو صرف خپور شوي کورسونه"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "کټالاګ یوازې هغو کورسونو ته محدود کړئ چې خپور شوي ګڼل کېږي."
+
+msgid "Display Catalog on Homepage"
+msgstr "په کور پاڼه کې کټالاګ ښکاره کړئ"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "په پلیټفارم کور پاڼه کې د کورس کټالاګ بلاک ښکاره کړئ."
+
+msgid "Hide Public Link"
+msgstr "عام لینک پټ کړئ"
+
+msgid "Remove the public URL link from course cards."
+msgstr "د کورس کارډونو څخه عام URL لینک لرې کړئ."
+
+msgid "Only Selected Courses"
+msgstr "یونو ټاکل شوي کورسونه"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "په کټالاګ کې یوازې لاسي ټاکل شوي کورسونه ښکاره کړئ."
+
+msgid "Allow Student Browsing"
+msgstr "د زده کونکي کتنه اجازه ورکړئ"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "د زده‌کوونکو اجازه ورکول چې د کورس کیټالۍګ وګوري او فلټر کړي."
+
+msgid "Hide Private Courses"
+msgstr "خصوصي کورسونه پټ کړئ"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "خصوصي کورسونه د کیټالۍګ ښودلو څخه ګټه ورکړئ."
+
+msgid "Show Courses & Sessions"
+msgstr "کورسونه او غونډې ښکاره کړئ"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "د کیټالۍګ پایلو کې کورسونه او غونډې دواړه شامل کړئ."
+
+msgid "Auto Session Subscription"
+msgstr "آټو غونډې ګډون"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "د کاروونکو لپاره غونډو ته اتومات ګډون فعال کړئ."
+
+msgid "Subscription in Session View"
+msgstr "د غونډې لید کې ګډون"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "کاروونکو ته اجازه ورکړئ چې د خپلې غونډې پاڼې څخه مستقیم کورسونو ته ګډون وکړي."
+
+msgid "Enable redirection plugin"
+msgstr "د بیا لارښوونې پلګین فعال کړئ"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "د 'ورځې' او 'میاشتې' ډله چې د کاروونکي لومړی ګډون پر مهال د حسابی پای ته رسیدو نیټه ټاکي."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "د رول => شمېره ډله چې د حسابی پای ته رسیدو دمخه د ورځو شمېر ښیي، د رول پورې اړوند."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "اضافي کاروونکي ډګر چې د غونډو لټون او نومولو لپاره کارول کیږي"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "دا ترتیب د اضافي کاروونکي ډګر کلید ټاکي (د بیلګې په توګه، \"شرکت\") چې د کاروونکو لټون لپاره او د زده‌کوونکو د ګډون پر مهال د غونډې نوم ټاکلو لپاره د /admin-dashboard/register څخه کارول کیږي."
+
+msgid "Glossary terms generator"
+msgstr "د اصطلاحاتو قاموس جوړوونکی"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "استادانو ته اجازه ورکړئ چې د خپل کورس کې د AI جوړ شوي قاموس اصطلاحات غواړي. دا به د کورس سرلیک او د کورس تشریحي وسیلې کې عمومي تشریح پر بنسټ ۲۰ اصطلاحات جوړ کړي. که څو ځله کارول شي، هغه اصطلاحات به ګټه ورکړي چې په هغه قاموس کې موجود دي (ډاډ ترلاسه کړئ چې منځپانګه د تنظیم شوي AI خدماتو سره شریکیدای شي)."
+
+msgid "Video generator"
+msgstr "ویدیو جوړوونکی"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "د لارښوونو یا منځپانګې پر بنسټ ویډیوګانې جوړوي د AI په کارولو سره (دا ممکن ډېر ټوکنونه مصرف کړي)."
+
+msgid "Course analyser"
+msgstr "کورس تحلیل کوونکی"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "د یو یا ډېرو کورسونو ټولې سرچینې تحلیل کوي او AI ماډل مخکیني روزنه ورکوي چې د دې یا دې کورسونو په اړه هرې پوښتنې ته ځواب ووایي (ډاډ ترلاسه کړئ چې منځپانګه د تنظیم شوي AI خدماتو سره شریکیدای شي)."
+
+msgid "Test/development"
+msgstr "ازموینه/پراختیا"
+
+msgid "Crons"
+msgstr "کرونونه"
+
+msgid "Editor"
+msgstr "سمادیتونکی"
+
+msgid "Gradebook"
+msgstr "درجه‌ګذارن"
+
+msgid "Internationalization"
+msgstr "نړیوال化"
+
+msgid "User profiles"
+msgstr "کاروونکي پروفایلونه"
+
+msgid "Support tickets"
+msgstr "ملاتړ ټکټونه"
+
+msgid "Webservices"
+msgstr "ويب خدمات"
+
+msgid "Catalogue"
+msgstr "کیټالۍګ"
+
+msgid "Workflows"
+msgstr "کاري بهیرونه"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "ترتیب په فرعي URL کې سمادیتلی دی"
+
+msgid "Show JSON Template"
+msgstr "JSON قالب ښکاره کړئ"
+
+msgid "JSON Template"
+msgstr "JSON قالب"
+
+msgid "Installing Xapian bindings"
+msgstr "د Xapian اتصالات نصب کول"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "لاندې ټوټه د Xapian PHP اتصالاتو د Ubuntu 25.04 کې د PHP 8.3 سره د نصبولو یوه بیلګه ښیي. لارې او نسخې خپلې چاپیریال ته ورته کړئ."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "ډاډ ترلاسه کړئ چې تاسو یوازې هغه PHP نسخې لرئ چې واقعاً کاروئ (د بیلګې په توګه 8.3) او ډېر نسخې د مختلفو توسیعي ډایریکټريونو سره مخلوط مه کوئ."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "کله چې توسیعه د CLI او ویب سرور دواړو لپاره سم بار شي، د لټون تشخیص باید راپور ورکړي چې Xapian ماډل نصب دی."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "د عارضي بار پورته کولو او کیچ صافول"
+
+msgid "Directory"
+msgstr "پوښه"
+
+msgid "Only delete files older than (minutes)"
+msgstr "یوازې هغه فایلونه پاک کړئ چې له (دقیقه) څخه زاړه وي"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "ټول فایلونه پاک کړئ لپاره ٠ ټاکئ. د لا د بار پورته کېدونکي فایلونو له لرې کولو څخه مخنیوي لپاره یو مثبت ارزښت وکاروئ (د بیلګې په توګه، 60)."
+
+msgid "Preview only (do not delete)"
+msgstr "یوازې مخلیډ (پاک مه کوئ)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "ګواښنه: تاسو غواړئ ټول عارضي فایلونه پاک کړئ. دا عمل نشي بیا کیدلای."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "دا به ټول عارضي فایلونه پاک کړي. دوام ورکړئ؟"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "دا به له %minutes% دقيقو څخه زاړه فایلونه پاک کړي. دوام ورکړئ؟"
 

@@ -212,6 +212,8 @@ $interbreadcrumb[] = [
     'name' => get_lang('Thematic control')
 ];
 
+Event::event_access_tool(TOOL_COURSE_PROGRESS);
+
 // Dispatch actions to controller
 switch ($action) {
     case 'thematic_add':

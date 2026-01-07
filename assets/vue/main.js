@@ -52,6 +52,7 @@ import BaseAppLink from "./components/basecomponents/BaseAppLink.vue"
 // import 'primeflex/primeflex.css';
 import "primeicons/primeicons.css"
 import Alpine from "alpinejs"
+import { ENTRYPOINT } from "./config/entrypoint"
 
 // @todo move in a file:
 store.registerModule(
@@ -244,6 +245,43 @@ installHttpErrors({
   on401: (err) => console.warn("Unauthorized", err?.response?.data?.error || "Unauthorized"),
   on403: (msg) => console.info("Forbidden shown:", msg),
   on500: (err) => console.error("Server error", err?.response?.data?.detail || "Server error"),
+})
+
+// Add cid/sid/gid automatically to every axios request to /api/*
+axios.interceptors.request.use((config) => {
+  const sp = new URLSearchParams(window.location.search)
+  const pageCid = sp.get("cid")
+  const pageSid = sp.get("sid")
+  const pageGid = sp.get("gid")
+
+  if (!pageCid && !pageSid && !pageGid) return config
+
+  // Only for API calls (ENTRYPOINT usually ends with /api)
+  const url = config.url || ""
+  const isApiCall = url.includes("/api/") || url.startsWith("/api/") || url.startsWith(ENTRYPOINT)
+  if (!isApiCall) return config
+
+  // Ensure params is an object
+  config.params = { ...(config.params || {}) }
+
+  // Inject/override context, especially if request has cid=0
+  if (
+    pageCid &&
+    (config.params.cid === undefined ||
+      config.params.cid === null ||
+      config.params.cid === "" ||
+      String(config.params.cid) === "0")
+  ) {
+    config.params.cid = pageCid
+  }
+  if (pageSid && (config.params.sid === undefined || config.params.sid === null || config.params.sid === "")) {
+    config.params.sid = pageSid
+  }
+  if (pageGid && (config.params.gid === undefined || config.params.gid === null || config.params.gid === "")) {
+    config.params.gid = pageGid
+  }
+
+  return config
 })
 
 app.mount("#app")

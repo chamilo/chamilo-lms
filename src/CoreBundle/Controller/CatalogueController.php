@@ -19,6 +19,8 @@ use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CoreBundle\Repository\TrackECourseAccessRepository;
+use Chamilo\CoreBundle\Repository\UserRelCourseVoteRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,7 +30,7 @@ use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/catalogue')]
 class CatalogueController extends AbstractController
@@ -38,8 +40,28 @@ class CatalogueController extends AbstractController
         private readonly UserHelper $userHelper,
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly CourseRepository $courseRepository,
-        private readonly SessionRepository $sessionRepository
+        private readonly SessionRepository $sessionRepository,
+        private readonly UserRelCourseVoteRepository $courseVoteRepository,
     ) {}
+
+    #[Route('/api/courses/{id}/rating', name: 'api_course_rating', methods: ['GET'])]
+    public function courseRating(Course $course, Request $request): JsonResponse
+    {
+        $sessionId = $request->query->getInt('session', 0);
+        $session = $sessionId > 0 ? $this->sessionRepository->find($sessionId) : null;
+        $rating = $this->courseVoteRepository->getCouseRating($course, $session);
+
+        return $this->json($rating);
+    }
+    #[Route('/api/courses/{id}/visits', name: 'api_course_visits', methods: ['GET'])]
+    public function courseVisits(Course $course, Request $request, TrackECourseAccessRepository $courseAccessRepository): JsonResponse
+    {
+        $sessionId = $request->query->getInt('session', 0);
+        $session = $sessionId > 0 ? $this->sessionRepository->find($sessionId) : null;
+        $count = $courseAccessRepository->getCourseVisits($course, $session);
+
+        return $this->json(['visits' => $count]);
+    }
 
     #[Route('/courses-list', name: 'chamilo_core_catalogue_courses_list', methods: ['GET'])]
     public function listCourses(): JsonResponse

@@ -67,37 +67,37 @@ msgid "Cosecant:\t\t\t\tcsc(x)"
 msgstr "Cosecant:\t\t\t\tcsc(x)"
 
 msgid "Hyperbolic cosecant:\t\tcsch(x)"
-msgstr "Hyperbolic cosecant:\t\tcsch(x)"
+msgstr "I-cosecant hyperbolic:\t\tcsch(x)"
 
 msgid "Arccosecant:\t\t\tarccsc(x)"
 msgstr "Arccosecant:\t\t\tarccsc(x)"
 
 msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
-msgstr "Hyperbolic arccosecant:\t\tarccsch(x)"
+msgstr "I-arccosecant hyperbolic:\t\tarccsch(x)"
 
 msgid "Secant:\t\t\t\tsec(x)"
 msgstr "Secant:\t\t\t\tsec(x)"
 
 msgid "Hyperbolic secant:\t\tsech(x)"
-msgstr "Hyperbolic secant:\t\tsech(x)"
+msgstr "I-secant hyperbolic:\t\tsech(x)"
 
 msgid "Arcsecant:\t\t\tarcsec(x)"
 msgstr "Arcsecant:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
-msgstr "Hyperbolic arcsecant:\t\tarcsech(x)"
+msgstr "I-arcsecant hyperbolic:\t\tarcsech(x)"
 
 msgid "Cotangent:\t\t\tcot(x)"
 msgstr "Cotangent:\t\t\tcot(x)"
 
 msgid "Hyperbolic cotangent:\t\tcoth(x)"
-msgstr "Hyperbolic cotangent:\t\tcoth(x)"
+msgstr "I-cotangent hyperbolic:\t\tcoth(x)"
 
 msgid "Arccotangent:\t\t\tarccot(x)"
 msgstr "Arccotangent:\t\t\tarccot(x)"
 
 msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
-msgstr "Hyperbolic arccotangent:\t\tarccoth(x)"
+msgstr "I-arccotangent hyperbolic:\t\tarccoth(x)"
 
 msgid "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />\nIf needed, the Help section of your browser indicates how to configure cookies.<br /><br />\nFor more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website."
 msgstr "Ukuze le ndawo isebenze kwaye ikwazi ukulinganisa ukusetyenziswa kwesiqulatho, eli qonga ngamakhuki.<br /><br />\nUkuba kuyimfuneko, icandelo leNcedo lwekhowudi yakho libonisa indlela yokumisa iikhuki.<br /><br />\nNgolwazi olongezelelweyo ngekhuki, ungundwendwela iwebhusayithi <a href=\"http://www.aboutcookies.org/\">Ngokuba Iikhuki</a>."
@@ -2845,16 +2845,16 @@ msgid "Structure"
 msgstr "Ulimo"
 
 msgid "The forum category has been modified"
-msgstr ""
+msgstr "Icandelo leforam liguqulwe"
 
 msgid "The forum has been modified"
-msgstr ""
+msgstr "Iforam liguqulwe"
 
 msgid "The new thread has been added"
-msgstr ""
+msgstr "Umxholo omtsha wongezwe"
 
 msgid "Approval"
-msgstr ""
+msgstr "Ukuvunywa"
 
 msgid "Direct"
 msgstr "Ngqo"
@@ -5743,13 +5743,13 @@ msgid "The field is successfully moved up."
 msgstr "Intsimi iye phezulu ngempumelelo."
 
 msgid "OpenGraph meta title"
-msgstr "OpenGraph meta title"
+msgstr "Isihloko se-OpenGraph meta"
 
 msgid "This will show an OpenGraph Description meta (og:description) in your site's headers"
 msgstr "Oku kuya bonisa i-OpenGraph Description meta (og:description) ezintloko ze-sayithi yakho"
 
 msgid "Meta description"
-msgstr "Meta description"
+msgstr "Inkcazo yeMeta"
 
 msgid "This will show an OpenGraph Title meta (og:title) in your site's headers"
 msgstr "Oku kuya bonisa i-OpenGraph Title meta (og:title) ezintloko ze-sayithi yakho"
@@ -5782,10 +5782,10 @@ msgid "Define access limits for the coach"
 msgstr "Chaza imida yokufikelela kwe-coach"
 
 msgid "days before session starts"
-msgstr "days before session starts"
+msgstr "iintsuku phambi kokuba iqalise iseshini"
 
 msgid "days after"
-msgstr "days after"
+msgstr "iintsuku emva"
 
 msgid "Single registration"
 msgstr "Bhaliso elinye"
@@ -5794,7 +5794,7 @@ msgid "Multiple registration"
 msgstr "Bhaliso elininzi"
 
 msgid "Full-text search feature"
-msgstr "Full-text search feature"
+msgstr "Uboniso olupheleleyo lwesigama"
 
 msgid "Select 'Yes' to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
 msgstr "Khetha 'Yebo' ukuze uvulelele eli bhaso.lixhobisa kakhulu ku-Xapian extension ye-PHP, ngoko alunakuze lisebenze ukuba esi sindululo asifakwanga kwi-server yakho, kwi-version 1.x ubuncinane."
@@ -5803,7 +5803,7 @@ msgid "Find a training session"
 msgstr "Fumana iseshoni yoqeqesho"
 
 msgid "Session session"
-msgstr "Session session"
+msgstr "Iseshini seseshini"
 
 msgid "Add URL"
 msgstr "Gezisa i-URL"
@@ -6766,7 +6766,7 @@ msgid "new group(s)"
 msgstr "qela(ama) ezintsha"
 
 msgid "max. 20 characters, e.g. <i>INNOV21</i>"
-msgstr "max. 20 characters, e.g. <i>INNOV21</i>"
+msgstr "max. 20 characters, umzekelo <i>INNOV21</i>"
 
 msgid "seats (optional)"
 msgstr "izihlalo (ezikhethekileyo)"
@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokugcwalisa ifomu lomsebenzi : bala iBody Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] neminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Isihloko seWikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala iBody Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -8629,7 +8629,7 @@ msgid "%A %B %d, %Y"
 msgstr "%A %B %d, %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
-msgstr "%B %d, %Y at %I:%M %p"
+msgstr "%B %d, %Y kwi %I:%M %p"
 
 msgid "%I:%M %p"
 msgstr "%I:%M %p"
@@ -10920,8 +10920,8 @@ msgstr "yi"
 msgid "The address of"
 msgstr "Idilesi ye"
 
-msgid "Your registration on"
-msgstr "Ubhaliso lwakho ku"
+msgid "Your registration on %s"
+msgstr "Ubhaliso lwakho ku %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Eli login selithathwe. Sebenzisa iqhosha elibuyela umva kwibhrawuza yakho kwaye ukhethe enye."
@@ -14425,13 +14425,13 @@ msgid "Compose"
 msgstr "Bhala"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "I-Orange encinci"
 
 msgid "Blue lagoon"
 msgstr "Blue lagoon"
 
 msgid "Cool blue"
-msgstr "Cool blue"
+msgstr "Blue epholileyo"
 
 msgid "Corporate"
 msgstr "Corporate"
@@ -14440,31 +14440,31 @@ msgid "Cosmic campus"
 msgstr "Cosmic campus"
 
 msgid "Delicious Bordeaux"
-msgstr "Delicious Bordeaux"
+msgstr "I-Bordeaux emnandi"
 
 msgid "Empire green"
 msgstr "Empire green"
 
 msgid "Fruity orange"
-msgstr "Fruity orange"
+msgstr "I-orange yeziphumo"
 
 msgid "Medical"
 msgstr "Medical"
 
 msgid "Royal purple"
-msgstr "Royal purple"
+msgstr "Purple yasebukhosini"
 
 msgid "Silver line"
 msgstr "Silver line"
 
 msgid "Sober brown"
-msgstr "Sober brown"
+msgstr "Brown sober"
 
 msgid "Steel grey"
 msgstr "Steel grey"
 
 msgid "Tasty olive"
-msgstr "Tasty olive"
+msgstr "Ioli enencasa"
 
 msgid "In this report you see the results of all questions"
 msgstr "Kule ngxelo ubona iziphumo zazo zonke iimibuzo"
@@ -14482,10 +14482,10 @@ msgid "dari"
 msgstr "isiDari"
 
 msgid "dutch corporate"
-msgstr "dutch corporate"
+msgstr "inkampani yaseDatshi"
 
 msgid "english for organisations"
-msgstr "english for organisations"
+msgstr "isiNgesi semibutho"
 
 msgid "friulian"
 msgstr "isiFriulian"
@@ -15406,7 +15406,7 @@ msgid "Allow users with the corresponding privileges to use the \"login as\" fea
 msgstr "Vumela abasebenzisi abane-privilheji ezifanelekileyo ukuba basebenzise i-\"login as\" feature ukuze baqhube nge-akhawunti yabanye abasebenzisi? Esi si seti siluncedo kakhulu kwi-multi-url configuration, apho awucingi ukuba umlawuli we-URL yesibini kufuneka akwazi ukuqhuba njengomsebenzisi na. Qaphela ukuba esinye iseti iyafumaneka kwifayile yolungelelwaniso ukuze ithintele yonke into yokuba umntu asebenzise olu luyinxalenye."
 
 msgid "\"Login as\" feature"
-msgstr "\"Login as\" feature"
+msgstr "\"Ngena njengokuba\" inezici"
 
 msgid "Filter by user"
 msgstr "Hlela ngomsebenzisi"
@@ -16762,19 +16762,19 @@ msgid "The domain of the Single Sign On server (the web address of the other ser
 msgstr "Ummandla weSingle Sign On server (idilesi yewebhu yeseva enye eya kuvumela ubhaliso oluzenzekelayo kwiChamilo). Oku kufuneka ngokuqhelekileyo ibe yidilesi yeseva enye ngaphandle kweslash yokugqibela nangaphandle kweprotokholi, umzekelo www.example.com"
 
 msgid "Single Sign On server authentication URL"
-msgstr "Single Sign On server authentication URL"
+msgstr "I-URL yokugunyazisa iseva ye-Single Sign On"
 
 msgid "The address of the page that deals with the authentication verification. For example /?q=user in Drupal's case."
 msgstr "Idilesi yephepha elisingatha ukuqinisekisa ubuni. Umzekelo /?q=user kwimeko yeDrupal."
 
 msgid "Single Sign On server's logout URL"
-msgstr "Single Sign On server's logout URL"
+msgstr "I-URL yokuphuma kwe-Single Sign On server"
 
 msgid "The address of the page on the server that logs the user out. This option is useful if you want users logging out of Chamilo to be automatically logged out of the authentication server."
 msgstr "Idilesi yephepha kwiserver esikhupha umsebenzisi. Eli khetho liluncedo ukuba ufuna abasebenzisi abaphuma eChamilo ukuba baphume ngokuzenzekelayo kwiserver yokuqinisekisa ubuni."
 
 msgid "Single Sign On server's protocol"
-msgstr "Single Sign On server's protocol"
+msgstr "Iprothokholi ye-Single Sign On server"
 
 msgid "The protocol string to prefix the Single Sign On server's domain (we recommend you use https:// if your server is able to provide this feature, as all non-secure protocols are dangerous for authentication matters)"
 msgstr "Utyeliwekwesazwi lweprotokholi ukuze lufakwe phambili kummandla weSingle Sign On server (siyacebisa ukuba usebenzise https:// ukuba iseva yakho inokunikeza eli sefe, njengoko zonke iiprokotoli ezingakhuselekanga ziyingozi kwimiba yokuqinisekisa ubuni)"
@@ -21907,82 +21907,82 @@ msgid "Maximum %s uppercase characters"
 msgstr "Umanda %s abalinganiswa abankulu"
 
 msgid "Maximum %s numerical (0-9) characters"
-msgstr ""
+msgstr "Ubalawule %s amanani (0-9)"
 
 msgid "Maximum %s characters in total"
-msgstr ""
+msgstr "Ubalawule %s oomlinganiselo beedatha"
 
 msgid "You can't edit this question because answers by students have already been registered"
-msgstr ""
+msgstr "Awungekudeli lo mbuzo kuba iimpendulo zabafundi sele zibhalisiwe"
 
 msgid "Avatar"
-msgstr ""
+msgstr "Umfanekiso weprofayili"
 
 msgid "Semester"
-msgstr ""
+msgstr "Isiqikelelo"
 
 msgid "Reading comprehension"
-msgstr ""
+msgstr "Ukuqonda okufundwayo"
 
 msgid "Sorry, it seems like a speed of %s words/minute was too fast for this text of %s words."
-msgstr ""
+msgstr "Uxolo, kubonakala ngathi isantya %s amagama/umzuzu sasishesha kakhulu kulo mxholo %s amagama."
 
 msgid "Congratulations, you have reached and correctly understood, at a speed of %s words per minute, a text of a total %s words."
-msgstr ""
+msgstr "Shukani, ufikelele kwaye waqonda kakuhle, ngesantya %s amagama ngomzuzu, umxholo we-%s amagama."
 
 msgid "%s words per minute"
-msgstr ""
+msgstr "%s amagama ngomzuzu"
 
 msgid "Tutor %s is no subscribed to this course"
-msgstr ""
+msgstr "Umelaphi %s akabhaliswanga kule khowusi"
 
 msgid "Update this title in learning paths"
-msgstr ""
+msgstr "Hlaziya esi sihlelo kwizindlela zokufunda"
 
 msgid "To enable video chat in your browser (if it supports it), make sure you click on the information icon on the left of the URL and then authorize the use of the webcam and microphone."
-msgstr ""
+msgstr "Ukuze uvule iividiyo chat kwibhrawuza yakho (ukuba iyixhasa), qinisekisa ukuba ucofa ikhonkco lolwazi ngasekhohlo kwe-URL kwaye emva koko gunyazisa ukusetyenziswa kwekhamera kunye nemakrofoni."
 
 msgid "Update file"
-msgstr ""
+msgstr "Hlaziya ifayile"
 
 msgid "Paranoid: E-mail teacher when a student starts an exercise"
-msgstr ""
+msgstr "Paranoid: Thumela i-imeyile kumfundisi xa umfundi eqala umsebenzi"
 
 msgid "Aware: E-mail teacher when a student ends an exercise"
-msgstr ""
+msgstr "Olumke: Thumela i-imeyile kumfundisi xa umfundi egqiba umsebenzi"
 
 msgid "Relaxed open: E-mail teacher when a student ends an exercise, only if an open question is answered"
-msgstr ""
+msgstr "Olumke okuvulekileyo: Thumela i-imeyile kumfundisi xa umfundi egqiba umsebenzi, kuphela ukuba umbuzo ovulekileyo uphendulwe"
 
 msgid "Relaxed audio: E-mail teacher when a student ends an exercise, only if an oral question is answered"
-msgstr ""
+msgstr "Olumke okomsindo: Thumela i-imeyile kumfundisi xa umfundi egqiba umsebenzi, kuphela ukuba umbuzo womlomo uphendulwe"
 
 msgid "Student just started an exercise"
-msgstr ""
+msgstr "Umfundi usanda kuqala umsebenzi"
 
 msgid "Temporary score: %s open question(s) not corrected yet."
-msgstr ""
+msgstr "Amanqaku okwexeshana: %s imibuzo evulekileyo ayilungiswanga okwangoku."
 
 msgid "Annotation"
-msgstr ""
+msgstr "Inqaku"
 
 msgid "Teacher picture"
-msgstr ""
+msgstr "Umfanekiso womfundisi"
 
 msgid "Feedback if not correct"
-msgstr ""
+msgstr "Ingxelo-mbuyekezo ukuba ayichanekanga"
 
 msgid "Scheduled announcements"
-msgstr ""
+msgstr "Izaziso ezicwangcisiweyo"
 
 msgid "Specific dispatch date"
-msgstr ""
+msgstr "Umhla okhethekileyo wokuthumela"
 
 msgid "Dispatch based on the session's start/end dates"
-msgstr ""
+msgstr "Thumela ngokusekelwe kwimihla yokuqala/ukuphela kweseshini"
 
 msgid "After or before"
-msgstr ""
+msgstr "Emva okanye phambi"
 
 msgid "Before"
 msgstr "Phambi"
@@ -23482,7 +23482,7 @@ msgid "Add to editor"
 msgstr "Yongeza kumhleli"
 
 msgid "Image URL"
-msgstr "Image URL"
+msgstr "I-URL yomfanekiso"
 
 msgid "px width"
 msgstr "ububanzi be-px"
@@ -23932,76 +23932,76 @@ msgid "Link to test edition"
 msgstr "Ikhonkco lokuhlela uvivinyo"
 
 msgid "Move users results from base course to a session"
-msgstr ""
+msgstr "Hambisa iziphumo zabasebenzisi ukusuka kwikhosi lesiseko eseshini"
 
 msgid "If your quiz have hotspot questions included, you should select the images related from the documents."
-msgstr ""
+msgstr "Ukuba uvivinyo lwakho luneembuzo zehotspot, kufuneka ukhethe imifanekiso enxulumene nakho kwiinxalenye zamaxwebhu."
 
 msgid "Back to the attempt list"
-msgstr ""
+msgstr "Buyela kuluhlu lokuzama"
 
 msgid "Show the result to the learner: Show the score, the learner's choice and his feedback on each attempt, add the correct answer and his feedback when the chosen limit of attempts is reached."
-msgstr ""
+msgstr "Bonisa iziphumo kumfundi: Bonisa amanqaku, ukhetho lomfundi kunye nengxelo-mbuyekezo yakhe kuzo zonke iinzame, ongeza impendulo echanekileyo nengxelo-mbuyekezo yakhe xa kufikelelwa kumda wokuzama."
 
 msgid "Signed in as"
-msgstr ""
+msgstr "Ungene njengoko"
 
 msgid "Remember me"
-msgstr ""
+msgstr "Khumbula mna"
 
 msgid "Register oneself"
-msgstr ""
+msgstr "Bhalisa"
 
 msgid "Course introduction"
-msgstr ""
+msgstr "Intshayelelo yekhosi"
 
 msgid "You don't have any course content yet."
-msgstr ""
+msgstr "Awunayo nawuphi na umxholo wezifundo okwangoku."
 
 msgid "You don't have any course yet."
-msgstr ""
+msgstr "Awunayo nawuphi na isifundo okwangoku."
 
 msgid "You don't have any session yet."
-msgstr ""
+msgstr "Awunayo nawuphi na iseshini okwangoku."
 
 msgid "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you."
-msgstr ""
+msgstr "Iya ku\"Explore\" ukufumana isihloko esinomdla, okanye linda umntu akubhalise."
 
 msgid "Add a course introduction to display to your students."
-msgstr ""
+msgstr "Faka intshayelelo yesifundo ukuze uyibonise abafundi bakho."
 
 msgid "See as student"
-msgstr ""
+msgstr "Jonga njengomfundi"
 
 msgid "Official code"
-msgstr ""
+msgstr "Ikhowudi esemthethweni"
 
 msgid "Welcome, please go to diagnostic at %s."
-msgstr ""
+msgstr "Wamkelekile, nceda uye kwi-diagnostic kwi %s."
 
 msgid "Your session search diagnosis is saved"
-msgstr ""
+msgstr "Uhlolo lwakho lokugcina iseshini lugciniwe"
 
 msgid "Send diagnostic finalization message"
-msgstr ""
+msgstr "Thumela umyalezo wokugqibezela uhlolo"
 
 msgid "DiagnosticfinalizationmessageTitle"
-msgstr ""
+msgstr "IsihlokoSomyalezoSokugqibezelaUhlolo"
 
 msgid "DiagnosticfinalizationmessageContent"
-msgstr ""
+msgstr "UmqumboWoMyaleloWokugqibezelaUhlolo"
 
 msgid "Add a forumCategory"
-msgstr ""
+msgstr "Faka icandelo leforam"
 
 msgid "Create surveyDoodle"
-msgstr ""
+msgstr "Yila uphando lweDoodle"
 
 msgid "Sticky courses"
-msgstr ""
+msgstr "Izifundo ezinamandla okuncamathela"
 
 msgid "Current session tab"
-msgstr ""
+msgstr "Itab yeseshini yangoku"
 
 msgid "Upcoming session tab"
 msgstr "Itebhu yezayo tab"
@@ -24694,7 +24694,7 @@ msgid "*: Current quarter, incomplete data"
 msgstr "*: Ikota yangoku, idatha engaphelelanga"
 
 msgid "Q%s %s"
-msgstr "Q%s %s"
+msgstr "Umbuzo %s %s"
 
 msgid "YoY"
 msgstr "YoY"
@@ -25057,7 +25057,7 @@ msgid "The update failed for the following courses"
 msgstr "Uhlaziyo aluphumelelanga kulaa makhosi alandelayo"
 
 msgid "%02d h %02d m %02d s"
-msgstr "%02d h %02d m %02d s"
+msgstr "%02d y %02d m %02d s"
 
 msgid "User management"
 msgstr "Ulawulo lwabasebenzisi"
@@ -26101,76 +26101,76 @@ msgid "Reduce gradebook load time by hiding the results table (but still giving 
 msgstr "Nciphisa ixesha lokulayisha i-gradebook ngokufihla itheyibhile yeziphumo (kodwa usa unikelela ukufikelela kwiisertifikethi, izakhono, njl.)."
 
 msgid "Hide item links for learners in gradebook"
-msgstr ""
+msgstr "Fihla amakhonkco ezinto zabafundi kwibhukubhuki yamanqaku"
 
 msgid "Avoid learners clicking on items from the gradebook by removing the links on the items."
-msgstr ""
+msgstr "Thintela abafundi ukuba baclishe izinto kwibhukubhuki yamanqaku ngokususa amakhonkco ezintweni."
 
 msgid "Enable skills by gradebook's subcategory"
-msgstr ""
+msgstr "Vula izakhono ngokwe-subcategory yebhukubhuki yamanqaku"
 
 msgid "Skills are normally attributed for completing a whole gradebook. By enabling this option, you allow skills to be attached to sub-sections of gradebooks."
-msgstr ""
+msgstr "Izakhono zidla ngokunikezelwa ekugqityweni kwebhukubhuki yamanqaku epheleleyo. Ngokuvula eli khetho, uvumela izakhono ukuba ziqhotyoshelwe kwi-sub-sections yeebukubhuki zamanqaku."
 
 msgid "Language switcher in main menu"
-msgstr ""
+msgstr "Isishintshi solwimi kwimenyu ephambili"
 
 msgid "Display a language selector in the main menu that immediately updates the language preference of the user. This can be useful in multilingual portals where learners have to switch from one language to another for their learning."
-msgstr ""
+msgstr "Bonisa umkhethi wolwimi kwimenyu ephambili ekhululayo ngokukhawuleza incwadi yolwimi lomsebenzisi. Oku kunokuba luncedo kuma-portals eenkcubeko ezininzi apho abafundi kufuneka batshintshe ulwimi lomnye komnye ukuze bafunde."
 
 msgid "Language flags"
-msgstr ""
+msgstr "Iiflegi zolwimi"
 
 msgid "Use country flags for languages. This is not enabled by default because some languages are not strictly attached to a country, which can lead to frustration for some users."
-msgstr ""
+msgstr "Sebenzisa iiflegi zamazwe kwiilwimi. Oku akavulwanga ngokwembali kuba ezinye iilwimi azinxulumene ngqo nelizwe, okunokukhokelela kukudakumbeka kwabanye abasebenzisi."
 
 msgid "Multiple-language courses"
-msgstr ""
+msgstr "Izifundo zolwimi oluninzi"
 
 msgid "Enable courses managed in more than one language. This option adds a language selector within the course page to let users switch easily, and adds a 'multiple_language' extra field to courses which allows for remote management procedures."
-msgstr ""
+msgstr "Vula izifundo ezilawulwa kwiilwimi ezingaphezulu kwesinye. Eli khetho longeze umkhethi wolwimi ngaphakathi kwiphepha lesifundo ukuze abasebenzisi batshintshe ngokulula, kwaye longeze intsimi eyongezelelweyo 'multiple_language' kwizifundo ezivumela iinkqubo zolawulo lwangaphandle."
 
 msgid "Multiple-language document templates"
-msgstr ""
+msgstr "Iitemplate zamaxwebhu zolwimi oluninzi"
 
 msgid "Enable document templates (at the platform or course level) to be configured for specific languages."
-msgstr ""
+msgstr "Vula iitemplate zamaxwebhu (kwi-platform okanye inqanaba lesifundo) ukuba ziqiwe ngolwimi oluthile."
 
 msgid "Invisible tests visible in learning paths"
-msgstr ""
+msgstr "Uviwo olungabonakaliyo lubonakala kwiindlela zokufunda"
 
 msgid "Make tests marked as 'invisible' in the tests tool appear when they are included in a learning path."
-msgstr ""
+msgstr "Yenza uviwo oluphawulwe 'lungabonakaliyo' kwisixhobo soviyo luvelane xa lufakiwe kwindlela yokufunda."
 
 msgid "Export all files when exporting a learning path"
-msgstr ""
+msgstr "Thumela zonke iifayile xa ukhupha indlela yokufunda"
 
 msgid "When exporting a LP, all files and folders in the same path of an html will be exported too."
-msgstr ""
+msgstr "Xa ukhupha i-LP, zonke iifayile neefolda kwindlela efanayo ye-html nazo ziya kukhutshelwa."
 
 msgid "Learning path's prerequisites"
-msgstr ""
+msgstr "Iimfuneko zendlela yokufunda"
 
 msgid "On the learning paths lists, display a visual element to show that other learning paths are currently blocked by some prerequisites rule."
-msgstr ""
+msgstr "Kwilayiti yezindlela zokufunda, bonisa icandelo elibonisa ukuba ezinye iindlela zokufunda ziblockiwe ngumthetho weemfuneko."
 
 msgid "Hide time from learning paths records"
-msgstr ""
+msgstr "Fihla ixesha kwiirekodi zeendlela zokufunda"
 
 msgid "Hide learning paths time spent in reports in general."
-msgstr ""
+msgstr "Fihla ixesha elichithiweyo kwiindlela zokufunda kwiingxelo ngokubanzi."
 
 msgid "Foldable learning paths' categories"
-msgstr ""
+msgstr "Iikhatri zokufunda ezinokugoba"
 
 msgid "Enable to allow users to fold the categories in the learning paths list."
-msgstr ""
+msgstr "Vula ukuze uvumele abasebenzisi ukuba bagobe iikhatri kulayiti yezindlela zokufunda."
 
 msgid "Foldable learning paths' items"
-msgstr ""
+msgstr "Izinto zeendlela zokufunda ezinokugoba"
 
 msgid "Disable JS in learning paths view"
-msgstr ""
+msgstr "Cima i-JS kumbono weendlela zokufunda"
 
 msgid "Disable JS files that Chamilo usually adds to HTML files in the learning path (while displaying them)."
 msgstr "Yeka iifayile ze-JS ezidla zongezwa yi-Chamilo kwiifayile ze-HTML kwindlela yokufunda (ngelixa ziboniswa)."
@@ -31223,4 +31223,601 @@ msgstr "Nceda ukhethe impendulo phambi kokuba uhlole isiphumo."
 
 msgid "Allow PDF export for this item"
 msgstr "Vumela ukukhutshwa kwePDF kwelo nto"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Fihla abasebenzisi basimahla (abangabhaliswanga)"
+
+msgid "Question statistics"
+msgstr "Iinkcukacha zamanani emibuzo"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Ukuvelisa ifayile. Musa ukuvala itab eli..."
+
+msgid "Assign auth source to users"
+msgstr "Abeka umthombo wobungqina kubasebenzisi"
+
+msgid "There are no questions for this survey"
+msgstr "Akukho mibuzo yolu phando"
+
+msgid "Certificates report"
+msgstr "Ingxelo yezitshixo"
+
+msgid "Course picture"
+msgstr "Umfanekiso wekosi"
+
+msgid "Current picture"
+msgstr "Umfanekiso wangoku"
+
+msgid "Course events log"
+msgstr "Ushwelo lweziganeko zesifundo"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Hlaziya ulwazi lwecandelo kunye nomda wexesha onganyanzelekanga."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Yenza iqela elinengqiqo lezendalo ukuze ugcine ikhathalogu yakho yoqeqesho icwangcisiwe."
+
+msgid "Generating file, do not close this tab"
+msgstr "Kuyaveliswa ifayile, musa ukuyivala le tab"
+
+msgid "Assign authentication sources to users"
+msgstr "Abelana nemithombo yobungqina kubasebenzisi"
+
+msgid "Average completion rate"
+msgstr "Umndilili womgangatho wokugqibezela"
+
+msgid "Average access rate"
+msgstr "Umndilili womgangatho wokufikelela"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Le tafile ishwankathe inkqubela phambili yomfundi kunye nomsebenzi ngendlela nganye yokufunda ezifundweni zakho zangoku."
+
+msgid "Follow up"
+msgstr "Landela"
+
+msgid "Tracking for superior"
+msgstr "Ukulandela umntu ophezulu"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Le ngxelo ibonisa ukuhanjiswa kweveki ngezendalo ngomqeqeshi jikelele kwisambuku sexesha elikhethiweyo."
+
+msgid "Head manager report"
+msgstr "Ingxelo yomlawuli oyintloko"
+
+msgid "Reset or update user password"
+msgstr "Susa okanye uhlaziye iphaswedi yomsebenzisi"
+
+msgid "Active users"
+msgstr "Abasebenzisi abasebenzayo"
+
+msgid "Inactive users"
+msgstr "Abasebenzisi abangasebenzisi"
+
+msgid "Report on resources"
+msgstr "Ingxelo ngezixhobo"
+
+msgid "Global view"
+msgstr "Umbono jikelele"
+
+msgid "Available reports"
+msgstr "Iingxelo ezikhoyo"
+
+msgid "Current report"
+msgstr "Ingxelo yangoku"
+
+msgid "Back to user assignment page"
+msgstr "Buyela kwiphepha lokwabelana ngabasebenzisi"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Imithombo yobungqina yabelwe ngempumelelo"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Cecel' ingqikelelo: khetha “— Upload nje —” ukugcina ngaphandle kokuthumela kuye nabani."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Nceda ukhethe umamkeli omnye ubuncinci (“— Upload nje —” okanye nawuphi na umsebenzisi)"
+
+msgid "Sharing"
+msgstr "Ukwabelana"
+
+msgid "Selected files"
+msgstr "Iifayile ezikhethiweyo"
+
+msgid "Hide password"
+msgstr "Fihla iphaswedi"
+
+msgid "Show password"
+msgstr "Bonisa iphaswedi"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Layisha ilogo ye-SVG kwiimeyile"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Kufuneka uhambe okanye ususe zonke iindlela zokufunda kule candelo phambi kokucima."
+
+msgid "Clear filters"
+msgstr "Susa izihluzi"
+
+msgid "Attendances (tablet)"
+msgstr "Ukuya esikolweni (itafile)"
+
+msgid "Exit tablet mode"
+msgstr "Phuma kwimodi yetafile"
+
+msgid "No members found."
+msgstr "Akukho malungu afunyanwayo."
+
+msgid "Health check"
+msgstr "Uhlolo lwempilo"
+
+msgid "Export to CC 1.3"
+msgstr "Thumela e-CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Ukulayisha izixhobo..."
+
+msgid "Failed to load resources."
+msgstr "Akukwazanga kulayishwa izixhobo."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Nceda ukhethe izixhobo ezinokuthunyelwa ezinye ezinye (uxwebhu, ikhonkco lewebhu, ingxoxo,...)."
+
+msgid "Export finished."
+msgstr "Ukuthumela kugqityiwe."
+
+msgid "Export failed."
+msgstr "Ukuthumela kwaphumelela."
+
+msgid "Import failed."
+msgstr "Ukungenisa kwaphumelela."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Ifayile lendasiphelo (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Ulungele ukungenisa"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Siza kubuyisela isuphu kwesi sifundo. Ungabuyela umva ukuze utshintshe iindlela."
+
+msgid "Select resources to import"
+msgstr "Khetha izixhobo eziza kungeniswa"
+
+msgid "No resources available in this backup."
+msgstr "Akukho zixhobo ezikhona kolu gcinammo."
+
+msgid "Import selection"
+msgstr "Ngenisa ukhetho"
+
+msgid "Import completed"
+msgstr "Ukungenisa kugqityiwe"
+
+msgid "Could not load options."
+msgstr "Akukwazeki ukulayisha ezinye izinto."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Nceda ukhethe ifayile yokugcina (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Nceda ukhethe ugcinammo kwiserver"
+
+msgid "Error selecting source."
+msgstr "Impazamo ekukhetheni umthombo."
+
+msgid "Recycling options"
+msgstr "Izinikiweyo zokuphinda zisebenzise"
+
+msgid "Type the course code to confirm"
+msgstr "Bhalisa ikhowudi yekhosi ukuqinisekisa"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Oku kuya kususa okanye kuqalise ngokutsha izixhobo ezikhethiweyo. Esi sixhobo asinakubuyiselwa."
+
+msgid "Select resources to recycle"
+msgstr "Khetha izixhobo eziza kuphinda zisebenzise"
+
+msgid "No resources available in this course."
+msgstr "Akukho zixhobo ezikhona kwikhosi le."
+
+msgid "Recycle selected"
+msgstr "Phinda zisebenzise ezikhethiweyo"
+
+msgid "Error loading resources."
+msgstr "Impazamo ekulayisheni izixhobo."
+
+msgid "Clear search"
+msgstr "Susa uphando"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Igama ledatha livumela oonobumba, amanani kunye neunderscore (_) kuphela. Oonobumba abangavumelekanga baya kususwa ngokuzenzekelayo."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Zeziphi iimeko jikelele ezinikwa abasebenzisi ukuze basebenzise eli qonga?"
+
+msgid "ex. {examplePassword}"
+msgstr "umf. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Wamkelekile eChamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Wamkelekile kule platfomu"
+
+msgid "For more details visit %s"
+msgstr "Ngakwimbalasane ezongezelelweyo undwendwele %s"
+
+msgid "Manager"
+msgstr "Mlawuli"
+
+msgid "Mark as"
+msgstr "Phawula njengo"
+
+msgid "Reply to all"
+msgstr "Phendula kubo bonke"
+
+msgid "SCIM external ID"
+msgstr "SCIM external ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Nceda uamkele uhlobo lwamva nje lwezifundela nezigqibo."
+
+msgid "Required value for operation without path"
+msgstr "Ixabiso eliyimfuneko kuqhubeko ngaphandle kwendlela"
+
+msgid "Available space (%s)"
+msgstr "Indawo ekhona (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Index ngolu chale kuza kufunyanwa jikelele"
+
+msgid "Unknown course"
+msgstr "Izifundo ezingaziwayo"
+
+msgid "Certificate not found."
+msgstr "Isatifikethi asifunyaneki."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Itokheni yokhuseleko liphelelwe lixesha. Nceda ulayishe ipheji kwakhona kwaye uzame ngokutsha."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Abalawuli beqonga kuphela abanokutshintsha ukubonakala kwesifundo."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Impazamo engalindelekanga ngexesha lokubhalisela umsebenzisi"
+
+msgid "Search in resource logs"
+msgstr "Gqiba kwii-log zezixhobo"
+
+msgid "Include this learning path in the global search results"
+msgstr "Qulathe le ndlela yokufunda kwiziphumo zokugqiba kwiqonga eliphela"
+
+msgid "The course code already exists"
+msgstr "Ikhowudi yesifundo sele ikhona"
+
+msgid "Latest news"
+msgstr "Iindaba zakamuva"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Fumana iindaba zakamuva zikaChamilo, kuquka iingozi zokhuseleko kunye nemicimbi, ngqo ngaphakathi kwipaneli yolawulo lwakho. Ezi ndawo zeendaba ziya kuhlolwa kwiserver yeendaba zeChamilo ngalo lonke ixesha ulayisha ipheji yolawulo kwaye zibonakala kubalawuli kuphela."
+
+msgid "Chamilo support block"
+msgstr "IBhloko lokuxhasa iChamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Fumana iingcebiso zobuchwepheshe kunye nendlela elula yokunxibelelana nababonelelisi beenkonzo ezisemthethweni ukuze baxhase ngobuchwepheshe, ngqo kubavelisi beChamilo. Esi bhloko sivelaphaya kwipheji yakho yolawulo, sibonakala kubalawuli kuphela, kwaye sihlaziywa ngalo lonke ixesha ulayisha ipheji yolawulo."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Fihla ukhetho lokuthumela izaziso kubasebenzisi be-HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Vumela abalawuli beeseshini ukuba bakhuphele iisatifikethi zabucala"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Ukuba ivuliwe, abalawuli beeseshini bangakhuphela iisatifikethi nasitsho bengapapashwa esidlangalaleni."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Ukuba ayingaqheyi, inkqubo yokudala isifundo iya kufuna amasimi kwiprofayili yomsebenzisi kwaye iwagcwalise ngokuzenzekelayo kwisifundo. Umzekelo, utitshala ogxile kwintengiso yedijithali unokusetra iflegi « intengiso yedijithali » ngokuzenzekelayo kwisifundo ngasinye asidala."
+
+msgid "Main menu entries"
+msgstr "Amangenelo emenyu ephambili"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Hlola ingenelo ofuna ukuyibona ivele kwimenyu ephambili"
+
+msgid "Main menu entries per role"
+msgstr "Amangenelo emenyu ephambili ngendima nganye"
+
+msgid "Define header tabs visibility per role."
+msgstr "Chaza ukubonakala kweethebhu zentloko ngendima nganye."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Seta iinketho ofuna ukuzibonisa kwimphezulu yokuhamba etafileni ukuze ubonise imigca encinci okanye eninzi kwipheji enye. umz. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Uluhlu lwezinto ezongezelelweyo onokuzivulela kumdlali wevidiyo eChamilo. Iinketho ziquka 'ispeed', evumela ukutshintsha isantya sokudlala ividiyo."
+
+msgid "Mail: character set"
+msgstr "Iposi: isethi yoomlinganiselo"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Ukuba kufuneka uchaze i-charset ekuthumeleni ezi posi. Shiya ixande ukuba awunaqiniseki."
+
+msgid "Mail: Debug"
+msgstr "Iposi: Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Khetha ukuba uyafuna ukuvula iilog zokudibaga zokuthumela iimeyile. Ezi ziya kukunika ulwazi olongezelelweyo ngokwenzekayo xa uqhagamshelana nenkonzo yeposi, kodwa azintle kwaye zinokwaphula uyilo lweepheji. Sebenzisa kuphela xa kungekho umsebenzi womsebenzisi."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Iposi: Thintle ukusebenzisa LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Abanye abasebenzisi beposi abayiqondi ifomathi echazayo yeLD+JSON, beyibonisa njengomtya weJSON ohlaziyekileyo kumsebenzisi wokugqibela. Ukuba yimeko yakho, ungafuna ukusetra iguqulelo elandelayo 'false' ukuze ukhuphelele isihloko esi."
+
+msgid "Mail: DKIM headers"
+msgstr "Iposi: Izihloko zeDKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Faka uluhlu lweJSON lwezicwangqiso zakho zeDKIM (jonga umzekelo)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Iposi: Iinketho zeXOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Ukuba usebenzisa inkonzo yeposi esekwe kwiXOAuth2, sebenzisa esi sethi kwiiJSON ukuze ugcine ulungevaniso lwakho olukhethekileyo (jonga umzekelo) kwaye ukhethe iXOAuth2 kwiseting yenkonto yeposi."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Ichaza uhlobo lwemo: \"prod\" (imveliso eqhelekileyo), \"validation\" (njengemveliso kodwa ngaphandle kokuxela iinkcukacha zamanani), okanye \"test\" (imo yokudibaga enezixhobo somphuhlisi ezifana nezaziso zezichaziwa ngokungafundwa)."
+
+msgid "Global limit of users per course"
+msgstr "Umlinganiselo weqonga wabasebenzisi ngesifundo"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Ichaza inani eliphezulu lamaqonga labasebenzisi (kuquka ootitshala) abavunyelwe ukubhaliselwa kwisifundo esinye seqonga. Seta eli xabiso ku-0 ukuze ukhuphelele umda. Oku kunceda ukunqanda izifundo zixhuzeke kumaqonga avulelekileyo."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Vula ukuze usebenzise uluhlu lokuchaza eziphi iindima kufuneka ziboniswe ngokucacileyo kwaye eziphi kufuneka zifihlwe."
+
+msgid "Show base course posts in session course"
+msgstr "Bonisa iiposti zesifundo esisisiseko kwisifundo seeseshini"
+
+msgid "Limit identical email usage"
+msgstr "Linganisa ukusetyenziswa kweemejile ezifanayo"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Inani eliphezulu lama-akhawunti avunyelwe ukwabelwana ngenombolo ye-imeyile efanayo. Misela ku-0 ukuze ukhuphele phantsi umda woku."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Vumela abalawuli beeseshini ukuba babone bonke abasebenzisi kuyo yonke ii-URLs"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Ukuba ivuliwe, abalawuli beeseshini bayakwazi ukukhangela kunye nokudwelisa abasebenzisi kubo bonke ama-URL okufikelela, kungakhathaleli i-URL yabo yangoku."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Vula amathuba okuba abasebenzisi bakhethe i-timezone yabo. Nje ukuba iqwalaselwe, abasebenzisi baya kuba nakho ukubona imihla yokugqibezela izinto ezinikezelwayo kunye nezinye iireferensi zexesha kwizifunga zabo, eziza kunciphisa iimpazamo ngexesha lokuhanjiswa."
+
+msgid "Redirect after login (per profile)"
+msgstr "Qondisa emva kokungena (ngephrofayili)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Chaza ukubuyiselwa ngokweprofayili emva kokungena usebenzisa i-JSON object enje {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Fihla ibhokisi lokuvuma ezomthetho kwiphepha leMigaqo neMiqathango"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Ukuba isetiwe kwi-true, isusa ibhokisi le-\"Ndifunde kwaye ndamkelela\" kwiphepha leMigaqo neMiqathango."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Uluhlu oluchaza umkhosi kunye nezitshixo ze-LDAP server."
+
+msgid "Enable 2FA"
+msgstr "Vula 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Faka iintsima kwiphepha lokuhlaziywa kwephasiwedi ukuze kuvulwe 2FA usebenzisa i-TOTP authenticator app. Xa ikhutshelwe kancinci, abasebenzisi abayi kubona iintsima ze-2FA kwaye abayi kucelwa 2FA ekungeni, nditye ndaba babeyivule ngaphambili."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Ezinye iimpawu ze-Chamilo ziya kudibanisa ngaphandle kweseva. Umzekelo ukuqinisekisa ukuba umxholo wangaphandle ukhona xa udala ikhonkco okanye ubonisa iphepha elidityaniswe kwindlela yokufunda. Ukuba iseva yakho ye-Chamilo isebenzisa i-proxy ukuze iphume kwinethiwekhi yayo, le yindawo yokuyiqulunqa."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Vula okanye khupha ubhaliso oluzenzekelayo oluthe chu xa uphelelwa lixesha lokusebenza kwikhosi. Umsebenzi we-cron onxulumene kufuneka uvinjwe."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Bonisa iintsuku ezisele kwi-My Sessions"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Ukuba ivuliwe, imihla yeseshini kwiphepha le-\"My Sessions\" iya kuthenjwa ngenani leentsuku ezisele."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Bonisa \"Ihlwlelwa phantsi kwezophando\" kwimenyu"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Bonisa into yemenyu evumela abasebenzisi ukuba bafikelele kwiiphando zabo ezilindelekileyo."
+
+msgid "Disclose AI assistance"
+msgstr "Bhenga uncedo lwe-AI"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Bonisa ithegi kuyo nayiphi na imixholo okanye ingxelo eyenziwe okanye eyenziwe ngokudibeneyo yinkqubo ye-AI, ibonisa kumsebenzisi ukuba umxholo wakhiwe ngoncedo lwenkqubo ethile ye-AI. Iinkcukacha malunga nenkqubo eyini eyayisetyenziswe kwezinye iimeko zigcinwa ngaphakathi kwedatha yokuphicotha, kodwa azifikeleli ngokuthe ngqo kumsebenzisi wokugqibela."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "Uqulunqo lwe-JSON lwekataloji yekhosi: iisetingi zelinki, izihluzi, izikhetho zokulungisa, kunye nokunye."
+
+msgid "Session Catalog Settings"
+msgstr "Iisetingi zeKataloji yeSeshini"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "Uqulunqo lwe-JSON lwekataloji yeseshini: izihluzi kunye nokubonisa izikhetho."
+
+msgid "Show Course Descriptions"
+msgstr "Bonisa Iinkcazo zeKhosi"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Bonisa iinkcazo zekhosi ngaphakathi koluhlu lwekataloji."
+
+msgid "Published Courses Only"
+msgstr "Iikhosi Ezipapashiweyo Kuphela"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Linganisa ikataloji kuphela kwiikhosi eziphawulwe njengzipapashiweyo."
+
+msgid "Display Catalog on Homepage"
+msgstr "Bonisa iKataloji kwiphepha lasekhaya"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Bonisa ibhloko yekataloji yekhosi kwiphepha lasekhaya leqonga."
+
+msgid "Hide Public Link"
+msgstr "Fihla iKhonkco loLuntu"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Susa ikhonkco le-URL loLuntu kumakhadi ekhosi."
+
+msgid "Only Selected Courses"
+msgstr "Iikhosi Ezikhethiweyo Kuphela"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Bonisa kuphela iikhosi ezikhethiweyo ngokwemanani kwi-kataloji."
+
+msgid "Allow Student Browsing"
+msgstr "Vumela uKhenketho lwabafundi"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Vumela abafundi ukuba babhengeze kwaye bahluzeke ikataloji yekhosi."
+
+msgid "Hide Private Courses"
+msgstr "Fihla Iikhosi Zabucala"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Khetha iikhosi zabucala ekubonakaliseni kwikataloji."
+
+msgid "Show Courses & Sessions"
+msgstr "Bonisa Iikhosi & Iiseshini"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Qulunqa zombini iikhosi kunye neeseshini kwiziphumo zekataloji."
+
+msgid "Auto Session Subscription"
+msgstr "Ubhaliselo lweSeshini oluzenzekelayo"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Vula ubhaliselo oluzenzekelayo lweeseshini kubasebenzisi."
+
+msgid "Subscription in Session View"
+msgstr "Ubhaliselo kwiSeshini yokujongwa"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Vumela abasebenzisi ukuba babhalise kwikhosi ngokuthe ngqo kwiphepha leseshini yabo."
+
+msgid "Enable redirection plugin"
+msgstr "Vula iplagi yokuphinda thumelela"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Uluhlu oluchaza '\'days\'' kunye '\'months\'' ukuze kusethwe umhla wokuphelelwa kwexesha lwe-akhawunti xa umsebenzisi engena okokuqala."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Uluhlu lwe-role => inani elimele inani leentsuku i-akhawunti inayo phambi kokuphelelwa, kuxhomekeke kwindima."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Intsimi yomsebenzisi eyongezelelweyo esetyenziswa ukukhangela kunye negama leseshini"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Esi sethi sichaza isitshixo sentsimi yomsebenzisi eyongezelelweyo (umz., \"company\") esiya kusetyenziswa ukukhangela abasebenzisi kunye nokuchaza igama leseshini xa ubhalisa abafundi kwi /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Umvelisi wamagama eGlossary"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Vumela ootitshala ukuba bacele amagama eglossary aveliswe yi-AI kwikhosi yabo. Oku kuya kuvelisa amagama angama-20 ngokusekelwe kwisihloko sekhosi kunye nenkcazo ngokubanzi kwisixhobo senkcazo yekhosi. Ukuba isetyenziswe ngaphezulu kwesinye, iya kukhupha amagama sele khona kwelo glossary (qinisekisa ukuba umxholo unokwabelwana naweenkonzo ze-AI ezilungisiweyo)."
+
+msgid "Video generator"
+msgstr "Umvelisi wevidiyo"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Uvelisa iividiyo ngokusekelwe kwizikhuthazo okanye umxholo usebenzisa i-AI (oku kunokusebenzisa amatokhini amaninzi)."
+
+msgid "Course analyser"
+msgstr "Umhlalutyi wekhosi"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Hlalutya zonke izixhobo kwikhosi enye okanye ezininzi kwaye iqeqeshe imodeli ye-AI phambili ukuze iphendule nawuphi na umbuzo kule khosi okanye ezi khosi (qinisekisa ukuba umxholo unokwabelwana naweenkonzo ze-AI ezilungisiweyo)."
+
+msgid "Test/development"
+msgstr "Uvivinyo/uphuhliso"
+
+msgid "Crons"
+msgstr "Iicrons"
+
+msgid "Editor"
+msgstr "Umhleli"
+
+msgid "Gradebook"
+msgstr "Incwadi yamanqaku"
+
+msgid "Internationalization"
+msgstr "Ukuhlelwa kweNkcubeko yeHlabathi"
+
+msgid "User profiles"
+msgstr "Iipروفayli zabasebenzisi"
+
+msgid "Support tickets"
+msgstr "Amaxwebhu enkxaso"
+
+msgid "Webservices"
+msgstr "I-Webservices"
+
+msgid "Catalogue"
+msgstr "Ikhathalogu"
+
+msgid "Workflows"
+msgstr "I-Workflows"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Usetingu lunokuguqulwa kwii-URLs ezingaphantsi"
+
+msgid "Show JSON Template"
+msgstr "Bonisa iTemplethi yeJSON"
+
+msgid "JSON Template"
+msgstr "iTemplet yesiJSON"
+
+msgid "Installing Xapian bindings"
+msgstr "Ukufakela iibhindi zeXapian"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Esi siqokoqo esilandelayo sibonisa umzekelo wokufakela iibhindi zeXapian PHP kwi-Ubuntu 25.04 kunye nePHP 8.3. Qulungisa iindlela kunye neenguqu kwi ndawo yakho."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Qinisekisa ukuba unaye kuphela inguqu yePHP oyisebenzisayo ngokwenene (umzekelo 8.3) kwaye ugwabele phantsi ukuxuba iinguqu ezininzi ezineendlela ezahlukeneyo zokwandisa."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Ngesinye isihlandlo isandiso silayishwe kakuhle kuzo zombini i-CLI kunye nomncedisi wewebhu, uhlalutyo lokukhangela ngasentla kufuneka luxele ukuba imodyuli yeXapian ifakiwe."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Coca iifayile zokufaka okwethutyana kunye ne-cache"
+
+msgid "Directory"
+msgstr "Uloyiko"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Cima kuphela iifayile ezindala kune (imizuzu)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Beka 0 ukuze ucime zonke iifayile. Sebenzisa ixabiso eliphezulu (umzekelo, 60) ukuze uphephe ukususa iifayile ezisafakwa."
+
+msgid "Preview only (do not delete)"
+msgstr "Bonisa kuphela (ungacimi)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Isaziso: uza kucima ZONKE iifayile zokufaka okwethutyana. Esi sixeko asinakubuyiselwa."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Oku kuya kucima zonke iifayile zokufaka okwethutyana. Qhubeka?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Oku kuya kucima iifayile ezindala kune-%minutes% imizuzu. Qhubeka?"
 

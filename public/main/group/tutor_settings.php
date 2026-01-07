@@ -3,7 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CGroup;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
@@ -75,21 +74,15 @@ function sort_users($user_a, $user_b)
     }
 }
 
-$htmlHeadXtra[] = '<script>
-$(function() {
-    $("#max_member").on("focus", function() {
-        $("#max_member_selected").attr("checked", true);
-    });
-});
- </script>';
-
-// Build form
 $form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidreq());
 $form->addElement('hidden', 'action');
 
-// Group tutors
-$group_tutor_list = $groupEntity->getTutors();
+if (method_exists($form, 'updateAttributes')) {
+    $form->updateAttributes(['class' => 'space-y-8']);
+}
 
+// Group tutors selected
+$group_tutor_list = $groupEntity->getTutors();
 $selected_tutors = [];
 foreach ($group_tutor_list as $user) {
     $selected_tutors[] = $user->getUser()->getId();
@@ -111,7 +104,7 @@ if ($subscribedUsers) {
 $orderUserListByOfficialCode = api_get_setting('display.order_user_list_by_official_code');
 if (!empty($complete_user_list)) {
     usort($complete_user_list, 'sort_users');
-    foreach ($complete_user_list as $index => $user) {
+    foreach ($complete_user_list as $user) {
         if (in_array($user['user_id'], $subscribedUsers)) {
             continue;
         }
@@ -127,17 +120,11 @@ if (!empty($complete_user_list)) {
                 $groupNameListToString = ' - ['.implode(', ', $groupNameList).']';
             }
 
-            $name = api_get_person_name(
-                $user['firstname'],
-                $user['lastname']
-            ).' ('.$user['username'].')'.$officialCode;
+            $name = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')'.$officialCode;
 
             if ('true' === $orderUserListByOfficialCode) {
                 $officialCode = !empty($user['official_code']) ? $user['official_code'].' - ' : '? - ';
-                $name = $officialCode.' '.api_get_person_name(
-                    $user['firstname'],
-                    $user['lastname']
-                ).' ('.$user['username'].')';
+                $name = $officialCode.' '.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
             }
 
             $possible_users[$user['user_id']] = $name.$groupNameListToString;
@@ -145,14 +132,28 @@ if (!empty($complete_user_list)) {
     }
 }
 
-$group_tutors_element = $form->addMultiSelect(
-    'group_tutors',
-    get_lang('Coaches'),
-    $possible_users,
-);
+// UI wrapper: title + group title + tabs
+$form->addHtml('<div class="mx-auto wd-full px-4 sm:px-6 lg:px-8">');
+$form->addHtml('<div class="mb-6">');
+$form->addHtml('<h1 class="text-2xl font-semibold text-gray-900">'.Security::remove_XSS($nameTools).'</h1>');
+$form->addHtml('<p class="mt-1 text-sm text-gray-600">'.Security::remove_XSS($groupEntity->getTitle()).'</p>');
+$form->addHtml('</div>');
+$form->addHtml(GroupManager::renderGroupTabs('tutor'));
 
-// submit button
+// Card
+$form->addHtml('<div class="rounded-lg border border-gray-50 bg-white p-6 shadow-sm">');
+$form->addHtml('<h2 class="text-base font-semibold text-gray-900 mb-4">'.get_lang('Coaches').'</h2>');
+
+$form->addMultiSelect('group_tutors', get_lang('Coaches'), $possible_users);
+
+$form->addHtml('</div>');
+
+// Submit
+$form->addHtml('<div class="flex justify-end">');
 $form->addButtonSave(get_lang('Save settings'));
+$form->addHtml('</div>');
+
+$form->addHtml('</div>'); // container
 
 if ($form->validate()) {
     $values = $form->exportValues();
@@ -194,17 +195,25 @@ if ($form->validate()) {
 
 $defaults = $current_group;
 $defaults['group_tutors'] = $selected_tutors;
-$action = isset($_GET['action']) ? $_GET['action'] : '';
-$defaults['action'] = $action;
+$defaults['action'] = isset($_GET['action']) ? $_GET['action'] : '';
 
+$searchAlertHtml = '';
 if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
     $keyword_name = Security::remove_XSS($_GET['keyword']);
-    echo '<br/>'.get_lang('Search results for:').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
+    $searchAlertHtml = '<div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 mt-4">'.
+        '<div class="rounded-md border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800">'.
+        get_lang('Search results for:').' <span class="font-medium italic">'.$keyword_name.'</span>'.
+        '</div>'.
+        '</div>';
 }
 
-Display :: display_header($nameTools, 'Group');
+Display::display_header($nameTools, 'Group');
+
+if (!empty($searchAlertHtml)) {
+    echo $searchAlertHtml;
+}
+
 $form->setDefaults($defaults);
-echo GroupManager::getSettingBar('tutor');
 $form->display();
 
-Display :: display_footer();
+Display::display_footer();

@@ -23,11 +23,13 @@ final readonly class LanguageHelper
         if ($locale) {
             $language = $this->languageRepository->findByIsoCode($locale);
 
-            if ($language->getParent()) {
-                $language = $language->getParent();
-            }
+            if ($language) {
+                if ($language?->getParent()) {
+                    $language = $language->getParent();
+                }
 
-            return str_replace('_', '-', $language->getIsocode());
+                return str_replace('_', '-', $language->getIsocode());
+            }
         }
 
         return 'en-US';

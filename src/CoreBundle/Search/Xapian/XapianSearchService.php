@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Search\Xapian;
 
+use Doctrine\DBAL\Connection;
 use RuntimeException;
 use Throwable;
 use XapianDatabase;
@@ -17,21 +18,21 @@ use XapianStem;
 
 /**
  * High-level Xapian search service for Chamilo 2.
- *
- * Demo version: free-text search over documents indexed by XapianIndexService.
  */
 final class XapianSearchService
 {
     public function __construct(
         private readonly SearchIndexPathResolver $indexPathResolver,
+        private readonly Connection $conn,
     ) {}
 
     /**
      * Execute a simple search query against the Xapian index.
      *
-     * @param string $queryString Free text query string
-     * @param int    $offset      First result offset (0-based)
-     * @param int    $length      Maximum number of results
+     * Supports field queries like:
+     *  - t:"some title"
+     *  - d:lorem
+     *  - k:peru
      *
      * @return array{
      *     count:int,
@@ -42,8 +43,8 @@ final class XapianSearchService
         string $queryString,
         int $offset = 0,
         int $length = 10,
-        array $extra = [],    // Kept for signature compatibility but unused in the demo
-        int $countType = 0,   // Kept for signature compatibility but unused in the demo
+        array $extra = [],
+        int $countType = 0,
     ): array {
         if (!class_exists(XapianDatabase::class)) {
             throw new RuntimeException('Xapian PHP extension is not loaded.');
@@ -60,19 +61,51 @@ final class XapianSearchService
 
         $enquire = new XapianEnquire($db);
 
-        if ('' !== $queryString) {
-            // Free-text query with stemming
+        if ('' !== trim($queryString)) {
             $queryParser = new XapianQueryParser();
-            $stemmer = new XapianStem('english'); // TODO: pick language from user/platform
+
+            // Resolve language for stemming. Caller can pass:
+            // - $extra['language'] or $extra['language_iso'] (e.g. "fr_61", "fr_FR", "fr", "french")
+            // - $extra['locale'] (e.g. "es_PE")
+            $languageRaw = null;
+            foreach (['language', 'language_iso', 'locale'] as $k) {
+                if (isset($extra[$k]) && \is_string($extra[$k]) && '' !== trim($extra[$k])) {
+                    $languageRaw = trim((string) $extra[$k]);
+
+                    break;
+                }
+            }
+
+            // Normalize ISO/code into a Xapian stemmer language string (fallback to english).
+            $xapianLanguage = $this->mapLanguageToXapianStemmer($languageRaw);
+
+            $usedLanguage = $xapianLanguage;
+
+            try {
+                $stemmer = new XapianStem($xapianLanguage);
+            } catch (Throwable $e) {
+                $usedLanguage = 'english';
+                $stemmer = new XapianStem($usedLanguage);
+            }
 
             $queryParser->set_stemmer($stemmer);
             $queryParser->set_database($db);
             $queryParser->set_stemming_strategy(XapianQueryParser::STEM_SOME);
 
-            $parsedQuery = $queryParser->parse_query($queryString);
-            $query = $parsedQuery;
+            // Dynamic prefixes (t:, d:, k:, etc)
+            $this->configureDynamicFieldPrefixes($queryParser);
+
+            // IMPORTANT: make parsing consistent (phrases, boolean ops, etc)
+            $flags = $this->buildQueryParserFlags();
+
+            try {
+                $query = $queryParser->parse_query($queryString, $flags);
+            } catch (Throwable $e) {
+                // Safe fallback: do not crash search endpoint on malformed queries.
+                error_log('[Xapian] XapianSearchService::search: parse_query failed: '.$e->getMessage());
+                $query = new XapianQuery('');
+            }
         } else {
-            // Empty query = match everything
             $query = new XapianQuery('');
         }
 
@@ -81,10 +114,8 @@ final class XapianSearchService
         $matches = $enquire->get_mset($offset, $length);
 
         $results = [];
-
         for ($m = $matches->begin(); !$m->equals($matches->end()); $m->next()) {
             $document = $m->get_document();
-
             if (!$document instanceof XapianDocument) {
                 continue;
             }
@@ -105,5 +136,128 @@ final class XapianSearchService
             'count' => $count,
             'results' => $results,
         ];
+    }
+
+    /**
+     * Map ISO codes or language names into Xapian stemmer language.
+     * Keeps behavior stable by falling back to english.
+     */
+    private function mapLanguageToXapianStemmer(?string $language): string
+    {
+        if (null === $language) {
+            return 'english';
+        }
+
+        $raw = strtolower(trim($language));
+        if ('' === $raw) {
+            return 'english';
+        }
+
+        // If caller already provides a Xapian language name, accept it.
+        $known = [
+            'english', 'spanish', 'french', 'portuguese', 'italian', 'german', 'dutch',
+            'swedish', 'norwegian', 'danish', 'finnish', 'russian', 'arabic', 'greek',
+            'turkish', 'romanian', 'hungarian', 'indonesian',
+        ];
+
+        if (\in_array($raw, $known, true)) {
+            return $raw;
+        }
+
+        // Normalize ISO variants: es_ES, pt-BR, fr_61, en_US -> es, pt, fr, en
+        $iso = $raw;
+        if (str_contains($iso, '_')) {
+            $iso = explode('_', $iso, 2)[0];
+        }
+        if (str_contains($iso, '-')) {
+            $iso = explode('-', $iso, 2)[0];
+        }
+        $iso = strtolower(trim($iso));
+
+        $map = [
+            'en' => 'english',
+            'es' => 'spanish',
+            'fr' => 'french',
+            'pt' => 'portuguese',
+            'it' => 'italian',
+            'de' => 'german',
+            'nl' => 'dutch',
+            'sv' => 'swedish',
+            'no' => 'norwegian',
+            'da' => 'danish',
+            'fi' => 'finnish',
+            'ru' => 'russian',
+            'ar' => 'arabic',
+            'el' => 'greek',
+            'tr' => 'turkish',
+            'ro' => 'romanian',
+            'hu' => 'hungarian',
+            'id' => 'indonesian',
+        ];
+
+        return $map[$iso] ?? 'english';
+    }
+
+    private function configureDynamicFieldPrefixes(XapianQueryParser $qp): void
+    {
+        try {
+            $rows = $this->conn->fetchAllAssociative('SELECT code FROM search_engine_field');
+        } catch (Throwable $e) {
+            error_log('[Xapian] XapianSearchService: failed to read search_engine_field: '.$e->getMessage());
+
+            // Safe fallback
+            $qp->add_prefix('t', 'FT');
+            $qp->add_prefix('d', 'FD');
+            $qp->add_prefix('k', 'FK');
+            $qp->add_prefix('c', 'FC');
+
+            return;
+        }
+
+        $loaded = [];
+
+        foreach ($rows as $row) {
+            $code = strtolower(trim((string) ($row['code'] ?? '')));
+            if ('' === $code) {
+                continue;
+            }
+
+            // Must match indexing convention: 'F' + strtoupper(code)
+            $prefix = 'F'.strtoupper($code);
+            $qp->add_prefix($code, $prefix);
+
+            $loaded[] = $code.':'.$prefix;
+        }
+    }
+
+    private function buildQueryParserFlags(): int
+    {
+        // Start with default if available, otherwise 0
+        $flags = 0;
+
+        $defaultConst = XapianQueryParser::class.'::FLAG_DEFAULT';
+        if (\defined($defaultConst)) {
+            $flags = \constant($defaultConst);
+        }
+
+        // Add common useful flags if present in the binding
+        $flagNames = [
+            'FLAG_PHRASE',
+            'FLAG_BOOLEAN',
+            'FLAG_LOVEHATE',
+            'FLAG_WILDCARD',
+            'FLAG_PURE_NOT',
+            'FLAG_SPELLING_CORRECTION',
+            'FLAG_PARTIAL',
+        ];
+
+        foreach ($flagNames as $name) {
+            $const = XapianQueryParser::class.'::'.$name;
+            if (\defined($const)) {
+                $flags |= \constant($const);
+            }
+        }
+
+        return $flags;
     }
 }

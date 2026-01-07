@@ -118,7 +118,7 @@ class PageHelper
         $this->pageCategoryRepository->update($footerPrivateCategory);
 
         // Categories for extra content in admin blocks.
-        foreach (self::getCategoriesForAdminBlocks() as $nameBlock) {
+        foreach (PageCategory::ADMIN_BLOCKS_CATEGORIES as $nameBlock) {
             $usersAdminBlock = (new PageCategory())
                 ->setTitle($nameBlock)
                 ->setType('grid')
@@ -143,21 +143,6 @@ class PageHelper
         $this->pageCategoryRepository->update($introductionCategory);
 
         return true;
-    }
-
-    public static function getCategoriesForAdminBlocks(): array
-    {
-        return [
-            'block-admin-users',
-            'block-admin-courses',
-            'block-admin-sessions',
-            'block-admin-gradebook',
-            'block-admin-skills',
-            'block-admin-privacy',
-            'block-admin-settings',
-            'block-admin-platform',
-            'block-admin-chamilo',
-        ];
     }
 
     /**

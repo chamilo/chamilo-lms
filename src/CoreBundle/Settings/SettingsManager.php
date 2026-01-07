@@ -14,6 +14,8 @@ use Chamilo\CoreBundle\Search\SearchEngineFieldSynchronizer;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use InvalidArgumentException;
+use ReflectionMethod;
+use ReflectionNamedType;
 use Sylius\Bundle\SettingsBundle\Manager\SettingsManagerInterface;
 use Sylius\Bundle\SettingsBundle\Model\Settings;
 use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
@@ -25,6 +27,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Exception\ValidatorException;
 
 use const ARRAY_FILTER_USE_KEY;
+use const PHP_URL_HOST;
 
 /**
  * Handles the platform settings.
@@ -54,6 +57,8 @@ class SettingsManager implements SettingsManagerInterface
     protected ?array $schemaList;
 
     protected RequestStack $request;
+
+    private ?AccessUrl $mainUrlCache = null;
 
     public function __construct(
         ServiceRegistryInterface $schemaRegistry,
@@ -154,25 +159,45 @@ class SettingsManager implements SettingsManagerInterface
             return $overridden;
         }
 
-        [$category, $name] = explode('.', $name);
+        [$category, $variable] = explode('.', $name);
 
         if ($loadFromDb) {
-            $settings = $this->load($category, $name);
-            if ($settings->has($name)) {
-                return $settings->get($name);
+            $settings = $this->load($category, $variable);
+            if ($settings->has($variable)) {
+                return $settings->get($variable);
             }
 
             return null;
         }
 
+        $this->ensureUrlResolved();
+
+        // MultiURL: avoid stale session schema cache in sub-URLs.
+        // Sessions are host-bound, so changes on the main URL cannot invalidate a sub-URL session cache.
+        // Resolve effective settings from DB once per request (runtime cache) to apply lock/unlock immediately.
+        if (null !== $this->url && !$this->isMainUrlContext()) {
+            if (!isset($this->resolvedSettings[$category])) {
+                $this->resolvedSettings[$category] = $this->load($category);
+            }
+
+            $settings = $this->resolvedSettings[$category];
+            if ($settings->has($variable)) {
+                return $settings->get($variable);
+            }
+
+            error_log("Attempted to access undefined setting '$variable' in category '$category'.");
+
+            return null;
+        }
+
+        // Main URL (or legacy single-URL): keep the fast session cache behavior.
         $this->loadAll();
 
         if (!empty($this->schemaList) && isset($this->schemaList[$category])) {
             $settings = $this->schemaList[$category];
-            if ($settings->has($name)) {
-                return $settings->get($name);
+            if ($settings->has($variable)) {
+                return $settings->get($variable);
             }
-            error_log("Attempted to access undefined setting '$name' in category '$category'.");
 
             return null;
         }
@@ -182,11 +207,16 @@ class SettingsManager implements SettingsManagerInterface
 
     public function loadAll(): void
     {
+        $this->ensureUrlResolved();
+
         $session = null;
 
         if ($this->request->getCurrentRequest()) {
             $session = $this->request->getCurrentRequest()->getSession();
-            $schemaList = $session->get('schemas');
+
+            $cacheKey = $this->getSessionSchemaCacheKey();
+            $schemaList = $session->get($cacheKey);
+
             if (!empty($schemaList)) {
                 $this->schemaList = $schemaList;
 
@@ -234,12 +264,15 @@ class SettingsManager implements SettingsManagerInterface
         }
         $this->schemaList = $schemaList;
         if ($session && $this->request->getCurrentRequest()) {
-            $session->set('schemas', $schemaList);
+            $cacheKey = $this->getSessionSchemaCacheKey();
+            $session->set($cacheKey, $schemaList);
         }
     }
 
     public function load(string $schemaAlias, ?string $namespace = null, bool $ignoreUnknown = true): SettingsInterface
     {
+        $this->ensureUrlResolved();
+
         $settings = new Settings();
         $schemaAliasNoPrefix = $schemaAlias;
         $schemaAlias = 'chamilo_core.settings.'.$schemaAlias;
@@ -280,7 +313,9 @@ class SettingsManager implements SettingsManagerInterface
 
     public function update(SettingsInterface $settings): void
     {
-        $namespace = $settings->getSchemaAlias();
+        $this->ensureUrlResolved();
+
+        $namespace = (string) $settings->getSchemaAlias();
 
         /** @var SchemaInterface $schema */
         $schema = $this->schemaRegistry->get($settings->getSchemaAlias());
@@ -290,55 +325,77 @@ class SettingsManager implements SettingsManagerInterface
         $raw = $settings->getParameters();
         $raw = $this->normalizeNullsBeforeResolve($raw, $settingsBuilder);
         $parameters = $settingsBuilder->resolve($raw);
-        // Transform value. Example array to string using transformer. Example:
-        // 1. Setting "tool_visible_by_default_at_creation" it's a multiple select
-        // 2. Is defined as an array in class DocumentSettingsSchema
-        // 3. Add transformer for that variable "ArrayToIdentifierTransformer"
-        // 4. Here we recover the transformer and convert the array to string
+
+        // Transform values to scalar strings for persistence.
         foreach ($parameters as $parameter => $value) {
             $parameters[$parameter] = $this->transformToString($value);
         }
 
         $settings->setParameters($parameters);
-        $category = $this->convertServiceToNameSpace($settings->getSchemaAlias());
-        $persistedParameters = $this->repository->findBy([
-            'category' => $category,
-        ]);
 
-        $persistedParametersMap = [];
+        $simpleCategoryName = str_replace('chamilo_core.settings.', '', $namespace);
+        $url = $this->getUrl();
 
-        /** @var SettingsCurrent $parameter */
-        foreach ($persistedParameters as $parameter) {
-            $persistedParametersMap[$parameter->getVariable()] = $parameter;
+        // Restrict lookup to current URL so we do not override other URLs.
+        $criteria = [
+            'category' => $simpleCategoryName,
+        ];
+
+        if (null !== $url) {
+            $criteria['url'] = $url;
         }
 
-        $url = $this->getUrl();
-        $simpleCategoryName = str_replace('chamilo_core.settings.', '', $namespace);
+        $persistedParameters = $this->repository->findBy($criteria);
+
+        /** @var array<string, SettingsCurrent> $persistedParametersMap */
+        $persistedParametersMap = [];
+        foreach ($persistedParameters as $parameter) {
+            if ($parameter instanceof SettingsCurrent) {
+                $persistedParametersMap[$parameter->getVariable()] = $parameter;
+            }
+        }
+
+        // Preload canonical metadata (main URL) once to avoid N+1 queries.
+        $canonicalByVar = $this->getCanonicalSettingsMap($simpleCategoryName);
 
         foreach ($parameters as $name => $value) {
-            if (isset($persistedParametersMap[$name])) {
-                $parameter = $persistedParametersMap[$name];
-                $parameter->setSelectedValue($value);
-                $parameter->setCategory($simpleCategoryName);
-                $this->manager->persist($parameter);
-            } else {
-                $parameter = (new SettingsCurrent())
-                    ->setVariable($name)
-                    ->setCategory($simpleCategoryName)
-                    ->setTitle($name)
-                    ->setSelectedValue($value)
-                    ->setUrl($url)
-                    ->setAccessUrlChangeable(1)
-                    ->setAccessUrlLocked(0)
-                ;
+            $canonical = $canonicalByVar[$name] ?? null;
 
-                $this->manager->persist($parameter);
+            // MultiURL: respect access_url_changeable defined on main URL.
+            $isChangeable = $this->isSettingChangeableForCurrentUrl($simpleCategoryName, $name);
+
+            if (isset($persistedParametersMap[$name])) {
+                $row = $persistedParametersMap[$name];
+
+                // Always keep metadata in sync (title/comment/type/etc).
+                $row->setCategory($simpleCategoryName);
+                $this->syncSettingMetadataFromCanonical($row, $canonical, $name);
+
+                // Only write value if changeable (or if we are on main URL).
+                if ($isChangeable || $this->isMainUrlContext()) {
+                    $row->setSelectedValue((string) $value);
+                }
+
+                // Do NOT force setUrl() here unless you really must.
+                // Setting the URL on an existing row can accidentally "move" it across URLs if a query is wrong.
+                $this->manager->persist($row);
+
+                continue;
             }
+
+            // Do not create rows for non-changeable settings in sub-URLs.
+            if (!$isChangeable && !$this->isMainUrlContext()) {
+                continue;
+            }
+
+            $row = $this->createSettingForCurrentUrl($simpleCategoryName, $name, (string) $value, $canonical);
+            $this->manager->persist($row);
         }
 
         $this->applySearchEngineFieldsSyncIfNeeded($simpleCategoryName, $parameters);
 
         $this->manager->flush();
+        $this->clearSessionSchemaCache();
     }
 
     /**
@@ -346,7 +403,9 @@ class SettingsManager implements SettingsManagerInterface
      */
     public function save(SettingsInterface $settings): void
     {
-        $namespace = $settings->getSchemaAlias();
+        $this->ensureUrlResolved();
+
+        $namespace = (string) $settings->getSchemaAlias();
 
         /** @var SchemaInterface $schema */
         $schema = $this->schemaRegistry->get($settings->getSchemaAlias());
@@ -356,48 +415,74 @@ class SettingsManager implements SettingsManagerInterface
         $raw = $settings->getParameters();
         $raw = $this->normalizeNullsBeforeResolve($raw, $settingsBuilder);
         $parameters = $settingsBuilder->resolve($raw);
-        // Transform value. Example array to string using transformer. Example:
-        // 1. Setting "tool_visible_by_default_at_creation" it's a multiple select
-        // 2. Is defined as an array in class DocumentSettingsSchema
-        // 3. Add transformer for that variable "ArrayToIdentifierTransformer"
-        // 4. Here we recover the transformer and convert the array to string
+
+        // Transform values to scalar strings for persistence.
         foreach ($parameters as $parameter => $value) {
             $parameters[$parameter] = $this->transformToString($value);
         }
         $settings->setParameters($parameters);
-        $persistedParameters = $this->repository->findBy([
-            'category' => $this->convertServiceToNameSpace($settings->getSchemaAlias()),
-        ]);
-        $persistedParametersMap = [];
-        foreach ($persistedParameters as $parameter) {
-            $persistedParametersMap[$parameter->getVariable()] = $parameter;
+
+        $simpleCategoryName = str_replace('chamilo_core.settings.', '', $namespace);
+        $url = $this->getUrl();
+
+        // Restrict lookup to current URL so we do not override other URLs.
+        $criteria = [
+            'category' => $simpleCategoryName,
+        ];
+
+        if (null !== $url) {
+            $criteria['url'] = $url;
         }
 
-        $url = $this->getUrl();
-        $simpleCategoryName = str_replace('chamilo_core.settings.', '', $namespace);
+        $persistedParameters = $this->repository->findBy($criteria);
+
+        /** @var array<string, SettingsCurrent> $persistedParametersMap */
+        $persistedParametersMap = [];
+        foreach ($persistedParameters as $parameter) {
+            if ($parameter instanceof SettingsCurrent) {
+                $persistedParametersMap[$parameter->getVariable()] = $parameter;
+            }
+        }
+
+        // Preload canonical metadata (main URL) once to avoid N+1 queries.
+        $canonicalByVar = $this->getCanonicalSettingsMap($simpleCategoryName);
 
         foreach ($parameters as $name => $value) {
-            if (isset($persistedParametersMap[$name])) {
-                $parameter = $persistedParametersMap[$name];
-                $parameter->setSelectedValue($value);
-            } else {
-                $parameter = (new SettingsCurrent())
-                    ->setVariable($name)
-                    ->setCategory($simpleCategoryName)
-                    ->setTitle($name)
-                    ->setSelectedValue($value)
-                    ->setUrl($url)
-                    ->setAccessUrlChangeable(1)
-                    ->setAccessUrlLocked(0)
-                ;
+            $canonical = $canonicalByVar[$name] ?? null;
 
-                $this->manager->persist($parameter);
+            // MultiURL: respect access_url_changeable defined on main URL.
+            $isChangeable = $this->isSettingChangeableForCurrentUrl($simpleCategoryName, $name);
+
+            if (isset($persistedParametersMap[$name])) {
+                $row = $persistedParametersMap[$name];
+
+                // Always keep metadata in sync (title/comment/type/etc).
+                $row->setCategory($simpleCategoryName);
+                $this->syncSettingMetadataFromCanonical($row, $canonical, $name);
+
+                // Only write value if changeable (or if we are on main URL).
+                if ($isChangeable || $this->isMainUrlContext()) {
+                    $row->setSelectedValue((string) $value);
+                }
+
+                $this->manager->persist($row);
+
+                continue;
             }
+
+            // Do not create rows for non-changeable settings in sub-URLs.
+            if (!$isChangeable && !$this->isMainUrlContext()) {
+                continue;
+            }
+
+            $row = $this->createSettingForCurrentUrl($simpleCategoryName, $name, (string) $value, $canonical);
+            $this->manager->persist($row);
         }
 
         $this->applySearchEngineFieldsSyncIfNeeded($simpleCategoryName, $parameters);
 
         $this->manager->flush();
+        $this->clearSessionSchemaCache();
     }
 
     /**
@@ -424,14 +509,42 @@ class SettingsManager implements SettingsManagerInterface
      */
     public function getParametersFromKeywordOrderedByCategory($keyword): array
     {
-        $query = $this->repository->createQueryBuilder('s')
+        $this->ensureUrlResolved();
+
+        $qb = $this->repository->createQueryBuilder('s')
             ->where('s.variable LIKE :keyword OR s.title LIKE :keyword')
             ->setParameter('keyword', "%{$keyword}%")
         ;
-        $parametersFromDb = $query->getQuery()->getResult();
+
+        // MultiURL: when on a sub-URL, include both current + main URL rows.
+        if (null !== $this->url && !$this->isMainUrlContext()) {
+            $mainUrl = $this->getMainUrlEntity();
+            if ($mainUrl) {
+                $qb
+                    ->andWhere('s.url IN (:urls)')
+                    ->setParameter('urls', [$this->url, $mainUrl])
+                ;
+            } else {
+                $qb
+                    ->andWhere('s.url = :url')
+                    ->setParameter('url', $this->url)
+                ;
+            }
+        } elseif (null !== $this->url) {
+            $qb
+                ->andWhere('s.url = :url')
+                ->setParameter('url', $this->url)
+            ;
+        }
+
+        $parametersFromDb = $qb->getQuery()->getResult();
+
+        // Deduplicate by variable: if locked on main URL => pick main; else pick current when available.
+        $effective = $this->deduplicateByEffectiveValue($parametersFromDb);
+
         $parameters = [];
 
-        foreach ($parametersFromDb as $parameter) {
+        foreach ($effective as $parameter) {
             /** @var SettingsCurrent $parameter */
             $category = $parameter->getCategory();
             $variable = $parameter->getVariable();
@@ -464,18 +577,64 @@ class SettingsManager implements SettingsManagerInterface
      */
     public function getParametersFromKeyword($namespace, $keyword = '', $returnObjects = false)
     {
+        $this->ensureUrlResolved();
+
         if (empty($keyword)) {
             $criteria = [
                 'category' => $namespace,
             ];
-            $parametersFromDb = $this->repository->findBy($criteria);
+
+            if (null !== $this->url && !$this->isMainUrlContext()) {
+                $mainUrl = $this->getMainUrlEntity();
+                if ($mainUrl) {
+                    $qb = $this->repository->createQueryBuilder('s')
+                        ->where('s.category = :cat')
+                        ->andWhere('s.url IN (:urls)')
+                        ->setParameter('cat', $namespace)
+                        ->setParameter('urls', [$this->url, $mainUrl])
+                    ;
+
+                    $parametersFromDb = $qb->getQuery()->getResult();
+                } else {
+                    $criteria['url'] = $this->url;
+                    $parametersFromDb = $this->repository->findBy($criteria);
+                }
+            } elseif (null !== $this->url) {
+                $criteria['url'] = $this->url;
+                $parametersFromDb = $this->repository->findBy($criteria);
+            } else {
+                $parametersFromDb = $this->repository->findBy($criteria);
+            }
         } else {
-            $query = $this->repository->createQueryBuilder('s')
+            $qb = $this->repository->createQueryBuilder('s')
                 ->where('s.variable LIKE :keyword')
+                ->andWhere('s.category = :cat')
                 ->setParameter('keyword', "%{$keyword}%")
+                ->setParameter('cat', $namespace)
             ;
-            $parametersFromDb = $query->getQuery()->getResult();
+
+            if (null !== $this->url && !$this->isMainUrlContext()) {
+                $mainUrl = $this->getMainUrlEntity();
+                if ($mainUrl) {
+                    $qb->andWhere('s.url IN (:urls)')
+                        ->setParameter('urls', [$this->url, $mainUrl])
+                    ;
+                } else {
+                    $qb->andWhere('s.url = :url')
+                        ->setParameter('url', $this->url)
+                    ;
+                }
+            } elseif (null !== $this->url) {
+                $qb->andWhere('s.url = :url')
+                    ->setParameter('url', $this->url)
+                ;
+            }
+
+            $parametersFromDb = $qb->getQuery()->getResult();
         }
+
+        // Deduplicate to return effective rows only.
+        $parametersFromDb = $this->deduplicateByEffectiveValue($parametersFromDb);
 
         if ($returnObjects) {
             return $parametersFromDb;
@@ -493,8 +652,6 @@ class SettingsManager implements SettingsManagerInterface
     private function validateSetting(string $name): string
     {
         if (!str_contains($name, '.')) {
-            // throw new \InvalidArgumentException(sprintf('Parameter must be in format "namespace.name", "%s" given.', $name));
-
             // This code allows the possibility of calling
             // api_get_setting('allow_skills_tool') instead of
             // the "correct" way api_get_setting('platform.allow_skills_tool')
@@ -519,7 +676,7 @@ class SettingsManager implements SettingsManagerInterface
     }
 
     /**
-     * Load parameter from database.
+     * Load parameter from database (effective values).
      *
      * @param string $namespace
      *
@@ -527,12 +684,84 @@ class SettingsManager implements SettingsManagerInterface
      */
     private function getParameters($namespace)
     {
-        $parameters = [];
-        $category = $this->repository->findBy(['category' => $namespace]);
+        $this->ensureUrlResolved();
 
-        /** @var SettingsCurrent $parameter */
-        foreach ($category as $parameter) {
-            $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
+        $parameters = [];
+        $criteria = ['category' => $namespace];
+
+        // Legacy single-URL: return raw category settings.
+        if (null === $this->url) {
+            $rows = $this->repository->findBy($criteria);
+
+            /** @var SettingsCurrent $parameter */
+            foreach ($rows as $parameter) {
+                $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
+            }
+
+            return $parameters;
+        }
+
+        // Main URL: return only current URL rows.
+        if ($this->isMainUrlContext()) {
+            $rows = $this->repository->findBy($criteria + ['url' => $this->url]);
+
+            /** @var SettingsCurrent $parameter */
+            foreach ($rows as $parameter) {
+                $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
+            }
+
+            return $parameters;
+        }
+
+        // Sub-URL: merge main + current according to access_url_changeable/access_url_locked on main.
+        $mainUrl = $this->getMainUrlEntity();
+        if (null === $mainUrl) {
+            // Fallback: restrict to current URL if main URL cannot be resolved.
+            $rows = $this->repository->findBy($criteria + ['url' => $this->url]);
+
+            /** @var SettingsCurrent $parameter */
+            foreach ($rows as $parameter) {
+                $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
+            }
+
+            return $parameters;
+        }
+
+        /** @var SettingsCurrent[] $mainRows */
+        $mainRows = $this->repository->findBy($criteria + ['url' => $mainUrl]);
+
+        /** @var SettingsCurrent[] $currentRows */
+        $currentRows = $this->repository->findBy($criteria + ['url' => $this->url]);
+
+        $mainValueByVar = [];
+        $changeableByVar = [];
+        $lockedByVar = [];
+
+        foreach ($mainRows as $row) {
+            $var = $row->getVariable();
+            $mainValueByVar[$var] = $row->getSelectedValue();
+            $changeableByVar[$var] = (int) $row->getAccessUrlChangeable();
+            $lockedByVar[$var] = (int) $row->getAccessUrlLocked();
+        }
+
+        // Start with main values
+        foreach ($mainValueByVar as $var => $val) {
+            $parameters[$var] = $val;
+        }
+
+        // Override only for changeable variables AND not locked on main
+        foreach ($currentRows as $row) {
+            $var = $row->getVariable();
+
+            $isLocked = isset($lockedByVar[$var]) && 1 === (int) $lockedByVar[$var];
+            if ($isLocked) {
+                continue;
+            }
+
+            $isChangeable = !isset($changeableByVar[$var]) || 1 === (int) $changeableByVar[$var];
+            if ($isChangeable) {
+                $parameters[$var] = $row->getSelectedValue();
+            }
         }
 
         return $parameters;
@@ -540,27 +769,204 @@ class SettingsManager implements SettingsManagerInterface
 
     private function getAllParametersByCategory()
     {
-        $parameters = [];
-        $all = $this->repository->findAll();
+        $this->ensureUrlResolved();
 
-        /** @var SettingsCurrent $parameter */
-        foreach ($all as $parameter) {
-            $parameters[$parameter->getCategory()][$parameter->getVariable()] = $parameter->getSelectedValue();
+        $parameters = [];
+
+        // Single URL mode: keep original behaviour.
+        if (null === $this->url) {
+            $all = $this->repository->findAll();
+
+            /** @var SettingsCurrent $parameter */
+            foreach ($all as $parameter) {
+                $parameters[$parameter->getCategory()][$parameter->getVariable()] = $parameter->getSelectedValue();
+            }
+
+            return $parameters;
+        }
+
+        // Main URL: only return current URL rows.
+        if ($this->isMainUrlContext()) {
+            $all = $this->repository->findBy(['url' => $this->url]);
+
+            /** @var SettingsCurrent $parameter */
+            foreach ($all as $parameter) {
+                $parameters[$parameter->getCategory()][$parameter->getVariable()] = $parameter->getSelectedValue();
+            }
+
+            return $parameters;
+        }
+
+        // Sub-URL: merge main + current according to access_url_changeable/access_url_locked on main.
+        $mainUrl = $this->getMainUrlEntity();
+        if (null === $mainUrl) {
+            $all = $this->repository->findBy(['url' => $this->url]);
+
+            /** @var SettingsCurrent $parameter */
+            foreach ($all as $parameter) {
+                $parameters[$parameter->getCategory()][$parameter->getVariable()] = $parameter->getSelectedValue();
+            }
+
+            return $parameters;
+        }
+
+        /** @var SettingsCurrent[] $mainRows */
+        $mainRows = $this->repository->findBy(['url' => $mainUrl]);
+
+        /** @var SettingsCurrent[] $currentRows */
+        $currentRows = $this->repository->findBy(['url' => $this->url]);
+
+        $changeableByVar = [];
+        $lockedByVar = [];
+
+        // Start with main values
+        foreach ($mainRows as $row) {
+            $cat = (string) $row->getCategory();
+            $var = $row->getVariable();
+
+            $parameters[$cat][$var] = $row->getSelectedValue();
+            $changeableByVar[$var] = (int) $row->getAccessUrlChangeable();
+            $lockedByVar[$var] = (int) $row->getAccessUrlLocked();
+        }
+
+        // Override with current values only for changeable variables AND not locked on main.
+        foreach ($currentRows as $row) {
+            $cat = (string) $row->getCategory();
+            $var = $row->getVariable();
+
+            $isLocked = isset($lockedByVar[$var]) && 1 === (int) $lockedByVar[$var];
+            if ($isLocked) {
+                continue;
+            }
+
+            $isChangeable = !isset($changeableByVar[$var]) || 1 === (int) $changeableByVar[$var];
+            if ($isChangeable) {
+                $parameters[$cat][$var] = $row->getSelectedValue();
+            }
         }
 
         return $parameters;
     }
 
-    /*private function transformParameters(SettingsBuilder $settingsBuilder, array $parameters)
-     * {
-     * $transformedParameters = $parameters;
-     * foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
-     * if (array_key_exists($parameter, $parameters)) {
-     * $transformedParameters[$parameter] = $transformer->reverseTransform($parameters[$parameter]);
-     * }
-     * }
-     * return $transformedParameters;
-     * }*/
+    /**
+     * Check if a setting is changeable for the current URL, using the
+     * access_url_changeable flag from the main URL (ID = 1).
+     *
+     * Note: if access_url_locked = 1 on main URL, it is considered NOT changeable
+     * for sub-URLs (and it should not even be listed in sub-URLs).
+     */
+    private function isSettingChangeableForCurrentUrl(string $category, string $variable): bool
+    {
+        $this->ensureUrlResolved();
+
+        // No URL bound: behave as legacy single-URL platform.
+        if (null === $this->url) {
+            return true;
+        }
+
+        // Main URL can always edit settings. UI already restricts who can see/edit fields.
+        if ($this->isMainUrlContext()) {
+            return true;
+        }
+
+        // Try to load main (canonical) URL.
+        $mainUrl = $this->getMainUrlEntity();
+        if (null === $mainUrl) {
+            // If main URL is missing, fallback to permissive behaviour.
+            return true;
+        }
+
+        /** @var SettingsCurrent|null $mainSetting */
+        $mainSetting = $this->repository->findOneBy([
+            'category' => $category,
+            'variable' => $variable,
+            'url' => $mainUrl,
+        ]);
+
+        if (null === $mainSetting) {
+            // If there is no canonical row, do not block changes.
+            return true;
+        }
+
+        // If the setting is globally locked on main URL, sub-URLs must not override it.
+        if (1 === (int) $mainSetting->getAccessUrlLocked()) {
+            return false;
+        }
+
+        // When access_url_changeable is false/0 on main URL,
+        // secondary URLs must not override the value.
+        return (bool) $mainSetting->getAccessUrlChangeable();
+    }
+
+    private function createSettingForCurrentUrl(
+        string $category,
+        string $variable,
+        string $value,
+        ?SettingsCurrent $canonical = null
+    ): SettingsCurrent {
+        $this->ensureUrlResolved();
+
+        $url = $this->getUrl();
+
+        // If canonical metadata is not provided, try to resolve it from main URL.
+        if (null === $canonical) {
+            $mainUrl = $this->getMainUrlEntity();
+            if (null !== $mainUrl) {
+                // 1) Try exact category first
+                $found = $this->repository->findOneBy([
+                    'category' => $category,
+                    'variable' => $variable,
+                    'url' => $mainUrl,
+                ]);
+
+                // 2) Try legacy category variant (e.g. "Platform")
+                if (!$found instanceof SettingsCurrent) {
+                    $found = $this->repository->findOneBy([
+                        'category' => ucfirst($category),
+                        'variable' => $variable,
+                        'url' => $mainUrl,
+                    ]);
+                }
+
+                // 3) As a last resort, ignore category (still restricted to main URL)
+                if (!$found instanceof SettingsCurrent) {
+                    $found = $this->repository->findOneBy([
+                        'variable' => $variable,
+                        'url' => $mainUrl,
+                    ]);
+                }
+
+                if ($found instanceof SettingsCurrent) {
+                    $canonical = $found;
+                }
+            }
+        }
+
+        // Fallback: any existing row for this variable (avoid losing metadata).
+        if (null === $canonical) {
+            $found = $this->repository->findOneBy([
+                'variable' => $variable,
+            ]);
+
+            if ($found instanceof SettingsCurrent) {
+                $canonical = $found;
+            }
+        }
+
+        // IMPORTANT: Initialize typed properties before any getter is called.
+        $setting = (new SettingsCurrent())
+            ->setVariable($variable)
+            ->setCategory($category)
+            ->setSelectedValue($value)
+            ->setUrl($url)
+            ->setTitle($variable) // Safe default; may be overwritten by canonical metadata.
+        ;
+
+        // Sync metadata from canonical definition when possible.
+        $this->syncSettingMetadataFromCanonical($setting, $canonical, $variable);
+
+        return $setting;
+    }
 
     /**
      * Get variables and categories as in 1.11.x.
@@ -614,8 +1020,6 @@ class SettingsManager implements SettingsManagerInterface
             'account_valid_duration' => 'Platform',
             'use_session_mode' => 'Session',
             'allow_email_editor' => 'Tools',
-            // 'registered' => null',
-            // 'donotlistcampus' =>'null',
             'show_email_addresses' => 'Platform',
             'service_ppt2lp' => 'NULL',
             'upload_extensions_list_type' => 'Security',
@@ -677,14 +1081,11 @@ class SettingsManager implements SettingsManagerInterface
             'allow_send_message_to_all_platform_users' => 'Message',
             'message_max_upload_filesize' => 'Tools',
             'use_users_timezone' => 'profile',
-            // 'use_users_timezone' => 'Timezones',
             'timezone_value' => 'platform',
-            // 'timezone_value' => 'Timezones',
             'allow_user_course_subscription_by_course_admin' => 'Security',
             'show_link_bug_notification' => 'Platform',
             'show_link_ticket_notification' => 'Platform',
             'course_validation' => 'course',
-            // 'course_validation' => 'Platform',
             'course_validation_terms_and_conditions_url' => 'Platform',
             'enabled_wiris' => 'Editor',
             'allow_spellcheck' => 'Editor',
@@ -807,7 +1208,7 @@ class SettingsManager implements SettingsManagerInterface
             'course_images_in_courses_list' => 'Course',
             'student_publication_to_take_in_gradebook' => 'Gradebook',
             'certificate_filter_by_official_code' => 'Gradebook',
-            'exercise_max_ckeditors_in_page' => 'Tools',
+            'exercise_max_keditors_in_page' => 'Tools',
             'document_if_file_exists_option' => 'Tools',
             'add_gradebook_certificates_cron_task_enabled' => 'Gradebook',
             'openbadges_backpack' => 'Gradebook',
@@ -899,7 +1300,7 @@ class SettingsManager implements SettingsManagerInterface
             'administrator_surname' => 'admin',
             'administrator_name' => 'admin',
             'administrator_phone' => 'admin',
-            'exercise_max_ckeditors_in_page' => 'exercise',
+            'exercise_max_keditors_in_page' => 'exercise',
             'allow_hr_skills_management' => 'skill',
             'accessibility_font_resize' => 'display',
             'account_valid_duration' => 'profile',
@@ -964,6 +1365,7 @@ class SettingsManager implements SettingsManagerInterface
             'exercise_max_score' => 'exercise',
             'exercise_min_score' => 'exercise',
             'pdf_logo_header' => 'platform',
+            'show_glossary_in_documents' => 'document',
             'show_glossary_in_extra_tools' => 'glossary',
             'survey_email_sender_noreply' => 'survey',
             'allow_coach_feedback_exercises' => 'exercise',
@@ -1053,5 +1455,385 @@ class SettingsManager implements SettingsManagerInterface
         }
 
         return $parameters;
+    }
+
+    /**
+     * Resolve current AccessUrl automatically when not set by controllers.
+     * This avoids mixing settings across URLs in MultiURL environments.
+     */
+    private function ensureUrlResolved(): void
+    {
+        if (null !== $this->url) {
+            return;
+        }
+
+        $repo = $this->manager->getRepository(AccessUrl::class);
+
+        $req = $this->request->getCurrentRequest() ?? $this->request->getMainRequest();
+        if (null !== $req) {
+            $host = $req->getHost();
+            $scheme = $req->getScheme();
+
+            // Try exact matches first (scheme + host, with and without trailing slash).
+            $candidates = array_values(array_unique([
+                $scheme.'://'.$host.'/',
+                $scheme.'://'.$host,
+                'https://'.$host.'/',
+                'https://'.$host,
+                'http://'.$host.'/',
+                'http://'.$host,
+            ]));
+
+            foreach ($candidates as $candidate) {
+                $found = $repo->findOneBy(['url' => $candidate]);
+                if ($found instanceof AccessUrl) {
+                    $this->url = $found;
+
+                    return;
+                }
+            }
+
+            // Fallback: match by host ignoring scheme and trailing slash.
+            // This avoids "URL not resolved => legacy mode => mixed settings".
+            $all = $repo->findAll();
+            foreach ($all as $u) {
+                if (!$u instanceof AccessUrl) {
+                    continue;
+                }
+
+                $dbUrl = (string) $u->getUrl();
+                $dbHost = parse_url($dbUrl, PHP_URL_HOST);
+
+                if (null !== $dbHost && strtolower($dbHost) === strtolower($host)) {
+                    $this->url = $u;
+
+                    return;
+                }
+            }
+        }
+
+        // Fallback to main URL (ID=1).
+        $main = $repo->find(1);
+        if ($main instanceof AccessUrl) {
+            $this->url = $main;
+
+            return;
+        }
+
+        // Final fallback: first URL in DB.
+        $first = $repo->findOneBy([], ['id' => 'ASC']);
+        if ($first instanceof AccessUrl) {
+            $this->url = $first;
+        }
+    }
+
+    private function getMainUrlEntity(): ?AccessUrl
+    {
+        if ($this->mainUrlCache instanceof AccessUrl) {
+            return $this->mainUrlCache;
+        }
+
+        $repo = $this->manager->getRepository(AccessUrl::class);
+        $main = $repo->find(1);
+
+        if ($main instanceof AccessUrl) {
+            $this->mainUrlCache = $main;
+
+            return $main;
+        }
+
+        return null;
+    }
+
+    private function isMainUrlContext(): bool
+    {
+        if (null === $this->url) {
+            return true;
+        }
+
+        $id = $this->url->getId();
+
+        return null !== $id && 1 === $id;
+    }
+
+    private function getSessionSchemaCacheKey(): string
+    {
+        $base = 'schemas';
+
+        if (null === $this->url || null === $this->url->getId()) {
+            return $base;
+        }
+
+        return $base.'_url_'.$this->url->getId();
+    }
+
+    private function clearSessionSchemaCache(): void
+    {
+        $this->resolvedSettings = [];
+        $this->schemaList = [];
+
+        $req = $this->request->getCurrentRequest() ?? $this->request->getMainRequest();
+        if (null === $req) {
+            return;
+        }
+
+        $session = $req->getSession();
+        if (!$session) {
+            return;
+        }
+
+        // Clear both legacy cache and any URL-scoped schema caches for this session.
+        foreach (array_keys((array) $session->all()) as $key) {
+            if ('schemas' === $key || str_starts_with($key, 'schemas_url_')) {
+                $session->remove($key);
+            }
+        }
+    }
+
+    /**
+     * Deduplicate a list of SettingsCurrent rows by variable, using effective MultiURL logic:
+     * - If current URL is main or not set => return rows as-is.
+     * - If on a sub-URL:
+     *   - If main says access_url_locked = 1 => keep main row
+     *   - Else if main says access_url_changeable = 0 => keep main row
+     *   - Else => keep current row when available, fallback to main
+     *
+     * @param array<int, mixed> $rows
+     *
+     * @return SettingsCurrent[]
+     */
+    private function deduplicateByEffectiveValue(array $rows): array
+    {
+        if (null === $this->url || $this->isMainUrlContext()) {
+            return array_values(array_filter($rows, fn ($r) => $r instanceof SettingsCurrent));
+        }
+
+        $mainUrl = $this->getMainUrlEntity();
+        if (null === $mainUrl) {
+            return array_values(array_filter($rows, fn ($r) => $r instanceof SettingsCurrent));
+        }
+
+        $byVar = [];
+        $mainChangeable = [];
+        $mainLocked = [];
+        $mainRowByVar = [];
+        $currentRowByVar = [];
+
+        foreach ($rows as $r) {
+            if (!$r instanceof SettingsCurrent) {
+                continue;
+            }
+
+            $var = $r->getVariable();
+            $rUrlId = $r->getUrl()->getId();
+
+            if (1 === $rUrlId) {
+                $mainRowByVar[$var] = $r;
+                $mainChangeable[$var] = (int) $r->getAccessUrlChangeable();
+                $mainLocked[$var] = (int) $r->getAccessUrlLocked();
+            } elseif (null !== $this->url && $rUrlId === $this->url->getId()) {
+                $currentRowByVar[$var] = $r;
+            }
+        }
+
+        $vars = array_unique(array_merge(array_keys($mainRowByVar), array_keys($currentRowByVar)));
+
+        foreach ($vars as $var) {
+            $isLocked = isset($mainLocked[$var]) && 1 === (int) $mainLocked[$var];
+            if ($isLocked) {
+                if (isset($mainRowByVar[$var])) {
+                    $byVar[$var] = $mainRowByVar[$var];
+                } elseif (isset($currentRowByVar[$var])) {
+                    $byVar[$var] = $currentRowByVar[$var];
+                }
+
+                continue;
+            }
+
+            $isNotChangeable = isset($mainChangeable[$var]) && 0 === (int) $mainChangeable[$var];
+            if ($isNotChangeable) {
+                if (isset($mainRowByVar[$var])) {
+                    $byVar[$var] = $mainRowByVar[$var];
+                } elseif (isset($currentRowByVar[$var])) {
+                    $byVar[$var] = $currentRowByVar[$var];
+                }
+
+                continue;
+            }
+
+            if (isset($currentRowByVar[$var])) {
+                $byVar[$var] = $currentRowByVar[$var];
+            } elseif (isset($mainRowByVar[$var])) {
+                $byVar[$var] = $mainRowByVar[$var];
+            }
+        }
+
+        return array_values($byVar);
+    }
+
+    /**
+     * Load canonical settings rows (main URL ID=1) for a given category.
+     *
+     * @return array<string, SettingsCurrent>
+     */
+    private function getCanonicalSettingsMap(string $category): array
+    {
+        $this->ensureUrlResolved();
+
+        $mainUrl = $this->getMainUrlEntity();
+        if (null === $mainUrl) {
+            return [];
+        }
+
+        $categories = $this->getCategoryVariants($category);
+
+        $qb = $this->repository->createQueryBuilder('s');
+        $qb
+            ->where('s.url = :url')
+            ->andWhere('s.category IN (:cats)')
+            ->setParameter('url', $mainUrl->getId())
+            ->setParameter('cats', $categories)
+        ;
+
+        $rows = $qb->getQuery()->getResult();
+
+        $map = [];
+        foreach ($rows as $row) {
+            if ($row instanceof SettingsCurrent) {
+                $map[$row->getVariable()] = $row;
+            }
+        }
+
+        return $map;
+    }
+
+    /**
+     * Keep the row metadata consistent across URLs.
+     * - Sync title/comment/type/scope/subkey/subkeytext/value_template_id from canonical row when available
+     * - Never overwrite existing metadata if canonical is missing (prevents "title reset to variable")
+     * - Sync access_url_changeable + access_url_locked from canonical row when available.
+     */
+    private function syncSettingMetadataFromCanonical(
+        SettingsCurrent $setting,
+        ?SettingsCurrent $canonical,
+        string $fallbackVariable
+    ): void {
+        $isNew = null === $setting->getId();
+
+        // If canonical is missing, do NOT destroy existing metadata.
+        // Only ensure safe defaults for brand-new rows.
+        if (!$canonical instanceof SettingsCurrent) {
+            if ($isNew) {
+                $setting->setTitle($fallbackVariable);
+
+                // Safe defaults for new rows.
+                $setting->setAccessUrlChangeable(1);
+                $setting->setAccessUrlLocked(0);
+            }
+
+            return;
+        }
+
+        // Title: use canonical title when available, otherwise keep existing title (or fallback for new rows).
+        $canonicalTitle = trim((string) $canonical->getTitle());
+        if ('' !== $canonicalTitle) {
+            $setting->setTitle($canonicalTitle);
+        } elseif ($isNew) {
+            $setting->setTitle($fallbackVariable);
+        }
+
+        // Comment: only overwrite if canonical has a non-null value, or if the row is new.
+        if (method_exists($setting, 'setComment') && method_exists($canonical, 'getComment')) {
+            $canonicalComment = $canonical->getComment();
+            if (null !== $canonicalComment || $isNew) {
+                $this->assignNullableString($setting, 'setComment', $canonicalComment);
+            }
+        }
+
+        // Type: NEVER pass null to setType(string $type).
+        if (method_exists($setting, 'setType') && method_exists($canonical, 'getType')) {
+            $type = $canonical->getType();
+            if (null !== $type && '' !== trim((string) $type)) {
+                $setting->setType((string) $type);
+            }
+        }
+
+        if (method_exists($setting, 'setScope') && method_exists($canonical, 'getScope')) {
+            $scope = $canonical->getScope();
+            if (null !== $scope) {
+                $setting->setScope($scope);
+            }
+        }
+
+        if (method_exists($setting, 'setSubkey') && method_exists($canonical, 'getSubkey')) {
+            $subkey = $canonical->getSubkey();
+            if (null !== $subkey) {
+                $setting->setSubkey($subkey);
+            }
+        }
+
+        if (method_exists($setting, 'setSubkeytext') && method_exists($canonical, 'getSubkeytext')) {
+            $subkeytext = $canonical->getSubkeytext();
+            if (null !== $subkeytext) {
+                $setting->setSubkeytext($subkeytext);
+            }
+        }
+
+        if (method_exists($setting, 'setValueTemplate') && method_exists($canonical, 'getValueTemplate')) {
+            $tpl = $canonical->getValueTemplate();
+            if (null !== $tpl) {
+                $setting->setValueTemplate($tpl);
+            }
+        }
+
+        // Sync MultiURL flags from canonical.
+        $setting->setAccessUrlChangeable((int) $canonical->getAccessUrlChangeable());
+        $setting->setAccessUrlLocked((int) $canonical->getAccessUrlLocked());
+    }
+
+    /**
+     * Assign a nullable string to a setter, respecting parameter nullability.
+     * If setter does not allow null, it will receive an empty string instead.
+     */
+    private function assignNullableString(object $target, string $setter, ?string $value): void
+    {
+        if (!method_exists($target, $setter)) {
+            return;
+        }
+
+        $ref = new ReflectionMethod($target, $setter);
+        $param = $ref->getParameters()[0] ?? null;
+
+        if (null === $param) {
+            return;
+        }
+
+        $type = $param->getType();
+        $allowsNull = true;
+
+        if ($type instanceof ReflectionNamedType) {
+            $allowsNull = $type->allowsNull();
+        }
+
+        if (null === $value && !$allowsNull) {
+            $target->{$setter}('');
+
+            return;
+        }
+
+        $target->{$setter}($value);
+    }
+
+    /**
+     * Return category variants to support legacy stored categories (e.g. "Platform" vs "platform").
+     */
+    private function getCategoryVariants(string $category): array
+    {
+        $variants = [
+            $category,
+            ucfirst($category),
+        ];
+
+        return array_values(array_unique($variants));
     }
 }

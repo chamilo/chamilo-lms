@@ -127,6 +127,60 @@ $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
 $learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
 
+// If we are not explicitly in LP context, ignore any leaked LP params and clear persisted context.
+// This avoids attaching standalone exercises to the last learning path attempt.
+if ('learnpath' !== $origin) {
+    Session::erase('learnpath_id');
+    Session::erase('lp_id');
+    Session::erase('learnpath_item_id');
+    Session::erase('lp_item_id');
+    Session::erase('learnpath_item_view_id');
+    Session::erase('lp_item_view_id');
+
+    $learnpath_id = 0;
+    $learnpath_item_id = 0;
+    $learnpath_item_view_id = 0;
+}
+
+if ('learnpath' === $origin) {
+    // Normalize common aliases used by LP tool
+    $learnpath_id = $learnpath_id > 0 ? $learnpath_id : (int) ($_REQUEST['lp_id'] ?? 0);
+
+    // Some links use item_id instead of learnpath_item_id
+    $learnpath_item_id = $learnpath_item_id > 0
+        ? $learnpath_item_id
+        : (int) ($_REQUEST['item_id'] ?? ($_REQUEST['lp_item_id'] ?? 0));
+
+    $learnpath_item_view_id = $learnpath_item_view_id > 0
+        ? $learnpath_item_view_id
+        : (int) ($_REQUEST['lp_item_view_id'] ?? 0);
+
+    // Restore from session when modal/navigation loses query params
+    if ($learnpath_id <= 0) {
+        $learnpath_id = (int) (Session::read('learnpath_id') ?? Session::read('lp_id') ?? 0);
+    }
+    if ($learnpath_item_id <= 0) {
+        $learnpath_item_id = (int) (Session::read('learnpath_item_id') ?? Session::read('lp_item_id') ?? 0);
+    }
+    if ($learnpath_item_view_id <= 0) {
+        $learnpath_item_view_id = (int) (Session::read('learnpath_item_view_id') ?? Session::read('lp_item_view_id') ?? 0);
+    }
+
+    // Persist context for future requests (modal, JS navigation, session resume)
+    if ($learnpath_id > 0) {
+        Session::write('learnpath_id', $learnpath_id);
+        Session::write('lp_id', $learnpath_id);
+    }
+    if ($learnpath_item_id > 0) {
+        Session::write('learnpath_item_id', $learnpath_item_id);
+        Session::write('lp_item_id', $learnpath_item_id);
+    }
+    if ($learnpath_item_view_id > 0) {
+        Session::write('learnpath_item_view_id', $learnpath_item_view_id);
+        Session::write('lp_item_view_id', $learnpath_item_view_id);
+    }
+}
+
 $reminder = isset($_REQUEST['reminder']) ? (int) $_REQUEST['reminder'] : 0;
 $remind_question_id = isset($_REQUEST['remind_question_id']) ? (int) $_REQUEST['remind_question_id'] : 0;
 $exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
@@ -417,9 +471,13 @@ if (empty($exercise_stat_info)) {
     }
     $total_weight = 0;
     $questionList = $objExercise->get_validated_question_list();
-    foreach ($questionListUncompressed as $question_id) {
-        $objQuestionTmp = Question::read($question_id);
-        $total_weight += (float) $objQuestionTmp->weighting;
+    $questionList = ExerciseLib::normalizeAttemptQuestionList($objExercise, $questionList);
+    $total_weight = 0;
+    foreach ($questionList as $question_id) {
+        $objQuestionTmp = Question::read((int) $question_id);
+        if ($objQuestionTmp && (int) $objQuestionTmp->type !== MEDIA_QUESTION && (int) $objQuestionTmp->type !== PAGE_BREAK) {
+            $total_weight += (float) $objQuestionTmp->weighting;
+        }
     }
 
     if ($time_control) {
@@ -489,18 +547,25 @@ if (empty($exercise_stat_info)) {
     }
 }
 Session::write('exe_id', $exe_id);
+$storedExeId = (int) (Session::read('questionListExeId') ?? 0);
+if ($storedExeId !== (int) $exe_id) {
+    Session::erase('questionList');
+    Session::erase('categoryList');
+    Session::write('questionListExeId', (int) $exe_id);
+}
 
 // Always restore persisted question order from DB (data_tracking) on resume
 // Rationale: session may be lost between visits; data_tracking is the single source of truth
 // for the question order selected at the very first entry of the attempt.
 if (!empty($exercise_stat_info) && !empty($exercise_stat_info['data_tracking'])) {
     $restoredQuestionList = array_map('intval', explode(',', $exercise_stat_info['data_tracking']));
-    // Keep original order but remove media questions that are not renderable
-    $restoredQuestionList = array_values(array_filter($restoredQuestionList, function (int $qid) {
-        $q = Question::read($qid);
-        return $q && $q->type !== MEDIA_QUESTION;
-    }));
-    // Store into session for navigation helpers; DB remains the canonical source.
+
+    // Fix random + media questions on resume as well.
+    $restoredQuestionList = ExerciseLib::normalizeAttemptQuestionList($objExercise, $restoredQuestionList);
+
+    // Persist correction so it doesn't flip-flop between requests.
+    ExerciseLib::updateAttemptDataTrackingIfNeeded((int) $exe_id, $restoredQuestionList, $exercise_stat_info);
+
     Session::write('questionList', $restoredQuestionList);
 }
 
@@ -570,6 +635,20 @@ if (!empty($exercise_stat_info['questions_to_check'])) {
 $params = "exe_id=$exe_id&exerciseId=$exerciseId&learnpath_id=$learnpath_id"
     . "&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id"
     . "&page=" . ($page ?? 1)
+    . "&" . api_get_cidreq();
+
+// Base query strings used by JS navigation (keep LP context on every click).
+$submitBaseQuery = "exe_id=$exe_id&exerciseId=$exerciseId"
+    . "&learnpath_id=$learnpath_id"
+    . "&learnpath_item_id=$learnpath_item_id"
+    . "&learnpath_item_view_id=$learnpath_item_view_id"
+    . "&reminder=$reminder"
+    . "&" . api_get_cidreq();
+
+$resultBaseQuery = "exe_id=$exe_id"
+    . "&learnpath_id=$learnpath_id"
+    . "&learnpath_item_id=$learnpath_item_id"
+    . "&learnpath_item_view_id=$learnpath_item_view_id"
     . "&" . api_get_cidreq();
 
 
@@ -1037,7 +1116,17 @@ if ($formSent && isset($_POST)) {
                         }
                     }
                 }
-                header('Location: exercise_result.php?'.api_get_cidreq()."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+
+                // Final redirect: if "Review my answers" is enabled, go to reminder list first.
+                $endUrl = $objExercise->review_answers
+                    ? 'exercise_reminder.php?'.$params
+                    : 'exercise_result.php?'.api_get_cidreq()
+                    ."&exe_id=$exe_id"
+                    ."&learnpath_id=$learnpath_id"
+                    ."&learnpath_item_id=$learnpath_item_id"
+                    ."&learnpath_item_view_id=$learnpath_item_view_id";
+
+                header('Location: '.$endUrl);
                 exit;
             } else {
                 if ($debug) {
@@ -1087,12 +1176,19 @@ $question_count = !empty($questionList) ? count($questionList) : 0;
 if ($_SERVER['REQUEST_METHOD'] === 'GET'
     && $reqGetNum !== null
     && $question_count > 0
-    && $reqGetNum > $question_count) {
-    header('Location: exercise_result.php?'.api_get_cidreq()
-        ."&exe_id=$exe_id"
-        ."&learnpath_id=$learnpath_id"
-        ."&learnpath_item_id=$learnpath_item_id"
-        ."&learnpath_item_view_id=$learnpath_item_view_id");
+    && $reqGetNum > $question_count
+) {
+    // If review answers is enabled, show reminder list instead of results.
+    if ($objExercise->review_answers) {
+        header('Location: exercise_reminder.php?'.$params);
+    } else {
+        header('Location: exercise_result.php?'.api_get_cidreq()
+            ."&exe_id=$exe_id"
+            ."&learnpath_id=$learnpath_id"
+            ."&learnpath_item_id=$learnpath_item_id"
+            ."&learnpath_item_view_id=$learnpath_item_view_id"
+        );
+    }
     exit;
 }
 
@@ -1533,12 +1629,15 @@ echo '<script>
 
         var page = '.(int) $page.';
         var totalPages = '.(int) ($totalPages ?? 1).';
+        var chSubmitBaseUrl = "'.api_get_self().'?'.$submitBaseQuery.'";
+        var chResultUrl = "'.$script_php.'?'.$params.'";
+
         function navigateNext() {
             var url;
             if (page === totalPages) {
-                url = "exercise_result.php?'.api_get_cidreq().'&exe_id='.$exe_id.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpath_item_view_id.'";
+                url = chResultUrl;
             } else {
-                url = "'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&page=" + (page + 1) + "&reminder='.$reminder.'";
+                url = chSubmitBaseUrl + "&page=" + (page + 1);
             }
             window.location = url;
         }
@@ -1682,11 +1781,8 @@ echo '<script>
         }
 
         function previous_question_and_save(previous_question_id, question_id_to_save) {
-          var url = \'exercise_submit.php?'.api_get_cidreq().'\'
-                  + \'&exerciseId='.$exerciseId.'\'
-                  + \'&num=\' + previous_question_id
-                  + \'&reminder='.$reminder.'\';
-          save_now(question_id_to_save, url);
+            var url = chSubmitBaseUrl + "&num=" + previous_question_id;
+            save_now(question_id_to_save, url);
         }
 
         function redirectExerciseToResult()
@@ -2150,9 +2246,7 @@ if (ALL_ON_ONE_PAGE == $objExercise->type || $forceGrouped) {
     $currentPageIds = implode(',', $questionList);
     echo '<div class="exercise_actions exercise-pagination mb-4">';
     if ($page > 1) {
-        $prevUrl = api_get_self() . '?' . api_get_cidreq()
-            . "&exerciseId=$exerciseId&page=" . ($page - 1)
-            . "&reminder=$reminder";
+        $prevUrl = api_get_self() . '?' . $submitBaseQuery . "&page=" . ($page - 1);
         echo '<button type="button" class="btn btn--secondary" '
             . "onclick=\"window.location='$prevUrl'\">"
             . '‹ ' . get_lang('Previous')

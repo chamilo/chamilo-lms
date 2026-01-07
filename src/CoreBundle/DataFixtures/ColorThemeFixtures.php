@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DataFixtures;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
 use Chamilo\CoreBundle\Entity\ColorTheme;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
@@ -64,7 +65,8 @@ class ColorThemeFixtures extends Fixture implements FixtureGroupInterface
             ])
         ;
 
-        $accessUrl = $this->accessUrlHelper->getCurrent();
+        /** @var AccessUrl $accessUrl */
+        $accessUrl = $this->getReference(AccessUserFixtures::ACCESS_URL_REFERENCE);
 
         if (!$accessUrl->getId()) {
             $manager->persist($accessUrl);

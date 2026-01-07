@@ -229,4 +229,19 @@ readonly class AuthenticationConfigHelper
 
         return null;
     }
+
+    public function getScimConfig(?AccessUrl $accessUrl = null): array
+    {
+        $authentication = $this->getAuthSources($accessUrl);
+        $config = [];
+
+        if (isset($authentication['scim'])) {
+            $config = $authentication['scim'];
+        }
+
+        return [
+            'enabled' => $config['enabled'] ?? false,
+            'auth_source' => $config['auth_source'] ?? UserAuthSource::PLATFORM,
+        ];
+    }
 }

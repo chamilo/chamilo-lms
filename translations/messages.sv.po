@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med vänliga hälsningar,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formel-exempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formel exempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervall"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:copyright,, nej:ingen copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapp,, application/msword:MsWord,, application/octet-stream:Okteström,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapp,, application/msword:MsWord,, application/octet-stream:Octetströmmar,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:övning,, simulation:simulering,, questionnaire:frågeställningar,, diagram:diagram,, figure:figur,, graph:graf,, index:index,, slide:slide,, table:bordläggning,, narrative text:berättartext,, exam:examen,, experiment:experiment,, problem statement:problemställning,, self assessment:självbedömning,, lecture:föreläsning"
@@ -2256,7 +2256,7 @@ msgid "Already in"
 msgstr "Redan inne"
 
 msgid "Check in"
-msgstr "Check in"
+msgstr "Checka in"
 
 msgid "The Moderator of this Conference has left the room."
 msgstr "Moderatorn för konferensen har lämnat rummet."
@@ -3150,7 +3150,7 @@ msgid "Edit Link"
 msgstr "Modifiera länk"
 
 msgid "CSV import"
-msgstr "CSV import"
+msgstr "CSV-import"
 
 msgid "CSV import file could not be opened (e.g. empty, too big)"
 msgstr "Importerad CSV kunde inte öppnas (den kan vara tom, för stor el. likn.)"
@@ -3309,7 +3309,7 @@ msgid "(recommended)"
 msgstr "(rekommenderad)"
 
 msgid "SCORM DB"
-msgstr "Scorm DB"
+msgstr "SCORM DB"
 
 msgid "Administrator last name"
 msgstr "Administratörens efternamn"
@@ -5598,7 +5598,7 @@ msgid "If you are using an LDAP server that does not support or accept anonymous
 msgstr "Om du använder LDAP-server som inte stöder anonym förfrågan kan du här fylla i det lösenord som isåfall ska användas."
 
 msgid "LDAP Import"
-msgstr "LDAP import"
+msgstr "LDAP-import"
 
 msgid "Notify subscribed users by e-mail"
 msgstr "Skicka meddelande till nya användare med e-post"
@@ -6744,7 +6744,7 @@ msgid "View this user"
 msgstr "Visa användaren"
 
 msgid "RSS feed"
-msgstr "Rss feed"
+msgstr "RSS-flöde"
 
 msgid "No friends in your contact list"
 msgstr "Inga vänner i din kontaktlista"
@@ -8628,10 +8628,10 @@ msgid "."
 msgstr ","
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%e %b %Y"
 
 msgid "%A %B %d, %Y"
-msgstr "%A %B %d, %Y"
+msgstr "%A %e %B %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
 msgstr "%B %d, %Y kl. %I:%M %p"
@@ -10925,8 +10925,8 @@ msgstr "är"
 msgid "The address of"
 msgstr "Adressen till"
 
-msgid "Your registration on"
-msgstr "Din registrering vid"
+msgid "Your registration on %s"
+msgstr "Din registrering vid %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Ditt anv�ndarnamn �r redan upptaget. Anv�nda webbl�saren tillbakaknapp och f�rs�k igen med ett annat."
@@ -13647,13 +13647,13 @@ msgid "Show all images in their original size. No resizing is done. Scrollbars w
 msgstr "Visa alla bilder i originalstorlek. Ingen storleksändring görs. Rullningslistar visas automatiskt om bilden är större än skärmstorleken."
 
 msgid "Show Thumbnails"
-msgstr "Show Thumbnails"
+msgstr "Visa miniatyrbilder"
 
 msgid "Gallery settings"
 msgstr "Set Slideshow Options"
 
 msgid "Slideshow Options"
-msgstr "Slideshow Options"
+msgstr "Bildspelsalternativ"
 
 msgid "NO RESIZING"
 msgstr "NO RESIZING (default)"
@@ -13668,7 +13668,7 @@ msgid "Published end date"
 msgstr "Publicerad slutdatum"
 
 msgid "View Slideshow"
-msgstr "View Slideshow"
+msgstr "Visa bildspel"
 
 msgid "My tasks"
 msgstr "Mina uppgifter"
@@ -13920,10 +13920,10 @@ msgid "Learning paths"
 msgstr "Inlärningsvägar"
 
 msgid "level up"
-msgstr "level up"
+msgstr "nivå upp"
 
 msgid "main category"
-msgstr "main category"
+msgstr "huvudkategori"
 
 msgid "Add to the course links"
 msgstr "Lägg till i kurslänkar"
@@ -13935,13 +13935,13 @@ msgid "Resources added"
 msgstr "Added new resources"
 
 msgid "External resources"
-msgstr "External resources"
+msgstr "Externa resurser"
 
 msgid "Course resources"
-msgstr "Course resources"
+msgstr "Kursresurser"
 
 msgid "External link"
-msgstr "External link"
+msgstr "Extern länk"
 
 msgid "Add the dropbox to this section."
 msgstr "Add the dropbox page to this chapter."
@@ -14688,7 +14688,7 @@ msgid "Chamilo homepage"
 msgstr "Chamilo startsida"
 
 msgid "Chamilo forum"
-msgstr "Chamilo forum"
+msgstr "Chamilo-forum"
 
 msgid "Chamilo extensions"
 msgstr "Chamilo-tillägg"
@@ -18963,7 +18963,7 @@ msgid "%b %d, %Y at %I:%M %p"
 msgstr "%b %d, %Y kl. %I:%M %p"
 
 msgid "%I:%M %p, %b %d %Y"
-msgstr "%I:%M %p, %b %d %Y"
+msgstr "%I:%M %p, %e %b %Y"
 
 msgid "Login to vote"
 msgstr "Logga in för att rösta"
@@ -20535,7 +20535,7 @@ msgid "Input size of box to fill"
 msgstr "Indatastorlek för ruta att fylla i"
 
 msgid "MM dd, yy"
-msgstr "MM dd, yy"
+msgstr "%m %d, %y"
 
 msgid "HH:mm"
 msgstr "HH:mm"
@@ -28777,7 +28777,7 @@ msgid "Diagnosis of user %s (language: %s) with link %s. Contact at %s"
 msgstr "Diagnos för användare %s (språk: %s) med länk %s. Kontakta på %s"
 
 msgid "%s support"
-msgstr "%s support"
+msgstr "%s-stöd"
 
 msgid "This option is not available because this activity is contained by an assessment."
 msgstr "Detta alternativ är inte tillgängligt eftersom denna aktivitet ingår i en bedömning."
@@ -31433,4 +31433,397 @@ msgstr "Fel vid laddning av resurser."
 
 msgid "Clear search"
 msgstr "Rensa sökning"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Endast bokstäver, siffror och understreck (_) är tillåtna i databasnamnet. Ogiltiga tecken kommer att tas bort automatiskt."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Vilka allmänna användarvillkor ges till användare för att använda denna plattform?"
+
+msgid "ex. {examplePassword}"
+msgstr "t.ex. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Välkommen till Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Välkommen till denna plattform"
+
+msgid "For more details visit %s"
+msgstr "För mer information besök %s"
+
+msgid "Manager"
+msgstr "Administratör"
+
+msgid "Mark as"
+msgstr ""
+
+msgid "Reply to all"
+msgstr ""
+
+msgid "SCIM external ID"
+msgstr ""
+
+msgid "OAuth2 ID"
+msgstr ""
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr ""
+
+msgid "Required value for operation without path"
+msgstr ""
+
+msgid "Available space (%s)"
+msgstr ""
+
+msgid "Index this description for the global search"
+msgstr ""
+
+msgid "Unknown course"
+msgstr ""
+
+msgid "Certificate not found."
+msgstr ""
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr ""
+
+msgid "Only platform administrators can change the course visibility."
+msgstr ""
+
+msgid "Unexpected error while subscribing the user"
+msgstr ""
+
+msgid "Search in resource logs"
+msgstr ""
+
+msgid "Include this learning path in the global search results"
+msgstr ""
+
+msgid "The course code already exists"
+msgstr ""
+
+msgid "Latest news"
+msgstr ""
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr ""
+
+msgid "Chamilo support block"
+msgstr ""
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr ""
+
+msgid "Hide option to send announcements to HR users"
+msgstr ""
+
+msgid "Allow session admins to download private certificates"
+msgstr ""
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr ""
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr ""
+
+msgid "Main menu entries"
+msgstr "Huvudmenyposter"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Markera de poster du vill ska visas i huvudmenyn"
+
+msgid "Main menu entries per role"
+msgstr "Huvudmenyposter per roll"
+
+msgid "Define header tabs visibility per role."
+msgstr "Definiera synlighet för rubrikmenuer per roll."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Ange alternativen du vill ska visas i navigeringen runt en tabell för att visa färre eller fler rader på en sida. t.ex. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Array med extra funktioner du kan aktivera för videospelaren i Chamilo. Alternativ inkluderar 'speed', som låter dig ändra uppspelningshastigheten för en video."
+
+msgid "Mail: character set"
+msgstr "E-post: teckenuppsättning"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Om du behöver definiera teckenuppsättningen som ska användas vid sändning av dessa e-postmeddelanden. Lämna tomt om du inte är säker."
+
+msgid "Mail: Debug"
+msgstr "E-post: Felsökning"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Välj om du vill aktivera felsökningsloggar för e-postsändning. Dessa ger mer information om vad som händer vid anslutning till e-posttjänsten, men är inte eleganta och kan bryta sidlayouten. Använd endast när det inte finns användaraktivitet."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "E-post: Undvik LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Vissa e-postklienter förstår inte det beskrivande LD+JSON-formatet och visar det som en lös JSON-sträng för slut-användaren. Om detta är ditt fall, sätt variabeln nedan till 'false' för att inaktivera denna rubrik."
+
+msgid "Mail: DKIM headers"
+msgstr "E-post: DKIM-rubriker"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Ange en JSON-array med dina DKIM-konfigurationsinställningar (se exempel)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "E-post: XOAuth2-alternativ"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Om du använder en XOAuth2-baserad e-posttjänst, använd denna inställning i JSON för att spara din specifika konfiguration (se exempel) och välj XOAuth2 i e-posttjänstinställningen."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Definierar miljötyp: \"prod\" (normal produktion), \"validation\" (som produktion men utan statistikrapportering), eller \"test\" (felsökningsläge med utvecklarverktyg som indikatorer för oöversatta strängar)."
+
+msgid "Global limit of users per course"
+msgstr "Global gräns för användare per kurs"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Definierar ett globalt maximalt antal användare (inklusive lärare) som får prenumerera på en enskild kurs på plattformen. Sätt detta värde till 0 för att inaktivera gränsen. Detta hjälper till att undvika överbelastade kurser i öppna portaler."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Aktivera för att använda en array för att definiera vilka roller som ska visas tydligt och vilka som ska döljas."
+
+msgid "Show base course posts in session course"
+msgstr "Visa bas kursinlägg i sessionskurs"
+
+msgid "Limit identical email usage"
+msgstr "Begränsa identisk e-postanvändning"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Maximalt antal konton som tillåts dela samma e-postadress. Sätt till 0 för att inaktivera denna gräns."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Tillåt sessionadministratörer att se alla användare på alla URL:er"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Om aktiverat kan sessionadministratörer söka och lista användare från alla åtkomst-URL:er, oavsett deras nuvarande URL."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Aktivera möjlighet för användare att välja sin egen tidszon. När det är konfigurerat kan användare se uppgiftsfrister och andra tidsreferenser i sin egen tidszon, vilket minskar fel vid inlämning."
+
+msgid "Redirect after login (per profile)"
+msgstr "Omdirigering efter inloggning (per profil)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Definiera omdirigering per profil efter inloggning med ett JSON-objekt som {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Dölj kryssrutan för juridiskt godkännande på sidan Användarvillkor"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Om satt till true, tas \"Jag har läst och godkänner\"-kryssrutan bort i flödet på sidan Användarvillkor."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Array som definierar värd och port för LDAP-servern."
+
+msgid "Enable 2FA"
+msgstr "Aktivera 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Lägg till fält på sidan för lösenordsuppdatering för att aktivera 2FA med en TOTP-autentiseringsapp. När inaktiverat globalt visas inga 2FA-fält för användare och de uppmanas inte till 2FA vid inloggning, även om de aktiverat det tidigare."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Vissa funktioner i Chamilo kommer att ansluta till externa resurser från servern. Till exempel för att säkerställa att externt innehåll finns när man skapar en länk eller visar en inbäddad sida i inlärningsstigen. Om din Chamilo-server använder en proxy för att komma ut från nätverket är detta platsen att konfigurera den."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Aktivera eller inaktivera automatisk omregistrering när kursens giltighetstid löper ut. Relaterad cron-jobb måste också aktiveras."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Visa återstående dagar i Mina sessioner"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Om aktiverat ersätts sessiondatumen på sidan \"Mina sessioner\" med antalet återstående dagar."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Visa \"Väntande enkäter\" i menyn"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Visa ett menyalternativ som låter användare komma åt sina väntande enkäter."
+
+msgid "Disclose AI assistance"
+msgstr "Visa AI-hjälp"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Visa en etikett på innehåll eller feedback som genererats eller medgenererats av ett AI-system, vilket visar för användaren att innehållet skapades med hjälp av ett AI-system. Detaljer om vilket AI-system som användes i varje fall sparas i databasen för granskning, men är inte direkt tillgängliga för slutanvändaren."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "JSON-konfiguration för kurskatalog: länk inställningar, filter, sorteringsalternativ och mer."
+
+msgid "Session Catalog Settings"
+msgstr "Inställningar för sessionkatalog"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "JSON-konfiguration för sessionkatalog: filter och visningsalternativ."
+
+msgid "Show Course Descriptions"
+msgstr "Visa kursbeskrivningar"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Visa kursbeskrivningar i katalogen."
+
+msgid "Published Courses Only"
+msgstr "Endast publicerade kurser"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Begränsa katalogen till endast kurser markerade som publicerade."
+
+msgid "Display Catalog on Homepage"
+msgstr "Visa katalog på startsidan"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Visa kurskatalogblocket på plattformens startsida."
+
+msgid "Hide Public Link"
+msgstr "Dölj offentlig länk"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Ta bort den offentliga URL-länken från kurskorten."
+
+msgid "Only Selected Courses"
+msgstr "Endast valda kurser"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Visa endast manuellt valda kurser i katalogen."
+
+msgid "Allow Student Browsing"
+msgstr "Tillåt studentbläddring"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Tillåt studenter att bläddra och filtrera kurskatalogen."
+
+msgid "Hide Private Courses"
+msgstr "Dölj privata kurser"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Uteslut privata kurser från katalogvisningen."
+
+msgid "Show Courses & Sessions"
+msgstr "Visa kurser & sessioner"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Inkludera både kurser och sessioner i katalogresultaten."
+
+msgid "Auto Session Subscription"
+msgstr "Automatisk sessionprenumeration"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Aktivera automatisk prenumeration på sessioner för användare."
+
+msgid "Subscription in Session View"
+msgstr "Prenumeration i sessionsvy"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Tillåt användare att prenumerera på kurser direkt från sin sessionsida."
+
+msgid "Enable redirection plugin"
+msgstr "Aktivera omdirigeringsplugin"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Array som definierar 'dagar' och 'månader' för att sätta kontots utgångsdatum vid första inloggningen."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "En array med roll => antal som representerar antalet dagar ett konto har innan utgång, beroende på rollen."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Extra användarfält som används för att söka och namnge sessioner"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Denna inställning definierar nyckeln för extra användarfält (t.ex. \"company\") som kommer att användas för att söka användare och definiera namnet på sessionen vid registrering av studenter från /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Generator för ordlista-termer"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Tillåt lärare att begära AI-genererade ordlista-termer i sin kurs. Detta genererar 20 termer baserat på kursens titel och den allmänna beskrivningen i kursbeskrivningsverktyget. Om använt mer än en gång utesluts termer som redan finns i den ordlistan (se till att innehåll kan delas med de konfigurerade AI-tjänsterna)."
+
+msgid "Video generator"
+msgstr "Videogenerator"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Genererar videor baserat på prompts eller innehåll med hjälp av AI (detta kan förbruka många tokens)."
+
+msgid "Course analyser"
+msgstr "Kursanalysator"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Analyserar alla resurser i en eller flera kurser och förtränar AI-modellen för att svara på frågor om denna eller dessa kurser (se till att innehållet kan delas med de konfigurerade AI-tjänsterna)."
+
+msgid "Test/development"
+msgstr "Test/utveckling"
+
+msgid "Crons"
+msgstr "Crons"
+
+msgid "Editor"
+msgstr "Redigerare"
+
+msgid "Gradebook"
+msgstr "Betygsbok"
+
+msgid "Internationalization"
+msgstr "Internationalisering"
+
+msgid "User profiles"
+msgstr "Användarprofiler"
+
+msgid "Support tickets"
+msgstr "Supportbiljetter"
+
+msgid "Webservices"
+msgstr "Webservices"
+
+msgid "Catalogue"
+msgstr "Katalog"
+
+msgid "Workflows"
+msgstr "Arbetsflöden"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Inställningen kan redigeras på under-URL:er"
+
+msgid "Show JSON Template"
+msgstr "Visa JSON-mall"
+
+msgid "JSON Template"
+msgstr "JSON-mall"
+
+msgid "Installing Xapian bindings"
+msgstr "Installerar Xapian-bindningar"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Följande kodsnutt visar ett exempel på installation av Xapian PHP-bindningar på Ubuntu 25.04 med PHP 8.3. Anpassa sökvägar och versioner efter din egen miljö."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Se till att du endast har den PHP-version du verkligen använder (t.ex. 8.3) och undvik att blanda flera versioner med olika kataloger för tillägg."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "När tillägget är korrekt laddat för både CLI och webbservern bör sökdiagnostiken ovan rapportera att Xapian-modulen är installerad."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Rensa temporära uppladdningar och cache"
+
+msgid "Directory"
+msgstr "Katalog"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Radera endast filer äldre än (minuter)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Ange 0 för att radera alla filer. Använd ett positivt värde (t.ex. 60) för att undvika att ta bort filer som fortfarande laddas upp."
+
+msgid "Preview only (do not delete)"
+msgstr "Förhandsgranska endast (radera inte)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Varning: du är på väg att radera ALLA temporära filer. Denna åtgärd kan inte ångras."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Detta raderar alla temporära filer. Fortsätta?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Detta raderar filer äldre än %minutes% minuter. Fortsätta?"
 

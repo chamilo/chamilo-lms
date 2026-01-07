@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -138,6 +140,10 @@ class LanguageRepository extends ServiceEntityRepository
             ->setMaxResults(1)
         ;
 
-        return $qb->getQuery()->getSingleResult();
+        try {
+            return $qb->getQuery()->getSingleResult();
+        } catch (NonUniqueResultException|NoResultException) {
+            return null;
+        }
     }
 }

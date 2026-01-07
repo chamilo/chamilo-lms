@@ -296,7 +296,7 @@ class CourseDescriptionController
                 $form->addCheckBox(
                     'enable_search',
                     null,
-                    get_lang('Index this description in global search')
+                    get_lang('Index this description for the global search')
                 );
 
                 // Default: checked
@@ -404,7 +404,7 @@ class CourseDescriptionController
                 $form->addCheckBox(
                     'enable_search',
                     null,
-                    get_lang('Index this description in global search')
+                    get_lang('Index this description for the global search')
                 );
 
                 $form->setDefaults([

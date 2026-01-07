@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:कपीराइट,, no:कपीराइट नभएको"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:फोल्डर,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:व्यायाम,,      simulation:सिमुलेशन,,      questionnaire:प्रश्नावली,,      diagram:डायाग्राम,,      figure:चित्र,,      graph:ग्राफ,,      index:सूची,,      slide:स्लाइड,,      table:तालिका,,      narrative text:कथन पाठ,,      exam:परीक्षा,,      experiment:प्रयोग,,      problem statement:समस्या कथन,,      self assessment:आत्म मूल्याङ्कन,,      lecture:व्याख्यान"
@@ -8633,7 +8633,7 @@ msgid "%A %B %d, %Y"
 msgstr "%A %B %d, %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
-msgstr "%B %d, %Y at %I:%M %p"
+msgstr "%B %d, %Y र %I:%M %p मा"
 
 msgid "%I:%M %p"
 msgstr "%I:%M %p"
@@ -10924,8 +10924,8 @@ msgstr "छ"
 msgid "The address of"
 msgstr "को ठेगाना"
 
-msgid "Your registration on"
-msgstr "मा तपाईंको दर्ता"
+msgid "Your registration on %s"
+msgstr "मा तपाईंको दर्ता %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "यो लगइन पहिले नै लिइएको छ। तपाईंको ब्राउजरको पछाडि बटन प्रयोग गर्नुहोस् र अर्को छान्नुहोस्।"
@@ -18593,7 +18593,7 @@ msgid "%m/%d/%Y"
 msgstr "%m/%d/%Y"
 
 msgid "%B %d, %Y at %H:%M"
-msgstr "%B %d, %Y at %H:%M"
+msgstr "%B %d, %Y र %H:%M मा"
 
 msgid "Enable legal terms"
 msgstr "कानुनी सर्तहरू सक्षम गर्नुहोस्"
@@ -18959,7 +18959,7 @@ msgid "Sent at: %s"
 msgstr "पाठाइएको: %s"
 
 msgid "%b %d, %Y at %I:%M %p"
-msgstr "%b %d, %Y at %I:%M %p"
+msgstr "%b %d, %Y र %I:%M %p मा"
 
 msgid "%I:%M %p, %b %d %Y"
 msgstr "%I:%M %p, %b %d %Y"
@@ -23204,7 +23204,7 @@ msgid "No status"
 msgstr "स्थिति छैन"
 
 msgid "CAS 3"
-msgstr "CAS 3"
+msgstr "CAS ३"
 
 msgid "Go back to video"
 msgstr "भिडियोमा फर्कनुहोस्"
@@ -31431,4 +31431,397 @@ msgstr "स्रोतहरू लोड गर्दा त्रुटि।
 
 msgid "Clear search"
 msgstr "खोजी सफा गर्नुहोस्"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "डेटाबेस नाममा मात्र अक्षरहरू, अंकहरू र अन्डरस्कोर (_) अनुमति छ। अवैध अक्षरहरू स्वतः हटाइनेछन्।"
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "यो प्लेटफर्म प्रयोग गर्न प्रयोगकर्ताहरूलाई दिइने सामान्य शर्तहरू के हुन्?"
+
+msgid "ex. {examplePassword}"
+msgstr "उदा. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Chamilo मा स्वागत छ!"
+
+msgid "Welcome to this platform"
+msgstr "यो प्लेटफर्ममा स्वागत छ"
+
+msgid "For more details visit %s"
+msgstr "थप विवरणको लागि %s भ्रमण गर्नुहोस्"
+
+msgid "Manager"
+msgstr "प्रबन्धक"
+
+msgid "Mark as"
+msgstr "चिन्ह लगाउनुहोस्"
+
+msgid "Reply to all"
+msgstr "सबैलाई जवाफ दिनुहोस्"
+
+msgid "SCIM external ID"
+msgstr "SCIM बाह्य ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "कृपया शर्तहरू र नियमहरूको नवीनतम संस्करण स्वीकार गर्नुहोस्।"
+
+msgid "Required value for operation without path"
+msgstr "पथ बिना सञ्चालनको लागि आवश्यक मान"
+
+msgid "Available space (%s)"
+msgstr "उपलब्ध स्थान (%s)"
+
+msgid "Index this description for the global search"
+msgstr "वैश्विक खोजको लागि यो विवरण सूचीबद्ध गर्नुहोस्"
+
+msgid "Unknown course"
+msgstr "अज्ञात कोर्स"
+
+msgid "Certificate not found."
+msgstr "प्रमाणपत्र फेला परेन।"
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "सुरक्षा टोकन समाप्त भयो। कृपया पृष्ठ पुनः लोड गर्नुहोस् र फेरि प्रयास गर्नुहोस्।"
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "केवल प्लेटफर्म प्रशासकहरूले मात्र कोर्स दृश्यता परिवर्तन गर्न सक्छन्।"
+
+msgid "Unexpected error while subscribing the user"
+msgstr "प्रयोगकर्तालाई सदस्यता दिँदा अपेक्षित त्रुटि"
+
+msgid "Search in resource logs"
+msgstr "स्रोत लगहरूमा खोज्नुहोस्"
+
+msgid "Include this learning path in the global search results"
+msgstr "वैश्विक खोज परिणामहरूमा यो सिकाइ पथ समावेश गर्नुहोस्"
+
+msgid "The course code already exists"
+msgstr "कोर्स कोड पहिले नै अवस्थित छ"
+
+msgid "Latest news"
+msgstr "नवीनतम समाचार"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Chamilo बाट नवीनतम समाचार प्राप्त गर्नुहोस्, जसमा सुरक्षा कमजोरीहरू र घटनाहरू समावेश छन्, सीधै तपाईंको प्रशासन प्यानल भित्र। यी समाचारहरू प्रशासन पृष्ठ लोड गर्ने प्रत्येक पटक Chamilo समाचार सर्वरमा जाँचिनेछन् र केवल प्रशासकहरूलाई देखिनेछन्।"
+
+msgid "Chamilo support block"
+msgstr "Chamilo समर्थन ब्लक"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "व्यावसायिक समर्थनको लागि आधिकारिक सेवा प्रदायकहरूसँग सम्पर्क गर्ने सजिलो तरिका र प्रो सुझावहरू प्राप्त गर्नुहोस्, Chamilo का निर्माताहरूबाट सीधै। यो ब्लक तपाईंको प्रशासन पृष्ठमा देखिन्छ, केवल प्रशासकहरूलाई देखिन्छ, र प्रशासन पृष्ठ लोड गर्ने प्रत्येक पटक ताजा हुन्छ।"
+
+msgid "Hide option to send announcements to HR users"
+msgstr "HR प्रयोगकर्ताहरूलाई घोषणाहरू पठाउने विकल्प लुकाउनुहोस्"
+
+msgid "Allow session admins to download private certificates"
+msgstr "सत्र प्रशासकहरूलाई निजी प्रमाणपत्रहरू डाउनलोड गर्न अनुमति दिनुहोस्"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "यदि सक्षम गरियो भने, सत्र प्रशासकहरूले सार्वजनिक रूपमा प्रकाशित नभए पनि प्रमाणपत्रहरू डाउनलोड गर्न सक्छन्।"
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "यदि खाली नभए, कोर्स निर्माण प्रक्रियाले प्रयोगकर्ता प्रोफाइलमा केही क्षेत्रहरू खोज्नेछ र कोर्सको लागि तिनीहरूलाई स्वतः भर्नेछ। उदाहरणको लागि, डिजिटल मार्केटिङमा विशेषज्ञ शिक्षकले प्रत्येक कोर्समा « डिजिटल मार्केटिङ » झण्डा स्वतः सेट गर्न सक्छ जुन (उ)हाँले सिर्जना गर्नुहुन्छ।"
+
+msgid "Main menu entries"
+msgstr "मुख्य मेनु प्रविष्टिहरू"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "मुख्य मेनुमा देखाउन चाहनुहुने प्रविष्टिहरू जाँच्नुहोस्"
+
+msgid "Main menu entries per role"
+msgstr "भूमिकाप्रति मुख्य मेनु प्रविष्टिहरू"
+
+msgid "Define header tabs visibility per role."
+msgstr "भूमिकाप्रति हेडर ट्याब दृश्यता निर्धारण गर्नुहोस्।"
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "एक पृष्ठमा कम वा बढी पङ्क्तिहरू देखाउन तालिकाको वरिपरि नेभिगेसनमा देखाउन चाहनुहुने विकल्पहरू सेट गर्नुहोस्। उदाहरण: [50, 100, 200, 500]।"
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Chamilo मा भिडियो प्लेयरका लागि सक्रिय गर्न सकिने अतिरिक्त सुविधाहरूको श्रेणी। विकल्पहरूमा 'speed' समावेश छ, जसले भिडियोको प्लेब्याक गति परिवर्तन गर्न अनुमति दिन्छ।"
+
+msgid "Mail: character set"
+msgstr "मेल: क्यारेक्टर सेट"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "यी इमेलहरू पठाउँदा प्रयोग गर्ने charset परिभाषित गर्न आवश्यक भएमा। निश्चित नभएमा खाली छोड्नुहोस्।"
+
+msgid "Mail: Debug"
+msgstr "मेल: डिबग"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "इमेल पठाउने डिबग लगहरू सक्रिय गर्न चाहनुहुन्छ कि छैन छान्नुहोस्। यीहरूले मेल सेवासँग जोडिन गर्दा के भइरहेको छ भन्ने थप जानकारी दिन्छन्, तर सुन्दर छैनन् र पृष्ठ डिजाइन भङ्ग गर्न सक्छन्। प्रयोगकर्ता गतिविधि नभएको अवस्थामा मात्र प्रयोग गर्नुहोस्।"
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "मेल: LD+JSON प्रयोग नगर्नुहोस्"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "केही इमेल क्लाइन्टहरूले वर्णनात्मक LD+JSON ढाँचालाई बुझ्दैनन्, अन्तिम प्रयोगकर्तालाई यो ढिलो JSON स्ट्रिङ्गको रूपमा देखाउँछन्। यदि यो तपाईंको अवस्था हो भने, यो हेडर अक्षम गर्न तलको चरलाई 'false' मा सेट गर्न सक्नुहुन्छ।"
+
+msgid "Mail: DKIM headers"
+msgstr "मेल: DKIM हेडरहरू"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "तपाईंको DKIM कन्फिगरेसन सेटिङहरूको JSON श्रेणी प्रविष्ट गर्नुहोस् (उदाहरण हेर्नुहोस्)।"
+
+msgid "Mail: XOAuth2 options"
+msgstr "मेल: XOAuth2 विकल्पहरू"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "यदि तपाईंले कुनै XOAuth2-आधारित इमेल सेवा प्रयोग गर्नुहुन्छ भने, यो सेटिङलाई JSON मा प्रयोग गरेर तपाईंको विशेष कन्फिगरेसन बचत गर्नुहोस् (उदाहरण हेर्नुहोस्) र मेल सेवा सेटिङमा XOAuth2 छान्नुहोस्।"
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "वातावरण प्रकार परिभाषित गर्दछ: \"prod\" (सामान्य उत्पादन), \"validation\" (उत्पादन जस्तै तर तथ्याङ्क प्रतिवेदन बिना), वा \"test\" (अनुवाद नभएका स्ट्रिङ्ग सूचकहरू जस्ता डेभलपर उपकरणहरूसहित डिबग मोड)।"
+
+msgid "Global limit of users per course"
+msgstr "पाठ्यक्रम प्रति प्रयोगकर्ताहरूको विश्वव्यापी सीमा"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "प्लेटफर्ममा कुनै एकल पाठ्यक्रममा सदस्यता लिन अनुमति दिइएको प्रयोगकर्ताहरू (शिक्षकहरू समावेश) को विश्वव्यापी अधिकतम संख्या परिभाषित गर्दछ। सीमा अक्षम गर्न यो मानलाई ० मा सेट गर्नुहोस्। यो खुला पोर्टलहरूमा पाठ्यक्रमहरू अधिभारित हुनबाट बचाउँछ।"
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "कुन भूमिकाहरू स्पष्ट रूपमा देखाउनुपर्छ र कुन लुकाउनुपर्छ भन्ने परिभाषित गर्न श्रेणी प्रयोग गर्न सक्रिय गर्नुहोस्।"
+
+msgid "Show base course posts in session course"
+msgstr "सत्र पाठ्यक्रममा आधार पाठ्यक्रम पोस्टहरू देखाउनुहोस्"
+
+msgid "Limit identical email usage"
+msgstr "एकै इमेल प्रयोग सीमित गर्नुहोस्"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "एउटै इमेल ठेगानामा साझा गर्न अनुमति दिइएको अधिकतम खाता संख्या। यो सीमा अक्षम गर्न ० मा सेट गर्नुहोस्।"
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "सत्र प्रशासकहरूलाई सबै URL मा सबै प्रयोगकर्ताहरू हेर्न अनुमति दिनुहोस्"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "यदि सक्षम गरियो भने, सत्र प्रशासकहरूले आफ्नो वर्तमान URL बाट बावजुद सबै पहुँच URL बाट प्रयोगकर्ताहरू खोजी र सूचीबद्ध गर्न सक्छन्।"
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "प्रयोगकर्ताहरूलाई आफ्नो आफ्नै समय क्षेत्र छान्ने सम्भावना सक्षम गर्नुहोस्। एकपटक कन्फिगर गरिएपछि, प्रयोगकर्ताहरूले आफ्नो समय क्षेत्रमा नियुक्ति म्याद र अन्य समय सन्दर्भहरू हेर्न सक्नेछन्, जसले डेलिभरी समयमा त्रुटिहरू कम गर्नेछ।"
+
+msgid "Redirect after login (per profile)"
+msgstr "लगइन पछि रिडाइरेक्ट (प्रोफाइल अनुसार)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "लगइन पछि प्रोफाइल अनुसार रिडाइरेक्ट निर्धारण गर्नुहोस् जस्तै JSON वस्तु प्रयोग गरेर {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "नियम र शर्तहरू पृष्ठमा कानुनी स्वीकार चेकबक्स लुकाउनुहोस्"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "यदि सत्यमा सेट गरियो भने, नियम र शर्तहरू पृष्ठ प्रवाहमा \"मैले पढेको र स्वीकार गरेको छु\" चेकबक्स हटाउँछ।"
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "LDAP सर्भरका लागि होस्ट र पोर्ट निर्धारण गर्ने array।"
+
+msgid "Enable 2FA"
+msgstr "२FA सक्षम गर्नुहोस्"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "पासवर्ड अपडेट पृष्ठमा TOTP प्रमाणीकरण एप प्रयोग गरेर २FA सक्षम गर्न क्षेत्रहरू थप्नुहोस्। विश्वव्यापी रूपमा अक्षम हुँदा, प्रयोगकर्ताहरूले २FA क्षेत्रहरू देख्दैनन् र पहिले नै सक्षम गरेका भए पनि लगइनमा २FA को लागि सोधिँदैन।"
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Chamilo का केही सुविधाहरू सर्भर बाट बाहिर जोडिनेछन्। उदाहरणका लागि लिङ्क सिर्जना गर्दा वा लर्निङ पथमा एम्बेडेड पृष्ठ देखाउँदा बाह्य सामग्री अस्तित्वमा छ भनेर सुनिश्चित गर्न। यदि तपाईंको Chamilo सर्भरले आफ्नो नेटवर्क बाहिर निस्कन प्रोक्सी प्रयोग गर्छ भने, यो यसलाई कन्फिगर गर्ने स्थान हो।"
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "कोर्स वैधता समाप्त हुँदा स्वचालित पुनः दर्ता सक्षम वा अक्षम गर्नुहोस्। सम्बन्धित क्रन जाग पनि सक्रिय गर्नुपर्छ।"
+
+msgid "Show remaining days in My Sessions"
+msgstr "मेरा सत्रहरूमा बाँकी दिनहरू देखाउनुहोस्"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "यदि सक्षम गरियो भने, \"मेरा सत्रहरू\" पृष्ठमा सत्र मितिहरू बाँकी दिनहरूको संख्याद्वारा प्रतिस्थापित हुनेछन्।"
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "मेनुमा \"विचाराधीन सर्वेक्षणहरू\" देखाउनुहोस्"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "प्रयोगकर्ताहरूलाई उनका विचाराधीन सर्वेक्षणहरूमा पहुँच दिने मेनु वस्तु प्रदर्शन गर्नुहोस्।"
+
+msgid "Disclose AI assistance"
+msgstr "AI सहायता खुलासा गर्नुहोस्"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "कुनै पनि AI प्रणालीद्वारा उत्पन्न वा सह-उत्पन्न सामग्री वा प्रतिक्रियामा प्रयोगकर्तालाई प्रमाणित गर्दै ट्याग देखाउनुहोस् कि सामग्री कुनै AI प्रणालीको सहायताले बनाइएको थियो। कुन AI प्रणाली कुन अवस्थामा प्रयोग गरियो भन्ने विवरण डाटाबेस भित्र लेखापरीक्षणका लागि राखिन्छ, तर अन्तिम प्रयोगकर्ताद्वारा प्रत्यक्ष पहुँचयोग्य हुँदैन।"
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "कोर्स क्याटलगका लागि JSON कन्फिगरेसन: लिङ्क सेटिङहरू, फिल्टरहरू, क्रमबद्ध विकल्पहरू, र थप।"
+
+msgid "Session Catalog Settings"
+msgstr "सत्र क्याटलग सेटिङहरू"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "सत्र क्याटलगका लागि JSON कन्फिगरेसन: फिल्टरहरू र प्रदर्शन विकल्पहरू।"
+
+msgid "Show Course Descriptions"
+msgstr "कोर्स विवरणहरू देखाउनुहोस्"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "क्याटलग सूचीभित्र कोर्स विवरणहरू प्रदर्शन गर्नुहोस्।"
+
+msgid "Published Courses Only"
+msgstr "प्रकाशित कोर्सहरू मात्र"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "क्याटलगलाई प्रकाशित चिन्ह लगाइएका कोर्सहरूमा मात्र सीमित गर्नुहोस्।"
+
+msgid "Display Catalog on Homepage"
+msgstr "मुख्य पृष्ठमा क्याटलग प्रदर्शन गर्नुहोस्"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "प्लेटफर्म मुख्य पृष्ठमा कोर्स क्याटलग ब्लक देखाउनुहोस्।"
+
+msgid "Hide Public Link"
+msgstr "सार्वजनिक लिङ्क लुकाउनुहोस्"
+
+msgid "Remove the public URL link from course cards."
+msgstr "पाठ्यक्रम कार्डहरूबाट सार्वजनिक URL लिङ्क हटाउनुहोस्।"
+
+msgid "Only Selected Courses"
+msgstr "मात्र छानिएका पाठ्यक्रमहरू"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "क्याटलगमा मात्र हातले छानिएका पाठ्यक्रमहरू देखाउनुहोस्।"
+
+msgid "Allow Student Browsing"
+msgstr "विद्यार्थी ब्राउजिङ अनुमति दिनुहोस्"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "विद्यार्थीहरूलाई पाठ्यक्रम क्याटलग ब्राउज र फिल्टर गर्न अनुमति दिनुहोस्।"
+
+msgid "Hide Private Courses"
+msgstr "निजी पाठ्यक्रमहरू लुकाउनुहोस्"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "क्याटलग प्रदर्शनबाट निजी पाठ्यक्रमहरू हटाउनुहोस्।"
+
+msgid "Show Courses & Sessions"
+msgstr "पाठ्यक्रम र सत्रहरू देखाउनुहोस्"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "क्याटलग परिणामहरूमा पाठ्यक्रम र सत्रहरू दुवै समावेश गर्नुहोस्।"
+
+msgid "Auto Session Subscription"
+msgstr "स्वचालित सत्र सदस्यता"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "प्रयोगकर्ताहरूका लागि सत्रहरूमा स्वचालित सदस्यता सक्षम गर्नुहोस्।"
+
+msgid "Subscription in Session View"
+msgstr "सत्र दृश्यमा सदस्यता"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "प्रयोगकर्ताहरूलाई आफ्नो सत्र पृष्ठबाट सीधै पाठ्यक्रमहरूमा सदस्यता लिन अनुमति दिनुहोस्।"
+
+msgid "Enable redirection plugin"
+msgstr "पुनर्निर्देशन प्लगइन सक्षम गर्नुहोस्"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "प्रयोगकर्ताले पहिलो पटक लगइन गर्दा खाता समाप्ति मिति सेट गर्न 'दिनहरू' र 'महिनाहरू' परिभाषित गर्ने एरे।"
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "भूमिकाको आधारमा खाता समाप्त हुनुअघिका दिनहरूको संख्या प्रतिनिधित्व गर्ने भूमिका => संख्या को एरे।"
+
+msgid "Extra user field used to search and name sessions"
+msgstr "सत्रहरू खोज्न र नाम दिन प्रयोग गरिने अतिरिक्त प्रयोगकर्ता क्षेत्र"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "यो सेटिङले प्रयोगकर्ताहरू खोज्न र /admin-dashboard/register बाट विद्यार्थीहरू दर्ता गर्दा सत्रको नाम परिभाषित गर्न प्रयोग गरिने अतिरिक्त प्रयोगकर्ता क्षेत्र कुञ्जी (उदाहरण, \"company\") परिभाषित गर्दछ।"
+
+msgid "Glossary terms generator"
+msgstr "शब्दकोश शब्दहरू जनरेटर"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "शिक्षकहरूलाई आफ्नो पाठ्यक्रममा AI-जनरेटेड शब्दकोश शब्दहरू माग्न अनुमति दिनुहोस्। यसले पाठ्यक्रम शीर्षक र पाठ्यक्रम विवरण उपकरणमा सामान्य विवरणको आधारमा २० शब्दहरू जनरेट गर्दछ। एकभन्दा बढी पटक प्रयोग गर्दा, यो त्यो शब्दकोशमा पहिलेदेखि रहेका शब्दहरूलाई हटाउँछ (कन्फिगर गरिएको AI सेवाहरूसँग सामग्री साझेदारी गर्न सकिन्छ भन्ने सुनिश्चित गर्नुहोस्)।"
+
+msgid "Video generator"
+msgstr "भिडियो जनरेटर"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "प्रम्प्ट वा सामग्रीको आधारमा AI प्रयोग गरेर भिडियोहरू जनरेट गर्दछ (यसले धेरै टोकनहरू खपत गर्न सक्छ)।"
+
+msgid "Course analyser"
+msgstr "पाठ्यक्रम विश्लेषक"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "एक वा धेरै पाठ्यक्रमहरूका सबै स्रोतहरू विश्लेषण गर्दछ र यो वा यी पाठ्यक्रमहरूमा कुनै प्रश्नको उत्तर दिन AI मोडेललाई पूर्व-प्रशिक्षित गर्दछ (कन्फिगर गरिएको AI सेवाहरूसँग सामग्री साझेदारी गर्न सकिन्छ भन्ने सुनिश्चित गर्नुहोस्)।"
+
+msgid "Test/development"
+msgstr "परीक्षण/विकास"
+
+msgid "Crons"
+msgstr "क्रनहरू"
+
+msgid "Editor"
+msgstr "सम्पादक"
+
+msgid "Gradebook"
+msgstr "ग्रेडबुक"
+
+msgid "Internationalization"
+msgstr "अन्तर्राष्ट्रियकरण"
+
+msgid "User profiles"
+msgstr "प्रयोगकर्ता प्रोफाइलहरू"
+
+msgid "Support tickets"
+msgstr "समर्थन टिकटहरू"
+
+msgid "Webservices"
+msgstr "वेबसेवाहरू"
+
+msgid "Catalogue"
+msgstr "क्याटलग"
+
+msgid "Workflows"
+msgstr "कार्यप्रवाहहरू"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "सेटिङ उप-URLहरूमा सम्पादन योग्य छ"
+
+msgid "Show JSON Template"
+msgstr "JSON टेम्प्लेट देखाउनुहोस्"
+
+msgid "JSON Template"
+msgstr "JSON टेम्प्लेट"
+
+msgid "Installing Xapian bindings"
+msgstr "Xapian बाइन्डिङहरू स्थापना गर्दै"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "निम्न स्निपेटले Ubuntu 25.04 मा PHP 8.3 सँग Xapian PHP बाइन्डिङहरूको उदाहरण स्थापना देखाउँछ। आफ्नो वातावरण अनुसार पथ र संस्करणहरू अनुकूलित गर्नुहोस्।"
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "निश्चित गर्नुहोस् कि तपाईंसँग मात्र तपाईंले वास्तवमा प्रयोग गर्ने PHP संस्करण (उदाहरणका लागि 8.3) छ र विभिन्न एक्सटेन्सन निर्देशिकाहरूसँग धेरै संस्करणहरू मिसाउनुहुन्न।"
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "एकपटक एक्सटेन्सन CLI र वेब सर्वर दुवैका लागि सही रूपमा लोड भएपछि, माथिका खोज निदानहरूले Xapian मोडेल स्थापित भएको रिपोर्ट गर्नुपर्छ।"
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "अस्थायी अपलोडहरू र क्यास सफा गर्नुहोस्"
+
+msgid "Directory"
+msgstr "डाइरेक्टरी"
+
+msgid "Only delete files older than (minutes)"
+msgstr "केवल (मिनेट) भन्दा पुराना फाइलहरू मेटाउनुहोस्"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "सबै फाइलहरू मेटाउन ० सेट गर्नुहोस्। अझै अपलोड भइरहेका फाइलहरू हटाउन नदिन सकारात्मक मान प्रयोग गर्नुहोस् (उदाहरण: ६०)।"
+
+msgid "Preview only (do not delete)"
+msgstr "पूर्वावलोकन मात्र (मेटाउनुहुन्न)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "चेतावनी: तपाईं सबै अस्थायी फाइलहरू मेटाउन लाग्नुभएको छ। यो कार्यलाई पूर्ववत गर्न सकिँदैन।"
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "योले सबै अस्थायी फाइलहरू मेटाउनेछ। जारी राख्ने?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "योले %minutes% मिनेट भन्दा पुराना फाइलहरू मेटाउनेछ। जारी राख्ने?"
 

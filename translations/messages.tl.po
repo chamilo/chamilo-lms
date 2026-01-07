@@ -67,37 +67,37 @@ msgid "Cosecant:\t\t\t\tcsc(x)"
 msgstr "Cosecant:\t\t\t\tcsc(x)"
 
 msgid "Hyperbolic cosecant:\t\tcsch(x)"
-msgstr "Hyperbolic cosecant:\t\tcsch(x)"
+msgstr "Hyperboliko kosikant:\t\tcsch(x)"
 
 msgid "Arccosecant:\t\t\tarccsc(x)"
 msgstr "Arccosecant:\t\t\tarccsc(x)"
 
 msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
-msgstr "Hyperbolic arccosecant:\t\tarccsch(x)"
+msgstr "Hyperboliko arkokosikant:\t\tarccsch(x)"
 
 msgid "Secant:\t\t\t\tsec(x)"
 msgstr "Secant:\t\t\t\tsec(x)"
 
 msgid "Hyperbolic secant:\t\tsech(x)"
-msgstr "Hyperbolic secant:\t\tsech(x)"
+msgstr "Hyperboliko sekant:\t\tsech(x)"
 
 msgid "Arcsecant:\t\t\tarcsec(x)"
 msgstr "Arcsecant:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
-msgstr "Hyperbolic arcsecant:\t\tarcsech(x)"
+msgstr "Hyperboliko arkosekant:\t\tarcsech(x)"
 
 msgid "Cotangent:\t\t\tcot(x)"
 msgstr "Cotangent:\t\t\tcot(x)"
 
 msgid "Hyperbolic cotangent:\t\tcoth(x)"
-msgstr "Hyperbolic cotangent:\t\tcoth(x)"
+msgstr "Hyperboliko kotanjent:\t\tcoth(x)"
 
 msgid "Arccotangent:\t\t\tarccot(x)"
 msgstr "Arccotangent:\t\t\tarccot(x)"
 
 msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
-msgstr "Hyperbolic arccotangent:\t\tarccoth(x)"
+msgstr "Hyperboliko arkokotanjent:\t\tarccoth(x)"
 
 msgid "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />\nIf needed, the Help section of your browser indicates how to configure cookies.<br /><br />\nFor more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website."
 msgstr "Upang gumana ang site na ito at masukat ang paggamit ng nilalaman, gumagamit ang platform na ito ng cookies.<br /><br />\nKung kinakailangan, ang seksyon ng Tulong ng iyong browser ay nagpapakita kung paano i-configure ang cookies.<br /><br />\nPara sa karagdagang impormasyon tungkol sa cookies, maaari mong bisitahin ang <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website."
@@ -226,7 +226,7 @@ msgid "The session duration allows you to set a number of days of access startin
 msgstr "Ang tagal ng sesyon ay nagbibigay-daan sa iyo upang itakda ang bilang ng mga araw ng access na nagsisimula mula sa unang petsa ng access ng gumagamit sa sesyon. Sa ganitong paraan, maaari mong itakda ang sesyon na 'tatagal ng 15 araw' sa halip na magsimula sa fixed na petsa para sa lahat ng mag-aaral."
 
 msgid "Hyperbolic arctangent:\t\tarctanh(x)"
-msgstr "Hyperbolic arctangent:\t\tarctanh(x)"
+msgstr "Hyperboliko arktanjent:\t\tarctanh(x)"
 
 msgid "Session duration"
 msgstr "Tagal ng sesyon"
@@ -235,7 +235,7 @@ msgid "Arctangent:\t\t\tarctan(x)"
 msgstr "Arctangent:\t\t\tarctan(x)"
 
 msgid "Hyperbolic tangent:\t\ttanh(x)"
-msgstr "Hyperbolic tangent:\t\ttanh(x)"
+msgstr "Hyperboliko tangente:\t\ttanh(x)"
 
 msgid "Tangent:\t\t\ttan(x)"
 msgstr "Tangent:\t\t\ttan(x)"
@@ -247,13 +247,13 @@ msgid "Series"
 msgstr "Series"
 
 msgid "Hyperbolic arccosine:\t\tarccosh(x)"
-msgstr "Hyperbolic arccosine:\t\tarccosh(x)"
+msgstr "Hyperboliko arkokosinus:\t\tarccosh(x)"
 
 msgid "Arccosine:\t\t\tarccos(x)"
 msgstr "Arccosine:\t\t\tarccos(x)"
 
 msgid "Hyperbolic cosine:\t\tcosh(x)"
-msgstr "Hyperbolic cosine:\t\tcosh(x)"
+msgstr "Hyperboliko kosinus:\t\tcosh(x)"
 
 msgid "Cosine:\t\t\t\tcos(x)"
 msgstr "Cosine:\t\t\t\tcos(x)"
@@ -262,7 +262,7 @@ msgid "Teachers time report"
 msgstr "Ulat ng oras ng mga guro"
 
 msgid "Hyperbolic arcsine:\t\tarcsinh(x)"
-msgstr "Hyperbolic arcsine:\t\tarcsinh(x)"
+msgstr "Hyperboliko arksinus:\t\tarcsinh(x)"
 
 msgid "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator."
 msgstr "Hindi mo nahanap ang iyong wika sa listahan? Makipag-ugnayan sa amin sa info@chamilo.org upang mag-ambag bilang translator."
@@ -271,7 +271,7 @@ msgid "Arcsine:\t\t\tarcsin(x)"
 msgstr "Arcsine:\t\t\tarcsin(x)"
 
 msgid "Hyperbolic sine:\t\tsinh(x)"
-msgstr "Hyperbolic sine:\t\tsinh(x)"
+msgstr "Hyperboliko sinus:\t\tsinh(x)"
 
 msgid "Sine:\t\t\t\tsin(x)"
 msgstr "Sine:\t\t\t\tsin(x)"
@@ -289,10 +289,10 @@ msgid "Natural logarithm:\t\tln(x)"
 msgstr "Natural na logaritmo:\t\tln(x)"
 
 msgid "Absolute value:\t\t\tabs(x)"
-msgstr "Absolute value:\t\t\tabs(x)"
+msgstr "Absolute na halaga:\t\tabs(x)"
 
 msgid "Square root:\t\t\tsqrt(x)"
-msgstr "Square root:\t\t\tsqrt(x)"
+msgstr "Square root:\t\tsqrt(x)"
 
 msgid "Exponentiation:\t\t\t^"
 msgstr "Pag-angat sa kapangyarihan:\t\t\t^"
@@ -499,7 +499,7 @@ msgid "Corporate report, short version"
 msgstr "Corporate report, maikling bersyon"
 
 msgid "Corporate report"
-msgstr "Corporate report"
+msgstr "Korporatibong ulat"
 
 msgid "Report"
 msgstr "Report"
@@ -3664,7 +3664,7 @@ msgid "RE:"
 msgstr "RE:"
 
 msgid "Advanced edit"
-msgstr "Advanced edit"
+msgstr "Advanced na pag-edit"
 
 msgid "Create table of contents"
 msgstr "Lumikha ng talahanayan ng mga nilalaman"
@@ -3706,7 +3706,7 @@ msgid "Administration by"
 msgstr "Administrasyon ni"
 
 msgid "Videoconference host"
-msgstr "Videoconference host"
+msgstr "Host ng Videoconference"
 
 msgid "Whether the videoconference protocol is web-based (false most of the time)"
 msgstr "Kung ang videoconference protocol ay web-based (mali karamihan ng panahon)"
@@ -3775,7 +3775,7 @@ msgid "Backup this course"
 msgstr "I-backup ang kursong ito"
 
 msgid "Course subscription"
-msgstr "Course subscription"
+msgstr "Pag-subscribe sa Kurso"
 
 msgid "Public access"
 msgstr "Pampublikong access"
@@ -4171,16 +4171,16 @@ msgid "Send a mail to users"
 msgstr "Magpadala ng email sa mga gumagamit"
 
 msgid "System code"
-msgstr "System code"
+msgstr "Kod ng sistema"
 
 msgid "Visual code"
-msgstr "Visual code"
+msgstr "Biswal na code"
 
 msgid "System Code"
 msgstr "System Code"
 
 msgid "visual code"
-msgstr "visual code"
+msgstr "biswal na code"
 
 msgid "Manage virtual courses"
 msgstr "Pamahalaan ang mga virtual na kurso"
@@ -4327,7 +4327,7 @@ msgid "Show the tool shortcuts in the banner?"
 msgstr "Ipakita ang mga shortcut na mga tool sa  banner?"
 
 msgid "Learner View"
-msgstr "Learner View"
+msgstr "Tanawin ng Mag-aaral"
 
 msgid "Enable Learner View?<br>This feature allows the teacher to see the learner view."
 msgstr "Payagan ang Learner View?<br>Pinapayagan ng tampok na ito ang guro na makita ang learner view."
@@ -4714,7 +4714,7 @@ msgid "The selected classes were subscribed to the selected course"
 msgstr "Ang napiling mga klase ay naka-subscribe sa napiling kurso"
 
 msgid "Role ID"
-msgstr "Role ID"
+msgstr "ID ng Tungkulin"
 
 msgid "Role name"
 msgstr "Pangalan ng Role"
@@ -4768,7 +4768,7 @@ msgid "Your version is"
 msgstr "Ang iyong bersyon ay"
 
 msgid "Socket Connection Error"
-msgstr "Socket Connection Error"
+msgstr "Error sa Socket Connection"
 
 msgid "Socket connections are disabled"
 msgstr "Hindi pinapayagang mga koneksyon ng socket"
@@ -5245,7 +5245,7 @@ msgid "If you choose to skip, the files filtered through the blacklist or whitel
 msgstr "Kung pipiliin mong i-skip, ang mga file na na-filter sa pamamagitan ng blacklist o whitelist ay hindi ma-upload sa system. Kung pipiliin mong i-rename, ang kanilang extension ay papalitan ng isa na tinukoy sa extension replacement setting. Mag-ingat na ang pag-rename ay hindi tunay na nagpoprotekta sa iyo, at maaaring magdulot ng name collision kung may mga file ng parehong pangalan ngunit iba't ibang extensions."
 
 msgid "Replacement extension"
-msgstr "Replacement extension"
+msgstr "Kapalit na extension"
 
 msgid "Enter the extension that you want to use to replace the dangerous extensions detected by the filter. Only needed if you have selected a filter by replacement."
 msgstr "Ilagay ang extension na nais mong gamitin upang palitan ang mga mapanganib na extensions na natukoy ng filter. Kinakailangan lamang kung napili mo ang filter sa pamamagitan ng replacement."
@@ -5401,16 +5401,16 @@ msgid "Add profile field"
 msgstr "Magdagdag ng profile field"
 
 msgid "Field label"
-msgstr "Field label"
+msgstr "Label ng Field"
 
 msgid "Field type"
-msgstr "Field type"
+msgstr "Uri ng Field"
 
 msgid "Field title"
-msgstr "Field title"
+msgstr "Pamagat ng Field"
 
 msgid "Default value"
-msgstr "Default value"
+msgstr "Default na halaga"
 
 msgid "Order"
 msgstr "Order"
@@ -5425,13 +5425,13 @@ msgid "Text area"
 msgstr "Text area"
 
 msgid "Radio buttons"
-msgstr "Radio buttons"
+msgstr "Mga radio button"
 
 msgid "Select drop-down"
-msgstr "Select drop-down"
+msgstr "Piliin ang drop-down"
 
 msgid "Multiple selection drop-down"
-msgstr "Multiple selection drop-down"
+msgstr "Multiple na seleksyon ng drop-down"
 
 msgid "Field successfully added"
 msgstr "Field na naidagdag nang matagumpay"
@@ -5515,7 +5515,7 @@ msgid "Display closed courses on the login page and courses start page? On the p
 msgstr "Ipakita ang mga saradong kurso sa pahina ng login at panimulang pahina ng mga kurso? Sa panimulang pahina ng portal, isang icon ang lilitaw katabi ng mga kurso upang mabilis na mag-subscribe sa bawat mga kurso. Ito ay lilitaw lamang sa panimulang pahina ng portal kapag ang gumagamit ay naka-login at kapag ang gumagamit ay hindi pa naka-subscribe sa portal."
 
 msgid "LDAP Connection Error"
-msgstr "LDAP Connection Error"
+msgstr "Error sa LDAP Connection"
 
 msgid "LDAP"
 msgstr "LDAP"
@@ -5557,13 +5557,13 @@ msgid "The port on which the replicate server will respond."
 msgstr "Ang port kung saan magre-responde ang replicate server."
 
 msgid "Search term"
-msgstr "Search term"
+msgstr "Termino ng paghahanap"
 
 msgid "This term will be used to filter the search for contacts on the LDAP server. If you are unsure what to put in here, please refer to your LDAP server's documentation and configuration."
 msgstr "Ang term na ito ay gagamitin upang i-filter ang paghahanap ng mga contact sa LDAP server. Kung hindi ka sigurado kung ano ang ilalagay dito, mangyaring tingnan ang dokumentasyon at configuration ng iyong LDAP server."
 
 msgid "LDAP version"
-msgstr "LDAP version"
+msgstr "LDAP bersyon"
 
 msgid "Please select the version of the LDAP server you want to use. Using the right version depends on your LDAP server's configuration."
 msgstr "Mangyaring piliin ang bersyon ng LDAP server na nais mong gamitin. Ang paggamit ng tamang bersyon ay nakadepende sa configuration ng iyong LDAP server."
@@ -5581,13 +5581,13 @@ msgid "A check will be done on this LDAP contact field on new users insertion. I
 msgstr "Isang check ay gagawin sa field na ito ng LDAP contact sa bagong insertion ng mga user. Kung ang field na ito ay hindi blangko, ituturing ang user bilang tutor at isinasama sa Chamilo bilang ganoon. Kung nais mong lahat ng iyong mga user ay kinikilala bilang simpleng mga user, hayaang blangko ang field na ito. Maaari mong baguhin ang pag-uugali na ito sa pamamagitan ng pagbabago ng code. Mangyaring basahin ang <a href=\"../../documentation/installation_guide.html\">installation guide</a> para sa karagdagang impormasyon."
 
 msgid "Authentication login"
-msgstr "Authentication login"
+msgstr "Pag-login ng pagpapatunay"
 
 msgid "If you are using an LDAP server that does not support or accept anonymous access, fill the following field with the user login that should be used. Do not include \"cn=\". Leave empty for anonymous access."
 msgstr "Kung gumagamit ka ng LDAP server na hindi sumusuporta o tinatanggap ang anonymous access, punuin ang sumusunod na field ng user login na dapat gamitin. Huwag isama ang \"cn=\". Hayaang blangko para sa anonymous access."
 
 msgid "Authentication password"
-msgstr "Authentication password"
+msgstr "Password ng pagpapatunay"
 
 msgid "If you are using an LDAP server that does not support or accept anonymous access, fill the following field with the user password that should be used."
 msgstr "Kung gumagamit ka ng LDAP server na hindi sumusuporta o tinatanggap ang anonymous access, punuin ang sumusunod na field ng user password na dapat gamitin."
@@ -5743,13 +5743,13 @@ msgid "The field is successfully moved up."
 msgstr "Matagumpay na inilipat pataas ang field."
 
 msgid "OpenGraph meta title"
-msgstr "OpenGraph meta title"
+msgstr "OpenGraph meta pamagat"
 
 msgid "This will show an OpenGraph Description meta (og:description) in your site's headers"
 msgstr "Ito ay magpapakita ng OpenGraph Description meta (og:description) sa headers ng iyong site"
 
 msgid "Meta description"
-msgstr "Meta description"
+msgstr "Meta deskripsyon"
 
 msgid "This will show an OpenGraph Title meta (og:title) in your site's headers"
 msgstr "Ito ay magpapakita ng OpenGraph Title meta (og:title) sa headers ng iyong site"
@@ -6232,7 +6232,7 @@ msgid "None: doesn't add any glossary terms to the documents"
 msgstr "Wala: hindi nagdadagdag ng anumang mga salita sa talahulugan sa mga dokumento"
 
 msgid "Language variable"
-msgstr "Language variable"
+msgstr "Wariableng wika"
 
 msgid "To export a document that has glossary terms with its references to the glossary, you have to make sure you include the glossary tool in the export"
 msgstr "Upang i-export ang dokumento na may mga termino ng glossary kasama ang mga reference nito sa glossary, kailangan mong isama ang glossary tool sa export"
@@ -6253,7 +6253,7 @@ msgid "HTML"
 msgstr "HTML"
 
 msgid "Page Link"
-msgstr "Page Link"
+msgstr "Link ng pahina"
 
 msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register."
 msgstr "Ipakita ang Terms & Conditions statement sa registration page, kailanganin ang bisita na tanggapin ang T&C upang magrehistro."
@@ -6301,7 +6301,7 @@ msgid "The category has been added"
 msgstr "Nadagdag na ang category"
 
 msgid "Category update"
-msgstr "Category update"
+msgstr "Pag-update ng Kategorya"
 
 msgid "The selected categories have been deleted"
 msgstr "Na-delete na ang napiling mga category"
@@ -6355,7 +6355,7 @@ msgid "Block user from courses in this session"
 msgstr "I-block ang user mula sa mga kurso sa session na ito"
 
 msgid "Language file"
-msgstr "Language file"
+msgstr "File ng wika"
 
 msgid "Show the courses descriptions in the catalog"
 msgstr "Ipakita ang mga paglalarawan ng mga kurso sa katalogo"
@@ -7198,7 +7198,7 @@ msgid "back to normal screen"
 msgstr "balik sa normal na screen"
 
 msgid "full screen"
-msgstr "full screen"
+msgstr "buong screen"
 
 msgid "There was a"
 msgstr "May"
@@ -7324,7 +7324,7 @@ msgid "Woogie : Word conversion"
 msgstr "Woogie: Word converter"
 
 msgid "MS Word to course converter"
-msgstr "MS Word to course converter"
+msgstr "MS Word patungo sa converter ng kurso"
 
 msgid "Welcome to Woogie Rapid Learning<ul type=\"1\"><li>Browse your hard disk to find any .doc, .sxw or .odt file<li>Upload it to Woogie. It will convert it into a SCORM course<li>You will then be able to add audio comments on each page and insert quizzes and other activities between pages</ul>"
 msgstr "Maligayang pagdating sa Woogie Rapid Learning<ul type=\"1\"><li>I-search ang iyong hard disk para makahanap ng .doc, .sxw o .odt file<li>I-upload ito sa Woogie. I-convert nito sa SCORM course<li>Makakapagdagdag ka na ng audio comments sa bawat pahina at maglagay ng quizzes at iba pang activities sa pagitan ng mga pahina</ul>"
@@ -7333,10 +7333,10 @@ msgid "Error during the conversion of the word document. Please check if there a
 msgstr "May error sa conversion ng word document. Mangyaring suriin kung may special characters sa pangalan ng dokumento mo.."
 
 msgid "MS Word conversion"
-msgstr "MS Word conversion"
+msgstr "Paglilipat ng MS Word"
 
 msgid "Interaction ID"
-msgstr "Interaction ID"
+msgstr "ID ng Pakikipag-ugnayan"
 
 msgid "Time (finished at...)"
 msgstr "Oras (natapos sa...)"
@@ -7411,7 +7411,7 @@ msgid "Trainer picture will resize if needed"
 msgstr "Ang larawan ng trainer ay magre-resize kung kinakailangan"
 
 msgid "Image preview"
-msgstr "Image preview"
+msgstr "Paunang tanaw ng Larawan"
 
 msgid " already exists."
 msgstr " umiiral na."
@@ -7456,19 +7456,19 @@ msgid "Add this document to the course"
 msgstr "Idagdag ang dokumentong ito sa kurso"
 
 msgid "Objective ID"
-msgstr "Objective ID"
+msgstr "ID ng Layunin"
 
 msgid "Objective status"
-msgstr "Objective status"
+msgstr "Katayuan ng Layunin"
 
 msgid "Objective raw score"
-msgstr "Objective raw score"
+msgstr "Hindi naproseso na marka ng Layunin"
 
 msgid "Objective max score"
-msgstr "Objective max score"
+msgstr "Pinakamataas na marka ng Layunin"
 
 msgid "Objective min score"
-msgstr "Objective min score"
+msgstr "Pinakamababang marka ng Layunin"
 
 msgid "Learning path name"
 msgstr "Pangalan ng kurso"
@@ -7528,13 +7528,13 @@ msgid "Clear the chat"
 msgstr "Linisin ang chat"
 
 msgid "Session banner"
-msgstr "Session banner"
+msgstr "Banner ng Sesyon"
 
 msgid "Short description"
 msgstr "Maikling deskripsyon"
 
 msgid "Target audience"
-msgstr "Target audience"
+msgstr "Target na madla"
 
 msgid "Convert your virtual campus to a skills-based learning experience"
 msgstr "I-convert ang iyong virtual campus sa skills-based learning experience"
@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Mangyaring i-type ang iyong text sa ibaba"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng activity na punan ang form: kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sekso</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Tangkad</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng pagpuno ng form activity: kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[L] (L o B)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Tangkad</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\"> [29] BMI = Timbang/Tangkad<sup>2</sup> (Tingnan <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false;\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Isulat ang address"
@@ -8356,7 +8356,7 @@ msgid "You have to select a test"
 msgstr "Kailangan mong pumili ng pagsusulit"
 
 msgid "Hotspot delineation"
-msgstr "Hotspot delineation"
+msgstr "Paghahati ng Hotspot"
 
 msgid "More areas at risk"
 msgstr "Higit pang lugar sa panganib"
@@ -9772,10 +9772,10 @@ msgid "Height"
 msgstr "Taas"
 
 msgid "Image manager"
-msgstr "Image manager"
+msgstr "Tagapamahala ng Larawan"
 
 msgid "Image File"
-msgstr "Image File"
+msgstr "File ng Larawan"
 
 msgid "Constrain proportions"
 msgstr "Limitahan ang sukat"
@@ -9892,10 +9892,10 @@ msgid "Edit user fields"
 msgstr "I-edit ang mga field ng user"
 
 msgid "Double select"
-msgstr "Double select"
+msgstr "Doble na pagpili"
 
 msgid "Visual divider"
-msgstr "Visual divider"
+msgstr "Biswal na tagahati"
 
 msgid "Unknown package format"
 msgstr "Hindi kilalang format ng package"
@@ -10387,7 +10387,7 @@ msgid "Evaluation statistics"
 msgstr "Mga istatistika ng pagsusuri"
 
 msgid "PDF Report"
-msgstr "PDF Report"
+msgstr "PDF Ulat"
 
 msgid "Welcome to the Assessments tool. This tool allows you to assess competences in your organization. Generate Competences Reports by merging the score of various learning activities including classroom and online activities. This will typically fit in a blended learning environment."
 msgstr "Maligayang pagdating sa kagamitan ng Pagsusuri. Ang kagamitang ito ay nagbibigay-daan sa iyo upang suriin ang mga kompetensya sa iyong organisasyon. Gumawa ng mga Ulat ng Kompetensya sa pamamagitan ng paghahalo ng score ng iba't ibang aktibidad sa pag-aaral kabilang ang mga aktibidad sa silid-aralan at online. Karaniwang angkop ito sa isang kapaligiran ng blended learning."
@@ -10414,7 +10414,7 @@ msgid "Result edited"
 msgstr "Na-edit na resulta"
 
 msgid "PDF report"
-msgstr "PDF report"
+msgstr "PDF ulat"
 
 msgid "Output file type"
 msgstr "Uri ng output file"
@@ -10615,10 +10615,10 @@ msgid "Validate presence sheet"
 msgstr "I-validate ang presence sheet"
 
 msgid "Presence sheet"
-msgstr "Presence sheet"
+msgstr "Listahan ng presensya"
 
 msgid "Presence sheets"
-msgstr "Presence sheets"
+msgstr "Mga listahan ng presensya"
 
 msgid "Evaluations"
 msgstr "Mga Ebalwasyon"
@@ -10693,7 +10693,7 @@ msgid "click here to get this course from your old portal"
 msgstr "i-click dito upang kunin ang kursong ito mula sa iyong lumang portal"
 
 msgid "Support forum"
-msgstr "Support forum"
+msgstr "Forum ng suporta"
 
 msgid "Categories Overview"
 msgstr "Pangkalahatang-ideya ng mga kategorya"
@@ -10920,8 +10920,8 @@ msgstr "ay"
 msgid "The address of"
 msgstr "Ang address ng"
 
-msgid "Your registration on"
-msgstr "Ang iyong pagrehistro sa"
+msgid "Your registration on %s"
+msgstr "Ang iyong pagrehistro sa %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Ang login na ito ay naubos na. Gamitin ang back button ng iyong browser at pumili ng iba."
@@ -13027,13 +13027,13 @@ msgid "<p>The Course Homepage displays a range of tools (introductory text,  des
 msgstr "<p>Ang Course Homepage ay nagpapakita ng hanay ng mga tool (pambungad na text, deskripsyon, documents manager atbp.) Ang pahinang ito ay modular sa kahulugan na maaari mong itago o ipakita ang anumang tool sa learner view sa pamamagitan ng isang pag-klik sa 'eye' icon (ang mga nakatagong tool ay maaaring i-reactivate anumang oras. </p><b>Navigation</b><p>Upang mag-browse ng kurso, maaari kang mag-klik lamang sa mga icon; ang 'breadcrumb' navigation tool sa itaas ng pahina ay nagpapahintulot sa iyo na balikan ang iyong mga hakbang pabalik sa course homepage.</p><b>Best practice</b><p>Upang matulungan ang motivasyon ng mga mag-aaral, mainam na gawing 'buhay' ang iyong kurso sa pamamagitan ng pagmumungkahi na laging may tao na 'nasa likod ng screen'. Isang epektibong paraan upang makabuo ng impresyong ito ay i-update ang pambungad na text (mag-klik lamang sa dilaw na lapis) hindi bababa sa isang beses bawat linggo kasama ang pinakabagong balita, deadlines atbp.</p><p>Kapag gumagawa ka ng iyong kurso, subukan ang mga sumusunod na hakbang:<ol><li>Sa Course Settings, gawing pribado ang access sa kurso at mag-subscribe lamang sa mga tagapagsanay. Sa ganitong paraan, walang makakapasok sa iyong course area habang ginagawa, </li><li>Gumamit ng anumang tool na kailangan mo upang 'punan' ang iyong lugar ng content, activities, guidelines, tests atbp., </li><li>Ngayon itago ang lahat ng tool upang ang iyong home page ay walang laman sa learner view sa pamamagitan ng pag-klik sa mga mata upang gawing abo ang mga icon. </li><li>Gumamit ng Learning Path tool upang lumikha ng learning path upang i-structure ang paraan kung paano susundin ng mga mag-aaral at matututo sa loob nito. Sa ganitong paraan, bagamat gagamitin mo ang iba pang mga tool, hindi mo kailangang ipakita ang mga ito sa homepage sa simula. </li><li>Mag-klik sa eye icon sa tabi ng path na nilikha mo upang ipakita ito sa iyong home page. </li><li>Handa na ang iyong kurso na tingnan. Ang homepage nito ay magpapakita ng pambungad na text na sinusundan ng isang link upang gabayan ang mga mag-aaral papasok at sa buong kurso. Mag-klik sa Learner View button (kanan sa itaas) upang makita ang kurso mula sa pananaw ng mag-aaral. <I></I></li></ol>"
 
 msgid "Chamilo LIVE Help"
-msgstr "Chamilo LIVE Help"
+msgstr "Chamilo LIVE Tulong"
 
 msgid "The GoogleMaps plugin needs to be enabled by the platform administrator in order to show the map."
 msgstr "Kailangang i-enable ng platform administrator ang GoogleMaps plugin upang maipakita ang mapa."
 
 msgid "Chamilo Help"
-msgstr "Chamilo Help"
+msgstr "Chamilo Tulong"
 
 msgid "Documents Help"
 msgstr "Tulong sa Mga Dokumento"
@@ -13072,7 +13072,7 @@ msgid "Reporting Help"
 msgstr "Tulong sa Pag-Uulat"
 
 msgid "Induction-type session"
-msgstr "Induction-type session"
+msgstr "Sesyon ng induksyon"
 
 msgid "Publish survey"
 msgstr "I-publish ang survey"
@@ -13093,7 +13093,7 @@ msgid "Create survey"
 msgstr "Lumikha ng sarbey"
 
 msgid "Survey template"
-msgstr "Survey template"
+msgstr "Template ng survey"
 
 msgid "Please enter survey title"
 msgstr "Mangyaring mag-enter ng survey title"
@@ -13108,13 +13108,13 @@ msgid "Advanced report allows to choose the user and the questions to see more p
 msgstr "Ang advanced report ay nagpapahintulot na pumili ng user at mga tanong upang makita ang mas tumpak na impormasyon"
 
 msgid "Advanced report"
-msgstr "Advanced report"
+msgstr "Advanced na ulat"
 
 msgid "Complete report allows to see all the results given by the people questioned, and export it in csv (for Excel)"
 msgstr "Ang complete report ay nagpapahintulot na makita ang lahat ng resulta na ibinigay ng mga tinatanong, at i-export ito sa csv (para sa Excel)"
 
 msgid "Complete report"
-msgstr "Complete report"
+msgstr "Buong ulat"
 
 msgid "Send the survey to these addresses only"
 msgstr "Ipadala ang survey sa mga address na ito lamang"
@@ -13132,7 +13132,7 @@ msgid "Export in Excel format"
 msgstr "I-export sa Excel format"
 
 msgid "Comparative results"
-msgstr "Comparative results"
+msgstr "Paghahambing ng mga resulta"
 
 msgid "Select the data you want to compare"
 msgstr "Pumili ng data na gusto mong i-compare"
@@ -13153,10 +13153,10 @@ msgid "Select Display Type :"
 msgstr "Pumili ng Display Type:"
 
 msgid "Feedback message"
-msgstr "Feedback message"
+msgstr "Mensahe ng feedback"
 
 msgid "Survey reporting"
-msgstr "Survey reporting"
+msgstr "Ulat ng survey"
 
 msgid "No survey available"
 msgstr "Walang available na survey"
@@ -13327,7 +13327,7 @@ msgid "Survey invitations"
 msgstr "Mga imbitasyon sa survey"
 
 msgid "Invitation code"
-msgstr "Invitation code"
+msgstr "Koda ng imbitasyon"
 
 msgid "Invitation date"
 msgstr "Petsa ng imbitasyon"
@@ -13369,7 +13369,7 @@ msgid "Select the question on the Y axis"
 msgstr "Pumili ng tanong sa Y axis"
 
 msgid "Comparative report"
-msgstr "Comparative report"
+msgstr "Paghahambing na ulat"
 
 msgid "This screen displays an exact copy of the form as it was filled by the user"
 msgstr "Ipinapakita ng screen na ito ang eksaktong kopya ng form na pinunan ng user"
@@ -13378,13 +13378,13 @@ msgid "Select user who filled the survey"
 msgstr "Pumili ng user na nagpuno ng survey"
 
 msgid "User report"
-msgstr "User report"
+msgstr "Ulat ng gumagamit"
 
 msgid "Graphic"
 msgstr "Graphic"
 
 msgid "Absolute total"
-msgstr "Absolute total"
+msgstr "Buong kabuuang bilang"
 
 msgid "Next question"
 msgstr "Susunod na tanong"
@@ -13468,7 +13468,7 @@ msgid "Sorry, this survey is not available anymore. Thank you for trying."
 msgstr "Paumanhin, hindi na available ang survey na ito. Salamat sa pagtangkang ito."
 
 msgid "Duplicate survey"
-msgstr "Duplicate survey"
+msgstr "Kopyahin ang survey"
 
 msgid "Empty survey"
 msgstr "Walang laman na survey"
@@ -14185,7 +14185,7 @@ msgid "URL of this company"
 msgstr "URL ng kompanyang ito"
 
 msgid "User DB"
-msgstr "User DB"
+msgstr "DB ng gumagamit"
 
 msgid "Please check these values"
 msgstr "Mangyaring suriin ang mga value na ito"
@@ -14299,7 +14299,7 @@ msgid "Your server must provide the following libraries to enable all features o
 msgstr "Dapat magbigay ang iyong server ng mga sumusunod na library upang mag-enable ng lahat ng tampok ng Chamilo. Ang mga nawawalang library na ipinapakita sa orange letters ay optional, ngunit maaaring ma-disable ang ilang tampok ng Chamilo kung hindi sila nainstall. Maaari mo pa ring i-install ang mga library na iyon mamaya upang mag-enable ng nawawalang mga tampok."
 
 msgid "PHP version"
-msgstr "PHP version"
+msgstr "Bersyon ng PHP"
 
 msgid "Support"
 msgstr "Suporta"
@@ -14440,31 +14440,31 @@ msgid "Cosmic campus"
 msgstr "Cosmic campus"
 
 msgid "Delicious Bordeaux"
-msgstr "Delicious Bordeaux"
+msgstr "Masarap na Bordeaux"
 
 msgid "Empire green"
-msgstr "Empire green"
+msgstr "Empire berde"
 
 msgid "Fruity orange"
-msgstr "Fruity orange"
+msgstr "Prutas na oranye"
 
 msgid "Medical"
 msgstr "Medical"
 
 msgid "Royal purple"
-msgstr "Royal purple"
+msgstr "Royal lila"
 
 msgid "Silver line"
-msgstr "Silver line"
+msgstr "Silver na linya"
 
 msgid "Sober brown"
-msgstr "Sober brown"
+msgstr "Seryosong kayumanggi"
 
 msgid "Steel grey"
-msgstr "Steel grey"
+msgstr "Bakal na abo"
 
 msgid "Tasty olive"
-msgstr "Tasty olive"
+msgstr "Masarap na olibo"
 
 msgid "In this report you see the results of all questions"
 msgstr "Sa report na ito makikita mo ang resulta ng lahat ng tanong"
@@ -14485,7 +14485,7 @@ msgid "dutch corporate"
 msgstr "dutch corporate"
 
 msgid "english for organisations"
-msgstr "english for organisations"
+msgstr "english para sa mga organisasyon"
 
 msgid "friulian"
 msgstr "friulian"
@@ -14518,7 +14518,7 @@ msgid "persian"
 msgstr "persian"
 
 msgid "quechua from Cusco"
-msgstr "quechua from Cusco"
+msgstr "quechua mula sa Cusco"
 
 msgid "romanian"
 msgstr "romanian"
@@ -14533,10 +14533,10 @@ msgid "swahili"
 msgstr "swahili"
 
 msgid "traditional chinese"
-msgstr "traditional chinese"
+msgstr "tradisyunal na tsino"
 
 msgid "Chamilo installation"
-msgstr "Chamilo installation"
+msgstr "Pag-install ng Chamilo"
 
 msgid "Pending invitations"
 msgstr "Mga nakabinbing paanyaya"
@@ -14602,7 +14602,7 @@ msgid "The time limit of a category is referential, will not affect the boundari
 msgstr "Ang time limit ng isang category ay referential, hindi apektado ang boundaries ng training session"
 
 msgid "User tag"
-msgstr "User tag"
+msgstr "Tag ng gumagamit"
 
 msgid "E-mail alert on course creation"
 msgstr "Alerto sa e-mail, sa paglikha ng bagong kurso"
@@ -14623,7 +14623,7 @@ msgid "Upload correction"
 msgstr "I-upload ang correction"
 
 msgid "ASCIIMathML mathematical editor"
-msgstr "ASCIIMathML mathematical editor"
+msgstr "ASCIIMathML editor ng matematika"
 
 msgid "Enable ASCIIMathML mathematical editor"
 msgstr "I-activate ang ASCIIMathML mathematical editor"
@@ -14689,10 +14689,10 @@ msgid "Chamilo extensions"
 msgstr "Mga palugit ng Chamilo"
 
 msgid "Chamilo Green"
-msgstr "Chamilo Green"
+msgstr "Chamilo Berde"
 
 msgid "Chamilo red"
-msgstr "Chamilo red"
+msgstr "Chamilo pula"
 
 msgid "Number of messages sent"
 msgstr "Bilang ng mga mensaheng ipinadala"
@@ -15106,7 +15106,7 @@ msgid "Only required by the sub-languages feature or version upgrade process"
 msgstr "Kailangan lamang ng tampok sa sub-wika o proseso ng pag-upgrade ng bersyon"
 
 msgid "Thematic advance"
-msgstr "Thematic advance"
+msgstr "Pag-unlad ng tematik"
 
 msgid "Dashboard"
 msgstr "Dashboard"
@@ -15361,13 +15361,13 @@ msgid "MySQL protocol"
 msgstr "MySQL protocol"
 
 msgid "MySQL server host"
-msgstr "MySQL server host"
+msgstr "Host ng MySQL server"
 
 msgid "MySQL server information"
 msgstr "Impormasyon ng MySQL server"
 
 msgid "MySQL client"
-msgstr "MySQL client"
+msgstr "MySQL kliyente"
 
 msgid "Protocol used by this server"
 msgstr "Protocol na ginagamit ng server na ito"
@@ -15535,7 +15535,7 @@ msgid "URL"
 msgstr "URL"
 
 msgid "Learning path"
-msgstr "Learning path"
+msgstr "Landas ng pag-aaral"
 
 msgid "Surveys"
 msgstr "Mga Sarbey"
@@ -15574,7 +15574,7 @@ msgid "Disable user list"
 msgstr "I-disable ang listahan ng gumagamit"
 
 msgid "Thematic control"
-msgstr "Thematic control"
+msgstr "Kontrol ng tematik"
 
 msgid "Thematic view with details"
 msgstr "Thematic na tanaw na may mga detalye"
@@ -15949,10 +15949,10 @@ msgid "Access start date for coaches"
 msgstr "Access start date para sa mga coach"
 
 msgid "Access end date"
-msgstr "Access end date"
+msgstr "Araw ng pagtatapos ng access"
 
 msgid "Access start date"
-msgstr "Access start date"
+msgstr "Araw ng pagsisimula ng access"
 
 msgid "End date to display"
 msgstr "End date na ipapakita"
@@ -16006,10 +16006,10 @@ msgid "A learner has attempted one or more oral question"
 msgstr "Nag-subscribe ang isang learner ng isa o higit pang oral question"
 
 msgid "Relative score"
-msgstr "Relative score"
+msgstr "Relative na marka"
 
 msgid "Absolute score"
-msgstr "Absolute score"
+msgstr "Absolute na marka"
 
 msgid "Prerequisites options"
 msgstr "Mga opsyon sa prerequisites"
@@ -16063,7 +16063,7 @@ msgid "Add skill to profile search"
 msgstr "Idagdag ang skill sa profile search"
 
 msgid "Short code"
-msgstr "Short code"
+msgstr "Maikling code"
 
 msgid "Create child skill"
 msgstr "Lumikha ng child skill"
@@ -16078,7 +16078,7 @@ msgid "What skills are you looking for?"
 msgstr "Anong skills ang hinahanap mo?"
 
 msgid "Profile search"
-msgstr "Profile search"
+msgstr "Paghahanap ng profile"
 
 msgid "If your course is public or open, you can use the direct link below to send an invitation to new users, so after registration, they will be sent directly to the course. Also, you can add the e=1 parameter to the URL, replacing \"1\" by an exercise ID to send them directly to a specific exam. The exercise ID can be discovered in the URL when clicking on an exercise to open it.<br/>%s"
 msgstr "Kung ang iyong kurso ay pampubliko o bukas, maaari mong gamitin ang direktang link sa ibaba upang makapagpadala ng imbitasyon sa mga bagong gumagamit, kung kaya't matapos ang rehistrasyon, sila ay direktang ipapadala sa kurso. At, maaari kang magdagdag ng e=1 parameter sa URL, pinapalitan ang \"1\" ng isang ID sa pagsasanay (exercise ID) upang direkta silang mapunta sa isang partikular na pagsusulit. Ang ID sa pagsasanay ay matutuklasan sa URL kapag magki-click na buksan ang isang pagsasanay.<br/>%s"
@@ -16144,7 +16144,7 @@ msgid "Edit questions"
 msgstr "I-edit ang mga tanong"
 
 msgid "Man hours"
-msgstr "Man hours"
+msgstr "Oras ng tao"
 
 msgid "Notes obtained"
 msgstr "Mga nakuha na notes"
@@ -16180,7 +16180,7 @@ msgid "Click to show graphics"
 msgstr "I-klik upang ipakita ang graphics"
 
 msgid "Quarterly report"
-msgstr "Quarterly report"
+msgstr "Pang-Quarterly na ulat"
 
 msgid "%d %B %Y"
 msgstr "%d %B %Y"
@@ -16195,7 +16195,7 @@ msgid "%d/%m"
 msgstr "%d/%m"
 
 msgid "Course tutor"
-msgstr "Course tutor"
+msgstr "Guro ng kurso"
 
 msgid "Student in session course"
 msgstr "Estudyante sa session course"
@@ -16222,7 +16222,7 @@ msgid "P"
 msgstr "P"
 
 msgid "Session calendar"
-msgstr "Session calendar"
+msgstr "Kalendaryo ng sesyon"
 
 msgid "Global platform information"
 msgstr "Impormasyon sa pandaigdigang platform"
@@ -16396,7 +16396,7 @@ msgid "Not inserted"
 msgstr "Hindi naipasok"
 
 msgid "Superior (n+1)"
-msgstr "Superior (n+1)"
+msgstr "Pangunahing (n+1)"
 
 msgid "Enable the MathJax library to visualize mathematical formulas. This is only useful if either ASCIIMathML or ASCIISVG settings are enabled."
 msgstr "I-activate ang MathJax library upang ma-visualize ang mga mathematical formula. Ito ay kapaki-pakinabang lamang kung ang alinman sa ASCIIMathML o ASCIISVG settings ay naka-enable."
@@ -16495,7 +16495,7 @@ msgid "You can't edit this course exercise from inside a session"
 msgstr "Hindi mo maaaring i-edit ang exercise ng kurso na ito mula sa loob ng sesyon"
 
 msgid "Session-specific resource"
-msgstr "Session-specific resource"
+msgstr "Session-specific na mapagkukunan"
 
 msgid "Edition not available from the session, please edit from the basic course."
 msgstr "Hindi available ang edition mula sa sesyon, paki-edit mula sa basic course."
@@ -16780,7 +16780,7 @@ msgid "The protocol string to prefix the Single Sign On server's domain (we reco
 msgstr "Ang string ng protocol upang i-prefix ang domain ng Single Sign On server (inirerekomenda namin na gumamit ka ng https:\/\/ kung ang iyong server ay makakapagbigay ng tampok na ito, dahil lahat ng hindi ligtas na protocol ay mapanganib para sa mga usapin ng pagpapatunay)"
 
 msgid "WIRIS mathematical editor"
-msgstr "WIRIS mathematical editor"
+msgstr "WIRIS editor ng matematika"
 
 msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href='http://www.wiris.com/es/plugins3/ckeditor/download' target='_blank'>PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href='http://www.wiris.com/store/who-pays' target='_blank'>commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
 msgstr "Paganahin ang WIRIS mathematical editor. Sa pag-install ng plugin na ito, makakakuha ka ng WIRIS editor at WIRIS CAS.<br/>Ang aktibasyon na ito ay hindi ganap na natatamo maliban kung na-download na ang <a href='http:\/\/www.wiris.com\/es\/plugins3\/ckeditor\/download' target='_blank'>PHP plugin para sa CKeditor WIRIS</a> at na-unzip ang mga nilalaman nito sa direktoryo ng Chamilo na main\/inc\/lib\/javascript\/ckeditor\/plugins\/.<br/>Kinakailangan ito dahil ang Wiris ay proprietary software at ang kanyang mga serbisyo ay <a href='http:\/\/www.wiris.com\/store\/who-pays' target='_blank'>commercial</a>. Upang gumawa ng mga adjustment sa plugin, i-edit ang configuration.ini file o palitan ang nilalaman nito ng file na configuration.ini.default na kasama sa Chamilo."
@@ -16825,7 +16825,7 @@ msgid "Exercise can't be edited after being added to the Learning Path"
 msgstr "Ang exercise ay hindi maaaring i-edit pagkatapos idagdag sa Learning Path"
 
 msgid "Course tool"
-msgstr "Course tool"
+msgstr "Kursong tool"
 
 msgid "Results of learning paths exercises by session"
 msgstr "Mga resulta ng mga pagsasanay sa learning path ayon sa sesyon"
@@ -16849,7 +16849,7 @@ msgid "Videoconference"
 msgstr "Videoconference"
 
 msgid "BigBlueButton videoconference tool"
-msgstr "BigBlueButton videoconference tool"
+msgstr "BigBlueButton tool ng videoconference"
 
 msgid "Choose whether you want to enable the BigBlueButton videoconference tool. Once enabled, it will show as an additional course tool in all courses' homepage, and teachers will be able to launch a conference at any time. Learners will not be able to launch a conference, only join one. If you don't have a BigBlueButton server, please <a href=\"http://bigbluebutton.org/\" target=\"_blank\">set one up</a> or ask the <a href=\"http://www.chamilo.org/en/providers\" target=\"_blank\">Chamilo official providers</a> for a quote."
 msgstr "Pumili kung nais mong paganahin ang BigBlueButton videoconference tool. Kapag pinagana, ito ay lalabas bilang karagdagang course tool sa homepage ng lahat ng kurso, at ang mga guro ay makakapag-launch ng conference anumang oras. Ang mga mag-aaral ay hindi makakapag-launch ng conference, maaari lamang sumali. Kung wala kang BigBlueButton server, pakikalmahan mong <a href=\"http:\/\/bigbluebutton.org\/\" target=\"_blank\">mag-set up ng isa</a> o magtanong sa <a href=\"http:\/\/www.chamilo.org\/en\/providers\" target=\"_blank\">mga opisyal na provider ng Chamilo</a> para sa quote."
@@ -16879,7 +16879,7 @@ msgid "Folders of users"
 msgstr "Mga folder ng mga gumagamit"
 
 msgid "User folder"
-msgstr "User folder"
+msgstr "Folder ng gumagamit"
 
 msgid "INFORMATION VISIBLE TO THE TEACHER ONLY:\nThe users folder contains a folder for each user who has accessed it through the documents tool, or when any file has been sent in the course through the online editor. If neither circumstances has occurred, then no user folder will have been created. In the case of groups, files that are sent through the editor will be added in the folder of each group, which is only accessible by students from this group."
 msgstr "ANG IMPORMASYON AY NAKIKITA LAMANG NG GURO:\nAng folder ng mga gumagamit ay naglalamang ng isang folder para sa bawat gumagamit na nakaka-access nito sa pamamagitan ng tool ng mga dokumento, o kapag ang alinmang file ay ipinadala sa kurso sa pamamagitan ng online editor. Kung alinmang kalagayan ang hindi mangyari, walang folder ng gumagamit ay malilikha. Sa kaso ngmga grupo, ang mga file na ipinadala sa pamamagitan ng editor ay idadagdag in folder ng bawat grupo, na siyang accessible lamang sa mga mag-aaral mula sa grupong ito. \n<br /><br /> \nAng folder ng mga gumagamit at ang bawat kasamang mga folder ay itatago bilang default para sa lahat ng mga mag-aaral, ngunit ang bawat mag-aaral ay maaaring makita ang mga nilalaman ng kanyang direktoryo sa pamamagitan ng online editor. Gayunpaman, kung ang isang mag-aaral ay alam ang address ng isang file o folder ng isang mag-aaral, maaari niya itong ma-access. \n<br /><br /> \nKung ang folder ng isang mag-aaral ay nakikita, ang ibang mga mag-aaral ay maaaring makita ang nilalaman nito. Sa kasong ito, ang mag-aaral na nagmamay-ari ng folder ay maaari din (mula sa tool ng mga dokumento at tanging sa kanyang folder): lumikha at mag-edit ng mga dokumento ng web, mag-convert ng isang dokumento sa isang template para sa personal na gamit, lumikha at mag-edit ng mga drawing sa SVG ang PNG na mga format, mag-record ng mga audio file sa WAV format, gumawa ng mga audio file sa MP3 mula sa teksto, gumawa ng mga snapshot mula sa webcam, ipadala ang mga dokumento, lumikha ng mga folder, ilipat ang mga folder at file, magtanggal ng mga folder at file, at mag-download ng backup ng kanyang folder. \n<br /><br /> \nGayunpaman, ang tool ng mga dokumento ay naka-synchronize sa file manager ng online editor, kung kaya"
@@ -17503,7 +17503,7 @@ msgid "To start recording press the red button"
 msgstr "Upang magsimula ng recording, pindutin ang pulang button"
 
 msgid "Voice record"
-msgstr "Voice record"
+msgstr "Rekord ng boses"
 
 msgid "Your browser does not send your recording to the platform, although you can save on your computer disk and send it later. To have all the features, we recommend using advanced browsers such as Firefox or Chrome."
 msgstr "Ang iyong browser ay hindi nagpapadala ng iyong recording sa platform, bagaman maaari mong i-save sa iyong computer disk at i-send ito mamaya. Upang magkaroon ng lahat ng tampok, inirerekomenda namin ang paggamit ng advanced browser tulad ng Firefox o Chrome."
@@ -17713,10 +17713,10 @@ msgid "Original session"
 msgstr "Orijinal na session"
 
 msgid "Destination course"
-msgstr "Destination course"
+msgstr "Lugar na kurso"
 
 msgid "Destination session"
-msgstr "Destination session"
+msgstr "Lugar na sesyon"
 
 msgid "The course does not exist in this session. The copy will work only from one course in one session to the same course in another session."
 msgstr "Ang kurso ay hindi umiiral sa session na ito. Gagana lamang ang kopya mula sa isang kurso sa isang session patungo sa parehong kurso sa ibang session."
@@ -17740,7 +17740,7 @@ msgid "A course category with the same name already exists."
 msgstr "May umiiral nang course category na may parehong pangalan."
 
 msgid "OpenID redirect"
-msgstr "OpenID redirect"
+msgstr "OpenID na muling idirekta"
 
 msgid "Blogs"
 msgstr "Mga Blog"
@@ -17830,13 +17830,13 @@ msgid "Import exercise"
 msgstr "I-import ang exercise"
 
 msgid "Multiple choice, multiple answers"
-msgstr "Multiple choice, multiple answers"
+msgstr "Multiple choice, maraming sagot"
 
 msgid "Multiple choice, unique answer"
-msgstr "Multiple choice, unique answer"
+msgstr "Multiple choice, iisang sagot"
 
 msgid "HotPotatoes files"
-msgstr "HotPotatoes files"
+msgstr "Mga file ng HotPotatoes"
 
 msgid "Area to avoid"
 msgstr "Area na dapat iwasan"
@@ -17938,10 +17938,10 @@ msgid "Information about the last finished step and the next unfinished one."
 msgstr "Impormasyon tungkol sa huling natapos na hakbang at sa susunod na hindi natapos."
 
 msgid "LaTeX code"
-msgstr "LaTeX code"
+msgstr "Kodong LaTeX"
 
 msgid "LaTeX formula"
-msgstr "LaTeX formula"
+msgstr "Formula ng LaTeX"
 
 msgid "Are you sure you want to lock the attendance?"
 msgstr "Sigurado ka bang gusto mong i-lock ang attendance?"
@@ -18097,7 +18097,7 @@ msgid "Pages most linked"
 msgstr "Pinakamaraming nalink na pahina"
 
 msgid "Dead end pages"
-msgstr "Dead end pages"
+msgstr "Mga patay na dulo ng pahina"
 
 msgid "Newest pages"
 msgstr "Pinakabagong pahina"
@@ -18406,10 +18406,10 @@ msgid "Number of tasks"
 msgstr "Bilang ng mga gawain"
 
 msgid "Portfolio mode"
-msgstr "Portfolio mode"
+msgstr "Mode ng Portfolio"
 
 msgid "Standard Task mode"
-msgstr "Standard Task mode"
+msgstr "Pangkaraniwang mode ng Lugarang Pagsasagawa"
 
 msgid "Information about the content of the pages"
 msgstr "Impormasyon tungkol sa nilalaman ng mga pahina"
@@ -19030,7 +19030,7 @@ msgid "Select an action"
 msgstr "Pumili ng aksyon"
 
 msgid "Login: %s"
-msgstr "Login: %s"
+msgstr "Pag-login: %s"
 
 msgid "Database <b>%s</b> will be created"
 msgstr "Ang database <b>%s</b> ay malilikha"
@@ -19228,16 +19228,16 @@ msgid "Once enabled, this option will enable locking of any assessment by the te
 msgstr "Kapag pinagana, pinapagana ng opsyong ito ang pag-lock ng anumang assessment ng mga guro ng kaukulang kurso. Ito naman, magpipigil sa anumang pagbabago ng mga resulta ng guro sa loob ng mga resource na ginamit sa assessment: exams, learning paths, tasks, atbp. Ang tanging role na awtorisado na mag-unlock ng naka-lock na assessment ay ang administrator. Ipaaalam sa guro ang posibilidad na ito. Ang pag-lock at pag-unlock ng gradebooks ay ire-register sa report ng mahahalagang aktibidad ng sistema"
 
 msgid "Shibboleth authentication"
-msgstr "Shibboleth authentication"
+msgstr "Shibboleth na pagpapatunay"
 
 msgid "<p>First of all, you have to configure Shibboleth for your web server.</p>To configure it for Chamilo<h5>edit file main/auth/shibboleth/config/aai.class.php</h5><p>Modify object &#36;result values with the name of your Shibboleth attributes</p><ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Go to <a href='settings.php?category=Shibboleth'>Plugin</a> to add a configurable 'Shibboleth Login' button for your Chamilo campus."
 msgstr "<p>Unang-una, kailangan mong i-configure ang Shibboleth para sa iyong web server.</p>Upang i-configure ito para sa Chamilo<h5>baguhin ang file main/auth/shibboleth/config/aai.class.php</h5><p>Baguhin ang mga halaga ng object &#36;result gamit ang pangalan ng iyong Shibboleth attributes</p><ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Pumunta sa <a href='settings.php?category=Shibboleth'>Plugin</a> upang magdagdag ng configurable 'Shibboleth Login' button para sa iyong Chamilo campus."
 
 msgid "LDAP authentication"
-msgstr "LDAP authentication"
+msgstr "LDAP na pagpapatunay"
 
 msgid "Facebook authentication"
-msgstr "Facebook authentication"
+msgstr "Facebook na pagpapatunay"
 
 msgid "<p><h5>Create your Facebook Application</h5>First of all, you have to create a Facebook Application (see <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) with your Facebook account. In the Facebook Apps settings, the site URL value should be the URL of this campus. Enable the Web OAuth Login option. And add the site URL of your campus to the Valid OAuth redirect URIs field</p><p>Uncomment the line <code>&#36;_configuration['facebook_auth'] = 1;</code> to enable the Facebook Auth.</p><p>Then, edit the <code>app/config/auth.conf.php</code> file and enter '<code>appId</code>' and '<code>secret</code>' values for <code>&#36;facebook_config</code>.</p><p>Go to <a href='settings.php?category=Plugins'>Plugins</a> to add a configurable <em>Facebook Login</em> button for your Chamilo campus.</p>"
 msgstr "<p><h5>Gumawa ng iyong Facebook Application</h5>Unang-una, kailangan mong gumawa ng Facebook Application (tingnan ang <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) gamit ang iyong Facebook account. Sa mga setting ng Facebook Apps, ang site URL value ay dapat ang URL ng campus na ito. I-enable ang Web OAuth Login option. At idagdag ang site URL ng iyong campus sa Valid OAuth redirect URIs field</p><p>I-uncomment ang linya <code>&#36;_configuration['facebook_auth'] = 1;</code> upang i-enable ang Facebook Auth.</p><p>Tapos, baguhin ang <code>app/config/auth.conf.php</code> file at ilagay ang '<code>appId</code>' at '<code>secret</code>' values para sa <code>&#36;facebook_config</code>.</p><p>Pumunta sa <a href='settings.php?category=Plugins'>Plugins</a> upang magdagdag ng configurable <em>Facebook Login</em> button para sa iyong Chamilo campus.</p>"
@@ -19258,7 +19258,7 @@ msgid "Fourth priority language"
 msgstr "Priyoridad sa wika 4"
 
 msgid "Language priority 5"
-msgstr "Language priority 5"
+msgstr "Priority ng wika 5"
 
 msgid "Primary language selected when multiple language contexts are set."
 msgstr "Ang wikang ito ang may pinakamataas na priyoridad"
@@ -19453,7 +19453,7 @@ msgid "Active only"
 msgstr "Aktibong lang"
 
 msgid "Authentication source"
-msgstr "Authentication source"
+msgstr "Pinagmulan ng pagpapatunay"
 
 msgid "Registered date"
 msgstr "Aralin ng rehistro"
@@ -19606,7 +19606,7 @@ msgid "Users not registered in any session"
 msgstr "Mga user na hindi narehistro sa anumang session"
 
 msgid "Command line interpreter (CLI)"
-msgstr "Command line interpreter (CLI)"
+msgstr "Tagapaliwanag ng command line (CLI)"
 
 msgid "Please visit our website: https://chamilo.org/download"
 msgstr "Mangyaring bisitahin ang aming website: https://chamilo.org/download"
@@ -19678,7 +19678,7 @@ msgid "Slider title"
 msgstr "Pamagat ng slider"
 
 msgid "Single Sign On error"
-msgstr "Single Sign On error"
+msgstr "Mali sa Single Sign On"
 
 msgid "Sent"
 msgstr "Ipinadala"
@@ -19912,7 +19912,7 @@ msgid "Set this to use the same template course (identified by its course numeri
 msgstr "Itakda ito upang gumamit ng parehong template course (na kinikilala sa pamamagitan ng numeric course ID nito sa database) para sa lahat ng bagong kurso na lilikha sa platform. Tandaan na, kung hindi maayos na naplano, maaaring magkaroon ng malaking epekto ang setting na ito sa paggamit ng espasyo. Gagamitin ang template course na parang gumawa ng copy ang guro gamit ang course backup tools, kaya walang user content na kinopya, tanging materyal ng guro. Lahat ng iba pang course-backup rules ay naaaplay. Hayaang blangko (o itakda sa 0) upang hindi paganahin."
 
 msgid "Password strength checker"
-msgstr "Password strength checker"
+msgstr "Tagapagbilang ng lakas ng password"
 
 msgid "Enable this option to add a visual indicator of password strength, when the user changes his/her password. This will NOT prevent bad passwords to be added, it only acts as a visual helper."
 msgstr "I-pagana ang opsyon na ito upang magdagdag ng visual indicator ng password strength, kapag binago ng user ang kanyang password. Ito ay HINDI pipigilan ang masamang password na idagdag, ito ay visual helper lamang."
@@ -19978,7 +19978,7 @@ msgid "Hide Learning Path PDF export"
 msgstr "Itago ang Learning Path PDF export"
 
 msgid "Hide the Learning Path PDF Export icon from the Learning Paths list"
-msgstr "Itago ang Learning Path PDF Export icon mula sa listahan ng Learning Paths"
+msgstr "Itago ang icon ng PDF Export ng Learning Path mula sa listahan ng Learning Paths"
 
 msgid "Default coach access days before session"
 msgstr "Default coach access days bago ang session"
@@ -19993,7 +19993,7 @@ msgid "Default number of days a coach can access his session after the official 
 msgstr "Default na bilang ng mga araw na maaaring ma-access ng coach ang kanyang session pagkatapos ng opisyal na end date ng session"
 
 msgid "PDF header logo"
-msgstr "PDF header logo"
+msgstr "Logo ng PDF header"
 
 msgid "Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
 msgstr "Gumamit ng image sa var/themes/[your-theme]/images/pdf_logo_header.png bilang PDF header logo para sa lahat ng PDF exports (sa halip na normal portal logo)"
@@ -20071,7 +20071,7 @@ msgid "In the assignments tool, students can upload more than one file. In case 
 msgstr "Sa assignments tool, maaaring mag-upload ng higit sa isang file ang mga students. Kung may higit sa isa para sa isang assignment, alin ang dapat isaalang-alang kapag nagra-rank sa gradebook? Ito ay nakadepende sa iyong methodology. Gumamit ng 'first' upang bigyang-diin ang attention to detail (tulad ng handling in time at right work first). Gumamit ng 'last' upang bigyang-diin ang collaborative at adaptive work."
 
 msgid "Certificates filter by official code"
-msgstr "Certificates filter by official code"
+msgstr "Filter ng Sertipiko ayon sa opisyal na code"
 
 msgid "Add a filter on the students official code to the certificates list."
 msgstr "Magdagdag ng filter sa official code ng students sa certificates list."
@@ -20083,7 +20083,7 @@ msgid "Because of the sheer number of questions that might appear in an exercise
 msgstr "Dahil sa dami ng mga tanong na maaaring lumabas sa exercise, ang correction screen, na nagbibigay-daan sa teacher na magdagdag ng comments sa bawat sagot, maaaring napakabagal na i-load. Itakda ang bilang na ito sa 5 upang hingin sa platform na ipakita lamang ang WYSIWYG editors hanggang sa tiyak na bilang ng sagot sa screen. Ito ay magpapabilis ng correction page loading time ng malaki, ngunit aalisin ang WYSIWYG editors at iiwan lamang ang plain text editor."
 
 msgid "Default document upload mode"
-msgstr "Default document upload mode"
+msgstr "Default na mode ng pag-upload ng dokumento"
 
 msgid "Default upload method in the courses documents. This setting can be changed at upload time for all users. It only represents a default setting."
 msgstr "Default upload method sa courses documents. Maaaring baguhin ang setting na ito sa upload time para sa lahat ng users. Ito ay default setting lamang."
@@ -20101,7 +20101,7 @@ msgid "The URL of the OpenBadges backpack server that will be used by default fo
 msgstr "Ang URL ng OpenBadges backpack server na gagamitin sa default para sa lahat ng users na nais mag-export ng kanilang badges. Ito ay default sa open at free Mozilla Foundation backpack repository: https://backpack.openbadges.org/"
 
 msgid "Cookie privacy notification"
-msgstr "Cookie privacy notification"
+msgstr "Mga abiso sa privacy ng cookie"
 
 msgid "If enabled, this option shows a banner on top of your platform that asks users to acknowledge that the platform is using cookies necessary to provide the user experience. The banner can easily be acknowledged and hidden by the user. This allows Chamilo to comply with EU web cookies regulations."
 msgstr "Kung pinagana, ipapakita ng opsyon na ito ang banner sa itaas ng platform na humihingi sa users na kinikilala na gumagamit ang platform ng cookies na kinakailangan para sa user experience. Madaling kinikilala at itinatago ng user ang banner. Ito ay nagbibigay-daan sa Chamilo na sumunod sa EU web cookies regulations."
@@ -20119,7 +20119,7 @@ msgid "Auto-subscription in sessions catalogue"
 msgstr "Auto-subscription sa sessions catalogue"
 
 msgid "Web services: decode UTF-8"
-msgstr "Web services: decode UTF-8"
+msgstr "Web services: i-decode ang UTF-8"
 
 msgid "Decode UTF-8 from web services calls. Enable this option (passed to the SOAP parser) if you have issues with the encoding of titles and names when inserted through web services."
 msgstr "Decode UTF-8 mula sa web services calls. Paganahin ang opsyon na ito (na ipinapasa sa SOAP parser) kung may issues ka sa encoding ng titles at names kapag ini-insert sa pamamagitan ng web services."
@@ -20131,19 +20131,19 @@ msgid "The default behaviour in Chamilo is to hide attendance sheets instead of 
 msgstr "Ang default behaviour sa Chamilo ay itago ang attendance sheets sa halip na i-delete ang mga ito, sakaling aksidente ng teacher. Paganahin ang opsyon na ito upang payagan ang mga teachers na *talagang* i-delete ang attendance sheets."
 
 msgid "Gravatar user pictures"
-msgstr "Gravatar user pictures"
+msgstr "Gravatar na larawan ng gumagamit"
 
 msgid "Enable this option to search into the Gravatar repository for pictures of the current user, if the user hasn't defined a picture locally. This is great to auto-fill pictures on your site, in particular if your users are active internet users. Gravatar pictures can be configured easily, based on the e-mail address of a user, at http://en.gravatar.com/"
 msgstr "Paganahin ang opsyon na ito upang maghanap sa Gravatar repository ng pictures ng current user, kung walang local picture ang user. Ito ay maganda upang awtomatikong punan ang pictures sa site mo, lalo na kung aktibong gumagamit ng internet ang mga users mo. Madaling i-configure ang Gravatar pictures, batay sa e-mail address ng user, sa http://en.gravatar.com/"
 
 msgid "Gravatar avatar type"
-msgstr "Gravatar avatar type"
+msgstr "Uri ng Gravatar avatar"
 
 msgid "If the Gravatar option is enabled and the user doesn't have a picture configured on Gravatar, this option allows you to choose the type of avatar that Gravatar will generate for each user. Check <a href='http://en.gravatar.com/site/implement/images#default-image'>http://en.gravatar.com/site/implement/images#default-image</a> for avatar types examples."
 msgstr "Kung pinagana ang Gravatar option at walang picture ang user sa Gravatar, payagan kang pumili ng type ng avatar na gagawin ng Gravatar para sa bawat user. Tingnan ang <a href='http://en.gravatar.com/site/implement/images#default-image'>http://en.gravatar.com/site/implement/images#default-image</a> para sa mga halimbawa ng avatar types."
 
 msgid "Limit session admins permissions"
-msgstr "Limit session admins permissions"
+msgstr "Limitahan ang mga pahintulot ng admin ng sesyon"
 
 msgid "If enabled, the session administrators will only see the User block with the 'Add user' option and the Sessions block with the 'Sessions list' option."
 msgstr "Kung pinagana, makikita lamang ng session administrators ang User block na may 'Add user' option at Sessions block na may 'Sessions list' option."
@@ -20173,7 +20173,7 @@ msgid "Hide session course coach in dropbox when a document is sent by the coach
 msgstr "Itago ang session course coach sa dropbox kapag nagpadala ng document ang coach sa students"
 
 msgid "Single Sign On: force redirect"
-msgstr "Single Sign On: force redirect"
+msgstr "Single Sign On: pilitin ang redirect"
 
 msgid "Enable this option to force users to authenticate on the master authentication portal when a Single Sign On method is enabled. Only enable once you are sure that your Single Sign On procedure is correctly set up, otherwise you might prevent yourself from logging in again (in this case, change the SSO settings in the settings_current table through direct access to the database, to unlock)."
 msgstr "Paganahin ang opsyon na ito upang pilitin ang users na mag-authenticate sa master authentication portal kapag pinagana ang Single Sign On method. Paganahin lamang kapag sigurado kang tama ang setup ng Single Sign On procedure mo, kung hindi maaari mong pigilan ang sarili mo na mag-log in muli (sa kasong ito, baguhin ang SSO settings sa settings_current table sa pamamagitan ng direct access sa database, upang ma-unlock)."
@@ -20203,19 +20203,19 @@ msgid "Add new sequence"
 msgstr "Magdagdag ng bagong sequence"
 
 msgid "Resources sequencing"
-msgstr "Resources sequencing"
+msgstr "Pagkasunod-sunod ng mga mapagkukunan"
 
 msgid "Gamification mode"
-msgstr "Gamification mode"
+msgstr "Mode ng Gamification"
 
 msgid "Activate the stars achievement in learning paths"
 msgstr "I-activate ang stars achievement sa learning paths"
 
 msgid "Level %s"
-msgstr "Level %s"
+msgstr "Antas %s"
 
 msgid "%s points"
-msgstr "%s points"
+msgstr "%s puntos"
 
 msgid "From %s until %s"
 msgstr "Mula %s hanggang %s"
@@ -20242,7 +20242,7 @@ msgid "Enable gamification mode"
 msgstr "I-activate ang gamification mode"
 
 msgid "My courses session view"
-msgstr "My courses session view"
+msgstr "Tanawin ng aking mga kurso sa sesyon"
 
 msgid "Disable gamification mode"
 msgstr "I-disable ang gamification mode"
@@ -20260,10 +20260,10 @@ msgid "Sequence selection"
 msgstr "Pili ng sequence"
 
 msgid "Sequence configuration"
-msgstr "Sequence configuration"
+msgstr "Kombigurasyon ng pagkasunod-sunod"
 
 msgid "Sequence preview"
-msgstr "Sequence preview"
+msgstr "Paunang tanawin ng pagkasunod-sunod"
 
 msgid "Dates shown"
 msgstr "Mga petsa na ipinapakita"
@@ -20281,7 +20281,7 @@ msgid "Start video call"
 msgstr "Simulan ang video call"
 
 msgid "Video URL"
-msgstr "Video URL"
+msgstr "URL ng Video"
 
 msgid "Insert a valid URL"
 msgstr "Maglagay ng valid na URL"
@@ -20311,7 +20311,7 @@ msgid "Until %s"
 msgstr "Hanga %s"
 
 msgid "Dependency tree"
-msgstr "Dependency tree"
+msgstr "Puno ng dependency"
 
 msgid "Customize icons"
 msgstr "I-customize ang mga icon"
@@ -20335,13 +20335,13 @@ msgid "You may add an introduction to this course here by clicking the edition i
 msgstr "Maaari kang magdagdag ng introduction sa kursong ito dito sa pamamagitan ng pag-klik sa edition icon"
 
 msgid "Social group"
-msgstr "Social group"
+msgstr "Lupong panlipunan"
 
 msgid "Required sessions"
-msgstr "Required sessions"
+msgstr "Kinakailangang mga sesyon"
 
 msgid "Dependent sessions"
-msgstr "Dependent sessions"
+msgstr "Mga dependenteng sesyon"
 
 msgid "By duration"
 msgstr "Ayon sa duration"
@@ -20353,7 +20353,7 @@ msgid "Send a copy to HR managers of selected students"
 msgstr "Ipadala ang kopya sa HR managers ng napiling mga mag-aaral"
 
 msgid "Powered by %s"
-msgstr "Powered by %s"
+msgstr "Pinapatakbo ng %s"
 
 msgid "Please select at least one user. The announcement has not been saved."
 msgstr "Pumili ng hindi bababa sa isang user. Ang announcement ay hindi naisave."
@@ -20368,19 +20368,19 @@ msgid "Send mail to HR manager"
 msgstr "Magpadala ng mail sa HR manager"
 
 msgid "Course fields"
-msgstr "Course fields"
+msgstr "Mga field ng kurso"
 
 msgid "Checkbox options"
-msgstr "Checkbox options"
+msgstr "Mga opsyon sa checkbox"
 
 msgid "Integer value"
-msgstr "Integer value"
+msgstr "Buhisang buong bilang"
 
 msgid "Image file"
-msgstr "Image file"
+msgstr "File ng larawan"
 
 msgid "Float value"
-msgstr "Float value"
+msgstr "Halagang float"
 
 msgid "Document visibility defined in course"
 msgstr "Document visibility na tinukoy sa course"
@@ -20404,7 +20404,7 @@ msgid "Import gradebook from base course"
 msgstr "I-import ang gradebook mula sa base course"
 
 msgid "Institution address"
-msgstr "Institution address"
+msgstr "Address ng institusyon"
 
 msgid "Address"
 msgstr "Address"
@@ -20437,7 +20437,7 @@ msgid "Check requirements"
 msgstr "Suriin ang mga kinakailangan"
 
 msgid "Parent language: %s"
-msgstr "Parent language: %s"
+msgstr "Magulang na wika: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "I-define ang mga bagong termino para sa sub-language %s sa pamamagitan ng paghahanap ng ilang termino, pagkatapos ay i-save ang bawat translation sa pamamagitan ng pag-klik sa save button. Pagkatapos ay kailangan mong i-switch ang iyong sariling user language upang makita ang mga bagong termino."
@@ -20446,16 +20446,16 @@ msgid "See sequences"
 msgstr "Tingnan ang mga sequence"
 
 msgid "Session requirements"
-msgstr "Session requirements"
+msgstr "Mga kinakailangan ng sesyon"
 
 msgid "Is requirement"
-msgstr "Is requirement"
+msgstr "Ay kinakailangan"
 
 msgid "Consider this gradebook as a requirement to complete the course (influences the sessions sequences)"
 msgstr "Ituring ang gradebook na ito bilang requirement upang makumpleto ang course (nakakaapekto sa mga session sequences)"
 
 msgid "Distinct users logins"
-msgstr "Distinct users logins"
+msgstr "Natatanging mga pag-login ng gumagamit"
 
 msgid "Are you sure to subscribe?"
 msgstr "Sigurado ka bang mag-subscribe?"
@@ -20473,7 +20473,7 @@ msgid "You are receiving this message because you (or someone pretending to be y
 msgstr "Natatanggap mo ang mensaheng ito dahil ikaw (o isang taong nagpapanggap na ikaw) ay humiling ng bagong password na gagawa para sa iyo.<br/>"
 
 msgid "Remind Course Expiration cron"
-msgstr "Remind Course Expiration cron"
+msgstr "Pag-alala sa pagtatapos ng kurso cron"
 
 msgid "Enable the Remind Course Expiration cron"
 msgstr "I-activate ang Remind Course Expiration cron"
@@ -20485,25 +20485,25 @@ msgid "Number of days before the expiration of the course to consider to send re
 msgstr "Bilang ng mga araw bago ang expiration ng course upang isaalang-alang ang pagpapadala ng reminder mail"
 
 msgid "Course Finished cron"
-msgstr "Course Finished cron"
+msgstr "Pagkatapos ng kurso cron"
 
 msgid "Activate the Course Finished cron"
 msgstr "I-activate ang Course Finished cron"
 
 msgid "End of course %s"
-msgstr "End of course %s"
+msgstr "Katapusan ng kurso %s"
 
 msgid "Dear %s,<br/>Thank you for your participation to course %s. We hope you've acquired new relevant knowledge and enjoyed the course.<br/>"
 msgstr "Mahal na %s,<br/>Salamat sa iyong pakikilahok sa course %s. Sana'y nakakuha ka ng mga bagong kaugnay na kaalaman at na-enjoy ang course.<br/>"
 
 msgid "Generate default content"
-msgstr "Generate default content"
+msgstr "Humikayat ng default content"
 
 msgid "Thanks for your subscription"
 msgstr "Salamat sa iyong subscription"
 
 msgid "%s team."
-msgstr "%s team."
+msgstr "%s koponan."
 
 msgid "You can start subscribing to courses entering to %s"
 msgstr "Maaari kang magsimula ng pag-subscribe sa mga kurso sa pamamagitan ng pagpasok sa %s"
@@ -20515,13 +20515,13 @@ msgid "Text only alphanumeric characters"
 msgstr "Teksto lamang alfanumerikong mga karakter"
 
 msgid "Only letters"
-msgstr "Only letters"
+msgstr "Titulang letra lamang"
 
 msgid "Select a blanks marker"
 msgstr "Pumili ng blanks marker"
 
 msgid "Refresh terms"
-msgstr "Refresh terms"
+msgstr "I-refresh ang mga tuntunin"
 
 msgid "Word to find"
 msgstr "Salitang hanapin"
@@ -20704,13 +20704,13 @@ msgid "Edit icon"
 msgstr "I-edit ang icon"
 
 msgid "Custom icon"
-msgstr "Custom icon"
+msgstr "Custom na icon"
 
 msgid "Current icon"
 msgstr "Kasalukuyang icon"
 
 msgid "Group reporting"
-msgstr "Group reporting"
+msgstr "Pag-uulat ng grupo"
 
 msgid "Convert format"
 msgstr "I-convert ang format"
@@ -20764,7 +20764,7 @@ msgid "%s days"
 msgstr "%s araw"
 
 msgid "Skill profile"
-msgstr "Skill profile"
+msgstr "Profile ng skill"
 
 msgid "Achieved skills"
 msgstr "Nakuha na ang mga skill"
@@ -20788,7 +20788,7 @@ msgid "Skill acquired at"
 msgstr "Nakuha ang skill sa"
 
 msgid "Basic skills"
-msgstr "Basic skills"
+msgstr "Pangunahing kasanayan"
 
 msgid "<strong>%s</strong> through <em>%s</em>"
 msgstr "<strong>%s</strong> sa pamamagitan ng <em>%s</em>"
@@ -20827,7 +20827,7 @@ msgid "Average rating %s"
 msgstr "Karaniwang rating %s"
 
 msgid "Average rating"
-msgstr "Average rating"
+msgstr "Karaniwang rating"
 
 msgid "Teachers results are not shown nor taken into account in the gradebook."
 msgstr "Ang mga resulta ng mga guro ay hindi ipinapakita ni isinama sa gradebook."
@@ -20836,7 +20836,7 @@ msgid "Write something on your friend's wall"
 msgstr "Sumulat ng mensahe sa pader ng iyong kaibigan"
 
 msgid "Blank template"
-msgstr "Blank template"
+msgstr "Blankong template"
 
 msgid "Base course"
 msgstr "Batayang kurso"
@@ -21193,7 +21193,7 @@ msgid "Term already exists"
 msgstr "Umiral na ang termino"
 
 msgid "LinkedIn profile URL"
-msgstr "LinkedIn profile URL"
+msgstr "URL ng LinkedIn profile"
 
 msgid "Save the correct answer for the next attempt"
 msgstr "I-save ang tamang sagot para sa susunod na pagtatangka"
@@ -21310,10 +21310,10 @@ msgid "Academic Incidents"
 msgstr "Mga Akademikong Insidente"
 
 msgid "Virtual campus"
-msgstr "Virtual campus"
+msgstr "Virtual na campus"
 
 msgid "Online evaluation"
-msgstr "Online evaluation"
+msgstr "Online na pagsusuri"
 
 msgid "Tickets about enrollment"
 msgstr "Mga ticket tungkol sa enrollment"
@@ -21394,7 +21394,7 @@ msgid "Upload corrections package"
 msgstr "I-upload ang package ng mga koreksyon"
 
 msgid "SVG icons mode"
-msgstr "SVG icons mode"
+msgstr "Mode ng SVG icons"
 
 msgid "By enabling this option, all icons that have an SVG version will prefer the SVG format to PNG. This will give a much better icons quality but some icons might still have some rendering size issue, and some browsers might not support it."
 msgstr "Sa pamamagitan ng pag-activate ng opsyon na ito, lahat ng icons na may SVG version ay magpaprefer ng SVG format kaysa PNG. Ito ay magbibigay ng mas mataas na kalidad ng icons ngunit maaaring magkaroon pa rin ng ilang isyu sa rendering size, at maaaring hindi suportahan ng ilang browser."
@@ -21406,7 +21406,7 @@ msgid "Import from Moodle"
 msgstr "I-import mula sa Moodle"
 
 msgid "Import a Moodle course backup file (.mbz) into this Chamilo course"
-msgstr "I-import ang Moodle course backup file (.mbz) sa Chamilo course na ito"
+msgstr "I-import ang backup file ng kurso ng Moodle (.mbz) sa kurso ng Chamilo na ito"
 
 msgid "The Moodle import feature might not support all content types from Moodle, given the fact that not all features are the same, and that Moodle and Chamilo both evolve continuously and rapidly. This import feature should be considered a work in progress. Please check https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import for more information."
 msgstr "Ang Moodle import feature ay maaaring hindi suportahan ang lahat ng content types mula sa Moodle, dahil hindi pareho ang lahat ng features, at patuloy na nag-e-evolve ang Moodle at Chamilo nang mabilis. Ang import feature na ito ay dapat ituring na work in progress. Mangyaring suriin ang https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import para sa karagdagang impormasyon."
@@ -21820,10 +21820,10 @@ msgid "Assignment work time"
 msgstr "Oras ng gawain sa assignment"
 
 msgid "Document ID"
-msgstr "Document ID"
+msgstr "ID ng Dokumento"
 
 msgid "Social data"
-msgstr "Social data"
+msgstr "Social na data"
 
 msgid "Wall messages posted by him/herself"
 msgstr "Wall messages na ipinost niya mismo"
@@ -21856,10 +21856,10 @@ msgid "This session has a maximum duration of %s days."
 msgstr "Ang session na ito ay may maximum na tagal ng %s araw."
 
 msgid "Score: %s %%"
-msgstr "Score: %s %%"
+msgstr "Marka: %s %%"
 
 msgid "Certificate: %s"
-msgstr "Certificate: %s"
+msgstr "Sertipiko: %s"
 
 msgid "Enable to bypass the configuration of Exercise invisible in session at a base course level"
 msgstr "I-activate upang i-bypass ang configuration ng Exercise na hindi nakikita sa session sa base course level"
@@ -21922,7 +21922,7 @@ msgid "Semester"
 msgstr "Semester"
 
 msgid "Reading comprehension"
-msgstr "Reading comprehension"
+msgstr "Pag-unawa sa pagbasa"
 
 msgid "Sorry, it seems like a speed of %s words/minute was too fast for this text of %s words."
 msgstr "Paumanhin, mukhang bilis ng %s salita/minuto ay masyadong mabilis para sa tekstong ito na may %s salita."
@@ -22192,7 +22192,7 @@ msgid "URL field format invalid. Example of expected format: http://dropbox.com/
 msgstr "Hindi valid ang format ng URL field. Halimbawa ng inaasahang format: http://dropbox.com/sh/loremipsum/loremipsum?dl=0"
 
 msgid "File extension"
-msgstr "File extension"
+msgstr "Extension ng file"
 
 msgid "Audit report"
 msgstr "Ulat ng Audit"
@@ -22222,7 +22222,7 @@ msgid "Session template"
 msgstr "Template ng Session"
 
 msgid "Cloud file link"
-msgstr "Cloud file link"
+msgstr "Link ng ulap na file"
 
 msgid "Reset %s"
 msgstr "I-reset ang %s"
@@ -22231,7 +22231,7 @@ msgid "My global certificate"
 msgstr "Ang aking global na sertipiko"
 
 msgid "Message tracking"
-msgstr "Message tracking"
+msgstr "Pagsubaybay ng mensahe"
 
 msgid "Messages exchange between %s and %s"
 msgstr "Mga palitan ng mensahe sa pagitan ng %s at %s"
@@ -22333,7 +22333,7 @@ msgid "This month"
 msgstr "Buwang ito"
 
 msgid "Portal user session stats"
-msgstr "Portal user session stats"
+msgstr "Mga estadistika ng sesyon ng gumagamit ng Portal"
 
 msgid "You may add an introduction to this tool page as a helper text for your students. Simply click the edit icon to add some text. This short info text here is invisible to students and you can just leave this block empty, but what you will type will be visible to them."
 msgstr "Maaari kang magdagdag ng panimula sa pahina ng tool na ito bilang teksto na tumutulong para sa iyong mga mag-aaral. I-click lamang ang icon ng pag-edit upang magdagdag ng teksto. Ang maikling teksto ng impormasyon na ito ay hindi nakikita ng mga mag-aaral at maaari mong iwanang walang laman ang bloke na ito, ngunit ang iyong isusulat ay makikita nila."
@@ -23482,7 +23482,7 @@ msgid "Add to editor"
 msgstr "Idagdag sa editor"
 
 msgid "Image URL"
-msgstr "Image URL"
+msgstr "URL ng Larawan"
 
 msgid "px width"
 msgstr "px lapad"
@@ -23524,10 +23524,10 @@ msgid "Required courses"
 msgstr "Mga kinakailangang kurso"
 
 msgid "Standard List"
-msgstr "Standard List"
+msgstr "Pangkaraniwang Listahan"
 
 msgid "Management List"
-msgstr "Management List"
+msgstr "Listahan ng Pamamahala"
 
 msgid "Anonymize user's sessions"
 msgstr "Anonymize mga session ng gumagamit"
@@ -23752,7 +23752,7 @@ msgid "Credits: %s on %s"
 msgstr "Mga kredito: %s sa %s"
 
 msgid "SOAP connection test..."
-msgstr "SOAP connection test..."
+msgstr "Pagsusuri ng koneksyon sa SOAP..."
 
 msgid "Connection to Compilatio's SOAP server"
 msgstr "Koneksyon sa SOAP server ng Compilatio"
@@ -24082,7 +24082,7 @@ msgid "Multiple choice with *other* option"
 msgstr "Multiple choice na may *other* na opsyon"
 
 msgid "Extra field to use as student ID for SCORM API"
-msgstr "Extra field na gagamitin bilang student ID para sa SCORM API"
+msgstr "Dagdag na field na gagamitin bilang student ID para sa SCORM API"
 
 msgid "The name provided will be used as the identifier of the user extra field containing an ID that the remote SCORM API will recognize as a user ID. This is only useful if your remote SCORM provider asked you for something similar."
 msgstr "Ang pangalang ibinigay ay gagamitin bilang identifier ng extra field ng gumagamit na naglalaman ng ID na kilala ng remote SCORM API bilang user ID. Ito ay kapaki-pakinabang lamang kung hiniling ito ng iyong remote SCORM provider."
@@ -24631,7 +24631,7 @@ msgid "Portfolio item unset as template"
 msgstr "Portfolio item na hindi na template"
 
 msgid "Global multiple answer dropdown"
-msgstr "Global multiple answer dropdown"
+msgstr "Global na dropdown ng maraming sagot"
 
 msgid "[Portfolio] New comment in post %s"
 msgstr "[Portfolio] Bagong komento sa post %s"
@@ -24694,7 +24694,7 @@ msgid "*: Current quarter, incomplete data"
 msgstr "*: Kasalukuyang quarter, hindi kumpletong data"
 
 msgid "Q%s %s"
-msgstr "Q%s %s"
+msgstr "Tanong%s %s"
 
 msgid "YoY"
 msgstr "YoY"
@@ -24880,7 +24880,7 @@ msgid "Multiple answer dropdown with exact selection"
 msgstr "Multiple answer dropdown na may eksaktong seleksyon"
 
 msgid "AI learning path generator"
-msgstr "AI learning path generator"
+msgstr "AI tagagawad ng landas ng pag-aaral"
 
 msgid "Topic"
 msgstr "Paksa"
@@ -25225,7 +25225,7 @@ msgid "Set HTML-code colours for each type of event to change the colour when di
 msgstr "Itakda ang mga kulay ng HTML-code para sa bawat uri ng event upang baguhin ang kulay kapag nagpapakita ng event."
 
 msgid "Agenda hover info"
-msgstr "Agenda hover info"
+msgstr "Impormasyon sa pag-hover ng Agenda"
 
 msgid "Customize the agenda on cursor hovering. Show agenda comment and/or description."
 msgstr "I-customize ang agenda sa cursor hovering. Ipakita ang agenda comment at/o opisyon."
@@ -25639,10 +25639,10 @@ msgid "Hide the context menu on video player"
 msgstr "Itago ang context menu sa video player"
 
 msgid "Video player renderers"
-msgstr "Video player renderers"
+msgstr "Mga renderer ng video player"
 
 msgid "Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
-msgstr "I-activate ang player renderers para sa YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
+msgstr "Pag-activate ng mga renderer ng player para sa YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
 
 msgid "Allow teachers to edit tests in learning paths"
 msgstr "Payagan ang mga guro na mag-edit ng mga pagsusulit sa learning paths"
@@ -25867,7 +25867,7 @@ msgid "Define an array with the list of user extra fields to add to the report."
 msgstr "I-define ang array na may listahan ng mga user extra fields na idadagdag sa report."
 
 msgid "Score grades model"
-msgstr "Score grades model"
+msgstr "Modelo ng grado ng marka"
 
 msgid "Define an array of score ranges and colors to display reports using this model. This allows you to show colors rather than numerical grades."
 msgstr "I-define ang array ng mga score ranges at colors upang ipakita ang mga reports gamit ang modelong ito. Nagbibigay-daan ito sa iyo na magpakita ng colors kaysa sa numerical grades."
@@ -25879,7 +25879,7 @@ msgid "By default, it is only possible to limit the time per test. Limiting it p
 msgstr "Sa pamamagitan ng default, posible lamang limitahan ang oras per pagsusulit. Ang pag-limit per tanong ay nagdadagdag ng karagdagang layer ng mga posibilidad, at maaari mong (maingat na) pagsamahin ang pareho."
 
 msgid "Global pending tests list"
-msgstr "Global pending tests list"
+msgstr "Global na listahan ng mga nakabinbing pagsusulit"
 
 msgid "Enable to display to the final user a page with the list of pending tests across all courses."
 msgstr "I-enable upang ipakita sa final user ang pahina na may listahan ng mga pending tests sa lahat ng kurso."
@@ -26032,7 +26032,7 @@ msgid "Improve speed when rendering gradebook student reports using Doctrine APC
 msgstr "Pagbutihin ang bilis kapag nagre-render ng gradebook student reports gamit ang Doctrine APCu cache. Ang APCu ay isang optional ngunit inirerekomendang PHP extension."
 
 msgid "Gradebook reports score style"
-msgstr "Gradebook reports score style"
+msgstr "Gradebook na nag-uulat ng istilo ng score"
 
 msgid "Add gradebook score style configuration in the flat view. See api.lib.php in order to find the options: examples SCORE_DIV = 1, SCORE_PERCENT = 2, etc"
 msgstr "Magdagdag ng gradebook score style configuration sa flat view. Tingnan ang api.lib.php upang mahanap ang mga opsyon: halimbawa SCORE_DIV = 1, SCORE_PERCENT = 2, atbp."
@@ -26044,7 +26044,7 @@ msgid "Use global score display setting in gradebook"
 msgstr "Gumamit ng global score display setting sa gradebook"
 
 msgid "Inter-gradebook dependencies"
-msgstr "Inter-gradebook dependencies"
+msgstr "Mga dependency sa pagitan ng mga gradebook"
 
 msgid "Enables a mechanism of gradebook dependencies that lets people know which other items they need to go through first in order to complete the gradebook."
 msgstr "Paganahin ang mekanismo ng gradebook dependencies na nagpapaalam sa mga tao kung aling iba pang item ang kailangang tapusin muna upang makumpleto ang gradebook."
@@ -26056,7 +26056,7 @@ msgid "When using inter-gradebook dependencies, you can choose a list of mandato
 msgstr "Kapag gumagamit ng inter-gradebook dependencies, maaari kang pumili ng listahan ng mandatory na mga kursong kailangang tapusin bago aprubahan ang anumang gradebook na may dependencies."
 
 msgid "Gradebook badges sidebar"
-msgstr "Gradebook badges sidebar"
+msgstr "Sidebar ng mga badge sa gradebook"
 
 msgid "Generate a block inside the side menu where a few badges can be shown as pending approval. Requires gradebooks to be listed here, by (numerical) ID."
 msgstr "Humikayat ng isang block sa loob ng side menu kung saan ilang badge ay maaaring ipakita bilang naghihintay ng pag-apruba. Nangangailangan ng paglista ng gradebooks dito, sa pamamagitan ng (numerical) ID."
@@ -26077,22 +26077,22 @@ msgid "Add the given columns ('variables' array) to the main results table in th
 msgstr "Magdagdag ng ibinigay na mga column ('variables' array) sa main results table sa gradebook."
 
 msgid "Gradebook PDF export options"
-msgstr "Gradebook PDF export options"
+msgstr "Mga opsyon sa pag-export ng PDF sa gradebook"
 
 msgid "Change the PDF export for learners based on the provided settings ('hide_score_weight', 'hide_feedback_textarea', ...)"
 msgstr "Baguhin ang PDF export para sa mga mag-aaral batay sa ibinigay na settings ('hide_score_weight', 'hide_feedback_textarea', ...)"
 
 msgid "Gradebook comments"
-msgstr "Gradebook comments"
+msgstr "Mga komento sa gradebook"
 
 msgid "Enable gradebook comments so teachers can add a comment to the overall performance of the learner in this course. The comment will appear in the PDF export for the learner."
 msgstr "Paganahin ang gradebook comments upang ang mga guro ay maaaring magdagdag ng komento sa pangkalahatang performance ng mag-aaral sa kursong ito. Ang komento ay lilitaw sa PDF export para sa mag-aaral."
 
 msgid "Gradebook extra statistics"
-msgstr "Gradebook extra statistics"
+msgstr "Karagdagang estadistika sa gradebook"
 
 msgid "Add additional columns to the gradebook's main report (1 = ranking, 2 = best score, 3 = average)."
-msgstr "Magdagdag ng karagdagang mga kolum sa main report ng gradebook (1 = ranking, 2 = best score, 3 = average)."
+msgstr "Magdagdag ng karagdagang kolum sa pangunahing ulat ng gradebook (1 = ranking, 2 = pinakamataas na score, 3 = average)."
 
 msgid "Hide gradebook table for learners"
 msgstr "Itago ang gradebook table para sa mga mag-aaral"
@@ -26200,7 +26200,7 @@ msgid "Add a minimum time field to learning paths. If the user has not spent tha
 msgstr "Magdagdag ng minimum time field sa mga learning paths. Kung hindi gumugol ng ganoong kadaming oras ang user sa learning path, hindi maaaring makumpleto ang huling item ng learning path."
 
 msgid "Use learning path item status from other sessions"
-msgstr "Gumamit ng learning path item status mula sa iba pang sessions"
+msgstr "Gumamit ng status ng item sa learning path mula sa iba pang mga sesyon"
 
 msgid "Allow users to complete prerequisites in a learning path if the corresponding item was already completed in another session."
 msgstr "Payagan ang mga user na makumpleto ang mga prerequisite sa isang learning path kung ang kaukulang item ay na-kumpleto na sa ibang session."
@@ -26314,7 +26314,7 @@ msgid "This adds an 'unlocked' column in the learning paths list if the learner 
 msgstr "Nagdadagdag ito ng 'unlocked' column sa listahan ng learning paths kung ang mag-aaral ay naka-subscribe sa learning path na iyon at may access dito."
 
 msgid "Show max progress instead of average for learning paths reporting"
-msgstr "Ipakita ang max progress sa halip na average para sa learning paths reporting"
+msgstr "Ipakita ang maksimum na progreso sa halip na average para sa pag-uulat ng learning paths"
 
 msgid "Select max progress vs average for learning paths at course level"
 msgstr "Piliin ang max progress laban sa average para sa learning paths sa antas ng kurso"
@@ -26356,10 +26356,10 @@ msgid "Unlock learning path item if max attempt is reached for test prerequisite
 msgstr "I-unlock ang item ng learning path kung naabot ang max attempt para sa prerequisite ng test"
 
 msgid "Hide percentage sign in average of tests in learning paths in learner follow-up"
-msgstr "Itago ang percentage sign sa average ng tests sa learning paths sa learner follow-up"
+msgstr "Itago ang senyales ng porsyento sa average ng mga pagsusulit sa learning paths sa pagsubaybay sa mag-aaral"
 
 msgid "Hides the icon of percentage in 'Average of tests in Learning Paths' indication on a student tracking"
-msgstr "Itinago ang icon ng percentage sa 'Average of tests in Learning Paths' indication sa student tracking"
+msgstr "Itinago ang icon ng porsyento sa 'Average ng mga pagsusulit sa Learning Paths' na indikasyon sa pagsubaybay ng mag-aaral"
 
 msgid "Add acquisition column in learner follow-up"
 msgstr "Idagdag ang acquisition column sa learner follow-up"
@@ -26434,7 +26434,7 @@ msgid "Given as array of e-mail addresses. Does not work for all cronjobs yet."
 msgstr "Binigay bilang array ng mga e-mail address. Hindi pa gumagana para sa lahat ng cronjobs."
 
 msgid "Extended notifications footer"
-msgstr "Extended notifications footer"
+msgstr "Extended na paa ng mga notification"
 
 msgid "Add a custom extra footer for notifications emails for a specific language, for example for privacy policy notices. Multiple languages and paragraphs can be added."
 msgstr "Magdagdag ng custom extra footer para sa mga notification emails para sa isang partikular na wika, halimbawa para sa mga notice ng privacy policy. Maaaring idagdag ang maraming wika at paragraphs."
@@ -26476,7 +26476,7 @@ msgid "Filter messages between a teacher and a learner between the session start
 msgstr "I-filter ang mga mensahe sa pagitan ng isang guro at mag-aaral sa pagitan ng session start at end dates"
 
 msgid "UNO converter binaries"
-msgstr "UNO converter binaries"
+msgstr "Mga binary ng UNO converter"
 
 msgid "Give the system path to the UNO converter library to enable some extra exporting features."
 msgstr "Bigyan ng system path ang UNO converter library upang paganahin ang ilang karagdagang tampok ng exporting."
@@ -26488,7 +26488,7 @@ msgid "When using Chamilo for a specific purpose (like one massive online exam),
 msgstr "Kapag gumagamit ng Chamilo para sa isang partikular na layunin (tulad ng isang massive online exam), maaari mong gustong bawasan ang distraction pa lalo sa pamamagitan ng pagtanggal ng side menu."
 
 msgid "PDF export resolution"
-msgstr "PDF export resolution"
+msgstr "Resolusyon ng PDF export"
 
 msgid "This represents the resolution of generated PDF files (in dot per inch, or dpi). The default is 96. Increasing it will give you better resolution PDF files but will also increase the weight and generation time of the files."
 msgstr "Ito ay kumakatawan sa resolution ng mga generated PDF files (sa dot per inch, o dpi). Ang default ay 96. Ang pagtaas nito ay magbibigay ng mas mahusay na resolution ng PDF files ngunit magpapatindi rin ng weight at generation time ng mga files."
@@ -26530,13 +26530,13 @@ msgid "When importing users (batch processes), automatically generate a random s
 msgstr "Kapag nag-i-import ng mga user (batch processes), awtomatikong buuin ang random string para sa username. Kung hindi, ang username ay mabubuo batay sa firstname at lastname, o ang prefix ng e-mail."
 
 msgid "Timepicker increment"
-msgstr "Timepicker increment"
+msgstr "Pagtaas ng timepicker"
 
 msgid "Minimal time increment (in minutes) when selecting a date and time with the timepicker widget. For example, it might not be useful to have less than 5 or 15 minutes increments when talking about assignment submission, availability of a test, start time of a session, etc."
 msgstr "Pinakamaliit na pagtaas ng oras (sa minuto) kapag pumipili ng petsa at oras gamit ang timepicker widget. Halimbawa, maaaring hindi kapaki-pakinabang na magkaroon ng mas mababa sa 5 o 15 minuto na pagtaas kapag pinag-uusapan ang pagsusumite ng gawain, availability ng pagsusulit, oras ng pagtatapos ng sesyon, atbp."
 
 msgid "Proxy settings"
-msgstr "Proxy settings"
+msgstr "Mga setting ng proxy"
 
 msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it.<br><pre> [ 'stream_context_create' => [ 'http' => [ 'proxy' => 'tcp://example.com:8080', 'request_fulluri' => true ] ], 'curl_setopt_array' => [ 'CURLOPT_PROXY' => 'http://example.com', 'CURLOPT_PROXYPORT' => '8080' ] ] </pre>"
 msgstr "Ang ilang tampok ng Chamilo ay magkakonekta sa panlabas mula sa server. Halimbawa, upang masiguro na umiiral ang panlabas na nilalaman kapag gumagawa ng link o nagpapakita ng naka-embed na pahina sa learning path. Kung ang iyong Chamilo server ay gumagamit ng proxy upang makalabas ng network nito, dito ang lugar upang i-configure ito.<br><pre> [ 'stream_context_create' => [ 'http' => [ 'proxy' => 'tcp://example.com:8080', 'request_fulluri' => true ] ], 'curl_setopt_array' => [ 'CURLOPT_PROXY' => 'http://example.com', 'CURLOPT_PROXYPORT' => '8080' ] ] </pre>"
@@ -26554,7 +26554,7 @@ msgid "Set the options you want to appear in the navigation around a table to sh
 msgstr "Itakda ang mga opsyon na nais mong lumitaw sa navigation sa paligid ng talahanayan upang ipakita ang mas kaunti o mas maraming hilera sa isang pahina. hal. [50, 100, 200, 500].<br><pre> ['options' => [50, 100, 200, 500]] </pre>"
 
 msgid "Webservices return user field"
-msgstr "Webservices return user field"
+msgstr "Webservices ibalik ang field ng user"
 
 msgid "Ask REST webservices (v2.php) to return another identifier for fields related to user ID. This is useful if the external system doesn't really deal with user IDs as they are in Chamilo, as it helps the external system match the user data return with some external data that is know to Chamilo. For example, if you use an external authentication system, you can return the extra field used to match the user with the external authentication system rather than user.id."
 msgstr "Humingi sa REST webservices (v2.php) na ibalik ang iba pang identifier para sa mga field na may kaugnayan sa user ID. Ito ay kapaki-pakinabang kung ang panlabas na sistema ay hindi talaga nakikitungo sa user ID tulad ng sa Chamilo, dahil ito ay tumutulong sa panlabas na sistema na itugma ang user data return sa ilang panlabas na data na kilala sa Chamilo. Halimbawa, kung gumagamit ka ng panlabas na authentication system, maaari kang magbalik ng extra field na ginamit upang itugma ang user sa panlabas na authentication system kaysa sa user.id."
@@ -26566,7 +26566,7 @@ msgid "Set to yes to hide settings completely in a sub-URL if the setting is dis
 msgstr "Itakda sa oo upang itago nang buo ang mga settings sa sub-URL kung ang setting ay hindi pinagana sa main URL (kung saan ang access_url_changeable field = 0)"
 
 msgid "Max login attempts before lockdown"
-msgstr "Max login attempts before lockdown"
+msgstr "Pinakamataas na pagtatangka ng pag-login bago ang lockdown"
 
 msgid "Number of failed login attempts to tolerate before the user account is locked and has to be unlocked by an admin."
 msgstr "Bilang ng nabigong login attempts na tatanggapin bago ma-lock ang user account at kailangang i-unlock ng admin."
@@ -26584,7 +26584,7 @@ msgid "If the user is not allowed to access a specific page, also hide the bread
 msgstr "Kung ang user ay hindi pinapayagang ma-access ang isang partikular na pahina, itago rin ang breadcrumb. Ito ay nagpapataas ng seguridad sa pamamagitan ng pag-iwas sa pagpapakita ng hindi kinakailangang impormasyon."
 
 msgid "LDAP connection configuration"
-msgstr "LDAP connection configuration"
+msgstr "Kombigurasyon ng koneksyon ng LDAP"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 msgstr "Array na tumutukoy sa host at port para sa LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
@@ -26596,10 +26596,10 @@ msgid "Array defining the 'days' and 'months' to set the account expiration date
 msgstr "Array na tumutukoy sa 'days' at 'months' upang itakda ang account expiration date kapag unang nag-log in ang user.<br><pre> [ 'days' => 0, 'months' => 0, ] </pre>"
 
 msgid "Selective display of roles"
-msgstr "Selective display of roles"
+msgstr "Piliin ang pagpapakita ng mga role"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "Isang array ng role => true/false na tumutukoy kung dapat ipakita o itago ang role na iyon.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "Isang array ng role => true/false na tumutukoy kung ang role na iyon ay dapat ipakita o itago.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Mga opsyon sa pagpapakita ng mga role"
@@ -26875,7 +26875,7 @@ msgid "HTTP Public Key Pinning protects your site from MiTM attacks using rogue 
 msgstr "Pinoprotektahan ng HTTP Public Key Pinning ang iyong site mula sa MiTM attacks gamit ang rogue X.509 certificates. Sa pamamagitan ng pag-whitelist lamang ng mga identity na dapat pinagkakatiwalaan ng browser, pinoprotektahan ang iyong mga user sa kaso ng compromised certificate authority."
 
 msgid "HTTP Public Key Pinning report only"
-msgstr "HTTP Public Key Pinning report only"
+msgstr "HTTP Public Key Pinning report lang"
 
 msgid "This setting allows you to experiment by reporting but not enforcing some HTTP Public Key Pinning."
 msgstr "Nagbibigay-daan ang setting na ito sa iyo na mag-eksperimento sa pamamagitan ng pag-report ngunit hindi pagpapatupad ng ilang HTTP Public Key Pinning."
@@ -26899,7 +26899,7 @@ msgid "X-Content-Type-Options stops a browser from trying to MIME-sniff the cont
 msgstr "Pinipigilan ng X-Content-Type-Options ang browser na subukan ang MIME-sniff ng content type at pinipilit itong manatili sa declared content-type. Ang tanging valid na halaga para sa header na ito ay 'nosniff'."
 
 msgid "Security Referrer Policy"
-msgstr "Security Referrer Policy"
+msgstr "Patakaran ng Referrer ng Seguridad"
 
 msgid "Referrer Policy is a new header that allows a site to control how much information the browser includes with navigation away from a document and should be set by all sites."
 msgstr "Ang Referrer Policy ay isang bagong header na nagbibigay-daan sa site na kontrolin kung gaano karaming impormasyon isasama ng browser sa navigation palayo mula sa dokumento at dapat itong itakda ng lahat ng site."
@@ -27049,7 +27049,7 @@ msgid "Show all learner publications (from base course and from all sessions) in
 msgstr "Ipakita ang lahat ng learner publications (mula sa base course at mula sa lahat ng sessions) sa work/pending.php page ng base course."
 
 msgid "Session admin can access batch user import, update and export"
-msgstr "Maaaring ma-access ng session admin ang batch user import, update at export"
+msgstr "Maaaring ma-access ng Session admin ang batch user import, update at export"
 
 msgid "Hide session chart in My progress"
 msgstr "Itago ang session chart sa My progress"
@@ -27079,7 +27079,7 @@ msgid "Add username to e-mail notification of subscription to session"
 msgstr "Idagdag ang username sa e-mail notification ng subscription sa session"
 
 msgid "Add reset password link to e-mail notification of subscription to session"
-msgstr "Magdagdag ng link sa reset ng password sa e-mail notification ng subscription sa sesyon"
+msgstr "Magdagdag ng reset password link sa e-mail notification ng subscription sa session"
 
 msgid "Pre-fill session fields with user fields"
 msgstr "Pre-fill ang session fields gamit ang user fields"
@@ -27268,7 +27268,7 @@ msgid "No link"
 msgstr "Walang link"
 
 msgid "Session link"
-msgstr "Session link"
+msgstr "Link ng sesyon"
 
 msgid "World"
 msgstr "Mundo"
@@ -27277,10 +27277,10 @@ msgid "Show to all users"
 msgstr "Ipakita sa lahat ng user"
 
 msgid "Black list"
-msgstr "Black list"
+msgstr "Itim na listahan"
 
 msgid "White list"
-msgstr "White list"
+msgstr "Puting listahan"
 
 msgid "Show glossary in documents is none"
 msgstr "Ipakita ang glossary sa documents kung wala"
@@ -27298,7 +27298,7 @@ msgid "Score average"
 msgstr "Average na score"
 
 msgid "Score percent"
-msgstr "Score percent"
+msgstr "Porsyento ng score"
 
 msgid "Score div percent"
 msgstr "Porsyento ng score div"
@@ -27319,10 +27319,10 @@ msgid "Show courses and sessions"
 msgstr "Ipakita ang mga kurso at session"
 
 msgid "Mail confirmation"
-msgstr "Mail confirmation"
+msgstr "Kumpirmasyon ng email"
 
 msgid "Campus homepage"
-msgstr "Campus homepage"
+msgstr "Homepage ng campus"
 
 msgid "Search shows unlinked results"
 msgstr "Ang paghahanap ay nagpapakita ng mga hindi na-link na resulta"
@@ -27334,7 +27334,7 @@ msgid "Course coach email sender"
 msgstr "Email sender ng course coach"
 
 msgid "No reply email sender"
-msgstr "No reply email sender"
+msgstr "Walang reply email sender"
 
 msgid "Course registration code incorrect"
 msgstr "Mali ang course registration code"
@@ -27382,7 +27382,7 @@ msgid "Configure Chamilo colors"
 msgstr "I-configure ang Chamilo colors"
 
 msgid "Primary color"
-msgstr "Primary color"
+msgstr "Pangunahing kulay"
 
 msgid "Primary color hover/background"
 msgstr "Pangunahing kulay hover/background"
@@ -27394,7 +27394,7 @@ msgid "Primary color button alternative text"
 msgstr "Pangunahing kulay button alternatibong text"
 
 msgid "Secondary color"
-msgstr "Secondary color"
+msgstr "Pangalawang kulay"
 
 msgid "Secondary color hover/background"
 msgstr "Pangalawang kulay hover/background"
@@ -27403,13 +27403,13 @@ msgid "Secondary color button text"
 msgstr "Pangalawang kulay button text"
 
 msgid "Tertiary color"
-msgstr "Tertiary color"
+msgstr "Pangatlong kulay"
 
 msgid "Tertiary color hover/background"
 msgstr "Pangatlong kulay hover/background"
 
 msgid "Success color"
-msgstr "Success color"
+msgstr "Kulay ng tagumpay"
 
 msgid "Success color hover/background"
 msgstr "Kulay ng tagumpay hover/background"
@@ -27418,7 +27418,7 @@ msgid "Success color button text"
 msgstr "Kulay ng tagumpay button text"
 
 msgid "Info color"
-msgstr "Info color"
+msgstr "Kulay ng impormasyon"
 
 msgid "Info color hover/background"
 msgstr "Kulay ng impormasyon hover/background"
@@ -27427,7 +27427,7 @@ msgid "Info color button text"
 msgstr "Kulay ng impormasyon button text"
 
 msgid "Warning color"
-msgstr "Warning color"
+msgstr "Kulay ng babala"
 
 msgid "Warning color hover/background"
 msgstr "Kulay ng babala hover/background"
@@ -27436,7 +27436,7 @@ msgid "Warning color button text"
 msgstr "Kulay ng babala button text"
 
 msgid "Danger color"
-msgstr "Danger color"
+msgstr "Kulay ng panganib"
 
 msgid "Danger color hover/background"
 msgstr "Peligro kulay hover/background"
@@ -27583,7 +27583,7 @@ msgid "Step 4 - Database settings"
 msgstr "Hakbang 4 - Mga setting ng database"
 
 msgid "Database host"
-msgstr "Database host"
+msgstr "Host ng database"
 
 msgid "Step 7 - Installation process execution"
 msgstr "Hakbang 7 - Pagpapatupad ng proseso ng installation"
@@ -27904,10 +27904,10 @@ msgid "On failure"
 msgstr "Kapag nabigo"
 
 msgid "Database port"
-msgstr "Database port"
+msgstr "Port ng database"
 
 msgid "Database driver"
-msgstr "Database driver"
+msgstr "Driver ng database"
 
 msgid "Step 5 - Configuration settings"
 msgstr "Hakbang 5 - Mga setting ng configuration"
@@ -28294,7 +28294,7 @@ msgid "Invalid format"
 msgstr "Hindi valid na format"
 
 msgid "Duration (hh:mm:ss)"
-msgstr "Duration (hh:mm:ss)"
+msgstr "Tagal (hh:mm:ss)"
 
 msgid "The following documents are used in learning paths:"
 msgstr "Ang mga sumusunod na documents ay ginagamit sa learning paths:"
@@ -28363,7 +28363,7 @@ msgid "User not found or invalid."
 msgstr "Hindi natagpuan ang user o hindi valid."
 
 msgid "Email Settings"
-msgstr "Email Settings"
+msgstr "Mga Setting ng Email"
 
 msgid "The DSN fully includes all parameters needed to connect to the mail service. You can learn more at %s. The default value is null://null and will disable e-mail sending. Use native://default to use the default PHP configuration on your server. Here are a few examples of supported DSN syntaxes: %s."
 msgstr "Ang DSN ay ganap na naglalaman ng lahat ng mga parameter na kailangan upang mag-connect sa mail service. Maaari kang matuto ng higit pa sa %s. Ang default value ay null://null at magdi-disable ng e-mail sending. Gumamit ng native://default upang gumamit ng default PHP configuration sa iyong server. Narito ang ilang halimbawa ng supported DSN syntaxes: %s."
@@ -28375,13 +28375,13 @@ msgid "The e-mail address from which e-mails will be sent when the platform send
 msgstr "Ang e-mail address mula kung saan ipapadala ang mga e-mail kapag nagpapadala ang platform ng e-mail, ginagamit din bilang 'reply-to' header. Inirerekomenda namin na gumamit ng 'no-reply' e-mail address dito, upang maiwasan ang labis na pagpuno ng e-mail box. Ang support e-mail address na tinukoy sa Platform section ay dapat gamitin upang makipag-ugnayan sa iyo, ngunit hindi dapat pahikayat ang pag-reply sa mga awtomatikong notifications."
 
 msgid "Mail: 'From' address"
-msgstr "Mail: 'From' address"
+msgstr "Mail: Address na 'From'"
 
 msgid "The name that appears as the sender (next to the From e-mail address) when the platform sends an e-mail."
 msgstr "Ang pangalan na lumalabas bilang sender (kabilang ang From e-mail address) kapag nagpapadala ang platform ng e-mail."
 
 msgid "Mail: 'From' name"
-msgstr "Mail: 'From' name"
+msgstr "Mail: Pangalan na 'From'"
 
 msgid "Installer data is missing."
 msgstr "Kulang ang installer data."
@@ -28435,7 +28435,7 @@ msgid "Evaluation for external tool added"
 msgstr "Idinagdag ang evaluation para sa external tool"
 
 msgid "External tool"
-msgstr "External tool"
+msgstr "Panlabas na tool"
 
 msgid "External tool added"
 msgstr "Idinagdag ang external tool"
@@ -28477,7 +28477,7 @@ msgid "The security code entered was incorrect."
 msgstr "Mali ang security code na ipinasok."
 
 msgid "Security check"
-msgstr "Security check"
+msgstr "Pagsusuri sa seguridad"
 
 msgid "New instance of recurring session created"
 msgstr "Nalikha ang bagong instance ng recurring session"
@@ -28615,7 +28615,7 @@ msgid "Resources by type"
 msgstr "Mga resource ayon sa uri"
 
 msgid "File info"
-msgstr "File info"
+msgstr "Impormasyon ng file"
 
 msgid "Page layouts"
 msgstr "Mga layout ng pahina"
@@ -28933,7 +28933,7 @@ msgid "Column"
 msgstr "Kolum"
 
 msgid "Blocks Palette"
-msgstr "Blocks Palette"
+msgstr "Palette ng mga Bloke"
 
 msgid "Already answered"
 msgstr "Sumagot na"
@@ -28960,13 +28960,13 @@ msgid "Item 3"
 msgstr "Item 3"
 
 msgid "Value 1"
-msgstr "Value 1"
+msgstr "Halaga 1"
 
 msgid "Value 2"
-msgstr "Value 2"
+msgstr "Halaga 2"
 
 msgid "Value 3"
-msgstr "Value 3"
+msgstr "Halaga 3"
 
 msgid "Checkbox 1"
 msgstr "Checkbox 1"
@@ -29164,7 +29164,7 @@ msgid "Select classes for which this session will be visible for subscription in
 msgstr "Piliin ang mga klase kung saan makikita ang session na ito para sa subscription sa catalogue. Mga tuntunin ng subscription ay nananatiling naaaplay bukod sa pagiging visible sa catalogue."
 
 msgid "Catalogue access"
-msgstr "Catalogue access"
+msgstr "Pag-access sa catalogue"
 
 msgid "The uploaded file does not match the selected file type."
 msgstr "Ang na-upload na file ay hindi tumutugma sa napiling uri ng file."
@@ -29215,7 +29215,7 @@ msgid "Add courses to URLs"
 msgstr "Magdagdag ng mga kurso sa mga URL"
 
 msgid "Parent category"
-msgstr "Parent category"
+msgstr "Magulang na kategorya"
 
 msgid "No parent"
 msgstr "Walang parent"
@@ -29308,7 +29308,7 @@ msgid "Subscriptions vs unsubscriptions, by day"
 msgstr "Subscriptions laban sa unsubscriptions, bawat araw"
 
 msgid "Quarterly report"
-msgstr "Quarterly report"
+msgstr "Pang-Quarterly na ulat"
 
 msgid "Course/Session subscriptions, by day"
 msgstr "Mga subscription ng Kurso/Sesyon, bawat araw"
@@ -30049,10 +30049,10 @@ msgid "Domain %s"
 msgstr "Domain %s"
 
 msgid "Topic %s"
-msgstr "Topic %s"
+msgstr "Paksa %s"
 
 msgid "Software program"
-msgstr "Software program"
+msgstr "Programa ng software"
 
 msgid "Send mail to users"
 msgstr "Magpadala ng email sa mga user"
@@ -30514,7 +30514,7 @@ msgid "ex. root"
 msgstr "hal. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "GUMAGAWA NG TALAAN works"
 
 msgid "ALTER TABLE works"
 msgstr "BAGUHIN ang TABLE works"
@@ -30532,7 +30532,7 @@ msgid "You are editing logos for visual theme"
 msgstr "Binabago mo ang mga logo para sa visual theme"
 
 msgid "Header logo"
-msgstr "Header logo"
+msgstr "Logo ng Header"
 
 msgid "Effective preview"
 msgstr "Epektibong preview"
@@ -30559,7 +30559,7 @@ msgid "Save header logo"
 msgstr "I-save ang header logo"
 
 msgid "Email logo"
-msgstr "Email logo"
+msgstr "Logo ng Email"
 
 msgid "Save email logo"
 msgstr "I-save ang email logo"
@@ -30616,7 +30616,7 @@ msgid "Are you sure you want to delete this?"
 msgstr "Sigurado ka bang gusto mong tanggalin ito?"
 
 msgid "Color theme"
-msgstr "Color theme"
+msgstr "Theme ng kulay"
 
 msgid "Logos will be applied to the current visual theme: "
 msgstr "Ang mga logo ay ilalapat sa kasalukuyang visual theme: "
@@ -30667,7 +30667,7 @@ msgid "Visual theme (assets)"
 msgstr "Biswal na tema (assets)"
 
 msgid "Branding (logos)"
-msgstr "Branding (logos)"
+msgstr "Branding (mga logo)"
 
 msgid "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback."
 msgstr "Mag-upload ng optional header at email logos. Ang SVG format ang pinipili. Ang PNG ay ginagamit bilang fallback."
@@ -30721,7 +30721,7 @@ msgid "GDPR compliance"
 msgstr "Pagsunod sa GDPR"
 
 msgid "Azure UID (internal ID)"
-msgstr "Azure UID (internal ID)"
+msgstr "Azure UID (panloob na ID)"
 
 msgid "Azure ID (mailNickname)"
 msgstr "Azure ID (mailNickname)"
@@ -30865,7 +30865,7 @@ msgid "Account locked until"
 msgstr "Nakakandado ang account hanggang"
 
 msgid "Google Calendar URL"
-msgstr "Google Calendar URL"
+msgstr "URL ng Google Calendar"
 
 msgid "User chat status"
 msgstr "Status ng chat ng user"
@@ -31427,4 +31427,397 @@ msgstr "Error sa pag-load ng mga mapagkukunan."
 
 msgid "Clear search"
 msgstr "I-clear ang paghahanap"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Tanging mga letra, digit at underscore (_) ang pinapayagan sa pangalan ng database. Mawawala awtomatikong ang mga hindi wasto na karakter."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Ano ang mga pangkalahatang tuntunin at kondisyon na ibinibigay sa mga gumagamit upang magamit ang platform na ito?"
+
+msgid "ex. {examplePassword}"
+msgstr "hal. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Maligayang pagdating sa Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Maligayang pagdating sa platform na ito"
+
+msgid "For more details visit %s"
+msgstr "Para sa higit pang detalye bisitahin ang %s"
+
+msgid "Manager"
+msgstr "Manager"
+
+msgid "Mark as"
+msgstr "Marka bilang"
+
+msgid "Reply to all"
+msgstr "Sumagot sa lahat"
+
+msgid "SCIM external ID"
+msgstr "SCIM panlabas na ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Pakikalagayan niyo po ang pinakabagong bersyon ng mga tuntunin at kondisyon."
+
+msgid "Required value for operation without path"
+msgstr "Kailangang halaga para sa operasyon nang walang landas"
+
+msgid "Available space (%s)"
+msgstr "Magagamit na espasyo (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Iindeks na deskripsyon na ito para sa pandaigdigan na paghahanap"
+
+msgid "Unknown course"
+msgstr "Hindi kilalang kurso"
+
+msgid "Certificate not found."
+msgstr "Sertipiko hindi natagpuan."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Nag-expire na ang security token. Mangyaring i-reload ang pahina at subukan muli."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Tanging mga administrador ng platform ang makakapagbago ng visibility ng kurso."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Hindi inaasahang error habang nag-subscribe ng user"
+
+msgid "Search in resource logs"
+msgstr "Maghanap sa mga log ng resource"
+
+msgid "Include this learning path in the global search results"
+msgstr "Isama ang landas ng pag-aaral na ito sa mga resulta ng pandaigdigan na paghahanap"
+
+msgid "The course code already exists"
+msgstr "Umiral na ang code ng kurso"
+
+msgid "Latest news"
+msgstr "Pinakabagong balita"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Kumuha ng pinakabagong balita mula sa Chamilo, kabilang ang mga kahinaan sa seguridad at mga kaganapan, direktang sa loob ng iyong panel ng administrasyon. Susuriin ang mga balitang ito sa serber ng balita ng Chamilo tuwing ikakarga mo ang pahina ng administrasyon at makikita lamang ng mga administrador."
+
+msgid "Chamilo support block"
+msgstr "Chamilo support block"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Kumuha ng pro tips at madaling paraan upang makipag-ugnayan sa opisyal na mga tagapagbigay ng serbisyo para sa propesyonal na suporta, direktang mula sa mga gumawa ng Chamilo. Lumilitaw ang blok na ito sa iyong pahina ng administrasyon, makikita lamang ng mga administrador, at naa-refresh tuwing ikakarga mo ang pahina ng administrasyon."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Itago ang opsyon na magpadala ng mga anunsyo sa mga user ng HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Payagan ang mga admin ng sesyon na i-download ang mga pribadong sertipiko"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Kung pinagana, ang mga administrador ng sesyon ay makakadownload ng sertipiko kahit hindi pa ito inilalathala nang publiko."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Kung hindi walang laman, ang proseso ng paglikha ng kurso ay maghahanap ng ilang field sa profile ng user at awtomatikong punan ang mga ito para sa kurso. Halimbawa, isang guro na espesyalista sa digital marketing ay maaaring awtomatikong mag-set ng « digital marketing » flag sa bawat kurso na (s)ya lumilikha."
+
+msgid "Main menu entries"
+msgstr "Mga entry ng pangunahing menu"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Suriin ang mga entry na gusto mong lumitaw sa pangunahing menu"
+
+msgid "Main menu entries per role"
+msgstr "Mga entry ng pangunahing menu bawat role"
+
+msgid "Define header tabs visibility per role."
+msgstr "Tukuyin ang visibility ng mga tab ng header bawat role."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Itakda ang mga opsyon na gusto mong lumitaw sa navigation sa paligid ng talahanayan upang ipakita ang mas kaunti o higit pang mga hilera sa isang pahina. hal. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Array ng mga karagdagang tampok na maaari mong paganahin para sa video player sa Chamilo. Ang mga opsyon ay kasama ang 'speed', na nagbibigay-daan sa iyo na baguhin ang bilis ng pag-play ng video."
+
+msgid "Mail: character set"
+msgstr "Mail: character set"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Kung kailangan mong tukuyin ang charset na gagamitin kapag nagpapadala ng mga e-mail na ito. Hayaang walang laman kung hindi ka sigurado."
+
+msgid "Mail: Debug"
+msgstr "Mail: Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Piliin kung gusto mong paganahin ang mga debug log ng pagpapadala ng e-mail. Magbibigay ito ng higit pang impormasyon kung ano ang nangyayari kapag nagko-konekta sa serbisyo ng mail, ngunit hindi maganda at maaaring sirain ang disenyo ng pahina. Gamitin lamang kapag walang aktibidad ng user."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Mail: Iwasan ang paggamit ng LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Hindi naiintindihan ng ilang e-mail client ang deskriptibong format ng LD+JSON, na ipinapakita ito bilang maluwag na JSON string sa huling user. Kung ito ang iyong kaso, maaari mong itakda ang variable sa ibaba sa 'false' upang hindi paganahin ang header na ito."
+
+msgid "Mail: DKIM headers"
+msgstr "E-mail: Mga header ng DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Magpasok ng JSON array ng iyong mga setting ng DKIM configuration (tingnan ang halimbawa)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Mail: Mga opsyon ng XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Kung gumagamit ka ng serbisyong e-mail na nakabase sa XOAuth2, gumamit ng setting na ito sa JSON upang i-save ang iyong partikular na configuration (tingnan ang halimbawa) at piliin ang XOAuth2 sa setting ng serbisyong mail."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Tinutukoy ang uri ng kapaligiran: \"prod\" (normal na produksyon), \"validation\" (tulad ng produksyon ngunit walang pag-uulat ng estadistika), o \"test\" (debug mode na may mga tool ng developer tulad ng mga tagapagpahiwatig ng hindi isinalin na string)."
+
+msgid "Global limit of users per course"
+msgstr "Global na limitasyon ng mga gumagamit bawat kurso"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Tinutukoy ang global na maximum na bilang ng mga gumagamit (kasama ang mga guro) na pinapayagang mag-subscribe sa anumang isang kurso sa platform. Itakda ang halagang ito sa 0 upang hindi paganahin ang limitasyon. Makakatulong ito upang maiwasan ang pagkakabigatan ng mga kurso sa mga bukas na portal."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "I-activate upang gumamit ng array upang tukuyin kung aling mga role ang dapat na malinaw na ipakita at alin ang dapat itago."
+
+msgid "Show base course posts in session course"
+msgstr "Ipakita ang mga post ng base course sa session course"
+
+msgid "Limit identical email usage"
+msgstr "Limitahan ang paggamit ng parehong email"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Pinakamataas na bilang ng mga account na pinapayagan na magbahagi ng parehong address ng e-mail. Itakda sa 0 upang hindi paganahin ang limitasyong ito."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Payagan ang mga admin ng session na makita ang lahat ng user sa lahat ng URL"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Kung pinagana, ang mga admin ng session ay makakapaghanap at maglista ng mga user mula sa lahat ng access URL, kahit na sa kanilang kasalukuyang URL."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Paganahin ang posibilidad para sa mga user na pumili ng kanilang sariling timezone. Kapag na-configure, ang mga user ay makakakita ng mga deadline ng assignment at iba pang reference ng oras sa kanilang sariling timezone, na magbabawas ng mga error sa oras ng paghahatid."
+
+msgid "Redirect after login (per profile)"
+msgstr "I-redirect pagkatapos mag-login (bawat profile)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "I-define ang redirection bawat profile pagkatapos mag-login gamit ang JSON object tulad ng {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Itago ang checkbox ng pagtanggap sa legal sa pahina ng Terms and Conditions"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Kung itakda sa true, alisin ang checkbox na \"Nabasa ko at tinatanggap ko\" sa daloy ng pahina ng Terms and Conditions."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Array na nagdedepina ng host at port para sa LDAP server."
+
+msgid "Enable 2FA"
+msgstr "Paganahin ang 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Magdagdag ng mga field sa pahina ng pag-update ng password upang paganahin ang 2FA gamit ang TOTP authenticator app. Kapag hindi pinagana globally, hindi makikita ng mga user ang mga field ng 2FA at hindi hihilingin ng 2FA sa login, kahit na na-enable ito dati."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Ang ilang tampok ng Chamilo ay magko-connect sa exterior mula sa server. Halimbawa, upang masiguro na umiiral ang external content kapag gumagawa ng link o nagpapakita ng embedded page sa learning path. Kung gumagamit ang iyong Chamilo server ng proxy upang lumabas ng network nito, dito ang lugar upang i-configure ito."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Paganahin o hindi paganahin ang awtomatikong muling pagrehistro kapag nag-e-expire ang validity ng course. Dapat din paganahin ang kaugnay na cron job."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Ipakita ang natitirang araw sa My Sessions"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Kung pinagana, ang mga petsa ng session sa pahina ng \"My Sessions\" ay papalitan ng bilang ng natitirang araw."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Ipakita ang \"Pending surveys\" sa menu"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "I-display ang menu item na nagpapahintulot sa mga user na ma-access ang kanilang mga pending survey."
+
+msgid "Disclose AI assistance"
+msgstr "I-disclose ang tulong ng AI"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Ipakita ang tag sa anumang content o feedback na nabuo o na-co-generate ng anumang sistema ng AI, na nagpapatunay sa user na ang content ay binuo gamit ang tulong ng ilang sistema ng AI. Ang mga detalye tungkol sa aling AI system ang ginamit sa anong kaso ay napanatili sa loob ng database para sa audit, ngunit hindi direktang accessible ng final user."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "JSON configuration para sa course catalog: link settings, filters, sort options, at higit pa."
+
+msgid "Session Catalog Settings"
+msgstr "Session Catalog Settings"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "JSON configuration para sa session catalog: filters at display options."
+
+msgid "Show Course Descriptions"
+msgstr "Ipakita ang Course Descriptions"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "I-display ang mga description ng course sa loob ng catalog listing."
+
+msgid "Published Courses Only"
+msgstr "Published Courses Only"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Limitahan ang catalog sa mga course lamang na minarkahan bilang published."
+
+msgid "Display Catalog on Homepage"
+msgstr "Ipakita ang Catalog sa Homepage"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Ipakita ang course catalog block sa platform homepage."
+
+msgid "Hide Public Link"
+msgstr "Itago ang Public Link"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Alisin ang public URL link mula sa mga course card."
+
+msgid "Only Selected Courses"
+msgstr "Only Selected Courses"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Ipakita lamang ang manually selected courses sa catalog."
+
+msgid "Allow Student Browsing"
+msgstr "Payagan ang Student Browsing"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Payagan ang mga estudyante na mag-browse at mag-filter ng course catalog."
+
+msgid "Hide Private Courses"
+msgstr "Itago ang Private Courses"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "I-exclude ang mga private course mula sa catalog display."
+
+msgid "Show Courses & Sessions"
+msgstr "Ipakita ang Courses & Sessions"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Isama ang parehong courses at sessions sa catalog results."
+
+msgid "Auto Session Subscription"
+msgstr "Auto Session Subscription"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Paganahin ang awtomatikong subscription sa sessions para sa mga user."
+
+msgid "Subscription in Session View"
+msgstr "Subscription sa Session View"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Payagan ang mga user na mag-subscribe sa courses nang direkta mula sa kanilang session page."
+
+msgid "Enable redirection plugin"
+msgstr "Paganahin ang redirection plugin"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Array na nagdedepina ng 'days' at 'months' upang itakda ang account expiration date kapag unang nag-log in ang user."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Isang array ng role => number na kumakatawan sa bilang ng araw na may hawak ang account bago mag-expire, depende sa role."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Extra user field na ginagamit upang maghanap at pangalanan ng sessions"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Itinatakdang ito ng extra user field key (hal., \"company\") na gagamitin upang maghanap ng mga user at upang i-define ang pangalan ng session kapag nagre-register ng mga estudyante mula sa /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Glossary terms generator"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Payagan ang mga guro na humingi ng AI-generated glossary terms sa kanilang course. Ito ay magge-generate ng 20 terms batay sa course title at general description sa course description tool. Kung ginamit ng higit sa isang beses, ito ay mag-e-exclude ng mga terms na na present na sa glossary na iyon (siguraduhing ma-share ang content sa na-configure na AI services)."
+
+msgid "Video generator"
+msgstr "Generator ng video"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Gumagawa ng mga video batay sa mga prompt o nilalaman gamit ang AI (maaaring gumamit ng maraming token ito)."
+
+msgid "Course analyser"
+msgstr "Tagapag-analisa ng kurso"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Pinag-aaralan ang lahat ng resources sa isang o maraming kurso at pre-train ang AI model upang masagot ang anumang tanong tungkol sa kurso o mga kursong ito (tiyakin na ang nilalaman ay maaaring i-share sa nakukumpigura na AI services)."
+
+msgid "Test/development"
+msgstr "Pagsubok/pagtuklas"
+
+msgid "Crons"
+msgstr "Crons"
+
+msgid "Editor"
+msgstr "Editor"
+
+msgid "Gradebook"
+msgstr "Gradebook"
+
+msgid "Internationalization"
+msgstr "Internasyonalisasyon"
+
+msgid "User profiles"
+msgstr "Mga profile ng gumagamit"
+
+msgid "Support tickets"
+msgstr "Mga ticket ng suporta"
+
+msgid "Webservices"
+msgstr "Webservices"
+
+msgid "Catalogue"
+msgstr "Katalog"
+
+msgid "Workflows"
+msgstr "Mga workflow"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Maa-edit ang setting sa sub-URL"
+
+msgid "Show JSON Template"
+msgstr "Ipakita ang JSON Template"
+
+msgid "JSON Template"
+msgstr "JSON Template"
+
+msgid "Installing Xapian bindings"
+msgstr "Pag-install ng Xapian bindings"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Ang sumusunod na snippet ay nagpapakita ng halimbawa ng pag-install ng Xapian PHP bindings sa Ubuntu 25.04 na may PHP 8.3. I-adapt ang mga path at bersyon sa iyong sariling kapaligiran."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Siguraduhing iisa lamang ang bersyon ng PHP na ginagamit mo (halimbawa 8.3) at iwasan ang paghahalo ng maraming bersyon na may iba't ibang direktoryo ng extension."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Kapag na-load nang tama ang extension para sa parehong CLI at web server, dapat mag-ulat ang search diagnostics sa itaas na naka-install na ang Xapian module."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Linisin ang temporary uploads at cache"
+
+msgid "Directory"
+msgstr "Directory"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Burahin lamang ang mga file na mas luma kaysa (minutes)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Itakda sa 0 upang burahin ang lahat ng file. Gumamit ng positibong value (hal., 60) upang maiwasan ang pagbura ng mga file na nag-u-upload pa."
+
+msgid "Preview only (do not delete)"
+msgstr "Preview only (huwag mag-delete)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Babala: ikaw ay magsasagawa ng pagbura ng LAHAT ng pansamantalang mga file. Ang aksyong ito ay hindi na maaaring baligtarin."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Ito ay magbabura ng lahat ng pansamantalang mga file. Magpatuloy?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Ito ay magbabura ng mga file na mas matanda kaysa %minutes% minuto. Magpatuloy?"
 

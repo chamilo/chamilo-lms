@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "உண்மையாகவே"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "பூரணசமனின் மாதிரி: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "புரோகா மாதிரி: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "மாறியின் வரம்புகள்"
@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:பதிப்புரிமை,, no:பதிப்புரிமை இல்லை"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:பாக்கெட்,, application/msword:MsWord,, application/octet-stream:அக்டெட் ஸ்ட்ரீம்,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:பாக்கெடு,, application/msword:MsWord,, application/octet-stream:அக்டெட் ஸ்ட்ரீம்,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:பயிற்சி,,      simulation:மெய்யப்படுத்தல்,,      questionnaire:கேள்வித்தாள்,,      diagram:சித்திரம்,,      figure:உருவம்,,      graph:படம்,,      index:அட்டவணை,,      slide:இன்னுசைடு,,      table:அட்டவணை,,      narrative text:கதை உரை,,      exam:தேர்வு,,      experiment:பரிசோதனை,,      problem statement:பிரச்சினை அறிக்கை,,      self assessment:சுய மதிப்பீடு,,      lecture:உபதேசம்"
@@ -4790,7 +4790,7 @@ msgid "Chamilo LIVE is a videoconferencing tool that offers: Slides sharing, whi
 msgstr "Chamilo LIVE ஒரு வீடியோ கான்பரன்ஸிங் கருவி: ஸ்லைடுகள் பகிர்வு, ஸ்லைடுகளின் மேல் வரைவு செய்யும் வெள்ளை பலகை, ஆடியோ/வீடியோ டூப்ளக்ஸ் மற்றும் சாட் ஆகியவற்றை வழங்குகிறது. இது Flash® பிளேயர் 9+ தேவைப்படுகிறது மற்றும் 2 மோடுகளை வழங்குகிறது: ஒன்றுக்கு பல மற்றும் பலுக்கு பல."
 
 msgid "Chamilo RAPID"
-msgstr "Chamilo RAPID"
+msgstr "சாமிலோ விரைவு"
 
 msgid "Chamilo RAPID is a Rapid Learning tool available in Chamilo Pro and Chamilo Medical. It allows you to convert Powerpoint or LibreOffice presentations to SCORM-compliant courses. After the conversion, you end up in the Courses authoring tool and are able to add audio comments on slides and pages, tests and activities between the slides or pages and interaction activities like forum discussions or assignment upload. Every step becomes an independent and removable learning object. And the whole course generates accurate SCORM reporting for further coaching."
 msgstr "Chamilo RAPID Chamilo Pro மற்றும் Chamilo Medical இல் கிடைக்கும் விரைவான கற்றல் கருவி. இது Powerpoint அல்லது LibreOffice வழங்கல்களை SCORM இணக்கமான பாடங்களாக மாற்ற அனுமதிக்கிறது. மாற்றத்திற்குப் பின், நீங்கள் பாடங்கள் உருவாக்கும் கருவியில் இருக்கிறீர்கள் மற்றும் ஸ்லைடுகள் மற்றும் பக்கங்களில் ஆடியோ கருத்துக்களை சேர்க்க, ஸ்லைடுகள் அல்லது பக்கங்களுக்கு இடையே சோதனைகள் மற்றும் செயல்பாடுகள், மன்ற விவாதங்கள் அல்லது பணி அணுகல் போன்ற தொடர்பு செயல்பாடுகளை சேர்க்க முடியும். ஒவ்வொரு படியும் சுதந்திரமான மற்றும் அகற்றக்கூடிய கற்றல் பொருளாகிறது. முழு பாடமும் மேலும் பயிற்சிக்கான துல்லியமான SCORM அறிக்கையை உருவாக்குகிறது."
@@ -4808,7 +4808,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "AWStats உங்கள் தளத்தின் புள்ளிவிவரங்களை பார்க்க அனுமதிக்கிறது: பார்வையாளர்கள், பக்க பார்வைகள், குறிப்புகள்..."
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "சாமிலோ நூலகம்"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "சாமிலோ நூலகம் பல அளவுகோல்களைக் கொண்ட இன்டெக்சிங் மற்றும் தேடல் வழங்கும் தேடுபொறியாகும். இது சாமிலோ மருத்துவ அம்சங்களின் ஒரு பகுதியாகும்."
@@ -10924,8 +10924,8 @@ msgstr "அது"
 msgid "The address of"
 msgstr "முகவரி"
 
-msgid "Your registration on"
-msgstr "உங்கள் பதிவு"
+msgid "Your registration on %s"
+msgstr "உங்கள் பதிவு %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "இந்த உள்நுழைவு ஏற்கனவே எடுக்கப்பட்டது. உங்கள் உலாவியின் பின்னோக்கு பொத்தானைப் பயன்படுத்தி வேறு ஒன்றைத் தேர்ந்தெடுக்கவும்."
@@ -15053,7 +15053,7 @@ msgid "Install Chamilo"
 msgstr "Chamilo நிறுவவும்"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "சாமிலோ URL"
 
 msgid "You have no session in your sessions history"
 msgstr "உங்கள் அமர்வுகள் வரலாற்றில் எந்த அமர்வும் இல்லை"
@@ -27374,7 +27374,7 @@ msgid "Obtained the following skills"
 msgstr "பின்வரும் திறன்களைப் பெற்றார்"
 
 msgid "Chamilo LMS"
-msgstr "Chamilo LMS"
+msgstr "சாமிலோ LMS"
 
 msgid "No course sessions for this user"
 msgstr "இந்த பயனருக்கு படிப்பு அமர்வுகள் இல்லை"
@@ -31431,4 +31431,397 @@ msgstr "வளங்களை ஏற்றும் பிழை."
 
 msgid "Clear search"
 msgstr "தேடலை அழி"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "தரவுத்தள பெயரில் எழுத்துகள், எண்கள் மற்றும் அண்டர்ஸ்கோர் (_) மட்டுமே அனுமதிக்கப்படுகின்றன. செல்லாத எழுத்துகள் தானாக அகற்றப்படும்."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "இந்த தளத்தைப் பயன்படுத்துவதற்கு பயனர்களுக்கு வழங்கப்படும் பொது நிபந்தனைகள் என்ன?"
+
+msgid "ex. {examplePassword}"
+msgstr "எ. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Chamiloவிற்கு வரவேற்கிறோம்!"
+
+msgid "Welcome to this platform"
+msgstr "இந்தத் தளத்திற்கு வரவேற்கிறோம்"
+
+msgid "For more details visit %s"
+msgstr "மேலும் விவரங்களுக்கு %s ஐப் பார்க்கவும்"
+
+msgid "Manager"
+msgstr "நிர்வாகி"
+
+msgid "Mark as"
+msgstr "என்று குறி வை"
+
+msgid "Reply to all"
+msgstr "எல்லாருக்கும் பதில்"
+
+msgid "SCIM external ID"
+msgstr "SCIM வெளி ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "விதிமுறைகள் மற்றும் நிபந்தனைகளின் சமீபத்திய பதிப்பை ஏற்பத் தயாராகவும்."
+
+msgid "Required value for operation without path"
+msgstr "பாதை இன்றி செயல்படுவதற்கான தேவையான மதிப்பு"
+
+msgid "Available space (%s)"
+msgstr "கிடைக்கும் இடம் (%s)"
+
+msgid "Index this description for the global search"
+msgstr "உலகளாவிய தேடலுக்காக இந்த விளக்கத்தை பட்டியலிடவும்"
+
+msgid "Unknown course"
+msgstr "தெரியாத பாடம்"
+
+msgid "Certificate not found."
+msgstr "சான்றிதழ் காணப்படவில்லை."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "பாதுகாப்பு டோக்கன் காலாவதியானது. பக்கத்தை மீண்டும் ஏற்றி முயற்சிக்கவும்."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "பாடத்தின் தெரிவுநிலையை மாற்ற மெய்யப்படி நிர்வாகிகள் மட்டுமே முடியும்."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "பயனரை பதிவு செய்வதில் எதிர்பாராத பிழை"
+
+msgid "Search in resource logs"
+msgstr "வள பதிவுகளில் தேடல்"
+
+msgid "Include this learning path in the global search results"
+msgstr "உலகளாவிய தேடல் முடிவுகளில் இந்த கற்றல் பாதையை சேர்க்கவும்"
+
+msgid "The course code already exists"
+msgstr "பாட குறியீடு ஏற்கனவே உள்ளது"
+
+msgid "Latest news"
+msgstr "சமீபத்திய செய்திகள்"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Chamilo இலிருந்து சமீபத்திய செய்திகளைப் பெறுங்கள், பாதுகாப்பு பிழைகள் மற்றும் நிகழ்வுகள் உட்பட, உங்கள் நிர்வாக பலகையில் நேரடியாக. இந்த செய்திகள் நிர்வாக பக்கத்தை ஏற்றும் ஒவ்வொரு முறையும் Chamilo செய்தி சர்வரில் சரிபார்க்கப்படும் மற்றும் நிர்வாகிகளுக்கு மட்டுமே தெரியும்."
+
+msgid "Chamilo support block"
+msgstr "Chamilo ஆதரவு பிளாக்"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Chamilo உருவாக்குபவர்களிடமிருந்து தொழில்முறை ஆதரவுக்கான அதிகாரப்பூர்வ சேவை வழங்குநர்களை தொடர்பு கொள்ள எளிய வழி மற்றும் நிபுணர் குறிப்புகளைப் பெறுங்கள். இந்த பிளாக் உங்கள் நிர்வாக பக்கத்தில் தோன்றும், நிர்வாகிகளுக்கு மட்டுமே தெரியும் மற்றும் நிர்வாக பக்கத்தை ஏற்றும் ஒவ்வொரு முறையும் புதுப்பிக்கப்படும்."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "HR பயனர்களுக்கு அறிவிப்புகளை அனுப்புவதற்கான விருப்பத்தை மறை"
+
+msgid "Allow session admins to download private certificates"
+msgstr "அமர்வு நிர்வாகிகளுக்கு தனியார் சான்றிதழ்களை பதிவிறக்க அனுமதி"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "இயக்கப்பட்டால், அமர்வு நிர்வாகிகள் சான்றிதழ்கள் பொது வெளியிடப்படாதபோதும் பதிவிறக்க செய்யலாம்."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "காலியாக இல்லையெனில், பாட உருவாக்கும் செயல்முறை பயனர் சுயவிவரத்தில் சில புலங்களைத் தேடி பாடத்திற்காக அவற்றை தானாக நிரப்பும். உதாரணமாக, டிஜிட்டல் மார்க்கெட்டிங்கில் நிபுணத்துவம் பெற்ற ஆசிரியர் உருவாக்கும் ஒவ்வொரு பாடத்திலும் « டிஜிட்டல் மார்க்கெட்டிங் » குறியை தானாக அமைக்கலாம்."
+
+msgid "Main menu entries"
+msgstr "முதன்மை மெனு உள்ளீடுகள்"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "முதன்மை மெனுவில் தோன்ற வேண்டிய உள்ளீட்டை சரிபார்க்கவும்"
+
+msgid "Main menu entries per role"
+msgstr "பாத்திரத்திற்கான முதன்மை மெனு உள்ளீடுகள்"
+
+msgid "Define header tabs visibility per role."
+msgstr "பாத்திரத்திற்கு தலைப்பு டேப்கள் தெரிவுநிலையை வரையறுக்கவும்."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "ஒரு பக்கத்தில் குறைவான அல்லது அதிக வரிகளைக் காட்டுவதற்கான அட்டவணைச் சுற்றியுள்ள வழிசெலுத்தலில் தோன்ற விரும்பும் விருப்பங்களை அமைக்கவும். உ.அ. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Chamilo இல் வீடியோ பிளேயருக்கு இயக்கலாம் உள்ள கூடுதல் அம்சங்களின் அம்சம். விருப்பங்கள் 'speed' ஐ உள்ளடக்கியது, இது வீடியோவின் மீண்டும் அனைத்தல் வேகத்தை மாற்ற அனுமதிக்கிறது."
+
+msgid "Mail: character set"
+msgstr "மின்னஞ்சல்: எழுத்துச் சரம்"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "இந்த மின்னஞ்சல்களை அனுப்பும்போது பயன்படுத்த வேண்டிய charset-ஐ வரையறுக்க வேண்டுமானால். உறுதியில்லை என்றால் காலியாக விடவும்."
+
+msgid "Mail: Debug"
+msgstr "மின்னஞ்சல்: அனுபவிப்பு"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "மின்னஞ்சல் அனுப்புதல் அனுபவிப்பு பதிவுகளை செயல்படுத்த வேண்டுமா எனத் தேர்ந்தெடுக்கவும். இவை மெயில் சேவையுடன் இணைப்பதில் என்ன நடக்கிறது என்பது பற்றிய மேலும் தகவல்களைத் தரும், ஆனால் அழகாக இருக்காது மற்றும் பக்க வடிவமைப்பை உடைக்கலாம். பயனர் செயல்பாடு இல்லாதபோது மட்டும் பயன்படுத்தவும்."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "மின்னஞ்சல்: LD+JSON பயன்படுத்த வேண்டாம்"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "சில மின்னஞ்சல் கிளையன்டுகள் விளக்கவுரை LD+JSON வடிவத்தைப் புரிந்துகொள்ளாது, இறுதி பயனருக்கு த鬆 JSON சரமாகக் காட்டும். இது உங்கள் சூழ்நிலை என்றால், இந்தத் தலைப்பை முடக்குவதற்காக கீழே உள்ள மாறியை 'false' ஆக அமைக்கலாம்."
+
+msgid "Mail: DKIM headers"
+msgstr "மின்னஞ்சல்: DKIM தலைப்புகள்"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "உங்கள் DKIM அமைப்பு அமைப்புகளின் JSON அமுக்கத்தை உள்ளிடவும் (எடுத்துக்காட்டு பார்)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "மின்னஞ்சல்: XOAuth2 விருப்பங்கள்"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "XOAuth2 அடிப்படையிலான மின்னஞ்சல் சேவையைப் பயன்படுத்தினால், உங்கள் குறிப்பிட்ட அமைப்பைச் சேமிக்க JSON-இல் இந்த அமைப்பைப் பயன்படுத்தவும் (எடுத்துக்காட்டு பார்) மற்றும் மெயில் சேவை அமைப்பில் XOAuth2-ஐத் தேர்ந்தெடுக்கவும்."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "சூழல் வகையை வரையறுக்கிறது: \"prod\" (இயல்புநிலை உற்பத்தி), \"validation\" (புள்ளிவிவரம் அறிக்கை இல்லாத உற்பத்தி போன்று), அல்லது \"test\" (மொழிபெயர்க்கப்படாத சரம் குறிகாட்டிகள் போன்ற உருவாக்கியாளர் கருவிகளுடன் அனுபவிப்பு நிலை)."
+
+msgid "Global limit of users per course"
+msgstr "பாடநிலைக்கு பயனர்களின் உலகளாவிய வரம்பு"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "தளத்தில் ஒரு ஒற்றை பாடநிலைக்கு பதிவு செய்ய அனுமதிக்கப்படும் பயனர்களின் (ஆசிரியர்கள் உட்பட) உலகளாவிய அதிகபட்ச எண்ணிக்கையை வரையறுக்கிறது. வரம்பை முடக்க 0 ஆக அமைக்கவும். இது திறந்த போர்டல்களில் பாடநிலைகள் அதிகமைக்கப்படுவதைத் தவிர்க்க உதவுகிறது."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "எந்த பாத்திரங்கள் தெளிவாகக் காட்டப்பட வேண்டும் மற்றும் எவை மறைக்கப்பட வேண்டும் என வரையறுக்க அமுக்கத்தைப் பயன்படுத்த செயல்படுத்தவும்."
+
+msgid "Show base course posts in session course"
+msgstr "அமர்வு பாடநிலையில் அடிப்படை பாடநிலை பதிவுகளைக் காட்டு"
+
+msgid "Limit identical email usage"
+msgstr "ஒரே மின்னஞ்சல் பயன்பாட்டை வரம்பிடு"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "ஒரே மின்னஞ்சல் முகவரியைப் பகிர்ந்து கொள்ள அனுமதிக்கப்படும் கணக்குகளின் அதிகபட்ச எண்ணிக்கை. இந்த வரம்பை முடக்க, 0 ஆக அமைக்கவும்."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "அனைத்து URL-களிலும் உள்ள அனைத்து பயனர்களையும் அமர்வு நிர்வாகிகளுக்கு காண அனுமதிக்கவும்"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "இயக்கப்பட்டால், அமர்வு நிர்வாகிகள் தங்கள் தற்போதைய URL-ஐப் பொருட்படுத்தாமல் அனைத்து அணுகல் URL-களிலிருந்தும் பயனர்களைத் தேடி பட்டியலிடலாம்."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "பயனர்கள் தங்கள் சொந்த நேரப்பகுதியைத் தேர்ந்தெடுக்கும் வாய்ப்பை இயக்கு. அமைக்கப்பட்டவுடன், பயனர்கள் ஒப்படைப்பு நேரத்தில் பிழைகளைக் குறைக்க தங்கள் சொந்த நேரப்பகுதியில் ஒப்படைப்பு கால வரம்புகள் மற்றும் பிற நேர மேற்கோள்களைக் காண்பிக்கலாம்."
+
+msgid "Redirect after login (per profile)"
+msgstr "உள்நுழைந்த பிறகு மாற்று (புரோஃபைல் ஒவ்வொன்றிற்கும்)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "உள்நுழைந்த பிறகு புரோஃபைல் ஒவ்வொன்றிற்கும் மாற்றத்தை {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"} போன்ற JSON பொருளைப் பயன்படுத்தி வரையறுக்கவும்"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "விதிமுறைகள் மற்றும் நிபந்தனைகள் பக்கத்தில் சட்ட ரீதியான ஏற்பு சரிபார்ப்பு பெட்டியை மறை"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "உண்மையாக அமைக்கப்பட்டால், விதிமுறைகள் மற்றும் நிபந்தனைகள் பக்கப் பாயில் \"நான் படித்து ஏற்கிறேன்\" சரிபார்ப்பு பெட்டியை அகற்றுகிறது."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "LDAP சர்வருக்கான விருட்சியாளர் மற்றும் துறைக்கான அமர்வு."
+
+msgid "Enable 2FA"
+msgstr "2FA ஐ இயக்கு"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "பாஸ்வேர்ட் புதுப்பிப்பு பக்கத்தில் TOTP அங்கீகார அப்பைப் பயன்படுத்தி 2FA ஐ இயக்குவதற்கான புலங்களைச் சேர்க்கவும். உலகளவில் முடக்கப்பட்டால், பயனர்கள் 2FA புலங்களைக் காண்பிப்பதில்லை மற்றும் முன்பு இயக்கியிருந்தாலும் உள்நுழைவில் 2FA க்கு கோரப்படமாட்டார்கள்."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Chamilo இன் சில அம்சங்கள் சர்வரிலிருந்து வெளியே இணைக்கும். உதாரணமாக, இணைப்பை உருவாக்கும் போது அல்லது கற்றல் பாதையில் ஒன்றிணைக்கப்பட்ட பக்கத்தைக் காட்டும் போது வெளிப்புற உள்ளடக்கம் உள்ளதா என்பதை உறுதிப்படுத்த. உங்கள் Chamilo சர்வர் தனது நெட்வொர்க்கிலிருந்து வெளியேற ப்ராக்ஸியைப் பயன்படுத்தினால், இதை அமைக்க இது இடம்."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "பாடநிலை செல்லுபடியாகும் காலம் முடிவடையும் போது தானியங்கி மீண்டும் பதிவு செய்வதை இயக்க அல்லது முடக்கு. தொடர்புடைய க்ரான் வேலை இயக்கப்பட வேண்டும்."
+
+msgid "Show remaining days in My Sessions"
+msgstr "எனது அமர்வுகளில் மீதமுள்ள நாட்களைக் காட்டு"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "இயக்கப்பட்டால், \"எனது அமர்வுகள்\" பக்கத்தில் அமர்வு தேதிகள் மீதமுள்ள நாட்களின் எண்ணால் மாற்றப்படும்."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "மெனுவில் \"நிலுவையிலுள்ள ஆய்வுகள்\" ஐ காட்டு"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "பயனர்கள் தங்கள் நிலுவையிலுள்ள ஆய்வுகளை அணுகும் மெனு பொருளைக் காட்டு."
+
+msgid "Disclose AI assistance"
+msgstr "AI உதவியை வெளிப்படுத்து"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "ஏதேனும் AI அமைப்பால் உருவாக்கப்பட்ட அல்லது இணை உருவாக்கப்பட்ட எந்த உள்ளடக்கம் அல்லது கருத்துரையிலும் பயனருக்கு உள்ளடக்கம் சில AI அமைப்பின் உதவியுடன் உருவாக்கப்பட்டதை உறுதிப்படுத்தும் லேபிளை காட்டு. எந்த AI அமைப்பு எந்த வழக்கிலும் பயன்படுத்தப்பட்டது என்பது தணிக்கைக்காக தரவுத்தளத்தில் சேமிக்கப்படுகிறது, ஆனால் இறுதி பயனரால் நேரடியாக அணுக முடியாது."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "பாடநிலை கேடலாக்கின் JSON அமைப்பு: இணைப்பு அமைப்புகள், வடிகட்டிகள், வரிசைப்படுத்தல் விருப்பங்கள் மற்றும் பல."
+
+msgid "Session Catalog Settings"
+msgstr "அமர்வு கேடலாக் அமைப்புகள்"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "அமர்வு கேடலாக்கிற்கான JSON அமைப்பு: வடிகட்டிகள் மற்றும் காட்சி விருப்பங்கள்."
+
+msgid "Show Course Descriptions"
+msgstr "பாடநிலை விளக்கங்களைக் காட்டு"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "கேடலாக் பட்டியலில் பாடநிலை விளக்கங்களைக் காட்டு."
+
+msgid "Published Courses Only"
+msgstr "வெளியிடப்பட்ட பாடநிலைகள் மட்டும்"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "கேடலாக்கை வெளியிடப்பட்டதாக குறிக்கப்பட்ட பாடநிலைகளுக்கு மட்டும் வரம்பிடு."
+
+msgid "Display Catalog on Homepage"
+msgstr "முகப்புப் பக்கத்தில் கேடலாக்கைக் காட்டு"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "தள முகப்புப் பக்கத்தில் பாடநிலை கேடலாக் பிளாக்கைக் காட்டு."
+
+msgid "Hide Public Link"
+msgstr "பொது இணைப்பை மறை"
+
+msgid "Remove the public URL link from course cards."
+msgstr "பாடநூல் அட்டைகளிலிருந்து பொது URL இணைப்பை அகற்றவும்."
+
+msgid "Only Selected Courses"
+msgstr "தேர்ந்தெடுக்கப்பட்ட பாடங்கள் மட்டுமே"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "பட்டியலில் கைமுறையாக தேர்ந்தெடுக்கப்பட்ட பாடங்கள் மட்டுமே காட்டவும்."
+
+msgid "Allow Student Browsing"
+msgstr "மாணவர் உலாவல் அனுமதி"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "மாணவர்களை பாடநூல் பட்டியலை உலாவவும் வடிகட்டவும் அனுமதிக்கவும்."
+
+msgid "Hide Private Courses"
+msgstr "தனியான பாடங்களை மறை"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "பட்டியல் காட்சியில் தனியான பாடங்களை விலக்கவும்."
+
+msgid "Show Courses & Sessions"
+msgstr "பாடங்கள் & அமர்வுகள் காட்டு"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "பட்டியல் முடிவுகளில் பாடங்கள் மற்றும் அமர்வுகளை உள்ளடக்கவும்."
+
+msgid "Auto Session Subscription"
+msgstr "தானியங்கி அமர்வு பதிவு"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "பயனர்களுக்கு அமர்வுகளுக்கு தானியங்கி பதிவு செய்ய அனுமதிக்கவும்."
+
+msgid "Subscription in Session View"
+msgstr "அமர்வு பார்வையில் பதிவு"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "பயனர்களை அவர்களின் அமர்வு பக்கத்திலிருந்து நேரடியாக பாடங்களுக்கு பதிவு செய்ய அனுமதிக்கவும்."
+
+msgid "Enable redirection plugin"
+msgstr "மாற்று வழி செருகுநெறியை செயல்படுத்து"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "பயனர் முதல் முறையாக உள்நுழைந்தபோது கணக்கு காலாவதியாகும் தேதியை அமைக்க 'நாட்கள்' மற்றும் 'மாதங்கள்' ஐ வரையறுக்கும் அமுக்கம்."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "பங்கின் பொறுப்பைப் பொறுத்து கணக்கு காலாவதியாகும் முன் நாட்களின் எண்ணிக்கையை குறிக்கும் role => எண் அமுக்கம்."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "அமர்வுகளை தேடவும் பெயரிடவும் பயன்படுத்தப்படும் கூடுதல் பயனர் புலம்"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "பயனர்களை தேடுவதற்கும் /admin-dashboard/register இலிருந்து மாணவர்களை பதிவு செய்யும் போது அமர்வின் பெயரை வரையறுப்பதற்கும் பயன்படுத்தப்படும் கூடுதல் பயனர் புல விசை (எ.கா., \"company\") ஐ இது வரையறுக்கிறது."
+
+msgid "Glossary terms generator"
+msgstr "சொல்லாட்சி சொற்கள் உருவாக்கி"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "ஆசிரியர்களை அவர்களின் பாடத்தில் AI உருவாக்கிய சொல்லாட்சி சொற்களை கோர அனுமதிக்கவும். இது பாடத்தின் பெயர் மற்றும் பாட விளக்க கருவியில் உள்ள பொது விளக்கத்தின் அடிப்படையில் 20 சொற்களை உருவாக்கும். ஒரே முறையில் பலமுறை பயன்படுத்தினால், அந்த சொல்லாட்சியில் ஏற்கனவே உள்ள சொற்களை விலக்கும் (அமைக்கப்பட்ட AI சேவைகளுடன் உள்ளடக்கத்தை பகிர்ந்து கொள்ள முடியும் என்பதை உறுதிப்படுத்தவும்)."
+
+msgid "Video generator"
+msgstr "வீடியோ உருவாக்கி"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "AI ஐப் பயன்படுத்தி உந்துதல்கள் அல்லது உள்ளடக்கத்தின் அடிப்படையில் வீடியோக்களை உருவாக்குகிறது (இது பல டோக்கன்களை நுகரலாம்)."
+
+msgid "Course analyser"
+msgstr "பாட பகுப்பாய்வு"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "ஒன்று அல்லது பல பாடங்களில் உள்ள அனைத்து வளங்களையும் பகுப்பாய்வு செய்து இந்த அல்லது இந்த பாடங்கள் பற்றிய எந்த கேள்விக்கும் பதிலளிக்க AI மாதிரியை முன்-പயிற்சி செய்கிறது (அமைக்கப்பட்ட AI சேவைகளுடன் உள்ளடக்கத்தை பகிர்ந்து கொள்ள முடியும் என்பதை உறுதிப்படுத்தவும்)."
+
+msgid "Test/development"
+msgstr "சோதனை/வளர்ச்சி"
+
+msgid "Crons"
+msgstr "க்ரான்கள்"
+
+msgid "Editor"
+msgstr "தொகுப்பி"
+
+msgid "Gradebook"
+msgstr "மதிப்பெண் புத்தகம்"
+
+msgid "Internationalization"
+msgstr "அனternationalization"
+
+msgid "User profiles"
+msgstr "பயனர் சுயவிவரங்கள்"
+
+msgid "Support tickets"
+msgstr "ஆதரவு டிக்கெட்டுகள்"
+
+msgid "Webservices"
+msgstr "உலாவெப் சேவைகள்"
+
+msgid "Catalogue"
+msgstr "பட்டியல்"
+
+msgid "Workflows"
+msgstr "பணிப்பாய்வுகள்"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "அமைப்பு துணை-URLகளில் திருத்தக்கூடியது"
+
+msgid "Show JSON Template"
+msgstr "JSON மாதிரியை காட்டு"
+
+msgid "JSON Template"
+msgstr "JSON மாதிரி"
+
+msgid "Installing Xapian bindings"
+msgstr "Xapian பிணைப்புகளை நிறுவுதல்"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "கீழே உள்ள பகுதி Ubuntu 25.04 இல் PHP 8.3 உடன் Xapian PHP பிணைப்புகளின் உதாரண நிறுவலைக் காட்டுகிறது. உங்கள் சொந்த சூழலுக்கு பாதைகள் மற்றும் பதிப்புகளை மாற்றவும்."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "நீங்கள் உண்மையில் பயன்படுத்தும் PHP பதிப்பு (எ.கா. 8.3) மட்டுமே உள்ளதா என்பதை உறுதிப்படுத்தவும், வெவ்வேறு நீட்டி அடைவுகளுடன் பல பதிப்புகளை கலக்க வேண்டாம்."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "நீட்டி CLI மற்றும் வலை சர்வருக்கானது சரியாக ஏற்றப்பட்டவுடன், மேலே உள்ள தேடல் நோயறிதல்கள் Xapian தொகுதி நிறுவப்பட்டுள்ளது என்று அறிவிக்க வேண்டும்."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "தற்காலிக பதிவேற்றங்கள் மற்றும் தாற்காலிக சேமிப்பை அகற்றுதல்"
+
+msgid "Directory"
+msgstr "பாக்கெடு"
+
+msgid "Only delete files older than (minutes)"
+msgstr "வெறும் பழைய கோப்புகளை மட்டும் அகற்றவும் (நிமிடங்கள்)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "எல்லா கோப்புகளையும் அகற்ற 0 அமைக்கவும். இன்னும் பதிவேற்றப்படும் கோப்புகளை அகற்றுவதை தவிர்க்க எண்ணிக்கையான மதிப்பை பயன்படுத்தவும் (எ.கா., 60)."
+
+msgid "Preview only (do not delete)"
+msgstr "முன்னோட்டம் மட்டும் (அகற்ற வேண்டாம்)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "எச்சரிக்கை: நீங்கள் எல்லா தற்காலிக கோப்புகளையும் அகற்ற உள்ளீர்கள். இந்த செயல் மீள முடியாது."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "இது எல்லா தற்காலிக கோப்புகளையும் அகற்றும். தொடர வேண்டுமா?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "இது %minutes% நிமிடங்களுக்கு முந்தைய கோப்புகளை அகற்றும். தொடர வேண்டுமா?"
 

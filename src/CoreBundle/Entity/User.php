@@ -798,7 +798,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->apiToken = null;
         $this->biography = '';
         $this->website = '';
-        $this->locale = 'en';
+        $this->locale = 'en_US';
         $this->timezone = 'Europe/Paris';
         $this->status = CourseRelUser::STUDENT;
         $this->salt = sha1(uniqid('', true));
@@ -960,7 +960,12 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     public function getIsActive(): bool
     {
-        return 1 === $this->active;
+        return self::ACTIVE === $this->active;
+    }
+
+    public function isSoftDeleted(): bool
+    {
+        return self::SOFT_DELETED === $this->active;
     }
 
     public function isEnabled(): bool

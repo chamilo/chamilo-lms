@@ -7336,7 +7336,7 @@ msgid "View this user"
 msgstr "ເບິ່ງຜູ້ໃຊ້ນີ້"
 
 msgid "RSS feed"
-msgstr "RSS feed"
+msgstr "RSS ຊ່ອງທາງຂ່າວ"
 
 #, fuzzy
 msgid "No friends in your contact list"
@@ -11881,8 +11881,8 @@ msgid "The address of"
 msgstr "ທີ່ຢູ່ຂອງ"
 
 #, fuzzy
-msgid "Your registration on"
-msgstr "ການລົງທະບຽນຂອງທ່ານທີ່"
+msgid "Your registration on %s"
+msgstr "ການລົງທະບຽນຂອງທ່ານທີ່ %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "ຊື່ຜູ້ໃຊ້ນີ້ມີຄົນໃຊ້ແລ້ວ. ໃຊ້ປຸ່ມກັບຄືນຂອງເບຣົາເຊີຂອງທ່ານ ແລະ ເລືອກຊື່ອື່ນ."
@@ -20264,7 +20264,6 @@ msgstr "ພອດທີ່ຈະເຊື່ອມຕໍ່ກັບເຊີບ
 msgid "Main CAS server protocol"
 msgstr "ໂປຣໂຕຄໍຂອງເຊີບເວີ CAS ຫຼັກ"
 
-#, fuzzy
 msgid "CAS 1"
 msgstr "CAS 1"
 
@@ -22118,7 +22117,6 @@ msgstr "ໂຫຼດຄຳເຫັນເພີ່ມເຕີມ"
 msgid "Show progress"
 msgstr "ສະແດງຄວາມຄືບໜ້າ"
 
-#, fuzzy
 msgid "%s %%"
 msgstr "%s %%"
 
@@ -26674,7 +26672,7 @@ msgid "*: Current quarter, incomplete data"
 msgstr "*: ໄຕມາດປັດຈຸບັນ, ຂໍ້ມູນບໍ່ສົມບູນ"
 
 msgid "Q%s %s"
-msgstr "Q%s %s"
+msgstr "ຄຳຖາມ%s %s"
 
 msgid "YoY"
 msgstr "YoY"
@@ -33783,4 +33781,397 @@ msgstr "ຂໍ້ຜິດພາດໃນການໂຫຼດຊັບພະຍ
 
 msgid "Clear search"
 msgstr "ລ້າງການຄົ້ນຫາ"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "ຊື່ຖານຂໍ້ມູນຈະໃຊ້ໄດ້ພຽງຕົວອັກສອນ, ຕົວເລກ ແລະ underscore (_) ເທົ່ານັ້ນ. ຕົວອັກສອນທີ່ບໍ່ຖືກຕ້ອງຈະຖືກລຶບອັດຕະໂນມັດ."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "ຂໍ້ກຳນົດແລະເງື່ອນໄຂທົ່ວໄປທີ່ໃຫ້ກັບຜູ້ໃຊ້ເພື່ອໃຊ້ແພລັດຟອມນີ້ແມ່ນຫຍັງ?"
+
+msgid "ex. {examplePassword}"
+msgstr "ຕົວຢ່າງ. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "ຍິນດີຕ້ອນຮັບສູ່ Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "ຍິນດີຕ້ອນຮັບສູ່ແພລັດຟອມນີ້"
+
+msgid "For more details visit %s"
+msgstr "ເພື່ອລາຍລະອຽດເພີ່ມເຕີມ ໃຫ້ເຂົ້າຊົມ %s"
+
+msgid "Manager"
+msgstr "ຜູ້ຈັດການ"
+
+msgid "Mark as"
+msgstr "ມີແຕ້ມການ"
+
+msgid "Reply to all"
+msgstr "ຕອບກັບທັງໝົດ"
+
+msgid "SCIM external ID"
+msgstr "SCIM external ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "ກະລຸນາຍອມຮັບເອກະສານຂໍ້ເລື່ອງແລະເງື່ອນໄຂລ่าสຸດ."
+
+msgid "Required value for operation without path"
+msgstr "ຄ່າທີ່ຕ້ອງການສຳລັບການເຮັດວຽກໂດຍບໍ່ມີເສັ້ນທາງ"
+
+msgid "Available space (%s)"
+msgstr "ຊ່ອງຫວ່າງທີ່ມີຢູ່ (%s)"
+
+msgid "Index this description for the global search"
+msgstr "ຈັດດັດເດັກນີ້ສຳລັບການຄົ້ນຫາທົ່ວໄປ"
+
+msgid "Unknown course"
+msgstr "ຄອສທີ່ບໍ່ຮູ້ຈັກ"
+
+msgid "Certificate not found."
+msgstr "ບໍ່ພົບປະກັນຍ້ານ."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "ໂທເຄັນການປ້ອງກັນຄວາມປອດໄພສິ້ນສຸດ. ກະລຸນາໂຫຼດໜ້າອີກເທື່ອໜຶ່ງແລະລອງອີກເທື່ອ."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "ພຽງແຕ່ຜູ້ຈັດການແພລັດຟອມເທົ່ານັ້ນທີ່ສາມາດປ່ຽນການເບິ່ງເຫັນຂອງຄອສ."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "ຂໍ້ຜິດພາດທີ່ບໍ່ຄາດຄິດໃນຂະນະທີ່ລົງทะເຍີນຜູ້ໃຊ້"
+
+msgid "Search in resource logs"
+msgstr "ຄົ້ນຫາໃນໄລລອກຊັບພະຍາກອນ"
+
+msgid "Include this learning path in the global search results"
+msgstr "ລວມເຖດທາງການຮຽນຮູ້ນີ້ໃນການຄົ້ນຫາທົ່ວໄປ"
+
+msgid "The course code already exists"
+msgstr "ລະຫັດຄອສມີຢູ່ແລ້ວ"
+
+msgid "Latest news"
+msgstr "ຂ່າວສານລ້າສຸດ"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "ເອົາຂ່າວສານລ້າສຸດຈາກ Chamilo, ລວມທັງມີບັນຫາຄວາມປອດໄພແລະເຫດການ, ໂດຍກົງໃນແຜ່ນຄວບຄຸມການຈັດການຂອງເຈົ້າ. ຂ່າວນີ້ຈະຖືກກວດສອບຢູ່ເຊີເວີຂ່າວ Chamilo ທຸກຄັ້ງທີ່ເຈົ້າໂຫຼດໜ້າການຈັດການ ແລະ ເບິ່ງເຫັນແຕ່ຜູ້ຈັດການເທົ່ານັ້ນ."
+
+msgid "Chamilo support block"
+msgstr "ບລັອກສະໜັບສະໜຸນຂອງ Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "ເອົາຄຳແນະນຳມືອາຊີບແລະວິທີງ່າຍໆເພື່ອຕິດຕໍ່ຜູ້ໃຫ້ບໍລິການທາງການສຳລັບການສະໜັບສະໜຸນການເຮັດວຽກມືອາຊີບ, ໂດຍກົງຈາກຜູ້ສ້າງ Chamilo. ບລັອກນີ້ປະກົດໃນໜ້າການຈັດການຂອງເຈົ້າ, ເບິ່ງເຫັນແຕ່ຜູ້ຈັດການເທົ່ານັ້ນ, ແລະ ອັບເດດທຸກຄັ້ງທີ່ເຈົ້າໂຫຼດໜ້າການຈັດການ."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "ປິດການສົ່ງປະກາດໄປຫາຜູ້ໃຊ້ HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "ອະນຸຍາດໃຫ້ຜູ້ຈັດການຊັ້ນເຊັິງໂຫຼດປະກັນຍ້ານສ່ວນຕົວ"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "ຖ້າເປີດໃຊ້, ຜູ້ຈັດການຊັ້ນເຊັິງສາມາດໂຫຼດປະກັນຍ້ານໄດ້ເຖິງແມ່ນວ່າມັນບໍ່ໄດ້ປະກາສະເໜີສາທາລະນະ."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "ຖ້າບໍ່ເປັນຫວ່າງ, ຂະບວນການສ້າງຄອສຈະຊອກຫາບາງຊ່ອງໃນໂປຣໄຟລ໌ຜູ້ໃຊ້ ແລະ ເຕີບຕົວອັດຕະໂນມັດສຳລັບຄອສ. ຕົວຢ່າງ, ຄູທີ່ຊ່ຽວຊານໃນການຕະຫຼາດດິຈິຕອລສາມາດຕັ້ງຄ່າສັນຍາລັກ « ການຕະຫຼາດດິຈິຕອລ » ອັດຕະໂນມັດໃນຄອສທີ່ສ້າງ."
+
+msgid "Main menu entries"
+msgstr "ຂໍ້ມູນເຂົ້າຫຼັກແມ່ນະມະນັດ"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "ເລືອກຂໍ້ມູນເຂົ້າທີ່ເຈົ້າຢາກໃຫ້ປະກົດໃນເນີມຫຼັກ"
+
+msgid "Main menu entries per role"
+msgstr "ຂໍ້ມູນເຂົ້າຫຼັກແມ່ນະມະນັດຕາມບົດບາດ"
+
+msgid "Define header tabs visibility per role."
+msgstr "ກຳນົດການເບິ່ງເຫັນຊັ້ນແຖວເຈື້ອນຕາມບົດບາດ."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "ຕັ້ງຄ່າຕົວເລືອກທີ່ເຈົ້າຢາກໃຫ້ປະກົດໃນການທີ່ຈະໄປຮອດຕາຕະລາງເພື່ອສະແດງແຖວນັ້ນໜ້ອຍຫຼືຫຼາຍກວ່າໃນໜ້າໜຶ່ງ. ຕົວຢ່າງ [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "ອາເຣທີ່ມີຄຸນສົມບັດເພີ່ມເຕີມທີ່ເຈົ້າສາມາດເປີດໃຊ້ສຳລັບເຄື່ອງເມີນວີດີໂອໃນ Chamilo. ຕົວເລືອກລວມທັງ 'speed', ທີ່ອະນຸຍາດໃຫ້ເຈົ້າเปลี่ยนຄວາມໄວການເກັບກຳວີດີໂອ."
+
+msgid "Mail: character set"
+msgstr "ອີເມວ: ຊຸດອັກສອນ"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "ຖ້າທ່ານຕ້ອງການກົหนด charset ທີ່ຈະໃຊ້ເມື່ອສົ່ງອີເມວເຫຼົ່ານີ້. ປ່ອຍໄວ້ເປົ່າ ຖ້າທ່ານບໍ່ແນ່ໃຈ."
+
+msgid "Mail: Debug"
+msgstr "ອີເມວ: Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "ເລືອກວ່າທ່ານຕ້ອງການເປີດໃຊ້ log debug ການສົ່ງອີເມວ ຫຼືບໍ່. ເຫຼົ່ານີ້ຈະໃຫ້ຂໍ້ມູນເພີ່ມເຕີມກ່ຽວກັບສິ່ງທີ່ເກີດຂຶ້ນເມື່ອເຊື່ອມຕໍ່ກັບບໍລິການອີເມວ, ແຕ່ບໍ່ງາມ ແລະອາດທຳລາຍການອອກແບບໜ້າ. ໃຊ້ເທົ່ານັ້ນເມື່ອບໍ່ມີກິດຈະກຳຜູ້ໃຊ້."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "ອີເມວ: ຫຼີກເວັ້ນການໃຊ້ LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "ບາງ client ອີເມວບໍ່ເຂົ້າໃຈຮູບແບບ LD+JSON ທີ່ອະທິບາຍ, ສະແດງເປັນ JSON string ທີ່ແລ່ນເປົ່າໃຫ້ຜູ້ໃຊ້ສຸດທ້າຍ. ຖ້າເປັນກໍລະນີຂອງທ່ານ, ທ່ານອາດຈະຕ້ອງການກົດຕັ້ງຕົວແປນດ້ານລຸ່ມນີ້ເປັນ 'false' ເພື່ອປິດ header ນີ້."
+
+msgid "Mail: DKIM headers"
+msgstr "ອີເມວ: DKIM headers"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "ໃສ່ JSON array ຂອງການຕັ້ງຄ່າ DKIM ຂອງທ່ານ (ເບິ່ງຕົວຢ່າງ)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "ອີເມວ: XOAuth2 options"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "ຖ້າທ່ານໃຊ້ບໍລິການອີເມວທີ່ອີງໃສ່ XOAuth2, ໃຊ້ການຕັ້ງນີ້ໃນ JSON ເພື່ອບັນທຶກການຕັ້ງຄ່າເປັນພິເສດຂອງທ່ານ (ເບິ່ງຕົວຢ່າງ) ແລະເລືອກ XOAuth2 ໃນການຕັ້ງຄ່າບໍລິການອີເມວ."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "ກົດລະຫັດປະເພດສິ່ງແວດລ້ອມ: \"prod\" (ການຜະລິດປົກກະຕິ), \"validation\" (ຄ້າຍກັບການຜະລິດແຕ່ບໍ່ລາຍງານສະຖິຕິ), ຫຼື \"test\" (ໂໝດ debug ດ້ວຍເຄື່ອງມືນັກພັດທະນາເຊັ່ນ ເຄື່ອງບຽງບໍ່ແປ)."
+
+msgid "Global limit of users per course"
+msgstr "ຂອບເຂດສູງສຸດຜູ້ໃຊ້ທັງໝົດຕໍ່ຄອສ"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "ກົດລະຫັດຈຳນວນເຢື້ອສູງສຸດຂອງຜູ້ໃຊ້ (ຮວມທັງອາຈານ) ທີ່ອະນຸຍາດໃຫ້ລົງทะບຽນໃນຄອສດຽວກັນໃນພລັດຟອມ. ກົດຄ່ານີ້ເປັນ 0 ເພື່ອປິດການຈຳກັດ. ນີ້ຊ່ວຍຫຼີກເວັ້ນຄອສທີ່ໂຫວດໃນປະຕູເປີດ."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "ເປີດໃຊ້ເພື່ອໃຊ້ array ເພື່ອກົດລະຫັດບົດບາດໃດທີ່ຄວນแสดงຢ່າງຈະແຈ້ງ ແລະໃດທີ່ຄວນປົກພູດ."
+
+msgid "Show base course posts in session course"
+msgstr "ສະແດງບັນຫຼັກຄອສໃນຄອສຊັ້ນການຮຽນ"
+
+msgid "Limit identical email usage"
+msgstr "ຈຳກັດການໃຊ້ອີເມວທີ່ເທົ່າເທົ່າກັນ"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr ""
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr ""
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr ""
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr ""
+
+msgid "Redirect after login (per profile)"
+msgstr ""
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr ""
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr ""
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr ""
+
+msgid "Array defining host and port for the LDAP server."
+msgstr ""
+
+msgid "Enable 2FA"
+msgstr ""
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr ""
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr ""
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr ""
+
+msgid "Show remaining days in My Sessions"
+msgstr ""
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr ""
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr ""
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr ""
+
+msgid "Disclose AI assistance"
+msgstr ""
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr ""
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr ""
+
+msgid "Session Catalog Settings"
+msgstr ""
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr ""
+
+msgid "Show Course Descriptions"
+msgstr ""
+
+msgid "Display course descriptions within the catalog listing."
+msgstr ""
+
+msgid "Published Courses Only"
+msgstr ""
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr ""
+
+msgid "Display Catalog on Homepage"
+msgstr ""
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr ""
+
+msgid "Hide Public Link"
+msgstr ""
+
+msgid "Remove the public URL link from course cards."
+msgstr "ລົບລິ້ງ URL ສາທາລະນະອອກຈາກກາດຄອສ."
+
+msgid "Only Selected Courses"
+msgstr "ພຽງແຕ່ຄອສທີ່ເລືອກ"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "ສະແດງພຽງແຕ່ຄອສທີ່ເລືອກດ້ວຍມືໃນໜ້າການລາຍການຄອສ."
+
+msgid "Allow Student Browsing"
+msgstr "ອະນຸຍາດໃຫ້ນັກຮຽນຊອກຫາ"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "ອະນຸຍາດໃຫ້ນັກຮຽນຊອກຫາແລະກັ່ນຕອງໜ້າການລາຍການຄອສ."
+
+msgid "Hide Private Courses"
+msgstr "ປິດບັນຊີຄອສສ່ວນຕົວ"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "ຈໍາກັດຄອສສ່ວນຕົວອອກຈາກການສະແດງໜ້າການລາຍການ."
+
+msgid "Show Courses & Sessions"
+msgstr "ສະແດງຄອສ ແລະ ຊັ້ນການຮຽນ"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "ລວມທັງຄອສແລະຊັ້ນການຮຽນໃນການຈັດລຽງຜົນໜ້າການລາຍການ."
+
+msgid "Auto Session Subscription"
+msgstr "ການລົງທະບຽນຊັ້ນການຮຽນອັດຕະໂນມັດ"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "ເປີດໃຊ້ການລົງທະບຽນຊັ້ນການຮຽນອັດຕະໂນມັດສຳລັບຜູ້ໃຊ້."
+
+msgid "Subscription in Session View"
+msgstr "ການລົງທະບຽນໃນໜ້າຊັ້ນການຮຽນ"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "ອະນຸຍາດໃຫ້ຜູ້ໃຊ້ລົງທະບຽນຄອສໂດຍກົງຈາກໜ້າຊັ້ນການຮຽນຂອງເຂົາເຈົ້າ."
+
+msgid "Enable redirection plugin"
+msgstr "ເປີດໃຊ້ພລັກອິນເລື່ອງຈັດທິດ"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "ອາເຣທີທີ່ກຳນົດ 'ມື້' ແລະ 'ເດືອນ' ເພື່ອກຳນົດວັນທີສຳລັບບັນຊີຫມົດອາຍຸເມື່ອຜູ້ໃຊ້ເຂົ້າສູ່ລະບົບຄັ້ງທຳອິດ."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "ອາເຣທີຂອງບົດບາດ => ເລກທີ່ສະແດງເຖິງຈຳນວນມື້ທີ່ບັນຊີມີກ່ອນຫມົດອາຍຸ, ຕາມບົດບາດ."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "ສະໜາມຜູ້ໃຊ້ເພີ່ມເຕີມທີ່ໃຊ້ສຳລັບການຊອກຫາແລະຕັ້ງຊື່ຊັ້ນການຮຽນ"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "ການຕັ້ງນີ້ກຳນົດກະດູກສະໜາມຜູ້ໃຊ້ເພີ່ມເຕີມ (ຕົວຢ່າງ, \"company\") ທີ່ຈະໃຊ້ສຳລັບການຊອກຫາຜູ້ໃຊ້ແລະກຳນົດຊື່ຂອງຊັ້ນການຮຽນເມື່ອລົງທະບຽນນັກຮຽນຈາກ /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "ເຮັດສ້າງຄຳສັບຄຳຫມາຍ"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "ອະນຸຍາດໃຫ້ຄູສາວຮ້ອງຂໍຄຳສັບຄຳຫມາຍທີ່ສ້າງດ້ວຍ AI ໃນຄອສຂອງເຂົາເຈົ້າ. ນີ້ຈະສ້າງ 20 ຄຳສັບອີງຕາມຊື່ຄອສແລະຄຳອະທິບາຍທົ່ວໄປໃນເຄື່ອງມືອະທິບາຍຄອສ. ຖ້າໃຊ້ຫຼາຍກວ່າຄັ້ງດຽວ, ມັນຈະຈໍາກັດຄຳສັບທີ່ມີຢູ່ໃນກົດລະບິດນັ້ນ (ໃຫ້ແນ່ໃຈວ່າເນື້ອຫາສາມາດແບ່ງປັນຫຼືການບໍລິການ AI ທີ່ຕັ້ງค่าໄດ້)."
+
+msgid "Video generator"
+msgstr "ເຮັດສ້າງວິດີໂອ"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "ສ້າງວິດີໂອອີງຕາມການເຄື່ອນໄຫວຫຼືເນື້ອຫາໂດຍໃຊ້ AI (ນີ້ອາດຈະໃຊ້ແທກເຊັນເພົາແພ)."
+
+msgid "Course analyser"
+msgstr "ການວິເຄາະຄອສ"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "ວິເຄາະຊັບພະຍາກອນທັງຫມົດໃນຄອສດຽວຫຼືຫຼາຍຄອສແລະຝຶກ AI ລ່ວງໜ້າເພື່ອຕອບຄຳຖາມໃດໆກ່ຽວກັບຄອສນີ້ຫຼືຄອສເຫຼົ່ານີ້ (ໃຫ້ແນ່ໃຈວ່າເນື້ອຫາສາມາດແບ່ງປັນຫຼືການບໍລິການ AI ທີ່ຕັ້ງค่าໄດ້)."
+
+msgid "Test/development"
+msgstr "ທົດສອບ/ພັດທະນາ"
+
+msgid "Crons"
+msgstr "Crons"
+
+msgid "Editor"
+msgstr "ບັດເດີດ"
+
+msgid "Gradebook"
+msgstr "ສຳຮອງຄະແນນ"
+
+msgid "Internationalization"
+msgstr "ການລຳລະຊື່ສາກົນ"
+
+msgid "User profiles"
+msgstr "ໂປຣໄຟລ໌ຜູ້ໃຊ້"
+
+msgid "Support tickets"
+msgstr "ຕົກລົງສະໜັບສະໜຸນ"
+
+msgid "Webservices"
+msgstr "ເວັບເຊີບິດ"
+
+msgid "Catalogue"
+msgstr "ໜ້າການລາຍການ"
+
+msgid "Workflows"
+msgstr "ລະບົບການເຮັດວຽກ"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "ການຕັ້ງສາມາດແກ້ໄຂໃນ sub-URLs"
+
+msgid "Show JSON Template"
+msgstr "ສະແດງແມ່ພິມ JSON"
+
+msgid "JSON Template"
+msgstr "ແມ່ພິມ JSON"
+
+msgid "Installing Xapian bindings"
+msgstr "ການຕິດຕັ້ງການເຊື່ອມຕໍ່ Xapian"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "ຕອນຈຳລຸ່ມນີ້ສະແດງຕົວຢ່າງການຕິດຕັ້ງການເຊື່ອມຕໍ່ PHP Xapian ໃນ Ubuntu 25.04 ດ້ວຍ PHP 8.3. ດັດແປງທາງແລະລຸ້ນໃຫ້ເໝາະກັບສະພາບແວດລ້ອມຂອງເຈົ້າ."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "ໃຫ້ແນ່ໃຈວ່າເຈົ້າມີພຽງແຕ່ລຸ້ນ PHP ທີ່ເຈົ້າໃຊ້ຈິງໆ (ຕົວຢ່າງ 8.3) ແລະຫຼີກເວັ້ນການປະສົມລຸ້ນຫຼາຍດ້ວຍໄດເລກທີ່ຕ່າງກັນ."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "ເມື່ອເຄັດເຊັນໄດ້ໂຫຼດຖືກຕ້ອງສຳລັບທັງ CLI ແລະເວັບເຊີເວີ, ການກວດສອບການຊອກຫາຂ້າງເທິງຄວນລາຍງານວ່າໂມດູນ Xapian ໄດ້ຕິດຕັ້ງແລ້ວ."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "ລ້າງຟາຍອັພໂຫດຊົ່ວຄາວ ແລະ ແຄຊ"
+
+msgid "Directory"
+msgstr "ໂຟນເດີ໌"
+
+msgid "Only delete files older than (minutes)"
+msgstr "ລ້າງພຽງຟາຍທີ່ເກົ່າກວ່າ (ນາທີ)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "ຕັ້ງ 0 ເພື່ອລ້າງທັງໝົດຟາຍ. ໃຊ້ຄ່າບວກ (ຕົວຢ່າງ, 60) ເພື່ອຫຼີກລ່ຽງການລຶບຟາຍທີ່ຍັງກຳລັງອັພໂຫດ."
+
+msgid "Preview only (do not delete)"
+msgstr "ເບິ່ງກ່ອນ (ບໍ່ລ້າງ)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "ຄຳເຕືອນ: ເຈົ້າກຳລັງຈະລ້າງທັງໝົດຟາຍຊົ່ວຄາວ. ການເຄື່ອນໄຫວນີ້ບໍ່ສາມາດຍົກເລີກໄດ້."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "ນີ້ຈະລ້າງທັງໝົດຟາຍຊົ່ວຄາວ. ດຳເນີນການ?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "ນີ້ຈະລ້າງຟາຍທີ່ເກົ່າກວ່າ %minutes% ນາທີ. ດຳເນີນການ?"
 

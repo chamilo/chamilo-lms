@@ -6123,43 +6123,22 @@ document.addEventListener("DOMContentLoaded", function () {
     public function displayItemPrerequisitesForm(CLpItem $lpItem)
     {
         $courseId = api_get_course_int_id();
-        $preRequisiteId = $lpItem->getPrerequisite();
-        $itemId = $lpItem->getIid();
+        $preRequisiteId = (int) ($lpItem->getPrerequisite() ?? 0);
+        $currentItemId = $lpItem->getIid();
 
-        $return = Display::page_header(get_lang('Add/edit prerequisites').' '.$lpItem->getTitle());
+        $title = get_lang('Add/edit prerequisites').' '.$lpItem->getTitle();
 
-        $return .= '<form method="POST">';
-        $return .= '<div class="table-responsive">';
-        $return .= '<table class="table table-hover">';
-        $return .= '<thead>';
-        $return .= '<tr>';
-        $return .= '<th>'.get_lang('Prerequisites').'</th>';
-        $return .= '<th width="140">'.get_lang('minimum').'</th>';
-        $return .= '<th width="140">'.get_lang('maximum').'</th>';
-        $return .= '</tr>';
-        $return .= '</thead>';
-
-        // Adding the none option to the prerequisites see http://www.chamilo.org/es/node/146
-        $return .= '<tbody>';
-        $return .= '<tr>';
-        $return .= '<td colspan="3">';
-        $return .= '<div class="radio learnpath"><label for="idnone">';
-        $return .= '<input checked="checked" id="idnone" name="prerequisites" type="radio" />';
-        $return .= get_lang('none').'</label>';
-        $return .= '</div>';
-        $return .= '</tr>';
-
-        // @todo use entitites
+        // Load scores
         $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT * FROM $tblLpItem
-                WHERE lp_id = ".$this->lp_id;
+        $sql = "SELECT * FROM $tblLpItem WHERE lp_id = ".$this->lp_id;
         $result = Database::query($sql);
 
         $selectedMinScore = [];
         $selectedMaxScore = [];
         $masteryScore = [];
+
         while ($row = Database::fetch_array($result)) {
-            if ($row['iid'] == $itemId) {
+            if ($row['iid'] == $currentItemId) {
                 $selectedMinScore[$row['prerequisite']] = $row['prerequisite_min_score'];
                 $selectedMaxScore[$row['prerequisite']] = $row['prerequisite_max_score'];
             }
@@ -6171,18 +6150,39 @@ document.addEventListener("DOMContentLoaded", function () {
         $itemRoot = $lpItemRepo->getRootItem($this->get_id());
         $em = Database::getManager();
 
-        $currentItemId = $itemId;
+        $noneChecked = (empty($preRequisiteId) || (int) $preRequisiteId === 0) ? ' checked="checked" ' : '';
+
+        $return  = '<div class="space-y-6">';
+        $return .= Display::page_header($title);
+
+        $return .= '<form method="POST" class="space-y-6">';
+        $return .= '  <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">';
+        $return .= '    <div class="overflow-x-auto">';
+        $return .= '      <table class="min-w-full divide-y divide-gray-200">';
+        $return .= '        <thead class="bg-gray-20">';
+        $return .= '          <tr>';
+        $return .= '            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">'.get_lang('Prerequisites').'</th>';
+        $return .= '            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-36">'.get_lang('minimum').'</th>';
+        $return .= '            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-36">'.get_lang('maximum').'</th>';
+        $return .= '          </tr>';
+        $return .= '        </thead>';
+        $return .= '        <tbody class="divide-y divide-gray-100 bg-white">';
+
+        // None row
+        $return .= '          <tr class="hover:bg-gray-20">';
+        $return .= '            <td colspan="3" class="px-6 py-4">';
+        $return .= '              <label for="idnone" class="flex items-center gap-3 cursor-pointer select-none">';
+        $return .= '                <input '.$noneChecked.' id="idnone" name="prerequisites" type="radio" value="0" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />';
+        $return .= '                <span class="text-sm text-gray-800">'.get_lang('none').'</span>';
+        $return .= '              </label>';
+        $return .= '            </td>';
+        $return .= '          </tr>';
+
         $options = [
             'decorate' => true,
-            'rootOpen' => function () {
-                return '';
-            },
-            'rootClose' => function () {
-                return '';
-            },
-            'childOpen' => function () {
-                return '';
-            },
+            'rootOpen' => function () { return ''; },
+            'rootClose' => function () { return ''; },
+            'childOpen' => function () { return ''; },
             'childClose' => '',
             'nodeDecorator' => function ($item) use (
                 $currentItemId,
@@ -6190,12 +6190,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 $courseId,
                 $selectedMaxScore,
                 $selectedMinScore,
+                $masteryScore,
                 $displayOrder,
                 $lpItemRepo,
                 $em
             ) {
                 $itemId = $item['iid'];
                 $type = $item['itemType'];
+
+                if ($itemId == $currentItemId) {
+                    return '';
+                }
+                if ($displayOrder < $item['displayOrder']) {
+                    return '';
+                }
+
                 $iconName = str_replace(' ', '', $type);
                 switch ($iconName) {
                     case 'category':
@@ -6209,43 +6218,52 @@ document.addEventListener("DOMContentLoaded", function () {
                         break;
                 }
 
-                if ($itemId == $currentItemId) {
-                    return '';
-                }
-
-                if ($displayOrder < $item['displayOrder']) {
-                    return '';
-                }
-
                 $selectedMaxScoreValue = isset($selectedMaxScore[$itemId]) ? $selectedMaxScore[$itemId] : $item['maxScore'];
                 $selectedMinScoreValue = $selectedMinScore[$itemId] ?? 0;
                 $masteryScoreAsMinValue = $masteryScore[$itemId] ?? 0;
 
-                $return = '<tr>';
-                $return .= '<td '.((TOOL_QUIZ != $type && TOOL_HOTPOTATOES != $type) ? ' colspan="3"' : '').'>';
-                $return .= '<div style="margin-left:'.($item['lvl'] * 20).'px;" class="radio learnpath">';
-                $return .= '<label for="id'.$itemId.'">';
+                $itemIdInt = (int) $itemId;
+                $refInt    = (int) ($item['ref'] ?? 0);
 
                 $checked = '';
-                if (null !== $preRequisiteId) {
-                    $checked = in_array($preRequisiteId, [$itemId, $item['ref']]) ? ' checked="checked" ' : '';
+                if ($preRequisiteId !== 0 && ($preRequisiteId === $itemIdInt || ($refInt !== 0 && $preRequisiteId === $refInt))) {
+                    $checked = ' checked="checked" ';
                 }
 
-                $disabled = 'dir' === $type ? ' disabled="disabled" ' : '';
+                $isDisabled = ('dir' === $type);
+                $disabledAttr = $isDisabled ? ' disabled="disabled" ' : '';
+                $rowHover = $isDisabled ? '' : ' hover:bg-gray-10';
+                $labelClass = $isDisabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer';
 
-                $return .= '<input
-                    '.$checked.' '.$disabled.'
-                    id="id'.$itemId.'"
-                    name="prerequisites"
-                    type="radio"
-                    value="'.$itemId.'" />';
+                $indentPx = (int) ($item['lvl'] ?? 0) * 20;
 
-                $return .= $icon.'&nbsp;&nbsp;'.$item['title'].'</label>';
-                $return .= '</div>';
-                $return .= '</td>';
+                $radio = '
+                <label for="id'.$itemId.'" class="flex items-center gap-3 select-none '.$labelClass.'" style="padding-left:'.$indentPx.'px;">
+                    <input
+                        '.$checked.' '.$disabledAttr.'
+                        id="id'.$itemId.'"
+                        name="prerequisites"
+                        type="radio"
+                        value="'.$itemId.'"
+                        class="h-4 w-4 border-gray-50 text-indigo-600 focus:ring-indigo-500"
+                    />
+                    <span class="flex items-center gap-2 text-sm text-gray-800">'.$icon.'<span>'.$item['title'].'</span></span>
+                </label>
+            ';
 
+                $return = '<tr class="'.$rowHover.'">';
+
+                $isScored = (TOOL_QUIZ == $type || TOOL_HOTPOTATOES == $type);
+
+                // Main cell
+                if ($isScored) {
+                    $return .= '<td class="px-6 py-3">'.$radio.'</td>';
+                } else {
+                    $return .= '<td colspan="3" class="px-6 py-3">'.$radio.'</td>';
+                }
+
+                // Score inputs
                 if (TOOL_QUIZ == $type) {
-                    // let's update max_score Tests information depending of the Tests Advanced properties
                     $exercise = new Exercise($courseId);
                     /** @var CLpItem $itemEntity */
                     $itemEntity = $lpItemRepo->find($itemId);
@@ -6257,61 +6275,26 @@ document.addEventListener("DOMContentLoaded", function () {
                     $item['maxScore'] = $exercise->getMaxScore();
 
                     if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
-                        // Backwards compatibility with 1.9.x use mastery_score as min value
                         $selectedMinScoreValue = $masteryScoreAsMinValue;
                     }
-                    $return .= '<td>';
-                    $return .= '<input
-                        class="form-control"
-                        size="4" maxlength="3"
-                        name="min_'.$itemId.'"
-                        type="number"
-                        min="0"
-                        step="any"
-                        max="'.$item['maxScore'].'"
-                        value="'.$selectedMinScoreValue.'"
-                    />';
-                    $return .= '</td>';
-                    $return .= '<td>';
-                    $return .= '<input
-                        class="form-control"
-                        size="4"
-                        maxlength="3"
-                        name="max_'.$itemId.'"
-                        type="number"
-                        min="0"
-                        step="any"
-                        max="'.$item['maxScore'].'"
-                        value="'.$selectedMaxScoreValue.'"
-                    />';
-                        $return .= '</td>';
-                    }
+
+                    $inputClass = 'w-28 rounded-lg border border-gray-50 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500';
+                    $return .= '<td class="px-6 py-3">
+                    <input class="'.$inputClass.'" name="min_'.$itemId.'" type="number" min="0" step="any" max="'.$item['maxScore'].'" value="'.$selectedMinScoreValue.'" />
+                </td>';
+                    $return .= '<td class="px-6 py-3">
+                    <input class="'.$inputClass.'" name="max_'.$itemId.'" type="number" min="0" step="any" max="'.$item['maxScore'].'" value="'.$selectedMaxScoreValue.'" />
+                </td>';
+                }
 
                 if (TOOL_HOTPOTATOES == $type) {
-                    $return .= '<td>';
-                    $return .= '<input
-                        size="4"
-                        maxlength="3"
-                        name="min_'.$itemId.'"
-                        type="number"
-                        min="0"
-                        step="any"
-                        max="'.$item['maxScore'].'"
-                        value="'.$selectedMinScoreValue.'"
-                    />';
-                        $return .= '</td>';
-                        $return .= '<td>';
-                        $return .= '<input
-                        size="4"
-                        maxlength="3"
-                        name="max_'.$itemId.'"
-                        type="number"
-                        min="0"
-                        step="any"
-                        max="'.$item['maxScore'].'"
-                        value="'.$selectedMaxScoreValue.'"
-                    />';
-                    $return .= '</td>';
+                    $inputClass = 'w-28 rounded-lg border border-gray-50 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500';
+                    $return .= '<td class="px-6 py-3">
+                    <input class="'.$inputClass.'" name="min_'.$itemId.'" type="number" min="0" step="any" max="'.$item['maxScore'].'" value="'.$selectedMinScoreValue.'" />
+                </td>';
+                    $return .= '<td class="px-6 py-3">
+                    <input class="'.$inputClass.'" name="max_'.$itemId.'" type="number" min="0" step="any" max="'.$item['maxScore'].'" value="'.$selectedMaxScoreValue.'" />
+                </td>';
                 }
                 $return .= '</tr>';
 
@@ -6321,13 +6304,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
         $tree = $lpItemRepo->childrenHierarchy($itemRoot, false, $options);
         $return .= $tree;
-        $return .= '</tbody>';
-        $return .= '</table>';
-        $return .= '</div>';
-        $return .= '<div class="form-group">';
-        $return .= '<button class="btn btn--primary" name="submit_button" type="submit">'.
-            get_lang('Save prerequisites settings').'</button>';
+
+        $return .= '        </tbody>';
+        $return .= '      </table>';
+        $return .= '    </div>';
+
+        // Footer actions
+        $return .= '    <div class="border-t border-gray-20 bg-gray-20 px-6 py-4 flex items-center justify-end">';
+        $return .= '      <button class="btn btn--primary" name="submit_button" type="submit">'.get_lang('Save prerequisites settings').'</button>';
+        $return .= '    </div>';
+
+        $return .= '  </div>';
         $return .= '</form>';
+        $return .= '</div>';
 
         return $return;
     }

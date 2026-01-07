@@ -7,22 +7,27 @@ Feature: Ticket
 
   Scenario: Check ticket categories
     Given I am on "/main/ticket/categories.php?project_id=1"
+    And I wait for the page to be loaded
     Then I should see "Enrollment"
 
   Scenario: Check ticket projects
     Given I am on "/main/ticket/projects.php?project_id=1"
+    And I wait for the page to be loaded
     Then I should see "Ticket System"
 
   Scenario: Check ticket status
     Given I am on "/main/ticket/status.php"
+    And I wait for the page to be loaded
     Then I should see "New"
 
   Scenario: Check ticket priorities
     Given I am on "/main/ticket/priorities.php"
+    And I wait very long for the page to be loaded
     Then I should see "Normal"
 
   Scenario: Create a ticket
     Given I am on "/main/ticket/new_ticket.php?project_id=1"
+    And I wait for the page to be loaded
     When I fill in the following:
       | subject | First ticket |
     And I fill in editor field "content" with "Ticket description"

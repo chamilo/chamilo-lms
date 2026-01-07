@@ -143,10 +143,6 @@ $form->addRule('user_file', get_lang('Required field'), 'required');
 
 if ('true' == api_get_setting('search_enabled')) {
     $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?'));
-    $specific_fields = get_specific_field_list();
-    foreach ($specific_fields as $specific_field) {
-        $form->addElement('text', $specific_field['code'], $specific_field['name'].' : ');
-    }
 }
 
 if (api_is_platform_admin()) {

@@ -65,8 +65,8 @@ define('TABLE_MAIN_USER_REL_TAG', 'user_rel_tag');
 define('TABLE_MAIN_EXTRA_FIELD_REL_TAG', 'extra_field_rel_tag');
 
 // Search engine
-define('TABLE_MAIN_SPECIFIC_FIELD', 'specific_field');
-define('TABLE_MAIN_SPECIFIC_FIELD_VALUES', 'specific_field_values');
+define('TABLE_MAIN_SPECIFIC_FIELD', 'search_engine_field');
+define('TABLE_MAIN_SPECIFIC_FIELD_VALUES', 'search_engine_field_values');
 define('TABLE_MAIN_SEARCH_ENGINE_REF', 'search_engine_ref');
 
 // Access URLs

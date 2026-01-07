@@ -132,33 +132,6 @@ echo Display::toolbarAction(
 }?>>
 <?php echo '<legend>'.$tool_name.' '.$promotion_data['title'].'</legend>';
 
-if ('multiple' == $add_type) {
-    $extraField = new \ExtraField('session');
-    $extra_field_list = $extraField->get_all_extra_field_by_type(ExtraField::FIELD_TYPE_SELECT);
-    $new_field_list = [];
-    if (is_array($extra_field_list) && (count($extra_field_list) > 0)) {
-        echo '<h3>'.get_lang('Filter sessions').'</h3>';
-        foreach ($extra_field_list as $new_field) {
-            echo $new_field['name'];
-            $varname = 'field_'.$new_field['variable'];
-            echo '&nbsp;<select name="'.$varname.'">';
-            echo '<option value="0">--'.get_lang('Select').'--</option>';
-            foreach ($new_field['data'] as $option) {
-                $checked = '';
-                if (isset($_POST[$varname])) {
-                    if ($_POST[$varname] == $option[1]) {
-                        $checked = 'selected="true"';
-                    }
-                }
-                echo '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';
-            }
-            echo '</select>';
-            echo '&nbsp;&nbsp;';
-        }
-        echo '<input type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" />';
-        echo '<br /><br />';
-    }
-}
 echo Display::input('hidden', 'id', $id);
 echo Display::input('hidden', 'form_sent', '1');
 echo Display::input('hidden', 'add_type', null);

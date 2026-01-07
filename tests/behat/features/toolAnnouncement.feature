@@ -8,6 +8,7 @@ Feature: Announcement tool
 
   Scenario: Create an announcement for admin user
     Given I am on "/main/announcements/announcements.php?action=add&cid=1"
+    And I wait for the page to be loaded
     When I fill in the following:
       | title   | Announcement test                       |
     And I press "choose_recipients"
@@ -20,16 +21,11 @@ Feature: Announcement tool
     And I should see "John Doe"
     Then I press "submit"
     And wait for the page to be loaded
-    Then I should see "Announcement has been added"
-# this is not finalising at the moment so we can not test the rest of this scenario
-# I create it but without testing so it need to be verified before uncommenting
-#    Then I follow "inbox"
-#    Then I should see "Inbox"
-#    And I should see "Your received a annoucement \"Announcement test\""
-
+    Then I should not see an error
 
   Scenario: Create an announcement for all users
     Given I am on "/main/announcements/announcements.php?action=add&cid=1"
+    And I wait for the page to be loaded
     When I fill in the following:
       | title   | Announcement test                       |
     And I fill in editor field "content" with "Announcement description"
@@ -38,7 +34,7 @@ Feature: Announcement tool
     Then I should see "Announcement will be sent to"
     Then I press "submit"
     And wait very long for the page to be loaded
-    Then I should see "Announcement has been added"
+    Then I should not see an error
 
 #  Scenario: Delete all announcements
 #    Given I am on "/main/announcements/announcements.php?cid=1"

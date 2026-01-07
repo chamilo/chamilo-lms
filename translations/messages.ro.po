@@ -4149,10 +4149,10 @@ msgid "works"
 msgstr "lucrari"
 
 msgid "MySql Client"
-msgstr "MySql Client"
+msgstr "Client MySql"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "Server MySql"
 
 msgid "Owner"
 msgstr "Propietar"
@@ -8286,7 +8286,7 @@ msgid "Display"
 msgstr "Prezentarea"
 
 msgid "Multiple choice"
-msgstr "Multiple choice"
+msgstr "Alegere multiplă"
 
 msgid "Multiple answer"
 msgstr "Raspunsuri multiple"
@@ -9354,7 +9354,7 @@ msgid "Tel"
 msgstr "Tel"
 
 msgid "No tel"
-msgstr "No tel"
+msgstr "Fără tel"
 
 msgid "Send mail"
 msgstr "Trimite mail"
@@ -10934,8 +10934,8 @@ msgstr "este"
 msgid "The address of"
 msgstr "Adresa"
 
-msgid "Your registration on"
-msgstr "Inregistrarea ta la"
+msgid "Your registration on %s"
+msgstr "Inregistrarea ta la %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Acest nume de utilizator este deja folosit. Foloseste butonul BACK al browser-ului pentru a alege alt nume."
@@ -14439,7 +14439,7 @@ msgid "Compose"
 msgstr "Scrie"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Portocaliu bebeluș"
 
 msgid "Blue lagoon"
 msgstr "Albastru laguna"
@@ -14454,19 +14454,19 @@ msgid "Cosmic campus"
 msgstr "Campus cosmic"
 
 msgid "Delicious Bordeaux"
-msgstr "Delicious Bordeaux"
+msgstr "Bordeaux delicios"
 
 msgid "Empire green"
 msgstr "Verde imperial"
 
 msgid "Fruity orange"
-msgstr "Fruity orange"
+msgstr "Portocaliu fructat"
 
 msgid "Medical"
 msgstr "Medical"
 
 msgid "Royal purple"
-msgstr "Royal purple"
+msgstr "Violet regal"
 
 msgid "Silver line"
 msgstr "Linie argitie"
@@ -14475,7 +14475,7 @@ msgid "Sober brown"
 msgstr "Maro sobru"
 
 msgid "Steel grey"
-msgstr "Steel Grey"
+msgstr "Gri oțel"
 
 msgid "Tasty olive"
 msgstr "Maslina gustoasa"
@@ -19376,7 +19376,7 @@ msgid "Exercise average"
 msgstr "Media exercitiului"
 
 msgid "Webcam Clip"
-msgstr "Webcam Clip"
+msgstr "Clip Webcam"
 
 msgid "Snapshot"
 msgstr "Capturati"
@@ -31447,4 +31447,397 @@ msgstr "Eroare la încărcarea resurselor."
 
 msgid "Clear search"
 msgstr "Șterge căutarea"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "În numele bazei de date sunt permise doar litere, cifre și underscore (_). Caracteristicile invalide vor fi eliminate automat."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Ce termeni și condiții generale sunt acordați utilizatorilor pentru a utiliza această platformă?"
+
+msgid "ex. {examplePassword}"
+msgstr "ex. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Bine ați venit la Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Bine ați venit pe această platformă"
+
+msgid "For more details visit %s"
+msgstr "Pentru mai multe detalii vizitați %s"
+
+msgid "Manager"
+msgstr "Manager"
+
+msgid "Mark as"
+msgstr "Marchează ca"
+
+msgid "Reply to all"
+msgstr "Răspunde tuturor"
+
+msgid "SCIM external ID"
+msgstr "SCIM ID extern"
+
+msgid "OAuth2 ID"
+msgstr "ID OAuth2"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Vă rugăm să acceptați cea mai recentă versiune a termenilor și condițiilor."
+
+msgid "Required value for operation without path"
+msgstr "Valoare obligatorie pentru operațiune fără cale"
+
+msgid "Available space (%s)"
+msgstr "Spațiu disponibil (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Indexează această descriere pentru căutarea globală"
+
+msgid "Unknown course"
+msgstr "Curs necunoscut"
+
+msgid "Certificate not found."
+msgstr "Certificat negăsit."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Jeton de securitate expirat. Vă rugăm să reîncărcați pagina și să încercați din nou."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Doar administratorii platformei pot schimba vizibilitatea cursului."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Eroare neașteptată la înscrierea utilizatorului"
+
+msgid "Search in resource logs"
+msgstr "Căutare în jurnalele de resurse"
+
+msgid "Include this learning path in the global search results"
+msgstr "Includeți această traiectorie de învățare în rezultatele căutării globale"
+
+msgid "The course code already exists"
+msgstr "Codul cursului există deja"
+
+msgid "Latest news"
+msgstr "Știri recente"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Obțineți cele mai recente știri de la Chamilo, inclusiv vulnerabilități de securitate și evenimente, direct în panoul dvs. de administrare. Aceste știri vor fi verificate pe serverul de știri Chamilo de fiecare dată când încărcați pagina de administrare și sunt vizibile doar administratorilor."
+
+msgid "Chamilo support block"
+msgstr "Bloc suport Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Obțineți sfaturi pro și o modalitate ușoară de a contacta furnizorii de servicii oficiali pentru suport profesional, direct de la creatorii Chamilo. Acest bloc apare pe pagina dvs. de administrare, este vizibil doar administratorilor și se actualizează de fiecare dată când încărcați pagina de administrare."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Ascunde opțiunea de trimitere a anunțurilor către utilizatorii HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Permite administratorilor de sesiune să descarce certificate private"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Dacă este activat, administratorii de sesiune pot descărca certificate chiar dacă nu sunt publicate public."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Dacă nu este gol, procesul de creare a cursului va căuta unele câmpuri în profilul utilizatorului și le va completa automat pentru curs. De exemplu, un profesor specializat în marketing digital ar putea seta automat un steag « marketing digital » pe fiecare curs pe care îl creează."
+
+msgid "Main menu entries"
+msgstr "Intrări meniu principal"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Bifați intrările pe care doriți să le vedeți în meniul principal"
+
+msgid "Main menu entries per role"
+msgstr "Intrări meniu principal pe rol"
+
+msgid "Define header tabs visibility per role."
+msgstr "Definiți vizibilitatea tab-urilor de antet pe rol."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Setați opțiunile pe care doriți să apară în navigarea din jurul unei tabele pentru a afișa mai puține sau mai multe rânduri pe o pagină. ex. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Matrice de funcții suplimentare pe care le puteți activa pentru redarea video în Chamilo. Opțiunile includ 'speed', care vă permite să schimbați viteza de redare a unui video."
+
+msgid "Mail: character set"
+msgstr "E-mail: set de caractere"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "În cazul în care trebuie să definiți setul de caractere de utilizat la trimiterea acelor e-mailuri. Lăsați gol dacă nu sunteți sigur."
+
+msgid "Mail: Debug"
+msgstr "E-mail: Depanare"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Selectați dacă doriți să activați jurnalele de depanare pentru trimiterea e-mailurilor. Acestea vă vor oferi mai multe informații despre ceea ce se întâmplă la conectarea la serviciul de e-mail, dar nu sunt elegante și pot afecta designul paginii. Utilizați doar când nu există activitate a utilizatorilor."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "E-mail: Evitați utilizarea LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Unele clienți de e-mail nu înțeleg formatul descriptiv LD+JSON, afișându-l ca un șir JSON liber utilizatorului final. Dacă este cazul dvs., puteți seta variabila de mai jos la 'false' pentru a dezactiva acest antet."
+
+msgid "Mail: DKIM headers"
+msgstr "E-mail: Antete DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Introduceți o matrice JSON cu setările de configurare DKIM (vezi exemplu)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "E-mail: Opțiuni XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Dacă utilizați un serviciu de e-mail bazat pe XOAuth2, utilizați această setare în JSON pentru a salva configurația specifică (vezi exemplu) și selectați XOAuth2 în setarea serviciului de e-mail."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Definește tipul de mediu: \"prod\" (producție normală), \"validation\" (ca producție dar fără raportarea statisticilor), sau \"test\" (mod depanare cu instrumente pentru dezvoltatori precum indicatori de șiruri netraduse)."
+
+msgid "Global limit of users per course"
+msgstr "Limită globală de utilizatori pe curs"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Definește un număr maxim global de utilizatori (inclusiv profesori) permis să fie înscriși într-un singur curs pe platformă. Setați această valoare la 0 pentru a dezactiva limita. Aceasta ajută la evitarea suprasolicitării cursurilor în portalurile deschise."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Activați pentru a utiliza o matrice care definește ce roluri ar trebui afișate clar și care ar trebui ascunse."
+
+msgid "Show base course posts in session course"
+msgstr "Afișați postările de bază ale cursului în cursul de sesiune"
+
+msgid "Limit identical email usage"
+msgstr "Limitați utilizarea identică a e-mailurilor"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Numărul maxim de conturi permise să împartă aceeași adresă de e-mail. Setați la 0 pentru a dezactiva această limită."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Permiteți administratorilor de sesiune să vadă toți utilizatorii pe toate URL-urile"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Dacă este activat, administratorii de sesiune pot căuta și lista utilizatori din toate URL-urile de acces, indiferent de URL-ul curent."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Activați posibilitatea utilizatorilor de a selecta fusul lor orar propriu. Odată configurat, utilizatorii vor putea vedea termenele de predare ale temelor și alte referințe temporale în fusul lor orar propriu, ceea ce va reduce erorile la momentul predării."
+
+msgid "Redirect after login (per profile)"
+msgstr "Redirecționare după autentificare (per profil)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Definiți redirecționarea per profil după autentificare folosind un obiect JSON precum {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Ascundeți caseta de acceptare legală în pagina Termeni și Condiții"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Dacă este setat pe true, elimină caseta de selectare \"Am citit și accept\" din fluxul paginii Termeni și Condiții."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Matrice care definește gazda și portul pentru serverul LDAP."
+
+msgid "Enable 2FA"
+msgstr "Activați 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Adăugați câmpuri în pagina de actualizare parolă pentru a activa 2FA folosind o aplicație autentificator TOTP. Când este dezactivat global, utilizatorii nu vor vedea câmpurile 2FA și nu vor fi solicitați pentru 2FA la autentificare, chiar dacă l-au activat anterior."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Unele funcționalități Chamilo se vor conecta la exterior de pe server. De exemplu, pentru a verifica dacă un conținut extern există la crearea unui link sau afișarea unei pagini încorporate în parcursul de învățare. Dacă serverul Chamilo utilizează un proxy pentru a ieși din rețea, aici este locul pentru a-l configura."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Activați sau dezactivați reinscrierea automată când valabilitatea cursului expiră. Job-ul cron asociat trebuie de asemenea activat."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Afișați zilele rămase în Sesiunile Mele"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Dacă este activat, datele sesiunii de pe pagina \"Sesiunile Mele\" vor fi înlocuite cu numărul de zile rămase."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Afișați \"Sondaje în așteptare\" în meniu"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Afișați un element de meniu care permite utilizatorilor accesul la sondajele lor în așteptare."
+
+msgid "Disclose AI assistance"
+msgstr "Divulgați asistența IA"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Afișați o etichetă pe orice conținut sau feedback generat sau co-generat de un sistem IA, indicând utilizatorului că conținutul a fost creat cu ajutorul unui sistem IA. Detaliile despre sistemul IA utilizat în fiecare caz sunt păstrate în baza de date pentru audit, dar nu sunt accesibile direct utilizatorului final."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "Configurație JSON pentru catalogul de cursuri: setări link-uri, filtre, opțiuni de sortare și altele."
+
+msgid "Session Catalog Settings"
+msgstr "Setări Catalog Sesiuni"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "Configurație JSON pentru catalogul de sesiuni: filtre și opțiuni de afișare."
+
+msgid "Show Course Descriptions"
+msgstr "Afișați Descrierile Cursurilor"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Afișați descrierile cursurilor în lista catalogului."
+
+msgid "Published Courses Only"
+msgstr "Doar Cursuri Publicate"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Limitați catalogul doar la cursurile marcate ca publicate."
+
+msgid "Display Catalog on Homepage"
+msgstr "Afișați Catalogul pe Pagina Principală"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Afișează blocul catalogului de cursuri pe pagina principală a platformei."
+
+msgid "Hide Public Link"
+msgstr "Ascunde link-ul public"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Elimină link-ul URL public din cardurile cursurilor."
+
+msgid "Only Selected Courses"
+msgstr "Doar cursurile selectate"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Afișează doar cursurile selectate manual în catalog."
+
+msgid "Allow Student Browsing"
+msgstr "Permite navigarea studenților"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Permite studenților să navigheze și să filtreze catalogul de cursuri."
+
+msgid "Hide Private Courses"
+msgstr "Ascunde cursurile private"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Exclude cursurile private din afișarea catalogului."
+
+msgid "Show Courses & Sessions"
+msgstr "Afișează cursuri și sesiuni"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Include atât cursuri, cât și sesiuni în rezultatele catalogului."
+
+msgid "Auto Session Subscription"
+msgstr "Înscriere automată în sesiune"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Activează înscrierea automată în sesiuni pentru utilizatori."
+
+msgid "Subscription in Session View"
+msgstr "Înscriere în vizualizarea sesiunii"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Permite utilizatorilor să se înscrie la cursuri direct de pe pagina sesiunii lor."
+
+msgid "Enable redirection plugin"
+msgstr "Activează plugin-ul de redirecționare"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Matrice care definește 'zilele' și 'lunile' pentru a seta data de expirare a contului la prima autentificare a utilizatorului."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "O matrice de rol => număr care reprezintă numărul de zile pe care le are un cont înainte de expirare, în funcție de rol."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Câmp suplimentar utilizator folosit pentru căutarea și denumirea sesiunilor"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Această setare definește cheia câmpului suplimentar utilizator (ex. \"company\") care va fi folosită pentru căutarea utilizatorilor și pentru definirea numelui sesiunii la înregistrarea studenților din /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Generator de termeni de glosar"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Permite profesorilor să solicite termeni de glosar generați de IA în cursul lor. Aceasta va genera 20 de termeni pe baza titlului cursului și a descrierii generale din instrumentul de descriere a cursului. Dacă este folosită de mai multe ori, va exclude termenii deja prezenți în acel glosar (asigurați-vă că conținutul poate fi partajat cu serviciile IA configurate)."
+
+msgid "Video generator"
+msgstr "Generator video"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Generează videoclipuri pe baza prompturilor sau conținutului folosind IA (aceasta poate consuma multe token-uri)."
+
+msgid "Course analyser"
+msgstr "Analizor de cursuri"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Analizează toate resursele dintr-unul sau mai multe cursuri și pre-antrenează modelul IA pentru a răspunde la orice întrebare despre acest/această curs/cursuri (asigurați-vă că conținutul poate fi partajat cu serviciile IA configurate)."
+
+msgid "Test/development"
+msgstr "Test/dezvoltare"
+
+msgid "Crons"
+msgstr "Cron-uri"
+
+msgid "Editor"
+msgstr "Editor"
+
+msgid "Gradebook"
+msgstr "Carnet de note"
+
+msgid "Internationalization"
+msgstr "Internaționalizare"
+
+msgid "User profiles"
+msgstr "Profiluri utilizator"
+
+msgid "Support tickets"
+msgstr "Tichete de suport"
+
+msgid "Webservices"
+msgstr "Servicii web"
+
+msgid "Catalogue"
+msgstr "Catalog"
+
+msgid "Workflows"
+msgstr "Fluxuri de lucru"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Setarea este editabilă pe sub-URL-uri"
+
+msgid "Show JSON Template"
+msgstr "Afișează șablonul JSON"
+
+msgid "JSON Template"
+msgstr "Șablon JSON"
+
+msgid "Installing Xapian bindings"
+msgstr "Instalarea legăturilor Xapian"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Următorul fragment arată un exemplu de instalare a legăturilor Xapian PHP pe Ubuntu 25.04 cu PHP 8.3. Adaptați căile și versiunile la mediul dvs."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Asigurați-vă că aveți doar versiunea PHP pe care o utilizați cu adevărat (de exemplu 8.3) și evitați amestecarea mai multor versiuni cu directoare de extensii diferite."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Odată ce extensia este încărcată corect atât pentru CLI, cât și pentru serverul web, diagnosticul de căutare de mai sus ar trebui să raporteze că modulul Xapian este instalat."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Curățare încărcări temporare și cache"
+
+msgid "Directory"
+msgstr "Director"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Șterge doar fișiere mai vechi de (minute)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Setează 0 pentru a șterge toate fișierele. Folosește o valoare pozitivă (ex. 60) pentru a evita ștergerea fișierelor în curs de încărcare."
+
+msgid "Preview only (do not delete)"
+msgstr "Previzualizare doar (nu șterge)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Atenție: ești pe cale să ștergi TOATE fișierele temporare. Această acțiune nu poate fi anulată."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Aceasta va șterge toate fișierele temporare. Continuă?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Aceasta va șterge fișiere mai vechi de %minutes% minute. Continuă?"
 

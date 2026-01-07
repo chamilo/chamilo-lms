@@ -159,9 +159,8 @@ class LinkAddEditForm extends FormValidator
             }
             $defaults['weight_mask'] = $values['weight'];
             $defaults['select_gradebook'] = $link->get_category_id();
-            if (!is_null($link->entity)) {
-                $defaults['min_score'] = $link->entity->getMinScore();
-            }
+            $defaults['min_score'] = $link->get_min_score();
+
         }
         // ELEMENT: max
         if ($link->needs_max()) {

@@ -31,7 +31,10 @@
       </template>
     </Column>
 
-    <Column :header="t('Feedback')">
+    <Column
+      v-if="showMetaColumns"
+      :header="t('Feedback')"
+    >
       <template #body="slotProps">
         <div
           v-if="slotProps.data.feedbackCount > 0"
@@ -51,7 +54,10 @@
       </template>
     </Column>
 
-    <Column :header="t('Last upload')">
+    <Column
+      v-if="showMetaColumns"
+      :header="t('Last upload')"
+    >
       <template #body="slotProps">
         {{ abbreviatedDatetime(slotProps.data.sentDate) || "-" }}
       </template>
@@ -68,7 +74,7 @@
 
 <script setup>
 import Column from "primevue/column"
-import { ref, onMounted, nextTick } from "vue"
+import { ref, onMounted, nextTick, computed } from "vue"
 import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
 import { useRoute, useRouter } from "vue-router"
@@ -78,7 +84,7 @@ import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseTable from "../basecomponents/BaseTable.vue"
 import CorrectAndRateModal from "./CorrectAndRateModal.vue"
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const { abbreviatedDatetime } = useFormatDate()
 const router = useRouter()
 const route = useRoute()
@@ -89,6 +95,7 @@ const loading = ref(false)
 
 const showCorrectAndRateDialog = ref(false)
 const correctingItem = ref(null)
+const showMetaColumns = computed(() => false)
 
 function openCommentDialog(item) {
   correctingItem.value = null
@@ -105,7 +112,7 @@ function handleDialogVisibility(newVal) {
   }
 }
 
-onMounted(async () => {
+async function loadAssignments() {
   loading.value = true
   try {
     const response = await cStudentPublicationService.findStudentAssignments()
@@ -114,10 +121,14 @@ onMounted(async () => {
       id: item.iid,
     }))
   } catch (e) {
-    console.error("Error loading student assignments", e)
+    console.error("[Assignments] Error loading student assignments", e)
   } finally {
     loading.value = false
   }
+}
+
+onMounted(async () => {
+  await loadAssignments()
 })
 
 function getNodeIdFromAssignment(item) {
@@ -153,11 +164,47 @@ function goToAssignmentDetail(assignment) {
   })
 }
 
+function pad2(n) {
+  return String(n).padStart(2, "0")
+}
+
+function getLocalePrefix(localeValue) {
+  if (typeof localeValue !== "string" || !localeValue) return "en"
+  // Accept both "es_ES" and "es-ES"
+  return localeValue.replace("-", "_").split("_")[0]
+}
+
+/**
+ * Format stored datetime values the same way the DatePicker shows them:
+ * - API returns ISO strings with timezone (e.g. +00:00)
+ * - Editing form uses new Date(iso) => browser timezone
+ * - List must do the same conversion
+ */
 function formatStored(val) {
   if (!val) return "—"
+
   const s = String(val)
+
+  // Prefer Date parsing to respect timezone and match the editing form behavior
+  const d = new Date(s)
+  if (!Number.isNaN(d.getTime())) {
+    const day = pad2(d.getDate())
+    const month = pad2(d.getMonth() + 1)
+    const year = d.getFullYear()
+    const hour = pad2(d.getHours())
+    const min = pad2(d.getMinutes())
+
+    const prefix = getLocalePrefix(locale.value)
+    // Keep the same behavior as BaseCalendar: en => mm/dd, others => dd/mm
+    if (prefix === "en") return `${month}/${day}/${year} ${hour}:${min}`
+    return `${day}/${month}/${year} ${hour}:${min}`
+  }
+
+  // Fallback to legacy regex formatting (kept to avoid regressions)
   const m = s.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/)
   if (m) return `${m[3]}/${m[2]}/${m[1]} ${m[4]}:${m[5]}`
+
+  console.warn("[Assignments] Failed to parse date, falling back to abbreviated", { val: s })
   return abbreviatedDatetime(s)
 }
 </script>

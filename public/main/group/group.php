@@ -43,7 +43,7 @@ $(function() {
 });
  </script>';
 $nameTools = get_lang('Groups management');
-
+Event::event_access_tool(TOOL_GROUP);
 /*
  * Self-registration and un-registration
  */

@@ -59,8 +59,8 @@ Install the software stack and Chamilo using the commands below.
 apt update && apt -y upgrade
 apt install -y apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,redis,soap,xml,zip} git unzip curl certbot
 mysql -e "GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost IDENTIFIED BY 'chamilo2';"
-cd /var/www && wget https://github.com/chamilo/chamilo-lms/releases/download/v2.0.0-beta.1/chamilo-2.0.0-beta.1.tar.gz
-tar zxf chamilo-2.0.0-beta.1.tar.gz
+cd /var/www && wget https://github.com/chamilo/chamilo-lms/releases/download/v2.0.0-beta.1/chamilo-2.0.0-beta.2.tar.gz
+tar zxf chamilo-2.0.0-beta.2.tar.gz
 mv chamilo-2.0.0-beta.1 chamilo
 cd chamilo
 cp public/main/install/apache.dist.conf /etc/apache2/sites-available/my.chamilo.net.conf

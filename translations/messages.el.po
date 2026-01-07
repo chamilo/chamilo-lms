@@ -192,7 +192,7 @@ msgid "Enter the skill name to search"
 msgstr "Πληκτρολογήστε το όνομα της δεξιότητας που ψάχνετε"
 
 msgid "Skills search"
-msgstr "Skills search"
+msgstr "Αναζήτηση δεξιοτήτων"
 
 msgid "Choose a background color"
 msgstr "Επιλέξτε χρώμα φόντου"
@@ -8537,7 +8537,7 @@ msgid "Last name"
 msgstr "Επίθετο"
 
 msgid "Slideshow conversion"
-msgstr "Slideshow conversion"
+msgstr "Μετατροπή slideshow"
 
 msgid "File upload"
 msgstr "Ανέβασμα αρχείου"
@@ -9473,7 +9473,7 @@ msgid "Not yet begun"
 msgstr "Δεν έχει ξεκινήσει ακόμα"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d %B %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Μη έγκυρος φάκελος: Παρακαλούμε δημιουργήστε έναν φάκελο με όνομα images στο εργαλείο έγγραφα σας ώστε οι εικόνες να μπορούν να ανέβουν σε αυτόν τον φάκελο"
@@ -9536,7 +9536,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "Η αποστολή αρχείου απέτυχε: αυτή η επέκταση αρχείου ή τύπος αρχείου απαγορεύεται"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "Διεύθυνση URL OpenID"
 
 msgid "The file is too big to upload."
 msgstr "Το αρχείο είναι πολύ μεγάλο για αποστολή."
@@ -10076,7 +10076,7 @@ msgid "Overview"
 msgstr "Ανασκόπηση ρόλων και δικαιωμάτων"
 
 msgid "API keys"
-msgstr "API keys"
+msgstr "Κλειδιά API"
 
 msgid "Generate API key"
 msgstr "Δημιουργία κλειδιού API"
@@ -10933,8 +10933,8 @@ msgstr "Οι αλλαγές σας αποθηκεύτηκαν"
 msgid "The address of"
 msgstr "Διεύθυνση"
 
-msgid "Your registration on"
-msgstr "Η εγγραφή σας στην πλατφόρμα"
+msgid "Your registration on %s"
+msgstr "Η εγγραφή σας στην πλατφόρμα %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Το όνομα χρήστη που επιλέξατε χρησιμοποιείται! Χρησιμοποιήστε το πλήκτρο «επιστροφή» του browser σας και ξαναδοκιμάστε."
@@ -13061,10 +13061,10 @@ msgid "Learning Path Help"
 msgstr "Βοήθεια -- Δομή Μαθήματος"
 
 msgid "Description Help"
-msgstr "Description Help"
+msgstr "Βοήθεια Περιγραφής"
 
 msgid "Links Help"
-msgstr "Links Help"
+msgstr "Βοήθεια Συνδέσμων"
 
 msgid "My Courses Help"
 msgstr "Βοήθεια Μαθημάτων μου"
@@ -13073,7 +13073,7 @@ msgid "Agenda Help"
 msgstr "Ατζέντα"
 
 msgid "Announcements Help"
-msgstr "Announcements Help"
+msgstr "Βοήθεια Ανακοινώσεων"
 
 msgid "Chat Help"
 msgstr "Ζωντανή Συζήτηση"
@@ -13082,31 +13082,31 @@ msgid "Assignments Help"
 msgstr "Βοήθεια"
 
 msgid "Reporting Help"
-msgstr "Reporting Help"
+msgstr "Βοήθεια Αναφορών"
 
 msgid "Induction-type session"
 msgstr "Εισαγωγική συνεδρία"
 
 msgid "Publish survey"
-msgstr "Publish survey"
+msgstr "Δημοσίευση έρευνας"
 
 msgid "Compare questions"
-msgstr "Compare questions"
+msgstr "Σύγκριση ερωτήσεων"
 
 msgid "Information updated"
-msgstr "Information updated"
+msgstr "Οι πληροφορίες ενημερώθηκαν"
 
 msgid "Survey title"
-msgstr "Survey title"
+msgstr "Τίτλος έρευνας"
 
 msgid "Survey introduction"
-msgstr "Survey introduction"
+msgstr "Εισαγωγή έρευνας"
 
 msgid "Create survey"
-msgstr "Create survey"
+msgstr "Δημιουργία έρευνας"
 
 msgid "Survey template"
-msgstr "Survey template"
+msgstr "Πρότυπο έρευνας"
 
 msgid "Please enter survey title"
 msgstr "Πληκτρολογήστε τον τίτλο της έρευνας"
@@ -13115,19 +13115,19 @@ msgid "Please Enter Valid Date"
 msgstr "Πληκτρολογήστε έγκυρη ημερομηνία"
 
 msgid "Not published"
-msgstr "Not published"
+msgstr "Δεν έχει δημοσιευτεί"
 
 msgid "Advanced report allows to choose the user and the questions to see more precis informations"
 msgstr "Η προχωρημένη αναφορά επιτρέπει την επιλογή χρήστη και ερωτήσεων για πιο ακριβείς πληροφορίες"
 
 msgid "Advanced report"
-msgstr "Advanced report"
+msgstr "Προχωρημένη αναφορά"
 
 msgid "Complete report allows to see all the results given by the people questioned, and export it in csv (for Excel)"
 msgstr "Η πλήρης αναφορά επιτρέπει να δείτε όλα τα αποτελέσματα από τους ερωτηθέντες και να τα εξάγετε σε csv (για Excel)"
 
 msgid "Complete report"
-msgstr "Complete report"
+msgstr "Πλήρης αναφορά"
 
 msgid "Send the survey to these addresses only"
 msgstr "Αποστολή έρευνας μόνο σε αυτές τις διευθύνσεις"
@@ -13145,7 +13145,7 @@ msgid "Export in Excel format"
 msgstr "Εξαγωγή σε μορφή Excel"
 
 msgid "Comparative results"
-msgstr "Comparative results"
+msgstr "Συγκριτικά αποτελέσματα"
 
 msgid "Select the data you want to compare"
 msgstr "Επιλογή δεδομένων προς σύγκριση"
@@ -13160,16 +13160,16 @@ msgid "No Surveys have been shared yet"
 msgstr "Δεν έχουν κοινοποιηθεί έρευνες ακόμη"
 
 msgid "View survey"
-msgstr "View survey"
+msgstr "Προβολή έρευνας"
 
 msgid "Select Display Type :"
 msgstr "Επιλογή τύπου εμφάνισης:"
 
 msgid "Feedback message"
-msgstr "Feedback message"
+msgstr "Μήνυμα ανατροφοδότησης"
 
 msgid "Survey reporting"
-msgstr "Survey reporting"
+msgstr "Αναφορές έρευνας"
 
 msgid "No survey available"
 msgstr "Δεν υπάρχει διαθέσιμη έρευνα"
@@ -13226,22 +13226,22 @@ msgid "Edit survey information"
 msgstr "Επεξεργασία πληροφοριών έρευνας"
 
 msgid "View questions"
-msgstr "View questions"
+msgstr "Προβολή ερωτήσεων"
 
 msgid "Finish survey"
-msgstr "Finish survey"
+msgstr "Ολοκλήρωση έρευνας"
 
 msgid "Questions are added"
 msgstr "Προστέθηκαν ερωτήσεις"
 
 msgid "Delete survey"
-msgstr "Delete survey"
+msgstr "Διαγραφή έρευνας"
 
 msgid "Survey list"
-msgstr "Survey list"
+msgstr "Λίστα ερευνών"
 
 msgid "Survey attached"
-msgstr "Survey attached"
+msgstr "Έρευνα συννημμένη"
 
 msgid "Question by type"
 msgstr "Ερώτηση ανά τύπο"
@@ -13262,25 +13262,25 @@ msgid "Save and exit"
 msgstr "Αποθήκευση και έξοδος"
 
 msgid "View answers"
-msgstr "View answers"
+msgstr "Προβολή απαντήσεων"
 
 msgid "Create from an existing survey"
 msgstr "Δημιουργία από υπάρχουσα έρευνα"
 
 msgid "Survey name"
-msgstr "Survey name"
+msgstr "Όνομα έρευνας"
 
 msgid "Survey subtitle"
-msgstr "Survey subtitle"
+msgstr "Υπότιτλος έρευνας"
 
 msgid "Share survey"
-msgstr "Share survey"
+msgstr "Κοινή χρήση έρευνας"
 
 msgid "Final thanks"
-msgstr "Final thanks"
+msgstr "Τελικές ευχαριστίες"
 
 msgid "Edit survey"
-msgstr "Edit survey"
+msgstr "Επεξεργασία έρευνας"
 
 msgid "Or return to survey overview"
 msgstr "Ή επιστροφή στην επισκόπηση έρευνας"
@@ -13295,13 +13295,13 @@ msgid "You have finished this survey."
 msgstr "Ολοκληρώσατε αυτή την έρευνα."
 
 msgid "Survey preview"
-msgstr "Survey preview"
+msgstr "Προεπισκόπηση έρευνας"
 
 msgid "Invalid survey"
-msgstr "Invalid survey"
+msgstr "Μη έγκυρη έρευνα"
 
 msgid "Edit question"
-msgstr "Edit question"
+msgstr "Επεξεργασία ερώτησης"
 
 msgid "This type does not exist"
 msgstr "Ο τύπος δεν υπάρχει"
@@ -13322,28 +13322,28 @@ msgid "The question has been updated."
 msgstr "Η ερώτηση ενημερώθηκε."
 
 msgid "Remove option"
-msgstr "Remove option"
+msgstr "Κατάργηση επιλογής"
 
 msgid "Add option"
-msgstr "Add option"
+msgstr "Προσθήκη επιλογής"
 
 msgid "Answer options"
-msgstr "Answer options"
+msgstr "Επιλογές απάντησης"
 
 msgid "Dropdown"
 msgstr "Dropdown"
 
 msgid "Page break"
-msgstr "Page break"
+msgstr "Κενό σελίδας"
 
 msgid "Survey invitations"
-msgstr "Survey invitations"
+msgstr "Προσκλήσεις έρευνας"
 
 msgid "Invitation code"
-msgstr "Invitation code"
+msgstr "Κωδικός πρόσκλησης"
 
 msgid "Invitation date"
-msgstr "Invitation date"
+msgstr "Ημερομηνία πρόσκλησης"
 
 msgid "Answered"
 msgstr "Answered"
@@ -13352,10 +13352,10 @@ msgid "You can invite additional users to fill the survey. To do so you can type
 msgstr "Μπορείτε να προσκαλέσετε επιπλέον χρήστες να συμπληρώσουν την έρευνα. Για να το κάνετε, πληκτρολογήστε τις διευθύνσεις email τους εδώ χωρισμένες με κόμμα ή ερωτηματικό."
 
 msgid "Mail subject"
-msgstr "Mail subject"
+msgstr "Θέμα email"
 
 msgid "invitations sent."
-msgstr "invitations sent."
+msgstr "προσκλήσεις εστάλησαν."
 
 msgid "The survey has been deleted."
 msgstr "Η έρευνα διαγράφηκε."
@@ -13367,7 +13367,7 @@ msgid "Invited"
 msgstr "Invited"
 
 msgid "Reset filter"
-msgstr "Reset filter"
+msgstr "Επαναφορά φίλτρου"
 
 msgid "Export current report"
 msgstr "Εξαγωγή τρέχουσας αναφοράς"
@@ -13382,7 +13382,7 @@ msgid "Select the question on the Y axis"
 msgstr "Επιλογή ερώτησης στον άξονα Y"
 
 msgid "Comparative report"
-msgstr "Comparative report"
+msgstr "Συγκριτικός αναφοράς"
 
 msgid "This screen displays an exact copy of the form as it was filled by the user"
 msgstr "Αυτή η οθόνη εμφανίζει ακριβές αντίγραφο της φόρμας όπως συμπληρώθηκε από τον χρήστη"
@@ -13391,19 +13391,19 @@ msgid "Select user who filled the survey"
 msgstr "Επιλογή χρήστη που συμπλήρωσε την έρευνα"
 
 msgid "User report"
-msgstr "User report"
+msgstr "Αναφορά χρήστη"
 
 msgid "Graphic"
 msgstr "Graphic"
 
 msgid "Absolute total"
-msgstr "Absolute total"
+msgstr "Απόλυτο σύνολο"
 
 msgid "Next question"
-msgstr "Next question"
+msgstr "Επόμενη ερώτηση"
 
 msgid "Previous question"
-msgstr "Previous question"
+msgstr "Προηγούμενη ερώτηση"
 
 msgid "People who have chosen this answer"
 msgstr "Άτομα που επέλεξαν αυτή την απάντηση"
@@ -13412,7 +13412,7 @@ msgid "Publication of the survey"
 msgstr "Δημοσίευση έρευνας"
 
 msgid "Additional users"
-msgstr "Additional users"
+msgstr "Πρόσθετοι χρήστες"
 
 msgid "E-mail message"
 msgstr "Email message"
@@ -13445,7 +13445,7 @@ msgid "Invite"
 msgstr "Invite"
 
 msgid "View invited"
-msgstr "View invited"
+msgstr "Προβολή προσκεκλημένων"
 
 msgid "View people who answered"
 msgstr "Προβολή ατόμων που απάντησαν"
@@ -13463,13 +13463,13 @@ msgid "Click here to answer the survey"
 msgstr "Κάντε κλικ εδώ για να απαντήσετε στην έρευνα"
 
 msgid "Unknow user"
-msgstr "Unknow user"
+msgstr "Άγνωστος χρήστης"
 
 msgid "have answered"
-msgstr "have answered"
+msgstr "έχουν απαντήσει"
 
 msgid "were invited"
-msgstr "were invited"
+msgstr "προσκλήθηκαν"
 
 msgid "The page break cannot be the first"
 msgstr "Η αλλαγή σελίδας δεν μπορεί να είναι η πρώτη"
@@ -13481,10 +13481,10 @@ msgid "Sorry, this survey is not available anymore. Thank you for trying."
 msgstr "Συγγνώμη, αυτή η έρευνα δεν είναι πλέον διαθέσιμη. Ευχαριστούμε που δοκιμάσατε."
 
 msgid "Duplicate survey"
-msgstr "Duplicate survey"
+msgstr "Διπλότυπο έρευνας"
 
 msgid "Empty survey"
-msgstr "Empty survey"
+msgstr "Κενή έρευνα"
 
 msgid "Answers to survey successfully deleted"
 msgstr "Οι απαντήσεις στην έρευνα διαγράφηκαν επιτυχώς"
@@ -13493,7 +13493,7 @@ msgid "This survey is not yet available. Please try again later. Thank you."
 msgstr "Αυτή η έρευνα δεν είναι ακόμη διαθέσιμη. Παρακαλούμε δοκιμάστε ξανά αργότερα. Ευχαριστούμε."
 
 msgid "people answered"
-msgstr "people answered"
+msgstr "άνθρωποι απάντησαν"
 
 msgid "This survey is anonymous. You can't see who answered."
 msgstr "Αυτή η έρευνα είναι ανώνυμη. Δεν μπορείτε να δείτε ποιος απάντησε."
@@ -13517,13 +13517,13 @@ msgid "Delete this user's answers"
 msgstr "Διαγραφή απαντήσεων αυτού του χρήστη"
 
 msgid "Select type"
-msgstr "Select type"
+msgstr "Επιλογή τύπου"
 
 msgid "Conditional"
 msgstr "Conditional"
 
 msgid "Parent Survey"
-msgstr "Parent Survey"
+msgstr "Γονική Έρευνα"
 
 msgid "One question per page"
 msgstr "Μία ερώτηση ανά σελίδα"
@@ -13538,7 +13538,7 @@ msgid "You need to create groups"
 msgstr "Πρέπει να δημιουργήσετε ομάδες"
 
 msgid "Manage groups"
-msgstr "Manage groups"
+msgstr "Διαχείριση ομάδων"
 
 msgid "Group created successfully"
 msgstr "Η ομάδα δημιουργήθηκε επιτυχώς"
@@ -13571,25 +13571,25 @@ msgid "Complete the survey's questions"
 msgstr "Συμπληρώστε τις ερωτήσεις της έρευνας"
 
 msgid "Surveys deleted"
-msgstr "Surveys deleted"
+msgstr "Έρευνες διαγράφηκαν"
 
 msgid "Remind only users who didn't answer"
 msgstr "Υπενθύμιση μόνο στους χρήστες που δεν απάντησαν"
 
 msgid "Create question"
-msgstr "Create question"
+msgstr "Δημιουργία ερώτησης"
 
 msgid "Back to survey"
 msgstr "Επιστροφή στην έρευνα"
 
 msgid "Update information"
-msgstr "Update information"
+msgstr "Ενημέρωση πληροφοριών"
 
 msgid "Please fill survey"
 msgstr "Παρακαλούμε συμπληρώστε την έρευνα"
 
 msgid "Reporting overview"
-msgstr "Reporting overview"
+msgstr "Πανοραμική αναφορά"
 
 msgid "What is the goal of the course? Are there prerequisites? How is this training connected to other courses?"
 msgstr "Σε τι αναφέρεται το μάθημα; Χρειάζονται τυχόν προαπαιτούμενα μαθήματα;"
@@ -13655,13 +13655,13 @@ msgid "Show all images in their original size. No resizing is done. Scrollbars w
 msgstr "Εμφάνιση όλων των εικόνων στο αρχικό τους μέγεθος. Δεν γίνεται αλλαγή μεγέθους. Θα εμφανιστούν αυτόματα μπάρες κύλισης αν η εικόνα είναι μεγαλύτερη από το μέγεθος της οθόνης σας."
 
 msgid "Show Thumbnails"
-msgstr "Show Thumbnails"
+msgstr "Εμφάνιση μικρογραφιών"
 
 msgid "Gallery settings"
 msgstr "Set Slideshow Options"
 
 msgid "Slideshow Options"
-msgstr "Slideshow Options"
+msgstr "Επιλογές διαφανειοθήκης"
 
 msgid "NO RESIZING"
 msgstr "ΧΩΡΙΣ ΑΛΛΑΓΗ ΜΕΓΕΘΟΥΣ"
@@ -13676,7 +13676,7 @@ msgid "Published end date"
 msgstr "Λήξη ημερομηνίας δημοσίευσης"
 
 msgid "View Slideshow"
-msgstr "View Slideshow"
+msgstr "Προβολή διαφανειοθήκης"
 
 msgid "My tasks"
 msgstr "Οι εργασίες μου"
@@ -14099,7 +14099,7 @@ msgid "Ends at (completely closed)"
 msgstr "Λήγει στις (πλήρως κλειστό)"
 
 msgid "Assignment scoring"
-msgstr "Assignment scoring"
+msgstr "Βαθμολόγηση εργασιών"
 
 msgid "Add to gradebook"
 msgstr "Προσθήκη στο βιβλίο βαθμών"
@@ -14138,7 +14138,7 @@ msgid "Filter by not expired"
 msgstr "Φιλτράρισμα κατά μη ληγμένες"
 
 msgid "Filter assignments"
-msgstr "Filter assignments"
+msgstr "Φιλτράρισμα εργασιών"
 
 msgid "Minimum score expected"
 msgstr "Ελάχιστος αναμενόμενος βαθμός"
@@ -14174,13 +14174,13 @@ msgid "The file is now visible"
 msgstr "Το αρχείο έγινε ορατό"
 
 msgid "Create assignment"
-msgstr "Create assignment"
+msgstr "Δημιουργία εργασίας"
 
 msgid "Assignment name"
-msgstr "Assignment name"
+msgstr "Όνομα εργασίας"
 
 msgid "Folder edited"
-msgstr "Folder edited"
+msgstr "Φάκελος επεξεργάστηκε"
 
 msgid "Update this task"
 msgstr "Ενημέρωση αυτής της εργασίας"
@@ -14258,7 +14258,7 @@ msgid "Clear content"
 msgstr "</p><p><b>Θεωρία Διδασκαλίας</b><p>Για τους καθηγητές, που ετοιμάζουν ένα μάθημα στο internet, μια ερώτηση της Θεωρίας Διδασκαλίας"
 
 msgid "Groups Help"
-msgstr "Groups Help"
+msgstr "Βοήθεια ομάδων"
 
 msgid "Content of the groups"
 msgstr "Περιεχόμενο των ομάδων"
@@ -14279,7 +14279,7 @@ msgid "The teacher is set as you for now. You can change this setting later in t
 msgstr "Προς το παρόν, έχετε ορισθεί εσείς ως Εκπαιδευτικός. Αργότερα, μπορείτε να αλλάξετε αυτή τη ρύθμιση, από τις ρυθμίσεις της σειράς μαθημάτων."
 
 msgid "Installation language"
-msgstr "Installation language"
+msgstr "Γλώσσα εγκατάστασης"
 
 msgid "Please read the following requirements thoroughly."
 msgstr "Παρακαλούμε διαβάστε προσεκτικά τις παρακάτω απαιτήσεις."
@@ -14294,7 +14294,7 @@ msgid "Check database connection"
 msgstr "Έλεγχος σύνδεσης με τη βάση δεδομένων"
 
 msgid "Show Overview"
-msgstr "Show Overview"
+msgstr "Εμφάνιση επισκόπησης"
 
 msgid "Install"
 msgstr "Install"
@@ -14306,13 +14306,13 @@ msgid "For more details"
 msgstr "Για περισσότερες λεπτομέρειες"
 
 msgid "Server requirements"
-msgstr "Server requirements"
+msgstr "Απαιτήσεις διακομιστή"
 
 msgid "Your server must provide the following libraries to enable all features of Chamilo. The missing libraries shown in orange letters are optional, but some features of Chamilo might be disabled if they are not installed. You can still install those libraries later on to enable the missing features."
 msgstr "Ο εξυπηρετητής σας πρέπει να παρέχει τις εξής βιβλιοθήκες για να ενεργοποιηθούν όλες οι λειτουργίες του Chamilo. Οι ελλείπουσες βιβλιοθήκες που εμφανίζονται με πορτοκαλί γράμματα είναι προαιρετικές, αλλά ορισμένες λειτουργίες του Chamilo μπορεί να απενεργοποιηθούν αν δεν εγκατασταθούν. Μπορείτε να εγκαταστήσετε αυτές τις βιβλιοθήκες αργότερα για να ενεργοποιήσετε τις ελλείπουσες λειτουργίες."
 
 msgid "PHP version"
-msgstr "PHP version"
+msgstr "Έκδοση PHP"
 
 msgid "Support"
 msgstr "support"
@@ -14321,7 +14321,7 @@ msgid "Your PHP version matches the minimum requirement:"
 msgstr "Η έκδοση PHP σας ταιριάζει με την ελάχιστη απαίτηση:"
 
 msgid "Recommended settings"
-msgstr "Recommended settings"
+msgstr "Προτεινόμενες ρυθμίσεις"
 
 msgid "Recommended settings for your server configuration. These settings are set in the php.ini configuration file on your server."
 msgstr "Συνιστώμενες ρυθμίσεις για τη διαμόρφωση του εξυπηρετητή σας. Αυτές οι ρυθμίσεις ορίζονται στο αρχείο διαμόρφωσης php.ini στον εξυπηρετητή σας."
@@ -14336,7 +14336,7 @@ msgid "Some directories and the files they include must be writable by the web s
 msgstr "Ορισμένοι κατάλογοι και τα αρχεία που περιέχουν πρέπει να είναι εγγράψιμοι από τον web εξυπηρετητή για να λειτουργήσει το Chamilo (αρχεία που ανεβάζουν χρήστες, αρχεία html αρχικής σελίδας, ...). Αυτό μπορεί να απαιτεί χειροκίνητη αλλαγή στον εξυπηρετητή σας (εκτός αυτής της διεπαφής)."
 
 msgid "Not writable"
-msgstr "Not writable"
+msgstr "Μη εγγράψιμο"
 
 msgid "Writable"
 msgstr "Writable"
@@ -14351,7 +14351,7 @@ msgid "Chamilo is free software distributed under the GNU General Public licence
 msgstr "Το Chamilo είναι ελεύθερο λογισμικό που διανέμεται υπό την άδεια GNU General Public Licence (GPL)."
 
 msgid "I accept"
-msgstr "I accept"
+msgstr "Αποδέχομαι"
 
 msgid "The following values will be written into your configuration file"
 msgstr "Οι εξής τιμές θα γραφτούν στο αρχείο διαμόρφωσής σας"
@@ -14387,7 +14387,7 @@ msgid "read warning below"
 msgstr "διαβάστε την προειδοποίηση παρακάτω"
 
 msgid "Security advice"
-msgstr "Security advice"
+msgstr "Συμβουλές ασφαλείας"
 
 msgid "You have more than %d courses on your Chamilo platform ! Only %d courses have been updated. To update the other courses, %sclick here %s"
 msgstr "Έχετε περισσότερα από %d μαθήματα στην πλατφόρμα Chamilo σας! Μόνο %d μαθήματα ενημερώθηκαν. Για να ενημερώσετε τα υπόλοιπα μαθήματα, %sκάντε κλικ εδώ %s"
@@ -14420,7 +14420,7 @@ msgid "The upgrade script will recover and update the Chamilo database(s). In or
 msgstr "Το σενάριο αναβάθμισης θα επαναφέρει και θα ενημερώσει τη(ς) βάση(σεις) δεδομένων του Chamilo. Για να το κάνει αυτό, το σενάριο θα χρησιμοποιήσει τις βάσεις δεδομένων και τις ρυθμίσεις που ορίζονται παρακάτω. Επειδή το λογισμικό μας εκτελείται σε ευρύ φάσμα συστημάτων και επειδή όλα μπορεί να μην έχουν δοκιμαστεί, σας συνιστούμε ανεπιφύλακτα να κάνετε πλήρες αντίγραφο ασφαλείας των βάσεων δεδομένων σας πριν προχωρήσετε στην αναβάθμιση!"
 
 msgid "Optional parameters"
-msgstr "Optional parameters"
+msgstr "Προαιρετικές παράμετροι"
 
 msgid "The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again."
 msgstr "Η σύνδεση με τη βάση δεδομένων απέτυχε. Αυτό οφείλεται συνήθως σε λανθασμένο χρήστη, λανθασμένο κωδικό πρόσβασης ή λανθασμένο πρόθεμα βάσης δεδομένων που ορίζεται παραπάνω. Παρακαλούμε ελέγξτε αυτές τις ρυθμίσεις και δοκιμάστε ξανά."
@@ -14438,46 +14438,46 @@ msgid "Compose"
 msgstr "Νέο μήνυμα"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Μωρό Πορτοκάλι"
 
 msgid "Blue lagoon"
-msgstr "Blue lagoon"
+msgstr "Μπλε λιμνοθάλασσα"
 
 msgid "Cool blue"
-msgstr "Cool blue"
+msgstr "Κρύο μπλε"
 
 msgid "Corporate"
 msgstr "Corporate"
 
 msgid "Cosmic campus"
-msgstr "Cosmic campus"
+msgstr "Κοσμική πανεπιστημιούπολη"
 
 msgid "Delicious Bordeaux"
-msgstr "Delicious Bordeaux"
+msgstr "Νόστιμο Μπορντό"
 
 msgid "Empire green"
-msgstr "Empire green"
+msgstr "Πράσινο αυτοκρατορίας"
 
 msgid "Fruity orange"
-msgstr "Fruity orange"
+msgstr "Φρουτώδες πορτοκάλι"
 
 msgid "Medical"
 msgstr "Medical"
 
 msgid "Royal purple"
-msgstr "Royal purple"
+msgstr "Βασιλικό μωβ"
 
 msgid "Silver line"
-msgstr "Silver line"
+msgstr "Ασημένια γραμμή"
 
 msgid "Sober brown"
-msgstr "Sober brown"
+msgstr "Σοβαρό καφέ"
 
 msgid "Steel grey"
-msgstr "Steel grey"
+msgstr "Γκρι ατσάλι"
 
 msgid "Tasty olive"
-msgstr "Tasty olive"
+msgstr "Νόστιμη ελιά"
 
 msgid "In this report you see the results of all questions"
 msgstr "Σε αυτή την αναλυτική αναφορά βλέπετε τα αποτελέσματα όλων των ερωτήσεων"
@@ -14546,10 +14546,10 @@ msgid "swahili"
 msgstr "swahili"
 
 msgid "traditional chinese"
-msgstr "traditional chinese"
+msgstr "Παραδοσιακά κινέζικα"
 
 msgid "Chamilo installation"
-msgstr "Chamilo installation"
+msgstr "Εγκατάσταση Chamilo"
 
 msgid "Pending invitations"
 msgstr "Προσκλήσεις σε αναμονή"
@@ -14570,22 +14570,22 @@ msgid "From here you can configure how to add the glossary terms in extra tools 
 msgstr "Από εδώ μπορείτε να ρυθμίσετε πως να προσθέτετε όρους στο γλωσσάρι μέσα στα πρόσθετα εργαλεία, σαν εκπαιδευτική διαδρομή και εργαλείο ασκήσεων."
 
 msgid "Survey Help"
-msgstr "Survey Help"
+msgstr "Βοήθεια Έρευνας"
 
 msgid "<p>Getting proper feedback on your courses is extremely important. You will find the dedicated Survey tool invaluable for getting effective feedback from users. </p> <p><b>Creating a new survey</b></p> <p> Click on the link 'Create a new survey' and fill in the fields 'Survey code' and 'Survey title'. With the help of the calendar, you can control the duration of your survey. There's no need to keep it open for a whole year; allow access for a few days at the end of the course program. Filling in the text fields 'Survey introduction' and 'Survey thanks' is also good practice; this will add clarity and a certain friendliness to your survey.</p> <p><b>Adding questions to the survey</b></p> <p>Once the survey outline is created, it is up to you to create the questions. The 'Survey' tool has many question types: open/closed questions, percentage, QCM, multiple responses... You should certainly find everything you need for your (ever increasing) feedback requirements.</p>  <p><b>Previewing the survey</b></p><p>Once you have created questions, you may want to check what the survey will look like to learners. Click on the 'Preview' icon and the preview screen will show you exactly this.</p> <p><b>Publishing the survey</b></p> <p>Happy with the preview? Any modifications to be made? No? Then click on the icon 'Publish survey' to send the survey to the selected list of recipients. As with creating groups, use the list 'Users of this course' on the left and the one for 'receivers' on its right to arrange this. Next, fill in the e-mail subject 'Title of the e-mail' and the content, 'Text of the e-mail'. Potential surveyees will be alerted by e-mail of the availability of a survey. Think carefully about  the wording of the e-mail  because it will play a big part in motivating users to take the survey.</p>  <p><b>Survey reports</b></p> Analysing surveys is a tedious task. The survey Reporting tool will help with analysis as it sorts reports according to question, user, comparisons etc...  <p><b>Managing surveys</b></p> When managing surveys you will see some new icons, apart from the usual 'Edit' and 'Delete' options. You can preview, publish and keep track of your surveys and responses using these.</p>"
 msgstr "<p>Η λήψη κατάλληλου feedback για τα μαθήματά σας είναι εξαιρετικά σημαντική. Θα βρείτε το εργαλείο Έρευνα ανεκτίμητο για τη λήψη αποτελεσματικού feedback από χρήστες. </p> <p><b>Δημιουργία νέας έρευνας</b></p> <p> Κάντε κλικ στη σύνδεση 'Δημιουργία νέας έρευνας' και συμπληρώστε τα πεδία 'Κωδικός έρευνας' και 'Τίτλος έρευνας'. Με τη βοήθεια του ημερολογίου, μπορείτε να ελέγξετε τη διάρκεια της έρευνάς σας. Δεν χρειάζεται να την κρατάτε ανοιχτή για ολόκληρο το χρόνο· επιτρέψτε πρόσβαση για λίγες μέρες στο τέλος του προγράμματος μαθήματος. Η συμπλήρωση των πεδίων κειμένου 'Εισαγωγή έρευνας' και 'Ευχαριστώ έρευνας' είναι επίσης καλή πρακτική· αυτό θα προσθέσει σαφήνεια και μια ορισμένη φιλικότητα στην έρευνά σας.</p> <p><b>Προσθήκη ερωτήσεων στην έρευνα</b></p> <p>Μόλις δημιουργηθεί το περίγραμμα της έρευνας, εσείς δημιουργείτε τις ερωτήσεις. Το εργαλείο 'Έρευνα' έχει πολλούς τύπους ερωτήσεων: ανοιχτές/κλειστές ερωτήσεις, ποσοστά, QCM, πολλαπλές απαντήσεις... Σίγουρα θα βρείτε ό,τι χρειάζεστε για τις (συνεχώς αυξανόμενες) απαιτήσεις feedback σας.</p>  <p><b>Προεπισκόπηση έρευνας</b></p><p>Μόλις δημιουργήσετε ερωτήσεις, ίσως θέλετε να ελέγξετε πώς θα φαίνεται η έρευνα στους εκπαιδευόμενους. Κάντε κλικ στο εικονίδιο 'Προεπισκόπηση' και η οθόνη προεπισκόπησης θα σας δείξει ακριβώς αυτό.</p> <p><b>Δημοσίευση έρευνας</b></p> <p>Είστε ικανοποιημένοι με την προεπισκόπηση; Υπάρχουν τροποποιήσεις που πρέπει να γίνουν; Όχι; Τότε κάντε κλικ στο εικονίδιο 'Δημοσίευση έρευνας' για να στείλετε την έρευνα στη λίστα επιλεγμένων παραληπτών. Όπως με τη δημιουργία ομάδων, χρησιμοποιήστε τη λίστα 'Χρήστες αυτού του μαθήματος' αριστερά και αυτή των 'παραληπτών' δεξιά για να το οργανώσετε. Στη συνέχεια, συμπληρώστε το θέμα email 'Τίτλος του email' και το περιεχόμενο, 'Κείμενο του email'. Οι πιθανοί συμμετέχοντες θα ειδοποιηθούν μέσω email για τη διαθεσιμότητα έρευνας. Σκεφτείτε προσεκτικά τη διατύπωση του email επειδή θα παίξει μεγάλο ρόλο στη διέγερση των χρηστών να συμμετάσχουν στην έρευνα.</p>  <p><b>Αναφορές έρευνας</b></p> Η ανάλυση ερευνών είναι χρονοβόρα εργασία. Το εργαλείο Αναφοράς έρευνας θα βοηθήσει στην ανάλυση καθώς ταξινομεί αναφορές σύμφωνα με ερώτηση, χρήστη, συγκρίσεις κ.λπ...  <p><b>Διαχείριση ερευνών</b></p> Κατά τη διαχείριση ερευνών θα δείτε μερικά νέα εικονίδια, εκτός από τις συνηθισμένες επιλογές 'Επεξεργασία' και 'Διαγραφή'. Μπορείτε να προεπισκοπήσετε, να δημοσιεύσετε και να παρακολουθήσετε τις έρευνές σας και τις απαντήσεις χρησιμοποιώντας αυτά.</p>"
 
 msgid "Project help"
-msgstr "Project help"
+msgstr "Βοήθεια Έργου"
 
 msgid "<p> The Project tool facilitates collaborative project work. </p> One way to use the tool is to use it to assign authors charged with keeping written reports on activities throughout the day/week. </p> Coupled with this is a task management tool through which you can assign a relevant task  to any of the designated authors (eg to report on the evolution of safety standards in the business). </p> An item representing new content is called an <i> article </i>. To create a new article, just follow the link in the menu prompting you to do. To edit (if you are the author of the article) or add a comment to an article, just click on the title of this article. </p>"
 msgstr "<p> Το εργαλείο Έργου διευκολύνει τη συνεργατική εργασία σε έργα. </p> Ένας τρόπος χρήσης του εργαλείου είναι να το χρησιμοποιήσετε για να ορίσετε συγγραφείς που είναι υπεύθυνοι για τη διατήρηση γραπτών αναφορών για δραστηριότητες καθ' όλη τη διάρκεια της ημέρας/εβδομάδας. </p> Σε συνδυασμό με αυτό είναι ένα εργαλείο διαχείρισης εργασιών μέσω του οποίου μπορείτε να ορίσετε σχετική εργασία σε οποιονδήποτε από τους ορισμένους συγγραφείς (π.χ. να αναφέρει την εξέλιξη των προτύπων ασφαλείας στην επιχείρηση). </p> Ένα στοιχείο που αντιπροσωπεύει νέο περιεχόμενο ονομάζεται <i> άρθρο </i>. Για να δημιουργήσετε ένα νέο άρθρο, απλώς ακολουθήστε τον σύνδεσμο στο μενού που σας προτρέπει να το κάνετε. Για να επεξεργαστείτε (αν είστε ο συγγραφέας του άρθρου) ή να προσθέσετε σχόλιο σε ένα άρθρο, απλώς κάντε κλικ στον τίτλο αυτού του άρθρου. </p>"
 
 msgid "First slide"
-msgstr "First slide"
+msgstr "Πρώτη διαφάνεια"
 
 msgid "Last slide"
-msgstr "Last slide"
+msgstr "Τελευταία διαφάνεια"
 
 msgid "The document has been deleted."
 msgstr "Το έγγραφο διαγράφηκε."
@@ -14600,7 +14600,7 @@ msgid "Export courses"
 msgstr "Εξαγωγή λίστας μαθημάτων"
 
 msgid "Is administrator"
-msgstr "Is administrator"
+msgstr "Είναι διαχειριστής"
 
 msgid "Is not administrator"
 msgstr "Δεν είναι διαχειριστής"
@@ -14615,7 +14615,7 @@ msgid "The time limit of a category is referential, will not affect the boundari
 msgstr "Το χρονικό όριο μιας κατηγορίας είναι αναφορικό, δεν θα επηρεάσει τα όρια μιας συνεδρίας εκπαίδευσης"
 
 msgid "User tag"
-msgstr "User tag"
+msgstr "Ετικέτα χρήστη"
 
 msgid "E-mail alert on course creation"
 msgstr "Email alert, of creation  a new course"
@@ -14627,7 +14627,7 @@ msgid "Select session"
 msgstr "Επιλογή συνεδρίας"
 
 msgid "Special course"
-msgstr "Special course"
+msgstr "Ειδικό μάθημα"
 
 msgid "Duration in words"
 msgstr "Διάρκεια σε λέξεις"
@@ -14696,16 +14696,16 @@ msgid "Chamilo homepage"
 msgstr "Ιστοσελίδα Chamilo"
 
 msgid "Chamilo forum"
-msgstr "Chamilo forum"
+msgstr "Chamilo φόρουμ"
 
 msgid "Chamilo extensions"
 msgstr "Επεκτάσεις Chamilo"
 
 msgid "Chamilo Green"
-msgstr "Chamilo Green"
+msgstr "Chamilo Πράσινο"
 
 msgid "Chamilo red"
-msgstr "Chamilo red"
+msgstr "Chamilo κόκκινο"
 
 msgid "Number of messages sent"
 msgstr "Πλήθος απεσταλμένων μηνυμάτων"
@@ -14915,7 +14915,7 @@ msgid "Friends online"
 msgstr "Φίλοι online"
 
 msgid "My productions"
-msgstr "My productions"
+msgstr "Οι παραγωγές μου"
 
 msgid "You have received a new message in group %s"
 msgstr "Λάβατε ένα νέο μήνυμα στην ομάδα %s"
@@ -15005,7 +15005,7 @@ msgid "The user has been added"
 msgstr "Ο χρήστης προστέθηκε"
 
 msgid "Updated on"
-msgstr "Updated on"
+msgstr "Ενημερώθηκε στις"
 
 msgid "Metadata"
 msgstr "Metadata"
@@ -15062,7 +15062,7 @@ msgid "Install Chamilo"
 msgstr "Εγκατάσταση chamilo"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "Διεύθυνση URL Chamilo"
 
 msgid "You have no session in your sessions history"
 msgstr "Δεν υπάρχουν συνεδρίες στο ιστορικό συνεδριών σας."
@@ -15080,7 +15080,7 @@ msgid "Column header in Competences Report"
 msgstr "Κεφαλίδα στήλης στην Αναφορά Επαγγελματικών Δεξιοτήτων"
 
 msgid "Configure extensions"
-msgstr "Configure extensions"
+msgstr "Διαμόρφωση επεκτάσεων"
 
 msgid "There are not questions for this survey"
 msgstr "Δεν υπάρχουν ερωτήσεις για αυτή την έρευνα"
@@ -15098,13 +15098,13 @@ msgid "This is a message confirming the good reception of the task"
 msgstr "Αυτό είναι μήνυμα επιβεβαίωσης της καλής λήψης της εργασίας"
 
 msgid "Data sent"
-msgstr "Data sent"
+msgstr "Δεδομένα εστάλησαν"
 
 msgid "Download link"
-msgstr "Download link"
+msgstr "Σύνδεσμος λήψης"
 
 msgid "Assignments received"
-msgstr "Assignments received"
+msgstr "Εργασίες που έλαβα"
 
 msgid "Send a reminder"
 msgstr "Αποστολή υπενθύμισης"
@@ -15125,10 +15125,10 @@ msgid "Dashboard"
 msgstr "Dashboard"
 
 msgid "Dashboard blocks"
-msgstr "Dashboard blocks"
+msgstr "Μπλοκ πίνακα ελέγχου"
 
 msgid "Dashboard list"
-msgstr "Dashboard list"
+msgstr "Λίστα πίνακα ελέγχου"
 
 msgid "You haven't enabled any block"
 msgstr "Δεν έχετε ενεργοποιήσει κανένα μπλοκ"
@@ -15137,7 +15137,7 @@ msgid "The blocks have been updated"
 msgstr "Τα μπλοκ ενημερώθηκαν"
 
 msgid "Dashboard plugins"
-msgstr "Dashboard plugins"
+msgstr "Πρόσθετα πίνακα ελέγχου"
 
 msgid "This plugin has been deleted from the dashboard plugin directory"
 msgstr "Αυτό το πρόσθετο διαγράφηκε από τον κατάλογο πρόσθετων πίνακα ελέγχου"
@@ -15149,7 +15149,7 @@ msgid "Select blocks to display in the dashboard blocks view"
 msgstr "Επιλογή μπλοκ για εμφάνιση στην προβολή μπλοκ πίνακα ελέγχου"
 
 msgid "Position (column)"
-msgstr "Position (column)"
+msgstr "Θέση (στήλη)"
 
 msgid "Enable dashboard block"
 msgstr "Ενεργοποίηση μπλοκ πίνακα ελέγχου"
@@ -15164,7 +15164,7 @@ msgid "What is the current progress you have reached with your learners inside y
 msgstr "Ποια είναι η τρέχουσα πρόοδος που έχετε επιτύχει με τους εκπαιδευόμενους σας μέσα στο μάθημά σας; Πόσο νομίζετε ότι απομένει σε σύγκριση με το πλήρες πρόγραμμα;"
 
 msgid "Advance history"
-msgstr "Advance history"
+msgstr "Προχωρημένο ιστορικό"
 
 msgid "Attendances"
 msgstr "Συμμετοχές"
@@ -15371,7 +15371,7 @@ msgid "This extension must be loaded."
 msgstr "Αυτή η επέκταση πρέπει να φορτωθεί."
 
 msgid "MySQL protocol"
-msgstr "MySQL protocol"
+msgstr "Πρωτόκολλο MySQL"
 
 msgid "MySQL server host"
 msgstr "Διακομιστής MySQL"
@@ -15380,7 +15380,7 @@ msgid "MySQL server information"
 msgstr "Πληροφορίες διακομιστή MySQL"
 
 msgid "MySQL client"
-msgstr "MySQL client"
+msgstr "Πελάτης MySQL"
 
 msgid "Protocol used by this server"
 msgstr "Πρωτόκολλο που χρησιμοποιεί αυτός ο διακομιστής"
@@ -15389,13 +15389,13 @@ msgid "Remote address (your address as received by the server)"
 msgstr "Απομακρυσμένη διεύθυνση (η διεύθυνσή σας όπως την έλαβε ο διακομιστής)"
 
 msgid "Server address"
-msgstr "Server address"
+msgstr "Διεύθυνση διακομιστή"
 
 msgid "Server name (as used in your request)"
 msgstr "Όνομα διακομιστή (όπως χρησιμοποιήθηκε στο αίτημά σας)"
 
 msgid "Server port"
-msgstr "Server port"
+msgstr "Θύρα διακομιστή"
 
 msgid "Your user agent as received by the server"
 msgstr "Το user agent σας όπως το έλαβε ο διακομιστής"
@@ -26605,7 +26605,7 @@ msgid "LDAP connection configuration"
 msgstr "Διαμόρφωση σύνδεσης LDAP"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Πίνακας που ορίζει host και θύρα για τον LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Πίνακας που ορίζει host και θύρα για τον LDAP διακομιστή.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Ορισμός ημερομηνίας λήξης κατά την πρώτη σύνδεση"
@@ -30536,7 +30536,7 @@ msgid "CREATE TABLE works"
 msgstr "ΔΗΜΙΟΥΡΓΙΑ ΠΙΝΑΚΑ works"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ALTER TABLE λειτουργεί"
 
 msgid "DROP COLUMN works"
 msgstr "ΔΙΑΓΡΑΦΗ ΣΤΗΛΗΣ works"
@@ -31446,4 +31446,397 @@ msgstr "Σφάλμα φόρτωσης πόρων."
 
 msgid "Clear search"
 msgstr "Καθαρισμός αναζήτησης"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Μόνο γράμματα, ψηφία και κάτω παύλα (_) επιτρέπονται στο όνομα βάσης δεδομένων. Άκυροι χαρακτήρες θα αφαιρεθούν αυτόματα."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Ποιοι γενικοί όροι και συνθήκες δίνονται στους χρήστες για χρήση αυτής της πλατφόρμας;"
+
+msgid "ex. {examplePassword}"
+msgstr "π.χ. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Καλώς ήρθατε στο Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Καλώς ήρθατε σε αυτή την πλατφόρμα"
+
+msgid "For more details visit %s"
+msgstr "Για περισσότερες λεπτομέρειες επισκεφθείτε το %s"
+
+msgid "Manager"
+msgstr "Διαχειριστής"
+
+msgid "Mark as"
+msgstr "Σημείωση ως"
+
+msgid "Reply to all"
+msgstr "Απάντηση σε όλους"
+
+msgid "SCIM external ID"
+msgstr "SCIM εξωτερικό ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Παρακαλούμε αποδεχθείτε την τελευταία έκδοση των όρων και προϋποθέσεων."
+
+msgid "Required value for operation without path"
+msgstr "Απαιτούμενη τιμή για λειτουργία χωρίς διαδρομή"
+
+msgid "Available space (%s)"
+msgstr "Διαθέσιμος χώρος (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Ενταγμένη αυτή την περιγραφή στην παγκόσμια αναζήτηση"
+
+msgid "Unknown course"
+msgstr "Άγνωστο μάθημα"
+
+msgid "Certificate not found."
+msgstr "Πιστοποιητικό δεν βρέθηκε."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Το διακριτικό ασφαλείας εξέπνευσε. Παρακαλούμε επαναφορτώστε τη σελίδα και δοκιμάστε ξανά."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Μόνο οι διαχειριστές της πλατφόρμας μπορούν να αλλάξουν την ορατότητα του μαθήματος."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Απροσδόκητο σφάλμα κατά την εγγραφή του χρήστη"
+
+msgid "Search in resource logs"
+msgstr "Αναζήτηση στα αρχεία πόρων"
+
+msgid "Include this learning path in the global search results"
+msgstr "Συμπερίληψη αυτού του μονοπατιού μάθησης στα αποτελέσματα παγκόσμιας αναζήτησης"
+
+msgid "The course code already exists"
+msgstr "Ο κωδικός του μαθήματος υπάρχει ήδη"
+
+msgid "Latest news"
+msgstr "Τελευταία νέα"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Λάβετε τα τελευταία νέα από το Chamilo, συμπεριλαμβανομένων ευπαθειών ασφαλείας και εκδηλώσεων, απευθείας στο πάνελ διαχείρισής σας. Αυτά τα νέα ελέγχονται στον διακομιστή νέων του Chamilo κάθε φορά που φορτώνετε τη σελίδα διαχείρισης και είναι ορατά μόνο στους διαχειριστές."
+
+msgid "Chamilo support block"
+msgstr "Τμήμα υποστήριξης Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Λάβετε επαγγελματικές συμβουλές και εύκολο τρόπο επικοινωνίας με επίσημους παρόχους υπηρεσιών για επαγγελματική υποστήριξη, απευθείας από τους δημιουργούς του Chamilo. Αυτό το τμήμα εμφανίζεται στη σελίδα διαχείρισής σας, είναι ορατό μόνο από διαχειριστές και ανανεώνεται κάθε φορά που φορτώνετε τη σελίδα διαχείρισης."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Απόκρυψη επιλογής αποστολής ανακοινώσεων σε χρήστες HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Επιτρέψτε στους διαχειριστές συνεδρίας να κατεβάσουν ιδιωτικά πιστοποιητικά"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Αν είναι ενεργοποιημένο, οι διαχειριστές συνεδρίας μπορούν να κατεβάσουν πιστοποιητικά ακόμα και αν δεν έχουν δημοσιευθεί δημόσια."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Αν δεν είναι κενό, η διαδικασία δημιουργίας μαθήματος θα αναζητήσει ορισμένα πεδία στο προφίλ του χρήστη και θα τα συμπληρώσει αυτόματα για το μάθημα. Για παράδειγμα, ένας δάσκαλος εξειδικευμένος στο ψηφιακό μάρκετινγκ θα μπορούσε αυτόματα να ορίσει μια σημαία «ψηφιακό μάρκετινγκ» σε κάθε μάθημα που δημιουργεί."
+
+msgid "Main menu entries"
+msgstr "Καταχωρήσεις κύριου μενού"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Επιλέξτε τις καταχωρήσεις που θέλετε να εμφανιστούν στο κύριο μενού"
+
+msgid "Main menu entries per role"
+msgstr "Καταχωρήσεις κύριου μενού ανά ρόλο"
+
+msgid "Define header tabs visibility per role."
+msgstr "Ορίστε την ορατότητα καρτελών κεφαλίδας ανά ρόλο."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Ορίστε τις επιλογές που θέλετε να εμφανιστούν στη πλοήγηση γύρω από έναν πίνακα για να δείξετε λιγότερες ή περισσότερες γραμμές σε μία σελίδα. π.χ. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Πίνακας επιπλέον χαρακτηριστικών που μπορείτε να ενεργοποιήσετε για τον αναπαραγωγέα βίντεο στο Chamilo. Οι επιλογές περιλαμβάνουν 'speed', που σας επιτρέπει να αλλάξετε την ταχύτητα αναπαραγωγής ενός βίντεο."
+
+msgid "Mail: character set"
+msgstr "Ταχυδρομείο: σύνολο χαρακτήρων"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Σε περίπτωση που χρειάζεται να ορίσετε το charset που θα χρησιμοποιηθεί κατά την αποστολή αυτών των email. Αφήστε κενό αν δεν είστε σίγουροι."
+
+msgid "Mail: Debug"
+msgstr "Ταχυδρομείο: Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Επιλέξτε αν θέλετε να ενεργοποιήσετε τα αρχεία καταγραφής debug αποστολής email. Αυτά θα σας δώσουν περισσότερες πληροφορίες για το τι συμβαίνει κατά τη σύνδεση στην υπηρεσία ταχυδρομείου, αλλά δεν είναι κομψά και μπορεί να σπάσουν τον σχεδιασμό της σελίδας. Χρησιμοποιήστε μόνο όταν δεν υπάρχει δραστηριότητα χρηστών."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Ταχυδρομείο: Αποφυγή χρήσης LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Μερικοί πελάτες email δεν κατανοούν τη μορφή LD+JSON περιγραφής, εμφανίζοντάς την ως χαλαρή συμβολοσειρά JSON στον τελικό χρήστη. Αν ισχύει αυτό για εσάς, ίσως θέλετε να ορίσετε τη μεταβλητή παρακάτω σε 'false' για να απενεργοποιήσετε αυτήν την κεφαλίδα."
+
+msgid "Mail: DKIM headers"
+msgstr "Ταχυδρομείο: Κεφαλίδες DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Εισαγάγετε έναν πίνακα JSON με τις ρυθμίσεις διαμόρφωσης DKIM σας (δείτε παράδειγμα)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Ταχυδρομείο: Επιλογές XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Αν χρησιμοποιείτε υπηρεσία email βασισμένη σε XOAuth2, χρησιμοποιήστε αυτήν τη ρύθμιση σε JSON για να αποθηκεύσετε τη συγκεκριμένη διαμόρφωσή σας (δείτε παράδειγμα) και επιλέξτε XOAuth2 στη ρύθμιση υπηρεσίας ταχυδρομείου."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Ορίζει τον τύπο περιβάλλοντος: \"prod\" (κανονική παραγωγή), \"validation\" (όπως παραγωγή αλλά χωρίς αναφορά στατιστικών), ή \"test\" (κατάσταση debug με εργαλεία προγραμματιστή όπως δείκτες μη μεταφρασμένων συμβολοσειρών)."
+
+msgid "Global limit of users per course"
+msgstr "Γlobal όριο χρηστών ανά μάθημα"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Ορίζει έναν παγκόσμιο μέγιστο αριθμό χρηστών (συμπεριλαμβανομένων δασκάλων) που επιτρέπεται να εγγραφούν σε οποιοδήποτε μεμονωμένο μάθημα στην πλατφόρμα. Ορίστε αυτήν την τιμή σε 0 για να απενεργοποιήσετε το όριο. Αυτό βοηθά στην αποφυγή υπερφόρτωσης μαθημάτων σε ανοιχτά portals."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Ενεργοποιήστε για να χρησιμοποιήσετε έναν πίνακα που ορίζει ποιους ρόλους θα εμφανίζονται ξεκάθαρα και ποιους θα κρύβονται."
+
+msgid "Show base course posts in session course"
+msgstr "Εμφάνιση αναρτήσεων βασικού μαθήματος σε μάθημα συνεδρίας"
+
+msgid "Limit identical email usage"
+msgstr "Περιορισμός χρήσης ίδιου email"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Μέγιστος αριθμός λογαριασμών που επιτρέπεται να μοιράζονται την ίδια διεύθυνση e-mail. Ορισμός σε 0 για απενεργοποίηση αυτού του ορίου."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Επιτρέψτε στους διαχειριστές συνεδρίας να βλέπουν όλους τους χρήστες σε όλες τις URLs"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Αν ενεργοποιηθεί, οι διαχειριστές συνεδρίας μπορούν να αναζητούν και να παρατίθενται χρήστες από όλες τις URLs πρόσβασης, ανεξαρτήτως της τρέχουσας URL τους."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Ενεργοποιήστε τη δυνατότητα στους χρήστες να επιλέγουν τη δική τους ζώνη ώρας. Μόλις ρυθμιστεί, οι χρήστες θα μπορούν να βλέπουν προθεσμίες εργασιών και άλλες χρονικές αναφορές στη δική τους ζώνη ώρας, μειώνοντας λάθη κατά την παράδοση."
+
+msgid "Redirect after login (per profile)"
+msgstr "Ανακατεύθυνση μετά τη σύνδεση (ανά προφίλ)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Ορίστε ανακατεύθυνση ανά προφίλ μετά τη σύνδεση χρησιμοποιώντας αντικείμενο JSON όπως {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Απόκρυψη κουτιού ελέγχου αποδοχής νομικών όρων στη σελίδα Όρων και Προϋποθέσεων"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Αν οριστεί σε true, αφαιρεί το κουτί ελέγχου \"Έχω διαβάσει και αποδέχομαι\" στη ροή σελίδας Όρων και Προϋποθέσεων."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Πίνακας που ορίζει host και θύρα για τον διακομιστή LDAP."
+
+msgid "Enable 2FA"
+msgstr "Ενεργοποίηση 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Προσθήκη πεδίων στη σελίδα ενημέρωσης κωδικού πρόσβασης για ενεργοποίηση 2FA χρησιμοποιώντας εφαρμογή TOTP. Όταν απενεργοποιημένο παγκοσμίως, οι χρήστες δεν θα βλέπουν πεδία 2FA και δεν θα ζητούνται για 2FA κατά τη σύνδεση, ακόμα κι αν το είχαν ενεργοποιήσει προηγουμένως."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Ορισμένα χαρακτηριστικά του Chamilo θα συνδέονται εξωτερικά από τον διακομιστή. Π.χ. για έλεγχο ύπαρξης εξωτερικού περιεχομένου κατά τη δημιουργία συνδέσμου ή εμφάνιση ενσωματωμένης σελίδας σε μονοπάτι μάθησης. Αν ο διακομιστής Chamilo χρησιμοποιεί proxy για έξοδο από το δίκτυο, εδώ ρυθμίζεται."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Ενεργοποίηση ή απενεργοποίηση αυτόματης επανεγγραφής όταν λήγει η εγκυρότητα μαθήματος. Η σχετική εργασία cron πρέπει επίσης να ενεργοποιηθεί."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Εμφάνιση εναπομεινάντων ημερών στις Συνεδρίες μου"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Αν ενεργοποιηθεί, οι ημερομηνίες συνεδρίας στη σελίδα \"Οι Συνεδρίες μου\" θα αντικατασταθούν από τον αριθμό εναπομεινάντων ημερών."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Εμφάνιση \"Εκκρεμείς έρευνες\" στο μενού"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Εμφάνιση στοιχείου μενού που επιτρέπει στους χρήστες πρόσβαση στις εκκρεμείς έρευνές τους."
+
+msgid "Disclose AI assistance"
+msgstr "Αποκάλυψη βοήθειας ΤΝ"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Εμφάνιση ετικέτας σε οποιοδήποτε περιεχόμενο ή ανατροφοδότηση που έχει δημιουργηθεί ή συνδημιουργηθεί από σύστημα ΤΝ, αποδεικνύοντας στον χρήστη ότι το περιεχόμενο δημιουργήθηκε με βοήθεια ΤΝ. Λεπτομέρειες για το ποιο σύστημα ΤΝ χρησιμοποιήθηκε αποθηκεύονται στη βάση δεδομένων για έλεγχο, αλλά δεν είναι άμεσα προσβάσιμες από τον τελικό χρήστη."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "Ρύθμιση JSON για κατάλογο μαθημάτων: ρυθμίσεις συνδέσμων, φίλτρα, επιλογές ταξινόμησης κ.λπ."
+
+msgid "Session Catalog Settings"
+msgstr "Ρυθμίσεις Καταλόγου Συνεδριών"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "Ρύθμιση JSON για κατάλογο συνεδριών: φίλτρα και επιλογές εμφάνισης."
+
+msgid "Show Course Descriptions"
+msgstr "Εμφάνιση Περιγραφών Μαθημάτων"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Εμφάνιση περιγραφών μαθημάτων στον κατάλογο."
+
+msgid "Published Courses Only"
+msgstr "Μόνο Δημοσιευμένα Μαθήματα"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Περιορισμός του καταλόγου μόνο σε μαθήματα που έχουν επιλεγεί ως δημοσιευμένα."
+
+msgid "Display Catalog on Homepage"
+msgstr "Εμφάνιση Καταλόγου στην Αρχική Σελίδα"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Εμφάνιση μπλοκ καταλόγου μαθημάτων στην αρχική σελίδα της πλατφόρμας."
+
+msgid "Hide Public Link"
+msgstr "Απόκρυψη Δημόσιου Συνδέσμου"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Αφαίρεση του δημόσιου συνδέσμου URL από τις κάρτες μαθήματος."
+
+msgid "Only Selected Courses"
+msgstr "Μόνο Επιλεγμένα Μαθήματα"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Εμφάνιση μόνο χειροκίνητα επιλεγμένων μαθημάτων στον κατάλογο."
+
+msgid "Allow Student Browsing"
+msgstr "Επιτρέψτε την Περιήγηση Μαθητών"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Επιτρέψτε στους μαθητές να περιηγούνται και να φιλτράρουν τον κατάλογο μαθημάτων."
+
+msgid "Hide Private Courses"
+msgstr "Απόκρυψη Ιδιωτικών Μαθημάτων"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Αποκλεισμός ιδιωτικών μαθημάτων από την εμφάνιση του καταλόγου."
+
+msgid "Show Courses & Sessions"
+msgstr "Εμφάνιση Μαθημάτων & Συνεδριών"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Συμπερίληψη μαθημάτων και συνεδριών στα αποτελέσματα του καταλόγου."
+
+msgid "Auto Session Subscription"
+msgstr "Αυτόματη Εγγραφή Συνεδρίας"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Ενεργοποίηση αυτόματης εγγραφής σε συνεδρίες για χρήστες."
+
+msgid "Subscription in Session View"
+msgstr "Εγγραφή στην Προβολή Συνεδρίας"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Επιτρέψτε στους χρήστες να εγγράφονται σε μαθήματα απευθείας από τη σελίδα της συνεδρίας τους."
+
+msgid "Enable redirection plugin"
+msgstr "Ενεργοποίηση προσθήκης ανακατεύθυνσης"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Πίνακας που ορίζει τις 'ημέρες' και 'μήνες' για την ημερομηνία λήξης του λογαριασμού κατά την πρώτη σύνδεση του χρήστη."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Πίνακας με ρόλο => αριθμό που αντιπροσωπεύει τον αριθμό ημερών πριν τη λήξη του λογαριασμού, ανάλογα με τον ρόλο."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Επιπλέον πεδίο χρήστη που χρησιμοποιείται για αναζήτηση και ονομασία συνεδριών"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Αυτή η ρύθμιση ορίζει το κλειδί του επιπλέον πεδίου χρήστη (π.χ. \"company\") που θα χρησιμοποιηθεί για αναζήτηση χρηστών και ορισμό ονόματος συνεδρίας κατά την εγγραφή μαθητών από /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Γεννήτρια όρων Γλωσσαρίου"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Επιτρέψτε στους διδάσκοντες να ζητούν όρους γλωσσαρίου που παράγονται από AI στο μάθημά τους. Αυτό θα παράγει 20 όρους βασισμένους στον τίτλο του μαθήματος και την γενική περιγραφή στο εργαλείο περιγραφής μαθήματος. Αν χρησιμοποιηθεί περισσότερο από μία φορά, θα αποκλείει όρους ήδη παρόντες στο γλωσσάριο (βεβαιωθείτε ότι το περιεχόμενο μπορεί να κοινοποιηθεί στις ρυθμισμένες υπηρεσίες AI)."
+
+msgid "Video generator"
+msgstr "Γεννήτρια Βίντεο"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Παραγωγή βίντεο βασισμένων σε προτροπές ή περιεχόμενο χρησιμοποιώντας AI (αυτό μπορεί να καταναλώσει πολλά tokens)."
+
+msgid "Course analyser"
+msgstr "Αναλυτής Μαθήματος"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Ανάλυση όλων των πόρων σε ένα ή πολλά μαθήματα και προ-εκπαίδευση του μοντέλου AI για απάντηση σε οποιαδήποτε ερώτηση σχετικά με αυτό ή αυτά τα μαθήματα (βεβαιωθείτε ότι το περιεχόμενο μπορεί να κοινοποιηθεί στις ρυθμισμένες υπηρεσίες AI)."
+
+msgid "Test/development"
+msgstr "Δοκιμές/Ανάπτυξη"
+
+msgid "Crons"
+msgstr "Crons"
+
+msgid "Editor"
+msgstr "Επεξεργαστής"
+
+msgid "Gradebook"
+msgstr "Βαθμολογία"
+
+msgid "Internationalization"
+msgstr "Διεθνοποίηση"
+
+msgid "User profiles"
+msgstr "Προφίλ Χρηστών"
+
+msgid "Support tickets"
+msgstr "Εισιτήρια Υποστήριξης"
+
+msgid "Webservices"
+msgstr "Υπηρεσίες Web"
+
+msgid "Catalogue"
+msgstr "Κατάλογος"
+
+msgid "Workflows"
+msgstr "Ροές Εργασιών"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Η ρύθμιση είναι επεξεργάσιμη σε υπο-URLs"
+
+msgid "Show JSON Template"
+msgstr "Εμφάνιση Προτύπου JSON"
+
+msgid "JSON Template"
+msgstr "Πρότυπο JSON"
+
+msgid "Installing Xapian bindings"
+msgstr "Εγκατάσταση Xapian bindings"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Το παρακάτω απόσπασμα δείχνει ένα παράδειγμα εγκατάστασης των Xapian PHP bindings στο Ubuntu 25.04 με PHP 8.3. Προσαρμόστε μονοπάτια και εκδόσεις στο δικό σας περιβάλλον."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Βεβαιωθείτε ότι έχετε μόνο την έκδοση PHP που χρησιμοποιείτε πραγματικά (π.χ. 8.3) και αποφύγετε τον συνδυασμό πολλών εκδόσεων με διαφορετικούς καταλόγους επεκτάσεων."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Μόλις η επέκταση φορτωθεί σωστά τόσο για CLI όσο και για τον web server, οι διαγνωστικές αναζήτησης παραπάνω θα πρέπει να αναφέρουν ότι το άρθρωμα Xapian είναι εγκατεστημένο."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Καθαρισμός προσωρινών μεταφορτώσεων και cache"
+
+msgid "Directory"
+msgstr "Κατάλογος"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Διαγραφή μόνο αρχείων παλαιότερων από (λεπτά)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Ορισμός 0 για διαγραφή όλων των αρχείων. Χρήση θετικής τιμής (π.χ., 60) για αποφυγή διαγραφής αρχείων που ανεβαίνουν ακόμα."
+
+msgid "Preview only (do not delete)"
+msgstr "Προεπισκόπηση μόνο (μη διαγραφή)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Προειδοποίηση: πρόκειται να διαγράψετε ΟΛΑ τα προσωρινά αρχεία. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Αυτό θα διαγράψει όλα τα προσωρινά αρχεία. Συνεχίσετε;"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Αυτό θα διαγράψει αρχεία παλαιότερα από %minutes% λεπτά. Συνεχίσετε;"
 

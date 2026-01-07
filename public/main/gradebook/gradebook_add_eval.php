@@ -1,6 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\GradebookEvaluation;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
@@ -9,19 +14,12 @@ api_block_anonymous_users();
 GradebookUtils::block_students();
 
 $select_cat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
-$is_allowedToEdit = api_is_course_admin();
-
 $userId = api_get_user_id();
 
 $evaladd = new Evaluation();
 $evaladd->set_user_id($userId);
-if (!empty($select_cat)) {
-    $evaladd->set_category_id($_GET['selectcat']);
-    $cat = Category::load($_GET['selectcat']);
-    $evaladd->setCourseId($cat[0]->getCourseId());
-} else {
-    $evaladd->set_category_id(0);
-}
+$evaladd->set_category_id($select_cat);
+$evaladd->setCourseId(api_get_course_int_id());
 
 $form = new EvalForm(
     EvalForm::TYPE_ADD,
@@ -34,62 +32,77 @@ $form = new EvalForm(
 
 if ($form->validate()) {
     $values = $form->exportValues();
-    $eval = new Evaluation();
-    $eval->set_name($values['name']);
-    $eval->set_description($values['description']);
-    $eval->set_user_id($values['hid_user_id']);
-
-    if (!empty($values['hid_course_code'])) {
-        $eval->setCourseId(api_get_course_int_id($values['hid_course_code']));
+    $entityManager = Database::getManager();
+    $course = $entityManager->getRepository(Course::class)->find(api_get_course_int_id());
+    if (!$course && !empty($values['hid_course_code'])) {
+        $course = $entityManager->getRepository(Course::class)->findOneBy(['code' => (string) $values['hid_course_code']]);
+    }
+    if (!$course) {
+        Display::addFlash(Display::return_message(get_lang('Course not found'), 'error', false));
+        header('Location: '.Category::getUrl().'selectcat='.$select_cat);
+        exit;
     }
 
-    // Todo: Fix this assignment that ignores the block above
-    //Always add the gradebook to the course
-    $eval->setCourseId(api_get_course_int_id());
-    $eval->set_category_id($values['hid_category_id']);
-
-    $parent_cat = Category::load($values['hid_category_id']);
-    $global_weight = $cat[0]->get_weight();
-    //$values['weight'] = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();
-    $values['weight'] = $values['weight_mask'];
-
-    $eval->set_weight($values['weight']);
-    $eval->set_max($values['max']);
-    $visible = 1;
-    if (empty($values['visible'])) {
-        $visible = 0;
+    // Resolve Category entity
+    $categoryId = isset($values['hid_category_id']) ? (int) $values['hid_category_id'] : 0;
+    $category = $entityManager->getRepository(GradebookCategory::class)->find($categoryId);
+    if (!$category) {
+        Display::addFlash(Display::return_message(get_lang('Select assessment'), 'error', false));
+        header('Location: '.Category::getUrl().'selectcat='.$select_cat);
+        exit;
     }
-    $eval->set_visible($visible);
-    $eval->add();
+
+    // Normalize numeric inputs
+    $weight = isset($values['weight_mask']) && $values['weight_mask'] !== '' ? (float) $values['weight_mask'] : 0.0;
+    $max = isset($values['max']) && $values['max'] !== '' ? (float) $values['max'] : 0.0;
+    $visible = empty($values['visible']) ? 0 : 1;
+
+    // Min score can be empty => store NULL
+    $minScore = null;
+    if (array_key_exists('min_score', $values) && $values['min_score'] !== '' && $values['min_score'] !== null) {
+        $minScore = (float) $values['min_score'];
+    }
+
+    $evaluation = new GradebookEvaluation();
+    $evaluation->setTitle((string) $values['name']);
+    $evaluation->setDescription($values['description'] !== '' ? (string) $values['description'] : '');
+
+    $evaluation->setCourse($course);
+    $evaluation->setCategory($category);
+
+    $evaluation->setWeight($weight);
+    $evaluation->setMax($max);
+    $evaluation->setVisible($visible);
+
+    // REQUIRED (DB NOT NULL)
+    $evaluation->setType('evaluation');
+
+    // Defensive: ensure locked has a value even if constructor changes later
+    $evaluation->setLocked(0);
+
+    // This is the missing piece for the reported issue
+    $evaluation->setMinScore($minScore);
+
+    $entityManager->persist($evaluation);
+    $entityManager->flush();
 
     $logInfo = [
         'tool' => TOOL_GRADEBOOK,
         'tool_id' => 0,
         'tool_id_detail' => 0,
         'action' => 'new-eval',
-        'action_details' => 'selectcat='.$eval->get_category_id(),
+        'action_details' => 'selectcat='.$evaluation->getCategory()->getId(),
     ];
     Event::registerLog($logInfo);
 
-    if (null == $eval->getCourseId()) {
-        if (1 == $values['adduser']) {
-            //Disabling code when course code is null see issue #2705
-            //header('Location: gradebook_add_user.php?selecteval=' . $eval->get_id());
-            exit;
-        } else {
-            header('Location: '.Category::getUrl().'selectcat='.$eval->get_category_id());
-            exit;
-        }
-    } else {
-        $val_addresult = isset($values['addresult']) ? $values['addresult'] : null;
-        if (1 == $val_addresult) {
-            header('Location: gradebook_add_result.php?selecteval='.$eval->get_id().'&'.api_get_cidreq());
-            exit;
-        } else {
-            header('Location: '.Category::getUrl().'selectcat='.$eval->get_category_id());
-            exit;
-        }
+    $val_addresult = isset($values['addresult']) ? (int) $values['addresult'] : 0;
+    if (1 === $val_addresult) {
+        header('Location: gradebook_add_result.php?selecteval='.$evaluation->getId().'&'.api_get_cidreq());
+        exit;
     }
+
+    header('Location: '.Category::getUrl().'selectcat='.$evaluation->getCategory()->getId());
+    exit;
 }
 
 $logInfo = [
@@ -103,8 +116,8 @@ Event::registerLog($logInfo);
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$select_cat,
-    'name' => get_lang('Assessments'), ]
-;
+    'name' => get_lang('Assessments'),
+];
 $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = '<script>
@@ -126,11 +139,32 @@ $(function() {
 });
 </script>';
 
-if (null == $evaladd->getCourseId()) {
-    Display::addFlash(Display::return_message(get_lang('Course independent evaluation'), 'normal', false));
-}
-
 Display::display_header(get_lang('Add classroom activity'));
 
+$defaultBackUrl = Category::getUrl().'selectcat='.$select_cat;
+$backUrl = $defaultBackUrl;
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+if (!empty($referer)) {
+    $platformHost = (string) parse_url(api_get_path(WEB_PATH), PHP_URL_HOST);
+    $refererHost = (string) parse_url($referer, PHP_URL_HOST);
+    if (empty($refererHost)) {
+        $backUrl = $referer;
+    } elseif (!empty($platformHost) && $refererHost === $platformHost) {
+        $backUrl = $referer;
+    }
+}
+
+echo '<div class="mb-4">';
+
+// Back icon only
+echo '<div class="mb-2">';
+echo Display::url(
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
+    $backUrl
+);
+echo '</div>';
+
+echo '</div>';
+
 $form->display();
-Display :: display_footer();
+Display::display_footer();

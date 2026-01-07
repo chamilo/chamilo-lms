@@ -52,6 +52,13 @@ window.RecordAudio = (function () {
             btnSave = rtcInfo.btnSaveId ? $(rtcInfo.btnSaveId) : null,
             tagAudio = $(rtcInfo.plyrPreviewId);
 
+        var buttonsToDisable = [
+            ".exercise_save_now_button button",
+            ".exercise_actions button",
+            ".question-answer-result button[name='show_ck']",
+            "#form-email button",
+        ].join(', ');
+
         function saveAudio() {
             var recordedBlob = recordRTC.getBlob();
 
@@ -98,7 +105,7 @@ window.RecordAudio = (function () {
                 btnPause.prop('disabled', true).addClass('hidden');
                 btnStart.prop('disabled', false).removeClass('hidden');
 
-                $('.exercise_save_now_button button, .exercise_actions button').prop('disabled', false);
+                $(buttonsToDisable).prop('disabled', false);
             });
         }
 
@@ -123,7 +130,7 @@ window.RecordAudio = (function () {
                 btnPause.prop('disabled', false).removeClass('hidden');
                 tagAudio.removeClass('show').addClass('hidden');
 
-                $('.exercise_save_now_button button, .exercise_actions button').prop('disabled', true);
+                $(buttonsToDisable).prop('disabled', true);
             }
 
             function errorCallback(error) {

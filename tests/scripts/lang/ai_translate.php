@@ -17,10 +17,13 @@ $apiKey = '{some-api-key-here}';
  * Chamilo Gettext auto-translator using Grok (grok-4-1-fast-non-reasoning)
  *
  * Usage:
- *   php translate.php [--test] fr es de
+ *   php translate.php [--test] [fr es de]
  *
  * - messages.en.po is used as the source of truth for terms and ordering.
- * - For each requested language (e.g. "fr"), messages.fr.po will be updated.
+ * - For each requested language (e.g. "fr"), messages.fr.po will be updated. If no language requested, all except English are processed.
+ * - The translation is done by calling the Grok API, which returns a JSON response with the translated terms.
+ * - The translation is applied to the target .po file, replacing existing terms.
+ * - The translation is logged to a file for review.
  * - In --test mode, only ONE API request of up to 50 terms is sent, and
  *   the partially translated .po file is written so you can inspect it.
  *
@@ -65,32 +68,73 @@ function eprintln(string $msg, bool $timestam = false): void {
  */
 function getLanguageName(string $code): string {
     static $map = [
-        'fr'    => 'French',
+        'ar'    => 'Arabic',
+        'ast_ES'=> 'Asturian (Spain)',
         'bg'    => 'Bulgarian',
-        'bn_BD' => 'Bengali (Bangladesh)',
-        'bo_CN' => 'Tibetan (China)',
-        'bs_BA' => 'Bosnian (Bosnia and Herzegovina)',
-        'cs_CZ' => 'Czech (Czech Republic)',
+        'bn'    => 'Bengali (Bangladesh)',
+        'bo'    => 'Tibetan (China)',
+        'bs'    => 'Bosnian (Bosnia and Herzegovina)',
+        'ca_ES' => 'Catalan (Spain)',
+        'cs'    => 'Czech (Czech Republic)',
+        'da'    => 'Danish',
+        'de'    => 'German',
+        'el'    => 'Greek',
+        'en'    => 'English',
         'eo'    => 'Esperanto',
         'es'    => 'Spanish',
         'es_MX'    => 'Spanish (Mexico)',
-        'de'    => 'German',
+        'eu_ES' => 'Basque (Spain)',
+        'fa'    => 'Persian (Iran)',
+        'fa_AF' => 'Persian (Afghanistan)',
+        'fi'    => 'Finnish',
+        'fo'    => 'Faroese',
+        'fr'    => 'French',
+        'fur_IT'=> 'Friulian (Italy)',
+        'ga'    => 'Irish',
+        'gl_ES' => 'Galician (Spain)',
+        'he'    => 'Hebrew',
+        'hi'    => 'Hindi',
+        'hr'    => 'Croatian',
+        'hu'    => 'Hungarian',
+        'hy'    => 'Armenian',
+        'id'    => 'Indonesian',
         'it'    => 'Italian',
+        'ja'    => 'Japanese',
+        'ka'    => 'Georgian',
+        'ko'    => 'Korean',
+        'lt'    => 'Lithuanian',
+        'lv'    => 'Latvian',
+        'mk'    => 'Macedonian',
+        'ms'    => 'Malay (Malaysia)',
+        'my_MM' => 'Burmese (Myanmar)',
+        'ne'    => 'Nepali (Nepal)',
         'nl'    => 'Dutch',
+        'nn'    => 'Norwegian Nynorsk',
+        'oc_FR' => 'Occitan (France)',
+        'pl'    => 'Polish',
+        'ps'    => 'Pashto (Afghanistan)',
         'pt'    => 'Portuguese',
         'pt_BR' => 'Brazilian Portuguese',
-        'pl'    => 'Polish',
+        'qu_PE' => 'Quechua (Peru)',
+        'ro'    => 'Romanian',
         'ru'    => 'Russian',
-        'ar'    => 'Arabic',
+        'sk'    => 'Slovak',
+        'sl'    => 'Slovenian',
+        'so'    => 'Somali (Somalia)',
+        'sq'    => 'Albanian',
+        'sr'    => 'Serbian',
+        'sv'    => 'Swedish',
+        'sw'    => 'Swahili',
+        'ta'    => 'Tamil (India)',
+        'th'    => 'Thai',
+        'tl'    => 'Tagalog (Philippines)',
+        'tr'    => 'Turkish',
+        'uk'    => 'Ukrainian',
+        'vi'    => 'Vietnamese',
+        'xh'    => 'Xhosa',
+        'yo'    => 'Yoruba (Nigeria)',
         'zh_CN' => 'Simplified Chinese',
         'zh_TW' => 'Traditional Chinese',
-        'ja'    => 'Japanese',
-        'ko'    => 'Korean',
-        'tr'    => 'Turkish',
-        'cs'    => 'Czech',
-        'ro'    => 'Romanian',
-        'el'    => 'Greek',
-        'hu'    => 'Hungarian',
     ];
     return $map[$code] ?? $code;
 }
@@ -391,7 +435,7 @@ function needsTranslationUpdate(string $msgid, string $msgstr, string $targetLan
     $tgtWordCount = count($tgtWords);
     $srcWordCount = count($srcWords);
 
-    if ($tgtWordCount > 2 && $srcWordCount > 0 && $tgt === $src) {
+    if ($tgtWordCount > 1 && $srcWordCount > 0 && $tgt === $src) {
         return true;
     }
 
@@ -495,7 +539,7 @@ EOT;
             'Authorization: Bearer ' . $apiKey,
         ],
         CURLOPT_POSTFIELDS     => $payloadJson,
-        CURLOPT_TIMEOUT        => 60,
+        CURLOPT_TIMEOUT        => 30,
     ]);
 
     $responseBody = curl_exec($ch);
@@ -644,7 +688,7 @@ function buildTargetPoContent(
 
 // CLI args
 $argvCopy = $argv;
-array_shift($argvCopy); // drop script name
+array_shift($argvCopy); // drop the script name
 
 $testMode = false;
 $testKey = array_search('--test', $argvCopy, true);
@@ -654,13 +698,45 @@ if ($testKey !== false) {
     $argvCopy = array_values($argvCopy);
 }
 
+// Determine which languages to process
 if (empty($argvCopy)) {
-    eprintln("Usage: php " . basename(__FILE__) . " [--test] <lang1> [<lang2> ...]");
-    eprintln("Example: php " . basename(__FILE__) . " fr es de");
-    exit(1);
-}
+    eprintln("No languages specified. Scanning {$translationsDir} for messages.*.po files...", true);
 
-$langCodes = $argvCopy;
+    $poFiles = glob($translationsDir . 'messages.*.po');
+    if ($poFiles === false || empty($poFiles)) {
+        eprintln("No .po files found in {$translationsDir}", true);
+        exit(1);
+    }
+
+    $langCodes = [];
+    foreach ($poFiles as $file) {
+        $filename = basename($file);
+        if (!preg_match('/^messages\.(.+)\.po$/', $filename, $matches)) {
+            continue;
+        }
+        $code = $matches[1];
+
+        // Skip English and any template (.pot disguised as .po)
+        // Tibetan (bo) is skipped because error-prone. Might be "unskipped" in the future. Execute manually (add 'po' parameter to command) to update.
+        if ($code === 'en' || $code === 'bo' || $code === 'pot') {
+            continue;
+        }
+
+        $langCodes[] = $code;
+    }
+
+    if (empty($langCodes)) {
+        eprintln("No translatable language files found (only English or template detected).", true);
+        exit(0);
+    }
+
+    // Sort alphabetically for consistent processing order
+    sort($langCodes);
+
+    eprintln("Auto-detected languages: " . implode(', ', $langCodes), true);
+} else {
+    $langCodes = $argvCopy;
+}
 
 if (!is_file($basePoFile)) {
     eprintln("Base PO file not found: {$basePoFile}");

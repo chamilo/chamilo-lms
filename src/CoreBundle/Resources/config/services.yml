@@ -38,7 +38,7 @@ services:
         tags:
             - {name: form.type}
 
-    Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor:
+    Chamilo\CoreBundle\Component\Editor\Tiny\TinyEditor:
         arguments: ['@translator', '@router']
 
     Chamilo\CoreBundle\Component\VichUploader\AssetDirectoryNamer:

@@ -20,7 +20,6 @@ use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\ResourceWithAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
-use Chamilo\CoreBundle\Search\Xapian\DocumentXapianIndexer;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
@@ -38,7 +37,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
-use Throwable;
 
 use const JSON_THROW_ON_ERROR;
 use const PATHINFO_EXTENSION;
@@ -52,8 +50,7 @@ class ResourceListener
         protected ToolChain $toolChain,
         protected RequestStack $request,
         protected Security $security,
-        protected TrackEDefaultRepository $trackEDefaultRepository,
-        protected DocumentXapianIndexer $documentXapianIndexer
+        protected TrackEDefaultRepository $trackEDefaultRepository
     ) {}
 
     /**
@@ -288,25 +285,6 @@ class ResourceListener
                 $this->security->getUser()?->getId()
             );
         }
-
-        // Xapian indexing for documents
-        if ($resource instanceof CDocument) {
-            if (!$this->shouldIndexDocumentFromRequest()) {
-                error_log('[Xapian] postPersist: indexing disabled by indexDocumentContent flag');
-
-                return;
-            }
-
-            try {
-                $docId = $this->documentXapianIndexer->indexDocument($resource);
-            } catch (Throwable $e) {
-                error_log(
-                    '[Xapian] postPersist: indexing failed: '.
-                    $e->getMessage().
-                    ' in '.$e->getFile().':'.$e->getLine()
-                );
-            }
-        }
     }
 
     public function postUpdate(AbstractResource $resource, PostUpdateEventArgs $event): void
@@ -319,24 +297,6 @@ class ResourceListener
                 'edition',
                 $this->security->getUser()?->getId()
             );
-        }
-
-        if ($resource instanceof CDocument) {
-            if (!$this->shouldIndexDocumentFromRequest()) {
-                error_log('[Xapian] postUpdate: indexing disabled by indexDocumentContent flag');
-
-                return;
-            }
-
-            try {
-                $docId = $this->documentXapianIndexer->indexDocument($resource);
-            } catch (Throwable $e) {
-                error_log(
-                    '[Xapian] postUpdate: indexing failed: '.
-                    $e->getMessage().
-                    ' in '.$e->getFile().':'.$e->getLine()
-                );
-            }
         }
     }
 
@@ -439,73 +399,11 @@ class ResourceListener
         }
 
         $em = $args->getObjectManager();
-        $resourceNode = $resource->getResourceNode();
-
-        if ($resourceNode) {
-            try {
-                $this->documentXapianIndexer->deleteForResourceNodeId((int) $resourceNode->getId());
-            } catch (Throwable $e) {
-                error_log(
-                    '[Xapian] preRemove: deleteForResourceNodeId() failed: '.
-                    $e->getMessage().' in '.$e->getFile().':'.$e->getLine()
-                );
-            }
-        }
-
         $docID = $resource->getIid();
         $em->createQuery('DELETE FROM Chamilo\CourseBundle\Entity\CLpItem i WHERE i.path = :path AND i.itemType = :type')
             ->setParameter('path', $docID)
             ->setParameter('type', 'document')
             ->execute()
         ;
-    }
-
-    private function shouldIndexDocumentFromRequest(): bool
-    {
-        $currentRequest = $this->request->getCurrentRequest();
-
-        // No HTTP request (CLI, tests, etc.) => keep old behavior: index
-        if (null === $currentRequest) {
-            return true;
-        }
-
-        // Only care about document endpoints
-        $path = $currentRequest->getPathInfo();
-        if (!\is_string($path) || !str_contains($path, '/documents')) {
-            return true;
-        }
-
-        // indexDocumentContent will come from form-data or query
-        $raw = $currentRequest->get('indexDocumentContent');
-
-        // If the flag is not present, keep the legacy behavior (index)
-        if (null === $raw) {
-            return true;
-        }
-
-        if (\is_bool($raw)) {
-            return $raw;
-        }
-
-        if (is_numeric($raw)) {
-            return ((int) $raw) !== 0;
-        }
-
-        if (\is_string($raw)) {
-            $normalized = strtolower(trim($raw));
-            $falseValues = ['0', 'false', 'no', 'off', ''];
-            $trueValues = ['1', 'true', 'yes', 'on'];
-
-            if (\in_array($normalized, $falseValues, true)) {
-                return false;
-            }
-
-            if (\in_array($normalized, $trueValues, true)) {
-                return true;
-            }
-        }
-
-        // Fallback: cast to boolean
-        return (bool) $raw;
     }
 }

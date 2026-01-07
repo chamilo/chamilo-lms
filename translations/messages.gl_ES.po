@@ -4649,7 +4649,7 @@ msgid "Invalid end date was given."
 msgstr "Data de fin inválida"
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(d/m/a h:m)"
 
 msgid "Homepage-files are not writable!"
 msgstr "¡Os ficheiros das páxinas de inicio non son editables!"
@@ -9458,7 +9458,7 @@ msgid "No document downloaded"
 msgstr "Non se descargou ningún documento"
 
 msgid "%d clicks"
-msgstr "%d clicks"
+msgstr "%d clics"
 
 msgid "Search results"
 msgstr "Resultados da busca"
@@ -10933,8 +10933,8 @@ msgstr "é"
 msgid "The address of"
 msgstr "O enderezo de"
 
-msgid "Your registration on"
-msgstr "A súa inscrición en"
+msgid "Your registration on %s"
+msgstr "A súa inscrición en %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "O nome de usuario que elixiu xa existe.Use o botón de Volver do navegador e elixa un diferente."
@@ -19375,7 +19375,7 @@ msgid "Exercise average"
 msgstr "Media do exercicio"
 
 msgid "Webcam Clip"
-msgstr "Webcam Clip"
+msgstr "Clip da Webcam"
 
 msgid "Snapshot"
 msgstr "Capturar"
@@ -22099,7 +22099,7 @@ msgid "Select with text field"
 msgstr "Seleccionar con campo de texto"
 
 msgid "Triple select"
-msgstr "Triple select"
+msgstr "Triple selección"
 
 msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Confirma que realmente quere subscribirse a esta plataforma."
@@ -26869,13 +26869,13 @@ msgid "Check password strength"
 msgstr "Comprobar a forza do contrasinal"
 
 msgid "HTTP Strict Transport Security"
-msgstr "HTTP Strict Transport Security"
+msgstr "Seguridade de Transporte Estrito HTTP"
 
 msgid "HTTP Strict Transport Security is an excellent feature to support on your site and strengthens your implementation of TLS by getting the User Agent to enforce the use of HTTPS. Recommended value: 'strict-transport-security: max-age=63072000; includeSubDomains'. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. You can include the 'preload' suffix, but this has consequences on the top level domain (TLD), so probably not to be done lightly. See https://hstspreload.org/. Leave blank to disable."
 msgstr "HTTP Strict Transport Security é unha excelente función para soportar no seu sitio e reforza a implementación de TLS facendo que o User Agent aplique o uso de HTTPS. Valor recomendado: 'strict-transport-security: max-age=63072000; includeSubDomains'. Vexa https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. Pode incluír o sufixo 'preload', pero isto ten consecuencias no dominio de nivel superior (TLD), polo que probablemente non se debe facer á lixeireza. Vexa https://hstspreload.org/. Deixe en branco para desactivar."
 
 msgid "Content Security Policy"
-msgstr "Content Security Policy"
+msgstr "Política de Seguridade de Contido"
 
 msgid "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the 'script-src' argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
 msgstr "Content Security Policy é unha medida efectiva para protexer o seu sitio de ataques XSS. Ao incluír en lista branca as fontes de contido aprobado, pode evitar que o navegador cargue activos maliciosos. Esta configuración é particularmente complicada de establecer con editores WYSIWYG, pero se engade todos os dominios que quere autorizar para a inclusión de iframes na declaración child-src, este exemplo debería funcionarche. Pode evitar que JavaScript se execute de fontes externas (incluíndo dentro de imaxes SVG) usando unha lista estricta no argumento 'script-src'. Deixe en branco para desactivar. Exemplo de configuración: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
@@ -26887,7 +26887,7 @@ msgid "This setting allows you to experiment by reporting but not enforcing some
 msgstr "Esta configuración permítelle experimentar informando pero non aplicando algunha Content Security Policy."
 
 msgid "HTTP Public Key Pinning"
-msgstr "HTTP Public Key Pinning"
+msgstr "Fixo de Clave Pública HTTP"
 
 msgid "HTTP Public Key Pinning protects your site from MiTM attacks using rogue X.509 certificates. By whitelisting only the identities that the browser should trust, your users are protected in the event a certificate authority is compromised."
 msgstr "HTTP Public Key Pinning protexe o seu sitio de ataques MiTM usando certificados X.509 falsos. Ao incluír en lista branca só as identidades que o navegador debe confiar, os seus usuarios están protexidos no caso de que unha autoridade de certificación sexa comprometida."
@@ -26917,7 +26917,7 @@ msgid "X-Content-Type-Options stops a browser from trying to MIME-sniff the cont
 msgstr "X-Content-Type-Options impide que un navegador intente detectar o tipo de contido MIME e obrígao a manter o tipo de contido declarado. O único valor válido para este cabezallo é 'nosniff'."
 
 msgid "Security Referrer Policy"
-msgstr "Security Referrer Policy"
+msgstr "Política de Referencia de Seguridade"
 
 msgid "Referrer Policy is a new header that allows a site to control how much information the browser includes with navigation away from a document and should be set by all sites."
 msgstr "Referrer Policy é un novo cabezallo que permite a un sitio controlar cantos datos do navegador inclúe coa navegación fóra dun documento e debería ser establecido por todos os sitios."
@@ -31446,4 +31446,397 @@ msgstr "Erro ao cargar recursos."
 
 msgid "Clear search"
 msgstr "Limpar busca"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Só se permiten letras, díxitos e guión baixo (_) no nome da base de datos. Os caracteres non válidos eliminaranse automaticamente."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Que termos e condicións xerais se dan aos usuarios para usar esta plataforma?"
+
+msgid "ex. {examplePassword}"
+msgstr "p. ex. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Benvido a Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Benvido a esta plataforma"
+
+msgid "For more details visit %s"
+msgstr "Para máis detalles visite %s"
+
+msgid "Manager"
+msgstr "Xestor"
+
+msgid "Mark as"
+msgstr "Marcar como"
+
+msgid "Reply to all"
+msgstr "Responder a todos"
+
+msgid "SCIM external ID"
+msgstr "ID externo SCIM"
+
+msgid "OAuth2 ID"
+msgstr "ID OAuth2"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Acepta a última versión dos termos e condicións."
+
+msgid "Required value for operation without path"
+msgstr "Valor obrigatorio para a operación sen camiño"
+
+msgid "Available space (%s)"
+msgstr "Espazo dispoñible (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Indexar esta descrición para a busca global"
+
+msgid "Unknown course"
+msgstr "Curso descoñecido"
+
+msgid "Certificate not found."
+msgstr "Certificado non atopado."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Token de seguridade caducado. Recarga a páxina e inténteo de novo."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Só os administradores da plataforma poden cambiar a visibilidade do curso."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Erro inesperado ao subscribir o usuario"
+
+msgid "Search in resource logs"
+msgstr "Buscar nos rexistros de recursos"
+
+msgid "Include this learning path in the global search results"
+msgstr "Incluír este camiño de aprendizaxe nos resultados da busca global"
+
+msgid "The course code already exists"
+msgstr "O código do curso xa existe"
+
+msgid "Latest news"
+msgstr "Últimas novas"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Obteña as últimas novas de Chamilo, incluíndo vulnerabilidades de seguridade e eventos, directamente no seu panel de administración. Estas novas consultaranse no servidor de novas de Chamilo cada vez que cargue a páxina de administración e só serán visibles para os administradores."
+
+msgid "Chamilo support block"
+msgstr "Bloque de soporte de Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Obteña consellos profesionais e unha forma sinxela de contactar con provedores de servizos oficiais para soporte profesional, directamente dos creadores de Chamilo. Este bloque aparece na súa páxina de administración, só é visible polos administradores e actualízase cada vez que carga a páxina de administración."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Agochar a opción de enviar anuncios aos usuarios de RRHH"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Permitir aos administradores de sesión descargar certificados privados"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Se está activado, os administradores de sesión poden descargar certificados mesmo se non están publicados publicamente."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Se non está baleiro, o proceso de creación do curso buscará algúns campos no perfil do usuario e enchelosáos automaticamente para o curso. Por exemplo, un profesor especializado en marketing dixital podería estabelecer automaticamente unha marca «marketing dixital» en cada curso que cree."
+
+msgid "Main menu entries"
+msgstr "Entradas do menú principal"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Marque as entradas que quere ver aparecer no menú principal"
+
+msgid "Main menu entries per role"
+msgstr "Entradas do menú principal por rol"
+
+msgid "Define header tabs visibility per role."
+msgstr "Defina a visibilidade das lapelas do cabezallo por rol."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Estableza as opcións que quere que aparezan na navegación ao redor dunha táboa para mostrar menos ou máis filas nunha páxina. p. ex. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Matriz de funcións extra que pode activar para o reprodutor de vídeo en Chamilo. As opcións inclúen 'speed', que lle permite cambiar a velocidade de reprodución dun vídeo."
+
+msgid "Mail: character set"
+msgstr "Correo: conxunto de caracteres"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "No caso de que precise definir o charset a usar ao enviar eses correos. Deixe baleiro se non está seguro."
+
+msgid "Mail: Debug"
+msgstr "Correo: Depuración"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Seleccione se quere activar os rexistros de depuración do envío de correos. Estes daránche máis información sobre o que está a ocorrer ao conectarse ao servizo de correo, pero non son elegantes e poden romper o deseño da páxina. Use só cando non haxa actividade de usuario."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Correo: Evitar usar LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Algúns clientes de correo non entenden o formato descritivo LD+JSON, mostrándoo como unha cadea JSON solta ao usuario final. Se este é o seu caso, pode querer estabelecer a variable de embaixo en 'false' para desactivar este cabezallo."
+
+msgid "Mail: DKIM headers"
+msgstr "Correo: Cabezallos DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Introduza un array JSON das súas configuracións DKIM (vexa exemplo)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Correo: Opcións XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Se usa algún servizo de correo baseado en XOAuth2, use esta configuración en JSON para gardar a súa configuración específica (vexa exemplo) e seleccione XOAuth2 na configuración do servizo de correo."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Define o tipo de ambiente: \"prod\" (produción normal), \"validation\" (como produción pero sen informar estatísticas), ou \"test\" (modo depuración con ferramentas de desenvolvedor como indicadores de cadeas non traducidas)."
+
+msgid "Global limit of users per course"
+msgstr "Límite global de usuarios por curso"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Define un número máximo global de usuarios (profesores incluídos) permitidos para subscribirse a calquera curso individual na plataforma. Estabeleza este valor a 0 para desactivar o límite. Isto axuda a evitar que os cursos se sobrecarguen en portais abertos."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Active para usar un array que defina cales roles deben mostrarse claramente e cales deben agocharse."
+
+msgid "Show base course posts in session course"
+msgstr "Mostrar publicacións base do curso no curso de sesión"
+
+msgid "Limit identical email usage"
+msgstr "Limitar o uso idéntico de correo"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Número máximo de contas permitidas para compartir o mesmo enderezo de correo-e. Estableza en 0 para deshabilitar este límite."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Permitir que os administradores de sesión vexan todos os usuarios en todas as URLs"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Se está activado, os administradores de sesión poden buscar e listar usuarios de todas as URLs de acceso, independentemente da súa URL actual."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Activar a posibilidade de que os usuarios seleccionen o seu propio fuso horario. Unha vez configurado, os usuarios poderán ver as datas límite das tarefas e outras referencias temporais no seu propio fuso horario, o que reducirá erros na hora de entrega."
+
+msgid "Redirect after login (per profile)"
+msgstr "Redirección despois do inicio de sesión (por perfil)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Definir redirección por perfil despois do inicio de sesión usando un obxecto JSON como {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Ocultar a caixa de aceptación legal na páxina de Termos e Condicións"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Se se establece en true, elimina a caixa de verificación \"Lin e acepto\" no fluxo da páxina de Termos e Condicións."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Matriz que define o anfitrión e o porto para o servidor LDAP."
+
+msgid "Enable 2FA"
+msgstr "Activar 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Engadir campos na páxina de actualización de contrasinal para activar 2FA usando unha app autenticadora TOTP. Cando está desactivado globalmente, os usuarios non verán os campos 2FA e non se lles pedirá 2FA ao iniciar sesión, mesmo se o activaran previamente."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Algunhas funcións de Chamilo conectaranse ao exterior desde o servidor. Por exemplo, para asegurarse de que un contido externo existe ao crear un enlace ou mostrar unha páxina incrustada no camiño de aprendizaxe. Se o seu servidor Chamilo usa un proxy para saír da súa rede, este sería o lugar para configuralo."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Activar ou desactivar a reinscrición automática cando caduca a validez do curso. Tamén debe activarse o traballo cron relacionado."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Mostrar días restantes nas Miñas Sesións"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Se está activado, as datas de sesión na páxina \"Miñas Sesións\" serán substituídas polo número de días restantes."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Mostrar \"Enquisas pendentes\" no menú"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Mostrar un elemento de menú que permite aos usuarios acceder ás súas enquisas pendentes."
+
+msgid "Disclose AI assistance"
+msgstr "Divulgar asistencia de IA"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Mostrar unha etiqueta en calquera contido ou comentarios xerados ou coxicenerados por calquera sistema de IA, evidenciando ao usuario que o contido foi creado coa axuda de algún sistema de IA. Os detalles sobre cal sistema de IA se usou en cada caso gárdanse na base de datos para auditoría, pero non son directamente accesibles polo usuario final."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "Configuración JSON para o catálogo de cursos: axustes de ligazóns, filtros, opcións de ordenación e máis."
+
+msgid "Session Catalog Settings"
+msgstr "Axustes do Catálogo de Sesións"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "Configuración JSON para o catálogo de sesións: filtros e opcións de visualización."
+
+msgid "Show Course Descriptions"
+msgstr "Mostrar Descricións de Cursos"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Mostrar descricións de cursos na listaxe do catálogo."
+
+msgid "Published Courses Only"
+msgstr "Só Cursos Publicados"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Limitar o catálogo só aos cursos marcados como publicados."
+
+msgid "Display Catalog on Homepage"
+msgstr "Mostrar Catálogo na Portada"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Mostrar o bloque do catálogo de cursos na portada da plataforma."
+
+msgid "Hide Public Link"
+msgstr "Ocultar Ligazón Pública"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Eliminar a ligazón URL pública das tarxetas de curso."
+
+msgid "Only Selected Courses"
+msgstr "Só Cursos Seleccionados"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Mostrar só os cursos seleccionados manualmente no catálogo."
+
+msgid "Allow Student Browsing"
+msgstr "Permitir Navegación de Estudantes"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Permitir aos estudantes navegar e filtrar o catálogo de cursos."
+
+msgid "Hide Private Courses"
+msgstr "Ocultar Cursos Privados"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Excluir os cursos privados da visualización do catálogo."
+
+msgid "Show Courses & Sessions"
+msgstr "Mostrar cursos e sesións"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Incluir cursos e sesións nos resultados do catálogo."
+
+msgid "Auto Session Subscription"
+msgstr "Subscrición automática á sesión"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Activar a subscrición automática ás sesións para os usuarios."
+
+msgid "Subscription in Session View"
+msgstr "Subscrición na vista da sesión"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Permitir aos usuarios subscribirse aos cursos directamente desde a páxina da súa sesión."
+
+msgid "Enable redirection plugin"
+msgstr "Activar o complemento de redirección"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Matriz que define os 'días' e 'meses' para establecer a data de caducidade da conta cando o usuario inicia sesión pola primeira vez."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Unha matriz de rol => número que representa o número de días que ten unha conta antes de caducar, dependendo do rol."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Campo extra de usuario usado para buscar e nomear sesións"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Esta configuración define a clave do campo extra de usuario (p. ex., \"company\") que se usará para buscar usuarios e para definir o nome da sesión ao rexistrar estudantes desde /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Xerador de termos do glosario"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Permitir aos profesores pedir termos de glosario xerados por IA no seu curso. Isto xerará 20 termos baseados no título do curso e na descrición xeral na ferramenta de descrición do curso. Se se usa máis dunha vez, excluirá os termos xa presentes nesse glosario (asegúrese de que o contido poida compartirse cos servizos de IA configurados)."
+
+msgid "Video generator"
+msgstr "Xerador de vídeo"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Xera vídeos baseados en indicacións ou contido usando IA (isto pode consumir moitos tokens)."
+
+msgid "Course analyser"
+msgstr "Analizador de curso"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Analiza todos os recursos nun ou varios cursos e preentrena o modelo de IA para responder calquera pregunta sobre este ou estes cursos (asegúrese de que o contido poida compartirse cos servizos de IA configurados)."
+
+msgid "Test/development"
+msgstr "Probas/desenvolvemento"
+
+msgid "Crons"
+msgstr "Crons"
+
+msgid "Editor"
+msgstr "Editor"
+
+msgid "Gradebook"
+msgstr "Libro de notas"
+
+msgid "Internationalization"
+msgstr "Internacionalización"
+
+msgid "User profiles"
+msgstr "Perfís de usuario"
+
+msgid "Support tickets"
+msgstr "Tickets de soporte"
+
+msgid "Webservices"
+msgstr "Servizos web"
+
+msgid "Catalogue"
+msgstr "Catálogo"
+
+msgid "Workflows"
+msgstr "Fluxos de traballo"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "A configuración é editable en sub-URLs"
+
+msgid "Show JSON Template"
+msgstr "Mostrar plantilla JSON"
+
+msgid "JSON Template"
+msgstr "Plantilla JSON"
+
+msgid "Installing Xapian bindings"
+msgstr "Instalando enlaces de Xapian"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "O seguinte fragmento mostra un exemplo de instalación dos enlaces PHP de Xapian en Ubuntu 25.04 con PHP 8.3. Adapten as rutas e versións ao seu propio entorno."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Asegúrense de ter só a versión de PHP que realmente usan (por exemplo, 8.3) e eviten mesturar varias versións con directorios de extensións diferentes."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Unha vez que a extensión estea correctamente cargada para CLI e o servidor web, os diagnósticos de busca de arriba deberían informar que o módulo Xapian está instalado."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Limpar cargas temporais e caché"
+
+msgid "Directory"
+msgstr "Directorio"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Eliminar só ficheiros con máis antigüidade que (minutos)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Estableza 0 para eliminar todos os ficheiros. Use un valor positivo (p. ex., 60) para evitar eliminar ficheiros que aínda se están cargando."
+
+msgid "Preview only (do not delete)"
+msgstr "Vista previa só (non eliminar)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Aviso: está a piques de eliminar TÓDOLOS ficheiros temporais. Esta acción non se pode desfacer."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Isto eliminará todos os ficheiros temporais. Continuar?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Isto eliminará os ficheiros con máis antigüidade que %minutes% minutos. Continuar?"
 

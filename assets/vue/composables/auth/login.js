@@ -79,6 +79,18 @@ function normalizeRedirectUrl(rawRedirect) {
   }
 }
 
+function hardRedirect(target) {
+  const origin = window.location.origin
+  const url = new URL(target, origin)
+
+  // Cache buster only for legacy PHP pages
+  if (url.pathname.endsWith(".php")) {
+    url.searchParams.set("_", Date.now().toString())
+  }
+
+  window.location.replace(url.pathname + url.search + url.hash)
+}
+
 export function useLogin() {
   const route = useRoute()
   const router = useRouter()
@@ -220,11 +232,17 @@ export function useLogin() {
               target = "/"
               break
             default:
-              target = `/${value.replace(/^\/+/, "")}`
+              target = `/${String(value).replace(/^\/+/, "")}`
           }
         } catch (e) {
           console.warn("[redirect_after_login] Malformed JSON:", e)
         }
+      }
+
+      const isLegacyTarget = target.includes(".php") || target.startsWith("/main/")
+      if (isLegacyTarget) {
+        hardRedirect(target)
+        return { success: true, redirect: target }
       }
 
       await router.replace({ path: target })

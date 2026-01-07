@@ -299,6 +299,15 @@ class GradebookCertificateRepository extends ResourceRepository
     }
 
     /**
+     * Backward-compatible alias.
+     * Some legacy code calls deleteCertificateResource(userId, catId).
+     */
+    public function deleteCertificateResource(int $userId, int $catId): bool
+    {
+        return $this->deleteCertificateAndRelatedFiles($userId, $catId);
+    }
+
+    /**
      * Delete the certificate and its associated files.
      * - New mode (resource): hardDelete() removes node + files + links.
      * - Legacy mode (personal file): remove PersonalFile and then the row.

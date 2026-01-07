@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Egoki"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula adibide: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula adibidea: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Aldagaien tarteak"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr "bai:copyright,, ez: copyright gabe"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Karpetak,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Karpeta,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ariketa,, simulation:simulazioa,, questionnaire:galdeketa,, diagram:diagrama,, figure:irudia,, graph:grafikoa,, index:indexa,, slide:diapositiba,, table:taula,, narrative text:testu narratiboa,, exam:azterketa,, experiment:saioa,, problem statement:problemaren egoera,, self assessment:autoebaluazioa,, lecture:irakurketa"
@@ -9528,7 +9528,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "Fitxategiaren kargak huts egin du: fitxategi luzapen hau edo fitxategi mota hau debekatuta dago"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "OpenID URLa"
 
 msgid "The file is too big to upload."
 msgstr "Kargatu beharreko fitxategia handiegia da!"
@@ -10925,8 +10925,8 @@ msgstr "da"
 msgid "The address of"
 msgstr "Noren helbidea:"
 
-msgid "Your registration on"
-msgstr "Zure inskripzioa honetan:"
+msgid "Your registration on %s"
+msgstr "Zure inskripzioa honetan  %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Erabiltzailearen izen hau badago hartuta. Erabili nagitzailearen 'Atzera' joateko botoia eta aukeratu beste bat."
@@ -15054,7 +15054,7 @@ msgid "Install Chamilo"
 msgstr "Instalatu Chamilo"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "Chamilo URLa"
 
 msgid "You have no session in your sessions history"
 msgstr "Ez duzu saio bat ere saioen historian"
@@ -19103,7 +19103,7 @@ msgid "Users added"
 msgstr "Erabiltzaileak gehitu dira"
 
 msgid "Plugin area"
-msgstr "Plugin area"
+msgstr "Plugin eremua"
 
 msgid "No configuration settings found for this plugin"
 msgstr "Ez da konfigurazioko ezarpenik aurkitu plugin honetarako"
@@ -28182,7 +28182,7 @@ msgid "Session expired. Redirecting to login…"
 msgstr "Saioa iraungi da. Birbideratzen login-era…"
 
 msgid "Super admin"
-msgstr "Super admin"
+msgstr "Super administratzailea"
 
 msgid "Global admin"
 msgstr "Admin globalea"
@@ -28431,7 +28431,7 @@ msgid "In person"
 msgstr "Pertsonalki"
 
 msgid "Blended learning"
-msgstr "Blended learning"
+msgstr "Ikaskuntza mistoa"
 
 msgid "Centralised"
 msgstr "Zentralizatua"
@@ -31438,4 +31438,397 @@ msgstr "Errorea gertatu da baliabideak kargatzean."
 
 msgid "Clear search"
 msgstr "Garbitu bilaketa"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Letra, digitu eta azpimarril (_) bakarrik onartzen dira datu-basearen izenean. Karakter baliogabeak ezabatu egingo dira automatikoki."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Zeintzuk dira erabiltzaileei plataforma hau erabiltzeko ematen zaizkien baldintza orokorrak?"
+
+msgid "ex. {examplePassword}"
+msgstr "ad. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Ongi etorri Chamilorat!"
+
+msgid "Welcome to this platform"
+msgstr "Ongi etorri plataforma honetara"
+
+msgid "For more details visit %s"
+msgstr "Xehetasun gehiagok %s bisitatu"
+
+msgid "Manager"
+msgstr "Kudeatzailea"
+
+msgid "Mark as"
+msgstr "Markatu honela"
+
+msgid "Reply to all"
+msgstr "Erantzun guztiei"
+
+msgid "SCIM external ID"
+msgstr "SCIM ID kanpokoa"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Onartu baldintza eta条款en azken bertsioa mesedez."
+
+msgid "Required value for operation without path"
+msgstr "Bide gabeko eragiketarako beharrezko balioa"
+
+msgid "Available space (%s)"
+msgstr "Eskuragarri dagoen lekua (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Indizearen deskribapen hau bilaketa globalean"
+
+msgid "Unknown course"
+msgstr "Ikastaro ezezaguna"
+
+msgid "Certificate not found."
+msgstr "Ziurtagiria ez da aurkitu."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Segurtasun tokena irauli da. Kargatu orria berriro eta saiatu berriro."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Plataforma administratzaileek soilik alda dezakete ikastaroaren ikusgarritasuna."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Erabiltzailea harpidetzean espero gabeko errorea"
+
+msgid "Search in resource logs"
+msgstr "Bilatu baliabideen eguneratzeetan"
+
+msgid "Include this learning path in the global search results"
+msgstr "Sartu ikasketa-bidea bilaketa globalaren emaitzetan"
+
+msgid "The course code already exists"
+msgstr "Ikastaro kodea dagoeneko existitzen da"
+
+msgid "Latest news"
+msgstr "Azken berriak"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Jaso Chamilo-ren azken berriak, segurtasun ahulguneak eta gertaerak barne, zuzenean zure administrazio-panelean. Berri hauek Chamilo berrien zerbitzarian egiaztatuko dira administrazio-orria kargatzen duzun bakoitzean eta administratzaileentzako bakarrik izango dira ikusgarriak."
+
+msgid "Chamilo support block"
+msgstr "Chamilo laguntza blokea"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Jaso pro aholkuak eta zerbitzu hornitzaile ofizialekin harremanetan jartzeko erraza, Chamilo sortzaileengandik zuzenean. Bloke hau administrazio-orrian agertzen da, administratzaileentzako bakarrik ikusgarria da eta administrazio-orria kargatzen duzun bakoitzean berritu egiten da."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Ezkutatu iragarkiak HR erabiltzaileei bidaltzeko aukera"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Baimendu saio administratzaileei ziurtagiri pribatuak deskargatzea"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Gaitasuna badu, saio-administratzaileek jaso ditzakete ziurtagiriak argi eta garbi argitaratu gabe ere."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Hutsik ez badago, ikastaroaren sorrerako prozesuak erabiltzailearen profilikatuko eremu batzuk bilatuko ditu eta automatikoki betetuko ditu ikastaroarentzat. Adibidez, marketing digital espezializatutako irakasleak automatikoki « marketing digital » bandera ezar dezake sortzen duen bakoitzean."
+
+msgid "Main menu entries"
+msgstr "Menu nagusiko sarrerak"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Menu nagusian agertu nahi duzun sarrera aukeratu"
+
+msgid "Main menu entries per role"
+msgstr "Menu nagusiko sarrerak rol bakoitzeko"
+
+msgid "Define header tabs visibility per role."
+msgstr "Definitu goiburuko fitxetako ikusgaitasuna rol bakoitzeko."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Ezarri aukerak taularen inguruko nabigazioan agertzeko, orri bakoitzean gutxiago edo gehiago lerro erakusteko. ad. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Chamilo bideo-jotzailearentzat gaitu daitezkeen ezaugarri gehigarrien sorta. Aukerak barne hartzen ditu 'speed', bideo baten erreproduzketaren abiadura aldatzeko."
+
+msgid "Mail: character set"
+msgstr "Posta: karaktere-multzo"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Posta horiek bidaltzean erabiltzeko karaktere-multzoa definitu behar baduzu. Hutsik utzi ziur ez badago."
+
+msgid "Mail: Debug"
+msgstr "Posta: Arazkera"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Aukeratu posta bidaltze arazkera-logak gaitu nahi dituzun. Hauek posta-zerbitzura konektatzean zer gertatzen den informazio gehiago emango dizute, baina ez dira dotoreak eta orriaren diseinua apur dezakete. Erabili soilik erabiltzaileen jardera ez dagoenean."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Posta: Saihestu LD+JSON erabiltzea"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Posta-klientek batzuek ez dute deskribapen LD+JSON formatua ulertzen, amaierako erabiltzaileari JSON kate soltea bezala erakutsiz. Zure kasua bada, beheko aldagailua 'false'ra ezarri dezakezu goiburuko hau desgaituz."
+
+msgid "Mail: DKIM headers"
+msgstr "Posta: DKIM goiburuak"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Sartu zure DKIM konfigurazio-ezarpenen JSON sorta (ikusi adibidea)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Posta: XOAuth2 aukerak"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "XOAuth2 oinarritutako posta-zerbitzurik erabiltzen baduzu, erabili ezarpen hau JSONan zure konfigurazio espezifikoa gordetzeko (ikusi adibidea) eta aukeratu XOAuth2 posta-zerbitzuaren ezarpenetan."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Definitu ingurune mota: \"prod\" (produkzio normala), \"validation\" (produkzio antzekoa baina estatistika txostirik gabe), edo \"test\" (arazkera modua garatzaileen tresnekin, hala nola itzuli gabe dagoen kate-adierazleak)."
+
+msgid "Global limit of users per course"
+msgstr "Erabiltzaileen mugara ikastaro globalea"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Definitu plataforma osoan ikastaro bakoitzera harpidetu daitekeen erabiltzaileen (irakasleak barne) gehienezko zenbaki globala. Ezarri balio hau 0ra mugara desgaituz. Honek portale irekietan ikastaroak gainkargatzea saihesten du."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Gaitu rolak argi erakutsi behar diren eta ezkutatzekoak diren definitzeko sorta erabiltzeko."
+
+msgid "Show base course posts in session course"
+msgstr "Erakutsi ikastaro oinarrizko mezuak saio-ikastaroan"
+
+msgid "Limit identical email usage"
+msgstr "Mugatu posta bera erabiltzea"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Baimendutako kontu kopuru maximoa, posta elektroniko bera partekatzeko. 0 ezarri mugara ezgaitzeko."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Saio-administratzaileei URL guztietako erabiltzaile guztiak ikustea baimentzea"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Gaituz gero, saio-administratzaileek URL aktibatutik independenteki, URL guztietako erabiltzaileak bilatu eta zerrendatu ditzakete."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Erabiltzaileek beren ordu-zona hautatzeko aukera gaitu. Konfiguratuta, erabiltzaileek beren ordu-zonan ikus ditzakete lanen epeak eta beste denbora-erreferentziak, bidaltzean erroreak murrizteko."
+
+msgid "Redirect after login (per profile)"
+msgstr "Birbideratze saio-hasieraketa ostean (perfila)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Saio-hasieraketa osteko birbideratzea profil bakoitzeko definitu, JSON objektu bati erabiliz: {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Lege-onarpenaren koadrotxoa ezkutatu Baldintza Orokorrak orrian"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Ezer ezarri gero, \"Irakurri eta onartzen dut\" koadrotxoa kentzen du Baldintza Orokorrak orriaren fluxuan."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "LDAP zerbitzarirako ostalaria eta ataka definitzen duen array-a."
+
+msgid "Enable 2FA"
+msgstr "2FA gaitu"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Pasahitzen eguneratze orrian 2FA gaitzeko eremuak gehitu TOTP autentifikazio aplikazio bat erabiliz. Desgaituta dagoenean, erabiltzaileek ez dute 2FA eremurik ikusiko eta ez dira 2FA eskatuko saio-hasieraketan, aurretik gaituta egon arren."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Chamilo-ren ezaugarri batzuek zerbitzaritik kanpora konektatuko dira. Adibidez, esteka sortzean edo ikasketa-bidean orri txertatua erakustean edukia existitzen dela egiaztatzeko. Zure Chamilo zerbitzariak proxy bat erabiltzen badu saretik irtetzeko, hemen konfigura daiteke."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Kurtsoaren balioaldia amaitu artean inskripzio automatikoa gaitu edo ezgaitu. Cron lana ere gaituta egon behar da."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Egun geratzen direnak erakutsi Nire Saioetan"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Gaituz gero, \"Nire Saioak\" orrian saio-datak egun geratzen diren kopuruaz ordeztuko dira."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "\"Zain dauden inkestak\" erakutsi menuan"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Menu elementu bat erakutsi erabiltzaileei zain dauden inkestak atzitzea ahalbidetzeko."
+
+msgid "Disclose AI assistance"
+msgstr "AI laguntza argitaratu"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "AI sistema batek sortutako edo elkarrekin sortutako eduki edo iritzi guztietan etiketa bat erakutsi, erabiltzaileari edukiak AI sistema batekin eraikitako froga gisa. Zein AI sistema erabili den xehetasunak datu-basean gordetzen dira ikuskaritzarako, baina ez dira zuzenean erabiltzaileari eskuragarri."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "Kurtso katalogorako JSON konfigurazioa: lotura ezarpenak, iragazkiak, ordenatze aukerak eta gehiago."
+
+msgid "Session Catalog Settings"
+msgstr "Saio Katalogoko Ezarpenak"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "Saio katalogorako JSON konfigurazioa: iragazkiak eta bistaratze aukerak."
+
+msgid "Show Course Descriptions"
+msgstr "Erakutsi Ikastaro Deskribapenak"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Erakutsi ikastaro deskribapenak katalogo zerrendan."
+
+msgid "Published Courses Only"
+msgstr "Argitaratutako Ikastaroak Soilik"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Mugatu katalogoa argitaratutzat markatutako ikastaroetara soilik."
+
+msgid "Display Catalog on Homepage"
+msgstr "Erakutsi Katalogoa Hasiera Orrian"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Erakutsi ikastaro katalogo blokea plataforma hasiera orrian."
+
+msgid "Hide Public Link"
+msgstr "Ezkutatu Esteka Publikoa"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Kendu URL esteka publikoa ikastaro txartelretatik."
+
+msgid "Only Selected Courses"
+msgstr "Hautatutako Ikastaroak Soilik"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Erakutsi eskuz hautatutako ikastaroak soilik katalogoan."
+
+msgid "Allow Student Browsing"
+msgstr "Baimendu Ikasleen Nabigazioa"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Baimendu ikasleek ikastaro katalogoa nabigatzea eta iragaztea."
+
+msgid "Hide Private Courses"
+msgstr "Ezkutatu Ikastaro Pribatuak"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Baztertu ikastaro pribatuak katalogo erakuspenetik."
+
+msgid "Show Courses & Sessions"
+msgstr "Erakutsi Ikastaroak eta Saioak"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Sartu ikastaroak eta saioak katalogo emaitzetan."
+
+msgid "Auto Session Subscription"
+msgstr "Saio Harpidetza Automatikoa"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Gaitu saioetarako harpidetza automatikoa erabiltzaileentzat."
+
+msgid "Subscription in Session View"
+msgstr "Harpidetza Saio Ikuspegian"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Baimendu erabiltzaileek ikastaroetan harpidetzera saio orritik zuzenean."
+
+msgid "Enable redirection plugin"
+msgstr "Gaitu birbideratze plugina"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "'egunak' eta 'hilabeteak' definitzen dituen arraya, kontu iraungitze data ezartzeko lehenengo saioan."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "rola => zenbakia arraya, kontuaren iraungitze egun kopurua adierazten duena, rolari arabera."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Erabiltzaile eremu extra saioak bilatzeko eta izendatzeko erabiltzen da"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Ezarpen honek erabiltzaile eremu extra gakoa definitzen du (adib. \"enpresa\") erabiltzaileak bilatzeko eta /admin-dashboard/register-tik ikasleak izena ematean saio izena definitzeko."
+
+msgid "Glossary terms generator"
+msgstr "Glosario terminoen sortzailea"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Baimendu irakasleek AI-rekin sortutako glosario terminoak eskatzea ikastaroan. Honek 20 termino sortuko ditu ikastaro izenburu eta deskribapen orokorraren oinarrian. Erabili bada gehiago, baztertuko ditu jadanik glosarioan dauden terminoak (ziurtatu edukia konfiguratutako AI zerbitzuekin partekatzeko aukera dagoela)."
+
+msgid "Video generator"
+msgstr "Bideo sortzailea"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "AI erabiliz prompt edo edukien oinarrian bideoak sortzen ditu (hau token asko kontsumi dezake)."
+
+msgid "Course analyser"
+msgstr "Ikastaro analitzailea"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Analizatzen ditu ikastaro baten edo anizkoitzaren baliabide guztiak eta AI modeloa aurrez entrenatzen du ikastaro hauetan edo haueetan edozein galderari erantzuteko (ziurtatu edukia konfiguratutako AI zerbitzuekin partekatzeko aukera dagoela)."
+
+msgid "Test/development"
+msgstr "Proba/garapena"
+
+msgid "Crons"
+msgstr "Cronak"
+
+msgid "Editor"
+msgstr "Editorea"
+
+msgid "Gradebook"
+msgstr "Kalifikazio liburua"
+
+msgid "Internationalization"
+msgstr "Nazioartekotzea"
+
+msgid "User profiles"
+msgstr "Erabiltzaile profileak"
+
+msgid "Support tickets"
+msgstr "Laguntza txartelak"
+
+msgid "Webservices"
+msgstr "Webserviceak"
+
+msgid "Catalogue"
+msgstr "Katalogoa"
+
+msgid "Workflows"
+msgstr "Lan fluxuak"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Ezarpena editagarria azpi-URLetan"
+
+msgid "Show JSON Template"
+msgstr "Erakutsi JSON Txantiloia"
+
+msgid "JSON Template"
+msgstr "JSON Txantiloia"
+
+msgid "Installing Xapian bindings"
+msgstr "Xapian loturak instalatzea"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Hurrengo zatiak Xapian PHP loturen instalazio adibidea erakusten du Ubuntu 25.04-n PHP 8.3-rekin. Egokitu bideak eta bertsioak zure ingurunura."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Ziurtatu PHP bertsio bakarra duzula erabiltzen duzuna (adib. 8.3) eta saihestu hainbat bertsio nahastea hedapen direktorio desberdinekin."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Hedapena ondo kargatuta dagoenean CLI eta web zerbitzarirako, goiko bilaketa diagnostikoek Xapian modula instalatuta dagoela adierazi beharko dute."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Garbitu aldi baterako igoerak eta cache-a"
+
+msgid "Directory"
+msgstr "Direktorioa"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Ez ezazu ezabatu %minutes% minutu baino zaharragoak diren fitxategiak bakarrik"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Ezarri 0 fitxategi guztiak ezabatzeko. Balio positiboa erabili (adib. 60) igoeran dauden fitxategiak ez kentzeko."
+
+msgid "Preview only (do not delete)"
+msgstr "Aurrebista soilik (ez ezabatu)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Abisua: aldi baterako fitxategi guztiak ezabatzen ari zara. Ekintza hau ezin da desegin."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Aldi baterako fitxategi guztiak ezabatuko dira. Jarraitu?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "%minutes% minutu baino zaharragoak diren fitxategiak ezabatuko dira. Jarraitu?"
 

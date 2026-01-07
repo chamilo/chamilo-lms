@@ -10924,8 +10924,8 @@ msgstr "është"
 msgid "The address of"
 msgstr "Adresa e"
 
-msgid "Your registration on"
-msgstr "Regjistrimi juaj në"
+msgid "Your registration on %s"
+msgstr "Regjistrimi juaj në %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Kjo hyrje është tashmë e zënë. Përdorni butonin back të shfletuesit tuaj dhe zgjidhni një tjetër."
@@ -31431,4 +31431,397 @@ msgstr "Gabim në ngarkimin e burimeve."
 
 msgid "Clear search"
 msgstr "Pastro kërkimin"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Vetëm shkronja, shifra dhe nënvija (_) lejohen në emrin e bazës së të dhënave. Karakteret e pavlefshme do të hiqen automatikisht."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Çfarë kushtesh të përgjithshme dhe kushtesh përdorimi u jepen përdoruesve për të përdorur këtë platformë?"
+
+msgid "ex. {examplePassword}"
+msgstr "p.sh. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Mirësevini në Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Mirësevini në këtë platformë"
+
+msgid "For more details visit %s"
+msgstr "Për më shumë detaje vizitoni %s"
+
+msgid "Manager"
+msgstr "Menaxher"
+
+msgid "Mark as"
+msgstr "Shëno si"
+
+msgid "Reply to all"
+msgstr "Përgjigju të gjithëve"
+
+msgid "SCIM external ID"
+msgstr "SCIM ID e jashtme"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Ju lutemi pranoni versionin më të fundit të kushteve dhe kushteve."
+
+msgid "Required value for operation without path"
+msgstr "Vlerë e kërkuar për operacionin pa shteg"
+
+msgid "Available space (%s)"
+msgstr "Hapësirë e disponueshme (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Indekso këtë përshkrim për kërkimin global"
+
+msgid "Unknown course"
+msgstr "Kurs i panjohur"
+
+msgid "Certificate not found."
+msgstr "Certifikata nuk u gjet."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Token i sigurisë ka skaduar. Ju lutemi rifreskoni faqen dhe provoni përsëri."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Vetëm administratorët e platformës mund të ndryshojnë dukshmërinë e kursit."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Gabim i papritur gjatë regjistrimit të përdoruesit"
+
+msgid "Search in resource logs"
+msgstr "Kërko në log-et e burimeve"
+
+msgid "Include this learning path in the global search results"
+msgstr "Përfshi këtë shteg mësimor në rezultatet e kërkimit global"
+
+msgid "The course code already exists"
+msgstr "Kodi i kursit ekziston tashmë"
+
+msgid "Latest news"
+msgstr "Lajmet më të fundit"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Merrni lajmet më të fundit nga Chamilo, përfshirë dobësitë e sigurisë dhe eventet, direkt në panelin tuaj të administrimit. Këto lajme do të kontrollohen në serverin e lajmeve të Chamilo çdo herë që ngarkoni faqen e administrimit dhe janë të dukshme vetëm për administratorët."
+
+msgid "Chamilo support block"
+msgstr "Bllok mbështetjeje Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Merrni këshilla pro dhe një mënyrë të lehtë për të kontaktuar ofruesit zyrtarë të shërbimeve për mbështetje profesionale, direkt nga krijuesit e Chamilo. Ky bllok shfaqet në faqen tuaj të administrimit, është i dukshëm vetëm nga administratorët dhe rifreskohet çdo herë që ngarkoni faqen e administrimit."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Fsheh opsionin për të dërguar njoftime te përdoruesit HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Lejo administratorët e sesioneve të shkarkojnë certifikata private"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Nëse aktivizohet, administratorët e sesioneve mund të shkarkojnë certifikata edhe nëse nuk janë publikuar publikisht."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Nëse nuk është bosh, procesi i krijimit të kursit do të kërkojë disa fusha në profilin e përdoruesit dhe do t'i mbushë automatikisht për kursin. Për shembull, një mësues i specializuar në marketing dixhital mund të vendosë automatikisht një shenjë « marketing dixhital » në çdo kurs (e) që krijon."
+
+msgid "Main menu entries"
+msgstr "Hyrjet e menu kryesore"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Zgjidhni hyrjen që dëshironi të shfaqet në menunë kryesore"
+
+msgid "Main menu entries per role"
+msgstr "Hyrjet e menu kryesore për rol"
+
+msgid "Define header tabs visibility per role."
+msgstr "Përcaktoni dukshmërinë e skedarëve të kryesisë për rol."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Përcaktoni opsionet që dëshironi të shfaqen në navigimin rreth një tabele për të treguar më pak ose më shumë rreshta në një faqe. p.sh. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Array i veçorive shtesë që mund të aktivizoni për videolojtësin në Chamilo. Opsionet përfshijnë 'speed', që ju lejon të ndryshoni shpejtësinë e riprodhimit të një videoje."
+
+msgid "Mail: character set"
+msgstr "Postë: grup karakteresh"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Në rast se duhet të përcaktoni charset-in për t'u përdorur kur dërgoni ato email-e. Lini bosh nëse nuk jeni të sigurt."
+
+msgid "Mail: Debug"
+msgstr "Postë: Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Zgjidhni nëse dëshironi të aktivizoni regjistrat e debug për dërgimin e email-eve. Këto do t'ju japin më shumë informacion për atë që po ndodh kur lidheni me shërbimin e postës, por nuk janë elegante dhe mund të prishin dizajnin e faqes. Përdorni vetëm kur nuk ka aktivitet përdoruesish."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Postë: Shmangni përdorimin e LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Disa klientë email nuk e kuptojnë formatin përshkrues LD+JSON, duke e shfaqur atë si një varg JSON të lirë për përdoruesin përfundimtar. Nëse ky është rasti juaj, mund të dëshironi të vendosni variablin më poshtë në 'false' për të çaktivizuar këtë krye."
+
+msgid "Mail: DKIM headers"
+msgstr "Postë: Kryetë DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Futni një array JSON të cilësimeve tuaja të konfigurimit DKIM (shihni shembullin)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Postë: Opsione XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Nëse përdorni një shërbim email të bazuar në XOAuth2, përdorni këtë cilësim në JSON për të ruajtur konfigurimin tuaj specifik (shihni shembullin) dhe zgjidhni XOAuth2 në cilësimin e shërbimit të postës."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Përcakton llojin e mjedisit: \"prod\" (prodhim normal), \"validation\" (si prodhimi por pa raportimin e statistikave), ose \"test\" (modalitet debug me mjete zhvillimi si treguesit e stringjeve të papërkthyera)."
+
+msgid "Global limit of users per course"
+msgstr "Kufi global i përdoruesve për kurs"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Përcakton një numër maksimal global të përdoruesve (përfshirë mësuesit) të lejuar të abonojnë në çdo kurs të vetëm në platformë. Vendosni këtë vlerë në 0 për të çaktivizuar kufirin. Kjo ndihmon për të shmangur mbingarkesën e kurseve në portale të hapura."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Aktivizoni për të përdorur një array për të përcaktuar cilat role duhet të shfaqen qartë dhe cilat duhet të fshehen."
+
+msgid "Show base course posts in session course"
+msgstr "Shfaqni postimet bazë të kursit në kursin e sesionit"
+
+msgid "Limit identical email usage"
+msgstr "Kufizoni përdorimin e email-it identik"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Numri maksimal i llogarive të lejuara për të ndarë të njëjtën adresë e-mail. Vendosni në 0 për të çaktivizuar këtë kufizim."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Lejo adminët e sesioneve të shohin të gjithë përdoruesit në të gjitha URL-të"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Nëse aktivizohet, adminët e sesioneve mund të kërkojnë dhe listojnë përdoruesit nga të gjitha URL-të e aksesit, pavarësisht nga URL-ja e tyre aktuale."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Aktivizo mundësinë për përdoruesit të zgjedhin zonën e tyre kohore. Pasi të konfigurohet, përdoruesit do të jenë në gjendje të shohin afatet e detyrave dhe referencat e tjera kohore në zonën e tyre kohore, çka do të reduktojë gabimet në kohën e dorëzimit."
+
+msgid "Redirect after login (per profile)"
+msgstr "Ridrejtim pas hyrjes (për profil)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Përcaktoni ridrejtimin për profil pas hyrjes duke përdorur një objekt JSON si {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Fsheh checkbox-in e pranimit ligjor në faqen e Kushteve dhe Konditave"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Nëse vendoset në true, heq checkbox-in \"E kam lexuar dhe pranoj\" në rrjedhën e faqes së Kushteve dhe Konditave."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Array që përcakton host dhe port për serverin LDAP."
+
+msgid "Enable 2FA"
+msgstr "Aktivizo 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Shto fusha në faqen e përditësimit të fjalëkalimit për të aktivizuar 2FA duke përdorur një aplikacion autentifikues TOTP. Kur çaktivizohet globalisht, përdoruesit nuk do të shohin fushat 2FA dhe nuk do të nxitohen për 2FA në hyrje, edhe nëse e kishin aktivizuar më parë."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Disa veçori të Chamilo do të lidhen me jashtë nga serveri. Për shembull, për të siguruar që një përmbajtje e jashtme ekziston kur krijohet një lidhje ose shfaqet një faqe e ngulitur në shtegun e mësimit. Nëse serveri juaj Chamilo përdor një proxy për të dalë nga rrjeti i tij, ky është vendi për ta konfiguruar atë."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Aktivizo ose çaktivizo ri-regjistrimin automatik kur vlefshmëria e kursit skadon. Punën e cron të lidhur duhet të aktivizohet gjithashtu."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Shfaq ditët e mbetura në Sesionet e Mia"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Nëse aktivizohet, datat e sesioneve në faqen \"Sesionet e Mia\" do të zëvendësohen nga numri i ditëve të mbetura."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Shfaq \"Anketat në pritje\" në menu"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Shfaq një element menu që lejon përdoruesit të aksesojnë anketat e tyre në pritje."
+
+msgid "Disclose AI assistance"
+msgstr "Zbuloni ndihmën me AI"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Shfaq një etiketë në çdo përmbajtje ose reagim që është gjeneruar ose bashkë-gjeneruar nga ndonjë sistem AI, duke dëshmuar për përdoruesin se përmbajtja u ndërtua me ndihmën e ndonjë sistemi AI. Detajet rreth se cili sistem AI u përdor në cilin rast ruhen brenda bazës së të dhënave për auditim, por nuk janë të aksesueshme drejtpërdrejt nga përdoruesi final."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "Konfigurim JSON për katalogun e kurseve: cilësime lidhjesh, filtra, opsione renditjeje dhe më shumë."
+
+msgid "Session Catalog Settings"
+msgstr "Cilësimet e Katalogut të Sesioneve"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "Konfigurim JSON për katalogun e sesioneve: filtra dhe opsione shfaqjeje."
+
+msgid "Show Course Descriptions"
+msgstr "Shfaq Përshkrimet e Kurseve"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Shfaqni përshkrimet e kurseve brenda listimit të katalogut."
+
+msgid "Published Courses Only"
+msgstr "Vetëm Kurset e Publikuara"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Kufizoni katalogun vetëm në kurset e shënuara si të publikuara."
+
+msgid "Display Catalog on Homepage"
+msgstr "Shfaq Katalogun në Faqen Kryesore"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Shfaqni bllokun e katalogut të kurseve në faqen kryesore të platformës."
+
+msgid "Hide Public Link"
+msgstr "Fsheh Lidhjen Publike"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Hiqni lidhjen e URL-së publike nga kartat e kurseve."
+
+msgid "Only Selected Courses"
+msgstr "Vetëm Kurset e Zgjedhura"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Shfaqni vetëm kurset e zgjedhura manualisht në katalog."
+
+msgid "Allow Student Browsing"
+msgstr "Lejo Shfletimin nga Studentët"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Lejoni studentët të shfletojnë dhe filtrojnë katalogun e kurseve."
+
+msgid "Hide Private Courses"
+msgstr "Fsheh Kurset Private"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Përjashtoni kurset private nga shfaqja e katalogut."
+
+msgid "Show Courses & Sessions"
+msgstr "Shfaq Kurset dhe Seancat"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Përfshini si kurset ashtu edhe seancat në rezultatet e katalogut."
+
+msgid "Auto Session Subscription"
+msgstr "Abonezim i Automatizuar i Seancës"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Aktivizoni abonimin e automatizuar të seancave për përdoruesit."
+
+msgid "Subscription in Session View"
+msgstr "Abonezim në Pamjen e Seancës"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Lejoni përdoruesit të abonojnë në kurse direkt nga faqja e tyre e seancës."
+
+msgid "Enable redirection plugin"
+msgstr "Aktivizo plugin-in e ridrejtimit"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Array që përcakton 'ditët' dhe 'muajt' për të vendosur datën e skadimit të llogarisë kur përdoruesi hyn për herë të parë."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Një array i rol => numër që përfaqëson numrin e ditëve që një llogari ka para skadimit, në varësi të rolit."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Fushë shtesë përdoruesi e përdorur për të kërkuar dhe emërtuar seancat"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Kjo cilësim përcakton çelësin e fushës shtesë të përdoruesit (p.sh., \"company\") që do të përdoret për të kërkuar përdoruesit dhe për të përcaktuar emrin e seancës kur regjistrohen studentët nga /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Gjeneruesi i termave të fjalorit"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Lejoni mësuesit të kërkojnë terma të fjalorit të gjeneruar nga AI në kursin e tyre. Kjo do të gjenerojë 20 terma bazuar në titullin e kursit dhe përshkrimin e përgjithshëm në mjetin e përshkrimit të kursit. Nëse përdoret më shumë se një herë, do të përjashtojë termat e tashmë të pranishëm në atë fjalor (sigurohuni që përmbajtja mund të ndahet me shërbimet e konfiguruar të AI-së)."
+
+msgid "Video generator"
+msgstr "Gjeneruesi i videove"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Gjeneron video bazuar në urdhra ose përmbajtje duke përdorur AI (kjo mund të konsumojë shumë tokena)."
+
+msgid "Course analyser"
+msgstr "Analizuesi i kursit"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Analizon të gjitha burimet në një ose shumë kurse dhe para-trenon modelin e AI-së për të përgjigjur çdo pyetje në këtë ose këto kurse (sigurohuni që përmbajtja mund të ndahet me shërbimet e konfiguruar të AI-së)."
+
+msgid "Test/development"
+msgstr "Test/zhvillim"
+
+msgid "Crons"
+msgstr "Crons"
+
+msgid "Editor"
+msgstr "Redaktues"
+
+msgid "Gradebook"
+msgstr "Regjistër notash"
+
+msgid "Internationalization"
+msgstr "Ndërkombëtarizim"
+
+msgid "User profiles"
+msgstr "Profili i përdoruesve"
+
+msgid "Support tickets"
+msgstr "Ticketat e mbështetjes"
+
+msgid "Webservices"
+msgstr "Webserviset"
+
+msgid "Catalogue"
+msgstr "Katalog"
+
+msgid "Workflows"
+msgstr "Rrjedhat e punës"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Cilësimi është i editueshëm në nën-URL"
+
+msgid "Show JSON Template"
+msgstr "Shfaq Shablonin JSON"
+
+msgid "JSON Template"
+msgstr "Shablloni JSON"
+
+msgid "Installing Xapian bindings"
+msgstr "Instalimi i lidhjeve Xapian"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Fragmenti i mëposhtëm tregon një shembull instalimi të lidhjeve PHP Xapian në Ubuntu 25.04 me PHP 8.3. Përshtatni shtigjet dhe versionet për mjedisin tuaj."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Sigurohuni që keni vetëm versionin e PHP që përdorni vërtet (p.sh. 8.3) dhe shmangni përzierjen e disa versioneve me direktori të ndryshme shtesash."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Pasi shtesa të jetë ngarkuar siç duhet për CLI dhe serverin web, diagnostikat e kërkimit të mësipërm duhet të raportojnë se moduli Xapian është instaluar."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Pastrimi i ngarkimeve të përkohshme dhe cache"
+
+msgid "Directory"
+msgstr "Direktorium"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Fshij vetëm skedarët më të vjetër se (minuta)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Vendos 0 për të fshirë të gjithë skedarët. Përdor një vlerë pozitive (p.sh., 60) për të shmangur heqjen e skedarëve që ende po ngarkohen."
+
+msgid "Preview only (do not delete)"
+msgstr "Parapamje vetëm (mos fshij)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Paralajmërim: ju jeni gati të fshini TË GJITHË skedarët e përkohshëm. Kjo veprim nuk mund të zhbëhet."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Kjo do të fshijë të gjithë skedarët e përkohshëm. Vazhdo?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Kjo do të fshijë skedarët më të vjetër se %minutes% minuta. Vazhdo?"
 

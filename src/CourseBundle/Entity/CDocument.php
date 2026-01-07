@@ -24,6 +24,7 @@ use ApiPlatform\Serializer\Filter\PropertyFilter;
 use ArrayObject;
 use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\DocumentLearningPathUsageAction;
+use Chamilo\CoreBundle\Controller\Api\DocumentUsageAction;
 use Chamilo\CoreBundle\Controller\Api\DownloadSelectedDocumentsAction;
 use Chamilo\CoreBundle\Controller\Api\MoveDocumentAction;
 use Chamilo\CoreBundle\Controller\Api\ReplaceDocumentFileAction;
@@ -46,6 +47,7 @@ use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
+use Chamilo\CoreBundle\Entity\ResourceRestrictToGroupContextInterface;
 
 #[ApiResource(
     shortName: 'Document',
@@ -211,6 +213,16 @@ use Symfony\Component\Validator\Constraints as Assert;
             ),
             provider: DocumentCollectionStateProvider::class
         ),
+        new Get(
+            uriTemplate: '/documents/{cid}/usage',
+            controller: DocumentUsageAction::class,
+            openapiContext: [
+                'summary' => 'Get usage/quota information for documents.',
+            ],
+            security: "is_granted('ROLE_USER')",
+            read: false,
+            name: 'api_documents_usage'
+        ),
     ],
     normalizationContext: [
         'groups' => ['document:read', 'resource_node:read'],
@@ -238,7 +250,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiFilter(filterClass: CidFilter::class)]
 #[ApiFilter(filterClass: SidFilter::class)]
-class CDocument extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
+class CDocument extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, ResourceRestrictToGroupContextInterface, Stringable
 {
     #[ApiProperty(identifier: true)]
     #[Groups(['document:read'])]

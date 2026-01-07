@@ -11,124 +11,127 @@
     removable-sort
     @page="onPage"
     @sort="onSort"
+  >
+    <Column selection-mode="multiple" />
+
+    <Column
+      :header="t('Title')"
+      :sortable="true"
+      field="title"
     >
-  <Column selection-mode="multiple" />
+      <template #body="slotProps">
+        <RouterLink
+          class="text-blue-600 hover:underline"
+          :to="getAssignmentDetailLink(slotProps.data)"
+        >
+          {{ slotProps.data.title }}
+        </RouterLink>
+      </template>
+    </Column>
 
-  <Column
-    :header="t('Title')"
-    :sortable="true"
-    field="title"
-  >
-    <template #body="slotProps">
-      <RouterLink
-        class="text-blue-600 hover:underline"
-        :to="getAssignmentDetailLink(slotProps.data)"
-      >
-        {{ slotProps.data.title }}
-      </RouterLink>
-      <BaseTag
-        v-if="slotProps.data.childFileCount > 0"
-        :label="`${slotProps.data.childFileCount}`"
-        type="success"
-        class="ml-2"
-      />
-    </template>
-  </Column>
-
-  <Column
-    :header="t('Deadline')"
-    :sortable="true"
-    field="assignment.expiresOn"
-  >
-    <template #body="slotProps">
+    <Column
+      :header="t('Deadline')"
+      :sortable="true"
+      field="assignment.expiresOn"
+    >
+      <template #body="slotProps">
         <span v-if="slotProps.data.assignment?.expiresOn">
           {{ formatStored(slotProps.data.assignment.expiresOn) }}
         </span>
-      <span v-else class="text-gray-400 italic">No deadline</span>
-    </template>
-  </Column>
+        <span
+          v-else
+          class="text-gray-400 italic"
+          >No deadline</span
+        >
+      </template>
+    </Column>
 
-  <Column
-    :header="t('End date')"
-    :sortable="true"
-    field="assignment.endsOn"
-  >
-    <template #body="slotProps">
+    <Column
+      :header="t('End date')"
+      :sortable="true"
+      field="assignment.endsOn"
+    >
+      <template #body="slotProps">
         <span v-if="slotProps.data.assignment?.endsOn">
           {{ formatStored(slotProps.data.assignment.endsOn) }}
         </span>
-      <span v-else class="text-gray-400 italic">—</span>
-    </template>
-  </Column>
+        <span
+          v-else
+          class="text-gray-400 italic"
+          >—</span
+        >
+      </template>
+    </Column>
 
-  <Column :header="t('Number submitted')">
-    <template #body="slotProps">
-      <BaseTag
-        :label="`${slotProps.data.uniqueStudentAttemptsTotal || 0} / ${slotProps.data.studentSubscribedToWork || 0}`"
-        type="success"
-      />
-    </template>
-  </Column>
+    <Column :header="t('Number submitted')">
+      <template #body="slotProps">
+        <BaseTag
+          :label="`${slotProps.data.uniqueStudentAttemptsTotal || 0} / ${slotProps.data.studentSubscribedToWork || 0}`"
+          type="success"
+        />
+      </template>
+    </Column>
 
-  <Column
-    :header="t('Actions')"
-    body-class="space-x-2"
-  >
-    <template #body="slotProps">
-      <div v-if="canEdit(slotProps.data)">
-        <BaseButton
-          :icon="
+    <Column
+      :header="t('Actions')"
+      body-class="space-x-2"
+    >
+      <template #body="slotProps">
+        <div v-if="canEdit(slotProps.data)">
+          <BaseButton
+            :icon="
               RESOURCE_LINK_PUBLISHED === slotProps.data.firstResourceLink?.visibility
                 ? 'eye-on'
                 : RESOURCE_LINK_DRAFT === slotProps.data.firstResourceLink?.visibility
                   ? 'eye-off'
                   : ''
             "
-          :label="t('Visibility')"
-          only-icon
-          size="normal"
-          type="black"
-          @click="onClickVisibility(slotProps.data)"
-        />
-        <BaseButton
-          :label="t('Upload corrections package')"
-          icon="zip-unpack"
-          only-icon
-          size="normal"
-          type="success"
-          :title="t('Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext')"
-          @click="() => uploadCorrections(slotProps.data)"
-        />
-        <BaseButton
-          :disabled="0 === (slotProps.data.uniqueStudentAttemptsTotal || 0)"
-          :label="t('Download assignments package')"
-          icon="zip-pack"
-          only-icon
-          size="normal"
-          type="primary"
-          @click="() => downloadAssignments(slotProps.data)"
-        />
-        <BaseButton
-          :label="t('Edit')"
-          icon="edit"
-          only-icon
-          size="normal"
-          type="black"
-          @click="onClickEdit(slotProps.data)"
-        />
-      </div>
-    </template>
-  </Column>
+            :label="t('Visibility')"
+            only-icon
+            size="normal"
+            type="black"
+            @click="onClickVisibility(slotProps.data)"
+          />
+          <BaseButton
+            :label="t('Upload corrections package')"
+            icon="zip-unpack"
+            only-icon
+            size="normal"
+            type="success"
+            :title="`${t('Upload corrections package')} — ${t('Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext')}`"
+            @click="() => uploadCorrections(slotProps.data)"
+          />
+          <BaseButton
+            :disabled="0 === (slotProps.data.uniqueStudentAttemptsTotal || 0)"
+            :label="t('Download assignments package')"
+            icon="zip-pack"
+            only-icon
+            size="normal"
+            type="primary"
+            :title="t('Download assignments package')"
+            @click="() => downloadAssignments(slotProps.data)"
+          />
+          <BaseButton
+            :label="t('Edit')"
+            icon="edit"
+            only-icon
+            size="normal"
+            type="black"
+            @click="onClickEdit(slotProps.data)"
+          />
+        </div>
+      </template>
+    </Column>
 
-  <template #footer>
-    <BaseButton
-      :disabled="0 === selected.length || loading"
-      :label="t('Delete selected')"
-      icon="delete"
-      type="danger"
-      @click="onClickMultipleDelete()"
-    />
-  </template>
+    <template #footer>
+      <BaseButton
+        :disabled="0 === selected.length || loading"
+        :label="t('Delete selected')"
+        icon="delete"
+        type="danger"
+        @click="onClickMultipleDelete()"
+      />
+    </template>
   </BaseTable>
 </template>
 
@@ -150,7 +153,7 @@ import { useRoute, useRouter } from "vue-router"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 import { useSecurityStore } from "../../store/securityStore"
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const route = useRoute()
 const router = useRouter()
 
@@ -187,7 +190,7 @@ watch(
     if (!loadParams.itemsPerPage) return
     loadData()
   },
-  { deep: true, immediate: true }
+  { deep: true, immediate: true },
 )
 
 async function loadData() {
@@ -310,7 +313,7 @@ async function downloadAssignments(assignment) {
     link.remove()
   } catch (error) {
     notification.showErrorNotification(t("Failed to download package"))
-    console.error("Download error", error)
+    console.error("[Assignments] Download error", error)
   }
 }
 
@@ -332,7 +335,7 @@ async function uploadCorrections(assignment) {
       notification.showSuccessNotification(t(`Corrections uploaded: ${uploaded}. Skipped: ${skipped}.`))
       await loadData()
     } catch (error) {
-      console.error("Upload corrections error", error)
+      console.error("[Assignments] Upload corrections error", error)
       notification.showErrorNotification(t("Failed to upload corrections"))
     }
   })
@@ -358,13 +361,45 @@ const canEdit = (item) => {
   return (isSessionDocument && isAllowedToEdit.value) || (isBaseCourse && !sid && isCurrentTeacher.value)
 }
 
+function pad2(n) {
+  return String(n).padStart(2, "0")
+}
+
+function getLocalePrefix(localeValue) {
+  if (typeof localeValue !== "string" || !localeValue) return "en"
+  return localeValue.replace("-", "_").split("_")[0]
+}
+
+/**
+ * Format stored datetime values the same way the DatePicker shows them:
+ * - API returns ISO strings with timezone (e.g. +00:00)
+ * - Editing form uses new Date(iso) => browser timezone
+ * - List must do the same conversion
+ */
 function formatStored(val) {
   if (!val) return "—"
+
   const s = String(val)
-  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/)
-  if (m) {
-    return `${m[3]}/${m[2]}/${m[1]} ${m[4]}:${m[5]}`
+
+  // Prefer Date parsing to respect timezone and match the editing form behavior
+  const d = new Date(s)
+  if (!Number.isNaN(d.getTime())) {
+    const day = pad2(d.getDate())
+    const month = pad2(d.getMonth() + 1)
+    const year = d.getFullYear()
+    const hour = pad2(d.getHours())
+    const min = pad2(d.getMinutes())
+
+    const prefix = getLocalePrefix(locale.value)
+    if (prefix === "en") return `${month}/${day}/${year} ${hour}:${min}`
+    return `${day}/${month}/${year} ${hour}:${min}`
   }
+
+  // Fallback to legacy regex formatting (kept to avoid regressions)
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/)
+  if (m) return `${m[3]}/${m[2]}/${m[1]} ${m[4]}:${m[5]}`
+
+  console.warn("[Assignments] Failed to parse date, falling back to abbreviated", { val: s })
   return abbreviatedDatetime(s)
 }
 </script>

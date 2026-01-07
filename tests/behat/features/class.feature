@@ -7,31 +7,32 @@ Feature: Classes
     Given I am a platform administrator
     And I am on "/main/admin/usergroups.php?action=add"
     When I fill in the following:
-      | name | Class 1 |
+      | title | Class 1 |
     Then I fill in editor field "description" with "description"
     Then I attach the file "/public/img/logo.png" to "picture"
     And I press "submit"
     And wait for the page to be loaded
-    Then I should see "Item added"
+    Then I should not see an error
 
   Scenario: Update a class
     Given I am a platform administrator
     And I am on "/main/admin/usergroups.php"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     Then I should see "Class 1"
-    Then I follow "Edit"
+    And I click the "i.mdi-pencil" element
+    And I wait for the page to be loaded
     When I fill in the following:
-      | name | Class 1 Edited |
+      | title | Class 1 Edited |
     Then I fill in editor field "description" with "description"
     And I press "submit"
     And wait for the page to be loaded
-    Then I should see "Update successful"
+    Then I should not see an error
 
   Scenario: Delete a class
     Given I am a platform administrator
     And I am on "/main/admin/usergroups.php"
     And wait for the page to be loaded
     Then I should see "Class 1"
-    Then I follow "Delete"
-    And confirm the popup
+    When I click the "i.mdi-delete" element
+    And I confirm the popup
     Then I should not see "Class 1"

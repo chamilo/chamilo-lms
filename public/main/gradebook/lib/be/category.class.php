@@ -2052,26 +2052,23 @@ class Category implements GradebookItem
             return false;
         }
 
-        $categoryLegacy = self::load($categoryId);
-        $categoryLegacy = $categoryLegacy[0];
+        $catArr = Category::load($categoryId);
+        $catObj = $catArr[0] ?? null;
 
-        /** @var Category $categoryLegacy */
-        $totalScore = $categoryLegacy->calc_score($user_id);
-
-        // Do not remove this the gradebook/lib/fe/gradebooktable.class.php
-        // file load this variable as a global
-        $scoredisplay = ScoreDisplay::instance();
-        $my_score_in_gradebook = $scoredisplay->display_score($totalScore, SCORE_SIMPLE);
-
-        if (empty($my_certificate)) {
-            GradebookUtils::registerUserInfoAboutCertificate(
-                $categoryId,
-                $user_id,
-                $my_score_in_gradebook,
-                api_get_utc_datetime()
-            );
-            $my_certificate = GradebookUtils::get_certificate_by_user_id($categoryId, $user_id);
+        $scoreForCertificate = 0.0;
+        if ($catObj) {
+            $scoreForCertificate = self::calculateFlatViewTotalPercent($catObj, (int) $user_id);
         }
+
+        GradebookUtils::registerUserInfoAboutCertificate(
+            (int) $categoryId,
+            (int) $user_id,
+            (float) $scoreForCertificate,
+            api_get_utc_datetime()
+        );
+
+// Now fetch the (possibly existing) certificate
+        $my_certificate = GradebookUtils::get_certificate_by_user_id($categoryId, $user_id);
 
         $html = [];
         if (!empty($my_certificate)) {
@@ -2152,6 +2149,58 @@ class Category implements GradebookItem
         }
 
         return false;
+    }
+
+
+    private static function calculateFlatViewTotalPercent(Category $cat, int $userId): float
+    {
+        $sessionId = api_get_session_id();
+        $courseId = api_get_course_int_id();
+
+        $parentId = (int) $cat->get_parent_id();
+        $allcat = $cat->get_subcategories(null, $courseId, $sessionId, 'ORDER BY id');
+
+        // Root category with visible subcategories.
+        if ($parentId === 0 && !empty($allcat)) {
+            $itemValueTotal = 0.0;
+            $itemTotal = 0.0;
+
+            foreach ($allcat as $subCat) {
+                $isVisible = true;
+                if (method_exists($subCat, 'is_visible')) {
+                    $isVisible = (bool) $subCat->is_visible();
+                } elseif (method_exists($subCat, 'get_visible')) {
+                    $isVisible = (bool) $subCat->get_visible();
+                }
+
+                $subWeight = (float) $subCat->get_weight();
+                if (!$isVisible || $subWeight <= 0) {
+                    continue;
+                }
+
+                $score = $subCat->calc_score($userId);
+                $den = (isset($score[1]) && (float) $score[1] > 0) ? (float) $score[1] : 0.0;
+                $num = isset($score[0]) ? (float) $score[0] : 0.0;
+
+                $ratio = ($den > 0.0) ? ($num / $den) : 0.0;
+
+                $itemValueTotal += $ratio * $subWeight;
+                $itemTotal += $subWeight;
+            }
+
+            $percent = ($itemTotal > 0.0) ? (($itemValueTotal / $itemTotal) * 100.0) : 0.0;
+
+            return round($percent, 2);
+        }
+
+        // Fallback: use category calc_score for non-root or no-subcat cases.
+        $total = $cat->calc_score($userId);
+        $den = (isset($total[1]) && (float) $total[1] > 0) ? (float) $total[1] : 0.0;
+        $num = isset($total[0]) ? (float) $total[0] : 0.0;
+
+        $percent = ($den > 0.0) ? (($num / $den) * 100.0) : 0.0;
+
+        return round($percent, 2);
     }
 
     /**
@@ -2729,14 +2778,7 @@ class Category implements GradebookItem
             return 0;
         }
 
-        $categoryList = self::load(
-            null,
-            null,
-            $courseId,
-            null,
-            null,
-            $sessionId
-        );
+        $categoryList = self::load((int) $category->getId(), null, 0, null, null, null, null);
 
         /* @var Category $category */
         $category = $categoryList[0] ?? null;

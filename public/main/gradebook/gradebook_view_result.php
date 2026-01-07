@@ -675,20 +675,50 @@ if (isset($_GET['import_score_error'])) {
 }
 
 if (null == $file_type) {
-    //show the result header
+    $captureHtml = static function (callable $fn): string {
+        ob_start();
+        $ret = $fn();
+        $buf = (string) ob_get_clean();
+
+        if ($buf !== '') {
+            return $buf;
+        }
+
+        return is_string($ret) ? $ret : '';
+    };
+
+    $formsHtml = '';
+
     if (isset($export_result_form) && !(isset($edit_res_form))) {
-        echo $export_result_form->display();
-        DisplayGradebook::display_header_result($eval[0], $currentcat[0]->get_id(), 'view_result');
+        $formsHtml .= $captureHtml(static function () use ($export_result_form) {
+            return $export_result_form->display();
+        });
     } else {
         if (isset($import_result_form)) {
-            echo $import_result_form->display();
+            $formsHtml .= $captureHtml(static function () use ($import_result_form) {
+                return $import_result_form->display();
+            });
         }
         if (isset($edit_res_form)) {
-            echo $edit_res_form->toHtml();
+            // EvalForm already returns HTML as string
+            $formsHtml .= $edit_res_form->toHtml();
         }
-        DisplayGradebook::display_header_result($eval[0], $currentcat[0]->get_id(), 'view_result');
     }
-    // Letter-based scores are built from lib/results_data_generator.class.php::get_score_display()
+
+    DisplayGradebook::display_header_result($eval[0], $currentcat[0]->get_id(), 'view_result');
+    echo '<div class="mx-auto w-full px-4 sm:px-4 lg:px-4">';
+    if (!empty(trim($formsHtml))) {
+        echo '  <div class="mt-4 bg-white border border-gray-25 rounded-2xl shadow-sm overflow-hidden">';
+        echo '    <div class="p-4 sm:p-6">';
+        echo          $formsHtml;
+        echo '    </div>';
+        echo '  </div>';
+    }
+    echo '  <div class="mt-4 bg-white border border-gray-25 rounded-2xl shadow-sm overflow-hidden">';
+    echo '    <div class="p-4 sm:p-6">';
     $resultTable->display();
+    echo '    </div>';
+    echo '  </div>';
+    echo '</div>';
     Display::display_footer();
 }

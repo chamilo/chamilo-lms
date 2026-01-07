@@ -1253,5 +1253,15 @@
     "Recycle selected": "Athch\u00fars\u00e1il roghnaithe",
     "Recycle is finished": "Cr\u00edochnaigh athch\u00fars\u00e1il",
     "Error loading resources.": "Earr\u00e1id ag lucht\u00fa acmhainn\u00ed.",
-    "Clear search": "Glan cuardach"
+    "Clear search": "Glan cuardach",
+    "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically.": "N\u00edl ach litreacha, digit\u00ed agus underscore (_) ceadaithe in ainm an bhunachair shonra\u00ed. Bainfear carachtair neamhbhail\u00ed go huathoibr\u00edoch.",
+    "Question manager": "Bainisteoir ceisteanna",
+    "Questions": "Ceisteanna",
+    "Security": "Sl\u00e1nd\u00e1il",
+    "What general terms and conditions are given to users to use this platform?": "C\u00e9 na t\u00e9arma\u00ed agus coinn\u00edollacha ginear\u00e1lta a thugtar d'\u00fas\u00e1ideoir\u00ed chun an t-ard\u00e1n seo a \u00fas\u00e1id?",
+    "ex. {examplePassword}": "m.sh. {examplePassword}",
+    "Blogs": "Blaganna",
+    "Blog": "Blag",
+    "Dropbox": "Dropbox",
+    "Your browser does not support Javascript": "N\u00ed thaca\u00edonn do bhrabhs\u00e1la\u00ed le Javascript"
 }

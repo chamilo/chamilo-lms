@@ -20,12 +20,11 @@
                 <hr class="my-6 border-gray-25" />
 
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12 w-full max-w-none">
                         <div class="box box-primary">
-                            <div class="box-body">
-                                {# Special notice for AI helpers namespace #}
+                            <div class="box-body w-full max-w-none">
                                 {% if namespace == 'ai_helpers' %}
-                                    <div class="mb-6 p-5 rounded-lg border border-gray-50 shadow-sm bg-white hover:shadow transition">
+                                    <div class="mb-6 p-5 rounded-lg border border-gray-50 shadow-sm bg-white hover:shadow transition" style="width:100%;max-width:none;">
                                         <div class="flex justify-between items-start mb-3 border-l-4 border-primary pl-4">
                                             <h3 class="text-gray-90 text-body-1 font-semibold">
                                                 {{ "EU AI Act – Transparency & risk notice"|trans }}
@@ -51,10 +50,9 @@
                                         </div>
                                     </div>
                                 {% endif %}
-
                                 {{ form_errors(form) }}
                                 <form
-                                        class="form-horizontal"
+                                        class="form-horizontal !w-full !max-w-none"
                                         action="{{ path('chamilo_platform_settings', { 'namespace': namespace, 'keyword': keyword } ) }}"
                                         method="post"
                                         novalidate
@@ -65,10 +63,43 @@
                                         {% set fieldName = field.vars.name %}
                                         {% set isHidden  = 'hidden' in field.vars.block_prefixes %}
 
-                                        {% if isHidden %}
+                                        {% set isLockedOnMain =
+                                            locked_map is defined
+                                            and locked_map[fieldName] is defined
+                                            and locked_map[fieldName] == 1
+                                        %}
+
+                                        {% set hideOnSubUrlBecauseLocked =
+                                            current_url_id is defined
+                                            and current_url_id != 1
+                                            and isLockedOnMain
+                                        %}
+
+                                        {% set isDisabledOnSubUrl =
+                                            current_url_id is defined
+                                            and current_url_id != 1
+                                            and (
+                                            (changeable_map is defined and changeable_map[fieldName] is defined and not changeable_map[fieldName])
+                                            or isLockedOnMain
+                                            )
+                                        %}
+
+                                        {% if hideOnSubUrlBecauseLocked %}
+                                            {# Do not show locked settings on sub-URLs.
+                                               Render them hidden/disabled so Symfony does not re-render them elsewhere. #}
+                                            <div class="hidden">
+                                                {% if field.vars.compound is defined and field.vars.compound %}
+                                                    {% for child in field %}
+                                                        {{ form_widget(child, { attr: { disabled: 'disabled' } }) }}
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {{ form_widget(field, { attr: { disabled: 'disabled' } }) }}
+                                                {% endif %}
+                                            </div>
+                                        {% elseif isHidden %}
                                             {{ form_widget(field) }}
                                         {% else %}
-                                            <div class="mb-6 p-5 rounded-lg border border-gray-50 shadow-sm bg-white hover:shadow transition">
+                                            <div class="mb-6 p-5 rounded-lg border border-gray-50 shadow-sm bg-white hover:shadow transition" style="width:100%;max-width:none;">
                                                 <div class="flex justify-between items-start mb-3 border-l-4 border-primary pl-4">
                                                     <h3 class="text-gray-90 text-body-1 font-semibold">
                                                         {{ field.vars.label|trans }}
@@ -85,22 +116,66 @@
                                                             </a>
                                                         {% endif %}
 
+                                                        {# Debug icon on test servers (keep original behavior) #}
                                                         {% set serverType = platform.server_type ?? (settings.platform.server_type ?? null) %}
                                                         {% if serverType == 'test' %}
                                                             <span
-                                                                    class="ml-3 text-gray-60 text-lg flex items-center cursor-default debug-setting-icon"
+                                                                    class="ml-1 text-gray-60 text-lg flex items-center cursor-default debug-setting-icon"
                                                                     title="{{ namespace ~ '.' ~ fieldName }}"
                                                                     role="img"
                                                                     aria-hidden="true"
                                                                     data-field-id="{{ field.vars.id }}"
                                                                     data-namespace="{{ namespace }}"
                                                                     data-field-name="{{ fieldName }}"
-                                                                {% if template_map[fieldName] is defined %}
-                                                                    data-template-id="{{ template_map[fieldName] }}"
-                                                                {% endif %}
+                                                                    {% if template_map[fieldName] is defined %}
+                                                                        data-template-id="{{ template_map[fieldName] }}"
+                                                                    {% endif %}
                                                             >
                                                                 <i class="mdi mdi-alphabetical course-tool__icon bg-primary-bgdisabled text-base" aria-hidden="true"></i>
                                                             </span>
+                                                        {% endif %}
+
+                                                        {# MultiURL changeable eye + access_url_locked behavior #}
+                                                        {% if changeable_map is defined %}
+                                                            {% set changeable = changeable_map[fieldName] is defined ? changeable_map[fieldName] : 1 %}
+
+                                                            {% if isLockedOnMain %}
+                                                                {# Main URL: show eye-off but NOT clickable when access_url_locked=1 #}
+                                                                <span
+                                                                        class="ml-1 text-gray-50 text-lg flex items-center cursor-not-allowed"
+                                                                        title="{{ 'Setting is globally locked (access_url_locked=1)'|trans }}"
+                                                                >
+                                                                    <i class="mdi mdi-eye-off text-gray-50 text-xl"></i>
+                                                                    <i class="mdi mdi-lock-outline text-gray-50 text-lg ml-1"></i>
+                                                                </span>
+                                                            {% elseif can_toggle_multiurl_setting %}
+                                                                {# Main URL + admin: clickable toggle #}
+                                                                <button
+                                                                        type="button"
+                                                                        class="ml-1 toggle-changeable flex items-center justify-center"
+                                                                        data-variable="{{ fieldName }}"
+                                                                        data-status="{{ changeable }}"
+                                                                        title="{{ changeable ? 'Setting is editable on sub-URLs'|trans : 'Setting locked for sub-URLs'|trans }}"
+                                                                >
+                                                                    {% if changeable %}
+                                                                        <i class="mdi mdi-eye text-primary text-xl"></i>
+                                                                    {% else %}
+                                                                        <i class="mdi mdi-eye-off text-gray-50 text-xl"></i>
+                                                                    {% endif %}
+                                                                </button>
+                                                            {% else %}
+                                                                {# Other URLs or non-privileged admins: read-only indicator #}
+                                                                <span
+                                                                        class="ml-1 text-gray-50 text-lg flex items-center cursor-default"
+                                                                        title="{{ changeable ? 'Setting is editable on sub-URLs'|trans : 'Setting locked for sub-URLs'|trans }}"
+                                                                >
+                                                                    {% if changeable %}
+                                                                        <i class="mdi mdi-eye text-gray-50 text-xl"></i>
+                                                                    {% else %}
+                                                                        <i class="mdi mdi-eye-off text-gray-50 text-xl"></i>
+                                                                    {% endif %}
+                                                                </span>
+                                                            {% endif %}
                                                         {% endif %}
                                                     </div>
                                                 </div>
@@ -112,19 +187,25 @@
 
                                                         <div class="flex flex-col gap-2">
                                                             {% for child in field %}
+                                                                {% set childAttr = isDisabledOnSubUrl ? { disabled: 'disabled' } : {} %}
                                                                 <label class="inline-flex items-center gap-2">
-                                                                    {{ form_widget(child) }}
+                                                                    {{ form_widget(child, { attr: childAttr }) }}
                                                                     <span>{{ child.vars.label }}</span>
                                                                 </label>
                                                             {% endfor %}
                                                         </div>
 
                                                     {% else %}
-                                                        {{ form_widget(field, {
-                                                            attr: {
-                                                                class: 'w-full rounded border border-gray-25 focus:border-primary focus:ring focus:ring-primary/30 transition'
-                                                            }
-                                                        }) }}
+                                                        {# Build base attributes and add disabled only when needed #}
+                                                        {% set baseAttr = {
+                                                            class: 'w-full rounded border border-gray-25 focus:border-primary focus:ring focus:ring-primary/30 transition'
+                                                        } %}
+                                                        {% set widgetAttr = isDisabledOnSubUrl
+                                                            ? baseAttr|merge({ disabled: 'disabled' })
+                                                            : baseAttr
+                                                        %}
+
+                                                        {{ form_widget(field, { attr: widgetAttr }) }}
                                                     {% endif %}
                                                 </div>
 
@@ -233,6 +314,106 @@
                                                 {% endfor %}
                                                 </tbody>
                                             </table>
+
+                                            {# --- Add this block right after the tools table --- #}
+                                            <div class="mt-4 p-4 rounded-lg border border-gray-25 bg-gray-10">
+                                                <h4 class="text-gray-90 text-body-2 font-semibold mb-2">
+                                                    {{ 'Supported file formats and required programs'|trans }}
+                                                </h4>
+
+                                                <p class="text-body-2 text-gray-70 mb-3">
+                                                    {{ 'Xapian indexes plain text only. For binary/external formats, Chamilo must first extract text using the programs below.'|trans }}
+                                                </p>
+
+                                                <table class="min-w-full text-sm border border-gray-25 rounded overflow-hidden bg-white">
+                                                    <thead class="bg-gray-10">
+                                                    <tr>
+                                                        <th class="px-3 py-2 text-left">{{ 'File extension(s)'|trans }}</th>
+                                                        <th class="px-3 py-2 text-left">{{ 'Extractor program'|trans }}</th>
+                                                        <th class="px-3 py-2 text-left">{{ 'Typical source formats'|trans }}</th>
+                                                        <th class="px-3 py-2 text-left">{{ 'Notes'|trans }}</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr class="border-t border-gray-15">
+                                                        <td class="px-3 py-2"><code>.pdf</code></td>
+                                                        <td class="px-3 py-2"><code>pdftotext</code></td>
+                                                        <td class="px-3 py-2">{{ 'PDF documents'|trans }}</td>
+                                                        <td class="px-3 py-2 text-gray-70">
+                                                            {{ 'Works on text-based PDFs. Scanned/image-only PDFs may return empty output unless OCR is used.'|trans }}
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr class="border-t border-gray-15">
+                                                        <td class="px-3 py-2"><code>.ps</code></td>
+                                                        <td class="px-3 py-2"><code>ps2pdf</code></td>
+                                                        <td class="px-3 py-2">{{ 'PostScript files'|trans }}</td>
+                                                        <td class="px-3 py-2 text-gray-70">
+                                                            {{ 'Used for PostScript-to-PDF conversion when needed by the extraction pipeline.'|trans }}
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr class="border-t border-gray-15">
+                                                        <td class="px-3 py-2"><code>.doc</code></td>
+                                                        <td class="px-3 py-2"><code>catdoc</code></td>
+                                                        <td class="px-3 py-2">{{ 'Legacy Microsoft Word (binary)'|trans }}</td>
+                                                        <td class="px-3 py-2 text-gray-70">
+                                                            {{ 'Applies to older .doc files (not .docx).'|trans }}
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr class="border-t border-gray-15">
+                                                        <td class="px-3 py-2"><code>.rtf</code></td>
+                                                        <td class="px-3 py-2"><code>unrtf</code></td>
+                                                        <td class="px-3 py-2">{{ 'Rich Text Format'|trans }}</td>
+                                                        <td class="px-3 py-2 text-gray-70">
+                                                            {{ 'Extracts text content from RTF documents.'|trans }}
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr class="border-t border-gray-15">
+                                                        <td class="px-3 py-2"><code>.ppt</code></td>
+                                                        <td class="px-3 py-2"><code>catppt</code></td>
+                                                        <td class="px-3 py-2">{{ 'Legacy Microsoft PowerPoint (binary)'|trans }}</td>
+                                                        <td class="px-3 py-2 text-gray-70">
+                                                            {{ 'Applies to older .ppt files (not .pptx).'|trans }}
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr class="border-t border-gray-15">
+                                                        <td class="px-3 py-2"><code>.xls</code></td>
+                                                        <td class="px-3 py-2"><code>xls2csv</code></td>
+                                                        <td class="px-3 py-2">{{ 'Legacy Microsoft Excel (binary)'|trans }}</td>
+                                                        <td class="px-3 py-2 text-gray-70">
+                                                            {{ 'Converts spreadsheets to CSV so text can be indexed.'|trans }}
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr class="border-t border-gray-15">
+                                                        <td class="px-3 py-2"><code>.html</code>, <code>.htm</code></td>
+                                                        <td class="px-3 py-2"><code>html2text</code></td>
+                                                        <td class="px-3 py-2">{{ 'HTML documents'|trans }}</td>
+                                                        <td class="px-3 py-2 text-gray-70">
+                                                            {{ 'Converts HTML to plain text (tags removed) before indexing.'|trans }}
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr class="border-t border-gray-15">
+                                                        <td class="px-3 py-2"><code>.txt</code>, <code>.md</code>, <code>.csv</code></td>
+                                                        <td class="px-3 py-2">{{ 'None (direct read)'|trans }}</td>
+                                                        <td class="px-3 py-2">{{ 'Plain text formats'|trans }}</td>
+                                                        <td class="px-3 py-2 text-gray-70">
+                                                            {{ 'These formats are already plain text and do not require external converters.'|trans }}
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                                <p class="text-body-2 text-gray-60 mt-3 mb-0">
+                                                    {{ 'Note: modern Office formats like .docx/.pptx/.xlsx require a different extraction method (ZIP/XML parsing, LibreOffice conversion, or a dedicated parser service).'|trans }}
+                                                </p>
+                                            </div>
+                                            {# --- End block --- #}
                                         </div>
                                     {% endif %}
                                 {% endif %}
@@ -245,7 +426,7 @@
         </div>
     </div>
 
-    {# MODAL overlay for JSON templates #}
+    {# MODAL overlay #}
     <div id="jsonTemplateOverlay"
          class="fixed inset-0 bg-gray-90/50 hidden z-40"></div>
 
@@ -326,7 +507,14 @@ sudo systemctl restart apache2
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        // JSON template modal
+        const overlay = document.getElementById('jsonTemplateOverlay');
+        const modal = document.getElementById('jsonTemplateModal');
+
+        function closeJsonTemplateModal() {
+          overlay?.classList.add('hidden');
+          modal?.classList.add('hidden');
+        }
+
         document.querySelectorAll('.show-template').forEach(link => {
           link.addEventListener('click', (e) => {
             e.preventDefault();
@@ -345,8 +533,8 @@ sudo systemctl restart apache2
                     document.getElementById('jsonTemplateContent').innerText = data.json_example;
                   }
 
-                  document.getElementById('jsonTemplateOverlay').classList.remove('hidden');
-                  document.getElementById('jsonTemplateModal').classList.remove('hidden');
+                  overlay?.classList.remove('hidden');
+                  modal?.classList.remove('hidden');
                 } else {
                   alert('{{ "Template not found."|trans }}');
                 }
@@ -354,10 +542,8 @@ sudo systemctl restart apache2
           });
         });
 
-        document.getElementById('closeJsonTemplateModal').addEventListener('click', () => {
-          document.getElementById('jsonTemplateOverlay').classList.add('hidden');
-          document.getElementById('jsonTemplateModal').classList.add('hidden');
-        });
+        document.getElementById('closeJsonTemplateModal')?.addEventListener('click', closeJsonTemplateModal);
+        overlay?.addEventListener('click', closeJsonTemplateModal);
 
         // Xapian help modal
         const openXapianHelp = document.getElementById('openXapianHelp');
@@ -382,9 +568,46 @@ sudo systemctl restart apache2
           });
         }
       });
-    </script>
-{% endblock %}
 
+      // MultiURL eye toggle: send AJAX to toggle access_url_changeable
+      document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.toggle-changeable');
+        if (!btn) {
+          return;
+        }
+
+        const variable = btn.dataset.variable;
+        const current = btn.dataset.status === '1' ? 1 : 0;
+        const next = current === 1 ? 0 : 1;
+
+        fetch('/admin/settings/toggle_changeable', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ variable: variable, status: next })
+        })
+          .then(r => r.json())
+          .then(data => {
+            if (data.result === 1) {
+              btn.dataset.status = String(next);
+              btn.innerHTML = next
+                ? '<i class="mdi mdi-eye text-primary text-xl"></i>'
+                : '<i class="mdi mdi-eye-off text-gray-50 text-xl"></i>';
+            } else if (data.error) {
+              console.error('Failed to update changeable state:', data.error);
+              alert(data.error);
+            } else {
+              console.error('Failed to update changeable state:', data);
+            }
+          })
+          .catch(err => {
+            console.error('AJAX error:', err);
+          });
+      });
+    </script>
+
+{% endblock %}
 {% block javascripts %}
     {% set ns = app.request.get('namespace')|default('') %}
     {% set sectionLabel =

@@ -39,6 +39,7 @@
           id="gradebook-gradebook-id"
           name="gradebook_category_id"
           option-label="name"
+          option-value="id"
         />
 
         <BaseInputNumber
@@ -111,12 +112,12 @@
       />
 
       <div v-if="chkRequireExtension">
-       <BaseMultiSelect
-         v-model="assignment.allowedExtensions"
-         :options="predefinedExtensions"
-         :label="t('Select allowed file formats')"
-         input-id="allowed-file-extensions"
-         />
+        <BaseMultiSelect
+          v-model="assignment.allowedExtensions"
+          :options="predefinedExtensions"
+          :label="t('Select allowed file formats')"
+          input-id="allowed-file-extensions"
+        />
 
         <BaseInputText
           v-if="assignment.allowedExtensions.includes('other')"
@@ -124,7 +125,6 @@
           v-model="assignment.customExtensions"
           :label="t('Custom extensions (separated by space)')"
         />
-
       </div>
     </BaseAdvancedSettingsButton>
 
@@ -147,7 +147,7 @@ import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsBu
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
-import BaseMultiSelect from "../basecomponents/BaseMultiSelect.vue";
+import BaseMultiSelect from "../basecomponents/BaseMultiSelect.vue"
 import BaseInputNumber from "../basecomponents/BaseInputNumber.vue"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 import useVuelidate from "@vuelidate/core"
@@ -188,29 +188,44 @@ const documentTypes = ref([
 ])
 
 const chkRequireExtension = ref(false)
-const predefinedExtensions = ref ([
-  {name: 'PDF', id: 'pdf'},
-  {name: 'DOCX', id: 'docx'},
-  {name: 'XLSX', id: 'xlsx'},
-  {name: 'ZIP', id: 'zip'},
-  {name: 'MP3', id: 'mp3'},
-  {name: 'MP4', id: 'mp4'},
-  {name: t('Other extensions'), id: 'other'},
+const predefinedExtensions = ref([
+  { name: "PDF", id: "pdf" },
+  { name: "DOCX", id: "docx" },
+  { name: "XLSX", id: "xlsx" },
+  { name: "ZIP", id: "zip" },
+  { name: "MP3", id: "mp3" },
+  { name: "MP4", id: "mp4" },
+  { name: t("Other extensions"), id: "other" },
 ])
 
 const assignment = reactive({
   title: "",
   description: "",
   qualification: 0,
-  gradebookId: gradebookCategories.value[0],
+  gradebookId: Number(gradebookCategories.value?.[0]?.id ?? 1),
   weight: 0,
   expiresOn: new Date(),
   endsOn: new Date(),
   addToCalendar: false,
   allowTextAssignment: 2,
   allowedExtensions: [],
-  customExtensions:'',
+  customExtensions: "",
 })
+
+function extractGradebookCategoryId(def) {
+  // Support multiple possible backend shapes.
+  // We return a number or null.
+  const direct = def?.gradebookCategoryId
+  if (direct !== undefined && direct !== null && direct !== "") return Number(direct)
+
+  const nested = def?.gradebookCategory?.id
+  if (nested !== undefined && nested !== null && nested !== "") return Number(nested)
+
+  const legacy = def?.gradebookId?.id
+  if (legacy !== undefined && legacy !== null && legacy !== "") return Number(legacy)
+
+  return null
+}
 
 watchEffect(() => {
   const def = props.defaultAssignment
@@ -224,6 +239,10 @@ watchEffect(() => {
   if (def.weight > 0) {
     chkAddToGradebook.value = true
     assignment.weight = def.weight
+    const gbId = extractGradebookCategoryId(def)
+    assignment.gradebookId = gbId ?? Number(gradebookCategories.value?.[0]?.id ?? 1)
+  } else {
+    assignment.gradebookId = Number(gradebookCategories.value?.[0]?.id ?? 1)
   }
   if (def.assignment.expiresOn) {
     chkExpiresOn.value = true
@@ -236,29 +255,26 @@ watchEffect(() => {
 
   assignment.allowTextAssignment = def.allowTextAssignment
 
-
   if (def.extensions) {
     const extensionsArray = def.extensions
-      .split(' ')
-      .map(ext => ext.trim())
-      .filter(ext => ext.length > 0)
+      .split(" ")
+      .map((ext) => ext.trim())
+      .filter((ext) => ext.length > 0)
 
     if (extensionsArray.length > 0) {
       chkRequireExtension.value = true
 
-      const predefinedIds = predefinedExtensions.value
-        .map(e => e.id)
-        .filter(id => id !== 'other')
+      const predefinedIds = predefinedExtensions.value.map((e) => e.id).filter((id) => id !== "other")
 
-      const predefined = extensionsArray.filter(ext => predefinedIds.includes(ext))
-      const custom = extensionsArray.filter(ext => !predefinedIds.includes(ext))
+      const predefined = extensionsArray.filter((ext) => predefinedIds.includes(ext))
+      const custom = extensionsArray.filter((ext) => !predefinedIds.includes(ext))
       if (assignment.allowedExtensions.length === 0) {
-      assignment.allowedExtensions = predefined
+        assignment.allowedExtensions = predefined
 
-      if (custom.length > 0) {
-        assignment.allowedExtensions.push('other')
-        assignment.customExtensions = custom.join(' ')
-      }
+        if (custom.length > 0) {
+          assignment.allowedExtensions.push("other")
+          assignment.customExtensions = custom.join(" ")
+        }
       }
     }
   }
@@ -270,7 +286,7 @@ watchEffect(() => {
     def.assignment.expiresOn ||
     def.assignment.endsOn ||
     def.allowTextAssignment !== undefined ||
-    (def.allowedExtensions)
+    def.allowedExtensions
   ) {
     showAdvancedSettings.value = true
   }
@@ -313,7 +329,7 @@ async function onSubmit() {
   }
 
   if (chkAddToGradebook.value) {
-    payload.gradebookCategoryId = assignment.gradebookId.id
+    payload.gradebookCategoryId = Number(assignment.gradebookId)
     payload.weight = assignment.weight
   }
   if (chkExpiresOn.value) {
@@ -325,21 +341,21 @@ async function onSubmit() {
   if (chkRequireExtension.value && assignment.allowedExtensions.length > 0) {
     let extensions = []
 
-    assignment.allowedExtensions.forEach(ext => {
-      if (ext !== 'other') {
+    assignment.allowedExtensions.forEach((ext) => {
+      if (ext !== "other") {
         extensions.push(ext)
       }
     })
-    if (assignment.allowedExtensions.includes('other') && assignment.customExtensions) {
+    if (assignment.allowedExtensions.includes("other") && assignment.customExtensions) {
       const customExts = assignment.customExtensions
-        .split(' ')
-        .map(ext => ext.trim().toLowerCase().replace('.', ''))
-        .filter(ext => ext.length > 0)
+        .split(" ")
+        .map((ext) => ext.trim().toLowerCase().replace(".", ""))
+        .filter((ext) => ext.length > 0)
       extensions.push(...customExts)
     }
 
     if (extensions.length > 0) {
-      payload.extensions = extensions.join(' ')  // "pdf docx rar ai"
+      payload.extensions = extensions.join(" ") // Example: "pdf docx rar ai"
     }
   }
   if (props.defaultAssignment?.["@id"]) {

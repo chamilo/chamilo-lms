@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Search\Xapian\XapianIndexService;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
@@ -696,6 +697,10 @@ abstract class Question
         $addQs = false,
         $rmQs = false
     ) {
+        // Chamilo 2 uses Symfony-based indexing. Legacy indexer (course_code) is not compatible.
+        if (class_exists(XapianIndexService::class)) {
+            return;
+        }
         // update search engine and its values table if enabled
         if (!empty($exerciseId) && 'true' == api_get_setting('search_enabled') &&
             extension_loaded('xapian')
@@ -1551,10 +1556,28 @@ abstract class Question
                 // Add all other non-open question types.
                 $allTypes = self::getQuestionTypeList();
 
-                // The task explicitly mentions NOT including free-answer questions.
-                // So we only exclude FREE_ANSWER here.
+                // Exclude the classic open question types from the filter list
+                // as the system cannot provide immediate feedback on these.
                 if (isset($allTypes[FREE_ANSWER])) {
                     unset($allTypes[FREE_ANSWER]);
+                }
+                if (isset($allTypes[ORAL_EXPRESSION])) {
+                    unset($allTypes[ORAL_EXPRESSION]);
+                }
+                if (isset($allTypes[ANNOTATION])) {
+                    unset($allTypes[ANNOTATION]);
+                }
+                if (isset($allTypes[MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY])) {
+                    unset($allTypes[MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY]);
+                }
+                if (isset($allTypes[UPLOAD_ANSWER])) {
+                    unset($allTypes[UPLOAD_ANSWER]);
+                }
+                if (isset($allTypes[ANSWER_IN_OFFICE_DOC])) {
+                    unset($allTypes[ANSWER_IN_OFFICE_DOC]);
+                }
+                if (isset($allTypes[PAGE_BREAK])) {
+                    unset($allTypes[PAGE_BREAK]);
                 }
 
                 // Append remaining types, without overriding the original ones.
@@ -2181,9 +2204,10 @@ abstract class Question
 
         $count = $em
             ->createQuery('
-                SELECT COUNT(qq.iid) FROM ChamiloCourseBundle:CQuizRelQuestion qq
-                WHERE qq.question = :id
-            ')
+            SELECT COUNT(qq.iid)
+            FROM ChamiloCourseBundle:CQuizRelQuestion qq
+            WHERE IDENTITY(qq.question) = :id
+        ')
             ->setParameters(['id' => (int) $this->id])
             ->getSingleScalarResult();
 
@@ -2195,19 +2219,103 @@ abstract class Question
      *
      * @throws \Doctrine\ORM\Query\QueryException
      */
-    public function getExerciseListWhereQuestionExists()
+    public function getExerciseListWhereQuestionExists(): array
     {
         $em = Database::getManager();
+        $questionId = (int) $this->id;
 
-        return $em
-            ->createQuery('
-                SELECT e
-                FROM ChamiloCourseBundle:CQuizRelQuestion qq
-                JOIN ChamiloCourseBundle:CQuiz e
-                WHERE e.iid = qq.exerciceId AND qq.questionId = :id
-            ')
-            ->setParameters(['id' => (int) $this->id])
-            ->getResult();
+        // Doctrine does not allow selecting only a JOIN alias unless it is a root alias.
+        // So we select CQuiz as root and join the relation entity with a WITH clause.
+        $dql = '
+        SELECT DISTINCT q
+        FROM ChamiloCourseBundle:CQuiz q
+        JOIN ChamiloCourseBundle:CQuizRelQuestion qq WITH qq.quiz = q
+        WHERE IDENTITY(qq.question) = :id
+    ';
+
+        try {
+            return $em->createQuery($dql)
+                ->setParameter('id', $questionId)
+                ->getResult();
+        } catch (\Throwable $e) {
+            // Fallback (best effort): use DBAL on the relation table and then load quizzes.
+            // We keep this non-fatal to avoid breaking the admin listing.
+        }
+
+        try {
+            $conn = Database::getConnection();
+
+            // DBAL 2/3 schema manager compatibility
+            $sm = method_exists($conn, 'createSchemaManager')
+                ? $conn->createSchemaManager()
+                : $conn->getSchemaManager();
+
+            $tableNames = method_exists($sm, 'listTableNames') ? $sm->listTableNames() : [];
+
+            $relCandidates = [
+                'c_quiz_rel_question',
+                'quiz_rel_question',
+                'c_quiz_question_rel_exercise',
+                'quiz_question_rel_exercise',
+            ];
+
+            $relTable = null;
+            foreach ($relCandidates as $t) {
+                if (\in_array($t, $tableNames, true)) {
+                    $relTable = $t;
+                    break;
+                }
+            }
+
+            if (empty($relTable)) {
+                return [];
+            }
+
+            // Detect the exercise/quiz id column name
+            $columns = [];
+            try {
+                foreach ($sm->listTableColumns($relTable) as $colName => $col) {
+                    $columns[] = $colName;
+                }
+            } catch (\Throwable $e) {
+                $columns = [];
+            }
+
+            $qCol = \in_array('question_id', $columns, true) ? 'question_id' : 'question_id';
+            $eCol = null;
+            foreach (['quiz_id', 'exercise_id', 'exercice_id', 'quizid'] as $c) {
+                if (\in_array($c, $columns, true)) {
+                    $eCol = $c;
+                    break;
+                }
+            }
+            if (null === $eCol) {
+                return [];
+            }
+
+            $sql = "SELECT DISTINCT $eCol AS quiz_id FROM $relTable WHERE $qCol = ?";
+
+            // DBAL 3: fetchFirstColumn, DBAL 2: fetchAll
+            if (method_exists($conn, 'fetchFirstColumn')) {
+                $ids = $conn->fetchFirstColumn($sql, [$questionId]);
+            } else {
+                $rows = (array) $conn->fetchAll($sql, [$questionId]);
+                $ids = [];
+                foreach ($rows as $r) {
+                    $ids[] = (int) ($r['quiz_id'] ?? (is_array($r) ? reset($r) : 0));
+                }
+            }
+
+            $ids = array_values(array_filter(array_map('intval', (array) $ids), static fn ($v) => $v > 0));
+            if (empty($ids)) {
+                return [];
+            }
+
+            // Load quizzes by ids (iid is the usual PK in Chamilo entities)
+            return $em->getRepository(\Chamilo\CourseBundle\Entity\CQuiz::class)->findBy(['iid' => $ids]);
+        } catch (\Throwable $e) {
+            return [];
+        }
     }
 
     /**

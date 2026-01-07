@@ -155,11 +155,7 @@ class ResultTable extends SortableTable
             }
 
             if (empty($model)) {
-                $row[] = Display::bar_progress(
-                    $item['percentage_score'],
-                    false,
-                    $item['score']
-                );
+                $row[] = $this->renderScoreCell($item);
             }
 
             if ($scoredisplay->is_custom()) {
@@ -172,6 +168,106 @@ class ResultTable extends SortableTable
         }
 
         return $sortable_data;
+    }
+
+    private function renderScoreCell(array $item): string
+    {
+        $raw = $item['score'] ?? '';
+        $text = html_entity_decode(strip_tags((string) $raw));
+        $text = trim(preg_replace('/\s+/', ' ', $text));
+
+        // Extract numeric parts from legacy strings like: "5 % (5 / 100)"
+        preg_match_all('/\d+(?:[\\.,]\d+)?/', $text, $m);
+        $numbers = $m[0] ?? [];
+
+        $score = $numbers[0] ?? '';
+        $max = !empty($numbers) ? end($numbers) : '';
+
+        $score = str_replace(',', '.', (string) $score);
+        $max = str_replace(',', '.', (string) $max);
+
+        $percent = $item['percentage_score'] ?? null;
+        $percentLabel = is_numeric($percent) ? api_number_format((float) $percent, 0) : '';
+
+        // If we don't have a numeric score, just show the legacy text nicely.
+        if ($score === '' && $text !== '') {
+            return '<div class="max-w-xs text-body-2 text-gray-50 italic">'.Security::remove_XSS($text).'</div>';
+        }
+
+        $fraction = ($score !== '' && $max !== '') ? '('.$score.'/'.$max.')' : '';
+        $left = $score !== '' ? Security::remove_XSS($score) : '—';
+
+        // Choose semantic styling based on percentage.
+        //  - success: >= 80
+        //  - warning: 50-79
+        //  - danger : < 50
+        $toneBg = 'bg-support-1';
+        $toneText = 'text-gray-90';
+        $toneBarBg = 'bg-gray-20';
+        $toneBarFill = 'bg-primary';
+        $tonePillBg = 'bg-support-1';
+        $tonePillText = 'text-support-4';
+
+        if (is_numeric($percent)) {
+            $p = (float) $percent;
+
+            if ($p >= 80) {
+                $toneBg = 'bg-support-2';
+                $toneText = 'text-gray-90';
+                $toneBarBg = 'bg-gray-20';
+                $toneBarFill = 'bg-success';
+                $tonePillBg = 'bg-support-2';
+                $tonePillText = 'text-success';
+            } elseif ($p >= 50) {
+                $toneBg = 'bg-support-6';
+                $toneText = 'text-gray-90';
+                $toneBarBg = 'bg-gray-20';
+                $toneBarFill = 'bg-warning';
+                $tonePillBg = 'bg-support-6';
+                $tonePillText = 'text-warning';
+            } else {
+                $toneBg = 'bg-support-6';
+                $toneText = 'text-gray-90';
+                $toneBarBg = 'bg-gray-20';
+                $toneBarFill = 'bg-danger';
+                $tonePillBg = 'bg-support-6';
+                $tonePillText = 'text-danger';
+            }
+        }
+
+        // Progress bar (uses theme colors)
+        $bar = '';
+        if (is_numeric($percent)) {
+            $p = max(0, min(100, (float) $percent));
+            $bar = '
+            <div class="mt-2 h-2 w-full rounded-full '.$toneBarBg.' overflow-hidden">
+                <div class="h-2 rounded-full '.$toneBarFill.'" style="width: '.$p.'%"></div>
+            </div>
+        ';
+        }
+
+        // Percent pill (uses theme colors)
+        $pill = '';
+        if ($percentLabel !== '') {
+            $pill = '<span class="inline-flex items-center rounded-full '.$tonePillBg.' px-2 py-0.5 text-tiny '.$tonePillText.'">'
+                .Security::remove_XSS($percentLabel).'%</span>';
+        }
+
+        $fractionHtml = '';
+        if ($fraction !== '') {
+            $fractionHtml = '<div class="mt-1 text-tiny text-gray-50">'.Security::remove_XSS($fraction).'</div>';
+        }
+
+        return '
+        <div class="min-w-[10rem] max-w-xs rounded-xl border border-gray-25 px-3 py-2 '.$toneBg.'">
+            <div class="flex items-center gap-2">
+                <span class="font-semibold '.$toneText.'">'.$left.'</span>
+                '.$pill.'
+            </div>
+            '.$fractionHtml.'
+            '.$bar.'
+        </div>
+    ';
     }
 
     /**

@@ -10920,8 +10920,8 @@ msgstr "ཡིན་"
 msgid "The address of"
 msgstr "གནས་གྲོགས་ཀྱི་"
 
-msgid "Your registration on"
-msgstr "ལ་ཁྱེད་ཀྱི་རྒྱ་སྤྲོད་"
+msgid "Your registration on%s "
+msgstr "ལ་ཁྱེད་ཀྱི་རྒྱ་སྤྲོད་ %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "འཛུལ་ཕོ་འདི་རང་གིས་འབྲུག་རེ་ཞིག་ བྲའུ་ཛར་གྱི་ལོག་ལ་འགྲོ་བར་འབྲེལ་རེ་འབྲུག་རེ་གཞན་པ་འཚོལ་རེ་འབྱུང་"

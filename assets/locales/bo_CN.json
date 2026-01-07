@@ -750,5 +750,12 @@
     "No resources available in this course.": "No resources available in this course.",
     "Recycle selected": "Recycle selected",
     "Error loading resources.": "Error loading resources.",
-    "Clear search": "Clear search"
+    "Clear search": "Clear search",
+    "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically.": "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically.",
+    "Question manager": "\u0f51\u0fb2\u0f72\u0f0b\u0f56\u0f0b\u0f66\u0f92\u0fb2\u0f72\u0f42\u0f0b\u0f60\u0f5b\u0f74\u0f42\u0f66\u0f0b\u0f58\u0f41\u0f53\u0f0d",
+    "What general terms and conditions are given to users to use this platform?": "What general terms and conditions are given to users to use this platform?",
+    "ex. {examplePassword}": "ex. {examplePassword}",
+    "Blogs": "\u0f40\u0f74\u0f53\u0f0b\u0f66\u0fb3\u0f7c\u0f42",
+    "Blog": "\u0f56\u0fb3\u0f7c\u0f42\u0f0d",
+    "Dropbox": "Dropbox"
 }

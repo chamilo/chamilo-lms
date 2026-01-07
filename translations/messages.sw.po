@@ -67,37 +67,37 @@ msgid "Cosecant:\t\t\t\tcsc(x)"
 msgstr "Cosecant:\t\t\t\tcsc(x)"
 
 msgid "Hyperbolic cosecant:\t\tcsch(x)"
-msgstr "Hyperbolic cosecant:\t\tcsch(x)"
+msgstr "Cosecant hyperbolic:\t\tcsch(x)"
 
 msgid "Arccosecant:\t\t\tarccsc(x)"
 msgstr "Arccosecant:\t\t\tarccsc(x)"
 
 msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
-msgstr "Hyperbolic arccosecant:\t\tarccsch(x)"
+msgstr "Arc cosecant hyperbolic:\t\tarccsch(x)"
 
 msgid "Secant:\t\t\t\tsec(x)"
 msgstr "Secant:\t\t\t\tsec(x)"
 
 msgid "Hyperbolic secant:\t\tsech(x)"
-msgstr "Hyperbolic secant:\t\tsech(x)"
+msgstr "Secant hyperbolic:\t\tsech(x)"
 
 msgid "Arcsecant:\t\t\tarcsec(x)"
 msgstr "Arcsecant:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
-msgstr "Hyperbolic arcsecant:\t\tarcsech(x)"
+msgstr "Arc secant hyperbolic:\t\tarcsech(x)"
 
 msgid "Cotangent:\t\t\tcot(x)"
 msgstr "Cotangent:\t\t\tcot(x)"
 
 msgid "Hyperbolic cotangent:\t\tcoth(x)"
-msgstr "Hyperbolic cotangent:\t\tcoth(x)"
+msgstr "Cotangent hyperbolic:\t\tcoth(x)"
 
 msgid "Arccotangent:\t\t\tarccot(x)"
 msgstr "Arccotangent:\t\t\tarccot(x)"
 
 msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
-msgstr "Hyperbolic arccotangent:\t\tarccoth(x)"
+msgstr "Arc cotangent hyperbolic:\t\tarccoth(x)"
 
 msgid "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />\nIf needed, the Help section of your browser indicates how to configure cookies.<br /><br />\nFor more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website."
 msgstr "Ili tovuti hii ifanye kazi na iweze kupima matumizi ya maudhui, jukwaa hili linatumia vidakuzi.<br /><br />\nKama inahitajika, sehemu ya Msaada ya kivinjari chako inaonyesha jinsi ya kusanidi vidakuzi.<br /><br />\nKwa maelezo zaidi kuhusu vidakuzi, unaweza kutembelea tovuti <a href=\"http://www.aboutcookies.org/\">About Cookies</a>."
@@ -226,7 +226,7 @@ msgid "The session duration allows you to set a number of days of access startin
 msgstr "Muda wa sesheni inakuruhusu kuweka idadi ya siku za ufikiaji kuanzia tarehe ya ufikiaji wa kwanza wa mtumiaji kwenye sesheni. Kwa njia hii, unaweza kuweka sesheni 'ya kudumu siku 15' badala ya kuanza kwa tarehe iliyowekwa kwa wanafunzi wote."
 
 msgid "Hyperbolic arctangent:\t\tarctanh(x)"
-msgstr "Hyperbolic arctangent:\t\tarctanh(x)"
+msgstr "Arc tangent hyperbolic:\t\tarctanh(x)"
 
 msgid "Session duration"
 msgstr "Muda wa sesheni"
@@ -235,7 +235,7 @@ msgid "Arctangent:\t\t\tarctan(x)"
 msgstr "Arctangent:\t\t\tarctan(x)"
 
 msgid "Hyperbolic tangent:\t\ttanh(x)"
-msgstr "Hyperbolic tangent:\t\ttanh(x)"
+msgstr "Tangent hyperbolic:\t\ttanh(x)"
 
 msgid "Tangent:\t\t\ttan(x)"
 msgstr "Tangent:\t\t\ttan(x)"
@@ -247,13 +247,13 @@ msgid "Series"
 msgstr "Mfululizo"
 
 msgid "Hyperbolic arccosine:\t\tarccosh(x)"
-msgstr "Hyperbolic arccosine:\t\tarccosh(x)"
+msgstr "Arc cosine hyperbolic:\t\tarccosh(x)"
 
 msgid "Arccosine:\t\t\tarccos(x)"
 msgstr "Arccosine:\t\t\tarccos(x)"
 
 msgid "Hyperbolic cosine:\t\tcosh(x)"
-msgstr "Hyperbolic cosine:\t\tcosh(x)"
+msgstr "Cosine hyperbolic:\t\tcosh(x)"
 
 msgid "Cosine:\t\t\t\tcos(x)"
 msgstr "Cosine:\t\t\t\tcos(x)"
@@ -262,7 +262,7 @@ msgid "Teachers time report"
 msgstr "Ripoti ya muda wa walimu"
 
 msgid "Hyperbolic arcsine:\t\tarcsinh(x)"
-msgstr "Hyperbolic arcsine:\t\tarcsinh(x)"
+msgstr "Arc sine hyperbolic:\t\tarcsinh(x)"
 
 msgid "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator."
 msgstr "Haukuona lugha yako katika orodha? Wasiliana nasi kwa info@chamilo.org ili kuchangia kama mtafsiri."
@@ -271,7 +271,7 @@ msgid "Arcsine:\t\t\tarcsin(x)"
 msgstr "Arcsine:\t\t\tarcsin(x)"
 
 msgid "Hyperbolic sine:\t\tsinh(x)"
-msgstr "Hyperbolic sine:\t\tsinh(x)"
+msgstr "Sine hyperbolic:\t\tsinh(x)"
 
 msgid "Sine:\t\t\t\tsin(x)"
 msgstr "Sine:\t\t\t\tsin(x)"
@@ -4636,7 +4636,7 @@ msgid "Invalid end date was given."
 msgstr "Tarehe ya mwisho batili ilitolewa."
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(s/m/y h:m)"
 
 msgid "Homepage-files are not writable!"
 msgstr "Faili za ukurasa wa nyumbani haziwezi kuandikwa!"
@@ -10920,8 +10920,8 @@ msgstr "ni"
 msgid "The address of"
 msgstr "Anwani ya"
 
-msgid "Your registration on"
-msgstr "Usajili wako kwenye"
+msgid "Your registration on %s"
+msgstr "Usajili wako kwenye %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Ingia hili tayari limechukuliwa. Tumia kitufe cha kurudi cha kivinjari chako na uchague lingine."
@@ -24694,7 +24694,7 @@ msgid "*: Current quarter, incomplete data"
 msgstr "*: Robo ya sasa, data isiyokamilika"
 
 msgid "Q%s %s"
-msgstr "Q%s %s"
+msgstr "Sw.%s %s"
 
 msgid "YoY"
 msgstr "YoY"
@@ -31427,4 +31427,397 @@ msgstr "Kosa la kupakia rasilimali."
 
 msgid "Clear search"
 msgstr "Futa utafutaji"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Herufi, nambari na underscore (_) pekee zinazoruhusiwa katika jina la hifadhidata. Herufi zisizofaa zitaondolewa kiotomatiki."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Sheria na masharti ya jumla ni yapi yanayotolewa kwa watumiaji kutumia jukwaa hili?"
+
+msgid "ex. {examplePassword}"
+msgstr "mf. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Karibu Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Karibu kwenye jukwaa hili"
+
+msgid "For more details visit %s"
+msgstr "Kwa maelezo zaidi tembelea %s"
+
+msgid "Manager"
+msgstr "Meneja"
+
+msgid "Mark as"
+msgstr "Aweka alama kama"
+
+msgid "Reply to all"
+msgstr "Jibu wote"
+
+msgid "SCIM external ID"
+msgstr "SCIM namba ya nje"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Tafadhali kukubali toleo la hivi karibuni la masharti na hali."
+
+msgid "Required value for operation without path"
+msgstr "Thamani inayohitajika kwa operesheni bila njia"
+
+msgid "Available space (%s)"
+msgstr " Nafasi inayopatikana (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Rekebisha maelezo haya kwa utafutaji wa kimataifa"
+
+msgid "Unknown course"
+msgstr "Kozi isiyojulikana"
+
+msgid "Certificate not found."
+msgstr "Cheti hakijapatikana."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Token ya usalama imekwisha muda wake. Tafadhali pakua upya ukurasa na jaribu tena."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Wakaguzi wa jukwaa pekee ndio wanaoweza kubadilisha mwonekano wa kozi."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Kosa lisilotarajiwa wakati wa kujiandikisha mtumiaji"
+
+msgid "Search in resource logs"
+msgstr "Tafuta katika kumbukumbu za rasilimali"
+
+msgid "Include this learning path in the global search results"
+msgstr "Jumuisha njia hii ya kujifunza katika matokeo ya utafutaji wa kimataifa"
+
+msgid "The course code already exists"
+msgstr "Msimbo wa kozi tayari upo"
+
+msgid "Latest news"
+msgstr "Habari za hivi karibuni"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Pata habari za hivi karibuni kutoka Chamilo, ikijumuisha udhaifu wa usalama na matukio, moja kwa moja ndani ya paneli yako ya usimamizi. Habari hizi zitachunguzwa kwenye seva ya habari za Chamilo kila unapopakia ukurasa wa usimamizi na zinaonekana kwa wakaguzi pekee."
+
+msgid "Chamilo support block"
+msgstr "Bloki ya msaada wa Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Pata vidokezo vya kitaalamu na njia rahisi ya kuwasiliana na watoa huduma rasmi za msaada wa kitaalamu, moja kwa moja kutoka kwa watengenezaji wa Chamilo. Bloki hii inaonekana kwenye ukurasa wako wa usimamizi, inaonekana na wakaguzi pekee, na inasasishwa kila unapopakia ukurasa wa usimamizi."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Ficha chaguo la kutuma matangazo kwa watumiaji wa HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Ruhusu wakaguzi wa kikao kupakua vyeti vya faragha"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Ikiwa imewezeshwa, wakaguzi wa kikao wanaweza kupakua vyeti hata kama havijachapishwa hadharani."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Ikiwa si tupu, mchakato wa kuunda kozi utatafuta baadhi ya nyanja katika wasifu wa mtumiaji na kuzijaza kiotomatiki kwa kozi. Kwa mfano, mwalimu aliyebobea katika uuzaji wa kidijitali anaweza kuweka kiashiria cha « uuzaji wa kidijitali » kiotomatiki kwenye kila kozi anayoizuia."
+
+msgid "Main menu entries"
+msgstr "Migongao ya menyu kuu"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Chagua migongao unayotaka kuonekana katika menyu kuu"
+
+msgid "Main menu entries per role"
+msgstr "Migongao ya menyu kuu kwa jukumu"
+
+msgid "Define header tabs visibility per role."
+msgstr "Fafanua mwonekano wa kadi za kichwa kwa jukumu."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Weka chaguzi unayotaka kuonekana katika urambazaji karibu na jedwali ili kuonyesha mistari kidogo au mingi zaidi kwenye ukurasa mmoja. mf. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Orodha ya vipengele vya ziada unaweza kuwezesha kwa kichezaji cha video katika Chamilo. Chaguzi ni pamoja na 'speed', ambayo inakuruhusu kubadilisha kasi ya kucheza video."
+
+msgid "Mail: character set"
+msgstr "Barua pepe: seti ya herufi"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "Ikiwa unahitaji kufafanua charset ya kutumia wakati wa kutuma barua pepe hizo. Acha tupu ikiwa haujui."
+
+msgid "Mail: Debug"
+msgstr "Barua pepe: Uchunguzi"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Chagua ikiwa unataka kuwezesha kumbukumbu za uchunguzi za kutuma barua pepe. Hizi zitakupa taarifa zaidi juu ya kinachoendelea wakati wa kuunganisha na huduma ya barua pepe, lakini si za kifahari na zinaweza kuvunja muundo wa ukurasa. Tumia tu wakati hakuna shughuli ya mtumiaji."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Barua pepe: Epuka kutumia LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Baadhi ya programu za barua pepe hazielewi muundo wa maelezo wa LD+JSON, zikiuonyesha kama mnyororo wa JSON uliolegeza kwa mtumiaji wa mwisho. Ikiwa hii ni hali yako, unaweza kutaka kuweka kigeuza hapa chini kuwa 'false' ili kuletea header hii."
+
+msgid "Mail: DKIM headers"
+msgstr "Barua pepe: Vichwa vya DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Ingiza orodha ya JSON ya mipangilio yako ya DKIM (tazama mfano)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Barua pepe: Chaguzi za XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Ikiwa unatumia huduma ya barua pepe inayotegemea XOAuth2, tumia mipangilio hii katika JSON ili kuhifadhi muundo maalum wako (tazama mfano) na chagua XOAuth2 katika mipangilio ya huduma ya barua pepe."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Inafafanua aina ya mazingira: \"prod\" (uzalishaji wa kawaida), \"validation\" (kama uzalishaji lakini bila kuripoti takwimu), au \"test\" (hali ya uchunguzi na zana za watengenezaji kama viashiria vya mnyororo usijoshaflanishwa)."
+
+msgid "Global limit of users per course"
+msgstr "Kipimo cha kimataifa cha watumiaji kwa kozi"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Inafafanua idadi kubwa ya watumiaji (ikijumuisha walimu) inaruhusiwa kujiandikisha kwenye kozi moja yoyote kwenye jukwaa. Weka thamani hii kuwa 0 ili kuletea kipimo. Hii inasaidia kuzuia kozi kuwa na mzigo mwingi katika portali zilizo wazi."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Wezesha kutumia orodha ili kufafanua jukumu zipi zinapaswa kuonyeshwa wazi na zipi zinapaswa kufichwa."
+
+msgid "Show base course posts in session course"
+msgstr "Onyesha machapisho ya msingi ya kozi katika kozi ya kikao"
+
+msgid "Limit identical email usage"
+msgstr "Pima matumizi sawa ya barua pepe"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Idadi kubwa zaidi ya akaunti zinazoruhusiwa kushiriki anwani ya barua pepe sawa. Weka 0 ili kuletea kikomo hiki."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Ruhusu wasimamizi wa kipindi kuona watumiaji wote kwenye URL zote"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Ikiwa imewashwa, wasimamizi wa kipindi wanaweza kutafuta na kuorodhesha watumiaji kutoka URL zote za ufikiaji, bila kujali URL yao ya sasa."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Washisha uwezekano wa watumiaji kuchagua eneo lao la wakati. Mara tu linapopangwa, watumiaji wataweza kuona tarehe za mwisho za kazi na marejeleo mengine ya wakati katika eneo lao la wakati, ambayo itapunguza makosa wakati wa utoaji."
+
+msgid "Redirect after login (per profile)"
+msgstr "Elekeza tena baada ya kuingia (kwa wasifu)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Fafanua uelekebisho tena kwa wasifu kila mmoja baada ya kuingia ukitumia kitufe cha JSON kama {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Ficha sanduku la kukubali kisheria kwenye ukurasa wa Masharti na Mazingira"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Ikiweka kweli, inaondoa sanduku la \"Nimesoma na nakubali\" katika mtiririko wa ukurasa wa Sheria na Masharti."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Array inayofafanua mwenyeji na bandari kwa seva ya LDAP."
+
+msgid "Enable 2FA"
+msgstr "Wezesha 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Ongeza nyanja katika ukurasa wa kusasisha nywila ili wezeshe 2FA kwa kutumia programu ya uthibitisho ya TOTP. Wakati imezimwa kimataifa, watumiaji hawataona nyanja za 2FA na hawataombwa 2FA wakati wa kuingia, hata kama walikuwa wamewezesha hapo awali."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Baadhi ya vipengele vya Chamilo vitaunganisha nje kutoka kwa seva. Kwa mfano ili kuhakikisha kuwa maudhui ya nje yapo wakati wa kuunda kiungo au kuonyesha ukurasa uliojumuishwa katika njia ya kujifunza. Ikiwa seva yako ya Chamilo inatumia proxy ili kutoka nje ya mtandao wake, hapa ndipo pa kuweka mipangilio yake."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Wezesha au zima uandikishwaji tena kiotomatiki wakati uhalali wa kozi unamalizika. Kazi husika ya cron lazima pia iwe imewashwa."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Onyesha siku zilizobaki katika Vikao Vyangu"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Ikiwa imewashwa, tarehe za kikao kwenye ukurasa wa \"Vikao Vyangu\" zitabadilishwa na idadi ya siku zilizobaki."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Onyesha \"Utafiti Unaosubiri\" katika menyu"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Onyesha kipengele cha menyu kinachoruhusu watumiaji kufikia tafiti zao zinazosubiri."
+
+msgid "Disclose AI assistance"
+msgstr "Fichua msaada wa AI"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Onyesha lebo kwenye maudhui yoyote au maoni yaliyotengenezwa au kutengenezwa kwa pamoja na mfumo wowote wa AI, ikithibitisha kwa mtumiaji kuwa maudhui yalijengwa kwa msaada wa mfumo wa AI. Maelezo kuhusu ni mfumo gani wa AI uliotumika katika kesi gani yanahifadhiwa ndani ya hifadhidata kwa ajili ya ukaguzi, lakini hayapatikani moja kwa moja na mtumiaji wa mwisho."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "Mipangilio ya JSON ya katalogi ya kozi: mipangilio ya viungo, vichuja, chaguo za kupanga, na zaidi."
+
+msgid "Session Catalog Settings"
+msgstr "Mipangilio ya Katalogi ya Kikao"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "Mipangilio ya JSON ya katalogi ya kikao: vichuja na chaguo za kuonyesha."
+
+msgid "Show Course Descriptions"
+msgstr "Onyesha Maelezo ya Kozi"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Onyesha maelezo ya kozi ndani ya orodha ya katalogi."
+
+msgid "Published Courses Only"
+msgstr "Kozi Zilizochapishwa Pekee"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Pima katalogi kwa kozi zilizochapishwa pekee."
+
+msgid "Display Catalog on Homepage"
+msgstr "Onyesha Katalogi kwenye Ukurasa wa Nyumbani"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Onyesha kizuizi cha katalogi ya kozi kwenye ukurasa wa nyumbani wa jukwaa."
+
+msgid "Hide Public Link"
+msgstr "Ficha Kiungo cha Umma"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Ondoa kiungo cha URL cha umma kutoka kwa kadi za kozi."
+
+msgid "Only Selected Courses"
+msgstr "Kozi Zilizochaguliwa Pekee"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Onyesha kozi zilizochaguliwa kwa mikono tu katika katalogi."
+
+msgid "Allow Student Browsing"
+msgstr "Ruhusu Kuvinjari kwa Wanafunzi"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Ruhusu wanafunzi kuvinjari na kuchuja katalogi ya kozi."
+
+msgid "Hide Private Courses"
+msgstr "Ficha Kozi za Kibinafsi"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Itoa kozi za kibinafsi kutoka kwa kuonyesha katalogi."
+
+msgid "Show Courses & Sessions"
+msgstr "Onyesha Kozi & Vikao"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Jumuisha kozi na vikao katika matokeo ya katalogi."
+
+msgid "Auto Session Subscription"
+msgstr "Uandikishaji wa Kikao Kiakomatiki"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Wezesha uandikishaji wa kikao kiotomatiki kwa watumiaji."
+
+msgid "Subscription in Session View"
+msgstr "Uandikishaji katika Mwonekano wa Kikao"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Ruhusu watumiaji kujiandikisha kwenye kozi moja kwa moja kutoka ukurasa wao wa kikao."
+
+msgid "Enable redirection plugin"
+msgstr "Wezesha programu-jalizi la kuelekeza upya"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Array inayofafanua 'siku' na 'miezi' ili kuweka tarehe ya mwisho wa akaunti wakati mtumiaji anaingia kwa mara ya kwanza."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Array ya jukumu => nambari ambayo inawakilisha idadi ya siku ambazo akaunti ina kabla ya kumalizika, kulingana na jukumu."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Sehemu ya ziada ya mtumiaji inayotumika kutafuta na kutaja vikao"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Mpangilio huu unafafanua ufunguo wa sehemu ya ziada ya mtumiaji (k.m., \"kampuni\") ambayo itatumika kutafuta watumiaji na kufafanua jina la kikao wakati wa kujiandikisha wanafunzi kutoka /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Jenzi wa maneno ya kamusi"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Ruhusu walimu kuomba maneno ya kamusi yaliyotengenezwa na AI katika kozi zao. Hii itatengeneza maneno 20 kulingana na jina la kozi na maelezo ya jumla katika zana ya maelezo ya kozi. Ikiwa itatumika zaidi ya mara moja, itaondoa maneno tayari yaliyopo katika kamusi hiyo (hakikisha maudhui yanaweza kushirikiwa na huduma za AI zilizopangwa)."
+
+msgid "Video generator"
+msgstr "Jenzi wa video"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Inatengeneza video kulingana na mapendekezo au maudhui kwa kutumia AI (hii inaweza kutumia tokeni nyingi)."
+
+msgid "Course analyser"
+msgstr "Mchambuzi wa kozi"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Inachambua rasilimali zote katika kozi moja au nyingi na inafunza mfano wa AI mapema kujibu swali lolote kuhusu kozi hii au hizi (hakikisha maudhui yanaweza kushirikiwa na huduma za AI zilizopangwa)."
+
+msgid "Test/development"
+msgstr "Jaribio/maendeleo"
+
+msgid "Crons"
+msgstr "Crons"
+
+msgid "Editor"
+msgstr "Mhariri"
+
+msgid "Gradebook"
+msgstr "Kitabu cha alama"
+
+msgid "Internationalization"
+msgstr "Utaalamika wa Kimataifa"
+
+msgid "User profiles"
+msgstr "Mifupi ya Watumiaji"
+
+msgid "Support tickets"
+msgstr "Tiketi za Msaada"
+
+msgid "Webservices"
+msgstr "Huduma za Wavuti"
+
+msgid "Catalogue"
+msgstr "Orodha"
+
+msgid "Workflows"
+msgstr "Mbinu za Kazi"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Mpangilio unaoweza kuhaririwa kwenye URL ndogo"
+
+msgid "Show JSON Template"
+msgstr "Onyesha Kigeuza cha JSON"
+
+msgid "JSON Template"
+msgstr "Kigeuza cha JSON"
+
+msgid "Installing Xapian bindings"
+msgstr "Kusakinisha viunganisho vya Xapian"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Kifungu hiki kinachoonekana kinaonyesha mfano wa kusakinisha viunganisho vya Xapian PHP kwenye Ubuntu 25.04 na PHP 8.3. Badilisha njia na matoleo kwa mazingira yako mwenyewe."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Hakikisha una toleo la PHP tu unalotumia kweli (kwa mfano 8.3) na epuka kuchanganya matoleo kadhaa yenye saraka za upanuzi tofauti."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Mara tu kiapanuzi kitakapopakiwa vizuri kwa CLI na seva ya wavuti, uchunguzi wa utafutaji hapo juu unapaswa kuripoti kuwa moduli ya Xapian imesakinishwa."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Safisha upakiaji wa muda na kache"
+
+msgid "Directory"
+msgstr "Direktori"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Futa tu faili zinazochukua muda mrefu kuliko (dakika)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Weka 0 kufuta faili zote. Tumia thamani chanya (k.m., 60) kuepuka kufuta faili zinazoongezwa bado."
+
+msgid "Preview only (do not delete)"
+msgstr "Onyesha hakikisho tu (usifute)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Onyo: Uko karibu kufuta faili zote za muda. Kitendo hiki hakiwezi kurekebishwa."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Hii itafuta faili zote za muda. Endelea?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Hii itafuta faili zinazochukua zaidi ya dakika %minutes%. Endelea?"
 

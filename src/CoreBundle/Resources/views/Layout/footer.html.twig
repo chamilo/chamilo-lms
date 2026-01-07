@@ -1,49 +1,51 @@
 {% autoescape false %}
-<div class="app-elevator">
-    <button id="back-to-top"
-            role="button" type="button"
-            class="btn btn--primary"
-            title="{{ 'Back to top'|trans }}" data-toggle="tooltip" data-placement="left">
-        <i class="fas fa-angle-up"></i>
-    </button>
-</div>
-
-<footer class="app-footer">
-    <div>
-        <a href="{{ url('index')}}" target="_blank">
-{#            {{ "Powered by %s" |trans | format(_s.software_name) }}#}
-            {{ "Chamilo"| trans }}
-        </a>&copy; {{ "now"|date("Y") }}
+    <div class="app-elevator">
+        <button id="back-to-top"
+                role="button" type="button"
+                class="btn btn--primary"
+                title="{{ 'Back to top'|trans }}" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-angle-up"></i>
+        </button>
     </div>
-    <div class="ml-auto">
-        {% if administrator_name is defined %}
-            {{ administrator_name }}
-        {% endif %}
-    </div>
-</footer>
 
-{# Delete modal #}
-<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-title" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">{{ 'Delete' | trans }}</h4>
-            </div>
+    <footer class="app-footer">
+        <div>
+            <a href="{{ url('index')}}" target="_blank">
+                {{ "Chamilo"|trans }}
+            </a>&copy; {{ "now"|date("Y") }}
+        </div>
+        <div class="ml-auto">
+            {% if administrator_name is defined %}
+                {{ administrator_name }}
+            {% endif %}
+        </div>
+    </footer>
 
-            <div class="modal-body">
-                <p class="debug-url"></p>
-            </div>
+    {# Delete modal #}
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">{{ 'Delete'|trans }}</h4>
+                </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn--plain" data-dismiss="modal">{{ 'Cancel' | trans }}</button>
-                <a id="delete_item" class="btn btn--danger btn-ok">{{ 'Delete' | trans }}</a>
+                <div class="modal-body">
+                    <p class="debug-url"></p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--plain" data-dismiss="modal">{{ 'Cancel'|trans }}</button>
+                    <a id="delete_item" class="btn btn--danger btn-ok">{{ 'Delete'|trans }}</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
 {% endautoescape %}
 
 {{ execution_stats }}
-{{ footer_extra_content }}
+
+{# Backward-compatible footer extra content (if provided by legacy controllers/layouts). #}
+{% if footer_extra_content is defined and footer_extra_content|default('')|trim %}
+    {{ footer_extra_content|raw }}
+{% endif %}

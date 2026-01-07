@@ -204,20 +204,128 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     'variable' => 'ai_providers',
                     'json_example' => [
                         'openai' => [
-                            'url' => 'https://api.openai.com/v1/chat/completions',
                             'api_key' => 'your-key',
-                            'model' => 'gpt-4o',
-                            'temperature' => 0.7,
                             'organization_id' => 'org123',
                             'monthly_token_limit' => 10000,
+                            'text' => [
+                                'url' => 'https://api.openai.com/v1/chat/completions',
+                                'model' => 'gpt-4o',
+                                'temperature' => 0.7,
+                            ],
+                            'image' => [
+                                'url' => 'https://api.openai.com/v1/images/generations',
+                                'model' => 'dall-e-3',
+                                'size' => '1024x1024',
+                                'quality' => 'standard',
+                            ],
+                            'video' => [
+                                'url' => 'https://api.openai.com/v1/videos/generations',
+                                'model' => 'sora-1.0',
+                                'duration' => 10,
+                                'resolution' => '1920x1080',
+                            ],
+                            'document' => [
+                                'url' => 'https://api.openai.com/v1/chat/completions',
+                                'model' => 'gpt-4o',
+                                'temperature' => 0.7,
+                            ],
+                            'document_process' => [
+                                'upload_url' => 'https://api.openai.com/v1/files',
+                                'purpose' => 'assistants',
+                                'query_url' => 'https://api.openai.com/v1/threads',
+                                'model' => 'gpt-4o',
+                                'temperature' => 0.7,
+                            ],
                         ],
                         'deepseek' => [
-                            'url' => 'https://api.deepseek.com/chat/completions',
                             'api_key' => 'your-key',
-                            'model' => 'deepseek-chat',
-                            'temperature' => 0.7,
                             'organization_id' => 'org456',
                             'monthly_token_limit' => 5000,
+                            'text' => [
+                                'url' => 'https://api.deepseek.com/chat/completions',
+                                'model' => 'deepseek-chat',
+                                'temperature' => 0.7,
+                            ],
+                            'document' => [
+                                'url' => 'https://api.deepseek.com/chat/completions',
+                                'model' => 'deepseek-chat',
+                                'temperature' => 0.7,
+                            ],
+                        ],
+                        'grok' => [
+                            'api_key' => 'your-key',
+                            'text' => [
+                                'url' => 'https://api.x.ai/v1/responses',
+                                'model' => 'grok-4-1-fast-reasoning',
+                                'temperature' => 0.7,
+                            ],
+                            'image' => [
+                                'url' => 'https://api.x.ai/v1/images/generations',
+                                'model' => 'grok-2-image',
+                                'response_format' => 'base64',
+                            ],
+                            'document' => [
+                                'url' => 'https://api.x.ai/v1/responses',
+                                'model' => 'grok-4-1-fast-reasoning',
+                                'temperature' => 0.7,
+                                'format' => 'pdf',
+                            ],
+                            'document_process' => [
+                                'upload_url' => 'https://api.x.ai/v1/files',
+                                'query_url' => 'https://api.x.ai/v1/responses',
+                                'model' => 'grok-4-1-fast-reasoning',
+                                'temperature' => 0.7,
+                                'max_file_size_mb' => 30,
+                            ],
+                        ],
+                        'mistral' => [
+                            'api_key' => 'your-key',
+                            'text' => [
+                                'url' => 'https://api.mistral.ai/v1/chat/completions',
+                                'model' => 'mistral-large-latest',
+                                'temperature' => 0.7,
+                            ],
+                            'document' => [
+                                'url' => 'https://api.mistral.ai/v1/chat/completions',
+                                'model' => 'mistral-large-latest',
+                                'temperature' => 0.7,
+                            ],
+                            'document_process' => [
+                                'upload_url' => 'https://api.mistral.ai/v1/files',
+                                'ocr_url' => 'https://api.mistral.ai/v1/ocr',
+                                'query_url' => 'https://api.mistral.ai/v1/chat/completions',
+                                'model' => 'mistral-large-latest',
+                                'temperature' => 0.7,
+                            ],
+                        ],
+                        'gemini' => [
+                            'api_key' => 'your-key',
+                            'text' => [
+                                'url' => 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent',
+                                'model' => 'gemini-2.5-flash',
+                                'temperature' => 0.7,
+                            ],
+                            'image' => [
+                                'url' => 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent',
+                                'model' => 'imagen-3',
+                                'size' => '1024x1024',
+                            ],
+                            'video' => [
+                                'url' => 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent',
+                                'model' => 'veo-3.1',
+                                'duration' => 10,
+                            ],
+                            'document' => [
+                                'url' => 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent',
+                                'model' => 'gemini-2.5-flash',
+                                'temperature' => 0.7,
+                            ],
+                            'document_process' => [
+                                'upload_url' => 'https://generativelanguage.googleapis.com/upload/v1beta/files',
+                                'query_url' => 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent',
+                                'model' => 'gemini-2.5-flash',
+                                'temperature' => 0.7,
+                            ],
                         ],
                     ],
                 ],
@@ -379,11 +487,11 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                         'models' => [
                             [
                                 'id' => 1,
-                                'variable' => 'ThisIsMyModel',
+                                'variable' => 'My score grading model',
                                 'display_score_name' => 0,
                                 'score_list' => [
                                     [
-                                        'variable' => 'VeryBad',
+                                        'variable' => 'Very bad',
                                         'css_class' => 'btn-danger',
                                         'min' => 0,
                                         'max' => 20,
@@ -404,7 +512,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                                         'score_to_qualify' => 60,
                                     ],
                                     [
-                                        'variable' => 'VeryGood',
+                                        'variable' => 'Very good',
                                         'css_class' => 'btn-success',
                                         'min' => 71,
                                         'max' => 100,
@@ -658,13 +766,13 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                 [
                     'variable' => 'redirect_after_login',
                     'json_example' => [
-                        'COURSEMANAGER' => '',
-                        'STUDENT' => '',
+                        'COURSEMANAGER' => 'courses',
+                        'STUDENT' => 'courses',
                         'DRH' => '',
                         'SESSIONADMIN' => 'admin-dashboard',
-                        'STUDENT_BOSS' => '',
-                        'INVITEE' => '',
-                        'ADMIN' => 'admin-dashboard',
+                        'STUDENT_BOSS' => 'main/my_space/student.php',
+                        'INVITEE' => 'courses',
+                        'ADMIN' => 'admin',
                     ],
                 ],
             ],

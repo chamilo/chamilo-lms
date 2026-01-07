@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Event\CourseCreatedEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
+use Chamilo\CoreBundle\Search\Xapian\XapianIndexService;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -2620,6 +2621,15 @@ class CourseManager
 
             //$repo = Container::getQuizRepository();
             //$repo->deleteAllByCourse($courseEntity);
+
+            // Purge Xapian index BEFORE deleting the course entity (resource links still exist)
+            try {
+                /** @var XapianIndexService $xapian */
+                $xapian = Container::$container->get(XapianIndexService::class);
+                $xapian->purgeCourseIndex($courseId);
+            } catch (\Throwable $e) {
+                error_log('[Xapian] purgeCourseIndex: failed for courseId='.$courseId.': '.$e->getMessage());
+            }
 
             // Delete the course from the database
             $courseRepo->deleteCourse($course);

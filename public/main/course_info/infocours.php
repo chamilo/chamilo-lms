@@ -61,6 +61,13 @@ $formOptionsArray = [];
 
 $enableAiHelpers = 'true' === api_get_setting('ai_helpers.enable_ai_helpers');
 
+$courseVisibilityAdminsOnlySetting = api_get_setting('workflows.course_visibility_change_only_admin');
+$courseVisibilityAdminsOnly = \in_array($courseVisibilityAdminsOnlySetting, ['true', '1'], true);
+
+// Teachers/course admins won't be able to change the visibility when this is enabled.
+// Platform admins can still change it (and also from admin courses list as mentioned in the issue).
+$canChangeCourseVisibility = !$courseVisibilityAdminsOnly || api_is_platform_admin();
+
 // Build the form
 $form = new FormValidator(
     'update_course',
@@ -222,6 +229,9 @@ $aiOptions = [
     'task_grader' => 'Enable Task Grader',
     'content_analyser' => 'Enable Content Analyser',
     'image_generator' => 'Enable Image Generator',
+    'glossary_terms_generator' => 'Enable Gloss Terms Generator',
+    'video_generator' => 'Enable Video Generator',
+    'course_analyser' => 'Enable Course Analyser',
 ];
 
 // This global "Save settings" button belongs to the main course settings block
@@ -303,6 +313,24 @@ if (api_is_platform_admin()) {
     );
 }
 
+$courseVisibilityHelp = null;
+if (!$canChangeCourseVisibility) {
+    foreach ($groupAccess as $radio) {
+        if (\is_object($radio) && method_exists($radio, 'updateAttributes')) {
+            $radio->updateAttributes([
+                'disabled' => 'disabled',
+            ]);
+        }
+    }
+
+    $courseVisibilityHelp = $form->createElement(
+        'html',
+        '<div class="alert alert-info" role="alert">'
+        .get_lang('Only platform administrators can change the course visibility.')
+        .'</div>'
+    );
+}
+
 $group2 = [];
 $group2[] = $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
 $group2[] = $form->createElement(
@@ -351,7 +379,7 @@ $textAreaLegal = $form->createElement('textarea', 'legal', get_lang('Legal agree
 $courseAccessAnchor = $form->createElement('html', '<div id="course-access-panel-anchor"></div>');
 
 $elements = [
-    '' => [$courseAccessAnchor],
+    '' => array_values(array_filter([$courseAccessAnchor, $courseVisibilityHelp])),
     get_lang('Course access') => $groupAccess,
     $label,
     get_lang('Subscription') => $group2,
@@ -1165,6 +1193,11 @@ if ($form->validate()) {
     $updateValues['visibility'] = isset($updateValues['visibility'])
         ? (int) $updateValues['visibility']
         : $courseEntity->getVisibility();
+
+    if ($courseVisibilityAdminsOnly && !api_is_platform_admin()) {
+        // Do not allow non-platform admins to change course visibility even if they tamper with the POST payload.
+        $updateValues['visibility'] = (int) $courseEntity->getVisibility();
+    }
 
     $updateValues['subscribe'] = isset($updateValues['subscribe'])
         ? (int) $updateValues['subscribe']

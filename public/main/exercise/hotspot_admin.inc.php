@@ -14,12 +14,15 @@ use ChamiloSession as Session;
  *
  * @author  Toon Keppens
  */
-$modifyAnswers = (int) $_GET['hotspotadmin'];
+$modifyAnswers = (int) ($_GET['hotspotadmin'] ?? 0);
 $objQuestion = Question::read($modifyAnswers);
 $questionName = $objQuestion->selectTitle();
 $answerType = $objQuestion->selectType();
 
 $debug = 0;
+$hotspot_skip_processing = $hotspot_skip_processing ?? false;
+$hotspot_skip_display = $hotspot_skip_display ?? false;
+
 
 $reponse = $_REQUEST['reponse'] ?? null;
 $comment = $_REQUEST['comment'] ?? null;
@@ -56,7 +59,7 @@ if ($modifyIn) {
         $objAnswer->duplicate($objQuestion);
 
         // construction of the duplicated Answers
-        $objAnswer = new Answer($questionId);
+        $objAnswer = new Answer($questionId, api_get_course_int_id(), $objExercise);
     }
 
     $color = UnserializeApi::unserialize('not_allowed_classes', $color);
@@ -178,11 +181,10 @@ if ($submitAnswers || $buttonBack) {
                 }
             }
 
-            $editQuestion = $objQuestion->iid;
+            $editQuestion = $objQuestion->id;
             unset($modifyAnswers);
             $redirect = $hotspot_admin_url.'&message=ItemUpdated';
-            echo '<meta http-equiv="refresh" content="0;url='.htmlspecialchars($redirect, ENT_QUOTES).'">';
-            echo '<script>top.location.replace("'.addslashes($redirect).'");</script>';
+            api_location($redirect);
             exit;
         }
 
@@ -379,11 +381,10 @@ if ($submitAnswers || $buttonBack) {
                 }
             }
 
-            $editQuestion = $objQuestion->iid;
+            $editQuestion = $objQuestion->id;
             unset($modifyAnswers);
             $redirect = $hotspot_admin_url.'&message=ItemUpdated';
-            echo '<meta http-equiv="refresh" content="0;url='.htmlspecialchars($redirect, ENT_QUOTES).'">';
-            echo '<script>top.location.replace("'.addslashes($redirect).'");</script>';
+            api_location($redirect);
             exit;
         }
     }

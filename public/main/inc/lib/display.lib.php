@@ -664,7 +664,7 @@ class Display
     ) {
         $code_path = api_get_path(SYS_PUBLIC_PATH);
         $w_code_path = api_get_path(WEB_PUBLIC_PATH);
-        // The following path is checked to see if the file exist. It's
+        // The following path is checked to see if the file exists. It's
         // important to use the public path (i.e. web/css/) rather than the
         // internal path (/app/Resource/public/css/) because the path used
         // in the end must be the public path
@@ -709,13 +709,7 @@ class Display
             }
         }
 
-        // Special code to enable SVG - refs #7359 - Needs more work
-        // The code below does something else to "test out" SVG: for each icon,
-        // it checks if there is an SVG version. If so, it uses it.
-        // When moving this to production, the return_icon() calls should
-        // ask for the SVG version directly
-        $svgIcons = 'true';
-        if ('true' == $svgIcons && false == $return_only_path) {
+        if ($return_only_path) {
             $svgImage = substr($image, 0, -3).'svg';
             if (is_file($code_path.$theme.'svg/'.$svgImage)) {
                 $icon = $w_code_path.$theme.'svg/'.$svgImage;
@@ -736,7 +730,7 @@ class Display
         }
 
         $img = self::img($icon, $alt_text, $additional_attributes);
-        if (SHOW_TEXT_NEAR_ICONS == true && !empty($alt_text)) {
+        if (SHOW_TEXT_NEAR_ICONS && !empty($alt_text)) {
             if ($show_text) {
                 $img = "$img $alt_text";
             }
@@ -746,23 +740,23 @@ class Display
     }
 
     /**
-     * Returns the htmlcode for an image.
+     * Returns the HTML code for an image.
      *
      * @param string $image_path            the filename of the file (in the main/img/ folder
-     * @param string $alt_text              the alt text (probably a language variable)
-     * @param array  $additional_attributes (for instance height, width, onclick, ...)
-     * @param bool   $filterPath            Optional. Whether filter the image path. Default is true
+     * @param ?string $alt_text              the alt text (probably a language variable)
+     * @param ?array  $additional_attributes (for instance, height, width, onclick, ...)
+     * @param ?bool   $filterPath            Optional. Whether filter the image path. Default is true
      *
      * @return string
      *
      * @author Julio Montoya 2010
      */
     public static function img(
-        $image_path,
-        $alt_text = '',
-        $additional_attributes = null,
-        $filterPath = true
-    ) {
+        string $image_path,
+        ?string $alt_text = '',
+        ?array $additional_attributes = null,
+        ?bool $filterPath = true
+    ): string {
         if (empty($image_path)) {
             return '';
         }
@@ -793,11 +787,11 @@ class Display
     }
 
     /**
-     * Returns the htmlcode for a tag (h3, h1, div, a, button), etc.
+     * Returns the HTML code for a tag (h3, h1, div, a, button), etc.
      *
      * @param string $tag                   the tag name
      * @param string $content               the tag's content
-     * @param array  $additional_attributes (for instance height, width, onclick, ...)
+     * @param array  $additional_attributes (for instance, height, width, onclick, ...)
      *
      * @return string
      *
@@ -827,12 +821,12 @@ class Display
      * Creates a URL anchor.
      *
      * @param string $name
-     * @param string $url
-     * @param array  $attributes
+     * @param ?string $url
+     * @param ?array  $attributes
      *
      * @return string
      */
-    public static function url($name, $url, $attributes = [])
+    public static function url(string $name, ?string $url, ?array $attributes = []): string
     {
         if (!empty($url)) {
             $url = preg_replace('#&amp;#', '&', $url);
@@ -847,11 +841,11 @@ class Display
      * Creates a div tag.
      *
      * @param string $content
-     * @param array  $attributes
+     * @param ?array  $attributes
      *
      * @return string
      */
-    public static function div($content, $attributes = [])
+    public static function div(string $content, ?array $attributes = []): string
     {
         return self::tag('div', $content, $attributes);
     }
@@ -859,7 +853,7 @@ class Display
     /**
      * Creates a span tag.
      */
-    public static function span($content, $attributes = [])
+    public static function span(string $content, ?array $attributes = []): string
     {
         return self::tag('span', $content, $attributes);
     }

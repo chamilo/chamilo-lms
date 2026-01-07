@@ -123,7 +123,9 @@
       >
         {{ t("You can no longer submit. The deadline has passed.") }}
       </div>
+
       <h2 class="text-2xl font-bold">{{ assignment.title }}</h2>
+
       <div class="bg-gray-10 border border-gray-25 rounded-lg shadow-sm">
         <div
           class="p-4 text-gray-800 prose max-w-none"
@@ -200,19 +202,27 @@ const notification = useNotification()
 const assignmentId = parseInt(route.params.id, 10)
 const fromLearnpath = route.query.origin === "learnpath"
 
-const isTeacherUser = computed(
+const isTeacherUI = computed(
   () =>
-    securityStore.isCourseAdmin || securityStore.isTeacher || securityStore.isAdmin || securityStore.isCurrentTeacher,
+    (securityStore.isCurrentTeacher || securityStore.isCourseAdmin || securityStore.isAdmin) &&
+    !platformConfigStore.isStudentViewActive,
 )
-const isTeacherUI = computed(() => isTeacherUser.value && !platformConfigStore.isStudentViewActive)
-const forceStudentView = computed(() => !isTeacherUser.value || platformConfigStore.isStudentViewActive)
 
-function onStudentViewChange() {
-}
+const forceStudentView = computed(() => !isTeacherUI.value || platformConfigStore.isStudentViewActive)
+
+function onStudentViewChange() {}
 
 const assignment = ref(null)
 const addedDocuments = ref([])
 const submissionListKey = ref(0)
+
+function buildCidParams() {
+  return {
+    cid,
+    ...(sid && { sid }),
+    ...(gid && { gid }),
+  }
+}
 
 function fromApiLocal(str) {
   if (!str) return null
@@ -236,7 +246,10 @@ const allowFileFlag = computed(
 async function loadAddedDocuments() {
   try {
     const resp = await axios.get(`${ENTRYPOINT}c_student_publication_rel_documents`, {
-      params: { publication: `/api/c_student_publications/${assignmentId}` },
+      params: {
+        ...buildCidParams(),
+        publication: `/api/c_student_publications/${assignmentId}`,
+      },
     })
     addedDocuments.value = resp.data["hydra:member"]
   } catch (e) {
@@ -373,7 +386,6 @@ async function deleteAllCorrections() {
     notification.showSuccessNotification(t("All corrections deleted"))
 
     assignment.value = await cStudentPublicationService.getAssignmentMetadata(assignmentId, cid, sid, gid)
-
     submissionListKey.value++
   } catch {
     notification.showErrorNotification(t("Failed to delete corrections"))

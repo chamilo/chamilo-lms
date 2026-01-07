@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\ApiResource\CourseTool;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
@@ -24,6 +25,7 @@ use Chamilo\CourseBundle\Repository\CToolRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Stringable;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
@@ -54,9 +56,6 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
     #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
-    #[ORM\Column(name: 'visibility', type: 'boolean', nullable: true)]
-    protected ?bool $visibility = null;
-
     #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'tools')]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[Gedmo\SortableGroup]
@@ -74,11 +73,6 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
     #[Gedmo\SortablePosition]
     #[ORM\Column(name: 'position', type: 'integer')]
     protected int $position;
-
-    public function __construct()
-    {
-        $this->visibility = true;
-    }
 
     public function __toString(): string
     {
@@ -131,18 +125,6 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this;
     }
 
-    public function getVisibility(): ?bool
-    {
-        return $this->visibility;
-    }
-
-    public function setVisibility(bool $visibility): self
-    {
-        $this->visibility = $visibility;
-
-        return $this;
-    }
-
     public function getTool(): Tool
     {
         return $this->tool;
@@ -180,5 +162,81 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
     public function setResourceName(string $name): self
     {
         return $this->setTitle($name);
+    }
+
+    /**
+     * Compatibility getter.
+     * Source of truth is ResourceLink.visibility (Published/Draft/Pending).
+     */
+    #[Groups(['ctool:read'])]
+    public function getVisibility(): bool
+    {
+        $link = $this->getContextResourceLink();
+
+        // Backward compatible default: tools were "visible" by default
+        if (null === $link) {
+            return true;
+        }
+
+        return ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility();
+    }
+
+    /**
+     * Compatibility setter.
+     *
+     * @deprecated Visibility is stored in ResourceLink.visibility.
+     */
+    public function setVisibility(bool $visibility): self
+    {
+        $link = $this->getContextResourceLink();
+        if (null === $link) {
+            // No resource link yet. The caller usually sets it through addCourseLink() next.
+            return $this;
+        }
+
+        $link->setVisibility(
+            $visibility ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_DRAFT
+        );
+
+        return $this;
+    }
+
+    private function getContextResourceLink(): ?ResourceLink
+    {
+        $node = $this->getResourceNode();
+        if (null === $node) {
+            return null;
+        }
+
+        $links = $node->getResourceLinks();
+        if ($links->isEmpty()) {
+            return null;
+        }
+
+        $courseId = $this->course?->getId();
+        $sessionId = $this->session?->getId();
+
+        foreach ($links as $link) {
+            if (null !== $courseId && $link->getCourse()?->getId() !== $courseId) {
+                continue;
+            }
+
+            // Session context preferred when CTool.session is set
+            if (null !== $sessionId) {
+                if ($link->getSession()?->getId() === $sessionId) {
+                    return $link;
+                }
+
+                continue;
+            }
+
+            // Course context (no session)
+            if (null === $link->getSession()) {
+                return $link;
+            }
+        }
+
+        // Fallback to first link (should not happen often)
+        return $links->first() ?: null;
     }
 }

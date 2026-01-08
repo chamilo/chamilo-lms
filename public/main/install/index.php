@@ -187,7 +187,7 @@ $session_lifetime = 360000;
 $installationGuideLink = '../../documentation/installation_guide.html';
 $mailerFromEmail = $_POST['mailerFromEmail'] ?? '';
 $mailerFromName = $_POST['mailerFromName'] ?? '';
-$mailerDsn = $_POST['mailer_dsn'] ?? '';
+$mailerDsn = $_POST['mailerDsn'] ?? ($_POST['mailer_dsn'] ?? '');
 
 // Setting the error reporting levels.
 error_reporting(E_ALL);

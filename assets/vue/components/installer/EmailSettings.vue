@@ -87,6 +87,7 @@ async function testSmtp() {
 
     const formData = new FormData()
     formData.append("mailerDsn", installerData.value.stepData.mailerDsn)
+    formData.append("mailer_dsn", installerData.value.stepData.mailerDsn)
     formData.append("mailerFromEmail", installerData.value.stepData.mailerFromEmail)
     formData.append("mailerFromName", installerData.value.stepData.mailerFromName)
     formData.append("mailerTestDestination", mailerTestDestination.value)

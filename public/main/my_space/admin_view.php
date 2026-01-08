@@ -107,7 +107,17 @@ Display::display_header($nameTools);
 // -----------------------------------------------------------------------------
 // Toolbar (MySpace main menu + print / CSV actions)
 // -----------------------------------------------------------------------------
-$actionsLeft = Display::mySpaceMenu('admin_view');
+$actionsLeft = Display::url(
+    Display::getMdiIcon(
+        'chart-box',
+        'ch-tool-icon',
+        null,
+        32,
+        get_lang('View my progress')
+    ),
+    $webCodePath.'auth/my_progress.php'
+);
+$actionsLeft .= Display::mySpaceMenu('admin_view');
 
 $actionsRight = Display::url(
     Display::getMdiIcon(

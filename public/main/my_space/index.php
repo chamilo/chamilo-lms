@@ -18,6 +18,9 @@ ob_start();
 $nameTools = get_lang('Reporting');
 $export_csv = isset($_GET['export']) && 'csv' === $_GET['export'];
 $display = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
+if (empty($display) && api_is_platform_admin()) {
+    $display = 'overview';
+}
 $csv_content = [];
 $user_id = api_get_user_id();
 $session_id = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
@@ -131,10 +134,7 @@ if (!empty($session_id) &&
     }
 } else {
     // No session context or a "global" display:
-    // 1) Show main MySpace navigation.
-    $actionsLeft .= Display::mySpaceMenu('overview');
-
-    // 2) Extra actions: "View my progress", calendar plugin, certificates.
+    // 0) always show "View my progress" first.
     $actionsLeft .= Display::url(
         Display::getMdiIcon(
             'chart-box',
@@ -145,6 +145,11 @@ if (!empty($session_id) &&
         ),
         api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
     );
+
+    // 1) Show main MySpace navigation.
+    $actionsLeft .= Display::mySpaceMenu($display);
+
+    // 2) Extra actions: "View my progress", calendar plugin, certificates.
 
     // Optional Learning Calendar plugin entry (teachers only).
     $pluginCalendar = 'true' === api_get_plugin_setting('learning_calendar', 'enabled');

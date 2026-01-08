@@ -98,27 +98,27 @@ if (api_is_platform_admin(true, true)) {
 
     if (!api_is_session_admin()) {
         // First icon: go back to "Follow up" (My space home)
+
+        // Keep existing navigation icons
         $menu_items[] = Display::url(
             Display::getMdiIcon(
                 ToolIcon::TRACKING,
                 'ch-tool-icon',
                 null,
                 ICON_SIZE_MEDIUM,
-                get_lang('Follow up')
+                get_lang('View my progress')
             ),
-            api_get_path(WEB_CODE_PATH).'my_space/index.php'
+            api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
         );
-
-        // Keep existing navigation icons
         $menu_items[] = Display::url(
             Display::getMdiIcon(
                 ToolIcon::COURSE_PROGRESS,
                 'ch-tool-icon',
                 null,
                 ICON_SIZE_MEDIUM,
-                get_lang('View my progress')
+                get_lang('Global view')
             ),
-            api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
+            api_get_path(WEB_CODE_PATH).'my_space/index.php'
         );
         $menu_items[] = Display::url(
             Display::getMdiIcon(

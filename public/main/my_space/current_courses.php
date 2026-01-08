@@ -449,7 +449,17 @@ Display::display_header($pageTitle);
 // ------------------------------------------------------------------------
 // Toolbar (MySpace main menu + Back / Print / Export actions).
 // ------------------------------------------------------------------------
-$actionsLeft = Display::mySpaceMenu('current_courses');
+$actionsLeft = Display::url(
+    Display::getMdiIcon(
+        'chart-box',
+        'ch-tool-icon',
+        null,
+        32,
+        get_lang('View my progress')
+    ),
+    api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
+);
+$actionsLeft .= Display::mySpaceMenu('current_courses');
 
 $actionsRight = Display::url(
     Display::getMdiIcon(

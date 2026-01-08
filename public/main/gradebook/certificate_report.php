@@ -407,9 +407,6 @@ $template->assign('certificate_students', $certificateStudents);
 $actionsLeft = '';
 $actionsRight = '';
 
-// Main MySpace navigation icons.
-$actionsLeft .= Display::mySpaceMenu('certificate_report');
-
 // Shortcut: view my own progress.
 $actionsLeft .= Display::url(
     Display::getMdiIcon(
@@ -421,6 +418,10 @@ $actionsLeft .= Display::url(
     ),
     api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
 );
+// Main MySpace navigation icons.
+$actionsLeft .= Display::mySpaceMenu('certificate_report');
+
+
 
 // Optional Learning Calendar plugin entry (teachers only).
 $pluginCalendarEnabled =

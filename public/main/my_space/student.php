@@ -266,10 +266,7 @@ $sort_by_first_name = api_sort_by_first_name();
 // ---------------------------------------------------------------------
 $actionsLeft = '';
 
-// 1) Main MySpace navigation with "Learners" as the current section.
-$actionsLeft .= Display::mySpaceMenu('students');
-
-// 2) Extra actions: "View my progress" (for tracking roles).
+// 0) "View my progress" (for tracking roles).
 $actionsLeft .= Display::url(
     Display::getMdiIcon(
         'chart-box',
@@ -281,7 +278,10 @@ $actionsLeft .= Display::url(
     $webCodePath.'auth/my_progress.php'
 );
 
-// 3) Extra actions for DRH and student bosses: skills report.
+// 1) Main MySpace navigation with "Learners" as the current section.
+$actionsLeft .= Display::mySpaceMenu('students');
+
+// 2) Extra actions for DRH and student bosses: skills report.
 if (api_is_drh() || api_is_student_boss()) {
     $actionsLeft .= Display::url(
         Display::getMdiIcon(
@@ -295,7 +295,7 @@ if (api_is_drh() || api_is_student_boss()) {
     );
 }
 
-// 4) Extra actions only for student bosses: corporate report, schedule, certificates.
+// 3) Extra actions only for student bosses: corporate report, schedule, certificates.
 if (api_is_student_boss()) {
     $actionsLeft .= Display::url(
         Display::getMdiIcon(

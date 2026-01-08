@@ -16,7 +16,7 @@ export const useSecurityStore = defineStore("security", () => {
   }
 
   const hasRole = computed(() => (role) => {
-    if (user.value && user.value.roles) {
+    if (user.value && Array.isArray(user.value.roles)) {
       return user.value.roles.indexOf(role) !== -1
     }
 
@@ -27,7 +27,7 @@ export const useSecurityStore = defineStore("security", () => {
    * @param {string} role
    */
   const removeRole = (role) => {
-    if (!user.value || !user.value.roles) return
+    if (!user.value || !Array.isArray(user.value.roles)) return
     const index = user.value.roles.indexOf(role)
 
     if (index > -1) {
@@ -45,16 +45,32 @@ export const useSecurityStore = defineStore("security", () => {
 
   const isTeacher = computed(() => isAdmin.value || hasRole.value("ROLE_TEACHER"))
 
-  const isCurrentTeacher = computed(
-    () => (isAdmin.value || hasRole.value("ROLE_CURRENT_COURSE_TEACHER")) && !platformConfigStore.isStudentViewActive,
-  )
+  // Course-context roles (as provided by backend/session)
+  const isCurrentCourseStudent = computed(() => hasRole.value("ROLE_CURRENT_COURSE_STUDENT"))
+  const isCurrentCourseTeacher = computed(() => hasRole.value("ROLE_CURRENT_COURSE_TEACHER"))
+  const isCurrentCourseSessionTeacher = computed(() => hasRole.value("ROLE_CURRENT_COURSE_SESSION_TEACHER"))
 
-  const isCourseAdmin = computed(
-    () =>
-      isAdmin.value ||
-      hasRole.value("ROLE_CURRENT_COURSE_SESSION_TEACHER") ||
-      hasRole.value("ROLE_CURRENT_COURSE_TEACHER"),
-  )
+  /**
+   * If user has BOTH roles due to polluted roles, Student must win (UI safeguard).
+   */
+  const isCurrentTeacher = computed(() => {
+    if (platformConfigStore.isStudentViewActive) return false
+    if (isAdmin.value) return true
+
+    // Student wins over teacher in the same course context
+    if (isCurrentCourseStudent.value) return false
+
+    return isCurrentCourseTeacher.value
+  })
+
+  const isCourseAdmin = computed(() => {
+    if (isAdmin.value) return true
+
+    // Student wins over teacher in the same course context
+    if (isCurrentCourseStudent.value) return false
+
+    return isCurrentCourseSessionTeacher.value || isCurrentCourseTeacher.value
+  })
 
   const isSessionAdmin = computed(() => hasRole.value("ROLE_SESSION_MANAGER"))
 
@@ -91,10 +107,11 @@ export const useSecurityStore = defineStore("security", () => {
     isStudentBoss,
     isHRM,
     isTeacher,
+    isAdmin,
+    isCurrentCourseStudent,
     isCurrentTeacher,
     isCourseAdmin,
     isSessionAdmin,
-    isAdmin,
     checkSession,
   }
 })

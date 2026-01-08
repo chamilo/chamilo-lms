@@ -51,7 +51,7 @@
         }
 
         .p-menubar-submenu {
-          @apply max-h-[15.5rem] overflow-y-auto absolute border-0 bottom-16 left-6;
+          @apply absolute border-0 bottom-16 left-6;
           width: calc(100vw - 3rem);
         }
       }
@@ -63,7 +63,8 @@
       md:justify-end grow md:flex-wrap md:items-center;
 
     > .p-menubar-item:last-child .p-menubar-submenu {
-      @apply md:right-0;
+      @apply max-h-[15.5rem] overflow-y-auto
+        md:right-0;
     }
   }
 

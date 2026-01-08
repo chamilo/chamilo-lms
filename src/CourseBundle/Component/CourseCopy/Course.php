@@ -125,13 +125,18 @@ class Course
                     case RESOURCE_EVENT:
                     case RESOURCE_THEMATIC:
                     case RESOURCE_WIKI:
-                        $title = $resource->title;
-                        $description = $resource->content;
+                        $title = $this->getStrProp($resource, 'title');
+                        $description = $this->getStrProp($resource, 'content');
                         break;
 
                     case RESOURCE_DOCUMENT:
-                        $title = $resource->title;
-                        $description = $resource->comment;
+                        // Some old exports may miss "comment" and only carry "description/summary/intro"
+                        $title = $this->getStrProp($resource, 'title');
+                        $description =
+                            $this->getStrProp($resource, 'comment')
+                                ?: $this->getStrProp($resource, 'description')
+                                ?: $this->getStrProp($resource, 'summary')
+                                    ?: $this->getStrProp($resource, 'intro');
                         break;
 
                     case RESOURCE_FORUM:
@@ -141,60 +146,60 @@ class Course
                     case RESOURCE_QUIZ:
                     case RESOURCE_TEST_CATEGORY:
                     case RESOURCE_WORK:
-                        $title = $resource->title;
-                        $description = $resource->description;
+                        $title = $this->getStrProp($resource, 'title');
+                        $description = $this->getStrProp($resource, 'description');
                         break;
 
                     case RESOURCE_FORUMPOST:
-                        $title = $resource->title;
-                        $description = $resource->text;
+                        $title = $this->getStrProp($resource, 'title');
+                        $description = $this->getStrProp($resource, 'text');
                         break;
 
                     case RESOURCE_SCORM:
                     case RESOURCE_FORUMTOPIC:
-                        $title = $resource->title;
+                        $title = $this->getStrProp($resource, 'title');
                         break;
 
                     case RESOURCE_GLOSSARY:
                     case RESOURCE_LEARNPATH:
-                        $title = $resource->name;
-                        $description = $resource->description;
+                        $title = $this->getStrProp($resource, 'name');
+                        $description = $this->getStrProp($resource, 'description');
                         break;
 
                     case RESOURCE_LEARNPATH_CATEGORY:
-                        $title = $resource->name;
+                        $title = $this->getStrProp($resource, 'name');
                         break;
 
                     case RESOURCE_QUIZQUESTION:
-                        $title = $resource->question;
-                        $description = $resource->description;
+                        $title = $this->getStrProp($resource, 'question');
+                        $description = $this->getStrProp($resource, 'description');
                         break;
 
                     case RESOURCE_SURVEY:
-                        $title = $resource->title;
-                        $description = $resource->subtitle;
+                        $title = $this->getStrProp($resource, 'title');
+                        $description = $this->getStrProp($resource, 'subtitle');
                         break;
 
                     case RESOURCE_SURVEYQUESTION:
-                        $title = $resource->survey_question;
-                        $description = $resource->survey_question_comment;
+                        $title = $this->getStrProp($resource, 'survey_question');
+                        $description = $this->getStrProp($resource, 'survey_question_comment');
                         break;
 
                     case RESOURCE_TOOL_INTRO:
-                        $description = $resource->intro_text;
+                        $description = $this->getStrProp($resource, 'intro_text');
                         break;
 
                     case RESOURCE_ATTENDANCE:
-                        $title = $resource->params['name'];
-                        $description = $resource->params['description'];
+                        $title = isset($resource->params['name']) && \is_string($resource->params['name']) ? $resource->params['name'] : '';
+                        $description = isset($resource->params['description']) && \is_string($resource->params['description']) ? $resource->params['description'] : '';
                         break;
 
                     default:
                         break;
                 }
 
-                $title = api_html_to_text($title);
-                $description = api_html_to_text($description);
+                $title = $this->toTextOrEmpty($title);
+                $description = $this->toTextOrEmpty($description);
 
                 if ($title !== '') {
                     $sample_text .= $title . "\n";
@@ -225,25 +230,32 @@ class Course
                 switch ($type) {
                     case RESOURCE_ANNOUNCEMENT:
                     case RESOURCE_EVENT:
-                        $resource->title = api_to_system_encoding($resource->title, $this->encoding);
-                        $resource->content = api_to_system_encoding($resource->content, $this->encoding);
+                        // Defensive: only convert if present and string
+                        $this->encodeIfSet($resource, 'title');
+                        $this->encodeIfSet($resource, 'content');
                         break;
 
                     case RESOURCE_DOCUMENT:
-                        $resource->title = api_to_system_encoding($resource->title, $this->encoding);
-                        $resource->comment = api_to_system_encoding($resource->comment, $this->encoding);
+                        // Defensive normalization: backfill "comment" if missing
+                        if (!property_exists($resource, 'comment') || !\is_string($resource->comment)) {
+                            $fallback =
+                                $this->getStrProp($resource, 'description')
+                                    ?: $this->getStrProp($resource, 'summary')
+                                    ?: $this->getStrProp($resource, 'intro')
+                                        ?: '';
+                            $resource->comment = $fallback;
+                        }
+                        $this->encodeIfSet($resource, 'title');
+                        $this->encodeIfSet($resource, 'comment'); // may be empty (but now always defined)
                         break;
 
                     case RESOURCE_FORUM:
                     case RESOURCE_QUIZ:
                     case RESOURCE_FORUMCATEGORY:
-                        if (isset($resource->title)) {
-                            $resource->title = api_to_system_encoding($resource->title, $this->encoding);
-                        }
-                        if (isset($resource->description)) {
-                            $resource->description = api_to_system_encoding($resource->description, $this->encoding);
-                        }
-                        if (isset($resource->obj)) {
+                        $this->encodeIfSet($resource, 'title');
+                        $this->encodeIfSet($resource, 'description');
+                        if (isset($resource->obj) && \is_object($resource->obj)) {
+                            // Encode nested forum fields safely
                             foreach (['cat_title', 'cat_comment', 'title', 'description'] as $f) {
                                 if (isset($resource->obj->{$f}) && \is_string($resource->obj->{$f})) {
                                     $resource->obj->{$f} = api_to_system_encoding($resource->obj->{$f}, $this->encoding);
@@ -255,96 +267,91 @@ class Course
                     case RESOURCE_LINK:
                     case RESOURCE_LINKCATEGORY:
                     case RESOURCE_TEST_CATEGORY:
-                        $resource->title = api_to_system_encoding($resource->title, $this->encoding);
-                        $resource->description = api_to_system_encoding($resource->description, $this->encoding);
+                        $this->encodeIfSet($resource, 'title');
+                        $this->encodeIfSet($resource, 'description');
                         break;
 
                     case RESOURCE_FORUMPOST:
-                        if (isset($resource->title)) {
-                            $resource->title = api_to_system_encoding($resource->title, $this->encoding);
-                        }
-                        if (isset($resource->text)) {
-                            $resource->text = api_to_system_encoding($resource->text, $this->encoding);
-                        }
-                        if (isset($resource->poster_name)) {
-                            $resource->poster_name = api_to_system_encoding($resource->poster_name, $this->encoding);
-                        }
+                        $this->encodeIfSet($resource, 'title');
+                        $this->encodeIfSet($resource, 'text');
+                        $this->encodeIfSet($resource, 'poster_name');
                         break;
 
                     case RESOURCE_FORUMTOPIC:
-                        if (isset($resource->title)) {
-                            $resource->title = api_to_system_encoding($resource->title, $this->encoding);
-                        }
-                        if (isset($resource->topic_poster_name)) {
-                            $resource->topic_poster_name = api_to_system_encoding($resource->topic_poster_name, $this->encoding);
-                        }
-                        if (isset($resource->title_qualify)) {
-                            $resource->title_qualify = api_to_system_encoding($resource->title_qualify, $this->encoding);
-                        }
+                        $this->encodeIfSet($resource, 'title');
+                        $this->encodeIfSet($resource, 'topic_poster_name');
+                        $this->encodeIfSet($resource, 'title_qualify');
                         break;
 
                     case RESOURCE_GLOSSARY:
-                        $resource->name = api_to_system_encoding($resource->name, $this->encoding);
-                        $resource->description = api_to_system_encoding($resource->description, $this->encoding);
+                        $this->encodeIfSet($resource, 'name');
+                        $this->encodeIfSet($resource, 'description');
                         break;
 
                     case RESOURCE_LEARNPATH:
-                        $resource->name = api_to_system_encoding($resource->name, $this->encoding);
-                        $resource->description = api_to_system_encoding($resource->description, $this->encoding);
-                        $resource->content_maker = api_to_system_encoding($resource->content_maker, $this->encoding);
-                        $resource->content_license = api_to_system_encoding($resource->content_license, $this->encoding);
+                        $this->encodeIfSet($resource, 'name');
+                        $this->encodeIfSet($resource, 'description');
+                        $this->encodeIfSet($resource, 'content_maker');
+                        $this->encodeIfSet($resource, 'content_license');
                         break;
 
                     case RESOURCE_QUIZQUESTION:
-                        $resource->question = api_to_system_encoding($resource->question, $this->encoding);
-                        $resource->description = api_to_system_encoding($resource->description, $this->encoding);
-                        if (\is_array($resource->answers) && \count($resource->answers) > 0) {
+                        $this->encodeIfSet($resource, 'question');
+                        $this->encodeIfSet($resource, 'description');
+                        if (isset($resource->answers) && \is_array($resource->answers) && \count($resource->answers) > 0) {
                             foreach ($resource->answers as &$answer) {
-                                $answer['answer'] = api_to_system_encoding($answer['answer'], $this->encoding);
-                                $answer['comment'] = api_to_system_encoding($answer['comment'], $this->encoding);
+                                // Answers array may be sparse; be defensive
+                                if (isset($answer['answer']) && \is_string($answer['answer'])) {
+                                    $answer['answer'] = api_to_system_encoding($answer['answer'], $this->encoding);
+                                }
+                                if (isset($answer['comment']) && \is_string($answer['comment'])) {
+                                    $answer['comment'] = api_to_system_encoding($answer['comment'], $this->encoding);
+                                }
                             }
                         }
                         break;
 
                     case RESOURCE_SCORM:
-                        $resource->title = api_to_system_encoding($resource->title, $this->encoding);
+                        $this->encodeIfSet($resource, 'title');
                         break;
 
                     case RESOURCE_SURVEY:
-                        $resource->title = api_to_system_encoding($resource->title, $this->encoding);
-                        $resource->subtitle = api_to_system_encoding($resource->subtitle, $this->encoding);
-                        $resource->author = api_to_system_encoding($resource->author, $this->encoding);
-                        $resource->intro = api_to_system_encoding($resource->intro, $this->encoding);
-                        $resource->surveythanks = api_to_system_encoding($resource->surveythanks, $this->encoding);
+                        $this->encodeIfSet($resource, 'title');
+                        $this->encodeIfSet($resource, 'subtitle');
+                        $this->encodeIfSet($resource, 'author');
+                        $this->encodeIfSet($resource, 'intro');
+                        $this->encodeIfSet($resource, 'surveythanks');
                         break;
 
                     case RESOURCE_SURVEYQUESTION:
-                        $resource->survey_question = api_to_system_encoding($resource->survey_question, $this->encoding);
-                        $resource->survey_question_comment = api_to_system_encoding($resource->survey_question_comment, $this->encoding);
+                        $this->encodeIfSet($resource, 'survey_question');
+                        $this->encodeIfSet($resource, 'survey_question_comment');
                         break;
 
                     case RESOURCE_TOOL_INTRO:
-                        $resource->intro_text = api_to_system_encoding($resource->intro_text, $this->encoding);
+                        $this->encodeIfSet($resource, 'intro_text');
                         break;
 
                     case RESOURCE_WIKI:
-                        $resource->title = api_to_system_encoding($resource->title, $this->encoding);
-                        $resource->content = api_to_system_encoding($resource->content, $this->encoding);
-                        $resource->reflink = api_to_system_encoding($resource->reflink, $this->encoding);
+                        $this->encodeIfSet($resource, 'title');
+                        $this->encodeIfSet($resource, 'content');
+                        $this->encodeIfSet($resource, 'reflink');
                         break;
 
                     case RESOURCE_WORK:
-                        $resource->url = api_to_system_encoding($resource->url, $this->encoding);
-                        $resource->title = api_to_system_encoding($resource->title, $this->encoding);
-                        $resource->description = api_to_system_encoding($resource->description, $this->encoding);
+                        $this->encodeIfSet($resource, 'url');
+                        $this->encodeIfSet($resource, 'title');
+                        $this->encodeIfSet($resource, 'description');
                         break;
 
                     default:
+                        // No string fields to encode or unsupported resource type
                         break;
                 }
             }
         }
 
+        // Update current encoding after conversion
         $this->encoding = api_get_system_encoding();
     }
 
@@ -389,5 +396,33 @@ class Course
 
         /** @var Course $unserialized */
         return $unserialized;
+    }
+
+    /**
+     * Safely returns a string property from a dynamic object-like resource.
+     * Returns '' if missing or not a string.
+     */
+    private function getStrProp(object $obj, string $prop): string
+    {
+        return (property_exists($obj, $prop) && \is_string($obj->$prop)) ? $obj->$prop : '';
+    }
+
+    /**
+     * Encode obj->$prop in-place if it exists and is a non-empty string.
+     * Keeps behavior no-op for absent properties (defensive).
+     */
+    private function encodeIfSet(object $obj, string $prop): void
+    {
+        if (property_exists($obj, $prop) && \is_string($obj->$prop) && $obj->$prop !== '') {
+            $obj->$prop = api_to_system_encoding($obj->$prop, $this->encoding);
+        }
+    }
+
+    /**
+     * Converts HTML-ish input to plain text if string, else returns ''.
+     */
+    private function toTextOrEmpty($value): string
+    {
+        return (\is_string($value) && $value !== '') ? api_html_to_text($value) : '';
     }
 }

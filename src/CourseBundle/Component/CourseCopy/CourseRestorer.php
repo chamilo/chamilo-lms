@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-/* For licensing terms, see /license.txt */
-
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
 use AllowDynamicProperties;
@@ -184,13 +182,15 @@ class CourseRestorer
      */
     public function __construct($course)
     {
-        // Read env constant/course hint if present
-        if (\defined('COURSE_RESTORER_DEBUG')) {
-            $this->debug = (bool) \constant('COURSE_RESTORER_DEBUG');
+        $this->course = $course ?: (object)[];
+
+        $code = (string) ($this->course->code ?? '');
+        if ($code === '') {
+            $code = api_get_course_id();
+            $this->course->code = $code;
         }
 
-        $this->course = $course;
-        $courseInfo = api_get_course_info($this->course->code);
+        $courseInfo = $code !== '' ? api_get_course_info($code) : api_get_course_info();
         $this->course_origin_id = !empty($courseInfo) ? $courseInfo['real_id'] : null;
 
         $this->file_option = FILE_RENAME;

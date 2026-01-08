@@ -6896,19 +6896,36 @@ function get_hosting_limit(int $urlId, string $limitName): mixed
         return [];
     }
 
-    $settingsOverrides = Container::$container->getParameter('settings_overrides');
+    $settingsOverrides = Container::$container->getParameter('settings_overrides') ?? [];
 
-    $limits = $settingsOverrides[$urlId]['hosting_limit'] ?? $settingsOverrides['default']['hosting_limit'];
+    // Defensive: ensure array
+    if (!is_array($settingsOverrides)) {
+        return [];
+    }
+
+    $urlOverrides = (isset($settingsOverrides[$urlId]) && is_array($settingsOverrides[$urlId]))
+        ? $settingsOverrides[$urlId]
+        : [];
+
+    $defaultOverrides = (isset($settingsOverrides['default']) && is_array($settingsOverrides['default']))
+        ? $settingsOverrides['default']
+        : [];
+
+    $limits = $urlOverrides['hosting_limit'] ?? ($defaultOverrides['hosting_limit'] ?? []);
+
+    // Defensive: ensure iterable array
+    if (!is_array($limits)) {
+        $limits = [];
+    }
 
     foreach ($limits as $limitArray) {
-        if (isset($limitArray[$limitName])) {
+        if (is_array($limitArray) && array_key_exists($limitName, $limitArray)) {
             return $limitArray[$limitName];
         }
     }
 
     return null;
 }
-
 
 /**
  * Retrieves an environment variable value with validation and handles boolean conversion.

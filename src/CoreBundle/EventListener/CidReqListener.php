@@ -35,6 +35,19 @@ use Twig\Environment;
  */
 class CidReqListener
 {
+    /**
+     * These roles are context roles and must be cleared every request
+     * to avoid "role leakage" between courses/groups/sessions.
+     */
+    private const CONTEXT_ROLES = [
+        'ROLE_CURRENT_COURSE_GROUP_TEACHER',
+        'ROLE_CURRENT_COURSE_GROUP_STUDENT',
+        'ROLE_CURRENT_COURSE_STUDENT',
+        'ROLE_CURRENT_COURSE_TEACHER',
+        'ROLE_CURRENT_COURSE_SESSION_STUDENT',
+        'ROLE_CURRENT_COURSE_SESSION_TEACHER',
+    ];
+
     public function __construct(
         private readonly Environment $twig,
         private readonly AuthorizationCheckerInterface $authorizationChecker,
@@ -66,6 +79,9 @@ class CidReqListener
         if ('_wdt' === $request->attributes->get('_profiler')) {
             return;
         }
+
+        // Always reset context roles at the beginning of each main request
+        $this->resetContextRolesOnTokenUser();
 
         if (true === $cidReset) {
             $this->cleanSessionHandler($request);
@@ -130,13 +146,10 @@ class CidReqListener
                 ChamiloSession::erase('sid');
                 ChamiloSession::erase('session');
             } else {
-                // dump("Load chamilo session from DB");
                 $session = $this->entityManager->find(Session::class, $sessionId);
                 if (null !== $session) {
-                    // $course->setCurrentSession($session);
                     $session->setCurrentCourse($course);
-                    // Check if user is allowed to this course-session
-                    // See SessionVoter.php
+
                     if (false === $checker->isGranted(SessionVoter::VIEW, $session)) {
                         throw new AccessDeniedHttpException($this->translator->trans("You're not allowed in this session"));
                     }
@@ -158,7 +171,6 @@ class CidReqListener
                 $sessionHandler->remove('gid');
                 ChamiloSession::erase('gid');
             } else {
-                // dump('Load chamilo group from DB');
                 $group = $this->entityManager->getRepository(CGroup::class)->find($groupId);
 
                 if (null === $group) {
@@ -173,17 +185,6 @@ class CidReqListener
 
                 $sessionHandler->set('group', $group);
                 $sessionHandler->set('gid', $groupId);
-                // @todo check if course has group
-                /*if ($course->hasGroup($group)) {
-                    // Check if user is allowed to this course-group
-                    // See GroupVoter.php
-                    if (false === $checker->isGranted(GroupVoter::VIEW, $group)) {
-                        throw new AccessDeniedHttpException($this->translator->trans('Unauthorised access to group'));
-                    }
-                    $sessionHandler->set('gid', $groupId);
-                } else {
-                    throw new AccessDeniedHttpException($this->translator->trans('Group does not exist in course'));
-                }*/
             }
 
             $origin = $request->get('origin');
@@ -214,20 +215,11 @@ class CidReqListener
         $sessionHandler = $request->getSession();
 
         $courseId = (int) $request->get('cid');
-        // $groupId = (int) $request->get('gid');
-        // $sessionId = (int) $request->get('sid');
 
-        // cidReset is set in the global.inc.php files
-        // global $cidReset;
-        // $cidReset = $sessionHandler->get('cid_reset', false);
-
-        // This controller implements ToolInterface? Then set the course/session
         if (\is_array($controllerList)
             && (
                 $controllerList[0] instanceof CourseControllerInterface
                 || $controllerList[0] instanceof EditorController
-                // $controllerList[0] instanceof ResourceController
-                // || $controllerList[0] instanceof LegacyController
             )
         ) {
             if (!empty($courseId)) {
@@ -235,28 +227,14 @@ class CidReqListener
                 $session = $sessionHandler->get('session');
                 $course = $sessionHandler->get('course');
 
-                // Sets the controller course/session in order to use:
-                // $this->getCourse() $this->getSession() in controllers
                 if ($course) {
                     $controller->setCourse($course);
-                    // Legacy code
-                    // $courseCode = $course->getCode();
-                    // $courseInfo = api_get_course_info($courseCode);
-                    // $sessionHandler->set('_real_cid', $course->getId());
-                    // $sessionHandler->set('_cid', $course->getCode());
-                    // $sessionHandler->set('_course', $courseInfo);
                 }
 
                 if ($session) {
                     $controller->setSession($session);
                 }
             }
-
-            // Example 'chamilo_notebook.controller.notebook:indexAction'
-            // $controllerAction = $request->get('_controller');
-            // $controllerActionParts = explode(':', $controllerAction);
-            // $controllerNameParts = explode('.', $controllerActionParts[0]);
-            // $controllerName = $controllerActionParts[0];
         }
     }
 
@@ -312,22 +290,29 @@ class CidReqListener
         ChamiloSession::erase('course_url_params');
         ChamiloSession::erase('origin');
 
-        // Remove user temp roles
+        // Remove context roles also when leaving the course/session/group
+        $this->resetContextRolesOnTokenUser();
+    }
+
+    private function resetContextRolesOnTokenUser(): void
+    {
         $token = $this->tokenStorage->getToken();
-        if (null !== $token) {
-            /** @var User $user */
-            $user = $token->getUser();
-            if ($user instanceof UserInterface) {
-                $user->removeRole('ROLE_CURRENT_COURSE_GROUP_TEACHER');
-                $user->removeRole('ROLE_CURRENT_COURSE_GROUP_STUDENT');
-                $user->removeRole('ROLE_CURRENT_COURSE_STUDENT');
-                $user->removeRole('ROLE_CURRENT_COURSE_TEACHER');
-                $user->removeRole('ROLE_CURRENT_COURSE_SESSION_STUDENT');
-                $user->removeRole('ROLE_CURRENT_COURSE_SESSION_TEACHER');
-            }
+        if (null === $token) {
+            return;
         }
 
-        // $request->setLocale($request->getPreferredLanguage());
+        $user = $token->getUser();
+        if (!$user instanceof UserInterface) {
+            return;
+        }
+
+        // We only know removeRole exists on Chamilo User entity
+        if ($user instanceof User) {
+            foreach (self::CONTEXT_ROLES as $role) {
+                $user->removeRole($role);
+            }
+            $token->setUser($user);
+        }
     }
 
     private function generateCourseUrl(?Course $course, int $sessionId, int $groupId, ?string $origin): string

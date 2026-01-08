@@ -399,12 +399,6 @@ class ResourceListener
         }
 
         $em = $args->getObjectManager();
-        $resourceNode = $resource->getResourceNode();
-
-        if (!$resourceNode) {
-            return;
-        }
-
         $docID = $resource->getIid();
         $em->createQuery('DELETE FROM Chamilo\CourseBundle\Entity\CLpItem i WHERE i.path = :path AND i.itemType = :type')
             ->setParameter('path', $docID)

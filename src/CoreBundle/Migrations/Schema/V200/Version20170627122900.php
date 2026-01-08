@@ -126,7 +126,7 @@ class Version20170627122900 extends AbstractMigrationChamilo
             'administrator_surname' => 'admin',
             'administrator_name' => 'admin',
             'administrator_phone' => 'admin',
-            'exercise_max_ckeditors_in_page' => 'exercise',
+            'exercise_max_keditors_in_page' => 'exercise',
             'allow_hr_skills_management' => 'skill',
             'accessibility_font_resize' => 'display',
             'account_valid_duration' => 'profile',

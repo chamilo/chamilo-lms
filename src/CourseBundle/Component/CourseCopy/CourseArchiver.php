@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Component\CourseCopy;
 
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Asset;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
+use Chamilo\CoreBundle\Helpers\DateTimeHelper;
 use DateTime;
 use PclZip;
 use RecursiveDirectoryIterator;
@@ -133,7 +134,7 @@ class CourseArchiver
         $course_info_file = $backup_dir . 'course_info.dat';
 
         $user = api_get_user_info();
-        $date = new DateTime(api_get_local_time());
+        $date = DateTimeHelper::nowLocalDateTime();
         $zipFileName = $user['user_id'] . '_' . $course->code . '_' . $date->format('Ymd-His') . '.zip';
         $zipFilePath = $backupDirectory . $zipFileName;
 

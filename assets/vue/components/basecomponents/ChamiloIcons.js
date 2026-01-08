@@ -140,8 +140,8 @@ export const chamiloIconToClass = {
   "lock": "mdi mdi-lock",
   "account-check": "mdi mdi-account-check",
   "account-cancel": "mdi mdi-account-cancel",
-  "zip-pack": "mdi mdi-archive",
-  "zip-unpack": "mdi mdi-archive-arrow-down",
+  "zip-pack": "mdi mdi-archive-arrow-down",
+  "zip-unpack": "mdi mdi-archive-arrow-up",
   "clear-all": "mdi mdi-broom",
   "qrcode": "mdi mdi-qrcode",
   "minus": "mdi mdi-minus",
@@ -155,4 +155,7 @@ export const chamiloIconToClass = {
   "pencil": "mdi mdi-pencil",
   "trash": "mdi mdi-delete",
   "xmark": "mdi mdi-close",
+  "health-check": "mdi mdi-clipboard-pulse-outline",
+  "promotion": "mdi mdi-school-outline",
+  "help": "mdi mdi-face-agent",
 }

@@ -3795,123 +3795,53 @@ class PortfolioController
                 && true === api_get_configuration_value('portfolio_show_base_course_post_in_sessions');
 
             $portfolioRepo = Container::getPortfolioRepository();
-            $queryBuilder = $portfolioRepo->getResources();
-            $portfolioRepo->addCourseQueryBuilder($this->course, $queryBuilder);
+            $portfolioCategoryHelper = Container::getPortfolioCategoryHelper();
 
-            if ($this->session) {
-                if ($showBaseContentInSession) {
-                    $portfolioRepo->addSessionAndBaseContentQueryBuilder($this->session, $queryBuilder);
-                } else {
-                    $portfolioRepo->addSessionOnlyQueryBuilder($this->session, $queryBuilder);
+            $filters = $frmFilterList && $frmFilterList->validate() ? $frmFilterList->exportValues() : [];
+
+            $searchInCategories = [];
+
+            if ($categoryId = $filters['categoryId'] ?? null) {
+                $searchInCategories[] = $categoryId;
+
+                foreach ($portfolioCategoryHelper->getListForIndex($categoryId) as $subCategory) {
+                    $searchInCategories[] = $subCategory->getId();
                 }
-            } else {
-                $portfolioRepo->addSessionNullQueryBuilder($queryBuilder);
             }
 
-            if ($frmFilterList && $frmFilterList->validate()) {
-                $values = $frmFilterList->exportValues();
+            $searchNotInCategories = [];
 
-                if (!empty($values['date'])) {
-                    $queryBuilder
-                        ->andWhere('resource.creationDate >= :date')
-                        ->setParameter(':date', api_get_utc_datetime($values['date'], false, true))
-                    ;
-                }
-
-                if (!empty($values['tags'])) {
-                    $queryBuilder
-                        ->innerJoin(ExtraFieldRelTag::class, 'efrt', Join::WITH, 'efrt.itemId = resource.id')
-                        ->innerJoin(ExtraFieldEntity::class, 'ef', Join::WITH, 'ef.id = efrt.fieldId')
-                        ->andWhere('ef.extraFieldType = :efType')
-                        ->andWhere('ef.variable = :variable')
-                        ->andWhere('efrt.tagId IN (:tags)');
-
-                    $queryBuilder->setParameter('efType', ExtraFieldEntity::PORTFOLIO_TYPE);
-                    $queryBuilder->setParameter('variable', 'tags');
-                    $queryBuilder->setParameter('tags', $values['tags']);
-                }
-
-                if (!empty($values['text'])) {
-                    $queryBuilder->andWhere(
-                        $queryBuilder->expr()->orX(
-                            $queryBuilder->expr()->like('resource.title', ':text'),
-                            $queryBuilder->expr()->like('resource.content', ':text')
-                        )
-                    );
-
-                    $queryBuilder->setParameter('text', '%'.$values['text'].'%');
-                }
-
-                // Filters by category level 0
-                $searchCategories = [];
-                if (!empty($values['categoryId'])) {
-                    $searchCategories[] = $values['categoryId'];
-                    $subCategories = $this->getCategoriesForIndex($values['categoryId']);
-                    if (count($subCategories) > 0) {
-                        foreach ($subCategories as $subCategory) {
-                            $searchCategories[] = $subCategory->getId();
-                        }
-                    }
-                    $queryBuilder->andWhere('resource.category IN('.implode(',', $searchCategories).')');
-                }
-
-                // Filters by sub-category, don't show the selected values
+            if ($subCategoryIdList = $filters['subCategoryIds'] ?? '') {
                 $diff = [];
-                if (!empty($values['subCategoryIds']) && !('all' === $values['subCategoryIds'])) {
-                    $subCategoryIds = explode(',', $values['subCategoryIds']);
-                    $diff = array_diff($searchCategories, $subCategoryIds);
-                } else {
-                    if (trim($values['subCategoryIds']) === '') {
-                        $diff = $searchCategories;
-                    }
+
+                if ('all' !== $subCategoryIdList) {
+                    $subCategoryIds = explode(',', $subCategoryIdList);
+                    $diff = array_diff($searchInCategories, $subCategoryIds);
+                } elseif (trim($subCategoryIdList) === '') {
+                    $diff = $searchInCategories;
                 }
+
                 if (!empty($diff)) {
                     unset($diff[0]);
-                    if (!empty($diff)) {
-                        $queryBuilder->andWhere('resource.category NOT IN('.implode(',', $diff).')');
-                    }
+
+                    $searchNotInCategories = $diff;
                 }
             }
 
-            if ($listByUser) {
-                $queryBuilder
-                    ->andWhere('resource.user = :user')
-                    ->setParameter('user', $this->owner);
-            }
-
-            if ($this->advancedSharingEnabled) {
-                $queryBuilder->andWhere(
-                    $queryBuilder->expr()->orX(
-                        $queryBuilder->expr()->eq('resource.visibility', Portfolio::VISIBILITY_VISIBLE),
-                        $queryBuilder->expr()->eq('links.user', ':current_user')
-                    )
-                );
-            } else {
-                $visibilityCriteria = [Portfolio::VISIBILITY_VISIBLE];
-
-                if (api_is_allowed_to_edit()) {
-                    $visibilityCriteria[] = Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER;
-                }
-
-                $queryBuilder->andWhere(
-                    $queryBuilder->expr()->orX(
-                        'node.creator = :current_user',
-                        $queryBuilder->expr()->andX(
-                            'node.creator != :current_user',
-                            $queryBuilder->expr()->in('resource.visibility', $visibilityCriteria)
-                        )
-                    )
-                );
-            }
-
-            $queryBuilder->setParameter('current_user', $currentUserId);
-            if ($alphabeticalOrder || true === api_get_configuration_value('portfolio_order_post_by_alphabetical_order')) {
-                $queryBuilder->orderBy('resource.title', 'ASC');
-            } else {
-                $queryBuilder->orderBy('node.createdAt', 'DESC');
-            }
-
-            $items = $queryBuilder->getQuery()->getResult();
+            $items = $portfolioRepo->getIndexCourseItems(
+                api_get_user_entity(),
+                $this->owner,
+                $this->course,
+                $this->session,
+                $showBaseContentInSession,
+                $listByUser,
+                $filters['date'] ?? null,
+                $filters['tags'] ?? [],
+                $filters['text'] ?? '',
+                $searchInCategories,
+                $searchNotInCategories,
+                $this->advancedSharingEnabled
+            );
 
             if ($showBaseContentInSession) {
                 $items = array_filter(

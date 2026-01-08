@@ -27,11 +27,11 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 $skillId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 $entityManager = Database::getManager();
-
 $skillRepo = Container::getSkillRepository();
 
 switch ($action) {
     case 'enable':
+        /** @var Skill|null $skill */
         $skill = $skillRepo->find($skillId);
 
         if (is_null($skill)) {
@@ -63,9 +63,9 @@ switch ($action) {
 
         header('Location: '.api_get_self());
         exit;
-        break;
+
     case 'disable':
-        /** @var Skill $skill */
+        /** @var Skill|null $skill */
         $skill = $skillRepo->find($skillId);
 
         if (is_null($skill)) {
@@ -90,15 +90,16 @@ switch ($action) {
             $children = $skillObj->getChildren($skill->getId());
 
             foreach ($children as $child) {
-                $skill = $skillRepo->find($child['id']);
+                /** @var Skill|null $childSkill */
+                $childSkill = $skillRepo->find($child['id']);
 
-                if (null === $skill) {
+                if (null === $childSkill) {
                     continue;
                 }
 
-                $skill->setStatus(0);
-                $skill->setUpdatedAt($updatedAt);
-                $entityManager->persist($skill);
+                $childSkill->setStatus(0);
+                $childSkill->setUpdatedAt($updatedAt);
+                $entityManager->persist($childSkill);
             }
 
             $entityManager->flush();
@@ -113,10 +114,13 @@ switch ($action) {
 
         header('Location: '.api_get_self());
         exit;
-        break;
+
     case 'list':
     default:
-        $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('Administration')];
+        $interbreadcrumb[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
+            'name' => get_lang('Administration'),
+        ];
 
         $toolbar = Display::url(
             Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Create skill')),
@@ -148,16 +152,21 @@ switch ($action) {
 
         $skill = new SkillModel();
         $skillList = $skill->getAllSkills();
+
+        // Tag filter (fix: avoid losing index 0 and use strict comparisons).
         $extraFieldSearchTagId = $_REQUEST['tag_id'] ?? 0;
 
         if ($extraFieldSearchTagId) {
             $skills = [];
             $skillsFiltered = $extraField->getAllSkillPerTag($arrayVals['id'], $extraFieldSearchTagId);
+
             foreach ($skillList as $index => $value) {
-                if (array_search($index, $skillsFiltered)) {
+                // Use in_array with strict mode, because array_search() can return 0 and be treated as false.
+                if (in_array($index, $skillsFiltered, true)) {
                     $skills[$index] = $value;
                 }
             }
+
             $skillList = $skills;
         }
 
@@ -165,6 +174,7 @@ switch ($action) {
         $tpl->assign('skills', $skillList);
         $tpl->assign('current_tag_id', $extraFieldSearchTagId);
         $tpl->assign('tags', $tags);
+
         $templateName = $tpl->get_template('skill/list.html.twig');
         $content = $tpl->fetch($templateName);
 

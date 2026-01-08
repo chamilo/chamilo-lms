@@ -664,7 +664,7 @@ class Display
     ) {
         $code_path = api_get_path(SYS_PUBLIC_PATH);
         $w_code_path = api_get_path(WEB_PUBLIC_PATH);
-        // The following path is checked to see if the file exist. It's
+        // The following path is checked to see if the file exists. It's
         // important to use the public path (i.e. web/css/) rather than the
         // internal path (/app/Resource/public/css/) because the path used
         // in the end must be the public path
@@ -709,13 +709,7 @@ class Display
             }
         }
 
-        // Special code to enable SVG - refs #7359 - Needs more work
-        // The code below does something else to "test out" SVG: for each icon,
-        // it checks if there is an SVG version. If so, it uses it.
-        // When moving this to production, the return_icon() calls should
-        // ask for the SVG version directly
-        $svgIcons = api_get_setting('icons_mode_svg');
-        if ('true' == $svgIcons && false == $return_only_path) {
+        if ($return_only_path) {
             $svgImage = substr($image, 0, -3).'svg';
             if (is_file($code_path.$theme.'svg/'.$svgImage)) {
                 $icon = $w_code_path.$theme.'svg/'.$svgImage;
@@ -736,7 +730,7 @@ class Display
         }
 
         $img = self::img($icon, $alt_text, $additional_attributes);
-        if (SHOW_TEXT_NEAR_ICONS == true && !empty($alt_text)) {
+        if (SHOW_TEXT_NEAR_ICONS && !empty($alt_text)) {
             if ($show_text) {
                 $img = "$img $alt_text";
             }
@@ -746,23 +740,23 @@ class Display
     }
 
     /**
-     * Returns the htmlcode for an image.
+     * Returns the HTML code for an image.
      *
      * @param string $image_path            the filename of the file (in the main/img/ folder
-     * @param string $alt_text              the alt text (probably a language variable)
-     * @param array  $additional_attributes (for instance height, width, onclick, ...)
-     * @param bool   $filterPath            Optional. Whether filter the image path. Default is true
+     * @param ?string $alt_text              the alt text (probably a language variable)
+     * @param ?array  $additional_attributes (for instance, height, width, onclick, ...)
+     * @param ?bool   $filterPath            Optional. Whether filter the image path. Default is true
      *
      * @return string
      *
      * @author Julio Montoya 2010
      */
     public static function img(
-        $image_path,
-        $alt_text = '',
-        $additional_attributes = null,
-        $filterPath = true
-    ) {
+        string $image_path,
+        ?string $alt_text = '',
+        ?array $additional_attributes = null,
+        ?bool $filterPath = true
+    ): string {
         if (empty($image_path)) {
             return '';
         }
@@ -793,11 +787,11 @@ class Display
     }
 
     /**
-     * Returns the htmlcode for a tag (h3, h1, div, a, button), etc.
+     * Returns the HTML code for a tag (h3, h1, div, a, button), etc.
      *
      * @param string $tag                   the tag name
      * @param string $content               the tag's content
-     * @param array  $additional_attributes (for instance height, width, onclick, ...)
+     * @param array  $additional_attributes (for instance, height, width, onclick, ...)
      *
      * @return string
      *
@@ -827,12 +821,12 @@ class Display
      * Creates a URL anchor.
      *
      * @param string $name
-     * @param string $url
-     * @param array  $attributes
+     * @param ?string $url
+     * @param ?array  $attributes
      *
      * @return string
      */
-    public static function url($name, $url, $attributes = [])
+    public static function url(string $name, ?string $url, ?array $attributes = []): string
     {
         if (!empty($url)) {
             $url = preg_replace('#&amp;#', '&', $url);
@@ -847,11 +841,11 @@ class Display
      * Creates a div tag.
      *
      * @param string $content
-     * @param array  $attributes
+     * @param ?array  $attributes
      *
      * @return string
      */
-    public static function div($content, $attributes = [])
+    public static function div(string $content, ?array $attributes = []): string
     {
         return self::tag('div', $content, $attributes);
     }
@@ -859,7 +853,7 @@ class Display
     /**
      * Creates a span tag.
      */
-    public static function span($content, $attributes = [])
+    public static function span(string $content, ?array $attributes = []): string
     {
         return self::tag('span', $content, $attributes);
     }
@@ -1577,7 +1571,7 @@ class Display
             $title .= "<small> $second_title</small>";
         }
 
-        return '<div class="page-header section-header"><'.$size.' class="section-header__title">'.$title.'</'.$size.'></div>';
+        return '<div class="page-header section-header mb-6"><'.$size.' class="section-header__title">'.$title.'</'.$size.'></div>';
     }
 
     public static function page_header_and_translate($title, $second_title = null)
@@ -2203,13 +2197,11 @@ class Display
             $end = $contentList[2];
         }
 
-
-        return '<div id="'.$id.'" class="toolbar-action p-toolbar p-component flex items-center justify-between flex-wrap" role="toolbar">
-                <div class="p-toolbar-group-start p-toolbar-group-left">'.$start.'</div>
-                <div class="p-toolbar-group-center">'.$center.'</div>
-                <div class="p-toolbar-group-end p-toolbar-group-right">'.$end.'</div>
-            </div>
-        ';
+        return '<div id="'.$id.'" class="toolbar-action p-toolbar p-component flex items-center justify-between flex-wrap w-full" role="toolbar">
+            <div class="p-toolbar-group-start p-toolbar-group-left">'.$start.'</div>
+            <div class="p-toolbar-group-center">'.$center.'</div>
+            <div class="p-toolbar-group-end p-toolbar-group-right">'.$end.'</div>
+        </div>';
     }
 
     /**
@@ -2756,6 +2748,131 @@ class Display
             }
         } catch (\Throwable $e) {
             error_log('Display::getFlash error: '.$e->getMessage());
+        }
+
+        return $html;
+    }
+
+    /**
+     * Build the common MySpace / tracking menu (left part of the toolbar).
+     *
+     * $current can be:
+     *  - overview
+     *  - students
+     *  - teachers
+     *  - admin_view
+     *  - exams
+     *  - current_courses
+     *  - courses
+     *  - sessions
+     *  - company_reports
+     *  - company_reports_resumed
+     */
+    public static function mySpaceMenu(?string $current = 'overview'): string
+    {
+        $base = api_get_path(WEB_CODE_PATH).'my_space/';
+        $items = [];
+
+        $isPlatformAdmin = api_is_platform_admin();
+        $isDrh = api_is_drh();
+        if ('yourstudents' === $current) {
+            $current = 'students';
+        }
+
+        if ($isDrh) {
+            // DRH menu.
+            $items = [
+                'students' => [
+                    'icon' => ObjectIcon::USER,
+                    'title' => get_lang('Learners'),
+                    'url' => $base.'student.php',
+                ],
+                'teachers' => [
+                    'icon' => ObjectIcon::TEACHER,
+                    'title' => get_lang('Teachers'),
+                    'url' => $base.'teachers.php',
+                ],
+                'courses' => [
+                    'icon' => ObjectIcon::COURSE,
+                    'title' => get_lang('Courses'),
+                    'url' => $base.'course.php',
+                ],
+                'sessions' => [
+                    'icon' => ObjectIcon::SESSION,
+                    'title' => get_lang('Course sessions'),
+                    'url' => $base.'session.php',
+                ],
+                'company_reports' => [
+                    'icon' => ObjectIcon::REPORT,
+                    'title' => get_lang('Corporate report'),
+                    'url' => $base.'company_reports.php',
+                ],
+                'company_reports_resumed' => [
+                    'icon' => 'chart-box-outline',
+                    'title' => get_lang('Corporate report, short version'),
+                    'url' => $base.'company_reports_resumed.php',
+                ],
+            ];
+        } else {
+            // Teacher / platform admin menu.
+            $items = [
+                'overview' => [
+                    'icon' => 'chart-bar',
+                    'title' => get_lang('Global view'),
+                    'url' => $base.'index.php',
+                ],
+                'students' => [
+                    'icon' => 'account-star',
+                    'title' => get_lang('Learners'),
+                    'url' => $base.'student.php',
+                ],
+                'teachers' => [
+                    'icon' => 'human-male-board',
+                    'title' => get_lang('Teachers'),
+                    'url' => $base.'teachers.php',
+                ],
+            ];
+
+            if ($isPlatformAdmin) {
+                $items['admin_view'] = [
+                    'icon' => 'star-outline',
+                    'title' => get_lang('Admin view'),
+                    'url' => $base.'admin_view.php',
+                ];
+                $items['exams'] = [
+                    'icon' => 'order-bool-ascending-variant',
+                    'title' => get_lang('Exam tracking'),
+                    'url' => api_get_path(WEB_CODE_PATH).'tracking/exams.php',
+                ];
+                $items['current_courses'] = [
+                    'icon' => 'book-open-page-variant',
+                    'title' => get_lang('Current courses report'),
+                    'url' => $base.'current_courses.php',
+                ];
+                $items['certificate_report'] = [
+                    'icon' => 'certificate',
+                    'title' => get_lang('See list of learner certificates'),
+                    'url' => api_get_path(WEB_CODE_PATH).'gradebook/certificate_report.php',
+                ];
+            }
+        }
+
+        $html = '';
+
+        foreach ($items as $name => $item) {
+            $iconClass = $name === $current ? 'ch-tool-icon-disabled' : 'ch-tool-icon';
+            $url = $name === $current ? '' : $item['url'];
+
+            $html .= self::url(
+                self::getMdiIcon(
+                    $item['icon'],
+                    $iconClass,
+                    null,
+                    32,
+                    $item['title']
+                ),
+                $url
+            );
         }
 
         return $html;

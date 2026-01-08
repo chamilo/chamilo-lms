@@ -54,7 +54,7 @@ class Version20230720142900 extends AbstractMigrationChamilo
                 $this->container->get(AccessUrlHelper::class)->getCurrent()
             )
             ->setPhone('0000000000')
-            ->setLocale('en')
+            ->setLocale('en_US')
             ->setActive(User::SOFT_DELETED)
             ->setTimezone('UTC')
         ;

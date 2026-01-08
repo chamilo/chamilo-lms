@@ -14,7 +14,7 @@ jobs:
                 php-versions: ['8.2', '8.3']
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
 
             - name: Setup apache
               run: |
@@ -35,8 +35,8 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php-versions }}
-                  extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, gd, json, soap, zip, bcmath
-                  ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M, date.timezone=Europe/Paris
+                  extensions: bcmath, ctype, curl, dom, gd, iconv, intl, json, ldap, mbstring, mysql, opcache, soap, xml, zip
+                  ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M, date.timezone=Europe/Paris, opcache.enable=1, opcache.memory_consumption=64M
 
             - name: Get composer cache directory
               id: composer-cache
@@ -113,7 +113,7 @@ jobs:
                 sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
 
             - name: Set up JDK
-              uses: actions/setup-java@v4
+              uses: actions/setup-java@v5
               with:
                   distribution: 'temurin'
                   java-version: '17'
@@ -155,7 +155,7 @@ jobs:
                   sed -i "s/APP_ENV='dev'/APP_ENV='prod'/g" .env
                   sed -i "s/APP_DEBUG='1'/APP_DEBUG='0'/g" .env
                   sudo php bin/console cache:clear
-                  sudo chmod -R 777 var public
+                  sudo chmod -R 777 var
 
             - name: Behat tests
               run: |

@@ -84,7 +84,7 @@ if ($is_allowedToEdit) {
             $new_id = $old_question_obj->duplicate($current_course);
             //Reading new question
             $new_question_obj = Question::read($new_id);
-            $new_question_obj->addToList($fromExercise);
+            $new_question_obj->addToList($fromExercise, true);
             //Reading Answers obj of the current course
             $new_answer_obj = new Answer($old_question_id, $origin_course_id);
             $new_answer_obj->read();
@@ -445,10 +445,30 @@ if (!empty($_course)) {
         // Start from all known types.
         $allTypes = $question_list;
 
-        // Exclude the classic open question type from the filter list.
+        // Exclude the classic open question types from the filter list
+        // as the system cannot provide immediate feedback on these.
         if (isset($allTypes[FREE_ANSWER])) {
             unset($allTypes[FREE_ANSWER]);
         }
+        if (isset($allTypes[ORAL_EXPRESSION])) {
+            unset($allTypes[ORAL_EXPRESSION]);
+        }
+        if (isset($allTypes[ANNOTATION])) {
+            unset($allTypes[ANNOTATION]);
+        }
+        if (isset($allTypes[MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY])) {
+            unset($allTypes[MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY]);
+        }
+        if (isset($allTypes[UPLOAD_ANSWER])) {
+            unset($allTypes[UPLOAD_ANSWER]);
+        }
+        if (isset($allTypes[ANSWER_IN_OFFICE_DOC])) {
+            unset($allTypes[ANSWER_IN_OFFICE_DOC]);
+        }
+        if (isset($allTypes[PAGE_BREAK])) {
+            unset($allTypes[PAGE_BREAK]);
+        }
+
 
         // Append remaining non-open types (do not override base ones).
         foreach ($allTypes as $key => $item) {

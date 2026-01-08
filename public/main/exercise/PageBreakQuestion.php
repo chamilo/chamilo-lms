@@ -3,7 +3,7 @@
 
 class PageBreakQuestion extends Question
 {
-    public $typePicture = 'page_break.png';
+    public $typePicture = 'page_end.png';
     public $explanationLangVar = 'Page break';
 
     public function __construct()

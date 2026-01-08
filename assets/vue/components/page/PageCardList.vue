@@ -12,7 +12,7 @@
 import PageCard from "./PageCard.vue"
 import pageService from "../../services/page"
 import { useI18n } from "vue-i18n"
-import { ref } from "vue"
+import { ref, watchEffect } from "vue"
 
 const { locale } = useI18n()
 
@@ -26,18 +26,21 @@ const props = defineProps({
 
 const pageList = ref([])
 
-if (props.pages.length) {
-  pageList.value = props.pages
-} else {
-  pageService
-    .findAll({
+watchEffect(async () => {
+  if (props.pages.length) {
+    pageList.value = props.pages
+  } else {
+    const response = await pageService.findAll({
       params: {
         "category.title": "home",
         enabled: "1",
         locale: locale.value,
       },
     })
-    .then((response) => response.json())
-    .then((json) => (pageList.value = json["hydra:member"]))
-}
+
+    const json = await response.json()
+
+    pageList.value = json["hydra:member"]
+  }
+})
 </script>

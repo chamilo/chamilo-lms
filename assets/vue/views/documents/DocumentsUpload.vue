@@ -45,12 +45,55 @@
           name="fileExistsOption"
         />
       </div>
+
+      <!-- Search / Xapian options -->
+      <div
+        v-if="isSearchEnabled"
+        class="flex flex-row mb-2"
+      >
+        <label class="font-semibold w-28">{{ t("Search") }}:</label>
+        <BaseCheckbox
+          id="indexDocumentContent"
+          v-model="indexDocumentContent"
+          :label="t('Index document content?')"
+          name="indexDocumentContent"
+        />
+      </div>
+
+      <!-- Specific search fields -->
+      <div
+        v-if="isSearchEnabled && searchFields.length > 0"
+        class="flex flex-col gap-2 mt-3"
+      >
+        <div
+          v-for="field in searchFields"
+          :key="field.id"
+          class="flex flex-row items-center gap-3"
+        >
+          <label
+            class="font-semibold w-28"
+            :for="`upload_search_field_${field.code}`"
+          >
+            {{ field.title }}:
+          </label>
+
+          <input
+            :id="`upload_search_field_${field.code}`"
+            :name="`searchFieldValues[${field.code}]`"
+            v-model="searchFieldValues[field.code]"
+            type="text"
+            class="w-full border border-gray-300 rounded px-3 py-2"
+            :placeholder="field.title"
+            autocomplete="off"
+          />
+        </div>
+      </div>
     </BaseAdvancedSettingsButton>
   </div>
 </template>
 
 <script setup>
-import { computed, ref, watch, onBeforeUnmount } from "vue"
+import { computed, ref, watch, onBeforeUnmount, onMounted } from "vue"
 import "@uppy/core/dist/style.css"
 import "@uppy/dashboard/dist/style.css"
 import "@uppy/image-editor/dist/style.css"
@@ -71,14 +114,15 @@ import BaseRadioButtons from "../../components/basecomponents/BaseRadioButtons.v
 import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
-import { useStore } from "vuex"
+import { usePlatformConfig } from "../../store/platformConfig"
 
-const store = useStore()
 const route = useRoute()
 const router = useRouter()
 const { gid, sid, cid } = useCidReq()
 const { onCreated } = useUpload()
 const { t } = useI18n()
+const platformConfigStore = usePlatformConfig()
+
 const allowedFiletypes = ["file", "video", "certificate"]
 const filetypeQuery = route.query.filetype
 const filetype = allowedFiletypes.includes(filetypeQuery) ? filetypeQuery : "file"
@@ -87,18 +131,32 @@ const showAdvancedSettings = ref(false)
 const isUncompressZipEnabled = ref(false)
 const fileExistsOption = ref("rename")
 
-const resourceNode = computed(() => store.getters["resourcenode/getResourceNode"])
+const isSearchEnabled = computed(() => "false" !== platformConfigStore.getSetting("search.search_enabled"))
+const indexDocumentContent = ref(isSearchEnabled.value)
+
+// Search fields: [{id, code, title}]
+const searchFields = ref([])
+const searchFieldValues = ref({})
+
 const parentResourceNodeId = ref(Number(route.query.parentResourceNodeId || route.params.node))
-const resourceLinkList = ref(
-  JSON.stringify([
-    {
-      gid,
-      sid,
-      cid,
-      visibility: RESOURCE_LINK_PUBLISHED,
-    },
-  ]),
-)
+const resourceLinkList = ref(JSON.stringify([{ gid, sid, cid, visibility: RESOURCE_LINK_PUBLISHED }]))
+
+function normalizeCode(code) {
+  return String(code || "")
+    .trim()
+    .toLowerCase()
+}
+
+// Build meta keys: { "searchFieldValues[t]": "...", "searchFieldValues[d]": "..." }
+function buildSearchFieldMeta(values, fields) {
+  const meta = {}
+  for (const f of fields || []) {
+    const code = normalizeCode(f.code)
+    if (!code) continue
+    meta[`searchFieldValues[${code}]`] = String(values?.[code] ?? "")
+  }
+  return meta
+}
 
 const uppy = new Uppy({ autoProceed: false })
   .use(Webcam)
@@ -146,12 +204,14 @@ const uppy = new Uppy({ autoProceed: false })
     }, 2000)
   })
 
+// Initial meta (do not send searchFieldValues as an object)
 uppy.setMeta({
   filetype,
   parentResourceNodeId: parentResourceNodeId.value,
   resourceLinkList: resourceLinkList.value,
   isUncompressZipEnabled: isUncompressZipEnabled.value,
   fileExistsOption: fileExistsOption.value,
+  indexDocumentContent: indexDocumentContent.value,
 })
 
 if (filetype === "certificate") {
@@ -162,17 +222,64 @@ if (filetype === "certificate") {
   uppy.setOptions({ restrictions: { allowedFileTypes: null } })
 }
 
-watch(isUncompressZipEnabled, () => {
-  uppy.setOptions({
-    meta: { isUncompressZipEnabled: isUncompressZipEnabled.value },
-  })
+onMounted(async () => {
+  if (!isSearchEnabled.value) return
+
+  try {
+    const response = await fetch(ENTRYPOINT + "search_engine_fields", { credentials: "same-origin" })
+    if (!response.ok) {
+      console.error("[Search] Failed to load search engine fields:", response.status)
+      return
+    }
+
+    const json = await response.json()
+    const fields = Array.isArray(json) ? json : json["hydra:member"] || []
+    if (!Array.isArray(fields)) {
+      console.error("[Search] Unexpected search engine fields payload:", json)
+      return
+    }
+
+    searchFields.value = fields
+      .map((f) => ({
+        id: f.id,
+        code: normalizeCode(f.code),
+        title: f.title,
+      }))
+      .filter((f) => f.code)
+
+    // Ensure keys exist for v-model
+    for (const f of searchFields.value) {
+      if (undefined === searchFieldValues.value[f.code]) {
+        searchFieldValues.value[f.code] = ""
+      }
+    }
+
+    // Push meta keys: searchFieldValues[t], searchFieldValues[d], ...
+    uppy.setMeta(buildSearchFieldMeta(searchFieldValues.value, searchFields.value))
+  } catch (e) {
+    console.error("[Search] Failed to fetch search engine fields:", e)
+  }
 })
 
-watch(fileExistsOption, () => {
-  uppy.setOptions({
-    meta: { fileExistsOption: fileExistsOption.value },
-  })
+watch(isUncompressZipEnabled, (value) => {
+  uppy.setMeta({ isUncompressZipEnabled: value })
 })
+
+watch(fileExistsOption, (value) => {
+  uppy.setMeta({ fileExistsOption: value })
+})
+
+watch(indexDocumentContent, (value) => {
+  uppy.setMeta({ indexDocumentContent: value })
+})
+
+watch(
+  searchFieldValues,
+  () => {
+    uppy.setMeta(buildSearchFieldMeta(searchFieldValues.value, searchFields.value))
+  },
+  { deep: true },
+)
 
 function back() {
   const queryParams = { cid, sid, gid, filetype, tab: route.query.tab }
@@ -188,6 +295,10 @@ function back() {
 }
 
 onBeforeUnmount(() => {
-  try { uppy.close() } catch {}
+  try {
+    uppy.close()
+  } catch {
+    // Ignore Uppy closing errors.
+  }
 })
 </script>

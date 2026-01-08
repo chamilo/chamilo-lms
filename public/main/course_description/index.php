@@ -13,9 +13,10 @@ $logInfo = [
     'action' => $action,
 ];
 Event::registerLog($logInfo);
-
 // protect a course script
 api_protect_course_script(true);
+
+Event::event_access_tool(TOOL_COURSE_DESCRIPTION);
 
 $description_type = '';
 if (isset($_GET['description_type'])) {

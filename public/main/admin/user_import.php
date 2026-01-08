@@ -20,6 +20,7 @@ $userId = api_get_user_id();
 api_protect_admin_script(true, null);
 api_protect_limit_for_session_admin();
 set_time_limit(0);
+$globalLimitUserCoursePairs = [];
 
 /**
  * @param array $users
@@ -202,7 +203,12 @@ function complete_missing_data($user)
  */
 function save_data($users, $sendMail = false)
 {
-    global $inserted_in_course, $extra_fields;
+    global $inserted_in_course, $extra_fields, $globalLimitUserCoursePairs;
+
+    // Ensure array for global limit tracking.
+    if (!isset($globalLimitUserCoursePairs) || !is_array($globalLimitUserCoursePairs)) {
+        $globalLimitUserCoursePairs = [];
+    }
 
     // Not all scripts declare the $inserted_in_course array (although they should).
     if (!isset($inserted_in_course)) {
@@ -254,12 +260,33 @@ function save_data($users, $sendMail = false)
             if ($user_id) {
                 $returnMessage = Display::return_message(get_lang('The user has been added'), 'success');
 
+                // Normalize Courses for both CSV and XML imports.
+                if (isset($user['Courses']) && !is_array($user['Courses'])) {
+                    $user['Courses'] = explode('|', trim((string) $user['Courses']));
+                }
+
                 if (isset($user['Courses']) && is_array($user['Courses'])) {
                     foreach ($user['Courses'] as $course) {
                         if (CourseManager::course_exists($course)) {
                             $course_info = api_get_course_info($course);
+                            if (empty($course_info) || empty($course_info['real_id'])) {
+                                // Skip invalid course records.
+                                continue;
+                            }
 
-                            $result = CourseManager::subscribeUser($user_id, $course_info['real_id'], $user['Status']);
+                            $courseId = (int) $course_info['real_id'];
+
+                            // Check global hosting limit for this user/course pair.
+                            if (CourseManager::wouldOperationExceedGlobalLimit($courseId, [$user_id])) {
+                                // Collect pair for later reporting in a single batch message.
+                                $pairLabel = $user['UserName'].' / '.$course_info['title'];
+                                $globalLimitUserCoursePairs[] = $pairLabel;
+
+                                // Do not subscribe this user to this course; continue with next course.
+                                continue;
+                            }
+
+                            $result = CourseManager::subscribeUser($user_id, $courseId, $user['Status']);
                             if ($result) {
                                 $inserted_in_course[$course] = $course_info['title'];
                             }
@@ -449,6 +476,8 @@ function parse_xml_data($file)
  */
 function processUsers(&$users, $sendMail)
 {
+    global $globalLimitUserCoursePairs;
+
     $users = save_data($users, $sendMail);
 
     $warningMessage = '';
@@ -479,6 +508,22 @@ function processUsers(&$users, $sendMail)
             $row++;
         }
         $warningMessage = $table->toHtml();
+    }
+
+    // Append global hosting limit report if needed (batch imports).
+    if (!empty($globalLimitUserCoursePairs)) {
+        $limitMessage = CourseManager::getGlobalLimitPartialImportMessage($globalLimitUserCoursePairs);
+
+        // Show the warning once as a flash message.
+        Display::addFlash(
+            Display::return_message($limitMessage, 'warning', false)
+        );
+
+        // Also append to the per-import log that is shown in the "Results and feedback" section.
+        $warningMessage .= Display::return_message($limitMessage, 'warning', false);
+
+        // Reset for potential subsequent imports in the same request.
+        $globalLimitUserCoursePairs = [];
     }
 
     // if the warning message is too long then we display the warning message trough a session

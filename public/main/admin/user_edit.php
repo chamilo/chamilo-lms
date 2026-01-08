@@ -112,6 +112,7 @@ $form = new FormValidator(
     api_get_self().'?user_id='.$user_id,
     ''
 );
+$form->protect();
 $form->addElement('header', $tool_name);
 $form->addElement('hidden', 'user_id', $user_id);
 
@@ -189,7 +190,7 @@ if ($hasPicture) {
 
 // Username
 if ('true' !== api_get_setting('login_is_email')) {
-    $form->addElement('text', 'username', get_lang('Login'), ['maxlength' => User::USERNAME_MAX_LENGTH]);
+    $form->addElement('text', 'username', get_lang('Username'), ['maxlength' => User::USERNAME_MAX_LENGTH]);
     $form->addRule('username', get_lang('Required field'), 'required');
     $form->addRule(
         'username',

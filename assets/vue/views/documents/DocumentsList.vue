@@ -146,7 +146,7 @@
     >
       <template #body="slotProps">
         {{
-          slotProps.data.resourceNode.firstResourceFile
+          slotProps.data.resourceNode && slotProps.data.resourceNode.firstResourceFile
             ? prettyBytes(slotProps.data.resourceNode.firstResourceFile.size)
             : ""
         }}
@@ -350,8 +350,8 @@
         size="big"
       />
       <span v-if="item"
-        >{{ t("Are you sure you want to delete") }} <b>{{ item.title }}</b
-        >?</span
+      >{{ t("Are you sure you want to delete") }} <b>{{ item.title }}</b
+      >?</span
       >
     </div>
   </BaseDialogConfirmCancel>
@@ -392,7 +392,6 @@
     :style="{ width: '28rem' }"
     :title="t('Space available')"
   >
-    <p>This feature is in development, this is a mockup with placeholder data!</p>
     <BaseChart :data="usageData" />
   </BaseDialog>
 
@@ -654,7 +653,14 @@ const showBackButtonIfNotRootFolder = computed(() => {
 })
 
 function goToAddVariation(item) {
-  const resourceFileId = item.resourceNode.firstResourceFile.id
+  const firstFile = item.resourceNode?.firstResourceFile
+  if (!firstFile) {
+    console.warn("Missing firstResourceFile for document", item.iid)
+    return
+  }
+
+  const resourceFileId = firstFile.id
+
   router.push({
     name: "DocumentsAddVariation",
     params: { resourceFileId, node: route.params.node },
@@ -947,13 +953,25 @@ function showSlideShowWithFirstImage() {
   document.querySelector("button.fancybox-button--play")?.click()
 }
 
-function showUsageDialog() {
-  usageData.value = {
-    datasets: [{ data: [83, 14, 5] }],
-    labels: ["Course", "Teacher", "Available space"],
+async function showUsageDialog() {
+  try {
+    const response = await axios.get(`/api/documents/${cid}/usage`, {
+      headers: { Accept: 'application/json' },
+      params: { sid, gid },
+    })
+
+    usageData.value = response.data
+  } catch (error) {
+    console.error('Error fetching documents quota usage:', error)
+    usageData.value = {
+      datasets: [{ data: [100] }],
+      labels: [t('Storage usage unavailable')],
+    }
   }
+
   isFileUsageDialogVisible.value = true
 }
+
 
 function showRecordAudioDialog() {
   isRecordAudioDialogVisible.value = true
@@ -970,11 +988,138 @@ function recordedAudioNotSaved(error) {
   console.error(error)
 }
 
-function openMoveDialog(document) {
+/**
+ * -----------------------------------------
+ * MOVE: helpers + folders fetching
+ * -----------------------------------------
+ */
+function normalizeResourceNodeId(value) {
+  if (value == null) return null
+  if (typeof value === "number") return value
+
+  if (typeof value === "string") {
+    // Accept IRI like "/api/resource_nodes/123"
+    const iriMatch = value.match(/\/api\/resource_nodes\/(\d+)/)
+    if (iriMatch) return Number(iriMatch[1])
+
+    // Accept "123"
+    if (/^\d+$/.test(value)) return Number(value)
+  }
+
+  return null
+}
+async function fetchFolders(nodeId = null, parentPath = "") {
+  const startId = normalizeResourceNodeId(nodeId || route.params.node || route.query.node)
+
+  const foldersList = [
+    {
+      label: t("Documents"),
+      value: startId || "root-node-id",
+    },
+  ]
+
+  try {
+    let nodesToFetch = [{ id: startId, path: parentPath }]
+    let depth = 0
+    const maxDepth = 5
+
+    while (nodesToFetch.length > 0 && depth < maxDepth) {
+      const currentNode = nodesToFetch.shift()
+      const currentNodeId = normalizeResourceNodeId(currentNode?.id)
+
+      if (!currentNodeId) {
+        depth++
+        continue
+      }
+
+      const response = await axios.get("/api/documents", {
+        params: {
+          loadNode: 1,
+          filetype: ["folder"],
+          "resourceNode.parent": currentNodeId,
+          cid,
+          sid,
+          gid,
+          page: 1,
+          itemsPerPage: 200,
+        },
+      })
+
+      const members = response.data?.["hydra:member"] || []
+
+      members.forEach((folder) => {
+        const folderNodeId =
+          normalizeResourceNodeId(folder?.resourceNode?.id) ?? normalizeResourceNodeId(folder?.resourceNodeId)
+
+        if (!folderNodeId) {
+          return
+        }
+
+        const fullPath = `${currentNode.path}/${folder.title}`.replace(/^\/+/, "")
+
+        foldersList.push({
+          label: fullPath,
+          value: folderNodeId, // ALWAYS numeric
+        })
+
+        nodesToFetch.push({ id: folderNodeId, path: fullPath })
+      })
+
+      depth++
+    }
+
+    return foldersList
+  } catch (error) {
+    console.error("Error fetching folders:", error?.message || error)
+    return foldersList
+  }
+}
+
+async function loadAllFolders() {
+  // Keep your behavior: start from current node.
+  // If you want ALWAYS from course root, tell me and I’ll adjust in 2 lines.
+  folders.value = await fetchFolders()
+}
+
+async function openMoveDialog(document) {
   item.value = document
+  selectedFolder.value = null
+  await loadAllFolders()
   isMoveDialogVisible.value = true
 }
 
+async function moveDocument() {
+  try {
+    const parentId = normalizeResourceNodeId(selectedFolder.value)
+
+    if (!parentId) {
+      notification.showErrorNotification(t("Select a folder"))
+      return
+    }
+
+    await axios.put(
+      `/api/documents/${item.value.iid}/move`,
+      { parentResourceNodeId: parentId },
+      {
+        // IMPORTANT: backend needs context to move the correct resource_link
+        params: { cid, sid, gid },
+      },
+    )
+
+    notification.showSuccessNotification(t("Document moved successfully"))
+    isMoveDialogVisible.value = false
+    onUpdateOptions(options.value)
+  } catch (error) {
+    console.error("Error moving document:", error.response || error)
+    notification.showErrorNotification(t("Error moving the document"))
+  }
+}
+
+/**
+ * -----------------------------------------
+ * REPLACE
+ * -----------------------------------------
+ */
 function openReplaceDialog(document) {
   if (!canEdit(document)) {
     return
@@ -1012,73 +1157,11 @@ async function replaceDocument() {
   }
 }
 
-async function fetchFolders(nodeId = null, parentPath = "") {
-  const foldersList = [
-    {
-      label: t("Documents"),
-      value: nodeId || route.params.node || route.query.node || "root-node-id",
-    },
-  ]
-
-  try {
-    let nodesToFetch = [{ id: nodeId || route.params.node || route.query.node, path: parentPath }]
-    let depth = 0
-    const maxDepth = 5
-
-    while (nodesToFetch.length > 0 && depth < maxDepth) {
-      const currentNode = nodesToFetch.shift()
-
-      const response = await axios.get("/api/documents", {
-        params: {
-          filetype: "folder",
-          "resourceNode.parent": currentNode.id,
-          cid: route.query.cid,
-          sid: route.query.sid,
-        },
-      })
-
-      response.data["hydra:member"].forEach((folder) => {
-        const fullPath = `${currentNode.path}/${folder.title}`
-
-        foldersList.push({
-          label: fullPath,
-          value: folder.resourceNode?.id || folder.resourceNodeId || folder["@id"],
-        })
-
-        if (folder.resourceNode && folder.resourceNode.id) {
-          nodesToFetch.push({ id: folder.resourceNode.id, path: fullPath })
-        }
-      })
-
-      depth++
-    }
-
-    return foldersList
-  } catch (error) {
-    console.error("Error fetching folders:", error.message || error)
-    return []
-  }
-}
-
-async function loadAllFolders() {
-  folders.value = await fetchFolders()
-}
-
-async function moveDocument() {
-  try {
-    const response = await axios.put(`/api/documents/${item.value.iid}/move`, {
-      parentResourceNodeId: selectedFolder.value,
-    })
-
-    notification.showSuccessNotification(t("Document moved successfully"))
-    isMoveDialogVisible.value = false
-    onUpdateOptions(options.value)
-  } catch (error) {
-    console.error("Error moving document:", error.response || error)
-    notification.showErrorNotification(t("Error moving the document"))
-  }
-}
-
+/**
+ * -----------------------------------------
+ * CERTIFICATES
+ * -----------------------------------------
+ */
 async function selectAsDefaultCertificate(certificate) {
   try {
     const response = await axios.patch(`/gradebook/set_default_certificate/${cid}/${certificate.iid}`)
@@ -1106,6 +1189,11 @@ async function loadDefaultCertificate() {
   }
 }
 
+/**
+ * -----------------------------------------
+ * TEMPLATE
+ * -----------------------------------------
+ */
 const showTemplateFormModal = ref(false)
 const selectedFile = ref(null)
 const templateFormData = ref({

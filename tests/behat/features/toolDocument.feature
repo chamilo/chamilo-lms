@@ -2,15 +2,14 @@ Feature: Document tool
   In order to use the document tool
   The teachers should be able to create and upload files
 
-  Background:
+  Scenario: Create a folder
     Given I am a platform administrator
     And I am on course "TEMP" homepage
+    And I wait for the page to be loaded
     Then I follow "Document"
-    And wait the page to be loaded when ready
-
-  Scenario: Create a folder
-    Then I should see "New folder"
-    Then I press "New folder"
+    And wait for the page to be loaded
+    Then I click the "span.mdi-folder-plus" element
+    And I wait for the page to be loaded
     Then I fill in the following:
       | title | My new directory |
     And I press "Save"
@@ -18,28 +17,42 @@ Feature: Document tool
     Then I should see "saved"
 
   Scenario: Create a folder that already exists
-    Then I should see "New folder"
-    Then I press "New folder"
+    Given I am a platform administrator
+    And I am on course "TEMP" homepage
+    And I wait for the page to be loaded
+    Then I follow "Document"
+    And wait for the page to be loaded
+    Then I click the "span.mdi-folder-plus" element
+    And I wait for the page to be loaded
     And I fill in the following:
       | title | My new directory |
     And I press "Save"
-    And wait for the page to be loaded
     Then I should see "saved"
 
   Scenario: Create a text document
-    Then I press "New document"
+    Given I am a platform administrator
+    And I am on course "TEMP" homepage
+    And I wait for the page to be loaded
+    Then I follow "Document"
+    And wait for the page to be loaded
+    Then I click the "span.mdi-file-plus" element
     And wait for the page to be loaded
     Then I fill in the following:
       | Title   | My first document |
     And I fill in tinymce field "item_content" with "This is my first document!"
-    And I press "Submit"
+    And I press "Save"
     And wait for the page to be loaded
     Then I should see "created"
     And I should see "My first document"
     And wait for the page to be loaded
 
   Scenario: Create a HTML document
-    Then I press "New document"
+    Given I am a platform administrator
+    And I am on course "TEMP" homepage
+    And I wait for the page to be loaded
+    Then I follow "Document"
+    And wait for the page to be loaded
+    Then I click the "span.mdi-file-plus" element
     And wait for the page to be loaded
     Then I fill in the following:
       | Title   | My second document |
@@ -50,14 +63,18 @@ Feature: Document tool
     And I should see "My second document"
 
   Scenario: Upload a document
-    Then I press "Upload"
+    Given I am a platform administrator
+    And I am on course "TEMP" homepage
+    And I wait for the page to be loaded
+    Then I follow "Document"
+    And wait for the page to be loaded
+    Then I click the "span.mdi-file-upload" element
     And wait for the page to be loaded
     Then I should see "Drop files here"
     Then I attach the file "/public/favicon.ico" to "files[]"
     Then I press "Upload 1 file"
     And wait for the page to be loaded
-    Then I should see "Complete"
-    Then I move backward one page
+    Then I should see "created"
     And wait for the page to be loaded
     Then I should see "favicon.ico"
 

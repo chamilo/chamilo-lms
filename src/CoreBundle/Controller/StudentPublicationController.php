@@ -33,7 +33,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
@@ -50,12 +50,13 @@ class StudentPublicationController extends AbstractController
     ) {}
 
     #[Route('/student', name: 'chamilo_core_assignment_student_list', methods: ['GET'])]
-    public function getStudentAssignments(SerializerInterface $serializer): JsonResponse
+    public function getStudentAssignments(Request $request, SerializerInterface $serializer): JsonResponse
     {
         $course = $this->cidReqHelper->getCourseEntity();
         $session = $this->cidReqHelper->getSessionEntity();
+        $gid = $request->query->getInt('gid', 0);
 
-        $assignments = $this->studentPublicationRepo->findVisibleAssignmentsForStudent($course, $session);
+        $assignments = $this->studentPublicationRepo->findVisibleAssignmentsForStudent($course, $session, $gid);
 
         $data = array_map(function ($row) use ($serializer) {
             $publication = $row[0] ?? null;

@@ -11,10 +11,17 @@
       @page="onPage"
       @sort="onSort"
     >
+      <!-- Full name -->
       <Column
-        field="user.fullname"
+        field="user.fullName"
         :header="t('Full name')"
-      />
+      >
+        <template #body="{ data }">
+          <span class="text-gray-900">
+            {{ getUserDisplayName(data?.user) }}
+          </span>
+        </template>
+      </Column>
 
       <Column
         field="title"
@@ -93,6 +100,7 @@
               only-icon
               :label="t('Upload correction')"
               type="success"
+              :class="actionBtnClass"
               @click="openUploader(data)"
             />
             <div
@@ -110,10 +118,11 @@
         <template #body="{ data }">
           <div class="flex justify-center gap-2">
             <BaseButton
-              icon="save"
+              icon="download"
               size="normal"
               only-icon
               :label="t('Download')"
+              :class="actionBtnClass"
               @click="saveCorrection(data)"
               type="primary"
             />
@@ -122,6 +131,7 @@
               size="normal"
               only-icon
               :label="t('Correct and rate')"
+              :class="actionBtnClass"
               @click="correctAndRate(data)"
               type="success"
             />
@@ -130,6 +140,7 @@
               size="normal"
               only-icon
               :label="t('Edit')"
+              :class="actionBtnClass"
               @click="editSubmission(data)"
               type=""
             />
@@ -138,6 +149,7 @@
               size="normal"
               only-icon
               :label="t('Move')"
+              :class="actionBtnClass"
               @click="moveSubmission(data)"
               type="info"
             />
@@ -153,6 +165,7 @@
               only-icon
               size="normal"
               type="black"
+              :class="actionBtnClass"
               @click="viewSubmission(data)"
             />
             <BaseButton
@@ -160,6 +173,7 @@
               size="normal"
               only-icon
               :label="t('Delete')"
+              :class="actionBtnClass"
               @click="deleteSubmission(data)"
               type="danger"
             />
@@ -241,13 +255,19 @@ const showCorrectAndRateDialog = ref(false)
 const correctingItem = ref(null)
 const showMoveDialog = ref(false)
 
+/**
+ * Make action buttons visually bigger without relying on unknown "size" enums.
+ * This keeps current BaseButton behavior and only increases hit area.
+ */
+const actionBtnClass = "w-10 h-10 !p-2"
+
 watch(
   loadParams,
   () => {
     if (!loadParams.itemsPerPage) return
     loadData()
   },
-  { deep: true, immediate: true }
+  { deep: true, immediate: true },
 )
 
 async function loadData() {
@@ -282,6 +302,27 @@ function onSort(event) {
   event.multiSortMeta.forEach((sortItem) => {
     loadParams[`order[${sortItem.field}]`] = sortItem.order === 1 ? "asc" : "desc"
   })
+}
+
+/**
+ * Robust full name resolver:
+ * API usually returns user.fullName, but we keep fallbacks to avoid blank display.
+ */
+function getUserDisplayName(user) {
+  if (!user) return "—"
+  if (typeof user === "string") return user
+
+  if (user.fullName) return user.fullName
+  if (user.fullname) return user.fullname
+
+  const first = user.firstname || user.firstName || ""
+  const last = user.lastname || user.lastName || ""
+  const combined = `${first} ${last}`.trim()
+  if (combined) return combined
+
+  if (user.username) return user.username
+
+  return "—"
 }
 
 async function onCorrectionUploaded(file) {
@@ -386,10 +427,7 @@ function editSubmission(item) {
 
 async function deleteSubmission(item) {
   const confirmed = window.confirm(t("Are you sure you want to delete this submission?"))
-
-  if (!confirmed) {
-    return
-  }
+  if (!confirmed) return
 
   try {
     await cStudentPublicationService.deleteAssignmentSubmission(item.iid)

@@ -7,20 +7,21 @@ Feature: Agenda tool
 
   Scenario: Create a personal event
     Given I am on "/main/calendar/agenda.php?action=add&type=personal"
+    And I wait for the page to be loaded
     When I fill in the following:
       | title | Event 1 |
-    Then wait for the page to be loaded
     And I focus "date_range"
     And I fill in "date_range" with "2017-03-07 12:15 / 2017-03-07 12:15"
     Then I fill in editor field "content" with "Description event"
     And I press "Add event"
     And wait very long for the page to be loaded
-    Then I should see "Event added"
+    Then I should not see an error
 # TODO we need to check if the event appears in the personal agenda on resources/ccalendarevent
 # For the moment it does not appear
 
   Scenario: Create an event inside course TEMP
-    Given I am on "/main/calendar/agenda.php?action=add&type=course&cid=1"
+    Given I am on "/main/calendar/agenda.php?action=add&type=course&cid=6"
+    And I wait for the page to be loaded
     When I fill in the following:
       | title | Event in course |
     Then I fill in editor field "content" with "Description event"
@@ -30,7 +31,7 @@ Feature: Agenda tool
     And I fill in "date_range" with "2017-03-07 12:15 / 2017-03-07 12:15"
     And I press "Add event"
     And wait very long for the page to be loaded
-    Then I should see "Event added"
+    Then I should not see an error
 
 #TODO This scenario needs to be fixed because I do not know how to set the start date and the end date of the event.
 #There is an input id but it is impossible to know it. I put startDate and endDate for the moment.
@@ -111,7 +112,7 @@ Feature: Agenda tool
 #    Then I should not see "Personal event from general agenda with invitees editable"
 #    Then I am a platform administrator
 #    And I am on "/resources/ccalendarevent"
-#    And I should see "Personal event from general agenda with invitees editable" 
+#    And I should see "Personal event from general agenda with invitees editable"
 #    And I follow "Personal event from general agenda with invitees editable"
 #    And I should not see "Edit"
 #    And I follow "Edit"

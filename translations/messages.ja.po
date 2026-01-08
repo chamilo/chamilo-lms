@@ -6282,8 +6282,8 @@ msgstr "言語を表示しました。プラットフォーム全体で使用す
 msgid "The language has been hidden. It will not be possible to use it until it becomes visible again."
 msgstr "言語を非表示にしました。もう一度表示するまで使用することはできません。"
 
-msgid "The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
-msgstr "このポータルで言語を保存するために使用される /main/lang ディレクトリに書き込み権限がありません。プラットフォーム管理者にお問い合わせください。"
+msgid "The var/translations directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
+msgstr "このポータルで言語を保存するために使用される var/translations ディレクトリに書き込み権限がありません。プラットフォーム管理者にお問い合わせください。"
 
 msgid "Show glossary terms in documents"
 msgstr "ドキュメントの用語集の用語を表示"
@@ -10930,7 +10930,7 @@ msgid "has been added. An e-mail has been sent to give him his login"
 msgstr "が追加されました。ログイン情報を記したメールが送信されました"
 
 msgid "The user"
-msgstr "The user"
+msgstr "ユーザー"
 
 msgid "has registered you to this course"
 msgstr "has registered you on this course"
@@ -10989,8 +10989,8 @@ msgstr "は"
 msgid "The address of"
 msgstr "アドレス::"
 
-msgid "Your registration on"
-msgstr "判峡されました:"
+msgid "Your registration on %s"
+msgstr "判峡されました %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "このユ〖ザ叹はすでに、戮の客がつかっています。ボタンで提って、侍の叹涟で判峡してください。"
@@ -13711,13 +13711,13 @@ msgid "Show all images in their original size. No resizing is done. Scrollbars w
 msgstr "すべての画像を元のサイズで表示。リサイズは行われません。画像がモニターサイズより大きい場合、スクロールバーが自動的に表示されます。"
 
 msgid "Show Thumbnails"
-msgstr "Show Thumbnails"
+msgstr "サムネイルを表示"
 
 msgid "Gallery settings"
 msgstr "Set Slideshow Options"
 
 msgid "Slideshow Options"
-msgstr "Slideshow Options"
+msgstr "スライドショーのオプション"
 
 msgid "NO RESIZING"
 msgstr "NO RESIZING (default)"
@@ -13732,7 +13732,7 @@ msgid "Published end date"
 msgstr "公開終了日"
 
 msgid "View Slideshow"
-msgstr "View Slideshow"
+msgstr "スライドショーを表示"
 
 msgid "My tasks"
 msgstr "タスク"
@@ -13984,10 +13984,10 @@ msgid "Learning paths"
 msgstr "学習パス"
 
 msgid "level up"
-msgstr "level up"
+msgstr "レベルアップ"
 
 msgid "main category"
-msgstr "main category"
+msgstr "メインカテゴリ"
 
 msgid "Add to the course links"
 msgstr "コースリンクに追加"
@@ -13999,13 +13999,13 @@ msgid "Resources added"
 msgstr "Added new resources"
 
 msgid "External resources"
-msgstr "External resources"
+msgstr "外部リソース"
 
 msgid "Course resources"
-msgstr "Course resources"
+msgstr "コースリソース"
 
 msgid "External link"
-msgstr "External link"
+msgstr "外部リンク"
 
 msgid "Add the dropbox to this section."
 msgstr "Add the dropbox page to this chapter."
@@ -14289,7 +14289,7 @@ msgstr "<p> アジェンダツールは、各コース内のカレンダーと�
 msgid "<p> The Announcements tool allows you to send an e-mail to some or all of your students, or to specific groups.  to might want to alert them to the addition of a new document, to remind them of a deadline for submission of an assignment or to highlight and share a particularly good piece of work. Sending such e-mail announcements can also serve as a useful prompt to re-engage students who have not visited the site for some time (as long as it's not overdone!). </p> <b> Contacting specific users </b> <p> In addition to sending a general one to all members of the course, you can send an e-mail to one or more individuals/groups groups. When you create a new announcement, just click <i>Visible to</i> and select users from the left hand lists and and add them as recipients using the arrows.</p>"
 msgstr "<p>お知らせツールでは、学生の一部または全員、または特定のグループにメールを送信できます。新規ドキュメントの追加を通知したり、課題提出期限を思い出させたり、優れた作品を強調共有したりできます。このようなメールお知らせは、サイトをしばらく訪問していない学生を再参加させる良いきっかけにもなります（過度にしないこと）。 </p> <b> 特定のユーザーに連絡 </b> <p> コースメンバー全員への一般的な送信に加え、個人またはグループにメールを送信できます。新規お知らせ作成時、<i>表示対象</i>をクリックし、左リストからユーザーを選択して矢印で受信者に追加します。"
 
-msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remains focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
+msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remain focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
 msgstr "<p>チャットツールでは、学生とリアルタイムで「ライブ」チャットが可能です。 </p> ほとんどの商用チャットツールとは異なり、Chamiloのチャットはウェブベースで追加インストール不要（例：MSN®、Yahoo Messenger®、Skype®など）です。このソリューションの利点は学生の即時利用可能性で、コースへの簡単統合が可能です。さらに、Chamiloチャットツールは議論を自動アーカイブし、ドキュメントツール経由で後からアクセス可能に保存します。（交換ごとに1〜5秒でメッセージが更新される場合がありますが、問題ありません！）。 </p> 学習者がプロフィール画像をアップロードしている場合、左列に縮小表示されます。それ以外はデフォルト画像が表示されます。 </p> 教師の責任で、適切なタイミングでスレッドを削除します。 </p> <b>教育利用</b> <p>コースにチャットを追加するのは常に良いとは限りません。このツールを最大限活用するには、議論をコースコンテンツに集中させる必要があります。例えば、「正式」な予定セッションの時間までチャット機能を非表示にすると、議論の自由が制限されるものの、ライブミーティングが有益になることを保証しやすくなります。"
 
 msgid "<p>The assignments tool  is a very simple tool that allows your students to upload documents to the course.It can be used to accept responses to open questions from individuals or groups, or for uploading any other form of document</p><p>You can make files visible to all students by default, or only visible to yourself according to the requirements of your course. Making all files visible is useful when, for instance, you want to ask students to share opinions on each others papers, or when you want to give them experience in publishing texts globally. Keep files invisible if, for example, you want ask everybody the same question but to avoid 'cheating'. Making the documents invisible will also allow you to have some form of control over when a document is available to all the other students. </p><p>If you want  students to hand in a document for grading you're best, from within the tool, to assign submissions to a folder.</p> <p>You can use the the tool to set deadlines and instructions for delivery, as well as a maximum grade/score.</p>"
@@ -22152,7 +22152,7 @@ msgstr "テキストフィールドで選択"
 msgid "Triple select"
 msgstr "トリプル選択"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "このプラットフォームに登録することを確認します。"
 
 msgid "Add text"
@@ -22212,14 +22212,11 @@ msgstr "登録確認"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "アカウントが未確認のため非活性です。メールを確認して指示に従ってください。あるいは以下のリンクをクリックしてメールを再送信してください"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "プラットフォーム登録を完了するには、以下のリンクをクリックしてアカウントを確認する必要があります"
 
 msgid "Confirmation for new account"
 msgstr "新規アカウント確認"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "プラットフォームにアクセスするには、メールでアカウントを確認する必要があります"
 
 msgid "Enable Cloud files link addition"
 msgstr "クラウドファイルリンクの追加を有効にする"
@@ -25056,9 +25053,6 @@ msgstr "すべてのテストの全結果をエクスポート"
 msgid "Click to view details"
 msgstr "詳細を表示するにはクリック"
 
-msgid "This report applies to all plateform activities of the user."
-msgstr "このレポートはユーザーのプラットフォーム上の全アクティビティに適用されます。"
-
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/yyyy"
 
@@ -27615,7 +27609,7 @@ msgstr "プラットフォーム利用条件"
 msgid "Password too easy to guess"
 msgstr "パスワードが推測されやすい"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "プラットフォームにアクセスするにはメールでアカウントを確認する必要があります"
 
 msgid "Redirect to portal home"
@@ -30590,10 +30584,10 @@ msgid "ex. root"
 msgstr "例: root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "テーブル works を作成"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "テーブル works を変更"
 
 msgid "DROP COLUMN works"
 msgstr "DROP COLUMN が動作しました"
@@ -31266,4 +31260,634 @@ msgstr "管理者再開コース"
 
 msgid "Admin Dashboard"
 msgstr "管理者ダッシュボード"
+
+msgid "Threads"
+msgstr "スレッド"
+
+msgid "Invalid thread"
+msgstr "無効なスレッド"
+
+msgid "View full thread"
+msgstr "スレッド全文を表示"
+
+msgid "No post yet"
+msgstr "投稿なし"
+
+msgid "Discussion thread"
+msgstr "ディスカッション・スレッド"
+
+msgid "Access to this course"
+msgstr "このコースへのアクセス"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "このプラグインには設定可能な項目がありません。アクティベーションはプラグイン一覧から管理されます。"
+
+msgid "Private - access granted by privileged users"
+msgstr "非公開 - 特権ユーザーがアクセスを許可"
+
+msgid "No detailed feedback is available for this question."
+msgstr "この質問には詳細なフィードバックが利用できません。"
+
+msgid "Please select an answer before checking the result."
+msgstr "結果を確認する前に回答を選択してください。"
+
+msgid "Allow PDF export for this item"
+msgstr "この項目のPDFエクスポートを許可"
+
+msgid "Hide free users (not enrolled)"
+msgstr "無料ユーザー（登録なし）を非表示"
+
+msgid "Question statistics"
+msgstr "質問の統計"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "ファイルを生成中。このタブを閉じないでください..."
+
+msgid "Assign auth source to users"
+msgstr "ユーザーに認証ソースを割り当て"
+
+msgid "There are no questions for this survey"
+msgstr "この調査には質問がありません"
+
+msgid "Certificates report"
+msgstr "証明書レポート"
+
+msgid "Course picture"
+msgstr "コース画像"
+
+msgid "Current picture"
+msgstr "現在の画像"
+
+msgid "Course events log"
+msgstr "コースイベントログ"
+
+msgid "Update the category information and its optional time limit."
+msgstr "カテゴリ情報を更新し、オプションの時間制限を設定。"
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "トレーニングカタログを整理するためにセッションの論理グループを作成。"
+
+msgid "Generating file, do not close this tab"
+msgstr "ファイルを生成中、このタブを閉じないでください"
+
+msgid "Assign authentication sources to users"
+msgstr "ユーザーに認証ソースを割り当て"
+
+msgid "Average completion rate"
+msgstr "平均完了率"
+
+msgid "Average access rate"
+msgstr "平均アクセス率"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "この表は、現在のコースの各学習パスごとの学習者の進捗と活動をまとめています。"
+
+msgid "Follow up"
+msgstr "フォローアップ"
+
+msgid "Tracking for superior"
+msgstr "上位者向けトラッキング"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "このレポートは、選択した日付範囲内の一般コーチごとのセッションの週次分布を示します。"
+
+msgid "Head manager report"
+msgstr "責任者レポート"
+
+msgid "Reset or update user password"
+msgstr "ユーザーパスワードをリセットまたは更新"
+
+msgid "Active users"
+msgstr "アクティブユーザー"
+
+msgid "Inactive users"
+msgstr "非アクティブユーザー"
+
+msgid "Report on resources"
+msgstr "リソースレポート"
+
+msgid "Global view"
+msgstr "全体ビュー"
+
+msgid "Available reports"
+msgstr "利用可能なレポート"
+
+msgid "Current report"
+msgstr "現在のレポート"
+
+msgid "Back to user assignment page"
+msgstr "ユーザー割り当てページに戻る"
+
+msgid "Authentication sources assigned successfully"
+msgstr "認証ソースの割り当てが成功しました"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "ヒント：「— ただアップロード —」を選択すると、誰にも送信せずに保存されます。"
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "少なくとも1つの受信者を選択してください（「— アップロードのみ —」または任意のユーザー）"
+
+msgid "Sharing"
+msgstr "共有"
+
+msgid "Selected files"
+msgstr "選択したファイル"
+
+msgid "Hide password"
+msgstr "パスワードを非表示"
+
+msgid "Show password"
+msgstr "パスワードを表示"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "メール用のSVGロゴをアップロード"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "削除する前に、このカテゴリからすべての学習パスを移動または削除する必要があります。"
+
+msgid "Clear filters"
+msgstr "フィルターをクリア"
+
+msgid "Attendances (tablet)"
+msgstr "出欠確認（タブレット）"
+
+msgid "Exit tablet mode"
+msgstr "タブレットモードを終了"
+
+msgid "No members found."
+msgstr "メンバーが見つかりません。"
+
+msgid "Health check"
+msgstr "ヘルスチェック"
+
+msgid "Export to CC 1.3"
+msgstr "CC 1.3にエクスポート"
+
+msgid "Loading resources..."
+msgstr "リソースを読み込み中..."
+
+msgid "Failed to load resources."
+msgstr "リソースの読み込みに失敗しました。"
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "エクスポート可能なリソースを少なくとも1つ選択してください（ドキュメント、ウェブリンク、ディスカッションなど）。"
+
+msgid "Export finished."
+msgstr "エクスポートが完了しました。"
+
+msgid "Export failed."
+msgstr "エクスポートに失敗しました。"
+
+msgid "Import failed."
+msgstr "インポートに失敗しました。"
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "ローカルファイル（.zip, .mbz, .tgz, .gz）"
+
+msgid "Ready to import"
+msgstr "インポート準備完了"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "このコースにバックアップを復元します。オプションを変更するには戻ることができます。"
+
+msgid "Select resources to import"
+msgstr "インポートするリソースを選択"
+
+msgid "No resources available in this backup."
+msgstr "このバックアップに利用可能なリソースがありません。"
+
+msgid "Import selection"
+msgstr "インポート選択"
+
+msgid "Import completed"
+msgstr "インポートが完了しました"
+
+msgid "Could not load options."
+msgstr "オプションを読み込めませんでした。"
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "バックアップファイルを選択してください（.zip, .mbz, .tgz, .gz）"
+
+msgid "Please choose a backup from the server"
+msgstr "サーバーからバックアップを選択してください"
+
+msgid "Error selecting source."
+msgstr "ソース選択エラー。"
+
+msgid "Recycling options"
+msgstr "リサイクルオプション"
+
+msgid "Type the course code to confirm"
+msgstr "確認のためコースコードを入力してください"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "選択したリソースを削除またはリセットします。この操作は元に戻せません。"
+
+msgid "Select resources to recycle"
+msgstr "リサイクルするリソースを選択"
+
+msgid "No resources available in this course."
+msgstr "このコースに利用可能なリソースがありません。"
+
+msgid "Recycle selected"
+msgstr "選択したものをリサイクル"
+
+msgid "Error loading resources."
+msgstr "リソースの読み込みエラー。"
+
+msgid "Clear search"
+msgstr "検索をクリア"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "データベース名には文字、数字、アンダースコア (_) のみ使用できます。無効な文字は自動的に削除されます。"
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "このプラットフォームを使用するユーザーに提供される一般的な利用規約は何ですか？"
+
+msgid "ex. {examplePassword}"
+msgstr "例: {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Chamilo へようこそ！"
+
+msgid "Welcome to this platform"
+msgstr "このプラットフォームへようこそ"
+
+msgid "For more details visit %s"
+msgstr "詳細は %s をご覧ください"
+
+msgid "Manager"
+msgstr "管理者"
+
+msgid "Mark as"
+msgstr "マークとして"
+
+msgid "Reply to all"
+msgstr "すべてに返信"
+
+msgid "SCIM external ID"
+msgstr "SCIM 外部 ID"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "最新の利用規約に同意してください。"
+
+msgid "Required value for operation without path"
+msgstr "パスなしでの操作に必要な値"
+
+msgid "Available space (%s)"
+msgstr "使用可能容量 (%s)"
+
+msgid "Index this description for the global search"
+msgstr "この説明をグローバル検索にインデックスする"
+
+msgid "Unknown course"
+msgstr "不明なコース"
+
+msgid "Certificate not found."
+msgstr "証明書が見つかりません。"
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "セキュリティトークンが期限切れです。ページを再読み込みして再度お試しください。"
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "コースの表示設定はプラットフォーム管理者だけが変更できます。"
+
+msgid "Unexpected error while subscribing the user"
+msgstr "ユーザーの登録中に予期しないエラーが発生しました"
+
+msgid "Search in resource logs"
+msgstr "リソースログで検索"
+
+msgid "Include this learning path in the global search results"
+msgstr "この学習パスをグローバル検索結果に含める"
+
+msgid "The course code already exists"
+msgstr "コースコードが既に存在します"
+
+msgid "Latest news"
+msgstr "最新ニュース"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Chamiloから最新ニュース（セキュリティ脆弱性やイベントを含む）を取得し、管理パネル内に直接表示します。これらのニュースは管理ページを読み込むたびにChamiloニュースサーバーでチェックされ、管理者のみが見ることができます。"
+
+msgid "Chamilo support block"
+msgstr "Chamiloサポートブロック"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "プロのヒントと公式サービスプロバイダーへの簡単な連絡方法を取得し、Chamiloの開発者から直接提供します。このブロックは管理ページに表示され、管理者のみが見ることができ、管理ページを読み込むたびに更新されます。"
+
+msgid "Hide option to send announcements to HR users"
+msgstr "HRユーザーにアナウンスメントを送信するオプションを非表示にする"
+
+msgid "Allow session admins to download private certificates"
+msgstr "セッション管理者が非公開証明書をダウンロードできるようにする"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "有効にすると、セッション管理者は公開されていない証明書もダウンロードできます。"
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "空でない場合、コース作成プロセスはユーザープロファイルのフィールドを検索し、コースに自動入力します。例えば、デジタルマーケティング専門の教師は作成する各コースに「デジタルマーケティング」フラグを自動設定できます。"
+
+msgid "Main menu entries"
+msgstr "メインメニュー項目"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "メインメニューに表示したい項目を選択してください"
+
+msgid "Main menu entries per role"
+msgstr "ロールごとのメインメニュー項目"
+
+msgid "Define header tabs visibility per role."
+msgstr "ロールごとにヘッダータブの表示を設定します。"
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "テーブル周りのナビゲーションに表示するオプションを設定し、1ページあたりの行数を少なくまたは多く表示します。例えば [50, 100, 200, 500]。"
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Chamiloのビデオプレーヤーで有効にできる追加機能の配列です。オプションには「speed」（ビデオの再生速度を変更可能）が含まれます。"
+
+msgid "Mail: character set"
+msgstr "メール: 文字セット"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "メール送信時に使用する文字セットを定義する必要がある場合に設定します。不明な場合は空のままにしてください。"
+
+msgid "Mail: Debug"
+msgstr "メール: デバッグ"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "メール送信デバッグログを有効にするかどうかを選択します。これによりメールサービスへの接続時の詳細情報が得られますが、ページデザインを崩す可能性があります。ユーザー活動がない場合のみ使用してください。"
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "メール: LD+JSON の使用を避ける"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "一部のメールクライアントは記述的な LD+JSON 形式を理解せず、最終ユーザーに緩い JSON 文字列として表示します。この場合、下記の変数を「false」に設定してこのヘッダーを無効にしてください。"
+
+msgid "Mail: DKIM headers"
+msgstr "メール: DKIM ヘッダー"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "DKIM 設定の JSON 配列を入力してください（例を参照）。"
+
+msgid "Mail: XOAuth2 options"
+msgstr "メール: XOAuth2 オプション"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "XOAuth2 ベースのメールサービスを使用する場合、この JSON 設定で特定の構成を保存し（例を参照）、メールサービス設定で XOAuth2 を選択してください。"
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "環境タイプを定義します: \"prod\"（通常の運用）、\"validation\"（統計レポートなしの運用に類似）、または \"test\"（未翻訳文字列インジケーターなどの開発者ツール付きデバッグモード）。"
+
+msgid "Global limit of users per course"
+msgstr "コースあたりのユーザーのグローバル上限"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "プラットフォーム内の任意の単一コースに登録可能なユーザー（教師を含む）の最大数を定義します。制限を無効にするには 0 に設定してください。オープンなポータルでコースの過負荷を防ぎます。"
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "表示する役割と非表示にする役割を配列で定義するために有効にします。"
+
+msgid "Show base course posts in session course"
+msgstr "セッションコースで基本コースの投稿を表示"
+
+msgid "Limit identical email usage"
+msgstr "同一メールアドレスの使用を制限"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "同じメールアドレスを共有できるアカウントの最大数。0に設定するとこの制限を無効にします。"
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "セッション管理者による全URLの全ユーザーの閲覧を許可"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "有効にすると、セッション管理者は現在のURLに関係なく、全アクセスURLのユーザーを検索・一覧表示できます。"
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "ユーザーが自分のタイムゾーンを選択できるようにする。設定後、ユーザーは自分のタイムゾーンで課題の締切日やその他の時間参照を表示でき、提出時のエラーを減らせます。"
+
+msgid "Redirect after login (per profile)"
+msgstr "ログイン後のリダイレクト（プロファイルごと）"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "JSONオブジェクトでログイン後のプロファイルごとのリダイレクトを定義: {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "利用規約ページの同意チェックボックスを非表示"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "trueに設定すると、利用規約ページのフローの\"読んで同意します\"チェックボックスを削除します。"
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "LDAPサーバーのホストとポートを定義する配列。"
+
+msgid "Enable 2FA"
+msgstr "2FAを有効化"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "パスワード更新ページにTOTP認証アプリを使った2FA有効化フィールドを追加。グローバルに無効の場合、ユーザーは2FAフィールドを表示せず、以前有効化していてもログイン時に求められません。"
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Chamiloのいくつかの機能がサーバーから外部に接続します。例えば、リンク作成時やラーニングパスで埋め込みページ表示時に外部コンテンツの存在を確認します。Chamiloサーバーがプロキシを使用する場合、ここで設定します。"
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "コース有効期限切れ時に自動再登録を有効/無効。関連するcronジョブも有効化する必要があります。"
+
+msgid "Show remaining days in My Sessions"
+msgstr "マイセッションに残り日数を表示"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "有効にすると、\"マイセッション\"ページのセッション日付が残り日数に置き換わります。"
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "メニューに\"保留中のアンケート\"を表示"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "ユーザーが保留中のアンケートにアクセスできるメニュー項目を表示します。"
+
+msgid "Disclose AI assistance"
+msgstr "AI支援の開示"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "AIシステムで生成または共同生成されたコンテンツやフィードバックにタグを表示し、ユーザーにAI支援で作成されたことを示します。使用したAIシステムの詳細はデータベースに監査用に保存されますが、ユーザーは直接アクセスできません。"
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "コースカタログのJSON設定: リンク設定、フィルタ、並べ替えオプションなど。"
+
+msgid "Session Catalog Settings"
+msgstr "セッションカタログ設定"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "セッションカタログのJSON設定: フィルタと表示オプション。"
+
+msgid "Show Course Descriptions"
+msgstr "コース説明を表示"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "カタログ一覧内でコース説明を表示します。"
+
+msgid "Published Courses Only"
+msgstr "公開済みコースのみ"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "カタログを公開済みとしてマークされたコースのみに制限します。"
+
+msgid "Display Catalog on Homepage"
+msgstr "ホームページにカタログを表示"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "プラットフォームのホームページにコースカタログブロックを表示します。"
+
+msgid "Hide Public Link"
+msgstr "公開リンクを非表示"
+
+msgid "Remove the public URL link from course cards."
+msgstr "コースカードから公開URLリンクを削除します。"
+
+msgid "Only Selected Courses"
+msgstr "選択したコースのみ"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "カタログに手動で選択したコースのみを表示します。"
+
+msgid "Allow Student Browsing"
+msgstr "学生の閲覧を許可"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "学生がコースカタログを閲覧およびフィルタリングすることを許可します。"
+
+msgid "Hide Private Courses"
+msgstr "プライベートコースを非表示"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "カタログ表示からプライベートコースを除外します。"
+
+msgid "Show Courses & Sessions"
+msgstr "コースとセッションを表示"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "カタログ結果にコースとセッションの両方を含めます。"
+
+msgid "Auto Session Subscription"
+msgstr "セッション自動登録"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "ユーザーのセッションへの自動登録を有効にします。"
+
+msgid "Subscription in Session View"
+msgstr "セッションビューでの登録"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "ユーザーがセッションページから直接コースに登録できるようにします。"
+
+msgid "Enable redirection plugin"
+msgstr "リダイレクトプラグインを有効にする"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "ユーザーが初めてログインしたときにアカウント有効期限を設定するための「days」と「months」を定義する配列です。"
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "役割に応じてアカウントの有効期限までの日数を表す role => number の配列です。"
+
+msgid "Extra user field used to search and name sessions"
+msgstr "セッションの検索と名前に使用される追加ユーザー項目"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "ユーザー検索および /admin-dashboard/register から学生を登録する際のセッション名定義に使用される追加ユーザー項目キー（例：\"company\"）を定義します。"
+
+msgid "Glossary terms generator"
+msgstr "用語集用語生成器"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "教師がコースでAI生成の用語集用語をリクエストできるようにします。コースタイトルとコース説明ツールの一般説明に基づいて20個の用語を生成します。複数回使用した場合、その用語集に既にある用語を除外します（設定されたAIサービスとコンテンツを共有できることを確認してください）。"
+
+msgid "Video generator"
+msgstr "ビデオ生成器"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "プロンプトやコンテンツに基づいてAIを使用してビデオを生成します（多くのトークンを消費する可能性があります）。"
+
+msgid "Course analyser"
+msgstr "コースアナライザー"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "1つまたは複数のコースのすべてのリソースを分析し、この/これらのコースに関するあらゆる質問に答えるためにAIモデルを事前訓練します（設定されたAIサービスとコンテンツを共有できることを確認してください）。"
+
+msgid "Test/development"
+msgstr "テスト/開発"
+
+msgid "Crons"
+msgstr "クロン"
+
+msgid "Editor"
+msgstr "エディター"
+
+msgid "Gradebook"
+msgstr "成績簿"
+
+msgid "Internationalization"
+msgstr "国際化"
+
+msgid "User profiles"
+msgstr "ユーザープロフィール"
+
+msgid "Support tickets"
+msgstr "サポートチケット"
+
+msgid "Webservices"
+msgstr "ウェブサービス"
+
+msgid "Catalogue"
+msgstr "カタログ"
+
+msgid "Workflows"
+msgstr "ワークフロー"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "サブURLで編集可能"
+
+msgid "Show JSON Template"
+msgstr "JSONテンプレートを表示"
+
+msgid "JSON Template"
+msgstr "JSONテンプレート"
+
+msgid "Installing Xapian bindings"
+msgstr "Xapianバインディングのインストール"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "以下のスニペットは、Ubuntu 25.04とPHP 8.3でのXapian PHPバインディングのインストール例を示しています。パスとバージョンをご自身の環境に合わせて調整してください。"
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "実際に使用するPHPバージョン（例：8.3）のみをインストールし、異なる拡張ディレクトリを持つ複数のバージョンを混在させないようにしてください。"
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "CLIとウェブサーバーの両方で拡張が正しくロードされたら、上記の検索診断でXapianモジュールがインストールされていると報告されるはずです。"
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "一時アップロードとキャッシュのクリーンアップ"
+
+msgid "Directory"
+msgstr "ディレクトリ"
+
+msgid "Only delete files older than (minutes)"
+msgstr "それ以上の古いファイルのみ削除 (分)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "0に設定するとすべてのファイルを削除します。アップロード中のファイルを削除しないよう、陽数値 (例: 60) を使用してください。"
+
+msgid "Preview only (do not delete)"
+msgstr "プレビューのみ (削除しない)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "警告: すべての一時ファイルを削除しようとしています。この操作は元に戻せません。"
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "すべての一時ファイルを削除します。続行しますか？"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "%minutes% 分より古いファイルを削除します。続行しますか？"
 

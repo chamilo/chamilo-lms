@@ -703,11 +703,11 @@ class Diagnoser
         // Extensions
         $extensions = [
             'curl' => ['link' => 'https://php.net/curl', 'expected' => 1, 'comment' => get_lang('This extension must be loaded.')],
-            'exif' => ['link' => 'https://www.php.net/exif', 'expected' => 1, 'comment' => get_lang('This extension should be loaded.')],
+            'exif' => ['link' => 'https://www.php.net/exif', 'expected' => 1, 'comment' => get_lang('This extension must be loaded.')],
             'fileinfo' => ['link' => 'https://php.net/fileinfo', 'expected' => 1, 'comment' => get_lang('This extension must be loaded.')],
             'gd' => ['link' => 'https://php.net/gd', 'expected' => 1, 'comment' => get_lang('This extension must be loaded.')],
-            'ldap' => ['link' => 'https://php.net/ldap', 'expected' => 1, 'comment' => get_lang('This extension should be loaded.')],
-            'mbstring' => ['link' => 'https://www.php.net/mbstring', 'expected' => 1, 'comment' => get_lang('This extension should be loaded.')],
+            'ldap' => ['link' => 'https://php.net/ldap', 'expected' => 1, 'comment' => get_lang('This extension must be loaded.')],
+            'mbstring' => ['link' => 'https://www.php.net/mbstring', 'expected' => 1, 'comment' => get_lang('This extension must be loaded.')],
             'pcre' => ['link' => 'https://php.net/pcre', 'expected' => 1, 'comment' => get_lang('This extension must be loaded.')],
             'pdo_mysql' => ['link' => 'https://php.net/manual/en/ref.pdo-mysql.php', 'expected' => 1, 'comment' => get_lang('This extension must be loaded.')],
             'session' => ['link' => 'https://php.net/session', 'expected' => 1, 'comment' => get_lang('This extension must be loaded.')],
@@ -718,6 +718,7 @@ class Diagnoser
             'OPcache' => ['link' => 'https://php.net/opcache', 'expected' => 2, 'comment' => get_lang('This extension should be loaded.')],
             'openssl' => ['link' => 'https://php.net/openssl', 'expected' => 2, 'comment' => get_lang('This extension should be loaded.')],
             'xsl' => ['link' => 'https://php.net/xsl', 'expected' => 2, 'comment' => get_lang('This extension should be loaded.')],
+            'xapian' => ['link' => 'https://xapian.org/docs/bindings/php/', 'expected' => 2, 'comment' => get_lang('This extension should be loaded.')],
         ];
 
         foreach ($extensions as $extension => $data) {

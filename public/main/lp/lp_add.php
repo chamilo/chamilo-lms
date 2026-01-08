@@ -36,22 +36,35 @@ function activate_end_date() {
 
 /* Constants and variables */
 
-$is_allowed_to_edit = api_is_allowed_to_create_course();
-$isStudentView = filter_var($_REQUEST['isStudentView'] ?? 'false', FILTER_VALIDATE_BOOLEAN);
 $lpId = (int)($_REQUEST['lp_id'] ?? 0);
+$is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
+
+// Only treat student view as enabled if it was explicitly passed in the URL.
+// This avoids picking it up from cookies/$_REQUEST.
+$rawQuery = $_SERVER['QUERY_STRING'] ?? '';
+$hasStudentViewInUrl = preg_match('/(?:^|&)isStudentView=/i', $rawQuery) === 1;
+$isStudentView = $hasStudentViewInUrl
+    ? filter_var($_GET['isStudentView'] ?? 'false', FILTER_VALIDATE_BOOLEAN)
+    : false;
 
 if (!$is_allowed_to_edit || $isStudentView) {
     $course = api_get_course_entity(api_get_course_int_id());
-    $nodeId = method_exists($course,'getResourceNode') && $course->getResourceNode()
-        ? (int)$course->getResourceNode()->getId()
+    $nodeId = method_exists($course, 'getResourceNode') && $course->getResourceNode()
+        ? (int) $course->getResourceNode()->getId()
         : 0;
 
-    $cid = (int)($_REQUEST['cid'] ?? api_get_course_int_id());
-    $sid = (int)($_REQUEST['sid'] ?? api_get_session_id());
-    $qs = ['cid' => $cid, 'isStudentView' => 'true'];
+    $cid = (int) ($_REQUEST['cid'] ?? api_get_course_int_id());
+    $sid = (int) ($_REQUEST['sid'] ?? api_get_session_id());
+
+    $qs = ['cid' => $cid];
     if ($sid > 0) $qs['sid'] = $sid;
-    if (isset($_REQUEST['gid']))       $qs['gid'] = (int)$_REQUEST['gid'];
-    if (isset($_REQUEST['gradebook'])) $qs['gradebook'] = (int)$_REQUEST['gradebook'];
+    if (isset($_REQUEST['gid']))       $qs['gid'] = (int) $_REQUEST['gid'];
+    if (isset($_REQUEST['gradebook'])) $qs['gradebook'] = (int) $_REQUEST['gradebook'];
+
+    // Preserve student view only if it was explicitly requested.
+    if ($isStudentView) {
+        $qs['isStudentView'] = 'true';
+    }
 
     $listUrl = api_get_path(WEB_PATH).'resources/lp/'.$nodeId.'?'.http_build_query($qs);
     header('Location: '.$listUrl);

@@ -11,16 +11,19 @@ declare(strict_types=1);
 // If no languages provided, processes all messages.*.po except messages.en.po
 
 exit;
-$apiKey = '{some-api-key-here}}';
+$apiKey = '{some-api-key-here}';
 
 /**
  * Chamilo Gettext auto-translator using Grok (grok-4-1-fast-non-reasoning)
  *
  * Usage:
- *   php translate.php [--test] fr es de
+ *   php translate.php [--test] [fr es de]
  *
  * - messages.en.po is used as the source of truth for terms and ordering.
- * - For each requested language (e.g. "fr"), messages.fr.po will be updated.
+ * - For each requested language (e.g. "fr"), messages.fr.po will be updated. If no language requested, all except English are processed.
+ * - The translation is done by calling the Grok API, which returns a JSON response with the translated terms.
+ * - The translation is applied to the target .po file, replacing existing terms.
+ * - The translation is logged to a file for review.
  * - In --test mode, only ONE API request of up to 50 terms is sent, and
  *   the partially translated .po file is written so you can inspect it.
  *
@@ -46,40 +49,92 @@ $logFile = __DIR__ . "/grok_translate.log";
 
 // Batch size for API calls
 $batchSize = 50;
+$batchSizeInTestMode = 20;
 
 // ===================== HELPER FUNCTIONS =====================
 
 /**
  * Simple stderr output.
  */
-function eprintln(string $msg): void {
+function eprintln(string $msg, bool $timestam = false): void {
+    if ($timestam) {
+        $msg = '[' . date('H:i:s') . '] ' . $msg;
+    }
     fwrite(STDERR, $msg . PHP_EOL);
 }
 
 /**
- * Get human-readable language name from code (best-effort).
+ * Get a human-readable language name from code (best-effort).
  */
 function getLanguageName(string $code): string {
     static $map = [
-        'fr'    => 'French',
-        'es'    => 'Spanish',
+        'ar'    => 'Arabic',
+        'ast_ES'=> 'Asturian (Spain)',
+        'bg'    => 'Bulgarian',
+        'bn'    => 'Bengali (Bangladesh)',
+        'bo'    => 'Tibetan (China)',
+        'bs'    => 'Bosnian (Bosnia and Herzegovina)',
+        'ca_ES' => 'Catalan (Spain)',
+        'cs'    => 'Czech (Czech Republic)',
+        'da'    => 'Danish',
         'de'    => 'German',
+        'el'    => 'Greek',
+        'en'    => 'English',
+        'eo'    => 'Esperanto',
+        'es'    => 'Spanish',
+        'es_MX'    => 'Spanish (Mexico)',
+        'eu_ES' => 'Basque (Spain)',
+        'fa'    => 'Persian (Iran)',
+        'fa_AF' => 'Persian (Afghanistan)',
+        'fi'    => 'Finnish',
+        'fo'    => 'Faroese',
+        'fr'    => 'French',
+        'fur_IT'=> 'Friulian (Italy)',
+        'ga'    => 'Irish',
+        'gl_ES' => 'Galician (Spain)',
+        'he'    => 'Hebrew',
+        'hi'    => 'Hindi',
+        'hr'    => 'Croatian',
+        'hu'    => 'Hungarian',
+        'hy'    => 'Armenian',
+        'id'    => 'Indonesian',
         'it'    => 'Italian',
+        'ja'    => 'Japanese',
+        'ka'    => 'Georgian',
+        'ko'    => 'Korean',
+        'lt'    => 'Lithuanian',
+        'lv'    => 'Latvian',
+        'mk'    => 'Macedonian',
+        'ms'    => 'Malay (Malaysia)',
+        'my_MM' => 'Burmese (Myanmar)',
+        'ne'    => 'Nepali (Nepal)',
         'nl'    => 'Dutch',
+        'nn'    => 'Norwegian Nynorsk',
+        'oc_FR' => 'Occitan (France)',
+        'pl'    => 'Polish',
+        'ps'    => 'Pashto (Afghanistan)',
         'pt'    => 'Portuguese',
         'pt_BR' => 'Brazilian Portuguese',
-        'pl'    => 'Polish',
+        'qu_PE' => 'Quechua (Peru)',
+        'ro'    => 'Romanian',
         'ru'    => 'Russian',
-        'ar'    => 'Arabic',
+        'sk'    => 'Slovak',
+        'sl'    => 'Slovenian',
+        'so'    => 'Somali (Somalia)',
+        'sq'    => 'Albanian',
+        'sr'    => 'Serbian',
+        'sv'    => 'Swedish',
+        'sw'    => 'Swahili',
+        'ta'    => 'Tamil (India)',
+        'th'    => 'Thai',
+        'tl'    => 'Tagalog (Philippines)',
+        'tr'    => 'Turkish',
+        'uk'    => 'Ukrainian',
+        'vi'    => 'Vietnamese',
+        'xh'    => 'Xhosa',
+        'yo'    => 'Yoruba (Nigeria)',
         'zh_CN' => 'Simplified Chinese',
         'zh_TW' => 'Traditional Chinese',
-        'ja'    => 'Japanese',
-        'ko'    => 'Korean',
-        'tr'    => 'Turkish',
-        'cs'    => 'Czech',
-        'ro'    => 'Romanian',
-        'el'    => 'Greek',
-        'hu'    => 'Hungarian',
     ];
     return $map[$code] ?? $code;
 }
@@ -380,7 +435,7 @@ function needsTranslationUpdate(string $msgid, string $msgstr, string $targetLan
     $tgtWordCount = count($tgtWords);
     $srcWordCount = count($srcWords);
 
-    if ($tgtWordCount > 2 && $srcWordCount > 0 && $tgt === $src) {
+    if ($tgtWordCount > 1 && $srcWordCount > 0 && $tgt === $src) {
         return true;
     }
 
@@ -409,7 +464,8 @@ function logAction(string $logFile, string $lang, string $msgid, string $action)
 
 /**
  * Call Grok API to translate a batch of strings.
- *
+ * → Only malformed JSON is gracefully ignored (batch skipped).
+ * → All other errors (cURL, HTTP 5xx, timeout, invalid structure) still throw exceptions.
  * @param string $apiUrl
  * @param string $apiKey
  * @param string $targetLangCode
@@ -483,12 +539,12 @@ EOT;
             'Authorization: Bearer ' . $apiKey,
         ],
         CURLOPT_POSTFIELDS     => $payloadJson,
-        CURLOPT_TIMEOUT        => 60,
+        CURLOPT_TIMEOUT        => 30,
     ]);
 
     $responseBody = curl_exec($ch);
     if ($responseBody === false) {
-        $err = curl_error($ch);
+        $err   = curl_error($ch);
         $errno = curl_errno($ch);
         curl_close($ch);
         throw new RuntimeException("cURL error ({$errno}): {$err}");
@@ -501,31 +557,50 @@ EOT;
         throw new RuntimeException("Grok API HTTP error {$httpCode}: {$responseBody}");
     }
 
+    // ——— SAFE JSON PARSING STARTS HERE ———
     $data = json_decode($responseBody, true);
+
+    // Case 1: Full response is not valid JSON → treat as malformed, skip batch
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        eprintln("[Grok] Invalid JSON in full response (" . json_last_error_msg() . ") – skipping batch.", true);
+        return [];
+    }
+
+    // Case 2: Valid JSON, but missing expected structure
     if (!is_array($data) || !isset($data['choices'][0]['message']['content'])) {
-        throw new RuntimeException("Unexpected Grok API response structure.");
+        throw new RuntimeException("Unexpected Grok API response structure (missing choices/content).");
     }
 
     $content = $data['choices'][0]['message']['content'];
 
-    // Try to extract JSON array from content
+    // Extract the JSON array part
     $start = strpos($content, '[');
     $end   = strrpos($content, ']');
     if ($start === false || $end === false || $end <= $start) {
-        throw new RuntimeException("Grok API response does not contain a JSON array: {$content}");
-    }
-    $jsonPart = substr($content, $start, $end - $start + 1);
-    $translationsArray = json_decode($jsonPart, true);
-    if (!is_array($translationsArray)) {
-        throw new RuntimeException("Failed to decode Grok JSON array: {$jsonPart}");
+        eprintln("[Grok] No JSON array found in response content – skipping batch.", true);
+        return [];
     }
 
+    $jsonPart = substr($content, $start, $end - $start + 1);
+    $translationsArray = json_decode($jsonPart, true);
+
+    // Case 3: The extracted part is not valid JSON → ignore and continue
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        eprintln("[Grok] Invalid JSON in extracted array (" . json_last_error_msg() . ") – skipping batch.", true);
+        return [];
+    }
+
+    if (!is_array($translationsArray)) {
+        eprintln("[Grok] Extracted JSON is not an array – skipping batch.", true);
+        return [];
+    }
+
+    // ——— SUCCESS: Valid translations ———
     $result = [];
     foreach ($translationsArray as $item) {
-        if (!isset($item['id'], $item['translation'])) {
-            continue;
+        if (isset($item['id'], $item['translation']) && is_scalar($item['translation'])) {
+            $result[(int)$item['id']] = (string)$item['translation'];
         }
-        $result[(int)$item['id']] = (string)$item['translation'];
     }
 
     return $result;
@@ -613,7 +688,7 @@ function buildTargetPoContent(
 
 // CLI args
 $argvCopy = $argv;
-array_shift($argvCopy); // drop script name
+array_shift($argvCopy); // drop the script name
 
 $testMode = false;
 $testKey = array_search('--test', $argvCopy, true);
@@ -623,13 +698,45 @@ if ($testKey !== false) {
     $argvCopy = array_values($argvCopy);
 }
 
+// Determine which languages to process
 if (empty($argvCopy)) {
-    eprintln("Usage: php " . basename(__FILE__) . " [--test] <lang1> [<lang2> ...]");
-    eprintln("Example: php " . basename(__FILE__) . " fr es de");
-    exit(1);
-}
+    eprintln("No languages specified. Scanning {$translationsDir} for messages.*.po files...", true);
 
-$langCodes = $argvCopy;
+    $poFiles = glob($translationsDir . 'messages.*.po');
+    if ($poFiles === false || empty($poFiles)) {
+        eprintln("No .po files found in {$translationsDir}", true);
+        exit(1);
+    }
+
+    $langCodes = [];
+    foreach ($poFiles as $file) {
+        $filename = basename($file);
+        if (!preg_match('/^messages\.(.+)\.po$/', $filename, $matches)) {
+            continue;
+        }
+        $code = $matches[1];
+
+        // Skip English and any template (.pot disguised as .po)
+        // Tibetan (bo) is skipped because error-prone. Might be "unskipped" in the future. Execute manually (add 'po' parameter to command) to update.
+        if ($code === 'en' || $code === 'bo' || $code === 'pot') {
+            continue;
+        }
+
+        $langCodes[] = $code;
+    }
+
+    if (empty($langCodes)) {
+        eprintln("No translatable language files found (only English or template detected).", true);
+        exit(0);
+    }
+
+    // Sort alphabetically for consistent processing order
+    sort($langCodes);
+
+    eprintln("Auto-detected languages: " . implode(', ', $langCodes), true);
+} else {
+    $langCodes = $argvCopy;
+}
 
 if (!is_file($basePoFile)) {
     eprintln("Base PO file not found: {$basePoFile}");
@@ -642,10 +749,10 @@ if ($apiKey === '' || $apiKey === 'YOUR_GROK_API_KEY_HERE') {
 }
 
 // Parse base messages.en.po
-eprintln("Loading base file: {$basePoFile}");
+eprintln("Loading base file: {$basePoFile}", true);
 $baseEntries = parseBasePoFile($basePoFile);
 $totalTerms = count($baseEntries);
-eprintln("Base entries loaded: {$totalTerms} (including header and plurals).");
+eprintln("Base entries loaded: {$totalTerms} (including header and plurals).", true);
 
 foreach ($langCodes as $lang) {
     $lang = trim($lang);
@@ -654,12 +761,12 @@ foreach ($langCodes as $lang) {
     }
 
     $targetLangName = getLanguageName($lang);
-
-    $targetFile = $translationsDir . "messages.{$lang}.po";
+    $targetFile = $translationsDir."messages.{$lang}.po";
     eprintln("------------------------------------------------------------");
-    eprintln("Processing language: {$lang} ({$targetLangName})");
+    eprintln("Processing language: {$lang} ({$targetLangName})", true);
     eprintln("Target file: {$targetFile}");
 
+    // Backup logic (unchanged)
     if (is_file($targetFile)) {
         $backupFile = $targetFile . '.bak';
         if (!is_file($backupFile)) {
@@ -678,174 +785,219 @@ foreach ($langCodes as $lang) {
     $targetParsed = parseTargetPoFile($targetFile);
     $existingSingular = $targetParsed['singular'];
 
-    $targetTranslations = []; // final msgstr for singular entries
-    $keepRawSingular = [];    // msgid => true for entries that we don't modify at all
+    $targetTranslations = [];
+    $keepRawSingular = [];
     $processedCount = 0;
     $apiBatchCount = 0;
-    $maxBatches = $testMode ? 1 : PHP_INT_MAX;
+    $maxBatches = $testMode ? $batchSizeInTestMode : PHP_INT_MAX;
 
     $pendingBatch = [];
     $pendingMap = []; // id => ['msgid'=>..., 'action'=>...]
 
-    // We'll assign incremental IDs per batch
     $entryIndex = 0;
-    foreach ($baseEntries as $entry) {
-        $entryIndex++;
 
-        if ($entry['isHeader'] || $entry['hasPlural']) {
-            // Header and plural entries are not sent to API
+    // Helper to write current state to disk (used on success AND on failure)
+    $writeCurrentState = function () use (
+        &$targetTranslations,
+        &$keepRawSingular,
+        $baseEntries,
+        $targetParsed,
+        $targetFile,
+        $lang
+    ) {
+        $newContent = buildTargetPoContent($baseEntries, $targetParsed, $targetTranslations, $keepRawSingular);
+        if (file_put_contents($targetFile, $newContent) !== false) {
+            eprintln("[{$lang}] Partial translation file successfully written after error.", true);
+        } else {
+            eprintln("[{$lang}] WARNING: Failed to write partial file!", true);
+        }
+    };
+
+    try {
+        foreach ($baseEntries as $entry) {
+            $entryIndex++;
+
+            if ($entry['isHeader'] || $entry['hasPlural']) {
+                $processedCount++;
+                if ($processedCount % 50 === 0) {
+                    eprintln("[{$lang}] Progress: {$processedCount} / {$totalTerms} entries processed (header/plurals included).",
+                        true);
+                }
+                continue;
+            }
+
+            $msgid = $entry['msgid'];
+            $existing = $existingSingular[$msgid] ?? '';
+
+            $needsTranslation = false;
+            $action = 'ignored';
+
+            if (!array_key_exists($msgid, $existingSingular)) {
+                $needsTranslation = true;
+                $action = 'translation added';
+            } else {
+                if (needsTranslationUpdate($msgid, $existing, $lang)) {
+                    $needsTranslation = true;
+                    $action = ($existing === '') ? 'translation added' : 'translation updated';
+                } else {
+                    $targetTranslations[$msgid] = $existing;
+                    $keepRawSingular[$msgid] = true;
+                    $action = 'ignored';
+                    logAction($logFile, $lang, $msgid, $action);
+                }
+            }
+
+            if ($needsTranslation && $apiBatchCount < $maxBatches) {
+                $localId = count($pendingBatch);
+                $pendingBatch[] = [
+                    'id' => $localId,
+                    'source' => $msgid,
+                ];
+                $pendingMap[$localId] = [
+                    'msgid' => $msgid,
+                    'action' => $action,
+                ];
+
+                // Send batch when full
+                if (count($pendingBatch) >= $batchSize) {
+                    $apiBatchCount++;
+                    eprintln("[{$lang}] Sending batch {$apiBatchCount} to Grok API ("
+                        .count($pendingBatch)." terms).", true);
+
+                    $batchSuccess = false;
+                    try {
+                        $translations = callGrokTranslateBatch(
+                            $apiUrl,
+                            $apiKey,
+                            $lang,
+                            $targetLangName,
+                            $pendingBatch
+                        );
+                        eprintln("[{$lang}] Grok API batch {$apiBatchCount} completed, "
+                            .count($translations)." translations received.", true);
+                        $batchSuccess = true;
+                    } catch (Throwable $ex) {
+                        eprintln("[{$lang}] API ERROR in batch {$apiBatchCount}: ".$ex->getMessage(), true);
+                        eprintln("[{$lang}] Skipping this batch. All previous batches are preserved.", true);
+                        // Do NOT re-throw — we continue with next entries
+                    }
+
+                    if ($batchSuccess) {
+                        foreach ($pendingBatch as $item) {
+                            $id = $item['id'];
+                            $msgidBatch = $pendingMap[$id]['msgid'];
+                            $actionBatch = $pendingMap[$id]['action'];
+                            $translated = $translations[$id] ?? '';
+
+                            if ($translated === '') {
+                                $translated = $existingSingular[$msgidBatch] ?? '';
+                                if (isset($existingSingular[$msgidBatch])) {
+                                    $keepRawSingular[$msgidBatch] = true;
+                                }
+                            }
+
+                            $targetTranslations[$msgidBatch] = $translated;
+                            logAction($logFile, $lang, $msgidBatch, $actionBatch);
+                        }
+                        sleep(1);
+                    } else {
+                        // On failure: keep existing translations (or empty) and preserve raw formatting
+                        foreach ($pendingBatch as $item) {
+                            $id = $item['id'];
+                            $msgidBatch = $pendingMap[$id]['msgid'];
+                            $translated = $existingSingular[$msgidBatch] ?? '';
+                            $targetTranslations[$msgidBatch] = $translated;
+                            if ($translated !== '') {
+                                $keepRawSingular[$msgidBatch] = true;
+                            }
+                            logAction($logFile, $lang, $msgidBatch, 'failed – kept original');
+                        }
+                    }
+
+                    // Always clear batch after processing (success or fail)
+                    $pendingBatch = [];
+                    $pendingMap = [];
+
+                    if ($testMode && $apiBatchCount >= $maxBatches) {
+                        eprintln("[{$lang}] Test mode limit reached.", true);
+                    }
+                }
+            } elseif ($needsTranslation && $apiBatchCount >= $maxBatches) {
+                // Test mode or limit reached → keep existing
+                $targetTranslations[$msgid] = $existing;
+                $keepRawSingular[$msgid] = true;
+                logAction($logFile, $lang, $msgid, 'ignored (limit reached)');
+            }
+
             $processedCount++;
             if ($processedCount % 50 === 0) {
-                eprintln("[{$lang}] Progress: {$processedCount} / {$totalTerms} entries processed (header/plurals included).");
-            }
-            continue;
-        }
-
-        $msgid = $entry['msgid'];
-        $existing = $existingSingular[$msgid] ?? '';
-
-        $needsTranslation = false;
-        $action = 'ignored';
-
-        if (!array_key_exists($msgid, $existingSingular)) {
-            // New term in base that does not exist in target
-            $needsTranslation = true;
-            $action = 'translation added';
-        } else {
-            if (needsTranslationUpdate($msgid, $existing, $lang)) {
-                $needsTranslation = true;
-                $action = ($existing === '') ? 'translation added' : 'translation updated';
-            } else {
-                // Keep existing translation as-is, preserving raw form
-                $targetTranslations[$msgid] = $existing;
-                $action = 'ignored';
-                $keepRawSingular[$msgid] = true;
-                logAction($logFile, $lang, $msgid, $action);
+                eprintln("[{$lang}] Progress: {$processedCount} / {$totalTerms} entries processed.", true);
             }
         }
 
-        if ($needsTranslation && $apiBatchCount < $maxBatches) {
-            $localId = count($pendingBatch);
-            $pendingBatch[] = [
-                'id'     => $localId,
-                'source' => $msgid,
-            ];
-            $pendingMap[$localId] = [
-                'msgid'  => $msgid,
-                'action' => $action,
-            ];
+        // Final batch (if any)
+        if (!empty($pendingBatch) && $apiBatchCount < $maxBatches) {
+            $apiBatchCount++;
+            eprintln("[{$lang}] Sending final batch {$apiBatchCount} to Grok API ("
+                .count($pendingBatch)." terms).", true);
 
-            if (count($pendingBatch) >= $batchSize) {
-                $apiBatchCount++;
-                eprintln("[{$lang}] Sending batch {$apiBatchCount} to Grok API ("
-                    . count($pendingBatch) . " terms).");
+            $finalSuccess = false;
+            try {
+                $translations = callGrokTranslateBatch(
+                    $apiUrl,
+                    $apiKey,
+                    $lang,
+                    $targetLangName,
+                    $pendingBatch
+                );
+                eprintln("[{$lang}] Final batch completed.", true);
+                $finalSuccess = true;
+            } catch (Throwable $ex) {
+                eprintln("[{$lang}] FINAL BATCH FAILED: ".$ex->getMessage(), true);
+                eprintln("[{$lang}] Writing file with all previously translated batches.", true);
+            }
 
-                try {
-                    $translations = callGrokTranslateBatch(
-                        $apiUrl,
-                        $apiKey,
-                        $lang,
-                        $targetLangName,
-                        $pendingBatch
-                    );
-                    eprintln("[{$lang}] Grok API batch {$apiBatchCount} completed, "
-                        . count($translations) . " translations received.");
-                } catch (Throwable $ex) {
-                    eprintln("[{$lang}] ERROR while calling Grok API: " . $ex->getMessage());
-                    exit(1);
-                }
-
+            if ($finalSuccess) {
                 foreach ($pendingBatch as $item) {
                     $id = $item['id'];
                     $msgidBatch = $pendingMap[$id]['msgid'];
                     $actionBatch = $pendingMap[$id]['action'];
                     $translated = $translations[$id] ?? '';
-
                     if ($translated === '') {
-                        // Fallback: if Grok didn't return something, keep existing or empty
                         $translated = $existingSingular[$msgidBatch] ?? '';
-                        // If we fall back to existing, preserve raw formatting
                         if (isset($existingSingular[$msgidBatch])) {
                             $keepRawSingular[$msgidBatch] = true;
                         }
                     }
-
                     $targetTranslations[$msgidBatch] = $translated;
                     logAction($logFile, $lang, $msgidBatch, $actionBatch);
                 }
-
-                $pendingBatch = [];
-                $pendingMap = [];
-
-                if ($testMode && $apiBatchCount >= $maxBatches) {
-                    eprintln("[{$lang}] Test mode: only one batch has been sent to Grok. "
-                        . "Remaining untranslated entries will be left as-is.");
+            } else {
+                // Keep existing or leave empty for failed items
+                foreach ($pendingBatch as $item) {
+                    $id = $item['id'];
+                    $msgidBatch = $pendingMap[$id]['msgid'];
+                    $translated = $existingSingular[$msgidBatch] ?? '';
+                    $targetTranslations[$msgidBatch] = $translated;
+                    if ($translated !== '') {
+                        $keepRawSingular[$msgidBatch] = true;
+                    }
+                    logAction($logFile, $lang, $msgidBatch, 'failed – kept original');
                 }
             }
-        } elseif ($needsTranslation && $apiBatchCount >= $maxBatches) {
-            // In test mode, or if max batches reached: keep existing (possibly empty)
-            $targetTranslations[$msgid] = $existing;
-            $keepRawSingular[$msgid] = true;
-            logAction($logFile, $lang, $msgid, 'ignored (test mode / no API call)');
         }
 
-        $processedCount++;
-        if ($processedCount % 50 === 0) {
-            eprintln("[{$lang}] Progress: {$processedCount} / {$totalTerms} entries processed (header/plurals included).");
-        }
-    }
+        // Final write on success
+        $writeCurrentState();
+        eprintln("[{$lang}] Translation completed and file written successfully.", true);
 
-    // Flush remaining pending batch (if any and allowed)
-    if (!empty($pendingBatch) && $apiBatchCount < $maxBatches) {
-        $apiBatchCount++;
-        eprintln("[{$lang}] Sending final batch {$apiBatchCount} to Grok API ("
-            . count($pendingBatch) . " terms).");
-
-        try {
-            $translations = callGrokTranslateBatch(
-                $apiUrl,
-                $apiKey,
-                $lang,
-                $targetLangName,
-                $pendingBatch
-            );
-            eprintln("[{$lang}] Grok API final batch {$apiBatchCount} completed, "
-                . count($translations) . " translations received.");
-        } catch (Throwable $ex) {
-            eprintln("[{$lang}] ERROR while calling Grok API: " . $ex->getMessage());
-            exit(1);
-        }
-
-        foreach ($pendingBatch as $item) {
-            $id = $item['id'];
-            $msgidBatch = $pendingMap[$id]['msgid'];
-            $actionBatch = $pendingMap[$id]['action'];
-            $translated = $translations[$id] ?? '';
-
-            if ($translated === '') {
-                $translated = $existingSingular[$msgidBatch] ?? '';
-                if (isset($existingSingular[$msgidBatch])) {
-                    $keepRawSingular[$msgidBatch] = true;
-                }
-            }
-
-            $targetTranslations[$msgidBatch] = $translated;
-            logAction($logFile, $lang, $msgidBatch, $actionBatch);
-        }
-    }
-
-    // Build updated .po content
-    $newContent = buildTargetPoContent($baseEntries, $targetParsed, $targetTranslations, $keepRawSingular);
-
-    if (file_put_contents($targetFile, $newContent) === false) {
-        eprintln("[{$lang}] ERROR: Unable to write updated translation file: {$targetFile}");
-        exit(1);
-    }
-
-    eprintln("[{$lang}] Updated translation file written: {$targetFile}");
-    if ($testMode) {
-        eprintln("[{$lang}] NOTE: Test mode was enabled; only one API batch of up to {$batchSize} terms was translated.");
+    } catch (Throwable $fatal) {
+        // Any unexpected fatal error outside batch processing
+        eprintln("[{$lang}] FATAL ERROR: ".$fatal->getMessage(), true);
+        eprintln("[{$lang}] Attempting to save partial progress...", true);
+        $writeCurrentState();
+        throw $fatal; // re-throw so you know something went very wrong
     }
 }
 
-eprintln("All requested languages processed.");
+eprintln("All requested languages processed.", true);

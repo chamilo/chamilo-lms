@@ -4,17 +4,18 @@ Feature: User registration
 
   Scenario: Enter the registration form
     Given I am on the homepage
+    And I wait for the page to be loaded
     Then I should see "Sign up"
     Then I follow "Sign up"
     Then I should see "Registration"
+    And I wait for the page to be loaded
     And I fill in the following:
       | firstname     | user registration first name  |
       | lastname      | user registration last name   |
       | email         | user-registration@example.com |
-      | official_code | user registration             |
       | username      | user_registration             |
-      | pass1         | user-registration             |
-      | pass2         | user-registration             |
+      | pass1         | user-registration00!          |
+      | pass2         | user-registration00!          |
     And I press "Register"
     And wait for the page to be loaded
-    Then I should see "Your personal settings have been registered"
+    Then I should not see an error

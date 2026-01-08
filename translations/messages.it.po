@@ -207,7 +207,7 @@ msgid "Delete comment"
 msgstr "Cancella il commento"
 
 msgid "Social wall"
-msgstr "Social wall"
+msgstr "Muro sociale"
 
 msgid "Buy courses"
 msgstr "Acquista corsi"
@@ -285,7 +285,7 @@ msgid "Pi number:\t\t\tpi"
 msgstr "Pi greco:\t\t\tpi"
 
 msgid "E number:\t\t\te"
-msgstr "E number:\t\t\te"
+msgstr "Numero E:\t\t\te"
 
 msgid "Logarithm:\t\t\tlog(x)"
 msgstr "Logaritmo:\t\t\tlog(x)"
@@ -3228,13 +3228,13 @@ msgid "ex."
 msgstr "es."
 
 msgid "Database Host"
-msgstr "Database Host"
+msgstr "Host database"
 
 msgid "Database user"
 msgstr "Database Username"
 
 msgid "Database Password"
-msgstr "Database Password"
+msgstr "Password database"
 
 msgid "Main Chamilo database (DB)"
 msgstr "Database principale"
@@ -4104,7 +4104,7 @@ msgid "Users number"
 msgstr "Numero di utenti"
 
 msgid "Public administration"
-msgstr "Public administration"
+msgstr "Amministrazione pubblica"
 
 msgid "Page after login"
 msgstr "Pagina di benvenuto"
@@ -4158,7 +4158,7 @@ msgid "Owner"
 msgstr "Proprietario"
 
 msgid "Upgrade database"
-msgstr "Upgrade database"
+msgstr "Aggiorna database"
 
 msgid "errors found"
 msgstr "trovati errori"
@@ -4650,7 +4650,7 @@ msgid "Invalid end date was given."
 msgstr "Data di fine errata"
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(g/m/a h:m)"
 
 msgid "Homepage-files are not writable!"
 msgstr "Non è possibile scrivere sui documenti della pagina principale!"
@@ -6227,8 +6227,8 @@ msgstr "Ora la lingua è visibile"
 msgid "The language has been hidden. It will not be possible to use it until it becomes visible again."
 msgstr "Ora la lingua è non visibile"
 
-msgid "The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
-msgstr "La directory /main/lang è protetta da scrittura, per problemi contattare l'amministratore"
+msgid "The var/translations directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
+msgstr "La directory var/translations è protetta da scrittura, per problemi contattare l'amministratore"
 
 msgid "Show glossary terms in documents"
 msgstr "Mostra le voci del glossario nei documenti"
@@ -10098,7 +10098,7 @@ msgid "There are no unqualified learners"
 msgstr "Non ci sono corsisti senza valutazione"
 
 msgid "Social network"
-msgstr "Social network"
+msgstr "Rete sociale"
 
 msgid "Back to outbox"
 msgstr "Ritorna ai messaggi in uscita"
@@ -10934,8 +10934,8 @@ msgstr "è"
 msgid "The address of"
 msgstr "L'indirizzo di"
 
-msgid "Your registration on"
-msgstr "Iscrizione su"
+msgid "Your registration on %s"
+msgstr "Iscrizione su %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "Il Nome Utente scelto è già occupato."
@@ -14234,7 +14234,7 @@ msgstr "<p>L'Agenda prevede due modalità come strumento generico si trova all'i
 msgid "<p> The Announcements tool allows you to send an e-mail to some or all of your students, or to specific groups.  to might want to alert them to the addition of a new document, to remind them of a deadline for submission of an assignment or to highlight and share a particularly good piece of work. Sending such e-mail announcements can also serve as a useful prompt to re-engage students who have not visited the site for some time (as long as it's not overdone!). </p> <b> Contacting specific users </b> <p> In addition to sending a general one to all members of the course, you can send an e-mail to one or more individuals/groups groups. When you create a new announcement, just click <i>Visible to</i> and select users from the left hand lists and and add them as recipients using the arrows.</p>"
 msgstr "<p>Questo strumento permette di pubblicare un annuncio nella relativa sezione, ma soprattutto l'opportunità di inviare, se voluto, una email a tutti i vostri corsisti o solo ad alcuni o ad un gruppo di loro precedentemente impostato. </p><p>Per spedire un messaggio solo ad alcuni o ad un gruppo di utenti cliccate prima su 'Messaggi ad utenti specifici'(in questo modalità l'annuncio non viene pubblicato nella sezione Annunci del sito del corso), per inviarlo a tutti i corsisti e contemporaneamente pubblicarlo nella relativa sezione spuntate la casella visibile appena sopra il titolo dell'annuncio, per pubblicare senza spedire l'email basta non spuntare la casella.</p>"
 
-msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remains focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
+msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remain focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
 msgstr "<p>Lo strumento Chat permette di discutere in tempo reale (modo sincrono) con i propri corsisti.</p><p>Diversamente da altri strumenti di Chat molto più famosi e potenti quali ad esempio i messenger MSN, Yahoo o l'italiano C6, è principalmente uno strumento di interazione testuale. Ciò è dovuto alla sua architettura Web - Based ed alla sua piena integrazione con la piattaforma di e-learning. Lo svantaggio principale è la necessità del 'refresh' della pagina che avviene ogni 10 secondi e non immediatamente. Per contro le discussioni in chat possono essere salvate in file che poi si può utilizzare come materiale del corso (se ritenuto utile).</p><p>Se gli utenti hanno inserito nel loro profilo una immagine, sarà visibile una miniatura di questa immagine accanto al testo inserito in modo da rendere immediata l'identificazione di chi parla in chat. Certo non è paragonabile agli strumenti di videoconferenza di cui si è detto, ma in genere è più che sufficiente per gli utilizzi tipici di un corso online.</p><p>Solo i docenti possono cancellare una discussione in chat se si accorgono che non è rilevante ai fini del corso.</p><p><b>Alcune note d'uso</b></p><p>L'uso della Chat in un corso non sempre è utile, dipende dal tipo di scenario che il docente ha deciso per il corso stesso. In genere la cosa migliore è quella lasciare normalmente disabilitata la chat anche perchè non potendo essere sempre monitorata potrebbe facilmente trasformarsi in semplice luogo di chiacchiere virtuali. Quando si ritiene utile l'interazione in tempo reale (un classico question time ad esempio) la si può abilitare per il tempo necessario (magari fissando un appuntamento in agenda) e disabilitarla subito dopo.</p>"
 
 msgid "<p>The assignments tool  is a very simple tool that allows your students to upload documents to the course.It can be used to accept responses to open questions from individuals or groups, or for uploading any other form of document</p><p>You can make files visible to all students by default, or only visible to yourself according to the requirements of your course. Making all files visible is useful when, for instance, you want to ask students to share opinions on each others papers, or when you want to give them experience in publishing texts globally. Keep files invisible if, for example, you want ask everybody the same question but to avoid 'cheating'. Making the documents invisible will also allow you to have some form of control over when a document is available to all the other students. </p><p>If you want  students to hand in a document for grading you're best, from within the tool, to assign submissions to a folder.</p> <p>You can use the the tool to set deadlines and instructions for delivery, as well as a maximum grade/score.</p>"
@@ -14439,46 +14439,46 @@ msgid "Compose"
 msgstr "Scrivi"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Baby Arancione"
 
 msgid "Blue lagoon"
-msgstr "Blue lagoon"
+msgstr "Laguna blu"
 
 msgid "Cool blue"
-msgstr "Cool blue"
+msgstr "Blu freddo"
 
 msgid "Corporate"
 msgstr "Corporate"
 
 msgid "Cosmic campus"
-msgstr "Cosmic campus"
+msgstr "Campus cosmico"
 
 msgid "Delicious Bordeaux"
-msgstr "Delicious Bordeaux"
+msgstr "Bordeaux delizioso"
 
 msgid "Empire green"
-msgstr "Empire green"
+msgstr "Verde impero"
 
 msgid "Fruity orange"
-msgstr "Fruity orange"
+msgstr "Arancione fruttato"
 
 msgid "Medical"
 msgstr "Medical"
 
 msgid "Royal purple"
-msgstr "Royal purple"
+msgstr "Viola reale"
 
 msgid "Silver line"
-msgstr "Silver line"
+msgstr "Linea argento"
 
 msgid "Sober brown"
-msgstr "Sober brown"
+msgstr "Marrone sobrio"
 
 msgid "Steel grey"
-msgstr "Steel grey"
+msgstr "Grigio acciaio"
 
 msgid "Tasty olive"
-msgstr "Tasty olive"
+msgstr "Oliva saporito"
 
 msgid "In this report you see the results of all questions"
 msgstr "In questo resoconto ci sono i risultati di tutti i quesiti"
@@ -16404,7 +16404,7 @@ msgid "Off"
 msgstr "Off"
 
 msgid "Web server"
-msgstr "Web Server"
+msgstr "Server web"
 
 msgid "Not inserted"
 msgstr "Non inserito"
@@ -19049,7 +19049,7 @@ msgid "Select an action"
 msgstr "Seleziona un'azione"
 
 msgid "Login: %s"
-msgstr "Login: %s"
+msgstr "Accesso: %s"
 
 msgid "Database <b>%s</b> will be created"
 msgstr "Il database %s sarà creato"
@@ -20300,7 +20300,7 @@ msgid "Start video call"
 msgstr "Inizia video chiamata"
 
 msgid "Video URL"
-msgstr "Video URL"
+msgstr "URL video"
 
 msgid "Insert a valid URL"
 msgstr "Inserisci URL valido"
@@ -20372,7 +20372,7 @@ msgid "Send a copy to HR managers of selected students"
 msgstr "Invia una copia agli amministratori risorse umane degli studenti selezionati"
 
 msgid "Powered by %s"
-msgstr "Powered by %s"
+msgstr "Offrire da %s"
 
 msgid "Please select at least one user. The announcement has not been saved."
 msgstr "Seleziona almeno un utente. L'avviso non è stato salvato."
@@ -22102,7 +22102,7 @@ msgstr "Seleziona con campo di testo"
 msgid "Triple select"
 msgstr "Tripla selezione"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Confermi di voler aderire realmente a questa piattaforma."
 
 msgid "Add text"
@@ -22162,14 +22162,11 @@ msgstr "Conferma registrazione"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Il tuo account è inattivo perché non l'hai ancora confermato. Controlla la tua e-mail e segui le istruzioni o clicca sul seguente link per reinviare l'e-mail"
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Per completare la registrazione alla piattaforma devi confermare il tuo account cliccando sul seguente link"
 
 msgid "Confirmation for new account"
 msgstr "Conferma per nuovo account"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Devi confermare il tuo account via e-mail per accedere alla piattaforma"
 
 msgid "Enable Cloud files link addition"
 msgstr "Abilita aggiunta link file Cloud"
@@ -24533,7 +24530,7 @@ msgid "Minimum score"
 msgstr "Punteggio minimo"
 
 msgid "In LP"
-msgstr "In LP"
+msgstr "Nel LP"
 
 msgid "Courses reports"
 msgstr "Report corsi"
@@ -25005,9 +25002,6 @@ msgstr "Esporta tutti i risultati di tutti i test"
 
 msgid "Click to view details"
 msgstr "Clicca per vedere i dettagli"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Questa relazione si applica a tutte le attività della piattaforma dell'utente."
 
 msgid "dd/mm/yyyy"
 msgstr "gg/mm/aaaa"
@@ -27565,7 +27559,7 @@ msgstr "Condizioni d'uso della piattaforma"
 msgid "Password too easy to guess"
 msgstr "Password troppo facile da indovinare"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr "Devi confermare il tuo account via e-mail per accedere alla piattaforma"
 
 msgid "Redirect to portal home"
@@ -30540,13 +30534,13 @@ msgid "ex. root"
 msgstr "es. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "CREATE TABLE lavori"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ALTER TABLE lavori"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "DROP COLUMN lavori"
 
 msgid "Theme selected as current"
 msgstr "Tema selezionato come corrente"
@@ -31216,4 +31210,634 @@ msgstr "Corsi Riavviati Admin"
 
 msgid "Admin Dashboard"
 msgstr "Dashboard Admin"
+
+msgid "Threads"
+msgstr "Thread"
+
+msgid "Invalid thread"
+msgstr "Thread non valido"
+
+msgid "View full thread"
+msgstr "Visualizza thread completo"
+
+msgid "No post yet"
+msgstr "Nessun post ancora"
+
+msgid "Discussion thread"
+msgstr "Thread di discussione"
+
+msgid "Access to this course"
+msgstr "Accesso a questo corso"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Questo plugin non ha impostazioni configurabili. L'attivazione è gestita dall'elenco dei plugin."
+
+msgid "Private - access granted by privileged users"
+msgstr "Privato - accesso concesso da utenti privilegiati"
+
+msgid "No detailed feedback is available for this question."
+msgstr "Nessun feedback dettagliato disponibile per questa domanda."
+
+msgid "Please select an answer before checking the result."
+msgstr "Seleziona una risposta prima di controllare il risultato."
+
+msgid "Allow PDF export for this item"
+msgstr "Consenti esportazione PDF per questo elemento"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Nascondi utenti gratuiti (non iscritti)"
+
+msgid "Question statistics"
+msgstr "Statistiche domande"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Generazione file. Non chiudere questa scheda..."
+
+msgid "Assign auth source to users"
+msgstr "Assegna fonte auth agli utenti"
+
+msgid "There are no questions for this survey"
+msgstr "Non ci sono domande per questo sondaggio"
+
+msgid "Certificates report"
+msgstr "Report certificati"
+
+msgid "Course picture"
+msgstr "Immagine corso"
+
+msgid "Current picture"
+msgstr "Immagine attuale"
+
+msgid "Course events log"
+msgstr "Log eventi corso"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Aggiorna le informazioni della categoria e il suo limite di tempo opzionale."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Crea un gruppo logico di sessioni per mantenere organizzato il tuo catalogo di formazione."
+
+msgid "Generating file, do not close this tab"
+msgstr "Generazione file, non chiudere questa scheda"
+
+msgid "Assign authentication sources to users"
+msgstr "Assegna fonti di autenticazione agli utenti"
+
+msgid "Average completion rate"
+msgstr "Tasso medio di completamento"
+
+msgid "Average access rate"
+msgstr "Tasso medio di accesso"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Questa tabella riassume i progressi e l'attività degli studenti per percorso di apprendimento nei tuoi corsi attuali."
+
+msgid "Follow up"
+msgstr "Monitoraggio"
+
+msgid "Tracking for superior"
+msgstr "Tracciamento per superiore"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Questo report mostra la distribuzione settimanale delle sessioni per coach generale nell'intervallo di date selezionato."
+
+msgid "Head manager report"
+msgstr "Report responsabile"
+
+msgid "Reset or update user password"
+msgstr "Reimposta o aggiorna password utente"
+
+msgid "Active users"
+msgstr "Utenti attivi"
+
+msgid "Inactive users"
+msgstr "Utenti inattivi"
+
+msgid "Report on resources"
+msgstr "Report sulle risorse"
+
+msgid "Global view"
+msgstr "Vista globale"
+
+msgid "Available reports"
+msgstr "Report disponibili"
+
+msgid "Current report"
+msgstr "Report corrente"
+
+msgid "Back to user assignment page"
+msgstr "Torna alla pagina di assegnazione utenti"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Fonti di autenticazione assegnate con successo"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Suggerimento: scegli “— Solo carica —” per salvare senza inviare a nessuno."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Seleziona almeno un destinatario (“— Solo carica —” o qualsiasi utente)"
+
+msgid "Sharing"
+msgstr "Condivisione"
+
+msgid "Selected files"
+msgstr "File selezionati"
+
+msgid "Hide password"
+msgstr "Nascondi password"
+
+msgid "Show password"
+msgstr "Mostra password"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Carica logo SVG per le e-mail"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Devi spostare o rimuovere tutti i percorsi di apprendimento da questa categoria prima di eliminarla."
+
+msgid "Clear filters"
+msgstr "Cancella filtri"
+
+msgid "Attendances (tablet)"
+msgstr "Presenze (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Esci dalla modalità tablet"
+
+msgid "No members found."
+msgstr "Nessun membro trovato."
+
+msgid "Health check"
+msgstr "Controllo salute"
+
+msgid "Export to CC 1.3"
+msgstr "Esporta in CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Caricamento risorse..."
+
+msgid "Failed to load resources."
+msgstr "Impossibile caricare le risorse."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Seleziona almeno una risorsa esportabile (documento, link web, discussione,...)."
+
+msgid "Export finished."
+msgstr "Esportazione completata."
+
+msgid "Export failed."
+msgstr "Esportazione fallita."
+
+msgid "Import failed."
+msgstr "Importazione fallita."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "File locale (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Pronto per l'importazione"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Ripristineremo il backup in questo corso. Puoi tornare indietro per cambiare le opzioni."
+
+msgid "Select resources to import"
+msgstr "Seleziona risorse da importare"
+
+msgid "No resources available in this backup."
+msgstr "Nessuna risorsa disponibile in questo backup."
+
+msgid "Import selection"
+msgstr "Selezione importazione"
+
+msgid "Import completed"
+msgstr "Importazione completata"
+
+msgid "Could not load options."
+msgstr "Impossibile caricare le opzioni."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Seleziona un file di backup (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Scegli un backup dal server"
+
+msgid "Error selecting source."
+msgstr "Errore nella selezione della sorgente."
+
+msgid "Recycling options"
+msgstr "Opzioni di riciclo"
+
+msgid "Type the course code to confirm"
+msgstr "Digita il codice del corso per confermare"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Questo rimuoverà o reimposterà le risorse selezionate. Questa azione non può essere annullata."
+
+msgid "Select resources to recycle"
+msgstr "Seleziona risorse da riciclare"
+
+msgid "No resources available in this course."
+msgstr "Nessuna risorsa disponibile in questo corso."
+
+msgid "Recycle selected"
+msgstr "Ricicla selezionati"
+
+msgid "Error loading resources."
+msgstr "Errore nel caricamento delle risorse."
+
+msgid "Clear search"
+msgstr "Cancella ricerca"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Nel nome del database sono consentite solo lettere, cifre e underscore (_). I caratteri non validi verranno rimossi automaticamente."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "Quali condizioni generali vengono fornite agli utenti per utilizzare questa piattaforma?"
+
+msgid "ex. {examplePassword}"
+msgstr "es. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Benvenuti in Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Benvenuti in questa piattaforma"
+
+msgid "For more details visit %s"
+msgstr "Per maggiori dettagli visita %s"
+
+msgid "Manager"
+msgstr "Amministratore"
+
+msgid "Mark as"
+msgstr "Imposta come"
+
+msgid "Reply to all"
+msgstr "Rispondi a tutti"
+
+msgid "SCIM external ID"
+msgstr "SCIM ID esterno"
+
+msgid "OAuth2 ID"
+msgstr "OAuth2 ID"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Accettare l'ultima versione dei termini e condizioni."
+
+msgid "Required value for operation without path"
+msgstr "Valore richiesto per l'operazione senza percorso"
+
+msgid "Available space (%s)"
+msgstr "Spazio disponibile (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Indizzare questa descrizione per la ricerca globale"
+
+msgid "Unknown course"
+msgstr "Corso sconosciuto"
+
+msgid "Certificate not found."
+msgstr "Certificato non trovato."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Token di sicurezza scaduto. Ricaricare la pagina e riprovare."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Solo gli amministratori della piattaforma possono modificare la visibilità del corso."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Errore imprevisto durante l'iscrizione dell'utente"
+
+msgid "Search in resource logs"
+msgstr "Cerca nei log delle risorse"
+
+msgid "Include this learning path in the global search results"
+msgstr "Includi questo percorso di apprendimento nei risultati della ricerca globale"
+
+msgid "The course code already exists"
+msgstr "Il codice del corso esiste già"
+
+msgid "Latest news"
+msgstr "Ultime notizie"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Ottieni le ultime notizie da Chamilo, incluse le vulnerabilità di sicurezza e gli eventi, direttamente nel tuo pannello di amministrazione. Queste notizie vengono verificate sul server di notizie Chamilo ogni volta che carichi la pagina di amministrazione e sono visibili solo agli amministratori."
+
+msgid "Chamilo support block"
+msgstr "Blocco supporto Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Ottieni consigli pro e un modo semplice per contattare i fornitori di servizi ufficiali per supporto professionale, direttamente dai creatori di Chamilo. Questo blocco appare nella tua pagina di amministrazione, è visibile solo agli amministratori e si aggiorna ogni volta che carichi la pagina di amministrazione."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Nascondi opzione per inviare annunci agli utenti HR"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Consenti agli amministratori di sessione di scaricare certificati privati"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Se abilitato, gli amministratori di sessione possono scaricare certificati anche se non sono pubblicati pubblicamente."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Se non vuoto, il processo di creazione del corso cercherà alcuni campi nel profilo utente e li compilerà automaticamente per il corso. Ad esempio, un insegnante specializzato in marketing digitale potrebbe impostare automaticamente una flag « marketing digitale » su ogni corso che crea."
+
+msgid "Main menu entries"
+msgstr "Voci del menu principale"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Seleziona le voci che vuoi vedere nel menu principale"
+
+msgid "Main menu entries per role"
+msgstr "Voci del menu principale per ruolo"
+
+msgid "Define header tabs visibility per role."
+msgstr "Definisci la visibilità delle schede dell'intestazione per ruolo."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Imposta le opzioni che vuoi far apparire nella navigazione intorno a una tabella per mostrare meno o più righe su una pagina. es. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Array di funzionalità extra che puoi abilitare per il lettore video in Chamilo. Le opzioni includono 'speed', che ti permette di cambiare la velocità di riproduzione di un video."
+
+msgid "Mail: character set"
+msgstr "Mail: set di caratteri"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "In caso tu debba definire il charset da usare quando invii quelle e-mail. Lascia vuoto se non sei sicuro."
+
+msgid "Mail: Debug"
+msgstr "Mail: Debug"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Seleziona se vuoi abilitare i log di debug per l'invio delle e-mail. Questi ti daranno più informazioni su cosa sta accadendo durante la connessione al servizio di posta, ma non sono eleganti e potrebbero rompere il design della pagina. Usa solo quando non c'è attività utente."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Mail: Evita l'uso di LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Alcuni client di e-mail non comprendono il formato descrittivo LD+JSON, mostrandolo come una stringa JSON sciolta all'utente finale. Se è il tuo caso, potresti voler impostare la variabile qui sotto su 'false' per disabilitare questo header."
+
+msgid "Mail: DKIM headers"
+msgstr "Mail: Intestazioni DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Inserisci un array JSON delle tue impostazioni di configurazione DKIM (vedi esempio)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Mail: Opzioni XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Se usi un servizio di e-mail basato su XOAuth2, usa questa impostazione in JSON per salvare la tua configurazione specifica (vedi esempio) e seleziona XOAuth2 nell'impostazione del servizio di posta."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Definisce il tipo di ambiente: \"prod\" (produzione normale), \"validation\" (come produzione ma senza reportistica statistiche), o \"test\" (modalità debug con strumenti per sviluppatori come indicatori di stringhe non tradotte)."
+
+msgid "Global limit of users per course"
+msgstr "Limite globale di utenti per corso"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Definisce un numero massimo globale di utenti (inclusi i docenti) consentiti per essere iscritti a un singolo corso nella piattaforma. Imposta questo valore a 0 per disabilitare il limite. Questo aiuta a evitare che i corsi siano sovraccarichi nei portali aperti."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Abilita per usare un array per definire quali ruoli devono essere visualizzati chiaramente e quali nascosti."
+
+msgid "Show base course posts in session course"
+msgstr "Mostra i post del corso base nel corso sessione"
+
+msgid "Limit identical email usage"
+msgstr "Limita l'uso di email identiche"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Numero massimo di account consentiti per condividere lo stesso indirizzo e-mail. Impostare su 0 per disabilitare questo limite."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Consenti agli amministratori di sessione di vedere tutti gli utenti su tutti gli URL"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Se abilitato, gli amministratori di sessione possono cercare ed elencare utenti da tutti gli URL di accesso, indipendentemente dal loro URL corrente."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Abilita la possibilità per gli utenti di selezionare il proprio fuso orario. Una volta configurato, gli utenti potranno vedere le scadenze degli assegnamenti e altri riferimenti temporali nel proprio fuso orario, riducendo gli errori al momento della consegna."
+
+msgid "Redirect after login (per profile)"
+msgstr "Reindirizzamento dopo il login (per profilo)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Definisci reindirizzamento per profilo dopo il login usando un oggetto JSON come {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Nascondi casella di accettazione legale nella pagina Termini e Condizioni"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Se impostato su true, rimuove la casella di controllo \"Ho letto e accetto\" nel flusso della pagina Termini e Condizioni."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Array che definisce host e porta per il server LDAP."
+
+msgid "Enable 2FA"
+msgstr "Abilita 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Aggiunge campi nella pagina di aggiornamento password per abilitare 2FA usando un'app autenticatore TOTP. Quando disabilitato globalmente, gli utenti non vedranno i campi 2FA e non saranno invitati per 2FA al login, anche se l'avevano abilitato in precedenza."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Alcune funzionalità di Chamilo si connetteranno all'esterno dal server. Ad esempio per verificare che un contenuto esterno esista quando si crea un link o si mostra una pagina incorporata nel percorso di apprendimento. Se il server Chamilo usa un proxy per uscire dalla sua rete, qui è il posto per configurarlo."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Abilita o disabilita la reiscrizione automatica quando la validità del corso scade. Il job cron correlato deve essere anch'esso attivato."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Mostra giorni rimanenti in Le mie sessioni"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Se abilitato, le date della sessione nella pagina \"Le mie sessioni\" saranno sostituite dal numero di giorni rimanenti."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Mostra \"Sondaggi in sospeso\" nel menu"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Visualizza un elemento di menu che permette agli utenti di accedere ai loro sondaggi in sospeso."
+
+msgid "Disclose AI assistance"
+msgstr "Rivelare assistenza AI"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Mostra un'etichetta su qualsiasi contenuto o feedback generato o co-generato da un sistema AI, attestando all'utente che il contenuto è stato creato con l'aiuto di un sistema AI. I dettagli su quale sistema AI è stato usato in ciascun caso sono conservati nel database per audit, ma non sono direttamente accessibili dall'utente finale."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "Configurazione JSON per catalogo corsi: impostazioni link, filtri, opzioni di ordinamento e altro."
+
+msgid "Session Catalog Settings"
+msgstr "Impostazioni Catalogo Sessioni"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "Configurazione JSON per catalogo sessioni: filtri e opzioni di visualizzazione."
+
+msgid "Show Course Descriptions"
+msgstr "Mostra Descrizioni Corsi"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Visualizza descrizioni corsi nell'elenco del catalogo."
+
+msgid "Published Courses Only"
+msgstr "Solo Corsi Pubblicati"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Limita il catalogo solo ai corsi contrassegnati come pubblicati."
+
+msgid "Display Catalog on Homepage"
+msgstr "Mostra Catalogo nella Homepage"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Mostra il blocco catalogo corsi nella homepage della piattaforma."
+
+msgid "Hide Public Link"
+msgstr "Nascondi Link Pubblico"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Rimuovi il link URL pubblico dalle schede dei corsi."
+
+msgid "Only Selected Courses"
+msgstr "Solo Corsi Selezionati"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Mostra solo i corsi selezionati manualmente nel catalogo."
+
+msgid "Allow Student Browsing"
+msgstr "Consenti Navigazione Studenti"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Consenti agli studenti di navigare e filtrare il catalogo corsi."
+
+msgid "Hide Private Courses"
+msgstr "Nascondi Corsi Privati"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Escludi i corsi privati dalla visualizzazione del catalogo."
+
+msgid "Show Courses & Sessions"
+msgstr "Mostra Corsi e Sessioni"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Includi sia corsi che sessioni nei risultati del catalogo."
+
+msgid "Auto Session Subscription"
+msgstr "Iscrizione Automatica Sessione"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Abilita l'iscrizione automatica alle sessioni per gli utenti."
+
+msgid "Subscription in Session View"
+msgstr "Iscrizione nella Vista Sessione"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Consenti agli utenti di iscriversi ai corsi direttamente dalla pagina della sessione."
+
+msgid "Enable redirection plugin"
+msgstr "Abilita plugin di reindirizzamento"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Array che definisce i 'giorni' e 'mesi' per impostare la data di scadenza dell'account al primo login dell'utente."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Un array di ruolo => numero che rappresenta il numero di giorni prima della scadenza dell'account, a seconda del ruolo."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Campo utente extra usato per cercare e nominare le sessioni"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Questa impostazione definisce la chiave del campo utente extra (es. \"company\") che verrà usata per cercare utenti e per definire il nome della sessione durante la registrazione degli studenti da /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Generatore termini Glossario"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Consenti ai docenti di richiedere termini del glossario generati dall'IA nel loro corso. Verranno generati 20 termini basati sul titolo del corso e sulla descrizione generale nello strumento di descrizione del corso. Se usato più volte, escluderà i termini già presenti in quel glossario (assicurati che il contenuto possa essere condiviso con i servizi IA configurati)."
+
+msgid "Video generator"
+msgstr "Generatore Video"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Genera video basati su prompt o contenuti usando l'IA (potrebbe consumare molti token)."
+
+msgid "Course analyser"
+msgstr "Analizzatore Corsi"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Analizza tutte le risorse in uno o più corsi e pre-allena il modello IA per rispondere a qualsiasi domanda su questo o questi corsi (assicurati che il contenuto possa essere condiviso con i servizi IA configurati)."
+
+msgid "Test/development"
+msgstr "Test/sviluppo"
+
+msgid "Crons"
+msgstr "Cron"
+
+msgid "Editor"
+msgstr "Editor"
+
+msgid "Gradebook"
+msgstr "Libretto Voti"
+
+msgid "Internationalization"
+msgstr "Internazionalizzazione"
+
+msgid "User profiles"
+msgstr "Profili Utente"
+
+msgid "Support tickets"
+msgstr "Ticket di Supporto"
+
+msgid "Webservices"
+msgstr "Web Services"
+
+msgid "Catalogue"
+msgstr "Catalogo"
+
+msgid "Workflows"
+msgstr "Workflow"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "Impostazione modificabile su sottourl"
+
+msgid "Show JSON Template"
+msgstr "Mostra Modello JSON"
+
+msgid "JSON Template"
+msgstr "Modello JSON"
+
+msgid "Installing Xapian bindings"
+msgstr "Installazione binding Xapian"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "Il seguente snippet mostra un esempio di installazione dei binding PHP Xapian su Ubuntu 25.04 con PHP 8.3. Adatta percorsi e versioni al tuo ambiente."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Assicurati di avere solo la versione PHP che usi realmente (ad esempio 8.3) ed evita di mescolare diverse versioni con directory di estensioni diverse."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Una volta caricata correttamente l'estensione sia per CLI che per il server web, la diagnostica di ricerca sopra dovrebbe riportare che il modulo Xapian è installato."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Pulizia caricamenti temporanei e cache"
+
+msgid "Directory"
+msgstr "Directory"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Cancella solo file più vecchi di (minuti)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Imposta 0 per cancellare tutti i file. Usa un valore positivo (es. 60) per evitare di rimuovere file ancora in caricamento."
+
+msgid "Preview only (do not delete)"
+msgstr "Anteprima solamente (non cancellare)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Attenzione: stai per cancellare TUTTI i file temporanei. Questa azione non può essere annullata."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Questo cancellerà tutti i file temporanei. Continuare?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Questo cancellerà i file più vecchi di %minutes% minuti. Continuare?"
 

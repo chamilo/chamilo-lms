@@ -4,100 +4,137 @@
       :is-loading="loading"
       v-model:multi-sort-meta="sortFields"
       v-model:rows="loadParams.itemsPerPage"
-    :total-items="totalRecords"
-    :values="submissions"
-    data-key="@id"
-    lazy
-    @page="onPage"
-    @sort="onSort"
+      :total-items="totalRecords"
+      :values="submissions"
+      data-key="@id"
+      lazy
+      @page="onPage"
+      @sort="onSort"
     >
-    <Column :header="t('Type')">
-      <template #body="{}">
-        <div class="flex justify-center">
-          <i class="pi pi-file" />
-        </div>
-      </template>
-    </Column>
+      <Column :header="t('Type')">
+        <template #body="{}">
+          <div class="flex justify-center">
+            <i class="pi pi-file" />
+          </div>
+        </template>
+      </Column>
 
-    <Column field="title" :header="t('Title')" />
+      <Column
+        field="title"
+        :header="t('Title')"
+      />
 
-    <Column :header="t('Feedback')">
-      <template #body="{ data }">
-        <div class="flex justify-center items-center gap-2">
-            <span v-if="data.correctionTitle" class="text-green-600">
+      <Column :header="t('Feedback')">
+        <template #body="{ data }">
+          <div class="flex justify-center items-center gap-2">
+            <span
+              v-if="data.correctionTitle"
+              class="text-green-600"
+            >
               <a
                 v-if="data.correctionDownloadUrl"
                 :href="data.correctionDownloadUrl"
                 target="_blank"
                 download
-                class="text-green-50 hover:underline"
+                class="hover:underline"
               >
                 <i class="pi pi-check-circle"></i>
               </a>
-              <i v-else class="pi pi-check-circle"></i>
+              <i
+                v-else
+                class="pi pi-check-circle"
+              ></i>
             </span>
 
-          <span
-            v-if="flags.allowText && data.comments && data.comments.length > 0"
-            class="flex items-center gap-1 text-gray-600 text-sm cursor-pointer hover:underline"
-            @click="openCommentDialog(data)"
-          >
+            <span
+              v-if="data.comments && data.comments.length > 0"
+              class="flex items-center gap-1 text-gray-600 text-sm cursor-pointer hover:underline"
+              @click="openCommentDialog(data)"
+            >
               <i class="pi pi-comment"></i> {{ data.comments.length }}
             </span>
-          <span v-else class="text-gray-400">—</span>
-        </div>
-      </template>
-    </Column>
 
-    <Column :header="t('Score')">
-      <template #body="{ data }">
-        <template v-if="data.qualification !== null && data.publicationParent?.qualification">
+            <span
+              v-else
+              class="text-gray-400"
+            >
+              —
+            </span>
+          </div>
+        </template>
+      </Column>
+
+      <Column :header="t('Score')">
+        <template #body="{ data }">
+          <template v-if="hasReceivedGrade(data) && data.publicationParent?.qualification">
             <span
               :class="{
                 'bg-success/10 text-success font-semibold text-sm px-2 py-1 rounded':
-                  data.qualification > data.publicationParent.qualification / 2,
+                  Number(data.qualification) > Number(data.publicationParent.qualification) / 2,
                 'bg-danger/10 text-danger font-semibold text-sm px-2 py-1 rounded':
-                  data.qualification <= data.publicationParent.qualification / 2,
+                  Number(data.qualification) <= Number(data.publicationParent.qualification) / 2,
               }"
             >
-              {{ data.qualification.toFixed(1) }} / {{ data.publicationParent.qualification.toFixed(1) }}
+              {{ Number(data.qualification).toFixed(1) }} /
+              {{ Number(data.publicationParent.qualification).toFixed(1) }}
             </span>
+          </template>
+          <template v-else>
+            <span class="text-gray-50">{{ t("Not graded yet") }}</span>
+          </template>
         </template>
-        <template v-else>
-          <span class="text-gray-50">{{ t('Not graded yet') }}</span>
+      </Column>
+
+      <Column
+        field="sentDate"
+        :header="t('Date')"
+      >
+        <template #body="{ data }">
+          {{ abbreviatedDatetime(data.sentDate) }}
         </template>
-      </template>
-    </Column>
+      </Column>
 
-    <Column field="sentDate" :header="t('Date')">
-      <template #body="{ data }">
-        {{ abbreviatedDatetime(data.sentDate) }}
-      </template>
-    </Column>
-
-    <Column :header="t('Actions')">
-      <template #body="{ data }">
-        <div class="flex justify-center gap-2">
-          <BaseButton
-            v-if="flags.allowFile"
-            icon="save"
-            only-icon
-            :label="t('Download')"
-            @click="downloadSubmission(data)"
-            type="primary"
-          />
-          <BaseButton
-            v-if="flags.allowText"
-            icon="reply-all"
-            only-icon
-            :label="t('Comment')"
-            @click="correctAndRate(data)"
-            type="success"
-          />
-          <span v-if="!flags.allowFile && !flags.allowText" class="text-gray-400">—</span>
-        </div>
-      </template>
-    </Column>
+      <Column :header="t('Actions')">
+        <template #body="{ data }">
+          <div class="flex justify-center gap-2">
+            <BaseButton
+              v-if="flags.allowFile"
+              icon="download"
+              only-icon
+              size="normal"
+              :class="actionBtnClass"
+              :label="t('Download')"
+              @click="downloadSubmission(data)"
+              type="primary"
+            />
+            <BaseButton
+              v-if="flags.allowText"
+              icon="reply-all"
+              only-icon
+              size="normal"
+              :class="actionBtnClass"
+              :label="t('Comment')"
+              @click="correctAndRate(data)"
+              type="success"
+            />
+            <BaseButton
+              v-if="canDeleteSubmission(data)"
+              icon="delete"
+              only-icon
+              size="normal"
+              :class="actionBtnClass"
+              :label="t('Delete')"
+              @click="deleteSubmission(data)"
+              type="danger"
+            />
+            <span
+              v-if="!flags.allowFile && !flags.allowText"
+              class="text-gray-400"
+              >—</span
+            >
+          </div>
+        </template>
+      </Column>
     </BaseTable>
 
     <CorrectAndRateModal
@@ -111,7 +148,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, nextTick } from "vue"
+import { nextTick, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import Column from "primevue/column"
 import BaseButton from "../basecomponents/BaseButton.vue"
@@ -146,13 +183,64 @@ const loadParams = reactive({
 const showCorrectAndRateDialog = ref(false)
 const correctingItem = ref(null)
 
+/**
+ * Bigger icon-only buttons for better readability and click area.
+ */
+const actionBtnClass = "w-10 h-10 !p-2"
+
+/**
+ * Some APIs send qualification = 0.0 by default even if not graded yet.
+ * Prefer grading metadata (qualificator/qualification date) when available.
+ */
+function getQualificatorId(row) {
+  const v = row?.qualificatorId ?? row?.qualificator_id ?? row?.qualifiedById ?? row?.qualified_by_id ?? 0
+
+  const n = Number(v)
+  return Number.isFinite(n) ? n : 0
+}
+
+function getQualificationDate(row) {
+  return (
+    row?.qualificationDate ??
+    row?.qualification_date ??
+    row?.qualifiedAt ??
+    row?.qualified_at ??
+    row?.dateOfQualification ??
+    row?.date_of_qualification ??
+    null
+  )
+}
+
+function hasReceivedGrade(row) {
+  // Best signals: who graded it and/or when it was graded
+  if (getQualificatorId(row) > 0) return true
+  if (getQualificationDate(row)) return true
+
+  // Fallback: if API does not provide metadata, infer carefully
+  const q = row?.qualification
+  if (q === null || q === undefined || q === "") return false
+
+  const qNum = Number(q)
+  if (!Number.isFinite(qNum)) return false
+
+  // Any non-zero score implies grading happened
+  if (qNum !== 0) return true
+
+  // Score is 0: only treat as graded if there is clear teacher feedback metadata
+  return (row?.comments?.length ?? 0) > 0 || !!row?.correctionTitle
+}
+
+function canDeleteSubmission(row) {
+  return !hasReceivedGrade(row)
+}
+
 watch(
   loadParams,
   () => {
     if (!loadParams.itemsPerPage) return
     loadData()
   },
-  { deep: true, immediate: true }
+  { deep: true, immediate: true },
 )
 
 async function loadData() {
@@ -170,6 +258,25 @@ async function loadData() {
     notification.showErrorNotification(error)
   } finally {
     loading.value = false
+  }
+}
+
+async function deleteSubmission(item) {
+  if (!item?.iid) {
+    notification.showErrorNotification(t("Invalid submission"))
+    return
+  }
+
+  const confirmed = window.confirm(t("Are you sure you want to delete this submission?"))
+  if (!confirmed) return
+
+  try {
+    await cStudentPublicationService.deleteAssignmentSubmission(item.iid)
+    notification.showSuccessNotification(t("Submission deleted successfully!"))
+    await loadData()
+  } catch (e) {
+    console.warn("[Assignments][StudentSubmissionList] Failed to delete submission", e)
+    notification.showErrorNotification(e)
   }
 }
 

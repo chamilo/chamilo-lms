@@ -1,136 +1,241 @@
 <!-- tracking course log -->
 <script>
-$(() => {
+  $(() => {
     var scoreStudent = document.getElementById("chart-score").getContext('2d');
     var lastAccess = document.getElementById("chart-access").getContext('2d');
     var jsonfile = {{ json_time_student|raw }};
     var labels = [];
     var times = [];
 
-   Object.keys(jsonfile).forEach(function(key) {
-       // Names
-       labels.push(jsonfile[key].fullname);
-       // Time platform total
-       times.push(jsonfile[key].total_time);
-   });
+    Object.keys(jsonfile).forEach(function(key) {
+      // Student name
+      labels.push(jsonfile[key].fullname);
+      // Total time in minutes
+      times.push(jsonfile[key].total_time);
+    });
 
     var myChartAccess = new Chart(lastAccess, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                data: times,
-                borderColor: "#3ba557",
-                backgroundColor: "#3ba557",
-                borderWidth: 1,
-                fill: false,
-                label: '{{ "Minutes"|get_lang|e('js') }}',
-            }]
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: times,
+          borderColor: "#3ba557",
+          backgroundColor: "#3ba557",
+          borderWidth: 1,
+          fill: false,
+          label: '{{ "Minutes"|get_lang|e('js') }}',
+        }]
+      },
+      options: {
+        legend:{
+          display: false
         },
-        options: {
-            legend:{
-                display: false
+        scales: {
+          x: {
+            position: "bottom",
+            title: {
+              display: true,
+              text: '{{ "Students"|get_lang|e('js') }}'
             },
-            scales: {
-                x: {
-                    position: "bottom",
-                    title: {
-                        display: true,
-                        text: '{{ "Students"|get_lang|e('js') }}'
-                    },
-                    ticks: { display: false },
-                    min: 0
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: '{{ "Minutes"|get_lang|e('js') }}'
-                    },
-                    position: "left",
-                    min: 0
-                }
-            }
+            ticks: { display: false },
+            min: 0
+          },
+          y: {
+            title: {
+              display: true,
+              text: '{{ "Minutes"|get_lang|e('js') }}'
+            },
+            position: "left",
+            min: 0
+          }
         }
+      }
     });
 
     var myChartScore = new Chart(scoreStudent, {
-        type: 'bar',
-        data: {
-            labels: ["0-9%", "10-19%", "20-29%", "30-39%", "40-49%", "50-59%", "60-69%", "70-79%", "80-89%", "90-100%"],
-            datasets: [{
-                label: '{{ "Number of users"|get_lang|e('js') }}',
-                data: {{ score_distribution|raw }},
-                backgroundColor: {{ chart_colors|raw }},
-                borderColor: {{ chart_colors|raw }},
-                borderWidth: 1,
-                fill: false
-            }]
+      type: 'bar',
+      data: {
+        labels: ["0-9%", "10-19%", "20-29%", "30-39%", "40-49%", "50-59%", "60-69%", "70-79%", "80-89%", "90-100%"],
+        datasets: [{
+          label: '{{ "Number of users"|get_lang|e('js') }}',
+          data: {{ score_distribution|raw }},
+          backgroundColor: {{ chart_colors|raw }},
+          borderColor: {{ chart_colors|raw }},
+          borderWidth: 1,
+          fill: false
+        }]
+      },
+      options: {
+        legend:{
+          display: false
         },
-        options: {
-            legend:{
-              display: false
+        scales: {
+          y: {
+            position: "left",
+            title: {
+              text: '{{ "Number of users"|get_lang|e('js') }}',
+              display: true
             },
-            scales: {
-                y: {
-                    position: "left",
-                    title: {
-                      text: '{{ "Number of users"|get_lang|e('js') }}',
-                      display: true
-                    },
-                    ticks: {
-                        display: true,
-                        min: 0,
-                        stepSize: 1
-                    },
-                    min: 0
-                },
-                x: {
-                    position: "bottom",
-                    title: {
-                      text: "{{ 'PercentileScoresDistribution'|get_lang|e('js') }}",
-                      display: true
-                    },
-                    gridLines: { display: true },
-                    ticks: { display: true, },
-                    min: 0
-                },
-            }
+            ticks: {
+              display: true,
+              min: 0,
+              stepSize: 1
+            },
+            min: 0
+          },
+          x: {
+            position: "bottom",
+            title: {
+              text: "{{ 'PercentileScoresDistribution'|get_lang|e('js') }}",
+              display: true
+            },
+            gridLines: { display: true },
+            ticks: { display: true },
+            min: 0
+          },
         }
+      }
     });
-})
+  })
 </script>
 
+<style>
+    /* KPI cards container */
+    .course-kpis {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        margin: 12px 0 20px;
+    }
+
+    .course-kpis__item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        background: #ffffff;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+    }
+
+    .course-kpis__icon {
+        flex-shrink: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eef2ff;
+    }
+
+    .course-kpis__icon-svg {
+        font-size: 22px;
+    }
+
+    .course-kpis__text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .course-kpis__value {
+        font-size: 18px;
+        font-weight: 700;
+        color: #111827;
+        line-height: 1.1;
+    }
+
+    .course-kpis__label {
+        font-size: 13px;
+        color: #4b5563;
+    }
+
+    /* Responsive behavior for KPI cards */
+    @media (max-width: 992px) {
+        .course-kpis {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 576px) {
+        .course-kpis {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
 <div class="tracking-course-summary">
-    <div class="grid grid-cols-4 gap-8 mt-4" style="display: flex; margin-bottom: 16pt;">
-        <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black" style="flex: 1; padding: 8pt;">
-            <i class="mdi mdi-account-group ch-tool-icon" style="font-size: 64px; width: 64px; height: 64px; display: block;" aria-hidden="true"></i>
-                {{ number_students }}
-            <div class="card-title text-center p-2 text-xl">
-                {{ "Number of users"|trans }}
+    <!-- KPI cards row -->
+    <div class="course-kpis">
+        <!-- Number of users -->
+        <div class="course-kpis__item">
+            <div class="course-kpis__icon">
+                <i class="mdi mdi-account-group ch-tool-icon course-kpis__icon-svg"
+                   aria-hidden="true"></i>
+            </div>
+            <div class="course-kpis__text">
+                <div class="course-kpis__value">
+                    {{ number_students }}
+                </div>
+                <div class="course-kpis__label">
+                    {{ "Number of users"|trans }}
+                </div>
             </div>
         </div>
-        <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black" style="flex: 1; padding: 8pt;">
-            <i class="mdi mdi-progress-check ch-tool-icon" style="font-size: 64px; width: 64px; height: 64px; display: block;" aria-hidden="true"></i>
-            {{ students_completed_lp }}/{{ number_students }}
-            <div class="card-title text-center p-2 text-xl">
-                {{ "Course progress"|trans }}
+
+        <!-- Course progress -->
+        <div class="course-kpis__item">
+            <div class="course-kpis__icon">
+                <i class="mdi mdi-progress-check ch-tool-icon course-kpis__icon-svg"
+                   aria-hidden="true"></i>
+            </div>
+            <div class="course-kpis__text">
+                <div class="course-kpis__value">
+                    {{ students_completed_lp }}/{{ number_students }}
+                </div>
+                <div class="course-kpis__label">
+                    {{ "Course progress"|trans }}
+                </div>
             </div>
         </div>
-        <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black" style="flex: 1; padding: 8pt;">
-            <i class="mdi mdi-chart-box ch-tool-icon" style="font-size: 64px; width: 64px; height: 64px; display: block;" aria-hidden="true"></i>
-            {{ students_test_score }}%
-            <div class="card-title text-center p-2 text-xl">
-                {{ "Exercise average"|trans }}
+
+        <!-- Exercise average -->
+        <div class="course-kpis__item">
+            <div class="course-kpis__icon">
+                <i class="mdi mdi-chart-box ch-tool-icon course-kpis__icon-svg"
+                   aria-hidden="true"></i>
+            </div>
+            <div class="course-kpis__text">
+                <div class="course-kpis__value">
+                    {{ students_test_score }}%
+                </div>
+                <div class="course-kpis__label">
+                    {{ "Exercise average"|trans }}
+                </div>
             </div>
         </div>
-        <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black" style="flex: 1; padding: 8pt;">
-            <i class="mdi mdi-certificate ch-tool-icon" style="font-size: 64px; width: 64px; height: 64px; display: block;" aria-hidden="true"></i>
-            {{ certificate_count }}/{{ number_students }}
-            <div class="card-title text-center p-2 text-xl">
-                {{ "Certificates count"|trans }}
+
+        <!-- Certificates count -->
+        <div class="course-kpis__item">
+            <div class="course-kpis__icon">
+                <i class="mdi mdi-certificate ch-tool-icon course-kpis__icon-svg"
+                   aria-hidden="true"></i>
+            </div>
+            <div class="course-kpis__text">
+                <div class="course-kpis__value">
+                    {{ certificate_count }}/{{ number_students }}
+                </div>
+                <div class="course-kpis__label">
+                    {{ "Certificates count"|trans }}
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Charts and top students row -->
     <div class="row" style="display: flex;">
         <div class="col-md-4" style="flex: 1; margin: 8pt;">
             <div class="panel panel-default">
@@ -151,33 +256,33 @@ $(() => {
                         {% for student in top_students %}
                             {% set counter = counter + 1 %}
                             {% if counter <= 3 %}
-                            <li>
-                                <div class="avatar">
-                                    <span class="round">
-                                        <img
-                                            title="{{ student.fullname }}"
-                                            alt="{{ student.fullname }}"
-                                            src="{{ student.user | illustration }}"
-                                            width="40px">
-                                    </span>
-                                </div>
-                                <div class="info">
-                                    <h3 class="name">{{ student.fullname }}</h3>
-                                    <div class="progress">
-                                        <div
-                                            class="progress-bar progress-bar-success progress-bar-striped"
-                                            role="progressbar"
-                                            aria-valuenow="{{ student.score }}" aria-valuemin="0"
-                                            aria-valuemax="100" style="width: {{ student.score }}%;">
-                                            {{ student.score }}%
+                                <li>
+                                    <div class="avatar">
+                                        <span class="round">
+                                            <img
+                                                    title="{{ student.fullname }}"
+                                                    alt="{{ student.fullname }}"
+                                                    src="{{ student.user | illustration }}"
+                                                    width="40px">
+                                        </span>
+                                    </div>
+                                    <div class="info">
+                                        <h3 class="name">{{ student.fullname }}</h3>
+                                        <div class="progress">
+                                            <div
+                                                    class="progress-bar progress-bar-success progress-bar-striped"
+                                                    role="progressbar"
+                                                    aria-valuenow="{{ student.score }}" aria-valuemin="0"
+                                                    aria-valuemax="100" style="width: {{ student.score }}%;">
+                                                {{ student.score }}%
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
                             {% endif %}
                         {% endfor %}
                     </ul>
-                   <span class="tracking-box-legend">
+                    <span class="tracking-box-legend">
                        {{ 'Note: This progress is obtained through a combination of progress in the learning paths and average scores in the tests'|trans }}
                    </span>
                 </div>
@@ -193,4 +298,3 @@ $(() => {
         </div>
     </div>
 </div>
-

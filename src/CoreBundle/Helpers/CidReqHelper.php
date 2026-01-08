@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Helpers;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\EventListener\CidReqListener;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -69,6 +70,11 @@ class CidReqHelper
         $session = $this->getSessionHandler();
 
         return $session?->get('gid');
+    }
+
+    public function getGroupEntity(): ?CGroup
+    {
+        return $this->getSessionHandler()->get('group');
     }
 
     public function getDoctrineCourseEntity(): ?Course

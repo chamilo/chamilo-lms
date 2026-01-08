@@ -172,7 +172,7 @@ class Gradebook extends Model
         $skills = $skill->get_all();
         $clean_skill_list = [];
         foreach ($skills as $skill) {
-            $clean_skill_list[$skill['id']] = $skill['name'];
+            $clean_skill_list[$skill['id']] = $skill['title'];
         }
         $form->addSelect(
             'skill',

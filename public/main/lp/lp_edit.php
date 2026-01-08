@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Search\Xapian\LpXapianIndexer;
 use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
 
@@ -143,26 +144,17 @@ $form->addRule(
     ['jpg', 'jpeg', 'png', 'gif']
 );
 
-// Search terms (only if search is activated).
+// Search toggle (only if global search is enabled).
 if ('true' === api_get_setting('search_enabled')) {
-    $specific_fields = get_specific_field_list();
-    foreach ($specific_fields as $specific_field) {
-        $form->addElement('text', $specific_field['code'], $specific_field['name']);
-        $filter = [
-            'c_id' => "'".api_get_course_int_id()."'",
-            'field_id' => $specific_field['id'],
-            'ref_id' => $learnPath->lp_id,
-            'tool_id' => '\''.TOOL_LEARNPATH.'\'',
-        ];
-        $values = get_specific_field_values_list($filter, ['value']);
-        if (!empty($values)) {
-            $arr_str_values = [];
-            foreach ($values as $value) {
-                $arr_str_values[] = $value['value'];
-            }
-            $defaults[$specific_field['code']] = implode(', ', $arr_str_values);
-        }
-    }
+    $form->addElement(
+        'checkbox',
+        'search_index_enabled',
+        null,
+        get_lang('Include this learning path in the global search results')
+    );
+
+    // Default: enabled
+    $defaults['search_index_enabled'] = 1;
 }
 
 $hideTableOfContents = (int) $lp->getHideTocFrame();
@@ -385,38 +377,26 @@ if ($form->validate()) {
 
     $lpRepo->update($lp);
 
+    // Optional: trigger Xapian index based on checkbox value
+    if ('true' === api_get_setting('search_enabled')) {
+        try {
+            /** @var LpXapianIndexer $lpIndexer */
+            $lpIndexer = Container::$container->get('chamilo_core.search.lp_xapian_indexer');
+
+            if (!empty($_REQUEST['search_index_enabled'])) {
+                $lpIndexer->indexLp($lp);
+            } else {
+                $lpIndexer->deleteLpIndex($lp);
+            }
+        } catch (\Throwable $e) {
+            // Best-effort: do not break form save if search service fails
+        }
+    }
+
     $form = new FormValidator('form1');
     $form->addSelect('skills', 'skills');
     SkillModel::saveSkills($form, ITEM_TYPE_LEARNPATH, $lpId);
 
-    if ('true' === api_get_setting('search_enabled')) {
-        $specific_fields = get_specific_field_list();
-        foreach ($specific_fields as $specific_field) {
-            $learnPath->set_terms_by_prefix($_REQUEST[$specific_field['code']], $specific_field['code']);
-            $new_values = explode(',', trim($_REQUEST[$specific_field['code']]));
-            if (!empty($new_values)) {
-                array_walk($new_values, 'trim');
-                delete_all_specific_field_value(
-                    api_get_course_id(),
-                    $specific_field['id'],
-                    TOOL_LEARNPATH,
-                    $lpId
-                );
-
-                foreach ($new_values as $value) {
-                    if (!empty($value)) {
-                        add_specific_field_value(
-                            $specific_field['id'],
-                            api_get_course_id(),
-                            TOOL_LEARNPATH,
-                            $lpId,
-                            $value
-                        );
-                    }
-                }
-            }
-        }
-    }
     Display::addFlash(Display::return_message(get_lang('Update successful')));
     $url = api_get_self().'?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();
     header('Location: '.$url);

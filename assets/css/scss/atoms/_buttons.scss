@@ -1,5 +1,5 @@
 .btn {
-  @apply cursor-default font-semibold gap-2 inline-flex justify-center items-center px-6 py-2 rounded-md transition flex-none text-base;
+  @apply cursor-pointer font-semibold gap-2 inline-flex justify-center items-center px-6 py-2 rounded-md transition flex-none text-base;
 
   .mdi {
     @apply text-base;
@@ -286,7 +286,7 @@ $border-color_12: #9333EA;
   }
 
   &.p-button-icon-only {
-    @apply px-3;
+    @apply px-3 gap-0;
 
     .p-button-label {
       @apply flex-initial hidden w-0;

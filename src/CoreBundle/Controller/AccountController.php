@@ -32,6 +32,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -47,6 +48,7 @@ class AccountController extends BaseController
         private readonly TranslatorInterface $translator
     ) {}
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/edit', name: 'chamilo_core_account_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
@@ -55,10 +57,6 @@ class AccountController extends BaseController
         SettingsManager $settingsManager
     ): Response {
         $user = $this->userHelper->getCurrent();
-
-        if (!\is_object($user) || !$user instanceof UserInterface) {
-            throw $this->createAccessDeniedException('This user does not have access to this section');
-        }
 
         /** @var User $user */
         $form = $this->createForm(ProfileType::class, $user);

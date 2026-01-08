@@ -18,7 +18,7 @@ use Question;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 use const FILTER_SANITIZE_NUMBER_INT;
 
@@ -52,7 +52,7 @@ class AiController extends AbstractController
                 ], 400);
             }
 
-            $aiService = $this->aiProviderFactory->getProvider($aiProvider);
+            $aiService = $this->aiProviderFactory->getProvider($aiProvider, 'text');
             $questions = $aiService->generateQuestions($topic, $nQ, $questionType, $language);
 
             if (str_starts_with($questions, 'Error:')) {
@@ -174,5 +174,47 @@ class AiController extends AbstractController
             'score' => $score,
             'feedback' => $feedback,
         ]);
+    }
+
+    #[Route('/generate_image', name: 'chamilo_core_ai_generate_image', methods: ['POST'])]
+    public function generateImage(Request $request): JsonResponse
+    {
+        try {
+            $data = json_decode($request->getContent(), true);
+            $n = (int) ($data['n'] ?? 1);
+            $language = (string) ($data['language'] ?? 'en');
+            $prompt = trim((string) ($data['prompt'] ?? ''));
+            $toolName = trim((string) ($data['tool'] ?? 'document'));
+            $aiProvider = $data['ai_provider'] ?? null;
+
+            if ($n <= 0 || empty($prompt) || empty($toolName)) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Invalid request parameters. Ensure all fields are filled correctly.',
+                ], 400);
+            }
+
+            $aiService = $this->aiProviderFactory->getProvider($aiProvider, 'image');
+            $questions = $aiService->generateImage($prompt, $toolName, ['language' => $language, 'n' => $n]);
+
+            if (str_starts_with($questions, 'Error:')) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => $questions,
+                ], 500);
+            }
+
+            return new JsonResponse([
+                'success' => true,
+                'text' => trim($questions),
+            ]);
+        } catch (Exception $e) {
+            error_log('AI Request failed: '.$e->getMessage());
+
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'An error occurred while generating questions. Please contact the administrator.',
+            ], 500);
+        }
     }
 }

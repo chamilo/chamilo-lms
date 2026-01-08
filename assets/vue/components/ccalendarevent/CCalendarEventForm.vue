@@ -54,12 +54,12 @@ import { computed, ref, watch, onMounted } from "vue"
 import { useRoute } from "vue-router"
 import { useVuelidate } from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
-import BaseInputText from "../basecomponents/BaseInputText.vue"
 import { useI18n } from "vue-i18n"
+import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseCalendar from "../basecomponents/BaseCalendar.vue"
+import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 import CalendarInvitations from "./CalendarInvitations.vue"
 import CalendarRemindersEditor from "./CalendarRemindersEditor.vue"
-import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -71,16 +71,25 @@ const props = defineProps({
   },
   errors: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
   initialValues: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
   isGlobal: Boolean,
 })
 
-const item = computed(() => props.initialValues || props.values)
+function isNonEmptyObject(v) {
+  return v && typeof v === "object" && !Array.isArray(v) && Object.keys(v).length > 0
+}
+
+const item = computed(() => {
+  if (isNonEmptyObject(props.initialValues)) {
+    return props.initialValues
+  }
+  return props.values
+})
 
 const rules = computed(() => ({
   item: {
@@ -105,15 +114,23 @@ defineExpose({
   v$,
 })
 
-const dateRange = ref()
+const dateRange = ref([null, null])
 
-if (item.value?.startDate || item.value?.endDate) {
-  dateRange.value = [item.value?.startDate, item.value?.endDate]
-}
+watch(
+  () => [item.value?.startDate, item.value?.endDate],
+  ([start, end]) => {
+    dateRange.value = [start ?? null, end ?? null]
+  },
+  { immediate: true },
+)
 
 watch(dateRange, (newValue) => {
-  item.value.startDate = newValue[0]
-  item.value.endDate = newValue[1]
+  if (!Array.isArray(newValue)) {
+    return
+  }
+
+  item.value.startDate = newValue[0] ?? null
+  item.value.endDate = newValue[1] ?? null
 })
 
 function getContextTypeFromRoute() {
@@ -150,7 +167,10 @@ function toHex(c) {
     const r = Math.min(255, +rgb[1])
     const g = Math.min(255, +rgb[2])
     const b = Math.min(255, +rgb[3])
-    return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`.toUpperCase()
+
+    return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b
+      .toString(16)
+      .padStart(2, "0")}`.toUpperCase()
   }
   const names = {
     YELLOW: "#FFFF00",
@@ -163,13 +183,26 @@ function toHex(c) {
   return names[s.toUpperCase()] || null
 }
 
-onMounted(() => {
+function ensureValidColor() {
   const normalized = toHex(item.value?.color)
   if (normalized) {
     item.value.color = normalized
-  } else if (!item.value?.color) {
-    const type = getContextTypeFromRoute()
-    item.value.color = getDefaultColorByType(type)
+    return
   }
+
+  const type = getContextTypeFromRoute()
+  item.value.color = getDefaultColorByType(type)
+}
+
+onMounted(() => {
+  ensureValidColor()
 })
+
+watch(
+  () => item.value,
+  () => {
+    ensureValidColor()
+  },
+  { immediate: true },
+)
 </script>

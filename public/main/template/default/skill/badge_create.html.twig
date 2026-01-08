@@ -1,721 +1,961 @@
-<script>
-    $(function() {
-      $("#image").on("change", function() {
-        var self = this
-
-        if (self.files.length > 0) {
-          var image = self.files[0]
-
-          if (!image.type.match(/image.*/)) {
-            return
-          }
-
-          var fileReader = new FileReader()
-          fileReader.onload = function(e) {
-            $("#badge-preview").attr("src", e.target.result)
-            $("#badge-container").removeClass("hide")
-          }
-          fileReader.readAsDataURL(image)
-        }
-      })
-    })
-</script>
-
 <div class="section-header section-header--h2">
     <h2 class="section-header__title">{{ skill.title }}</h2>
 </div>
 
-<div class="grid md:grid-cols-3 gap-4">
-    <div class="order-last md:order-first col-span-2">
-        <form action="{{ current_url }}" class="form-horizontal" method="post" enctype="multipart/form-data">
-            <div class="field">
-                <div class="float-label">
-                    <label for="image">{{ 'Image'|trans }}</label>
-                    <input data-placement="left" data-toggle="tooltip" type="file" name="image" id="image"
-                           accept="image/*">
+<div class="w-full">
+    <div class="w-full max-w-none px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row gap-6 items-start">
+
+            {# LEFT #}
+            <div class="w-full min-w-0 lg:basis-2/3">
+                <div class="bg-white border border-gray-30 rounded-2xl shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-gray-100">
+                        <h3 class="text-base font-semibold text-gray-900">{{ "Badge"|trans }}</h3>
+                        <p class="mt-1 text-sm text-gray-600">{{ "Badge measures 200x200 pixels in PNG"|trans }}</p>
+                    </div>
+
+                    <form id="badge-form" action="{{ current_url }}" method="post" enctype="multipart/form-data" class="p-6 space-y-6">
+
+                        {# Upload #}
+                        <div class="min-w-0">
+                            <label for="image" class="block text-sm font-medium text-gray-800">{{ "Image"|trans }}</label>
+
+                            <div class="mt-2 min-w-0">
+                                <input
+                                        type="file"
+                                        name="image"
+                                        id="image"
+                                        accept="image/*"
+                                        class="block w-full max-w-full text-sm text-gray-700
+                                           file:mr-4 file:py-2 file:px-4
+                                           file:rounded-lg file:border-0
+                                           file:bg-primary/10 file:text-primary
+                                           hover:file:bg-primary/15
+                                           border border-gray-30 rounded-lg px-3 py-2"
+                                />
+                            </div>
+
+                            <div class="mt-3 flex items-center gap-2">
+                                <span id="badge-status-pill"
+                                      class="inline-flex items-center rounded-full border border-gray-200 bg-gray-50 px-2.5 py-1 text-xs font-semibold text-gray-700">
+                                    •
+                                </span>
+                                <span id="badge-status-text" class="text-xs text-gray-600">
+                                    {{ "No image selected"|trans }}
+                                </span>
+                            </div>
+
+                            <p class="mt-2 text-xs text-gray-500">{{ "Badge measures 200x200 pixels in PNG"|trans }}</p>
+                        </div>
+
+                        {# Badge Studio (collapsed by default, NOT display:none) #}
+                        <div
+                                id="badge-studio-frame"
+                                class="max-h-0 opacity-0 overflow-hidden pointer-events-none transition-all duration-200"
+                        >
+                            <div class="rounded-2xl border border-gray-30 bg-gray-10 p-4">
+                                <div class="flex items-start justify-between gap-3">
+                                    <div class="min-w-0">
+                                        <h4 class="text-sm font-semibold text-gray-900">Badge Studio</h4>
+                                        <p class="mt-1 text-xs text-gray-600">
+                                            {{ "Use the Badge Studio to create your own badge from within your platform"|trans }}
+                                        </p>
+                                    </div>
+
+                                    <button
+                                            id="btn-close-badge-studio"
+                                            type="button"
+                                            class="shrink-0 inline-flex items-center justify-center rounded-lg border border-gray-30 bg-white px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50"
+                                            aria-label="Close Badge Studio"
+                                            title="Close"
+                                    >✕</button>
+                                </div>
+
+                                <div class="mt-4">
+                                    {# Keep structure/IDs used by studio.js #}
+                                    <div id="studio">
+                                        <div id="input" class="space-y-4">
+
+                                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                                <div class="space-y-3 min-w-0">
+                                                    <div>
+                                                        <label for="studio-template" class="block text-xs font-semibold text-gray-800">{{ "Templates"|trans }}</label>
+                                                        <select
+                                                                name="template"
+                                                                id="studio-template"
+                                                                data-path="{{ badge_studio.templates }}"
+                                                                class="mt-1 block w-full rounded-lg border border-gray-30 bg-white px-3 py-2 text-sm"
+                                                        >
+                                                            <option value="template-1">{{ "Template"|trans }} 1</option>
+                                                            <option value="template-2">{{ "Template"|trans }} 2</option>
+                                                            <option value="template-3">{{ "Template"|trans }} 3</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div>
+                                                        <label for="studio-palette" class="block text-xs font-semibold text-gray-800">{{ "Palettes"|trans }}</label>
+                                                        <select
+                                                                name="palette"
+                                                                id="studio-palette"
+                                                                class="mt-1 block w-full rounded-lg border border-gray-30 bg-white px-3 py-2 text-sm"
+                                                        >
+                                                            <option
+                                                                    value="palette-1"
+                                                                    data-color-background="#CE001F"
+                                                                    data-color-stitching="#FFF"
+                                                                    data-color-border="#4C4F53"
+                                                                    data-color-detail="#999"
+                                                                    data-color-glyph="#FFF"
+                                                            >{{ "Palette"|trans }} 1</option>
+
+                                                            <option
+                                                                    value="palette-2"
+                                                                    data-color-background="#04A"
+                                                                    data-color-stitching="#0AE"
+                                                                    data-color-border="#0AE"
+                                                                    data-color-detail="#FFF"
+                                                                    data-color-glyph="#FFF"
+                                                            >{{ "Palette"|trans }} 2</option>
+
+                                                            <option
+                                                                    value="palette-3"
+                                                                    data-color-background="#11458B"
+                                                                    data-color-stitching="#3EB48D"
+                                                                    data-color-border="#3EB48D"
+                                                                    data-color-detail="#FFF"
+                                                                    data-color-glyph="#FFF"
+                                                            >{{ "Palette"|trans }} 3</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div>
+                                                        <label class="block text-xs font-semibold text-gray-800">{{ "Colors"|trans }}</label>
+                                                        <div id="custom-palette" class="mt-2"></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="md:col-span-3 min-w-0">
+                                                    <div class="rounded-xl border border-gray-30 bg-white p-3 min-w-0 overflow-hidden">
+                                                        <div id="output" class="min-h-[280px] relative"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                                <div class="min-w-0">
+                                                    <label for="studio-mask" class="block text-xs font-semibold text-gray-800">{{ "Mask"|trans }}</label>
+                                                    <select
+                                                            name="mask"
+                                                            id="studio-mask"
+                                                            data-path="{{ badge_studio.masks }}"
+                                                            class="mt-1 block w-full rounded-lg border border-gray-30 bg-white px-3 py-2 text-sm"
+                                                    >
+                                                        <option value="">{{ "None"|trans }}</option>
+                                                        <option value="lines">{{ "Lines"|trans }}</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="min-w-0">
+                                                    <label class="block text-xs font-semibold text-gray-800">{{ "Options"|trans }}</label>
+                                                    <div id="options" class="mt-2 text-sm text-gray-600">
+                                                        <i>{{ "None"|trans }}</i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="md:col-span-2 space-y-3 min-w-0">
+                                                    <div>
+                                                        <label for="glyph" class="block text-xs font-semibold text-gray-800">{{ "Icon"|trans }}</label>
+
+                                                        <select
+                                                                name="glyph"
+                                                                id="glyph"
+                                                                class="mt-1 block w-full rounded-lg border border-gray-30 bg-white px-3 py-2 text-sm"
+                                                        >
+                                                            <option value="">{{ "None"|trans }}</option>
+
+                                                            {% if badge_studio.glyph_options is defined and badge_studio.glyph_options is not empty %}
+                                                                {{ badge_studio.glyph_options|raw }}
+                                                            {% else %}
+                                                                <optgroup label="Basics">
+                                                                    <option value="check">Check</option>
+                                                                    <option value="times">Times</option>
+                                                                    <option value="plus">Plus</option>
+                                                                    <option value="minus">Minus</option>
+                                                                    <option value="star">Star</option>
+                                                                    <option value="star-fill">Star Fill</option>
+                                                                    <option value="heart">Heart</option>
+                                                                    <option value="bookmark">Bookmark</option>
+                                                                    <option value="flag">Flag</option>
+                                                                    <option value="tag">Tag</option>
+                                                                    <option value="info-circle">Info</option>
+                                                                    <option value="question-circle">Help</option>
+                                                                    <option value="exclamation-triangle">Warning</option>
+                                                                </optgroup>
+
+                                                                <optgroup label="Learning">
+                                                                    <option value="book">Book</option>
+                                                                    <option value="file">File</option>
+                                                                    <option value="file-edit">Edit File</option>
+                                                                    <option value="folder">Folder</option>
+                                                                    <option value="copy">Copy</option>
+                                                                    <option value="pencil">Pencil</option>
+                                                                    <option value="save">Save</option>
+                                                                    <option value="calendar">Calendar</option>
+                                                                    <option value="clock">Clock</option>
+                                                                </optgroup>
+
+                                                                <optgroup label="Communication">
+                                                                    <option value="envelope">Envelope</option>
+                                                                    <option value="comment">Comment</option>
+                                                                    <option value="comments">Comments</option>
+                                                                    <option value="bell">Bell</option>
+                                                                    <option value="send">Send</option>
+                                                                    <option value="volume-up">Volume</option>
+                                                                </optgroup>
+
+                                                                <optgroup label="Security">
+                                                                    <option value="lock">Lock</option>
+                                                                    <option value="unlock">Unlock</option>
+                                                                    <option value="shield">Shield</option>
+                                                                    <option value="key">Key</option>
+                                                                </optgroup>
+
+                                                                <optgroup label="Tech">
+                                                                    <option value="cog">Cog</option>
+                                                                    <option value="code">Code</option>
+                                                                    <option value="database">Database</option>
+                                                                    <option value="desktop">Desktop</option>
+                                                                    <option value="mobile">Mobile</option>
+                                                                    <option value="cloud">Cloud</option>
+                                                                    <option value="wifi">WiFi</option>
+                                                                </optgroup>
+
+                                                                <optgroup label="Actions">
+                                                                    <option value="upload">Upload</option>
+                                                                    <option value="download">Download</option>
+                                                                    <option value="trash">Trash</option>
+                                                                    <option value="refresh">Refresh</option>
+                                                                    <option value="search">Search</option>
+                                                                    <option value="filter">Filter</option>
+                                                                </optgroup>
+
+                                                                <optgroup label="Legacy">
+                                                                    <option value="archive">Archive</option>
+                                                                    <option value="anchor">Anchor</option>
+                                                                    <option value="android">Android</option>
+                                                                    <option value="apple">Apple</option>
+                                                                </optgroup>
+                                                            {% endif %}
+                                                        </select>
+
+                                                        {# Some studio builds reference this #}
+                                                        <select id="studio-glyph" class="hidden" aria-hidden="true" tabindex="-1"></select>
+                                                    </div>
+
+                                                    <div>
+                                                        <label for="size-glyph" class="block text-xs font-semibold text-gray-800">{{ "Size"|trans }}</label>
+                                                        <select
+                                                                name="size-glyph"
+                                                                id="size-glyph"
+                                                                class="mt-1 block w-full rounded-lg border border-gray-30 bg-white px-3 py-2 text-sm"
+                                                        >
+                                                            <option value="big">{{ "Big"|trans }}</option>
+                                                            <option value="medium" selected>{{ "Medium"|trans }}</option>
+                                                            <option value="small">{{ "Small"|trans }}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="flex items-center justify-center gap-3 pt-2">
+                                                <a
+                                                        id="set-custom-badge"
+                                                        href="#"
+                                                        class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
+                                                >✓ {{ "Use this badge"|trans }}</a>
+
+                                                <input type="hidden" id="badge_studio_image" name="badge_studio_image" />
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    {# Templates needed by studio.js (keep as-is) #}
+                                    <template id="glyph-selector-template">
+                                        <div id="glyph-selector" role="dialog" class="overlay hidden" aria-label="Select a glyph" tabIndex="0">
+                                            <div class="header" style="position: relative;">
+                                                <label class="title"></label>
+                                                <button type="button" class="bs-glyph-close" aria-label="Close">×</button>
+                                            </div>
+                                            <div class="panel"><ul></ul></div>
+                                        </div>
+                                    </template>
+
+                                    <template id="glyph-selector-item-template">
+                                        <li>
+                                            <input type="radio" name="glyph-selector-item" class="hidden" />
+                                            <label></label>
+                                        </li>
+                                    </template>
+
+                                    <template id="option-template">
+                                        <label>
+                                            <input type="checkbox" />
+                                            <span>Label</span>
+                                        </label>
+                                    </template>
+
+                                    <template id="close-button-template">
+                                        <button type="button" class="close" aria-label="Close">×</button>
+                                    </template>
+
+                                    <template id="custom-color-template">
+                                        <label>
+                                            <input type="color" />
+                                            <span>Label</span>
+                                        </label>
+                                    </template>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <small>{{ "Badge measures 200x200 pixels in PNG"|trans }}</small>
             </div>
-            <div class="form-group invisible" id="badge-studio-frame">
-                <label for="criteria"></label>
-                <div class="col-sm-10">
-                    <h1 class="title">Badge Studio</h1>
-                    <div class="" id="studio">
-                        <div id="input" class="space-y-4">
-                            <div class="grid md:grid-cols-4 gap-4">
-                                <div>
-                                    <h3 class="label"><label for="studio-mask">{{ "Templates"|trans }}</label></h3>
-                                    <select name="template" class="form-control" id="studio-template"
-                                            data-path="{{ badge_studio.templates }}">
-                                        <option value="template-1">{{ "Template"|trans }} 1</option>
-                                        <option value="template-2">{{ "Template"|trans }} 2</option>
-                                        <option value="template-3">{{ "Template"|trans }} 3</option>
-                                    </select>
-                                    <h3 class="label"><label for="studio-mask">{{ "Palettes"|trans }}</label></h3>
-                                    <select name="palette" class="form-control" id="studio-palette">
-                                        <option value="palette-1" data-color-background="#CE001F"
-                                                data-color-stitching="#FFF" data-color-border="#4C4F53"
-                                                data-color-detail="#999" data-color-glyph="#FFF">
-                                            {{ "Palette"|trans }} 1
-                                        </option>
-                                        <option value="palette-2" data-color-background="#04A"
-                                                data-color-stitching="#0AE" data-color-border="#0AE"
-                                                data-color-detail="#FFF" data-color-glyph="#FFF">
-                                            {{ "Palette"|trans }} 2
-                                        </option>
-                                        <option value="palette-3" data-color-background="#11458B"
-                                                data-color-stitching="#3EB48D" data-color-border="#3EB48D"
-                                                data-color-detail="#FFF" data-color-glyph="#FFF">
-                                            {{ "Palette"|trans }} 3
-                                        </option>
-                                    </select>
-                                    <br />
-                                    <h3 class="label"><label for="studio-mask">{{ "Colors"|trans }}</label></h3>
-                                    <div id="custom-palette"></div>
-                                </div>
-                                <div class="md:col-span-3">
-                                    <div id="output"></div>
-                                </div>
+
+            {# RIGHT #}
+            <div class="w-full min-w-0 lg:basis-1/3 lg:sticky lg:top-6 self-start">
+                <div class="bg-white border border-gray-30 rounded-2xl shadow-sm p-6 space-y-5 overflow-hidden">
+                    <div>
+                        <h3 class="text-base font-semibold text-gray-900">{{ "Badge preview"|trans }}</h3>
+                        <p class="mt-1 text-sm text-gray-600">{{ "Upload an image or create one with Badge Studio."|trans }}</p>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <div class="w-[240px] max-w-full">
+                            <div
+                                    id="badge-container"
+                                    class="{% if (badge_url|default('')) is empty %}hidden{% endif %} rounded-2xl border border-gray-30 bg-gray-10 p-3"
+                            >
+                                <img
+                                        id="badge-preview"
+                                        src="{{ badge_url|default('') }}"
+                                        alt="{{ "Badge preview"|trans }}"
+                                        class="w-full h-auto rounded-xl {% if (badge_url|default('')) is empty %}hidden{% endif %}"
+                                />
                             </div>
-                            <div class="grid md:grid-cols-4 gap-4">
-                                <div>
-                                    <h3 class="label"><label for="studio-mask">{{ "Mask"|trans }}</label></h3>
-                                    <p class="item">
-                                        <select name="mask" class="form-control" id="studio-mask"
-                                                data-path="{{ badge_studio.masks }}">
-                                            <option value="">{{ "None"|trans }}</option>
-                                            <option value="lines">{{ "Lines"|trans }}</option>
-                                        </select>
-                                    </p>
-                                </div>
-                                <div>
-                                    <h3 class="label"><label for="studio-options">{{ "Options"|trans }}</label></h3>
-                                    <p class="item" id="options">
-                                        <i>None</i>
-                                    </p>
-                                </div>
-                                <div class="col-span-2">
-                                    <h3 class="label"><label for="studio-glyph">{{ "Icon"|trans }}</label></h3>
-                                    <p class="item">
-                                        <select name="glyph" class="form-control" id="studio-glyph">
-                                            <option value="">None</option>
-                                            <option value="ambulance">Ambulance</option>
-                                            <option value="anchor">Anchor</option>
-                                            <option value="android">Android</option>
-                                            <option value="angle-down">Angle: Down</option>
-                                            <option value="angle-double-down">Angle: Down (Double)</option>
-                                            <option value="angle-left">Angle: Left</option>
-                                            <option value="angle-double-left">Angle: Left (Double)</option>
-                                            <option value="angle-right">Angle: Right</option>
-                                            <option value="angle-double-right">Angle: Right (Double)</option>
-                                            <option value="angle-up">Angle: Up</option>
-                                            <option value="angle-double-up">Angle: Up (Double)</option>
-                                            <option value="apple">Apple</option>
-                                            <option value="archive">Archive</option>
-                                            <option value="arrow-down">Arrow: Down</option>
-                                            <option value="arrow-circle-down">Arrow: Down (Circle)</option>
-                                            <option value="arrow-circle-o-down">Arrow: Down (Circle-O)</option>
-                                            <option value="arrow-left">Arrow (Left)</option>
-                                            <option value="arrow-circle-left">Arrow: Left (Circle)</option>
-                                            <option value="arrow-circle-o-left">Arrow: Left (Circle-O)</option>
-                                            <option value="arrow-right">Arrow: Right</option>
-                                            <option value="arrow-circle-right">Arrow: Right (Circle)</option>
-                                            <option value="arrow-circle-o-right">Arrow: Right (Circle-O)</option>
-                                            <option value="arrow-up">Arrow: Up</option>
-                                            <option value="arrow-circle-up">Arrow: Up (Circle)</option>
-                                            <option value="arrow-circle-o-up">Arrow: Up (Circle-O)</option>
-                                            <option value="arrows">Arrows</option>
-                                            <option value="arrows-alt">Arrows (Alt)</option>
-                                            <option value="arrows-h">Arrows: Horizontal</option>
-                                            <option value="arrows-v">Arrows: Vertical</option>
-                                            <option value="asterisk">Asterisk</option>
-                                            <option value="automobile">Automobile</option>
-                                            <option value="backward">Backward</option>
-                                            <option value="ban">Ban</option>
-                                            <option value="bank">Bank</option>
-                                            <option value="bar-chart-o">Bar Chart (O)</option>
-                                            <option value="barcode">Barcode</option>
-                                            <option value="bars">Bars</option>
-                                            <option value="beer">Beer</option>
-                                            <option value="behance">Behance</option>
-                                            <option value="behance-square">Behance (Square)</option>
-                                            <option value="bell">Bell</option>
-                                            <option value="bell-o">Bell (O)</option>
-                                            <option value="bitbucket">BitBucket</option>
-                                            <option value="bitbucket-square">BitBucket (Square)</option>
-                                            <option value="bitcoin">Bitcoin</option>
-                                            <option value="bold">Bold</option>
-                                            <option value="bolt">Bolt</option>
-                                            <option value="bomb">Bomb</option>
-                                            <option value="book">Book</option>
-                                            <option value="bookmark">Bookmark</option>
-                                            <option value="bookmark-o">Bookmark (O)</option>
-                                            <option value="briefcase">Briefcase</option>
-                                            <option value="btc">BTC</option>
-                                            <option value="bug">Bug</option>
-                                            <option value="building">Building</option>
-                                            <option value="building-o">Building (O)</option>
-                                            <option value="bullhorn">Bullhorn</option>
-                                            <option value="bullseye">Bullseye</option>
-                                            <option value="cab">Cab</option>
-                                            <option value="calendar">Calendar</option>
-                                            <option value="calendar-o">Calendar (O)</option>
-                                            <option value="camera">Camera</option>
-                                            <option value="camera-retro">Camera (Retro)</option>
-                                            <option value="car">Car</option>
-                                            <option value="caret-down">Caret: Down</option>
-                                            <option value="caret-square-o-down">Caret: Down (Square-O)</option>
-                                            <option value="caret-left">Caret: Left</option>
-                                            <option value="caret-square-o-left">Caret: Left (Square-O)</option>
-                                            <option value="caret-right">Caret: Right</option>
-                                            <option value="caret-square-o-right">Caret: Right (Square-O)</option>
-                                            <option value="caret-up">Caret: Up</option>
-                                            <option value="caret-square-o-up">Caret: Up (Square-O)</option>
-                                            <option value="certificate">Certificate</option>
-                                            <option value="chain">Chain</option>
-                                            <option value="chain-broken">Chain (Broken)</option>
-                                            <option value="check">Check</option>
-                                            <option value="check-circle">Check (Circle)</option>
-                                            <option value="check-circle-o">Check (Circle-O)</option>
-                                            <option value="check-square">Check (Square)</option>
-                                            <option value="check-square-o">Check (Square-O)</option>
-                                            <option value="chevron-down">Chevron: Down</option>
-                                            <option value="chevron-circle-down">Chevron: Down (Circle)</option>
-                                            <option value="chevron-left">Chevron: Left</option>
-                                            <option value="chevron-circle-left">Chevron: Left (Circle)</option>
-                                            <option value="chevron-right">Chevron: Right</option>
-                                            <option value="chevron-circle-right">Chevron: Right (Circle)</option>
-                                            <option value="chevron-up">Chevron: Up</option>
-                                            <option value="chevron-circle-up">Chevron: Up (Circle)</option>
-                                            <option value="child">Child</option>
-                                            <option value="circle">Circle</option>
-                                            <option value="circle-o">Circle (O)</option>
-                                            <option value="circle-o-notch">Circle (O Notch)</option>
-                                            <option value="circle-thin">Circle (Thin)</option>
-                                            <option value="clipboard">Clipboard</option>
-                                            <option value="clock-o">Clock (O)</option>
-                                            <option value="cloud">Cloud</option>
-                                            <option value="cloud-download">Cloud: Download</option>
-                                            <option value="cloud-upload">Cloud: Upload</option>
-                                            <option value="cny">CNY</option>
-                                            <option value="code">Code</option>
-                                            <option value="code-fork">Code (Fork)</option>
-                                            <option value="codepen">Codepen</option>
-                                            <option value="coffee">Coffee</option>
-                                            <option value="cog">Cog</option>
-                                            <option value="cogs">Cogs</option>
-                                            <option value="columns">Columns</option>
-                                            <option value="comment">Comment</option>
-                                            <option value="comment-o">Comment (O)</option>
-                                            <option value="comments">Comments</option>
-                                            <option value="comments-o">Comments (O)</option>
-                                            <option value="compass">Compass</option>
-                                            <option value="compress">Compress</option>
-                                            <option value="copy">Copy</option>
-                                            <option value="credit-card">Credit (Card)</option>
-                                            <option value="crop">Crop</option>
-                                            <option value="crosshairs">Crosshairs</option>
-                                            <option value="css3">CSS3</option>
-                                            <option value="cube">Cube</option>
-                                            <option value="cubes">Cubes</option>
-                                            <option value="cut">Cut</option>
-                                            <option value="cutlery">Cutlery</option>
-                                            <option value="dashboard">Dashboard</option>
-                                            <option value="database">Database</option>
-                                            <option value="dedent">Dedent</option>
-                                            <option value="delicious">Delicious</option>
-                                            <option value="desktop">Desktop</option>
-                                            <option value="deviantart">Deviantart</option>
-                                            <option value="digg">Digg</option>
-                                            <option value="dollar">Dollar</option>
-                                            <option value="dot-circle-o">Dot (Circle-O)</option>
-                                            <option value="download">Download</option>
-                                            <option value="dribbble">Dribbble</option>
-                                            <option value="dropbox">Dropbox</option>
-                                            <option value="drupal">Drupal</option>
-                                            <option value="edit">Edit</option>
-                                            <option value="eject">Eject</option>
-                                            <option value="ellipsis-h">Ellipsis (Horizontal)</option>
-                                            <option value="ellipsis-v">Ellipsis (Vertical)</option>
-                                            <option value="empire">Empire</option>
-                                            <option value="envelope">Envelope</option>
-                                            <option value="envelope-o">Envelope (O)</option>
-                                            <option value="envelope-square">Envelope (Square)</option>
-                                            <option value="eraser">Eraser</option>
-                                            <option value="eur">EUR</option>
-                                            <option value="euro">Euro</option>
-                                            <option value="exchange">Exchange</option>
-                                            <option value="exclamation">Exclamation</option>
-                                            <option value="exclamation-circle">Exclamation (Circle)</option>
-                                            <option value="exclamation-triangle">Exclamation (Triangle)</option>
-                                            <option value="expand">Expand</option>
-                                            <option value="external-link">External Link</option>
-                                            <option value="external-link-square">External Link (Square)</option>
-                                            <option value="eye">Eye</option>
-                                            <option value="eye-slash">Eye (Slash)</option>
-                                            <option value="facebook">Facebook</option>
-                                            <option value="facebook-square">Facebook (Square)</option>
-                                            <option value="fast-backward">Fast Rewind</option>
-                                            <option value="fast-forward">Fast Forward</option>
-                                            <option value="fax">Fax</option>
-                                            <option value="female">Female</option>
-                                            <option value="fighter-jet">Fighter Jet</option>
-                                            <option value="file">File</option>
-                                            <option value="file-o">File (O)</option>
-                                            <option value="files-o">Files (O)</option>
-                                            <option value="file-archive-o">File: Archive (O)</option>
-                                            <option value="file-audio-o">File: Audio (O)</option>
-                                            <option value="file-code-o">File: Code (O)</option>
-                                            <option value="file-excel-o">File: Excel (O)</option>
-                                            <option value="file-image-o">File: Image (O)</option>
-                                            <option value="file-movie-o">File: Movie (O)</option>
-                                            <option value="file-pdf-o">File: PDF (O)</option>
-                                            <option value="file-photo-o">File: Photo (O)</option>
-                                            <option value="file-picture-o">File: Picture (O)</option>
-                                            <option value="file-powerpoint-o">File: Powerpoint (O)</option>
-                                            <option value="file-sound-o">File: Sound (O)</option>
-                                            <option value="file-text">File: Text</option>
-                                            <option value="file-text-o">File: Text (O)</option>
-                                            <option value="file-video-o">File: Video (O)</option>
-                                            <option value="file-word-o">File: Word (O)</option>
-                                            <option value="file-zip-o">File: Zip (O)</option>
-                                            <option value="film">Film</option>
-                                            <option value="filter">Filter</option>
-                                            <option value="fire">Fire</option>
-                                            <option value="fire-extinguisher">Fire Extinguisher</option>
-                                            <option value="flag">Flag</option>
-                                            <option value="flag-o">Flag (O)</option>
-                                            <option value="flag-checkered">Flag: Checkered</option>
-                                            <option value="flash">Flash</option>
-                                            <option value="flask">Flask</option>
-                                            <option value="flickr">Flickr</option>
-                                            <option value="floppy-o">Floppy (O)</option>
-                                            <option value="folder">Folder</option>
-                                            <option value="folder-o">Folder (O)</option>
-                                            <option value="folder-open">Folder: Open</option>
-                                            <option value="folder-open-o">Folder: Open (O)</option>
-                                            <option value="font">Font</option>
-                                            <option value="forward">Forward</option>
-                                            <option value="foursquare">Foursquare</option>
-                                            <option value="frown-o">Frown (O)</option>
-                                            <option value="gamepad">Gamepad</option>
-                                            <option value="gavel">Gavel</option>
-                                            <option value="gbp">GBP</option>
-                                            <option value="ge">Ge</option>
-                                            <option value="gear">Gear</option>
-                                            <option value="gears">Gears</option>
-                                            <option value="gift">Gift</option>
-                                            <option value="git">Git</option>
-                                            <option value="git-square">Git (Square)</option>
-                                            <option value="github">GitHub</option>
-                                            <option value="github-alt">GitHub (Alt)</option>
-                                            <option value="github-square">GitHub (Square)</option>
-                                            <option value="gittip">GitTip</option>
-                                            <option value="glass">Glass</option>
-                                            <option value="globe">Globe</option>
-                                            <option value="google">Google</option>
-                                            <option value="google-plus">Google Plus</option>
-                                            <option value="google-plus-square">Google Plus (Square)</option>
-                                            <option value="graduation-cap">Graduation (Cap)</option>
-                                            <option value="group">Group</option>
-                                            <option value="h-square">H (Square)</option>
-                                            <option value="hacker-news">Hacker News</option>
-                                            <option value="hand-o-down">Hand: Down (O)</option>
-                                            <option value="hand-o-left">Hand: Left (O)</option>
-                                            <option value="hand-o-right">Hand: Right (O)</option>
-                                            <option value="hand-o-up">Hand: Up (O)</option>
-                                            <option value="hdd-o">HDD (O)</option>
-                                            <option value="header">Header</option>
-                                            <option value="headphones">Headphones</option>
-                                            <option value="heart">Heart</option>
-                                            <option value="heart-o">Heart (O)</option>
-                                            <option value="history">History</option>
-                                            <option value="home">Home</option>
-                                            <option value="hospital-o">Hospital (O)</option>
-                                            <option value="html5">HTML5</option>
-                                            <option value="image">Image</option>
-                                            <option value="inbox">Inbox</option>
-                                            <option value="indent">Indent</option>
-                                            <option value="info">Info</option>
-                                            <option value="info-circle">Info (Circle)</option>
-                                            <option value="inr">Inr</option>
-                                            <option value="instagram">Instagram</option>
-                                            <option value="institution">Institution</option>
-                                            <option value="italic">Italic</option>
-                                            <option value="joomla">Joomla</option>
-                                            <option value="jpy">JPY</option>
-                                            <option value="jsfiddle">JSFiddle</option>
-                                            <option value="key">Key</option>
-                                            <option value="keyboard-o">Keyboard (O)</option>
-                                            <option value="krw">KRW</option>
-                                            <option value="language">Language</option>
-                                            <option value="laptop">Laptop</option>
-                                            <option value="leaf">Leaf</option>
-                                            <option value="legal">Legal</option>
-                                            <option value="lemon-o">Lemon (O)</option>
-                                            <option value="level-down">Level Down</option>
-                                            <option value="level-up">Level Up</option>
-                                            <option value="life-bouy">Life Bouy</option>
-                                            <option value="life-ring">Life Ring</option>
-                                            <option value="life-saver">Life Saver</option>
-                                            <option value="lightbulb-o">Lightbulb (O)</option>
-                                            <option value="link">Link</option>
-                                            <option value="linkedin">LinkedIn</option>
-                                            <option value="linkedin-square">LinkedIn (Square)</option>
-                                            <option value="linux">Linux</option>
-                                            <option value="list">List</option>
-                                            <option value="list-alt">List (Alt)</option>
-                                            <option value="list-ol">List (Ol)</option>
-                                            <option value="list-ul">List (Ul)</option>
-                                            <option value="location-arrow">Location (Arrow)</option>
-                                            <option value="lock">Lock</option>
-                                            <option value="long-arrow-down">Long Arrow Down</option>
-                                            <option value="long-arrow-left">Long Arrow Left</option>
-                                            <option value="long-arrow-right">Long Arrow Right</option>
-                                            <option value="long-arrow-up">Long Arrow Up</option>
-                                            <option value="magic">Magic</option>
-                                            <option value="magnet">Magnet</option>
-                                            <option value="mail-forward">Mail: Forward</option>
-                                            <option value="mail-reply">Mail: Reply</option>
-                                            <option value="mail-reply-all">Mail: Reply All</option>
-                                            <option value="male">Male</option>
-                                            <option value="map-marker">Map Marker</option>
-                                            <option value="maxcdn">MaxCDN</option>
-                                            <option value="medkit">Medkit</option>
-                                            <option value="meh-o">Meh (O)</option>
-                                            <option value="microphone">Microphone</option>
-                                            <option value="microphone-slash">Microphone (Slash)</option>
-                                            <option value="minus">Minus</option>
-                                            <option value="minus-circle">Minus (Circle)</option>
-                                            <option value="minus-square">Minus (Square)</option>
-                                            <option value="minus-square-o">Minus (Square O)</option>
-                                            <option value="mobile">Mobile</option>
-                                            <option value="mobile-phone">Mobile Phone</option>
-                                            <option value="money">Money</option>
-                                            <option value="moon-o">Moon (O)</option>
-                                            <option value="mortar-board">Mortar Board</option>
-                                            <option value="music">Music</option>
-                                            <option value="navicon">Navicon</option>
-                                            <option value="openid">Openid</option>
-                                            <option value="outdent">Outdent</option>
-                                            <option value="pagelines">Pagelines</option>
-                                            <option value="paper-plane">Paper Plane</option>
-                                            <option value="paper-plane-o">Paper Plane (O)</option>
-                                            <option value="paperclip">Paper Clip</option>
-                                            <option value="paragraph">Paragraph</option>
-                                            <option value="paste">Paste</option>
-                                            <option value="pause">Pause</option>
-                                            <option value="paw">Paw</option>
-                                            <option value="pencil">Pencil</option>
-                                            <option value="pencil-square">Pencil (Square)</option>
-                                            <option value="pencil-square-o">Pencil (Square-O)</option>
-                                            <option value="phone">Phone</option>
-                                            <option value="phone-square">Phone (Square)</option>
-                                            <option value="photo">Photo</option>
-                                            <option value="picture-o">Picture (O)</option>
-                                            <option value="pied-piper">Pied Piper</option>
-                                            <option value="pied-piper-alt">Pied Piper (Alt)</option>
-                                            <option value="pied-piper-square">Pied Piper (Square)</option>
-                                            <option value="pinterest">Pinterest</option>
-                                            <option value="pinterest-square">Pinterest (Square)</option>
-                                            <option value="plane">Plane</option>
-                                            <option value="play">Play</option>
-                                            <option value="play-circle">Play (Circle)</option>
-                                            <option value="play-circle-o">Play (Circle-O)</option>
-                                            <option value="plus">Plus</option>
-                                            <option value="plus-circle">Plus (Circle)</option>
-                                            <option value="plus-square">Plus (Square)</option>
-                                            <option value="plus-square-o">Plus (Square-O)</option>
-                                            <option value="power-off">Power Off</option>
-                                            <option value="print">Print</option>
-                                            <option value="puzzle-piece">Puzzle Piece</option>
-                                            <option value="qq">Qq</option>
-                                            <option value="qrcode">QR Code</option>
-                                            <option value="question">Question</option>
-                                            <option value="question-circle">Question (Circle)</option>
-                                            <option value="quote-left">Quote: Left</option>
-                                            <option value="quote-right">Quote: Right</option>
-                                            <option value="ra">Ra</option>
-                                            <option value="random">Random</option>
-                                            <option value="rebel">Rebel</option>
-                                            <option value="recycle">Recycle</option>
-                                            <option value="reddit">Reddit</option>
-                                            <option value="reddit-square">Reddit (Square)</option>
-                                            <option value="refresh">Refresh</option>
-                                            <option value="renren">Renren</option>
-                                            <option value="reorder">Reorder</option>
-                                            <option value="repeat">Repeat</option>
-                                            <option value="reply">Reply</option>
-                                            <option value="reply-all">Reply All</option>
-                                            <option value="retweet">Retweet</option>
-                                            <option value="rmb">Rmb</option>
-                                            <option value="road">Road</option>
-                                            <option value="rocket">Rocket</option>
-                                            <option value="rotate-left">Rotate Left</option>
-                                            <option value="rotate-right">Rotate Right</option>
-                                            <option value="rouble">Rouble</option>
-                                            <option value="rss">RSS</option>
-                                            <option value="rss-square">RSS (Square)</option>
-                                            <option value="rub">Rub</option>
-                                            <option value="ruble">Ruble</option>
-                                            <option value="rupee">Rupee</option>
-                                            <option value="save">Save</option>
-                                            <option value="scissors">Scissors</option>
-                                            <option value="search">Search</option>
-                                            <option value="search-minus">Search: Minus</option>
-                                            <option value="search-plus">Search: Plus</option>
-                                            <option value="send">Send</option>
-                                            <option value="send-o">Send (O)</option>
-                                            <option value="share">Share</option>
-                                            <option value="share-alt">Share (Alt)</option>
-                                            <option value="share-alt-square">Share (Alt Square)</option>
-                                            <option value="share-square">Share (Square)</option>
-                                            <option value="share-square-o">Share (Square-O)</option>
-                                            <option value="shield">Shield</option>
-                                            <option value="shopping-cart">Shopping Cart</option>
-                                            <option value="sign-in">Sign In</option>
-                                            <option value="sign-out">Sign Out</option>
-                                            <option value="signal">Signal</option>
-                                            <option value="sitemap">Sitemap</option>
-                                            <option value="skype">Skype</option>
-                                            <option value="slack">Slack</option>
-                                            <option value="sliders">Sliders</option>
-                                            <option value="smile-o">Smile (O)</option>
-                                            <option value="sort">Sort</option>
-                                            <option value="sort-asc">Sort: Asc</option>
-                                            <option value="sort-desc">Sort: Desc</option>
-                                            <option value="sort-down">Sort: Down</option>
-                                            <option value="sort-up">Sort: Up</option>
-                                            <option value="sort-alpha-asc">Sort: Alpha Asc</option>
-                                            <option value="sort-alpha-desc">Sort: Alpha Desc</option>
-                                            <option value="sort-amount-asc">Sort: Amount Asc</option>
-                                            <option value="sort-amount-desc">Sort: Amount Desc</option>
-                                            <option value="sort-numeric-asc">Sort: Numeric Asc</option>
-                                            <option value="sort-numeric-desc">Sort: Numeric Desc</option>
-                                            <option value="soundcloud">Soundcloud</option>
-                                            <option value="space-shuttle">Space Shuttle</option>
-                                            <option value="spinner">Spinner</option>
-                                            <option value="spoon">Spoon</option>
-                                            <option value="spotify">Spotify</option>
-                                            <option value="square">Square</option>
-                                            <option value="square-o">Square (O)</option>
-                                            <option value="stack-exchange">Stack Exchange</option>
-                                            <option value="stack-overflow">Stack Overflow</option>
-                                            <option value="star">Star</option>
-                                            <option value="star-half">Star (Half)</option>
-                                            <option value="star-half-empty">Star (Half Empty)</option>
-                                            <option value="star-half-full">Star (Half Full)</option>
-                                            <option value="star-half-o">Star (Half O)</option>
-                                            <option value="star-o">Star (O)</option>
-                                            <option value="steam">Steam</option>
-                                            <option value="steam-square">Steam (Square)</option>
-                                            <option value="step-backward">Step Backward</option>
-                                            <option value="step-forward">Step Forward</option>
-                                            <option value="stethoscope">Stethoscope</option>
-                                            <option value="stop">Stop</option>
-                                            <option value="strikethrough">Strikethrough</option>
-                                            <option value="stumbleupon">Stumbleupon</option>
-                                            <option value="stumbleupon-circle">Stumbleupon (Circle)</option>
-                                            <option value="subscript">Subscript</option>
-                                            <option value="suitcase">Suitcase</option>
-                                            <option value="sun-o">Sun (O)</option>
-                                            <option value="superscript">Superscript</option>
-                                            <option value="support">Support</option>
-                                            <option value="table">Table</option>
-                                            <option value="tablet">Tablet</option>
-                                            <option value="tachometer">Tachometer</option>
-                                            <option value="tag">Tag</option>
-                                            <option value="tags">Tags</option>
-                                            <option value="tasks">Tasks</option>
-                                            <option value="taxi">Taxi</option>
-                                            <option value="tencent-weibo">Tencent Weibo</option>
-                                            <option value="terminal">Terminal</option>
-                                            <option value="text-height">Text Height</option>
-                                            <option value="text-width">Text Width</option>
-                                            <option value="th">Th</option>
-                                            <option value="th-large">Th (Large)</option>
-                                            <option value="th-list">Th (List)</option>
-                                            <option value="thumb-tack">Thumb Tack</option>
-                                            <option value="thumbs-down">Thumbs Down</option>
-                                            <option value="thumbs-o-down">Thumbs Down (O)</option>
-                                            <option value="thumbs-up">Thumbs Up</option>
-                                            <option value="thumbs-o-up">Thumbs Up (O)</option>
-                                            <option value="ticket">Ticket</option>
-                                            <option value="times">Times</option>
-                                            <option value="times-circle">Times (Circle)</option>
-                                            <option value="times-circle-o">Times (Circle O)</option>
-                                            <option value="tint">Tint</option>
-                                            <option value="toggle-down">Toggle Down</option>
-                                            <option value="toggle-left">Toggle Left</option>
-                                            <option value="toggle-right">Toggle Right</option>
-                                            <option value="toggle-up">Toggle Up</option>
-                                            <option value="trash-o">Trash (O)</option>
-                                            <option value="tree">Tree</option>
-                                            <option value="trello">Trello</option>
-                                            <option value="trophy">Trophy</option>
-                                            <option value="truck">Truck</option>
-                                            <option value="try">Try</option>
-                                            <option value="tumblr">Tumblr</option>
-                                            <option value="tumblr-square">Tumblr (Square)</option>
-                                            <option value="turkish-lira">Turkish Lira</option>
-                                            <option value="twitter">Twitter</option>
-                                            <option value="twitter-square">Twitter (Square)</option>
-                                            <option value="umbrella">Umbrella</option>
-                                            <option value="underline">Underline</option>
-                                            <option value="undo">Undo</option>
-                                            <option value="university">University</option>
-                                            <option value="unlink">Unlink</option>
-                                            <option value="unlock">Unlock</option>
-                                            <option value="unlock-alt">Unlock (Alt)</option>
-                                            <option value="unsorted">Unsorted</option>
-                                            <option value="upload">Upload</option>
-                                            <option value="usd">USD</option>
-                                            <option value="user">User</option>
-                                            <option value="user-md">User (MD)</option>
-                                            <option value="users">Users</option>
-                                            <option value="video-camera">Video (Camera)</option>
-                                            <option value="vimeo-square">Vimeo (Square)</option>
-                                            <option value="vine">Vine</option>
-                                            <option value="vk">Vk</option>
-                                            <option value="volume-up">Volume Up</option>
-                                            <option value="volume-down">Volume Down</option>
-                                            <option value="volume-off">Volume Off</option>
-                                            <option value="warning">Warning</option>
-                                            <option value="wechat">Wechat</option>
-                                            <option value="weibo">Weibo</option>
-                                            <option value="weixin">Weixin</option>
-                                            <option value="wheelchair">Wheelchair</option>
-                                            <option value="windows">Windows</option>
-                                            <option value="won">Won</option>
-                                            <option value="wordpress">Wordpress</option>
-                                            <option value="wrench">Wrench</option>
-                                            <option value="xing">Xing</option>
-                                            <option value="xing-square">Xing (Square)</option>
-                                            <option value="yahoo">Yahoo</option>
-                                            <option value="yen">Yen</option>
-                                            <option value="youtube">Youtube</option>
-                                            <option value="youtube-play">Youtube (Play)</option>
-                                            <option value="youtube-square">Youtube (Square)</option>
-                                        </select>
-                                    </p>
-                                    <h3 class="label"><label for="size-glyph">{{ "Size"|trans }}</label></h3>
-                                    <p class="item">
-                                        <select name="size-glyph" class="form-control" id="size-glyph">
-                                            <option value="big">{{ "Big"|trans }}</option>
-                                            <option value="medium" selected>{{ "Medium"|trans }}</option>
-                                            <option value="small">{{ "Small"|trans }}</option>
-                                        </select>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="text-center">
-                                <a id="set-custom-badge" class="btn btn--primary"><em class="fa fa-check"></em>
-                                    {{ 'Use this badge'|trans }}</a>
-                                <input type="hidden" id="badge_studio_image" name="badge_studio_image">
+
+                            <div
+                                    id="badge-placeholder"
+                                    class="{% if (badge_url|default('')) is not empty %}hidden{% endif %} rounded-2xl border border-dashed border-gray-300 bg-gray-10 p-6 text-center"
+                            >
+                                <div class="text-gray-500 text-sm">{{ "No image selected"|trans }}</div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <template id="glyph-selector-template">
-                    <div id="glyph-selector" role="dialog" class="overlay hidden" aria-label="Select a glyph"
-                         tabIndex="0">
-                        <div class="header">
-                            <label class="title"></label>
-                        </div>
-                        <div class="panel">
-                            <ul>
-                            </ul>
-                        </div>
+                    <div class="space-y-3">
+                        <button
+                                id="btn-save-badge"
+                                type="submit"
+                                form="badge-form"
+                                disabled
+                                class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90
+                   disabled:opacity-50 disabled:cursor-not-allowed"
+                        >{{ "Save badge"|trans }}</button>
+
+                        <p class="text-xs text-gray-600">
+                            {{ "Select an image (upload or Badge Studio) to enable saving."|trans }}
+                        </p>
+                        <a
+                                id="btn-open-designer"
+                                href="https://badge.design"
+                                class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                        >{{ "Design a new badge"|trans }}</a>
+
+                        <p class="text-xs text-gray-600">
+                            {{ "Design a new badge, download it from the design tool and upload it on the platform."|trans }}
+                        </p>
+
+                        <button
+                                id="btn-open-badge-studio"
+                                type="button"
+                                class="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-primary px-4 py-2.5 text-sm font-semibold text-primary hover:bg-primary/10"
+                        >{{ "Design with Badge Studio"|trans }}</button>
+
+                        <p class="text-xs text-gray-600">
+                            {{ "Use the Badge Studio to create your own badge from within your platform"|trans }}
+                        </p>
                     </div>
-                </template>
-
-                <template id="glyph-selector-item-template">
-                    <li>
-                        <input type="radio" name="glyph-selector-item" class="hidden">
-                        <label></label>
-                    </li>
-                </template>
-
-                <template id="option-template">
-                    <label>
-                        <input type="checkbox">
-                        <span>Label</span>
-                    </label>
-                </template>
-
-                <template id="close-button-template">
-                    <button type="button" class="close fa fa-times-circle-o" aria-label="Close"></button>
-                </template>
-
-                <template id="custom-color-template">
-                    <label>
-                        <input type="color">
-                        <span>Label</span>
-                    </label>
-                </template>
-            </div>
-
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn--primary btn-large"><em class="fa fa-plus"></em>
-                        {{ 'Save badge'| trans }}
-                    </button>
                 </div>
             </div>
-        </form>
-    </div>
-    <div>
-        <div class="openbadges-img" id="badge-container">
-            <img id="badge-preview"
-                 class="img-fluid" alt="{{ 'Badge preview'|trans }}" src="{{ skill.asset }}">
-        </div>
 
-        <div class="create-openbadges">
-            <div class="field">
-                <div>
-                    <a id="btn-open-designer" href="https://badge.design" class="btn btn--primary" target="_blank">
-                        <span aria-hidden="true" class="fas fa-pencil-alt"></span> {{ 'Design a new badge'|trans }}
-                    </a>
-                </div>
-                <small>{{ 'Design a new badge, download it from the design tool and upload it on the platform.'|trans }}</small>
-            </div>
-        </div>
-        <div class="create-openbadges">
-            <div class="field">
-                <div>
-                    <button id="btn-open-badge-studio" class="btn btn--primary-outline"
-                            data-toggle="collapse" data-target="#badge-studio-frame" aria-expanded="false"
-                            aria-controls="badge-studio-frame" type="button">
-                        <samll aria-hidden="true" class="fa fa-cogs"></samll> {{ 'Design with Badge Studio'|trans }}
-                    </button>
-                </div>
-                <small>{{ 'Use the Badge Studio to create your own badge from within your platform'|trans }}</small>
-            </div>
         </div>
     </div>
 </div>
 
-<script>
-  $(function() {
-    $("#btn-open-badge-studio").click(function() {
-      $("#badge-studio-frame").toggleClass("invisible")
-    })
-
-    $("#set-custom-badge").click(function() {
-      var data = $("#raster").attr("src")
-      $("#badge_studio_image").val(data)
-      $("#badge-preview").attr("src", data)
-      $("#badge-container").removeClass("hide")
-    })
-
-    $("#size-glyph").change(function() {
-      window.size = $(this).val()
-      updateGlyph()
-    })
-  })
-</script>
-
 {% autoescape false %}
     {{ badge_studio.script_js }}
 {% endautoescape %}
+
+<script>
+  (function () {
+    if (window.__ChamiloSkillBadgeNoSearchV2) return;
+    window.__ChamiloSkillBadgeNoSearchV2 = true;
+
+    const DEBUG = false;
+
+    function log(msg, data) {
+      if (!DEBUG) return;
+      if (data !== undefined) console.log("[SkillBadge]", msg, data);
+      else console.log("[SkillBadge]", msg);
+    }
+
+    function warn(msg, data) {
+      if (data !== undefined) console.warn("[SkillBadge]", msg, data);
+      else console.warn("[SkillBadge]", msg);
+    }
+
+    function $(id) { return document.getElementById(id); }
+
+    // ---------------------------
+    // Initial state from backend
+    // ---------------------------
+    const INITIAL_HAS_BADGE = {{ (badge_url|default('')) is not empty ? 'true' : 'false' }};
+    const INITIAL_BADGE_SRC = {{ ((badge_url|default('')) is not empty ? (badge_url|default('')) : '')|json_encode|raw }};
+
+    const TEXT_NO_IMAGE = {{ "No image selected"|trans|json_encode|raw }};
+    const TEXT_CURRENT_BADGE = {{ "Current badge set"|trans|json_encode|raw }};
+    const TEXT_READY_TO_SAVE = {{ "Badge ready to be saved"|trans|json_encode|raw }};
+    const TEXT_SELECT_TO_SAVE = {{ "Select an image (upload or Badge Studio) to enable saving."|trans|json_encode|raw }};
+
+    // ---------------------------
+    // Status helpers
+    // ---------------------------
+    function setStatus(text, tone) {
+      const pill = $("badge-status-pill");
+      const label = $("badge-status-text");
+
+      if (label) label.textContent = String(text || "");
+
+      if (!pill) return;
+
+      // tone: "neutral" | "success" | "warning"
+      const t = String(tone || "neutral");
+
+      pill.classList.remove(
+        "border-gray-200", "bg-gray-50", "text-gray-700",
+        "border-green-200", "bg-green-50", "text-green-700",
+        "border-amber-200", "bg-amber-50", "text-amber-800"
+      );
+
+      if (t === "success") {
+        pill.classList.add("border-green-200", "bg-green-50", "text-green-700");
+        pill.textContent = "✓";
+        return;
+      }
+
+      if (t === "warning") {
+        pill.classList.add("border-amber-200", "bg-amber-50", "text-amber-800");
+        pill.textContent = "!";
+        return;
+      }
+
+      pill.classList.add("border-gray-200", "bg-gray-50", "text-gray-700");
+      pill.textContent = "•";
+    }
+
+    function setSaveEnabled(enabled) {
+      const btn = $("btn-save-badge");
+      if (!btn) return;
+      btn.disabled = !enabled;
+    }
+
+    function hasPendingSelection() {
+      const hidden = $("badge_studio_image");
+      const fileInput = $("image");
+
+      const hasStudio = !!(hidden && String(hidden.value || "").trim().length > 0);
+      const hasFile = !!(fileInput && fileInput.files && fileInput.files.length > 0);
+
+      return hasStudio || hasFile;
+    }
+
+    // ---------------------------
+    // Fast: detect the glyph "Search" label
+    // ---------------------------
+    function isSearchLabel(text) {
+      const t = String(text || "").trim().toLowerCase();
+      return t === "search" || t === "rechercher" || t === "buscar";
+    }
+
+    // ---------------------------
+    // Hide the Search button (twig-side)
+    // ---------------------------
+    function hideStudioSearchButton() {
+      const frame = $("badge-studio-frame");
+      if (!frame) return;
+
+      // Search button is usually inside the studio frame, created by studio.js
+      const candidates = frame.querySelectorAll("button, input[type='button'], input[type='submit'], a");
+      for (const el of candidates) {
+        const label = (el.textContent || el.value || "");
+        if (isSearchLabel(label)) {
+          el.style.display = "none";
+          el.setAttribute("aria-hidden", "true");
+          el.setAttribute("tabindex", "-1");
+          log("Search button hidden");
+        }
+      }
+    }
+
+    // Capture clicks only inside the studio frame (kept, in case studio re-adds it)
+    document.addEventListener("click", function (e) {
+      const frame = $("badge-studio-frame");
+      if (!frame) return;
+
+      const target = e.target && e.target.closest ? e.target.closest("button, a, input[type='button'], input[type='submit']") : null;
+      if (!target) return;
+
+      if (!target.closest("#badge-studio-frame")) return;
+
+      const label = (target.textContent || target.value || "");
+      if (isSearchLabel(label)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        log("Blocked glyph search UI click");
+      }
+    }, true);
+
+    // ---------------------------
+    // Hide glyph selector modal (no custom CSS)
+    // ---------------------------
+    function hideGlyphSelectorModal() {
+      const gs = $("glyph-selector");
+      if (!gs) return;
+      gs.classList.add("hidden");
+      gs.setAttribute("aria-hidden", "true");
+      gs.style.display = "none";
+    }
+
+    // ---------------------------
+    // Studio open/close
+    // ---------------------------
+    function openStudio() {
+      const frame = $("badge-studio-frame");
+      if (!frame) return;
+
+      frame.classList.remove("max-h-0", "opacity-0", "overflow-hidden", "pointer-events-none");
+      frame.classList.add("max-h-[2400px]", "opacity-100", "overflow-visible", "pointer-events-auto");
+
+      // Defer a bit so studio.js finishes initial DOM updates
+      setTimeout(function () {
+        hideGlyphSelectorModal();
+
+        // Hide Search button after studio DOM is ready
+        hideStudioSearchButton();
+
+        window.dispatchEvent(new Event("resize"));
+        const tpl = $("studio-template");
+        if (tpl) tpl.dispatchEvent(new Event("change", { bubbles: true }));
+        const pal = $("studio-palette");
+        if (pal) pal.dispatchEvent(new Event("change", { bubbles: true }));
+
+        updateOverlay();
+        log("Badge Studio opened");
+      }, 60);
+
+      // Extra safety: studio.js can rebuild parts later
+      setTimeout(hideStudioSearchButton, 250);
+      setTimeout(hideStudioSearchButton, 600);
+    }
+
+    function closeStudio() {
+      const frame = $("badge-studio-frame");
+      if (!frame) return;
+
+      frame.classList.remove("max-h-[2400px]", "opacity-100", "overflow-visible", "pointer-events-auto");
+      frame.classList.add("max-h-0", "opacity-0", "overflow-hidden", "pointer-events-none");
+
+      setTimeout(function () {
+        window.dispatchEvent(new Event("resize"));
+        log("Badge Studio closed");
+      }, 60);
+    }
+
+    // ---------------------------
+    // Preview helpers
+    // ---------------------------
+    function applyPreview(src) {
+      const preview = $("badge-preview");
+      const container = $("badge-container");
+      const placeholder = $("badge-placeholder");
+
+      if (preview) {
+        preview.src = src;
+        preview.classList.remove("hidden");
+      }
+      if (container) container.classList.remove("hidden");
+      if (placeholder) placeholder.classList.add("hidden");
+    }
+
+    function clearStudioHiddenImage() {
+      const hidden = $("badge_studio_image");
+      if (hidden) hidden.value = "";
+    }
+
+    // ---------------------------
+    // PrimeIcons helpers (cached)
+    // ---------------------------
+    let PRIME_OK = null;
+    const PRIME_INFO_CACHE = new Map();
+
+    function isPrimeIconsLoaded() {
+      if (PRIME_OK !== null) return PRIME_OK;
+
+      const i = document.createElement("i");
+      i.className = "pi pi-check";
+      i.style.position = "absolute";
+      i.style.left = "-99999px";
+      i.style.top = "-99999px";
+      document.body.appendChild(i);
+
+      const content = getComputedStyle(i, "::before").getPropertyValue("content");
+      const family = (getComputedStyle(i).getPropertyValue("font-family") || "").toLowerCase();
+
+      document.body.removeChild(i);
+
+      PRIME_OK = !!content && content !== "none" && family.includes("primeicons");
+      return PRIME_OK;
+    }
+
+    function normalizeHex(c) {
+      if (!c) return "#ffffff";
+      const s = String(c).trim();
+      return s.startsWith("#") ? s : ("#" + s.replace(/^#/, ""));
+    }
+
+    function getGlyphColor() {
+      const opt = document.querySelector("#studio-palette option:checked");
+      const c = opt ? (opt.getAttribute("data-color-glyph") || (opt.dataset ? opt.dataset.colorGlyph : null)) : null;
+      return normalizeHex(c || "#ffffff");
+    }
+
+    // Best-effort aliasing for legacy values
+    const GLYPH_MAP = {
+      android: ["mobile", "desktop", "code"],
+      apple: ["bookmark", "star", "heart"],
+      anchor: ["link", "bookmark", "tag"],
+      archive: ["folder", "file", "bookmark"],
+    };
+
+    function getPrimeIconInfo(name) {
+      const iconName = String(name || "").trim();
+      if (!iconName) return null;
+
+      const key = iconName.startsWith("pi-") ? iconName : ("pi-" + iconName);
+      if (PRIME_INFO_CACHE.has(key)) return PRIME_INFO_CACHE.get(key);
+
+      const cls = iconName.startsWith("pi-") ? iconName : ("pi-" + iconName);
+
+      const el = document.createElement("i");
+      el.className = "pi " + cls;
+      el.style.position = "absolute";
+      el.style.left = "-99999px";
+      el.style.top = "-99999px";
+      el.style.fontSize = "80px";
+      document.body.appendChild(el);
+
+      let content = getComputedStyle(el, "::before").getPropertyValue("content");
+      const fontFamily = getComputedStyle(el).getPropertyValue("font-family") || "";
+      const fontWeight = getComputedStyle(el).getPropertyValue("font-weight") || "400";
+
+      document.body.removeChild(el);
+
+      if (!content || content === "none" || !String(fontFamily).toLowerCase().includes("primeicons")) {
+        PRIME_INFO_CACHE.set(key, null);
+        return null;
+      }
+
+      let char = String(content).replace(/^["']|["']$/g, "");
+      if (char.startsWith("\\")) {
+        const hex = char.replace("\\", "");
+        const code = parseInt(hex, 16);
+        if (!Number.isNaN(code)) char = String.fromCharCode(code);
+      }
+
+      const info = { cls: "pi " + cls, char, fontFamily, fontWeight };
+      PRIME_INFO_CACHE.set(key, info);
+      return info;
+    }
+
+    function resolvePrimeIcon(value) {
+      const v = String(value || "").trim();
+      if (!v) return null;
+
+      const candidates = GLYPH_MAP[v] || [v, "check"];
+      for (const c of candidates) {
+        const info = getPrimeIconInfo(c);
+        if (info && info.char) return info;
+      }
+      return null;
+    }
+
+    function getGlyphSizePxForPreview() {
+      const sel = $("size-glyph");
+      const v = String(sel ? sel.value : "medium");
+      if (v === "big") return 92;
+      if (v === "small") return 62;
+      return 78;
+    }
+
+    // ---------------------------
+    // Raster extraction
+    // ---------------------------
+    function getRasterSrc() {
+      const raster = $("raster");
+      if (raster) {
+        if (raster.tagName === "IMG") return raster.getAttribute("src") || "";
+        if (raster.tagName === "CANVAS") {
+          try { return raster.toDataURL("image/png"); } catch (e) { return ""; }
+        }
+      }
+
+      const out = $("output");
+      if (!out) return "";
+
+      const img = out.querySelector("img");
+      if (img && img.getAttribute("src")) return img.getAttribute("src");
+
+      const canvas = out.querySelector("canvas");
+      if (canvas) {
+        try { return canvas.toDataURL("image/png"); } catch (e) { return ""; }
+      }
+
+      return "";
+    }
+
+    function loadImage(src) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => resolve(null);
+        img.src = src;
+      });
+    }
+
+    // ---------------------------
+    // Overlay preview (no custom CSS, Tailwind classes)
+    // ---------------------------
+    function ensureOverlay() {
+      const out = $("output");
+      if (!out) return null;
+
+      let overlay = $("pi-glyph-overlay");
+      if (overlay) return overlay;
+
+      overlay = document.createElement("div");
+      overlay.id = "pi-glyph-overlay";
+      overlay.className = "absolute inset-0 hidden items-center justify-center pointer-events-none";
+      overlay.innerHTML = '<i aria-hidden="true"></i>';
+      out.appendChild(overlay);
+      return overlay;
+    }
+
+    function updateOverlay() {
+      const overlay = ensureOverlay();
+      if (!overlay) return;
+
+      // Hide Search button if studio rebuilds the icon area
+      hideStudioSearchButton();
+
+      const glyphSel = $("glyph");
+      const value = glyphSel ? String(glyphSel.value || "").trim() : "";
+      const i = overlay.querySelector("i");
+
+      if (!value || !isPrimeIconsLoaded()) {
+        overlay.classList.add("hidden");
+        overlay.classList.remove("flex");
+        if (i) i.className = "";
+        return;
+      }
+
+      const info = resolvePrimeIcon(value);
+      if (!info) {
+        overlay.classList.add("hidden");
+        overlay.classList.remove("flex");
+        return;
+      }
+
+      overlay.classList.remove("hidden");
+      overlay.classList.add("flex");
+
+      const size = getGlyphSizePxForPreview();
+      const color = getGlyphColor();
+
+      if (i) {
+        i.className = info.cls;
+        i.style.color = color;
+        i.style.fontSize = size + "px";
+        i.style.lineHeight = "1";
+      }
+    }
+
+    // ---------------------------
+    // Build final PNG (base + PrimeIcons glyph char)
+    // ---------------------------
+    async function buildFinalAndApply() {
+      const rasterSrc = getRasterSrc();
+      if (!rasterSrc) {
+        warn("No raster found. Badge Studio output might not be ready.");
+        return;
+      }
+
+      const baseImg = await loadImage(rasterSrc);
+      if (!baseImg) {
+        warn("Base raster could not be loaded.");
+        return;
+      }
+
+      const w = baseImg.naturalWidth || 200;
+      const h = baseImg.naturalHeight || 200;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(baseImg, 0, 0, w, h);
+
+      const glyphSel = $("glyph");
+      const value = glyphSel ? String(glyphSel.value || "").trim() : "";
+
+      if (value && isPrimeIconsLoaded()) {
+        const info = resolvePrimeIcon(value);
+        if (info && info.char) {
+          try {
+            if (document.fonts && document.fonts.load) {
+              await document.fonts.load(`${info.fontWeight} 80px ${info.fontFamily}`, info.char);
+              await document.fonts.ready;
+            }
+          } catch (e) {}
+
+          const sizeSel = $("size-glyph") ? String($("size-glyph").value || "medium") : "medium";
+          const rel = (sizeSel === "big") ? 0.50 : (sizeSel === "small") ? 0.34 : 0.42;
+          const sizePx = Math.round(Math.min(w, h) * rel);
+
+          ctx.fillStyle = getGlyphColor();
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.font = `${info.fontWeight} ${sizePx}px ${info.fontFamily}`;
+          ctx.fillText(info.char, w / 2, h / 2);
+
+          log("Glyph drawn using PrimeIcons", { value, sizePx });
+        }
+      }
+
+      const finalSrc = canvas.toDataURL("image/png");
+
+      const hidden = $("badge_studio_image");
+      if (hidden) hidden.value = finalSrc;
+
+      const fileInput = $("image");
+      if (fileInput) fileInput.value = "";
+
+      applyPreview(finalSrc);
+
+      // Enable saving only after selection
+      setSaveEnabled(true);
+      setStatus(TEXT_READY_TO_SAVE, "success");
+
+      log("Final badge applied", { length: String(finalSrc).length });
+    }
+
+    // ---------------------------
+    // Hooks
+    // ---------------------------
+    function hook() {
+      hideGlyphSelectorModal();
+
+      const btnOpen = $("btn-open-badge-studio");
+      const btnClose = $("btn-close-badge-studio");
+      const fileInput = $("image");
+      const form = $("badge-form");
+
+      // Default: disabled until user selects something
+      setSaveEnabled(false);
+
+      if (INITIAL_HAS_BADGE && INITIAL_BADGE_SRC) {
+        applyPreview(INITIAL_BADGE_SRC);
+        setStatus(TEXT_CURRENT_BADGE, "success");
+        // Keep save disabled until user changes something
+      } else {
+        setStatus(TEXT_NO_IMAGE, "neutral");
+      }
+
+      if (btnOpen) btnOpen.addEventListener("click", openStudio);
+      if (btnClose) btnClose.addEventListener("click", closeStudio);
+
+      if (fileInput) {
+        fileInput.addEventListener("change", function () {
+          const file = fileInput.files && fileInput.files[0] ? fileInput.files[0] : null;
+          if (!file) return;
+
+          clearStudioHiddenImage();
+
+          const url = URL.createObjectURL(file);
+          applyPreview(url);
+
+          setSaveEnabled(true);
+          setStatus(TEXT_READY_TO_SAVE, "success");
+
+          log("File selected for preview", { name: file.name, size: file.size });
+        });
+      }
+
+      // Prevent "save" if nothing was selected (avoid confusion)
+      if (form) {
+        form.addEventListener("submit", function (e) {
+          if (!hasPendingSelection()) {
+            e.preventDefault();
+            setSaveEnabled(false);
+            setStatus(TEXT_SELECT_TO_SAVE, "warning");
+            log("Submit blocked: no selection");
+          }
+        });
+      }
+
+      // Update overlay on explicit changes only (cheap)
+      document.addEventListener("change", function (e) {
+        const t = e.target;
+        if (!t || !t.id) return;
+
+        if (t.id === "glyph" || t.id === "size-glyph" || t.id === "studio-palette") {
+          updateOverlay();
+          hideStudioSearchButton();
+        }
+      }, true);
+
+      // Capture click BEFORE studio handlers (ensures final image is generated)
+      document.addEventListener("click", function (e) {
+        const btn = e.target && e.target.closest ? e.target.closest("#set-custom-badge") : null;
+        if (!btn) return;
+
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        buildFinalAndApply();
+      }, true);
+
+      // Hide Search button early if studio HTML is already present
+      hideStudioSearchButton();
+
+      log("UI hooks ready");
+    }
+
+    if (document.readyState !== "loading") hook();
+    else document.addEventListener("DOMContentLoaded", hook);
+  })();
+</script>

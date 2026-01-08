@@ -159,7 +159,7 @@ if (isset($_POST['action'])) {
 }
 
 $form = new FormValidator('advanced_search', 'get');
-$form->addText('keyword_username', get_lang('Login'), false);
+$form->addText('keyword_username', get_lang('Username'), false);
 if (api_is_western_name_order()) {
     $form->addText('keyword_firstname', get_lang('First name'), false);
     $form->addText('keyword_lastname', get_lang('Last name'), false);

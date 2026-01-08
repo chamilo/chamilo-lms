@@ -208,9 +208,9 @@ class CourseRequestManager
             $email_body_teacher,
             $sender_name_admin,
             $sender_email_admin,
-            null,
-            null,
-            null
+            [],
+            [],
+            false
         );
 
         return $last_insert_id;

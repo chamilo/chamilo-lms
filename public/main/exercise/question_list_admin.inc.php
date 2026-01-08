@@ -155,7 +155,7 @@ if (isset($exerciseId) && $exerciseId > 0) {
         $allowQuestionOrdering = true;
         $showPagination = 'true' === api_get_setting('exercise.show_question_pagination');
         $length = (int) api_get_setting('exercise.question_pagination_length') ?: 30;
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
 
         if ($showPagination && $nbrQuestions > $length) {
             $allowQuestionOrdering = false;
@@ -195,9 +195,14 @@ if (isset($exerciseId) && $exerciseId > 0) {
                     continue;
                 }
 
+                $baseUrl = api_get_self().'?'.api_get_cidreq().'&exerciseId='.(int) $exerciseId;
+
                 $clone_link = Display::url(
                     Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon-button', 'margin-bottom: 5px;', ICON_SIZE_TINY, get_lang('Copy')),
-                    api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'&page='.$page,
+                    $baseUrl.'&'.http_build_query([
+                        'clone_question' => $id,
+                        'page' => $page,
+                    ]),
                     ['class' => 'btn btn--warning btn-sm']
                 );
 
@@ -208,21 +213,18 @@ if (isset($exerciseId) && $exerciseId > 0) {
                     )
                     : Display::url(
                         Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-button', 'margin-bottom: 5px;', ICON_SIZE_TINY, get_lang('Edit')),
-                        api_get_self().'?'.api_get_cidreq().'&'
-                            .http_build_query([
-                                'type' => $objQuestionTmp->selectType(),
-                                'editQuestion' => $id,
-                                'page' => $page,
-                            ]),
+                        $baseUrl.'&'.http_build_query([
+                            'type' => $objQuestionTmp->selectType(),
+                            'editQuestion' => $id,
+                            'page' => $page,
+                        ]),
                         ['class' => 'btn btn--warning btn-sm']
                     );
                 $delete_link = null;
                 if ($objExercise->edit_exercise_in_lp) {
                     $delete_link = Display::url(
                         Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-button', 'margin-bottom: 5px;', ICON_SIZE_TINY, get_lang('Remove from test')),
-                        api_get_self().'?'.api_get_cidreq().'&'
-                            .http_build_query([
-                                'id' => $exerciseId,
+                        $baseUrl.'&'.http_build_query([
                                 'deleteQuestion' => $id,
                                 'page' => $page,
                             ]),

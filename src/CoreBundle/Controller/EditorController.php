@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
+use Chamilo\CoreBundle\Component\Editor\Tiny\TinyEditor;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
 use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
@@ -28,7 +28,7 @@ class EditorController extends BaseController
     #[Route(path: '/templates', methods: ['GET'], name: 'editor_templates')]
     public function editorTemplates(TranslatorInterface $translator, RouterInterface $router): Response
     {
-        $editor = new CkEditor(
+        $editor = new TinyEditor(
             $translator,
             $router
         );

@@ -14,6 +14,7 @@ use Chamilo\CourseBundle\Entity\CAttendanceCalendarRelGroup;
 use Chamilo\CourseBundle\Repository\CAttendanceCalendarRepository;
 use DateInterval;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -71,31 +72,98 @@ final class CAttendanceStateProcessor implements ProcessorInterface
     private function handleAddCalendar(CAttendance $attendance): void
     {
         $request = $this->requestStack->getCurrentRequest();
-        $data = json_decode($request->getContent(), true);
-
-        if (!$data) {
-            throw new BadRequestHttpException('Request data is required to create a calendar.');
+        if (null === $request) {
+            throw new BadRequestHttpException('[Attendance] Request is missing.');
         }
 
-        $startDate = new DateTime($data['startDate']);
-        $repeatDate = $data['repeatDate'] ?? false;
-        $repeatType = $data['repeatType'] ?? null;
-        $repeatDays = $data['repeatDays'] ?? null;
-        $endDate = $repeatDate ? new DateTime($data['repeatEndDate']) : null;
-        $groupId = $data['group'] ?? 0;
-        $duration = $data['duration'] ?? null;
+        $data = json_decode($request->getContent(), true);
+        if (!\is_array($data)) {
+            throw new BadRequestHttpException('[Attendance] Request data is required to create a calendar.');
+        }
 
+        // Required
+        $startIso = $data['startDate'] ?? null;
+        $startDateImmutable = $this->parseLocalIsoDateTime($startIso, 'startDate');
+        $startDate = DateTime::createFromImmutable($startDateImmutable);
+
+        // Optional
+        $repeatDate = (bool) ($data['repeatDate'] ?? false);
+        $repeatType = $data['repeatType'] ?? null;
+        $repeatDays = isset($data['repeatDays']) ? (int) $data['repeatDays'] : null;
+
+        $endDate = null;
+        if ($repeatDate) {
+            $endIso = $data['repeatEndDate'] ?? null;
+            if (null === $repeatType || '' === (string) $repeatType) {
+                throw new BadRequestHttpException('[Attendance] Repeat settings are incomplete: repeatType is required.');
+            }
+            if (null === $endIso || '' === (string) $endIso) {
+                throw new BadRequestHttpException('[Attendance] Repeat settings are incomplete: repeatEndDate is required.');
+            }
+
+            $endDateImmutable = $this->parseLocalIsoDateTime($endIso, 'repeatEndDate');
+            if ($endDateImmutable < $startDateImmutable) {
+                throw new BadRequestHttpException('[Attendance] repeatEndDate must be greater than or equal to startDate.');
+            }
+            $endDate = DateTime::createFromImmutable($endDateImmutable);
+        }
+
+        $groupId = isset($data['group']) ? (int) $data['group'] : 0;
+        $duration = isset($data['duration']) ? (int) $data['duration'] : null;
+
+        // Save the first calendar
         $this->saveCalendar($attendance, $startDate, $groupId, $duration);
 
+        // Save repetitions (never create dates beyond endDate)
         if ($repeatDate && $repeatType && $endDate) {
-            $interval = $this->getRepeatInterval($repeatType, $repeatDays);
-            $currentDate = clone $startDate;
+            $interval = $this->getRepeatInterval((string) $repeatType, $repeatDays);
 
-            while ($currentDate < $endDate) {
-                $currentDate->add($interval);
-                $this->saveCalendar($attendance, $currentDate, $groupId, $duration);
+            $current = $startDateImmutable;
+
+            while (true) {
+                $next = $current->add($interval);
+
+                // stop if the next occurrence is outside the allowed range
+                if ($next > $endDateImmutable) {
+                    break;
+                }
+
+                $this->saveCalendar($attendance, DateTime::createFromImmutable($next), $groupId, $duration);
+                $current = $next;
             }
         }
+    }
+
+    /**
+     * Accept only local ISO datetime strings (no ambiguity).
+     * Examples accepted:
+     * - 2025-12-01T18:55
+     * - 2025-12-01T18:55:00
+     * - 2025-12-01T18:55:00.000Z (timezone part will be ignored safely).
+     */
+    private function parseLocalIsoDateTime(mixed $value, string $fieldName): DateTimeImmutable
+    {
+        if (!\is_string($value) || '' === trim($value)) {
+            throw new BadRequestHttpException(\sprintf('[Attendance] "%s" is required and must be a string.', $fieldName));
+        }
+
+        $raw = trim($value);
+
+        // Extract "YYYY-MM-DDTHH:mm" and optional ":ss" from the beginning, ignore trailing timezone/offset/millis
+        if (!preg_match('/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})(?::(\d{2}))?/', $raw, $m)) {
+            throw new BadRequestHttpException(\sprintf('[Attendance] Invalid "%s". Expected local ISO "YYYY-MM-DDTHH:mm(:ss)". Got "%s".', $fieldName, $raw));
+        }
+
+        $base = $m[1];
+        $seconds = isset($m[2]) ? $m[2] : '00';
+        $normalized = $base.':'.$seconds;
+
+        $dt = DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s', $normalized);
+        if (false === $dt) {
+            throw new BadRequestHttpException(\sprintf('[Attendance] Invalid "%s". Failed to parse "%s".', $fieldName, $normalized));
+        }
+
+        return $dt;
     }
 
     private function saveCalendar(CAttendance $attendance, DateTime $date, ?int $groupId, ?int $duration = null): void
@@ -132,13 +200,21 @@ final class CAttendanceStateProcessor implements ProcessorInterface
 
     private function getRepeatInterval(string $repeatType, ?int $repeatDays = null): DateInterval
     {
+        if ('every-x-days' === $repeatType) {
+            $days = (int) ($repeatDays ?? 0);
+            if ($days < 1) {
+                throw new BadRequestHttpException('[Attendance] repeatDays must be >= 1 for repeatType "every-x-days".');
+            }
+
+            return new DateInterval("P{$days}D");
+        }
+
         return match ($repeatType) {
             'daily' => new DateInterval('P1D'),
             'weekly' => new DateInterval('P7D'),
             'bi-weekly' => new DateInterval('P14D'),
-            'every-x-days' => new DateInterval("P{$repeatDays}D"),
             'monthly-by-date' => new DateInterval('P1M'),
-            default => throw new BadRequestHttpException('Invalid repeat type.'),
+            default => throw new BadRequestHttpException(\sprintf('[Attendance] Invalid repeat type "%s".', $repeatType)),
         };
     }
 }

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
@@ -32,8 +34,15 @@ if (0 == $session_id) {
 } else {
     $all_categories = Category::loadSessionCategories(null, $session_id);
 }
-$category = Category :: load($selectCat);
-$url = api_get_self().'?selectcat='.$selectCat.'&newtypeselected='.$typeSelected.'&course_code='.api_get_course_id().'&'.api_get_cidreq();
+
+$category = Category::load($selectCat);
+
+$url = api_get_self()
+    .'?selectcat='.$selectCat
+    .'&newtypeselected='.$typeSelected
+    .'&course_code='.api_get_course_id()
+    .'&'.api_get_cidreq();
+
 $typeform = new LinkForm(
     LinkForm::TYPE_CREATE,
     $category[0],
@@ -86,6 +95,10 @@ if (isset($typeSelected) && '0' != $typeSelected) {
         $global_weight = $category[0]->get_weight();
         $link->set_weight($addvalues['weight_mask']);
 
+        if (isset($addvalues['min_score']) && $addvalues['min_score'] !== '') {
+            $link->set_min_score(api_float_val($addvalues['min_score']));
+        }
+
         if ($link->needs_max()) {
             $link->set_max($addvalues['max']);
         }
@@ -104,7 +117,7 @@ if (isset($typeSelected) && '0' != $typeSelected) {
 					 WHERE iid  = '.$addvalues['select_link'];
             $res1 = Database::query($sql1);
             $rowtit = Database::fetch_row($res1);
-            $course_id = api_get_course_id();
+            $course_id = api_get_course_int_id();
             $sql_l = 'SELECT count(*) FROM '.$tbl_link.'
                       WHERE
                             ref_id='.$addvalues['select_link'].' AND
@@ -182,6 +195,20 @@ $(function() {
 </script>';
 
 Display::display_header(get_lang('Add online activity'));
+
+$defaultBackUrl = Category::getUrl().'selectcat='.$selectCat;
+echo '<div class="mb-4">';
+
+// Back icon only
+echo '<div class="mb-2">';
+echo Display::url(
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
+    $defaultBackUrl
+);
+echo '</div>';
+
+echo '</div>';
+
 if (isset($typeform)) {
     echo Display::return_message(
         get_lang(

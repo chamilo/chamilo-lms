@@ -2033,7 +2033,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":sí:copyright,, no:sin copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:texto/plano;iso-8859-1,, text/plain;utf-8:texto/plano;utf-8,, text/html;iso-8859-1:texto/html;iso-8859-1,, text/html;utf-8:texto/html;utf-8,, inode/directory:Directorio,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpeta,, application/msword:MsWord,, application/octet-stream:Flujo de octetos,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación"
@@ -6229,8 +6229,8 @@ msgstr "El idioma ahora es visible"
 msgid "The language has been hidden. It will not be possible to use it until it becomes visible again."
 msgstr "El idioma ahora no es visible"
 
-msgid "The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
-msgstr "El directorio /main/lang usado en éste portal,no tiene permisos de escritura. Por favor contacte con su administrador"
+msgid "The var/translations directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
+msgstr "El directorio var/translations usado en éste portal,no tiene permisos de escritura. Por favor contacte con su administrador"
 
 msgid "Show glossary terms in documents"
 msgstr "Mostrar los términos del glosario en los documentos"
@@ -10936,8 +10936,8 @@ msgstr "es"
 msgid "The address of"
 msgstr "El enlace para acceder a la plataforma"
 
-msgid "Your registration on"
-msgstr "Su registro en"
+msgid "Your registration on %s"
+msgstr "Su registro en %s"
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "El nombre de usuario que eligió ya existe. Use el botón de 'Atrás' de su navegador y elija uno diferente."
@@ -14236,7 +14236,7 @@ msgstr "<p>La agenda es una herramienta que en cada curso ofrece una visión res
 msgid "<p> The Announcements tool allows you to send an e-mail to some or all of your students, or to specific groups.  to might want to alert them to the addition of a new document, to remind them of a deadline for submission of an assignment or to highlight and share a particularly good piece of work. Sending such e-mail announcements can also serve as a useful prompt to re-engage students who have not visited the site for some time (as long as it's not overdone!). </p> <b> Contacting specific users </b> <p> In addition to sending a general one to all members of the course, you can send an e-mail to one or more individuals/groups groups. When you create a new announcement, just click <i>Visible to</i> and select users from the left hand lists and and add them as recipients using the arrows.</p>"
 msgstr "<p>La herramienta Tablón de anuncios permite a los profesores colocar mensajes en el tablón de anuncios del curso. Puede avisar a sus miembros de la colocación de un nuevo documento, de la proximidad de la fecha para enviar los trabajos, o de que alguien ha realizado un trabajo de especial calidad. Cada miembro verá esta novedad cuando entre en su área de usuario. </p><p><strong>La lista de distribución. </strong> Los anuncios además de ser publicados en el tablón pueden ser enviados automáticamente por correo electrónico si se marca la casilla correspondiente. Si sólo desea utilizar la lista, bastará con que tras enviarlo, borre el anuncio del tablón.</p><p>Además de enviar un correo a todos los miembros, Vd. puede enviarlo a una o varias personas, o a uno o varios grupos que haya formado en el curso. Una vez pulsada la opción, use CTRL+clic para seleccionar varios elementos en el menú de izquierda y después haga clic sobre el botón que apunta a la derecha para enviarlos a la otra lista. Finalmente, escriba su mensaje en el campo inferior de la página y pulse el botón Enviar. Esta utilidad, si es usada con moderación, permite recuperar a miembros que hayan abandonado antes de finalizar.</p>"
 
-msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remains focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
+msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remain focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
 msgstr "<p>La herramienta 'Chat' le permite charlar en vivo con varios miembros del curso.</p><p><p>Este chat no es igual que el usado por programas como MSN® o Yahoo Messenger®, pues al estar basado en la Web, tarda unos segundos en restaurarse. Sin embargo, tiene la ventaja de estar integrado en el curso, de poder archivar sus charlas en la sección documentos y de no requerir que los usuarios tengan instalado ningún software especial.</p><p>Si los usuarios incluyen sus fotografías en su portafolios electrónico (opción 'Mi perfil' de la barra de menú superior del sitio web), esta aparecerá junto a sus mensajes para ayudar a identificarlos.</p><p>El chat es una herramienta de comunicación sincrónica que permite a varios usuarios intervenir en tiempo real. Cuando los usuarios son dos o tres no hay problema en la interacción, pero cuando éstos son muchos los mensajes pueden sucederse vertiginosamente y se puede llegar a perderse el hilo de la discusión. Al igual que en un aula física, en estos casos es necesario un moderador. Este chat basado en la web no ofrece al profesor unas herramientas especiales de moderación, salvo la de suprimir todos los mensajes en pantalla mediante la opción \"Borrar la lista de mensajes\". Esto se realiza cuando el profesor quiere borrar todos los mensajes de la pantalla y comenzar de nuevo una conversación.</p><p>También, los usuarios disponen de una casilla para marcar preguntas importantes, aunque no se debe abusar de ella.</p><p><b>Importancia pedagógica</b></p><p>No siempre es necesario proporcionar un espacio de charla en un curso. Sin embargo, si la idea es fomentar la participación, ésta herramienta puede ayudar. Por ejemplo, habitualmente puede ocultar la herramienta de Chat, haciéndola visible en ciertas épocas en que usted tenga una reunión concertada con el resto de los miembros para contestar a sus preguntas en vivo. De esta manera, los estudiantes tendrán la garantía de poder tener varios interlocutores en ese momento.</p><p>El chat se puede usar combinado con otras herramientas o documentos de nuestro sitio web, que hayamos abierto en otra ventana (clic derecho del ratón sobre el enlace del documento o herramienta y seleccionar abrir en una nueva ventana); de esta forma podemos por ej., ir explicando en el chat determinados documentos que hayamos subido a la plataforma.</p><p>Todas las sesiones del chat son guardadas automáticamente y podrán ser visualizadas por los usuarios del curso si así lo desea el administrador del mismo. Aunque muchas veces las sesiones en el chat pueden ser triviales, en otras pueden ser realmente interesantes y dignas de ser incorporadas como un documento más de trabajo.</p>"
 
 msgid "<p>The assignments tool  is a very simple tool that allows your students to upload documents to the course.It can be used to accept responses to open questions from individuals or groups, or for uploading any other form of document</p><p>You can make files visible to all students by default, or only visible to yourself according to the requirements of your course. Making all files visible is useful when, for instance, you want to ask students to share opinions on each others papers, or when you want to give them experience in publishing texts globally. Keep files invisible if, for example, you want ask everybody the same question but to avoid 'cheating'. Making the documents invisible will also allow you to have some form of control over when a document is available to all the other students. </p><p>If you want  students to hand in a document for grading you're best, from within the tool, to assign submissions to a folder.</p> <p>You can use the the tool to set deadlines and instructions for delivery, as well as a maximum grade/score.</p>"
@@ -14618,7 +14618,7 @@ msgid "The time limit of a category is referential, will not affect the boundari
 msgstr "El plazo de una categoría es referencial, no afectará a los límites de una sesión de formación"
 
 msgid "User tag"
-msgstr "User tag"
+msgstr "Etiqueta de usuario"
 
 msgid "E-mail alert on course creation"
 msgstr "Aviso e-mail a la creación de nuevos cursos"
@@ -19392,7 +19392,7 @@ msgid "Exercise average"
 msgstr "Media del ejercicio"
 
 msgid "Webcam Clip"
-msgstr "Webcam Clip"
+msgstr "Clip de Webcam"
 
 msgid "Snapshot"
 msgstr "Capturar"
@@ -22118,7 +22118,7 @@ msgstr "Lista desplegable con campo de texto"
 msgid "Triple select"
 msgstr "Campo de tipo selección triple"
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr "Confirma que realmente deseas suscribirte a esta plataforma."
 
 msgid "Add text"
@@ -22178,14 +22178,11 @@ msgstr "Confirmación de registro"
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Su cuenta está inactiva porque aún no la ha confirmado. Revise su correo electrónico y siga las instrucciones o haga click en el siguiente enlace para volver a enviar el correo electrónico de confirmación."
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr "Para completar su registro en la plataforma, necesita confirmar su cuenta haciendo click en el siguiente enlace"
 
 msgid "Confirmation for new account"
 msgstr "Confirmación de nueva cuenta"
-
-msgid "You need confirm your account via email to access the platform"
-msgstr "Usted necesita confirmar su cuenta por correo electrónico para acceder a la plataforma"
 
 msgid "Enable Cloud files link addition"
 msgstr "Permitir añadir enlaces a ficheros en la nube"
@@ -23835,7 +23832,7 @@ msgid "Learning path by author"
 msgstr "Lección por autor"
 
 msgid "Import assignments from base course"
-msgstr "Importar los tareas del curso base"
+msgstr "Importar las tareas del curso base"
 
 msgid "Redirect to the platform home page"
 msgstr "Redirigir a la página de inicio de la plataforma"
@@ -25038,9 +25035,6 @@ msgstr "Exportar todos los resultados de todos los ejercicios"
 
 msgid "Click to view details"
 msgstr "Haga clic para más detalles"
-
-msgid "This report applies to all plateform activities of the user."
-msgstr "Este reporte usa todos los datos del usuario en toda la plataforma."
 
 msgid "dd/mm/yyyy"
 msgstr "dd/mm/aaaa"
@@ -28549,7 +28543,7 @@ msgstr "Condiciones de uso de la plataforma"
 msgid "Password too easy to guess"
 msgstr "Contraseña demasiado fácil de adivinar"
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr ""
 "Necesita confirmar su cuenta a través del correo electrónico para acceder a "
 "la plataforma"
@@ -32340,4 +32334,634 @@ msgstr "Reiniciar cursos del administrador"
 
 msgid "Admin Dashboard"
 msgstr "Panel del administrador"
+
+msgid "Threads"
+msgstr "Hilos"
+
+msgid "Invalid thread"
+msgstr "Hilo inválido"
+
+msgid "View full thread"
+msgstr "Ver hilo completo"
+
+msgid "No post yet"
+msgstr "No hay publicaciones aún"
+
+msgid "Discussion thread"
+msgstr "Hilo de discusión"
+
+msgid "Access to this course"
+msgstr "Acceso a este curso"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "Este complemento no tiene configuraciones ajustables. La activación se gestiona desde la lista de complementos."
+
+msgid "Private - access granted by privileged users"
+msgstr "Privado - acceso concedido por usuarios privilegiados"
+
+msgid "No detailed feedback is available for this question."
+msgstr "No hay retroalimentación detallada disponible para esta pregunta."
+
+msgid "Please select an answer before checking the result."
+msgstr "Por favor seleccione una respuesta antes de verificar el resultado."
+
+msgid "Allow PDF export for this item"
+msgstr "Permitir exportación PDF para este elemento"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Ocultar usuarios gratuitos (no inscritos)"
+
+msgid "Question statistics"
+msgstr "Estadísticas de preguntas"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Generando archivo. No cierre esta pestaña..."
+
+msgid "Assign auth source to users"
+msgstr "Asignar fuente de autenticación a usuarios"
+
+msgid "There are no questions for this survey"
+msgstr "No hay preguntas para esta encuesta"
+
+msgid "Certificates report"
+msgstr "Informe de certificados"
+
+msgid "Course picture"
+msgstr "Imagen del curso"
+
+msgid "Current picture"
+msgstr "Imagen actual"
+
+msgid "Course events log"
+msgstr "Registro de eventos del curso"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Actualice la información de la categoría y su límite de tiempo opcional."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Cree un grupo lógico de sesiones para mantener organizado su catálogo de formación."
+
+msgid "Generating file, do not close this tab"
+msgstr "Generando archivo, no cierre esta pestaña"
+
+msgid "Assign authentication sources to users"
+msgstr "Asignar fuentes de autenticación a usuarios"
+
+msgid "Average completion rate"
+msgstr "Tasa promedio de finalización"
+
+msgid "Average access rate"
+msgstr "Tasa promedio de acceso"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "Esta tabla resume el progreso y la actividad del aprendiz por ruta de aprendizaje en sus cursos actuales."
+
+msgid "Follow up"
+msgstr "Seguimiento"
+
+msgid "Tracking for superior"
+msgstr "Seguimiento para superior"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "Este informe muestra la distribución semanal de sesiones por coach general en el rango de fechas seleccionado."
+
+msgid "Head manager report"
+msgstr "Informe de gerente principal"
+
+msgid "Reset or update user password"
+msgstr "Restablecer o actualizar contraseña de usuario"
+
+msgid "Active users"
+msgstr "Usuarios activos"
+
+msgid "Inactive users"
+msgstr "Usuarios inactivos"
+
+msgid "Report on resources"
+msgstr "Informe sobre recursos"
+
+msgid "Global view"
+msgstr "Vista global"
+
+msgid "Available reports"
+msgstr "Informes disponibles"
+
+msgid "Current report"
+msgstr "Informe actual"
+
+msgid "Back to user assignment page"
+msgstr "Volver a la página de asignación de usuarios"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Fuentes de autenticación asignadas exitosamente"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Consejo: elija “— Solo subir —” para guardar sin enviar a nadie."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Por favor seleccione al menos un destinatario (“— Solo subir —” o cualquier usuario)"
+
+msgid "Sharing"
+msgstr "Compartir"
+
+msgid "Selected files"
+msgstr "Archivos seleccionados"
+
+msgid "Hide password"
+msgstr "Ocultar contraseña"
+
+msgid "Show password"
+msgstr "Mostrar contraseña"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Subir logotipo SVG para correos electrónicos"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "Debe mover o eliminar todos los itinerarios de aprendizaje de esta categoría antes de eliminarla."
+
+msgid "Clear filters"
+msgstr "Borrar filtros"
+
+msgid "Attendances (tablet)"
+msgstr "Asistencias (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Salir del modo tablet"
+
+msgid "No members found."
+msgstr "No se encontraron miembros."
+
+msgid "Health check"
+msgstr "Comprobación de salud"
+
+msgid "Export to CC 1.3"
+msgstr "Exportar a CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Cargando recursos..."
+
+msgid "Failed to load resources."
+msgstr "Error al cargar recursos."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Seleccione al menos un recurso exportable (documento, enlace web, discusión,...)."
+
+msgid "Export finished."
+msgstr "Exportación finalizada."
+
+msgid "Export failed."
+msgstr "Error en la exportación."
+
+msgid "Import failed."
+msgstr "Error en la importación."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Archivo local (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Listo para importar"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "Restauraremos la copia de seguridad en este curso. Puede volver para cambiar opciones."
+
+msgid "Select resources to import"
+msgstr "Seleccionar recursos a importar"
+
+msgid "No resources available in this backup."
+msgstr "No hay recursos disponibles en esta copia de seguridad."
+
+msgid "Import selection"
+msgstr "Selección de importación"
+
+msgid "Import completed"
+msgstr "Importación completada"
+
+msgid "Could not load options."
+msgstr "No se pudieron cargar las opciones."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Seleccione un archivo de copia de seguridad (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Elija una copia de seguridad del servidor"
+
+msgid "Error selecting source."
+msgstr "Error al seleccionar origen."
+
+msgid "Recycling options"
+msgstr "Opciones de reciclaje"
+
+msgid "Type the course code to confirm"
+msgstr "Escriba el código del curso para confirmar"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "Esto eliminará o restablecerá los recursos seleccionados. Esta acción no se puede deshacer."
+
+msgid "Select resources to recycle"
+msgstr "Seleccionar recursos a reciclar"
+
+msgid "No resources available in this course."
+msgstr "No hay recursos disponibles en este curso."
+
+msgid "Recycle selected"
+msgstr "Reciclar seleccionados"
+
+msgid "Error loading resources."
+msgstr "Error al cargar recursos."
+
+msgid "Clear search"
+msgstr "Borrar búsqueda"
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr "Solo se permiten letras, dígitos y guión bajo (_) en el nombre de la base de datos. Los caracteres inválidos se eliminarán automáticamente."
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr "¿Qué términos y condiciones generales se dan a los usuarios para usar esta plataforma?"
+
+msgid "ex. {examplePassword}"
+msgstr "ej. {examplePassword}"
+
+msgid "Welcome to Chamilo!"
+msgstr "Bienvenid@ en Chamilo!"
+
+msgid "Welcome to this platform"
+msgstr "Bienvenid@ a esta plataforma"
+
+msgid "For more details visit %s"
+msgstr "Para más detalles visite %s"
+
+msgid "Manager"
+msgstr "Responsable"
+
+msgid "Mark as"
+msgstr "Marcar como"
+
+msgid "Reply to all"
+msgstr "Responder a todos"
+
+msgid "SCIM external ID"
+msgstr "ID externo SCIM"
+
+msgid "OAuth2 ID"
+msgstr "ID OAuth2"
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr "Por favor, acepte la última versión de los términos y condiciones."
+
+msgid "Required value for operation without path"
+msgstr "Valor requerido para la operación sin ruta"
+
+msgid "Available space (%s)"
+msgstr "Espacio disponible (%s)"
+
+msgid "Index this description for the global search"
+msgstr "Indexar esta descripción para la búsqueda global"
+
+msgid "Unknown course"
+msgstr "Curso desconocido"
+
+msgid "Certificate not found."
+msgstr "Certificado no encontrado."
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr "Token de seguridad expirado. Por favor, recargue la página e inténtelo de nuevo."
+
+msgid "Only platform administrators can change the course visibility."
+msgstr "Solo los administradores de la plataforma pueden cambiar la visibilidad del curso."
+
+msgid "Unexpected error while subscribing the user"
+msgstr "Error inesperado al inscribir al usuario"
+
+msgid "Search in resource logs"
+msgstr "Buscar en los registros de recursos"
+
+msgid "Include this learning path in the global search results"
+msgstr "Incluir este itinerario de aprendizaje en los resultados de búsqueda global"
+
+msgid "The course code already exists"
+msgstr "El código del curso ya existe"
+
+msgid "Latest news"
+msgstr "Últimas noticias"
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr "Obtenga las últimas noticias de Chamilo, incluidas vulnerabilidades de seguridad y eventos, directamente en su panel de administración. Estas noticias se verificarán en el servidor de noticias de Chamilo cada vez que cargue la página de administración y solo serán visibles para administradores."
+
+msgid "Chamilo support block"
+msgstr "Bloque de soporte de Chamilo"
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr "Obtenga consejos profesionales y una forma fácil de contactar con proveedores de servicios oficiales para soporte profesional, directamente de los creadores de Chamilo. Este bloque aparece en su página de administración, solo es visible para administradores y se actualiza cada vez que carga la página de administración."
+
+msgid "Hide option to send announcements to HR users"
+msgstr "Ocultar opción para enviar anuncios a usuarios de RRHH"
+
+msgid "Allow session admins to download private certificates"
+msgstr "Permitir a administradores de sesión descargar certificados privados"
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr "Si está habilitado, los administradores de sesión pueden descargar certificados incluso si no están publicados públicamente."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "Si no está vacío, el proceso de creación del curso buscará algunos campos en el perfil del usuario y los autocompletará para el curso. Por ejemplo, un profesor especializado en marketing digital podría establecer automáticamente una marca «marketing digital» en cada curso que cree."
+
+msgid "Main menu entries"
+msgstr "Entradas del menú principal"
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr "Marque las entradas que desea que aparezcan en el menú principal"
+
+msgid "Main menu entries per role"
+msgstr "Entradas del menú principal por rol"
+
+msgid "Define header tabs visibility per role."
+msgstr "Defina la visibilidad de las pestañas del encabezado por rol."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr "Establezca las opciones que desea que aparezcan en la navegación alrededor de una tabla para mostrar menos o más filas en una página. p. ej. [50, 100, 200, 500]."
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr "Matriz de funciones extra que puede habilitar para el reproductor de video en Chamilo. Las opciones incluyen 'speed', que le permite cambiar la velocidad de reproducción de un video."
+
+msgid "Mail: character set"
+msgstr "Correo: conjunto de caracteres"
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr "En caso de que necesite definir el conjunto de caracteres a usar al enviar esos correos electrónicos. Déjelo vacío si no está seguro."
+
+msgid "Mail: Debug"
+msgstr "Correo: Depuración"
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr "Seleccione si desea habilitar los registros de depuración del envío de correos electrónicos. Estos le darán más información sobre lo que está sucediendo al conectarse al servicio de correo, pero no son elegantes y podrían romper el diseño de la página. Úselos solo cuando no haya actividad de usuarios."
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr "Correo: Evitar usar LD+JSON"
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr "Algunos clientes de correo no entienden el formato descriptivo LD+JSON, mostrándolo como una cadena JSON suelta al usuario final. Si este es su caso, podría querer establecer la variable de abajo en 'false' para desactivar este encabezado."
+
+msgid "Mail: DKIM headers"
+msgstr "Correo: Encabezados DKIM"
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr "Introduzca un array JSON de sus configuraciones DKIM (vea el ejemplo)."
+
+msgid "Mail: XOAuth2 options"
+msgstr "Correo: Opciones XOAuth2"
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr "Si usa un servicio de correo basado en XOAuth2, use esta configuración en JSON para guardar su configuración específica (vea el ejemplo) y seleccione XOAuth2 en la configuración del servicio de correo."
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr "Define el tipo de entorno: \"prod\" (producción normal), \"validation\" (como producción pero sin reportar estadísticas), o \"test\" (modo debug con herramientas de desarrollador como indicadores de cadenas no traducidas)."
+
+msgid "Global limit of users per course"
+msgstr "Límite global de usuarios por curso"
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr "Define un número máximo global de usuarios (incluidos profesores) permitidos para inscribirse en cualquier curso individual de la plataforma. Establezca este valor en 0 para desactivar el límite. Esto ayuda a evitar que los cursos se sobrecarguen en portales abiertos."
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr "Activar para usar un array que defina qué roles deben mostrarse claramente y cuáles deben ocultarse."
+
+msgid "Show base course posts in session course"
+msgstr "Mostrar publicaciones base del curso en el curso de sesión"
+
+msgid "Limit identical email usage"
+msgstr "Limitar uso idéntico de correos electrónicos"
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr "Número máximo de cuentas permitidas para compartir la misma dirección de correo electrónico. Establezca en 0 para desactivar este límite."
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr "Permitir a los administradores de sesión ver todos los usuarios en todas las URLs"
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr "Si está habilitado, los administradores de sesión pueden buscar y listar usuarios de todas las URLs de acceso, independientemente de su URL actual."
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr "Habilitar la posibilidad para que los usuarios seleccionen su propia zona horaria. Una vez configurado, los usuarios podrán ver las fechas límite de las tareas y otras referencias temporales en su propia zona horaria, lo que reducirá errores en el momento de la entrega."
+
+msgid "Redirect after login (per profile)"
+msgstr "Redirigir después del inicio de sesión (por perfil)"
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr "Definir redirección por perfil después del inicio de sesión usando un objeto JSON como {\"ESTUDIANTE\":\"\", \"ADMINISTRADOR\":\"admin-dashboard\"}"
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr "Ocultar casilla de aceptación legal en la página de Términos y Condiciones"
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr "Si se establece en true, elimina la casilla \"He leído y acepto\" en el flujo de la página de Términos y Condiciones."
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Matriz que define el host y puerto para el servidor LDAP."
+
+msgid "Enable 2FA"
+msgstr "Habilitar 2FA"
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr "Agregar campos en la página de actualización de contraseña para habilitar 2FA usando una app autenticadora TOTP. Cuando está deshabilitado globalmente, los usuarios no verán campos 2FA y no serán solicitados para 2FA al iniciar sesión, incluso si lo habían habilitado previamente."
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr "Algunas funciones de Chamilo se conectarán al exterior desde el servidor. Por ejemplo, para asegurarse de que un contenido externo existe al crear un enlace o mostrar una página incrustada en el camino de aprendizaje. Si su servidor Chamilo usa un proxy para salir de su red, este sería el lugar para configurarlo."
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr "Habilitar o deshabilitar la reinscripción automática cuando expira la validez del curso. También debe activarse el trabajo cron relacionado."
+
+msgid "Show remaining days in My Sessions"
+msgstr "Mostrar días restantes en Mis Sesiones"
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr "Si está habilitado, las fechas de sesión en la página \"Mis Sesiones\" serán reemplazadas por el número de días restantes."
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr "Mostrar \"Encuestas pendientes\" en el menú"
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr "Mostrar un elemento de menú que permite a los usuarios acceder a sus encuestas pendientes."
+
+msgid "Disclose AI assistance"
+msgstr "Revelar asistencia de IA"
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr "Mostrar una etiqueta en cualquier contenido o retroalimentación que haya sido generada o co-generada por cualquier sistema de IA, evidenciando al usuario que el contenido fue construido con la ayuda de algún sistema de IA. Los detalles sobre qué sistema de IA se usó en cada caso se guardan en la base de datos para auditoría, pero no son directamente accesibles por el usuario final."
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr "Configuración JSON para el catálogo de cursos: ajustes de enlaces, filtros, opciones de ordenación y más."
+
+msgid "Session Catalog Settings"
+msgstr "Configuración del Catálogo de Sesiones"
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr "Configuración JSON para el catálogo de sesiones: filtros y opciones de visualización."
+
+msgid "Show Course Descriptions"
+msgstr "Mostrar Descripciones de Cursos"
+
+msgid "Display course descriptions within the catalog listing."
+msgstr "Mostrar descripciones de cursos dentro del listado del catálogo."
+
+msgid "Published Courses Only"
+msgstr "Solo Cursos Publicados"
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr "Limitar el catálogo solo a cursos marcados como publicados."
+
+msgid "Display Catalog on Homepage"
+msgstr "Mostrar Catálogo en la Página Principal"
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr "Mostrar el bloque del catálogo de cursos en la página principal de la plataforma."
+
+msgid "Hide Public Link"
+msgstr "Ocultar Enlace Público"
+
+msgid "Remove the public URL link from course cards."
+msgstr "Eliminar el enlace URL público de las tarjetas de cursos."
+
+msgid "Only Selected Courses"
+msgstr "Solo Cursos Seleccionados"
+
+msgid "Show only manually selected courses in the catalog."
+msgstr "Mostrar solo cursos seleccionados manualmente en el catálogo."
+
+msgid "Allow Student Browsing"
+msgstr "Permitir Navegación de Estudiantes"
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr "Permitir a los estudiantes navegar y filtrar el catálogo de cursos."
+
+msgid "Hide Private Courses"
+msgstr "Ocultar Cursos Privados"
+
+msgid "Exclude private courses from the catalog display."
+msgstr "Excluir cursos privados de la visualización del catálogo."
+
+msgid "Show Courses & Sessions"
+msgstr "Mostrar cursos y sesiones"
+
+msgid "Include both courses and sessions in catalog results."
+msgstr "Incluir tanto cursos como sesiones en los resultados del catálogo."
+
+msgid "Auto Session Subscription"
+msgstr "Inscripción automática a sesiones"
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr "Habilitar la inscripción automática a sesiones para los usuarios."
+
+msgid "Subscription in Session View"
+msgstr "Inscripción en la vista de sesión"
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr "Permitir a los usuarios inscribirse en cursos directamente desde la página de su sesión."
+
+msgid "Enable redirection plugin"
+msgstr "Habilitar plugin de redirección"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr "Arreglo que define los 'días' y 'meses' para establecer la fecha de expiración de la cuenta cuando el usuario inicia sesión por primera vez."
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr "Un arreglo de rol => número que representa el número de días que tiene una cuenta antes de expirar, dependiendo del rol."
+
+msgid "Extra user field used to search and name sessions"
+msgstr "Campo extra de usuario usado para buscar y nombrar sesiones"
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr "Esta configuración define la clave del campo extra de usuario (p. ej., \"company\") que se usará para buscar usuarios y definir el nombre de la sesión al registrar estudiantes desde /admin-dashboard/register."
+
+msgid "Glossary terms generator"
+msgstr "Generador de términos de glosario"
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr "Permitir a los profesores solicitar términos de glosario generados por IA en su curso. Esto generará 20 términos basados en el título del curso y la descripción general en la herramienta de descripción del curso. Si se usa más de una vez, excluirá términos ya presentes en ese glosario (asegúrese de que el contenido pueda compartirse con los servicios de IA configurados)."
+
+msgid "Video generator"
+msgstr "Generador de videos"
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr "Genera videos basados en indicaciones o contenido usando IA (esto podría consumir muchos tokens)."
+
+msgid "Course analyser"
+msgstr "Analizador de cursos"
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr "Analiza todos los recursos en uno o varios cursos y pre-entrena el modelo de IA para responder cualquier pregunta sobre este o estos cursos (asegúrese de que el contenido pueda compartirse con los servicios de IA configurados)."
+
+msgid "Test/development"
+msgstr "Pruebas/desarrollo"
+
+msgid "Crons"
+msgstr "Crons"
+
+msgid "Editor"
+msgstr "Editor"
+
+msgid "Gradebook"
+msgstr "Libro de calificaciones"
+
+msgid "Internationalization"
+msgstr "Internacionalización"
+
+msgid "User profiles"
+msgstr "Perfiles de usuario"
+
+msgid "Support tickets"
+msgstr "Tickets de soporte"
+
+msgid "Webservices"
+msgstr "Servicios web"
+
+msgid "Catalogue"
+msgstr "Catálogo"
+
+msgid "Workflows"
+msgstr "Flujos de trabajo"
+
+msgid "Setting is editable on sub-URLs"
+msgstr "La configuración es editable en sub-URLs"
+
+msgid "Show JSON Template"
+msgstr "Mostrar plantilla JSON"
+
+msgid "JSON Template"
+msgstr "Plantilla JSON"
+
+msgid "Installing Xapian bindings"
+msgstr "Instalando enlaces de Xapian"
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr "El siguiente fragmento muestra un ejemplo de instalación de los enlaces PHP de Xapian en Ubuntu 25.04 con PHP 8.3. Adapte las rutas y versiones a su propio entorno."
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr "Asegúrese de tener solo la versión de PHP que realmente usa (por ejemplo, 8.3) y evite mezclar varias versiones con diferentes directorios de extensiones."
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr "Una vez que la extensión esté correctamente cargada tanto para CLI como para el servidor web, los diagnósticos de búsqueda anteriores deberían reportar que el módulo Xapian está instalado."
+
+msgid "Cleanup temporary uploads and cache"
+msgstr "Limpiar cargas temporales y caché"
+
+msgid "Directory"
+msgstr "Directorio"
+
+msgid "Only delete files older than (minutes)"
+msgstr "Solo eliminar archivos más antiguos que (minutos)"
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr "Establecer 0 para eliminar todos los archivos. Usar un valor positivo (p.ej., 60) para evitar eliminar archivos que aún se están cargando."
+
+msgid "Preview only (do not delete)"
+msgstr "Solo vista previa (no eliminar)"
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr "Advertencia: está a punto de eliminar TODOS los archivos temporales. Esta acción no se puede deshacer."
+
+msgid "This will delete all temporary files. Continue?"
+msgstr "Esto eliminará todos los archivos temporales. ¿Continuar?"
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr "Esto eliminará archivos más antiguos que %minutes% minutos. ¿Continuar?"
 

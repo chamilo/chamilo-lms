@@ -2293,7 +2293,7 @@ function render_thread_preview_html(
             </div>
 
             <?php if (empty($rows)): ?>
-                <div class="text-gray-50 text-body-2 mt-2"><?php echo get_lang('No posts yet'); ?></div>
+                <div class="text-gray-50 text-body-2 mt-2"><?php echo get_lang('No post yet'); ?></div>
             <?php else: foreach ($rows as $row):
                 $postId  = (int) $row['iid'];
                 $isFocus = $highlightPostId && $postId === (int) $highlightPostId;

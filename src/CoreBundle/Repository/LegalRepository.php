@@ -125,32 +125,62 @@ class LegalRepository extends ServiceEntityRepository
         return false;
     }
 
-    public function getLastConditionByLanguage(int $languageId): ?Legal
+    public function getLastVersionByLanguage(int $languageId): ?int
     {
         try {
-            $qb = $this->createQueryBuilder('l');
-            $qb->where('l.languageId = :languageId')
+            $result = $this->createQueryBuilder('l')
+                ->select('MAX(l.version)')
+                ->andWhere('l.languageId = :languageId')
                 ->setParameter('languageId', $languageId)
-                ->orderBy('l.version', 'DESC')
-                ->setMaxResults(1)
+                ->getQuery()
+                ->getSingleScalarResult()
             ;
 
-            $result = $qb->getQuery()->getSingleResult();
-
-            if ($result->getContent()) {
-                $result->setContent($this->replaceTags($result->getContent()));
-            }
-
-            return $result;
-        } catch (NonUniqueResultException|NoResultException $e) {
+            return null !== $result ? (int) $result : null;
+        } catch (NonUniqueResultException|NoResultException) {
             return null;
         }
+    }
+
+    /**
+     * @return Legal[]
+     */
+    public function findTermsByLanguageAndVersion(int $languageId, int $version): array
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.languageId = :languageId')
+            ->andWhere('l.version = :version')
+            ->setParameter('languageId', $languageId)
+            ->setParameter('version', $version)
+            ->orderBy('l.type', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * IMPORTANT: keep this returning the main section (type=0),
+     * otherwise it might return one of the GDPR sections.
+     */
+    public function getLastConditionByLanguage(int $languageId): ?Legal
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.languageId = :languageId')
+            ->andWhere('l.type = 0')
+            ->setParameter('languageId', $languageId)
+            ->orderBy('l.version', 'DESC')
+            ->addOrderBy('l.date', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
 
     public function findLastConditionByLanguage(int $languageId): ?Legal
     {
         return $this->createQueryBuilder('l')
             ->andWhere('l.languageId = :languageId')
+            ->andWhere('l.type = 0')
             ->setParameter('languageId', $languageId)
             ->orderBy('l.version', 'DESC')
             ->setMaxResults(1)
@@ -181,6 +211,7 @@ class LegalRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('l');
         $qb->where('l.languageId = :languageId')
             ->andWhere('l.version = :versionId')
+            ->andWhere('l.type = 0')
             ->setParameters([
                 'languageId' => $languageId,
                 'versionId' => $versionId,
@@ -188,12 +219,37 @@ class LegalRepository extends ServiceEntityRepository
             ->setMaxResults(1)
         ;
 
-        $result = $qb->getQuery()->getOneOrNullResult();
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 
-        if ($result && $result->getContent()) {
-            $result->setContent($this->replaceTags($result->getContent()));
-        }
+    public function findLatestVersionByLanguage(int $languageId): int
+    {
+        $qb = $this->createQueryBuilder('l');
+        $qb->select('MAX(l.version) AS maxVersion')
+            ->andWhere('l.languageId = :languageId')
+            ->setParameter('languageId', $languageId)
+        ;
 
-        return $result;
+        $row = $qb->getQuery()->getOneOrNullResult();
+
+        return (int) ($row['maxVersion'] ?? 0);
+    }
+
+    /**
+     * @return Legal[]
+     */
+    public function findByLanguageAndVersion(int $languageId, int $version): array
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.languageId = :languageId')
+            ->andWhere('l.version = :version')
+            ->setParameters([
+                'languageId' => $languageId,
+                'version' => $version,
+            ])
+            ->orderBy('l.type', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 }

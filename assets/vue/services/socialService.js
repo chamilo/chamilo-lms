@@ -43,11 +43,21 @@ export default {
     }
   },
 
-  async fetchTermsAndConditions(userId) {
+  async fetchTermsAndConditions(userId, { accepted = false } = {}) {
     try {
-      const response = await axios.get(`${API_URL}/terms-and-conditions/${userId}`)
+      const url = accepted
+        ? `${API_URL}/terms-and-conditions/${userId}?accepted=1`
+        : `${API_URL}/terms-and-conditions/${userId}`
 
-      return response.data.terms
+      const response = await axios.get(url)
+
+      return {
+        items: response.data?.terms ?? [],
+        date_text: response.data?.date_text ?? "",
+        version: response.data?.version ?? null,
+        language_id: response.data?.language_id ?? null,
+        showing_accepted: response.data?.showing_accepted ?? false,
+      }
     } catch (error) {
       console.error("Error fetching terms and conditions:", error)
       throw error

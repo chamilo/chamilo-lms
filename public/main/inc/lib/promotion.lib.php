@@ -16,7 +16,7 @@ class Promotion extends Model
     public $table;
     public $columns = [
         'id',
-        'name',
+        'title',
         'description',
         'career_id',
         'status',
@@ -61,68 +61,68 @@ class Promotion extends Model
     {
         $pid = false;
         $promotion = $this->get($id);
-        if (!empty($promotion)) {
-            $new = [];
-            foreach ($promotion as $key => $val) {
-                switch ($key) {
-                    case 'id':
-                    case 'updated_at':
-                        break;
-                    case 'title':
-                        $val .= ' '.get_lang('Copy');
+
+        if (empty($promotion)) {
+            return false;
+        }
+
+        // Build new promotion payload
+        $new = [];
+        foreach ($promotion as $key => $val) {
+            switch ($key) {
+                case 'id':
+                case 'updated_at':
+                    break;
+                case 'title':
+                    $new[$key] = $val.' '.get_lang('Copy');
+                    break;
+                case 'created_at':
+                    $new[$key] = api_get_utc_datetime();
+                    break;
+                case 'career_id':
+                    // Keep original career unless a valid career_id is provided
+                    if (!empty($career_id)) {
+                        $new[$key] = (int) $career_id;
+                    } else {
                         $new[$key] = $val;
-                        break;
-                    case 'created_at':
-                        $val = api_get_utc_datetime();
-                        $new[$key] = $val;
-                        break;
-                    case 'career_id':
-                        if (!empty($career_id)) {
-                            $val = (int) $career_id;
-                        }
-                        $new[$key] = $val;
-                        break;
-                    default:
-                        $new[$key] = $val;
-                        break;
-                }
+                    }
+                    break;
+                default:
+                    $new[$key] = $val;
+                    break;
             }
+        }
 
-            if ($copy_sessions) {
-                /**
-                 * When copying a session we do:
-                 * 1. Copy a new session from the source
-                 * 2. Copy all courses from the session (no user data, no user list)
-                 * 3. Create the promotion.
-                 */
-                $session_list = SessionManager::get_all_sessions_by_promotion($id);
+        // Always create the new promotion first
+        $pid = $this->save($new);
+        if (empty($pid)) {
+            return false;
+        }
 
-                if (!empty($session_list)) {
-                    $pid = $this->save($new);
-                    if (!empty($pid)) {
-                        $new_session_list = [];
+        // Optionally copy sessions
+        if ($copy_sessions) {
+            $session_list = SessionManager::get_all_sessions_by_promotion($id);
+            if (!empty($session_list)) {
+                $new_session_list = [];
 
-                        foreach ($session_list as $item) {
-                            $sid = SessionManager::copy(
-                                (int) $item['id'],
-                                true,
-                                false,
-                                false,
-                                true
-                            );
-                            $new_session_list[] = $sid;
-                        }
+                foreach ($session_list as $item) {
+                    $sid = SessionManager::copy(
+                        (int) $item['id'],
+                        true,
+                        false,
+                        false,
+                        true
+                    );
 
-                        if (!empty($new_session_list)) {
-                            SessionManager::subscribe_sessions_to_promotion(
-                                $pid,
-                                $new_session_list
-                            );
-                        }
+                    // Only keep valid session ids
+                    if (!empty($sid)) {
+                        $new_session_list[] = $sid;
                     }
                 }
-            } else {
-                $pid = $this->save($new);
+
+                if (!empty($new_session_list)) {
+                    SessionManager::subscribe_sessions_to_promotion($pid, $new_session_list);
+                }
             }
         }
 
@@ -309,17 +309,26 @@ class Promotion extends Model
      */
     public function delete($id)
     {
-        if (parent::delete($id)) {
-            SessionManager::clear_session_ref_promotion($id);
-            Event::addEvent(
-                LOG_PROMOTION_DELETE,
-                LOG_PROMOTION_ID,
-                $id,
-                api_get_utc_datetime(),
-                api_get_user_id()
-            );
-        } else {
+        $id = (int) $id;
+        if ($id <= 0) {
             return false;
         }
+
+        // Unassign sessions first, otherwise DB constraints may block deletion.
+        SessionManager::clear_session_ref_promotion($id);
+
+        if (!parent::delete($id)) {
+            return false;
+        }
+
+        Event::addEvent(
+            LOG_PROMOTION_DELETE,
+            LOG_PROMOTION_ID,
+            $id,
+            api_get_utc_datetime(),
+            api_get_user_id()
+        );
+
+        return true;
     }
 }

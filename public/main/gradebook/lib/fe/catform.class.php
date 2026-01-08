@@ -425,7 +425,7 @@ class CatForm extends FormValidator
             $this->addButtonCreate(get_lang('Add category'));
         } else {
             $this->addElement('hidden', 'editcat', (int) $_GET['editcat']);
-            $this->addButtonUpdate(get_lang('Edit this category'));
+            $this->addButtonUpdate(get_lang('Save'));
         }
 
         $setting = api_get_setting('tool_visible_by_default_at_creation');

@@ -229,6 +229,8 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     $parent = $course;
                 }
                 if (null === $parent->getResourceNode()) {
+                    $this->logItemPropertyInconsistency('document', (int) $documentId, (string) $documentPath);
+
                     continue;
                 }
                 $admin = $this->getAdmin();

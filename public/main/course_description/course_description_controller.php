@@ -140,38 +140,49 @@ class CourseDescriptionController
         $affected_rows = null;
         if ('POST' === strtoupper($_SERVER['REQUEST_METHOD'])) {
             if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
-                $title = $_POST['title'];
-                $content = $_POST['contentDescription'];
+                $title            = $_POST['title'];
+                $content          = $_POST['contentDescription'];
                 $description_type = $_POST['description_type'];
-                $id = $_POST['id'];
+                $id               = $_POST['id'];
+
                 if (empty($id)) {
-                    // If the ID was not provided, find the first matching description item given the item type
-                    $description = $course_description->get_data_by_description_type(
-                        $description_type
-                    );
+                    $description = $course_description->get_data_by_description_type($description_type);
                     if (count($description) > 0) {
                         $id = $description['iid'];
                     }
-                    // If no corresponding description is found, edit a new one
                 }
+
                 $progress = isset($_POST['progress']) ? $_POST['progress'] : 0;
+
+                $searchEnabled = api_get_setting('search.search_enabled');
+                $enableSearch  = $searchEnabled === 'true' && !empty($_POST['enable_search']);
+
                 $repo = Container::getCourseDescriptionRepository();
 
-                /** @var CCourseDescription $courseDescription */
+                /** @var CCourseDescription|null $courseDescription */
                 $courseDescription = $repo->find($id);
+
                 if ($courseDescription) {
+                    if ($searchEnabled === 'true') {
+                        // If checkbox is unchecked => skip search index for this request.
+                        $courseDescription->setSkipSearchIndex(!$enableSearch);
+                    }
+
                     $courseDescription
                         ->setTitle($title)
-                        ->setProgress($progress)
+                        ->setProgress((int) $progress)
                         ->setContent($content)
                     ;
+
                     $repo->update($courseDescription);
                 } else {
                     $course_description->set_description_type($description_type);
                     $course_description->set_title($title);
                     $course_description->set_progress($progress);
                     $course_description->set_content($content);
-                    $course_description->insert();
+
+                    // Pass the flag down to insert (see next section).
+                    $course_description->insert($enableSearch);
                 }
 
                 Display::addFlash(
@@ -280,6 +291,18 @@ class CourseDescriptionController
                     'Height' => '200',
                 ]
             );
+
+            if ('true' === api_get_setting('search.search_enabled')) {
+                $form->addCheckBox(
+                    'enable_search',
+                    null,
+                    get_lang('Index this description for the global search')
+                );
+
+                // Default: checked
+                $default['enable_search'] = 1;
+            }
+
             $form->addButtonCreate(get_lang('Save'));
 
             $actions = self::getToolbar();
@@ -321,14 +344,20 @@ class CourseDescriptionController
 
         if ('POST' === strtoupper($_SERVER['REQUEST_METHOD'])) {
             if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
-                $title = $_POST['title'];
-                $content = $_POST['contentDescription'];
+                $title            = $_POST['title'];
+                $content          = $_POST['contentDescription'];
                 $description_type = $_POST['description_type'];
+
+                $searchEnabled = api_get_setting('search.search_enabled');
+                $enableSearch  = $searchEnabled === 'true' && !empty($_POST['enable_search']);
+
                 if ($description_type >= ADD_BLOCK) {
                     $course_description->set_description_type($description_type);
                     $course_description->set_title($title);
                     $course_description->set_content($content);
-                    $course_description->insert();
+
+                    // Pass flag
+                    $course_description->insert($enableSearch);
                 }
 
                 Display::addFlash(
@@ -370,6 +399,19 @@ class CourseDescriptionController
                     'Height' => '200',
                 ]
             );
+
+            if ('true' === api_get_setting('search.search_enabled')) {
+                $form->addCheckBox(
+                    'enable_search',
+                    null,
+                    get_lang('Index this description for the global search')
+                );
+
+                $form->setDefaults([
+                    'enable_search' => 1,
+                ]);
+            }
+
             $form->addButtonCreate(get_lang('Save'));
 
             $tpl = new Template(get_lang('Description'));

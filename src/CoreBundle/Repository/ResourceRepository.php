@@ -24,6 +24,7 @@ use Chamilo\CoreBundle\Traits\Repository\RepositoryQueryBuilderTrait;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryProxy;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
@@ -37,6 +38,10 @@ use const PATHINFO_EXTENSION;
 
 /**
  * Extends Resource EntityRepository.
+ *
+ * @template T of object
+ *
+ * @template-extends ServiceEntityRepositoryProxy<T>
  */
 abstract class ResourceRepository extends ServiceEntityRepository
 {
@@ -583,14 +588,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this->resourceNodeRepository->getResourceNodeFileContent($resourceNode);
     }
 
-    /**
-     * @return false|resource
-     */
-    public function getResourceNodeFileStream(ResourceNode $resourceNode)
-    {
-        return $this->resourceNodeRepository->getResourceNodeFileStream($resourceNode);
-    }
-
     public function getResourceFileDownloadUrl(AbstractResource $resource, array $extraParams = [], ?int $referenceType = null): string
     {
         $extraParams['mode'] = 'download';
@@ -636,7 +633,17 @@ abstract class ResourceRepository extends ServiceEntityRepository
         ?Course $course = null,
         ?Session $session = null
     ): void {
-        $firstLink = $resource->getFirstResourceLink();
+        $firstLink = null;
+
+        if (null !== $course) {
+            $firstLink = $resource->getFirstResourceLinkFromCourseSession($course, $session);
+        }
+
+        $firstLink ??= $resource->getFirstResourceLink();
+
+        if (null === $firstLink) {
+            return;
+        }
 
         if (ResourceLink::VISIBILITY_PUBLISHED === $firstLink->getVisibility()) {
             $this->setVisibilityDraft($resource, $course, $session);
@@ -844,6 +851,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
                     && $linkItem->getSession() === $link->getSession()
                     && $linkItem->getCourse() === $link->getCourse()
                     && $linkItem->getUserGroup() === $link->getUserGroup()
+                    && $linkItem->getGroup() === $link->getGroup()
                 ) {
                     $linkItem->setVisibility($link->getVisibility());
                     $em->persist($linkItem);
@@ -928,12 +936,12 @@ abstract class ResourceRepository extends ServiceEntityRepository
                 ];
                 $childDocument = $this->findOneBy($criteria);
                 if ($childDocument) {
-                    $this->setLinkVisibility($childDocument, $visibility);
+                    $this->setLinkVisibility($childDocument, $visibility, true, $course, $session, $group, $user);
                 }
             }
         }
 
-        if ($resource instanceof ResourceShowCourseResourcesInSessionInterface) {
+        if ($resource instanceof ResourceShowCourseResourcesInSessionInterface && null !== $course) {
             $link = $resource->getFirstResourceLinkFromCourseSession($course, $session);
 
             if (!$link) {

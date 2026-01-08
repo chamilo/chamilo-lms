@@ -2,10 +2,15 @@
   <div class="terms">
     <div v-if="!isLoading">
       <div
-        v-for="(item, index) in term"
+        v-for="(item, index) in term.items"
         :key="index"
       >
         <h3>{{ item.title }}</h3>
+        <p
+          v-if="item.subtitle"
+          class="small"
+          v-text="item.subtitle"
+        ></p>
         <div v-html="item.content"></div>
       </div>
       <p class="small mt-4 mb-4">{{ term.date_text }}</p>
@@ -44,7 +49,7 @@ import socialService from "../../services/socialService"
 
 const { t } = useI18n()
 
-const term = ref({})
+const term = ref({ items: [], date_text: "" })
 const accepted = ref(false)
 const acceptanceDate = ref(null)
 const blockButton = ref(false)
@@ -87,8 +92,7 @@ const acceptTerms = async () => {
   try {
     const userId = securityStore.user.id
     await socialService.submitAcceptTerm(userId)
-    accepted.value = true
-    acceptanceDate.value = new Date().toLocaleDateString()
+    await checkAcceptance()
   } catch (error) {
     console.error("Error accepting terms:", error)
   }
@@ -98,8 +102,7 @@ const revokeAcceptance = async () => {
   try {
     const userId = securityStore.user.id
     await socialService.revokeAcceptTerm(userId)
-    accepted.value = false
-    acceptanceDate.value = null
+    await checkAcceptance()
   } catch (error) {
     console.error("Error revoking acceptance:", error)
   }

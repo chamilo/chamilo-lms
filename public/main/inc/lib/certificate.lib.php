@@ -222,12 +222,26 @@ class Certificate extends Model
         }
 
         $categoryId = isset($this->certificate_data['cat_id']) ? (int) $this->certificate_data['cat_id'] : 0;
-        $certRepo   = Container::getGradeBookCertificateRepository();
+        $userId = isset($this->certificate_data['user_id']) ? (int) $this->certificate_data['user_id'] : 0;
+
+        if ($userId <= 0) {
+            return false;
+        }
+
+        $certRepo = Container::getGradeBookCertificateRepository();
 
         try {
-            $certRepo->deleteCertificateResource($this->certificate_data['user_id'], $categoryId);
+            // Prefer the real method name (resource-first + legacy fallback)
+            if (method_exists($certRepo, 'deleteCertificateAndRelatedFiles')) {
+                return (bool) $certRepo->deleteCertificateAndRelatedFiles($userId, $categoryId);
+            }
 
-            return true;
+            // Backward compatible fallback
+            if (method_exists($certRepo, 'deleteCertificateResource')) {
+                return (bool) $certRepo->deleteCertificateResource($userId, $categoryId);
+            }
+
+            return false;
         } catch (\Throwable $e) {
             error_log('[CERTIFICATE::deleteCertificate] delete error: '.$e->getMessage());
             return false;
@@ -341,9 +355,17 @@ class Certificate extends Model
                 $params['hide_print_button']
             );
 
-            $score = 100.0;
-            if (is_array($gb) && isset($gb['score'])) {
-                $score = (float)$gb['score'];
+            $score = null;
+            if (is_array($gb) && isset($gb['score']) && $gb['score'] !== '' && $gb['score'] !== null) {
+                $score = (float) $gb['score'];
+            }
+
+            if (null === $score && isset($this->certificate_data['score_certificate']) && $this->certificate_data['score_certificate'] !== '') {
+                $score = (float) $this->certificate_data['score_certificate'];
+            }
+
+            if (null === $score) {
+                $score = 100.0;
             }
 
             $html   = '';

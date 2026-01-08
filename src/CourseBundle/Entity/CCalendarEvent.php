@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\Career;
 use Chamilo\CoreBundle\Entity\Promotion;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceRestrictToGroupContextInterface;
 use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\GlobalEventFilter;
@@ -75,7 +76,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(filterClass: CidFilter::class)]
 #[ApiFilter(filterClass: SidFilter::class)]
 #[ApiFilter(GlobalEventFilter::class, properties: ['type'])]
-class CCalendarEvent extends AbstractResource implements ResourceInterface, Stringable
+class CCalendarEvent extends AbstractResource implements ResourceInterface, ResourceRestrictToGroupContextInterface, Stringable
 {
     public const COLOR_STUDENT_PUBLICATION = '#FF8C00';
 

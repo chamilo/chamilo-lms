@@ -116,7 +116,14 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
 
                     return;
                 }
-                $this->clearAnon($request);
+
+                // If we are in anonymous context, clear everything.
+                // Otherwise, only clear the public-course context flags.
+                if ($this->isAnonymousContext($request, $currentUser)) {
+                    $this->clearAnon($request);
+                } else {
+                    $this->clearActivePublicContext($request);
+                }
 
                 return;
             }
@@ -130,8 +137,9 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
             return;
         }
 
-        // No active context (or expired): for an ANONYMOUS user, clear only on top-level navigation outside whitelist
-        if ($currentUser instanceof User && User::ANONYMOUS === $currentUser->getStatus()) {
+        // No active context (or expired):
+        // For an anonymous context, clear only on top-level navigation outside whitelist.
+        if ($this->isAnonymousContext($request, $currentUser)) {
             if ($this->isTopLevelNavigation($request) && !$this->isWhitelistedPath($request)) {
                 $this->clearAnon($request);
             }
@@ -177,10 +185,42 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
      */
     private function rememberActivePublicCid(Request $request, int $cid): void
     {
+        if (!$request->hasSession()) {
+            return;
+        }
+
         $session = $request->getSession();
         $session->set(self::S_ACTIVE_CID, $cid);
         $session->set(self::S_ACTIVE_PUBLIC, true);
         $session->set(self::S_ACTIVE_EXPIRES_AT, time() + self::ACTIVE_TTL_SECONDS);
+    }
+
+    /**
+     * Detect if we are in an anonymous context.
+     * We must NOT rely only on $security->getUser() because this subscriber might run
+     * before the firewall loads the token.
+     */
+    private function isAnonymousContext(Request $request, mixed $currentUser): bool
+    {
+        if ($currentUser instanceof User && User::ANONYMOUS === $currentUser->getStatus()) {
+            return true;
+        }
+
+        // If we set our legacy _user marker, trust it.
+        if ($request->hasSession()) {
+            $u = $request->getSession()->get('_user');
+            if (\is_array($u) && !empty($u['is_anonymous'])) {
+                return true;
+            }
+        }
+
+        // Fallback: check token roles (when available)
+        $token = $this->tokenStorage->getToken();
+        if (null !== $token && \in_array('ROLE_ANONYMOUS', $token->getRoleNames(), true)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -240,7 +280,23 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Clear token and session flags.
+     * Clear ONLY the public-course context flags, without touching security/session user.
+     * This must be used when a real user navigates away from a public course.
+     */
+    private function clearActivePublicContext(Request $request): void
+    {
+        if (!$request->hasSession()) {
+            return;
+        }
+
+        $session = $request->getSession();
+        $session->remove(self::S_ACTIVE_CID);
+        $session->remove(self::S_ACTIVE_PUBLIC);
+        $session->remove(self::S_ACTIVE_EXPIRES_AT);
+    }
+
+    /**
+     * Clear token and session flags for anonymous context only.
      */
     private function clearAnon(Request $request): void
     {

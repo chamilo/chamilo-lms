@@ -14,6 +14,9 @@ class SkillRelUserModel extends Model
         'acquired_skill_at',
         'course_id',
         'session_id',
+        'validation_status',
+        'argumentation',
+        'argumentation_author_id',
     ];
 
     public function __construct()

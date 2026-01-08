@@ -51,12 +51,12 @@
           height="1.5rem"
           width="6rem"
         />
-        <Skeleton
+        <!-- Skeleton
           v-if="securityStore.isCurrentTeacher"
           class="aspect-square"
           height="1.5rem"
           width="6rem"
-        />
+        / -->
       </div>
 
       <hr class="mt-0 mb-4" />
@@ -216,7 +216,7 @@
             size="small"
             without-borders
           />
-          <BaseToggleButton
+          <!-- BaseToggleButton
             v-model="isCustomizing"
             :disabled="isSorting"
             :off-label="t('Customize')"
@@ -225,7 +225,7 @@
             on-icon="customize"
             size="small"
             without-borders
-          />
+          / -->
         </div>
       </div>
 

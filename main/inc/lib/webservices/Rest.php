@@ -2559,7 +2559,7 @@ class Rest extends WebService
      *
      * @return int The matching session id, or an array with details about the session
      */
-    public function getSessionFromExtraField(string $fieldName, string $fieldValue)
+    public function getSessionFromExtraField(string $fieldName, string $fieldValue): int
     {
         // find sessions that have that value in the given field
         $valueModel = new ExtraFieldValue('session');
@@ -2582,7 +2582,7 @@ class Rest extends WebService
         }
 
         // return sessionId
-        return intval($sessionIdList[0]['item_id']);
+        return (int) $sessionIdList[0]['item_id'];
     }
 
     /**

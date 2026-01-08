@@ -818,28 +818,32 @@ try {
             $restResponse->setData(['status' => $result]);
             break;
         case Rest::GET_SESSION_FROM_EXTRA_FIELD:
-            if (empty($_POST['field_name']) || empty($_POST['field_value'])) {
+            $fieldName = trim($httpRequest->request->get('field_name'));
+            $fieldValue = trim($httpRequest->request->get('field_value'));
+            if (empty($fieldName) || empty($fieldValue)) {
                 throw new Exception(get_lang('NoData'));
             }
-            $idSession = $restApi->getSessionFromExtraField($_POST['field_name'], $_POST['field_value']);
+            $idSession = $restApi->getSessionFromExtraField($fieldName, $fieldValue);
             Event::addEvent(
                 LOG_WS.$action,
                 'extra_field_name-extra_field_value',
-                Database::escape_string($_POST['field_name']).':'.Database::escape_string($_POST['field_value'])
+                $fieldName.':'.$fieldValue
             );
             $restResponse->setData([$idSession]);
             break;
         case Rest::GET_SESSION_INFO_FROM_EXTRA_FIELD:
-            if (empty($_POST['field_name']) || empty($_POST['field_value'])) {
+            $fieldName = trim($httpRequest->request->get('field_name'));
+            $fieldValue = trim($httpRequest->request->get('field_value'));
+            if (empty($fieldName) || empty($fieldValue)) {
                 throw new Exception(get_lang('NoData'));
             }
-            $idSession = $restApi->getSessionInfoFromExtraField($_POST['field_name'], $_POST['field_value']);
+            $sessionInfo = $restApi->getSessionInfoFromExtraField($fieldName, $fieldValue);
             Event::addEvent(
                 LOG_WS.$action,
                 'extra_field_name-extra_field_value',
-                Database::escape_string($_POST['field_name']).':'.Database::escape_string($_POST['field_value'])
+                $fieldName.':'.$fieldValue
             );
-            $restResponse->setData([$idSession]);
+            $restResponse->setData($sessionInfo);
             break;
         case Rest::SAVE_SESSION:
             $data = $restApi->addSession($_POST);

@@ -64,19 +64,26 @@ class CidReqListener
         global $cidReset;
 
         if (!$event->isMainRequest()) {
-            // don't do anything if it's not the master request
+            // Do nothing on subrequests
             return;
         }
 
         $request = $event->getRequest();
 
-        // Ignore debug
+        // Ignore debug toolbar
         if ('_wdt' === $request->attributes->get('_route')) {
             return;
         }
 
-        // Ignore toolbar
+        // Ignore profiler toolbar
         if ('_wdt' === $request->attributes->get('_profiler')) {
+            return;
+        }
+
+        // Skip all course/session logic during installation pages.
+        // This prevents crashes when APP_INSTALLED is wrong or the DB is not ready yet.
+        $path = $request->getPathInfo();
+        if (\is_string($path) && str_starts_with($path, '/main/install/')) {
             return;
         }
 
@@ -86,6 +93,12 @@ class CidReqListener
         if (true === $cidReset) {
             $this->cleanSessionHandler($request);
 
+            return;
+        }
+
+        // Prevent "Session has not been set" during early bootstrap or install.
+        if (!$request->hasSession()) {
+            // No session available yet, so we cannot safely store course/session context.
             return;
         }
 
@@ -103,19 +116,20 @@ class CidReqListener
             if ($sessionHandler->has('course')) {
                 /** @var Course $courseFromSession */
                 $courseFromSession = $sessionHandler->get('course');
-                if ($courseId === $courseFromSession->getId()) {
+                if ($courseFromSession instanceof Course && $courseId === $courseFromSession->getId()) {
                     $course = $courseFromSession;
-                    $courseInfo = $sessionHandler->get('_course');
+                    $courseInfo = (array) $sessionHandler->get('_course');
                 }
             }
 
             if (null === $course) {
                 $course = $this->entityManager->find(Course::class, $courseId);
-                $courseInfo = api_get_course_info($course->getCode());
-            }
 
-            if (null === $course) {
-                throw new NotFoundHttpException($this->translator->trans('Course does not exist'));
+                if (null === $course) {
+                    throw new NotFoundHttpException($this->translator->trans('Course does not exist'));
+                }
+
+                $courseInfo = api_get_course_info($course->getCode());
             }
 
             // Setting variables in the session.
@@ -212,6 +226,18 @@ class CidReqListener
         }
 
         $request = $event->getRequest();
+
+        // Prevent "Session has not been set" during early bootstrap or install.
+        if (!$request->hasSession()) {
+            return;
+        }
+
+        // Skip injection during installation pages.
+        $path = $request->getPathInfo();
+        if (\is_string($path) && str_starts_with($path, '/main/install/')) {
+            return;
+        }
+
         $sessionHandler = $request->getSession();
 
         $courseId = (int) $request->get('cid');
@@ -240,6 +266,13 @@ class CidReqListener
 
     public function cleanSessionHandler(Request $request): void
     {
+        // If there is no session available, just ensure we clear context roles and exit.
+        if (!$request->hasSession()) {
+            $this->resetContextRolesOnTokenUser();
+
+            return;
+        }
+
         $sessionHandler = $request->getSession();
         $alreadyVisited = $sessionHandler->get('course_already_visited');
         if ($alreadyVisited) {

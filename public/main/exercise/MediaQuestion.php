@@ -6,7 +6,7 @@ class MediaQuestion extends Question
     /**
      * Icon shown in the question-type menu.
      */
-    public $typePicture      = 'media.png';
+    public $typePicture = 'media.png';
     public $explanationLangVar = 'Question media';
 
     public function __construct()

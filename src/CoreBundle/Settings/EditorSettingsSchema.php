@@ -35,8 +35,8 @@ class EditorSettingsSchema extends AbstractSettingsSchema
             'enabled_mathjax' => '',
             'translate_html' => 'false',
             'save_titles_as_html' => 'false',
-            'full_ckeditor_toolbar_set' => 'false',
-            'ck_editor_block_image_copy_paste' => 'false',
+            'full_editor_toolbar_set' => 'false',
+            'editor_block_image_copy_paste' => 'false',
             'editor_driver_list' => '',
             'enable_uploadimage_editor' => 'false',
             'editor_settings' => '',
@@ -67,8 +67,8 @@ class EditorSettingsSchema extends AbstractSettingsSchema
             ->add('enabled_mathjax', YesNoType::class)
             ->add('translate_html', YesNoType::class)
             ->add('save_titles_as_html', YesNoType::class)
-            ->add('full_ckeditor_toolbar_set', YesNoType::class)
-            ->add('ck_editor_block_image_copy_paste', YesNoType::class)
+            ->add('full_editor_toolbar_set', YesNoType::class)
+            ->add('editor_block_image_copy_paste', YesNoType::class)
             ->add('editor_driver_list', TextareaType::class, [
                 'attr' => ['rows' => 3, 'style' => 'font-family: monospace;'],
             ])

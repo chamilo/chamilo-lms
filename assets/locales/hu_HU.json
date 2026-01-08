@@ -1262,5 +1262,6 @@
     "ex. {examplePassword}": "pl. {examplePassword}",
     "Blogs": "Blogok",
     "Blog": "Blog",
-    "Dropbox": "F\u00e1jlposta"
+    "Dropbox": "F\u00e1jlposta",
+    "Your browser does not support Javascript": "A b\u00f6ng\u00e9sz\u0151je nem t\u00e1mogatja a Javascriptet"
 }

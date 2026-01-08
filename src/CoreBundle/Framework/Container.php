@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Framework;
 
-use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
+use Chamilo\CoreBundle\Component\Editor\Tiny\TinyEditor;
 use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\ContainerHelper;
@@ -188,7 +188,7 @@ class Container
      */
     public static function getHtmlEditor()
     {
-        return self::$container->get(CkEditor::class);
+        return self::$container->get(TinyEditor::class);
     }
 
     /**

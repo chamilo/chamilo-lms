@@ -798,7 +798,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->apiToken = null;
         $this->biography = '';
         $this->website = '';
-        $this->locale = 'en';
+        $this->locale = 'en_US';
         $this->timezone = 'Europe/Paris';
         $this->status = CourseRelUser::STUDENT;
         $this->salt = sha1(uniqid('', true));

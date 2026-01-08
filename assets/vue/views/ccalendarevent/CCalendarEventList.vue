@@ -354,12 +354,16 @@ const calendarOptions = ref({
       commonParams.sid = session.value.id
     }
 
-    if (group.value) {
-      commonParams.gid = group.value.id
-    }
-
     if (route.query?.type === "global") {
       commonParams.type = "global"
+    }
+
+    const gidFromRoute = Number(route.query.gid ?? 0)
+    const gidFromStore = Number(group.value?.id ?? 0)
+    const effectiveGid = gidFromStore > 0 ? gidFromStore : gidFromRoute
+
+    if (effectiveGid > 0) {
+      commonParams.gid = effectiveGid
     }
 
     getCalendarEvents(info.start, info.end, commonParams).then((events) => successCallback(events))
@@ -500,10 +504,14 @@ async function onCreateEventForm() {
       await store.dispatch("ccalendarevent/update", itemModel)
     } else {
       if (course.value) {
+        const gidFromRoute = Number(route.query.gid ?? 0)
+        const gidFromStore = Number(group.value?.id ?? 0)
+        const effectiveGid = gidFromStore > 0 ? gidFromStore : gidFromRoute
         itemModel.resourceLinkList = [
           {
             cid: course.value.id,
             sid: session.value?.id ?? null,
+            gid: effectiveGid > 0 ? effectiveGid : null,
             visibility: RESOURCE_LINK_PUBLISHED,
           },
         ]

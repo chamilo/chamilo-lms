@@ -155,4 +155,7 @@ export const chamiloIconToClass = {
   "pencil": "mdi mdi-pencil",
   "trash": "mdi mdi-delete",
   "xmark": "mdi mdi-close",
+  "health-check": "mdi mdi-clipboard-pulse-outline",
+  "promotion": "mdi mdi-school-outline",
+  "help": "mdi mdi-face-agent",
 }

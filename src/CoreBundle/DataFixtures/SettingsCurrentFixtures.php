@@ -1354,7 +1354,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'If an exercise is visible in the base course then it appears invisible in the session. If an exercise is invisible in the base course then it does not appear in the session.',
                 ],
                 [
-                    'name' => 'exercise_max_ckeditors_in_page',
+                    'name' => 'exercise_max_editors_in_page',
                     'title' => 'Max editors in exercise result screen',
                     'comment' => 'Because of the sheer number of questions that might appear in an exercise, the correction screen, allowing the teacher to add comments to each answer, might be very slow to load. Set this number to 5 to ask the platform to only show WYSIWYG editors up to a certain number of answers on the screen. This will speed up the correction page loading time considerably, but will remove WYSIWYG editors and leave only a plain text editor.',
                 ],
@@ -2079,7 +2079,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'editor' => [
                 [
-                    'name' => 'ck_editor_block_image_copy_paste',
+                    'name' => 'editor_block_image_copy_paste',
                     'title' => 'Prevent copy-pasting images in WYSIWYG editor',
                     'comment' => 'Prevent the use of images copy-paste as base64 in the editor to avoid filling the database with images.',
                 ],
@@ -2099,7 +2099,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Enable image upload as file when doing a copy in the content or a drag and drop.',
                 ],
                 [
-                    'name' => 'full_ckeditor_toolbar_set',
+                    'name' => 'full_editor_toolbar_set',
                     'title' => 'Full WYSIWYG editor toolbar',
                     'comment' => 'Show the full toolbar in all WYSIWYG editor boxes around the platform.',
                 ],

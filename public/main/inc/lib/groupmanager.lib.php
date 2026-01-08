@@ -3005,6 +3005,110 @@ class GroupManager
         return $result;
     }
 
+    /**
+     * Render tabs for group pages (space/settings/members/tutors)
+     *
+     * @param string $active One of: space|settings|member|tutor
+     */
+    public static function renderGroupTabs(string $active = 'space'): string
+    {
+        $urlBase = api_get_path(WEB_CODE_PATH).'group/%s?'.api_get_cidreq();
+
+        $groupId = api_get_group_id();
+        $userId = api_get_user_id();
+        $groupEntity = null;
+
+        if (!empty($groupId)) {
+            $groupEntity = api_get_group_entity($groupId);
+        }
+
+        // Only teachers/admins or group tutors can manage settings/members/coaches
+        $canManageGroup = api_is_allowed_to_edit(false, true);
+        if (!$canManageGroup && null !== $groupEntity) {
+            $canManageGroup = GroupManager::isTutorOfGroup($userId, $groupEntity);
+        }
+
+        $tabs = [
+            'space' => [
+                'href' => sprintf($urlBase, 'group_space.php'),
+                'label' => get_lang('Group area'),
+                'icon' => Display::getMdiIcon(
+                    'view-dashboard-outline',
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('Group area')
+                ),
+            ],
+        ];
+
+        if ($canManageGroup) {
+            $tabs['settings'] = [
+                'href' => sprintf($urlBase, 'settings.php'),
+                'label' => get_lang('Settings'),
+                'icon' => Display::getMdiIcon(
+                    ToolIcon::SETTINGS,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('Settings')
+                ),
+            ];
+
+            $tabs['member'] = [
+                'href' => sprintf($urlBase, 'member_settings.php'),
+                'label' => get_lang('Group members'),
+                'icon' => Display::getMdiIcon(
+                    ToolIcon::MEMBER,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('Group members')
+                ),
+            ];
+
+            $tabs['tutor'] = [
+                'href' => sprintf($urlBase, 'tutor_settings.php'),
+                'label' => get_lang('Coaches'),
+                'icon' => Display::getMdiIcon(
+                    'human-male-board',
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('Coaches')
+                ),
+            ];
+        } else {
+            // If a non-manager somehow lands on a restricted page, keep UI consistent
+            if (!isset($tabs[$active])) {
+                $active = 'space';
+            }
+        }
+
+        $html = '<div class="mb-6 border-b border-gray-50">';
+        $html .= '<nav class="-mb-px flex flex-wrap gap-6" aria-label="Tabs">';
+
+        foreach ($tabs as $key => $tab) {
+            $isActive = ($key === $active);
+
+            $class = 'inline-flex items-center gap-2 border-b-2 px-1 py-3 text-sm font-medium ';
+            if ($isActive) {
+                $class .= 'border-blue-600 text-blue-700';
+            } else {
+                $class .= 'border-transparent text-gray-600 hover:border-gray-10 hover:text-gray-800';
+            }
+
+            $html .= '<a href="'.Security::remove_XSS($tab['href']).'" class="'.$class.'">';
+            $html .= $tab['icon'].'<span>'.$tab['label'].'</span>';
+            $html .= '</a>';
+        }
+
+        $html .= '</nav>';
+        $html .= '</div>';
+
+        return $html;
+    }
+
     public static function is_user_in_group($user_id, $groupInfo)
     {
         if (empty($groupInfo)) {

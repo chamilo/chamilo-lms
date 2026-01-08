@@ -1262,5 +1262,6 @@
     "ex. {examplePassword}": "npr. {examplePassword}",
     "Blogs": "Blogi",
     "Blog": "Blog",
-    "Dropbox": "Nabiralnik"
+    "Dropbox": "Nabiralnik",
+    "Your browser does not support Javascript": "Va\u0161 brskalnik ne podpira Javascripta"
 }

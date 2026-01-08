@@ -989,14 +989,14 @@ if ($user->hasRole('ROLE_QUESTION_MANAGER')) {
 }
 
 $actionsLeft = Display::url(
-    Display::return_icon('back.png', get_lang('Administration'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Administration')),
     $backUrl
 );
 
 $exportUrl = '/main/admin/questions.php?' . http_build_query(['action' => 'export_pdf', ...$params]);
 
 $actionsRight = Display::url(
-    Display::return_icon('pdf.png', get_lang('Export to PDF'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon('file-pdf-box', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')),
     $exportUrl
 );
 

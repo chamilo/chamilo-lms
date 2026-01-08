@@ -14,7 +14,7 @@ class Evaluation implements GradebookItem
     public GradebookEvaluation $entity;
     private int $id;
     private string $name;
-    private string $description;
+    private string $description = '';
     private int $user_id;
     private ?string $course_code;
     private Category $category;
@@ -171,9 +171,9 @@ class Evaluation implements GradebookItem
         $this->name = $name;
     }
 
-    public function set_description($description)
+    public function set_description($description): void
     {
-        $this->description = $description;
+        $this->description = $description === null ? '' : (string) $description;
     }
 
     public function set_user_id($user_id)

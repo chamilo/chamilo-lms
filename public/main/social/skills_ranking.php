@@ -17,10 +17,15 @@ if ('social' === $origin) {
         'url' => '/social',
         'name' => get_lang('Social'),
     ];
-} else {
+} elseif ('admin' === $origin) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
         'name' => get_lang('Administration'),
+    ];
+} else {
+    $interbreadcrumb[] = [
+        'url' => '/home',
+        'name' => get_lang('Home'),
     ];
 }
 
@@ -29,7 +34,7 @@ $pageTitle = get_lang('Your skill ranking');
 //jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_user_skill_ranking';
 
-//The order is important you need to check the the $column variable in the model.ajax.php file
+//The order is important you need to check the $column variable in the model.ajax.php file
 $columns = [
     get_lang('Photo'),
     get_lang('First name'),

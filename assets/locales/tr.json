@@ -1262,5 +1262,6 @@
     "ex. {examplePassword}": "\u00f6r. {examplePassword}",
     "Blogs": "Bloglar",
     "Blog": "Blog",
-    "Dropbox": "GelenGiden Kutusu"
+    "Dropbox": "GelenGiden Kutusu",
+    "Your browser does not support Javascript": "Taray\u0131c\u0131n\u0131z Javascript desteklemiyor"
 }

@@ -1235,7 +1235,7 @@ class ExtraFieldValue extends Model
 
             $formatted[] = [
                 'variable' => $extraValue->getField()->getVariable(),
-                'title' => $extraValue->getField()->getDisplayText(),
+                'display_text' => $extraValue->getField()->getDisplayText(),
                 'value' => $extraValue->getValue(),
             ];
         }

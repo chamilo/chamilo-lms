@@ -1263,5 +1263,6 @@
     "Blogs": "Blogi",
     "Blog": "Blog",
     "Dropbox": "Skrzynka nadawcza",
-    "Your browser does not support Javascript": "Twoja przegl\u0105darka nie obs\u0142uguje Javascript"
+    "Your browser does not support Javascript": "Twoja przegl\u0105darka nie obs\u0142uguje Javascript",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

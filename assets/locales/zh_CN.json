@@ -1263,5 +1263,6 @@
     "Blogs": "\u535a\u5ba2",
     "Blog": "\u535a\u5ba2",
     "Dropbox": "\u6295\u9012\u7bb1",
-    "Your browser does not support Javascript": "\u60a8\u7684\u6d4f\u89c8\u5668\u4e0d\u652f\u6301 Javascript"
+    "Your browser does not support Javascript": "\u60a8\u7684\u6d4f\u89c8\u5668\u4e0d\u652f\u6301 Javascript",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

@@ -1263,5 +1263,6 @@
     "Blogs": "Blogit",
     "Blog": "Blogi",
     "Dropbox": "Tiedostot",
-    "Your browser does not support Javascript": "Selaimesi ei tue JavaScripti\u00e4"
+    "Your browser does not support Javascript": "Selaimesi ei tue JavaScripti\u00e4",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

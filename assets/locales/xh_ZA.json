@@ -1263,5 +1263,6 @@
     "Blogs": "Iiblogi",
     "Blog": "Ibhloko",
     "Dropbox": "Dropbox",
-    "Your browser does not support Javascript": "Isikhangeli sakho asixhasi iJavascript"
+    "Your browser does not support Javascript": "Isikhangeli sakho asixhasi iJavascript",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

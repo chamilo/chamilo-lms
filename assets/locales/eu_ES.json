@@ -1263,5 +1263,6 @@
     "Blogs": "Blogak",
     "Blog": "Blog",
     "Dropbox": "Dokumentuak partekatzeko kutxa",
-    "Your browser does not support Javascript": "Zure nabigatzaileak ez du Javascript onartzen"
+    "Your browser does not support Javascript": "Zure nabigatzaileak ez du Javascript onartzen",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

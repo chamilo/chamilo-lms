@@ -1263,5 +1263,6 @@
     "Blogs": "Blocs",
     "Blog": "Bloc",
     "Dropbox": "Dropbox",
-    "Your browser does not support Javascript": "El vostre navegador no admet Javascript"
+    "Your browser does not support Javascript": "El vostre navegador no admet Javascript",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

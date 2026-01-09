@@ -1263,5 +1263,6 @@
     "Blogs": "Blogje",
     "Blog": "Blog",
     "Dropbox": "Dropbox",
-    "Your browser does not support Javascript": "Shfletuesi juaj nuk e mb\u00ebshtet Javascript"
+    "Your browser does not support Javascript": "Shfletuesi juaj nuk e mb\u00ebshtet Javascript",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

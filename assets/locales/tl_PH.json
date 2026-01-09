@@ -1263,5 +1263,6 @@
     "Blogs": "Mga Blog",
     "Blog": "Blog",
     "Dropbox": "Dropbox",
-    "Your browser does not support Javascript": "Ang iyong browser ay hindi sumusuporta sa Javascript"
+    "Your browser does not support Javascript": "Ang iyong browser ay hindi sumusuporta sa Javascript",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

@@ -1263,5 +1263,6 @@
     "Blogs": "Blogi",
     "Blog": "Blog",
     "Dropbox": "Nabiralnik",
-    "Your browser does not support Javascript": "Va\u0161 brskalnik ne podpira Javascripta"
+    "Your browser does not support Javascript": "Va\u0161 brskalnik ne podpira Javascripta",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

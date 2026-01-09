@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\MessageAttachment;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Helpers\DateTimeHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
@@ -71,6 +72,7 @@ class SocialController extends AbstractController
 
     public function __construct(
         private readonly UserHelper $userHelper,
+        private readonly DateTimeHelper $dateTimeHelper,
     ) {}
 
     #[Route('/personal-data/{userId}', name: 'chamilo_core_social_personal_data')]
@@ -161,11 +163,11 @@ class SocialController extends AbstractController
             ];
         }
 
-        $date = new DateTime('@'.$rows[0]->getDate());
+        $pubDate = $this->dateTimeHelper->localTimeYmdHis($rows[0]->getDate(), null, 'UTC');
 
         return $this->json([
             'terms' => $terms,
-            'date_text' => $translator->trans('Publication date', [], 'messages', $isoCode).': '.$date->format('Y-m-d H:i:s'),
+            'date_text' => $translator->trans('Publication date', [], 'messages', $isoCode).': '.$pubDate,
             'version' => $version,
             'language_id' => $languageId,
             'showing_accepted' => $showAccepted,
@@ -271,7 +273,7 @@ class SocialController extends AbstractController
                 $contentEmail = \sprintf(
                     $translator->trans('User %s signed the agreement the %s.', [], 'messages'),
                     $user->getFullName(),
-                    api_get_local_time()
+                    $this->dateTimeHelper->localTimeYmdHis(null, null, 'UTC')
                 );
 
                 MessageManager::send_message_simple(

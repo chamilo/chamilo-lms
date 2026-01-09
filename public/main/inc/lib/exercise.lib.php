@@ -3405,12 +3405,12 @@ EOT;
 
         $qb = $repo->getResourcesByCourse($course, $session);
 
-        $qb->andWhere('resourceLink.endVisibilityAt IS NULL');
-
+        $qb->andWhere('links.deletedAt IS NULL');
+        $qb->andWhere('links.endVisibilityAt IS NULL');
         if ($onlyActiveExercises) {
-            $qb->andWhere('resourceLink.visibility = 2');
+            $qb->andWhere('links.visibility = 2');
         } else {
-            $qb->andWhere('resourceLink.visibility IN (0,2)');
+            $qb->andWhere('links.visibility IN (0,2)');
         }
 
         $qb->orderBy('resource.title', 'ASC');

@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\DateTimeHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreRemoveEventArgs;
@@ -23,7 +24,8 @@ class UserListener
         private UserRepository $userRepository,
         private Security $security,
         private readonly TranslatorInterface $translator,
-        private AccessUrlHelper $accessUrlHelper
+        private AccessUrlHelper $accessUrlHelper,
+        private readonly DateTimeHelper $dateTimeHelper
     ) {}
 
     /**
@@ -91,12 +93,11 @@ class UserListener
     {
         $ob = $eventArgs->getObjectManager();
 
-        $now = api_get_utc_datetime();
-
+        $nowText = $this->dateTimeHelper->localTimeYmdHis(null, null, 'UTC');
         $messages = $user->getSentMessages();
         $newContent = \sprintf(
             $this->translator->trans('This message was deleted when the user was removed from the platform on %s'),
-            api_get_local_time($now)
+            $nowText
         );
 
         foreach ($messages as $message) {

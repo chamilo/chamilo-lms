@@ -1263,5 +1263,6 @@
     "Blogs": "Projekte",
     "Blog": "Projekt",
     "Dropbox": "Dateikiste",
-    "Your browser does not support Javascript": "Ihr Browser unterst\u00fctzt kein JavaScript"
+    "Your browser does not support Javascript": "Ihr Browser unterst\u00fctzt kein JavaScript",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

@@ -20,7 +20,11 @@ export function useNotification() {
 
     if (error.response) {
       if (error.response.data) {
-        message = error.response.data["hydra:description"]
+        if (error.response.data["hydra:description"]) {
+          message = error.response.data["hydra:description"]
+        } else if (error.response.data.error) {
+          message = error.response.data.error
+        }
       }
     } else if (error.message) {
       message = error.message

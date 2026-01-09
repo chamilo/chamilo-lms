@@ -1262,5 +1262,6 @@
     "Blogs": "Blogs",
     "Blog": "Blog",
     "Dropbox": "Dueslag",
-    "Your browser does not support Javascript": "Din browser underst\u00f8tter ikke Javascript"
+    "Your browser does not support Javascript": "Din browser underst\u00f8tter ikke Javascript",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

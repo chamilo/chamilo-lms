@@ -1263,5 +1263,6 @@
     "Blogs": "Blogs",
     "Blog": "Blog",
     "Dropbox": "Compartir documentos",
-    "Your browser does not support Javascript": "Su navegador no soporta el JavaScript"
+    "Your browser does not support Javascript": "Su navegador no soporta el JavaScript",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

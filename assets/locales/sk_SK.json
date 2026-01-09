@@ -1263,5 +1263,6 @@
     "Blogs": "Blogy",
     "Blog": "Blog",
     "Dropbox": "Dropbox",
-    "Your browser does not support Javascript": "V\u00e1\u0161 prehliada\u010d nepodporuje Javascript"
+    "Your browser does not support Javascript": "V\u00e1\u0161 prehliada\u010d nepodporuje Javascript",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

@@ -172,3 +172,9 @@ services:
     Chamilo\CoreBundle\Search\Xapian\XapianSearchService:
       arguments:
         $indexPathResolver: '@Chamilo\CoreBundle\Search\Xapian\SearchIndexPathResolver'
+
+    Chamilo\CoreBundle\Command\DoctrineMigrationsMigrateCommandDecorator:
+      decorates: doctrine_migrations.migrate_command
+      arguments:
+        $inner: '@Chamilo\CoreBundle\Command\DoctrineMigrationsMigrateCommandDecorator.inner'
+      tags: [ 'console.command' ]

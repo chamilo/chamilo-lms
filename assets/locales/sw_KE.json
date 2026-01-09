@@ -1263,5 +1263,6 @@
     "Blogs": "Blogi",
     "Blog": "Blogu",
     "Dropbox": "Dropbox",
-    "Your browser does not support Javascript": "Brawza yako haiaiungi mkono Javascript"
+    "Your browser does not support Javascript": "Brawza yako haiaiungi mkono Javascript",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

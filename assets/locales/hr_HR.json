@@ -1263,5 +1263,6 @@
     "Blogs": "Blogovi",
     "Blog": "Blog",
     "Dropbox": "Pretinac",
-    "Your browser does not support Javascript": "Va\u0161 preglednik ne podr\u017eava Javascript"
+    "Your browser does not support Javascript": "Va\u0161 preglednik ne podr\u017eava Javascript",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

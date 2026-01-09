@@ -7,6 +7,7 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Export;
 
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Exception;
+use Chamilo\CoreBundle\Helpers\DateTimeHelper;
 
 class Cc13ExportConvert
 {
@@ -49,7 +50,7 @@ class Cc13ExportConvert
     {
         $backupDirectory = CourseArchiver::getBackupDir();
 
-        $date = new \DateTime(api_get_local_time());
+        $date = DateTimeHelper::nowLocalDateTime();
 
         $imsccFileName = $objCourse->info['code'].'_'.$date->format('Ymd-His').'.imscc';
         $imsccFilePath = $backupDirectory.$imsccFileName;

@@ -1263,5 +1263,6 @@
     "Blogs": "Blaganna",
     "Blog": "Blag",
     "Dropbox": "Dropbox",
-    "Your browser does not support Javascript": "N\u00ed thaca\u00edonn do bhrabhs\u00e1la\u00ed le Javascript"
+    "Your browser does not support Javascript": "N\u00ed thaca\u00edonn do bhrabhs\u00e1la\u00ed le Javascript",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

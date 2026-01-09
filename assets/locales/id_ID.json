@@ -1263,5 +1263,6 @@
     "Blogs": "Blog",
     "Blog": "Blog",
     "Dropbox": "Dropbox",
-    "Your browser does not support Javascript": "Browser Anda tidak mendukung Javascript"
+    "Your browser does not support Javascript": "Browser Anda tidak mendukung Javascript",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

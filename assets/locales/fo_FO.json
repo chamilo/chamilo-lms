@@ -1254,5 +1254,6 @@
     "Blogs": "Bloggar",
     "Blog": "Bloggur",
     "Dropbox": "Dropbox",
-    "Your browser does not support Javascript": "T\u00edn kaga st\u00f8ttar ikki Javascript"
+    "Your browser does not support Javascript": "T\u00edn kaga st\u00f8ttar ikki Javascript",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

@@ -1263,5 +1263,6 @@
     "Blogs": "Blogs",
     "Blog": "Blogs",
     "Dropbox": "Dokumentu / failu apmai\u0146a",
-    "Your browser does not support Javascript": "J\u016bsu p\u0101rl\u016bkprogramma neatbalsta Javascript"
+    "Your browser does not support Javascript": "J\u016bsu p\u0101rl\u016bkprogramma neatbalsta Javascript",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

@@ -1263,5 +1263,6 @@
     "Blogs": "Bloglar",
     "Blog": "Blog",
     "Dropbox": "GelenGiden Kutusu",
-    "Your browser does not support Javascript": "Taray\u0131c\u0131n\u0131z Javascript desteklemiyor"
+    "Your browser does not support Javascript": "Taray\u0131c\u0131n\u0131z Javascript desteklemiyor",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

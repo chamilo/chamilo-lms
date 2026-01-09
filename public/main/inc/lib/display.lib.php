@@ -2768,39 +2768,42 @@ class Display
      *  - company_reports
      *  - company_reports_resumed
      */
-    public static function mySpaceMenu(string $current): string
+    public static function mySpaceMenu(?string $current = 'overview'): string
     {
         $base = api_get_path(WEB_CODE_PATH).'my_space/';
         $items = [];
 
         $isPlatformAdmin = api_is_platform_admin();
         $isDrh = api_is_drh();
+        if ('yourstudents' === $current) {
+            $current = 'students';
+        }
 
         if ($isDrh) {
             // DRH menu.
             $items = [
                 'students' => [
-                    'icon' => 'account',
+                    'icon' => ObjectIcon::USER,
                     'title' => get_lang('Learners'),
                     'url' => $base.'student.php',
                 ],
                 'teachers' => [
-                    'icon' => 'human-male-board',
+                    'icon' => ObjectIcon::TEACHER,
                     'title' => get_lang('Teachers'),
                     'url' => $base.'teachers.php',
                 ],
                 'courses' => [
-                    'icon' => 'book-open-page-variant',
+                    'icon' => ObjectIcon::COURSE,
                     'title' => get_lang('Courses'),
                     'url' => $base.'course.php',
                 ],
                 'sessions' => [
-                    'icon' => 'book-open-page-variant',
+                    'icon' => ObjectIcon::SESSION,
                     'title' => get_lang('Course sessions'),
                     'url' => $base.'session.php',
                 ],
                 'company_reports' => [
-                    'icon' => 'chart-box',
+                    'icon' => ObjectIcon::REPORT,
                     'title' => get_lang('Corporate report'),
                     'url' => $base.'company_reports.php',
                 ],

@@ -106,66 +106,152 @@ class SessionRepository extends ServiceEntityRepository
     public function getPastSessionsOfUserInUrl(User $user, AccessUrl $url): array
     {
         $sessions = $this->getSubscribedSessionsOfUserInUrl($user, $url);
+        $now = new DateTime();
 
-        $filterPastSessions = function (Session $session) use ($user) {
-            $now = new DateTime();
-            // Determine if the user is a coach
+        $filterPastSessions = function (Session $session) use ($user, $now): bool {
             $userIsCoach = $session->hasCoach($user);
 
-            // Check if the session has a duration
+            // Duration sessions: past only for learners when expired (coaches never see them as past)
             if ($session->getDuration() > 0) {
-                $daysLeft = $session->getDaysLeftByUser($user);
-                $session->setTitle($session->getTitle().'<-'.$daysLeft);
+                if ($userIsCoach) {
+                    return false;
+                }
 
-                return $daysLeft < 0 && !$userIsCoach;
+                return $session->getDaysLeftByUser($user) < 0;
             }
 
-            // Get the appropriate end date based on whether the user is a coach
-            $sessionEndDate = $userIsCoach && $session->getCoachAccessEndDate()
-                ? $session->getCoachAccessEndDate()
-                : $session->getAccessEndDate();
+            // Date-based sessions: prefer coach end date (if coach), else user end date, else session end date
+            $subscription = $user->getSubscriptionToSession($session);
 
-            // If there's no end date, the session is not considered past
-            if (!$sessionEndDate) {
+            $effectiveEndDate = null;
+
+            if ($userIsCoach && $session->getCoachAccessEndDate()) {
+                $effectiveEndDate = $session->getCoachAccessEndDate();
+            } elseif ($subscription && $subscription->getAccessEndDate()) {
+                $effectiveEndDate = $subscription->getAccessEndDate();
+            } else {
+                $effectiveEndDate = $session->getAccessEndDate();
+            }
+
+            if (!$effectiveEndDate) {
                 return false;
             }
 
-            // Check if the current date is after the end date
-            return $now > $sessionEndDate;
+            return $now > $effectiveEndDate;
         };
 
-        return array_filter($sessions, $filterPastSessions);
+        return array_values(array_filter($sessions, $filterPastSessions));
     }
 
     public function getCurrentSessionsOfUserInUrl(User $user, AccessUrl $url): QueryBuilder
     {
-        $qb = $this->getSessionsByUser($user, $url);
+        $qb = $this->getSessionsByUser($user, $url)->distinct();
+
+        $now = new DateTime();
+
+        // Treat NULL duration as non-duration (same as 0)
+        $nonDuration = $qb->expr()->orX(
+            $qb->expr()->isNull('s.duration'),
+            $qb->expr()->lte('s.duration', 0)
+        );
+
+        // Effective start date window:
+        // - If user start date exists -> use it
+        // - Else fallback to session start date
+        // - If both NULL -> considered "open" on start side
+        $startOk = $qb->expr()->orX(
+            $qb->expr()->andX(
+                $qb->expr()->isNull('sru.accessStartDate'),
+                $qb->expr()->isNull('s.accessStartDate')
+            ),
+            $qb->expr()->lte('sru.accessStartDate', ':now'),
+            $qb->expr()->andX(
+                $qb->expr()->isNull('sru.accessStartDate'),
+                $qb->expr()->lte('s.accessStartDate', ':now')
+            )
+        );
+
+        // Fallback end date window (non-coach override case):
+        $fallbackEndOk = $qb->expr()->orX(
+            $qb->expr()->andX(
+                $qb->expr()->isNull('sru.accessEndDate'),
+                $qb->expr()->isNull('s.accessEndDate')
+            ),
+            $qb->expr()->gte('sru.accessEndDate', ':now'),
+            $qb->expr()->andX(
+                $qb->expr()->isNull('sru.accessEndDate'),
+                $qb->expr()->gte('s.accessEndDate', ':now')
+            )
+        );
+
+        // Coach override is active if relationType=coach AND session has coachAccessEndDate
+        $coachOverrideActive = $qb->expr()->andX(
+            $qb->expr()->eq('sru.relationType', ':coachRelationType'),
+            $qb->expr()->isNotNull('s.coachAccessEndDate')
+        );
+
+        // Effective end date window:
+        // - If coach override active -> use coachAccessEndDate
+        // - Else fallback to (sru.accessEndDate || s.accessEndDate)
+        $endOk = $qb->expr()->orX(
+            $qb->expr()->andX(
+                $coachOverrideActive,
+                $qb->expr()->gte('s.coachAccessEndDate', ':now')
+            ),
+            $qb->expr()->andX(
+                $qb->expr()->orX(
+                    $qb->expr()->neq('sru.relationType', ':coachRelationType'),
+                    $qb->expr()->isNull('s.coachAccessEndDate')
+                ),
+                $fallbackEndOk
+            )
+        );
+
+        $dateBasedCurrent = $qb->expr()->andX($startOk, $endOk);
 
         return $qb
             ->andWhere(
                 $qb->expr()->orX(
-                    $qb->expr()->isNull('sru.accessStartDate'),
-                    $qb->expr()->isNull('sru.accessEndDate'),
-                    $qb->expr()->andX(
-                        $qb->expr()->lte('sru.accessStartDate', ':now'),
-                        $qb->expr()->gte('sru.accessEndDate', ':now'),
-                    ),
+                // Duration sessions are candidates for "current" (provider filters expired ones via daysLeft)
+                    $qb->expr()->gt('s.duration', 0),
+
+                    // Date-based sessions must be inside the effective window
+                    $qb->expr()->andX($nonDuration, $dateBasedCurrent)
                 )
             )
-            ->setParameter('now', new DateTime())
-        ;
+            ->setParameter('now', $now)
+            ->setParameter('coachRelationType', 3)
+            // IMPORTANT: stable ordering for your scan pagination in the provider
+            ->addOrderBy('s.id', 'ASC');
     }
 
     public function getUpcomingSessionsOfUserInUrl(User $user, AccessUrl $url): QueryBuilder
     {
-        $qb = $this->getSessionsByUser($user, $url);
+        $qb = $this->getSessionsByUser($user, $url)->distinct();
+        $now = new DateTime();
+
+        $nonDuration = $qb->expr()->orX(
+            $qb->expr()->isNull('s.duration'),
+            $qb->expr()->lte('s.duration', 0)
+        );
+
+        // Effective start date > now:
+        // - If sru.accessStartDate exists -> use it
+        // - Else fallback to s.accessStartDate
+        $upcomingStart = $qb->expr()->orX(
+            $qb->expr()->gt('sru.accessStartDate', ':now'),
+            $qb->expr()->andX(
+                $qb->expr()->isNull('sru.accessStartDate'),
+                $qb->expr()->gt('s.accessStartDate', ':now')
+            )
+        );
 
         return $qb
-            ->andWhere(
-                $qb->expr()->gt('sru.accessStartDate', ':now'),
-            )
-            ->setParameter('now', new DateTime())
-        ;
+            ->andWhere($nonDuration)
+            ->andWhere($upcomingStart)
+            ->setParameter('now', $now)
+            ->addOrderBy('sru.accessStartDate', 'ASC')
+            ->addOrderBy('s.id', 'ASC');
     }
 
     public function addUserInCourse(int $relationType, User $user, Course $course, Session $session): void

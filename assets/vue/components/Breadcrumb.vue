@@ -297,8 +297,24 @@ function resolveSettingsSectionLabel(nsRaw) {
 watchEffect(() => {
   if ("/" === route.fullPath) return
   itemList.value = []
+// special-case accessurl routes
+  if (/^\/resources\/accessurl\/[^\/]+\/delete(?:\/|$)/.test(route.path)) {
+    itemList.value = []
 
-  if (buildSkillBreadcrumbIfNeeded()) return
+    itemList.value.push({
+      label: t("Administration"),
+      url: "/main/admin/index.php",
+    })
+
+    itemList.value.push({
+      label: t("Multiple access URL / Branding"),
+      url: "/main/admin/access_urls.php",
+    })
+
+    itemList.value.push({ label: t("Delete access") })
+
+    return
+  }
 
   if (buildManualBreadcrumbIfNeeded()) return
 

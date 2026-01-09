@@ -27,6 +27,7 @@ class IndexController extends BaseController
     #[Route('/catalogue/{slug}', name: 'catalogue', options: ['expose' => true], methods: ['GET', 'POST'])]
     #[Route('/resources/ccalendarevent', name: 'resources_ccalendarevent', methods: ['GET'])]
     #[Route('/resources/document/{nodeId}/manager', name: 'resources_filemanager', methods: ['GET'])]
+    #[Route('/resources/accessurl/{id}/delete', name: 'access_url_delete', methods: ['GET'])]
     #[Route('/account/home', name: 'chamilo_core_account_home', options: ['expose' => true])]
     #[Route('/social', name: 'chamilo_core_socialnetwork', options: ['expose' => true])]
     #[Route('/social/{vueRouting}', name: 'chamilo_core_socialnetwork_vue_entrypoint', requirements: ['vueRouting' => '.+'], options: ['expose' => true])]

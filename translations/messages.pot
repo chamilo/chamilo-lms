@@ -31769,3 +31769,6 @@ msgstr ""
 
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr ""
+
+msgid "The value must match exactly: %s"
+msgstr ""

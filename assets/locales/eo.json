@@ -1263,5 +1263,6 @@
     "Blogs": "Blogoj",
     "Blog": "Blogo",
     "Dropbox": "Demetujo",
-    "Your browser does not support Javascript": "Via retumilo ne subtenas Javascript"
+    "Your browser does not support Javascript": "Via retumilo ne subtenas Javascript",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

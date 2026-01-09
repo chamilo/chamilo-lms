@@ -757,5 +757,6 @@
     "ex. {examplePassword}": "ex. {examplePassword}",
     "Blogs": "\u0f40\u0f74\u0f53\u0f0b\u0f66\u0fb3\u0f7c\u0f42",
     "Blog": "\u0f56\u0fb3\u0f7c\u0f42\u0f0d",
-    "Dropbox": "Dropbox"
+    "Dropbox": "Dropbox",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

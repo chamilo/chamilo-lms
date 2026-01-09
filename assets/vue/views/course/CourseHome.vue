@@ -51,12 +51,12 @@
           height="1.5rem"
           width="6rem"
         />
-        <Skeleton
+        <!-- Skeleton
           v-if="securityStore.isCurrentTeacher"
           class="aspect-square"
           height="1.5rem"
           width="6rem"
-        />
+        / -->
       </div>
 
       <hr class="mt-0 mb-4" />
@@ -216,7 +216,7 @@
             size="small"
             without-borders
           />
-          <BaseToggleButton
+          <!-- BaseToggleButton
             v-model="isCustomizing"
             :disabled="isSorting"
             :off-label="t('Customize')"
@@ -225,7 +225,7 @@
             on-icon="customize"
             size="small"
             without-borders
-          />
+          / -->
         </div>
       </div>
 
@@ -234,7 +234,7 @@
         class="course-home__tools"
       >
         <CourseTool
-          v-for="(tool, index) in tools"
+          v-for="(tool, index) in toolsForDisplay"
           :key="'tool-' + index.toString()"
           :change-visibility="changeVisibility"
           :data-index="index"
@@ -308,6 +308,22 @@ const exerciseAutoLaunch = ref(0)
 const lpAutoLaunch = ref(0)
 const forumAutoLaunch = ref(0)
 const courseSettingsStore = useCourseSettings()
+
+const TOOL_VISIBILITY_VISIBLE = 2
+
+function getToolVisibility(tool) {
+  return tool?.resourceNode?.resourceLinks?.[0]?.visibility
+}
+
+const toolsForDisplay = computed(() => {
+  // Teachers/admins can see all tools (even hidden) to manage them.
+  if (isAllowedToEdit.value) {
+    return tools.value
+  }
+
+  // Learners must not see hidden tools.
+  return tools.value.filter((tool) => getToolVisibility(tool) === TOOL_VISIBILITY_VISIBLE)
+})
 
 /**
  * Load tools for the course, split admin tools into the cog menu
@@ -451,7 +467,6 @@ async function updateDisplayOrder(htmlItem, newIndex) {
     console.error("[CourseHome] Tool item or iid missing", toolItem)
     return
   }
-
 
   // Send the updated values to the server
   await courseService.updateToolOrder(toolItem, newIndex, course.value.id, session.value?.id)

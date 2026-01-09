@@ -1263,5 +1263,6 @@
     "Blogs": "Blogs",
     "Blog": "Blog",
     "Dropbox": "Partage de fichiers",
-    "Your browser does not support Javascript": "Votre navigateur ne supporte pas le JavaScript"
+    "Your browser does not support Javascript": "Votre navigateur ne supporte pas le JavaScript",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

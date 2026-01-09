@@ -239,10 +239,7 @@ $sort_by_first_name = api_sort_by_first_name();
 // ---------------------------------------------------------------------
 $actionsLeft = '';
 
-// 1) Main MySpace navigation with "Teachers" as current section.
-$actionsLeft .= Display::mySpaceMenu('teachers');
-
-// 2) Extra action: "View my progress".
+// 0) "View my progress" is always first
 $actionsLeft .= Display::url(
     Display::getMdiIcon(
         'chart-box',
@@ -253,8 +250,10 @@ $actionsLeft .= Display::url(
     ),
     $webCodePath.'auth/my_progress.php'
 );
+// 1) Main MySpace navigation with "Teachers" as current section.
+$actionsLeft .= Display::mySpaceMenu('teachers');
 
-// 3) Extra action for DRH: skills report.
+// 2) Extra action for DRH: skills report.
 if (api_is_drh()) {
     $actionsLeft .= Display::url(
         Display::getMdiIcon(

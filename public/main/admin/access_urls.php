@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -76,7 +77,7 @@ if ($httpRequest->query->has('action')) {
 }
 
 $parameters['sec_token'] = Security::get_token();
-
+echo '<script>window.SEC_TOKEN = ' . json_encode($parameters['sec_token']) . ';</script>';
 // Checking if the admin is registered in all sites
 if (!api_is_admin_in_all_active_urls()) {
     // Get the list of unregistered urls
@@ -213,8 +214,18 @@ foreach ($url_list as $u) {
     );
 
     if ($u->getId() !== 1) {
-        $rowActions .= '<a href="access_urls.php?action=delete_url&url_id=' . $u->getId() . '" ' .
-            'onclick="return confirm(\'' . addslashes(get_lang('Please confirm your choice')) . '\');">' .
+        // build a link to the Vue route that will open DeleteAccessUrl.vue
+        $vueHref = Container::getRouter()->generate(
+            'access_url_delete',
+            [
+                'id' => $u->getId(),
+                'url' => $u->getUrl(),
+                'sec_token' => $parameters['sec_token'],
+            ],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
+        $rowActions .= '<a href="'.$vueHref.'">' .
             Display::getMdiIcon('delete', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')) .
             '</a>';
     }

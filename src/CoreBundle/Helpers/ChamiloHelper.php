@@ -385,10 +385,13 @@ class ChamiloHelper
      */
     public static function getServerMidnightTime(?string $utcTime = null): DateTime
     {
-        $localTime = api_get_local_time($utcTime);
-        $localTimeZone = api_get_timezone();
+        // UTC -> local time string (already converted using resolved timezone)
+        $localTime = DateTimeHelper::localTimeYmdHis($utcTime, null, 'UTC');
 
-        $localMidnight = new DateTime($localTime, new DateTimeZone($localTimeZone));
+        // Resolved timezone (platform/user)
+        $tz = DateTimeHelper::resolveTimezone();
+
+        $localMidnight = new DateTime($localTime, new DateTimeZone($tz));
         $localMidnight->modify('midnight');
 
         return $localMidnight;
@@ -625,31 +628,41 @@ class ChamiloHelper
      */
     public static function saveUserTermsAcceptance(int $userId, string $legalAcceptType): void
     {
-        // Split and build the stored value**
+        // Split and build the stored value
         [$version, $languageId] = explode(':', $legalAcceptType);
         $timestamp = time();
         $toSave = (int) $version.':'.(int) $languageId.':'.$timestamp;
 
-        // Save in extra-field**
+        // Save in extra-field
         UserManager::update_extra_field_value($userId, 'legal_accept', $toSave);
 
-        // Log event
+        // Log event (UTC datetime for DB/log consistency)
         Event::addEvent(
             LOG_TERM_CONDITION_ACCEPTED,
             LOG_USER_OBJECT,
             api_get_user_info($userId),
-            api_get_utc_datetime()
+            DateTimeHelper::localTimeYmdHis($timestamp, 'UTC', 'UTC')
         );
 
         $bossList = UserManager::getStudentBossList($userId);
         if (!empty($bossList)) {
             $bossIds = array_column($bossList, 'boss_id');
             $current = api_get_user_info($userId);
-            $dateStr = api_get_local_time($timestamp);
+
+            // Localized datetime string (platform/user TZ)
+            $dateStr = DateTimeHelper::localTime(
+                $timestamp,
+                null,
+                'UTC',
+                false,
+                true,
+                false,
+                'Y-m-d H:i:s'
+            ) ?? '';
 
             foreach ($bossIds as $bossId) {
-                $subject = \sprintf(get_lang('User %s signed the agreement.'), $current['complete_name']);
-                $content = \sprintf(get_lang('User %s signed the agreement the %s.'), $current['complete_name'], $dateStr);
+                $subject = sprintf(get_lang('User %s signed the agreement.'), $current['complete_name']);
+                $content = sprintf(get_lang('User %s signed the agreement the %s.'), $current['complete_name'], $dateStr);
                 MessageManager::send_message_simple($bossId, $subject, $content, $userId);
             }
         }

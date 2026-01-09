@@ -31834,3 +31834,6 @@ msgstr "This will delete all temporary files. Continue?"
 
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "This will delete files older than %minutes% minutes. Continue?"
+
+msgid "The value must match exactly: %s"
+msgstr "The value must match exactly: %s"

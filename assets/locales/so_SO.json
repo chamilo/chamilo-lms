@@ -1263,5 +1263,6 @@
     "Blogs": "Balogga",
     "Blog": "Baloog",
     "Dropbox": "Dropbox",
-    "Your browser does not support Javascript": "Browser-kaagu ma taageero Javascript"
+    "Your browser does not support Javascript": "Browser-kaagu ma taageero Javascript",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

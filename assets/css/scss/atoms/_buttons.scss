@@ -286,7 +286,7 @@ $border-color_12: #9333EA;
   }
 
   &.p-button-icon-only {
-    @apply px-3;
+    @apply px-3 gap-0;
 
     .p-button-label {
       @apply flex-initial hidden w-0;

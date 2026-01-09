@@ -3108,4 +3108,52 @@ class GroupManager
 
         return $html;
     }
+
+    public static function is_user_in_group($user_id, $groupInfo)
+    {
+        if (empty($groupInfo)) {
+            return false;
+        }
+        $group = api_get_group_entity($groupInfo['id']);
+        $member = self::is_subscribed($user_id, $group);
+        if ($member) {
+            return true;
+        }
+
+        $tutor = self::is_tutor_of_group($user_id, $groupInfo);
+        if ($tutor) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function is_tutor_of_group($user_id, $groupInfo, $courseId = 0)
+    {
+        if (empty($groupInfo)) {
+            return false;
+        }
+
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
+        if (empty($courseId)) {
+            return false;
+        }
+
+        $user_id = (int) $user_id;
+        $group_id = (int) $groupInfo['id'];
+
+        $table = Database::get_course_table(TABLE_GROUP_TUTOR);
+
+        $sql = "SELECT * FROM $table
+                WHERE
+                    c_id = $courseId AND
+                    user_id = $user_id AND
+                    group_id = $group_id";
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            return true;
+        }
+
+        return false;
+    }
 }

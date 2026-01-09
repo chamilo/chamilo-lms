@@ -1263,5 +1263,6 @@
     "Blogs": "Blogkuna",
     "Blog": "Blog",
     "Dropbox": "Qelqa khipukunata t'aqapay",
-    "Your browser does not support Javascript": "Yachaynikiykuman JavaScriptqa manam kanchu"
+    "Your browser does not support Javascript": "Yachaynikiykuman JavaScriptqa manam kanchu",
+    "The value must match exactly: %s": "The value must match exactly: {0}"
 }

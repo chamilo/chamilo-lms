@@ -1030,32 +1030,16 @@ img.course-tool__icon {
 }
 
 @layer base {
-  .form-control:focus,
-  input:focus,
-  select:focus,
-  textarea:focus {
-    outline: 0 !important;
-    border-color: #1d4ed8 !important;
-    box-shadow: 0 0 0 2px rgba(29, 78, 216, .35) !important;
-    border-radius: .5rem;
-    transition: box-shadow .12s ease, border-color .12s ease;
+  .form-control,
+  input,
+  select,
+  textarea {
+    @apply focus:outline-0 focus:border-primary focus:rounded-md focus:transition;
   }
-  input[type="checkbox"]:focus,
-  input[type="radio"]:focus {
-    outline: 3px solid #1d4ed8 !important;
-    outline-offset: 2px;
-    box-shadow: 0 0 0 2px rgba(29, 78, 216, .35) !important;
-    border-radius: 4px;
-  }
-  .p-dropdown:focus-within,
-  .p-multiselect:focus-within,
-  .p-calendar:focus-within,
-  .p-inputnumber:focus-within,
-  .p-autocomplete:focus-within {
-    outline: 0 !important;
-    border-color: #1d4ed8 !important;
-    box-shadow: 0 0 0 2px rgba(29, 78, 216, .35) !important;
-    border-radius: .5rem !important;
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    @apply focus:outline-2 focus:outline-primary rounded-full;
   }
 }
 @layer components {

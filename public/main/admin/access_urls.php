@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -214,10 +215,17 @@ foreach ($url_list as $u) {
 
     if ($u->getId() !== 1) {
         // build a link to the Vue route that will open DeleteAccessUrl.vue
-        $urlEncoded = rawurlencode($u->getUrl());
-        $secTokenEncoded = rawurlencode($parameters['sec_token']);
-        $vueHref = api_get_path(WEB_PATH) . 'resources/accessurl/' . $u->getId() . '/delete?url=' . $urlEncoded . '&sec_token=' . $secTokenEncoded;
-        $rowActions .= '<a href="' . $vueHref . '">' .
+        $vueHref = Container::getRouter()->generate(
+            'access_url_delete',
+            [
+                'id' => $u->getId(),
+                'url' => $u->getUrl(),
+                'sec_token' => $parameters['sec_token'],
+            ],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
+        $rowActions .= '<a href="'.$vueHref.'">' .
             Display::getMdiIcon('delete', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')) .
             '</a>';
     }

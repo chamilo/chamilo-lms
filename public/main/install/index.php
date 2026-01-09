@@ -85,26 +85,68 @@ if (file_exists($envFile)) {
         // Ignore and let the wizard continue
     }
 
-    $appInstalled = (($_ENV['APP_INSTALLED'] ?? getenv('APP_INSTALLED') ?? '') === '1');
+    $appInstalled = (string) (
+            $_SERVER['APP_INSTALLED']
+            ?? $_ENV['APP_INSTALLED']
+            ?? getenv('APP_INSTALLED')
+            ?? ''
+        ) === '1';
 
-    if ($appInstalled) {
-        // Try to read DB version; fail soft if DB is unreachable
+    if ($appInstalled && $installerVersion) {
         $dbVersion = null;
-        try {
-            $dbHost = $_ENV['DATABASE_HOST'] ?? 'localhost';
-            $dbUser = $_ENV['DATABASE_USER'] ?? '';
-            $dbPass = $_ENV['DATABASE_PASSWORD'] ?? '';
-            $dbName = $_ENV['DATABASE_NAME'] ?? '';
-            $dbPort = (int) ($_ENV['DATABASE_PORT'] ?? 3306);
+        $dbLooksInitialized = false;
 
+        try {
+            $dbHost = (string) ($_SERVER['DATABASE_HOST'] ?? $_ENV['DATABASE_HOST'] ?? getenv('DATABASE_HOST') ?? 'localhost');
+            $dbUser = (string) ($_SERVER['DATABASE_USER'] ?? $_ENV['DATABASE_USER'] ?? getenv('DATABASE_USER') ?? '');
+            $dbPass = (string) ($_SERVER['DATABASE_PASSWORD'] ?? $_ENV['DATABASE_PASSWORD'] ?? getenv('DATABASE_PASSWORD') ?? '');
+            $dbName = (string) ($_SERVER['DATABASE_NAME'] ?? $_ENV['DATABASE_NAME'] ?? getenv('DATABASE_NAME') ?? '');
+            $dbPort = (int) ($_SERVER['DATABASE_PORT'] ?? $_ENV['DATABASE_PORT'] ?? getenv('DATABASE_PORT') ?? 3306);
+
+            // Connect using the legacy installer helpers
             connectToDatabase($dbHost, $dbUser, $dbPass, $dbName, $dbPort);
-            $dbVersion = get_config_param_from_db('chamilo_database_version');
+
+            $conn = Database::getManager()->getConnection();
+
+            // Fast "is initialized?" proof:
+            // - if settings_current (or settings) exists AND has at least 1 row, we treat it as initialized.
+            // Avoid schema introspection for performance and reliability.
+            try {
+                $hasAnySetting = $conn->fetchOne('SELECT 1 FROM settings_current LIMIT 1');
+                if ($hasAnySetting !== false && $hasAnySetting !== null) {
+                    $dbLooksInitialized = true;
+
+                    $dbVersion = $conn->fetchOne(
+                        "SELECT selected_value FROM settings_current WHERE variable = 'chamilo_database_version' LIMIT 1"
+                    );
+                }
+            } catch (\Throwable $e) {
+                // Ignore and try legacy table
+            }
+
+            if (!$dbLooksInitialized) {
+                try {
+                    $hasAnySetting = $conn->fetchOne('SELECT 1 FROM settings LIMIT 1');
+                    if ($hasAnySetting !== false && $hasAnySetting !== null) {
+                        $dbLooksInitialized = true;
+
+                        $dbVersion = $conn->fetchOne(
+                            "SELECT selected_value FROM settings WHERE variable = 'chamilo_database_version' LIMIT 1"
+                        );
+                    }
+                } catch (\Throwable $e) {
+                    // No settings tables -> DB is not initialized
+                }
+            }
         } catch (\Throwable $e) {
-            // Leave $dbVersion as null
+            // If we cannot connect, do not block the wizard
+            $dbLooksInitialized = false;
+            $dbVersion = null;
         }
 
-        // If DB version is >= installer version, block the wizard
-        if ($installerVersion && $dbVersion && version_compare($dbVersion, $installerVersion, '>=')) {
+        // Block ONLY if DB is initialized AND version is up-to-date.
+        $dbVersion = is_string($dbVersion) ? trim($dbVersion) : '';
+        if ($dbLooksInitialized && $dbVersion !== '' && version_compare($dbVersion, $installerVersion, '>=')) {
             header('HTTP/1.1 409 Conflict');
             echo '<!doctype html><meta charset="utf-8"><title>Chamilo already installed</title>';
             echo '<div style="font-family:system-ui;max-width:760px;margin:64px auto;padding:24px;border:1px solid #e5e7eb;border-radius:12px">';
@@ -115,10 +157,8 @@ if (file_exists($envFile)) {
             exit;
         }
 
-        // If DB version < installer version, let the wizard run (upgrade path)
-        // If we could not read DB version (null), also allow the wizard (conservative).
+        // If APP_INSTALLED=1 but DB is NOT initialized, we intentionally allow the wizard to run.
     }
-    // If APP_INSTALLED != 1, allow a fresh install
 }
 
 $httpRequest = Request::createFromGlobals();
@@ -554,10 +594,16 @@ if (isset($_POST['step2'])) {
     } else {
         error_log('------------------------------');
         $start = date('Y-m-d H:i:s');
-        error_log('Chamilo installation starts:  ('.$start.')');
-        set_file_folder_permissions();
-        error_log("connectToDatabase as user $dbUsernameForm");
+        error_log('Chamilo installation starts: (' . $start . ')');
 
+        set_file_folder_permissions();
+
+        // Sanitize database name: only letters, numbers and underscore
+        $dbNameForm = preg_replace('/[^a-zA-Z0-9_]/', '', $dbNameForm);
+
+        error_log("Connect to DB server as user {$dbUsernameForm}");
+
+        // Connect to DB server (without selecting a database)
         connectToDatabase(
             $dbHostForm,
             $dbUsernameForm,
@@ -565,115 +611,193 @@ if (isset($_POST['step2'])) {
             null,
             $dbPortForm
         );
+
         $manager = Database::getManager();
-
-        // Sanitize database name: only letters, numbers and underscore
-        $dbNameForm = preg_replace('/[^a-zA-Z0-9_]/', '', $dbNameForm);
-
-        // Drop and create the database anyway
-        error_log("Drop database $dbNameForm");
         $schemaManager = $manager->getConnection()->createSchemaManager();
 
+        // Create database if it does not exist (reuse if it exists)
+        error_log("Ensure database exists: {$dbNameForm}");
+
+        $dbExists = false;
         try {
-            $schemaManager->dropDatabase($dbNameForm);
-        } catch (\Doctrine\DBAL\Exception $e) {
-            error_log("Database ".$dbNameForm." does not exist");
+            // Some platforms/drivers support listing databases
+            $databases = $schemaManager->listDatabases();
+            $dbExists = in_array($dbNameForm, $databases, true);
+        } catch (\Throwable $e) {
+            // If listing is not supported, we'll try to create and ignore "already exists" errors
+            error_log('Database listing not supported, falling back to createDatabase() attempt.');
         }
 
-        $schemaManager->createDatabase($dbNameForm);
+        if (!$dbExists) {
+            try {
+                $schemaManager->createDatabase($dbNameForm);
+                error_log("Database created: {$dbNameForm}");
+            } catch (\Throwable $e) {
+                // If it already exists or we lack permissions, we will try to continue anyway
+                error_log("Could not create database (may already exist): {$dbNameForm} - " . $e->getMessage());
+            }
+        } else {
+            error_log("Database already exists, it will be reused: {$dbNameForm}");
+        }
 
-        error_log("Connect to database $dbNameForm with user $dbUsernameForm");
-        connectToDatabase(
-            $dbHostForm,
-            $dbUsernameForm,
-            $dbPassForm,
-            $dbNameForm,
-            $dbPortForm
-        );
+        // Connect to the target database
+        error_log("Connect to database {$dbNameForm} with user {$dbUsernameForm}");
+        try {
+            connectToDatabase(
+                $dbHostForm,
+                $dbUsernameForm,
+                $dbPassForm,
+                $dbNameForm,
+                $dbPortForm
+            );
+        } catch (\Throwable $e) {
+            error_log('ERROR: Could not connect to target database: ' . $e->getMessage());
+            $result = 1;
+        }
 
-        $manager = Database::getManager();
-        // Create .env file
-        $envFile = api_get_path(SYMFONY_SYS_PATH).'.env';
-        $distFile = api_get_path(SYMFONY_SYS_PATH).'.env.dist';
+        if (empty($result)) {
+            $manager = Database::getManager();
+            $conn = $manager->getConnection();
+            $dbSchemaManager = $conn->createSchemaManager();
+            $platform = $conn->getDatabasePlatform();
 
-        $params = [
-            '{{DATABASE_HOST}}' => $dbHostForm,
-            '{{DATABASE_PORT}}' => $dbPortForm,
-            '{{DATABASE_NAME}}' => $dbNameForm,
-            '{{DATABASE_USER}}' => $dbUsernameForm,
-            '{{DATABASE_PASSWORD}}' => $dbPassForm,
-            '{{APP_INSTALLED}}' => 1,
-            '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
-            '{{APP_SECRET}}' => generateRandomToken(),
-            '{{DB_MANAGER_ENABLED}}' => '0',
-            '{{SOFTWARE_NAME}}' => 'Chamilo',
-            '{{SOFTWARE_URL}}' => $institutionUrlForm,
-            '{{DENY_DELETE_USERS}}' => '0',
-            '{{HOSTING_TOTAL_SIZE_LIMIT}}' => '0',
-            '{{THEME_FALLBACK}}' => 'chamilo',
-            '{{PACKAGER}}' => 'chamilo',
-            '{{DEFAULT_TEMPLATE}}' => 'default',
-            '{{ADMIN_CHAMILO_ANNOUNCEMENTS_DISABLE}}' => '0',
-            '{{SCIM_TOKEN}}' => ScimHelper::createToken(),
-        ];
+            // If there are tables, drop them (no DROP DATABASE required)
+            try {
+                $tables = $dbSchemaManager->listTableNames();
 
-        updateEnvFile($distFile, $envFile, $params);
-        (new Dotenv())->load($envFile);
+                if (count($tables) > 0) {
+                    error_log('Existing tables detected. Cleaning database (dropping tables)...');
 
-        error_log('Load kernel');
-        // Load Symfony Kernel
-        $kernel = new Kernel('dev', true);
-        $application = new Application($kernel);
+                    // MySQL / MariaDB: disable FK checks for easier cleanup
+                    if ($platform instanceof \Doctrine\DBAL\Platforms\MySQLPlatform) {
+                        $conn->executeStatement('SET FOREIGN_KEY_CHECKS=0');
+                    }
 
-        // Create database
-        error_log('Create database');
-        $input = new ArrayInput([]);
-        $command = $application->find('doctrine:schema:create');
-        $result = $command->run($input, new ConsoleOutput());
+                    // PostgreSQL: easiest clean is dropping public schema (if permitted)
+                    if ($platform instanceof \Doctrine\DBAL\Platforms\PostgreSQLPlatform) {
+                        try {
+                            $conn->executeStatement('DROP SCHEMA public CASCADE');
+                            $conn->executeStatement('CREATE SCHEMA public');
+                            error_log('PostgreSQL public schema recreated.');
+                        } catch (\Throwable $e) {
+                            // Fallback: try dropping tables one by one (may fail if constraints exist)
+                            error_log('Could not recreate public schema, falling back to per-table drop: ' . $e->getMessage());
+                            foreach ($tables as $t) {
+                                try {
+                                    $dbSchemaManager->dropTable($t);
+                                } catch (\Throwable $dropError) {
+                                    error_log("Could not drop table {$t}: " . $dropError->getMessage());
+                                }
+                            }
+                        }
+                    } else {
+                        // Default behavior: drop tables one by one
+                        foreach ($tables as $t) {
+                            try {
+                                $dbSchemaManager->dropTable($t);
+                            } catch (\Throwable $dropError) {
+                                error_log("Could not drop table {$t}: " . $dropError->getMessage());
+                            }
+                        }
+                    }
 
-        // No errors
-        if (0 === $result) {
+                    if ($platform instanceof \Doctrine\DBAL\Platforms\MySQLPlatform) {
+                        $conn->executeStatement('SET FOREIGN_KEY_CHECKS=1');
+                    }
+
+                    error_log('Database cleanup completed.');
+                } else {
+                    error_log('Database is empty. No cleanup needed.');
+                }
+            } catch (\Throwable $e) {
+                error_log('Database cleanup check failed (continuing): ' . $e->getMessage());
+            }
+
+            // Create .env file
+            $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
+            $distFile = api_get_path(SYMFONY_SYS_PATH) . '.env.dist';
+
+            $params = [
+                '{{DATABASE_HOST}}' => $dbHostForm,
+                '{{DATABASE_PORT}}' => $dbPortForm,
+                '{{DATABASE_NAME}}' => $dbNameForm,
+                '{{DATABASE_USER}}' => $dbUsernameForm,
+                '{{DATABASE_PASSWORD}}' => $dbPassForm,
+                '{{APP_INSTALLED}}' => 1,
+                '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
+                '{{APP_SECRET}}' => generateRandomToken(),
+                '{{DB_MANAGER_ENABLED}}' => '0',
+                '{{SOFTWARE_NAME}}' => 'Chamilo',
+                '{{SOFTWARE_URL}}' => $institutionUrlForm,
+                '{{DENY_DELETE_USERS}}' => '0',
+                '{{HOSTING_TOTAL_SIZE_LIMIT}}' => '0',
+                '{{THEME_FALLBACK}}' => 'chamilo',
+                '{{PACKAGER}}' => 'chamilo',
+                '{{DEFAULT_TEMPLATE}}' => 'default',
+                '{{ADMIN_CHAMILO_ANNOUNCEMENTS_DISABLE}}' => '0',
+                '{{SCIM_TOKEN}}' => ScimHelper::createToken(),
+            ];
+
+            updateEnvFile($distFile, $envFile, $params);
+            (new Dotenv())->load($envFile);
+
+            error_log('Load kernel');
+            // Load Symfony Kernel
+            $kernel = new Kernel('dev', true);
+            $application = new Application($kernel);
+
+            // Create database schema
+            error_log('Create database schema');
             $input = new ArrayInput([]);
-            $input->setInteractive(false);
-            $command = $application->find('doctrine:fixtures:load');
+            $command = $application->find('doctrine:schema:create');
             $result = $command->run($input, new ConsoleOutput());
 
-            error_log('Delete PHP Session');
-            session_unset();
-            $_SESSION = [];
-            session_destroy();
-            error_log('Boot kernel');
+            // Load fixtures (no errors)
+            if (0 === $result) {
+                $input = new ArrayInput([]);
+                $input->setInteractive(false);
+                $command = $application->find('doctrine:fixtures:load');
+                $result = $command->run($input, new ConsoleOutput());
 
-            // Boot kernel and get the doctrine from Symfony container
-            $kernel->boot();
-            $containerDatabase = $kernel->getContainer();
-            $sysPath = api_get_path(SYMFONY_SYS_PATH);
+                error_log('Delete PHP Session');
+                session_unset();
+                $_SESSION = [];
+                session_destroy();
 
-            finishInstallationWithContainer(
-                $containerDatabase,
-                $sysPath,
-                $encryptPassForm,
-                $passForm,
-                $adminLastName,
-                $adminFirstName,
-                $loginForm,
-                $emailForm,
-                $adminPhoneForm,
-                $languageForm,
-                $institutionForm,
-                $institutionUrlForm,
-                $campusForm,
-                $allowSelfReg,
-                $allowSelfRegProf,
-                $installationProfile,
-                $mailerDsn,
-                $mailerFromEmail,
-                $mailerFromName,
-                $kernel
-            );
-            error_log('Finish installation');
-        } else {
-            error_log('ERROR during installation.');
+                error_log('Boot kernel');
+
+                // Boot kernel and get the doctrine from Symfony container
+                $kernel->boot();
+                $containerDatabase = $kernel->getContainer();
+                $sysPath = api_get_path(SYMFONY_SYS_PATH);
+
+                finishInstallationWithContainer(
+                    $containerDatabase,
+                    $sysPath,
+                    $encryptPassForm,
+                    $passForm,
+                    $adminLastName,
+                    $adminFirstName,
+                    $loginForm,
+                    $emailForm,
+                    $adminPhoneForm,
+                    $languageForm,
+                    $institutionForm,
+                    $institutionUrlForm,
+                    $campusForm,
+                    $allowSelfReg,
+                    $allowSelfRegProf,
+                    $installationProfile,
+                    $mailerDsn,
+                    $mailerFromEmail,
+                    $mailerFromName,
+                    $kernel
+                );
+
+                error_log('Finish installation');
+            } else {
+                error_log('ERROR during installation.');
+            }
         }
     }
 } elseif (isset($_POST['step1']) || $badUpdatePath) {

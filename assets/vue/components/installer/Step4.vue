@@ -137,7 +137,13 @@
       severity="warn"
       style="margin-bottom: 8px"
     >
-      <span v-html="t('A database with the same name already exists. It will be deleted.')" />
+      <span
+        v-html="
+          t(
+            'A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused.',
+          )
+        "
+      />
     </Message>
 
     <Message

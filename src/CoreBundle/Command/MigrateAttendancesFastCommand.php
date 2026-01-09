@@ -26,8 +26,8 @@ use Symfony\Component\Uid\Uuid;
 )]
 final class MigrateAttendancesFastCommand extends Command
 {
-    private const RESOURCE_TYPE_ID_ATTENDANCE = 10;
-    private const RESOURCE_TYPE_GROUP_ATTENDANCE = 10;
+    public const RESOURCE_TYPE_ID_ATTENDANCE = 10;
+    public const RESOURCE_TYPE_GROUP_ATTENDANCE = 10;
 
     public function __construct(
         private readonly EntityManagerInterface $em,
@@ -72,9 +72,17 @@ final class MigrateAttendancesFastCommand extends Command
         $hasAttendanceTitle = $this->tableHasColumn('c_attendance', 'title');
         $hasAttendanceName = $this->tableHasColumn('c_attendance', 'name');
 
+        // At this migration stage, c_attendance.session_id is expected to be removed.
+        // We only rely on c_item_property.session_id when available.
+        $hasItemPropertySessionId = $hasItemProperty && $this->tableHasColumn('c_item_property', 'session_id');
+
         if (!$hasItemProperty && !$hasAttendanceCId) {
             $io->error('Cannot determine attendance->course mapping: c_item_property does not exist and c_attendance.c_id does not exist.');
             return Command::FAILURE;
+        }
+
+        if ($hasItemProperty && !$hasItemPropertySessionId) {
+            $io->note('c_item_property.session_id is not available. Session context will be stored as NULL in resource_link.');
         }
 
         $courseIds = $this->getCourseIdsToProcess($hasItemProperty, $hasAttendanceCId);
@@ -126,7 +134,8 @@ final class MigrateAttendancesFastCommand extends Command
                 hasItemProperty: $hasItemProperty,
                 hasAttendanceCId: $hasAttendanceCId,
                 hasAttendanceTitle: $hasAttendanceTitle,
-                hasAttendanceName: $hasAttendanceName
+                hasAttendanceName: $hasAttendanceName,
+                hasItemPropertySessionId: $hasItemPropertySessionId
             );
 
             if (0 === \count($attendanceRows)) {
@@ -141,9 +150,10 @@ final class MigrateAttendancesFastCommand extends Command
             try {
                 foreach ($attendanceRows as $row) {
                     $attendanceId = (int) $row['iid'];
-
                     $attendanceTitle = $this->pickAttendanceTitle($row, $attendanceId);
 
+                    // session_id is read from c_item_property (when available).
+                    // Normalize 0 -> NULL as expected by resource_link.session_id.
                     $attendanceSessionId = isset($row['session_id']) ? (int) $row['session_id'] : 0;
                     $attendanceSessionId = 0 === $attendanceSessionId ? null : $attendanceSessionId;
 
@@ -174,6 +184,7 @@ final class MigrateAttendancesFastCommand extends Command
                     $uuid = Uuid::v4();
                     $uuidValue = $uuidIsBinary ? $uuid->toBinary() : $uuid->toRfc4122();
 
+                    // Keep the slug stable and unique by appending the iid.
                     $slug = (string) $this->slugger->slug($attendanceTitle.'-'.$attendanceId)->lower();
 
                     $resourceNodeId = $this->insertResourceNode(
@@ -207,9 +218,11 @@ final class MigrateAttendancesFastCommand extends Command
                         'user_id' => $toUserId,
                     ]);
 
+                    // resource_node.path should be aligned with the course tree: <coursePath>-<nodeId>/
                     $newPath = $coursePath.'-'.$resourceNodeId.'/';
                     $this->connection->update('resource_node', ['path' => $newPath], ['id' => $resourceNodeId]);
 
+                    // Mark attendance as migrated by storing the new resource_node_id.
                     $this->connection->update('c_attendance', ['resource_node_id' => $resourceNodeId], ['iid' => $attendanceId]);
 
                     $displayOrder++;
@@ -267,14 +280,18 @@ final class MigrateAttendancesFastCommand extends Command
         bool $hasItemProperty,
         bool $hasAttendanceCId,
         bool $hasAttendanceTitle,
-        bool $hasAttendanceName
+        bool $hasAttendanceName,
+        bool $hasItemPropertySessionId
     ): array {
         $selectTitle = $hasAttendanceTitle ? 'a.title' : 'NULL AS title';
         $selectName = $hasAttendanceName ? 'a.name' : 'NULL AS name';
 
+        // session_id comes ONLY from c_item_property when available, otherwise NULL.
+        $selectSession = $hasItemPropertySessionId ? 'ip.session_id' : 'NULL';
+
         if ($hasItemProperty) {
             return $this->connection->fetchAllAssociative(
-                "SELECT a.iid, {$selectTitle}, {$selectName}, a.session_id
+                "SELECT a.iid, {$selectTitle}, {$selectName}, {$selectSession} AS session_id
                  FROM c_attendance a
                  INNER JOIN c_item_property ip
                     ON ip.tool = 'attendance'
@@ -286,10 +303,11 @@ final class MigrateAttendancesFastCommand extends Command
             );
         }
 
-        // Fallback using legacy c_id
+        // Fallback using legacy c_id (no c_item_property available).
+        // At this stage, we cannot infer a session_id, so we store NULL.
         if ($hasAttendanceCId) {
             return $this->connection->fetchAllAssociative(
-                "SELECT a.iid, {$selectTitle}, {$selectName}, a.session_id
+                "SELECT a.iid, {$selectTitle}, {$selectName}, NULL AS session_id
                  FROM c_attendance a
                  WHERE a.c_id = :cid AND a.resource_node_id IS NULL
                  ORDER BY a.iid",

@@ -72,6 +72,7 @@ function courseKey(course, index) {
         :disabled="!isEnabled"
         :session="session"
         :session-id="session.id"
+        :show-session-display-date="false"
       />
     </div>
   </div>

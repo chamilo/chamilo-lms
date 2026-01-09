@@ -411,6 +411,9 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     #[ORM\Column(name: 'validity_in_days', type: 'integer', nullable: true)]
     protected ?int $validityInDays = null;
 
+    #[Groups(['user_subscriptions:sessions'])]
+    private ?int $daysLeft = null;
+
     public function __construct()
     {
         $this->skills = new ArrayCollection();
@@ -1673,6 +1676,18 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public function setValidityInDays(?int $validityInDays): self
     {
         $this->validityInDays = $validityInDays ?: null;
+
+        return $this;
+    }
+
+    public function getDaysLeft(): ?int
+    {
+        return $this->daysLeft;
+    }
+
+    public function setDaysLeft(?int $daysLeft): self
+    {
+        $this->daysLeft = $daysLeft;
 
         return $this;
     }

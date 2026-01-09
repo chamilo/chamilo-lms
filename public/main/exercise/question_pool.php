@@ -9,6 +9,7 @@ use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use ChamiloSession as Session;
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\QueryBuilder;
 use Knp\Component\Pager\Paginator;
 
 /**
@@ -637,11 +638,42 @@ function getExtraFieldConditions(array $formValues, $queryType = 'from')
 }
 
 /**
+ * Apply "active" constraints on a ResourceLink alias.
+ *
+ * This mirrors the UI/ExerciseLib behavior:
+ * - Ignore soft-deleted links
+ * - Ignore ended links (endVisibilityAt IS NULL)
+ * - Keep only standard visibilities (0 or 2)
+ * - When a session is selected, include both course-level links (session IS NULL)
+ *   and session links (session = :sessionId)
+ */
+function applyActiveResourceLinkConstraints(QueryBuilder $qb, string $alias, int $sessionId, bool $includeCourseWhenSessionSelected = true): void
+{
+    $qb->andWhere($alias.'.deletedAt IS NULL');
+    $qb->andWhere($alias.'.endVisibilityAt IS NULL');
+    $qb->andWhere($alias.'.visibility IN (0,2)');
+
+    if ($sessionId > 0) {
+        if ($includeCourseWhenSessionSelected) {
+            $qb->andWhere('(IDENTITY('.$alias.'.session) = :sessionId OR '.$alias.'.session IS NULL)');
+        } else {
+            $qb->andWhere('IDENTITY('.$alias.'.session) = :sessionId');
+        }
+    } else {
+        $qb->andWhere($alias.'.session IS NULL');
+    }
+}
+
+/**
  * Fetch questions using Doctrine (C2).
  *
  * Important UI rule:
  * - We do NOT exclude questions already linked to the current quiz (fromExercise).
  *   The UI already disables checkboxes/actions through $objExercise->hasQuestion().
+ *
+ * Soft delete rule:
+ * - A question is considered linked to a quiz ONLY if that quiz is still "active"
+ *   in this context (ResourceLink.deletedAt IS NULL).
  */
 function getQuestions(
     $getCount,
@@ -678,6 +710,12 @@ function getQuestions(
     $qb = $entityManager->createQueryBuilder();
     $qb->from(CQuizQuestion::class, 'qq');
 
+    // Parameters used by main query and all subqueries
+    $qb->setParameter('courseId', $selectedCourse);
+    if ($sessionId > 0) {
+        $qb->setParameter('sessionId', $sessionId);
+    }
+
     // ---------------------------------------------------------------------
     // COURSE SCOPE (C2):
     // - Primary: question's own ResourceNode -> ResourceLink -> course
@@ -693,6 +731,7 @@ function getQuestions(
         ->innerJoin('qRN.resourceLinks', 'qRL')
         ->where('rq.question = qq')
         ->andWhere('IDENTITY(qRL.course) = :courseId');
+    applyActiveResourceLinkConstraints($existsViaQuiz, 'qRL', $sessionId, true);
 
     if ($questionMeta->hasAssociation('resourceNode')) {
         $qb->leftJoin('qq.resourceNode', 'rn');
@@ -702,6 +741,7 @@ function getQuestions(
             ->from(\Chamilo\CoreBundle\Entity\ResourceLink::class, 'rl')
             ->where('rl.resourceNode = rn')
             ->andWhere('IDENTITY(rl.course) = :courseId');
+        applyActiveResourceLinkConstraints($existsQuestionLink, 'rl', $sessionId, true);
 
         $qb->andWhere(
             $qb->expr()->orX(
@@ -714,8 +754,6 @@ function getQuestions(
         // Orphan questions without quiz links cannot be discovered in this scenario.
         $qb->andWhere($qb->expr()->exists($existsViaQuiz->getDQL()));
     }
-
-    $qb->setParameter('courseId', $selectedCourse);
 
     // ---------------------------------------------------------------------
     // FILTERS
@@ -746,24 +784,36 @@ function getQuestions(
             ->setParameter('description', '%'.$description.'%');
     }
 
-    // If a specific quiz is selected, keep only questions in that quiz.
+    // If a specific quiz is selected, keep only questions in that quiz,
+    // but only if the quiz is still active in this context (not soft-deleted link).
     if ($exerciseId > 0) {
         $inQuiz = $entityManager->createQueryBuilder();
         $inQuiz->select('1')
             ->from(CQuizRelQuestion::class, 'rqq')
+            ->innerJoin('rqq.quiz', 'qSel')
+            ->innerJoin('qSel.resourceNode', 'qSelRN')
+            ->innerJoin('qSelRN.resourceLinks', 'qSelRL')
             ->where('IDENTITY(rqq.quiz) = :exerciseId')
-            ->andWhere('rqq.question = qq');
+            ->andWhere('rqq.question = qq')
+            ->andWhere('IDENTITY(qSelRL.course) = :courseId');
+        applyActiveResourceLinkConstraints($inQuiz, 'qSelRL', $sessionId, true);
 
         $qb->andWhere($qb->expr()->exists($inQuiz->getDQL()))
             ->setParameter('exerciseId', $exerciseId);
     } elseif ($exerciseId === -1) {
-        // Orphan: not linked to any quiz
-        $hasAny = $entityManager->createQueryBuilder();
-        $hasAny->select('1')
+        // Orphan: not linked to any ACTIVE quiz in this context.
+        // A quiz with a soft-deleted link must NOT prevent a question from being orphan.
+        $hasAnyActive = $entityManager->createQueryBuilder();
+        $hasAnyActive->select('1')
             ->from(CQuizRelQuestion::class, 'rqq2')
-            ->where('rqq2.question = qq');
+            ->innerJoin('rqq2.quiz', 'q2')
+            ->innerJoin('q2.resourceNode', 'q2rn')
+            ->innerJoin('q2rn.resourceLinks', 'q2rl')
+            ->where('rqq2.question = qq')
+            ->andWhere('IDENTITY(q2rl.course) = :courseId');
+        applyActiveResourceLinkConstraints($hasAnyActive, 'q2rl', $sessionId, true);
 
-        $qb->andWhere($qb->expr()->not($qb->expr()->exists($hasAny->getDQL())));
+        $qb->andWhere($qb->expr()->not($qb->expr()->exists($hasAnyActive->getDQL())));
     }
 
     // ---------------------------------------------------------------------
@@ -1243,6 +1293,17 @@ function get_action_icon_for_question(
             break;
 
         case 'edit':
+            if (isQuestionInActiveQuiz($in_questionid)) {
+                $res = Display::getMdiIcon(
+                    ActionIcon::EDIT,
+                    'ch-tool-icon-disabled',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('This question belongs to a test. Edit it from inside the test or filter Orphan questions.')
+                );
+                break;
+            }
+
             $res = getLinkForQuestion(
                 1,
                 $from_exercise,
@@ -1283,26 +1344,60 @@ function get_action_icon_for_question(
 }
 
 /**
- * Checks whether a question is used by any quiz.
+ * Checks whether a question is used by any ACTIVE quiz in the current context.
+ *
+ * Soft-delete aware:
+ * - A quiz that only exists through a soft-deleted ResourceLink must NOT block question deletion.
  */
 function isQuestionInActiveQuiz($questionId)
 {
-    $tblQuizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-    $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+    global $selected_course, $session_id;
 
     $questionId = (int) $questionId;
     if (empty($questionId)) {
         return false;
     }
 
-    $sql = "SELECT COUNT(qq.question_id) AS count
-            FROM $tblQuizRelQuestion qq
-            INNER JOIN $tblQuiz q ON q.iid = qq.quiz_id
-            WHERE qq.question_id = $questionId";
+    $courseId = (int) $selected_course;
+    if ($courseId <= 0) {
+        $courseId = (int) api_get_course_int_id();
+    }
 
-    $row = Database::fetch_assoc(Database::query($sql));
+    $sessionId = (int) $session_id;
+    if ($sessionId < 0) {
+        $sessionId = 0;
+    }
 
-    return !empty($row) && (int) $row['count'] > 0;
+    try {
+        $entityManager = Database::getManager();
+
+        $qb = $entityManager->createQueryBuilder();
+        $qb->select('COUNT(DISTINCT q.iid)')
+            ->from(CQuizRelQuestion::class, 'rqq')
+            ->innerJoin('rqq.quiz', 'q')
+            ->innerJoin('q.resourceNode', 'rn')
+            ->innerJoin('rn.resourceLinks', 'rl')
+            ->where('rqq.question = :questionId')
+            ->andWhere('IDENTITY(rl.course) = :courseId')
+            ->setParameter('questionId', $questionId)
+            ->setParameter('courseId', $courseId);
+
+        // Soft-delete aware "active link" rules.
+        // NOTE: If you want session-only scope, change last param to false.
+        applyActiveResourceLinkConstraints($qb, 'rl', $sessionId, true);
+
+        if ($sessionId > 0) {
+            $qb->setParameter('sessionId', $sessionId);
+        }
+
+        $count = (int) $qb->getQuery()->getSingleScalarResult();
+
+        return $count > 0;
+    } catch (\Throwable $e) {
+        error_log('[question_pool] isQuestionInActiveQuiz failed: '.$e->getMessage());
+        // Fail-safe: keep legacy safe behavior (treat as used).
+        return true;
+    }
 }
 
 /**

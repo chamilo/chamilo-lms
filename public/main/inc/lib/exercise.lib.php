@@ -3405,6 +3405,7 @@ EOT;
 
         $qb = $repo->getResourcesByCourse($course, $session);
 
+        $qb->andWhere('links.deletedAt IS NULL');
         $qb->andWhere('links.endVisibilityAt IS NULL');
         if ($onlyActiveExercises) {
             $qb->andWhere('links.visibility = 2');

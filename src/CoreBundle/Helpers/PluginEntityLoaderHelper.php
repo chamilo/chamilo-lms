@@ -17,7 +17,7 @@ readonly class PluginEntityLoaderHelper
     public function getEntityDirectories(): array
     {
         $finder = new Finder();
-        $finder->directories()->in($this->pluginDir)->name('Entity')->depth('== 1');
+        $finder->directories()->in($this->pluginDir)->name('Entity')->depth('<= 2');
 
         $directories = [];
         foreach ($finder as $dir) {

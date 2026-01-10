@@ -100,10 +100,10 @@ security:
 #                    - Chamilo\CoreBundle\Security\LoginFormAuthenticator
 #                    - Chamilo\CoreBundle\Security\TokenAuthenticator
             entry_point: Chamilo\CoreBundle\Security\AuthenticationEntryPoint
-            remember_me:
-                secret: '%secret%'
-                lifetime: 604800 # 1 week in seconds
-                path: /
+#            remember_me:
+#               secret: '%secret%'
+#                lifetime: 604800 # 1 week in seconds
+#                path: /
             logout:
                 path: /logout
                 target: /

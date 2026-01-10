@@ -126,6 +126,15 @@ services:
       tags:
         - { name: 'api_platform.state_processor' }
 
+    Chamilo\CoreBundle\EventSubscriber\RememberMeSubscriber:
+      arguments:
+        $appSecret: '%kernel.secret%'
+      tags: [ 'kernel.event_subscriber' ]
+
+    Chamilo\CoreBundle\Security\Authenticator\RememberMeCookieAuthenticator:
+      arguments:
+        $appSecret: '%env(APP_SECRET)%'
+
     Chamilo\CoreBundle\EventSubscriber\AnonymousUserSubscriber:
       tags:
         - name: kernel.event_subscriber

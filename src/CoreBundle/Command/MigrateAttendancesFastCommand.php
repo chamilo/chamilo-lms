@@ -53,6 +53,13 @@ final class MigrateAttendancesFastCommand extends Command
             InputOption::VALUE_NONE,
             'Alias of --drop-c-item-property (drops legacy table c_item_property after successful migration, only if no pending attendances remain).'
         );
+
+        $this->addOption(
+            'dry-run',
+            null,
+            InputOption::VALUE_NONE,
+            'Preview mode: prints the computed resource_node.path and rolls back the transaction (no data persisted).'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -60,9 +67,16 @@ final class MigrateAttendancesFastCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Fast attendances migration');
 
+        $dryRun = (bool) $input->getOption('dry-run');
+
         // Accept both flags as the same action (alias)
         $dropItemProperty = (bool) $input->getOption('drop-c-item-property')
             || (bool) $input->getOption('drop-c-item-properties');
+
+        if ($dryRun && $dropItemProperty) {
+            $io->note('Dry-run enabled: ignoring --drop-c-item-property (no schema changes will be applied).');
+            $dropItemProperty = false;
+        }
 
         $fallbackAdminId = $this->getFallbackAdminId();
         $uuidIsBinary = $this->detectUuidIsBinary();
@@ -93,6 +107,10 @@ final class MigrateAttendancesFastCommand extends Command
                 $this->maybeDropItemProperty($io);
             }
             return Command::SUCCESS;
+        }
+
+        if ($dryRun) {
+            $io->warning('Dry-run enabled: all changes will be rolled back. Only paths will be printed.');
         }
 
         $processedCourses = 0;
@@ -142,7 +160,7 @@ final class MigrateAttendancesFastCommand extends Command
                 continue;
             }
 
-            $io->section("Course {$courseId}: migrating ".\count($attendanceRows).' attendances');
+            $io->section("Course {$courseId}: processing ".\count($attendanceRows).' attendances');
 
             $displayOrder = 0;
             $this->connection->beginTransaction();
@@ -218,8 +236,17 @@ final class MigrateAttendancesFastCommand extends Command
                         'user_id' => $toUserId,
                     ]);
 
-                    // resource_node.path should be aligned with the course tree: <coursePath>-<nodeId>/
-                    $newPath = $coursePath.'-'.$resourceNodeId.'/';
+                    // resource_node.path should follow the same structure as the standard migration:
+                    // <parentPath>/<title>-<attendanceIid>-<nodeId>/
+                    $segmentTitle = trim(str_replace(['/', '\\'], '-', $attendanceTitle));
+                    $segmentTitle = preg_replace('/\s+/', ' ', $segmentTitle) ?: $segmentTitle;
+
+                    $newPath = $coursePath.'/'.$segmentTitle.'-'.$attendanceId.'-'.$resourceNodeId.'/';
+
+                    if ($dryRun) {
+                        $io->writeln(sprintf('  - Attendance %d -> path: %s', $attendanceId, $newPath));
+                    }
+
                     $this->connection->update('resource_node', ['path' => $newPath], ['id' => $resourceNodeId]);
 
                     // Mark attendance as migrated by storing the new resource_node_id.
@@ -229,13 +256,29 @@ final class MigrateAttendancesFastCommand extends Command
                     $processedAttendances++;
                 }
 
-                $this->connection->commit();
+                if ($dryRun) {
+                    $this->connection->rollBack();
+                    $io->note("Dry-run: rolled back changes for course {$courseId}.");
+                } else {
+                    $this->connection->commit();
+                }
+
                 $processedCourses++;
             } catch (\Throwable $e) {
-                $this->connection->rollBack();
+                try {
+                    $this->connection->rollBack();
+                } catch (\Throwable) {
+                    // Ignore rollback failures.
+                }
+
                 $io->error("Course {$courseId}: transaction failed - ".$e->getMessage());
                 return Command::FAILURE;
             }
+        }
+
+        if ($dryRun) {
+            $io->success("Dry-run finished. Courses processed: {$processedCourses}. Attendances simulated: {$processedAttendances}.");
+            return Command::SUCCESS;
         }
 
         $io->success("Done. Courses processed: {$processedCourses}. Attendances migrated: {$processedAttendances}.");
@@ -353,14 +396,12 @@ final class MigrateAttendancesFastCommand extends Command
         $io->section('Dropping legacy table "c_item_property"...');
 
         try {
-            // DBAL generates the proper DROP TABLE for the current platform.
             $sm = $this->connection->createSchemaManager();
             $sm->dropTable('c_item_property');
 
             $io->success('Legacy table "c_item_property" dropped.');
         } catch (DbalException $e) {
             $io->error('Failed to drop legacy table "c_item_property": '.$e->getMessage());
-            // Optional: throw $e; // if you want to fail hard
         }
     }
 

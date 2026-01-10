@@ -10,43 +10,57 @@
 class Ims2Question extends Question
 {
     /**
-     * Include the correct answer class and create answer.
-     *
-     * @return Answer
+     * Create the proper Answer handler.
+     * Messages/strings in code must be English.
      */
     public function setAnswer()
     {
+        $questionId = 0;
+
+        if (method_exists($this, 'getIid')) {
+            $questionId = (int) $this->getIid();
+        } elseif (property_exists($this, 'iid')) {
+            $questionId = (int) $this->iid;
+        } elseif (property_exists($this, 'id')) {
+            $questionId = (int) $this->id;
+        }
+
+        // Avoid null IDs: use 0 as safe fallback (some flows set the ID later).
+        if ($questionId < 0) {
+            $questionId = 0;
+        }
+
         switch ($this->type) {
             case TF:
             case MCUA:
-                $answer = new ImsAnswerMultipleChoice($this->id);
-
-                return $answer;
             case MCMA:
-                $answer = new ImsAnswerMultipleChoice($this->id);
+                $answer = new ImsAnswerMultipleChoice($questionId);
+                break;
 
-                return $answer;
             case FIB:
-                $answer = new ImsAnswerFillInBlanks($this->id);
+                $answer = new ImsAnswerFillInBlanks($questionId);
+                break;
 
-                return $answer;
             case MATCHING:
             case MATCHING_DRAGGABLE:
-                $answer = new ImsAnswerMatching($this->id);
+                $answer = new ImsAnswerMatching($questionId);
+                break;
 
-                return $answer;
             case FREE_ANSWER:
-                $answer = new ImsAnswerFree($this->id);
+                $answer = new ImsAnswerFree($questionId);
+                break;
 
-                return $answer;
             case HOT_SPOT:
-                $answer = new ImsAnswerHotspot($this->id);
+                $answer = new ImsAnswerHotspot($questionId);
+                break;
 
-                return $answer;
             default:
                 $answer = null;
+        }
 
-                break;
+        // If the parent Question class expects an internal property, keep it.
+        if (property_exists($this, 'answer')) {
+            $this->answer = $answer;
         }
 
         return $answer;

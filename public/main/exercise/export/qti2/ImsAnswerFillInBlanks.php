@@ -10,17 +10,36 @@ class ImsAnswerFillInBlanks extends Answer implements ImsAnswerInterface
 
     /**
      * Export the text with missing words.
+     *
+     * @param string $questionIdent
+     * @param string $questionStatment
+     * @param string $questionDesc
+     * @param string $questionMedia
+     *
+     * @return string
      */
-    public function imsExportResponses($questionIdent, $questionStatment)
+    public function imsExportResponses($questionIdent, $questionStatment, $questionDesc = '', $questionMedia = '')
     {
         $this->answerList = $this->getAnswersList(true);
-        $text = isset($this->answerText) ? $this->answerText : '';
+
+        // Keep legacy behavior: prefer $this->answerText (it usually contains the [..] placeholders).
+        // Fallback to the provided statement if answerText is empty.
+        $text = isset($this->answerText) ? (string) $this->answerText : '';
+        if ($text === '') {
+            $text = (string) $questionStatment;
+        }
+
         if (is_array($this->answerList)) {
             foreach ($this->answerList as $key => $answer) {
                 $key = $answer['id'];
                 $answer = $answer['answer'];
                 $len = api_strlen($answer);
-                $text = str_replace('['.$answer.']', '<textEntryInteraction responseIdentifier="fill_'.$key.'" expectedLength="'.api_strlen($answer).'"/>', $text);
+
+                $text = str_replace(
+                    '['.$answer.']',
+                    '<textEntryInteraction responseIdentifier="fill_'.$key.'" expectedLength="'.api_strlen($answer).'"/>',
+                    $text
+                );
             }
         }
 

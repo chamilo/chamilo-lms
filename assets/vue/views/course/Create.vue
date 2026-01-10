@@ -22,7 +22,6 @@
     <Loading :visible="isLoading" />
   </div>
 </template>
-
 <script setup>
 import { ref } from "vue"
 import CourseForm from "../../components/course/Form.vue"
@@ -33,19 +32,58 @@ import courseService from "../../services/courseService"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
 
-const item = ref({})
 const router = useRouter()
-const { t } = useI18n()
+const { t, locale } = useI18n()
+
+function normalizeLocale(value) {
+  // Normalize values like: "en-US" -> "en_US", "EN" -> "en"
+  return String(value || "")
+    .trim()
+    .replace("-", "_")
+    .toLowerCase()
+}
+
+/**
+ * Default form values.
+ */
+const item = ref({
+  language: normalizeLocale(locale.value),
+})
 
 const isLoading = ref(false)
 const violations = ref(null)
 const { showSuccessNotification, showErrorNotification } = useNotification()
 
+function sanitizeCoursePayload(data) {
+  // Make sure demo/sample content is never enabled from the UI
+  const payload = { ...data }
+
+  const demoKeys = [
+    "fillDemoContent",
+    "includeSampleContent",
+    "include_sample_content",
+    "addExampleContent",
+    "add_example_content",
+    "exampleContent",
+    "example_content",
+  ]
+
+  for (const key of demoKeys) {
+    if (key in payload) {
+      payload[key] = false
+    }
+  }
+
+  return payload
+}
+
 const submitCourse = async (formData) => {
   isLoading.value = true
   violations.value = null
   try {
-    const response = await courseService.createCourse(formData)
+    const payload = sanitizeCoursePayload(formData)
+    const response = await courseService.createCourse(payload)
+
     const courseId = response.courseId
     const sessionId = 0
 

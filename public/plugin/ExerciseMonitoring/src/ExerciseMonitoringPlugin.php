@@ -2,10 +2,11 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\PluginBundle\ExerciseMonitoring\Entity\Log;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
-use Symfony\Component\Filesystem\Filesystem;
+use League\Flysystem\FilesystemOperator;
 
 class ExerciseMonitoringPlugin extends Plugin
 {
@@ -70,22 +71,21 @@ class ExerciseMonitoringPlugin extends Plugin
             ]
         );
 
-        $pluginDirName = api_get_path(SYS_UPLOAD_PATH).'plugins/ExerciseMonitoring';
+        /** @var FilesystemOperator $fs */
+        $fs = Container::$container->get('oneup_flysystem.plugins_filesystem');
 
-        $fs = new Filesystem();
-        $fs->mkdir(
-            $pluginDirName,
-            api_get_permissions_for_new_directories()
-        );
+        if (!$fs->directoryExists('ExerciseMonitoring')) {
+            $fs->createDirectory('ExerciseMonitoring');
+        }
 
         $objField = new ExtraField('exercise');
         $objField->save([
             'variable' => self::FIELD_SELECTED,
-            'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
+            'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
             'display_text' => $this->get_title(),
             'visible_to_self' => true,
             'changeable' => true,
-            'filter' => false,
+            'filter' => 0,
         ]);
     }
 

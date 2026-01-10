@@ -69,11 +69,11 @@ class ExerciseFocusedPlugin extends Plugin
         $objField = new ExtraField('exercise');
         $objField->save([
             'variable' => self::FIELD_SELECTED,
-            'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
+            'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
             'display_text' => $this->get_title(),
             'visible_to_self' => true,
             'changeable' => true,
-            'filter' => false,
+            'filter' => 0,
         ]);
     }
 

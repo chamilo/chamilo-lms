@@ -118,8 +118,8 @@ if (!empty($sessionId) && !$is_allowedToEdit) {
     }
 }
 
-$allowCoachFeedbackExercises = 'true' === api_get_setting('allow_coach_feedback_exercises');
-$maxEditors = (int) api_get_setting('exercise_max_editors_in_page');
+$allowCoachFeedbackExercises = 'true' === api_get_setting('exercise.allow_coach_feedback_exercises');
+$maxEditors = (int) api_get_setting('exercise.exercise_max_editors_in_page');
 $enableAi     = 'true' === api_get_setting('ai_helpers.enable_ai_helpers');
 $openAnsGrader= 'true' === api_get_setting('ai_helpers.open_answers_grader');
 $isCoachAllowedToEdit = api_is_allowed_to_edit(false, true);

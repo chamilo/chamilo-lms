@@ -75,7 +75,22 @@ function importFile($array_file)
         $main_path = api_get_path(SYS_CODE_PATH);
         require_once $main_path.'exercise/export/exercise_import.inc.php';
 
-        return import_exercise($array_file['name']);
+        // Move upload to a real temp location keeping the .zip name
+        $permDirs = api_get_permissions_for_new_directories();
+        $tmpBase = api_get_path(SYS_ARCHIVE_PATH).'qti2_import/'.api_get_unique_id().'/';
+
+        if (!is_dir($tmpBase)) {
+            mkdir($tmpBase, $permDirs, true);
+        }
+
+        $targetPath = $tmpBase.$array_file['name'];
+        if (!move_uploaded_file($array_file['tmp_name'], $targetPath)) {
+            if (!copy($array_file['tmp_name'], $targetPath)) {
+                return 'FileError';
+            }
+        }
+
+        return import_exercise($targetPath);
     }
 
     return 'FileError';

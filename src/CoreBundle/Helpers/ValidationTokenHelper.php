@@ -16,6 +16,7 @@ class ValidationTokenHelper
     // Define constants for the types
     public const TYPE_TICKET = 1;
     public const TYPE_USER = 2;
+    public const TYPE_REMEMBER_ME = 3;
 
     public function __construct(
         private readonly ValidationTokenRepository $tokenRepository,
@@ -39,15 +40,17 @@ class ValidationTokenHelper
         return match ($type) {
             'ticket' => self::TYPE_TICKET,
             'user' => self::TYPE_USER,
+            'remember_me' => self::TYPE_REMEMBER_ME,
             default => throw new InvalidArgumentException('Unrecognized validation type'),
         };
     }
 
-    private function getTypeString(int $type): string
+    public function getTypeString(int $type): string
     {
         return match ($type) {
             self::TYPE_TICKET => 'ticket',
             self::TYPE_USER => 'user',
+            self::TYPE_REMEMBER_ME => 'remember_me',
             default => throw new InvalidArgumentException('Unrecognized validation type'),
         };
     }

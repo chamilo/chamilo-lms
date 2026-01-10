@@ -10,13 +10,16 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Legal;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\ValidationToken;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
+use Chamilo\CoreBundle\Helpers\ValidationTokenHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
+use Chamilo\CoreBundle\Repository\ValidationTokenRepository;
 use Chamilo\CoreBundle\Security\Authenticator\Ldap\LdapAuthenticator;
 use Chamilo\CoreBundle\Security\Authenticator\LoginTokenAuthenticator;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -28,6 +31,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use OTPHP\TOTP;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -65,6 +69,13 @@ class SecurityController extends AbstractController
             throw $this->createAccessDeniedException($translator->trans('Invalid login request: check that the Content-Type header is <em>application/json</em>.'));
         }
 
+        $dataRequest = json_decode($request->getContent(), true);
+        if (!\is_array($dataRequest)) {
+            $dataRequest = [];
+        }
+
+        $rememberRequested = (bool) ($dataRequest['_remember_me'] ?? false);
+
         $user = $this->userHelper->getCurrent();
 
         if (User::ACTIVE !== $user->getActive()) {
@@ -81,8 +92,7 @@ class SecurityController extends AbstractController
         }
 
         if ($user->getMfaEnabled()) {
-            $data = json_decode($request->getContent(), true);
-            $totpCode = $data['totp'] ?? null;
+            $totpCode = $dataRequest['totp'] ?? null;
 
             if (null === $totpCode) {
                 $tokenStorage->setToken(null);
@@ -177,7 +187,46 @@ class SecurityController extends AbstractController
             $data = $this->serializer->serialize($user, 'jsonld', ['groups' => ['user_json:read']]);
         }
 
-        return new JsonResponse($data, Response::HTTP_OK, [], true);
+        $response = new JsonResponse($data, Response::HTTP_OK, [], true);
+
+        // Remember Me: only on HTTPS.
+        if ($rememberRequested && $request->isSecure()) {
+            $ttlSeconds = 1209600; // 14 days
+
+            // Opportunistic cleanup of expired remember-me tokens.
+            /** @var ValidationTokenRepository $validationTokenRepo */
+            $validationTokenRepo = $this->entityManager->getRepository(ValidationToken::class);
+            $validationTokenRepo->deleteExpiredRememberMeTokens((new DateTimeImmutable())->modify('-'.$ttlSeconds.' seconds'));
+
+            $rawToken = rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
+            $hash = hash('sha256', $rawToken);
+
+            $tokenEntity = new ValidationToken(ValidationTokenHelper::TYPE_REMEMBER_ME, (int) $user->getId(), $hash);
+            $validationTokenRepo->save($tokenEntity, true);
+
+            $secret = (string) $this->getParameter('kernel.secret');
+            $sigRaw = hash_hmac('sha256', (string) $user->getId().'|'.$rawToken, $secret, true);
+            $sig = rtrim(strtr(base64_encode($sigRaw), '+/', '-_'), '=');
+
+            $cookieValue = $user->getId().':'.$rawToken.':'.$sig;
+            $expiresAt = (new DateTimeImmutable())->modify('+'.$ttlSeconds.' seconds');
+
+            $cookie = new Cookie(
+                'ch_remember_me',
+                $cookieValue,
+                $expiresAt->getTimestamp(),
+                '/',
+                null,
+                true,  // Secure
+                true,  // HttpOnly
+                false,
+                Cookie::SAMESITE_STRICT
+            );
+
+            $response->headers->setCookie($cookie);
+        }
+
+        return $response;
     }
 
     #[IsGranted('IS_AUTHENTICATED_FULLY')]

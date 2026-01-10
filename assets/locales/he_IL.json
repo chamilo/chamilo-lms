@@ -1264,5 +1264,9 @@
     "Blog": "\u05d1\u05dc\u05d5\u05d2",
     "Dropbox": "Dropbox",
     "Your browser does not support Javascript": "\u05d4\u05d3\u05e4\u05d3\u05e4\u05df \u05e9\u05dc\u05da \u05d0\u05d9\u05e0\u05d5 \u05ea\u05d5\u05de\u05da \u05d1-Javascript",
-    "The value must match exactly: %s": "The value must match exactly: {0}"
+    "The value must match exactly: {0}": "The value must match exactly: {0}",
+    "Repeat end date must be after start date.": "Repeat end date must be after start date.",
+    "Index document content?": "Index document content?",
+    "Upload SVG logo to platform header": "Upload SVG logo to platform header",
+    "Upload PNG logo to platform header ({0})": "Upload PNG logo to platform header ({0})"
 }

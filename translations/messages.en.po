@@ -31837,3 +31837,18 @@ msgstr "This will delete files older than %minutes% minutes. Continue?"
 
 msgid "The value must match exactly: %s"
 msgstr "The value must match exactly: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Repeat end date must be after start date."
+
+msgid "Index document content?"
+msgstr "Index document content?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Upload SVG logo to platform header"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Upload PNG logo to platform header (%s)"
+
+msgid "Write something to %s"
+msgstr "Write something to %s"

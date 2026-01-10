@@ -9,7 +9,7 @@
     </Message>
     <section>
       <p class="mb-3">
-        {{ t("The value must match exactly: %s", [urlText]) }}
+        {{ t("The value must match exactly: {0}", [urlText]) }}
       </p>
 
       <BaseInputText

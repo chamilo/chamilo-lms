@@ -1026,7 +1026,7 @@
     "The exercises auto-launch feature configuration is enabled": "The exercises auto-launch feature configuration is enabled",
     "The learning path auto-launch setting is ON": "The learning path auto-launch setting is ON",
     "The forum's auto-launch setting is on": "The forum's auto-launch setting is on",
-    "Once you click on \"Create a course\", a course is created with a section for Tests, Project based learning, Assessments, Courses, Dropbox, Agenda and much more. Logging in as teacher provides you with editing privileges for this course.": "Una vez que haya pulsado el bot\u00f3n \"Crear curso\" se crear\u00e1 el sitio web del curso, en el que dispondr\u00e1 de m\u00faltiples herramientas que podr\u00e1 configurar para dar al curso su aspecto definitivo: Test o Ejercicios, Proyectos o Blogs, Wikis, Tareas, Creador y visualizador de Lecciones en formato SCORM, Encuestas y mucho m\u00e1s. Su identificaci\u00f3n como creador de este sitio autom\u00e1ticamente lo convierte en profesor del curso, lo cual le permitir\u00e1 modificarlo seg\u00fan sus necesidades.",
+    "Once you click on \"Create a course\", a course is created with a section for Tests, Project based learning, Assessments, Courses, Dropbox, Agenda and much more. Logging in as teacher provides you with editing privileges for this course.": "Una vez que haya pulsado el bot\u00f3n \"Crear curso\" se crear\u00e1 el espacio del curso, en el que dispondr\u00e1 de m\u00faltiples herramientas que podr\u00e1 configurar para dar al curso su aspecto definitivo: Tests o Ejercicios, Proyectos o Blogs, Wikis, Tareas, editor y visualizador de Lecciones en formato SCORM o nativas, Encuestas y mucho m\u00e1s. Su identificaci\u00f3n como creador de este curso autom\u00e1ticamente lo convierte en su profesor asignado, lo cual le permitir\u00e1 modificarlo seg\u00fan sus necesidades. Muchos profesores deciden esconder todas las herramientas y solo habilitar algunas. Una buena manera de reducir la confusi\u00f3n para sus alumnos.",
     "Course ID is missing": "Course ID is missing",
     "Course created successfully": "Course created successfully",
     "An unexpected error occurred.": "Ocurri\u00f3 un error inesperado.",
@@ -1264,5 +1264,9 @@
     "Blog": "Blog",
     "Dropbox": "Compartir documentos",
     "Your browser does not support Javascript": "Su navegador no soporta el JavaScript",
-    "The value must match exactly: %s": "The value must match exactly: {0}"
+    "The value must match exactly: {0}": "The value must match exactly: {0}",
+    "Repeat end date must be after start date.": "Repeat end date must be after start date.",
+    "Index document content?": "Index document content?",
+    "Upload SVG logo to platform header": "Upload SVG logo to platform header",
+    "Upload PNG logo to platform header ({0})": "Upload PNG logo to platform header ({0})"
 }

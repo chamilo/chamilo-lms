@@ -2877,4 +2877,50 @@ class Display
 
         return $html;
     }
+
+    /**
+     * Reusable collapsible wrapper for "advanced parameters" sections.
+     */
+    public static function advancedPanelStart(
+        string $id,
+        string $title,
+        bool $open = false,
+        array $options = []
+    ): string {
+        $safeId = preg_replace('/[^a-zA-Z0-9\-_:.]/', '_', $id);
+        $safeTitle = Security::remove_XSS($title);
+
+        $openAttr = $open ? ' open' : '';
+
+        $detailsClass = $options['details_class']
+            ?? 'display-advanced-panel mb-4';
+
+        // Button-like summary, fit to text (no full width)
+        $summaryClass = $options['summary_class']
+            ?? 'inline-flex w-fit items-center gap-2 cursor-pointer select-none whitespace-nowrap
+            bg-primary text-white
+            border border-primary rounded px-3 py-2 shadow-sm font-semibold
+            hover:opacity-90 transition
+            focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2';
+
+        $contentClass = $options['content_class']
+            ?? 'bg-white border border-gray-25 rounded mt-3 px-3 py-3';
+
+        return '
+            <details id="'.$safeId.'" class="'.$detailsClass.'"'.$openAttr.'>
+              <summary class="'.$summaryClass.'">
+                <span class="display-advanced-panel__chevron" aria-hidden="true">▸</span>
+                <span>'.$safeTitle.'</span>
+              </summary>
+              <div class="'.$contentClass.'">
+            ';
+    }
+
+    public static function advancedPanelEnd(): string
+    {
+        return '
+          </div>
+        </details>
+        ';
+    }
 }

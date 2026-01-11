@@ -123,9 +123,65 @@ const confirm = useConfirm()
 
 const requestList = ref()
 
+function buildUserIri() {
+  if (user.value?.["@id"]) {
+    return user.value["@id"]
+  }
+  if (user.value?.id) {
+    return `/api/users/${user.value.id}`
+  }
+  return null
+}
+
+/**
+ * Normalize relation so that:
+ * - relation.user is always "me"
+ * - relation.friend is always "the other user"
+ * Returns null if invalid or self-relation.
+ */
+function normalizeFriendRelation(rel, meIri) {
+  const userIri = rel?.user?.["@id"]
+  const friendIri = rel?.friend?.["@id"]
+
+  if (!userIri || !friendIri) {
+    return null
+  }
+
+  // Ignore broken self-relations
+  if (userIri === meIri && friendIri === meIri) {
+    return null
+  }
+
+  // Forward already (user=me)
+  if (userIri === meIri) {
+    if (friendIri === meIri) return null
+    return rel
+  }
+
+  // Backward (friend=me) -> swap
+  if (friendIri === meIri) {
+    const swapped = {
+      ...rel,
+      user: rel.friend, // me
+      friend: rel.user, // other
+    }
+
+    if (swapped.friend?.["@id"] === meIri) return null
+    return swapped
+  }
+
+  return null
+}
+
 function reloadHandler() {
   if (!user.value) {
     console.log("User not defined yet")
+    return
+  }
+
+  const meIri = buildUserIri()
+  if (!meIri) {
+    console.warn("Friends list: current user IRI is missing.")
     return
   }
 
@@ -133,23 +189,31 @@ function reloadHandler() {
   items.value = []
 
   Promise.all([
-    userRelUserService.findAll({ params: { user: user.value.id, relationType: 3 } }),
-    userRelUserService.findAll({ params: { friend: user.value.id, relationType: 3 } }),
+    userRelUserService.findAll({ params: { user: meIri, relationType: 3 } }),
+    userRelUserService.findAll({ params: { friend: meIri, relationType: 3 } }),
   ])
     .then(([friendshipResponse, friendshipBackResponse]) => {
       return Promise.all([friendshipResponse.json(), friendshipBackResponse.json()])
     })
     .then(([friendshipJson, friendshipBackJson]) => {
-      const friendsSet = new Set()
-      items.value = [...friendshipJson["hydra:member"], ...friendshipBackJson["hydra:member"]].filter((friend) => {
-        const friendId = friend.user["@id"] === user.value["@id"] ? friend.friend["@id"] : friend.user["@id"]
-        if (friendsSet.has(friendId)) {
-          return false
-        } else {
-          friendsSet.add(friendId)
-          return true
-        }
-      })
+      const merged = [...(friendshipJson?.["hydra:member"] || []), ...(friendshipBackJson?.["hydra:member"] || [])]
+      const seen = new Set()
+      const normalized = []
+
+      for (const rel of merged) {
+        const fixed = normalizeFriendRelation(rel, meIri)
+        if (!fixed) continue
+
+        const otherIri = fixed.friend?.["@id"]
+        if (!otherIri) continue
+
+        if (seen.has(otherIri)) continue
+        seen.add(otherIri)
+
+        normalized.push(fixed)
+      }
+
+      items.value = normalized
     })
     .catch((e) => {
       console.error("Error occurred", e)
@@ -186,7 +250,6 @@ function onClickDeleteFriend(friendship) {
     message: t("Are you sure to delete the friendship?"),
     accept: async () => {
       await userRelUserService.del(friendship)
-
       reloadHandler()
     },
   })

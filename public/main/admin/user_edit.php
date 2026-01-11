@@ -79,6 +79,7 @@ function confirmation(name) {
 }
 </script>';
 
+$advancedPanelOpen = !empty($_POST);
 $tool_name = get_lang('Edit user information');
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
@@ -347,6 +348,12 @@ if (!empty($studentBossList)) {
 $user_data['student_boss'] = $studentBossList;
 $form->addMultiSelect('student_boss', get_lang('Superior (n+1)'), $studentBossToSelect);
 
+$form->addElement('html', Display::advancedPanelStart(
+    'advanced_params',
+    get_lang('Advanced parameters'),
+    $advancedPanelOpen
+));
+
 // EXTRA FIELDS
 $extraField = new ExtraField('user');
 $returnParams = $extraField->addElements(
@@ -364,6 +371,7 @@ $returnParams = $extraField->addElements(
 $jqueryReadyContent = $returnParams['jquery_ready_content'];
 
 $form->addEmailTemplate(['user_edit_content.tpl']);
+$form->addElement('html', Display::advancedPanelEnd());
 
 // the $jqueryReadyContent variable collects all functions that will be load in the
 $htmlHeadXtra[] = '<script>

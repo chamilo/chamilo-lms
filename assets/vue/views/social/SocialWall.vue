@@ -85,7 +85,7 @@ const wallName = computed(() => {
 const isWallLoading = computed(() => !isOwnWallByRoute.value && !wallName.value)
 
 const wallTitle = computed(() => {
-  if (isOwnWallByRoute.value) return t("My wall")
+  if (isOwnWallByRoute.value) return ''
   if (isWallLoading.value) return `${t("Wall")}…`
   return `${t("Wall of")} ${wallName.value}`.trim()
 })

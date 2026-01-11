@@ -65,6 +65,20 @@ $interbreadcrumb[] = [
 $show_learn_path = true;
 $lp_theme_css = $learnPath->get_theme();
 
+$itemTitle = '';
+if (isset($lpItem) && $lpItem) {
+    $itemTitle = (string) $lpItem->getTitle();
+}
+$itemTitle = trim(strip_tags($itemTitle));
+if ('' === $itemTitle) {
+    $itemTitle = get_lang('Edit item');
+}
+
+$htmlHeadXtra[] = '<style>
+    .lp-edit-right-wrap { padding-left: 24px; padding-right: 16px; }
+    .lp-edit-right-title { font-size: 18px; font-weight: 600; margin: 6px 0 14px 0; }
+</style>';
+
 $excludeExtraFields = [
     'authors',
     'authorlp',
@@ -72,7 +86,6 @@ $excludeExtraFields = [
     'price',
 ];
 if (api_is_platform_admin()) {
-    // Only admins can edit this items
     $excludeExtraFields = [];
 }
 $right = '';
@@ -82,13 +95,25 @@ if (isset($is_success) && true === $is_success) {
     $right .= '</div>';
     $right .= $learnPath->display_item($lpItem, $msg);
 } else {
-    $right .= $learnPath->display_edit_item($lpItem, $excludeExtraFields);
-    $finalItem = Session::read('finalItem');
-    if ($finalItem) {
-        $right .= '<script>$("#frmModel").remove()</script>';
+    if ($lpItem && method_exists($lpItem, 'getItemType') && $lpItem->getItemType() === TOOL_LP_FINAL_ITEM) {
+        $right .= $learnPath->getFinalItemForm();
+
+        $right .= "<script>
+            (function () {
+                var el = document.getElementById('frmModel');
+                if (el) el.remove();
+            })();
+        </script>";
+    } else {
+        $right .= $learnPath->display_edit_item($lpItem, $excludeExtraFields);
     }
     Session::erase('finalItem');
 }
+$right =
+    '<div class="lp-edit-right-wrap">'
+    . '<div class="lp-edit-right-title">' . Security::remove_XSS($itemTitle) . '</div>'
+    . $right
+    . '</div>';
 
 $tpl = new Template();
 $tpl->assign('actions', $learnPath->build_action_menu(true));

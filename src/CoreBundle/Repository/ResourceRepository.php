@@ -574,12 +574,32 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
     public function getResourceFileContent(AbstractResource $resource): string
     {
-        try {
-            $resourceNode = $resource->getResourceNode();
+        $resourceNode = $resource->getResourceNode();
 
+        if (null === $resourceNode) {
+            throw new FileNotFoundException($resource->getResourceName());
+        }
+
+        try {
             return $this->resourceNodeRepository->getResourceNodeFileContent($resourceNode);
         } catch (Throwable $throwable) {
-            throw new FileNotFoundException($resource->getResourceName());
+            // Fallback: editable text content (for resources stored without a physical file)
+            if (method_exists($resourceNode, 'hasEditableTextContent')
+                && $resourceNode->hasEditableTextContent()
+                && method_exists($resourceNode, 'getEditableTextContent')
+            ) {
+                $editable = (string) $resourceNode->getEditableTextContent();
+                if ('' !== trim($editable)) {
+                    return $editable;
+                }
+            }
+
+            // If there is no file, returning an empty string avoids fatal errors for non-file resources.
+            if (method_exists($resourceNode, 'hasResourceFile') && !$resourceNode->hasResourceFile()) {
+                return '';
+            }
+
+            throw new FileNotFoundException($resource->getResourceName(), 0, $throwable);
         }
     }
 

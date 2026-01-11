@@ -108,8 +108,35 @@ switch ($action) {
         $course  = api_get_course_entity();
         $results = [];
 
-        $createDocument = function(string $path, string $filename, string $mimetype, int $filesize, bool $ifExists) use (
-            $repo, $em, $course, $directoryParentId, &$results
+        // --------- LP context (optional): auto-create LP items when uploading from LP builder ----------
+        $lpId = (int) ($_REQUEST['lp_id'] ?? ($_POST['lp_id'] ?? 0));
+        $lpAutoAdd = ((int) ($_REQUEST['lp_auto_add'] ?? ($_POST['lp_auto_add'] ?? 0))) === 1;
+
+        $oLP = null;
+        $lpItemsCreated = [];
+
+        if ($lpAutoAdd && $lpId > 0) {
+            $lp = Container::getLpRepository()->find($lpId);
+            if ($lp) {
+                $courseInfo = api_get_course_info();
+                $oLP = new learnpath($lp, $courseInfo, api_get_user_id());
+            }
+        }
+
+        $createDocument = function(
+            string $path,
+            string $filename,
+            string $mimetype,
+            int $filesize,
+            string $ifExists
+        ) use (
+            $repo,
+            $em,
+            $course,
+            $directoryParentId,
+            &$results,
+            $oLP,
+            &$lpItemsCreated
         ) {
             $qb = $em->createQueryBuilder()
                 ->select('d')
@@ -153,12 +180,33 @@ switch ($action) {
 
             $repo->addFileFromPath($doc, $filename, $path);
 
+            // --------- If in LP mode, also create the LP item (c_lp_item) ----------
+            $createdLpItemId = 0;
+            if ($oLP) {
+                $lpItemRepo = Container::getLpItemRepository();
+                $root = $lpItemRepo->getRootItem($oLP->get_id());
+
+                $createdLpItemId = (int) $oLP->add_item(
+                    $root,            // parent
+                    '',              // previous
+                    TOOL_DOCUMENT,   // item type
+                    (string) $doc->getIid(), // path = document iid
+                    $doc->getTitle(),
+                    '',              // description
+                    ''               // prerequisites
+                );
+
+                $oLP->set_modified_on();
+                $lpItemsCreated[] = $createdLpItemId;
+            }
+
             $results[] = [
-                'name'   => api_htmlentities($doc->getTitle()),
-                'url'    => $repo->getResourceFileUrl($doc),
-                'size'   => format_file_size($filesize),
-                'type'   => api_htmlentities($mimetype),
-                'result' => Display::return_icon('accept.png', get_lang('Uploaded.'))
+                'name'       => api_htmlentities($doc->getTitle()),
+                'url'        => $repo->getResourceFileUrl($doc),
+                'size'       => format_file_size($filesize),
+                'type'       => api_htmlentities($mimetype),
+                'result'     => Display::return_icon('accept.png', get_lang('Uploaded.')),
+                'lp_item_id' => $createdLpItemId,
             ];
         };
 
@@ -182,7 +230,7 @@ switch ($action) {
                                 $f->getFilename(),
                                 mime_content_type($f->getRealPath()),
                                 $f->getSize(),
-                                $ifExists
+                                (string) $ifExists
                             );
                         }
                     }
@@ -194,13 +242,17 @@ switch ($action) {
                 $fileInfo['tmp_name'],
                 $fileInfo['name'],
                 $fileInfo['type'],
-                $fileInfo['size'],
-                $ifExists
+                (int) $fileInfo['size'],
+                (string) $ifExists
             );
         }
 
         header('Content-Type: application/json');
-        echo json_encode(['files' => $results]);
+        echo json_encode([
+            'files' => $results,
+            'lp_refresh' => !empty($lpItemsCreated),
+            'lp_items_created' => $lpItemsCreated,
+        ]);
         exit;
 }
 exit;

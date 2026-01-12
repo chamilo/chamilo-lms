@@ -60,7 +60,7 @@ const messages = loadLocaleMessages()
 
 // Prefer previously chosen locale, otherwise <html lang>, otherwise "en"
 const stored = typeof localStorage !== "undefined" ? localStorage.getItem("app_locale") : null
-const initialHtmlLocale = stored || document.documentElement.dataset?.lang || "en"
+const initialHtmlLocale = stored || document.documentElement.dataset?.lang || "en_US"
 const initial = resolveBestLocale(initialHtmlLocale, messages)
 
 // NOTE: do NOT create runtime aliases; use the resolved bundle directly

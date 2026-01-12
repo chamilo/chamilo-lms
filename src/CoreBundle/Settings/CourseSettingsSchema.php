@@ -204,7 +204,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ])
             ->add('course_creation_use_template', EntityType::class, [
                 'class' => Course::class,
-                'placeholder' => 'Choose ...',
+                'placeholder' => 'Choose',
                 'empty_data' => null,
                 'choice_label' => 'title',
                 'choice_value' => 'id',

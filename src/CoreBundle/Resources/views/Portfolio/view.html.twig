@@ -1,6 +1,6 @@
 {% if item.isHighlighted %}
     <span class="label label-success">
-        <span class="fa fa-fw fa-star-o" aria-hidden="true"></span>
+        {{ 'ActionIcon::STAR'|mdi_icon(22) }}
         {{ 'Highlighted'|get_lang }}
     </span>
 {% endif %}
@@ -58,7 +58,7 @@
 
     <section id="portfolio-item-comments">
         <h1 class="h3">
-            <span class="fa fa-fw fa-comment-o" aria-hidden="true"></span>
+            {{ 'ActionIcon::COMMENT'|mdi_icon(22) }}
             {{ 'XComments'|get_lang|format(count_comments) }}
         </h1>
 

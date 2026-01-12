@@ -37,7 +37,7 @@ enum ObjectIcon: string
     // Presentation file/format
     case PPT = 'file-powerpoint';
     // PDF file/format
-    case PDF = 'arrow-down-bold';
+    case PDF = 'file-pdf-box';
     // Indicator of session or admin resource
     case STAR = 'star';
     // Indicator of something new

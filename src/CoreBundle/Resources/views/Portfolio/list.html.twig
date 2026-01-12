@@ -1,8 +1,8 @@
 {% autoescape false %}
-{% set edit_img = 'edit.png'|icon(22, 'Edit'|get_lang) %}
-{% set visible_img = 'visible.png'|icon(22, 'Invisible'|get_lang) %}
-{% set invisible_img = 'invisible.png'|icon(22, 'Visible'|get_lang) %}
-{% set delete_img = 'delete.png'|icon(22, 'Delete'|get_lang) %}
+{% set edit_img = 'ActionIcon::EDIT'|mdi_icon_t(22, 'ch-tool-icon', 'Edit') %}
+{% set visible_img = 'ActionIcon::VISIBLE'|mdi_icon_t(22, 'ch-tool-icon', 'Invisible') %}
+{% set invisible_img = 'ActionIcon::INVISIBLE'|mdi_icon_t(22, 'ch-tool-icon', 'Visible') %}
+{% set delete_img = 'ActionIcon::DELETE'|mdi_icon_t(22, 'ch-tool-icon', 'Delete') %}
 {% set baseurl = _p.web_self ~ '?' ~ (_p.web_cid_query ? _p.web_cid_query ~ '&' : '') %}
 
 {% import '@ChamiloCore/Portfolio/items.html.twig' as items %}

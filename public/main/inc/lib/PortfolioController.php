@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
@@ -128,7 +131,7 @@ class PortfolioController
 
         $actions = [];
         $actions[] = Display::url(
-            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
             $this->baseUrl.'action=edit_category&id='.$category->getId()
         );
 
@@ -188,18 +191,18 @@ class PortfolioController
             $links = null;
             // Edit action
             $url = $this->baseUrl.'action=edit_category&id='.$category->getId();
-            $links .= Display::url(Display::return_icon('edit.png', get_lang('Edit')), $url).'&nbsp;';
+            $links .= Display::url(Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')), $url).'&nbsp;';
             // Visible action: if active
             if ($category->isVisible() != 0) {
                 $url = $this->baseUrl.'action=hide_category&id='.$category->getId();
-                $links .= Display::url(Display::return_icon('visible.png', get_lang('Hide')), $url).'&nbsp;';
+                $links .= Display::url(Display::getMdiIcon(ActionIcon::VISIBLE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Hide')), $url).'&nbsp;';
             } else { // else if not active
                 $url = $this->baseUrl.'action=show_category&id='.$category->getId();
-                $links .= Display::url(Display::return_icon('invisible.png', get_lang('Show')), $url).'&nbsp;';
+                $links .= Display::url(Display::getMdiIcon(ActionIcon::INVISIBLE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Show')), $url).'&nbsp;';
             }
             // Delete action
             $url = $this->baseUrl.'action=delete_category&id='.$category->getId();
-            $links .= Display::url(Display::return_icon('delete.png', get_lang('Delete')), $url, ['onclick' => 'javascript:if(!confirm(\''.get_lang('Are you sure to delete').'?\')) return false;']);
+            $links .= Display::url(Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete')), $url, ['onclick' => 'javascript:if(!confirm(\''.get_lang('Are you sure to delete').'?\')) return false;']);
 
             $table->setCellContents($row, $column++, $links);
             $row++;
@@ -218,12 +221,12 @@ class PortfolioController
 
         $actions = [];
         $actions[] = Display::url(
-            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
             $this->baseUrl.($parentId > 0 ? 'action=list_categories' : '')
         );
         if ($currentUserId == $this->owner->getId() && $parentId === 0) {
             $actions[] = Display::url(
-                Display::return_icon('new_folder.png', get_lang('Add category'), [], ICON_SIZE_MEDIUM),
+                Display::getMdiIcon(ActionIcon::CREATE_FOLDER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add category')),
                 $this->baseUrl.'action=add_category'
             );
         }
@@ -306,7 +309,7 @@ class PortfolioController
 
         $actions = [];
         $actions[] = Display::url(
-            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
             $this->baseUrl.'action=list_categories'
         );
 
@@ -395,7 +398,7 @@ class PortfolioController
 
         $actions = [];
         $actions[] = Display::url(
-            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
             $this->baseUrl.'action=list_categories&parent_id='.$category->getParentId()
         );
 
@@ -610,12 +613,12 @@ class PortfolioController
 
         $actions = [];
         $actions[] = Display::url(
-            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
             $this->baseUrl
         );
         $actions[] = '<a id="hide_bar_template" href="#" role="button">'.
-            Display::return_icon('expand.png', get_lang('Expand'), ['id' => 'expand'], ICON_SIZE_MEDIUM).
-            Display::return_icon('contract.png', get_lang('Collapse'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon(ActionIcon::EXPAND, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Expand')).
+            Display::getMdiIcon(ActionIcon::COLLAPSE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Collapse')).'</a>';
 
         $js = '<script>
             $(function() {
@@ -836,12 +839,12 @@ class PortfolioController
         ];
         $actions = [];
         $actions[] = Display::url(
-            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
             $this->baseUrl
         );
         $actions[] = '<a id="hide_bar_template" href="#" role="button">'.
-            Display::return_icon('expand.png', get_lang('Expand'), ['id' => 'expand'], ICON_SIZE_MEDIUM).
-            Display::return_icon('contract.png', get_lang('Collapse'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon(ActionIcon::EXPAND, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Expand')).
+            Display::getMdiIcon(ActionIcon::COLLAPSE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Collapse')).'</a>';
 
         $js = '<script>
             $(function() {
@@ -967,38 +970,38 @@ class PortfolioController
 
         if (api_is_platform_admin()) {
             $actions[] = Display::url(
-                Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
+                Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')),
                 $this->baseUrl.'action=add_item'
             );
             $actions[] = Display::url(
-                Display::return_icon('folder.png', get_lang('Add category'), [], ICON_SIZE_MEDIUM),
+                Display::getMdiIcon(ActionIcon::CREATE_FOLDER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add category')),
                 $this->baseUrl.'action=list_categories'
             );
             $actions[] = Display::url(
-                Display::return_icon('waiting_list.png', get_lang('Portfolio details'), [], ICON_SIZE_MEDIUM),
+                Display::getMdiIcon(ObjectIcon::WAITING_LIST, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Portfolio details')),
                 $this->baseUrl.'action=details'
             );
         } elseif (api_get_user_entity() === $this->owner) {
             if ($this->isAllowed()) {
                 $actions[] = Display::url(
-                    Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')),
                     $this->baseUrl.'action=add_item'
                 );
                 $actions[] = Display::url(
-                    Display::return_icon('waiting_list.png', get_lang('Portfolio details'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon(ObjectIcon::WAITING_LIST, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Portfolio details')),
                     $this->baseUrl.'action=details'
                 );
             }
         } else {
             $actions[] = Display::url(
-                Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
                 $this->baseUrl
             );
         }
 
         if (api_is_allowed_to_edit()) {
             $actions[] = Display::url(
-                Display::return_icon('tickets.png', get_lang('Tags'), [], ICON_SIZE_MEDIUM),
+                Display::getMdiIcon(ObjectIcon::TICKET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Tags')),
                 $this->baseUrl.'action=tags'
             );
         }
@@ -1225,16 +1228,19 @@ class PortfolioController
 
                     if ($this->commentBelongsToOwner($comment)) {
                         $commentActions[] = Display::url(
-                            Display::return_icon(
-                                $comment->isTemplate() ? 'wizard.png' : 'wizard_na.png',
-                                $comment->isTemplate() ? get_lang('Remove as template') : get_lang('Add as a template')
+                            Display::getMdiIcon(
+                                ActionIcon::FIX,
+                                $item->isTemplate() ? 'ch-tool-icon' : 'ch-tool-icon-disabled',
+                                null,
+                                ICON_SIZE_MEDIUM,
+                                $item->isTemplate() ? get_lang('Remove as template') : get_lang('Add as a template'),
                             ),
                             $this->baseUrl.http_build_query(['action' => 'template_comment', 'id' => $comment->getId()])
                         );
                     }
 
                     $commentActions[] = Display::url(
-                        Display::return_icon('discuss.png', get_lang('Reply to this comment')),
+                        Display::getMdiIcon(ActionIcon::COMMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Reply to this comment')),
                         '#',
                         [
                             'data-comment' => htmlspecialchars(
@@ -1245,7 +1251,7 @@ class PortfolioController
                         ]
                     );
                     $commentActions[] = Display::url(
-                        Display::return_icon('copy.png', get_lang('Copy to my portfolio')),
+                        Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Copy to my portfolio')),
                         $this->baseUrl.http_build_query(
                             [
                                 'action' => 'copy',
@@ -1259,7 +1265,7 @@ class PortfolioController
 
                     if ($isAllowedToEdit) {
                         $commentActions[] = Display::url(
-                            Display::return_icon('copy.png', get_lang('Copy to student portfolio')),
+                            Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Copy to student portfolio')),
                             $this->baseUrl.http_build_query(
                                 [
                                     'action' => 'teacher_copy',
@@ -1271,7 +1277,7 @@ class PortfolioController
 
                         if ($comment->isImportant()) {
                             $commentActions[] = Display::url(
-                                Display::return_icon('drawing-pin.png', get_lang('Unmark comment as important')),
+                                Display::getMdiIcon(ObjectIcon::PIN, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Unmark comment as important')),
                                 $this->baseUrl.http_build_query(
                                     [
                                         'action' => 'mark_important',
@@ -1282,7 +1288,7 @@ class PortfolioController
                             );
                         } else {
                             $commentActions[] = Display::url(
-                                Display::return_icon('drawing-pin.png', get_lang('Mark comment as important')),
+                                Display::getMdiIcon(ObjectIcon::PIN, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Mark comment as important')),
                                 $this->baseUrl.http_build_query(
                                     [
                                         'action' => 'mark_important',
@@ -1295,7 +1301,7 @@ class PortfolioController
 
                         if ($this->course && '1' === api_get_course_setting('qualify_portfolio_comment')) {
                             $commentActions[] = Display::url(
-                                Display::return_icon('quiz.png', get_lang('Grade this comment')),
+                                Display::getMdiIcon(ObjectIcon::TEST, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Grade this comment')),
                                 $this->baseUrl.http_build_query(
                                     [
                                         'action' => 'qualify',
@@ -1309,17 +1315,17 @@ class PortfolioController
                     if ($this->commentBelongsToOwner($comment)) {
                         if ($this->advancedSharingEnabled) {
                             $commentActions[] = Display::url(
-                                Display::return_icon('visible.png', get_lang('Choose recipients')),
+                                Display::getMdiIcon(ActionIcon::VISIBLE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Choose recipients')),
                                 $this->baseUrl.http_build_query(['action' => 'comment_visiblity_choose', 'id' => $comment->getId()])
                             );
                         }
 
                         $commentActions[] = Display::url(
-                            Display::return_icon('edit.png', get_lang('Edit')),
+                            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')),
                             $this->baseUrl.http_build_query(['action' => 'edit_comment', 'id' => $comment->getId()])
                         );
                         $commentActions[] = Display::url(
-                            Display::return_icon('delete.png', get_lang('Delete')),
+                            Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete')),
                             $this->baseUrl.http_build_query(['action' => 'delete_comment', 'id' => $comment->getId()])
                         );
                     }
@@ -1383,7 +1389,7 @@ class PortfolioController
         $interbreadcrumb[] = ['name' => get_lang('Portfolio'), 'url' => $this->baseUrl];
 
         $editLink = Display::url(
-            Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')),
             $this->baseUrl.http_build_query(['action' => 'edit_item', 'id' => $item->getId()])
         );
 
@@ -1394,7 +1400,7 @@ class PortfolioController
 
         $actions = [];
         $actions[] = Display::url(
-            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
             $this->baseUrl.$urlUserString
         );
 
@@ -1402,18 +1408,19 @@ class PortfolioController
             $actions[] = $editLink;
 
             $actions[] = Display::url(
-                Display::return_icon(
-                    $item->isTemplate() ? 'wizard.png' : 'wizard_na.png',
+                Display::getMdiIcon(
+                    ActionIcon::FIX,
+                    $item->isTemplate() ? 'ch-tool-icon' : 'ch-tool-icon-disabled',
+                    null,
+                    ICON_SIZE_MEDIUM,
                     $item->isTemplate() ? get_lang('Remove template') : get_lang('Add as a template'),
-                    [],
-                    ICON_SIZE_MEDIUM
                 ),
                 $this->baseUrl.http_build_query(['action' => 'template', 'id' => $item->getId()])
             );
 
             if ($this->advancedSharingEnabled) {
                 $actions[] = Display::url(
-                    Display::return_icon('visible.png', get_lang('Choose recipients'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon(ActionIcon::VISIBLE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Choose recipients')),
                     $this->baseUrl.http_build_query(['action' => 'item_visiblity_choose', 'id' => $item->getId()])
                 );
             } else {
@@ -1421,36 +1428,36 @@ class PortfolioController
 
                 if ($item->getVisibility() === Portfolio::VISIBILITY_HIDDEN) {
                     $actions[] = Display::url(
-                        Display::return_icon('invisible.png', get_lang('Make visible'), [], ICON_SIZE_MEDIUM),
+                        Display::getMdiIcon(ActionIcon::INVISIBLE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Make visible')),
                         $visibilityUrl
                     );
                 } elseif ($item->getVisibility() === Portfolio::VISIBILITY_VISIBLE) {
                     $actions[] = Display::url(
-                        Display::return_icon('visible.png', get_lang('Make visible for teachers'), [], ICON_SIZE_MEDIUM),
+                        Display::getMdiIcon(ActionIcon::VISIBLE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Make visible for teachers')),
                         $visibilityUrl
                     );
                 } elseif ($item->getVisibility() === Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER) {
                     $actions[] = Display::url(
-                        Display::return_icon('eye-slash.png', get_lang('Make invisible'), [], ICON_SIZE_MEDIUM),
+                        Display::getMdiIcon(StateIcon::CLOSED_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Make invisible')),
                         $visibilityUrl
                     );
                 }
             }
 
             $actions[] = Display::url(
-                Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_MEDIUM),
+                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete')),
                 $this->baseUrl.http_build_query(['action' => 'delete_item', 'id' => $item->getId()])
             );
         } else {
             $actions[] = Display::url(
-                Display::return_icon('copy.png', get_lang('Copy to my portfolio'), [], ICON_SIZE_MEDIUM),
+                Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Copy to my portfolio')),
                 $this->baseUrl.http_build_query(['action' => 'copy', 'copy' => 'item', 'id' => $item->getId()])
             );
         }
 
         if (api_is_allowed_to_edit()) {
             $actions[] = Display::url(
-                Display::return_icon('copy.png', get_lang('Copy to student portfolio'), [], ICON_SIZE_MEDIUM),
+                Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Copy to student portfolio')),
                 $this->baseUrl.http_build_query(['action' => 'teacher_copy', 'copy' => 'item', 'id' => $item->getId()])
             );
             $actions[] = $editLink;
@@ -1459,19 +1466,19 @@ class PortfolioController
 
             if ($item->isHighlighted()) {
                 $actions[] = Display::url(
-                    Display::return_icon('award_red.png', get_lang('Unmark as highlighted'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon(ActionIcon::AWARD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Unmark as highlighted')),
                     $highlightedUrl
                 );
             } else {
                 $actions[] = Display::url(
-                    Display::return_icon('award_red_na.png', get_lang('Mark as highlighted'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon(ActionIcon::AWARD, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Mark as highlighted')),
                     $highlightedUrl
                 );
             }
 
             if ($itemCourse && '1' === api_get_course_setting('qualify_portfolio_item')) {
                 $actions[] = Display::url(
-                    Display::return_icon('quiz.png', get_lang('Grade this item'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon(ObjectIcon::TEST, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Grade this item')),
                     $this->baseUrl.http_build_query(['action' => 'qualify', 'item' => $item->getId()])
                 );
             }
@@ -1765,15 +1772,15 @@ class PortfolioController
 
         $actions = [];
         $actions[] = Display::url(
-            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
             $this->baseUrl
         );
         $actions[] = Display::url(
-            Display::return_icon('pdf.png', get_lang('Export my portfolio data in a PDF file'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export my portfolio data in a PDF file')),
             $this->baseUrl.http_build_query(['action' => 'export_pdf'])
         );
         $actions[] = Display::url(
-            Display::return_icon('save_pack.png', get_lang('Export my portfolio data in a ZIP file'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::EXPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export my portfolio data in a ZIP file')),
             $this->baseUrl.http_build_query(['action' => 'export_zip'])
         );
 
@@ -1788,11 +1795,11 @@ class PortfolioController
                 }
 
                 $actions[1] = Display::url(
-                    Display::return_icon('pdf.png', get_lang('Export my portfolio data in a PDF file'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon(ObjectIcon::PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export my portfolio data in a PDF file')),
                     $this->baseUrl.http_build_query(['action' => 'export_pdf', 'user' => $this->owner->getId()])
                 );
                 $actions[2] = Display::url(
-                    Display::return_icon('save_pack.png', get_lang('Export my portfolio data in a ZIP file'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon(ActionIcon::EXPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export my portfolio data in a ZIP file')),
                     $this->baseUrl.http_build_query(['action' => 'export_zip', 'user' => $this->owner->getId()])
                 );
             }
@@ -2531,7 +2538,7 @@ class PortfolioController
 
         $actions = [];
         $actions[] = Display::url(
-            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
             $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()])
         );
 
@@ -2606,7 +2613,7 @@ class PortfolioController
 
         $actions = [];
         $actions[] = Display::url(
-            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
             $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()])
         );
 
@@ -2881,8 +2888,8 @@ class PortfolioController
         $langTags = get_lang('Tags');
         $langEdit = get_lang('Edit');
 
-        $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'));
-        $editIcon = Display::return_icon('edit.png', $langEdit);
+        $deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete'));
+        $editIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM,$langEdit);
 
         $table = new SortableTable(
             'portfolio_tags',
@@ -3074,7 +3081,7 @@ class PortfolioController
 
         $actions = [];
         $actions[] = Display::url(
-            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
             $this->baseUrl
         );
 
@@ -3241,7 +3248,7 @@ class PortfolioController
 
         $actions = [];
         $actions[] = Display::url(
-            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
             $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()])
         );
 
@@ -3375,7 +3382,7 @@ class PortfolioController
 
         $actions = [];
         $actions[] = Display::url(
-            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
             $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()])
         );
 
@@ -4006,12 +4013,7 @@ class PortfolioController
 
         $listItems = '<ul class="fa-ul">';
 
-        $deleteIcon = Display::return_icon(
-            'delete.png',
-            get_lang('Delete attachment'),
-            ['style' => 'display: inline-block'],
-            ICON_SIZE_TINY
-        );
+        $deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', 'display: inline-block', ICON_SIZE_MEDIUM, get_lang('Delete attachment'));
         $deleteAttrs = ['class' => 'btn-portfolio-delete'];
 
         /** @var PortfolioAttachment $attachment */

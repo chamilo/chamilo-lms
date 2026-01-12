@@ -1,8 +1,8 @@
 {% macro display(items, category_id, _c, user, listByUser) %}
-    {% set edit_img = 'edit.png'|icon(22, 'Edit'|get_lang) %}
-    {% set visible_img = 'visible.png'|icon(22, 'Invisible'|get_lang) %}
-    {% set invisible_img = 'invisible.png'|icon(22, 'Visible'|get_lang) %}
-    {% set delete_img = 'delete.png'|icon(22, 'Delete'|get_lang) %}
+    {% set edit_img = 'ActionIcon::EDIT'|mdi_icon_t(22, 'ch-tool-icon', 'Edit') %}
+    {% set visible_img = 'ActionIcon::VISIBLE'|mdi_icon_t(22, 'ch-tool-icon', 'Invisible') %}
+    {% set invisible_img = 'ActionIcon::INVISIBLE'|mdi_icon_t(22, 'ch-tool-icon', 'Visible') %}
+    {% set delete_img = 'ActionIcon::DELETE'|mdi_icon_t(22, 'ch-tool-icon', 'Delete') %}
     {% set baseurl = app.request.getPathInfo() ~ '?' ~ (app.request.queryString ? app.request.queryString ~ '&' : '') %}
     {% set is_advanced_sharing_enabled = 'platform.portfolio_advanced_sharing'|api_get_setting and not _c is empty %}
 
@@ -26,35 +26,35 @@
                     <div class="portfolio-actions pull-right">
                         {% if app.user.id == item.resourceNode.creator.id %}
                             <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}">
-                                {{ 'edit.png'|icon(22, 'Edit'|get_lang) }}
+                                {{ 'ActionIcon::EDIT'|mdi_icon_t(22, 'ch-tool-icon', 'Edit') }}
                             </a>
 
                             {% if is_advanced_sharing_enabled %}
                                 <a href="{{ baseurl ~ {'action':'item_visiblity_choose', 'id':item.id}|url_encode }}">
-                                    {{ 'visible.png'|icon(22, 'Choose recipients'|get_lang) }}
+                                    {{ 'ActionIcon::VISIBLE'|mdi_icon_t(22, 'ch-tool-icon', 'Choose recipients') }}
                                 </a>
                             {% else %}
                                 {% if item.visibility == 0 %}
                                     <a href="{{ baseurl ~ {'action':'visibility', 'id':item.id}|url_encode }}">
-                                        {{ 'invisible.png'|icon(22, 'Make visible'|get_lang) }}
+                                        {{ 'ActionIcon::INVISIBLE'|mdi_icon_t(22, 'ch-tool-icon', 'Make visible') }}
                                     </a>
                                 {% elseif item.visibility == 1 %}
                                     <a href="{{ baseurl ~ {'action':'visibility', 'id':item.id}|url_encode }}">
-                                        {{ 'visible.png'|icon(22, 'Make visible for teachers'|get_lang) }}
+                                        {{ 'ActionIcon::VISIBLE'|mdi_icon_t(22, 'ch-tool-icon', 'Make visible for teachers') }}
                                     </a>
                                 {% elseif item.visibility == 2 %}
                                     <a href="{{ baseurl ~ {'action':'visibility', 'id':item.id}|url_encode }}">
-                                        {{ 'eye-slash.png'|icon(22, 'Make invisible'|get_lang) }}
+                                        {{ 'StateIcon::CLOSED_VISIBILITY'|mdi_icon_t(22, 'ch-tool-icon', 'Make invisible') }}
                                     </a>
                                 {% endif %}
                             {% endif %}
 
                             <a href="{{ baseurl ~ {'action':'delete_item', 'id':item.id}|url_encode }}" class="btn-delete">
-                                {{ 'delete.png'|icon(22, 'Delete'|get_lang) }}
+                                {{ 'ActionIcon::DELETE'|mdi_icon_t(22, 'ch-tool-icon', 'Delete') }}
                             </a>
                         {% elseif is_allowed_to_edit() %}
                             <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}">
-                                {{ 'edit.png'|icon(22, 'Edit'|get_lang) }}
+                                {{ 'ActionIcon::EDIT'|mdi_icon_t(22, 'ch-tool-icon', 'Edit') }}
                             </a>
                         {% endif %}
 
@@ -73,7 +73,7 @@
 
                     {% if item.isHighlighted %}
                         <span class="label label-success">
-                            <span class="fa fa-fw fa-star-o" aria-hidden="true"></span>
+                            {{ 'ActionIcon::STAR'|mdi_icon(22) }}
                             {{ 'Highlighted'|get_lang }}
                         </span>
                     {% endif %}
@@ -137,8 +137,8 @@
                             {% for comment in comments %}
                                 <article>
                                     <footer>
-                                        <span class="fa fa-fw fa-commenting-o" aria-hidden="true"></span>
-                                        <strong>{{ comment.resourceNode.creator.fullName }}</strong>
+                                        {{ 'ToolIcon::FORUM'|mdi_icon(22) }}
+                                        <strong>{{ comment.author.completeName }}</strong>
                                         <small class="fa fa-clock-o fa-fw text-muted" aria-hidden="true"></small>
                                         <small class="text-muted">{{ comment.date|date_to_time_ago }}</small>
                                     </footer>
@@ -147,7 +147,7 @@
                             {% endfor %}
                         {% else %}
                             <a href="{{ item_url }}#portfolio-item-comments">
-                                <span class="fa fa-commenting-o fa-fw" aria-hidden="true"></span>
+                                {{ 'ActionIcon::COMMENT'|mdi_icon(22) }}
                                 {{ 'Add new comment'|get_lang }}
                             </a>
                         {% endif %}

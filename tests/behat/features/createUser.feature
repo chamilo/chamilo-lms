@@ -20,7 +20,7 @@ Feature: Users management as admin
       | email     | smarshall@example.com |
       | username  | smarshall             |
       | password  | smarshall             |
-    And I check the "#send_mail_no" radio button selector
+    And I click the "input#send_mail_no" element
     And I press "submit"
     And wait very long for the page to be loaded
     Then I should see "The user has been added"
@@ -33,7 +33,7 @@ Feature: Users management as admin
       | email     | example@example.com |
       | username  | NIÑO                  |
       | password  | smarshall             |
-    And I check the "#send_mail_no" radio button selector
+    And I click the "input#send_mail_no" element
     And I press "submit"
     And wait very long for the page to be loaded
     Then I should see "Only letters and numbers allowed"
@@ -46,7 +46,7 @@ Feature: Users management as admin
       | email     | NI -ÑO@example.com      |
       | username  | Juls                  |
       | password  | Juls                  |
-    And I check the "#send_mail_no" radio button selector
+    And I click the "input#send_mail_no" element
     And I press "submit"
     And wait very long for the page to be loaded
     Then I should see "The email address is not complete or contains some invalid characters"
@@ -71,7 +71,7 @@ Feature: Users management as admin
       | email     | hrm@example.com |
       | username  | hrm             |
       | password  | hrm             |
-    And I check the "#send_mail_no" radio button selector
+    And I click the "input#send_mail_no" element
 #    And I fill in select bootstrap static input "#status_select" select "4"
     And I select "Human Resources Manager" from "status_select"
     And wait very long for the page to be loaded
@@ -89,7 +89,7 @@ Feature: Users management as admin
       | password  | teacher             |
 #    And I fill in select bootstrap static input "#status_select" select "1"
     And I select "Trainer" from "status_select"
-    And I check the "#send_mail_no" radio button selector
+    And I click the "input#send_mail_no" element
     And I press "submit"
     And wait very long for the page to be loaded
     Then I should see "The user has been added"
@@ -104,7 +104,7 @@ Feature: Users management as admin
       | password  | student             |
 #    And I fill in select bootstrap static input "#status_select" select "5"
     And I select "Learner" from "status_select"
-    And I check the "#send_mail_no" radio button selector
+    And I click the "input#send_mail_no" element
     And I press "submit"
     And wait very long for the page to be loaded
     Then I should see "The user has been added"

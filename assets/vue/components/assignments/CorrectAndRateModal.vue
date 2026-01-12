@@ -27,6 +27,7 @@
       </div>
 
       <Textarea
+        id="assignment-comment"
         v-model="comment"
         :placeholder="t('Write your comment...')"
         class="w-full"
@@ -38,6 +39,7 @@
 
         <template v-if="!forceStudentView">
           <input
+            id="assignment-score"
             type="number"
             v-model.number="qualification"
             class="input border p-2 rounded"
@@ -60,6 +62,7 @@
       <div class="flex flex-col gap-2">
         <label>{{ t("Attach file (optional)") }}</label>
         <input
+          id="assignment-attach-correction"
           type="file"
           @change="handleFileUpload"
         />
@@ -79,11 +82,13 @@
         <Button
           :label="t('Cancel')"
           class="p-button-text"
+          id="assignment-cancel"
           @click="close"
         />
         <Button
           :label="t('Send')"
           :disabled="submitting"
+          id="assignment-send"
           @click="submit"
         />
       </div>

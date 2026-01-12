@@ -33,6 +33,7 @@
         <div class="relative">
           <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <InputText
+            id = "search_catalogue"
             v-model="filters['global'].value"
             :placeholder="$t('Search')"
             class="pl-10 w-64"

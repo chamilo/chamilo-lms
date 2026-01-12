@@ -2,7 +2,7 @@
   <form class="grid gap-3 md:grid-cols-4 items-end" @submit.prevent="apply">
     <div v-if="allowTitle">
       <label class="block text-sm font-medium mb-1">{{ $t('Title') }}</label>
-      <InputText v-model="model.title" :placeholder="$t('Search by title')" />
+      <InputText v-model="model.title" :placeholder="$t('Search by title')" id="search_by_title" />
     </div>
 
     <template v-for="f in fields" :key="f.variable">
@@ -141,7 +141,7 @@
       <!-- TEXT / INTEGER / FLOAT / DURATION  -->
       <div v-else>
         <label class="block text-sm font-medium mb-1">{{ f.title }}</label>
-        <InputText v-model="model.extra[f.variable]" />
+        <InputText v-model="model.extra[f.variable]" :id="`extra-${f.variable}`" />
       </div>
     </template>
 

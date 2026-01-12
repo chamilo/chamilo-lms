@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "সূত্র নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "সূত্রের নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -32306,4 +32306,37 @@ msgstr "Drupal ব্যবহারকারী আইডি"
 
 msgid "There are no terms that match the search: %s"
 msgstr "কোনো শব্দ পাওয়া যায়নি যা অনুসন্ধানের সাথে মিলে: %s"
+
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "সেটিংস বিশ্বব্যাপী লক করা আছে (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "সক্রিয় হলে, ১:১ ব্যক্তিগত চ্যাট বার্তাগুলি কোর্স চ্যাট ইতিহাস নথিপত্রে প্রতিফলিত হবে। গোপনীয়তার জন্য নিষ্ক্রিয় রাখার পরামর্শ দেওয়া হয়।"
+
+msgid "Save private conversations in documents"
+msgstr "নথিপত্রে ব্যক্তিগত কথোপকথন সংরক্ষণ করুন"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU AI আইন – স্বচ্ছতা ও ঝুঁকি বিজ্ঞপ্তি"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "EU কৃত্রিম বুদ্ধিমত্তা আইন (Regulation (EU) 2024/1689) এর অধীনে, শিক্ষায় ব্যবহৃত AI সিস্টেমগুলি সাধারণত “উচ্চ-ঝুঁকি” হিসেবে শ্রেণীবদ্ধ। এই সফটওয়্যার নিজেই <strong>AI সিস্টেম নয়</strong>, কিন্তু এটি আপনার কনফিগারেশনের উপর নির্ভর করে ঐচ্ছিক অভ্যন্তরীণ বা বাহ্যিক AI সিস্টেমগুলি একীভূত করতে পারে—ব্যবহারকারীর কাজের কর্মক্ষমতা উন্নত করার জন্য। এই সিস্টেমগুলি ব্যক্তিগত তথ্য অ্যাক্সেস করতে পারে <em>শুধুমাত্র যদি</em> ব্যবহারকারীরা তাদের প্রম্পটে এমন তথ্য অন্তর্ভুক্ত করেন। নকশায়, এই সফটওয়্যার ব্যবহারকারীর সক্রিয় ইনপুট ছাড়া AI সিস্টেমগুলির সাথে ব্যক্তিগত তথ্য শেয়ার করে না। ডিফল্টভাবে, সকল AI ফিচার নিষ্ক্রিয়।"
+
+msgid "Admin responsibility & disclosures"
+msgstr "প্রশাসকের দায়িত্ব ও প্রকাশনা"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "এই কনফিগারেশন পৃষ্ঠা প্রত্যেক AI ফিচার এবং এর উদ্দেশ্য বিস্তারিতভাবে বর্ণনা করে। একজন ডেপ্লয়ার হিসেবে, আপনার উচিত এগুলি যত্নসহকারে পর্যালোচনা করা এবং আপনার GDPR-সম্মত ডেটা গোপনীয়তা নীতিগুলি আপডেট করা যাতে আপনার সক্রিয় করা অপশনগুলি প্রতিফলিত হয়। যদিও অধিকাংশ AI ফিচার বাহ্যিক সিস্টেমগুলির সাথে সরাসরি ব্যক্তিগত তথ্য শেয়ার করে না, AI-এ পাঠানো ব্যবহারকারীর প্রম্পটগুলি অজান্তে ব্যক্তিগত তথ্য অন্তর্ভুক্ত করতে পারে। একজন ডেপ্লয়ার হিসেবে, <strong>আপনি দায়ী</strong> ব্যবহারকারীদের এই ঝুঁকি সম্পর্কে অবহিত করার জন্য। স্বচ্ছতার জন্য, ভবিষ্যত রিলিজগুলি নির্দিষ্ট কনটেন্ট বা ফিডব্যাক AI-এর সাহায্যে উৎপন্ন হয়েছে তা নির্দেশ করে অ-আক্রমণাত্মক শেষ-ব্যবহারকারী ট্যাগ দেখাতে পারে।"
+
+msgid "Positioning"
+msgstr "অবস্থান নির্ধারণ"
+
+msgid "Quiz"
+msgstr "কুইজ"
+
+msgid "Customcertificate"
+msgstr "কাস্টমসার্টিফিকেট"
+
+msgid "Update profile"
+msgstr "প্রোফাইল আপডেট করুন"
 

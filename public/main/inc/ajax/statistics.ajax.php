@@ -88,7 +88,7 @@ switch ($action) {
                 $row = [];
                 $row['url'] = $url->getUrl();
                 $row['session'] = Display::url(
-                    $session['name'],
+                    $session['title'],
                     $sessionUrl.$sessionId
                 );
 
@@ -729,7 +729,7 @@ switch ($action) {
                     arsort($courseSessions);
                     foreach ($courseSessions as $courseId => $count) {
                         $courseInfo = api_get_course_info_by_id($courseId);
-                        $all[$courseInfo['name']] = $count;
+                        $all[$courseInfo['title']] = $count;
                     }
                 }
                 $table = Statistics::buildJsChartData($all, '');

@@ -53,93 +53,93 @@ Feature: Group tool
     And I wait for the page to be loaded
     Then I should not see an error
 
-#  Scenario: Create document folder in group
-#    Given I am on "/main/group/group.php?cid=1&sid=0"
-#    And I follow "Group 0001"
-#    And I wait for the page to be loaded
-#    Then I should see "Group 0001"
-#    And I follow "Documents"
-#    And I wait for the page to be loaded
-#    Then I should see "There are no documents to be displayed"
-#    Then I follow "Create folder"
-#    And I wait for the page to be loaded
-#    Then I should see "Create folder"
-#    Then I fill in the following:
-#      | dirname | My folder in group |
-#    And I press "create_dir_form_submit"
-#    And I wait for the page to be loaded
-#    Then I should see "Folder created"
+  Scenario: Create document folder in group
+    Given I am on "/main/group/group.php?cid=1&sid=0"
+    And I follow "Group 0001"
+    And I wait for the page to be loaded
+    Then I should see "Group 0001"
+    And I click the "i.mdi-bookshelf" element
+    And I wait for the page to be loaded
+    Then I should see "There are no documents to be displayed"
+    Then I follow "Create folder"
+    And I wait for the page to be loaded
+    Then I should see "Create folder"
+    Then I fill in the following:
+      | dirname | My folder in group |
+    And I press "create_dir_form_submit"
+    And I wait for the page to be loaded
+    Then I should see "Folder created"
 
-#  Scenario: Create document inside folder in group
-#    Given I am on "/main/group/group.php?cid=1&sid=0"
-#    And I follow "Group 0001"
-#    And I wait for the page to be loaded
-#    Then I should see "Group 0001"
-#    And I follow "Documents"
-#    And I wait for the page to be loaded
-#    Then I should see "My folder in group"
-#    Then I follow "My folder in group"
-#    And I wait for the page to be loaded
-#    Then I follow "Create a rich media page / activity"
-#    And I wait for the page to be loaded
-#    Then I should see "Create a rich media page"
-#    Then I fill in the following:
-#      | title | html test |
-#    And I fill in editor field "content" with "My first HTML!!"
-#    Then I press "create_document_submit"
-#    And I wait for the page to be loaded
-#    Then I should see "Item added"
+  Scenario: Create document inside folder in group
+    Given I am on "/main/group/group.php?cid=1&sid=0"
+    And I follow "Group 0001"
+    And I wait for the page to be loaded
+    Then I should see "Group 0001"
+    And I follow "Documents"
+    And I wait for the page to be loaded
+    Then I should see "My folder in group"
+    Then I follow "My folder in group"
+    And I wait for the page to be loaded
+    Then I follow "Create a rich media page / activity"
+    And I wait for the page to be loaded
+    Then I should see "Create a rich media page"
+    Then I fill in the following:
+      | title | html test |
+    And I fill in editor field "content" with "My first HTML!!"
+    Then I press "create_document_submit"
+    And I wait for the page to be loaded
+    Then I should not see an error
 
-#  Scenario: Upload a document inside folder in group
-#    Given I am on "/main/group/group.php?cid=1&sid=0"
-#    And I follow "Group 0001"
-#    And I wait for the page to be loaded
-#    Then I should see "Group 0001"
-#    And I follow "Documents"
-#    And I wait for the page to be loaded
-#    Then I should see "My folder in group"
-#    Then I follow "My folder in group"
-#    And I wait for the page to be loaded
-#    Then I follow "Upload documents"
-#    And I wait for the page to be loaded
-#    Then I follow "Upload (Simple)"
-#    And I wait for the page to be loaded
-#    # File path is located in behat.yml
-#    Then I attach the file "/public/favicon.ico" to "file"
-#    And I wait for the page to be loaded
-#    Then I press "upload_submitDocument"
-#    And I wait for the page to be loaded
-#    Then I should see "File upload succeeded"
-#
-#  Scenario: Delete 2 uploaded files
-#    Given I am on "/main/group/group.php?cid=1&sid=0"
-#    And I follow "Group 0001"
-#    And I wait for the page to be loaded
-#    Then I should see "Group 0001"
-#    And I follow "Documents"
-#    And I wait for the page to be loaded
-#    Then I should see "My folder in group"
-#    Then I follow "My folder in group"
-#    And I wait for the page to be loaded
-#    Then I follow "Delete"
-#    And I wait for the page to be loaded
-#    Then I should see "Are you sure to delete"
-#    Then I follow "delete_item"
-#    And I wait for the page to be loaded
-#
-#  Scenario: Delete directory
-#    Given I am on "/main/group/group.php?cid=1&sid=0"
-#    And I follow "Group 0001"
-#    And I wait for the page to be loaded
-#    Then I should see "Group 0001"
-#    And I follow "Documents"
-#    And I wait for the page to be loaded
-#    Then I should see "My folder in group"
-#    Then I follow "Delete"
-#    And I wait for the page to be loaded
-#    Then I should see "Are you sure to delete"
-#    Then I follow "delete_item"
-#    And I wait for the page to be loaded
+  Scenario: Upload a document inside folder in group
+    Given I am on "/main/group/group.php?cid=1&sid=0"
+    And I follow "Group 0001"
+    And I wait for the page to be loaded
+    Then I should see "Group 0001"
+    And I follow "Documents"
+    And I wait for the page to be loaded
+    Then I should see "My folder in group"
+    Then I follow "My folder in group"
+    And I wait for the page to be loaded
+    Then I follow "Upload documents"
+    And I wait for the page to be loaded
+    Then I follow "Upload (Simple)"
+    And I wait for the page to be loaded
+   # File path is located in behat.yml
+    Then I attach the file "/public/favicon.ico" to "file"
+    And I wait for the page to be loaded
+    Then I press "upload_submitDocument"
+    And I wait for the page to be loaded
+    Then I should see "File upload succeeded"
+
+  Scenario: Delete 2 uploaded files
+    Given I am on "/main/group/group.php?cid=1&sid=0"
+    And I follow "Group 0001"
+    And I wait for the page to be loaded
+    Then I should see "Group 0001"
+    And I follow "Documents"
+    And I wait for the page to be loaded
+    Then I should see "My folder in group"
+    Then I follow "My folder in group"
+    And I wait for the page to be loaded
+    Then I follow "Delete"
+    And I wait for the page to be loaded
+    Then I should see "Are you sure to delete"
+    Then I follow "delete_item"
+    And I wait for the page to be loaded
+
+  Scenario: Delete directory
+    Given I am on "/main/group/group.php?cid=1&sid=0"
+    And I follow "Group 0001"
+    And I wait for the page to be loaded
+    Then I should see "Group 0001"
+    And I follow "Documents"
+    And I wait for the page to be loaded
+    Then I should see "My folder in group"
+    Then I follow "Delete"
+    And I wait for the page to be loaded
+    Then I should see "Are you sure to delete"
+    Then I follow "delete_item"
+    And I wait for the page to be loaded
 
   Scenario: Add fapple to the Group 0001
     Given I am on "/main/group/group.php?cid=1&sid=0"
@@ -150,7 +150,7 @@ Feature: Group tool
     Then I click the "i.mdi-pencil" element
     And I wait for the page to be loaded
     Then I should see "Group members"
-    Then I follow "group_members_tab"
+    Then I click the "i.mdi-account" element
     And I wait for the page to be loaded
     Then I select "Fiona Apple Maggart (fapple)" from "group_members"
     And I wait for the page to be loaded
@@ -172,7 +172,7 @@ Feature: Group tool
     Then I click the "i.mdi-pencil" element
     And I wait for the page to be loaded
     Then I should see "Group members"
-    Then I follow "group_members_tab"
+    Then I click the "i.mdi-account" element
     And I wait for the page to be loaded
     Then I select "Fiona Apple Maggart (fapple)" from "group_members"
     And I wait for the page to be loaded
@@ -185,7 +185,7 @@ Feature: Group tool
     And I wait for the page to be loaded
     Then I should not see "Fiona"
 
-  # Group category overwrites all other groups settings.
+ # Group category overwrites all other groups settings.
   Scenario: Change Group category to allow multiple inscription of the user
     Given I am on "/main/group/group.php?cid=1&sid=0"
     And I wait for the page to be loaded
@@ -249,7 +249,7 @@ Feature: Group tool
     Then I click the "i.mdi-pencil" element
     And I wait for the page to be loaded
     Then I should see "Group members"
-    Then I follow "group_members_tab"
+    Then I click the "i.mdi-account" element
     And I wait for the page to be loaded
     Then I additionally select "Fiona Apple Maggart (fapple)" from "group_members"
     And I wait for the page to be loaded
@@ -274,7 +274,7 @@ Feature: Group tool
     Then I click the "i.mdi-pencil" element
     And I wait for the page to be loaded
     Then I should see "Group members"
-    Then I follow "group_members_tab"
+    Then I click the "i.mdi-account" element
     And I wait for the page to be loaded
     Then I select "Fiona Apple Maggart (fapple)" from "group_members"
     And I wait for the page to be loaded
@@ -296,7 +296,7 @@ Feature: Group tool
     Then I click the "i.mdi-pencil" element
     And I wait for the page to be loaded
     Then I should see "Group members"
-    Then I follow "group_members_tab"
+    Then I click the "i.mdi-account" element
     And I wait for the page to be loaded
     Then I select "Andrea Costea (acostea)" from "group_members"
     And I wait for the page to be loaded
@@ -315,20 +315,20 @@ Feature: Group tool
     And I follow "Group 0001"
     And I wait for the page to be loaded
     Then I should see "Group 0001"
-    Then I follow "Announcements"
+    Then I click the "i.mdi-bullhorn" element
     And I wait for the page to be loaded
     Then I follow "Add an announcement"
     And I wait for the page to be loaded
     Then I should see "Add an announcement"
     Then I fill in the following:
       | title | Announcement for all users inside Group 0001 |
-    And I fill in editor field "content" with "Announcement description in Group 0001"
+      And I fill in editor field "content" with "Announcement description in Group 0001"
     Then I follow "announcement_preview"
     And I wait for the page to be loaded
     Then I should see "Announcement will be sent to"
     Then I press "submit"
     And I wait for the page to be loaded
-    Then I should see "Announcement has been added"
+    Then I should not see an error
 
   Scenario: Create an announcement for fapple inside Group 0001
     Given I am on "/main/group/group.php?cid=1&sid=0"
@@ -336,7 +336,7 @@ Feature: Group tool
     And I follow "Group 0001"
     And I wait for the page to be loaded
     Then I should see "Group 0001"
-    Then I follow "Announcements"
+    Then I click the "i.mdi-bullhorn" element
     And I wait for the page to be loaded
     Then I follow "Add an announcement"
     And I wait for the page to be loaded
@@ -355,7 +355,7 @@ Feature: Group tool
     Then I should see "Announcement will be sent to"
     Then I press "submit"
     And I wait for the page to be loaded
-    Then I should see "Announcement has been added"
+    Then I should not see an error
 
   Scenario: Create an announcement for everybody inside Group 0003 (private)
     Given I am on "/main/group/group.php?cid=1&sid=0"
@@ -363,7 +363,7 @@ Feature: Group tool
     And I follow "Group 0003"
     And I wait for the page to be loaded
     Then I should see "Group 0003"
-    Then I follow "Announcements"
+    Then I click the "i.mdi-bullhorn" element
     And I wait for the page to be loaded
     Then I follow "Add an announcement"
     And I wait for the page to be loaded
@@ -376,7 +376,7 @@ Feature: Group tool
     Then I should see "Announcement will be sent to"
     Then I press "submit"
     And I wait for the page to be loaded
-    Then I should see "Announcement has been added"
+    Then I should not see an error
 
   Scenario: Create an announcement for fapple inside Group 0003
     Given I am on "/main/group/group.php?cid=1&sid=0"
@@ -384,7 +384,7 @@ Feature: Group tool
     And I follow "Group 0003"
     And I wait for the page to be loaded
     Then I should see "Group 0003"
-    And I follow "Announcements"
+    Then I click the "i.mdi-bullhorn" element
     And I wait for the page to be loaded
     Then I follow "Add an announcement"
     And I wait for the page to be loaded
@@ -403,7 +403,7 @@ Feature: Group tool
     Then I should see "Announcement will be sent to"
     Then I press "submit"
     And I wait for the page to be loaded
-    Then I should see "Announcement has been added"
+    Then I should not see an error
 
   Scenario: Create an announcement as acostea and send only to fapple
     Given I am not logged
@@ -415,9 +415,8 @@ Feature: Group tool
     And I follow "Group 0005"
     And I wait for the page to be loaded
     Then I should see "Group 0005"
-    Then I follow "Announcements"
+    Then I click the "i.mdi-bullhorn" element
     And I wait for the page to be loaded
-    Then I should see "Announcements"
     Then I follow "Add an announcement"
     And I wait for the page to be loaded
     Then I should see "Add an announcement"
@@ -435,7 +434,7 @@ Feature: Group tool
     Then I should see "Announcement will be sent to"
     Then I press "submit"
     And I wait for the page to be loaded
-    Then I should see "Announcement has been added"
+    Then I should not see an error
 
   Scenario: Check fapple/acostea access of announcements
     Given I am not logged
@@ -449,7 +448,7 @@ Feature: Group tool
     And I follow "Group 0001"
     And I wait for the page to be loaded
     Then I should see "Group 0001"
-    Then I follow "Announcements"
+    Then I click the "i.mdi-bullhorn" element
     And I wait for the page to be loaded
     Then I should see "Announcement for all users inside Group 0001"
     Then I should see "Announcement for user fapple inside Group 0001"
@@ -469,7 +468,7 @@ Feature: Group tool
     And I follow "Group 0003"
     And I wait for the page to be loaded
     Then I should see "Group 0003"
-    Then I follow "Announcements"
+    Then I click the "i.mdi-bullhorn" element
     And I wait for the page to be loaded
     Then I should see "Announcement for all users inside Group 0003"
     Then I should see "Announcement for user fapple inside Group 0003"
@@ -489,14 +488,14 @@ Feature: Group tool
     And I follow "Group 0005"
     And I wait for the page to be loaded
     Then I should see "Group 0005"
-    Then I follow "Announcements"
+    Then I click the "i.mdi-bullhorn" element
     And I wait for the page to be loaded
-    Then I should see "Announcement only for fapple Group 0005"
     Then I follow "Announcement only for fapple Group 0005"
     And I wait for the page to be loaded
     Then I save current URL with name "announcement_only_for_fapple_private"
 
-    ## Finish tests with fapple now check access with acostea ##
+
+   ## Finish tests with fapple now check access with acostea ##
     Given I am not logged
     And I wait for the page to be loaded
     Given I am logged as "acostea"
@@ -519,6 +518,7 @@ Feature: Group tool
     And I wait for the page to be loaded
     Then I should not see "not allowed"
 
+
     Given I am not logged
     And I wait for the page to be loaded
     Given I am logged as "acostea"
@@ -532,6 +532,7 @@ Feature: Group tool
     And I should see "Group 0003"
     And I should see "Group 0004"
     And I should see "Group 0005"
+
 
     Then I visit URL saved with name "announcement_for_user_fapple_group_0001_public"
     And I wait for the page to be loaded

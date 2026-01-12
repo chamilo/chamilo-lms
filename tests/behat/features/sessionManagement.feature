@@ -49,10 +49,11 @@ Feature: Session management tool
     And I wait for the page to be loaded
     Then I should not see an error
 
-#  Scenario: Check session description is not present
-#    Given I am on "/main/index/user_portal.php"
-#    Then I should see "Temp Session"
-#    And I should not see "Description for Temp Session"
+  Scenario: Check session description is not present
+    Given I am on "/sessions"
+    And I wait for the page to be loaded
+    Then I should see "Temp Session"
+    And I should not see "Description for Temp Session"
 
   Scenario: Edit session description setting
     Given I am on "/main/session/session_list.php?keyword=Temp+session"
@@ -66,7 +67,8 @@ Feature: Session management tool
     And I press "submit"
     And I wait for the page to be loaded
     Then I should not see an error
-    #Then I should see "Update successful"
+    Then I should see "Temp Session"
+
 
   Scenario: Check session description with platform setting off
     Given I am on "/admin/settings/search_settings?keyword=show_session_description"
@@ -77,9 +79,10 @@ Feature: Session management tool
     Then I should see "Show session description"
     And I should see "No"
     And I should not see an error
-#    Then I am on "/main/index/user_portal.php"
-#    Then I should see "Temp Session"
-#    And I should not see "Description for Temp Session"
+    Then I am on "/sessions"
+    And I wait for the page to be loaded
+    Then I should see "Temp Session"
+    And I should not see "Description for Temp Session"
 
   Scenario: Check session description with platform setting on
     Given I am on "/admin/settings/search_settings?keyword=show_session_description"
@@ -90,9 +93,10 @@ Feature: Session management tool
     Then I should see "Show session description"
     And I should see "Yes"
     And I should not see an error
-#    Then I am on "/main/index/user_portal.php"
-#    Then I should see "Temp Session"
-#    And I should see "Description for Temp Session"
+    Then I am on "/sessions"
+    And I wait for the page to be loaded
+    Then I should see "Temp Session"
+    And I should see "Description for Temp Session"
 
   Scenario: Delete session
     Given I am on "/main/session/session_list.php?keyword=Temp+session"

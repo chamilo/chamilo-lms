@@ -9,7 +9,7 @@ Feature: Thematic tool
     Then I fill in the following:
       | title | Thematic 1 |
     Then I fill in editor field "content" with "Description for thematic"
-    And I press "Save"
+    And I press "submit"
     And I wait for the page to be loaded
     Then I should see "Thematic 1"
 
@@ -23,7 +23,7 @@ Feature: Thematic tool
     Then I fill in the following:
       | title[1] | Objective |
     Then I fill in editor field "description1" with "Objective 1"
-    And I press "Save"
+    And I press "submit"
     And I wait for the page to be loaded
     Then I should see "Objective 1"
 
@@ -34,7 +34,7 @@ Feature: Thematic tool
     Then I fill in the following:
       | title | Thematic 1 edited |
     Then I fill in editor field "content" with "Description edited"
-    Then I press "Save"
+    Then I press "submit"
     And I wait for the page to be loaded
     Then I should see "Thematic 1 edited"
 

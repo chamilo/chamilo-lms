@@ -72,10 +72,12 @@ Feature: Forum tool
     And wait for the page to be loaded
     Then I should not see an error
 
-# This test is commented because to quote a message is necessary load HTML code inside of textarea.
-# And this breaks the page for Behat
-#  Scenario: Quote a forum message
-#    Given I am on "/main/forum/viewthread.php?forum=1&thread=1"
-#    When I follow "quote-1"
-#    And I press "SubmitPost"
-#    Then I should see "The reply has been added"
+  Scenario: Quote a forum message
+    Given I am on "/main/forum/viewthread.php?forum=1&thread=1&cid=1"
+    And I wait for the page to be loaded
+    When I click the "i.mdi-comment-quote" element
+    And I wait for the page to be loaded
+    And I press "SubmitPost"
+    And wait for the page to be loaded
+    Then I should see "Quoting"
+

@@ -20,10 +20,9 @@ Feature: Users management as admin
       | firstname | Sammy                 |
       | lastname  | Marshall              |
       | email     | smarshall@example.com |
-      | username  | smarshall           |
-      | password  | smarshall00!            |
-    And I check the "#send_mail_no" radio button selector
-    And I select "Invitee" from "Roles"
+      | username  | smarshall             |
+      | password  | smarshall             |
+    And I click the "input#send_mail_no" element
     And I press "submit"
     And wait very long for the page to be loaded
     Then I should not see an error
@@ -38,7 +37,7 @@ Feature: Users management as admin
       | username  | NIÑO                  |
       | password  | smarshall             |
     And I check the "#send_mail_no" radio button selector
-    And I select "Invitee" from "Roles"
+    And I click the "input#send_mail_no" element
     And I press "submit"
     And wait very long for the page to be loaded
     Then I should see "Only letters and numbers allowed"
@@ -53,7 +52,7 @@ Feature: Users management as admin
       | username  | Juls                  |
       | password  | Juls                  |
     And I check the "#send_mail_no" radio button selector
-    And I select "Invitee" from "Roles"
+    And I click the "input#send_mail_no" element
     And I press "submit"
     And wait very long for the page to be loaded
     Then I should see "The email address is not complete or contains some invalid characters"
@@ -84,9 +83,9 @@ Feature: Users management as admin
       | firstname | HRM firstname|
       | lastname  | HRM lastname |
       | email     | hrm@example.com |
-      | username  | hrm    |
-      | password  | hrm00!    |
-    And I check the "#send_mail_no" radio button selector
+      | username  | hrm             |
+      | password  | hrm             |
+    And I click the "input#send_mail_no" element
 #    And I fill in select bootstrap static input "#status_select" select "4"
     And I select "Human Resources Manager" from "Roles"
     And wait very long for the page to be loaded
@@ -104,8 +103,8 @@ Feature: Users management as admin
       | username  | teacher  |
       | password  | teacher00!   |
 #    And I fill in select bootstrap static input "#status_select" select "1"
-    And I select "Teacher" from "Roles"
-    And I check the "#send_mail_no" radio button selector
+    And I select "Trainer" from "status_select"
+    And I click the "input#send_mail_no" element
     And I press "submit"
     And wait very long for the page to be loaded
     Then I should not see an error
@@ -120,8 +119,8 @@ Feature: Users management as admin
       | username  | student   |
       | password  | student00!   |
 #    And I fill in select bootstrap static input "#status_select" select "5"
-    And I select "Learner" from "Roles"
-    And I check the "#send_mail_no" radio button selector
+    And I select "Learner" from "status_select"
+    And I click the "input#send_mail_no" element
     And I press "submit"
     And wait very long for the page to be loaded
     Then I should not see an error

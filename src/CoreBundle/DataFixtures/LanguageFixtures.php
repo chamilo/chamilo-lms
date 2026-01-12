@@ -99,7 +99,7 @@ class LanguageFixtures extends Fixture
             [
                 'original_name' => 'Português do Brasil',
                 'english_name' => 'brazilian',
-                'isocode' => 'pt_PT',
+                'isocode' => 'pt_BR',
                 'available' => 1,
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',

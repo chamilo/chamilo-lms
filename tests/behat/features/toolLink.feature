@@ -28,14 +28,16 @@ Feature: Link tool
     Then I should see "Chamilo"
     And I should not see an error
 
-#  Scenario: Create a link with category
-#    Given I am on "/main/link/link.php?action=addlink&cid=1"
-#    When I fill in the following:
-#      | url   | http://www.chamilo.org |
-#      | title | Chamilo in category 1 |
-#    And I select "Category 1" from "category_id"
-#    And I press "submitLink"
-#    Then I should see "The link has been added"
+  Scenario: Create a link with category
+    Given I am on "/main/link/link.php?action=addlink&cid=1"
+    And I wait for the page to be loaded
+    When I fill in the following:
+      | url   | http://www.chamilo.org |
+      | title | Chamilo in category 1 |
+    And I select "Category 1" from "category_id"
+    And I press "submitLink"
+    And wait for the page to be loaded
+    Then I should see "Chamilo in category 1"
 
   Scenario: Delete link
     Given I am on "/main/link/link.php?cid=1"

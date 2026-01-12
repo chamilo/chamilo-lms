@@ -755,4 +755,74 @@ class FeatureContext extends MinkContext
 
         $element->click();
     }
+    /**
+     * @Then /^(?:I see|I should see|And I see)\s+"?([^\"]+)"?\s+in the element "([^\"]+)"$/
+     */
+    public function iSeeInElement($expected, $elementSelector)
+    {
+        $page = $this->getSession()->getPage();
+        $el = null;
+
+        // If the selector contains a comma or starts with #/. or contains CSS combinators, use CSS directly
+        $useCssDirectly = (strpos($elementSelector, ',') !== false)
+            || strpos($elementSelector, '#') === 0
+            || strpos($elementSelector, '.') === 0
+            || preg_match('/[>\s\[\]\:\,\+]/', $elementSelector);
+
+        if ($useCssDirectly) {
+            $el = $page->find('css', $elementSelector);
+        } else {
+            // try findById if available
+            if (method_exists($page, 'findById')) {
+                $el = $page->findById($elementSelector);
+            }
+
+            // fallback to CSS id
+            if (!$el) {
+                $el = $page->find('css', '#'.$elementSelector);
+            }
+        }
+
+        if (!$el) {
+            throw new \Exception(sprintf('Element with selector/id "%s" not found on the page.', $elementSelector));
+        }
+
+        // getText() returns visible text (includes children)
+        $textRaw = $el->getText();
+
+        // normalization: trim, replace NBSP and compress spaces/newlines
+        $text = trim($textRaw);
+        $text = str_replace("\xC2\xA0", ' ', $text); // NBSP UTF-8 -> space
+        $text = preg_replace('/\s+/u', ' ', $text);
+
+        // case-insensitive check
+        if (mb_stripos($text, $expected) === false) {
+            throw new \Exception(sprintf('Expected "%s" inside element "%s" but found "%s".', $expected, $elementSelector, $text));
+        }
+
+        return true;
+    }
+
+// php
+
+    /**
+     * @When /^I zoom out to maximum$/
+     */
+    public function zoomOutMax()
+    {
+        $script = <<<'JS'
+(function() {
+    var scale = 0.25;
+    if (typeof document.body.style.zoom !== 'undefined') {
+        document.body.style.zoom = scale;
+    } else {
+        document.documentElement.style.transform = 'scale(' + scale + ')';
+    }
+})();
+JS;
+        $this->getSession()->executeScript($script);
+        $this->getSession()->wait(300);
+        return true;
+    }
+
 }

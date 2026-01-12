@@ -36,8 +36,11 @@ Feature: Announcement tool
     And wait very long for the page to be loaded
     Then I should not see an error
 
-#  Scenario: Delete all announcements
-#    Given I am on "/main/announcements/announcements.php?cid=1"
-#    When I follow "Clear list of announcements"
-#    And I confirm the popup
-#    Then I should see "All announcements have been deleted"
+  Scenario: Delete all announcements
+    Given I am on "/main/announcements/announcements.php?cid=1"
+    And I wait for the page to be loaded
+    Then I click the "th.ui-th-ltr" element
+    And I click the "span.mdi-trash-can-outline" element
+    And I press "Delete"
+    And I wait for the page to be loaded
+    Then I should not see "Announcement test"

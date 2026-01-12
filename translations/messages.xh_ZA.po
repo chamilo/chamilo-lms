@@ -31077,9 +31077,6 @@ msgstr "Gqiba ngesihloko okanye indlela..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Lawula iibhakethi, buyisela, kopisha, buyise kwi-recycle kwaye susa idatha yekhosi."
 
-
-msgstr "%d igqabantaba"
-
 msgid "Error updating third party. Please verify the data."
 msgstr "Impazamo yokuhlaziya umntu wesithathu. Nceda uqinise idatha."
 

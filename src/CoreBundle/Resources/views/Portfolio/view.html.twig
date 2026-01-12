@@ -16,18 +16,19 @@
             </li>
             <li>
                 <span class="fa-li fa fa-clock-o" aria-hidden="true"></span>
-                {{ 'CreationDate'|get_lang ~ ': ' ~ item.creationDate|date_to_time_ago }}
+                {{ 'Creation date'|get_lang ~ ': ' }}
+                {{ item.creationDate|date_to_time_ago }}
             </li>
 
             {% if last_edit %}
                 <li>
                     <span class="fa-li fa fa-clock-o" aria-hidden="true"></span>
-                    {{ 'UpdatedDateXByUserY'|get_lang|format(last_edit.date|date_to_time_ago, last_edit.user) }}
+                    {{ 'Updated on %s by %s'|get_lang|format(last_edit.date|date_to_time_ago, last_edit.user) }}
                 </li>
             {% elseif item.creationDate != item.updateDate %}
                 <li>
                     <span class="fa-li fa fa fa-clock-o" aria-hidden="true"></span>
-                    {{ 'UpdatedDateX'|get_lang|format(item.updateDate|date_to_time_ago) }}
+                    {{ 'Updated on %s'|get_lang|format(item.updateDate|date_to_time_ago) }}
                 </li>
             {% endif %}
 

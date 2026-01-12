@@ -4,7 +4,7 @@
     {% set invisible_img = 'invisible.png'|icon(22, 'Visible'|get_lang) %}
     {% set delete_img = 'delete.png'|icon(22, 'Delete'|get_lang) %}
     {% set baseurl = app.request.getPathInfo() ~ '?' ~ (app.request.queryString ? app.request.queryString ~ '&' : '') %}
-    {% set is_advanced_sharing_enabled = 'portfolio_advanced_sharing'|api_get_configuration_value and not _c is empty %}
+    {% set is_advanced_sharing_enabled = 'platform.portfolio_advanced_sharing'|api_get_setting and not _c is empty %}
 
     <section class="portfolio-items">
         {% for item in items %}
@@ -15,7 +15,7 @@
             {% endif %}
             {% set comments = item.lastComments(3, is_advanced_sharing_enabled) %}
 
-            {% if 'portfolio_show_base_course_post_in_sessions'|api_get_configuration_value %}
+            {% if 'platform.portfolio_show_base_course_post_in_sessions'|api_get_setting %}
                 {% if _c.session_id and not item.session and not item.isDuplicatedInSessionId(_c.session_id) %}
                     {% set comments = {} %}
                 {% endif %}
@@ -31,20 +31,20 @@
 
                             {% if is_advanced_sharing_enabled %}
                                 <a href="{{ baseurl ~ {'action':'item_visiblity_choose', 'id':item.id}|url_encode }}">
-                                    {{ 'visible.png'|icon(22, 'ChooseRecipients'|get_lang) }}
+                                    {{ 'visible.png'|icon(22, 'Choose recipients'|get_lang) }}
                                 </a>
                             {% else %}
                                 {% if item.visibility == 0 %}
                                     <a href="{{ baseurl ~ {'action':'visibility', 'id':item.id}|url_encode }}">
-                                        {{ 'invisible.png'|icon(22, 'MakeVisible'|get_lang) }}
+                                        {{ 'invisible.png'|icon(22, 'Make visible'|get_lang) }}
                                     </a>
                                 {% elseif item.visibility == 1 %}
                                     <a href="{{ baseurl ~ {'action':'visibility', 'id':item.id}|url_encode }}">
-                                        {{ 'visible.png'|icon(22, 'MakeVisibleForTeachers'|get_lang) }}
+                                        {{ 'visible.png'|icon(22, 'Make visible for teachers'|get_lang) }}
                                     </a>
                                 {% elseif item.visibility == 2 %}
                                     <a href="{{ baseurl ~ {'action':'visibility', 'id':item.id}|url_encode }}">
-                                        {{ 'eye-slash.png'|icon(22, 'MakeInvisible'|get_lang) }}
+                                        {{ 'eye-slash.png'|icon(22, 'Make invisible'|get_lang) }}
                                     </a>
                                 {% endif %}
                             {% endif %}
@@ -61,11 +61,11 @@
                         {% if is_allowed_to_edit() %}
                             {% if item.isHighlighted %}
                                 <a href="{{ baseurl ~ {'action':'highlighted', 'id':item.id}|url_encode }}">
-                                    {{ 'award_red.png'|icon(22, 'UnmarkAsHighlighted'|get_lang) }}
+                                    {{ 'award_red.png'|icon(22, 'Unmark as highlighted'|get_lang) }}
                                 </a>
                             {% else %}
                                 <a href="{{ baseurl ~ {'action':'highlighted', 'id':item.id}|url_encode }}">
-                                    {{ 'award_red_na.png'|icon(22, 'MarkAsHighlighted'|get_lang) }}
+                                    {{ 'award_red_na.png'|icon(22, 'Mark as highlighted'|get_lang) }}
                                 </a>
                             {% endif %}
                         {% endif %}
@@ -105,13 +105,15 @@
 
                             <li>
                                 <span class="fa-li fa fa-clock-o" aria-hidden="true"></span>
-                                {{ 'CreationDate'|get_lang ~ ': ' ~ item.resourceNode.createdAt|date_to_time_ago }}
+                                {{ 'Creation date'|get_lang ~ ': ' }}
+                                {{ item.resourceNode.createdAt|date_to_time_ago }}
                             </li>
 
                             {% if item.resourceNode.createdAt != item.resourceNode.updatedAt %}
                                 <li>
                                     <span class="fa-li fa fa-clock-o" aria-hidden="true"></span>
-                                    {{ 'UpdateDate'|get_lang ~ ': ' ~ item.resourceNode.updatedAt|date_to_time_ago }}
+                                    {{ 'Update date'|get_lang ~ ': ' }}
+                                    {{ item.resourceNode.updatedAt|date_to_time_ago }}
                                 </li>
                             {% endif %}
                         </ul>
@@ -127,10 +129,10 @@
                         {% if comments|length > 0 %}
                             <h4>
                                 <a href="{{ item_url }}#portfolio-item-comments">
-                                    {{ 'XComments'|get_lang|format(comments|length) }}
+                                    {{ '%s comments'|get_lang|format(comments|length) }}
                                 </a>
                                 &centerdot;
-                                <a href="{{ item_url }}#frm_comment">{{ 'AddNewComment'|get_lang }}</a>
+                                <a href="{{ item_url }}#frm_comment">{{ 'Add new comment'|get_lang }}</a>
                             </h4>
                             {% for comment in comments %}
                                 <article>
@@ -146,7 +148,7 @@
                         {% else %}
                             <a href="{{ item_url }}#portfolio-item-comments">
                                 <span class="fa fa-commenting-o fa-fw" aria-hidden="true"></span>
-                                {{ 'AddNewComment'|get_lang }}
+                                {{ 'Add new comment'|get_lang }}
                             </a>
                         {% endif %}
                     </section>

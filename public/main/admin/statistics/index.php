@@ -1907,8 +1907,6 @@ switch ($report) {
         ];
 
         $ajaxEndpointJs = json_encode($ajaxEndpoint, JSON_UNESCAPED_SLASHES);
-
-        // Keep the loading UI simple and compatible with Tailwind.
         $loadingHtml = '
         <div class="flex items-center gap-2 text-sm text-gray-600 py-3">
             '.$waitIcon.'
@@ -1918,81 +1916,78 @@ switch ($report) {
         $loadingHtmlJs = json_encode($loadingHtml, JSON_UNESCAPED_SLASHES);
 
         $htmlHeadXtra[] = <<<JS
-<script>
-(function () {
-  "use strict";
+        <script>
+        (function () {
+          "use strict";
 
-  var AJAX_ENDPOINT = {$ajaxEndpointJs};
-  var LOADING_HTML = {$loadingHtmlJs};
+          var AJAX_ENDPOINT = {$ajaxEndpointJs};
+          var LOADING_HTML = {$loadingHtmlJs};
 
-  function showTarget(\$el) {
-    \$el.removeClass("hidden");
-  }
+          function showTarget(\$el) {
+            \$el.removeClass("hidden");
+          }
 
-  function hideTarget(\$el) {
-    \$el.addClass("hidden");
-  }
+          function hideTarget(\$el) {
+            \$el.addClass("hidden");
+          }
 
-  function toggleTarget(\$el) {
-    \$el.toggleClass("hidden");
-  }
+          function toggleTarget(\$el) {
+            \$el.toggleClass("hidden");
+          }
 
-  function loadQuarterlyReport(action, targetId, force) {
-    var \$target = $("#" + targetId);
-    if (!\$target.length) {
-      return;
-    }
+          function loadQuarterlyReport(action, targetId, force) {
+            var \$target = $("#" + targetId);
+            if (!\$target.length) {
+              return;
+            }
 
-    var isLoaded = \$target.data("loaded") === 1;
+            var isLoaded = \$target.data("loaded") === 1;
+            if (isLoaded && !force) {
+              toggleTarget(\$target);
+              return;
+            }
 
-    // If already loaded and not forcing reload, just toggle the visibility.
-    if (isLoaded && !force) {
-      toggleTarget(\$target);
-      return;
-    }
+            showTarget(\$target);
+            \$target.html(LOADING_HTML);
 
-    showTarget(\$target);
-    \$target.html(LOADING_HTML);
+            // Load HTML from Ajax endpoint.
+            \$target.load(AJAX_ENDPOINT + "?a=" + encodeURIComponent(action), function (response, status) {
+              if (status !== "success") {
+                \$target.html(
+                  '<div class="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">' +
+                  'Failed to load this report. Please try again.' +
+                  '</div>'
+                );
+                return;
+              }
+              \$target.data("loaded", 1);
+            });
+          }
 
-    // Load HTML from Ajax endpoint.
-    \$target.load(AJAX_ENDPOINT + "?a=" + encodeURIComponent(action), function (response, status) {
-      if (status !== "success") {
-        \$target.html(
-          '<div class="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">' +
-          'Failed to load this report. Please try again.' +
-          '</div>'
-        );
-        return;
-      }
-      \$target.data("loaded", 1);
-    });
-  }
+          $(function () {
+            $(document).on("click", ".js-quarterly-load", function (e) {
+              e.preventDefault();
+              var \$btn = $(this);
+              loadQuarterlyReport(\$btn.data("action"), \$btn.data("target"), false);
+            });
 
-  $(function () {
-    $(document).on("click", ".js-quarterly-load", function (e) {
-      e.preventDefault();
-      var \$btn = $(this);
-      loadQuarterlyReport(\$btn.data("action"), \$btn.data("target"), false);
-    });
+            $(document).on("click", ".js-quarterly-reload", function (e) {
+              e.preventDefault();
+              var \$btn = $(this);
+              loadQuarterlyReport(\$btn.data("action"), \$btn.data("target"), true);
+            });
 
-    $(document).on("click", ".js-quarterly-reload", function (e) {
-      e.preventDefault();
-      var \$btn = $(this);
-      loadQuarterlyReport(\$btn.data("action"), \$btn.data("target"), true);
-    });
-
-    $(document).on("click", "#js-quarterly-load-all", function (e) {
-      e.preventDefault();
-      $(".js-quarterly-load").each(function () {
-        var \$btn = $(this);
-        loadQuarterlyReport(\$btn.data("action"), \$btn.data("target"), true);
-      });
-    });
-  });
-})();
-</script>
-JS;
-
+            $(document).on("click", "#js-quarterly-load-all", function (e) {
+              e.preventDefault();
+              $(".js-quarterly-load").each(function () {
+                var \$btn = $(this);
+                loadQuarterlyReport(\$btn.data("action"), \$btn.data("target"), true);
+              });
+            });
+          });
+        })();
+        </script>
+        JS;
         // Header
         $content .= '
     <div class="w-full">
@@ -2009,8 +2004,6 @@ JS;
         </div>
       </div>
     ';
-
-        // Cards grid (Tailwind)
         $content .= '<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">';
 
         foreach ($cards as $card) {
@@ -2021,7 +2014,6 @@ JS;
             $title = $card['title'];
             $action = $card['action'];
             $target = $card['target'];
-
             $content .= '
         <div class="rounded-xl border border-gray-200 bg-white shadow-sm">
           <div class="flex items-start justify-between gap-3 px-4 py-3 border-b border-gray-100">
@@ -2049,9 +2041,7 @@ JS;
         </div>
         ';
         }
-
         $content .= '</div></div>';
-
         break;
 }
 

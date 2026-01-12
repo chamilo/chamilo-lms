@@ -963,8 +963,6 @@ class Statistics
         $keyword = Security::remove_XSS($keyword);
 
         $content = '';
-
-        // Minimal styles for chips (no dependency on Tailwind/Bootstrap versions).
         $content .= '
     <style>
         .ch-activities-wrap { margin-top: 10px; }
@@ -1008,8 +1006,6 @@ class Statistics
             </div>
         </div>
     ';
-
-        // Search form (keeps existing behavior).
         $form = new FormValidator(
             'search_simple',
             'get',
@@ -1029,8 +1025,6 @@ class Statistics
         $form->addButtonSearch(get_lang('Search'), 'submit');
 
         $content .= '<div class="ch-activities-actions">'.$form->returnForm().'</div>';
-
-        // Show table only when a keyword is provided (same as before).
         if (!empty($keyword)) {
             $table = new SortableTable(
                 'activities',
@@ -1059,10 +1053,8 @@ class Statistics
             $content .= '<div class="ch-divider"></div>';
         }
 
-        // Collect event types from LOG_* constants + LOG_WS expansions.
         $prefix = 'LOG_';
         $userDefinedConstants = get_defined_constants(true)['user'] ?? [];
-
         $filteredConstants = array_filter(
             $userDefinedConstants,
             static function ($constantName) use ($prefix) {
@@ -1072,7 +1064,6 @@ class Statistics
         );
 
         $eventTypes = [];
-
         foreach (array_keys($filteredConstants) as $constantName) {
             if ($constantName === 'LOG_WS') {
                 // Expand WS events based on Rest constants.
@@ -1089,8 +1080,6 @@ class Statistics
                 }
                 continue;
             }
-
-            // Ignore *_ID constants to avoid noisy/internal identifiers.
             if (substr($constantName, -3) === '_ID') {
                 continue;
             }
@@ -1139,8 +1128,7 @@ class Statistics
             <div>
                 <h4 class="ch-activities-title">'.get_lang('Event type').'</h4>
                 <div class="ch-activities-help">
-                    <!-- Click a chip to filter the table by that event type. -->
-                    Click an event type to filter results.
+                    '.get_lang('Click an event type to filter results.').'
                 </div>
             </div>
             <input id="chChipFilter" class="ch-chip-filter" type="text" placeholder="Filter event types...">
@@ -1151,8 +1139,6 @@ class Statistics
             $content .= '<div class="ch-empty">No event types found.</div>';
         } else {
             $content .= '<div class="ch-groups" id="chChipGroups">';
-
-            // Keep a stable order of groups.
             $preferredOrder = ['Course', 'Session', 'User', 'Social', 'Message', 'Resource', 'Wiki', 'Webservice', 'Other'];
             foreach ($preferredOrder as $label) {
                 if (empty($groups[$label])) {
@@ -1176,8 +1162,6 @@ class Statistics
             }
 
             $content .= '</div>';
-
-            // Small client-side filter for chips.
             $content .= '
         <script>
             (function () {
@@ -1193,8 +1177,6 @@ class Statistics
                         var t = (chip.getAttribute("data-chip-text") || "").toLowerCase();
                         chip.style.display = (!q || t.indexOf(q) !== -1) ? "" : "none";
                     });
-
-                    // Hide group blocks when all chips are hidden.
                     var groups = container.querySelectorAll(".ch-group");
                     groups.forEach(function (g) {
                         var visible = g.querySelectorAll(".ch-chip:not([style*=none])").length > 0;

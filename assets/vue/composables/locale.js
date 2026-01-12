@@ -112,7 +112,7 @@ export function useLocale() {
   function getLanguageName(iso, displayLocale = null) {
     if (!iso) return "-"
     const tag = String(iso).replace("_", "-")
-    const ui = displayLocale || appLocale.value || document.documentElement.dataset.lang || "en"
+    const ui = displayLocale || appLocale.value || document.documentElement.dataset.lang || "en-US"
     try {
       const dn = new Intl.DisplayNames([ui], { type: "language" })
       return dn.of(tag) || iso.toUpperCase()

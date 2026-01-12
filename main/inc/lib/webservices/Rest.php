@@ -514,9 +514,22 @@ class Rest extends WebService
         }
 
         $courseList = CourseManager::searchCourse($q, $sessionId);
+        $em = Database::getManager();
 
         return array_map(
-            fn($course) => api_get_course_info_by_id($course['id']),
+            function ($courseInfo) use ($em) {
+                /** @var Course $course */
+                $course = $em->find(Course::class, $courseInfo['id']);
+
+                return [
+                    'id' => $course->getId(),
+                    'title' => $course->getTitle(),
+                    'code' => $course->getCode(),
+                    'directory' => $course->getDirectory(),
+                    'urlPicture' => CourseManager::getPicturePath($course, true),
+                    'teachers' => CourseManager::getTeacherListFromCourseCodeToString($course->getCode()),
+                ];
+            },
             $courseList
         );
     }

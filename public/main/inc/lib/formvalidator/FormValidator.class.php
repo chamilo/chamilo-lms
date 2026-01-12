@@ -56,7 +56,7 @@ class FormValidator extends HTML_QuickForm
                 $attributes['class'] = 'flex flex-row gap-3 items-center ';
                 break;
             case self::LAYOUT_BOX:
-                $attributes['class'] = 'ch flex gap-1 ';
+                $attributes['class'] = 'ch flex flex-col gap-1 ';
                 break;
             case self::LAYOUT_GRID:
                 $attributes['class'] = 'ch form-grid';

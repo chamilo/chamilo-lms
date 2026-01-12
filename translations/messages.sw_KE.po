@@ -32307,3 +32307,36 @@ msgstr "ID ya mtumiaji wa Drupal"
 msgid "There are no terms that match the search: %s"
 msgstr "Hakuna maneno yanayolingana na utafutaji: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Mipangilio imefungwa kimataifa (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Ikiwa imewezeshwa, meseji ya mazungumzo ya kibinafsi 1:1 yataangaziwa katika hati za historia za mazungumzo ya kozi. Inapendekezwa kuziweka zimezimwa kwa faragha."
+
+msgid "Save private conversations in documents"
+msgstr "Hifadhi mazungumzo ya kibinafsi katika hati"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "Sheria ya AI ya EU – Uwezo wa uwazi & taarifa ya hatari"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "Chini ya Sheria ya Akili Bandia ya EU (Mtaneno (EU) 2024/1689), mifumo ya AI inayotumika katika elimu kwa ujumla imeingizwa kama “hatari kubwa”. Programu hii yenyewe <strong>sio</strong> mfumo wa AI, lakini inaweza kuunganisha mifumo ya AI ya ndani au nje—kutegemea usanidi wako—ili kuboresha utendaji wa kazi za mtumiaji. Mifumo hii inaweza kufikia data ya kibinafsi <em>tu ikiwa</em> watumiaji watajumuisha data hizo katika ombi lao. Kwa muundo, programu hii haishiriki data ya kibinafsi na mifumo ya AI bila ingizo la mtumiaji. Kwa chaguo-msingi, vipengele vyote vya AI vimezimwa."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Wajibu wa msimamizi & mauzo"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Ukurasa huu wa usanidi unaelezea kila kipengele cha AI na kusudi lake. Kama mweka programu, unapaswa kuzichunguza kwa makini na kusasisha sera zako za faragha za data zinazofuata GDPR ili kuakisi chaguzi unazowasha. Wakati vipengele vingi vya AI havishiriki data ya kibinafsi moja kwa moja na mifumo ya nje, ombi la mtumiaji linalotumwa kwa AI linaweza kujumuisha taarifa ya kibinafsi kwa bahati mbaya. Kama mweka programu, <strong>wewe ni mwenye wajibu</strong> wa kuwajulisha watumiaji hatari hii. Kwa uwazi, matoleo ya baadaye yanaweza kuonyesha lebo zisizo na ushawishi kwa watumiaji wa mwisho zinazoonyesha kuwa maudhui au maoni fulani yalizalishwa kwa msaada wa AI."
+
+msgid "Positioning"
+msgstr "Uwekaji nafasi"
+
+msgid "Quiz"
+msgstr "Jaribio"
+
+msgid "Customcertificate"
+msgstr "Cheti cha kibinafsi"
+
+msgid "Update profile"
+msgstr "Sasisha wasifu"
+

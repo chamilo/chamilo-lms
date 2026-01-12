@@ -32307,3 +32307,36 @@ msgstr "Drupal ID korisnika"
 msgid "There are no terms that match the search: %s"
 msgstr "Nema termina koji odgovaraju pretrazi: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Postavka je globalno zaključana (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Ako je omogućeno, 1:1 privatne chat poruke će biti zrcaljene u dokumentima historije chata kursa. Preporučeno je ostaviti onemogućeno zbog privatnosti."
+
+msgid "Save private conversations in documents"
+msgstr "Spremi privatne razgovore u dokumente"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU AI Act – Transparentnost i obavještenje o rizicima"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "Prema EU Zakonu o umjetnoj inteligenciji (Uredba (EU) 2024/1689), AI sistemi korišteni u obrazovanju se generalno klasifikuju kao „visokorizični”. Ovaj softver sam po sebi <strong>nije</strong> AI sistem, ali može integrisati opcionalne interne ili eksterne AI sisteme—ovisno o vašoj konfiguraciji—kako bi poboljšao performanse korisničkih zadataka. Ovi sistemi mogu pristupiti osobnim podacima <em>samo ako</em> korisnici uključe takve podatke u svoje upite. Po dizajnu, ovaj softver ne dijeli osobne podatke sa AI sistemima bez aktivnog unosa korisnika. Po defaultu, sve AI značajke su onemogućene."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Odgovornost administratora i objave"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Ova stranica konfiguracije detaljno opisuje svaku AI značajku i njenu svrhu. Kao deployer, trebate ih pažljivo pregledati i ažurirati svoje politike privatnosti podataka u skladu sa GDPR-om kako bi odražavale opcije koje omogućite. Iako većina AI značajki ne dijeli direktno osobne podatke sa eksternim sistemima, upiti korisnika poslani AI-ju mogu nehotice uključivati osobne informacije. Kao deployer, <strong>vi ste odgovorni</strong> za informisanje korisnika o ovom riziku. Za transparentnost, buduća izdanja mogu prikazivati neinvazivne oznake za krajnje korisnike koje ukazuju da je određeni sadržaj ili povratna informacija generisana uz pomoć AI."
+
+msgid "Positioning"
+msgstr "Pozicioniranje"
+
+msgid "Quiz"
+msgstr "Kvizes"
+
+msgid "Customcertificate"
+msgstr "Prilagođenicertifikat"
+
+msgid "Update profile"
+msgstr "Ažuriraj profil"
+

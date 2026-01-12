@@ -32311,3 +32311,36 @@ msgstr "Drupal-brukar-ID"
 msgid "There are no terms that match the search: %s"
 msgstr "Det finst ingen termar som stemmer med søket: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Innstillinga er globalt låst (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Om aktivert, vil 1:1 private chat-meldingar bli speila i kurschat-historikkdokumenta. Anbefalt å halde deaktivert for personvern."
+
+msgid "Save private conversations in documents"
+msgstr "Lagre private samtalar i dokument"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU AI Act – Gjennomsynt & risikovarsel"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "Under EU-kunstig intelligens-lova (forordning (EU) 2024/1689) blir AI-system brukt i utdanning generelt klassifisert som «høyrisiko». Denne programvaren sjølv er <strong>ikkje</strong> eit AI-system, men den kan integrere valfrie interne eller eksterne AI-system – avhengig av konfigurasjonen din – for å forbetre brukaroppgåveytelse. Desse systema kan få tilgang til personopplysningar <em>berre om</em> brukarar inkluderer slikt data i sine føringar. Per design deler ikkje denne programvaren personopplysningar med AI-system utan aktiv brukarinput. Som standard er alle AI-funksjonar deaktiverte."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Administrativt ansvar & opplysningar"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Denne konfigurasjonssida detaljerer kvar AI-funksjon og dens formål. Som driftsansvarleg bør du gå gjennom dei nøye og oppdatere GDPR-kompatible personvernpolicyar for å reflektere vala du aktiverer. Medan dei fleste AI-funksjonar ikkje deler personopplysningar direkte med eksterne system, kan brukarføringar sendt til AI utilsikta inkludere personleg informasjon. Som driftsansvarleg er <strong>du ansvarleg</strong> for å informere brukarar om denne risikoen. For gjennomsynt vil framtidige utgivelser kunne vise ikkje-intruderande sluttbrukarmerke som indikerer at visst innhald eller tilbakemelding er generert med hjelp av AI."
+
+msgid "Positioning"
+msgstr "Posisjonering"
+
+msgid "Quiz"
+msgstr "Kuv"
+
+msgid "Customcertificate"
+msgstr "Egendefinert sertifikat"
+
+msgid "Update profile"
+msgstr "Oppdater profil"
+

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "བདེ་འཛེས་ཆེ་"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ཆུང་སྡེབས་དཔེ་: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ཆུགས་ལྷག་ལྟ་རྨིན་: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "བྱེད་རྟགས་ཀྱི་མཐའ་འབྲུ་"
@@ -607,151 +607,151 @@ msgid "Subscribe students to session(s)"
 msgstr "བསྡད་སློབ་ལ་སློབ་ཕྲེང་རྒྱབ་འཛུན"
 
 msgid "Manage course categories"
-msgstr ""
+msgstr "བདེ་གཤེ་རིགས་སྡེབས་འགོས་པའི་གཏན་ལ་གཏོགས།"
 
 msgid "Course categories in %s site:"
-msgstr ""
+msgstr "%s་སྟོང་ལ་གཏོགས་པའི་བདེ་གཤེ་རིགས་སྡེབས།"
 
 msgid "Course categories available"
-msgstr ""
+msgstr "མངོན་སྤྲོད་བྱས་པའི་བདེ་གཤེ་རིགས་སྡེབས།"
 
 msgid "The group now belongs to the selected URL."
-msgstr ""
+msgstr "འདི་རྒྱུག་གཅིག་གི་སློབ་ཚན་གྱི་འཛུལ་ཕྲེང་ལ་གཅིག་ཀྲིམ་འགྱུར།"
 
 msgid "You need to select at least one group and one URL."
-msgstr ""
+msgstr "རྒྱུག་གཅིག་དང་འཛུལ་ཕྲེང་གཅིག་རང་ལ་རེད་མིན་ན་མི་འགྱུར།"
 
 msgid "Agenda list"
-msgstr ""
+msgstr "དོན་ཚོགས་ཐོ་རིམས།"
 
 msgid "Calendar"
-msgstr ""
+msgstr "ལོ་ཐོ།"
 
 msgid "Custom range"
-msgstr ""
+msgstr "རང་བཞིན་གྱི་རྒྱུད་ཚོད།"
 
 msgid "This week"
-msgstr ""
+msgstr "བདུན་ཕྲག་འདི།"
 
 msgid "Send to users in all sessions of this course"
-msgstr ""
+msgstr "བདེ་གཤེ་རིགས་འདིའི་ཐུན་མོང་སློབ་ཚན་རེ་རེ་ལ་སློབ་ཕྱུག་ཚོགས་ལ་འཕྲིན་འབྱུང་འབྱུང།"
 
 msgid "Parameters not found"
-msgstr ""
+msgstr "མཚན་རྟགས་མི་རྙེད།"
 
 msgid "Users to add"
-msgstr ""
+msgstr "སློབ་ཕྱུག་འཐོམ་པའི་ཚོགས།"
 
 msgid "Documents added"
-msgstr ""
+msgstr "ཡིག་ཆ་འཐོམ་པའི་ཚོགས།"
 
 msgid "No users to add"
-msgstr ""
+msgstr "སློབ་ཕྱུག་འཐོམ་པའི་ཚོགས་མེད།"
 
 msgid "Start the Survey"
-msgstr ""
+msgstr "ལས་རྒྱུན་འབེད་པའི་གཏན་ལ་གཏོགས།"
 
 msgid "Subgroup"
-msgstr ""
+msgstr "རྒྱུག་གཅིག་གཅིག་གི་སྡེབས།"
 
 msgid "Subgroups"
-msgstr ""
+msgstr "རྒྱུག་གཅིག་གཅིག་གི་སྡེབས་ཚོགས།"
 
 msgid "Enter the letters you see."
-msgstr ""
+msgstr "མཐོང་བ་རེད་པའི་ཡིག་ཚད་འབྲི།"
 
 msgid "Click on the image to load a new one."
-msgstr ""
+msgstr "གཞན་པ་གསར་པ་འབོད་པའི་གཏན་ལ་གཏོགས་གསར་མཚོང་ལ་འཁྲིག།"
 
 msgid "Account blocked by captcha."
-msgstr ""
+msgstr "མཚན་རྒྱུག་གཅིག་གི་སྡེབས་གཏོགས་འཁྱམས།"
 
 msgid "Capture screenshot/screencast"
-msgstr ""
+msgstr "གཞི་རྟེན་གཏོགས་གཏོགས་ལ་འབྲི།／གཞི་རྟེན་གཏོགས་གཏོགས་ལ་འབྲི།"
 
 msgid "View"
-msgstr ""
+msgstr "མཐོང།"
 
 msgid "Number submitted"
-msgstr ""
+msgstr "འབྱུང་སྟོན་གྱི་གྲངས།"
 
 msgid "Warning: the installer detected an error while trying to reach the test file at %s. It looks like the PHP script could not be interpreted. This could be a warning sign for future problems when creating courses. Please check the installation guide for more information about permissions. If you are installing a site with a URL that doesn't resolve yet, you can probably ignore this message."
-msgstr ""
+msgstr "བླ་མསྙན་འབྱུང་: བཟོ་རྒྱུ་གྲུབ་གཤིས་ཀྱི་ལས་རྒྱུ་ལ་འཛུལ་ཕྲེང་ %s ལ་ལྟེ་བ་རྟོགས་ནས་འཛིན་རྩིས་ལ་འཁྲུལ་པ་རྙེད། ཨཔའི་ཨཨི་སྐྲིབཏ་ PHP མི་འགྱུར་བ་རེད་པ་ལྟར་འགྱུར། བདེ་གཤེ་རིགས་འབྱུང་ལྔ་རེ་རེ་ལ་འཁྲུལ་པ་རེད་པའི་གནས་ཚུལ་རེད། མཆོག་ཏུ་འཛིན་སྐོར་གྱི་གནས་ཚུལ་ལ་ལྟོས། མི་འགྱུར་འཛུལ་ཕྲེང་གཅིག་གི་སྟོང་ལ་གཏོགས་ནས་འབྲས་བུ་འདི་མི་མཐོང་བ་རེད།"
 
 msgid "Before %s"
-msgstr ""
+msgstr "%s ཀྱི་མུང་ཆུང་"
 
 msgid "After %s"
-msgstr ""
+msgstr "%s ཀྱི་ཕྱི་མ"
 
 msgid "Export settings as XLS"
-msgstr ""
+msgstr "མཚན་རྟགས་ཚོགས་ཨཨར་ཨེཨཨི་ཨེཨས་ལ་འབྱུང་"
 
 msgid "Delete all items"
-msgstr ""
+msgstr "དངོས་པོ་ཚོགས་ཀུན་སུམ་པ་སུམ་པ་འབྱུང་"
 
 msgid "Delete this item"
-msgstr ""
+msgstr "དངོས་པོ་འདི་འབྱུང་"
 
 msgid "Record your voice"
-msgstr ""
+msgstr "རང་གི་སྐད་ཆ་རྒྱུན་འབེད།"
 
 msgid "No recording available"
-msgstr ""
+msgstr "རྒྱུན་འབེད་པ་མེད།"
 
 msgid "Works received"
-msgstr ""
+msgstr "ལས་འཇུག་ཚོགས་འབྱུང་"
 
 msgid "Class ID does not exist"
-msgstr ""
+msgstr "བསློབ་ཚན་གྱི་མཚན་རྒྱུ་མེད།"
 
 msgid "Without category"
-msgstr ""
+msgstr "སྡེབས་མེད་པ།"
 
 msgid "Incorrect score"
-msgstr ""
+msgstr "མི་རྒྱུན་འབྲས་བུ།"
 
 msgid "Correct score"
-msgstr ""
+msgstr "རྒྱུན་འབྲས་བུ།"
 
 msgid "Use custom score for all questions"
-msgstr ""
+msgstr "དཔེར་རྒྱུན་ཚོགས་ཀུན་ལ་རང་བཞིན་གྱི་འབྲས་བུ་འབྱུང་"
 
 msgid "You should add some items to your learning path, otherwise you won't be able to attach audio files to them"
-msgstr ""
+msgstr "རང་གི་སློབ་ཚན་ལ་རྒྱུན་འབེད་པ་འཐོམ་པའི་ཚོགས་མི་འགྱུར་ན་སྒྲ་ཡིག་ཆ་འཐོམ་པའི་ཚོགས་མི་འགྱུར།"
 
 msgid "Inactive days"
-msgstr ""
+msgstr "མི་འཆམས་པའི་ཉིན་ཚོགས།"
 
 msgid "Followed HR directors"
-msgstr ""
+msgstr "རྒྱུར་ལྷན་རྒྱུད་མཁན་རྒྱུག་གཅིག་གཅིག་གི་སྡེབས།"
 
 msgid "The text you entered doesn't match the picture."
-msgstr ""
+msgstr "འབྲི་བའི་ཚིག་ཚང་གཅིག་གི་གཞི་རྟེན་མཚོང་མི་མཚུངས།"
 
 msgid "Remove previous relationships"
-msgstr ""
+msgstr "མུང་ཆུང་གི་འབྲེལ་འབྱོར་འབྱུང་"
 
 msgid "Import list of HR directors into sessions"
-msgstr ""
+msgstr "རྒྱུར་ལྷན་རྒྱུད་མཁན་གྱི་ཐོ་རིམས་ཐུན་མོང་སློབ་ཚན་ལ་འབྱུང་"
 
 msgid "Followed students"
-msgstr ""
+msgstr "སློབ་ཕྱུག་རྒྱུག་གཅིག་གཅིག་གི་སྡེབས།"
 
 msgid "Followed teachers"
-msgstr ""
+msgstr "སློབ་མཁན་རྒྱུག་གཅིག་གཅིག་གི་སྡེབས།"
 
 msgid "Allow only files"
-msgstr ""
+msgstr "ཡིག་ཆ་ཙམ་རང་ལ་འབྱུང་"
 
 msgid "Allow only text"
-msgstr ""
+msgstr "ཚིག་ཚང་ཙམ་རང་ལ་འབྱུང་"
 
 msgid "Allow files or online text"
-msgstr ""
+msgstr "ཡིག་ཆ་ཡང་ན་ཨང་ཐོང་ཚིག་ཚང་རང་ལ་འབྱུང་"
 
 msgid "Document type"
-msgstr ""
+msgstr "ཡིག་ཆའི་རིགས།"
 
 msgid "Send an email to myself for testing purposes."
 msgstr ""
@@ -1354,7 +1354,7 @@ msgid "default year"
 msgstr ""
 
 msgid "default hour"
-msgstr ""
+msgstr "དམིགས་སྦྱོར་ཆུ་ཚོད་"
 
 msgid "minute"
 msgstr "སྐར་མ"
@@ -1507,148 +1507,148 @@ msgid "Terminate"
 msgstr "མཇུག་སྒྲུབ"
 
 msgid "Restart"
-msgstr ""
+msgstr "འགོགས་པའི་གནས་སློབ་"
 
 msgid "Completed"
-msgstr ""
+msgstr "རྫོགས་སྒྲུབ་བྱས་"
 
 msgid "Incomplete"
-msgstr ""
+msgstr "རྫོགས་མིན་པ་"
 
 msgid "Passed"
-msgstr ""
+msgstr "བསྒྲུབས་པ་"
 
 msgid "Failed"
-msgstr ""
+msgstr "མི་བསྒྲུབས་པ་"
 
 msgid "Previous"
-msgstr ""
+msgstr "སྔོན་པོ་"
 
 msgid "Next"
-msgstr ""
+msgstr "ཕྱིས་པ་"
 
 msgid "Chamilo SCORM player"
-msgstr ""
+msgstr "ཆ་མི་ལོ SCORM མཁན་པོ་"
 
 msgid "My progress"
-msgstr ""
+msgstr "ངའི་འབྲིང་ཆ་གཏོང་བ་"
 
 msgid "This course is empty."
-msgstr ""
+msgstr "འདིའི་སློབ་གཉེར་སྟོང་པ་ཡིན།"
 
 msgid "No status for this content"
-msgstr ""
+msgstr "འདིའི་གནས་སློབ་ལ་གནས་ཚུལ་མེད།"
 
 msgid "logged out from SCORM area"
-msgstr ""
+msgstr "SCORM་ས་ཆ་ནས་ཕྱིར་འབྲིང་"
 
 msgid "Close windows"
-msgstr ""
+msgstr "སྒོ་རྒྱབ་རྒྱུས་ཀྱི་ཁྱུད་"
 
 msgid "Browsed"
-msgstr ""
+msgstr "འཁོར་བརྒྱུད་"
 
 msgid "Back to normal screen"
-msgstr ""
+msgstr "མཚན་མོ་གཞན་དུ་ཕྱིར་འཛུལ་"
 
 msgid "Full screen"
-msgstr ""
+msgstr "ཁྱུད་སར་བརྒྱུད་"
 
 msgid "Not attempted"
-msgstr ""
+msgstr "མི་འབྲས་བརྩོན་"
 
 msgid "Local"
-msgstr ""
+msgstr "རང་གི་ས་ཆ་"
 
 msgid "Remote"
-msgstr ""
+msgstr "ཕྱོགས་གཉིས་ཀྱི་ས་ཆ་"
 
 msgid "Auto-detect"
-msgstr ""
+msgstr "རང་འགུགས་འཚོལ་"
 
 msgid "Total of completed learning objects"
-msgstr ""
+msgstr "རྫོགས་སྒྲུབ་བྱས་ཀྱི་སློབ་གཉེར་གྱི་གྲངས་ཀེ་རེ་"
 
 msgid "Are you sure you want to delete these steps?"
-msgstr ""
+msgstr "འདི་དང་པོའི་རིམ་པ་འབུབས་ནས་གཏོང་ཡོད་པ་ངེས་ཡིན་ནམ།"
 
 msgid "Authoring tool"
-msgstr ""
+msgstr "སློབ་གཉེར་རྩོམ་པའི་རྒྱུར་ཆས་"
 
 msgid "SCORM or AICC file to upload"
-msgstr ""
+msgstr "སློབ་གཉེར་རྩོམ་པའི SCORM པོ་ཏི་ཁ་ AICC ཡིག་སྦྱོར་སློབ་རྒྱུན་ལ་འབུགས་"
 
 msgid "Course location"
-msgstr ""
+msgstr "སློབ་གཉེར་གྱི་གནས་ས་"
 
 msgid "Upload local .zip package from the archive/ directory"
-msgstr ""
+msgstr "རྒྱུན་འཁོར་གྱི་སྦྱོར་སྒྲིག་ནང་གི་རྒྱུན་འཁོར་གྱི .zip ཡིག་སྦྱོར་རང་གི་ས་ཆ་ནས་འབུགས་"
 
 msgid "This learning object or activity is not SCORM compliant. That's why it is not exportable."
-msgstr ""
+msgstr "འདིའི་སློབ་གཉེར་ཡང་ན་སློབ་གཉེར་གྱི་གནས་སློབ SCORM བརྩོན་མིན་པ་ཡིན། འདི་ཕྱིར་ཕྱིར་ལེན་མི་འགུགས།"
 
 msgid "Move the current section"
-msgstr ""
+msgstr "དང་པོའི་རྒྱུད་འཁོར་འཛུལ་"
 
 msgid "Generic SCORM"
-msgstr ""
+msgstr "མཚན་མོ་གཞན་གྱི SCORM"
 
 msgid "The format of this package could not be recognized. Please check this is a valid package."
-msgstr ""
+msgstr "འདིའི་ཡིག་སྦྱོར་གྱི་རྣམ་པ་རེ་རེ་མངོན་སུམ་དུ་མ་བྱུང། ཡིག་སྦྱོར་ལེགས་པ་ཡིན་ནམ་ཞུས་རོགས།"
 
 msgid "Move the current forum"
-msgstr ""
+msgstr "དང་པོའི་མགྲོན་འཛུལ་"
 
 msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
-msgstr ""
+msgstr "བྱ་སྒོའི་ངོ་སྤྲོད། སློབ་གཉེར་གྱི་གནས་སློབ་གྱི་གནས་ལ་འགྱུར་བ་འབྱེད་རྒྱུ་སློབ་གཉེར་གྱི་གསལ་བསྒྲིག་ལ་འབྱེད་པ་ཡོད་ནམ་སློབ་གཉེར་གྱི་གནས་སློབ་ལ་ཉམས་མངོན་གྱུར་རོགས།"
 
 msgid "Please provide a subject or message"
-msgstr ""
+msgstr "དོན་ཚིག་ཡང་ན་གསུང་ཚིག་སྦྱོར་རོགས་"
 
 msgid "Messages"
-msgstr ""
+msgstr "གསུང་ཚིག་ཚུམ་"
 
 msgid "New message"
-msgstr ""
+msgstr "གསུང་ཚིག་གསར་པ་"
 
 msgid "Delete selected messages"
-msgstr ""
+msgstr "གོ་རྟོགས་གྱི་གསུང་ཚིག་ཚུམ་འབུབས་ནས་གཏོང་"
 
 msgid "Deselect all"
-msgstr ""
+msgstr "ཀུན་རང་མ་གོ་རྟོགས་"
 
 msgid "Reply to this message"
-msgstr ""
+msgstr "འདིའི་གསུང་ཚིག་ལ་འབྲིང་རེས་"
 
 msgid "Back to inbox"
-msgstr ""
+msgstr "སྨྲ་སྣོད་ཀྱི་སྙིང་གཅིག་ཏུ་ཕྱིར་འཛུལ་"
 
 msgid "The message has been sent to"
-msgstr ""
+msgstr "གསུང་ཚིག་འདི་འབུགས་ཡོད་པ་ལ་"
 
 msgid "Send to"
-msgstr ""
+msgstr "འབུགས་རྒྱུ་"
 
 msgid "myself"
-msgstr ""
+msgstr "ང་ཚོ་རང་ལ་"
 
 msgid "The id of the message to reply to is not valid."
-msgstr ""
+msgstr "འབྲིང་རེས་རྒྱུ་གསུང་ཚིག་གི་ངོ་སྤྲོད་ལེགས་མིན།"
 
 msgid "There was an error while trying to send the message."
-msgstr ""
+msgstr "གསུང་ཚིག་འབུགས་རྒྱུ་ལ་འཁུར་པའི་སྐབས་ན་འཁུར་འཁྲུལ་གྱུར།"
 
 msgid "Are you sure you want to delete the selected messages?"
-msgstr ""
+msgstr "གོ་རྟོགས་གྱི་གསུང་ཚིག་ཚུམ་འབུབས་ནས་གཏོང་ཡོད་པ་ངེས་ཡིན་ནམ།"
 
 msgid "The selected messages have been deleted"
-msgstr ""
+msgstr "གོ་རྟོགས་གྱི་གསུང་ཚིག་ཚུམ་འབུབས་ནས་གཏོང་ཡོད།"
 
 msgid "Please enter a title"
-msgstr ""
+msgstr "མཚན་བྱང་སྦྱོར་རོགས་"
 
 msgid "Type your message here"
-msgstr ""
+msgstr "འདིར་ཁྱེད་ཀྱི་གསུང་ཚིག་སྦྱོར་"
 
 msgid "The message has been deleted"
 msgstr "གླེང་འཛིན་འབུར་སོང་།"
@@ -6451,154 +6451,154 @@ msgid "Published on"
 msgstr ""
 
 msgid "Add an announcement"
-msgstr ""
+msgstr "བརྡ་འབྱུང་གླེང་འབྱེད་པ་ལུགས་གསལ་བསྒྲིལ།"
 
 msgid "Clear list of announcements"
-msgstr ""
+msgstr "བརྡ་འབྱུང་གླེང་འབྱེད་པ་གླེང་གཞི་སུབས་པ།"
 
 msgid "Message from the trainer"
-msgstr ""
+msgstr "སློབ་སྒྲོན་གྱི་སྨྲ་བ།"
 
 msgid " and emailed to registered learners"
-msgstr ""
+msgstr "དང་རྒྱུན་འཁོར་སློབ་མ་ཚོ་ལ་སྨྲ་སློབ་གཏོང་བ།"
 
 msgid "Send this announcement by email to selected groups/users"
-msgstr ""
+msgstr "བརྡ་འབྱུང་གླེང་འབྱེད་པ་འདི་སྨྲ་སློབ་ཀྱིས་གོ་རིམ་འཚོང་འབྱེད་པ／མི་ཚོ་ཚོ་ལ་གཏོང་བ།"
 
 msgid "On"
-msgstr ""
+msgstr "ཨོང་།"
 
 msgid "registered users of the site"
-msgstr ""
+msgstr "ནང་རྒྱུན་འཁོར་གྱི་རྒྱུན་འཁོར་མི་ཚོ།"
 
 msgid "have unvalid or no e-mail address"
-msgstr ""
+msgstr "མི་ཚོ་ཀུན་གྱི་སྨྲ་སློབ་གཏོང་གོ་མེད་ཡོད་ནས་ཡོད་པ།"
 
 msgid "Modifies this announcement"
-msgstr ""
+msgstr "བརྡ་འབྱུང་གླེང་འབྱེད་པ་འདི་སྒྲིག་བྱས་པ།"
 
 msgid "Warnings to some users"
-msgstr ""
+msgstr "མི་ཚོ་ཀུན་ལ་གྲོགས་སྨྲ་བ།"
 
 msgid "Selected Users"
-msgstr ""
+msgstr "མི་ཚོ་འཚོང་འབྱེད་པ"
 
 msgid "You must introduce the message text."
-msgstr ""
+msgstr "ཁྱེད་ཀྱིས་སྨྲ་བ་གཞི་སྨྲ་བ་འབྱུང་མི་འབྱེད་ཆེས།"
 
 msgid "You must select some users."
-msgstr ""
+msgstr "ཁྱེད་ཀྱིས་མི་ཚོ་འཚོང་འབྱེད་ཆེས།"
 
 msgid "Message sent to users"
-msgstr ""
+msgstr "མི་ཚོ་ལ་སྨྲ་བ་གཏོངས་པ།"
 
 msgid "Messages to selected users"
-msgstr ""
+msgstr "མི་ཚོ་འཚོང་འབྱེད་པ་ལ་སྨྲ་བ"
 
 msgid "To send a message, select groups of users (see G) or single users from the list on the left."
-msgstr ""
+msgstr "སྨྲ་བ་གཏོང་ལ་གོ་རིམ་མི་ཚོ་འཚོང་འབྱེད་པ（གཟུགས་གཟུགས་ལུས་ལུགས་གསལ་）ཡང་ན་གཡས་ལུགས་གསལ་གྱི་མི་ཚོ་གཅིག་ལུགས་འཚོང་འབྱེད།"
 
 msgid "The message has been sent to the selected learners"
-msgstr ""
+msgstr "སྨྲ་བ་འཚོང་འབྱེད་པ་སློབ་མ་ཚོ་ལ་གཏོངས་པ།"
 
 msgid "selected users of the site"
-msgstr ""
+msgstr "ནང་རྒྱུན་འཁོར་གྱི་མི་ཚོ་འཚོང་འབྱེད་པ"
 
 msgid "Message to selected groups"
-msgstr ""
+msgstr "གོ་རིམ་འཚོང་འབྱེད་པ་ལ་སྨྲ་བ"
 
 msgid "selected groups"
-msgstr ""
+msgstr "གོ་རིམ་འཚོང་འབྱེད་པ"
 
 msgid "Message"
-msgstr ""
+msgstr "སྨྲ་བ"
 
 msgid "All announcements have been deleted"
-msgstr ""
+msgstr "བརྡ་འབྱུང་གླེང་འབྱེད་པ་ཀུན་སུབས་པ།"
 
 msgid "The announcement has been moved"
-msgstr ""
+msgstr "བརྡ་འབྱུང་གླེང་འབྱེད་པ་འགྲོ་བྱས་པ།"
 
 msgid "There are no announcements."
-msgstr ""
+msgstr "བརྡ་འབྱུང་གླེང་འབྱེད་པ་མེད་པ།"
 
 msgid "Select Everybody"
-msgstr ""
+msgstr "མི་ཚོ་ཀུན་འཚོང་འབྱེད་པ"
 
 msgid "selected user groups"
-msgstr ""
+msgstr "མི་ཚོ་གོ་རིམ་འཚོང་འབྱེད་པ"
 
 msgid "Message from a learner"
-msgstr ""
+msgstr "སློབ་མ་གྱི་སྨྲ་བ"
 
 msgid "Title is required"
-msgstr ""
+msgstr "མགོ་མིང་ཉིད་ཉར་ཆས་པ།"
 
 msgid "Announcement sent by e-mail"
-msgstr ""
+msgstr "བརྡ་འབྱུང་གླེང་འབྱེད་པ་སྨྲ་སློབ་ཀྱིས་གཏོངས་པ"
 
 msgid "Announcement sent to the selected users"
-msgstr ""
+msgstr "བརྡ་འབྱུང་གླེང་འབྱེད་པ་མི་ཚོ་འཚོང་འབྱེད་པ་ལ་གཏོངས་པ"
 
 msgid "Send announcement"
-msgstr ""
+msgstr "བརྡ་འབྱུང་གླེང་འབྱེད་པ་གཏོང་བ"
 
 msgid "Edit announcement"
-msgstr ""
+msgstr "བརྡ་འབྱུང་གླེང་འབྱེད་པ་སྒྲིག་བྱས་པ"
 
 msgid "Line Number"
-msgstr ""
+msgstr "རིམ་པའི་གྲས།"
 
 msgid "line(s)"
-msgstr ""
+msgstr "རིམ་པ"
 
 msgid "Add new heading"
-msgstr ""
+msgstr "མགོ་མིང་གསར་པ་འབྱེད་པ"
 
 msgid "Teachers only"
-msgstr ""
+msgstr "སློབ་སྒྲོན་ཚོ་ཉིད།"
 
 msgid "Define Headings"
-msgstr ""
+msgstr "མགོ་མིང་ངེས་པ"
 
 msgid "change rights of"
-msgstr ""
+msgstr "ཐོབ་ཐང་སྒྲིག་བྱས་པ"
 
 msgid "has from now on <b>no</b> rights on this page"
-msgstr ""
+msgstr "ད་རྒྱུན་གྱིས་འཁོང་གིས་འདི་ལུགས་གསལ་ལུགས་གྱི <b>ཐོབ་ཐང་མེད་</b>ཡོད་པ།"
 
 msgid "has from now on <b>all</b> rights on this page"
-msgstr ""
+msgstr "ད་རྒྱུན་གྱིས་འཁོང་གིས་འདི་ལུགས་གསལ་ལུགས་གྱི <b>ཐོབ་ཐང་ཀུན་</b>ཡོད་པ།"
 
 msgid "Change role of"
-msgstr ""
+msgstr "རོལ་སློབ་སྒྲིག་བྱས་པ"
 
 msgid "is from now on"
-msgstr ""
+msgstr "ད་རྒྱུན་གྱིས་འཁོང་གིས"
 
 msgid "in this course"
-msgstr ""
+msgstr "འདི་སློབ་ཚན་ལུགས།"
 
 msgid "You have left some fields empty."
-msgstr ""
+msgstr "ཁྱེད་ཀྱིས་གཞི་སྒྲིག་གཞི་སྒྲིག་ཀུན་སྨྲ་སློབ་མི་འབྱེད་པ།"
 
 msgid "The login you chose"
-msgstr ""
+msgstr "ཁྱེད་ཀྱིས་འཚོང་འབྱེད་པ་ནང་འཛུལ་བ"
 
 msgid "is already in use. Choose another one."
-msgstr ""
+msgstr "འདི་ནང་རྒྱུན་འཁོར་ལུགས་ཡོད་པ། ཨང་གཅིག་འཚོང་འབྱེད།"
 
 msgid "Coach"
-msgstr ""
+msgstr "སློབ་སྒྲོན་ཁྱེར་"
 
 msgid "Groups management"
-msgstr ""
+msgstr "གོ་རིམ་འཇོག་སྤྱོད།"
 
 msgid "The selected users have been unsubscribed from the course"
-msgstr ""
+msgstr "མི་ཚོ་འཚོང་འབྱེད་པ་སློབ་ཚན་ནང་རྒྱུན་འཁོར་ལས་ཕྱིར་འབྱུང་བ།"
 
 msgid "This learner is subscribed in this training through a training session. You cannot edit his information"
-msgstr ""
+msgstr "འདི་སློབ་མ་འདི་སློབ་ཚན་གྱི་སློབ་ཚན་གྱི་རྒྱུན་འཁོར་ལུགས་རྒྱུན་འཁོར་ཡོད་པ། འཁོང་གི་གཞི་སྒྲིག་སྒྲིག་བྱས་མི་འཐུབ།"
 
 msgid "Are you sure you want to add this contact to your friends ?"
 msgstr ""
@@ -7651,154 +7651,154 @@ msgid "Please enter a score for each blank"
 msgstr ""
 
 msgid "use square brackets [...] to define one or more blanks"
-msgstr ""
+msgstr "ཀུང་གསུམ་གྱི་རྒྱབ་འབྱང་ [...] རྒྱུད་གཅིག་ལྷག་གྱི་སྤྲོད་ཚན་གཉིས་གཅིག་ལ་རྒྱུར་བཅུམ་སྟོན།"
 
 msgid "+answ"
-msgstr ""
+msgstr "+བྱང་ཆུམ་"
 
 msgid "-answ"
-msgstr ""
+msgstr "-བྱང་ཆུམ་"
 
 msgid "+elem"
-msgstr ""
+msgstr "+ཆ་རྒྱུན་"
 
 msgid "-elem"
-msgstr ""
+msgstr "-ཆ་རྒྱུན་"
 
 msgid "Please type your text below"
-msgstr ""
+msgstr "མེ་ཏོག་གྱི་གློག་ཚད་སྟོད་ཏུ་གྲུབ་པར་བྱའོ"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr ""
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>དཔེར་བརྗོད་པའི་གློག་ཚད་སྤྲོད་ཚན་གཏོང་བའི་ལས་རྩོལ། ལུས་ཀྱི་སྡུག་བསྡུས་ཀྱི་གྲུབ་པའི་སྒྲུབ་སྒྲུབ།</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ལོ་ཚོད་</strong></td>            <td width=\"75%\" style=\"\">[25] ལོ་ཉུང་</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ཁྱིམ་མཚོང་</strong></td>            <td style=\"\" text-align:=\"\">[M] (མ ཡང་ན་ F) </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ལུས་ཀྱི་སྡུག་བསྡུས་</strong></td>            <td style=\"\" text-align:=\"\">95 ཀེ་གི་</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>མཐོང་</strong></td>            <td style=\"vertical-align: top;\">1.81 མೀ་ཏེར་</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ལུས་ཀྱི་སྡུག་བསྡུས་ཀྱི་གྲུབ་པ་</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = ལུས་ཀྱི་སྡུག་བསྡུས་/མཐོང་<sup>2</sup> (བཅར་<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false;\"> ཝི་ཀི་པཌི་ཡ་གློག་ཚད་</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
-msgstr ""
+msgstr "གནས་ཚུལ་གྱི་གཏད་རྒྱབ་སྒྲིག་པར་བྱའོ"
 
 msgid "Contact the emergency services"
-msgstr ""
+msgstr "མཐོང་ཐོབ་ཀྱི་གྲས་ཆེན་པོ་དང་འབྲེལ་བརྒྱུད་བྱེད་པར་བྱའོ"
 
 msgid "First step"
-msgstr ""
+msgstr "དང་པོའི་གོ་རིམ་"
 
 msgid "Second step"
-msgstr ""
+msgstr "གཉིས་པའི་གོ་རིམ་"
 
 msgid "Please define the options"
-msgstr ""
+msgstr "མཆོག་ཚོད་རྒྱུན་གཉིས་གཅིག་ལ་རྒྱུར་བཅུམ་བྱའོ"
 
 msgid "Match them"
-msgstr ""
+msgstr "འབྲེལ་འབྱོར་བྱེད་པར་བྱའོ"
 
 msgid "Please fill the two lists below"
-msgstr ""
+msgstr "འོག་གི་དེབ་ཐོབ་གཉིས་ཀྱི་སྤྲོད་ཚན་གཏོང་བར་བྱའོ"
 
 msgid "Please type the text"
-msgstr ""
+msgstr "ཚིག་ཚིག་གྲུབ་པར་བྱའོ"
 
 msgid "Please define at least one blank with the selected marker"
-msgstr ""
+msgstr "མཆོག་གསལ་བའི་རྟགས་མཚོན་གྱིས་སྤྲོད་ཚན་གཅིག་ལ་རྒྱུར་བཅུམ་བྱའོ"
 
 msgid "Please type the question's answers"
-msgstr ""
+msgstr "དྲི་བའི་བྱང་ཆུམ་གྲུབ་པར་བྱའོ"
 
 msgid "Please check the correct answer"
-msgstr ""
+msgstr "བྱང་ཆུམ་ཡང་དག་པ་ལ་རྩོད་སྡེབས་བྱའོ"
 
 msgid "Please check one or more correct answers"
-msgstr ""
+msgstr "བྱང་ཆུམ་ཡང་དག་པ་གཅིག་ལྷག་ལ་རྩོད་སྡེབས་བྱའོ"
 
 msgid "Question list of the test"
-msgstr ""
+msgstr "དྲི་བའི་དེབ་ཐོབ་གཏན་ལ་ཕབས"
 
 msgid "Recycle existing questions"
-msgstr ""
+msgstr "དང་ལས་ཀྱི་དྲི་བ་སྒྲིག་འབྱེད་པར་བྱའོ"
 
 msgid "Correct test"
-msgstr ""
+msgstr "ཡང་དག་པའི་དྲི་བ་གཏན་ལ་ཕབས"
 
 msgid "Orphan questions"
-msgstr ""
+msgstr "མཆིམས་མེད་པའི་དྲི་བ་ཚོ"
 
 msgid "Questions list (there is no question so far)."
-msgstr ""
+msgstr "དྲི་བའི་དེབ་ཐོབ (བརྒྱུད་མེད་པའི་དྲི་བ་མེད།)"
 
 msgid "All tests"
-msgstr ""
+msgstr "དྲི་བ་གཏན་ལ་ཕབས་ཀུན"
 
 msgid "Go back to the test"
-msgstr ""
+msgstr "དྲི་བ་གཏན་ལ་ཕབས་ལ་ལོག་སློང་"
 
 msgid "Re-use in current test"
-msgstr ""
+msgstr "དང་ལས་ཀྱི་དྲི་བ་གཏན་ལ་ཕབས་ལ་སྒྲིག་འབྱེད་པར་བྱའོ"
 
 msgid "Tests management"
-msgstr ""
+msgstr "དྲི་བ་གཏན་ལ་ཕབས་ཀྱི་གཉེར་སྤྱོད་"
 
 msgid "Question / Answer management"
-msgstr ""
+msgstr "དྲི་བ / བྱང་ཆུམ་གཉེར་སྤྱོད་"
 
 msgid "Question not found"
-msgstr ""
+msgstr "དྲི་བ་མཐོང་མ་རེད་"
 
 msgid "Test not found or not visible"
-msgstr ""
+msgstr "དྲི་བ་གཏན་ལ་ཕབས་མཐོང་མ་རེད་ལྷག་མམངོན་མ་རེད་"
 
 msgid "You already answered the question"
-msgstr ""
+msgstr "ཁྱེད་ཀྱིས་དྲི་བའི་བྱང་ཆུམ་རྒྱུར་བཅུམ་བྱས་ཤིང་"
 
 msgid "Elements list"
-msgstr ""
+msgstr "ཆ་རྒྱུན་གྱི་དེབ་ཐོབ་"
 
 msgid "Corresponds to"
-msgstr ""
+msgstr "འབྲེལ་བརྒྱུད་བྱེད་པར་བྱའོ"
 
 msgid "Expected choice"
-msgstr ""
+msgstr "སྐྱོང་བའི་མཆོག་ཚོད་"
 
 msgid "Score for the test"
-msgstr ""
+msgstr "དྲི་བ་གཏན་ལ་ཕབས་ཀྱི་གྲུབ་པའི་སྒྲུབ་སྒྲུབ་"
 
 msgid "You have reached the maximum number of attempts for this test. Being a trainer, you can go on practicing but your Results will not be reported."
-msgstr ""
+msgstr "ཁྱེད་ཀྱིས་དྲི་བ་གཏན་ལ་ཕབས་ཀྱི་མཐོང་ཐོབ་གྱི་གྲུབ་པའི་སྒྲུབ་སྒྲུབ་ལ་འཆིང་བར་འབྱུང་། སློབ་སྒྲུན་པ་རེད་ན་སློབ་སྒྲུབ་ལ་སློབ་སྒྲུབ་བྱེད་ཐུབ་ལྷག་གྲུབ་པའི་སྒྲུབ་སྒྲུབ་གསལ་བར་མི་འགྱུར།"
 
 msgid "Exercise added"
-msgstr ""
+msgstr "ལས་རྩོལ་འབོད་པར་བྱས་"
 
 msgid "active"
-msgstr ""
+msgstr "ནུས་ལྡན་"
 
 msgid "inactive"
-msgstr ""
+msgstr "མི་ནུས་"
 
 msgid "Create questions"
-msgstr ""
+msgstr "དྲི་བ་འབོད་པར་བྱའོ"
 
 msgid "your test has been saved"
-msgstr ""
+msgstr "ཁྱེད་ཀྱི་དྲི་བ་གཏན་ལ་ཕབས་སྒྲིག་བསཀྲུན་བར་བྱས་"
 
 msgid "back to the edit page of questions"
-msgstr ""
+msgstr "དྲི་བའི་སྒྲིག་འཇུག་གཉིས་ལ་ལོག་སློང་"
 
 msgid "make test"
-msgstr ""
+msgstr "དྲི་བ་གཏན་ལ་ཕབས་འབོད་པར་བྱའོ"
 
 msgid "Describe assessment settings"
-msgstr ""
+msgstr "དཔྱད་རྒྱན་གྱི་གཏད་རྒྱབ་སྒྲིག་པར་བྱའོ"
 
 msgid "Create/Edit questions"
-msgstr ""
+msgstr "དྲི་བ་འབོད་པར་བྱའོ／སྒྲིག་འཇུག་བྱེད་པར་བྱའོ"
 
 msgid "subtitle"
-msgstr ""
+msgstr "མཐོང་ཚིག་"
 
 msgid "My answer"
-msgstr ""
+msgstr "ངའི་བྱང་ཆུམ་"
 
 msgid "+ answer"
-msgstr ""
+msgstr "+ བྱང་ཆུམ་"
 
 msgid "- answer"
-msgstr ""
+msgstr "- བྱང་ཆུམ་"
 
 msgid "Save test"
 msgstr "བརྟན་འཛིན་སྦྱངས།"
@@ -10920,8 +10920,8 @@ msgstr "ཡིན་"
 msgid "The address of"
 msgstr "གནས་གྲོགས་ཀྱི་"
 
-msgid "Your registration on%s "
-msgstr "ལ་ཁྱེད་ཀྱི་རྒྱ་སྤྲོད་ %s"
+msgid "Your registration on %s"
+msgstr ""
 
 msgid "This login is already taken. Use your browser's back button and choose another."
 msgstr "འཛུལ་ཕོ་འདི་རང་གིས་འབྲུག་རེ་ཞིག་ བྲའུ་ཛར་གྱི་ལོག་ལ་འགྲོ་བར་འབྲེལ་རེ་འབྲུག་རེ་གཞན་པ་འཚོལ་རེ་འབྱུང་"
@@ -12112,190 +12112,190 @@ msgid "Trainers Overview"
 msgstr ""
 
 msgid "User overview"
-msgstr ""
+msgstr "ལག་འབྲེལ་མཁན་སྤྱི་དོན་"
 
 msgid "User overview export options"
-msgstr ""
+msgstr "ལག་འབྲེལ་མཁན་སྤྱི་དོན་ཕྱིར་འབྲང་སློབ་སྙོང་"
 
 msgid "The following fields will also be exported"
-msgstr ""
+msgstr "འདིར་གྱུར་ཆས་གཞན་ཡང་ཕྱིར་འབྲངས་པར་བྱེད་པའི་རེད་"
 
 msgid "Total score obtained for tests"
-msgstr ""
+msgstr "དྲ་རྒྱུད་ལས་ཐོབ་པའི་སྡེབས་སྒྲིབ་རེ་"
 
 msgid "Total possible score for tests"
-msgstr ""
+msgstr "དྲ་རྒྱུད་ལས་སྦྱར་མི་ཐུབ་པའི་སྡེབས་སྒྲིབ་རེ་"
 
 msgid "Number of tests answered"
-msgstr ""
+msgstr "བྱས་པའི་དྲ་རྒྱུད་གྱུང་"
 
 msgid "Total score percentage for tests"
-msgstr ""
+msgstr "དྲ་རྒྱུད་ལས་སྡེབས་སྒྲིབ་རེ་སྙོམས་སྒྲིབ་རེ་"
 
 msgid "Forums Number"
-msgstr ""
+msgstr "མགྲམ་གཉིས་གྱུང་"
 
 msgid "Threads number"
-msgstr ""
+msgstr "མཐུད་འབྲེལ་གྱུང་"
 
 msgid "Posts number"
-msgstr ""
+msgstr "སློབ་སྙོང་གྱུང་"
 
 msgid "Connections to the chat during last %s days"
-msgstr ""
+msgstr "ཉེ་རིང་གི་ཉིན་རེ %s་ལ་གླེང་འབྲེལ་འབྲེལ་མཐུད་"
 
 msgid "Latest chat connection"
-msgstr ""
+msgstr "མཇུག་སྒོར་གྱི་གླེང་འབྲེལ་འབྲེལ་མཐུད་"
 
 msgid "Course Information"
-msgstr ""
+msgstr "བསློབ་སློབ་གཞུང་དོན་"
 
 msgid "No additional fields will be exported"
-msgstr ""
+msgstr "ཕྱིར་འབྲངས་པར་བྱེད་པའི་གཞན་གྱུར་ཆས་མེད་"
 
 msgid "Time in course"
 msgstr ""
 
 msgid "Average of all learners in all courses"
-msgstr ""
+msgstr "བསློབ་སློབ་ཐམས་ཅད་ཀྱི་སློབ་ཕྱུག་ཐམས་ཅད་ཀྱི་སྙོམས་"
 
 msgid "View minus"
-msgstr ""
+msgstr "མཉམ་སྦྱོར་མཆོག་ལྡེམ་"
 
 msgid "Report on resource"
-msgstr ""
+msgstr "དངུལ་ཆས་ལ་རྒྱུན་འབྲེལ་"
 
 msgid "no such Links category"
-msgstr ""
+msgstr "འཛུམ་འཛུན་མིན་པའི་མཚམས་སྦྱོར་མེད་"
 
 msgid "(syntax error in manifest file...)"
-msgstr ""
+msgstr "(ཉེར་སྒྲོག་ཡིག་ཆ་ལ་སྒྲིག་སྡེབས་འཁྲུལ་པ་)"
 
 msgid "(empty manifest file...)"
-msgstr ""
+msgstr "(སྦོང་ཉིད་ཉེར་སྒྲོག་ཡིག་ཆ་)"
 
 msgid "(no manifest file...)"
-msgstr ""
+msgstr "(ཉེར་སྒྲོག་ཡིག་ཆ་མེད་)"
 
 msgid "are not possible, it is not a folder..."
-msgstr ""
+msgstr "མི་ཐུབ་པ་རེད་ སྦྱར་མཁན་མིན་པར་རེད་"
 
 msgid "Upload HTT file"
-msgstr ""
+msgstr "HTT ཡིག་ཆ་སློབ་སྙོང་"
 
 msgid "New HTT file could not be opened (e.g. empty, too big)"
-msgstr ""
+msgstr "བརྙན་གསར་པའི HTT ཡིག་ཆ་འབྱེད་མི་ཐུབ (བདུད་སྦོང་ ཆེན་པོ་ལ་སོགས་པ་)"
 
 msgid "New HTT file has been uploaded"
-msgstr ""
+msgstr "བརྙན་གསར་པའི HTT ཡིག་ཆ་སློབ་སྙོངས་པར་བྱས་"
 
 msgid "HTT file upload has failed"
-msgstr ""
+msgstr "HTT ཡིག་ཆ་སློབ་སྙོང་མི་ཐུབ་པར་འགྱུར་"
 
 msgid "Remove HTT file"
-msgstr ""
+msgstr "HTT ཡིག་ཆ་སུངས་པ་"
 
 msgid "HTT file has been removed"
-msgstr ""
+msgstr "HTT ཡིག་ཆ་སུངས་པར་བྱས་"
 
 msgid "HTT file remove has failed"
-msgstr ""
+msgstr "HTT ཡིག་ཆ་སུངས་པ་མི་ཐུབ་པར་འགྱུར་"
 
 msgid "All entries removed for category"
-msgstr ""
+msgstr "མཚམས་སྦྱོར་ལས་ཐམས་ཅད་སུངས་པར་བྱས་"
 
 msgid "Index Words"
-msgstr ""
+msgstr "མདངས་ཚིག་ཚིག་"
 
 msgid "Open Main MDE"
-msgstr ""
+msgstr "གཙོ་བོའི MDE འབྱེད་པ་"
 
 msgid "lines"
-msgstr ""
+msgstr "ཟློག་ཚིག་"
 
 msgid "Play index.php"
-msgstr ""
+msgstr "index.php རྒྱུན་འབྲེལ་"
 
 msgid "No MD operations are possible"
-msgstr ""
+msgstr "MD བྱ་སྤྱོད་ཐམས་ཅད་མི་ཐུབ་པར་རེད་"
 
 msgid "Select a Links category"
-msgstr ""
+msgstr "འཛུམ་འཛུན་མཚམས་སྦྱོར་རྣམ་པ་སློབ་སྙོང་"
 
 msgid "Work with SCORM Directory"
-msgstr ""
+msgstr "SCORM མཚམས་སྦྱོར་ལ་ལས་འབྲེལ་"
 
 msgid "... SCORM Directory with SD-id (and split manifest - or leave empty)"
-msgstr ""
+msgstr "… SCORM མཚམས་སྦྱོར་ལ SD-id (དང་ཉེར་སྒྲོག་ཡིག་ཆ་འཁྱུད་པ - ཡང་ན་སྦོང་ཉིད་ལ་སྦྱར་)"
 
 msgid "root"
-msgstr ""
+msgstr "རྩ་བ་"
 
 msgid "Split manifests, and #MDe, if any:"
-msgstr ""
+msgstr "ཉེར་སྒྲོག་ཡིག་ཆ་འཁྱུད་པ་ MDe # རེ་"
 
 msgid "Manifest file replace has failed"
-msgstr ""
+msgstr "ཉེར་སྒྲོག་ཡིག་ཆ་ལོག་སྦྱོར་མི་ཐུབ་པར་འགྱུར་"
 
 msgid "Manifest file has been replaced"
-msgstr ""
+msgstr "ཉེར་སྒྲོག་ཡིག་ཆ་ལོག་སྦྱོར་བྱས་"
 
 msgid "New manifest file could not be opened (e.g. empty, too big)"
-msgstr ""
+msgstr "བརྙན་གསར་པའི་ཉེར་སྒྲོག་ཡིག་ཆ་འབྱེད་མི་ཐུབ (བདུད་སྦོང་ ཆེན་པོ་ལ་སོགས་པ་)"
 
 msgid "Replace manifest file"
-msgstr ""
+msgstr "ཉེར་སྒྲོག་ཡིག་ཆ་ལོག་སྦྱོར་"
 
 msgid "Table of contents successfully created."
-msgstr ""
+msgstr "དོན་ཚིགས་སྦྱོར་མཁན་སློབ་སྙོངས་པར་བྱས་"
 
 msgid "You can view your organisation"
-msgstr ""
+msgstr "ཁྱེད་ཀྱི་སྤྱོར་མཁན་མཉམ་སྦྱོར་མཁན་རེད་"
 
 msgid "Add to contents"
-msgstr ""
+msgstr "དོན་ཚིགས་ལ་སྦྱར་བ་"
 
 msgid "Generate table of contents"
-msgstr ""
+msgstr "དོན་ཚིགས་སྦྱོར་མཁན་སློབ་སྙོང་"
 
 msgid "Store documents"
-msgstr ""
+msgstr "ཡིག་ཆ་སྦས་པ་"
 
 msgid "No frames"
-msgstr ""
+msgstr "ཁྱབ་སྤྲོད་མེད་པ"
 
 msgid "Upload file"
-msgstr ""
+msgstr "ཡོད་ཚོག་སླུར་བ"
 
 msgid "This folder cannot be deleted"
-msgstr ""
+msgstr "འདི་གསུང་རྒྱུད་སུང་མི་རུང་བ"
 
 msgid "Change visibility"
-msgstr ""
+msgstr "སྐྱོན་གྱུར་བཀྱོད་པ"
 
 msgid "The visibility cannot be changed"
-msgstr ""
+msgstr "སྐྱོན་གྱུར་བཀྱོད་མི་རུང་བ"
 
 msgid "The document cannot be moved"
-msgstr ""
+msgstr "འདི་ཡོད་ཚོག་སླུར་མི་རུང་བ"
 
 msgid "Chamilo RAPID : PowerPoint conversion"
-msgstr ""
+msgstr "Chamilo RAPID : PowerPoint མཐུན་འགྱུར་བ"
 
 msgid "A PowerPoint to SCORM Courses converter"
-msgstr ""
+msgstr "PowerPoint མིན SCORM བོད་ཀྱི་སློབ་གཞུང་ལ་མཐུན་འགྱུར་བ"
 
 msgid "Go"
-msgstr ""
+msgstr "འགྲོ་བ"
 
 msgid "The quota for this course is"
-msgstr ""
+msgstr "འདི་སློབ་གཞུང་གྱི་སྙོམས་འབྲིང་གི་གླེང་གཞིག་ནི"
 
 msgid "delete"
-msgstr ""
+msgstr "སུང་བ"
 
 msgid "Space Available"
-msgstr ""
+msgstr "གནས་སྟོངས་ཡོད་པ"
 
 msgid "This course currently uses"
 msgstr "བསླམ་གཞུང་འདི་སྤྱི་ཚོགས་ལ་སྤྱོད་པའི་གནས་ཚུལ་འདི་ལ་གཏོང་བར་འགྱུར།"
@@ -12448,13 +12448,13 @@ msgid "It's the table of content"
 msgstr "དེ་ནང་ཚིགས་འཁྲི་ཡིན།"
 
 msgid "Your instructor"
-msgstr ""
+msgstr "ཁྱོད་ཀྱི་སློབ་བྱེད་པ་པོ"
 
 msgid "Dialog on the bottom with a trainer"
-msgstr ""
+msgstr "འབྲུག་སྦྱོར་གྱི་སློབ་བྱེད་པ་པོ་དང་འབྲེལ་བ"
 
 msgid "Production"
-msgstr ""
+msgstr "བྱས་རྒྱུ"
 
 msgid "Attended production description"
 msgstr "མཁན་པོའི་སྐོར་གསུམ་སློབ་གཏོན་གྱི་སྙིང་པོ།"
@@ -12607,109 +12607,109 @@ msgid "Learner wonder"
 msgstr "སློབ་གཡོག་གྱི་རྨོངས་པ།"
 
 msgid "Learner wonder description"
-msgstr ""
+msgstr "སློབ་པ་པོའི་རྨིག་སྡུད་ངེས་བཀྱོད"
 
 msgid "Phase timeline"
-msgstr ""
+msgstr "རིམ་པའི་གྲུ་གྲུ་གྲུ"
 
 msgid "3 lists with an relational arrow"
-msgstr ""
+msgstr "འབྲེལ་འབྱོར་གྱི་མདུད་རྩིག་དང་གྲུ་གསུམ་པ"
 
 msgid "Stop and think"
-msgstr ""
+msgstr "འགོག་པ་དང་སེམས་པ་འཁྲིལ་བ"
 
 msgid "Layout encouraging to stop and think"
-msgstr ""
+msgstr "འགོག་པ་དང་སེམས་པ་འཁྲིལ་བའི་སྦྱོར་བ"
 
 msgid "Create template"
 msgstr ""
 
 msgid "Shared folder"
-msgstr ""
+msgstr "སྤྱོད་འབྲེལ་གྱི་གསུང་རྒྱུད"
 
 msgid "Create the folder"
-msgstr ""
+msgstr "གསུང་རྒྱུད་བཞེད་པ"
 
 msgid "INFORMATION VISIBLE TO THE TEACHER ONLY:\nThis folder contains the default archives. You can clear files or add new ones, but if a file is hidden when it is inserted in a web document, the students will not be able to see it in this document. When inserting a file in a web document, first make sure it is visible. The folders can remain hidden."
-msgstr ""
+msgstr "སློབ་བྱེད་པ་པོ་ཙམ་ལ་མཉན་པའི་ངོ་ཤེས་ཡོད་པ:\nའདི་གསུང་རྒྱུད་གྱི་སྦྱོངས་རྒྱུན་གྱི་སྙིང་པོ་ཡོད་པ་ཡིན། ཁྱེད་ཀྱིས་ཡོད་ཚོག་སུང་རྒྱུ་རུང་སྟེ་གསར་པ་བཏོན་རྒྱུ་རུང་སྟེ། བུམ་གཏན་གྱི་ནང་དུ་སླུར་རྩོམས་སྟེ་སྦས་པ་ཡིན་ན་སློབ་པ་པོ་རྣམས་ཀྱིས་འདི་ཡོད་ཚོག་མཉན་མི་རུང་བ། བུམ་གཏན་གྱི་ནང་དུ་ཡོད་ཚོག་སླུར་རྩོམས་སྟེ་སྦས་པ་མ་ཡིན་པ་མཐོང་རྒྱུ། གསུང་རྒྱུད་སྦས་པ་རྟེན་རུང་སྟེ།"
 
 msgid "This folder contains the files that other learners (or yourself) sent into a course through the editor (if they didn't do it from the groups tool). By default, they will be visible by any trainer, but will be hidden from other learners (unless they access the files directly). If you make one user folder visible, other users will see all its content."
-msgstr ""
+msgstr "འདི་གསུང་རྒྱུད་གྱི་ནང་དུ་སློབ་པ་པོ་རྣམས་ཀྱིས་རྩོམ་རྒྱུ་རྒྱུ་ལ་སློབ་གཞུང་ལ་སྦྱར་རྩོམས་པའི་ཡོད་ཚོག་ཡོད་པ་ཡིན། སློབ་གྲུམས་ཀྱི་ནང་ནས་མིན་ན་ཁྱེད་རང་གིས་རྒྱུ་རྒྱུ་ཡིན། སྦྱོངས་རྒྱུ་ལ་སློབ་བྱེད་པ་པོ་རྣམས་ཀྱིས་མཉན་པ་ཡིན་ན་སློབ་པ་པོ་རྣམས་ཀྱིས་སྦས་པ་ཡིན། མི་གཅིག་གི་གསུང་རྒྱུད་མཉན་པ་བཀྱོད་ན་མི་རྣམས་ཀྱིས་ནང་གི་རྒྱུན་མཉན་པ་ཡིན།"
 
 msgid "Template's icon"
-msgstr ""
+msgstr "དཔེ་རྟེན་གྱི་བརྡ་རྟེན"
 
 msgid "multiple users have"
-msgstr ""
+msgstr "མི་མང་པོ་ཡོད་པ"
 
 msgid "no such learner with"
-msgstr ""
+msgstr "འདི་ལྷག་མི་ཡོད་པ་མེད་པ"
 
 msgid "name does not contain any recipient-id"
-msgstr ""
+msgstr "མིང་ལ་སློབ་པ་པོའི་ངོས་འཛིན་མེད་པ"
 
 msgid "name does not end with"
-msgstr ""
+msgstr "མིང་འདི་དང་མཉམ་པ་མེད་པ"
 
 msgid "name does not start with"
-msgstr ""
+msgstr "མིང་འདི་འཁོར་ལོ་མེད་པ"
 
 msgid "no name, or extension not 1-4 letters or digits"
-msgstr ""
+msgstr "མིང་མེད་པ་ལྷག་མིན་རྒྱུ་རྒྱུ་ཡིན་ན་ཡིག་འབྲུ་ཨ་ཡོད་པ་ལྷག་མིན་རྒྱུ་རྒྱུ་ཡིན་ན"
 
 msgid "Mailing zipfile must not contain duplicate files - it will not be sent"
-msgstr ""
+msgstr "བརྒྱུད་སྦྱར་གྱི་ཡོད་ཚོག་གཅིག་ཀུན་གྱི་ནང་དུ་ཡོད་ཚོག་གཅིག་ཀུན་གྱི་ནང་དུ་མིན་རུང་བ - མི་སྦྱར་རྒྱུ"
 
 msgid "Mailing zipfile must not contain php files - it will not be sent"
-msgstr ""
+msgstr "བརྒྱུད་སྦྱར་གྱི་ཡོད་ཚོག་གཅིག་ཀུན་གྱི་ནང་དུ php་ཡོད་ཚོག་མེད་པ - མི་སྦྱར་རྒྱུ"
 
 msgid "Mailing zipfile is empty or not a valid zipfile"
-msgstr ""
+msgstr "བརྒྱུད་སྦྱར་གྱི་ཡོད་ཚོག་སྟོང་པ་ཡིན་ན་ལྷག་མིན་རྒྱུ་རྒྱུ་ཡིན"
 
 msgid "Mailing must be zipfile with STUDENTID or LOGINNAME"
-msgstr ""
+msgstr "བརྒྱུད་སྦྱར་གྱི་ཡོད་ཚོག་སློབ་པ་པོའི་ངོས་འཛིན་ལྷག་མིན་རྒྱུ་རྒྱུ་ཡིན"
 
 msgid "Send content files to individuals?"
-msgstr ""
+msgstr "ཡོད་ཚོག་གཅིག་ཀུན་མི་རྣམས་ལ་སྦྱར་རྒྱུ?"
 
 msgid "Mailing content files have not yet been sent out..."
-msgstr ""
+msgstr "བརྒྱུད་སྦྱར་གྱི་ཡོད་ཚོག་གཅིག་ཀུན་སྦྱར་མི་རྒྱུ..."
 
 msgid "---Mailing---"
-msgstr ""
+msgstr "---བརྒྱུད་སྦྱར---"
 
 msgid "Mailing"
-msgstr ""
+msgstr "བརྒྱུད་སྦྱར"
 
 msgid "sender"
-msgstr ""
+msgstr "སྦྱར་བ་པོ"
 
 msgid "filesize"
-msgstr ""
+msgstr "ཡོད་ཚོག་གི་རྒྱུ་རྒྱུ"
 
 msgid "Allow unsubscription from platform"
-msgstr ""
+msgstr "བརྒྱུད་སྦྱར་གྱི་ནང་ནས་ཕྱིར་འབྲེལ་རྒྱུ་རུང་བ"
 
 msgid "Overwrite previous versions of same document?"
-msgstr ""
+msgstr "ཡོད་ཚོག་གཅིག་ཀུན་གྱི་སྔོན་གྱི་རྒྱུ་རྒྱུ་ལ་བསྐྲུན་རྒྱུ?"
 
 msgid "on"
-msgstr ""
+msgstr "ལ་སྟེ"
 
 msgid "Drag and drop an element here"
-msgstr ""
+msgstr "འདིར་ཆོས་རྒྱུ་འཁྱུད་པ་དང་འབབ་པ"
 
 msgid "Can't create the directory. Please contact your system administrator."
-msgstr ""
+msgstr "གསུང་རྒྱུད་བཞེད་མི་རུང་བ། ཁྱེད་ཀྱི་རྒྱུད་ཁྲིམ་ལྡོག་པ་པོ་དང་འབྲེལ་རྒྱུ།"
 
 msgid "You didn't specify a file to upload."
-msgstr ""
+msgstr "ཁྱེད་ཀྱིས་སླུར་བའི་ཡོད་ཚོག་མངོན་མི་བཀྱོད།"
 
 msgid "Please select a user to send the file to."
-msgstr ""
+msgstr "ཡོད་ཚོག་སྦྱར་བའི་མི་མངོན་རྒྱུ།"
 
 msgid "Submit failed: bad form data. Please contact your system administrator."
-msgstr ""
+msgstr "འབྲུག་སྦྱོར་མི་རྒྱུ: འབྲུག་སྦྱོར་གྱི་རྒྱུ་རྒྱུ་མིན་རྒྱུ། ཁྱེད་ཀྱི་རྒྱུད་ཁྲིམ་ལྡོག་པ་པོ་དང་འབྲེལ་རྒྱུ།"
 
 msgid "An error has occurred. Please contact your system administrator."
 msgstr ""
@@ -12862,154 +12862,154 @@ msgid "Mailing cannot be overwritten by non-mailing and vice-versa"
 msgstr ""
 
 msgid "Mailing cannot be combined with other recipients"
-msgstr ""
+msgstr "མེལ་འབྲེལ་མི་ཐུབ་གཅིག་ལྷག་གི་སྐྱབས་མཁན་ཚོ་དང་སྦྲེལ་མི་ཐུབ།"
 
 msgid "Just Upload cannot be combined with other recipients"
-msgstr ""
+msgstr "ཁ་སློང་རོལ་མི་ཐུབ་གཅིག་ལྷག་གི་སྐྱབས་མཁན་ཚོ་དང་སྦྲེལ་མི་ཐུབ།"
 
 msgid "By enabling this option, you allow any user to definitively remove his own account and all data related to it from the platform. This is quite a radical action, but it is necessary for portals opened to the public where users can auto-register. An additional entry will appear in the user profile to unsubscribe after confirmation."
-msgstr ""
+msgstr "འདི་ཡན་ལག་འབྱེད་ནས་། རིག་གནས་ལ་གཅིག་གི་སྐྱབས་མཁན་གཅིག་གི་རང་གི་རེའུ་མཚན་དང་འབྲེལ་བའི་རིགས་ཀུན་རྒྱག་གཏོང་བར་རང་དབང་ཐོབ་པར་འགྱུར། འདི་ནི་ཤུགས་ཆེན་པོའི་ལས་རྒྱུན་ཡིན་ན་ཡང་། རང་འབྲེལ་ཐུབ་པའི་སྐྱབས་མཁན་ཚོ་མཐོང་བའི་སྡེ་ཚན་ཚོར་གཅིག་རེད། བསྡུས་ནས་འབྲེལ་མེད་དུ་འབྱུང་ནས་སྐྱབས་མཁན་གྱི་མཚན་འཁོར་ལ་གཅིག་ལྷག་འབྱུང་རྒྱུ་ཡིན།"
 
 msgid "A new file has been sent in the dropbox"
-msgstr ""
+msgstr "མུར་འབུམ་ནང་དུ་ཡང་སྤྲོད་ཡོད་པའི་གཞན་པའི་ཡིག་འབྲུ་གཅིག་འབྱུང་།"
 
 msgid "A new file has been sent to the Dropbox"
-msgstr ""
+msgstr "མུར་འབུམ་ལ་ཡང་སྤྲོད་ཡོད་པའི་གཞན་པའི་ཡིག་འབྲུ་གཅིག་འབྱུང་།"
 
 msgid "Add / Edit"
-msgstr ""
+msgstr "ཁ་སློང / བསྲུབ་འབྱེད།"
 
 msgid "This folder is empty"
-msgstr ""
+msgstr "འདིའི་སྣོད་སྦྱར་སྦོམ་པོ་ཡིན།"
 
 msgid "Editing exercise cause problems in Learning Path"
-msgstr ""
+msgstr "བསྲུབ་འབྱེད་བྱས་པའི་ལས་འབྲེལ་འབྲེལ་མཐུན་ལ་གནོད་པ་འབྱུང་།"
 
 msgid "The folder has been deleted"
-msgstr ""
+msgstr "སྣོད་སྦྱར་འབུམ་ཆུང་བའི་རྒྱུན་འབྱུང་།"
 
 msgid "Learning Object Title"
-msgstr ""
+msgstr "བསམ་གཏན་གྱི་དོན་ཚིག་གི་མཚན་བྱང་།"
 
 msgid "To store this information, press Store"
-msgstr ""
+msgstr "འདིའི་གནས་ཚུལ་སྔོན་དུ་བཞག་པར་གཏོང་བ། བཞག་གཏོང་"
 
 msgid "e.g. Bachelor of ..."
-msgstr ""
+msgstr "བཀྲ་ཤིས་ཀྱི་སྙིང་རྗེ་ཅན་གྱི་སྐོར་..."
 
 msgid "e.g. provided the source is acknowledged"
-msgstr ""
+msgstr "བྱུང་ཁུངས་གསལ་བའི་རྒྱུ་མཆིའི་སྐོར་"
 
 msgid "Script is not enabled in your browser, please ignore the screen part below this text, it won't work..."
-msgstr ""
+msgstr "འདིའི་འབྲོ་སྒྲོམ་ལ་སྐྲིབཊ་མི་འབྱེད། འདིའི་ཚིག་འབྲི་འབྲུ་ལྷག་མཇུག་གི་གཟུགས་ཚུལ་མཉན་པ་མི་འབྱེད། མི་འབྱེད་པར་བྱོས་ཤིག་..."
 
 msgid "the language in which this learning object was made"
-msgstr ""
+msgstr "འདིའི་བསམ་གཏན་གྱི་དོན་ཚིག་གི་སྐད་ཡིག་"
 
 msgid "Identifier"
-msgstr ""
+msgstr "མཚན་རྒྱུན"
 
 msgid "unique identification for this learning object, composed of letters, digits, _-.()'!*"
-msgstr ""
+msgstr "འདིའི་བསམ་གཏན་གྱི་དོན་ཚིག་གི་གཅིག་ཀྱི་མཚན་རྒྱུན། ཀལ་རྒྱུ་སྒྲ་སྦྱོར་དང་ངར་སྒྲ་སྦྱོར་ _-.()'!* བཅས་པའི་སྦྱོར་བ།"
 
 msgid "title or name, and language of that title or name"
-msgstr ""
+msgstr "མཚན་བྱང་གམ་མинг་དང་འདིའི་སྐད་ཡིག་"
 
 msgid "description or comment, and language used for describing this learning object"
-msgstr ""
+msgstr "བསམ་གཏན་གྱི་དོན་ཚིག་གསལ་བའི་སྐོར་གམ་འཁོར་སྒྲོམ་དང་འདིའི་བསམ་གཏན་གྱི་དོན་ཚིག་གསལ་བའི་སྐད་ཡིག་"
 
 msgid "Keyword"
-msgstr ""
+msgstr "མདངས་ཚིག་"
 
 msgid "comma-separated (letters, digits, -.)"
-msgstr ""
+msgstr "མཚམས་སྦྱར་རྒྱུ་སྒྲ་སྦྱོར་དང་ངར་སྒྲ་སྦྱོར་ -."
 
 msgid "Coverage"
-msgstr ""
+msgstr "བྱུང་ཁུངས་ཀྱི་སྐོར་"
 
 msgid "for example bachelor of xxx: yyy"
-msgstr ""
+msgstr "བཀྲ་ཤིས་ཀྱི་སྙིང་རྗེ་ཅན་གྱི་སྐོར་ xxx: yyy"
 
 msgid "If you change the description language, do not add keywords at the same time."
-msgstr ""
+msgstr "བསམ་གཏན་གྱི་དོན་ཚིག་གི་སྐད་ཡིག་ལོག་གཅིག་ནས་མདངས་ཚིག་གཅིག་སྦྲེལ་མི་འབྱེད།"
 
 msgid "URL/URI"
-msgstr ""
+msgstr "URL/URI"
 
 msgid "click to open object"
-msgstr ""
+msgstr "བསམ་གཏན་གྱི་དོན་ཚིག་འབྱེད་པར་འཁྱིལ།"
 
 msgid "Store"
-msgstr ""
+msgstr "བཞག་གཏོང་"
 
 msgid "Do you *really* want to delete all metadata?"
-msgstr ""
+msgstr "མཚན་འཁོར་ཀུན་རྒྱག་གཏོང་སླད་དུ་རེ་རེ་འདོད་ཡིན་ནམ།"
 
 msgid "Create"
-msgstr ""
+msgstr "བྱས་ཤིག་"
 
 msgid "obsolete entries removed for category"
-msgstr ""
+msgstr "དབྱེ་བའི་སྡེ་ཚན་གྱི་ནང་ནས་ནང་ལྷག་གྱུར་པའི་རྒྱུན་མ་ཡིན་པ་རྒྱག་གཏོང་"
 
 msgid " - duplicate categorynames were removed from the list!"
-msgstr ""
+msgstr " - དབྱེ་བའི་སྡེ་ཚན་གྱི་མཚན་བྱང་གཅིག་ལྷག་གྱུར་པ་ལྡེམིགས་ལྷག་ནས་རྒྱག་གཏོང་!"
 
 msgid "Work with Links category named"
-msgstr ""
+msgstr "མཚན་མཚོད་ཀྱི་སྡེ་ཚན་གྱི་མཚན་བྱང་དང་ལས་འབྲེལ།"
 
 msgid "Add new glossary term"
-msgstr ""
+msgstr "མདངས་ཚིག་གསར་པ་ཁ་སློང་"
 
 msgid "Term"
-msgstr ""
+msgstr "མདངས་ཚིག་"
 
 msgid "Term definition"
-msgstr ""
+msgstr "མདངས་ཚིག་གི་ངོས་བཟང་"
 
 msgid "Term removed"
-msgstr ""
+msgstr "མདངས་ཚིག་རྒྱག་གཏོང་"
 
 msgid "Term updated"
-msgstr ""
+msgstr "མདངས་ཚིག་གསར་བསྒྲུབ་"
 
 msgid "Do you really want to delete this term"
-msgstr ""
+msgstr "འདིའི་མདངས་ཚིག་རྒྱག་གཏོང་སླད་དུ་རེ་རེ་འདོད་ཡིན་ནམ"
 
 msgid "Save term"
-msgstr ""
+msgstr "མདངས་ཚིག་སྔོན་དུ་བཞག་"
 
 msgid "Update term"
-msgstr ""
+msgstr "མདངས་ཚིག་གསར་བསྒྲུབ་"
 
 msgid "Edit term"
-msgstr ""
+msgstr "མདངས་ཚིག་བསྲུབ་འབྱེད་"
 
 msgid "Delete term"
-msgstr ""
+msgstr "མདངས་ཚིག་རྒྱག་གཏོང་"
 
 msgid "Pre-defined"
-msgstr ""
+msgstr "མུང་སྦྱོར་བའི་སྡེ་ཚན་"
 
 msgid "Term added"
-msgstr ""
+msgstr "མདངས་ཚིག་ཁ་སློང་"
 
 msgid "You must enter a term"
-msgstr ""
+msgstr "མདངས་ཚིག་འབྲི་མི་འཐུབ།"
 
 msgid "You must enter a term definition"
-msgstr ""
+msgstr "མདངས་ཚིག་གི་ངོས་བཟང་འབྲི་མི་འཐུབ།"
 
 msgid "This glossary term already exists. Please change the term name."
-msgstr ""
+msgstr "འདིའི་མདངས་ཚིག་མདངས་ཚིག་གཅིག་ཡོད། མདངས་ཚིག་གྱི་མཚན་བྱང་ལོག་གཅིག་ཤིག་"
 
 msgid "Glossary management"
-msgstr ""
+msgstr "མདངས་ཚིག་གི་གཉེར་སྤྱོད་"
 
 msgid "The term has moved"
-msgstr ""
+msgstr "མདངས་ཚིག་འགྲོ་བའི་རྒྱུན་འབྱུང་"
 
 msgid "Forums Help"
-msgstr ""
+msgstr "མཚན་མཚོད་གྱི་གྲོས་སྤྱོད་"
 
 msgid "<p> The forum is an discussion tool for asynchronous written work.  In contrast to e-mail, a forum is for public, or semi-public, group discussion. </p>To use the Chamilo forum, members can simply use their browser - they do not require any distinct client software. </p>To organize forums, click on the Forums tool. Discussions are organized hierarchically according to the following structure: </ p><b> Category> Forum> Topic> Post</ b> </ p> To ensure members can participate in the forum tidily and effectively, it is essential in the first instance to create categories and forums; it's then up to the participants to create topics and posts. By default, the forum contains a single (public) category, an example topic and an example post. You can add forums to the category,  change its title or create other categories within which you could then create new forums. (Don't confuse categories and forums, and remember that a category that contains no forum is useless and is not displayed.)</p>\n<p>The forum description might include a list of its members, a definition of its purpose, a target a task, a theme etc.</p><p>Group forums should not be created via the Forum tool but instead via the Groups tool, where you can determine whether your group forums should be private or public, at the same time providing a location for sharing groups of documents.</p><b> Teaching Tips</ b></ p> A learning forum is not quite the same as the forums you are used to seeing on the internet. For one thing, it is not possible for learners to alter their posts once they have been published as the course is logically archived to allow tracking of what has been said in the past. Furthermore, Chamilo forums allow for specific uses  relevant to teaching. For example, some teachers/trainers publish corrections directly within forums in the following way: <li> A learner is asked to post a report directly into the forum, </ li> The teacher corrects it by clicking Edit (yellow pencil) and marking it using the graphics editor (color, underlining, etc.) </ li> Finally, other learners benefit from viewing the corrections was made on the production of one of of them, </ li> Note that the same principle can be applied between learners, but will require his copying/pasting the message of his fellow student because students / trainees can not edit one another's posts. <. li> </ ul>"
 msgstr ""
@@ -13162,199 +13162,199 @@ msgid "No survey available"
 msgstr ""
 
 msgid "has been published"
-msgstr ""
+msgstr "བརྙན་འགྱུར་བྱས་ཡོད།"
 
 msgid "Create from existing survey"
-msgstr ""
+msgstr "མཚོན་འགྱིག་ལས་སྤྲོད་པ་བཟོ།"
 
 msgid "Search a survey"
-msgstr ""
+msgstr "མཚོན་འགྱིག་ལུ་འབྲོག།"
 
 msgid "Survey(s) of all courses"
-msgstr ""
+msgstr "ཏོག་ཚན་རེ་རེའི་མཚོན་འགྱིག་ཚན།"
 
 msgid "Please make a choice"
-msgstr ""
+msgstr "གོ་རིམ་གཅིག་ལུ་སློབ།"
 
 msgid "There are no questions in the database"
-msgstr ""
+msgstr "མཚོན་འགྱིག་གཉིས་ཀྱི་གཞུང་བཞིན་ལས་སྨྲད་མེད།"
 
 msgid "Update Question Type :"
-msgstr ""
+msgstr "དྲི་བའི་རིགས་སྒྲིག་འགྱུར།"
 
 msgid "Add new question"
-msgstr ""
+msgstr "དྲི་བ་གསར་པ་སྤྲོད།"
 
 msgid "Share survey with others"
-msgstr ""
+msgstr "མཚོན་འགྱིག་གཉིས་ལ་སྤྲོད།"
 
 msgid "Proceed"
-msgstr ""
+msgstr "འབྲིང་འཛུལ།"
 
 msgid "Please fill numeric values for points."
-msgstr ""
+msgstr "གླེགས་ཚན་གྱི་གླེགས་ཚན་ལུ་སྨྲད།"
 
 msgid "Please fill points from 1-5"
-msgstr ""
+msgstr "གླེགས་ཚན་གཅིག་ནང་ལས་ཧྲིང་ལྔ་ལུ་སྨྲད།"
 
 msgid "Please fill all the answer fields."
-msgstr ""
+msgstr "བསྡད་སྙིང་རེ་རེ་ལུ་སྨྲད།"
 
 msgid "Please select at least Four true answers."
-msgstr ""
+msgstr "བདེན་དོན་གྱི་བསྡད་སྙིང་བཞི་ལས་མེད་པ་ལ་སློབ།"
 
 msgid "Please Select at least Four Default Answers."
-msgstr ""
+msgstr "མདོག་གཉིས་ཀྱི་བསྡད་སྙིང་བཞི་ལས་མེད་པ་ལ་སློབ།"
 
 msgid "Please fill default text"
-msgstr ""
+msgstr "མདོག་གཉིས་ཀྱི་ཚིག་གཏོང་སྨྲད།"
 
 msgid "Edit survey information"
-msgstr ""
+msgstr "མཚོན་འགྱིག་གི་གནས་ཚུལ་འགྱུར།"
 
 msgid "View questions"
-msgstr ""
+msgstr "དྲི་བ་ལྟ།"
 
 msgid "Finish survey"
-msgstr ""
+msgstr "མཚོན་འགྱིག་འཛུལ།"
 
 msgid "Questions are added"
-msgstr ""
+msgstr "དྲི་བ་ཚན་སྤྲོད་ཡོད།"
 
 msgid "Delete survey"
-msgstr ""
+msgstr "མཚོན་འགྱིག་སུང།"
 
 msgid "Survey list"
-msgstr ""
+msgstr "མཚོན་འགྱིག་གི་ཐོ་ཚན།"
 
 msgid "Survey attached"
-msgstr ""
+msgstr "མཚོན་འགྱིག་འབྲེལ་ཡོད།"
 
 msgid "Question by type"
-msgstr ""
+msgstr "རིགས་ཀྱིས་དྲི་བ"
 
 msgid "Select question by type"
-msgstr ""
+msgstr "རིགས་ཀྱིས་དྲི་བ་སློབ།"
 
 msgid "Please enter a question"
-msgstr ""
+msgstr "དྲི་བ་འཛུལ།"
 
 msgid "Number of question"
-msgstr ""
+msgstr "དྲི་བའི་གླེགས་ཚན"
 
 msgid "This code already exists"
-msgstr ""
+msgstr "འདི་ཉིད་ཀྱི་རྟགས་ཡོད།"
 
 msgid "Save and exit"
-msgstr ""
+msgstr "བསླུ་བརྙས་ནས་ཕྱིར་འབབ།"
 
 msgid "View answers"
-msgstr ""
+msgstr "བསྡད་སྙིང་ལྟ།"
 
 msgid "Create from an existing survey"
-msgstr ""
+msgstr "མཚོན་འགྱིག་ལས་སྤྲོད་པ་བཟོ།"
 
 msgid "Survey name"
-msgstr ""
+msgstr "མཚོན་འགྱིག་གི་མིང་།"
 
 msgid "Survey subtitle"
-msgstr ""
+msgstr "མཚོན་འགྱིག་གི་མདོག་གཉིས།"
 
 msgid "Share survey"
-msgstr ""
+msgstr "མཚོན་འགྱིག་སྤྲོད།"
 
 msgid "Final thanks"
-msgstr ""
+msgstr "མཇུག་སྲིད་ཀྱི་བཀྲ་ཤིས།"
 
 msgid "Edit survey"
-msgstr ""
+msgstr "མཚོན་འགྱིག་འགྱུར།"
 
 msgid "Or return to survey overview"
-msgstr ""
+msgstr "མཚོན་འགྱིག་གི་སྐོར་ལ་ཕྱིར་འབབ།"
 
 msgid "There is a parameter missing in the link. Please use copy and past"
-msgstr ""
+msgstr "མཚོན་འགྱིག་ལ་མཐུན་ཚོགས་མེད་པ་ཡོད། བཀྲ་ཤིས་སྦྱར་ནས་འབྲི།"
 
 msgid "Wrong invitation code"
-msgstr ""
+msgstr "འབོད་འབྱུང་རྟགས་མི་ལྷུན་གྱིས་འབྱུང་བ།"
 
 msgid "You have finished this survey."
-msgstr ""
+msgstr "ཁྱེད་ཀྱིས་འདི་ཉིད་ཀྱི་མཚོན་འགྱིག་འཛུལ་ཡོད།"
 
 msgid "Survey preview"
-msgstr ""
+msgstr "མཚོན་འགྱིག་གི་མཇུག་སྲིད་ལྟ།"
 
 msgid "Invalid survey"
-msgstr ""
+msgstr "མཚོན་འགྱིག་མི་ལྷུན་གྱིས་འབྱུང་བ།"
 
 msgid "Edit question"
-msgstr ""
+msgstr "དྲི་བ་འགྱུར།"
 
 msgid "This type does not exist"
-msgstr ""
+msgstr "འདི་ཉིད་ཀྱི་རིགས་མེད།"
 
 msgid "The survey has been created successfully"
-msgstr ""
+msgstr "མཚོན་འགྱིག་ལྷན་སྐྱེས་བྱས་ཡོད།"
 
 msgid "You can now add questions to your survey"
-msgstr ""
+msgstr "ཁྱེད་ཀྱིས་རིགས་ཀྱིས་དྲི་བ་ཚན་སྤྲོད་ཐུབ།"
 
 msgid "The survey has been updated successfully"
-msgstr ""
+msgstr "མཚོན་འགྱིག་ལྷན་སྐྱེས་བྱས་ཡོད།"
 
 msgid "The question has been added."
-msgstr ""
+msgstr "དྲི་བ་སྤྲོད་ཡོད།"
 
 msgid "The question has been updated."
-msgstr ""
+msgstr "དྲི་བ་འགྱུར་ཡོད།"
 
 msgid "Remove option"
-msgstr ""
+msgstr "མདེམས་སྤྲོད་སུང།"
 
 msgid "Add option"
-msgstr ""
+msgstr "ཆོག་སྤྲོད་འབྲུག"
 
 msgid "Answer options"
-msgstr ""
+msgstr "བྱས་པའི་ཆོག་སྤྲོད་ཚན་རིམ་རྒྱུན"
 
 msgid "Dropdown"
-msgstr ""
+msgstr "མཉམ་སྦྲང་ལྷག་མདུད་ཀྱི་རིམ་པ"
 
 msgid "Page break"
-msgstr ""
+msgstr "ཤོག་ལེབ་རྒྱབ་འབྱེད་པ"
 
 msgid "Survey invitations"
-msgstr ""
+msgstr "རོ་གླེང་འབུལ་མི་གྲོགས་གཏོང་བ"
 
 msgid "Invitation code"
-msgstr ""
+msgstr "རོ་གླེང་འབུལ་མི་གྲོགས་ཀྱི་རྒྱུན་ཆེད"
 
 msgid "Invitation date"
-msgstr ""
+msgstr "རོ་གླེང་འབུལ་མི་གྲོགས་ཀྱི་ཉིན་རེའི་ཚེས་སྒྲིག"
 
 msgid "Answered"
-msgstr ""
+msgstr "བྱས་པ"
 
 msgid "You can invite additional users to fill the survey. To do so you can type their e-mail addresses here separated by either , (comma) or ; (semi-column)"
-msgstr ""
+msgstr "རོ་གླེང་འབུལ་མི་གྲོགས་གཏོང་ནས་རོ་གླེང་འབུལ་མི་གྲོགས་གཏོང་བའི་མིག་སྙན་གྱི་གནས་ལུགས་འདིར་ལུ་, (ཚིག་མཆོག་) པར་ཡང་ན་; (ཚིག་མཆོག་གཅིག་གི་རྒྱུན་ཆེད་) གྱིས་ཕྱེད་པར་རོ་གླེང་འབུལ་མི་གྲོགས་གཏོང་བའི་མིག་སྙན་གྱི་གནས་ལུགས་འབྲི་བར་རིགས།"
 
 msgid "Mail subject"
-msgstr ""
+msgstr "མིག་སྙན་གྱི་རྒྱུན་མཚན"
 
 msgid "invitations sent."
-msgstr ""
+msgstr "རོ་གླེང་འབུལ་མི་གྲོགས་གཏོང་བ་ཕྱིར་འབུབས།"
 
 msgid "The survey has been deleted."
-msgstr ""
+msgstr "རོ་གླེང་འབུལ་མི་གྲོགས་སུས་པར་བསྲུངས།"
 
 msgid "No surveys have been selected."
-msgstr ""
+msgstr "རོ་གླེང་འབུལ་མི་གྲོགས་གཅིག་ཀྱང་མི་འཛུམས།"
 
 msgid "Invited"
-msgstr ""
+msgstr "རོ་གླེང་འབུལ་མི་གྲོགས་གཏོང་བ"
 
 msgid "Reset filter"
-msgstr ""
+msgstr "བསྡུས་ཚུལ་སྦྲུལ་ནས་སྦྲུལ་བཏོན"
 
 msgid "Export current report"
 msgstr "ད་ལྟའི་རིམ་པ་ཉར་འབུག"
@@ -13507,109 +13507,109 @@ msgid "Select type"
 msgstr "རྣམ་པ་སློབ།"
 
 msgid "Conditional"
-msgstr ""
+msgstr "མཐུན་རྒྱུན་ཅན"
 
 msgid "Parent Survey"
-msgstr ""
+msgstr "མཁའ་མཇིག་རོ་གླེང་འབུལ་མི་གྲོགས"
 
 msgid "One question per page"
-msgstr ""
+msgstr "ཤོག་ལེབ་རེ་རེ་ལ་སྨྲ་བ་རེ་རེ"
 
 msgid "Enable shuffle mode"
-msgstr ""
+msgstr "འབུབ་འགྱུར་གྱི་རྒྱུན་ལྷག་མདུད་སྒྲུབ་བྱེད"
 
 msgid "Show profile form"
-msgstr ""
+msgstr "མིང་རྟགས་ཀྱི་རིམ་པ་སྟོན་པ"
 
 msgid "You need to create groups"
-msgstr ""
+msgstr "ཚོགས་པ་ཚུལ་འབྲུག་རྒྱུན་མཁོ་སྟེ"
 
 msgid "Manage groups"
-msgstr ""
+msgstr "ཚོགས་པ་ཚུལ་འཇུམ་པ"
 
 msgid "Group created successfully"
-msgstr ""
+msgstr "ཚོགས་པ་ཚུལ་འབྲུག་རྒྱུན་ལྷག་མདུད་སྒྲུབ"
 
 msgid "Group need name"
-msgstr ""
+msgstr "ཚོགས་པ་ཚུལ་མིང་མཁོ་སྟེ"
 
 msgid "Personalize"
-msgstr ""
+msgstr "རང་གི་རྒྱུན་ལྷག་མདུད"
 
 msgid "Primary"
-msgstr ""
+msgstr "གཞི་རྩ"
 
 msgid "Secondary"
-msgstr ""
+msgstr "མཐོང་བ་གཉིས་པ"
 
 msgid "Please choose a condition"
-msgstr ""
+msgstr "མཐུན་རྒྱུན་ཚོ་འཛུམས་རྒྱུན་མཁོ་སྟེ"
 
 msgid "Choose different categories"
-msgstr ""
+msgstr "བྱང་ཆུང་རྣམས་གཉིས་སོང་འཛུམས"
 
 msgid "No log of duration"
-msgstr ""
+msgstr "རིམ་གྱུར་གྱི་ཐོབ་ཐང་གི་རྒྱུན་མེད"
 
 msgid "Users who are not invited can use this link to take the survey:"
-msgstr ""
+msgstr "རོ་གླེང་འབུལ་མི་གྲོགས་གཏོང་བ་མ་ཡིན་པའི་མི་ཞིག་ཚུལ་འདིའི་མཐུད་ཚོད་རོ་གླེང་འབུལ་མི་གྲོགས་འཁོར་ལོ་འབུབ་རྒྱུན་རིགས"
 
 msgid "Complete the survey's questions"
-msgstr ""
+msgstr "རོ་གླེང་འབུལ་མི་གྲོགས་ཀྱི་སྨྲ་བ་ཚུལ་འབུབ"
 
 msgid "Surveys deleted"
-msgstr ""
+msgstr "རོ་གླེང་འབུལ་མི་གྲོགས་སུས་པར་བསྲུངས"
 
 msgid "Remind only users who didn't answer"
-msgstr ""
+msgstr "བྱས་པ་མ་ཡིན་པའི་མི་ཚུལ་རྒྱུན་མཛད་རྒྱུན་རྒྱུན་མཁོ་སྟེ"
 
 msgid "Create question"
-msgstr ""
+msgstr "སྨྲ་བ་འབྲུག"
 
 msgid "Back to survey"
-msgstr ""
+msgstr "རོ་གླེང་འབུལ་མི་གྲོགས་ལ་ལོག་འབྱུང"
 
 msgid "Update information"
-msgstr ""
+msgstr "བརྒྱུད་ཚུལ་གསར་འབྱུང"
 
 msgid "Please fill survey"
-msgstr ""
+msgstr "རོ་གླེང་འབུལ་མི་གྲོགས་ཚུལ་འབུབ་རྒྱུན་མཁོ་སྟེ"
 
 msgid "Reporting overview"
-msgstr ""
+msgstr "བརྒྱུད་ཚུལ་གསར་འབྱུང་སྦྲུལ་བཏོན"
 
 msgid "What is the goal of the course? Are there prerequisites? How is this training connected to other courses?"
-msgstr ""
+msgstr "བསློབ་སློབ་གྱི་དོན་ནོར་སྟེ་གང་ཡིན། སྔོན་གྱི་རྒྱུན་མཁོ་སྟེ། བསློབ་སློབ་འདི་སློབ་སློབ་གཞན་དང་རྒྱུན་འབྲེལ་རྒྱུན་ཡང་ན་གང་ཡིན།"
 
 msgid "Describe the course (number of hours, serial number, location) and teacher (name, office, Tel., e-mail, office hours . . . .)."
-msgstr ""
+msgstr "བསློབ་སློབ་ཚུལ་འབྲི་བ (ཆུ་ཚོད་ཀྱི་གྲངས། རིམ་གྱི་རྒྱུན་ཆེད། གནས་སྟོད་) བསློབ་སློབ་འབྲུག་མི (མིང་, གླུང་ཁང་, མཐོང་ཚན་, མིག་སྙན་, གླུང་ཁང་གི་ཆུ་ཚོད་ . . . .) འབྲི་བ།"
 
 msgid "Objectives"
-msgstr ""
+msgstr "དོན་རྒྱུན"
 
 msgid "What are the objectives of the course (competences, skills, outcomes)?"
-msgstr ""
+msgstr "བསློབ་སློབ་གྱི་དོན་རྒྱུན་གང་ཡིན (བྱུང་རྒྱུན་, བརྩོན་འགྲུས་, འབྲས་བུ་)?"
 
 msgid "What should the end results be when the learner has completed the course? What are the activities performed during the course?"
-msgstr ""
+msgstr "སློབ་སློབ་པོ་གཅིག་གིས་བསློབ་སློབ་འབུབ་རྒྱུན་ལ་འབྲས་བུ་གང་ཡིན། བསློབ་སློབ་གྱི་རིམ་གྱུར་ལ་གྱུར་ཆས་གང་ཡིན།"
 
 msgid "Topics"
-msgstr ""
+msgstr "དོན་སྤྲོད་ཚན་རིམ་རྒྱུན"
 
 msgid "List of topics included in the training. Importance of each topic. Level of difficulty. Structure and inter-dependence of the different parts."
-msgstr ""
+msgstr "བསློབ་སློབ་ལ་འབྲེལ་བའི་དོན་སྤྲོད་ཚན་རིམ་རྒྱུན། དོན་སྤྲོད་རེ་རེའི་དོན་ཆེ་བ། དཀའ་སྙད་ཀྱི་རིམ་པ། བྱང་ཆུང་རྣམས་ཀྱི་རྩ་གྲུབ་པ་དང་མཐུན་རྒྱུན།"
 
 msgid "How does the course progress? Where should the learner pay special care? Are there identifiable problems in understanding different areas? How much time should one dedicate to the different areas of the course?"
-msgstr ""
+msgstr "བསློབ་སློབ་རིམ་གྱུར་རྒྱུན་རྒྱུན་ཡང་ན་གང་ཡིན། སློབ་སློབ་པོ་གང་ལ་རང་བཞིན་གྱི་མཐོང་བ་མཁོ་སྟེ། བྱང་ཆུང་རྣམས་ལ་འབྲེལ་བའི་གནས་ཚུལ་གྱི་འབྲས་བུ་རྙེད་རྒྱུན་ཡོད། བསློབ་སློབ་གྱི་བྱང་ཆུང་རྣམས་ལ་ཆུ་ཚོད་རང་གི་རྒྱུན་ལྷག་མདུད་རྒྱུན་རྒྱུན་ཡང་ན་གང་ཡིན།"
 
 msgid "Methodology"
-msgstr ""
+msgstr "བརྒྱུད་ཚུལ་གསར་འབྱུང"
 
 msgid "What methods and activities help achieve the objectives of the course?  What would the schedule be?"
-msgstr ""
+msgstr "བསློབ་སློབ་གྱི་དོན་རྒྱུན་ལ་གྱུར་ཆས་གང་ཡིན། བརྒྱུད་ཚུལ་གསར་འབྱུང་གང་ཡིན།"
 
 msgid "Presentation of the activities (conference, papers, group research, labs...)."
-msgstr ""
+msgstr "གྱུར་ཆས་ཚུལ་སྟོན་པ (མཇོད་གླུང་, བོད་ཡིག་, ཚོགས་པའི་རྒྱུན་འབྲེལ་བརྩོན་འགྲུས་, བསློབ་གླུང་...) འབྲི་བ།"
 
 msgid "Course material"
 msgstr ""
@@ -15559,154 +15559,154 @@ msgid "Return to the languages list"
 msgstr ""
 
 msgid "Add a date time"
-msgstr ""
+msgstr "ཆུ་ཚོད་གཅིག་ལྷག་འབྱེད།"
 
 msgid "The coach of the session, shall have all rights and privileges on all the courses that belong to the session."
-msgstr ""
+msgstr "བསྡམས་པའི་སློབ་ཀློང་གྱི་སློབ་དཔོན་གྱིས་། བསྡམས་པའི་སློབ་གཉེར་ལྷག་གི་རང་གི་ཐོབ་ཐང་དང་སློབ་དཔྱད་ཀུན་ལ་ཐོབ་ཐང་ཆེན་པོ་ཐོབ།"
 
 msgid "Allow user view user list"
-msgstr ""
+msgstr "མི་ཤེས་གྲངས་ལྡོག་ལ་མི་ཤེས་གྲངས་ལྡོག་ལ་རུང་བ་ལ་སྒྲིག།"
 
 msgid "Enable user list"
-msgstr ""
+msgstr "མི་ཤེས་གྲངས་ལྡོག་ལ་སྒྲིག།"
 
 msgid "Disable user list"
-msgstr ""
+msgstr "མི་ཤེས་གྲངས་ལྡོག་ལ་སྒྲིབ།"
 
 msgid "Thematic control"
-msgstr ""
+msgstr "བརྒྱུད་འཛིན་སྒྲིག"
 
 msgid "Thematic view with details"
-msgstr ""
+msgstr "བརྒྱུད་འཛིན་ལྡོག་ཏུགས་རྟེན་དང་བཅས་པ"
 
 msgid "Thematic view as list"
-msgstr ""
+msgstr "བརྒྱུད་འཛིན་ལྡོག་གྲངས་ལྡོག་ཏུགས"
 
 msgid "Thematic"
-msgstr ""
+msgstr "བརྒྱུད་འཛིན"
 
 msgid "Thematic plan"
-msgstr ""
+msgstr "བརྒྱུད་འཛིན་འཛུམ་འབྲི།"
 
 msgid "Edit thematicadvance"
-msgstr ""
+msgstr "བརྒྱུད་འཛིན་འབྲང་འཛིན་འབྱེད།"
 
 msgid "Edit thematic advance"
-msgstr ""
+msgstr "བརྒྱུད་འཛིན་འབྲང་འཛིན་འབྱེད།"
 
 msgid "There is not still a thematic section"
-msgstr ""
+msgstr "བརྒྱུད་འཛིན་རྒྱག་ཚན་མེད།"
 
 msgid "New thematic section"
-msgstr ""
+msgstr "བརྒྱུད་འཛིན་རྒྱག་ཚན་གསར་པ"
 
 msgid "Delete all thematics"
-msgstr ""
+msgstr "བརྒྱུད་འཛིན་ཀུན་སུབ་འབྱེད།"
 
 msgid "Details of topics and their respective plan and progress. To indicate a topic as completed, select its date following the chronological order and the system will display all previous dates as completed."
-msgstr ""
+msgstr "དོན་ཚོགས་ཀྱི་མཐོང་བ་རེ་བ་དང་། རང་གི་འཛུམ་འབྲི་དང་འབྲང་འཛིན། དོན་ཚོགས་གཅིག་ལ་རྫོགས་སྦྱང་བར་བཞག་པའི་ཆུ་ཚོད་རིམ་གྱིས་འབདར་ནས་རང་གི་ཆུ་ཚོད་སྔོན་གྱི་ཆུ་ཚོད་ཀུན་རྫོགས་སྦྱང་བར་གསལ་བར་བྱེད།"
 
 msgid "What skills are to be acquired bu the end of this thematic section?"
-msgstr ""
+msgstr "བརྒྱུད་འཛིན་རྒྱག་ཚན་འདི་རྫོགས་སྦྱང་བར་གྱུར་ན་གང་ལ་རྒྱུན་སྐྱེས་ལ་རྒྱུར་འགྱུར།"
 
 msgid "Skills to acquire"
-msgstr ""
+msgstr "རྒྱུན་སྐྱེས་ལ་རྒྱུར་འགྱུར་བ"
 
 msgid "What infrastructure is necessary to achieve the goals of this topic normally?"
-msgstr ""
+msgstr "དོན་ཚོགས་འདིའི་དོན་ཚོགས་རྫོགས་སྦྱང་བར་གྱུར་ན་གང་ལ་རྒྱུན་སྐྱེས་ལ་རྒྱུར་འགྱུར།"
 
 msgid "Infrastructure"
-msgstr ""
+msgstr "རྒྱུན་སྐྱེས་ལ་རྒྱུར་འགྱུར་བ"
 
 msgid "Which other elements are necessary?"
-msgstr ""
+msgstr "གང་ཞིག་གཞན་ལ་རྒྱུར་འགྱུར།"
 
 msgid "Duration in hours"
-msgstr ""
+msgstr "ཆུ་ཚོད་ཀྱི་རྒྱུན་སྐྱེས་ལ་རྒྱུར་འགྱུར།"
 
 msgid "There is no attendance sheet in this course"
-msgstr ""
+msgstr "སློབ་གཉེར་འདིར་འབྲང་འཛིན་ཤོག་ལེབ་མེད།"
 
 msgid "You must select a start date"
-msgstr ""
+msgstr "འབྲས་ཆུང་ཆུ་ཚོད་རྒྱུར་འགྱུར།"
 
 msgid "Return to list"
-msgstr ""
+msgstr "གྲངས་ལྡོག་ལ་འབྲས་འབྱུང།"
 
 msgid "Additional notes"
-msgstr ""
+msgstr "གླེང་གཟི་གཅིག་ལྷག་འབྱེད།"
 
 msgid "Start date taken from an attendance date"
-msgstr ""
+msgstr "འབྲང་འཛིན་ཆུ་ཚོད་ནས་འབྲས་ཆུང་ཆུ་ཚོད་རྒྱུར་འགྱུར།"
 
 msgid "Custom start date"
-msgstr ""
+msgstr "རང་བཞག་འབྲས་ཆུང་ཆུ་ཚོད"
 
 msgid "Start date options"
-msgstr ""
+msgstr "འབྲས་ཆུང་ཆུ་ཚོད་སློབ་གཅིག་ལྷག་འབྱེད།"
 
 msgid "Thematic advance configuration"
-msgstr ""
+msgstr "བརྒྱུད་འཛིན་འབྲང་འཛིན་སྒྲིག་ཡོད།"
 
 msgid "Information on thematic advance on course homepage"
-msgstr ""
+msgstr "སློབ་གཉེར་སློབ་གཉེར་མཐོང་བར་གྱུར་ན་བརྒྱུད་འཛིན་འབྲང་འཛིན་གྱི་མིང་ཚན།"
 
 msgid "Display information about the last completed topic"
-msgstr ""
+msgstr "རྫོགས་སྦྱང་བའི་དོན་ཚོགས་མཐོང་བ་རེ་བ་གསལ་བར་བྱེད།"
 
 msgid "Display information about the next uncompleted topic"
-msgstr ""
+msgstr "རྫོགས་མིན་པའི་དོན་ཚོགས་མཐོང་བ་རེ་བ་གསལ་བར་བྱེད།"
 
 msgid "Information about the last completed topic"
-msgstr ""
+msgstr "རྫོགས་སྦྱང་བའི་དོན་ཚོགས་མཐོང་བ་རེ་བ"
 
 msgid "Information about the next uncompleted topic"
-msgstr ""
+msgstr "རྫོགས་མིན་པའི་དོན་ཚོགས་མཐོང་བ་རེ་བ"
 
 msgid "There is no thematic section"
-msgstr ""
+msgstr "བརྒྱུད་འཛིན་རྒྱག་ཚན་མེད།"
 
 msgid "There is no thematic advance"
-msgstr ""
+msgstr "བརྒྱུད་འཛིན་འབྲང་འཛིན་མེད།"
 
 msgid "There is no thematic plan for now"
-msgstr ""
+msgstr "བརྒྱུད་འཛིན་འཛུམ་འབྲི་མེད།"
 
 msgid "New thematic advance"
-msgstr ""
+msgstr "བརྒྱུད་འཛིན་འབྲང་འཛིན་གསར་པ"
 
 msgid "Duration must be numeric"
-msgstr ""
+msgstr "རྒྱུན་སྐྱེས་ལ་རྒྱུར་འགྱུར།"
 
 msgid "Do not display progress"
-msgstr ""
+msgstr "འབྲང་འཛིན་མི་གསལ་བར་བྱེད།"
 
 msgid "Create a thematic section"
-msgstr ""
+msgstr "བརྒྱུད་འཛིན་རྒྱག་ཚན་གསར་བཅུག"
 
 msgid "Edit thematic section"
-msgstr ""
+msgstr "བརྒྱུད་འཛིན་རྒྱག་ཚན་འབྱེད།"
 
 msgid "Course progress"
-msgstr ""
+msgstr "སློབ་གཉེར་འབྲང་འཛིན"
 
 msgid "Select an attendance"
-msgstr ""
+msgstr "འབྲང་འཛིན་རྒྱུར་འགྱུར།"
 
 msgid "Re-use a copy inside the current test"
-msgstr ""
+msgstr "རང་གི་ལས་རྩལ་ལམ་ལོག་གཅིག་ལྷག་འབྱེད།"
 
 msgid "You already invite all your contacts"
-msgstr ""
+msgstr "ཁྱོད་ཀྱིས་མི་འབྲང་ཐམས་ཅད་ལ་འབུལ་བ་འབྱུང།"
 
 msgid "Results hidden by the exercise setting"
-msgstr ""
+msgstr "ལས་རྩལ་སྒྲིག་ཡོད་པས་འབྲས་འབྱུང་སྦུངས།"
 
 msgid "Attended"
-msgstr ""
+msgstr "འབྲང་འཛིན་འབྱུང།"
 
 msgid "IP address"
-msgstr ""
+msgstr "IP མཚོང་ཁྲོམས་གཤོགས"
 
 msgid "Only skills that were not registered were imported"
 msgstr ""
@@ -18700,154 +18700,154 @@ msgid "The protocol with which we connect to the CAS server"
 msgstr ""
 
 msgid "Enable CAS user addition"
-msgstr ""
+msgstr "CAS གཉེར་སྤྱོད་མཁན་འབྱུང་ལྟ་བསྒྲུབ་འཁྱུད"
 
 msgid "Enable CAS user addition. To create the user account from the LDAP directory, the extldap_config and extldap_user_correspondance tables must be filled in in app/config/auth.conf.php"
-msgstr ""
+msgstr "CAS གཉེར་སྤྱོད་མཁན་འབྱུང་ལྟ་བསྒྲུབ་འཁྱུད། LDAP མཚན་མོའི་ནང་ལས་གཉེར་སྤྱོད་མཁན་གྱི་འབྱུང་ལྟ་བསྒྲུབ་པའི་གྲས། extldap_config དང extldap_user_correspondance བརྒྱད་ཁྲི་གཅིག་གི་ནང་ལས app/config/auth.conf.php ལ་སྦྱར་ནུས།"
 
 msgid "Add CAS user login"
-msgstr ""
+msgstr "CAS གཉེར་སྤྱོད་མཁན་འཛུལ་སྤྲོད་འབྱུང་ལྟ་སྤྲོད"
 
 msgid "Add CAS user login details when registering a new user"
-msgstr ""
+msgstr "གཉེར་སྤྱོད་མཁན་གསར་པ་རྒྱག་སྤྲོད་བྱས་ལྟར CAS གཉེར་སྤྱོད་མཁན་འཛུལ་སྤྲོད་འབྱུང་ལྟ་སྤྲོད"
 
 msgid "Add CAS user e-mail"
-msgstr ""
+msgstr "CAS གཉེར་སྤྱོད་མཁན་གློག་འཕྲིན་སྤྲོད"
 
 msgid "Add CAS user e-mail details when registering a new user"
-msgstr ""
+msgstr "གཉེར་སྤྱོད་མཁན་གསར་པ་རྒྱག་སྤྲོད་བྱས་ལྟར CAS གཉེར་སྤྱོད་མཁན་གློག་འཕྲིན་འབྱུང་ལྟ་སྤྲོད"
 
 msgid "Add CAS user first name"
-msgstr ""
+msgstr "CAS གཉེར་སྤྱོད་མཁན་མིང་རྒྱུས་སྤྲོད"
 
 msgid "Add CAS user first name when registering a new user"
-msgstr ""
+msgstr "གཉེར་སྤྱོད་མཁན་གསར་པ་རྒྱག་སྤྲོད་བྱས་ལྟར CAS གཉེར་སྤྱོད་མཁན་མིང་རྒྱུས་སྤྲོད"
 
 msgid "Add CAS user last name"
-msgstr ""
+msgstr "CAS གཉེར་སྤྱོད་མཁན་མིང་རྒྱུས་མཐའ་མ་སྤྲོད"
 
 msgid "Add CAS user last name details when registering a new user"
-msgstr ""
+msgstr "གཉེར་སྤྱོད་མཁན་གསར་པ་རྒྱག་སྤྲོད་བྱས་ལྟར CAS གཉེར་སྤྱོད་མཁན་མིང་རྒྱུས་མཐའ་མ་འབྱུང་ལྟ་སྤྲོད"
 
 msgid "User list"
-msgstr ""
+msgstr "གཉེར་སྤྱོད་མཁན་གྲངས་རིམས་སྦྱར"
 
 msgid "Add as an announcement"
-msgstr ""
+msgstr "གསར་བརྙན་གྱི་རྒྱུན་སྤྱད་དུ་སྤྲོད"
 
 msgid "Skills and assessments"
-msgstr ""
+msgstr "བརྩོན་འགྲུས་དང་རྒུལ་འཛིན"
 
 msgid "Add skill"
-msgstr ""
+msgstr "བརྩོན་འགྲུས་སྤྲོད"
 
 msgid "Show admin toolbar"
-msgstr ""
+msgstr "ཉེར་སྤྱོད་འགྱོགས་རིམས་སྦྱར་བཀྲ་སྷད"
 
 msgid "Accept legal agreement"
-msgstr ""
+msgstr "ཆོས་སྤྲོད་འབྲིབ་འགྱུར་འཛིན་སྐྱོང"
 
 msgid "Legal agreement for this course"
-msgstr ""
+msgstr "བསླམ་གཉེར་འདིའི་ཆོས་སྤྲོད་འབྲིབ་འགྱུར"
 
 msgid "Random questions by category"
-msgstr ""
+msgstr "དབྱེ་བ་ལས་སྤྲོད་འཛུགས་གཏོང་བའི་རྒུལ་འཛིན་གྲངས"
 
 msgid "Display questions category"
-msgstr ""
+msgstr "རྒུལ་འཛིན་དབྱེ་བ་བཀྲ་སྷད"
 
 msgid "Review my answers"
-msgstr ""
+msgstr "ངའི་འབྲི་སྤྲོད་ལ་འཁྲིད་ཀྱིས་གཟིགས"
 
 msgid "Text appearing at the end of the test"
-msgstr ""
+msgstr "རྒུལ་འཛིན་མཐའ་མའི་ཚིགས་སྦྱོར"
 
 msgid "Validated"
-msgstr ""
+msgstr "བརྟན་འགྱུར་བྱས"
 
 msgid "Not validated"
-msgstr ""
+msgstr "བརྟན་འགྱུར་མ་བྱས"
 
 msgid "Reviewed"
-msgstr ""
+msgstr "འཁྲིད་ཀྱིས་གཟིགས"
 
 msgid "Select a question to revise"
-msgstr ""
+msgstr "འཇོག་སྤྲོད་གཟིགས་སྦྱང་རྒུལ་འཛིན་སླེབས"
 
 msgid "Revise question later"
-msgstr ""
+msgstr "རྒུལ་འཛིན་སླེབས་སྦྱང་ཕྱིར་འབྱུང"
 
 msgid "Number of learners who selected it"
-msgstr ""
+msgstr "དེ་སླེབས་གྱুর་པའི་སློབ་འགུས་གྲངས"
 
 msgid "Questions already answered"
-msgstr ""
+msgstr "འབྲི་སྤྲོད་བྱས་པའི་རྒུལ་འཛིན་ཚོ"
 
 msgid "There is no such skill"
-msgstr ""
+msgstr "དེ་ལྟར་གྱུར་པའི་བརྩོན་འགྲུས་མེད"
 
 msgid "Please check your grading model values"
-msgstr ""
+msgstr "བརྗེད་རྒྱན་མདེའི་གཅིག་གི་གཏོགས་རྒྱུ་ལ་གཟིགས"
 
 msgid "Skills obtained when achieving this assessment"
-msgstr ""
+msgstr "དེའི་རྒུལ་འཛིན་འཛུགས་སྒྲུབ་བྱས་ལྟར་ཐོབ་པའི་བརྩོན་འགྲུས"
 
 msgid "Add assessment"
-msgstr ""
+msgstr "རྒུལ་འཛིན་སྤྲོད"
 
 msgid "No learner"
-msgstr ""
+msgstr "སློབ་འགུས་མེད"
 
 msgid "I am a human resources manager"
-msgstr ""
+msgstr "ང་མིགས་རྒྱུན་ལྡོག་སྐྱོང་པ་ཡིན"
 
 msgid "Absolute skill"
-msgstr ""
+msgstr "བརྩོན་འགྲུས་ཉམས་མང"
 
 msgid "Option"
-msgstr ""
+msgstr "སླེབས་སྦྱོར"
 
 msgid "There are no SVG images in your images gallery directory"
-msgstr ""
+msgstr "བརྙན་རིམས་ཁྲོངས་ལྷག་གི་ནང་ལས SVG བརྙན་རིམས་མེད"
 
 msgid "No SVG image"
-msgstr ""
+msgstr "SVG བརྙན་རིམས་མེད"
 
 msgid "Number of learners"
-msgstr ""
+msgstr "སློབ་འགུས་གྲངས"
 
 msgid "Number of learners accessing the course"
-msgstr ""
+msgstr "བསླམ་གཉེར་ལ་འཛུལ་སྤྲོད་བྱས་པའི་སློབ་འགུས་གྲངས"
 
 msgid "Percentage of learners accessing the course"
-msgstr ""
+msgstr "བསླམ་གཉེར་ལ་འཛུལ་སྤྲོད་བྱས་པའི་སློབ་འགུས་གྱི་སྙམས་མང"
 
 msgid "Number of learners who completed all activities (100% progress)"
-msgstr ""
+msgstr "མཁོད་འབྲི་ཚོ་ཐམས་ཅད་རྫོགས་སྒྲུབ་བྱས་པའི (100% འབྲིང་འཛུགས)་སློབ་འགུས་གྲངས"
 
 msgid "Percentage of learners who completed all activities (100% progress)"
-msgstr ""
+msgstr "མཁོད་འབྲི་ཚོ་ཐམས་ཅད་རྫོགས་སྒྲུབ་བྱས་པའི (100% འབྲིང་འཛུགས)་སློབ་འགུས་གྱི་སྙམས་མང"
 
 msgid "Average number of activities completed per learner"
-msgstr ""
+msgstr "སློབ་འགུས་རེ་རེའི་མཁོད་འབྲི་རྫོགས་སྒྲུབ་བྱས་པའི་ཉམས་མང་གྲངས"
 
 msgid "Total time spent in the course"
-msgstr ""
+msgstr "བསླམ་གཉེར་ལ་སྤྱད་པའི་ཉེ་རྒྱུན་གྲངས"
 
 msgid "Average time spent per learner in the course"
-msgstr ""
+msgstr "བསླམ་གཉེར་ལ་སློབ་འགུས་རེ་རེའི་སྤྱད་པའི་ཉེ་རྒྱུན་ཉམས་མང"
 
 msgid "Number of documents in learning path"
-msgstr ""
+msgstr "སློབ་འབྲིང་འཛུགས་ལྷག་གི་ཡིག་ཆ་གྲངས"
 
 msgid "Number of exercises in learning path"
-msgstr ""
+msgstr "སློབ་འབྲིང་འཛུགས་ལྷག་གི་རྒུལ་འཛིན་གྲངས"
 
 msgid "Number of links in learning path"
-msgstr ""
+msgstr "སློབ་འབྲིང་འཛུགས་ལྷག་གི་དེབས་རྒྱུ་གྲངས"
 
 msgid "Number of forums in learning path"
-msgstr ""
+msgstr "སློབ་འབྲིང་འཛུགས་ལྷག་གི་མཚོ་སྔོན་གྲངས"
 
 msgid "Number of assignments in learning path"
 msgstr ""
@@ -21538,73 +21538,73 @@ msgid "Welcome to YOUR tickets section. Here, you'll be able to track the state 
 msgstr ""
 
 msgid "No history"
-msgstr ""
+msgstr "མདོན་རྒྱུན་མེད།"
 
 msgid "Recalculate results"
-msgstr ""
+msgstr "འབྲུག་སྒྲུབ་སྒྲིག་གསལ་ཕྲེང་སྤྱད་པའི་རྒྱུན་སྒྲུབ།"
 
 msgid "%s (deleted)"
-msgstr ""
+msgstr "%s (བསྲུང་ནས་སུང་བ།)"
 
 msgid "Available also on main portal"
-msgstr ""
+msgstr "གཏོང་རྒྱུག་སྡེཚོད་གཙོ་བོའི་ནང་དུ་ཡང་གཏོང་བ།"
 
 msgid "Edit course categories for one URL"
-msgstr ""
+msgstr "མཚོང་རྒྱུག་གཅིག་གི་རྟེན་འབྲེལ་གྱི་མཚོང་རྒྱུག་སྡེཚོད་འགོས་པ།"
 
 msgid "Visible to self"
-msgstr ""
+msgstr "རང་གི་ལ་ལོགས་སུ་མཐོང་བ།"
 
 msgid "Visible to others"
-msgstr ""
+msgstr "མང་གིས་མཐོང་བ།"
 
 msgid "Upgrade Chamilo LMS version"
-msgstr ""
+msgstr "ཆམོ་ལོ་ཨེམ་སྲིད་སྐོར་སྤྱད་པའི་རིམ་པ་སྤྱད་པ།"
 
 msgid "The install script has detected tables left over from previous versions that could cause problems during the upgrade process."
-msgstr ""
+msgstr "སྤྱད་པའི་སྐྲིབཏ་གཏོང་རྒྱུག་སྡེཚོད་གཙོ་བོའི་རིམ་པ་ལས་ལྷོད་མཁས་གཏོང་རྒྱུག་སྡེཚོད་རྣམས་སྡེབས་ནས་སྤྱད་པའི་དོན་གྱི་སྐབས་སློབ་གྱུར་ཆེས་འབྲས་བུ་འབྱུང་ཞིང་རེད།"
 
 msgid "Removing"
-msgstr ""
+msgstr "བསྲུང་ནས་སུང་བ།"
 
 msgid "Check for tables from previous versions"
-msgstr ""
+msgstr "རིམ་པ་སྔོན་གྱི་གཏོང་རྒྱུག་སྡེཚོད་རྣམས་རྟོགས་པར་བྱའོ།"
 
 msgid "Your password cannot be the same as your email"
-msgstr ""
+msgstr "ཁྱེད་ཀྱི་མ་གློག་འཛུགས་གློག་འཛུགས་དང་མཉམ་པར་མི་འགྱུར།"
 
 msgid "Your password cannot contain your username"
-msgstr ""
+msgstr "ཁྱེད་ཀྱི་མ་གློག་འཛུགས་ལ་མིང་འདོག་གཅིག་ལ་གཅིག་མི་འགྱུར།"
 
 msgid "Use different character classes"
-msgstr ""
+msgstr "མིང་ཚན་རིགས་གཞན་སྤྱད་པ།"
 
 msgid "Too many repetitions"
-msgstr ""
+msgstr "སྐྱོན་མེད་ཀྱི་སྐྱོན་མེད་མང་པོ།"
 
 msgid "Your password contains sequences"
-msgstr ""
+msgstr "ཁྱེད་ཀྱི་མ་གློག་འཛུགས་ལ་རྒྱུན་འབྲེལ་ཡོད།"
 
 msgid "Very weak"
-msgstr ""
+msgstr "མཐོང་ཚན་ཉུང་ངོ།"
 
 msgid "You have been assigned the learner %s"
-msgstr ""
+msgstr "ཁྱེད་ལ་སློབ་ཕྲུག %s་འབད་རྟེན་བྱས།"
 
 msgid "You have been assigned the learner %s with url %s"
-msgstr ""
+msgstr "ཁྱེད་ལ་སློབ་ཕྲུག %s་རྟེན་འབྲེལ %s་འབད་རྟེན་བྱས།"
 
 msgid "You have been assigned as tutor for the learner %s.<br/>"
-msgstr ""
+msgstr "ཁྱེད་ལ་སློབ་ཕྲུག %s བརྟན་འཛིན་དུ་འབད་རྟེན་བྱས།<br/>"
 
 msgid "Short name"
-msgstr ""
+msgstr "མཚོང་ཚིག་ཐུང་ངུ།"
 
 msgid "Course user document"
-msgstr ""
+msgstr "མཚོང་རྒྱུག་སློབ་གྲྭ་མི་གཏོང་རྒྱུག"
 
 msgid "Destination"
-msgstr ""
+msgstr "གནས་སྤྱད་ས་ཆ"
 
 msgid "User testing of e-mail configuration"
 msgstr "མི་ཞིག་གི་སློབ་མའི་གློག་འཁོར་སྒྲིག་འགོལ་སློབ་རྒྱུ་རྒྱུད།"
@@ -21757,85 +21757,85 @@ msgid "Are you sure you want to close this ticket?"
 msgstr "ཁྱེད་རང་གི་ངོ་མཚར་བའི་གནས་ལ་གཏོང་ནས། ཁྱཱད་འབྲེལ་གྱི་གཏན་འབེབས་འདི་འཛུམས་རྒྱུ་ལ་གཏོང་།"
 
 msgid "Unassigned"
-msgstr ""
+msgstr "མ་འབད་རྟེན།"
 
 msgid "Select the timespan in weeks"
-msgstr ""
+msgstr "བདུན་རྒྱུག་གི་དུས་ཚོད་སློབ་རམ་པར་བྱའོ།"
 
 msgid "Course %s added"
-msgstr ""
+msgstr "མཚོང་རྒྱུག %s་འཛོམས་སུ་འཛོམས།"
 
 msgid "Current password"
-msgstr ""
+msgstr "ད་ལྟའི་མ་གློག་འཛུགས"
 
 msgid "Delete all corrections"
-msgstr ""
+msgstr "བསྲུང་ནས་སུང་བའི་གཏོང་རྒྱུག་སྡེཚོད་ཀུན་བསྲུང"
 
 msgid "Enable 'My Files' section"
-msgstr ""
+msgstr "'ངའི་ཡིག་ཆ་རྣམས'་རྒྱུག་སྡེཚོད་འབྱུང་རྟེན་བྱེད་པ།"
 
 msgid "Allow users to upload files to a personal space on the platform."
-msgstr ""
+msgstr "མི་རྣམས་ལ་རྣམ་རྟོག་ས་ཆ་ལ་ཡིག་ཆ་འཛོམས་པར་འབྱུང་རྟེན་བྱེད་པ།"
 
 msgid "You are currently using the multi-URL feature and are trying to upgrade your portal using a secondary URL. Please connect to the main URL to proceed with the upgrade: %s"
-msgstr ""
+msgstr "ཁྱེད་ད་ལྟ་རྟེན་འབྲེལ་མང་པོ་སྤྱད་པར་འགྱུར་ཞིང་རྒྱུག་སྡེཚོད་གཅིག་གི་རྟེན་འབྲེལ་གྱི་སྤྱད་པའི་རིམ་པ་སྤྱད་པར་འགྱུར། གཏོང་རྒྱུག་སྡེཚོད་གཙོ་བོའི་རྟེན་འབྲེལ་ལ་འཛུགས་པར་གྱུར་ཅིག་སྤྱད་པའི་རིམ་པ་ལ་སློབ་རམ་པར་བྱའོ: %s"
 
 msgid "Only %s questions will be picked randomly following the quiz configuration."
-msgstr ""
+msgstr "མཚོང་རྒྱུག་གཏོང་རྒྱུག་སྡེཚོད་གྱི་རྒྱུན་སྒྲུབ་སྒྲིག་ལ་འབྲས་བུ་འབྱུང་རྒྱུ %s་གྲུག་སྨྲོས་སུ་འཛོམས་པར་འགྱུར།"
 
 msgid "Allow download course documents by API Key"
-msgstr ""
+msgstr "ཨེཔི་ཀיי་འབྲས་བུ་མཚོང་རྒྱུག་གཏོང་རྒྱུག་འཛོམས་པར་འབྱུང་རྟེན་བྱེད་པ།"
 
 msgid "Download documents verifying the REST API key for a user"
-msgstr ""
+msgstr "མི་གཅིག་གི་རེསཏ་ཨེཔི་ཀיי་རྟོགས་པར་བྱས་ནས་གཏོང་རྒྱུག་འཛོམས་པར་འབྱུང་རྟེན་བྱེད་པ།"
 
 msgid "First you have to download the corrections <a href='%s'> here </a>."
-msgstr ""
+msgstr "མ་རོམ་སྤྱད་པའི་བསྲུང་ནས་སུང་བ་འཛོམས་པར་འགྱུར་རོ。<a href='%s'>ཨ་ལྟའི་ནང་ལོ།</a>。"
 
 msgid "Posts pending moderation"
-msgstr ""
+msgstr "བརྗོད་རྒྱུན་སློབ་གཡོད་འཛིན་ནང་ལ་ཡོད་པ།"
 
 msgid "Only users from one course in a session"
-msgstr ""
+msgstr "བསྡད་རྒྱུན་གཅིག་གི་མཚོང་རྒྱུག་གྱི་མི་རྣམས་ཀེ་རྒྱུན་གྱི་ནང་ལ་ཡོད་པ།"
 
 msgid "If the server is behind a proxy or firewall (and only in those cases), it might be using the X_FORWARDED_FOR HTTP header to show the remote user IP (yours, in this case)."
-msgstr ""
+msgstr "སར་ཝར་འབྲེལ་མཐུད་འབྲེལ་རྒྱུག་སྡེཚོད་གཡོན་ལ་ཡོད་པའི་སྐབས་སུ་རྒྱུན་འབྲེལ་གཡོན་ལ་ཡོད་པའི་སྐབས་སུ་གཉིས་ཀས་རེ་རྒྱུག་སྡེཚོད་གཡོན་ལ་ཡོད་པའི་སྐབས་སུ (ཁྱེད་ཀྱི་སྐབས་སུ་རེ་རྒྱུག་སྡེཚོད་གཡོན་ལ་ཡོད་པའི་སྐབས་སུ) X_FORWARDED_FOR HTTP མདོངས་གློག་འཛུགས་སྤྱད་པར་འགྱུར་རོ།"
 
 msgid "Geolocalization by coordinates"
-msgstr ""
+msgstr "མཚོང་རྒྱུག་གཏོང་རྒྱུག་སྡེཚོད་གཙོ་བོའི་རིམ་པ་ལས་ལྷོད་མཁས་གཏོང་རྒྱུག་སྡེཚོད་རྣམས་རྟོགས་པར་བྱའོ།"
 
 msgid "Export users of a course"
-msgstr ""
+msgstr "མཚོང་རྒྱུག་གྱི་མི་རྣམས་ཕྱིར་འབྲུག"
 
 msgid "Pause recording"
-msgstr ""
+msgstr "བསྡད་རྒྱུན་གཉིས་རྒྱུག"
 
 msgid "Resume recording"
-msgstr ""
+msgstr "བསྡད་རྒྱུན་གཉིས་རྒྱུག་སློབ་རམ་པར་བྱའོ"
 
 msgid "You are already registered but your allowed access time has expired."
-msgstr ""
+msgstr "ཁྱེད་ད་ལྟ་འཛུགས་པར་འགྱུར་ཞིང་ཁྱེད་ཀྱི་འཛུགས་པའི་དུས་ཚོད་འཛིན་ནང་ལ་ཡོད་པ།"
 
 msgid "Assignment work time"
-msgstr ""
+msgstr "འབད་རྟེན་ལས་ཀར་དུས་ཚོད"
 
 msgid "Document ID"
-msgstr ""
+msgstr "གཏོང་རྒྱུག་ཨཨཌི"
 
 msgid "Social data"
-msgstr ""
+msgstr "མི་མང་གློག་འཛུགས"
 
 msgid "Wall messages posted by him/herself"
-msgstr ""
+msgstr "རང་གིས་བརྗོད་རྒྱུན་གློག་འཛུགས་རྣམས"
 
 msgid "See accesses"
-msgstr ""
+msgstr "འཛུགས་པ་མཐོང་བ"
 
 msgid "Priority changed from %s to %s"
-msgstr ""
+msgstr "མཆོག་གསལ་ཕྲེང %s ལས %s བརྒྱུད་འགྱུར་བ"
 
 msgid "Status changed from %s to %s"
-msgstr ""
+msgstr "གནས་ཚུལ %s ལས %s བརྒྱུད་འགྱུར་བ"
 
 msgid "This skill was obtained through course %s which has been removed since then."
 msgstr ""
@@ -22138,154 +22138,154 @@ msgid "Require e-mail confirmation"
 msgstr ""
 
 msgid "Registration confirmation"
-msgstr ""
+msgstr "ཐོ་རིམ་གསལ་བཀོད།"
 
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
-msgstr ""
+msgstr "ཁྱེད་ཀྱི་རེམ་ཤོག་འདི་མ་གསལ་བཀོད་པས་མ་ལྕོག་སྒྲིབས། ཁྱེད་ཀྱི་གློག་འཕྲིན་ལ་སྐོར་བའི་གནས་ཚུལ་བལྟ་ནས་ལམ་སྀར་འབྲེལ་འབྱོར་ལྷབ་པར་གཏོང་རྒྱུ་ལྷུ་ནས་གློག་འཕྲིན་ཡང་སྤྲད་རྒྱུ་ལྷུ།"
 
 msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr ""
+msgstr "ཁྱེད་ཀྱི་སྤྲོད་མཁན་གྱི་ཐོ་རིམ་གཏོང་ནས་ལམ་སྀར་འབྲེལ་འབྱོར་ལྷབ་པར་རེམ་ཤོག་གསལ་བཀོད་རྒྱུ་ཡོད།"
 
 msgid "Confirmation for new account"
-msgstr ""
+msgstr "རེམ་ཤོག་གསར་པའི་གསལ་བཀོད།"
 
 msgid "Enable Cloud files link addition"
-msgstr ""
+msgstr "སྐྱེ་མཁའི་ཡིག་ཆ་ལམ་སྀར་འབྲེལ་འབྱོར་འབྱང་ཆུབ་བྱས།"
 
 msgid "Allow users to link to a file hosted on a public cloud service as if they were documents in the Chamilo documents tool."
-msgstr ""
+msgstr "དམིགས་རྒྱུ་མི་རྣམས་ལ་ཆ་མེད་སྐྱེ་མཁའི་སློབ་གཉེར་གྱི་ཡིག་ཆ་ལ་ལམ་སྀར་འབྲེལ་འབྱོར་རྒྱུ་ཆ་མེད་མཁན་གྱི་ཡིག་ཆ་རྣམས་ལུས་སྦྱར་རྒྱུ་འབྱུང།"
 
 msgid "This URL already exists"
-msgstr ""
+msgstr "འདུར་འབྲེལ་འདི་གློག་འཕྲིན་ལུ་ཡོད།"
 
 msgid "An error occurred while adding the link to a cloud file."
-msgstr ""
+msgstr "སྐྱེ་མཁའི་ཡིག་ཆ་ལ་ལམ་སྀར་འབྲེལ་འབྱོར་ནས་འབྲེལ་འབྱུང་ལ་འཁྲུལ་འཁྲུག་འབྱུང་བ།"
 
 msgid "Add link to Cloud file"
-msgstr ""
+msgstr "སྐྱེ་མཁའི་ཡིག་ཆ་ལ་ལམ་སྀར་འབྲེལ་འབྱོར།"
 
 msgid "Cloud link deleted"
-msgstr ""
+msgstr "སྐྱེ་མཁའི་ལམ་སྀར་སུངས་པ།"
 
 msgid "Cloud link moved"
-msgstr ""
+msgstr "སྐྱེ་མཁའི་ལམ་སྀར་འགྲོ་བ།"
 
 msgid "Error deleting the cloud link."
-msgstr ""
+msgstr "སྐྱེ་མཁའི་ལམ་སྀར་སུང་ནས་འཁྲུལ་འཁྲུག་འབྱུང་བ།"
 
 msgid "Cloud link added"
-msgstr ""
+msgstr "སྐྱེ་མཁའི་ལམ་སྀར་འབྲེལ་འབྱོར།"
 
 msgid "Please enter a name for this Cloud link"
-msgstr ""
+msgstr "སྐྱེ་མཁའི་ལམ་སྀར་འདིའི་མིང་འབྲུག་རྒྱུ་ལྷུ།"
 
 msgid "Cloud file link updated."
-msgstr ""
+msgstr "སྐྱེ་མཁའི་ཡིག་ཆ་ལམ་སྀར་གྱུར་ཆས།"
 
 msgid "The domain is not valid. It must be one of the following:"
-msgstr ""
+msgstr "ནང་ལོ་མི་དགེ་བ། འདི་ལྷག་གི་ནང་ལོ་རྣམས་ནས་གཅིག་ཡིན་རྒྱུ་ཡོད།"
 
 msgid "List of valid domains"
-msgstr ""
+msgstr "དགེ་བའི་ནང་ལོ་རྣམས་ཀྱི་རིམ་པ།"
 
 msgid "URL field format invalid. Example of expected format: http://dropbox.com/sh/loremipsum/loremipsum?dl=0"
-msgstr ""
+msgstr "འདུར་འབྲེལ་གནས་ཚུལ་མི་དགེ་བ། བསྒྲུབ་བྱའི་རིམ་པའི་དཔེ：「http://dropbox.com/sh/loremipsum/loremipsum?dl=0」"
 
 msgid "File extension"
-msgstr ""
+msgstr "ཡིག་ཆ་རྒྱབ་ཚིགས"
 
 msgid "Audit report"
-msgstr ""
+msgstr "བརྟག་འདྲི་རྟེན་གཏམ་རྒྱུན"
 
 msgid "The Google Translate API used by this feature returned and empty answer. Please check or ask your translate_app_google_key setting is set correctly, or kindly ask an administrator to do so."
-msgstr ""
+msgstr "འདིའི་གནས་ཚུལ་གུ་གུའི་ལོ་རྒྱུན་མ་ལོ་གོ་གློག་འཕྲིན་སྦོམ་པོ་སྤྲོད་པ། ཁྱེད་ཀྱི translate_app_google_key་གཏན་ལ་ཕབ་མི་དགེ་བ་སྐོར་བ་བལྟ་རྒྱུ་ལྷུ་ནས་འབྲུག་མཁན་ལ་གསོལ་རྒྱུ་ལྷུ།"
 
 msgid "Link me to student"
-msgstr ""
+msgstr "སློབ་ཕྲུད་ལ་ལམ་སྀར་འབྲེལ།"
 
 msgid "Please select the student you want to request a link to, so the administrators can review and approve your request. Please note that proper administrative procedures should have been followed first to ensure the admin can legally accept your request."
-msgstr ""
+msgstr "འབྲུག་མཁན་རྣམས་སྤྲོད་ནས་གསལ་བཀོད་དང་འཛིན་སྐོར་རྒྱུ་ལྷུ་ཁྱེད་ལ་ལམ་སྀར་སློབ་ཕྲུད་འབྲེལ་རྒྱུ་ཡོད་པའི་སློབ་ཕྲུད་འབྲུག་རྒྱུ་ལྷུ། འབྲུག་མཁན་གྱི་ལམ་སྀར་འབྲེལ་རྒྱུ་ལེགས་པར་འགྱུར་རྒྱུ་ལྷུ་འབྲུག་མཁན་གྱི་གཏན་འཁེལ་ལ་འབྲེལ་རྒྱུ་ཡོད།"
 
 msgid "Request linking with student"
-msgstr ""
+msgstr "སློབ་ཕྲུད་ལ་ལམ་སྀར་འབྲེལ་སྨོན་ལམ།"
 
 msgid "Send pending announcements manually"
-msgstr ""
+msgstr "མངོན་སུམ་དུ་སྨོན་ལམ་གྱི་སྙན་མཛོད་རྒྱུན་སྤྲོད།"
 
 msgid "Student linking request rejected"
-msgstr ""
+msgstr "སློབ་ཕྲུད་ལ་ལམ་སྀར་འབྲེལ་སྨོན་ལམ་བསྡམས།"
 
 msgid "Student link removed"
-msgstr ""
+msgstr "སློབ་ཕྲུད་ལམ་སྀར་སུངས་པ།"
 
 msgid "Session template"
-msgstr ""
+msgstr "ཐུན་མོང་གཉིས་སུ་རྒྱན་འགོམས།"
 
 msgid "Cloud file link"
-msgstr ""
+msgstr "སྐྱེ་མཁའི་ཡིག་ཆ་ལམ་སྀར།"
 
 msgid "Reset %s"
-msgstr ""
+msgstr "འཇོག་སློང %s"
 
 msgid "My global certificate"
-msgstr ""
+msgstr "ང་རང་གི་སྤྱི་མཆོག་གི་བརྡ་རྟགས།"
 
 msgid "Message tracking"
-msgstr ""
+msgstr "མིག་སྔར་བཞག་གཏམ་རྒྱུན།"
 
 msgid "Messages exchange between %s and %s"
-msgstr ""
+msgstr "%s་དང %s གྱི་གཏམ་རྒྱུན་འབྲེལ་འབྱོར།"
 
 msgid "You will receive another email with your password"
-msgstr ""
+msgstr "ཁྱེད་ལ་སྔོན་གྱི་སྐོར་གློག་འཕྲིན་ཡང་སྤྲོད་པར་འགྱུར།"
 
 msgid "You must have received another email with your username."
-msgstr ""
+msgstr "ཁྱེད་ལ་མིང་འདོག་སྐོར་གློག་འཕྲིན་སྤྲོད་པར་འགྱུར་རྒྱུ་ཡོད།"
 
 msgid "You must upload a zip file with the same name as the original SCORM file."
-msgstr ""
+msgstr "ཁྱེད་ལ་སྙིང་རྗེ་གནས་གཅིག་མཚམས་སམས་ཡིག་ཆ་སྦྱར་རྒྱུ་ཡོད།"
 
 msgid "You need to create a skill profile"
-msgstr ""
+msgstr "ཁྱེད་ལ་རྩོལ་ཆོག་གཉིས་སུ་རྒྱན་འགོམས་རྒྱུ་ཡོད།"
 
 msgid "Skill level"
-msgstr ""
+msgstr "རྩོལ་ཆོག་གོ་རིམ"
 
 msgid "Add item to portfolio"
-msgstr ""
+msgstr "མདོ་རྟེན་ལ་རྒྱུ་རྒྱན་འབྲེལ་འབྱོར།"
 
 msgid "New document added to course %s"
-msgstr ""
+msgstr "བསློབ་སློབ་གཉིས་སུ་ཡིག་ཆ་གསར་འབྲེལ་འབྱོར། %s"
 
 msgid "A new document %s has been added to the document tool in your course %s by %s."
-msgstr ""
+msgstr "བསློབ་སློབ་གཉིས་སུ་ཡིག་ཆ་རྒྱུན་ལ་ཡིག་ཆ་གསར་པ %s %s ལས་འབྲེལ་འབྱོར་བྱས།"
 
 msgid "Pending surveys"
-msgstr ""
+msgstr "སྨོན་ལམ་གྱི་གསར་འཛུགས།"
 
 msgid "No pending surveys"
-msgstr ""
+msgstr "སྨོན་ལམ་མེད།"
 
 msgid "Most popular sessions"
-msgstr ""
+msgstr "མང་པའི་ཐུན་མོང་གཉིས་སུ།"
 
 msgid "Item can be viewed - Prerequisites completed"
-msgstr ""
+msgstr "རྒྱུ་རྒྱན་དམིགས་སུ་མཁན་འབྲེལ་འབྱོར -སྔོན་གྱི་རྒྱུ་རྒྱན་རྫོགས།"
 
 msgid "Item %s blocks this step"
-msgstr ""
+msgstr "རྒྱུ་རྒྱན %s རིམ་པ་འདི་སྒྲིབས།"
 
 msgid "Your result at %s blocks this step"
-msgstr ""
+msgstr "%s ལ་ཁྱེད་ཀྱི་རྒྱུ་མཁན་རིམ་པ་འདི་སྒྲིབས།"
 
 msgid "What do you want to do?"
-msgstr ""
+msgstr "ཁྱེད་ལ་གང་འདྲ་བ་བྱ་རྒྱུ་ཡོད།"
 
 msgid "Follow courses"
-msgstr ""
+msgstr "བསློབ་སློབ་རྒྱུན་འབྲེལ།"
 
 msgid "Teach courses"
-msgstr ""
+msgstr "བསློབ་སློབ་རྒྱུན་སློབ་གཏོང།"
 
 msgid "Edit portfolio item"
 msgstr ""
@@ -24088,154 +24088,154 @@ msgid "The name provided will be used as the identifier of the user extra field 
 msgstr ""
 
 msgid "Deleted users"
-msgstr ""
+msgstr "བསུབས་བྱས་པའི་སྐྱེད་མཁན་ཚོ"
 
 msgid "Latest login in a course"
-msgstr ""
+msgstr "བདེན་སློབ་གཞུང་ནང་གི་སྔོན་མའི་འཛུལ་སྤྱོད།"
 
 msgid "The"
-msgstr ""
+msgstr "འདི་"
 
 msgid "Multiply questions by class"
-msgstr ""
+msgstr "དངུལ་སློབ་རིམ་པར་སློབ་སྒྲུབ་སྨྲ་ཚོ་ལ་གུང་སྒྲིབ།"
 
 msgid "Multiply questions by user"
-msgstr ""
+msgstr "སྐྱེད་མཁན་གྱིས་སློབ་སྒྲུབ་སྨྲ་ཚོ་ལ་གུང་སྒྲིབ།"
 
 msgid "Questions about next user"
-msgstr ""
+msgstr "བརྒྱུད་པའི་སྐྱེད་མཁན་གྱིས་སློབ་སྒྲུབ་སྨྲ་ཚོ།"
 
 msgid "Course code to be entered in capital letters to confirm the deletion: %s"
-msgstr ""
+msgstr "བསུབས་པའི་སྦྱོར་བའི་གཞུང་ཀོད་ལུས་ཀྱིས་རྒྱས་པའི་གློག་གསར་འབྱེད་པའི་གཞུང་ཀོད་ %s"
 
 msgid "Badge: %s"
-msgstr ""
+msgstr "བརྡ་རྟགས་ %s"
 
 msgid "Comment by %s"
-msgstr ""
+msgstr "%s གྱིས་གྲགས་སྨྲ།"
 
 msgid "Portfolio item by %s"
-msgstr ""
+msgstr "%s གྱིས་གྲོགས་སྤྱོད་རྒྱུན་རྒྱུ"
 
 msgid "Copy to my portfolio"
-msgstr ""
+msgstr "ང་གི་གྲོགས་སྤྱོད་རྒྱུན་རྒྱུ་ལ་སྦྲོམས།"
 
 msgid "Copy to student portfolio"
-msgstr ""
+msgstr "སློབ་ཕེབས་གྱི་གྲོགས་སྤྱོད་རྒྱུན་རྒྱུ་ལ་སྦྲོམས།"
 
 msgid "Originally published as \"%s\" by %s"
-msgstr ""
+msgstr "འགོ་ཉེན་གྱིས \"%s\" %s གྱིས་འགོ་ཉེན་བྱས།"
 
 msgid "Originally commented by %s in \"%s\""
-msgstr ""
+msgstr "%s གྱིས \"%s\" ནང་ནས་འགོ་ཉེན་གྲགས་སྨྲ་བྱས།"
 
 msgid "Item added to students own portfolio"
-msgstr ""
+msgstr "སློབ་ཕེབས་གྱི་གྲོགས་སྤྱོད་རྒྱུན་རྒྱུ་ལ་རྒྱུན་རྒྱུ་འབྱུང་བ།"
 
 msgid "Mark comment as important"
-msgstr ""
+msgstr "གྲགས་སྨྲ་སྙན་པོར་རྒྱབ།"
 
 msgid "Unmark comment as important"
-msgstr ""
+msgstr "གྲགས་སྨྲ་སྙན་པོར་མི་རྒྱབ།"
 
 msgid "Portfolio item marked as important"
-msgstr ""
+msgstr "གྲོགས་སྤྱོད་རྒྱུན་རྒྱུ་སྙན་པོར་རྒྱབས།"
 
 msgid "Select a learner portfolio"
-msgstr ""
+msgstr "སློབ་ཕེབས་གྱི་གྲོགས་སྤྱོད་རྒྱུན་རྒྱུ་རྣམ་སློབ།"
 
 msgid "See my portfolio in this course"
-msgstr ""
+msgstr "བདེན་སློབ་གཞུང་ནང་ནང་གི་གྲོགས་སྤྱོད་རྒྱུན་རྒྱུ་མཐོང།"
 
 msgid "Portfolio details"
-msgstr ""
+msgstr "གྲོགས་སྤྱོད་རྒྱུན་རྒྱུའི་རྒྱུན་མཚན།"
 
 msgid "Item title"
-msgstr ""
+msgstr "རྒྱུན་རྒྱུའི་མཚན་བྱང"
 
 msgid "Creation date: %s"
-msgstr ""
+msgstr "བྱས་པའི་ཉིན་རེ་ %s"
 
 msgid "Update date: %s"
-msgstr ""
+msgstr "འགོས་པའི་ཉིན་རེ་ %s"
 
 msgid "Category: %s"
-msgstr ""
+msgstr "དངུལ་སྡེ་ %s"
 
 msgid "Date: %s"
-msgstr ""
+msgstr "ཉིན་རེ་ %s"
 
 msgid "Item title: %s"
-msgstr ""
+msgstr "རྒྱུན་རྒྱུའི་མཚན་བྱང་ %s"
 
 msgid "No items in your portfolio"
-msgstr ""
+msgstr "ང་གི་གྲོགས་སྤྱོད་རྒྱུན་རྒྱུ་ལ་རྒྱུན་རྒྱུ་མེད།"
 
 msgid "You have not commented"
-msgstr ""
+msgstr "ཁྱེད་ཀྱིས་གྲགས་སྨྲ་མ་བྱས།"
 
 msgid "Portfolio items"
-msgstr ""
+msgstr "གྲོགས་སྤྱོད་རྒྱུན་རྒྱུ་ཚོ"
 
 msgid "Portfolio comments"
-msgstr ""
+msgstr "གྲོགས་སྤྱོད་རྒྱུན་རྒྱུའི་གྲགས་སྨྲ་ཚོ"
 
 msgid "Comments made"
-msgstr ""
+msgstr "བྱས་པའི་གྲགས་སྨྲ་ཚོ"
 
 msgid "Grade this item"
-msgstr ""
+msgstr "རྒྱུན་རྒྱུ་འཛུགས་རྒྱབ།"
 
 msgid "Portfolio item was graded"
-msgstr ""
+msgstr "གྲོགས་སྤྱོད་རྒྱུན་རྒྱུ་འཛུགས་རྒྱབས།"
 
 msgid "Context for the comment to be grade"
-msgstr ""
+msgstr "འཛུགས་རྒྱབ་བྱ་གྲགས་སྨྲའི་སྐོར།"
 
 msgid "Grade this comment"
-msgstr ""
+msgstr "གྲགས་སྨྲ་འཛུགས་རྒྱབ།"
 
 msgid "Portfolio comment was graded"
-msgstr ""
+msgstr "གྲོགས་སྤྱོད་རྒྱུན་རྒྱུའི་གྲགས་སྨྲ་འཛུགས་རྒྱབས།"
 
 msgid "Grade items"
-msgstr ""
+msgstr "རྒྱུན་རྒྱུ་ཚོ་འཛུགས་རྒྱབ།"
 
 msgid "Grade comments"
-msgstr ""
+msgstr "གྲགས་སྨྲ་ཚོ་འཛུགས་རྒྱབ།"
 
 msgid "Hide correct answered questions"
-msgstr ""
+msgstr "བྱང་ཆུབ་ཀྱི་སློབ་སྒྲུབ་སྨྲ་ཚོ་སྦུགས་པ།"
 
 msgid "The setting \"%s\" will change to \"%s\""
-msgstr ""
+msgstr "བཀོད་ཡོད \"%s\" འདི་ \"%s\" ལ་འགྱུར་བྱས།"
 
 msgid "Verification of answered questions"
-msgstr ""
+msgstr "སློབ་སྒྲུབ་སྨྲ་ཚོའི་སྙོན་རྒྱུར་བཟོ།"
 
 msgid "Student's assignments to be corrected"
-msgstr ""
+msgstr "བསྲུང་བར་གྱུར་པའི་སློབ་ཕེབས་གྱི་ལས་འབྲེལ།"
 
 msgid "You will find below all the work that have been submitted by students in one of your course (it could be in the base course or in a course in a session). You can filter the list selecting a specific course or a work status."
-msgstr ""
+msgstr "ཁྱེད་ཀྱི་བདེན་སློབ་གཞུང་གཅིག་ལ་སློབ་ཕེབས་ཀྱིས་སྤྲོད་པའི་ལས་ཚོ་ཀུན་འབྲེལ་ལྷག་འབྱུང་ (བདེན་སློབ་གཞུང་གཅིག་ཡིན་ནམ་གླེང་སློབ་གཞུང་གཅིག་ཡིན་ནམ།)། བདེན་སློབ་གཞུང་གཅིག་རྣམ་སློབ་ནམ་ལས་འབྲེལ་གྱི་དོན་རྣམ་སློབ་ནས་རིམ་པ་རྒྱུར་ཆོག"
 
 msgid "Back to the main course portfolio"
-msgstr ""
+msgstr "བདེན་སློབ་གཞུང་གི་གྲོགས་སྤྱོད་རྒྱུན་རྒྱུ་དངོས་གཞི་ལ་ལོགས།"
 
 msgid "Export my portfolio data in a PDF file"
-msgstr ""
+msgstr "ང་གི་གྲོགས་སྤྱོད་རྒྱུན་རྒྱུའི་གཞི་གློག་གསར་ལ་སྦྲོམས་གཏོང་ PDF ཡི་གཏན་ལ་ཕབ།"
 
 msgid "Export my portfolio data in a ZIP file"
-msgstr ""
+msgstr "ང་གི་གྲོགས་སྤྱོད་རྒྱུན་རྒྱུའི་གཞི་གློག་གསར་ལ་སྦྲོམས་གཏོང་ ZIP ཡི་གཏན་ལ་ཕབ།"
 
 msgid "Categories are for organization only in personal portfolio."
-msgstr ""
+msgstr "དངུལ་སྡེ་ཚོ་གྲོགས་སྤྱོད་རྒྱུན་རྒྱུ་རང་གི་སྐྱོང་བ་ལ་སྒྲིག་གཏོགས་ཀྱི་གཏན་ལ་ཕབ།"
 
 msgid "Export my portfolio data to a PDF file"
-msgstr ""
+msgstr "ང་གི་གྲོགས་སྤྱོད་རྒྱུན་རྒྱུའི་གཞི་གློག་གསར་ལ་སྦྲོམས་གཏོང་ PDF ཡི་གཏན་ལ་ཕབ།"
 
 msgid "Export my portfolio data to a ZIP file"
-msgstr ""
+msgstr "ང་གི་གྲོགས་སྤྱོད་རྒྱུན་རྒྱུའི་གཞི་གློག་གསར་ལ་སྦྲོམས་གཏོང་ ZIP ཡི་གཏན་ལ་ཕབ།"
 
 msgid "New learning path available"
 msgstr ""
@@ -28597,34 +28597,34 @@ msgid "Course not found"
 msgstr ""
 
 msgid "Attendance data and comments saved successfully"
-msgstr ""
+msgstr "འབྱོར་སྤྱད་གཞི་གྲུབ་དང་འབྲེལ་བརྒྱུད་ཡོངས་སུ་བསླད་འཇོགས་སོ།"
 
 msgid "Your account has expired."
-msgstr ""
+msgstr "ཁྱེད་ཀྱི་རེའུ་མཚན་འཆིང་བ་ལྷུན་གྱི་འབྲས་བུ་ལྷུན་གྱི་འབྱུང་ནས་འབྱུང་བ་ཡིན།"
 
 msgid "Invalid credentials. Please try again or contact support if you continue to experience issues."
-msgstr ""
+msgstr "མི་འཛིན་པའི་རེའུ་མཚན་ཡིན། ཡང་སླར་སློབ་སློབ་གཏང་རྒྱུ་མེད་ན་གཉེར་སྤྱོད་ལ་འབྲེལ་བརྒྱུད་འབྱུང།"
 
 msgid "Your account has not been activated."
-msgstr ""
+msgstr "ཁྱེད་ཀྱི་རེའུ་མཚན་མ་སྒྲུབ་མཁན་མ་ཡིན།"
 
 msgid "Third parties (GDPR)"
-msgstr ""
+msgstr "གཞན་པའི་མཁན་པོ་ཚོ (GDPR)"
 
 msgid "Resources by type"
-msgstr ""
+msgstr "རིམ་པའི་རང་བཞིན་གྱི་རྒྱུན་ཚོགས"
 
 msgid "File info"
-msgstr ""
+msgstr "ཡིག་ཆ་གཞི་གྲུབ"
 
 msgid "Page layouts"
 msgstr "རྩེས་ལུགས་རྒྱུན་རྒྱུད"
 
 msgid "No push notification settings configured."
-msgstr ""
+msgstr "མིན་གྲོམས་སྨྲ་བའི་རྒྱུན་ཚོགས་མ་སྒྲུབ་མཁན་མ་ཡིན།"
 
 msgid "Current user not found."
-msgstr ""
+msgstr "ད་ལྟའི་སློབ་ཕྱུག་མི་རྙེད།"
 
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr ""
@@ -28633,121 +28633,121 @@ msgid "You are registered on %s"
 msgstr ""
 
 msgid "Learning path categories"
-msgstr ""
+msgstr "བླ་ལམ་རྒྱུན་ཚོགས་ཀྱི་རིམ་པ"
 
 msgid "Translation saved."
-msgstr ""
+msgstr "འགྱུར་སྐད་ཡོངས་སུ་བསླད་འཇོགས་སོ།"
 
 msgid "Total available hours"
-msgstr ""
+msgstr "མཁས་པའི་ཆུ་ཚོད་ཀྱི་གྲངས་ཡོད་པའི་རྒྱུན་ཚོགས།"
 
 msgid "Sum of hours in subscribed sessions"
-msgstr ""
+msgstr "འབྲེལ་འབྱོར་གྱི་གསེམས་ཚིང་གི་ཆུ་ཚོད་ཀྱི་གྲངས་ཚོགས།"
 
 msgid "Count of available hours"
-msgstr ""
+msgstr "མཁས་པའི་ཆུ་ཚོད་ཀྱི་གྲངས་ཀྱི་རྒྱུན་ཚོགས།"
 
 msgid "Go to the session"
-msgstr ""
+msgstr "གསེམས་ཚིང་ལ་འགོ་འཛུལ།"
 
 msgid "Duration (minutes)"
-msgstr ""
+msgstr "མངོན་སྐབས་ཀྱི་རྒྱུན་ཚོགས (བརྒྱད་ཆུ་ཚོད)"
 
 msgid "Gradebook options"
-msgstr ""
+msgstr "བརྗོད་སྡེབས་ཀྱི་རྣམ་པའི་རྒྱུན་ཚོགས།"
 
 msgid "Qualify attendance gradebook"
-msgstr ""
+msgstr "འབྱོར་སྤྱད་གཞི་གྲུབ་བརྗོད་སྡེབས་རྒྱུན་ཚོགས་སྒྲུབ་པ"
 
 msgid "Select gradebook option"
-msgstr ""
+msgstr "བརྗོད་སྡེབས་རྣམ་པའི་རྒྱུན་ཚོགས་རེའུ་མཚན་འཛིན་པ"
 
 msgid "Gradebook column title"
-msgstr ""
+msgstr "བརྗོད་སྡེབས་གྱི་སྡེ་ཚན་གྱི་མདོ་རྒྱབ་མིང་"
 
 msgid "Grade weight"
-msgstr ""
+msgstr "བརྗོད་སྡེབས་ཀྱི་རྒྱུན་ཚོགས།"
 
 msgid "No invitations or records found"
-msgstr ""
+msgstr "འབུལ་མ་སྨོན་ལམ་ཡང་ན་གཞི་གྲུབ་མི་རྙེད་པ"
 
 msgid "Accept invitation"
 msgstr ""
 
 msgid "Reject invitation"
-msgstr ""
+msgstr "འབུལ་མ་སྨོན་ལམ་སློབ་སློབ་པ"
 
 msgid "Friend added successfully"
-msgstr ""
+msgstr "གྲོགས་པོ་ཡོངས་སུ་བསླད་འཇོགས་སོ"
 
 msgid "Friend request rejected"
-msgstr ""
+msgstr "གྲོགས་པོའི་འཛེད་སྨོན་ལམ་སློབ་སློབ་པ"
 
 msgid "We could not retrieve the themes"
-msgstr ""
+msgstr "མདོ་རྒྱབ་རྣམ་པ་ཚོ་མ་འཐོབ་ཐུབ།"
 
 msgid "Theme title"
-msgstr ""
+msgstr "མདོ་རྒྱབ་རྣམ་པའི་མདོ་རྒྱབ་མིང་"
 
 msgid "A file name is required to save the recorded audio"
-msgstr ""
+msgstr "བསླད་འཇོགས་གྱི་སྒྲོམ་སྒྲོམ་གྱི་ཡིག་ཆའི་མིང་རྒྱུ་མཁན་ཡིན།"
 
 msgid "We are sorry, your browser does not support using a microphone"
-msgstr ""
+msgstr "བསླང་རྒྱུ་ཡོད། ཁྱེད་ཀྱི་འཛུལ་འཛུམ་སྒྲོམ་སྒྲོམ་སྒྲུབ་མཁན་མ་ཡིན།"
 
 msgid "Results for"
-msgstr ""
+msgstr "འབྲས་བུ་ཚོ་གྱི་རྒྱུན་ཚོགས"
 
 msgid "Search groups"
-msgstr ""
+msgstr "ཚོགས་པོ་ཚོ་འཛུར།"
 
 msgid "Pending group invitations"
-msgstr ""
+msgstr "ཚོགས་པོའི་འབུལ་མ་སྨོན་ལམ་ཚོ་ལྷག་ཡོད།"
 
 msgid "Delete skill profile"
-msgstr ""
+msgstr "མཁས་པའི་རང་བཞིན་གཞི་གྲུབ་སུབ་པ"
 
 msgid "Skill profile deleted"
-msgstr ""
+msgstr "མཁས་པའི་རང་བཞིན་གཞི་གྲུབ་སུབ་འཇོགས་སོ"
 
 msgid "Skill profiles"
-msgstr ""
+msgstr "མཁས་པའི་རང་བཞིན་གཞི་གྲུབ་ཚོ"
 
 msgid "No skill profile"
-msgstr ""
+msgstr "མཁས་པའི་རང་བཞིན་གཞི་གྲུབ་མེད་པ"
 
 msgid "Original assignment"
-msgstr ""
+msgstr "རང་བཞིན་གྱི་འབྲེལ་འབྱོར"
 
 msgid "Student's submission"
-msgstr ""
+msgstr "སློབ་ཕྱུག་གི་འབུལ་མ"
 
 msgid "Write your comment..."
-msgstr ""
+msgstr "ཁྱེད་ཀྱི་འབྲེལ་བརྒྱུད་འབྲི་བ…"
 
 msgid "Not graded yet"
-msgstr ""
+msgstr "མ་གྲས་སྒྲུབ་མཁན་མ་ཡིན།"
 
 msgid "Attach file (optional)"
-msgstr ""
+msgstr "ཡིག་ཆ་འབྲེལ་འབྱོར (མ་གཏོགས་པ)"
 
 msgid "Please add a comment, a grade or a file"
-msgstr ""
+msgstr "འབྲེལ་བརྒྱུད་ཡང་ན་བརྗོད་སྡེབས་ཡང་ན་ཡིག་ཆ་སྤྲོད་རྒྱུ་མཁན"
 
 msgid "Score updated successfully"
-msgstr ""
+msgstr "བརྗོད་སྡེབས་ཡོངས་སུ་བསླད་འཇོགས་སོ"
 
 msgid "Comment added successfully"
-msgstr ""
+msgstr "འབྲེལ་བརྒྱུད་ཡོངས་སུ་བསླད་འཇོགས་སོ"
 
 msgid "Actions"
-msgstr ""
+msgstr "ལས་འགྲུབ་པ"
 
 msgid "Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext"
-msgstr ""
+msgstr "ཡིག་ཆའི་མིང་རེ་རེ་འདི་དང་མཚུངས་ཤོག༌ YYYY-MM-DD_HH-MM_username_originalTitle.ext"
 
 msgid "Are you sure you want to delete the selected items?"
-msgstr ""
+msgstr "འཛིན་འབྱུང་བའི་རྒྱུན་ཚོགས་སུབ་པར་ངེས་རྒྱུ་ཡོད།"
 
 msgid "Assignments deleted"
 msgstr ""
@@ -31223,4 +31223,1120 @@ msgstr "མཐོང་ཐོབ་ཀྱི་རྒྱུ་མཇུག་ས
 
 msgid "Allow PDF export for this item"
 msgstr ""
+
+msgid "Hide free users (not enrolled)"
+msgstr ""
+
+msgid "Question statistics"
+msgstr ""
+
+msgid "Generating file. Do not close this tab..."
+msgstr ""
+
+msgid "Assign auth source to users"
+msgstr ""
+
+msgid "There are no questions for this survey"
+msgstr ""
+
+msgid "Certificates report"
+msgstr ""
+
+msgid "Course picture"
+msgstr ""
+
+msgid "Current picture"
+msgstr ""
+
+msgid "Course events log"
+msgstr ""
+
+msgid "Update the category information and its optional time limit."
+msgstr ""
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr ""
+
+msgid "Generating file, do not close this tab"
+msgstr ""
+
+msgid "Assign authentication sources to users"
+msgstr ""
+
+msgid "Average completion rate"
+msgstr ""
+
+msgid "Average access rate"
+msgstr ""
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr ""
+
+msgid "Follow up"
+msgstr ""
+
+msgid "Tracking for superior"
+msgstr ""
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr ""
+
+msgid "Head manager report"
+msgstr ""
+
+msgid "Reset or update user password"
+msgstr ""
+
+msgid "Active users"
+msgstr ""
+
+msgid "Inactive users"
+msgstr ""
+
+msgid "Report on resources"
+msgstr ""
+
+msgid "Global view"
+msgstr ""
+
+msgid "Available reports"
+msgstr ""
+
+msgid "Current report"
+msgstr ""
+
+msgid "Back to user assignment page"
+msgstr ""
+
+msgid "Authentication sources assigned successfully"
+msgstr ""
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr ""
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr ""
+
+msgid "Sharing"
+msgstr ""
+
+msgid "Selected files"
+msgstr ""
+
+msgid "Hide password"
+msgstr ""
+
+msgid "Show password"
+msgstr ""
+
+msgid "Upload SVG logo for e-mails"
+msgstr ""
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr ""
+
+msgid "Clear filters"
+msgstr ""
+
+msgid "Attendances (tablet)"
+msgstr ""
+
+msgid "Exit tablet mode"
+msgstr ""
+
+msgid "No members found."
+msgstr ""
+
+msgid "Health check"
+msgstr ""
+
+msgid "Export to CC 1.3"
+msgstr ""
+
+msgid "Loading resources..."
+msgstr ""
+
+msgid "Failed to load resources."
+msgstr ""
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr ""
+
+msgid "Export finished."
+msgstr ""
+
+msgid "Export failed."
+msgstr ""
+
+msgid "Import failed."
+msgstr ""
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr ""
+
+msgid "Ready to import"
+msgstr ""
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr ""
+
+msgid "Select resources to import"
+msgstr ""
+
+msgid "No resources available in this backup."
+msgstr ""
+
+msgid "Import selection"
+msgstr ""
+
+msgid "Import completed"
+msgstr ""
+
+msgid "Could not load options."
+msgstr ""
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr ""
+
+msgid "Please choose a backup from the server"
+msgstr ""
+
+msgid "Error selecting source."
+msgstr ""
+
+msgid "Recycling options"
+msgstr ""
+
+msgid "Type the course code to confirm"
+msgstr ""
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr ""
+
+msgid "Select resources to recycle"
+msgstr ""
+
+msgid "No resources available in this course."
+msgstr ""
+
+msgid "Recycle selected"
+msgstr ""
+
+msgid "Error loading resources."
+msgstr ""
+
+msgid "Clear search"
+msgstr ""
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr ""
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr ""
+
+msgid "ex. {examplePassword}"
+msgstr ""
+
+msgid "Welcome to Chamilo!"
+msgstr ""
+
+msgid "Welcome to this platform"
+msgstr ""
+
+msgid "For more details visit %s"
+msgstr ""
+
+msgid "Manager"
+msgstr ""
+
+msgid "Mark as"
+msgstr ""
+
+msgid "Reply to all"
+msgstr ""
+
+msgid "SCIM external ID"
+msgstr ""
+
+msgid "OAuth2 ID"
+msgstr ""
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr ""
+
+msgid "Required value for operation without path"
+msgstr ""
+
+msgid "Available space (%s)"
+msgstr ""
+
+msgid "Index this description for the global search"
+msgstr ""
+
+msgid "Unknown course"
+msgstr ""
+
+msgid "Certificate not found."
+msgstr ""
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr ""
+
+msgid "Only platform administrators can change the course visibility."
+msgstr ""
+
+msgid "Unexpected error while subscribing the user"
+msgstr ""
+
+msgid "Search in resource logs"
+msgstr ""
+
+msgid "Include this learning path in the global search results"
+msgstr ""
+
+msgid "The course code already exists"
+msgstr ""
+
+msgid "Latest news"
+msgstr ""
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr ""
+
+msgid "Chamilo support block"
+msgstr ""
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr ""
+
+msgid "Hide option to send announcements to HR users"
+msgstr ""
+
+msgid "Allow session admins to download private certificates"
+msgstr ""
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr ""
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr ""
+
+msgid "Main menu entries"
+msgstr ""
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr ""
+
+msgid "Main menu entries per role"
+msgstr ""
+
+msgid "Define header tabs visibility per role."
+msgstr ""
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr ""
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr ""
+
+msgid "Mail: character set"
+msgstr ""
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr ""
+
+msgid "Mail: Debug"
+msgstr ""
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr ""
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr ""
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr ""
+
+msgid "Mail: DKIM headers"
+msgstr ""
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr ""
+
+msgid "Mail: XOAuth2 options"
+msgstr ""
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr ""
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr ""
+
+msgid "Global limit of users per course"
+msgstr ""
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr ""
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr ""
+
+msgid "Show base course posts in session course"
+msgstr ""
+
+msgid "Limit identical email usage"
+msgstr ""
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr ""
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr ""
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr ""
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr ""
+
+msgid "Redirect after login (per profile)"
+msgstr ""
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr ""
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr ""
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr ""
+
+msgid "Array defining host and port for the LDAP server."
+msgstr ""
+
+msgid "Enable 2FA"
+msgstr ""
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr ""
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr ""
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr ""
+
+msgid "Show remaining days in My Sessions"
+msgstr ""
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr ""
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr ""
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr ""
+
+msgid "Disclose AI assistance"
+msgstr ""
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr ""
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr ""
+
+msgid "Session Catalog Settings"
+msgstr ""
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr ""
+
+msgid "Show Course Descriptions"
+msgstr ""
+
+msgid "Display course descriptions within the catalog listing."
+msgstr ""
+
+msgid "Published Courses Only"
+msgstr ""
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr ""
+
+msgid "Display Catalog on Homepage"
+msgstr ""
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr ""
+
+msgid "Hide Public Link"
+msgstr ""
+
+msgid "Remove the public URL link from course cards."
+msgstr ""
+
+msgid "Only Selected Courses"
+msgstr ""
+
+msgid "Show only manually selected courses in the catalog."
+msgstr ""
+
+msgid "Allow Student Browsing"
+msgstr ""
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr ""
+
+msgid "Hide Private Courses"
+msgstr ""
+
+msgid "Exclude private courses from the catalog display."
+msgstr ""
+
+msgid "Show Courses & Sessions"
+msgstr ""
+
+msgid "Include both courses and sessions in catalog results."
+msgstr ""
+
+msgid "Auto Session Subscription"
+msgstr ""
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr ""
+
+msgid "Subscription in Session View"
+msgstr ""
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr ""
+
+msgid "Enable redirection plugin"
+msgstr ""
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr ""
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr ""
+
+msgid "Extra user field used to search and name sessions"
+msgstr ""
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr ""
+
+msgid "Glossary terms generator"
+msgstr ""
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr ""
+
+msgid "Video generator"
+msgstr ""
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr ""
+
+msgid "Course analyser"
+msgstr ""
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr ""
+
+msgid "Test/development"
+msgstr ""
+
+msgid "Crons"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
+msgid "Gradebook"
+msgstr ""
+
+msgid "Internationalization"
+msgstr ""
+
+msgid "User profiles"
+msgstr ""
+
+msgid "Support tickets"
+msgstr ""
+
+msgid "Webservices"
+msgstr ""
+
+msgid "Catalogue"
+msgstr ""
+
+msgid "Workflows"
+msgstr ""
+
+msgid "Setting is editable on sub-URLs"
+msgstr ""
+
+msgid "Show JSON Template"
+msgstr ""
+
+msgid "JSON Template"
+msgstr ""
+
+msgid "Installing Xapian bindings"
+msgstr ""
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr ""
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr ""
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr ""
+
+msgid "Cleanup temporary uploads and cache"
+msgstr ""
+
+msgid "Directory"
+msgstr ""
+
+msgid "Only delete files older than (minutes)"
+msgstr ""
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr ""
+
+msgid "Preview only (do not delete)"
+msgstr ""
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr ""
+
+msgid "This will delete all temporary files. Continue?"
+msgstr ""
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr ""
+
+msgid "The value must match exactly: %s"
+msgstr ""
+
+msgid "Repeat end date must be after start date."
+msgstr ""
+
+msgid "Index document content?"
+msgstr ""
+
+msgid "Upload SVG logo to platform header"
+msgstr ""
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr ""
+
+msgid "Write something to %s"
+msgstr ""
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr ""
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr ""
+
+msgid "Header PNG must be ≤ %spx."
+msgstr ""
+
+msgid "Require specific file format"
+msgstr ""
+
+msgid "Select allowed file formats"
+msgstr ""
+
+msgid "Custom extensions (separated by space)"
+msgstr ""
+
+msgid "Other extensions"
+msgstr ""
+
+msgid "My invitations"
+msgstr ""
+
+msgid "Delete access"
+msgstr ""
+
+msgid "Certificate tags"
+msgstr ""
+
+msgid "Copy all"
+msgstr ""
+
+msgid "Click to insert"
+msgstr ""
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr ""
+
+msgid "View badge"
+msgstr ""
+
+msgid "%d min"
+msgstr ""
+
+msgid "Duration in minutes"
+msgstr ""
+
+msgid "Go back to standard view"
+msgstr ""
+
+msgid "Search for student..."
+msgstr ""
+
+msgid "This date is locked or read-only."
+msgstr ""
+
+msgid "Failed to load attendance. Please try again later."
+msgstr ""
+
+msgid "Nothing to save"
+msgstr ""
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr ""
+
+msgid "Storage usage unavailable"
+msgstr ""
+
+msgid "Search for members..."
+msgstr ""
+
+msgid "Current members"
+msgstr ""
+
+msgid "Add members"
+msgstr "འབྲེལ་འབྱོར་པའི་མི་སྡེབས་འཛིན་འབྱེད་པ"
+
+msgid "Search for users in course/session..."
+msgstr "བཀོལ་གླུང་/སྤྱད་སྒྲིག་ནང་གི་མི་འབྲེལ་འབྲེལ་འབྱེད་པ་..."
+
+msgid "No users available."
+msgstr "མི་འབྲེལ་མེད་པ།"
+
+msgid "Browse and publish new posts"
+msgstr "འབྲེལ་འབྱུང་གསར་པའི་སློབ་གཏམ་འཁྱོད་པ་དང་འབྱོད་པ"
+
+msgid "Create and assign tasks"
+msgstr "ལས་འབྲེལ་གསར་བ་འབྱེད་པ་དང་འབྲེལ་འཛིན་འབྱེད་པ"
+
+msgid "Filtered by %s"
+msgstr "%s བརྒྱད་སྒྲིག་འགྱུར་བ"
+
+msgid "Select a score"
+msgstr "ཨང་གྲགས་སླེབས་འབྱེད་པ"
+
+msgid "Edit comment"
+msgstr "འབྲེལ་འབྱུང་གྱི་འགྲེམ་སྣོན་འབྱེད་པ"
+
+msgid "Failed to update the post."
+msgstr "འབྲེལ་འབྱུང་གྱི་གྱུར་སླར་མི་འགྱུར་བ།"
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "འབྲེལ་འབྱུང་འདི་སུབས་འབྱེད་ཡོད་ནས་གཏོང་ཡོད་ནམ། འདི་ལྟར་གྱུར་ན་ལོག་སློག་བྱ་མི་འཐུབ།"
+
+msgid "Failed to delete the post."
+msgstr "འབྲེལ་འབྱུང་སུབས་འབྱེད་མི་འགྱུར་བ།"
+
+msgid "Failed to update the comment."
+msgstr "འབྲེལ་འབྱུང་གྱི་འགྲེམ་གྱུར་སླར་མི་འགྱུར་བ།"
+
+msgid "Delete this comment?"
+msgstr "འབྲེལ་འབྱུང་འདི་སུབས་འབྱེད་ཡོད་ནམ།"
+
+msgid "Failed to delete the comment."
+msgstr "འབྲེལ་འབྱུང་སུབས་འབྱེད་མི་འགྱུར་བ།"
+
+msgid "Search for projects..."
+msgstr "འབྲེལ་འབྱུང་འབྲེལ་འབྱེད་པ་..."
+
+msgid "Only visible"
+msgstr "མཉམ་སྦྱོར་མཐོང་བ་ཅན་རེད་པ"
+
+msgid "Rename project"
+msgstr "འབྲེལ་འབྱུང་མིང་གྱུར་འབྱེད་པ"
+
+msgid "New title"
+msgstr "མིང་གསར་པ"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "འབྲེལ་འབྱུང་འཇུག་འབྱེད་ལ་སློབ་ཐུན་ཁང་ལྷ་ཁང་པ་གཡོག་རྒྱུག་པ་གཡོག་རྒྱུག་པ་ཡིན་ནས་གཏོང་ཡོད།"
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "འབྲེལ་འབྱུང་འདི་སུབས་འབྱེད་ཡོད་ནམ། འདི་ལྟར་གྱུར་ན་ལོག་སློག་བྱ་མི་འཐུབ།"
+
+msgid "Task list"
+msgstr "ལས་འབྲེལ་གྲངས་ཐོང་"
+
+msgid "Change status"
+msgstr "དངོས་གྲུབ་གྱུར་གྱུར་འབྱེད་པ"
+
+msgid "Waiting for validation"
+msgstr "བསྒྲུབ་བྱ་སྒྲིག་འཛིན་སྐྱོང་བ"
+
+msgid "Delete this task?"
+msgstr "ལས་འབྲེལ་འདི་སུབས་འབྱེད་ཡོད་ནམ།"
+
+msgid "Failed to delete the task."
+msgstr "ལས་འབྲེལ་སུབས་འབྱེད་མི་འགྱུར་བ།"
+
+msgid "Failed to update status."
+msgstr "དངོས་གྲུབ་གྱུར་གྱུར་སླར་མི་འགྱུར་བ།"
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "འདི་ལྟར་གྱུར་ན་གཞན་དང་འབྲེལ་འབྱོར་འདི་སུབས་འབྱེད་ཡོད་ནམ། འདི་ལྟར་གྱུར་ན་ལོག་སློག་བྱ་མི་འཐུབ།"
+
+msgid "Please fix the errors before saving."
+msgstr "བསླུ་བ་འབྲས་སྒྲུབ་གྱི་ཕན་ཚུན་ལ་གནས་འབྱེད།"
+
+msgid "Error creating third party. Please verify the data."
+msgstr "གཞན་དང་འབྲེལ་འབྱོར་འབྱེད་པའི་འབྲེལ་འབྱུང་། བརྒྱུད་འབྲེལ་འབྲེལ་འབྱེད་པ།"
+
+msgid "Error deleting third party."
+msgstr "གཞན་དང་འབྲེལ་འབྱོར་སུབས་འབྱེད་པའི་འབྲེལ་འབྱུང་།"
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "མདོ་རྒྱུ་གཏོགས་གཏོགས་མཚོན་རྟགས་དང་འབྲེལ་འབྲེལ་འབུགས་རྟགས་འབུགས་འབྱེད་པ། SVG མཉམ་མཆོག་ཡིན་པ། PNG བརྒྱུད་འབྲེལ་ཡིན་པ།"
+
+msgid "Data exchange updated successfully."
+msgstr "བརྒྱུད་འབྲེལ་སློབ་གཏམ་གྱུར་སླར་འགྱུར་བ།"
+
+msgid "Error deleting data exchange."
+msgstr "བརྒྱུད་འབྲེལ་སུབས་འབྱེད་པའི་འབྲེལ་འབྱུང་།"
+
+msgid "Failed to recycle course."
+msgstr "བཀོལ་གླུང་སློག་སློག་མི་འགྱུར་བ།"
+
+msgid "Select source course"
+msgstr "དངོས་གཞིའི་བཀོལ་གླུང་སླེབས་འབྱེད་པ"
+
+msgid "Course to copy from"
+msgstr "འབྲེལ་འབྱུང་བཀོལ་གླུང་"
+
+msgid "Search by code or title..."
+msgstr "རྒྱུན་ཆས་གཡམ་མིང་ལ་འབྲེལ་འབྱེད་པ་..."
+
+msgid "No courses match your search."
+msgstr "བཀོལ་གླུང་འབྲེལ་མི་མཉམ་མཆོག་མེད་པ།"
+
+msgid "Copy options"
+msgstr "འབྲེལ་འབྱུང་རྒྱན"
+
+msgid "Include users (enrollments)"
+msgstr "མི་འབྲེལ་འབྲེལ་འབྱོར (འཁྲིད་ཡོད་པ)"
+
+msgid "Reset dates"
+msgstr "ཉིན་རེའི་སློག་འབྱེད་པ"
+
+msgid "When a file with the same name exists"
+msgstr "མིང་མཉམ་པའི་ཡིག་ཆ་གནས་ལ་གནས་ཡོད་ན"
+
+msgid "Ready to copy"
+msgstr "འབྲེལ་འབྱུང་ལ་སློགས་སློག་རྒྱུན་ཆས་ཡོད་པ"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "བལེབས་འབྱེད་བཀོལ་གླུང་ནང་གི་འབྲེལ་འབྱུང་འདི་བཀོལ་གླུང་ནང་འབྲེལ་འབྱུང་འབྱེད་པ། རྒྱན་གྱུར་ལ་ལོག་འགྲོ་བཞིན་ཡོད་པ།"
+
+msgid "Start copying"
+msgstr "འབྲེལ་འབྱུང་འབྱེད་པ་འགོམས་པ"
+
+msgid "Select resources to copy"
+msgstr "འབྲེལ་འབྱུང་འབྱེད་པའི་རྒྱུན་འཁྲིལ་གྱི་སླེབས་འབྱེད་པ"
+
+msgid "Copy selected"
+msgstr "བལེབས་འབྱེད་པ་འབྲེལ་འབྱུང་འབྱེད་པ"
+
+msgid "Copy completed."
+msgstr "འབྲེལ་འབྱུང་འབྱེད་པ་རྫོགས་སོ།"
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "མཐོང་བ་མེད་པའི་གནས་ལུགས། བཀོལ་གླུང་སུབས་འབྱེད་པ་རྒྱུན་ཆས་ཡིན་པ།"
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "བཀོལ་གླུང་རྒྱུན་ཆས་འབྲི་བྱ་ཡོད། བརྒྱུད་འབྲེལ་རྒྱུན་ཆས་སུབས་འབྱེད་པ།"
+
+msgid "The code must match '%s' exactly."
+msgstr "ཀོད་“%s”ལ་སྙམས་འབྲང་ནས་འགྲིགས་སོང་།"
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "འདི་རྒྱུན་གྱི་ནང་ལ་སྤྱོད་ཡོད་པའི་གཞི་སློབ་གཉན་ཚོ་ཡང་སུབས་བཏང་།（ཡོད་ན་）"
+
+msgid "Delete course"
+msgstr "རྒྱུན་སུབས་བཏང་"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "འདིའི་ལས་སུམས་མི་འགྲོབ་བོ་ཡིན་པས། འགྲོགས་སུང་？"
+
+msgid "Course deleted successfully."
+msgstr "རྒྱུན་སུབས་བཏང་སློབ་དཔོད་སོང་།"
+
+msgid "Failed to delete course."
+msgstr "རྒྱུན་སུབས་བཏང་མི་འགྲུབ་བོ།"
+
+msgid "Create .mbz"
+msgstr ".mbz་སྦྱར་བཏང་"
+
+msgid "Backup scope"
+msgstr "སྦྱར་བཏང་རང་བཞིན་"
+
+msgid "Full course"
+msgstr "རྒྱུན་རྒྱལ་རྒྱས་པ"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "གསར་བཅུག་ཡོད་པའི་གཉན་ཚོ་གཅིག་ཙམ་སུབས་བཏང་གཉན་ལ་འབྲས་སྤྲོད་སོང་།"
+
+msgid "Moodle export"
+msgstr "མུདུ་སུབས་བཏང་"
+
+msgid "Moodle version"
+msgstr "མུདུ་སྤྱི་མཚན་"
+
+msgid "Admin ID"
+msgstr "མདམས་གཉེན་ཨའི་ཌི་"
+
+msgid "Internal integer user id"
+msgstr "ནང་གི་མི་ཤེས་ཨའི་ཌི་གཅིག་གཅིག་"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "མུདུ་ནང་གི་མི་ཨའི་ཌི་ཨེམ་ཨེམ་ཨེལ་ནང་ལ་སྦྱར་ནས་འབྲས་སྤྲོད་ཡོད། འདྲ་བ་མེད་ན་༡་སྤྱོད།"
+
+msgid "Username to appear as owner of imported items"
+msgstr "སུབས་པའི་གཉན་ཚོའི་བདག་པོར་འབྱུང་ནས་སྤྱོད་པའི་མི་མíng"
+
+msgid "Email to use in the archive metadata"
+msgstr "སྦྱར་བཏང་གཉན་གྱི་མེ་ཏ་(%s)བརྒྱུད་སྤྱོད་པའི་གློག་འཁོར་"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr ".mbz་གཉན་གཅིག་སྦྱར་བཏང་སོང་། མཇུག་སྒྲིལ་ནས་འཐོབ་ཐུབ།"
+
+msgid "Select resources to include"
+msgstr "འབྲས་སྤྲོད་རྒྱུན་ཚོ་གསར་བཅུག་"
+
+msgid "Export completed"
+msgstr "སུབས་བཏང་མཇུག་སྒྲིལ་སོང་"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "ཁྱེད་ཀྱི་མུདུ་སྦྱར་བཏང་སྦྱར་བཏང་སོང་། རྒྱུན་སྦྱར་བཏང་གྲངས་ལ་ཡོད།"
+
+msgid "Please complete all required fields."
+msgstr "མཇུག་སྒྲིལ་ཡོད་པའི་གཞི་ཚོ་རྒྱལ་རྒྱས་འགྲིགས་"
+
+msgid "Failed to create Moodle backup."
+msgstr "མུདུ་སྦྱར་བཏང་སྦྱར་བཏང་མི་འགྲུབ་བོ།"
+
+msgid "More actions"
+msgstr "ལས་སུམས་མང་པོ"
+
+msgid "Write something"
+msgstr "ཆོས་སྦྱོར་གྱི་གཏམ་སྦྱོར་"
+
+msgid "Friends of %s"
+msgstr "%sའི་གྲོགས་པོ་ཚོ"
+
+msgid "Error loading learning paths."
+msgstr "སློབ་ལམ་ཚོ་འཐོབ་མི་འགྲུབ་བོ།"
+
+msgid "You don't have any learning path."
+msgstr "ཁྱེད་ལ་སློབ་ལམ་མེད།"
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "རྒྱུན་གྱི་དོན་ཚོ་འགྱུར་བཏང་ནས་སློབ་ལམ་གཅིག་སྦྱར་བཏང་"
+
+msgid "Could not save the new category order."
+msgstr "དབྱུགས་གཉེན་གྱི་རིམ་པ་གསར་པ་སྦྱར་མི་འགྲུབ་བོ།"
+
+msgid "Could not save the new order."
+msgstr "རིམ་པ་གསར་པ་སྦྱར་མི་འགྲུབ་བོ།"
+
+msgid "Assignment"
+msgstr "བརྩོན་འགྲུས"
+
+msgid "Allowed file formats: %s"
+msgstr "བརྩད་ཐུབ་པའི་གཉན་རྣམ་ཚོ: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "གཉན་རྣམ་མི་བརྩད། བརྩད་ཐུབ་པའི་མཐའ་ཚིག: %s"
+
+msgid "Folder name"
+msgstr "སྨྲ་མཁོའི་མིང་"
+
+msgid "Rename folder"
+msgstr "སྨྲ་མཁོ་གསར་བསྡད་"
+
+msgid "New name"
+msgstr "མིང་གསར་"
+
+msgid "Choose an action"
+msgstr "ལས་སུམས་གཅིག་གྷུར་"
+
+msgid "New version"
+msgstr "སྤྱི་མཚན་གསར་"
+
+msgid "Change title to selected filename"
+msgstr "མཚོན་གྱི་གཉན་མིང་ལ་སྤྱོད་པའི་མཚོན་གྱི་མིང་གཅིག་གསར་བསྡད་"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "གཉན་གཅིག་གཅིག་སྦྱར་ཐུབ། སྨྲ་མཁོ་གཅིག་གཅིག་ལ་འགྲོབ་ཐུབ། ཁོ་ནོ་གཉིས་ཀྱི་གཅིག་གིས་སོགས།"
+
+msgid "Move %s"
+msgstr "%s་འགྲོབ་"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "རྩ་བའི་སྨྲ་མཁོ་མ་གཏོགས་པའི་སྨྲ་མཁོ་ཚོ་རང་གི་གཉན་ཚོ་རྩ་བལ་མི་འབྲུག་ནས་སྤྲོད།"
+
+msgid "No feedback yet."
+msgstr "བསྒྲུབ་འཛིན་མེད།"
+
+msgid "Upload first, organize later"
+msgstr "སྦྱར་བཏང་ནས་ འགྱུར་བཏང་"
+
+msgid "Drag & drop or browse to add files"
+msgstr "གཉན་ཚོ་སྦྱར་བཏང་ནས་འཁོར་བའི་འགྲོབ་འཛིན་འབྲུག་སློབ་འཛིན་འབྲུག་"
+
+msgid "Social wall..."
+msgstr "མི་མཐུན་པའི་སྨྲ་མཁོ..."
+
+msgid "Wall of %s"
+msgstr "%sའི་སྨྲ་མཁོ"
+
+msgid "Version currently loaded"
+msgstr "སྤྱོད་ནས་འཐོབ་པའི་སྤྱི་མཚན་"
+
+msgid "Completion"
+msgstr "མཇུག་སྒྲིལ་"
+
+msgid "Quick navigation"
+msgstr "མྱུར་སྐྱོར་འགྲོ་བ"
+
+msgid "Filled"
+msgstr "ཁ满了"
+
+msgid "Terms sections"
+msgstr "བརྒྱད་རིམ་སྡེ་ཚན"
+
+msgid "Open a section to edit its content."
+msgstr "དེའི་གཞིང་འགྱུར་བར་སྡེ་ཚན་གཅིག་འཁྱིལ།"
+
+msgid "Open this section to load the editor."
+msgstr "བཤད་མིན་འཛུགས་འབྲུག་འབུབས་ལོ་རྒྱུན་འབྲུག་སྡེ་ཚན་འདི་འཁྱིལ།"
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "མཐམ་སྒྲིབ་སྡེ་ཚན་: མཐུད་འགྲོ་ཡུ་རླ་འབྱེད་པ་མི་འགྱུར་བའི་རེད།"
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "ངོས་བཟངས་ཀྱི་ཡུ་རླ་རེད་པ་རེད། ཡུ་རླ་དང་འབྲེལ་བ་རྣམས་མི་འགྱུར་བར་འབྱེད་པར་བྱེད།"
+
+msgid "Unable to load the badge's image."
+msgstr "བརྡ་རྟགས་ཀྱི་རྟེན་གཏོང་མི་འཐུབ།"
+
+msgid "Invalid role selection"
+msgstr "མི་རྒྱུན་སྤྱོད་མེད་པ"
+
+msgid "Select relation type first to enable user management."
+msgstr "མི་འཛིན་སྐྱོང་ལ་མི་འཛུགས་འབྲུག་འབུབས་ལ་མི་འཛིན་སྐྱོང་གཅིག་སྡེབ།"
+
+msgid "This question has no course context. Preview is not available."
+msgstr "འདིའི་སློབ་དཔོན་གྱི་གནས་མེད། མཇུག་སྡེབས་མི་འཐུབ།"
+
+msgid "Unknown test"
+msgstr "མི་ཤེས་པའི་རྩོད་འབྲེལ"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "སློབ་དཔོན་གྱི་གནས་མེད་ན་འབྱེད་པ་མི་འཐུབ།"
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "འབྱེད་པ་མི་འཐུབ།: སློབ་དཔོན་གྱི་གནས་མེད་ནས་རྩོད་འབྲེལ་འདི་རྩོད་འབྲེལ་གྱི་ནང་ནས་འགྱུར་བར་བྱེད་པར་བྱོས་ནས་རྩོད་འབྲེལ་མེད་པའི་རྩོད་འབྲེལ་རེ་རེ་སྡེབས། མི་རྒྱུན་རྩོད་འབྲེལ་ཀྱི་ངོ་མེད།"
+
+msgid "Delete failed: question not found."
+msgstr "འབྱེད་པ་མི་འཐུབ།: རྩོད་འབྲེལ་མི་རྙེད།"
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "འབྱེད་པ་མི་འཐུབ།: རྩོད་འབྲེལ་འདི་གཞན་པའི་རྒྱུན་ལ་གཏོངས་ཡོད།"
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "རྩོད་འབྲེལ་འདི་རྩོད་འབྲེལ་གྱི་ནང་ལ་ཡོད། རྩོད་འབྲེལ་གྱི་ནང་ནས་འགྱུར་བར་བྱེད་པར་བྱོས་ནས་རྩོད་འབྲེལ་མེད་པའི་རྩོད་འབྲེལ་རེ་རེ་སྡེབས།"
+
+msgid "Access the group tools and resources"
+msgstr "སྡེ་ཚན་གྱི་རྒྱུན་ལ་མཐུད་འགྲོ"
+
+msgid "%s members"
+msgstr "%s་སྡེ་ཚན་མི"
+
+msgid "View certificate (HTML)"
+msgstr "བརྡ་རྟགས་མཇུག་སྡེབས (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "འདིའི་སྡེ་ཚན་ལ་རྒྱུན་ལ་མཐུད།"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "སྡེ་ཚན་གྱི་རྒྱུན་ལ་མཐུད་འགྲོ་དང་རྒྱུན་ལ་མཐུད་འགྲོ་སྐྱོང་ལ་འགྱུར།"
+
+msgid "Please select a specific badge issue to download"
+msgstr "བརྡ་རྟགས་གཅིག་སྡེབས་ཀྱི་རྒྱུན་ལ་མཐུད་འགྲོ"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM་མི་འཛུགས།"
+
+msgid "Invalid token."
+msgstr "མི་རྒྱུན་རྐྱེན་མེད་པ"
+
+msgid "Schema not supported."
+msgstr "མདོ་རྟེན་མི་རྒྱུན།"
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "PATCH བརྒྱུད་ལ་མི་རྒྱུན་མདོ་རྟེན།"
+
+msgid "Missing required \"Operations\" array."
+msgstr "འབྲེལ་འབྱུང་གྱི་གྲོང་ཚན་མི་རྙེད།"
+
+msgid "The '%s' operation is not supported."
+msgstr "འབྲེལ་འབྱུང '%s' མི་རྒྱུན།"
+
+msgid "Drupal user ID"
+msgstr "Drupal མི་ངོ"
+
+msgid "There are no terms that match the search: %s"
+msgstr "བལྟ་བ་མི་འགྲོ་བ %s བརྒྱུད་ལ་མི་རྙེད་པའི་རྒྱུན་མེད"
+
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "རྒྱུན་ལ་འབྲེལ་འབྱུང་མི་འགྱུར (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "འཛུགས་ན་ 1:1 མི་གཉིས་ཀྱི་འབྲེལ་འབྱུང་སློབ་དཔོན་གྱི་རྒྱུན་ལ་གཏོངས་ཡོད། མི་གཉིས་ཀྱི་གནས་ལ་མི་འཛུགས་པར་བྱ་སློབ།"
+
+msgid "Save private conversations in documents"
+msgstr "མི་གཉིས་ཀྱི་འབྲེལ་འབྱུང་རྩོམ་རྒྱུན་ལ་སྒྲིག"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU AI Act – མཐོང་བསམ་གྱི་རྒྱུན་ལ་སྨྲད་པ"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "EU Artificial Intelligence Act (Regulation (EU) 2024/1689)འི་རྒྱུན་ལ་ AI སྒྲིབ་རྒྱུན་སློབ་གཉིར་ལ་སྤྱོད་པ་རྣམས “མཐོ་རྒྱུན” ལ་སྡེབས་ཡོད། འདིའི་སྒྲིབ་རྒྱུན་ཁོ་ན་ལ AI སྒྲིབ་རྒྱུན་མིན་ལ་སྒྲིག་རྒྱུན་ལ་གཏོངས་ཡོད — སྒྲིག་རྒྱུན་ལ་རེ་རེ — མི་འཛུགས་རྒྱུན་ལ་སྤྱོད་པར་བྱེད། འདིའི་སྒྲིབ་རྒྱུན་རྣམས་མི་འཛུགས་རྒྱུན་ལ་གཏོངས་ཡོད <em>མི་འཛུགས་ནས</em> མི་འཛུགས་རྒྱུན་ལ་གཏོངས་ཡོད། འདིའི་སྒྲིབ་རྒྱུན་རྣམས་མི་འཛུགས་རྒྱུན་ལ་གཏོངས་ཡོད <strong>མིན</strong> AI སྒྲིབ་རྒྱུན་ལ་མི་འཛུགས་རྒྱུན་ལ་གཏོངས་ཡོད། མི་འཛུགས་རྒྱུན་ལ་གཏོངས་ཡོད།"
+
+msgid "Admin responsibility & disclosures"
+msgstr "མདུན་པའི་གནས་ལ་སྒྲིག་དང་སྨྲད་པ"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "འདིའི་སྒྲིག་རྒྱུན་ལ་རྒྱུན་རྣམས་དང་རྒྱུན་ལ་སྤྱོད་པ་རེ་རེ་སྡེབས། མཐུན་འགྱུར་རྒྱུན་ལ་སྒྲིག་ནས་ GDPR མཐུན་འགྱུར་མི་འཛུགས་རྒྱུན་ལ་སྒྲིག། མི་འཛུགས་རྒྱུན་ལ་གཏོངས་ཡོད། AI རྒྱུན་རྣམས་རྒྱུན་ལ་གཏོངས་ཡོད། མི་འཛུགས་རྒྱུན་ལ་གཏོངས་ཡོད། <strong>ཁྱེད་རང་གནས་ལ་སྒྲིག</strong> མི་འཛུགས་རྒྱུན་ལ་གཏོངས་ཡོད། མཐོང་བསམ་གྱི་རྒྱུན་ལ་ AI འི་རྒྱུན་ལ་གཏོངས་ཡོད།"
+
+msgid "Positioning"
+msgstr "གནས་ལ་སྒྲིག"
+
+msgid "Quiz"
+msgstr "རྩོད་འབྲེལ"
+
+msgid "Customcertificate"
+msgstr "རྒྱུན་ལ་མཐུད་འགྲོ་བརྡ་རྟགས"
+
+msgid "Update profile"
+msgstr "མི་འཛུགས་རྒྱུན་ལ་སྒྲིག"
 

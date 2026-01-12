@@ -31077,6 +31077,9 @@ msgstr "Gqiba ngesihloko okanye indlela..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Lawula iibhakethi, buyisela, kopisha, buyise kwi-recycle kwaye susa idatha yekhosi."
 
+msgid "%s comment(s)"
+msgstr "%s izagqabantshintshi"
+
 msgid "Error updating third party. Please verify the data."
 msgstr "Impazamo yokuhlaziya umntu wesithathu. Nceda uqinise idatha."
 
@@ -32303,4 +32306,37 @@ msgstr "ID yomsebenzisi weDrupal"
 
 msgid "There are no terms that match the search: %s"
 msgstr "Akukho magama ahambelana nokukhangela: %s"
+
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Setting is globally locked (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Ukuba ivulwe, imiyalezo yechat yangasese ye-1:1 iya kufaniswa kumaxwebhu embali wekursi. Kuyanconyelwa ukuyigcina ivaliwe ukuze kukhuselwe ubumdla wangasese."
+
+msgid "Save private conversations in documents"
+msgstr "Gcina iingxoxo zangasese kumaxwebhu"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "Umthetho we-AI wase-EU – Ubonakuda & isaziso somngcipheko"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "Phantsi koMthetho wase-EU we-Artificial Intelligence Act (Regulation (EU) 2024/1689), iinkqubo ze-AI ezisetyenziswa kwimfundo zihlelwa ngokubanzi njenge-“high-risk”. Le softeyari ngokwayo <strong>ayiyo</strong> inkqubo ye-AI, kodwa inokudibanisa iinkqubo ze-AI zangaphakathi okanye zangaphandle ezikhethekileyo—kuxhomekeke kulungelelwaniso lwakho—ukuphucula ukusebenza kwemisebenzi yomsebenzisi. Ezi nkqubo zinokufikelela kwidatha yobuqu <em>kuphela ukuba</em> abasebenzisi bayifaka kwizibhambathiso zabo. Ngoyilo, le softeyari ayabelani idatha yobuqu neenkqubo ze-AI ngaphandle kokufaka okusebenzayo komsebenzisi. Ngokwendalo, zonke iimpawu ze-AI zikhutshiweyo."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Uxanduva lolawulo & ukuchazwa"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Eli phepha lolungelelwaniso lichaza ngokweenkcukacha inqaku ngalinye le-AI kunye nenjongo yalo. Njengomdidobi, kufuneka ulihlolisise ngokucophelelayo kwaye uhlaziye imigaqo yakho yemfihlo yedatha ehambelana ne-GDPR ukuze ibonise ezinye izikhetho ozivulelayo. Nangona uninzi lweempawu ze-AI azabelani ngqo idatha yobuqu neenkqubo zangaphandle, izibhambathiso zabasebenzisi ezithunyelwa kwi-AI zinokubandakanya ulwazi lobuqu ngokungathethi ngokwenzakala. Njengomdidobi, <strong>wena unoxanduva</strong> lokwazisa abasebenzisi ngalo umngcipheko. Ukuze kube necwecwe, ushicilelo lwexesha elizayo lunokubonisa iimpawu ezingangxameliyo zabasebenzisi abagqibeleleyo ezibonisa ukuba umxholo okanye ingxubuso ethile yenziwe ngoncedo lwe-AI."
+
+msgid "Positioning"
+msgstr "Isikhundla"
+
+msgid "Quiz"
+msgstr "Uvavanyo"
+
+msgid "Customcertificate"
+msgstr "Isatifikethi esiqhelekileyo"
+
+msgid "Update profile"
+msgstr "Hlaziya iprofayili"
 

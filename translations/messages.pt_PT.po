@@ -19041,7 +19041,7 @@ msgid "Select an action"
 msgstr "Selecione uma ação"
 
 msgid "Login: %s"
-msgstr "Login: %s"
+msgstr "Início de sessão: %s"
 
 msgid "Database <b>%s</b> will be created"
 msgstr "Banco de dados <b>%s</b> será criado"
@@ -32318,4 +32318,37 @@ msgstr "ID de usuário Drupal"
 
 msgid "There are no terms that match the search: %s"
 msgstr "Não há termos que correspondam à pesquisa: %s"
+
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Definição bloqueada globalmente (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Se ativado, mensagens de chat privado 1:1 serão espelhadas nos documentos do histórico de chat do curso. Recomenda-se manter desativado por privacidade."
+
+msgid "Save private conversations in documents"
+msgstr "Guardar conversas privadas em documentos"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU AI Act – Aviso de transparência e risco"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "Sob o Regulamento de Inteligência Artificial da UE (Regulamento (UE) 2024/1689), os sistemas de IA usados na educação são geralmente classificados como “alto risco”. Este software em si <strong>não</strong> é um sistema de IA, mas pode integrar sistemas de IA internos ou externos opcionais — dependendo da sua configuração — para melhorar o desempenho das tarefas do utilizador. Estes sistemas só podem aceder a dados pessoais <em>se</em> os utilizadores incluírem esses dados nos seus prompts. Por conceção, este software não partilha dados pessoais com sistemas de IA sem a entrada ativa do utilizador. Por predefinição, todas as funcionalidades de IA estão desativadas."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Responsabilidade do administrador e divulgações"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Esta página de configuração detalha cada funcionalidade de IA e o seu propósito. Como implementador, deve rever cuidadosamente e atualizar as suas políticas de privacidade de dados conformes com o RGPD para refletir as opções que ativa. Embora a maioria das funcionalidades de IA não partilhe diretamente dados pessoais com sistemas externos, os prompts dos utilizadores enviados para a IA podem inadvertidamente incluir informação pessoal. Como implementador, <strong>é responsável</strong> por informar os utilizadores deste risco. Para transparência, versões futuras podem mostrar etiquetas não intrusivas para utilizadores finais indicando que certo conteúdo ou feedback foi gerado com a ajuda de IA."
+
+msgid "Positioning"
+msgstr "Posicionamento"
+
+msgid "Quiz"
+msgstr "Questionário"
+
+msgid "Customcertificate"
+msgstr "Customcertificate"
+
+msgid "Update profile"
+msgstr "Atualizar perfil"
 

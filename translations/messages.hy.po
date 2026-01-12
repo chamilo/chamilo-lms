@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:հեղինակային իրավունք,, no:առանց հեղինակային իրավունքի"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Թերթիկ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Թղթապանակ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:վարժություն,,      simulation:մոդելավորում,,      questionnaire:հարցաթերթիկ,,      diagram:սխեմա,,      figure:նկար,,      graph:գրաֆիկ,,      index:հիմնական ցուցիչ,,      slide:սլայդ,,      table:तालिका,,      narrative text:նարատիվ տեքստ,,      exam:քննություն,,      experiment:փորձ,,      problem statement:պրոբլեմի ձևակերպում,,      self assessment:ինքնագնահատում,,      lecture:դասախոսություն"
@@ -31072,8 +31072,8 @@ msgstr "Ավելացնել մեկնաբանություն"
 msgid "Write your comment here..."
 msgstr "Գրեք Ձեր մեկնաբանությունը այստեղ..."
 
-msgid "%d selected"
-msgstr "%d ընտրված"
+msgid "%s selected"
+msgstr "%s ընտրված"
 
 msgid "Search by title or path..."
 msgstr "Որոնել վերնագրով կամ ուղով..."
@@ -32310,4 +32310,37 @@ msgstr "Drupal օգտատիրոջ ID"
 
 msgid "There are no terms that match the search: %s"
 msgstr "Ոչ մի տերմին չի համապատասխանում որոնմանը՝ %s"
+
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Պարամետրը գլոբալ կերպով արգելափակված է (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Եթե ակտիվացված է, 1:1 մասնավոր չաթի հաղորդագրությունները կկրկնօրինակվեն դասընթացի չաթի պատմության փաստաթղթերում: Առաջարկվում է անհատականության համար անգործ դնել:"
+
+msgid "Save private conversations in documents"
+msgstr "Պահպանել մասնավոր զրույցները փաստաթղթերում"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "ԵՄ Աԕ օրենք – Տրանսպարենտություն և ռիսկերի ծանուցում"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "ԵՄ արհեստական բանականության օրենքի (Միության կանոնակարգ (ԵՄ) 2024/1689) համաձայն, կրթության մեջ օգտագործվող ԱԲ համակարգերը սովորաբար դասակարգվում են որպես «բարձր ռիսկային»: Այս ծրագիրը <strong>չի</strong> հանդիսանում ԱԲ համակարգ, սակայն կարող է ինտեգրել ընտրովի ներքին կամ արտաքին ԱԲ համակարգեր՝ կախված ձեր կարգավորումներից՝ օգտատերերի առաջադրանքների կատարումը բարելավելու համար: Այդ համակարգերը կարող են մուտք գործել անձնական տվյալներ <em>միայն</em>, եթե օգտատերերը ներառեն այդ տվյալները իրենց հրահանգներում: Դիզայնով այս ծրագիրը չի կիսվում անձնական տվյալներ ԱԲ համակարգերի հետ առանց օգտատիրոջ ակտիվ միջամտության: Ընդհանուր առմամբ ԱԲ բոլոր ֆունկցիաները անգործ են:"
+
+msgid "Admin responsibility & disclosures"
+msgstr "Ադմինի պատասխանատվություն և բացահայտումներ"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Այս կարգավորումների էջը մանրամասն նկարագրում է յուրաքանչյուր ԱԲ ֆունկցիան և նրա նպատակը: Որպես տեղակայող, դուք պետք է ուշադիր վերանայեք դրանք և թարմացնեք ձեր GDPR-ին համապատասխանող տվյալների գաղտնիության քաղաքականությունները՝ ակտիվացրած տարբերակները արտացոլելու համար: Թեև շատ ԱԲ ֆունկցիաներ ուղղակիորեն չեն կիսվում անձնական տվյալներ արտաքին համակարգերի հետ, ԱԲ-ին ուղարկված օգտատիրոջ հրահանգները կարող են պատահաբար ներառել անձնական տեղեկատվություն: Որպես տեղակայող, <strong>դուք պատասխանատու եք</strong> օգտատերերին այս ռիսկի մասին տեղեկացնելու համար: Տրանսպարենտության համար, ապագա թողարկումները կարող են ցուցադրել ոչ 침ոռոմիկ օգտատիրոջ պիտակներ՝ ցույց տալով, որ որոշ բովանդակություն կամ արձագանք ստեղծվել է ԱԲ-ի օգնությամբ:"
+
+msgid "Positioning"
+msgstr "Դիրքավորում"
+
+msgid "Quiz"
+msgstr "Թեստ"
+
+msgid "Customcertificate"
+msgstr "Customcertificate"
+
+msgid "Update profile"
+msgstr "Թարմացնել профիլը"
 

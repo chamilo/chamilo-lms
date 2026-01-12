@@ -32377,3 +32377,36 @@ msgstr "Drupal ユーザー ID"
 msgid "There are no terms that match the search: %s"
 msgstr "検索「%s」に一致する用語はありません"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "設定はグローバルにロックされています (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "有効にすると、1:1のプライベートチャットメッセージがコースのチャット履歴ドキュメントにミラーリングされます。プライバシーのため、無効のままにすることを推奨します。"
+
+msgid "Save private conversations in documents"
+msgstr "プライベート会話をドキュメントに保存"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU AI法 – 透明性とリスク通知"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "EU人工知能法（規則（EU）2024/1689）では、教育で使用されるAIシステムは一般的に「高リスク」と分類されます。このソフトウェア自体は<strong>AIシステムではありません</strong>が、設定によってはオプションの内部または外部AIシステムを統合してユーザータスクのパフォーマンスを向上させることができます。これらのシステムは、ユーザーがプロンプトにそのようなデータを<em>含めた場合に限り</em>個人データにアクセスします。設計上、このソフトウェアはユーザーの積極的な入力なしにAIシステムと個人データを共有しません。デフォルトでは、すべてのAI機能が無効です。"
+
+msgid "Admin responsibility & disclosures"
+msgstr "管理者責任と開示事項"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "この設定ページでは、各AI機能とその目的を詳述しています。展開者として、これらを慎重に確認し、有効にするオプションを反映してGDPR準拠のデータプライバシーポリシーを更新する必要があります。ほとんどのAI機能は外部システムと個人データを直接共有しませんが、AIに送信されるユーザープロンプトには偶発的に個人情報が含まれる可能性があります。展開者として、<strong>このリスクについてユーザーに通知する責任があります</strong>。透明性のため、今後のリリースでは、AIの支援で生成されたコンテンツやフィードバックを示す非侵入的なエンドユーザータグが表示される可能性があります。"
+
+msgid "Positioning"
+msgstr "位置"
+
+msgid "Quiz"
+msgstr "クイズ"
+
+msgid "Customcertificate"
+msgstr "カスタム証明書"
+
+msgid "Update profile"
+msgstr "プロフィールを更新"
+

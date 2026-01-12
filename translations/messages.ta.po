@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "உண்மையாகவே"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "பூரணச் சூத்திரம்: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "சூத்திர நட样: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "மாறியின் வரம்புகள்"
@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:பதிப்புரிமை,, no:பதிப்புரிமை இல்லை"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:பாக்கெடு,, application/msword:MsWord,, application/octet-stream:அக்டெட் ஸ்ட்ரீம்,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:பாக்கெட்,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:பயிற்சி,,      simulation:மெய்யப்படுத்தல்,,      questionnaire:கேள்வித்தாள்,,      diagram:சித்திரம்,,      figure:உருவம்,,      graph:படம்,,      index:அட்டவணை,,      slide:இன்னுசைடு,,      table:அட்டவணை,,      narrative text:கதை உரை,,      exam:தேர்வு,,      experiment:பரிசோதனை,,      problem statement:பிரச்சினை அறிக்கை,,      self assessment:சுய மதிப்பீடு,,      lecture:உபதேசம்"
@@ -32310,4 +32310,37 @@ msgstr "Drupal பயனர் ID"
 
 msgid "There are no terms that match the search: %s"
 msgstr "தேடலுக்கு பொருந்தும் சொற்கள் இல்லை: %s"
+
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "அமைப்பு உலகளாவிய முற்றிலும் பூட்டப்பட்டுள்ளது (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "இயல்புநிலைப்படுத்தப்பட்டால், 1:1 தனியார் சாட் செய்திகள் பாடநூல் சாட் வரலாற்று ஆவணங்களில் பிரதிபலிக்கப்படும். தனியுரிமைக்காக இயல்புநிலையில் முடக்கியிருப்பது பரிந்துரைக்கப்படுகிறது."
+
+msgid "Save private conversations in documents"
+msgstr "ஆவணங்களில் தனியார் உரையாடல்களை சேமி"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU AI சட்டம் – வெளிப்படைத்தன்மை & ஆபத்து அறிவிப்பு"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "EU செயற்கை-intelligence சட்டத்தின் கீழ் (Regulation (EU) 2024/1689), கல்வியில் பயன்படுத்தப்படும் AI அமைப்புகள் பொதுவாக “உயர்-ஆபத்து” என்று வகைப்படுத்தப்படுகின்றன. இந்த மென்பொருள் தானே <strong>ஒரு AI அமைப்பு அல்ல</strong>, ஆனால் உங்கள் அமைவு சார்ந்து—விருப்பமான உள்ளுறை அல்லது வெளி AI அமைப்புகளை ஒருங்கிணைக்கலாம்—பயனர் பணி செயல்திறனை மேம்படுத்த. இந்த அமைப்புகள் தனிப்பட்ட தரவுகளை அணுக முடியும் <em>மட்டுமே</em> பயனர்கள் தங்கள் ஊக்குவிப்புகளில் அத்தகைய தரவுகளை சேர்த்தால். வடிவமைப்பின்படி, இந்த மென்பொருள் பயனரின் செயல்படும் உள்ளீடு இன்றி AI அமைப்புகளுடன் தனிப்பட்ட தரவுகளை பகிர்ந்து கொள்ளாது. இயல்புநிலையில், அனைத்து AI அம்சங்களும் முடக்கப்பட்டுள்ளன."
+
+msgid "Admin responsibility & disclosures"
+msgstr "நிர்வாகி பொறுப்பு & வெளிப்படுத்தல்கள்"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "இந்த அமைவு பக்கம் ஒவ்வொரு AI அம்சத்தையும் அதன் நோக்கத்தையும் விவரிக்கிறது. ஒரு அமைப்பாளராக, நீங்கள் அவற்றை கவனமாக மதிப்பாய்வு செய்ய வேண்டும் மற்றும் நீங்கள் இயல்புநிலைப்படுத்தும் விருப்பங்களை பிரதிபலிக்க GDPR-அனુறுதியான தரவு தனியுரிமை கொள்கைகளை புதுப்பிக்க வேண்டும். பெரும்பாலான AI அம்சங்கள் வெளி அமைப்புகளுடன் தனிப்பட்ட தரவுகளை நேரடியாக பகிர்ந்து கொள்ளாவிட்டாலும், AI-க்கு அனுப்பப்பட்ட பயனர் ஊக்குவிப்புகள் தனிப்பட்ட தகவல்களை தவறுதலாக சேர்க்கலாம். ஒரு அமைப்பாளராக, <strong>நீங்கள் பொறுப்பு</strong> இந்த ஆபத்தை பயனர்களுக்கு தெரிவிப்பதற்கு. வெளிப்படைத்தன்மைக்காக, எதிர்கால வெளியீடுகள் AI உதவியுடன் உருவாக்கப்பட்ட குறிப்பிட்ட உள்ளடக்கம் அல்லது கருத்துரையை குறிக்கும் அல்லாத-உட்செலுத்தும் பயனர் லேபிள்களை காட்டலாம்."
+
+msgid "Positioning"
+msgstr "இடநிலை"
+
+msgid "Quiz"
+msgstr "சோதனை"
+
+msgid "Customcertificate"
+msgstr "Customcertificate"
+
+msgid "Update profile"
+msgstr "சுயவிவரத்தை புதுப்பி"
 

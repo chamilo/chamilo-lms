@@ -32314,3 +32314,36 @@ msgstr "ID пользователя Drupal"
 msgid "There are no terms that match the search: %s"
 msgstr "Нет терминов, соответствующих поиску: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Настройка глобально заблокирована (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Если включено, личные сообщения чата 1:1 будут дублироваться в документах истории чата курса. Рекомендуется оставить выключенным для соблюдения конфиденциальности."
+
+msgid "Save private conversations in documents"
+msgstr "Сохранять личные беседы в документах"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "Закон ЕС об ИИ – Уведомление о прозрачности и рисках"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "Согласно Закону ЕС об искусственном интеллекте (Регламент (EU) 2024/1689), системы ИИ, используемые в образовании, в целом классифицируются как «высокорисковые». Это ПО само по себе <strong>не</strong> является системой ИИ, но может интегрировать опциональные внутренние или внешние системы ИИ — в зависимости от вашей конфигурации — для улучшения выполнения задач пользователя. Эти системы могут получить доступ к персональным данным <em>только если</em> пользователи включат такие данные в свои запросы. По замыслу, это ПО не передает персональные данные системам ИИ без активного ввода пользователя. По умолчанию все функции ИИ отключены."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Ответственность администратора и раскрытие информации"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Эта страница конфигурации детализирует каждую функцию ИИ и её назначение. Как развертывающий, вы должны тщательно их изучить и обновить свои политики конфиденциальности данных, соответствующие GDPR, чтобы отразить включенные опции. Хотя большинство функций ИИ не передают персональные данные внешним системам напрямую, запросы пользователей к ИИ могут непреднамеренно содержать персональную информацию. Как развертывающий, <strong>вы несете ответственность</strong> за информирование пользователей об этом риске. Для прозрачности будущие релизы могут показывать ненавязчивые метки для конечных пользователей, указывающие, что определенный контент или обратная связь были созданы с помощью ИИ."
+
+msgid "Positioning"
+msgstr "Позиционирование"
+
+msgid "Quiz"
+msgstr "Тест"
+
+msgid "Customcertificate"
+msgstr "Customcertificate"
+
+msgid "Update profile"
+msgstr "Обновить профиль"
+

@@ -2020,7 +2020,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:berhak cipta,, no:tiada hak cipta"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Pastas,, application/msword:MsWord,, application/octet-stream:Aliran oktet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:latihan,,      simulation:simulasi,,      questionnaire:soal selidik,,      diagram:diagram,,      figure:gambar,,      graph:graf,,      index:indeks,,      slide:slaid,,      table:jadual,,      narrative text:teks naratif,,      exam:ujian,,      experiment:eksperimen,,      problem statement:penyata masalah,,      self assessment:penilaian diri,,      lecture:kuliah"
@@ -24451,7 +24451,7 @@ msgid "Reminder number %s for the course %s"
 msgstr "Bilangan peringatan %s untuk kursus %s"
 
 msgid "Hello %s"
-msgstr "Hello %s"
+msgstr "Hai %s"
 
 msgid "You are registered in the training %s since the %s"
 msgstr "Anda telah didaftarkan dalam latihan %s sejak %s"
@@ -24778,7 +24778,7 @@ msgid "Invitation to the ((course_title)) course"
 msgstr "Jemputan ke kursus ((course_title))"
 
 msgid "<p>Hello ((user_complete_name)).</p>"
-msgstr "<p>Hello ((user_complete_name)).</p>"
+msgstr "<p>Hai ((user_complete_name)).</p>"
 
 msgid "%s's portfolio items"
 msgstr "Item portfolio %s"
@@ -32310,4 +32310,37 @@ msgstr "ID pengguna Drupal"
 
 msgid "There are no terms that match the search: %s"
 msgstr "Tiada istilah yang sepadan dengan carian: %s"
+
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Tetapan dikunci secara global (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Jika diaktifkan, mesej sembang peribadi 1:1 akan disalin dalam dokumen sejarah sembang kursus. Disyorkan kekal dilumpuhkan untuk privasi."
+
+msgid "Save private conversations in documents"
+msgstr "Simpan perbualan peribadi dalam dokumen"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "Akta AI EU – Notis Ketelusan & Risiko"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "Mengikut Akta Kecerdasan Buatan EU (Peraturan (EU) 2024/1689), sistem AI yang digunakan dalam pendidikan diklasifikasikan secara amnya sebagai “berisiko tinggi”. Perisian ini sendiri <strong>bukan</strong> sistem AI, tetapi boleh mengintegrasikan sistem AI dalaman atau luaran pilihan—bergantung pada konfigurasi anda—untuk meningkatkan prestasi tugas pengguna. Sistem ini boleh mengakses data peribadi <em>hanya jika</em> pengguna memasukkan data sedemikian dalam arahan mereka. Secara reka bentuk, perisian ini tidak berkongsi data peribadi dengan sistem AI tanpa input aktif pengguna. Secara lalai, semua ciri AI dilumpuhkan."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Tanggungjawab pentadbir & pendedahan"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Halaman konfigurasi ini menerangkan setiap ciri AI dan tujuannya. Sebagai pelaksana, anda perlu menyemaknya dengan teliti dan mengemas kini dasar privasi data yang patuh GDPR untuk mencerminkan pilihan yang anda aktifkan. Walaupun kebanyakan ciri AI tidak berkongsi data peribadi secara langsung dengan sistem luaran, arahan pengguna yang dihantar ke AI mungkin secara tidak sengaja mengandungi maklumat peribadi. Sebagai pelaksana, <strong>anda bertanggungjawab</strong> untuk memaklumkan pengguna tentang risiko ini. Demi ketelusan, pelepasan masa depan mungkin memaparkan label pengguna akhir yang tidak mengganggu menunjukkan bahawa kandungan atau maklum balas tertentu dijana dengan bantuan AI."
+
+msgid "Positioning"
+msgstr "Penyusunan"
+
+msgid "Quiz"
+msgstr "Kuis"
+
+msgid "Customcertificate"
+msgstr "Sijil tersuai"
+
+msgid "Update profile"
+msgstr "Kemas kini profil"
 

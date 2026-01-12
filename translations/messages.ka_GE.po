@@ -32307,3 +32307,36 @@ msgstr "Drupal-ის მომხმარებლის ID"
 msgid "There are no terms that match the search: %s"
 msgstr "არ არის ტერმინები რომლებიც შეესაბამება ძიებას: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "პარამეტრი გლობალურად შეზღუდულია (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "თუ ჩართულია, 1:1 კერძო ჩატის შეტყობინებები მოთავსდება კურსის ჩატის ისტორიის დოკუმენტებში. კონფიდენციალურობისთვის რეკომენდებულია გამორთვა."
+
+msgid "Save private conversations in documents"
+msgstr "კერძო საუბრების შენახვა დოკუმენტებში"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU AI Act – გამჭვირვალობა და რისკის შეტყობინება"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "EU ხელოვნური ინტელექტის კანონის (რეგულაცია (EU) 2024/1689) მიხედვით, განათლებაში გამოყენებული AI სისტემები ზოგადად კლასიფიცირდება როგორც „მაღალი რისკის“. ეს პროგრამული უზრუნველყოფა <strong>არ არის</strong> AI სისტემა, მაგრამ ის შეიძლება ინტეგრირდეს შიდა ან გარე AI სისტემებთან — თქვენი კონფიგურაციის მიხედვით — მომხმარებლის ამოცანების შესრულების გასაუმჯობესებლად. ეს სისტემები შეძლებს პირად მონაცემებზე წვდომას <em>მხოლოდ იმ შემთხვევაში,</em> თუ მომხმარებლები შეიტანენ ასეთ მონაცემებს თავიანთ მოთხოვნებში. დიზაინით, ეს პროგრამული უზრუნველყოფა არ გადასცემს პირად მონაცემებს AI სისტემებს მომხმარებლის აქტიური შეყვანის გარეშე. ნაგულისხმევად ყველა AI ფუნქცია გამორთულია."
+
+msgid "Admin responsibility & disclosures"
+msgstr "ადმინისტრატორის პასუხისმგებლობა და გამჟღავნება"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "ამ კონფიგურაციის გვერდი აღწერს თითოეულ AI ფუნქციას და მის მიზანს. როგორც განლაგების შემსრულებელი, თქვენ უნდა გადახედოთ მათ ყურადღებით და განაახლოთ თქვენი GDPR-თან შესაბამისი მონაცემთა კონფიდენციალურობის პოლიტიკა იმ ვარიანტების მიხედვით, რომლებიც ჩართავთ. მიუხედავად იმისა, რომ უმეტესი AI ფუნქცია არ იზიარებს პირდაპირ პირად მონაცემებს გარე სისტემებთან, AI-ს გაგზავნილი მომხმარებლის მოთხოვნები შეიძლება შეუნაცვლებლად შეიცავდეს პირად ინფორმაციას. როგორც განლაგების შემსრულებელი, <strong>თქვენ ხართ პასუხისმგებელი</strong> მომხმარებლებისთვის ამ რისკის შეტყობინებაზე. გამჭვირვალობისთვის, სამომავლო გამოშვებები შეიძლება გამოიჩინოს არაინტრუზიული ეტიკეტები მომხმარებლისთვის, მიუთითებდეს, რომ გარკვეული კონტენტი ან უკუკავშირი გენერირებულია AI-ის დახმარებით."
+
+msgid "Positioning"
+msgstr "პოზიციონირება"
+
+msgid "Quiz"
+msgstr "ვიქტორინა"
+
+msgid "Customcertificate"
+msgstr "Customcertificate"
+
+msgid "Update profile"
+msgstr "პროფილის განახლება"
+

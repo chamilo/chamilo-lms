@@ -414,14 +414,10 @@ msgid "The given session duration is the same as the default for the session. Ig
 msgstr "The given session duration is the same as the default for the session. Ignoring."
 
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s"
-msgstr ""
-"This user's first access to the session was on %s. With a session duration "
-"of %s days, the access to this session already expired on %s."
+msgstr "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s"
 
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days"
-msgstr ""
-"This user's first access to the session was on %s. With a session duration "
-"of %s days, the end date is scheduled in %s days."
+msgstr "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days"
 
 msgid "This user never accessed this session before. The duration is currently set to %s days (from the first access date)"
 msgstr "This user never accessed this session before. The duration is currently set to %s days (from the first access date)"
@@ -1756,7 +1752,7 @@ msgid "has been deleted"
 msgstr "has been deleted"
 
 msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
-msgstr "Deleting this course will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
+msgstr "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 
 msgid "YES"
 msgstr "YES"
@@ -2131,7 +2127,7 @@ msgid "No destination course available"
 msgstr "No destination course available"
 
 msgid "Import a backup. You will be able to upload a backup file from you local drive or you can use a backup file available on the server."
-msgstr "Import a backup. You will be able to upload a backup file from you local drive or you can use a backup file available on the server."
+msgstr "Import a backup. You will be able to upload a backup file from your local drive or you can use a backup file available on the server."
 
 msgid "Create a backup. You can select the learning objects to integrate in the backup file."
 msgstr "Create a backup. You can select the learning objects to integrate in the backup file."
@@ -3583,10 +3579,10 @@ msgid "Publish"
 msgstr "Publish"
 
 msgid "This is a SCORM course. To play it, click here : <input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
-msgstr "This is a SCORM course. To play it, click here : <input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
+msgstr "This is a SCORM course. To play it, click here : <input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 
 msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
-msgstr "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
+msgstr "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 
 msgid "The zip file can not contain .PHP files"
 msgstr "The zip file can not contain .PHP files"
@@ -4033,7 +4029,7 @@ msgid "View children"
 msgstr "View children"
 
 msgid "Tree rebuilded in"
-msgstr "Tree rebuilded in"
+msgstr "Tree rebuilt in"
 
 msgid "Tree recounted in"
 msgstr "Tree recounted in"
@@ -4135,7 +4131,7 @@ msgid "Login list"
 msgstr "Login list"
 
 msgid "Status of MySQL server :"
-msgstr "Status of MySQL server :"
+msgstr "Status of MySQL server :"
 
 msgid "Database"
 msgstr "Database"
@@ -4369,7 +4365,7 @@ msgid "Allow Name Change in profile?"
 msgstr "Allow Name Change in profile?"
 
 msgid "Is the user allowed to change his/her firste and last name?"
-msgstr "Is the user allowed to change his/her firste and last name?"
+msgstr "Is the user allowed to change his/her first and last name?"
 
 msgid "Default hard disk space"
 msgstr "Default hard disk space"
@@ -4393,7 +4389,7 @@ msgid "Group disk space available"
 msgstr "Group disk space available"
 
 msgid "What is the default hard disk spacde available for a groups documents tool?"
-msgstr "What is the default hard disk spacde available for a groups documents tool?"
+msgstr "What is the default hard disk space available for a groups documents tool?"
 
 msgid "Lost password"
 msgstr "Lost password"
@@ -4420,7 +4416,7 @@ msgid "Split users' upload directory"
 msgstr "Split users' upload directory"
 
 msgid "On high-load portals, where a lot of users are registered and send their pictures, the upload directory (main/upload/users/) might contain too many files for the filesystem to handle (it has been reported with more than 36000 files on a Debian server). Changing this option will enable a one-level splitting of the directories in the upload directory. 9 directories will be used in the base directory and all subsequent users' directories will be stored into one of these 9 directories. The change of this option will not affect the directories structure on disk, but will affect the behaviour of the Chamilo code, so if you change this option, you have to create the new directories and move the existing directories by yourself on te server. Be aware that when creating and moving those directories, you will have to move the directories of users 1 to 9 into subdirectories of the same name. If you are not sure about this option, it is best not to activate it."
-msgstr "On high-load portals, where a lot of users are registered and send their pictures, the upload directory (main/upload/users/) might contain too many files for the filesystem to handle (it has been reported with more than 36000 files on a Debian server). Changing this option will enable a one-level splitting of the directories in the upload directory. 9 directories will be used in the base directory and all subsequent users' directories will be stored into one of these 9 directories. The change of this option will not affect the directories structure on disk, but will affect the behaviour of the Chamilo code, so if you change this option, you have to create the new directories and move the existing directories by yourself on te server. Be aware that when creating and moving those directories, you will have to move the directories of users 1 to 9 into subdirectories of the same name. If you are not sure about this option, it is best not to activate it."
+msgstr "On high-load portals, where a lot of users are registered and send their pictures, the upload directory (main/upload/users/) might contain too many files for the filesystem to handle (it has been reported with more than 36000 files on a Debian server). Changing this option will enable a one-level splitting of the directories in the upload directory. 9 directories will be used in the base directory and all subsequent users' directories will be stored into one of these 9 directories. The change of this option will not affect the directories structure on disk, but will affect the behaviour of the Chamilo code, so if you change this option, you have to create the new directories and move the existing directories by yourself on the server. Be aware that when creating and moving those directories, you will have to move the directories of users 1 to 9 into subdirectories of the same name. If you are not sure about this option, it is best not to activate it."
 
 msgid "Disk Space"
 msgstr "Disk Space"
@@ -5263,13 +5259,13 @@ msgid "Show the number of courses in each category in the courses categories on 
 msgstr "Show the number of courses in each category in the courses categories on the homepage"
 
 msgid "Start using the Ephorus anti plagiarism service in Chamilo.<br /> \t\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>With Ephorus, you will prevent internet plagiarism without any additional effort.</strong><br /> \t\t\t\t\t\t\t\t\t\t\t\t\t\t You can use our unique open standard webservice to build your own integration or you can use one of our Chamilo-integration modules."
-msgstr "Start using the Ephorus anti plagiarism service in Chamilo.<br /> \t\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>With Ephorus, you will prevent internet plagiarism without any additional effort.</strong><br /> \t\t\t\t\t\t\t\t\t\t\t\t\t\t You can use our unique open standard webservice to build your own integration or you can use one of our Chamilo-integration modules."
+msgstr "Start using the Ephorus anti plagiarism service in Chamilo.<br /> 										<strong>With Ephorus, you will prevent internet plagiarism without any additional effort.</strong><br /> 										 You can use our unique open standard webservice to build your own integration or you can use one of our Chamilo-integration modules."
 
 msgid "<strong>Leaders in <br />anti plagiarism </strong>\t\t\t\t"
-msgstr "<strong>Leaders in <br />anti plagiarism </strong>\t\t\t\t"
+msgstr "<strong>Leaders in <br />anti plagiarism </strong>				"
 
 msgid "Click here for more information and prices\t\t\t"
-msgstr "Click here for more information and prices\t\t\t"
+msgstr "Click here for more information and prices			"
 
 msgid "This user isn't subscribed in a session"
 msgstr "This user isn't subscribed in a session"
@@ -7678,7 +7674,7 @@ msgid "Please type your text below"
 msgstr "Please type your text below"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\"> [29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false;\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Note down the address"
@@ -8314,13 +8310,13 @@ msgid "A then B then C"
 msgstr "A then B then C"
 
 msgid "Milk is the basis of many dairy products such as butter, cheese, yogurt, among other"
-msgstr "Milk is the basis of many dairy products such as butter, cheese, yogurt, among other"
+msgstr "Milk is the basis of many dairy products such as butter, cheese, yogurt, among others"
 
 msgid "A then C then B"
 msgstr "A then C then B"
 
 msgid "Oats are one of the most comprehensive grain. By their energy and nutritional qualities has been the basis of feeding people"
-msgstr "Oats are one of the most comprehensive grain. By their energy and nutritional qualities has been the basis of feeding people"
+msgstr "Oats are one of the most comprehensive grains. Due to their energy and nutritional qualities, they have been the basis of people's diet"
 
 msgid "The marasmus is a consequence of"
 msgstr "The marasmus is a consequence of"
@@ -8353,7 +8349,7 @@ msgid "Reached time limit admin"
 msgstr "Reached time limit admin"
 
 msgid "Last score of a exercise"
-msgstr "Last score of a exercise"
+msgstr "Last score of an exercise"
 
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "If you edit a question score, please remember that this Exercise was added in a Course"
@@ -9805,7 +9801,7 @@ msgid "Export to PDF"
 msgstr "Export to PDF"
 
 msgid "You comment has been added"
-msgstr "You comment has been added"
+msgstr "Your comment has been added"
 
 msgid "Back to previous page"
 msgstr "Back to previous page"
@@ -10153,7 +10149,7 @@ msgid "Courses history"
 msgstr "Courses history"
 
 msgid "Conversion failled"
-msgstr "Conversion failled"
+msgstr "Conversion failed"
 
 msgid "Already exists"
 msgstr "Already exists"
@@ -10495,7 +10491,7 @@ msgid "The score doesn't match"
 msgstr "The score doesn't match"
 
 msgid "File upload successfull"
-msgstr "File upload successfull"
+msgstr "File upload successful"
 
 msgid "No results available"
 msgstr "No results available"
@@ -10816,7 +10812,7 @@ msgid "Confirm user unsubscription"
 msgstr "Confirm user unsubscription"
 
 msgid "Go to"
-msgstr "Go to"
+msgstr "Go to"
 
 msgid "My latest visits"
 msgstr "My latest visits"
@@ -10825,7 +10821,7 @@ msgid "If you want to add a list of users in your course, please contact your we
 msgstr "If you want to add a list of users in your course, please contact your web administrator."
 
 msgid "this password  is too simple. Use a pass like this"
-msgstr "this password  is too simple. Use a pass like this"
+msgstr "This password is too simple. Use a password like this"
 
 msgid "has been registered to your course"
 msgstr "has been registered to your course"
@@ -10852,7 +10848,7 @@ msgid "Upload the list"
 msgstr "Upload the list"
 
 msgid "Every line of file to send will necessarily and only include 5 fields: <b>First name   LastName   Login   Password   E-mail</b> tab-separated and in this order. Users will receive an e-mail confirmation with their login/password."
-msgstr "Every line of file to send will necessarily and only include 5 fields: <b>First name   LastName   Login   Password   E-mail</b> tab-separated and in this order. Users will receive an e-mail confirmation with their login/password."
+msgstr "Every line of file to send will necessarily and only include 5 fields: <b>First name   LastName   Login   Password   E-mail</b> tab-separated and in this order. Users will receive an e-mail confirmation with their login/password."
 
 msgid "Import a users list"
 msgstr "Import a users list"
@@ -11542,7 +11538,7 @@ msgid "This notification has been made in accordance with their desire to monito
 msgstr "This notification has been made in accordance with their desire to monitor changes in the Wiki. This option means you have activated the button"
 
 msgid "If you want to stop being notified of changes in the Wiki, select the tabs<strong> Recent Changes</ strong>, <strong>Current page</ strong>, <strong>Talk</ strong> as appropriate and then push the button"
-msgstr "If you want to stop being notified of changes in the Wiki, select the tabs<strong> Recent Changes</ strong>, <strong>Current page</ strong>, <strong>Talk</ strong> as appropriate and then push the button"
+msgstr "If you want to stop being notified of changes in the Wiki, select the tabs<strong> Recent Changes</strong>, <strong>Current page</strong>, <strong>Talk</strong> as appropriate and then push the button"
 
 msgid "Orphaned pages"
 msgstr "Orphaned pages"
@@ -12454,13 +12450,13 @@ msgid "Plan"
 msgstr "Plan"
 
 msgid "It's the table of content"
-msgstr "It's the table of content"
+msgstr "It's the table of contents"
 
 msgid "Your instructor"
 msgstr "Your instructor"
 
 msgid "Dialog on the bottom with a trainer"
-msgstr "Dialog on the bottom with a trainer"
+msgstr "Bottom dialog with trainer"
 
 msgid "Production"
 msgstr "Production"
@@ -12487,22 +12483,22 @@ msgid "Text and image centered"
 msgstr "Text and image centered"
 
 msgid "It's a text with an image centered and legend"
-msgstr "It's a text with an image centered and legend"
+msgstr "Text with centered image and caption"
 
 msgid "Compare"
 msgstr "Compare"
 
 msgid "2 columns text page"
-msgstr "2 columns text page"
+msgstr "Two-column text page"
 
 msgid "Diagram explained"
-msgstr "Diagram explained"
+msgstr "Explained diagram"
 
 msgid "Image on the left, comment on the right"
-msgstr "Image on the left, comment on the right"
+msgstr "Image on left, text on right"
 
 msgid "Image alone"
-msgstr "Image alone"
+msgstr "Image only"
 
 msgid "Flash animation"
 msgstr "Flash animation"
@@ -12511,34 +12507,34 @@ msgid "Animation + introduction text"
 msgstr "Animation + introduction text"
 
 msgid "Audio comment"
-msgstr "Audio comment"
+msgstr "Audio commentary"
 
 msgid "Audio + image + text : listening comprehension"
-msgstr "Audio + image + text : listening comprehension"
+msgstr "Audio + image + text: listening comprehension"
 
 msgid "Schema with audio explain"
-msgstr "Schema with audio explain"
+msgstr "Diagram with audio explanation"
 
 msgid "A schema explain by a trainer"
-msgstr "A schema explain by a trainer"
+msgstr "Diagram explained by trainer"
 
 msgid "Video page"
 msgstr "Video page"
 
 msgid "On demand video + text"
-msgstr "On demand video + text"
+msgstr "On-demand video + text"
 
 msgid "Video page fullscreen"
-msgstr "Video page fullscreen"
+msgstr "Fullscreen video page"
 
 msgid "On demand video in fullscreen"
-msgstr "On demand video in fullscreen"
+msgstr "On-demand fullscreen video"
 
 msgid "Table page"
 msgstr "Table page"
 
 msgid "Spreadsheet-like page"
-msgstr "Spreadsheet-like page"
+msgstr "Spreadsheet page"
 
 msgid "Explain goals, roles, agenda"
 msgstr "Explain goals, roles, agenda"
@@ -12559,7 +12555,7 @@ msgid "List of questions and answers"
 msgstr "List of questions and answers"
 
 msgid "List of term of the section"
-msgstr "List of term of the section"
+msgstr "List of section terms"
 
 msgid "Evaluation"
 msgstr "Evaluation"
@@ -12568,7 +12564,7 @@ msgid "Certificate of completion"
 msgstr "Certificate of completion"
 
 msgid "To appear at the end of a course"
-msgstr "To appear at the end of a course"
+msgstr "Displays at course end"
 
 msgid "Checklist"
 msgstr "Checklist"
@@ -12577,25 +12573,25 @@ msgid "Left list"
 msgstr "Left list"
 
 msgid "Left list with an instructor"
-msgstr "Left list with an instructor"
+msgstr "Left list with instructor"
 
 msgid "List of resources"
 msgstr "List of resources"
 
 msgid "Course title with a logo"
-msgstr "Course title with a logo"
+msgstr "Course title with logo"
 
 msgid "Right list"
 msgstr "Right list"
 
 msgid "Right list with an instructor"
-msgstr "Right list with an instructor"
+msgstr "Right list with instructor"
 
 msgid "Left & right list"
-msgstr "Left & right list"
+msgstr "Left and right lists"
 
 msgid "Left & right list with an instructor"
-msgstr "Left & right list with an instructor"
+msgstr "Left and right lists with instructor"
 
 msgid "Describe a resource"
 msgstr "Describe a resource"
@@ -12604,19 +12600,19 @@ msgid "Course objectives"
 msgstr "Course objectives"
 
 msgid "Describe the objectives of the course"
-msgstr "Describe the objectives of the course"
+msgstr "Describe course objectives"
 
 msgid "Cycle chart"
 msgstr "Cycle chart"
 
 msgid "2 list with cycle arrows"
-msgstr "2 list with cycle arrows"
+msgstr "Two lists with cycle arrows"
 
 msgid "Learner wonder"
-msgstr "Learner wonder"
+msgstr "Learner inquiry"
 
 msgid "Learner wonder description"
-msgstr "Learner wonder description"
+msgstr "Learner inquiry description"
 
 msgid "Phase timeline"
 msgstr "Phase timeline"
@@ -13282,7 +13278,7 @@ msgid "Or return to survey overview"
 msgstr "Or return to survey overview"
 
 msgid "There is a parameter missing in the link. Please use copy and past"
-msgstr "There is a parameter missing in the link. Please use copy and past"
+msgstr "There is a parameter missing in the link. Please use copy and paste"
 
 msgid "Wrong invitation code"
 msgstr "Wrong invitation code"
@@ -13345,7 +13341,7 @@ msgid "Answered"
 msgstr "Answered"
 
 msgid "You can invite additional users to fill the survey. To do so you can type their e-mail addresses here separated by either , (comma) or ; (semi-column)"
-msgstr "You can invite additional users to fill the survey. To do so you can type their e-mail addresses here separated by either , (comma) or ; (semi-column)"
+msgstr "You can invite additional users to fill the survey. To do so you can type their e-mail addresses here separated by either , (comma) or ; (semicolon)"
 
 msgid "Mail subject"
 msgstr "Mail subject"
@@ -13459,7 +13455,7 @@ msgid "Click here to answer the survey"
 msgstr "Click here to answer the survey"
 
 msgid "Unknow user"
-msgstr "Unknow user"
+msgstr "Unknown user"
 
 msgid "have answered"
 msgstr "have answered"
@@ -13540,7 +13536,7 @@ msgid "Group created successfully"
 msgstr "Group created successfully"
 
 msgid "Group need name"
-msgstr "Group need name"
+msgstr "Group needs name"
 
 msgid "Personalize"
 msgstr "Personalize"
@@ -13840,7 +13836,7 @@ msgid "Project management"
 msgstr "Project management"
 
 msgid "Welcome !"
-msgstr "Welcome !"
+msgstr "Welcome!"
 
 msgid "Module"
 msgstr "Module"
@@ -15412,7 +15408,7 @@ msgid "Admins can change users' passwords"
 msgstr "Admins can change users' passwords"
 
 msgid "Allow users with the corresponding privileges to use the \"login as\" feature to connect using other users' account? This setting is most useful for multi-url configuration, where you don't think an administrator from a secondary URL should be able to connect as any user. Note that another setting is available in the configuration file to block all possibility for anyone to use this feature."
-msgstr "Allow users with the corresponding privileges to use the \"login as\" feature to connect using other users' account? This setting is most useful for multi-url configuration, where you don't think an administrator from a secondary URL should be able to connect as any user. Note that another setting is available in the configuration file to block all possibility for anyone to use this feature."
+msgstr "\"Login as\" feature"
 
 msgid "\"Login as\" feature"
 msgstr "\"Login as\" feature"
@@ -15904,7 +15900,7 @@ msgid "twenty"
 msgstr "twenty"
 
 msgid "Allow User Course Subscription By Course Admininistrator"
-msgstr "Allow User Course Subscription By Course Admininistrator"
+msgstr "Allow User Course Subscription By Course Administrator"
 
 msgid "Activate this option will allow course administrator to subscribe users inside a course"
 msgstr "Activate this option will allow course administrator to subscribe users inside a course"
@@ -16525,7 +16521,7 @@ msgid "Resource shared"
 msgstr "Resource shared"
 
 msgid "There are a file with the same name in your private user file area. Do you want replace it?"
-msgstr "There are a file with the same name in your private user file area. Do you want replace it?"
+msgstr "There is a file with the same name in your private user file area. Do you want to replace it?"
 
 msgid "Copy failed"
 msgstr "Copy failed"
@@ -16708,7 +16704,7 @@ msgid "Courses validation"
 msgstr "Courses validation"
 
 msgid "When the 'Courses validation' feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
-msgstr "When the \"Courses validation\" feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
+msgstr "When the 'Courses validation' feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
 
 msgid "%s A request for additional information about the course request %s"
 msgstr "%s A request for additional information about the course request %s"
@@ -16732,7 +16728,7 @@ msgid "Course validation - a link to the terms and conditions"
 msgstr "Course validation - a link to the terms and conditions"
 
 msgid "This is the URL to the 'Terms and Conditions' document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's 'Terms and Conditions' module and if you want its URL to be used, then leave this setting empty."
-msgstr "This is the URL to the \"Terms and Conditions\" document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's \"Terms and Conditions\" module and if you want its URL to be used, then leave this setting empty."
+msgstr "This is the URL to the 'Terms and Conditions' document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's 'Terms and Conditions' module and if you want its URL to be used, then leave this setting empty."
 
 msgid "The course has not been created due to an internal error."
 msgstr "The course has not been created due to an internal error."
@@ -16792,7 +16788,7 @@ msgid "WIRIS mathematical editor"
 msgstr "WIRIS mathematical editor"
 
 msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href='http://www.wiris.com/es/plugins3/ckeditor/download' target='_blank'>PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href='http://www.wiris.com/store/who-pays' target='_blank'>commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
-msgstr "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\" target=\"_blank\">PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
+msgstr "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href='http://www.wiris.com/es/plugins3/ckeditor/download' target='_blank'>PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href='http://www.wiris.com/store/who-pays' target='_blank'>commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
 
 msgid "File export as"
 msgstr "File export as"
@@ -16846,13 +16842,13 @@ msgid "Please select a course"
 msgstr "Please select a course"
 
 msgid "Learner score average is calculated bases on all learning paths and all attempts"
-msgstr "Learner score average is calculated bases on all learning paths and all attempts"
+msgstr "Learner score average is calculated based on all learning paths and all attempts"
 
 msgid "Average score"
 msgstr "Average score"
 
 msgid "Last connexion date"
-msgstr "Last connexion date"
+msgstr "Last connection date"
 
 msgid "Videoconference"
 msgstr "Videoconference"
@@ -16873,7 +16869,7 @@ msgid "Security key of the BigBlueButton server"
 msgstr "Security key of the BigBlueButton server"
 
 msgid "This is the security key of your BigBlueButton server, which will allow your server to authentify the Chamilo installation. Refer to the BigBlueButton documentation to locate it."
-msgstr "This is the security key of your BigBlueButton server, which will allow your server to authentify the Chamilo installation. Refer to the BigBlueButton documentation to locate it."
+msgstr "This is the security key of your BigBlueButton server, which will allow your server to authenticate the Chamilo installation. Refer to the BigBlueButton documentation to locate it."
 
 msgid "Select a picture (SVG, PNG)"
 msgstr "Select a picture (SVG, PNG)"
@@ -16882,7 +16878,7 @@ msgid "Only accessible from your group"
 msgstr "Only accessible from your group"
 
 msgid "This will create a special wiki page in which the teacher can describe the task and which will be automatically linked to the wiki pages where learners perform the task. Both the teacher's and the learners' pages are created automatically. In these tasks, learners can only edit and view theirs pages, but this can be changed easily if you need to."
-msgstr "This will create a special wiki page in which the teacher can describe the task and which will be automatically linked to the wiki pages where learners perform the task. Both the teacher's and the learners' pages are created automatically. In these tasks, learners can only edit and view theirs pages, but this can be changed easily if you need to."
+msgstr "This will create a special wiki page in which the teacher can describe the task and which will be automatically linked to the wiki pages where learners perform the task. Both the teacher's and the learners' pages are created automatically. In these tasks, learners can only edit and view their pages, but this can be changed easily if you need to."
 
 msgid "Folders of users"
 msgstr "Folders of users"
@@ -16891,7 +16887,7 @@ msgid "User folder"
 msgstr "User folder"
 
 msgid "INFORMATION VISIBLE TO THE TEACHER ONLY:\nThe users folder contains a folder for each user who has accessed it through the documents tool, or when any file has been sent in the course through the online editor. If neither circumstances has occurred, then no user folder will have been created. In the case of groups, files that are sent through the editor will be added in the folder of each group, which is only accessible by students from this group."
-msgstr "INFORMATION VISIBLE TO THE TEACHER ONLY:\nThe users folder contains a folder for each user who has accessed it through the documents tool, or when any file has been sent in the course through the online editor. If neither circumstances has occurred, then no user folder will have been created. In the case of groups, files that are sent through the editor will be added in the folder of each group, which is only accessible by students from this group."
+msgstr "INFORMATION VISIBLE TO THE TEACHER ONLY:\nThe users folder contains a folder for each user who has accessed it through the documents tool, or when any file has been sent in the course through the online editor. If neither circumstance has occurred, then no user folder will have been created. In the case of groups, files that are sent through the editor will be added in the folder of each group, which is only accessible by students from this group."
 
 msgid "INFORMATION VISIBLE TO THE TEACHER ONLY:\nThis folder contains all sessions that have been opened in the chat. Although the chat sessions can often be trivial, others can be really interesting and worthy of being incorporated as an additional work document. To do this without changing the visibility of this folder, make the file visible and link it from where you deem appropriate. It is not recommended to make this folder visible to all."
 msgstr "INFORMATION VISIBLE TO THE TEACHER ONLY:\nThis folder contains all sessions that have been opened in the chat. Although the chat sessions can often be trivial, others can be really interesting and worthy of being incorporated as an additional work document. To do this without changing the visibility of this folder, make the file visible and link it from where you deem appropriate. It is not recommended to make this folder visible to all."
@@ -16939,7 +16935,7 @@ msgid "Show the history folder of chat conversations"
 msgstr "Show the history folder of chat conversations"
 
 msgid "This will show to theacher the folder that contains all sessions that have been made in the chat, the teacher can make them visible or not learners and use them as a resource"
-msgstr "This will show to theacher the folder that contains all sessions that have been made in the chat, the teacher can make them visible or not learners and use them as a resource"
+msgstr "This will show to the teacher the folder that contains all sessions that have been made in the chat, the teacher can make them visible or not learners and use them as a resource"
 
 msgid "Allow learners to export web documents to PDF format in the documents and wiki tools"
 msgstr "Allow learners to export web documents to PDF format in the documents and wiki tools"
@@ -16978,7 +16974,7 @@ msgid "Load the Mathjax library in all the system pages"
 msgstr "Load the Mathjax library in all the system pages"
 
 msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the 'Documents' tool, but elsewhere in the system."
-msgstr "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the \"Documents\" tool, but elsewhere in the system."
+msgstr "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the 'Documents' tool, but elsewhere in the system."
 
 msgid "Hide tools from teachers"
 msgstr "Hide tools from teachers"
@@ -17518,13 +17514,13 @@ msgid "Your browser does not send your recording to the platform, although you c
 msgstr "Your browser does not send your recording to the platform, although you can save on your computer disk and send it later. To have all the features, we recommend using advanced browsers such as Firefox or Chrome."
 
 msgid "Already exist a file with the same name.  Please, rename the file."
-msgstr "Already exist a file with the same name.  Please, rename the file."
+msgstr "A file with the same name already exists. Please rename the file."
 
 msgid "Activate recorder - voice player Nanogong"
 msgstr "Activate recorder - voice player Nanogong"
 
 msgid "Nanongong is a recorder - voice player that allows you to record your voice and send it to the platform or download it into your hard drive. It also lets you play what you recorded. The learners only need a microphone and speakers, and accept the load applet when first loaded. It is very useful for language learners to hear his voice after listening the correct pronunciation proposed by teacher in a wav voice file."
-msgstr "Nanongong is a recorder - voice player that allows you to record your voice and send it to the platform or download it into your hard drive. It also lets you play what you recorded. The learners only need a microphone and speakers, and accept the load applet when first loaded. It is very useful for language learners to hear his voice after listening the correct pronunciation proposed by teacher in a wav voice file."
+msgstr "Nanogong is a recorder - voice player that allows you to record your voice and send it to the platform or download it into your hard drive. It also lets you play what you recorded. The learners only need a microphone and speakers, and accept the load applet when first loaded. It is very useful for language learners to hear his voice after listening the correct pronunciation proposed by teacher in a wav voice file."
 
 msgid "Assessments and attendances"
 msgstr "Assessments and attendances"
@@ -17563,7 +17559,7 @@ msgid "There was a problem uploading your document: the received file had a 0 by
 msgstr "There was a problem uploading your document: the received file had a 0 bytes size on the server. Please, review your local file for any corruption or damage, then try again."
 
 msgid "You have to  choose a relation type"
-msgstr "You have to  choose a relation type"
+msgstr "You have to choose a relation type"
 
 msgid "Relation type selection"
 msgstr "Relation type selection"
@@ -18268,12 +18264,7 @@ msgid "The var/cache/ directory cleanup has been executed successfully."
 msgstr "The var/cache/ directory cleanup has been executed successfully."
 
 msgid "For some reason, the var/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/var/cache/ directory, except the .htaccess file. On Linux: # find var/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
-msgstr ""
-"For some reason, the chamilo/var/cache/ directory could not be cleaned up. "
-"Please clean it up by manually: connect to the server and delete all files "
-"and symbolic links under the chamilo/var/cache/ directory, except the ."
-"htaccess file. On Linux: # find var/cache/ \\( -type f -or -type l \\) -not -"
-"name .htaccess -exec echo rm -v \\{} \\;"
+msgstr "For some reason, the var/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/var/cache/ directory, except the .htaccess file. On Linux: # find var/cache/ \( -type f -or -type l \) -not -name .htaccess -exec echo rm -v \{} \;"
 
 msgid "Enable start time"
 msgstr "Enable start time"
@@ -19020,7 +19011,7 @@ msgid "Show to admins and teachers"
 msgstr "Show to admins and teachers"
 
 msgid "Show to all  users"
-msgstr "Show to all  users"
+msgstr "Show to all users"
 
 msgid "Import glossary"
 msgstr "Import glossary"
@@ -19344,7 +19335,7 @@ msgid "Allow public certificates"
 msgstr "Allow public certificates"
 
 msgid "User certificates can be view by unregistered users."
-msgstr "User certificates can be view by unregistered users."
+msgstr "User certificates can be viewed by unregistered users."
 
 msgid "Don't forget to select the media files if your resource need it"
 msgstr "Don't forget to select the media files if your resource needs it"
@@ -19395,7 +19386,7 @@ msgid "Enable Webcam Clip"
 msgstr "Enable Webcam Clip"
 
 msgid "Webcam Clip allow to users capture images from his webcam and send them to server in JPEG (.jpg or .jpeg) format"
-msgstr "Webcam Clip allow to users capture images from his webcam and send them to server in JPEG (.jpg or .jpeg) format"
+msgstr "Webcam Clip allows users to capture images from their webcam and send them to server in JPEG (.jpg or .jpeg) format"
 
 msgid "AUTO RESIZE (default)"
 msgstr "AUTO RESIZE (default)"
@@ -19404,7 +19395,7 @@ msgid "This slideshow will resize automatically to your screen size. This is the
 msgstr "This slideshow will resize automatically to your screen size. This is the default option."
 
 msgid "You should create the \"Term and Conditions\" for all the available languages."
-msgstr "You should create the \"Term and Conditions\" for all the available languages."
+msgstr "You should create the \"Terms and Conditions\" for all the available languages."
 
 msgid "Select an audio file from documents"
 msgstr "Select an audio file from documents"
@@ -19434,7 +19425,7 @@ msgid "To be warned user list"
 msgstr "To be warned user list"
 
 msgid "You have some unsaved changes. Do you want to abandon them ?"
-msgstr "You have some unsaved changes. Do you want to abandon them ?"
+msgstr "You have some unsaved changes. Do you want to abandon them?"
 
 msgid "Activate event"
 msgstr "Activate event"
@@ -20010,7 +20001,7 @@ msgid "PDF header logo"
 msgstr "PDF header logo"
 
 msgid "Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
-msgstr "Whether to use the image at var/themes/[your-css]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
+msgstr "Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
 
 msgid "Order users by official code"
 msgstr "Order users by official code"
@@ -22494,7 +22485,7 @@ msgid "Your overall results for the test"
 msgstr "Your overall results for the test"
 
 msgid "You will find your results for test %s below.<br />"
-msgstr "You will find your results for test %s below.<br />"
+msgstr "You will find your results for test %s below.<br \/>"
 
 msgid "Very sure"
 msgstr "Very sure"
@@ -22545,7 +22536,7 @@ msgid "I am totally sure"
 msgstr "I am totally sure"
 
 msgid "Multiple answer true/false/degree of certainty"
-msgstr "Multiple answer true/false/degree of certainty"
+msgstr "Multiple answer true\/false\/degree of certainty"
 
 msgid "Ignorance: %s"
 msgstr "Ignorance: %s"
@@ -22581,10 +22572,10 @@ msgid "%d questions"
 msgstr "%d questions"
 
 msgid "The styles and assets in the web/ folder have been refreshed."
-msgstr "The styles and assets in the web/ folder have been refreshed."
+msgstr "The styles and assets in the web\/ folder have been refreshed."
 
 msgid "The styles and assets in the web/ folder could not be refreshed, probably due to a permissions problem. Make sure the web/ folder is writeable by your web server."
-msgstr "The styles and assets in the web/ folder could not be refreshed, probably due to a permissions problem. Make sure the web/ folder is writeable by your web server."
+msgstr "The styles and assets in the web\/ folder could not be refreshed, probably due to a permissions problem. Make sure the web\/ folder is writeable by your web server."
 
 msgid "Copy text"
 msgstr "Copy text"
@@ -22782,7 +22773,7 @@ msgid "Student care detail view"
 msgstr "Student care detail view"
 
 msgid "More data available in the database but trunked for efficiency reasons."
-msgstr "More data available in the database but trunked for efficiency reasons."
+msgstr "More data available in the database but truncated for efficiency reasons."
 
 msgid "Send a copy by email to myself."
 msgstr "Send a copy by email to myself."
@@ -22794,7 +22785,7 @@ msgid "Announcement will be sent to"
 msgstr "Announcement will be sent to"
 
 msgid "You need attach a audio file according to the text, clicking on the %s icon."
-msgstr "You need attach a audio file according to the text, clicking on the %s icon."
+msgstr "You need to attach an audio file according to the text, clicking on the %s icon."
 
 msgid "Create read-out text"
 msgstr "Create read-out text"
@@ -22824,13 +22815,13 @@ msgid "Question for next class"
 msgstr "Question for next class"
 
 msgid "The portal do not allowed to start new test for the moment, please come back later."
-msgstr "The portal do not allowed to start new test for the moment, please come back later."
+msgstr "The portal does not allow starting new tests at the moment, please come back later."
 
 msgid "Personal data officer"
 msgstr "Personal data officer"
 
 msgid "The maximum number of student has already been reached, it is not possible to subscribe more student."
-msgstr "The maximum number of student has already been reached, it is not possible to subscribe more student."
+msgstr "The maximum number of students has already been reached, it is not possible to subscribe more students."
 
 msgid "User %s has been registered to course %s"
 msgstr "User %s has been registered to course %s"
@@ -22860,7 +22851,7 @@ msgid "The student <b>%s</b> has finished the learning paths from the course <b>
 msgstr "The student <b>%s</b> has finished the learning paths from the course <b>%s</b>"
 
 msgid "This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question."
-msgstr "This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question."
+msgstr "This question is used in other exercises. If you continue its edition, the changes will affect all exercises that contain this question."
 
 msgid "Time spent / Time required"
 msgstr "Time spent / Time required"
@@ -22941,7 +22932,7 @@ msgid "Ask for a revision"
 msgstr "Ask for a revision"
 
 msgid "This feature has been disabled because the libraries it depends on are no longer unmaintained."
-msgstr "This feature has been disabled because the libraries it depends on are no longer unmaintained."
+msgstr "This feature has been disabled because the libraries it depends on are no longer maintained."
 
 msgid "By geolocalization"
 msgstr "By geolocalization"
@@ -25356,7 +25347,7 @@ msgid "Hide courses block in the sidebar"
 msgstr "Hide courses block in the sidebar"
 
 msgid "When on screens where the left menu is visible, do not display the « Courses » section."
-msgstr "When on screens where the left menu is visible, do not display the « Courses » section."
+msgstr "When on screens where the left menu is visible, do not display the « Courses » section."
 
 msgid "Allow using extra fields in course catalogue"
 msgstr "Allow using extra fields in course catalogue"
@@ -25398,7 +25389,7 @@ msgid "Type of link for the session title"
 msgstr "Type of link for the session title"
 
 msgid "On the courses/sessions page, the session title can be either of the following : 0 = no link (hide session title) ; 1 = link title to a special session page ; 2 = link to the course if there is only one course ; 3 = session title makes the courses list foldable ; 4 = no link (show session title)."
-msgstr "On the courses/sessions page, the session title can be either of the following : 0 = no link (hide session title) ; 1 = link title to a special session page ; 2 = link to the course if there is only one course ; 3 = session title makes the courses list foldable ; 4 = no link (show session title)."
+msgstr "On the courses/sessions page, the session title can be either of the following : 0 = no link (hide session title) ; 1 = link title to a special session page ; 2 = link to the course if there is only one course ; 3 = session title makes the courses list foldable ; 4 = no link (show session title)."
 
 msgid "Hide course rating"
 msgstr "Hide course rating"
@@ -25416,7 +25407,7 @@ msgid "Course student info display"
 msgstr "Course student info display"
 
 msgid "On the ‘My courses’/’My sessions’ pages, show additional information regarding the score, progress and/or certificate acquisition by the student."
-msgstr "On the ‘My courses’/’My sessions’ pages, show additional information regarding the score, progress and/or certificate acquisition by the student."
+msgstr "On the ‘My courses’/‘My sessions’ pages, show additional information regarding the score, progress and/or certificate acquisition by the student."
 
 msgid "Course catalogue settings"
 msgstr "Course catalogue settings"
@@ -25503,7 +25494,7 @@ msgid "Prefill course fields with fields from user"
 msgstr "Prefill course fields with fields from user"
 
 msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
-msgstr "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
 
 msgid "Allow tool visibility edition in sessions"
 msgstr "Allow tool visibility edition in sessions"
@@ -26028,7 +26019,7 @@ msgid "Hide gradebook charts"
 msgstr "Hide gradebook charts"
 
 msgid "If your portal is resources-limited, reducing the generation of the dynamic gradebok charts with potentially thousands of results is a good option."
-msgstr "If your portal is resources-limited, reducing the generation of the dynamic gradebook charts with potentially thousands of results is a good option."
+msgstr "If your portal is resources-limited, reducing the generation of the dynamic gradebok charts with potentially thousands of results is a good option."
 
 msgid "Hide gradebook button 'download PDF report'"
 msgstr "Hide gradebook button 'download PDF report'"
@@ -26205,7 +26196,7 @@ msgid "Hide requirements label in learning paths"
 msgstr "Hide requirements label in learning paths"
 
 msgid "Hide the pre-requisites tooltip on learning path items. This is mostly an estaethic choice."
-msgstr "Hide the pre-requisites tooltip on learning path items. This is mostly an estaethic choice."
+msgstr "Hide the pre-requisites tooltip on learning path items. This is mostly an aesthetic choice."
 
 msgid "Minimum time to complete learning path"
 msgstr "Minimum time to complete learning path"
@@ -26835,7 +26826,7 @@ msgid "Add a disclaimer below the career diagram. A language variable called 'Ca
 msgstr "Add a disclaimer below the career diagram. A language variable called 'Career diagram disclaimer' must exist in your sub-language."
 
 msgid "LinkedIn Orgnization ID"
-msgstr "LinkedIn Orgnization ID"
+msgstr "LinkedIn Organization ID"
 
 msgid "When sharing a badge on LinkedIn, LinkedIn allows you to set an organization ID that will link to the LinkedIn's page of your organization (to link the organization attributing the badge)."
 msgstr "When sharing a badge on LinkedIn, LinkedIn allows you to set an organization ID that will link to the LinkedIn's page of your organization (to link the organization attributing the badge)."
@@ -27372,7 +27363,7 @@ msgid "Certificate of participation"
 msgstr "Certificate of participation"
 
 msgid "User has participate at a training session on the platforme %s from %s until %s"
-msgstr "User has participate at a training session on the platforme %s from %s until %s"
+msgstr "User has participated in a training session on the platform %s from %s until %s"
 
 msgid "This preparation corresponds to a volume of approximately %s training hours."
 msgstr "This preparation corresponds to a volume of approximately %s training hours."
@@ -27465,7 +27456,7 @@ msgid "Show advanced mode"
 msgstr "Show advanced mode"
 
 msgid "You can see examples of how chamilo will look here"
-msgstr "You can see examples of how chamilo will look here"
+msgstr "You can see examples of how Chamilo will look here"
 
 msgid "Buttons"
 msgstr "Buttons"
@@ -28071,7 +28062,7 @@ msgid "Enable or disable automatic re-subscription when course validity expires.
 msgstr "Enable or disable automatic re-subscription when course validity expires. The related cron job must also be activated."
 
 msgid "Enable Session Replication"
-msgstr "Enable session replication"
+msgstr "Enable Session Replication"
 
 msgid "Enable or disable automatic session replication. The related cron job must also be activated."
 msgstr "Enable or disable automatic session replication. The related cron job must also be activated."
@@ -29403,7 +29394,7 @@ msgid "Failed to send friend request"
 msgstr "Failed to send friend request"
 
 msgid "You have a new friend request"
-msgstr ""
+msgstr "You have a new friend request"
 
 msgid "You have received a new friend request. Visit the invitations page to accept or reject the request."
 msgstr "You have received a new friend request. Visit the invitations page to accept or reject the request."
@@ -29667,7 +29658,7 @@ msgid "Back to list"
 msgstr "Back to list"
 
 msgid "Show public link"
-msgstr "SHow public link"
+msgstr "Show public link"
 
 msgid "Public link"
 msgstr "Public link"
@@ -30381,7 +30372,7 @@ msgid "You have access to multiple URLs. Here is the list of your accesses."
 msgstr "You have access to multiple URLs. Here is the list of your accesses."
 
 msgid "Please click on the link below corresponding to the URL you wish to access."
-msgstr "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Please click on the link below corresponding to the URL you wish to access."
 
 msgid "Does not have enough contrast against background"
 msgstr "Does not have enough contrast against background"
@@ -30819,7 +30810,7 @@ msgid "Buyer's company"
 msgstr "Buyer's company"
 
 msgid "Block Category"
-msgstr "Block category"
+msgstr "Block Category"
 
 msgid "Authentication method"
 msgstr "Authentication method"
@@ -32353,3 +32344,4 @@ msgstr "Custom certificate"
 
 msgid "Update profile"
 msgstr "Update profile"
+

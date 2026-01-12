@@ -32326,3 +32326,36 @@ msgstr "Drupal user ID"
 msgid "There are no terms that match the search: %s"
 msgstr "Δεν υπάρχουν όροι που ταιριάζουν με την αναζήτηση: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Η ρύθμιση είναι κλειδωμένη παγκοσμίως (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Αν είναι ενεργοποιημένη, τα μηνύματα ιδιωτικής συνομιλίας 1:1 θα αντικατοπτρίζονται στα έγγραφα ιστορικού συνομιλίας του μαθήματος. Συνιστάται να παραμένει απενεργοποιημένη για λόγους απορρήτου."
+
+msgid "Save private conversations in documents"
+msgstr "Αποθήκευση ιδιωτικών συνομιλιών σε έγγραφα"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "Νόμος ΕΕ για την ΤΝ – Ειδοποίηση διαφάνειας & κινδύνου"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "Σύμφωνα με τον Νόμο της ΕΕ για την Τεχνητή Νοημοσύνη (Κανονισμός (ΕΕ) 2024/1689), τα συστήματα ΤΝ που χρησιμοποιούνται στην εκπαίδευση ταξινομούνται γενικά ως «υψηλού κινδύνου». Αυτό το λογισμικό <strong>δεν</strong> είναι σύστημα ΤΝ, αλλά μπορεί να ενσωματώσει προαιρετικά εσωτερικά ή εξωτερικά συστήματα ΤΝ—ανάλογα με τη διαμόρφωσή σας—για να βελτιώσει την απόδοση εργασιών των χρηστών. Αυτά τα συστήματα μπορούν να έχουν πρόσβαση σε προσωπικά δεδομένα <em>μόνο εάν</em> οι χρήστες συμπεριλάβουν τέτοια δεδομένα στις προτροπές τους. Σχεδιαστικά, αυτό το λογισμικό δεν μοιράζεται προσωπικά δεδομένα με συστήματα ΤΝ χωρίς ενεργή εισαγωγή από τον χρήστη. Εξ ορισμού, όλες οι λειτουργίες ΤΝ είναι απενεργοποιημένες."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Ευθύνη διαχειριστή & αποκαλύψεις"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Αυτή η σελίδα διαμόρφωσης περιγράφει λεπτομερώς κάθε λειτουργία ΤΝ και τον σκοπό της. Ως επιβάτης, θα πρέπει να τις εξετάσετε προσεκτικά και να ενημερώσετε τις πολιτικές απορρήτου δεδομένων σας σύμφωνες με τον GDPR ώστε να αντικατοπτρίζουν τις επιλογές που ενεργοποιείτε. Ενώ οι περισσότερες λειτουργίες ΤΝ δεν μοιράζονται άμεσα προσωπικά δεδομένα με εξωτερικά συστήματα, οι προτροπές χρηστών προς την ΤΝ μπορεί να περιλαμβάνουν ακούσια προσωπικές πληροφορίες. Ως επιβάτης, <strong>είστε υπεύθυνοι</strong> για την ενημέρωση των χρηστών σχετικά με αυτόν τον κίνδυνο. Για διαφάνεια, μελλοντικές εκδόσεις μπορεί να εμφανίζουν μη παρεμβατικές ετικέτες τελικού χρήστη που υποδεικνύουν ότι ορισμένο περιεχόμενο ή ανατροφοδότηση δημιουργήθηκε με τη βοήθεια ΤΝ."
+
+msgid "Positioning"
+msgstr "Θέση"
+
+msgid "Quiz"
+msgstr "Τεστ"
+
+msgid "Customcertificate"
+msgstr "Προσαρμοσμένοπιστοποιητικό"
+
+msgid "Update profile"
+msgstr "Ενημέρωση προφίλ"
+

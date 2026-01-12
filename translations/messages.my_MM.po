@@ -32311,3 +32311,36 @@ msgstr "Drupal အသုံးပြုသူ ID"
 msgid "There are no terms that match the search: %s"
 msgstr "ရှာဖွေမှုနှင့် ကိုက်ညီသော အသုံးအနှုန်များ မရှိပါ။ %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "ဆက်တင်ကို ကမ္ဘာလုံးဆိုင်ရာ သော့ခတ်ထားသည် (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "ဖွင့်ထားပါက၊ ၁:၁ ပုဂ္ဂိုလ်ရေးအချက်ပြမှုများကို သင်တန်းချက်သမိုင်းစာရွက်စာတမ်းများတွင် ထင်ဟပ်ပြသမည်။ ကိုယ်ရေးအချက်အလက်ကိုကာကွယ်ရန် ပိတ်ထားရန် အကြံပြုသည်။"
+
+msgid "Save private conversations in documents"
+msgstr "ပုဂ္ဂိုလ်ရေးဆက်သွယ်မှုများကို စာရွက်စာတမ်းများတွင် သိမ်းဆည်း"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU AI ဥပဒေ – ပွင့်လင်းမြင်သာမှု နှင့် အန္တရာယ်သတိပေးချက်"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "EU ဉာဏ်ရည်တု ဥပဒေ (Regulation (EU) 2024/1689) အရ၊ ပညာရေးတွင် အသုံးပြုသော AI စနစ်များကို ယေဘုယျအားဖြင့် “အန္တရာယ်မြင့်မားသော” အဖြစ် ခွဲခြားသတ်မှတ်သည်။ ဤဆော့ဖ်ဝဲလ်ကိုယ်တိုင်မှာ <strong>မဟုတ်</strong> AI စနစ်တစ်ခုဖြစ်သော်လည်း၊ သင်၏ ပုံစံတည်းမှုပေါ်မူတည်၍ အသုံးပြုသူရဲ့ လုပ်ဆောင်ချက်စွမ်းဆောင်ရည်ကို မြှင့်တင်ရန် ရွေးချယ်နိုင်သော အတွင်းပိုင် သို့မဟုတ် ပြင်ပရှိ AI စနစ်များကို ပေါင်းစည်းနိုင်သည်။ ဤစနစ်များသည် အသုံးပြုသူများက သူတို့၏ ညွှန်ကြားချက်များတွင် ထည့်သွင်းထားပါက <em>သက်သက်သာ</em> ကိုယ်ရေးအချက်အလက်များကို အသုံးပြုနိုင်သည်။ ဒီဇိုင်းအရ၊ ဤဆော့ဖ်ဝဲလ်သည် အသုံးပြုသူ၏ တက်ကြွသော ထည့်သွင်းမှုမရှိပဲ AI စနစ်များနှင့် ကိုယ်ရေးအချက်အလက်များကို မမျှဝေပါ။ မူလတန်းအတိုင်း၊ အားလုံး AI လုပ်ဆောင်ချက်များကို ပိတ်ထားသည်။"
+
+msgid "Admin responsibility & disclosures"
+msgstr "အုပ်ချုပ်ရေးမှူး တာဝန်နှင့် ထုတ်ဖော်ချက်များ"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "ဤပုံစံတည်းမှုစာမျက်နှာတွင် အင်္ဂါရပ်တစ်ခုချင်းစီနှင့် ၎င်း၏ ရည်ရွယ်ချက်ကို အသေးစိတ်ဖော်ပြထားသည်။ ထုတ်လွှင့်သူအဖြစ်၊ သင်သည် ၎င်းတို့ကို ဂရုတစိုက်သုံးသပ်ရမည်ဖြစ်ပြီး သင်ဖွင့်ထားသော ရွေးချယ်စရာများကို ထင်ဟပ်ပြသရန် GDPR နှင့်ကိုက်ညီသော ဒေတာကိုယ်ရေးအချက်အလက် ကာကွယ်မူဝါဒများကို အပ်ဒိတ်လုပ်ရမည်။ အင်္ဂါရပ်အများစုသည် ပြင်ပစနစ်များနှင့် ကိုယ်ရေးအချက်အလက်များကို တိုက်ရိုက်မမျှဝေသော်လည်း၊ AI သို့ ပို့လွှတ်သော အသုံးပြုသူ ညွှန်ကြားချက်များတွင် ကိုယ်ရေးအချက်အလက်များ မတော်မတရား ပါဝင်နိုင်သည်။ ထုတ်လွှင့်သူအဖြစ်၊ <strong>သင်တာဝန်ရှိသည်</strong> ဤအန္တရာယ်ကို အသုံးပြုသူများကို အသိပေးရန်။ ပွင့်လင်းမြင်သာမှုအတွက်၊ အနာဂတ်ထုတ်ဝေမှုများတွင် အကြောင်းအရာအချို့ သို့မဟုတ် တုံ့ပြန်ချက်များကို AI ၏ အကူအညီနှင့် ထုတ်လုပ်ထားကြောင်း ညွှန်ပြသော အသုံးပြုသူအဆုံးမှ မအနှောင့်အယှက်ဖြစ်သော တံဆိပ်များကို ပြသရနိုင်သည်။"
+
+msgid "Positioning"
+msgstr "အနေအထား"
+
+msgid "Quiz"
+msgstr "ဉာဏ်စမ်းစာ"
+
+msgid "Customcertificate"
+msgstr "Customcertificate"
+
+msgid "Update profile"
+msgstr "ပရိုဖိုင်ကို အပ်ဒိတ်လုပ်ရန်"
+

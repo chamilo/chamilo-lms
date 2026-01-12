@@ -32311,3 +32311,36 @@ msgstr "Drupal felhasználói azonosító"
 msgid "There are no terms that match the search: %s"
 msgstr "Nincsenek olyan kifejezések, amelyek megfelelnek a keresésnek: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "A beállítás globálisan zárolva (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Ha engedélyezve van, az 1:1 privát csevegőüzenetek a kurzuscsevegés előzménydokumentumaiban is megjelennek. Ajánlott kikapcsolva tartani a adatvédelem miatt."
+
+msgid "Save private conversations in documents"
+msgstr "Privát beszélgetések mentése dokumentumokba"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU AI Act – Átláthatóság és kockázati értesítés"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "Az EU Mesterséges Intelligencia Törvénye (Rendelet (EU) 2024/1689) szerint az oktatásban használt AI rendszereket általában „magas kockázatúnak” minősítik. Ez a szoftver <strong>nem</strong> AI rendszer, de opcionálisan integrálhat belső vagy külső AI rendszereket – a konfigurációtól függően – a felhasználói feladatok teljesítményének növelése érdekében. Ezek a rendszerek <em>csak akkor</em> férhetnek hozzá személyes adatokhoz, ha a felhasználók ilyen adatokat tartalmaznak a promptjaikban. Tervezés szerint ez a szoftver nem oszt meg személyes adatokat AI rendszerekkel a felhasználó aktív bevitele nélkül. Alapértelmezetten minden AI funkció ki van kapcsolva."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Adminisztrátori felelősség és közzétételek"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Ez a konfigurációs oldal részletezi minden AI funkciót és annak célját. Telepítőként gondosan át kell néznie őket, és frissítenie kell GDPR-kompatibilis adatvédelmi szabályzatát az engedélyezett opciók tükrözésére. Bár a legtöbb AI funkció nem oszt meg közvetlenül személyes adatokat külső rendszerekkel, a felhasználói promptok, amelyek AI-hoz kerülnek, véletlenül tartalmazhatnak személyes információkat. Telepítőként <strong>ön felelős</strong> a felhasználók tájékoztatásáért erről a kockázatról. Az átláthatóság érdekében a jövőbeli kiadások nem tolakodó végfelhasználói címkéket jeleníthetnek meg, amelyek jelzik, hogy bizonyos tartalom vagy visszajelzés AI segítségével készült."
+
+msgid "Positioning"
+msgstr "Pozicionálás"
+
+msgid "Quiz"
+msgstr "Kvíz"
+
+msgid "Customcertificate"
+msgstr "Egyediigazolás"
+
+msgid "Update profile"
+msgstr "Profil frissítése"
+

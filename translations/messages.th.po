@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "ด้วยความเคารพ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ตัวอย่างสูตร: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ตัวอย่างสูตร: sqrt( [x] / [ย] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ช่วงตัวแปร"
@@ -32312,4 +32312,37 @@ msgstr "Drupal user ID"
 
 msgid "There are no terms that match the search: %s"
 msgstr "ไม่มีคำศัพท์ที่ตรงกับการค้นหา: %s"
+
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "การตั้งค่านี้ถูกล็อกทั่วโลก (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "หากเปิดใช้งาน ข้อความแชทส่วนตัว 1:1 จะถูกคัดลอกไปยังเอกสารประวัติแชทของคอร์ส แนะนำให้ปิดไว้เพื่อความเป็นส่วนตัว"
+
+msgid "Save private conversations in documents"
+msgstr "บันทึกการสนทนาส่วนตัวในเอกสาร"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU AI Act – การแจ้งเตือนความโปร่งใสและความเสี่ยง"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "ตามกฎหมายปัญญาประดิษฐ์ของสหภาพยุโรป (กฎระเบียบ (EU) 2024/1689) ระบบ AI ที่ใช้ในการศึกษาได้รับการจำแนกเป็น \"ความเสี่ยงสูง\" โดยทั่วไป ซอฟต์แวร์นี้ <strong>ไม่ใช่</strong> ระบบ AI แต่สามารถรวมระบบ AI ภายในหรือภายนอกที่เป็นตัวเลือกได้—ขึ้นอยู่กับการกำหนดค่าของคุณ—เพื่อปรับปรุงประสิทธิภาพงานของผู้ใช้ ระบบเหล่านี้อาจเข้าถึงข้อมูลส่วนบุคคล <em>เฉพาะเมื่อ</em> ผู้ใช้รวมข้อมูลดังกล่าวในพรอมต์ของพวกเขา โดยการออกแบบ ซอฟต์แวร์นี้ไม่แบ่งปันข้อมูลส่วนบุคคลกับระบบ AI โดยปราศจากการป้อนข้อมูลที่ใช้งานอยู่ของผู้ใช้ โดยค่าเริ่มต้น คุณสมบัติ AI ทั้งหมดจะถูกปิดใช้งาน"
+
+msgid "Admin responsibility & disclosures"
+msgstr "ความรับผิดชอบของผู้ดูแลระบบและการเปิดเผยข้อมูล"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "หน้าตั้งค่านี้แสดงรายละเอียดคุณสมบัติ AI แต่ละตัวและวัตถุประสงค์ ในฐานะผู้ติดตั้ง คุณควรตรวจสอบอย่างละเอียดและอัปเดตนโยบายความเป็นส่วนตัวข้อมูลที่สอดคล้องกับ GDPR เพื่อสะท้อนตัวเลือกที่คุณเปิดใช้งาน แม้ว่าคุณสมบัติ AI ส่วนใหญ่จะไม่แบ่งปันข้อมูลส่วนบุคคลโดยตรงกับระบบภายนอก พรอมต์ของผู้ที่ส่งไปยัง AI อาจรวมข้อมูลส่วนบุคคลโดยไม่ได้ตั้งใจ ในฐานะผู้ติดตั้ง <strong>คุณมีหน้าที่รับผิดชอบ</strong> ในการแจ้งผู้ใช้เกี่ยวกับความเสี่ยงนี้ เพื่อความโปร่งใส รุ่นในอนาคตอาจแสดงป้ายผู้ใช้ปลายทางที่ไม่รบกวนเพื่อระบุว่าคอนเทนต์หรือข้อเสนอแนะบางอย่างถูกสร้างด้วยความช่วยเหลือจาก AI"
+
+msgid "Positioning"
+msgstr "ตำแหน่ง"
+
+msgid "Quiz"
+msgstr "ควิซ"
+
+msgid "Customcertificate"
+msgstr "ใบรับรองแบบกำหนดเอง"
+
+msgid "Update profile"
+msgstr "อัปเดตโปรไฟล์"
 

@@ -32311,3 +32311,36 @@ msgstr "ID pengguna Drupal"
 msgid "There are no terms that match the search: %s"
 msgstr "Tidak ada istilah yang cocok dengan pencarian: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Pengaturan terkunci secara global (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Jika diaktifkan, pesan obrolan pribadi 1:1 akan dicerminkan dalam dokumen riwayat obrolan kursus. Disarankan untuk tetap dinonaktifkan demi privasi."
+
+msgid "Save private conversations in documents"
+msgstr "Simpan percakapan pribadi dalam dokumen"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU AI Act – Pemberitahuan Transparansi & Risiko"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "Berdasarkan Undang-Undang Kecerdasan Buatan UE (Peraturan (UE) 2024/1689), sistem AI yang digunakan dalam pendidikan umumnya diklasifikasikan sebagai \"berisiko tinggi\". Perangkat lunak ini <strong>tidak</strong> merupakan sistem AI, tetapi dapat mengintegrasikan sistem AI internal atau eksternal opsional—tergantung pada konfigurasi Anda—untuk meningkatkan kinerja tugas pengguna. Sistem ini hanya dapat mengakses data pribadi <em>jika</em> pengguna menyertakan data tersebut dalam prompt mereka. Secara desain, perangkat lunak ini tidak membagikan data pribadi dengan sistem AI tanpa masukan aktif dari pengguna. Secara default, semua fitur AI dinonaktifkan."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Tanggung jawab Admin & Pengungkapan"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Halaman konfigurasi ini merinci setiap fitur AI dan tujuannya. Sebagai penyedia, Anda harus meninjau dengan teliti dan memperbarui kebijakan privasi data yang sesuai GDPR untuk mencerminkan opsi yang Anda aktifkan. Meskipun sebagian besar fitur AI tidak secara langsung membagikan data pribadi dengan sistem eksternal, prompt pengguna yang dikirim ke AI mungkin secara tidak sengaja menyertakan informasi pribadi. Sebagai penyedia, <strong>Anda bertanggung jawab</strong> untuk memberi tahu pengguna tentang risiko ini. Demi transparansi, rilis mendatang mungkin menampilkan tag pengguna akhir yang tidak mengganggu yang menunjukkan bahwa konten atau umpan balik tertentu dihasilkan dengan bantuan AI."
+
+msgid "Positioning"
+msgstr "Pemosisian"
+
+msgid "Quiz"
+msgstr "Kuis"
+
+msgid "Customcertificate"
+msgstr "Sertifikat Khusus"
+
+msgid "Update profile"
+msgstr "Perbarui profil"
+

@@ -55,19 +55,9 @@ $interbreadcrumb[] = [
 $arr_infos = [];
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     // get all tutor by course_code in the session
-    $sql = "SELECT user_id
-	        FROM $tbl_session_rel_course_rel_user
-	        WHERE session_id = '$id_session' AND c_id = '".$courseId."' AND status = 2";
-    $rs_coaches = Database::query($sql);
+    $coaches_course_session = SessionManager::getCoachesByCourseSession($id_session, $courseId);
 
-    $coaches_course_session = [];
-    if (Database::num_rows($rs_coaches) > 0) {
-        while ($row_coaches = Database::fetch_row($rs_coaches)) {
-            $coaches_course_session[] = $row_coaches[0];
-        }
-    }
-
-    $id_coaches = isset($_POST['id_coach']) ? $_POST['id_coach'] : [0];
+    $id_coaches = $_POST['id_coach'] ?? [0];
     if (is_array($id_coaches) && count($id_coaches) > 0) {
         foreach ($id_coaches as $id_coach) {
             $id_coach = intval($id_coach);

@@ -6009,9 +6009,9 @@ class SessionManager
      * @param int $sessionId
      * @param int $courseId
      *
-     * @return array
+     * @return array<int, int>
      */
-    public static function getCoachesByCourseSession($sessionId, $courseId)
+    public static function getCoachesByCourseSession($sessionId, $courseId): array
     {
         $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $sessionId = (int) $sessionId;
@@ -6027,7 +6027,7 @@ class SessionManager
         $coaches = [];
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
-                $coaches[] = $row['user_id'];
+                $coaches[] = (int) $row['user_id'];
             }
         }
 

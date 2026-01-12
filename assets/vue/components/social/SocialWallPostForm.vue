@@ -110,7 +110,7 @@ function showTextPlaceholder() {
     user.value?.username ||
     ""
 
-  postState.textPlaceholder = wallName ? `${t("Write something to")} ${wallName}` : t("Write something")
+  postState.textPlaceholder = wallName ? `${t("Write something to {0}", [wallName])}` : t("Write something")
 }
 
 function showCheckboxPromoted() {

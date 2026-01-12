@@ -4,7 +4,7 @@
       <template #start><h3 class="text-lg font-semibold m-0">{{ t("Members") }}</h3></template>
       <template #end>
         <div class="flex items-center gap-2">
-          <BaseInputText v-model="q" :placeholder="t('Search members…')" id="m-q" label=""/>
+          <BaseInputText v-model="q" :placeholder="t('Search for members...')" id="m-q" label=""/>
           <BaseButton type="primary" icon="plus" :label="t('Add')" @click="openPicker" />
         </div>
       </template>
@@ -69,7 +69,7 @@
           </div>
 
           <div class="flex items-center gap-2 mb-3">
-            <BaseInputText v-model="poolQ" :placeholder="t('Search users in course/session…')" id="pool-q" label=""/>
+            <BaseInputText v-model="poolQ" :placeholder="t('Search for users in course/session...')" id="pool-q" label=""/>
             <span class="text-xs text-gray-500">
               {{ t("Total") }}: {{ filteredPool.length }}
             </span>

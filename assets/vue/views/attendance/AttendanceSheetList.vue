@@ -263,7 +263,7 @@
                           v-if="date.duration !== undefined && date.duration !== null"
                           class="text-xs text-gray-600 mt-1"
                         >
-                          {{ date.duration }} {{ t("min") }}
+                          {{ t("{0} min", [date.duration]) }}
                         </span>
 
                         <div

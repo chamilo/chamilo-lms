@@ -31840,3 +31840,318 @@ msgstr "Αυτό θα διαγράψει όλα τα προσωρινά αρχε
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Αυτό θα διαγράψει αρχεία παλαιότερα από %minutes% λεπτά. Συνεχίσετε;"
 
+msgid "The value must match exactly: %s"
+msgstr "Η τιμή πρέπει να ταιριάζει ακριβώς: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Η ημερομηνία λήξης επανάληψης πρέπει να είναι μετά την ημερομηνία έναρξης."
+
+msgid "Index document content?"
+msgstr "Ευρετηρίαση περιεχομένου εγγράφου;"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Ανέβασμα SVG λογότυπου στην κεφαλίδα της πλατφόρμας"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Ανέβασμα PNG λογότυπου στην κεφαλίδα της πλατφόρμας (%s)"
+
+msgid "Write something to %s"
+msgstr "Γράψτε κάτι στο %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Προτιμώμενο: SVG. Συνιστώμενο πλάτος PNG: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Ανέβασμα PNG λογότυπου για email (~%spx πλάτος)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "Το PNG κεφαλίδας πρέπει να είναι ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Απαίτηση συγκεκριμένης μορφής αρχείου"
+
+msgid "Select allowed file formats"
+msgstr "Επιλογή επιτρεπόμενων μορφών αρχείων"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Προσαρμοσμένες επεκτάσεις (διαχωρισμένες με κενό)"
+
+msgid "Other extensions"
+msgstr "Άλλες επεκτάσεις"
+
+msgid "My invitations"
+msgstr "Οι προσκλήσεις μου"
+
+msgid "Delete access"
+msgstr "Διαγραφή πρόσβασης"
+
+msgid "Certificate tags"
+msgstr "Ετικέτες πιστοποιητικού"
+
+msgid "Copy all"
+msgstr "Αντιγραφή όλων"
+
+msgid "Click to insert"
+msgstr "Κάντε κλικ για εισαγωγή"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Προτιμώμενο: SVG. Μέγιστο μέγεθος PNG: %spx."
+
+msgid "View badge"
+msgstr "Προβολή διακριτικού"
+
+msgid "%d min"
+msgstr "%d λεπτό"
+
+msgid "Duration in minutes"
+msgstr "Διάρκεια σε λεπτά"
+
+msgid "Go back to standard view"
+msgstr "Επιστροφή στην τυπική προβολή"
+
+msgid "Search for student..."
+msgstr "Αναζήτηση φοιτητή..."
+
+msgid "This date is locked or read-only."
+msgstr "Αυτή η ημερομηνία είναι κλειδωμένη ή μόνο για ανάγνωση."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Αποτυχία φόρτωσης παρουσίας. Δοκιμάστε ξανά αργότερα."
+
+msgid "Nothing to save"
+msgstr "Τίποτα προς αποθήκευση"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Έχετε μη αποθηκευμένες αλλαγές. Να φύγετε οπωσδήποτε;"
+
+msgid "Storage usage unavailable"
+msgstr "Χρήση αποθήκευσης μη διαθέσιμη"
+
+msgid "Search for members..."
+msgstr "Αναζήτηση μελών..."
+
+msgid "Current members"
+msgstr "Τρέχοντα μέλη"
+
+msgid "Add members"
+msgstr "Προσθήκη μελών"
+
+msgid "Search for users in course/session..."
+msgstr "Αναζήτηση χρηστών στο μάθημα/περίοδο..."
+
+msgid "No users available."
+msgstr "Κανένας χρήστης δεν είναι διαθέσιμος."
+
+msgid "Browse and publish new posts"
+msgstr "Περιήγηση και δημοσίευση νέων αναρτήσεων"
+
+msgid "Create and assign tasks"
+msgstr "Δημιουργία και ανάθεση εργασιών"
+
+msgid "Filtered by %s"
+msgstr "Φιλτραρισμένα κατά %s"
+
+msgid "Select a score"
+msgstr "Επιλογή βαθμού"
+
+msgid "Edit comment"
+msgstr "Επεξεργασία σχολίου"
+
+msgid "Failed to update the post."
+msgstr "Αποτυχία ενημέρωσης της ανάρτησης."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Διαγραφή αυτής της ανάρτησης; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
+
+msgid "Failed to delete the post."
+msgstr "Αποτυχία διαγραφής της ανάρτησης."
+
+msgid "Failed to update the comment."
+msgstr "Αποτυχία ενημέρωσης του σχολίου."
+
+msgid "Delete this comment?"
+msgstr "Διαγραφή αυτού του σχολίου;"
+
+msgid "Failed to delete the comment."
+msgstr "Αποτυχία διαγραφής του σχολίου."
+
+msgid "Search for projects..."
+msgstr "Αναζήτηση έργων..."
+
+msgid "Only visible"
+msgstr "Μόνο ορατό"
+
+msgid "Rename project"
+msgstr "Μετονομασία έργου"
+
+msgid "New title"
+msgstr "Νέος τίτλος"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Πρέπει να είστε διαχειριστής ή καθηγητής για να διαχειριστείτε έργα."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Διαγραφή αυτού του έργου; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
+
+msgid "Task list"
+msgstr "Λίστα εργασιών"
+
+msgid "Change status"
+msgstr "Αλλαγή κατάστασης"
+
+msgid "Waiting for validation"
+msgstr "Αναμονή έγκρισης"
+
+msgid "Delete this task?"
+msgstr "Διαγραφή αυτής της εργασίας;"
+
+msgid "Failed to delete the task."
+msgstr "Αποτυχία διαγραφής της εργασίας."
+
+msgid "Failed to update status."
+msgstr "Αποτυχία ενημέρωσης κατάστασης."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτόν τον τρίτο; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
+
+msgid "Please fix the errors before saving."
+msgstr "Διορθώστε τα σφάλματα πριν την αποθήκευση."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Σφάλμα δημιουργίας τρίτου. Ελέγξτε τα δεδομένα."
+
+msgid "Error deleting third party."
+msgstr "Σφάλμα διαγραφής τρίτου."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Ανεβάστε προαιρετικά λογότυπα κεφαλίδας και email. Προτιμάται SVG· χρησιμοποιείται PNG ως εφεδρικό."
+
+msgid "Data exchange updated successfully."
+msgstr "Η ανταλλαγή δεδομένων ενημερώθηκε επιτυχώς."
+
+msgid "Error deleting data exchange."
+msgstr "Σφάλμα διαγραφής ανταλλαγής δεδομένων."
+
+msgid "Failed to recycle course."
+msgstr "Αποτυχία ανακύκλωσης μαθήματος."
+
+msgid "Select source course"
+msgstr "Επιλογή μαθήματος πηγής"
+
+msgid "Course to copy from"
+msgstr "Μάθημα προς αντιγραφή από"
+
+msgid "Search by code or title..."
+msgstr "Αναζήτηση με κωδικό ή τίτλο..."
+
+msgid "No courses match your search."
+msgstr "Κανένα μάθημα δεν ταιριάζει με την αναζήτησή σας."
+
+msgid "Copy options"
+msgstr "Επιλογές αντιγραφής"
+
+msgid "Include users (enrollments)"
+msgstr "Συμπερίληψη χρηστών (εγγραφές)"
+
+msgid "Reset dates"
+msgstr "Επαναφορά ημερομηνιών"
+
+msgid "When a file with the same name exists"
+msgstr "Όταν υπάρχει αρχείο με το ίδιο όνομα"
+
+msgid "Ready to copy"
+msgstr "Έτοιμο για αντιγραφή"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Θα αντιγραφεί περιεχόμενο από το επιλεγμένο μάθημα σε αυτό το μάθημα. Μπορείτε να επιστρέψετε για αλλαγή επιλογών."
+
+msgid "Start copying"
+msgstr "Έναρξη αντιγραφής"
+
+msgid "Select resources to copy"
+msgstr "Επιλογή πόρων προς αντιγραφή"
+
+msgid "Copy selected"
+msgstr "Αντιγραφή επιλεγμένων"
+
+msgid "Copy completed."
+msgstr "Η αντιγραφή ολοκληρώθηκε."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Περιοχή κινδύνου: η διαγραφή μαθήματος είναι μόνιμη."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Πληκτρολογήστε τον κωδικό του μαθήματος για επιβεβαίωση. Όλα τα δεδομένα θα διαγραφούν μόνιμα."
+
+msgid "The code must match '%s' exactly."
+msgstr "Ο κωδικός πρέπει να ταιριάζει ακριβώς με '%s'."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Διαγραφή επίσης εγγράφων που χρησιμοποιούνται μόνο σε αυτό το μάθημα (αν υπάρχουν)."
+
+msgid "Delete course"
+msgstr "Διαγραφή μαθήματος"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Αυτή η ενέργεια δεν μπορεί να αναιρεθεί. Συνέχεια;"
+
+msgid "Course deleted successfully."
+msgstr "Το μάθημα διαγράφηκε επιτυχώς."
+
+msgid "Failed to delete course."
+msgstr "Αποτυχία διαγραφής μαθήματος."
+
+msgid "Create .mbz"
+msgstr "Δημιουργία .mbz"
+
+msgid "Backup scope"
+msgstr "Πεδίο αντιγράφου"
+
+msgid "Full course"
+msgstr "Πλήρες μάθημα"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Τα επιλεγμένα στοιχεία θα είναι τα μόνα που θα περιληφθούν στο εξαγόμενο αρχείο."
+
+msgid "Moodle export"
+msgstr "Εξαγωγή Moodle"
+
+msgid "Moodle version"
+msgstr "Έκδοση Moodle"
+
+msgid "Admin ID"
+msgstr "ID Διαχειριστή"
+
+msgid "Internal integer user id"
+msgstr "Εσωτερικό ακέραιος ID χρήστη"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Το Moodle απαιτεί εσωτερικό ID χρήστη αποθηκευμένο σε XML. Αν έχετε αμφιβολίες, χρησιμοποιήστε 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Όνομα χρήστη που θα εμφανίζεται ως ιδιοκτήτης των εισαγόμενων στοιχείων"
+
+msgid "Email to use in the archive metadata"
+msgstr "Email για χρήση στα μεταδεδομένα του αρχείου"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "Θα δημιουργηθεί αρχείο .mbz. Θα μπορείτε να το κατεβάσετε μόλις ολοκληρωθεί."
+
+msgid "Select resources to include"
+msgstr "Επιλέξτε πόρους για συμπερίληψη"
+
+msgid "Export completed"
+msgstr "Η εξαγωγή ολοκληρώθηκε"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Το αντίγραφο ασφαλείας του Moodle δημιουργήθηκε. Μπορείτε να το βρείτε στη λίστα αντιγράφων ασφαλείας του μαθήματος."
+
+msgid "Please complete all required fields."
+msgstr "Παρακαλούμε συμπληρώστε όλα τα υποχρεωτικά πεδία."
+
+msgid "Failed to create Moodle backup."
+msgstr "Αποτυχία δημιουργίας αντιγράφου ασφαλείας Moodle."
+
+msgid "More actions"
+msgstr "Περισσότερες ενέργειες"
+

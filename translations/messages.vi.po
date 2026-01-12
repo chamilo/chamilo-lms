@@ -31827,3 +31827,318 @@ msgstr "Thao tác này sẽ xóa tất cả tệp tạm thời. Tiếp tục?"
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Thao tác này sẽ xóa các tệp cũ hơn %minutes% phút. Tiếp tục?"
 
+msgid "The value must match exactly: %s"
+msgstr "Giá trị phải khớp chính xác: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Ngày kết thúc lặp lại phải sau ngày bắt đầu."
+
+msgid "Index document content?"
+msgstr "Lập chỉ mục nội dung tài liệu?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Tải lên logo SVG vào tiêu đề nền tảng"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Tải lên logo PNG vào tiêu đề nền tảng (%s)"
+
+msgid "Write something to %s"
+msgstr "Viết gì đó đến %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Ưu tiên: SVG. Chiều rộng PNG khuyến nghị: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Tải lên logo PNG cho email (~%spx chiều rộng)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "PNG tiêu đề phải ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Yêu cầu định dạng tệp cụ thể"
+
+msgid "Select allowed file formats"
+msgstr "Chọn định dạng tệp được phép"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Phần mở rộng tùy chỉnh (cách nhau bởi dấu cách)"
+
+msgid "Other extensions"
+msgstr "Các phần mở rộng khác"
+
+msgid "My invitations"
+msgstr "Lời mời của tôi"
+
+msgid "Delete access"
+msgstr "Xóa quyền truy cập"
+
+msgid "Certificate tags"
+msgstr "Thẻ chứng chỉ"
+
+msgid "Copy all"
+msgstr "Sao chép tất cả"
+
+msgid "Click to insert"
+msgstr "Nhấp để chèn"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Ưu tiên: SVG. Kích thước tối đa PNG: %spx."
+
+msgid "View badge"
+msgstr "Xem huy hiệu"
+
+msgid "%d min"
+msgstr "%d phút"
+
+msgid "Duration in minutes"
+msgstr "Thời lượng (phút)"
+
+msgid "Go back to standard view"
+msgstr "Quay lại chế độ xem chuẩn"
+
+msgid "Search for student..."
+msgstr "Tìm kiếm học viên..."
+
+msgid "This date is locked or read-only."
+msgstr "Ngày này bị khóa hoặc chỉ đọc."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Không tải được điểm danh. Vui lòng thử lại sau."
+
+msgid "Nothing to save"
+msgstr "Không có gì để lưu"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Bạn có thay đổi chưa lưu. Vẫn rời đi?"
+
+msgid "Storage usage unavailable"
+msgstr "Không thể lấy thông tin sử dụng lưu trữ"
+
+msgid "Search for members..."
+msgstr "Tìm kiếm thành viên..."
+
+msgid "Current members"
+msgstr "Thành viên hiện tại"
+
+msgid "Add members"
+msgstr "Thêm thành viên"
+
+msgid "Search for users in course/session..."
+msgstr "Tìm kiếm người dùng trong khóa học/buổi học..."
+
+msgid "No users available."
+msgstr "Không có người dùng nào khả dụng."
+
+msgid "Browse and publish new posts"
+msgstr "Duyệt và đăng bài viết mới"
+
+msgid "Create and assign tasks"
+msgstr "Tạo và giao nhiệm vụ"
+
+msgid "Filtered by %s"
+msgstr "Lọc theo %s"
+
+msgid "Select a score"
+msgstr "Chọn điểm số"
+
+msgid "Edit comment"
+msgstr "Sửa bình luận"
+
+msgid "Failed to update the post."
+msgstr "Không thể cập nhật bài viết."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Xóa bài viết này? Hành động này không thể hoàn tác."
+
+msgid "Failed to delete the post."
+msgstr "Không thể xóa bài viết."
+
+msgid "Failed to update the comment."
+msgstr "Không thể cập nhật bình luận."
+
+msgid "Delete this comment?"
+msgstr "Xóa bình luận này?"
+
+msgid "Failed to delete the comment."
+msgstr "Không thể xóa bình luận."
+
+msgid "Search for projects..."
+msgstr "Tìm kiếm dự án..."
+
+msgid "Only visible"
+msgstr "Chỉ hiển thị"
+
+msgid "Rename project"
+msgstr "Đổi tên dự án"
+
+msgid "New title"
+msgstr "Tiêu đề mới"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Bạn cần là quản trị viên hoặc giảng viên để quản lý dự án."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Xóa dự án này? Hành động này không thể hoàn tác."
+
+msgid "Task list"
+msgstr "Danh sách nhiệm vụ"
+
+msgid "Change status"
+msgstr "Thay đổi trạng thái"
+
+msgid "Waiting for validation"
+msgstr "Đang chờ xác thực"
+
+msgid "Delete this task?"
+msgstr "Xóa nhiệm vụ này?"
+
+msgid "Failed to delete the task."
+msgstr "Không thể xóa nhiệm vụ."
+
+msgid "Failed to update status."
+msgstr "Không thể cập nhật trạng thái."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Bạn có chắc chắn muốn xóa bên thứ ba này? Hành động này không thể hoàn tác."
+
+msgid "Please fix the errors before saving."
+msgstr "Vui lòng sửa lỗi trước khi lưu."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Lỗi tạo bên thứ ba. Vui lòng kiểm tra dữ liệu."
+
+msgid "Error deleting third party."
+msgstr "Lỗi xóa bên thứ ba."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Tải lên logo tiêu đề và email tùy chọn. SVG được ưu tiên; PNG dùng làm dự phòng."
+
+msgid "Data exchange updated successfully."
+msgstr "Trao đổi dữ liệu được cập nhật thành công."
+
+msgid "Error deleting data exchange."
+msgstr "Lỗi xóa trao đổi dữ liệu."
+
+msgid "Failed to recycle course."
+msgstr "Không thể tái chế khóa học."
+
+msgid "Select source course"
+msgstr "Chọn khóa học nguồn"
+
+msgid "Course to copy from"
+msgstr "Khóa học để sao chép từ"
+
+msgid "Search by code or title..."
+msgstr "Tìm kiếm theo mã hoặc tiêu đề..."
+
+msgid "No courses match your search."
+msgstr "Không có khóa học nào phù hợp với tìm kiếm của bạn."
+
+msgid "Copy options"
+msgstr "Tùy chọn sao chép"
+
+msgid "Include users (enrollments)"
+msgstr "Bao gồm người dùng (đăng ký)"
+
+msgid "Reset dates"
+msgstr "Đặt lại ngày"
+
+msgid "When a file with the same name exists"
+msgstr "Khi tồn tại tệp có cùng tên"
+
+msgid "Ready to copy"
+msgstr "Sẵn sàng sao chép"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Chúng tôi sẽ sao chép nội dung từ khóa học đã chọn vào khóa học này. Bạn có thể quay lại để thay đổi tùy chọn."
+
+msgid "Start copying"
+msgstr "Bắt đầu sao chép"
+
+msgid "Select resources to copy"
+msgstr "Chọn tài nguyên để sao chép"
+
+msgid "Copy selected"
+msgstr "Sao chép các mục đã chọn"
+
+msgid "Copy completed."
+msgstr "Sao chép hoàn tất."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Vùng nguy hiểm: xóa khóa học là vĩnh viễn."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Nhập mã khóa học để xác nhận. Tất cả dữ liệu sẽ bị xóa vĩnh viễn."
+
+msgid "The code must match '%s' exactly."
+msgstr "Mã phải khớp chính xác với '%s'."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Cũng xóa tài liệu chỉ được sử dụng trong khóa học này (nếu có)."
+
+msgid "Delete course"
+msgstr "Xóa khóa học"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Hành động này không thể hoàn tác. Tiếp tục?"
+
+msgid "Course deleted successfully."
+msgstr "Khóa học đã được xóa thành công."
+
+msgid "Failed to delete course."
+msgstr "Không thể xóa khóa học."
+
+msgid "Create .mbz"
+msgstr "Tạo .mbz"
+
+msgid "Backup scope"
+msgstr "Phạm vi sao lưu"
+
+msgid "Full course"
+msgstr "Toàn bộ khóa học"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Các mục đã chọn sẽ là những mục duy nhất được bao gồm trong tệp xuất."
+
+msgid "Moodle export"
+msgstr "Xuất Moodle"
+
+msgid "Moodle version"
+msgstr "Phiên bản Moodle"
+
+msgid "Admin ID"
+msgstr "ID quản trị viên"
+
+msgid "Internal integer user id"
+msgstr "ID người dùng số nguyên nội bộ"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle yêu cầu ID người dùng nội bộ lưu trong XML. Nếu không chắc chắn, sử dụng 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Tên người dùng xuất hiện làm chủ sở hữu các mục nhập"
+
+msgid "Email to use in the archive metadata"
+msgstr "Email dùng trong siêu dữ liệu lưu trữ"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "Tệp .mbz sẽ được tạo. Bạn có thể tải xuống khi hoàn tất."
+
+msgid "Select resources to include"
+msgstr "Chọn tài nguyên để bao gồm"
+
+msgid "Export completed"
+msgstr "Xuất hoàn tất"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Sao lưu Moodle của bạn đã được tạo. Bạn có thể tìm thấy nó trong danh sách sao lưu khóa học."
+
+msgid "Please complete all required fields."
+msgstr "Vui lòng hoàn tất tất cả các trường bắt buộc."
+
+msgid "Failed to create Moodle backup."
+msgstr "Không thể tạo sao lưu Moodle."
+
+msgid "More actions"
+msgstr "Thêm hành động"
+

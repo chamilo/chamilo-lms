@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:cóipcheart,, no:gan cóipcheart"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fillteán,, application/msword:MsWord,, application/octet-stream:Sruth Octad,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fillteán,, application/msword:MsWord,, application/octet-stream:Sruth octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:cleachtadh,,      simulation:insamhal,,      questionnaire:fiosrúchán,,      diagram:léaráid,,      figure:figiúr,,      graph:graf,,      index:innéacs,,      slide:sleamhnán,,      table:tábla,,      narrative text:téacs insinte,,      exam:scrúdú,,      experiment:turgnamh,,      problem statement:ráiteas fadhb,,      self assessment:féimmeasúnú,,      lecture:léacht"
@@ -4640,7 +4640,7 @@ msgid "Invalid end date was given."
 msgstr "Dáta deiridh neamhbhailí tugtha."
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(l/m/b h:m)"
 
 msgid "Homepage-files are not writable!"
 msgstr "Níl comhaid an leathanaigh baile inscríobhtha!"
@@ -31824,4 +31824,319 @@ msgstr "Scriosfaidh sé seo gach comhad sealadach. Lean ar aghaidh?"
 
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Scriosfaidh sé seo comhaid níos sine ná %minutes% nóiméad. Lean ar aghaidh?"
+
+msgid "The value must match exactly: %s"
+msgstr "Caithfidh an luach comhoiriúnú go cruinn: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Caithfidh dáta deiridh athrá a bheith tar éis an dáta tosaigh."
+
+msgid "Index document content?"
+msgstr "Innéacs ábhar an doiciméid?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Uaslódaigh lógó SVG chuig ceanntitle an ardáin"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Uaslódaigh lógó PNG chuig ceanntitle an ardáin (%s)"
+
+msgid "Write something to %s"
+msgstr "Scríbh rud éigin chuig %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Favoraithe: SVG. Leithead PNG molta: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Uaslódaigh lógó PNG le haghaidh r-phoist (~%spx leithead)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "Caithfidh PNG an cheanntiitle a bheith ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Éiligh formáid comhaid shonrach"
+
+msgid "Select allowed file formats"
+msgstr "Roghnaigh formáidí comhaid ceadaithe"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Eisíontais saincheaptha (scartha le spás)"
+
+msgid "Other extensions"
+msgstr "Eisíontais eile"
+
+msgid "My invitations"
+msgstr "Mo chuirithe"
+
+msgid "Delete access"
+msgstr "Scrios rochtain"
+
+msgid "Certificate tags"
+msgstr "Clibeanna deimhníochta"
+
+msgid "Copy all"
+msgstr "Cóipeáil go léir"
+
+msgid "Click to insert"
+msgstr "Cliceáil le cur isteach"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Is fearr: SVG. Uasmhéid PNG: %spx."
+
+msgid "View badge"
+msgstr "Féach ar an suaitheantas"
+
+msgid "%d min"
+msgstr "%d nóim"
+
+msgid "Duration in minutes"
+msgstr "Fad i nóiméid"
+
+msgid "Go back to standard view"
+msgstr "Téigh ar ais chuig an amharc caighdeánach"
+
+msgid "Search for student..."
+msgstr "Cuardaigh mac léinn..."
+
+msgid "This date is locked or read-only."
+msgstr "Tá an dáta seo faoi ghlas nó inléite amháin."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Theip ar luchtú an fhreastail. Bain triail as níos déanaí."
+
+msgid "Nothing to save"
+msgstr "Níl aon rud le sábháil"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Tá athruithe gan sábháil agat. Fág ar aon nós?"
+
+msgid "Storage usage unavailable"
+msgstr "Úsáid stórála nach bhfuil ar fáil"
+
+msgid "Search for members..."
+msgstr "Cuardaigh baill..."
+
+msgid "Current members"
+msgstr "Baill reatha"
+
+msgid "Add members"
+msgstr "Cuir baill leis"
+
+msgid "Search for users in course/session..."
+msgstr "Cuardaigh úsáideoirí sa chúrsa/seisiún..."
+
+msgid "No users available."
+msgstr "Níl aon úsáideoirí ar fáil."
+
+msgid "Browse and publish new posts"
+msgstr "Brabhsáil agus foilsigh postálacha nua"
+
+msgid "Create and assign tasks"
+msgstr "Cruthaigh agus sann tascanna"
+
+msgid "Filtered by %s"
+msgstr "Scagtha de réir %s"
+
+msgid "Select a score"
+msgstr "Roghnaigh scór"
+
+msgid "Edit comment"
+msgstr "Cuir tráchtaireacht in eagar"
+
+msgid "Failed to update the post."
+msgstr "Theip ar nuashonrú an phoist."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Scrios an post seo? Ní féidir an gníomh seo a chealú."
+
+msgid "Failed to delete the post."
+msgstr "Theip ar scriosadh an phoist."
+
+msgid "Failed to update the comment."
+msgstr "Theip ar nuashonrú na tráchtaireachta."
+
+msgid "Delete this comment?"
+msgstr "Scrios an tráchtaireacht seo?"
+
+msgid "Failed to delete the comment."
+msgstr "Theip ar scriosadh na tráchtaireachta."
+
+msgid "Search for projects..."
+msgstr "Cuardaigh tionscadail..."
+
+msgid "Only visible"
+msgstr "Infheicthe amháin"
+
+msgid "Rename project"
+msgstr "Ainmníú athshlánaithe ar thionscadal"
+
+msgid "New title"
+msgstr "Teideal nua"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Caithfidh tú a bheith i do riarthóir nó múinteoir chun tionscadail a bhainistiú."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Scrios an tionscadal seo? Ní féidir an gníomh seo a chealú."
+
+msgid "Task list"
+msgstr "Liosta na dtascanna"
+
+msgid "Change status"
+msgstr "Athraigh stádas"
+
+msgid "Waiting for validation"
+msgstr "Ag fanacht le fíorú"
+
+msgid "Delete this task?"
+msgstr "Scrios an tasc seo?"
+
+msgid "Failed to delete the task."
+msgstr "Theip ar an tasc a scriosadh."
+
+msgid "Failed to update status."
+msgstr "Theip ar an stádas a nuashonrú."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "An bhfuil tú cinnte gur mhaith leat an tríú páirtí seo a scriosadh? Ní féidir an gníomh seo a chealú."
+
+msgid "Please fix the errors before saving."
+msgstr "Socróidh na hearróidí roimh shábháil."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Earráid ag cruthú tríú páirtí. Seiceáil na sonraí le do thoil."
+
+msgid "Error deleting third party."
+msgstr "Earráid ag scriosadh tríú páirtí."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Uaslódaigh lógónna ceanntásc agus ríomhphoist roghnacha. Is fearr SVG; úsáidtear PNG mar fhilleadh siar."
+
+msgid "Data exchange updated successfully."
+msgstr "Malartú sonraí nuashonraithe go rathúil."
+
+msgid "Error deleting data exchange."
+msgstr "Earráid ag scriosadh malartú sonraí."
+
+msgid "Failed to recycle course."
+msgstr "Theip ar an gcúrsa a athchúrsáil."
+
+msgid "Select source course"
+msgstr "Roghnaigh cúrsa foinse"
+
+msgid "Course to copy from"
+msgstr "Cúrsa le cóipeáil as"
+
+msgid "Search by code or title..."
+msgstr "Cuardaigh de réir cód nó teidil..."
+
+msgid "No courses match your search."
+msgstr "Níl aon chúrsa ag teacht le do chuardach."
+
+msgid "Copy options"
+msgstr "Roghanna cóipeála"
+
+msgid "Include users (enrollments)"
+msgstr "Cuir úsáideoirí san áireamh (rollaithe)"
+
+msgid "Reset dates"
+msgstr "Athshocraigh dátaí"
+
+msgid "When a file with the same name exists"
+msgstr "Nuair a bhíonn comhad leis an ainm céanna ann"
+
+msgid "Ready to copy"
+msgstr "Réidh le cóipeáil"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Cóipeálfaimid ábhar ón gcúrsa roghnaithe isteach sa chúrsa seo. Féadfaidh tú dul ar ais chun roghanna a athrú."
+
+msgid "Start copying"
+msgstr "Tosaigh ag cóipeáil"
+
+msgid "Select resources to copy"
+msgstr "Roghnaigh acmhainní le cóipeáil"
+
+msgid "Copy selected"
+msgstr "Cóipeáil roghnaithe"
+
+msgid "Copy completed."
+msgstr "Cóipeáil críochnaithe."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Crioslár contúirte: scriosadh cúrsa go buan."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Clóscríobh cód an chúrsa le deimhniú. Bainfear gach sonraí go buan."
+
+msgid "The code must match '%s' exactly."
+msgstr "Caithfidh an cód '%s' a mheaitseáil go díreach."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Scrios doiciméid nach n-úsáidtear ach sa chúrsa seo freisin (má tá aon cheann ann)."
+
+msgid "Delete course"
+msgstr "Scrios cúrsa"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Ní féidir an gníomh seo a chealú. Lean ar aghaidh?"
+
+msgid "Course deleted successfully."
+msgstr "Cúrsa scriosta go rathúil."
+
+msgid "Failed to delete course."
+msgstr "Theip ar chúrsa a scriosadh."
+
+msgid "Create .mbz"
+msgstr "Cruthaigh .mbz"
+
+msgid "Backup scope"
+msgstr "Raon cúltaca"
+
+msgid "Full course"
+msgstr "Cúrsa iomlán"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Beidh na míreanna roghnaithe amháin san áireamh sa chomhad easpórtáilte."
+
+msgid "Moodle export"
+msgstr "Easpórtáil Moodle"
+
+msgid "Moodle version"
+msgstr "Leagan Moodle"
+
+msgid "Admin ID"
+msgstr "ID Riarthóra"
+
+msgid "Internal integer user id"
+msgstr "ID slánuimhreach úsáideora inmheánach"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Téigh le ID úsáideora inmheánach i XML ag Moodle. Má tá amhras ort, úsáid 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Ainm úsáideora le feiceáil mar úinéir na míreanna iompórtáilte"
+
+msgid "Email to use in the archive metadata"
+msgstr "Ríomhphost le húsáid i meiteasonais an chartlainne"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "Ginfear comhad .mbz. Beidh tú in ann é a íoslódáil nuair a bheidh sé críochnaithe."
+
+msgid "Select resources to include"
+msgstr "Roghnaigh acmhainní le cur san áireamh"
+
+msgid "Export completed"
+msgstr "Onnmhairiú críochnaithe"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Tá do chúltaca Moodle cruthaithe. Is féidir leat é a fháil i liosta na gcúltacaí cúrsa."
+
+msgid "Please complete all required fields."
+msgstr "Comhlánaigh gach réimse riachtanach le do thoil."
+
+msgid "Failed to create Moodle backup."
+msgstr "Theip ar chruthú cúltaca Moodle."
+
+msgid "More actions"
+msgstr "Mó gníomhartha"
 

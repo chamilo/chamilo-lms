@@ -31891,3 +31891,318 @@ msgstr "すべての一時ファイルを削除します。続行しますか？
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "%minutes% 分より古いファイルを削除します。続行しますか？"
 
+msgid "The value must match exactly: %s"
+msgstr "値は完全に一致する必要があります: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "繰り返し終了日は開始日より後でなければなりません。"
+
+msgid "Index document content?"
+msgstr "ドキュメントの内容をインデックス化しますか？"
+
+msgid "Upload SVG logo to platform header"
+msgstr "プラットフォームヘッダーにSVGロゴをアップロード"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "プラットフォームヘッダーにPNGロゴをアップロード (%s)"
+
+msgid "Write something to %s"
+msgstr "%s に何かを書く"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "推奨: SVG。PNG推奨幅: %spx。"
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "メール用PNGロゴをアップロード (~%spx 幅)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "ヘッダーPNGは %spx 以下でなければなりません。"
+
+msgid "Require specific file format"
+msgstr "特定のファイル形式を要求"
+
+msgid "Select allowed file formats"
+msgstr "許可されたファイル形式を選択"
+
+msgid "Custom extensions (separated by space)"
+msgstr "カスタム拡張子 (スペースで区切る)"
+
+msgid "Other extensions"
+msgstr "その他の拡張子"
+
+msgid "My invitations"
+msgstr "私の招待"
+
+msgid "Delete access"
+msgstr "アクセスを削除"
+
+msgid "Certificate tags"
+msgstr "証明書タグ"
+
+msgid "Copy all"
+msgstr "すべてコピー"
+
+msgid "Click to insert"
+msgstr "クリックして挿入"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "推奨: SVG。PNG 最大サイズ: %spx。"
+
+msgid "View badge"
+msgstr "バッジを表示"
+
+msgid "%d min"
+msgstr "%d分"
+
+msgid "Duration in minutes"
+msgstr "分単位の期間"
+
+msgid "Go back to standard view"
+msgstr "標準ビューに戻る"
+
+msgid "Search for student..."
+msgstr "学生を検索..."
+
+msgid "This date is locked or read-only."
+msgstr "この日付はロックされているか読み取り専用です。"
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "出欠を読み込めませんでした。後でもう一度お試しください。"
+
+msgid "Nothing to save"
+msgstr "保存する内容がありません"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "保存されていない変更があります。それでも離れますか？"
+
+msgid "Storage usage unavailable"
+msgstr "ストレージ使用量が利用できません"
+
+msgid "Search for members..."
+msgstr "メンバーを検索..."
+
+msgid "Current members"
+msgstr "現在のメンバー"
+
+msgid "Add members"
+msgstr "メンバーを追加"
+
+msgid "Search for users in course/session..."
+msgstr "コース/セッションのユーザーを検索..."
+
+msgid "No users available."
+msgstr "利用可能なユーザーがありません。"
+
+msgid "Browse and publish new posts"
+msgstr "新しい投稿を閲覧して公開"
+
+msgid "Create and assign tasks"
+msgstr "タスクを作成して割り当て"
+
+msgid "Filtered by %s"
+msgstr "%s でフィルタリング"
+
+msgid "Select a score"
+msgstr "スコアを選択"
+
+msgid "Edit comment"
+msgstr "コメントを編集"
+
+msgid "Failed to update the post."
+msgstr "投稿の更新に失敗しました。"
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "この投稿を削除しますか？この操作は元に戻せません。"
+
+msgid "Failed to delete the post."
+msgstr "投稿の削除に失敗しました。"
+
+msgid "Failed to update the comment."
+msgstr "コメントの更新に失敗しました。"
+
+msgid "Delete this comment?"
+msgstr "このコメントを削除しますか？"
+
+msgid "Failed to delete the comment."
+msgstr "コメントの削除に失敗しました。"
+
+msgid "Search for projects..."
+msgstr "プロジェクトを検索..."
+
+msgid "Only visible"
+msgstr "表示のみ"
+
+msgid "Rename project"
+msgstr "プロジェクトの名前を変更"
+
+msgid "New title"
+msgstr "新しいタイトル"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "プロジェクトを管理するには管理者または教師である必要があります。"
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "このプロジェクトを削除しますか？この操作は元に戻せません。"
+
+msgid "Task list"
+msgstr "タスクリスト"
+
+msgid "Change status"
+msgstr "ステータスを変更"
+
+msgid "Waiting for validation"
+msgstr "検証待ち"
+
+msgid "Delete this task?"
+msgstr "このタスクを削除しますか？"
+
+msgid "Failed to delete the task."
+msgstr "タスクの削除に失敗しました。"
+
+msgid "Failed to update status."
+msgstr "ステータスの更新に失敗しました。"
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "このサードパーティを削除してもよろしいですか？この操作は元に戻せません。"
+
+msgid "Please fix the errors before saving."
+msgstr "保存前にエラーを修正してください。"
+
+msgid "Error creating third party. Please verify the data."
+msgstr "サードパーティの作成エラーです。データを確認してください。"
+
+msgid "Error deleting third party."
+msgstr "サードパーティの削除エラーです。"
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "オプションのヘッダーとメールロゴをアップロードしてください。SVGが推奨されます。PNGがフォールバックとして使用されます。"
+
+msgid "Data exchange updated successfully."
+msgstr "データ交換が正常に更新されました。"
+
+msgid "Error deleting data exchange."
+msgstr "データ交換の削除エラーです。"
+
+msgid "Failed to recycle course."
+msgstr "コースのリサイクルに失敗しました。"
+
+msgid "Select source course"
+msgstr "ソースコースを選択"
+
+msgid "Course to copy from"
+msgstr "コピー元のコース"
+
+msgid "Search by code or title..."
+msgstr "コードまたはタイトルで検索..."
+
+msgid "No courses match your search."
+msgstr "検索に一致するコースはありません。"
+
+msgid "Copy options"
+msgstr "コピーオプション"
+
+msgid "Include users (enrollments)"
+msgstr "ユーザー（登録）を追加"
+
+msgid "Reset dates"
+msgstr "日付をリセット"
+
+msgid "When a file with the same name exists"
+msgstr "同じ名前のファイルが存在する場合"
+
+msgid "Ready to copy"
+msgstr "コピー準備完了"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "選択したコースからこのコースへコンテンツをコピーします。オプションを変更するには戻ることができます。"
+
+msgid "Start copying"
+msgstr "コピーを開始"
+
+msgid "Select resources to copy"
+msgstr "コピーするリソースを選択"
+
+msgid "Copy selected"
+msgstr "選択したものをコピー"
+
+msgid "Copy completed."
+msgstr "コピーが完了しました。"
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "危険領域：コースの削除は永久的です。"
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "確認のためコースコードを入力してください。すべてのデータが永久に削除されます。"
+
+msgid "The code must match '%s' exactly."
+msgstr "コードは「%s」と完全に一致する必要があります。"
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "このコースのみで使用されているドキュメントも削除する（存在する場合）。"
+
+msgid "Delete course"
+msgstr "コースを削除"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "この操作は元に戻せません。続行しますか？"
+
+msgid "Course deleted successfully."
+msgstr "コースが正常に削除されました。"
+
+msgid "Failed to delete course."
+msgstr "コースの削除に失敗しました。"
+
+msgid "Create .mbz"
+msgstr ".mbz を作成"
+
+msgid "Backup scope"
+msgstr "バックアップ範囲"
+
+msgid "Full course"
+msgstr "全コース"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "選択した項目のみがエクスポートファイルに含まれます。"
+
+msgid "Moodle export"
+msgstr "Moodle エクスポート"
+
+msgid "Moodle version"
+msgstr "Moodle バージョン"
+
+msgid "Admin ID"
+msgstr "管理者 ID"
+
+msgid "Internal integer user id"
+msgstr "内部整数ユーザー ID"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle は XML に保存された内部ユーザー ID を必要とします。分からない場合は 1 を使用してください。"
+
+msgid "Username to appear as owner of imported items"
+msgstr "インポート項目の所有者として表示されるユーザー名"
+
+msgid "Email to use in the archive metadata"
+msgstr "アーカイブメタデータで使用するメールアドレス"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr ".mbzファイルが生成されます。完了したらダウンロードできます。"
+
+msgid "Select resources to include"
+msgstr "含めるリソースを選択"
+
+msgid "Export completed"
+msgstr "エクスポートが完了しました"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Moodleバックアップが作成されました。コースバックアップリストで確認できます。"
+
+msgid "Please complete all required fields."
+msgstr "すべての必須フィールドを記入してください。"
+
+msgid "Failed to create Moodle backup."
+msgstr "Moodleバックアップの作成に失敗しました。"
+
+msgid "More actions"
+msgstr "その他のアクション"
+

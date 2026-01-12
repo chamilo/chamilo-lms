@@ -31840,3 +31840,318 @@ msgstr "Toto vymaže všetky dočasné súbory. Pokračovať?"
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Toto vymaže súbory staršie ako %minutes% minút. Pokračovať?"
 
+msgid "The value must match exactly: %s"
+msgstr "Hodnota musí presne zodpovedať: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Dátum ukončenia opakovania musí byť po dátume začiatku."
+
+msgid "Index document content?"
+msgstr "Indexovať obsah dokumentu?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Nahrať SVG logo do hlavičky platformy"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Nahrať PNG logo do hlavičky platformy (%s)"
+
+msgid "Write something to %s"
+msgstr "Napísať niečo do %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Odporúčané: SVG. Odporúčaná šírka PNG: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Nahrať PNG logo pre e-maily (~%spx šírka)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "Hlavička PNG musí byť ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Vyžadovať špecifický formát súboru"
+
+msgid "Select allowed file formats"
+msgstr "Vybrať povolené formáty súborov"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Vlastné prípony (oddelene medzerou)"
+
+msgid "Other extensions"
+msgstr "Ostatné prípony"
+
+msgid "My invitations"
+msgstr "Moje pozvania"
+
+msgid "Delete access"
+msgstr "Zmazať prístup"
+
+msgid "Certificate tags"
+msgstr "Tagy certifikátu"
+
+msgid "Copy all"
+msgstr "Kopírovať všetko"
+
+msgid "Click to insert"
+msgstr "Kliknite na vloženie"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Preferované: SVG. Maximálna veľkosť PNG: %spx."
+
+msgid "View badge"
+msgstr "Zobraziť odznak"
+
+msgid "%d min"
+msgstr "%d min"
+
+msgid "Duration in minutes"
+msgstr "Trvanie v minútach"
+
+msgid "Go back to standard view"
+msgstr "Návrat k štandardnému zobrazeniu"
+
+msgid "Search for student..."
+msgstr "Vyhľadávanie študenta..."
+
+msgid "This date is locked or read-only."
+msgstr "Tento dátum je zamknutý alebo iba na čítanie."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Nepodarilo sa načítať dochádzku. Skúste to neskôr znova."
+
+msgid "Nothing to save"
+msgstr "Nie je čo uložiť"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Máte neuložené zmeny. Chcete odísť aj tak?"
+
+msgid "Storage usage unavailable"
+msgstr "Využitie úložiska nie je k dispozícii"
+
+msgid "Search for members..."
+msgstr "Vyhľadávanie členov..."
+
+msgid "Current members"
+msgstr "Aktuálni členovia"
+
+msgid "Add members"
+msgstr "Pridať členov"
+
+msgid "Search for users in course/session..."
+msgstr "Vyhľadávanie používateľov v kurze/relácii..."
+
+msgid "No users available."
+msgstr "Žiadni používatelia nie sú k dispozícii."
+
+msgid "Browse and publish new posts"
+msgstr "Prehliadať a publikovať nové príspevky"
+
+msgid "Create and assign tasks"
+msgstr "Vytvoriť a priradiť úlohy"
+
+msgid "Filtered by %s"
+msgstr "Filtrované podľa %s"
+
+msgid "Select a score"
+msgstr "Vybrať skóre"
+
+msgid "Edit comment"
+msgstr "Upraviť komentár"
+
+msgid "Failed to update the post."
+msgstr "Aktualizácia príspevku zlyhala."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Zmazať tento príspevok? Táto akcia sa nedá vrátiť späť."
+
+msgid "Failed to delete the post."
+msgstr "Zmazať príspevok zlyhalo."
+
+msgid "Failed to update the comment."
+msgstr "Aktualizácia komentára zlyhala."
+
+msgid "Delete this comment?"
+msgstr "Zmazať tento komentár?"
+
+msgid "Failed to delete the comment."
+msgstr "Zmazať komentár zlyhalo."
+
+msgid "Search for projects..."
+msgstr "Hľadať projekty..."
+
+msgid "Only visible"
+msgstr "Iba viditeľné"
+
+msgid "Rename project"
+msgstr "Premenovať projekt"
+
+msgid "New title"
+msgstr "Nový názov"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Na správu projektov musíte byť administrátor alebo učiteľ."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Zmazať tento projekt? Táto akcia sa nedá vrátiť späť."
+
+msgid "Task list"
+msgstr "Zoznam úloh"
+
+msgid "Change status"
+msgstr "Zmeniť stav"
+
+msgid "Waiting for validation"
+msgstr "Čaká na overenie"
+
+msgid "Delete this task?"
+msgstr "Zmazať túto úlohu?"
+
+msgid "Failed to delete the task."
+msgstr "Zmazať úlohu zlyhalo."
+
+msgid "Failed to update status."
+msgstr "Aktualizácia stavu zlyhala."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Naozaj chcete zmazať tohto tretieho partnera? Táto akcia sa nedá vrátiť späť."
+
+msgid "Please fix the errors before saving."
+msgstr "Pred uložením opravte chyby."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Chyba pri vytváraní tretieho partnera. Overte údaje."
+
+msgid "Error deleting third party."
+msgstr "Chyba pri mazaní tretieho partnera."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Nahrajte voliteľné hlavičky a logá e-mailu. SVG je preferované; PNG sa použije ako záloha."
+
+msgid "Data exchange updated successfully."
+msgstr "Výmena údajov bola úspešne aktualizovaná."
+
+msgid "Error deleting data exchange."
+msgstr "Chyba pri mazaní výmeny údajov."
+
+msgid "Failed to recycle course."
+msgstr "Obnovenie kurzu zlyhalo."
+
+msgid "Select source course"
+msgstr "Vybrať zdrojový kurz"
+
+msgid "Course to copy from"
+msgstr "Kurz na kopírovanie z"
+
+msgid "Search by code or title..."
+msgstr "Hľadať podľa kódu alebo názvu..."
+
+msgid "No courses match your search."
+msgstr "Žiadne kurzy nevyhovujú vášmu vyhľadávaniu."
+
+msgid "Copy options"
+msgstr "Možnosti kopírovania"
+
+msgid "Include users (enrollments)"
+msgstr "Zahrnúť používateľov (prihlásenia)"
+
+msgid "Reset dates"
+msgstr "Resetovať dátumy"
+
+msgid "When a file with the same name exists"
+msgstr "Keď existuje súbor s rovnakým názvom"
+
+msgid "Ready to copy"
+msgstr "Pripravené na kopírovanie"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Skopírujeme obsah z vybraného kurzu do tohto kurzu. Môžete sa vrátiť a zmeniť možnosti."
+
+msgid "Start copying"
+msgstr "Začať kopírovanie"
+
+msgid "Select resources to copy"
+msgstr "Vybrať zdroje na kopírovanie"
+
+msgid "Copy selected"
+msgstr "Kopírovať vybrané"
+
+msgid "Copy completed."
+msgstr "Kopírovanie dokončené."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Nebezpečná zóna: mazanie kurzu je trvalé."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Zadajte kód kurzu na potvrdenie. Všetky údaje budú natrvalo odstránené."
+
+msgid "The code must match '%s' exactly."
+msgstr "Kód musí presne zodpovedať '%s'."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Tiež zmazať dokumenty, ktoré sa používajú iba v tomto kurze (ak nejaké sú)."
+
+msgid "Delete course"
+msgstr "Zmazať kurz"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Táto akcia sa nedá vrátiť späť. Pokračovať?"
+
+msgid "Course deleted successfully."
+msgstr "Kurz bol úspešne zmazaný."
+
+msgid "Failed to delete course."
+msgstr "Zmazať kurz zlyhalo."
+
+msgid "Create .mbz"
+msgstr "Vytvoriť .mbz"
+
+msgid "Backup scope"
+msgstr "Rozsah zálohy"
+
+msgid "Full course"
+msgstr "Celý kurz"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Vybrané položky budú jedinými zahrnutými v exportovanom súbore."
+
+msgid "Moodle export"
+msgstr "Export do Moodle"
+
+msgid "Moodle version"
+msgstr "Verzia Moodle"
+
+msgid "Admin ID"
+msgstr "ID správcu"
+
+msgid "Internal integer user id"
+msgstr "Interné celé číslo ID používateľa"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle vyžaduje interné ID používateľa uložené v XML. Ak máte pochybnosti, použite 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Používateľské meno, ktoré sa objaví ako vlastník importovaných položiek"
+
+msgid "Email to use in the archive metadata"
+msgstr "E-mail na použitie v metadátach archívu"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "Bude vygenerovaný súbor .mbz. Budete ho môcť stiahnuť po dokončení."
+
+msgid "Select resources to include"
+msgstr "Vybrať zdroje na zahrnutie"
+
+msgid "Export completed"
+msgstr "Export dokončený"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Vaša záloha Moodle bola vytvorená. Nájdete ju v zozname záloh kurzu."
+
+msgid "Please complete all required fields."
+msgstr "Doplňte všetky povinné polia."
+
+msgid "Failed to create Moodle backup."
+msgstr "Neúspešné vytvorenie zálohy Moodle."
+
+msgid "More actions"
+msgstr "Ďalšie akcie"
+

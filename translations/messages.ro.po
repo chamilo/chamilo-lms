@@ -31841,3 +31841,318 @@ msgstr "Aceasta va șterge toate fișierele temporare. Continuă?"
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Aceasta va șterge fișiere mai vechi de %minutes% minute. Continuă?"
 
+msgid "The value must match exactly: %s"
+msgstr "Valoarea trebuie să corespundă exact: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Data de sfârșit repetată trebuie să fie după data de început."
+
+msgid "Index document content?"
+msgstr "Indexare conținut document?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Încarcă logo SVG în antetul platformei"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Încarcă logo PNG în antetul platformei (%s)"
+
+msgid "Write something to %s"
+msgstr "Scrie ceva către %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Preferat: SVG. Lățime PNG recomandată: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Încarcă logo PNG pentru e-mailuri (~%spx lățime)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "PNG antet trebuie să fie ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Cere format specific de fișier"
+
+msgid "Select allowed file formats"
+msgstr "Selectează formatele de fișiere permise"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Extensii personalizate (separate prin spațiu)"
+
+msgid "Other extensions"
+msgstr "Alte extensii"
+
+msgid "My invitations"
+msgstr "Invitațiile mele"
+
+msgid "Delete access"
+msgstr "Șterge accesul"
+
+msgid "Certificate tags"
+msgstr "Etichete certificat"
+
+msgid "Copy all"
+msgstr "Copiază tot"
+
+msgid "Click to insert"
+msgstr "Click pentru a insera"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Preferat: SVG. Dimensiune max. PNG: %spx."
+
+msgid "View badge"
+msgstr "Vezi insigna"
+
+msgid "%d min"
+msgstr "%d min"
+
+msgid "Duration in minutes"
+msgstr "Durata în minute"
+
+msgid "Go back to standard view"
+msgstr "Întoarce-te la vizualizarea standard"
+
+msgid "Search for student..."
+msgstr "Caută student..."
+
+msgid "This date is locked or read-only."
+msgstr "Această dată este blocată sau doar citire."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Nu s-a putut încărca prezența. Încearcă din nou mai târziu."
+
+msgid "Nothing to save"
+msgstr "Nimic de salvat"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Aveți modificări nesalvate. Părăsiți oricum?"
+
+msgid "Storage usage unavailable"
+msgstr "Utilizarea stocării indisponibilă"
+
+msgid "Search for members..."
+msgstr "Caută membri..."
+
+msgid "Current members"
+msgstr "Membri actuali"
+
+msgid "Add members"
+msgstr "Adaugă membri"
+
+msgid "Search for users in course/session..."
+msgstr "Caută utilizatori în curs/sesiune..."
+
+msgid "No users available."
+msgstr "Niciun utilizator disponibil."
+
+msgid "Browse and publish new posts"
+msgstr "Răsfoiește și publică postări noi"
+
+msgid "Create and assign tasks"
+msgstr "Creează și atribuie sarcini"
+
+msgid "Filtered by %s"
+msgstr "Filtrat după %s"
+
+msgid "Select a score"
+msgstr "Selectează un scor"
+
+msgid "Edit comment"
+msgstr "Editează comentariul"
+
+msgid "Failed to update the post."
+msgstr "Nu s-a putut actualiza postarea."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Șterge această postare? Această acțiune nu poate fi anulată."
+
+msgid "Failed to delete the post."
+msgstr "Nu s-a putut șterge postarea."
+
+msgid "Failed to update the comment."
+msgstr "Nu s-a putut actualiza comentariul."
+
+msgid "Delete this comment?"
+msgstr "Șterge acest comentariu?"
+
+msgid "Failed to delete the comment."
+msgstr "Nu s-a putut șterge comentariul."
+
+msgid "Search for projects..."
+msgstr "Caută proiecte..."
+
+msgid "Only visible"
+msgstr "Vizibil doar"
+
+msgid "Rename project"
+msgstr "Redenumește proiectul"
+
+msgid "New title"
+msgstr "Titlu nou"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Trebuie să fii administrator sau profesor pentru a gestiona proiectele."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Șterge acest proiect? Această acțiune nu poate fi anulată."
+
+msgid "Task list"
+msgstr "Lista de sarcini"
+
+msgid "Change status"
+msgstr "Schimbă starea"
+
+msgid "Waiting for validation"
+msgstr "În așteptarea validării"
+
+msgid "Delete this task?"
+msgstr "Șterge această sarcină?"
+
+msgid "Failed to delete the task."
+msgstr "Eșec la ștergerea sarcinii."
+
+msgid "Failed to update status."
+msgstr "Eșec la actualizarea stării."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Ești sigur că vrei să ștergi această terță parte? Această acțiune nu poate fi anulată."
+
+msgid "Please fix the errors before saving."
+msgstr "Corectați erorile înainte de salvare."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Eroare la crearea terței părți. Verificați datele."
+
+msgid "Error deleting third party."
+msgstr "Eroare la ștergerea terței părți."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Încărcați antet opțional și logo-uri email. SVG este preferat; PNG este folosit ca rezervă."
+
+msgid "Data exchange updated successfully."
+msgstr "Schimbul de date a fost actualizat cu succes."
+
+msgid "Error deleting data exchange."
+msgstr "Eroare la ștergerea schimbului de date."
+
+msgid "Failed to recycle course."
+msgstr "Eșec la reciclarea cursului."
+
+msgid "Select source course"
+msgstr "Selectați cursul sursă"
+
+msgid "Course to copy from"
+msgstr "Cursul din care să copiați"
+
+msgid "Search by code or title..."
+msgstr "Căutați după cod sau titlu..."
+
+msgid "No courses match your search."
+msgstr "Niciun curs nu se potrivește căutării dvs."
+
+msgid "Copy options"
+msgstr "Opțiuni de copiere"
+
+msgid "Include users (enrollments)"
+msgstr "Include utilizatori (înscrieri)"
+
+msgid "Reset dates"
+msgstr "Resetează datele"
+
+msgid "When a file with the same name exists"
+msgstr "Când există un fișier cu același nume"
+
+msgid "Ready to copy"
+msgstr "Gata de copiat"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Vom copia conținutul din cursul selectat în acest curs. Puteți reveni pentru a schimba opțiunile."
+
+msgid "Start copying"
+msgstr "Începe copierea"
+
+msgid "Select resources to copy"
+msgstr "Selectați resursele de copiat"
+
+msgid "Copy selected"
+msgstr "Copiază selectate"
+
+msgid "Copy completed."
+msgstr "Copierea s-a finalizat."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Zonă periculoasă: ștergerea unui curs este permanentă."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Introduceți codul cursului pentru confirmare. Toate datele vor fi eliminate permanent."
+
+msgid "The code must match '%s' exactly."
+msgstr "Codul trebuie să corespundă exact cu '%s'."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Ștergeți și documentele folosite doar în acest curs (dacă există)."
+
+msgid "Delete course"
+msgstr "Șterge cursul"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Această acțiune nu poate fi anulată. Continuați?"
+
+msgid "Course deleted successfully."
+msgstr "Cursul a fost șters cu succes."
+
+msgid "Failed to delete course."
+msgstr "Eșec la ștergerea cursului."
+
+msgid "Create .mbz"
+msgstr "Creează .mbz"
+
+msgid "Backup scope"
+msgstr "Domeniu de backup"
+
+msgid "Full course"
+msgstr "Curs complet"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Elementele selectate vor fi singurele incluse în fișierul exportat."
+
+msgid "Moodle export"
+msgstr "Export Moodle"
+
+msgid "Moodle version"
+msgstr "Versiune Moodle"
+
+msgid "Admin ID"
+msgstr "ID Admin"
+
+msgid "Internal integer user id"
+msgstr "ID intern utilizator întreg"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle necesită un ID intern utilizator stocat în XML. Dacă sunteți nesigur, folosiți 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Nume utilizator care va apărea ca proprietar al elementelor importate"
+
+msgid "Email to use in the archive metadata"
+msgstr "Email de utilizat în metadatele arhivei"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "Va fi generat un fișier .mbz. Îl veți putea descărca odată ce este finalizat."
+
+msgid "Select resources to include"
+msgstr "Selectați resursele de inclus"
+
+msgid "Export completed"
+msgstr "Export finalizat"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Backup-ul Moodle a fost creat. Îl puteți găsi în lista de backup-uri ale cursului."
+
+msgid "Please complete all required fields."
+msgstr "Vă rugăm să completați toate câmpurile obligatorii."
+
+msgid "Failed to create Moodle backup."
+msgstr "Nu s-a putut crea backup Moodle."
+
+msgid "More actions"
+msgstr "Mai multe acțiuni"
+

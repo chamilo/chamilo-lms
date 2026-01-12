@@ -31804,26 +31804,341 @@ msgid "Once the extension is correctly loaded for both CLI and the web server, t
 msgstr "Setelah ekstensi dimuat dengan benar untuk CLI dan server web, diagnostik pencarian di atas seharusnya melaporkan bahwa modul Xapian telah terpasang."
 
 msgid "Cleanup temporary uploads and cache"
-msgstr ""
+msgstr "Bersihkan unggahan sementara dan cache"
 
 msgid "Directory"
-msgstr ""
+msgstr "Direktori"
 
 msgid "Only delete files older than (minutes)"
-msgstr ""
+msgstr "Hanya hapus file yang lebih tua dari (menit)"
 
 msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
-msgstr ""
+msgstr "Atur 0 untuk menghapus semua file. Gunakan nilai positif (misalnya, 60) untuk menghindari menghapus file yang masih diunggah."
 
 msgid "Preview only (do not delete)"
-msgstr ""
+msgstr "Pratinjau saja (jangan hapus)"
 
 msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
-msgstr ""
+msgstr "Peringatan: Anda akan menghapus SEMUA file sementara. Tindakan ini tidak dapat dibatalkan."
 
 msgid "This will delete all temporary files. Continue?"
-msgstr ""
+msgstr "Ini akan menghapus semua file sementara. Lanjutkan?"
 
 msgid "This will delete files older than %minutes% minutes. Continue?"
-msgstr ""
+msgstr "Ini akan menghapus file yang lebih tua dari %minutes% menit. Lanjutkan?"
+
+msgid "The value must match exactly: %s"
+msgstr "Nilai harus cocok persis: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Tanggal akhir pengulangan harus setelah tanggal mulai."
+
+msgid "Index document content?"
+msgstr "Indeks konten dokumen?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Unggah logo SVG ke header platform"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Unggah logo PNG ke header platform (%s)"
+
+msgid "Write something to %s"
+msgstr "Tulis sesuatu ke %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Disarankan: SVG. Lebar PNG yang direkomendasikan: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Unggah logo PNG untuk email (~%spx lebar)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "PNG header harus ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Membutuhkan format file tertentu"
+
+msgid "Select allowed file formats"
+msgstr "Pilih format file yang diizinkan"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Ekstensi khusus (dipisahkan spasi)"
+
+msgid "Other extensions"
+msgstr "Ekstensi lainnya"
+
+msgid "My invitations"
+msgstr "Undangan saya"
+
+msgid "Delete access"
+msgstr "Hapus akses"
+
+msgid "Certificate tags"
+msgstr "Tag sertifikat"
+
+msgid "Copy all"
+msgstr "Salin semua"
+
+msgid "Click to insert"
+msgstr "Klik untuk menyisipkan"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Disarankan: SVG. Ukuran maks PNG: %spx."
+
+msgid "View badge"
+msgstr "Lihat lencana"
+
+msgid "%d min"
+msgstr "%d menit"
+
+msgid "Duration in minutes"
+msgstr "Durasi dalam menit"
+
+msgid "Go back to standard view"
+msgstr "Kembali ke tampilan standar"
+
+msgid "Search for student..."
+msgstr "Cari siswa..."
+
+msgid "This date is locked or read-only."
+msgstr "Tanggal ini terkunci atau hanya baca."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Gagal memuat kehadiran. Silakan coba lagi nanti."
+
+msgid "Nothing to save"
+msgstr "Tidak ada yang disimpan"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Anda memiliki perubahan yang belum disimpan. Tetap keluar?"
+
+msgid "Storage usage unavailable"
+msgstr "Penggunaan penyimpanan tidak tersedia"
+
+msgid "Search for members..."
+msgstr "Cari anggota..."
+
+msgid "Current members"
+msgstr "Anggota saat ini"
+
+msgid "Add members"
+msgstr "Tambah anggota"
+
+msgid "Search for users in course/session..."
+msgstr "Cari pengguna di mata kuliah/sesi..."
+
+msgid "No users available."
+msgstr "Tidak ada pengguna yang tersedia."
+
+msgid "Browse and publish new posts"
+msgstr "Jelajahi dan publikasikan postingan baru"
+
+msgid "Create and assign tasks"
+msgstr "Buat dan tetapkan tugas"
+
+msgid "Filtered by %s"
+msgstr "Difilter oleh %s"
+
+msgid "Select a score"
+msgstr "Pilih skor"
+
+msgid "Edit comment"
+msgstr "Edit komentar"
+
+msgid "Failed to update the post."
+msgstr "Gagal memperbarui postingan."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Hapus postingan ini? Tindakan ini tidak dapat dibatalkan."
+
+msgid "Failed to delete the post."
+msgstr "Gagal menghapus postingan."
+
+msgid "Failed to update the comment."
+msgstr "Gagal memperbarui komentar."
+
+msgid "Delete this comment?"
+msgstr "Hapus komentar ini?"
+
+msgid "Failed to delete the comment."
+msgstr "Gagal menghapus komentar."
+
+msgid "Search for projects..."
+msgstr "Cari proyek..."
+
+msgid "Only visible"
+msgstr "Hanya terlihat"
+
+msgid "Rename project"
+msgstr "Ganti nama proyek"
+
+msgid "New title"
+msgstr "Judul baru"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Anda harus menjadi admin atau pengajar untuk mengelola proyek."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Hapus proyek ini? Tindakan ini tidak dapat dibatalkan."
+
+msgid "Task list"
+msgstr "Daftar tugas"
+
+msgid "Change status"
+msgstr "Ubah status"
+
+msgid "Waiting for validation"
+msgstr "Menunggu validasi"
+
+msgid "Delete this task?"
+msgstr "Hapus tugas ini?"
+
+msgid "Failed to delete the task."
+msgstr "Gagal menghapus tugas."
+
+msgid "Failed to update status."
+msgstr "Gagal memperbarui status."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Apakah Anda yakin ingin menghapus pihak ketiga ini? Tindakan ini tidak dapat dibatalkan."
+
+msgid "Please fix the errors before saving."
+msgstr "Perbaiki kesalahan sebelum menyimpan."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Kesalahan membuat pihak ketiga. Verifikasi data."
+
+msgid "Error deleting third party."
+msgstr "Kesalahan menghapus pihak ketiga."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Unggah logo header dan email opsional. SVG lebih disukai; PNG sebagai cadangan."
+
+msgid "Data exchange updated successfully."
+msgstr "Pertukaran data berhasil diperbarui."
+
+msgid "Error deleting data exchange."
+msgstr "Kesalahan menghapus pertukaran data."
+
+msgid "Failed to recycle course."
+msgstr "Gagal mendaur ulang mata kuliah."
+
+msgid "Select source course"
+msgstr "Pilih mata kuliah sumber"
+
+msgid "Course to copy from"
+msgstr "Mata kuliah untuk disalin dari"
+
+msgid "Search by code or title..."
+msgstr "Cari berdasarkan kode atau judul..."
+
+msgid "No courses match your search."
+msgstr "Tidak ada mata kuliah yang cocok dengan pencarian Anda."
+
+msgid "Copy options"
+msgstr "Opsi salin"
+
+msgid "Include users (enrollments)"
+msgstr "Sertakan pengguna (pendaftaran)"
+
+msgid "Reset dates"
+msgstr "Atur ulang tanggal"
+
+msgid "When a file with the same name exists"
+msgstr "Ketika file dengan nama yang sama ada"
+
+msgid "Ready to copy"
+msgstr "Siap untuk disalin"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Kami akan menyalin konten dari mata kuliah yang dipilih ke mata kuliah ini. Anda dapat kembali untuk mengubah opsi."
+
+msgid "Start copying"
+msgstr "Mulai menyalin"
+
+msgid "Select resources to copy"
+msgstr "Pilih sumber daya untuk disalin"
+
+msgid "Copy selected"
+msgstr "Salin yang dipilih"
+
+msgid "Copy completed."
+msgstr "Penyalinan selesai."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Zona berbahaya: menghapus kursus bersifat permanen."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Ketik kode kursus untuk mengonfirmasi. Semua data akan dihapus secara permanen."
+
+msgid "The code must match '%s' exactly."
+msgstr "Kode harus cocok dengan '%s' secara tepat."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Juga hapus dokumen yang hanya digunakan di kursus ini (jika ada)."
+
+msgid "Delete course"
+msgstr "Hapus kursus"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Tindakan ini tidak dapat dibatalkan. Lanjutkan?"
+
+msgid "Course deleted successfully."
+msgstr "Kursus berhasil dihapus."
+
+msgid "Failed to delete course."
+msgstr "Gagal menghapus kursus."
+
+msgid "Create .mbz"
+msgstr "Buat .mbz"
+
+msgid "Backup scope"
+msgstr "Ruang lingkup cadangan"
+
+msgid "Full course"
+msgstr "Kursus lengkap"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Item yang dipilih akan menjadi satu-satunya yang disertakan dalam file diekspor."
+
+msgid "Moodle export"
+msgstr "Ekspor Moodle"
+
+msgid "Moodle version"
+msgstr "Versi Moodle"
+
+msgid "Admin ID"
+msgstr "ID Admin"
+
+msgid "Internal integer user id"
+msgstr "ID pengguna integer internal"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle memerlukan ID pengguna internal yang disimpan dalam XML. Jika ragu, gunakan 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Nama pengguna yang muncul sebagai pemilik item yang diimpor"
+
+msgid "Email to use in the archive metadata"
+msgstr "Email untuk digunakan dalam metadata arsip"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "File .mbz akan dihasilkan. Anda dapat mengunduhnya setelah selesai."
+
+msgid "Select resources to include"
+msgstr "Pilih sumber daya untuk disertakan"
+
+msgid "Export completed"
+msgstr "Ekspor selesai"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Cadangan Moodle Anda telah dibuat. Anda dapat menemukannya dalam daftar cadangan kursus."
+
+msgid "Please complete all required fields."
+msgstr "Silakan lengkapi semua kolom yang diperlukan."
+
+msgid "Failed to create Moodle backup."
+msgstr "Gagal membuat cadangan Moodle."
+
+msgid "More actions"
+msgstr "Tindakan lainnya"
 

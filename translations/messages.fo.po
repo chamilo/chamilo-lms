@@ -31821,3 +31821,318 @@ msgstr "Hetta slettur allar fyribils skrár. Halda fram?"
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Hetta slettur skrár eldri enn %minutes% minuttir. Halda fram?"
 
+msgid "The value must match exactly: %s"
+msgstr "Virðið má passa nákvæmt: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Enduruppryt dagfesting má vera eftir byrja dagfesting."
+
+msgid "Index document content?"
+msgstr "Índeksera dokument innihald?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Legg SVG logo upp í pallur header"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Legg PNG logo upp í pallur header (%s)"
+
+msgid "Write something to %s"
+msgstr "Skriva nakað til %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Foðast: SVG. PNG ráðfylt breidd: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Legg PNG logo upp fyri t-post (~%spx breidd)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "Header PNG má vera ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Krav um serstaka fílusnið"
+
+msgid "Select allowed file formats"
+msgstr "Vel loyvd fílusnið"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Egenhandar endingar (sundurskildar við millumrúmi)"
+
+msgid "Other extensions"
+msgstr "Onnur endingar"
+
+msgid "My invitations"
+msgstr "Mínar boðskrivstørv"
+
+msgid "Delete access"
+msgstr "Sletta atgongd"
+
+msgid "Certificate tags"
+msgstr "Skírteini tags"
+
+msgid "Copy all"
+msgstr "Avrita alt"
+
+msgid "Click to insert"
+msgstr "Klikk til at seta inn"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Foðast: SVG. PNG mest møguleiki: %spx."
+
+msgid "View badge"
+msgstr "Vís merki"
+
+msgid "%d min"
+msgstr "%d min"
+
+msgid "Duration in minutes"
+msgstr "Lægd í minuttum"
+
+msgid "Go back to standard view"
+msgstr "Far aftur til vanligar útsjónd"
+
+msgid "Search for student..."
+msgstr "Leita eftir studentum..."
+
+msgid "This date is locked or read-only."
+msgstr "Hendan dagin er låsad ella bert lesilig."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Miseygdist at lesa frammhald. Royn aftur seinni."
+
+msgid "Nothing to save"
+msgstr "Einki at vista"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Tú hevur óvistaðar broytingar. Far samt?"
+
+msgid "Storage usage unavailable"
+msgstr "Gevur ikki atgongd til brúkaravstøðuna"
+
+msgid "Search for members..."
+msgstr "Leita eftir limum..."
+
+msgid "Current members"
+msgstr "Núverandi limir"
+
+msgid "Add members"
+msgstr "Legg afturat limir"
+
+msgid "Search for users in course/session..."
+msgstr "Leita eftir brúkarum í kursi/bólki..."
+
+msgid "No users available."
+msgstr "Ongir brúkarar tøkktir."
+
+msgid "Browse and publish new posts"
+msgstr "Røkta og útgeva nýggjar innlegg"
+
+msgid "Create and assign tasks"
+msgstr "Upprætta og viðgera uppgávur"
+
+msgid "Filtered by %s"
+msgstr "Filtrað eftir %s"
+
+msgid "Select a score"
+msgstr "Vel ein stigatalvu"
+
+msgid "Edit comment"
+msgstr "Brota úttektina"
+
+msgid "Failed to update the post."
+msgstr "Miseygdist at dagføra innlegið."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Sletta hetta innlegið? Henda handlingin kann ikki verða ógjørd."
+
+msgid "Failed to delete the post."
+msgstr "Miseygdist at sletta innlegið."
+
+msgid "Failed to update the comment."
+msgstr "Miseygdist at dagføra úttektina."
+
+msgid "Delete this comment?"
+msgstr "Sletta hesi úttektini?"
+
+msgid "Failed to delete the comment."
+msgstr "Miseyðing at sletta viðmerkingina."
+
+msgid "Search for projects..."
+msgstr "Leita eftir verkætlanum..."
+
+msgid "Only visible"
+msgstr "Bert sjálig"
+
+msgid "Rename project"
+msgstr "Umnevna verkætlan"
+
+msgid "New title"
+msgstr "Nýtt heiti"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Tú mást vera admin ella lærarin til at stýra verkætlunum."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Sletta hesi verkætlanini? Henda handlingin kann ikki verða ógjør."
+
+msgid "Task list"
+msgstr "Verklisti"
+
+msgid "Change status"
+msgstr "Broyt støðu"
+
+msgid "Waiting for validation"
+msgstr "Vantar góðkendilse"
+
+msgid "Delete this task?"
+msgstr "Sletta hesum uppgávuna?"
+
+msgid "Failed to delete the task."
+msgstr "Miseyðing at sletta uppgávuna."
+
+msgid "Failed to update status."
+msgstr "Miseyðing at dagføra støðu."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Er tú vís í at tú ynskir at sletta tann triðja part? Henda handlingin kann ikki verða ógjør."
+
+msgid "Please fix the errors before saving."
+msgstr "Rætta villurnar áðrenn tú goymir."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Feil at skapa triðja part. Rætta vælan vinarliga."
+
+msgid "Error deleting third party."
+msgstr "Feil at sletta triðja part."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Legg upp valfríar hausar- og t-postbræv logo. SVG er fyrimunur; PNG verður brúkt sum afturfall."
+
+msgid "Data exchange updated successfully."
+msgstr "Dataskipti dagførd við gongd."
+
+msgid "Error deleting data exchange."
+msgstr "Feil at sletta dataskipti."
+
+msgid "Failed to recycle course."
+msgstr "Miseyðing at endurnýggja líkamsrætting."
+
+msgid "Select source course"
+msgstr "Vel kjarnlíkið"
+
+msgid "Course to copy from"
+msgstr "Líkami at avrita frá"
+
+msgid "Search by code or title..."
+msgstr "Leita eftir kóða ella heiti..."
+
+msgid "No courses match your search."
+msgstr "Ongar líkamar passa til søguna þína."
+
+msgid "Copy options"
+msgstr "Avritsmøguleikar"
+
+msgid "Include users (enrollments)"
+msgstr "Tak við brúkarum (skrásetingar)"
+
+msgid "Reset dates"
+msgstr "Endurstovna dagfestingar"
+
+msgid "When a file with the same name exists"
+msgstr "Tá ein fíla við somu navni finst"
+
+msgid "Ready to copy"
+msgstr "Liðug til at avrita"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Vit avrita móttakið frá valda líkaminum í hetta líkamið. Tú kanst fara aftur til at broyta val."
+
+msgid "Start copying"
+msgstr "Byrja avriting"
+
+msgid "Select resources to copy"
+msgstr "Vel tilfar at avrita"
+
+msgid "Copy selected"
+msgstr "Avrita valda"
+
+msgid "Copy completed."
+msgstr "Avriting liðug."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Hættuvøllur: at sletta eitt líkami er varandi."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Skriva líkamakóðan til at staðfesta. All data verða varandi slett."
+
+msgid "The code must match '%s' exactly."
+msgstr "Kóðan má passa '%s' nákvæmt."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Sletta eisini skjúlum sum bert verða brúkt í hesum líkamanum (um nakar)."
+
+msgid "Delete course"
+msgstr "Sletta líkami"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Henda handlingin kann ikki verða ógjør. Halda fram?"
+
+msgid "Course deleted successfully."
+msgstr "Líkami slettur við gongd."
+
+msgid "Failed to delete course."
+msgstr "Miseyðing at sletta líkami."
+
+msgid "Create .mbz"
+msgstr "Stovna .mbz"
+
+msgid "Backup scope"
+msgstr "Backup øki"
+
+msgid "Full course"
+msgstr "Fullur líkami"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Valdir lutir verða einastu inninhaldnum í eksportfílunni."
+
+msgid "Moodle export"
+msgstr "Moodle eksport"
+
+msgid "Moodle version"
+msgstr "Moodle útgáva"
+
+msgid "Admin ID"
+msgstr "Admin ID"
+
+msgid "Internal integer user id"
+msgstr "Innanhúsligur heiltalsbrúkar-ID"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle krevur ein innanhúsligan brúkara-ID goymd í XML. Um ivi, brúka 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Brúkarnafn ið skal víva sum eigari av innfluttum lutum"
+
+msgid "Email to use in the archive metadata"
+msgstr "T-postur at brúka í metadáta í skjalasavninum"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "Ein .mbz fíla verður stovnað. Tú kanst sína hana eftir at hon er liðug."
+
+msgid "Select resources to include"
+msgstr "Vel lutir at innlima"
+
+msgid "Export completed"
+msgstr "Útføra liðugt"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Tín Moodle varðveiting er stovnað. Tú kanst finna hana í listanum yvir varðveitingar fyri kursin."
+
+msgid "Please complete all required fields."
+msgstr "Venlig at fylla út øll kravd feløg."
+
+msgid "Failed to create Moodle backup."
+msgstr "Miseydnað at stovna Moodle varðveiting."
+
+msgid "More actions"
+msgstr "Meira handlingar"
+

@@ -31840,3 +31840,318 @@ msgstr "זה ימחק את כל הקבצים הזמניים. להמשיך?"
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "זה ימחק קבצים ישנים מ־%minutes% דקות. להמשיך?"
 
+msgid "The value must match exactly: %s"
+msgstr "הערך חייב להתאים בדיוק: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "תאריך סיום חוזר חייב להיות לאחר תאריך התחלה."
+
+msgid "Index document content?"
+msgstr "לסנן תוכן מסמך?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "העלאת לוגו SVG לכותרת הפלטפורמה"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "העלאת לוגו PNG לכותרת הפלטפורמה (%s)"
+
+msgid "Write something to %s"
+msgstr "כתוב משהו ל־%s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "מועדף: SVG. רוחב PNG מומלץ: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "העלאת לוגו PNG עבור דוא\"ל (~%spx רוחב)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "PNG בכותרת חייב להיות ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "דרוש פורמט קובץ ספציפי"
+
+msgid "Select allowed file formats"
+msgstr "בחר פורמטי קבצים מותרים"
+
+msgid "Custom extensions (separated by space)"
+msgstr "הרחבות מותאמות אישית (מופרדות ברווח)"
+
+msgid "Other extensions"
+msgstr "הרחבות אחרות"
+
+msgid "My invitations"
+msgstr "ההזמנות שלי"
+
+msgid "Delete access"
+msgstr "מחק גישה"
+
+msgid "Certificate tags"
+msgstr "תגי תעודה"
+
+msgid "Copy all"
+msgstr "העתק הכל"
+
+msgid "Click to insert"
+msgstr "לחץ להכנסה"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "מועדף: SVG. גודל מקסימלי PNG: %spx."
+
+msgid "View badge"
+msgstr "הצג תג"
+
+msgid "%d min"
+msgstr "%d דק'"
+
+msgid "Duration in minutes"
+msgstr "משך בדקות"
+
+msgid "Go back to standard view"
+msgstr "חזור לתצוגה הסטנדרטית"
+
+msgid "Search for student..."
+msgstr "חפש סטודנט..."
+
+msgid "This date is locked or read-only."
+msgstr "תאריך זה נעול או לקריאה בלבד."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "נכשל בטעינת נוכחות. נסה שוב מאוחר יותר."
+
+msgid "Nothing to save"
+msgstr "אין מה לשמור"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "יש לך שינויים לא שמורים. לצאת בכל זאת?"
+
+msgid "Storage usage unavailable"
+msgstr "שימוש באחסון לא זמין"
+
+msgid "Search for members..."
+msgstr "חפש חברים..."
+
+msgid "Current members"
+msgstr "חברים נוכחיים"
+
+msgid "Add members"
+msgstr "הוסף חברים"
+
+msgid "Search for users in course/session..."
+msgstr "חפש משתמשים בקורס/מפגש..."
+
+msgid "No users available."
+msgstr "אין משתמשים זמינים."
+
+msgid "Browse and publish new posts"
+msgstr "עיין ופרסם פוסטים חדשים"
+
+msgid "Create and assign tasks"
+msgstr "צור והקצה משימות"
+
+msgid "Filtered by %s"
+msgstr "מסונן לפי %s"
+
+msgid "Select a score"
+msgstr "בחר ציון"
+
+msgid "Edit comment"
+msgstr "ערוך הערה"
+
+msgid "Failed to update the post."
+msgstr "נכשל בעדכון הפוסט."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "למחוק פוסט זה? פעולה זו אינה ניתנת לביטול."
+
+msgid "Failed to delete the post."
+msgstr "נכשל במחיקת הפוסט."
+
+msgid "Failed to update the comment."
+msgstr "נכשל בעדכון ההערה."
+
+msgid "Delete this comment?"
+msgstr "למחוק הערה זו?"
+
+msgid "Failed to delete the comment."
+msgstr "נכשל במחיקת ההערה."
+
+msgid "Search for projects..."
+msgstr "חפש פרויקטים..."
+
+msgid "Only visible"
+msgstr "רק גלויים"
+
+msgid "Rename project"
+msgstr "שנה שם פרויקט"
+
+msgid "New title"
+msgstr "כותרת חדשה"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "עליך להיות מנהל או מורה כדי לנהל פרויקטים."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "למחוק פרויקט זה? פעולה זו אינה ניתנת לביטול."
+
+msgid "Task list"
+msgstr "רשימת משימות"
+
+msgid "Change status"
+msgstr "שנה סטטוס"
+
+msgid "Waiting for validation"
+msgstr "ממתין לאישור"
+
+msgid "Delete this task?"
+msgstr "למחוק משימה זו?"
+
+msgid "Failed to delete the task."
+msgstr "נכשל במחיקת המשימה."
+
+msgid "Failed to update status."
+msgstr "נכשל בעדכון הסטטוס."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "האם אתה בטוח שברצונך למחוק צד שלישי זה? פעולה זו אינה ניתנת לביטול."
+
+msgid "Please fix the errors before saving."
+msgstr "נא לתקן את השגיאות לפני השמירה."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "שגיאה ביצירת צד שלישי. נא לבדוק את הנתונים."
+
+msgid "Error deleting third party."
+msgstr "שגיאה במחיקת צד שלישי."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "העלה לוגו כותרת ולוגו דוא\"ל אופציונליים. SVG מועדף; PNG משמש כגיבוי."
+
+msgid "Data exchange updated successfully."
+msgstr "החלפת נתונים עודכנה בהצלחה."
+
+msgid "Error deleting data exchange."
+msgstr "שגיאה במחיקת החלפת נתונים."
+
+msgid "Failed to recycle course."
+msgstr "נכשל בהחזרת הקורס."
+
+msgid "Select source course"
+msgstr "בחר קורס מקור"
+
+msgid "Course to copy from"
+msgstr "קורס להעתקה ממנו"
+
+msgid "Search by code or title..."
+msgstr "חפש לפי קוד או כותרת..."
+
+msgid "No courses match your search."
+msgstr "אין קורסים התואמים לחיפוש שלך."
+
+msgid "Copy options"
+msgstr "אפשרויות העתקה"
+
+msgid "Include users (enrollments)"
+msgstr "כלול משתמשים (הרשמות)"
+
+msgid "Reset dates"
+msgstr "אפס תאריכים"
+
+msgid "When a file with the same name exists"
+msgstr "כאשר קיים קובץ באותו שם"
+
+msgid "Ready to copy"
+msgstr "מוכן להעתקה"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "נעתיק תוכן מהקורס הנבחר לקורס זה. ניתן לחזור כדי לשנות אפשרויות."
+
+msgid "Start copying"
+msgstr "התחל העתקה"
+
+msgid "Select resources to copy"
+msgstr "בחר משאבים להעתקה"
+
+msgid "Copy selected"
+msgstr "העתק נבחר"
+
+msgid "Copy completed."
+msgstr "ההעתקה הושלמה."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "אזור סכנה: מחיקת קורס היא קבועה."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "הקלד את קוד הקורס כדי לאשר. כל הנתונים יימחקו לצמיתות."
+
+msgid "The code must match '%s' exactly."
+msgstr "הקוד חייב להתאים בדיוק ל־'%s'."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "מחק גם מסמכים המשמשים רק בקורס זה (אם קיימים)."
+
+msgid "Delete course"
+msgstr "מחק קורס"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "פעולה זו אינה ניתנת לביטול. להמשיך?"
+
+msgid "Course deleted successfully."
+msgstr "הקורס נמחק בהצלחה."
+
+msgid "Failed to delete course."
+msgstr "נכשל במחיקת הקורס."
+
+msgid "Create .mbz"
+msgstr "צור .mbz"
+
+msgid "Backup scope"
+msgstr "היקף גיבוי"
+
+msgid "Full course"
+msgstr "קורס מלא"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "הפריטים הנבחרים יהיו היחידים שייכללו בקובץ המיובא."
+
+msgid "Moodle export"
+msgstr "ייצוא מודל"
+
+msgid "Moodle version"
+msgstr "גרסת מודל"
+
+msgid "Admin ID"
+msgstr "מזהה מנהל"
+
+msgid "Internal integer user id"
+msgstr "מזהה משתמש שלם פנימי"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "מודל דורש מזהה משתמש פנימי המושמר ב־XML. אם אינך בטוח, השתמש ב־1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "שם משתמש שיופיע כבעלים של הפריטים המיובאים"
+
+msgid "Email to use in the archive metadata"
+msgstr "דוא\"ל לשימוש במטא נתונים של הארכיון"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "קובץ .mbz ייווצר. תוכל להוריד אותו לאחר השלמה."
+
+msgid "Select resources to include"
+msgstr "בחר משאבים להכללה"
+
+msgid "Export completed"
+msgstr "ייצוא הושלם"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "גיבוי מודל הושלם. ניתן למצוא אותו ברשימת גיבויי הקורס."
+
+msgid "Please complete all required fields."
+msgstr "אנא מלא את כל השדות הנדרשים."
+
+msgid "Failed to create Moodle backup."
+msgstr "נכשל ביצירת גיבוי מודל."
+
+msgid "More actions"
+msgstr "פעולות נוספות"
+

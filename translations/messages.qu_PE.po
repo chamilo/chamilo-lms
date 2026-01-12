@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ñawpaq formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Rurasqa rakina: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ari:copyright nisqawan,, mana:mana copyright nisqawan"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Phuqlla,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Puqyu,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación"
@@ -31826,4 +31826,319 @@ msgstr "Kay ñawpaq willakuykunaq llapan q'echunki. Ruray?"
 
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Kay %minutes% p'unchaymanta ñawpaq willakuykunaq q'echunki. Ruray?"
+
+msgid "The value must match exactly: %s"
+msgstr "Kikin qatiq kayman: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Paway qhipa pacha qallariy pachamanta qhipa kasqa."
+
+msgid "Index document content?"
+msgstr "Willakuy yachaynin index?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "SVG logo platform headerman watukuq"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "PNG logo platform headerman watukuq (%s)"
+
+msgid "Write something to %s"
+msgstr "%s-man imatapis willakuy"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Munay: SVG. PNG paqarichisqa: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "PNG logo e-mailspaq watukuq (~%spx paqari)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "Header PNG %spx-manta aswan huk'uy."
+
+msgid "Require specific file format"
+msgstr "Yachay willakuynin formatota mañakuy"
+
+msgid "Select allowed file formats"
+msgstr "Willakuynin formatokunata mañakuy"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Sapaq extensionkuna (chakrasitaq kimsak)"
+
+msgid "Other extensions"
+msgstr "Huk extensionkuna"
+
+msgid "My invitations"
+msgstr "Ñoqap invitationskunapaq"
+
+msgid "Delete access"
+msgstr "Accesota huch'akuy"
+
+msgid "Certificate tags"
+msgstr "Yachaytapisqakuna etiketakuna"
+
+msgid "Copy all"
+msgstr "Tukuyta q'illay"
+
+msgid "Click to insert"
+msgstr "Klikiy insertar"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Munaykuna: SVG. PNG huchalla kama: %spx."
+
+msgid "View badge"
+msgstr "Wakin insignia qhawachin"
+
+msgid "%d min"
+msgstr "%d phut"
+
+msgid "Duration in minutes"
+msgstr "Pacha phutkunapi"
+
+msgid "Go back to standard view"
+msgstr "Rurasqaruq qhawachinman kutichiy"
+
+msgid "Search for student..."
+msgstr "Yachasqaqta maskhay..."
+
+msgid "This date is locked or read-only."
+msgstr "Kay pacha k'anchakunata hap'in ku oqhay."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Asistencia carganaykuq. Ñawpaqman t'inkiy."
+
+msgid "Nothing to save"
+msgstr "Kamakunata imapas manañan"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Kamakunachu willakuykuna kanki. Rillakuyta qhawachinmi?"
+
+msgid "Storage usage unavailable"
+msgstr "Kamakuy imakuna manañan"
+
+msgid "Search for members..."
+msgstr "Membrokunata maskhay..."
+
+msgid "Current members"
+msgstr "Kunan membrokuna"
+
+msgid "Add members"
+msgstr "Membrokunata yapay"
+
+msgid "Search for users in course/session..."
+msgstr "Kursopi / sesionpi runakunata maskhay..."
+
+msgid "No users available."
+msgstr "Manan runakuna manam."
+
+msgid "Browse and publish new posts"
+msgstr "Willakuykunata qhawachinaypi nisqakunata yapachinay"
+
+msgid "Create and assign tasks"
+msgstr "Rurakunata kamachiy"
+
+msgid "Filtered by %s"
+msgstr "%s nisqawan sarp'iy"
+
+msgid "Select a score"
+msgstr "P'akisqata akllay"
+
+msgid "Edit comment"
+msgstr "Willakuytan llamk'ay"
+
+msgid "Failed to update the post."
+msgstr "Willakuyta llamk'ananaykuq."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Kay willakuyta hapiynaq? Kay ruway manan t'inkinakunqachu."
+
+msgid "Failed to delete the post."
+msgstr "Willakuyta hap'inanaykuq."
+
+msgid "Failed to update the comment."
+msgstr "Yachachisqanta qhawayta mana atinchu."
+
+msgid "Delete this comment?"
+msgstr "¿Kay yachachisqanta kikinay?"
+
+msgid "Failed to delete the comment."
+msgstr "Yachachisqanta kikinay mana atinchu."
+
+msgid "Search for projects..."
+msgstr "Proyektonkunata maskhay..."
+
+msgid "Only visible"
+msgstr "Ñawpaq qhawasqa qhapaq"
+
+msgid "Rename project"
+msgstr "Proyekto sutinta kambiyay"
+
+msgid "New title"
+msgstr "Yachay suti maski"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Proyektonkunata kamachiyta munaspayki ukhu kamachiq utaw yachachiq kay."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "¿Kay proyektoni kikinay? Kay ruway mana tukuytan kikinakunata."
+
+msgid "Task list"
+msgstr "Rurakuna ruray"
+
+msgid "Change status"
+msgstr "Istallatinta kambiyay"
+
+msgid "Waiting for validation"
+msgstr "Qatikuytan kutichispa"
+
+msgid "Delete this task?"
+msgstr "¿Kay rurani kikinay?"
+
+msgid "Failed to delete the task."
+msgstr "Rurani kikinay mana atinchu."
+
+msgid "Failed to update status."
+msgstr "Istallati qhawayta mana atinchu."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "¿Kay qharqhaqni kikinayta munaspayki? Kay ruway mana tukuytan kikinakunata."
+
+msgid "Please fix the errors before saving."
+msgstr "Kikinaykuna imaykuna qhawayta huchallaq kanki."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Qharqhaqni yaratay huchallaq. Willakuykunata qhaway."
+
+msgid "Error deleting third party."
+msgstr "Qharqhaqni kikinay huchallaq."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Qhapaq rumi logo nisqa hakuq logo imaykunata churay. SVG munakun; PNG qhapaq kasqan."
+
+msgid "Data exchange updated successfully."
+msgstr "Willakuy interchange qhawayta atinchu."
+
+msgid "Error deleting data exchange."
+msgstr "Willakuy interchange kikinay huchallaq."
+
+msgid "Failed to recycle course."
+msgstr "Yachay wasini qhawayta mana atinchu."
+
+msgid "Select source course"
+msgstr "Kamachiq yachay wasi riqsiy"
+
+msgid "Course to copy from"
+msgstr "Kikinakuy yachay wasi"
+
+msgid "Search by code or title..."
+msgstr "Kutiq rima utaw sutita maskhay..."
+
+msgid "No courses match your search."
+msgstr "Manam yachay wasikuna maskhaykiwan uyariyku."
+
+msgid "Copy options"
+msgstr "Kikinakuy kallpa"
+
+msgid "Include users (enrollments)"
+msgstr "Runakunata qhapaq (qatikuynin)"
+
+msgid "Reset dates"
+msgstr "Pacha kamarikuy"
+
+msgid "When a file with the same name exists"
+msgstr "Sutinchaw sutikuna kashpa"
+
+msgid "Ready to copy"
+msgstr "Kikinakuyta qhapaq"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Riqsikuy yachay wasimanta kay yachay wasi ukhupi willakuykunata kikinakunki. Qhipa kallpata kambiyta saqespayki."
+
+msgid "Start copying"
+msgstr "Kikinakuyta qallariy"
+
+msgid "Select resources to copy"
+msgstr "Kikinakuy willakuykunata riqsiy"
+
+msgid "Copy selected"
+msgstr "Riqsikuykuna kikinay"
+
+msgid "Copy completed."
+msgstr "Kikinakuy tukuy."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Pichay zona: yachay wasi kikinay permanent kasqa."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Yachay wasi kutiq rima willakuy qhapaq. Tukuy willakuy permanent kikinakun."
+
+msgid "The code must match '%s' exactly."
+msgstr "Kutiq rima '%s'wan exact uyariy."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Kay yachay wasipi qhapaq kasqan willakuykunata kikinay (kanchispa)."
+
+msgid "Delete course"
+msgstr "Yachay wasi kikinay"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Kay ruway mana tukuytan kikinakunata. Rispay?"
+
+msgid "Course deleted successfully."
+msgstr "Yachay wasi kikinay atinchu."
+
+msgid "Failed to delete course."
+msgstr "Yachay wasi kikinay mana atinchu."
+
+msgid "Create .mbz"
+msgstr ".mbz yaratay"
+
+msgid "Backup scope"
+msgstr "Backup llimk'i"
+
+msgid "Full course"
+msgstr "Yachay wasi tukuy"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Riqsikuy imaykuna export willakuypi qhapaq kasqan."
+
+msgid "Moodle export"
+msgstr "Moodle export"
+
+msgid "Moodle version"
+msgstr "Versión Moodle"
+
+msgid "Admin ID"
+msgstr "ID Kamachisqa"
+
+msgid "Internal integer user id"
+msgstr "Kamachisqa yuraqchakuq ID"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle XMLpiq XMLpiq yuraqchakuq ID nisqata mañachin. Mana allinchaypi, 1llata jampi."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Yapayuq rurakunaq sutin sutichay"
+
+msgid "Email to use in the archive metadata"
+msgstr "Yapayuq metadataq email"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr ".mbz kutxapunqan. Kutichisqa kaptin, yapayuq."
+
+msgid "Select resources to include"
+msgstr "Yatichisqa willakuykunata akllay"
+
+msgid "Export completed"
+msgstr "Yapay kutichisqa"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Moodle yapayuq kutichisqa. Kuru yapaykunataq listapi rikunki."
+
+msgid "Please complete all required fields."
+msgstr "Llapan waqaychakuna tukuyta jallttay."
+
+msgid "Failed to create Moodle backup."
+msgstr "Moodle yapayuq mañakunqanchu."
+
+msgid "More actions"
+msgstr "Huk ruwakuna"
 

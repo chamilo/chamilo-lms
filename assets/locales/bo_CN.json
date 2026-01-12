@@ -762,5 +762,18 @@
     "Repeat end date must be after start date.": "Repeat end date must be after start date.",
     "Index document content?": "Index document content?",
     "Upload SVG logo to platform header": "Upload SVG logo to platform header",
-    "Upload PNG logo to platform header ({0})": "Upload PNG logo to platform header ({0})"
+    "Upload PNG logo to platform header ({0})": "Upload PNG logo to platform header ({0})",
+    "Preferred: SVG. PNG recommended width: {0}px.": "Preferred: SVG. PNG recommended width: {0}px.",
+    "Upload PNG logo for e-mails (~{0}px width)": "Upload PNG logo for e-mails (~{0}px width)",
+    "Header PNG must be \u2264 {0}px.": "Header PNG must be \u2264 {0}px.",
+    "Require specific file format": "Require specific file format",
+    "Select allowed file formats": "Select allowed file formats",
+    "Custom extensions (separated by space)": "Custom extensions (separated by space)",
+    "Other extensions": "Other extensions",
+    "My invitations": "My invitations",
+    "Delete access": "Delete access",
+    "Certificate tags": "Certificate tags",
+    "Copy all": "Copy all",
+    "Click to insert": "Click to insert",
+    "Preferred: SVG. PNG max size: {0}px.": "Preferred: SVG. PNG max size: {0}px."
 }

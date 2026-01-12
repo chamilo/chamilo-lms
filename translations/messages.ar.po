@@ -31839,3 +31839,318 @@ msgstr "سيحذف هذا جميع الملفات المؤقتة. هل تتاب�
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "سيحذف هذا الملفات الأقدم من %minutes% دقيقة. هل تتابع؟"
 
+msgid "The value must match exactly: %s"
+msgstr "يجب أن تتطابق القيمة تمامًا: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "يجب أن تكون تاريخ نهاية التكرار بعد تاريخ البدء."
+
+msgid "Index document content?"
+msgstr "فهرسة محتوى المستند؟"
+
+msgid "Upload SVG logo to platform header"
+msgstr "رفع شعار SVG إلى رأس المنصة"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "رفع شعار PNG إلى رأس المنصة (%s)"
+
+msgid "Write something to %s"
+msgstr "اكتب شيئًا إلى %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "مفضل: SVG. عرض PNG الموصى به: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "رفع شعار PNG للبريد الإلكتروني (عرض ~%spx)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "يجب أن يكون PNG الرأس ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "طلب تنسيق ملف محدد"
+
+msgid "Select allowed file formats"
+msgstr "حدد تنسيقات الملفات المسموح بها"
+
+msgid "Custom extensions (separated by space)"
+msgstr "الامتدادات المخصصة (مفصولة بمسافة)"
+
+msgid "Other extensions"
+msgstr "امتدادات أخرى"
+
+msgid "My invitations"
+msgstr "دعواتي"
+
+msgid "Delete access"
+msgstr "حذف الوصول"
+
+msgid "Certificate tags"
+msgstr "وسوم الشهادة"
+
+msgid "Copy all"
+msgstr "نسخ الكل"
+
+msgid "Click to insert"
+msgstr "انقر للإدراج"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "مفضل: SVG. الحد الأقصى لحجم PNG: %spx."
+
+msgid "View badge"
+msgstr "عرض الشارة"
+
+msgid "%d min"
+msgstr "%d دقيقة"
+
+msgid "Duration in minutes"
+msgstr "المدة بالدقائق"
+
+msgid "Go back to standard view"
+msgstr "العودة إلى العرض القياسي"
+
+msgid "Search for student..."
+msgstr "البحث عن طالب..."
+
+msgid "This date is locked or read-only."
+msgstr "هذا التاريخ مقفل أو للقراءة فقط."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "فشل في تحميل الحضور. يرجى المحاولة لاحقًا."
+
+msgid "Nothing to save"
+msgstr "لا يوجد شيء للحفظ"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "لديك تغييرات غير محفوظة. هل تريد الخروج على أي حال؟"
+
+msgid "Storage usage unavailable"
+msgstr "استخدام التخزين غير متاح"
+
+msgid "Search for members..."
+msgstr "البحث عن الأعضاء..."
+
+msgid "Current members"
+msgstr "الأعضاء الحاليون"
+
+msgid "Add members"
+msgstr "إضافة أعضاء"
+
+msgid "Search for users in course/session..."
+msgstr "البحث عن مستخدمين في المقرر/الجلسة..."
+
+msgid "No users available."
+msgstr "لا يوجد مستخدمون متاحون."
+
+msgid "Browse and publish new posts"
+msgstr "تصفح ونشر منشورات جديدة"
+
+msgid "Create and assign tasks"
+msgstr "إنشاء وتخصيص المهام"
+
+msgid "Filtered by %s"
+msgstr "مفلتر حسب %s"
+
+msgid "Select a score"
+msgstr "اختر درجة"
+
+msgid "Edit comment"
+msgstr "تعديل التعليق"
+
+msgid "Failed to update the post."
+msgstr "فشل في تحديث المنشور."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "حذف هذا المنشور؟ لا يمكن التراجع عن هذا الإجراء."
+
+msgid "Failed to delete the post."
+msgstr "فشل في حذف المنشور."
+
+msgid "Failed to update the comment."
+msgstr "فشل في تحديث التعليق."
+
+msgid "Delete this comment?"
+msgstr "حذف هذا التعليق؟"
+
+msgid "Failed to delete the comment."
+msgstr "فشل في حذف التعليق."
+
+msgid "Search for projects..."
+msgstr "البحث عن المشاريع..."
+
+msgid "Only visible"
+msgstr "مرئي فقط"
+
+msgid "Rename project"
+msgstr "إعادة تسمية المشروع"
+
+msgid "New title"
+msgstr "العنوان الجديد"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "يجب أن تكون مديرًا أو معلمًا لإدارة المشاريع."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "حذف هذا المشروع؟ لا يمكن التراجع عن هذا الإجراء."
+
+msgid "Task list"
+msgstr "قائمة المهام"
+
+msgid "Change status"
+msgstr "تغيير الحالة"
+
+msgid "Waiting for validation"
+msgstr "في انتظار التحقق"
+
+msgid "Delete this task?"
+msgstr "حذف هذه المهمة؟"
+
+msgid "Failed to delete the task."
+msgstr "فشل في حذف المهمة."
+
+msgid "Failed to update status."
+msgstr "فشل في تحديث الحالة."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "هل أنت متأكد من حذف هذا الطرف الثالث؟ هذا الإجراء لا يمكن التراجع عنه."
+
+msgid "Please fix the errors before saving."
+msgstr "يرجى إصلاح الأخطاء قبل الحفظ."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "خطأ في إنشاء الطرف الثالث. يرجى التحقق من البيانات."
+
+msgid "Error deleting third party."
+msgstr "خطأ في حذف الطرف الثالث."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "رفع شعار رأس اختياري وشعارات البريد الإلكتروني. SVG مفضل؛ PNG يُستخدم كبديل."
+
+msgid "Data exchange updated successfully."
+msgstr "تم تحديث تبادل البيانات بنجاح."
+
+msgid "Error deleting data exchange."
+msgstr "خطأ في حذف تبادل البيانات."
+
+msgid "Failed to recycle course."
+msgstr "فشل في إعادة تدوير المقرر."
+
+msgid "Select source course"
+msgstr "اختر المقرر المصدر"
+
+msgid "Course to copy from"
+msgstr "المقرر للنسخ منه"
+
+msgid "Search by code or title..."
+msgstr "البحث حسب الرمز أو العنوان..."
+
+msgid "No courses match your search."
+msgstr "لا توجد مقررات تطابق بحثك."
+
+msgid "Copy options"
+msgstr "خيارات النسخ"
+
+msgid "Include users (enrollments)"
+msgstr "تضمين المستخدمين (التسجيلات)"
+
+msgid "Reset dates"
+msgstr "إعادة تعيين التواريخ"
+
+msgid "When a file with the same name exists"
+msgstr "عند وجود ملف بنفس الاسم"
+
+msgid "Ready to copy"
+msgstr "جاهز للنسخ"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "سنقوم بنسخ المحتوى من المقرر المحدد إلى هذا المقرر. يمكنك العودة لتغيير الخيارات."
+
+msgid "Start copying"
+msgstr "بدء النسخ"
+
+msgid "Select resources to copy"
+msgstr "اختر الموارد للنسخ"
+
+msgid "Copy selected"
+msgstr "نسخ المحدد"
+
+msgid "Copy completed."
+msgstr "تم النسخ بنجاح."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "منطقة الخطر: حذف المقرر نهائي."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "اكتب رمز المقرر للتأكيد. سيتم حذف جميع البيانات نهائياً."
+
+msgid "The code must match '%s' exactly."
+msgstr "يجب أن يتطابق الرمز مع '%s' تماماً."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "حذف الوثائق التي تُستخدم فقط في هذا المقرر (إن وجدت)."
+
+msgid "Delete course"
+msgstr "حذف المقرر"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "هذا الإجراء لا يمكن التراجع عنه. هل تتابع؟"
+
+msgid "Course deleted successfully."
+msgstr "تم حذف المقرر بنجاح."
+
+msgid "Failed to delete course."
+msgstr "فشل في حذف المقرر."
+
+msgid "Create .mbz"
+msgstr "إنشاء .mbz"
+
+msgid "Backup scope"
+msgstr "نطاق النسخ الاحتياطي"
+
+msgid "Full course"
+msgstr "المقرر الكامل"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "سيتم تضمين العناصر المحددة فقط في الملف المُصدر."
+
+msgid "Moodle export"
+msgstr "تصدير مودل"
+
+msgid "Moodle version"
+msgstr "إصدار مودل"
+
+msgid "Admin ID"
+msgstr "معرف المسؤول"
+
+msgid "Internal integer user id"
+msgstr "معرف المستخدم الصحيح الداخلي"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "يتطلب مودل معرف مستخدم داخلي مخزن في XML. إذا كنت غير متأكد، استخدم 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "اسم المستخدم الذي سيظهر كمالك للعناصر المستوردة"
+
+msgid "Email to use in the archive metadata"
+msgstr "البريد الإلكتروني لاستخدامه في بيانات وصف الأرشيف"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "سيتم إنشاء ملف .mbz. يمكنك تنزيله بعد الانتهاء."
+
+msgid "Select resources to include"
+msgstr "اختر الموارد للتضمين"
+
+msgid "Export completed"
+msgstr "تم التصدير"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "تم إنشاء نسخة احتياطية مودل الخاصة بك. يمكنك العثور عليها في قائمة نسخ احتياطية المقرر."
+
+msgid "Please complete all required fields."
+msgstr "يرجى إكمال جميع الحقول المطلوبة."
+
+msgid "Failed to create Moodle backup."
+msgstr "فشل في إنشاء نسخة احتياطية مودل."
+
+msgid "More actions"
+msgstr "مزيد من الإجراءات"
+

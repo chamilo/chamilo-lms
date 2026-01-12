@@ -34,7 +34,7 @@
             v-model="search"
             type="text"
             class="border rounded px-3 py-2"
-            :placeholder="t('Search student...')"
+            :placeholder="t('Search for student...')"
           />
           <BaseButton
             v-if="canEdit && !isLocked"

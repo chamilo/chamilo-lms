@@ -31821,3 +31821,318 @@ msgstr "Cheste scancelarà ducj i scjampe temporaneis. Continuâ?"
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Cheste scancelarà i scjampe pli vecjis che %minutes% minuts. Continuâ?"
 
+msgid "The value must match exactly: %s"
+msgstr "Il valor deve corispondisi esatament: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "La date finale di repeticion deve jessi dopo la date inizial."
+
+msgid "Index document content?"
+msgstr "Indiciar il contenut dal ducument?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Cjarie logo SVG intal intestivi dal plateform"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Cjarie logo PNG intal intestivi dal plateform (%s)"
+
+msgid "Write something to %s"
+msgstr "Scrivî cualche robe a %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Preferît: SVG. Larghiece PNG ricomandade: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Cjarie logo PNG par i e-mail (~%spx larghieche)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "Intestî PNG deve jessi ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Richiar format specifich di file"
+
+msgid "Select allowed file formats"
+msgstr "Sceâi i format di file permetûts"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Estensions personalizadis (separadis par spaz)"
+
+msgid "Other extensions"
+msgstr "Altri estensions"
+
+msgid "My invitations"
+msgstr "Mîs invitâs"
+
+msgid "Delete access"
+msgstr "Scanceâ access"
+
+msgid "Certificate tags"
+msgstr "Etichêts dal certifichât"
+
+msgid "Copy all"
+msgstr "Copie dut"
+
+msgid "Click to insert"
+msgstr "Clic par inserir"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Preferred: SVG. PNG max size: %spx."
+
+msgid "View badge"
+msgstr "Visualize il badge"
+
+msgid "%d min"
+msgstr "%d min"
+
+msgid "Duration in minutes"
+msgstr "Durade in minute"
+
+msgid "Go back to standard view"
+msgstr "Torna alla viste standard"
+
+msgid "Search for student..."
+msgstr "Zirî un studint..."
+
+msgid "This date is locked or read-only."
+msgstr "Cheste date e blocade o di solo leture."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Impê di cjarî la presenze. Provis ce che a torni piê tardi."
+
+msgid "Nothing to save"
+msgstr "Nissun cambiament da salvâ"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Âsi modifiche non salvadis. Vuil usî lâ lâ?"
+
+msgid "Storage usage unavailable"
+msgstr "Impê di visualizâ l'utilizazion dal spaci di archiviation"
+
+msgid "Search for members..."
+msgstr "Zirî i sodalizi..."
+
+msgid "Current members"
+msgstr "Sodalizi atuâi"
+
+msgid "Add members"
+msgstr "Zontâ sodalizi"
+
+msgid "Search for users in course/session..."
+msgstr "Zirî utents intun curs/session..."
+
+msgid "No users available."
+msgstr "Nissun utent disponibi."
+
+msgid "Browse and publish new posts"
+msgstr "Naveas e publiche nûs messidis"
+
+msgid "Create and assign tasks"
+msgstr "Cree e asigne tôcs"
+
+msgid "Filtered by %s"
+msgstr "Filtrât pe %s"
+
+msgid "Select a score"
+msgstr "Sceâ un puntuai"
+
+msgid "Edit comment"
+msgstr "Modifiche il comentari"
+
+msgid "Failed to update the post."
+msgstr "Nol si è pudût agiornâ il post."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Scanceâl cheste publicazion? Cheste aczion no si pues le scanceâ."
+
+msgid "Failed to delete the post."
+msgstr "Nol si è pudût scanceâ il post."
+
+msgid "Failed to update the comment."
+msgstr "Nol si è pudût agiornâ il comentari."
+
+msgid "Delete this comment?"
+msgstr "Scanceâl chest comentari?"
+
+msgid "Failed to delete the comment."
+msgstr "Nol si è pudût scanceâ il comentari."
+
+msgid "Search for projects..."
+msgstr "Çerca proetis..."
+
+msgid "Only visible"
+msgstr "Domane visîl"
+
+msgid "Rename project"
+msgstr "Renome proet"
+
+msgid "New title"
+msgstr "Gnûv titel"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Tu devi jessî aministradôr o dusint pe gjestî i proets."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Scanceâl chest proet? Cheste aczion no si pues le scanceâ."
+
+msgid "Task list"
+msgstr "Liste des tjâches"
+
+msgid "Change status"
+msgstr "Cjange stât"
+
+msgid "Waiting for validation"
+msgstr "In atente di validazion"
+
+msgid "Delete this task?"
+msgstr "Scanceâl cheste tjâche?"
+
+msgid "Failed to delete the task."
+msgstr "Nol si è pudût scanceâ la tjâche."
+
+msgid "Failed to update status."
+msgstr "Nol si è pudût agiornâ lo stât."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Si jer certe che tu vûs scanceâl chest tertsi? Cheste aczion no si pues le scanceâ."
+
+msgid "Please fix the errors before saving."
+msgstr "Corege lis erôr prime di salvâ."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Erôr nel creâ il tertsi. Verifiche i dâts."
+
+msgid "Error deleting third party."
+msgstr "Erôr nel scanceâ il tertsi."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Cjampe il testât opcional e i loghi e-mail. SVG al è preferît; PNG al è doprât come riserve."
+
+msgid "Data exchange updated successfully."
+msgstr "Scambie di dâts agiornât cu sucès."
+
+msgid "Error deleting data exchange."
+msgstr "Erôr nel scanceâ lo scambie di dâts."
+
+msgid "Failed to recycle course."
+msgstr "Nol si è pudût ricliclâ il curs."
+
+msgid "Select source course"
+msgstr "Sceâ il curs font"
+
+msgid "Course to copy from"
+msgstr "Curs dal cual copî"
+
+msgid "Search by code or title..."
+msgstr "Çerca pe cûdiche o titel..."
+
+msgid "No courses match your search."
+msgstr "Nissun curs al corisponde à la tô çercjhe."
+
+msgid "Copy options"
+msgstr "Opzions di copie"
+
+msgid "Include users (enrollments)"
+msgstr "Include utents (iscritzions)"
+
+msgid "Reset dates"
+msgstr "Azzerâ lis dâts"
+
+msgid "When a file with the same name exists"
+msgstr "Cu un file chês tal non esist"
+
+msgid "Ready to copy"
+msgstr "Pront pe copiâ"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Nô a copierâs il contenut dal curs selezionât in chest curs. Tu pues tornâ indaê pe cjampe lis opzions."
+
+msgid "Start copying"
+msgstr "Ancjape a copiâ"
+
+msgid "Select resources to copy"
+msgstr "Sceâ lis risors par copiâ"
+
+msgid "Copy selected"
+msgstr "Copie selezionâts"
+
+msgid "Copy completed."
+msgstr "Copie completade."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Zone periculose: scanceâ un curs al è permanent."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Scrive il cûdiche dal curs par conferme. Tuds i dâts a saran scanceâts permanentement."
+
+msgid "The code must match '%s' exactly."
+msgstr "Il cûdiche al deve corispondê esatament a '%s'."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Scanceâ ancje i ducuments che a son doprâts dome in chest curs (se cualcûn jè)."
+
+msgid "Delete course"
+msgstr "Scanceâ curs"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Cheste aczion no si pues le scanceâ. Continuâ?"
+
+msgid "Course deleted successfully."
+msgstr "Curs scanceât cu sucès."
+
+msgid "Failed to delete course."
+msgstr "Impuità a eliminar il curs."
+
+msgid "Create .mbz"
+msgstr "Cree .mbz"
+
+msgid "Backup scope"
+msgstr "Ambît dal backup"
+
+msgid "Full course"
+msgstr "Cors complêt"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "I elemets selezionâts saran i unics inclusîs dal file esportât."
+
+msgid "Moodle export"
+msgstr "Esportassion Moodle"
+
+msgid "Moodle version"
+msgstr "Version Moodle"
+
+msgid "Admin ID"
+msgstr "ID Admin"
+
+msgid "Internal integer user id"
+msgstr "ID interner integjer dal utent"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle al devent un ID interner dal utent memorizât in XML. Se dubiti, juê 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Nume utent che a aparê cem proprietari des elemets importâts"
+
+msgid "Email to use in the archive metadata"
+msgstr "Email da juê intal metadâts dal archivi"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "Un file .mbz a sarà generât. Lo podarâs discjamâ ce finît."
+
+msgid "Select resources to include"
+msgstr "Selezionâ risursis da inclûr"
+
+msgid "Export completed"
+msgstr "Esportassion completade"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Il to backup Moodle a l'è stât creât. Lu pues trovar te liste des backups dal curs."
+
+msgid "Please complete all required fields."
+msgstr "Complete te campis obligatorîs."
+
+msgid "Failed to create Moodle backup."
+msgstr "Impuità a crear il backup Moodle."
+
+msgid "More actions"
+msgstr "Altre azions"
+

@@ -30520,13 +30520,13 @@ msgid "ex. root"
 msgstr "เช่น root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "CREATE TABLE ผลงาน"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ALTER TABLE ผลงาน"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "DROP COLUMN ผลงาน"
 
 msgid "Theme selected as current"
 msgstr "เลือกธีมเป็นธีมปัจจุบัน"
@@ -31826,4 +31826,319 @@ msgstr "สิ่งนี้จะลบไฟล์ชั่วคราวท
 
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "สิ่งนี้จะลบไฟล์ที่เก่ากว่า %minutes% นาที ดำเนินการต่อ?"
+
+msgid "The value must match exactly: %s"
+msgstr "ค่าต้องตรงกันเป๊ะ: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "วันที่สิ้นสุดซ้ำต้องหลังวันที่เริ่มต้น"
+
+msgid "Index document content?"
+msgstr "จัดทำดัชนีเนื้อหาเอกสาร?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "อัปโหลดโลโก้ SVG ไปยังส่วนหัวแพลตฟอร์ม"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "อัปโหลดโลโก้ PNG ไปยังส่วนหัวแพลตฟอร์ม (%s)"
+
+msgid "Write something to %s"
+msgstr "เขียนบางอย่างถึง %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "แนะนำ: SVG. PNG ความกว้างแนะนำ: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "อัปโหลดโลโก้ PNG สำหรับอีเมล (~%spx ความกว้าง)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "PNG ส่วนหัวต้อง ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "กำหนดรูปแบบไฟล์เฉพาะ"
+
+msgid "Select allowed file formats"
+msgstr "เลือก รูปแบบไฟล์ที่อนุญาต"
+
+msgid "Custom extensions (separated by space)"
+msgstr "นามสกุลที่กำหนดเอง (คั่นด้วยช่องว่าง)"
+
+msgid "Other extensions"
+msgstr "นามสกุลอื่นๆ"
+
+msgid "My invitations"
+msgstr "คำเชิญของฉัน"
+
+msgid "Delete access"
+msgstr "ลบการเข้าถึง"
+
+msgid "Certificate tags"
+msgstr "ป้ายกำกับใบรับรอง"
+
+msgid "Copy all"
+msgstr "คัดลอกทั้งหมด"
+
+msgid "Click to insert"
+msgstr "คลิกเพื่อแทรกลงไป"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "แนะนำ: SVG. PNG สูงสุด: %spx."
+
+msgid "View badge"
+msgstr "ดูเครื่องหมาย"
+
+msgid "%d min"
+msgstr "%d นาที"
+
+msgid "Duration in minutes"
+msgstr "ระยะเวลา (นาที)"
+
+msgid "Go back to standard view"
+msgstr "กลับไปยังมุมมองมาตรฐาน"
+
+msgid "Search for student..."
+msgstr "ค้นหานักเรียน..."
+
+msgid "This date is locked or read-only."
+msgstr "วันที่นี้ถูกล็อกหรืออ่านอย่างเดียว"
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "โหลดการเข้าเรียนไม่สำเร็จ กรุณาลองใหม่ภายหลัง"
+
+msgid "Nothing to save"
+msgstr "ไม่มีอะไรบันทึก"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "คุณมีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก จะออกอยู่ดีหรือไม่?"
+
+msgid "Storage usage unavailable"
+msgstr "ไม่สามารถใช้ข้อมูลการใช้งานที่เก็บได้"
+
+msgid "Search for members..."
+msgstr "ค้นหาสมาชิก..."
+
+msgid "Current members"
+msgstr "สมาชิกปัจจุบัน"
+
+msgid "Add members"
+msgstr "เพิ่มสมาชิก"
+
+msgid "Search for users in course/session..."
+msgstr "ค้นหาผู้ใช้ในคอร์ส/เซสชัน..."
+
+msgid "No users available."
+msgstr "ไม่มีผู้ใช้"
+
+msgid "Browse and publish new posts"
+msgstr "เรียกดูและเผยแพร่โพสต์ใหม่"
+
+msgid "Create and assign tasks"
+msgstr "สร้างและมอบหมายงาน"
+
+msgid "Filtered by %s"
+msgstr "กรองโดย %s"
+
+msgid "Select a score"
+msgstr "เลือกคะแนน"
+
+msgid "Edit comment"
+msgstr "แก้ไขความคิดเห็น"
+
+msgid "Failed to update the post."
+msgstr "อัปเดตโพสต์ไม่สำเร็จ"
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "ลบโพสต์นี้? การกระทำนี้ไม่สามารถย้อนกลับได้"
+
+msgid "Failed to delete the post."
+msgstr "ลบโพสต์ไม่สำเร็จ"
+
+msgid "Failed to update the comment."
+msgstr "อัปเดตความคิดเห็นไม่สำเร็จ"
+
+msgid "Delete this comment?"
+msgstr "ลบความคิดเห็นนี้?"
+
+msgid "Failed to delete the comment."
+msgstr "ลบความคิดเห็นไม่สำเร็จ"
+
+msgid "Search for projects..."
+msgstr "ค้นหาโครงการ..."
+
+msgid "Only visible"
+msgstr "แสดงอย่างเดียว"
+
+msgid "Rename project"
+msgstr "เปลี่ยนชื่อโครงการ"
+
+msgid "New title"
+msgstr "ชื่อใหม่"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "คุณต้องเป็นผู้ดูแลระบบหรือครูเพื่อจัดการโครงการ"
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "ลบโครงการนี้หรือไม่? การดำเนินการนี้ไม่สามารถยกเลิกได้"
+
+msgid "Task list"
+msgstr "รายการงาน"
+
+msgid "Change status"
+msgstr "เปลี่ยนสถานะ"
+
+msgid "Waiting for validation"
+msgstr "รอการตรวจสอบ"
+
+msgid "Delete this task?"
+msgstr "ลบงานนี้หรือไม่?"
+
+msgid "Failed to delete the task."
+msgstr "ลบงานล้มเหลว"
+
+msgid "Failed to update status."
+msgstr "อัปเดตสถานะล้มเหลว"
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบบุคคลภายนอกนี้? การดำเนินการนี้ไม่สามารถยกเลิกได้"
+
+msgid "Please fix the errors before saving."
+msgstr "กรุณาแก้ไขข้อผิดพลาดก่อนบันทึก"
+
+msgid "Error creating third party. Please verify the data."
+msgstr "เกิดข้อผิดพลาดในการสร้างบุคคลภายนอก กรุณาตรวจสอบข้อมูล"
+
+msgid "Error deleting third party."
+msgstr "เกิดข้อผิดพลาดในการลบบุคคลภายนอก"
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "อัปโหลดโลโก้ส่วนหัวและอีเมลที่เป็นตัวเลือก SVG เป็นตัวเลือกที่แนะนำ PNG ใช้เป็นตัวสำรอง"
+
+msgid "Data exchange updated successfully."
+msgstr "อัปเดตการแลกเปลี่ยนข้อมูลสำเร็จแล้ว"
+
+msgid "Error deleting data exchange."
+msgstr "เกิดข้อผิดพลาดในการลบการแลกเปลี่ยนข้อมูล"
+
+msgid "Failed to recycle course."
+msgstr "รีไซเคิลหลักสูตรล้มเหลว"
+
+msgid "Select source course"
+msgstr "เลือกหลักสูตรต้นทาง"
+
+msgid "Course to copy from"
+msgstr "หลักสูตรที่จะคัดลอกจาก"
+
+msgid "Search by code or title..."
+msgstr "ค้นหาตามรหัสหรือชื่อ..."
+
+msgid "No courses match your search."
+msgstr "ไม่มีหลักสูตรที่ตรงกับการค้นหาของคุณ"
+
+msgid "Copy options"
+msgstr "ตัวเลือกการคัดลอก"
+
+msgid "Include users (enrollments)"
+msgstr "รวมผู้ใช้ (การลงทะเบียน)"
+
+msgid "Reset dates"
+msgstr "รีเซ็ตวันที่"
+
+msgid "When a file with the same name exists"
+msgstr "เมื่อมีไฟล์ชื่อเดียวกันอยู่แล้ว"
+
+msgid "Ready to copy"
+msgstr "พร้อมคัดลอก"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "เราจะคัดลอกเนื้อหาจากหลักสูตรที่เลือกไปยังหลักสูตรนี้ คุณสามารถย้อนกลับเพื่อเปลี่ยนตัวเลือกได้"
+
+msgid "Start copying"
+msgstr "เริ่มคัดลอก"
+
+msgid "Select resources to copy"
+msgstr "เลือกทรัพยากรที่จะคัดลอก"
+
+msgid "Copy selected"
+msgstr "คัดลอกที่เลือก"
+
+msgid "Copy completed."
+msgstr "คัดลอกเสร็จสมบูรณ์"
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "เขตอันตราย: การลบหลักสูตรเป็นการถาวร"
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "พิมพ์รหัสหลักสูตรเพื่อยืนยัน ข้อมูลทั้งหมดจะถูกลบอย่างถาวร"
+
+msgid "The code must match '%s' exactly."
+msgstr "รหัสต้องตรงกับ '%s' อย่างสมบูรณ์"
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "ลบเอกสารที่ใช้เฉพาะในหลักสูตรนี้ด้วย (ถ้ามี)"
+
+msgid "Delete course"
+msgstr "ลบหลักสูตร"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "การดำเนินการนี้ไม่สามารถยกเลิกได้ ดำเนินการต่อหรือไม่?"
+
+msgid "Course deleted successfully."
+msgstr "ลบหลักสูตรสำเร็จแล้ว"
+
+msgid "Failed to delete course."
+msgstr "ลบหลักสูตรล้มเหลว"
+
+msgid "Create .mbz"
+msgstr "สร้าง .mbz"
+
+msgid "Backup scope"
+msgstr "ขอบเขตสำรองข้อมูล"
+
+msgid "Full course"
+msgstr "หลักสูตรเต็ม"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "รายการที่เลือกจะเป็นรายการเดียวที่รวมอยู่ในไฟล์ที่ส่งออก"
+
+msgid "Moodle export"
+msgstr "ส่งออก Moodle"
+
+msgid "Moodle version"
+msgstr "เวอร์ชัน Moodle"
+
+msgid "Admin ID"
+msgstr "รหัสผู้ดูแลระบบ"
+
+msgid "Internal integer user id"
+msgstr "รหัสผู้ใช้ตัวเลขภายใน"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle ต้องการรหัสผู้ใช้ภายในที่เก็บใน XML หากไม่แน่ใจให้ใช้ 1"
+
+msgid "Username to appear as owner of imported items"
+msgstr "ชื่อผู้ใช้ที่จะปรากฏเป็นเจ้าของรายการที่นำเข้า"
+
+msgid "Email to use in the archive metadata"
+msgstr "อีเมลที่ใช้ในข้อมูลเมตาของไฟล์เก็บถาวร"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "ไฟล์ .mbz จะถูกสร้างขึ้น คุณจะสามารถดาวน์โหลดได้เมื่อเสร็จสิ้น"
+
+msgid "Select resources to include"
+msgstr "เลือกทรัพยากรที่จะรวม"
+
+msgid "Export completed"
+msgstr "การส่งออกเสร็จสมบูรณ์"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "ไฟล์สำรองข้อมูล Moodle ของคุณถูกสร้างแล้ว คุณสามารถค้นหาได้ในรายการสำรองข้อมูลคอร์ส"
+
+msgid "Please complete all required fields."
+msgstr "กรุณากรอกข้อมูลในช่องที่จำเป็นทั้งหมด"
+
+msgid "Failed to create Moodle backup."
+msgstr "ไม่สามารถสร้างไฟล์สำรองข้อมูล Moodle ได้"
+
+msgid "More actions"
+msgstr "การดำเนินการเพิ่มเติม"
 

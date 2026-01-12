@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:запазени права,, no:свободен"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Octet поток,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Поток от октети,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:тест (упражнение),,      simulation:симулация,,      questionnaire:въпросник,,      diagram:диаграма,,      figure:фигура,,      graph:графика,,      index:индекс,,      slide:слайд,,      table:таблица,,      narrative text:обзор,,      exam:изпит,,      experiment:експеримент,,      problem statement:постановка на проблем,,      self assessment:самостоятелно оценяване,,      lecture:лекция"
@@ -31826,4 +31826,319 @@ msgstr "Това ще изтрие всички временни файлове.
 
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Това ще изтрие файлове по-стари от %minutes% минути. Продължи?"
+
+msgid "The value must match exactly: %s"
+msgstr "Стойността трябва да съвпада точно: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Крайна дата на повторение трябва да е след начална дата."
+
+msgid "Index document content?"
+msgstr "Индексиране на съдържанието на документа?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Качи SVG лого в заглавната част на платформата"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Качи PNG лого в заглавната част на платформата (%s)"
+
+msgid "Write something to %s"
+msgstr "Напиши нещо към %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Предпочитан: SVG. Препоръчителна ширина на PNG: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Качи PNG лого за имейли (~%spx ширина)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "Заглавен PNG трябва да е ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Изисквай конкретен формат на файл"
+
+msgid "Select allowed file formats"
+msgstr "Избери разрешени формати на файлове"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Собствени разширения (разделени със запетая)"
+
+msgid "Other extensions"
+msgstr "Други разширения"
+
+msgid "My invitations"
+msgstr "Моите покани"
+
+msgid "Delete access"
+msgstr "Изтрий достъп"
+
+msgid "Certificate tags"
+msgstr "Етикети на сертификат"
+
+msgid "Copy all"
+msgstr "Копирай всички"
+
+msgid "Click to insert"
+msgstr "Кликни за вмъкване"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Предпочитан: SVG. Максимален размер на PNG: %spx."
+
+msgid "View badge"
+msgstr "Виж емблемата"
+
+msgid "%d min"
+msgstr "%d мин"
+
+msgid "Duration in minutes"
+msgstr "Продължителност в минути"
+
+msgid "Go back to standard view"
+msgstr "Връщане към стандартния изглед"
+
+msgid "Search for student..."
+msgstr "Търсене на студент..."
+
+msgid "This date is locked or read-only."
+msgstr "Тази дата е заключена или само за четене."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Грешка при зареждане на посещаемостта. Опитайте по-късно."
+
+msgid "Nothing to save"
+msgstr "Няма какво да се запише"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Имате незапазени промени. Да напуснете въпреки това?"
+
+msgid "Storage usage unavailable"
+msgstr "Информацията за заетото място е недостъпна"
+
+msgid "Search for members..."
+msgstr "Търсене на членове..."
+
+msgid "Current members"
+msgstr "Текущи членове"
+
+msgid "Add members"
+msgstr "Добавяне на членове"
+
+msgid "Search for users in course/session..."
+msgstr "Търсене на потребители в курс/сесия..."
+
+msgid "No users available."
+msgstr "Няма налични потребители."
+
+msgid "Browse and publish new posts"
+msgstr "Разглеждане и публикуване на нови публикации"
+
+msgid "Create and assign tasks"
+msgstr "Създаване и задаване на задачи"
+
+msgid "Filtered by %s"
+msgstr "Филтрирано по %s"
+
+msgid "Select a score"
+msgstr "Изберете оценка"
+
+msgid "Edit comment"
+msgstr "Редактиране на коментар"
+
+msgid "Failed to update the post."
+msgstr "Грешка при актуализиране на публикацията."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Да изтриете ли тази публикация? Това действие не може да бъде отменено."
+
+msgid "Failed to delete the post."
+msgstr "Грешка при изтриване на публикацията."
+
+msgid "Failed to update the comment."
+msgstr "Грешка при актуализиране на коментара."
+
+msgid "Delete this comment?"
+msgstr "Да изтриете ли този коментар?"
+
+msgid "Failed to delete the comment."
+msgstr "Грешка при изтриване на коментара."
+
+msgid "Search for projects..."
+msgstr "Търсене на проекти..."
+
+msgid "Only visible"
+msgstr "Само видими"
+
+msgid "Rename project"
+msgstr "Преименуване на проект"
+
+msgid "New title"
+msgstr "Ново заглавие"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Трябва да сте администратор или преподавател, за да управлявате проекти."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Изтриване на този проект? Това действие не може да бъде отменено."
+
+msgid "Task list"
+msgstr "Списък със задачи"
+
+msgid "Change status"
+msgstr "Промяна на статус"
+
+msgid "Waiting for validation"
+msgstr "Очаква проверка"
+
+msgid "Delete this task?"
+msgstr "Изтриване на тази задача?"
+
+msgid "Failed to delete the task."
+msgstr "Грешка при изтриване на задачата."
+
+msgid "Failed to update status."
+msgstr "Грешка при актуализиране на статуса."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Сигурни ли сте, че искате да изтриете този външен доставчик? Това действие не може да бъде отменено."
+
+msgid "Please fix the errors before saving."
+msgstr "Поправете грешките преди запазване."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Грешка при създаване на външен доставчик. Моля, проверете данните."
+
+msgid "Error deleting third party."
+msgstr "Грешка при изтриване на външен доставчик."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Качете опционални заглавни и лога за имейл. Предпочитан е SVG; PNG се използва като резервен."
+
+msgid "Data exchange updated successfully."
+msgstr "Обменът на данни е актуализиран успешно."
+
+msgid "Error deleting data exchange."
+msgstr "Грешка при изтриване на обмена на данни."
+
+msgid "Failed to recycle course."
+msgstr "Грешка при възстановяване на курса."
+
+msgid "Select source course"
+msgstr "Изберете изходен курс"
+
+msgid "Course to copy from"
+msgstr "Курс за копиране от"
+
+msgid "Search by code or title..."
+msgstr "Търсене по код или заглавие..."
+
+msgid "No courses match your search."
+msgstr "Няма курсове, съответстващи на търсенето."
+
+msgid "Copy options"
+msgstr "Опции за копиране"
+
+msgid "Include users (enrollments)"
+msgstr "Включи потребители ( записвания)"
+
+msgid "Reset dates"
+msgstr "Нулирай дати"
+
+msgid "When a file with the same name exists"
+msgstr "Когато съществува файл със същото име"
+
+msgid "Ready to copy"
+msgstr "Готов за копиране"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Ще копираме съдържание от избрания курс в този курс. Можете да се върнете, за да промените опциите."
+
+msgid "Start copying"
+msgstr "Започни копиране"
+
+msgid "Select resources to copy"
+msgstr "Изберете ресурси за копиране"
+
+msgid "Copy selected"
+msgstr "Копирай избраните"
+
+msgid "Copy completed."
+msgstr "Копиране завършено."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Зона на опасност: изтриването на курс е постоянно."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Въведете кода на курса за потвърждение. Всички данни ще бъдат постоянно премахнати."
+
+msgid "The code must match '%s' exactly."
+msgstr "Кодът трябва да съвпада точно с '%s'."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Също изтрий документи, които се използват само в този курс (ако има такива)."
+
+msgid "Delete course"
+msgstr "Изтрий курс"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Това действие не може да бъде отменено. Продължи?"
+
+msgid "Course deleted successfully."
+msgstr "Курсът е изтрит успешно."
+
+msgid "Failed to delete course."
+msgstr "Грешка при изтриване на курса."
+
+msgid "Create .mbz"
+msgstr "Създай .mbz"
+
+msgid "Backup scope"
+msgstr "Обхват на архивиране"
+
+msgid "Full course"
+msgstr "Цял курс"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Избраните елементи ще бъдат единствените, включени в износения файл."
+
+msgid "Moodle export"
+msgstr "Износ за Moodle"
+
+msgid "Moodle version"
+msgstr "Версия на Moodle"
+
+msgid "Admin ID"
+msgstr "ID на администратор"
+
+msgid "Internal integer user id"
+msgstr "Вътрешен потребителски ID (целочислен)"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle изисква вътрешен потребителски ID, съхранен в XML. Ако не сте сигурни, използвайте 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Потребителско име, което ще се появи като собственик на внесените елементи"
+
+msgid "Email to use in the archive metadata"
+msgstr "Имейл за използване в метаданните на архива"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "Ще бъде генериран .mbz файл. Ще можете да го изтеглите след приключване."
+
+msgid "Select resources to include"
+msgstr "Изберете ресурси за включване"
+
+msgid "Export completed"
+msgstr "Износът е завършен"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Резервното копие на вашия Moodle е създадено. Можете да го намерите в списъка с резервни копия на курса."
+
+msgid "Please complete all required fields."
+msgstr "Моля, попълнете всички задължителни полета."
+
+msgid "Failed to create Moodle backup."
+msgstr "Грешка при създаването на резервно копие на Moodle."
+
+msgid "More actions"
+msgstr "Още действия"
 

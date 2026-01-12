@@ -31821,3 +31821,318 @@ msgstr "این همه فایل‌های موقتی را حذف می‌کند. ا
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "این فایل‌های قدیمی‌تر از %minutes% دقیقه را حذف می‌کند. ادامه دهید؟"
 
+msgid "The value must match exactly: %s"
+msgstr "مقدار باید دقیقاً مطابقت داشته باشد: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "تاریخ پایان تکرار باید پس از تاریخ شروع باشد."
+
+msgid "Index document content?"
+msgstr "فهرست کردن محتوای سند؟"
+
+msgid "Upload SVG logo to platform header"
+msgstr "آپلود لوگوی SVG به سربرگ پلتفرم"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "آپلود لوگوی PNG به سربرگ پلتفرم (%s)"
+
+msgid "Write something to %s"
+msgstr "چیزی به %s بنویسید"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "ترجیحی: SVG. عرض PNG پیشنهادی: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "آپلود لوگوی PNG برای ایمیل‌ها (~%spx عرض)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "PNG سربرگ باید ≤ %spx باشد."
+
+msgid "Require specific file format"
+msgstr "الزام فرمت فایل خاص"
+
+msgid "Select allowed file formats"
+msgstr "انتخاب فرمت‌های فایل مجاز"
+
+msgid "Custom extensions (separated by space)"
+msgstr "پسوندهای سفارشی (با فاصله جدا شده)"
+
+msgid "Other extensions"
+msgstr "پسوندهای دیگر"
+
+msgid "My invitations"
+msgstr "دعوت‌نامه‌های من"
+
+msgid "Delete access"
+msgstr "حذف دسترسی"
+
+msgid "Certificate tags"
+msgstr "برچسب‌های گواهینامه"
+
+msgid "Copy all"
+msgstr "کپی همه"
+
+msgid "Click to insert"
+msgstr "کلیک برای درج"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "ترجیحی: SVG. حداکثر اندازه PNG: %spx."
+
+msgid "View badge"
+msgstr "مشاهده نشان"
+
+msgid "%d min"
+msgstr "%d دقیقه"
+
+msgid "Duration in minutes"
+msgstr "مدت زمان به دقیقه"
+
+msgid "Go back to standard view"
+msgstr "بازگشت به نمای استاندارد"
+
+msgid "Search for student..."
+msgstr "جستجو برای دانش‌آموز..."
+
+msgid "This date is locked or read-only."
+msgstr "این تاریخ قفل شده یا فقط خواندنی است."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "بارگیری حضور و غیاب ناموفق بود. لطفاً بعداً تلاش کنید."
+
+msgid "Nothing to save"
+msgstr "هیچ چیز برای ذخیره وجود ندارد"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "تغییرات ذخیره نشده دارید. آیا همچنان خارج شوید؟"
+
+msgid "Storage usage unavailable"
+msgstr "استفاده از فضای ذخیره‌سازی در دسترس نیست"
+
+msgid "Search for members..."
+msgstr "جستجو برای اعضا..."
+
+msgid "Current members"
+msgstr "اعضای فعلی"
+
+msgid "Add members"
+msgstr "افزودن اعضا"
+
+msgid "Search for users in course/session..."
+msgstr "جستجو برای کاربران در دوره/جلسه..."
+
+msgid "No users available."
+msgstr "هیچ کاربری در دسترس نیست."
+
+msgid "Browse and publish new posts"
+msgstr "مرور و انتشار پست‌های جدید"
+
+msgid "Create and assign tasks"
+msgstr "ایجاد و تخصیص وظایف"
+
+msgid "Filtered by %s"
+msgstr "فیلتر شده بر اساس %s"
+
+msgid "Select a score"
+msgstr "انتخاب نمره"
+
+msgid "Edit comment"
+msgstr "ویرایش نظر"
+
+msgid "Failed to update the post."
+msgstr "به‌روزرسانی پست ناموفق بود."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "آیا این پست را حذف کنید؟ این عمل قابل بازگشت نیست."
+
+msgid "Failed to delete the post."
+msgstr "حذف پست ناموفق بود."
+
+msgid "Failed to update the comment."
+msgstr "به‌روزرسانی نظر ناموفق بود."
+
+msgid "Delete this comment?"
+msgstr "آیا این نظر را حذف کنید؟"
+
+msgid "Failed to delete the comment."
+msgstr "حذف نظر ناموفق بود."
+
+msgid "Search for projects..."
+msgstr "جستجو برای پروژه‌ها..."
+
+msgid "Only visible"
+msgstr "فقط قابل مشاهده"
+
+msgid "Rename project"
+msgstr "تغییر نام پروژه"
+
+msgid "New title"
+msgstr "عنوان جدید"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "برای مدیریت پروژه‌ها باید مدیر یا معلم باشید."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "آیا این پروژه را حذف کنید؟ این عمل قابل بازگشت نیست."
+
+msgid "Task list"
+msgstr "فهرست وظایف"
+
+msgid "Change status"
+msgstr "تغییر وضعیت"
+
+msgid "Waiting for validation"
+msgstr "در انتظار تأیید"
+
+msgid "Delete this task?"
+msgstr "آیا این وظیفه را حذف کنید؟"
+
+msgid "Failed to delete the task."
+msgstr "حذف وظیفه ناموفق بود."
+
+msgid "Failed to update status."
+msgstr "به‌روزرسانی وضعیت ناموفق بود."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "آیا مطمئن هستید که می‌خواهید این طرف سوم را حذف کنید؟ این عمل قابل بازگشت نیست."
+
+msgid "Please fix the errors before saving."
+msgstr "لطفاً خطاها را قبل از ذخیره برطرف کنید."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "خطا در ایجاد طرف سوم. لطفاً داده‌ها را بررسی کنید."
+
+msgid "Error deleting third party."
+msgstr "خطا در حذف طرف سوم."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "آپلود لوگوی هدر و ایمیل اختیاری. SVG ترجیح داده می‌شود؛ PNG به عنوان جایگزین استفاده می‌شود."
+
+msgid "Data exchange updated successfully."
+msgstr "تبادل داده با موفقیت به‌روزرسانی شد."
+
+msgid "Error deleting data exchange."
+msgstr "خطا در حذف تبادل داده."
+
+msgid "Failed to recycle course."
+msgstr "بازیافت دوره ناموفق بود."
+
+msgid "Select source course"
+msgstr "انتخاب دوره مبدأ"
+
+msgid "Course to copy from"
+msgstr "دوره‌ای که از آن کپی شود"
+
+msgid "Search by code or title..."
+msgstr "جستجو بر اساس کد یا عنوان..."
+
+msgid "No courses match your search."
+msgstr "هیچ دوره‌ای با جستجوی شما مطابقت ندارد."
+
+msgid "Copy options"
+msgstr "گزینه‌های کپی"
+
+msgid "Include users (enrollments)"
+msgstr "شامل کاربران (ثبت‌نام‌ها)"
+
+msgid "Reset dates"
+msgstr "بازنشانی تاریخ‌ها"
+
+msgid "When a file with the same name exists"
+msgstr "هنگامی که فایلی با نام یکسان وجود دارد"
+
+msgid "Ready to copy"
+msgstr "آماده برای کپی"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "محتوا از دوره انتخاب‌شده به این دوره کپی خواهد شد. می‌توانید برای تغییر گزینه‌ها به عقب برگردید."
+
+msgid "Start copying"
+msgstr "شروع کپی"
+
+msgid "Select resources to copy"
+msgstr "انتخاب منابع برای کپی"
+
+msgid "Copy selected"
+msgstr "کپی انتخاب‌شده‌ها"
+
+msgid "Copy completed."
+msgstr "کپی کامل شد."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "منطقه خطر: حذف دوره دائمی است."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "کد دوره را برای تأیید وارد کنید. تمام داده‌ها به طور دائمی حذف خواهند شد."
+
+msgid "The code must match '%s' exactly."
+msgstr "کد باید دقیقاً با '%s' مطابقت داشته باشد."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "اسناد مورد استفاده فقط در این دوره را نیز حذف کنید (در صورت وجود)."
+
+msgid "Delete course"
+msgstr "حذف دوره"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "این عمل قابل بازگشت نیست. ادامه دهید؟"
+
+msgid "Course deleted successfully."
+msgstr "دوره با موفقیت حذف شد."
+
+msgid "Failed to delete course."
+msgstr "حذف دوره ناموفق بود."
+
+msgid "Create .mbz"
+msgstr "ایجاد .mbz"
+
+msgid "Backup scope"
+msgstr "محدوده پشتیبان‌گیری"
+
+msgid "Full course"
+msgstr "دوره کامل"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "اقلام انتخاب‌شده تنها مواردی خواهند بود که در فایل صادرشده گنجانده می‌شوند."
+
+msgid "Moodle export"
+msgstr "صادرات Moodle"
+
+msgid "Moodle version"
+msgstr "نسخه Moodle"
+
+msgid "Admin ID"
+msgstr "شناسه مدیر"
+
+msgid "Internal integer user id"
+msgstr "شناسه داخلی عددی کاربر"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle به شناسه داخلی کاربر در XML نیاز دارد. در صورت تردید، از ۱ استفاده کنید."
+
+msgid "Username to appear as owner of imported items"
+msgstr "نام کاربری که به عنوان مالک اقلام واردشده ظاهر شود"
+
+msgid "Email to use in the archive metadata"
+msgstr "ایمیل برای استفاده در متاداده آرشیو"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "فایل .mbz تولید خواهد شد. پس از اتمام می‌توانید آن را دانلود کنید."
+
+msgid "Select resources to include"
+msgstr "انتخاب منابع برای شامل کردن"
+
+msgid "Export completed"
+msgstr "صادرات کامل شد"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "پشتیبان Moodle شما ایجاد شد. می‌توانید آن را در فهرست پشتیبان‌های دوره پیدا کنید."
+
+msgid "Please complete all required fields."
+msgstr "لطفاً تمام فیلدهای الزامی را کامل کنید."
+
+msgid "Failed to create Moodle backup."
+msgstr "ایجاد پشتیبان Moodle ناموفق بود."
+
+msgid "More actions"
+msgstr "عملیات بیشتر"
+

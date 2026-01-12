@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:berhak cipta,, no:tiada hak cipta"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Pasta,, application/msword:MsWord,, application/octet-stream:Aliran oktet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Pastas,, application/msword:MsWord,, application/octet-stream:Aliran oktet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:latihan,,      simulation:simulasi,,      questionnaire:soal selidik,,      diagram:diagram,,      figure:gambar,,      graph:graf,,      index:indeks,,      slide:slaid,,      table:jadual,,      narrative text:teks naratif,,      exam:ujian,,      experiment:eksperimen,,      problem statement:penyata masalah,,      self assessment:penilaian diri,,      lecture:kuliah"
@@ -31826,4 +31826,319 @@ msgstr "Ini akan memadam semua fail sementara. Teruskan?"
 
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Ini akan memadam fail yang lebih tua daripada %minutes% minit. Teruskan?"
+
+msgid "The value must match exactly: %s"
+msgstr "Nilai mesti sepadan tepat: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Tarikh tamat berulang mesti selepas tarikh mula."
+
+msgid "Index document content?"
+msgstr "Indeks kandungan dokumen?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Muat naik logo SVG ke header platform"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Muat naik logo PNG ke header platform (%s)"
+
+msgid "Write something to %s"
+msgstr "Tulis sesuatu kepada %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Lebih digemari: SVG. Lebar PNG disyorkan: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Muat naik logo PNG untuk e-mel (~%spx lebar)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "PNG header mesti ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Muttarik format fail khusus"
+
+msgid "Select allowed file formats"
+msgstr "Pilih format fail yang dibenarkan"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Sambungan tersuai (dipisahkan oleh ruang)"
+
+msgid "Other extensions"
+msgstr "Sambungan lain"
+
+msgid "My invitations"
+msgstr "Jemputan saya"
+
+msgid "Delete access"
+msgstr "Padam akses"
+
+msgid "Certificate tags"
+msgstr "Tag sijil"
+
+msgid "Copy all"
+msgstr "Salin semua"
+
+msgid "Click to insert"
+msgstr "Klik untuk sisip"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Disuci: SVG. Saiz PNG maks: %spx."
+
+msgid "View badge"
+msgstr "Lihat lencana"
+
+msgid "%d min"
+msgstr "%d min"
+
+msgid "Duration in minutes"
+msgstr "Tempoh dalam minit"
+
+msgid "Go back to standard view"
+msgstr "Kembali ke paparan standard"
+
+msgid "Search for student..."
+msgstr "Cari pelajar..."
+
+msgid "This date is locked or read-only."
+msgstr "Tarikh ini terkunci atau baca sahaja."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Gagal memuat kehadiran. Sila cuba lagi kemudian."
+
+msgid "Nothing to save"
+msgstr "Tiada apa yang perlu disimpan"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Anda mempunyai perubahan yang belum disimpan. Tinggalkan juga?"
+
+msgid "Storage usage unavailable"
+msgstr "Penggunaan storan tidak tersedia"
+
+msgid "Search for members..."
+msgstr "Cari ahli..."
+
+msgid "Current members"
+msgstr "Ahli semasa"
+
+msgid "Add members"
+msgstr "Tambah ahli"
+
+msgid "Search for users in course/session..."
+msgstr "Cari pengguna dalam kursus/sesi..."
+
+msgid "No users available."
+msgstr "Tiada pengguna tersedia."
+
+msgid "Browse and publish new posts"
+msgstr "Lelayar dan terbitkan siaran baru"
+
+msgid "Create and assign tasks"
+msgstr "Cipta dan tugaskan tugas"
+
+msgid "Filtered by %s"
+msgstr "Ditapis mengikut %s"
+
+msgid "Select a score"
+msgstr "Pilih skor"
+
+msgid "Edit comment"
+msgstr "Edit komen"
+
+msgid "Failed to update the post."
+msgstr "Gagal mengemas kini siaran."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Padam siaran ini? Tindakan ini tidak boleh dibatalkan."
+
+msgid "Failed to delete the post."
+msgstr "Gagal memadam siaran."
+
+msgid "Failed to update the comment."
+msgstr "Gagal mengemas kini komen."
+
+msgid "Delete this comment?"
+msgstr "Padam komen ini?"
+
+msgid "Failed to delete the comment."
+msgstr "Gagal memadam komen."
+
+msgid "Search for projects..."
+msgstr "Cari projek..."
+
+msgid "Only visible"
+msgstr "Hanya kelihatan"
+
+msgid "Rename project"
+msgstr "Tukar nama projek"
+
+msgid "New title"
+msgstr "Tajuk baru"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Anda perlu menjadi pentadbir atau guru untuk mengurus projek."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Padam projek ini? Tindakan ini tidak boleh dibatalkan."
+
+msgid "Task list"
+msgstr "Senarai tugas"
+
+msgid "Change status"
+msgstr "Tukar status"
+
+msgid "Waiting for validation"
+msgstr "Menunggu pengesahan"
+
+msgid "Delete this task?"
+msgstr "Padam tugas ini?"
+
+msgid "Failed to delete the task."
+msgstr "Gagal memadam tugas."
+
+msgid "Failed to update status."
+msgstr "Gagal mengemas kini status."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Adakah anda pasti mahu memadam pihak ketiga ini? Tindakan ini tidak boleh dibatalkan."
+
+msgid "Please fix the errors before saving."
+msgstr "Sila betulkan ralat sebelum menyimpan."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Ralat mencipta pihak ketiga. Sila semak data."
+
+msgid "Error deleting third party."
+msgstr "Ralat memadam pihak ketiga."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Muat naik logo header dan e-mel pilihan. SVG lebih digemari; PNG digunakan sebagai sandaran."
+
+msgid "Data exchange updated successfully."
+msgstr "Pertukaran data dikemas kini berjaya."
+
+msgid "Error deleting data exchange."
+msgstr "Ralat memadam pertukaran data."
+
+msgid "Failed to recycle course."
+msgstr "Gagal mengitar semula kursus."
+
+msgid "Select source course"
+msgstr "Pilih kursus sumber"
+
+msgid "Course to copy from"
+msgstr "Kursus untuk disalin daripada"
+
+msgid "Search by code or title..."
+msgstr "Cari mengikut kod atau tajuk..."
+
+msgid "No courses match your search."
+msgstr "Tiada kursus yang sepadan dengan carian anda."
+
+msgid "Copy options"
+msgstr "Pilihan salin"
+
+msgid "Include users (enrollments)"
+msgstr "Sertakan pengguna (pendaftaran)"
+
+msgid "Reset dates"
+msgstr "Tetap semula tarikh"
+
+msgid "When a file with the same name exists"
+msgstr "Bila fail dengan nama yang sama wujud"
+
+msgid "Ready to copy"
+msgstr "Bersedia untuk disalin"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Kami akan salin kandungan daripada kursus yang dipilih ke dalam kursus ini. Anda boleh kembali untuk menukar pilihan."
+
+msgid "Start copying"
+msgstr "Mula salin"
+
+msgid "Select resources to copy"
+msgstr "Pilih sumber untuk disalin"
+
+msgid "Copy selected"
+msgstr "Salin yang dipilih"
+
+msgid "Copy completed."
+msgstr "Salin selesai."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Zon bahaya: memadam kursus adalah kekal."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Taip kod kursus untuk mengesahkan. Semua data akan dipadamkan secara kekal."
+
+msgid "The code must match '%s' exactly."
+msgstr "Kod mesti sepadan '%s' dengan tepat."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Juga padam dokumen yang hanya digunakan dalam kursus ini (jika ada)."
+
+msgid "Delete course"
+msgstr "Padam kursus"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Tindakan ini tidak boleh dibatalkan. Teruskan?"
+
+msgid "Course deleted successfully."
+msgstr "Kursus berjaya dipadam."
+
+msgid "Failed to delete course."
+msgstr "Gagal memadam kursus."
+
+msgid "Create .mbz"
+msgstr "Cipta .mbz"
+
+msgid "Backup scope"
+msgstr "Skop sandaran"
+
+msgid "Full course"
+msgstr "Kursus penuh"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Item terpilih akan menjadi yang tunggal dimasukkan dalam fail dieksport."
+
+msgid "Moodle export"
+msgstr "Eksport Moodle"
+
+msgid "Moodle version"
+msgstr "Versi Moodle"
+
+msgid "Admin ID"
+msgstr "ID Pentadbir"
+
+msgid "Internal integer user id"
+msgstr "ID pengguna integer dalaman"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle memerlukan ID pengguna dalaman yang disimpan dalam XML. Jika ragu-ragu, gunakan 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Nama pengguna untuk muncul sebagai pemilik item yang diimport"
+
+msgid "Email to use in the archive metadata"
+msgstr "E-mel untuk digunakan dalam metadata arkib"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "Fail .mbz akan dihasilkan. Anda boleh memuat turunnya selepas siap."
+
+msgid "Select resources to include"
+msgstr "Pilih sumber untuk dimasukkan"
+
+msgid "Export completed"
+msgstr "Eksport selesai"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Sandaran Moodle anda telah dicipta. Anda boleh mencarinya dalam senarai sandaran kursus."
+
+msgid "Please complete all required fields."
+msgstr "Sila lengkapkan semua medan yang diperlukan."
+
+msgid "Failed to create Moodle backup."
+msgstr "Gagal mencipta sandaran Moodle."
+
+msgid "More actions"
+msgstr "Lagi tindakan"
 

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med vänliga hälsningar,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formel exempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formel-exempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervall"
@@ -31456,76 +31456,76 @@ msgid "Manager"
 msgstr "Administratör"
 
 msgid "Mark as"
-msgstr ""
+msgstr "Markera som"
 
 msgid "Reply to all"
-msgstr ""
+msgstr "Svara alla"
 
 msgid "SCIM external ID"
-msgstr ""
+msgstr "SCIM extern ID"
 
 msgid "OAuth2 ID"
-msgstr ""
+msgstr "OAuth2 ID"
 
 msgid "Please accept the latest version of the terms and conditions."
-msgstr ""
+msgstr "Vänligen acceptera den senaste versionen av villkoren och avtalen."
 
 msgid "Required value for operation without path"
-msgstr ""
+msgstr "Krävt värde för operation utan sökväg"
 
 msgid "Available space (%s)"
-msgstr ""
+msgstr "Tillgängligt utrymme (%s)"
 
 msgid "Index this description for the global search"
-msgstr ""
+msgstr "Indexera denna beskrivning för global sökning"
 
 msgid "Unknown course"
-msgstr ""
+msgstr "Okänd kurs"
 
 msgid "Certificate not found."
-msgstr ""
+msgstr "Certifikat hittades inte."
 
 msgid "Security token expired. Please reload the page and try again."
-msgstr ""
+msgstr "Säkerhetstoken har gått ut. Ladda om sidan och försök igen."
 
 msgid "Only platform administrators can change the course visibility."
-msgstr ""
+msgstr "Endast plattformsadministratörer kan ändra kursens synlighet."
 
 msgid "Unexpected error while subscribing the user"
-msgstr ""
+msgstr "Oväntat fel vid registrering av användaren"
 
 msgid "Search in resource logs"
-msgstr ""
+msgstr "Sök i resursloggar"
 
 msgid "Include this learning path in the global search results"
-msgstr ""
+msgstr "Inkludera denna lärsteg i globala sökresultat"
 
 msgid "The course code already exists"
-msgstr ""
+msgstr "Kurskoden finns redan"
 
 msgid "Latest news"
-msgstr ""
+msgstr "Senaste nyheter"
 
 msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
-msgstr ""
+msgstr "Hämta de senaste nyheterna från Chamilo, inklusive säkerhetshål och evenemang, direkt i din administrationspanel. Dessa nyheter kontrolleras på Chamilos nyhetsserver varje gång du laddar administrationssidan och är endast synliga för administratörer."
 
 msgid "Chamilo support block"
-msgstr ""
+msgstr "Chamilo supportblock"
 
 msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
-msgstr ""
+msgstr "Få pro tips och ett enkelt sätt att kontakta officiella tjänsteleverantörer för professionellt stöd, direkt från Chamilos skapare. Detta block visas på din administrationssida, är endast synligt för administratörer och uppdateras varje gång du laddar administrationssidan."
 
 msgid "Hide option to send announcements to HR users"
-msgstr ""
+msgstr "Dölj alternativ för att skicka annonseringar till HR-användare"
 
 msgid "Allow session admins to download private certificates"
-msgstr ""
+msgstr "Tillåt sessionadministratörer att ladda ner privata certifikat"
 
 msgid "If enabled, session administrators can download certificates even if they are not publicly published."
-msgstr ""
+msgstr "Om aktiverat kan sessionadministratörer ladda ner certifikat även om de inte är offentligt publicerade."
 
 msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
-msgstr ""
+msgstr "Om inte tomt kommer kursens skapandeprocess att leta efter vissa fält i användarprofilen och autofylla dem för kursen. Till exempel kan en lärare specialiserad på digital marknadsföring automatiskt sätta en « digital marknadsföring » flagga på varje kurs (han/hon) skapar."
 
 msgid "Main menu entries"
 msgstr "Huvudmenyposter"
@@ -31826,4 +31826,319 @@ msgstr "Detta raderar alla temporära filer. Fortsätta?"
 
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Detta raderar filer äldre än %minutes% minuter. Fortsätta?"
+
+msgid "The value must match exactly: %s"
+msgstr "Värdet måste matcha exakt: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Upprepa slutdatum måste vara efter startdatum."
+
+msgid "Index document content?"
+msgstr "Indexera dokumentinnehåll?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Ladda upp SVG-logo till plattformshuvud"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Ladda upp PNG-logo till plattformshuvud (%s)"
+
+msgid "Write something to %s"
+msgstr "Skriv något till %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Föredraget: SVG. PNG rekommenderad bredd: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Ladda upp PNG-logo för e-post (~%spx bredd)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "Huvud PNG måste vara ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Kräv specifikt filformat"
+
+msgid "Select allowed file formats"
+msgstr "Välj tillåtna filformat"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Egna tillägg (separerade med mellanslag)"
+
+msgid "Other extensions"
+msgstr "Andra tillägg"
+
+msgid "My invitations"
+msgstr "Mina inbjudningar"
+
+msgid "Delete access"
+msgstr "Radera åtkomst"
+
+msgid "Certificate tags"
+msgstr "Certifikattaggar"
+
+msgid "Copy all"
+msgstr "Kopiera alla"
+
+msgid "Click to insert"
+msgstr "Klicka för att infoga"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Föredraget: SVG. PNG max storlek: %spx."
+
+msgid "View badge"
+msgstr "Visa märke"
+
+msgid "%d min"
+msgstr "%d min"
+
+msgid "Duration in minutes"
+msgstr "Varaktighet i minuter"
+
+msgid "Go back to standard view"
+msgstr "Gå tillbaka till standardvy"
+
+msgid "Search for student..."
+msgstr "Sök efter student..."
+
+msgid "This date is locked or read-only."
+msgstr "Detta datum är låst eller skrivskyddat."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Kunde inte ladda närvaro. Försök igen senare."
+
+msgid "Nothing to save"
+msgstr "Inget att spara"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Du har osparade ändringar. Lämna ändå?"
+
+msgid "Storage usage unavailable"
+msgstr "Lagring användning otillgänglig"
+
+msgid "Search for members..."
+msgstr "Sök efter medlemmar..."
+
+msgid "Current members"
+msgstr "Nuvarande medlemmar"
+
+msgid "Add members"
+msgstr "Lägg till medlemmar"
+
+msgid "Search for users in course/session..."
+msgstr "Sök efter användare i kurs/session..."
+
+msgid "No users available."
+msgstr "Inga användare tillgängliga."
+
+msgid "Browse and publish new posts"
+msgstr "Bläddra och publicera nya inlägg"
+
+msgid "Create and assign tasks"
+msgstr "Skapa och tilldela uppgifter"
+
+msgid "Filtered by %s"
+msgstr "Filtrerat efter %s"
+
+msgid "Select a score"
+msgstr "Välj ett betyg"
+
+msgid "Edit comment"
+msgstr "Redigera kommentar"
+
+msgid "Failed to update the post."
+msgstr "Kunde inte uppdatera inlägget."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Ta bort detta inlägg? Denna åtgärd kan inte ångras."
+
+msgid "Failed to delete the post."
+msgstr "Kunde inte ta bort inlägget."
+
+msgid "Failed to update the comment."
+msgstr "Kunde inte uppdatera kommentaren."
+
+msgid "Delete this comment?"
+msgstr "Ta bort denna kommentar?"
+
+msgid "Failed to delete the comment."
+msgstr "Kunde inte ta bort kommentaren."
+
+msgid "Search for projects..."
+msgstr "Sök efter projekt..."
+
+msgid "Only visible"
+msgstr "Endast synlig"
+
+msgid "Rename project"
+msgstr "Byt namn på projekt"
+
+msgid "New title"
+msgstr "Ny titel"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Du måste vara admin eller lärare för att hantera projekt."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Ta bort detta projekt? Denna åtgärd kan inte ångras."
+
+msgid "Task list"
+msgstr "Uppgiftslista"
+
+msgid "Change status"
+msgstr "Ändra status"
+
+msgid "Waiting for validation"
+msgstr "Väntar på validering"
+
+msgid "Delete this task?"
+msgstr "Ta bort denna uppgift?"
+
+msgid "Failed to delete the task."
+msgstr "Kunde inte ta bort uppgiften."
+
+msgid "Failed to update status."
+msgstr "Kunde inte uppdatera status."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Är du säker på att du vill ta bort denna tredjepart? Denna åtgärd kan inte ångras."
+
+msgid "Please fix the errors before saving."
+msgstr "Åtgärda felen innan du sparar."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Fel vid skapande av tredjepart. Kontrollera datan."
+
+msgid "Error deleting third party."
+msgstr "Fel vid borttagning av tredjepart."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Ladda upp valfria sidhuvud- och e-postlogotyper. SVG föredras; PNG används som reserv."
+
+msgid "Data exchange updated successfully."
+msgstr "Datautbyte uppdaterat framgångsrikt."
+
+msgid "Error deleting data exchange."
+msgstr "Fel vid borttagning av datautbyte."
+
+msgid "Failed to recycle course."
+msgstr "Kunde inte återvinna kursen."
+
+msgid "Select source course"
+msgstr "Välj källkurs"
+
+msgid "Course to copy from"
+msgstr "Kurs att kopiera från"
+
+msgid "Search by code or title..."
+msgstr "Sök efter kod eller titel..."
+
+msgid "No courses match your search."
+msgstr "Inga kurser matchar din sökning."
+
+msgid "Copy options"
+msgstr "Kopiera alternativ"
+
+msgid "Include users (enrollments)"
+msgstr "Inkludera användare (inskrivningar)"
+
+msgid "Reset dates"
+msgstr "Återställ datum"
+
+msgid "When a file with the same name exists"
+msgstr "När en fil med samma namn finns"
+
+msgid "Ready to copy"
+msgstr "Redo att kopiera"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Vi kommer att kopiera innehåll från den valda kursen till denna kurs. Du kan gå tillbaka för att ändra alternativen."
+
+msgid "Start copying"
+msgstr "Starta kopiering"
+
+msgid "Select resources to copy"
+msgstr "Välj resurser att kopiera"
+
+msgid "Copy selected"
+msgstr "Kopiera valda"
+
+msgid "Copy completed."
+msgstr "Kopiering slutförd."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Farozon: att radera en kurs är permanent."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Skriv in kurskoden för att bekräfta. All data kommer att raderas permanent."
+
+msgid "The code must match '%s' exactly."
+msgstr "Koden måste matcha '%s' exakt."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Radera även dokument som endast används i denna kurs (om några)."
+
+msgid "Delete course"
+msgstr "Radera kurs"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Denna åtgärd kan inte ångras. Fortsätta?"
+
+msgid "Course deleted successfully."
+msgstr "Kurs raderad framgångsrikt."
+
+msgid "Failed to delete course."
+msgstr "Misslyckades med att radera kurs."
+
+msgid "Create .mbz"
+msgstr "Skapa .mbz"
+
+msgid "Backup scope"
+msgstr "Säkerhetskopieringsomfång"
+
+msgid "Full course"
+msgstr "Hela kursen"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Valda objekt kommer att vara de enda som inkluderas i exportfilen."
+
+msgid "Moodle export"
+msgstr "Moodle-export"
+
+msgid "Moodle version"
+msgstr "Moodle-version"
+
+msgid "Admin ID"
+msgstr "Admin-ID"
+
+msgid "Internal integer user id"
+msgstr "Intern heltalsanvändar-ID"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle kräver ett internt användar-ID lagrat i XML. Om osäker, använd 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Användarnamn som ska visas som ägare av importerade objekt"
+
+msgid "Email to use in the archive metadata"
+msgstr "E-post att använda i arkivets metadata"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "En .mbz-fil kommer att genereras. Du kan ladda ner den när den är klar."
+
+msgid "Select resources to include"
+msgstr "Välj resurser att inkludera"
+
+msgid "Export completed"
+msgstr "Export slutförd"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Din Moodle-säkerhetskopia har skapats. Du hittar den i listan över kurs-säkerhetskopior."
+
+msgid "Please complete all required fields."
+msgstr "Vänligen fyll i alla obligatoriska fält."
+
+msgid "Failed to create Moodle backup."
+msgstr "Misslyckades med att skapa Moodle-säkerhetskopia."
+
+msgid "More actions"
+msgstr "Fler åtgärder"
 

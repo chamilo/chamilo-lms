@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala iBody Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala iBody Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -31820,4 +31820,319 @@ msgstr "Oku kuya kucima zonke iifayile zokufaka okwethutyana. Qhubeka?"
 
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Oku kuya kucima iifayile ezindala kune-%minutes% imizuzu. Qhubeka?"
+
+msgid "The value must match exactly: %s"
+msgstr "Ixabiso kufuneka lihambelane ngqo: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Umhla wokuphindaphinda ekugqibeleni kufuneka ube emva komhla wokuqala."
+
+msgid "Index document content?"
+msgstr "Index document content?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Layisha ilogo ye-SVG kwintloko yeqonga"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Layisha ilogo ye-PNG kwintloko yeqonga (%s)"
+
+msgid "Write something to %s"
+msgstr "Bhala into ku %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Okukhethekileyo: SVG. Ububanzi be-PNG obucetywayo: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Faka ilogo yePNG kwi-imeyile (~%spx ububanzi)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "IHeader yePNG ifanele ibe ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Funa iformati efikelelekayo yefayile"
+
+msgid "Select allowed file formats"
+msgstr "Khetha iifomati zefayile ezivunyelweyo"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Izinambelelo ezizodwa (zahlulwe ngesithuba)"
+
+msgid "Other extensions"
+msgstr "Ezinye izinambelelo"
+
+msgid "My invitations"
+msgstr "Izimemo zam"
+
+msgid "Delete access"
+msgstr "Cima ukufikelela"
+
+msgid "Certificate tags"
+msgstr "Iitheyigi zesatifikethi"
+
+msgid "Copy all"
+msgstr "Kopisha zonke"
+
+msgid "Click to insert"
+msgstr "Cofa ukuze ufake"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Okhethiweyo: SVG. Ubungakanani obuphezulu bePNG: %spx."
+
+msgid "View badge"
+msgstr "Jonga ibheji"
+
+msgid "%d min"
+msgstr "%d min"
+
+msgid "Duration in minutes"
+msgstr "Uxhobo lwemizuzu"
+
+msgid "Go back to standard view"
+msgstr "Buyela kumgangatho oqhelekileyo"
+
+msgid "Search for student..."
+msgstr "Gqiba umfundi..."
+
+msgid "This date is locked or read-only."
+msgstr "Umhla okuvaliweyo okanye ofundwayo kuphela."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Asiphumelelanga ukulayisha ukubhala ezitratweni. Nceda uzame kwakhona kamva."
+
+msgid "Nothing to save"
+msgstr "Akukho nto yokugcina"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Unemifuto engagcinwanga. Uyavumela ukuhamba?"
+
+msgid "Storage usage unavailable"
+msgstr "Ukusetyenziswa kwendawo yokugcina akufumaneki"
+
+msgid "Search for members..."
+msgstr "Gqiba amalungu..."
+
+msgid "Current members"
+msgstr "Amalungu akhona"
+
+msgid "Add members"
+msgstr "Faka amalungu"
+
+msgid "Search for users in course/session..."
+msgstr "Gqiba abasebenzisi kwizifundo/iiseshini..."
+
+msgid "No users available."
+msgstr "Akukho basebenzisi abakhoyo."
+
+msgid "Browse and publish new posts"
+msgstr "Qwalasela kwaye ushicilele iiposti ezintsha"
+
+msgid "Create and assign tasks"
+msgstr "Yila kwaye yabela imisebenzi"
+
+msgid "Filtered by %s"
+msgstr "Ihlanganiswe ngu %s"
+
+msgid "Select a score"
+msgstr "Khetha amanqaku"
+
+msgid "Edit comment"
+msgstr "Hlela igqabantaba"
+
+msgid "Failed to update the post."
+msgstr "Asiphumelelanga ukuhlaziya iposti."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Cima le post? Esi sixeko asinakubuyiselwa."
+
+msgid "Failed to delete the post."
+msgstr "Asiphumelelanga ukucima iposti."
+
+msgid "Failed to update the comment."
+msgstr "Asiphumelelanga ukuhlaziya igqabantaba."
+
+msgid "Delete this comment?"
+msgstr "Cima le igqabantaba?"
+
+msgid "Failed to delete the comment."
+msgstr "Asiphumelelanga ukucima igqabantaba."
+
+msgid "Search for projects..."
+msgstr "Gqiba iiprojekthi..."
+
+msgid "Only visible"
+msgstr "Ibonakala kuphela"
+
+msgid "Rename project"
+msgstr "Thiya igama le projekthi"
+
+msgid "New title"
+msgstr "Isihloko esitsha"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Kufuneka ube ngumlawuli okanye utitshala ukuze ulawule iiprojekthi."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Cima le projekthi? Esi sixeko asinakubuyiselwa."
+
+msgid "Task list"
+msgstr "Uluhlu lwemisebenzi"
+
+msgid "Change status"
+msgstr "Tshintsha imeko"
+
+msgid "Waiting for validation"
+msgstr "Ilinde ukuqinisekiswa"
+
+msgid "Delete this task?"
+msgstr "Cima lo msebenzi?"
+
+msgid "Failed to delete the task."
+msgstr "Asiphumelelanga ukucima umsebenzi."
+
+msgid "Failed to update status."
+msgstr "Asiphumelelanga ukuhlaziya imeko."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Uqinisekile ukuba ufuna ukucima lo mntu wesithathu? Esi sixeko asinakubuyiselwa."
+
+msgid "Please fix the errors before saving."
+msgstr "Nceda ilungise iimpazamo phambi kokugcina."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Impazamo yokudala umntu wesithathu. Nceda uqinisekise idatha."
+
+msgid "Error deleting third party."
+msgstr "Impazamo yokucima umntu wesithathu."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Layisha i-logo yentloko neyemeyile engunyulwanga. I-SVG ikhethiweyo; i-PNG isetyenziswa njengokubuyela umva."
+
+msgid "Data exchange updated successfully."
+msgstr "Utshintsho lwentlele yokutshintshiselana ngedatha luyiphumelele."
+
+msgid "Error deleting data exchange."
+msgstr "Impazamo yokucima utshintsho lwentlele yokutshintshiselana ngedatha."
+
+msgid "Failed to recycle course."
+msgstr "Asiphumelelanga ukuphinda kusetyenziswe izifundo."
+
+msgid "Select source course"
+msgstr "Khetha izifundo zomthombo"
+
+msgid "Course to copy from"
+msgstr "Izifundo ezikopishwa kuzo"
+
+msgid "Search by code or title..."
+msgstr "Gqiba ngokwekhowudi okanye isihloko..."
+
+msgid "No courses match your search."
+msgstr "Akukho zikolo zifanelayo ukholo lwakho."
+
+msgid "Copy options"
+msgstr "Kopisha iinketho"
+
+msgid "Include users (enrollments)"
+msgstr "Qulatha abasebenzisi (ubhaliso)"
+
+msgid "Reset dates"
+msgstr "Susa imihla"
+
+msgid "When a file with the same name exists"
+msgstr "Xa ifayile enegama elifanayo likhona"
+
+msgid "Ready to copy"
+msgstr "Ulungile ukukopisha"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Siza kukopisha umqukumbelo ukusuka kwizikolo ezikhethiweyo kule khosi. Ungabuyela umva ukutshintsha iinketho."
+
+msgid "Start copying"
+msgstr "Qala ukukopisha"
+
+msgid "Select resources to copy"
+msgstr "Khetha izixhobo ezokukopishwa"
+
+msgid "Copy selected"
+msgstr "Kopisha ezikhethiweyo"
+
+msgid "Copy completed."
+msgstr "Ukukopisha kugqityiwe."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Indawo eyingozi: ukucima ikhosi akunakubuyiselwa."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Chwetheza ikhowudi yekhosi ukuqinisekisa. Yonke idatha iya kususwa ngokusisigxina."
+
+msgid "The code must match '%s' exactly."
+msgstr "Ikhowudi kufuneka ifane '%s' ngokuchanekileyo."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Cima namaxwebhu asetyenziswa kuphela kule khosi (ukuba akhona)."
+
+msgid "Delete course"
+msgstr "Cima ikhosi"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Esi senzo asinakubuyiselwa. Qhubeka?"
+
+msgid "Course deleted successfully."
+msgstr "Ikhosi icinyiwe ngempumelelo."
+
+msgid "Failed to delete course."
+msgstr "Akuphumelelanga ukucima ikhosi."
+
+msgid "Create .mbz"
+msgstr "Yenza .mbz"
+
+msgid "Backup scope"
+msgstr "Umbambo wokugcina"
+
+msgid "Full course"
+msgstr "Ikhosi epheleleyo"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Izinto ezikhethiweyo ziya kuba ezodwa ezifakwe kwifayile ephuma."
+
+msgid "Moodle export"
+msgstr "Thumela iMoodle"
+
+msgid "Moodle version"
+msgstr "Inguqulelo yeMoodle"
+
+msgid "Admin ID"
+msgstr "ID yoMlawuli"
+
+msgid "Internal integer user id"
+msgstr "ID yomsebenzisi yenombolo yangaphakathi"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "IMoodle ifuna ID yomsebenzisi yangaphakathi egciniweyo kwiXML. Ukuba uyathandabuza, sebenzisa 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Igama lomsebenzisi eliya kuvela njengomnini wezinto ezingenisiweyo"
+
+msgid "Email to use in the archive metadata"
+msgstr "I-imeyile esetyenziswa kwidatha yeakhayiv"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "Ifayile .mbz iya kuveliswa. Uya kukwazi ukuyikhuphela xa igqityiwe."
+
+msgid "Select resources to include"
+msgstr "Khetha izixhobo ezokufakwa"
+
+msgid "Export completed"
+msgstr "Ukuthumela kugqityiwe"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Igcinammo lakho leMoodle lenziwe. Ungalifumana kuluhlu lwezigcinammo zekhosi."
+
+msgid "Please complete all required fields."
+msgstr "Nceda ugcwalise zonke iindawo ezifunwayo."
+
+msgid "Failed to create Moodle backup."
+msgstr "Akuphumelelanga ukwenza igcinammo leMoodle."
+
+msgid "More actions"
+msgstr "Ezinye izenzo"
 

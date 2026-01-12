@@ -31821,3 +31821,318 @@ msgstr "دا به ټول عارضي فایلونه پاک کړي. دوام ور�
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "دا به له %minutes% دقيقو څخه زاړه فایلونه پاک کړي. دوام ورکړئ؟"
 
+msgid "The value must match exactly: %s"
+msgstr "ارزښت باید په بشپړه توګه ورته وي: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "د تکرار پایکټه نیټه باید د پیل نیټې وروسته وي."
+
+msgid "Index document content?"
+msgstr "د اسنادو محتوا انډېکس کول؟"
+
+msgid "Upload SVG logo to platform header"
+msgstr "SVG لوګو د پلیټفارم سرلیک ته اپلوډ کړئ"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "PNG لوګو د پلیټفارم سرلیک ته اپلوډ کړئ (%s)"
+
+msgid "Write something to %s"
+msgstr "څه لیکلي %s ته"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "غوره: SVG. د PNG وړاندیز شوی عرض: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "PNG لوګو د بریښنالیکو لپاره اپلوډ کړئ (~%spx عرض)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "د سرلیک PNG باید ≤ %spx وي."
+
+msgid "Require specific file format"
+msgstr "د ځانګړي فایل فورمټ غوښتنه"
+
+msgid "Select allowed file formats"
+msgstr "اجازې شوي فایل فورمټونه غوره کړئ"
+
+msgid "Custom extensions (separated by space)"
+msgstr "د ځانګړو توسیعونو (د فضا لخوا جلا شوي)"
+
+msgid "Other extensions"
+msgstr " نور توسیعونه"
+
+msgid "My invitations"
+msgstr "زما دعوتونه"
+
+msgid "Delete access"
+msgstr "د لاسرسي له منځه وړل"
+
+msgid "Certificate tags"
+msgstr "د سرٹیفکیټ ټګونه"
+
+msgid "Copy all"
+msgstr "ټول کاپي کړئ"
+
+msgid "Click to insert"
+msgstr "د داخل کولو لپاره کلیک وکړئ"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "غوره: SVG. PNG اعظمي اندازې: %spx."
+
+msgid "View badge"
+msgstr "د نښې لیدل"
+
+msgid "%d min"
+msgstr "%d دقیقې"
+
+msgid "Duration in minutes"
+msgstr "د دقیقو وخت"
+
+msgid "Go back to standard view"
+msgstr "د معیاري لیدو ته بیرته ورګرځېدل"
+
+msgid "Search for student..."
+msgstr "د زده‌کوچۍ لټون..."
+
+msgid "This date is locked or read-only."
+msgstr "دا نیټه قفل شوې یا یوازې د لوستلو وي."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "حاضری ډاونلوډ کېدل پاتې راغلل. مهرباني وکړئ وروسته بیا هڅه وکړئ."
+
+msgid "Nothing to save"
+msgstr "هېڅ شی د خوندي کولو لپاره نشته"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "تاسو ناکړې بدلونونه لرئ. بیا هم پرېږدئ؟"
+
+msgid "Storage usage unavailable"
+msgstr "د ذخیره کولو استعمال شوی نشي"
+
+msgid "Search for members..."
+msgstr "د غړو لټون..."
+
+msgid "Current members"
+msgstr "اوسني غړي"
+
+msgid "Add members"
+msgstr "غړي ورگډول"
+
+msgid "Search for users in course/session..."
+msgstr "د درس/سمينار کې د کاروونکو لټون..."
+
+msgid "No users available."
+msgstr "هېڅ کاروونکي شتون نلري."
+
+msgid "Browse and publish new posts"
+msgstr "نوي پوسټونه کتنه او خپرول"
+
+msgid "Create and assign tasks"
+msgstr "دندې جوړول او ټاکل"
+
+msgid "Filtered by %s"
+msgstr "د %s له مخې فلټر شوی"
+
+msgid "Select a score"
+msgstr "یو نمره غوره کړئ"
+
+msgid "Edit comment"
+msgstr "تبصره سمول"
+
+msgid "Failed to update the post."
+msgstr "د پوسټ تازه کول پاتې راغلل."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "دا پوسټ حذف کړئ؟ دا عمل نشي بیا کولای."
+
+msgid "Failed to delete the post."
+msgstr "د پوسټ حذف کول پاتې راغلل."
+
+msgid "Failed to update the comment."
+msgstr "د تبصرې تازه کول پاتې راغلل."
+
+msgid "Delete this comment?"
+msgstr "دا تبصره حذف کړئ؟"
+
+msgid "Failed to delete the comment."
+msgstr "د تبصرې حذف کول پاتې راغلل."
+
+msgid "Search for projects..."
+msgstr "د پروژو لټون..."
+
+msgid "Only visible"
+msgstr "یوزې ښکاره"
+
+msgid "Rename project"
+msgstr "د پروژې نوم بدلول"
+
+msgid "New title"
+msgstr "نوی سرلیک"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "تاسو باید ادمین یا ښوونکي وي ترڅو پروژې اداره کړئ."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "دا پروژه حذف کړئ؟ دا عمل نشي بیا کولای."
+
+msgid "Task list"
+msgstr "د دندو لړ"
+
+msgid "Change status"
+msgstr "د حالت بدلول"
+
+msgid "Waiting for validation"
+msgstr "د تصدیق په تمه"
+
+msgid "Delete this task?"
+msgstr "دا دنده حذف کړئ؟"
+
+msgid "Failed to delete the task."
+msgstr "د دندې حذف پېښه ناکامه شوه."
+
+msgid "Failed to update status."
+msgstr "د حالت تازه کول پېښه ناکامه شوه."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "آیا تاسو ډاډه یاست چې دا دریمه غونډه حذف کړئ؟ دا عمل نشي بیا کیدی."
+
+msgid "Please fix the errors before saving."
+msgstr "مهرباني وکړئ تر ګڼاستونکي مخکې غلطۍ سمې کړئ."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "د دریمې غونډې جوړول پېښه ناکامه شوه. مهرباني وکړئ معلوماتو تایید وکړئ."
+
+msgid "Error deleting third party."
+msgstr "د دریمې غونډې حذف پېښه ناکامه شوه."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "اختیارۍ سرلیک او برېښنالیک لوګو اپلوډ کړئ. SVG ترجیحی دی؛ PNG د ړنګتیا په توګه کارول کېږي."
+
+msgid "Data exchange updated successfully."
+msgstr "د معلوماتو تبادليه بريالي ډول تازه شوه."
+
+msgid "Error deleting data exchange."
+msgstr "د معلوماتو تبادليه حذف پېښه ناکامه شوه."
+
+msgid "Failed to recycle course."
+msgstr "د کورس بیا کارول پېښه ناکامه شوه."
+
+msgid "Select source course"
+msgstr "سرچينې کورس غوره کړئ"
+
+msgid "Course to copy from"
+msgstr "د کاپي کولو لپاره کورس"
+
+msgid "Search by code or title..."
+msgstr "د کوډ یا سرلیک له مخې لټون..."
+
+msgid "No courses match your search."
+msgstr "هیڅ کورس ستاسو لټون سره مطابقت نلري."
+
+msgid "Copy options"
+msgstr "د کاپي اختیارونه"
+
+msgid "Include users (enrollments)"
+msgstr "کاروونکي شامل کړئ (د ګډون)"
+
+msgid "Reset dates"
+msgstr "نېټې بېرته تنظیم کړئ"
+
+msgid "When a file with the same name exists"
+msgstr "کله چې همنومۍ فایل شتون لري"
+
+msgid "Ready to copy"
+msgstr "د کاپي کولو لپاره چمتو"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "موږ به د غوره شوي کورس څخه محتويات دا کورس ته کاپي کړو. تاسو کولی شئ بیرته ورشئ ترڅو اختیارونه بدل کړئ."
+
+msgid "Start copying"
+msgstr "د کاپي پیل"
+
+msgid "Select resources to copy"
+msgstr "د کاپي کولو لپاره سرچینې غوره کړئ"
+
+msgid "Copy selected"
+msgstr "غوره شوي کاپي کړئ"
+
+msgid "Copy completed."
+msgstr "کاپي بشپړه شوه."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr " خطرناکه سیمه: د کورس حذف دایمي دی."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "د تایید لپاره د کورس کوډ ولیکئ. ټولې معلومات به دایمي ډول له منځه لاړې شي."
+
+msgid "The code must match '%s' exactly."
+msgstr "کوډ باید په دقیق ډول د '%s' سره مطابقت ولري."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "همدارنګه هغه اسناد حذف کړئ چې یوازې په دې کورس کې کارول کېږي (که شتون ولري)."
+
+msgid "Delete course"
+msgstr "کورس حذف کړئ"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "دا عمل نشي بېرته کېدای. دوام ورکړئ؟"
+
+msgid "Course deleted successfully."
+msgstr "کورس بريالي ډول حذف شو."
+
+msgid "Failed to delete course."
+msgstr "د کورس حذف پېښه ناکامه شوه."
+
+msgid "Create .mbz"
+msgstr ".mbz جوړ کړئ"
+
+msgid "Backup scope"
+msgstr "د ګرځنده کولو حدود"
+
+msgid "Full course"
+msgstr "ټول کورس"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "غوره شوي توکي به یوازې په صادر شوي فایل کې شامل شي."
+
+msgid "Moodle export"
+msgstr "Moodle صادرول"
+
+msgid "Moodle version"
+msgstr "Moodle نسخې"
+
+msgid "Admin ID"
+msgstr "د اډمين آي دي"
+
+msgid "Internal integer user id"
+msgstr "د کاروونکي داخلي عددي آي دي"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle د XML کې داخلي کاروونکي آي دي ته اړتیا لري. که شک کې وي، 1 وکاروئ."
+
+msgid "Username to appear as owner of imported items"
+msgstr "د وارد شوي توکو مالک په توګه ښکاره کېدونکي کاروون نوم"
+
+msgid "Email to use in the archive metadata"
+msgstr "د آرشيف ميټاډيټا کې د استعمال برېښنالیک"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr ".mbz فایل به جوړ شي. تاسو به یې د بشپړېدو وروسته ډاونلوډ کیدی شي."
+
+msgid "Select resources to include"
+msgstr "د شاملولو لپاره سرچینې غوره کړئ"
+
+msgid "Export completed"
+msgstr "صادرول بشپړه شول"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "ستاسو د مودل بېک اپ جوړ شوی دی. تاسو کولای شئ چې دا په درس بېک اپ لیست کې ومومئ."
+
+msgid "Please complete all required fields."
+msgstr "مه مهرباني وکړئ ټول اړین ډکې ډکې کړئ."
+
+msgid "Failed to create Moodle backup."
+msgstr "د مودل بېک اپ جوړول پاتې راغلل."
+
+msgid "More actions"
+msgstr "نور فعالیتونه"
+

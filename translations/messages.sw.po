@@ -31821,3 +31821,318 @@ msgstr "Hii itafuta faili zote za muda. Endelea?"
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Hii itafuta faili zinazochukua zaidi ya dakika %minutes%. Endelea?"
 
+msgid "The value must match exactly: %s"
+msgstr "Thamani lazima iwe sawa kabisa: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Tarehe ya mwisho ya kurudia lazima iwe baada ya tarehe ya mwanzo."
+
+msgid "Index document content?"
+msgstr "Je, fanyi yaliyomo ya hati ya indeksia?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Pakia logo ya SVG kwenye kichwa cha jukwaa"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Pakia logo ya PNG kwenye kichwa cha jukwaa (%s)"
+
+msgid "Write something to %s"
+msgstr "Andika kitu kwa %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Inapendekezwa: SVG. Upana unaopendekezwa wa PNG: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Pakia nembo PNG kwa barua pepe (~%spx upana)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "Kichwa PNG kinapaswa kuwa ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Hitaji muundo maalum wa faili"
+
+msgid "Select allowed file formats"
+msgstr "Chagua miundo inayoruhusiwa ya faili"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Viendelezaji vya kibinafsi (vimegawanywa kwa nafasi)"
+
+msgid "Other extensions"
+msgstr "Viendelezaji vingine"
+
+msgid "My invitations"
+msgstr "Mialiko yangu"
+
+msgid "Delete access"
+msgstr "Futa upatikanaji"
+
+msgid "Certificate tags"
+msgstr "Lebo za cheti"
+
+msgid "Copy all"
+msgstr "Nakili yote"
+
+msgid "Click to insert"
+msgstr "Bonyeza kuingiza"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Inapendekezwa: SVG. PNG saizi kubwa zaidi: %spx."
+
+msgid "View badge"
+msgstr "Tazama badge"
+
+msgid "%d min"
+msgstr "%d dakika"
+
+msgid "Duration in minutes"
+msgstr "Muda kwa dakika"
+
+msgid "Go back to standard view"
+msgstr "Rudi kwenye mwonekano wa kawaida"
+
+msgid "Search for student..."
+msgstr "Tafuta mwanafunzi..."
+
+msgid "This date is locked or read-only."
+msgstr "Tarehe hii imefungwa au inasomwa pekee."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Imeshindwa kupakia mahudhurio. Tafadhali jaribu tena baadaye."
+
+msgid "Nothing to save"
+msgstr "Hakuna kilichohifadhiwa"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Una mabadiliko ambayo hayajahifadhiwa. Ondoka hata hivyo?"
+
+msgid "Storage usage unavailable"
+msgstr "Matumizi ya uhifadhi hayapatikani"
+
+msgid "Search for members..."
+msgstr "Tafuta wanachama..."
+
+msgid "Current members"
+msgstr "Wanachama wa sasa"
+
+msgid "Add members"
+msgstr "Ongeza wanachama"
+
+msgid "Search for users in course/session..."
+msgstr "Tafuta watumiaji katika kozi/kipindi..."
+
+msgid "No users available."
+msgstr "Hakuna watumiaji yanayopatikana."
+
+msgid "Browse and publish new posts"
+msgstr "Vinjari na chapisha machapisho mapya"
+
+msgid "Create and assign tasks"
+msgstr "Unda na ugawanye kazi"
+
+msgid "Filtered by %s"
+msgstr "Imechunguzwa kwa %s"
+
+msgid "Select a score"
+msgstr "Chagua alama"
+
+msgid "Edit comment"
+msgstr "Hariri maoni"
+
+msgid "Failed to update the post."
+msgstr "Imeshindwa kusasisha chapisho."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Futa chapisho hili? Kitendo hiki hakiwezi kurekebishwa."
+
+msgid "Failed to delete the post."
+msgstr "Imeshindwa kufuta chapisho."
+
+msgid "Failed to update the comment."
+msgstr "Imeshindwa kusasisha maoni."
+
+msgid "Delete this comment?"
+msgstr "Futa maoni haya?"
+
+msgid "Failed to delete the comment."
+msgstr "Imeshindwa kufuta maoni."
+
+msgid "Search for projects..."
+msgstr "Tafuta miradi..."
+
+msgid "Only visible"
+msgstr "Inayoonekana pekee"
+
+msgid "Rename project"
+msgstr "Badilisha jina la mradi"
+
+msgid "New title"
+msgstr "Kichwa kipya"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Unahitaji kuwa msimamizi au mwalimu ili kusimamia miradi."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Futa mradi huu? Kitendo hiki hakiwezi kurekebishwa."
+
+msgid "Task list"
+msgstr "Orodha ya kazi"
+
+msgid "Change status"
+msgstr "Badilisha hali"
+
+msgid "Waiting for validation"
+msgstr "Inasubiri uthibitisho"
+
+msgid "Delete this task?"
+msgstr "Futa kazi hii?"
+
+msgid "Failed to delete the task."
+msgstr "Imeshindwa kufuta kazi."
+
+msgid "Failed to update status."
+msgstr "Imeshindwa kusasisha hali."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Je, una uhakika unataka kufuta nchi ya tatu hii? Kitendo hiki hakiwezi kurekebishwa."
+
+msgid "Please fix the errors before saving."
+msgstr "Tafadhali rekebisha makosa kabla ya kuhifadhi."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Kosa la kuunda nchi ya tatu. Tafadhali angalia data."
+
+msgid "Error deleting third party."
+msgstr "Kosa la kufuta nchi ya tatu."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Pakia logo za kichwa na barua pepe za hiari. SVG inapendekezwa; PNG inatumika kama mbadala."
+
+msgid "Data exchange updated successfully."
+msgstr "Badilishano la data limesasishwa kwa mafanikio."
+
+msgid "Error deleting data exchange."
+msgstr "Kosa la kufuta badilishano la data."
+
+msgid "Failed to recycle course."
+msgstr "Imeshindwa kusafisha kozi tena."
+
+msgid "Select source course"
+msgstr "Chagua kozi chanzo"
+
+msgid "Course to copy from"
+msgstr "Kozi ya kunakili kutoka"
+
+msgid "Search by code or title..."
+msgstr "Tafuta kwa msimbo au kichwa..."
+
+msgid "No courses match your search."
+msgstr "Hakuna kozi inayolingana na utafutaji wako."
+
+msgid "Copy options"
+msgstr "Chaguzi za kunakili"
+
+msgid "Include users (enrollments)"
+msgstr "Jumuisha watumiaji (usajili)"
+
+msgid "Reset dates"
+msgstr "Weka upya tarehe"
+
+msgid "When a file with the same name exists"
+msgstr "Wakati faili yenye jina sawa ipo"
+
+msgid "Ready to copy"
+msgstr "Iko tayari kunakili"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Tutakili maudhui kutoka kozi iliyochaguliwa kwenye kozi hii. Unaweza kurudi nyuma kubadilisha chaguzi."
+
+msgid "Start copying"
+msgstr "Anza kunakili"
+
+msgid "Select resources to copy"
+msgstr "Chagua rasilimali za kunakili"
+
+msgid "Copy selected"
+msgstr "Nakili iliyochaguliwa"
+
+msgid "Copy completed."
+msgstr "Nakili imekamilika."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Kanda hatari: kufuta kozi ni ya kudumu."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Andika msimbo wa kozi ili uthibitishe. Data yote itaondolewa kabisa."
+
+msgid "The code must match '%s' exactly."
+msgstr "Msimbo lazima uwe sawa na '%s' kabisa."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Futa pia hati zinazotumiwa tu katika kozi hii (ikiwa zipo)."
+
+msgid "Delete course"
+msgstr "Futa kozi"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Kitendo hiki hakiwezi kurejeshwa. Endelea?"
+
+msgid "Course deleted successfully."
+msgstr "Kozi imefutwa kwa mafanikio."
+
+msgid "Failed to delete course."
+msgstr "Imeshindwa kufuta kozi."
+
+msgid "Create .mbz"
+msgstr "Unda .mbz"
+
+msgid "Backup scope"
+msgstr "Wigo wa nakili"
+
+msgid "Full course"
+msgstr "Kozi kamili"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Vipengele vilivyochaguliwa vitakuwa pekee vilivyo katika faili iliyosafirishwa."
+
+msgid "Moodle export"
+msgstr "Usafirishaji wa Moodle"
+
+msgid "Moodle version"
+msgstr "Toleo la Moodle"
+
+msgid "Admin ID"
+msgstr "Kitambulisho cha msimamizi"
+
+msgid "Internal integer user id"
+msgstr "Kitambulisho cha ndani cha mtumiaji cha nambari nzuri"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle inahitaji kitambulisho cha ndani cha mtumiaji kilichohifadhiwa katika XML. Ikiwa una shaka, tumia 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Jina la mtumiaji la kuonekana kama mmiliki wa vipengele vilivyoingizwa"
+
+msgid "Email to use in the archive metadata"
+msgstr "Barua pepe ya kutumia katika metadata ya kumbukumbu"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "Faili .mbz itatengenezwa. Utaweza kuipakua mara tu ikikamilika."
+
+msgid "Select resources to include"
+msgstr "Chagua rasilimali za kujumuisha"
+
+msgid "Export completed"
+msgstr "Usafirishaji umekamilika"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Nakili yako ya Moodle imeundwa. Unaweza kuipata katika orodha ya nakili za kozi."
+
+msgid "Please complete all required fields."
+msgstr "Tafadhali jaza sehemu zote zinazohitajika."
+
+msgid "Failed to create Moodle backup."
+msgstr "Imeshindwa kuunda nakili ya Moodle."
+
+msgid "More actions"
+msgstr "Vitendo zaidi"
+

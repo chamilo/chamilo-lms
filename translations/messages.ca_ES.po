@@ -31840,3 +31840,318 @@ msgstr "Això eliminarà tots els fitxers temporals. Continuar?"
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Això eliminarà els fitxers antics de %minutes% minuts. Continuar?"
 
+msgid "The value must match exactly: %s"
+msgstr "El valor ha de coincidir exactament: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "La data de finalització recurrent ha de ser posterior a la data d'inici."
+
+msgid "Index document content?"
+msgstr "Indexar el contingut del document?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Puja logotip SVG a l'anticapçalera de la plataforma"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Puja logotip PNG a l'anticapçalera de la plataforma (%s)"
+
+msgid "Write something to %s"
+msgstr "Escriu alguna cosa a %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Preferit: SVG. Amplada PNG recomanada: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Puja logotip PNG per a correus electrònics (~%spx amplada)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "PNG d'anticapçalera ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Requereix format de fitxer específic"
+
+msgid "Select allowed file formats"
+msgstr "Selecciona formats de fitxer permesos"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Extensions personalitzades (separades per espai)"
+
+msgid "Other extensions"
+msgstr "Altres extensions"
+
+msgid "My invitations"
+msgstr "Les meves invitacions"
+
+msgid "Delete access"
+msgstr "Esborra accés"
+
+msgid "Certificate tags"
+msgstr "Etiquetes del certificat"
+
+msgid "Copy all"
+msgstr "Copia-ho tot"
+
+msgid "Click to insert"
+msgstr "Feu clic per inserir"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Preferit: SVG. Mida màx. PNG: %spx."
+
+msgid "View badge"
+msgstr "Veure insígnia"
+
+msgid "%d min"
+msgstr "%d min"
+
+msgid "Duration in minutes"
+msgstr "Durada en minuts"
+
+msgid "Go back to standard view"
+msgstr "Tornar a la vista estàndard"
+
+msgid "Search for student..."
+msgstr "Cerca estudiant..."
+
+msgid "This date is locked or read-only."
+msgstr "Aquesta data està bloquejada o només lectura."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "No s'ha pogut carregar l'assistència. Torna-ho a provar més tard."
+
+msgid "Nothing to save"
+msgstr "No hi ha res per desar"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Teniu canvis sense desar. Voleu sortir igualment?"
+
+msgid "Storage usage unavailable"
+msgstr "Ús d'emmagatzematge no disponible"
+
+msgid "Search for members..."
+msgstr "Cerca membres..."
+
+msgid "Current members"
+msgstr "Membres actuals"
+
+msgid "Add members"
+msgstr "Afegir membres"
+
+msgid "Search for users in course/session..."
+msgstr "Cerca usuaris al curs/sessió..."
+
+msgid "No users available."
+msgstr "No hi ha usuaris disponibles."
+
+msgid "Browse and publish new posts"
+msgstr "Navega i publica entrades noves"
+
+msgid "Create and assign tasks"
+msgstr "Crea i assigna tasques"
+
+msgid "Filtered by %s"
+msgstr "Filtrat per %s"
+
+msgid "Select a score"
+msgstr "Selecciona una puntuació"
+
+msgid "Edit comment"
+msgstr "Editar comentari"
+
+msgid "Failed to update the post."
+msgstr "No s'ha pogut actualitzar l'entrada."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Esborrar aquesta entrada? Aquesta acció no es pot desfer."
+
+msgid "Failed to delete the post."
+msgstr "No s'ha pogut esborrar l'entrada."
+
+msgid "Failed to update the comment."
+msgstr "No s'ha pogut actualitzar el comentari."
+
+msgid "Delete this comment?"
+msgstr "Esborrar aquest comentari?"
+
+msgid "Failed to delete the comment."
+msgstr "No s'ha pogut esborrar el comentari."
+
+msgid "Search for projects..."
+msgstr "Cerca projectes..."
+
+msgid "Only visible"
+msgstr "Només visible"
+
+msgid "Rename project"
+msgstr "Canviar nom del projecte"
+
+msgid "New title"
+msgstr "Nou títol"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Heu de ser administrador o professor per gestionar projectes."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Esborrar aquest projecte? Aquesta acció no es pot desfer."
+
+msgid "Task list"
+msgstr "Llista de tasques"
+
+msgid "Change status"
+msgstr "Canviar estat"
+
+msgid "Waiting for validation"
+msgstr "Esperant validació"
+
+msgid "Delete this task?"
+msgstr "Esborrar aquesta tasca?"
+
+msgid "Failed to delete the task."
+msgstr "S'ha produït un error en esborrar la tasca."
+
+msgid "Failed to update status."
+msgstr "S'ha produït un error en actualitzar l'estat."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Segur que voleu esborrar aquest tercer? Aquesta acció no es pot desfer."
+
+msgid "Please fix the errors before saving."
+msgstr "Corregiu els errors abans de desar."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Error en crear el tercer. Verifiqueu les dades."
+
+msgid "Error deleting third party."
+msgstr "Error en esborrar el tercer."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Pujar logotips opcionals d'capçalera i correu electrònic. Es recomana SVG; PNG com a alternativa."
+
+msgid "Data exchange updated successfully."
+msgstr "Intercanvi de dades actualitzat correctament."
+
+msgid "Error deleting data exchange."
+msgstr "Error en esborrar l'intercanvi de dades."
+
+msgid "Failed to recycle course."
+msgstr "S'ha produït un error en reciclar el curs."
+
+msgid "Select source course"
+msgstr "Seleccionar curs d'origen"
+
+msgid "Course to copy from"
+msgstr "Curs del qual copiar"
+
+msgid "Search by code or title..."
+msgstr "Cerca per codi o títol..."
+
+msgid "No courses match your search."
+msgstr "No hi ha cursos que coincideixin amb la cerca."
+
+msgid "Copy options"
+msgstr "Opcions de còpia"
+
+msgid "Include users (enrollments)"
+msgstr "Incloure usuaris (matriculacions)"
+
+msgid "Reset dates"
+msgstr "Reiniciar dates"
+
+msgid "When a file with the same name exists"
+msgstr "Quan existeix un fitxer amb el mateix nom"
+
+msgid "Ready to copy"
+msgstr "Llist per copiar"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Copiem el contingut del curs seleccionat en aquest curs. Podeu tornar enrere per canviar opcions."
+
+msgid "Start copying"
+msgstr "Iniciar còpia"
+
+msgid "Select resources to copy"
+msgstr "Seleccionar recursos a copiar"
+
+msgid "Copy selected"
+msgstr "Copiar seleccionats"
+
+msgid "Copy completed."
+msgstr "Còpia completada."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Zona perillosa: esborrar un curs és permanent."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Escriviu el codi del curs per confirmar. Totes les dades s'eliminaran permanentment."
+
+msgid "The code must match '%s' exactly."
+msgstr "El codi ha de coincidir exactament amb '%s'."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "També esborrar documents que només s'utilitzen en aquest curs (si n'hi ha)."
+
+msgid "Delete course"
+msgstr "Esborrar curs"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Aquesta acció no es pot desfer. Continuar?"
+
+msgid "Course deleted successfully."
+msgstr "Curs esborrat correctament."
+
+msgid "Failed to delete course."
+msgstr "S'ha produït un error en esborrar el curs."
+
+msgid "Create .mbz"
+msgstr "Crear .mbz"
+
+msgid "Backup scope"
+msgstr "Àmbit de la còpia de seguretat"
+
+msgid "Full course"
+msgstr "Curs complet"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Els elements seleccionats seran els únics inclosos al fitxer exportat."
+
+msgid "Moodle export"
+msgstr "Exportació Moodle"
+
+msgid "Moodle version"
+msgstr "Versió de Moodle"
+
+msgid "Admin ID"
+msgstr "ID d'administrador"
+
+msgid "Internal integer user id"
+msgstr "ID intern d'usuari enter"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle requereix un ID intern d'usuari emmagatzemat en XML. Si teniu dubtes, utilitzeu 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Nom d'usuari que apareixerà com a propietari dels elements importats"
+
+msgid "Email to use in the archive metadata"
+msgstr "Correu electrònic a utilitzar en les metadades de l'arxiu"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "Es generarà un fitxer .mbz. Podreu descarregar-lo un cop finalitzat."
+
+msgid "Select resources to include"
+msgstr "Seleccioneu els recursos a incloure"
+
+msgid "Export completed"
+msgstr "Exportació completada"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "S'ha creat la còpia de seguretat de Moodle. Podeu trobar-la a la llista de còpies de seguretat del curs."
+
+msgid "Please complete all required fields."
+msgstr "Si us plau, completeu tots els camps obligatoris."
+
+msgid "Failed to create Moodle backup."
+msgstr "No s'ha pogut crear la còpia de seguretat de Moodle."
+
+msgid "More actions"
+msgstr "Més accions"
+

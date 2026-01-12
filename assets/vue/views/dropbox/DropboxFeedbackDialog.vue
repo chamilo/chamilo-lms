@@ -63,7 +63,7 @@
           v-if="hasTiny"
           v-model="text"
           editor-id="dbx-feedback-editor"
-          :title="t('Add feedback…')"
+          :title="t('Add feedback')"
           :editor-config="tinyConfig"
           :full-page="false"
           :use-file-manager="false"
@@ -74,7 +74,7 @@
           v-model="text"
           rows="3"
           class="w-full rounded-md border border-gray-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-          :placeholder="t('Add feedback…')"
+          :placeholder="t('Add feedback')"
           @keydown.ctrl.enter.prevent="trySend"
         />
 

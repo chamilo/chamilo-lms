@@ -66,16 +66,16 @@ if ('copy' === $action) {
             if ($res) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('Item copied').' - '.get_lang('ExerciseAndLPsAreInvisibleInTheNewCourse'),
+                        get_lang('Item copied').' - '.get_lang('Exercises and learning paths are invisible in the new course"'),
                         'confirmation'
                     )
                 );
             } else {
-                Display::addFlash(Display::return_message(get_lang('An error occurred'), 'error'));
+                Display::addFlash(Display::return_message(get_lang('An error occurred.'), 'error'));
             }
         } catch (Throwable $e) {
             // Do not expose stack traces in UI.
-            Display::addFlash(Display::return_message(get_lang('An error occurred'), 'error'));
+            Display::addFlash(Display::return_message(get_lang('An error occurred.'), 'error'));
         }
     }
 

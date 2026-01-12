@@ -31828,3 +31828,318 @@ msgstr "Это удалит все временные файлы. Продолж
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Это удалит файлы старше %minutes% минут. Продолжить?"
 
+msgid "The value must match exactly: %s"
+msgstr "Значение должно точно совпадать: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Дата окончания повторения должна быть после даты начала."
+
+msgid "Index document content?"
+msgstr "Индексировать содержимое документа?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Загрузить SVG-логотип в заголовок платформы"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Загрузить PNG-логотип в заголовок платформы (%s)"
+
+msgid "Write something to %s"
+msgstr "Напишите что-нибудь для %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Предпочтительно: SVG. Рекомендуемая ширина PNG: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Загрузить PNG-логотип для электронных писем (~%spx ширина)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "PNG-заголовок должен быть ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Требовать определённый формат файла"
+
+msgid "Select allowed file formats"
+msgstr "Выбрать разрешённые форматы файлов"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Пользовательские расширения (разделённые пробелом)"
+
+msgid "Other extensions"
+msgstr "Другие расширения"
+
+msgid "My invitations"
+msgstr "Мои приглашения"
+
+msgid "Delete access"
+msgstr "Удалить доступ"
+
+msgid "Certificate tags"
+msgstr "Теги сертификата"
+
+msgid "Copy all"
+msgstr "Копировать все"
+
+msgid "Click to insert"
+msgstr "Нажмите для вставки"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Предпочтительно: SVG. Макс. размер PNG: %spx."
+
+msgid "View badge"
+msgstr "Просмотр значка"
+
+msgid "%d min"
+msgstr "%d мин"
+
+msgid "Duration in minutes"
+msgstr "Продолжительность в минутах"
+
+msgid "Go back to standard view"
+msgstr "Вернуться к стандартному виду"
+
+msgid "Search for student..."
+msgstr "Поиск студента..."
+
+msgid "This date is locked or read-only."
+msgstr "Эта дата заблокирована или доступна только для чтения."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Не удалось загрузить посещаемость. Попробуйте позже."
+
+msgid "Nothing to save"
+msgstr "Нет данных для сохранения"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "У вас есть несохранённые изменения. Всё равно выйти?"
+
+msgid "Storage usage unavailable"
+msgstr "Информация о использовании хранилища недоступна"
+
+msgid "Search for members..."
+msgstr "Поиск участников..."
+
+msgid "Current members"
+msgstr "Текущие участники"
+
+msgid "Add members"
+msgstr "Добавить участников"
+
+msgid "Search for users in course/session..."
+msgstr "Поиск пользователей в курсе/сессии..."
+
+msgid "No users available."
+msgstr "Пользователи недоступны."
+
+msgid "Browse and publish new posts"
+msgstr "Просмотр и публикация новых сообщений"
+
+msgid "Create and assign tasks"
+msgstr "Создание и назначение задач"
+
+msgid "Filtered by %s"
+msgstr "Отфильтровано по %s"
+
+msgid "Select a score"
+msgstr "Выберите оценку"
+
+msgid "Edit comment"
+msgstr "Редактировать комментарий"
+
+msgid "Failed to update the post."
+msgstr "Не удалось обновить сообщение."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Удалить это сообщение? Действие нельзя отменить."
+
+msgid "Failed to delete the post."
+msgstr "Не удалось удалить сообщение."
+
+msgid "Failed to update the comment."
+msgstr "Не удалось обновить комментарий."
+
+msgid "Delete this comment?"
+msgstr "Удалить этот комментарий?"
+
+msgid "Failed to delete the comment."
+msgstr "Не удалось удалить комментарий."
+
+msgid "Search for projects..."
+msgstr "Поиск проектов..."
+
+msgid "Only visible"
+msgstr "Только видимые"
+
+msgid "Rename project"
+msgstr "Переименовать проект"
+
+msgid "New title"
+msgstr "Новое название"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Для управления проектами вы должны быть администратором или преподавателем."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Удалить этот проект? Действие нельзя отменить."
+
+msgid "Task list"
+msgstr "Список задач"
+
+msgid "Change status"
+msgstr "Изменить статус"
+
+msgid "Waiting for validation"
+msgstr "Ожидает подтверждения"
+
+msgid "Delete this task?"
+msgstr "Удалить эту задачу?"
+
+msgid "Failed to delete the task."
+msgstr "Не удалось удалить задачу."
+
+msgid "Failed to update status."
+msgstr "Не удалось обновить статус."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Вы уверены, что хотите удалить этого третью сторону? Это действие нельзя отменить."
+
+msgid "Please fix the errors before saving."
+msgstr "Исправьте ошибки перед сохранением."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Ошибка создания третьей стороны. Проверьте данные."
+
+msgid "Error deleting third party."
+msgstr "Ошибка удаления третьей стороны."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Загрузите опциональные логотипы для заголовка и email. Предпочтителен SVG; PNG используется как запасной вариант."
+
+msgid "Data exchange updated successfully."
+msgstr "Обмен данными успешно обновлён."
+
+msgid "Error deleting data exchange."
+msgstr "Ошибка удаления обмена данными."
+
+msgid "Failed to recycle course."
+msgstr "Не удалось переработать курс."
+
+msgid "Select source course"
+msgstr "Выберите исходный курс"
+
+msgid "Course to copy from"
+msgstr "Курс для копирования"
+
+msgid "Search by code or title..."
+msgstr "Поиск по коду или названию..."
+
+msgid "No courses match your search."
+msgstr "Нет курсов, соответствующих поиску."
+
+msgid "Copy options"
+msgstr "Опции копирования"
+
+msgid "Include users (enrollments)"
+msgstr "Включить пользователей (зачисления)"
+
+msgid "Reset dates"
+msgstr "Сбросить даты"
+
+msgid "When a file with the same name exists"
+msgstr "Если файл с таким именем уже существует"
+
+msgid "Ready to copy"
+msgstr "Готово к копированию"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Будет скопировано содержимое из выбранного курса в этот курс. Вы можете вернуться, чтобы изменить опции."
+
+msgid "Start copying"
+msgstr "Начать копирование"
+
+msgid "Select resources to copy"
+msgstr "Выберите ресурсы для копирования"
+
+msgid "Copy selected"
+msgstr "Копировать выбранное"
+
+msgid "Copy completed."
+msgstr "Копирование завершено."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Зона опасности: удаление курса необратимо."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Введите код курса для подтверждения. Все данные будут безвозвратно удалены."
+
+msgid "The code must match '%s' exactly."
+msgstr "Код должен точно совпадать с «%s»."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Также удалить документы, используемые только в этом курсе (если есть)."
+
+msgid "Delete course"
+msgstr "Удалить курс"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Это действие нельзя отменить. Продолжить?"
+
+msgid "Course deleted successfully."
+msgstr "Курс успешно удалён."
+
+msgid "Failed to delete course."
+msgstr "Не удалось удалить курс."
+
+msgid "Create .mbz"
+msgstr "Создать .mbz"
+
+msgid "Backup scope"
+msgstr "Область резервного копирования"
+
+msgid "Full course"
+msgstr "Полный курс"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Выбранные элементы будут единственными, включёнными в экспортируемый файл."
+
+msgid "Moodle export"
+msgstr "Экспорт для Moodle"
+
+msgid "Moodle version"
+msgstr "Версия Moodle"
+
+msgid "Admin ID"
+msgstr "ID администратора"
+
+msgid "Internal integer user id"
+msgstr "Внутренний целочисленный ID пользователя"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle требует внутренний ID пользователя, хранящийся в XML. Если не уверены, используйте 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Имя пользователя, которое будет отображаться как владелец импортируемых элементов"
+
+msgid "Email to use in the archive metadata"
+msgstr "Email для использования в метаданных архива"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "Будет создан файл .mbz. Вы сможете скачать его после завершения."
+
+msgid "Select resources to include"
+msgstr "Выберите ресурсы для включения"
+
+msgid "Export completed"
+msgstr "Экспорт завершён"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Резервная копия Moodle создана. Вы можете найти её в списке резервных копий курса."
+
+msgid "Please complete all required fields."
+msgstr "Пожалуйста, заполните все обязательные поля."
+
+msgid "Failed to create Moodle backup."
+msgstr "Не удалось создать резервную копию Moodle."
+
+msgid "More actions"
+msgstr "Дополнительные действия"
+

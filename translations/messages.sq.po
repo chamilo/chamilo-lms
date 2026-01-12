@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:të drejtat e autorit,, no:pa të drejtat e autorit"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dosje,, application/msword:MsWord,, application/octet-stream:Rrjedhë octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dosje,, application/msword:MsWord,, application/octet-stream:Rrjedhë oktet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ushtrim,,      simulation:simulim,,      questionnaire:pyetësor,,      diagram:diagramë,,      figure:figurë,,      graph:grafik,,      index:indeks,,      slide:slide,,      table:tabelë,,      narrative text:tekst narrativ,,      exam:provim,,      experiment:eksperiment,,      problem statement:përmbajtja e problemit,,      self assessment:vëtëvlerësim,,      lecture:ligjëratë"
@@ -31824,4 +31824,319 @@ msgstr "Kjo do të fshijë të gjithë skedarët e përkohshëm. Vazhdo?"
 
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Kjo do të fshijë skedarët më të vjetër se %minutes% minuta. Vazhdo?"
+
+msgid "The value must match exactly: %s"
+msgstr "Vlera duhet të përputhet saktësisht: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Data e përsëritjes së fundit duhet të jetë pas datës së fillimit."
+
+msgid "Index document content?"
+msgstr "Indekso përmbajtjen e dokumentit?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Ngarko logo SVG në kryen e platformës"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Ngarko logo PNG në kryen e platformës (%s)"
+
+msgid "Write something to %s"
+msgstr "Shkruaj diçka te %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "E preferuara: SVG. Gjerësia e rekomanduar PNG: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Ngarko logo PNG për email-et (~%spx gjerësi)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "PNG kryen duhet të jetë ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Kërko format specifik skedari"
+
+msgid "Select allowed file formats"
+msgstr "Zgjidh formatet e lejuara të skedarëve"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Shtesa të personalizuara (të ndara me hapësirë)"
+
+msgid "Other extensions"
+msgstr "Shtesa të tjera"
+
+msgid "My invitations"
+msgstr "Ftesat e mia"
+
+msgid "Delete access"
+msgstr "Fshij aksesin"
+
+msgid "Certificate tags"
+msgstr "Etiketat e certifikatës"
+
+msgid "Copy all"
+msgstr "Kopjo të gjitha"
+
+msgid "Click to insert"
+msgstr "Kliko për të futur"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "I preferuari: SVG. Madhësia maksimale PNG: %spx."
+
+msgid "View badge"
+msgstr "Shih badge"
+
+msgid "%d min"
+msgstr "%d min"
+
+msgid "Duration in minutes"
+msgstr "Koha në minuta"
+
+msgid "Go back to standard view"
+msgstr "Kthehu te pamja standarde"
+
+msgid "Search for student..."
+msgstr "Kërko për student..."
+
+msgid "This date is locked or read-only."
+msgstr "Kjo datë është e bllokuar ose vetëm për lexim."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Deshtoi ngarkimi i pranisë. Provoni më vonë."
+
+msgid "Nothing to save"
+msgstr "Asgjë për të ruajtur"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Keni ndryshime të ruajtura. Të largoheshit gjithsesi?"
+
+msgid "Storage usage unavailable"
+msgstr "Përdorimi i ruajtjes i padisponueshëm"
+
+msgid "Search for members..."
+msgstr "Kërko për anëtarë..."
+
+msgid "Current members"
+msgstr "Anëtarët aktualë"
+
+msgid "Add members"
+msgstr "Shto anëtarë"
+
+msgid "Search for users in course/session..."
+msgstr "Kërko për përdorues në kurs/sesion..."
+
+msgid "No users available."
+msgstr "Asnjë përdorues i disponueshëm."
+
+msgid "Browse and publish new posts"
+msgstr "Shfleto dhe publiko postime të reja"
+
+msgid "Create and assign tasks"
+msgstr "Krijo dhe cakto detyra"
+
+msgid "Filtered by %s"
+msgstr "Filtruar sipas %s"
+
+msgid "Select a score"
+msgstr "Zgjidh një notë"
+
+msgid "Edit comment"
+msgstr "Ndrysho komentin"
+
+msgid "Failed to update the post."
+msgstr "Deshtoi përditësimi i postimit."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Fshij këtë postim? Kjo veprim nuk mund të zhbëhet."
+
+msgid "Failed to delete the post."
+msgstr "Dështoi fshirja e postimit."
+
+msgid "Failed to update the comment."
+msgstr "Dështoi përditësimi i komentes."
+
+msgid "Delete this comment?"
+msgstr "Fshij këtë koment?"
+
+msgid "Failed to delete the comment."
+msgstr "Dështoi fshirja e komentes."
+
+msgid "Search for projects..."
+msgstr "Kërko për projekte..."
+
+msgid "Only visible"
+msgstr "Vetëm i dukshëm"
+
+msgid "Rename project"
+msgstr "Riemërto projektin"
+
+msgid "New title"
+msgstr "Titull i ri"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Duhet të jesh admin ose mësues për të menaxhuar projektet."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Fshij këtë projekt? Kjo veprimtari nuk mund të zhbëhet."
+
+msgid "Task list"
+msgstr "Listë detyrash"
+
+msgid "Change status"
+msgstr "Ndrysho statusin"
+
+msgid "Waiting for validation"
+msgstr "Duke pritur validimin"
+
+msgid "Delete this task?"
+msgstr "Fshij këtë detyrë?"
+
+msgid "Failed to delete the task."
+msgstr "Dështoi fshirja e detyrës."
+
+msgid "Failed to update status."
+msgstr "Dështoi përditësimi i statusit."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "A je i sigurt që dëshiron të fshish këtë palë të tretë? Kjo veprimtari nuk mund të zhbëhet."
+
+msgid "Please fix the errors before saving."
+msgstr "Ju lutemi, rregulloni gabimet para ruajtjes."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Gabim në krijimin e palës së tretë. Ju lutemi, verifikoni të dhënat."
+
+msgid "Error deleting third party."
+msgstr "Gabim në fshirjen e palës së tretë."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Ngarko logo opsionale për krye dhe email. SVG është i preferuar; PNG përdoret si rezervë."
+
+msgid "Data exchange updated successfully."
+msgstr "Shkëmbimi i të dhënave u përditësua me sukses."
+
+msgid "Error deleting data exchange."
+msgstr "Gabim në fshirjen e shkëmbimit të të dhënave."
+
+msgid "Failed to recycle course."
+msgstr "Dështoi riciklimi i kursit."
+
+msgid "Select source course"
+msgstr "Zgjidh kursin burim"
+
+msgid "Course to copy from"
+msgstr "Kursi nga i cili të kopjohet"
+
+msgid "Search by code or title..."
+msgstr "Kërko sipas kodit ose titullit..."
+
+msgid "No courses match your search."
+msgstr "Asnjë kurs nuk përputhet me kërkimin tuaj."
+
+msgid "Copy options"
+msgstr "Opsione kopjimi"
+
+msgid "Include users (enrollments)"
+msgstr "Përfshij përdoruesit (regjistrimet)"
+
+msgid "Reset dates"
+msgstr "Rivendos datat"
+
+msgid "When a file with the same name exists"
+msgstr "Kur ekziston një skedar me të njëjtin emër"
+
+msgid "Ready to copy"
+msgstr "I gatshëm për kopjim"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Do të kopjojmë përmbajtjen nga kursi i zgjedhur në këtë kurs. Mund të kthehesh mbrapsht për të ndryshuar opsionet."
+
+msgid "Start copying"
+msgstr "Fillo kopjimin"
+
+msgid "Select resources to copy"
+msgstr "Zgjidh burimet për t'u kopjuar"
+
+msgid "Copy selected"
+msgstr "Kopjo të zgjedhurit"
+
+msgid "Copy completed."
+msgstr "Kopjimi u përfundua."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Zona e rrezikshme: fshirja e një kursi është e përhershme."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Shkruaj kodin e kursit për të konfirmuar. Të gjitha të dhënat do të fshihen përgjithmonë."
+
+msgid "The code must match '%s' exactly."
+msgstr "Kodi duhet të përputhet saktësisht me '%s'."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Fshij gjithashtu dokumentet që përdoren vetëm në këtë kurs (nëse ka)."
+
+msgid "Delete course"
+msgstr "Fshij kursin"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Kjo veprimtari nuk mund të zhbëhet. Vazhdo?"
+
+msgid "Course deleted successfully."
+msgstr "Kursi u fshi me sukses."
+
+msgid "Failed to delete course."
+msgstr "Dështoi fshirja e kursit."
+
+msgid "Create .mbz"
+msgstr "Krijo .mbz"
+
+msgid "Backup scope"
+msgstr "Hapësira e kopjeruajtjes"
+
+msgid "Full course"
+msgstr "Kurs i plotë"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Artikujt e zgjedhur do të jenë të vetmit të përfshirë në skedarin e eksportuar."
+
+msgid "Moodle export"
+msgstr "Eksportimi në Moodle"
+
+msgid "Moodle version"
+msgstr "Versioni i Moodle"
+
+msgid "Admin ID"
+msgstr "ID Administratori"
+
+msgid "Internal integer user id"
+msgstr "ID e brendshme e përdoruesit si numër i plotë"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle kërkon një ID të brendshme të përdoruesit të ruajtur në XML. Nëse keni dyshime, përdorni 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Emri i përdoruesit që do të shfaqet si pronar i elementeve të importuara"
+
+msgid "Email to use in the archive metadata"
+msgstr "Email-i për t'u përdorur në metadatat e arkivës"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "Do të gjenerohet një skedar .mbz. Do të mund ta shkarkoni sapo të përfundojë."
+
+msgid "Select resources to include"
+msgstr "Zgjidhni burimet për t'i përfshirë"
+
+msgid "Export completed"
+msgstr "Eksportimi u përfundua"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Kopjerbackup-i juaj i Moodle u krijua. Mund ta gjeni në listën e kopjerbackup-eve të kursit."
+
+msgid "Please complete all required fields."
+msgstr "Ju lutemi, plotësoni të gjitha fushat e kërkuara."
+
+msgid "Failed to create Moodle backup."
+msgstr "Deshtoi krijimi i kopjerbackup-it të Moodle."
+
+msgid "More actions"
+msgstr "Më shumë veprime"
 

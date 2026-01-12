@@ -31827,3 +31827,318 @@ msgstr "Dette vil slette alle midlertidige filer. Fortsette?"
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Dette vil slette filer eldre enn %minutes% minutt. Fortsette?"
 
+msgid "The value must match exactly: %s"
+msgstr ""
+
+msgid "Repeat end date must be after start date."
+msgstr ""
+
+msgid "Index document content?"
+msgstr ""
+
+msgid "Upload SVG logo to platform header"
+msgstr ""
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr ""
+
+msgid "Write something to %s"
+msgstr ""
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr ""
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr ""
+
+msgid "Header PNG must be ≤ %spx."
+msgstr ""
+
+msgid "Require specific file format"
+msgstr ""
+
+msgid "Select allowed file formats"
+msgstr ""
+
+msgid "Custom extensions (separated by space)"
+msgstr ""
+
+msgid "Other extensions"
+msgstr ""
+
+msgid "My invitations"
+msgstr ""
+
+msgid "Delete access"
+msgstr ""
+
+msgid "Certificate tags"
+msgstr ""
+
+msgid "Copy all"
+msgstr "Kopier alle"
+
+msgid "Click to insert"
+msgstr "Klikk for å setja inn"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Føretrek SVG. PNG maks storleik: %spx."
+
+msgid "View badge"
+msgstr "Vis merke"
+
+msgid "%d min"
+msgstr "%d min"
+
+msgid "Duration in minutes"
+msgstr "Varighet i minutt"
+
+msgid "Go back to standard view"
+msgstr "Gå tilbake til standardvisning"
+
+msgid "Search for student..."
+msgstr "Søk etter elev..."
+
+msgid "This date is locked or read-only."
+msgstr "Denne datoen er låst eller berre lesbar."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Kunne ikkje laste fram oppmøte. Prøv igjen seinare."
+
+msgid "Nothing to save"
+msgstr "Ingen ting å lagre"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Du har ulagra endringar. Vil du likevel gå?"
+
+msgid "Storage usage unavailable"
+msgstr "Lagringsbruk ikkje tilgjengeleg"
+
+msgid "Search for members..."
+msgstr "Søk etter medlemmer..."
+
+msgid "Current members"
+msgstr "Noverande medlemmer"
+
+msgid "Add members"
+msgstr "Legg til medlemmer"
+
+msgid "Search for users in course/session..."
+msgstr "Søk etter brukarar i kurs/sesjon..."
+
+msgid "No users available."
+msgstr "Ingen brukarar tilgjengelege."
+
+msgid "Browse and publish new posts"
+msgstr "Bla gjennom og publiser nye innlegg"
+
+msgid "Create and assign tasks"
+msgstr "Opprett og tildel oppgåver"
+
+msgid "Filtered by %s"
+msgstr "Filtrert etter %s"
+
+msgid "Select a score"
+msgstr "Vel ein karakter"
+
+msgid "Edit comment"
+msgstr "Rediger kommentar"
+
+msgid "Failed to update the post."
+msgstr "Kunne ikkje oppdatere innlegget."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Slette dette innlegget? Denne handlinga kan ikkje angre."
+
+msgid "Failed to delete the post."
+msgstr "Kunne ikkje slette innlegget."
+
+msgid "Failed to update the comment."
+msgstr "Kunne ikkje oppdatere kommentaren."
+
+msgid "Delete this comment?"
+msgstr "Slette denne kommentaren?"
+
+msgid "Failed to delete the comment."
+msgstr "Kunne ikkje slette kommentaren."
+
+msgid "Search for projects..."
+msgstr "Søk etter prosjekt..."
+
+msgid "Only visible"
+msgstr "Berre synleg"
+
+msgid "Rename project"
+msgstr "Døypne om prosjekt"
+
+msgid "New title"
+msgstr "Ny tittel"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Du må vere admin eller lærar for å handsame prosjekt."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Slette dette prosjektet? Denne handlinga kan ikkje angre."
+
+msgid "Task list"
+msgstr "Oppgåveliste"
+
+msgid "Change status"
+msgstr "Endre status"
+
+msgid "Waiting for validation"
+msgstr "Venter på godkjenning"
+
+msgid "Delete this task?"
+msgstr "Slette denne oppgåva?"
+
+msgid "Failed to delete the task."
+msgstr "Kunne ikkje slette oppgåva."
+
+msgid "Failed to update status."
+msgstr "Kunne ikkje oppdatere status."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Er du sikker på at du vil slette denne tredjeparten? Denne handlinga kan ikkje angre."
+
+msgid "Please fix the errors before saving."
+msgstr "Rett feila før du lagrar."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Feil ved oppretting av tredjepart. Verifiser dataa."
+
+msgid "Error deleting third party."
+msgstr "Feil ved sletting av tredjepart."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Last opp valfri topptekst- og e-postlogo. SVG er føretrekkt; PNG brukast som reserveløysing."
+
+msgid "Data exchange updated successfully."
+msgstr "Datautveksling oppdatert vellykka."
+
+msgid "Error deleting data exchange."
+msgstr "Feil ved sletting av datautveksling."
+
+msgid "Failed to recycle course."
+msgstr "Kunne ikkje gjenskape kurs."
+
+msgid "Select source course"
+msgstr "Vel kjeldekurs"
+
+msgid "Course to copy from"
+msgstr "Kurs å kopiere frå"
+
+msgid "Search by code or title..."
+msgstr "Søk etter kode eller tittel..."
+
+msgid "No courses match your search."
+msgstr "Ingen kurs stemmer med søket ditt."
+
+msgid "Copy options"
+msgstr "Kopieringsalternativ"
+
+msgid "Include users (enrollments)"
+msgstr "Inkluder brukarar (påtning)"
+
+msgid "Reset dates"
+msgstr "Nullstill datoar"
+
+msgid "When a file with the same name exists"
+msgstr "Når ei fil med same namn finst"
+
+msgid "Ready to copy"
+msgstr "Klar til å kopiere"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Vi kopierer innhald frå det valde kurset til dette kurset. Du kan gå tilbake for å endre alternativ."
+
+msgid "Start copying"
+msgstr "Start kopiering"
+
+msgid "Select resources to copy"
+msgstr "Vel ressursar å kopiere"
+
+msgid "Copy selected"
+msgstr "Kopier valde"
+
+msgid "Copy completed."
+msgstr "Kopiering fullført."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Faresone: sletting av kurs er permanent."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Skriv kurskoden for å stadfeste. All data vert permanent fjerna."
+
+msgid "The code must match '%s' exactly."
+msgstr "Koden må stemme nøyaktig med «%s»."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Slett òg dokument som berre vert brukt i dette kurset (om nokre)."
+
+msgid "Delete course"
+msgstr "Slett kurs"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Denne handlinga kan ikkje angre. Fortset?"
+
+msgid "Course deleted successfully."
+msgstr "Kurs sletta vellykka."
+
+msgid "Failed to delete course."
+msgstr "Kunne ikkje slette kurs."
+
+msgid "Create .mbz"
+msgstr "Opprett .mbz"
+
+msgid "Backup scope"
+msgstr "Sikkeringsomfang"
+
+msgid "Full course"
+msgstr "Heilt kurs"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Valde element vert dei einaste som vert inkluderte i eksporterte fil."
+
+msgid "Moodle export"
+msgstr "Moodle-eksport"
+
+msgid "Moodle version"
+msgstr "Moodle-versjon"
+
+msgid "Admin ID"
+msgstr "Admin-ID"
+
+msgid "Internal integer user id"
+msgstr "Intern heiltalsbrukar-ID"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle krev ein intern brukar-ID lagra i XML. Om usikker, bruk 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Brukarnamn som eigar av importerte element"
+
+msgid "Email to use in the archive metadata"
+msgstr "E-post å bruke i arkivmetadata"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "Ei .mbz-fil vert generert. Du kan laste den ned når den er ferdig."
+
+msgid "Select resources to include"
+msgstr "Vel ressursar å inkludere"
+
+msgid "Export completed"
+msgstr "Eksport fullført"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Moodle-sikring er oppretta. Du finn den i lista over kurs-sikringar."
+
+msgid "Please complete all required fields."
+msgstr "Fullfør alle påkråvd felt."
+
+msgid "Failed to create Moodle backup."
+msgstr "Kunne ikkje opprette Moodle-sikring."
+
+msgid "More actions"
+msgstr "Fleire handlingar"
+

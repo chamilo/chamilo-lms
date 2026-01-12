@@ -2023,7 +2023,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autortiesības,, no:nav autortiesību"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Okteta plūsma,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mape,, application/msword:MsWord,, application/octet-stream:Okta plūsma,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:uzdevums,,      simulation:simulācija,,      questionnaire:aptaujā,,      diagram:diagramma,,      figure:attēls,,      graph:diagramma,,      index:indekss,,      slide:slīdrāde,,      table:tabula,,      narrative text:narratīvs teksts,,      exam:eksāmens,,      experiment:eksperiments,,      problem statement:problēmas apraksts,,      self assessment:paškontrole,,      lecture:lekcija"
@@ -31827,4 +31827,319 @@ msgstr "Tas dzēsīs visus pagaidu failus. Turpināt?"
 
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Tas dzēsīs failus, kas vecāki par %minutes% minūtēm. Turpināt?"
+
+msgid "The value must match exactly: %s"
+msgstr "Vērtībai jāatbilst precīzi: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Atkārtošanas beigu datums jābūt pēc sākuma datuma."
+
+msgid "Index document content?"
+msgstr "Indeksēt dokumenta saturu?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Augšupielādēt SVG logotipu platformas galvenē"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Augšupielādēt PNG logotipu platformas galvenē (%s)"
+
+msgid "Write something to %s"
+msgstr "Uzrakstīt kaut ko %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Ieteicams: SVG. PNG ieteicamais platums: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Augšupielādēt PNG logotipu e-pastiem (~%spx platums)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "Galvenes PNG jābūt ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Pieprasīt specifisku faila formātu"
+
+msgid "Select allowed file formats"
+msgstr "Izvēlēties atļautās faila formātus"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Pielāgoti paplašinājumi (atdalīti ar atstarpēm)"
+
+msgid "Other extensions"
+msgstr "Citi paplašinājumi"
+
+msgid "My invitations"
+msgstr "Manas uzaicinājumi"
+
+msgid "Delete access"
+msgstr "Dzēst piekļuvi"
+
+msgid "Certificate tags"
+msgstr "Sertifikāta etiķetes"
+
+msgid "Copy all"
+msgstr "Kopēt visu"
+
+msgid "Click to insert"
+msgstr "Noklikšķiniet, lai ievietotu"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Ieteicamais: SVG. PNG maks. izmērs: %spx."
+
+msgid "View badge"
+msgstr "Skatīt nozīmi"
+
+msgid "%d min"
+msgstr "%d min"
+
+msgid "Duration in minutes"
+msgstr "Ilgums minūtēs"
+
+msgid "Go back to standard view"
+msgstr "Atgriezties standarta skatā"
+
+msgid "Search for student..."
+msgstr "Meklēt studentu..."
+
+msgid "This date is locked or read-only."
+msgstr "Šis datums ir bloķēts vai tikai lasāms."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Neizdevās ielādēt apmeklētību. Lūdzu, mēģiniet vēlāk."
+
+msgid "Nothing to save"
+msgstr "Nav ko saglabāt"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Jums ir nesaglabātas izmaiņas. Aiziet tik un tā?"
+
+msgid "Storage usage unavailable"
+msgstr "Glabāšanas lietojums nav pieejams"
+
+msgid "Search for members..."
+msgstr "Meklēt dalībniekus..."
+
+msgid "Current members"
+msgstr "Pašreizējie dalībnieki"
+
+msgid "Add members"
+msgstr "Pievienot dalībniekus"
+
+msgid "Search for users in course/session..."
+msgstr "Meklēt lietotājus kursā/sesijā..."
+
+msgid "No users available."
+msgstr "Nav pieejamu lietotāju."
+
+msgid "Browse and publish new posts"
+msgstr "Pārlūkot un publicēt jaunus ierakstus"
+
+msgid "Create and assign tasks"
+msgstr "Izveidot un piešķirt uzdevumus"
+
+msgid "Filtered by %s"
+msgstr "Filtrēts pēc %s"
+
+msgid "Select a score"
+msgstr "Izvēlēties vērtējumu"
+
+msgid "Edit comment"
+msgstr "Rediģēt komentāru"
+
+msgid "Failed to update the post."
+msgstr "Neizdevās atjaunināt ierakstu."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Dzēst šo ierakstu? Šo darbību nevar atcelt."
+
+msgid "Failed to delete the post."
+msgstr "Neizdevās dzēst ierakstu."
+
+msgid "Failed to update the comment."
+msgstr "Neizdevās atjaunināt komentāru."
+
+msgid "Delete this comment?"
+msgstr "Dzēst šo komentāru?"
+
+msgid "Failed to delete the comment."
+msgstr "Neizdevās dzēst komentāru."
+
+msgid "Search for projects..."
+msgstr "Meklēt projektus..."
+
+msgid "Only visible"
+msgstr "Tikai redzams"
+
+msgid "Rename project"
+msgstr "Pārdēvēt projektu"
+
+msgid "New title"
+msgstr "Jauns nosaukums"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Lai pārvaldītu projektus, jābūt administratoram vai skolotājam."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Dzēst šo projektu? Šo darbību nevar atcelt."
+
+msgid "Task list"
+msgstr "Uzdevumu saraksts"
+
+msgid "Change status"
+msgstr "Mainīt statusu"
+
+msgid "Waiting for validation"
+msgstr "Gaida apstiprinājumu"
+
+msgid "Delete this task?"
+msgstr "Dzēst šo uzdevumu?"
+
+msgid "Failed to delete the task."
+msgstr "Neizdevās dzēst uzdevumu."
+
+msgid "Failed to update status."
+msgstr "Neizdevās atjaunināt statusu."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Vai tiešām vēlaties dzēst šo trešo pusi? Šo darbību nevar atcelt."
+
+msgid "Please fix the errors before saving."
+msgstr "Lūdzu, novērstiet kļūdas pirms saglabāšanas."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Kļūda izveidojot trešo pusi. Lūdzu, pārbaudiet datus."
+
+msgid "Error deleting third party."
+msgstr "Kļūda dzēšot trešo pusi."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Augšupielādējiet fakultatīvo galvenes un e-pasta logotipus. SVG ir ieteicams; PNG izmanto kā rezerves variantu."
+
+msgid "Data exchange updated successfully."
+msgstr "Datu apmaiņa atjaunināta veiksmīgi."
+
+msgid "Error deleting data exchange."
+msgstr "Kļūda dzēšot datu apmaiņu."
+
+msgid "Failed to recycle course."
+msgstr "Neizdevās pārstrādāt kursu."
+
+msgid "Select source course"
+msgstr "Izvēlēties avota kursu"
+
+msgid "Course to copy from"
+msgstr "Kursu, no kura kopēt"
+
+msgid "Search by code or title..."
+msgstr "Meklēt pēc koda vai nosaukuma..."
+
+msgid "No courses match your search."
+msgstr "Nav kursu, kas atbilstu jūsu meklējumam."
+
+msgid "Copy options"
+msgstr "Kopēšanas opcijas"
+
+msgid "Include users (enrollments)"
+msgstr "Iekļaut lietotājus (reģistrācijas)"
+
+msgid "Reset dates"
+msgstr "Atiestatīt datumus"
+
+msgid "When a file with the same name exists"
+msgstr "Ja pastāv fails ar tādu pašu nosaukumu"
+
+msgid "Ready to copy"
+msgstr "Gatavs kopēšanai"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Mēs kopēsim saturu no izvēlētā kursa uz šo kursu. Jūs varat atgriezties, lai mainītu opcijas."
+
+msgid "Start copying"
+msgstr "Sākt kopēšanu"
+
+msgid "Select resources to copy"
+msgstr "Izvēlēties kopējamās resursus"
+
+msgid "Copy selected"
+msgstr "Kopēt izvēlētos"
+
+msgid "Copy completed."
+msgstr "Kopēšana pabeigta."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Bīstamā zona: kursa dzēšana ir neatgriezeniska."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Ievadiet kursa kodu, lai apstiprinātu. Visi dati tiks neatgriezeniski dzēsti."
+
+msgid "The code must match '%s' exactly."
+msgstr "Kods jāatbilst '%s' precīzi."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Arī dzēst dokumentus, kas tiek izmantoti tikai šajā kursā (ja tādi ir)."
+
+msgid "Delete course"
+msgstr "Dzēst kursu"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Šo darbību nevar atcelt. Turpināt?"
+
+msgid "Course deleted successfully."
+msgstr "Kursu veiksmīgi izdzēsta."
+
+msgid "Failed to delete course."
+msgstr "Neizdevās dzēst kursu."
+
+msgid "Create .mbz"
+msgstr "Izveidot .mbz"
+
+msgid "Backup scope"
+msgstr "Rezerves kopijas apjoms"
+
+msgid "Full course"
+msgstr "Pilns kurss"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Izvēlētie vienumi būs vienīgie, kas iekļauti eksportētajā failā."
+
+msgid "Moodle export"
+msgstr "Moodle eksports"
+
+msgid "Moodle version"
+msgstr "Moodle versija"
+
+msgid "Admin ID"
+msgstr "Admin ID"
+
+msgid "Internal integer user id"
+msgstr "Iekšējais vesela skaitļa lietotāja ID"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle prasa iekšēju lietotāja ID, kas saglabāts XML. Ja šaubā, izmanto 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Lietotājvārds, kas parādīsies kā importēto vienību īpašnieks"
+
+msgid "Email to use in the archive metadata"
+msgstr "E-pasts, ko izmantot arhīva metadatos"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "Tiks ģenerēts .mbz fails. To varēsiet lejupielādēt, kad pabeigts."
+
+msgid "Select resources to include"
+msgstr "Izvēlieties iekļaujamās resursus"
+
+msgid "Export completed"
+msgstr "Eksports pabeigts"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Jūsu Moodle dublējums ir izveidots. To var atrast kursa dublējumu sarakstā."
+
+msgid "Please complete all required fields."
+msgstr "Lūdzu, aizpildiet visus obligātos laukus."
+
+msgid "Failed to create Moodle backup."
+msgstr "Neizdevās izveidot Moodle dublējumu."
+
+msgid "More actions"
+msgstr "Vairāk darbību"
 

@@ -31835,3 +31835,318 @@ msgstr "Isso apagará todos os arquivos temporários. Continuar?"
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Isso apagará arquivos mais antigos que %minutes% minutos. Continuar?"
 
+msgid "The value must match exactly: %s"
+msgstr "O valor deve corresponder exatamente: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "A data final repetida deve ser posterior à data inicial."
+
+msgid "Index document content?"
+msgstr "Indexar conteúdo do documento?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Carregar logotipo SVG no cabeçalho da plataforma"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Carregar logotipo PNG no cabeçalho da plataforma (%s)"
+
+msgid "Write something to %s"
+msgstr "Escreva algo para %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Preferencial: SVG. Largura PNG recomendada: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Carregar logotipo PNG para e-mails (~%spx largura)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "PNG do cabeçalho deve ter ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Exigir formato específico de arquivo"
+
+msgid "Select allowed file formats"
+msgstr "Selecionar formatos de arquivo permitidos"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Extensões personalizadas (separadas por espaço)"
+
+msgid "Other extensions"
+msgstr "Outras extensões"
+
+msgid "My invitations"
+msgstr "Meus convites"
+
+msgid "Delete access"
+msgstr "Remover acesso"
+
+msgid "Certificate tags"
+msgstr "Etiquetas do certificado"
+
+msgid "Copy all"
+msgstr "Copiar tudo"
+
+msgid "Click to insert"
+msgstr "Clique para inserir"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Preferencial: SVG. Tamanho máximo PNG: %spx."
+
+msgid "View badge"
+msgstr "Ver emblema"
+
+msgid "%d min"
+msgstr "%d min"
+
+msgid "Duration in minutes"
+msgstr "Duração em minutos"
+
+msgid "Go back to standard view"
+msgstr "Voltar à visualização padrão"
+
+msgid "Search for student..."
+msgstr "Pesquisar por aluno..."
+
+msgid "This date is locked or read-only."
+msgstr "Esta data está bloqueada ou somente leitura."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Falha ao carregar frequência. Tente novamente mais tarde."
+
+msgid "Nothing to save"
+msgstr "Nada para salvar"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Você tem alterações não salvas. Sair mesmo assim?"
+
+msgid "Storage usage unavailable"
+msgstr "Uso de armazenamento indisponível"
+
+msgid "Search for members..."
+msgstr "Pesquisar por membros..."
+
+msgid "Current members"
+msgstr "Membros atuais"
+
+msgid "Add members"
+msgstr "Adicionar membros"
+
+msgid "Search for users in course/session..."
+msgstr "Pesquisar por usuários no curso/sessão..."
+
+msgid "No users available."
+msgstr "Nenhum usuário disponível."
+
+msgid "Browse and publish new posts"
+msgstr "Navegar e publicar novas postagens"
+
+msgid "Create and assign tasks"
+msgstr "Criar e atribuir tarefas"
+
+msgid "Filtered by %s"
+msgstr "Filtrado por %s"
+
+msgid "Select a score"
+msgstr "Selecionar uma pontuação"
+
+msgid "Edit comment"
+msgstr "Editar comentário"
+
+msgid "Failed to update the post."
+msgstr "Falha ao atualizar a publicação."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Eliminar esta publicação? Esta ação não pode ser desfeita."
+
+msgid "Failed to delete the post."
+msgstr "Falha ao eliminar a publicação."
+
+msgid "Failed to update the comment."
+msgstr "Falha ao atualizar o comentário."
+
+msgid "Delete this comment?"
+msgstr "Eliminar este comentário?"
+
+msgid "Failed to delete the comment."
+msgstr "Falha ao eliminar o comentário."
+
+msgid "Search for projects..."
+msgstr "Pesquisar projetos..."
+
+msgid "Only visible"
+msgstr "Apenas visível"
+
+msgid "Rename project"
+msgstr "Renomear projeto"
+
+msgid "New title"
+msgstr "Novo título"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Precisa ser administrador ou professor para gerenciar projetos."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Eliminar este projeto? Esta ação não pode ser desfeita."
+
+msgid "Task list"
+msgstr "Lista de tarefas"
+
+msgid "Change status"
+msgstr "Alterar estado"
+
+msgid "Waiting for validation"
+msgstr "Aguardando validação"
+
+msgid "Delete this task?"
+msgstr "Eliminar esta tarefa?"
+
+msgid "Failed to delete the task."
+msgstr "Falha ao eliminar a tarefa."
+
+msgid "Failed to update status."
+msgstr "Falha ao atualizar o estado."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Tem certeza de que deseja eliminar este terceiro? Esta ação não pode ser desfeita."
+
+msgid "Please fix the errors before saving."
+msgstr "Corrija os erros antes de salvar."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Erro ao criar terceiro. Verifique os dados."
+
+msgid "Error deleting third party."
+msgstr "Erro ao eliminar terceiro."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Carregar logotipos opcionais de cabeçalho e e-mail. SVG é preferido; PNG é usado como fallback."
+
+msgid "Data exchange updated successfully."
+msgstr "Troca de dados atualizada com sucesso."
+
+msgid "Error deleting data exchange."
+msgstr "Erro ao eliminar troca de dados."
+
+msgid "Failed to recycle course."
+msgstr "Falha ao reciclar curso."
+
+msgid "Select source course"
+msgstr "Selecionar curso de origem"
+
+msgid "Course to copy from"
+msgstr "Curso a copiar de"
+
+msgid "Search by code or title..."
+msgstr "Pesquisar por código ou título..."
+
+msgid "No courses match your search."
+msgstr "Nenhum curso corresponde à sua pesquisa."
+
+msgid "Copy options"
+msgstr "Opções de cópia"
+
+msgid "Include users (enrollments)"
+msgstr "Incluir utilizadores (inscrições)"
+
+msgid "Reset dates"
+msgstr "Redefinir datas"
+
+msgid "When a file with the same name exists"
+msgstr "Quando existir um ficheiro com o mesmo nome"
+
+msgid "Ready to copy"
+msgstr "Pronto para copiar"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Vamos copiar conteúdo do curso selecionado para este curso. Pode voltar para alterar opções."
+
+msgid "Start copying"
+msgstr "Iniciar cópia"
+
+msgid "Select resources to copy"
+msgstr "Selecionar recursos a copiar"
+
+msgid "Copy selected"
+msgstr "Copiar selecionados"
+
+msgid "Copy completed."
+msgstr "Cópia concluída."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Zona de perigo: eliminar um curso é permanente."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Digite o código do curso para confirmar. Todos os dados serão permanentemente removidos."
+
+msgid "The code must match '%s' exactly."
+msgstr "O código deve corresponder exatamente a '%s'."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Também eliminar documentos usados apenas neste curso (se houver)."
+
+msgid "Delete course"
+msgstr "Eliminar curso"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Esta ação não pode ser desfeita. Continuar?"
+
+msgid "Course deleted successfully."
+msgstr "Curso eliminado com sucesso."
+
+msgid "Failed to delete course."
+msgstr "Falha ao eliminar curso."
+
+msgid "Create .mbz"
+msgstr "Criar .mbz"
+
+msgid "Backup scope"
+msgstr "Escopo do backup"
+
+msgid "Full course"
+msgstr "Curso completo"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Os itens selecionados serão os únicos incluídos no arquivo exportado."
+
+msgid "Moodle export"
+msgstr "Exportar para Moodle"
+
+msgid "Moodle version"
+msgstr "Versão do Moodle"
+
+msgid "Admin ID"
+msgstr "ID do administrador"
+
+msgid "Internal integer user id"
+msgstr "ID interno de usuário inteiro"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "O Moodle requer um ID interno de usuário armazenado em XML. Em caso de dúvida, use 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Nome de usuário a aparecer como proprietário dos itens importados"
+
+msgid "Email to use in the archive metadata"
+msgstr "E-mail a usar nos metadados do arquivo"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "Um arquivo .mbz será gerado. Você poderá baixá-lo após a conclusão."
+
+msgid "Select resources to include"
+msgstr "Selecionar recursos a incluir"
+
+msgid "Export completed"
+msgstr "Exportação concluída"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Seu backup do Moodle foi criado. Você pode encontrá-lo na lista de backups do curso."
+
+msgid "Please complete all required fields."
+msgstr "Por favor, preencha todos os campos obrigatórios."
+
+msgid "Failed to create Moodle backup."
+msgstr "Falha ao criar backup do Moodle."
+
+msgid "More actions"
+msgstr "Mais ações"
+

@@ -31825,3 +31825,318 @@ msgstr "Սա կջնջի բոլոր ժամանակավոր ֆայլերը: Շար
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Սա կջնջի %minutes% րոպեից հին ֆայլերը: Շարունակե՞ք:"
 
+msgid "The value must match exactly: %s"
+msgstr "Արժեքը պետք է ճիշտ համապատասխանի՝ %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Կրկնության ավարտի ամսաթիվը պետք է լինի սկսման ամսաթվից հետո:"
+
+msgid "Index document content?"
+msgstr "Ինդեքսավորել փաստաթղթի բովանդակությունը?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Վերբեռնել SVG լոգոն հարթակի վերնագծին"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Վերբեռնել PNG լոգոն հարթակի վերնագծին (%s)"
+
+msgid "Write something to %s"
+msgstr "Գրեք ինչ-որ բան %s-ին"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Նախընտրելի՝ SVG. PNG-ի խորհուրդ տրվող լայնություն՝ %spx:"
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Վերբեռնել PNG լոգո էլ. փոստերի համար (~%spx լայնություն)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "Վերնագրի PNG-ն պետք է լինի ≤ %spx:"
+
+msgid "Require specific file format"
+msgstr "Պահանջել որոշակի ֆայլի ձևաչափ"
+
+msgid "Select allowed file formats"
+msgstr "Ընտրել թույլատրված ֆայլերի ձևաչափերը"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Հատուկ ընդլայնումներ (տարանջատված բացատով)"
+
+msgid "Other extensions"
+msgstr "Այլ ընդլայնումներ"
+
+msgid "My invitations"
+msgstr "Իմ հրավերները"
+
+msgid "Delete access"
+msgstr "Ջնջել մուտքը"
+
+msgid "Certificate tags"
+msgstr "Վկայականի թեգեր"
+
+msgid "Copy all"
+msgstr "Պատճենել ամեն ինչ"
+
+msgid "Click to insert"
+msgstr "Սեղմեք տեղադրելու համար"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Նախընտրելի՝ SVG։ PNG առավելագույն չափ՝ %spx:"
+
+msgid "View badge"
+msgstr "Դիտել նշանը"
+
+msgid "%d min"
+msgstr "%d րոպե"
+
+msgid "Duration in minutes"
+msgstr "Տևողությունը րոպեներով"
+
+msgid "Go back to standard view"
+msgstr "Վերադառնալ ստանդարտ տեսքին"
+
+msgid "Search for student..."
+msgstr "Որոնել ուսանողին..."
+
+msgid "This date is locked or read-only."
+msgstr "Այս ամսաթիվը փակ է կամ միայն ընթերցման համար:"
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Չհաջողվեց բեռնել ներկայացուժը: Խնդրում ենք փորձել հետո:"
+
+msgid "Nothing to save"
+msgstr "Չկա պահպանելու բան"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Դուք ունեք չպահպանված փոփոխություններ: Դուրս գալ בכל դեպք?"
+
+msgid "Storage usage unavailable"
+msgstr "Պահեստավորման օգտագործումը հասանելի չէ"
+
+msgid "Search for members..."
+msgstr "Որոնել անդամներին..."
+
+msgid "Current members"
+msgstr "Ընթացիկ անդամներ"
+
+msgid "Add members"
+msgstr "Ավելացնել անդամներ"
+
+msgid "Search for users in course/session..."
+msgstr "Որոնել օգտատերերին դասընթացում/նստաշրջանում..."
+
+msgid "No users available."
+msgstr "Չկան հասանելի օգտատերեր:"
+
+msgid "Browse and publish new posts"
+msgstr "Գտնել և հրապարակել նոր գրառումներ"
+
+msgid "Create and assign tasks"
+msgstr "Ստեղծել և հանձնարարել առաջադրանքներ"
+
+msgid "Filtered by %s"
+msgstr "Фильтրված %s-ով"
+
+msgid "Select a score"
+msgstr "Ընտրել գնահատական"
+
+msgid "Edit comment"
+msgstr "Խմբագրել մեկնաբանությունը"
+
+msgid "Failed to update the post."
+msgstr "Չհաջողվեց թարմացնել գրառումը:"
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Ջնջել այս գրառումը? Այս գործողությունը չի կարող հետ շրջանառվել:"
+
+msgid "Failed to delete the post."
+msgstr "Փոստը ջնջելը չհաջողվեց:"
+
+msgid "Failed to update the comment."
+msgstr "Մեկնաբանությունը թարմացնելը չհաջողվեց:"
+
+msgid "Delete this comment?"
+msgstr "Ջնջել այս մեկնաբանությունը?"
+
+msgid "Failed to delete the comment."
+msgstr "Մեկնաբանությունը ջնջելը չհաջողվեց:"
+
+msgid "Search for projects..."
+msgstr "Փնտրել նախագծեր..."
+
+msgid "Only visible"
+msgstr "Միայն տեսանելի"
+
+msgid "Rename project"
+msgstr "Վերանվանել նախագիծ"
+
+msgid "New title"
+msgstr "Նոր վերնագիր"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Նախագծերը կառավարելու համար պետք է լինեք ադմինիստրատոր կամ հաշվի առնող:"
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Ջնջել այս նախագիծը? Այս գործողությունը չի կարող հետ շրջանառվել:"
+
+msgid "Task list"
+msgstr "Առաջադրանքների ցուցակ"
+
+msgid "Change status"
+msgstr "Փոխել կարգավիճակը"
+
+msgid "Waiting for validation"
+msgstr "Սպասվում է հաստատում"
+
+msgid "Delete this task?"
+msgstr "Ջնջել այս առաջադրանքը?"
+
+msgid "Failed to delete the task."
+msgstr "Առաջադրանքը ջնջելը չհաջողվեց:"
+
+msgid "Failed to update status."
+msgstr "Կարգավիճակը թարմացնելը չհաջողվեց:"
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Հաստատու՞ն եք, որ ցանկանում եք ջնջել այս երրորդ կողմը: Այս գործողությունը չի կարող հետ շրջանառվել:"
+
+msgid "Please fix the errors before saving."
+msgstr "Խնդրում ենք շտկել սխալները նախքան պահպանելը:"
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Սխալ երրորդ կողմ ստեղծելիս: Խնդրում ենք ստուգել տվյալները:"
+
+msgid "Error deleting third party."
+msgstr "Սխալ երրորդ կողմ ջնջելիս:"
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Վերբեռնել ընտրովի գլխավոր և էլ. փոստի լոգոներ: SVG-ն նախընտրելի է; PNG-ն օգտագործվում է որպես պաշար:"
+
+msgid "Data exchange updated successfully."
+msgstr "Տվյալների փոխանակումը հաջողությամբ թարմացվեց:"
+
+msgid "Error deleting data exchange."
+msgstr "Սխալ տվյալների փոխանակումը ջնջելիս:"
+
+msgid "Failed to recycle course."
+msgstr "Դասընթացի վերօգտագործումը չհաջողվեց:"
+
+msgid "Select source course"
+msgstr "Ընտրել աղբյուրի դասընթաց"
+
+msgid "Course to copy from"
+msgstr "Դասընթաց, որից պատճենել"
+
+msgid "Search by code or title..."
+msgstr "Փնտրել կոդով կամ վերնագրով..."
+
+msgid "No courses match your search."
+msgstr "Ձեր որոնմանը համապատասխանող դասընթացներ չկան:"
+
+msgid "Copy options"
+msgstr "Պատճենման ընտրանքներ"
+
+msgid "Include users (enrollments)"
+msgstr "Ներառել օգտատերերին (գրանցումներ)"
+
+msgid "Reset dates"
+msgstr "Վերակայել ամսաթվերը"
+
+msgid "When a file with the same name exists"
+msgstr "Երբ նույն անվանումով ֆայլ կա"
+
+msgid "Ready to copy"
+msgstr "Պատրաստ է պատճենել"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Մենք կպատճենենք բովանդակությունը ընտրված դասընթացից այս դասընթաց: Կարող եք հետ գնալ՝ փոխելու ընտրանքները:"
+
+msgid "Start copying"
+msgstr "Սկսել պատճենումը"
+
+msgid "Select resources to copy"
+msgstr "Ընտրել պատճենելու ռեսուրսները"
+
+msgid "Copy selected"
+msgstr "Պատճենել ընտրվածները"
+
+msgid "Copy completed."
+msgstr "Պատճենումն ավարտված է:"
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Վտանգավոր գոտի. դասընթացը ջնջելը մշտական է:"
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Մուտքագրեք դասընթացի կոդը հաստատման համար: Բոլոր տվյալները մշտապես կջնջվեն:"
+
+msgid "The code must match '%s' exactly."
+msgstr "Կոդը պետք է ճիշտ համապատասխանի '%s'-ին:"
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Նաև ջնջել այն փաստաթղթերը, որոնք օգտագործվում են միայն այս դասընթացում (եթե կան):"
+
+msgid "Delete course"
+msgstr "Ջնջել դասընթացը"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Այս գործողությունը չի կարող հետ շրջանառվել: Շարունակե՞լ:"
+
+msgid "Course deleted successfully."
+msgstr "Դասընթացը հաջողությամբ ջնջվեց:"
+
+msgid "Failed to delete course."
+msgstr "Դասընթացը ջնջելը չհաջողվեց:"
+
+msgid "Create .mbz"
+msgstr "Ստեղծել .mbz"
+
+msgid "Backup scope"
+msgstr "Պահպանման շրջանակ"
+
+msgid "Full course"
+msgstr "Ամբողջ դասընթաց"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Ընտրված տարրերը կլինեն միակները, որոնք կներառվեն արտահանված ֆայլում:"
+
+msgid "Moodle export"
+msgstr "Moodle արտահանում"
+
+msgid "Moodle version"
+msgstr "Moodle տարբերակ"
+
+msgid "Admin ID"
+msgstr "Ադմին ID"
+
+msgid "Internal integer user id"
+msgstr "Ներքին ամբողջահամարային օգտատիրոջ ID"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle-ը պահանջում է ներքին օգտատիրոջ ID XML-ում պահված: Եթե կասկած ունեք, օգտագործեք 1:"
+
+msgid "Username to appear as owner of imported items"
+msgstr "Օգտանունը, որը կհայտնվի ներմուծված տարրերի սեփականատիրոջ տեղում"
+
+msgid "Email to use in the archive metadata"
+msgstr "Արխիվի մետահատուկ տվյալներում օգտագործել էլ. փոստը"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr ".mbz ֆայլ կստեղծվի: Դուք կկարողանաք այն ներբեռնել ավարտից հետո:"
+
+msgid "Select resources to include"
+msgstr "Ընտրեք ներառվող ռեսուրսները"
+
+msgid "Export completed"
+msgstr "Արտահանումն ավարտված է"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Ձեր Moodle պատճենը ստեղծվել է: Դուք կարող եք այն գտնել դասընթացի պատճենների ցանկում:"
+
+msgid "Please complete all required fields."
+msgstr "Լրացրեք բոլոր պարտադիր դաշտերը:"
+
+msgid "Failed to create Moodle backup."
+msgstr "Չհաջողվեց ստեղծել Moodle պատճենը:"
+
+msgid "More actions"
+msgstr "Ավելի շատ գործողություններ"
+

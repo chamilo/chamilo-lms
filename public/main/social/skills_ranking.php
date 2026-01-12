@@ -105,7 +105,7 @@ $jqgrid = Display::grid_js(
     true
 );
 
-$tpl = new Template(get_lang('Skill ranking'));
+$tpl = new Template(get_lang('Skills ranking'));
 $tpl->assign('jqgrid_html', $jqgrid);
 
 $content = Display::grid_html('skill_ranking');

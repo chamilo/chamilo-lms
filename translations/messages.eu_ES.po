@@ -31832,3 +31832,318 @@ msgstr "Aldi baterako fitxategi guztiak ezabatuko dira. Jarraitu?"
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "%minutes% minutu baino zaharragoak diren fitxategiak ezabatuko dira. Jarraitu?"
 
+msgid "The value must match exactly: %s"
+msgstr "Balioak zehazki hau izan behar du: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Errepikapen amaierako data hasierako dataren ondoren egon behar da."
+
+msgid "Index document content?"
+msgstr "Indizatuko duzu dokumentuaren edukia?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Kargatu SVG logoa plataforma goiburura"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Kargatu PNG logoa plataforma goiburura (%s)"
+
+msgid "Write something to %s"
+msgstr "Idatzi zerbait %s(r)en"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Gomendatua: SVG. PNG gomendatutako zabalera: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Kargatu PNG logoa e-postetarako (~%spx zabalera)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "Goiburuaren PNG-a ≤ %spx izan behar du."
+
+msgid "Require specific file format"
+msgstr "Eskatu fitxategi formatu zehatza"
+
+msgid "Select allowed file formats"
+msgstr "Hautatu onartutako fitxategi formatuak"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Luzapen pertsonalizatuak (espazioz bereizita)"
+
+msgid "Other extensions"
+msgstr "Beste luzapenak"
+
+msgid "My invitations"
+msgstr "Nire gonbidapenak"
+
+msgid "Delete access"
+msgstr "Ezabatu sarbidea"
+
+msgid "Certificate tags"
+msgstr "Ziurtagiri etiketak"
+
+msgid "Copy all"
+msgstr "Kopiatu guztia"
+
+msgid "Click to insert"
+msgstr "Klik egin txertatzeko"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr ""
+
+msgid "View badge"
+msgstr ""
+
+msgid "%d min"
+msgstr ""
+
+msgid "Duration in minutes"
+msgstr ""
+
+msgid "Go back to standard view"
+msgstr ""
+
+msgid "Search for student..."
+msgstr ""
+
+msgid "This date is locked or read-only."
+msgstr ""
+
+msgid "Failed to load attendance. Please try again later."
+msgstr ""
+
+msgid "Nothing to save"
+msgstr ""
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr ""
+
+msgid "Storage usage unavailable"
+msgstr ""
+
+msgid "Search for members..."
+msgstr ""
+
+msgid "Current members"
+msgstr ""
+
+msgid "Add members"
+msgstr ""
+
+msgid "Search for users in course/session..."
+msgstr ""
+
+msgid "No users available."
+msgstr ""
+
+msgid "Browse and publish new posts"
+msgstr ""
+
+msgid "Create and assign tasks"
+msgstr ""
+
+msgid "Filtered by %s"
+msgstr ""
+
+msgid "Select a score"
+msgstr ""
+
+msgid "Edit comment"
+msgstr ""
+
+msgid "Failed to update the post."
+msgstr ""
+
+msgid "Delete this post? This action cannot be undone."
+msgstr ""
+
+msgid "Failed to delete the post."
+msgstr "Mezua ezabatzeak huts egin du."
+
+msgid "Failed to update the comment."
+msgstr "Iruzkina eguneratzeak huts egin du."
+
+msgid "Delete this comment?"
+msgstr "Ezabatu iruzkin hau?"
+
+msgid "Failed to delete the comment."
+msgstr "Iruzkina ezabatzeak huts egin du."
+
+msgid "Search for projects..."
+msgstr "Bilatu proiektuak..."
+
+msgid "Only visible"
+msgstr "Ikusgai soilik"
+
+msgid "Rename project"
+msgstr "Berrizendatu proiektua"
+
+msgid "New title"
+msgstr "Izenburu berria"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Administratzailea edo irakaslea izan behar duzu proiektuak kudeatzeko."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Ezabatu proiektu hau? Ekintza hau ezin da desegin."
+
+msgid "Task list"
+msgstr "Zereginen zerrenda"
+
+msgid "Change status"
+msgstr "Aldatu egoera"
+
+msgid "Waiting for validation"
+msgstr "Balioztapenaren zain"
+
+msgid "Delete this task?"
+msgstr "Ezabatu zeregin hau?"
+
+msgid "Failed to delete the task."
+msgstr "Zeregina ezabatzeak huts egin du."
+
+msgid "Failed to update status."
+msgstr "Egoera eguneratzeak huts egin du."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Ziur zaude hirugarren hau ezabatu nahi duzula? Ekintza hau ezin da desegin."
+
+msgid "Please fix the errors before saving."
+msgstr "Zehaztu erroreak gorde aurretik."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Errorea hirugarrena sortzerakoan. Egiaztatu datuak."
+
+msgid "Error deleting third party."
+msgstr "Errorea hirugarrena ezabatzerakoan."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Kargatu aukerako goiburua eta posta elektronikoaren logoak. SVG gomendatzen da; PNG erabiltzen da ordezkoa gisa."
+
+msgid "Data exchange updated successfully."
+msgstr "Datuen trukaketa ongi eguneratu da."
+
+msgid "Error deleting data exchange."
+msgstr "Errorea datuen trukaketa ezabatzerakoan."
+
+msgid "Failed to recycle course."
+msgstr "Kurtsoa berrabiarazteak huts egin du."
+
+msgid "Select source course"
+msgstr "Hautatu jatorrizko kurtsoa"
+
+msgid "Course to copy from"
+msgstr "Kopiatzeko kurtsoa"
+
+msgid "Search by code or title..."
+msgstr "Bilatu kodez edo izenburuz..."
+
+msgid "No courses match your search."
+msgstr "Ez dago zure bilaketarekin bat datozen kurtsoak."
+
+msgid "Copy options"
+msgstr "Kopia-aukerak"
+
+msgid "Include users (enrollments)"
+msgstr "Sartu erabiltzaileak (matrikulak)"
+
+msgid "Reset dates"
+msgstr "Berrezarri datak"
+
+msgid "When a file with the same name exists"
+msgstr "Fitxategi bera izenarekin existitzen denean"
+
+msgid "Ready to copy"
+msgstr "Kopiatzeko prest"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Hautatutako kurtsoaren edukia kopiatuko dugu kurtso honetara. Itzuli zaitezke aukerak aldatzeko."
+
+msgid "Start copying"
+msgstr "Hasi kopiatzen"
+
+msgid "Select resources to copy"
+msgstr "Hautatu kopiatzeko baliabideak"
+
+msgid "Copy selected"
+msgstr "Kopiatu hautatua"
+
+msgid "Copy completed."
+msgstr "Kopia osatua."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Arrisku-zona: kurtsoa ezabatzea betirakoa da."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Idatzi kurtsoaren kodea baieztatzeko. Datozen guztiak betirako ezabatuak izango dira."
+
+msgid "The code must match '%s' exactly."
+msgstr "Kodeak '%s'rekin bat egin behar du zehazki."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Ezabatu kurtso honetan soilik erabilitako dokumentuak ere (badaude)."
+
+msgid "Delete course"
+msgstr "Ezabatu kurtsoa"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Ekintza hau ezin da desegin. Jarraitu?"
+
+msgid "Course deleted successfully."
+msgstr "Kurtsoa ongi ezabatu da."
+
+msgid "Failed to delete course."
+msgstr "Kurtsoa ezabatzeak huts egin du."
+
+msgid "Create .mbz"
+msgstr "Sortu .mbz"
+
+msgid "Backup scope"
+msgstr "Babeskoparen hedadura"
+
+msgid "Full course"
+msgstr "Kurtso osoa"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Hautatutako elementuak soilik izango dira esportatutako fitxategian barneratuak."
+
+msgid "Moodle export"
+msgstr "Moodle esportazioa"
+
+msgid "Moodle version"
+msgstr "Moodle bertsioa"
+
+msgid "Admin ID"
+msgstr "Admin ID"
+
+msgid "Internal integer user id"
+msgstr "Barneko erabiltzaile ID osoa"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle-k XML-n gordetako barneko erabiltzaile ID bat behar du. Zalantzan bazaude, 1 erabili."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Inportatutako elementuen jabe gisa agertuko den erabiltzaile-izena"
+
+msgid "Email to use in the archive metadata"
+msgstr "Artxiboaren metadatetarako erabiltzeko e-posta"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr ".mbz fitxategi bat sortuko da. Deskargatu ahal izango duzu amaitutakoan."
+
+msgid "Select resources to include"
+msgstr "Barne hartzeko baliabideak aukeratu"
+
+msgid "Export completed"
+msgstr "Esportazioa osatua"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Zure Moodle babeskopia sortu da. Ikastaroen babeskopien zerrendan aurki dezakezu."
+
+msgid "Please complete all required fields."
+msgstr "Bete beharrezko eremu guztiak."
+
+msgid "Failed to create Moodle backup."
+msgstr "Hutsegitea Moodle babeskopia sortzean."
+
+msgid "More actions"
+msgstr "Ekintza gehiago"
+

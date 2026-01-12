@@ -25642,7 +25642,7 @@ msgid "Video player renderers"
 msgstr "Mga renderer ng video player"
 
 msgid "Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
-msgstr "Pag-activate ng mga renderer ng player para sa YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
+msgstr "I-activate ang player renderers para sa YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
 
 msgid "Allow teachers to edit tests in learning paths"
 msgstr "Payagan ang mga guro na mag-edit ng mga pagsusulit sa learning paths"
@@ -26587,7 +26587,7 @@ msgid "LDAP connection configuration"
 msgstr "Kombigurasyon ng koneksyon ng LDAP"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Array na tumutukoy sa host at port para sa LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Array na nagdedepina ng host at port para sa LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Itakda ang expiration date sa unang login"
@@ -26599,7 +26599,7 @@ msgid "Selective display of roles"
 msgstr "Piliin ang pagpapakita ng mga role"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "Isang array ng role => true/false na tumutukoy kung ang role na iyon ay dapat ipakita o itago.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "Isang array ng role => true/false na nagdedepina kung ang role na iyon ay dapat ipakita o itago.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Mga opsyon sa pagpapakita ng mga role"
@@ -31820,4 +31820,319 @@ msgstr "Ito ay magbabura ng lahat ng pansamantalang mga file. Magpatuloy?"
 
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Ito ay magbabura ng mga file na mas matanda kaysa %minutes% minuto. Magpatuloy?"
+
+msgid "The value must match exactly: %s"
+msgstr ""
+
+msgid "Repeat end date must be after start date."
+msgstr ""
+
+msgid "Index document content?"
+msgstr ""
+
+msgid "Upload SVG logo to platform header"
+msgstr ""
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr ""
+
+msgid "Write something to %s"
+msgstr ""
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr ""
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr ""
+
+msgid "Header PNG must be ≤ %spx."
+msgstr ""
+
+msgid "Require specific file format"
+msgstr ""
+
+msgid "Select allowed file formats"
+msgstr ""
+
+msgid "Custom extensions (separated by space)"
+msgstr ""
+
+msgid "Other extensions"
+msgstr ""
+
+msgid "My invitations"
+msgstr ""
+
+msgid "Delete access"
+msgstr ""
+
+msgid "Certificate tags"
+msgstr ""
+
+msgid "Copy all"
+msgstr ""
+
+msgid "Click to insert"
+msgstr ""
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr ""
+
+msgid "View badge"
+msgstr ""
+
+msgid "%d min"
+msgstr ""
+
+msgid "Duration in minutes"
+msgstr ""
+
+msgid "Go back to standard view"
+msgstr ""
+
+msgid "Search for student..."
+msgstr ""
+
+msgid "This date is locked or read-only."
+msgstr ""
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Nabigo sa pag-load ng attendance. Mangyaring subukan muli mamaya."
+
+msgid "Nothing to save"
+msgstr "Walang magpapadala"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "May hindi pa nai-save na mga pagbabago. Umalis pa rin?"
+
+msgid "Storage usage unavailable"
+msgstr "Gamit ng storage hindi magagamit"
+
+msgid "Search for members..."
+msgstr "Maghanap ng mga miyembro..."
+
+msgid "Current members"
+msgstr "Kasalukuyang mga miyembro"
+
+msgid "Add members"
+msgstr "Magdagdag ng mga miyembro"
+
+msgid "Search for users in course/session..."
+msgstr "Maghanap ng mga user sa kurso/sesyon..."
+
+msgid "No users available."
+msgstr "Walang magagamit na user."
+
+msgid "Browse and publish new posts"
+msgstr "I-browse at i-publish ang mga bagong post"
+
+msgid "Create and assign tasks"
+msgstr "Lumikha at magtalaga ng mga gawain"
+
+msgid "Filtered by %s"
+msgstr "Na-filter ayon sa %s"
+
+msgid "Select a score"
+msgstr "Piliin ang iskor"
+
+msgid "Edit comment"
+msgstr "I-edit ang komento"
+
+msgid "Failed to update the post."
+msgstr "Nabigo sa pag-update ng post."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Tanggalin ang post na ito? Hindi na mababago ang aksyong ito."
+
+msgid "Failed to delete the post."
+msgstr "Nabigo sa pagtanggal ng post."
+
+msgid "Failed to update the comment."
+msgstr "Nabigo sa pag-update ng komento."
+
+msgid "Delete this comment?"
+msgstr "Tanggalin ang komentong ito?"
+
+msgid "Failed to delete the comment."
+msgstr "Nabigo sa pagtanggal ng komento."
+
+msgid "Search for projects..."
+msgstr "Maghanap ng mga proyekto..."
+
+msgid "Only visible"
+msgstr "Tanging nakikita"
+
+msgid "Rename project"
+msgstr "Palitan ang pangalan ng proyekto"
+
+msgid "New title"
+msgstr "Bagong pamagat"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Kailangan mong admin o guro upang pamahalaan ang mga proyekto."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Tanggalin ang proyekto na ito? Hindi na mababago ang aksyong ito."
+
+msgid "Task list"
+msgstr "Listahan ng gawain"
+
+msgid "Change status"
+msgstr "Palitan ang katayuan"
+
+msgid "Waiting for validation"
+msgstr "Naghihintay ng pag-validate"
+
+msgid "Delete this task?"
+msgstr "Tanggalin ang gawaing ito?"
+
+msgid "Failed to delete the task."
+msgstr "Nabigo sa pagtanggal ng gawain."
+
+msgid "Failed to update status."
+msgstr "Nabigo sa pag-update ng katayuan."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Sigurado ka bang gustong tanggalin ang third party na ito? Hindi na mababago ang aksyong ito."
+
+msgid "Please fix the errors before saving."
+msgstr "Ayusin ang mga error bago i-save."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Error sa paglikha ng third party. Mangyaring suriin ang data."
+
+msgid "Error deleting third party."
+msgstr "Error sa pagtanggal ng third party."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "I-upload ang opsyonal na header at email logos. SVG ang pinipili; PNG ang ginagamit bilang fallback."
+
+msgid "Data exchange updated successfully."
+msgstr "Matagumpay na na-update ang data exchange."
+
+msgid "Error deleting data exchange."
+msgstr "Error sa pagtanggal ng data exchange."
+
+msgid "Failed to recycle course."
+msgstr "Nabigo sa pag-recycle ng kurso."
+
+msgid "Select source course"
+msgstr "Piliin ang source course"
+
+msgid "Course to copy from"
+msgstr "Kurso na kopyahin mula"
+
+msgid "Search by code or title..."
+msgstr "Maghanap ayon sa code o pamagat..."
+
+msgid "No courses match your search."
+msgstr "Walang kurso na tumugma sa iyong paghahanap."
+
+msgid "Copy options"
+msgstr "Mga opsyon sa pagkopya"
+
+msgid "Include users (enrollments)"
+msgstr "Isama ang mga user (enrollments)"
+
+msgid "Reset dates"
+msgstr "I-reset ang mga petsa"
+
+msgid "When a file with the same name exists"
+msgstr "Kapag may umiiral nang file na may parehong pangalan"
+
+msgid "Ready to copy"
+msgstr "Handa nang kopyahin"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Kopyahin natin ang nilalaman mula sa napiling kurso patungo sa kursong ito. Pwede kang bumalik upang baguhin ang mga opsyon."
+
+msgid "Start copying"
+msgstr "Simulan ang pagkopya"
+
+msgid "Select resources to copy"
+msgstr "Piliin ang mga mapagkukunan upang kopyahin"
+
+msgid "Copy selected"
+msgstr "Kopyahin ang napiling"
+
+msgid "Copy completed."
+msgstr "Natapos na ang pagkopya."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Peligro: ang pag-delete ng kurso ay permanente."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "I-type ang code ng kurso upang kumpirmahin. Lahat ng data ay tatanggalin nang permanente."
+
+msgid "The code must match '%s' exactly."
+msgstr "Ang code ay dapat tumugma sa '%s' nang eksakto."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Tanggalin din ang mga dokumento na ginagamit lamang sa kursong ito (kung mayroon)."
+
+msgid "Delete course"
+msgstr "Tanggalin ang kurso"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Hindi na mababago ang aksyong ito. Magpatuloy?"
+
+msgid "Course deleted successfully."
+msgstr "Matagumpay na natanggal ang kurso."
+
+msgid "Failed to delete course."
+msgstr "Nabigo ang pagtanggal ng kurso."
+
+msgid "Create .mbz"
+msgstr "Lumikha ng .mbz"
+
+msgid "Backup scope"
+msgstr "Saklaw ng backup"
+
+msgid "Full course"
+msgstr "Buong kurso"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Ang mga napiling item lamang ang isasama sa na-export na file."
+
+msgid "Moodle export"
+msgstr "Moodle export"
+
+msgid "Moodle version"
+msgstr "Bersyon ng Moodle"
+
+msgid "Admin ID"
+msgstr "Admin ID"
+
+msgid "Internal integer user id"
+msgstr "Panloob na integer ID ng user"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Kinakailangan ng Moodle ang panloob na user ID na naka-store sa XML. Kung hindi sigurado, gumamit ng 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Username na lalabas bilang may-ari ng na-import na item"
+
+msgid "Email to use in the archive metadata"
+msgstr "Email na gagamitin sa metadata ng archive"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "Isang .mbz file ang mabubuo. Ma-download mo ito kapag natapos na."
+
+msgid "Select resources to include"
+msgstr "Piliin ang mga mapagkukunan na isasama"
+
+msgid "Export completed"
+msgstr "Natapos na ang export"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Nalikha na ang Moodle backup mo. Matatagpuan ito sa listahan ng mga backup ng kurso."
+
+msgid "Please complete all required fields."
+msgstr "Pakikalunan lahat ng kinakailangang field."
+
+msgid "Failed to create Moodle backup."
+msgstr "Nabigo ang paglikha ng Moodle backup."
+
+msgid "More actions"
+msgstr "Higit pang mga aksyon"
 

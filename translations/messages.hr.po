@@ -31828,3 +31828,318 @@ msgstr "Ovo će obrisati sve privremene datoteke. Nastaviti?"
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Ovo će obrisati datoteke starije od %minutes% minuta. Nastaviti?"
 
+msgid "The value must match exactly: %s"
+msgstr "Vrijednost mora točno odgovarati: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Datum završetka ponavljanja mora biti nakon datuma početka."
+
+msgid "Index document content?"
+msgstr "Indeksirati sadržaj dokumenta?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Učitaj SVG logotip u zaglavlje platforme"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Učitaj PNG logotip u zaglavlje platforme (%s)"
+
+msgid "Write something to %s"
+msgstr "Napiši nešto za %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Preporučeno: SVG. PNG preporučena širina: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Učitaj PNG logotip za e-poštu (~%spx širine)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "Zaglavlje PNG mora biti ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Zahtijevaj specifičan format datoteke"
+
+msgid "Select allowed file formats"
+msgstr "Odaberi dopuštene formate datoteka"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Prilagođene ekstenzije (odvojene razmacima)"
+
+msgid "Other extensions"
+msgstr "Druge ekstenzije"
+
+msgid "My invitations"
+msgstr "Moje pozivnice"
+
+msgid "Delete access"
+msgstr "Obriši pristup"
+
+msgid "Certificate tags"
+msgstr "Oznake certifikata"
+
+msgid "Copy all"
+msgstr "Kopiraj sve"
+
+msgid "Click to insert"
+msgstr "Klikni za umetanje"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Preferirano: SVG. PNG maksimalna veličina: %spx."
+
+msgid "View badge"
+msgstr "Pogledaj značku"
+
+msgid "%d min"
+msgstr "%d min"
+
+msgid "Duration in minutes"
+msgstr "Trajanje u minutama"
+
+msgid "Go back to standard view"
+msgstr "Vrati se na standardni prikaz"
+
+msgid "Search for student..."
+msgstr "Pretraži studenta..."
+
+msgid "This date is locked or read-only."
+msgstr "Ovaj datum je zaključan ili samo za čitanje."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Neuspjelo učitavanje prisutnosti. Pokušajte ponovno kasnije."
+
+msgid "Nothing to save"
+msgstr "Nema što spremiti"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Imate nespremljene promjene. Ipak otići?"
+
+msgid "Storage usage unavailable"
+msgstr "Upotreba prostora nedostupna"
+
+msgid "Search for members..."
+msgstr "Pretraži članove..."
+
+msgid "Current members"
+msgstr "Trenutni članovi"
+
+msgid "Add members"
+msgstr "Dodaj članove"
+
+msgid "Search for users in course/session..."
+msgstr "Pretraži korisnike u predmetu/sesiiji..."
+
+msgid "No users available."
+msgstr "Nema dostupnih korisnika."
+
+msgid "Browse and publish new posts"
+msgstr "Pregledaj i objavi nove objave"
+
+msgid "Create and assign tasks"
+msgstr "Stvori i dodijeli zadatke"
+
+msgid "Filtered by %s"
+msgstr "Filtrirano po %s"
+
+msgid "Select a score"
+msgstr "Odaberite ocjenu"
+
+msgid "Edit comment"
+msgstr "Uređivanje komentara"
+
+msgid "Failed to update the post."
+msgstr "Neuspjelo ažuriranje objave."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Izbrišite ovu objavu? Ova radnja se ne može poništiti."
+
+msgid "Failed to delete the post."
+msgstr "Neuspjelo brisanje objave."
+
+msgid "Failed to update the comment."
+msgstr "Neuspjelo ažuriranje komentara."
+
+msgid "Delete this comment?"
+msgstr "Izbrišite ovaj komentar?"
+
+msgid "Failed to delete the comment."
+msgstr "Neuspjelo brisanje komentara."
+
+msgid "Search for projects..."
+msgstr "Pretražite projekte..."
+
+msgid "Only visible"
+msgstr "Samo vidljivo"
+
+msgid "Rename project"
+msgstr "Preimenuj projekt"
+
+msgid "New title"
+msgstr "Novi naslov"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Morate biti administrator ili nastavnik za upravljanje projektima."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Izbrišite ovaj projekt? Ova radnja se ne može poništiti."
+
+msgid "Task list"
+msgstr "Popis zadataka"
+
+msgid "Change status"
+msgstr "Promijeni status"
+
+msgid "Waiting for validation"
+msgstr "Čeka potvrdu"
+
+msgid "Delete this task?"
+msgstr "Izbrišite ovaj zadatak?"
+
+msgid "Failed to delete the task."
+msgstr "Neuspjelo brisanje zadatka."
+
+msgid "Failed to update status."
+msgstr "Neuspjelo ažuriranje statusa."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Jeste li sigurni da želite izbrisati ovog trećeg partnera? Ova radnja se ne može poništiti."
+
+msgid "Please fix the errors before saving."
+msgstr "Ispravite greške prije spremanja."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Greška pri stvaranju trećeg partnera. Provjerite podatke."
+
+msgid "Error deleting third party."
+msgstr "Greška pri brisanju trećeg partnera."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Učitajte neobavezne logotipe za zaglavlje i e-poštu. SVG je poželjan; PNG se koristi kao rezervna opcija."
+
+msgid "Data exchange updated successfully."
+msgstr "Razmjena podataka uspješno ažurirana."
+
+msgid "Error deleting data exchange."
+msgstr "Greška pri brisanju razmjene podataka."
+
+msgid "Failed to recycle course."
+msgstr "Neuspjelo recikliranje kursa."
+
+msgid "Select source course"
+msgstr "Odaberite izvorni kurs"
+
+msgid "Course to copy from"
+msgstr "Kurs za kopiranje"
+
+msgid "Search by code or title..."
+msgstr "Pretraži po kodu ili naslovu..."
+
+msgid "No courses match your search."
+msgstr "Nema kurseva koji odgovaraju vašoj pretrazi."
+
+msgid "Copy options"
+msgstr "Opcije kopiranja"
+
+msgid "Include users (enrollments)"
+msgstr "Uključi korisnike (upise)"
+
+msgid "Reset dates"
+msgstr "Resetiraj datume"
+
+msgid "When a file with the same name exists"
+msgstr "Kada postoji datoteka s istim imenom"
+
+msgid "Ready to copy"
+msgstr "Spremno za kopiranje"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Kopirat ćemo sadržaj iz odabranog kursa u ovaj kurs. Možete se vratiti da promijenite opcije."
+
+msgid "Start copying"
+msgstr "Započni kopiranje"
+
+msgid "Select resources to copy"
+msgstr "Odaberite resurse za kopiranje"
+
+msgid "Copy selected"
+msgstr "Kopiraj odabrano"
+
+msgid "Copy completed."
+msgstr "Kopiranje završeno."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Opasno područje: brisanje kursa je trajno."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Upišite kod kursa za potvrdu. Svi podaci će biti trajno izbrisani."
+
+msgid "The code must match '%s' exactly."
+msgstr "Kod mora točno odgovarati '%s'."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Također izbrišite dokumente koji se koriste samo u ovom kursu (ako ih ima)."
+
+msgid "Delete course"
+msgstr "Izbriši kurs"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Ova radnja se ne može poništiti. Nastaviti?"
+
+msgid "Course deleted successfully."
+msgstr "Kurs uspješno izbrisan."
+
+msgid "Failed to delete course."
+msgstr "Neuspjelo brisanje kursa."
+
+msgid "Create .mbz"
+msgstr "Stvori .mbz"
+
+msgid "Backup scope"
+msgstr "Opseg sigurnosne kopije"
+
+msgid "Full course"
+msgstr "Cijeli predmet"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Odabrani elementi bit će jedini uključeni u izvezenu datoteku."
+
+msgid "Moodle export"
+msgstr "Izvoz za Moodle"
+
+msgid "Moodle version"
+msgstr "Verzija Moodlea"
+
+msgid "Admin ID"
+msgstr "ID administratora"
+
+msgid "Internal integer user id"
+msgstr "Unutarnji cjelobrojni ID korisnika"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle zahtijeva unutarnji ID korisnika pohranjen u XML-u. Ako niste sigurni, koristite 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Korisničko ime koje će se prikazati kao vlasnik uvezenih elemenata"
+
+msgid "Email to use in the archive metadata"
+msgstr "E-pošta za upotrebu u metapodacima arhive"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "Generirat će se .mbz datoteka. Moći ćete je preuzeti kada se završi."
+
+msgid "Select resources to include"
+msgstr "Odaberite resurse za uključivanje"
+
+msgid "Export completed"
+msgstr "Izvoz završen"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Vaša Moodle sigurnosna kopija je kreirana. Možete je pronaći na popisu sigurnosnih kopija predmeta."
+
+msgid "Please complete all required fields."
+msgstr "Molimo ispunite sva obavezna polja."
+
+msgid "Failed to create Moodle backup."
+msgstr "Neuspjelo kreiranje Moodle sigurnosne kopije."
+
+msgid "More actions"
+msgstr "Više radnji"
+

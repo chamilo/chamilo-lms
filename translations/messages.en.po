@@ -31852,3 +31852,303 @@ msgstr "Upload PNG logo to platform header (%s)"
 
 msgid "Write something to %s"
 msgstr "Write something to %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Preferred: SVG. PNG recommended width: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Upload PNG logo for e-mails (~%spx width)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "Header PNG must be ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Require specific file format"
+
+msgid "Select allowed file formats"
+msgstr "Select allowed file formats"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Custom extensions (separated by space)"
+
+msgid "Other extensions"
+msgstr "Other extensions"
+
+msgid "My invitations"
+msgstr "My invitations"
+
+msgid "Delete access"
+msgstr "Delete access"
+
+msgid "Certificate tags"
+msgstr "Certificate tags"
+
+msgid "Copy all"
+msgstr "Copy all"
+
+msgid "Click to insert"
+msgstr "Click to insert"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Preferred: SVG. PNG max size: %spx."
+
+msgid "View badge"
+msgstr "View badge"
+
+msgid "%d min"
+msgstr "%d min"
+
+msgid "Duration in minutes"
+msgstr "Duration in minutes"
+
+msgid "Go back to standard view"
+msgstr "Go back to standard view"
+
+msgid "Search for student..."
+msgstr "Search for student..."
+
+msgid "This date is locked or read-only."
+msgstr "This date is locked or read-only."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Failed to load attendance. Please try again later."
+
+msgid "Nothing to save"
+msgstr "Nothing to save"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "You have unsaved changes. Leave anyway?"
+
+msgid "Storage usage unavailable"
+msgstr "Storage usage unavailable"
+
+msgid "Search for members..."
+msgstr "Search for members..."
+
+msgid "Current members"
+msgstr "Current members"
+
+msgid "Add members"
+msgstr "Add members"
+
+msgid "Search for users in course/session..."
+msgstr "Search for users in course/session..."
+
+msgid "No users available."
+msgstr "No users available."
+
+msgid "Browse and publish new posts"
+msgstr "Browse and publish new posts"
+
+msgid "Create and assign tasks"
+msgstr "Create and assign tasks"
+
+msgid "Filtered by %s"
+msgstr "Filtered by %s"
+
+msgid "Select a score"
+msgstr "Select a score"
+
+msgid "Edit comment"
+msgstr "Edit comment"
+
+msgid "Failed to update the post."
+msgstr "Failed to update the post."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Delete this post? This action cannot be undone."
+
+msgid "Failed to delete the post."
+msgstr "Failed to delete the post."
+
+msgid "Failed to update the comment."
+msgstr "Failed to update the comment."
+
+msgid "Delete this comment?"
+msgstr "Delete this comment?"
+
+msgid "Failed to delete the comment."
+msgstr "Failed to delete the comment."
+
+msgid "Search for projects..."
+msgstr "Search for projects..."
+
+msgid "Only visible"
+msgstr "Only visible"
+
+msgid "Rename project"
+msgstr "Rename project"
+
+msgid "New title"
+msgstr "New title"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "You need to be a admin or teacher to manage projects."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Delete this project? This action cannot be undone."
+
+msgid "Task list"
+msgstr "Task list"
+
+msgid "Change status"
+msgstr "Change status"
+
+msgid "Waiting for validation"
+msgstr "Waiting for validation"
+
+msgid "Delete this task?"
+msgstr "Delete this task?"
+
+msgid "Failed to delete the task."
+msgstr "Failed to delete the task."
+
+msgid "Failed to update status."
+msgstr "Failed to update status."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Are you sure you want to delete this third party? This action cannot be undone."
+
+msgid "Please fix the errors before saving."
+msgstr "Please fix the errors before saving."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Error creating third party. Please verify the data."
+
+msgid "Error deleting third party."
+msgstr "Error deleting third party."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+
+msgid "Data exchange updated successfully."
+msgstr "Data exchange updated successfully."
+
+msgid "Error deleting data exchange."
+msgstr "Error deleting data exchange."
+
+msgid "Failed to recycle course."
+msgstr "Failed to recycle course."
+
+msgid "Select source course"
+msgstr "Select source course"
+
+msgid "Course to copy from"
+msgstr "Course to copy from"
+
+msgid "Search by code or title..."
+msgstr "Search by code or title..."
+
+msgid "No courses match your search."
+msgstr "No courses match your search."
+
+msgid "Copy options"
+msgstr "Copy options"
+
+msgid "Include users (enrollments)"
+msgstr "Include users (enrollments)"
+
+msgid "Reset dates"
+msgstr "Reset dates"
+
+msgid "When a file with the same name exists"
+msgstr "When a file with the same name exists"
+
+msgid "Ready to copy"
+msgstr "Ready to copy"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "We will copy content from the selected course into this course. You can go back to change options."
+
+msgid "Start copying"
+msgstr "Start copying"
+
+msgid "Select resources to copy"
+msgstr "Select resources to copy"
+
+msgid "Copy selected"
+msgstr "Copy selected"
+
+msgid "Copy completed."
+msgstr "Copy completed."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Danger zone: deleting a course is permanent."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Type the course code to confirm. All data will be permanently removed."
+
+msgid "The code must match '%s' exactly."
+msgstr "The code must match '%s' exactly."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Also delete documents that are only used in this course (if any)."
+
+msgid "Delete course"
+msgstr "Delete course"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "This action cannot be undone. Continue?"
+
+msgid "Course deleted successfully."
+msgstr "Course deleted successfully."
+
+msgid "Failed to delete course."
+msgstr "Failed to delete course."
+
+msgid "Create .mbz"
+msgstr "Create .mbz"
+
+msgid "Backup scope"
+msgstr "Backup scope"
+
+msgid "Full course"
+msgstr "Full course"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Selected items will be the only ones included in the exported file."
+
+msgid "Moodle export"
+msgstr "Moodle export"
+
+msgid "Moodle version"
+msgstr "Moodle version"
+
+msgid "Admin ID"
+msgstr "Admin ID"
+
+msgid "Internal integer user id"
+msgstr "Internal integer user id"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Username to appear as owner of imported items"
+
+msgid "Email to use in the archive metadata"
+msgstr "Email to use in the archive metadata"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr "A .mbz file will be generated. You will be able to download it once finished."
+
+msgid "Select resources to include"
+msgstr "Select resources to include"
+
+msgid "Export completed"
+msgstr "Export completed"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Your Moodle backup has been created. You can find it in the course backups list."
+
+msgid "Please complete all required fields."
+msgstr "Please complete all required fields."
+
+msgid "Failed to create Moodle backup."
+msgstr "Failed to create Moodle backup."
+
+msgid "More actions"
+msgstr "More actions"
+
+msgid "Write something"
+msgstr "Write something"

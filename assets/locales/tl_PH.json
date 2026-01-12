@@ -1265,8 +1265,9 @@
     "Dropbox": "Dropbox",
     "Your browser does not support Javascript": "Ang iyong browser ay hindi sumusuporta sa Javascript",
     "The value must match exactly: {0}": "The value must match exactly: {0}",
-    "Repeat end date must be after start date.": "Repeat end date must be after start date.",
-    "Index document content?": "Index document content?",
-    "Upload SVG logo to platform header": "Upload SVG logo to platform header",
-    "Upload PNG logo to platform header ({0})": "Upload PNG logo to platform header ({0})"
+    "Upload PNG logo to platform header ({0})": "Upload PNG logo to platform header ({0})",
+    "Preferred: SVG. PNG recommended width: {0}px.": "Preferred: SVG. PNG recommended width: {0}px.",
+    "Upload PNG logo for e-mails (~{0}px width)": "Upload PNG logo for e-mails (~{0}px width)",
+    "Header PNG must be \u2264 {0}px.": "Header PNG must be \u2264 {0}px.",
+    "Preferred: SVG. PNG max size: {0}px.": "Preferred: SVG. PNG max size: {0}px."
 }

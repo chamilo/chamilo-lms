@@ -110,7 +110,7 @@
     <div class="rounded-lg border bg-white shadow-sm p-5">
       <div class="flex items-center justify-between mb-3">
         <h3 class="text-lg font-semibold">{{ t("Comments") }}</h3>
-        <BaseButton type="primary" icon="comment" :label="t('Add Comment')" @click="openComment" />
+        <BaseButton type="primary" icon="comment" :label="t('Add comment')" @click="openComment" />
       </div>
 
       <div v-if="loadingComments" class="space-y-3">
@@ -119,7 +119,7 @@
           <div class="h-3 w-60 bg-gray-100 rounded mt-1"></div>
         </div>
       </div>
-      <div v-else-if="!comments.length" class="text-sm text-gray-500">{{ t("No comments yet.") }}</div>
+      <div v-else-if="!comments.length" class="text-sm text-gray-500">{{ t("No comment") }}</div>
       <ul v-else class="space-y-3">
         <li v-for="c in comments" :key="c.id" class="rounded bg-gray-20 p-3">
           <div class="flex items-start justify-between gap-2">
@@ -156,7 +156,7 @@
     <CommentDialog
       v-if="showEditCommentDialog"
       :initialText="editCommentText"
-      :dialogTitle="t('Edit Comment')"
+      :dialogTitle="t('Edit comment')"
       :confirmLabel="t('Save')"
       :headerIcon="'pencil'"
       @close="showEditCommentDialog=false"
@@ -168,7 +168,7 @@
       mode="edit"
       :initialTitle="editTitle"
       :initialFullText="editText"
-      :dialogTitle="t('Edit Post')"
+      :dialogTitle="t('Edit post')"
       :confirmLabel="t('Save')"
       :headerIcon="'pencil'"
       :showFiles="false"

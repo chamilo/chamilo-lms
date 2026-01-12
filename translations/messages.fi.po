@@ -31829,3 +31829,318 @@ msgstr "Tämä poistaa kaikki väliaikaiset tiedostot. Jatka?"
 msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Tämä poistaa tiedostot, jotka ovat vanhempia kuin %minutes% minuuttia. Jatka?"
 
+msgid "The value must match exactly: %s"
+msgstr "Arvon on oltava täsmälleen: %s"
+
+msgid "Repeat end date must be after start date."
+msgstr "Toistopäivämäärän on oltava alkamispäivämäärän jälkeen."
+
+msgid "Index document content?"
+msgstr "Indeksoi asiakirjan sisältö?"
+
+msgid "Upload SVG logo to platform header"
+msgstr "Lataa SVG-logo alustan otsikkoon"
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr "Lataa PNG-logo alustan otsikkoon (%s)"
+
+msgid "Write something to %s"
+msgstr "Kirjoita jotain kohteeseen %s"
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr "Suositeltu: SVG. PNG-suositeltu leveys: %spx."
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr "Lataa PNG-logo sähköposteja varten (~%spx leveys)"
+
+msgid "Header PNG must be ≤ %spx."
+msgstr "Otsikon PNG on oltava ≤ %spx."
+
+msgid "Require specific file format"
+msgstr "Vaatii tietyn tiedostomuodon"
+
+msgid "Select allowed file formats"
+msgstr "Valitse sallitut tiedostomuodot"
+
+msgid "Custom extensions (separated by space)"
+msgstr "Omat lisäykset (välilyönnillä eroteltuna)"
+
+msgid "Other extensions"
+msgstr "Muut lisäykset"
+
+msgid "My invitations"
+msgstr "Omat kutsuni"
+
+msgid "Delete access"
+msgstr "Poista pääsy"
+
+msgid "Certificate tags"
+msgstr "Varausmerkit"
+
+msgid "Copy all"
+msgstr "Kopioi kaikki"
+
+msgid "Click to insert"
+msgstr "Napsauta lisätäksesi"
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr "Suositeltu: SVG. PNG max koko: %spx."
+
+msgid "View badge"
+msgstr "Näytä merkki"
+
+msgid "%d min"
+msgstr "%d min"
+
+msgid "Duration in minutes"
+msgstr "Kesto minuuteissa"
+
+msgid "Go back to standard view"
+msgstr "Palaa normaaliin näkymään"
+
+msgid "Search for student..."
+msgstr "Etsi opiskelijaa..."
+
+msgid "This date is locked or read-only."
+msgstr "Tämä päivämäärä on lukittu tai vain luku-tila."
+
+msgid "Failed to load attendance. Please try again later."
+msgstr "Osallistumisen lataus epäonnistui. Yritä myöhemmin uudelleen."
+
+msgid "Nothing to save"
+msgstr "Ei tallennettavaa"
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Sinulla on tallentamattomia muutoksia. Poistu silti?"
+
+msgid "Storage usage unavailable"
+msgstr "Tallennustilan käyttö ei saatavilla"
+
+msgid "Search for members..."
+msgstr "Etsi jäseniä..."
+
+msgid "Current members"
+msgstr "Nykyiset jäsenet"
+
+msgid "Add members"
+msgstr "Lisää jäseniä"
+
+msgid "Search for users in course/session..."
+msgstr "Etsi käyttäjiä kurssilta/istunnosta..."
+
+msgid "No users available."
+msgstr "Ei käyttäjiä saatavilla."
+
+msgid "Browse and publish new posts"
+msgstr "Selaa ja julkaise uusia viestejä"
+
+msgid "Create and assign tasks"
+msgstr "Luo ja määritä tehtäviä"
+
+msgid "Filtered by %s"
+msgstr "Suodatettu kohteella %s"
+
+msgid "Select a score"
+msgstr "Valitse arvosana"
+
+msgid "Edit comment"
+msgstr "Muokkaa kommenttia"
+
+msgid "Failed to update the post."
+msgstr "Viestin päivitys epäonnistui."
+
+msgid "Delete this post? This action cannot be undone."
+msgstr "Poista tämä viesti? Toimintoa ei voi perua."
+
+msgid "Failed to delete the post."
+msgstr "Viestin poisto epäonnistui."
+
+msgid "Failed to update the comment."
+msgstr "Kommentin päivitys epäonnistui."
+
+msgid "Delete this comment?"
+msgstr "Poista tämä kommentti?"
+
+msgid "Failed to delete the comment."
+msgstr "Kommentin poisto epäonnistui."
+
+msgid "Search for projects..."
+msgstr "Etsi projekteja..."
+
+msgid "Only visible"
+msgstr "Vain näkyvät"
+
+msgid "Rename project"
+msgstr "Nimeä projekti uudelleen"
+
+msgid "New title"
+msgstr "Uusi otsikko"
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr "Sinun täytyy olla ylläpitäjä tai opettaja hallitaksesi projekteja."
+
+msgid "Delete this project? This action cannot be undone."
+msgstr "Poista tämä projekti? Toimintoa ei voi perua."
+
+msgid "Task list"
+msgstr "Tehtävälista"
+
+msgid "Change status"
+msgstr "Muuta tilaa"
+
+msgid "Waiting for validation"
+msgstr "Odottaa vahvistusta"
+
+msgid "Delete this task?"
+msgstr "Poistetaanko tämä tehtävä?"
+
+msgid "Failed to delete the task."
+msgstr "Tehtävän poistaminen epäonnistui."
+
+msgid "Failed to update status."
+msgstr "Tilan päivitys epäonnistui."
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr "Haluatko varmasti poistaa tämän kolmannen osapuolen? Toimintoa ei voi perua."
+
+msgid "Please fix the errors before saving."
+msgstr "Korjaa virheet ennen tallentamista."
+
+msgid "Error creating third party. Please verify the data."
+msgstr "Kolmannen osapuolen luonti epäonnistui. Tarkista tiedot."
+
+msgid "Error deleting third party."
+msgstr "Kolmannen osapuolen poistaminen epäonnistui."
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr "Lataa valinnaiset otsake- ja sähköpostilogot. SVG on suositeltu; PNG toimii varalla."
+
+msgid "Data exchange updated successfully."
+msgstr "Tiedonvaihto päivitettiin onnistuneesti."
+
+msgid "Error deleting data exchange."
+msgstr "Tiedonvaihdon poistaminen epäonnistui."
+
+msgid "Failed to recycle course."
+msgstr "Kurssin kierrätys epäonnistui."
+
+msgid "Select source course"
+msgstr "Valitse lähdekurssi"
+
+msgid "Course to copy from"
+msgstr "Kurssi josta kopioidaan"
+
+msgid "Search by code or title..."
+msgstr "Hae tunnuksella tai nimellä..."
+
+msgid "No courses match your search."
+msgstr "Yhtään kurssia ei löydy haullasi."
+
+msgid "Copy options"
+msgstr "Kopiointiasetukset"
+
+msgid "Include users (enrollments)"
+msgstr "Sisällytä käyttäjät (ilmoittautumiset)"
+
+msgid "Reset dates"
+msgstr "Nollaa päivämäärät"
+
+msgid "When a file with the same name exists"
+msgstr "Kun tiedosto samalla nimellä on jo olemassa"
+
+msgid "Ready to copy"
+msgstr "Valmis kopioimaan"
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr "Kopioimme sisällön valitusta kurssista tähän kurssiin. Voit palata muuttamaan asetuksia."
+
+msgid "Start copying"
+msgstr "Aloita kopiointi"
+
+msgid "Select resources to copy"
+msgstr "Valitse kopioitavat resurssit"
+
+msgid "Copy selected"
+msgstr "Kopioi valitut"
+
+msgid "Copy completed."
+msgstr "Kopiointi valmistui."
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr "Vaara-alue: kurssin poistaminen on pysyvä toiminto."
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr "Kirjoita kurssin tunnus vahvistaaksesi. Kaikki tiedot poistetaan pysyvästi."
+
+msgid "The code must match '%s' exactly."
+msgstr "Tunnuksen täytyy täsmätä täysin '%s':iin."
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr "Poista myös asiakirjat, joita käytetään vain tässä kurssissa (jos sellaisia on)."
+
+msgid "Delete course"
+msgstr "Poista kurssi"
+
+msgid "This action cannot be undone. Continue?"
+msgstr "Toimintoa ei voi perua. Jatka?"
+
+msgid "Course deleted successfully."
+msgstr "Kurssi poistettiin onnistuneesti."
+
+msgid "Failed to delete course."
+msgstr "Kurssin poistaminen epäonnistui."
+
+msgid "Create .mbz"
+msgstr "Luo .mbz"
+
+msgid "Backup scope"
+msgstr "Varmuuskopion laajuus"
+
+msgid "Full course"
+msgstr "Koko kurssi"
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr "Valitut kohteet ovat ainoat, jotka sisällytetään viedyssä tiedostossa."
+
+msgid "Moodle export"
+msgstr "Moodle-vienti"
+
+msgid "Moodle version"
+msgstr "Moodle-versio"
+
+msgid "Admin ID"
+msgstr "Ylläpitäjän tunnus"
+
+msgid "Internal integer user id"
+msgstr "Sisäinen käyttäjän kokonaislukutunnus"
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr "Moodle vaatii sisäisen käyttäjätunnuksen, joka tallennetaan XML-tiedostoon. Jos epävarma, käytä 1."
+
+msgid "Username to appear as owner of imported items"
+msgstr "Käyttäjätunnus, joka näkyy tuoduista kohteista omistajana"
+
+msgid "Email to use in the archive metadata"
+msgstr "Sähköposti, jota käytetään arkiston metatiedoissa"
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr ".mbz-tiedosto luodaan. Voit ladata sen kun se on valmis."
+
+msgid "Select resources to include"
+msgstr "Valitse sisällytettävät resurssit"
+
+msgid "Export completed"
+msgstr "Vienti valmistui"
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr "Moodle-varmuuskopiosi on luotu. Löydät sen kurssin varmuuskopioiden luettelosta."
+
+msgid "Please complete all required fields."
+msgstr "Täytä kaikki pakolliset kentät."
+
+msgid "Failed to create Moodle backup."
+msgstr "Moodle-varmuuskopion luonti epäonnistui."
+
+msgid "More actions"
+msgstr "Lisää toimintoja"
+

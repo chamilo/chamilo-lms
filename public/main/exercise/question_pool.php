@@ -1299,7 +1299,7 @@ function get_action_icon_for_question(
                     'ch-tool-icon-disabled',
                     null,
                     ICON_SIZE_SMALL,
-                    get_lang('This question belongs to a test. Edit it from inside the test or filter Orphan questions.')
+                    get_lang('This question belongs to a test. Edit it from inside the test or filter for orphan questions only.')
                 );
                 break;
             }

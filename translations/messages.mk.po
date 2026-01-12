@@ -31074,8 +31074,8 @@ msgstr "Додај коментар"
 msgid "Write your comment here..."
 msgstr "Напишете го вашиот коментар овде..."
 
-msgid "%d selected"
-msgstr "%d избран"
+msgid "%s selected"
+msgstr "%s избран"
 
 msgid "Search by title or path..."
 msgstr "Пребарај по наслов или патека..."
@@ -31083,8 +31083,8 @@ msgstr "Пребарај по наслов или патека..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Управувајте со резервни копии, враќање, копирање, корпата со отпадоци и бришење на податоците од курсот."
 
-msgid "%d comment(s)"
-msgstr "%d коментар(и)"
+msgid "%s comment(s)"
+msgstr "%s коментар(и)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Грешка при ажурирање на надворешна страна. Ве молиме проверете ги податоците."
@@ -32141,4 +32141,175 @@ msgstr "Неуспешно креирање на Moodle резервен при�
 
 msgid "More actions"
 msgstr "Повече акции"
+
+msgid "Write something"
+msgstr "Напиши нешто"
+
+msgid "Friends of %s"
+msgstr "Пријатели на %s"
+
+msgid "Error loading learning paths."
+msgstr "Грешка при вчитување на патеките за учење."
+
+msgid "You don't have any learning path."
+msgstr "Немате ниту една патека за учење."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Создајте ја вашата прва патека за учење за да започнете да организирате содржина од курсот."
+
+msgid "Could not save the new category order."
+msgstr "Не може да се зачува новиот редослед на категориите."
+
+msgid "Could not save the new order."
+msgstr "Не може да се зачува новиот редослед."
+
+msgid "Assignment"
+msgstr "Задача"
+
+msgid "Allowed file formats: %s"
+msgstr "Дозволени формати на датотеки: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Типот на датотека не е дозволен. Дозволени наставки: %s"
+
+msgid "Folder name"
+msgstr "Име на папка"
+
+msgid "Rename folder"
+msgstr "Преименувај папка"
+
+msgid "New name"
+msgstr "Ново име"
+
+msgid "Choose an action"
+msgstr "Избери акција"
+
+msgid "New version"
+msgstr "Нова верзија"
+
+msgid "Change title to selected filename"
+msgstr "Промени го насловот во избраното име на датотека"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Може да ја замените датотеката, да ја преселите во друга папка или и двете."
+
+msgid "Move %s"
+msgstr "Премести %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Прикажани се само непотребни коренски папки за да се избегне оставање на ставки во коренот."
+
+msgid "No feedback yet."
+msgstr "Сè уште нема повратни информации."
+
+msgid "Upload first, organize later"
+msgstr "Подигни прво, организирај подоцна"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Повлечи и испушти или прегледај за да додадеш датотеки"
+
+msgid "Social wall..."
+msgstr "Социјален ѕид..."
+
+msgid "Wall of %s"
+msgstr "Ѕид на %s"
+
+msgid "Version currently loaded"
+msgstr "Верзија моментално вчитана"
+
+msgid "Completion"
+msgstr "Завршување"
+
+msgid "Quick navigation"
+msgstr "Брза навигација"
+
+msgid "Filled"
+msgstr "Пополнето"
+
+msgid "Terms sections"
+msgstr "Секции на условија"
+
+msgid "Open a section to edit its content."
+msgstr "Отворете секција за да ја уредите нејзината содржина."
+
+msgid "Open this section to load the editor."
+msgstr "Отворете ја оваа секција за да го вчитате уредувачот."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Опасна зона: бришењето на URL за пристап е трајно."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Внесете го целосниот URL за потврда. URL-от и неговите релации ќе бидат трајно отстранети."
+
+msgid "Unable to load the badge's image."
+msgstr "Не може да се вчита сликата на значката."
+
+msgid "Invalid role selection"
+msgstr "Неважечки избор на улога"
+
+msgid "Select relation type first to enable user management."
+msgstr "Изберете тип на релација прво за да ја овозможите управата со корисници."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Ова прашање нема контекст на курс. Преглед не е достапен."
+
+msgid "Unknown test"
+msgstr "Непознат тест"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Бришењето не е дозволено без контекст на курс."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Бришењето не успеа: недостасува контекст на курс или воОва прашање припаѓа на тест. Уредете го од внатре во тестот или филтрирајте само за осамени прашања.важечки ID на прашање."
+
+msgid "Delete failed: question not found."
+msgstr "Бришењето не успеа: прашањето не е пронајдено."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Бришењето не успеа: ова прашање сè уште е референцирано од други ресурси."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Ова прашање припаѓа на тест. Уредете го од внатре во тестот или филтрирајте само за осамени прашања."
+
+msgid "Access the group tools and resources"
+msgstr "Пристапете до алатките и ресурсите на групата"
+
+msgid "%s members"
+msgstr "%s членови"
+
+msgid "View certificate (HTML)"
+msgstr "Преглед на сертификат (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Поврзанете вештина со овој дневник на оценки"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Управувајте со врската помеѓу сертификатите и вештините за секој дневник на оценки"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Изберете специфично издавање на значка за преземање"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM не е овозможен."
+
+msgid "Invalid token."
+msgstr "Неважечки токен."
+
+msgid "Schema not supported."
+msgstr "Шемата не е поддржана."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Неважечки шеми за PATCH операција."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Недостасува задолжителна \"Operations\" низа."
+
+msgid "The '%s' operation is not supported."
+msgstr "Операцијата '%s' не е поддржана."
+
+msgid "Drupal user ID"
+msgstr "Drupal ID на корисник"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Нема термини што одговараат на пребарувањето: %s"
 

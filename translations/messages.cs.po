@@ -31068,8 +31068,8 @@ msgstr "Přidat komentář"
 msgid "Write your comment here..."
 msgstr "Napište svůj komentář zde..."
 
-msgid "%d selected"
-msgstr "%d vybráno"
+msgid "%s selected"
+msgstr "%s vybráno"
 
 msgid "Search by title or path..."
 msgstr "Hledat podle názvu nebo cesty..."
@@ -31077,8 +31077,8 @@ msgstr "Hledat podle názvu nebo cesty..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Spravovat zálohy, obnovení, kopírování, koš a mazání dat kurzu."
 
-msgid "%d comment(s)"
-msgstr "%d komentář(ů)"
+msgid "%s comment(s)"
+msgstr "%s komentář(ů)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Chyba při aktualizaci třetí strany. Ověřte data."
@@ -32135,4 +32135,175 @@ msgstr "Vytvoření zálohy Moodle selhalo."
 
 msgid "More actions"
 msgstr "Další akce"
+
+msgid "Write something"
+msgstr "Napište něco"
+
+msgid "Friends of %s"
+msgstr "Přátelé %s"
+
+msgid "Error loading learning paths."
+msgstr "Chyba při načítání učebních cest."
+
+msgid "You don't have any learning path."
+msgstr "Nemáte žádnou učební cestu."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Vytvořte svou první učební cestu pro začátek organizace obsahu kurzu."
+
+msgid "Could not save the new category order."
+msgstr "Nelze uložit nový pořádek kategorií."
+
+msgid "Could not save the new order."
+msgstr "Nelze uložit nový pořádek."
+
+msgid "Assignment"
+msgstr "Úkol"
+
+msgid "Allowed file formats: %s"
+msgstr "Povolené formáty souborů: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Nepovolený typ souboru. Povolené přípony: %s"
+
+msgid "Folder name"
+msgstr "Název složky"
+
+msgid "Rename folder"
+msgstr "Přejmenovat složku"
+
+msgid "New name"
+msgstr "Nový název"
+
+msgid "Choose an action"
+msgstr "Vyberte akci"
+
+msgid "New version"
+msgstr "Nová verze"
+
+msgid "Change title to selected filename"
+msgstr "Změnit název na vybraný název souboru"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Můžete soubor nahradit, přesunout do jiné složky nebo obojí."
+
+msgid "Move %s"
+msgstr "Přesunout %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Zobrazují se pouze neslužební složky, aby se zabránilo ponechání položek v kořeni."
+
+msgid "No feedback yet."
+msgstr "Zatím žádná zpětná vazba."
+
+msgid "Upload first, organize later"
+msgstr "Nahrajte nejdříve, uspořádejte později"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Přetáhněte a pusťte nebo procházejte pro přidání souborů"
+
+msgid "Social wall..."
+msgstr "Sociální zeď..."
+
+msgid "Wall of %s"
+msgstr "Zeď %s"
+
+msgid "Version currently loaded"
+msgstr "Aktuálně načtená verze"
+
+msgid "Completion"
+msgstr "Dokončení"
+
+msgid "Quick navigation"
+msgstr "Rychlá navigace"
+
+msgid "Filled"
+msgstr "Vyplněno"
+
+msgid "Terms sections"
+msgstr "Sekce podmínek"
+
+msgid "Open a section to edit its content."
+msgstr "Otevřete sekci pro úpravu jejího obsahu."
+
+msgid "Open this section to load the editor."
+msgstr "Otevřete tuto sekci pro načtení editoru."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Nebezpečná zóna: mazání přístupové URL je trvalé."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Zadejte úplnou URL pro potvrzení. URL a její vztahy budou trvale odstraněny."
+
+msgid "Unable to load the badge's image."
+msgstr "Nelze načíst obrázek odznaku."
+
+msgid "Invalid role selection"
+msgstr "Neplatný výběr role"
+
+msgid "Select relation type first to enable user management."
+msgstr "Nejprve vyberte typ vztahu pro povolení správy uživatelů."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Tato otázka nemá kontext kurzu. Náhled není k dispozici."
+
+msgid "Unknown test"
+msgstr "Neznámý test"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Mazání není povoleno bez kontextu kurzu."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Mazání selhalo: chybí kontext kurzu nebo platné ID otázky.Tato otázka patří testu. Upravte ji zevnitř testu nebo filtrujte pouze osiřelé otázky."
+
+msgid "Delete failed: question not found."
+msgstr "Mazání selhalo: otázka nenalezena."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Mazání selhalo: tato otázka je stále odkazována jinými zdroji."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Tato otázka patří testu. Upravte ji zevnitř testu nebo filtrujte pouze osiřelé otázky."
+
+msgid "Access the group tools and resources"
+msgstr "Přístup k nástrojům a zdrojům skupiny"
+
+msgid "%s members"
+msgstr "%s členů"
+
+msgid "View certificate (HTML)"
+msgstr "Zobrazit certifikát (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Propojit dovednost s touto známkovou knihou"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Spravovat propojení mezi certifikáty a dovednostmi pro každou známkovou knihu"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Vyberte konkrétní vydání odznaku ke stažení"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM není povoleno."
+
+msgid "Invalid token."
+msgstr "Neplatný token."
+
+msgid "Schema not supported."
+msgstr "Schéma není podporováno."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Neplatná schémata pro operaci PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Chybí požadované pole \"Operations\"."
+
+msgid "The '%s' operation is not supported."
+msgstr "Operace '%s' není podporována."
+
+msgid "Drupal user ID"
+msgstr "ID uživatele Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Neexistují žádné termíny odpovídající vyhledávání: %s"
 

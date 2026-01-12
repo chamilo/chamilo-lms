@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:jogvédett,, no:nem jogvédett"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappa,, application/msword:MsWord,, application/octet-stream:Ok-tet bájtáram,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappa,, application/msword:MsWord,, application/octet-stream:Oktett stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:feladat,, simulation:szimuláció,, questionnaire:kérdőív,, diagram:diagram,, figure:ábra,, graph:grafikon,, index:tárgymutató,, slide:dia,, table:tábla,, narrative text:narrátor szöveg,, exam:teszt,, experiment:kísérlet,, problem statement:probléma megállapítás,, self assessment:önértékelés,, lecture:előadó"
@@ -31074,8 +31074,8 @@ msgstr "Megjegyzés hozzáadása"
 msgid "Write your comment here..."
 msgstr "Írja meg megjegyzését ide..."
 
-msgid "%d selected"
-msgstr "%d kiválasztva"
+msgid "%s selected"
+msgstr "%s kiválasztva"
 
 msgid "Search by title or path..."
 msgstr "Keresés cím vagy elérési út szerint..."
@@ -31083,8 +31083,8 @@ msgstr "Keresés cím vagy elérési út szerint..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Biztonsági mentések kezelése, visszaállítás, másolás, újrahasznosítás és kurzusu adatok törlése."
 
-msgid "%d comment(s)"
-msgstr "%d megjegyzés"
+msgid "%s comment(s)"
+msgstr "%s megjegyzés"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Hiba a harmadik félt frissítésekor. Ellenőrizze az adatokat."
@@ -32101,7 +32101,7 @@ msgid "Selected items will be the only ones included in the exported file."
 msgstr "A kiválasztott elemek lesznek egyedüliek a kiviteli fájlban."
 
 msgid "Moodle export"
-msgstr "Moodle export"
+msgstr "Moodle exportálás"
 
 msgid "Moodle version"
 msgstr "Moodle verzió"
@@ -32141,4 +32141,175 @@ msgstr "Moodle biztonsági mentés létrehozása sikertelen."
 
 msgid "More actions"
 msgstr "További műveletek"
+
+msgid "Write something"
+msgstr "Írjon valamit"
+
+msgid "Friends of %s"
+msgstr "%s barátai"
+
+msgid "Error loading learning paths."
+msgstr "Hiba történt a tanulási útvonalak betöltése során."
+
+msgid "You don't have any learning path."
+msgstr "Nincs tanulási útvonalad."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Hozd létre az első tanulási útvonaladat a kurzustartalom rendszerezéséhez."
+
+msgid "Could not save the new category order."
+msgstr "Nem sikerült menteni az új kategóriarendet."
+
+msgid "Could not save the new order."
+msgstr "Nem sikerült menteni az új sorrendet."
+
+msgid "Assignment"
+msgstr "Feladat"
+
+msgid "Allowed file formats: %s"
+msgstr "Engedélyezett fájlformátumok: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Fájltípus nem megengedett. Engedélyezett kiterjesztések: %s"
+
+msgid "Folder name"
+msgstr "Mappa neve"
+
+msgid "Rename folder"
+msgstr "Mappa átnevezése"
+
+msgid "New name"
+msgstr "Új név"
+
+msgid "Choose an action"
+msgstr "Válasszon műveletet"
+
+msgid "New version"
+msgstr "Új verzió"
+
+msgid "Change title to selected filename"
+msgstr "Cím módosítása a kiválasztott fájlnévre"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Cserélheti a fájlt, áthelyezheti másik mappába, vagy mindkettőt megteheti."
+
+msgid "Move %s"
+msgstr "%s áthelyezése"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Csak a nem gyökeret tartalmazó mappák láthatók, hogy elkerüljük az elemek gyökérben hagyását."
+
+msgid "No feedback yet."
+msgstr "Még nincs visszajelzés."
+
+msgid "Upload first, organize later"
+msgstr "Először tölts fel, később rendszerezz"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Húzza ide vagy tallózzon fájl hozzáadásához"
+
+msgid "Social wall..."
+msgstr "Társadalmi fal..."
+
+msgid "Wall of %s"
+msgstr "%s fala"
+
+msgid "Version currently loaded"
+msgstr "Jelenleg betöltött verzió"
+
+msgid "Completion"
+msgstr "Befejezés"
+
+msgid "Quick navigation"
+msgstr "Gyors navigáció"
+
+msgid "Filled"
+msgstr "Kitöltve"
+
+msgid "Terms sections"
+msgstr "Szerződés szakaszok"
+
+msgid "Open a section to edit its content."
+msgstr "Nyissa meg a szakaszt a tartalmának szerkesztéséhez."
+
+msgid "Open this section to load the editor."
+msgstr "Nyissa meg ezt a szakaszt a szerkesztő betöltéséhez."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Veszélyzóna: a hozzáférési URL törlése végleges."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Írja be a teljes URL-t a megerősítéshez. Az URL és kapcsolatai véglegesen eltávolításra kerülnek."
+
+msgid "Unable to load the badge's image."
+msgstr "Nem sikerült betölteni a jelvény képét."
+
+msgid "Invalid role selection"
+msgstr "Érvénytelen szerep kiválasztás"
+
+msgid "Select relation type first to enable user management."
+msgstr "Válasszon először kapcsolattípust a felhasználókezelés engedélyezéséhez."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Ennek a kérdésnek nincs kurzuskörnyezete. Az előnézet nem érhető el."
+
+msgid "Unknown test"
+msgstr "Ismeretlen teszt"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Törlés nem megengedett kurzuskörnyezet nélkül."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Törlés sikertelen: hiányzó kurzuskörnyezet vagy érvényes kérdésazonosító. Ez a kérdés egy teszthez tartozik. Szerkessze a tesztből vagy szűrje csak az árva kérdéseket."
+
+msgid "Delete failed: question not found."
+msgstr "Törlés sikertelen: kérdés nem található."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Törlés sikertelen: ezt a kérdést más erőforrások még hivatkozzák."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Ez a kérdés egy teszthez tartozik. Szerkessze a tesztből vagy szűrje csak az árva kérdéseket."
+
+msgid "Access the group tools and resources"
+msgstr "Hozzáférés a csoporteszközökhöz és erőforrásokhoz"
+
+msgid "%s members"
+msgstr "%s tag"
+
+msgid "View certificate (HTML)"
+msgstr "Tanúsítvány megtekintése (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Képesség összekapcsolása ezzel a jegyzetfüzettel"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "A tanúsítványok és képességek közötti kapcsolat kezelése minden jegyzetfüzetnél"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Válasszon ki egy konkrét jelvénykiadást a letöltéshez"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM nincs engedélyezve."
+
+msgid "Invalid token."
+msgstr "Érvénytelen token."
+
+msgid "Schema not supported."
+msgstr "Nem támogatott séma."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Érvénytelen sémák PATCH művelethez."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Hiányzó kötelező „Operations” tömb."
+
+msgid "The '%s' operation is not supported."
+msgstr "A(z) „%s” művelet nem támogatott."
+
+msgid "Drupal user ID"
+msgstr "Drupal felhasználói azonosító"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Nincsenek olyan kifejezések, amelyek megfelelnek a keresésnek: %s"
 

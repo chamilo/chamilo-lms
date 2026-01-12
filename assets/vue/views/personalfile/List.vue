@@ -108,7 +108,7 @@
   <Dialog v-model:visible="deleteDialog" :modal="true" :style="{ width: '450px' }" :header="$t('Confirm')">
     <div class="confirmation-content">
       <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem"></i>
-      <span>{{ $t('Are you sure you want to delete') }} <b>{{ itemToDelete?.title }}</b>?</span>
+      <span>{{ $t('Are you sure you want to delete {0}?', [itemToDelete?.title]) }}</span>
     </div>
     <template #footer>
       <Button class="p-button-text" icon="pi pi-times" :label="$t('No')" @click="deleteDialog = false" />

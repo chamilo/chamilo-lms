@@ -31068,8 +31068,8 @@ msgstr "تبصره اضافه کول"
 msgid "Write your comment here..."
 msgstr "خپله تبصره دلته ولیکئ..."
 
-msgid "%d selected"
-msgstr "%d ټاکل شوي"
+msgid "%s selected"
+msgstr "%s ټاکل شوي"
 
 msgid "Search by title or path..."
 msgstr "د سرلیک یا لارې له مخې لټون..."
@@ -31077,8 +31077,8 @@ msgstr "د سرلیک یا لارې له مخې لټون..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "بېک آپونه اداره کول، بیرته راوستل، کاپي کول، ریسایکل او د کورس ډاټا له منځه وړل."
 
-msgid "%d comment(s)"
-msgstr "%d تبصره(ګانې)"
+msgid "%s comment(s)"
+msgstr "%s تبصره(ګانې)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "د دریمې ډلې تازه کول کې خطا. مهرباني وکړئ ډاټا وګورئ."
@@ -32135,4 +32135,175 @@ msgstr "د مودل بېک اپ جوړول پاتې راغلل."
 
 msgid "More actions"
 msgstr "نور فعالیتونه"
+
+msgid "Write something"
+msgstr "کوم څه ولیکئ"
+
+msgid "Friends of %s"
+msgstr "%s ملګري"
+
+msgid "Error loading learning paths."
+msgstr "د زده کړې لارې بار کول کې ستونزه."
+
+msgid "You don't have any learning path."
+msgstr "ستاسو هیڅ زده کړې لاره نشته."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "خپله لومړۍ زده کړې لاره جوړ کړئ ترڅو د کورس موادو منظمولو پیل کړئ."
+
+msgid "Could not save the new category order."
+msgstr "نوی کټګورۍ ترتیب خوندي نشو کړ."
+
+msgid "Could not save the new order."
+msgstr "نوی ترتیب خوندي نشو کړ."
+
+msgid "Assignment"
+msgstr "دندې"
+
+msgid "Allowed file formats: %s"
+msgstr "اجازې شوي فایل فورمټونه: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "فایل ډول اجازه نشته. اجازې شوي توسیعونه: %s"
+
+msgid "Folder name"
+msgstr "پوښې نوم"
+
+msgid "Rename folder"
+msgstr "پوښه بیا نومول"
+
+msgid "New name"
+msgstr "نوی نوم"
+
+msgid "Choose an action"
+msgstr "یوه کړنه غوره کړئ"
+
+msgid "New version"
+msgstr "نوی نس"
+
+msgid "Change title to selected filename"
+msgstr "عنوان د غوره شوي فایل نوم سره بدل کړئ"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "تاسو کولی شئ فایل ځای پر ځای کړئ، یې بلې پوښې ته ولېږئ، یا دواړه."
+
+msgid "Move %s"
+msgstr "%s لېږل"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "یوځل ریشه پوښې ښودل کېږي ترڅو شیان په ریشه کې پاتې نشي."
+
+msgid "No feedback yet."
+msgstr "هنوز هیڅ فیډبیک نشته."
+
+msgid "Upload first, organize later"
+msgstr "لومړی اپلوډ کړئ، وروسته منظم کړئ"
+
+msgid "Drag & drop or browse to add files"
+msgstr "ډریګ & ډراپ یا براوز کړئ ترڅو فایلونه اضافه کړئ"
+
+msgid "Social wall..."
+msgstr "ټولنیزه دیوال..."
+
+msgid "Wall of %s"
+msgstr "%s دیوال"
+
+msgid "Version currently loaded"
+msgstr "اوس بار شوې نس"
+
+msgid "Completion"
+msgstr " بشپړول"
+
+msgid "Quick navigation"
+msgstr "چټکه نیویګیشن"
+
+msgid "Filled"
+msgstr "ډک شوی"
+
+msgid "Terms sections"
+msgstr "اصطلاحات برخې"
+
+msgid "Open a section to edit its content."
+msgstr "برخه خلاص کړئ ترڅو خپل مواد سم کړئ."
+
+msgid "Open this section to load the editor."
+msgstr "دا برخه خلاص کړئ ترڅو ایډیټر بار شي."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr " خطرناکه سیمه: د لاسرسي URL حذف کول دایمي دي."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "پورې URL ولیکئ ترڅو تایید کړئ. URL او د هغې اړیکې به دایمي له منځه لاړ شي."
+
+msgid "Unable to load the badge's image."
+msgstr "د بیج نښې انځور لود کول نشي کېدلی."
+
+msgid "Invalid role selection"
+msgstr "ناسم رول ټاکل"
+
+msgid "Select relation type first to enable user management."
+msgstr "لومړی اړیکې ډول وټاکئ ترڅو د کاروونکو مدیریت فعال شي."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "د دې پوښتنې کورس سیاق نلري. مخلصي شتون نلري."
+
+msgid "Unknown test"
+msgstr "نامعلوم ازموینه"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "پرته له کورس سیاق ړنګول اجازه نشته."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "ړنګول ناکامه شو: د کورس سیاق نشتوالی یا د دې پوښتنې د ازموینې برخه ده. دا له ازموینې دننه سم کړئ یا یوازې د یتیمو پوښتنو لپاره فلټر وکاروئ.ناسم پوښتنې آیدی."
+
+msgid "Delete failed: question not found."
+msgstr "ړنګول ناکامه شو: پوښتنه ونه موندل شوه."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "ړنګول ناکامه شو: دا پوښتنه لا هم د نورو سرچینو لخوا اشاره شوې ده."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "دا پوښتنه د ازموینې برخه ده. دا له ازموینې دننه سم کړئ یا یوازې د یتیمو پوښتنو لپاره فلټر وکاروئ."
+
+msgid "Access the group tools and resources"
+msgstr "د ډلې وسیلو او سرچینو ته لاسرسی"
+
+msgid "%s members"
+msgstr "%s غړي"
+
+msgid "View certificate (HTML)"
+msgstr "سرٹیفکیټ لیدل (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "دا نمرې کتاب سره مهارت تړل"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "د هر نمرې کتاب لپاره د سرٹیفکیټونو او مهارتونو ترمنځ تړاو مدیریت کړئ"
+
+msgid "Please select a specific badge issue to download"
+msgstr "لطفاً د ډاونلوډ لپاره یو ځانګړی بیج صادرول وټاکئ"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM فعال ندی."
+
+msgid "Invalid token."
+msgstr "ناسم ټوکن."
+
+msgid "Schema not supported."
+msgstr "سکیم ملاتړ نه کېږي."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "د PATCH عملیات لپاره ناسم سکیمونه."
+
+msgid "Missing required \"Operations\" array."
+msgstr "اړین \"Operations\" آرې نشته."
+
+msgid "The '%s' operation is not supported."
+msgstr "د '%s' عملیات ملاتړ نه کېږي."
+
+msgid "Drupal user ID"
+msgstr "دروپال کاروونکي آیدی"
+
+msgid "There are no terms that match the search: %s"
+msgstr "هیڅ اصطلاح شتون نلري چې لټون سره تطبیق وکړي: %s"
 

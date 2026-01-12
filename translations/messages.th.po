@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "ด้วยความเคารพ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "สูตรตัวอย่าง: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ตัวอย่างสูตร: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ช่วงตัวแปร"
@@ -31074,8 +31074,8 @@ msgstr "เพิ่มความคิดเห็น"
 msgid "Write your comment here..."
 msgstr "พิมพ์ความคิดเห็นของคุณที่นี่..."
 
-msgid "%d selected"
-msgstr "%d รายการที่เลือก"
+msgid "%s selected"
+msgstr "%s รายการที่เลือก"
 
 msgid "Search by title or path..."
 msgstr "ค้นหาตามชื่อหรือเส้นทาง..."
@@ -31083,8 +31083,8 @@ msgstr "ค้นหาตามชื่อหรือเส้นทาง...
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "จัดการสำรองข้อมูล, คืนค่า, คัดลอก, รีไซเคิล และลบข้อมูลคอร์ส"
 
-msgid "%d comment(s)"
-msgstr "%d ความคิดเห็น"
+msgid "%s comment(s)"
+msgstr "%s ความคิดเห็น"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "เกิดข้อผิดพลาดในการอัปเดตบุคคลที่สาม กรุณาตรวจสอบข้อมูล"
@@ -32141,4 +32141,175 @@ msgstr "ไม่สามารถสร้างไฟล์สำรองข
 
 msgid "More actions"
 msgstr "การดำเนินการเพิ่มเติม"
+
+msgid "Write something"
+msgstr "พิมพ์บางอย่าง"
+
+msgid "Friends of %s"
+msgstr "เพื่อนของ %s"
+
+msgid "Error loading learning paths."
+msgstr "เกิดข้อผิดพลาดในการโหลดเส้นทางการเรียนรู้"
+
+msgid "You don't have any learning path."
+msgstr "คุณไม่มีเส้นทางการเรียนรู้ใด ๆ"
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "สร้างเส้นทางการเรียนรู้ตัวแรกของคุณเพื่อเริ่มจัดระเบียบเนื้อหาคอร์ส"
+
+msgid "Could not save the new category order."
+msgstr "ไม่สามารถบันทึกลำดับหมวดหมู่ใหม่ได้"
+
+msgid "Could not save the new order."
+msgstr "ไม่สามารถบันทึกลำดับใหม่ได้"
+
+msgid "Assignment"
+msgstr "งาน"
+
+msgid "Allowed file formats: %s"
+msgstr "รูปแบบไฟล์ที่อนุญาต: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "ประเภทไฟล์ไม่ได้รับอนุญาต ส่วนขยายที่อนุญาต: %s"
+
+msgid "Folder name"
+msgstr "ชื่อโฟลเดอร์"
+
+msgid "Rename folder"
+msgstr "เปลี่ยนชื่อโฟลเดอร์"
+
+msgid "New name"
+msgstr "ชื่อใหม่"
+
+msgid "Choose an action"
+msgstr "เลือกการกระทำ"
+
+msgid "New version"
+msgstr "เวอร์ชันใหม่"
+
+msgid "Change title to selected filename"
+msgstr "เปลี่ยนชื่อเรื่องเป็นชื่อไฟล์ที่เลือก"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "คุณสามารถแทนที่ไฟล์ ย้ายไปยังโฟลเดอร์อื่น หรือทั้งสองอย่างได้"
+
+msgid "Move %s"
+msgstr "ย้าย %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "แสดงเฉพาะโฟลเดอร์ที่ไม่ใช่รูทเพื่อหลีกเลี่ยงการทิ้งรายการไว้ในรูท"
+
+msgid "No feedback yet."
+msgstr "ยังไม่มีข้อเสนอแนะ"
+
+msgid "Upload first, organize later"
+msgstr "อัปโหลดก่อน จัดระเบียบทีหลัง"
+
+msgid "Drag & drop or browse to add files"
+msgstr "ลากและวางหรือเรียกดูเพื่อเพิ่มไฟล์"
+
+msgid "Social wall..."
+msgstr "กำแพงสังคม..."
+
+msgid "Wall of %s"
+msgstr "กำแพงของ %s"
+
+msgid "Version currently loaded"
+msgstr "เวอร์ชันที่กำลังโหลดอยู่"
+
+msgid "Completion"
+msgstr "การเสร็จสิ้น"
+
+msgid "Quick navigation"
+msgstr "การนำทางด่วน"
+
+msgid "Filled"
+msgstr "เต็ม"
+
+msgid "Terms sections"
+msgstr "ส่วนเงื่อนไข"
+
+msgid "Open a section to edit its content."
+msgstr "เปิดส่วนเพื่อแก้ไขเนื้อหา"
+
+msgid "Open this section to load the editor."
+msgstr "เปิดส่วนนี้เพื่อโหลดตัวแก้ไข"
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "เขตอันตราย: การลบ URL เข้าถึงจะถาวร"
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "พิมพ์ URL เต็มเพื่อยืนยัน URL และความสัมพันธ์จะถูกลบอย่างถาวร"
+
+msgid "Unable to load the badge's image."
+msgstr "ไม่สามารถโหลดภาพของเหรียญตราได้"
+
+msgid "Invalid role selection"
+msgstr "การเลือกบทบาทไม่ถูกต้อง"
+
+msgid "Select relation type first to enable user management."
+msgstr "เลือกประเภทความสัมพันธ์ก่อนเพื่อเปิดใช้งานการจัดการผู้ใช้"
+
+msgid "This question has no course context. Preview is not available."
+msgstr "คำถามนี้ไม่มีบริบทของวิชา ไม่สามารถดูตัวอย่างได้"
+
+msgid "Unknown test"
+msgstr "การทดสอบที่ไม่รู้จัก"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "ไม่สามารถลบได้หากไม่มีบริบทของวิชา"
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "ลบไม่สำเร็จ: ขาดบริบทของวิชาหรือในคำถามนี้เป็นของการทดสอบ แก้ไขจากภายในการทดสอบหรือกรองเฉพาะคำถามกำพร้าเท่านั้น ID คำถามที่ถูกต้อง"
+
+msgid "Delete failed: question not found."
+msgstr "ลบไม่สำเร็จ: ไม่พบคำถาม"
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "ลบไม่สำเร็จ: คำถามนี้ยังถูกอ้างอิงโดยทรัพยากรอื่น"
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "คำถามนี้เป็นของการทดสอบ แก้ไขจากภายในการทดสอบหรือกรองเฉพาะคำถามกำพร้าเท่านั้น"
+
+msgid "Access the group tools and resources"
+msgstr "เข้าถึงเครื่องมือและทรัพยากรของกลุ่ม"
+
+msgid "%s members"
+msgstr "%s สมาชิก"
+
+msgid "View certificate (HTML)"
+msgstr "ดูใบรับรอง (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "เชื่อมโยงทักษะกับสมุดเกรดนี้"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "จัดการการเชื่อมโยงระหว่างใบรับรองและทักษะสำหรับแต่ละสมุดเกรด"
+
+msgid "Please select a specific badge issue to download"
+msgstr "กรุณาเลือกการออกเหรียญตราที่เฉพาะเจาะจงเพื่อดาวน์โหลด"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM ไม่ได้เปิดใช้งาน"
+
+msgid "Invalid token."
+msgstr "โทเค็นไม่ถูกต้อง"
+
+msgid "Schema not supported."
+msgstr "ไม่รองรับโครงสร้างข้อมูล"
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "โครงสร้างข้อมูลไม่ถูกต้องสำหรับการดำเนินการ PATCH"
+
+msgid "Missing required \"Operations\" array."
+msgstr "ขาดอาร์เรย์ \"Operations\" ที่จำเป็น"
+
+msgid "The '%s' operation is not supported."
+msgstr "การดำเนินการ '%s' ไม่รองรับ"
+
+msgid "Drupal user ID"
+msgstr "Drupal user ID"
+
+msgid "There are no terms that match the search: %s"
+msgstr "ไม่มีคำศัพท์ที่ตรงกับการค้นหา: %s"
 

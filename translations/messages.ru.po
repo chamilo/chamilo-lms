@@ -31075,8 +31075,8 @@ msgstr "Добавить комментарий"
 msgid "Write your comment here..."
 msgstr "Напишите ваш комментарий здесь..."
 
-msgid "%d selected"
-msgstr "%d выбрано"
+msgid "%s selected"
+msgstr "%s выбрано"
 
 msgid "Search by title or path..."
 msgstr "Поиск по названию или пути..."
@@ -31084,8 +31084,8 @@ msgstr "Поиск по названию или пути..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Управление резервными копиями, восстановлением, копированием, корзиной и удалением данных курса."
 
-msgid "%d comment(s)"
-msgstr "%d комментарий(я)"
+msgid "%s comment(s)"
+msgstr "%s комментарий(я)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Ошибка обновления стороннего сервиса. Проверьте данные."
@@ -32142,4 +32142,175 @@ msgstr "Не удалось создать резервную копию Moodle.
 
 msgid "More actions"
 msgstr "Дополнительные действия"
+
+msgid "Write something"
+msgstr "Напишите что-нибудь"
+
+msgid "Friends of %s"
+msgstr "Друзья %s"
+
+msgid "Error loading learning paths."
+msgstr "Ошибка загрузки учебных траекторий."
+
+msgid "You don't have any learning path."
+msgstr "У вас нет учебных траекторий."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Создайте свою первую учебную траекторию, чтобы начать организовывать содержимое курса."
+
+msgid "Could not save the new category order."
+msgstr "Не удалось сохранить новый порядок категорий."
+
+msgid "Could not save the new order."
+msgstr "Не удалось сохранить новый порядок."
+
+msgid "Assignment"
+msgstr "Задание"
+
+msgid "Allowed file formats: %s"
+msgstr "Разрешенные форматы файлов: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Тип файла не разрешен. Разрешенные расширения: %s"
+
+msgid "Folder name"
+msgstr "Название папки"
+
+msgid "Rename folder"
+msgstr "Переименовать папку"
+
+msgid "New name"
+msgstr "Новое название"
+
+msgid "Choose an action"
+msgstr "Выберите действие"
+
+msgid "New version"
+msgstr "Новая версия"
+
+msgid "Change title to selected filename"
+msgstr "Изменить название на выбранное имя файла"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Вы можете заменить файл, переместить его в другую папку или и то, и другое."
+
+msgid "Move %s"
+msgstr "Переместить %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Показываются только непереходные папки, чтобы избежать оставления элементов в корне."
+
+msgid "No feedback yet."
+msgstr "Еще нет отзывов."
+
+msgid "Upload first, organize later"
+msgstr "Сначала загрузите, потом организуйте"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Перетащите или выберите файлы"
+
+msgid "Social wall..."
+msgstr "Социальная стена..."
+
+msgid "Wall of %s"
+msgstr "Стена %s"
+
+msgid "Version currently loaded"
+msgstr "Текущая загруженная версия"
+
+msgid "Completion"
+msgstr "Завершение"
+
+msgid "Quick navigation"
+msgstr "Быстрая навигация"
+
+msgid "Filled"
+msgstr "Заполнено"
+
+msgid "Terms sections"
+msgstr "Разделы условий"
+
+msgid "Open a section to edit its content."
+msgstr "Откройте раздел, чтобы отредактировать его содержимое."
+
+msgid "Open this section to load the editor."
+msgstr "Откройте этот раздел, чтобы загрузить редактор."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Зона опасности: удаление URL доступа необратимо."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Введите полный URL для подтверждения. URL и его связи будут безвозвратно удалены."
+
+msgid "Unable to load the badge's image."
+msgstr "Не удалось загрузить изображение значка."
+
+msgid "Invalid role selection"
+msgstr "Неверный выбор роли"
+
+msgid "Select relation type first to enable user management."
+msgstr "Сначала выберите тип связи, чтобы включить управление пользователями."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "У этого вопроса нет контекста курса. Предварительный просмотр недоступен."
+
+msgid "Unknown test"
+msgstr "Неизвестный тест"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Удаление невозможно без контекста курса."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Ошибка удаления: отсутствует контекст курса или вЭтот вопрос принадлежит тесту. Отредактируйте его изнутри теста или фильтруйте только сиротские вопросы.недействительный ID вопроса."
+
+msgid "Delete failed: question not found."
+msgstr "Ошибка удаления: вопрос не найден."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Ошибка удаления: этот вопрос все еще используется другими ресурсами."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Этот вопрос принадлежит тесту. Отредактируйте его изнутри теста или фильтруйте только сиротские вопросы."
+
+msgid "Access the group tools and resources"
+msgstr "Доступ к инструментам и ресурсам группы"
+
+msgid "%s members"
+msgstr "%s участников"
+
+msgid "View certificate (HTML)"
+msgstr "Просмотр сертификата (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Привязать навык к этой книге оценок"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Управление связью между сертификатами и навыками для каждой книги оценок"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Выберите конкретную выдачу значка для скачивания"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM не включен."
+
+msgid "Invalid token."
+msgstr "Недействительный токен."
+
+msgid "Schema not supported."
+msgstr "Схема не поддерживается."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Недействительные схемы для операции PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Отсутствует обязательный массив \"Operations\"."
+
+msgid "The '%s' operation is not supported."
+msgstr "Операция '%s' не поддерживается."
+
+msgid "Drupal user ID"
+msgstr "ID пользователя Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Нет терминов, соответствующих поиску: %s"
 

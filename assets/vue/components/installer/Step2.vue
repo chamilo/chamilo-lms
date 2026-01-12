@@ -8,7 +8,7 @@
 
     <i18n-t
       class="mb-4"
-      keypath="For more details %s"
+      keypath="For more details {0}"
       tag="p"
     >
       <a

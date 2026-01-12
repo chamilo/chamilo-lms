@@ -2031,7 +2031,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":da:avtorske pravice,, ne:brez avtorskih pravic"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Okteatni tok,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Octetni tok,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":vaja:vaja,,      simulacija:simulacija,,      vprašalnik:vprašalnik,,      diagram:diagram,,      slika:slika,,      graf:graf,,      kazalo:kazalo,,      diapozitiv:diapozitiv,,      tabela:tabela,,      pripovedno besedilo:narrativno besedilo,,      izpit:izpit,,      poskus:poskus,,      izjava problema:izjava problema,,      samopredstavitev:samopredstavitev,,      predavanje:predavanje"
@@ -31088,8 +31088,8 @@ msgstr "Dodaj komentar"
 msgid "Write your comment here..."
 msgstr "Napišite svoj komentar tukaj..."
 
-msgid "%d selected"
-msgstr "%d izbranih"
+msgid "%s selected"
+msgstr "%s izbranih"
 
 msgid "Search by title or path..."
 msgstr "Išči po naslovu ali poti..."
@@ -31097,8 +31097,8 @@ msgstr "Išči po naslovu ali poti..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Upravljajte varnostne kopije, obnovitev, kopiranje, recikliranje in brisanje podatkov tečaja."
 
-msgid "%d comment(s)"
-msgstr "%d komentarjev"
+msgid "%s comment(s)"
+msgstr "%s komentarjev"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Napaka pri posodabljanju tretje osebe. Prosim preverite podatke."
@@ -32155,4 +32155,175 @@ msgstr "Napaka pri ustvarjanju Moodle varnostne kopije."
 
 msgid "More actions"
 msgstr "Več dejanj"
+
+msgid "Write something"
+msgstr "Napišite nekaj"
+
+msgid "Friends of %s"
+msgstr "Prijatelji %s"
+
+msgid "Error loading learning paths."
+msgstr "Napaka pri nalaganju učnih poti."
+
+msgid "You don't have any learning path."
+msgstr "Nimate nobene učne poti."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Ustvarite svojo prvo učo pot, da začnete organizirati vsebino tečaja."
+
+msgid "Could not save the new category order."
+msgstr "Ni mogoče shraniti novega vrstnega reda kategorij."
+
+msgid "Could not save the new order."
+msgstr "Ni mogoče shraniti novega vrstnega reda."
+
+msgid "Assignment"
+msgstr "Naloga"
+
+msgid "Allowed file formats: %s"
+msgstr "Dovoljene oblike datotek: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Tip datoteke ni dovoljen. Dovoljene končnice: %s"
+
+msgid "Folder name"
+msgstr "Ime mape"
+
+msgid "Rename folder"
+msgstr "Preimenuj mapo"
+
+msgid "New name"
+msgstr "Novo ime"
+
+msgid "Choose an action"
+msgstr "Izberite dejanje"
+
+msgid "New version"
+msgstr "Nova različica"
+
+msgid "Change title to selected filename"
+msgstr "Spremeni naslov v izbrano ime datoteke"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Datoteko lahko zamenjate, premaknete v drugo mapo ali oboje."
+
+msgid "Move %s"
+msgstr "Premakni %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Prikazane so samo neglavne mape, da se izognete pustitvi predmetov v korenu."
+
+msgid "No feedback yet."
+msgstr "Še ni povratnih informacij."
+
+msgid "Upload first, organize later"
+msgstr "Najprej naložite, kasneje organizirajte"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Povlecite in spustite ali brskajte za dodajanje datotek"
+
+msgid "Social wall..."
+msgstr "Socialno steno..."
+
+msgid "Wall of %s"
+msgstr "Zid %s"
+
+msgid "Version currently loaded"
+msgstr "Trenutno naložena različica"
+
+msgid "Completion"
+msgstr "Zaključek"
+
+msgid "Quick navigation"
+msgstr "Hitra navigacija"
+
+msgid "Filled"
+msgstr "Izpolnjeno"
+
+msgid "Terms sections"
+msgstr "Odseki pogojev"
+
+msgid "Open a section to edit its content."
+msgstr "Odprite odsek za urejanje njegove vsebine."
+
+msgid "Open this section to load the editor."
+msgstr "Odprite ta odsek za nalaganje urejevalnika."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Nevarno območje: brisanje URL-ja za dostop je trajno."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Vnesite celoten URL za potrditev. URL in njegove povezave bodo trajno odstranjeni."
+
+msgid "Unable to load the badge's image."
+msgstr "Ni mogoče naložiti slike značke."
+
+msgid "Invalid role selection"
+msgstr "Nevelika izbira vloge"
+
+msgid "Select relation type first to enable user management."
+msgstr "Najprej izberite vrsto povezave, da omogočite upravljanje uporabnikov."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "To vprašanje nima konteksta tečaja. Predogled ni na voljo."
+
+msgid "Unknown test"
+msgstr "Neznan test"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Brisanje ni dovoljeno brez konteksta tečaja."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Brisanje ni uspelo: manjka kontekst tečaja ali veljavna ID vprašanja v tem vprašanju pripada testu. Uredite ga iz notranjosti testa ali filtrirajte samo za osirotela vprašanja."
+
+msgid "Delete failed: question not found."
+msgstr "Brisanje ni uspelo: vprašanje ni najdeno."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Brisanje ni uspelo: to vprašanje je še vedno navedeno v drugih virih."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "To vprašanje pripada testu. Uredite ga iz notranjosti testa ali filtrirajte samo za osirotela vprašanja."
+
+msgid "Access the group tools and resources"
+msgstr "Dostopajte do orodij in virov skupine"
+
+msgid "%s members"
+msgstr "%s članov"
+
+msgid "View certificate (HTML)"
+msgstr "Prikaži potrdilo (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Povežite veščino s to knjigo ocen"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Upravljajte povezavo med potrdili in veščinami za vsako knjigo ocen"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Izberite specifično izdajo značke za prenos"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM ni omogočen."
+
+msgid "Invalid token."
+msgstr "Neveljaven žeton."
+
+msgid "Schema not supported."
+msgstr "Shema ni podprta."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Neveljavne sheme za operacijo PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Manjka obvezno polje »Operations«."
+
+msgid "The '%s' operation is not supported."
+msgstr "Operacija »%s« ni podprta."
+
+msgid "Drupal user ID"
+msgstr "ID uporabnika Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Ni izrazov, ki bi se ujemali z iskanjem: %s"
 

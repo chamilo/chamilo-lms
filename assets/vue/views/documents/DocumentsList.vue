@@ -350,8 +350,7 @@
         size="big"
       />
       <span v-if="item"
-      >{{ t("Are you sure you want to delete") }} <b>{{ item.title }}</b
-      >?</span
+      >{{ t("Are you sure you want to delete {0}?", [item.title]) }}</span
       >
     </div>
   </BaseDialogConfirmCancel>

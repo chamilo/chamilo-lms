@@ -31068,8 +31068,8 @@ msgstr "Ongeza maoni"
 msgid "Write your comment here..."
 msgstr "Andika maoni yako hapa..."
 
-msgid "%d selected"
-msgstr "%d zimechaguliwa"
+msgid "%s selected"
+msgstr "%s zimechaguliwa"
 
 msgid "Search by title or path..."
 msgstr "Tafuta kwa kichwa au njia..."
@@ -31077,8 +31077,8 @@ msgstr "Tafuta kwa kichwa au njia..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Dhibiti nakala za ziada, rejesha, nakili, mizunguko na ufute data ya kozi."
 
-msgid "%d comment(s)"
-msgstr "%d maoni"
+msgid "%s comment(s)"
+msgstr "%s maoni"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Hitilafu wakati wa kusasisha programu ya tatu. Tafadhali angalia data."
@@ -32135,4 +32135,175 @@ msgstr "Imeshindwa kuunda nakili ya Moodle."
 
 msgid "More actions"
 msgstr "Vitendo zaidi"
+
+msgid "Write something"
+msgstr "Andika kitu"
+
+msgid "Friends of %s"
+msgstr "Marafiki wa %s"
+
+msgid "Error loading learning paths."
+msgstr "Hitilafu wakati wa kupakia njia za kujifunza."
+
+msgid "You don't have any learning path."
+msgstr "Huna njia yoyote ya kujifunza."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Unda njia yako ya kwanza ya kujifunza ili kuanza kupanga maudhui ya kozi."
+
+msgid "Could not save the new category order."
+msgstr "Haikuwezekana kuhifadhi mpangilio mpya wa jamii."
+
+msgid "Could not save the new order."
+msgstr "Haikuwezekana kuhifadhi mpangilio mpya."
+
+msgid "Assignment"
+msgstr "Kazi"
+
+msgid "Allowed file formats: %s"
+msgstr "Muundo wa faili zilizoruhusiwa: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Aina ya faili hairuhusiwi. Viendelezi vilivyoruhusiwa: %s"
+
+msgid "Folder name"
+msgstr "Jina la folda"
+
+msgid "Rename folder"
+msgstr "Badilisha jina la folda"
+
+msgid "New name"
+msgstr "Jina jipya"
+
+msgid "Choose an action"
+msgstr "Chagua kitendo"
+
+msgid "New version"
+msgstr "Toleo jipya"
+
+msgid "Change title to selected filename"
+msgstr "Badilisha kichwa kuwa jina la faili iliyochaguliwa"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Unaweza kubadilisha faili, kuihamishia folda nyingine, au zote mbili."
+
+msgid "Move %s"
+msgstr "Hamisha %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Folda zisizo za mzizi pekee zinaonyeshwa ili kuepuka kuacha vitu kwenye mzizi."
+
+msgid "No feedback yet."
+msgstr "Hakuna maoni bado."
+
+msgid "Upload first, organize later"
+msgstr "Pakia kwanza, panga baadaye"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Buruta na kuacha au tembelea ili kuongeza faili"
+
+msgid "Social wall..."
+msgstr "Ukuta wa kijamii..."
+
+msgid "Wall of %s"
+msgstr "Ukuta wa %s"
+
+msgid "Version currently loaded"
+msgstr "Toleo lililopakiwa sasa"
+
+msgid "Completion"
+msgstr "Ukomavu"
+
+msgid "Quick navigation"
+msgstr "Navigesheni ya haraka"
+
+msgid "Filled"
+msgstr "Imejazwa"
+
+msgid "Terms sections"
+msgstr "Sehemu za maneno"
+
+msgid "Open a section to edit its content."
+msgstr "Fungua sehemu ili kuhariri maudhui yake."
+
+msgid "Open this section to load the editor."
+msgstr "Fungua sehemu hii ili kupakia mhariri."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Eneo la hatari: kufuta URL ya ufikiaji ni la kudumu."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Andika URL kamili ili kuthibitisha. URL na uhusiano wake utaondolewa kudumu."
+
+msgid "Unable to load the badge's image."
+msgstr "Haiwezi kupakia picha ya badge."
+
+msgid "Invalid role selection"
+msgstr "Chaguo la jukumu batili"
+
+msgid "Select relation type first to enable user management."
+msgstr "Chagua aina ya uhusiano kwanza ili kuwezesha usimamizi wa mtumiaji."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Swali hili halina muktadha wa kozi. Hakikisho halipatikani."
+
+msgid "Unknown test"
+msgstr "Jaribio lisilojulikana"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Kufuta hakuruhusiwi bila muktadha wa kozi."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Kufuta kimeshindwa: muktadha wa kozi ukikosekana au katikaSwali hili ni la jaribio. Liweke sawa kutoka ndani ya jaribio au chuja maswali yatima pekee.ID halali ya swali."
+
+msgid "Delete failed: question not found."
+msgstr "Kufuta kimeshindwa: swali halipatikani."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Kufuta kimeshindwa: swali hili bado linarejelewa na rasilimali zingine."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Swali hili ni la jaribio. Liweke sawa kutoka ndani ya jaribio au chuja maswali yatima pekee."
+
+msgid "Access the group tools and resources"
+msgstr "Fikia zana na rasilimali za kikundi"
+
+msgid "%s members"
+msgstr "%s wanachama"
+
+msgid "View certificate (HTML)"
+msgstr "Tazama cheti (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Unganisha ustadi na kitabu hiki cha alama"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Dhibiti kiungo kati ya vyeti na ustadi kwa kila kitabu cha alama"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Tafadhali chagua utoaji maalum wa badge ili kupakua"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM haijawezeshwa."
+
+msgid "Invalid token."
+msgstr "Token batili."
+
+msgid "Schema not supported."
+msgstr "Mfumo hauungwi mkono."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Mifumo batili kwa operesheni ya PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Inakosekana array iliyohitajika \"Operesheni\"."
+
+msgid "The '%s' operation is not supported."
+msgstr "Operesheni ya '%s' hauungwi mkono."
+
+msgid "Drupal user ID"
+msgstr "ID ya mtumiaji wa Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Hakuna maneno yanayolingana na utafutaji: %s"
 

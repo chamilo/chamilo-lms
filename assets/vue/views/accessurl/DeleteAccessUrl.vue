@@ -24,7 +24,7 @@
       <BaseButton
         :disabled="loading || !canDelete"
         :is-loading="loading"
-        :label="t('Delete URL')"
+        :label="t('Delete')"
         icon="delete"
         type="danger"
         @click="confirmDialogVisible = true"
@@ -88,7 +88,7 @@ async function confirmSubmit() {
     const secToken = window.SEC_TOKEN || route.query.sec_token || ""
     const res = await deleteById(urlId, secToken)
 
-    notification.showSuccessNotification(t("URL deleted successfully."))
+    notification.showSuccessNotification(t("URL deleted."))
 
     window.location.href = res.redirectUrl
   } catch (e) {

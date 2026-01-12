@@ -31068,8 +31068,8 @@ msgstr "Apondre un comentari"
 msgid "Write your comment here..."
 msgstr "Escrivètz vòstre comentari aquí..."
 
-msgid "%d selected"
-msgstr "%d seleccionat(s)"
+msgid "%s selected"
+msgstr "%s seleccionat(s)"
 
 msgid "Search by title or path..."
 msgstr "Recercar per títol o camèl..."
@@ -31077,8 +31077,8 @@ msgstr "Recercar per títol o camèl..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Gerir las sàuvagardas, restauracion, còpia, reciclatge e supression de donadas del curs."
 
-msgid "%d comment(s)"
-msgstr "%d comentari(s)"
+msgid "%s comment(s)"
+msgstr "%s comentari(s)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Error en la mesa a jorn del tièrs. Verificatz las donadas."
@@ -32135,4 +32135,175 @@ msgstr "Fracàs de crear la sàlvagarda Moodle."
 
 msgid "More actions"
 msgstr "Mai d'actions"
+
+msgid "Write something"
+msgstr "Escrivètz quicòm"
+
+msgid "Friends of %s"
+msgstr "Amics de %s"
+
+msgid "Error loading learning paths."
+msgstr "Error al cargar los camins d'aprendiment."
+
+msgid "You don't have any learning path."
+msgstr "Vos tenètz pas cap de camin d'aprendiment."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Creatz vòstre primièr camin d'aprendiment per començar a organizar lo contengut del curs."
+
+msgid "Could not save the new category order."
+msgstr "Impossible de salvar l'òrdre novèl de las categorias."
+
+msgid "Could not save the new order."
+msgstr "Impossible de salvar l'òrdre novèl."
+
+msgid "Assignment"
+msgstr "Tòca"
+
+msgid "Allowed file formats: %s"
+msgstr "Formats de fichièrs autorizats: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Tipe de fichièr pas autorizat. Extensions autorizadas: %s"
+
+msgid "Folder name"
+msgstr "Nom del dossièr"
+
+msgid "Rename folder"
+msgstr "Renomenar lo dossièr"
+
+msgid "New name"
+msgstr "Novèl nom"
+
+msgid "Choose an action"
+msgstr "Causir una accion"
+
+msgid "New version"
+msgstr "Version novèla"
+
+msgid "Change title to selected filename"
+msgstr "Cambiàr lo títol al nom de fichièr seleccionat"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Podètz remplassar lo fichièr, lo desplaçar dins un autre dossièr, o las dos."
+
+msgid "Move %s"
+msgstr "Desplaçar %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Solament los dossiers non-racine son mostrats per evitar de daissar d'elements a la racine."
+
+msgid "No feedback yet."
+msgstr "Cap de comentari encara."
+
+msgid "Upload first, organize later"
+msgstr "Telecargar primer, organizar mai tard"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Tirar e depositar o navegar per apondre de fichièrs"
+
+msgid "Social wall..."
+msgstr "Mur social..."
+
+msgid "Wall of %s"
+msgstr "Mur de %s"
+
+msgid "Version currently loaded"
+msgstr "Version actualament cargada"
+
+msgid "Completion"
+msgstr "Acabament"
+
+msgid "Quick navigation"
+msgstr "Navigacion rapida"
+
+msgid "Filled"
+msgstr "Empli"
+
+msgid "Terms sections"
+msgstr "Seccions de tèrmes"
+
+msgid "Open a section to edit its content."
+msgstr "Dobrir una seccion per modificar son contengut."
+
+msgid "Open this section to load the editor."
+msgstr "Dobrir aquesta seccion per cargar l'editor."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Zòna perilhosa : suprimir un URL d'accès es definitiu."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Picar l'URL complet per confirmar. L'URL e sas relacions seràn suprimidas definitivament."
+
+msgid "Unable to load the badge's image."
+msgstr "Impossible de cargar l'imatge del badge."
+
+msgid "Invalid role selection"
+msgstr "Seleccion de ròtle invalida"
+
+msgid "Select relation type first to enable user management."
+msgstr "Seleccionar primer lo tipe de relacion per activar la gestion d'utilizaires."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Aquesta question es sens context de curs. La previsualizacion es pas disponibla."
+
+msgid "Unknown test"
+msgstr "Tèst desconegut"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "La supression es pas autorizada sens context de curs."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Supression fallida : manca lo context de curs o dinsAquesta question apartenant a un tèst. La modificar de dedins lo tèst o filtrar que las questions òrfanas.id de question valida."
+
+msgid "Delete failed: question not found."
+msgstr "Supression fallida : question pas trobada."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Supression fallida : aquesta question es encara referenciada per d'autras ressources."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Aquesta question apartenant a un tèst. La modificar de dedins lo tèst o filtrar que las questions òrfanas."
+
+msgid "Access the group tools and resources"
+msgstr "Accedir ais ostils e ressources del grup"
+
+msgid "%s members"
+msgstr "%s membres"
+
+msgid "View certificate (HTML)"
+msgstr "Veire lo certificat (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Ligar una competéncia a aquest libre de notas"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Gestar lo ligam entre certificats e competéncias per cada libre de notas"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Seleccionar un emissen specific de badge per telecargar"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM es pas activat."
+
+msgid "Invalid token."
+msgstr "Jeton invalid."
+
+msgid "Schema not supported."
+msgstr "Eschema pas suportat."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Eschemas invalids per l'operacion PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Manca lo tablèu obligatòri \"Operations\"."
+
+msgid "The '%s' operation is not supported."
+msgstr "L'operacion '%s' es pas suportada."
+
+msgid "Drupal user ID"
+msgstr "ID d'utilizaire Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Cap de termes correspond pas a la recèrca : %s"
 

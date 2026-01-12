@@ -350,7 +350,7 @@ $form->addMultiSelect('student_boss', get_lang('Superior (n+1)'), $studentBossTo
 
 $form->addElement('html', Display::advancedPanelStart(
     'advanced_params',
-    get_lang('Advanced parameters'),
+    get_lang('Advanced settings'),
     $advancedPanelOpen
 ));
 

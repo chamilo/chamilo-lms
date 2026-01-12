@@ -31076,8 +31076,8 @@ msgstr "Lisää kommentti"
 msgid "Write your comment here..."
 msgstr "Kirjoita kommenttisi tänne..."
 
-msgid "%d selected"
-msgstr "%d valittu"
+msgid "%s selected"
+msgstr "%s valittu"
 
 msgid "Search by title or path..."
 msgstr "Hae otsikon tai polun mukaan..."
@@ -31085,8 +31085,8 @@ msgstr "Hae otsikon tai polun mukaan..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Hallitse varmuuskopioita, palautuksia, kopiointia, kierrätystä ja kurssitietojen poistamista."
 
-msgid "%d comment(s)"
-msgstr "%d kommenttia"
+msgid "%s comment(s)"
+msgstr "%s kommenttia"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Virhe kolmannen osapuolen päivittämisessä. Tarkista tiedot."
@@ -32143,4 +32143,175 @@ msgstr "Moodle-varmuuskopion luonti epäonnistui."
 
 msgid "More actions"
 msgstr "Lisää toimintoja"
+
+msgid "Write something"
+msgstr "Kirjoita jotain"
+
+msgid "Friends of %s"
+msgstr "%s:n ystävät"
+
+msgid "Error loading learning paths."
+msgstr "Oppimispolkujen lataamisessa virhe."
+
+msgid "You don't have any learning path."
+msgstr "Sinulla ei ole yhtään oppimispolkua."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Luo ensimmäinen oppimispolkusi aloittaaksesi kurssisisällön järjestämisen."
+
+msgid "Could not save the new category order."
+msgstr "Uutta luokkajärjestystä ei voitu tallentaa."
+
+msgid "Could not save the new order."
+msgstr "Uutta järjestystä ei voitu tallentaa."
+
+msgid "Assignment"
+msgstr "Tehtävä"
+
+msgid "Allowed file formats: %s"
+msgstr "Sallitut tiedostomuodot: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Tiedostotyyppi ei ole sallittu. Sallitut lisäykset: %s"
+
+msgid "Folder name"
+msgstr "Kansion nimi"
+
+msgid "Rename folder"
+msgstr "Nimeä kansio uudelleen"
+
+msgid "New name"
+msgstr "Uusi nimi"
+
+msgid "Choose an action"
+msgstr "Valitse toiminto"
+
+msgid "New version"
+msgstr "Uusi versio"
+
+msgid "Change title to selected filename"
+msgstr "Muuta otsikko valituksi tiedostonimeksi"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Voit korvata tiedoston, siirtää sen toiseen kansioon tai molemmat."
+
+msgid "Move %s"
+msgstr "Siirrä %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Vain ei-juurikansiot näytetään välttääksesi kohteen jättämisen juureen."
+
+msgid "No feedback yet."
+msgstr "Ei palautetta vielä."
+
+msgid "Upload first, organize later"
+msgstr "Lataa ensin, järjestä myöhemmin"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Raahaa ja pudota tai selaa lisätäksesi tiedostoja"
+
+msgid "Social wall..."
+msgstr "Sosiaalinen seinä..."
+
+msgid "Wall of %s"
+msgstr "%s:n seinä"
+
+msgid "Version currently loaded"
+msgstr "Ladattu versio tällä hetkellä"
+
+msgid "Completion"
+msgstr "Valmistuminen"
+
+msgid "Quick navigation"
+msgstr "Pikavalikko"
+
+msgid "Filled"
+msgstr "Täytetty"
+
+msgid "Terms sections"
+msgstr "Ehdot ehtoja"
+
+msgid "Open a section to edit its content."
+msgstr "Avaa osio muokataksesi sen sisältöä."
+
+msgid "Open this section to load the editor."
+msgstr "Avaa tämä osio ladataksesi editorin."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Vaara-alue: pääsyketjun poistaminen on pysyvä."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Kirjoita täysi URL vahvistaaksesi. URL ja sen suhteet poistetaan pysyvästi."
+
+msgid "Unable to load the badge's image."
+msgstr "Haamun kuvaa ei voitu ladata."
+
+msgid "Invalid role selection"
+msgstr "Virheellinen roolin valinta"
+
+msgid "Select relation type first to enable user management."
+msgstr "Valitse ensin suhdeluokka aktivoidaksesi käyttäjien hallinnan."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Tällä kysymyksellä ei ole kurssikontekstia. Esikatselua ei ole saatavilla."
+
+msgid "Unknown test"
+msgstr "Tuntematon testi"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Poisto ei ole sallittu ilman kurssikontekstia."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Poisto epäonnistui: puuttuu kurssikonteksti taiTämä kysymys kuuluu testiin. Muokkaa sitä testin sisältä tai suodata vain orpokysymykset. kelvollinen kysymys-ID."
+
+msgid "Delete failed: question not found."
+msgstr "Poisto epäonnistui: kysymystä ei löytynyt."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Poisto epäonnistui: tätä kysymystä viittaavat edelleen muut resurssit."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Tämä kysymys kuuluu testiin. Muokkaa sitä testin sisältä tai suodata vain orpokysymykset."
+
+msgid "Access the group tools and resources"
+msgstr "Käytä ryhmän työkaluja ja resursseja"
+
+msgid "%s members"
+msgstr "%s jäsentä"
+
+msgid "View certificate (HTML)"
+msgstr "Näytä todistus (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Linkitä taito tähän arvosanakirjaan"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Hallitse todistusten ja taitojen välistä linkkiä jokaiselle arvosanakirjalle"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Valitse ladattava tietty merkki myöntö"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM ei ole käytössä."
+
+msgid "Invalid token."
+msgstr "Virheellinen tunnus."
+
+msgid "Schema not supported."
+msgstr "Skema ei ole tuettu."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Virheelliset skeemat PATCH-toiminnolle."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Puuttuu pakollinen \"Operations\" taulukko."
+
+msgid "The '%s' operation is not supported."
+msgstr "'%s'-toimintoa ei tueta."
+
+msgid "Drupal user ID"
+msgstr "Drupal-käyttäjän ID"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Ei hakutuloksia haulle: %s"
 

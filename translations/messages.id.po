@@ -31074,8 +31074,8 @@ msgstr "Tambah komentar"
 msgid "Write your comment here..."
 msgstr "Tulis komentar Anda di sini..."
 
-msgid "%d selected"
-msgstr "%d dipilih"
+msgid "%s selected"
+msgstr "%s dipilih"
 
 msgid "Search by title or path..."
 msgstr "Cari berdasarkan judul atau jalur..."
@@ -31083,8 +31083,8 @@ msgstr "Cari berdasarkan judul atau jalur..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Kelola cadangan, pulihkan, salin, daur ulang dan hapus data mata kuliah."
 
-msgid "%d comment(s)"
-msgstr "%d komentar"
+msgid "%s comment(s)"
+msgstr "%s komentar"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Kesalahan memperbarui pihak ketiga. Harap verifikasi data."
@@ -32141,4 +32141,175 @@ msgstr "Gagal membuat cadangan Moodle."
 
 msgid "More actions"
 msgstr "Tindakan lainnya"
+
+msgid "Write something"
+msgstr "Tulis sesuatu"
+
+msgid "Friends of %s"
+msgstr "Teman dari %s"
+
+msgid "Error loading learning paths."
+msgstr "Gagal memuat jalur pembelajaran."
+
+msgid "You don't have any learning path."
+msgstr "Anda tidak memiliki jalur pembelajaran apa pun."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Buat jalur pembelajaran pertama Anda untuk mulai mengatur konten kursus."
+
+msgid "Could not save the new category order."
+msgstr "Tidak dapat menyimpan urutan kategori baru."
+
+msgid "Could not save the new order."
+msgstr "Tidak dapat menyimpan urutan baru."
+
+msgid "Assignment"
+msgstr "Tugas"
+
+msgid "Allowed file formats: %s"
+msgstr "Format file yang diizinkan: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Jenis file tidak diizinkan. Ekstensi yang diizinkan: %s"
+
+msgid "Folder name"
+msgstr "Nama folder"
+
+msgid "Rename folder"
+msgstr "Ganti nama folder"
+
+msgid "New name"
+msgstr "Nama baru"
+
+msgid "Choose an action"
+msgstr "Pilih tindakan"
+
+msgid "New version"
+msgstr "Versi baru"
+
+msgid "Change title to selected filename"
+msgstr "Ubah judul menjadi nama file yang dipilih"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Anda dapat mengganti file, memindahkannya ke folder lain, atau keduanya."
+
+msgid "Move %s"
+msgstr "Pindahkan %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Hanya folder non-root yang ditampilkan untuk menghindari meninggalkan item di root."
+
+msgid "No feedback yet."
+msgstr "Belum ada umpan balik."
+
+msgid "Upload first, organize later"
+msgstr "Unggah dulu, atur nanti"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Seret & lepas atau jelajahi untuk menambahkan file"
+
+msgid "Social wall..."
+msgstr "Dinding sosial..."
+
+msgid "Wall of %s"
+msgstr "Dinding %s"
+
+msgid "Version currently loaded"
+msgstr "Versi yang sedang dimuat"
+
+msgid "Completion"
+msgstr "Penyelesaian"
+
+msgid "Quick navigation"
+msgstr "Navigasi cepat"
+
+msgid "Filled"
+msgstr "Terisi"
+
+msgid "Terms sections"
+msgstr "Bagian syarat"
+
+msgid "Open a section to edit its content."
+msgstr "Buka bagian untuk mengedit isinya."
+
+msgid "Open this section to load the editor."
+msgstr "Buka bagian ini untuk memuat editor."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Zona berbahaya: menghapus URL akses bersifat permanen."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Ketik URL lengkap untuk mengonfirmasi. URL dan relasinya akan dihapus secara permanen."
+
+msgid "Unable to load the badge's image."
+msgstr "Tidak dapat memuat gambar lencana."
+
+msgid "Invalid role selection"
+msgstr "Pemilihan peran tidak valid"
+
+msgid "Select relation type first to enable user management."
+msgstr "Pilih jenis relasi terlebih dahulu untuk mengaktifkan manajemen pengguna."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Pertanyaan ini tidak memiliki konteks kursus. Pratinjau tidak tersedia."
+
+msgid "Unknown test"
+msgstr "Tes tidak dikenal"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Penghapusan tidak diizinkan tanpa konteks kursus."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Penghapusan gagal: konteks kursus hilang atau id pertanyaan valid.Pertanyaan ini termasuk dalam tes. Edit dari dalam tes atau filter hanya pertanyaan yatim."
+
+msgid "Delete failed: question not found."
+msgstr "Penghapusan gagal: pertanyaan tidak ditemukan."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Penghapusan gagal: pertanyaan ini masih dirujuk oleh sumber daya lain."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Pertanyaan ini termasuk dalam tes. Edit dari dalam tes atau filter hanya pertanyaan yatim."
+
+msgid "Access the group tools and resources"
+msgstr "Akses alat dan sumber daya grup"
+
+msgid "%s members"
+msgstr "%s anggota"
+
+msgid "View certificate (HTML)"
+msgstr "Lihat sertifikat (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Hubungkan keterampilan ke buku nilai ini"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Kelola hubungan antara sertifikat dan keterampilan untuk setiap buku nilai"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Pilih penerbitan lencana tertentu untuk diunduh"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM tidak diaktifkan."
+
+msgid "Invalid token."
+msgstr "Token tidak valid."
+
+msgid "Schema not supported."
+msgstr "Skema tidak didukung."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Skema tidak valid untuk operasi PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Array \"Operations\" yang diperlukan hilang."
+
+msgid "The '%s' operation is not supported."
+msgstr "Operasi '%s' tidak didukung."
+
+msgid "Drupal user ID"
+msgstr "ID pengguna Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Tidak ada istilah yang cocok dengan pencarian: %s"
 

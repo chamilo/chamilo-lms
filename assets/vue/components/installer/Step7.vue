@@ -31,7 +31,7 @@
         <strong v-t="'Security advice'" />
 
         <i18n-t
-          keypath="To protect your site, make the whole %s directory read-only (chmod -R 0555 on Linux) and delete the %s directory."
+          keypath="To protect your site, make the whole {0} directory read-only (chmod -R 0555 on Linux) and delete the {1} directory."
           tag="p"
         >
           <code>config/</code>

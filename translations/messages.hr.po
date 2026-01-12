@@ -31075,8 +31075,8 @@ msgstr "Dodaj komentar"
 msgid "Write your comment here..."
 msgstr "Napišite svoj komentar ovdje..."
 
-msgid "%d selected"
-msgstr "%d odabrano"
+msgid "%s selected"
+msgstr "%s odabrano"
 
 msgid "Search by title or path..."
 msgstr "Pretraži po naslovu ili putanji..."
@@ -31084,8 +31084,8 @@ msgstr "Pretraži po naslovu ili putanji..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Upravljanje sigurnosnim kopijama, vraćanje, kopiranje, recikliranje i brisanje podataka predmeta."
 
-msgid "%d comment(s)"
-msgstr "%d komentar(a)"
+msgid "%s comment(s)"
+msgstr "%s komentar(a)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Greška pri ažuriranju treće strane. Provjerite podatke."
@@ -32142,4 +32142,175 @@ msgstr "Neuspjelo kreiranje Moodle sigurnosne kopije."
 
 msgid "More actions"
 msgstr "Više radnji"
+
+msgid "Write something"
+msgstr "Napišite nešto"
+
+msgid "Friends of %s"
+msgstr "Prijatelji %s"
+
+msgid "Error loading learning paths."
+msgstr "Greška pri učitavanju putova učenja."
+
+msgid "You don't have any learning path."
+msgstr "Nemate nijedan put učenja."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Stvorite svoj prvi put učenja kako biste počeli organizirati sadržaj tečaja."
+
+msgid "Could not save the new category order."
+msgstr "Nije moguće spremiti novi redoslijed kategorija."
+
+msgid "Could not save the new order."
+msgstr "Nije moguće spremiti novi redoslijed."
+
+msgid "Assignment"
+msgstr "Zadatak"
+
+msgid "Allowed file formats: %s"
+msgstr "Dopušteni formati datoteka: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Vrsta datoteke nije dopuštena. Dopuštene ekstenzije: %s"
+
+msgid "Folder name"
+msgstr "Naziv mape"
+
+msgid "Rename folder"
+msgstr "Preimenuj mapu"
+
+msgid "New name"
+msgstr "Novo ime"
+
+msgid "Choose an action"
+msgstr "Odaberite radnju"
+
+msgid "New version"
+msgstr "Nova verzija"
+
+msgid "Change title to selected filename"
+msgstr "Promijeni naslov u odabrani naziv datoteke"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Možete zamijeniti datoteku, premjestiti je u drugu mapu ili oboje."
+
+msgid "Move %s"
+msgstr "Premjesti %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Prikazuju se samo ne-rootne mape kako bi se izbjeglo ostavljanje stavki u rootu."
+
+msgid "No feedback yet."
+msgstr "Još nema povratnih informacija."
+
+msgid "Upload first, organize later"
+msgstr "Prvo učitaj, kasnije organiziraj"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Povuci i ispusti ili pretraži za dodavanje datoteka"
+
+msgid "Social wall..."
+msgstr "Društveni zid..."
+
+msgid "Wall of %s"
+msgstr "Zid %s"
+
+msgid "Version currently loaded"
+msgstr "Trenutno učitana verzija"
+
+msgid "Completion"
+msgstr "Završenost"
+
+msgid "Quick navigation"
+msgstr "Brza navigacija"
+
+msgid "Filled"
+msgstr "Popunjeno"
+
+msgid "Terms sections"
+msgstr "Sekcije uvjeta"
+
+msgid "Open a section to edit its content."
+msgstr "Otvorite sekciju za uređivanje njezina sadržaja."
+
+msgid "Open this section to load the editor."
+msgstr "Otvorite ovu sekciju za učitavanje uređivača."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Opasno područje: brisanje URL-a pristupa je trajno."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Upišite puni URL za potvrdu. URL i njegove relacije bit će trajno uklonjeni."
+
+msgid "Unable to load the badge's image."
+msgstr "Nije moguće učitati sliku značke."
+
+msgid "Invalid role selection"
+msgstr "Nevaljan odabir uloge"
+
+msgid "Select relation type first to enable user management."
+msgstr "Prvo odaberite vrstu relacije za omogućavanje upravljanja korisnicima."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Ovo pitanje nema kontekst kursa. Pregled nije dostupan."
+
+msgid "Unknown test"
+msgstr "Nepoznati test"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Brisanje nije dopušteno bez konteksta kursa."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Brisanje nije uspjelo: nedostaje kontekst kursa ili valjan ID pitanja.Ovo pitanje pripada testu. Uredite ga iznutra testa ili filtrirajte samo sirota pitanja."
+
+msgid "Delete failed: question not found."
+msgstr "Brisanje nije uspjelo: pitanje nije pronađeno."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Brisanje nije uspjelo: ovo pitanje još uvijek referenciraju drugi resursi."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Ovo pitanje pripada testu. Uredite ga iznutra testa ili filtrirajte samo sirota pitanja."
+
+msgid "Access the group tools and resources"
+msgstr "Pristupite alatima i resursima grupe"
+
+msgid "%s members"
+msgstr "%s članova"
+
+msgid "View certificate (HTML)"
+msgstr "Prikaži certifikat (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Povežite vještinu s ovim dnevnikom ocjena"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Upravljajte poveznicom između certifikata i vještina za svaki dnevnik ocjena"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Odaberite specifično izdavanje značke za preuzimanje"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM nije omogućen."
+
+msgid "Invalid token."
+msgstr "Nevaljan token."
+
+msgid "Schema not supported."
+msgstr "Shema nije podržana."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Nevaljne sheme za PATCH operaciju."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Nedostaje obavezni niz \"Operations\"."
+
+msgid "The '%s' operation is not supported."
+msgstr "Operacija '%s' nije podržana."
+
+msgid "Drupal user ID"
+msgstr "Drupal ID korisnika"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Nema pojmova koji odgovaraju pretrazi: %s"
 

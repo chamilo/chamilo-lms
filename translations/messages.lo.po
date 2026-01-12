@@ -33411,8 +33411,8 @@ msgid "Write your comment here..."
 msgstr "ຂຽນຄວາມຄິດເຫັນຂອງທ່ານທີ່ນີ້..."
 
 #, fuzzy
-msgid "%d selected"
-msgstr "ເລືອກ %d ລາຍການ"
+msgid "%s selected"
+msgstr "ເລືອກ %s ລາຍການ"
 
 #, fuzzy
 msgid "Search by title or path..."
@@ -33422,8 +33422,8 @@ msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "ຈັດການການສຳຮອງຂໍ້ມູນ, ກູ້ຄືນ, ສຳເນົາ, ນຳກັບມາໃຊ້ໃໝ່ ແລະ ລຶບຂໍ້ມູນລາຍວິຊາ."
 
 #, fuzzy
-msgid "%d comment(s)"
-msgstr "%d ຄວາມຄິດເຫັນ"
+msgid "%s comment(s)"
+msgstr "%s ຄວາມຄິດເຫັນ"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "ຜິດພາດໃນການອັບເດດບຸກຄົນທີສາມ. ກະລຸນາກວດສອບຂໍ້ມູນ."
@@ -34489,4 +34489,175 @@ msgstr "ສ້າງການເຄື່ອງຮັກສາ Moodle ບໍ່�
 
 msgid "More actions"
 msgstr "ການເຄື່ອງຫຼາຍກວ່າ"
+
+msgid "Write something"
+msgstr ""
+
+msgid "Friends of %s"
+msgstr ""
+
+msgid "Error loading learning paths."
+msgstr ""
+
+msgid "You don't have any learning path."
+msgstr ""
+
+msgid "Create your first learning path to start organizing course content."
+msgstr ""
+
+msgid "Could not save the new category order."
+msgstr ""
+
+msgid "Could not save the new order."
+msgstr ""
+
+msgid "Assignment"
+msgstr ""
+
+msgid "Allowed file formats: %s"
+msgstr ""
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr ""
+
+msgid "Folder name"
+msgstr ""
+
+msgid "Rename folder"
+msgstr ""
+
+msgid "New name"
+msgstr ""
+
+msgid "Choose an action"
+msgstr ""
+
+msgid "New version"
+msgstr ""
+
+msgid "Change title to selected filename"
+msgstr ""
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr ""
+
+msgid "Move %s"
+msgstr ""
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr ""
+
+msgid "No feedback yet."
+msgstr ""
+
+msgid "Upload first, organize later"
+msgstr ""
+
+msgid "Drag & drop or browse to add files"
+msgstr ""
+
+msgid "Social wall..."
+msgstr ""
+
+msgid "Wall of %s"
+msgstr ""
+
+msgid "Version currently loaded"
+msgstr ""
+
+msgid "Completion"
+msgstr ""
+
+msgid "Quick navigation"
+msgstr ""
+
+msgid "Filled"
+msgstr ""
+
+msgid "Terms sections"
+msgstr ""
+
+msgid "Open a section to edit its content."
+msgstr ""
+
+msgid "Open this section to load the editor."
+msgstr ""
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr ""
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr ""
+
+msgid "Unable to load the badge's image."
+msgstr ""
+
+msgid "Invalid role selection"
+msgstr ""
+
+msgid "Select relation type first to enable user management."
+msgstr ""
+
+msgid "This question has no course context. Preview is not available."
+msgstr ""
+
+msgid "Unknown test"
+msgstr ""
+
+msgid "Deletion is not allowed without a course context."
+msgstr ""
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr ""
+
+msgid "Delete failed: question not found."
+msgstr ""
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr ""
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr ""
+
+msgid "Access the group tools and resources"
+msgstr ""
+
+msgid "%s members"
+msgstr ""
+
+msgid "View certificate (HTML)"
+msgstr ""
+
+msgid "Link a skill to this gradebook"
+msgstr ""
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr ""
+
+msgid "Please select a specific badge issue to download"
+msgstr ""
+
+msgid "SCIM is not enabled."
+msgstr ""
+
+msgid "Invalid token."
+msgstr "ເຕັກໂຕເຄີນບໍ່ຖືກຕ້ອງ."
+
+msgid "Schema not supported."
+msgstr "ຮູບແບບບໍ່ຮອງຮັບ."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "ຮູບແບບບໍ່ຖືກຕ້ອງສຳລັບການດຳເນິນການ PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "ຂາດມີຕອບຈໍາເປັນ \"Operations\"."
+
+msgid "The '%s' operation is not supported."
+msgstr "ການດຳເນິນການ '%s' ບໍ່ໄດ້ຮັບການຮອງຮັບ."
+
+msgid "Drupal user ID"
+msgstr "ID ຜູ້ໃຊ້ Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "ບໍ່ມີຄຳສັ້ນທີ່ຕົງກັບການຄົ້ນຫາ: %s"
 

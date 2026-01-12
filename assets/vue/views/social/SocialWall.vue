@@ -86,8 +86,8 @@ const isWallLoading = computed(() => !isOwnWallByRoute.value && !wallName.value)
 
 const wallTitle = computed(() => {
   if (isOwnWallByRoute.value) return ''
-  if (isWallLoading.value) return `${t("Wall")}…`
-  return `${t("Wall of")} ${wallName.value}`.trim()
+  if (isWallLoading.value) return `${t("Social wall")}`
+  return `${t("Wall of {0}", [wallName.value])}`.trim()
 })
 
 // Remount children when wall id or filter changes (prevents stale state reuse)

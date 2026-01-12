@@ -19,12 +19,12 @@
           <BaseButton
             type="primary"
             icon="file-upload"
-            :label="t('Choose file…')"
+            :label="t('Choose file')"
             @click="showUploader = true"
           />
         </div>
         <div v-if="pickedName" class="text-xs text-gray-500 mt-2">
-          {{ t('Selected') }}: <strong>{{ pickedName }}</strong>
+          {{ t('{0} selected', [pickedName]) }}
         </div>
 
         <!-- Rename toggle -->
@@ -36,7 +36,7 @@
             v-model="renameTitle"
           />
           <label for="renameTitle" class="text-sm">
-            {{ t('Rename title to selected filename') }}
+            {{ t("Change title to selected filename") }}
           </label>
         </div>
       </div>
@@ -79,7 +79,7 @@
       </div>
 
       <p class="text-xs text-gray-500">
-        {{ t('You can replace the file, move it to another folder, or both.') }}
+        {{ t("You can replace the file, move it to another folder, or both.") }}
       </p>
     </div>
   </BaseDialog>

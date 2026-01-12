@@ -49,7 +49,7 @@
       </BaseCard>
     </li>
     <li v-if="!isLoading && glossaries.length === 0">
-      {{ t("There is no terms that matches the search: %s", [searchTerm]) }}
+      {{ t("There are no terms that match the search: {0}", [searchTerm]) }}
     </li>
   </ul>
 </template>

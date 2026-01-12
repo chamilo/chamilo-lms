@@ -31072,8 +31072,8 @@ msgstr "Cuir trácht leis"
 msgid "Write your comment here..."
 msgstr "Scríobh do thrácht anseo..."
 
-msgid "%d selected"
-msgstr "%d roghnaithe"
+msgid "%s selected"
+msgstr "%s roghnaithe"
 
 msgid "Search by title or path..."
 msgstr "Cuardaigh de réir teidil nó cosáin..."
@@ -31081,8 +31081,8 @@ msgstr "Cuardaigh de réir teidil nó cosáin..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Bainistigh cúltacairí, athchóirigh, cóipeáil, athchúrsáil agus scrios sonraí an chúrsa."
 
-msgid "%d comment(s)"
-msgstr "%d trácht(tí)"
+msgid "%s comment(s)"
+msgstr "%s trácht(tí)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Earráid ag nuashonrú tríú páirtí. Seiceáil na sonraí le do thoil."
@@ -32139,4 +32139,175 @@ msgstr "Theip ar chruthú cúltaca Moodle."
 
 msgid "More actions"
 msgstr "Mó gníomhartha"
+
+msgid "Write something"
+msgstr "Scríobh rud éigin"
+
+msgid "Friends of %s"
+msgstr "Cairde %s"
+
+msgid "Error loading learning paths."
+msgstr "Earráid ag lódáil cosáin foghlama."
+
+msgid "You don't have any learning path."
+msgstr "Níl aon chosán foghlama agat."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Cruthaigh do chéad chosán foghlama chun tús a chur le heagrú ábhar an chúrsa."
+
+msgid "Could not save the new category order."
+msgstr "Níorbh fhéidir ord na catagóire nua a shábháil."
+
+msgid "Could not save the new order."
+msgstr "Níorbh fhéidir an t-ord nua a shábháil."
+
+msgid "Assignment"
+msgstr "Tasc"
+
+msgid "Allowed file formats: %s"
+msgstr "Formáidí comhaid ceadaithe: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Cineál comhaid nach bhfuil ceadaithe. Eisíontais ceadaithe: %s"
+
+msgid "Folder name"
+msgstr "Ainm fillteáin"
+
+msgid "Rename folder"
+msgstr "Athainmnigh fillteán"
+
+msgid "New name"
+msgstr "Ainm nua"
+
+msgid "Choose an action"
+msgstr "Roghnaigh gníomh"
+
+msgid "New version"
+msgstr "Leagan nua"
+
+msgid "Change title to selected filename"
+msgstr "Athraigh teideal go ainm comhaid roghnaithe"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Is féidir leat an comhad a athsholáthar, é a bhogadh go fillteán eile, nó an dá cheann."
+
+msgid "Move %s"
+msgstr "Bog %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Ní thaispeántar ach filltéáin neamhfhréamh chun míreanna a fhágáil sa fhréamh a sheachaint."
+
+msgid "No feedback yet."
+msgstr "Gan aon aiseolas fós."
+
+msgid "Upload first, organize later"
+msgstr "Uáthlaigh ar dtús, eagraigh níos déanaí"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Tarraing & scaoil nó brabhsáil chun comhaid a chur leis"
+
+msgid "Social wall..."
+msgstr "Balla sóisialta..."
+
+msgid "Wall of %s"
+msgstr "Balla %s"
+
+msgid "Version currently loaded"
+msgstr "Leagan atá lódáilte faoi láthair"
+
+msgid "Completion"
+msgstr "Críochnú"
+
+msgid "Quick navigation"
+msgstr "Nascleanúint thapa"
+
+msgid "Filled"
+msgstr "Líonadh"
+
+msgid "Terms sections"
+msgstr "Ranna téarmaí"
+
+msgid "Open a section to edit its content."
+msgstr "Oscail rann chun a ábhar a eagarthóireacht."
+
+msgid "Open this section to load the editor."
+msgstr "Oscail an rann seo chun an eagarthóir a luchtú."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Crios contúirte: scriosadh URL rochtana is buan é."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Cuir isteach an URL iomlán le deimhniú. Bainfear an URL agus a gcaidrimh go buan."
+
+msgid "Unable to load the badge's image."
+msgstr "Níorbh fhéidir íomhá an suaite a luchtú."
+
+msgid "Invalid role selection"
+msgstr "Roghnaigh ról neamhbhailí"
+
+msgid "Select relation type first to enable user management."
+msgstr "Roghnaigh cineál caidrimh ar dtús chun bainistíocht úsáideoirí a chumasaú."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Níl comhthéacs cúrsa ag an cheist seo. Níl réamhamharc ar fáil."
+
+msgid "Unknown test"
+msgstr "Tástáil anaithnid"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Ní cheadaítear scriosadh gan chomhthéacs cúrsa."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Theip ar scriosadh: comhthéacs cúrsa in easnamh nó ID ceiste bailí.Is le tástáil an cheist seo. Cuir in eagar é ón taobh istigh den tástáil nó scag le haghaidh ceisteanna dílleachta amháin."
+
+msgid "Delete failed: question not found."
+msgstr "Theip ar scriosadh: ceist ní bhfuarthas."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Theip ar scriosadh: tá an cheist seo fós á tagairt ag acmhainní eile."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Is le tástáil an cheist seo. Cuir in eagar é ón taobh istigh den tástáil nó scag le haghaidh ceisteanna dílleachta amháin."
+
+msgid "Access the group tools and resources"
+msgstr "Rochtain ar uirlisí agus acmhainní an ghrúpa"
+
+msgid "%s members"
+msgstr "%s bhall"
+
+msgid "View certificate (HTML)"
+msgstr "Féach ar an deimhniú (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Nasc scil leis an leabhar grádúcháin seo"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Bainistigh an nasc idir deimhnithe agus scileanna do gach leabhar grádúcháin"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Roghnaigh eagrán suaithe ar leith le híoslódáil"
+
+msgid "SCIM is not enabled."
+msgstr "Níl SCIM cumasaithe."
+
+msgid "Invalid token."
+msgstr "Comhartha neamhbhailí."
+
+msgid "Schema not supported."
+msgstr "Scéim nach dtacaítear léi."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Scéimeanna neamhbhailí le haghaidh oibríochta PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Easnamh ar an eagar \"Operations\" riachtanach."
+
+msgid "The '%s' operation is not supported."
+msgstr "Ní thacaítear leis an oibríocht '%s'."
+
+msgid "Drupal user ID"
+msgstr "ID úsáideora Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Níl aon téarmaí a mheaitseálann an cuardach: %s"
 

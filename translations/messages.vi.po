@@ -31074,8 +31074,8 @@ msgstr "Thêm bình luận"
 msgid "Write your comment here..."
 msgstr "Viết bình luận của bạn tại đây..."
 
-msgid "%d selected"
-msgstr "%d đã chọn"
+msgid "%s selected"
+msgstr "%s đã chọn"
 
 msgid "Search by title or path..."
 msgstr "Tìm kiếm theo tiêu đề hoặc đường dẫn..."
@@ -31083,8 +31083,8 @@ msgstr "Tìm kiếm theo tiêu đề hoặc đường dẫn..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Quản lý sao lưu, khôi phục, sao chép, thùng rác và xóa dữ liệu khóa học."
 
-msgid "%d comment(s)"
-msgstr "%d bình luận"
+msgid "%s comment(s)"
+msgstr "%s bình luận"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Lỗi cập nhật bên thứ ba. Vui lòng kiểm tra dữ liệu."
@@ -32141,4 +32141,175 @@ msgstr "Không thể tạo sao lưu Moodle."
 
 msgid "More actions"
 msgstr "Thêm hành động"
+
+msgid "Write something"
+msgstr "Viết điều gì đó"
+
+msgid "Friends of %s"
+msgstr "Bạn bè của %s"
+
+msgid "Error loading learning paths."
+msgstr "Lỗi khi tải lộ trình học tập."
+
+msgid "You don't have any learning path."
+msgstr "Bạn chưa có lộ trình học tập nào."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Tạo lộ trình học tập đầu tiên để bắt đầu tổ chức nội dung khóa học."
+
+msgid "Could not save the new category order."
+msgstr "Không thể lưu thứ tự danh mục mới."
+
+msgid "Could not save the new order."
+msgstr "Không thể lưu thứ tự mới."
+
+msgid "Assignment"
+msgstr "Bài tập"
+
+msgid "Allowed file formats: %s"
+msgstr "Định dạng tệp được phép: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Loại tệp không được phép. Phần mở rộng được phép: %s"
+
+msgid "Folder name"
+msgstr "Tên thư mục"
+
+msgid "Rename folder"
+msgstr "Đổi tên thư mục"
+
+msgid "New name"
+msgstr "Tên mới"
+
+msgid "Choose an action"
+msgstr "Chọn hành động"
+
+msgid "New version"
+msgstr "Phiên bản mới"
+
+msgid "Change title to selected filename"
+msgstr "Đổi tiêu đề thành tên tệp đã chọn"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Bạn có thể thay thế tệp, di chuyển nó đến thư mục khác, hoặc cả hai."
+
+msgid "Move %s"
+msgstr "Di chuyển %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Chỉ hiển thị các thư mục không phải gốc để tránh để lại các mục trong gốc."
+
+msgid "No feedback yet."
+msgstr "Chưa có phản hồi."
+
+msgid "Upload first, organize later"
+msgstr "Tải lên trước, tổ chức sau"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Kéo & thả hoặc duyệt để thêm tệp"
+
+msgid "Social wall..."
+msgstr "Tường xã hội..."
+
+msgid "Wall of %s"
+msgstr "Tường của %s"
+
+msgid "Version currently loaded"
+msgstr "Phiên bản đang tải"
+
+msgid "Completion"
+msgstr "Hoàn thành"
+
+msgid "Quick navigation"
+msgstr "Điều hướng nhanh"
+
+msgid "Filled"
+msgstr "Đã điền"
+
+msgid "Terms sections"
+msgstr "Các phần điều khoản"
+
+msgid "Open a section to edit its content."
+msgstr "Mở một phần để chỉnh sửa nội dung của nó."
+
+msgid "Open this section to load the editor."
+msgstr "Mở phần này để tải trình chỉnh sửa."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Vùng nguy hiểm: xóa URL truy cập là vĩnh viễn."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Nhập đầy đủ URL để xác nhận. URL và các liên kết của nó sẽ bị xóa vĩnh viễn."
+
+msgid "Unable to load the badge's image."
+msgstr "Không thể tải hình ảnh huy hiệu."
+
+msgid "Invalid role selection"
+msgstr "Lựa chọn vai trò không hợp lệ"
+
+msgid "Select relation type first to enable user management."
+msgstr "Chọn loại quan hệ trước để kích hoạt quản lý người dùng."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Câu hỏi này không có ngữ cảnh khóa học. Xem trước không khả dụng."
+
+msgid "Unknown test"
+msgstr "Bài kiểm tra không xác định"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Không cho phép xóa nếu không có ngữ cảnh khóa học."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Xóa thất bại: thiếu ngữ cảnh khóa học hoặc ID câu hỏi hợp lệ trong câu hỏi này thuộc về một bài kiểm tra. Chỉnh sửa nó từ bên trong bài kiểm tra hoặc chỉ lọc các câu hỏi mồ côi."
+
+msgid "Delete failed: question not found."
+msgstr "Xóa thất bại: không tìm thấy câu hỏi."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Xóa thất bại: câu hỏi này vẫn được tham chiếu bởi các tài nguyên khác."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Câu hỏi này thuộc về một bài kiểm tra. Chỉnh sửa nó từ bên trong bài kiểm tra hoặc chỉ lọc các câu hỏi mồ côi."
+
+msgid "Access the group tools and resources"
+msgstr "Truy cập công cụ và tài nguyên nhóm"
+
+msgid "%s members"
+msgstr "%s thành viên"
+
+msgid "View certificate (HTML)"
+msgstr "Xem chứng chỉ (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Liên kết kỹ năng với sổ điểm này"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Quản lý liên kết giữa chứng chỉ và kỹ năng cho mỗi sổ điểm"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Vui lòng chọn một lần cấp huy hiệu cụ thể để tải xuống"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM chưa được kích hoạt."
+
+msgid "Invalid token."
+msgstr "Token không hợp lệ."
+
+msgid "Schema not supported."
+msgstr "Schema không được hỗ trợ."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Schema không hợp lệ cho thao tác PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Thiếu mảng \"Operations\" bắt buộc."
+
+msgid "The '%s' operation is not supported."
+msgstr "Thao tác '%s' không được hỗ trợ."
+
+msgid "Drupal user ID"
+msgstr "ID người dùng Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Không có thuật ngữ nào khớp với tìm kiếm: %s"
 

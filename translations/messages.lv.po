@@ -2023,7 +2023,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autortiesības,, no:nav autortiesību"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mape,, application/msword:MsWord,, application/octet-stream:Okta plūsma,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapē,, application/msword:MsWord,, application/octet-stream:Okteta plūsma,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:uzdevums,,      simulation:simulācija,,      questionnaire:aptaujā,,      diagram:diagramma,,      figure:attēls,,      graph:diagramma,,      index:indekss,,      slide:slīdrāde,,      table:tabula,,      narrative text:narratīvs teksts,,      exam:eksāmens,,      experiment:eksperiments,,      problem statement:problēmas apraksts,,      self assessment:paškontrole,,      lecture:lekcija"
@@ -31075,8 +31075,8 @@ msgstr "Pievienot komentāru"
 msgid "Write your comment here..."
 msgstr "Uzrakstiet savu komentāru šeit..."
 
-msgid "%d selected"
-msgstr "%d izvēlēti"
+msgid "%s selected"
+msgstr "%s izvēlēti"
 
 msgid "Search by title or path..."
 msgstr "Meklēt pēc nosaukuma vai ceļa..."
@@ -31084,8 +31084,8 @@ msgstr "Meklēt pēc nosaukuma vai ceļa..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Pārvaldīt dublējumus, atjaunošanu, kopēšanu, atkritni un kursa datu dzēšanu."
 
-msgid "%d comment(s)"
-msgstr "%d komentārs(i)"
+msgid "%s comment(s)"
+msgstr "%s komentārs(i)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Kļūda atjaunojot trešo pusi. Lūdzu, pārbaudiet datus."
@@ -32142,4 +32142,175 @@ msgstr "Neizdevās izveidot Moodle dublējumu."
 
 msgid "More actions"
 msgstr "Vairāk darbību"
+
+msgid "Write something"
+msgstr "Uzrakstiet kaut ko"
+
+msgid "Friends of %s"
+msgstr "%s draugi"
+
+msgid "Error loading learning paths."
+msgstr "Kļūda ielādējot mācīšanās ceļus."
+
+msgid "You don't have any learning path."
+msgstr "Jums nav neviena mācīšanās ceļa."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Izveidojiet savu pirmo mācīšanās ceļu, lai sāktu organizēt kursa saturu."
+
+msgid "Could not save the new category order."
+msgstr "Neizdevās saglabāt jauno kategorijas secību."
+
+msgid "Could not save the new order."
+msgstr "Neizdevās saglabāt jauno secību."
+
+msgid "Assignment"
+msgstr "Darbs"
+
+msgid "Allowed file formats: %s"
+msgstr "Atļautie failu formāti: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Faila tips nav atļauts. Atļautās paplašinājumi: %s"
+
+msgid "Folder name"
+msgstr "Mapes nosaukums"
+
+msgid "Rename folder"
+msgstr "Pārdēvēt mapi"
+
+msgid "New name"
+msgstr "Jauns nosaukums"
+
+msgid "Choose an action"
+msgstr "Izvēlieties darbību"
+
+msgid "New version"
+msgstr "Jauna versija"
+
+msgid "Change title to selected filename"
+msgstr "Mainīt virsrakstu uz izvēlēto faila nosaukumu"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Jūs varat aizstāt failu, pārvietot to uz citu mapi vai abus."
+
+msgid "Move %s"
+msgstr "Pārvietot %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Tiek rādītas tikai ne saknes mapes, lai izvairītos no elementu atstāšanas saknē."
+
+msgid "No feedback yet."
+msgstr "Vēl nav atsauksmju."
+
+msgid "Upload first, organize later"
+msgstr "Vispirms augšupielādējiet, pēc tam organizējiet"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Velciet un nometiet vai pārlūkojiet, lai pievienotu failus"
+
+msgid "Social wall..."
+msgstr "Sociālais siens..."
+
+msgid "Wall of %s"
+msgstr "%s siens"
+
+msgid "Version currently loaded"
+msgstr "Pašlaik ielādētā versija"
+
+msgid "Completion"
+msgstr "Pabeigšana"
+
+msgid "Quick navigation"
+msgstr "Ātrā navigācija"
+
+msgid "Filled"
+msgstr "Aizpildīts"
+
+msgid "Terms sections"
+msgstr "Noteikumu sadaļas"
+
+msgid "Open a section to edit its content."
+msgstr "Atveriet sadaļu, lai rediģētu tās saturu."
+
+msgid "Open this section to load the editor."
+msgstr "Atveriet šo sadaļu, lai ielādētu redaktoru."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Bīstamā zona: piekļuves URL dzēšana ir neatgriezeniska."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Ievadiet pilnu URL, lai apstiprinātu. URL un tā saites tiks neatgriezeniski dzēsti."
+
+msgid "Unable to load the badge's image."
+msgstr "Nevar ielādēt nozīmes attēlu."
+
+msgid "Invalid role selection"
+msgstr "Nederīga lomas izvēle"
+
+msgid "Select relation type first to enable user management."
+msgstr "Vispirms izvēlieties saites veidu, lai aktivizētu lietotāju pārvaldību."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Šim jautājumam nav kursa konteksta. Priekšskatījums nav pieejams."
+
+msgid "Unknown test"
+msgstr "Nezināms tests"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Dzēšana nav atļauta bez kursa konteksta."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Dzēšana neizdevās: trūkst kursa konteksta vai šis jautājums pieder testam. Rediģējiet to no testa iekšpuses vai filtrējiet tikai bāreņu jautājumus."
+
+msgid "Delete failed: question not found."
+msgstr "Dzēšana neizdevās: jautājums nav atrasts."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Dzēšana neizdevās: šis jautājums joprojām tiek izmantots citos resursos."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Šis jautājums pieder testam. Rediģējiet to no testa iekšpuses vai filtrējiet tikai bāreņu jautājumus."
+
+msgid "Access the group tools and resources"
+msgstr "Piekļūt grupas rīkiem un resursiem"
+
+msgid "%s members"
+msgstr "%s dalībnieki"
+
+msgid "View certificate (HTML)"
+msgstr "Skatīt sertifikātu (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Pievienot prasmi šim atzīmju grāmatai"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Pārvaldīt saites starp sertifikātiem un prasmēm katrai atzīmju grāmatai"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Lūdzu, izvēlieties konkrētu nozīmes izsniegšanu, lai lejupielādētu"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM nav iespējots."
+
+msgid "Invalid token."
+msgstr "Nederīgs žetons."
+
+msgid "Schema not supported."
+msgstr "Shema nav atbalstīta."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Nederīgas shēmas PATCH operācijai."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Trūkst nepieciešamā \"Operations\" masīva."
+
+msgid "The '%s' operation is not supported."
+msgstr "Operācija '%s' nav atbalstīta."
+
+msgid "Drupal user ID"
+msgstr "Drupal lietotāja ID"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Nav terminu, kas atbilstu meklēšanai: %s"
 

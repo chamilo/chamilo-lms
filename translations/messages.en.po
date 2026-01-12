@@ -31082,8 +31082,8 @@ msgstr "Add comment"
 msgid "Write your comment here..."
 msgstr "Write your comment here..."
 
-msgid "%d selected"
-msgstr "%d selected"
+msgid "%s selected"
+msgstr "%s selected"
 
 msgid "Search by title or path..."
 msgstr "Search by title or path..."
@@ -31091,8 +31091,8 @@ msgstr "Search by title or path..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Manage backups, restore, copy, recycle and delete course data."
 
-msgid "%d comment(s)"
-msgstr "%d comment(s)"
+msgid "%s comment(s)"
+msgstr "%s comment(s)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Error updating third party. Please verify the data."
@@ -32152,3 +32152,171 @@ msgstr "More actions"
 
 msgid "Write something"
 msgstr "Write something"
+
+msgid "Friends of %s"
+msgstr "Friends of %s"
+
+msgid "Error loading learning paths."
+msgstr "Error loading learning paths."
+
+msgid "You don't have any learning path."
+msgstr "You don't have any learning path."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Create your first learning path to start organizing course content."
+
+msgid "Could not save the new category order."
+msgstr "Could not save the new category order."
+
+msgid "Could not save the new order."
+msgstr "Could not save the new order."
+
+msgid "Assignment"
+msgstr "Assignment"
+
+msgid "Allowed file formats: %s"
+msgstr "Allowed file formats: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "File type not allowed. Allowed extensions: %s"
+
+msgid "Folder name"
+msgstr "Folder name"
+
+msgid "Rename folder"
+msgstr "Rename folder"
+
+msgid "New name"
+msgstr "New name"
+
+msgid "Choose an action"
+msgstr "Choose an action"
+
+msgid "New version"
+msgstr "New version"
+
+msgid "Change title to selected filename"
+msgstr "Change title to selected filename"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "You can replace the file, move it to another folder, or both."
+
+msgid "Move %s"
+msgstr "Move %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Only non-root folders are shown to avoid leaving items in root."
+
+msgid "No feedback yet."
+msgstr "No feedback yet."
+
+msgid "Upload first, organize later"
+msgstr "Upload first, organize later"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Drag & drop or browse to add files"
+
+msgid "Social wall..."
+msgstr "Social wall..."
+
+msgid "Wall of %s"
+msgstr "Wall of %s"
+
+msgid "Version currently loaded"
+msgstr "Version currently loaded"
+
+msgid "Completion"
+msgstr "Completion"
+
+msgid "Quick navigation"
+msgstr "Quick navigation"
+
+msgid "Filled"
+msgstr "Filled"
+
+msgid "Terms sections"
+msgstr "Terms sections"
+
+msgid "Open a section to edit its content."
+msgstr "Open a section to edit its content."
+
+msgid "Open this section to load the editor."
+msgstr "Open this section to load the editor."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Danger zone: deleting an access URL is permanent."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Type the full URL to confirm. The URL and its relations will be permanently removed."
+
+msgid "Unable to load the badge's image."
+msgstr "Unable to load the badge's image."
+
+msgid "Invalid role selection"
+msgstr "Invalid role selection"
+
+msgid "Select relation type first to enable user management."
+msgstr "Select relation type first to enable user management."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "This question has no course context. Preview is not available."
+
+msgid "Unknown test"
+msgstr "Unknown test"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Deletion is not allowed without a course context."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Delete failed: missing course context or invalid question id."
+
+msgid "Delete failed: question not found."
+msgstr "Delete failed: question not found."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Delete failed: this question is still referenced by other resources."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+
+msgid "Access the group tools and resources"
+msgstr "Access the group tools and resources"
+
+msgid "%s members"
+msgstr "%s members"
+
+msgid "View certificate (HTML)"
+msgstr "View certificate (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Link a skill to this gradebook"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Manage the link between certificates and skills for each gradebook"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Please select a specific badge issue to download"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM is not enabled."
+
+msgid "Invalid token."
+msgstr "Invalid token."
+
+msgid "Schema not supported."
+msgstr "Schema not supported."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Invalid schemas for PATCH operation."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Missing required \"Operations\" array."
+
+msgid "The '%s' operation is not supported."
+msgstr "The '%s' operation is not supported."
+
+msgid "Drupal user ID"
+msgstr "Drupal user ID"
+
+msgid "There are no terms that match the search: %s"
+msgstr "There are no terms that match the search: %s"

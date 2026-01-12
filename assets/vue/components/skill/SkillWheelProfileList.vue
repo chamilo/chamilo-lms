@@ -43,7 +43,7 @@ onMounted(() => {
 
 async function onClickDeleteProfile(profile) {
   confirm.require({
-    message: t('Are you sure you want to delete "%s"?', [profile.title]),
+    message: t('Are you sure you want to delete {0}?', [profile.title]),
     header: t("Delete skill profile"),
     icon: "mdi mdi-alert",
     async accept() {

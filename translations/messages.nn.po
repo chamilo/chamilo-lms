@@ -31074,8 +31074,8 @@ msgstr "Legg til kommentar"
 msgid "Write your comment here..."
 msgstr "Skriv kommentaren din her..."
 
-msgid "%d selected"
-msgstr "%d valde"
+msgid "%s selected"
+msgstr "%s valde"
 
 msgid "Search by title or path..."
 msgstr "Søk etter tittel eller sti..."
@@ -31083,8 +31083,8 @@ msgstr "Søk etter tittel eller sti..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Hald styr på sikkeringskopiar, gjenoppretting, kopiering, søppelbøtte og sletting av kursdata."
 
-msgid "%d comment(s)"
-msgstr "%d kommentar(ar)"
+msgid "%s comment(s)"
+msgstr "%s kommentar(ar)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Feil ved oppdatering av tredjepart. Verifiser dataa."
@@ -31828,52 +31828,52 @@ msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Dette vil slette filer eldre enn %minutes% minutt. Fortsette?"
 
 msgid "The value must match exactly: %s"
-msgstr ""
+msgstr "Verdien må stemme nøyaktig: %s"
 
 msgid "Repeat end date must be after start date."
-msgstr ""
+msgstr "Gjenta sluttdato må vere etter startdato."
 
 msgid "Index document content?"
-msgstr ""
+msgstr "Indekser dokumentinnhold?"
 
 msgid "Upload SVG logo to platform header"
-msgstr ""
+msgstr "Last opp SVG-logo til plattformhode"
 
 msgid "Upload PNG logo to platform header (%s)"
-msgstr ""
+msgstr "Last opp PNG-logo til plattformhode (%s)"
 
 msgid "Write something to %s"
-msgstr ""
+msgstr "Skriv noko til %s"
 
 msgid "Preferred: SVG. PNG recommended width: %spx."
-msgstr ""
+msgstr "Føretrekne: SVG. PNG anbefalt breidde: %spx."
 
 msgid "Upload PNG logo for e-mails (~%spx width)"
-msgstr ""
+msgstr "Last opp PNG-logo for e-post (~%spx breidde)"
 
 msgid "Header PNG must be ≤ %spx."
-msgstr ""
+msgstr "Hode-PNG må vere ≤ %spx."
 
 msgid "Require specific file format"
-msgstr ""
+msgstr "Krev spesifikk filformat"
 
 msgid "Select allowed file formats"
-msgstr ""
+msgstr "Vel tillatte filformat"
 
 msgid "Custom extensions (separated by space)"
-msgstr ""
+msgstr "Eigne utvidelser (skild av mellomrom)"
 
 msgid "Other extensions"
-msgstr ""
+msgstr "Andre utvidelser"
 
 msgid "My invitations"
-msgstr ""
+msgstr "Mine invitasjonar"
 
 msgid "Delete access"
-msgstr ""
+msgstr "Slett tilgang"
 
 msgid "Certificate tags"
-msgstr ""
+msgstr "Sertifikatmerker"
 
 msgid "Copy all"
 msgstr "Kopier alle"
@@ -32141,4 +32141,175 @@ msgstr "Kunne ikkje opprette Moodle-sikring."
 
 msgid "More actions"
 msgstr "Fleire handlingar"
+
+msgid "Write something"
+msgstr "Skriv noko"
+
+msgid "Friends of %s"
+msgstr "Vennar av %s"
+
+msgid "Error loading learning paths."
+msgstr "Feil ved lasting av læringsstiar."
+
+msgid "You don't have any learning path."
+msgstr "Du har ikkje nokon læringssti."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Opprett din første læringssti for å begynne å organisere kursinnhold."
+
+msgid "Could not save the new category order."
+msgstr "Kunne ikkje lagre den nye rekkefølgen på kategoriar."
+
+msgid "Could not save the new order."
+msgstr "Kunne ikkje lagre den nye rekkefølgjen."
+
+msgid "Assignment"
+msgstr "Oppgåve"
+
+msgid "Allowed file formats: %s"
+msgstr "Tillatte filformat: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Filtyp ikkje tillatt. Tillatte endelser: %s"
+
+msgid "Folder name"
+msgstr "Mappanamn"
+
+msgid "Rename folder"
+msgstr "Døyp mappe på nytt"
+
+msgid "New name"
+msgstr "Nytt namn"
+
+msgid "Choose an action"
+msgstr "Vel ein handling"
+
+msgid "New version"
+msgstr "Ny versjon"
+
+msgid "Change title to selected filename"
+msgstr "Endre tittel til velta filnamnet"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Du kan erstatte fila, flytte den til ein annan mappe, eller begge deler."
+
+msgid "Move %s"
+msgstr "Flytt %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Berre ikkje-rotmappar visast for å unngå å etterlate element i rot."
+
+msgid "No feedback yet."
+msgstr "Ingen tilbakemelding enno."
+
+msgid "Upload first, organize later"
+msgstr "Last opp først, organiser sidan"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Dra og slepp eller bla gjennom for å legge til filer"
+
+msgid "Social wall..."
+msgstr "Sosial vegg..."
+
+msgid "Wall of %s"
+msgstr "Vegg for %s"
+
+msgid "Version currently loaded"
+msgstr "Versjon som no er lasta"
+
+msgid "Completion"
+msgstr "Fullføringsgrad"
+
+msgid "Quick navigation"
+msgstr "Rask navigasjon"
+
+msgid "Filled"
+msgstr "Fylld"
+
+msgid "Terms sections"
+msgstr "Vilkaravsnitt"
+
+msgid "Open a section to edit its content."
+msgstr "Opne eit avsnitt for å redigere innhaldet."
+
+msgid "Open this section to load the editor."
+msgstr "Opne dette avsnittet for å laste redigeringsverktøyet."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Fareområde: sletting av ein tilgjengeliggjerings-URL er permanent."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Skriv inn full URL for å stadfeste. URL-en og tilhøyrandene vil bli permanent fjerna."
+
+msgid "Unable to load the badge's image."
+msgstr "Kunne ikkje laste bildet for merket."
+
+msgid "Invalid role selection"
+msgstr "Ugyldig rolleval"
+
+msgid "Select relation type first to enable user management."
+msgstr "Vel relasjonstype først for å aktivere brukaradministrasjon."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Denne spørsmålet har ikkje kurskontekst. Forhåndsvisning er ikkje tilgjengeleg."
+
+msgid "Unknown test"
+msgstr "Ukjend prøve"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Sletting er ikkje tillatt utan kurskontekst."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Sletting mislyktes: manglande kurskontekst eller gyldig spørsmåls-ID. Dette spørsmålet tilhøyrer ein prøve. Rediger det frå innsida av prøva eller filtrer berre for foreldrelause spørsmål."
+
+msgid "Delete failed: question not found."
+msgstr "Sletting mislyktes: spørsmål ikkje funne."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Sletting mislyktes: dette spørsmålet er enno referert av andre ressursar."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Dette spørsmålet tilhøyrer ein prøve. Rediger det frå innsida av prøva eller filtrer berre for foreldrelause spørsmål."
+
+msgid "Access the group tools and resources"
+msgstr "Få tilgang til gruppeverktøy og ressursar"
+
+msgid "%s members"
+msgstr "%s medlemmer"
+
+msgid "View certificate (HTML)"
+msgstr "Vis sertifikat (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Lenk ein ferdighet til denne karakterboka"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Hald styr på lenka mellom sertifikat og ferdigheiter for kvar karakterbok"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Vel eit spesifikt utdelingsmerke for å laste ned"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM er ikkje aktivert."
+
+msgid "Invalid token."
+msgstr "Ugyldig token."
+
+msgid "Schema not supported."
+msgstr "Skjema ikkje støtta."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Ugyldige skjema for PATCH-operasjon."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Manglar påkrævd \"Operations\"-tabell."
+
+msgid "The '%s' operation is not supported."
+msgstr "Operasjonen «%s» er ikkje støtta."
+
+msgid "Drupal user ID"
+msgstr "Drupal-brukar-ID"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Det finst ingen termar som stemmer med søket: %s"
 

@@ -66,7 +66,7 @@ if ('copy' === $action) {
             if ($res) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('Item copied').' - '.get_lang('Exercises and learning paths are invisible in the new course"'),
+                        get_lang('Item copied').' - '.get_lang('Exercises and learning paths are invisible in the new course'),
                         'confirmation'
                     )
                 );

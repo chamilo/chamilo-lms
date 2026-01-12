@@ -31138,8 +31138,8 @@ msgstr "コメントを追加"
 msgid "Write your comment here..."
 msgstr "ここにコメントを入力..."
 
-msgid "%d selected"
-msgstr "%d 項目選択済み"
+msgid "%s selected"
+msgstr "%s 項目選択済み"
 
 msgid "Search by title or path..."
 msgstr "タイトルまたはパスで検索..."
@@ -31147,8 +31147,8 @@ msgstr "タイトルまたはパスで検索..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "バックアップの管理、復元、コピー、ごみ箱、コースデータの削除。"
 
-msgid "%d comment(s)"
-msgstr "%d 件のコメント"
+msgid "%s comment(s)"
+msgstr "%s 件のコメント"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "サードパーティの更新エラー。データを確認してください。"
@@ -32205,4 +32205,175 @@ msgstr "Moodleバックアップの作成に失敗しました。"
 
 msgid "More actions"
 msgstr "その他のアクション"
+
+msgid "Write something"
+msgstr "何か入力してください"
+
+msgid "Friends of %s"
+msgstr "%s の友達"
+
+msgid "Error loading learning paths."
+msgstr "学習パスを読み込めませんでした。"
+
+msgid "You don't have any learning path."
+msgstr "学習パスがありません。"
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "最初の学習パスを作成してコースコンテンツの整理を開始してください。"
+
+msgid "Could not save the new category order."
+msgstr "新しいカテゴリの順序を保存できませんでした。"
+
+msgid "Could not save the new order."
+msgstr "新しい順序を保存できませんでした。"
+
+msgid "Assignment"
+msgstr "課題"
+
+msgid "Allowed file formats: %s"
+msgstr "許可されたファイル形式: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "ファイル形式が許可されていません。許可された拡張子: %s"
+
+msgid "Folder name"
+msgstr "フォルダ名"
+
+msgid "Rename folder"
+msgstr "フォルダの名前を変更"
+
+msgid "New name"
+msgstr "新しい名前"
+
+msgid "Choose an action"
+msgstr "操作を選択"
+
+msgid "New version"
+msgstr "新しいバージョン"
+
+msgid "Change title to selected filename"
+msgstr "選択したファイル名にタイトルを変更"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "ファイルを置き換えたり、他のフォルダに移動したり、両方行うことができます。"
+
+msgid "Move %s"
+msgstr "%s を移動"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "ルートフォルダにアイテムを残さないように、非ルートフォルダのみを表示しています。"
+
+msgid "No feedback yet."
+msgstr "まだフィードバックはありません。"
+
+msgid "Upload first, organize later"
+msgstr "まずアップロード、後で整理"
+
+msgid "Drag & drop or browse to add files"
+msgstr "ドラッグ＆ドロップまたは閲覧してファイルを追加"
+
+msgid "Social wall..."
+msgstr "ソーシャルウォール..."
+
+msgid "Wall of %s"
+msgstr "%s のウォール"
+
+msgid "Version currently loaded"
+msgstr "現在読み込まれているバージョン"
+
+msgid "Completion"
+msgstr "完了"
+
+msgid "Quick navigation"
+msgstr "クイックナビゲーション"
+
+msgid "Filled"
+msgstr "入力済み"
+
+msgid "Terms sections"
+msgstr "利用規約セクション"
+
+msgid "Open a section to edit its content."
+msgstr "セクションを開いてコンテンツを編集します。"
+
+msgid "Open this section to load the editor."
+msgstr "このセクションを開いてエディタを読み込みます。"
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "危険領域: アクセスURLの削除は永久的です。"
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "確認のため完全なURLを入力してください。URLとその関連は永久に削除されます。"
+
+msgid "Unable to load the badge's image."
+msgstr "バッジの画像を読み込めませんでした。"
+
+msgid "Invalid role selection"
+msgstr "無効なロール選択"
+
+msgid "Select relation type first to enable user management."
+msgstr "ユーザー管理を有効にするには、最初に関係タイプを選択してください。"
+
+msgid "This question has no course context. Preview is not available."
+msgstr "この質問にはコースコンテキストがありません。プレビューは利用できません。"
+
+msgid "Unknown test"
+msgstr "不明なテスト"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "コースコンテキストなしでは削除できません。"
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "削除に失敗しました: コースコンテキストの欠如またはこの質問はテストに属しています。テスト内から編集するか、孤立質問のみをフィルタリングしてください。有効な質問IDの欠如。"
+
+msgid "Delete failed: question not found."
+msgstr "削除に失敗しました: 質問が見つかりません。"
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "削除に失敗しました: この質問は他のリソースによって参照されています。"
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "この質問はテストに属しています。テスト内から編集するか、孤立質問のみをフィルタリングしてください。"
+
+msgid "Access the group tools and resources"
+msgstr "グループツールとリソースにアクセス"
+
+msgid "%s members"
+msgstr "%s 人のメンバー"
+
+msgid "View certificate (HTML)"
+msgstr "証明書を表示 (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "このグレードブックにスキルをリンク"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "各グレードブックの証明書とスキルのリンクを管理"
+
+msgid "Please select a specific badge issue to download"
+msgstr "ダウンロードする特定のバッジ発行を選択してください"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM が有効になっていません。"
+
+msgid "Invalid token."
+msgstr "無効なトークン。"
+
+msgid "Schema not supported."
+msgstr "スキーマがサポートされていません。"
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "PATCH 操作に無効なスキーマです。"
+
+msgid "Missing required \"Operations\" array."
+msgstr "必須の \"Operations\" 配列が欠落しています。"
+
+msgid "The '%s' operation is not supported."
+msgstr "'%s' 操作はサポートされていません。"
+
+msgid "Drupal user ID"
+msgstr "Drupal ユーザー ID"
+
+msgid "There are no terms that match the search: %s"
+msgstr "検索「%s」に一致する用語はありません"
 

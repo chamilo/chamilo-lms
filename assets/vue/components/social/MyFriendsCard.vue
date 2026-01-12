@@ -118,7 +118,7 @@ const titleUserName = computed(() => {
 const friendsTitle = computed(() => {
   if (isOwnWall.value) return t("My friends")
   if (!titleUserName.value) return t("Friends")
-  return `${t("Friends of")} ${titleUserName.value}`.trim()
+  return `${t("Friends of {0}", [titleUserName.value])}`.trim()
 })
 
 async function loadTitleUser() {

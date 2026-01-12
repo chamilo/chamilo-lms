@@ -14430,22 +14430,22 @@ msgid "Compose"
 msgstr "Tulis"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Baby Oren"
 
 msgid "Blue lagoon"
-msgstr "Blue lagoon"
+msgstr "Laguna Biru"
 
 msgid "Cool blue"
-msgstr "Cool blue"
+msgstr "Biru sejuk"
 
 msgid "Corporate"
 msgstr "Korporat"
 
 msgid "Cosmic campus"
-msgstr "Cosmic campus"
+msgstr "Kampus Kosmik"
 
 msgid "Delicious Bordeaux"
-msgstr "Delicious Bordeaux"
+msgstr "Bordeaux Larat"
 
 msgid "Empire green"
 msgstr "Hijau empayar"
@@ -31074,8 +31074,8 @@ msgstr "Tambah komen"
 msgid "Write your comment here..."
 msgstr "Tulis komen anda di sini..."
 
-msgid "%d selected"
-msgstr "%d dipilih"
+msgid "%s selected"
+msgstr "%s dipilih"
 
 msgid "Search by title or path..."
 msgstr "Cari mengikut tajuk atau laluan..."
@@ -31083,8 +31083,8 @@ msgstr "Cari mengikut tajuk atau laluan..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Urus sandaran, pulih, salin, kitar semula dan padam data kursus."
 
-msgid "%d comment(s)"
-msgstr "%d komen"
+msgid "%s comment(s)"
+msgstr "%s komen"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Ralat mengemas kini pihak ketiga. Sila semak data."
@@ -32141,4 +32141,175 @@ msgstr "Gagal mencipta sandaran Moodle."
 
 msgid "More actions"
 msgstr "Lagi tindakan"
+
+msgid "Write something"
+msgstr "Tulis sesuatu"
+
+msgid "Friends of %s"
+msgstr "Rakan %s"
+
+msgid "Error loading learning paths."
+msgstr "Ralat memuat laluan pembelajaran."
+
+msgid "You don't have any learning path."
+msgstr "Anda tiada laluan pembelajaran."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Cipta laluan pembelajaran pertama anda untuk mula mengatur kandungan kursus."
+
+msgid "Could not save the new category order."
+msgstr "Tidak dapat menyimpan susunan kategori baru."
+
+msgid "Could not save the new order."
+msgstr "Tidak dapat menyimpan susunan baru."
+
+msgid "Assignment"
+msgstr "Tugasan"
+
+msgid "Allowed file formats: %s"
+msgstr "Format fail dibenarkan: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Jenis fail tidak dibenarkan. Sambungan dibenarkan: %s"
+
+msgid "Folder name"
+msgstr "Nama folder"
+
+msgid "Rename folder"
+msgstr "Tukar nama folder"
+
+msgid "New name"
+msgstr "Nama baru"
+
+msgid "Choose an action"
+msgstr "Pilih tindakan"
+
+msgid "New version"
+msgstr "Versi baru"
+
+msgid "Change title to selected filename"
+msgstr "Tukar tajuk kepada nama fail yang dipilih"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Anda boleh menggantikan fail, memindahkannya ke folder lain, atau kedua-duanya."
+
+msgid "Move %s"
+msgstr "Pindah %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Hanya folder bukan akar yang ditunjukkan untuk mengelakkan meninggalkan item di akar."
+
+msgid "No feedback yet."
+msgstr "Belum ada maklum balas."
+
+msgid "Upload first, organize later"
+msgstr "Muat naik dahulu, susun kemudian"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Seret & jatuhkan atau jelajah untuk tambah fail"
+
+msgid "Social wall..."
+msgstr "Dinding sosial..."
+
+msgid "Wall of %s"
+msgstr "Dinding %s"
+
+msgid "Version currently loaded"
+msgstr "Versi yang dimuatkan sekarang"
+
+msgid "Completion"
+msgstr "Penyelesaian"
+
+msgid "Quick navigation"
+msgstr "Navigasi pantas"
+
+msgid "Filled"
+msgstr "Diisi"
+
+msgid "Terms sections"
+msgstr "Bahagian terma"
+
+msgid "Open a section to edit its content."
+msgstr "Buka bahagian untuk mengedit kandungannya."
+
+msgid "Open this section to load the editor."
+msgstr "Buka bahagian ini untuk memuatkan penyunting."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Zon bahaya: memadam URL akses adalah kekal."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Taip URL penuh untuk mengesahkan. URL dan hubungannya akan dipadamkan secara kekal."
+
+msgid "Unable to load the badge's image."
+msgstr "Tidak dapat memuatkan imej lencana."
+
+msgid "Invalid role selection"
+msgstr "Pilihan peranan tidak sah"
+
+msgid "Select relation type first to enable user management."
+msgstr "Pilih jenis hubungan dahulu untuk mengaktifkan pengurusan pengguna."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Soalan ini tiada konteks kursus. Pratinjau tidak tersedia."
+
+msgid "Unknown test"
+msgstr "Ujian tidak diketahui"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Penghapusan tidak dibenarkan tanpa konteks kursus."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Penghapusan gagal: soalan ini milik ujian. Edit dari dalam ujian atau saring soalan yatim sahaja. ID soalan sah tidak ada atau konteks kursus hilang."
+
+msgid "Delete failed: question not found."
+msgstr "Penghapusan gagal: soalan tidak dijumpai."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Penghapusan gagal: soalan ini masih dirujuk oleh sumber lain."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Soalan ini milik ujian. Edit dari dalam ujian atau saring soalan yatim sahaja."
+
+msgid "Access the group tools and resources"
+msgstr "Akses alat dan sumber kumpulan"
+
+msgid "%s members"
+msgstr "%s ahli"
+
+msgid "View certificate (HTML)"
+msgstr "Lihat sijil (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Hubungkan kemahiran kepada buku markah ini"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Urus pautan antara sijil dan kemahiran untuk setiap buku markah"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Sila pilih isu lencana khusus untuk dimuat turun"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM tidak diaktifkan."
+
+msgid "Invalid token."
+msgstr "Token tidak sah."
+
+msgid "Schema not supported."
+msgstr "Skema tidak disokong."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Skema tidak sah untuk operasi PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Array \"Operations\" yang diperlukan hilang."
+
+msgid "The '%s' operation is not supported."
+msgstr "Operasi '%s' tidak disokong."
+
+msgid "Drupal user ID"
+msgstr "ID pengguna Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Tiada istilah yang sepadan dengan carian: %s"
 

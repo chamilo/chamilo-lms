@@ -32954,8 +32954,8 @@ msgstr "Ajouter un commentaire"
 msgid "Write your comment here..."
 msgstr "Écrivez votre commentaire ici..."
 
-msgid "%d selected"
-msgstr "%d sélectionné(s)"
+msgid "%s selected"
+msgstr "%s sélectionné(s)"
 
 msgid "Search by title or path..."
 msgstr "Rechercher par titre ou chemin..."
@@ -32963,8 +32963,8 @@ msgstr "Rechercher par titre ou chemin..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Gérer les sauvegardes, restaurer, copier, recycler et supprimer les données du cours."
 
-msgid "%d comment(s)"
-msgstr "%d commentaire(s)"
+msgid "%s comment(s)"
+msgstr "%s commentaire(s)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Erreur lors de la mise à jour du tiers. Veuillez vérifier les données."
@@ -34021,4 +34021,175 @@ msgstr "Échec de la création de la sauvegarde Moodle."
 
 msgid "More actions"
 msgstr "Plus d'actions"
+
+msgid "Write something"
+msgstr "Écrivez quelque chose"
+
+msgid "Friends of %s"
+msgstr "Amis de %s"
+
+msgid "Error loading learning paths."
+msgstr "Erreur lors du chargement des parcours d'apprentissage."
+
+msgid "You don't have any learning path."
+msgstr "Vous n'avez aucun parcours d'apprentissage."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Créez votre premier parcours d'apprentissage pour commencer à organiser le contenu du cours."
+
+msgid "Could not save the new category order."
+msgstr "Impossible de sauvegarder le nouvel ordre des catégories."
+
+msgid "Could not save the new order."
+msgstr "Impossible de sauvegarder le nouvel ordre."
+
+msgid "Assignment"
+msgstr "Devoir"
+
+msgid "Allowed file formats: %s"
+msgstr "Formats de fichiers autorisés : %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Type de fichier non autorisé. Extensions autorisées : %s"
+
+msgid "Folder name"
+msgstr "Nom du dossier"
+
+msgid "Rename folder"
+msgstr "Renommer le dossier"
+
+msgid "New name"
+msgstr "Nouveau nom"
+
+msgid "Choose an action"
+msgstr "Choisir une action"
+
+msgid "New version"
+msgstr "Nouvelle version"
+
+msgid "Change title to selected filename"
+msgstr "Changer le titre pour le nom de fichier sélectionné"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Vous pouvez remplacer le fichier, le déplacer vers un autre dossier, ou les deux."
+
+msgid "Move %s"
+msgstr "Déplacer %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Seuls les dossiers non-racines sont affichés pour éviter de laisser des éléments à la racine."
+
+msgid "No feedback yet."
+msgstr "Aucun retour pour le moment."
+
+msgid "Upload first, organize later"
+msgstr "Téléversez d'abord, organisez plus tard"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Glisser-déposer ou parcourir pour ajouter des fichiers"
+
+msgid "Social wall..."
+msgstr "Mur social..."
+
+msgid "Wall of %s"
+msgstr "Mur de %s"
+
+msgid "Version currently loaded"
+msgstr "Version actuellement chargée"
+
+msgid "Completion"
+msgstr "Achèvement"
+
+msgid "Quick navigation"
+msgstr "Navigation rapide"
+
+msgid "Filled"
+msgstr "Rempli"
+
+msgid "Terms sections"
+msgstr "Sections des termes"
+
+msgid "Open a section to edit its content."
+msgstr "Ouvrir une section pour modifier son contenu."
+
+msgid "Open this section to load the editor."
+msgstr "Ouvrir cette section pour charger l'éditeur."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Zone de danger : supprimer une URL d'accès est permanent."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Tapez l'URL complète pour confirmer. L'URL et ses relations seront supprimées de manière permanente."
+
+msgid "Unable to load the badge's image."
+msgstr "Impossible de charger l'image du badge."
+
+msgid "Invalid role selection"
+msgstr "Sélection de rôle invalide"
+
+msgid "Select relation type first to enable user management."
+msgstr "Sélectionnez d'abord le type de relation pour activer la gestion des utilisateurs."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Cette question n'a pas de contexte de cours. L'aperçu n'est pas disponible."
+
+msgid "Unknown test"
+msgstr "Test inconnu"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "La suppression n'est pas autorisée sans contexte de cours."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Échec de la suppression : contexte de cours manquant ou ID de question valide.Cette question appartient à un test. Modifiez-la depuis l'intérieur du test ou filtrez uniquement les questions orphelines."
+
+msgid "Delete failed: question not found."
+msgstr "Échec de la suppression : question non trouvée."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Échec de la suppression : cette question est encore référencée par d'autres ressources."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Cette question appartient à un test. Modifiez-la depuis l'intérieur du test ou filtrez uniquement les questions orphelines."
+
+msgid "Access the group tools and resources"
+msgstr "Accéder aux outils et ressources du groupe"
+
+msgid "%s members"
+msgstr "%s membres"
+
+msgid "View certificate (HTML)"
+msgstr "Voir le certificat (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Lier une compétence à ce carnet de notes"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Gérer le lien entre les certificats et les compétences pour chaque carnet de notes"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Veuillez sélectionner une délivrance de badge spécifique à télécharger"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM n'est pas activé."
+
+msgid "Invalid token."
+msgstr "Jeton invalide."
+
+msgid "Schema not supported."
+msgstr "Schéma non pris en charge."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Schémas invalides pour l'opération PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Tableau « Operations » requis manquant."
+
+msgid "The '%s' operation is not supported."
+msgstr "L'opération « %s » n'est pas prise en charge."
+
+msgid "Drupal user ID"
+msgstr "ID utilisateur Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Aucun terme ne correspond à la recherche : %s"
 

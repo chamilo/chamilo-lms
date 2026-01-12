@@ -89,7 +89,7 @@ if (!$downloadIssueId && $export) {
     } else {
         Display::addFlash(
             Display::return_message(
-                get_lang('Please select a specific badge issue to download.'),
+                get_lang('Please select a specific badge issue to download'),
                 'warning'
             )
         );

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Úprimne"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Vzorkový vzorec: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Vzorková formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy premennej"
@@ -31087,8 +31087,8 @@ msgstr "Pridať komentár"
 msgid "Write your comment here..."
 msgstr "Napíšte svoj komentár sem..."
 
-msgid "%d selected"
-msgstr "%d vybraných"
+msgid "%s selected"
+msgstr "%s vybraných"
 
 msgid "Search by title or path..."
 msgstr "Hľadať podľa názvu alebo cesty..."
@@ -31096,8 +31096,8 @@ msgstr "Hľadať podľa názvu alebo cesty..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Spravovať zálohy, obnovu, kopírovanie, recykláciu a mazanie dát kurzu."
 
-msgid "%d comment(s)"
-msgstr "%d komentárov"
+msgid "%s comment(s)"
+msgstr "%s komentárov"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Chyba pri aktualizácii tretej strany. Skontrolujte údaje."
@@ -32154,4 +32154,175 @@ msgstr "Neúspešné vytvorenie zálohy Moodle."
 
 msgid "More actions"
 msgstr "Ďalšie akcie"
+
+msgid "Write something"
+msgstr "Napíšte niečo"
+
+msgid "Friends of %s"
+msgstr "Priatelia %s"
+
+msgid "Error loading learning paths."
+msgstr "Chyba pri načítavaní učebných ciest."
+
+msgid "You don't have any learning path."
+msgstr "Nemáte žiadnu učebnú cestu."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Vytvorte svoju prvú učebnú cestu na začatie organizácie obsahu kurzu."
+
+msgid "Could not save the new category order."
+msgstr "Nepodarilo sa uložiť nový poradie kategórií."
+
+msgid "Could not save the new order."
+msgstr "Nepodarilo sa uložiť nové poradie."
+
+msgid "Assignment"
+msgstr "Úloha"
+
+msgid "Allowed file formats: %s"
+msgstr "Povolené formáty súborov: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Nepovolený typ súboru. Povolené prípony: %s"
+
+msgid "Folder name"
+msgstr "Názov priečinka"
+
+msgid "Rename folder"
+msgstr "Premenovať priečinok"
+
+msgid "New name"
+msgstr "Nový názov"
+
+msgid "Choose an action"
+msgstr "Vybrať akciu"
+
+msgid "New version"
+msgstr "Nová verzia"
+
+msgid "Change title to selected filename"
+msgstr "Zmeniť názov na vybraný názov súboru"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Môžete nahradiť súbor, presunúť ho do iného priečinka alebo oboje."
+
+msgid "Move %s"
+msgstr "Presunúť %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Zobrazujú sa iba nepriečinkové priečinky, aby sa predišlo nechaniu položiek v koreňovom priečinku."
+
+msgid "No feedback yet."
+msgstr "Zatiaľ žiadna spätná väzba."
+
+msgid "Upload first, organize later"
+msgstr "Najprv nahrajte, usporiadajte neskôr"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Presuňte a pustite alebo prehľadajte na pridanie súborov"
+
+msgid "Social wall..."
+msgstr "Sociálny stěna..."
+
+msgid "Wall of %s"
+msgstr "Stena %s"
+
+msgid "Version currently loaded"
+msgstr "Aktuálne načítaná verzia"
+
+msgid "Completion"
+msgstr "Dokončenie"
+
+msgid "Quick navigation"
+msgstr "Rýchla navigácia"
+
+msgid "Filled"
+msgstr "Vyplnené"
+
+msgid "Terms sections"
+msgstr "Sekcie podmienok"
+
+msgid "Open a section to edit its content."
+msgstr "Otvorte sekciu na úpravu jej obsahu."
+
+msgid "Open this section to load the editor."
+msgstr "Otvorte túto sekciu na načítanie editora."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Nebezpečná zóna: mazanie prístupového URL je trvalé."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Zadajte úplné URL na potvrdenie. URL a jeho vzťahy budú natrvalo odstránené."
+
+msgid "Unable to load the badge's image."
+msgstr "Nie je možné načítať obrázok odznaku."
+
+msgid "Invalid role selection"
+msgstr "Neplatný výber role"
+
+msgid "Select relation type first to enable user management."
+msgstr "Najprv vyberte typ vzťahu na povolenie správy používateľov."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Táto otázka nemá kontext kurzu. Predview nie je k dispozícii."
+
+msgid "Unknown test"
+msgstr "Neznámy test"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Mazanie nie je povolené bez kontextu kurzu."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Mazanie zlyhalo: chýba kontext kurzu alebo platné ID otázky.Táto otázka patrí do testu. Upravte ju zvnútra testu alebo filtrujte iba sirote otázky."
+
+msgid "Delete failed: question not found."
+msgstr "Mazanie zlyhalo: otázka nenájdená."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Mazanie zlyhalo: táto otázka je stále odkazovaná inými zdrojmi."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Táto otázka patrí do testu. Upravte ju zvnútra testu alebo filtrujte iba sirote otázky."
+
+msgid "Access the group tools and resources"
+msgstr "Prístup k nástrojom a zdrojom skupiny"
+
+msgid "%s members"
+msgstr "%s členov"
+
+msgid "View certificate (HTML)"
+msgstr "Zobraziť certifikát (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Prepojiť zručnosť s týmto zápisníkom"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Spravovať prepojenie medzi certifikátmi a zručnosťami pre každý zápisník"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Vyberte konkrétne vydanie odznaku na stiahnutie"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM nie je povolené."
+
+msgid "Invalid token."
+msgstr "Neplatný token."
+
+msgid "Schema not supported."
+msgstr "Schéma nie je podporovaná."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Neplatné schémy pre operáciu PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Chýba požadované pole \"Operations\"."
+
+msgid "The '%s' operation is not supported."
+msgstr "Operácia '%s' nie je podporovaná."
+
+msgid "Drupal user ID"
+msgstr "ID používateľa Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Žiadne pojmy nevyhovujú vyhľadávaniu: %s"
 

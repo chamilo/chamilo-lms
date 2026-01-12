@@ -31074,8 +31074,8 @@ msgstr "댓글 추가"
 msgid "Write your comment here..."
 msgstr "여기에 댓글을 작성하세요..."
 
-msgid "%d selected"
-msgstr "%d 선택됨"
+msgid "%s selected"
+msgstr "%s 선택됨"
 
 msgid "Search by title or path..."
 msgstr "제목이나 경로로 검색..."
@@ -31083,8 +31083,8 @@ msgstr "제목이나 경로로 검색..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "백업 관리, 복원, 복사, 휴지통 및 강좌 데이터 삭제."
 
-msgid "%d comment(s)"
-msgstr "%d개의 댓글"
+msgid "%s comment(s)"
+msgstr "%s개의 댓글"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "타사 업데이트 오류. 데이터를 확인하세요."
@@ -32141,4 +32141,175 @@ msgstr "Moodle 백업 생성에 실패했습니다."
 
 msgid "More actions"
 msgstr "추가 작업"
+
+msgid "Write something"
+msgstr "무언가를 작성하세요"
+
+msgid "Friends of %s"
+msgstr "%s의 친구들"
+
+msgid "Error loading learning paths."
+msgstr "학습 경로를 불러오는 중 오류가 발생했습니다."
+
+msgid "You don't have any learning path."
+msgstr "학습 경로가 없습니다."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "코스 콘텐츠를 정리하기 시작하려면 첫 번째 학습 경로를 생성하세요."
+
+msgid "Could not save the new category order."
+msgstr "새 카테고리 순서를 저장할 수 없습니다."
+
+msgid "Could not save the new order."
+msgstr "새 순서를 저장할 수 없습니다."
+
+msgid "Assignment"
+msgstr "과제"
+
+msgid "Allowed file formats: %s"
+msgstr "허용된 파일 형식: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "허용되지 않은 파일 유형입니다. 허용된 확장자: %s"
+
+msgid "Folder name"
+msgstr "폴더 이름"
+
+msgid "Rename folder"
+msgstr "폴더 이름 변경"
+
+msgid "New name"
+msgstr "새 이름"
+
+msgid "Choose an action"
+msgstr "작업을 선택하세요"
+
+msgid "New version"
+msgstr "새 버전"
+
+msgid "Change title to selected filename"
+msgstr "선택된 파일 이름으로 제목 변경"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "파일을 교체하거나 다른 폴더로 이동하거나 둘 다 할 수 있습니다."
+
+msgid "Move %s"
+msgstr "%s 이동"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "루트에 항목이 남지 않도록 루트가 아닌 폴더만 표시됩니다."
+
+msgid "No feedback yet."
+msgstr "아직 피드백이 없습니다."
+
+msgid "Upload first, organize later"
+msgstr "먼저 업로드하고 나중에 정리하세요"
+
+msgid "Drag & drop or browse to add files"
+msgstr "파일을 추가하기 위해 드래그 앤 드롭 또는 탐색"
+
+msgid "Social wall..."
+msgstr "소셜 월..."
+
+msgid "Wall of %s"
+msgstr "%s의 월"
+
+msgid "Version currently loaded"
+msgstr "현재 로드된 버전"
+
+msgid "Completion"
+msgstr "완료"
+
+msgid "Quick navigation"
+msgstr "빠른 탐색"
+
+msgid "Filled"
+msgstr "채워짐"
+
+msgid "Terms sections"
+msgstr "약관 섹션"
+
+msgid "Open a section to edit its content."
+msgstr "섹션을 열어 콘텐츠를 편집하세요."
+
+msgid "Open this section to load the editor."
+msgstr "이 섹션을 열어 편집기를 로드하세요."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "위험 구역: 액세스 URL 삭제는 영구적입니다."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "확인을 위해 전체 URL을 입력하세요. URL과 그 관계가 영구적으로 제거됩니다."
+
+msgid "Unable to load the badge's image."
+msgstr "배지의 이미지를 로드할 수 없습니다."
+
+msgid "Invalid role selection"
+msgstr "잘못된 역할 선택"
+
+msgid "Select relation type first to enable user management."
+msgstr "사용자 관리를 활성화하려면 먼저 관계 유형을 선택하세요."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "이 질문에는 코스 컨텍스트가 없습니다. 미리보기가 사용할 수 없습니다."
+
+msgid "Unknown test"
+msgstr "알 수 없는 테스트"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "코스 컨텍스트 없이 삭제할 수 없습니다."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "삭제 실패: 코스 컨텍스트 누락 또는 이 질문은 테스트에 속합니다. 테스트 내부에서 편집하거나 고아 질문만 필터링하세요.유효한 질문 ID 누락."
+
+msgid "Delete failed: question not found."
+msgstr "삭제 실패: 질문을 찾을 수 없습니다."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "삭제 실패: 이 질문은 다른 리소스에서 여전히 참조되고 있습니다."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "이 질문은 테스트에 속합니다. 테스트 내부에서 편집하거나 고아 질문만 필터링하세요."
+
+msgid "Access the group tools and resources"
+msgstr "그룹 도구 및 리소스에 액세스"
+
+msgid "%s members"
+msgstr "%s 명의 멤버"
+
+msgid "View certificate (HTML)"
+msgstr "증명서 보기 (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "이 성적부에 기술 연결"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "각 성적부에 대한 증명서와 기술 간의 연결 관리"
+
+msgid "Please select a specific badge issue to download"
+msgstr "다운로드할 특정 배지 발급을 선택하세요."
+
+msgid "SCIM is not enabled."
+msgstr "SCIM이 활성화되지 않았습니다."
+
+msgid "Invalid token."
+msgstr "잘못된 토큰입니다."
+
+msgid "Schema not supported."
+msgstr "지원되지 않는 스키마입니다."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "PATCH 작업에 대한 잘못된 스키마입니다."
+
+msgid "Missing required \"Operations\" array."
+msgstr "필수 \"Operations\" 배열이 누락되었습니다."
+
+msgid "The '%s' operation is not supported."
+msgstr "'%s' 작업은 지원되지 않습니다."
+
+msgid "Drupal user ID"
+msgstr "Drupal 사용자 ID"
+
+msgid "There are no terms that match the search: %s"
+msgstr "검색어와 일치하는 용어가 없습니다: %s"
 

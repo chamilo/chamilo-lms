@@ -281,7 +281,7 @@ if ($hasBrowseAccess) {
 if (!empty($actions_array)) {
     echo '<div class="rounded-2xl border border-gray-50 bg-white p-6 shadow-sm">';
     echo '<h2 class="text-base font-semibold text-gray-900">'.get_lang('Tools').'</h2>';
-    echo '<p class="mt-1 text-sm text-gray-600">'.get_lang('Access the group tools and resources.').'</p>';
+    echo '<p class="mt-1 text-sm text-gray-600">'.get_lang('Access the group tools and resources').'</p>';
 
     echo '<div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">';
     foreach ($actions_array as $item) {

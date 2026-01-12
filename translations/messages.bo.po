@@ -31068,7 +31068,7 @@ msgstr ""
 msgid "Write your comment here..."
 msgstr ""
 
-msgid "%d selected"
+msgid "%s selected"
 msgstr ""
 
 msgid "Search by title or path..."
@@ -31077,7 +31077,7 @@ msgstr ""
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr ""
 
-msgid "%d comment(s)"
+msgid "%s comment(s)"
 msgstr ""
 
 msgid "Error updating third party. Please verify the data."

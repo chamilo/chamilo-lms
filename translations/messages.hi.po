@@ -31068,8 +31068,8 @@ msgstr "टिप्पणी जोड़ें"
 msgid "Write your comment here..."
 msgstr "अपनी टिप्पणी यहाँ लिखें..."
 
-msgid "%d selected"
-msgstr "%d चयनित"
+msgid "%s selected"
+msgstr "%s चयनित"
 
 msgid "Search by title or path..."
 msgstr "शीर्षक या पथ से खोजें..."
@@ -31077,8 +31077,8 @@ msgstr "शीर्षक या पथ से खोजें..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "बैकअप प्रबंधित करें, पुनर्स्थापित करें, कॉपी करें, रीसायकल करें और पाठ्यक्रम डेटा हटाएँ।"
 
-msgid "%d comment(s)"
-msgstr "%d टिप्पणी(याँ)"
+msgid "%s comment(s)"
+msgstr "%s टिप्पणी(याँ)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "तीसरे पक्ष को अद्यतन करने में त्रुटि। कृपया डेटा सत्यापित करें।"
@@ -32135,4 +32135,175 @@ msgstr "मूडल बैकअप बनाने में विफल।"
 
 msgid "More actions"
 msgstr "अधिक क्रिया"
+
+msgid "Write something"
+msgstr "कुछ लिखें"
+
+msgid "Friends of %s"
+msgstr "%s के मित्र"
+
+msgid "Error loading learning paths."
+msgstr "लर्निंग पाथ लोड करने में त्रुटि।"
+
+msgid "You don't have any learning path."
+msgstr "आपके पास कोई लर्निंग पाथ नहीं है।"
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "कोर्स सामग्री को व्यवस्थित करना शुरू करने के लिए अपना पहला लर्निंग पाथ बनाएं।"
+
+msgid "Could not save the new category order."
+msgstr "नई श्रेणी क्रम को सहेजा नहीं जा सका।"
+
+msgid "Could not save the new order."
+msgstr "नया क्रम सहेजा नहीं जा सका।"
+
+msgid "Assignment"
+msgstr "कार्य"
+
+msgid "Allowed file formats: %s"
+msgstr "अनुमत फ़ाइल प्रारूप: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "फ़ाइल प्रकार अनुमत नहीं। अनुमत एक्सटेंशन: %s"
+
+msgid "Folder name"
+msgstr "फ़ोल्डर का नाम"
+
+msgid "Rename folder"
+msgstr "फ़ोल्डर का नाम बदलें"
+
+msgid "New name"
+msgstr "नया नाम"
+
+msgid "Choose an action"
+msgstr "कार्य चुनें"
+
+msgid "New version"
+msgstr "नया संस्करण"
+
+msgid "Change title to selected filename"
+msgstr "चयनित फ़ाइल नाम से शीर्षक बदलें"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "आप फ़ाइल को बदल सकते हैं, इसे दूसरे फ़ोल्डर में ले जा सकते हैं, या दोनों।"
+
+msgid "Move %s"
+msgstr "%s को ले जाएँ"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "रूट में आइटम छोड़ने से बचने के लिए केवल गैर-रूट फ़ोल्डर दिखाए जाते हैं।"
+
+msgid "No feedback yet."
+msgstr "अभी तक कोई प्रतिक्रिया नहीं।"
+
+msgid "Upload first, organize later"
+msgstr "पहले अपलोड करें, बाद में व्यवस्थित करें"
+
+msgid "Drag & drop or browse to add files"
+msgstr "फ़ाइलें जोड़ने के लिए ड्रैग & ड्रॉप करें या ब्राउज़ करें"
+
+msgid "Social wall..."
+msgstr "सामाजिक दीवार..."
+
+msgid "Wall of %s"
+msgstr "%s की दीवार"
+
+msgid "Version currently loaded"
+msgstr "वर्तमान में लोड संस्करण"
+
+msgid "Completion"
+msgstr "पूर्णता"
+
+msgid "Quick navigation"
+msgstr "त्वरित नेविगेशन"
+
+msgid "Filled"
+msgstr "भरा हुआ"
+
+msgid "Terms sections"
+msgstr "शर्तें अनुभाग"
+
+msgid "Open a section to edit its content."
+msgstr "अनुभाग खोलें ताकि इसकी सामग्री संपादित की जा सके।"
+
+msgid "Open this section to load the editor."
+msgstr "इस अनुभाग को खोलें ताकि संपादक लोड हो।"
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "खतरे का क्षेत्र: एक्सेस URL को हटाना स्थायी है।"
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "पुष्टि के लिए पूरा URL टाइप करें। URL और उसके संबंध स्थायी रूप से हटा दिए जाएंगे।"
+
+msgid "Unable to load the badge's image."
+msgstr "बैज की छवि लोड नहीं हो सकी।"
+
+msgid "Invalid role selection"
+msgstr "अवैध भूमिका चयन"
+
+msgid "Select relation type first to enable user management."
+msgstr "उपयोगकर्ता प्रबंधन सक्षम करने के लिए पहले संबंध प्रकार चुनें।"
+
+msgid "This question has no course context. Preview is not available."
+msgstr "इस प्रश्न का कोई कोर्स संदर्भ नहीं है। पूर्वावलोकन उपलब्ध नहीं है।"
+
+msgid "Unknown test"
+msgstr "अज्ञात परीक्षा"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "कोर्स संदर्भ के बिना हटाना अनुमत नहीं है।"
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "हटाने में विफल: कोर्स संदर्भ या वैध प्रश्न ID की कमी।यह प्रश्न एक परीक्षा का हिस्सा है। परीक्षा के अंदर इसे संपादित करें या केवल अनाथ प्रश्नों के लिए फ़िल्टर करें।"
+
+msgid "Delete failed: question not found."
+msgstr "हटाने में विफल: प्रश्न नहीं मिला।"
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "हटाने में विफल: यह प्रश्न अन्य संसाधनों द्वारा अभी भी संदर्भित है।"
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "यह प्रश्न एक परीक्षा का हिस्सा है। परीक्षा के अंदर इसे संपादित करें या केवल अनाथ प्रश्नों के लिए फ़िल्टर करें।"
+
+msgid "Access the group tools and resources"
+msgstr "समूह उपकरणों और संसाधनों तक पहुँचें"
+
+msgid "%s members"
+msgstr "%s सदस्य"
+
+msgid "View certificate (HTML)"
+msgstr "प्रमाणपत्र देखें (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "इस ग्रेडबुक से एक कौशल जोड़ें"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "प्रत्येक ग्रेडबुक के लिए प्रमाणपत्रों और कौशलों के बीच लिंक प्रबंधित करें"
+
+msgid "Please select a specific badge issue to download"
+msgstr "डाउनलोड करने के लिए कृपया एक विशिष्ट बैज जारी करना चुनें"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM सक्षम नहीं है।"
+
+msgid "Invalid token."
+msgstr "अवैध टोकन।"
+
+msgid "Schema not supported."
+msgstr "स्कीमा समर्थित नहीं है।"
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "PATCH ऑपरेशन के लिए अवैध स्कीमा।"
+
+msgid "Missing required \"Operations\" array."
+msgstr "आवश्यक \"Operations\" array गायब है।"
+
+msgid "The '%s' operation is not supported."
+msgstr "'%s' ऑपरेशन समर्थित नहीं है।"
+
+msgid "Drupal user ID"
+msgstr "Drupal उपयोगकर्ता ID"
+
+msgid "There are no terms that match the search: %s"
+msgstr "कोई शब्द नहीं मिले जो खोज से मेल खाते हों: %s"
 

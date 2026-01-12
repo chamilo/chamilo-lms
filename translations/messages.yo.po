@@ -31068,8 +31068,8 @@ msgstr "Fi ìdíwò kun"
 msgid "Write your comment here..."
 msgstr "Kọ ìdíwò rẹ sihí..."
 
-msgid "%d selected"
-msgstr "%d ti yan"
+msgid "%s selected"
+msgstr "%s ti yan"
 
 msgid "Search by title or path..."
 msgstr "Wa nipa akọle tabi ọ̀nà..."
@@ -31077,8 +31077,8 @@ msgstr "Wa nipa akọle tabi ọ̀nà..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Ṣàtúnṣe ìdàbòsí, ìdàpadà, ẹ̀dá, ìpadà àti pipa ìdàsílẹ̀ data kọlẹ̀."
 
-msgid "%d comment(s)"
-msgstr "%d ìdíwò(ìdíwò)"
+msgid "%s comment(s)"
+msgstr "%s ìdíwò(ìdíwò)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Ìkùnàbì ìdàsílẹ̀ ẹgbẹ́ kẹta. Jọwọ ṣayẹ̀wò data naa."
@@ -32135,4 +32135,175 @@ msgstr "Kuna lati ṣẹda ìdábòsí Moodle."
 
 msgid "More actions"
 msgstr "Awọn iṣe diẹ sii"
+
+msgid "Write something"
+msgstr "Kọ nkan kan"
+
+msgid "Friends of %s"
+msgstr "Àwùn rere %s"
+
+msgid "Error loading learning paths."
+msgstr "Àṣìṣe ìkọ́wé ọ̀nà ìmọ̀."
+
+msgid "You don't have any learning path."
+msgstr "O kò ní ọ̀nà ìmọ̀ kankan."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Ṣẹ̀dá ọ̀nà ìmọ̀ àkọ́kọ́ rẹ láti bẹ̀rẹ̀ ìdásílẹ̀ àkóónù ìdàsílẹ̀."
+
+msgid "Could not save the new category order."
+msgstr "Kò ṣe ìdáàbò ìlànà ẹ̀ka tuntun."
+
+msgid "Could not save the new order."
+msgstr "Kò ṣe ìdáàbò ìlànà tuntun."
+
+msgid "Assignment"
+msgstr "Iṣẹ́ Ìdásílẹ̀"
+
+msgid "Allowed file formats: %s"
+msgstr "Àwùn ìlò ìdásílẹ̀ tí a yọ̀ǹda: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Àwùn ìlò ìdásílẹ̀ kò yọ̀ǹda. Àwùn ìdásílẹ̀ tí a yọ̀ǹda: %s"
+
+msgid "Folder name"
+msgstr "Orúkọ folda"
+
+msgid "Rename folder"
+msgstr "Yí orúkọ folda pada"
+
+msgid "New name"
+msgstr "Orúkọ tuntun"
+
+msgid "Choose an action"
+msgstr "Yan ìṣe kan"
+
+msgid "New version"
+msgstr "Ẹya tuntun"
+
+msgid "Change title to selected filename"
+msgstr "Yí akọle pada sí orúkọ ìdásílẹ̀ tí a yàn"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "O le rọ́pò ìdásílẹ̀, gbe e lọ sí folda mìíràn, tàbí àwùn méjèèjì."
+
+msgid "Move %s"
+msgstr "Gbe %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Folda tí kò ṣe root nìkan ni a fi hàn láti yẹra fún ìlọ kúrò àwùn nínú root."
+
+msgid "No feedback yet."
+msgstr "Kò sí ìdáhùn síbẹ̀."
+
+msgid "Upload first, organize later"
+msgstr "Gbe ìdásílẹ̀ soke kọ́kọ́, ṣètò lẹ́yìn náà"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Fa & fi silẹ tàbí ṣàwárí láti fi ìdásílẹ̀ kun"
+
+msgid "Social wall..."
+msgstr "Ògiri ìbáṣepọ̀..."
+
+msgid "Wall of %s"
+msgstr "Ògiri ti %s"
+
+msgid "Version currently loaded"
+msgstr "Ẹya tí a ti gbe soke lọ́wọ́lọ́wọ́"
+
+msgid "Completion"
+msgstr "Ìparí"
+
+msgid "Quick navigation"
+msgstr "Ìdarí ìrìnàjọ yára"
+
+msgid "Filled"
+msgstr "Kún"
+
+msgid "Terms sections"
+msgstr "Àwùn ìlò ìdọsì"
+
+msgid "Open a section to edit its content."
+msgstr "Ṣii ìdàpọ̀ kan láti ṣàtúnṣe àkóónù rẹ̀."
+
+msgid "Open this section to load the editor."
+msgstr "Ṣii ìdàpọ̀ yìí láti gbe olùdásílẹ̀ soke."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Agbègbè ewu: ìparẹ́ URL ìwọlé jẹ́ ìparí."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Tẹ URL kíkún láti fìdí múlẹ̀. URL àti ìbáṣepọ̀ rẹ̀ yóò yọ kúrò títí."
+
+msgid "Unable to load the badge's image."
+msgstr "Kò ṣe ìdàsílẹ̀ àwòrán baaji."
+
+msgid "Invalid role selection"
+msgstr "Yí ìpinnu ipa tí kò yẹ yàn"
+
+msgid "Select relation type first to enable user management."
+msgstr "Yan ìpinnu ìbáṣepọ̀ kọ́kọ́ láti ṣe ìdarí ìlò ìdàsílẹ̀."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Ìbeèrè yìí kò ní ìlò ìdàsílẹ̀. Àwò ìlọ́wọ́lọ́wọ́ kò ṣe."
+
+msgid "Unknown test"
+msgstr "Ìdánwò àìmọ̀"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Ìparẹ́ kò yọ̀ǹda láìsí ìlò ìdàsílẹ̀."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Ìparẹ́ kùnà: ìlò ìdàsílẹ̀ kò ṣe tàbí Ìbeèrè yìí jẹ́ ti ìdánwò kan. Ṣàtúnṣe láti inú ìdánwò tàbí ṣàwàrà fún ìbeèrè òmùgọ̀ nìkan.id ìbeèrè tí ó yẹ."
+
+msgid "Delete failed: question not found."
+msgstr "Ìparẹ́ kùnà: ìbeèrè kò rí."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Ìparẹ́ kùnà: ìbeèrè yìí ṣì wà ìtọ́kasí nipasẹ̀ àwùn ìtùmọ̀ mìíràn."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Ìbeèrè yìí jẹ́ ti ìdánwò kan. Ṣàtúnṣe láti inú ìdánwò tàbí ṣàwàrà fún ìbeèrè òmùgọ̀ nìkan."
+
+msgid "Access the group tools and resources"
+msgstr "Wọle si awọn ohun elo ẹgbẹ ati awọn orisun"
+
+msgid "%s members"
+msgstr "%s ọmọ ẹgbẹ́"
+
+msgid "View certificate (HTML)"
+msgstr "Wo ìjẹ́rẹ́ (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Ṣopọ ìmọ̀ kan sí ìwé ìdíbọ̀ yìí"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Ṣàtúnṣe ìsopọ̀ láàárín ìjẹ́rẹ́ àti ìmọ̀ fún ìwé ìdíbọ̀ kọ̀ọ̀kan"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Jọ̀wọ̀ yan ìdásílẹ̀ baaji kan patò láti ṣe ìgbàsanwò"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM kò ṣiṣẹ́."
+
+msgid "Invalid token."
+msgstr "Àmì àìtọ́."
+
+msgid "Schema not supported."
+msgstr "Àwòrán kò ṣe ìdúró."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Àwòrán àìtọ́ fún ìṣiṣẹ́ PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Àwòrán \"Operations\" tí ó ṣe pàtàkì kò sí."
+
+msgid "The '%s' operation is not supported."
+msgstr "Ìṣiṣẹ́ '%s' kò ṣe ìdúró."
+
+msgid "Drupal user ID"
+msgstr "ID olùpẹ̀ Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Ko si awọn ọrọ ti o baamu wiwa: %s"
 

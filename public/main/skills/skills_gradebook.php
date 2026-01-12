@@ -197,8 +197,8 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
 // Add a visible content header (some themes don't show the main title from display_header)
 $visibleTitle = ('add_skill' === $action) ? get_lang('Add skill') : get_lang('Skills and assessments');
 $visibleDesc  = ('add_skill' === $action)
-    ? get_lang('Link a skill to this gradebook.')
-    : get_lang('Manage the link between certificates and skills for each gradebook.');
+    ? get_lang('Link a skill to this gradebook')
+    : get_lang('Manage the link between certificates and skills for each gradebook');
 
 $headerHtml = '
   <div class="skills-gradebook-header">

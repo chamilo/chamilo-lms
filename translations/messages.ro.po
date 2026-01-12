@@ -31088,8 +31088,8 @@ msgstr "Adaugă comentariu"
 msgid "Write your comment here..."
 msgstr "Scrie comentariul tău aici..."
 
-msgid "%d selected"
-msgstr "%d selectate"
+msgid "%s selected"
+msgstr "%s selectate"
 
 msgid "Search by title or path..."
 msgstr "Caută după titlu sau cale..."
@@ -31097,8 +31097,8 @@ msgstr "Caută după titlu sau cale..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Gestionează backup-urile, restaurarea, copierea, coșul de gunoi și ștergerea datelor cursului."
 
-msgid "%d comment(s)"
-msgstr "%d comentariu(i)"
+msgid "%s comment(s)"
+msgstr "%s comentariu(i)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Eroare la actualizarea terței părți. Vă rugăm să verificați datele."
@@ -32155,4 +32155,175 @@ msgstr "Nu s-a putut crea backup Moodle."
 
 msgid "More actions"
 msgstr "Mai multe acțiuni"
+
+msgid "Write something"
+msgstr "Scrie ceva"
+
+msgid "Friends of %s"
+msgstr "Prieteni ai lui %s"
+
+msgid "Error loading learning paths."
+msgstr "Eroare la încărcarea traseelor de învățare."
+
+msgid "You don't have any learning path."
+msgstr "Nu aveți niciun traseu de învățare."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Creați primul vostru traseu de învățare pentru a începe organizarea conținutului cursului."
+
+msgid "Could not save the new category order."
+msgstr "Nu s-a putut salva noua ordine a categoriilor."
+
+msgid "Could not save the new order."
+msgstr "Nu s-a putut salva noua ordine."
+
+msgid "Assignment"
+msgstr "Sarcină"
+
+msgid "Allowed file formats: %s"
+msgstr "Formate de fișiere permise: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Tip fișier nepermis. Extensii permise: %s"
+
+msgid "Folder name"
+msgstr "Nume dosar"
+
+msgid "Rename folder"
+msgstr "Redenumește dosarul"
+
+msgid "New name"
+msgstr "Nume nou"
+
+msgid "Choose an action"
+msgstr "Alegeți o acțiune"
+
+msgid "New version"
+msgstr "Versiune nouă"
+
+msgid "Change title to selected filename"
+msgstr "Schimbă titlul în numele fișierului selectat"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Puteți înlocui fișierul, îl puteți muta în alt dosar sau ambele."
+
+msgid "Move %s"
+msgstr "Mută %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Doar dosarele non-rădăcină sunt afișate pentru a evita lăsarea elementelor în rădăcină."
+
+msgid "No feedback yet."
+msgstr "Niciun feedback încă."
+
+msgid "Upload first, organize later"
+msgstr "Încarcă mai întâi, organizează mai târziu"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Trage și plasează sau navighează pentru a adăuga fișiere"
+
+msgid "Social wall..."
+msgstr "Zid social..."
+
+msgid "Wall of %s"
+msgstr "Zidul lui %s"
+
+msgid "Version currently loaded"
+msgstr "Versiunea încărcată în prezent"
+
+msgid "Completion"
+msgstr "Finalizare"
+
+msgid "Quick navigation"
+msgstr "Navigare rapidă"
+
+msgid "Filled"
+msgstr "Completat"
+
+msgid "Terms sections"
+msgstr "Secțiuni termeni"
+
+msgid "Open a section to edit its content."
+msgstr "Deschideți o secțiune pentru a-i edita conținutul."
+
+msgid "Open this section to load the editor."
+msgstr "Deschideți această secțiune pentru a încărca editorul."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Zonă periculoasă: ștergerea unui URL de acces este permanentă."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Introduceți URL-ul complet pentru confirmare. URL-ul și relațiile sale vor fi eliminate permanent."
+
+msgid "Unable to load the badge's image."
+msgstr "Nu se poate încărca imaginea insigniei."
+
+msgid "Invalid role selection"
+msgstr "Selecție invalidă a rolului"
+
+msgid "Select relation type first to enable user management."
+msgstr "Selectați mai întâi tipul de relație pentru a activa gestionarea utilizatorilor."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Această întrebare nu are context de curs. Previzualizarea nu este disponibilă."
+
+msgid "Unknown test"
+msgstr "Test necunoscut"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Ștergerea nu este permisă fără context de curs."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Ștergere eșuată: lipsește contextul cursului sau ID întrebare validă. Această întrebare aparține unui test. Editați-o din interiorul testului sau filtrați doar întrebări orfane."
+
+msgid "Delete failed: question not found."
+msgstr "Ștergere eșuată: întrebare negăsită."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Ștergere eșuată: această întrebare este încă referențiată de alte resurse."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Această întrebare aparține unui test. Editați-o din interiorul testului sau filtrați doar întrebări orfane."
+
+msgid "Access the group tools and resources"
+msgstr "Accesați instrumentele și resursele grupului"
+
+msgid "%s members"
+msgstr "%s membri"
+
+msgid "View certificate (HTML)"
+msgstr "Vizualizați certificatul (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Leagă o competență de acest jurnal de note"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Gestionați legătura dintre certificate și competențe pentru fiecare jurnal de note"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Selectați o emitere specifică a insigniei pentru descărcare"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM nu este activat."
+
+msgid "Invalid token."
+msgstr "Token invalid."
+
+msgid "Schema not supported."
+msgstr "Schemă nesuportată."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Scheme invalide pentru operațiunea PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Lipsește array-ul obligatoriu „Operations\"."
+
+msgid "The '%s' operation is not supported."
+msgstr "Operațiunea „%s” nu este suportată."
+
+msgid "Drupal user ID"
+msgstr "ID utilizator Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Nu există termeni care să corespundă căutării: %s"
 

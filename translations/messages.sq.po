@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:të drejtat e autorit,, no:pa të drejtat e autorit"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dosje,, application/msword:MsWord,, application/octet-stream:Rrjedhë oktet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dosje,, application/msword:MsWord,, application/octet-stream:Rrjedhë octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ushtrim,,      simulation:simulim,,      questionnaire:pyetësor,,      diagram:diagramë,,      figure:figurë,,      graph:grafik,,      index:indeks,,      slide:slide,,      table:tabelë,,      narrative text:tekst narrativ,,      exam:provim,,      experiment:eksperiment,,      problem statement:përmbajtja e problemit,,      self assessment:vëtëvlerësim,,      lecture:ligjëratë"
@@ -31072,8 +31072,8 @@ msgstr "Shto koment"
 msgid "Write your comment here..."
 msgstr "Shkruani komentin tuaj këtu..."
 
-msgid "%d selected"
-msgstr "%d të zgjedhura"
+msgid "%s selected"
+msgstr "%s të zgjedhura"
 
 msgid "Search by title or path..."
 msgstr "Kërko sipas titullit ose shtegut..."
@@ -31081,8 +31081,8 @@ msgstr "Kërko sipas titullit ose shtegut..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Menaxho kopjer rezervë, rikrijo, kopjo, riciklo dhe fshij të dhënat e kursit."
 
-msgid "%d comment(s)"
-msgstr "%d komente(r)"
+msgid "%s comment(s)"
+msgstr "%s komente(r)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Gabim në përditësimin e palës së tretë. Ju lutemi verifikoni të dhënat."
@@ -32139,4 +32139,175 @@ msgstr "Deshtoi krijimi i kopjerbackup-it të Moodle."
 
 msgid "More actions"
 msgstr "Më shumë veprime"
+
+msgid "Write something"
+msgstr "Shkruaj diçka"
+
+msgid "Friends of %s"
+msgstr "Miqtë e %s"
+
+msgid "Error loading learning paths."
+msgstr "Gabim në ngarkimin e shtegjeve të mësimit."
+
+msgid "You don't have any learning path."
+msgstr "Nuk keni asnjë shteg mësimi."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Krijoni shtegun tuaj të parë të mësimit për të filluar organizimin e përmbajtjes së kursit."
+
+msgid "Could not save the new category order."
+msgstr "Nuk mund të ruhet rendi i ri i kategorisë."
+
+msgid "Could not save the new order."
+msgstr "Nuk mund të ruhet rendi i ri."
+
+msgid "Assignment"
+msgstr "Detyrë"
+
+msgid "Allowed file formats: %s"
+msgstr "Formatet e lejuara të skedarëve: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Lloji i skedarit nuk lejohet. Shtesat e lejuara: %s"
+
+msgid "Folder name"
+msgstr "Emri i dosjes"
+
+msgid "Rename folder"
+msgstr "Riemërto dosjen"
+
+msgid "New name"
+msgstr "Emër i ri"
+
+msgid "Choose an action"
+msgstr "Zgjidhni një veprim"
+
+msgid "New version"
+msgstr "Version i ri"
+
+msgid "Change title to selected filename"
+msgstr "Ndrysho titullin në emrin e skedarit të zgjedhur"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Mund ta zëvendësoni skedarin, ta zhvendosni në një dosje tjetër, ose të dyja."
+
+msgid "Move %s"
+msgstr "Zhvendos %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Tregohen vetëm dosjet jo-root për të shmangur lënien e artikujve në root."
+
+msgid "No feedback yet."
+msgstr "Nuk ka feedback ende."
+
+msgid "Upload first, organize later"
+msgstr "Ngarko së pari, organizo më vonë"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Drag & drop ose shfleto për të shtuar skedarë"
+
+msgid "Social wall..."
+msgstr "Mur social..."
+
+msgid "Wall of %s"
+msgstr "Muri i %s"
+
+msgid "Version currently loaded"
+msgstr "Versioni i ngarkuar aktualisht"
+
+msgid "Completion"
+msgstr "Përfundim"
+
+msgid "Quick navigation"
+msgstr "Navigim i shpejtë"
+
+msgid "Filled"
+msgstr "Mbushur"
+
+msgid "Terms sections"
+msgstr "Seksione kushtesh"
+
+msgid "Open a section to edit its content."
+msgstr "Hap një seksion për të edituar përmbajtjen e tij."
+
+msgid "Open this section to load the editor."
+msgstr "Hap këtë seksion për të ngarkuar editorin."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Zona e rrezikut: fshirja e një URL hyrjeje është e përhershme."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Shkruaj URL-në e plotë për të konfirmuar. URL-ja dhe marrëdhëniet e saj do të fshihen përgjithmonë."
+
+msgid "Unable to load the badge's image."
+msgstr "Nuk mund të ngarkohet imazhi i badge-ut."
+
+msgid "Invalid role selection"
+msgstr "Zgjedhje e pavlefshme roli"
+
+msgid "Select relation type first to enable user management."
+msgstr "Zgjidh llojin e marrëdhënies së parë për të aktivizuar menaxhimin e përdoruesve."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Kjo pyetje nuk ka kontekst kursi. Parashikimi nuk është i disponueshëm."
+
+msgid "Unknown test"
+msgstr "Test i panjohur"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Fshirja nuk lejohet pa kontekst kursi."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Fshirja dështoi: mungon konteksti i kursit ose kjo pyetje i përket një testi. Editoni atë nga brenda testit ose filtro vetëm për pyetje jetimë.id pyetjeje të vlefshme."
+
+msgid "Delete failed: question not found."
+msgstr "Fshirja dështoi: pyetja nuk u gjet."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Fshirja dështoi: kjo pyetje ende referohet nga burime të tjera."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Kjo pyetje i përket një testi. Editoni atë nga brenda testit ose filtro vetëm për pyetje jetimë."
+
+msgid "Access the group tools and resources"
+msgstr "Akceso mjetet dhe burimet e grupit"
+
+msgid "%s members"
+msgstr "%s anëtarë"
+
+msgid "View certificate (HTML)"
+msgstr "Shih certifikatën (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Lidh një aftësi me këtë libër notash"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Menaxho lidhjen midis certifikatave dhe aftësive për çdo libër notash"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Ju lutemi, zgjidhni një lëshim specifike badge për të shkarkuar"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM nuk është i aktivizuar."
+
+msgid "Invalid token."
+msgstr "Token i pavlefshëm."
+
+msgid "Schema not supported."
+msgstr "Skema e mos mbështetur."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Skema të pavlefshme për operacionin PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Mungon array e kërkuar \"Operations\"."
+
+msgid "The '%s' operation is not supported."
+msgstr "Operacioni '%s' nuk mbështetet."
+
+msgid "Drupal user ID"
+msgstr "ID përdoruesi Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Nuk ka terma që përputhen me kërkimin: %s"
 

@@ -29,7 +29,7 @@ const platformConfig = usePlatformConfig()
           :url="extAuth.url"
           class="external-logins__button"
         >
-          {{ t("Continue with %s", [extAuth.title]) }}
+          {{ t("Continue with {0}", [extAuth.title]) }}
         </BaseAppLink>
       </li>
     </ul>

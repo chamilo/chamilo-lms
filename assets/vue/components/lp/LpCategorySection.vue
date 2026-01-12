@@ -95,7 +95,7 @@ const onCatDelete = () => {
   }
 
   const label = (props.category.title || "").trim() || t("Category")
-  const msg = `${t("Are you sure you want to delete")} ${label}?`
+  const msg = `${t("Are you sure you want to delete {0}?", [label])}`
   if (confirm(msg)) {
     goCat("delete_lp_category")
   }

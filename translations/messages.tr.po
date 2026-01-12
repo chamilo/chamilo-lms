@@ -31074,8 +31074,8 @@ msgstr "Yorum ekle"
 msgid "Write your comment here..."
 msgstr "Yorumunuzu buraya yazın..."
 
-msgid "%d selected"
-msgstr "%d seçildi"
+msgid "%s selected"
+msgstr "%s seçildi"
 
 msgid "Search by title or path..."
 msgstr "Başlık veya yol ile ara..."
@@ -31083,8 +31083,8 @@ msgstr "Başlık veya yol ile ara..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Yedeklemeleri yönetin, geri yükleyin, kopyalayın, geri dönüşüm ve kurs verilerini silin."
 
-msgid "%d comment(s)"
-msgstr "%d yorum"
+msgid "%s comment(s)"
+msgstr "%s yorum"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Üçüncü taraf güncellenirken hata. Verileri kontrol edin."
@@ -32141,4 +32141,175 @@ msgstr "Moodle yedeği oluşturulamadı."
 
 msgid "More actions"
 msgstr "Daha fazla eylem"
+
+msgid "Write something"
+msgstr "Bir şey yazın"
+
+msgid "Friends of %s"
+msgstr "%s'ın arkadaşları"
+
+msgid "Error loading learning paths."
+msgstr "Öğrenme yolları yüklenirken hata oluştu."
+
+msgid "You don't have any learning path."
+msgstr "Hiç öğrenme yolunuz yok."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Kurs içeriğinizi düzenlemeye başlamak ilk öğrenme yolunuzu oluşturun."
+
+msgid "Could not save the new category order."
+msgstr "Yeni kategori sırası kaydedilemedi."
+
+msgid "Could not save the new order."
+msgstr "Yeni sıra kaydedilemedi."
+
+msgid "Assignment"
+msgstr "Görev"
+
+msgid "Allowed file formats: %s"
+msgstr "İzin verilen dosya formatları: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Dosya tipi izin verilmiyor. İzin verilen uzantılar: %s"
+
+msgid "Folder name"
+msgstr "Klasör adı"
+
+msgid "Rename folder"
+msgstr "Klasörü yeniden adlandır"
+
+msgid "New name"
+msgstr "Yeni ad"
+
+msgid "Choose an action"
+msgstr "Bir eylem seçin"
+
+msgid "New version"
+msgstr "Yeni sürüm"
+
+msgid "Change title to selected filename"
+msgstr "Başlığı seçili dosya adıyla değiştir"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Dosyayı değiştirebilir, başka bir klasöre taşıyabilir veya her ikisini yapabilirsiniz."
+
+msgid "Move %s"
+msgstr "%s'ı taşı"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Kök klasörden öğeleri bırakmamak için yalnızca kök olmayan klasörler gösterilir."
+
+msgid "No feedback yet."
+msgstr "Henüz geri bildirim yok."
+
+msgid "Upload first, organize later"
+msgstr "Önce yükleyin, sonra düzenleyin"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Dosya eklemek için sürükle bırak veya tarayın"
+
+msgid "Social wall..."
+msgstr "Sosyal duvar..."
+
+msgid "Wall of %s"
+msgstr "%s'ın Duvarı"
+
+msgid "Version currently loaded"
+msgstr "Şu anda yüklenen sürüm"
+
+msgid "Completion"
+msgstr "Tamamlanma"
+
+msgid "Quick navigation"
+msgstr "Hızlı gezinme"
+
+msgid "Filled"
+msgstr "Dolu"
+
+msgid "Terms sections"
+msgstr "Terim bölümleri"
+
+msgid "Open a section to edit its content."
+msgstr "İçeriğini düzenlemek için bir bölüm açın."
+
+msgid "Open this section to load the editor."
+msgstr "Editörü yüklemek için bu bölümü açın."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Tehlike bölgesi: bir erişim URL'sini silmek kalıcıdır."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Onaylamak için tam URL'yi yazın. URL ve ilişkileri kalıcı olarak silinecek."
+
+msgid "Unable to load the badge's image."
+msgstr "Rozetin görüntüsü yüklenemedi."
+
+msgid "Invalid role selection"
+msgstr "Geçersiz rol seçimi"
+
+msgid "Select relation type first to enable user management."
+msgstr "Kullanıcı yönetimini etkinleştirmek için önce ilişki türünü seçin."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Bu sorunun kurs bağlamı yok. Önizleme kullanılamıyor."
+
+msgid "Unknown test"
+msgstr "Bilinmeyen test"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Kurs bağlamı olmadan silme izin verilmez."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Silme başarısız: kurs bağlamı eksik veya geçerli soru kimliği yok.Bu soru bir teste ait. Test içinden düzenleyin veya sadece yetim soruları filtreleyin."
+
+msgid "Delete failed: question not found."
+msgstr "Silme başarısız: soru bulunamadı."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Silme başarısız: bu soru hala diğer kaynaklar tarafından referans alınıyor."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Bu soru bir teste ait. Test içinden düzenleyin veya sadece yetim soruları filtreleyin."
+
+msgid "Access the group tools and resources"
+msgstr "Gruplara ve kaynaklara erişin"
+
+msgid "%s members"
+msgstr "%s üye"
+
+msgid "View certificate (HTML)"
+msgstr "Sertifikayı görüntüle (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Bu not defterine bir beceri bağlayın"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Her not defteri için sertifikalar ve beceriler arasındaki bağlantıyı yönetin"
+
+msgid "Please select a specific badge issue to download"
+msgstr "İndirmek için belirli bir rozet verme işlemini seçin"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM etkin değil."
+
+msgid "Invalid token."
+msgstr "Geçersiz belirteç."
+
+msgid "Schema not supported."
+msgstr "Şema desteklenmiyor."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "PATCH işlemi için geçersiz şemalar."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Gerekli \"Operations\" dizisi eksik."
+
+msgid "The '%s' operation is not supported."
+msgstr "'%s' işlemi desteklenmiyor."
+
+msgid "Drupal user ID"
+msgstr "Drupal kullanıcı kimliği"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Aramayla eşleşen terim yok: %s"
 

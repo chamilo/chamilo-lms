@@ -42,7 +42,7 @@
               name="language"
               option-value="id"
               option-label="name"
-              :placeholder="t('Select a language')"
+              :placeholder="t('Please select a language')"
             />
           </div>
 
@@ -81,7 +81,7 @@
               <div class="rounded-2xl border border-gray-25 bg-white p-4 shadow-sm">
                 <div class="flex items-start justify-between gap-3">
                   <div>
-                    <div class="text-sm text-gray-60">{{ t("Current loaded version") }}</div>
+                    <div class="text-sm text-gray-60">{{ t("Version currently loaded") }}</div>
                     <div class="text-lg font-semibold text-gray-90">
                       {{ loadedVersion ?? t("None") }}
                     </div>
@@ -323,32 +323,32 @@ const sectionsDefinition = computed(() => [
   { type: 0, title: t("Terms and Conditions"), helpText: "" },
 
   { type: 1, title: t("Personal data collection"), helpText: t("Why do we collect this data?") },
-  { type: 2, title: t("Personal data recording"), helpText: t("Where do we record the data?") },
-  { type: 3, title: t("Personal data organization"), helpText: t("How is the data structured?") },
-  { type: 4, title: t("Personal data structure"), helpText: t("How is the data structured in this software?") },
-  { type: 5, title: t("Personal data conservation"), helpText: t("How long do we save the data?") },
+  { type: 2, title: t("Personal data recording"), helpText: t("Where do we record the data? (in which system, hosted where, accessible by which company that handles the servers, etc.)") },
+  { type: 3, title: t("Personal data organization"), helpText: t("How is the data structured? To what extent does the organization of the data protect your security? ... Do you have established processes that ensure that a hacker will not be able to collect all the personal data on the first attempt? Are they encrypted?") },
+  { type: 4, title: t("Personal data structure"), helpText: t("How is the data structured in this software? (one tab for all the data, it has some categorization / label, ...)") },
+  { type: 5, title: t("Personal data conservation"), helpText: t("How long do we save the data? Is there data that expires even though the account is still active? How much time do we keep the data after the last use of the system?") },
   {
     type: 6,
     title: t("Personal data adaptation or modification"),
-    helpText: t("What changes can we make to the data?"),
+    helpText: t("What changes can we make to the data? What changes can be made to the data without affecting the service?"),
   },
-  { type: 7, title: t("Personal data extraction"), helpText: t("What do we extract data for?") },
-  { type: 8, title: t("Personal data queries"), helpText: t("Who can consult the personal data?") },
+  { type: 7, title: t("Personal data extraction"), helpText: t("What do we extract data for (towards other internal processes) and which data is it?") },
+  { type: 8, title: t("Personal data queries"), helpText: t("Who can consult the personal data? For what purpose?") },
   { type: 9, title: t("Personal data use"), helpText: t("How and for what can we use the personal data?") },
-  { type: 10, title: t("Personal data communication and sharing"), helpText: t("With whom can we share them?") },
+  { type: 10, title: t("Personal data communication and sharing"), helpText: t("With whom can we share them? In what opportunities? Through what processes (safe or not)?") },
   {
     type: 11,
     title: t("Personal data interconnection"),
-    helpText: t("Do we have another system with which Chamilo interacts?"),
+    helpText: t("Do we have another system with which Chamilo interacts? What is the interconnection process? What are the data pieces exchanged and in what way?"),
   },
-  { type: 12, title: t("Personal data limitation"), helpText: t("What are the limits that we will always respect?") },
-  { type: 13, title: t("Personal data deletion"), helpText: t("After how long do we erase the data?") },
+  { type: 12, title: t("Personal data limitation"), helpText: t("What are the limits that we will always respect when using personal data? How far can we go?") },
+  { type: 13, title: t("Personal data deletion"), helpText: t("After how long do we erase the data? (event, last use, contract validity, etc.) What are the elimination processes?") },
   {
     type: 14,
     title: t("Personal data destruction"),
-    helpText: t("What happens if the data is destroyed as a result of a technical failure?"),
+    helpText: t("What happens if the data is destroyed as a result of a technical failure? (unauthorized deletion or loss of material, for example)"),
   },
-  { type: 15, title: t("Personal data profiling"), helpText: t("For what purpose do we process personal data?") },
+  { type: 15, title: t("Personal data profiling"), helpText: t("For what purpose do we process personal data? Do we use it to filter the access users have to certain parts of our application? (negative or positive discrimination)") },
 ])
 
 const normalizeHtmlToText = (html) => {

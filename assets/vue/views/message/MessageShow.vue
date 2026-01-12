@@ -276,7 +276,7 @@ async function deleteMessage(message) {
 function confirmDelete() {
   confirm.require({
     header: t("Confirmation"),
-    message: t(`Are you sure you want to delete "${item.value.title}"?`),
+    message: t(`Are you sure you want to delete {0}?`, [item.value.title]),
     accept: async () => {
       await deleteMessage(item.value)
     },

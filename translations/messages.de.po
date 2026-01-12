@@ -32642,8 +32642,8 @@ msgstr "Kommentar hinzufügen"
 msgid "Write your comment here..."
 msgstr "Schreiben Sie hier Ihren Kommentar..."
 
-msgid "%d selected"
-msgstr "%d ausgewählt"
+msgid "%s selected"
+msgstr "%s ausgewählt"
 
 msgid "Search by title or path..."
 msgstr "Nach Titel oder Pfad suchen..."
@@ -32651,8 +32651,8 @@ msgstr "Nach Titel oder Pfad suchen..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Backups verwalten, wiederherstellen, kopieren, recyceln und Kursdaten löschen."
 
-msgid "%d comment(s)"
-msgstr "%d Kommentar(e)"
+msgid "%s comment(s)"
+msgstr "%s Kommentar(e)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Fehler beim Aktualisieren des Drittanbieters. Bitte überprüfen Sie die Daten."
@@ -33456,7 +33456,7 @@ msgid "View badge"
 msgstr "Abzeichen anzeigen"
 
 msgid "%d min"
-msgstr "%d Min"
+msgstr "%d Min."
 
 msgid "Duration in minutes"
 msgstr "Dauer in Minuten"
@@ -33709,4 +33709,175 @@ msgstr "Erstellen des Moodle-Backups fehlgeschlagen."
 
 msgid "More actions"
 msgstr "Weitere Aktionen"
+
+msgid "Write something"
+msgstr "Etwas schreiben"
+
+msgid "Friends of %s"
+msgstr "Freunde von %s"
+
+msgid "Error loading learning paths."
+msgstr "Fehler beim Laden der Lernpfade."
+
+msgid "You don't have any learning path."
+msgstr "Sie haben keinen Lernpfad."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Erstellen Sie Ihren ersten Lernpfad, um Kursinhalte zu organisieren."
+
+msgid "Could not save the new category order."
+msgstr "Neue Kategorienreihenfolge konnte nicht gespeichert werden."
+
+msgid "Could not save the new order."
+msgstr "Neue Reihenfolge konnte nicht gespeichert werden."
+
+msgid "Assignment"
+msgstr "Aufgabe"
+
+msgid "Allowed file formats: %s"
+msgstr "Erlaubte Dateiformate: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Dateityp nicht erlaubt. Erlaubte Erweiterungen: %s"
+
+msgid "Folder name"
+msgstr "Ordnername"
+
+msgid "Rename folder"
+msgstr "Ordner umbenennen"
+
+msgid "New name"
+msgstr "Neuer Name"
+
+msgid "Choose an action"
+msgstr "Aktion wählen"
+
+msgid "New version"
+msgstr "Neue Version"
+
+msgid "Change title to selected filename"
+msgstr "Titel auf ausgewählten Dateinamen ändern"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Sie können die Datei ersetzen, sie in einen anderen Ordner verschieben oder beides tun."
+
+msgid "Move %s"
+msgstr "%s verschieben"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Nur Nicht-Root-Ordner werden angezeigt, um das Zurücklassen von Elementen im Root zu vermeiden."
+
+msgid "No feedback yet."
+msgstr "Noch kein Feedback."
+
+msgid "Upload first, organize later"
+msgstr "Zuerst hochladen, später organisieren"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Dateien per Drag & Drop oder Durchsuchen hinzufügen"
+
+msgid "Social wall..."
+msgstr "Soziale Wand..."
+
+msgid "Wall of %s"
+msgstr "Wand von %s"
+
+msgid "Version currently loaded"
+msgstr "Aktuell geladene Version"
+
+msgid "Completion"
+msgstr "Abschluss"
+
+msgid "Quick navigation"
+msgstr "Schnavnavigation"
+
+msgid "Filled"
+msgstr "Gefüllt"
+
+msgid "Terms sections"
+msgstr "Begriffsabschnitte"
+
+msgid "Open a section to edit its content."
+msgstr "Einen Abschnitt öffnen, um seinen Inhalt zu bearbeiten."
+
+msgid "Open this section to load the editor."
+msgstr "Diesen Abschnitt öffnen, um den Editor zu laden."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Gefahrenzone: Das Löschen einer Zugriffs-URL ist dauerhaft."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Geben Sie die vollständige URL zur Bestätigung ein. Die URL und ihre Beziehungen werden dauerhaft entfernt."
+
+msgid "Unable to load the badge's image."
+msgstr "Badge-Bild konnte nicht geladen werden."
+
+msgid "Invalid role selection"
+msgstr "Ungültige Rollenauswahl"
+
+msgid "Select relation type first to enable user management."
+msgstr "Wählen Sie zuerst den Beziehungstyp aus, um die Benutzerverwaltung zu aktivieren."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Diese Frage hat keinen Kurskontext. Vorschau ist nicht verfügbar."
+
+msgid "Unknown test"
+msgstr "Unbekannter Test"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Löschen ist ohne Kurskontext nicht erlaubt."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Löschen fehlgeschlagen: Fehlender Kurskontext oder gültige Fragens-ID. Diese Frage gehört zu einem Test. Bearbeiten Sie sie innerhalb des Tests oder filtern Sie nur nach verwaisten Fragen."
+
+msgid "Delete failed: question not found."
+msgstr "Löschen fehlgeschlagen: Frage nicht gefunden."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Löschen fehlgeschlagen: Diese Frage wird noch von anderen Ressourcen referenziert."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Diese Frage gehört zu einem Test. Bearbeiten Sie sie innerhalb des Tests oder filtern Sie nur nach verwaisten Fragen."
+
+msgid "Access the group tools and resources"
+msgstr "Zu den Gruppen-Tools und -Ressourcen"
+
+msgid "%s members"
+msgstr "%s Mitglieder"
+
+msgid "View certificate (HTML)"
+msgstr "Zertifikat anzeigen (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Kompetenz mit diesem Notenbuch verknüpfen"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Verknüpfung zwischen Zertifikaten und Kompetenzen für jedes Notenbuch verwalten"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Wählen Sie eine spezifische Badge-Ausgabe zum Herunterladen aus"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM ist nicht aktiviert."
+
+msgid "Invalid token."
+msgstr "Ungültiges Token."
+
+msgid "Schema not supported."
+msgstr "Schema nicht unterstützt."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Ungültige Schemas für PATCH-Operation."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Erforderliches \"Operations\"-Array fehlt."
+
+msgid "The '%s' operation is not supported."
+msgstr "Die Operation '%s' wird nicht unterstützt."
+
+msgid "Drupal user ID"
+msgstr "Drupal-Benutzer-ID"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Es gibt keine Begriffe, die zur Suche passen: %s"
 

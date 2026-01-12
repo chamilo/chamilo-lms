@@ -31079,8 +31079,8 @@ msgstr "Gehitu iruzkina"
 msgid "Write your comment here..."
 msgstr "Idatz ezazu zure iruzkina hemen..."
 
-msgid "%d selected"
-msgstr "%d hautatuta"
+msgid "%s selected"
+msgstr "%s hautatuta"
 
 msgid "Search by title or path..."
 msgstr "Bilatu izenburu edo bidearen arabera..."
@@ -31088,8 +31088,8 @@ msgstr "Bilatu izenburu edo bidearen arabera..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Kudeatu babesketak, leheneratu, kopiatu, birziklatu eta ezabatu ikastaroaren datuak."
 
-msgid "%d comment(s)"
-msgstr "%d iruzkin"
+msgid "%s comment(s)"
+msgstr "%s iruzkin"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Errorea hirugarren aldeko eguneratzean. Egiaztatu datuak mesedez."
@@ -31887,73 +31887,73 @@ msgid "Click to insert"
 msgstr "Klik egin txertatzeko"
 
 msgid "Preferred: SVG. PNG max size: %spx."
-msgstr ""
+msgstr "Lehena: SVG. PNG gehienezko tamaina: %spx."
 
 msgid "View badge"
-msgstr ""
+msgstr "Ikusi domina"
 
 msgid "%d min"
-msgstr ""
+msgstr "%d min"
 
 msgid "Duration in minutes"
-msgstr ""
+msgstr "Iraupena minututan"
 
 msgid "Go back to standard view"
-msgstr ""
+msgstr "Itzuli ikuspegi estandarrera"
 
 msgid "Search for student..."
-msgstr ""
+msgstr "Bilatu ikaslea..."
 
 msgid "This date is locked or read-only."
-msgstr ""
+msgstr "Data hau blokeatuta dago edo irakurtzeko soilik."
 
 msgid "Failed to load attendance. Please try again later."
-msgstr ""
+msgstr "Ezin izan da asistencia kargatu. Saiatu berriro geroago."
 
 msgid "Nothing to save"
-msgstr ""
+msgstr "Ez dago gordetzeko ezer"
 
 msgid "You have unsaved changes. Leave anyway?"
-msgstr ""
+msgstr "Aldaketak gorde gabe dituzu. Irten hala ere?"
 
 msgid "Storage usage unavailable"
-msgstr ""
+msgstr "Biltegi erabilera ez dago eskuragarri"
 
 msgid "Search for members..."
-msgstr ""
+msgstr "Bilatu kideak..."
 
 msgid "Current members"
-msgstr ""
+msgstr "Kide unekoak"
 
 msgid "Add members"
-msgstr ""
+msgstr "Gehitu kideak"
 
 msgid "Search for users in course/session..."
-msgstr ""
+msgstr "Bilatu erabiltzaileak ikastaroan/saioan..."
 
 msgid "No users available."
-msgstr ""
+msgstr "Ez dago erabiltzailerik eskuragarri."
 
 msgid "Browse and publish new posts"
-msgstr ""
+msgstr "Arakatu eta argitaratu mezu berriak"
 
 msgid "Create and assign tasks"
-msgstr ""
+msgstr "Sortu eta esleitu lanak"
 
 msgid "Filtered by %s"
-msgstr ""
+msgstr "Irudikatua %s(e)kin"
 
 msgid "Select a score"
-msgstr ""
+msgstr "Hautatu puntuazioa"
 
 msgid "Edit comment"
-msgstr ""
+msgstr "Editatu iruzkina"
 
 msgid "Failed to update the post."
-msgstr ""
+msgstr "Ezin izan da mezua eguneratu."
 
 msgid "Delete this post? This action cannot be undone."
-msgstr ""
+msgstr "Ezabatu mezu hau? Ekintza hau ezin da desegin."
 
 msgid "Failed to delete the post."
 msgstr "Mezua ezabatzeak huts egin du."
@@ -32146,4 +32146,175 @@ msgstr "Hutsegitea Moodle babeskopia sortzean."
 
 msgid "More actions"
 msgstr "Ekintza gehiago"
+
+msgid "Write something"
+msgstr "Idatzi zerbait"
+
+msgid "Friends of %s"
+msgstr "%s-ren lagunak"
+
+msgid "Error loading learning paths."
+msgstr "Errorea ikaste-bideak kargatzerakoan."
+
+msgid "You don't have any learning path."
+msgstr "Ez duzu ikaste-biderik."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Sortu zure lehen ikaste-bidea ikastaroaren edukiak antolatzen hasi nahi baduzu."
+
+msgid "Could not save the new category order."
+msgstr "Ezin izan da kategoria berrien ordena gorde."
+
+msgid "Could not save the new order."
+msgstr "Ezin izan da ordena berria gorde."
+
+msgid "Assignment"
+msgstr "Lanarekin"
+
+msgid "Allowed file formats: %s"
+msgstr "Onartutako fitxategi-formatuak: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Fitxategi-mota ez dago onartua. Hedapen onartuak: %s"
+
+msgid "Folder name"
+msgstr "Karpetaren izena"
+
+msgid "Rename folder"
+msgstr "Berridatzi karpeta"
+
+msgid "New name"
+msgstr "Izen berria"
+
+msgid "Choose an action"
+msgstr "Hautatu ekintza bat"
+
+msgid "New version"
+msgstr "Bertsio berria"
+
+msgid "Change title to selected filename"
+msgstr "Aldatu izenburua hautatutako fitxategi-izenarekin"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Ordezka dezakezu fitxategia, mugitu beste karpetara edo biak."
+
+msgid "Move %s"
+msgstr "Mugitu %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Erakarri ez diren karpetak soilik erakusten dira elementuak sustaraino uzteko."
+
+msgid "No feedback yet."
+msgstr "Ez dago feedbackik oraindik."
+
+msgid "Upload first, organize later"
+msgstr "Kargatu lehenik, antolatu gero"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Arrastatu eta askatu edo arakatu fitxategiak gehitzeko"
+
+msgid "Social wall..."
+msgstr "Hormaren horma..."
+
+msgid "Wall of %s"
+msgstr "%s-ren horma"
+
+msgid "Version currently loaded"
+msgstr "Kargatutako bertsioa"
+
+msgid "Completion"
+msgstr "Osaketa"
+
+msgid "Quick navigation"
+msgstr "Nabigazio azkarra"
+
+msgid "Filled"
+msgstr "Betea"
+
+msgid "Terms sections"
+msgstr "Baldintza atalak"
+
+msgid "Open a section to edit its content."
+msgstr "Ireki atal bat haren edukia editatzeko."
+
+msgid "Open this section to load the editor."
+msgstr "Ireki atal hau editorea kargatzeko."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Arrisku-zona: sarbide URL-a ezabatzea betirakoa da."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Idatzi URL osoa baieztatzeko. URL-a eta haren erlazioak betirako ezabatuak izango dira."
+
+msgid "Unable to load the badge's image."
+msgstr "Ezin da badgeren irudia kargatu."
+
+msgid "Invalid role selection"
+msgstr "Rolaren hautaketa baliogabea"
+
+msgid "Select relation type first to enable user management."
+msgstr "Hautatu lehenik erlazio-mota erabiltzaileen kudeaketa gaitzeko."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Galdera honek ez du ikastaro-kontexturik. Aurrebista ez dago eskuragarri."
+
+msgid "Unknown test"
+msgstr "Proba ezezaguna"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Ezabatzea ez dago onartua ikastaro-kontexturik gabe."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Ezabaketa huts egin du: falta da ikastaro-kontextua edo galdera hau proba bati dagokio. Editatu proba barrutik edo filtratu bakarrik umezurtz galderentzat.baliogarria galdera ID-a."
+
+msgid "Delete failed: question not found."
+msgstr "Ezabaketa huts egin du: galderarik ez da aurkitu."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Ezabaketa huts egin du: galdera honek beste baliabide batzuetan aipamenak ditu oraindik."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Galdera honek proba bati dagokio. Editatu proba barrutik edo filtratu umezurtz galderentzat soilik."
+
+msgid "Access the group tools and resources"
+msgstr "Accedeu talde tresnei eta baliabideei"
+
+msgid "%s members"
+msgstr "%s kide"
+
+msgid "View certificate (HTML)"
+msgstr "Ikusi ziurtagiria (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Esteka gaitasun bat kalifikazio-liburu honi"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Kudeatu ziurtagiri eta gaitasunen arteko lotura kalifikazio-liburu bakoitzerako"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Mesedez hautatu badgeren emisio zehatz bat deskargatzeko"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM gaituta ez dago."
+
+msgid "Invalid token."
+msgstr "Token baliogabea."
+
+msgid "Schema not supported."
+msgstr "Schema ez da onartzen."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "PATCH eragiketarako schema baliogabeak."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Beharrezko \"Operations\" matrize falta."
+
+msgid "The '%s' operation is not supported."
+msgstr "'%s' eragiketa ez da onartzen."
+
+msgid "Drupal user ID"
+msgstr "Drupal erabiltzaile ID"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Ez dago bilaketarekin bat datozen terminorik: %s"
 

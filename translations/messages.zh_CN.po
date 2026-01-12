@@ -31074,8 +31074,8 @@ msgstr "添加评论"
 msgid "Write your comment here..."
 msgstr "在此编写您的评论..."
 
-msgid "%d selected"
-msgstr "%d 已选择"
+msgid "%s selected"
+msgstr "%s 已选择"
 
 msgid "Search by title or path..."
 msgstr "按标题或路径搜索..."
@@ -31083,8 +31083,8 @@ msgstr "按标题或路径搜索..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "管理备份、恢复、复制、回收和删除课程数据。"
 
-msgid "%d comment(s)"
-msgstr "%d 条评论"
+msgid "%s comment(s)"
+msgstr "%s 条评论"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "更新第三方出错。请验证数据。"
@@ -32141,4 +32141,175 @@ msgstr "创建 Moodle 备份失败。"
 
 msgid "More actions"
 msgstr "更多操作"
+
+msgid "Write something"
+msgstr "写点什么"
+
+msgid "Friends of %s"
+msgstr "%s 的朋友"
+
+msgid "Error loading learning paths."
+msgstr "加载学习路径出错。"
+
+msgid "You don't have any learning path."
+msgstr "您没有任何学习路径。"
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "创建您的第一个学习路径，开始组织课程内容。"
+
+msgid "Could not save the new category order."
+msgstr "无法保存新的分类顺序。"
+
+msgid "Could not save the new order."
+msgstr "无法保存新顺序。"
+
+msgid "Assignment"
+msgstr "作业"
+
+msgid "Allowed file formats: %s"
+msgstr "允许的文件格式：%s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "文件类型不允许。允许的扩展名：%s"
+
+msgid "Folder name"
+msgstr "文件夹名称"
+
+msgid "Rename folder"
+msgstr "重命名文件夹"
+
+msgid "New name"
+msgstr "新名称"
+
+msgid "Choose an action"
+msgstr "选择操作"
+
+msgid "New version"
+msgstr "新版本"
+
+msgid "Change title to selected filename"
+msgstr "将标题更改为选定的文件名"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "您可以替换文件、移动到另一个文件夹，或两者兼做。"
+
+msgid "Move %s"
+msgstr "移动 %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "仅显示非根文件夹，以避免将项目留在根目录。"
+
+msgid "No feedback yet."
+msgstr "暂无反馈。"
+
+msgid "Upload first, organize later"
+msgstr "先上传，后整理"
+
+msgid "Drag & drop or browse to add files"
+msgstr "拖放或浏览添加文件"
+
+msgid "Social wall..."
+msgstr "社交墙..."
+
+msgid "Wall of %s"
+msgstr "%s 的墙"
+
+msgid "Version currently loaded"
+msgstr "当前加载的版本"
+
+msgid "Completion"
+msgstr "完成度"
+
+msgid "Quick navigation"
+msgstr "快速导航"
+
+msgid "Filled"
+msgstr "已填写"
+
+msgid "Terms sections"
+msgstr "条款部分"
+
+msgid "Open a section to edit its content."
+msgstr "打开部分以编辑其内容。"
+
+msgid "Open this section to load the editor."
+msgstr "打开此部分以加载编辑器。"
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "危险区域：删除访问 URL 是永久性的。"
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "输入完整 URL 以确认。URL 及其关系将被永久删除。"
+
+msgid "Unable to load the badge's image."
+msgstr "无法加载徽章图像。"
+
+msgid "Invalid role selection"
+msgstr "无效的角色选择"
+
+msgid "Select relation type first to enable user management."
+msgstr "先选择关系类型以启用用户管理。"
+
+msgid "This question has no course context. Preview is not available."
+msgstr "此问题没有课程上下文。预览不可用。"
+
+msgid "Unknown test"
+msgstr "未知测试"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "没有课程上下文不允许删除。"
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "删除失败：缺少课程上下文或此问题属于测试。请从测试内部编辑，或仅筛选孤儿问题。有效问题 ID。"
+
+msgid "Delete failed: question not found."
+msgstr "删除失败：问题未找到。"
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "删除失败：此问题仍被其他资源引用。"
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "此问题属于测试。请从测试内部编辑，或仅筛选孤儿问题。"
+
+msgid "Access the group tools and resources"
+msgstr "访问群组工具和资源"
+
+msgid "%s members"
+msgstr "%s 名成员"
+
+msgid "View certificate (HTML)"
+msgstr "查看证书 (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "将技能链接到此成绩簿"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "管理每个成绩簿的证书与技能之间的链接"
+
+msgid "Please select a specific badge issue to download"
+msgstr "请选择要下载的特定徽章颁发"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM 未启用。"
+
+msgid "Invalid token."
+msgstr "无效令牌。"
+
+msgid "Schema not supported."
+msgstr "不支持的模式。"
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "PATCH 操作无效的模式。"
+
+msgid "Missing required \"Operations\" array."
+msgstr "缺少必需的 \"Operations\" 数组。"
+
+msgid "The '%s' operation is not supported."
+msgstr "不支持 '%s' 操作。"
+
+msgid "Drupal user ID"
+msgstr "Drupal 用户 ID"
+
+msgid "There are no terms that match the search: %s"
+msgstr "没有匹配搜索的条款：%s"
 

@@ -299,7 +299,7 @@ $form->addElement('radio', 'active', '', get_lang('inactive'), 0);
 
 $form->addElement('html', Display::advancedPanelStart(
     'advanced_params',
-    get_lang('Advanced parameters'),
+    get_lang('Advanced settings'),
     $advancedPanelOpen
 ));
 

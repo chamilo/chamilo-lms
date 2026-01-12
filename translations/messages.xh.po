@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala iBody Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala iBody Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -31068,8 +31068,8 @@ msgstr "Faka igqabantaba"
 msgid "Write your comment here..."
 msgstr "Bhala igqabantaba lakho apha..."
 
-msgid "%d selected"
-msgstr "%d ekhethiweyo"
+msgid "%s selected"
+msgstr "%s ekhethiweyo"
 
 msgid "Search by title or path..."
 msgstr "Gqiba ngesihloko okanye indlela..."
@@ -31077,7 +31077,7 @@ msgstr "Gqiba ngesihloko okanye indlela..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Lawula iibhakethi, buyisela, kopisha, buyise kwi-recycle kwaye susa idatha yekhosi."
 
-msgid "%d comment(s)"
+
 msgstr "%d igqabantaba"
 
 msgid "Error updating third party. Please verify the data."
@@ -32135,4 +32135,175 @@ msgstr "Akuphumelelanga ukwenza igcinammo leMoodle."
 
 msgid "More actions"
 msgstr "Ezinye izenzo"
+
+msgid "Write something"
+msgstr "Bhala into ethile"
+
+msgid "Friends of %s"
+msgstr "Abahlobo baka %s"
+
+msgid "Error loading learning paths."
+msgstr "Impazamo ekulayisheni iindlela zokufunda."
+
+msgid "You don't have any learning path."
+msgstr "Awunayo nayiphi na indlela yokufunda."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Yenza indlela yakho yokuqala yokufunda ukuze uqale ukuhlelwa kwesiqulatho sesifundo."
+
+msgid "Could not save the new category order."
+msgstr "Ayiphendulanga ukugcina i-odolo lencandelo elitsha."
+
+msgid "Could not save the new order."
+msgstr "Ayiphendulanga ukugcina i-odolo litsha."
+
+msgid "Assignment"
+msgstr "Umsebenzi"
+
+msgid "Allowed file formats: %s"
+msgstr "Iifomati zefayile ezivunyelweyo: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Udidi lwefayile aluvunyelwanga. Izandiso ezivunyelweyo: %s"
+
+msgid "Folder name"
+msgstr "Igama lefolda"
+
+msgid "Rename folder"
+msgstr "Thatha igama lefolda"
+
+msgid "New name"
+msgstr "Igama litsha"
+
+msgid "Choose an action"
+msgstr "Khetha isenzo"
+
+msgid "New version"
+msgstr "Inguqulelo entsha"
+
+msgid "Change title to selected filename"
+msgstr "Tshintsha isihloko sibe yigama lefayile elikhethiweyo"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Ungayitshintsha ifayile, uyihambise kwenye ifolda, okanye zombini."
+
+msgid "Move %s"
+msgstr "Hambisa %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Zibonakaliswa kuphela iifolda ezingeyo ing根 ezona ukugcina izinto kwing根."
+
+msgid "No feedback yet."
+msgstr "Akukho impendulo okwangoku."
+
+msgid "Upload first, organize later"
+msgstr "Layisha kuqala, lula emva koko"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Rhuqa & drop okanye khetha ukongeza iifayile"
+
+msgid "Social wall..."
+msgstr "Udonga loluntu..."
+
+msgid "Wall of %s"
+msgstr "Udonga lwe-%s"
+
+msgid "Version currently loaded"
+msgstr "Inguqulelo esele ilayishwe"
+
+msgid "Completion"
+msgstr "Ukugqitywa"
+
+msgid "Quick navigation"
+msgstr "Ukuhamba okukhawulezayo"
+
+msgid "Filled"
+msgstr "Igxininiswe"
+
+msgid "Terms sections"
+msgstr "Amacandelo emigaqo"
+
+msgid "Open a section to edit its content."
+msgstr "Vula icandelo ukuze uhlele umxholo waso."
+
+msgid "Open this section to load the editor."
+msgstr "Vula eli candelo ukuze ulayishe umhleli."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Indawo enobungozi: ukucima i-URL yokufikelela kungapheli."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Chweta i-URL epheleleyo ukuqinisekisa. I-URL kunye nobudlelwane bayo baya kususwa ngokusisigxina."
+
+msgid "Unable to load the badge's image."
+msgstr "Ayiphendulanga ukulayisha umfanekiso webhedji."
+
+msgid "Invalid role selection"
+msgstr "Ukhetho lwendima olungasebenziyo"
+
+msgid "Select relation type first to enable user management."
+msgstr "Khetha uhlobo lobudlelwane kuqala ukuze uvule ulawulo lwabasebenzisi."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Lo mbuzo awunayo umxholo wesifundo. Umbono awufumaneki."
+
+msgid "Unknown test"
+msgstr "Uviwo olungaziwayo"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Ukucima akuvunyelwanga ngaphandle komxholo wesifundo."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Ukucima akuphumelelanga: ukungabikho komxholo wesifundo okanye kule mbuzo yingxenye yovivo. Hlela ngaphakathi kovivo okanye hlutha iimbuzo ezingenamzali kuphela. id yesimbuzo esemgangathweni."
+
+msgid "Delete failed: question not found."
+msgstr "Ukucima akuphumelelanga: imbuzo ayifunyanwanga."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Ukucima akuphumelelanga: lo mbuzo usabalulekile kwezinye izixhobo."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Lo mbuzo yingxenye yovivo. Hlela ngaphakathi kovivo okanye hlutha iimbuzo ezingenamzali kuphela."
+
+msgid "Access the group tools and resources"
+msgstr "Fikelela izixhobo zeqela kunye nezixhobo"
+
+msgid "%s members"
+msgstr "%s amalungu"
+
+msgid "View certificate (HTML)"
+msgstr "Jonga isatifikethi (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Qhagamshela isakhono kule nkcenkceza yamabala"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Lawula unxibelelwano phakathi kwezitifikethi kunye nezakhono kwelinye nalinye ibhuleki yamabala"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Nceda ukhethe ukukhutshwa kwebhedji elithile ukuze ukhuphele"
+
+msgid "SCIM is not enabled."
+msgstr "I-SCIM ayivulwanga."
+
+msgid "Invalid token."
+msgstr "Itoken ingasebenziyo."
+
+msgid "Schema not supported."
+msgstr "Ischema ayixhasiwi."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Iischema ezingasebenziyo kuMsebenzi we-PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Ukungabikho okufuneka \"iiOperations\" array."
+
+msgid "The '%s' operation is not supported."
+msgstr "Umsebenzi we- '%s' awuxhasiwi."
+
+msgid "Drupal user ID"
+msgstr "ID yomsebenzisi weDrupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Akukho magama ahambelana nokukhangela: %s"
 

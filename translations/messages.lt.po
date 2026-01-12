@@ -2024,7 +2024,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autoriaus teisės,, no:be autoriaus teisių"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplankas ,, application/msword:MsWord,, application/octet-stream:Oktobinis srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplankas ,, application/msword:MsWord,, application/octet-stream:Oktobaitų srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":testas:testas,,      simuliacija:simuliacija,,      klausimynas:klausimynas,,      diagrama:diagrama,,      paveikslėlis:paveikslėlis,,      grafikas:grafikas,,      indeksas:indeksas,,      skaidrė:skaidrė,,      lentelė:lentelė,,      naratyvinis tekstas:naratyvinis tekstas,,      egzaminas:egzaminas,,      eksperimentas:eksperimentas,,      problemos teiginys:problemos teiginys,,      savęs vertinimas:savęs vertinimas,,      paskaita:paskaita"
@@ -31075,8 +31075,8 @@ msgstr "Pridėti komentarą"
 msgid "Write your comment here..."
 msgstr "Parašykite savo komentarą čia..."
 
-msgid "%d selected"
-msgstr "%d pažymėta"
+msgid "%s selected"
+msgstr "%s pažymėta"
 
 msgid "Search by title or path..."
 msgstr "Ieškoti pagal pavadinimą ar kelią..."
@@ -31084,8 +31084,8 @@ msgstr "Ieškoti pagal pavadinimą ar kelią..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Valdykite atsargines kopijas, atkūrimą, kopijavimą, perdirbimą ir kursų duomenų ištrynimą."
 
-msgid "%d comment(s)"
-msgstr "%d komentaras(arai)"
+msgid "%s comment(s)"
+msgstr "%s komentaras(arai)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Klaida atnaujinant trečiąją pusę. Prašome patikrinti duomenis."
@@ -31889,7 +31889,7 @@ msgid "View badge"
 msgstr "Peržiūrėti ženklelį"
 
 msgid "%d min"
-msgstr "%d min"
+msgstr "%d min."
 
 msgid "Duration in minutes"
 msgstr "Trukmė minutėmis"
@@ -32142,4 +32142,175 @@ msgstr "Nepavyko sukurti Moodle atsarginės kopijos."
 
 msgid "More actions"
 msgstr "Daugiau veiksmų"
+
+msgid "Write something"
+msgstr "Parašykite ką nors"
+
+msgid "Friends of %s"
+msgstr "%s draugai"
+
+msgid "Error loading learning paths."
+msgstr "Klaida įkeliant mokymosi kelius."
+
+msgid "You don't have any learning path."
+msgstr "Jūs neturite jokių mokymosi kelių."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Sukurkite savo pirmąjį mokymosi kelią, kad pradėtumėte organizuoti kurso turinį."
+
+msgid "Could not save the new category order."
+msgstr "Nepavyko išsaugoti naują kategorijų tvarką."
+
+msgid "Could not save the new order."
+msgstr "Nepavyko išsaugoti naują tvarką."
+
+msgid "Assignment"
+msgstr "Užduotis"
+
+msgid "Allowed file formats: %s"
+msgstr "Leidžiami failų formatai: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Failo tipas neleistinas. Leidžiami plėtiniai: %s"
+
+msgid "Folder name"
+msgstr "Aplanko pavadinimas"
+
+msgid "Rename folder"
+msgstr "Pervardinti aplanką"
+
+msgid "New name"
+msgstr "Naujas pavadinimas"
+
+msgid "Choose an action"
+msgstr "Pasirinkite veiksmą"
+
+msgid "New version"
+msgstr "Nauja versija"
+
+msgid "Change title to selected filename"
+msgstr "Pakeisti pavadinimą į pasirinkto failo vardą"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Galite pakeisti failą, perkelti jį į kitą aplanką arba abu."
+
+msgid "Move %s"
+msgstr "Perkelti %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Rodomi tik nešakniniai aplankai, kad būtų išvengta elementų palikimo šaknyje."
+
+msgid "No feedback yet."
+msgstr "Dar nėra atsiliepimų."
+
+msgid "Upload first, organize later"
+msgstr "Pirmiausia įkelkite, vėliau organizuokite"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Vilkite ir paleiskite arba naršykite, kad pridėtumėte failus"
+
+msgid "Social wall..."
+msgstr "Socialinis sienelė..."
+
+msgid "Wall of %s"
+msgstr "%s sienelė"
+
+msgid "Version currently loaded"
+msgstr "Šiuo metu įkelta versija"
+
+msgid "Completion"
+msgstr "Užbaigimas"
+
+msgid "Quick navigation"
+msgstr "Greita navigacija"
+
+msgid "Filled"
+msgstr "Užpildyta"
+
+msgid "Terms sections"
+msgstr "Sąlygų skyriai"
+
+msgid "Open a section to edit its content."
+msgstr "Atverkite skyrių, kad redaguotumėte jo turinį."
+
+msgid "Open this section to load the editor."
+msgstr "Atverkite šią sekciją, kad įkeltumėte redaktorių."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Pavojinga zona: prieigos URL ištrynimas yra negrįžtamas."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Įveskite pilną URL patvirtinti. URL ir jo ryšiai bus negrįžtamai pašalinti."
+
+msgid "Unable to load the badge's image."
+msgstr "Nepavyko įkelti ženklelio paveikslėlio."
+
+msgid "Invalid role selection"
+msgstr "Neteisingas vaidmens pasirinkimas"
+
+msgid "Select relation type first to enable user management."
+msgstr "Pirmiausia pasirinkite ryšio tipą, kad galėtumėte valdyti vartotojus."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Šis klausimas neturi kurso konteksto. Peržiūra negalima."
+
+msgid "Unknown test"
+msgstr "Nežinomas testas"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Trinimas neleidžiamas be kurso konteksto."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Trinimas nepavyko: trūksta kurso konteksto arba galiojančio klausimo ID.Šis klausimas priklauso testui. Redaguokite jį iš testą arba filtruokite tik našlaičių klausimus."
+
+msgid "Delete failed: question not found."
+msgstr "Trinimas nepavyko: klausimas nerastas."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Trinimas nepavyko: šis klausimas vis dar naudojamas kitur."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Šis klausimas priklauso testui. Redaguokite jį iš testą arba filtruokite tik našlaičių klausimus."
+
+msgid "Access the group tools and resources"
+msgstr "Prieikite grupės įrankius ir išteklius"
+
+msgid "%s members"
+msgstr "%s nariai"
+
+msgid "View certificate (HTML)"
+msgstr "Peržiūrėti pažymėjimą (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Susieti įgūdį su šiuo pažymių knygos įrašu"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Valdyti ryšį tarp pažymėjimų ir įgūdžių kiekvienai pažymių knygai"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Pasirinkite konkretų ženklelio išdavimą atsisiuntimui"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM neįjungtas."
+
+msgid "Invalid token."
+msgstr "Neteisingas prieigos raktas."
+
+msgid "Schema not supported."
+msgstr "Schema nepalaikoma."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Neteisingos schemos PATCH operacijai."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Trūksta reikiamos \"Operations\" masyvų."
+
+msgid "The '%s' operation is not supported."
+msgstr "Operacija '%s' nepalaikoma."
+
+msgid "Drupal user ID"
+msgstr "Drupal vartotojo ID"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Nėra terminų, atitinkančių paiešką: %s"
 

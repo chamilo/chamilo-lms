@@ -31074,8 +31074,8 @@ msgstr "Amestar comentariu"
 msgid "Write your comment here..."
 msgstr "Escribi el comentariu equí..."
 
-msgid "%d selected"
-msgstr "%d seleicionaos"
+msgid "%s selected"
+msgstr "%s seleicionaos"
 
 msgid "Search by title or path..."
 msgstr "Guetar por títulu o camín..."
@@ -31083,8 +31083,8 @@ msgstr "Guetar por títulu o camín..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Xestionar copes de seguridá, restaurar, copiar, reciclar y desaniciar datos del cursu."
 
-msgid "%d comment(s)"
-msgstr "%d comentariu(s)"
+msgid "%s comment(s)"
+msgstr "%s comentariu(s)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Error actualizando el terceiru. Verifica los datos."
@@ -31882,106 +31882,106 @@ msgid "Click to insert"
 msgstr "Enclicar pa inserir"
 
 msgid "Preferred: SVG. PNG max size: %spx."
-msgstr ""
+msgstr "Preferíu: SVG. Tamiñu máx. PNG: %spx."
 
 msgid "View badge"
-msgstr ""
+msgstr "Ver distintivu"
 
 msgid "%d min"
-msgstr ""
+msgstr "%d min"
 
 msgid "Duration in minutes"
-msgstr ""
+msgstr "Duración en minutos"
 
 msgid "Go back to standard view"
-msgstr ""
+msgstr "Volver a la vista estándar"
 
 msgid "Search for student..."
-msgstr ""
+msgstr "Guetar alumnos..."
 
 msgid "This date is locked or read-only."
-msgstr ""
+msgstr "Esta fecha ta bloquiada o namái de lectura."
 
 msgid "Failed to load attendance. Please try again later."
-msgstr ""
+msgstr "Siguió cargar l'assistolia. Pruèbalo más tarde."
 
 msgid "Nothing to save"
-msgstr ""
+msgstr "Nun hai nada que guardar"
 
 msgid "You have unsaved changes. Leave anyway?"
-msgstr ""
+msgstr "Ties cambéosensin guardar. ¿Quieres siguir?"
 
 msgid "Storage usage unavailable"
-msgstr ""
+msgstr "Usu d'alminu non disponible"
 
 msgid "Search for members..."
-msgstr ""
+msgstr "Guetar miembros..."
 
 msgid "Current members"
-msgstr ""
+msgstr "Miembru actuals"
 
 msgid "Add members"
-msgstr ""
+msgstr "Amestar miembros"
 
 msgid "Search for users in course/session..."
-msgstr ""
+msgstr "Guetar usuarios nel cursu/sesión..."
 
 msgid "No users available."
-msgstr ""
+msgstr "Nun hai usuarios disponibles."
 
 msgid "Browse and publish new posts"
-msgstr ""
+msgstr "Guetar y publicar Nuevos posts"
 
 msgid "Create and assign tasks"
-msgstr ""
+msgstr "Crear y asignar xestes"
 
 msgid "Filtered by %s"
-msgstr ""
+msgstr "Filtráu por %s"
 
 msgid "Select a score"
-msgstr ""
+msgstr "Escoyer una nota"
 
 msgid "Edit comment"
-msgstr ""
+msgstr "Editar comentariu"
 
 msgid "Failed to update the post."
-msgstr ""
+msgstr "Siguió actualizase'l post."
 
 msgid "Delete this post? This action cannot be undone."
-msgstr ""
+msgstr "¿Desaniciar esti post? Esta axón nun ye desfaable."
 
 msgid "Failed to delete the post."
-msgstr ""
+msgstr "Siguió desaniciar el post."
 
 msgid "Failed to update the comment."
-msgstr ""
+msgstr "Siguió actualizase'l comentariu."
 
 msgid "Delete this comment?"
-msgstr ""
+msgstr "¿Desaniciar esti comentariu?"
 
 msgid "Failed to delete the comment."
-msgstr ""
+msgstr "Siguió desaniciar el comentariu."
 
 msgid "Search for projects..."
-msgstr ""
+msgstr "Guetar proiectu..."
 
 msgid "Only visible"
-msgstr ""
+msgstr "Namái visible"
 
 msgid "Rename project"
-msgstr ""
+msgstr "Renomar proyectu"
 
 msgid "New title"
-msgstr ""
+msgstr "Nuevu títulu"
 
 msgid "You need to be a admin or teacher to manage projects."
-msgstr ""
+msgstr "Has de ser alministrador o profesor pa xestionar proyectu."
 
 msgid "Delete this project? This action cannot be undone."
-msgstr ""
+msgstr "¿Desaniciar esti proyectu? Esta axón nun ye desfaable."
 
 msgid "Task list"
-msgstr ""
+msgstr "Llista de xestes"
 
 msgid "Change status"
 msgstr "Camudar estau"
@@ -32141,4 +32141,175 @@ msgstr "Falló la creación de la copia de seguridá de Moodle."
 
 msgid "More actions"
 msgstr "Más axones"
+
+msgid "Write something"
+msgstr "Escribi algo"
+
+msgid "Friends of %s"
+msgstr "Amigos de %s"
+
+msgid "Error loading learning paths."
+msgstr "Error cargando les rutas d'aprendizaxe."
+
+msgid "You don't have any learning path."
+msgstr "Nun tienes nenguna ruta d'aprendizaxe."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Crea la primera ruta d'aprendizaxe pa entamar a organizar el conteníu del cursu."
+
+msgid "Could not save the new category order."
+msgstr "Nun ye posible guardar el nuevu orde de les categories."
+
+msgid "Could not save the new order."
+msgstr "Nun ye posible guardar el nuevu orde."
+
+msgid "Assignment"
+msgstr "Trabayu"
+
+msgid "Allowed file formats: %s"
+msgstr "Formatos de ficheru permitíos: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Tipu de ficheru non permitíu. Estensiones permitíes: %s"
+
+msgid "Folder name"
+msgstr "Nome de la carpeta"
+
+msgid "Rename folder"
+msgstr "Renomar carpeta"
+
+msgid "New name"
+msgstr "Nuevu nome"
+
+msgid "Choose an action"
+msgstr "Escoye una axón"
+
+msgid "New version"
+msgstr "Nuev versión"
+
+msgid "Change title to selected filename"
+msgstr "Camudar títulu al nome del ficheru seleicionáu"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Pues camudar el ficheru, movelu a otru directoriu o les dos coses."
+
+msgid "Move %s"
+msgstr "Mover %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Sólo s'amenen les carpetes non-raíz pa evitar dexar elementos na raíz."
+
+msgid "No feedback yet."
+msgstr "Encami nengún comentariu."
+
+msgid "Upload first, organize later"
+msgstr "Subir primero, organizar dempués"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Arraxar y soltar o navegar pa amestar ficheros"
+
+msgid "Social wall..."
+msgstr "Mur social..."
+
+msgid "Wall of %s"
+msgstr "Mur de %s"
+
+msgid "Version currently loaded"
+msgstr "Versión cargada actualmente"
+
+msgid "Completion"
+msgstr "Completáu"
+
+msgid "Quick navigation"
+msgstr "Navegación rápida"
+
+msgid "Filled"
+msgstr "Rellenáu"
+
+msgid "Terms sections"
+msgstr "Seiciones de términos"
+
+msgid "Open a section to edit its content."
+msgstr "Abrir una seición pa editar el so conteníu."
+
+msgid "Open this section to load the editor."
+msgstr "Abrir esta seición pa cargar l'editor."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Zona perigosu: eliminar una URL d'accesu ye permanente."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Escribi la URL completa pa confirmar. La URL y les sues relacions van ser eliminados permanentemente."
+
+msgid "Unable to load the badge's image."
+msgstr "Nun ye posible cargar la imaxe de la distintiva."
+
+msgid "Invalid role selection"
+msgstr "Seleición de rol inválida"
+
+msgid "Select relation type first to enable user management."
+msgstr "Escueye primero el tipu de relación pa activar la xestión d'usuarios."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Esta pregunta nun tien conteniu de cursu. La previsualización nun ye disponible."
+
+msgid "Unknown test"
+msgstr "Proba desconocida"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "L'eliminación nun ye permitida ensin conteniu de cursu."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Falló l'eliminación: falta conteniu de cursu oEsta pregunta pertenez a una proba. Edítala dende la proba o filtra namái les preguntes orfanes.id de pregunta válidu."
+
+msgid "Delete failed: question not found."
+msgstr "Falló l'eliminación: pregunta non atopada."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Falló l'eliminación: esta pregunta sigo referenciada por otros recursos."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Esta pregunta pertenez a una proba. Edítala dende la proba o filtra namái les preguntes orfanes."
+
+msgid "Access the group tools and resources"
+msgstr "Acceder a les ferramientes y recursos del grupu"
+
+msgid "%s members"
+msgstr "%s miembros"
+
+msgid "View certificate (HTML)"
+msgstr "Ver certificáu (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Enllazar una competencia a esta libreta de calificaciones"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Xestionar l'enllace ente certificaus y competencias pa cada libreta de calificaciones"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Escueye una emisión específica de distintiva pa descargar"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM nun ta activáu."
+
+msgid "Invalid token."
+msgstr "Token inválidu."
+
+msgid "Schema not supported."
+msgstr "Esquema non soportáu."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Esquemes inválidos pa l'operación PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Falta l'array obligatoriu \"Operations\"."
+
+msgid "The '%s' operation is not supported."
+msgstr "L'operación '%s' nun ye soportada."
+
+msgid "Drupal user ID"
+msgstr "ID d'usuariu de Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Nun hai términos que concasen col cambéu: %s"
 

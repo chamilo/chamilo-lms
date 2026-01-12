@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Rurasqa rakina: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ñawpaq formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -31074,8 +31074,8 @@ msgstr "Willakuyta yapay"
 msgid "Write your comment here..."
 msgstr "Kayman willakuyta qelqay..."
 
-msgid "%d selected"
-msgstr "%d chinakusqa"
+msgid "%s selected"
+msgstr "%s chinakusqa"
 
 msgid "Search by title or path..."
 msgstr "Suti o ñanpi maskhay..."
@@ -31083,8 +31083,8 @@ msgstr "Suti o ñanpi maskhay..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Qelqakuna, kamarichiy, k'ipi, musuqyachiy, q'echay yachakuynata kamachiy."
 
-msgid "%d comment(s)"
-msgstr "%d willakuykuna"
+msgid "%s comment(s)"
+msgstr "%s willakuykuna"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Pantasqay musuqyachiy maki. Yachakuyta ruruy."
@@ -32141,4 +32141,175 @@ msgstr "Moodle yapayuq mañakunqanchu."
 
 msgid "More actions"
 msgstr "Huk ruwakuna"
+
+msgid "Write something"
+msgstr "Kamachiq imata"
+
+msgid "Friends of %s"
+msgstr "%s runakuna"
+
+msgid "Error loading learning paths."
+msgstr "Manam atinachu yachay ñan kunakuna carganapaq."
+
+msgid "You don't have any learning path."
+msgstr "Manam kaypi yachay ñan kanchu."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Yachay ñan suyuta kamachiy imayna organizakunaypaq kursu kaqkunata."
+
+msgid "Could not save the new category order."
+msgstr "Manam atinachu yarpakunaypaq musuq katigoriarawit."
+
+msgid "Could not save the new order."
+msgstr "Manam atinachu musuq ordenat yarpakunaypaq."
+
+msgid "Assignment"
+msgstr "Kamachiynin"
+
+msgid "Allowed file formats: %s"
+msgstr "Kutichisqa willay formato: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Willay formato manam kutichisqachu. Kutichisqa kutikuna: %s"
+
+msgid "Folder name"
+msgstr "Phuru sutin"
+
+msgid "Rename folder"
+msgstr "Phuru sutinta hukichiy"
+
+msgid "New name"
+msgstr "Musuq sutin"
+
+msgid "Choose an action"
+msgstr "Kamachiyniynita mañay"
+
+msgid "New version"
+msgstr "Musuq rupay"
+
+msgid "Change title to selected filename"
+msgstr "Sutinni mañakunamanta willaypa sutinman wischuy"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Willayta pantachiy, huk phuruman wichqay ukhu mana."
+
+msgid "Move %s"
+msgstr "%s wichqay"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Phuru rakikunamantaqa mana rikhurikunachu, rakita qispichikunaypaq."
+
+msgid "No feedback yet."
+msgstr "Manam willakuy kanchu."
+
+msgid "Upload first, organize later"
+msgstr "Qhawayta kamachiy, ñawpaq organizakuy"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Arrastray & soltay ukhu mañakuy willakunata yawaray"
+
+msgid "Social wall..."
+msgstr "Rakin wall..."
+
+msgid "Wall of %s"
+msgstr "%s wall"
+
+msgid "Version currently loaded"
+msgstr "Kutipayninchikpi versiyun"
+
+msgid "Completion"
+msgstr "Kutipachiy"
+
+msgid "Quick navigation"
+msgstr "Sumpaq navegasyon"
+
+msgid "Filled"
+msgstr "Llamk'achik"
+
+msgid "Terms sections"
+msgstr "Pachakuna kamachina"
+
+msgid "Open a section to edit its content."
+msgstr "Kamachinanta hamp'ikuyta churaykupaq pachata hamp'ay."
+
+msgid "Open this section to load the editor."
+msgstr "Editorninta k'anchaykupaq kay pachat hamp'ay."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "P'iqanakuy zona: acces URLta q'echay permanente nisqa."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Confirmakunaykupaq URLta manaq URLman qillqay. URLqa willakunaqwanqawan permanente q'echakun."
+
+msgid "Unable to load the badge's image."
+msgstr "Insignia rasminta k'anchayta atinchu."
+
+msgid "Invalid role selection"
+msgstr "Manaq saqillasqan rol"
+
+msgid "Select relation type first to enable user management."
+msgstr "Runakuna kamachinkupaq relasiyun tiputa saqillay."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Kay paqarina kursu suyukunamanchu. Ñawpaq qhawarina mana kanchu."
+
+msgid "Unknown test"
+msgstr "Mana yachasqan pruibakuna"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Kursu suyukunamanchu q'echayta mana saqichun."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Q'echay mana cullunchisqa: kursu suyuku mana kanchu utaq kay paqarina pruibakunaman kaykamaq. Paqarina pruibakunaqman qhawinakuy utaq ñawpaq qhawinakuykunata qhawinakuy."
+
+msgid "Delete failed: question not found."
+msgstr "Q'echay mana cullunchisqa: paqarina mana tukuq."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Q'echay mana cullunchisqa: kay paqarina willakunaqwanqawanqawan q'illqasqa."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Kay paqarina pruibakunamanqan. Pruybakunamanta hamp'inikuychis utaq ñawpaq qhawinakuykunata qhawinakuy."
+
+msgid "Access the group tools and resources"
+msgstr "Harp'unakuna rurakunaqwan willakunaqman riy"
+
+msgid "%s members"
+msgstr "%s runakuna"
+
+msgid "View certificate (HTML)"
+msgstr "Yachaywillakuyta qhawiy (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Kay notakunaman yachayniyta hamp'ay"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Notakunaq yachaywillakuykunawan yachaykunataq kamachiy"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Yachquy insiginiyta descargakunaykupaq saqillay"
+
+msgid "SCIM is not enabled."
+msgstr "SCIMqa mana kanchu."
+
+msgid "Invalid token."
+msgstr "Manaq saqillasqa token."
+
+msgid "Schema not supported."
+msgstr "Mana rurakunqa schema."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "PATCH rurakunaykupaq manaq schema."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Kutichisqa \"Operations\" arregloqa mana kanchu."
+
+msgid "The '%s' operation is not supported."
+msgstr "'%s' rurakuna mana rurakun."
+
+msgid "Drupal user ID"
+msgstr "Drupal runa ID"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Manam kay imayna rimanakuna kay qhawarina %swan khuyrakunapaschu"
 

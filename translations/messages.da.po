@@ -31074,8 +31074,8 @@ msgstr "Tilføj kommentar"
 msgid "Write your comment here..."
 msgstr "Skriv din kommentar her..."
 
-msgid "%d selected"
-msgstr "%d valgt"
+msgid "%s selected"
+msgstr "%s valgt"
 
 msgid "Search by title or path..."
 msgstr "Søg efter titel eller sti..."
@@ -31083,8 +31083,8 @@ msgstr "Søg efter titel eller sti..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Administrer sikkerhedskopier, genopret, kopiér, genbrug og slet kursusdata."
 
-msgid "%d comment(s)"
-msgstr "%d kommentar(er)"
+msgid "%s comment(s)"
+msgstr "%s kommentar(er)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Fejl ved opdatering af tredjepart. Kontrollér venligst dataene."
@@ -32141,4 +32141,175 @@ msgstr "Fejl ved oprettelse af Moodle-backup."
 
 msgid "More actions"
 msgstr "Flere handlinger"
+
+msgid "Write something"
+msgstr "Skriv noget"
+
+msgid "Friends of %s"
+msgstr "Venners af %s"
+
+msgid "Error loading learning paths."
+msgstr "Fejl ved indlæsning af læringsstier."
+
+msgid "You don't have any learning path."
+msgstr "Du har ingen læringssti."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Opret din første læringssti for at starte med at organisere kursusindhold."
+
+msgid "Could not save the new category order."
+msgstr "Kunne ikke gemme den nye kategori-rækkefølge."
+
+msgid "Could not save the new order."
+msgstr "Kunne ikke gemme den nye rækkefølge."
+
+msgid "Assignment"
+msgstr "Opgave"
+
+msgid "Allowed file formats: %s"
+msgstr "Tilladte filformater: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Filtypen er ikke tilladt. Tilladte filtyper: %s"
+
+msgid "Folder name"
+msgstr "Mappenavn"
+
+msgid "Rename folder"
+msgstr "Omdøb mappe"
+
+msgid "New name"
+msgstr "Nyt navn"
+
+msgid "Choose an action"
+msgstr "Vælg en handling"
+
+msgid "New version"
+msgstr "Ny version"
+
+msgid "Change title to selected filename"
+msgstr "Skift titel til valgt filnavn"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Du kan erstatte filen, flytte den til en anden mappe eller begge dele."
+
+msgid "Move %s"
+msgstr "Flyt %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Kun ikke-rodmapper vises for at undgå at efterlade elementer i roden."
+
+msgid "No feedback yet."
+msgstr "Ingen feedback endnu."
+
+msgid "Upload first, organize later"
+msgstr "Upload først, organiser senere"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Træk & slip eller gennemse for at tilføje filer"
+
+msgid "Social wall..."
+msgstr "Social væg..."
+
+msgid "Wall of %s"
+msgstr "Væg for %s"
+
+msgid "Version currently loaded"
+msgstr "Indlæst version"
+
+msgid "Completion"
+msgstr "Færdiggørelse"
+
+msgid "Quick navigation"
+msgstr "Hurtig navigation"
+
+msgid "Filled"
+msgstr "Udfyldt"
+
+msgid "Terms sections"
+msgstr "Terms-sektioner"
+
+msgid "Open a section to edit its content."
+msgstr "Åbn en sektion for at redigere dens indhold."
+
+msgid "Open this section to load the editor."
+msgstr "Åbn denne sektion for at indlæse editoren."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Farezone: sletning af adgangs-URL er permanent."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Skriv den fulde URL for at bekræfte. URL'en og dens relationer vil blive permanent fjernet."
+
+msgid "Unable to load the badge's image."
+msgstr "Kunne ikke indlæse badge-billedet."
+
+msgid "Invalid role selection"
+msgstr "Ugyldig rollevalg"
+
+msgid "Select relation type first to enable user management."
+msgstr "Vælg først relationstype for at aktivere brugerhåndtering."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Dette spørgsmål har ingen kursuskontekst. Forhåndsvisning er ikke tilgængelig."
+
+msgid "Unknown test"
+msgstr "Ukendt test"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Sletning er ikke tilladt uden kursuskontekst."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Sletning mislykkedes: manglende kursuskontekst eller gyldigt spørgsmål-id. Dette spørgsmål tilhører en test. Redigér det inde fra testen eller filtrér kun efter forældreløse spørgsmål."
+
+msgid "Delete failed: question not found."
+msgstr "Sletning mislykkedes: spørgsmål ikke fundet."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Sletning mislykkedes: dette spørgsmål refereres stadig af andre ressourcer."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Dette spørgsmål tilhører en test. Redigér det inde fra testen eller filtrér kun efter forældreløse spørgsmål."
+
+msgid "Access the group tools and resources"
+msgstr "Få adgang til gruppens værktøjer og ressourcer"
+
+msgid "%s members"
+msgstr "%s medlemmer"
+
+msgid "View certificate (HTML)"
+msgstr "Vis certifikat (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Knyt en færdighed til dette karakterbog"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Administrér linket mellem certifikater og færdigheder for hver karakterbog"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Vælg et specifikt badge-udstedelse at downloade"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM er ikke aktiveret."
+
+msgid "Invalid token."
+msgstr "Ugyldigt token."
+
+msgid "Schema not supported."
+msgstr "Schema understøttes ikke."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Ugyldige skemaer for PATCH-operationen."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Manglende påkrævet \"Operations\"-array."
+
+msgid "The '%s' operation is not supported."
+msgstr "Operationen '%s' understøttes ikke."
+
+msgid "Drupal user ID"
+msgstr "Drupal-bruger-ID"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Der er ingen termer, der matcher søgningen: %s"
 

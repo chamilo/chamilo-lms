@@ -31086,8 +31086,8 @@ msgstr "إضافة تعليق"
 msgid "Write your comment here..."
 msgstr "اكتب تعليقك هنا..."
 
-msgid "%d selected"
-msgstr "%d محدد"
+msgid "%s selected"
+msgstr "%s محدد"
 
 msgid "Search by title or path..."
 msgstr "البحث حسب العنوان أو المسار..."
@@ -31095,8 +31095,8 @@ msgstr "البحث حسب العنوان أو المسار..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "إدارة النسخ الاحتياطية، الاستعادة، النسخ، سلة المهملات وحذف بيانات المقرر الدراسي."
 
-msgid "%d comment(s)"
-msgstr "%d تعليق(ات)"
+msgid "%s comment(s)"
+msgstr "%s تعليق(ات)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "خطأ في تحديث الطرف الثالث. يرجى التحقق من البيانات."
@@ -32153,4 +32153,175 @@ msgstr "فشل في إنشاء نسخة احتياطية مودل."
 
 msgid "More actions"
 msgstr "مزيد من الإجراءات"
+
+msgid "Write something"
+msgstr "اكتب شيئاً"
+
+msgid "Friends of %s"
+msgstr "أصدقاء %s"
+
+msgid "Error loading learning paths."
+msgstr "خطأ في تحميل مسارات التعلم."
+
+msgid "You don't have any learning path."
+msgstr "ليس لديك أي مسار تعلم."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "أنشئ مسار تعلمك الأول لبدء تنظيم محتوى الدورة."
+
+msgid "Could not save the new category order."
+msgstr "تعذر حفظ ترتيب الفئة الجديد."
+
+msgid "Could not save the new order."
+msgstr "تعذر حفظ الترتيب الجديد."
+
+msgid "Assignment"
+msgstr "مهمة"
+
+msgid "Allowed file formats: %s"
+msgstr "صيغ الملفات المسموح بها: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "نوع الملف غير مسموح. الامتدادات المسموح بها: %s"
+
+msgid "Folder name"
+msgstr "اسم المجلد"
+
+msgid "Rename folder"
+msgstr "إعادة تسمية المجلد"
+
+msgid "New name"
+msgstr "الاسم الجديد"
+
+msgid "Choose an action"
+msgstr "اختر إجراءً"
+
+msgid "New version"
+msgstr "إصدار جديد"
+
+msgid "Change title to selected filename"
+msgstr "تغيير العنوان إلى اسم الملف المحدد"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "يمكنك استبدال الملف، أو نقله إلى مجلد آخر، أو كليهما."
+
+msgid "Move %s"
+msgstr "نقل %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "يتم عرض المجلدات غير الجذرية فقط لتجنب ترك العناصر في الجذر."
+
+msgid "No feedback yet."
+msgstr "لا يوجد تعليق بعد."
+
+msgid "Upload first, organize later"
+msgstr "ارفع أولاً، نظّم لاحقاً"
+
+msgid "Drag & drop or browse to add files"
+msgstr "اسحب وأفلت أو تصفح لإضافة الملفات"
+
+msgid "Social wall..."
+msgstr "جدار اجتماعي..."
+
+msgid "Wall of %s"
+msgstr "جدار %s"
+
+msgid "Version currently loaded"
+msgstr "الإصدار المحمل حالياً"
+
+msgid "Completion"
+msgstr "الإكمال"
+
+msgid "Quick navigation"
+msgstr "التنقل السريع"
+
+msgid "Filled"
+msgstr "مملوء"
+
+msgid "Terms sections"
+msgstr "أقسام الشروط"
+
+msgid "Open a section to edit its content."
+msgstr "افتح قسماً لتحرير محتواه."
+
+msgid "Open this section to load the editor."
+msgstr "افتح هذا القسم لتحميل المحرر."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "منطقة الخطر: حذف رابط الوصول دائم."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "اكتب الرابط الكامل للتأكيد. سيتم حذف الرابط وعلاقه نهائياً."
+
+msgid "Unable to load the badge's image."
+msgstr "تعذر تحميل صورة الشارة."
+
+msgid "Invalid role selection"
+msgstr "اختيار دور غير صالح"
+
+msgid "Select relation type first to enable user management."
+msgstr "حدد نوع العلاقة أولاً لتفعيل إدارة المستخدمين."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "هذا السؤال ليس له سياق دورة. المعاينة غير متاحة."
+
+msgid "Unknown test"
+msgstr "اختبار غير معروف"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "الحذف غير مسموح بدون سياق مسار دراسي."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "فشل الحذف: سياق مسار دراسي مفقود أو معرف سؤال صالح لهذا السؤال ينتمي إلى اختبار. قم بتحريره من داخل الاختبار أو قم بالتصفية للأسئلة اليتيمة فقط."
+
+msgid "Delete failed: question not found."
+msgstr "فشل الحذف: السؤال غير موجود."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "فشل الحذف: هذا السؤال ما زال مرتبطاً بموارد أخرى."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "هذا السؤال ينتمي إلى اختبار. قم بتحريره من داخل الاختبار أو قم بالتصفية للأسئلة اليتيمة فقط."
+
+msgid "Access the group tools and resources"
+msgstr "الوصول إلى أدوات المجموعة والموارد"
+
+msgid "%s members"
+msgstr "%s أعضاء"
+
+msgid "View certificate (HTML)"
+msgstr "عرض الشهادة (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "ربط مهارة بهذا دفتر الدرجات"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "إدارة الرابط بين الشهادات والمهارات لكل دفتر درجات"
+
+msgid "Please select a specific badge issue to download"
+msgstr "يرجى اختيار إصدار شارة محدد للتنزيل"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM غير مفعّل."
+
+msgid "Invalid token."
+msgstr "رمز غير صالح."
+
+msgid "Schema not supported."
+msgstr "السكيما غير مدعوم."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "سكيمات غير صالحة لعملية PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "مصفوفة \"Operations\" المطلوبة مفقودة."
+
+msgid "The '%s' operation is not supported."
+msgstr "عملية '%s' غير مدعومة."
+
+msgid "Drupal user ID"
+msgstr "معرف مستخدم Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "لا توجد مصطلحات تطابق البحث: %s"
 

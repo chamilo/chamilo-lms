@@ -33154,8 +33154,8 @@ msgstr "Opmerking toevoegen"
 msgid "Write your comment here..."
 msgstr "Schrijf je opmerking hier..."
 
-msgid "%d selected"
-msgstr "%d geselecteerd"
+msgid "%s selected"
+msgstr "%s geselecteerd"
 
 msgid "Search by title or path..."
 msgstr "Zoek op titel of pad..."
@@ -33163,8 +33163,8 @@ msgstr "Zoek op titel of pad..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Beheer back-ups, herstel, kopieer, recycleer en verwijder cursusgegevens."
 
-msgid "%d comment(s)"
-msgstr "%d opmerking(en)"
+msgid "%s comment(s)"
+msgstr "%s opmerking(en)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Fout bij bijwerken van derde partij. Controleer de gegevens."
@@ -34221,4 +34221,175 @@ msgstr "Fout bij aanmaken Moodle-back-up."
 
 msgid "More actions"
 msgstr "Meer acties"
+
+msgid "Write something"
+msgstr "Schrijf iets"
+
+msgid "Friends of %s"
+msgstr "Vrienden van %s"
+
+msgid "Error loading learning paths."
+msgstr "Fout bij het laden van leerpaden."
+
+msgid "You don't have any learning path."
+msgstr "Je hebt geen leerpad."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Maak je eerste leerpad om cursusinhoud te organiseren."
+
+msgid "Could not save the new category order."
+msgstr "Nieuwe categorievolgorde kon niet worden opgeslagen."
+
+msgid "Could not save the new order."
+msgstr "Nieuwe volgorde kon niet worden opgeslagen."
+
+msgid "Assignment"
+msgstr "Opdracht"
+
+msgid "Allowed file formats: %s"
+msgstr "Toegestane bestandsformaten: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Bestandstype niet toegestaan. Toegestane extensies: %s"
+
+msgid "Folder name"
+msgstr "Mapnaam"
+
+msgid "Rename folder"
+msgstr "Map hernoemen"
+
+msgid "New name"
+msgstr "Nieuwe naam"
+
+msgid "Choose an action"
+msgstr "Kies een actie"
+
+msgid "New version"
+msgstr "Nieuwe versie"
+
+msgid "Change title to selected filename"
+msgstr "Titel wijzigen naar geselecteerde bestandsnaam"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Je kunt het bestand vervangen, het naar een andere map verplaatsen, of beide."
+
+msgid "Move %s"
+msgstr "Verplaats %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Alleen niet-wortel mappen worden getoond om te voorkomen dat items in de wortel blijven."
+
+msgid "No feedback yet."
+msgstr "Nog geen feedback."
+
+msgid "Upload first, organize later"
+msgstr "Eerst uploaden, later organiseren"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Sleep en laat los of blader om bestanden toe te voegen"
+
+msgid "Social wall..."
+msgstr "Sociale muur..."
+
+msgid "Wall of %s"
+msgstr "Muur van %s"
+
+msgid "Version currently loaded"
+msgstr "Momenteel geladen versie"
+
+msgid "Completion"
+msgstr "Voltooiing"
+
+msgid "Quick navigation"
+msgstr "Snelle navigatie"
+
+msgid "Filled"
+msgstr "Ingevuld"
+
+msgid "Terms sections"
+msgstr "Termsecties"
+
+msgid "Open a section to edit its content."
+msgstr "Open een sectie om de inhoud te bewerken."
+
+msgid "Open this section to load the editor."
+msgstr "Open deze sectie om de editor te laden."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Gevarenzone: het verwijderen van een toegang-URL is permanent."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Typ de volledige URL om te bevestigen. De URL en de relaties worden permanent verwijderd."
+
+msgid "Unable to load the badge's image."
+msgstr "Kan afbeelding van badge niet laden."
+
+msgid "Invalid role selection"
+msgstr "Ongeldige rolselectie"
+
+msgid "Select relation type first to enable user management."
+msgstr "Selecteer eerst een relatietype om gebruikersbeheer in te schakelen."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Deze vraag heeft geen cursuscontext. Voorvertoning is niet beschikbaar."
+
+msgid "Unknown test"
+msgstr "Onbekende test"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Verwijderen is niet toegestaan zonder cursuscontext."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Verwijderen mislukt: ontbrekende cursuscontext of ongeldige vraag-ID. Deze vraag behoort tot een test. Bewerk deze vanuit de test of filter alleen op weesvragen."
+
+msgid "Delete failed: question not found."
+msgstr "Verwijderen mislukt: vraag niet gevonden."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Verwijderen mislukt: deze vraag wordt nog steeds gebruikt door andere bronnen."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Deze vraag behoort tot een test. Bewerk deze vanuit de test of filter alleen op weesvragen."
+
+msgid "Access the group tools and resources"
+msgstr "Toegang tot groepstools en -resources"
+
+msgid "%s members"
+msgstr "%s leden"
+
+msgid "View certificate (HTML)"
+msgstr "Certificaat bekijken (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Koppel een vaardigheid aan dit rapportboek"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Beheer de koppeling tussen certificaten en vaardigheden voor elk rapportboek"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Selecteer een specifieke badge-uitgifte om te downloaden"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM is niet ingeschakeld."
+
+msgid "Invalid token."
+msgstr "Ongeldig token."
+
+msgid "Schema not supported."
+msgstr "Schema niet ondersteund."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Ongeldige schema's voor PATCH-operatie."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Ontbrekende vereiste \"Operations\"-array."
+
+msgid "The '%s' operation is not supported."
+msgstr "De '%s'-operatie wordt niet ondersteund."
+
+msgid "Drupal user ID"
+msgstr "Drupal-gebruikers-ID"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Er zijn geen termen die overeenkomen met de zoekopdracht: %s"
 

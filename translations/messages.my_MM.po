@@ -31072,8 +31072,8 @@ msgstr "မှတ်ချက်ထည့်ရန်"
 msgid "Write your comment here..."
 msgstr "သင်၏မှတ်ချက်ကို ဤနေရာတွင် ရေးပါ..."
 
-msgid "%d selected"
-msgstr "%d ရွေးချယ်ထားသည်"
+msgid "%s selected"
+msgstr "%s ရွေးချယ်ထားသည်"
 
 msgid "Search by title or path..."
 msgstr "ခေါင်းစဉ် သို့မဟုတ် လမ်းကြောင်းဖြင့် ရှာဖွေပါ..."
@@ -31081,8 +31081,8 @@ msgstr "ခေါင်းစဉ် သို့မဟုတ် လမ်းက�
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "သိမ်းဆည်းမှုများ၊ ပြန်လည်သိမ်းဆည်း၊ မိတ္တူကူး၊ ပြန်အသုံးပြုရန်နှင့် သင်တန်းဒေတာကို ဖျက်ရန် စီမံခန့်ခွဲပါ။"
 
-msgid "%d comment(s)"
-msgstr "%d မှတ်ချက်(များ)"
+msgid "%s comment(s)"
+msgstr "%s မှတ်ချက်(များ)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "တတိယပုဂ္ဂိုလ်ကို အပ်ဒိတ်လုပ်ရန် အမှားဖြစ်ပါသည်။ ဒေတာကို စစ်ဆေးပါ။"
@@ -32139,4 +32139,175 @@ msgstr "Moodle ဘက်အပ် ဖန်တီးရန် မအောင်
 
 msgid "More actions"
 msgstr "အခြားလုပ်ဆောင်ချက်များ"
+
+msgid "Write something"
+msgstr ""
+
+msgid "Friends of %s"
+msgstr ""
+
+msgid "Error loading learning paths."
+msgstr ""
+
+msgid "You don't have any learning path."
+msgstr ""
+
+msgid "Create your first learning path to start organizing course content."
+msgstr ""
+
+msgid "Could not save the new category order."
+msgstr ""
+
+msgid "Could not save the new order."
+msgstr ""
+
+msgid "Assignment"
+msgstr ""
+
+msgid "Allowed file formats: %s"
+msgstr ""
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr ""
+
+msgid "Folder name"
+msgstr ""
+
+msgid "Rename folder"
+msgstr ""
+
+msgid "New name"
+msgstr ""
+
+msgid "Choose an action"
+msgstr ""
+
+msgid "New version"
+msgstr ""
+
+msgid "Change title to selected filename"
+msgstr ""
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr ""
+
+msgid "Move %s"
+msgstr ""
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr ""
+
+msgid "No feedback yet."
+msgstr ""
+
+msgid "Upload first, organize later"
+msgstr ""
+
+msgid "Drag & drop or browse to add files"
+msgstr ""
+
+msgid "Social wall..."
+msgstr ""
+
+msgid "Wall of %s"
+msgstr ""
+
+msgid "Version currently loaded"
+msgstr ""
+
+msgid "Completion"
+msgstr ""
+
+msgid "Quick navigation"
+msgstr ""
+
+msgid "Filled"
+msgstr ""
+
+msgid "Terms sections"
+msgstr ""
+
+msgid "Open a section to edit its content."
+msgstr ""
+
+msgid "Open this section to load the editor."
+msgstr ""
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr ""
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr ""
+
+msgid "Unable to load the badge's image."
+msgstr ""
+
+msgid "Invalid role selection"
+msgstr ""
+
+msgid "Select relation type first to enable user management."
+msgstr ""
+
+msgid "This question has no course context. Preview is not available."
+msgstr ""
+
+msgid "Unknown test"
+msgstr ""
+
+msgid "Deletion is not allowed without a course context."
+msgstr ""
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr ""
+
+msgid "Delete failed: question not found."
+msgstr ""
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr ""
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr ""
+
+msgid "Access the group tools and resources"
+msgstr ""
+
+msgid "%s members"
+msgstr ""
+
+msgid "View certificate (HTML)"
+msgstr ""
+
+msgid "Link a skill to this gradebook"
+msgstr ""
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr ""
+
+msgid "Please select a specific badge issue to download"
+msgstr ""
+
+msgid "SCIM is not enabled."
+msgstr ""
+
+msgid "Invalid token."
+msgstr "မမှန်ကန်သော token။"
+
+msgid "Schema not supported."
+msgstr "Schema ကို မထောက်ပံ့ပါ။"
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "PATCH လုပ်ဆောင်မှုအတွက် မမှန်ကန်သော schemas များ။"
+
+msgid "Missing required \"Operations\" array."
+msgstr "\"Operations\" array လိုအပ်သော မရှိပါ။"
+
+msgid "The '%s' operation is not supported."
+msgstr "'%s' လုပ်ဆောင်မှုကို မထောက်ပံ့ပါ။"
+
+msgid "Drupal user ID"
+msgstr "Drupal အသုံးပြုသူ ID"
+
+msgid "There are no terms that match the search: %s"
+msgstr "ရှာဖွေမှုနှင့် ကိုက်ညီသော အသုံးအနှုန်များ မရှိပါ။ %s"
 

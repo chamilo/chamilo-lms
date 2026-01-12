@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:հեղինակային իրավունք,, no:առանց հեղինակային իրավունքի"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Թղթապանակ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Թերթիկ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:վարժություն,,      simulation:մոդելավորում,,      questionnaire:հարցաթերթիկ,,      diagram:սխեմա,,      figure:նկար,,      graph:գրաֆիկ,,      index:հիմնական ցուցիչ,,      slide:սլայդ,,      table:तालिका,,      narrative text:նարատիվ տեքստ,,      exam:քննություն,,      experiment:փորձ,,      problem statement:պրոբլեմի ձևակերպում,,      self assessment:ինքնագնահատում,,      lecture:դասախոսություն"
@@ -31081,8 +31081,8 @@ msgstr "Որոնել վերնագրով կամ ուղով..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Կառավարեք պատճենները, վերականգնեք, պատճենեք, վերֆայլացրեք և ջնջեք դասընթացի տվյալները:"
 
-msgid "%d comment(s)"
-msgstr "%d մեկնաբանություն(ներ)"
+msgid "%s comment(s)"
+msgstr "%s մեկնաբանություն(ներ)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Սխալ երրորդ կողմի թարմացնելիս: Խնդրում ենք ստուգել տվյալները:"
@@ -32139,4 +32139,175 @@ msgstr "Չհաջողվեց ստեղծել Moodle պատճենը:"
 
 msgid "More actions"
 msgstr "Ավելի շատ գործողություններ"
+
+msgid "Write something"
+msgstr "Գրեք ինչ-որ բան"
+
+msgid "Friends of %s"
+msgstr "%s-ի ընկերները"
+
+msgid "Error loading learning paths."
+msgstr "Սխալ է լրացնելիս ուսման ուղիները:"
+
+msgid "You don't have any learning path."
+msgstr "Ձեր մոտ ուսման ուղի չկա:"
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Ստեղծեք Ձեր առաջին ուսման ուղին՝ սկսելու համար դասընթացի բովանդակությունը կազմակերպելը:"
+
+msgid "Could not save the new category order."
+msgstr "Չհաջողվեց պահպանել նոր կատեգորիայի կարգը:"
+
+msgid "Could not save the new order."
+msgstr "Չհաջողվեց պահպանել նոր կարգը:"
+
+msgid "Assignment"
+msgstr "Առաջադրանք"
+
+msgid "Allowed file formats: %s"
+msgstr "Թույլատրված ֆայլերի ձևաչափեր՝ %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Ֆայլի տիպը թույլատրված չէ: Թույլատրված ընդլայնումներ՝ %s"
+
+msgid "Folder name"
+msgstr "Թերթիկի անուն"
+
+msgid "Rename folder"
+msgstr "Վերանվանել թերթիկը"
+
+msgid "New name"
+msgstr "Նոր անուն"
+
+msgid "Choose an action"
+msgstr "Ընտրեք գործողություն"
+
+msgid "New version"
+msgstr "Նոր տարբերակ"
+
+msgid "Change title to selected filename"
+msgstr "Փոխել վերնագիրը ընտրված ֆայլի անունով"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Դուք կարող եք փոխարինել ֆայլը, տեղափոխել այն մեկ այլ թերթիկ կամ երկուսը միասին:"
+
+msgid "Move %s"
+msgstr "Տեղափոխել %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Ցուցադրվում են միայն ոչ արմատային թերթիկները՝ խուսափելու համար տարրերը արմատում թողնելուց:"
+
+msgid "No feedback yet."
+msgstr "Փուլադրում դեռևս չկա:"
+
+msgid "Upload first, organize later"
+msgstr "Ներբեռնեք առաջինը, կազմակերպեք հետո"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Փոխվարել կամ որոնել ֆայլեր ավելացնելու համար"
+
+msgid "Social wall..."
+msgstr "Սոցիալական պատ..."
+
+msgid "Wall of %s"
+msgstr "%s-ի պատի"
+
+msgid "Version currently loaded"
+msgstr "Ներբեռնված տարբերակը"
+
+msgid "Completion"
+msgstr "Ավարտություն"
+
+msgid "Quick navigation"
+msgstr "Արագ նավիգացիա"
+
+msgid "Filled"
+msgstr "Լրացված"
+
+msgid "Terms sections"
+msgstr "Պայմանների բաժիններ"
+
+msgid "Open a section to edit its content."
+msgstr "Բացեք բաժինը՝ խմբագրելու դրա բովանդակությունը:"
+
+msgid "Open this section to load the editor."
+msgstr "Բացեք այս բաժինը՝ խմբագրիչը բեռնելու համար:"
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Վտանգավոր գոտի. մուտքի URL-ի ջնջումը անվերադարձ է:"
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Մուտքագրեք ամբողջական URL-ը հաստատման համար: URL-ը և նրա կապերը կջնջվեն անվերադարձ:"
+
+msgid "Unable to load the badge's image."
+msgstr "Չկարողացա բեռնել խորհրդանի պատկերը:"
+
+msgid "Invalid role selection"
+msgstr "Անվավեր դերի ընտրություն"
+
+msgid "Select relation type first to enable user management."
+msgstr "Նախ ընտրեք կապի տեսակը՝ օգտատերերի կառավարումը ակտիվացնելու համար:"
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Այս հարցը չունի դասընթացի համատեքստ: Նախադիտումը հասանելի չէ:"
+
+msgid "Unknown test"
+msgstr "Անհայտ թեստ"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Ջնջումը թույլատրված չէ առանց դասընթացի համատեքստի:"
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Ջնջումը ձախողվեց. բացակայում է դասընթացի համատեքստը կամ հարցը պատկանում է թեստին: Խմբագրեք այն թեստի ներսից կամ զտեք միայն հիշող հարցերի համար: վավեր հարցի id:"
+
+msgid "Delete failed: question not found."
+msgstr "Ջնջումը ձախողվեց. հարցը չի գտնվել:"
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Ջնջումը ձախողվեց. այս հարցը դեռ 참조վում է այլ ռեսուրսներով:"
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Այս հարցը պատկանում է թեստին: Խմբագրեք այն թեստի ներսից կամ զտեք միայն հիշող հարցերի համար:"
+
+msgid "Access the group tools and resources"
+msgstr "Մուտք գործելու խմբի գործիքներ և ռեսուրսներ"
+
+msgid "%s members"
+msgstr "%s անդամներ"
+
+msgid "View certificate (HTML)"
+msgstr "Նայել վկայականը (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Սրա գրադարանին կապել հմտություն"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Կառավարել վկայականների և հմտությունների կապը յուրաքանչյուր գրադարանի համար"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Խնդրում ենք ընտրել կոնկրետ insignի տրամադրում ներբեռնելու համար"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM-ը չի ակտիվացված:"
+
+msgid "Invalid token."
+msgstr "Անվավեր token:"
+
+msgid "Schema not supported."
+msgstr "Շեման չի աջակցվում:"
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Անվավեր շեմաներ PATCH գործողության համար:"
+
+msgid "Missing required \"Operations\" array."
+msgstr "Բացակայում է պահանջվող «Operations» զանգվածը:"
+
+msgid "The '%s' operation is not supported."
+msgstr "'%s' գործողությունը չի աջակցվում:"
+
+msgid "Drupal user ID"
+msgstr "Drupal օգտատիրոջ ID"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Ոչ մի տերմին չի համապատասխանում որոնմանը՝ %s"
 

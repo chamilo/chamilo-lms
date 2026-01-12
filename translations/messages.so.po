@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Foomilada tusaale: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Foomulaha tusaalaha: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -31068,8 +31068,8 @@ msgstr "Ku dar faallo"
 msgid "Write your comment here..."
 msgstr "Faalladaada halkan qor..."
 
-msgid "%d selected"
-msgstr "%d la doortay"
+msgid "%s selected"
+msgstr "%s la doortay"
 
 msgid "Search by title or path..."
 msgstr "Raadi ciwaanka ama dariiqa..."
@@ -31077,8 +31077,8 @@ msgstr "Raadi ciwaanka ama dariiqa..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Maamule backup-yada, soo-celinta, koobiyada, dib-u-warshadaynta iyo tirtirka xogta koorsada."
 
-msgid "%d comment(s)"
-msgstr "%d faallo(oyin)"
+msgid "%s comment(s)"
+msgstr "%s faallo(oyin)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Khaldar ku cusboonaysiinta qaybta saddexaad. Fadlan hubi xogta."
@@ -32135,4 +32135,175 @@ msgstr "Waan ku guuldareystay abuurista kaydinta Moodle."
 
 msgid "More actions"
 msgstr "Fale kale oo badan"
+
+msgid "Write something"
+msgstr "Qor wax"
+
+msgid "Friends of %s"
+msgstr "Saaxiibada %s"
+
+msgid "Error loading learning paths."
+msgstr "Khalad la xidhiidhay rarka waxbarashada."
+
+msgid "You don't have any learning path."
+msgstr "Ma haysatid waxbarasho kasta."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Abuur waxbarashadaada ugu horreysa si aad u bilowdo habaynta waxyaabaha koorsada."
+
+msgid "Could not save the new category order."
+msgstr "Ma xajin karin nidaamka qaybta cusub."
+
+msgid "Could not save the new order."
+msgstr "Ma xajin karin nidaamka cusub."
+
+msgid "Assignment"
+msgstr "Shaqo"
+
+msgid "Allowed file formats: %s"
+msgstr "Noocyada faylalka la oggol yahay: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Nooca faylka lama oggol. Kordhinta la oggol yahay: %s"
+
+msgid "Folder name"
+msgstr "Magaca faylalka"
+
+msgid "Rename folder"
+msgstr "Magac-badee faylalka"
+
+msgid "New name"
+msgstr "Magac cusub"
+
+msgid "Choose an action"
+msgstr "Dooro ficil"
+
+msgid "New version"
+msgstr "Nooca cusub"
+
+msgid "Change title to selected filename"
+msgstr "Beddel magaca faylka la doortay"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Waxaad bedeli kartaa faylka, u wareejin kartaa faylal kale, ama labadaba."
+
+msgid "Move %s"
+msgstr "U wareeji %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Waxaa la muujiyaa oo keliya faylalka aan xididka ahayn si looga fogaado in alaabta lagu dhaafiyo xididka."
+
+msgid "No feedback yet."
+msgstr "Ma jiro jawaab-celin weli."
+
+msgid "Upload first, organize later"
+msgstr "Sare gali marka hore, habayn dambe"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Jiido & daadiso ama baadho si aad faylal uga dartid"
+
+msgid "Social wall..."
+msgstr "Darbi bulsho..."
+
+msgid "Wall of %s"
+msgstr "Darbi %s"
+
+msgid "Version currently loaded"
+msgstr "Nooca hadda la raro"
+
+msgid "Completion"
+msgstr "Dhammaystir"
+
+msgid "Quick navigation"
+msgstr "Socod degdeg ah"
+
+msgid "Filled"
+msgstr "La buuxiyay"
+
+msgid "Terms sections"
+msgstr "Qaybaha shuruudaha"
+
+msgid "Open a section to edit its content."
+msgstr "Furo qaybta si aad u tafatirto nuxwadeeda."
+
+msgid "Open this section to load the editor."
+msgstr "Furo qaybtan si aad u raro tifaftiraha."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Aagga khatarta ah: tirtirka URL-ga gelitaanka waa mid joogto ah."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Ged URL-ga buuxda si aad u xaqiijiso. URL-ka iyo xiriirkiisa si joogto ah ayaa loo tirtiri doonaa."
+
+msgid "Unable to load the badge's image."
+msgstr "Ma raro karin sawirka calaamadda."
+
+msgid "Invalid role selection"
+msgstr "Doorashada doorashada ee aan sax ahayn"
+
+msgid "Select relation type first to enable user management."
+msgstr "Dooro nooca xiriirka marka hore si aad u shaqeyso maamulka isticmaale."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Su'aashani ma leh macnaha koorsada. Hordhac ma jiro."
+
+msgid "Unknown test"
+msgstr "Imtixaan aan la aqoon"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Tirtirka lama oggol yahay iyada oo aan lahayn macnaha koorsada."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Tirtirka wuu ku fashilmay: maqnaanshaha macnaha koorsada ama su'aashani waxay ka tirsan tahay imtixaan. Ka tafatir gudaha imtixaanka ama shaandheyn su'aalaha agoonta kaliya."
+
+msgid "Delete failed: question not found."
+msgstr "Tirtirka wuu ku fashilmay: su'aasha lama helin."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Tirtirka wuu ku fashilmay: su'aashani wali waxay tixraacaysaa agab kale."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Su'aashani waxay ka tirsan tahay imtixaan. Ka tafatir gudaha imtixaanka ama shaandheyn su'aalaha agoonta kaliya."
+
+msgid "Access the group tools and resources"
+msgstr "Galgalaadka qalabka iyo agabka kooxda"
+
+msgid "%s members"
+msgstr "%s xubnood"
+
+msgid "View certificate (HTML)"
+msgstr "Eeg shahaadada (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Ku xidh xirfadda buugada qiimeynta"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Maamulo xiriirka u dhexeeya shahaadooyinka iyo xirfadaha buug kasta oo qiimeyn ah"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Fadlan dooro calaamad gaar ah si aad u soo dejiso"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM lama shaqayn."
+
+msgid "Invalid token."
+msgstr "Token aan sax ahayn."
+
+msgid "Schema not supported."
+msgstr "Schema lama taageerin."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Schemas aan sax ahayn ee hawlgal PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Ka maqan yahay loo baahan yahay \"Hawlgalada\" array."
+
+msgid "The '%s' operation is not supported."
+msgstr "Hawlgal '%s' lama taageerin."
+
+msgid "Drupal user ID"
+msgstr "ID isticmaale Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Ma jiraan ereyo kuwaas oo u dhigma raadinta: %s"
 

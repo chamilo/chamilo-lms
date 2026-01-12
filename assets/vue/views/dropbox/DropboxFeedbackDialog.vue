@@ -51,7 +51,7 @@
 
           <div v-if="!feedback.length" class="flex items-center gap-2 text-gray-500">
             <i :class="chamiloIconToClass['comment']"></i>
-            <span>{{ t('No feedback yet.') }}</span>
+            <span>{{ t("No feedback yet.") }}</span>
           </div>
         </template>
       </div>

@@ -16,8 +16,7 @@
       v-if="allowedExtensions.length > 0"
       class="text-gray-600"
     >
-      <span class="font-semibold">{{ t('Allowed file formats:') }}</span>
-      {{ allowedExtensions.map(ext => '.' + ext).join(', ') }}
+      <span class="font-semibold">{{ t("Allowed file formats: {0}", [allowedExtensions.map(ext => '.' + ext).join(', ')]) }}</span>
     </p>
 
     <div
@@ -187,8 +186,7 @@ uppy.on("file-added", (file) => {
   if (!isFileExtensionAllowed(file.name)) {
     uppy.removeFile(file.id)
     showErrorNotification(
-      t('File type not allowed. Allowed extensions') + ': ' +
-      allowedExtensions.value.map(ext => '.' + ext).join(', ')
+      t("File type not allowed. Allowed extensions: {0}", [allowedExtensions.value.map(ext => '.' + ext).join(', ')])
     )
     return
   }

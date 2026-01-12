@@ -21,7 +21,7 @@ class SchemaItemController extends AbstractScimController
     public function __invoke(string $schemaId): JsonResponse
     {
         if ('urn:ietf:params:scim:schemas:core:2.0:User' !== $schemaId) {
-            throw new ScimException($this->translator->trans('Schema not supported'));
+            throw new ScimException($this->translator->trans('Schema not supported.'));
         }
 
         $userSchema = $this->getUserCoreSchema();

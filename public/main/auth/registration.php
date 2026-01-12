@@ -1128,7 +1128,7 @@ if ('approval' === api_get_setting('allow_registration')) {
 
 // if openid was not found
 if (!empty($_GET['openid_msg']) && 'idnotfound' == $_GET['openid_msg']) {
-    $content .= Display::return_message(get_lang('This OpenID could not be found in our database. Please register for a new account. If you already an account with us, please edit your profile inside your account to add this OpenID'));
+    $content .= Display::return_message(get_lang('This OpenID could not be found in our database. Please register for a new account. If you have already an account with us, please edit your profile inside your account to add this OpenID'));
 }
 
 if ($extraConditions) {

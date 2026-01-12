@@ -30514,13 +30514,13 @@ msgid "ex. root"
 msgstr "наприклад, root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "CREATE TABLE роботи"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ALTER TABLE роботи"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "DROP COLUMN роботи"
 
 msgid "Theme selected as current"
 msgstr "Тему обрано як поточну"
@@ -31068,8 +31068,8 @@ msgstr "Додати коментар"
 msgid "Write your comment here..."
 msgstr "Напишіть свій коментар тут..."
 
-msgid "%d selected"
-msgstr "%d вибрано"
+msgid "%s selected"
+msgstr "%s вибрано"
 
 msgid "Search by title or path..."
 msgstr "Пошук за заголовком або шляхом..."
@@ -31077,8 +31077,8 @@ msgstr "Пошук за заголовком або шляхом..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Керувати резервними копіями, відновленням, копіюванням, кошиком і видаленням даних курсу."
 
-msgid "%d comment(s)"
-msgstr "%d коментар(ів)"
+msgid "%s comment(s)"
+msgstr "%s коментар(ів)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Помилка оновлення сторонньої системи. Будь ласка, перевірте дані."
@@ -32135,4 +32135,175 @@ msgstr "Не вдалося створити резервну копію Moodle.
 
 msgid "More actions"
 msgstr "Більше дій"
+
+msgid "Write something"
+msgstr "Напишіть щось"
+
+msgid "Friends of %s"
+msgstr "Друзі %s"
+
+msgid "Error loading learning paths."
+msgstr "Помилка завантаження навчальних шляхів."
+
+msgid "You don't have any learning path."
+msgstr "У вас немає жодного навчального шляху."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Створіть свій перший навчальний шлях, щоб почати організовувати вміст курсу."
+
+msgid "Could not save the new category order."
+msgstr "Не вдалося зберегти новий порядок категорій."
+
+msgid "Could not save the new order."
+msgstr "Не вдалося зберегти новий порядок."
+
+msgid "Assignment"
+msgstr "Завдання"
+
+msgid "Allowed file formats: %s"
+msgstr "Дозволені формати файлів: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Тип файлу не дозволено. Дозволені розширення: %s"
+
+msgid "Folder name"
+msgstr "Назва папки"
+
+msgid "Rename folder"
+msgstr "Перейменувати папку"
+
+msgid "New name"
+msgstr "Нова назва"
+
+msgid "Choose an action"
+msgstr "Оберіть дію"
+
+msgid "New version"
+msgstr "Нова версія"
+
+msgid "Change title to selected filename"
+msgstr "Змінити назву на вибране ім'я файлу"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Ви можете замінити файл, перемістити його до іншої папки або й те, й інше."
+
+msgid "Move %s"
+msgstr "Перемістити %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Показуються лише непервинні папки, щоб уникнути залишення елементів у корені."
+
+msgid "No feedback yet."
+msgstr "Ще немає відгуків."
+
+msgid "Upload first, organize later"
+msgstr "Спочатку завантажте, потім організуйте"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Перетягніть або перегляньте для додавання файлів"
+
+msgid "Social wall..."
+msgstr "Соціальна стіна..."
+
+msgid "Wall of %s"
+msgstr "Стіна %s"
+
+msgid "Version currently loaded"
+msgstr "Поточна завантажена версія"
+
+msgid "Completion"
+msgstr "Завершення"
+
+msgid "Quick navigation"
+msgstr "Швидка навігація"
+
+msgid "Filled"
+msgstr "Заповнено"
+
+msgid "Terms sections"
+msgstr "Розділи умов"
+
+msgid "Open a section to edit its content."
+msgstr "Відкрийте розділ, щоб редагувати його вміст."
+
+msgid "Open this section to load the editor."
+msgstr "Відкрийте цей розділ, щоб завантажити редактор."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Зона небезпеки: видалення URL доступу є незворотним."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Введіть повний URL для підтвердження. URL та його зв'язки будуть назавжди видалені."
+
+msgid "Unable to load the badge's image."
+msgstr "Не вдалося завантажити зображення значка."
+
+msgid "Invalid role selection"
+msgstr "Невірний вибір ролі"
+
+msgid "Select relation type first to enable user management."
+msgstr "Спочатку виберіть тип зв'язку, щоб увімкнути керування користувачами."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "У цього запитання немає контексту курсу. Попередній перегляд недоступний."
+
+msgid "Unknown test"
+msgstr "Невідомий тест"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Видалення не дозволено без контексту курсу."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Помилка видалення: відсутній контекст курсу або валідний ID запитання.Це запитання належить тесту. Редагуйте його зсередини тесту або фільтруйте лише сирітські запитання."
+
+msgid "Delete failed: question not found."
+msgstr "Помилка видалення: запитання не знайдено."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Помилка видалення: це запитання все ще посилається іншими ресурсами."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Це запитання належить тесту. Редагуйте його зсередини тесту або фільтруйте лише сирітські запитання."
+
+msgid "Access the group tools and resources"
+msgstr "Доступ до інструментів та ресурсів групи"
+
+msgid "%s members"
+msgstr "%s учасників"
+
+msgid "View certificate (HTML)"
+msgstr "Переглянути сертифікат (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Прив'язати навичку до цього журналу оцінок"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Керувати зв'язком між сертифікатами та навичками для кожного журналу оцінок"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Будь ласка, виберіть конкретну видачу значка для завантаження"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM не увімкнено."
+
+msgid "Invalid token."
+msgstr "Невірний токен."
+
+msgid "Schema not supported."
+msgstr "Схема не підтримується."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Невірні схеми для операції PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Відсутній обов'язковий масив \"Operations\"."
+
+msgid "The '%s' operation is not supported."
+msgstr "Операція '%s' не підтримується."
+
+msgid "Drupal user ID"
+msgstr "ID користувача Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Немає термінів, що відповідають пошуку: %s"
 

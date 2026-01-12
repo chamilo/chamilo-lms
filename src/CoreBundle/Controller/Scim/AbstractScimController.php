@@ -56,13 +56,13 @@ abstract class AbstractScimController extends AbstractController
     protected function authenticateRequest(Request $request): void
     {
         if (!$this->scimConfig['enabled']) {
-            throw new AccessDeniedHttpException($this->translator->trans('SCIM is not enabled'));
+            throw new AccessDeniedHttpException($this->translator->trans('SCIM is not enabled.'));
         }
 
         $authHeader = $request->headers->get('Authorization');
 
         $invalidTokenException = new ScimException(
-            $this->translator->trans('Invalid Token'),
+            $this->translator->trans('Invalid token.'),
             Response::HTTP_UNAUTHORIZED
         );
 

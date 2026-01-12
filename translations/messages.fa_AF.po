@@ -31068,8 +31068,8 @@ msgstr "افزودن نظر"
 msgid "Write your comment here..."
 msgstr "نظر خود را اینجا بنویسید..."
 
-msgid "%d selected"
-msgstr "%d انتخاب شده"
+msgid "%s selected"
+msgstr "%s انتخاب شده"
 
 msgid "Search by title or path..."
 msgstr "جستجو بر اساس عنوان یا مسیر..."
@@ -31077,8 +31077,8 @@ msgstr "جستجو بر اساس عنوان یا مسیر..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "مدیریت پشتیبان‌گیری، بازیابی، کپی، بازیافت و حذف داده‌های درس."
 
-msgid "%d comment(s)"
-msgstr "%d نظر"
+msgid "%s comment(s)"
+msgstr "%s نظر"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "خطا در به‌روزرسانی طرف سوم. لطفاً داده‌ها را بررسی کنید."
@@ -32135,4 +32135,175 @@ msgstr "ایجاد پشتیبان Moodle ناموفق بود."
 
 msgid "More actions"
 msgstr "عملیات بیشتر"
+
+msgid "Write something"
+msgstr "چیزی بنویسید"
+
+msgid "Friends of %s"
+msgstr "دوستان %s"
+
+msgid "Error loading learning paths."
+msgstr "خطا در بارگیری مسیرهای یادگیری."
+
+msgid "You don't have any learning path."
+msgstr "هیچ مسیر یادگیری ندارید."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "اولین مسیر یادگیری خود را بسازید تا محتوای دوره را سازماندهی کنید."
+
+msgid "Could not save the new category order."
+msgstr "نمی‌توان ترتیب دسته‌بندی جدید را ذخیره کرد."
+
+msgid "Could not save the new order."
+msgstr "نمی‌توان ترتیب جدید را ذخیره کرد."
+
+msgid "Assignment"
+msgstr "تکلیف"
+
+msgid "Allowed file formats: %s"
+msgstr "فرمت‌های فایل مجاز: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "نوع فایل مجاز نیست. پسوندهای مجاز: %s"
+
+msgid "Folder name"
+msgstr "نام پوشه"
+
+msgid "Rename folder"
+msgstr "تغییر نام پوشه"
+
+msgid "New name"
+msgstr "نام جدید"
+
+msgid "Choose an action"
+msgstr "یک عمل انتخاب کنید"
+
+msgid "New version"
+msgstr "نسخه جدید"
+
+msgid "Change title to selected filename"
+msgstr "تغییر عنوان به نام فایل انتخاب‌شده"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "می‌توانید فایل را جایگزین کنید، آن را به پوشه دیگری منتقل کنید، یا هر دو."
+
+msgid "Move %s"
+msgstr "انتقال %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "فقط پوشه‌های غیرریشه نمایش داده می‌شوند تا از باقی ماندن اقلام در ریشه جلوگیری شود."
+
+msgid "No feedback yet."
+msgstr "هنوز بازخوردی وجود ندارد."
+
+msgid "Upload first, organize later"
+msgstr "ابتدا بارگیری کنید، بعداً سازماندهی کنید"
+
+msgid "Drag & drop or browse to add files"
+msgstr "فایل‌ها را بکشید و رها کنید یا مرور کنید"
+
+msgid "Social wall..."
+msgstr "دیوار اجتماعی..."
+
+msgid "Wall of %s"
+msgstr "دیوار %s"
+
+msgid "Version currently loaded"
+msgstr "نسخه بارگیری‌شده فعلی"
+
+msgid "Completion"
+msgstr "تکمیل"
+
+msgid "Quick navigation"
+msgstr "ناوبری سریع"
+
+msgid "Filled"
+msgstr "پر شده"
+
+msgid "Terms sections"
+msgstr "بخش‌های شرایط"
+
+msgid "Open a section to edit its content."
+msgstr "یک بخش را باز کنید تا محتوای آن را ویرایش کنید."
+
+msgid "Open this section to load the editor."
+msgstr "این بخش را باز کنید تا ویرایشگر بارگیری شود."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "منطقه خطر: حذف URL دسترسی دائمی است."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "URL کامل را برای تأیید تایپ کنید. URL و روابط آن به طور دائمی حذف خواهند شد."
+
+msgid "Unable to load the badge's image."
+msgstr "نمی‌توان تصویر نشان را بارگیری کرد."
+
+msgid "Invalid role selection"
+msgstr "انتخاب نقش نامعتبر"
+
+msgid "Select relation type first to enable user management."
+msgstr "ابتدا نوع رابطه را انتخاب کنید تا مدیریت کاربر فعال شود."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "این سؤال زمینه درسی ندارد. پیش‌نمایش در دسترس نیست."
+
+msgid "Unknown test"
+msgstr "آزمون ناشناخته"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "حذف بدون زمینه درسی مجاز نیست."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "حذف ناموفق: زمینه درسی مفقود یا شناسه سؤال معتبر نیست.این سؤال متعلق به یک آزمون است. آن را از داخل آزمون ویرایش کنید یا فقط برای سؤالات یتیم فیلتر کنید."
+
+msgid "Delete failed: question not found."
+msgstr "حذف ناموفق: سؤال یافت نشد."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "حذف ناموفق: این سؤال همچنان توسط منابع دیگر ارجاع داده شده است."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "این سؤال متعلق به یک آزمون است. آن را از داخل آزمون ویرایش کنید یا فقط سؤالات یتیم را فیلتر کنید."
+
+msgid "Access the group tools and resources"
+msgstr "دسترسی به ابزارها و منابع گروه"
+
+msgid "%s members"
+msgstr "%s عضو"
+
+msgid "View certificate (HTML)"
+msgstr "مشاهده گواهینامه (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "پیوند یک مهارت به این دفتر نمرات"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "مدیریت پیوند بین گواهینامه‌ها و مهارت‌ها برای هر دفتر نمرات"
+
+msgid "Please select a specific badge issue to download"
+msgstr "لطفاً یک صدور نشان خاص برای دانلود انتخاب کنید"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM فعال نیست."
+
+msgid "Invalid token."
+msgstr "توکن نامعتبر."
+
+msgid "Schema not supported."
+msgstr "طرح‌واره پشتیبانی نمی‌شود."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "طرح‌واره‌های نامعتبر برای عملیات PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "آرایه الزامی «Operations» موجود نیست."
+
+msgid "The '%s' operation is not supported."
+msgstr "عملیات «%s» پشتیبانی نمی‌شود."
+
+msgid "Drupal user ID"
+msgstr "شناسه کاربر دروپال"
+
+msgid "There are no terms that match the search: %s"
+msgstr "هیچ اصطلاحی با جستجو مطابقت ندارد: %s"
 

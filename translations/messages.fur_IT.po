@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:dirit d'autor,, no:senza dirit d'autor"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Cartelle,, application/msword:MsWord,, application/octet-stream:Flui octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:esercizi,,      simulation:simulazion,,      questionnaire:cuestionari,,      diagram:diagrami,,      figure:figure,,      graph:graf,,      index:indis,,      slide:diapositivis,,      table:tabile,,      narrative text:test narativ,,      exam:sîs,,      experiment:esperiments,,      problem statement:enunzi de problem,,      self assessment:auto valutazion,,      lecture:lecion"
@@ -31068,8 +31068,8 @@ msgstr "Zontâ comentari"
 msgid "Write your comment here..."
 msgstr "Scrivî il to comentari chi..."
 
-msgid "%d selected"
-msgstr "%d selezionâts"
+msgid "%s selected"
+msgstr "%s selezionâts"
 
 msgid "Search by title or path..."
 msgstr "Kercjâ par titol o percors..."
@@ -31077,8 +31077,8 @@ msgstr "Kercjâ par titol o percors..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Gjestî backup, restaurâ, copî, reciclar e eliminar dâts dal cors."
 
-msgid "%d comment(s)"
-msgstr "%d comentari(s)"
+msgid "%s comment(s)"
+msgstr "%s comentari(s)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Erôr nel agiornâ il terz part. Verificâ i dâts."
@@ -32135,4 +32135,175 @@ msgstr "Impuità a crear il backup Moodle."
 
 msgid "More actions"
 msgstr "Altre azions"
+
+msgid "Write something"
+msgstr "Scrivi cualche robe"
+
+msgid "Friends of %s"
+msgstr "Amics di %s"
+
+msgid "Error loading learning paths."
+msgstr "Erôr nel cariî i percors di aprument."
+
+msgid "You don't have any learning path."
+msgstr "No âs gnul percors di aprument."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Crea il primi to percors di aprument par inizî a organizâ il contenut dal curs."
+
+msgid "Could not save the new category order."
+msgstr "No si pues salvâ l'ordin novelle des categorîs."
+
+msgid "Could not save the new order."
+msgstr "No si pues salvâ l'ordin novelle."
+
+msgid "Assignment"
+msgstr "Compit"
+
+msgid "Allowed file formats: %s"
+msgstr "Formâts di file permetûts: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Gjener di file no permitût. Estensions permetûs: %s"
+
+msgid "Folder name"
+msgstr "Nume da cartelle"
+
+msgid "Rename folder"
+msgstr "Renome cartelle"
+
+msgid "New name"
+msgstr "Nume nuif"
+
+msgid "Choose an action"
+msgstr "Sceât un aczion"
+
+msgid "New version"
+msgstr "Version nuive"
+
+msgid "Change title to selected filename"
+msgstr "Cambie titol al num dal file selezionât"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Tu puest displaciâ il file, muêvilu in un'altre cartelle o dut doi."
+
+msgid "Move %s"
+msgstr "Muêf %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Sùment lis cartelis no-raz sint visibis par evitiâ di lâsi elementis in raz."
+
+msgid "No feedback yet."
+msgstr "Nissun feedback ancó."
+
+msgid "Upload first, organize later"
+msgstr "Cjarie prime, organizâ dopo"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Trassion e lassâ o sfuê per zontâ files"
+
+msgid "Social wall..."
+msgstr "Mur social..."
+
+msgid "Wall of %s"
+msgstr "Mur di %s"
+
+msgid "Version currently loaded"
+msgstr "Version corint caridie"
+
+msgid "Completion"
+msgstr "Completude"
+
+msgid "Quick navigation"
+msgstr "Navigazion velope"
+
+msgid "Filled"
+msgstr "Cjampe"
+
+msgid "Terms sections"
+msgstr "Sezions dai termins"
+
+msgid "Open a section to edit its content."
+msgstr "Vierç une sezion par modificar sô contignû."
+
+msgid "Open this section to load the editor."
+msgstr "Vierç cheste sezion par cjarî l'editor."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Zone pericolose: eliminar un URL di acès e permanint."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Tipe il URL complet par conferme. Il URL e sie relazions a saran eliminâts permanentement."
+
+msgid "Unable to load the badge's image."
+msgstr "Impussibil cjarî l'imajine dal badge."
+
+msgid "Invalid role selection"
+msgstr "Seletzion di ruol no valide"
+
+msgid "Select relation type first to enable user management."
+msgstr "Seletç il tip di relazion prime par ativâ la gestione des utents."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Cheste domandi n'ave nu contest cors. La anteprime no è disponible."
+
+msgid "Unknown test"
+msgstr "Test indetermina"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "L'eliminazion no è permetude senz'un contest cors."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Eliminazion falîe: manca contest cors o inCheste domandi apartene a un test. Modifichila de dantorn dal test o filtrâ par domandis orfanis sols.id domandi valide."
+
+msgid "Delete failed: question not found."
+msgstr "Eliminazion falîe: domandi no trovade."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Eliminazion falîe: cheste domandi è ancó riferîe da altris ressoris."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Cheste domandi apartene a un test. Modifichila de dantorn dal test o filtrâ par domandis orfanis sols."
+
+msgid "Access the group tools and resources"
+msgstr "Acessâ lis utensilis e lis ressoris dal grup"
+
+msgid "%s members"
+msgstr "%s mints"
+
+msgid "View certificate (HTML)"
+msgstr "Vê il certificât (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Jonte une cumpetence a chest libri di valutazions"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Gjestî il leam fra certificâts e cumpetencis par ogni libri di valutazions"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Seletç un emision specifeche di badge par discjamparie"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM no è ativât."
+
+msgid "Invalid token."
+msgstr "Token no valide."
+
+msgid "Schema not supported."
+msgstr "Schema no suportât."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Schemis no validis par l'operazion PATCH."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Mancje l'array \"Operations\" obligatori."
+
+msgid "The '%s' operation is not supported."
+msgstr "L'operazion '%s' no è suportade."
+
+msgid "Drupal user ID"
+msgstr "ID utent Drupal"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Nons i è gnun termin che corisponde a la recerca: %s"
 

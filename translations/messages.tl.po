@@ -19978,7 +19978,7 @@ msgid "Hide Learning Path PDF export"
 msgstr "Itago ang Learning Path PDF export"
 
 msgid "Hide the Learning Path PDF Export icon from the Learning Paths list"
-msgstr "Itago ang icon ng PDF Export ng Learning Path mula sa listahan ng Learning Paths"
+msgstr "Itago ang Learning Path PDF Export icon mula sa listahan ng Learning Paths"
 
 msgid "Default coach access days before session"
 msgstr "Default coach access days bago ang session"
@@ -22201,7 +22201,7 @@ msgid "The Google Translate API used by this feature returned and empty answer. 
 msgstr "Ang Google Translate API na ginagamit ng tampok na ito ay nagbalik ng walang laman na sagot. Mangyaring suriin o tanungin kung tama ang setting ng translate_app_google_key, o magpolitika sa isang administrador upang gawin ito."
 
 msgid "Link me to student"
-msgstr "Link me to student"
+msgstr "I-link mo ako sa mag-aaral"
 
 msgid "Please select the student you want to request a link to, so the administrators can review and approve your request. Please note that proper administrative procedures should have been followed first to ensure the admin can legally accept your request."
 msgstr "Pakipiliin ang mag-aaral na nais mong mag-request ng link, upang maaaring suriin at aprubahan ng mga administrador ang iyong kahilingan. Tandaan na dapat na sinusunod muna ang tamang administrative procedures upang masiguro na legal na matanggap ng admin ang iyong kahilingan."
@@ -26587,7 +26587,7 @@ msgid "LDAP connection configuration"
 msgstr "Kombigurasyon ng koneksyon ng LDAP"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Array na nagdedepina ng host at port para sa LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Array na tumutukoy sa host at port para sa LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Itakda ang expiration date sa unang login"
@@ -26599,7 +26599,7 @@ msgid "Selective display of roles"
 msgstr "Piliin ang pagpapakita ng mga role"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "Isang array ng role => true/false na nagdedepina kung ang role na iyon ay dapat ipakita o itago.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "Isang array ng role => true/false na tumutukoy kung ang role na iyon ay dapat ipakita o itago.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Mga opsyon sa pagpapakita ng mga role"
@@ -27049,7 +27049,7 @@ msgid "Show all learner publications (from base course and from all sessions) in
 msgstr "Ipakita ang lahat ng learner publications (mula sa base course at mula sa lahat ng sessions) sa work/pending.php page ng base course."
 
 msgid "Session admin can access batch user import, update and export"
-msgstr "Maaaring ma-access ng Session admin ang batch user import, update at export"
+msgstr "Session admin ay makakapunta sa batch user import, update at export"
 
 msgid "Hide session chart in My progress"
 msgstr "Itago ang session chart sa My progress"
@@ -31068,8 +31068,8 @@ msgstr "Magdagdag ng komento"
 msgid "Write your comment here..."
 msgstr "Isulat ang iyong komento dito..."
 
-msgid "%d selected"
-msgstr "%d napili"
+msgid "%s selected"
+msgstr "%s napili"
 
 msgid "Search by title or path..."
 msgstr "Maghanap ayon sa pamagat o path..."
@@ -31077,8 +31077,8 @@ msgstr "Maghanap ayon sa pamagat o path..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Pamahalaan ang mga backup, i-restore, kopyahin, i-recycle at tanggalin ang data ng kurso."
 
-msgid "%d comment(s)"
-msgstr "%d komento(s)"
+msgid "%s comment(s)"
+msgstr "%s komento(s)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Error sa pag-update ng third party. Mangyaring suriin ang data."
@@ -32101,7 +32101,7 @@ msgid "Moodle version"
 msgstr "Bersyon ng Moodle"
 
 msgid "Admin ID"
-msgstr "Admin ID"
+msgstr "ID ng Admin"
 
 msgid "Internal integer user id"
 msgstr "Panloob na integer ID ng user"
@@ -32135,4 +32135,175 @@ msgstr "Nabigo ang paglikha ng Moodle backup."
 
 msgid "More actions"
 msgstr "Higit pang mga aksyon"
+
+msgid "Write something"
+msgstr "Magsulat ng something"
+
+msgid "Friends of %s"
+msgstr "Mga kaibigan ni %s"
+
+msgid "Error loading learning paths."
+msgstr "Error sa pag-load ng mga landas ng pag-aaral."
+
+msgid "You don't have any learning path."
+msgstr "Wala kang anumang landas ng pag-aaral."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Lumikha ng iyong unang landas ng pag-aaral upang simulan ang pag-oorganisa ng nilalamang kurso."
+
+msgid "Could not save the new category order."
+msgstr "Hindi ma-save ang bagong kaayusan ng kategorya."
+
+msgid "Could not save the new order."
+msgstr "Hindi ma-save ang bagong kaayusan."
+
+msgid "Assignment"
+msgstr "Assignment"
+
+msgid "Allowed file formats: %s"
+msgstr "Pinapayagang mga format ng file: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Hindi pinapayagang uri ng file. Pinapayagang mga extension: %s"
+
+msgid "Folder name"
+msgstr "Pangalan ng folder"
+
+msgid "Rename folder"
+msgstr "Palitan ang pangalan ng folder"
+
+msgid "New name"
+msgstr "Bagong pangalan"
+
+msgid "Choose an action"
+msgstr "Piliin ang aksyon"
+
+msgid "New version"
+msgstr "Bagong bersyon"
+
+msgid "Change title to selected filename"
+msgstr "Palitan ang pamagat sa napiling pangalan ng file"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Maaari mong palitan ang file, ilipat ito sa ibang folder, o pareho."
+
+msgid "Move %s"
+msgstr "Ilipat ang %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Ipapakita lamang ang mga hindi-root folder upang maiwasan ang pag-iwan ng mga item sa root."
+
+msgid "No feedback yet."
+msgstr "Walang feedback pa."
+
+msgid "Upload first, organize later"
+msgstr "I-upload muna, ayusin pagkatapos"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Drag & drop o mag-browse upang magdagdag ng mga file"
+
+msgid "Social wall..."
+msgstr "Social wall..."
+
+msgid "Wall of %s"
+msgstr "Wall ni %s"
+
+msgid "Version currently loaded"
+msgstr "Kasalukuyang noload na bersyon"
+
+msgid "Completion"
+msgstr "Pagkumpleto"
+
+msgid "Quick navigation"
+msgstr "Mabilis na navigation"
+
+msgid "Filled"
+msgstr "Napunan"
+
+msgid "Terms sections"
+msgstr "Mga seksyon ng mga tuntunin"
+
+msgid "Open a section to edit its content."
+msgstr "Buksan ang seksyon upang i-edit ang nilalaman nito."
+
+msgid "Open this section to load the editor."
+msgstr "Buksan ang seksyong ito upang i-load ang editor."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Danger zone: ang pag-delete ng access URL ay permanente."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "I-type ang buong URL upang kumpirmahin. Ang URL at mga relasyon nito ay mawawala nang permanente."
+
+msgid "Unable to load the badge's image."
+msgstr "Hindi ma-load ang larawan ng badge."
+
+msgid "Invalid role selection"
+msgstr "Hindi wasto ang pagpili ng role"
+
+msgid "Select relation type first to enable user management."
+msgstr "Piliin muna ang uri ng relasyon upang ma-enable ang pamamahala ng user."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Walang konteksto ng kurso ang tanong na ito. Ang preview ay hindi available."
+
+msgid "Unknown test"
+msgstr "Hindi kilalang pagsusulit"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Hindi pinapayagan ang pag-delete nang walang konteksto ng kurso."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Nabigo ang pag-delete: nawawalang konteksto ng kurso o saTanong na ito ay kabilang sa isang pagsusulit. I-edit ito mula sa loob ng pagsusulit o i-filter lamang ang mga ulilang tanong.valid na ID ng tanong."
+
+msgid "Delete failed: question not found."
+msgstr "Nabigo ang pag-delete: hindi natagpuan ang tanong."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Nabigo ang pag-delete: ang tanong na ito ay binabanggit pa rin ng iba pang mga resource."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Kabilang ang tanong na ito sa isang pagsusulit. I-edit ito mula sa loob ng pagsusulit o i-filter lamang ang mga ulilang tanong."
+
+msgid "Access the group tools and resources"
+msgstr "Aksesuhan ang mga tool at resource ng grupo"
+
+msgid "%s members"
+msgstr "%s mga miyembro"
+
+msgid "View certificate (HTML)"
+msgstr "Tingnan ang sertipiko (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Link ang isang skill sa gradebook na ito"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Pamahalaan ang link sa pagitan ng mga sertipiko at skills para sa bawat gradebook"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Mangyaring piliin ang isang tiyak na badge na inisyu upang i-download"
+
+msgid "SCIM is not enabled."
+msgstr "Hindi naka-aktibo ang SCIM."
+
+msgid "Invalid token."
+msgstr "Hindi wasto ang token."
+
+msgid "Schema not supported."
+msgstr "Hindi sinusuportahan ang schema."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Hindi wasto ang mga schema para sa PATCH operation."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Kakulangan ng kinakailangang \"Operations\" array."
+
+msgid "The '%s' operation is not supported."
+msgstr "Ang '%s' operation ay hindi sinusuportahan."
+
+msgid "Drupal user ID"
+msgstr "Drupal user ID"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Walang mga termino na tumutugma sa paghahanap: %s"
 

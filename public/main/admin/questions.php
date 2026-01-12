@@ -845,7 +845,7 @@ if ($formSent) {
                         ]
                     );
                 } else {
-                    $question->questionData .= '<span class="btn btn--disabled" title="' . api_htmlentities(get_lang('Delete is not available without a course context.')) . '">'
+                    $question->questionData .= '<span class="btn btn--disabled" title="' . api_htmlentities(get_lang('Deletion is not allowed without a course context.')) . '">'
                         . get_lang('Delete') . '</span>';
                 }
 
@@ -973,7 +973,7 @@ switch ($action) {
             $debug = 'test' === api_get_setting('server_type');
             $msg = $debug
                 ? ('Delete failed: ' . $e->getMessage())
-                : get_lang('Delete failed: this question is still referenced by other data.');
+                : get_lang('Delete failed: this question is still referenced by other resources.');
 
             Display::addFlash(Display::return_message($msg, 'warning'));
         }

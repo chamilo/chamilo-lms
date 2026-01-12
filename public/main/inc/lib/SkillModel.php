@@ -2479,7 +2479,7 @@ class SkillModel extends Model
         if (empty($imageContent)) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('Unable to load the badge image.'),
+                    get_lang("Unable to load the badge's image."),
                     'error'
                 )
             );

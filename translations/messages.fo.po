@@ -31068,8 +31068,8 @@ msgstr "Legg við viðmerking"
 msgid "Write your comment here..."
 msgstr "Skriva tín viðmerking her..."
 
-msgid "%d selected"
-msgstr "%d valdir"
+msgid "%s selected"
+msgstr "%s valdir"
 
 msgid "Search by title or path..."
 msgstr "Leita eftir heiti ella slóð..."
@@ -31077,8 +31077,8 @@ msgstr "Leita eftir heiti ella slóð..."
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr "Handhava varðveitingar, endurset, avrita, endurvinna og slett bólkagagn."
 
-msgid "%d comment(s)"
-msgstr "%d viðmerking(ar)"
+msgid "%s comment(s)"
+msgstr "%s viðmerking(ar)"
 
 msgid "Error updating third party. Please verify the data."
 msgstr "Feil at dagføra triðja part. Vinarliga góðtaka teg um dátuna."
@@ -32135,4 +32135,175 @@ msgstr "Miseydnað at stovna Moodle varðveiting."
 
 msgid "More actions"
 msgstr "Meira handlingar"
+
+msgid "Write something"
+msgstr "Skriva nakað"
+
+msgid "Friends of %s"
+msgstr "Vinar av %s"
+
+msgid "Error loading learning paths."
+msgstr "Feil at lesa lærugongdir."
+
+msgid "You don't have any learning path."
+msgstr "Tú hevur ongan lærugong."
+
+msgid "Create your first learning path to start organizing course content."
+msgstr "Stoð fyrsta lærugongin fyri at byrja at skipa námsroyndir."
+
+msgid "Could not save the new category order."
+msgstr "Kundi ikki goyma nýggja bólkaseðuna."
+
+msgid "Could not save the new order."
+msgstr "Kundi ikki goyma nýggja seðuna."
+
+msgid "Assignment"
+msgstr "Verkefni"
+
+msgid "Allowed file formats: %s"
+msgstr "Leymdar fílusnið: %s"
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr "Fílusnið ikki leyft. Leymdar endingar: %s"
+
+msgid "Folder name"
+msgstr "Bólkarnavn"
+
+msgid "Rename folder"
+msgstr "Umnevna bólk"
+
+msgid "New name"
+msgstr "Nýtt navn"
+
+msgid "Choose an action"
+msgstr "Vel ein handling"
+
+msgid "New version"
+msgstr "Nýggj útgáva"
+
+msgid "Change title to selected filename"
+msgstr "Broyt heitið til valda fílunavns"
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr "Tú kanst skifta fílin út, flyta tað til ein annan bólk, ella báðar."
+
+msgid "Move %s"
+msgstr "Flyt %s"
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr "Bert ikki-rotið bólkar verða vísnir fyri at sleppa ikki lutum í rot."
+
+msgid "No feedback yet."
+msgstr "Ongin endurgivan enn."
+
+msgid "Upload first, organize later"
+msgstr "Legg upp fyrst, skipa seinni"
+
+msgid "Drag & drop or browse to add files"
+msgstr "Drag & drop ella blaðsíðu fyri at leggja fílar afturat"
+
+msgid "Social wall..."
+msgstr "Sosial veggur..."
+
+msgid "Wall of %s"
+msgstr "Veggur hjá %s"
+
+msgid "Version currently loaded"
+msgstr "Versjón núverandi innlest"
+
+msgid "Completion"
+msgstr "Liðugt"
+
+msgid "Quick navigation"
+msgstr "Stutt navigatión"
+
+msgid "Filled"
+msgstr "Fyllt"
+
+msgid "Terms sections"
+msgstr "Reglur bólkar"
+
+msgid "Open a section to edit its content."
+msgstr "Opna ein bólk til at broyta innihald hans."
+
+msgid "Open this section to load the editor."
+msgstr "Opna hendan bólkin til at lesa inn ritstjóran."
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr "Hættuvøllur: at sletta einum atgongu-URL er varandi."
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr "Skriva ta fulla URL til at staðfesta. URL-in og tilfar hennara verða varandi slettar."
+
+msgid "Unable to load the badge's image."
+msgstr "Kundi ikki lesa inn mynd merkisins."
+
+msgid "Invalid role selection"
+msgstr "Ógyldig val av roli"
+
+msgid "Select relation type first to enable user management."
+msgstr "Vel sambands slag fyrst til at gerð virknandi brúkarastýring."
+
+msgid "This question has no course context. Preview is not available."
+msgstr "Hendan spurningin hevur ongan bólka samanhang. Forskoðan er ikki tøk."
+
+msgid "Unknown test"
+msgstr "Ókend próving"
+
+msgid "Deletion is not allowed without a course context."
+msgstr "Sletting er ikki loyvd uttan bólka samanhang."
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr "Sletting miseyknað: vantar bólka samanhang ella íHendan spurningur hoyrur til eina próving. Broyt tað frá innvinding próvingar ella sía eftir einguligum spurningum bert.gyldig spurning ID."
+
+msgid "Delete failed: question not found."
+msgstr "Sletting miseyknað: spurningur ikki funnin."
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr "Sletting miseyknað: hendan spurningur verður enn nevnd av øðrum tilfjøldum."
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr "Hendan spurningur hoyrur til eina próving. Broyt tað frá innvinding próvingar ella sía eftir einguligum spurningum bert."
+
+msgid "Access the group tools and resources"
+msgstr "Kom til bólka verkførini og tilfar"
+
+msgid "%s members"
+msgstr "%s limir"
+
+msgid "View certificate (HTML)"
+msgstr "Vís skjal (HTML)"
+
+msgid "Link a skill to this gradebook"
+msgstr "Koyt ein færni til henda eginstiga bók"
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr "Stýr sambandi millum skjal og færni fyri hvørja eginstiga bók"
+
+msgid "Please select a specific badge issue to download"
+msgstr "Veld ein serstaka útgávu av merki til niðurtøku"
+
+msgid "SCIM is not enabled."
+msgstr "SCIM er ikki virkin."
+
+msgid "Invalid token."
+msgstr "Ógyldig teikn."
+
+msgid "Schema not supported."
+msgstr "Skema ikki stuðlað."
+
+msgid "Invalid schemas for PATCH operation."
+msgstr "Ógyldug skemur fyri PATCH virknan."
+
+msgid "Missing required \"Operations\" array."
+msgstr "Vantar kravda \"Operations\" fylking."
+
+msgid "The '%s' operation is not supported."
+msgstr "Virknan '%s' er ikki stuðlað."
+
+msgid "Drupal user ID"
+msgstr "Drupal brúkara ID"
+
+msgid "There are no terms that match the search: %s"
+msgstr "Tað eru ongir tíðarorð sum passa til leitingina: %s"
 

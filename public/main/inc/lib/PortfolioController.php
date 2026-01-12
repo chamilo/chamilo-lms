@@ -590,7 +590,6 @@ class PortfolioController
                         0,
                         false,
                         false,
-                        [],
                         false
                     );
                 }

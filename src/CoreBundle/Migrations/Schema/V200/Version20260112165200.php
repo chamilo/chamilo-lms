@@ -20,7 +20,7 @@ final class Version20260112165200 extends AbstractMigrationChamilo
     {
         $this->addSql("
             INSERT INTO language (original_name, english_name, isocode, available)
-            SELECT 'Español (México)', 'spanish (mexico)', 'es_MX', 0
+            SELECT 'Español (México)', 'spanish (mexico)', 'es_MX', 1
             WHERE NOT EXISTS (
                 SELECT 1 FROM language WHERE isocode = 'es_MX'
             )

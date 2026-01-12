@@ -915,6 +915,10 @@ try {
             );
             $restResponse->setData($data);
             break;
+        case Rest::ADD_SESSION_COURSE_COACHES:
+            $restApi->addSessionCourseCoaches($httpRequest->request);
+            $restResponse->setData([]);
+            break;
         case Rest::UNSUBSCRIBE_USERS_FROM_SESSION:
             $data = $restApi->unsubscribeUsersFromSession($_POST);
             Event::addEvent(

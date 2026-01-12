@@ -129,6 +129,7 @@ class Rest extends WebService
     public const ADD_USERS_SESSION = 'add_users_session';
     public const SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME = 'subscribe_user_to_session_from_username';
     public const SUBSCRIBE_USERS_TO_SESSION = 'subscribe_users_to_session';
+    public const ADD_SESSION_COURSE_COACHES = 'add_session_course_coaches';
     public const UNSUBSCRIBE_USERS_FROM_SESSION = 'unsubscribe_users_from_session';
     public const GET_USERS_SUBSCRIBED_TO_SESSION = 'get_users_subscribed_to_session';
 
@@ -4707,5 +4708,55 @@ class Rest extends WebService
 
         return api_get_self().'?'
             .http_build_query(array_merge($queryParams, $additionalParams));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function addSessionCourseCoaches(ParameterBag $request)
+    {
+        $sessionId = $request->getInt('id_session');
+        $courseId = $request->getInt('course_id');
+
+        $em = Database::getManager();
+        $countSession = $em->getRepository(Session::class)->count(['id' => $sessionId]);
+
+        if (!$countSession) {
+            throw new Exception(get_lang('NoSession'));
+        }
+
+        if (!SessionManager::cantEditSession($sessionId)) {
+            throw new Exception(get_lang('NotAllowed'));
+        }
+
+        $countCourse = $em->getRepository(Course::class)->count(['id' => $courseId]);
+
+        if (!$countCourse) {
+            throw new Exception(get_lang('NoCourse'));
+        }
+
+        $coachesToSubscribe = array_filter(
+            array_map(fn ($coachId) => (int) $coachId, $request->get('coach_id', []))
+        );
+        $subscribedCoaches = SessionManager::getCoachesByCourseSession($sessionId, $courseId);
+        $coachesToRemove = array_diff($subscribedCoaches, $coachesToSubscribe);
+
+        foreach ($coachesToSubscribe as $coachId) {
+            SessionManager::set_coach_to_course_session(
+                $coachId,
+                $sessionId,
+                $courseId
+            );
+        }
+
+        foreach ($coachesToRemove as $coachId) {
+            SessionManager::set_coach_to_course_session($coachId, $sessionId, $courseId, true);
+        }
+
+        Event::addEvent(
+            LOG_WS.self::ADD_SESSION_COURSE_COACHES,
+            'session_id-course_id-coach_ids',
+            (int) $_POST['id_session'].':'.implode(',', $coachesToSubscribe)
+        );
     }
 }

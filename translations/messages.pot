@@ -31053,7 +31053,7 @@ msgstr ""
 msgid "Manage backups, restore, copy, recycle and delete course data."
 msgstr ""
 
-
+msgid "%d comment(s)"
 msgstr ""
 
 msgid "Error updating third party. Please verify the data."

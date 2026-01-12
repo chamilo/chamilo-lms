@@ -782,11 +782,13 @@ class IndexBlocksController extends BaseController
             'url' => '/documentation/optimization.html',
             'label' => $this->translator->trans('Optimization guide'),
         ];
+        /*
         $items[] = [
             'class' => 'item-extensions',
             'url' => 'https://chamilo.org/extensions',
             'label' => $this->translator->trans('Chamilo extensions'),
         ];
+        */
         $items[] = [
             'class' => 'item-providers',
             'url' => 'https://chamilo.org/providers',

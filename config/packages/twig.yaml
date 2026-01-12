@@ -33,4 +33,3 @@ twig:
         plugin_main_bottom:
         flash_messages:
         shuffle_answers:
-        is_allowed_to_edit_helper: '@Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper'

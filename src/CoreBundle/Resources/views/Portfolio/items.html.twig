@@ -52,13 +52,13 @@
                             <a href="{{ baseurl ~ {'action':'delete_item', 'id':item.id}|url_encode }}" class="btn-delete">
                                 {{ 'delete.png'|icon(22, 'Delete'|get_lang) }}
                             </a>
-                        {% elseif is_allowed_to_edit_helper.check() %}
+                        {% elseif is_allowed_to_edit() %}
                             <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}">
                                 {{ 'edit.png'|icon(22, 'Edit'|get_lang) }}
                             </a>
                         {% endif %}
 
-                        {% if is_allowed_to_edit_helper.check() %}
+                        {% if is_allowed_to_edit() %}
                             {% if item.isHighlighted %}
                                 <a href="{{ baseurl ~ {'action':'highlighted', 'id':item.id}|url_encode }}">
                                     {{ 'award_red.png'|icon(22, 'UnmarkAsHighlighted'|get_lang) }}

@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Twig\Extension;
 
 use Chamilo\CoreBundle\Entity\ResourceIllustrationInterface;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Helpers\NameConventionHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
@@ -34,7 +35,8 @@ class ChamiloExtension extends AbstractExtension
         SettingsHelper $helper,
         RouterInterface $router,
         NameConventionHelper $nameConventionHelper,
-        private readonly ThemeHelper $themeHelper
+        private readonly ThemeHelper $themeHelper,
+        private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {
         $this->illustrationRepository = $illustrationRepository;
         $this->helper = $helper;
@@ -76,6 +78,7 @@ class ChamiloExtension extends AbstractExtension
             new TwigFunction('theme_asset_link_tag', $this->getThemeAssetLinkTag(...), ['is_safe' => ['html']]),
             new TwigFunction('theme_asset_base64', $this->getThemeAssetBase64Encoded(...)),
             new TwigFunction('theme_logo', $this->getThemeLogoUrl(...)),
+            new TwigFunction('is_allowed_to_edit', $this->isAllowedToEditHelper->check(...))
         ];
     }
 

@@ -51,16 +51,19 @@
         />
       </div>
 
-      <div class="field login-section__remember-me">
+      <div
+        v-if="isHttps"
+        class="field login-section__remember-me"
+      >
         <ToggleSwitch
           v-model="remember"
-          input-id="binary"
-          name="remember_me"
+          input-id="remember_me"
+          name="_remember_me"
           tabindex="4"
         />
         <label
           v-t="'Remember me'"
-          for="binary"
+          for="remember_me"
         />
       </div>
 
@@ -97,6 +100,7 @@
 
 <script setup>
 const isInIframe = window.self !== window.top
+const isHttps = window.location.protocol === "https:"
 if (isInIframe) {
   try {
     const parentUrl = window.top.location.href
@@ -138,11 +142,11 @@ const remember = ref(false)
 redirectNotAuthenticated()
 
 async function onSubmitLoginForm() {
-  const response = await performLogin({
+  await performLogin({
     login: login.value,
     password: password.value,
     totp: requires2FA.value ? totp.value : null,
-    _remember_me: remember.value,
+    _remember_me: isHttps ? remember.value : false,
     isLoginLdap: ldapAuth.value,
   })
 }

@@ -71,7 +71,7 @@
                         <article>
                             <footer class="fa-lg">
                                 <p>
-                                    {{ 'Comment by %s in %s'|get_lang|format(comment.author.completeName, commentItem.title) }}
+                                    {{ 'Comment by %s in %s'|get_lang|format(comment.resourceNode.creator.fullName, commentItem.title) }}
                                 </p>
                                 <p class="text-muted">
                                     <span class="fa fa-clock-o fa-fw" aria-hidden="true"></span>

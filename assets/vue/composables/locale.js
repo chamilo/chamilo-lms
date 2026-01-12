@@ -57,7 +57,7 @@ export function useLocale() {
     { immediate: true },
   )
 
-  const defaultLanguage = { originalName: "English", isocode: "en" }
+  const defaultLanguage = { originalName: "English", isocode: "en_US" }
 
   /**
    * @type {{originalName: string, isocode: string}[]}

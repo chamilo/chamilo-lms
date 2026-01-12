@@ -43,7 +43,7 @@ class UpdateVueTranslations extends Command
         $dir = $this->parameterBag->get('kernel.project_dir');
 
         $vueLocalePath = $dir.'/assets/locales/';
-        $englishJson = file_get_contents($vueLocalePath.'en.json');
+        $englishJson = file_get_contents($vueLocalePath.'en_US.json');
         $translations = json_decode($englishJson, true);
 
         foreach ($languages as $language) {
@@ -62,7 +62,7 @@ class UpdateVueTranslations extends Command
                     $newLanguage[$variable] = $this->replaceMarkersGettextToVue($translated);
                 }
                 $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT);
-                $fileToSave = $vueLocalePath.'en.json';
+                $fileToSave = $vueLocalePath.'en_US.json';
                 file_put_contents($fileToSave, $newLanguageToString);
 
                 continue;
@@ -118,10 +118,10 @@ class UpdateVueTranslations extends Command
 
                 // Check if translation is still not found and use the base language (English)
                 if ($translated === $variable) {
-                    $translated = $this->translator->trans($variable, [], 'messages', 'en');
+                    $translated = $this->translator->trans($variable, [], 'messages', 'en_US');
                 }
             } else {
-                $translated = $this->translator->trans($variable, [], 'messages', 'en');
+                $translated = $this->translator->trans($variable, [], 'messages', 'en_US');
             }
         }
 

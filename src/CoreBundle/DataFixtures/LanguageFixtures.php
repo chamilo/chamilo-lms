@@ -462,6 +462,14 @@ class LanguageFixtures extends Fixture
                 'sort_by' => 'last_name',
             ],
             [
+                'original_name' => 'Español (México)',
+                'english_name' => 'spanish (mexico)',
+                'isocode' => 'es_MX',
+                'available' => 1,
+                'format' => 'title last_name first_name',
+                'sort_by' => 'last_name',
+            ],
+            [
                 'original_name' => 'Kiswahili',
                 'english_name' => 'swahili',
                 'isocode' => 'sw_KE',

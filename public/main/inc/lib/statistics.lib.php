@@ -504,47 +504,56 @@ class Statistics
         string $title,
         array $stats,
         ?bool $showTotal = true,
-        ?bool $isFileSize = false
-    ): string
-    {
+        ?bool $isFileSize = false,
+        ?bool $barRelativeToMax = false
+    ): string {
         $total = 0;
+        $max = 0;
+
         $content = '<table class="table table-hover table-striped data_table stats_table" cellspacing="0" cellpadding="3" width="90%">
-            <thead><tr><th colspan="'.($showTotal ? '4' : '3').'">'.$title.'</th></tr></thead><tbody>';
+        <thead><tr><th colspan="'.($showTotal ? '4' : '3').'">'.$title.'</th></tr></thead><tbody>';
+
         $i = 0;
+
         foreach ($stats as $subtitle => $number) {
+            $number = (float) $number;
             $total += $number;
+            if ($number > $max) {
+                $max = $number;
+            }
         }
 
         foreach ($stats as $subtitle => $number) {
+            $number = (float) $number;
+
             if (!$isFileSize) {
-                $number_label = number_format($number, 0, ',', '.');
+                $numberLabel = number_format($number, 0, ',', '.');
             } else {
-                $number_label = self::makeSizeString($number);
+                $numberLabel = self::makeSizeString($number);
             }
-            $percentage = ($total > 0 ? number_format(100 * $number / $total, 1, ',', '.') : '0');
+
+            $percentageRaw = ($total > 0) ? (100 * $number / $total) : 0.0;
+            $percentageDisplay = ($total > 0) ? number_format($percentageRaw, 1, ',', '.') : '0';
+
+            // Bar size: either relative to max (wanted for "1 vs 7") or relative to total (legacy behavior)
+            $barPercent = $barRelativeToMax
+                ? (($max > 0) ? (100 * $number / $max) : 0.0)
+                : $percentageRaw;
 
             $content .= '<tr class="row_'.(0 == $i % 2 ? 'odd' : 'even').'">
-                    <td width="25%" style="vertical-align:top;">'.$subtitle.'</td>
-                    <td width="60%">'.Display::bar_progress($percentage, false).'</td>
-                    <td width="5%" align="right" style="vertical-align:top;">'.$number_label.'</td>';
+            <td width="25%" style="vertical-align:top;">'.$subtitle.'</td>
+            <td width="60%">'.Display::bar_progress($barPercent, false).'</td>
+            <td width="5%" align="right" style="vertical-align:top;">'.$numberLabel.'</td>';
+
             if ($showTotal) {
-                $content .= '<td width="5%" align="right"> '.$percentage.'%</td>';
+                $content .= '<td width="5%" align="right"> '.$percentageDisplay.'%</td>';
             }
+
             $content .= '</tr>';
             $i++;
         }
-        $content .= '</tbody>';
-        if ($showTotal) {
-            if (!$isFileSize) {
-                $total_label = number_format($total, 0, ',', '.');
-            } else {
-                $total_label = self::makeSizeString($total);
-            }
-            $content .= '
-                <tfoot><tr><th colspan="4" align="right">'.get_lang('Total').': '.$total_label.'</td></tr></tfoot>
-            ';
-        }
-        $content .= '</table>';
+
+        $content .= '</tbody></table>';
 
         return $content;
     }
@@ -735,9 +744,9 @@ class Statistics
         }
 
         if ($distinct) {
-            $content = self::printStats(get_lang('Distinct users logins'), $totalLogin, false);
+            $content = self::printStats(get_lang('Distinct users logins'), $totalLogin, false, false, true);
         } else {
-            $content = self::printStats(get_lang('Logins'), $totalLogin, false);
+            $content = self::printStats(get_lang('Logins'), $totalLogin, false, false, true);
         }
 
         return $content;
@@ -950,27 +959,73 @@ class Statistics
      */
     public static function printActivitiesStats(): string
     {
-        $content = '<h4>'.get_lang('Important activities').'</h4>';
-        // Create a search-box
+        $keyword = isset($_GET['keyword']) ? (string) $_GET['keyword'] : '';
+        $keyword = Security::remove_XSS($keyword);
+
+        $content = '';
+        $content .= '
+    <style>
+        .ch-activities-wrap { margin-top: 10px; }
+        .ch-activities-header { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+        .ch-activities-title { margin:0; }
+        .ch-activities-help { margin:6px 0 0; color:#5f6b7a; font-size:13px; }
+        .ch-activities-actions { margin:10px 0 16px; }
+        .ch-chip-filter { width: 280px; max-width: 100%; padding: 8px 10px; border: 1px solid #d6dde6; border-radius: 8px; }
+        .ch-groups { margin-top: 14px; }
+        .ch-group { margin: 14px 0; }
+        .ch-group-title { margin: 0 0 8px; font-size: 14px; font-weight: 600; color:#2b3645; }
+        .ch-chip-row { display:flex; flex-wrap:wrap; gap:8px; }
+        .ch-chip {
+            display:inline-flex; align-items:center; gap:8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid #d6dde6;
+            background: #f7f9fc;
+            color: #1f2d3d;
+            text-decoration: none;
+            font-size: 13px;
+            line-height: 1;
+        }
+        .ch-chip:hover { background:#eef3fb; border-color:#c8d3e1; text-decoration:none; }
+        .ch-chip-code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 12px; color:#51606f; }
+        .ch-empty { color:#5f6b7a; font-size:13px; }
+        .ch-divider { border-top: 1px solid #e6edf5; margin: 14px 0; }
+    </style>
+    ';
+
+        $content .= '<div class="ch-activities-wrap">';
+
+        $content .= '
+        <div class="ch-activities-header">
+            <div>
+                <h4 class="ch-activities-title">'.get_lang('Important activities').'</h4>
+                <div class="ch-activities-help">
+                    <!-- This report lists tracked event records. Select an event type below or search by keyword. -->
+                    '.get_lang('Search').' / '.get_lang('Event type').'
+                </div>
+            </div>
+        </div>
+    ';
         $form = new FormValidator(
             'search_simple',
             'get',
             api_get_path(WEB_CODE_PATH).'admin/statistics/index.php',
             '',
-            ['style' => 'width:200px']
+            ['style' => 'display:inline-block']
         );
+
         $renderer = &$form->defaultRenderer();
         $renderer->setCustomElementTemplate('<span>{element}</span> ');
+
         $form->addHidden('report', 'activities');
         $form->addHidden('activities_direction', 'DESC');
         $form->addHidden('activities_column', '4');
+
         $form->addElement('text', 'keyword', get_lang('Keyword'));
         $form->addButtonSearch(get_lang('Search'), 'submit');
-        $content .= '<div class="actions">';
-        $content .= $form->returnForm();
-        $content .= '</div>';
 
-        if (!empty($_GET['keyword'])) {
+        $content .= '<div class="ch-activities-actions">'.$form->returnForm().'</div>';
+        if (!empty($keyword)) {
             $table = new SortableTable(
                 'activities',
                 ['Statistics', 'getNumberOfActivities'],
@@ -979,10 +1034,10 @@ class Statistics
                 50,
                 'DESC'
             );
-            $parameters = [];
 
+            $parameters = [];
             $parameters['report'] = 'activities';
-            $parameters['keyword'] = Security::remove_XSS($_GET['keyword']);
+            $parameters['keyword'] = $keyword;
 
             $table->set_additional_parameters($parameters);
             $table->set_header(0, get_lang('Event type'));
@@ -993,32 +1048,146 @@ class Statistics
             $table->set_header(5, get_lang('Username'));
             $table->set_header(6, get_lang('IP address'));
             $table->set_header(7, get_lang('Date'));
+
             $content .= $table->return_table();
+            $content .= '<div class="ch-divider"></div>';
         }
 
-        $content .= '<div class="alert alert-info">'.get_lang('Important activities').' : '.'<br>';
         $prefix = 'LOG_';
-        $userDefinedConstants = get_defined_constants(true)['user'];
-        $filteredConstants = array_filter($userDefinedConstants, function ($constantName) use ($prefix) {
-            return strpos($constantName, $prefix) === 0;
-        }, ARRAY_FILTER_USE_KEY);
-        $constantNames = array_keys($filteredConstants);
-        $link = api_get_self().'?report=activities&activities_direction=DESC&activities_column=7&keyword=';
-        foreach ($constantNames as $constantName) {
-            if ($constantName != 'LOG_WS') {
-                if (substr($constantName, -3) == '_ID') {
+        $userDefinedConstants = get_defined_constants(true)['user'] ?? [];
+        $filteredConstants = array_filter(
+            $userDefinedConstants,
+            static function ($constantName) use ($prefix) {
+                return strpos((string) $constantName, $prefix) === 0;
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+
+        $eventTypes = [];
+        foreach (array_keys($filteredConstants) as $constantName) {
+            if ($constantName === 'LOG_WS') {
+                // Expand WS events based on Rest constants.
+                $constantValue = (string) constant($constantName);
+                if (class_exists('Rest')) {
+                    try {
+                        $reflection = new ReflectionClass('Rest');
+                        foreach ($reflection->getConstants() as $name => $value) {
+                            $eventTypes[] = $constantValue.(string) $value;
+                        }
+                    } catch (\Throwable $e) {
+                        // Ignore reflection issues.
+                    }
+                }
+                continue;
+            }
+            if (substr($constantName, -3) === '_ID') {
+                continue;
+            }
+
+            $eventTypes[] = (string) constant($constantName);
+        }
+
+        $eventTypes = array_values(array_unique(array_filter($eventTypes)));
+        sort($eventTypes);
+
+        // Group event types by prefix to make it easier to scan.
+        $groupLabels = [
+            'course'    => 'Course',
+            'session'   => 'Session',
+            'user'      => 'User',
+            'soc'       => 'Social',
+            'msg'       => 'Message',
+            'message'   => 'Message',
+            'wiki'      => 'Wiki',
+            'resource'  => 'Resource',
+            'ws'        => 'Webservice',
+            'default'   => 'Other',
+        ];
+
+        $groups = [];
+        foreach ($eventTypes as $evt) {
+            $evt = trim($evt);
+            if ($evt === '') {
+                continue;
+            }
+
+            $first = explode('_', $evt, 2)[0] ?? 'default';
+            $key = $groupLabels[$first] ?? $groupLabels['default'];
+
+            if (!isset($groups[$key])) {
+                $groups[$key] = [];
+            }
+            $groups[$key][] = $evt;
+        }
+
+        // Chips section: click = open the report with keyword.
+        $linkBase = api_get_self().'?report=activities&activities_direction=DESC&activities_column=7&keyword=';
+
+        $content .= '
+        <div class="ch-activities-header" style="margin-top:8px;">
+            <div>
+                <h4 class="ch-activities-title">'.get_lang('Event type').'</h4>
+                <div class="ch-activities-help">
+                    '.get_lang('Click an event type to filter results.').'
+                </div>
+            </div>
+            <input id="chChipFilter" class="ch-chip-filter" type="text" placeholder="Filter event types...">
+        </div>
+    ';
+
+        if (empty($groups)) {
+            $content .= '<div class="ch-empty">No event types found.</div>';
+        } else {
+            $content .= '<div class="ch-groups" id="chChipGroups">';
+            $preferredOrder = ['Course', 'Session', 'User', 'Social', 'Message', 'Resource', 'Wiki', 'Webservice', 'Other'];
+            foreach ($preferredOrder as $label) {
+                if (empty($groups[$label])) {
                     continue;
                 }
-                $content .= '- <a href="'.$link.constant($constantName).'">'.constant($constantName).'</a><br>'.PHP_EOL;
-            } else {
-                $constantValue = constant($constantName);
-                $reflection = new ReflectionClass('Rest');
-                $constants = $reflection->getConstants();
-                foreach ($constants as $name => $value) {
-                    $content .= '- <a href="'.$link.$constantValue.$value.'">'.$constantValue.$value.'</a><br>'.PHP_EOL;
+
+                $content .= '<div class="ch-group">';
+                $content .= '<div class="ch-group-title">'.htmlspecialchars($label, ENT_QUOTES, 'UTF-8').' ('.count($groups[$label]).')</div>';
+                $content .= '<div class="ch-chip-row">';
+
+                foreach ($groups[$label] as $evt) {
+                    $evtEsc = htmlspecialchars($evt, ENT_QUOTES, 'UTF-8');
+                    $human = ucwords(str_replace('_', ' ', $evt));
+                    $humanEsc = htmlspecialchars($human, ENT_QUOTES, 'UTF-8');
+
+                    $content .= '<a class="ch-chip" data-chip-text="'.$evtEsc.' '.$humanEsc.'" href="'.$linkBase.$evtEsc.'" title="'.$evtEsc.'">'
+                        .$humanEsc.' <span class="ch-chip-code">'.$evtEsc.'</span></a>';
                 }
+
+                $content .= '</div></div>';
             }
+
+            $content .= '</div>';
+            $content .= '
+        <script>
+            (function () {
+                var input = document.getElementById("chChipFilter");
+                var container = document.getElementById("chChipGroups");
+                if (!input || !container) { return; }
+
+                input.addEventListener("input", function () {
+                    var q = (input.value || "").toLowerCase().trim();
+                    var chips = container.querySelectorAll(".ch-chip");
+
+                    chips.forEach(function (chip) {
+                        var t = (chip.getAttribute("data-chip-text") || "").toLowerCase();
+                        chip.style.display = (!q || t.indexOf(q) !== -1) ? "" : "none";
+                    });
+                    var groups = container.querySelectorAll(".ch-group");
+                    groups.forEach(function (g) {
+                        var visible = g.querySelectorAll(".ch-chip:not([style*=none])").length > 0;
+                        g.style.display = visible ? "" : "none";
+                    });
+                });
+            })();
+        </script>
+        ';
         }
+
         $content .= '</div>';
 
         return $content;
@@ -1320,129 +1489,269 @@ class Statistics
     }
 
     /**
-     * Prepare the JS code to load a chart.
+     * Builds a Chart.js chart from an Ajax endpoint that returns JSON chart data.
      *
-     * @param string $url     URL for AJAX data generator
-     * @param ?string $type    bar, line, pie, etc (defaults to 'pie')
-     * @param ?string $options Additional options to the chart (see chart-specific library)
-     * @param ?string A JS code for loading the chart together with a call to AJAX data generator
+     * Expected JSON format:
+     * {
+     *   "labels": [...],
+     *   "datasets": [...]
+     * }
      */
-    public static function getJSChartTemplate(string $url, ?string $type = 'pie', ?string $options = '', ?string $elementId = 'canvas')
-    {
-        return '
-        <script>
-        $(function() {
-            $.ajax({
-                url: "'.$url.'",
-                type: "POST",
-                success: function(data) {
-                    Chart.defaults.responsive = false;
-                    var ctx = document.getElementById("'.$elementId.'").getContext("2d");
-                    ctx.canvas.width = 420;
-                    ctx.canvas.height = 420;
-                    var chart = new Chart(ctx, {
-                        type: "'.$type.'",
-                        data: data,
-                        options: {
-                            plugins: {
-                                '.$options.'
-                            },
-                            cutout: "25%"
-                        }
-                    });
-                    var title = chart.options.plugins.title.text;
-                    $("#'.$elementId.'_title").html(title);
-                    $("#'.$elementId.'_table").html(data.table);
-                }
-            });
-        });
-        </script>';
+    public static function getJSChartTemplate(
+        string $url,
+        string $type,
+        string $options = '',
+        string $canvasId = 'canvas',
+        bool $fullSize = false,
+        string $onClickHandler = '',
+        string $afterInitJs = '',
+        array $dimensions = []
+    ): string {
+        $urlJs = json_encode($url, JSON_UNESCAPED_SLASHES);
+        $typeJs = json_encode($type, JSON_UNESCAPED_SLASHES);
+        $canvasIdJs = json_encode($canvasId, JSON_UNESCAPED_SLASHES);
 
+        $typeLower = strtolower(trim($type));
+        $isCircular = in_array($typeLower, ['pie', 'doughnut', 'polararea'], true);
+
+        // For circular charts, default to a centered medium size (60%) unless overridden.
+        $circularScale = isset($dimensions['circular_scale']) ? (float) $dimensions['circular_scale'] : 0.5;
+        if ($circularScale <= 0) {
+            $circularScale = 0.5;
+        }
+        if ($circularScale > 1) {
+            $circularScale = 1.0;
+        }
+
+        // Build options:
+        // - For non-circular charts, when fullSize=true, disable aspect ratio so it fills the wrapper.
+        // - For circular charts, keep aspect ratio to avoid massive charts on tall wrappers.
+        $options = trim($options);
+        if ($isCircular) {
+            $baseOptions = 'responsive: true, maintainAspectRatio: true,';
+        } else {
+            $baseOptions = $fullSize
+                ? 'responsive: true, maintainAspectRatio: false,'
+                : 'responsive: true,';
+        }
+
+        $finalOptions = trim($baseOptions.' '.$options);
+        $finalOptions = rtrim($finalOptions, ", \n\r\t");
+        $optionsJs = '{'.$finalOptions.'}';
+
+        $w = isset($dimensions['width']) ? (int) $dimensions['width'] : 0;
+        $h = isset($dimensions['height']) ? (int) $dimensions['height'] : 0;
+
+        $applyDimensionsJs = '';
+        if ($w > 0 || $h > 0) {
+            $applyDimensionsJs .= '
+            var el = document.getElementById(canvasId);
+            if (el) {'.($w > 0 ? ' el.width = '.$w.';' : '').($h > 0 ? ' el.height = '.$h.';' : '').'}
+        ';
+        }
+
+        // Apply a default centered medium size for circular charts (unless explicit width/height provided).
+        $applyCircularSizingJs = '';
+        if ($isCircular && $w <= 0 && $h <= 0 && $circularScale < 1.0) {
+            $percent = (int) round($circularScale * 100);
+            $applyCircularSizingJs = '
+            // Center and scale down circular charts by default.
+            ctxEl.style.display = "block";
+            ctxEl.style.marginLeft = "auto";
+            ctxEl.style.marginRight = "auto";
+            ctxEl.style.width = "'.$percent.'%";
+            ctxEl.style.maxWidth = "'.$percent.'%";
+            ctxEl.style.height = "auto";
+        ';
+        } elseif ($isCircular) {
+            // Always center circular charts even if scale is 100% or dimensions were provided.
+            $applyCircularSizingJs = '
+            ctxEl.style.display = "block";
+            ctxEl.style.marginLeft = "auto";
+            ctxEl.style.marginRight = "auto";
+        ';
+        }
+
+        $bindOnClickJs = '';
+        if (!empty(trim($onClickHandler))) {
+            // "chart" variable is available in the handler
+            $bindOnClickJs = '
+            options.onClick = function(evt) {
+                '.$onClickHandler.'
+            };
+        ';
+        }
+
+        $afterInitJs = trim($afterInitJs);
+        $afterInitBlock = $afterInitJs !== '' ? $afterInitJs : '';
+
+        return <<<JS
+        <script>
+            $(function () {
+                var url = $urlJs;
+                var canvasId = $canvasIdJs;
+                var ctxEl = document.getElementById(canvasId);
+
+                if (!ctxEl) {
+                    // Canvas not found: nothing to render.
+                    return;
+                }
+
+                $applyCircularSizingJs
+                $applyDimensionsJs
+
+                var ctx = ctxEl.getContext('2d');
+                var chart = null;
+
+                $.ajax({
+                    url: url,
+                    dataType: "json"
+                }).done(function (payload) {
+                    var data = payload;
+
+                    // If backend returns a JSON string, parse it.
+                    if (typeof data === "string") {
+                        try { data = JSON.parse(data); } catch (e) { data = null; }
+                    }
+
+                    if (!data || !data.labels || !data.datasets) {
+                        // Invalid dataset: do not crash the page.
+                        return;
+                    }
+
+                    var options = $optionsJs;
+
+                    $bindOnClickJs
+
+                    chart = new Chart(ctx, {
+                        type: $typeJs,
+                        data: data,
+                        options: options
+                    });
+
+                    $afterInitBlock
+                });
+            });
+        </script>
+        JS;
     }
 
     /**
-     * Return template for a JS chart
-     * @param $data
-     * @param $type
-     * @param $options
-     * @param $elementId
-     * @param $responsive
-     * @param $onClickHandler
-     * @param $extraButtonHandler
-     * @param $canvasDimensions
-     * @return string
+     * Builds a Chart.js chart from a PHP array (no Ajax call).
      */
     public static function getJSChartTemplateWithData(
-        $data,
-        ?string $type = 'pie',
-        ?string $options = '',
-        ?string $elementId = 'canvas',
-        ?bool $responsive = true,
-        ?string $onClickHandler = '',
-        ?string $extraButtonHandler = '',
-        ?array $canvasDimensions = ['width' => 420, 'height' => 420]
+        array $chartData,
+        string $type,
+        string $options = '',
+        string $canvasId = 'canvas',
+        bool $fullSize = false,
+        string $onClickHandler = '',
+        string $afterInitJs = '',
+        array $dimensions = []
     ): string {
-        $data = json_encode($data);
-        $responsiveValue = $responsive ? 'true' : 'false';
+        $dataJs = json_encode($chartData, JSON_UNESCAPED_SLASHES);
+        $typeJs = json_encode($type, JSON_UNESCAPED_SLASHES);
+        $canvasIdJs = json_encode($canvasId, JSON_UNESCAPED_SLASHES);
 
-        $indexAxisOption = '';
-        if ($type === 'bar') {
-            $indexAxisOption = 'indexAxis: "y",';
+        $typeLower = strtolower(trim($type));
+        $isCircular = in_array($typeLower, ['pie', 'doughnut', 'polararea'], true);
+
+        // For circular charts, default to a centered medium size (60%) unless overridden.
+        $circularScale = isset($dimensions['circular_scale']) ? (float) $dimensions['circular_scale'] : 0.5;
+        if ($circularScale <= 0) {
+            $circularScale = 0.5;
+        }
+        if ($circularScale > 1) {
+            $circularScale = 1.0;
         }
 
-        $onClickScript = '';
-        if (!empty($onClickHandler)) {
-            $onClickScript = '
-                onClick: function(evt) {
-                    '.$onClickHandler.'
-                },
-            ';
+        $options = trim($options);
+        if ($isCircular) {
+            $baseOptions = 'responsive: true, maintainAspectRatio: true,';
+        } else {
+            $baseOptions = $fullSize
+                ? 'responsive: true, maintainAspectRatio: false,'
+                : 'responsive: true,';
         }
 
-        $canvasSize = '';
-        if ($responsiveValue === 'false') {
-            $canvasSize = '
-            ctx.canvas.width = '.$canvasDimensions['width'].';
-            ctx.canvas.height = '.$canvasDimensions['height'].';
-            ';
+        $finalOptions = trim($baseOptions.' '.$options);
+        $finalOptions = rtrim($finalOptions, ", \n\r\t");
+        $optionsJs = '{'.$finalOptions.'}';
+
+        $w = isset($dimensions['width']) ? (int) $dimensions['width'] : 0;
+        $h = isset($dimensions['height']) ? (int) $dimensions['height'] : 0;
+
+        $applyDimensionsJs = '';
+        if ($w > 0 || $h > 0) {
+            $applyDimensionsJs .= '
+            var el = document.getElementById(canvasId);
+            if (el) {'.($w > 0 ? ' el.width = '.$w.';' : '').($h > 0 ? ' el.height = '.$h.';' : '').'}
+        ';
         }
 
-        return '
-        <script>
-            $(function() {
-                Chart.defaults.responsive = '.$responsiveValue.';
-                var ctx = document.getElementById("'.$elementId.'").getContext("2d");
-                '.$canvasSize.'
-                var chart = new Chart(ctx, {
-                    type: "'.$type.'",
-                    data: '.$data.',
-                    options: {
-                        plugins: {
-                            '.$options.',
-                            datalabels: {
-                                anchor: "end",
-                                align: "left",
-                                formatter: function(value) {
-                                    return value;
-                                },
-                                color: "#000"
-                            },
-                        },
-                        '.$indexAxisOption.'
-                        scales: {
-                            x: { beginAtZero: true },
-                            y: { barPercentage: 0.5 }
-                        },
-                        '.$onClickScript.'
+        $applyCircularSizingJs = '';
+        if ($isCircular && $w <= 0 && $h <= 0 && $circularScale < 1.0) {
+            $percent = (int) round($circularScale * 100);
+            $applyCircularSizingJs = '
+            // Center and scale down circular charts by default.
+            ctxEl.style.display = "block";
+            ctxEl.style.marginLeft = "auto";
+            ctxEl.style.marginRight = "auto";
+            ctxEl.style.width = "'.$percent.'%";
+            ctxEl.style.maxWidth = "'.$percent.'%";
+            ctxEl.style.height = "auto";
+        ';
+        } elseif ($isCircular) {
+            $applyCircularSizingJs = '
+            ctxEl.style.display = "block";
+            ctxEl.style.marginLeft = "auto";
+            ctxEl.style.marginRight = "auto";
+        ';
+        }
+
+        $bindOnClickJs = '';
+        if (!empty(trim($onClickHandler))) {
+            $bindOnClickJs = '
+            options.onClick = function(evt) {
+                '.$onClickHandler.'
+            };
+        ';
+        }
+
+        $afterInitJs = trim($afterInitJs);
+        $afterInitBlock = $afterInitJs !== '' ? $afterInitJs : '';
+
+        return <<<JS
+            <script>
+                $(function () {
+                    var canvasId = $canvasIdJs;
+                    var ctxEl = document.getElementById(canvasId);
+
+                    if (!ctxEl) {
+                        return;
                     }
-                });
-                var title = chart.options.plugins.title.text;
-                $("#'.$elementId.'_title").html(title);
-                $("#'.$elementId.'_table").html(chart.data.datasets[0].data);
 
-                '.$extraButtonHandler.'
-            });
-        </script>';
+                    $applyCircularSizingJs
+                    $applyDimensionsJs
+
+                    var ctx = ctxEl.getContext('2d');
+                    var chart = null;
+
+                    var data = $dataJs;
+                    var options = $optionsJs;
+
+                    $bindOnClickJs
+
+                    chart = new Chart(ctx, {
+                        type: $typeJs,
+                        data: data,
+                        options: options
+                    });
+
+                    $afterInitBlock
+                });
+            </script>
+            JS;
     }
 
     public static function buildJsChartData(array $all, string $chartName): array
@@ -2022,5 +2331,164 @@ class Statistics
         }
 
         return $rows;
+    }
+
+    public static function statistics_render_menu(array $tools): string
+    {
+        if (empty($tools)) {
+            return '';
+        }
+
+        $baseUrl = api_get_self();
+        $current = $_GET;
+        $cols = min(count($tools), 5);
+
+        $parseQuery = static function (string $query): array {
+            $decoded = html_entity_decode($query, ENT_QUOTES);
+            $params = [];
+            parse_str($decoded, $params);
+
+            return is_array($params) ? $params : [];
+        };
+
+        $isActiveItem = static function (array $params) use ($current): bool {
+            if (empty($params)) {
+                return false;
+            }
+
+            foreach ($params as $k => $v) {
+                if (!array_key_exists($k, $current)) {
+                    return false;
+                }
+                if ((string) $current[$k] !== (string) $v) {
+                    return false;
+                }
+            }
+
+            return true;
+        };
+
+        $buildUrl = static function (array $params) use ($baseUrl): string {
+            if (empty($params)) {
+                return $baseUrl;
+            }
+
+            $query = http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+
+            return str_contains($baseUrl, '?')
+                ? ($baseUrl . '&' . $query)
+                : ($baseUrl . '?' . $query);
+        };
+
+        $activeInfo = null;
+        $out = '<nav class="w-full">';
+        static $cssPrinted = false;
+        if (!$cssPrinted) {
+            $cssPrinted = true;
+
+            $out .= '<style>
+            .stats-menu-wrap{ overflow-x:auto; padding-bottom:2px; }
+            .stats-menu-grid{
+              --stats-cols: 5;
+              display:grid;
+              gap:1rem;
+              align-items:start;
+              grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+            .p-inputtext, .p-select { width: auto !important; }
+            @media (min-width:640px){
+              .stats-menu-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            }
+            @media (min-width:768px){
+              .stats-menu-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            }
+            @media (min-width:1024px){
+              .stats-menu-grid{ grid-template-columns: repeat(var(--stats-cols), minmax(240px, 1fr)); }
+            }
+            </style>';
+        }
+
+        $out .= '<div class="stats-menu-wrap">';
+        $out .= '<div class="stats-menu-grid" style="--stats-cols:' . (int) $cols . '">';
+
+        foreach ($tools as $section => $items) {
+            $section = (string) $section;
+
+            $sectionHasActive = false;
+            foreach ($items as $key => $_label) {
+                $params = $parseQuery((string) $key);
+                if ($isActiveItem($params)) {
+                    $sectionHasActive = true;
+                    break;
+                }
+            }
+
+            $sectionCardClass = $sectionHasActive
+                ? 'border-primary/30 ring-1 ring-primary/20'
+                : 'border-surface-200';
+
+            $dotClass = $sectionHasActive ? 'bg-primary' : 'bg-surface-300';
+
+            $out .= '<section class="self-start h-fit min-w-0 rounded-2xl border ' . $sectionCardClass . ' bg-surface-50 p-4 shadow-sm">';
+            $out .= '  <h3 class="flex items-center gap-2 text-sm font-semibold text-surface-900">
+                <span class="h-2 w-2 rounded-full ' . $dotClass . '"></span>
+                ' . htmlspecialchars($section, ENT_QUOTES) . '
+            </h3>';
+
+            $out .= '  <ul class="mt-3 space-y-1">';
+
+            foreach ($items as $key => $label) {
+                $params = $parseQuery((string) $key);
+                $url = $buildUrl($params);
+                $active = $isActiveItem($params);
+
+                if ($active) {
+                    $activeInfo = ['section' => $section, 'label' => (string) $label];
+                }
+
+                $aClass = $active
+                    ? 'bg-primary/10 text-primary ring-1 ring-primary/25'
+                    : 'text-surface-700 hover:bg-surface-100 hover:text-surface-900';
+
+                $itemDotClass = $active ? 'bg-primary' : 'bg-surface-300 group-hover:bg-primary/60';
+
+                $out .= '<li>
+                <a href="' . htmlspecialchars($url, ENT_QUOTES) . '"
+                   ' . ($active ? 'aria-current="page"' : '') . '
+                   class="group flex items-start justify-between gap-3 rounded-xl px-3 py-2 text-sm font-medium transition
+                          focus:outline-none focus:ring-2 focus:ring-primary/30 ' . $aClass . '">
+                  <span class="flex items-start gap-2 min-w-0">
+                    <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full ' . $itemDotClass . '"></span>
+                    <span class="leading-5 break-words">' . htmlspecialchars((string) $label, ENT_QUOTES) . '</span>
+                  </span>';
+
+                if ($active) {
+                    $out .= '<span class="inline-flex items-center rounded-full bg-primary/15 px-2 py-0.5 text-xs font-semibold text-primary">'
+                        . htmlspecialchars(get_lang('Active'), ENT_QUOTES) .
+                        '</span>';
+                }
+
+                $out .= '</a></li>';
+            }
+
+            $out .= '  </ul>';
+            $out .= '</section>';
+        }
+
+        $out .= '</div></div>';
+
+        if (!empty($activeInfo)) {
+            $out .= '<div class="mt-4 flex flex-wrap items-center gap-2 text-sm text-surface-700">
+            <span class="font-semibold">' . htmlspecialchars(get_lang('You are here'), ENT_QUOTES) . ':</span>
+            <span class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">'
+                . htmlspecialchars($activeInfo['section'], ENT_QUOTES) . ' · ' . htmlspecialchars($activeInfo['label'], ENT_QUOTES) .
+                '</span>
+        </div>';
+        }
+
+        $out .= '</nav>';
+        $out .= '<div class="my-6 h-px w-full bg-surface-200"></div>';
+
+        return $out;
     }
 }

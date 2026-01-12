@@ -32325,3 +32325,36 @@ msgstr "معرف مستخدم Drupal"
 msgid "There are no terms that match the search: %s"
 msgstr "لا توجد مصطلحات تطابق البحث: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "الإعداد مقفل عالميًا (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "إذا تم تفعيله، ستُنسخ رسائل الدردشة الخاصة 1:1 في وثائق تاريخ الدردشة في المقرر. يُوصى بإبقائها معطلة للخصوصية."
+
+msgid "Save private conversations in documents"
+msgstr "حفظ المحادثات الخاصة في الوثائق"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "قانون الذكاء الاصطناعي الأوروبي – إشعار الشفافية والمخاطر"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "بموجب قانون الذكاء الاصطناعي الأوروبي (اللائحة (EU) 2024/1689)، يُصنف أنظمة الذكاء الاصطناعي المستخدمة في التعليم عمومًا كـ\"عالية المخاطر\". هذا البرنامج نفسه <strong>ليس</strong> نظام ذكاء اصطناعي، لكنه يمكن أن يدمج أنظمة ذكاء اصطناعي داخلية أو خارجية اختيارية —حسب تكوينك— لتحسين أداء مهام المستخدم. قد تتمكن هذه الأنظمة من الوصول إلى البيانات الشخصية <em>فقط إذا</em> تضمن المستخدمون مثل هذه البيانات في استفساراتهم. بتصميم البرنامج، لا يتم مشاركة البيانات الشخصية مع أنظمة الذكاء الاصطناعي دون إدخال نشط من المستخدم. افتراضيًا، جميع ميزات الذكاء الاصطناعي معطلة."
+
+msgid "Admin responsibility & disclosures"
+msgstr "مسؤولية المسؤول والإفصاحات"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "توضح صفحة التكوين هذه كل ميزة ذكاء اصطناعي وغرضها. كمنشئ، يجب عليك مراجعتها بعناية وتحديث سياسات الخصوصية المتوافقة مع GDPR لتعكس الخيارات التي تفعلها. بينما معظم ميزات الذكاء الاصطناعي لا تشارك بيانات شخصية مباشرة مع الأنظمة الخارجية، قد تحتوي استفسارات المستخدمين المرسلة إلى الذكاء الاصطناعي عن غير قصد على معلومات شخصية. كمنشئ، <strong>أنت مسؤول</strong> عن إبلاغ المستخدمين بهذا المخاطر. للشفافية، قد تعرض الإصدارات المستقبلية علامات غير تدخلية للمستخدم النهائي تشير إلى أن محتوى أو تعليقًا معينًا تم إنشاؤه بمساعدة الذكاء الاصطناعي."
+
+msgid "Positioning"
+msgstr "الموضع"
+
+msgid "Quiz"
+msgstr "اختبار"
+
+msgid "Customcertificate"
+msgstr "شهادة_مخصصة"
+
+msgid "Update profile"
+msgstr "تحديث الملف الشخصي"
+

@@ -57,7 +57,7 @@ class ChamiloExtension extends AbstractExtension
             new TwigFilter('api_convert_and_format_date', 'api_convert_and_format_date'),
             new TwigFilter('format_date', 'api_format_date'),
             new TwigFilter('format_file_size', 'format_file_size'),
-            new TwigFilter('date_to_time_ago', 'Display::dateToStringAgoAndLongDate'),
+            new TwigFilter('date_to_time_ago', 'Display::dateToStringAgoAndLongDate', ['is_safe' => ['html']]),
             new TwigFilter('api_get_configuration_value', 'api_get_configuration_value'),
             new TwigFilter('remove_xss', 'Security::remove_XSS'),
             new TwigFilter('user_complete_name', 'UserManager::formatUserFullName'),

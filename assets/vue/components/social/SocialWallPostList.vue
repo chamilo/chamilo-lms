@@ -19,22 +19,25 @@ import axios from "axios"
 import { ENTRYPOINT } from "../../config/entrypoint"
 import { useRoute } from "vue-router"
 import { SOCIAL_TYPE_PROMOTED_MESSAGE } from "./constants"
+import { ref as vueRef } from "vue"
 
-const user = inject("social-user")
-
+const route = useRoute()
+const user = inject("social-user", vueRef(null))
 const postList = reactive([])
 const isLoading = ref(false)
 
-const route = useRoute()
-
 watch(
-  [() => user.value, () => route.query.filterType],
+  // Watch only the stable identifier instead of the whole object.
+  [() => user.value?.["@id"], () => route.query.filterType],
   () => {
     listPosts()
   },
   { immediate: true },
 )
-onMounted(listPosts)
+
+onMounted(() => {
+  listPosts()
+})
 
 function refreshPosts() {
   listPosts()
@@ -45,26 +48,37 @@ defineExpose({
 })
 
 async function listPosts() {
+  // Clear current list immediately to avoid showing stale posts when switching walls.
   postList.splice(0, postList.length)
-  if (!user.value["@id"]) {
+
+  const wallOwnerId = user.value?.id
+  const wallOwnerIri = user.value?.["@id"]
+
+  // If wall user is not ready yet (null while loading), just do nothing.
+  if (!wallOwnerId || !wallOwnerIri) {
     return
   }
 
   const filterType = route.query.filterType
   isLoading.value = true
-  const params = {
-    socialwall_wallOwner: user.value["id"],
-    "order[sendDate]": "desc",
-    "exists[parent]": false,
-  }
-  if (filterType === "promoted") {
-    params.type = SOCIAL_TYPE_PROMOTED_MESSAGE
-  }
+  try {
+    const params = {
+      socialwall_wallOwner: wallOwnerId,
+      "order[sendDate]": "desc",
+      "exists[parent]": false,
+    }
 
-  const { data } = await axios.get(ENTRYPOINT + "social_posts", { params })
-  postList.push(...data["hydra:member"])
+    if (filterType === "promoted") {
+      params.type = SOCIAL_TYPE_PROMOTED_MESSAGE
+    }
 
-  isLoading.value = false
+    const { data } = await axios.get(ENTRYPOINT + "social_posts", { params })
+    postList.push(...(data?.["hydra:member"] || []))
+  } catch (e) {
+    console.error("Failed to load social wall posts.", e)
+  } finally {
+    isLoading.value = false
+  }
 }
 
 function onPostDeleted(event) {

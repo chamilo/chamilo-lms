@@ -7,9 +7,9 @@
 
 {% import '@ChamiloCore/Portfolio/items.html.twig' as items %}
 
-<div class="row">
+<div class="grid md:grid-cols-12">
     {% if course %}
-        <div class="col-md-3">
+        <div class="md:col-span-3">
             {{ frm_student_list }}
 
             <hr>
@@ -18,7 +18,7 @@
         </div>
     {% endif %}
 
-    <div class="{{ course ? 'col-md-9' : 'col-xs-12'  }}">
+    <div class="{{ course ? 'md:col-span-9' : ''  }}">
         {% if (categories) %}
             <div class="btn-toolbar">
                 <div class="btn-group" data-toggle="buttons">

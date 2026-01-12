@@ -32313,3 +32313,36 @@ msgstr "Drupal 用户 ID"
 msgid "There are no terms that match the search: %s"
 msgstr "没有匹配搜索的条款：%s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "设置已全局锁定 (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "如果启用，一对一私人聊天消息将镜像到课程聊天历史文档中。为隐私建议保持禁用。"
+
+msgid "Save private conversations in documents"
+msgstr "将私人对话保存到文档中"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "欧盟人工智能法案 – 透明度和风险通知"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "根据欧盟人工智能法案（法规（EU）2024/1689），教育中使用的AI系统通常被分类为“高风险”。此软件本身<strong>不是</strong>AI系统，但它可以根据您的配置集成可选的内部或外部AI系统，以提升用户任务性能。这些系统仅在用户在提示中包含此类数据时才能访问个人数据。根据设计，此软件不会在用户主动输入的情况下与AI系统共享个人数据。默认情况下，所有AI功能均已禁用。"
+
+msgid "Admin responsibility & disclosures"
+msgstr "管理员责任和披露"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "此配置页面详细说明了每个AI功能及其用途。作为部署者，您应仔细审查它们，并更新符合GDPR的数据隐私政策以反映您启用的选项。虽然大多数AI功能不会直接与外部系统共享个人数据，但发送给AI的用户提示可能无意中包含个人信息。作为部署者，<strong>您有责任</strong>告知用户此风险。为透明起见，未来版本可能显示非侵入性的终端用户标签，表明某些内容或反馈是由AI辅助生成的。"
+
+msgid "Positioning"
+msgstr "定位"
+
+msgid "Quiz"
+msgstr "测验"
+
+msgid "Customcertificate"
+msgstr "Customcertificate"
+
+msgid "Update profile"
+msgstr "更新个人资料"
+

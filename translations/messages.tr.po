@@ -32313,3 +32313,36 @@ msgstr "Drupal kullanıcı kimliği"
 msgid "There are no terms that match the search: %s"
 msgstr "Aramayla eşleşen terim yok: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Ayar genel olarak kilitli (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Etkinleştirilirse, 1:1 özel sohbet mesajları kurs sohbet geçmişi belgelerinde yansıtılır. Gizlilik için devre dışı bırakılması önerilir."
+
+msgid "Save private conversations in documents"
+msgstr "Özel konuşmaları belgelerde kaydet"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "AB Yapay Zeka Yasası – Şeffaflık ve risk uyarısı"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "AB Yapay Zeka Yasası (Düzenleme (AB) 2024/1689) kapsamında, eğitimde kullanılan yapay zeka sistemleri genellikle “yüksek riskli” olarak sınıflandırılır. Bu yazılım <strong>bir yapay zeka sistemi değildir</strong>, ancak yapılandırmanıza bağlı olarak isteğe bağlı iç veya dış yapay zeka sistemlerini entegre edebilir—kullanıcı görev performansını artırmak için. Bu sistemler, kullanıcılar yalnızca istemlerinde bu verileri dahil ederse kişisel verilere <em>yalnızca o durumda</em> erişebilir. Tasarım gereği, bu yazılım kullanıcının aktif girdisi olmadan kişisel verileri yapay zeka sistemleriyle paylaşmaz. Varsayılan olarak tüm yapay zeka özellikleri devre dışıdır."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Yönetici sorumluluğu ve bildirimler"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Bu yapılandırma sayfası her yapay zeka özelliğini ve amacını detaylandırır. Dağıtıcı olarak bunları dikkatle incelemeli ve etkinleştirdiğiniz seçenekleri yansıtmak için GDPR uyumlu veri gizliliği politikalarınızı güncellemelisiniz. Çoğu yapay zeka özelliği doğrudan kişisel verileri dış sistemlerle paylaşmasa da, yapay zekaya gönderilen kullanıcı istemleri istemeden kişisel bilgi içerebilir. Dağıtıcı olarak <strong>siz sorumlusunuz</strong> kullanıcıları bu risk hakkında bilgilendirmek için. Şeffaflık için, gelecek sürümler belirli içerik veya geri bildirimlerin yapay zeka yardımıyla üretildiğini belirten zararsız son kullanıcı etiketleri gösterebilir."
+
+msgid "Positioning"
+msgstr "Konumlandırma"
+
+msgid "Quiz"
+msgstr "Test"
+
+msgid "Customcertificate"
+msgstr "Özel sertifika"
+
+msgid "Update profile"
+msgstr "Profili güncelle"
+

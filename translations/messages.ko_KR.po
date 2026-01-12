@@ -4807,7 +4807,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "AWStats는 플랫폼 통계(방문자, 페이지 뷰, 추천원 등)를 확인할 수 있게 합니다."
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "Chamilo 라이브러리"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "Chamilo LIBRARY는 다중 기준 색인 및 검색을 제공하는 검색 엔진입니다. Chamilo Medical 기능의 일부입니다."
@@ -32310,4 +32310,37 @@ msgstr "Drupal 사용자 ID"
 
 msgid "There are no terms that match the search: %s"
 msgstr "검색어와 일치하는 용어가 없습니다: %s"
+
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "설정은 전역적으로 잠김 (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "활성화 시, 1:1 개인 채팅 메시지가 코스 채팅 기록 문서에 미러링됩니다. 개인정보 보호를 위해 비활성화 상태를 권장합니다."
+
+msgid "Save private conversations in documents"
+msgstr "개인 대화를 문서에 저장"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU AI 법 – 투명성 및 위험 고지"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "EU 인공지능법(규정 (EU) 2024/1689)에 따라 교육에서 사용되는 AI 시스템은 일반적으로 “고위험”으로 분류됩니다. 이 소프트웨어 자체는 <strong>AI 시스템이 아닙니다</strong>, 그러나 구성에 따라 선택적 내부 또는 외부 AI 시스템을 통합하여 사용자 작업 성능을 향상시킬 수 있습니다. 이러한 시스템은 사용자가 프롬프트에 해당 데이터를 포함한 경우에만 개인 데이터에 접근할 수 있습니다. 설계상 이 소프트웨어는 사용자의 적극적인 입력 없이 AI 시스템과 개인 데이터를 공유하지 않습니다. 기본적으로 모든 AI 기능은 비활성화되어 있습니다."
+
+msgid "Admin responsibility & disclosures"
+msgstr "관리자 책임 및 공지"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "이 구성 페이지는 각 AI 기능과 그 목적을 상세히 설명합니다. 배포자로서 이를 신중히 검토하고 활성화할 옵션에 맞게 GDPR 준수 데이터 개인정보 보호 정책을 업데이트해야 합니다. 대부분의 AI 기능은 외부 시스템과 개인 데이터를 직접 공유하지 않지만, AI로 전송된 사용자 프롬프트에 개인 정보가 의도치 않게 포함될 수 있습니다. 배포자로서 <strong>사용자에게 이 위험을 알리는 책임</strong>이 있습니다. 투명성을 위해 향후 릴리스에서는 특정 콘텐츠나 피드백이 AI 도움을 받아 생성되었음을 나타내는 비침투적 최종 사용자 태그를 표시할 수 있습니다."
+
+msgid "Positioning"
+msgstr "위치 지정"
+
+msgid "Quiz"
+msgstr "퀴즈"
+
+msgid "Customcertificate"
+msgstr "Customcertificate"
+
+msgid "Update profile"
+msgstr "프로필 업데이트"
 

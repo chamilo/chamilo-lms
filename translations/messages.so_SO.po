@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Foomulaha tusaalaha: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Foomilada tusaale: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -32306,4 +32306,37 @@ msgstr "ID isticmaale Drupal"
 
 msgid "There are no terms that match the search: %s"
 msgstr "Ma jiraan ereyo kuwaas oo u dhigma raadinta: %s"
+
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Dejinta si guud loo xiray (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Haddii la shaqeeyo, 1:1 fariimaha sheekaysiga gaarka ah waxaa lagu muujin doonaa dukumentiyada taariikhda sheekaysiga koorsada. Waxaa lagu talinayaa in la sii daayo si loo ilaaliyo asturnaanta."
+
+msgid "Save private conversations in documents"
+msgstr "Kaydso sheekaysiga gaarka ah dukumentiyada"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "Sharciga AI ee EU – Daahfurnaan & ogeysiis khatar"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "Sida uu qabo Sharciga Sirdoonka Macmal ee EU (Xeerka (EU) 2024/1689), nidaamyada AI ee loo adeegsado waxbarashada guud ahaan waxaa lagu kala saaraa “khatar-sare”. Barnaamijkan laftiisu <strong>maaha</strong> nidaam AI, laakiin waxa uu isku dari karaa nidaamyo AI gudaha ah ama dibadda ah oo ikhtiyaari ah—iyadoo ku xidhan dejintaada—si loo horumariyo waxqabadka shaqada isticmaale. Nidaamyadan waxay heli karaan xogta shakhsi ahaaneed <em>hadduu</em> kaliya isticmaalehu ku daro xogtaas tilmaamahooda. Naqshad ahaan, barnaamijkan ma la wadaago xogta shakhsi ahaaneed nidaamyada AI iyada oo aan lahayn talobixinta firfircoon ee isticmaale. Sida caadiga ah, dhammaan astaamaha AI waa la joojiyay."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Masuuliyadda maamulaha & shaacinta"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Bogga dejintan waxa uu faahfaahinayaa astaamo kasta oo AI ah iyo ujeedadiisa. Adiga oo ah adeegsade, waa in aad si taxadar leh dib u eegtaa oo aad cusboonaysiisaa siyaasadaha asturnaanta xogta ee la jaangooyo GDPR si ay u muujiyaan doorashooyinka aad shaqaaleyso. In kasta oo inta badan astaamaha AI aan si toos ah ula wadaagin xogta shakhsi ahaaneed nidaamyada dibadda, tilmaamaha isticmaale ee loo diro AI waxay si aan kala sooc lahayn ku dari karaan macluumaadka shakhsi ahaaneed. Adiga oo ah adeegsade, <strong>adiga ayaa masuul ka ah</strong> in aad ogeysiiso isticmaale khatartan. Si daahfuran ah, sii deynta mustaqbalka waxay muujin kartaa calaamado isticmaale ee aan faragelinin oo tilmaamaya in waxyaabaha qaar ama jawaab-celinta ay la-garsaday AI."
+
+msgid "Positioning"
+msgstr "Meelaynta"
+
+msgid "Quiz"
+msgstr "Imtixaan"
+
+msgid "Customcertificate"
+msgstr "Shahaadada-gaarka ah"
+
+msgid "Update profile"
+msgstr "Cusboonaysii profaylka"
 

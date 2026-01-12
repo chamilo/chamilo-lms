@@ -19978,7 +19978,7 @@ msgid "Hide Learning Path PDF export"
 msgstr "Itago ang Learning Path PDF export"
 
 msgid "Hide the Learning Path PDF Export icon from the Learning Paths list"
-msgstr "Itago ang Learning Path PDF Export icon mula sa listahan ng Learning Paths"
+msgstr "Itago ang icon ng PDF Export ng Learning Path mula sa listahan ng Learning Paths"
 
 msgid "Default coach access days before session"
 msgstr "Default coach access days bago ang session"
@@ -27049,7 +27049,7 @@ msgid "Show all learner publications (from base course and from all sessions) in
 msgstr "Ipakita ang lahat ng learner publications (mula sa base course at mula sa lahat ng sessions) sa work/pending.php page ng base course."
 
 msgid "Session admin can access batch user import, update and export"
-msgstr "Session admin ay makakapunta sa batch user import, update at export"
+msgstr "Maaaring ma-access ng Session admin ang batch user import, update at export"
 
 msgid "Hide session chart in My progress"
 msgstr "Itago ang session chart sa My progress"
@@ -32306,4 +32306,37 @@ msgstr "Drupal user ID"
 
 msgid "There are no terms that match the search: %s"
 msgstr "Walang mga termino na tumutugma sa paghahanap: %s"
+
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Ang setting ay naka-lock sa buong sistema (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Kung pinagana, ang mga pribadong chat na mensahe 1:1 ay ikokopya sa mga dokumento ng kasaysayan ng chat ng kurso. Inirerekomenda na panatilihing hindi pinagana para sa privacy."
+
+msgid "Save private conversations in documents"
+msgstr "I-save ang pribadong pag-uusap sa mga dokumento"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU AI Act – Paunawa sa Transparency at Risk"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "Sa ilalim ng EU Artificial Intelligence Act (Regulation (EU) 2024/1689), ang mga sistema ng AI na ginagamit sa edukasyon ay karaniwang na-classify bilang “high-risk”. Ang software na ito mismo ay <strong>hindi</strong> isang sistema ng AI, ngunit maaari itong mag-integrate ng opsyonal na panloob o panlabas na mga sistema ng AI—depende sa iyong konfigurasyon—upang mapabuti ang pagganap ng mga gawain ng gumagamit. Ang mga sistemang ito ay maaaring ma-access ang personal na data <em>lamang kung</em> ang mga gumagamit ay magdagdag ng ganitong data sa kanilang mga prompt. Sa disenyo, ang software na ito ay hindi nagbabahagi ng personal na data sa mga sistema ng AI nang walang aktibong input ng gumagamit. Sa default, lahat ng tampok ng AI ay hindi pinagana."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Responsibilidad ng Admin at mga Pahayag"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Ang pahina ng konfigurasyong ito ay nagdedetalye ng bawat tampok ng AI at ang layunin nito. Bilang deployer, dapat mong suriin ito nang maingat at i-update ang iyong mga patakaran sa privacy ng data na sumusunod sa GDPR upang sumalamin sa mga opsyon na pinagana mo. Habang karamihan sa mga tampok ng AI ay hindi direktang nagbabahagi ng personal na data sa panlabas na sistema, ang mga prompt ng gumagamit na ipinadala sa AI ay maaaring hindi sinasadyang maglaman ng personal na impormasyon. Bilang deployer, <strong>ikaw ang responsable</strong> sa pagpapaalam sa mga gumagamit ng panganib na ito. Para sa transparency, ang mga hinaharap na release ay maaaring magpakita ng hindi nakakabagabag na mga tag ng end-user na nagpapahiwatig na ang ilang nilalaman o feedback ay nabuo gamit ang tulong ng AI."
+
+msgid "Positioning"
+msgstr "Pag-position"
+
+msgid "Quiz"
+msgstr "Pagsusulit"
+
+msgid "Customcertificate"
+msgstr "Customcertificate"
+
+msgid "Update profile"
+msgstr "I-update ang profile"
 

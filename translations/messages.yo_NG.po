@@ -32307,3 +32307,36 @@ msgstr "ID olùpẹ̀ Drupal"
 msgid "There are no terms that match the search: %s"
 msgstr "Ko si awọn ọrọ ti o baamu wiwa: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Ètò ti wa ni titiipa agbaye (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Ti a ba ṣiṣẹ, awọn ifọrọwérọ ikọkọ 1:1 yoo ṣe afihan ni awọn iwe itan chat iṣẹ-ẹkọ. A ṣe iṣeduro lati ma ṣiṣẹ fun aabo alaitọju."
+
+msgid "Save private conversations in documents"
+msgstr "Fipamọ awọn ibaraẹnisọrọ ikọkọ sinu awọn iwe-ipamisi"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "Ofin AI EU – Ìfihàn & Ìdíyelọnu ewu"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "Labẹ Ofin Ìmọye Oníwàìṣẹ EU (Regulation (EU) 2024/1689), awọn eto AI ti a lo ninu ẹkọ ni gbogbogbo ni ipin bi “eewu giga”. Sọfitiwia yii funrararẹ <strong> kìí ṣe</strong> eto AI, ṣùgbọ́n o le ṣepọ awọn eto AI inu tabi ita ti a yan—da lori ìfìdàsílẹ̀ rẹ—lati mu iṣẹ-ṣiṣe iṣẹ-ṣiṣe olumulo dara si. Awọn eto wọnyi le wọle si data ti ara ẹni <em>nikan ti</em> awọn olumulo ba fi iru data bẹ sinu awọn itọsọna wọn. Nipa apẹrẹ, sọfitiwia yii ko pin data ti ara ẹni pẹlu awọn eto AI laisi titẹ sii ti olumulo. Nipa aiyipada, gbogbo awọn ẹya AI ti wa ni pipa."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Ojuse Alakoso & Ìfihàn"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Oju-iwe ìfìdàsílẹ̀ yii ṣe alaye kọ̀ọ̀kan ẹya AI ati idi rẹ. Gẹgẹbi oluṣe ifilọlẹ, o yẹ ki o ṣe ayẹwo wọn ni pẹkipẹki ki o ṣe imudojuiwò awọn eto aabo data ti o ni ibamu pẹlu GDPR lati ṣafihan awọn aṣayan ti o ṣiṣẹ. Lakoko ti ọpọlọpọ awọn ẹya AI ko pin data ti ara ẹni taara pẹlu awọn eto ita, awọn itọsọna olumulo ti a fi ranṣẹ si AI le fi alaye ti ara ẹni sinu lairotẹlẹ. Gẹgẹbi oluṣe ifilọlẹ, <strong>iwọ ni iduro</strong> fun sisọ fun awọn olumulo nipa ewu yii. Fun ìtọkasí, awọn idasilẹ iwaju le ṣafihan awọn aami olumulo ipari ti ko ni intrusive ti n ṣafihan pe diẹ ninu akoonu tabi esi ti ipilẹṣẹ pẹlu iranlọwọ AI."
+
+msgid "Positioning"
+msgstr "Ìdúróde"
+
+msgid "Quiz"
+msgstr "Idanwo"
+
+msgid "Customcertificate"
+msgstr "Iwe-ẹri Àfarawé"
+
+msgid "Update profile"
+msgstr "Ṣe ìmú padà sí ìpìlẹ̀ ìdàrúkọ"
+

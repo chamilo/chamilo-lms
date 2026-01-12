@@ -32324,3 +32324,36 @@ msgstr "מזהה משתמש Drupal"
 msgid "There are no terms that match the search: %s"
 msgstr "אין מונחים התואמים לחיפוש: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "ההגדרה נעולה באופן גלובלי (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "אם מופעל, הודעות צ'אט פרטיות 1:1 יועתקו למסמכי היסטוריית הצ'אט של הקורס. מומלץ להשאיר מושבת לשמירה על פרטיות."
+
+msgid "Save private conversations in documents"
+msgstr "שמור שיחות פרטיות במסמכים"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "חוק הבינה המלאכותית של האיחוד האירופי – הודעת שקיפות וסיכונים"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "על פי חוק הבינה המלאכותית של האיחוד האירופי (תקנה (EU) 2024/1689), מערכות בינה מלאכותית המשמשות בחינוך מסווגות בדרך כלל כ'בעלות סיכון גבוה'. תוכנה זו עצמה <strong>אינה</strong> מערכת בינה מלאכותית, אך היא יכולה לשלב מערכות בינה מלאכותית פנימיות או חיצוניות אופציונליות—תלוי בתצורה שלך—לשיפור ביצועי משימות המשתמש. מערכות אלה יכולות לגשת לנתונים אישיים <em>רק אם</em> המשתמשים כוללים נתונים כאלה בשאילתות שלהם. מתוך עיצוב, תוכנה זו אינה משתפת נתונים אישיים עם מערכות בינה מלאכותית ללא קלט פעיל של המשתמש. כברירת מחדל, כל תכונות הבינה המלאכותית מושבתות."
+
+msgid "Admin responsibility & disclosures"
+msgstr "אחריות מנהל והתראות"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "דף תצורה זה מפרט כל תכונת בינה מלאכותית ומטרתה. כמפעיל, עליך לבחון אותן בקפידה ולעדכן את מדיניות פרטיות הנתונים התואמת GDPR כדי לשקף את האפשרויות שאתה מפעיל. בעוד שרוב תכונות הבינה המלאכותית אינן משתפות נתונים אישיים ישירות עם מערכות חיצוניות, שאילתות משתמשים המועברות לבינה מלאכותית עלולות לכלול מידע אישי בטעות. כמפעיל, <strong>אתה אחראי</strong> ליידע את המשתמשים על הסיכון הזה. לשקיפות, גרסאות עתידיות עשויות להציג תגיות לא פולשניות למשתמש הסופי המציינות שתוכן או משוב מסוים נוצרו בעזרת בינה מלאכותית."
+
+msgid "Positioning"
+msgstr "מיקום"
+
+msgid "Quiz"
+msgstr "חידון"
+
+msgid "Customcertificate"
+msgstr "תעודה מותאמת אישית"
+
+msgid "Update profile"
+msgstr "עדכן פרופיל"
+

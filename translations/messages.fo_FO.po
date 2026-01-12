@@ -265,7 +265,7 @@ msgid "Hyperbolic arcsine:\t\tarcsinh(x)"
 msgstr "Hyperbolisk arcsine:\t\tarcsinh(x)"
 
 msgid "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator."
-msgstr ""
+msgstr "Finnur ikki málið í listanum? Tveysamband við okkum á info@chamilo.org fyri at geva títt íkast sum týðarsettari."
 
 msgid "Arcsine:\t\t\tarcsin(x)"
 msgstr "Arcsine:\t\t\tarcsin(x)"
@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Við kærleika"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulubeispiel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulur dæmi: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variablumørk"
@@ -937,7 +937,7 @@ msgid "Please pick a student"
 msgstr "Vinarliga vel ein næming"
 
 msgid "Search users"
-msgstr ""
+msgstr "Leita brúkarar"
 
 msgid "Please pick a course"
 msgstr "Vinarliga vel eitt línd"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:upphavsrætt,, nei:ikki upphavsrætt"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappar,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":uppgáva:uppgáva,,      simuleran:simuleran,,      spurnarkanning:spurnarkanning,,      diagram:diagram,,      talva:talva,,      graf:graf,,      indeks:indeks,,      fólka:folka,,      talva:talva,,      frásagnartextur:frásagnartekstur,,      próv:próv,,      tilfar:tilfar,,      trupulleikafrágreiðing:trupulleikafrágreiðing,,      sjálvmatan:sjálvmatan,,      fyrilestrar:fyrilestrar"
@@ -6400,7 +6400,7 @@ msgid "Subscription sessions in the category"
 msgstr "Melda bólkar í bólkinum"
 
 msgid "List of sessions on the platform"
-msgstr ""
+msgstr "Listi yvir bólkum á talgvingini"
 
 msgid "List of sessions in the categories"
 msgstr "Listi yvir bólkar í bólkunum"
@@ -6661,7 +6661,7 @@ msgid "Request contact"
 msgstr "Bið sambond"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Ókendur"
 
 msgid "My parents"
 msgstr "Mín foreldur"
@@ -7516,7 +7516,7 @@ msgid "Urgent: %s course expiration reminder"
 msgstr "Bráðskaparviðminning um útlop av kursi %s"
 
 msgid "Exercise and learning path"
-msgstr ""
+msgstr "Æfing og lærugangur"
 
 msgid "Warning: It is possible to use, in the gradebook, tests that are part of learning paths. If the learning path itself is already included, this test might be part of the gradebook already. The learning paths evaluation is made on the basis of a progress percentage, while the evaluation on tests is made on the basis of a score. Survey evaluation is based on whether the user has answered (1) or not (0). Make sure you test your combinations of gradebook evaluations to avoid mind-boggling situations."
 msgstr "Ávaring: Tað er møguligt at brúka próvur í bókstavenum, sum eru partur av lærugongum. Um lærugongurin sjálvur er longur innari, kann hesa próvan longu vera partur av bókstavenum. Metan av lærugongum verður gjørd á grundlagi av framstigilsprosent, meðan metan av próvum verður gjørd á grundlagi av stigum. Metan av kanningum er grundførd á hvønnug sum brúkarin hevur svarað (1) ella ikki (0). Vís at tú próvar kombinatiónirnar av bókstavarmetingum at sleppa undan hugtakandi støðum."
@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Skriva tegstin niðanfyri"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Dæmi um útfylling av líkama massu indeks</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Aldur</strong></td>            <td width=\"75%\" style=\"\">[25] ár</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kyni</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ella F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong:Vekt</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong:Hædd</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Líkama massu indeks</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Vekt/Hædd<sup>2</sup> (Sí <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia grein</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Dæmi um útfylling av eyðskema starv: rokna Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strongAldur</strong></td>            <td width=\"75%\" style=\"\">[25] ár gammal</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strongKyni</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ella F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strongVekt</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strongHædd</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strongBody Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Vekt/Hædd<sup>2</sup> (Vís til.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia grein</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Rit upp adressuna"
@@ -9469,7 +9469,7 @@ msgid "Online in my sessions"
 msgstr "Online í mínum bólkum"
 
 msgid "Dear user"
-msgstr ""
+msgstr "Kæri brúkar"
 
 msgid "Your registration data"
 msgstr "Tín skrásetingarupplýsingar"
@@ -11683,7 +11683,7 @@ msgid "Course Stats"
 msgstr "Kursstøða"
 
 msgid "Tools access"
-msgstr ""
+msgstr "Verktøy atgongd"
 
 msgid "Links accessed"
 msgstr "Leinkið atgongdir"
@@ -12337,82 +12337,82 @@ msgid "The zipfile was successfully extracted."
 msgstr "Zip-fílan var væl pakkað út."
 
 msgid "Unable to extract zip file (corrupt file?)."
-msgstr ""
+msgstr "Kann ikki pakka út zip-fílu (skadd fíla?)."
 
 msgid "File saved as"
-msgstr ""
+msgstr "Fíla goymd sum"
 
 msgid " was overwritten."
-msgstr ""
+msgstr " var ynskrifað."
 
 msgid "Unable to create the folder."
-msgstr ""
+msgstr "Kann ikki upprætta mappu."
 
 msgid "If file exists:"
-msgstr ""
+msgstr "Um fíla finst:"
 
 msgid "Do nothing"
-msgstr ""
+msgstr "Ger einki"
 
 msgid "Don't upload if file exists"
-msgstr ""
+msgstr "Upload ikki um fíla finst"
 
 msgid "Overwrite"
-msgstr ""
+msgstr "Ynskriva"
 
 msgid "Overwrite the existing file"
-msgstr ""
+msgstr "Ynskriva verandi fílu"
 
 msgid "Rename the uploaded file if it exists"
-msgstr ""
+msgstr "Umnevna uptekna fílu um hon finst"
 
 msgid "There are no documents to be displayed."
-msgstr ""
+msgstr "Ongar skjalfestir at vísa."
 
 msgid "Upload to"
-msgstr ""
+msgstr "Upload til"
 
 msgid "The file has been modified"
-msgstr ""
+msgstr "Fílan er verðin broytt"
 
 msgid "Documents overview"
-msgstr ""
+msgstr "Yvirlit yvir skjalfestir"
 
 msgid "Options"
-msgstr ""
+msgstr "Valmøguleikar"
 
 msgid "Welcome to Chamilo RAPID<ul type=\"1\"><li>Browse your hard disk to find any .ppt or .odp file<li>Upload it to Oogie. It will convert it into a SCORM course.<li>You will then be allowed to add audio comments on each slide and insert test and activities between slides."
-msgstr ""
+msgstr "Velkominn til Chamilo RAPID<ul type=\"1\"><li>Goym tín harða disk at finna nakran .ppt ella .odp fílu<li>Upload tað til Oogie. Tað setur tað um í eitt SCORM-kursus.<li>Tú fert tá at megin at leggja til lutakomentar á hvørari skíðu og seta próv og starv ímillum skíður."
 
 msgid "Convert to course"
-msgstr ""
+msgstr "Umset til kursus"
 
 msgid "File"
-msgstr ""
+msgstr "Fíla"
 
 msgid "Error during the delete of document"
-msgstr ""
+msgstr "Feil við sletting av skjalfesti"
 
 msgid "A problem occurred while updating visibility"
-msgstr ""
+msgstr "Trupluleiki við at dagfólka sýniligheit"
 
 msgid "Folder deleted"
-msgstr ""
+msgstr "Mappa slett"
 
 msgid "Template name"
-msgstr ""
+msgstr "Skabelon navn"
 
 msgid "Template description"
-msgstr ""
+msgstr "Skabelon lýsing"
 
 msgid "Document set as a new template"
-msgstr ""
+msgstr "Skjalfesti sett sum nýggja skabelon"
 
 msgid "Document unset as template"
-msgstr ""
+msgstr "Skjalfesti fjórt sum skabelon"
 
 msgid "Add as a template"
-msgstr ""
+msgstr "Legg afturat sum skabelon"
 
 msgid "Remove template"
 msgstr "Strika skabelun"
@@ -15217,7 +15217,7 @@ msgid "Assign courses to %s"
 msgstr "Vítt neyðandi líkindafrøðir til %s"
 
 msgid "List of sessions on the platform"
-msgstr ""
+msgstr "Listi yvir bólkum á talgvingini"
 
 msgid "Assign sessions to Human Resources manager"
 msgstr "Vítt neyðandi samkomur til mannaávísingar-eyðkennarans"
@@ -27304,7 +27304,7 @@ msgid "Score div percent"
 msgstr "Støðudeiling við prosent"
 
 msgid "Exercise and learning path"
-msgstr ""
+msgstr "Æfing og lærugangur"
 
 msgid "Hide catalogue"
 msgstr "Fjal katalogin"
@@ -27565,7 +27565,7 @@ msgid "Please select installation language"
 msgstr "Válk uppsetingarmálið"
 
 msgid "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator."
-msgstr ""
+msgstr "Finnur ikki málið í listanum? Tveysamband við okkum á info@chamilo.org fyri at geva títt íkast sum týðarsettari."
 
 msgid "Step 2 - Requirements"
 msgstr "Trappur 2 - Krav"
@@ -27688,7 +27688,7 @@ msgid "User registrations by creator"
 msgstr "Brúkaraskrásetingar eftir uppritta"
 
 msgid "Tools access"
-msgstr ""
+msgstr "Verktøy atgongd"
 
 msgid "Courses count"
 msgstr "Tal av kursum"
@@ -28402,7 +28402,7 @@ msgid "A database with the same name already exists. It will be deleted."
 msgstr "Ein dátagrunnur við somu navni finst longu. Hon verður slettað."
 
 msgid "Dear user"
-msgstr ""
+msgstr "Kæri brúkar"
 
 msgid "You are about to start using one of the best Open Source e-learning platforms on the market. Like many other Open Source projects, Chamilo is backed up by a large community of students, teachers, developers, content creators and businesses who would like to promote the project better."
 msgstr "Tú ert í ferð við at byrja at brúka eina av teimum besta Open Source e-learningar plattformunum á marknaðinum. Sum so nógvar aðrar Open Source verkætlanir verður Chamilo stuðlað av einari stórari samfelags av studentum, lærarum, býararum, innihaldsskaparum og fyriseynum, sum vilja fremja verkætlanina betur."
@@ -29251,7 +29251,7 @@ msgid "Add users to selected URLs"
 msgstr "Legg brúkarar afturat valdu URL-um"
 
 msgid "Search users"
-msgstr ""
+msgstr "Leita brúkarar"
 
 msgid "The user accounts have been unassigned from the URL"
 msgstr "Brúkarakreinirnar eru avmarkeraðar frá URL-inum"
@@ -29290,7 +29290,7 @@ msgid "%s extension not available"
 msgstr "%s viðgerð ikki til tak"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Ókendur"
 
 msgid "The following users have accessed one or more courses without being officially registered. They generated activity in open courses but are not listed in the course subscription tables."
 msgstr "Teir fylgjandi brúkarar hava fingið atgongd til ein ella fleiri kursar uttan at vera almennskrásettir. Teir hava stovtað virkni í opnum kursum, men eru ikki skrivaðir í skrásetingarbókunum fyri kursin."
@@ -32306,4 +32306,37 @@ msgstr "Drupal brúkara ID"
 
 msgid "There are no terms that match the search: %s"
 msgstr "Tað eru ongir tíðarorð sum passa til leitingina: %s"
+
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Innstillingin er globuliga lásin (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Um virkin, verða 1:1 privatu spjaldstindamiðlanir speglaðar í bólka spjallstovusøgunnar skjølum. Anbefalið at halda óvirkið fyri friðhelgi."
+
+msgid "Save private conversations in documents"
+msgstr "Goym privatu samtalurnar í skjølum"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU AI lóggávu – Gjørðugheit & áhættumelding"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "Samanliga við EU AI lóggávuna (reglugerð (EU) 2024/1689) verða AI kerfi brúkt í útbúgving almennt flokkað sum „hááhætta“. Hendan hugbúnaðurin sjálvur er <strong>ikki</strong> eitt AI kervi, men hann kann integrera valfríar innbyggjar ella uttanstondandi AI kervi — avhengigt av tíni stilling — fyri at betra brúkarauppgávna avrikkjan. Hesir kervi kunnu fáa atgongd til persónligar dữatur <em>bert um</em> brúkarar innihalda slík dữatur í teimum boðunum teir senda. Við design deilir hesin hugbúnaðurin ikki persónligar dữatur við AI kervi uttan brúkarans virkna innslátt. Sum standard eru allar AI-funktir óvirkar."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Admin ábyrgd & kunngjøringar"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Hendan stillingarsíðan greinir hvørja AI-funktu og hennara tilvørumerki. Sum umsátari skalt tú umsita tær nøktur og dagføra tínar GDPR-samskipaðar persónsverndarstefnur til at endaspelga tær valmøguleika tú virkjar. Longst AI-funkturnar deila ikki beinleiðis persónligar dữatur við uttanstondandi kervi, kunnu brúkaraboð send til AI innihalda persónligar upplýsingar uttan at tað er meiningin. Sum umsátari ert <strong>tú ábyrgur</strong> fyri at varsla brúkarar um hesa áhættuna. Fyri gjørdugheit kunnu framtíðarútgávur vísa ikki-intrúsivar endabrúkaramerki, ið vísa, at ávørt innslit ella afturmelting varð stovnað við hjálp frá AI."
+
+msgid "Positioning"
+msgstr "Støðseting"
+
+msgid "Quiz"
+msgstr "Kvík"
+
+msgid "Customcertificate"
+msgstr "Customcertificate"
+
+msgid "Update profile"
+msgstr "Dagfør profil"
 

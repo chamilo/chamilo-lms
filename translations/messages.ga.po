@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:cóipcheart,, no:gan cóipcheart"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fillteán,, application/msword:MsWord,, application/octet-stream:Sruth octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fillteán,, application/msword:MsWord,, application/octet-stream:Sruth Octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:cleachtadh,,      simulation:insamhal,,      questionnaire:fiosrúchán,,      diagram:léaráid,,      figure:figiúr,,      graph:graf,,      index:innéacs,,      slide:sleamhnán,,      table:tábla,,      narrative text:téacs insinte,,      exam:scrúdú,,      experiment:turgnamh,,      problem statement:ráiteas fadhb,,      self assessment:féimmeasúnú,,      lecture:léacht"
@@ -32310,4 +32310,37 @@ msgstr "ID úsáideora Drupal"
 
 msgid "There are no terms that match the search: %s"
 msgstr "Níl aon téarmaí a mheaitseálann an cuardach: %s"
+
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Tá an socrú glasáilte go domhanda (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Má chumasaítear é, déanfar teachtaireachtaí comhrá príobháideach 1:1 a fhrithscáthaán i gcáipéisí stair chomhrá an chúrsa. Moltar é a choinneáil dhíchumasaithe le haghaidh príobháideachta."
+
+msgid "Save private conversations in documents"
+msgstr "Sábháil comhráite príobháideacha i gcáipéisí"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "Acht AI AE – Fógra trédhearcachta & riosca"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "Faoin Acht um Intleacht Shaorga de chuid an AE (Rialachán (AE) 2024/1689), aicmítear córais AI a úsáidtear san oideachas go ginearálta mar “ardriosca”. Níl an bogearra seo féin <strong>ina</strong> chóras AI, ach is féidir dó córais AI inmheánacha nó seachtracha roghnacha a chomhtháthú—ag brath ar do chumraíocht—chun feidhmíocht tascanna úsáideoir a fheabhsú. D’fhéadfadh rochtain a bheith ag na córais sin ar shonraí pearsanta <em>amháin má</em> áiríonn úsáideoirí a leithéid i ngiotáin. De réir dearaidh, ní roinneann an bogearra seo sonraí pearsanta le córais AI gan ionchur gníomhach an úsáideora. De réir réamhshocraithe, tá gach gné AI díchumasaithe."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Freagracht riarthóra & nochtana"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Sonraíonn leathanach cumraíochta seo gach gné AI agus a cuspóir. Mar imscaradh, ba cheart duit iad a athbhreithniú go cúramach agus do pholasaithe príobháideachta sonraí atá comhlúathach le GDPR a nuashonrú chun na roghanna a chumasaíonn tú a léiriú. Cé nach roinneann formhór na ngnéithe AI sonraí pearsanta go díreach le córais sheachtracha, d’fhéadfadh faisnéis phearsanta a bheith i ngiotáin úsáideoirí a sheoltar chuig AI gan rún. Mar imscaradh, <strong>tá tú freagrach</strong> as úsáideoirí a chur ar an eolas faoin riosca seo. Ar mhaithe le trédhearcacht, féadfaidh eisiontaí amach anseo clibeanna neamhfhabhtacha úsáideoir deiridh a thaispeáint ag tabhairt le fios gur gineadh ábhar nó aiseolas áirithe le cabhair ón AI."
+
+msgid "Positioning"
+msgstr "Suíomh"
+
+msgid "Quiz"
+msgstr "Fionnachtain"
+
+msgid "Customcertificate"
+msgstr "Deimhniú saincheaptha"
+
+msgid "Update profile"
+msgstr "Nuashonraigh próifíl"
 

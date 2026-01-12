@@ -32313,3 +32313,36 @@ msgstr "Drupal-käyttäjän ID"
 msgid "There are no terms that match the search: %s"
 msgstr "Ei hakutuloksia haulle: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Asetus on globaalisti lukittu (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Jos käytössä, 1:1 yksityiset chat-viestit kopioidaan kurssin chat-historiadokumentteihin. Suositellaan pidettäväksi pois käytöstä tietosuojan vuoksi."
+
+msgid "Save private conversations in documents"
+msgstr "Tallenna yksityiset keskustelut dokumentteihin"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU:n tekoälylaki – Läpinäkyvyys- ja riski-ilmoitus"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "EU:n tekoälylain (asetus (EU) 2024/1689) mukaan koulutuksessa käytettävät tekoälyjärjestelmät luokitellaan yleensä ”korkeariskisiksi”. Tämä ohjelmisto itsessään <strong>ei ole</strong> tekoälyjärjestelmä, mutta se voi integroida valinnaisia sisäisiä tai ulkoisia tekoälyjärjestelmiä – riippuen asetuksistasi – käyttäjän tehtävien suorituskyvyn parantamiseksi. Nämä järjestelmät voivat päästä käsiksi henkilötietoihin <em>vain jos</em> käyttäjät sisällyttävät sellaisia tietoja kehotteisiinsa. Suunnittelun mukaan tämä ohjelmisto ei jaa henkilötietoja tekoälyjärjestelmien kanssa ilman käyttäjän aktiivista syötettä. Oletuksena kaikki tekoälyominaisuudet ovat pois käytöstä."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Ylläpitovastuu ja ilmoitukset"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Tämä asetussivu kuvaa jokaisen tekoälyominaisuuden ja sen tarkoituksen. Käyttöönottajana sinun tulisi tarkastella niitä huolellisesti ja päivittää GDPR-yhteensopivat tietosuojakäytäntösi vastaamaan ottamiasi käyttöön vaihtoehtoja. Vaikka useimmat tekoälyominaisuudet eivät jaa henkilötietoja suoraan ulkoisten järjestelmien kanssa, tekoälylle lähetetyt käyttäjän kehotteet voivat vahingossa sisältää henkilötietoja. Käyttöönottajana <strong>sinä olet vastuussa</strong> käyttäjien informoimisesta tästä riskistä. Läpinäkyvyyden vuoksi tulevat julkaisut voivat näyttää ei-intrusiiivisia loppukäyttäjän tunnisteita, jotka osoittavat, että tietty sisältö tai palaute on generoitu tekoälyn avulla."
+
+msgid "Positioning"
+msgstr "Sijoittelu"
+
+msgid "Quiz"
+msgstr "Testi"
+
+msgid "Customcertificate"
+msgstr "Mukautettuvarmenne"
+
+msgid "Update profile"
+msgstr "Päivitä profiili"
+

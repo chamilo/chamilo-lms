@@ -32311,3 +32311,36 @@ msgstr "شناسه کاربر دروپال"
 msgid "There are no terms that match the search: %s"
 msgstr "هیچ اصطلاحی با جستجو مطابقت ندارد: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr ""
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr ""
+
+msgid "Save private conversations in documents"
+msgstr ""
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr ""
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr ""
+
+msgid "Admin responsibility & disclosures"
+msgstr ""
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr ""
+
+msgid "Positioning"
+msgstr ""
+
+msgid "Quiz"
+msgstr ""
+
+msgid "Customcertificate"
+msgstr ""
+
+msgid "Update profile"
+msgstr ""
+

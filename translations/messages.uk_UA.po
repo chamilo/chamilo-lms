@@ -32307,3 +32307,36 @@ msgstr "ID користувача Drupal"
 msgid "There are no terms that match the search: %s"
 msgstr "Немає термінів, що відповідають пошуку: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Налаштування глобально заблоковано (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Якщо увімкнено, приватні повідомлення чату 1:1 будуть відображені в документах історії чату курсу. Рекомендується тримати вимкненим для конфіденційності."
+
+msgid "Save private conversations in documents"
+msgstr "Зберігати приватні розмови в документах"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "Закон ЄС про ШІ – Повідомлення про прозорість та ризики"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "Згідно із Законом ЄС про штучний інтелект (Регламент (EU) 2024/1689), системи ШІ, що використовуються в освіті, загалом класифікуються як «високоризикові». Це програмне забезпечення саме по собі <strong>не</strong> є системою ШІ, але воно може інтегрувати необов’язкові внутрішні або зовнішні системи ШІ — залежно від вашої конфігурації — для покращення продуктивності завдань користувача. Ці системи можуть отримувати доступ до персональних даних <em>лише якщо</em> користувачі включають такі дані в свої запити. За конструкцією, це програмне забезпечення не передає персональні дані системам ШІ без активного введення користувача. За замовчуванням усі функції ШІ вимкнено."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Відповідальність адміністратора та розкриття інформації"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Ця сторінка конфігурації деталізує кожну функцію ШІ та її призначення. Як розгортальник, ви повинні ретельно їх переглянути та оновити свої політики конфіденційності даних, сумісні з GDPR, щоб відобразити опції, які ви вмикаєте. Хоча більшість функцій ШІ не передають безпосередньо персональні дані зовнішнім системам, запити користувачів, надіслані до ШІ, можуть мимоволі містити персональну інформацію. Як розгортальник, <strong>ви відповідаєте</strong> за інформування користувачів про цей ризик. Для прозорості, майбутні релізи можуть показувати ненав’язливі теги для кінцевих користувачів, що вказують, що певний контент або зворотний зв’язок було згенеровано за допомогою ШІ."
+
+msgid "Positioning"
+msgstr "Позиціонування"
+
+msgid "Quiz"
+msgstr "Тест"
+
+msgid "Customcertificate"
+msgstr "Customcertificate"
+
+msgid "Update profile"
+msgstr "Оновити профіль"
+

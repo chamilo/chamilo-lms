@@ -32307,3 +32307,36 @@ msgstr "ID uživatele Drupal"
 msgid "There are no terms that match the search: %s"
 msgstr "Neexistují žádné termíny odpovídající vyhledávání: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Nastavení je globálně uzamčeno (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Pokud je povoleno, soukromé zprávy 1:1 budou zrcadlovy v dokumentech historie chatu kurzu. Doporučeno nechat vypnuto z důvodu soukromí."
+
+msgid "Save private conversations in documents"
+msgstr "Ukládat soukromé konverzace do dokumentů"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU AI Act – Upozornění na transparentnost a rizika"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "Podle nařízení EU o umělé inteligenci (Nařízení (EU) 2024/1689) jsou AI systémy používané ve vzdělávání obecně klasifikovány jako „vysokorizikové“. Tento software sám o sobě <strong>není</strong> AI systémem, ale může integrovat volitelné interní nebo externí AI systémy – v závislosti na vaší konfiguraci – pro zlepšení výkonu úkolů uživatelů. Tyto systémy mohou přistupovat k osobním údajům <em>pouze pokud</em> uživatelé zahrnou takové údaje do svých výzev. Z konstrukce tento software neposílá osobní údaje k AI systémům bez aktivního vstupu uživatele. Ve výchozím nastavení jsou všechny AI funkce vypnuté."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Odpovědnost správce & oznámení"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Tato konfigurační stránka podrobně popisuje každou AI funkci a její účel. Jako nasazovatel byste je měli pečlivě prostudovat a aktualizovat své zásady ochrany osobních údajů v souladu s GDPR tak, aby odrážely možnosti, které povolíte. Zatímco většina AI funkcí neposílá osobní údaje přímo k externím systémům, výzvy uživatelů odeslané k AI mohou neúmyslně obsahovat osobní informace. Jako nasazovatel jste <strong>odpovědný</strong> za informování uživatelů o tomto riziku. Pro transparentnost budou budoucí verze zobrazovat neinvazivní značky pro koncové uživatele, které označí, že určitý obsah nebo zpětná vazba byla generována s pomocí AI."
+
+msgid "Positioning"
+msgstr "Umístění"
+
+msgid "Quiz"
+msgstr "Kvíz"
+
+msgid "Customcertificate"
+msgstr "Vlastní osvědčení"
+
+msgid "Update profile"
+msgstr "Aktualizovat profil"
+

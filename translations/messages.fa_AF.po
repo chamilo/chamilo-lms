@@ -32307,3 +32307,36 @@ msgstr "شناسه کاربر دروپال"
 msgid "There are no terms that match the search: %s"
 msgstr "هیچ اصطلاحی با جستجو مطابقت ندارد: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "تنظیم به صورت سراسری قفل شده است (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "اگر فعال باشد، پیام‌های چت خصوصی ۱:۱ در اسناد تاریخچه چت دوره منعکس می‌شوند. توصیه می‌شود برای حفظ حریم خصوصی غیرفعال نگه داشته شود."
+
+msgid "Save private conversations in documents"
+msgstr "ذخیره مکالمات خصوصی در اسناد"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "قانون هوش مصنوعی اتحادیه اروپا – اطلاعیه شفافیت و ریسک"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "بر اساس قانون هوش مصنوعی اتحادیه اروپا (مقررات (EU) 2024/1689)، سیستم‌های هوش مصنوعی مورد استفاده در آموزش عموماً به عنوان «پرریسک» طبقه‌بندی می‌شوند. این نرم‌افزار خود <strong>هوش مصنوعی</strong> نیست، اما می‌تواند سیستم‌های هوش مصنوعی داخلی یا خارجی اختیاری را—بسته به پیکربندی شما—یکپارچه کند تا عملکرد وظایف کاربر را بهبود بخشد. این سیستم‌ها <em>تنها در صورتی</em> به داده‌های شخصی دسترسی خواهند داشت که کاربران چنین داده‌هایی را در پرسش‌های خود وارد کنند. به طور پیش‌فرض، این نرم‌افزار داده‌های شخصی را بدون ورودی فعال کاربر با سیستم‌های هوش مصنوعی به اشتراک نمی‌گذارد. به طور پیش‌فرض، تمام ویژگی‌های هوش مصنوعی غیرفعال هستند."
+
+msgid "Admin responsibility & disclosures"
+msgstr "مسئولیت مدیر و افشاها"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "این صفحه پیکربندی هر ویژگی هوش مصنوعی و هدف آن را شرح می‌دهد. به عنوان مستقرکننده، باید آن‌ها را با دقت بررسی کنید و سیاست‌های حفظ حریم خصوصی داده‌های مطابق با GDPR خود را به‌روزرسانی کنید تا گزینه‌هایی که فعال می‌کنید را منعکس کند. در حالی که اکثر ویژگی‌های هوش مصنوعی داده‌های شخصی را مستقیماً با سیستم‌های خارجی به اشتراک نمی‌گذارند، پرسش‌های ارسالی کاربران به هوش مصنوعی ممکن است به طور ناخواسته شامل اطلاعات شخصی باشد. به عنوان مستقرکننده، <strong>شما مسئول</strong> اطلاع‌رسانی این ریسک به کاربران هستید. برای شفافیت، نسخه‌های آینده ممکن است برچسب‌های غیرمزاحم برای کاربران نهایی نمایش دهند که نشان‌دهنده تولید محتوای خاص یا بازخورد با کمک هوش مصنوعی است."
+
+msgid "Positioning"
+msgstr "موقعیت‌یابی"
+
+msgid "Quiz"
+msgstr "کوئیز"
+
+msgid "Customcertificate"
+msgstr "گواهینامه سفارشی"
+
+msgid "Update profile"
+msgstr "به‌روزرسانی پروفایل"
+

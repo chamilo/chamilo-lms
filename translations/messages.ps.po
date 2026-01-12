@@ -32307,3 +32307,36 @@ msgstr "دروپال کاروونکي آیدی"
 msgid "There are no terms that match the search: %s"
 msgstr "هیڅ اصطلاح شتون نلري چې لټون سره تطبیق وکړي: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "سمون ښخه عمومي قفل شوې ده (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "که فعاله شي، 1:1 خصوصي چټ پیغامونه به په درس چټ تاریخچه اسنادو کې انعکاس شي. د خصوصیت لپاره غیر فعال ساتل وړاندیز کیږي."
+
+msgid "Save private conversations in documents"
+msgstr "خصوصي خبرو اترې په اسنادو کې خوندي کړئ"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU AI Act – شفافیت او خطر خبرونه"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "د EU مصنوعي ذکاوت قانون (Regulation (EU) 2024/1689) لاندې، په تعلیم کې کارول شوي AI سیسټمونه عموماً \"لوړ خطر\" ګڼل کیږي. دا سافټویر پخپله <strong>AI سیسټم نه دی</strong>، خو دا کولی شي اختیاري داخلي یا بهرني AI سیسټمونه—د تاسو د ترتیب پورې اړخ—وکاروي ترڅو د کاروونکو دنده ښه کړي. دا سیسټمونه شخصي معلوماتو ته لاسرسی کولی شي <em>یوازې که</em> کاروونکي دا معلومات په خپلو وړاندیو کې شامل کړي. د ډیزاین له مخې، دا سافټویر شخصي معلومات AI سیسټمونو سره شریک نه کوي پرته له دې چې کاروونکي فعال داخلول وکړي. په پیش فرض، ټول AI ځانګړتیاوې غیر فعالې دي."
+
+msgid "Admin responsibility & disclosures"
+msgstr "اداري مسؤلیت او افشاګانې"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "دا ترتیب پاڼه د هر AI ځانګړتیا او د هغې موخه تفصیل ورکوي. د نصب کونکي په توګه، تاسو باید هغه په دقت سره وڅیړئ او خپل GDPR مطابق معلومات خصوصیت پالیسۍ تازه کړئ ترڅو د هغو اختیارونو انعکاس وکړي چې تاسو فعالوئ. ډیری AI ځانګړتیاوې شخصي معلومات په مستقیم ډول بهرني سیسټمونو سره نه شریکوي، خو د AI ته واستول شوي کاروونکي وړاندی ممکن په بې هوښه ډول شخصي معلومات شامل کړي. د نصب کونکي په توګه، <strong>تاسو مسؤل یاست</strong> چې د دې خطر په اړه کاروونکي خبر کړئ. د شفافیت لپاره، راتلونکي نسخې ممکن غیر مزاحم پای کاروونکي ټګونه ښکاره کړي چې ځینې محتوا یا فیډبیک د AI په مرسته تولید شوی دی."
+
+msgid "Positioning"
+msgstr "پозиسیون"
+
+msgid "Quiz"
+msgstr "کویس"
+
+msgid "Customcertificate"
+msgstr "د ګمرکي سند"
+
+msgid "Update profile"
+msgstr "پروفایل تازه کول"
+

@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":是:有版權,, 否:無版權"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:資料夾,, application/msword:MsWord,, application/octet-stream:八位元組串流,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:資料夾,, application/msword:MsWord,, application/octet-stream:八位元組流,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":練習:練習,, 類比:類比,, 問卷:問卷,, 圖表:圖表,, 圖:圖,, 圖:圖,, 索引:索引,, 幻燈:幻燈,, 表:表,, 描述文本:描述文本,, 考試:考試,, 實驗:實驗,, 問題聲明:問題聲明,, 自我評價:自我評價,, 演講:演講"
@@ -32312,4 +32312,37 @@ msgstr "Drupal 使用者 ID"
 
 msgid "There are no terms that match the search: %s"
 msgstr "沒有符合搜尋的詞彙：%s"
+
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "設定已全域鎖定 (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "若啟用，一對一私人聊天訊息將會鏡像至課程聊天記錄文件中。為隱私建議保持停用。"
+
+msgid "Save private conversations in documents"
+msgstr "將私人對話儲存至文件中"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "歐盟 AI 法案 – 透明度與風險通知"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "根據歐盟人工智慧法案 (Regulation (EU) 2024/1689)，用於教育的人工智慧系統通常被分類為「高風險」。此軟體本身<strong>並非</strong>人工智慧系統，但可依您的設定整合選用的內部或外部人工智慧系統，以提升使用者任務效能。這些系統僅在使用者於提示中包含此類資料時，才能存取個人資料。本軟體設計上不會在未經使用者主動輸入的情況下，將個人資料分享給人工智慧系統。預設情況下，所有人工智慧功能均為停用狀態。"
+
+msgid "Admin responsibility & disclosures"
+msgstr "管理員責任與揭露事項"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "此設定頁面詳述每個 AI 功能及其目的。身為部署者，您應仔細檢視並更新符合 GDPR 的資料隱私政策，以反映您啟用的選項。雖然大多數 AI 功能不會直接將個人資料分享給外部系統，但發送至 AI 的使用者提示可能無意中包含個人資訊。身為部署者，<strong>您有責任</strong>告知使用者此風險。為達透明度，未來版本可能會顯示非侵入性的終端使用者標記，標示特定內容或回饋是由 AI 輔助產生。"
+
+msgid "Positioning"
+msgstr "定位"
+
+msgid "Quiz"
+msgstr "測驗"
+
+msgid "Customcertificate"
+msgstr "自訂證書"
+
+msgid "Update profile"
+msgstr "更新個人檔案"
 

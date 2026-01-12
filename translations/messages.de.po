@@ -33881,3 +33881,36 @@ msgstr "Drupal-Benutzer-ID"
 msgid "There are no terms that match the search: %s"
 msgstr "Es gibt keine Begriffe, die zur Suche passen: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Einstellung ist global gesperrt (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Wenn aktiviert, werden 1:1-Private-Chat-Nachrichten in den Kurs-Chat-Verlauf-Dokumenten gespiegelt. Aus Datenschutzgründen empfohlen, deaktiviert zu lassen."
+
+msgid "Save private conversations in documents"
+msgstr "Private Gespräche in Dokumenten speichern"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU-KI-Verordnung – Transparenz- & Risikohinweis"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "Gemäß EU-Künstliche-Intelligenz-Verordnung (Verordnung (EU) 2024/1689) werden KI-Systeme im Bildungsbereich in der Regel als „hochrisikobasiert“ eingestuft. Diese Software selbst ist <strong>kein</strong> KI-System, kann jedoch optionale interne oder externe KI-Systeme – je nach Konfiguration – integrieren, um die Leistung der Benutzeraufgaben zu verbessern. Diese Systeme können personenbezogene Daten <em>nur dann</em> abrufen, wenn Benutzer solche Daten in ihren Prompts enthalten. Diese Software teilt aus Designgründen keine personenbezogenen Daten mit KI-Systemen ohne aktive Benutzereingabe. Standardmäßig sind alle KI-Funktionen deaktiviert."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Admin-Verantwortung & Offenlegung"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Diese Konfigurationsseite beschreibt jede KI-Funktion und ihren Zweck detailliert. Als Bereitsteller sollten Sie diese sorgfältig prüfen und Ihre DSGVO-konformen Datenschutzrichtlinien aktualisieren, um die von Ihnen aktivierten Optionen widerzuspiegeln. Während die meisten KI-Funktionen keine personenbezogenen Daten direkt mit externen Systemen teilen, können Benutzerprompts an KI unbeabsichtigt personenbezogene Informationen enthalten. Als Bereitsteller sind <strong>Sie verantwortlich</strong>, Benutzer über dieses Risiko zu informieren. Zur Transparenz können zukünftige Versionen nicht aufdringliche Endbenutzer-Markierungen anzeigen, die darauf hinweisen, dass bestimmte Inhalte oder Rückmeldungen mit Hilfe von KI generiert wurden."
+
+msgid "Positioning"
+msgstr "Positionierung"
+
+msgid "Quiz"
+msgstr "Test"
+
+msgid "Customcertificate"
+msgstr "Customcertificate"
+
+msgid "Update profile"
+msgstr "Profil aktualisieren"
+

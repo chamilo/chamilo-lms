@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autortiesības,, no:nav autortiesību"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapē,, application/msword:MsWord,, application/octet-stream:Okteta plūsma,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Okteta plūsma,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:uzdevums,,      simulation:simulācija,,      questionnaire:aptaujā,,      diagram:diagramma,,      figure:attēls,,      graph:diagramma,,      index:indekss,,      slide:slīdrāde,,      table:tabula,,      narrative text:narratīvs teksts,,      exam:eksāmens,,      experiment:eksperiments,,      problem statement:problēmas apraksts,,      self assessment:paškontrole,,      lecture:lekcija"
@@ -32311,4 +32311,37 @@ msgstr "Drupal lietotāja ID"
 
 msgid "There are no terms that match the search: %s"
 msgstr "Nav terminu, kas atbilstu meklēšanai: %s"
+
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Iestatījums ir globāli bloķēts (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Ja iespējots, 1:1 privātā čata ziņas tiks atspoguļotas kursa čata vēstures dokumentos. Ieteicams atstāt izslēgtu privātumam."
+
+msgid "Save private conversations in documents"
+msgstr "Saglabāt privātās sarunas dokumentos"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "ES AI likums – caurspīdīguma un riska paziņojums"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "Saskaņā ar ES Mākslīgā intelekta likumu (Regula (ES) 2024/1689), mākslīgā intelekta sistēmas, kas izmantotas izglītībā, parasti tiek klasificētas kā “augsta riska”. Šī programmatūra pati par sevi <strong>nav</strong> mākslīgā intelekta sistēma, bet tā var integrēt opcionālas iekšējas vai ārējas mākslīgā intelekta sistēmas — atkarībā no jūsu konfigurācijas —, lai uzlabotu lietotāju uzdevumu izpildi. Šīs sistēmas var piekļūt personīgajiem datiem <em>tikai tad, ja</em> lietotāji iekļauj šādus datus savos uzvednēs. Pēc dizaina šī programmatūra neizmanto personīgos datus ar mākslīgā intelekta sistēmām bez lietotāja aktīvas ievades. Pēc noklusējuma visas mākslīgā intelekta funkcijas ir izslēgtas."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Administratora atbildība un atklāsmes"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Šī konfigurācijas lapa detalizēti apraksta katru mākslīgā intelekta funkciju un tās mērķi. Kā izvietotājs, jums rūpīgi jāizskata tās un jāatjaunina jūsu ar GDPR saderīgās datu privātuma politikas, lai atspoguļotu iespējotās opcijas. Lai gan lielākā daļa mākslīgā intelekta funkciju tieši neizmanto personīgos datus ar ārējām sistēmām, lietotāju uzvednes, kas nosūtītas mākslīgajam intelektam, var netīši ietvert personisku informāciju. Kā izvietotājs, <strong>jūs esat atbildīgs</strong> par lietotāju informēšanu par šo risku. Caurspīdīguma labad nākamajos laidienos var tikt rādītas neuzbāzīgas gala lietotāju birkas, kas norāda, ka noteikts saturs vai atsauksmes tika ģenerēts ar mākslīgā intelekta palīdzību."
+
+msgid "Positioning"
+msgstr "Pozicionēšana"
+
+msgid "Quiz"
+msgstr "Tests"
+
+msgid "Customcertificate"
+msgstr "Customcertificate"
+
+msgid "Update profile"
+msgstr "Atjaunināt profilu"
 

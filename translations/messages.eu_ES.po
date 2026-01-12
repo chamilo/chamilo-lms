@@ -32318,3 +32318,36 @@ msgstr "Drupal erabiltzaile ID"
 msgid "There are no terms that match the search: %s"
 msgstr "Ez dago bilaketarekin bat datozen terminorik: %s"
 
+msgid "Setting is globally locked (access_url_locked=1)"
+msgstr "Ezarpena globaleki blokeatuta dago (access_url_locked=1)"
+
+msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
+msgstr "Gaituta badago, 1:1 txat pribatuaren mezuak ikastaroaren txataren historia dokumentuetan islatuko dira. Pribatutasunerako desgaituta mantentzea gomendatzen da."
+
+msgid "Save private conversations in documents"
+msgstr "Gorde elkarrizketa pribatuak dokumentuetan"
+
+msgid "EU AI Act – Transparency & risk notice"
+msgstr "EU AI Act – Gardentasun eta arrisku abisua"
+
+msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
+msgstr "EU Artificial Intelligence Act (Erregelamendua (EU) 2024/1689) arabera, hezkuntzan erabilitako AI sistemak oro har “arrisku handiko” gisa sailkatzen dira. Software honezk ez da <strong>ez</strong> AI sistema, baina zure konfigurazioaren arabera, barneko edo kanpoko AI sistemak aukeran integratzea ahalbidetzen du erabiltzaileen zereginei errendimendua hobetzeko. Sistemek horrelako datuak erabiltzaileen promptuetatik soilik sar dezakete. Diseinuagatik, software honek ez ditu datu pertsonalak AI sistemekin partekatzen erabiltzailearen sarrera aktiborik gabe. Lehenetsitako moduan, AI ezaugarri guztiak desgaituta daude."
+
+msgid "Admin responsibility & disclosures"
+msgstr "Administratzailearen erantzukizuna eta argibideak"
+
+msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
+msgstr "Orrialde honek AI ezaugarri bakoitza eta bere xedoa xehatzen ditu. Inplementatzaile gisa, hauek arreta handiz berrikusi behar dituzu eta GDPRren arabera datuak babesteko zure politiken eguneratzea gaitzen dituzun aukerak islatzeko. Gehienbat AI ezaugarriek ez dute datu pertsonalik partekatzen kanpoko sistemekin zuzenean, baina AIra bidalitako erabiltzaileen promptuak datu pertsonalak barne ditzake. Inplementatzaile gisa, <strong>zuri dagokio</strong> erabiltzaileei arrisku hau jakinaraztea. Gardentasunerako, etorkizuneko bertsioek eduki edo feedback jakin batzuk AIaren laguntzarekin sortu direla adierazten duten erabiltzaile-erroten etiketa ez-intrusiboak erakutsi ditzakete."
+
+msgid "Positioning"
+msgstr "Kokapena"
+
+msgid "Quiz"
+msgstr "Galdera-testa"
+
+msgid "Customcertificate"
+msgstr "Customcertificate"
+
+msgid "Update profile"
+msgstr "Eguneratu profila"
+

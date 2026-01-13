@@ -493,8 +493,8 @@ async function saveToDocuments(file, type) {
   // Title without extension usually looks better in Documents listings.
   const titleNoExt = String(file.name).replace(/\.[^/.]+$/i, "")
   formData.append("title", titleNoExt)
+  formData.append("filetype", "file")
 
-  formData.append("filetype", type === "video" ? "video" : "file")
   formData.append("parentResourceNodeId", String(selectedFolderId.value))
   formData.append("resourceLinkList", buildResourceLinkList())
   formData.append("fileExistsOption", "rename")
@@ -506,7 +506,6 @@ async function saveToDocuments(file, type) {
   const data = response?.data || {}
   savedIri.value = String(data?.["@id"] || data?.id || "")
 
-  // Return created entity to build a reliable success message (renamed file, etc).
   return data
 }
 
@@ -623,8 +622,8 @@ function stopVideoPolling(reason = "") {
 }
 
 async function pollVideoJobOnce(jobId, providerCode) {
-  // This endpoint must be implemented server-side.
-  // It should return { success: true, result: { status, is_base64, content, url, content_type } }.
+  // Server-side polling endpoint.
+  // Expected: { success: true, text?: string, result: { id, status, is_base64, content, url, content_type, error? } }.
   const response = await axios.get(`/ai/video_job/${encodeURIComponent(jobId)}`, {
     params: {
       ai_provider: providerCode || null,
@@ -632,26 +631,6 @@ async function pollVideoJobOnce(jobId, providerCode) {
   })
 
   return response?.data
-}
-
-function isTerminalVideoStatus(status) {
-  const s = String(status || "")
-    .toLowerCase()
-    .trim()
-  return ["completed", "succeeded", "done", "failed", "canceled", "cancelled", "error"].includes(s)
-}
-
-function isSuccessVideoStatus(status) {
-  const s = String(status || "")
-    .toLowerCase()
-    .trim()
-  return ["completed", "succeeded", "done"].includes(s)
-}
-
-function scheduleNextVideoPoll(jobId, providerCode) {
-  videoPollTimeoutHandle = setTimeout(async () => {
-    await pollVideoJob(jobId, providerCode)
-  }, VIDEO_POLL_INTERVAL_MS)
 }
 
 async function pollVideoJob(jobId, providerCode) {
@@ -672,7 +651,6 @@ async function pollVideoJob(jobId, providerCode) {
       const msg = String(data?.text || "")
       console.warn("[AI Media] Video job status request failed:", msg)
       statusMessage.value = msg || t("Failed to check video status.")
-      // Keep polling, but do not spam too much.
       scheduleNextVideoPoll(jobId, providerCode)
       return
     }
@@ -680,6 +658,9 @@ async function pollVideoJob(jobId, providerCode) {
     const result = data?.result || {}
     const status = String(result.status || "")
     videoJobStatus.value = status
+
+    // Prefer a provider/server error message when available.
+    const serverError = String(result.error || data?.text || "").trim()
 
     // Update stored result (job-based).
     generatedResult.value = {
@@ -690,9 +671,9 @@ async function pollVideoJob(jobId, providerCode) {
       url: String(result.url || ""),
       is_base64: !!result.is_base64,
       content_type: String(result.content_type || "video/mp4"),
+      error: serverError || "",
     }
 
-    // If completed, try to show preview and allow save if base64.
     if (isTerminalVideoStatus(status)) {
       if (isSuccessVideoStatus(status)) {
         const isBase64 = !!result.is_base64
@@ -704,7 +685,6 @@ async function pollVideoJob(jobId, providerCode) {
           previewUrl.value = `data:${contentType};base64,${content}`
           statusMessage.value = t("Video generated successfully. You can now save it.")
         } else if (!isBase64 && url) {
-          // Preview only. Saving remains disabled to avoid browser downloading.
           previewUrl.value = url
           statusMessage.value = t(
             "Video generated successfully, but saving is disabled because the provider returned a URL.",
@@ -713,14 +693,13 @@ async function pollVideoJob(jobId, providerCode) {
           statusMessage.value = t("Video generation completed, but no playable content was returned.")
         }
       } else {
-        statusMessage.value = t("Video generation failed.")
+        statusMessage.value = serverError ? serverError : t("Video generation failed.")
       }
 
       stopVideoPolling("Terminal status reached.")
       return
     }
 
-    // Non-terminal status: keep polling.
     statusMessage.value = t("Waiting for the video to be ready...")
     scheduleNextVideoPoll(jobId, providerCode)
   } catch (e) {
@@ -728,6 +707,26 @@ async function pollVideoJob(jobId, providerCode) {
     statusMessage.value = t("Failed to check video status.")
     scheduleNextVideoPoll(jobId, providerCode)
   }
+}
+
+function isTerminalVideoStatus(status) {
+  const s = String(status || "")
+    .toLowerCase()
+    .trim()
+  return ["completed", "succeeded", "done", "failed", "canceled", "cancelled", "error"].includes(s)
+}
+
+function isSuccessVideoStatus(status) {
+  const s = String(status || "")
+    .toLowerCase()
+    .trim()
+  return ["completed", "succeeded", "done"].includes(s)
+}
+
+function scheduleNextVideoPoll(jobId, providerCode) {
+  videoPollTimeoutHandle = setTimeout(async () => {
+    await pollVideoJob(jobId, providerCode)
+  }, VIDEO_POLL_INTERVAL_MS)
 }
 
 function startVideoPolling(jobId, providerCode) {

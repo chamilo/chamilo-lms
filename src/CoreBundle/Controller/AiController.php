@@ -21,6 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 use const FILTER_SANITIZE_NUMBER_INT;
@@ -61,6 +62,13 @@ class AiController extends AbstractController
     {
         try {
             $data = json_decode($request->getContent(), true);
+            if (!is_array($data)) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Invalid JSON payload.',
+                ], 400);
+            }
+
             $nQ = (int) ($data['nro_questions'] ?? 0);
             $language = (string) ($data['language'] ?? 'en');
             $topic = trim((string) ($data['quiz_name'] ?? ''));
@@ -204,9 +212,22 @@ class AiController extends AbstractController
     public function generateImage(Request $request): JsonResponse
     {
         try {
-            $this->denyIfNotTeacher();
+            try {
+                $this->denyIfNotTeacher();
+            } catch (AccessDeniedException $e) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Access denied.',
+                ], 403);
+            }
 
             $data = json_decode($request->getContent(), true);
+            if (!is_array($data)) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Invalid JSON payload.',
+                ], 400);
+            }
 
             $n = (int) ($data['n'] ?? 1);
             $language = (string) ($data['language'] ?? 'en');
@@ -360,7 +381,14 @@ class AiController extends AbstractController
     public function generateVideo(Request $request): JsonResponse
     {
         try {
-            $this->denyIfNotTeacher();
+            try {
+                $this->denyIfNotTeacher();
+            } catch (AccessDeniedException $e) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Access denied.',
+                ], 403);
+            }
 
             $data = json_decode($request->getContent(), true);
             if (!is_array($data)) {
@@ -376,9 +404,9 @@ class AiController extends AbstractController
             $toolName = trim((string) ($data['tool'] ?? 'document'));
             $aiProvider = $data['ai_provider'] ?? null;
 
-            // Optional overrides (if later you decide to send them from the UI)
-            $seconds = isset($data['seconds']) ? (string) $data['seconds'] : null;
-            $size = isset($data['size']) ? (string) $data['size'] : null;
+            // Optional overrides
+            $seconds = isset($data['seconds']) ? trim((string) $data['seconds']) : null;
+            $size = isset($data['size']) ? trim((string) $data['size']) : null;
 
             if ($n <= 0 || '' === $prompt || '' === $toolName) {
                 return new JsonResponse([
@@ -426,11 +454,11 @@ class AiController extends AbstractController
                         'n' => $n,
                     ];
 
-                    if (null !== $seconds && '' !== trim($seconds)) {
-                        $options['seconds'] = trim($seconds);
+                    if (null !== $seconds && $seconds !== '') {
+                        $options['seconds'] = $seconds; // must be string: "4"|"8"|"12"
                     }
-                    if (null !== $size && '' !== trim($size)) {
-                        $options['size'] = trim($size);
+                    if (null !== $size && $size !== '') {
+                        $options['size'] = $size;
                     }
 
                     $result = $aiService->generateVideo($prompt, $toolName, $options);
@@ -441,7 +469,6 @@ class AiController extends AbstractController
                         continue;
                     }
 
-                    // Critical fix: treat "Error: ..." as a real failure (try next provider in AUTO).
                     if (\is_string($result) && str_starts_with($result, 'Error:')) {
                         $errors[$providerName] = $result;
                         $result = null;
@@ -484,7 +511,6 @@ class AiController extends AbstractController
                 ], $statusCode);
             }
 
-            // Normalize string response (best-effort).
             if (\is_string($result)) {
                 $raw = trim($result);
 
@@ -504,7 +530,6 @@ class AiController extends AbstractController
                     $normalized['content'] = $raw;
                     $normalized['is_base64'] = true;
                 } else {
-                    // Treat as a job id or opaque identifier.
                     $normalized['id'] = $raw;
                 }
 
@@ -518,7 +543,6 @@ class AiController extends AbstractController
                 ]);
             }
 
-            // Array response: allow url/content and job-based (id/status).
             if (!is_array($result)) {
                 return new JsonResponse([
                     'success' => false,
@@ -533,7 +557,6 @@ class AiController extends AbstractController
             $url = isset($result['url']) && \is_string($result['url']) ? trim($result['url']) : '';
             $content = isset($result['content']) && \is_string($result['content']) ? trim($result['content']) : '';
 
-            // If URL returned, try to inline as base64 (limited) to enable save/preview.
             if (empty($content) && !empty($url) && false === (bool) ($result['is_base64'] ?? false)) {
                 try {
                     $fetched = $this->fetchUrlAsBase64($url, 15 * 1024 * 1024);
@@ -542,7 +565,6 @@ class AiController extends AbstractController
                     $result['is_base64'] = true;
                     $result['url'] = null;
                 } catch (\Throwable $e) {
-                    // Keep URL mode (preview OK, saving disabled in frontend).
                     error_log('[AI][video] Failed to fetch video URL as base64: '.$e->getMessage());
                 }
             }
@@ -645,9 +667,16 @@ class AiController extends AbstractController
     public function videoJobStatus(string $id, Request $request): JsonResponse
     {
         try {
-            $this->denyIfNotTeacher();
+            try {
+                $this->denyIfNotTeacher();
+            } catch (AccessDeniedException $e) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Access denied.',
+                ], 403);
+            }
 
-            $aiProvider = $request->query->get('ai_provider'); // required when multiple providers exist
+            $aiProvider = $request->query->get('ai_provider');
 
             $aiService = $this->aiProviderFactory->getProvider($aiProvider, 'video');
             if (!$aiService instanceof AiVideoProviderInterface) {
@@ -664,7 +693,6 @@ class AiController extends AbstractController
                 ], 400);
             }
 
-            /** @var array|null $job */
             $job = $aiService->getVideoJobStatus($id);
             if (empty($job)) {
                 return new JsonResponse([
@@ -674,6 +702,7 @@ class AiController extends AbstractController
             }
 
             $status = (string) ($job['status'] ?? '');
+            $jobError = isset($job['error']) && is_string($job['error']) ? trim($job['error']) : '';
 
             $result = [
                 'id' => (string) ($job['id'] ?? $id),
@@ -683,13 +712,12 @@ class AiController extends AbstractController
                 'is_base64' => false,
                 'content_type' => 'video/mp4',
                 'revised_prompt' => null,
+                'error' => $jobError !== '' ? $jobError : null,
             ];
 
-            // Only attempt to fetch content when the job is completed.
             if (in_array($status, ['completed', 'succeeded', 'done'], true)) {
                 if (method_exists($aiService, 'getVideoJobContentAsBase64')) {
                     $maxBytes = 15 * 1024 * 1024;
-
                     $content = $aiService->getVideoJobContentAsBase64($id, $maxBytes);
 
                     if (is_array($content)) {
@@ -699,9 +727,11 @@ class AiController extends AbstractController
                         $result['content_type'] = (string) ($content['content_type'] ?? 'video/mp4');
 
                         if (!empty($content['error'])) {
+                            $result['error'] = is_string($content['error']) ? trim($content['error']) : (string) $content['error'];
+
                             return new JsonResponse([
                                 'success' => true,
-                                'text' => (string) $content['error'],
+                                'text' => (string) $result['error'],
                                 'result' => $result,
                                 'provider_used' => $aiProvider,
                             ]);
@@ -712,7 +742,7 @@ class AiController extends AbstractController
 
             return new JsonResponse([
                 'success' => true,
-                'text' => '',
+                'text' => $jobError !== '' ? $jobError : '',
                 'result' => $result,
                 'provider_used' => $aiProvider,
             ]);

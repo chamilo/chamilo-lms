@@ -22,6 +22,11 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
     private string $organizationId;
     private int $monthlyTokenLimit;
 
+    // OpenAI Videos API constraints (validate early to avoid avoidable 400s).
+    private const ALLOWED_VIDEO_MODELS = ['sora-2', 'sora-2-pro'];
+    private const ALLOWED_VIDEO_SECONDS = ['4', '8', '12'];
+    private const ALLOWED_VIDEO_SIZES = ['720x1280', '1280x720', '1024x1792', '1792x1024'];
+
     public function __construct(
         private readonly HttpClientInterface $httpClient,
         SettingsManager $settingsManager,
@@ -335,8 +340,24 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         $cfg = $this->getTypeConfig('video');
         $url = (string) ($cfg['url'] ?? 'https://api.openai.com/v1/videos');
         $model = (string) ($cfg['model'] ?? 'sora-2');
-        $seconds = (string) (($options['seconds'] ?? null) ?? ($cfg['seconds'] ?? '4'));
+        $seconds = (string) (($options['seconds'] ?? null) ?? ($cfg['seconds'] ?? '8'));
         $size = (string) (($options['size'] ?? null) ?? ($cfg['size'] ?? '720x1280'));
+
+        $model = strtolower(trim($model));
+        $seconds = trim((string) $seconds);
+        $size = trim((string) $size);
+
+        if (!in_array($model, self::ALLOWED_VIDEO_MODELS, true)) {
+            return 'Error: Invalid value for model. Expected one of: '.implode(', ', self::ALLOWED_VIDEO_MODELS).'.';
+        }
+
+        if (!in_array($seconds, self::ALLOWED_VIDEO_SECONDS, true)) {
+            return 'Error: Invalid value for seconds. Expected one of: '.implode(', ', self::ALLOWED_VIDEO_SECONDS).'.';
+        }
+
+        if (!in_array($size, self::ALLOWED_VIDEO_SIZES, true)) {
+            return 'Error: Invalid value for size. Expected one of: '.implode(', ', self::ALLOWED_VIDEO_SIZES).'.';
+        }
 
         $promptTrimmed = trim($prompt);
         $promptForLog = mb_substr($promptTrimmed, 0, 200);
@@ -360,7 +381,11 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                 'size' => $size,
             ];
 
-            if (isset($options['input_reference_path']) && is_string($options['input_reference_path']) && '' !== $options['input_reference_path']) {
+            if (
+                isset($options['input_reference_path'])
+                && is_string($options['input_reference_path'])
+                && '' !== $options['input_reference_path']
+            ) {
                 $path = $options['input_reference_path'];
                 if (is_readable($path)) {
                     $fields['input_reference'] = DataPart::fromPath($path);
@@ -396,7 +421,6 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                 $finalMsg = (string) ($err['message'] ?? '');
 
                 if ('' === trim($finalMsg)) {
-                    // Fallback when body is empty or not JSON.
                     $finalMsg = sprintf(
                         'OpenAI returned HTTP %d. Ensure your project/org has access to model "%s" and the organization is verified if required.',
                         $status,
@@ -451,7 +475,6 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                 'job' => $data,
             ];
 
-            // Job created -> tokens not provided here (keep 0s)
             $this->saveAiRequest($userId, $toolName, $promptTrimmed, 'openai', 0, 0, 0);
 
             error_log(sprintf(
@@ -537,6 +560,14 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         $contentUrlTpl = (string) ($cfg['content_url'] ?? 'https://api.openai.com/v1/videos/{id}/content');
         $contentUrl = str_replace('{id}', rawurlencode($jobId), $contentUrlTpl);
 
+        // Optional query variant (e.g. "preview") if you want smaller payloads for UI previews.
+        // Keep empty by default.
+        $variant = isset($cfg['content_variant']) ? trim((string) $cfg['content_variant']) : '';
+        if ($variant !== '') {
+            $separator = (str_contains($contentUrl, '?')) ? '&' : '?';
+            $contentUrl .= $separator.'variant='.rawurlencode($variant);
+        }
+
         try {
             $response = $this->httpClient->request('GET', $contentUrl, [
                 'headers' => array_merge($this->buildAuthHeaders(false), [
@@ -570,6 +601,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                 ];
             }
 
+            // Sometimes the content endpoint can return JSON with a URL.
             if ($raw !== '' && ($raw[0] === '{' || $raw[0] === '[')) {
                 $json = json_decode($raw, true);
                 if (is_array($json)) {

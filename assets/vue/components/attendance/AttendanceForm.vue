@@ -18,43 +18,56 @@
       editor-id="attendance_description"
     />
 
-    <!-- Advanced Settings (only in creation mode) -->
-    <BaseAdvancedSettingsButton
-      v-if="!isEditMode"
-      v-model="showAdvancedSettings"
-    >
-      <div class="flex flex-row mb-4">
-        <label class="font-semibold w-28">{{ t("Gradebook options") }}:</label>
+    <!-- Advanced Settings (create + edit) -->
+    <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
+      <!-- Require unique presence -->
+      <div class="flex flex-col gap-2 mb-4">
         <BaseCheckbox
-          id="attendance_qualify_gradebook"
-          v-model="formData.qualifyGradebook"
-          :label="t('Qualify attendance gradebook')"
-          name="attendance_qualify_gradebook"
-          @change="toggleGradebookOptions"
+          id="attendance_require_unique"
+          v-model="formData.requireUnique"
+          :label="t('Require unique presence')"
+          name="attendance_require_unique"
         />
+        <p class="text-xs text-gray-500">
+          {{ t("If enabled, the gradebook will give 100% when the learner was present at least once.") }}
+        </p>
       </div>
 
-      <div
-        v-if="formData.qualifyGradebook"
-        class="ml-6"
-      >
-        <BaseSelect
-          v-model="formData.gradebookOption"
-          :label="t('Select gradebook option')"
-          :options="gradebookOptions"
-        />
+      <!-- Gradebook options (only in creation mode) -->
+      <div v-if="!isEditMode">
+        <div class="flex flex-row mb-4">
+          <label class="font-semibold w-28">{{ t("Gradebook options") }}:</label>
+          <BaseCheckbox
+            id="attendance_qualify_gradebook"
+            v-model="formData.qualifyGradebook"
+            :label="t('Qualify attendance gradebook')"
+            name="attendance_qualify_gradebook"
+            @change="toggleGradebookOptions"
+          />
+        </div>
 
-        <BaseInputText
-          v-model="formData.gradebookTitle"
-          :label="t('Gradebook column title')"
-        />
+        <div
+          v-if="formData.qualifyGradebook"
+          class="ml-6"
+        >
+          <BaseSelect
+            v-model="formData.gradebookOption"
+            :label="t('Select gradebook option')"
+            :options="gradebookOptions"
+          />
 
-        <BaseInputNumber
-          v-model="formData.gradeWeight"
-          :label="t('Grade weight')"
-          :min="0"
-          :step="0.01"
-        />
+          <BaseInputText
+            v-model="formData.gradebookTitle"
+            :label="t('Gradebook column title')"
+          />
+
+          <BaseInputNumber
+            v-model="formData.gradeWeight"
+            :label="t('Grade weight')"
+            :min="0"
+            :step="0.01"
+          />
+        </div>
       </div>
     </BaseAdvancedSettingsButton>
 
@@ -124,6 +137,7 @@ const formData = reactive({
   gradebookOption: null,
   gradebookTitle: "",
   gradeWeight: 0.0,
+  requireUnique: false,
 })
 
 const gradebookOptions = ref([])
@@ -135,12 +149,11 @@ const rules = {
   gradebookOption: {},
   gradebookTitle: {},
   gradeWeight: {},
+  requireUnique: {},
 }
 
 const v$ = useVuelidate(rules, formData)
-
 const showAdvancedSettings = ref(false)
-
 const isEditMode = computed(() => !!props.initialData?.id)
 
 onMounted(async () => {
@@ -182,41 +195,42 @@ const submitForm = async () => {
   const postData = {
     title: formData.title,
     description: formData.description,
-    parentResourceNodeId: parentResourceNodeId.value,
-    resourceLinkList: resourceLinkList.value,
     sid: route.query.sid || null,
     cid: route.query.cid || null,
     attendanceQualifyTitle: formData.gradebookTitle,
     attendanceWeight: formData.gradeWeight,
+    requireUnique: !!formData.requireUnique,
+  }
+
+  // Only send these on create (safer)
+  if (!props.initialData?.id) {
+    postData.parentResourceNodeId = parentResourceNodeId.value
+    postData.resourceLinkList = resourceLinkList.value
   }
 
   try {
     if (props.initialData?.id) {
       await attendanceService.updateAttendance(props.initialData.id, postData)
       emit("backPressed", route.query)
-    } else {
-      const created = await attendanceService.createAttendance(postData)
-      router.push({
-        name: "AttendanceAddCalendarEvent",
-        params: {
-          node: getNodeId(created.resourceNode),
-          id: created.iid,
-        },
-        query: {
-          cid: route.query.cid,
-          sid: route.query.sid,
-          gid: route.query.gid,
-        },
-      })
+      return
     }
+
+    const created = await attendanceService.createAttendance(postData)
+
+    router.push({
+      name: "AttendanceAddCalendarEvent",
+      params: {
+        node: String(route.params.node),
+        id: created.iid,
+      },
+      query: {
+        cid: route.query.cid,
+        sid: route.query.sid,
+        gid: route.query.gid,
+      },
+    })
   } catch (error) {
     console.error("Error submitting attendance:", error)
   }
-}
-
-function getNodeId(resourceNode) {
-  if (!resourceNode || !resourceNode["@id"]) return 0
-  const parts = resourceNode["@id"].split("/")
-  return parseInt(parts[parts.length - 1])
 }
 </script>

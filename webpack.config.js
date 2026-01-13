@@ -93,6 +93,11 @@ Encore.setOutputPath("public/build/")
       to: "libs/qtip2/dist/jquery.qtip.css",
     },
     {
+      from: "./node_modules/flatpickr/dist",
+      pattern: /flatpickr\.min\.(css|js)$/,
+      to: "flatpickr/[name].[ext]",
+    },
+    {
       from: "./node_modules/flatpickr/dist/l10n",
       to: "flatpickr/l10n/[name].[ext]",
     },

@@ -15,49 +15,44 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class DeepSeekProvider implements AiProviderInterface
+class DeepSeekProvider implements AiProviderInterface, AiDocumentProviderInterface
 {
+    private array $providerConfig;
     private string $apiUrl;
     private string $apiKey;
     private string $model;
     private float $temperature;
-    private string $organizationId;
-    private int $monthlyTokenLimit;
-    private HttpClientInterface $httpClient;
-    private AiRequestsRepository $aiRequestsRepository;
-    private Security $security;
+    private int $maxTokens;
 
     public function __construct(
-        HttpClientInterface $httpClient,
+        private readonly HttpClientInterface $httpClient,
         SettingsManager $settingsManager,
-        AiRequestsRepository $aiRequestsRepository,
-        Security $security
+        private readonly AiRequestsRepository $aiRequestsRepository,
+        private readonly Security $security
     ) {
-        $this->httpClient = $httpClient;
-        $this->aiRequestsRepository = $aiRequestsRepository;
-        $this->security = $security;
-
-        // Get AI providers from settings
         $configJson = $settingsManager->getSetting('ai_helpers.ai_providers', true);
-        $config = json_decode($configJson, true) ?? [];
+        $config = \is_string($configJson) ? (json_decode($configJson, true) ?? []) : (\is_array($configJson) ? $configJson : []);
 
-        if (!isset($config['deepseek'])) {
+        if (!isset($config['deepseek']) || !\is_array($config['deepseek'])) {
             throw new RuntimeException('DeepSeek configuration is missing.');
         }
-        if (!isset($config['deepseek']['text'])) {
-            throw new RuntimeException('DeepSeek configuration for text processing is missing.');
-        }
 
-        $this->apiKey = $config['deepseek']['api_key'] ?? '';
-        $this->organizationId = $config['deepseek']['organization_id'] ?? '';
-        $this->monthlyTokenLimit = $config['deepseek']['monthly_token_limit'] ?? 1000;
-        $this->apiUrl = $config['deepseek']['text']['url'] ?? 'https://api.deepseek.com/chat/completions';
-        $this->model = $config['deepseek']['text']['model'] ?? 'deepseek-chat';
-        $this->temperature = $config['deepseek']['text']['temperature'] ?? 0.7;
+        $this->providerConfig = $config['deepseek'];
+        $this->apiKey = (string) ($this->providerConfig['api_key'] ?? '');
 
-        if (empty($this->apiKey)) {
+        if ('' === trim($this->apiKey)) {
             throw new RuntimeException('DeepSeek API key is missing.');
         }
+
+        $textCfg = $this->providerConfig['text'] ?? [];
+        if (!\is_array($textCfg)) {
+            $textCfg = [];
+        }
+
+        $this->apiUrl = (string) ($textCfg['url'] ?? 'https://api.deepseek.com/chat/completions');
+        $this->model = (string) ($textCfg['model'] ?? 'deepseek-chat');
+        $this->temperature = (float) ($textCfg['temperature'] ?? 0.7);
+        $this->maxTokens = (int) ($textCfg['max_tokens'] ?? 1000);
     }
 
     public function generateQuestions(string $topic, int $numQuestions, string $questionType, string $language): ?string
@@ -80,12 +75,11 @@ class DeepSeekProvider implements AiProviderInterface
             $topic
         );
 
-        return $this->requestDeepSeekAI($prompt, 'quiz');
+        return $this->requestDeepSeek($prompt, 'quiz');
     }
 
     public function generateLearnPath(string $topic, int $chaptersCount, string $language, int $wordsCount, bool $addTests, int $numQuestions): ?array
     {
-        // Step 1: Generate the Table of Contents
         $tableOfContentsPrompt = \sprintf(
             'Generate a structured table of contents for a course in "%s" with %d chapters on "%s".
             Return a numbered list, each chapter on a new line. No conclusion.',
@@ -94,17 +88,16 @@ class DeepSeekProvider implements AiProviderInterface
             $topic
         );
 
-        $lpStructure = $this->requestDeepSeekAI($tableOfContentsPrompt, 'learnpath');
+        $lpStructure = $this->requestDeepSeek($tableOfContentsPrompt, 'learnpath');
         if (!$lpStructure) {
             return ['success' => false, 'message' => 'Failed to generate course structure.'];
         }
 
-        // Step 2: Generate content for each chapter
         $lpItems = [];
         $chapters = explode("\n", trim($lpStructure));
-        foreach ($chapters as $index => $chapterTitle) {
+        foreach ($chapters as $chapterTitle) {
             $chapterTitle = trim($chapterTitle);
-            if (empty($chapterTitle)) {
+            if ('' === $chapterTitle) {
                 continue;
             }
 
@@ -117,7 +110,7 @@ class DeepSeekProvider implements AiProviderInterface
                 $chapterTitle
             );
 
-            $chapterContent = $this->requestDeepSeekAI($chapterPrompt, 'learnpath');
+            $chapterContent = $this->requestDeepSeek($chapterPrompt, 'learnpath');
             if (!$chapterContent) {
                 continue;
             }
@@ -128,10 +121,9 @@ class DeepSeekProvider implements AiProviderInterface
             ];
         }
 
-        // Step 3: Generate quizzes if enabled
         $quizItems = [];
         if ($addTests) {
-            foreach ($lpItems as &$chapter) {
+            foreach ($lpItems as $chapter) {
                 $quizPrompt = \sprintf(
                     'Generate %d multiple-choice questions in Aiken format in %s about "%s".
         Ensure each question follows this format:
@@ -150,11 +142,9 @@ class DeepSeekProvider implements AiProviderInterface
                     $chapter['title']
                 );
 
-                $quizContent = $this->requestDeepSeekAI($quizPrompt, 'learnpath');
-
+                $quizContent = $this->requestDeepSeek($quizPrompt, 'learnpath');
                 if ($quizContent) {
                     $validQuestions = $this->filterValidAikenQuestions($quizContent);
-
                     if (!empty($validQuestions)) {
                         $quizItems[] = [
                             'title' => 'Quiz: '.$chapter['title'],
@@ -173,31 +163,18 @@ class DeepSeekProvider implements AiProviderInterface
         ];
     }
 
-    private function filterValidAikenQuestions(string $quizContent): array
+    public function gradeOpenAnswer(string $prompt, string $toolName): ?string
     {
-        $questions = preg_split('/\n{2,}/', trim($quizContent));
-
-        $validQuestions = [];
-        foreach ($questions as $questionBlock) {
-            $lines = explode("\n", trim($questionBlock));
-
-            if (\count($lines) < 6) {
-                continue;
-            }
-
-            $options = \array_slice($lines, 1, 4);
-            $validOptions = array_filter($options, fn ($line) => preg_match('/^[A-D]\. .+/', $line));
-
-            $answerLine = end($lines);
-            if (4 === \count($validOptions) && preg_match('/^ANSWER: [A-D]$/', $answerLine)) {
-                $validQuestions[] = implode("\n", $lines);
-            }
-        }
-
-        return $validQuestions;
+        return $this->requestDeepSeek($prompt, $toolName);
     }
 
-    private function requestDeepSeekAI(string $prompt, string $toolName): ?string
+    public function generateDocument(string $prompt, string $toolName, ?array $options = []): ?string
+    {
+        // Document is text-like for DeepSeek
+        return $this->requestDeepSeek($prompt, $toolName);
+    }
+
+    private function requestDeepSeek(string $prompt, string $toolName): ?string
     {
         $userId = $this->getUserId();
         if (!$userId) {
@@ -211,7 +188,7 @@ class DeepSeekProvider implements AiProviderInterface
                 ['role' => 'user', 'content' => $prompt],
             ],
             'temperature' => $this->temperature,
-            'max_tokens' => 300,
+            'max_tokens' => $this->maxTokens,
         ];
 
         try {
@@ -223,44 +200,85 @@ class DeepSeekProvider implements AiProviderInterface
                 'json' => $payload,
             ]);
 
-            $statusCode = $response->getStatusCode();
-            $data = $response->toArray();
+            $data = $response->toArray(false);
 
-            if (200 === $statusCode && isset($data['choices'][0]['message']['content'])) {
-                $generatedContent = $data['choices'][0]['message']['content'];
-
-                $aiRequest = new AiRequests();
-                $aiRequest->setUserId($userId)
-                    ->setToolName($toolName)
-                    ->setRequestText($prompt)
-                    ->setPromptTokens($data['usage']['prompt_tokens'] ?? 0)
-                    ->setCompletionTokens($data['usage']['completion_tokens'] ?? 0)
-                    ->setTotalTokens($data['usage']['total_tokens'] ?? 0)
-                    ->setAiProvider('deepseek')
-                ;
-
-                $this->aiRequestsRepository->save($aiRequest);
-
-                return $generatedContent;
+            $generatedContent = $data['choices'][0]['message']['content'] ?? null;
+            if (!\is_string($generatedContent) || '' === trim($generatedContent)) {
+                error_log('[AI][DeepSeek] Empty content returned.');
+                return null;
             }
 
-            return null;
+            $this->saveAiRequest(
+                $userId,
+                $toolName,
+                $prompt,
+                'deepseek',
+                (int) ($data['usage']['prompt_tokens'] ?? 0),
+                (int) ($data['usage']['completion_tokens'] ?? 0),
+                (int) ($data['usage']['total_tokens'] ?? 0)
+            );
+
+            return $generatedContent;
         } catch (Exception $e) {
             error_log('[AI][DeepSeek] Exception: '.$e->getMessage());
-
             return null;
         }
     }
 
-    public function gradeOpenAnswer(string $prompt, string $toolName): ?string
+    private function filterValidAikenQuestions(string $quizContent): array
     {
-        return $this->requestDeepSeekAI($prompt, $toolName);
+        $questions = preg_split('/\n{2,}/', trim($quizContent));
+
+        $validQuestions = [];
+        foreach ($questions as $questionBlock) {
+            $lines = explode("\n", trim($questionBlock));
+
+            if (\count($lines) < 6) {
+                continue;
+            }
+
+            $options = \array_slice($lines, 1, 4);
+            $validOptions = array_filter($options, static fn ($line) => (bool) preg_match('/^[A-D]\. .+/', $line));
+
+            $answerLine = end($lines);
+            if (4 === \count($validOptions) && \is_string($answerLine) && preg_match('/^ANSWER: [A-D]$/', $answerLine)) {
+                $validQuestions[] = implode("\n", $lines);
+            }
+        }
+
+        return $validQuestions;
+    }
+
+    private function saveAiRequest(
+        int $userId,
+        string $toolName,
+        string $requestText,
+        string $provider,
+        int $promptTokens = 0,
+        int $completionTokens = 0,
+        int $totalTokens = 0
+    ): void {
+        try {
+            $aiRequest = new AiRequests();
+            $aiRequest
+                ->setUserId($userId)
+                ->setToolName($toolName)
+                ->setRequestText($requestText)
+                ->setPromptTokens($promptTokens)
+                ->setCompletionTokens($completionTokens)
+                ->setTotalTokens($totalTokens)
+                ->setAiProvider($provider)
+            ;
+
+            $this->aiRequestsRepository->save($aiRequest);
+        } catch (Exception $e) {
+            error_log('[AI] Failed to save AiRequests record: '.$e->getMessage());
+        }
     }
 
     private function getUserId(): ?int
     {
         $user = $this->security->getUser();
-
         return $user instanceof UserInterface ? $user->getId() : null;
     }
 }

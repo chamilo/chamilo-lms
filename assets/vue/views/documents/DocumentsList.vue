@@ -98,6 +98,14 @@
       only-icon
       type="primary"
     />
+    <BaseButton
+      v-if="showGenerateMediaButton"
+      :label="t('Generate media')"
+      icon="robot"
+      only-icon
+      type="black"
+      @click="goToGenerateMedia"
+    />
   </SectionHeader>
 
   <BaseTable
@@ -349,9 +357,7 @@
         icon="alert"
         size="big"
       />
-      <span v-if="item"
-      >{{ t("Are you sure you want to delete {0}?", [item.title]) }}</span
-      >
+      <span v-if="item">{{ t("Are you sure you want to delete {0}?", [item.title]) }}</span>
     </div>
   </BaseDialogConfirmCancel>
 
@@ -478,7 +484,7 @@ import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/en
 import { isEmpty } from "lodash"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import { computed, onMounted, ref, watch } from "vue"
+import { computed, onMounted, ref, unref, watch } from "vue"
 import { useCidReq } from "../../composables/cidReq"
 import { useDatatableList } from "../../composables/datatableList"
 import { useFormatDate } from "../../composables/formatDate"
@@ -502,13 +508,27 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 import { usePlatformConfig } from "../../store/platformConfig"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import { useCourseSettings } from "../../store/courseSettingStore"
 
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
 const securityStore = useSecurityStore()
-
+const courseSettingsStore = useCourseSettings()
 const platformConfigStore = usePlatformConfig()
+
+const aiHelpersEnabled = computed(() => {
+  return String(platformConfigStore.getSetting("ai_helpers.enable_ai_helpers")) === "true"
+})
+
+const imageGeneratorEnabled = computed(() => {
+  return String(courseSettingsStore?.getSetting?.("image_generator")) === "true"
+})
+
+const videoGeneratorEnabled = computed(() => {
+  return String(courseSettingsStore?.getSetting?.("video_generator")) === "true"
+})
+
 const allowAccessUrlFiles = computed(
   () => "false" !== platformConfigStore.getSetting("document.access_url_specific_files"),
 )
@@ -619,7 +639,27 @@ onMounted(async () => {
   await loadAllFolders()
   options.value.itemsPerPage = resolveDefaultRows(totalItems.value || 0)
   onUpdateOptions(options.value)
+  try {
+    await courseSettingsStore.loadCourseSettings(cid, sid)
+  } catch (e) {
+    console.error("[AI] loadCourseSettings failed:", e)
+  }
+  await loadAiCapabilities()
+  consumeAiSavedToast()
 })
+
+watch(
+  () => [
+    unref(cid),
+    unref(sid),
+    unref(gid),
+    aiHelpersEnabled.value,
+    imageGeneratorEnabled.value,
+    videoGeneratorEnabled.value,
+  ],
+  () => loadAiCapabilities(),
+  { immediate: true },
+)
 
 watch(totalItems, (n) => {
   const def = Number(platformConfigStore.getSetting("display.table_default_row", 10))
@@ -955,22 +995,21 @@ function showSlideShowWithFirstImage() {
 async function showUsageDialog() {
   try {
     const response = await axios.get(`/api/documents/${cid}/usage`, {
-      headers: { Accept: 'application/json' },
+      headers: { Accept: "application/json" },
       params: { sid, gid },
     })
 
     usageData.value = response.data
   } catch (error) {
-    console.error('Error fetching documents quota usage:', error)
+    console.error("Error fetching documents quota usage:", error)
     usageData.value = {
       datasets: [{ data: [100] }],
-      labels: [t('Storage usage unavailable')],
+      labels: [t("Storage usage unavailable")],
     }
   }
 
   isFileUsageDialogVisible.value = true
 }
-
 
 function showRecordAudioDialog() {
   isRecordAudioDialogVisible.value = true
@@ -1274,5 +1313,83 @@ const submitTemplateForm = async () => {
     console.error("Error submitting the form:", error)
     notification.showErrorNotification(t("Error submitting the form."))
   }
+}
+
+const hasAiImage = ref(false)
+const hasAiVideo = ref(false)
+
+const showGenerateMediaButton = computed(() => {
+  if (!isCurrentTeacher.value) return false
+  if (!aiHelpersEnabled.value) return false
+
+  const canImage = imageGeneratorEnabled.value && hasAiImage.value
+  const canVideo = !isCertificateMode.value && videoGeneratorEnabled.value && hasAiVideo.value
+
+  return canImage || canVideo
+})
+
+async function loadAiCapabilities() {
+  if (!aiHelpersEnabled.value || (!imageGeneratorEnabled.value && !videoGeneratorEnabled.value)) {
+    hasAiImage.value = false
+    hasAiVideo.value = false
+    return
+  }
+
+  try {
+    const { data } = await axios.get("/ai/capabilities", {
+      params: {
+        cid: unref(cid),
+        sid: unref(sid),
+        gid: unref(gid),
+      },
+      headers: { Accept: "application/json" },
+    })
+
+    console.warn("[AI] capabilities:", data)
+
+    const backendHasImage = !!(data?.has?.image ?? data?.image)
+    const backendHasVideo = !!(data?.has?.video ?? data?.video)
+
+    hasAiImage.value = imageGeneratorEnabled.value && backendHasImage
+    hasAiVideo.value = videoGeneratorEnabled.value && backendHasVideo
+  } catch (e) {
+    console.error("[AI] Failed to load capabilities:", e?.response || e)
+    hasAiImage.value = false
+    hasAiVideo.value = false
+  }
+}
+
+function goToGenerateMedia() {
+  router.push({
+    name: "DocumentsGenerateMedia",
+    params: { node: route.params.node },
+    query: { ...route.query, cid, sid, gid },
+  })
+}
+
+function consumeAiSavedToast() {
+  // Show toast only once after redirect from AI generator.
+  if (String(route.query.ai_saved || "") !== "1") {
+    return
+  }
+
+  const path = String(route.query.ai_saved_path || "").trim()
+  if (path) {
+    notification.showSuccessNotification(`${t("Saved")}: ${path}`)
+  } else {
+    notification.showSuccessNotification(t("Saved"))
+  }
+
+  // Remove params so it doesn't show again on refresh/back.
+  const newQuery = { ...route.query }
+  delete newQuery.ai_saved
+  delete newQuery.ai_saved_path
+  delete newQuery.ai_saved_iri
+
+  router.replace({
+    name: route.name,
+    params: route.params,
+    query: newQuery,
+  })
 }
 </script>

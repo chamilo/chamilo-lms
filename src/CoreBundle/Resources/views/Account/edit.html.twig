@@ -2,7 +2,7 @@
 
 {% block content %}
     {% autoescape false %}
-        <link rel="stylesheet" href="/build/flatpickr/flatpickr.min.css"/>
+        <link rel="stylesheet" href="{{ asset('build/flatpickr/flatpickr.min.css') }}"/>
         <script>
           document.addEventListener("DOMContentLoaded", function () {
             $('.select2_user_rel_tag').each(function(i, obj) {
@@ -59,7 +59,7 @@
         </div>
 
         {# Flatpickr JS desde /build #}
-        <script src="/build/flatpickr/flatpickr.min.js"></script>
+        <script src="{{ asset('build/flatpickr/flatpickr.min.js') }}"></script>
         {# (Opcional) Localización, si quieres: <script src="/build/flatpickr/l10n/fr.js"></script> #}
         <script>
           document.addEventListener('DOMContentLoaded', function () {

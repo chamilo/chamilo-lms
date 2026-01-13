@@ -92,77 +92,179 @@ class AttendanceLink extends AbstractLink
      */
     public function calc_score(?int $studentId = null, ?string $type = null): array
     {
-        $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
-        $sessionId = $this->get_session_id();
+        $attendanceId = (int) $this->get_ref_id();
 
-        // get attendance qualify max
-        $sql = 'SELECT attendance_qualify_max
-                FROM '.$this->get_attendance_table().'
-                WHERE iid = '.$this->get_ref_id();
+        $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
+        $tbl_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
+        $tbl_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
+
+        // Load attendance settings (qualify max + require unique mode)
+        $sql = 'SELECT attendance_qualify_max, require_unique
+            FROM '.$this->get_attendance_table().'
+            WHERE iid = '.$attendanceId;
         $query = Database::query($sql);
         $attendance = Database::fetch_assoc($query);
 
-        // Get results
-        $sql = 'SELECT *
-                FROM '.$tbl_attendance_result.'
-                WHERE attendance_id = '.$this->get_ref_id();
-        if (isset($studentId)) {
-            $sql .= ' AND user_id = '.intval($studentId);
-        }
-        $scores = Database::query($sql);
-        // for 1 student
-        if (isset($studentId)) {
-            if ($data = Database::fetch_assoc($scores)) {
-                return [
-                    $data['score'],
-                    $attendance['attendance_qualify_max'],
-                ];
-            } else {
-                //We sent the 0/attendance_qualify_max instead of null for correct calculations
-                return [0, $attendance['attendance_qualify_max']];
-            }
-        } else {
-            // all students -> get average
-            $students = []; // user list, needed to make sure we only
-            // take first attempts into account
-            $resultCount = 0;
-            $sum = 0;
-            $sumResult = 0;
-            $bestResult = 0;
+        $qualifyMax = (float) ($attendance['attendance_qualify_max'] ?? 0);
+        $requireUnique = !empty($attendance['require_unique']);
 
-            while ($data = Database::fetch_array($scores)) {
-                if (!(array_key_exists($data['user_id'], $students))) {
-                    if (0 != $attendance['attendance_qualify_max']) {
-                        $students[$data['user_id']] = $data['score'];
-                        $resultCount++;
-                        $sum += $data['score'] / $attendance['attendance_qualify_max'];
-                        $sumResult += $data['score'];
-                        if ($data['score'] > $bestResult) {
-                            $bestResult = $data['score'];
-                        }
-                        $weight = $attendance['attendance_qualify_max'];
+        // ------------------------------------------------------------
+        // Require-unique mode: 100% score if present at least once
+        // This is calculated from attendance sheets to avoid relying on
+        // potentially ambiguous aggregated scores in c_attendance_result.
+        // Presence states considered "present":
+        // 1 = Present, 2 = Late < 15 min, 3 = Late > 15 min
+        // ------------------------------------------------------------
+        if ($requireUnique) {
+            // Single student
+            if (null !== $studentId) {
+                $studentId = (int) $studentId;
+
+                $sqlHasPresence = 'SELECT 1
+                FROM '.$tbl_sheet.' s
+                INNER JOIN '.$tbl_calendar.' c ON c.iid = s.attendance_calendar_id
+                WHERE c.attendance_id = '.$attendanceId.'
+                  AND s.user_id = '.$studentId.'
+                  AND s.presence IN (1, 2, 3)
+                LIMIT 1';
+
+                $hasPresence = Database::num_rows(Database::query($sqlHasPresence)) > 0;
+
+                // 100% if present at least once
+                return [$hasPresence ? $qualifyMax : 0, $qualifyMax];
+            }
+
+            // All students (average / best / ranking / default)
+            $students = [];      // user_id => final score for that user
+            $sumRatio = 0.0;     // sum(score/max) across users
+            $sumScore = 0.0;     // sum(score) across users
+            $bestScore = 0.0;
+            $resultCount = 0;
+            $weight = $qualifyMax;
+
+            // Aggregate per user: has_presence = 1 if any presence in (1,2,3)
+            $sqlAll = 'SELECT s.user_id,
+                          MAX(CASE WHEN s.presence IN (1, 2, 3) THEN 1 ELSE 0 END) AS has_presence
+                   FROM '.$tbl_sheet.' s
+                   INNER JOIN '.$tbl_calendar.' c ON c.iid = s.attendance_calendar_id
+                   WHERE c.attendance_id = '.$attendanceId.'
+                   GROUP BY s.user_id';
+
+            $rs = Database::query($sqlAll);
+
+            while ($row = Database::fetch_assoc($rs)) {
+                $uid = (int) ($row['user_id'] ?? 0);
+                if ($uid <= 0) {
+                    continue;
+                }
+
+                $finalScore = ((int) ($row['has_presence'] ?? 0) === 1) ? $qualifyMax : 0.0;
+                $students[$uid] = $finalScore;
+            }
+
+            // Compute stats (keep legacy behavior when qualifyMax is 0)
+            foreach ($students as $uid => $finalScore) {
+                if (0 != $qualifyMax) {
+                    $resultCount++;
+                    $sumRatio += $finalScore / $qualifyMax;
+                    $sumScore += $finalScore;
+
+                    if ($finalScore > $bestScore) {
+                        $bestScore = $finalScore;
                     }
                 }
             }
 
             if (0 == $resultCount) {
                 return [null, null];
-            } else {
-                switch ($type) {
-                    case 'best':
-                        return [$bestResult, $weight];
-                        break;
-                    case 'average':
-                        return [$sumResult / $resultCount, $weight];
-                        break;
-                    case 'ranking':
-                        return AbstractLink::getCurrentUserRanking($studentId, $students);
-                        break;
-                    default:
-                        return [$sum, $resultCount];
-                        break;
+            }
+
+            switch ($type) {
+                case 'best':
+                    return [$bestScore, $weight];
+
+                case 'average':
+                    return [$sumScore / $resultCount, $weight];
+
+                case 'ranking':
+                    return AbstractLink::getCurrentUserRanking($studentId, $students);
+
+                default:
+                    // Default expected format: [sum of ratios, number of users]
+                    return [$sumRatio, $resultCount];
+            }
+        }
+
+        $sql = 'SELECT user_id, score
+            FROM '.$tbl_attendance_result.'
+            WHERE attendance_id = '.$attendanceId;
+
+        if (null !== $studentId) {
+            $sql .= ' AND user_id = '.(int) $studentId;
+        }
+
+        $scores = Database::query($sql);
+
+        // Single student
+        if (null !== $studentId) {
+            if ($row = Database::fetch_assoc($scores)) {
+                return [$row['score'], $qualifyMax];
+            }
+
+            return [0, $qualifyMax];
+        }
+
+        // All students (average / best)
+        $students = [];      // user_id => final score for that user
+        $sumRatio = 0.0;     // sum(score/max) across users
+        $sumScore = 0.0;     // sum(score) across users
+        $bestScore = 0.0;
+        $resultCount = 0;
+        $weight = $qualifyMax;
+
+        // Aggregate per user (legacy assumes one score per user)
+        while ($row = Database::fetch_assoc($scores)) {
+            $uid = (int) ($row['user_id'] ?? 0);
+            $score = (float) ($row['score'] ?? 0);
+
+            if ($uid <= 0) {
+                continue;
+            }
+
+            if (!array_key_exists($uid, $students)) {
+                $students[$uid] = $score;
+            }
+        }
+
+        // Compute stats
+        foreach ($students as $uid => $finalScore) {
+            if (0 != $qualifyMax) {
+                $resultCount++;
+                $sumRatio += $finalScore / $qualifyMax;
+                $sumScore += $finalScore;
+
+                if ($finalScore > $bestScore) {
+                    $bestScore = $finalScore;
                 }
             }
+        }
+
+        if (0 == $resultCount) {
+            return [null, null];
+        }
+
+        switch ($type) {
+            case 'best':
+                return [$bestScore, $weight];
+
+            case 'average':
+                return [$sumScore / $resultCount, $weight];
+
+            case 'ranking':
+                return AbstractLink::getCurrentUserRanking($studentId, $students);
+
+            default:
+                return [$sumRatio, $resultCount];
         }
     }
 
@@ -261,11 +363,12 @@ class AttendanceLink extends AbstractLink
      */
     private function get_attendance_data(): array
     {
-        if (!isset($this->attendance_data)) {
+        if (null === $this->attendance_data) {
             $sql = 'SELECT * FROM '.$this->get_attendance_table().' att
-                    WHERE att.iid = '.$this->get_ref_id();
+                    WHERE att.iid = '.(int) $this->get_ref_id();
             $query = Database::query($sql);
-            $this->attendance_data = Database::fetch_array($query);
+            $row = Database::fetch_assoc($query);
+            $this->attendance_data = is_array($row) ? $row : [];
         }
 
         return $this->attendance_data;

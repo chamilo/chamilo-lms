@@ -3,7 +3,7 @@
     {% set visible_img = 'ActionIcon::VISIBLE'|mdi_icon_t(22, 'ch-tool-icon', 'Invisible') %}
     {% set invisible_img = 'ActionIcon::INVISIBLE'|mdi_icon_t(22, 'ch-tool-icon', 'Visible') %}
     {% set delete_img = 'ActionIcon::DELETE'|mdi_icon_t(22, 'ch-tool-icon', 'Delete') %}
-    {% set baseurl = app.request.getPathInfo() ~ '?' ~ (app.request.queryString ? app.request.queryString ~ '&' : '') %}
+    {% set baseurl = '/main/portfolio/index.php' ~ '?' ~ (app.request.queryString ? app.request.queryString ~ '&' : '') %}
     {% set is_advanced_sharing_enabled = 'platform.portfolio_advanced_sharing'|api_get_setting and not _c is empty %}
 
     <section class="portfolio-items">
@@ -138,7 +138,7 @@
                                 <article>
                                     <footer>
                                         {{ 'ToolIcon::FORUM'|mdi_icon(22) }}
-                                        <strong>{{ comment.author.completeName }}</strong>
+                                        <strong>{{ comment.resourceNode.creator.fullName }}</strong>
                                         <small class="fa fa-clock-o fa-fw text-muted" aria-hidden="true"></small>
                                         <small class="text-muted">{{ comment.date|date_to_time_ago }}</small>
                                     </footer>

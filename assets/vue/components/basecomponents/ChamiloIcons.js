@@ -158,4 +158,5 @@ export const chamiloIconToClass = {
   "health-check": "mdi mdi-clipboard-pulse-outline",
   "promotion": "mdi mdi-school-outline",
   "help": "mdi mdi-face-agent",
+  "robot": "mdi mdi-robot",
 }

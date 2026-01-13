@@ -49,7 +49,7 @@ class GrokImageProvider implements AiImageProviderInterface
         $this->model = $config['grok']['image']['model'] ?? 'grok-2-image';
         $this->defaultOptions = [
             'response_format' => $config['grok']['image']['response_format'] ?? 'b64_json',
-            'n' => 1, // Number of images is fixed until we add an interface for choosing
+            'n' => 1,
         ];
 
         if (empty($this->apiKey)) {
@@ -57,11 +57,12 @@ class GrokImageProvider implements AiImageProviderInterface
         }
     }
 
-    public function generateImage(string $prompt, string $toolName, ?array $options = []): ?string
+    public function generateImage(string $prompt, string $toolName, ?array $options = []): string|array|null
     {
-        return $this->requestGrokAI($prompt, $toolName, $options);
+        return $this->requestGrokAI($prompt, $toolName, $options ?? []);
     }
-    private function requestGrokAI(string $prompt, string $toolName, array $options = []): ?string
+
+    private function requestGrokAI(string $prompt, string $toolName, array $options = []): string|array|null
     {
         $userId = $this->getUserId();
         if (!$userId) {
@@ -70,7 +71,8 @@ class GrokImageProvider implements AiImageProviderInterface
 
         $payload = [
             'model' => $this->model,
-            'prompt' => $prompt,  // Direct prompt string, no messages array
+            // Direct prompt string (no messages array for this endpoint)
+            'prompt' => $prompt,
             ...array_merge($this->defaultOptions, $options),
         ];
 
@@ -95,32 +97,45 @@ class GrokImageProvider implements AiImageProviderInterface
                 throw new RuntimeException('API error: '.$data['error']['message']);
             }
 
-            // Proper access: assuming response_format 'b64_json'
+            // Usage might not exist for images; default to 0
+            $usage = $data['usage'] ?? ['prompt_tokens' => 0, 'completion_tokens' => 0, 'total_tokens' => 0];
+
+            // Log request
+            $aiRequest = new AiRequests();
+            $aiRequest->setUserId($userId)
+                ->setToolName($toolName)
+                ->setRequestText($prompt)
+                ->setPromptTokens((int) ($usage['prompt_tokens'] ?? 0))
+                ->setCompletionTokens((int) ($usage['completion_tokens'] ?? 0))
+                ->setTotalTokens((int) ($usage['total_tokens'] ?? 0))
+                ->setAiProvider('grok')
+            ;
+            $this->aiRequestsRepository->save($aiRequest);
+
+            // Preferred response: base64
             if (isset($data['data'][0]['b64_json'])) {
-                $generatedContent = $data['data'][0]['b64_json'];
-
-                // Usage might not exist for images; default to 0
-                $usage = $data['usage'] ?? ['prompt_tokens' => 0, 'completion_tokens' => 0, 'total_tokens' => 0];
-
-                // Log request
-                $aiRequest = new AiRequests();
-                $aiRequest->setUserId($userId)
-                    ->setToolName($toolName)
-                    ->setRequestText($prompt)
-                    ->setPromptTokens($usage['prompt_tokens'])
-                    ->setCompletionTokens($usage['completion_tokens'])
-                    ->setTotalTokens($usage['total_tokens'])
-                    ->setAiProvider('grok')
-                ;
-
-                $this->aiRequestsRepository->save($aiRequest);
-
-                return $generatedContent;
+                return [
+                    'content' => (string) $data['data'][0]['b64_json'],
+                    'is_base64' => true,
+                    'content_type' => 'image/png',
+                    'revised_prompt' => $data['data'][0]['revised_prompt'] ?? null,
+                ];
             }
 
+            // Alternative response: URL
+            if (isset($data['data'][0]['url'])) {
+                return [
+                    'url' => (string) $data['data'][0]['url'],
+                    'is_base64' => false,
+                    'content_type' => 'image/png',
+                    'revised_prompt' => $data['data'][0]['revised_prompt'] ?? null,
+                ];
+            }
+
+            // Legacy fallback (should rarely happen)
             return null;
         } catch (Exception $e) {
-            error_log('[AI][Grok] Exception: '.$e->getMessage());
+            error_log('[AI][Grok][Image] Exception: '.$e->getMessage());
 
             return null;
         }

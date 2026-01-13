@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+/* For licensing terms, see /license.txt */
+
 namespace Chamilo\CoreBundle\AiProvider;
 
 use Chamilo\CoreBundle\Entity\AiRequests;
@@ -13,47 +15,57 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class GeminiProvider implements AiProviderInterface
+final class GeminiProvider implements AiProviderInterface, AiDocumentProviderInterface
 {
-    private string $apiUrl;
     private string $apiKey;
-    private string $model;
-    private float $temperature;
-    private HttpClientInterface $httpClient;
-    private AiRequestsRepository $aiRequestsRepository;
-    private Security $security;
+
+    // Text
+    private string $textModel;
+    private string $textUrlTemplate;
+    private float $textTemperature;
+    private int $textMaxOutputTokens;
+
+    // Document (fallbacks to text if missing)
+    private string $documentModel;
+    private string $documentUrlTemplate;
+    private float $documentTemperature;
+    private int $documentMaxOutputTokens;
 
     public function __construct(
-        HttpClientInterface $httpClient,
-        SettingsManager $settingsManager,
-        AiRequestsRepository $aiRequestsRepository,
-        Security $security
+        private readonly HttpClientInterface $httpClient,
+        private readonly SettingsManager $settingsManager,
+        private readonly AiRequestsRepository $aiRequestsRepository,
+        private readonly Security $security
     ) {
-        $this->httpClient = $httpClient;
-        $this->aiRequestsRepository = $aiRequestsRepository;
-        $this->security = $security;
+        $config = $this->readProvidersConfig();
 
-        // Get AI providers from settings
-        $configJson = $settingsManager->getSetting('ai_helpers.ai_providers', true);
-        $config = json_decode($configJson, true) ?? [];
-
-        if (!isset($config['gemini'])) {
+        if (!isset($config['gemini']) || !\is_array($config['gemini'])) {
             throw new RuntimeException('Gemini configuration is missing.');
         }
-        if (!isset($config['gemini']['text'])) {
+
+        $providerConfig = $config['gemini'];
+
+        $this->apiKey = (string) ($providerConfig['api_key'] ?? '');
+        if ('' === $this->apiKey) {
+            throw new RuntimeException('Gemini API key is missing.');
+        }
+
+        $textCfg = $providerConfig['text'] ?? null;
+        if (!\is_array($textCfg)) {
             throw new RuntimeException('Gemini configuration for text processing is missing.');
         }
 
-        $this->apiKey = $config['gemini']['api_key'] ?? '';
-        // Gemini expects endpoint like: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
-        $this->model = $config['gemini']['text']['model'] ?? 'gemini-2.5-flash';
-        $tempApiUrl = $config['gemini']['text']['url'] ?? 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent';
-        $this->apiUrl = \sprintf($tempApiUrl, $this->model);
-        $this->temperature = $config['gemini']['text']['temperature'] ?? 0.7;
+        $this->textModel = (string) ($textCfg['model'] ?? 'gemini-2.5-flash');
+        $this->textUrlTemplate = (string) ($textCfg['url'] ?? 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent');
+        $this->textTemperature = (float) ($textCfg['temperature'] ?? 0.7);
+        $this->textMaxOutputTokens = (int) ($textCfg['max_output_tokens'] ?? 1000);
 
-        if (empty($this->apiKey)) {
-            throw new RuntimeException('Gemini API key is missing.');
-        }
+        $docCfg = $providerConfig['document'] ?? null;
+
+        $this->documentModel = \is_array($docCfg) ? (string) ($docCfg['model'] ?? $this->textModel) : $this->textModel;
+        $this->documentUrlTemplate = \is_array($docCfg) ? (string) ($docCfg['url'] ?? $this->textUrlTemplate) : $this->textUrlTemplate;
+        $this->documentTemperature = \is_array($docCfg) ? (float) ($docCfg['temperature'] ?? $this->textTemperature) : $this->textTemperature;
+        $this->documentMaxOutputTokens = \is_array($docCfg) ? (int) ($docCfg['max_output_tokens'] ?? $this->textMaxOutputTokens) : $this->textMaxOutputTokens;
     }
 
     public function generateQuestions(string $topic, int $numQuestions, string $questionType, string $language): ?string
@@ -76,19 +88,18 @@ class GeminiProvider implements AiProviderInterface
             $topic
         );
 
-        return $this->requestGemini($prompt, 'quiz');
+        return $this->requestGemini(
+            $this->buildUrl($this->textUrlTemplate, $this->textModel),
+            $this->textTemperature,
+            $this->textMaxOutputTokens,
+            $prompt,
+            'quiz'
+        );
     }
 
-    public function generateLearnPath(
-        string $topic,
-        int $chaptersCount,
-        string $language,
-        int $wordsCount,
-        bool $addTests,
-        int $numQuestions
-    ): ?array {
-        // Step 1: Generate the Table of Contents
-        $tableOfContentsPrompt = \sprintf(
+    public function generateLearnPath(string $topic, int $chaptersCount, string $language, int $wordsCount, bool $addTests, int $numQuestions): ?array
+    {
+        $tocPrompt = \sprintf(
             'Generate a structured table of contents for a course in "%s" with %d chapters on "%s".
             Return a numbered list, each chapter on a new line. No conclusion.',
             $language,
@@ -96,17 +107,23 @@ class GeminiProvider implements AiProviderInterface
             $topic
         );
 
-        $lpStructure = $this->requestGemini($tableOfContentsPrompt, 'learnpath');
+        $lpStructure = $this->requestGemini(
+            $this->buildUrl($this->textUrlTemplate, $this->textModel),
+            $this->textTemperature,
+            $this->textMaxOutputTokens,
+            $tocPrompt,
+            'learnpath'
+        );
+
         if (!$lpStructure) {
             return ['success' => false, 'message' => 'Failed to generate course structure.'];
         }
 
-        // Step 2: Generate content for each chapter
         $lpItems = [];
         $chapters = explode("\n", trim($lpStructure));
-        foreach ($chapters as $index => $chapterTitle) {
+        foreach ($chapters as $chapterTitle) {
             $chapterTitle = trim($chapterTitle);
-            if (empty($chapterTitle)) {
+            if ('' === $chapterTitle) {
                 continue;
             }
 
@@ -119,7 +136,14 @@ class GeminiProvider implements AiProviderInterface
                 $chapterTitle
             );
 
-            $chapterContent = $this->requestGemini($chapterPrompt, 'learnpath');
+            $chapterContent = $this->requestGemini(
+                $this->buildUrl($this->textUrlTemplate, $this->textModel),
+                $this->textTemperature,
+                $this->textMaxOutputTokens,
+                $chapterPrompt,
+                'learnpath'
+            );
+
             if (!$chapterContent) {
                 continue;
             }
@@ -130,10 +154,9 @@ class GeminiProvider implements AiProviderInterface
             ];
         }
 
-        // Step 3: Generate quizzes if enabled
         $quizItems = [];
         if ($addTests) {
-            foreach ($lpItems as &$chapter) {
+            foreach ($lpItems as $chapter) {
                 $quizPrompt = \sprintf(
                     'Generate %d multiple-choice questions in Aiken format in %s about "%s".
             Ensure each question follows this format:
@@ -152,17 +175,24 @@ class GeminiProvider implements AiProviderInterface
                     $chapter['title']
                 );
 
-                $quizContent = $this->requestGemini($quizPrompt, 'learnpath');
+                $quizContent = $this->requestGemini(
+                    $this->buildUrl($this->textUrlTemplate, $this->textModel),
+                    $this->textTemperature,
+                    $this->textMaxOutputTokens,
+                    $quizPrompt,
+                    'learnpath'
+                );
 
-                if ($quizContent) {
-                    $validQuestions = $this->filterValidAikenQuestions($quizContent);
+                if (!$quizContent) {
+                    continue;
+                }
 
-                    if (!empty($validQuestions)) {
-                        $quizItems[] = [
-                            'title' => 'Quiz: '.$chapter['title'],
-                            'content' => implode("\n\n", $validQuestions),
-                        ];
-                    }
+                $valid = $this->filterValidAikenQuestions($quizContent);
+                if (!empty($valid)) {
+                    $quizItems[] = [
+                        'title' => 'Quiz: '.$chapter['title'],
+                        'content' => implode("\n\n", $valid),
+                    ];
                 }
             }
         }
@@ -175,9 +205,105 @@ class GeminiProvider implements AiProviderInterface
         ];
     }
 
+    public function gradeOpenAnswer(string $prompt, string $toolName): ?string
+    {
+        return $this->requestGemini(
+            $this->buildUrl($this->textUrlTemplate, $this->textModel),
+            $this->textTemperature,
+            $this->textMaxOutputTokens,
+            $prompt,
+            $toolName
+        );
+    }
+
+    public function generateDocument(string $prompt, string $toolName, ?array $options = []): ?string
+    {
+        $format = isset($options['format']) ? (string) $options['format'] : '';
+        if ('' !== $format) {
+            $prompt .= "\n\nOutput format: {$format}.";
+        }
+
+        return $this->requestGemini(
+            $this->buildUrl($this->documentUrlTemplate, $this->documentModel),
+            $this->documentTemperature,
+            $this->documentMaxOutputTokens,
+            $prompt,
+            $toolName
+        );
+    }
+
+    private function requestGemini(string $url, float $temperature, int $maxOutputTokens, string $prompt, string $toolName): ?string
+    {
+        $userId = $this->getUserId();
+        if (!$userId) {
+            throw new RuntimeException('User not authenticated.');
+        }
+
+        $payload = [
+            'contents' => [
+                [
+                    'parts' => [
+                        ['text' => $prompt],
+                    ],
+                ],
+            ],
+            'generationConfig' => [
+                'temperature' => $temperature,
+                'maxOutputTokens' => $maxOutputTokens,
+            ],
+        ];
+
+        try {
+            $response = $this->httpClient->request('POST', $url, [
+                'headers' => [
+                    'x-goog-api-key' => $this->apiKey,
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => $payload,
+            ]);
+
+            $statusCode = $response->getStatusCode();
+            $data = $response->toArray(false);
+
+            if (
+                200 !== $statusCode
+                || !isset($data['candidates'][0]['content']['parts'][0]['text'])
+            ) {
+                error_log('[AI][Gemini] Invalid response (status='.$statusCode.').');
+                return null;
+            }
+
+            $generatedContent = (string) $data['candidates'][0]['content']['parts'][0]['text'];
+
+            // Gemini usually returns usageMetadata, not usage.prompt_tokens
+            $usageMeta = $data['usageMetadata'] ?? [];
+            $promptTokens = (int) ($usageMeta['promptTokenCount'] ?? 0);
+            $completionTokens = (int) ($usageMeta['candidatesTokenCount'] ?? 0);
+            $totalTokens = (int) ($usageMeta['totalTokenCount'] ?? ($promptTokens + $completionTokens));
+
+            $aiRequest = new AiRequests();
+            $aiRequest
+                ->setUserId($userId)
+                ->setToolName($toolName)
+                ->setRequestText($prompt)
+                ->setPromptTokens($promptTokens)
+                ->setCompletionTokens($completionTokens)
+                ->setTotalTokens($totalTokens)
+                ->setAiProvider('gemini')
+            ;
+
+            $this->aiRequestsRepository->save($aiRequest);
+
+            return $generatedContent;
+        } catch (Exception $e) {
+            error_log('[AI][Gemini] Exception: '.$e->getMessage());
+            return null;
+        }
+    }
+
     private function filterValidAikenQuestions(string $quizContent): array
     {
-        $questions = preg_split('/\n{2,}/', trim($quizContent));
+        $questions = preg_split('/\n{2,}/', trim($quizContent)) ?: [];
 
         $validQuestions = [];
         foreach ($questions as $questionBlock) {
@@ -188,9 +314,9 @@ class GeminiProvider implements AiProviderInterface
             }
 
             $options = \array_slice($lines, 1, 4);
-            $validOptions = array_filter($options, fn ($line) => preg_match('/^[A-D]\. .+/', $line));
+            $validOptions = array_filter($options, static fn ($line) => (bool) preg_match('/^[A-D]\. .+/', $line));
 
-            $answerLine = end($lines);
+            $answerLine = (string) end($lines);
             if (4 === \count($validOptions) && preg_match('/^ANSWER: [A-D]$/', $answerLine)) {
                 $validQuestions[] = implode("\n", $lines);
             }
@@ -199,80 +325,30 @@ class GeminiProvider implements AiProviderInterface
         return $validQuestions;
     }
 
-    private function requestGemini(string $prompt, string $toolName): ?string
+    private function buildUrl(string $template, string $model): string
     {
-        $userId = $this->getUserId();
-        if (!$userId) {
-            throw new RuntimeException('User not authenticated.');
-        }
-
-        // Gemini expects a "contents" array (of turns), with inner "parts" [{"text": "..."}]
-        $payload = [
-            'contents' => [
-                [
-                    'parts' => [
-                        ['text' => $prompt],
-                    ],
-                ],
-            ],
-            'generationConfig' => [
-                'temperature' => $this->temperature,
-                'maxOutputTokens' => 1000,
-            ],
-        ];
-
-        try {
-            $response = $this->httpClient->request('POST', $this->apiUrl, [
-                'headers' => [
-                    'x-goog-api-key' => $this->apiKey,
-                    'Content-Type' => 'application/json',
-                ],
-                'json' => $payload,
-            ]);
-
-            $statusCode = $response->getStatusCode();
-            $data = $response->toArray();
-
-            // Gemini returns "candidates" (array), first candidate, first part of content
-            if (
-                200 === $statusCode
-                && isset($data['candidates'][0]['content']['parts'][0]['text'])
-            ) {
-                $generatedContent = $data['candidates'][0]['content']['parts'][0]['text'];
-
-                $aiRequest = new AiRequests();
-                $aiRequest->setUserId($userId)
-                    ->setToolName($toolName)
-                    ->setRequestText($prompt)
-                    // Gemini does not currently return token counts, so we set to 0
-                    ->setPromptTokens($data['usage']['prompt_tokens'] ?? 0)
-                    ->setCompletionTokens($data['usage']['completion_tokens'] ?? 0)
-                    ->setTotalTokens($data['usage']['total_tokens'] ?? 0)
-                    ->setAiProvider('gemini')
-                ;
-
-                $this->aiRequestsRepository->save($aiRequest);
-
-                return $generatedContent;
-            }
-
-            return null;
-        } catch (Exception $e) {
-            error_log('[AI][Gemini] Exception: '.$e->getMessage());
-
-            return null;
-        }
-    }
-
-    public function gradeOpenAnswer(string $prompt, string $toolName): ?string
-    {
-        return $this->requestGemini($prompt, $toolName);
+        // If template expects %s, inject model; else keep as-is
+        return str_contains($template, '%s') ? \sprintf($template, $model) : $template;
     }
 
     private function getUserId(): ?int
     {
         $user = $this->security->getUser();
-
         return $user instanceof UserInterface ? $user->getId() : null;
+    }
+
+    private function readProvidersConfig(): array
+    {
+        $configJson = $this->settingsManager->getSetting('ai_helpers.ai_providers', true);
+
+        if (\is_string($configJson)) {
+            return json_decode($configJson, true) ?? [];
+        }
+
+        if (\is_array($configJson)) {
+            return $configJson;
+        }
+
+        return [];
     }
 }

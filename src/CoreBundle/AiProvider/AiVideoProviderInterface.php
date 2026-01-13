@@ -11,11 +11,13 @@ interface AiVideoProviderInterface
     /**
      * Generate a video.
      *
-     * @param string $prompt   The complete prompt, with language, question, context and answer
-     * @param string $toolName A tag, e.g. 'open_answer_grade'.
-     * @param ?array $options  An array of options (format etc.)
+     * @param string $prompt   The prompt to generate a video from
+     * @param string $toolName A tag, e.g. 'document_video_generate'
+     * @param ?array  $options Provider-specific options
      *
-     * @return string The raw text of the video in base64, or a URL
+     * @return string|array|null
+     *  - string: legacy mode (base64 or URL)
+     *  - array: structured response for UI (preferred)
      */
-    public function generateVideo(string $prompt, string $toolName, ?array $options = []): string;
+    public function generateVideo(string $prompt, string $toolName, ?array $options = []): string|array|null;
 }

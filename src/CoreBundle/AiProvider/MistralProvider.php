@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+/* For licensing terms, see /license.txt */
+
 namespace Chamilo\CoreBundle\AiProvider;
 
 use Chamilo\CoreBundle\Entity\AiRequests;
@@ -13,45 +15,57 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class MistralProvider implements AiProviderInterface
+final class MistralProvider implements AiProviderInterface, AiDocumentProviderInterface
 {
-    private string $apiUrl;
     private string $apiKey;
-    private string $model;
-    private float $temperature;
-    private HttpClientInterface $httpClient;
-    private AiRequestsRepository $aiRequestsRepository;
-    private Security $security;
+
+    // Text
+    private string $textApiUrl;
+    private string $textModel;
+    private float $textTemperature;
+    private int $textMaxTokens;
+
+    // Document (fallbacks to text if missing)
+    private string $documentApiUrl;
+    private string $documentModel;
+    private float $documentTemperature;
+    private int $documentMaxTokens;
 
     public function __construct(
-        HttpClientInterface $httpClient,
-        SettingsManager $settingsManager,
-        AiRequestsRepository $aiRequestsRepository,
-        Security $security
+        private readonly HttpClientInterface $httpClient,
+        private readonly SettingsManager $settingsManager,
+        private readonly AiRequestsRepository $aiRequestsRepository,
+        private readonly Security $security
     ) {
-        $this->httpClient = $httpClient;
-        $this->aiRequestsRepository = $aiRequestsRepository;
-        $this->security = $security;
+        $config = $this->readProvidersConfig();
 
-        // Get AI providers from settings
-        $configJson = $settingsManager->getSetting('ai_helpers.ai_providers', true);
-        $config = json_decode($configJson, true) ?? [];
-
-        if (!isset($config['mistral'])) {
+        if (!isset($config['mistral']) || !\is_array($config['mistral'])) {
             throw new RuntimeException('Mistral configuration is missing.');
         }
-        if (!isset($config['mistral']['text'])) {
-            throw new RuntimeException('DeepSeek configuration for text processing is missing.');
-        }
 
-        $this->apiKey = $config['mistral']['api_key'] ?? '';
-        $this->apiUrl = $config['mistral']['text']['url'] ?? 'https://api.mistral.ai/v1/chat/completions';
-        $this->model = $config['mistral']['text']['model'] ?? 'mistral-large-latest';
-        $this->temperature = $config['mistral']['text']['temperature'] ?? 0.7;
+        $providerConfig = $config['mistral'];
 
-        if (empty($this->apiKey)) {
+        $this->apiKey = (string) ($providerConfig['api_key'] ?? '');
+        if ('' === $this->apiKey) {
             throw new RuntimeException('Mistral API key is missing.');
         }
+
+        $textCfg = $providerConfig['text'] ?? null;
+        if (!\is_array($textCfg)) {
+            throw new RuntimeException('Mistral configuration for text processing is missing.');
+        }
+
+        $this->textApiUrl = (string) ($textCfg['url'] ?? 'https://api.mistral.ai/v1/chat/completions');
+        $this->textModel = (string) ($textCfg['model'] ?? 'mistral-large-latest');
+        $this->textTemperature = (float) ($textCfg['temperature'] ?? 0.7);
+        $this->textMaxTokens = (int) ($textCfg['max_tokens'] ?? 1000);
+
+        $docCfg = $providerConfig['document'] ?? null;
+
+        $this->documentApiUrl = \is_array($docCfg) ? (string) ($docCfg['url'] ?? $this->textApiUrl) : $this->textApiUrl;
+        $this->documentModel = \is_array($docCfg) ? (string) ($docCfg['model'] ?? $this->textModel) : $this->textModel;
+        $this->documentTemperature = \is_array($docCfg) ? (float) ($docCfg['temperature'] ?? $this->textTemperature) : $this->textTemperature;
+        $this->documentMaxTokens = \is_array($docCfg) ? (int) ($docCfg['max_tokens'] ?? $this->textMaxTokens) : $this->textMaxTokens;
     }
 
     public function generateQuestions(string $topic, int $numQuestions, string $questionType, string $language): ?string
@@ -74,13 +88,12 @@ class MistralProvider implements AiProviderInterface
             $topic
         );
 
-        return $this->requestMistralAI($prompt, 'quiz');
+        return $this->requestMistral($this->textApiUrl, $this->textModel, $this->textTemperature, $this->textMaxTokens, $prompt, 'quiz');
     }
 
     public function generateLearnPath(string $topic, int $chaptersCount, string $language, int $wordsCount, bool $addTests, int $numQuestions): ?array
     {
-        // Step 1: Generate the Table of Contents
-        $tableOfContentsPrompt = \sprintf(
+        $tocPrompt = \sprintf(
             'Generate a structured table of contents for a course in "%s" with %d chapters on "%s".
             Return a numbered list, each chapter on a new line. No conclusion.',
             $language,
@@ -88,30 +101,29 @@ class MistralProvider implements AiProviderInterface
             $topic
         );
 
-        $lpStructure = $this->requestMistralAI($tableOfContentsPrompt, 'learnpath');
+        $lpStructure = $this->requestMistral($this->textApiUrl, $this->textModel, $this->textTemperature, $this->textMaxTokens, $tocPrompt, 'learnpath');
         if (!$lpStructure) {
             return ['success' => false, 'message' => 'Failed to generate course structure.'];
         }
 
-        // Step 2: Generate content for each chapter
         $lpItems = [];
         $chapters = explode("\n", trim($lpStructure));
-        foreach ($chapters as $index => $chapterTitle) {
+        foreach ($chapters as $chapterTitle) {
             $chapterTitle = trim($chapterTitle);
-            if (empty($chapterTitle)) {
+            if ('' === $chapterTitle) {
                 continue;
             }
 
             $chapterPrompt = \sprintf(
                 'Create a learning chapter in HTML for "%s" in "%s" with %d words.
-                Title: "%s". Assume the reader already knows the context.',
+Title: "%s". Assume the reader already knows the context.',
                 $topic,
                 $language,
                 $wordsCount,
                 $chapterTitle
             );
 
-            $chapterContent = $this->requestMistralAI($chapterPrompt, 'learnpath');
+            $chapterContent = $this->requestMistral($this->textApiUrl, $this->textModel, $this->textTemperature, $this->textMaxTokens, $chapterPrompt, 'learnpath');
             if (!$chapterContent) {
                 continue;
             }
@@ -122,10 +134,9 @@ class MistralProvider implements AiProviderInterface
             ];
         }
 
-        // Step 3: Generate quizzes if enabled
         $quizItems = [];
         if ($addTests) {
-            foreach ($lpItems as &$chapter) {
+            foreach ($lpItems as $chapter) {
                 $quizPrompt = \sprintf(
                     'Generate %d multiple-choice questions in Aiken format in %s about "%s".
             Ensure each question follows this format:
@@ -144,17 +155,17 @@ class MistralProvider implements AiProviderInterface
                     $chapter['title']
                 );
 
-                $quizContent = $this->requestMistralAI($quizPrompt, 'learnpath');
+                $quizContent = $this->requestMistral($this->textApiUrl, $this->textModel, $this->textTemperature, $this->textMaxTokens, $quizPrompt, 'learnpath');
+                if (!$quizContent) {
+                    continue;
+                }
 
-                if ($quizContent) {
-                    $validQuestions = $this->filterValidAikenQuestions($quizContent);
-
-                    if (!empty($validQuestions)) {
-                        $quizItems[] = [
-                            'title' => 'Quiz: '.$chapter['title'],
-                            'content' => implode("\n\n", $validQuestions),
-                        ];
-                    }
+                $validQuestions = $this->filterValidAikenQuestions($quizContent);
+                if (!empty($validQuestions)) {
+                    $quizItems[] = [
+                        'title' => 'Quiz: '.$chapter['title'],
+                        'content' => implode("\n\n", $validQuestions),
+                    ];
                 }
             }
         }
@@ -167,9 +178,92 @@ class MistralProvider implements AiProviderInterface
         ];
     }
 
+    public function gradeOpenAnswer(string $prompt, string $toolName): ?string
+    {
+        return $this->requestMistral($this->textApiUrl, $this->textModel, $this->textTemperature, $this->textMaxTokens, $prompt, $toolName);
+    }
+
+    public function generateDocument(string $prompt, string $toolName, ?array $options = []): ?string
+    {
+        $format = isset($options['format']) ? (string) $options['format'] : '';
+        if ('' !== $format) {
+            $prompt .= "\n\nOutput format: {$format}.";
+        }
+
+        return $this->requestMistral(
+            $this->documentApiUrl,
+            $this->documentModel,
+            $this->documentTemperature,
+            $this->documentMaxTokens,
+            $prompt,
+            $toolName
+        );
+    }
+
+    private function requestMistral(string $url, string $model, float $temperature, int $maxTokens, string $prompt, string $toolName): ?string
+    {
+        $userId = $this->getUserId();
+        if (!$userId) {
+            throw new RuntimeException('User not authenticated.');
+        }
+
+        $payload = [
+            'model' => $model,
+            'messages' => [
+                ['role' => 'system', 'content' => 'You are a helpful AI assistant that generates structured educational content.'],
+                ['role' => 'user', 'content' => $prompt],
+            ],
+            'temperature' => $temperature,
+            'max_tokens' => $maxTokens,
+        ];
+
+        try {
+            $response = $this->httpClient->request('POST', $url, [
+                'headers' => [
+                    'Authorization' => 'Bearer '.$this->apiKey,
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => $payload,
+            ]);
+
+            $statusCode = $response->getStatusCode();
+            $data = $response->toArray(false);
+
+            if (200 !== $statusCode || !isset($data['choices'][0]['message']['content'])) {
+                error_log('[AI][Mistral] Invalid response (status='.$statusCode.').');
+                return null;
+            }
+
+            $generatedContent = (string) $data['choices'][0]['message']['content'];
+
+            $usage = $data['usage'] ?? [];
+            $promptTokens = (int) ($usage['prompt_tokens'] ?? 0);
+            $completionTokens = (int) ($usage['completion_tokens'] ?? 0);
+            $totalTokens = (int) ($usage['total_tokens'] ?? ($promptTokens + $completionTokens));
+
+            $aiRequest = new AiRequests();
+            $aiRequest
+                ->setUserId($userId)
+                ->setToolName($toolName)
+                ->setRequestText($prompt)
+                ->setPromptTokens($promptTokens)
+                ->setCompletionTokens($completionTokens)
+                ->setTotalTokens($totalTokens)
+                ->setAiProvider('mistral')
+            ;
+
+            $this->aiRequestsRepository->save($aiRequest);
+
+            return $generatedContent;
+        } catch (Exception $e) {
+            error_log('[AI][Mistral] Exception: '.$e->getMessage());
+            return null;
+        }
+    }
+
     private function filterValidAikenQuestions(string $quizContent): array
     {
-        $questions = preg_split('/\n{2,}/', trim($quizContent));
+        $questions = preg_split('/\n{2,}/', trim($quizContent)) ?: [];
 
         $validQuestions = [];
         foreach ($questions as $questionBlock) {
@@ -180,9 +274,9 @@ class MistralProvider implements AiProviderInterface
             }
 
             $options = \array_slice($lines, 1, 4);
-            $validOptions = array_filter($options, fn ($line) => preg_match('/^[A-D]\. .+/', $line));
+            $validOptions = array_filter($options, static fn ($line) => (bool) preg_match('/^[A-D]\. .+/', $line));
 
-            $answerLine = end($lines);
+            $answerLine = (string) end($lines);
             if (4 === \count($validOptions) && preg_match('/^ANSWER: [A-D]$/', $answerLine)) {
                 $validQuestions[] = implode("\n", $lines);
             }
@@ -191,70 +285,24 @@ class MistralProvider implements AiProviderInterface
         return $validQuestions;
     }
 
-    private function requestMistralAI(string $prompt, string $toolName): ?string
-    {
-        $userId = $this->getUserId();
-        if (!$userId) {
-            throw new RuntimeException('User not authenticated.');
-        }
-
-        $payload = [
-            'model' => $this->model,
-            'messages' => [
-                ['role' => 'system', 'content' => 'You are a helpful AI assistant that generates structured educational content.'],
-                ['role' => 'user', 'content' => $prompt],
-            ],
-            'temperature' => $this->temperature,
-            'max_tokens' => 1000,
-        ];
-
-        try {
-            $response = $this->httpClient->request('POST', $this->apiUrl, [
-                'headers' => [
-                    'Authorization' => 'Bearer '.$this->apiKey,
-                    'Content-Type' => 'application/json',
-                ],
-                'json' => $payload,
-            ]);
-
-            $statusCode = $response->getStatusCode();
-            $data = $response->toArray();
-
-            if (200 === $statusCode && isset($data['choices'][0]['message']['content'])) {
-                $generatedContent = $data['choices'][0]['message']['content'];
-
-                $aiRequest = new AiRequests();
-                $aiRequest->setUserId($userId)
-                    ->setToolName($toolName)
-                    ->setRequestText($prompt)
-                    ->setPromptTokens($data['usage']['prompt_tokens'] ?? 0)
-                    ->setCompletionTokens($data['usage']['completion_tokens'] ?? 0)
-                    ->setTotalTokens($data['usage']['total_tokens'] ?? 0)
-                    ->setAiProvider('mistral')
-                ;
-
-                $this->aiRequestsRepository->save($aiRequest);
-
-                return $generatedContent;
-            }
-
-            return null;
-        } catch (Exception $e) {
-            error_log('[AI][Mistral] Exception: '.$e->getMessage());
-
-            return null;
-        }
-    }
-
-    public function gradeOpenAnswer(string $prompt, string $toolName): ?string
-    {
-        return $this->requestMistralAI($prompt, $toolName);
-    }
-
     private function getUserId(): ?int
     {
         $user = $this->security->getUser();
-
         return $user instanceof UserInterface ? $user->getId() : null;
+    }
+
+    private function readProvidersConfig(): array
+    {
+        $configJson = $this->settingsManager->getSetting('ai_helpers.ai_providers', true);
+
+        if (\is_string($configJson)) {
+            return json_decode($configJson, true) ?? [];
+        }
+
+        if (\is_array($configJson)) {
+            return $configJson;
+        }
+
+        return [];
     }
 }

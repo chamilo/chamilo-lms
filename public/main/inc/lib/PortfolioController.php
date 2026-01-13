@@ -3554,7 +3554,7 @@ class PortfolioController
 
     private function itemBelongToOwner(Portfolio $item): bool
     {
-        if ($item->getUser()->getId() != $this->owner->getId()) {
+        if ($item->getCreator()->getId() != $this->owner->getId()) {
             return false;
         }
 

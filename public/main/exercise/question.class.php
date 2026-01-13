@@ -635,6 +635,7 @@ abstract class Question
                 ->setFeedback($this->feedback)
                 ->setParentMediaId($this->parent_id)
                 ->setParent($courseEntity)
+                ->setCreator(api_get_user_entity())
                 ->addCourseLink($courseEntity, api_get_session_entity(), api_get_group_entity());
 
             $em->persist($question);

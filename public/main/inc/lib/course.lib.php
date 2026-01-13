@@ -5440,6 +5440,14 @@ class CourseManager
             'subscribe_users_to_forum_notifications',
             'learning_path_generator',
             'exercise_generator',
+            'open_answers_grader',
+            'tutor_chatbot',
+            'task_grader',
+            'content_analyser',
+            'image_generator',
+            'glossary_terms_generator',
+            'video_generator',
+            'course_analyser',
         ];
 
         $courseModels = ExerciseLib::getScoreModels();

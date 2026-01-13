@@ -11,11 +11,20 @@ interface AiImageProviderInterface
     /**
      * Generate an image.
      *
-     * @param string $prompt   The complete prompt, with language, question, context and answer
-     * @param string $toolName A tag, e.g. 'open_answer_grade'.
-     * @param ?array $options  An array of options (format etc.)
+     * @param string $prompt   The prompt to generate an image from
+     * @param string $toolName A tag, e.g. 'document_image_generate'
+     * @param ?array  $options Provider-specific options
      *
-     * @return ?string The raw text of the image in base64, or a URL
+     * @return string|array|null
+     *  - string: legacy mode (base64 or URL)
+     *  - array: structured response for UI (preferred)
+     *      [
+     *          'content' => string (base64),
+     *          'url' => string,
+     *          'is_base64' => bool,
+     *          'content_type' => string,
+     *          'revised_prompt' => ?string
+     *      ]
      */
-    public function generateImage(string $prompt, string $toolName, ?array $options = []): ?string;
+    public function generateImage(string $prompt, string $toolName, ?array $options = []): string|array|null;
 }

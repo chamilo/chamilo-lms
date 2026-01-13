@@ -3,7 +3,7 @@
 {% set visible_img = 'ActionIcon::VISIBLE'|mdi_icon_t(22, 'ch-tool-icon', 'Invisible') %}
 {% set invisible_img = 'ActionIcon::INVISIBLE'|mdi_icon_t(22, 'ch-tool-icon', 'Visible') %}
 {% set delete_img = 'ActionIcon::DELETE'|mdi_icon_t(22, 'ch-tool-icon', 'Delete') %}
-{% set baseurl = _p.web_self ~ '?' ~ (_p.web_cid_query ? _p.web_cid_query ~ '&' : '') %}
+{% set baseurl = '/main/portfolio/index.php?' ~ (_p.web_cid_query ? _p.web_cid_query ~ '&' : '') %}
 
 {% import '@ChamiloCore/Portfolio/items.html.twig' as items %}
 
@@ -148,7 +148,7 @@
 
         {% if course %}
             $('form#frm_student_list select[name="user"]').on('change', function (e) {
-                var newLocation = '{{ _p.web_self ~ '?' ~ _p.web_cid_query }}';
+                var newLocation = '{{ '/main/portfolio/index.php?' ~ _p.web_cid_query }}';
 
                 if (this.value) {
                     newLocation += '&user=' + this.value;

@@ -8,14 +8,14 @@
     <div class="space-y-4">
       <!-- Summary -->
       <div class="text-sm text-gray-600">
-        <span class="mr-2">{{ t('Current') }}:</span>
+        <span class="mr-2">{{ t("Current") }}:</span>
         <strong>{{ fileTitle }}</strong>
       </div>
 
       <!-- Uploader -->
       <div class="border rounded p-3">
         <div class="flex items-center justify-between">
-          <div class="font-medium">{{ t('New version') }}</div>
+          <div class="font-medium">{{ t("New version") }}</div>
           <BaseButton
             type="primary"
             icon="file-upload"
@@ -23,8 +23,11 @@
             @click="showUploader = true"
           />
         </div>
-        <div v-if="pickedName" class="text-xs text-gray-500 mt-2">
-          {{ t('{0} selected', [pickedName]) }}
+        <div
+          v-if="pickedName"
+          class="text-xs text-gray-500 mt-2"
+        >
+          {{ t("{0} selected", [pickedName]) }}
         </div>
 
         <!-- Rename toggle -->
@@ -35,7 +38,10 @@
             class="h-4 w-4"
             v-model="renameTitle"
           />
-          <label for="renameTitle" class="text-sm">
+          <label
+            for="renameTitle"
+            class="text-sm"
+          >
             {{ t("Change title to selected filename") }}
           </label>
         </div>
@@ -50,7 +56,7 @@
       <!-- Folder -->
       <div class="grid gap-3 md:grid-cols-2">
         <div>
-          <label class="block text-sm mb-1">{{ t('Folder') }}</label>
+          <label class="block text-sm mb-1">{{ t("Folder") }}</label>
           <BaseSelect
             v-model="categoryId"
             :options="folderOptions"

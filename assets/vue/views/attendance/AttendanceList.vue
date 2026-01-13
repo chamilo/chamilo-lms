@@ -72,13 +72,20 @@ const { sid, cid, gid } = useCidReq()
 const parentResourceNodeId = ref(Number(route.params.node))
 
 const redirectToCreateAttendance = () => {
-  router.push({ name: "CreateAttendance", query: { cid, sid, gid } })
+  router.push({
+    name: "CreateAttendance",
+    params: { node: String(route.params.node) },
+    query: { cid, sid, gid },
+  })
 }
 
 const redirectToEditAttendance = (attendance) => {
   router.push({
     name: "AttendanceEditAttendance",
-    params: { node: getNodeId(attendance.resourceNode), id: attendance.id },
+    params: {
+      node: String(route.params.node),
+      id: attendance.id,
+    },
     query: { cid, sid, gid },
   })
 }
@@ -145,13 +152,6 @@ const fetchAttendances = async ({ page = 1, rows = 10 } = {}) => {
     isLoading.value = false
   }
 }
-
-function getNodeId(resourceNode) {
-  if (!resourceNode || !resourceNode["@id"]) return 0
-  const parts = resourceNode["@id"].split("/")
-  return parseInt(parts[parts.length - 1])
-}
-
 function onStudentViewChange() {
   fetchAttendances()
 }

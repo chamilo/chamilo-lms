@@ -26,11 +26,7 @@ import { useI18n } from "vue-i18n"
 import LayoutFormGeneric from "../../components/layout/LayoutFormGeneric.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import DOMPurify from "dompurify"
-import { useCidReqStore } from "../../store/cidReq"
-import { storeToRefs } from "pinia"
 
-const cidReqStore = useCidReqStore()
-const { course } = storeToRefs(cidReqStore)
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
@@ -41,7 +37,7 @@ const loading = ref(true)
 const goBack = (query = {}) => {
   router.push({
     name: "AttendanceList",
-    params: { node: String(course.value?.resourceNode?.id) },
+    params: { node: String(route.params.node) },
     query: { ...route.query, ...query },
   })
 }
@@ -65,6 +61,7 @@ const fetchAttendance = async () => {
       gradebookOption: fetchedData.gradebookOption || null,
       gradebookTitle: fetchedData.attendanceQualifyTitle || "",
       gradeWeight: fetchedData.attendanceWeight || 0.0,
+      requireUnique: !!fetchedData.requireUnique,
     }
   } catch (error) {
     console.error("Error fetching attendance:", error)

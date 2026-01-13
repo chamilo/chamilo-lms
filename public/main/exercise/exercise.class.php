@@ -1679,6 +1679,7 @@ class Exercise
             $courseEntity = api_get_course_entity($this->course_id);
             $exercise
                 ->setParent($courseEntity)
+                ->setCreator(api_get_user_entity())
                 ->addCourseLink($courseEntity, api_get_session_entity());
             $em->persist($exercise);
             $em->flush();

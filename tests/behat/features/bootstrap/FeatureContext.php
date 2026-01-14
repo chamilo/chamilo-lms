@@ -77,7 +77,7 @@ class FeatureContext extends MinkContext
     /**
      * @Given /^course "([^"]*)" is deleted$/
      */
-    public function courseIsDeleted($argument)
+    public function courseIsDeleted($argument): void
     {
         $this->iAmAPlatformAdministrator();
         $this->visit('/main/admin/course_list.php?keyword='.$argument);
@@ -86,8 +86,9 @@ class FeatureContext extends MinkContext
 
     /**
      * @Given /^I am on course "([^"]*)" homepage$/
+     * @deprecated Use iAmOnTheHomepageOfCourseX instead
      */
-    public function iAmOnCourseXHomepage($courseCode)
+    public function iAmOnCourseXHomepage($courseCode): void
     {
         $this->visit('/main/course_home/redirect.php?cidReq='.$courseCode);
         $this->waitForThePageToBeLoaded();
@@ -97,10 +98,32 @@ class FeatureContext extends MinkContext
 
     /**
      * @Given /^I am on course "([^"]*)" homepage in session "([^"]*)"$/
+     * @deprecated Use iAmOnTheHomepageOfCourseXInSessionY instead
      */
-    public function iAmOnCourseXHomepageInSessionY($courseCode, $sessionName)
+    public function iAmOnCourseXHomepageInSessionY($courseCode, $sessionName): void
     {
         $this->visit('/main/course_home/redirect.php?cidReq='.$courseCode.'&session_name='.$sessionName);
+        $this->waitForThePageToBeLoaded();
+        $this->assertElementNotOnPage('.alert-danger');
+    }
+
+    /**
+     * @Given /^I am on the homepage of course "([^"]*)"$/
+     */
+    public function iAmOnTheHomepageOfCourseX($courseId): void
+    {
+        $this->visit('/course/'.$courseId.'/home');
+        $this->waitForThePageToBeLoaded();
+        //$this->visit('/courses/'.$courseCode.'/index.php');
+        $this->assertElementNotOnPage('.alert-danger');
+    }
+
+    /**
+     * @Given /^I am on the homepage of course "([^"]*) in session "([^"]*)"$/
+     */
+    public function iAmOnTheHomepageOfCourseXInSessionY($courseId, $sessionId): void
+    {
+        $this->visit('/course/'.$courseId.'&sid='.$sessionId);
         $this->waitForThePageToBeLoaded();
         $this->assertElementNotOnPage('.alert-danger');
     }

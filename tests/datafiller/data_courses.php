@@ -20,7 +20,7 @@ $courses[] = [
     'course_language' => 'en_US',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
 ];
 // 2
 $courses[] = [
@@ -31,7 +31,7 @@ $courses[] = [
     'course_language' => 'es',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
 ];
 // 3
 $courses[] = [
@@ -42,7 +42,7 @@ $courses[] = [
     'course_language' => 'fr_FR',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
 ];
 // 4
 $courses[] = [
@@ -53,7 +53,7 @@ $courses[] = [
     'course_language' => 'ar',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
 ];
 // 5
 $courses[] = [
@@ -64,7 +64,7 @@ $courses[] = [
     'course_language' => 'en_US',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
 ];
 // 6
 $courses[] = [
@@ -75,7 +75,7 @@ $courses[] = [
     'course_language' => 'en_US',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
 ];
 // 7
 $courses[] = [
@@ -86,7 +86,7 @@ $courses[] = [
     'course_language' => 'en_US',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
 ];
 // 8
 $courses[] = [
@@ -97,7 +97,7 @@ $courses[] = [
     'course_language' => 'ja',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
 ];
 // 9
 $courses[] = [
@@ -108,7 +108,7 @@ $courses[] = [
     'course_language' => 'en_US',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
 ];
 // 10
 $courses[] = [
@@ -119,7 +119,7 @@ $courses[] = [
     'course_language' => 'he',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
 ];
 // 11
 $courses[] = [
@@ -130,7 +130,7 @@ $courses[] = [
     'course_language' => 'zh_CN',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
 ];
 // 12
 $courses[] = [
@@ -141,5 +141,5 @@ $courses[] = [
     'course_language' => 'my_MM',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
 ];

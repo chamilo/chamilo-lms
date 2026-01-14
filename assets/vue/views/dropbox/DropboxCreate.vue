@@ -10,12 +10,19 @@
       </template>
       <template #end>
         <RouterLink :to="{ name: 'DropboxListSent', params: $route.params, query: $route.query }">
-          <BaseButton type="black" icon="arrow-left" :label="t('Back')" />
+          <BaseButton
+            type="black"
+            icon="arrow-left"
+            :label="t('Back')"
+          />
         </RouterLink>
       </template>
     </BaseToolbar>
 
-    <div class="grid mt-5 gap-6" style="grid-template-columns: 1.6fr 1fr">
+    <div
+      class="grid mt-5 gap-6"
+      style="grid-template-columns: 1.6fr 1fr"
+    >
       <!-- LEFT: files -->
       <div>
         <div class="rounded-lg border border-gray-50 bg-white shadow-sm">
@@ -37,7 +44,10 @@
               />
             </div>
 
-            <div v-if="pickedFiles.length" class="mt-3">
+            <div
+              v-if="pickedFiles.length"
+              class="mt-3"
+            >
               <div class="text-sm text-gray-600 mb-1">{{ t("Selected files") }}</div>
               <ul class="text-sm space-y-1">
                 <li
@@ -60,7 +70,10 @@
               </ul>
             </div>
 
-            <div v-else class="mt-3 text-sm text-gray-500">
+            <div
+              v-else
+              class="mt-3 text-sm text-gray-500"
+            >
               {{ t("No file selected.") }}
             </div>
           </div>
@@ -78,7 +91,11 @@
             />
 
             <label class="inline-flex items-center gap-3 mt-3">
-              <input id="overwrite" type="checkbox" v-model="overwrite" />
+              <input
+                id="overwrite"
+                type="checkbox"
+                v-model="overwrite"
+              />
               <span class="text-sm">{{ t("Overwrite previous versions of same document?") }}</span>
             </label>
           </div>
@@ -90,9 +107,7 @@
         <div class="rounded-lg border border-gray-50 bg-white shadow-sm">
           <div class="px-4 py-3 border-b text-sm font-medium">{{ t("Sharing") }}</div>
           <div class="p-4">
-            <label class="block text-sm mb-1">
-              {{ t("Recipients") }} <span class="text-red-600">*</span>
-            </label>
+            <label class="block text-sm mb-1"> {{ t("Recipients") }} <span class="text-red-600">*</span> </label>
             <BaseSelect
               v-model="recipients"
               :options="recipientOptions"
@@ -105,15 +120,22 @@
               :class="{ 'ring-1 ring-red-500 rounded-md': submitted && !hasSelectedRecipient }"
             />
             <small class="text-gray-500 block mt-1">
-              {{ t('Tip: choose “— Just upload —” to store without sending to anyone.') }}
+              {{ t("Tip: choose “— Just upload —” to store without sending to anyone.") }}
             </small>
-            <div v-if="submitted && !hasSelectedRecipient" class="text-sm text-red-600 mt-1">
-              {{ t('Please select at least one recipient (“— Just upload —” or any user)') }}
+            <div
+              v-if="submitted && !hasSelectedRecipient"
+              class="text-sm text-red-600 mt-1"
+            >
+              {{ t("Please select at least one recipient (“— Just upload —” or any user)") }}
             </div>
 
             <div class="flex justify-end gap-2 mt-6">
               <RouterLink :to="{ name: 'DropboxListSent', params: $route.params, query: $route.query }">
-                <BaseButton type="black" icon="xmark" :label="t('Cancel')" />
+                <BaseButton
+                  type="black"
+                  icon="xmark"
+                  :label="t('Cancel')"
+                />
               </RouterLink>
               <BaseButton
                 type="primary"
@@ -126,7 +148,10 @@
           </div>
         </div>
 
-        <div v-if="isUploading" class="text-xs text-gray-500 mt-2 text-right">
+        <div
+          v-if="isUploading"
+          class="text-xs text-gray-500 mt-2 text-right"
+        >
           {{ t("Uploading... please keep this tab open.") }}
         </div>
       </div>
@@ -135,7 +160,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from "vue"
+import { computed, markRaw, onBeforeUnmount, onMounted, ref, shallowRef } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import Uppy from "@uppy/core"
@@ -153,8 +178,8 @@ import service from "../../services/dropbox"
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const uppy = shallowRef(null)
 
-const uppy = ref(null)
 const pickedFiles = ref([])
 const description = ref("")
 const overwrite = ref(false)
@@ -164,41 +189,61 @@ const isUploading = ref(false)
 // recipients
 const recipients = ref([])
 const recipientOptions = ref([])
+let syncPicked = null
 
 onMounted(() => {
-  uppy.value = new Uppy({
-    autoProceed: false,
-    allowMultipleUploads: true,
-    restrictions: { maxNumberOfFiles: null },
-  })
+  uppy.value = markRaw(
+    new Uppy({
+      autoProceed: false,
+      allowMultipleUploads: true,
+      restrictions: { maxNumberOfFiles: null },
+    }),
+  )
 
-  // sync picked files when user adds/removes in dashboard
-  const syncPicked = () => {
-    pickedFiles.value = Object.values(uppy.value?.getFiles?.() ?? {}).map((f) => f.data)
+  syncPicked = () => {
+    const files = uppy.value?.getFiles?.() ?? []
+    pickedFiles.value = files.map((f) => f.data)
   }
   uppy.value?.on?.("file-added", syncPicked)
   uppy.value?.on?.("file-removed", syncPicked)
 })
 
 onBeforeUnmount(() => {
-  if (uppy.value) {
-    try { uppy.value.cancelAll() } catch {}
-    try { uppy.value.reset() } catch {}
-    uppy.value = null
-  }
+  if (!uppy.value) return
+
+  try {
+    if (syncPicked) {
+      uppy.value?.off?.("file-added", syncPicked)
+      uppy.value?.off?.("file-removed", syncPicked)
+    }
+  } catch {}
+
+  try {
+    uppy.value.cancelAll()
+  } catch {}
+  try {
+    uppy.value.reset()
+  } catch {}
+
+  try {
+    uppy.value.close?.()
+  } catch {}
+
+  uppy.value = null
 })
 
 function removePicked(file) {
   // remove by id match in uppy store
-  const record = (uppy.value?.getFiles?.() || []).find((r) => r.data === file)
+  const list = uppy.value?.getFiles?.() ?? []
+  const record = list.find((r) => r.data === file)
   if (record) uppy.value?.removeFile?.(record.id)
   else pickedFiles.value = pickedFiles.value.filter((f) => f !== file)
 }
 
 // utils
 function humanSize(bytes) {
-  const units = ["B","KB","MB","GB","TB"]
-  const i = bytes > 0 ? Math.floor(Math.log(bytes)/Math.log(1024)) : 0
+  const units = ["B", "KB", "MB", "GB", "TB"]
+  const i = bytes > 0 ? Math.floor(Math.log(bytes) / Math.log(1024)) : 0
   return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${units[i]}`
 }
 
@@ -253,7 +298,9 @@ async function submit() {
     description.value = ""
     overwrite.value = false
     recipients.value = []
-    try { uppy.value?.reset() } catch {}
+    try {
+      uppy.value?.reset?.()
+    } catch {}
     pickedFiles.value = []
 
     // Navigate back to list (sent)

@@ -106,11 +106,17 @@ const layout = computed(() => {
     return AccessUrlChooserLayout
   }
 
-  if (route.meta.emptyLayout) {
+  const queryParams = new URLSearchParams(window.location.search)
+  const picker = String(queryParams.get("picker") || "").toLowerCase()
+
+  // Force EmptyLayout for embedded editor pickers (TinyMCE/CKEditor)
+  if (picker === "tinymce" || picker === "ckeditor") {
     return EmptyLayout
   }
 
-  const queryParams = new URLSearchParams(window.location.search)
+  if (route.meta.emptyLayout) {
+    return EmptyLayout
+  }
 
   if (
     (queryParams.has("lp_id") && "view" === queryParams.get("action")) ||

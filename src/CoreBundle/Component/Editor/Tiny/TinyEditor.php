@@ -72,27 +72,50 @@ class TinyEditor extends Editor
         // Replace file browser placeholder by our File Manager picker
         $javascript = str_replace('"[browser]"', $this->getFileManagerPicker(), $javascript);
 
-        // Inject script that:
-        //  1) Bridges postMessage -> callback for the File Manager
-        //  2) Monkey-patches tinymce.init to always merge with window.buildTinyMceConfig (from tiny-settings.js)
-        //  3) Queues the generated TinyMCE init script into window.chEditors for deferred execution
         return "<script>
             // 1) Cross-frame bridge: accept file URL messages from the File Manager
+            //    Supported payloads:
+            //      - { url: '...' }
+            //      - { mceAction: 'fileSelected', content: { url: '...' }, cbId?: '...' }
             window.addEventListener('message', function(event) {
-                if (event && event.data && event.data.url) {
-                    if (window.parent !== window) {
-                        // Forward to parent if inside an iframe
-                        window.parent.postMessage(event.data, '*');
-                        const parentWindow = (window.parent && window.parent.window && window.parent.window[0]) ? window.parent.window[0].window : null;
-                        if (parentWindow && parentWindow.tinyMCECallback) {
-                            parentWindow.tinyMCECallback(event.data.url);
-                            delete parentWindow.tinyMCECallback;
+                try {
+                    if (!event || event.origin !== window.location.origin) {
+                        return;
+                    }
+
+                    // Forward to parent when embedded (same-origin only)
+                    if (window.parent && window.parent !== window) {
+                        try {
+                            window.parent.postMessage(event.data, window.location.origin);
+                        } catch (e) {
+                            // Ignore forwarding errors
                         }
-                    } else if (window.tinyMCECallback) {
-                        // Handle directly if on the main window
-                        window.tinyMCECallback(event.data.url);
+                    }
+
+                    var data = event.data || {};
+                    var pickedUrl = data.url || (data.content && data.content.url) || null;
+                    if (!pickedUrl) {
+                        return;
+                    }
+
+                    // Preferred: cbId registry callback (reliable for plugin dialogs)
+                    var cbId = data.cbId || null;
+                    if (cbId && window.__chamiloTinyPickerCallbacks && typeof window.__chamiloTinyPickerCallbacks[cbId] === 'function') {
+                        try {
+                            window.__chamiloTinyPickerCallbacks[cbId](pickedUrl);
+                        } finally {
+                            delete window.__chamiloTinyPickerCallbacks[cbId];
+                        }
+                        return;
+                    }
+
+                    // Legacy fallback: single global callback
+                    if (window.tinyMCECallback) {
+                        window.tinyMCECallback(pickedUrl);
                         delete window.tinyMCECallback;
                     }
+                } catch (e) {
+                    // console.warn('[TinyMCE] File picker message bridge failed:', e);
                 }
             });
 
@@ -100,15 +123,14 @@ class TinyEditor extends Editor
                 // 2) Patch tinymce.init once to merge local config with the shared base config
                 //    The shared base config is defined in /theme/<theme>/tiny-settings.js
                 if (window.tinymce && !window.tinymce.__chamiloPatched) {
-                    const originalInit = window.tinymce.init.bind(window.tinymce);
+                    var originalInit = window.tinymce.init.bind(window.tinymce);
                     window.tinymce.__chamiloPatched = true;
+
                     window.tinymce.init = function(cfg) {
-                        // If the shared builder exists, merge base + local configs
                         if (window.buildTinyMceConfig && typeof window.buildTinyMceConfig === 'function') {
                             try {
                                 cfg = window.buildTinyMceConfig(cfg);
                             } catch (e) {
-                                // Fail-safe: if merge fails, fall back to the given cfg
                                 // console.warn('TinyMCE config merge failed:', e);
                             }
                         }
@@ -138,7 +160,6 @@ class TinyEditor extends Editor
             $cssTheme,
             api_get_path(REL_CODE_PATH).'img/',
             api_get_path(REL_PATH),
-            // api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
             '',
         ];
 
@@ -146,15 +167,6 @@ class TinyEditor extends Editor
         foreach ($templates as $template) {
             $image = $template->getImage();
             $image = !empty($image) ? $image : 'empty.gif';
-
-            // If generating absolute URLs is needed, use the router (commented out example)
-            /*
-            $image = $this->urlGenerator->generate(
-                'get_document_template_action',
-                ['file' => $image],
-                UrlGenerator::ABSOLUTE_URL
-            );
-            */
 
             $content = str_replace($search, $replace, $template->getContent());
 
@@ -217,63 +229,143 @@ class TinyEditor extends Editor
     }
 
     /**
-     * Generates a JavaScript function for TinyMCE file manager picker.
+     * Generates a JavaScript function for TinyMCE file manager picker (legacy).
      *
-     * @param bool $onlyPersonalfiles if true, only shows personal files
-     *
-     * @return string JavaScript function as a string
+     * Behavior:
+     *  - If a course context exists: use the Documents manager (/resources/document/{node}/manager)
+     *  - Otherwise: use Personal files manager (/resources/filemanager/personal_list/{node})
+     *  - Adds type filters: images|media|files
+     *  - Uses cbId registry callback to reliably fill TinyMCE plugin inputs
      */
-    private function getFileManagerPicker(bool $onlyPersonalfiles = true): string
+    private function getFileManagerPicker(bool $onlyPersonalfiles = false): string
     {
-        $user = api_get_user_entity();
-        $course = api_get_course_entity();
+        $baseUrl = $this->getLegacyManagerBaseUrl($onlyPersonalfiles);
 
-        if ($onlyPersonalfiles) {
-            if (null !== $user) {
-                $cidReqQuery = '';
-                if (null !== $course) {
-                    $parentResourceNodeId = $course->getResourceNode()->getId();
-                    $cidReqQuery = '&'.api_get_cidreq().'&parentResourceNodeId='.$parentResourceNodeId;
-                }
-                $resourceNodeId = $user->getResourceNode()->getId();
-                $url = api_get_path(WEB_PATH).'resources/filemanager/personal_list/'.$resourceNodeId.'?loadNode=1'.$cidReqQuery;
-            }
-        } else {
-            if (null !== $course) {
-                $resourceNodeId = $course->getResourceNode()->getId();
-                $url = api_get_path(WEB_PATH).'resources/document/'.$resourceNodeId.'/manager?'.api_get_cidreq();
-            } elseif (null !== $user) {
-                $resourceNodeId = $user->getResourceNode()->getId();
-                $url = api_get_path(WEB_PATH).'resources/filemanager/personal_list/'.$resourceNodeId.'?loadNode=1';
-            }
-        }
-
-        if (!isset($url)) {
-            // Fallback to simple native image picker if a URL cannot be determined
+        if (empty($baseUrl)) {
+            // Fail-safe: if a URL cannot be determined, fall back to the native picker
             return $this->getImagePicker();
         }
 
+        $baseUrlJson = json_encode($baseUrl, JSON_UNESCAPED_SLASHES);
+
         return '
             function(cb, value, meta) {
-                // Store callback to be used by the postMessage bridge
-                window.tinyMCECallback = cb;
-                var fileType = (meta && meta.filetype) ? meta.filetype : "file";
-                var fileManagerUrl = "'.$url.'";
+                // Create a unique callback id (cbId) and store cb in a registry.
+                var cbId;
+                try {
+                    cbId = (window.crypto && window.crypto.randomUUID) ? window.crypto.randomUUID() : null;
+                } catch (e) {
+                    cbId = null;
+                }
+                if (!cbId) {
+                    cbId = "cb_" + Date.now() + "_" + Math.random().toString(16).slice(2);
+                }
 
+                window.__chamiloTinyPickerCallbacks = window.__chamiloTinyPickerCallbacks || {};
+                window.__chamiloTinyPickerCallbacks[cbId] = function(pickedUrl) {
+                    try {
+                        cb(pickedUrl);
+                    } finally {
+                        try {
+                            delete window.__chamiloTinyPickerCallbacks[cbId];
+                        } catch (e) {
+                            // Ignore
+                        }
+                    }
+                };
+
+                // Legacy fallback (postMessage bridge may still use this)
+                window.tinyMCECallback = cb;
+
+                var fileType = (meta && meta.filetype) ? String(meta.filetype).toLowerCase() : "file";
+                var typeParam = "files";
                 if (fileType === "image") {
-                    fileManagerUrl += "&type=images";
-                } else {
-                    fileManagerUrl += "&type=files";
+                    typeParam = "images";
+                } else if (fileType === "media") {
+                    typeParam = "media";
+                }
+
+                var fileManagerUrl = '.$baseUrlJson.';
+
+                // Append picker params safely
+                try {
+                    var u = new URL(fileManagerUrl, window.location.origin);
+                    u.searchParams.set("type", typeParam);
+                    u.searchParams.set("picker", "tinymce");
+                    u.searchParams.set("cbId", cbId);
+                    fileManagerUrl = u.toString();
+                } catch (e) {
+                    // Minimal fallback if URL() fails
+                    var sep = (fileManagerUrl.indexOf("?") === -1) ? "?" : "&";
+                    fileManagerUrl = fileManagerUrl + sep
+                        + "type=" + encodeURIComponent(typeParam)
+                        + "&picker=tinymce"
+                        + "&cbId=" + encodeURIComponent(cbId);
                 }
 
                 tinymce.activeEditor.windowManager.openUrl({
                     title: "File Manager",
                     url: fileManagerUrl,
                     width: 980,
-                    height: 600
+                    height: 600,
+                    onMessage: function(api, message) {
+                        try {
+                            var data = message || {};
+                            var pickedUrl = (data.content && data.content.url) || data.url || null;
+                            if (!pickedUrl) return;
+
+                            if (window.__chamiloTinyPickerCallbacks && typeof window.__chamiloTinyPickerCallbacks[cbId] === "function") {
+                                window.__chamiloTinyPickerCallbacks[cbId](pickedUrl);
+                                delete window.__chamiloTinyPickerCallbacks[cbId];
+                            } else if (window.tinyMCECallback) {
+                                window.tinyMCECallback(pickedUrl);
+                                delete window.tinyMCECallback;
+                            }
+
+                            if (api && typeof api.close === "function") {
+                                api.close();
+                            }
+                        } catch (e) {
+                            // console.warn("[TinyMCE] onMessage handler failed:", e);
+                        }
+                    }
                 });
             }
         ';
+    }
+
+    /**
+     * Resolve the correct legacy manager URL based on context.
+     * - Course context => Documents manager
+     * - Otherwise => Personal files manager
+     */
+    private function getLegacyManagerBaseUrl(bool $onlyPersonalfiles): ?string
+    {
+        $user = api_get_user_entity();
+        $course = api_get_course_entity();
+
+        // Prefer Documents manager when in a course (unless explicitly forced to personal files)
+        if (!$onlyPersonalfiles && null !== $course) {
+            $resourceNodeId = $course->getResourceNode()->getId();
+
+            // Example produced URL:
+            // /resources/document/{node}/manager?cid=...&sid=...&gid=...
+            return api_get_path(WEB_PATH).'resources/document/'.$resourceNodeId.'/manager?'.api_get_cidreq();
+        }
+
+        if (null !== $user) {
+            $resourceNodeId = $user->getResourceNode()->getId();
+            $url = api_get_path(WEB_PATH).'resources/filemanager/personal_list/'.$resourceNodeId.'?loadNode=1';
+
+            // If a course exists and caller forced personal manager, keep cidreq available for context (safe no-op if ignored)
+            if (null !== $course) {
+                $url .= '&'.api_get_cidreq();
+            }
+
+            return $url;
+        }
+
+        return null;
     }
 
     /**
@@ -368,9 +460,6 @@ class TinyEditor extends Editor
             $templateItem['title'] = $template->getTitle();
             $templateItem['description'] = $template->getDescription();
             $templateItem['image'] = api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/noimage.gif';
-
-            // If you want to include HTML content from course documents, implement a safe resolver here.
-            // (Left out intentionally to avoid file system coupling in this context.)
 
             $image = $template->getImage();
             if (!empty($image)) {

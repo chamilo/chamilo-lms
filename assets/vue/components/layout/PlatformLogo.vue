@@ -10,42 +10,30 @@ const securityStore = useSecurityStore()
 const siteName = platformConfigStore.getSetting("platform.site_name")
 
 const theme = computed(() => platformConfigStore.visualTheme || "chamilo")
-const DEFAULT_THEME = "chamilo"
 const bust = ref(Date.now())
 
-function themeUrl(name, path, { strict = false } = {}) {
-  const base = `/themes/${encodeURIComponent(name)}/${path}`
-  const qs = []
-  if (strict) qs.push("strict=1")
-  qs.push(`t=${bust.value}`)
-  return `${base}?${qs.join("&")}`
-}
+/**
+ * It will always serve the best available logo (svg/png) and fallback to default theme.
+ * This avoids strict=1 probing and prevents 404 noise in the console.
+ */
+const logoUrl = computed(() => {
+  return `/themes/${encodeURIComponent(theme.value)}/logo/header?t=${bust.value}`
+})
 
-const sources = computed(() => [
-  themeUrl(theme.value, "images/header-logo.svg", { strict: true }),
-  themeUrl(theme.value, "images/header-logo.png", { strict: true }),
-  themeUrl(theme.value, "images/header-logo.svg"),
-  themeUrl(theme.value, "images/header-logo.png"),
-  themeUrl(DEFAULT_THEME, "images/header-logo.svg"),
-  themeUrl(DEFAULT_THEME, "images/header-logo.png"),
-])
-
-const idx = ref(0)
-const currentSrc = computed(() => sources.value[idx.value] || "")
+const showImg = ref(true)
 
 watch(
   () => platformConfigStore.visualTheme,
   () => {
-    idx.value = 0
     bust.value = Date.now()
-  }
+    showImg.value = true
+  },
 )
 
-const onError = () => {
-  if (idx.value < sources.value.length - 1) {
-    idx.value++
-  } else {
-    idx.value = sources.value.length
+function onError(e) {
+  showImg.value = false
+  if (e?.target) {
+    e.target.style.display = "none"
   }
 }
 </script>
@@ -53,15 +41,19 @@ const onError = () => {
   <div class="platform-logo">
     <BaseAppLink :to="securityStore.user ? { name: 'Home' } : { name: 'Index' }">
       <img
-        v-if="currentSrc"
+        v-if="showImg"
         :alt="siteName"
-        :src="currentSrc"
+        :src="logoUrl"
         :title="siteName"
         decoding="async"
         fetchpriority="high"
         @error="onError"
       />
-      <span v-else class="font-semibold text-primary" aria-label="logo">
+      <span
+        v-else
+        class="font-semibold text-primary"
+        aria-label="logo"
+      >
         {{ siteName }}
       </span>
     </BaseAppLink>

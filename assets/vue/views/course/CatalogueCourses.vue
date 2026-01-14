@@ -33,7 +33,7 @@
         <div class="relative">
           <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <InputText
-            id = "search_catalogue"
+            id="search_catalogue"
             v-model="filters['global'].value"
             :placeholder="$t('Search')"
             class="pl-10 w-64"
@@ -257,7 +257,7 @@ function normalizeString(x) {
 
 function splitCandidates(str) {
   return normalizeString(str)
-    .split(/[:;,\|]+/)
+    .split(/[:;,|]+/)
     .map((s) => s.trim())
     .filter(Boolean)
 }
@@ -402,9 +402,9 @@ function applyAdvancedSearch() {
       ? true
       : extraFields.value.every((field) => {
           const present =
-            adv.hasOwnProperty(`extra_${field.variable}`) ||
-            adv.hasOwnProperty(`extra_${field.variable}_second`) ||
-            adv.hasOwnProperty(`extra_${field.variable}_third`)
+            Object.hasOwnProperty.call(adv, `extra_${field.variable}`) ||
+            Object.hasOwnProperty.call(adv, `extra_${field.variable}_second`) ||
+            Object.hasOwnProperty.call(adv, `extra_${field.variable}_third`)
           return present ? matchesExtraField(course, field, adv) : true
         })
 
@@ -421,8 +421,7 @@ const visibleCoursesBase = computed(() => {
   let list = filteredCourses.value.filter((course) => {
     const visibility = Number(course.visibility)
     if (visibility === 0 || visibility === 4) return false
-    if (visibility === 1 && hidePrivate) return false
-    return true
+    return !(visibility === 1 && hidePrivate)
   })
 
   if (sortOpt) {

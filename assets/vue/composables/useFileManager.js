@@ -1,4 +1,4 @@
-import { computed, onMounted, ref } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useStore } from "vuex"
 import { storeToRefs } from "pinia"
@@ -40,6 +40,52 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
   const currentFolderTitle = ref("Root")
   const { cid, sid, gid } = useCidReq()
 
+  // ---- Picker type filter (files/images/media) ----
+  const filterType = computed(() => {
+    const raw = String(route.query.type || "files").toLowerCase()
+    return ["files", "images", "media"].includes(raw) ? raw : "files"
+  })
+
+  function isFolderEntry(entry) {
+    return !entry?.resourceNode?.firstResourceFile
+  }
+
+  function getFilename(entry) {
+    return (
+      entry?.resourceNode?.firstResourceFile?.filename ||
+      entry?.resourceNode?.firstResourceFile?.name ||
+      entry?.resourceNode?.title ||
+      ""
+    )
+  }
+
+  function getMimeType(entry) {
+    return String(entry?.resourceNode?.firstResourceFile?.mimeType || "").toLowerCase()
+  }
+
+  function matchesFilter(entry, type) {
+    // Always keep folders visible for navigation
+    if (isFolderEntry(entry)) return true
+    if (type === "files") return true
+
+    const mime = getMimeType(entry)
+    const name = String(getFilename(entry)).toLowerCase()
+
+    const isImg = mime.startsWith("image/") || /\.(png|jpe?g|gif|svg|webp|bmp|tiff?)$/.test(name)
+    const isMed =
+      mime.startsWith("video/") || mime.startsWith("audio/") || /\.(mp4|webm|ogg|mov|avi|mkv|mp3|wav|m4a)$/.test(name)
+
+    if (type === "images") return isImg
+    if (type === "media") return isMed
+    return true
+  }
+
+  // Backwards-compatible: keep `files`, add `visibleFiles`
+  const visibleFiles = computed(() => {
+    const type = filterType.value
+    return (files.value || []).filter((f) => matchesFilter(f, type))
+  })
+
   const SS_KEY_PARENT = "pf_parent"
   const setParentInSession = (id) => {
     try {
@@ -59,9 +105,9 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     } catch {}
   }
 
-  const flattenFilters = (filters) => {
-    return Object.keys(filters).reduce((acc, key) => {
-      acc[key] = filters[key]
+  const flattenFilters = (filtersObj) => {
+    return Object.keys(filtersObj).reduce((acc, key) => {
+      acc[key] = filtersObj[key]
       return acc
     }, {})
   }
@@ -101,10 +147,10 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
         files.value = data["hydra:member"]
         totalFiles.value = data["hydra:totalItems"]
       } else {
-        console.error("Error: Data format is not correct", data)
+        console.error("[FILEMANAGER] Unexpected API response format", data)
       }
     } catch (error) {
-      console.error("Error fetching files:", error)
+      console.error("[FILEMANAGER] Error fetching files:", error)
     } finally {
       isLoading.value = false
     }
@@ -148,13 +194,50 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     onUpdateOptions()
   }
 
+  function toAbsoluteUrl(url) {
+    const raw = String(url || "").trim()
+    if (!raw) return ""
+    try {
+      return new URL(raw, window.location.origin).href
+    } catch {
+      return raw
+    }
+  }
+
   const returnToEditor = (data) => {
-    const url = data.contentUrl
-    window.parent.postMessage({ url: url }, "*")
-    if (parent.tinymce) {
-      parent.tinymce.activeEditor.windowManager.close()
+    const url = toAbsoluteUrl(data?.contentUrl)
+    if (!url) {
+      console.error("[FILEMANAGER] Missing contentUrl for selected item", data)
+      return
     }
 
+    // TinyMCE preferred channel (openUrl onMessage)
+    const tinymcePayload = { mceAction: "fileSelected", content: { url } }
+
+    try {
+      if (parent?.tinymce?.activeEditor?.windowManager?.sendMessage) {
+        parent.tinymce.activeEditor.windowManager.sendMessage(tinymcePayload)
+      }
+    } catch (e) {
+      console.warn("[FILEMANAGER] Failed to send TinyMCE windowManager message", e)
+    }
+
+    // postMessage fallback (both formats)
+    try {
+      window.parent.postMessage(tinymcePayload, window.location.origin)
+    } catch {}
+    try {
+      window.parent.postMessage({ url }, "*")
+    } catch {}
+
+    // Close TinyMCE dialog if present
+    try {
+      if (parent?.tinymce?.activeEditor?.windowManager) {
+        parent.tinymce.activeEditor.windowManager.close()
+      }
+    } catch {}
+
+    // CKEditor legacy support
     function getUrlParam(paramName) {
       const reParam = new RegExp("(?:[\\?&]|&amp;)" + paramName + "=([^&]+)", "i")
       const match = window.location.search.match(reParam)
@@ -162,9 +245,13 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     }
 
     const funcNum = getUrlParam("CKEditorFuncNum")
-    if (window.opener.CKEDITOR) {
-      window.opener.CKEDITOR.tools.callFunction(funcNum, url)
-      window.close()
+    try {
+      if (window.opener?.CKEDITOR) {
+        window.opener.CKEDITOR.tools.callFunction(funcNum, url)
+        window.close()
+      }
+    } catch (e) {
+      console.warn("[FILEMANAGER] CKEditor callback failed", e)
     }
   }
 
@@ -176,8 +263,11 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
   const viewModeIcon = computed(() => (viewMode.value === "list" ? "pi pi-th-large" : "pi pi-list"))
 
   const isImage = (file) => {
-    const fileExtensions = ["jpeg", "jpg", "png", "gif"]
-    const extension = file.resourceNode.title.split(".").pop().toLowerCase()
+    const fileExtensions = ["jpeg", "jpg", "png", "gif", "svg", "webp"]
+    const extension = String(file?.resourceNode?.title || "")
+      .split(".")
+      .pop()
+      .toLowerCase()
     return fileExtensions.includes(extension)
   }
 
@@ -196,10 +286,15 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
       jpg: "mdi-file-image-box",
       png: "mdi-file-image-box",
       gif: "mdi-file-image-box",
+      svg: "mdi-file-image-box",
+      webp: "mdi-file-image-box",
       default: "mdi-file",
     }
-    const extension = file.resourceNode.title.split(".").pop().toLowerCase()
-    return fileTypeIcons[extension] || fileTypeIcons["default"]
+    const extension = String(file?.resourceNode?.title || "")
+      .split(".")
+      .pop()
+      .toLowerCase()
+    return fileTypeIcons[extension] || fileTypeIcons.default
   }
 
   const showContextMenu = (event, file) => {
@@ -222,7 +317,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
 
   const saveItem = async () => {
     submitted.value = true
-    if (item.value.title.trim()) {
+    if (item.value.title?.trim()) {
       if (!item.value.id) {
         item.value.filetype = "folder"
         item.value.parentResourceNodeId = filters.value["resourceNode.parent"]
@@ -232,7 +327,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
           await store.dispatch(`${entity}/createWithFormData`, item.value)
           await onUpdateOptions()
         } catch (error) {
-          console.error("Error creating folder:", error)
+          console.error("[FILEMANAGER] Error creating folder:", error)
         }
       }
       dialog.value = false
@@ -241,8 +336,8 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     }
   }
 
-  const confirmDeleteItem = (item) => {
-    itemToDelete.value = { ...item }
+  const confirmDeleteItem = (it) => {
+    itemToDelete.value = { ...it }
     deleteDialog.value = true
   }
 
@@ -258,7 +353,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
       selectedFiles.value = []
       onUpdateOptions()
     } catch (error) {
-      console.error("Error deleting multiple items:", error)
+      console.error("[FILEMANAGER] Error deleting multiple items:", error)
     }
   }
 
@@ -271,10 +366,10 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
           itemToDelete.value = { resourceNode: {} }
           await onUpdateOptions()
         } catch (error) {
-          console.error("Error deleting document:", error)
+          console.error("[FILEMANAGER] Error deleting document:", error)
         }
       } else {
-        console.error("Document to delete is missing or invalid", itemToDelete.value)
+        console.error("[FILEMANAGER] Document to delete is missing or invalid", itemToDelete.value)
       }
     } else {
       if (itemToDelete.value && itemToDelete.value.id) {
@@ -284,7 +379,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
           itemToDelete.value = null
           onUpdateOptions()
         } catch (error) {
-          console.error("An error occurred while deleting the item", error)
+          console.error("[FILEMANAGER] Error deleting item", error)
         }
       }
     }
@@ -318,7 +413,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     await router.push({
       name: uploadRoute,
       query: {
-        ...route.query,
+        ...route.query, // keep picker/type
         parentResourceNodeId: filters.value["resourceNode.parent"],
         parent: filters.value["resourceNode.parent"],
         returnTo: route.name,
@@ -380,18 +475,27 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     })
   }
 
+  // If picker type changes (images/media/files), refresh list
+  watch(
+    () => filterType.value,
+    () => {
+      filters.value.page = 1
+      onUpdateOptions()
+    },
+  )
+
   const selectFile = (file) => {
     returnToEditor(file)
     contextMenuVisible.value = false
   }
 
-  const showHandler = (item) => {
-    selectedItem.value = item
+  const showHandler = (it) => {
+    selectedItem.value = it
     detailsDialogVisible.value = true
   }
 
-  const editHandler = (item) => {
-    item.value = { ...item }
+  const editHandler = (it) => {
+    item.value = { ...it }
     dialog.value = true
   }
 
@@ -415,6 +519,8 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
 
   return {
     files,
+    visibleFiles,
+    filterType,
     totalFiles,
     isLoading,
     selectedFiles,

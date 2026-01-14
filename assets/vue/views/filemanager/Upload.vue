@@ -112,7 +112,7 @@ const fileExistsOption = "rename"
 
 /**
  * Single shared Uppy instance (same pattern as DocumentUpload.vue).
- * This avoids reactivity wrappers around the instance.
+ * NOTE: We keep it as a plain instance (not a ref) to avoid reactivity wrappers.
  */
 const uppy = new Uppy({ autoProceed: false })
   .use(Webcam)
@@ -220,12 +220,53 @@ function back() {
   })
 }
 
+/**
+ * Safely destroy an Uppy instance across different Uppy versions and ref/non-ref cases.
+ */
+function destroyUppyInstance(instanceLike) {
+  const instance = instanceLike?.value ?? instanceLike
+  if (!instance) return
+
+  // Uppy v2/v3 typically has close()
+  if (typeof instance.close === "function") {
+    try {
+      instance.close({ reason: "unmount" })
+    } catch (e) {
+      // Some versions accept no args
+      try {
+        instance.close()
+      } catch (e2) {
+        log("Uppy close() failed", e2)
+      }
+    }
+    return
+  }
+
+  // Some builds expose destroy()
+  if (typeof instance.destroy === "function") {
+    try {
+      instance.destroy()
+    } catch (e) {
+      log("Uppy destroy() failed", e)
+    }
+    return
+  }
+
+  // Minimal fallback (avoid throwing during unmount)
+  try {
+    if (typeof instance.cancelAll === "function") instance.cancelAll()
+    if (typeof instance.reset === "function") instance.reset()
+  } catch (e) {
+    log("Uppy fallback cleanup failed", e)
+  }
+}
+
 onBeforeUnmount(() => {
   try {
-    log("Closing Uppy instance from Upload.vue")
-    uppy.close()
+    log("Destroying Uppy instance from Upload.vue")
+    destroyUppyInstance(uppy)
   } catch (e) {
-    log("Error while closing Uppy", e)
+    log("Error while destroying Uppy", e)
   }
 })
 </script>

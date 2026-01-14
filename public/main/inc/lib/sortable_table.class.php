@@ -1053,24 +1053,23 @@ class SortableTable extends HTML_Table
     {
         $url_params = $this->get_sortable_table_param_string().'&'.$this->get_additional_url_paramstring();
         foreach ($this->column_filters as $column => &$function) {
-            $firstParam = isset($row[$column]) ? $row[$column] : 0;
+            $firstParam = $row[$column] ?? 0;
             $row[$column] = call_user_func($function, $firstParam, $url_params, $row);
         }
-        if (count($this->form_actions) > 0) {
-            if (strlen($row[0]) > 0) {
-                $row[0] = '<div class="checkbox" ><label><input type="checkbox" name="'.$this->checkbox_name.'[]" value="'.$row[0].'"';
-                if (isset($_GET[$this->param_prefix.'selectall'])) {
-                    $row[0] .= ' checked="checked"';
-                }
-                $row[0] .= '/><span class="checkbox-material"><span class="check"></span></span></label></div>';
+        if (count($this->form_actions) > 0 && strlen($row[0]) > 0) {
+            $checkboxParams = [];
+
+            if (isset($_GET[$this->param_prefix.'selectall'])) {
+                $checkboxParams['checked'] = 'checked';
             }
+
+            $row[0] = Display::input('checkbox', $this->checkbox_name.'[]', $row[0], $checkboxParams);
         }
         if (is_array($row)) {
-            foreach ($row as &$value) {
-                if (empty($value)) {
-                    $value = '-';
-                }
-            }
+            $row = array_map(
+                fn($value) => empty($value) ? '-' : $value,
+                $row
+            );
         }
 
         return $row;

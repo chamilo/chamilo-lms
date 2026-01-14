@@ -1020,18 +1020,19 @@ function api_to_system_encoding($string, $from_encoding = null, $check_utf8_vali
  *
  * @see http://php.net/manual/en/function.htmlentities
  */
-function api_htmlentities($string, $quote_style = ENT_COMPAT)
+function api_htmlentities($string, $quote_style = ENT_COMPAT): string
 {
-    switch ($quote_style) {
-        case ENT_COMPAT:
-            $string = str_replace(['&', '"', '<', '>'], ['&amp;', '&quot;', '&lt;', '&gt;'], $string);
-            break;
-        case ENT_QUOTES:
-            $string = str_replace(['&', '\'', '"', '<', '>'], ['&amp;', '&#039;', '&quot;', '&lt;', '&gt;'], $string);
-            break;
+    $flags = ENT_HTML401;
+
+    if ($quote_style === ENT_QUOTES) {
+        $flags |= ENT_QUOTES;
+    } else {
+        $flags |= ENT_COMPAT;
     }
 
-    return mb_convert_encoding($string, 'HTML-ENTITIES', 'UTF-8');
+    $flags |= ENT_SUBSTITUTE;
+
+    return htmlentities($string, $flags, 'UTF-8');
 }
 
 /**

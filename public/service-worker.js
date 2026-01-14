@@ -1,16 +1,15 @@
 /**
  * Chamilo Service Worker
  * Handles:
- * - Offline caching
  * - Push notifications
+ * - (Optional) Network fallback response when offline
  *
  * Notes:
- * - We avoid caching or intercepting dynamic endpoints (/api, /themes) to prevent noisy console logs
+ * - We avoid intercepting dynamic endpoints (/api, /themes) to prevent noisy console logs
  *   when responses are 404 (expected in strict checks) or 202 (async endpoints).
- * - We only cache successful GET responses (res.ok).
+ * - We do NOT store responses. This prevents stale navigation/session issues.
  */
 
-const CACHE_NAME = "chamilo-cache-v1"
 const PRECACHE_URLS = [
   "/",
   "/manifest.json",
@@ -18,14 +17,22 @@ const PRECACHE_URLS = [
   "/img/pwa-icons/icon-512.png",
 ]
 
-// PWA: Cache basic files on install
+// PWA: Keep install/activate flow (no persistent storage)
 self.addEventListener("install", (event) => {
   console.log("[Service Worker] Install event")
 
+  // Validate basic URLs at install time to fail fast if something is missing.
+  // We intentionally do not store anything.
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(PRECACHE_URLS)
-    })
+    Promise.all(
+      PRECACHE_URLS.map(async (url) => {
+        try {
+          await fetch(url, { cache: "no-store" })
+        } catch (e) {
+          // Best-effort: do not block SW install if a non-critical asset fails
+        }
+      })
+    )
   )
 
   // Activate updated SW ASAP
@@ -35,22 +42,7 @@ self.addEventListener("install", (event) => {
 self.addEventListener("activate", (event) => {
   console.log("[Service Worker] Activate event")
 
-  event.waitUntil(
-    (async () => {
-      // Cleanup old caches if cache name changes in the future
-      const keys = await caches.keys()
-      await Promise.all(
-        keys.map((key) => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key)
-          }
-          return Promise.resolve()
-        })
-      )
-
-      await self.clients.claim()
-    })()
-  )
+  event.waitUntil(self.clients.claim())
 })
 
 /**
@@ -60,28 +52,32 @@ self.addEventListener("activate", (event) => {
 function shouldBypass(request) {
   const url = new URL(request.url)
 
+  // Do not handle non-GET requests
+  if (request.method !== "GET") return true
+
   // Ignore internal redirect helper routes
   if (url.pathname.startsWith("/r/")) return true
 
-  // Avoid intercepting theme assets (prevents console noise for strict 404 checks)
+  // Avoid intercepting theme assets/endpoints
   if (url.pathname.startsWith("/themes/")) return true
 
-  // Avoid intercepting API calls (can return 202 or other statuses that shouldn't be cached)
+  // Avoid intercepting API calls
   if (url.pathname.startsWith("/api/")) return true
 
-  // Avoid strict probing calls anywhere (expected 404 should not produce SW noise)
+  // Avoid strict probing calls anywhere
   if (url.searchParams.has("strict")) return true
 
-  // Do not handle non-GET requests
-  if (request.method !== "GET") return true
+  // Never intercept HTML navigations/documents (prevents any navigation impact)
+  if (request.mode === "navigate" || request.destination === "document") return true
+  const accept = request.headers.get("accept") || ""
+  if (accept.includes("text/html")) return true
 
   return false
 }
 
 /**
- * Cache-first for static navigations/assets, network fallback.
- * - Only caches successful responses (res.ok).
- * - If network fails, returns cache if available.
+ * Network-first (no storage), with graceful offline responses.
+ * This avoids stale resources while still providing a friendly offline fallback.
  */
 self.addEventListener("fetch", (event) => {
   const request = event.request
@@ -94,29 +90,13 @@ self.addEventListener("fetch", (event) => {
   event.respondWith(
     (async () => {
       try {
-        const cachedResponse = await caches.match(request)
-        if (cachedResponse) {
-          return cachedResponse
-        }
-
-        const response = await fetch(request)
-
-        // Cache only successful responses
-        if (response && response.ok) {
-          const cache = await caches.open(CACHE_NAME)
-          await cache.put(request, response.clone())
-        }
-
-        return response
+        // Always go to network (no SW storage)
+        return await fetch(request)
       } catch (err) {
-        // Network failure: try cache
-        const cachedResponse = await caches.match(request)
-        if (cachedResponse) {
-          return cachedResponse
-        }
-
-        // As last resort, provide a friendly offline response for navigations
+        // Offline fallback
         const accept = request.headers.get("accept") || ""
+
+        // If someone requested HTML (rare here because we bypass HTML), return a friendly page anyway
         if (accept.includes("text/html")) {
           return new Response(
             "<h1>Offline</h1><p>The application is currently offline.</p>",
@@ -124,7 +104,7 @@ self.addEventListener("fetch", (event) => {
           )
         }
 
-        // For other assets, just fail gracefully
+        // For assets, fail gracefully
         return new Response("Offline", { status: 503, statusText: "Service Unavailable" })
       }
     })()

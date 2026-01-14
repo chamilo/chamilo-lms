@@ -85,3 +85,12 @@
     @apply text-body-2 w-5 h-5;
   }
 }
+
+/* legacy checkboxes */
+.p-checkbox-box .p-checkbox-icon {
+  @apply hidden;
+}
+
+.p-checkbox-input:checked + .p-checkbox-box .p-checkbox-icon {
+  @apply block;
+}

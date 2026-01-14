@@ -1058,11 +1058,13 @@ class SortableTable extends HTML_Table
         }
         if (count($this->form_actions) > 0) {
             if (strlen($row[0]) > 0) {
-                $row[0] = '<div class="checkbox" ><label><input type="checkbox" name="'.$this->checkbox_name.'[]" value="'.$row[0].'"';
+                $checkboxParams = [];
+
                 if (isset($_GET[$this->param_prefix.'selectall'])) {
-                    $row[0] .= ' checked="checked"';
+                    $checkboxParams['checked'] = 'checked';
                 }
-                $row[0] .= '/><span class="checkbox-material"><span class="check"></span></span></label></div>';
+
+                $row[0] = Display::input('checkbox', $this->checkbox_name.'[]', $row[0], $checkboxParams);
             }
         }
         if (is_array($row)) {

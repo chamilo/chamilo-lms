@@ -644,9 +644,6 @@ form .field {
   td {
     padding: 12px;
   }
-  input[type="checkbox"] {
-    transform: scale(1.2);
-  }
   .save-button {
     background-color: #4CAF50;
     color: white;
@@ -658,10 +655,6 @@ form .field {
   }
   .save-button:hover {
     background-color: #45a049;
-  }
-  input[type="checkbox"] {
-    transform: scale(1);
-    margin: 0 auto;
   }
 }
 
@@ -1035,11 +1028,6 @@ img.course-tool__icon {
   select,
   textarea {
     @apply focus:outline-0 focus:border-primary focus:rounded-md focus:transition;
-  }
-
-  input[type="checkbox"],
-  input[type="radio"] {
-    @apply focus:outline-2 focus:outline-primary rounded-full;
   }
 }
 @layer components {

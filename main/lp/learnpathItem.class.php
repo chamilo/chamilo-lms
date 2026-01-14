@@ -2366,61 +2366,59 @@ class learnpathItem
 
                                         // For one and first attempt.
                                         if ($this->prevent_reinit == 1) {
-                                            // 2. If is completed we check the results in the DB of the quiz.
-                                            if ($returnstatus) {
-                                                $checkLastScoreAttempt = api_get_configuration_value('lp_prerequisite_use_last_attempt_only');
-                                                $orderBy = ($checkLastScoreAttempt ? 'ORDER BY exe_date DESC' : 'ORDER BY (exe_result/exe_weighting) DESC');
-                                                $sql = 'SELECT exe_result, exe_weighting
-                                                        FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
-                                                        WHERE
-                                                            exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.' AND
-                                                            exe_user_id = '.$user_id.' AND
-                                                            orig_lp_id = '.$this->lp_id.' AND
-                                                            orig_lp_item_id = '.$prereqs_string.' AND
-                                                            status <> "incomplete" AND
-                                                            c_id = '.$courseId.'
-                                                        '.$orderBy.'
-                                                        LIMIT 0, 1';
-                                                $rs_quiz = Database::query($sql);
-                                                if ($quiz = Database::fetch_array($rs_quiz)) {
-                                                    /** @var learnpathItem $myItemToCheck */
-                                                    $myItemToCheck = $items[$refs_list[$this->get_id()]];
-                                                    $minScore = $myItemToCheck->getPrerequisiteMinScore();
-                                                    $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
+                                            // 2. Check the results in the DB of the quiz.
+                                            $checkLastScoreAttempt = api_get_configuration_value('lp_prerequisite_use_last_attempt_only');
+                                            $orderBy = ($checkLastScoreAttempt ? 'ORDER BY exe_date DESC' : 'ORDER BY (exe_result/exe_weighting) DESC');
+                                            $sql = 'SELECT exe_result, exe_weighting
+                                                    FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
+                                                    WHERE
+                                                        exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.' AND
+                                                        exe_user_id = '.$user_id.' AND
+                                                        orig_lp_id = '.$this->lp_id.' AND
+                                                        orig_lp_item_id = '.$prereqs_string.' AND
+                                                        status <> "incomplete" AND
+                                                        c_id = '.$courseId.'
+                                                    '.$orderBy.'
+                                                    LIMIT 0, 1';
+                                            $rs_quiz = Database::query($sql);
+                                            if ($quiz = Database::fetch_array($rs_quiz)) {
+                                                /** @var learnpathItem $myItemToCheck */
+                                                $myItemToCheck = $items[$refs_list[$this->get_id()]];
+                                                $minScore = $myItemToCheck->getPrerequisiteMinScore();
+                                                $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
 
-                                                    if (isset($minScore) && isset($minScore)) {
-                                                        // Taking min/max prerequisites values see BT#5776
-                                                        if ($quiz['exe_result'] >= $minScore &&
-                                                            $quiz['exe_result'] <= $maxScore
-                                                        ) {
-                                                            $returnstatus = true;
-                                                        } else {
-                                                            $explanation = sprintf(
-                                                                get_lang('YourResultAtXBlocksThisElement'),
-                                                                $itemToCheck->get_title()
-                                                            );
-                                                            $this->prereq_alert = $explanation;
-                                                            $returnstatus = false;
-                                                        }
+                                                if (isset($minScore) && isset($minScore)) {
+                                                    // Taking min/max prerequisites values see BT#5776
+                                                    if ($quiz['exe_result'] >= $minScore &&
+                                                        $quiz['exe_result'] <= $maxScore
+                                                    ) {
+                                                        $returnstatus = true;
                                                     } else {
-                                                        // Classic way
-                                                        if ($quiz['exe_result'] >=
-                                                            $items[$refs_list[$prereqs_string]]->get_mastery_score()
-                                                        ) {
-                                                            $returnstatus = true;
-                                                        } else {
-                                                            $explanation = sprintf(
-                                                                get_lang('YourResultAtXBlocksThisElement'),
-                                                                $itemToCheck->get_title()
-                                                            );
-                                                            $this->prereq_alert = $explanation;
-                                                            $returnstatus = false;
-                                                        }
+                                                        $explanation = sprintf(
+                                                            get_lang('YourResultAtXBlocksThisElement'),
+                                                            $itemToCheck->get_title()
+                                                        );
+                                                        $this->prereq_alert = $explanation;
+                                                        $returnstatus = false;
                                                     }
                                                 } else {
-                                                    $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
-                                                    $returnstatus = false;
+                                                    // Classic way
+                                                    if ($quiz['exe_result'] >=
+                                                        $items[$refs_list[$prereqs_string]]->get_mastery_score()
+                                                    ) {
+                                                        $returnstatus = true;
+                                                    } else {
+                                                        $explanation = sprintf(
+                                                            get_lang('YourResultAtXBlocksThisElement'),
+                                                            $itemToCheck->get_title()
+                                                        );
+                                                        $this->prereq_alert = $explanation;
+                                                        $returnstatus = false;
+                                                    }
                                                 }
+                                            } else {
+                                                $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                                $returnstatus = false;
                                             }
                                         } else {
                                             // 3. For multiple attempts we check that there are minimum 1 item completed

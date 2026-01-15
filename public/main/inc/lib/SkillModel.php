@@ -974,6 +974,7 @@ class SkillModel extends Model
                         $passed = isset($skills[(int) $data['id']]);
                         $transparency = '';
                         if (false === $passed) {
+                            // @todo use a css class
                             $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
                         }
 
@@ -997,6 +998,7 @@ class SkillModel extends Model
                         $passed = isset($skills[(int) $data['id']]);
                         $transparency = '';
                         if (false === $passed) {
+                            // @todo use a css class
                             $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
                         }
 
@@ -1413,7 +1415,7 @@ class SkillModel extends Model
      * @param int $courseId  Optional. The course id
      * @param int $sessionId Optional. The session id
      *
-     * @return bool Whether the user has the skill return true. Otherwise, return false
+     * @return bool Whether the user has the skill return true. Otherwise return false
      */
     public function userHasSkill($userId, $skillId, $courseId = 0, $sessionId = 0)
     {

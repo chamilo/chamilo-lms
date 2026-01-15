@@ -21,6 +21,7 @@ $courses[] = [
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/english101s.png',
 ];
 // 2
 $courses[] = [
@@ -32,6 +33,7 @@ $courses[] = [
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/spanish101s.png',
 ];
 // 3
 $courses[] = [
@@ -43,6 +45,7 @@ $courses[] = [
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/french101s.png',
 ];
 // 4
 $courses[] = [
@@ -54,6 +57,7 @@ $courses[] = [
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/arabic101s.png',
 ];
 // 5
 $courses[] = [
@@ -65,6 +69,7 @@ $courses[] = [
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/solarsystems.png',
 ];
 // 6
 $courses[] = [
@@ -76,6 +81,7 @@ $courses[] = [
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/marnavigations.png',
 ];
 // 7
 $courses[] = [
@@ -87,6 +93,7 @@ $courses[] = [
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/natgeos.png',
 ];
 // 8
 $courses[] = [
@@ -98,6 +105,7 @@ $courses[] = [
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/japanese101s.png',
 ];
 // 9
 $courses[] = [
@@ -109,6 +117,7 @@ $courses[] = [
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/timemgmts.png',
 ];
 // 10
 $courses[] = [
@@ -120,6 +129,7 @@ $courses[] = [
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/hebrew101s.png',
 ];
 // 11
 $courses[] = [
@@ -131,6 +141,7 @@ $courses[] = [
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/chinese101s.png',
 ];
 // 12
 $courses[] = [
@@ -142,4 +153,5 @@ $courses[] = [
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
     'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/myanmar101s.png',
 ];

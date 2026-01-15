@@ -65,7 +65,7 @@
                                 </a>
                             {% else %}
                                 <a href="{{ baseurl ~ {'action':'highlighted', 'id':item.id}|url_encode }}">
-                                    {{ 'award_red_na.png'|icon(22, 'Mark as highlighted'|get_lang) }}
+                                    {{ 'ActionIcon::AWARD'|mdi_icon_t(22, 'ch-tool-icon', 'Mark as highlighted'|get_lang) }}
                                 </a>
                             {% endif %}
                         {% endif %}

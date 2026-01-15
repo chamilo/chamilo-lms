@@ -66,7 +66,7 @@ class PortfolioRepository extends ResourceRepository
         ?Session $session = null,
         bool $showBaseContentInSession = false,
         bool $listByUser = false,
-        ?DateTime $date = null,
+        ?string $date = null,
         array $tags = [],
         ?string $searchText = null,
         array $searchCategories = [],
@@ -88,7 +88,7 @@ class PortfolioRepository extends ResourceRepository
 
         if ($date) {
             $queryBuilder
-                ->andWhere('resource.creationDate >= :date')
+                ->andWhere('node.createdAt >= :date')
                 ->setParameter(':date', $date)
             ;
         }
@@ -130,7 +130,7 @@ class PortfolioRepository extends ResourceRepository
 
         if ($listByUser) {
             $queryBuilder
-                ->andWhere('resource.user = :user')
+                ->andWhere('node.creator = :user')
                 ->setParameter('user', $owner)
             ;
         }

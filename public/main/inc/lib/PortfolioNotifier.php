@@ -11,15 +11,16 @@ class PortfolioNotifier
     public static function notifyTeachersAndAuthor(PortfolioComment $comment)
     {
         $item = $comment->getItem();
-        $course = $item->getCourse();
-        $session = $item->getSession();
+        $itemResourceLink = $item->getFirstResourceLink();
+        $course = $itemResourceLink->getCourse();
+        $session = $itemResourceLink->getSession();
 
         $messageSubject = sprintf(
             get_lang('[Portfolio] New comment in post %s'),
             $item->getTitle(true)
         );
         $userIdListToSend = [];
-        $userIdListToSend[] = $comment->getItem()->getUser()->getId();
+        $userIdListToSend[] = $comment->getItem()->resourceNode->getCreator()->getId();
 
         $cidreq = api_get_cidreq_params(
             $course ? $course->getCode() : '',
@@ -58,7 +59,7 @@ class PortfolioNotifier
 
         $messageContent .= '<br><br><figure>'
             .'<blockquote>'.$comment->getExcerpt().'</blockquote>'
-            .'<figcaption>'.$comment->getAuthor()->getFullName().'</figcaption>'
+            .'<figcaption>'.$comment->resourceNode->getCreator()->getFullName().'</figcaption>'
             .'</figure>';
 
         foreach ($userIdListToSend as $userIdToSend) {
@@ -69,7 +70,6 @@ class PortfolioNotifier
                 0,
                 false,
                 false,
-                [],
                 false
             );
         }
@@ -78,7 +78,7 @@ class PortfolioNotifier
     private static function getCourseTitle(CourseEntity $course, ?SessionEntity $session = null): string
     {
         if ($session) {
-            return "{$course->getTitle()} ({$session->getName()})";
+            return "{$course->getTitle()} ({$session->getTitle()})";
         }
 
         return $course->getTitle();

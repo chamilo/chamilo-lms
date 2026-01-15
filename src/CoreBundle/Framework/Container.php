@@ -30,6 +30,7 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
+use Chamilo\CoreBundle\Repository\Node\PortfolioCommentRepository;
 use Chamilo\CoreBundle\Repository\Node\PortfolioRepository;
 use Chamilo\CoreBundle\Repository\Node\SocialPostAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\TicketMessageAttachmentRepository;
@@ -37,6 +38,7 @@ use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\PluginRepository;
 use Chamilo\CoreBundle\Repository\PromotionRepository;
+use Chamilo\CoreBundle\Repository\ResourceFileRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
@@ -710,6 +712,12 @@ class Container
         return self::$container->get(PortfolioRepository::class);
     }
 
+    public static function getPortfolioCommentRepository(): PortfolioCommentRepository
+    {
+        /** @var PortfolioRepository $repo */
+        return self::$container->get(PortfolioCommentRepository::class);
+    }
+
     public static function getPortfolioCategoryHelper(): PortfolioCategoryHelper
     {
         /** @var PortfolioCategoryHelper $helper */
@@ -719,5 +727,10 @@ class Container
     public static function getSearchIndexPathResolver(): SearchIndexPathResolver
     {
         return self::$container->get(SearchIndexPathResolver::class);
+    }
+
+    public static function getResourceFileRepository(): ResourceFileRepository
+    {
+        return self::$container->get(ResourceFileRepository::class);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Command\DoctrineMigrationsMigrateCommandDecorator;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
@@ -16,6 +17,10 @@ final class Version20240811221400 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        // When enabled, we keep legacy attendance columns to avoid data loss
+        // if attendances are being skipped/handled separately.
+        $skipAttendances = (bool) getenv(DoctrineMigrationsMigrateCommandDecorator::SKIP_ATTENDANCES_FLAG);
+
         $this->addSql('SET FOREIGN_KEY_CHECKS = 0;');
 
         // resource_node
@@ -213,9 +218,13 @@ final class Version20240811221400 extends AbstractMigrationChamilo
         }
 
         // c_attendance
-        $this->addSql('ALTER TABLE c_attendance DROP COLUMN IF EXISTS c_id');
-        $this->addSql('ALTER TABLE c_attendance DROP COLUMN IF EXISTS id');
-        $this->addSql('ALTER TABLE c_attendance DROP COLUMN IF EXISTS session_id');
+        if ($skipAttendances) {
+            $this->write('Skip attendances flag enabled: keeping legacy c_attendance columns (c_id, id, session_id).');
+        } else {
+            $this->addSql('ALTER TABLE c_attendance DROP COLUMN IF EXISTS c_id');
+            $this->addSql('ALTER TABLE c_attendance DROP COLUMN IF EXISTS id');
+            $this->addSql('ALTER TABLE c_attendance DROP COLUMN IF EXISTS session_id');
+        }
 
         // c_forum_thread
         $this->addSql('ALTER TABLE c_forum_thread DROP FOREIGN KEY IF EXISTS FK_5DA7884CD4DC43B9');

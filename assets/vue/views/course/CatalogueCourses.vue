@@ -132,23 +132,40 @@ const isPrivilegedUser =
   securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin
 
 const allowCatalogueAccess = computed(() => {
-  if (isAnonymous) return platformConfigStore.getSetting("catalog.course_catalog_published") !== "false"
-  if (isPrivilegedUser) return true
-  if (securityStore.isStudent)
+  if (isAnonymous) {
+    return platformConfigStore.getSetting("catalog.course_catalog_published") !== "false"
+  }
+
+  if (isPrivilegedUser) {
+    return true
+  }
+
+  if (securityStore.isStudent) {
     return platformConfigStore.getSetting("catalog.allow_students_to_browse_courses") !== "false"
+  }
+
   return false
 })
 
-if (!allowCatalogueAccess.value) {
-  if (!securityStore.user?.id) {
-    router.push({ name: "Login" })
-  } else if (securityStore.isStudent) {
-    router.push({ name: "Home" })
-  } else {
-    router.push({ name: "Index" })
+watch(allowCatalogueAccess, async (newValue) => {
+  if (true !== newValue) {
+    return
   }
-  throw new Error("Catalogue access denied by settings")
-}
+
+  if (!securityStore.isAuthenticated) {
+    await router.push({ name: "Login" })
+
+    return
+  }
+
+  if (securityStore.isStudent) {
+    await router.push({ name: "Home" })
+
+    return
+  }
+
+  await router.push({ name: "Index" })
+})
 
 const currentUserId = securityStore.user?.id ?? null
 const status = ref(false)

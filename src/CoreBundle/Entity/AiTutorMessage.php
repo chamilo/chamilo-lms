@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Entity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-
 #[ORM\Entity]
 #[ORM\Table(name: 'ai_tutor_message')]
 #[ORM\Index(columns: ['conversation_id', 'created_at'], name: 'idx_ai_tutor_msg_conv_created')]
@@ -21,7 +20,7 @@ class AiTutorMessage
     #[ORM\Column(name: 'id', type: 'integer')]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: AiTutorConversation::class)]
+    #[ORM\ManyToOne(targetEntity: AiTutorConversation::class, inversedBy: 'messages')]
     #[ORM\JoinColumn(name: 'conversation_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected AiTutorConversation $conversation;
 

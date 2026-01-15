@@ -14,6 +14,8 @@ use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Chamilo\CoreBundle\AiProvider\AiChatCompletionResult;
+use Throwable;
 
 class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, AiVideoProviderInterface, AiDocumentProviderInterface
 {
@@ -49,6 +51,251 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         if ('' === trim($this->apiKey)) {
             throw new RuntimeException('OpenAI API key is missing.');
         }
+    }
+
+    /**
+     * Chat completion entrypoint for AiTutorChatService.
+     *
+     * @param array<int, array{role:string,content:string}> $messages
+     * @param array<string,mixed> $options
+     */
+    public function chat(array $messages, array $options = []): string
+    {
+        $userId = $this->getUserId();
+        if (!$userId) {
+            error_log('[AI][OpenAI][chat] User not authenticated.');
+            return 'Error: User is not authenticated.';
+        }
+
+        $cfg = $this->getTypeConfig('text');
+        if (empty($cfg)) {
+            error_log('[AI][OpenAI][chat] Missing config for type: text');
+            return 'Error: OpenAI text configuration is missing.';
+        }
+
+        $url = (string) ($cfg['url'] ?? 'https://api.openai.com/v1/chat/completions');
+        $model = (string) (($options['model'] ?? null) ?? ($cfg['model'] ?? 'gpt-4o-mini'));
+        $temperature = (float) (($options['temperature'] ?? null) ?? ($cfg['temperature'] ?? 0.7));
+        $maxTokens = (int) (($options['max_tokens'] ?? null) ?? ($cfg['max_tokens'] ?? 1000));
+
+        $normalizedMessages = $this->normalizeChatMessages($messages);
+        if (empty($normalizedMessages)) {
+            error_log('[AI][OpenAI][chat] Empty messages payload.');
+            return 'Error: Empty chat messages.';
+        }
+
+        $payload = [
+            'model' => $model,
+            'messages' => $normalizedMessages,
+            'temperature' => $temperature,
+            'max_tokens' => $maxTokens,
+        ];
+
+        // Optional overrides (safe)
+        if (isset($options['top_p'])) {
+            $payload['top_p'] = (float) $options['top_p'];
+        }
+        if (isset($options['presence_penalty'])) {
+            $payload['presence_penalty'] = (float) $options['presence_penalty'];
+        }
+        if (isset($options['frequency_penalty'])) {
+            $payload['frequency_penalty'] = (float) $options['frequency_penalty'];
+        }
+
+        $logPreview = $this->messagesForLog($normalizedMessages, 900);
+
+        error_log(sprintf(
+            '[AI][OpenAI][chat] Request: userId=%d url=%s model=%s temperature=%.2f max_tokens=%d messages="%s"',
+            $userId,
+            $url,
+            $model,
+            $temperature,
+            $maxTokens,
+            $logPreview
+        ));
+
+        try {
+            $response = $this->httpClient->request('POST', $url, [
+                'headers' => $this->buildAuthHeaders(true),
+                'json' => $payload,
+            ]);
+
+            $data = $response->toArray(false);
+
+            // Handle API-level error payloads.
+            if (\is_array($data) && isset($data['error'])) {
+                $msg = $data['error']['message'] ?? null;
+                $msg = \is_string($msg) && '' !== trim($msg) ? trim($msg) : 'OpenAI returned an error response.';
+                error_log('[AI][OpenAI][chat] Error response: '.$msg);
+
+                return 'Error: '.$msg;
+            }
+
+            $generatedContent = $data['choices'][0]['message']['content'] ?? null;
+            if (!\is_string($generatedContent) || '' === trim($generatedContent)) {
+                error_log('[AI][OpenAI][chat] Empty content returned.');
+                return 'Error: Empty response from OpenAI.';
+            }
+
+            $this->saveAiRequest(
+                $userId,
+                'chat',
+                $logPreview,
+                'openai',
+                (int) ($data['usage']['prompt_tokens'] ?? 0),
+                (int) ($data['usage']['completion_tokens'] ?? 0),
+                (int) ($data['usage']['total_tokens'] ?? 0)
+            );
+
+            return trim($generatedContent);
+        } catch (Throwable $e) {
+            error_log('[AI][OpenAI][chat] Exception: '.$e->getMessage());
+            return 'Error: '.$e->getMessage();
+        }
+    }
+
+    /**
+     * Optional fallback used by DefaultAiChatCompletionClient when a provider does not implement chat().
+     * Keeping this for compatibility.
+     */
+    public function generateText(string $prompt, array $options = []): string
+    {
+        $prompt = trim($prompt);
+        if ('' === $prompt) {
+            return 'Error: Empty prompt.';
+        }
+
+        $userId = $this->getUserId();
+        if (!$userId) {
+            error_log('[AI][OpenAI][generateText] User not authenticated.');
+            return 'Error: User is not authenticated.';
+        }
+
+        $cfg = $this->getTypeConfig('text');
+        if (empty($cfg)) {
+            error_log('[AI][OpenAI][generateText] Missing config for type: text');
+            return 'Error: OpenAI text configuration is missing.';
+        }
+
+        $url = (string) ($cfg['url'] ?? 'https://api.openai.com/v1/chat/completions');
+        $model = (string) (($options['model'] ?? null) ?? ($cfg['model'] ?? 'gpt-4o-mini'));
+        $temperature = (float) (($options['temperature'] ?? null) ?? ($cfg['temperature'] ?? 0.7));
+        $maxTokens = (int) (($options['max_tokens'] ?? null) ?? ($cfg['max_tokens'] ?? 1000));
+
+        $payload = [
+            'model' => $model,
+            'messages' => [
+                ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+                ['role' => 'user', 'content' => $prompt],
+            ],
+            'temperature' => $temperature,
+            'max_tokens' => $maxTokens,
+        ];
+
+        error_log(sprintf(
+            '[AI][OpenAI][generateText] Request: userId=%d url=%s model=%s temperature=%.2f max_tokens=%d prompt="%s"',
+            $userId,
+            $url,
+            $model,
+            $temperature,
+            $maxTokens,
+            mb_substr($prompt, 0, 200)
+        ));
+
+        try {
+            $response = $this->httpClient->request('POST', $url, [
+                'headers' => $this->buildAuthHeaders(true),
+                'json' => $payload,
+            ]);
+
+            $data = $response->toArray(false);
+
+            if (\is_array($data) && isset($data['error'])) {
+                $msg = $data['error']['message'] ?? null;
+                $msg = \is_string($msg) && '' !== trim($msg) ? trim($msg) : 'OpenAI returned an error response.';
+                error_log('[AI][OpenAI][generateText] Error response: '.$msg);
+
+                return 'Error: '.$msg;
+            }
+
+            $generatedContent = $data['choices'][0]['message']['content'] ?? null;
+            if (!\is_string($generatedContent) || '' === trim($generatedContent)) {
+                error_log('[AI][OpenAI][generateText] Empty content returned.');
+                return 'Error: Empty response from OpenAI.';
+            }
+
+            $this->saveAiRequest(
+                $userId,
+                'generateText',
+                mb_substr($prompt, 0, 900),
+                'openai',
+                (int) ($data['usage']['prompt_tokens'] ?? 0),
+                (int) ($data['usage']['completion_tokens'] ?? 0),
+                (int) ($data['usage']['total_tokens'] ?? 0)
+            );
+
+            return trim($generatedContent);
+        } catch (Throwable $e) {
+            error_log('[AI][OpenAI][generateText] Exception: '.$e->getMessage());
+            return 'Error: '.$e->getMessage();
+        }
+    }
+
+    /**
+     * @param array<int, array{role:string,content:string}> $messages
+     *
+     * @return array<int, array{role:string,content:string}>
+     */
+    private function normalizeChatMessages(array $messages): array
+    {
+        $out = [];
+
+        foreach ($messages as $m) {
+            if (!\is_array($m)) {
+                continue;
+            }
+
+            $role = isset($m['role']) ? trim((string) $m['role']) : '';
+            $content = isset($m['content']) ? trim((string) $m['content']) : '';
+
+            if ('' === $role || '' === $content) {
+                continue;
+            }
+
+            $role = strtolower($role);
+            if (!in_array($role, ['system', 'user', 'assistant', 'tool'], true)) {
+                $role = 'user';
+            }
+
+            $out[] = [
+                'role' => $role,
+                'content' => $content,
+            ];
+        }
+
+        return $out;
+    }
+
+    /**
+     * @param array<int, array{role:string,content:string}> $messages
+     */
+    private function messagesForLog(array $messages, int $maxChars = 900): string
+    {
+        $parts = [];
+        foreach ($messages as $m) {
+            $role = $m['role'] ?? 'user';
+            $content = $m['content'] ?? '';
+            $content = trim((string) $content);
+
+            if ('' === $content) {
+                continue;
+            }
+
+            $parts[] = strtoupper((string) $role).': '.mb_substr($content, 0, 300);
+        }
+
+        $s = implode(' | ', $parts);
+        return mb_substr($s, 0, $maxChars);
     }
 
     public function generateQuestions(string $topic, int $numQuestions, string $questionType, string $language): ?string
@@ -854,5 +1101,93 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             'code' => isset($err['code']) && is_string($err['code']) ? $err['code'] : null,
             'param' => isset($err['param']) && is_string($err['param']) ? $err['param'] : null,
         ];
+    }
+
+    /**
+     * Chat completion with conversation state (Responses API).
+     *
+     * @param array<int, array{role:string,content:string}> $messages
+     * @param array<string,mixed> $options
+     */
+    public function chatWithMeta(array $messages, array $options = []): AiChatCompletionResult
+    {
+        $text = $this->chat($messages, $options);
+        return new AiChatCompletionResult((string) $text, null);
+    }
+
+    /**
+     * Extract system instructions and build Responses API input items.
+     *
+     * @param array<int, array{role:string,content:string}> $messages
+     *
+     * @return array{0:string,1:array<int,array{role:string,content:string}>}
+     */
+    private function splitInstructionsAndInput(array $messages): array
+    {
+        $normalized = $this->normalizeChatMessages($messages);
+
+        $instructions = [];
+        $input = [];
+
+        foreach ($normalized as $m) {
+            $role = $m['role'] ?? 'user';
+            $content = trim((string) ($m['content'] ?? ''));
+
+            if ($content === '') {
+                continue;
+            }
+
+            if ($role === 'system') {
+                $instructions[] = $content;
+                continue;
+            }
+
+            $input[] = [
+                'role' => $role,
+                'content' => $content,
+            ];
+        }
+
+        return [implode("\n\n", $instructions), $input];
+    }
+
+    /**
+     * Extract the assistant text from Responses API payload.
+     */
+    private function extractResponsesApiText(array $data): string
+    {
+        // Many responses include output_text directly in the response object. :contentReference[oaicite:4]{index=4}
+        if (isset($data['output_text']) && is_string($data['output_text'])) {
+            return $data['output_text'];
+        }
+
+        // Fallback: walk through output[] -> content[] -> text.
+        if (!isset($data['output']) || !is_array($data['output'])) {
+            return '';
+        }
+
+        $parts = [];
+
+        foreach ($data['output'] as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            if (!isset($item['content']) || !is_array($item['content'])) {
+                continue;
+            }
+
+            foreach ($item['content'] as $c) {
+                if (!is_array($c)) {
+                    continue;
+                }
+
+                // Typical shape: { "type": "output_text", "text": "..." }
+                if (isset($c['type']) && $c['type'] === 'output_text' && isset($c['text']) && is_string($c['text'])) {
+                    $parts[] = $c['text'];
+                }
+            }
+        }
+
+        return trim(implode("\n", $parts));
     }
 }

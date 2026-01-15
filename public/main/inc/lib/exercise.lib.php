@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AiHelper;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -4456,24 +4457,48 @@ EOT;
         return $res;
     }
 
-    /**
-     * @param int $exe_id
-     */
     public static function create_chat_exercise_session($exe_id)
     {
-        if (!isset($_SESSION['current_exercises'])) {
+        $exeId = (int) $exe_id;
+        if ($exeId <= 0) {
+            return;
+        }
+
+        if (!isset($_SESSION['current_exercises']) || !is_array($_SESSION['current_exercises'])) {
             $_SESSION['current_exercises'] = [];
         }
-        $_SESSION['current_exercises'][$exe_id] = true;
+        $_SESSION['current_exercises'][$exeId] = true;
+
+        try {
+            /** @var AiHelper $aiHelper */
+            $aiHelper = Container::$container->get(AiHelper::class);
+            $aiHelper->markUserInTest((int) $exeId);
+        } catch (\Throwable $e) {
+            // Ignore on legacy context (no hard dependency).
+        }
     }
 
-    /**
-     * @param int $exe_id
-     */
     public static function delete_chat_exercise_session($exe_id)
     {
-        if (isset($_SESSION['current_exercises'])) {
-            $_SESSION['current_exercises'][$exe_id] = false;
+        $exeId = (int) $exe_id;
+        if ($exeId <= 0) {
+            return;
+        }
+
+        if (isset($_SESSION['current_exercises']) && is_array($_SESSION['current_exercises'])) {
+            unset($_SESSION['current_exercises'][$exeId]);
+
+            if (empty($_SESSION['current_exercises'])) {
+                unset($_SESSION['current_exercises']);
+            }
+        }
+
+        try {
+            /** @var AiHelper $aiHelper */
+            $aiHelper = Container::$container->get(AiHelper::class);
+            $aiHelper->clearUserInTest((int) $exeId);
+        } catch (\Throwable $e) {
+            // Ignore on legacy context (no hard dependency).
         }
     }
 

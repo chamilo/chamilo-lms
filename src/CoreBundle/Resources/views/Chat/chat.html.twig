@@ -10,6 +10,9 @@
         {% set courseLabel = course.title|default('Course') %}
         {% set courseUrl = '/course/' ~ course.id ~ '/home?sid=' ~ sid %}
 
+        {% set aiEnabled = ai_enabled|default(false) %}
+        {% set aiDefaultProvider = ai_default_provider|default('openai') %}
+
         <script>
           window.breadcrumb = [
             { name: "{{ rootLabel|e('js') }}", url: "{{ rootUrl|e('js') }}" },
@@ -51,6 +54,15 @@
                                                 class="tab-btn active whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium"
                                         >{{ 'All'|trans }}</button>
                                     {% endif %}
+
+                                    {% if aiEnabled %}
+                                        <!--button
+                                                data-user="-1"
+                                                id="chat-tab--1"
+                                                class="tab-btn whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-50"
+                                        >🤖 {{ 'AI Tutor'|trans }}</button-->
+                                    {% endif %}
+
                                     {# Dynamic user tabs added by JS #}
                                 </div>
                             </div>
@@ -60,6 +72,12 @@
                                 <div class="tab-panel" id="panel-0">
                                     <div class="chat-history" id="chat-history"></div>
                                 </div>
+
+                                {% if aiEnabled %}
+                                    <div class="tab-panel hidden" id="panel--1">
+                                        <div class="chat-history" id="chat-history--1"></div>
+                                    </div>
+                                {% endif %}
                             </div>
 
                             {# Composer #}
@@ -127,7 +145,9 @@
               chat: '{{ "Chat"|trans|e('js') }}',
               confirmReset: '{{ "Are you sure you want to clear this chat?"|trans|e('js') }}',
               loading: '{{ "Loading…"|trans|e('js') }}',
-              loadingPlain: 'Loading…'
+              loadingPlain: 'Loading…',
+              aiTutorPlaceholder: 'Ask the AI Tutor…',
+              defaultPlaceholder: '{{ "Write…"|trans|e('js') }}'
             };
 
             // ---------- helpers ----------
@@ -135,6 +155,9 @@
             const myUserId = {{ user.user_id }};
             const restrictToCoach = {{ restrict_to_coach ? 'true' : 'false' }};
             const parentNodeId = {{ chat_parent_node_id|default('0') }};
+
+            const aiEnabled = {{ aiEnabled ? 'true' : 'false' }};
+            const aiDefaultProvider = '{{ aiDefaultProvider|e('js') }}';
 
             const $  = (sel, root=document) => root.querySelector(sel);
             const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
@@ -145,13 +168,13 @@
             let currentFriendForNode = 0;
 
             // Ensure node parameter travels with requests ONLY for general chat (friend=0).
-            // Privacy-by-default: do not associate private conversations with a ResourceNode.
+            // Privacy-by-default: do not associate private conversations (users) nor AI Tutor with a ResourceNode.
             const withNode = (params = {}) => {
               const p = { ...params };
               const friend = Number(p.friend ?? currentFriendForNode ?? 0);
-              const isPrivate = friend > 0;
+              const isGeneral = (friend === 0);
 
-              if (!isPrivate && parentNodeId && String(parentNodeId) !== '0') {
+              if (isGeneral && parentNodeId && String(parentNodeId) !== '0') {
                 p.node = parentNodeId;
               }
               return p;
@@ -205,6 +228,16 @@
               if (!el) return;
               el.innerHTML = `<div class="text-sm text-gray-500">${escapeHTML(T.loading)}</div>`;
               el.scrollTop = 0;
+            }
+
+            function updateComposerPlaceholder(userId) {
+              const ta = $('#chat-writer');
+              if (!ta) return;
+              if (userId === -1) {
+                ta.placeholder = T.aiTutorPlaceholder;
+              } else {
+                ta.placeholder = T.defaultPlaceholder;
+              }
             }
 
             // ---------- Emoji picker (Unicode only) ----------
@@ -356,6 +389,8 @@
                   sendBtn.disabled = (restrictToCoach && userId === 0);
                 }
 
+                updateComposerPlaceholder(userId);
+
                 // Force server to re-send full history for the new tab
                 this._historySize = -1;
               },
@@ -371,6 +406,8 @@
 
                 // UX: clear the visible history while the new one loads.
                 renderHistoryLoading(userId);
+
+                updateComposerPlaceholder(userId);
 
                 return this.track({ force: true });
               },
@@ -393,12 +430,19 @@
 
                 const prevSize = this._historySize;
 
-                return getJSON({
+                const params = {
                   action: 'track',
                   size: this._historySize,
                   users_online: this.usersOnline,
                   friend: this.currentFriend
-                }, { signal })
+                };
+
+                // AI Tutor: attach provider hint
+                if (this.currentFriend === -1) {
+                  params.ai_provider = aiDefaultProvider;
+                }
+
+                return getJSON(params, { signal })
                   .then(response => {
                     if (!response || !response.status) return;
 
@@ -523,6 +567,10 @@
                   sid: {{ session_id|default(0) }}
                 };
 
+                if (this.currentFriend === -1) {
+                  params.ai_provider = aiDefaultProvider;
+                }
+
                 // Primary: POST
                 postForm(params)
                   .then(response => {
@@ -566,7 +614,12 @@
                 // User activity: reset backoff.
                 this._resetBackoff();
 
-                getJSON({ action: 'reset', friend: this.currentFriend })
+                const params = { action: 'reset', friend: this.currentFriend };
+                if (this.currentFriend === -1) {
+                  params.ai_provider = aiDefaultProvider;
+                }
+
+                getJSON(params)
                   .then(response => {
                     if (!response || !response.status) return;
                     this.setHistory(response.data);
@@ -658,20 +711,30 @@
                 this._started = true;
 
                 const defaultTab = document.getElementById('chat-tab-0');
+                const aiTab = document.getElementById('chat-tab--1');
+
                 if (defaultTab) {
                   setActiveTab(defaultTab);
                   showPanel(0);
                   this.currentFriend = 0;
                   currentFriendForNode = 0;
+                  updateComposerPlaceholder(0);
+                } else if (aiEnabled && aiTab) {
+                  setActiveTab(aiTab);
+                  showPanel(-1);
+                  this.currentFriend = -1;
+                  currentFriendForNode = -1;
+                  updateComposerPlaceholder(-1);
                 } else {
                   // No "All" tab exists (restrict-to-coach mode). Keep state at 0, user must pick a peer.
                   this.currentFriend = 0;
                   currentFriendForNode = 0;
+                  updateComposerPlaceholder(0);
                 }
 
                 if (restrictToCoach) {
                   const sendBtn = document.getElementById('chat-send-message');
-                  if (sendBtn) sendBtn.disabled = true;
+                  if (sendBtn) sendBtn.disabled = (this.currentFriend === 0);
                 }
 
                 this._resetBackoff();

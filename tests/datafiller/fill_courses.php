@@ -57,6 +57,7 @@ function fill_courses(): array
                 'wanted_code' => $course['wanted_code'],
                 'course_language' => $course['course_language'],
                 'exemplary_content' => $course['exemplary_content'] ?? false,
+                'illustration_path' => $course['illustration_path'] ?? null,
             ]);
 
             if ($created) {

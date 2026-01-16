@@ -283,7 +283,7 @@
                   const isMe = (user.id === myUserId);
                   const dotCls = user.isConnected ? 'bg-emerald-500' : 'bg-gray-300';
                   const btnTitle = user.isConnected ? T.startChat : T.leaveMessage;
-                 // Build a safe id from the complete_name: normalize accents, lowercase, spaces -> underscores, remove non-alnum/_
+                 // Build a safe id from the complete_name
                   const rawName = user.complete_name || '';
                   const nameNormalized = rawName.replace(/\s+/g, '_')
 

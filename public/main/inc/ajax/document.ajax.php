@@ -20,16 +20,23 @@ switch ($action) {
         api_protect_course_script(true);
         $path = isset($_GET['path']) ? $_GET['path'] : '';
         $isAllowedToEdit = api_is_allowed_to_edit();
-        $size = $repo->getFolderSize(api_get_course_int_id(), $path);
+        $courseId = api_get_course_int_id();
+        // Close the session as we don't need it any further
+        session_write_close();
+
+        $size = $repo->getFolderSize($courseId, $path);
 
         echo format_file_size($size);
         break;
     case 'get_document_quota':
         // Getting the course quota
         $courseQuota = DocumentManager::get_course_quota();
+        $courseId = api_get_course_int_id();
+        // Close the session as we don't need it any further
+        session_write_close();
 
         // Calculating the total space
-        $total = $repo->getTotalSpace(api_get_course_int_id());
+        $total = $repo->getTotalSpace($courseId);
 
         // Displaying the quota
         echo DocumentManager::displaySimpleQuota($courseQuota, $total);
@@ -52,6 +59,13 @@ switch ($action) {
         break;
     case 'upload_file':
         api_protect_course_script(true);
+        $isEdit = api_is_allowed_to_edit(null, true);
+        $course  = api_get_course_entity();
+        $userId = api_get_user_id();
+        $courseInfo = api_get_course_info();
+
+        // Close the session as we don't need it any further
+        session_write_close();
 
         $ifExists = $_POST['if_exists'] ?? api_get_setting('document.document_if_file_exists_option') ?? 'rename';
         $unzip    = !empty($_POST['unzip']);
@@ -82,7 +96,6 @@ switch ($action) {
             exit;
         }
 
-        $isEdit = api_is_allowed_to_edit(null, true);
         if (!$isEdit) {
             exit;
         }
@@ -107,7 +120,6 @@ switch ($action) {
 
         $repo    = Container::getDocumentRepository();
         $em      = Database::getManager();
-        $course  = api_get_course_entity();
         $results = [];
 
         // --------- LP context (optional): auto-create LP items when uploading from LP builder ----------
@@ -120,8 +132,7 @@ switch ($action) {
         if ($lpAutoAdd && $lpId > 0) {
             $lp = Container::getLpRepository()->find($lpId);
             if ($lp) {
-                $courseInfo = api_get_course_info();
-                $oLP = new learnpath($lp, $courseInfo, api_get_user_id());
+                $oLP = new learnpath($lp, $courseInfo, $userId);
             }
         }
 

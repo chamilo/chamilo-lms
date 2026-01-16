@@ -1,6 +1,9 @@
 <template>
   <Teleport to="body">
-    <div class="chd">
+    <div
+      v-if="canRenderDock"
+      class="chd"
+    >
       <!-- FAB -->
       <button
         class="chd-fab"
@@ -59,6 +62,34 @@
               </button>
             </div>
 
+            <!-- AI Tutor quick entry (only when course context is available) -->
+            <div
+              v-if="inCourse && tutorCtx.enabled && !contactsHasAiTutor"
+              class="chd-ai"
+            >
+              <button
+                class="chd-ai__btn"
+                :class="{ 'is-active': Number(activePeer?.id || 0) === AI_PEER_ID }"
+                @click="openConversation({ id: AI_PEER_ID, name: t('AI Tutor'), image: '' })"
+                :disabled="tutorCtx.inTest"
+                :title="tutorCtx.inTest ? t('AI tutor is disabled during tests') : t('AI Tutor')"
+              >
+                <i class="mdi mdi-robot-outline" />
+                <span class="chd-truncate">{{ t("AI Tutor") }}</span>
+                <span
+                  class="chd-presence on"
+                  aria-hidden="true"
+                />
+              </button>
+
+              <p
+                v-if="tutorCtx.inTest"
+                class="chd-text--muted chd-ai__hint"
+              >
+                {{ t("AI tutor is disabled during tests") }}
+              </p>
+            </div>
+
             <div
               class="chd-contacts"
               @scroll.passive="onContactsScroll"
@@ -100,7 +131,7 @@
                     <span
                       class="chd-presence"
                       :class="activePeer.online ? 'on' : 'off'"
-                    ></span>
+                    />
                   </div>
                 </template>
                 <template v-else>
@@ -164,7 +195,7 @@
               <textarea
                 v-model.trim="draft"
                 class="chd-input"
-                :placeholder="t('Write a message')"
+                :placeholder="composerPlaceholder"
                 rows="2"
                 @keydown="onComposerKeydown"
                 @keydown.enter.prevent.exact="send"
@@ -183,7 +214,7 @@
                 <button
                   class="chd-btn chd-btn--primary"
                   @click="send"
-                  :disabled="!draft || sending || userStatus !== 1"
+                  :disabled="sendDisabled"
                 >
                   <i class="mdi mdi-send" /> {{ t("Send") }}
                 </button>
@@ -199,31 +230,174 @@
 <script setup>
 import { ref, reactive, computed, onBeforeUnmount, watch, onMounted } from "vue"
 import { useI18n } from "vue-i18n"
+import { useRoute } from "vue-router"
+import { useCidReq } from "../../composables/cidReq"
 
 const { t } = useI18n({ useScope: "global" })
+const route = useRoute()
+
+/**
+ * cidreq context (course/session/group).
+ * We prefer vue-router (route.fullPath) because DockedChat is mounted in App.vue.
+ * We still keep a safe fallback to window.location for edge cases.
+ */
+const cid = ref(0)
+const sid = ref(0)
+const gid = ref(0)
+
+function toInt(v) {
+  const n = Number(v)
+  return Number.isFinite(n) ? n : 0
+}
+
+function extractCourseIdFromPath(pathname) {
+  const p = String(pathname || "")
+  let m = p.match(/\/course\/(\d+)(?:\/|$)/i)
+  if (m) return toInt(m[1]) || 0
+  m = p.match(/\/courses\/(\d+)(?:\/|$)/i)
+  if (m) return toInt(m[1]) || 0
+  return 0
+}
+
+function readCidReqFromRouteAndLocation() {
+  // Try route query first
+  const q = route?.query || {}
+  const qp = (k) => (q?.[k] ?? "").toString()
+
+  let c = toInt(qp("cid")) || toInt(qp("cidReq")) || toInt(qp("cidreq")) || 0
+  let s = toInt(qp("sid")) || 0
+  let g = toInt(qp("gid")) || 0
+
+  // Fallback to URL path for routes like /course/5/home
+  if (c <= 0) c = extractCourseIdFromPath(route?.path || window.location.pathname)
+
+  // Last fallback: raw window.location search
+  if (c <= 0) {
+    const sp = new URLSearchParams(window.location.search || "")
+    c = toInt(sp.get("cid")) || toInt(sp.get("cidReq")) || toInt(sp.get("cidreq")) || 0
+    s = s || toInt(sp.get("sid") ?? "0") || 0
+    g = g || toInt(sp.get("gid") ?? "0") || 0
+    if (c <= 0) c = extractCourseIdFromPath(window.location.pathname)
+  }
+
+  cid.value = c || 0
+  sid.value = s || 0
+  gid.value = g || 0
+}
+
+/**
+ * Keep compatibility: if useCidReq() works, bind to it.
+ * If it doesn't provide cid for path-based routes, route watcher will override via readCidReqFromRouteAndLocation().
+ */
+function safeBindCidReq() {
+  try {
+    const r = useCidReq()
+    if (r?.cid && typeof r.cid === "object" && "value" in r.cid) cid.value = toInt(r.cid.value) || 0
+    if (r?.sid && typeof r.sid === "object" && "value" in r.sid) sid.value = toInt(r.sid.value) || 0
+    if (r?.gid && typeof r.gid === "object" && "value" in r.gid) gid.value = toInt(r.gid.value) || 0
+  } catch {
+    // No injection/router in some contexts: ignore.
+  }
+}
+
+safeBindCidReq()
+readCidReqFromRouteAndLocation()
+
+function getRuntimeCidReq() {
+  // Use the most up-to-date reactive values first.
+  let c = toInt(cid.value)
+  let s = toInt(sid.value)
+  let g = toInt(gid.value)
+
+  // Ensure cid is resolved from path if needed.
+  if (c <= 0) c = extractCourseIdFromPath(route?.path || window.location.pathname)
+  return { cid: c || 0, sid: s || 0, gid: g || 0 }
+}
+
+function runtimeCidReqParams() {
+  const { cid: c, sid: s, gid: g } = getRuntimeCidReq()
+  if (c <= 0) return {}
+  // Keep all aliases to be compatible with legacy endpoints.
+  return { cid: c, cidReq: c, cidreq: c, sid: s || 0, gid: g || 0 }
+}
+
+watch(
+  () => {
+    const r = getRuntimeCidReq()
+    return `${r.cid}:${r.sid}:${r.gid}`
+  },
+  async (nv, ov) => {
+    if (nv === ov) return
+  },
+)
+
+/** AI peer id used across backend/services */
+const AI_PEER_ID = -1
+
 const openedOnce = ref(false)
 const AUTO_OPEN_LAST_PEER = false
 const queuedBadgePids = new Set()
 
-/** Active peer must exist before we watch it (avoid ReferenceError). */
 const activePeer = ref(null) // { id, name, online, image }
+const activePeerAvatar = computed(() => (typeof activePeer.value?.image === "string" ? activePeer.value.image : ""))
 
-/** Persist last opened peer locally (nice UX). */
 const LAST_PEER_KEY = "chd:lastPeerId"
 watch(activePeer, (v) => {
   if (v?.id) localStorage.setItem(LAST_PEER_KEY, String(v.id))
 })
 
-/** ===== Endpoints ===== */
+function isAssignmentsPage() {
+  const p = String(window.location.pathname || "")
+  const q = String(window.location.search || "")
+  return (
+    p.includes("/work/") ||
+    p.includes("/student_publication/") ||
+    p.endsWith("/work.php") ||
+    q.includes("work.php") ||
+    q.includes("student_publication")
+  )
+}
+
+function isExercisePage() {
+  const p = String(window.location.pathname || "")
+  const q = String(window.location.search || "")
+  return (
+    p.includes("/exercise/") ||
+    p.endsWith("/exercise.php") ||
+    q.includes("exercise.php") ||
+    (q.includes("cidReq") && (q.includes("exercise") || q.includes("lp_id")))
+  )
+}
+
+const inCourse = computed(() => getRuntimeCidReq().cid > 0)
+
+const dockEnabled = computed(() => {
+  const bodyVal = document?.body?.dataset?.chatDockEnabled
+  const v = window?.CHAMILO_CHAT_DOCK_ENABLED ?? window?.CHAT_DOCK_ENABLED ?? window?.CHAT_DOCKED_ENABLED ?? bodyVal
+  if (v === undefined || v === null || v === "") return true
+  if (typeof v === "string") return /^(1|true|on|yes)$/i.test(v)
+  return !!v
+})
+
+const canRenderDock = computed(() => {
+  if (!dockEnabled.value) return false
+  if (isAssignmentsPage()) return false
+  if (isExercisePage()) return false
+  return true
+})
+
 function RG(candidates, fallback) {
   for (const name of candidates) {
     try {
       const u = window.Routing?.generate(name)
       if (u) return u
-    } catch {}
+    } catch {
+      // ignore
+    }
   }
   return fallback
 }
+
 const API = {
   start: RG(["chat_api_start", "chamilo_core_chat_api_start"], "/account/chat/api/start"),
   contacts: RG(["chat_api_contacts", "chamilo_core_chat_api_contacts"], "/account/chat/api/contacts"),
@@ -238,6 +412,11 @@ const API = {
   preview: RG(["chat_api_preview", "chamilo_core_chat_api_preview"], "/account/chat/api/preview"),
   presence: RG(["chat_api_presence", "chamilo_core_chat_api_presence"], "/account/chat/api/presence"),
   ack: RG(["chat_api_ack", "chamilo_core_chat_api_ack"], "/account/chat/api/ack"),
+  tutor_context: RG(
+    ["chat_api_tutor_context", "chamilo_core_chat_api_tutor_context"],
+    "/account/chat/api/tutor_context",
+  ),
+  tutor_reset: RG(["chat_api_tutor_reset", "chamilo_core_chat_api_tutor_reset"], "/account/chat/api/tutor/reset"),
 }
 
 /** ===== State ===== */
@@ -257,28 +436,97 @@ const clearing = ref(false)
 
 const scrollBox = ref(null)
 
-/** Unread tracking (client-side only) */
-const unreadByPeer = reactive(new Map()) // peerId -> count
-const clearedAtByPeer = reactive(new Map()) // peerId -> epoch seconds
-const lastSeenMsgIdByPeer = reactive(new Map()) // peerId -> last msg id seen
-
-/** FAB global unread from /heartbeat?mode=min */
-const fabUnread = ref(0)
-const fabHasUnread = computed(() => unreadTotal.value > 0 || fabUnread.value > 0)
-const unreadTotal = computed(() => {
-  let t = 0
-  unreadByPeer.forEach((v) => (t += Number(v || 0)))
-  return t
+/** Tutor context (backend-authoritative) */
+const tutorCtx = reactive({
+  loaded: false,
+  enabled: false, // TRUE only when backend says enabled (course-aware)
+  inTest: false,
+  course: null, // { id, title, language }
+  provider: "", // default provider key
 })
 
+/** Unread tracking */
+const unreadByPeer = reactive(new Map())
+const clearedAtByPeer = reactive(new Map())
+const lastSeenMsgIdByPeer = reactive(new Map())
+
+const fabUnread = ref(0)
+const unreadTotal = computed(() => {
+  let s = 0
+  unreadByPeer.forEach((v) => (s += Number(v || 0)))
+  return s
+})
+const fabHasUnread = computed(() => unreadTotal.value > 0 || fabUnread.value > 0)
+
 let hbTimer = null
-let hbLegacyLoop = false
 let contactsTimer = null
 
-/** ===== Utils ===== */
 function qs(obj) {
   return new URLSearchParams(obj).toString()
 }
+
+function withCidReq(params) {
+  const extra = runtimeCidReqParams()
+  if (!Object.keys(extra).length) return params || {}
+  return { ...(params || {}), ...extra }
+}
+
+function addCidReqToUrl(url) {
+  try {
+    const u = new URL(url, window.location.origin)
+    const p = runtimeCidReqParams()
+    Object.entries(p).forEach(([k, v]) => u.searchParams.set(k, String(v)))
+    return u.toString()
+  } catch {
+    return url
+  }
+}
+
+const contactsHasAiTutor = computed(() => {
+  const html = String(contactsHtml.value || "")
+  if (!html) return false
+  return (
+    /data-(?:user|id|uid|peer|contact-id)\s*=\s*["']-1["']/i.test(html) ||
+    /\b(peer_id|user_id|uid)\s*=\s*-1\b/i.test(html) ||
+    /(AI\s*Tutor)/i.test(html)
+  )
+})
+
+function normalizeContactsHtmlForAiTutor(html) {
+  const raw = String(html || "")
+  if (!raw) return ""
+
+  const wrap = document.createElement("div")
+  wrap.innerHTML = raw
+
+  // Remove any existing AI tutor rows first (different possible markers).
+  wrap
+    .querySelectorAll(
+      '.chd-ai-contact,[data-user="-1"],[data-id="-1"],[data-uid="-1"],[data-user-id="-1"],[data-id-user="-1"]',
+    )
+    .forEach((n) => n.remove())
+
+  const shouldShowAi = !!tutorCtx.enabled && !!inCourse.value && !tutorCtx.inTest
+
+  if (shouldShowAi) {
+    const row = document.createElement("div")
+    row.className = "chd-ai-contact"
+    row.dataset.user = String(AI_PEER_ID)
+    row.setAttribute("data-name", "AI Tutor")
+    row.style.cursor = "pointer"
+    row.style.padding = "10px"
+    row.style.borderBottom = "1px solid #eee"
+    row.innerHTML = `
+      <span style="margin-right:8px;">🤖</span>
+      <strong>AI Tutor</strong>
+      <span style="float:right; color:#2e7d32;">●</span>
+    `
+    wrap.prepend(row)
+  }
+
+  return wrap.innerHTML
+}
+
 function linkify(str) {
   return (str || "").replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>')
 }
@@ -312,7 +560,6 @@ function isMine(m) {
   return Number(m?.from_user_info?.id) === me.id || Number(m?.f) === me.id
 }
 
-/** ===== Acks: UI helpers ===== */
 function ackGlyph(msg) {
   const v = Number(msg?.recd ?? 0)
   if (v >= 2) return "✓✓"
@@ -326,25 +573,37 @@ function ackTitle(msg) {
   return t("Sending")
 }
 
-/** API helpers */
 async function getJSON(url, params) {
-  const full = params ? `${url}?${qs(params)}` : url
+  const full = params ? `${url}?${qs(withCidReq(params))}` : addCidReqToUrl(url)
   const r = await fetch(full, { credentials: "same-origin" })
-  if (!r.ok) throw new Error("net")
+  if (!r.ok) throw new Error("Network error")
   return r.json()
 }
+
 async function post(url, params, expectJson = true) {
-  const r = await fetch(url, {
+  const fullUrl = addCidReqToUrl(url)
+  const r = await fetch(fullUrl, {
     method: "POST",
     credentials: "same-origin",
     headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
-    body: new URLSearchParams(params || {}),
+    body: new URLSearchParams(withCidReq(params || {})),
   })
-  if (!r.ok) throw new Error("net")
+  if (!r.ok) throw new Error("Network error")
   return expectJson ? r.json() : r.text()
 }
 
-/** Normalize + filters */
+function byChronoId(a, b) {
+  const da = Number(a?.date) || 0
+  const db = Number(b?.date) || 0
+  if (da !== db) return da - db
+  const aid = Number(a?.id) || 0
+  const bid = Number(b?.id) || 0
+  const aneg = aid < 0
+  const bneg = bid < 0
+  if (aneg !== bneg) return aneg ? 1 : -1
+  return aid - bid
+}
+
 function normalizeItems(raw) {
   const list = Array.isArray(raw) ? raw.slice() : Object.values(raw || {})
   return list.sort(byChronoId)
@@ -355,8 +614,8 @@ function filterAfterClear(pid, list) {
   return list.filter((m) => Number(m?.date) > cut)
 }
 
-/** Pending + dedupe (optimistic UI) */
-const pendingByPeer = reactive(new Map()) // peerId -> [{ id: tempId, msg, ts }]
+/** Pending optimistic messages */
+const pendingByPeer = reactive(new Map())
 function addPending(pid, tempId, msg, ts) {
   const arr = pendingByPeer.get(pid) || []
   arr.push({ id: tempId, msg: String(msg || ""), ts: Number(ts) })
@@ -365,10 +624,8 @@ function addPending(pid, tempId, msg, ts) {
 function removePending(pid, tempId) {
   const arr = pendingByPeer.get(pid) || []
   const idx = arr.findIndex((x) => x.id === tempId)
-  if (idx >= 0) {
-    arr.splice(idx, 1)
-    pendingByPeer.set(pid, arr)
-  }
+  if (idx >= 0) arr.splice(idx, 1)
+  pendingByPeer.set(pid, arr)
 }
 function replaceTempId(pid, tempId, newMsg) {
   const arr = messagesByPeer.get(pid) || []
@@ -384,14 +641,13 @@ function textToPlain(s) {
   el.innerHTML = String(s ?? "")
   return (el.textContent || "").trim()
 }
-
 function sameContent(a, b) {
   const textA = textToPlain(a?.message ?? a?.m ?? "")
   const textB = textToPlain(b?.message ?? b?.m ?? "")
   if (textA !== textB) return false
   const ta = Number(a?.date) || 0
   const tb = Number(b?.date) || 0
-  return Math.abs(ta - tb) <= 10 // tolerate minor clock drift
+  return Math.abs(ta - tb) <= 10
 }
 function adoptPendingFromServer(pid, srvList, prevList) {
   const pend = pendingByPeer.get(pid) || []
@@ -438,31 +694,63 @@ function isAtBottom(el, tolerance = 24) {
   if (!el) return false
   return el.scrollHeight - el.scrollTop - el.clientHeight <= tolerance
 }
+
 async function markActiveAsRead() {
   if (!activePeer.value) return
-  const pid = activePeer.value.id
+  const pid = Number(activePeer.value.id || 0)
   const arr = messagesByPeer.get(pid) || []
   if (!arr.length) return
-  const last = arr[arr.length - 1].id
+
+  const last = Number(arr[arr.length - 1]?.id || 0)
   const lastSeenPrev = Number(lastSeenMsgIdByPeer.get(pid) || 0)
-  if (last <= lastSeenPrev) return
+  if (last <= 0 || last <= lastSeenPrev) return
+
   lastSeenMsgIdByPeer.set(pid, last)
   resetUnread(pid)
+
+  // AI tutor is not part of classic chat ack.
+  if (pid <= 0) return
+
   try {
     await post(API.ack, { peer_id: pid, last_seen_id: last })
-  } catch {}
+  } catch {
+    // ignore
+  }
 }
 
+let ackDebounceTimer = null
+function debounceMarkAsRead(ms = 180) {
+  clearTimeout(ackDebounceTimer)
+  ackDebounceTimer = setTimeout(() => markActiveAsRead(), ms)
+}
+
+function isActuallyViewingActivePeer() {
+  const el = scrollBox.value
+  return open.value && document.hasFocus() && !!activePeer.value && !!el && el.clientHeight > 0 && isAtBottom(el, 24)
+}
+function maybeMarkAsReadOnView() {
+  if (isActuallyViewingActivePeer()) debounceMarkAsRead()
+}
+
+function onScrollUpLoadMore(e) {
+  const el = e.target
+  if (!activePeer.value || fetchingPrev.value) return
+  if (el.scrollTop <= 0) getPreviousMessages()
+}
+function onBodyScrollForRead() {
+  if (!activePeer.value) return
+  maybeMarkAsReadOnView()
+}
+
+/** Contacts DOM helpers */
 function extractPeerIdFromNode(node) {
   if (!node) return 0
   const ds = node.dataset || {}
-
   const cand = Number(ds.user || ds.id || ds.userId || ds.idUser || ds.uid || ds.friend || ds.contactId || 0)
   if (cand) return cand
-
   if (node.matches?.("a[href]")) {
     try {
-      const u = new URL(node.getAttribute("href"), location.origin)
+      const u = new URL(node.getAttribute("href"), window.location.origin)
       const p = Number(
         u.searchParams.get("user") ||
           u.searchParams.get("id") ||
@@ -472,16 +760,15 @@ function extractPeerIdFromNode(node) {
           0,
       )
       if (p) return p
-    } catch {}
+    } catch {
+      // ignore
+    }
   }
-
   const oc = node.getAttribute?.("onclick") || ""
   if (oc) {
     const m = oc.match(/(?:chatWith|openChat|startChat)\s*\(\s*['"]?(\d+)['"]?/i)
     if (m) return Number(m[1])
   }
-
-  // id="friend_123" / "contact-123"
   const idAttr = node.id || ""
   if (idAttr) {
     const m2 = idAttr.match(/(?:friend|user|contact|person|peer)[_-]?(\d+)/i)
@@ -520,6 +807,7 @@ function setRowUnreadDot(row, hasUnread) {
     if (dot) dot.remove()
   }
 }
+
 function updateContactUnreadBadge(pid) {
   const root = document.querySelector(".chd .chd-contacts .chd-contacts-html")
   if (!root) {
@@ -544,46 +832,33 @@ function repaintAllContactBadges() {
   }
 }
 
-/** Presence helpers */
-function resolveOnlineFromInfo(ui) {
-  if (!ui) return false
-  let v = ui.user_is_online_in_chat ?? ui.user_is_online ?? ui.online ?? ui.is_online ?? ui.presence
-  if (v !== undefined && v !== null) {
-    if (typeof v === "string") return /^(1|true|online|on)$/i.test(v)
-    return !!Number(v) || v === true
-  }
-  const ts = ui.last_seen_ts ?? ui.last_active_ts ?? ui.last_active_at ?? null
-  if (ts) {
-    const now = Date.now()
-    const tms = Number(ts) > 1e12 ? Number(ts) : Number(ts) * 1000
-    return now - tms <= 120000
-  }
-  return false
-}
 function collectVisibleContactIds() {
   const root = document.querySelector(".chd .chd-contacts .chd-contacts-html")
-  if (!root) return []
   const ids = new Set()
-  root.querySelectorAll("[data-user],[data-id],[data-user-id],[data-id-user],a[href],[onclick],[id]").forEach((el) => {
-    const id = extractPeerIdFromNode(el)
-    if (id) ids.add(id)
-  })
+
+  // Only include AI Tutor when backend says it is enabled (course-aware).
+  if (tutorCtx.enabled && inCourse.value) ids.add(AI_PEER_ID)
+
+  if (root) {
+    root
+      .querySelectorAll("[data-user],[data-id],[data-user-id],[data-id-user],a[href],[onclick],[id]")
+      .forEach((el) => {
+        const id = extractPeerIdFromNode(el)
+        if (id) ids.add(id)
+      })
+  }
+
   if (activePeer.value?.id) ids.add(activePeer.value.id)
   return Array.from(ids)
 }
-async function refreshPresence() {
-  // Presence is now piggy-backed on heartbeat responses (see heartbeatMinTick).
-}
 
-/** Paint presence icons on contact list */
 function paintPresenceOnContacts(map) {
   const root = document.querySelector(".chd .chd-contacts .chd-contacts-html")
   if (!root) return
-  Object.entries(map).forEach(([sid, online]) => {
+  Object.entries(map || {}).forEach(([sid, online]) => {
     const pid = Number(sid)
     const rows = findContactNodesByPeerId(root, pid)
     rows.forEach((row) => {
-      row.querySelectorAll(":scope > .chd-presence-dot").forEach((n) => n.remove())
       const icon =
         row.querySelector("i.mdi-account-check") ||
         row.querySelector("i.mdi-account-outline") ||
@@ -598,23 +873,45 @@ function paintPresenceOnContacts(map) {
   })
 }
 
-/** Flows */
+/** Tutor context */
+async function loadTutorContext() {
+  tutorCtx.loaded = false
+  tutorCtx.enabled = false
+  tutorCtx.inTest = false
+  tutorCtx.course = null
+  tutorCtx.provider = ""
+
+  try {
+    const r = await getJSON(API.tutor_context)
+    tutorCtx.enabled = !!r?.enabled
+    tutorCtx.inTest = !!r?.in_test
+    tutorCtx.course = r?.course || null
+    tutorCtx.provider = typeof r?.provider === "string" ? r.provider : ""
+  } catch {
+    tutorCtx.enabled = false
+    tutorCtx.inTest = false
+    tutorCtx.course = null
+    tutorCtx.provider = ""
+  } finally {
+    tutorCtx.loaded = true
+  }
+}
+
 async function startSession() {
   const data = await getJSON(API.start)
   if (!data) return
   me.name = data.me || ""
   me.id = Number(data.user_id || 0)
   userStatus.value = Number(data.user_status || 0)
-  me.secToken = data.sec_token || ""
+  me.secToken = data.sec_token || data.chat_sec_token || ""
 
   if (data.items) {
     Object.entries(data.items).forEach(([peerId, userItems]) => {
       const pid = Number(peerId)
+      // Ignore AI peer state from classic chat payload
+      if (pid <= 0) return
       const arr = filterAfterClear(pid, normalizeItems(userItems?.items ?? []))
       messagesByPeer.set(pid, arr)
-      if (activePeer.value?.id === pid && userItems?.window_user_info) {
-        activePeer.value.online = resolveOnlineFromInfo(userItems.window_user_info)
-      }
       if (arr.length) lastSeenMsgIdByPeer.set(pid, arr[arr.length - 1].id)
     })
   }
@@ -624,16 +921,13 @@ async function loadContacts() {
   loadingContacts.value = true
   try {
     const html = await post(API.contacts, { to: "user_id" }, false)
-    contactsHtml.value = String(html || "")
-    requestAnimationFrame(() => {
-      repaintAllContactBadges()
-      refreshPresence()
-    })
+    contactsHtml.value = normalizeContactsHtmlForAiTutor(String(html || ""))
+    requestAnimationFrame(() => repaintAllContactBadges())
   } finally {
     loadingContacts.value = false
   }
 }
-/** Contacts click handler */
+
 function onContactsClick(e) {
   const a = e.target.closest("a[href]")
   if (a) {
@@ -665,13 +959,15 @@ function onContactsClick(e) {
 
   if (a) {
     try {
-      const u = new URL(a.getAttribute("href"), location.origin)
+      const u = new URL(a.getAttribute("href"), window.location.origin)
       const id = Number(u.searchParams.get("user") || u.searchParams.get("id") || 0)
       if (id) {
         const name = a.getAttribute("data-name") || a.textContent?.trim() || "User"
         return openConversation({ id, name })
       }
-    } catch {}
+    } catch {
+      // ignore
+    }
   }
 
   el = e.target.closest("[id]")
@@ -684,58 +980,53 @@ function onContactsClick(e) {
     }
   }
 }
+
 function pickOnline() {
   return undefined
 }
 
+function aiQueryParamsIfNeeded(pid) {
+  if (Number(pid) !== AI_PEER_ID) return {}
+  return tutorCtx.provider ? { ai_provider: tutorCtx.provider } : {}
+}
+
+const lastIdByPeer = reactive(new Map())
+
+function resetAiThreadCache() {
+  messagesByPeer.delete(AI_PEER_ID)
+  unreadByPeer.set(AI_PEER_ID, 0)
+  lastSeenMsgIdByPeer.set(AI_PEER_ID, 0)
+  lastIdByPeer.set(AI_PEER_ID, 0)
+}
+
 async function openConversation(peer) {
+  const pid = Number(peer.id)
+
+  // Guard: AI Tutor must be course-only and enabled by backend.
+  if (pid === AI_PEER_ID && (!tutorCtx.enabled || !inCourse.value || tutorCtx.inTest)) return
+
   activePeer.value = {
-    id: Number(peer.id),
+    id: pid,
     name: peer.name || "User",
     image: peer.image || "",
-    online: pickOnline(peer.id) ?? false,
+    online: pid === AI_PEER_ID ? true : (pickOnline(pid) ?? false),
   }
 
-  if (!messagesByPeer.get(activePeer.value.id)) {
+  const existing = messagesByPeer.get(pid)
+  if (!existing || existing.length === 0) {
     await getPreviousMessages()
   }
+
   requestAnimationFrame(() => {
     const el = scrollBox.value
     if (el) el.scrollTop = el.scrollHeight
     maybeMarkAsReadOnView()
   })
 
-  // Kick fast phase when opening a conversation: reset backoff
-  lastIdByPeer.set(activePeer.value.id, lastKnownIdForPeer(activePeer.value.id))
+  lastIdByPeer.set(pid, lastKnownIdForPeer(pid))
   maybeResetScheduler()
 }
 
-let ackDebounceTimer = null
-function debounceMarkAsRead(ms = 180) {
-  clearTimeout(ackDebounceTimer)
-  ackDebounceTimer = setTimeout(() => markActiveAsRead(), ms)
-}
-
-function isActuallyViewingActivePeer() {
-  const el = scrollBox.value
-  return open.value && document.hasFocus() && !!activePeer.value && !!el && el.clientHeight > 0 && isAtBottom(el, 24)
-}
-
-function maybeMarkAsReadOnView() {
-  if (isActuallyViewingActivePeer()) {
-    debounceMarkAsRead()
-  }
-}
-
-function onScrollUpLoadMore(e) {
-  const el = e.target
-  if (!activePeer.value || fetchingPrev.value) return
-  if (el.scrollTop <= 0) getPreviousMessages()
-}
-function onBodyScrollForRead() {
-  if (!activePeer.value) return
-  maybeMarkAsReadOnView()
-}
 async function getPreviousMessages() {
   if (!activePeer.value) return
   const pid = activePeer.value.id
@@ -743,7 +1034,7 @@ async function getPreviousMessages() {
   const visible = current.length
   fetchingPrev.value = true
   try {
-    const items = await getJSON(API.history, { user_id: pid, visible_messages: visible })
+    const items = await getJSON(API.history, { user_id: pid, visible_messages: visible, ...aiQueryParamsIfNeeded(pid) })
     const list = filterAfterClear(pid, normalizeItems(items))
     if (list.length) {
       const merged = [...list, ...current].sort(byChronoId)
@@ -758,86 +1049,6 @@ async function getPreviousMessages() {
   }
 }
 
-let lastPresenceAt = 0
-// Heartbeat that does not rely on server-provided unread_by_peer.
-// It merges new items, handles acks, updates presence throttled,
-// and finally recomputes unread counts locally for FAB + contact dots.
-async function heartbeat() {
-  try {
-    const data = await getJSON(API.heartbeat)
-
-    if (data?.items) {
-      for (const [peerId, userItems] of Object.entries(data.items)) {
-        const pid = Number(peerId)
-        const prev = messagesByPeer.get(pid) || []
-        const pruned = filterAfterClear(pid, normalizeItems(userItems?.items ?? []))
-
-        // Adopt optimistic bubbles that the server just acknowledged
-        const adopted = adoptPendingFromServer(pid, pruned, prev)
-
-        // Dedupe vs existing and pending
-        let newOnes = pruned.filter((x) => !prev.find((p) => p.id === x.id && !adopted.has(Number(x.id))))
-        newOnes = dedupeNewWithPending(pid, newOnes)
-
-        if (newOnes.length) {
-          const merged = [...prev, ...newOnes].sort(byChronoId)
-          messagesByPeer.set(pid, merged)
-
-          // Handle incoming messages (not mine)
-          const incoming = newOnes.filter((m) => !isMine(m))
-          if (incoming.length) {
-            const isActivePeer = activePeer.value?.id === pid
-            const viewing = false
-            if (!isActivePeer) {
-              // Let the UI react immediately (blink/title), exact counts will be reconciled below
-              incUnread(pid, incoming.length)
-            } else {
-              // If the user is seeing the bottom of the active conversation, mark as read and ack
-              const lastId = merged[merged.length - 1].id
-              lastSeenMsgIdByPeer.set(pid, lastId)
-              resetUnread(pid)
-              try {
-                await post(API.ack, { peer_id: pid, last_seen_id: lastId })
-              } catch {
-                /* best effort */
-              }
-            }
-          }
-
-          maybeMarkAsReadOnView()
-          // Auto-scroll if this peer is the active one
-          if (activePeer.value?.id === pid) {
-            requestAnimationFrame(() => {
-              const el = scrollBox.value
-              if (el) el.scrollTop = el.scrollHeight
-            })
-          }
-        }
-
-        // Optional presence hint from server
-        if (userItems.window_user_info && activePeer.value?.id === pid) {
-          activePeer.value.online = resolveOnlineFromInfo(userItems.window_user_info)
-        }
-      }
-    }
-
-    // Throttled presence refresh
-    const now = Date.now()
-    if (now - lastPresenceAt > 5000) {
-      lastPresenceAt = now
-      refreshPresence()
-    }
-
-    recomputeUnreadFromLocal()
-  } finally {
-    if (hbLegacyLoop && !hbTimer) {
-      hbTimer = setTimeout(heartbeat, 30000)
-    }
-  }
-}
-
-/** per-peer last id cache and incremental fetch */
-const lastIdByPeer = reactive(new Map())
 function lastKnownIdForPeer(pid) {
   const arr = messagesByPeer.get(pid) || []
   for (let i = arr.length - 1; i >= 0; i--) {
@@ -846,22 +1057,28 @@ function lastKnownIdForPeer(pid) {
   }
   return Number(lastIdByPeer.get(pid) || 0) || 0
 }
+
 async function fetchNewForActivePeer(pid) {
   const since = lastKnownIdForPeer(pid)
-  const items = await getJSON(API.history_since, { user_id: pid, since_id: since })
+  const items = await getJSON(API.history_since, { user_id: pid, since_id: since, ...aiQueryParamsIfNeeded(pid) })
   const list = normalizeItems(items)
   if (!list.length) return
+
   const prev = messagesByPeer.get(pid) || []
   const adopted = adoptPendingFromServer(pid, list, prev)
+
   let newOnes = list.filter((x) => !prev.find((p) => p.id === x.id && !adopted.has(Number(x.id))))
   newOnes = dedupeNewWithPending(pid, newOnes)
   if (!newOnes.length) return
+
   const merged = [...prev, ...newOnes].sort(byChronoId)
   messagesByPeer.set(pid, merged)
   lastIdByPeer.set(pid, Number(merged[merged.length - 1].id) || since)
+
   const viewing = open.value && activePeer.value?.id === pid && isAtBottom(scrollBox.value) && document.hasFocus()
   if (!viewing) {
-    incUnread(pid, newOnes.filter((m) => !isMine(m)).length || 0)
+    // Do not count unread for AI Tutor.
+    if (pid !== AI_PEER_ID) incUnread(pid, newOnes.filter((m) => !isMine(m)).length || 0)
   } else {
     maybeMarkAsReadOnView()
     requestAnimationFrame(() => {
@@ -871,7 +1088,7 @@ async function fetchNewForActivePeer(pid) {
   }
 }
 
-/** Progressive backoff scheduler with override (1s→5s→10s→30s) */
+/** Backoff scheduler (kept) */
 function createBackoffScheduler({ onTick, onReset, getOverrideDelayMs } = {}) {
   const phases = [
     { ms: 1000, repeats: 5 },
@@ -891,16 +1108,20 @@ function createBackoffScheduler({ onTick, onReset, getOverrideDelayMs } = {}) {
     const override = getOverrideDelayMs?.(base)
     return Number.isFinite(override) && override > 0 ? override : base
   }
+
   function scheduleNext() {
     if (aborted) return
     timer = setTimeout(async () => {
       try {
         await onTick?.()
-      } catch {}
+      } catch {
+        // ignore
+      }
       advancePhase()
       scheduleNext()
     }, phaseMs())
   }
+
   function advancePhase() {
     const p = phases[idx]
     ticks++
@@ -915,9 +1136,9 @@ function createBackoffScheduler({ onTick, onReset, getOverrideDelayMs } = {}) {
       idx++
       ticks = 0
       started = performance.now()
-      return
     }
   }
+
   function start() {
     aborted = false
     idx = 0
@@ -925,11 +1146,13 @@ function createBackoffScheduler({ onTick, onReset, getOverrideDelayMs } = {}) {
     started = performance.now()
     scheduleNext()
   }
+
   function reset() {
     stop()
     onReset?.()
     start()
   }
+
   function stop() {
     aborted = true
     if (timer) {
@@ -937,12 +1160,12 @@ function createBackoffScheduler({ onTick, onReset, getOverrideDelayMs } = {}) {
       timer = null
     }
   }
+
   return { start, stop, reset }
 }
 
-/** Minimal heartbeat tick (fast path + safety net) */
 const lastHeartbeatId = ref(0)
-let noChangeTicks = 0 // counts consecutive min ticks without server-reported changes
+let noChangeTicks = 0
 
 function computeGlobalLastId() {
   let maxId = 0
@@ -951,25 +1174,16 @@ function computeGlobalLastId() {
   })
   return maxId
 }
+
 function shouldPoll() {
-  // Only poll when the user is marked as online.
   return userStatus.value === 1
 }
 
-/** Gate resets so we don't restart fast phase when it does not make sense */
 let lastSchedulerResetAt = 0
-
 function maybeResetScheduler() {
-  if (!open.value || !document.hasFocus()) {
-    return
-  }
-
+  if (!open.value || !document.hasFocus()) return
   const now = Date.now()
-  // Avoid resetting the backoff too often
-  if (now - lastSchedulerResetAt < 5000) {
-    return
-  }
-
+  if (now - lastSchedulerResetAt < 5000) return
   lastSchedulerResetAt = now
   scheduler.reset()
 }
@@ -977,9 +1191,14 @@ function maybeResetScheduler() {
 function syncUnreadFromServer(payload) {
   const map = payload?.unread_by_peer
   if (!map) return
+
   Object.entries(map).forEach(([sid, count]) => {
-    unreadByPeer.set(Number(sid), Number(count) || 0)
+    const pid = Number(sid)
+    // Ignore non-positive peers (including AI Tutor = -1).
+    if (!Number.isFinite(pid) || pid <= 0) return
+    unreadByPeer.set(pid, Number(count) || 0)
   })
+
   requestAnimationFrame(() => repaintAllContactBadges())
 }
 
@@ -989,18 +1208,11 @@ async function heartbeatMinTick() {
   const presenceIds = collectVisibleContactIds()
   const presenceParam = presenceIds.length > 0 ? { presence_ids: JSON.stringify(presenceIds) } : {}
 
-  // Ultra-light path when a conversation is active
   const pid = activePeer.value?.id
   if (pid) {
     try {
       const since = lastKnownIdForPeer(pid)
-      const params = {
-        mode: "tiny",
-        peer_id: pid,
-        since_id: since,
-        ...presenceParam,
-      }
-
+      const params = { mode: "tiny", peer_id: pid, since_id: since, ...presenceParam }
       const r = await getJSON(API.heartbeat, params)
 
       const latest = Number(r?.last_id || 0)
@@ -1012,45 +1224,26 @@ async function heartbeatMinTick() {
         noChangeTicks++
       }
 
-      // update presence from heartbeat payload
-      if (r?.presence) {
-        paintPresenceOnContacts(r.presence)
-        if (activePeer.value?.id && r.presence[activePeer.value.id] !== undefined) {
-          activePeer.value.online = !!r.presence[activePeer.value.id]
-        }
-      }
-
-      const now = Date.now()
-      if (now - lastPresenceAt > 5000) {
-        lastPresenceAt = now
-      }
-    } catch {}
+      if (r?.presence) paintPresenceOnContacts(r.presence)
+    } catch {
+      // ignore
+    }
     return
   }
 
-  // No active peer: ultra-light global (for FAB + unread)
   try {
     const since = lastHeartbeatId.value || computeGlobalLastId()
-    const params = {
-      mode: "min",
-      since_id: since,
-      ...presenceParam,
-    }
-
+    const params = { mode: "min", since_id: since, ...presenceParam }
     const r = await getJSON(API.heartbeat, params)
 
     syncUnreadFromServer(r)
-
-    if (r?.presence) {
-      paintPresenceOnContacts(r.presence)
-    }
+    if (r?.presence) paintPresenceOnContacts(r.presence)
 
     const srvLast = Number(r?.last_id ?? 0)
     const hasNew = !!r?.has_new || srvLast > since
 
-    if (typeof r?.unread === "number") {
-      fabUnread.value = r.unread
-    }
+    // Prefer local computed total instead of trusting server "unread".
+    fabUnread.value = unreadTotal.value
 
     if (hasNew) {
       lastHeartbeatId.value = Math.max(srvLast || 0, computeGlobalLastId(), since)
@@ -1058,29 +1251,21 @@ async function heartbeatMinTick() {
     } else {
       noChangeTicks++
     }
-  } catch {}
+  } catch {
+    // ignore
+  }
 }
 
-// Shared backoff scheduler for both dock states (open/closed).
 const scheduler = createBackoffScheduler({
   onTick: heartbeatMinTick,
   onReset: () => {},
   getOverrideDelayMs: (baseMs) => {
-    // When the dock is closed we still use the same scheduler,
-    // but we clamp to a slower range to avoid aggressive polling.
-    if (!open.value) {
-      // Between 10s and 30s when closed.
-      return Math.min(Math.max(baseMs, 10000), 30000)
-    }
-    // When the dock is open we respect the configured phases:
-    // 1s (x5) -> 5s (30s) -> 10s (120s) -> 30s.
+    if (!open.value) return Math.min(Math.max(baseMs, 10000), 30000)
     return baseMs
   },
 })
 
-/** Start/stop heartbeat (single scheduler) */
 function startHeartbeat() {
-  // Always restart the backoff sequence when requested.
   scheduler.stop()
   scheduler.start()
 }
@@ -1090,7 +1275,6 @@ function stopHeartbeat() {
   hbTimer = null
 }
 
-/** Send / Status / Clear */
 async function goOnline() {
   await post(API.status, { status: 1 })
   userStatus.value = 1
@@ -1099,20 +1283,40 @@ async function toggleStatus() {
   const newStatus = userStatus.value === 1 ? 0 : 1
   await post(API.status, { status: newStatus })
   userStatus.value = newStatus
-  if (newStatus === 1) {
-    startHeartbeat()
-  } else {
-    stopHeartbeat()
-  }
+  if (newStatus === 1) startHeartbeat()
+  else stopHeartbeat()
 }
+
+const isAiThread = computed(() => Number(activePeer.value?.id || 0) === AI_PEER_ID)
+
+const composerPlaceholder = computed(() => {
+  if (isAiThread.value && tutorCtx.inTest) return t("AI tutor is disabled during tests")
+  return t("Write a message")
+})
+
+const sendDisabled = computed(() => {
+  if (!draft.value) return true
+  if (sending.value) return true
+  if (userStatus.value !== 1) return true
+  if (isAiThread.value && tutorCtx.inTest) return true
+  if (isAiThread.value && (!tutorCtx.enabled || !inCourse.value)) return true
+  return false
+})
+
 async function send() {
   if (!activePeer.value || !draft.value) return
-  const pid = activePeer.value.id
+
+  const pid = Number(activePeer.value.id)
   const raw = draft.value
+
+  if (pid === AI_PEER_ID) {
+    if (tutorCtx.inTest) return
+    if (!tutorCtx.enabled || !inCourse.value) return
+  }
+
   const msgEscaped = escapeForHtml(raw)
   const nowSec = Math.floor(Date.now() / 1000)
 
-  // Optimistic bubble
   const tempId = -Date.now()
   const optimistic = {
     from_user_info: { id: me.id, complete_name: "me" },
@@ -1124,9 +1328,11 @@ async function send() {
     recd: 0,
     pending: true,
   }
+
   const arr = messagesByPeer.get(pid) || []
   messagesByPeer.set(pid, [...arr, optimistic])
   addPending(pid, tempId, raw, nowSec)
+
   requestAnimationFrame(() => {
     const el = scrollBox.value
     if (el) el.scrollTop = el.scrollHeight
@@ -1136,12 +1342,24 @@ async function send() {
   sending.value = true
 
   try {
-    const res = await post(API.send, { to: pid, message: raw, chat_sec_token: me.secToken })
+    const extra = pid === AI_PEER_ID ? { ai_provider: tutorCtx.provider } : {}
+    const res = await post(API.send, { to: pid, message: raw, chat_sec_token: me.secToken, ...extra })
+
+    if (res?.assistant?.id) {
+      const arr2 = messagesByPeer.get(pid) || []
+      if (!arr2.find((m) => Number(m.id) === Number(res.assistant.id))) {
+        messagesByPeer.set(pid, [...arr2, res.assistant].sort(byChronoId))
+      }
+      requestAnimationFrame(() => {
+        const el = scrollBox.value
+        if (el) el.scrollTop = el.scrollHeight
+      })
+    }
+
     if (res && typeof res === "object" && Number(res.id) > 0) {
       if (res.sec_token) me.secToken = res.sec_token
-      replaceTempId(pid, tempId, { id: Number(res.id), recd: 0, date: nowSec })
+      replaceTempId(pid, tempId, { id: Number(res.id), recd: 2, date: nowSec })
       removePending(pid, tempId)
-      //maybeResetScheduler()
       return
     }
   } catch {
@@ -1150,12 +1368,6 @@ async function send() {
     sending.value = false
   }
 }
-function onComposerKeydown() {
-  //maybeResetScheduler()
-}
-function newline() {
-  /* Shift+Enter */
-}
 
 async function clearConversation() {
   if (!activePeer.value) return
@@ -1163,29 +1375,40 @@ async function clearConversation() {
   clearing.value = true
   try {
     const pid = activePeer.value.id
-    const nowSec = Math.floor(Date.now() / 1000)
-    clearedAtByPeer.set(pid, nowSec)
-    messagesByPeer.set(pid, [])
-    resetUnread(pid)
+
+    if (Number(pid) === AI_PEER_ID) {
+      // Server reset for AI tutor (course-only)
+      await post(API.tutor_reset, { ai_provider: tutorCtx.provider || "" })
+      resetAiThreadCache()
+      await getPreviousMessages()
+    } else {
+      const nowSec = Math.floor(Date.now() / 1000)
+      clearedAtByPeer.set(pid, nowSec)
+      messagesByPeer.set(pid, [])
+      resetUnread(pid)
+    }
+
     requestAnimationFrame(() => {
       const el = scrollBox.value
       if (el) el.scrollTop = el.scrollHeight
     })
+  } catch {
+    // ignore
   } finally {
     clearing.value = false
   }
 }
 
-/** Computed */
 const activeMessages = computed(() => {
   if (!activePeer.value) return []
   return messagesByPeer.get(activePeer.value.id) || []
 })
 
-/** Title blink for unread  */
+/** Title blink */
 const originalTitle = document.title
 let blinkTimer = null
 let blinkState = false
+
 function applyBlinkFrame() {
   const total = unreadTotal.value
   if (!total || !document.hidden) {
@@ -1212,72 +1435,47 @@ function stopBlinkNow() {
   document.title = originalTitle
   blinkState = false
 }
+
 document.addEventListener("visibilitychange", () => {
-  if (document.hidden) {
-    maybeStartBlink()
-  } else {
+  if (document.hidden) maybeStartBlink()
+  else {
     maybeStopBlink()
-    //maybeResetScheduler()
     maybeMarkAsReadOnView()
   }
 })
 window.addEventListener("focus", () => {
   maybeStopBlink()
-  //maybeResetScheduler()
   maybeMarkAsReadOnView()
 })
 window.addEventListener("online", () => {
-  // Network came back: if user is online, restart scheduler and backoff.
-  if (userStatus.value === 1) {
-    startHeartbeat()
-    //maybeResetScheduler()
-  }
+  if (userStatus.value === 1) startHeartbeat()
 })
 window.addEventListener("offline", () => scheduler.stop())
 
-/** Legacy compatibility layer */
 function registerLegacyChatGlobals() {
   const handler = (id, name) => {
     try {
-      // Only open the dock if it's closed; do not re-trigger init paths
       if (!open.value) toggleDock(true)
       openConversation({ id: Number(id), name: name || "User" })
-    } catch (e) {}
+    } catch {
+      // ignore
+    }
     return false
   }
   if (!("chatWith" in window)) window.chatWith = handler
   if (!("openChat" in window)) window.openChat = handler
   if (!("startChat" in window)) window.startChat = handler
 }
-async function passiveTick() {
-  try {
-    const since = lastHeartbeatId.value || computeGlobalLastId()
-    const r = await getJSON(API.heartbeat, { mode: "min", since_id: since })
 
-    syncUnreadFromServer(r)
-    if (typeof r?.unread === "number") fabUnread.value = r.unread
-
-    const srvLast = Number(r?.last_id ?? 0)
-    const hasNew = !!r?.has_new || srvLast > since
-    if (hasNew) {
-      lastHeartbeatId.value = Math.max(srvLast || 0, since)
-      await heartbeat()
-
-      if (!r?.unread_by_peer) {
-        recomputeUnreadFromLocal()
-      }
-    }
-  } catch {}
-}
-
-// Recompute per-peer unread counts from local state and repaint badges + FAB.
 function recomputeUnreadFromLocal() {
   let total = 0
-  // Consider peers that have messages or a lastSeen stored
   const pids = new Set([...Array.from(messagesByPeer.keys()), ...Array.from(lastSeenMsgIdByPeer.keys())])
 
   pids.forEach((pid0) => {
     const pid = Number(pid0)
+    // Ignore AI tutor in local unread computation.
+    if (pid <= 0) return
+
     const arr = messagesByPeer.get(pid) || []
     const lastSeen = Number(lastSeenMsgIdByPeer.get(pid) || 0)
     const cut = Number(clearedAtByPeer.get(pid) || 0)
@@ -1285,72 +1483,113 @@ function recomputeUnreadFromLocal() {
     let c = 0
     for (const m of arr) {
       const mid = Number(m?.id) || 0
-      if (mid <= 0) continue // ignore temp (optimistic) bubbles
+      if (mid <= 0) continue
       if (cut && Number(m?.date) <= cut) continue
       if (isMine(m)) continue
       if (mid > lastSeen) c++
     }
+
     unreadByPeer.set(pid, c)
     total += c
   })
 
   fabUnread.value = total
-  // Paint red dots on the contact list when available
   requestAnimationFrame(() => repaintAllContactBadges())
 }
 
-function stopPassiveHeartbeat() {
-  if (hbTimer) {
-    clearInterval(hbTimer)
-    hbTimer = null
+/**
+ * SPA navigation handler:
+ * - update cid/sid/gid from route
+ * - refresh tutor context
+ * - refresh contacts (AI Tutor visibility)
+ * - if AI thread is active, reload history for the new course
+ */
+let navDebounceTimer = null
+async function onNavigationChanged() {
+  readCidReqFromRouteAndLocation()
+
+  if (!canRenderDock.value) return
+
+  const aiActive = Number(activePeer.value?.id || 0) === AI_PEER_ID
+  if (!open.value && !aiActive) {
+    // Keep AI cache clean for next time.
+    resetAiThreadCache()
+    return
+  }
+
+  await loadTutorContext()
+
+  try {
+    await loadContacts()
+  } catch {
+    // ignore
+  }
+
+  if (aiActive) {
+    if (!tutorCtx.enabled || !inCourse.value || tutorCtx.inTest) {
+      activePeer.value = null
+      resetAiThreadCache()
+      return
+    }
+    resetAiThreadCache()
+    await getPreviousMessages()
+    requestAnimationFrame(() => {
+      const el = scrollBox.value
+      if (el) el.scrollTop = el.scrollHeight
+      maybeMarkAsReadOnView()
+    })
+  } else {
+    resetAiThreadCache()
   }
 }
 
-/** Lifecycle */
+// Use vue-router signal (no history patching, no polling).
+watch(
+  () => route.fullPath,
+  () => {
+    clearTimeout(navDebounceTimer)
+    navDebounceTimer = setTimeout(() => {
+      onNavigationChanged().catch(() => {})
+    }, 80)
+  },
+  { immediate: false },
+)
+
 async function toggleDock(v) {
   if (v === open.value) return
+  if (v && !canRenderDock.value) return
 
   const wasOpen = open.value
   open.value = v
 
   if (v) {
-    // OPEN: use the same scheduler, but reset the backoff so we go through
-    // 1s→5s→10s→30s again when the user explicitly opens the dock.
+    await loadTutorContext()
+
     if (!openedOnce.value) {
       await startSession()
 
       if (userStatus.value !== 1) {
         try {
           await goOnline()
-        } catch {}
+        } catch {
+          // ignore
+        }
         userStatus.value = 1
       }
 
-      // First open: ask heartbeat for contacts + presence in one go
       const presenceIds = collectVisibleContactIds()
-      const params = {
-        mode: "min",
-        since_id: lastHeartbeatId.value || 0,
-        include_contacts: 1,
-      }
-      if (presenceIds.length > 0) {
-        params.presence_ids = JSON.stringify(presenceIds)
-      }
+      const params = { mode: "min", since_id: lastHeartbeatId.value || 0, include_contacts: 1 }
+      if (presenceIds.length > 0) params.presence_ids = JSON.stringify(presenceIds)
 
       const r = await getJSON(API.heartbeat, params)
 
       if (typeof r?.contacts_html === "string") {
-        contactsHtml.value = r.contacts_html
+        contactsHtml.value = normalizeContactsHtmlForAiTutor(String(r.contacts_html || ""))
         requestAnimationFrame(() => repaintAllContactBadges())
       }
+      if (r?.presence) paintPresenceOnContacts(r.presence)
 
-      if (r?.presence) {
-        paintPresenceOnContacts(r.presence)
-      }
-
-      // Sync unread from server if available
       syncUnreadFromServer(r)
-
       openedOnce.value = true
     } else {
       await loadContacts()
@@ -1361,57 +1600,55 @@ async function toggleDock(v) {
     clearInterval(contactsTimer)
     contactsTimer = setInterval(loadContacts, 15000)
 
-    // Restart backoff phases when the dock is opened.
     startHeartbeat()
     try {
       await heartbeatMinTick()
-    } catch {}
+    } catch {
+      // ignore
+    }
 
     if (!wasOpen) {
       if (AUTO_OPEN_LAST_PEER) {
         const last = Number(localStorage.getItem(LAST_PEER_KEY) || 0)
-        if (last > 0 && !activePeer.value) {
-          openConversation({ id: last, name: "User" })
-        }
+        if (last > 0 && !activePeer.value) openConversation({ id: last, name: "User" })
       } else {
         activePeer.value = null
       }
     }
   } else {
-    // CLOSE
     activePeer.value = null
     clearInterval(contactsTimer)
     contactsTimer = null
-    // Do not stop scheduler here: keep the same backoff-driven heartbeat
-    // running in "closed" mode (slower intervals via getOverrideDelayMs).
     recomputeUnreadFromLocal()
   }
 }
 
-function byChronoId(a, b) {
-  const da = Number(a?.date) || 0
-  const db = Number(b?.date) || 0
-  if (da !== db) return da - db
-  const aid = Number(a?.id) || 0
-  const bid = Number(b?.id) || 0
-  const aneg = aid < 0
-  const bneg = bid < 0
-  if (aneg !== bneg) return aneg ? 1 : -1
-  return aid - bid
-}
+watch(open, (v) => {
+  if (!v) activePeer.value = null
+})
+
+function onContactsScroll() {}
+function onComposerKeydown() {}
+function newline() {}
 
 onMounted(async () => {
   registerLegacyChatGlobals()
+
+  if (!canRenderDock.value) return
+
+  // Ensure cid is set on initial mount (important for /course/ID/home routes).
+  readCidReqFromRouteAndLocation()
+
+  await loadTutorContext()
   await startSession()
 
-  // If user already online at mount time, start scheduler immediately.
-  if (userStatus.value === 1) {
-    startHeartbeat()
-  }
+  if (userStatus.value === 1) startHeartbeat()
 
   try {
     await heartbeatMinTick()
-  } catch {}
+  } catch {
+    // ignore
+  }
 })
 
 onBeforeUnmount(() => {
@@ -1420,10 +1657,6 @@ onBeforeUnmount(() => {
   contactsTimer = null
   stopBlinkNow()
 })
-watch(open, (v) => {
-  if (!v) activePeer.value = null
-})
-function onContactsScroll() {}
 </script>
 
 <style scoped>
@@ -1471,5 +1704,32 @@ html[dir="rtl"] .chd .chd-contacts .chd-contact-dot {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+/* AI contact styles (minimal and non-breaking) */
+.chd-ai {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+.chd-ai__btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  cursor: pointer;
+}
+.chd-ai__btn.is-active {
+  border-color: rgba(0, 0, 0, 0.18);
+}
+.chd-ai__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.chd-ai__hint {
+  margin: 6px 2px 0;
+  font-size: 12px;
 }
 </style>

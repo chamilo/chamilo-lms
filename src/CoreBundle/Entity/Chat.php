@@ -6,16 +6,17 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\ChatRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Chat.
  */
+#[ORM\Entity(repositoryClass: ChatRepository::class)]
 #[ORM\Table(name: 'chat')]
-#[ORM\Index(name: 'idx_chat_to_user', columns: ['to_user'])]
-#[ORM\Index(name: 'idx_chat_from_user', columns: ['from_user'])]
-#[ORM\Entity]
+#[ORM\Index(columns: ['to_user'], name: 'idx_chat_to_user')]
+#[ORM\Index(columns: ['from_user'], name: 'idx_chat_from_user')]
 class Chat
 {
     #[ORM\Column(name: 'id', type: 'integer')]

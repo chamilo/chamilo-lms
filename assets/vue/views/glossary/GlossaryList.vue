@@ -17,6 +17,13 @@
           @click="addNewTerm"
         />
         <BaseButton
+          v-if="canUseAiGlossaryGenerator"
+          :label="t('Generate glossary terms')"
+          icon="robot"
+          type="black"
+          @click="generateGlossaryTerms"
+        />
+        <BaseButton
           :label="t('Import glossary')"
           icon="import"
           type="black"
@@ -67,7 +74,6 @@
     </div>
 
     <div v-if="glossaries.length === 0 && !searchBoxTouched && !isLoading">
-      <!-- Render the image and create button -->
       <EmptyState
         icon="glossary"
         summary="Add your first term glossary to this course"
@@ -135,6 +141,7 @@ import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useCourseSettings } from "../../store/courseSettingStore"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import StudentViewButton from "../../components/StudentViewButton.vue"
 
@@ -143,12 +150,12 @@ const router = useRouter()
 const securityStore = useSecurityStore()
 const notifications = useNotification()
 const platform = usePlatformConfig()
+const courseSettingsStore = useCourseSettings()
 
 const { t } = useI18n()
 
 const cidReqStore = useCidReqStore()
-
-const { course } = storeToRefs(cidReqStore)
+const { course, session } = storeToRefs(cidReqStore)
 
 const isLoading = ref(true)
 const isSearchLoading = ref(false)
@@ -161,22 +168,19 @@ const resourceLinkList = ref(
     {
       sid: route.query.sid,
       cid: route.query.cid,
-      visibility: RESOURCE_LINK_PUBLISHED, // visible by default
+      visibility: RESOURCE_LINK_PUBLISHED,
     },
   ]),
 )
-
-const isCurrentTeacher = securityStore.isCurrentTeacher
 
 const glossaries = ref([])
 const view = ref("list")
 
 const isDeleteItemDialogVisible = ref(false)
 const termToDelete = ref(null)
+
 const termToDeleteString = computed(() => {
-  if (termToDelete.value === null) {
-    return ""
-  }
+  if (termToDelete.value === null) return ""
   return termToDelete.value.title
 })
 
@@ -188,13 +192,35 @@ const canEditGlossary = computed(() => {
   return basePermission && !platform.isStudentViewActive
 })
 
-const isAdminOrTeacher = computed(() => securityStore.isAdmin || securityStore.isTeacher)
+async function loadCourseSettingsIfPossible() {
+  const courseId = course.value?.id
+  const sessionId = session.value?.id
+
+  if (!courseId) {
+    return
+  }
+
+  try {
+    await courseSettingsStore.loadCourseSettings(courseId, sessionId)
+  } catch (err) {
+    console.error("[Glossary] loadCourseSettings FAILED:", err)
+  }
+}
 
 onMounted(async () => {
   isLoading.value = true
+
+  await loadCourseSettingsIfPossible()
   await fetchGlossaries()
   await onStudentViewChange()
 })
+
+watch(
+  () => [course.value?.id, session.value?.id],
+  async () => {
+    await loadCourseSettingsIfPossible()
+  },
+)
 
 watch(
   () => platform.isStudentViewActive,
@@ -214,6 +240,31 @@ const debouncedSearch = debounce(() => {
   isSearchLoading.value = true
   fetchGlossaries()
 }, 500)
+
+const aiHelpersEnabled = computed(() => {
+  const v = String(platform.getSetting("ai_helpers.enable_ai_helpers"))
+  return v === "true"
+})
+
+const glossaryGeneratorEnabled = computed(() => {
+  const v =
+    courseSettingsStore?.getSetting?.("glossary_terms_generator") ??
+    courseSettingsStore?.getSetting?.("glossary_terms_generators")
+
+  return String(v) === "true"
+})
+
+const canUseAiGlossaryGenerator = computed(() => {
+  return !!(canEditGlossary.value && aiHelpersEnabled.value && glossaryGeneratorEnabled.value)
+})
+
+function generateGlossaryTerms() {
+  if (!canEditGlossary.value) return
+  router.push({
+    name: "GenerateGlossaryTerms",
+    query: route.query,
+  })
+}
 
 function addNewTerm() {
   if (!canEditGlossary.value) return
@@ -247,7 +298,7 @@ async function deleteTerm() {
     isDeleteItemDialogVisible.value = false
     await fetchGlossaries()
   } catch (error) {
-    console.error("Error deleting term:", error)
+    console.error("[Glossary] Error deleting term:", error)
     notifications.showErrorNotification(t("Could not delete term"))
   }
 }
@@ -283,7 +334,7 @@ async function exportToDocuments() {
     await glossaryService.exportToDocuments(postData)
     notifications.showSuccessNotification(t("Exported to documents"))
   } catch (error) {
-    console.error("Error fetching links:", error)
+    console.error("[Glossary] Error exporting to documents:", error)
     notifications.showErrorNotification(t("Could not export to documents"))
   }
 }
@@ -301,7 +352,7 @@ async function fetchGlossaries() {
   try {
     glossaries.value = await glossaryService.getGlossaryTerms(params)
   } catch (error) {
-    console.error("Error fetching links:", error)
+    console.error("[Glossary] Error fetching glossary terms:", error)
     notifications.showErrorNotification(t("Could not fetch glossary terms"))
   } finally {
     isLoading.value = false

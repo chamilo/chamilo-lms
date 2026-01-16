@@ -270,6 +270,7 @@ final class GeminiProvider implements AiProviderInterface, AiDocumentProviderInt
                 || !isset($data['candidates'][0]['content']['parts'][0]['text'])
             ) {
                 error_log('[AI][Gemini] Invalid response (status='.$statusCode.').');
+
                 return null;
             }
 
@@ -297,6 +298,7 @@ final class GeminiProvider implements AiProviderInterface, AiDocumentProviderInt
             return $generatedContent;
         } catch (Exception $e) {
             error_log('[AI][Gemini] Exception: '.$e->getMessage());
+
             return null;
         }
     }
@@ -334,6 +336,7 @@ final class GeminiProvider implements AiProviderInterface, AiDocumentProviderInt
     private function getUserId(): ?int
     {
         $user = $this->security->getUser();
+
         return $user instanceof UserInterface ? $user->getId() : null;
     }
 

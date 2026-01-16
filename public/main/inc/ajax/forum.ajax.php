@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+// Avoid auto-closing the session in global.inc.php because of api_is_platform_admin() call
+const KEEP_SESSION_OPEN = true;
 use Chamilo\CourseBundle\Entity\CForumPost;
 
 /**

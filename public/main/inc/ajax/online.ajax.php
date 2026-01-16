@@ -3,6 +3,8 @@
 
 $_dont_save_user_course_access = true;
 
+// Avoid auto-closing the session in global.inc.php because of api_is_platform_admin() call
+const KEEP_SESSION_OPEN = true;
 require_once __DIR__.'/../global.inc.php';
 
 $action = isset($_GET['a']) ? $_GET['a'] : '';

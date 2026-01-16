@@ -199,6 +199,13 @@ if ($isCli) {
         }
     }
 
+    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
+        // Check if the script has explicitly asked to keep the session open
+        if (!defined('KEEP_SESSION_OPEN')) {
+            session_write_close();
+        }
+    }
+
     $charset = 'UTF-8';
     ini_set('log_errors', '1');
     $this_section = SECTION_GLOBAL;

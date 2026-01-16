@@ -20,6 +20,7 @@ switch ($action) {
     case 'update_changeable_setting':
         $url_id = api_get_current_access_url_id();
         $platformAdmin = api_is_platform_admin();
+        // Close the session as we don't need it any further
         session_write_close();
 
         if ($platformAdmin && 1 == $url_id) {
@@ -37,11 +38,12 @@ switch ($action) {
         }
         break;
     case 'version':
-        // Fix session block when loading admin/index.php and changing page
+        // Close the session as we don't need it any further
         session_write_close();
         echo version_check();
         break;
     case 'get_extra_content':
+        // Close the session as we don't need it any further
         session_write_close();
         $blockName = isset($_POST['block']) ? Security::remove_XSS($_POST['block']) : null;
 

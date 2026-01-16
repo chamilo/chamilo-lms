@@ -96,14 +96,14 @@ class Chat extends Model
         $html = (string) SocialManager::listMyFriendsBlock(api_get_user_id(), '', true);
 
         // Add AI Tutor contact when enabled (global chat).
-        if ('true' === api_get_setting('ai_helpers.tutor_chatbot')) {
+        if ('true' === api_get_setting('ai_helpers.tutor_chatbot') && api_get_course_int_id() > 0) {
             // Hide AI when user is in an exam (best effort).
             if (empty($_SESSION['is_in_a_test'])) {
                 $ai = ''
                     .'<div class="chd-ai-contact" data-user="'.self::USER_AI_TUTOR.'" data-name="AI Tutor" style="cursor:pointer; padding:10px; border-bottom:1px solid #eee;">'
                     .'<span style="margin-right:8px;">🤖</span>'
-                    .'<strong>AI Tutor</strong>'
-                    .'<span style="float:right; color:#2e7d32;">●</span>'
+                    .'<strong>'.get_lang('AI Tutor').'</strong>'
+                    .'<span style="float:right; color:#10B981;">●</span>'
                     .'</div>';
                 $html = $ai.$html;
             }

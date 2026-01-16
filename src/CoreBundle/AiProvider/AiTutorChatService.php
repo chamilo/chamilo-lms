@@ -453,4 +453,401 @@ final class AiTutorChatService
 
         return $this->client->chatWithMeta($provider, $providerMessages, $options);
     }
+
+    public function sendTutorMessageForDockedChat(
+        int $userId,
+        Course $course,
+        ?Session $session,
+        string $provider,
+        string $message,
+        string $uiLang
+    ): array {
+        $provider = $this->normalizeProvider($provider);
+        $message = trim($message);
+
+        if ('' === $message) {
+            return ['id' => 0];
+        }
+
+        $conversation = $this->getOrCreateConversation($userId, $course, $session, $provider);
+
+        // Persist user message
+        $userMsg = (new AiTutorMessage())
+            ->setConversation($conversation)
+            ->setRole('user')
+            ->setContent($message)
+        ;
+
+        $this->em->persist($userMsg);
+        $conversation->touchLastMessageAt();
+        $this->em->flush();
+
+        // Generate assistant reply with meta (may update provider conversation id)
+        $result = $this->generateAssistantReplyWithMeta($provider, $course, $conversation);
+
+        $assistantText = trim((string) $result->text);
+        if ('' === $assistantText) {
+            $assistantText = 'I could not generate a response right now. Please try again.';
+        }
+
+        if (null !== $result->conversationId && '' !== trim($result->conversationId)) {
+            if ($conversation->getProviderConversationId() !== $result->conversationId) {
+                $conversation->setProviderConversationId($result->conversationId);
+            }
+        }
+
+        // Persist assistant message
+        $assistantMsg = (new AiTutorMessage())
+            ->setConversation($conversation)
+            ->setRole('assistant')
+            ->setContent($assistantText)
+        ;
+
+        $this->em->persist($assistantMsg);
+        $conversation->touchLastMessageAt();
+        $this->em->flush();
+
+        $assistantItem = $this->toDockedChatItem($assistantMsg, $userId, $provider);
+
+        return [
+            'id' => (int) $userMsg->getId(),
+            'assistant' => $assistantItem,
+            'mode' => 'course',
+        ];
+    }
+
+    /**
+     * Returns a page of messages for the docked UI (older messages loading).
+     * $visibleMessages is how many messages are already shown in the UI.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public function getHistoryPageAsDockedItems(
+        int $userId,
+        Course $course,
+        string $provider,
+        int $visibleMessages,
+        int $pageSize = 30
+    ): array {
+        $provider = $this->normalizeProvider($provider);
+
+        $conversation = $this->conversationRepo->findOneByUserCourseProvider(
+            $userId,
+            (int) $course->getId(),
+            $provider
+        );
+
+        if (null === $conversation) {
+            return [];
+        }
+
+        $total = $this->conversationRepo->countMessages($conversation);
+        if ($total <= 0) {
+            return [];
+        }
+
+        $visible = max(0, $visibleMessages);
+        $remaining = max(0, $total - $visible);
+
+        if ($remaining <= 0) {
+            return [];
+        }
+
+        $limit = min($pageSize, $remaining);
+        $offset = max(0, $total - $visible - $limit);
+
+        $messages = $this->conversationRepo->findMessagesPage($conversation, $offset, $limit);
+
+        $items = [];
+        foreach ($messages as $m) {
+            $items[] = $this->toDockedChatItem($m, $userId, $provider);
+        }
+
+        return $items;
+    }
+
+    /**
+     * Returns incoming messages since a given ID for the docked UI.
+     * For the AI tutor, "incoming" means assistant messages only.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public function getIncomingSinceAsDockedItems(
+        int $userId,
+        Course $course,
+        string $provider,
+        int $sinceId
+    ): array {
+        $provider = $this->normalizeProvider($provider);
+
+        $conversation = $this->conversationRepo->findOneByUserCourseProvider(
+            $userId,
+            (int) $course->getId(),
+            $provider
+        );
+
+        if (null === $conversation) {
+            return [];
+        }
+
+        $sinceId = max(0, $sinceId);
+        $messages = $this->conversationRepo->findAssistantMessagesSince($conversation, $sinceId);
+
+        $items = [];
+        foreach ($messages as $m) {
+            $items[] = $this->toDockedChatItem($m, $userId, $provider);
+        }
+
+        return $items;
+    }
+
+    /**
+     * Stores last-seen id in session (course + provider scoped).
+     */
+    public function ackTutorReadUpTo(
+        int $userId,
+        Course $course,
+        string $provider,
+        int $lastSeenId
+    ): int {
+        $provider = $this->normalizeProvider($provider);
+        $lastSeenId = max(0, $lastSeenId);
+
+        try {
+            $req = $this->requestStack->getCurrentRequest();
+            if (null === $req || !$req->hasSession()) {
+                return 0;
+            }
+
+            $key = $this->buildLastSeenSessionKey((int) $course->getId(), $provider);
+
+            $current = (int) $req->getSession()->get($key, 0);
+            if ($lastSeenId > $current) {
+                $req->getSession()->set($key, $lastSeenId);
+                return 1;
+            }
+
+            return 0;
+        } catch (Throwable) {
+            return 0;
+        }
+    }
+
+    private function buildLastSeenSessionKey(int $courseId, string $provider): string
+    {
+        return 'ai_tutor_last_seen_'.$courseId.'_'.$provider;
+    }
+
+    private function getLastSeenFromSession(int $courseId, string $provider): int
+    {
+        try {
+            $req = $this->requestStack->getCurrentRequest();
+            if (null === $req || !$req->hasSession()) {
+                return 0;
+            }
+
+            $key = $this->buildLastSeenSessionKey($courseId, $provider);
+            return (int) $req->getSession()->get($key, 0);
+        } catch (Throwable) {
+            return 0;
+        }
+    }
+
+    /**
+     * Converts an AiTutorMessage into the same shape used by classic chat JSON items.
+     *
+     * @return array<string, mixed>
+     */
+    private function toDockedChatItem(AiTutorMessage $m, int $meUserId, string $provider): array
+    {
+        $id = (int) $m->getId();
+        $role = (string) $m->getRole();
+        $createdAt = $m->getCreatedAt();
+        $ts = $createdAt ? (int) $createdAt->getTimestamp() : time();
+
+        $isAssistant = ('assistant' === $role);
+
+        $fromId = $isAssistant ? self::FRIEND_AI : $meUserId;
+        $toId = $isAssistant ? $meUserId : self::FRIEND_AI;
+
+        $courseId = (int) $m->getConversation()->getCourse()->getId();
+        $lastSeen = $this->getLastSeenFromSession($courseId, $provider);
+
+        // recd=1 means "read"; for assistant messages we mark as unread if above lastSeen.
+        $recd = 1;
+        if ($isAssistant) {
+            $recd = ($id <= $lastSeen) ? 1 : 0;
+        }
+
+        $content = (string) $m->getContent();
+        $safeHtml = $this->toSafeHtml($content);
+
+        return [
+            'id' => $id,
+            'message' => $safeHtml,
+            'date' => $ts,
+            'recd' => $recd,
+            'from_user_info' => $isAssistant ? $this->getAiTutorUserInfo() : api_get_user_info($meUserId, true),
+            'to_user_info' => $isAssistant ? api_get_user_info($meUserId, true) : $this->getAiTutorUserInfo(),
+            'from' => $fromId,
+            'to' => $toId,
+        ];
+    }
+
+    private function getAiTutorUserInfo(): array
+    {
+        return [
+            'id' => self::FRIEND_AI,
+            'user_id' => self::FRIEND_AI,
+            'complete_name' => 'AI Tutor',
+            'user_is_online_in_chat' => 1,
+            'user_is_online' => 1,
+            'online' => 1,
+            'avatar_small' => '',
+        ];
+    }
+
+    private function toSafeHtml(string $text): string
+    {
+        $text = trim($text);
+        if ('' === $text) {
+            return '';
+        }
+
+        // Keep line breaks readable in the UI, avoid raw HTML injection.
+        $escaped = htmlspecialchars($text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $html = nl2br($escaped);
+
+        return \Security::remove_XSS($html);
+    }
+
+    public function handleUserMessageForDock(
+        int $userId,
+        Course $course,
+        ?Session $session,
+        string $provider,
+        string $message
+    ): array {
+        $provider = $this->normalizeProvider($provider);
+        $message = trim($message);
+
+        if ('' === $message) {
+            throw new \InvalidArgumentException('Empty message.');
+        }
+
+        $conversation = $this->getOrCreateConversation($userId, $course, $session, $provider);
+
+        // Persist user message
+        $userMsg = (new AiTutorMessage())
+            ->setConversation($conversation)
+            ->setRole('user')
+            ->setContent($message)
+        ;
+
+        $this->em->persist($userMsg);
+        $conversation->touchLastMessageAt();
+        $this->em->flush();
+
+        // Generate assistant reply (with meta to keep provider conversation id)
+        $result = $this->generateAssistantReplyWithMeta($provider, $course, $conversation);
+
+        $assistantText = trim((string) $result->text);
+        if ('' === $assistantText) {
+            $assistantText = 'I could not generate a response right now. Please try again.';
+        }
+
+        if (null !== $result->conversationId && '' !== trim($result->conversationId)) {
+            if ($conversation->getProviderConversationId() !== $result->conversationId) {
+                $conversation->setProviderConversationId($result->conversationId);
+            }
+        }
+
+        // Persist assistant message
+        $assistantMsg = (new AiTutorMessage())
+            ->setConversation($conversation)
+            ->setRole('assistant')
+            ->setContent($assistantText)
+        ;
+
+        $this->em->persist($assistantMsg);
+        $conversation->touchLastMessageAt();
+        $this->em->flush();
+
+        return [
+            'conversation' => $conversation,
+            'user' => $userMsg,
+            'assistant' => $assistantMsg,
+            'assistant_text' => $assistantText,
+        ];
+    }
+
+    /**
+     * Returns one "page" of messages for the dock, based on how many are already visible.
+     *
+     * @return AiTutorMessage[]
+     */
+    public function getDockMessagesPage(
+        int $userId,
+        Course $course,
+        string $provider,
+        int $visible,
+        int $pageSize = 20
+    ): array {
+        $provider = $this->normalizeProvider($provider);
+
+        $conversation = $this->conversationRepo->findOneByUserCourseProvider(
+            $userId,
+            (int) $course->getId(),
+            $provider
+        );
+
+        if (null === $conversation) {
+            return [];
+        }
+
+        $total = $this->conversationRepo->countMessages($conversation);
+        if ($total <= 0) {
+            return [];
+        }
+
+        $visible = max(0, $visible);
+        $pageSize = max(1, $pageSize);
+
+        // We want the slice just before the currently visible tail.
+        // Example: total=100, visible=20, pageSize=20 => return messages[60..79]
+        $end = max(0, $total - $visible);
+        $start = max(0, $end - $pageSize);
+        $len = max(0, $end - $start);
+
+        if ($len <= 0) {
+            return [];
+        }
+
+        return $this->conversationRepo->findMessagesSlice($conversation, $start, $len);
+    }
+
+    /**
+     * @return AiTutorMessage[]
+     */
+    public function getDockMessagesSince(
+        int $userId,
+        Course $course,
+        string $provider,
+        int $sinceId,
+        int $limit = 80
+    ): array {
+        $provider = $this->normalizeProvider($provider);
+
+        $conversation = $this->conversationRepo->findOneByUserCourseProvider(
+            $userId,
+            (int) $course->getId(),
+            $provider
+        );
+
+        if (null === $conversation) {
+            return [];
+        }
+
+        return $this->conversationRepo->findMessagesSinceId($conversation, max(0, $sinceId), $limit);
+    }
 }

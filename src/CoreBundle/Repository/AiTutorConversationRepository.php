@@ -11,7 +11,7 @@ use Chamilo\CoreBundle\Entity\AiTutorMessage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class AiTutorConversationRepository extends ServiceEntityRepository
+final class AiTutorConversationRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -48,6 +48,54 @@ class AiTutorConversationRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @return AiTutorMessage[]
+     */
+    public function findMessagesSlice(AiTutorConversation $conversation, int $offset, int $limit): array
+    {
+        return $this->getEntityManager()->createQueryBuilder()
+            ->select('m')
+            ->from(AiTutorMessage::class, 'm')
+            ->andWhere('m.conversation = :c')
+            ->setParameter('c', $conversation)
+            ->orderBy('m.createdAt', 'ASC')
+            ->setFirstResult(max(0, $offset))
+            ->setMaxResults(max(0, $limit))
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return AiTutorMessage[]
+     */
+    public function findMessagesSinceId(AiTutorConversation $conversation, int $sinceId, int $limit = 80): array
+    {
+        return $this->getEntityManager()->createQueryBuilder()
+            ->select('m')
+            ->from(AiTutorMessage::class, 'm')
+            ->andWhere('m.conversation = :c')
+            ->andWhere('m.id > :sid')
+            ->setParameter('c', $conversation)
+            ->setParameter('sid', $sinceId)
+            ->orderBy('m.id', 'ASC')
+            ->setMaxResults(max(1, $limit))
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function countMessages(AiTutorConversation $conversation): int
+    {
+        $n = $this->getEntityManager()->createQueryBuilder()
+            ->select('COUNT(m.id)')
+            ->from(AiTutorMessage::class, 'm')
+            ->andWhere('m.conversation = :c')
+            ->setParameter('c', $conversation)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return (int) ($n ?? 0);
     }
 
     public function clearMessages(AiTutorConversation $conversation): int

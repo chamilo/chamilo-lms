@@ -11,6 +11,7 @@ $_dont_save_user_course_access = true;
 require_once __DIR__.'/../global.inc.php';
 
 api_block_anonymous_users();
+$currentUserId = api_get_user_id();
 
 if ('false' == api_get_setting('allow_global_chat')) {
     exit;
@@ -26,7 +27,6 @@ if ('preview' === $action) {
 
 $toUserId = isset($_REQUEST['to']) ? $_REQUEST['to'] : null;
 $message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
-$currentUserId = api_get_user_id();
 
 $chat = new Chat();
 
@@ -44,6 +44,8 @@ switch ($action) {
     case 'get_message_status':
         $messageId = isset($_REQUEST['message_id']) ? $_REQUEST['message_id'] : 0;
         $messageInfo = $chat->get($messageId);
+        // Close the session as we don't need it any further
+        session_write_close();
         if ($messageInfo && $messageInfo['from_user'] == $currentUserId) {
             echo json_encode($messageInfo);
         }
@@ -115,6 +117,8 @@ switch ($action) {
             $currentUserId,
             $visibleMessages
         );
+        // Close the session as we don't need it any further
+        session_write_close();
 
         if (!empty($items)) {
             sort($items);

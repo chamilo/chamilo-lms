@@ -228,6 +228,7 @@ class PlatformConfigurationController extends AbstractController
             'learning_path_generator' => $courseSettingsManager->getCourseSettingValue('learning_path_generator'),
             'image_generator' => $courseSettingsManager->getCourseSettingValue('image_generator'),
             'video_generator' => $courseSettingsManager->getCourseSettingValue('video_generator'),
+            'glossary_terms_generator' => $courseSettingsManager->getCourseSettingValue('glossary_terms_generator'),
             'display_info_advance_inside_homecourse' => $courseSettingsManager->getCourseSettingValue('display_info_advance_inside_homecourse'),
         ];
 

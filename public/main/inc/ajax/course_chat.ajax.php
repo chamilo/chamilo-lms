@@ -29,6 +29,9 @@ switch ($_REQUEST['action']) {
         Event::registerLog($logInfo);
         break;
     case 'track':
+        // Close the session as we don't need it any further
+        session_write_close();
+
         $courseChatUtils->keepUserAsConnected();
         $courseChatUtils->disconnectInactiveUsers();
 
@@ -52,6 +55,9 @@ switch ($_REQUEST['action']) {
 
         break;
     case 'preview':
+        // Close the session as we don't need it any further
+        session_write_close();
+
         $json = [
             'status' => true,
             'data' => [
@@ -60,6 +66,9 @@ switch ($_REQUEST['action']) {
         ];
         break;
     case 'reset':
+        // Close the session as we don't need it any further
+        session_write_close();
+
         $friend = isset($_REQUEST['friend']) ? (int) $_REQUEST['friend'] : 0;
 
         $json = [
@@ -69,12 +78,14 @@ switch ($_REQUEST['action']) {
         break;
     case 'write':
         $friend = isset($_REQUEST['friend']) ? (int) $_REQUEST['friend'] : 0;
-        $writed = $courseChatUtils->saveMessage($_POST['message'], $friend);
+        $written = $courseChatUtils->saveMessage($_POST['message'], $friend);
+        // Close the session as we don't need it any further
+        session_write_close();
 
         $json = [
-            'status' => $writed,
+            'status' => $written,
             'data' => [
-                'writed' => $writed,
+                'writed' => $written,
             ],
         ];
         break;

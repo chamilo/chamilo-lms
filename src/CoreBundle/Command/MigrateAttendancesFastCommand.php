@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Command;
 
+use Chamilo\CoreBundle\Command\DoctrineMigrationsMigrateCommandDecorator;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception as DbalException;
 use Doctrine\DBAL\ParameterType;
@@ -55,6 +56,13 @@ final class MigrateAttendancesFastCommand extends Command
         );
 
         $this->addOption(
+            'drop-c-id-session-id-from-c-attendance',
+            null,
+            InputOption::VALUE_NONE,
+            'Drop legacy columns c_attendance.c_id and c_attendance.session_id after successful migration (only if no pending attendances remain).'
+        );
+
+        $this->addOption(
             'dry-run',
             null,
             InputOption::VALUE_NONE,
@@ -73,39 +81,77 @@ final class MigrateAttendancesFastCommand extends Command
         $dropItemProperty = (bool) $input->getOption('drop-c-item-property')
             || (bool) $input->getOption('drop-c-item-properties');
 
+        $dropAttendanceLegacyColumns = (bool) $input->getOption('drop-c-id-session-id-from-c-attendance');
+
         if ($dryRun && $dropItemProperty) {
             $io->note('Dry-run enabled: ignoring --drop-c-item-property (no schema changes will be applied).');
             $dropItemProperty = false;
+        }
+
+        if ($dryRun && $dropAttendanceLegacyColumns) {
+            $io->note('Dry-run enabled: ignoring --drop-c-id-session-id-from-c-attendance (no schema changes will be applied).');
+            $dropAttendanceLegacyColumns = false;
         }
 
         $fallbackAdminId = $this->getFallbackAdminId();
         $uuidIsBinary = $this->detectUuidIsBinary();
 
         $hasItemProperty = $this->tableExists('c_item_property');
+
+        // We rely on c_attendance.c_id to map attendances to courses (c_item_property.c_id is ignored).
         $hasAttendanceCId = $this->tableHasColumn('c_attendance', 'c_id');
+        $hasAttendanceLegacyId = $this->tableHasColumn('c_attendance', 'id');
+        $hasAttendanceSessionId = $this->tableHasColumn('c_attendance', 'session_id');
+
         $hasAttendanceTitle = $this->tableHasColumn('c_attendance', 'title');
         $hasAttendanceName = $this->tableHasColumn('c_attendance', 'name');
 
-        // At this migration stage, c_attendance.session_id is expected to be removed.
-        // We only rely on c_item_property.session_id when available.
-        $hasItemPropertySessionId = $hasItemProperty && $this->tableHasColumn('c_item_property', 'session_id');
-
-        if (!$hasItemProperty && !$hasAttendanceCId) {
-            $io->error('Cannot determine attendance->course mapping: c_item_property does not exist and c_attendance.c_id does not exist.');
+        if (!$hasAttendanceCId) {
+            $io->error('Cannot map attendances to courses: c_attendance.c_id is missing. This command expects c_id to be available in c_attendance.');
             return Command::FAILURE;
         }
 
-        if ($hasItemProperty && !$hasItemPropertySessionId) {
-            $io->note('c_item_property.session_id is not available. Session context will be stored as NULL in resource_link.');
+        if (!$hasAttendanceSessionId) {
+            $io->note('c_attendance.session_id is not available. Session context will be stored as NULL in resource_link.');
         }
 
-        $courseIds = $this->getCourseIdsToProcess($hasItemProperty, $hasAttendanceCId);
+        // Respect the same env-flag used during Doctrine migrations (only migrate gradebook-linked attendances).
+        $skipAttendances = (bool) getenv(DoctrineMigrationsMigrateCommandDecorator::SKIP_ATTENDANCES_FLAG);
+        $gradebookIds = [];
+
+        if ($skipAttendances) {
+            $io->note('SKIP_ATTENDANCES flag detected: only gradebook-linked attendances will be migrated.');
+
+            // gradebook_link.type=7 (attendance). Some datasets may link to attendance.iid or attendance.id.
+            $join = 'a.iid = gl.ref_id';
+            if ($hasAttendanceLegacyId) {
+                $join = '(a.iid = gl.ref_id OR a.id = gl.ref_id)';
+            }
+
+            $ids = $this->connection->fetchFirstColumn(
+                "SELECT DISTINCT a.iid
+                 FROM gradebook_link gl
+                 INNER JOIN c_attendance a ON {$join}
+                 WHERE gl.type = 7"
+            );
+
+            $ids = array_map('intval', $ids);
+            $gradebookIds = array_fill_keys($ids, true);
+        }
+
+        $courseIds = $this->getCourseIdsToProcess();
 
         if (0 === \count($courseIds)) {
             $io->success('No attendances to migrate (nothing pending).');
+
             if ($dropItemProperty) {
                 $this->maybeDropItemProperty($io);
             }
+
+            if ($dropAttendanceLegacyColumns) {
+                $this->maybeDropAttendanceLegacyColumns($io);
+            }
+
             return Command::SUCCESS;
         }
 
@@ -149,11 +195,10 @@ final class MigrateAttendancesFastCommand extends Command
 
             $attendanceRows = $this->fetchPendingAttendancesForCourse(
                 courseId: $courseId,
-                hasItemProperty: $hasItemProperty,
-                hasAttendanceCId: $hasAttendanceCId,
                 hasAttendanceTitle: $hasAttendanceTitle,
                 hasAttendanceName: $hasAttendanceName,
-                hasItemPropertySessionId: $hasItemPropertySessionId
+                hasAttendanceSessionId: $hasAttendanceSessionId,
+                hasAttendanceLegacyId: $hasAttendanceLegacyId
             );
 
             if (0 === \count($attendanceRows)) {
@@ -168,22 +213,52 @@ final class MigrateAttendancesFastCommand extends Command
             try {
                 foreach ($attendanceRows as $row) {
                     $attendanceId = (int) $row['iid'];
+
+                    if ($skipAttendances && !isset($gradebookIds[$attendanceId])) {
+                        continue;
+                    }
+
                     $attendanceTitle = $this->pickAttendanceTitle($row, $attendanceId);
 
-                    // session_id is read from c_item_property (when available).
-                    // Normalize 0 -> NULL as expected by resource_link.session_id.
-                    $attendanceSessionId = isset($row['session_id']) ? (int) $row['session_id'] : 0;
-                    $attendanceSessionId = 0 === $attendanceSessionId ? null : $attendanceSessionId;
+                    $attendanceLegacyId = null;
+                    if ($hasAttendanceLegacyId && isset($row['legacy_id']) && null !== $row['legacy_id']) {
+                        $legacy = (int) $row['legacy_id'];
+                        $attendanceLegacyId = $legacy > 0 ? $legacy : null;
+                    }
 
+                    // IMPORTANT:
+                    // - We ignore c_item_property.session_id because it can be incoherent.
+                    // - We store session context using c_attendance.session_id (when available).
+                    $attendanceSessionId = null;
+                    if ($hasAttendanceSessionId && isset($row['attendance_session_id']) && null !== $row['attendance_session_id']) {
+                        $tmp = (int) $row['attendance_session_id'];
+                        $attendanceSessionId = $tmp > 0 ? $tmp : null;
+                    }
+
+                    // Metadata from c_item_property:
+                    // - Trust only tool + ref (and optionally legacy ref=a.id).
+                    // - Do NOT filter by c_id to avoid relying on incoherent mappings.
                     $ip = [];
                     if ($hasItemProperty) {
-                        $ip = $this->connection->fetchAssociative(
-                            "SELECT insert_date, lastedit_date, lastedit_user_id, visibility, start_visible, end_visible, to_group_id, to_user_id
-                             FROM c_item_property
-                             WHERE tool = 'attendance' AND ref = :ref AND c_id = :cid
-                             LIMIT 1",
-                            ['ref' => $attendanceId, 'cid' => $courseId]
-                        ) ?: [];
+                        $sql = "SELECT insert_date, lastedit_date, lastedit_user_id, visibility, start_visible, end_visible, to_group_id, to_user_id
+                                FROM c_item_property
+                                WHERE tool = 'attendance' AND ref = :iid
+                                ORDER BY insert_date ASC
+                                LIMIT 1";
+
+                        $params = ['iid' => $attendanceId];
+
+                        if (null !== $attendanceLegacyId) {
+                            $sql = "SELECT insert_date, lastedit_date, lastedit_user_id, visibility, start_visible, end_visible, to_group_id, to_user_id
+                                    FROM c_item_property
+                                    WHERE tool = 'attendance'
+                                      AND (ref = :iid OR ref = :legacyId)
+                                    ORDER BY CASE WHEN ref = :iid THEN 1 ELSE 0 END DESC, insert_date ASC
+                                    LIMIT 1";
+                            $params['legacyId'] = $attendanceLegacyId;
+                        }
+
+                        $ip = $this->connection->fetchAssociative($sql, $params) ?: [];
                     }
 
                     $insertDate = $ip['insert_date'] ?? $this->nowUtc();
@@ -236,7 +311,7 @@ final class MigrateAttendancesFastCommand extends Command
                         'user_id' => $toUserId,
                     ]);
 
-                    // resource_node.path should follow the same structure as the standard migration:
+                    // resource_node.path format:
                     // <parentPath>/<title>-<attendanceIid>-<nodeId>/
                     $segmentTitle = trim(str_replace(['/', '\\'], '-', $attendanceTitle));
                     $segmentTitle = preg_replace('/\s+/', ' ', $segmentTitle) ?: $segmentTitle;
@@ -291,74 +366,49 @@ final class MigrateAttendancesFastCommand extends Command
             }
         }
 
+        if ($dropAttendanceLegacyColumns) {
+            $this->maybeDropAttendanceLegacyColumns($io);
+        } else {
+            if ($this->tableHasColumn('c_attendance', 'c_id') || $this->tableHasColumn('c_attendance', 'session_id')) {
+                $io->note('c_attendance legacy columns still exist. You can drop them later or rerun this command with --drop-c-id-session-id-from-c-attendance once you confirm no pending attendances remain.');
+            }
+        }
+
         return Command::SUCCESS;
     }
 
-    private function getCourseIdsToProcess(bool $hasItemProperty, bool $hasAttendanceCId): array
+    private function getCourseIdsToProcess(): array
     {
-        if ($hasItemProperty) {
-            return $this->connection->fetchFirstColumn(
-                "SELECT DISTINCT c_id
-                 FROM c_item_property
-                 WHERE tool = 'attendance'
-                 ORDER BY c_id"
-            );
-        }
-
-        // Fallback: legacy schema still has c_attendance.c_id
-        if ($hasAttendanceCId) {
-            return $this->connection->fetchFirstColumn(
-                "SELECT DISTINCT c_id
-                 FROM c_attendance
-                 WHERE resource_node_id IS NULL
-                 ORDER BY c_id"
-            );
-        }
-
-        return [];
+        // We rely on c_attendance.c_id to identify the course ownership.
+        return $this->connection->fetchFirstColumn(
+            "SELECT DISTINCT c_id
+             FROM c_attendance
+             WHERE resource_node_id IS NULL
+               AND c_id IS NOT NULL
+             ORDER BY c_id"
+        );
     }
 
     private function fetchPendingAttendancesForCourse(
         int $courseId,
-        bool $hasItemProperty,
-        bool $hasAttendanceCId,
         bool $hasAttendanceTitle,
         bool $hasAttendanceName,
-        bool $hasItemPropertySessionId
+        bool $hasAttendanceSessionId,
+        bool $hasAttendanceLegacyId
     ): array {
         $selectTitle = $hasAttendanceTitle ? 'a.title' : 'NULL AS title';
         $selectName = $hasAttendanceName ? 'a.name' : 'NULL AS name';
+        $selectSession = $hasAttendanceSessionId ? 'a.session_id AS attendance_session_id' : 'NULL AS attendance_session_id';
+        $selectLegacyId = $hasAttendanceLegacyId ? 'a.id AS legacy_id' : 'NULL AS legacy_id';
 
-        // session_id comes ONLY from c_item_property when available, otherwise NULL.
-        $selectSession = $hasItemPropertySessionId ? 'ip.session_id' : 'NULL';
-
-        if ($hasItemProperty) {
-            return $this->connection->fetchAllAssociative(
-                "SELECT a.iid, {$selectTitle}, {$selectName}, {$selectSession} AS session_id
-                 FROM c_attendance a
-                 INNER JOIN c_item_property ip
-                    ON ip.tool = 'attendance'
-                   AND ip.ref = a.iid
-                   AND ip.c_id = :cid
-                 WHERE a.resource_node_id IS NULL
-                 ORDER BY a.iid",
-                ['cid' => $courseId]
-            );
-        }
-
-        // Fallback using legacy c_id (no c_item_property available).
-        // At this stage, we cannot infer a session_id, so we store NULL.
-        if ($hasAttendanceCId) {
-            return $this->connection->fetchAllAssociative(
-                "SELECT a.iid, {$selectTitle}, {$selectName}, NULL AS session_id
-                 FROM c_attendance a
-                 WHERE a.c_id = :cid AND a.resource_node_id IS NULL
-                 ORDER BY a.iid",
-                ['cid' => $courseId]
-            );
-        }
-
-        return [];
+        return $this->connection->fetchAllAssociative(
+            "SELECT a.iid, {$selectTitle}, {$selectName}, {$selectSession}, {$selectLegacyId}
+             FROM c_attendance a
+             WHERE a.c_id = :cid
+               AND a.resource_node_id IS NULL
+             ORDER BY a.iid",
+            ['cid' => $courseId]
+        );
     }
 
     private function pickAttendanceTitle(array $row, int $attendanceId): string
@@ -402,6 +452,57 @@ final class MigrateAttendancesFastCommand extends Command
             $io->success('Legacy table "c_item_property" dropped.');
         } catch (DbalException $e) {
             $io->error('Failed to drop legacy table "c_item_property": '.$e->getMessage());
+        }
+    }
+
+    /**
+     * Drops legacy columns from c_attendance.
+     * Only runs if no pending attendances remain.
+     */
+    private function maybeDropAttendanceLegacyColumns(SymfonyStyle $io): void
+    {
+        if (!$this->tableExists('c_attendance')) {
+            $io->note('Table "c_attendance" does not exist - nothing to drop.');
+            return;
+        }
+
+        $pending = (int) $this->connection->fetchOne('SELECT COUNT(*) FROM c_attendance WHERE resource_node_id IS NULL');
+        if ($pending > 0) {
+            $io->warning("Not dropping legacy columns from c_attendance: {$pending} attendances are still pending (resource_node_id IS NULL).");
+            return;
+        }
+
+        $sm = $this->connection->createSchemaManager();
+        $table = $sm->introspectTable('c_attendance');
+
+        $columnsToDrop = ['c_id', 'session_id'];
+        $dropList = [];
+
+        foreach ($columnsToDrop as $col) {
+            if ($table->hasColumn($col)) {
+                $dropList[] = $col;
+            }
+        }
+
+        if (0 === \count($dropList)) {
+            $io->note('c_attendance does not have legacy columns c_id/session_id - nothing to drop.');
+            return;
+        }
+
+        $io->section('Dropping legacy columns from c_attendance...');
+
+        try {
+            foreach ($dropList as $col) {
+                // Keep it explicit to avoid relying on non-portable "IF EXISTS" syntax.
+                $this->connection->executeStatement("ALTER TABLE c_attendance DROP COLUMN {$col}");
+                $io->writeln(" - Dropped column c_attendance.{$col}");
+            }
+
+            $io->success('Legacy columns dropped from c_attendance.');
+        } catch (DbalException $e) {
+            $io->error('Failed to drop legacy columns from c_attendance: '.$e->getMessage());
+        } catch (\Throwable $e) {
+            $io->error('Failed to drop legacy columns from c_attendance: '.$e->getMessage());
         }
     }
 

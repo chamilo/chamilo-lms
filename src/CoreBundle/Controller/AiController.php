@@ -9,10 +9,13 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\AiProvider\AiImageProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Chamilo\CoreBundle\AiProvider\AiVideoProviderInterface;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Repository\TrackEAttemptRepository;
+use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -23,8 +26,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const FILTER_SANITIZE_NUMBER_INT;
+use const FILTER_VALIDATE_URL;
 
 #[Route('/ai')]
 class AiController extends AbstractController
@@ -34,7 +39,174 @@ class AiController extends AbstractController
         private readonly TrackEAttemptRepository $attemptRepo,
         private readonly EntityManagerInterface $em,
         private readonly HttpClientInterface $httpClient,
+        private readonly TranslatorInterface $translator,
     ) {}
+
+    #[Route('/text_providers', name: 'chamilo_core_ai_text_providers', methods: ['GET'])]
+    public function textProviders(): JsonResponse
+    {
+        try {
+            $this->denyIfNotTeacher();
+        } catch (AccessDeniedException $e) {
+            return new JsonResponse(['providers' => []], 403);
+        }
+
+        return new JsonResponse([
+            'providers' => array_values($this->aiProviderFactory->getProvidersForType('text')),
+        ]);
+    }
+
+    #[Route('/glossary_default_prompt', name: 'chamilo_core_ai_glossary_default_prompt', methods: ['GET'])]
+    public function glossaryDefaultPrompt(Request $request): JsonResponse
+    {
+        try {
+            $this->denyIfNotTeacher();
+        } catch (AccessDeniedException $e) {
+            return new JsonResponse(['prompt' => ''], 403);
+        }
+
+        $cid = (int) $request->query->get('cid', 0);
+        $sid = (int) $request->query->get('sid', 0);
+        $n = (int) $request->query->get('n', 15);
+
+        if ($n < 1) {
+            $n = 1;
+        }
+        if ($n > 200) {
+            $n = 200;
+        }
+
+        if (0 === $cid) {
+            return new JsonResponse(['prompt' => ''], 400);
+        }
+
+        /** @var Course|null $course */
+        $course = $this->em->getRepository(Course::class)->find($cid);
+        if (null === $course) {
+            return new JsonResponse(['prompt' => ''], 404);
+        }
+
+        $courseTitle = (string) $course->getTitle();
+        $desc = $this->getGenericCourseDescription($cid, $sid);
+
+        $base = $this->translator->trans(
+            "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term."
+        );
+
+        $prompt = sprintf($base, $n, $courseTitle);
+
+        if ('' !== $desc) {
+            $descPrefix = $this->translator->trans(
+                "This is a short description of the course '%s'."
+            );
+            $prompt .= ' '.sprintf($descPrefix, $courseTitle).' '.$desc;
+        }
+
+        return new JsonResponse(['prompt' => $prompt]);
+    }
+
+    #[Route('/generate_glossary_terms', name: 'chamilo_core_ai_generate_glossary_terms', methods: ['POST'])]
+    public function generateGlossaryTerms(Request $request): JsonResponse
+    {
+        try {
+            $this->denyIfNotTeacher();
+        } catch (AccessDeniedException $e) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Access denied.',
+            ], 403);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        if (!is_array($data)) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Invalid JSON payload.',
+            ], 400);
+        }
+
+        $n = (int) ($data['n'] ?? 15);
+        $language = (string) ($data['language'] ?? 'en');
+        $prompt = trim((string) ($data['prompt'] ?? ''));
+        $providerName = isset($data['ai_provider']) ? (string) $data['ai_provider'] : null;
+        $cid = (int) ($data['cid'] ?? 0);
+        $toolName = trim((string) ($data['tool'] ?? 'glossary'));
+
+        if ($n < 1) {
+            $n = 1;
+        }
+        if ($n > 200) {
+            $n = 200;
+        }
+
+        if (0 === $cid || '' === $prompt) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Invalid request parameters.',
+            ], 400);
+        }
+
+        /** @var Course|null $course */
+        $course = $this->em->getRepository(Course::class)->find($cid);
+        if (null === $course) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Course not found.',
+            ], 404);
+        }
+
+        try {
+            $provider = $this->aiProviderFactory->getProvider($providerName, 'text');
+
+            if (!is_object($provider) || !method_exists($provider, 'generateText')) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Selected AI provider does not support text generation.',
+                ], 400);
+            }
+
+            // Preferred signature: generateText(string $prompt, array $options = []): string
+            try {
+                $raw = (string) $provider->generateText($prompt, [
+                    'language' => $language,
+                    'n' => $n,
+                    'tool' => $toolName,
+                ]);
+            } catch (\TypeError $e) {
+                // Backward compatibility: generateText(string $prompt, string $language): string
+                $raw = (string) $provider->generateText($prompt, $language);
+            }
+
+            $raw = trim($raw);
+
+            if ('' === $raw) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'AI request returned an empty response.',
+                ], 500);
+            }
+
+            if (str_starts_with($raw, 'Error:')) {
+                $msg = trim((string) preg_replace('/^Error:\s*/', '', $raw));
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => $msg !== '' ? $msg : $raw,
+                ], 500);
+            }
+
+            return new JsonResponse([
+                'success' => true,
+                'text' => $raw,
+            ]);
+        } catch (\Throwable $e) {
+            error_log('[AI][glossary] Generation failed: '.$e->getMessage());
+
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'An error occurred while generating glossary terms.',
+            ], 500);
+        }
+    }
 
     #[Route('/capabilities', name: 'chamilo_core_ai_capabilities', methods: ['GET'])]
     public function capabilities(): JsonResponse
@@ -332,26 +504,15 @@ class AiController extends AbstractController
                 ]);
             }
 
-            $content = isset($result['content']) && \is_string($result['content']) ? trim($result['content']) : '';
             $url = isset($result['url']) && \is_string($result['url']) ? trim($result['url']) : '';
-            $isBase64 = (bool) ($result['is_base64'] ?? false);
-            $contentType = (string) ($result['content_type'] ?? 'image/png');
+            $content = isset($result['content']) && \is_string($result['content']) ? trim($result['content']) : '';
 
-            if (!$isBase64 && '' === $content && '' !== $url) {
-                try {
-                    $fetched = $this->fetchUrlAsBase64($url, 10 * 1024 * 1024);
-                    $result['content'] = $fetched['content'];
-                    $result['content_type'] = $fetched['content_type'];
-                    $result['is_base64'] = true;
-                    $result['url'] = null;
-                } catch (\Throwable $e) {
-                    error_log('[AI][image] Failed to fetch image URL as base64: '.$e->getMessage());
-
-                    return new JsonResponse([
-                        'success' => false,
-                        'text' => 'Image was generated, but could not be converted to base64 for preview.',
-                    ], 500);
-                }
+            if ('' === $content && '' !== $url && false === (bool) ($result['is_base64'] ?? false)) {
+                $fetched = $this->fetchUrlAsBase64($url, 10 * 1024 * 1024);
+                $result['content'] = $fetched['content'];
+                $result['content_type'] = $fetched['content_type'];
+                $result['is_base64'] = true;
+                $result['url'] = null;
             }
 
             $text = '';
@@ -404,7 +565,6 @@ class AiController extends AbstractController
             $toolName = trim((string) ($data['tool'] ?? 'document'));
             $aiProvider = $data['ai_provider'] ?? null;
 
-            // Optional overrides
             $seconds = isset($data['seconds']) ? trim((string) $data['seconds']) : null;
             $size = isset($data['size']) ? trim((string) $data['size']) : null;
 
@@ -455,7 +615,7 @@ class AiController extends AbstractController
                     ];
 
                     if (null !== $seconds && $seconds !== '') {
-                        $options['seconds'] = $seconds; // must be string: "4"|"8"|"12"
+                        $options['seconds'] = $seconds;
                     }
                     if (null !== $size && $size !== '') {
                         $options['size'] = $size;
@@ -501,11 +661,11 @@ class AiController extends AbstractController
                     : 'All video providers failed.'
                 );
 
-                $statusCode = $this->mapVideoErrorToHttpStatus($message);
+                $statusCode = $this->mapVideoErrorToHttpStatus((string) $message);
 
                 return new JsonResponse([
                     'success' => false,
-                    'text' => $message,
+                    'text' => (string) $message,
                     'providers_tried' => $providersToTry,
                     'errors' => $errors,
                 ], $statusCode);
@@ -557,7 +717,7 @@ class AiController extends AbstractController
             $url = isset($result['url']) && \is_string($result['url']) ? trim($result['url']) : '';
             $content = isset($result['content']) && \is_string($result['content']) ? trim($result['content']) : '';
 
-            if (empty($content) && !empty($url) && false === (bool) ($result['is_base64'] ?? false)) {
+            if ('' === $content && '' !== $url && false === (bool) ($result['is_base64'] ?? false)) {
                 try {
                     $fetched = $this->fetchUrlAsBase64($url, 15 * 1024 * 1024);
                     $result['content'] = $fetched['content'];
@@ -594,73 +754,6 @@ class AiController extends AbstractController
                 'text' => 'An error occurred while generating the video. Please contact the administrator.',
             ], 500);
         }
-    }
-
-    /**
-     * Returns a reasonable HTTP status code for known provider errors.
-     */
-    private function mapVideoErrorToHttpStatus(string $message): int
-    {
-        $m = strtolower(trim($message));
-
-        if ($m === '') {
-            return 500;
-        }
-
-        // OpenAI typical cases
-        if (str_contains($m, 'invalid api key') || str_contains($m, 'incorrect api key') || str_contains($m, 'unauthorized')) {
-            return 401;
-        }
-
-        if (str_contains($m, 'must be verified') || str_contains($m, 'verify organization') || str_contains($m, 'organization must be verified')) {
-            return 403;
-        }
-
-        if (str_contains($m, 'does not have access') || str_contains($m, 'not authorized') || str_contains($m, 'permission')) {
-            return 403;
-        }
-
-        if (str_contains($m, 'rate limit') || str_contains($m, 'too many requests')) {
-            return 429;
-        }
-
-        if (str_contains($m, 'insufficient_quota') || str_contains($m, 'quota')) {
-            return 402;
-        }
-
-        return 500;
-    }
-
-    private function looksLikeUrl(string $s): bool
-    {
-        $s = trim($s);
-        if ($s === '') {
-            return false;
-        }
-
-        return (bool) filter_var($s, FILTER_VALIDATE_URL);
-    }
-
-    private function looksLikeBase64(string $s): bool
-    {
-        $s = trim($s);
-        if ($s === '' || strlen($s) < 64) {
-            return false;
-        }
-
-        // Basic base64 charset check
-        if (!preg_match('/^[A-Za-z0-9+\/=\r\n]+$/', $s)) {
-            return false;
-        }
-
-        // Validate decode (strict)
-        $decoded = base64_decode($s, true);
-        if ($decoded === false) {
-            return false;
-        }
-
-        // Video will likely be binary; just ensure not empty
-        return $decoded !== '';
     }
 
     #[Route('/video_job/{id}', name: 'chamilo_core_ai_video_job', methods: ['GET'])]
@@ -756,13 +849,77 @@ class AiController extends AbstractController
         }
     }
 
+    /**
+     * Returns a reasonable HTTP status code for known provider errors.
+     */
+    private function mapVideoErrorToHttpStatus(string $message): int
+    {
+        $m = strtolower(trim($message));
+
+        if ('' === $m) {
+            return 500;
+        }
+
+        if (str_contains($m, 'invalid api key') || str_contains($m, 'incorrect api key') || str_contains($m, 'unauthorized')) {
+            return 401;
+        }
+
+        if (str_contains($m, 'must be verified') || str_contains($m, 'verify organization') || str_contains($m, 'organization must be verified')) {
+            return 403;
+        }
+
+        if (str_contains($m, 'does not have access') || str_contains($m, 'not authorized') || str_contains($m, 'permission')) {
+            return 403;
+        }
+
+        if (str_contains($m, 'rate limit') || str_contains($m, 'too many requests')) {
+            return 429;
+        }
+
+        if (str_contains($m, 'insufficient_quota') || str_contains($m, 'quota')) {
+            return 402;
+        }
+
+        return 500;
+    }
+
+    private function looksLikeUrl(string $s): bool
+    {
+        $s = trim($s);
+        if ('' === $s) {
+            return false;
+        }
+
+        return (bool) filter_var($s, FILTER_VALIDATE_URL);
+    }
+
+    private function looksLikeBase64(string $s): bool
+    {
+        $s = trim($s);
+        if ('' === $s || strlen($s) < 64) {
+            return false;
+        }
+
+        if (!preg_match('/^[A-Za-z0-9+\/=\r\n]+$/', $s)) {
+            return false;
+        }
+
+        $decoded = base64_decode($s, true);
+        if (false === $decoded) {
+            return false;
+        }
+
+        return '' !== $decoded;
+    }
+
     private function denyIfNotTeacher(): void
     {
-        if (!$this->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+        if (
+            !$this->isGranted('ROLE_CURRENT_COURSE_TEACHER')
             && !$this->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
             && !$this->isGranted('ROLE_TEACHER')
         ) {
-            throw new \RuntimeException('Access denied.');
+            throw new AccessDeniedException('Access denied.');
         }
     }
 
@@ -823,12 +980,26 @@ class AiController extends AbstractController
 
         $ip = gethostbyname($host);
         if (filter_var($ip, FILTER_VALIDATE_IP)) {
-            // Block private/reserved ranges (basic SSRF hardening).
             if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    private function getGenericCourseDescription(int $cid, int $sid): string
+    {
+        try {
+            $repo = $this->em->getRepository(CGlossary::class);
+
+            if ($repo instanceof CGlossaryRepository) {
+                return $repo->getGenericCourseDescription($cid, $sid);
+            }
+        } catch (\Throwable) {
+            // Ignore repository instantiation differences.
+        }
+
+        return '';
     }
 }

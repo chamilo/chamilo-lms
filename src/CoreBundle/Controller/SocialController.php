@@ -622,7 +622,7 @@ class SocialController extends AbstractController
 
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
-                    $geoData = explode('::', $fieldValue);
+                    $geoData = explode('::', $fieldValue ?: '');
                     $locationName = $geoData[0];
                     $coordinates = $geoData[1] ?? '';
                     $fieldValue = $locationName;

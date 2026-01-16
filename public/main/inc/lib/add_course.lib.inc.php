@@ -16,6 +16,28 @@ use Chamilo\CourseBundle\Entity\CToolIntro;
 class AddCourse
 {
     public const FIRST_EXPIRATION_DATE = 31536000; // 365 days in seconds
+    /**
+     * Platform -> course_setting default propagation for NEW courses.
+     * Extend this map later for other categories/features.
+     */
+    private const PLATFORM_TO_COURSE_SETTING_DEFAULTS = [
+        'ai_helpers' => [
+            'enable' => 'enable_ai_helpers',
+            'keys' => [
+                'learning_path_generator',
+                'exercise_generator',
+                'open_answers_grader',
+                'tutor_chatbot',
+                'task_grader',
+                'content_analyser',
+                'image_generator',
+                'glossary_terms_generator',
+                'video_generator',
+                'course_analyser',
+            ],
+            'course_category' => 'ai_helpers',
+        ],
+    ];
 
     /**
      * Defines the four needed keys to create a course based on several parameters.
@@ -324,6 +346,9 @@ class AddCourse
             );
             $counter++;
         }
+
+        // Apply platform defaults for this new course (AI helpers, etc.)
+        self::applyPlatformDefaultsToCourseSettings($course);
     }
 
     /**
@@ -989,5 +1014,61 @@ class AddCourse
         }
 
         return $newIdResultData['new_id'] > 0 ? $newIdResultData['new_id'] : 1;
+    }
+
+    /**
+     * Apply platform defaults into legacy course_setting for a newly created course.
+     * Inserts missing rows only (does not overwrite existing rows).
+     */
+    private static function applyPlatformDefaultsToCourseSettings(Course $course, int $accessUrlId = 0): void
+    {
+        $courseId = (int) $course->getId();
+        if ($courseId <= 0) {
+            return;
+        }
+
+        $table = Database::get_course_table(TABLE_COURSE_SETTING);
+
+        foreach (self::PLATFORM_TO_COURSE_SETTING_DEFAULTS as $platformCategory => $cfg) {
+            $enableKey = (string) ($cfg['enable'] ?? '');
+            if ('' === $enableKey) {
+                continue;
+            }
+
+            // Gate: if the main switch is off, do nothing
+            if ('true' !== (string) api_get_setting($platformCategory.'.'.$enableKey)) {
+                continue;
+            }
+
+            $courseCategory = (string) ($cfg['course_category'] ?? 'course');
+            $keys = (array) ($cfg['keys'] ?? []);
+
+            foreach ($keys as $var) {
+                $var = (string) $var;
+                if ('' === $var) {
+                    continue;
+                }
+
+                // Only propagate helpers enabled at platform-level
+                if ('true' !== (string) api_get_setting($platformCategory.'.'.$var)) {
+                    continue;
+                }
+
+                $varEsc = Database::escape_string($var);
+                $catEsc = Database::escape_string($courseCategory);
+
+                // Insert only if missing (portable SQL)
+                $sql = "
+                INSERT INTO $table (c_id, title, variable, value, category)
+                SELECT $courseId, '', '$varEsc', 'true', '$catEsc'
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM $table
+                    WHERE c_id = $courseId AND variable = '$varEsc'
+                    LIMIT 1
+                )
+            ";
+                Database::query($sql);
+            }
+        }
     }
 }

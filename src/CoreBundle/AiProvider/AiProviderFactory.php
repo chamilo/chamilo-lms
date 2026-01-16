@@ -71,18 +71,20 @@ final class AiProviderFactory
         foreach ($config as $providerName => $providerConfig) {
             if (!isset($possibleProviders[$providerName])) {
                 error_log('[AI] Unsupported provider in config: "'.$providerName.'". Skipping.');
+
                 continue;
             }
 
             if (!\is_array($providerConfig)) {
                 error_log('[AI] Provider config for "'.$providerName.'" must be an array. Skipping.');
+
                 continue;
             }
 
             $providerPrefix = $possibleProviders[$providerName];
 
             // Base provider class (e.g. OpenAiProvider)
-            $baseClass = 'Chamilo\\CoreBundle\\AiProvider\\'.$providerPrefix.'Provider';
+            $baseClass = 'Chamilo\CoreBundle\AiProvider\\'.$providerPrefix.'Provider';
             $baseObject = $this->instantiateProvider($baseClass);
 
             // If base class cannot be instantiated, we can still allow type-specific classes.
@@ -94,11 +96,11 @@ final class AiProviderFactory
 
             foreach ($typeSuffix as $type => $suffix) {
                 // Only types explicitly present in provider config are considered enabled
-                if (!array_key_exists($type, $providerConfig)) {
+                if (!\array_key_exists($type, $providerConfig)) {
                     continue;
                 }
 
-                $typeClass = 'Chamilo\\CoreBundle\\AiProvider\\'.$providerPrefix.$suffix.'Provider';
+                $typeClass = 'Chamilo\CoreBundle\AiProvider\\'.$providerPrefix.$suffix.'Provider';
 
                 // Known types: we can fallback to base provider if it implements the right interface
                 if (isset($typeInterface[$type])) {
@@ -125,12 +127,14 @@ final class AiProviderFactory
                             }
                         } else {
                             error_log('[AI] Provider "'.$providerName.'" is configured for type "'.$type.'" but no usable implementation was found (expected '.$iface.').');
+
                             continue;
                         }
                     }
 
                     $this->providers[$providerName][$type] = $obj;
                     $this->providersByType[$type][$providerName] = $obj;
+
                     continue;
                 }
 
@@ -141,6 +145,7 @@ final class AiProviderFactory
 
                     if (!$obj) {
                         error_log('[AI] Provider "'.$providerName.'" is configured for unknown type "'.$type.'" but could not instantiate "'.$typeClass.'".');
+
                         continue;
                     }
 
@@ -232,6 +237,7 @@ final class AiProviderFactory
             );
         } catch (Exception $e) {
             error_log('[AI] Could not instantiate '.$fqcn.': '.$e->getMessage());
+
             return null;
         }
     }

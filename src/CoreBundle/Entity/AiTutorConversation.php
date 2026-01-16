@@ -6,12 +6,13 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\AiTutorConversationRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: AiTutorConversationRepository::class)]
 #[ORM\Table(name: 'ai_tutor_conversation')]
 #[ORM\UniqueConstraint(name: 'uniq_ai_tutor_conv_user_course_provider', columns: ['user_id', 'course_id', 'ai_provider'])]
 #[ORM\Index(columns: ['user_id', 'course_id'], name: 'idx_ai_tutor_conv_user_course')]

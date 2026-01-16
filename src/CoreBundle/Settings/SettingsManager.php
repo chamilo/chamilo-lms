@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Helpers\SettingsManagerHelper;
 use Chamilo\CoreBundle\Search\SearchEngineFieldSynchronizer;
+use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use InvalidArgumentException;
@@ -59,6 +60,29 @@ class SettingsManager implements SettingsManagerInterface
     protected RequestStack $request;
 
     private ?AccessUrl $mainUrlCache = null;
+
+    /**
+     * Platform -> Course settings propagation map.
+     * Add more categories/variables here to scale to other features.
+     *
+     * IMPORTANT:
+     * - Values are stored as strings in legacy course settings ("true"/"false" is common).
+     */
+    private const COURSE_SETTINGS_PROPAGATION = [
+        'ai_helpers' => [
+            // Only propagate "feature flags" (not JSON providers, etc.)
+            'learning_path_generator',
+            'exercise_generator',
+            'open_answers_grader',
+            'tutor_chatbot',
+            'task_grader',
+            'content_analyser',
+            'image_generator',
+            'glossary_terms_generator',
+            'video_generator',
+            'course_analyser',
+        ],
+    ];
 
     public function __construct(
         ServiceRegistryInterface $schemaRegistry,
@@ -396,6 +420,7 @@ class SettingsManager implements SettingsManagerInterface
 
         $this->manager->flush();
         $this->clearSessionSchemaCache();
+        $this->propagatePlatformSettingsToCoursesIfNeeded($simpleCategoryName, $parameters);
     }
 
     /**
@@ -483,6 +508,7 @@ class SettingsManager implements SettingsManagerInterface
 
         $this->manager->flush();
         $this->clearSessionSchemaCache();
+        $this->propagatePlatformSettingsToCoursesIfNeeded($simpleCategoryName, $parameters);
     }
 
     /**
@@ -1835,5 +1861,132 @@ class SettingsManager implements SettingsManagerInterface
         ];
 
         return array_values(array_unique($variants));
+    }
+
+    /**
+     * Propagate selected platform settings to course settings (c_course_setting).
+     * This is designed to scale: add categories/variables to COURSE_SETTINGS_PROPAGATION.
+     *
+     * @param string $category   Simple category name (e.g. "ai_helpers")
+     * @param array  $parameters Persisted platform parameters (already stringified)
+     */
+    private function propagatePlatformSettingsToCoursesIfNeeded(string $category, array $parameters): void
+    {
+        if (!isset(self::COURSE_SETTINGS_PROPAGATION[$category])) {
+            return;
+        }
+
+        // Example gate for AI helpers: if the master switch is off, do nothing.
+        if ('ai_helpers' === $category && ('true' !== (string) ($parameters['enable_ai_helpers'] ?? 'false'))) {
+            return;
+        }
+
+        $vars = self::COURSE_SETTINGS_PROPAGATION[$category];
+
+        // Build list of course settings to enable based on platform values.
+        // Strategy: enable only those set to true at platform-level.
+        $varToValue = [];
+        foreach ($vars as $var) {
+            if ('true' === (string) ($parameters[$var] ?? 'false')) {
+                $varToValue[$var] = 'true';
+            }
+        }
+
+        if (empty($varToValue)) {
+            return;
+        }
+
+        // By default: only insert missing rows, do NOT overwrite existing course choices.
+        // If you want to force overwrite to true across all courses, set $force = true.
+        $force = false;
+
+        $this->upsertCourseSettingsForAllCourses($category, $varToValue, $force);
+    }
+
+    /**
+     * Upsert course settings for all courses in batches.
+     *
+     * @param array<string,string> $varToValue variable => value
+     */
+    private function upsertCourseSettingsForAllCourses(string $category, array $varToValue, bool $force = false): void
+    {
+        // Fetch all course IDs (batch-friendly)
+        $courseIdRows = $this->manager->createQueryBuilder()
+            ->select('c.id')
+            ->from(Course::class, 'c')
+            ->getQuery()
+            ->getScalarResult()
+        ;
+
+        $courseIds = array_map(
+            static fn (array $r): int => (int) ($r['id'] ?? 0),
+            $courseIdRows
+        );
+        $courseIds = array_values(array_filter($courseIds, static fn (int $id): bool => $id > 0));
+
+        if (empty($courseIds)) {
+            return;
+        }
+
+        $vars = array_keys($varToValue);
+        $batchSize = 300;
+
+        for ($offset = 0; $offset < \count($courseIds); $offset += $batchSize) {
+            $chunk = \array_slice($courseIds, $offset, $batchSize);
+
+            // Load existing settings for this chunk
+            $existing = $this->manager->createQueryBuilder()
+                ->select('cs')
+                ->from(CCourseSetting::class, 'cs')
+                ->where('cs.cId IN (:cids)')
+                ->andWhere('cs.variable IN (:vars)')
+                ->andWhere('cs.category = :cat')
+                ->setParameter('cids', $chunk)
+                ->setParameter('vars', $vars)
+                ->setParameter('cat', $category)
+                ->getQuery()
+                ->getResult()
+            ;
+
+            /** @var array<int, array<string, CCourseSetting>> $byCourse */
+            $byCourse = [];
+            foreach ($existing as $row) {
+                if (!$row instanceof CCourseSetting) {
+                    continue;
+                }
+                $cId = (int) $row->getCId();
+                $var = (string) $row->getVariable();
+                $byCourse[$cId][$var] = $row;
+            }
+
+            foreach ($chunk as $cId) {
+                foreach ($varToValue as $var => $value) {
+                    $row = $byCourse[$cId][$var] ?? null;
+
+                    if ($row instanceof CCourseSetting) {
+                        if ($force && (string) $row->getValue() !== $value) {
+                            $row->setValue($value);
+                            $this->manager->persist($row);
+                        }
+
+                        continue;
+                    }
+
+                    $new = new CCourseSetting();
+                    $new
+                        ->setCId($cId)
+                        ->setVariable($var)
+                        ->setTitle($var)
+                        ->setCategory($category)
+                        ->setValue($value)
+                    ;
+
+                    $this->manager->persist($new);
+                }
+            }
+
+            $this->manager->flush();
+            $this->manager->clear();
+        }
     }
 }

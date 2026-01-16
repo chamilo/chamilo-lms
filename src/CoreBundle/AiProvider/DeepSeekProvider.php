@@ -205,6 +205,7 @@ class DeepSeekProvider implements AiProviderInterface, AiDocumentProviderInterfa
             $generatedContent = $data['choices'][0]['message']['content'] ?? null;
             if (!\is_string($generatedContent) || '' === trim($generatedContent)) {
                 error_log('[AI][DeepSeek] Empty content returned.');
+
                 return null;
             }
 
@@ -221,6 +222,7 @@ class DeepSeekProvider implements AiProviderInterface, AiDocumentProviderInterfa
             return $generatedContent;
         } catch (Exception $e) {
             error_log('[AI][DeepSeek] Exception: '.$e->getMessage());
+
             return null;
         }
     }
@@ -279,6 +281,7 @@ class DeepSeekProvider implements AiProviderInterface, AiDocumentProviderInterfa
     private function getUserId(): ?int
     {
         $user = $this->security->getUser();
+
         return $user instanceof UserInterface ? $user->getId() : null;
     }
 }

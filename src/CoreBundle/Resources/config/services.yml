@@ -178,3 +178,7 @@ services:
       arguments:
         $inner: '@Chamilo\CoreBundle\Command\DoctrineMigrationsMigrateCommandDecorator.inner'
       tags: [ 'console.command' ]
+
+    Chamilo\CoreBundle\AiProvider\AiChatCompletionClientInterface:
+      class: Chamilo\CoreBundle\AiProvider\DefaultAiChatCompletionClient
+      public: true

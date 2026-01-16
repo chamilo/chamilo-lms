@@ -231,6 +231,7 @@ Title: "%s". Assume the reader already knows the context.',
 
             if (200 !== $statusCode || !isset($data['choices'][0]['message']['content'])) {
                 error_log('[AI][Mistral] Invalid response (status='.$statusCode.').');
+
                 return null;
             }
 
@@ -257,6 +258,7 @@ Title: "%s". Assume the reader already knows the context.',
             return $generatedContent;
         } catch (Exception $e) {
             error_log('[AI][Mistral] Exception: '.$e->getMessage());
+
             return null;
         }
     }
@@ -288,6 +290,7 @@ Title: "%s". Assume the reader already knows the context.',
     private function getUserId(): ?int
     {
         $user = $this->security->getUser();
+
         return $user instanceof UserInterface ? $user->getId() : null;
     }
 

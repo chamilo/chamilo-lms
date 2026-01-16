@@ -207,10 +207,11 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
         return $this->requestText($this->textApiUrl, $this->textModel, $this->textTemperature, $this->textMaxTokens, $prompt, $toolName);
     }
 
-    public function generateImage(string $prompt, string $toolName, ?array $options = []): string|array|null
+    public function generateImage(string $prompt, string $toolName, ?array $options = []): array|string|null
     {
         if ('' === $this->imageApiUrl || '' === $this->imageModel) {
             error_log('[AI][Grok][Image] Image is not configured for this provider.');
+
             return null;
         }
 
@@ -284,12 +285,14 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
 
             if (200 !== $status || !\is_array($data)) {
                 error_log('[AI][Grok][Text] Invalid response (status='.$status.').');
+
                 return null;
             }
 
             $generated = $this->extractTextContent($data);
             if (null === $generated || '' === trim($generated)) {
                 error_log('[AI][Grok][Text] Empty content returned by API.');
+
                 return null;
             }
 
@@ -300,11 +303,12 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
             return $generated;
         } catch (Exception $e) {
             error_log('[AI][Grok][Text] Exception: '.$e->getMessage());
+
             return null;
         }
     }
 
-    private function requestImage(string $prompt, string $toolName, array $options = []): string|array|null
+    private function requestImage(string $prompt, string $toolName, array $options = []): array|string|null
     {
         $userId = $this->getUserId();
         if (!$userId) {
@@ -341,6 +345,7 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
 
             if (200 !== $status || !\is_array($data)) {
                 error_log('[AI][Grok][Image] Invalid response (status='.$status.').');
+
                 return null;
             }
 
@@ -368,9 +373,11 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
             }
 
             error_log('[AI][Grok][Image] No usable image content found in response.');
+
             return null;
         } catch (Exception $e) {
             error_log('[AI][Grok][Image] Exception: '.$e->getMessage());
+
             return null;
         }
     }
@@ -478,6 +485,7 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
     private function getUserId(): ?int
     {
         $user = $this->security->getUser();
+
         return $user instanceof UserInterface ? $user->getId() : null;
     }
 

@@ -1931,10 +1931,10 @@ class SettingsManager implements SettingsManagerInterface
         $vars = array_keys($varToValue);
         $batchSize = 300;
 
-        for ($offset = 0; $offset < count($courseIds); $offset += $batchSize) {
-            $chunk = array_slice($courseIds, $offset, $batchSize);
+        for ($offset = 0; $offset < \count($courseIds); $offset += $batchSize) {
+            $chunk = \array_slice($courseIds, $offset, $batchSize);
 
-            // Load existing settings for this chunk (IMPORTANT: filter by category)
+            // Load existing settings for this chunk
             $existing = $this->manager->createQueryBuilder()
                 ->select('cs')
                 ->from(CCourseSetting::class, 'cs')
@@ -1968,16 +1968,16 @@ class SettingsManager implements SettingsManagerInterface
                             $row->setValue($value);
                             $this->manager->persist($row);
                         }
+
                         continue;
                     }
 
-                    // Insert missing row (category standardized)
                     $new = new CCourseSetting();
                     $new
                         ->setCId($cId)
                         ->setVariable($var)
                         ->setTitle($var)
-                        ->setCategory($category) // <-- here
+                        ->setCategory($category)
                         ->setValue($value)
                     ;
 

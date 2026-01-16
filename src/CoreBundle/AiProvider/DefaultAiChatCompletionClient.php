@@ -36,7 +36,7 @@ final class DefaultAiChatCompletionClient implements AiChatCompletionClientInter
             if (!\is_object($providerInstance)) {
                 $this->logger->warning('[AiTutorChat] Invalid provider instance', [
                     'provider' => $provider,
-                    'type' => gettype($providerInstance),
+                    'type' => \gettype($providerInstance),
                 ]);
 
                 return new AiChatCompletionResult('AI is temporarily unavailable. Please try again later.', null);
@@ -79,9 +79,6 @@ final class DefaultAiChatCompletionClient implements AiChatCompletionClientInter
         }
     }
 
-    /**
-     * @param mixed $raw
-     */
     private function extractResult(string $provider, mixed $raw): AiChatCompletionResult
     {
         // Already normalized
@@ -136,7 +133,7 @@ final class DefaultAiChatCompletionClient implements AiChatCompletionClientInter
         if ('' === $text) {
             $this->logger->warning('[AiTutorChat] Provider returned empty response', [
                 'provider' => $provider,
-                'rawType' => gettype($raw),
+                'rawType' => \gettype($raw),
             ]);
 
             $text = 'I could not generate a response right now. Please try again.';

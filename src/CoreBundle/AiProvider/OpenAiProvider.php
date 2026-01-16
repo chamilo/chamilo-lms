@@ -14,7 +14,6 @@ use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Chamilo\CoreBundle\AiProvider\AiChatCompletionResult;
 use Throwable;
 
 class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, AiVideoProviderInterface, AiDocumentProviderInterface
@@ -57,19 +56,21 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
      * Chat completion entrypoint for AiTutorChatService.
      *
      * @param array<int, array{role:string,content:string}> $messages
-     * @param array<string,mixed> $options
+     * @param array<string,mixed>                           $options
      */
     public function chat(array $messages, array $options = []): string
     {
         $userId = $this->getUserId();
         if (!$userId) {
             error_log('[AI][OpenAI][chat] User not authenticated.');
+
             return 'Error: User is not authenticated.';
         }
 
         $cfg = $this->getTypeConfig('text');
         if (empty($cfg)) {
             error_log('[AI][OpenAI][chat] Missing config for type: text');
+
             return 'Error: OpenAI text configuration is missing.';
         }
 
@@ -81,6 +82,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         $normalizedMessages = $this->normalizeChatMessages($messages);
         if (empty($normalizedMessages)) {
             error_log('[AI][OpenAI][chat] Empty messages payload.');
+
             return 'Error: Empty chat messages.';
         }
 
@@ -104,7 +106,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
 
         $logPreview = $this->messagesForLog($normalizedMessages, 900);
 
-        error_log(sprintf(
+        error_log(\sprintf(
             '[AI][OpenAI][chat] Request: userId=%d url=%s model=%s temperature=%.2f max_tokens=%d messages="%s"',
             $userId,
             $url,
@@ -134,6 +136,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             $generatedContent = $data['choices'][0]['message']['content'] ?? null;
             if (!\is_string($generatedContent) || '' === trim($generatedContent)) {
                 error_log('[AI][OpenAI][chat] Empty content returned.');
+
                 return 'Error: Empty response from OpenAI.';
             }
 
@@ -150,6 +153,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             return trim($generatedContent);
         } catch (Throwable $e) {
             error_log('[AI][OpenAI][chat] Exception: '.$e->getMessage());
+
             return 'Error: '.$e->getMessage();
         }
     }
@@ -168,12 +172,14 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         $userId = $this->getUserId();
         if (!$userId) {
             error_log('[AI][OpenAI][generateText] User not authenticated.');
+
             return 'Error: User is not authenticated.';
         }
 
         $cfg = $this->getTypeConfig('text');
         if (empty($cfg)) {
             error_log('[AI][OpenAI][generateText] Missing config for type: text');
+
             return 'Error: OpenAI text configuration is missing.';
         }
 
@@ -192,7 +198,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             'max_tokens' => $maxTokens,
         ];
 
-        error_log(sprintf(
+        error_log(\sprintf(
             '[AI][OpenAI][generateText] Request: userId=%d url=%s model=%s temperature=%.2f max_tokens=%d prompt="%s"',
             $userId,
             $url,
@@ -221,6 +227,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             $generatedContent = $data['choices'][0]['message']['content'] ?? null;
             if (!\is_string($generatedContent) || '' === trim($generatedContent)) {
                 error_log('[AI][OpenAI][generateText] Empty content returned.');
+
                 return 'Error: Empty response from OpenAI.';
             }
 
@@ -237,6 +244,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             return trim($generatedContent);
         } catch (Throwable $e) {
             error_log('[AI][OpenAI][generateText] Exception: '.$e->getMessage());
+
             return 'Error: '.$e->getMessage();
         }
     }
@@ -263,7 +271,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             }
 
             $role = strtolower($role);
-            if (!in_array($role, ['system', 'user', 'assistant', 'tool'], true)) {
+            if (!\in_array($role, ['system', 'user', 'assistant', 'tool'], true)) {
                 $role = 'user';
             }
 
@@ -295,6 +303,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         }
 
         $s = implode(' | ', $parts);
+
         return mb_substr($s, 0, $maxChars);
     }
 
@@ -418,7 +427,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         return $this->requestChatCompletion($prompt, $toolName, 'document');
     }
 
-    public function generateImage(string $prompt, string $toolName, ?array $options = []): string|array|null
+    public function generateImage(string $prompt, string $toolName, ?array $options = []): array|string|null
     {
         $userId = $this->getUserId();
         if (!$userId) {
@@ -435,8 +444,8 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         $promptTrimmed = trim($prompt);
         $promptForLog = mb_substr($promptTrimmed, 0, 200);
 
-        if ('dall-e-3' === $model && $n !== 1) {
-            error_log(sprintf('[AI][OpenAI][image] Model "%s" only supports n=1. Forcing n from %d to 1.', $model, $n));
+        if ('dall-e-3' === $model && 1 !== $n) {
+            error_log(\sprintf('[AI][OpenAI][image] Model "%s" only supports n=1. Forcing n from %d to 1.', $model, $n));
             $n = 1;
         }
 
@@ -454,7 +463,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             $payload['response_format'] = $responseFormat;
         }
 
-        error_log(sprintf(
+        error_log(\sprintf(
             '[AI][OpenAI][image] Request: userId=%d tool=%s url=%s model=%s size=%s quality=%s n=%d prompt="%s"',
             $userId,
             $toolName,
@@ -487,7 +496,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                 $param = $decoded['error']['param'] ?? null;
 
                 $finalMsg = $msg ?: 'OpenAI returned an error response.';
-                error_log(sprintf(
+                error_log(\sprintf(
                     '[AI][OpenAI][image] HTTP %d request_id=%s type=%s code=%s param=%s body=%s',
                     $status,
                     (string) $requestId,
@@ -501,8 +510,8 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             }
 
             $data = json_decode((string) $raw, true);
-            if (!is_array($data)) {
-                error_log(sprintf(
+            if (!\is_array($data)) {
+                error_log(\sprintf(
                     '[AI][OpenAI][image] Invalid JSON response. HTTP %d request_id=%s body=%s',
                     $status,
                     (string) $requestId,
@@ -512,8 +521,8 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                 return 'Error: Invalid JSON response from OpenAI.';
             }
 
-            if (!isset($data['data'][0]) || !is_array($data['data'][0])) {
-                error_log(sprintf(
+            if (!isset($data['data'][0]) || !\is_array($data['data'][0])) {
+                error_log(\sprintf(
                     '[AI][OpenAI][image] Missing image data[0]. HTTP %d request_id=%s keys=%s body=%s',
                     $status,
                     (string) $requestId,
@@ -541,7 +550,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                 $result['url'] = $item['url'];
                 $result['is_base64'] = false;
             } else {
-                error_log(sprintf(
+                error_log(\sprintf(
                     '[AI][OpenAI][image] Response did not include b64_json or url. HTTP %d request_id=%s body=%s',
                     $status,
                     (string) $requestId,
@@ -561,7 +570,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                 (int) ($data['usage']['total_tokens'] ?? 0)
             );
 
-            error_log(sprintf(
+            error_log(\sprintf(
                 '[AI][OpenAI][image] Success. HTTP %d request_id=%s revised_prompt=%s returned_base64=%s returned_url=%s',
                 $status,
                 (string) $requestId,
@@ -573,11 +582,12 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             return $result;
         } catch (Exception $e) {
             error_log('[AI][OpenAI][image] Exception: '.$e->getMessage());
+
             return 'Error: '.$e->getMessage();
         }
     }
 
-    public function generateVideo(string $prompt, string $toolName, ?array $options = []): string|array|null
+    public function generateVideo(string $prompt, string $toolName, ?array $options = []): array|string|null
     {
         $userId = $this->getUserId();
         if (!$userId) {
@@ -594,22 +604,22 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         $seconds = trim((string) $seconds);
         $size = trim((string) $size);
 
-        if (!in_array($model, self::ALLOWED_VIDEO_MODELS, true)) {
+        if (!\in_array($model, self::ALLOWED_VIDEO_MODELS, true)) {
             return 'Error: Invalid value for model. Expected one of: '.implode(', ', self::ALLOWED_VIDEO_MODELS).'.';
         }
 
-        if (!in_array($seconds, self::ALLOWED_VIDEO_SECONDS, true)) {
+        if (!\in_array($seconds, self::ALLOWED_VIDEO_SECONDS, true)) {
             return 'Error: Invalid value for seconds. Expected one of: '.implode(', ', self::ALLOWED_VIDEO_SECONDS).'.';
         }
 
-        if (!in_array($size, self::ALLOWED_VIDEO_SIZES, true)) {
+        if (!\in_array($size, self::ALLOWED_VIDEO_SIZES, true)) {
             return 'Error: Invalid value for size. Expected one of: '.implode(', ', self::ALLOWED_VIDEO_SIZES).'.';
         }
 
         $promptTrimmed = trim($prompt);
         $promptForLog = mb_substr($promptTrimmed, 0, 200);
 
-        error_log(sprintf(
+        error_log(\sprintf(
             '[AI][OpenAI][video] Request: userId=%d tool=%s url=%s model=%s seconds=%s size=%s prompt="%s"',
             $userId,
             $toolName,
@@ -630,7 +640,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
 
             if (
                 isset($options['input_reference_path'])
-                && is_string($options['input_reference_path'])
+                && \is_string($options['input_reference_path'])
                 && '' !== $options['input_reference_path']
             ) {
                 $path = $options['input_reference_path'];
@@ -668,14 +678,14 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                 $finalMsg = (string) ($err['message'] ?? '');
 
                 if ('' === trim($finalMsg)) {
-                    $finalMsg = sprintf(
+                    $finalMsg = \sprintf(
                         'OpenAI returned HTTP %d. Ensure your project/org has access to model "%s" and the organization is verified if required.',
                         $status,
                         $model
                     );
                 }
 
-                error_log(sprintf(
+                error_log(\sprintf(
                     '[AI][OpenAI][video] HTTP %d request_id=%s type=%s code=%s param=%s error="%s" body=%s',
                     $status,
                     (string) $requestId,
@@ -683,31 +693,33 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                     (string) ($err['code'] ?? ''),
                     (string) ($err['param'] ?? ''),
                     $finalMsg,
-                    $rawForLog !== '' ? $rawForLog : '(empty body)'
+                    '' !== $rawForLog ? $rawForLog : '(empty body)'
                 ));
 
                 return 'Error: '.$finalMsg;
             }
 
             $data = json_decode($raw, true);
-            if (!is_array($data)) {
-                error_log(sprintf(
+            if (!\is_array($data)) {
+                error_log(\sprintf(
                     '[AI][OpenAI][video] Invalid JSON response. HTTP %d request_id=%s body=%s',
                     $status,
                     (string) $requestId,
-                    $rawForLog !== '' ? $rawForLog : '(empty body)'
+                    '' !== $rawForLog ? $rawForLog : '(empty body)'
                 ));
+
                 return 'Error: Invalid JSON response from OpenAI.';
             }
 
-            if (!isset($data['id']) || !is_string($data['id']) || '' === trim($data['id'])) {
-                error_log(sprintf(
+            if (!isset($data['id']) || !\is_string($data['id']) || '' === trim($data['id'])) {
+                error_log(\sprintf(
                     '[AI][OpenAI][video] Missing "id" in response. HTTP %d request_id=%s keys=%s body=%s',
                     $status,
                     (string) $requestId,
                     implode(',', array_keys($data)),
                     $rawForLog
                 ));
+
                 return 'Error: OpenAI response missing "id".';
             }
 
@@ -724,7 +736,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
 
             $this->saveAiRequest($userId, $toolName, $promptTrimmed, 'openai', 0, 0, 0);
 
-            error_log(sprintf(
+            error_log(\sprintf(
                 '[AI][OpenAI][video] Job created. HTTP %d request_id=%s id=%s status=%s',
                 $status,
                 (string) $requestId,
@@ -735,6 +747,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             return $result;
         } catch (Exception $e) {
             error_log('[AI][OpenAI][video] Exception: '.$e->getMessage());
+
             return 'Error: '.$e->getMessage();
         }
     }
@@ -758,7 +771,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
 
             if ($status >= 400) {
                 $msg = $this->extractOpenAiErrorMessage($raw);
-                error_log(sprintf(
+                error_log(\sprintf(
                     '[AI][OpenAI][video] Status HTTP %d request_id=%s id=%s error="%s" body=%s',
                     $status,
                     $requestId,
@@ -766,6 +779,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                     $msg,
                     $this->safeTruncate($raw, 2000)
                 ));
+
                 return [
                     'id' => $jobId,
                     'status' => 'failed',
@@ -775,7 +789,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             }
 
             $data = json_decode($raw, true);
-            if (!is_array($data)) {
+            if (!\is_array($data)) {
                 return [
                     'id' => $jobId,
                     'status' => '',
@@ -792,6 +806,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             ];
         } catch (Exception $e) {
             error_log('[AI][OpenAI][video] getVideoJobStatus exception: '.$e->getMessage());
+
             return [
                 'id' => $jobId,
                 'status' => '',
@@ -810,7 +825,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         // Optional query variant (e.g. "preview") if you want smaller payloads for UI previews.
         // Keep empty by default.
         $variant = isset($cfg['content_variant']) ? trim((string) $cfg['content_variant']) : '';
-        if ($variant !== '') {
+        if ('' !== $variant) {
             $separator = (str_contains($contentUrl, '?')) ? '&' : '?';
             $contentUrl .= $separator.'variant='.rawurlencode($variant);
         }
@@ -831,7 +846,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
 
             if ($status >= 400) {
                 $msg = $this->extractOpenAiErrorMessage($raw);
-                error_log(sprintf(
+                error_log(\sprintf(
                     '[AI][OpenAI][video] Content HTTP %d request_id=%s id=%s error="%s" body=%s',
                     $status,
                     $requestId,
@@ -839,6 +854,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                     $msg,
                     $this->safeTruncate($raw, 2000)
                 ));
+
                 return [
                     'is_base64' => false,
                     'content' => null,
@@ -849,11 +865,11 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             }
 
             // Sometimes the content endpoint can return JSON with a URL.
-            if ($raw !== '' && ($raw[0] === '{' || $raw[0] === '[')) {
+            if ('' !== $raw && ('{' === $raw[0] || '[' === $raw[0])) {
                 $json = json_decode($raw, true);
-                if (is_array($json)) {
+                if (\is_array($json)) {
                     $url = $json['url'] ?? ($json['data']['url'] ?? null);
-                    if (is_string($url) && '' !== trim($url)) {
+                    if (\is_string($url) && '' !== trim($url)) {
                         return [
                             'is_base64' => false,
                             'content' => null,
@@ -873,7 +889,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                 ];
             }
 
-            if (strlen($raw) > $maxBytes) {
+            if (\strlen($raw) > $maxBytes) {
                 return [
                     'is_base64' => false,
                     'content' => null,
@@ -892,6 +908,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             ];
         } catch (Exception $e) {
             error_log('[AI][OpenAI][video] getVideoJobContentAsBase64 exception: '.$e->getMessage());
+
             return [
                 'is_base64' => false,
                 'content' => null,
@@ -916,6 +933,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
 
         if (empty($cfg)) {
             error_log('[AI][OpenAI] Missing config for type: '.$type);
+
             return null;
         }
 
@@ -945,6 +963,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             $generatedContent = $data['choices'][0]['message']['content'] ?? null;
             if (!\is_string($generatedContent) || '' === trim($generatedContent)) {
                 error_log('[AI][OpenAI] Empty content returned for type: '.$type);
+
                 return null;
             }
 
@@ -961,6 +980,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             return $generatedContent;
         } catch (Exception $e) {
             error_log('[AI][OpenAI] Exception: '.$e->getMessage());
+
             return null;
         }
     }
@@ -992,6 +1012,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
     private function getTypeConfig(string $type): array
     {
         $cfg = $this->providerConfig[$type] ?? null;
+
         return \is_array($cfg) ? $cfg : [];
     }
 
@@ -1047,6 +1068,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
     private function getUserId(): ?int
     {
         $user = $this->security->getUser();
+
         return $user instanceof UserInterface ? $user->getId() : null;
     }
 
@@ -1058,12 +1080,13 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
     private function extractOpenAiErrorMessage(string $raw): string
     {
         $decoded = json_decode($raw, true);
-        if (is_array($decoded)) {
+        if (\is_array($decoded)) {
             $msg = $decoded['error']['message'] ?? null;
-            if (is_string($msg) && trim($msg) !== '') {
+            if (\is_string($msg) && '' !== trim($msg)) {
                 return trim($msg);
             }
         }
+
         return 'OpenAI returned an error response.';
     }
 
@@ -1076,7 +1099,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
     {
         $decoded = json_decode($raw, true);
 
-        if (!is_array($decoded)) {
+        if (!\is_array($decoded)) {
             return [
                 'message' => null,
                 'type' => null,
@@ -1086,7 +1109,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         }
 
         $err = $decoded['error'] ?? null;
-        if (!is_array($err)) {
+        if (!\is_array($err)) {
             return [
                 'message' => null,
                 'type' => null,
@@ -1096,10 +1119,10 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         }
 
         return [
-            'message' => isset($err['message']) && is_string($err['message']) ? $err['message'] : null,
-            'type' => isset($err['type']) && is_string($err['type']) ? $err['type'] : null,
-            'code' => isset($err['code']) && is_string($err['code']) ? $err['code'] : null,
-            'param' => isset($err['param']) && is_string($err['param']) ? $err['param'] : null,
+            'message' => isset($err['message']) && \is_string($err['message']) ? $err['message'] : null,
+            'type' => isset($err['type']) && \is_string($err['type']) ? $err['type'] : null,
+            'code' => isset($err['code']) && \is_string($err['code']) ? $err['code'] : null,
+            'param' => isset($err['param']) && \is_string($err['param']) ? $err['param'] : null,
         ];
     }
 
@@ -1107,11 +1130,12 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
      * Chat completion with conversation state (Responses API).
      *
      * @param array<int, array{role:string,content:string}> $messages
-     * @param array<string,mixed> $options
+     * @param array<string,mixed>                           $options
      */
     public function chatWithMeta(array $messages, array $options = []): AiChatCompletionResult
     {
         $text = $this->chat($messages, $options);
+
         return new AiChatCompletionResult((string) $text, null);
     }
 
@@ -1133,12 +1157,13 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             $role = $m['role'] ?? 'user';
             $content = trim((string) ($m['content'] ?? ''));
 
-            if ($content === '') {
+            if ('' === $content) {
                 continue;
             }
 
-            if ($role === 'system') {
+            if ('system' === $role) {
                 $instructions[] = $content;
+
                 continue;
             }
 
@@ -1157,32 +1182,32 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
     private function extractResponsesApiText(array $data): string
     {
         // Many responses include output_text directly in the response object. :contentReference[oaicite:4]{index=4}
-        if (isset($data['output_text']) && is_string($data['output_text'])) {
+        if (isset($data['output_text']) && \is_string($data['output_text'])) {
             return $data['output_text'];
         }
 
         // Fallback: walk through output[] -> content[] -> text.
-        if (!isset($data['output']) || !is_array($data['output'])) {
+        if (!isset($data['output']) || !\is_array($data['output'])) {
             return '';
         }
 
         $parts = [];
 
         foreach ($data['output'] as $item) {
-            if (!is_array($item)) {
+            if (!\is_array($item)) {
                 continue;
             }
-            if (!isset($item['content']) || !is_array($item['content'])) {
+            if (!isset($item['content']) || !\is_array($item['content'])) {
                 continue;
             }
 
             foreach ($item['content'] as $c) {
-                if (!is_array($c)) {
+                if (!\is_array($c)) {
                     continue;
                 }
 
                 // Typical shape: { "type": "output_text", "text": "..." }
-                if (isset($c['type']) && $c['type'] === 'output_text' && isset($c['text']) && is_string($c['text'])) {
+                if (isset($c['type']) && 'output_text' === $c['type'] && isset($c['text']) && \is_string($c['text'])) {
                     $parts[] = $c['text'];
                 }
             }

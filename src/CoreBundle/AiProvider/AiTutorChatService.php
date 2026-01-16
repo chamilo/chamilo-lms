@@ -14,9 +14,14 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\AiTutorConversationRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Throwable;
+
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 
 final class AiTutorChatService
 {
@@ -24,7 +29,7 @@ final class AiTutorChatService
      * Special "friend id" used by the course chat UI to represent the AI Tutor.
      * -  0 => course public chat
      * >  0 => private chat with a user
-     * -1 => AI Tutor private conversation (per user)
+     * -1 => AI Tutor private conversation (per user).
      */
     public const FRIEND_AI = -1;
 
@@ -37,8 +42,7 @@ final class AiTutorChatService
         private readonly AiTutorConversationRepository $conversationRepo,
         private readonly AiChatCompletionClientInterface $client,
         private readonly LoggerInterface $logger
-    ) {
-    }
+    ) {}
 
     public function getOrCreateConversation(
         int $userId,
@@ -138,6 +142,7 @@ final class AiTutorChatService
     ): bool {
         try {
             $this->handleUserMessageAndGetAssistantText($userId, $course, $session, $provider, $message);
+
             return true;
         } catch (Throwable $e) {
             $this->logger->error('[AiTutorChat] handleUserMessage failed', [
@@ -236,7 +241,7 @@ final class AiTutorChatService
                     return $v;
                 }
             }
-        } catch (\Throwable) {
+        } catch (Throwable) {
             // ignore
         }
 
@@ -296,11 +301,11 @@ final class AiTutorChatService
         $lang = trim($courseLanguage);
 
         return "You are a digital tutor and mentor. You help me understand topics related to my courses, in this case '{$title}'. "
-            .($lang ? "The course is in '{$lang}' but just answer me in whatever language I talk to you. " : "Just answer me in whatever language I talk to you. ")
-            ."This is an educational use, so content that would not be appropriate for children (or minors under any law) is not acceptable. "
+            .($lang ? "The course is in '{$lang}' but just answer me in whatever language I talk to you. " : 'Just answer me in whatever language I talk to you. ')
+            .'This is an educational use, so content that would not be appropriate for children (or minors under any law) is not acceptable. '
             ."You are not available to me when I'm taking an exam, just in case I forget and I ask why you weren't there. "
-            ."You must mention the course title when greeting or when the user asks what you are. "
-            ."If the user asks something unrelated to the course topic, politely redirect to course-related help.";
+            .'You must mention the course title when greeting or when the user asks what you are. '
+            .'If the user asks something unrelated to the course topic, politely redirect to course-related help.';
     }
 
     private function renderEmptyState(): string
@@ -378,7 +383,7 @@ final class AiTutorChatService
         $message = trim($message);
 
         if ('' === $message) {
-            throw new \InvalidArgumentException('Empty message.');
+            throw new InvalidArgumentException('Empty message.');
         }
 
         $conversation = $this->getOrCreateConversation($userId, $course, $session, $provider);
@@ -624,6 +629,7 @@ final class AiTutorChatService
             $current = (int) $req->getSession()->get($key, 0);
             if ($lastSeenId > $current) {
                 $req->getSession()->set($key, $lastSeenId);
+
                 return 1;
             }
 
@@ -647,6 +653,7 @@ final class AiTutorChatService
             }
 
             $key = $this->buildLastSeenSessionKey($courseId, $provider);
+
             return (int) $req->getSession()->get($key, 0);
         } catch (Throwable) {
             return 0;
@@ -718,7 +725,7 @@ final class AiTutorChatService
         $escaped = htmlspecialchars($text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
         $html = nl2br($escaped);
 
-        return \Security::remove_XSS($html);
+        return Security::remove_XSS($html);
     }
 
     public function handleUserMessageForDock(
@@ -732,7 +739,7 @@ final class AiTutorChatService
         $message = trim($message);
 
         if ('' === $message) {
-            throw new \InvalidArgumentException('Empty message.');
+            throw new InvalidArgumentException('Empty message.');
         }
 
         $conversation = $this->getOrCreateConversation($userId, $course, $session, $provider);

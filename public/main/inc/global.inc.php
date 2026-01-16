@@ -177,7 +177,7 @@ if ($isCli) {
 
     $context->setBaseUrl($newBaseUrl);
 
-    // Do not over-use this variable. It is only for this script's local use.
+    // Do not overuse this variable. It is only for this script's local use.
     $libraryPath = __DIR__.'/lib/';
     $container = $kernel->getContainer();
 

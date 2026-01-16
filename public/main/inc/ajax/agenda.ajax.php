@@ -11,6 +11,8 @@ if ('personal' === $type) {
     $cidReset = true; // fixes #5162
 }
 
+// Avoid auto-closing the session in global.inc.php because of api_get_group_id() call and others
+const KEEP_SESSION_OPEN = true;
 require_once __DIR__.'/../global.inc.php';
 
 $action = $_REQUEST['a'] ?? null;
@@ -97,6 +99,8 @@ switch ($action) {
         if (false === Security::check_token('get')) {
             exit;
         }
+        // Close the session as we don't need it any further
+        session_write_close();
         $minute_delta = $_REQUEST['minute_delta'];
         $id = explode('_', $_REQUEST['id']);
         $id = $id[1];
@@ -109,6 +113,8 @@ switch ($action) {
         if (false === Security::check_token('get')) {
             exit;
         }
+        // Close the session as we don't need it any further
+        session_write_close();
         $minute_delta = $_REQUEST['minute_delta'];
         $allDay = $_REQUEST['all_day'];
         $id = explode('_', $_REQUEST['id']);
@@ -137,13 +143,14 @@ switch ($action) {
             $groupId,
             $userId
         );
+        // Close the session as we don't need it any further
+        session_write_close();
         header('Content-Type: application/json');
         echo $events;
         break;
     case 'get_user_agenda':
         // Used in the admin user list.
         api_protect_admin_script();
-
         if (api_is_allowed_to_edit(null, true)) {
             //@todo move this in the agenda class
             $DaysShort = api_get_week_days_short();
@@ -151,6 +158,8 @@ switch ($action) {
 
             $user_id = (int) $_REQUEST['user_id'];
             $my_course_list = CourseManager::get_courses_list_by_user_id($user_id, true);
+            // Close the session as we don't need it any further
+            session_write_close();
             if (!is_array($my_course_list)) {
                 // this is for the special case if the user has no courses (otherwise you get an error)
                 $my_course_list = [];

@@ -32,6 +32,8 @@ switch ($action) {
         break;
     case 'order':
         api_protect_admin_script();
+        // Close the session as we don't need it any further
+        session_write_close();
         $order = isset($_GET['order']) ? $_GET['order'] : [];
         $order = json_decode($order);
         if (!empty($order)) {
@@ -48,6 +50,8 @@ switch ($action) {
         break;
     case 'search_session':
         if (api_is_platform_admin()) {
+            // Close the session as we don't need it any further
+            session_write_close();
             $sessions = SessionManager::get_sessions_list(
                 [
                     's.title' => [
@@ -78,6 +82,8 @@ switch ($action) {
         break;
     case 'search_session_all':
         if (api_is_platform_admin()) {
+            // Close the session as we don't need it any further
+            session_write_close();
             $results = SessionManager::get_sessions_list(
                 [
                     's.title' => ['operator' => 'like', 'value' => "%".$_REQUEST['q']."%"],
@@ -107,6 +113,8 @@ switch ($action) {
         break;
     case 'search_session_by_course':
         if (api_is_platform_admin()) {
+            // Close the session as we don't need it any further
+            session_write_close();
             $results = SessionManager::get_sessions_list(
                 [
                     's.title' => ['operator' => 'like', 'value' => "%".$_REQUEST['q']."%"],
@@ -139,6 +147,8 @@ switch ($action) {
     case 'session_info':
         $sessionId = $_GET['session_id'] ?? '';
         $sessionInfo = api_get_session_info($sessionId);
+        // Close the session as we don't need it any further
+        session_write_close();
 
         $extraFieldValues = new ExtraFieldValue('session');
         $extraField = new ExtraField('session');
@@ -181,6 +191,8 @@ switch ($action) {
             echo '';
             break;
         }
+        // Close the session as we don't need it any further
+        session_write_close();
 
         $list = [
             'items' => [],

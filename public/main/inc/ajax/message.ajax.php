@@ -18,12 +18,17 @@ $action = $_GET['a'];
 switch ($action) {
     case 'get_notifications_friends':
         $userId = api_get_user_id();
+        // Close the session as we don't need it any further
+        session_write_close();
         $listInvitations = [];
         $temp = [];
         if ('true' === api_get_setting('allow_social_tool')) {
             $list = SocialManager::get_list_invitation_of_friends_by_user_id($userId, 3);
 
             foreach ($list as $row) {
+                if (empty($row['user_sender_id'])) {
+                    continue;
+                }
                 $user = api_get_user_info($row['user_sender_id']);
                 $temp['title'] = $row['title'];
                 $temp['content'] = $row['content'];
@@ -96,9 +101,12 @@ switch ($action) {
             echo '';
             break;
         }
+        $userId = api_get_user_id();
+        // Close the session as we don't need it any further
+        session_write_close();
 
         $users = Container::getUserRepository()->findUsersToSendMessage(
-            api_get_user_id(),
+            $userId,
             $_REQUEST['q'],
             $_REQUEST['page_limit']
         );

@@ -27,6 +27,8 @@ $userId = api_get_user_id();
 switch ($action) {
     case 'add':
         if (api_is_platform_admin() || api_is_drh()) {
+            // Close the session as we don't need it any further
+            session_write_close();
             if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {
                 $skillId = $skill->edit($_REQUEST);
             } else {
@@ -37,10 +39,14 @@ switch ($action) {
         break;
     case 'delete_skill':
         if (api_is_platform_admin() || api_is_drh()) {
+            // Close the session as we don't need it any further
+            session_write_close();
             echo $skill->delete($_REQUEST['skill_id']);
         }
         break;
     case 'find_skills':
+        // Close the session as we don't need it any further
+        session_write_close();
         $returnSkills = [[
             'items' => [],
         ]];
@@ -58,6 +64,8 @@ switch ($action) {
         echo json_encode($returnSkills);
         break;
     case 'get_gradebooks':
+        // Close the session as we don't need it any further
+        session_write_close();
         $gradebooks = $gradebook_list = $gradebook->get_all();
         $gradebook_list = [];
         //Only course gradebook with certificate
@@ -74,6 +82,8 @@ switch ($action) {
         echo json_encode($gradebook_list);
         break;
     case 'find_gradebooks':
+        // Close the session as we don't need it any further
+        session_write_close();
         $return = [];
         if (isset($_REQUEST['tag']) && !empty($_REQUEST['tag'])) {
             $gradebooks = $gradebook->find('all', ['where' => ['name LIKE %?% ' => $_REQUEST['tag']]]);
@@ -92,12 +102,16 @@ switch ($action) {
                 ['c_id' => $courseInfo['real_id']],
             ]
         );
+        // Close the session as we don't need it any further
+        session_write_close();
         Display::display_no_header();
         Display::$global_template->assign('hot_courses', $courses);
         $template = Display::$global_template->get_template('layout/hot_course_item_popup.tpl');
         echo Display::$global_template->fetch($template);
         break;
     case 'gradebook_exists':
+        // Close the session as we don't need it any further
+        session_write_close();
         $data = $gradebook->get($_REQUEST['gradebook_id']);
         if (!empty($data)) {
             echo 1;
@@ -106,12 +120,16 @@ switch ($action) {
         }
         break;
     case 'get_skills_by_profile':
+        // Close the session as we don't need it any further
+        session_write_close();
         $skillRelProfile = new SkillRelProfileModel();
         $profile_id = isset($_REQUEST['profile_id']) ? $_REQUEST['profile_id'] : null;
         $skills = $skillRelProfile->getSkillsByProfile($profile_id);
         echo json_encode($skills);
         break;
     case 'get_saved_profiles':
+        // Close the session as we don't need it any further
+        session_write_close();
         $skillProfile = new SkillProfileModel();
         $profiles = $skillProfile->get_all();
         Display::display_no_header();
@@ -120,17 +138,23 @@ switch ($action) {
         echo Display::$global_template->fetch($template);
         break;
     case 'get_skills':
+        // Close the session as we don't need it any further
+        session_write_close();
         $loadUserData = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;
         $id = intval($_REQUEST['id']);
         $skills = $skill->getAllSkills($loadUserData, false, $id);
         echo json_encode($skills);
         break;
     case 'get_skill_info':
+        // Close the session as we don't need it any further
+        session_write_close();
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
         $skillInfo = $skill->getSkillInfo($id);
         echo json_encode($skillInfo);
         break;
     case 'get_skill_course_info':
+        // Close the session as we don't need it any further
+        session_write_close();
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
         $skillInfo = $skill->getSkillInfo($id);
         $courses = $skill->getCoursesBySkill($id);
@@ -149,12 +173,16 @@ switch ($action) {
     case 'get_skills_tree_json':
         header('Content-Type: application/json');
         $userId = isset($_REQUEST['load_user']) && 1 == $_REQUEST['load_user'] ? api_get_user_id() : 0;
+        // Close the session as we don't need it any further
+        session_write_close();
         $skill_id = isset($_REQUEST['skill_id']) ? intval($_REQUEST['skill_id']) : 0;
         $depth = isset($_REQUEST['main_depth']) ? intval($_REQUEST['main_depth']) : 2;
         $all = $skill->getSkillsTreeToJson($userId, $skill_id, false, $depth);
         echo $all;
         break;
     case 'get_user_skill':
+        // Close the session as we don't need it any further
+        session_write_close();
         $skillId = isset($_REQUEST['profile_id']) ? intval($_REQUEST['profile_id']) : 0;
         $skill = $skill->userHasSkill($userId, $skillId);
         if ($skill) {
@@ -164,10 +192,14 @@ switch ($action) {
         }
         break;
     case 'get_all_user_skills':
+        // Close the session as we don't need it any further
+        session_write_close();
         $skills = $skill->getUserSkills($userId, true);
         echo json_encode($skills);
         break;
     case 'get_user_skills':
+        // Close the session as we don't need it any further
+        session_write_close();
         $skills = $skill->getUserSkills($userId, true);
         Display::display_no_header();
         Display::$global_template->assign('skills', $skills);
@@ -175,6 +207,8 @@ switch ($action) {
         echo Display::$global_template->fetch($template);
         break;
     case 'get_gradebook_info':
+        // Close the session as we don't need it any further
+        session_write_close();
         $id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
         $info = $gradebook->get($id);
         echo json_encode($info);
@@ -183,6 +217,8 @@ switch ($action) {
         $id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
         $load_user_data = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;
         $skills = $skill->getChildren($id, $load_user_data);
+        // Close the session as we don't need it any further
+        session_write_close();
         $return = [];
         foreach ($skills as $skill) {
             if (isset($skill['data']) && !empty($skill['data'])) {
@@ -205,6 +241,8 @@ switch ($action) {
         echo json_encode($result);
         break;
     case 'load_direct_parents':
+        // Close the session as we don't need it any further
+        session_write_close();
         $id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
         $skills = $skill->getDirectParents($id);
         $return = [];
@@ -218,6 +256,8 @@ switch ($action) {
         echo json_encode($return);
         break;
     case 'profile_matches':
+        // Close the session as we don't need it any further
+        session_write_close();
         $skill_rel_user = new SkillRelUserModel();
         $skills = !empty($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : [];
         $total_skills_to_search = $skills;
@@ -306,6 +346,8 @@ switch ($action) {
         }
         break;
     case 'get_profile':
+        // Close the session as we don't need it any further
+        session_write_close();
         $skillRelProfile = new SkillRelProfileModel();
         $profileId = isset($_REQUEST['profile_id']) ? intval($_REQUEST['profile_id']) : null;
         $profile = $skillRelProfile->getProfileInfo($profileId);
@@ -313,6 +355,8 @@ switch ($action) {
         break;
     case 'save_profile':
         if (api_is_platform_admin() || api_is_drh()) {
+            // Close the session as we don't need it any further
+            session_write_close();
             $skill_profile = new SkillProfileModel();
             $params = $_REQUEST;
             $params['skills'] = isset($params['skill_id']) ? $params['skill_id'] : null;
@@ -336,6 +380,8 @@ switch ($action) {
         break;
     case 'delete_profile':
         if (api_is_platform_admin() || api_is_drh()) {
+            // Close the session as we don't need it any further
+            session_write_close();
             $profileId = $_REQUEST['profile'];
             $skillProfile = new SkillProfileModel();
             $isDeleted = $skillProfile->delete($profileId);
@@ -356,6 +402,8 @@ switch ($action) {
     case 'search_skills':
         $returnSkills = [];
         if (isset($_REQUEST['q']) && !empty($_REQUEST['q'])) {
+            // Close the session as we don't need it any further
+            session_write_close();
             $skills = $skill->find(
                 'all',
                 [
@@ -373,6 +421,8 @@ switch ($action) {
         echo json_encode(['items' => $returnSkills]);
         break;
     case 'search_skills_in_course':
+        // Close the session as we don't need it any further
+        session_write_close();
         $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
         $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : null;
 
@@ -428,6 +478,9 @@ switch ($action) {
             }
 
             $session = api_get_session_entity($sessionId);
+            // Close the session as we don't need it any further
+            session_write_close();
+
             /** @var SkillRelItem $skillRelItem */
             $skillRelItem = $em->getRepository(SkillRelItem::class)->findOneBy(
                 ['itemId' => $itemId, 'itemType' => $typeId, 'skill' => $skillId]

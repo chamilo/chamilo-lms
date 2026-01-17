@@ -19,6 +19,8 @@ switch ($action) {
         api_block_anonymous_users(false);
 
         if (api_is_platform_admin() || api_is_drh()) {
+            // Close the session as we don't need it any further
+            session_write_close();
             $query = $_REQUEST['q'];
             $conditions = [
                 'username' => $query,
@@ -42,6 +44,8 @@ switch ($action) {
 
         $user_info = api_get_user_info($_REQUEST['user_id']);
         $isAnonymous = api_is_anonymous();
+        // Close the session as we don't need it any further
+        session_write_close();
 
         if ($isAnonymous && $courseId) {
             if ('false' === api_get_setting('catalog.course_catalog_published')) {
@@ -144,6 +148,8 @@ switch ($action) {
         }
         break;
     case 'search_tags':
+        // Close the session as we don't need it any further
+        session_write_close();
         header('Content-Type: application/json');
 
         $result = ['items' => []];
@@ -165,6 +171,8 @@ switch ($action) {
         if (api_is_anonymous()) {
             echo '';
         } else {
+            // Close the session as we don't need it any further
+            session_write_close();
             $array_list_key = [];
             $user_id = api_get_user_id();
             $api_service = 'dokeos';
@@ -277,6 +285,8 @@ switch ($action) {
         break;
     case 'teacher_to_basis_course':
         api_block_anonymous_users(false);
+        // Close the session as we don't need it any further
+        session_write_close();
 
         $urlId = api_get_current_access_url_id();
 
@@ -308,6 +318,8 @@ switch ($action) {
         break;
     case 'user_by_all_roles':
         api_block_anonymous_users(false);
+        // Close the session as we don't need it any further
+        session_write_close();
 
         $urlId = api_get_current_access_url_id();
 

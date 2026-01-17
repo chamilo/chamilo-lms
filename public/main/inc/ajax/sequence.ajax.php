@@ -32,6 +32,8 @@ $sequenceResourceRepository = $em->getRepository(SequenceResource::class);
 switch ($action) {
     case 'graph':
         api_block_anonymous_users();
+        // Close the session as we don't need it any further
+        session_write_close();
 
         /** @var Sequence $sequence */
         $sequence = $sequenceRepository->find($sequenceId);
@@ -91,6 +93,8 @@ switch ($action) {
                 }
                 break;
         }
+        // Close the session as we don't need it any further
+        session_write_close();
 
         if (empty($resourceData)) {
             exit;
@@ -235,6 +239,8 @@ switch ($action) {
                         }
                     }
                 }
+                // Close the session as we don't need it any further
+                session_write_close();
 
                 $sequence->setGraphAndSerialize($graph);
                 $em->persist($sequence);
@@ -246,6 +252,8 @@ switch ($action) {
     case 'load_resource':
         api_block_anonymous_users();
         api_protect_admin_script();
+        // Close the session as we don't need it any further
+        session_write_close();
 
         // children or parent
         $loadResourceType = isset($_REQUEST['load_resource_type']) ? $_REQUEST['load_resource_type'] : null;
@@ -302,6 +310,8 @@ switch ($action) {
     case 'save_resource':
         api_block_anonymous_users();
         api_protect_admin_script();
+        // Close the session as we don't need it any further
+        session_write_close();
 
         $parents = isset($_REQUEST['parents']) ? $_REQUEST['parents'] : '';
 
@@ -415,6 +425,8 @@ switch ($action) {
                 $template = 'course_requirements.tpl';
                 break;
         }
+        // Close the session as we don't need it any further
+        session_write_close();
 
         if (empty($resourceData) || empty($template)) {
             exit;
@@ -453,6 +465,8 @@ switch ($action) {
     case 'get_initial_resource':
         api_block_anonymous_users();
         api_protect_admin_script();
+        // Close the session as we don't need it any further
+        session_write_close();
 
         /** @var Sequence $sequence */
         $sequence = $sequenceRepository->find($sequenceId);

@@ -27,6 +27,8 @@
     />
     <ConfirmDialog />
     <AccessUrlChooser v-if="!showAccessUrlChosserLayout" />
+
+    <!-- Do not show docked chat in embedded contexts (iframes/pickers/dialogs) -->
     <DockedChat v-if="showGlobalChat" />
   </component>
 
@@ -101,13 +103,43 @@ const showAccessUrlChosserLayout = computed(
   () => securityStore.isAuthenticated && !securityStore.isAdmin && accessUrlChooserVisible.value,
 )
 
+// ---- Embedded context detection (iframe/dialog/picker) ----
+const queryParams = computed(() => new URLSearchParams(window.location.search))
+
+const isPickerContext = computed(() => {
+  const picker = String(queryParams.value.get("picker") || "").toLowerCase()
+  return picker === "tinymce" || picker === "ckeditor"
+})
+
+const isIframeContext = computed(() => {
+  // Safe checks: if cross-origin, accessing window.top can throw.
+  try {
+    return window.self !== window.top
+  } catch (e) {
+    // If we cannot access window.top, we assume we are inside an iframe.
+    return true
+  }
+})
+
+const isDialogContext = computed(() => {
+  // allow explicit opt-out via query param.
+  // Example: ?hideChat=1
+  const hideChat = String(queryParams.value.get("hideChat") || "").toLowerCase()
+  return hideChat === "1" || hideChat === "true"
+})
+
+const isEmbeddedContext = computed(() => {
+  // In embedded contexts, we must not render global docked chat to avoid duplicated UI.
+  return isPickerContext.value || isIframeContext.value || isDialogContext.value
+})
+
 const layout = computed(() => {
   if (showAccessUrlChosserLayout.value) {
     return AccessUrlChooserLayout
   }
 
-  const queryParams = new URLSearchParams(window.location.search)
-  const picker = String(queryParams.get("picker") || "").toLowerCase()
+  const qp = queryParams.value
+  const picker = String(qp.get("picker") || "").toLowerCase()
 
   // Force EmptyLayout for embedded editor pickers (TinyMCE/CKEditor)
   if (picker === "tinymce" || picker === "ckeditor") {
@@ -119,8 +151,8 @@ const layout = computed(() => {
   }
 
   if (
-    (queryParams.has("lp_id") && "view" === queryParams.get("action")) ||
-    (queryParams.has("origin") && "learnpath" === queryParams.get("origin"))
+    (qp.has("lp_id") && "view" === qp.get("action")) ||
+    (qp.has("origin") && "learnpath" === qp.get("origin"))
   ) {
     return EmptyLayout
   }
@@ -244,7 +276,8 @@ const allowGlobalChat = computed(() => {
 })
 
 const showGlobalChat = computed(() => {
-  return securityStore.isAuthenticated && allowGlobalChat.value
+  // Do not render global chat when the app is embedded (iframe/dialog/picker).
+  return securityStore.isAuthenticated && allowGlobalChat.value && !isEmbeddedContext.value
 })
 
 watch(forbiddenMsg, (msg) => {

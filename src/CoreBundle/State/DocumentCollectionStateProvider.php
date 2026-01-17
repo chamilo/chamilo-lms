@@ -145,11 +145,17 @@ final class DocumentCollectionStateProvider implements ProviderInterface
                     );
 
                     if (null !== $parentLink) {
+                        // If a contextual parent link exists, we must prioritize rl.parent.
+                        // The rn.parent fallback should only include items that don't have a contextual hierarchy (rl.parent IS NULL),
+                        // otherwise moved items may still appear in the old folder due to rn.parent not changing.
                         $qb
                             ->andWhere(
                                 $qb->expr()->orX(
                                     'IDENTITY(rl.parent) = :parentLinkId',
-                                    'IDENTITY(rn.parent) = :parentNodeId'
+                                    $qb->expr()->andX(
+                                        'IDENTITY(rn.parent) = :parentNodeId',
+                                        'rl.parent IS NULL'
+                                    )
                                 )
                             )
                             ->setParameter('parentLinkId', (int) $parentLink->getId())

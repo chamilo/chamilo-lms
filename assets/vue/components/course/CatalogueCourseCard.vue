@@ -1,218 +1,16 @@
-<template>
-  <div
-    class="course-card relative hover:shadow-lg transition duration-300 rounded-2xl overflow-hidden border border-gray-300 bg-white flex flex-col"
-  >
-    <div
-      v-if="localCourse.categories?.length"
-      class="absolute top-2 left-2 flex flex-wrap gap-1 z-30"
-    >
-      <span
-        v-for="cat in localCourse.categories"
-        :key="cat.id"
-        class="bg-support-5 text-white text-xs font-bold px-2 py-0.5 rounded"
-      >
-        {{ cat.title }}
-      </span>
-    </div>
-    <span
-      v-if="localCourse.courseLanguage"
-      class="absolute top-0 right-0 bg-support-4 text-white text-xs px-2 py-0.5 font-semibold rounded-bl-lg z-20"
-    >
-      {{ getOriginalLanguageName(localCourse.courseLanguage) }}
-    </span>
-
-    <Button
-      v-if="allowDescription && showInfoPopup"
-      icon="pi pi-info-circle"
-      @click="showDescriptionDialog = true"
-      class="absolute top-10 left-2 z-20"
-      size="small"
-      text
-      aria-label="Course info"
-    />
-    <router-link
-      v-if="imageLink"
-      :to="imageLink"
-    >
-      <img
-        :src="localCourse.illustrationUrl"
-        :alt="localCourse.title"
-        class="w-full object-cover"
-      />
-    </router-link>
-    <img
-      v-else
-      :src="localCourse.illustrationUrl"
-      :alt="localCourse.title"
-      class="w-full object-cover"
-    />
-    <div class="p-4 flex flex-col flex-grow gap-2">
-      <router-link
-        v-if="showTitle && titleLink"
-        :to="titleLink"
-        class="text-xl font-semibold"
-      >
-        {{ localCourse.title }}
-      </router-link>
-      <h3
-        v-else-if="showTitle"
-        class="text-xl font-semibold"
-      >
-        {{ localCourse.title }}
-      </h3>
-      <div
-        v-if="localCourse.duration"
-        class="text-sm text-gray-700"
-      >
-        <strong>{{ $t("Duration") }}:</strong> {{ durationInHours }}
-      </div>
-      <div
-        v-if="localCourse.dependencies?.length"
-        class="text-sm text-gray-700"
-      >
-        <strong>{{ $t("Dependencies") }}:</strong>
-        {{ localCourse.dependencies.map((dep) => dep.title).join(", ") }}
-      </div>
-
-      <div
-        v-if="localCourse.price !== undefined"
-        class="text-sm text-gray-700"
-      >
-        <strong>{{ $t("Price") }}:</strong>
-        {{ localCourse.price > 0 ? "S/. " + localCourse.price.toFixed(2) : $t("Free") }}
-      </div>
-      <div
-        v-if="localCourse.teachers?.length"
-        class="text-sm text-gray-700"
-      >
-        <strong>{{ $t("Teachers") }}:</strong>
-        {{ localCourse.teachers.map((t) => t.user.fullName).join(", ") }}
-      </div>
-      <div class="my-1 flex items-baseline gap-2">
-        <span
-          v-if="displayRatingAvg !== null"
-          class="text-sm font-normal leading-none"
-          aria-hidden="true"
-        >
-          {{ formattedRatingAvg }}
-        </span>
-
-        <Rating
-          v-if="props.currentUserId"
-          :key="`rating-${localCourse.id}-${ratingResetKey}`"
-          :modelValue="displayRatingAvg"
-          :stars="5"
-          :cancel="false"
-          @update:modelValue="onUserRate"
-          class="text-sm self-baseline inline-flex leading-none"
-        />
-      </div>
-      <div
-        class="text-xs text-gray-600 mt-1"
-        v-if="localCourse.popularity || localVote"
-      >
-        {{ localCourse.popularity || 0 }} Vote<span v-if="localCourse.popularity !== 1">s</span>
-        |
-        {{ localCourse.nbVisits || 0 }} Visite<span v-if="localCourse.nbVisits !== 1">s</span>
-        <span v-if="localVote">
-          |
-          {{ $t("Your vote") }} [{{ localVote }}]
-        </span>
-      </div>
-
-      <div
-        v-for="field in cardExtraFields"
-        :key="field.variable"
-        class="text-sm text-gray-700"
-      >
-        <strong>{{ field.display_text }}:</strong>
-        {{ localCourse.extra_fields?.[field.variable] ?? "-" }}
-      </div>
-
-      <div class="mt-auto pt-2">
-        <router-link
-          v-if="localCourse.subscribed"
-          :to="{ name: 'CourseHome', params: { id: localCourse.id } }"
-        >
-          <Button
-            :label="$t('Go to the course')"
-            icon="pi pi-external-link"
-            class="w-full"
-          />
-        </router-link>
-
-        <Button
-          v-else-if="isLocked && hasRequirements"
-          :label="$t('Check requirements')"
-          icon="mdi mdi-shield-check"
-          class="w-full p-button-warning"
-          @click="showDependenciesModal = true"
-        />
-
-        <Button
-          v-else-if="localCourse.subscribe && props.currentUserId && allowSelfSignup"
-          :label="$t('Subscribe')"
-          icon="pi pi-sign-in"
-          class="w-full"
-          @click="subscribeToCourse"
-        />
-
-        <Button
-          v-else-if="props.currentUserId && !allowSelfSignup"
-          :label="$t('Subscription not allowed')"
-          icon="pi pi-ban"
-          disabled
-          class="w-full"
-        />
-
-        <Button
-          v-else-if="localCourse.visibility === 1"
-          :label="$t('Private course')"
-          icon="pi pi-lock"
-          disabled
-          class="w-full"
-        />
-
-        <Button
-          v-else
-          :label="$t('Not available')"
-          icon="pi pi-eye-slash"
-          disabled
-          class="w-full"
-        />
-      </div>
-    </div>
-  </div>
-  <CatalogueRequirementModal
-    v-model="showDependenciesModal"
-    :course-id="localCourse.id"
-    :session-id="localCourse.sessionId || 0"
-    :requirements="requirementList"
-    :graph-image="graphImage"
-  />
-  <Dialog
-    v-model:visible="showDescriptionDialog"
-    :header="localCourse.title"
-    modal
-    class="w-96"
-  >
-    <p class="text-sm text-gray-700 whitespace-pre-line">
-      {{ localCourse.description || $t("No description available") }}
-    </p>
-  </Dialog>
-</template>
 <script setup>
 import Rating from "primevue/rating"
 import Button from "primevue/button"
 import Dialog from "primevue/dialog"
-import { computed, ref, onMounted, watch } from "vue"
-import { useRoute, useRouter } from "vue-router"
+import { computed, onMounted, ref, watch } from "vue"
+import { useRouter } from "vue-router"
 import { useNotification } from "../../composables/notification"
 import { usePlatformConfig } from "../../store/platformConfig"
 import CatalogueRequirementModal from "./CatalogueRequirementModal.vue"
 import courseRelUserService from "../../services/courseRelUserService"
 import { useCourseRequirementStatus } from "../../composables/course/useCourseRequirementStatus"
 import { useLocale } from "../../composables/locale"
+
 const { getOriginalLanguageName } = useLocale()
 
 const props = defineProps({
@@ -231,7 +29,6 @@ const props = defineProps({
 const emit = defineEmits(["rate", "subscribed"])
 
 const router = useRouter()
-const route = useRoute()
 const { showErrorNotification, showSuccessNotification } = useNotification()
 const platformConfigStore = usePlatformConfig()
 
@@ -381,7 +178,11 @@ const displayRatingAvg = computed(() => {
 // formatted string for the numeric average
 const formattedRatingAvg = computed(() => {
   const v = Number(displayRatingAvg.value ?? 0)
-  if (!isFinite(v)) return "0.0"
+
+  if (!isFinite(v)) {
+    return "0.0"
+  }
+
   return v.toFixed(1)
 })
 
@@ -399,6 +200,7 @@ const subscribing = ref(false)
 const subscribeToCourse = async () => {
   if (!props.currentUserId) {
     showErrorNotification("You must be logged in to subscribe to a course.")
+
     return
   }
 
@@ -496,3 +298,207 @@ onMounted(() => {
   fetchStatus()
 })
 </script>
+
+<template>
+  <div
+    class="course-card relative hover:shadow-lg transition duration-300 rounded-2xl overflow-hidden border border-gray-300 bg-white flex flex-col"
+  >
+    <div
+      v-if="localCourse.categories?.length"
+      class="absolute top-2 left-2 flex flex-wrap gap-1 z-30"
+    >
+      <span
+        v-for="cat in localCourse.categories"
+        :key="cat.id"
+        class="bg-support-5 text-white text-xs font-bold px-2 py-0.5 rounded"
+      >
+        {{ cat.title }}
+      </span>
+    </div>
+    <span
+      v-if="localCourse.courseLanguage"
+      class="absolute top-0 right-0 bg-support-4 text-white text-xs px-2 py-0.5 font-semibold rounded-bl-lg z-20"
+    >
+      {{ getOriginalLanguageName(localCourse.courseLanguage) }}
+    </span>
+
+    <Button
+      v-if="allowDescription && showInfoPopup"
+      aria-label="Course info"
+      class="absolute top-10 left-2 z-20"
+      icon="pi pi-info-circle"
+      size="small"
+      text
+      @click="showDescriptionDialog = true"
+    />
+    <router-link
+      v-if="imageLink"
+      :to="imageLink"
+    >
+      <img
+        :alt="localCourse.title"
+        :src="localCourse.illustrationUrl"
+        class="w-full object-cover"
+      />
+    </router-link>
+    <img
+      v-else
+      :alt="localCourse.title"
+      :src="localCourse.illustrationUrl"
+      class="w-full object-cover"
+    />
+    <div class="p-4 flex flex-col flex-grow gap-2">
+      <router-link
+        v-if="showTitle && titleLink"
+        :to="titleLink"
+        class="text-xl font-semibold"
+      >
+        {{ localCourse.title }}
+      </router-link>
+      <h3
+        v-else-if="showTitle"
+        class="text-xl font-semibold"
+      >
+        {{ localCourse.title }}
+      </h3>
+      <div
+        v-if="localCourse.duration"
+        class="text-sm text-gray-700"
+      >
+        <strong>{{ $t("Duration") }}:</strong> {{ durationInHours }}
+      </div>
+      <div
+        v-if="localCourse.dependencies?.length"
+        class="text-sm text-gray-700"
+      >
+        <strong>{{ $t("Dependencies") }}:</strong>
+        {{ localCourse.dependencies.map((dep) => dep.title).join(", ") }}
+      </div>
+
+      <div
+        v-if="localCourse.price !== undefined"
+        class="text-sm text-gray-700"
+      >
+        <strong>{{ $t("Price") }}:</strong>
+        {{ localCourse.price > 0 ? "S/. " + localCourse.price.toFixed(2) : $t("Free") }}
+      </div>
+      <div
+        v-if="localCourse.teachers?.length"
+        class="text-sm text-gray-700"
+      >
+        <strong>{{ $t("Teachers") }}:</strong>
+        {{ localCourse.teachers.map((t) => t.user.fullName).join(", ") }}
+      </div>
+      <div class="my-1 flex items-baseline gap-2">
+        <span
+          v-if="displayRatingAvg !== null"
+          aria-hidden="true"
+          class="text-sm font-normal leading-none"
+        >
+          {{ formattedRatingAvg }}
+        </span>
+
+        <Rating
+          v-if="props.currentUserId"
+          :key="`rating-${localCourse.id}-${ratingResetKey}`"
+          :cancel="false"
+          :modelValue="displayRatingAvg"
+          :stars="5"
+          class="text-sm self-baseline inline-flex leading-none"
+          @update:modelValue="onUserRate"
+        />
+      </div>
+      <div
+        v-if="localCourse.popularity || localVote"
+        class="text-xs text-gray-600 mt-1"
+      >
+        {{ localCourse.popularity || 0 }} Vote<span v-if="localCourse.popularity !== 1">s</span>
+        |
+        {{ localCourse.nbVisits || 0 }} Visite<span v-if="localCourse.nbVisits !== 1">s</span>
+        <span v-if="localVote">
+          |
+          {{ $t("Your vote") }} [{{ localVote }}]
+        </span>
+      </div>
+
+      <div
+        v-for="field in cardExtraFields"
+        :key="field.variable"
+        class="text-sm text-gray-700"
+      >
+        <strong>{{ field.display_text }}:</strong>
+        {{ localCourse.extra_fields?.[field.variable] ?? "-" }}
+      </div>
+
+      <div class="mt-auto pt-2">
+        <router-link
+          v-if="localCourse.subscribed"
+          :to="{ name: 'CourseHome', params: { id: localCourse.id } }"
+        >
+          <Button
+            :label="$t('Go to the course')"
+            class="w-full"
+            icon="pi pi-external-link"
+          />
+        </router-link>
+
+        <Button
+          v-else-if="isLocked && hasRequirements"
+          :label="$t('Check requirements')"
+          class="w-full p-button-warning"
+          icon="mdi mdi-shield-check"
+          @click="showDependenciesModal = true"
+        />
+
+        <Button
+          v-else-if="localCourse.subscribe && props.currentUserId && allowSelfSignup"
+          :label="$t('Subscribe')"
+          class="w-full"
+          icon="pi pi-sign-in"
+          @click="subscribeToCourse"
+        />
+
+        <Button
+          v-else-if="props.currentUserId && !allowSelfSignup"
+          :label="$t('Subscription not allowed')"
+          class="w-full"
+          disabled
+          icon="pi pi-ban"
+        />
+
+        <Button
+          v-else-if="localCourse.visibility === 1"
+          :label="$t('Private course')"
+          class="w-full"
+          disabled
+          icon="pi pi-lock"
+        />
+
+        <Button
+          v-else
+          :label="$t('Not available')"
+          class="w-full"
+          disabled
+          icon="pi pi-eye-slash"
+        />
+      </div>
+    </div>
+  </div>
+  <CatalogueRequirementModal
+    v-model="showDependenciesModal"
+    :course-id="localCourse.id"
+    :graph-image="graphImage"
+    :requirements="requirementList"
+    :session-id="localCourse.sessionId || 0"
+  />
+  <Dialog
+    v-model:visible="showDescriptionDialog"
+    :header="localCourse.title"
+    class="w-96"
+    modal
+  >
+    <p class="text-sm text-gray-700 whitespace-pre-line">
+      {{ localCourse.description || $t("No description available") }}
+    </p>
+  </Dialog>
+</template>

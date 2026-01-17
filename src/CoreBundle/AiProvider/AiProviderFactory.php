@@ -163,6 +163,11 @@ final class AiProviderFactory
         }
     }
 
+    public function create(string $provider, string $serviceType = 'text'): object
+    {
+        return $this->getProvider($provider, $serviceType);
+    }
+
     public function hasProvidersForType(string $serviceType): bool
     {
         return !empty($this->providersByType[$serviceType] ?? []);

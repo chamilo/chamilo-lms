@@ -229,6 +229,7 @@ class PlatformConfigurationController extends AbstractController
             'image_generator' => $courseSettingsManager->getCourseSettingValue('image_generator'),
             'video_generator' => $courseSettingsManager->getCourseSettingValue('video_generator'),
             'glossary_terms_generator' => $courseSettingsManager->getCourseSettingValue('glossary_terms_generator'),
+            'task_grader' => $courseSettingsManager->getCourseSettingValue('task_grader'),
             'display_info_advance_inside_homecourse' => $courseSettingsManager->getCourseSettingValue('display_info_advance_inside_homecourse'),
         ];
 

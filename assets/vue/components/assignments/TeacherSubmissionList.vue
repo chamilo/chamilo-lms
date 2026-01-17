@@ -11,7 +11,6 @@
       @page="onPage"
       @sort="onSort"
     >
-      <!-- Full name -->
       <Column
         field="user.fullName"
         :header="t('Full name')"
@@ -127,12 +126,22 @@
               type="primary"
             />
             <BaseButton
+              v-if="canUseAiTaskGrader"
+              icon="robot"
+              size="normal"
+              only-icon
+              :label="t('AI grade')"
+              :class="actionBtnClass"
+              @click="openCorrectAndRate(data)"
+              type="black"
+            />
+            <BaseButton
               icon="reply-all"
               size="normal"
               only-icon
               :label="t('Correct and rate')"
               :class="actionBtnClass"
-              @click="correctAndRate(data)"
+              @click="openCorrectAndRate(data)"
               type="success"
             />
             <BaseButton
@@ -212,7 +221,7 @@
 </template>
 
 <script setup>
-import { nextTick, watch, reactive, ref } from "vue"
+import { nextTick, watch, reactive, ref, computed, onMounted } from "vue"
 import { useI18n } from "vue-i18n"
 import Column from "primevue/column"
 import BaseButton from "../basecomponents/BaseButton.vue"
@@ -226,6 +235,11 @@ import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/en
 import EditStudentSubmissionForm from "./EditStudentSubmissionForm.vue"
 import CorrectAndRateModal from "./CorrectAndRateModal.vue"
 import MoveSubmissionModal from "./MoveSubmissionModal.vue"
+import { useCidReqStore } from "../../store/cidReq"
+import { storeToRefs } from "pinia"
+import { usePlatformConfig } from "../../store/platformConfig"
+import { useCourseSettings } from "../../store/courseSettingStore"
+import { useSecurityStore } from "../../store/securityStore"
 
 const props = defineProps({
   assignmentId: {
@@ -254,12 +268,54 @@ const editingItem = ref(null)
 const showCorrectAndRateDialog = ref(false)
 const correctingItem = ref(null)
 const showMoveDialog = ref(false)
-
-/**
- * Make action buttons visually bigger without relying on unknown "size" enums.
- * This keeps current BaseButton behavior and only increases hit area.
- */
 const actionBtnClass = "w-10 h-10 !p-2"
+const cidReqStore = useCidReqStore()
+const { course, session } = storeToRefs(cidReqStore)
+
+const platform = usePlatformConfig()
+const courseSettingsStore = useCourseSettings()
+const securityStore = useSecurityStore()
+
+async function loadCourseSettingsIfPossible() {
+  const courseId = course.value?.id
+  const sessionId = session.value?.id
+
+  if (!courseId) return
+
+  try {
+    await courseSettingsStore.loadCourseSettings(courseId, sessionId)
+  } catch (err) {
+    console.error("[Assignments] loadCourseSettings FAILED:", err)
+  }
+}
+
+onMounted(async () => {
+  await loadCourseSettingsIfPossible()
+})
+
+watch(
+  () => [course.value?.id, session.value?.id],
+  async () => {
+    await loadCourseSettingsIfPossible()
+  },
+)
+
+const aiHelpersEnabled = computed(() => {
+  const v = String(platform.getSetting("ai_helpers.enable_ai_helpers"))
+  return v === "true"
+})
+
+const taskGraderEnabled = computed(() => {
+  const v = courseSettingsStore?.getSetting?.("task_grader")
+  return String(v) === "true"
+})
+
+const canUseAiTaskGrader = computed(() => {
+  // Only teachers/admins and not in student view
+  const canEdit = !!(securityStore.isTeacher || securityStore.isCourseAdmin || securityStore.isAdmin)
+  const notStudentView = !platform.isStudentViewActive
+  return !!(canEdit && notStudentView && aiHelpersEnabled.value && taskGraderEnabled.value)
+})
 
 watch(
   loadParams,
@@ -270,6 +326,20 @@ watch(
   { deep: true, immediate: true },
 )
 
+function buildOrderFromSort() {
+  // PrimeVue multi sort meta => API expects { field: "asc|desc" }
+  const order = {}
+  const meta = Array.isArray(sortFields.value) ? sortFields.value : []
+  meta.forEach((s) => {
+    if (!s?.field) return
+    order[s.field] = s.order === 1 ? "asc" : "desc"
+  })
+  if (!Object.keys(order).length) {
+    order.sentDate = "desc"
+  }
+  return order
+}
+
 async function loadData() {
   loading.value = true
   try {
@@ -277,7 +347,7 @@ async function loadData() {
       assignmentId: props.assignmentId,
       page: loadParams.page,
       itemsPerPage: loadParams.itemsPerPage,
-      order: { sentDate: "desc" },
+      order: buildOrderFromSort(),
     })
 
     submissions.value = response["hydra:member"]
@@ -295,13 +365,9 @@ function onPage(event) {
 }
 
 function onSort(event) {
-  Object.keys(loadParams)
-    .filter((key) => key.startsWith("order["))
-    .forEach((key) => delete loadParams[key])
-
-  event.multiSortMeta.forEach((sortItem) => {
-    loadParams[`order[${sortItem.field}]`] = sortItem.order === 1 ? "asc" : "desc"
-  })
+  if (event?.multiSortMeta) {
+    sortFields.value = event.multiSortMeta
+  }
 }
 
 /**
@@ -438,7 +504,7 @@ async function deleteSubmission(item) {
   }
 }
 
-function correctAndRate(item) {
+function openCorrectAndRate(item) {
   correctingItem.value = null
   nextTick(() => {
     correctingItem.value = item
@@ -447,11 +513,7 @@ function correctAndRate(item) {
 }
 
 function openCommentDialog(item) {
-  correctingItem.value = null
-  nextTick(() => {
-    correctingItem.value = item
-    showCorrectAndRateDialog.value = true
-  })
+  openCorrectAndRate(item)
 }
 
 function moveSubmission(item) {

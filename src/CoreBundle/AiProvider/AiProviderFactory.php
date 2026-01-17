@@ -62,7 +62,7 @@ final class AiProviderFactory
             'image' => AiImageProviderInterface::class,
             'video' => AiVideoProviderInterface::class,
             'document' => AiDocumentProviderInterface::class,
-            // 'document_process' intentionally not validated (no interface yet)
+            'document_process' => AiDocumentProcessProviderInterface::class,
         ];
 
         $this->providers = [];
@@ -71,13 +71,11 @@ final class AiProviderFactory
         foreach ($config as $providerName => $providerConfig) {
             if (!isset($possibleProviders[$providerName])) {
                 error_log('[AI] Unsupported provider in config: "'.$providerName.'". Skipping.');
-
                 continue;
             }
 
             if (!\is_array($providerConfig)) {
                 error_log('[AI] Provider config for "'.$providerName.'" must be an array. Skipping.');
-
                 continue;
             }
 
@@ -87,7 +85,6 @@ final class AiProviderFactory
             $baseClass = 'Chamilo\CoreBundle\AiProvider\\'.$providerPrefix.'Provider';
             $baseObject = $this->instantiateProvider($baseClass);
 
-            // If base class cannot be instantiated, we can still allow type-specific classes.
             if (!$baseObject && !class_exists($baseClass)) {
                 error_log('[AI] Base provider class not found: '.$baseClass.'.');
             } elseif (!$baseObject) {
@@ -102,58 +99,40 @@ final class AiProviderFactory
 
                 $typeClass = 'Chamilo\CoreBundle\AiProvider\\'.$providerPrefix.$suffix.'Provider';
 
-                // Known types: we can fallback to base provider if it implements the right interface
-                if (isset($typeInterface[$type])) {
-                    $iface = $typeInterface[$type];
-                    $obj = null;
-
-                    // 1) Prefer type-specific class if exists (optional architecture)
-                    if ($typeClass !== $baseClass && class_exists($typeClass)) {
-                        $obj = $this->instantiateProvider($typeClass);
-
-                        if ($obj && !($obj instanceof $iface)) {
-                            error_log('[AI] Provider "'.$providerName.'" type-class "'.$typeClass.'" does not implement '.$iface.'. Falling back to base provider.');
-                            $obj = null;
-                        }
-                    }
-
-                    // 2) Fallback to base provider
-                    if (!$obj) {
-                        if ($baseObject && ($baseObject instanceof $iface)) {
-                            $obj = $baseObject;
-
-                            if ($typeClass !== $baseClass && !class_exists($typeClass)) {
-                                error_log('[AI] Provider "'.$providerName.'" uses base provider for type "'.$type.'" (no dedicated type class found).');
-                            }
-                        } else {
-                            error_log('[AI] Provider "'.$providerName.'" is configured for type "'.$type.'" but no usable implementation was found (expected '.$iface.').');
-
-                            continue;
-                        }
-                    }
-
-                    $this->providers[$providerName][$type] = $obj;
-                    $this->providersByType[$type][$providerName] = $obj;
-
+                if (!isset($typeInterface[$type])) {
+                    error_log('[AI] Unknown AI service type configured: "'.$type.'" for provider "'.$providerName.'". Skipping.');
                     continue;
                 }
 
-                // Unknown type (e.g. document_process): do NOT fallback to base provider.
-                // Require a dedicated class to avoid claiming support when methods don't exist.
+                $iface = $typeInterface[$type];
+                $obj = null;
+
+                // Prefer type-specific class if exists (optional)
                 if ($typeClass !== $baseClass && class_exists($typeClass)) {
                     $obj = $this->instantiateProvider($typeClass);
 
-                    if (!$obj) {
-                        error_log('[AI] Provider "'.$providerName.'" is configured for unknown type "'.$type.'" but could not instantiate "'.$typeClass.'".');
+                    if ($obj && !($obj instanceof $iface)) {
+                        error_log('[AI] Provider "'.$providerName.'" type-class "'.$typeClass.'" does not implement '.$iface.'. Falling back to base provider.');
+                        $obj = null;
+                    }
+                }
 
+                // Fallback to base provider
+                if (!$obj) {
+                    if ($baseObject && ($baseObject instanceof $iface)) {
+                        $obj = $baseObject;
+
+                        if ($typeClass !== $baseClass && !class_exists($typeClass)) {
+                            error_log('[AI] Provider "'.$providerName.'" uses base provider for type "'.$type.'" (no dedicated type class found).');
+                        }
+                    } else {
+                        error_log('[AI] Provider "'.$providerName.'" is configured for type "'.$type.'" but no usable implementation was found (expected '.$iface.').');
                         continue;
                     }
-
-                    $this->providers[$providerName][$type] = $obj;
-                    $this->providersByType[$type][$providerName] = $obj;
-                } else {
-                    error_log('[AI] Provider "'.$providerName.'" is configured for unknown type "'.$type.'" but no dedicated class was found (expected "'.$typeClass.'").');
                 }
+
+                $this->providers[$providerName][$type] = $obj;
+                $this->providersByType[$type][$providerName] = $obj;
             }
         }
 

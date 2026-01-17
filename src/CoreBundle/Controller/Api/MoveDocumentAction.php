@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -58,19 +59,41 @@ final class MoveDocumentAction
             throw new BadRequestHttpException('Document resource node not found.');
         }
 
+        if ($docNode->getId() === $destNode->getId()) {
+            throw new BadRequestHttpException('Cannot move into itself.');
+        }
+
+        // Always keep ResourceNode.parent in sync for providers still relying on resourceNode.parent.
+        $docNode->setParent($destNode);
+        $docNode->setUpdatedAt(new DateTime());
+        $this->em->persist($docNode);
+
         if ($hasContext) {
             $course = $cid > 0 ? $this->em->getRepository(Course::class)->find($cid) : null;
             $session = $sid > 0 ? $this->em->getRepository(Session::class)->find($sid) : null;
             $group = $gid > 0 ? $this->em->getRepository(CGroup::class)->find($gid) : null;
 
-            $docLink = $this->linkRepo->findParentLinkForContext(
-                $docNode,
+            // Find the current link for THIS resource in THIS context.
+            $docLink = $this->linkRepo->findLinkForResourceInContext(
+                $document,
                 $course,
                 $session,
                 $group,
                 null,
                 null
             );
+
+            // Backward-compatible fallback (older repos sometimes used node-based lookup).
+            if (!$docLink instanceof ResourceLink) {
+                $docLink = $this->linkRepo->findParentLinkForContext(
+                    $docNode,
+                    $course,
+                    $session,
+                    $group,
+                    null,
+                    null
+                );
+            }
 
             if (!$docLink instanceof ResourceLink) {
                 throw new BadRequestHttpException('Document has no link in this context.');
@@ -86,22 +109,21 @@ final class MoveDocumentAction
             );
 
             if (!$destLink instanceof ResourceLink) {
-                throw new BadRequestHttpException('Destination folder has no link in this context.');
+                // Safer behavior: do not silently "lose" the item in the UI.
+                // If destination folder has no link in this context, we keep it as root-level in link-tree
+                // but still update ResourceNode.parent, so the item is not lost for node-based providers.
+                $docLink->setParent(null);
+                $this->em->persist($docLink);
+                $this->em->flush();
+
+                return $document;
             }
 
-            if ($docLink->getId() === $destLink->getId()) {
-                throw new BadRequestHttpException('Cannot move into itself.');
-            }
-
+            // Moving folder/file under a folder link.
             $docLink->setParent($destLink);
             $this->em->persist($docLink);
-            $this->em->flush();
-
-            return $document;
         }
 
-        $docNode->setParent($destNode);
-        $this->em->persist($docNode);
         $this->em->flush();
 
         return $document;

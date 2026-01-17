@@ -60,20 +60,25 @@ class ReplaceDocumentFileAction extends BaseResourceFileAction
             throw new BadRequestHttpException(\sprintf('Failed to move the file: %s', $e->getMessage()));
         }
 
-        $movedFilePath = $filePath;
-        if (!file_exists($movedFilePath)) {
+        if (!file_exists($filePath)) {
             throw new RuntimeException('The moved file does not exist at the expected location.');
         }
-        $fileSize = filesize($movedFilePath);
+
+        $fileSize = filesize($filePath);
         $resourceFile->setSize($fileSize);
 
         $newFileName = $uploadedFile->getClientOriginalName();
+
+        // Keep titles consistent: entity title + node title.
         $document->setTitle($newFileName);
+        $resourceNode->setTitle($newFileName);
+
         $resourceFile->setOriginalName($newFileName);
 
         $resourceNode->setUpdatedAt(new DateTime());
 
         $em->persist($document);
+        $em->persist($resourceNode);
         $em->persist($resourceFile);
         $em->flush();
 

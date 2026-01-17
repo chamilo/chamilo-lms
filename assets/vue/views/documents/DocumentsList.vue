@@ -1123,20 +1123,45 @@ function normalizeResourceNodeId(value) {
   return null
 }
 
+function getDocumentsRootNodeId() {
+  // We want the top node of this documents tree (usually the course root node).
+  let node = resourceNode.value
+
+  const fallback = normalizeResourceNodeId(route.params.node || route.query.node)
+
+  if (!node) {
+    return fallback
+  }
+
+  // If current node is already the course root, use it.
+  if (node?.resourceType?.title === "courses") {
+    return normalizeResourceNodeId(node.id) || fallback
+  }
+
+  // Walk up until we reach the course root node.
+  let safety = 0
+  while (node?.parent && node?.resourceType?.title !== "courses" && safety < 30) {
+    node = node.parent
+    safety++
+  }
+
+  return normalizeResourceNodeId(node?.id) || fallback
+}
+
 async function fetchFolders(nodeId = null, parentPath = "") {
-  const startId = normalizeResourceNodeId(nodeId || route.params.node || route.query.node)
+  const rootId = normalizeResourceNodeId(nodeId) ?? getDocumentsRootNodeId()
 
   const foldersList = [
     {
       label: t("Documents"),
-      value: startId || "root-node-id",
+      value: rootId, // REAL root node id
     },
   ]
 
   try {
-    let nodesToFetch = [{ id: startId, path: parentPath }]
+    let nodesToFetch = [{ id: rootId, path: parentPath }]
     let depth = 0
-    const maxDepth = 5
+    const maxDepth = 10
 
     while (nodesToFetch.length > 0 && depth < maxDepth) {
       const currentNode = nodesToFetch.shift()
@@ -1152,9 +1177,9 @@ async function fetchFolders(nodeId = null, parentPath = "") {
           loadNode: 1,
           filetype: ["folder"],
           "resourceNode.parent": currentNodeId,
-          cid,
-          sid,
-          gid,
+          cid: unref(cid),
+          sid: unref(sid),
+          gid: unref(gid),
           page: 1,
           itemsPerPage: 200,
         },
@@ -1174,7 +1199,7 @@ async function fetchFolders(nodeId = null, parentPath = "") {
 
         foldersList.push({
           label: fullPath,
-          value: folderNodeId, // ALWAYS numeric
+          value: folderNodeId,
         })
 
         nodesToFetch.push({ id: folderNodeId, path: fullPath })
@@ -1191,8 +1216,8 @@ async function fetchFolders(nodeId = null, parentPath = "") {
 }
 
 async function loadAllFolders() {
-  // Keep your behavior: start from current node.
-  folders.value = await fetchFolders()
+  const rootId = getDocumentsRootNodeId()
+  folders.value = await fetchFolders(rootId)
 }
 
 async function openMoveDialog(document) {
@@ -1211,12 +1236,25 @@ async function moveDocument() {
       return
     }
 
+    // Optional: avoid no-op moves
+    const currentParentId =
+      normalizeResourceNodeId(item.value?.resourceNode?.parent?.id) ??
+      normalizeResourceNodeId(item.value?.resourceNode?.parent)
+
+    if (currentParentId && String(currentParentId) === String(parentId)) {
+      notification.showErrorNotification(t("The document is already in this folder"))
+      return
+    }
+
     await axios.put(
       `/api/documents/${item.value.iid}/move`,
       { parentResourceNodeId: parentId },
       {
-        // IMPORTANT: backend needs context to move the correct resource_link
-        params: { cid, sid, gid },
+        params: {
+          cid: unref(cid),
+          sid: unref(sid),
+          gid: unref(gid),
+        },
       },
     )
 

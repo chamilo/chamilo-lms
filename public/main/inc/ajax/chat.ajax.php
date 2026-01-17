@@ -4,8 +4,6 @@
 /**
  * Responses to AJAX calls.
  */
-// Avoid auto-closing the session in global.inc.php because of api_is_platform_admin() call
-const KEEP_SESSION_OPEN = true;
 $_dont_save_user_course_access = true;
 
 require_once __DIR__.'/../global.inc.php';

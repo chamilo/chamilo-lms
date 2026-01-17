@@ -11,8 +11,6 @@ if ('personal' === $type) {
     $cidReset = true; // fixes #5162
 }
 
-// Avoid auto-closing the session in global.inc.php because of api_get_group_id() call and others
-const KEEP_SESSION_OPEN = true;
 require_once __DIR__.'/../global.inc.php';
 
 $action = $_REQUEST['a'] ?? null;

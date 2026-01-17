@@ -5,8 +5,6 @@
 /**
  * Responses to AJAX calls.
  */
-// Avoid auto-closing the session in global.inc.php because of api_is_platform_admin() call
-const KEEP_SESSION_OPEN = true;
 require_once __DIR__.'/../global.inc.php';
 
 $action = $_REQUEST['a'];
@@ -395,7 +393,7 @@ switch ($action) {
         Event::registerLog($logInfo);
         // Close the session as we don't need it any further
         session_write_close();
-        
+
         $result = (int) Event::courseLogout($logoutInfo);
         echo $result;
         break;

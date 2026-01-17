@@ -3,8 +3,6 @@
 /**
  * Responses to AJAX calls for course chat.
  */
-// Avoid auto-closing the session in global.inc.php because of api_is_platform_admin() call
-const KEEP_SESSION_OPEN = true;
 require_once __DIR__.'/../global.inc.php';
 
 if (!api_protect_course_script(false)) {

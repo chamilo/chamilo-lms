@@ -5,8 +5,6 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
 
-// Avoid auto-closing the session in global.inc.php because of api_is_platform_admin() call
-const KEEP_SESSION_OPEN = true;
 require_once __DIR__.'/../global.inc.php';
 
 $current_user_id = api_get_user_id();

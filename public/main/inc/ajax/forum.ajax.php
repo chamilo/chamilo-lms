@@ -9,8 +9,6 @@ use Chamilo\CourseBundle\Entity\CForumPost;
  *
  * @author Daniel Barreto Alva <daniel.barreto@beeznest.com>
  */
-// Avoid auto-closing the session in global.inc.php because of api_is_platform_admin() call
-const KEEP_SESSION_OPEN = true;
 require_once __DIR__.'/../global.inc.php';
 
 // First, protect this script

@@ -21,7 +21,7 @@ final class Version20260114132800 extends AbstractMigrationChamilo
         // ai_tutor_conversation
         if (!$schema->hasTable('ai_tutor_conversation')) {
             // Create table + indexes
-            $this->addSql(<<<SQL
+            $this->addSql(<<<'SQL'
             CREATE TABLE ai_tutor_conversation (
               id INT AUTO_INCREMENT NOT NULL,
               user_id INT NOT NULL,
@@ -77,7 +77,7 @@ final class Version20260114132800 extends AbstractMigrationChamilo
         // ai_tutor_message
         if (!$schema->hasTable('ai_tutor_message')) {
             // Create table + indexes
-            $this->addSql(<<<SQL
+            $this->addSql(<<<'SQL'
             CREATE TABLE ai_tutor_message (
               id INT AUTO_INCREMENT NOT NULL,
               conversation_id INT NOT NULL,

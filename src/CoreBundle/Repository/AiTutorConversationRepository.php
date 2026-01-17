@@ -28,7 +28,8 @@ final class AiTutorConversationRepository extends ServiceEntityRepository
             ->setParameter('cid', $courseId)
             ->setParameter('p', $provider)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
     }
 
     /**
@@ -41,7 +42,8 @@ final class AiTutorConversationRepository extends ServiceEntityRepository
             ->from(AiTutorMessage::class, 'm')
             ->andWhere('m.conversation = :c')
             ->setParameter('c', $conversation)
-            ->orderBy('m.createdAt', 'ASC');
+            ->orderBy('m.createdAt', 'ASC')
+        ;
 
         if ($limit > 0) {
             $qb->setMaxResults($limit);
@@ -64,7 +66,8 @@ final class AiTutorConversationRepository extends ServiceEntityRepository
             ->setFirstResult(max(0, $offset))
             ->setMaxResults(max(0, $limit))
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     /**
@@ -82,7 +85,8 @@ final class AiTutorConversationRepository extends ServiceEntityRepository
             ->orderBy('m.id', 'ASC')
             ->setMaxResults(max(1, $limit))
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     public function countMessages(AiTutorConversation $conversation): int
@@ -93,7 +97,8 @@ final class AiTutorConversationRepository extends ServiceEntityRepository
             ->andWhere('m.conversation = :c')
             ->setParameter('c', $conversation)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult()
+        ;
 
         return (int) ($n ?? 0);
     }
@@ -106,7 +111,8 @@ final class AiTutorConversationRepository extends ServiceEntityRepository
             ->andWhere('m.conversation = :c')
             ->setParameter('c', $conversation)
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
     public function getLastMessageId(AiTutorConversation $conversation): int
@@ -118,7 +124,8 @@ final class AiTutorConversationRepository extends ServiceEntityRepository
             ->andWhere('m.conversation = :c')
             ->setParameter('c', $conversation)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult()
+        ;
 
         return (int) ($id ?? 0);
     }

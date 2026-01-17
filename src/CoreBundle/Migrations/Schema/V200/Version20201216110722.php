@@ -82,7 +82,8 @@ final class Version20201216110722 extends AbstractMigrationChamilo
             $course = $courseRepo->find($courseId);
 
             if (null === $course) {
-                $this->write(sprintf('Course %s not found - skipping attendances migration', $courseId));
+                $this->write(\sprintf('Course %s not found - skipping attendances migration', $courseId));
+
                 continue;
             }
 
@@ -103,7 +104,8 @@ final class Version20201216110722 extends AbstractMigrationChamilo
 
                 // If skip enabled, we only migrate gradebook-linked attendances
                 if ($skipAttendances && !isset($gradebookIds[$id])) {
-                    $this->write(sprintf('Attendance %s is not linked to gradebook - skipping', $id));
+                    $this->write(\sprintf('Attendance %s is not linked to gradebook - skipping', $id));
+
                     continue;
                 }
 

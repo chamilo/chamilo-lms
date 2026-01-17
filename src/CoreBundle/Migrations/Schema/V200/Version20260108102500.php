@@ -20,13 +20,13 @@ final class Version20260108102500 extends AbstractMigrationChamilo
     {
         // Chamilo runs on MySQL/MariaDB typically. Keep it safe.
         $this->abortIf(
-            $this->connection->getDatabasePlatform()->getName() !== 'mysql',
+            'mysql' !== $this->connection->getDatabasePlatform()->getName(),
             'This migration is intended for MySQL/MariaDB.'
         );
 
         // Only touch rows that look suspicious to avoid scanning the whole table.
         $rows = $this->connection->fetchAllAssociative(
-            "SELECT id, roles FROM user WHERE roles LIKE :pattern",
+            'SELECT id, roles FROM user WHERE roles LIKE :pattern',
             ['pattern' => '%ROLE_CURRENT_%']
         );
 
@@ -49,7 +49,7 @@ final class Version20260108102500 extends AbstractMigrationChamilo
             $encoded = serialize(array_values($clean));
 
             $this->connection->executeStatement(
-                "UPDATE user SET roles = :roles WHERE id = :id",
+                'UPDATE user SET roles = :roles WHERE id = :id',
                 ['roles' => $encoded, 'id' => $userId]
             );
         }
@@ -96,6 +96,7 @@ final class Version20260108102500 extends AbstractMigrationChamilo
 
     /**
      * @param mixed[] $roles
+     *
      * @return string[]
      */
     private function normalizeRoles(array $roles): array
@@ -113,15 +114,14 @@ final class Version20260108102500 extends AbstractMigrationChamilo
         }
 
         // Keep order but remove duplicates
-        $out = array_values(array_unique($out));
-
-        return $out;
+        return array_values(array_unique($out));
     }
 
     /**
      * Remove any temporary context roles from DB.
      *
      * @param string[] $roles
+     *
      * @return string[]
      */
     private function removeTemporaryContextRoles(array $roles): array

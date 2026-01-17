@@ -12,6 +12,7 @@ use ApiPlatform\Doctrine\Orm\Util\QueryNameGenerator;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\Pagination\TraversablePaginator;
 use ApiPlatform\State\ProviderInterface;
+use ArrayIterator;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
@@ -19,8 +20,8 @@ use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use DateTime;
 use Exception;
+use RuntimeException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -58,7 +59,7 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
 
         $url = $this->accessUrlHelper->getCurrent() ?? $this->accessUrlHelper->getFirstAccessUrl();
         if (!$url instanceof AccessUrl) {
-            throw new \RuntimeException('Access URL not found');
+            throw new RuntimeException('Access URL not found');
         }
 
         if ('user_session_subscriptions_past' === $operation->getName()) {
@@ -96,7 +97,7 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
             }
 
             return new TraversablePaginator(
-                new \ArrayIterator($sessions),
+                new ArrayIterator($sessions),
                 (int) ($context['filters']['page'] ?? 1),
                 (int) ($context['filters']['itemsPerPage'] ?? $context['pagination_items_per_page'] ?? 10),
                 $paginator->getTotalItems()
@@ -186,7 +187,7 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
         }
 
         return new TraversablePaginator(
-            new \ArrayIterator($pageItems),
+            new ArrayIterator($pageItems),
             $page,
             $itemsPerPage,
             $totalAccepted

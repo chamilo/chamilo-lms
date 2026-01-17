@@ -32,7 +32,8 @@ final class ChatRepository extends ServiceEntityRepository
             ->setToUser($toUser)
             ->setMessage($message)
             ->setRecd($recd)
-            ->setSent(\DateTime::createFromImmutable($sentUtc));
+            ->setSent(DateTime::createFromImmutable($sentUtc))
+        ;
 
         $em = $this->getEntityManager();
         $em->persist($chat);
@@ -62,7 +63,8 @@ final class ChatRepository extends ServiceEntityRepository
             ->setToUser($toUser)
             ->setMessage($message)
             ->setSent($sent)
-            ->setRecd($recd);
+            ->setRecd($recd)
+        ;
 
         $em = $this->getEntityManager();
         $em->persist($entity);

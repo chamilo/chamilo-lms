@@ -54,6 +54,7 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
 
         if (null === $userId || $userId <= 0) {
             error_log('[Assignments][StudentPublication][upload] Authenticated user is missing or has no ID.');
+
             throw new RuntimeException('User not authenticated.');
         }
 
@@ -81,10 +82,10 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
         if ($authUser instanceof UserInterface) {
             if (method_exists($authUser, 'getId')) {
                 $id = $authUser->getId();
-                if (is_int($id)) {
+                if (\is_int($id)) {
                     return $id;
                 }
-                if (is_string($id) && ctype_digit($id)) {
+                if (\is_string($id) && ctype_digit($id)) {
                     return (int) $id;
                 }
             }

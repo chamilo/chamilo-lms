@@ -1773,7 +1773,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     {
         $role = strtoupper(trim($role));
 
-        if ($role === '' || $role === self::ROLE_DEFAULT || $role === 'ROLE_USER') {
+        if ('' === $role || self::ROLE_DEFAULT === $role || 'ROLE_USER' === $role) {
             return $this;
         }
 
@@ -2763,7 +2763,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     {
         $role = strtoupper(trim($role));
 
-        if ($role === '' || $role === self::ROLE_DEFAULT || $role === 'ROLE_USER') {
+        if ('' === $role || self::ROLE_DEFAULT === $role || 'ROLE_USER' === $role) {
             return $this;
         }
 

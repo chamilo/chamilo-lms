@@ -661,8 +661,8 @@ class ChamiloHelper
             ) ?? '';
 
             foreach ($bossIds as $bossId) {
-                $subject = sprintf(get_lang('User %s signed the agreement.'), $current['complete_name']);
-                $content = sprintf(get_lang('User %s signed the agreement the %s.'), $current['complete_name'], $dateStr);
+                $subject = \sprintf(get_lang('User %s signed the agreement.'), $current['complete_name']);
+                $content = \sprintf(get_lang('User %s signed the agreement the %s.'), $current['complete_name'], $dateStr);
                 MessageManager::send_message_simple($bossId, $subject, $content, $userId);
             }
         }

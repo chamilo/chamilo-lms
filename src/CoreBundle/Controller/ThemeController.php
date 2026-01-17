@@ -155,7 +155,7 @@ class ThemeController extends AbstractController
      * 1) {theme}/images/<type>-logo.svg
      * 2) {theme}/images/<type>-logo.png
      * 3) default/images/<type>-logo.svg
-     * 4) default/images/<type>-logo.png
+     * 4) default/images/<type>-logo.png.
      *
      * Example:
      * - /themes/beeznest/logo/header
@@ -177,7 +177,7 @@ class ThemeController extends AbstractController
         $themeDir = basename($slug);
         $defaultTheme = ThemeHelper::DEFAULT_THEME;
 
-        $relCandidates = $type === 'email'
+        $relCandidates = 'email' === $type
             ? ['images/email-logo.svg', 'images/email-logo.png']
             : ['images/header-logo.svg', 'images/header-logo.png'];
 
@@ -188,6 +188,7 @@ class ThemeController extends AbstractController
             $candidate = $themeDir.'/'.$rel;
             if ($filesystem->fileExists($candidate)) {
                 $filePath = $candidate;
+
                 break;
             }
         }
@@ -198,6 +199,7 @@ class ThemeController extends AbstractController
                 $candidate = $defaultTheme.'/'.$rel;
                 if ($filesystem->fileExists($candidate)) {
                     $filePath = $candidate;
+
                     break;
                 }
             }
@@ -260,6 +262,7 @@ class ThemeController extends AbstractController
         foreach ($candidates as $candidate) {
             if ($filesystem->fileExists($candidate)) {
                 $filePath = $candidate;
+
                 break;
             }
         }
@@ -278,9 +281,9 @@ class ThemeController extends AbstractController
     {
         return match ($path) {
             'images/header-logo.svg' => ['images/header-logo.png'],
-            'images/email-logo.svg'  => ['images/email-logo.png'],
+            'images/email-logo.svg' => ['images/email-logo.png'],
             'images/header-logo.png' => ['images/header-logo.svg'],
-            'images/email-logo.png'  => ['images/email-logo.svg'],
+            'images/email-logo.png' => ['images/email-logo.svg'],
             default => [],
         };
     }
@@ -292,7 +295,7 @@ class ThemeController extends AbstractController
     {
         $response = new StreamedResponse(function () use ($filesystem, $filePath): void {
             $out = fopen('php://output', 'wb');
-            $in  = $filesystem->readStream($filePath);
+            $in = $filesystem->readStream($filePath);
 
             if (!\is_resource($out) || !\is_resource($in)) {
                 return;

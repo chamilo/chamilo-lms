@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Command;
 
-use Chamilo\CoreBundle\Command\DoctrineMigrationsMigrateCommandDecorator;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception as DbalException;
 use Doctrine\DBAL\ParameterType;
@@ -20,6 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Uid\Uuid;
+use Throwable;
 
 #[AsCommand(
     name: 'chamilo:migration:migrate-attendances-fast',
@@ -108,6 +108,7 @@ final class MigrateAttendancesFastCommand extends Command
 
         if (!$hasAttendanceCId) {
             $io->error('Cannot map attendances to courses: c_attendance.c_id is missing. This command expects c_id to be available in c_attendance.');
+
             return Command::FAILURE;
         }
 
@@ -172,12 +173,14 @@ final class MigrateAttendancesFastCommand extends Command
 
             if (!$courseRow) {
                 $io->warning("Course {$courseId} not found - skipping.");
+
                 continue;
             }
 
             $courseResourceNodeId = isset($courseRow['resource_node_id']) ? (int) $courseRow['resource_node_id'] : 0;
             if ($courseResourceNodeId <= 0) {
                 $io->warning("Course {$courseId} has no resource_node_id - skipping.");
+
                 continue;
             }
 
@@ -188,6 +191,7 @@ final class MigrateAttendancesFastCommand extends Command
 
             if (!$courseNode) {
                 $io->warning("Course {$courseId} resource_node {$courseResourceNodeId} not found - skipping.");
+
                 continue;
             }
 
@@ -319,7 +323,7 @@ final class MigrateAttendancesFastCommand extends Command
                     $newPath = $coursePath.'/'.$segmentTitle.'-'.$attendanceId.'-'.$resourceNodeId.'/';
 
                     if ($dryRun) {
-                        $io->writeln(sprintf('  - Attendance %d -> path: %s', $attendanceId, $newPath));
+                        $io->writeln(\sprintf('  - Attendance %d -> path: %s', $attendanceId, $newPath));
                     }
 
                     $this->connection->update('resource_node', ['path' => $newPath], ['id' => $resourceNodeId]);
@@ -339,20 +343,22 @@ final class MigrateAttendancesFastCommand extends Command
                 }
 
                 $processedCourses++;
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 try {
                     $this->connection->rollBack();
-                } catch (\Throwable) {
+                } catch (Throwable) {
                     // Ignore rollback failures.
                 }
 
                 $io->error("Course {$courseId}: transaction failed - ".$e->getMessage());
+
                 return Command::FAILURE;
             }
         }
 
         if ($dryRun) {
             $io->success("Dry-run finished. Courses processed: {$processedCourses}. Attendances simulated: {$processedAttendances}.");
+
             return Command::SUCCESS;
         }
 
@@ -381,11 +387,11 @@ final class MigrateAttendancesFastCommand extends Command
     {
         // We rely on c_attendance.c_id to identify the course ownership.
         return $this->connection->fetchFirstColumn(
-            "SELECT DISTINCT c_id
+            'SELECT DISTINCT c_id
              FROM c_attendance
              WHERE resource_node_id IS NULL
                AND c_id IS NOT NULL
-             ORDER BY c_id"
+             ORDER BY c_id'
         );
     }
 
@@ -434,12 +440,14 @@ final class MigrateAttendancesFastCommand extends Command
     {
         if (!$this->tableExists('c_item_property')) {
             $io->note('Legacy table "c_item_property" does not exist - nothing to drop.');
+
             return;
         }
 
         $pending = (int) $this->connection->fetchOne('SELECT COUNT(*) FROM c_attendance WHERE resource_node_id IS NULL');
         if ($pending > 0) {
             $io->warning("Not dropping legacy table \"c_item_property\": {$pending} attendances are still pending (resource_node_id IS NULL).");
+
             return;
         }
 
@@ -463,12 +471,14 @@ final class MigrateAttendancesFastCommand extends Command
     {
         if (!$this->tableExists('c_attendance')) {
             $io->note('Table "c_attendance" does not exist - nothing to drop.');
+
             return;
         }
 
         $pending = (int) $this->connection->fetchOne('SELECT COUNT(*) FROM c_attendance WHERE resource_node_id IS NULL');
         if ($pending > 0) {
             $io->warning("Not dropping legacy columns from c_attendance: {$pending} attendances are still pending (resource_node_id IS NULL).");
+
             return;
         }
 
@@ -486,6 +496,7 @@ final class MigrateAttendancesFastCommand extends Command
 
         if (0 === \count($dropList)) {
             $io->note('c_attendance does not have legacy columns c_id/session_id - nothing to drop.');
+
             return;
         }
 
@@ -501,7 +512,7 @@ final class MigrateAttendancesFastCommand extends Command
             $io->success('Legacy columns dropped from c_attendance.');
         } catch (DbalException $e) {
             $io->error('Failed to drop legacy columns from c_attendance: '.$e->getMessage());
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $io->error('Failed to drop legacy columns from c_attendance: '.$e->getMessage());
         }
     }
@@ -509,7 +520,7 @@ final class MigrateAttendancesFastCommand extends Command
     private function getFallbackAdminId(): int
     {
         $id = $this->connection->fetchOne(
-            "SELECT id FROM user WHERE roles LIKE :role LIMIT 1",
+            'SELECT id FROM user WHERE roles LIKE :role LIMIT 1',
             ['role' => '%ROLE_ADMIN%']
         );
 
@@ -530,7 +541,7 @@ final class MigrateAttendancesFastCommand extends Command
             $len = $col->getLength();
 
             return \in_array($type, ['binary', 'varbinary'], true) || 16 === $len;
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return false;
         }
     }
@@ -539,8 +550,9 @@ final class MigrateAttendancesFastCommand extends Command
     {
         try {
             $sm = $this->connection->createSchemaManager();
+
             return \in_array($tableName, $sm->listTableNames(), true);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return false;
         }
     }
@@ -550,8 +562,9 @@ final class MigrateAttendancesFastCommand extends Command
         try {
             $sm = $this->connection->createSchemaManager();
             $table = $sm->introspectTable($tableName);
+
             return $table->hasColumn($columnName);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return false;
         }
     }

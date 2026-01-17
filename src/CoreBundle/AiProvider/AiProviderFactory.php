@@ -71,11 +71,13 @@ final class AiProviderFactory
         foreach ($config as $providerName => $providerConfig) {
             if (!isset($possibleProviders[$providerName])) {
                 error_log('[AI] Unsupported provider in config: "'.$providerName.'". Skipping.');
+
                 continue;
             }
 
             if (!\is_array($providerConfig)) {
                 error_log('[AI] Provider config for "'.$providerName.'" must be an array. Skipping.');
+
                 continue;
             }
 
@@ -101,6 +103,7 @@ final class AiProviderFactory
 
                 if (!isset($typeInterface[$type])) {
                     error_log('[AI] Unknown AI service type configured: "'.$type.'" for provider "'.$providerName.'". Skipping.');
+
                     continue;
                 }
 
@@ -127,6 +130,7 @@ final class AiProviderFactory
                         }
                     } else {
                         error_log('[AI] Provider "'.$providerName.'" is configured for type "'.$type.'" but no usable implementation was found (expected '.$iface.').');
+
                         continue;
                     }
                 }

@@ -212,7 +212,7 @@ class SessionRepository extends ServiceEntityRepository
         return $qb
             ->andWhere(
                 $qb->expr()->orX(
-                // Duration sessions are candidates for "current" (provider filters expired ones via daysLeft)
+                    // Duration sessions are candidates for "current" (provider filters expired ones via daysLeft)
                     $qb->expr()->gt('s.duration', 0),
 
                     // Date-based sessions must be inside the effective window
@@ -222,7 +222,8 @@ class SessionRepository extends ServiceEntityRepository
             ->setParameter('now', $now)
             ->setParameter('coachRelationType', 3)
             // IMPORTANT: stable ordering for your scan pagination in the provider
-            ->addOrderBy('s.id', 'ASC');
+            ->addOrderBy('s.id', 'ASC')
+        ;
     }
 
     public function getUpcomingSessionsOfUserInUrl(User $user, AccessUrl $url): QueryBuilder
@@ -251,7 +252,8 @@ class SessionRepository extends ServiceEntityRepository
             ->andWhere($upcomingStart)
             ->setParameter('now', $now)
             ->addOrderBy('sru.accessStartDate', 'ASC')
-            ->addOrderBy('s.id', 'ASC');
+            ->addOrderBy('s.id', 'ASC')
+        ;
     }
 
     public function addUserInCourse(int $relationType, User $user, Course $course, Session $session): void

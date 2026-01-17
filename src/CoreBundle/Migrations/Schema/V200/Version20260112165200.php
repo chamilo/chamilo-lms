@@ -13,7 +13,7 @@ final class Version20260112165200 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return "Add Spanish (Mexico) language (es_MX) to language table when missing.";
+        return 'Add Spanish (Mexico) language (es_MX) to language table when missing.';
     }
 
     public function up(Schema $schema): void

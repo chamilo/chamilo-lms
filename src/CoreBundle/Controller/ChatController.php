@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Chamilo\CoreBundle\AiProvider\AiTutorChatService;
-use Chamilo\CoreBundle\Entity\AiTutorMessage;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\LanguageHelper;
@@ -29,6 +28,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\Persistence\ManagerRegistry;
 use Event;
+use Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,6 +36,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Throwable;
 
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
 
@@ -179,6 +181,7 @@ final class ChatController extends AbstractController
                         'action_details' => 'exit-chat',
                     ]);
                     $json = ['status' => true];
+
                     break;
 
                 case 'track':
@@ -204,6 +207,7 @@ final class ChatController extends AbstractController
                                 'currentFriend' => $friend,
                             ],
                         ];
+
                         break;
                     }
 
@@ -218,11 +222,13 @@ final class ChatController extends AbstractController
                             'currentFriend' => $friend,
                         ],
                     ];
+
                     break;
 
                 case 'preview':
                     $msg = (string) $request->get('message', '');
                     $json = ['status' => true, 'data' => ['message' => CourseChatUtils::prepareMessage($msg)]];
+
                     break;
 
                 case 'reset':
@@ -233,10 +239,12 @@ final class ChatController extends AbstractController
                             'status' => true,
                             'data' => $aiTutorChatService->renderHistoryHtml($userId, $course, $session, $aiProvider),
                         ];
+
                         break;
                     }
 
                     $json = ['status' => true, 'data' => $chat->readMessages(true, $friend)];
+
                     break;
 
                 case 'write':
@@ -245,15 +253,18 @@ final class ChatController extends AbstractController
                     if (AiTutorChatService::FRIEND_AI === $friend) {
                         $ok = $aiTutorChatService->handleUserMessage($userId, $course, $session, $aiProvider, $msg);
                         $json = ['status' => $ok, 'data' => ['writed' => $ok]];
+
                         break;
                     }
 
                     $ok = $chat->saveMessage($msg, $friend);
                     $json = ['status' => $ok, 'data' => ['writed' => $ok]];
+
                     break;
 
                 default:
                     $json = ['status' => false, 'error' => 'unknown_action'];
+
                     break;
             }
         } catch (Throwable $e) {
@@ -268,7 +279,6 @@ final class ChatController extends AbstractController
      * ===== GLOBAL CHAT (docked) =====
      * This is the API used by DockedChat.vue.
      */
-
     #[Route(path: '/account/chat', name: 'chamilo_core_global_chat_home', options: ['expose' => true])]
     public function globalHome(): Response
     {
@@ -431,7 +441,7 @@ final class ChatController extends AbstractController
         $peerId = (int) $req->query->get('user_id', 0);
         $sinceId = (int) $req->query->get('since_id', 0);
 
-        if ($peerId === AiTutorChatService::FRIEND_AI) {
+        if (AiTutorChatService::FRIEND_AI === $peerId) {
             $course = $this->resolveCourseFromRequest($req, $doctrine);
             if (null === $course) {
                 return new JsonResponse([]);
@@ -458,7 +468,7 @@ final class ChatController extends AbstractController
 
                 $out[] = [
                     'id' => (int) $m->getId(),
-                    'message' => \Security::remove_XSS(nl2br(htmlspecialchars((string) $m->getContent(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'))),
+                    'message' => Security::remove_XSS(nl2br(htmlspecialchars((string) $m->getContent(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'))),
                     'date' => (int) $m->getCreatedAt()->getTimestamp(),
                     'recd' => 2,
                     'from_user_info' => ('user' === $role)
@@ -691,7 +701,7 @@ final class ChatController extends AbstractController
                 'id' => (int) $userMsgId,
                 'assistant' => [
                     'id' => (int) $assistantId,
-                    'message' => \Security::remove_XSS($assistantSanitized),
+                    'message' => Security::remove_XSS($assistantSanitized),
                     'date' => $nowTs,
                     'recd' => 1,
                     'from_user_info' => [
@@ -846,7 +856,7 @@ final class ChatController extends AbstractController
         $peerId = (int) $req->query->get('user_id', 0);
         $visible = (int) $req->query->get('visible_messages', 0);
 
-        if ($peerId === AiTutorChatService::FRIEND_AI) {
+        if (AiTutorChatService::FRIEND_AI === $peerId) {
             // Course-only AI tutor history
             $course = $this->resolveCourseFromRequest($req, $doctrine);
             if (null === $course) {
@@ -874,7 +884,7 @@ final class ChatController extends AbstractController
 
                 $out[] = [
                     'id' => (int) $m->getId(),
-                    'message' => \Security::remove_XSS(nl2br(htmlspecialchars((string) $m->getContent(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'))),
+                    'message' => Security::remove_XSS(nl2br(htmlspecialchars((string) $m->getContent(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'))),
                     'date' => (int) $m->getCreatedAt()->getTimestamp(),
                     'recd' => 2,
                     'from_user_info' => ('user' === $role)
@@ -998,7 +1008,7 @@ final class ChatController extends AbstractController
             return new JsonResponse(['ok' => false, 'error' => 'bad_params'], 400);
         }
 
-        $chat = new \Chat();
+        $chat = new Chat();
 
         try {
             $n = $chat->ackReadUpTo($peerId, (int) $me, $lastSeenId);
@@ -1152,24 +1162,23 @@ final class ChatController extends AbstractController
         $mode = (string) ($ctx['mode'] ?? 'global');
 
         if ('course' === $mode) {
-            return sprintf(
+            return \sprintf(
                 "You are a digital tutor and mentor. You help the user understand topics related to their course '%s'. ".
                 "When greeting OR when the user asks what you are, you MUST mention the course title '%s'. ".
                 "The course is in '%s' but you must answer in whatever language the user speaks. ".
-                "This is educational use. Content that is not appropriate for minors is not acceptable. ".
-                "You are not available during exams.",
+                'This is educational use. Content that is not appropriate for minors is not acceptable. '.
+                'You are not available during exams.',
                 $title,
                 $title,
                 $lang
             );
         }
 
-        return sprintf(
-            "You are a digital tutor and mentor inside Chamilo. You help the user with learning and studying in general. ".
-            "You must answer in whatever language the user speaks. ".
-            "This is educational use. Content that is not appropriate for minors is not acceptable. ".
-            "You are not available during exams."
-        );
+        return
+            'You are a digital tutor and mentor inside Chamilo. You help the user with learning and studying in general. '.
+            'You must answer in whatever language the user speaks. '.
+            'This is educational use. Content that is not appropriate for minors is not acceptable. '.
+            'You are not available during exams.';
     }
 
     /**
@@ -1206,6 +1215,7 @@ final class ChatController extends AbstractController
             // AI Tutor is always online.
             if (AiTutorChatService::FRIEND_AI === $id) {
                 $map[$id] = 1;
+
                 continue;
             }
 
@@ -1235,7 +1245,7 @@ final class ChatController extends AbstractController
         }
 
         // Ensure AI Tutor presence exists when requested ids include it.
-        if (in_array(AiTutorChatService::FRIEND_AI, $ids, true)) {
+        if (\in_array(AiTutorChatService::FRIEND_AI, $ids, true)) {
             $map[AiTutorChatService::FRIEND_AI] = 1;
         }
 
@@ -1258,11 +1268,11 @@ final class ChatController extends AbstractController
             return null;
         }
 
-        if ('' !== $requestedProvider && in_array($requestedProvider, $available, true)) {
+        if ('' !== $requestedProvider && \in_array($requestedProvider, $available, true)) {
             return $requestedProvider;
         }
 
-        if (null !== $defaultProvider && '' !== trim($defaultProvider) && in_array($defaultProvider, $available, true)) {
+        if (null !== $defaultProvider && '' !== trim($defaultProvider) && \in_array($defaultProvider, $available, true)) {
             return $defaultProvider;
         }
 

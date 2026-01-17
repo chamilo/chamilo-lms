@@ -20,7 +20,7 @@ final class PartialSearchOrFilter extends AbstractFilter
 {
     /**
      * Prevent applying the portal scope multiple times on the same QueryBuilder instance.
-     * (No unused parameters, no side-effects on the DQL parameter list.)
+     * (No unused parameters, no side-effects on the DQL parameter list.).
      *
      * @var array<int, bool>
      */
@@ -54,21 +54,20 @@ final class PartialSearchOrFilter extends AbstractFilter
 
     protected function filterProperty(
         string $property,
-               $value,
+        $value,
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
         ?Operation $operation = null,
         array $context = []
     ): void {
-
         $this->applyAccessUrlScopeOnce($queryBuilder, $queryNameGenerator, $resourceClass);
 
         if ('search' !== $property) {
             return;
         }
 
-        if (!is_string($value) || '' === trim($value)) {
+        if (!\is_string($value) || '' === trim($value)) {
             throw new InvalidArgumentException('The "search" filter must not be empty.');
         }
 
@@ -124,7 +123,7 @@ final class PartialSearchOrFilter extends AbstractFilter
         if (\function_exists('array_is_list') && array_is_list($properties)) {
             $normalized = [];
             foreach ($properties as $field) {
-                if (is_string($field) && '' !== trim($field)) {
+                if (\is_string($field) && '' !== trim($field)) {
                     $normalized[trim($field)] = null;
                 }
             }
@@ -132,7 +131,7 @@ final class PartialSearchOrFilter extends AbstractFilter
         }
 
         // Ensure "search" is enabled, otherwise ApiPlatform may ignore ?search=...
-        if (!array_key_exists('search', $properties)) {
+        if (!\array_key_exists('search', $properties)) {
             $properties['search'] = null;
         }
 

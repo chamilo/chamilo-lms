@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Entity\PortfolioComment;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\Traits\Repository\ORM\NestedTreeRepositoryTrait;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**

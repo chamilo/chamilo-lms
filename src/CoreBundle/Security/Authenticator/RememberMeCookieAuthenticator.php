@@ -10,9 +10,11 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\ValidationToken;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\ValidationTokenRepository;
+use DateTime;
 use DateTimeImmutable;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
@@ -61,6 +63,7 @@ final class RememberMeCookieAuthenticator extends AbstractAuthenticator
         $parsed = $this->parseCookieValue($cookieValue);
         if (null === $parsed) {
             $request->attributes->set('_remember_me_clear', true);
+
             throw new AuthenticationException('Invalid remember-me cookie format/signature.');
         }
 
@@ -75,12 +78,14 @@ final class RememberMeCookieAuthenticator extends AbstractAuthenticator
         $tokenEntity = $this->tokenRepository->findRememberMeToken($userId, $hash);
         if (!$tokenEntity instanceof ValidationToken) {
             $request->attributes->set('_remember_me_clear', true);
+
             throw new AuthenticationException('Remember-me token not found.');
         }
 
         if ($this->isExpired($tokenEntity)) {
             $this->tokenRepository->remove($tokenEntity, true);
             $request->attributes->set('_remember_me_clear', true);
+
             throw new AuthenticationException('Remember-me token expired.');
         }
 
@@ -88,6 +93,7 @@ final class RememberMeCookieAuthenticator extends AbstractAuthenticator
         if (!$user instanceof User) {
             $this->tokenRepository->remove($tokenEntity, true);
             $request->attributes->set('_remember_me_clear', true);
+
             throw new AuthenticationException('User not found for remember-me token.');
         }
 
@@ -95,12 +101,14 @@ final class RememberMeCookieAuthenticator extends AbstractAuthenticator
         if (User::ACTIVE !== $user->getActive()) {
             $this->tokenRepository->remove($tokenEntity, true);
             $request->attributes->set('_remember_me_clear', true);
+
             throw new AuthenticationException('User not active.');
         }
 
-        if (null !== $user->getExpirationDate() && $user->getExpirationDate() <= new \DateTime()) {
+        if (null !== $user->getExpirationDate() && $user->getExpirationDate() <= new DateTime()) {
             $this->tokenRepository->remove($tokenEntity, true);
             $request->attributes->set('_remember_me_clear', true);
+
             throw new AuthenticationException('User expired.');
         }
 
@@ -121,14 +129,15 @@ final class RememberMeCookieAuthenticator extends AbstractAuthenticator
         );
     }
 
-    public function onAuthenticationSuccess(Request $request, $token, string $firewallName): ?\Symfony\Component\HttpFoundation\Response
+    public function onAuthenticationSuccess(Request $request, $token, string $firewallName): ?Response
     {
         return null;
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?\Symfony\Component\HttpFoundation\Response
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         $request->attributes->set('_remember_me_clear', true);
+
         return null;
     }
 
@@ -144,6 +153,7 @@ final class RememberMeCookieAuthenticator extends AbstractAuthenticator
     private function isExpired(ValidationToken $token): bool
     {
         $createdTs = $token->getCreatedAt()->getTimestamp();
+
         return ($createdTs + self::TTL_SECONDS) < time();
     }
 
@@ -176,12 +186,14 @@ final class RememberMeCookieAuthenticator extends AbstractAuthenticator
     private function buildCookieValue(int $userId, string $rawToken): string
     {
         $sig = $this->sign((string) $userId.'|'.$rawToken);
+
         return $userId.':'.$rawToken.':'.$sig;
     }
 
     private function sign(string $data): string
     {
         $raw = hash_hmac('sha256', $data, $this->appSecret, true);
+
         return $this->base64UrlEncode($raw);
     }
 

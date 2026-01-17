@@ -265,6 +265,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         $userId = $this->getUserId();
         if (!$userId) {
             error_log('[AI][OpenAI][document_process] User not authenticated.');
+
             return 'Error: User is not authenticated.';
         }
 
@@ -292,6 +293,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
 
         if (empty($cfg)) {
             error_log('[AI][OpenAI][document_process] Missing config for type: document_process/text');
+
             return 'Error: OpenAI document processing configuration is missing.';
         }
 
@@ -332,6 +334,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
 
             if (!\is_array($data)) {
                 error_log('[AI][OpenAI][document_process] Invalid JSON response: '.mb_substr($raw, 0, 1200));
+
                 return 'Error: Invalid JSON response from OpenAI.';
             }
 
@@ -339,12 +342,14 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                 $msg = $data['error']['message'] ?? 'OpenAI returned an error response.';
                 $msg = \is_string($msg) ? trim($msg) : 'OpenAI returned an error response.';
                 error_log('[AI][OpenAI][document_process] Error response: '.$msg);
+
                 return 'Error: '.$msg;
             }
 
             $text = $this->extractResponsesApiText($data);
             if ('' === trim($text)) {
                 error_log('[AI][OpenAI][document_process] Empty output_text.');
+
                 return 'Error: Empty response from OpenAI.';
             }
 
@@ -362,6 +367,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             return trim($text);
         } catch (Throwable $e) {
             error_log('[AI][OpenAI][document_process] Exception: '.$e->getMessage());
+
             return 'Error: '.$e->getMessage();
         }
     }
@@ -398,6 +404,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
 
             if (!\is_array($data)) {
                 error_log('[AI][OpenAI][files] Invalid JSON response: '.mb_substr($raw, 0, 1200));
+
                 return null;
             }
 
@@ -405,18 +412,21 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                 $msg = $data['error']['message'] ?? 'OpenAI returned an error response.';
                 $msg = \is_string($msg) ? trim($msg) : 'OpenAI returned an error response.';
                 error_log('[AI][OpenAI][files] Error response: '.$msg);
+
                 return null;
             }
 
             $fileId = $data['id'] ?? null;
             if (!\is_string($fileId) || '' === trim($fileId)) {
                 error_log('[AI][OpenAI][files] Missing file id in response.');
+
                 return null;
             }
 
             return $fileId;
         } catch (Throwable $e) {
             error_log('[AI][OpenAI][files] Upload exception: '.$e->getMessage());
+
             return null;
         }
     }
@@ -1331,5 +1341,4 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             'param' => isset($err['param']) && \is_string($err['param']) ? $err['param'] : null,
         ];
     }
-
 }

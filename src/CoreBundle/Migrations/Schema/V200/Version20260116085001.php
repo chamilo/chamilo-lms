@@ -18,6 +18,9 @@ use Doctrine\DBAL\Schema\Schema;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
+use const PHP_URL_PATH;
+use const PREG_SET_ORDER;
+
 final class Version20260116085001 extends AbstractMigrationChamilo
 {
     private ?CDocumentRepository $documentRepo;
@@ -27,7 +30,7 @@ final class Version20260116085001 extends AbstractMigrationChamilo
 
     public function getDescription(): string
     {
-        return "Migrate embed files in portfolio items and comments";
+        return 'Migrate embed files in portfolio items and comments';
     }
 
     public function up(Schema $schema): void
@@ -191,11 +194,9 @@ final class Version20260116085001 extends AbstractMigrationChamilo
 
     /**
      * @param array<int, CDocument> $documents
-     * @param array $matches
-     * @param int $index
-     * @param string $contentText
-     *
-     * @return void
+     * @param array                 $matches
+     * @param int                   $index
+     * @param string                $contentText
      */
     private function replaceDocumentLinks(array $documents, $matches, $index, $contentText): void
     {

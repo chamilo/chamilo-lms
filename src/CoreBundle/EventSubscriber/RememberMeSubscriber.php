@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ValidationToken;
 use Chamilo\CoreBundle\Helpers\ValidationTokenHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\ValidationTokenRepository;
+use DateTime;
 use DateTimeImmutable;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -30,7 +31,7 @@ final class RememberMeSubscriber implements EventSubscriberInterface
 
     /**
      * Extended session lifetime (seconds).
-     * 14 days = 14 * 24 * 60 * 60 = 1209600
+     * 14 days = 14 * 24 * 60 * 60 = 1209600.
      */
     private const TTL_SECONDS = 1209600;
 
@@ -113,6 +114,7 @@ final class RememberMeSubscriber implements EventSubscriberInterface
         $cookieValue = $request->cookies->get(self::COOKIE_NAME);
         if (!\is_string($cookieValue) || '' === $cookieValue) {
             $this->debug('No remember-me cookie on request');
+
             return;
         }
 
@@ -120,6 +122,7 @@ final class RememberMeSubscriber implements EventSubscriberInterface
         if (null === $parsed) {
             $request->attributes->set('_remember_me_clear', true);
             $this->debug('Invalid remember-me cookie format/signature');
+
             return;
         }
 
@@ -135,6 +138,7 @@ final class RememberMeSubscriber implements EventSubscriberInterface
         if (!$tokenEntity) {
             $request->attributes->set('_remember_me_clear', true);
             $this->debug('Remember-me token not found in DB', ['userId' => $userId]);
+
             return;
         }
 
@@ -142,6 +146,7 @@ final class RememberMeSubscriber implements EventSubscriberInterface
             $this->tokenRepository->remove($tokenEntity, true);
             $request->attributes->set('_remember_me_clear', true);
             $this->debug('Remember-me token expired', ['userId' => $userId]);
+
             return;
         }
 
@@ -150,6 +155,7 @@ final class RememberMeSubscriber implements EventSubscriberInterface
             $this->tokenRepository->remove($tokenEntity, true);
             $request->attributes->set('_remember_me_clear', true);
             $this->debug('User not found for remember-me token', ['userId' => $userId]);
+
             return;
         }
 
@@ -158,13 +164,15 @@ final class RememberMeSubscriber implements EventSubscriberInterface
             $this->tokenRepository->remove($tokenEntity, true);
             $request->attributes->set('_remember_me_clear', true);
             $this->debug('User not active for remember-me token', ['userId' => $userId]);
+
             return;
         }
 
-        if (null !== $user->getExpirationDate() && $user->getExpirationDate() <= new \DateTime()) {
+        if (null !== $user->getExpirationDate() && $user->getExpirationDate() <= new DateTime()) {
             $this->tokenRepository->remove($tokenEntity, true);
             $request->attributes->set('_remember_me_clear', true);
             $this->debug('User expired for remember-me token', ['userId' => $userId]);
+
             return;
         }
 
@@ -211,6 +219,7 @@ final class RememberMeSubscriber implements EventSubscriberInterface
             // Clear both variants to avoid issues when switching HTTP/HTTPS in dev.
             $response->headers->setCookie($this->makeExpiredCookie(true));
             $response->headers->setCookie($this->makeExpiredCookie(false));
+
             return;
         }
 
@@ -276,6 +285,7 @@ final class RememberMeSubscriber implements EventSubscriberInterface
     private function isExpired(ValidationToken $token): bool
     {
         $createdTs = $token->getCreatedAt()->getTimestamp();
+
         return ($createdTs + self::TTL_SECONDS) < time();
     }
 
@@ -318,12 +328,14 @@ final class RememberMeSubscriber implements EventSubscriberInterface
     private function buildCookieValue(int $userId, string $rawToken): string
     {
         $sig = $this->sign((string) $userId.'|'.$rawToken);
+
         return $userId.':'.$rawToken.':'.$sig;
     }
 
     private function sign(string $data): string
     {
         $raw = hash_hmac('sha256', $data, $this->appSecret, true);
+
         return $this->base64UrlEncode($raw);
     }
 
@@ -375,6 +387,7 @@ final class RememberMeSubscriber implements EventSubscriberInterface
 
         // Helps when behind a reverse proxy and trusted proxies aren't configured.
         $xfp = strtolower((string) $request->headers->get('x-forwarded-proto', ''));
+
         return str_contains($xfp, 'https');
     }
 

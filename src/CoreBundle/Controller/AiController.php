@@ -24,6 +24,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Question;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,9 +32,17 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
+use TypeError;
 
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+use const FILTER_FLAG_NO_PRIV_RANGE;
+use const FILTER_FLAG_NO_RES_RANGE;
 use const FILTER_SANITIZE_NUMBER_INT;
+use const FILTER_VALIDATE_IP;
 use const FILTER_VALIDATE_URL;
+use const PATHINFO_EXTENSION;
 
 #[Route('/ai')]
 class AiController extends AbstractController
@@ -101,13 +110,13 @@ class AiController extends AbstractController
             "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term."
         );
 
-        $prompt = sprintf($base, $n, $courseTitle);
+        $prompt = \sprintf($base, $n, $courseTitle);
 
         if ('' !== $desc) {
             $descPrefix = $this->translator->trans(
                 "This is a short description of the course '%s'."
             );
-            $prompt .= ' '.sprintf($descPrefix, $courseTitle).' '.$desc;
+            $prompt .= ' '.\sprintf($descPrefix, $courseTitle).' '.$desc;
         }
 
         return new JsonResponse(['prompt' => $prompt]);
@@ -126,7 +135,7 @@ class AiController extends AbstractController
         }
 
         $data = json_decode($request->getContent(), true);
-        if (!is_array($data)) {
+        if (!\is_array($data)) {
             return new JsonResponse([
                 'success' => false,
                 'text' => 'Invalid JSON payload.',
@@ -166,7 +175,7 @@ class AiController extends AbstractController
         try {
             $provider = $this->aiProviderFactory->getProvider($providerName, 'text');
 
-            if (!is_object($provider) || !method_exists($provider, 'generateText')) {
+            if (!\is_object($provider) || !method_exists($provider, 'generateText')) {
                 return new JsonResponse([
                     'success' => false,
                     'text' => 'Selected AI provider does not support text generation.',
@@ -180,7 +189,7 @@ class AiController extends AbstractController
                     'n' => $n,
                     'tool' => $toolName,
                 ]);
-            } catch (\TypeError $e) {
+            } catch (TypeError $e) {
                 // Backward compatibility: generateText(string $prompt, string $language): string
                 $raw = (string) $provider->generateText($prompt, $language);
             }
@@ -196,9 +205,10 @@ class AiController extends AbstractController
 
             if (str_starts_with($raw, 'Error:')) {
                 $msg = trim((string) preg_replace('/^Error:\s*/', '', $raw));
+
                 return new JsonResponse([
                     'success' => false,
-                    'text' => $msg !== '' ? $msg : $raw,
+                    'text' => '' !== $msg ? $msg : $raw,
                 ], 500);
             }
 
@@ -206,7 +216,7 @@ class AiController extends AbstractController
                 'success' => true,
                 'text' => $raw,
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             error_log('[AI][glossary] Generation failed: '.$e->getMessage());
 
             return new JsonResponse([
@@ -243,7 +253,7 @@ class AiController extends AbstractController
     {
         try {
             $data = json_decode($request->getContent(), true);
-            if (!is_array($data)) {
+            if (!\is_array($data)) {
                 return new JsonResponse([
                     'success' => false,
                     'text' => 'Invalid JSON payload.',
@@ -403,7 +413,7 @@ class AiController extends AbstractController
             }
 
             $data = json_decode($request->getContent(), true);
-            if (!is_array($data)) {
+            if (!\is_array($data)) {
                 return new JsonResponse([
                     'success' => false,
                     'text' => 'Invalid JSON payload.',
@@ -435,7 +445,7 @@ class AiController extends AbstractController
             if (null !== $aiProvider && '' !== (string) $aiProvider) {
                 $explicitProvider = (string) $aiProvider;
 
-                if (!in_array($explicitProvider, $availableProviders, true)) {
+                if (!\in_array($explicitProvider, $availableProviders, true)) {
                     return new JsonResponse([
                         'success' => false,
                         'text' => 'Selected AI provider is not available for image generation.',
@@ -454,6 +464,7 @@ class AiController extends AbstractController
 
                     if (!$aiService instanceof AiImageProviderInterface) {
                         $errors[$providerName] = 'Provider does not implement image generation interface.';
+
                         continue;
                     }
 
@@ -464,19 +475,23 @@ class AiController extends AbstractController
 
                     if (empty($result)) {
                         $errors[$providerName] = 'Provider returned an empty response.';
+
                         continue;
                     }
 
                     if (\is_string($result) && str_starts_with($result, 'Error:')) {
                         $errors[$providerName] = $result;
                         $result = null;
+
                         continue;
                     }
 
                     $providerUsed = $providerName;
+
                     break;
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     $errors[$providerName] = $e->getMessage();
+
                     continue;
                 }
             }
@@ -561,7 +576,7 @@ class AiController extends AbstractController
             }
 
             $data = json_decode($request->getContent(), true);
-            if (!is_array($data)) {
+            if (!\is_array($data)) {
                 return new JsonResponse([
                     'success' => false,
                     'text' => 'Invalid JSON payload.',
@@ -596,7 +611,7 @@ class AiController extends AbstractController
             if (null !== $aiProvider && '' !== (string) $aiProvider) {
                 $explicitProvider = (string) $aiProvider;
 
-                if (!in_array($explicitProvider, $availableProviders, true)) {
+                if (!\in_array($explicitProvider, $availableProviders, true)) {
                     return new JsonResponse([
                         'success' => false,
                         'text' => 'Selected AI provider is not available for video generation.',
@@ -615,6 +630,7 @@ class AiController extends AbstractController
 
                     if (!$aiService instanceof AiVideoProviderInterface) {
                         $errors[$providerName] = 'Provider does not implement video generation interface.';
+
                         continue;
                     }
 
@@ -623,10 +639,10 @@ class AiController extends AbstractController
                         'n' => $n,
                     ];
 
-                    if (null !== $seconds && $seconds !== '') {
+                    if (null !== $seconds && '' !== $seconds) {
                         $options['seconds'] = $seconds;
                     }
-                    if (null !== $size && $size !== '') {
+                    if (null !== $size && '' !== $size) {
                         $options['size'] = $size;
                     }
 
@@ -635,20 +651,24 @@ class AiController extends AbstractController
                     if (empty($result)) {
                         $errors[$providerName] = 'Provider returned an empty response.';
                         $result = null;
+
                         continue;
                     }
 
                     if (\is_string($result) && str_starts_with($result, 'Error:')) {
                         $errors[$providerName] = $result;
                         $result = null;
+
                         continue;
                     }
 
                     $providerUsed = $providerName;
+
                     break;
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     $errors[$providerName] = $e->getMessage();
                     $result = null;
+
                     continue;
                 }
             }
@@ -658,14 +678,15 @@ class AiController extends AbstractController
 
                 $firstError = '';
                 foreach ($errors as $err) {
-                    if (is_string($err) && '' !== trim($err)) {
+                    if (\is_string($err) && '' !== trim($err)) {
                         $firstError = trim($err);
+
                         break;
                     }
                 }
 
-                $message = $firstError !== '' ? preg_replace('/^Error:\s*/', '', $firstError) : (
-                $explicitProvider
+                $message = '' !== $firstError ? preg_replace('/^Error:\s*/', '', $firstError) : (
+                    $explicitProvider
                     ? 'Video generation failed for the selected provider.'
                     : 'All video providers failed.'
                 );
@@ -712,7 +733,7 @@ class AiController extends AbstractController
                 ]);
             }
 
-            if (!is_array($result)) {
+            if (!\is_array($result)) {
                 return new JsonResponse([
                     'success' => false,
                     'text' => 'Provider returned an unsupported response type.',
@@ -733,7 +754,7 @@ class AiController extends AbstractController
                     $result['content_type'] = $fetched['content_type'];
                     $result['is_base64'] = true;
                     $result['url'] = null;
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     error_log('[AI][video] Failed to fetch video URL as base64: '.$e->getMessage());
                 }
             }
@@ -804,7 +825,7 @@ class AiController extends AbstractController
             }
 
             $status = (string) ($job['status'] ?? '');
-            $jobError = isset($job['error']) && is_string($job['error']) ? trim($job['error']) : '';
+            $jobError = isset($job['error']) && \is_string($job['error']) ? trim($job['error']) : '';
 
             $result = [
                 'id' => (string) ($job['id'] ?? $id),
@@ -814,22 +835,22 @@ class AiController extends AbstractController
                 'is_base64' => false,
                 'content_type' => 'video/mp4',
                 'revised_prompt' => null,
-                'error' => $jobError !== '' ? $jobError : null,
+                'error' => '' !== $jobError ? $jobError : null,
             ];
 
-            if (in_array($status, ['completed', 'succeeded', 'done'], true)) {
+            if (\in_array($status, ['completed', 'succeeded', 'done'], true)) {
                 if (method_exists($aiService, 'getVideoJobContentAsBase64')) {
                     $maxBytes = 15 * 1024 * 1024;
                     $content = $aiService->getVideoJobContentAsBase64($id, $maxBytes);
 
-                    if (is_array($content)) {
+                    if (\is_array($content)) {
                         $result['is_base64'] = (bool) ($content['is_base64'] ?? false);
                         $result['content'] = $content['content'] ?? null;
                         $result['url'] = $content['url'] ?? null;
                         $result['content_type'] = (string) ($content['content_type'] ?? 'video/mp4');
 
                         if (!empty($content['error'])) {
-                            $result['error'] = is_string($content['error']) ? trim($content['error']) : (string) $content['error'];
+                            $result['error'] = \is_string($content['error']) ? trim($content['error']) : (string) $content['error'];
 
                             return new JsonResponse([
                                 'success' => true,
@@ -844,7 +865,7 @@ class AiController extends AbstractController
 
             return new JsonResponse([
                 'success' => true,
-                'text' => $jobError !== '' ? $jobError : '',
+                'text' => '' !== $jobError ? $jobError : '',
                 'result' => $result,
                 'provider_used' => $aiProvider,
             ]);
@@ -861,9 +882,10 @@ class AiController extends AbstractController
     public function documentFeedback(Request $request): JsonResponse
     {
         $debug = false;
+
         try {
             $debug = (bool) $this->getParameter('kernel.debug');
-        } catch (\Throwable) {
+        } catch (Throwable) {
             $debug = false;
         }
 
@@ -915,6 +937,7 @@ class AiController extends AbstractController
             $linkCourse = $link->getCourse();
             if ($linkCourse && (int) $linkCourse->getId() === $cid) {
                 $belongsToCourse = true;
+
                 break;
             }
         }
@@ -930,10 +953,11 @@ class AiController extends AbstractController
 
         try {
             $binary = (string) $this->resourceNodeRepository->getFileSystem()->read($fileUri);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             if ($debug) {
                 error_log('[AI][document_feedback] Failed to read file: '.$e->getMessage());
             }
+
             return new JsonResponse(['success' => false, 'text' => 'Failed to read file content.'], 500);
         }
 
@@ -953,8 +977,8 @@ class AiController extends AbstractController
 
         // Use extension as a fallback (some files come as application/octet-stream)
         $ext = strtolower((string) pathinfo($filename, PATHINFO_EXTENSION));
-        $isPdf = ($ext === 'pdf') || ($mimeType === 'application/pdf');
-        $isTxt = ($ext === 'txt') || str_starts_with(strtolower($mimeType), 'text/plain');
+        $isPdf = ('pdf' === $ext) || ('application/pdf' === $mimeType);
+        $isTxt = ('txt' === $ext) || str_starts_with(strtolower($mimeType), 'text/plain');
 
         // Size limits (different per type)
         $maxBytesPdf = 10 * 1024 * 1024;
@@ -1016,7 +1040,7 @@ class AiController extends AbstractController
                         'sid' => $sid,
                         'gid' => $gid,
                     ]);
-                } catch (\TypeError) {
+                } catch (TypeError) {
                     // Backward compatibility
                     $raw = (string) $provider->generateText($fullPrompt, $language);
                 }
@@ -1030,12 +1054,12 @@ class AiController extends AbstractController
                 if (str_starts_with($result, 'Error:')) {
                     $msg = trim((string) preg_replace('/^Error:\s*/', '', $result));
                     $status = $this->mapDocumentErrorToHttpStatus($msg);
-                    return new JsonResponse(['success' => false, 'text' => $msg !== '' ? $msg : $result], $status);
+
+                    return new JsonResponse(['success' => false, 'text' => '' !== $msg ? $msg : $result], $status);
                 }
 
                 return new JsonResponse(['success' => true, 'text' => $result]);
             }
-
 
             // PDF: send as file to DOCUMENT_PROCESS provider
             $provider = $this->aiProviderFactory->getProvider($aiProvider, 'document_process');
@@ -1070,11 +1094,12 @@ class AiController extends AbstractController
             if (str_starts_with($result, 'Error:')) {
                 $msg = trim((string) preg_replace('/^Error:\s*/', '', $result));
                 $status = $this->mapDocumentErrorToHttpStatus($msg);
-                return new JsonResponse(['success' => false, 'text' => $msg !== '' ? $msg : $result], $status);
+
+                return new JsonResponse(['success' => false, 'text' => '' !== $msg ? $msg : $result], $status);
             }
 
             return new JsonResponse(['success' => true, 'text' => $result]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $msg = trim($e->getMessage());
             if ($debug) {
                 error_log('[AI][document_feedback] Exception: '.$msg);
@@ -1084,7 +1109,7 @@ class AiController extends AbstractController
 
             return new JsonResponse([
                 'success' => false,
-                'text' => $debug && $msg !== '' ? $msg : 'An error occurred while analyzing the document.',
+                'text' => $debug && '' !== $msg ? $msg : 'An error occurred while analyzing the document.',
             ], $status);
         }
     }
@@ -1127,12 +1152,12 @@ class AiController extends AbstractController
 
         // "AI feedback on %s in course %s"
         $subjectTpl = $this->translator->trans('AI feedback on %s in course %s');
-        $subject = sprintf($subjectTpl, $documentTitle, $courseTitle);
+        $subject = \sprintf($subjectTpl, $documentTitle, $courseTitle);
 
         try {
             $safeHtml = '<pre style="white-space:pre-wrap;">'
-                . htmlspecialchars($answer, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
-                . '</pre>';
+                .htmlspecialchars($answer, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
+                .'</pre>';
 
             $messageId = $this->messageHelper->sendMessageSimple(
                 $userId,
@@ -1153,7 +1178,7 @@ class AiController extends AbstractController
             }
 
             return new JsonResponse(['success' => true, 'message_id' => $messageId]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->debugLog('[AI][document_feedback][inbox] Exception: '.$e->getMessage());
 
             return new JsonResponse([
@@ -1239,7 +1264,7 @@ class AiController extends AbstractController
     private function looksLikeBase64(string $s): bool
     {
         $s = trim($s);
-        if ('' === $s || strlen($s) < 64) {
+        if ('' === $s || \strlen($s) < 64) {
             return false;
         }
 
@@ -1269,7 +1294,7 @@ class AiController extends AbstractController
     private function fetchUrlAsBase64(string $url, int $maxBytes = 10485760): array
     {
         if (!$this->isSafeRemoteUrl($url)) {
-            throw new \RuntimeException('Remote URL is not allowed.');
+            throw new RuntimeException('Remote URL is not allowed.');
         }
 
         $response = $this->httpClient->request('GET', $url, [
@@ -1283,13 +1308,13 @@ class AiController extends AbstractController
 
         $lenHeader = $headers['content-length'][0] ?? null;
         if (null !== $lenHeader && is_numeric($lenHeader) && (int) $lenHeader > $maxBytes) {
-            throw new \RuntimeException('Remote content is too large to inline as base64.');
+            throw new RuntimeException('Remote content is too large to inline as base64.');
         }
 
         $binary = $response->getContent(false);
 
-        if (strlen($binary) > $maxBytes) {
-            throw new \RuntimeException('Remote content exceeded the maximum allowed size.');
+        if (\strlen($binary) > $maxBytes) {
+            throw new RuntimeException('Remote content exceeded the maximum allowed size.');
         }
 
         return [
@@ -1303,12 +1328,12 @@ class AiController extends AbstractController
     private function isSafeRemoteUrl(string $url): bool
     {
         $parts = parse_url($url);
-        if (!is_array($parts)) {
+        if (!\is_array($parts)) {
             return false;
         }
 
         $scheme = strtolower((string) ($parts['scheme'] ?? ''));
-        if (!in_array($scheme, ['https'], true)) {
+        if (!\in_array($scheme, ['https'], true)) {
             return false;
         }
 
@@ -1317,7 +1342,7 @@ class AiController extends AbstractController
             return false;
         }
 
-        if (in_array($host, ['localhost', '127.0.0.1', '::1'], true)) {
+        if (\in_array($host, ['localhost', '127.0.0.1', '::1'], true)) {
             return false;
         }
 
@@ -1339,7 +1364,7 @@ class AiController extends AbstractController
             if ($repo instanceof CGlossaryRepository) {
                 return $repo->getGenericCourseDescription($cid, $sid);
             }
-        } catch (\Throwable) {
+        } catch (Throwable) {
             // Ignore repository instantiation differences.
         }
 
@@ -1352,7 +1377,7 @@ class AiController extends AbstractController
     private function normalizePlainText(string $binary): string
     {
         // If mbstring is missing, just return as-is.
-        if (!function_exists('mb_detect_encoding') || !function_exists('mb_convert_encoding')) {
+        if (!\function_exists('mb_detect_encoding') || !\function_exists('mb_convert_encoding')) {
             return trim($binary);
         }
 

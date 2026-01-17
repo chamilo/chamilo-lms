@@ -139,7 +139,7 @@ final class DateTimeHelper
         }
 
         // Timestamp input
-        if (is_int($time) || (is_string($time) && ctype_digit($time))) {
+        if (\is_int($time) || (\is_string($time) && ctype_digit($time))) {
             $ts = (int) $time;
 
             if ($returnNullIfInvalidDate && $ts <= 0) {

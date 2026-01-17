@@ -19,6 +19,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Routing\RouterInterface;
+use Throwable;
 
 final class CGlossaryRepository extends ResourceRepository implements ResourceWithLinkInterface
 {
@@ -69,12 +70,12 @@ final class CGlossaryRepository extends ResourceRepository implements ResourceWi
         foreach ($candidates as $sessionId) {
             try {
                 $row = $this->connection->fetchAssociative(
-                    "SELECT content
+                    'SELECT content
                      FROM c_course_description
                      WHERE c_id = :cid
                        AND session_id = :sid
                      ORDER BY id DESC
-                     LIMIT 1",
+                     LIMIT 1',
                     [
                         'cid' => $cid,
                         'sid' => (int) $sessionId,
@@ -87,7 +88,7 @@ final class CGlossaryRepository extends ResourceRepository implements ResourceWi
 
                     return trim($txt);
                 }
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 // Some installs may not have this table or may differ; ignore.
                 continue;
             }

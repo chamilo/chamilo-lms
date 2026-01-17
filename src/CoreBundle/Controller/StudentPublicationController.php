@@ -43,6 +43,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 use ZipArchive;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const PATHINFO_EXTENSION;
 use const PATHINFO_FILENAME;
 
 #[Route('/assignments')]
@@ -602,6 +605,7 @@ class StudentPublicationController extends AbstractController
                 if ($kernel->isDebug()) {
                     error_log('[Assignments][AI][providers] Skipping provider "'.$name.'": '.$e->getMessage());
                 }
+
                 continue;
             }
         }
@@ -610,7 +614,6 @@ class StudentPublicationController extends AbstractController
 
         return new JsonResponse(['providers' => $providers]);
     }
-
 
     #[Route('/submissions/{id}/ai-task-grader-default-prompt', name: 'chamilo_core_assignment_ai_task_grader_default_prompt', methods: ['GET'])]
     public function getAiTaskGraderDefaultPrompt(
@@ -671,6 +674,7 @@ class StudentPublicationController extends AbstractController
             $cap['reason'] = $hasText
                 ? 'No file attached. AI will grade the text submission.'
                 : 'No file attached and submission text is empty. AI will have little to grade.';
+
             return new JsonResponse($cap);
         }
 
@@ -681,6 +685,7 @@ class StudentPublicationController extends AbstractController
             $cap['documentSupported'] = true;
             $cap['recommendedMode'] = 'document';
             $cap['reason'] = 'PDF detected. AI will process the document.';
+
             return new JsonResponse($cap);
         }
 
@@ -688,6 +693,7 @@ class StudentPublicationController extends AbstractController
             $cap['docxSupported'] = true;
             $cap['recommendedMode'] = 'text';
             $cap['reason'] = 'DOCX detected. AI will extract the text content and grade it as text.';
+
             return new JsonResponse($cap);
         }
 
@@ -695,17 +701,20 @@ class StudentPublicationController extends AbstractController
             $cap['textFileSupported'] = true;
             $cap['recommendedMode'] = 'text';
             $cap['reason'] = 'Text-based file detected. AI will read the content and grade it as text.';
+
             return new JsonResponse($cap);
         }
 
         if ($this->isImageFile($filename, $mimeType)) {
             $cap['recommendedMode'] = $hasText ? 'text' : 'text';
             $cap['reason'] = 'Image detected. Image grading is not supported by the document processor. Please upload a PDF or paste text.';
+
             return new JsonResponse($cap);
         }
 
         $cap['recommendedMode'] = $hasText ? 'text' : 'text';
         $cap['reason'] = 'Unsupported file type. Please upload a PDF (recommended) or a text-based file.';
+
         return new JsonResponse($cap);
     }
 
@@ -747,7 +756,7 @@ class StudentPublicationController extends AbstractController
                 'language' => $language,
                 'mode' => $requestedMode,
                 'prompt' => $userPrompt,
-                'provider_options' => is_array($data['options'] ?? null) ? $data['options'] : [],
+                'provider_options' => \is_array($data['options'] ?? null) ? $data['options'] : [],
                 'teacher_notes' => (string) ($data['teacher_notes'] ?? ''),
                 'rubric' => (string) ($data['rubric'] ?? ''),
             ]
@@ -792,12 +801,12 @@ class StudentPublicationController extends AbstractController
         $max = $this->getMaxScore($submission);
         $maxText = null !== $max ? (string) $max : 'N/A';
 
-        return sprintf(
+        return \sprintf(
             "You are an assignment grader.\n".
             "Language: %s.\n".
             "Provide constructive feedback and actionable improvements.\n".
             "At the end, add a final line exactly like: SCORE: <number> (0 to %s).\n".
-            "Return plain text only.",
+            'Return plain text only.',
             $language,
             $maxText
         );
@@ -817,7 +826,7 @@ class StudentPublicationController extends AbstractController
 
         $lines = [];
         $lines[] = 'ASSIGNMENT TITLE: '.$assignmentTitle;
-        $lines[] = 'ASSIGNMENT INSTRUCTIONS:'.("\n".($assignmentInstructions !== '' ? $assignmentInstructions : '(none)'));
+        $lines[] = 'ASSIGNMENT INSTRUCTIONS:'.("\n".('' !== $assignmentInstructions ? $assignmentInstructions : '(none)'));
         if (null !== $max) {
             $lines[] = 'MAX SCORE: '.$max;
         }
@@ -892,8 +901,8 @@ class StudentPublicationController extends AbstractController
         $ext = strtolower((string) pathinfo($filename, PATHINFO_EXTENSION));
         $mime = strtolower(trim($mimeType));
 
-        $allowedExt = ['txt','md','markdown','html','htm','json','xml','yaml','yml','csv','log','ini','env'];
-        if (in_array($ext, $allowedExt, true)) {
+        $allowedExt = ['txt', 'md', 'markdown', 'html', 'htm', 'json', 'xml', 'yaml', 'yml', 'csv', 'log', 'ini', 'env'];
+        if (\in_array($ext, $allowedExt, true)) {
             return true;
         }
 
@@ -903,7 +912,7 @@ class StudentPublicationController extends AbstractController
     private function isImageFile(string $filename, string $mimeType): bool
     {
         $ext = strtolower((string) pathinfo($filename, PATHINFO_EXTENSION));
-        if (in_array($ext, ['jpg','jpeg','png','gif','webp','bmp','tiff'], true)) {
+        if (\in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'tiff'], true)) {
             return true;
         }
 
@@ -958,5 +967,4 @@ class StudentPublicationController extends AbstractController
 
         return $n;
     }
-
 }

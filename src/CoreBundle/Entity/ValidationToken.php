@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Repository\ValidationTokenRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
+use const PHP_INT_MAX;
+
 /**
  * ValidationToken entity.
  */

@@ -93,9 +93,7 @@ final class Version20251001221600 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 
     private function quoteIdentifier(AbstractPlatform $platform, string $name): string
     {

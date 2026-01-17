@@ -9,13 +9,15 @@ namespace Chamilo\CoreBundle\AiProvider;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
-use RuntimeException;
 use Symfony\Component\Process\Process;
 use Throwable;
 use ZipArchive;
 
 use const ENT_HTML5;
 use const ENT_QUOTES;
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+use const PATHINFO_EXTENSION;
 
 final class AiTaskGraderService
 {
@@ -52,6 +54,7 @@ final class AiTaskGraderService
         $assignment = $submission->getPublicationParent();
         if (!$assignment instanceof CStudentPublication) {
             $this->dbg('Missing assignment parent', ['submissionIid' => $submission->getIid()]);
+
             return $this->fail('This submission has no assignment parent.', 400, 'text');
         }
 
@@ -65,6 +68,7 @@ final class AiTaskGraderService
         $providerName = trim((string) ($options['ai_provider'] ?? ''));
         if ('' === $providerName) {
             $this->dbg('Missing ai_provider', ['submissionIid' => $submission->getIid()]);
+
             return $this->fail('Missing ai_provider.', 400, 'text');
         }
 
@@ -231,9 +235,9 @@ final class AiTaskGraderService
 
         // Hard guard: avoid "SCORE:" being translated
         $guard = "IMPORTANT OUTPUT RULES:\n"
-            . "- Return plain text only.\n"
-            . "- The LAST line must start with exactly: SCORE: <number>.\n"
-            . "- Do NOT translate the word 'SCORE'.\n";
+            ."- Return plain text only.\n"
+            ."- The LAST line must start with exactly: SCORE: <number>.\n"
+            ."- Do NOT translate the word 'SCORE'.\n";
 
         // Context: assignment + submission + explicit instruction for document mode
         $context = $this->buildTaskGraderContextBlock(
@@ -246,18 +250,19 @@ final class AiTaskGraderService
             rubric: $rubric
         );
 
-        $finalPrompt = $basePrompt . "\n\n" . $guard . "\n---\n" . $context;
+        $finalPrompt = $basePrompt."\n\n".$guard."\n---\n".$context;
 
         // Call provider
         try {
             $provider = $this->aiProviderFactory->create($providerName);
         } catch (Throwable $e) {
             $this->dbg('Failed to create provider', ['error' => $e->getMessage()]);
+
             return $this->fail('Failed to initialize AI provider.', 500, $effectiveMode);
         }
 
         $this->dbg('Provider created', [
-            'providerClass' => \is_object($provider) ? $provider::class : gettype($provider),
+            'providerClass' => \is_object($provider) ? $provider::class : \gettype($provider),
             'effectiveMode' => $effectiveMode,
         ]);
 
@@ -301,6 +306,7 @@ final class AiTaskGraderService
             }
         } catch (Throwable $e) {
             $this->dbg('Provider exception', ['error' => $e->getMessage()]);
+
             return $this->fail('AI provider failed: '.$e->getMessage(), 502, $effectiveMode);
         }
 
@@ -349,14 +355,14 @@ final class AiTaskGraderService
         $language = '' !== trim($language) ? $language : 'en';
 
         if ($maxScore > 0) {
-            return sprintf(
+            return \sprintf(
                 "You are an assignment grader.\nLanguage: %s.\nProvide constructive feedback and actionable improvements.\nAt the end, add a final line exactly like: SCORE: <number> (0 to %.1f).\nReturn plain text only.",
                 $language,
                 $maxScore
             );
         }
 
-        return sprintf(
+        return \sprintf(
             "You are an assignment grader.\nLanguage: %s.\nProvide constructive feedback and actionable improvements.\nAt the end, add a final line exactly like: SCORE: N/A.\nReturn plain text only.",
             $language
         );
@@ -377,7 +383,7 @@ final class AiTaskGraderService
 
         $lines = [];
         $lines[] = 'ASSIGNMENT TITLE: '.$assignmentTitle;
-        $lines[] = 'ASSIGNMENT INSTRUCTIONS:'."\n".($assignmentInstructions !== '' ? $assignmentInstructions : '(none)');
+        $lines[] = 'ASSIGNMENT INSTRUCTIONS:'."\n".('' !== $assignmentInstructions ? $assignmentInstructions : '(none)');
 
         if ('' !== $rubric) {
             $lines[] = 'RUBRIC (teacher):'."\n".$rubric;
@@ -475,6 +481,7 @@ final class AiTaskGraderService
                     'mimeType' => $mimeType,
                     'resourceFileId' => method_exists($rf, 'getId') ? $rf->getId() : null,
                 ]);
+
                 return [$filename, $mimeType, '', 'Failed to resolve file storage key.'];
             }
 
@@ -492,6 +499,7 @@ final class AiTaskGraderService
                     'key' => $pathKey,
                     'filename' => $filename,
                 ]);
+
                 return [$filename, $mimeType, '', 'File is empty or could not be read.'];
             }
 
@@ -502,6 +510,7 @@ final class AiTaskGraderService
                 'mimeType' => $mimeType,
                 'error' => $e->getMessage(),
             ]);
+
             return [$filename, $mimeType, '', 'Failed to read submission file.'];
         }
     }
@@ -519,6 +528,7 @@ final class AiTaskGraderService
     private function looksLikePdfBytes(string $bytes): bool
     {
         $head = ltrim(substr($bytes, 0, 64));
+
         return str_starts_with($head, '%PDF-');
     }
 
@@ -537,8 +547,8 @@ final class AiTaskGraderService
         $ext = strtolower((string) pathinfo($filename, PATHINFO_EXTENSION));
         $mime = strtolower(trim($mimeType));
 
-        $allowedExt = ['txt','md','markdown','html','htm','json','xml','yaml','yml','csv','log','ini','env'];
-        if (in_array($ext, $allowedExt, true)) {
+        $allowedExt = ['txt', 'md', 'markdown', 'html', 'htm', 'json', 'xml', 'yaml', 'yml', 'csv', 'log', 'ini', 'env'];
+        if (\in_array($ext, $allowedExt, true)) {
             return true;
         }
 
@@ -548,7 +558,7 @@ final class AiTaskGraderService
     private function isImageFile(string $filename, string $mimeType): bool
     {
         $ext = strtolower((string) pathinfo($filename, PATHINFO_EXTENSION));
-        if (in_array($ext, ['jpg','jpeg','png','gif','webp','bmp','tiff'], true)) {
+        if (\in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'tiff'], true)) {
             return true;
         }
 
@@ -572,6 +582,7 @@ final class AiTaskGraderService
         $ok = $zip->open($tmp);
         if (true !== $ok) {
             @unlink($tmp);
+
             return '';
         }
 
@@ -579,7 +590,7 @@ final class AiTaskGraderService
         $zip->close();
         @unlink($tmp);
 
-        if (!is_string($xml) || '' === $xml) {
+        if (!\is_string($xml) || '' === $xml) {
             return '';
         }
 
@@ -601,7 +612,7 @@ final class AiTaskGraderService
 
         if (!mb_check_encoding($s, 'UTF-8')) {
             $converted = @mb_convert_encoding($s, 'UTF-8', 'ISO-8859-1, Windows-1252, UTF-16, UTF-16LE, UTF-16BE');
-            if (is_string($converted) && '' !== $converted) {
+            if (\is_string($converted) && '' !== $converted) {
                 $s = $converted;
             }
         }
@@ -647,6 +658,7 @@ final class AiTaskGraderService
             }
 
             $v = max(0.0, min($max, $v));
+
             return round($v, 1);
         }
 
@@ -660,6 +672,7 @@ final class AiTaskGraderService
 
             $scaled = ($v / $den) * $max;
             $scaled = max(0.0, min($max, $scaled));
+
             return round($scaled, 1);
         }
 

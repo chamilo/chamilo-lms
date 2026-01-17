@@ -13,6 +13,8 @@ use Chamilo\CoreBundle\Entity\Templates;
 use Chamilo\CoreBundle\Framework\Container;
 use Database;
 
+use const JSON_UNESCAPED_SLASHES;
+
 class TinyEditor extends Editor
 {
     /**
@@ -337,7 +339,7 @@ class TinyEditor extends Editor
     /**
      * Resolve the correct legacy manager URL based on context.
      * - Course context => Documents manager
-     * - Otherwise => Personal files manager
+     * - Otherwise => Personal files manager.
      */
     private function getLegacyManagerBaseUrl(bool $onlyPersonalfiles): ?string
     {

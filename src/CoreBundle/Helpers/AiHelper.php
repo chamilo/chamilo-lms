@@ -9,6 +9,8 @@ namespace Chamilo\CoreBundle\Helpers;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
+use const PHP_SESSION_ACTIVE;
+
 final class AiHelper
 {
     public const SESSION_CURRENT_EXERCISES = 'current_exercises';
@@ -78,6 +80,7 @@ final class AiHelper
         if (empty($map)) {
             $this->removeCurrentExercisesMap();
             $this->syncAggregateInTestFlag([], null);
+
             return;
         }
 
@@ -117,7 +120,8 @@ final class AiHelper
         $session = $this->getSession();
         if (null !== $session) {
             $value = $session->get(self::SESSION_CURRENT_EXERCISES, []);
-            return is_array($value) ? $value : [];
+
+            return \is_array($value) ? $value : [];
         }
 
         if (PHP_SESSION_ACTIVE !== session_status()) {
@@ -125,7 +129,8 @@ final class AiHelper
         }
 
         $value = $_SESSION[self::SESSION_CURRENT_EXERCISES] ?? [];
-        return is_array($value) ? $value : [];
+
+        return \is_array($value) ? $value : [];
     }
 
     private function writeCurrentExercisesMap(array $map): void
@@ -133,6 +138,7 @@ final class AiHelper
         $session = $this->getSession();
         if (null !== $session) {
             $session->set(self::SESSION_CURRENT_EXERCISES, $map);
+
             return;
         }
 
@@ -148,6 +154,7 @@ final class AiHelper
         $session = $this->getSession();
         if (null !== $session) {
             $session->remove(self::SESSION_CURRENT_EXERCISES);
+
             return;
         }
 
@@ -181,6 +188,7 @@ final class AiHelper
             } else {
                 $session->remove(self::SESSION_IN_TEST_LP);
             }
+
             return;
         }
 
@@ -211,6 +219,7 @@ final class AiHelper
             } else {
                 $session->remove(self::SESSION_IS_IN_A_TEST);
             }
+
             return;
         }
 
@@ -230,6 +239,7 @@ final class AiHelper
         $session = $this->getSession();
         if (null !== $session) {
             $session->remove(self::SESSION_IS_IN_A_TEST);
+
             return;
         }
 

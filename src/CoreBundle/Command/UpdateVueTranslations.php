@@ -169,8 +169,8 @@ class UpdateVueTranslations extends Command
 
         if ($alternativeSpecifier) {
             return preg_replace($pattern, '%d', $text);
-        } else {
-            return preg_replace($pattern, '%s', $text);
         }
+
+        return preg_replace($pattern, '%s', $text);
     }
 }

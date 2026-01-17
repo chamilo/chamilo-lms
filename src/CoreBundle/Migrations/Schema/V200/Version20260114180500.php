@@ -13,7 +13,7 @@ final class Version20260114180500 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return "Fix duplicated setting with wrong selected value";
+        return 'Fix duplicated setting with wrong selected value';
     }
 
     public function up(Schema $schema): void

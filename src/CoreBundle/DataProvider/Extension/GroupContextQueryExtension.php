@@ -24,7 +24,7 @@ final class GroupContextQueryExtension implements QueryCollectionExtensionInterf
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
-        Operation $operation = null,
+        ?Operation $operation = null,
         array $context = []
     ): void {
         $this->applyGroupRestriction($queryBuilder, $queryNameGenerator, $resourceClass, $operation);
@@ -35,7 +35,7 @@ final class GroupContextQueryExtension implements QueryCollectionExtensionInterf
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
         array $identifiers,
-        Operation $operation = null,
+        ?Operation $operation = null,
         array $context = []
     ): void {
         $this->applyGroupRestriction($queryBuilder, $queryNameGenerator, $resourceClass, $operation);
@@ -69,16 +69,17 @@ final class GroupContextQueryExtension implements QueryCollectionExtensionInterf
         $rootAlias = $rootAliases[0];
 
         $rnAlias = $queryNameGenerator->generateJoinAlias('resourceNode');
-        $queryBuilder->join(sprintf('%s.resourceNode', $rootAlias), $rnAlias);
+        $queryBuilder->join(\sprintf('%s.resourceNode', $rootAlias), $rnAlias);
         $queryBuilder->distinct();
         if ($gid > 0) {
             $rlAlias = $queryNameGenerator->generateJoinAlias('resourceLinks');
-            $queryBuilder->join(sprintf('%s.resourceLinks', $rnAlias), $rlAlias);
+            $queryBuilder->join(\sprintf('%s.resourceLinks', $rnAlias), $rlAlias);
 
             // Match group by identifier to avoid association-vs-int issues
             $queryBuilder
-                ->andWhere(sprintf('IDENTITY(%s.group) = :gid', $rlAlias))
-                ->setParameter('gid', $gid);
+                ->andWhere(\sprintf('IDENTITY(%s.group) = :gid', $rlAlias))
+                ->setParameter('gid', $gid)
+            ;
 
             return;
         }
@@ -86,12 +87,12 @@ final class GroupContextQueryExtension implements QueryCollectionExtensionInterf
         // gid = 0 -> exclude any resource that has at least one group link
         $rlGroupAlias = $queryNameGenerator->generateJoinAlias('groupLinks');
         $queryBuilder->leftJoin(
-            sprintf('%s.resourceLinks', $rnAlias),
+            \sprintf('%s.resourceLinks', $rnAlias),
             $rlGroupAlias,
             'WITH',
-            sprintf('%s.group IS NOT NULL', $rlGroupAlias)
+            \sprintf('%s.group IS NOT NULL', $rlGroupAlias)
         );
 
-        $queryBuilder->andWhere(sprintf('%s.id IS NULL', $rlGroupAlias));
+        $queryBuilder->andWhere(\sprintf('%s.id IS NULL', $rlGroupAlias));
     }
 }

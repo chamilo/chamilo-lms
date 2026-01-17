@@ -47,7 +47,8 @@ class ValidationTokenRepository extends ServiceEntityRepository
             ->setParameter('userId', $userId)
             ->setParameter('hash', $hash)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
     }
 
     public function deleteExpiredRememberMeTokens(DateTimeInterface $cutoff): int
@@ -59,7 +60,8 @@ class ValidationTokenRepository extends ServiceEntityRepository
             ->setParameter('type', ValidationTokenHelper::TYPE_REMEMBER_ME)
             ->setParameter('cutoff', $cutoff)
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
     public function deleteRememberMeTokenById(int $id): int
@@ -71,7 +73,8 @@ class ValidationTokenRepository extends ServiceEntityRepository
             ->setParameter('type', ValidationTokenHelper::TYPE_REMEMBER_ME)
             ->setParameter('id', $id)
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
     public function deleteRememberMeTokensForUser(int $userId): int

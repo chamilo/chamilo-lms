@@ -44,7 +44,8 @@ final class Version20251231115400 extends AbstractMigrationChamilo
                     'item_type' => ExtraField::USER_FIELD_TYPE,
                 ]
             )
-            ->fetchAssociative();
+            ->fetchAssociative()
+        ;
 
         return (bool) $existingField;
     }

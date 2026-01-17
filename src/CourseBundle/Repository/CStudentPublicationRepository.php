@@ -175,7 +175,8 @@ final class CStudentPublicationRepository extends ResourceRepository
 
         if ($session) {
             $qb->andWhere('rl.session = :session')
-                ->setParameter('session', $session);
+                ->setParameter('session', $session)
+            ;
         } else {
             $qb->andWhere('rl.session IS NULL');
         }
@@ -185,7 +186,8 @@ final class CStudentPublicationRepository extends ResourceRepository
         // - groupId = 0: exclude any resource that has at least one group link (avoid leaks into course context)
         if ($groupId > 0) {
             $qb->andWhere('IDENTITY(rl.group) = :gid')
-                ->setParameter('gid', $groupId);
+                ->setParameter('gid', $groupId)
+            ;
         } else {
             $with = 'rl_group.course = :course AND rl_group.group IS NOT NULL';
             if ($session) {
@@ -195,7 +197,8 @@ final class CStudentPublicationRepository extends ResourceRepository
             }
 
             $qb->leftJoin('rn.resourceLinks', 'rl_group', 'WITH', $with)
-                ->andWhere('rl_group.id IS NULL');
+                ->andWhere('rl_group.id IS NULL')
+            ;
         }
 
         $qb->andWhere('

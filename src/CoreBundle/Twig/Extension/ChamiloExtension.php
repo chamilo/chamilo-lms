@@ -78,7 +78,7 @@ class ChamiloExtension extends AbstractExtension
             new TwigFunction('theme_asset_link_tag', $this->getThemeAssetLinkTag(...), ['is_safe' => ['html']]),
             new TwigFunction('theme_asset_base64', $this->getThemeAssetBase64Encoded(...)),
             new TwigFunction('theme_logo', $this->getThemeLogoUrl(...)),
-            new TwigFunction('is_allowed_to_edit', $this->isAllowedToEditHelper->check(...))
+            new TwigFunction('is_allowed_to_edit', $this->isAllowedToEditHelper->check(...)),
         ];
     }
 

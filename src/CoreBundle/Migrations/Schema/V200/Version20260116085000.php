@@ -13,7 +13,7 @@ final class Version20260116085000 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return "Fix wrong resource type for portfolio comments";
+        return 'Fix wrong resource type for portfolio comments';
     }
 
     public function up(Schema $schema): void
@@ -31,14 +31,12 @@ final class Version20260116085000 extends AbstractMigrationChamilo
             return;
         }
 
-        $this->addSql(sprintf(
+        $this->addSql(\sprintf(
             'UPDATE resource_node rn INNER JOIN portfolio_comment pc ON rn.id = pc.resource_node_id SET rn.resource_type_id = %d WHERE rn.resource_type_id = %d',
             $commentsType['id'],
             $itemsType['id']
         ));
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

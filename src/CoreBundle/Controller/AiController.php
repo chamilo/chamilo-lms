@@ -6,12 +6,16 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\AiProvider\AiDocumentProcessProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiImageProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Chamilo\CoreBundle\AiProvider\AiVideoProviderInterface;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Helpers\MessageHelper;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\TrackEAttemptRepository;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
@@ -34,12 +38,16 @@ use const FILTER_VALIDATE_URL;
 #[Route('/ai')]
 class AiController extends AbstractController
 {
+    private bool $debug = false;
+
     public function __construct(
         private readonly AiProviderFactory $aiProviderFactory,
         private readonly TrackEAttemptRepository $attemptRepo,
         private readonly EntityManagerInterface $em,
         private readonly HttpClientInterface $httpClient,
         private readonly TranslatorInterface $translator,
+        private readonly ResourceNodeRepository $resourceNodeRepository,
+        private readonly MessageHelper $messageHelper,
     ) {}
 
     #[Route('/text_providers', name: 'chamilo_core_ai_text_providers', methods: ['GET'])]
@@ -225,6 +233,7 @@ class AiController extends AbstractController
                 'image' => $this->aiProviderFactory->hasProvidersForType('image'),
                 'video' => $this->aiProviderFactory->hasProvidersForType('video'),
                 'document' => $this->aiProviderFactory->hasProvidersForType('document'),
+                'document_process' => $this->aiProviderFactory->hasProvidersForType('document_process'),
             ],
         ]);
     }
@@ -848,6 +857,340 @@ class AiController extends AbstractController
             ], 500);
         }
     }
+    #[Route('/document_feedback', name: 'chamilo_core_ai_document_feedback', methods: ['POST'])]
+    public function documentFeedback(Request $request): JsonResponse
+    {
+        $debug = false;
+        try {
+            $debug = (bool) $this->getParameter('kernel.debug');
+        } catch (\Throwable) {
+            $debug = false;
+        }
+
+        try {
+            $this->denyIfNotTeacher();
+        } catch (AccessDeniedException) {
+            return new JsonResponse(['success' => false, 'text' => 'Access denied.'], 403);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        if (!\is_array($data)) {
+            return new JsonResponse(['success' => false, 'text' => 'Invalid JSON payload.'], 400);
+        }
+
+        $cid = (int) ($data['cid'] ?? 0);
+        $sid = (int) ($data['sid'] ?? 0);
+        $gid = (int) ($data['gid'] ?? 0);
+        $language = (string) ($data['language'] ?? 'en');
+        $prompt = trim((string) ($data['prompt'] ?? ''));
+        $aiProvider = isset($data['ai_provider']) ? (string) $data['ai_provider'] : null;
+
+        $resourceFileId = (int) ($data['resource_file_id'] ?? 0);
+        $documentTitle = trim((string) ($data['document_title'] ?? ''));
+
+        if (0 === $cid || 0 === $resourceFileId || '' === $prompt) {
+            return new JsonResponse(['success' => false, 'text' => 'Invalid request parameters.'], 400);
+        }
+
+        /** @var Course|null $course */
+        $course = $this->em->getRepository(Course::class)->find($cid);
+        if (null === $course) {
+            return new JsonResponse(['success' => false, 'text' => 'Course not found.'], 404);
+        }
+
+        /** @var ResourceFile|null $resourceFile */
+        $resourceFile = $this->em->getRepository(ResourceFile::class)->find($resourceFileId);
+        if (null === $resourceFile) {
+            return new JsonResponse(['success' => false, 'text' => 'Resource file not found.'], 404);
+        }
+
+        $node = $resourceFile->getResourceNode();
+        if (null === $node) {
+            return new JsonResponse(['success' => false, 'text' => 'Resource node not found.'], 404);
+        }
+
+        // Security: ensure this resource belongs to the course through ResourceLinks
+        $belongsToCourse = false;
+        foreach ($node->getResourceLinks() as $link) {
+            $linkCourse = $link->getCourse();
+            if ($linkCourse && (int) $linkCourse->getId() === $cid) {
+                $belongsToCourse = true;
+                break;
+            }
+        }
+
+        if (!$belongsToCourse) {
+            return new JsonResponse(['success' => false, 'text' => 'Resource does not belong to this course.'], 403);
+        }
+
+        $fileUri = $this->resourceNodeRepository->getFilename($resourceFile);
+        if (!\is_string($fileUri) || '' === trim($fileUri)) {
+            return new JsonResponse(['success' => false, 'text' => 'Could not resolve resource file URI.'], 500);
+        }
+
+        try {
+            $binary = (string) $this->resourceNodeRepository->getFileSystem()->read($fileUri);
+        } catch (\Throwable $e) {
+            if ($debug) {
+                error_log('[AI][document_feedback] Failed to read file: '.$e->getMessage());
+            }
+            return new JsonResponse(['success' => false, 'text' => 'Failed to read file content.'], 500);
+        }
+
+        if ('' === $binary) {
+            return new JsonResponse(['success' => false, 'text' => 'File is empty.'], 400);
+        }
+
+        $filename = basename($fileUri);
+
+        $mimeType = 'application/octet-stream';
+        if (method_exists($resourceFile, 'getMimeType')) {
+            $mt = (string) $resourceFile->getMimeType();
+            if ('' !== trim($mt)) {
+                $mimeType = $mt;
+            }
+        }
+
+        // Use extension as a fallback (some files come as application/octet-stream)
+        $ext = strtolower((string) pathinfo($filename, PATHINFO_EXTENSION));
+        $isPdf = ($ext === 'pdf') || ($mimeType === 'application/pdf');
+        $isTxt = ($ext === 'txt') || str_starts_with(strtolower($mimeType), 'text/plain');
+
+        // Size limits (different per type)
+        $maxBytesPdf = 10 * 1024 * 1024;
+        $maxBytesTxt = 1 * 1024 * 1024;
+
+        if ($isPdf && \strlen($binary) > $maxBytesPdf) {
+            return new JsonResponse(['success' => false, 'text' => 'Document is too large to analyze.'], 413);
+        }
+        if ($isTxt && \strlen($binary) > $maxBytesTxt) {
+            return new JsonResponse(['success' => false, 'text' => 'Text file is too large to analyze.'], 413);
+        }
+
+        // If not pdf/txt => fail early (don’t call provider)
+        if (!$isPdf && !$isTxt) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Unsupported file type. Supported: PDF, TXT.',
+            ], 415);
+        }
+
+        $courseTitle = (string) $course->getTitle();
+        $docLabel = '' !== $documentTitle ? $documentTitle : (string) ($node->getTitle() ?? $filename);
+
+        // Base prompt (same structure for both)
+        $basePrompt = $this->buildDocumentFeedbackPrompt($courseTitle, $docLabel, $prompt, $language, $sid);
+
+        try {
+            // TXT: task_grader-style -> send content as text to TEXT provider
+            if ($isTxt) {
+                $text = $this->normalizePlainText($binary);
+
+                // Keep it safe: truncate very long text (tokens)
+                $maxChars = 20000;
+                $truncated = false;
+                if (mb_strlen($text) > $maxChars) {
+                    $text = mb_substr($text, 0, $maxChars);
+                    $truncated = true;
+                }
+
+                $fullPrompt = $basePrompt
+                    ."\n\nDocument content (plain text):\n"
+                    .$text
+                    .($truncated ? "\n\n[Content truncated]" : '');
+
+                $provider = $this->aiProviderFactory->getProvider($aiProvider, 'text');
+
+                if (!\is_object($provider) || !method_exists($provider, 'generateText')) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'Selected AI provider does not support text generation.',
+                    ], 400);
+                }
+
+                try {
+                    $raw = (string) $provider->generateText($fullPrompt, [
+                        'language' => $language,
+                        'tool' => 'document_analyzer_txt',
+                        'cid' => $cid,
+                        'sid' => $sid,
+                        'gid' => $gid,
+                    ]);
+                } catch (\TypeError) {
+                    // Backward compatibility
+                    $raw = (string) $provider->generateText($fullPrompt, $language);
+                }
+
+                $result = trim($raw);
+
+                if ('' === $result) {
+                    return new JsonResponse(['success' => false, 'text' => 'AI request returned an empty response.'], 500);
+                }
+
+                if (str_starts_with($result, 'Error:')) {
+                    $msg = trim((string) preg_replace('/^Error:\s*/', '', $result));
+                    $status = $this->mapDocumentErrorToHttpStatus($msg);
+                    return new JsonResponse(['success' => false, 'text' => $msg !== '' ? $msg : $result], $status);
+                }
+
+                return new JsonResponse(['success' => true, 'text' => $result]);
+            }
+
+
+            // PDF: send as file to DOCUMENT_PROCESS provider
+            $provider = $this->aiProviderFactory->getProvider($aiProvider, 'document_process');
+
+            if (!$provider instanceof AiDocumentProcessProviderInterface) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Selected AI provider does not support document processing.',
+                ], 400);
+            }
+
+            $result = $provider->processDocument(
+                $basePrompt,
+                'document_analyzer_pdf',
+                $filename,
+                'application/pdf', // force consistent mime
+                $binary,
+                [
+                    'language' => $language,
+                    'cid' => $cid,
+                    'sid' => $sid,
+                    'gid' => $gid,
+                ]
+            );
+
+            $result = \is_string($result) ? trim($result) : '';
+
+            if ('' === $result) {
+                return new JsonResponse(['success' => false, 'text' => 'AI request returned an empty response.'], 500);
+            }
+
+            if (str_starts_with($result, 'Error:')) {
+                $msg = trim((string) preg_replace('/^Error:\s*/', '', $result));
+                $status = $this->mapDocumentErrorToHttpStatus($msg);
+                return new JsonResponse(['success' => false, 'text' => $msg !== '' ? $msg : $result], $status);
+            }
+
+            return new JsonResponse(['success' => true, 'text' => $result]);
+        } catch (\Throwable $e) {
+            $msg = trim($e->getMessage());
+            if ($debug) {
+                error_log('[AI][document_feedback] Exception: '.$msg);
+            }
+
+            $status = $this->mapDocumentErrorToHttpStatus($msg);
+
+            return new JsonResponse([
+                'success' => false,
+                'text' => $debug && $msg !== '' ? $msg : 'An error occurred while analyzing the document.',
+            ], $status);
+        }
+    }
+
+    #[Route('/document_feedback/save_to_inbox', name: 'chamilo_core_ai_document_feedback_save_to_inbox', methods: ['POST'])]
+    public function saveDocumentFeedbackToInbox(Request $request): JsonResponse
+    {
+        try {
+            $this->denyIfNotTeacher();
+        } catch (AccessDeniedException) {
+            return new JsonResponse(['success' => false, 'text' => 'Access denied.'], 403);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        if (!\is_array($data)) {
+            return new JsonResponse(['success' => false, 'text' => 'Invalid JSON payload.'], 400);
+        }
+
+        $cid = (int) ($data['cid'] ?? 0);
+        $documentTitle = trim((string) ($data['document_title'] ?? ''));
+        $answer = trim((string) ($data['answer'] ?? ''));
+
+        if (0 === $cid || '' === $documentTitle || '' === $answer) {
+            return new JsonResponse(['success' => false, 'text' => 'Invalid request parameters.'], 400);
+        }
+
+        /** @var Course|null $course */
+        $course = $this->em->getRepository(Course::class)->find($cid);
+        if (null === $course) {
+            return new JsonResponse(['success' => false, 'text' => 'Course not found.'], 404);
+        }
+
+        $user = $this->getUser();
+        if (!\is_object($user) || !method_exists($user, 'getId')) {
+            return new JsonResponse(['success' => false, 'text' => 'User is not authenticated.'], 401);
+        }
+
+        $userId = (int) $user->getId();
+        $courseTitle = (string) $course->getTitle();
+
+        // "AI feedback on %s in course %s"
+        $subjectTpl = $this->translator->trans('AI feedback on %s in course %s');
+        $subject = sprintf($subjectTpl, $documentTitle, $courseTitle);
+
+        try {
+            $safeHtml = '<pre style="white-space:pre-wrap;">'
+                . htmlspecialchars($answer, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
+                . '</pre>';
+
+            $messageId = $this->messageHelper->sendMessageSimple(
+                $userId,
+                $subject,
+                $safeHtml,
+                $userId,
+                false,
+                false
+            );
+
+            if (null === $messageId) {
+                $this->debugLog('[AI][document_feedback][inbox] MessageHelper returned null (message not created).');
+
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Failed to save answer to inbox.',
+                ], 500);
+            }
+
+            return new JsonResponse(['success' => true, 'message_id' => $messageId]);
+        } catch (\Throwable $e) {
+            $this->debugLog('[AI][document_feedback][inbox] Exception: '.$e->getMessage());
+
+            return new JsonResponse([
+                'success' => false,
+                'text' => $this->debug ? $e->getMessage() : 'Failed to save answer to inbox.',
+            ], 500);
+        }
+    }
+
+    /**
+     * Build a stable prompt that always includes course/document context.
+     */
+    private function buildDocumentFeedbackPrompt(
+        string $courseTitle,
+        string $documentTitle,
+        string $teacherPrompt,
+        string $language,
+        int $sid
+    ): string {
+        $teacherPrompt = trim($teacherPrompt);
+
+        $base = "You are an expert educational content reviewer.\n";
+        $base .= "Language: {$language}\n";
+        $base .= "Course: {$courseTitle}\n";
+        $base .= "Document: {$documentTitle}\n";
+        if ($sid > 0) {
+            $base .= "Session ID: {$sid}\n";
+        }
+        $base .= "\nTeacher request:\n{$teacherPrompt}\n";
+        $base .= "\nReturn clear, structured feedback with actionable suggestions.\n";
+        $base .= "\nFormatting rules:\n";
+        $base .= "- Return plain text only (no Markdown).\n";
+        $base .= "- Do not use **, #, ``` or HTML.\n";
+        $base .= "- Use short headings and bullet points with '-'.\n";
+
+        return $base;
+    }
 
     /**
      * Returns a reasonable HTTP status code for known provider errors.
@@ -1001,5 +1344,66 @@ class AiController extends AbstractController
         }
 
         return '';
+    }
+
+    /**
+     * Normalize plain text content (best-effort) into UTF-8.
+     */
+    private function normalizePlainText(string $binary): string
+    {
+        // If mbstring is missing, just return as-is.
+        if (!function_exists('mb_detect_encoding') || !function_exists('mb_convert_encoding')) {
+            return trim($binary);
+        }
+
+        $enc = mb_detect_encoding($binary, ['UTF-8', 'ISO-8859-1', 'Windows-1252'], true);
+        if (!$enc) {
+            return trim($binary);
+        }
+
+        return trim((string) mb_convert_encoding($binary, 'UTF-8', $enc));
+    }
+
+    /**
+     * Map known provider/user errors to better HTTP status codes.
+     */
+    private function mapDocumentErrorToHttpStatus(string $message): int
+    {
+        $m = strtolower(trim($message));
+
+        if ('' === $m) {
+            return 500;
+        }
+
+        if (str_contains($m, 'file type') && str_contains($m, 'not supported')) {
+            return 415;
+        }
+
+        if (str_contains($m, 'too large') || str_contains($m, 'exceeds') || str_contains($m, 'maximum')) {
+            return 413;
+        }
+
+        if (str_contains($m, 'invalid api key') || str_contains($m, 'incorrect api key') || str_contains($m, 'unauthorized')) {
+            return 401;
+        }
+
+        if (str_contains($m, 'rate limit') || str_contains($m, 'too many requests')) {
+            return 429;
+        }
+
+        if (str_contains($m, 'insufficient_quota') || str_contains($m, 'quota')) {
+            return 402;
+        }
+
+        return 500;
+    }
+
+    private function debugLog(string $message): void
+    {
+        if (!$this->debug) {
+            return;
+        }
+
+        error_log($message);
     }
 }

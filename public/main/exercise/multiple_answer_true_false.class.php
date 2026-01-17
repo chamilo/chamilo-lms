@@ -29,7 +29,7 @@ class MultipleAnswerTrueFalse extends Question
 
     public function createAnswersForm($form)
     {
-        $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;
+        $nb_answers = (int) ($_POST['nb_answers'] ?? 4);
         // The previous default value was 2. See task #1759.
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
@@ -38,22 +38,24 @@ class MultipleAnswerTrueFalse extends Question
         $renderer = &$form->defaultRenderer();
         $defaults = [];
 
-        $html = '<table class="table table-striped table-hover">';
-        $html .= '<thead>';
+        $html = '';
+        $html .= '<div class="overflow-x-auto">';
+        $html .= '<table class="min-w-full text-sm border border-gray-200 rounded-lg overflow-hidden table table-striped table-hover">';
+        $html .= '<thead class="bg-gray-20">';
         $html .= '<tr>';
-        $html .= '<th>'.get_lang('N°').'</th>';
-        $html .= '<th>'.get_lang('True').'</th>';
-        $html .= '<th>'.get_lang('False').'</th>';
-        $html .= '<th>'.get_lang('Answer').'</th>';
+        $html .= '<th class="px-3 py-2 text-left font-semibold text-gray-700">'.get_lang('N°').'</th>';
+        $html .= '<th class="px-3 py-2 text-center font-semibold text-gray-700">'.get_lang('True').'</th>';
+        $html .= '<th class="px-3 py-2 text-center font-semibold text-gray-700">'.get_lang('False').'</th>';
+        $html .= '<th class="px-3 py-2 text-left font-semibold text-gray-700">'.get_lang('Answer').'</th>';
 
-        // show column comment when feedback is enable
+        // Show column comment when feedback is enabled
         if (EXERCISE_FEEDBACK_TYPE_EXAM != $obj_ex->getFeedbackType()) {
-            $html .= '<th>'.get_lang('Comment').'</th>';
+            $html .= '<th class="px-3 py-2 text-left font-semibold text-gray-700">'.get_lang('Comment').'</th>';
         }
 
         $html .= '</tr>';
         $html .= '</thead>';
-        $html .= '<tbody>';
+        $html .= '<tbody class="divide-y divide-gray-200 bg-white">';
 
         $form->addHeader(get_lang('Answers'));
         $form->addHtml($html);
@@ -75,26 +77,43 @@ class MultipleAnswerTrueFalse extends Question
             echo Display::return_message(get_lang('You have to create at least one answer'));
         }
 
-        // Can be more options
+        // Can be more options in the future
         $optionData = Question::readQuestionOption($this->id, $course_id);
+
+        // Safe input attrs (force visibility even if global CSS sets appearance:none)
+        $choiceInputAttrs = [
+            'class' => 'h-4 w-4 cursor-pointer',
+            'style' => 'appearance:auto;-webkit-appearance:auto;',
+        ];
 
         for ($i = 1; $i <= $nb_answers; $i++) {
             $form->addHtml('<tr>');
 
             $renderer->setElementTemplate(
-                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'correct['.$i.']'
-            );
-            $renderer->setElementTemplate(
-                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                '<td class="px-3 py-2 align-top text-gray-700">'.
+                '<!-- BEGIN error --><div class="text-xs text-red-600 mb-1">{error}</div><!-- END error -->'.
+                '{element}</td>',
                 'counter['.$i.']'
             );
+
+            // This will generate 2 <td> cells for the 2 radios, matching the True/False columns.
             $renderer->setElementTemplate(
-                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                '<td class="px-3 py-2 align-top text-center">'.
+                '<!-- BEGIN error --><div class="text-xs text-red-600 mb-1">{error}</div><!-- END error -->'.
+                '{element}</td>',
+                'correct['.$i.']'
+            );
+
+            $renderer->setElementTemplate(
+                '<td class="px-3 py-2 align-top">'.
+                '<!-- BEGIN error --><div class="text-xs text-red-600 mb-1">{error}</div><!-- END error -->'.
+                '{element}</td>',
                 'answer['.$i.']'
             );
             $renderer->setElementTemplate(
-                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                '<td class="px-3 py-2 align-top">'.
+                '<!-- BEGIN error --><div class="text-xs text-red-600 mb-1">{error}</div><!-- END error -->'.
+                '{element}</td>',
                 'comment['.$i.']'
             );
 
@@ -110,28 +129,32 @@ class MultipleAnswerTrueFalse extends Question
             if (is_object($answer)) {
                 $defaults['answer['.$i.']'] = $answer->answer[$i] ?? null;
                 $defaults['comment['.$i.']'] = $answer->comment[$i] ?? null;
-                $correct = $answer->correct[$i] ?? false;
+                $correct = $answer->correct[$i] ?? '';
                 $defaults['correct['.$i.']'] = $correct;
 
-                $j = 1;
+                // Render True/False radios based on existing option IDs (iid)
+                // Only take the first 2 options (True/False). The 3rd option is "Don't know" score, not a correct flag.
                 if (!empty($optionData)) {
-                    foreach ($optionData as $id => $data) {
-                        $rdoCorrect = $form->addElement('radio', 'correct['.$i.']', null, null, $id);
-
-                        if (isset($_POST['correct']) && isset($_POST['correct'][$i]) && $j == $_POST['correct'][$i]) {
-                            $rdoCorrect->setValue(Security::remove_XSS($_POST['correct'][$i]));
-                        }  else {
-                            $rdoCorrect->setValue($data['iid']);
+                    $count = 0;
+                    foreach ($optionData as $data) {
+                        $value = (int) ($data['iid'] ?? 0);
+                        if ($value > 0) {
+                            $form->addElement('radio', 'correct['.$i.']', null, null, $value, $choiceInputAttrs);
+                            $count++;
                         }
-                        $j++;
-                        if (3 == $j) {
+                        if ($count >= 2) {
                             break;
                         }
                     }
+                } else {
+                    // Fallback
+                    $form->addElement('radio', 'correct['.$i.']', null, null, 1, $choiceInputAttrs);
+                    $form->addElement('radio', 'correct['.$i.']', null, null, 2, $choiceInputAttrs);
                 }
             } else {
-                $form->addElement('radio', 'correct['.$i.']', null, null, 1);
-                $form->addElement('radio', 'correct['.$i.']', null, null, 2);
+                // New question: positions 1/2 are mapped to the real option iids on save
+                $form->addElement('radio', 'correct['.$i.']', null, null, 1, $choiceInputAttrs);
+                $form->addElement('radio', 'correct['.$i.']', null, null, 2, $choiceInputAttrs);
 
                 $defaults['answer['.$i.']'] = '';
                 $defaults['comment['.$i.']'] = '';
@@ -146,10 +169,11 @@ class MultipleAnswerTrueFalse extends Question
                 ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
             );
 
-            if (isset($_POST['answer']) && isset($_POST['answer'][$i])) {
+            if (isset($_POST['answer'][$i])) {
                 $form->getElement("answer[$i]")->setValue(Security::remove_XSS($_POST['answer'][$i]));
             }
-            // show comment when feedback is enable
+
+            // Show comment when feedback is enabled
             if (EXERCISE_FEEDBACK_TYPE_EXAM != $obj_ex->getFeedbackType()) {
                 $form->addHtmlEditor(
                     'comment['.$i.']',
@@ -163,7 +187,7 @@ class MultipleAnswerTrueFalse extends Question
                     ]
                 );
                 $form->applyFilter("comment[$i]", 'attr_on_filter');
-                if (isset($_POST['comment']) && isset($_POST['comment'][$i])) {
+                if (isset($_POST['comment'][$i])) {
                     $form->getElement("comment[$i]")->setValue(Security::remove_XSS($_POST['comment'][$i]));
                 }
             }
@@ -171,41 +195,39 @@ class MultipleAnswerTrueFalse extends Question
             $form->addHtml('</tr>');
         }
 
-        $form->addHtml('</tbody></table>');
+        $form->addHtml('</tbody></table></div>');
 
-        $correctInputTemplate = '<div class="form-group">';
-        $correctInputTemplate .= '<label class="col-sm-2 control-label">';
-        $correctInputTemplate .= '<span class="form_required">*</span>'.get_lang('Score');
-        $correctInputTemplate .= '</label>';
-        $correctInputTemplate .= '<div class="col-sm-8">';
-        $correctInputTemplate .= '<table>';
-        $correctInputTemplate .= '<tr>';
-        $correctInputTemplate .= '<td>';
-        $correctInputTemplate .= get_lang('Correct').'{element}';
-        $correctInputTemplate .= '<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->';
-        $correctInputTemplate .= '</td>';
+        // Score block
+        $scoreWrapperStart = '<div class="mt-6 border border-gray-200 rounded-lg bg-white p-4 mb-4">';
+        $scoreWrapperStart .= '<div class="text-sm font-semibold text-gray-700 mb-3">';
+        $scoreWrapperStart .= '<span class="text-red-600">*</span> '.get_lang('Score');
+        $scoreWrapperStart .= '</div>';
+        $scoreWrapperStart .= '<div class="flex flex-wrap gap-6 items-end">';
 
-        $wrongInputTemplate = '<td>';
-        $wrongInputTemplate .= get_lang('Wrong').'{element}';
-        $wrongInputTemplate .= '<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->';
-        $wrongInputTemplate .= '</td>';
+        $scoreWrapperEnd = '</div></div>';
 
-        $doubtScoreInputTemplate = '<td>'.get_lang('Don\'t know').'<br>{element}';
-        $doubtScoreInputTemplate .= '<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->';
-        $doubtScoreInputTemplate .= '</td>';
-        $doubtScoreInputTemplate .= '</tr>';
-        $doubtScoreInputTemplate .= '</table>';
-        $doubtScoreInputTemplate .= '</div>';
-        $doubtScoreInputTemplate .= '</div>';
+        $scoreInputTemplate = function (string $label) {
+            $tpl = '<div class="min-w-[160px]">';
+            $tpl .= '<div class="text-xs text-gray-600 mb-1">'.$label.'</div>';
+            $tpl .= '{element}';
+            $tpl .= '<!-- BEGIN error --><div class="text-xs text-red-600 mt-1">{error}</div><!-- END error -->';
+            $tpl .= '</div>';
 
-        $renderer->setElementTemplate($correctInputTemplate, 'option[1]');
-        $renderer->setElementTemplate($wrongInputTemplate, 'option[2]');
-        $renderer->setElementTemplate($doubtScoreInputTemplate, 'option[3]');
+            return $tpl;
+        };
+
+        $renderer->setElementTemplate($scoreWrapperStart.$scoreInputTemplate(get_lang('Correct')), 'option[1]');
+        $renderer->setElementTemplate($scoreInputTemplate(get_lang('Wrong')), 'option[2]');
+        $renderer->setElementTemplate($scoreInputTemplate(get_lang('Don\'t know')).$scoreWrapperEnd, 'option[3]');
+
+        $scoreInputAttrs = [
+            'class' => 'w-24 rounded-md border border-gray-300 px-2 py-1 text-sm',
+        ];
 
         // 3 scores
-        $txtOption1 = $form->addElement('text', 'option[1]', get_lang('Correct'), ['class' => 'span1', 'value' => '1']);
-        $txtOption2 = $form->addElement('text', 'option[2]', get_lang('Wrong'), ['class' => 'span1', 'value' => '-0.5']);
-        $txtOption3 = $form->addElement('text', 'option[3]', get_lang('Don\'t know'), ['class' => 'span1', 'value' => '0']);
+        $txtOption1 = $form->addElement('text', 'option[1]', get_lang('Correct'), array_merge($scoreInputAttrs, ['value' => '1']));
+        $txtOption2 = $form->addElement('text', 'option[2]', get_lang('Wrong'), array_merge($scoreInputAttrs, ['value' => '-0.5']));
+        $txtOption3 = $form->addElement('text', 'option[3]', get_lang('Don\'t know'), array_merge($scoreInputAttrs, ['value' => '0']));
 
         $form->addRule('option[1]', get_lang('Required field'), 'required');
         $form->addRule('option[2]', get_lang('Required field'), 'required');
@@ -213,14 +235,13 @@ class MultipleAnswerTrueFalse extends Question
 
         $form->addElement('hidden', 'options_count', 3);
 
-        // Extra values True, false,  Dont known
+        // Extra values True, false, Dont know
         if (!empty($this->extra)) {
             $scores = explode(':', $this->extra);
-
             if (!empty($scores)) {
-                $txtOption1->setValue($scores[0]);
-                $txtOption2->setValue($scores[1]);
-                $txtOption3->setValue($scores[2]);
+                $txtOption1->setValue($scores[0] ?? '1');
+                $txtOption2->setValue($scores[1] ?? '-0.5');
+                $txtOption3->setValue($scores[2] ?? '0');
             }
         }
 
@@ -228,7 +249,8 @@ class MultipleAnswerTrueFalse extends Question
         if (true == $obj_ex->edit_exercise_in_lp ||
             (empty($this->exerciseList) && empty($obj_ex->id))
         ) {
-            // setting the save button here and not in the question class.php
+            // Setting the save button here and not in the question class.php
+            $buttonGroup = [];
             $buttonGroup[] = $form->addButtonDelete(get_lang('Remove answer option'), 'lessAnswers', true);
             $buttonGroup[] = $form->addButtonCreate(get_lang('Add answer option'), 'moreAnswers', true);
             $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
@@ -246,58 +268,65 @@ class MultipleAnswerTrueFalse extends Question
     {
         $questionWeighting = 0;
         $objAnswer = new Answer($this->id);
-        $nb_answers = $form->getSubmitValue('nb_answers');
+        $nb_answers = (int) $form->getSubmitValue('nb_answers');
         $course_id = api_get_course_int_id();
         $repo = Container::getQuestionRepository();
+
         /** @var CQuizQuestion $question */
         $question = $repo->find($this->id);
-        $options = $question->getOptions();
-        $em = Database::getManager();
+        $optionsCollection = $question->getOptions();
+        $isFirstCreation = $optionsCollection->isEmpty();
 
-        if (!$options->isEmpty()) {
-            foreach ($options as $optionData) {
-                $optionData->setTitle($optionData>getTitle());
-            }
-        } else {
+        // Ensure default options exist (True, False, DoubtScore)
+        if ($isFirstCreation) {
             for ($i = 1; $i <= 3; $i++) {
                 Question::saveQuestionOption($question, $this->options[$i], $i);
             }
         }
 
-        /* Getting quiz_question_options (true, false, doubt) because
-        it's possible that there are more options in the future */
+        /*
+         * Getting quiz_question_options (true, false, doubt) because
+         * it's possible that there are more options in the future.
+         */
         $new_options = Question::readQuestionOption($this->id, $course_id);
         $sortedByPosition = [];
         foreach ($new_options as $item) {
-            $sortedByPosition[$item['position']] = $item;
+            $sortedByPosition[(int) $item['position']] = $item;
         }
 
-        /* Saving quiz_question.extra values that has the correct scores of
-        the true, false, doubt options registered in this format
-        XX:YY:ZZZ where XX is a float score value.*/
+        /*
+         * Saving quiz_question.extra values that has the correct scores of
+         * the true, false, doubt options registered in this format:
+         * XX:YY:ZZZ
+         */
         $extra_values = [];
         for ($i = 1; $i <= 3; $i++) {
-            $score = trim($form->getSubmitValue('option['.$i.']'));
+            $score = trim((string) $form->getSubmitValue('option['.$i.']'));
             $extra_values[] = $score;
         }
         $this->setExtra(implode(':', $extra_values));
 
         for ($i = 1; $i <= $nb_answers; $i++) {
-            $answer = trim($form->getSubmitValue('answer['.$i.']'));
-            $comment = trim($form->getSubmitValue('comment['.$i.']'));
-            $goodAnswer = trim($form->getSubmitValue('correct['.$i.']'));
-            if (empty($options)) {
-                //If this is the first time that the question is created when
-                // change the default values from the form 1 and 2 by the correct "option id" registered
-                $goodAnswer = isset($sortedByPosition[$goodAnswer]) ? $sortedByPosition[$goodAnswer]['iid'] : '';
+            $answer = trim((string) $form->getSubmitValue('answer['.$i.']'));
+            $comment = trim((string) $form->getSubmitValue('comment['.$i.']'));
+            $goodAnswer = trim((string) $form->getSubmitValue('correct['.$i.']'));
+
+            if ($isFirstCreation) {
+                // First creation: map submitted position (1/2) to the real option iid
+                $pos = (int) $goodAnswer;
+                $goodAnswer = isset($sortedByPosition[$pos]) ? (string) $sortedByPosition[$pos]['iid'] : '';
             }
-            $questionWeighting += $extra_values[0]; //By default 0 has the correct answers
+
+            // Total question weighting = nb_answers * "Correct" score (option[1])
+            $questionWeighting += (float) ($extra_values[0] ?? 0);
+
             $objAnswer->createAnswer($answer, $goodAnswer, $comment, '', $i);
         }
 
-        // saves the answers into the database
+        // Saves the answers into the database
         $objAnswer->save();
-        // sets the total weighting of the question
+
+        // Sets the total weighting of the question
         $this->updateWeighting($questionWeighting);
         $this->save($exercise);
     }

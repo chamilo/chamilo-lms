@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
 
-class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, AiVideoProviderInterface, AiDocumentProviderInterface
+class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, AiVideoProviderInterface, AiDocumentProviderInterface, AiDocumentProcessProviderInterface
 {
     private array $providerConfig;
     private string $apiKey;
@@ -247,6 +247,212 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
 
             return 'Error: '.$e->getMessage();
         }
+    }
+
+    /**
+     * Process a document through the Responses API using file_id (upload first).
+     *
+     * Note: We upload via /v1/files (purpose=user_data) and then reference file_id in /v1/responses.
+     */
+    public function processDocument(
+        string $prompt,
+        string $toolName,
+        string $filename,
+        string $mimeType,
+        string $binaryContent,
+        array $options = []
+    ): ?string {
+        $userId = $this->getUserId();
+        if (!$userId) {
+            error_log('[AI][OpenAI][document_process] User not authenticated.');
+            return 'Error: User is not authenticated.';
+        }
+
+        $promptTrimmed = trim($prompt);
+        if ('' === $promptTrimmed) {
+            return 'Error: Empty prompt.';
+        }
+
+        if ('' === trim($filename) || '' === trim($mimeType) || '' === $binaryContent) {
+            return 'Error: Missing document payload.';
+        }
+
+        // Upload the file and obtain file_id
+        $fileId = $this->uploadFileForResponses($filename, $mimeType, $binaryContent);
+        if (!\is_string($fileId) || '' === trim($fileId)) {
+            return 'Error: Failed to upload document for processing.';
+        }
+
+        // Call /v1/responses with input_file(file_id)
+        $cfg = $this->getTypeConfig('document_process');
+        if (empty($cfg)) {
+            // allow to reuse text config if document_process isn't explicitly defined
+            $cfg = $this->getTypeConfig('text');
+        }
+
+        if (empty($cfg)) {
+            error_log('[AI][OpenAI][document_process] Missing config for type: document_process/text');
+            return 'Error: OpenAI document processing configuration is missing.';
+        }
+
+        $url = (string) ($cfg['url'] ?? 'https://api.openai.com/v1/responses');
+        $model = (string) (($options['model'] ?? null) ?? ($cfg['model'] ?? 'gpt-4o'));
+        $maxOutputTokens = (int) (($options['max_output_tokens'] ?? null) ?? ($cfg['max_output_tokens'] ?? 900));
+        $temperature = (float) (($options['temperature'] ?? null) ?? ($cfg['temperature'] ?? 0.2));
+
+        $payload = [
+            'model' => $model,
+            'temperature' => $temperature,
+            'max_output_tokens' => $maxOutputTokens,
+            'input' => [
+                [
+                    'role' => 'user',
+                    'content' => [
+                        [
+                            'type' => 'input_file',
+                            'file_id' => $fileId,
+                        ],
+                        [
+                            'type' => 'input_text',
+                            'text' => $promptTrimmed,
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        try {
+            $response = $this->httpClient->request('POST', $url, [
+                'headers' => $this->buildAuthHeaders(true),
+                'json' => $payload,
+            ]);
+
+            $raw = (string) $response->getContent(false);
+            $data = json_decode($raw, true);
+
+            if (!\is_array($data)) {
+                error_log('[AI][OpenAI][document_process] Invalid JSON response: '.mb_substr($raw, 0, 1200));
+                return 'Error: Invalid JSON response from OpenAI.';
+            }
+
+            if (isset($data['error'])) {
+                $msg = $data['error']['message'] ?? 'OpenAI returned an error response.';
+                $msg = \is_string($msg) ? trim($msg) : 'OpenAI returned an error response.';
+                error_log('[AI][OpenAI][document_process] Error response: '.$msg);
+                return 'Error: '.$msg;
+            }
+
+            $text = $this->extractResponsesApiText($data);
+            if ('' === trim($text)) {
+                error_log('[AI][OpenAI][document_process] Empty output_text.');
+                return 'Error: Empty response from OpenAI.';
+            }
+
+            $usage = \is_array($data['usage'] ?? null) ? $data['usage'] : [];
+            $this->saveAiRequest(
+                $userId,
+                $toolName,
+                mb_substr($promptTrimmed, 0, 900),
+                'openai',
+                (int) ($usage['input_tokens'] ?? 0),
+                (int) ($usage['output_tokens'] ?? 0),
+                (int) ($usage['total_tokens'] ?? 0)
+            );
+
+            return trim($text);
+        } catch (Throwable $e) {
+            error_log('[AI][OpenAI][document_process] Exception: '.$e->getMessage());
+            return 'Error: '.$e->getMessage();
+        }
+    }
+
+    /**
+     * Upload a file to /v1/files to obtain file_id for Responses API.
+     */
+    private function uploadFileForResponses(string $filename, string $mimeType, string $binaryContent): ?string
+    {
+        $cfg = $this->getTypeConfig('files');
+        $url = (string) (($cfg['url'] ?? null) ?? 'https://api.openai.com/v1/files');
+
+        try {
+            $filePart = new DataPart($binaryContent, $filename, $mimeType);
+
+            $formData = new FormDataPart([
+                'purpose' => 'user_data',
+                'file' => $filePart,
+            ]);
+
+            $headers = array_merge(
+                $this->buildAuthHeaders(false),
+                $formData->getPreparedHeaders()->toArray(),
+                ['Accept' => 'application/json']
+            );
+
+            $response = $this->httpClient->request('POST', $url, [
+                'headers' => $headers,
+                'body' => $formData->bodyToIterable(),
+            ]);
+
+            $raw = (string) $response->getContent(false);
+            $data = json_decode($raw, true);
+
+            if (!\is_array($data)) {
+                error_log('[AI][OpenAI][files] Invalid JSON response: '.mb_substr($raw, 0, 1200));
+                return null;
+            }
+
+            if (isset($data['error'])) {
+                $msg = $data['error']['message'] ?? 'OpenAI returned an error response.';
+                $msg = \is_string($msg) ? trim($msg) : 'OpenAI returned an error response.';
+                error_log('[AI][OpenAI][files] Error response: '.$msg);
+                return null;
+            }
+
+            $fileId = $data['id'] ?? null;
+            if (!\is_string($fileId) || '' === trim($fileId)) {
+                error_log('[AI][OpenAI][files] Missing file id in response.');
+                return null;
+            }
+
+            return $fileId;
+        } catch (Throwable $e) {
+            error_log('[AI][OpenAI][files] Upload exception: '.$e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Extract assistant text from Responses API payload.
+     */
+    private function extractResponsesApiText(array $data): string
+    {
+        if (isset($data['output_text']) && \is_string($data['output_text'])) {
+            return $data['output_text'];
+        }
+
+        if (!isset($data['output']) || !\is_array($data['output'])) {
+            return '';
+        }
+
+        $parts = [];
+        foreach ($data['output'] as $item) {
+            if (!\is_array($item) || !isset($item['content']) || !\is_array($item['content'])) {
+                continue;
+            }
+            foreach ($item['content'] as $c) {
+                if (!\is_array($c)) {
+                    continue;
+                }
+                if (
+                    isset($c['type']) && 'output_text' === $c['type']
+                    && isset($c['text']) && \is_string($c['text'])
+                ) {
+                    $parts[] = $c['text'];
+                }
+            }
+        }
+
+        return trim(implode("\n", $parts));
     }
 
     /**
@@ -1126,93 +1332,4 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         ];
     }
 
-    /**
-     * Chat completion with conversation state (Responses API).
-     *
-     * @param array<int, array{role:string,content:string}> $messages
-     * @param array<string,mixed>                           $options
-     */
-    public function chatWithMeta(array $messages, array $options = []): AiChatCompletionResult
-    {
-        $text = $this->chat($messages, $options);
-
-        return new AiChatCompletionResult((string) $text, null);
-    }
-
-    /**
-     * Extract system instructions and build Responses API input items.
-     *
-     * @param array<int, array{role:string,content:string}> $messages
-     *
-     * @return array{0:string,1:array<int,array{role:string,content:string}>}
-     */
-    private function splitInstructionsAndInput(array $messages): array
-    {
-        $normalized = $this->normalizeChatMessages($messages);
-
-        $instructions = [];
-        $input = [];
-
-        foreach ($normalized as $m) {
-            $role = $m['role'] ?? 'user';
-            $content = trim((string) ($m['content'] ?? ''));
-
-            if ('' === $content) {
-                continue;
-            }
-
-            if ('system' === $role) {
-                $instructions[] = $content;
-
-                continue;
-            }
-
-            $input[] = [
-                'role' => $role,
-                'content' => $content,
-            ];
-        }
-
-        return [implode("\n\n", $instructions), $input];
-    }
-
-    /**
-     * Extract the assistant text from Responses API payload.
-     */
-    private function extractResponsesApiText(array $data): string
-    {
-        // Many responses include output_text directly in the response object. :contentReference[oaicite:4]{index=4}
-        if (isset($data['output_text']) && \is_string($data['output_text'])) {
-            return $data['output_text'];
-        }
-
-        // Fallback: walk through output[] -> content[] -> text.
-        if (!isset($data['output']) || !\is_array($data['output'])) {
-            return '';
-        }
-
-        $parts = [];
-
-        foreach ($data['output'] as $item) {
-            if (!\is_array($item)) {
-                continue;
-            }
-            if (!isset($item['content']) || !\is_array($item['content'])) {
-                continue;
-            }
-
-            foreach ($item['content'] as $c) {
-                if (!\is_array($c)) {
-                    continue;
-                }
-
-                // Typical shape: { "type": "output_text", "text": "..." }
-                if (isset($c['type']) && 'output_text' === $c['type'] && isset($c['text']) && \is_string($c['text'])) {
-                    $parts[] = $c['text'];
-                }
-            }
-        }
-
-        return trim(implode("\n", $parts));
-    }
 }

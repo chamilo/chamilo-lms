@@ -3712,7 +3712,7 @@ class Exercise
                             $questionScore += $true_score;
                         } else {
                             if (isset($quiz_question_options[$studentChoice])
-                                && in_array($quiz_question_options[$studentChoice]['name'], ["Don't know", 'DoubtScore'])
+                                && in_array($quiz_question_options[$studentChoice]['title'], ["Don't know", 'DoubtScore'])
                             ) {
                                 $questionScore += $doubt_score;
                             } else {
@@ -6474,7 +6474,7 @@ class Exercise
             if (!empty($sessionInfo)) {
                 $sessionData = '<tr>'
                     .'<td>'.get_lang('Session name').'</td>'
-                    .'<td>'.$sessionInfo['name'].'</td>'
+                    .'<td>'.$sessionInfo['title'].'</td>'
                     .'</tr>';
             }
         }
@@ -10883,7 +10883,7 @@ class Exercise
             if (!empty($sessionInfo)) {
                 $sessionData = '<tr>'
                     .'<td><em>'.get_lang('Session name').'</em></td>'
-                    .'<td>&nbsp;<b>'.$sessionInfo['name'].'</b></td>'
+                    .'<td>&nbsp;<b>'.$sessionInfo['title'].'</b></td>'
                     .'</tr>';
             }
         }

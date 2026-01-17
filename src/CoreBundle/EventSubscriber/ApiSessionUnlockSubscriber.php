@@ -7,8 +7,8 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
- * This subscriber unlocks the session after an API call,
- * to reduce the likeliness of a session lock that would slow down or block other API calls.
+ * This subscriber unlocks the session after an API call to reduce the
+ * likeliness of a session lock that would slow down or block other API calls.
  * See GH#6858.
  */
 class ApiSessionUnlockSubscriber implements EventSubscriberInterface
@@ -17,7 +17,8 @@ class ApiSessionUnlockSubscriber implements EventSubscriberInterface
     {
         return [
             // We listen on KernelEvents::REQUEST
-            // Priority 4 is usually after Security but before API Platform starts its logic
+            // Priority 4 is usually after Security but before API Platform
+            // starts its logic
             KernelEvents::REQUEST => [['unlockSession', 4]],
         ];
     }

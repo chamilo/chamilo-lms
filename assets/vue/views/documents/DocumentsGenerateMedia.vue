@@ -10,10 +10,21 @@
 
   <div class="p-4 space-y-4">
     <h2 class="text-xl font-semibold">{{ t("Generate media") }}</h2>
-
-    <!-- Permission / settings gate -->
+    <div class="p-3 rounded border border-gray-200 bg-gray-10 text-sm text-gray-700 leading-relaxed">
+      {{
+        t(
+          "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal.",
+        )
+      }}
+    </div>
     <div
-      v-if="!canEdit"
+      v-if="isBooting"
+      class="text-sm text-gray-600"
+    >
+      {{ t("Loading...") }}
+    </div>
+    <div
+      v-else-if="!canEdit"
       class="p-3 rounded border border-gray-200 text-sm"
     >
       {{ t("You do not have permission to generate AI media in this course.") }}
@@ -112,10 +123,53 @@
       <div class="space-y-1">
         <label class="font-semibold text-sm">{{ t("Prompt") }}</label>
         <textarea
+          ref="promptTextareaEl"
           v-model="prompt"
           class="w-full border border-gray-300 rounded px-3 py-2 min-h-[140px]"
           :placeholder="t('Describe what you want to generate...')"
         />
+      </div>
+
+      <!-- Size (image only): width/height inputs + presets -->
+      <div
+        v-if="selectedType === 'image'"
+        class="space-y-1"
+      >
+        <div class="flex items-center justify-between gap-2">
+          <label class="font-semibold text-sm">{{ t("Size") }}</label>
+
+          <!-- Presets: small links -->
+          <div class="flex flex-wrap items-center gap-2 text-xs">
+            <button
+              v-for="s in sizePresets"
+              :key="s.label"
+              type="button"
+              class="underline opacity-70 hover:opacity-100"
+              @click="applySizePreset(s.w, s.h)"
+            >
+              {{ s.label }}
+            </button>
+          </div>
+        </div>
+
+        <div class="flex gap-2">
+          <InputText
+            v-model="widthInput"
+            class="w-28"
+            inputmode="numeric"
+            :placeholder="t('Width')"
+          />
+          <InputText
+            v-model="heightInput"
+            class="w-28"
+            inputmode="numeric"
+            :placeholder="t('Height')"
+          />
+        </div>
+
+        <p class="text-xs text-gray-600">
+          {{ t("Tip: click a preset to quickly fill the size.") }}
+        </p>
       </div>
 
       <!-- Actions -->
@@ -184,17 +238,24 @@
       <!-- Revised prompt -->
       <div
         v-if="revisedPrompt"
-        class="space-y-1"
+        class="space-y-2"
       >
-        <h3 class="font-semibold">{{ t("Modified prompt") }}</h3>
+        <div class="flex items-center justify-between gap-2">
+          <h3 class="font-semibold">{{ t("Modified prompt") }}</h3>
+          <BaseButton
+            :label="t('Customize')"
+            icon="edit"
+            type="secondary"
+            size="small"
+            @click="applyRevisedPromptToPrompt"
+          />
+        </div>
         <textarea
           :value="revisedPrompt"
-          class="w-full border border-gray-300 rounded px-3 py-2 min-h-[120px] bg-gray-50"
+          class="w-full border border-gray-300 rounded px-3 py-2 min-h-[120px] bg-gray-10"
           readonly
         />
       </div>
-
-      <!-- Saved -->
       <div
         v-if="savedIri"
         class="p-3 rounded border border-green-200 bg-green-50 text-sm"
@@ -212,8 +273,6 @@
           />
         </div>
       </div>
-
-      <!-- Provider used -->
       <div
         v-if="providerUsed"
         class="text-xs text-gray-600"
@@ -240,7 +299,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue"
+import { computed, onBeforeUnmount, onMounted, ref, watch, nextTick } from "vue"
 import axios from "axios"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
@@ -262,6 +321,9 @@ const platformConfig = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
 const securityStore = useSecurityStore()
 
+const promptTextareaEl = ref(null)
+const isBooting = ref(true)
+
 const isLoadingCaps = ref(false)
 
 const hasImage = ref(false)
@@ -281,6 +343,49 @@ const previewUrl = ref("")
 const savedIri = ref("")
 const providerUsed = ref("")
 
+// Image size (requested improvement #7365):
+// Keep as strings for inputs, parse only when building payload.
+const widthInput = ref("1024")
+const heightInput = ref("768")
+
+// Common size presets (small links near width/height inputs).
+const sizePresets = [
+  { label: "400x400", w: 400, h: 400 },
+  { label: "800x600", w: 800, h: 600 },
+  { label: "1024x768", w: 1024, h: 768 },
+  { label: "1440x900", w: 1440, h: 900 },
+  { label: "1920x1080", w: 1920, h: 1080 },
+]
+
+function applySizePreset(w, h) {
+  widthInput.value = String(w)
+  heightInput.value = String(h)
+}
+
+function applyRevisedPromptToPrompt() {
+  const rp = String(revisedPrompt.value || "").trim()
+  if (!rp) return
+
+  prompt.value = rp
+  nextTick(() => {
+    const el = promptTextareaEl.value
+    if (!el) return
+
+    try {
+      el.scrollIntoView({ behavior: "smooth", block: "center" })
+    } catch (e) {
+      // Ignore: some browsers might not support scrollIntoView options.
+    }
+
+    el.focus()
+
+    const len = (el.value || "").length
+    if (typeof el.setSelectionRange === "function") {
+      el.setSelectionRange(len, len)
+    }
+  })
+}
+
 // Generated result kept in memory until teacher accepts it.
 const generatedResult = ref(null)
 
@@ -288,8 +393,9 @@ const isGenerating = ref(false)
 const isSaving = ref(false)
 const statusMessage = ref("")
 
-const rawCanEdit = ref(false)
-const canEdit = computed(() => !!rawCanEdit.value)
+// Tri-state permission flag to prevent UI flicker: null=unknown, true/false=known.
+const rawCanEdit = ref(null)
+const canEdit = computed(() => rawCanEdit.value === true)
 
 // Video polling state (OpenAI video is job-based).
 const isPollingVideoJob = ref(false)
@@ -396,15 +502,37 @@ watch(
   },
 )
 
+const parsedWidth = computed(() => {
+  const n = Number(String(widthInput.value || "").trim())
+  return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0
+})
+
+const parsedHeight = computed(() => {
+  const n = Number(String(heightInput.value || "").trim())
+  return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0
+})
+
 const canGenerate = computed(() => {
-  return (
-    canUseAnyType.value &&
-    !!selectedType.value &&
-    !!selectedProvider.value &&
-    !!selectedFolderId.value &&
-    !!fileName.value?.trim() &&
-    !!prompt.value?.trim()
-  )
+  // Base requirements
+  if (
+    !(
+      canUseAnyType.value &&
+      !!selectedType.value &&
+      !!selectedProvider.value &&
+      !!selectedFolderId.value &&
+      !!fileName.value?.trim() &&
+      !!prompt.value?.trim()
+    )
+  ) {
+    return false
+  }
+
+  // Image requires width/height
+  if (selectedType.value === "image") {
+    return parsedWidth.value > 0 && parsedHeight.value > 0
+  }
+
+  return true
 })
 
 const hasGeneratedResult = computed(() => !!generatedResult.value)
@@ -484,7 +612,95 @@ function buildResourceLinkList() {
   return JSON.stringify([{ gid, sid, cid, visibility: RESOURCE_LINK_PUBLISHED }])
 }
 
-async function saveToDocuments(file, type) {
+/**
+ * Local image resize (frontend) to match UI presets like 400x400.
+ * Some providers only support fixed sizes; we keep the requested size by resizing here.
+ */
+function canvasMimeFromContentType(contentType) {
+  const ct = String(contentType || "").toLowerCase()
+
+  // Canvas reliably supports PNG and JPEG in all browsers.
+  if (ct.includes("jpeg") || ct.includes("jpg")) return "image/jpeg"
+  if (ct.includes("png")) return "image/png"
+
+  // WEBP might be supported depending on the browser; we try, and fallback to PNG if needed.
+  if (ct.includes("webp")) return "image/webp"
+
+  return "image/png"
+}
+
+// Resize/crop with "cover" strategy: scale to fill then center-crop.
+// Returns { base64, mime } without the "data:" prefix.
+function resizeImageBase64Cover(rawBase64, inContentType, targetW, targetH) {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+
+    img.onload = () => {
+      try {
+        const canvas = document.createElement("canvas")
+        canvas.width = targetW
+        canvas.height = targetH
+
+        const ctx = canvas.getContext("2d")
+        if (!ctx) return reject(new Error("Canvas context not available"))
+
+        // Cover strategy
+        const scale = Math.max(targetW / img.width, targetH / img.height)
+        const sw = targetW / scale
+        const sh = targetH / scale
+        const sx = (img.width - sw) / 2
+        const sy = (img.height - sh) / 2
+
+        ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetW, targetH)
+
+        const preferredMime = canvasMimeFromContentType(inContentType)
+        let dataUrl = canvas.toDataURL(preferredMime)
+
+        // If the browser doesn't support the requested output mime, it may fallback silently.
+        // We accept whatever comes back and detect it via prefix.
+        if (typeof dataUrl !== "string" || !dataUrl.startsWith("data:")) {
+          dataUrl = canvas.toDataURL("image/png")
+        }
+
+        const outMimeMatch = dataUrl.match(/^data:([^;]+);base64,/i)
+        const outMime = outMimeMatch ? String(outMimeMatch[1]) : "image/png"
+        const outBase64 = String(dataUrl.split(",")[1] || "")
+
+        resolve({ base64: outBase64, mime: outMime })
+      } catch (e) {
+        reject(e)
+      }
+    }
+
+    img.onerror = () => reject(new Error("Failed to load base64 image for resize"))
+    img.src = `data:${inContentType || "image/png"};base64,${rawBase64}`
+  })
+}
+
+async function maybeResizeGeneratedImage(result, targetW, targetH) {
+  if (!result?.is_base64 || !result?.content) return result
+
+  const ct = String(result.content_type || "").toLowerCase()
+  if (!ct.startsWith("image/")) return result
+  if (!(targetW > 0 && targetH > 0)) return result
+
+  try {
+    const { base64, mime } = await resizeImageBase64Cover(result.content, result.content_type, targetW, targetH)
+
+    return {
+      ...result,
+      content: base64,
+      content_type: mime,
+      // Debug field (not used by UI, but useful when troubleshooting).
+      resized_to: `${targetW}x${targetH}`,
+    }
+  } catch (e) {
+    console.warn("[AI Media] Local resize failed, using provider output.", e)
+    return result
+  }
+}
+
+async function saveToDocuments(file) {
   const formData = new FormData()
 
   // Must match CreateDocumentFileAction schema.
@@ -605,6 +821,7 @@ async function loadCapabilities() {
     isLoadingCaps.value = false
   }
 }
+
 function stopVideoPolling(reason = "") {
   if (videoPollTimeoutHandle) {
     clearTimeout(videoPollTimeoutHandle)
@@ -771,17 +988,20 @@ async function generate() {
   try {
     const endpoint = selectedType.value === "video" ? "/ai/generate_video" : "/ai/generate_image"
 
-    const { data } = await axios.post(
-      endpoint,
-      {
-        n: 1,
-        language: "en",
-        prompt: prompt.value,
-        tool: "document",
-        ai_provider: selectedProvider.value,
-      },
-      { headers: { "Content-Type": "application/json" } },
-    )
+    const payload = {
+      n: 1,
+      language: "en",
+      prompt: prompt.value,
+      tool: "document",
+      ai_provider: selectedProvider.value,
+    }
+
+    if (selectedType.value === "image") {
+      payload.width = parsedWidth.value
+      payload.height = parsedHeight.value
+    }
+
+    const { data } = await axios.post(endpoint, payload, { headers: { "Content-Type": "application/json" } })
 
     if (!data?.success) {
       const msg = String(data?.text || "")
@@ -814,6 +1034,17 @@ async function generate() {
     // - Image: backend should return base64 (preferred).
     // - Video: can be base64, url, or job-based id/status.
     if (isBase64 && content) {
+      // Enforce the requested UI size for images by resizing client-side.
+      if (selectedType.value === "image") {
+        const resized = await maybeResizeGeneratedImage(generatedResult.value, parsedWidth.value, parsedHeight.value)
+        generatedResult.value = resized
+
+        previewUrl.value = `data:${resized.content_type || contentType};base64,${resized.content}`
+        statusMessage.value = t("Generated successfully. Review the preview and save when ready.")
+        return
+      }
+
+      // Default behavior (videos base64, or images when resize is not applicable).
       previewUrl.value = `data:${contentType};base64,${content}`
       statusMessage.value = t("Generated successfully. Review the preview and save when ready.")
       return
@@ -864,10 +1095,9 @@ async function acceptAndSave() {
     const finalName = ensureFilenameWithExtension(fileName.value, ext)
 
     const mime = generatedResult.value.content_type || (selectedType.value === "video" ? "video/mp4" : "image/png")
-
     const file = base64ToFile(generatedResult.value.content, finalName, mime)
 
-    const savedDoc = await saveToDocuments(file, selectedType.value)
+    const savedDoc = await saveToDocuments(file)
 
     // Build a human-readable path for success message.
     const folderLabel =
@@ -911,39 +1141,47 @@ function goToFolder() {
 }
 
 onMounted(async () => {
-  // Load course settings (same pattern as LP generator usage).
-  try {
-    await courseSettingsStore.loadCourseSettings(cid, sid)
-  } catch (e) {
-    console.error("[AI Media] loadCourseSettings failed:", e)
-  }
+  isBooting.value = true
 
-  // Permission check (teacher/admin).
   try {
-    let allowed = await checkIsAllowedToEdit(true, true, true, false)
-    const roles = securityStore.user?.roles ?? []
-
-    if (!allowed && Array.isArray(roles) && (roles.includes("ROLE_ADMIN") || roles.includes("ROLE_GLOBAL_ADMIN"))) {
-      allowed = true
+    // Load course settings first (needed by course flags like image_generator/video_generator).
+    try {
+      await courseSettingsStore.loadCourseSettings(cid, sid)
+    } catch (e) {
+      console.error("[AI Media] loadCourseSettings failed:", e)
     }
 
-    rawCanEdit.value = !!allowed
-  } catch (e) {
-    console.error("[AI Media] Permission check failed:", e)
-    rawCanEdit.value = false
-  }
+    // Permission check (teacher/admin).
+    try {
+      let allowed = await checkIsAllowedToEdit(true, true, true, false)
+      const roles = securityStore.user?.roles ?? []
 
-  // Only load capabilities if the feature is usable by settings + permissions.
-  if (canEdit.value && aiHelpersEnabled.value && (imageGeneratorEnabled.value || videoGeneratorEnabled.value)) {
-    await loadCapabilities()
-  }
+      if (!allowed && Array.isArray(roles) && (roles.includes("ROLE_ADMIN") || roles.includes("ROLE_GLOBAL_ADMIN"))) {
+        allowed = true
+      }
 
-  folders.value = await fetchFolders()
-  selectedFolderId.value = normalizeResourceNodeId(route.params.node) || folders.value[0]?.value || null
+      rawCanEdit.value = !!allowed
+    } catch (e) {
+      console.error("[AI Media] Permission check failed:", e)
+      rawCanEdit.value = false
+    }
 
-  // Ensure selected type is valid when only one is available.
-  if (typeOptions.value.length === 1) {
-    selectedType.value = typeOptions.value[0].value
+    // Capabilities only if the feature is usable.
+    if (canEdit.value && aiHelpersEnabled.value && (imageGeneratorEnabled.value || videoGeneratorEnabled.value)) {
+      await loadCapabilities()
+    }
+
+    // Folders list + default selection.
+    folders.value = await fetchFolders()
+    selectedFolderId.value = normalizeResourceNodeId(route.params.node) || folders.value[0]?.value || null
+
+    // Ensure selected type is valid when only one is available.
+    if (typeOptions.value.length === 1) {
+      selectedType.value = typeOptions.value[0].value
+    }
+  } finally {
+    // Always end boot mode (even if something failed).
+    isBooting.value = false
   }
 })
 

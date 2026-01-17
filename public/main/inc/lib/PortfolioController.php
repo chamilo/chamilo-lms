@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
@@ -29,6 +31,8 @@ use Chamilo\CoreBundle\Event\PortfolioItemScoredEvent;
 use Chamilo\CoreBundle\Event\PortfolioItemViewedEvent;
 use Chamilo\CoreBundle\Event\PortfolioItemVisibilityChangedEvent;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\Node\PortfolioCommentRepository;
+use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Doctrine\ORM\Query\Expr\Join;
 use Mpdf\MpdfException;
@@ -1072,7 +1076,6 @@ class PortfolioController
             'found_comments' => $foundComments,
             '_p' => Template::getLegacyP(),
             '_c' => Template::getLegacyC(),
-            'is_allowed_to_edit' => api_is_allowed_to_edit(false),
         ];
 
         $js = '<script>
@@ -1112,21 +1115,23 @@ class PortfolioController
     {
         global $interbreadcrumb;
 
+        /** @var ResourceLinkRepository $resourceLinkRepo */
+        $resourceLinkRepo = Database::getManager()->getRepository(ResourceLink::class);
+
+        $firstResourceLink = $item->getFirstResourceLink();
+
         if (!$this->itemBelongToOwner($item)) {
             if ($this->advancedSharingEnabled) {
-                $courseInfo = api_get_course_info_by_id($this->course->getId());
-                $sessionId = $this->session ? $this->session->getId() : 0;
-
-                $itemPropertyVisiblity = api_get_item_visibility(
-                    $courseInfo,
-                    TOOL_PORTFOLIO,
-                    $item->getId(),
-                    $sessionId,
-                    $this->owner->getId(),
-                    'visible'
+                $userLink = $resourceLinkRepo->findLinkForResourceInContext(
+                    $item,
+                    $this->course,
+                    $this->session,
+                    null,
+                    null,
+                    $this->owner
                 );
 
-                if ($item->getVisibility() === Portfolio::VISIBILITY_PER_USER && 1 !== $itemPropertyVisiblity) {
+                if ($item->getVisibility() === Portfolio::VISIBILITY_PER_USER && !$userLink) {
                     api_not_allowed(true);
                 }
             } elseif ($item->getVisibility() === Portfolio::VISIBILITY_HIDDEN
@@ -1141,52 +1146,48 @@ class PortfolioController
             Events::PORTFOLIO_ITEM_VIEWED
         );
 
-        $itemCourse = $item->getCourse();
-        $itemSession = $item->getSession();
+        $itemCourse = $firstResourceLink?->getCourse();
+        $itemSession = $firstResourceLink?->getSession();
 
         $form = $this->createCommentForm($item);
 
-        $commentsRepo = $this->em->getRepository(PortfolioComment::class);
+        $commentsRepo = Container::getPortfolioCommentRepository();
 
-        $commentsQueryBuilder = $commentsRepo->createQueryBuilder('comment');
-        $commentsQueryBuilder->where('comment.item = :item');
+        $commentsQueryBuilder = $commentsRepo->getResources();
+        $commentsQueryBuilder->andWhere('resource.item = :item');
 
         if ($this->advancedSharingEnabled) {
+            // @todo change to left join with resource_link to get resources with advanced sharing
+            if ($itemCourse) {
+                $commentsQueryBuilder
+                    ->andWhere($commentsQueryBuilder->expr()->eq('links.course', ':course'))
+                    ->setParameter('course', $itemCourse->getId());
+                ;
+            }
+
             $commentsQueryBuilder
-                ->leftJoin(
-                    CItemProperty::class,
-                    'cip',
-                    Join::WITH,
-                    "cip.ref = comment.id
-                        AND cip.tool = :cip_tool
-                        AND cip.course = :course
-                        AND cip.lasteditType = 'visible'
-                        AND cip.toUser = :current_user"
-                )
+                ->andWhere($commentsQueryBuilder->expr()->eq('links.user', ':current_user'))
                 ->andWhere(
-                    sprintf(
-                        'comment.visibility = %d
-                            OR (
-                                comment.visibility = %d AND cip IS NOT NULL OR comment.author = :current_user
-                            )',
-                        PortfolioComment::VISIBILITY_VISIBLE,
-                        PortfolioComment::VISIBILITY_PER_USER
+                    $commentsQueryBuilder->expr()->orX(
+                        $commentsQueryBuilder->expr()->eq('resource.visibility', PortfolioComment::VISIBILITY_PER_USER),
+                        $commentsQueryBuilder->expr()->andX(
+                            $commentsQueryBuilder->expr()->eq('resource.visibility', PortfolioComment::VISIBILITY_VISIBLE),
+                            $commentsQueryBuilder->expr()->eq('node.creator', ':current_user')
+                        )
                     )
                 )
-                ->setParameter('cip_tool', TOOL_PORTFOLIO_COMMENT)
                 ->setParameter('current_user', $this->owner->getId())
-                ->setParameter('course', $item->getCourse())
             ;
         }
 
-        if (true === api_get_configuration_value('portfolio_show_base_course_post_in_sessions')
-            && $this->session && !$item->getSession() && !$item->isDuplicatedInSession($this->session)
+        if ('true' === api_get_setting('platform.portfolio_show_base_course_post_in_sessions')
+            && $this->session && !$itemSession && !$item->isDuplicatedInSession($this->session)
         ) {
             $comments = [];
         } else {
             $comments = $commentsQueryBuilder
-                ->orderBy('comment.root, comment.lft', 'ASC')
-                ->setParameter('item', $item)
+                ->orderBy('node.level', 'ASC')
+                ->setParameter('item', $item->getId())
                 ->getQuery()
                 ->getArrayResult()
             ;
@@ -1194,178 +1195,187 @@ class PortfolioController
 
         $clockIcon = Display::returnFontAwesomeIcon('clock-o', '', true);
 
-        $commentsHtml = $commentsRepo->buildTree(
-            $comments,
-            [
-                'decorate' => true,
-                'rootOpen' => '<div class="media-list">',
-                'rootClose' => '</div>',
-                'childOpen' => function ($node) use ($commentsRepo) {
-                    /** @var PortfolioComment $comment */
-                    $comment = $commentsRepo->find($node['id']);
-                    $author = $comment->getAuthor();
+        $commentsHtml = '';
 
-                    $userPicture = UserManager::getUserPicture(
-                        $comment->getAuthor()->getId(),
-                        USER_IMAGE_SIZE_SMALL,
-                        null,
-                        [
-                            'picture_uri' => $author->getPictureUri(),
-                            'email' => $author->getEmail(),
-                        ]
-                    );
+//        $commentsRepo->buildTree(
+//            $comments,
+//            [
+//                'decorate' => true,
+//                'rootOpen' => '<div class="media-list">',
+//                'rootClose' => '</div>',
+//                'childOpen' => function ($node) use ($commentsRepo) {
+//                    /** @var PortfolioComment $comment */
+//                    $comment = $commentsRepo->find($node['id']);
+//                    $author = $comment->getAuthor();
+//
+//                    $userPicture = UserManager::getUserPicture(
+//                        $comment->getAuthor()->getId(),
+//                        USER_IMAGE_SIZE_SMALL,
+//                        null,
+//                        [
+//                            'picture_uri' => $author->getPictureUri(),
+//                            'email' => $author->getEmail(),
+//                        ]
+//                    );
+//
+//                    return '<article class="media" id="comment-'.$node['id'].'">
+//                        <div class="media-left"><img class="media-object thumbnail" src="'.$userPicture.'" alt="'
+//                        .$author->getFullName().'"></div>
+//                        <div class="media-body">';
+//                },
+//                'childClose' => '</div></article>',
+//                'nodeDecorator' => function ($node) use ($commentsRepo, $clockIcon, $item) {
+//                    $commentActions = [];
+//                    /** @var PortfolioComment $comment */
+//                    $comment = $commentsRepo->find($node['id']);
+//
+//                    if ($this->commentBelongsToOwner($comment)) {
+//                        $commentActions[] = Display::url(
+//                            Display::getMdiIcon(
+//                                ActionIcon::FIX,
+//                                $item->isTemplate() ? 'ch-tool-icon' : 'ch-tool-icon-disabled',
+//                                null,
+//                                ICON_SIZE_MEDIUM,
+//                                $item->isTemplate() ? get_lang('Remove as template') : get_lang('Add as a template'),
+//                            ),
+//                            $this->baseUrl.http_build_query(['action' => 'template_comment', 'id' => $comment->getId()])
+//                        );
+//                    }
+//
+//                    $commentActions[] = Display::url(
+//                        Display::getMdiIcon(ActionIcon::COMMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Reply to this comment')),
+//                        '#',
+//                        [
+//                            'data-comment' => htmlspecialchars(
+//                                json_encode(['id' => $comment->getId()])
+//                            ),
+//                            'role' => 'button',
+//                            'class' => 'btn-reply-to',
+//                        ]
+//                    );
+//                    $commentActions[] = Display::url(
+//                        Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Copy to my portfolio')),
+//                        $this->baseUrl.http_build_query(
+//                            [
+//                                'action' => 'copy',
+//                                'copy' => 'comment',
+//                                'id' => $comment->getId(),
+//                            ]
+//                        )
+//                    );
+//
+//                    $isAllowedToEdit = api_is_allowed_to_edit();
+//
+//                    if ($isAllowedToEdit) {
+//                        $commentActions[] = Display::url(
+//                            Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Copy to student portfolio')),
+//                            $this->baseUrl.http_build_query(
+//                                [
+//                                    'action' => 'teacher_copy',
+//                                    'copy' => 'comment',
+//                                    'id' => $comment->getId(),
+//                                ]
+//                            )
+//                        );
+//
+//                        if ($comment->isImportant()) {
+//                            $commentActions[] = Display::url(
+//                                Display::getMdiIcon(ObjectIcon::PIN, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Unmark comment as important')),
+//                                $this->baseUrl.http_build_query(
+//                                    [
+//                                        'action' => 'mark_important',
+//                                        'item' => $item->getId(),
+//                                        'id' => $comment->getId(),
+//                                    ]
+//                                )
+//                            );
+//                        } else {
+//                            $commentActions[] = Display::url(
+//                                Display::getMdiIcon(ObjectIcon::PIN, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Mark comment as important')),
+//                                $this->baseUrl.http_build_query(
+//                                    [
+//                                        'action' => 'mark_important',
+//                                        'item' => $item->getId(),
+//                                        'id' => $comment->getId(),
+//                                    ]
+//                                )
+//                            );
+//                        }
+//
+//                        if ($this->course && '1' === api_get_course_setting('qualify_portfolio_comment')) {
+//                            $commentActions[] = Display::url(
+//                                Display::getMdiIcon(ObjectIcon::TEST, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Grade this comment')),
+//                                $this->baseUrl.http_build_query(
+//                                    [
+//                                        'action' => 'qualify',
+//                                        'comment' => $comment->getId(),
+//                                    ]
+//                                )
+//                            );
+//                        }
+//                    }
+//
+//                    if ($this->commentBelongsToOwner($comment)) {
+//                        if ($this->advancedSharingEnabled) {
+//                            $commentActions[] = Display::url(
+//                                Display::getMdiIcon(ActionIcon::VISIBLE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Choose recipients')),
+//                                $this->baseUrl.http_build_query(['action' => 'comment_visiblity_choose', 'id' => $comment->getId()])
+//                            );
+//                        }
+//
+//                        $commentActions[] = Display::url(
+//                            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')),
+//                            $this->baseUrl.http_build_query(['action' => 'edit_comment', 'id' => $comment->getId()])
+//                        );
+//                        $commentActions[] = Display::url(
+//                            Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete')),
+//                            $this->baseUrl.http_build_query(['action' => 'delete_comment', 'id' => $comment->getId()])
+//                        );
+//                    }
+//
+//                    $nodeHtml = '<div class="pull-right">'.implode(PHP_EOL, $commentActions).'</div>'.PHP_EOL
+//                        .'<footer class="media-heading h4">'.PHP_EOL
+//                        .'<p>'.$comment->getAuthor()->getFullName().'</p>'.PHP_EOL;
+//
+//                    if ($comment->isImportant()
+//                        && ($this->itemBelongToOwner($comment->getItem()) || $isAllowedToEdit)
+//                    ) {
+//                        $nodeHtml .= '<span class="pull-right label label-warning origin-style">'
+//                            .get_lang('Portfolio item marked as important')
+//                            .'</span>'.PHP_EOL;
+//                    }
+//
+//                    $nodeHtml .= '<small>'.$clockIcon.PHP_EOL
+//                        .$this->getLabelForCommentDate($comment).'</small>'.PHP_EOL;
+//
+//                    $nodeHtml .= '</footer>'.PHP_EOL
+//                        .Security::remove_XSS($comment->getContent()).PHP_EOL;
+//
+//                    $nodeHtml .= $this->generateAttachmentList($comment);
+//
+//                    return $nodeHtml;
+//                },
+//            ]
+//        );
 
-                    return '<article class="media" id="comment-'.$node['id'].'">
-                        <div class="media-left"><img class="media-object thumbnail" src="'.$userPicture.'" alt="'
-                        .$author->getFullName().'"></div>
-                        <div class="media-body">';
-                },
-                'childClose' => '</div></article>',
-                'nodeDecorator' => function ($node) use ($commentsRepo, $clockIcon, $item) {
-                    $commentActions = [];
-                    /** @var PortfolioComment $comment */
-                    $comment = $commentsRepo->find($node['id']);
-
-                    if ($this->commentBelongsToOwner($comment)) {
-                        $commentActions[] = Display::url(
-                            Display::getMdiIcon(
-                                ActionIcon::FIX,
-                                $item->isTemplate() ? 'ch-tool-icon' : 'ch-tool-icon-disabled',
-                                null,
-                                ICON_SIZE_MEDIUM,
-                                $item->isTemplate() ? get_lang('Remove as template') : get_lang('Add as a template'),
-                            ),
-                            $this->baseUrl.http_build_query(['action' => 'template_comment', 'id' => $comment->getId()])
-                        );
-                    }
-
-                    $commentActions[] = Display::url(
-                        Display::getMdiIcon(ActionIcon::COMMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Reply to this comment')),
-                        '#',
-                        [
-                            'data-comment' => htmlspecialchars(
-                                json_encode(['id' => $comment->getId()])
-                            ),
-                            'role' => 'button',
-                            'class' => 'btn-reply-to',
-                        ]
-                    );
-                    $commentActions[] = Display::url(
-                        Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Copy to my portfolio')),
-                        $this->baseUrl.http_build_query(
-                            [
-                                'action' => 'copy',
-                                'copy' => 'comment',
-                                'id' => $comment->getId(),
-                            ]
-                        )
-                    );
-
-                    $isAllowedToEdit = api_is_allowed_to_edit();
-
-                    if ($isAllowedToEdit) {
-                        $commentActions[] = Display::url(
-                            Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Copy to student portfolio')),
-                            $this->baseUrl.http_build_query(
-                                [
-                                    'action' => 'teacher_copy',
-                                    'copy' => 'comment',
-                                    'id' => $comment->getId(),
-                                ]
-                            )
-                        );
-
-                        if ($comment->isImportant()) {
-                            $commentActions[] = Display::url(
-                                Display::getMdiIcon(ObjectIcon::PIN, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Unmark comment as important')),
-                                $this->baseUrl.http_build_query(
-                                    [
-                                        'action' => 'mark_important',
-                                        'item' => $item->getId(),
-                                        'id' => $comment->getId(),
-                                    ]
-                                )
-                            );
-                        } else {
-                            $commentActions[] = Display::url(
-                                Display::getMdiIcon(ObjectIcon::PIN, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Mark comment as important')),
-                                $this->baseUrl.http_build_query(
-                                    [
-                                        'action' => 'mark_important',
-                                        'item' => $item->getId(),
-                                        'id' => $comment->getId(),
-                                    ]
-                                )
-                            );
-                        }
-
-                        if ($this->course && '1' === api_get_course_setting('qualify_portfolio_comment')) {
-                            $commentActions[] = Display::url(
-                                Display::getMdiIcon(ObjectIcon::TEST, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Grade this comment')),
-                                $this->baseUrl.http_build_query(
-                                    [
-                                        'action' => 'qualify',
-                                        'comment' => $comment->getId(),
-                                    ]
-                                )
-                            );
-                        }
-                    }
-
-                    if ($this->commentBelongsToOwner($comment)) {
-                        if ($this->advancedSharingEnabled) {
-                            $commentActions[] = Display::url(
-                                Display::getMdiIcon(ActionIcon::VISIBLE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Choose recipients')),
-                                $this->baseUrl.http_build_query(['action' => 'comment_visiblity_choose', 'id' => $comment->getId()])
-                            );
-                        }
-
-                        $commentActions[] = Display::url(
-                            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')),
-                            $this->baseUrl.http_build_query(['action' => 'edit_comment', 'id' => $comment->getId()])
-                        );
-                        $commentActions[] = Display::url(
-                            Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete')),
-                            $this->baseUrl.http_build_query(['action' => 'delete_comment', 'id' => $comment->getId()])
-                        );
-                    }
-
-                    $nodeHtml = '<div class="pull-right">'.implode(PHP_EOL, $commentActions).'</div>'.PHP_EOL
-                        .'<footer class="media-heading h4">'.PHP_EOL
-                        .'<p>'.$comment->getAuthor()->getFullName().'</p>'.PHP_EOL;
-
-                    if ($comment->isImportant()
-                        && ($this->itemBelongToOwner($comment->getItem()) || $isAllowedToEdit)
-                    ) {
-                        $nodeHtml .= '<span class="pull-right label label-warning origin-style">'
-                            .get_lang('Portfolio item marked as important')
-                            .'</span>'.PHP_EOL;
-                    }
-
-                    $nodeHtml .= '<small>'.$clockIcon.PHP_EOL
-                        .$this->getLabelForCommentDate($comment).'</small>'.PHP_EOL;
-
-                    $nodeHtml .= '</footer>'.PHP_EOL
-                        .Security::remove_XSS($comment->getContent()).PHP_EOL;
-
-                    $nodeHtml .= $this->generateAttachmentList($comment);
-
-                    return $nodeHtml;
-                },
-            ]
-        );
-
-        $template = new Template(null, false, false, false, false, false, false);
-        $template->assign('baseurl', $this->baseUrl);
-        $template->assign('item', $item);
-        $template->assign('item_content', $this->generateItemContent($item));
-        $template->assign('count_comments', count($comments));
-        $template->assign('comments', $commentsHtml);
-        $template->assign('form', $form);
-        $template->assign('attachment_list', $this->generateAttachmentList($item));
+        $context = [];
+        $context['baseurl'] = $this->baseUrl;
+        $context['item'] = $item;
+        $context['course'] = $itemCourse;
+        $context['session'] = $itemSession;
+        $context['item_content'] = $this->generateItemContent($item);
+        $context['count_comments'] = count($comments);
+        $context['comments'] = $commentsHtml;
+        $context['form'] = $form;
+        $context['attachment_list'] = $this->generateAttachmentList($item);
 
         if ($itemCourse) {
-            $propertyInfo = api_get_item_property_info(
+            $context['last_edit'] = [
+                'date' => $firstResourceLink->getUpdatedAt(),
+                'user' => $item->resourceNode->getCreator()->getFullName(),
+            ];
+
+            /*$propertyInfo = api_get_item_property_info(
                 $itemCourse->getId(),
                 TOOL_PORTFOLIO,
                 $item->getId(),
@@ -1373,18 +1383,14 @@ class PortfolioController
             );
 
             if ($propertyInfo && empty($propertyInfo['to_user_id'])) {
-                $template->assign(
-                    'last_edit',
-                    [
-                        'date' => $propertyInfo['lastedit_date'],
-                        'user' => api_get_user_entity($propertyInfo['lastedit_user_id'])->getFullName(),
-                    ]
-                );
-            }
+                $context['last_edit'] = [
+                    'date' => $propertyInfo['lastedit_date'],
+                    'user' => api_get_user_entity($propertyInfo['lastedit_user_id'])->getFullName(),
+                ];
+            }*/
         }
 
-        $layout = $template->get_template('Portfolio/view.html.twig');
-        $content = $template->fetch($layout);
+        $content = Container::getTwig()->render('@ChamiloCore/Portfolio/view.html.twig', $context);
 
         $interbreadcrumb[] = ['name' => get_lang('Portfolio'), 'url' => $this->baseUrl];
 
@@ -1837,8 +1843,8 @@ class PortfolioController
             ;
             $frmStudent->setDefaults(['user' => $this->owner->getId()]);
             $frmStudent->addHidden('action', 'details');
-            $frmStudent->addHidden('cidReq', $this->course->getCode());
-            $frmStudent->addHidden('id_session', $this->session ? $this->session->getId() : 0);
+            $frmStudent->addHidden('cid', $this->course->getId());
+            $frmStudent->addHidden('sid', $this->session ? $this->session->getId() : 0);
             $frmStudent->addButtonFilter(get_lang('Filter'));
         }
 
@@ -2939,9 +2945,9 @@ class PortfolioController
         $table->set_additional_parameters(
             [
                 'action' => 'tags',
-                'cidReq' => $this->course->getCode(),
-                'id_session' => $this->session ? $this->session->getId() : 0,
-                'gidReq' => 0,
+                'cid' => $this->course->getId(),
+                'sid' => $this->session ? $this->session->getId() : 0,
+                'gid' => 0,
             ]
         );
 
@@ -3601,9 +3607,9 @@ class PortfolioController
         $frmTagList->addButtonFilter(get_lang('Filter'));
 
         if ($this->course) {
-            $frmTagList->addHidden('cidReq', $this->course->getCode());
-            $frmTagList->addHidden('id_session', $this->session ? $this->session->getId() : 0);
-            $frmTagList->addHidden('gidReq', 0);
+            $frmTagList->addHidden('cid', $this->course->getId());
+            $frmTagList->addHidden('sid', $this->session ? $this->session->getId() : 0);
+            $frmTagList->addHidden('gid', 0);
             $frmTagList->addHidden('gradebook', 0);
             $frmTagList->addHidden('origin', '');
             $frmTagList->addHidden('categoryId', 0);
@@ -3796,11 +3802,12 @@ class PortfolioController
     ) {
         $currentUserId = api_get_user_id();
 
+        $portfolioRepo = Container::getPortfolioRepository();
+
         if ($this->course) {
             $showBaseContentInSession = $this->session
-                && true === api_get_configuration_value('portfolio_show_base_course_post_in_sessions');
+                && 'true' === api_get_setting('platform.portfolio_show_base_course_post_in_sessions');
 
-            $portfolioRepo = Container::getPortfolioRepository();
             $portfolioCategoryHelper = Container::getPortfolioCategoryHelper();
 
             $filters = $frmFilterList && $frmFilterList->validate() ? $frmFilterList->exportValues() : [];
@@ -3852,22 +3859,32 @@ class PortfolioController
             if ($showBaseContentInSession) {
                 $items = array_filter(
                     $items,
-                    fn (Portfolio $item) => !($this->session && !$item->getSession() && $item->isDuplicatedInSession($this->session))
+                    function (Portfolio $item) {
+                        $itemResourceLink = $item->getFirstResourceLink();
+
+                        return !($this->session && !$itemResourceLink?->getSession()
+                            && $item->isDuplicatedInSession($this->session));
+                    }
                 );
             }
 
             return $items;
         } else {
-            $itemsCriteria = [];
-            $itemsCriteria['category'] = null;
-            $itemsCriteria['user'] = $this->owner;
+            $queryBuilder = $portfolioRepo->getResourcesByCreator($this->owner);
+            $queryBuilder->andWhere($queryBuilder->expr()->isNull('resource.category'));
 
             if ($currentUserId !== $this->owner->getId()) {
-                $itemsCriteria['visibility'] = Portfolio::VISIBILITY_VISIBLE;
+                $queryBuilder
+                    ->andWhere($queryBuilder->expr()->eq('resource.visibility', ':visible'))
+                    ->setParameter('visible', Portfolio::VISIBILITY_VISIBLE)
+                ;
             }
 
-            $items = Container::getPortfolioRepository()
-                ->findBy($itemsCriteria, ['creationDate' => 'DESC']);
+            $items = $queryBuilder
+                ->orderBy('node.createdAt', 'DESC')
+                ->getQuery()
+                ->getResult()
+            ;
         }
 
         return $items;
@@ -3881,15 +3898,7 @@ class PortfolioController
     private function createCommentForm(Portfolio $item): string
     {
         $formAction = $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]);
-
-        $templates = $this->em
-            ->getRepository(PortfolioComment::class)
-            ->findBy(
-                [
-                    'isTemplate' => true,
-                    'author' => $this->owner,
-                ]
-            );
+        $templates = Container::getPortfolioCommentRepository()->findTemplatesByUser($this->owner);
 
         $form = new FormValidator('frm_comment', 'post', $formAction);
         $form->addHeader(get_lang('Add a new comment'));
@@ -3915,10 +3924,12 @@ class PortfolioController
 
         $form->addButtonSave(get_lang('Save'));
 
+        $itemResourceLink = $item->getFirstResourceLink();
+
         if ($form->validate()) {
             if ($this->session
                 && true === api_get_configuration_value('portfolio_show_base_course_post_in_sessions')
-                && !$item->getSession()
+                && !$itemResourceLink->getSession()
             ) {
                 $duplicate = $item->duplicateInSession($this->session);
 
@@ -3936,8 +3947,8 @@ class PortfolioController
 
             $comment = new PortfolioComment();
             $comment
-                ->setAuthor($this->owner)
-                ->setParent($parentComment)
+                ->setCreator($this->owner)
+                ->setParent($parentComment ?: $item)
                 ->setContent($values['content'])
                 ->setDate(api_get_utc_datetime(null, false, true))
                 ->setItem($item);
@@ -3947,7 +3958,7 @@ class PortfolioController
 
             $this->processAttachments(
                 $form,
-                $comment->getAuthor(),
+                $this->owner,
                 $comment->getId(),
                 Portfolio::TYPE_COMMENT
             );
@@ -3989,23 +4000,13 @@ class PortfolioController
         return $form->returnForm().$js;
     }
 
-    private function generateAttachmentList($post, bool $includeHeader = true): string
+    private function generateAttachmentList(Portfolio|PortfolioComment $post, bool $includeHeader = true): string
     {
-        $attachmentsRepo = $this->em->getRepository(PortfolioAttachment::class);
+        $attachments = $post->resourceNode->getResourceFiles();
 
-        $postOwnerId = 0;
+        $postOwnerId = $post->getCreator()?->getId();
 
-        if ($post instanceof Portfolio) {
-            $attachments = $attachmentsRepo->findFromItem($post);
-
-            $postOwnerId = $post->getUser()->getId();
-        } elseif ($post instanceof PortfolioComment) {
-            $attachments = $attachmentsRepo->findFromComment($post);
-
-            $postOwnerId = $post->getAuthor()->getId();
-        }
-
-        if (empty($attachments)) {
+        if (!$attachments->count()) {
             return '';
         }
 
@@ -4016,15 +4017,14 @@ class PortfolioController
         $deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', 'display: inline-block', ICON_SIZE_MEDIUM, get_lang('Delete attachment'));
         $deleteAttrs = ['class' => 'btn-portfolio-delete'];
 
-        /** @var PortfolioAttachment $attachment */
         foreach ($attachments as $attachment) {
-            $downloadParams = http_build_query(['action' => 'download_attachment', 'file' => $attachment->getPath()]);
-            $deleteParams = http_build_query(['action' => 'delete_attachment', 'file' => $attachment->getPath()]);
+            $downloadParams = http_build_query(['action' => 'download_attachment', 'node_id' => $post->resourceNode->getId()]);
+            $deleteParams = http_build_query(['action' => 'delete_attachment', 'node_id' => $post->resourceNode->getId()]);
 
             $listItems .= '<li>'
                 .'<span class="fa-li fa fa-paperclip" aria-hidden="true"></span>'
                 .Display::url(
-                    Security::remove_XSS($attachment->getFilename()),
+                    Security::remove_XSS($attachment->getOriginalName()),
                     $this->baseUrl.$downloadParams
                 );
 
@@ -4032,8 +4032,8 @@ class PortfolioController
                 $listItems .= PHP_EOL.Display::url($deleteIcon, $this->baseUrl.$deleteParams, $deleteAttrs);
             }
 
-            if ($attachment->getComment()) {
-                $listItems .= '<p class="text-muted">'.Security::remove_XSS($attachment->getComment()).'</p>';
+            if ($fileDescription = $attachment->getDescription()) {
+                $listItems .= '<p class="text-muted">'.Security::remove_XSS($fileDescription).'</p>';
             }
 
             $listItems .= '</li>';
@@ -4352,54 +4352,48 @@ class PortfolioController
             return [];
         }
 
-        $queryBuilder = $this->em->createQueryBuilder()
-            ->select('c')
-            ->from(PortfolioComment::class, 'c')
-        ;
+        $commentsRepo = Container::getPortfolioCommentRepository();
+        $queryBuilder = $commentsRepo->getResources();
 
         if (!empty($values['date'])) {
             $queryBuilder
-                ->andWhere('c.date >= :date')
+                ->andWhere($queryBuilder->expr()->gte('node.createdAt', ':date'))
                 ->setParameter(':date', api_get_utc_datetime($values['date'], false, true))
             ;
         }
 
         if (!empty($values['text'])) {
             $queryBuilder
-                ->andWhere('c.content LIKE :text')
+                ->andWhere($queryBuilder->expr()->like('resource.content', ':text'))
                 ->setParameter('text', '%'.$values['text'].'%')
             ;
         }
 
         if ($this->advancedSharingEnabled) {
+            // @todo change to left join with resource_link to get resources with advanced sharing
+            if ($this->course) {
+                $queryBuilder
+                    ->andWhere($queryBuilder->expr()->eq('links.course', ':course'))
+                    ->setParameter('course', $this->course->getId())
+                ;
+            }
+
             $queryBuilder
-                ->leftJoin(
-                    CItemProperty::class,
-                    'cip',
-                    Join::WITH,
-                    "cip.ref = c.id
-                        AND cip.tool = :cip_tool
-                        AND cip.course = :course
-                        AND cip.lasteditType = 'visible'
-                        AND cip.toUser = :current_user"
-                )
+                ->andWhere($queryBuilder->expr()->eq('links.user', ':current_user'))
                 ->andWhere(
-                    sprintf(
-                        'c.visibility = %d
-                            OR (
-                                c.visibility = %d AND cip IS NOT NULL OR c.author = :current_user
-                            )',
-                        PortfolioComment::VISIBILITY_VISIBLE,
-                        PortfolioComment::VISIBILITY_PER_USER
+                    $queryBuilder->expr()->orX(
+                        $queryBuilder->expr()->eq('resource.visibility', Portfolio::VISIBILITY_VISIBLE),
+                        $queryBuilder->expr()->andX(
+                            $queryBuilder->expr()->eq('resource.visibility', Portfolio::VISIBILITY_PER_USER),
+                            $queryBuilder->expr()->eq('node.creator', ':current_user')
+                        )
                     )
                 )
-                ->setParameter('cip_tool', TOOL_PORTFOLIO_COMMENT)
                 ->setParameter('current_user', $this->owner->getId())
-                ->setParameter('course', $this->course)
             ;
         }
 
-        $queryBuilder->orderBy('c.date', 'DESC');
+        $queryBuilder->orderBy('node.createdAt', 'DESC');
 
         return $queryBuilder->getQuery()->getResult();
     }

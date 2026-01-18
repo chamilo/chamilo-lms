@@ -9,7 +9,10 @@
         :url="ticketUrl"
         class="item-button"
       >
-        <BaseIcon class="item-button__icon" icon="ticket" />
+        <BaseIcon
+          class="item-button__icon"
+          icon="ticket"
+        />
       </BaseAppLink>
 
       <BaseAppLink
@@ -18,8 +21,15 @@
         :to="{ name: 'MessageList' }"
         class="item-button"
       >
-        <BaseIcon class="item-button__icon" icon="inbox" />
-        <span v-if="btnInboxBadge" class="item-button__badge" v-text="btnInboxBadge" />
+        <BaseIcon
+          class="item-button__icon"
+          icon="inbox"
+        />
+        <span
+          v-if="btnInboxBadge"
+          class="item-button__badge"
+          v-text="btnInboxBadge"
+        />
       </BaseAppLink>
     </div>
     <div class="app-topbar__end">
@@ -38,7 +48,10 @@
         :to="null"
         tabindex="0"
       >
-        <BaseIcon class="item-button__icon" icon="login" />
+        <BaseIcon
+          class="item-button__icon"
+          icon="login"
+        />
       </BaseAppLink>
     </div>
   </div>
@@ -118,6 +131,42 @@ const ticketUrl = computed(() => {
   return "/main/ticket/tickets.php?" + searchParms.toString()
 })
 
+/**
+ * Read display.show_tabs as a JSON string:
+ * {
+ *   "menu": { ... },
+ *   "topbar": { "topbar_certificate": true, "topbar_skills": true }
+ * }
+ *
+ * We keep parsing defensive to avoid breaking the UI if the setting is invalid.
+ */
+const displayShowTabs = computed(() => {
+  const raw = platformConfigStore.getSetting("display.show_tabs") || ""
+
+  // if still empty or not a JSON string, behave like "no extra topbar items".
+  if ("string" !== typeof raw || "" === raw.trim()) {
+    return { menu: {}, topbar: {} }
+  }
+
+  try {
+    const parsed = JSON.parse(raw)
+
+    // Ensure structure exists even if JSON is incomplete.
+    const menu = parsed?.menu && "object" === typeof parsed.menu ? parsed.menu : {}
+    const topbar = parsed?.topbar && "object" === typeof parsed.topbar ? parsed.topbar : {}
+
+    return { menu, topbar }
+  } catch (e) {
+    // Don't block the app for a bad JSON: log and fallback.
+    console.warn("[Topbar] Invalid JSON in display.show_tabs", e)
+    return { menu: {}, topbar: {} }
+  }
+})
+
+function isTopbarEnabled(key) {
+  return displayShowTabs.value?.topbar?.[key] === true
+}
+
 const loginUrl = "/login"
 const elUserSubmenu = ref(null)
 const userSubmenuItems = computed(() => {
@@ -140,24 +189,21 @@ const userSubmenuItems = computed(() => {
     })
   }
 
-  const tabs = platformConfigStore.getSetting("display.show_tabs") || ""
-  if (tabs.indexOf("topbar_certificate") > -1) {
+  if (isTopbarEnabled("topbar_certificate")) {
     items[0].items.push({
       label: t("My General Certificate"),
       url: "/main/social/my_skills_report.php?a=generate_custom_skill",
     })
   }
-  if (tabs.indexOf("topbar_skills") > -1) {
+
+  if (isTopbarEnabled("topbar_skills")) {
     items[0].items.push({
       label: t("My skills"),
       url: "/main/social/my_skills_report.php",
     })
   }
 
-  items[0].items.push(
-    { separator: true },
-    { label: t("Sign out"), url: "/logout", icon: "mdi mdi-logout-variant" },
-  )
+  items[0].items.push({ separator: true }, { label: t("Sign out"), url: "/logout", icon: "mdi mdi-logout-variant" })
   return items
 })
 

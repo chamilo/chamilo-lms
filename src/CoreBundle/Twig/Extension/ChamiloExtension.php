@@ -108,7 +108,13 @@ class ChamiloExtension extends AbstractExtension
 
     public function getSettingsParameter($name)
     {
-        return $this->helper->getSettingsParameter($name);
+        $value = $this->helper->getSettingsParameter($name);
+        // We only want to inject valid HTML snippets here.
+        if ($name === 'tracking.header_extra_content' || $name === 'tracking.footer_extra_content') {
+            return $this->resolveTrackingExtraContentValue($name, $value);
+        }
+
+        return $value;
     }
 
     /**
@@ -275,5 +281,51 @@ class ChamiloExtension extends AbstractExtension
     public function getThemeAssetBase64Encoded(string $path): string
     {
         return $this->themeHelper->getAssetBase64Encoded($path);
+    }
+
+    /**
+     * Normalize legacy tracking extra content values.
+     *
+     * Expected value: an HTML snippet (e.g. <script>...</script>, <meta ...>, etc.)
+     *
+     * Problem on migrated portals:
+     * - Legacy migration can store a filesystem path (e.g. "app/home/header_extra_content.txt")
+     * - Rendering that value produces a visible "flash" of the path before navigation completes.
+     *
+     * Rule:
+     * - Only allow HTML snippets (must contain "<").
+     * - If the value looks like a file path / file reference, return empty string.
+     * - If the value is plain text (no "<"), return empty string (do not inject as |raw).
+     */
+    private function resolveTrackingExtraContentValue(string $settingName, mixed $value): string
+    {
+        if (!\in_array($settingName, ['tracking.header_extra_content', 'tracking.footer_extra_content'], true)) {
+            return is_string($value) ? $value : '';
+        }
+
+        if (!is_string($value)) {
+            return '';
+        }
+
+        $value = trim($value);
+        if ($value === '') {
+            return '';
+        }
+
+        // Only allow HTML snippets. Anything else should not be injected with |raw.
+        if (!str_contains($value, '<')) {
+            return '';
+        }
+
+        // Reject obvious file paths or filename references to avoid injecting legacy migrated values.
+        // Examples: "app/home/header_extra_content.txt", "/var/www/...", "C:\path\file.txt"
+        $looksLikePath = str_contains($value, '/') || str_contains($value, '\\');
+        $looksLikeFile = (bool) preg_match('/\.[a-z0-9]{1,8}\b/i', $value);
+
+        if ($looksLikePath && $looksLikeFile) {
+            return '';
+        }
+
+        return $value;
     }
 }

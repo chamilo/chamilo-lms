@@ -1,5 +1,5 @@
 <template>
-  <SectionHeader :title="t('Attendance (tablet)')" />
+  <SectionHeader :title="t('Attendances (tablet)')" />
 
   <div class="p-4 space-y-4">
     <!-- Loading state -->
@@ -7,7 +7,7 @@
       v-if="isLoading"
       class="flex items-center justify-center py-10 text-gray-600"
     >
-      {{ t("Loading attendance...") }}
+      {{ t("Loading...") }}
     </div>
 
     <!-- Main content -->
@@ -34,7 +34,7 @@
             v-model="search"
             type="text"
             class="border rounded px-3 py-2"
-            :placeholder="t('Search student...')"
+            :placeholder="t('Search for student...')"
           />
           <BaseButton
             v-if="canEdit && !isLocked"
@@ -62,7 +62,7 @@
               <th class="p-3 text-left">{{ t("Photo") }}</th>
               <th class="p-3 text-left">{{ t("Last name") }}</th>
               <th class="p-3 text-left">{{ t("First name") }}</th>
-              <th class="p-3 text-center">{{ t("Presence") }}</th>
+              <th class="p-3 text-center">{{ t("Attended") }}</th>
               <th
                 class="p-3 text-center"
                 v-if="allowComments"
@@ -149,7 +149,7 @@
       <!-- Comment Dialog -->
       <BaseDialog
         v-model:isVisible="showCommentDialog"
-        :title="t('Add Comment')"
+        :title="t('Add comment')"
       >
         <textarea
           class="w-full h-32 border rounded p-2"

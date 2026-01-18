@@ -263,7 +263,7 @@
                           v-if="date.duration !== undefined && date.duration !== null"
                           class="text-xs text-gray-600 mt-1"
                         >
-                          {{ date.duration }} {{ t("min") }}
+                          {{ t("{0} min", [date.duration]) }}
                         </span>
 
                         <div
@@ -624,6 +624,20 @@ const filteredAttendanceSheets = computed(() => {
 
 const isSaving = ref(false)
 const attendanceData = ref({})
+
+/**
+ * Normalize presence before saving:
+ * - Binary mode: anything not explicitly "present" (1) is saved as "absent" (0).
+ * - Multi-level mode: keep null to represent "no state" (NP) when user removes a state.
+ */
+const normalizePresenceForSave = (rawPresence) => {
+  if (allowMultilevelGrading.value) {
+    return rawPresence !== undefined ? rawPresence : null
+  }
+
+  return Number(rawPresence) === 1 ? 1 : 0
+}
+
 const saveAttendanceSheet = async () => {
   if (!canEdit.value) return
 
@@ -644,7 +658,7 @@ const saveAttendanceSheet = async () => {
       preparedData.push({
         userId: user.id,
         calendarId: date.id,
-        presence: attendanceData.value[key] !== undefined ? attendanceData.value[key] : null,
+        presence: normalizePresenceForSave(attendanceData.value[key]),
         comment: comments.value[key] ?? null,
         signature: signatures.value[key] ?? null,
       })

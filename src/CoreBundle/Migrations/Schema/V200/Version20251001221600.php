@@ -6,7 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Command\DoctrineMigrationsMigrateCommandDecorator;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Schema\Schema;
 
 final class Version20251001221600 extends AbstractMigrationChamilo
@@ -18,10 +21,14 @@ final class Version20251001221600 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        // Disable foreign key checks to prevent issues during migration
-        $this->addSql('SET FOREIGN_KEY_CHECKS = 0;');
+        $skipAttendances = (bool) getenv(DoctrineMigrationsMigrateCommandDecorator::SKIP_ATTENDANCES_FLAG);
+        $platform = $this->connection->getDatabasePlatform();
 
-        // Drop tables if they exist
+        // MySQL-only FK checks toggle
+        if ($platform instanceof MySQLPlatform) {
+            $this->addSql('SET FOREIGN_KEY_CHECKS = 0;');
+        }
+
         $tablesToDrop = [
             'page__snapshot',
             'class_item',
@@ -58,7 +65,7 @@ final class Version20251001221600 extends AbstractMigrationChamilo
             'timeline__action',
             'contact_category_translation',
             'media__gallery_media',
-            'c_item_property',
+            // 'c_item_property' handled separately below
             'c_survey_group',
             'c_permission_group',
             'c_role_group',
@@ -66,15 +73,30 @@ final class Version20251001221600 extends AbstractMigrationChamilo
         ];
 
         foreach ($tablesToDrop as $table) {
-            // Check if the table exists before attempting to drop it
             if ($schema->hasTable($table)) {
-                $this->addSql("DROP TABLE $table;");
+                $this->addSql('DROP TABLE '.$this->quoteIdentifier($platform, $table).';');
             }
         }
 
-        // Re-enable foreign key checks
-        $this->addSql('SET FOREIGN_KEY_CHECKS = 1;');
+        // If skip-attendances is enabled, we keep c_item_property because the post-migration command
+        // "chamilo:migration:migrate-attendances-fast" needs it to map attendances to courses and metadata.
+        if ($schema->hasTable('c_item_property')) {
+            if ($skipAttendances) {
+                $this->write('skip-attendances enabled: keeping c_item_property for post-migration attendance fast migration.');
+            } else {
+                $this->addSql('DROP TABLE '.$this->quoteIdentifier($platform, 'c_item_property').';');
+            }
+        }
+
+        if ($platform instanceof MySQLPlatform) {
+            $this->addSql('SET FOREIGN_KEY_CHECKS = 1;');
+        }
     }
 
     public function down(Schema $schema): void {}
+
+    private function quoteIdentifier(AbstractPlatform $platform, string $name): string
+    {
+        return $platform->quoteIdentifier($name);
+    }
 }

@@ -181,4 +181,7 @@ enum ActionIcon: string
     case LIST = 'format-list-bulleted';
     case STAR = 'star';
     case STAR_OUTLINE = 'star-outline';
+    case HEALTH_CHECK = 'clipboard-pulse-outline';
+    case FIX = 'auto-fix';
+    case AWARD = 'medal';
 }

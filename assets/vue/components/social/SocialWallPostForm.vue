@@ -69,10 +69,9 @@ const securityStore = useSecurityStore()
 const { t } = useI18n()
 const route = useRoute()
 const { showErrorNotification } = useNotification()
-const isPromotedPage = computed(() => {
-  return route.query.filterType === "promoted"
-})
-const user = inject("social-user")
+const isPromotedPage = computed(() => route.query.filterType === "promoted")
+const user = inject("social-user", ref(null))
+
 const selectedFile = ref(null)
 const postState = reactive({
   content: "",
@@ -81,20 +80,52 @@ const postState = reactive({
   textPlaceholder: "",
 })
 const { content, attachment, isPromoted, textPlaceholder } = toRefs(postState)
-
 const v$ = useVuelidate(
   {
     content: { required },
   },
   postState,
 )
+const allowCreatePromoted = ref(false)
+
+function showTextPlaceholder() {
+  const meIri = securityStore.user?.["@id"]
+  const wallIri = user.value?.["@id"]
+
+  // user can be null while wall loads
+  if (!meIri || !wallIri) {
+    postState.textPlaceholder = t("What are you thinking about?")
+    return
+  }
+
+  if (meIri === wallIri) {
+    postState.textPlaceholder = t("What are you thinking about?")
+    return
+  }
+
+  // Avoid i18n interpolation here to prevent "{0}" rendering issues in some locales
+  const wallName =
+    user.value?.fullName ||
+    [user.value?.firstname, user.value?.lastname].filter(Boolean).join(" ") ||
+    user.value?.username ||
+    ""
+
+  postState.textPlaceholder = wallName ? `${t("Write something to {0}", [wallName])}` : t("Write something")
+}
+
+function showCheckboxPromoted() {
+  const meIri = securityStore.user?.["@id"]
+  const wallIri = user.value?.["@id"]
+  allowCreatePromoted.value = !!(securityStore.isAdmin && meIri && wallIri && meIri === wallIri)
+}
 
 watch(
-  () => user.value,
+  () => user.value?.["@id"],
   () => {
     showTextPlaceholder()
     showCheckboxPromoted()
   },
+  { immediate: true },
 )
 
 watch(
@@ -112,19 +143,6 @@ onMounted(() => {
   showCheckboxPromoted()
 })
 
-function showTextPlaceholder() {
-  postState.textPlaceholder =
-    securityStore.user["@id"] === user.value["@id"]
-      ? t("What are you thinking about?")
-      : t("Write something to {0}", [user.value.fullName])
-}
-
-const allowCreatePromoted = ref(false)
-
-function showCheckboxPromoted() {
-  allowCreatePromoted.value = securityStore.isAdmin && securityStore.user["@id"] === user.value["@id"]
-}
-
 async function sendPost() {
   v$.value.$touch()
   if (!postState.content.trim()) {
@@ -135,23 +153,35 @@ async function sendPost() {
     return
   }
 
+  // If wall user is not ready, avoid crashing and avoid sending wrong receiver
+  const meIri = securityStore.user?.["@id"]
+  const wallIri = user.value?.["@id"]
+
+  if (!meIri || !wallIri) {
+    console.warn("Post creation blocked: wall user is not ready yet.")
+    showErrorNotification("Wall is still loading. Please try again.")
+    return
+  }
+
   if (isPromotedPage.value) {
     postState.isPromoted = true
   }
 
   try {
+    const receiver = meIri === wallIri ? null : wallIri
     const post = await socialService.createPost({
       content: postState.content,
       type: postState.isPromoted ? SOCIAL_TYPE_PROMOTED_MESSAGE : SOCIAL_TYPE_WALL_POST,
-      sender: securityStore.user["@id"],
-      userReceiver: securityStore.user["@id"] === user.value["@id"] ? null : user.value["@id"],
+      sender: meIri,
+      userReceiver: receiver,
     })
 
     if (selectedFile.value) {
       const formData = new FormData()
-      let idUrl = post["@id"]
-      let parts = idUrl.split("/")
-      let socialPostId = parts[parts.length - 1]
+      const idUrl = post["@id"]
+      const parts = String(idUrl).split("/")
+      const socialPostId = parts[parts.length - 1]
+
       formData.append("file", selectedFile.value)
       formData.append("messageId", socialPostId)
 
@@ -162,6 +192,7 @@ async function sendPost() {
     postState.attachment = null
     postState.isPromoted = false
     postState.isPromoted = isPromotedPage.value
+    selectedFile.value = null
     v$.value.$reset()
     emit("post-created")
   } catch (error) {

@@ -7,7 +7,7 @@
  */
 class HotSpotDelineation extends HotSpot
 {
-    public $typePicture = 'hotspot-delineation.png';
+    public $typePicture = 'hotspot_delineation.png';
     public $explanationLangVar = 'HotspotDelineation';
 
     public function __construct()

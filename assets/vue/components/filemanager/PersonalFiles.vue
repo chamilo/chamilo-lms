@@ -57,7 +57,7 @@
         :global-filter-fields="['resourceNode.title', 'resourceNode.updatedAt']"
         :is-loading="isLoading"
         :total-items="totalFiles"
-        :values="files"
+        :values="filteredFiles"
         data-key="iid"
         lazy
         @page="onFilesPage"
@@ -137,10 +137,10 @@
     <div v-else>
       <div class="thumbnails">
         <div
-          v-for="file in files"
+          v-for="file in filteredFiles"
           :key="file.iid"
           class="thumbnail-item"
-          @click="handleClickFile(file)"
+          @click="onThumbnailClick(file)"
           @contextmenu.prevent="showContextMenu($event, file)"
         >
           <div class="thumbnail-icon">
@@ -331,15 +331,21 @@
 </template>
 
 <script setup>
+import { computed } from "vue"
+import { useRoute } from "vue-router"
 import { useFileManager } from "../../composables/useFileManager"
 import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
 import BaseContextMenu from "../basecomponents/BaseContextMenu.vue"
 import prettyBytes from "pretty-bytes"
 import BaseTable from "../basecomponents/BaseTable.vue"
+import { pickUrlForTinyMce } from "../../utils/tinyPickerBridge"
 
+const route = useRoute()
 const { t } = useI18n()
 const { relativeDatetime } = useFormatDate()
+const isTinyPicker = computed(() => String(route.query.picker || "") === "tinymce")
+const cbId = computed(() => String(route.query.cbId || ""))
 
 const {
   files,
@@ -363,7 +369,7 @@ const {
   currentFolderTitle,
   handleClickFile,
   goBack,
-  returnToEditor,
+  returnToEditor: baseReturnToEditor,
   toggleViewMode,
   viewModeIcon,
   isImage,
@@ -383,11 +389,118 @@ const {
   uploadDocumentHandler,
   onMountedCallback,
   isAuthenticated,
-  selectFile,
+  selectFile: baseSelectFile,
   nextPage,
   previousPage,
   totalPages,
 } = useFileManager("personalfile", "/api/personal_files", "FileManagerUploadFile")
 
+/**
+ * Picker filter type:
+ *  - "files"  (default)
+ *  - "images" (only images)
+ *  - "media"  (only audio/video)
+ */
+const filterType = computed(() => {
+  const raw = String(route.query.type || "files").toLowerCase()
+  return ["files", "images", "media"].includes(raw) ? raw : "files"
+})
+
+function toAbsoluteUrl(raw) {
+  const v = String(raw || "").trim()
+  if (!v) return ""
+  try {
+    return new URL(v, window.location.origin).href
+  } catch {
+    return v
+  }
+}
+
+function resolveItemUrl(entry) {
+  if (!entry?.resourceNode?.firstResourceFile) return ""
+  return (
+    entry?.contentUrl || entry?.downloadUrl || entry?.url || entry?.resourceNode?.firstResourceFile?.contentUrl || ""
+  )
+}
+
+function isFolderEntry(entry) {
+  return !entry?.resourceNode?.firstResourceFile
+}
+
+function getFilename(entry) {
+  return (
+    entry?.resourceNode?.firstResourceFile?.filename ||
+    entry?.resourceNode?.firstResourceFile?.name ||
+    entry?.resourceNode?.title ||
+    ""
+  )
+}
+
+function getMimeType(entry) {
+  return String(entry?.resourceNode?.firstResourceFile?.mimeType || "").toLowerCase()
+}
+
+function matchesFilter(entry, type) {
+  if (isFolderEntry(entry)) return true
+  if (type === "files") return true
+
+  const mime = getMimeType(entry)
+  const name = String(getFilename(entry)).toLowerCase()
+
+  const isImg = mime.startsWith("image/") || /\.(png|jpe?g|gif|svg|webp|bmp|tiff?)$/.test(name)
+  const isMed =
+    mime.startsWith("video/") || mime.startsWith("audio/") || /\.(mp4|webm|ogg|mov|avi|mkv|mp3|wav|m4a)$/.test(name)
+
+  if (type === "images") return isImg
+  if (type === "media") return isMed
+  return true
+}
+
+const filteredFiles = computed(() => {
+  const type = filterType.value
+  return (files.value || []).filter((f) => matchesFilter(f, type))
+})
+
+function returnToEditor(entry) {
+  const url = toAbsoluteUrl(resolveItemUrl(entry))
+  if (!url) {
+    console.warn("[FILEMANAGER PICKER] No URL found for the selected entry")
+    return
+  }
+
+  if (isTinyPicker.value) {
+    pickUrlForTinyMce(url, { cbId: cbId.value, close: true, logPrefix: "[FILEMANAGER PICKER]" })
+    return
+  }
+
+  baseReturnToEditor(entry)
+}
+
+function selectFile(entry) {
+  // In TinyMCE picker mode, "Select" should return the file URL to the editor.
+  if (isTinyPicker.value && entry?.resourceNode?.firstResourceFile) {
+    contextMenuVisible.value = false
+    returnToEditor(entry)
+    return
+  }
+  baseSelectFile(entry)
+}
+
+function onThumbnailClick(entry) {
+  // Keep folder navigation as-is
+  if (!entry?.resourceNode?.firstResourceFile) {
+    handleClickFile(entry)
+    return
+  }
+
+  // If opened as a TinyMCE picker, clicking a file should select it.
+  if (isTinyPicker.value) {
+    returnToEditor(entry)
+    return
+  }
+
+  // Default behavior
+  handleClickFile(entry)
+}
 onMountedCallback()
 </script>

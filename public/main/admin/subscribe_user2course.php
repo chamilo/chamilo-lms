@@ -95,30 +95,87 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             echo Display::return_message(get_lang('You must select at least one user and one course'), 'error');
         } else {
             $errorDrh = 0;
-            foreach ($courses as $course_code) {
-                foreach ($users as $user_id) {
-                    $user = api_get_user_info($user_id);
-                    if (DRH != $user['status']) {
-                        $courseInfo = api_get_course_info($course_code);
-                        CourseManager::subscribeUser($user_id, $courseInfo['real_id']);
-                    } else {
-                        $errorDrh = 1;
+
+            // -----------------------------------------------------------------
+            // Build user info map once and list of users allowed for subscription
+            // (DRH users are excluded from global limit computation and from
+            // course subscription).
+            // -----------------------------------------------------------------
+            $usersInfo = [];
+            $subscribableUserIds = [];
+
+            foreach ($users as $user_id) {
+                $user = api_get_user_info($user_id);
+                $usersInfo[$user_id] = $user;
+
+                if (DRH != $user['status']) {
+                    $subscribableUserIds[] = $user_id;
+                } else {
+                    // Keep original behaviour: mark DRH presence to show message later
+                    $errorDrh = 1;
+                }
+            }
+
+            // -----------------------------------------------------------------
+            // Global hosting limit: cancel whole operation if any selected
+            // course would exceed platform.hosting_limit_users_per_course.
+            // -----------------------------------------------------------------
+            $limitExceeded = false;
+
+            if (!empty($subscribableUserIds)) {
+                foreach ($courses as $course_code) {
+                    $courseInfo = api_get_course_info($course_code);
+                    if (empty($courseInfo) || empty($courseInfo['real_id'])) {
+                        continue; // Skip invalid course records.
+                    }
+
+                    $courseId = (int) $courseInfo['real_id'];
+
+                    if (CourseManager::wouldOperationExceedGlobalLimit($courseId, $subscribableUserIds)) {
+                        $limitExceeded = true;
+                        break;
                     }
                 }
             }
 
-            if (0 == $errorDrh) {
+            if ($limitExceeded) {
+                // No subscription is executed if the global limit would be exceeded.
                 echo Display::return_message(
-                    get_lang('The selected users are subscribed to the selected course'),
-                    'confirm'
+                    CourseManager::getGlobalLimitCancelMessage(),
+                    'warning'
                 );
             } else {
-                echo Display::return_message(
-                    get_lang(
-                        'Human resources managers should not be registered to courses. The corresponding users you selected have not been subscribed.'
-                    ),
-                    'error'
-                );
+                // -----------------------------------------------------------------
+                // Original behaviour: subscribe all non-DRH users to all selected courses.
+                // DRH users are skipped and reported.
+                // -----------------------------------------------------------------
+                foreach ($courses as $course_code) {
+                    $courseInfo = api_get_course_info($course_code);
+
+                    foreach ($users as $user_id) {
+                        $user = $usersInfo[$user_id] ?? api_get_user_info($user_id);
+
+                        if (DRH != $user['status']) {
+                            CourseManager::subscribeUser($user_id, $courseInfo['real_id']);
+                        } else {
+                            $errorDrh = 1;
+                        }
+                    }
+                }
+
+                if (0 == $errorDrh) {
+                    echo Display::return_message(
+                        get_lang('The selected users are subscribed to the selected course'),
+                        'confirm'
+                    );
+                } else {
+                    echo Display::return_message(
+                        get_lang(
+                            'Human resources managers should not be registered to courses. The corresponding users you selected have not been subscribed.'
+                        ),
+                        'error'
+                    );
+                }
             }
         }
     }

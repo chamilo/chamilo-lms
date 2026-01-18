@@ -6214,7 +6214,7 @@ msgstr ""
 msgid "The language has been hidden. It will not be possible to use it until it becomes visible again."
 msgstr ""
 
-msgid "The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
+msgid "The var/translations directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
 msgstr ""
 
 msgid "Show glossary terms in documents"
@@ -10921,7 +10921,7 @@ msgstr ""
 msgid "The address of"
 msgstr ""
 
-msgid "Your registration on"
+msgid "Your registration on %s"
 msgstr ""
 
 msgid "This login is already taken. Use your browser's back button and choose another."
@@ -14221,7 +14221,7 @@ msgstr ""
 msgid "<p> The Announcements tool allows you to send an e-mail to some or all of your students, or to specific groups.  to might want to alert them to the addition of a new document, to remind them of a deadline for submission of an assignment or to highlight and share a particularly good piece of work. Sending such e-mail announcements can also serve as a useful prompt to re-engage students who have not visited the site for some time (as long as it's not overdone!). </p> <b> Contacting specific users </b> <p> In addition to sending a general one to all members of the course, you can send an e-mail to one or more individuals/groups groups. When you create a new announcement, just click <i>Visible to</i> and select users from the left hand lists and and add them as recipients using the arrows.</p>"
 msgstr ""
 
-msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remains focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
+msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remain focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
 msgstr ""
 
 msgid "<p>The assignments tool  is a very simple tool that allows your students to upload documents to the course.It can be used to accept responses to open questions from individuals or groups, or for uploading any other form of document</p><p>You can make files visible to all students by default, or only visible to yourself according to the requirements of your course. Making all files visible is useful when, for instance, you want to ask students to share opinions on each others papers, or when you want to give them experience in publishing texts globally. Keep files invisible if, for example, you want ask everybody the same question but to avoid 'cheating'. Making the documents invisible will also allow you to have some form of control over when a document is available to all the other students. </p><p>If you want  students to hand in a document for grading you're best, from within the tool, to assign submissions to a folder.</p> <p>You can use the the tool to set deadlines and instructions for delivery, as well as a maximum grade/score.</p>"
@@ -22078,7 +22078,7 @@ msgstr ""
 msgid "Triple select"
 msgstr ""
 
-msgid "You confirm that you really want to subscribe to this plateform."
+msgid "You confirm that you really want to subscribe to this platform."
 msgstr ""
 
 msgid "Add text"
@@ -22138,13 +22138,10 @@ msgstr ""
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr ""
 
-msgid "To complete your platform registration you need confirm your account by clicking the following link"
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
 msgstr ""
 
 msgid "Confirmation for new account"
-msgstr ""
-
-msgid "You need confirm your account via email to access the platform"
 msgstr ""
 
 msgid "Enable Cloud files link addition"
@@ -24982,9 +24979,6 @@ msgstr ""
 msgid "Click to view details"
 msgstr ""
 
-msgid "This report applies to all plateform activities of the user."
-msgstr ""
-
 msgid "dd/mm/yyyy"
 msgstr ""
 
@@ -27540,7 +27534,7 @@ msgstr ""
 msgid "Password too easy to guess"
 msgstr ""
 
-msgid "You need confirm your account via e-mail to access the platform"
+msgid "You need to confirm your account via e-mail to access the platform"
 msgstr ""
 
 msgid "Redirect to portal home"
@@ -31050,7 +31044,7 @@ msgstr ""
 msgid "Write your comment here..."
 msgstr ""
 
-msgid "%d selected"
+msgid "%s selected"
 msgstr ""
 
 msgid "Search by title or path..."
@@ -31144,4 +31138,1120 @@ msgid "Are you sure you want to clear this conversation?"
 msgstr ""
 
 msgid "New messages"
+msgstr ""
+
+msgid "Threads"
+msgstr ""
+
+msgid "Invalid thread"
+msgstr ""
+
+msgid "View full thread"
+msgstr ""
+
+msgid "No post yet"
+msgstr ""
+
+msgid "Discussion thread"
+msgstr ""
+
+msgid "Access to this course"
+msgstr ""
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr ""
+
+msgid "Private - access granted by privileged users"
+msgstr ""
+
+msgid "No detailed feedback is available for this question."
+msgstr ""
+
+msgid "Please select an answer before checking the result."
+msgstr ""
+
+msgid "Allow PDF export for this item"
+msgstr ""
+
+msgid "Hide free users (not enrolled)"
+msgstr ""
+
+msgid "Question statistics"
+msgstr ""
+
+msgid "Generating file. Do not close this tab..."
+msgstr ""
+
+msgid "There are no questions for this survey"
+msgstr ""
+
+msgid "Certificates report"
+msgstr ""
+
+msgid "Course picture"
+msgstr ""
+
+msgid "Current picture"
+msgstr ""
+
+msgid "Course events log"
+msgstr ""
+
+msgid "Update the category information and its optional time limit."
+msgstr ""
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr ""
+
+msgid "Generating file, do not close this tab"
+msgstr ""
+
+msgid "Assign authentication sources to users"
+msgstr ""
+
+msgid "Average completion rate"
+msgstr ""
+
+msgid "Average access rate"
+msgstr ""
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr ""
+
+msgid "Follow up"
+msgstr ""
+
+msgid "Tracking for superior"
+msgstr ""
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr ""
+
+msgid "Head manager report"
+msgstr ""
+
+msgid "Reset or update user password"
+msgstr ""
+
+msgid "Active users"
+msgstr ""
+
+msgid "Inactive users"
+msgstr ""
+
+msgid "Report on resources"
+msgstr ""
+
+msgid "Global view"
+msgstr ""
+
+msgid "Available reports"
+msgstr ""
+
+msgid "Current report"
+msgstr ""
+
+msgid "Back to user assignment page"
+msgstr ""
+
+msgid "Authentication sources assigned successfully"
+msgstr ""
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr ""
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr ""
+
+msgid "Sharing"
+msgstr ""
+
+msgid "Selected files"
+msgstr ""
+
+msgid "Hide password"
+msgstr ""
+
+msgid "Show password"
+msgstr ""
+
+msgid "Upload SVG logo for e-mails"
+msgstr ""
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr ""
+
+msgid "Clear filters"
+msgstr ""
+
+msgid "Attendances (tablet)"
+msgstr ""
+
+msgid "Exit tablet mode"
+msgstr ""
+
+msgid "No members found."
+msgstr ""
+
+msgid "Health check"
+msgstr ""
+
+msgid "Export to CC 1.3"
+msgstr ""
+
+msgid "Loading resources..."
+msgstr ""
+
+msgid "Failed to load resources."
+msgstr ""
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr ""
+
+msgid "Export finished."
+msgstr ""
+
+msgid "Export failed."
+msgstr ""
+
+msgid "Import failed."
+msgstr ""
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr ""
+
+msgid "Ready to import"
+msgstr ""
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr ""
+
+msgid "Select resources to import"
+msgstr ""
+
+msgid "No resources available in this backup."
+msgstr ""
+
+msgid "Import selection"
+msgstr ""
+
+msgid "Import completed"
+msgstr ""
+
+msgid "Could not load options."
+msgstr ""
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr ""
+
+msgid "Please choose a backup from the server"
+msgstr ""
+
+msgid "Error selecting source."
+msgstr ""
+
+msgid "Recycling options"
+msgstr ""
+
+msgid "Type the course code to confirm"
+msgstr ""
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr ""
+
+msgid "Select resources to recycle"
+msgstr ""
+
+msgid "No resources available in this course."
+msgstr ""
+
+msgid "Recycle selected"
+msgstr ""
+
+msgid "Error loading resources."
+msgstr ""
+
+msgid "Clear search"
+msgstr ""
+
+msgid "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically."
+msgstr ""
+
+msgid "What general terms and conditions are given to users to use this platform?"
+msgstr ""
+
+msgid "ex. {examplePassword}"
+msgstr ""
+
+msgid "Welcome to Chamilo!"
+msgstr ""
+
+msgid "Welcome to this platform"
+msgstr ""
+
+msgid "For more details visit %s"
+msgstr ""
+
+msgid "Manager"
+msgstr ""
+
+msgid "Mark as"
+msgstr ""
+
+msgid "Reply to all"
+msgstr ""
+
+msgid "SCIM external ID"
+msgstr ""
+
+msgid "OAuth2 ID"
+msgstr ""
+
+msgid "Please accept the latest version of the terms and conditions."
+msgstr ""
+
+msgid "Required value for operation without path"
+msgstr ""
+
+msgid "Available space (%s)"
+msgstr ""
+
+msgid "Index this description for the global search"
+msgstr ""
+
+msgid "Unknown course"
+msgstr ""
+
+msgid "Certificate not found."
+msgstr ""
+
+msgid "Security token expired. Please reload the page and try again."
+msgstr ""
+
+msgid "Only platform administrators can change the course visibility."
+msgstr ""
+
+msgid "Unexpected error while subscribing the user"
+msgstr ""
+
+msgid "Search in resource logs"
+msgstr ""
+
+msgid "Include this learning path in the global search results"
+msgstr ""
+
+msgid "The course code already exists"
+msgstr ""
+
+msgid "Latest news"
+msgstr ""
+
+msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
+msgstr ""
+
+msgid "Chamilo support block"
+msgstr ""
+
+msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
+msgstr ""
+
+msgid "Hide option to send announcements to HR users"
+msgstr ""
+
+msgid "Allow session admins to download private certificates"
+msgstr ""
+
+msgid "If enabled, session administrators can download certificates even if they are not publicly published."
+msgstr ""
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr ""
+
+msgid "Main menu entries"
+msgstr ""
+
+msgid "Check the entrie you want to see appear in the main menu"
+msgstr ""
+
+msgid "Main menu entries per role"
+msgstr ""
+
+msgid "Define header tabs visibility per role."
+msgstr ""
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr ""
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr ""
+
+msgid "The DSN fully includes all parameters needed to connect to the mail service. You can learn more at https://symfony.com/doc/6.4/mailer.html#using-built-in-transports. Here are a few examples of supported DSN syntaxes: https://symfony.com/doc/6.4/mailer.html#using-a-3rd-party-transport"
+msgstr ""
+
+msgid "Mail: character set"
+msgstr ""
+
+msgid "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure."
+msgstr ""
+
+msgid "Mail: Debug"
+msgstr ""
+
+msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
+msgstr ""
+
+msgid "Mail: Avoid using LD+JSON"
+msgstr ""
+
+msgid "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header."
+msgstr ""
+
+msgid "Mail: DKIM headers"
+msgstr ""
+
+msgid "Enter a JSON array of your DKIM configuration settings (see example)."
+msgstr ""
+
+msgid "Mail: XOAuth2 options"
+msgstr ""
+
+msgid "If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting."
+msgstr ""
+
+msgid "Defines the environment type: \"prod\" (normal production), \"validation\" (like production but without reporting statistics), or \"test\" (debug mode with developer tools such as untranslated string indicators)."
+msgstr ""
+
+msgid "Global limit of users per course"
+msgstr ""
+
+msgid "Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals."
+msgstr ""
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr ""
+
+msgid "Show base course posts in session course"
+msgstr ""
+
+msgid "Limit identical email usage"
+msgstr ""
+
+msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
+msgstr ""
+
+msgid "Allow session admins to see all users on all URLs"
+msgstr ""
+
+msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
+msgstr ""
+
+msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
+msgstr ""
+
+msgid "Redirect after login (per profile)"
+msgstr ""
+
+msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
+msgstr ""
+
+msgid "Hide legal accept checkbox in Terms and Conditions page"
+msgstr ""
+
+msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
+msgstr ""
+
+msgid "Array defining host and port for the LDAP server."
+msgstr ""
+
+msgid "Enable 2FA"
+msgstr ""
+
+msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
+msgstr ""
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr ""
+
+msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
+msgstr ""
+
+msgid "Show remaining days in My Sessions"
+msgstr ""
+
+msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
+msgstr ""
+
+msgid "Show \"Pending surveys\" in menu"
+msgstr ""
+
+msgid "Display a menu item that lets users access their pending surveys."
+msgstr ""
+
+msgid "Disclose AI assistance"
+msgstr ""
+
+msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
+msgstr ""
+
+msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
+msgstr ""
+
+msgid "Session Catalog Settings"
+msgstr ""
+
+msgid "JSON configuration for session catalog: filters and display options."
+msgstr ""
+
+msgid "Show Course Descriptions"
+msgstr ""
+
+msgid "Display course descriptions within the catalog listing."
+msgstr ""
+
+msgid "Published Courses Only"
+msgstr ""
+
+msgid "Limit the catalog to only courses marked as published."
+msgstr ""
+
+msgid "Display Catalog on Homepage"
+msgstr ""
+
+msgid "Show the course catalog block on the platform homepage."
+msgstr ""
+
+msgid "Hide Public Link"
+msgstr ""
+
+msgid "Remove the public URL link from course cards."
+msgstr ""
+
+msgid "Only Selected Courses"
+msgstr ""
+
+msgid "Show only manually selected courses in the catalog."
+msgstr ""
+
+msgid "Allow Student Browsing"
+msgstr ""
+
+msgid "Permit students to browse and filter the course catalog."
+msgstr ""
+
+msgid "Hide Private Courses"
+msgstr ""
+
+msgid "Exclude private courses from the catalog display."
+msgstr ""
+
+msgid "Show Courses & Sessions"
+msgstr ""
+
+msgid "Include both courses and sessions in catalog results."
+msgstr ""
+
+msgid "Auto Session Subscription"
+msgstr ""
+
+msgid "Enable automatic subscription to sessions for users."
+msgstr ""
+
+msgid "Subscription in Session View"
+msgstr ""
+
+msgid "Allow users to subscribe to courses directly from their session page."
+msgstr ""
+
+msgid "Enable redirection plugin"
+msgstr ""
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr ""
+
+msgid "An array of role => number which represents the number of days an account has before expiration, depending on the role."
+msgstr ""
+
+msgid "Extra user field used to search and name sessions"
+msgstr ""
+
+msgid "This setting defines the extra user field key (e.g., \"company\") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register."
+msgstr ""
+
+msgid "Glossary terms generator"
+msgstr ""
+
+msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
+msgstr ""
+
+msgid "Video generator"
+msgstr ""
+
+msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
+msgstr ""
+
+msgid "Course analyser"
+msgstr ""
+
+msgid "Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services)."
+msgstr ""
+
+msgid "Test/development"
+msgstr ""
+
+msgid "Crons"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
+msgid "Gradebook"
+msgstr ""
+
+msgid "Internationalization"
+msgstr ""
+
+msgid "User profiles"
+msgstr ""
+
+msgid "Support tickets"
+msgstr ""
+
+msgid "Webservices"
+msgstr ""
+
+msgid "Catalogue"
+msgstr ""
+
+msgid "Workflows"
+msgstr ""
+
+msgid "Setting is editable on sub-URLs"
+msgstr ""
+
+msgid "Show JSON Template"
+msgstr ""
+
+msgid "JSON Template"
+msgstr ""
+
+msgid "Installing Xapian bindings"
+msgstr ""
+
+msgid "The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment."
+msgstr ""
+
+msgid "Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories."
+msgstr ""
+
+msgid "Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed."
+msgstr ""
+
+msgid "Cleanup temporary uploads and cache"
+msgstr ""
+
+msgid "Directory"
+msgstr ""
+
+msgid "Only delete files older than (minutes)"
+msgstr ""
+
+msgid "Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded."
+msgstr ""
+
+msgid "Preview only (do not delete)"
+msgstr ""
+
+msgid "Warning: you are about to delete ALL temporary files. This action cannot be undone."
+msgstr ""
+
+msgid "This will delete all temporary files. Continue?"
+msgstr ""
+
+msgid "This will delete files older than %minutes% minutes. Continue?"
+msgstr ""
+
+msgid "The value must match exactly: %s"
+msgstr ""
+
+msgid "Repeat end date must be after start date."
+msgstr ""
+
+msgid "Index document content?"
+msgstr ""
+
+msgid "Upload SVG logo to platform header"
+msgstr ""
+
+msgid "Upload PNG logo to platform header (%s)"
+msgstr ""
+
+msgid "Write something to %s"
+msgstr ""
+
+msgid "Preferred: SVG. PNG recommended width: %spx."
+msgstr ""
+
+msgid "Upload PNG logo for e-mails (~%spx width)"
+msgstr ""
+
+msgid "Header PNG must be ≤ %spx."
+msgstr ""
+
+msgid "Require specific file format"
+msgstr ""
+
+msgid "Select allowed file formats"
+msgstr ""
+
+msgid "Custom extensions (separated by space)"
+msgstr ""
+
+msgid "Other extensions"
+msgstr ""
+
+msgid "My invitations"
+msgstr ""
+
+msgid "Delete access"
+msgstr ""
+
+msgid "Certificate tags"
+msgstr ""
+
+msgid "Copy all"
+msgstr ""
+
+msgid "Click to insert"
+msgstr ""
+
+msgid "Preferred: SVG. PNG max size: %spx."
+msgstr ""
+
+msgid "View badge"
+msgstr ""
+
+msgid "%d min"
+msgstr ""
+
+msgid "Duration in minutes"
+msgstr ""
+
+msgid "Go back to standard view"
+msgstr ""
+
+msgid "Search for student..."
+msgstr ""
+
+msgid "This date is locked or read-only."
+msgstr ""
+
+msgid "Failed to load attendance. Please try again later."
+msgstr ""
+
+msgid "Nothing to save"
+msgstr ""
+
+msgid "You have unsaved changes. Leave anyway?"
+msgstr ""
+
+msgid "Storage usage unavailable"
+msgstr ""
+
+msgid "Search for members..."
+msgstr ""
+
+msgid "Current members"
+msgstr ""
+
+msgid "Add members"
+msgstr ""
+
+msgid "Search for users in course/session..."
+msgstr ""
+
+msgid "No users available."
+msgstr ""
+
+msgid "Browse and publish new posts"
+msgstr ""
+
+msgid "Create and assign tasks"
+msgstr ""
+
+msgid "Filtered by %s"
+msgstr ""
+
+msgid "Select a score"
+msgstr ""
+
+msgid "Edit comment"
+msgstr ""
+
+msgid "Failed to update the post."
+msgstr ""
+
+msgid "Delete this post? This action cannot be undone."
+msgstr ""
+
+msgid "Failed to delete the post."
+msgstr ""
+
+msgid "Failed to update the comment."
+msgstr ""
+
+msgid "Delete this comment?"
+msgstr ""
+
+msgid "Failed to delete the comment."
+msgstr ""
+
+msgid "Search for projects..."
+msgstr ""
+
+msgid "Only visible"
+msgstr ""
+
+msgid "Rename project"
+msgstr ""
+
+msgid "New title"
+msgstr ""
+
+msgid "You need to be a admin or teacher to manage projects."
+msgstr ""
+
+msgid "Delete this project? This action cannot be undone."
+msgstr ""
+
+msgid "Task list"
+msgstr ""
+
+msgid "Change status"
+msgstr ""
+
+msgid "Waiting for validation"
+msgstr ""
+
+msgid "Delete this task?"
+msgstr ""
+
+msgid "Failed to delete the task."
+msgstr ""
+
+msgid "Failed to update status."
+msgstr ""
+
+msgid "Are you sure you want to delete this third party? This action cannot be undone."
+msgstr ""
+
+msgid "Please fix the errors before saving."
+msgstr ""
+
+msgid "Error creating third party. Please verify the data."
+msgstr ""
+
+msgid "Error deleting third party."
+msgstr ""
+
+msgid "Upload optional header and email logos. SVG is preferred; PNG is used as fallback."
+msgstr ""
+
+msgid "Data exchange updated successfully."
+msgstr ""
+
+msgid "Error deleting data exchange."
+msgstr ""
+
+msgid "Failed to recycle course."
+msgstr ""
+
+msgid "Select source course"
+msgstr ""
+
+msgid "Course to copy from"
+msgstr ""
+
+msgid "Search by code or title..."
+msgstr ""
+
+msgid "No courses match your search."
+msgstr ""
+
+msgid "Copy options"
+msgstr ""
+
+msgid "Include users (enrollments)"
+msgstr ""
+
+msgid "Reset dates"
+msgstr ""
+
+msgid "When a file with the same name exists"
+msgstr ""
+
+msgid "Ready to copy"
+msgstr ""
+
+msgid "We will copy content from the selected course into this course. You can go back to change options."
+msgstr ""
+
+msgid "Start copying"
+msgstr ""
+
+msgid "Select resources to copy"
+msgstr ""
+
+msgid "Copy selected"
+msgstr ""
+
+msgid "Copy completed."
+msgstr ""
+
+msgid "Danger zone: deleting a course is permanent."
+msgstr ""
+
+msgid "Type the course code to confirm. All data will be permanently removed."
+msgstr ""
+
+msgid "The code must match '%s' exactly."
+msgstr ""
+
+msgid "Also delete documents that are only used in this course (if any)."
+msgstr ""
+
+msgid "Delete course"
+msgstr ""
+
+msgid "This action cannot be undone. Continue?"
+msgstr ""
+
+msgid "Course deleted successfully."
+msgstr ""
+
+msgid "Failed to delete course."
+msgstr ""
+
+msgid "Create .mbz"
+msgstr ""
+
+msgid "Backup scope"
+msgstr ""
+
+msgid "Full course"
+msgstr ""
+
+msgid "Selected items will be the only ones included in the exported file."
+msgstr ""
+
+msgid "Moodle export"
+msgstr ""
+
+msgid "Moodle version"
+msgstr ""
+
+msgid "Admin ID"
+msgstr ""
+
+msgid "Internal integer user id"
+msgstr ""
+
+msgid "Moodle requires an internal user id stored in XML. If in doubt, use 1."
+msgstr ""
+
+msgid "Username to appear as owner of imported items"
+msgstr ""
+
+msgid "Email to use in the archive metadata"
+msgstr ""
+
+msgid "A .mbz file will be generated. You will be able to download it once finished."
+msgstr ""
+
+msgid "Select resources to include"
+msgstr ""
+
+msgid "Export completed"
+msgstr ""
+
+msgid "Your Moodle backup has been created. You can find it in the course backups list."
+msgstr ""
+
+msgid "Please complete all required fields."
+msgstr ""
+
+msgid "Failed to create Moodle backup."
+msgstr ""
+
+msgid "More actions"
+msgstr ""
+
+msgid "Write something"
+msgstr ""
+
+msgid "Friends of %s"
+msgstr ""
+
+msgid "Error loading learning paths."
+msgstr ""
+
+msgid "You don't have any learning path."
+msgstr ""
+
+msgid "Create your first learning path to start organizing course content."
+msgstr ""
+
+msgid "Could not save the new category order."
+msgstr ""
+
+msgid "Could not save the new order."
+msgstr ""
+
+msgid "Assignment"
+msgstr ""
+
+msgid "Allowed file formats: %s"
+msgstr ""
+
+msgid "File type not allowed. Allowed extensions: %s"
+msgstr ""
+
+msgid "Folder name"
+msgstr ""
+
+msgid "Rename folder"
+msgstr ""
+
+msgid "New name"
+msgstr ""
+
+msgid "Choose an action"
+msgstr ""
+
+msgid "New version"
+msgstr ""
+
+msgid "Change title to selected filename"
+msgstr ""
+
+msgid "You can replace the file, move it to another folder, or both."
+msgstr ""
+
+msgid "Move %s"
+msgstr ""
+
+msgid "Only non-root folders are shown to avoid leaving items in root."
+msgstr ""
+
+msgid "No feedback yet."
+msgstr ""
+
+msgid "Upload first, organize later"
+msgstr ""
+
+msgid "Drag & drop or browse to add files"
+msgstr ""
+
+msgid "Social wall..."
+msgstr ""
+
+msgid "Wall of %s"
+msgstr ""
+
+msgid "Version currently loaded"
+msgstr ""
+
+msgid "Completion"
+msgstr ""
+
+msgid "Quick navigation"
+msgstr ""
+
+msgid "Filled"
+msgstr ""
+
+msgid "Terms sections"
+msgstr ""
+
+msgid "Open a section to edit its content."
+msgstr ""
+
+msgid "Open this section to load the editor."
+msgstr ""
+
+msgid "Danger zone: deleting an access URL is permanent."
+msgstr ""
+
+msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
+msgstr ""
+
+msgid "Unable to load the badge's image."
+msgstr ""
+
+msgid "Invalid role selection"
+msgstr ""
+
+msgid "Select relation type first to enable user management."
+msgstr ""
+
+msgid "This question has no course context. Preview is not available."
+msgstr ""
+
+msgid "Unknown test"
+msgstr ""
+
+msgid "Deletion is not allowed without a course context."
+msgstr ""
+
+msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
+msgstr ""
+
+msgid "Delete failed: question not found."
+msgstr ""
+
+msgid "Delete failed: this question is still referenced by other resources."
+msgstr ""
+
+msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
+msgstr ""
+
+msgid "Access the group tools and resources"
+msgstr ""
+
+msgid "%s members"
+msgstr ""
+
+msgid "View certificate (HTML)"
+msgstr ""
+
+msgid "Link a skill to this gradebook"
+msgstr ""
+
+msgid "Manage the link between certificates and skills for each gradebook"
+msgstr ""
+
+msgid "Please select a specific badge issue to download"
+msgstr ""
+
+msgid "SCIM is not enabled."
+msgstr ""
+
+msgid "Invalid token."
+msgstr ""
+
+msgid "Schema not supported."
+msgstr ""
+
+msgid "Invalid schemas for PATCH operation."
+msgstr ""
+
+msgid "Missing required \"Operations\" array."
+msgstr ""
+
+msgid "The '%s' operation is not supported."
+msgstr ""
+
+msgid "Drupal user ID"
+msgstr ""
+
+msgid "There are no terms that match the search: %s"
 msgstr ""

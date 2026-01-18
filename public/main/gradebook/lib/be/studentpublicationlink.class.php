@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Gradebook link to student publication item.
@@ -71,13 +72,27 @@ class StudentPublicationLink extends AbstractLink
         if (empty($studentPublication)) {
             return '';
         }
-        $id = $studentPublication->getIid();
+
         $session = api_get_session_entity($this->get_session_id());
-        $results = Container::getStudentPublicationRepository()
-            ->getStudentAssignments($studentPublication, api_get_course_entity($this->course_id), $session);
+        $course = api_get_course_entity($this->course_id);
 
+        $qbOrResults = Container::getStudentPublicationRepository()
+            ->getStudentAssignments($studentPublication, $course, $session);
 
-        return 0 !== count($results);
+        // In most cases this repository returns a QueryBuilder.
+        if ($qbOrResults instanceof QueryBuilder) {
+            $qbOrResults->setMaxResults(1);
+            $one = $qbOrResults->getQuery()->getOneOrNullResult();
+
+            return null !== $one;
+        }
+
+        // Fallback if it returns an array (older behavior).
+        if (is_array($qbOrResults)) {
+            return 0 !== count($qbOrResults);
+        }
+
+        return false;
     }
 
     /**
@@ -93,43 +108,78 @@ class StudentPublicationLink extends AbstractLink
         if (empty($assignment)) {
             return [];
         }
+
         $session = api_get_session_entity($this->get_session_id());
         $course = api_get_course_entity($this->course_id);
 
         $qb = Container::getStudentPublicationRepository()
-            ->getStudentAssignments($assignment, $course, $session, null, $studentId ? api_get_user_entity($studentId) : null);
+            ->getStudentAssignments(
+                $assignment,
+                $course,
+                $session,
+                null,
+                $studentId ? api_get_user_entity($studentId) : null
+            );
+
+        // Safety net: ensure we only fetch submissions for the requested user.
+        // This prevents a single student's grade from being shown for all users in gradebook.
+        if (!empty($studentId) && $qb instanceof QueryBuilder) {
+            $studentUser = api_get_user_entity($studentId);
+            if ($studentUser) {
+                $qb
+                    ->andWhere('resource.user = :studentUser')
+                    ->setParameter('studentUser', $studentUser);
+            }
+        }
 
         $order = api_get_setting('student_publication_to_take_in_gradebook');
 
-        switch ($order) {
-            case 'last':
-                $qb->orderBy('resource.sentDate', 'DESC');
-                break;
-            case 'first':
-            default:
-                $qb->orderBy('resource.iid', 'ASC');
-                break;
+        if ($qb instanceof QueryBuilder) {
+            switch ($order) {
+                case 'last':
+                    $qb->orderBy('resource.sentDate', 'DESC');
+                    break;
+                case 'first':
+                default:
+                    $qb->orderBy('resource.iid', 'ASC');
+                    break;
+            }
         }
 
-        $scores = $qb->getQuery()->getResult();
-
-        // for 1 student
+        // For 1 student
         if (!empty($studentId)) {
-            if (!count($scores)) {
+            if ($qb instanceof QueryBuilder) {
+                $qb->setMaxResults(1);
+                $data = $qb->getQuery()->getOneOrNullResult();
+            } else {
+                // Fallback if repository returns array
+                $scores = is_array($qb) ? $qb : [];
+                $data = $scores[0] ?? null;
+            }
+
+            if (empty($data)) {
                 return [null, null];
             }
 
-            $data = $scores[0];
+            // Prefer the submission qualification date; fallback to assignment date if needed.
+            $date = null;
+            if (method_exists($data, 'getDateOfQualification')) {
+                $date = $data->getDateOfQualification();
+            } elseif (method_exists($assignment, 'getDateOfQualification')) {
+                $date = $assignment->getDateOfQualification();
+            }
 
             return [
                 $data->getQualification(),
                 $assignment->getQualification(),
-                api_get_local_time($assignment->getDateOfQualification()),
+                $date ? api_get_local_time($date) : null,
                 1,
             ];
         }
 
-        // multiple students
+        // Multiple students
+        $scores = ($qb instanceof QueryBuilder) ? $qb->getQuery()->getResult() : (is_array($qb) ? $qb : []);
+
         $students = [];
         $rescount = 0;
         $sum = 0;
@@ -138,9 +188,11 @@ class StudentPublicationLink extends AbstractLink
         $sumResult = 0;
 
         foreach ($scores as $data) {
-            if (!array_key_exists($data->getUser()->getId(), $students)) {
+            $userId = $data->getUser()->getId();
+
+            if (!array_key_exists($userId, $students)) {
                 if (0 != $assignment->getQualification()) {
-                    $students[$data->getUser()->getId()] = $data->getQualification();
+                    $students[$userId] = $data->getQualification();
                     $rescount++;
                     $sum += $data->getQualification() / $assignment->getQualification();
                     $sumResult += $data->getQualification();
@@ -192,12 +244,25 @@ class StudentPublicationLink extends AbstractLink
     public function get_link()
     {
         $studentPublication = $this->getStudentPublication();
-        $sessionId = $this->get_session_id();
-        $url = api_get_path(WEB_PATH).'main/work/work.php?'.
-            api_get_cidreq_params($this->getCourseId(), $sessionId).
-            '&id='.$studentPublication->getIid().'&gradebook=view';
 
-        return $url;
+        if (
+            !$studentPublication ||
+            !method_exists($studentPublication, 'getResourceNode') ||
+            null === $studentPublication->getResourceNode()
+        ) {
+            return '';
+        }
+
+        $nodeId = (int) $studentPublication->getResourceNode()->getId();
+
+        $query = [
+            'cid' => (int) $this->getCourseId(),
+            'sid' => (int) $this->get_session_id(),
+            'gid' => 0,
+            'gradebook' => 'view',
+        ];
+
+        return api_get_path(WEB_PATH).'resources/assignment/'.$nodeId.'/?'.http_build_query($query);
     }
 
     public function needs_max()

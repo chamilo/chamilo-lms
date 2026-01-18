@@ -101,14 +101,14 @@
               v-if="viewMode==='posts'"
               type="primary"
               icon="plus"
-              :label="t('New Post')"
+              :label="t('New post')"
               @click="openCreate"
             />
             <BaseButton
               v-else
               type="primary"
               icon="plus"
-              :label="t('New Task')"
+              :label="t('New task')"
               @click="showCreateTask = true"
             />
           </div>
@@ -123,7 +123,7 @@
               <span v-if="viewMode==='posts'">
                 {{ t("Showing {n} posts", { n: total }) }}
                 <span v-if="selectedDate" class="text-gray-400">
-                  — {{ t("Filtered by") }} {{ selectedDate }}
+                  — {{ t("Filtered by {0}", [selectedDate]) }}
                 </span>
               </span>
               <span v-else>
@@ -151,7 +151,7 @@
           </div>
 
           <div v-else-if="!rows.length" class="p-6 text-center text-gray-500">
-            {{ t("No posts yet.") }}
+            {{ t("No posts") }}
           </div>
 
           <ul v-else class="divide-y">
@@ -220,7 +220,7 @@
         <!-- TASKS MODE -->
         <template v-else>
           <div v-if="!tasksFiltered.length" class="p-6 text-center text-gray-500">
-            {{ t("No tasks yet.") }}
+            {{ t("No tasks") }}
           </div>
           <div v-else class="p-4 space-y-3">
             <div

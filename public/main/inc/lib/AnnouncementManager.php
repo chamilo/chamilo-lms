@@ -1341,15 +1341,18 @@ class AnnouncementManager
         $stok,
         $announcement_number,
         ?int $courseId = null,
-        ?int $sessionId = null
+        ?int $sessionId = null,
+        ?int $groupId = null
     ): array {
-        $groupId = api_get_group_id();
 
         if (null === $courseId) {
             $courseId = api_get_course_int_id();
         }
         if (null === $sessionId) {
             $sessionId = api_get_session_id();
+        }
+        if (null === $groupId) {
+            $groupId = api_get_group_id();
         }
 
         $repo = Container::getAnnouncementRepository();
@@ -1601,7 +1604,7 @@ class AnnouncementManager
     /**
      * @return int
      */
-    public static function getNumberAnnouncements(?int $courseId = null, ?int $sessionId = null): int
+    public static function getNumberAnnouncements(?int $courseId = null, ?int $sessionId = null, ?int $groupId = null): int
     {
         if (null === $courseId) {
             $courseId = api_get_course_int_id();
@@ -1609,12 +1612,15 @@ class AnnouncementManager
         if (null === $sessionId) {
             $sessionId = api_get_session_id();
         }
+        if (null === $groupId) {
+            $groupId = api_get_group_id();
+        }
 
         $userId = api_get_user_id();
         $repo = Container::getAnnouncementRepository();
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
-        $group = api_get_group_entity(api_get_group_id());
+        $group = api_get_group_entity($groupId);
         if (api_is_allowed_to_edit(false, true)) {
             // check teacher status
             if (empty($_GET['origin']) || 'learnpath' !== $_GET['origin']) {

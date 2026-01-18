@@ -107,20 +107,32 @@ const onClickCreateEvent = async () => {
   }
 
   isLoading.value = true
-
   const itemModel = createForm.value.v$.item.$model
+
+  const cid = Number(route.query.cid ?? 0)
+  const sid = Number(route.query.sid ?? 0)
+  const gid = Number(route.query.gid ?? 0)
+
+  if (cid > 0) {
+    itemModel.resourceLinkList = [
+      {
+        cid,
+        sid: sid > 0 ? sid : null,
+        gid: gid > 0 ? gid : null,
+        visibility: RESOURCE_LINK_PUBLISHED,
+      },
+    ]
+  }
 
   try {
     await store.dispatch("ccalendarevent/create", itemModel)
   } catch (e) {
     isLoading.value = false
-
     notification.showErrorNotification(e)
-
     return
   }
 
-  await router.push({ name: "CCalendarEventList" })
+  await router.push({ name: "CCalendarEventList", query: route.query })
 }
 
 const notification = useNotification()

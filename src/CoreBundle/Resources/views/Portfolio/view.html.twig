@@ -1,7 +1,8 @@
+{% autoescape false %}
 {% if item.isHighlighted %}
     <span class="label label-success">
-        <span class="fa fa-fw fa-star-o" aria-hidden="true"></span>
-        {{ 'Highlighted'|get_lang }}
+        {{ 'ActionIcon::STAR'|mdi_icon(22) }}
+        {{ 'Highlighted'|trans }}
     </span>
 {% endif %}
 
@@ -12,35 +13,36 @@
         <ul class="fa-ul list-inline">
             <li>
                 <span class="fa-li fa fa-user" aria-hidden="true"></span>
-                {{ item.user.completeName }}
+                {{ item.creator.fullName }}
             </li>
             <li>
                 <span class="fa-li fa fa-clock-o" aria-hidden="true"></span>
-                {{ 'CreationDate'|get_lang ~ ': ' ~ item.creationDate|date_to_time_ago }}
+                {{ 'Creation date'|trans ~ ': ' }}
+                {{ item.resourceNode.createdAt|date_to_time_ago }}
             </li>
 
             {% if last_edit %}
                 <li>
                     <span class="fa-li fa fa-clock-o" aria-hidden="true"></span>
-                    {{ 'UpdatedDateXByUserY'|get_lang|format(last_edit.date|date_to_time_ago, last_edit.user) }}
+                    {{ 'Updated on %s by %s'|trans|format(last_edit.date|date_to_time_ago, last_edit.user) }}
                 </li>
-            {% elseif item.creationDate != item.updateDate %}
+            {% elseif item.resourceNode.createdAt != item.resourceNode.updatedAte %}
                 <li>
                     <span class="fa-li fa fa fa-clock-o" aria-hidden="true"></span>
-                    {{ 'UpdatedDateX'|get_lang|format(item.updateDate|date_to_time_ago) }}
+                    {{ 'Updated on %s'|trans|format(item.resourceNode.updateDate|date_to_time_ago) }}
                 </li>
             {% endif %}
 
-            {% if _c is empty %}
-                {% if item.session %}
+            {% if course is empty %}
+                {% if session %}
                     <li>
                         <span class="fa-li fa fa-book" aria-hidden="true"></span>
-                        {{ 'Course'|get_lang ~ ': ' ~ item.session.name ~ ' (' ~ item.course.title ~ ')' }}
+                        {{ 'Course'|trans ~ ': ' ~ session.name ~ ' (' ~ course.title ~ ')' }}
                     </li>
-                {% elseif not item.session and item.course %}
+                {% elseif not session and course %}
                     <li>
                         <span class="fa-li fa fa-book" aria-hidden="true"></span>
-                        {{ 'Course'|get_lang ~ ': ' ~ item.course.title }}
+                        {{ 'Course'|trans ~ ': ' ~ course.title }}
                     </li>
                 {% endif %}
             {% endif %}
@@ -57,8 +59,8 @@
 
     <section id="portfolio-item-comments">
         <h1 class="h3">
-            <span class="fa fa-fw fa-comment-o" aria-hidden="true"></span>
-            {{ 'XComments'|get_lang|format(count_comments) }}
+            {{ 'ActionIcon::COMMENT'|mdi_icon(22) }}
+            {{ '%s comments'|trans|format(count_comments) }}
         </h1>
 
         {{ comments }}
@@ -94,3 +96,4 @@
         });
     });
 </script>
+{% endautoescape %}

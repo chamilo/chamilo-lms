@@ -174,6 +174,27 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public const INACTIVE_AUTOMATIC = -1;
     public const SOFT_DELETED = -2;
 
+    /**
+     * Context roles must NEVER be persisted.
+     * They are computed per-request from course/session/group context.
+     *
+     * @var string[]
+     */
+    private array $temporaryRoles = [];
+
+    /**
+     * List of all context roles used by the platform security layer.
+     * These roles must not be stored in the DB.
+     */
+    public const CONTEXT_ROLES = [
+        'ROLE_CURRENT_COURSE_TEACHER',
+        'ROLE_CURRENT_COURSE_STUDENT',
+        'ROLE_CURRENT_COURSE_GROUP_TEACHER',
+        'ROLE_CURRENT_COURSE_GROUP_STUDENT',
+        'ROLE_CURRENT_COURSE_SESSION_TEACHER',
+        'ROLE_CURRENT_COURSE_SESSION_STUDENT',
+    ];
+
     #[Groups(['user_json:read'])]
     #[ORM\OneToOne(targetEntity: ResourceNode::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'resource_node_id', onDelete: 'CASCADE')]
@@ -798,7 +819,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->apiToken = null;
         $this->biography = '';
         $this->website = '';
-        $this->locale = 'en';
+        $this->locale = 'en_US';
         $this->timezone = 'Europe/Paris';
         $this->status = CourseRelUser::STUDENT;
         $this->salt = sha1(uniqid('', true));
@@ -960,7 +981,12 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     public function getIsActive(): bool
     {
-        return 1 === $this->active;
+        return self::ACTIVE === $this->active;
+    }
+
+    public function isSoftDeleted(): bool
+    {
+        return self::SOFT_DELETED === $this->active;
     }
 
     public function isEnabled(): bool
@@ -1690,25 +1716,35 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
-     * Returns the user roles.
+     * Returns the user roles (persisted + temporary + group roles).
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
+        // Never trust persisted roles to be free of context roles (backward compat safety).
+        $persisted = array_map('strtoupper', $this->roles);
+        $persisted = array_values(array_diff($persisted, self::CONTEXT_ROLES));
+
+        $temporary = array_map('strtoupper', $this->temporaryRoles);
+
+        $roles = array_merge($persisted, $temporary);
+
         foreach ($this->getGroups() as $group) {
             $roles = array_merge($roles, $group->getRoles());
         }
-        // we need to make sure to have at least one role
+
+        // Ensure baseline role.
         $roles[] = 'ROLE_USER';
 
-        return array_unique($roles);
+        $roles = array_map('strtoupper', $roles);
+
+        return array_values(array_unique($roles));
     }
 
     public function setRoles(array $roles): self
     {
         $this->roles = [];
         foreach ($roles as $role) {
-            $this->addRole($role);
+            $this->addRole((string) $role);
         }
 
         return $this;
@@ -1735,10 +1771,17 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function addRole(string $role): self
     {
-        $role = strtoupper($role);
-        if ($role === static::ROLE_DEFAULT || empty($role)) {
+        $role = strtoupper(trim($role));
+
+        if ('' === $role || self::ROLE_DEFAULT === $role || 'ROLE_USER' === $role) {
             return $this;
         }
+
+        // Context roles must never be persisted.
+        if (\in_array($role, self::CONTEXT_ROLES, true)) {
+            return $this->addTemporaryRole($role);
+        }
+
         if (!\in_array($role, $this->roles, true)) {
             $this->roles[] = $role;
         }
@@ -1748,7 +1791,14 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function removeRole(string $role): self
     {
-        if (false !== ($key = array_search(strtoupper($role), $this->roles, true))) {
+        $role = strtoupper(trim($role));
+
+        // If it's a context role, remove it from temporary roles.
+        if (\in_array($role, self::CONTEXT_ROLES, true)) {
+            return $this->removeTemporaryRole($role);
+        }
+
+        if (false !== ($key = array_search($role, $this->roles, true))) {
             unset($this->roles[$key]);
             $this->roles = array_values($this->roles);
         }
@@ -2683,5 +2733,63 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function getFullNameWithUsername(): string
     {
         return $this->getFullName().' ('.$this->getUsername().')';
+    }
+
+    /**
+     * Clears any context roles (temporary) and also removes them from persisted roles
+     * for backward compatibility (in case they were stored by mistake in older versions).
+     */
+    public function resetContextRoles(): self
+    {
+        $this->clearTemporaryRoles();
+
+        // Backward-compat: remove from persisted roles if they were stored by mistake.
+        foreach (self::CONTEXT_ROLES as $role) {
+            $this->removeRole($role);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getTemporaryRoles(): array
+    {
+        return $this->temporaryRoles;
+    }
+
+    public function addTemporaryRole(string $role): self
+    {
+        $role = strtoupper(trim($role));
+
+        if ('' === $role || self::ROLE_DEFAULT === $role || 'ROLE_USER' === $role) {
+            return $this;
+        }
+
+        if (!\in_array($role, $this->temporaryRoles, true)) {
+            $this->temporaryRoles[] = $role;
+        }
+
+        return $this;
+    }
+
+    public function removeTemporaryRole(string $role): self
+    {
+        $role = strtoupper(trim($role));
+
+        if (false !== ($key = array_search($role, $this->temporaryRoles, true))) {
+            unset($this->temporaryRoles[$key]);
+            $this->temporaryRoles = array_values($this->temporaryRoles);
+        }
+
+        return $this;
+    }
+
+    public function clearTemporaryRoles(): self
+    {
+        $this->temporaryRoles = [];
+
+        return $this;
     }
 }

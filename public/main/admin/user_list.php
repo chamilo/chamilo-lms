@@ -1016,7 +1016,7 @@ if (!empty($action)) {
                 }
                 break;
             case 'delete_user':
-                $message = UserManager::deleteUserWithVerification($_GET['user_id']);
+                $message = UserManager::deleteUserWithVerification((int) $_GET['user_id']);
                 Display::addFlash($message);
                 header('Location: '.api_get_self());
                 exit;

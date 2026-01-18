@@ -9,6 +9,7 @@ use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use ChamiloSession as Session;
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\QueryBuilder;
 use Knp\Component\Pager\Paginator;
 
 /**
@@ -37,15 +38,18 @@ $answerType = isset($_REQUEST['answerType']) ? (int) $_REQUEST['answerType'] : n
 $question_copy = isset($_REQUEST['question_copy']) ? (int) $_REQUEST['question_copy'] : 0;
 $session_id = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : null;
 $selected_course = isset($_GET['selected_course']) ? (int) $_GET['selected_course'] : null;
+
 // save the id of the previous course selected by user to reset menu if we detect that user change course hub 13-10-2011
 $course_id_changed = isset($_GET['course_id_changed']) ? (int) $_GET['course_id_changed'] : null;
 // save the id of the previous exercise selected by user to reset menu if we detect that user change course hub 13-10-2011
 $exercise_id_changed = isset($_GET['exercise_id_changed']) ? (int) $_GET['exercise_id_changed'] : null;
+
 $questionId = isset($_GET['question_id']) && !empty($_GET['question_id']) ? (int) $_GET['question_id'] : '';
 $description = isset($_GET['description']) ? Database::escape_string($_GET['description']) : '';
 $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 
-// by default when we go to the page for the first time, we select the current course
+// By default when we go to the page for the first time, we select the current course.
+// NOTE: legacy behavior keeps -1 as "Select", so we normalize inside getQuestions().
 if (!isset($_GET['selected_course']) && !isset($_GET['exerciseId'])) {
     $selected_course = -1;
 }
@@ -84,7 +88,7 @@ if ($is_allowedToEdit) {
             $new_id = $old_question_obj->duplicate($current_course);
             //Reading new question
             $new_question_obj = Question::read($new_id);
-            $new_question_obj->addToList($fromExercise);
+            $new_question_obj->addToList($fromExercise, true);
             //Reading Answers obj of the current course
             $new_answer_obj = new Answer($old_question_id, $origin_course_id);
             $new_answer_obj->read();
@@ -278,6 +282,7 @@ if (isset($_REQUEST['action'])) {
             }
 
             break;
+
         case 'clone':
             if (!empty($_REQUEST['questions']) && !empty($fromExercise)) {
                 $questions = $_REQUEST['questions'];
@@ -288,10 +293,8 @@ if (isset($_REQUEST['action'])) {
 
                 if (count($questions) > 0) {
                     foreach ($questions as $questionId) {
-                        // gets an existing question and copies it into a new exercise
                         // Reading the source question
                         $old_question_obj = Question::read($questionId, $origin_course_info);
-                        $courseId = $current_course['real_id'];
                         if ($old_question_obj) {
                             $old_question_obj->updateTitle($old_question_obj->selectTitle().' - '.get_lang('Copy'));
                             // Duplicating the source question, in the current course
@@ -330,7 +333,6 @@ foreach ($sessionList as $item) {
 // Course list, get course list of session, or for course where user is admin
 $course_list = [];
 
-// Course list, get course list of session, or for course where user is admin
 if (!empty($session_id) && '-1' != $session_id && !empty($sessionList)) {
     $sessionInfo = [];
     foreach ($sessionList as $session) {
@@ -372,11 +374,12 @@ foreach ($course_list as $item) {
 
 if (empty($selected_course) || '-1' == $selected_course) {
     $course_info = api_get_course_info();
-    // no course selected, reset menu test / difficult� / type de reponse
+    // no course selected, reset menu test / difficulty / answer type
     reset_menu_exo_lvl_type();
 } else {
     $course_info = api_get_course_info_by_id($selected_course);
 }
+
 // If course has changed, reset the menu default
 if ($course_id_changed) {
     reset_menu_exo_lvl_type();
@@ -445,10 +448,14 @@ if (!empty($_course)) {
         // Start from all known types.
         $allTypes = $question_list;
 
-        // Exclude the classic open question type from the filter list.
-        if (isset($allTypes[FREE_ANSWER])) {
-            unset($allTypes[FREE_ANSWER]);
-        }
+        // Exclude open question types (no immediate feedback).
+        unset($allTypes[FREE_ANSWER]);
+        unset($allTypes[ORAL_EXPRESSION]);
+        unset($allTypes[ANNOTATION]);
+        unset($allTypes[MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY]);
+        unset($allTypes[UPLOAD_ANSWER]);
+        unset($allTypes[ANSWER_IN_OFFICE_DOC]);
+        unset($allTypes[PAGE_BREAK]);
 
         // Append remaining non-open types (do not override base ones).
         foreach ($allTypes as $key => $item) {
@@ -484,6 +491,7 @@ $form->addHidden('cidReq', $_course['real_id']);
 $form->addHidden('cid', api_get_course_int_id());
 $form->addHidden('sid', api_get_session_id());
 $form->addHidden('fromExercise', $fromExercise);
+
 $form
     ->addSelect(
         'session_id',
@@ -492,6 +500,7 @@ $form
         ['onchange' => 'submit_form(this)', 'id' => 'session_id']
     )
     ->setSelected($session_id);
+
 $form
     ->addSelect(
         'selected_course',
@@ -500,6 +509,7 @@ $form
         ['onchange' => 'mark_course_id_changed(); submit_form(this);', 'id' => 'selected_course']
     )
     ->setSelected($selected_course);
+
 $form
     ->addSelect(
         'courseCategoryId',
@@ -508,6 +518,7 @@ $form
         ['onchange' => 'submit_form(this);', 'id' => 'courseCategoryId']
     )
     ->setSelected($courseCategoryId);
+
 $form
     ->addSelect(
         'exerciseId',
@@ -516,6 +527,7 @@ $form
         ['onchange' => 'mark_exercise_id_changed(); submit_form(this);', 'id' => 'exerciseId']
     )
     ->setSelected($exerciseId);
+
 $form
     ->addSelect(
         'exerciseLevel',
@@ -524,6 +536,7 @@ $form
         ['onchange' => 'submit_form(this);', 'id' => 'exerciseLevel']
     )
     ->setSelected($exerciseLevel);
+
 $form
     ->addSelect(
         'answerType',
@@ -532,9 +545,11 @@ $form
         ['onchange' => 'submit_form(this);', 'id' => 'answerType']
     )
     ->setSelected($answerType);
+
 $form
     ->addText('question_id', get_lang('Id'), false)
     ->setValue($questionId);
+
 $form
     ->addText('description', get_lang('Description'), false)
     ->setValue(Security::remove_XSS($description));
@@ -622,6 +637,44 @@ function getExtraFieldConditions(array $formValues, $queryType = 'from')
     ];
 }
 
+/**
+ * Apply "active" constraints on a ResourceLink alias.
+ *
+ * This mirrors the UI/ExerciseLib behavior:
+ * - Ignore soft-deleted links
+ * - Ignore ended links (endVisibilityAt IS NULL)
+ * - Keep only standard visibilities (0 or 2)
+ * - When a session is selected, include both course-level links (session IS NULL)
+ *   and session links (session = :sessionId)
+ */
+function applyActiveResourceLinkConstraints(QueryBuilder $qb, string $alias, int $sessionId, bool $includeCourseWhenSessionSelected = true): void
+{
+    $qb->andWhere($alias.'.deletedAt IS NULL');
+    $qb->andWhere($alias.'.endVisibilityAt IS NULL');
+    $qb->andWhere($alias.'.visibility IN (0,2)');
+
+    if ($sessionId > 0) {
+        if ($includeCourseWhenSessionSelected) {
+            $qb->andWhere('(IDENTITY('.$alias.'.session) = :sessionId OR '.$alias.'.session IS NULL)');
+        } else {
+            $qb->andWhere('IDENTITY('.$alias.'.session) = :sessionId');
+        }
+    } else {
+        $qb->andWhere($alias.'.session IS NULL');
+    }
+}
+
+/**
+ * Fetch questions using Doctrine (C2).
+ *
+ * Important UI rule:
+ * - We do NOT exclude questions already linked to the current quiz (fromExercise).
+ *   The UI already disables checkboxes/actions through $objExercise->hasQuestion().
+ *
+ * Soft delete rule:
+ * - A question is considered linked to a quiz ONLY if that quiz is still "active"
+ *   in this context (ResourceLink.deletedAt IS NULL).
+ */
 function getQuestions(
     $getCount,
     $start,
@@ -638,116 +691,169 @@ function getQuestions(
     $formValues = []
 ) {
     $entityManager = Database::getManager();
-    $qb = $entityManager->createQueryBuilder();
 
-    $qb->select('qq', 'IDENTITY(qr.quiz) as exerciseId')
-        ->from(CQuizQuestion::class, 'qq')
-        ->leftJoin('qq.relQuizzes', 'qr');
+    // Normalize inputs
+    $selectedCourse = (int) $selectedCourse;
+    $sessionId = (int) $sessionId;
+    $exerciseId = (int) $exerciseId;
+    $fromExercise = (int) $fromExercise;
 
-    if ($exerciseId > 0) {
-        $qb->andWhere('qr.quiz = :exerciseId')
-            ->setParameter('exerciseId', $exerciseId);
-    } elseif ($exerciseId == -1) {
-        $qb->andWhere($qb->expr()->isNull('qr.quiz'));
-    } elseif ($selectedCourse > 0) {
-        $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
-            $selectedCourse,
-            $sessionId ?? 0,
-            true
-        );
-
-        if (!empty($exerciseList)) {
-            $exerciseIds = array_column($exerciseList, 'iid');
-            $qb->andWhere($qb->expr()->in('qr.quiz', ':exerciseIds'))
-                ->setParameter('exerciseIds', $exerciseIds);
-        } else {
-            return $getCount ? 0 : [];
-        }
-    } elseif ($selectedCourse == -1 && $sessionId > 0) {
-        $sessionCourses = SessionManager::get_course_list_by_session_id($sessionId);
-        $courseIds = array_keys($sessionCourses);
-
-        if (!empty($courseIds)) {
-            $exerciseIds = [];
-            foreach ($courseIds as $courseId) {
-                $exercises = ExerciseLib::get_all_exercises_for_course_id($courseId, $sessionId, true);
-                $exerciseIds = array_merge($exerciseIds, array_column($exercises, 'iid'));
-            }
-
-            if (!empty($exerciseIds)) {
-                $qb->andWhere($qb->expr()->in('qr.quiz', ':exerciseIds'))
-                    ->setParameter('exerciseIds', $exerciseIds);
-            } else {
-                return $getCount ? 0 : [];
-            }
-        } else {
-            return $getCount ? 0 : [];
-        }
+    if ($sessionId < 0) {
+        $sessionId = 0;
     }
 
+    // If "Select" (-1/0/null) is used, default to the current course to avoid empty results.
+    if ($selectedCourse <= 0) {
+        $selectedCourse = (int) api_get_course_int_id();
+    }
+
+    $qb = $entityManager->createQueryBuilder();
+    $qb->from(CQuizQuestion::class, 'qq');
+
+    // Parameters used by main query and all subqueries
+    $qb->setParameter('courseId', $selectedCourse);
+    if ($sessionId > 0) {
+        $qb->setParameter('sessionId', $sessionId);
+    }
+
+    // ---------------------------------------------------------------------
+    // COURSE SCOPE (C2):
+    // - Primary: question's own ResourceNode -> ResourceLink -> course
+    // - Secondary: question used in a quiz belonging to the course
+    // ---------------------------------------------------------------------
+    $questionMeta = $entityManager->getClassMetadata(CQuizQuestion::class);
+
+    $existsViaQuiz = $entityManager->createQueryBuilder();
+    $existsViaQuiz->select('1')
+        ->from(CQuizRelQuestion::class, 'rq')
+        ->innerJoin('rq.quiz', 'q')
+        ->innerJoin('q.resourceNode', 'qRN')
+        ->innerJoin('qRN.resourceLinks', 'qRL')
+        ->where('rq.question = qq')
+        ->andWhere('IDENTITY(qRL.course) = :courseId');
+    applyActiveResourceLinkConstraints($existsViaQuiz, 'qRL', $sessionId, true);
+
+    if ($questionMeta->hasAssociation('resourceNode')) {
+        $qb->leftJoin('qq.resourceNode', 'rn');
+
+        $existsQuestionLink = $entityManager->createQueryBuilder();
+        $existsQuestionLink->select('1')
+            ->from(\Chamilo\CoreBundle\Entity\ResourceLink::class, 'rl')
+            ->where('rl.resourceNode = rn')
+            ->andWhere('IDENTITY(rl.course) = :courseId');
+        applyActiveResourceLinkConstraints($existsQuestionLink, 'rl', $sessionId, true);
+
+        $qb->andWhere(
+            $qb->expr()->orX(
+                $qb->expr()->exists($existsQuestionLink->getDQL()),
+                $qb->expr()->exists($existsViaQuiz->getDQL())
+            )
+        );
+    } else {
+        // Fallback: only include questions used in quizzes belonging to the course.
+        // Orphan questions without quiz links cannot be discovered in this scenario.
+        $qb->andWhere($qb->expr()->exists($existsViaQuiz->getDQL()));
+    }
+
+    // ---------------------------------------------------------------------
+    // FILTERS
+    // ---------------------------------------------------------------------
     if ($courseCategoryId > 0) {
         $qb->join('qq.categories', 'qc')
             ->andWhere('qc.id = :categoryId')
-            ->setParameter('categoryId', $courseCategoryId);
+            ->setParameter('categoryId', (int) $courseCategoryId);
     }
 
-    if ($exerciseLevel !== null && $exerciseLevel != -1) {
+    if ($exerciseLevel !== null && (int) $exerciseLevel !== -1) {
         $qb->andWhere('qq.level = :level')
-            ->setParameter('level', $exerciseLevel);
+            ->setParameter('level', (int) $exerciseLevel);
     }
 
-    if ($answerType !== null && $answerType > 0) {
+    if ($answerType !== null && (int) $answerType > 0) {
         $qb->andWhere('qq.type = :type')
-            ->setParameter('type', $answerType);
+            ->setParameter('type', (int) $answerType);
     }
 
     if (!empty($questionId)) {
         $qb->andWhere('qq.iid = :questionId')
-            ->setParameter('questionId', $questionId);
+            ->setParameter('questionId', (int) $questionId);
     }
 
     if (!empty($description)) {
         $qb->andWhere('qq.description LIKE :description')
-            ->setParameter('description', '%' . $description . '%');
+            ->setParameter('description', '%'.$description.'%');
     }
 
-    if (!empty($fromExercise)) {
-        $subQb = $entityManager->createQueryBuilder();
-        $subQb->select('IDENTITY(sq.question)')
-            ->from(CQuizRelQuestion::class, 'sq')
-            ->where('sq.quiz = :fromExercise');
+    // If a specific quiz is selected, keep only questions in that quiz,
+    // but only if the quiz is still active in this context (not soft-deleted link).
+    if ($exerciseId > 0) {
+        $inQuiz = $entityManager->createQueryBuilder();
+        $inQuiz->select('1')
+            ->from(CQuizRelQuestion::class, 'rqq')
+            ->innerJoin('rqq.quiz', 'qSel')
+            ->innerJoin('qSel.resourceNode', 'qSelRN')
+            ->innerJoin('qSelRN.resourceLinks', 'qSelRL')
+            ->where('IDENTITY(rqq.quiz) = :exerciseId')
+            ->andWhere('rqq.question = qq')
+            ->andWhere('IDENTITY(qSelRL.course) = :courseId');
+        applyActiveResourceLinkConstraints($inQuiz, 'qSelRL', $sessionId, true);
 
-        $qb->andWhere($qb->expr()->notIn('qq.iid', $subQb->getDQL()))
-            ->setParameter('fromExercise', $fromExercise);
+        $qb->andWhere($qb->expr()->exists($inQuiz->getDQL()))
+            ->setParameter('exerciseId', $exerciseId);
+    } elseif ($exerciseId === -1) {
+        // Orphan: not linked to any ACTIVE quiz in this context.
+        // A quiz with a soft-deleted link must NOT prevent a question from being orphan.
+        $hasAnyActive = $entityManager->createQueryBuilder();
+        $hasAnyActive->select('1')
+            ->from(CQuizRelQuestion::class, 'rqq2')
+            ->innerJoin('rqq2.quiz', 'q2')
+            ->innerJoin('q2.resourceNode', 'q2rn')
+            ->innerJoin('q2rn.resourceLinks', 'q2rl')
+            ->where('rqq2.question = qq')
+            ->andWhere('IDENTITY(q2rl.course) = :courseId');
+        applyActiveResourceLinkConstraints($hasAnyActive, 'q2rl', $sessionId, true);
+
+        $qb->andWhere($qb->expr()->not($qb->expr()->exists($hasAnyActive->getDQL())));
     }
 
+    // ---------------------------------------------------------------------
+    // EXECUTE
+    // ---------------------------------------------------------------------
     if ($getCount) {
-        $qb->select('COUNT(qq.iid)');
+        $qb->select('COUNT(DISTINCT qq.iid)');
+
         try {
             return (int) $qb->getQuery()->getSingleScalarResult();
         } catch (NoResultException $e) {
             return 0;
+        } catch (\Throwable $e) {
+            return 0;
         }
-    } else {
-        $qb->select('qq.iid as id', 'qq.question', 'qq.type', 'qq.level', 'IDENTITY(qr.quiz) as exerciseId')
-            ->setFirstResult($start)
-            ->setMaxResults($length);
-
-        $results = $qb->getQuery()->getArrayResult();
-
-        $questions = [];
-        foreach ($results as $result) {
-            $questions[] = [
-                'iid' => $result['id'],
-                'question' => $result['question'],
-                'type' => $result['type'],
-                'level' => $result['level'],
-                'exerciseId' => $result['exerciseId'],
-            ];
-        }
-
-        return $questions;
     }
+
+    $qb->select('qq.iid as id', 'qq.question', 'qq.type', 'qq.level')
+        ->setFirstResult((int) $start)
+        ->setMaxResults((int) $length);
+
+    try {
+        $results = $qb->getQuery()->getArrayResult();
+    } catch (\Throwable $e) {
+        return [];
+    }
+
+    $questions = [];
+    foreach ($results as $result) {
+        $questions[] = [
+            'iid' => $result['id'],
+            'question' => $result['question'],
+            'type' => $result['type'],
+            'level' => $result['level'],
+            // Keep expected shape used later
+            'exerciseId' => $exerciseId > 0 ? $exerciseId : 0,
+        ];
+    }
+
+    return $questions;
 }
 
 $formValues = $form->validate() ? $form->exportValues() : [];
@@ -768,11 +874,11 @@ $nbrQuestions = getQuestions(
     $formValues
 );
 
-$length = intval(api_get_setting('exercise.question_pagination_length'));
+$length = (int) api_get_setting('exercise.question_pagination_length');
 if (empty($length)) {
     $length = 20;
 }
-$page = intval($page);
+$page = (int) $page;
 $start = ($page - 1) * $length;
 
 $mainQuestionList = getQuestions(
@@ -801,7 +907,7 @@ $pagination->renderer = function ($data) use ($url) {
     $render = '<nav aria-label="Page navigation" class="question-pool-pagination-nav">';
     $render .= '<ul class="pagination">';
 
-    $link = function($page, $text, $label, $isActive = false) use ($url) {
+    $link = function ($page, $text, $label, $isActive = false) use ($url) {
         $activeClass = $isActive ? ' active' : '';
         return '<li class="page-item'.$activeClass.'"><a class="page-link" href="'.$url.'&page='.$page.'" aria-label="'.$label.'">'.$text.'</a></li>';
     };
@@ -830,10 +936,6 @@ $pagination->renderer = function ($data) use ($url) {
 };
 
 // build the line of the array to display questions
-// Actions are different if you launch the question_pool page
-// They are different too if you have displayed questions from your course
-// Or from another course you are the admin(or session admin)
-// from a test or not
 /*
 +--------------------------------------------+--------------------------------------------+
 |   NOT IN A TEST                            |         IN A TEST                          |
@@ -873,13 +975,15 @@ if (is_array($mainQuestionList)) {
     foreach ($mainQuestionList as $question) {
         $questionId = $question['iid'];
         $row = [];
+
         // This function checks if the question can be read
         $question_type = get_question_type_for_question($selected_course, $questionId);
-
         if (empty($question_type)) {
+            // Keep legacy behavior: skip rows that cannot build the type icon safely.
             continue;
         }
-        $sessionId = isset($question['session_id']) ? $question['session_id'] : null;
+
+        $sessionId = $question['session_id'] ?? null;
 
         if ($fromExercise > 0 && !$objExercise->hasQuestion($question['iid'])) {
             $row[] = Display::input(
@@ -950,6 +1054,7 @@ $headers = [
 ];
 
 Display::display_header($nameTools, 'Exercise');
+
 $actions = '';
 if (isset($fromExercise) && $fromExercise > 0) {
     $actions .= '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.
@@ -978,6 +1083,7 @@ echo '<script>$(function () {
 echo '<div class="text-center">';
 echo $pagination;
 echo '</div>';
+
 $tableId = 'question_pool_id';
 echo '<form id="'.$tableId.'" method="get" action="'.$url.'">';
 echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
@@ -1038,7 +1144,7 @@ $html .= '</div>';
 
 if ($fromExercise > 0) {
     $html .= '<div class="btn-group">
-                <button class="btn btn--plain action-button">' .get_lang('Actions').'</button>
+                <button class="btn btn--plain action-button">'.get_lang('Actions').'</button>
                 <ul class="dropdown-menu" id="action-dropdown" style="display: none;">';
 
     $actions = ['clone' => get_lang('Re-use a copy inside the current test')];
@@ -1143,18 +1249,7 @@ function getLinkForQuestion(
 }
 
 /**
-    Return the <a> html code for delete, add, clone, edit a question
-    in_action = the code of the action triggered by the button
-    from_exercise = the id of the current exercise from which we click on question pool
-    in_questionid = the id of the current question
-    in_questiontype = the code of the type of the current question
-    in_questionname = the name of the question
-    in_selected_course = the if of the course chosen in the FILTERING MENU
-    in_courseCategoryId = the id of the category chosen in the FILTERING MENU
-    in_exerciseLevel = the level of the exercise chosen in the FILTERING MENU
-    in_answerType = the code of the type of the question chosen in the FILTERING MENU
-    in_session_id = the id of the session_id chosen in the FILTERING MENU
-    in_exercise_id = the id of the exercise chosen in the FILTERING MENU
+ * Return the <a> html code for delete, add, clone, edit a question.
  */
 function get_action_icon_for_question(
     $in_action,
@@ -1173,6 +1268,7 @@ function get_action_icon_for_question(
     $limitTeacherAccess = ('true' === api_get_setting('exercise.limit_exercise_teacher_access'));
     $getParams = "&selected_course=$in_selected_course&courseCategoryId=$in_courseCategoryId&exerciseId=$in_exercise_id&exerciseLevel=$in_exerciseLevel&answerType=$in_answerType&session_id=$in_session_id";
     $res = '';
+
     switch ($in_action) {
         case 'delete':
             if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -1180,16 +1276,34 @@ function get_action_icon_for_question(
             }
 
             if (isQuestionInActiveQuiz($in_questionid)) {
-                $res = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question.'));
+                $res = Display::getMdiIcon(
+                    ActionIcon::DELETE,
+                    'ch-tool-icon-disabled',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question.')
+                );
             } else {
                 $res = "<a href='".api_get_self()."?".
-                api_get_cidreq().$getParams."&delete=$in_questionid' onclick='return confirm_your_choice()'>";
+                    api_get_cidreq().$getParams."&delete=$in_questionid' onclick='return confirm_your_choice()'>";
                 $res .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'));
                 $res .= "</a>";
             }
 
             break;
+
         case 'edit':
+            if (isQuestionInActiveQuiz($in_questionid)) {
+                $res = Display::getMdiIcon(
+                    ActionIcon::EDIT,
+                    'ch-tool-icon-disabled',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('This question belongs to a test. Edit it from inside the test or filter for orphan questions only.')
+                );
+                break;
+            }
+
             $res = getLinkForQuestion(
                 1,
                 $from_exercise,
@@ -1199,8 +1313,8 @@ function get_action_icon_for_question(
                 $in_session_id,
                 $in_exercise_id
             );
-
             break;
+
         case 'add':
             $res = '-';
             if ($from_exercise > 0 && !$myObjEx->hasQuestion($in_questionid)) {
@@ -1209,8 +1323,8 @@ function get_action_icon_for_question(
                 $res .= Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Use this question in the test as a link (not a copy)'));
                 $res .= '</a>';
             }
-
             break;
+
         case 'clone':
             $url = api_get_self().'?'.api_get_cidreq().$getParams.
                 "&question_copy=$in_questionid&course_id=$in_selected_course&fromExercise=$from_exercise";
@@ -1218,10 +1332,10 @@ function get_action_icon_for_question(
                 Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Re-use a copy inside the current test')),
                 $url
             );
-
             break;
+
         default:
-            // When no action is expected, return empty string to keep layout clean
+            // When no action is expected, return empty string to keep layout clean.
             $res = '';
             break;
     }
@@ -1230,26 +1344,60 @@ function get_action_icon_for_question(
 }
 
 /**
- * Checks whether a question is used by any quiz.
+ * Checks whether a question is used by any ACTIVE quiz in the current context.
+ *
+ * Soft-delete aware:
+ * - A quiz that only exists through a soft-deleted ResourceLink must NOT block question deletion.
  */
 function isQuestionInActiveQuiz($questionId)
 {
-    $tblQuizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-    $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+    global $selected_course, $session_id;
 
     $questionId = (int) $questionId;
     if (empty($questionId)) {
         return false;
     }
 
-    $sql = "SELECT COUNT(qq.question_id) AS count
-            FROM $tblQuizRelQuestion qq
-            INNER JOIN $tblQuiz q ON q.iid = qq.quiz_id
-            WHERE qq.question_id = $questionId";
+    $courseId = (int) $selected_course;
+    if ($courseId <= 0) {
+        $courseId = (int) api_get_course_int_id();
+    }
 
-    $row = Database::fetch_assoc(Database::query($sql));
+    $sessionId = (int) $session_id;
+    if ($sessionId < 0) {
+        $sessionId = 0;
+    }
 
-    return !empty($row) && (int)$row['count'] > 0;
+    try {
+        $entityManager = Database::getManager();
+
+        $qb = $entityManager->createQueryBuilder();
+        $qb->select('COUNT(DISTINCT q.iid)')
+            ->from(CQuizRelQuestion::class, 'rqq')
+            ->innerJoin('rqq.quiz', 'q')
+            ->innerJoin('q.resourceNode', 'rn')
+            ->innerJoin('rn.resourceLinks', 'rl')
+            ->where('rqq.question = :questionId')
+            ->andWhere('IDENTITY(rl.course) = :courseId')
+            ->setParameter('questionId', $questionId)
+            ->setParameter('courseId', $courseId);
+
+        // Soft-delete aware "active link" rules.
+        // NOTE: If you want session-only scope, change last param to false.
+        applyActiveResourceLinkConstraints($qb, 'rl', $sessionId, true);
+
+        if ($sessionId > 0) {
+            $qb->setParameter('sessionId', $sessionId);
+        }
+
+        $count = (int) $qb->getQuery()->getSingleScalarResult();
+
+        return $count > 0;
+    } catch (\Throwable $e) {
+        error_log('[question_pool] isQuestionInActiveQuiz failed: '.$e->getMessage());
+        // Fail-safe: keep legacy safe behavior (treat as used).
+        return true;
+    }
 }
 
 /**

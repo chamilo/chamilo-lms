@@ -437,7 +437,7 @@ define('GROUP_PERMISSION_CLOSED', '2');
 
 // Group user permissions
 define('GROUP_USER_PERMISSION_ADMIN', 1); // the admin of a group
-define('GROUP_USER_PERMISSION_READER', 2); // a normal user
+define('GROUP_USER_PERMISSION_READER', 0); // a normal user
 define('GROUP_USER_PERMISSION_PENDING_INVITATION', 3); // When an admin/moderator invites a user
 define('GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER', 4); // an user joins a group
 define('GROUP_USER_PERMISSION_MODERATOR', 5); // a moderator
@@ -3380,6 +3380,20 @@ function api_is_allowed_to_edit(
         }
     }
 
+    // ---------------------------------------------------------------------
+    // Explicit student subscription guard (no session context).
+    // If the user is subscribed as a learner in the course, do NOT grant edit
+    // rights even if "current course teacher" roles are polluted/persisted.
+    // ---------------------------------------------------------------------
+    $courseCode = api_get_course_id();
+    $inCourse = !empty($courseCode) && $courseCode != -1;
+
+    if ($inCourse && empty($sessionId)) {
+        if (api_is_explicit_course_student(api_get_user_id(), api_get_course_int_id())) {
+            return false;
+        }
+    }
+
     $isCourseAdmin = api_is_course_admin();
     $isCoach = api_is_coach(0, null, $check_student_view);
 
@@ -3442,6 +3456,35 @@ function api_is_allowed_to_edit(
     }
 
     return $isAllowed;
+}
+
+/**
+ * UI/legacy safeguard: returns true if the user is explicitly subscribed as STUDENT
+ * in the current course (course_rel_user), regardless of Symfony/serialized roles.
+ *
+ * This is intentionally a low-level check to avoid polluted context roles.
+ */
+function api_is_explicit_course_student(?int $userId = null, ?int $courseIntId = null): bool
+{
+    $userId = $userId ?? api_get_user_id();
+    $courseIntId = $courseIntId ?? api_get_course_int_id();
+
+    if (empty($userId) || empty($courseIntId)) {
+        return false;
+    }
+
+    $studentStatus = defined('STUDENT') ? (int) STUDENT : 5;
+    $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $sql = "SELECT status
+            FROM $table
+            WHERE c_id = ".((int) $courseIntId)."
+              AND user_id = ".((int) $userId)."
+            LIMIT 1";
+
+    $res = Database::query($sql);
+    $row = Database::fetch_array($res, 'ASSOC');
+
+    return !empty($row) && (int) $row['status'] === $studentStatus;
 }
 
 /**
@@ -5274,7 +5317,7 @@ function api_get_current_access_url_id(): int
 
     //if the url in WEB_PATH was not found, it can only mean that there is
     // either a configuration problem or the first URL has not been defined yet
-    // (by default it is http://localhost/). Thus the more sensible thing we can
+    // (by default, it is http://localhost/). Thus, the more sensible thing we can
     // do is return 1 (the main URL) as the user cannot hack this value anyway
     return 1;
 }
@@ -5287,10 +5330,10 @@ function api_get_current_access_url_id(): int
  * @param int $user_id
  *
  * @return array
+ * @throws Exception
  */
-function api_get_access_url_from_user($user_id)
+function api_get_access_url_from_user(int $user_id): array
 {
-    $user_id = (int) $user_id;
     $table_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $table_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $sql = "SELECT access_url_id
@@ -5308,11 +5351,12 @@ function api_get_access_url_from_user($user_id)
 }
 
 /**
- * Checks whether the current admin user in in all access urls.
+ * Checks whether the current admin user in all access urls.
  *
  * @return bool
+ * @throws Exception
  */
-function api_is_admin_in_all_active_urls()
+function api_is_admin_in_all_active_urls(): bool
 {
     if (api_is_platform_admin()) {
         $urls = api_get_active_urls();
@@ -5322,16 +5366,20 @@ function api_is_admin_in_all_active_urls()
                 return false;
             }
         }
+
         return true;
     }
+
+    return false;
 }
 
 /**
  * Gets all the access urls in the database.
  *
  * @return array
+ * @throws Exception
  */
-function api_get_active_urls()
+function api_get_active_urls(): array
 {
     $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $sql = "SELECT * FROM $table WHERE active = 1";
@@ -5345,16 +5393,16 @@ function api_get_active_urls()
 }
 
 /**
- * Checks whether the curent user is in a group or not.
+ * Checks whether the current user is in a group or not.
  *
- * @param string        The group id - optional (takes it from session if not given)
- * @param string        The course code - optional (no additional check by course if course code is not given)
+ * @param ?int $groupIdParam       The group id - optional (takes it from session if not given)
+ * @param ?string $courseCodeParam       The course code - optional (no additional check by course if course code is not given)
  *
  * @return bool
  *
  * @author Ivan Tcholakov
  */
-function api_is_in_group($groupIdParam = null, $courseCodeParam = null)
+function api_is_in_group(?int $groupIdParam = null, ?string $courseCodeParam = null): bool
 {
     if (!empty($courseCodeParam)) {
         $courseCode = api_get_course_id();
@@ -5369,7 +5417,7 @@ function api_is_in_group($groupIdParam = null, $courseCodeParam = null)
 
     $groupId = api_get_group_id();
 
-    if (isset($groupId) && '' != $groupId) {
+    if ('' != $groupId) {
         if (!empty($groupIdParam)) {
             return $groupIdParam == $groupId;
         } else {
@@ -5386,7 +5434,7 @@ function api_is_in_group($groupIdParam = null, $courseCodeParam = null)
  * @param string $original_key_secret - secret key from (webservice) client
  * @param string $security_key        - security key from Chamilo
  *
- * @return bool - true if secret key is valid, false otherwise
+ * @return bool - true if the secret key is valid, false otherwise
  */
 function api_is_valid_secret_key($original_key_secret, $security_key)
 {
@@ -6848,19 +6896,36 @@ function get_hosting_limit(int $urlId, string $limitName): mixed
         return [];
     }
 
-    $settingsOverrides = Container::$container->getParameter('settings_overrides');
+    $settingsOverrides = Container::$container->getParameter('settings_overrides') ?? [];
 
-    $limits = $settingsOverrides[$urlId]['hosting_limit'] ?? $settingsOverrides['default']['hosting_limit'];
+    // Defensive: ensure array
+    if (!is_array($settingsOverrides)) {
+        return [];
+    }
+
+    $urlOverrides = (isset($settingsOverrides[$urlId]) && is_array($settingsOverrides[$urlId]))
+        ? $settingsOverrides[$urlId]
+        : [];
+
+    $defaultOverrides = (isset($settingsOverrides['default']) && is_array($settingsOverrides['default']))
+        ? $settingsOverrides['default']
+        : [];
+
+    $limits = $urlOverrides['hosting_limit'] ?? ($defaultOverrides['hosting_limit'] ?? []);
+
+    // Defensive: ensure iterable array
+    if (!is_array($limits)) {
+        $limits = [];
+    }
 
     foreach ($limits as $limitArray) {
-        if (isset($limitArray[$limitName])) {
+        if (is_array($limitArray) && array_key_exists($limitName, $limitArray)) {
             return $limitArray[$limitName];
         }
     }
 
     return null;
 }
-
 
 /**
  * Retrieves an environment variable value with validation and handles boolean conversion.
@@ -7537,4 +7602,39 @@ function api_email_reached_registration_limit(string $email): bool
 
     return $count >= $limit;
 }
+
+/**
+ * Build the HTML snippet required to bootstrap the automatic glossary tooltips.
+ */
+function api_get_glossary_auto_snippet(?int $courseId, ?int $sessionId, ?int $resourceNodeParentId = null): string
+{
+    if (null === $resourceNodeParentId && $courseId) {
+        try {
+            $courseEntity = Container::getCourseRepository()->find($courseId);
+
+            if ($courseEntity && $courseEntity->getResourceNode()) {
+                $resourceNodeParentId = (int) $courseEntity->getResourceNode()->getId();
+            }
+        } catch (\Throwable $exception) {
+            error_log('[Glossary] Failed to resolve resourceNodeParentId from course: '.$exception->getMessage());
+        }
+    }
+
+    $course  = $courseId ?: 'null';
+    $session = $sessionId ?: 'null';
+    $parent  = $resourceNodeParentId ?: 'null';
+
+    return '
+        <script>
+          window.chamiloGlossaryConfig = {
+            courseId: ' . $course . ',
+            sessionId: ' . $session . ',
+            resourceNodeParentId: ' . $parent . ',
+            termsEndpoint: "/api/glossaries"
+          };
+        </script>
+        ' . api_get_build_js("glossary_auto.js") . '
+    ';
+}
+
 

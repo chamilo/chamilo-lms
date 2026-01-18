@@ -4,6 +4,7 @@
 
 // $cidReset : This is the main difference with gradebook.php, here we say,
 // basically, that we are inside a course, and many things depend from that
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Framework\Container;
 
 $_in_course = true;
@@ -20,7 +21,7 @@ $course_id = api_get_course_int_id();
 $courseInfo = api_get_course_info();
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-$itemId = isset($_GET['itemId']) ? $_GET['itemId'] : 0;
+$itemId = isset($_GET['itemId']) ? (int) $_GET['itemId'] : 0;
 
 switch ($action) {
     case 'generate_eval_stats':
@@ -57,13 +58,13 @@ switch ($action) {
         exit;
         break;
     case 'lock':
-        $category_to_lock = Category::load($_GET['category_id']);
+        $category_to_lock = Category::load((int) $_GET['category_id']);
         $category_to_lock[0]->lockAllItems(1);
         $confirmation_message = get_lang('This assessment has been locked. You cannot unlock it. If you really need to unlock it, please contact the platform administrator, explaining the reason why you would need to do that (it might otherwise be considered as fraud attempt).');
         break;
     case 'unlock':
         if (api_is_platform_admin()) {
-            $category_to_lock = Category::load($_GET['category_id']);
+            $category_to_lock = Category::load((int) $_GET['category_id']);
             $category_to_lock[0]->lockAllItems(0);
             $confirmation_message = get_lang('Evaluation has been unlocked');
         }
@@ -75,7 +76,7 @@ switch ($action) {
         }
         if (isset($_GET['category_id'])) {
             $cats = Category::load(
-                $_GET['category_id'],
+                (int) $_GET['category_id'],
                 null,
                 0,
                 null,
@@ -259,6 +260,7 @@ if (isset($_GET['visiblelog'])) {
     exit;
 }
 
+$course_to_crsind = false;
 //move a category
 if (isset($_GET['movecat'])) {
     GradebookUtils::block_students();
@@ -791,7 +793,7 @@ if (isset($_GET['studentoverview'])) {
         $alleval = $cats[0]->get_evaluations($stud_id);
         $alllink = $cats[0]->get_links($stud_id);
     } else {
-        $allcat = $alleval = $alling = [];
+        $allcat = $alleval = $alllink = [];
     }
 }
 
@@ -812,24 +814,93 @@ $hideCertificateExport = api_get_setting('certificate.hide_certificate_export_li
 $category = null;
 if (!empty($selectCat)) {
     $repo = Container::getGradeBookCategoryRepository();
+    /* @var GradebookCategory $category */
     $category = $repo->find($selectCat);
-    $course_id = CourseManager::get_course_by_category($selectCat);
-    $show_message = Category::show_message_resource_delete($course_id);
+    $courseIdFromCategory = CourseManager::get_course_by_category($selectCat);
+    $show_message = Category::show_message_resource_delete($courseIdFromCategory);
     if (empty($show_message)) {
         // Student
         if (!api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
             if (null !== $category) {
-                $certificate = Category::generateUserCertificate($category, $stud_id);
-                if ('true' !== $hideCertificateExport && isset($certificate['pdf_url'])) {
-                    $actionsLeft .= Display::url(
-                        Display::getMdiIcon('file-pdf-box').get_lang('Download certificate in PDF'),
-                        $certificate['pdf_url'],
-                        ['class' => 'btn btn--plain']
-                    );
+                // Compute and store current score (used to decide certificate eligibility)
+                $currentScore = (float) Category::getCurrentScore(
+                    (int) $stud_id,
+                    $category,
+                    true,
+                    (int) $courseIdFromCategory,
+                    (int) $session_id
+                );
+                Category::registerCurrentScore($currentScore, (int) $stud_id, (int) $selectCat);
+
+                // Resolve certificate rules every time (even if a certificate already exists)
+                $minCertificationScore = (float) $category->getCertifMinScore();
+                $certificatesEnabled   = (bool) $category->getGenerateCertificates();
+                $isEligibleForCertificate = $certificatesEnabled
+                    && $minCertificationScore > 0.0
+                    && $currentScore >= $minCertificationScore;
+
+                // Load existing certificate (if any)
+                $certificate = [];
+                $list = GradebookUtils::get_list_gradebook_certificates_by_user_id(
+                    (int) $stud_id,
+                    (int) $selectCat
+                );
+                if (!empty($list) && isset($list[0]) && is_array($list[0])) {
+                    $certificate = $list[0];
                 }
 
-                $currentScore = Category::getCurrentScore($stud_id, $category, true);
-                Category::registerCurrentScore($currentScore, $stud_id, $selectCat);
+                $hasCertificatePath = isset($certificate['path_certificate'])
+                    && '' !== trim((string) $certificate['path_certificate']);
+
+                // If the learner is not eligible anymore, do not expose an already issued certificate
+                if (!$isEligibleForCertificate) {
+                    $certificate = [];
+                    $hasCertificatePath = false;
+                }
+
+                // Generate on-demand only if eligible and missing
+                if (!$hasCertificatePath && $isEligibleForCertificate) {
+                    Category::generateUserCertificate($category, (int) $stud_id);
+
+                    // Reload certificate list to get path_certificate
+                    $certificate = [];
+                    $list = GradebookUtils::get_list_gradebook_certificates_by_user_id((int) $stud_id, (int) $selectCat);
+                    if (!empty($list) && isset($list[0]) && is_array($list[0])) {
+                        $certificate = $list[0];
+                    }
+
+                    $hasCertificatePath = isset($certificate['path_certificate'])
+                        && '' !== trim((string) $certificate['path_certificate']);
+                }
+
+                // Show PDF download button if certificate exists (legacy path-based behavior)
+                if ($isEligibleForCertificate && isset($certificate['path_certificate'])) {
+                    $pathRaw = (string) $certificate['path_certificate'];
+                    $path    = ltrim($pathRaw, '/'); // normalize: remove leading slash if present
+                    $hasPath = '' !== $path;
+                    $hash    = $hasPath ? pathinfo($path, PATHINFO_FILENAME) : '';
+
+                    if ($hasPath) {
+                        $certificate['pdf_url'] = api_get_path(WEB_PATH).'certificates/'.$hash.'.pdf';
+                        $actionsLeft .= Display::url(
+                            Display::getMdiIcon('file-pdf-box').get_lang('Download certificate in PDF'),
+                            $certificate['pdf_url'],
+                            ['class' => 'btn btn--plain']
+                        );
+
+                        // HTML preview/export (same hash)
+                        $certificate['html_url'] = api_get_path(WEB_PATH).'certificates/'.$hash.'.html';
+                        $actionsLeft .= Display::url(
+                            Display::getMdiIcon('file-document-outline').get_lang('View certificate (HTML)'),
+                            $certificate['html_url'],
+                            [
+                                'class' => 'btn btn--plain',
+                                'target' => '_blank',
+                                'rel' => 'noopener noreferrer',
+                            ]
+                        );
+                    }
+                }
             }
         }
     }
@@ -1052,7 +1123,7 @@ api_set_in_gradebook();
 $contents = ob_get_contents();
 
 ob_end_clean();
-
+Event::event_access_tool(TOOL_GRADEBOOK);
 $view = new Template($viewTitle);
 $view->assign('content', $contents);
 $view->display_one_col_template();

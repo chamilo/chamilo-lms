@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Cocur\Slugify\Slugify;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
@@ -24,7 +25,7 @@ class PortfolioComment extends AbstractResource implements ResourceInterface, St
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private int $id;
+    private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Portfolio::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(name: 'item_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
@@ -143,7 +144,13 @@ class PortfolioComment extends AbstractResource implements ResourceInterface, St
 
     public function getResourceName(): string
     {
-        return 'portfolio_comment_'.$this->id;
+        if ($this->id) {
+            return 'portfolio_comment_'.$this->id;
+        }
+
+        return Slugify::create()->slugify(
+            $this->date->format('c')
+        );
     }
 
     public function setResourceName(string $name): static

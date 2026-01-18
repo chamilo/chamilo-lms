@@ -2293,7 +2293,7 @@ function render_thread_preview_html(
             </div>
 
             <?php if (empty($rows)): ?>
-                <div class="text-gray-50 text-body-2 mt-2"><?php echo get_lang('No posts yet'); ?></div>
+                <div class="text-gray-50 text-body-2 mt-2"><?php echo get_lang('No post yet'); ?></div>
             <?php else: foreach ($rows as $row):
                 $postId  = (int) $row['iid'];
                 $isFocus = $highlightPostId && $postId === (int) $highlightPostId;
@@ -2405,25 +2405,18 @@ function newThread(CForum $forum, $form_values = '', $showPreview = true)
         [] // extra data);
     );
 
-    if (Gradebook::is_active() &&
-        (api_is_course_admin() || api_is_session_general_coach() || api_is_course_tutor())
-    ) {
+    if ((api_is_course_admin() || api_is_session_general_coach() || api_is_course_tutor())) {
         $form->addElement('advanced_settings', 'advanced_params', get_lang('Advanced settings'));
         $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
         // Thread qualify
-        if (Gradebook::is_active()) {
-            //Loading gradebook select
-            GradebookUtils::load_gradebook_select_in_tool($form);
-            $form->addCheckBox(
-                'thread_qualify_gradebook',
-                '',
-                get_lang('Grade this thread'),
-                ['onclick' => 'javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}']
-            );
-        } else {
-            $form->addElement('hidden', 'thread_qualify_gradebook', false);
-        }
+        GradebookUtils::load_gradebook_select_in_tool($form);
+        $form->addCheckBox(
+            'thread_qualify_gradebook',
+            '',
+            get_lang('Grade this thread'),
+            ['onclick' => 'javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}']
+        );
 
         $form->addElement('html', '<div id="options_field" style="display:none">');
         $form->addElement('text', 'numeric_calification', get_lang('Maximum score'));

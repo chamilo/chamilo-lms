@@ -613,7 +613,7 @@ class IndexBlocksController extends BaseController
         if (is_dir(api_get_path(SYS_TEST_PATH))) {
             $items[] = [
                 'class' => 'item-email-tester',
-                'url' => '/main/admin/email_tester.php',
+                'url' => '/admin/email_tester',
                 'label' => $this->translator->trans('E-mail tester'),
             ];
         }
@@ -676,7 +676,7 @@ class IndexBlocksController extends BaseController
 
         $items[] = [
             'class' => 'item-skill-ranking',
-            'url' => '/main/social/skills_ranking.php',
+            'url' => '/main/social/skills_ranking.php?origin=admin',
             'label' => $this->translator->trans('Skills ranking'),
         ];
         $items[] = [
@@ -782,11 +782,13 @@ class IndexBlocksController extends BaseController
             'url' => '/documentation/optimization.html',
             'label' => $this->translator->trans('Optimization guide'),
         ];
+        /*
         $items[] = [
             'class' => 'item-extensions',
             'url' => 'https://chamilo.org/extensions',
             'label' => $this->translator->trans('Chamilo extensions'),
         ];
+        */
         $items[] = [
             'class' => 'item-providers',
             'url' => 'https://chamilo.org/providers',
@@ -958,7 +960,8 @@ class IndexBlocksController extends BaseController
         // Check if dsn or email is defined :
         $mailDsn = $this->settingsManager->getSetting('mail.mailer_dsn', true);
         $mailSender = $this->settingsManager->getSetting('mail.mailer_from_email', true);
-        if ((empty($mailDsn) || 'null://null' == $mailDsn) && empty($mailSender)) {
+        $nameSender = $this->settingsManager->getSetting('mail.mailer_from_name', true);
+        if ((empty($mailDsn) || 'null://null' == $mailDsn) || empty($mailSender) || empty($nameSender)) {
             $items[] = [
                 'className' => 'item-health-check-mail-settings text-error',
                 'url' => '/admin/settings/mail',

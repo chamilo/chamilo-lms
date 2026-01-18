@@ -18,8 +18,6 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-use const DIRECTORY_SEPARATOR;
-
 #[Route('/themes')]
 class ThemeController extends AbstractController
 {
@@ -152,9 +150,72 @@ class ThemeController extends AbstractController
     }
 
     /**
+     * Resolve and serve the preferred logo for a theme without causing frontend 404 probes.
+     * Priority order:
+     * 1) {theme}/images/<type>-logo.svg
+     * 2) {theme}/images/<type>-logo.png
+     * 3) default/images/<type>-logo.svg
+     * 4) default/images/<type>-logo.png.
+     *
+     * Example:
+     * - /themes/beeznest/logo/header
+     * - /themes/beeznest/logo/email
+     */
+    #[Route(
+        '/{slug}/logo/{type}',
+        name: 'theme_logo',
+        requirements: ['type' => 'header|email'],
+        methods: ['GET'],
+        priority: 20
+    )]
+    public function logo(
+        string $slug,
+        string $type,
+        #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
+        FilesystemOperator $filesystem
+    ): Response {
+        $themeDir = basename($slug);
+        $defaultTheme = ThemeHelper::DEFAULT_THEME;
+
+        $relCandidates = 'email' === $type
+            ? ['images/email-logo.svg', 'images/email-logo.png']
+            : ['images/header-logo.svg', 'images/header-logo.png'];
+
+        $filePath = null;
+
+        // Try requested theme first (do not fail if theme folder does not exist)
+        foreach ($relCandidates as $rel) {
+            $candidate = $themeDir.'/'.$rel;
+            if ($filesystem->fileExists($candidate)) {
+                $filePath = $candidate;
+
+                break;
+            }
+        }
+
+        // Fallback to default theme
+        if (!$filePath) {
+            foreach ($relCandidates as $rel) {
+                $candidate = $defaultTheme.'/'.$rel;
+                if ($filesystem->fileExists($candidate)) {
+                    $filePath = $candidate;
+
+                    break;
+                }
+            }
+        }
+
+        if (!$filePath) {
+            throw $this->createNotFoundException('No logo file found.');
+        }
+
+        return $this->streamFile($filesystem, $filePath);
+    }
+
+    /**
      * Serve an asset from the theme.
-     * - If ?strict=1 → only serves {name}/{path}. If it doesn't exist, 404 (no fallback).
-     * - If strict isn't available → tries {name}/{path} and then the default theme.
+     * - If ?strict=1: only serves {name}/{path}. If it doesn't exist -> 404 (no fallback).
+     * - If not strict: serves {name}/{path}, then known logo alternates (svg/png), then default theme.
      */
     #[Route(
         '/{name}/{path}',
@@ -171,41 +232,75 @@ class ThemeController extends AbstractController
         FilesystemOperator $filesystem
     ): Response {
         $themeDir = basename($name);
+
+        // Normalize path and prevent traversal
+        $path = str_replace('\\', '/', $path);
+        $path = ltrim($path, '/');
+        if (str_contains($path, '..')) {
+            throw $this->createNotFoundException('The requested file does not exist.');
+        }
+
         $strict = $request->query->getBoolean('strict', false);
 
-        if (!$filesystem->directoryExists($themeDir)) {
-            throw $this->createNotFoundException('The folder name does not exist.');
+        $candidates = [];
+
+        if ($strict) {
+            // Strict: only exact file from requested theme
+            $candidates[] = $themeDir.'/'.$path;
+        } else {
+            // Non-strict: theme first, then default theme (with logo svg/png alternates)
+            foreach ([$themeDir, ThemeHelper::DEFAULT_THEME] as $slug) {
+                $candidates[] = $slug.'/'.$path;
+
+                foreach ($this->getLogoAlternates($path) as $alt) {
+                    $candidates[] = $slug.'/'.$alt;
+                }
+            }
         }
 
         $filePath = null;
-
-        if ($strict) {
-            $candidate = $themeDir.DIRECTORY_SEPARATOR.$path;
+        foreach ($candidates as $candidate) {
             if ($filesystem->fileExists($candidate)) {
                 $filePath = $candidate;
-            } else {
-                throw $this->createNotFoundException('The requested file does not exist.');
-            }
-        } else {
-            $candidates = [
-                $themeDir.DIRECTORY_SEPARATOR.$path,
-                ThemeHelper::DEFAULT_THEME.DIRECTORY_SEPARATOR.$path,
-            ];
-            foreach ($candidates as $c) {
-                if ($filesystem->fileExists($c)) {
-                    $filePath = $c;
 
-                    break;
-                }
-            }
-            if (!$filePath) {
-                throw $this->createNotFoundException('The requested file does not exist.');
+                break;
             }
         }
 
+        if (!$filePath) {
+            throw $this->createNotFoundException('The requested file does not exist.');
+        }
+
+        return $this->streamFile($filesystem, $filePath);
+    }
+
+    /**
+     * Only for known logo files. Other assets keep the normal behavior.
+     */
+    private function getLogoAlternates(string $path): array
+    {
+        return match ($path) {
+            'images/header-logo.svg' => ['images/header-logo.png'],
+            'images/email-logo.svg' => ['images/email-logo.png'],
+            'images/header-logo.png' => ['images/header-logo.svg'],
+            'images/email-logo.png' => ['images/email-logo.svg'],
+            default => [],
+        };
+    }
+
+    /**
+     * Stream a file from Flysystem with correct mime type.
+     */
+    private function streamFile(FilesystemOperator $filesystem, string $filePath): Response
+    {
         $response = new StreamedResponse(function () use ($filesystem, $filePath): void {
             $out = fopen('php://output', 'wb');
             $in = $filesystem->readStream($filePath);
+
+            if (!\is_resource($out) || !\is_resource($in)) {
+                return;
+            }
+
             stream_copy_to_stream($in, $out);
             fclose($out);
             fclose($in);
@@ -218,7 +313,7 @@ class ThemeController extends AbstractController
 
         $disposition = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_INLINE,
-            basename($path)
+            basename($filePath)
         );
 
         $response->headers->set('Content-Disposition', $disposition);

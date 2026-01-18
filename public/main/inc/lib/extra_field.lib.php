@@ -496,7 +496,7 @@ class ExtraField extends Model
                                 alert('".get_lang('Not found')."');
                             }
                         } else {
-                            alert('Geocode ".get_lang('Error').': '.get_lang('Address').' '.get_lang('Not found')."');
+                            alert(\"Geocode ".get_lang('Error').': '.get_lang('Address').' '.get_lang('Not found')."\");
                         }
                     });
                 }
@@ -2487,23 +2487,23 @@ class ExtraField extends Model
         );
 
         $group = [];
-        $group[] = $form->createElement('radio', 'visible_to_self', null, get_lang('Yes'), 1);
-        $group[] = $form->createElement('radio', 'visible_to_self', null, get_lang('No'), 0);
+        $group[] = $form->createElement('radio', 'visible_to_self', null, get_lang('Yes'), 1, ['id' => 'visible_to_self_yes']);
+        $group[] = $form->createElement('radio', 'visible_to_self', null, get_lang('No'), 0, ['id' => 'visible_to_self_no']);
         $form->addGroup($group, '', get_lang('Visible to self'), null, false);
 
         $group = [];
-        $group[] = $form->createElement('radio', 'visible_to_others', null, get_lang('Yes'), 1);
-        $group[] = $form->createElement('radio', 'visible_to_others', null, get_lang('No'), 0);
+        $group[] = $form->createElement('radio', 'visible_to_others', null, get_lang('Yes'), 1, ['id' => 'visible_to_others_yes']);
+        $group[] = $form->createElement('radio', 'visible_to_others', null, get_lang('No'), 0, ['id' => 'visible_to_others_no']);
         $form->addGroup($group, '', get_lang('Visible to others'), null, false);
 
         $group = [];
-        $group[] = $form->createElement('radio', 'changeable', null, get_lang('Yes'), 1);
-        $group[] = $form->createElement('radio', 'changeable', null, get_lang('No'), 0);
+        $group[] = $form->createElement('radio', 'changeable', null, get_lang('Yes'), 1, ['id' => 'changeable_yes']);
+        $group[] = $form->createElement('radio', 'changeable', null, get_lang('No'), 0, ['id' => 'changeable_no']);
         $form->addGroup($group, '', get_lang('Can change'), null, false);
 
         $group = [];
-        $group[] = $form->createElement('radio', 'filter', null, get_lang('Yes'), 1);
-        $group[] = $form->createElement('radio', 'filter', null, get_lang('No'), 0);
+        $group[] = $form->createElement('radio', 'filter', null, get_lang('Yes'), 1, ['id' => 'filter_yes']);
+        $group[] = $form->createElement('radio', 'filter', null, get_lang('No'), 0, ['id' => 'filter_no']);
         $form->addGroup($group, '', get_lang('Filter'), null, false);
 
         /* Enable this when field_loggeable is introduced as a table field (2.0)

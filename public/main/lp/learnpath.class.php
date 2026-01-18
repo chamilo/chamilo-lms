@@ -34,6 +34,7 @@ use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use PhpZip\ZipFile;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -6123,43 +6124,22 @@ document.addEventListener("DOMContentLoaded", function () {
     public function displayItemPrerequisitesForm(CLpItem $lpItem)
     {
         $courseId = api_get_course_int_id();
-        $preRequisiteId = $lpItem->getPrerequisite();
-        $itemId = $lpItem->getIid();
+        $preRequisiteId = (int) ($lpItem->getPrerequisite() ?? 0);
+        $currentItemId = $lpItem->getIid();
 
-        $return = Display::page_header(get_lang('Add/edit prerequisites').' '.$lpItem->getTitle());
+        $title = get_lang('Add/edit prerequisites').' '.$lpItem->getTitle();
 
-        $return .= '<form method="POST">';
-        $return .= '<div class="table-responsive">';
-        $return .= '<table class="table table-hover">';
-        $return .= '<thead>';
-        $return .= '<tr>';
-        $return .= '<th>'.get_lang('Prerequisites').'</th>';
-        $return .= '<th width="140">'.get_lang('minimum').'</th>';
-        $return .= '<th width="140">'.get_lang('maximum').'</th>';
-        $return .= '</tr>';
-        $return .= '</thead>';
-
-        // Adding the none option to the prerequisites see http://www.chamilo.org/es/node/146
-        $return .= '<tbody>';
-        $return .= '<tr>';
-        $return .= '<td colspan="3">';
-        $return .= '<div class="radio learnpath"><label for="idnone">';
-        $return .= '<input checked="checked" id="idnone" name="prerequisites" type="radio" />';
-        $return .= get_lang('none').'</label>';
-        $return .= '</div>';
-        $return .= '</tr>';
-
-        // @todo use entitites
+        // Load scores
         $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT * FROM $tblLpItem
-                WHERE lp_id = ".$this->lp_id;
+        $sql = "SELECT * FROM $tblLpItem WHERE lp_id = ".$this->lp_id;
         $result = Database::query($sql);
 
         $selectedMinScore = [];
         $selectedMaxScore = [];
         $masteryScore = [];
+
         while ($row = Database::fetch_array($result)) {
-            if ($row['iid'] == $itemId) {
+            if ($row['iid'] == $currentItemId) {
                 $selectedMinScore[$row['prerequisite']] = $row['prerequisite_min_score'];
                 $selectedMaxScore[$row['prerequisite']] = $row['prerequisite_max_score'];
             }
@@ -6171,18 +6151,39 @@ document.addEventListener("DOMContentLoaded", function () {
         $itemRoot = $lpItemRepo->getRootItem($this->get_id());
         $em = Database::getManager();
 
-        $currentItemId = $itemId;
+        $noneChecked = (empty($preRequisiteId) || (int) $preRequisiteId === 0) ? ' checked="checked" ' : '';
+
+        $return  = '<div class="space-y-6">';
+        $return .= Display::page_header($title);
+
+        $return .= '<form method="POST" class="space-y-6">';
+        $return .= '  <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">';
+        $return .= '    <div class="overflow-x-auto">';
+        $return .= '      <table class="min-w-full divide-y divide-gray-200">';
+        $return .= '        <thead class="bg-gray-20">';
+        $return .= '          <tr>';
+        $return .= '            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">'.get_lang('Prerequisites').'</th>';
+        $return .= '            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-36">'.get_lang('minimum').'</th>';
+        $return .= '            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-36">'.get_lang('maximum').'</th>';
+        $return .= '          </tr>';
+        $return .= '        </thead>';
+        $return .= '        <tbody class="divide-y divide-gray-100 bg-white">';
+
+        // None row
+        $return .= '          <tr class="hover:bg-gray-20">';
+        $return .= '            <td colspan="3" class="px-6 py-4">';
+        $return .= '              <label for="idnone" class="flex items-center gap-3 cursor-pointer select-none">';
+        $return .= '                <input '.$noneChecked.' id="idnone" name="prerequisites" type="radio" value="0" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />';
+        $return .= '                <span class="text-sm text-gray-800">'.get_lang('none').'</span>';
+        $return .= '              </label>';
+        $return .= '            </td>';
+        $return .= '          </tr>';
+
         $options = [
             'decorate' => true,
-            'rootOpen' => function () {
-                return '';
-            },
-            'rootClose' => function () {
-                return '';
-            },
-            'childOpen' => function () {
-                return '';
-            },
+            'rootOpen' => function () { return ''; },
+            'rootClose' => function () { return ''; },
+            'childOpen' => function () { return ''; },
             'childClose' => '',
             'nodeDecorator' => function ($item) use (
                 $currentItemId,
@@ -6190,12 +6191,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 $courseId,
                 $selectedMaxScore,
                 $selectedMinScore,
+                $masteryScore,
                 $displayOrder,
                 $lpItemRepo,
                 $em
             ) {
                 $itemId = $item['iid'];
                 $type = $item['itemType'];
+
+                if ($itemId == $currentItemId) {
+                    return '';
+                }
+                if ($displayOrder < $item['displayOrder']) {
+                    return '';
+                }
+
                 $iconName = str_replace(' ', '', $type);
                 switch ($iconName) {
                     case 'category':
@@ -6209,43 +6219,52 @@ document.addEventListener("DOMContentLoaded", function () {
                         break;
                 }
 
-                if ($itemId == $currentItemId) {
-                    return '';
-                }
-
-                if ($displayOrder < $item['displayOrder']) {
-                    return '';
-                }
-
                 $selectedMaxScoreValue = isset($selectedMaxScore[$itemId]) ? $selectedMaxScore[$itemId] : $item['maxScore'];
                 $selectedMinScoreValue = $selectedMinScore[$itemId] ?? 0;
                 $masteryScoreAsMinValue = $masteryScore[$itemId] ?? 0;
 
-                $return = '<tr>';
-                $return .= '<td '.((TOOL_QUIZ != $type && TOOL_HOTPOTATOES != $type) ? ' colspan="3"' : '').'>';
-                $return .= '<div style="margin-left:'.($item['lvl'] * 20).'px;" class="radio learnpath">';
-                $return .= '<label for="id'.$itemId.'">';
+                $itemIdInt = (int) $itemId;
+                $refInt    = (int) ($item['ref'] ?? 0);
 
                 $checked = '';
-                if (null !== $preRequisiteId) {
-                    $checked = in_array($preRequisiteId, [$itemId, $item['ref']]) ? ' checked="checked" ' : '';
+                if ($preRequisiteId !== 0 && ($preRequisiteId === $itemIdInt || ($refInt !== 0 && $preRequisiteId === $refInt))) {
+                    $checked = ' checked="checked" ';
                 }
 
-                $disabled = 'dir' === $type ? ' disabled="disabled" ' : '';
+                $isDisabled = ('dir' === $type);
+                $disabledAttr = $isDisabled ? ' disabled="disabled" ' : '';
+                $rowHover = $isDisabled ? '' : ' hover:bg-gray-10';
+                $labelClass = $isDisabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer';
 
-                $return .= '<input
-                    '.$checked.' '.$disabled.'
-                    id="id'.$itemId.'"
-                    name="prerequisites"
-                    type="radio"
-                    value="'.$itemId.'" />';
+                $indentPx = (int) ($item['lvl'] ?? 0) * 20;
 
-                $return .= $icon.'&nbsp;&nbsp;'.$item['title'].'</label>';
-                $return .= '</div>';
-                $return .= '</td>';
+                $radio = '
+                <label for="id'.$itemId.'" class="flex items-center gap-3 select-none '.$labelClass.'" style="padding-left:'.$indentPx.'px;">
+                    <input
+                        '.$checked.' '.$disabledAttr.'
+                        id="id'.$itemId.'"
+                        name="prerequisites"
+                        type="radio"
+                        value="'.$itemId.'"
+                        class="h-4 w-4 border-gray-50 text-indigo-600 focus:ring-indigo-500"
+                    />
+                    <span class="flex items-center gap-2 text-sm text-gray-800">'.$icon.'<span>'.$item['title'].'</span></span>
+                </label>
+            ';
 
+                $return = '<tr class="'.$rowHover.'">';
+
+                $isScored = (TOOL_QUIZ == $type || TOOL_HOTPOTATOES == $type);
+
+                // Main cell
+                if ($isScored) {
+                    $return .= '<td class="px-6 py-3">'.$radio.'</td>';
+                } else {
+                    $return .= '<td colspan="3" class="px-6 py-3">'.$radio.'</td>';
+                }
+
+                // Score inputs
                 if (TOOL_QUIZ == $type) {
-                    // let's update max_score Tests information depending of the Tests Advanced properties
                     $exercise = new Exercise($courseId);
                     /** @var CLpItem $itemEntity */
                     $itemEntity = $lpItemRepo->find($itemId);
@@ -6257,61 +6276,26 @@ document.addEventListener("DOMContentLoaded", function () {
                     $item['maxScore'] = $exercise->getMaxScore();
 
                     if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
-                        // Backwards compatibility with 1.9.x use mastery_score as min value
                         $selectedMinScoreValue = $masteryScoreAsMinValue;
                     }
-                    $return .= '<td>';
-                    $return .= '<input
-                        class="form-control"
-                        size="4" maxlength="3"
-                        name="min_'.$itemId.'"
-                        type="number"
-                        min="0"
-                        step="any"
-                        max="'.$item['maxScore'].'"
-                        value="'.$selectedMinScoreValue.'"
-                    />';
-                    $return .= '</td>';
-                    $return .= '<td>';
-                    $return .= '<input
-                        class="form-control"
-                        size="4"
-                        maxlength="3"
-                        name="max_'.$itemId.'"
-                        type="number"
-                        min="0"
-                        step="any"
-                        max="'.$item['maxScore'].'"
-                        value="'.$selectedMaxScoreValue.'"
-                    />';
-                        $return .= '</td>';
-                    }
+
+                    $inputClass = 'w-28 rounded-lg border border-gray-50 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500';
+                    $return .= '<td class="px-6 py-3">
+                    <input class="'.$inputClass.'" name="min_'.$itemId.'" type="number" min="0" step="any" max="'.$item['maxScore'].'" value="'.$selectedMinScoreValue.'" />
+                </td>';
+                    $return .= '<td class="px-6 py-3">
+                    <input class="'.$inputClass.'" name="max_'.$itemId.'" type="number" min="0" step="any" max="'.$item['maxScore'].'" value="'.$selectedMaxScoreValue.'" />
+                </td>';
+                }
 
                 if (TOOL_HOTPOTATOES == $type) {
-                    $return .= '<td>';
-                    $return .= '<input
-                        size="4"
-                        maxlength="3"
-                        name="min_'.$itemId.'"
-                        type="number"
-                        min="0"
-                        step="any"
-                        max="'.$item['maxScore'].'"
-                        value="'.$selectedMinScoreValue.'"
-                    />';
-                        $return .= '</td>';
-                        $return .= '<td>';
-                        $return .= '<input
-                        size="4"
-                        maxlength="3"
-                        name="max_'.$itemId.'"
-                        type="number"
-                        min="0"
-                        step="any"
-                        max="'.$item['maxScore'].'"
-                        value="'.$selectedMaxScoreValue.'"
-                    />';
-                    $return .= '</td>';
+                    $inputClass = 'w-28 rounded-lg border border-gray-50 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500';
+                    $return .= '<td class="px-6 py-3">
+                    <input class="'.$inputClass.'" name="min_'.$itemId.'" type="number" min="0" step="any" max="'.$item['maxScore'].'" value="'.$selectedMinScoreValue.'" />
+                </td>';
+                    $return .= '<td class="px-6 py-3">
+                    <input class="'.$inputClass.'" name="max_'.$itemId.'" type="number" min="0" step="any" max="'.$item['maxScore'].'" value="'.$selectedMaxScoreValue.'" />
+                </td>';
                 }
                 $return .= '</tr>';
 
@@ -6321,13 +6305,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
         $tree = $lpItemRepo->childrenHierarchy($itemRoot, false, $options);
         $return .= $tree;
-        $return .= '</tbody>';
-        $return .= '</table>';
-        $return .= '</div>';
-        $return .= '<div class="form-group">';
-        $return .= '<button class="btn btn--primary" name="submit_button" type="submit">'.
-            get_lang('Save prerequisites settings').'</button>';
+
+        $return .= '        </tbody>';
+        $return .= '      </table>';
+        $return .= '    </div>';
+
+        // Footer actions
+        $return .= '    <div class="border-t border-gray-20 bg-gray-20 px-6 py-4 flex items-center justify-end">';
+        $return .= '      <button class="btn btn--primary" name="submit_button" type="submit">'.get_lang('Save prerequisites settings').'</button>';
+        $return .= '    </div>';
+
+        $return .= '  </div>';
         $return .= '</form>';
+        $return .= '</div>';
 
         return $return;
     }
@@ -6466,7 +6456,15 @@ document.addEventListener("DOMContentLoaded", function () {
             get_lang('Uncompress zip')
         );
 
-        $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath=';
+        $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'
+            .api_get_cidreq()
+            .'&a=upload_file&curdirpath='
+            .'&lp_id='.(int) $this->lp_id
+            .'&lp_auto_add=1';
+
+        $form->addHidden('lp_id', (string) (int) $this->lp_id);
+        $form->addHidden('lp_auto_add', '1');
+
         $form->addMultipleUpload($url);
 
         $lpItem = (new CLpItem())
@@ -6505,9 +6503,53 @@ document.addEventListener("DOMContentLoaded", function () {
             get_lang('Upload'),
         ];
 
+        $uploadHtml = $form->returnForm();
+        $refreshUrl = $this->getCurrentBuildingModeURL();
+
+        $uploadHtml .= '
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  if (typeof window.jQuery === "undefined") {
+    return;
+  }
+
+  var needsReload = false;
+
+  function extractJsonFromUploadData(data) {
+    try {
+      if (!data) return null;
+      if (data.result) return data.result;
+      if (data.responseJSON) return data.responseJSON;
+      if (data.jqXHR && data.jqXHR.responseJSON) return data.jqXHR.responseJSON;
+      if (data.jqXHR && data.jqXHR.responseText) {
+        return JSON.parse(data.jqXHR.responseText);
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // Fired per-file when upload completes
+  jQuery(document).on("fileuploaddone", function (e, data) {
+    var json = extractJsonFromUploadData(data);
+    if (json && (json.lp_refresh === true || json.lp_refresh === 1)) {
+      needsReload = true;
+    }
+  });
+
+  // Fired after all uploads are done
+  jQuery(document).on("fileuploadstop", function () {
+    if (!needsReload) return;
+    window.location.href = '.json_encode($refreshUrl).';
+  });
+});
+</script>';
+
         return Display::tabs(
             $headers,
-            [$documentTree, $videosTree, $new, $form->returnForm()],
+            [$documentTree, $videosTree, $new, $uploadHtml],
             'subtab',
             ['class' => 'mt-3 lp-subtabs']
         );
@@ -7616,26 +7658,37 @@ document.addEventListener("DOMContentLoaded", function () {
     public static function deleteCategory(int $id): bool
     {
         $repo = Container::getLpCategoryRepository();
-        /** @var CLpCategory $category */
+        /** @var CLpCategory|null $category */
         $category = $repo->find($id);
-        if ($category) {
-            $em = Database::getManager();
-            $lps = $category->getLps();
 
-            foreach ($lps as $lp) {
-                $lp->setCategory(null);
-                $em->persist($lp);
-            }
-
-            $course = api_get_course_entity();
-            $session = api_get_session_entity();
-
-            $em->getRepository(ResourceLink::class)->removeByResourceInContext($category, $course, $session);
-
-            return true;
+        if (null === $category) {
+            return false;
         }
 
-        return false;
+        $em  = Database::getManager();
+        $lps = $category->getLps();
+
+        // Detach all learning paths from this category
+        foreach ($lps as $lp) {
+            $lp->setCategory(null);
+            $em->persist($lp);
+        }
+
+        // Remove the resource link of this category in the current context
+        $course  = api_get_course_entity();
+        $session = api_get_session_entity();
+
+        $em->getRepository(ResourceLink::class)->removeByResourceInContext(
+            $category,
+            $course,
+            $session
+        );
+
+        // Remove the category itself
+        $em->remove($category);
+        $em->flush();
+
+        return true;
     }
 
     /**
@@ -8074,18 +8127,40 @@ document.addEventListener("DOMContentLoaded", function () {
      *
      * @return string
      */
-    public function getFinalItemForm()
+    public function getFinalItemForm(): string
     {
         $finalItem = $this->getFinalItem();
+
+        $lpId = (int) $this->lp_id;
+        $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
+
+        $finalItemIid = 0;
         $title = '';
+        $content = '';
 
         if ($finalItem) {
-            $title = $finalItem->get_title();
-            $buttonText = get_lang('Save');
-            $content = $this->getSavedFinalItem();
+            $finalItemIid = (int) $finalItem->get_id();
+            $title = (string) $finalItem->get_title();
+            $content = (string) $this->getSavedFinalItem();
         } else {
-            $buttonText = get_lang('Add this document to the course');
-            $content = $this->getFinalItemTemplate();
+            $title = '';
+            $content = (string) $this->getFinalItemTemplate();
+        }
+
+        // Read stored ref from THIS lp_item row
+        $storedRef = 0;
+        if ($finalItemIid > 0) {
+            $sql = "SELECT ref
+            FROM $tableLpItem
+            WHERE iid = $finalItemIid
+            LIMIT 1";
+            $res = Database::query($sql);
+            if ($res && Database::num_rows($res) > 0) {
+                $row = Database::fetch_array($res);
+                if (isset($row['ref']) && is_numeric($row['ref'])) {
+                    $storedRef = (int) $row['ref'];
+                }
+            }
         }
 
         $editorConfig = [
@@ -8095,14 +8170,33 @@ document.addEventListener("DOMContentLoaded", function () {
             'FullPage' => true,
         ];
 
-        $url = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
-            'type' => 'document',
-            'lp_id' => $this->lp_id,
-        ]);
+        // Keep build context params
+        $pathItem = isset($_REQUEST['path_item']) ? (int) $_REQUEST['path_item'] : 0;
+        $gradebook = isset($_REQUEST['gradebook']) ? (int) $_REQUEST['gradebook'] : null;
+        $origin = isset($_REQUEST['origin']) ? (string) $_REQUEST['origin'] : null;
 
-        $form = new FormValidator('final_item', 'POST', $url);
+        $qs = [
+            'action' => 'add_final_item',
+            'lp_id' => $lpId,
+        ];
+
+        if ($pathItem > 0) {
+            $qs['path_item'] = $pathItem;
+        }
+        if (null !== $gradebook) {
+            $qs['gradebook'] = $gradebook;
+        }
+        if (null !== $origin && '' !== $origin) {
+            $qs['origin'] = Security::remove_XSS($origin);
+        }
+
+        $actionUrl = 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query($qs);
+
+        $form = new FormValidator('final_item', 'POST', $actionUrl);
+
+        // ---------- Form fields (order matters for UX) ----------
         $form->addText('title', get_lang('Title'));
-        $form->addButtonSave($buttonText);
+
         $form->addHtml(
             Display::return_message(
                 'Variables :<br><br> <b>((certificate))</b> <br> <b>((skill))</b>',
@@ -8110,6 +8204,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 false
             )
         );
+
+        // Hidden that will ALWAYS be posted (even if the select is disabled/hidden)
+        $form->addHidden('final_item_ref', $storedRef > 0 ? (string) $storedRef : '');
+        // Do not send a POST field called "action" (it would override GET[action])
+        $form->addHidden('final_item_save', '1');
 
         $renderer = $form->defaultRenderer();
         $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp_certificate');
@@ -8121,22 +8220,118 @@ document.addEventListener("DOMContentLoaded", function () {
             false,
             $editorConfig
         );
-        $form->addHidden('action', 'add_final_item');
-        $form->addHidden('path', Session::read('pathItem'));
-        $form->addHidden('previous', $this->get_last());
-        $form->setDefaults(
-            ['title' => $title, 'content_lp_certificate' => $content]
-        );
+
+        // Advanced settings AFTER the editor (as requested)
+        if (api_is_allowed_to_edit(null, true)) {
+            $form->addElement('advanced_settings', 'advanced_params', get_lang('Advanced settings'));
+            $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+            GradebookUtils::load_gradebook_select_in_tool($form);
+            $form->addElement('html', '</div>');
+
+            // Sync select -> hidden on change + submit
+            $form->addElement('html', '
+<script>
+(function () {
+  function findGradebookSelect() {
+    var sel = document.querySelector("select[name=\'selecteval\']");
+    if (sel) return sel;
+
+    var container = document.getElementById("advanced_params_options");
+    if (!container) return null;
+    var selects = container.querySelectorAll("select");
+    if (!selects || !selects.length) return null;
+    return selects[0];
+  }
+
+  function getStoredRef() {
+    var hidden = document.querySelector("input[name=\'final_item_ref\']");
+    if (!hidden) return "";
+    return (hidden.value || "").toString().trim();
+  }
+
+  function applyStoredRefToSelect() {
+    var sel = findGradebookSelect();
+    if (!sel) return;
+
+    var stored = getStoredRef();
+    if (!stored) return;
+
+    var opt = sel.querySelector("option[value=\'" + stored.replace(/\'/g, "\\\'") + "\']");
+    if (opt) {
+      sel.value = stored;
+      try { sel.dispatchEvent(new Event("change", { bubbles: true })); } catch (e) {}
+    }
+  }
+
+  function syncFinalRef() {
+    var hidden = document.querySelector("input[name=\'final_item_ref\']");
+    if (!hidden) return;
+
+    var sel = findGradebookSelect();
+    if (!sel) return;
+
+    try { sel.disabled = false; } catch (e) {}
+    hidden.value = sel.value || "";
+  }
+
+  document.addEventListener("change", function (e) {
+    var sel = findGradebookSelect();
+    if (sel && e.target === sel) {
+      syncFinalRef();
+    }
+  });
+
+  document.addEventListener("submit", function (e) {
+    var f = e.target;
+    if (!f || f.getAttribute("name") !== "final_item") return;
+    syncFinalRef();
+  }, true);
+
+  function init() {
+    applyStoredRefToSelect();
+    syncFinalRef();
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+  init();
+})();
+</script>
+');
+        }
+
+        // Save button at the END (as requested)
+        $form->addButtonSave(get_lang('Save'));
+
+        $form->setDefaults([
+            'title' => $title,
+            'content_lp_certificate' => $content,
+            'final_item_ref' => $storedRef > 0 ? (string) $storedRef : '',
+            'selecteval' => $storedRef > 0 ? $storedRef : null,
+        ]);
 
         if ($form->validate()) {
             $values = $form->exportValues();
-            $lastItemId = $this->getLastInFirstLevel();
+
+            $newTitle = trim((string) ($values['title'] ?? ''));
+            $newContent = (string) ($values['content_lp_certificate'] ?? '');
+
+            // Read ref from hidden (most reliable)
+            $selectedRef = 0;
+            $rawRef = trim((string) ($values['final_item_ref'] ?? ''));
+            if ('' !== $rawRef && preg_match('/(\d+)/', $rawRef, $m)) {
+                $selectedRef = (int) $m[1];
+            }
+
+            // Mark LP as modified
+            $this->set_modified_on();
 
             if (!$finalItem) {
+                $lastItemId = $this->getLastInFirstLevel();
+
                 $documentId = $this->create_document(
                     $this->course_info,
-                    $values['content_lp_certificate'],
-                    $values['title'],
+                    $newContent,
+                    $newTitle,
                     'html',
                     0,
                     0,
@@ -8144,22 +8339,95 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
 
                 $lpItemRepo = Container::getLpItemRepository();
-                $root       = $lpItemRepo->getRootItem($this->get_id());
+                $root = $lpItemRepo->getRootItem($this->get_id());
 
-                $this->add_item(
+                // Capture created item iid directly if add_item returns it
+                $created = $this->add_item(
                     $root,
                     $lastItemId,
                     TOOL_LP_FINAL_ITEM,
                     $documentId,
-                    $values['title']
+                    $newTitle
                 );
 
-                Display::addFlash(
-                    Display::return_message(get_lang('Added'))
-                );
+                if (is_numeric($created)) {
+                    $finalItemIid = (int) $created;
+                } else {
+                    // Fallback: re-fetch iid
+                    $sqlIid = "SELECT iid
+                       FROM $tableLpItem
+                       WHERE lp_id = $lpId
+                         AND item_type = '".Database::escape_string(TOOL_LP_FINAL_ITEM)."'
+                       ORDER BY iid DESC
+                       LIMIT 1";
+                    $resIid = Database::query($sqlIid);
+                    if ($resIid && Database::num_rows($resIid) > 0) {
+                        $rowIid = Database::fetch_array($resIid);
+                        $finalItemIid = isset($rowIid['iid']) ? (int) $rowIid['iid'] : 0;
+                    }
+                }
+
+                Display::addFlash(Display::return_message(get_lang('Added'), 'confirmation', false));
             } else {
-                $this->edit_document();
+                // Update underlying document (path stores the document id)
+                $documentId = isset($finalItem->path) ? (int) $finalItem->path : 0;
+
+                if ($documentId > 0) {
+                    $em = Database::getManager();
+                    $document = $em->getRepository(CDocument::class)->find($documentId);
+
+                    if ($document) {
+                        $documentRepo = Container::getDocumentRepository();
+
+                        $documentRepo->setResourceName($document, $newTitle);
+
+                        $updated = $documentRepo->updateResourceFileContent($document, $newContent);
+                        if (!$updated) {
+                            $node = $document->getResourceNode();
+                            if ($node && method_exists($node, 'setContent')) {
+                                $node->setContent($newContent);
+                            }
+                        }
+
+                        $documentRepo->update($document, true);
+                    }
+                }
+
+                // Update LP item title
+                if ($finalItemIid > 0) {
+                    $safeTitle = Database::escape_string($newTitle);
+                    Database::query("UPDATE $tableLpItem SET title = '$safeTitle' WHERE iid = $finalItemIid");
+                }
+
+                Display::addFlash(Display::return_message(get_lang('Update successful'), 'confirmation', false));
             }
+
+            // Persist ref in c_lp_item.ref for THIS item
+            if (api_is_allowed_to_edit(null, true) && $finalItemIid > 0) {
+                if ($selectedRef > 0) {
+                    Database::query("UPDATE $tableLpItem SET ref = $selectedRef WHERE iid = $finalItemIid");
+                } else {
+                    Database::query("UPDATE $tableLpItem SET ref = NULL WHERE iid = $finalItemIid");
+                }
+            }
+
+            // Redirect back to the final item form (same action), so the UI doesn't "disappear"
+            $redirectQs = [
+                'action' => 'add_final_item',
+                'lp_id' => $lpId,
+            ];
+            if ($pathItem > 0) {
+                $redirectQs['path_item'] = $pathItem;
+            }
+            if (null !== $gradebook) {
+                $redirectQs['gradebook'] = $gradebook;
+            }
+            if (null !== $origin && '' !== $origin) {
+                $redirectQs['origin'] = Security::remove_XSS($origin);
+            }
+
+            \ChamiloSession::write('refresh', 1);
+            api_location('lp_controller.php?'.api_get_cidreq().'&'.http_build_query($redirectQs));
         }
 
         return $form->returnForm();
@@ -9135,7 +9403,7 @@ document.addEventListener("DOMContentLoaded", function () {
      *
      * @return learnpathItem
      */
-    private function getFinalItem()
+    public function getFinalItem()
     {
         if (empty($this->items)) {
             return null;
@@ -9165,15 +9433,46 @@ document.addEventListener("DOMContentLoaded", function () {
      *
      * @return string
      */
-    private function getSavedFinalItem()
+    private function getSavedFinalItem(): string
     {
         $finalItem = $this->getFinalItem();
 
-        $repo = Container::getDocumentRepository();
-        /** @var CDocument $document */
-        $document = $repo->find($finalItem->path);
+        if (!$finalItem || empty($finalItem->path)) {
+            return '';
+        }
 
-        return $document ? $repo->getResourceFileContent($document) : '';
+        $documentId = (int) $finalItem->path;
+
+        // Always load the real course document entity (avoid loading other resource types like Skill).
+        $em = Database::getManager();
+        /** @var CDocument|null $document */
+        $document = $em->getRepository(CDocument::class)->find($documentId);
+
+        if (!$document) {
+            // Document was deleted or path is corrupted.
+            return '';
+        }
+
+        $documentRepo = Container::getDocumentRepository();
+
+        try {
+            return (string) $documentRepo->getResourceFileContent($document);
+        } catch (FileNotFoundException $e) {
+            // Fallback for cases where the resource has no file on disk (editable content, etc.)
+            $node = $document->getResourceNode();
+
+            if ($node
+                && method_exists($node, 'hasEditableTextContent')
+                && $node->hasEditableTextContent()
+                && method_exists($node, 'getEditableTextContent')
+            ) {
+                return (string) $node->getEditableTextContent();
+            }
+
+            return '';
+        } catch (\Throwable $e) {
+            return '';
+        }
     }
 
     /**

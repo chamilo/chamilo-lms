@@ -2,56 +2,77 @@ Feature: Ticket
   In order to use the ticket tool
   The admin should be able to create a ticket
 
+
   Background:
     Given I am a platform administrator
 
+
   Scenario: Check ticket categories
     Given I am on "/main/ticket/categories.php?project_id=1"
+    And I wait for the page to be loaded
     Then I should see "Enrollment"
+
 
   Scenario: Check ticket projects
     Given I am on "/main/ticket/projects.php?project_id=1"
+    And I wait for the page to be loaded
     Then I should see "Ticket System"
+
 
   Scenario: Check ticket status
     Given I am on "/main/ticket/status.php"
+    And I wait for the page to be loaded
     Then I should see "New"
+
 
   Scenario: Check ticket priorities
     Given I am on "/main/ticket/priorities.php"
+    And I wait very long for the page to be loaded
     Then I should see "Normal"
+
 
   Scenario: Create a ticket
     Given I am on "/main/ticket/new_ticket.php?project_id=1"
+    And I wait for the page to be loaded
     When I fill in the following:
       | subject | First ticket |
     And I fill in editor field "content" with "Ticket description"
     And I fill in select2 input "#category_id" with id "1" and value "Enrollment: Tickets about enrollment"
-    #category id = 1 => Enrollment: Tickets about enrollment
+   #category id = 1 => Enrollment: Tickets about enrollment
     And I press "Send message"
     Then wait very long for the page to be loaded
-    Then I should see "created"
+    And I should see "First ticket"
+    And I should not see an error
 #
-#  Scenario: Create ticket project
-#    Given I am on "/main/ticket/projects.php?action=add"
-#    When I fill in the following:
-#      | name | Project 2 |
-#    And I fill in editor field "description" with "Project description"
-#    And I press "Save"
-#    Then I should see "Added"
+  Scenario: Create ticket project
+    Given I am on "/main/ticket/projects.php?action=add"
+    And I wait for the page to be loaded
+    When I fill in the following:
+      | name | Project 2 |
+    And I fill in editor field "description" with "Project description"
+    And I press "submit"
+    Then wait very long for the page to be loaded
+    And I should see "Project 2"
+    And I should not see an error
 #
-#  Scenario: Create ticket status
-#    Given I am on "/main/ticket/status.php?action=add"
-#    When I fill in the following:
-#      | name | Status 1 |
-#    And I fill in editor field "description" with "Status"
-#    And I press "Save"
-#    Then I should see "Added"
+  Scenario: Create ticket status
+    Given I am on "/main/ticket/status.php?action=add"
+    And I wait for the page to be loaded
+    When I fill in the following:
+      | name | Status 1 |
+    And I fill in editor field "description" with "Status"
+    And I press "submit"
+    Then wait very long for the page to be loaded
+    And I should see "Status 1"
+    And I should not see an error
 #
-#  Scenario: Create priority
-#    Given I am on "/main/ticket/priorities.php?action=add"
-#    When I fill in the following:
-#      | name | Priority 1 |
-#    And I fill in editor field "description" with "Priority"
-#    And I press "Save"
-#    Then I should see "Added"
+  Scenario: Create priority
+    Given I am on "/main/ticket/priorities.php?action=add"
+    And I wait for the page to be loaded
+    When I fill in the following:
+      | name | Priority 1 |
+    And I fill in editor field "description" with "Priority"
+    And I press "submit"
+    Then wait very long for the page to be loaded
+    And I should see "Priority 1"
+    And I should not see an error

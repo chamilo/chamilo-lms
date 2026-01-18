@@ -1,11 +1,33 @@
 <template>
   <div v-if="item">
+    <nav class="mb-3 flex items-center gap-2 text-sm text-gray-500">
+      <BaseAppLink
+        :to="{ name: 'MessageList', query: listQuery }"
+        class="text-primary hover:underline"
+      >
+        {{ t("Messages") }}
+      </BaseAppLink>
+      <span class="text-gray-300">/</span>
+      <span class="text-gray-700 line-clamp-1">{{ item.title }}</span>
+    </nav>
+
     <SectionHeader :title="item.title">
+      <BaseButton
+        icon="back"
+        only-icon
+        type="black"
+        :title="t('Back')"
+        :aria-label="t('Back')"
+        @click="goBackToList"
+      />
+
       <BaseButton
         :disabled="isLoading"
         icon="reply"
         only-icon
         type="black"
+        :title="t('Reply to this message')"
+        :aria-label="t('Reply to this message')"
         @click="reply"
       />
 
@@ -14,6 +36,8 @@
         icon="reply-all"
         only-icon
         type="black"
+        :title="t('Reply to all')"
+        :aria-label="t('Reply to all')"
         @click="replyAll"
       />
 
@@ -21,6 +45,8 @@
         icon="calendar-plus"
         only-icon
         type="black"
+        :title="t('Add to calendar')"
+        :aria-label="t('Add to calendar')"
         @click="createEvent"
       />
 
@@ -28,6 +54,8 @@
         icon="delete"
         only-icon
         type="black"
+        :title="t('Delete')"
+        :aria-label="t('Delete')"
         @click="confirmDelete"
       />
     </SectionHeader>
@@ -146,6 +174,7 @@ import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import BaseAvatarList from "../../components/basecomponents/BaseAvatarList.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
+import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
 import { useNotification } from "../../composables/notification"
 import { useMessageReceiverFormatter } from "../../composables/message/messageFormatter"
 import { MESSAGE_TYPE_INBOX } from "../../constants/entity/message"
@@ -175,14 +204,27 @@ const item = ref(null)
 const myReceiver = ref(null)
 const notification = useNotification()
 
+const listQuery = computed(() => {
+  const q = { ...route.query }
+  // Keep navigation context, but drop message-specific params.
+  delete q.id
+  delete q.receiverType
+  delete q.all
+  delete q.send_to_user
+  delete q.prefill
+  return q
+})
+
+function goBackToList() {
+  router.push({ name: "MessageList", query: listQuery.value })
+}
+
 const receiverType = route.query.receiverType ? parseInt(route.query.receiverType) : MESSAGE_TYPE_INBOX
 store.dispatch("message/load", id).then((responseItem) => {
   item.value = responseItem
 
   const rawRt = route.query.receiverType ? Number(route.query.receiverType) : undefined
-  myReceiver.value = rawRt
-    ? findMyReceiver(responseItem, rawRt)
-    : findMyReceiver(responseItem, MESSAGE_TYPE_INBOX)
+  myReceiver.value = rawRt ? findMyReceiver(responseItem, rawRt) : findMyReceiver(responseItem, MESSAGE_TYPE_INBOX)
 
   if (!myReceiver.value) {
     const all = [...responseItem.receiversTo, ...responseItem.receiversCc, ...responseItem.receiversSender]
@@ -190,18 +232,18 @@ store.dispatch("message/load", id).then((responseItem) => {
   }
 
   if (myReceiver.value && !myReceiver.value.read) {
-    messageRelUserService
-      .update(myReceiver.value["@id"], { read: true })
-      .then(() => {
-        messageRelUserStore.findUnreadCount()
-        window.dispatchEvent(new CustomEvent("message:read", {
+    messageRelUserService.update(myReceiver.value["@id"], { read: true }).then(() => {
+      messageRelUserStore.findUnreadCount()
+      window.dispatchEvent(
+        new CustomEvent("message:read", {
           detail: {
             iri: responseItem["@id"],
             receiverId: myReceiver.value.receiver["@id"],
             receiverType: myReceiver.value.receiverType,
           },
-        }))
-      })
+        }),
+      )
+    })
   }
 })
 
@@ -225,7 +267,7 @@ async function deleteMessage(message) {
     }
 
     await messageRelUserStore.findUnreadCount()
-    await router.push({ name: "MessageList" })
+    await router.push({ name: "MessageList", query: listQuery.value })
   } catch (e) {
     notification.showErrorNotification(t("Error deleting message"))
   }
@@ -234,7 +276,7 @@ async function deleteMessage(message) {
 function confirmDelete() {
   confirm.require({
     header: t("Confirmation"),
-    message: t(`Are you sure you want to delete "${item.value.title}"?`),
+    message: t(`Are you sure you want to delete {0}?`, [item.value.title]),
     accept: async () => {
       await deleteMessage(item.value)
     },

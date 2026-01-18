@@ -1,7 +1,7 @@
 <template>
   <BaseDialog
     v-model:isVisible="visibleProxy"
-    :title="`${t('Move file')} — ${fileTitle}`"
+    :title="`${t('Move {0}', [fileTitle])}`"
     header-icon="file-swap"
     :width="'520px'"
   >
@@ -21,7 +21,7 @@
           label=""
         />
         <p class="text-xs text-gray-500 mt-2">
-          {{ t('Only non-root folders are shown to avoid leaving items in root.') }}
+          {{ t("Only non-root folders are shown to avoid leaving items in root.") }}
         </p>
       </div>
 

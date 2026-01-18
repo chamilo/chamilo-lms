@@ -24,6 +24,7 @@ use GradebookUtils;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 /**
  * @implements ProcessorInterface<CStudentPublication, CStudentPublication>
@@ -47,6 +48,15 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
     ): CStudentPublication {
         /** @var CStudentPublication $publication */
         $publication = $data;
+        $isUpdate = null !== $publication->getIid();
+        $previous = $context['previous_data'] ?? null;
+        $originalUser = $previous instanceof CStudentPublication ? $previous->getUser() : null;
+
+        /** @var User|null $currentUser */
+        $currentUser = $this->security->getUser();
+        if (!$currentUser instanceof User) {
+            $currentUser = null;
+        }
 
         $result = $this->persistProcessor->process($publication, $operation, $uriVariables, $context);
 
@@ -56,11 +66,6 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
         $session = $courseLink->getSession();
         $group = $courseLink->getGroup();
 
-        /** @var User $currentUser */
-        $currentUser = $this->security->getUser();
-
-        $isUpdate = null !== $publication->getIid();
-
         if (!$assignment) {
             $assignment = new CStudentPublicationAssignment();
             $assignment->setPublication($publication);
@@ -68,14 +73,22 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
             $this->entityManager->persist($assignment);
         }
 
-        $payload = $context['request']->toArray();
+        $payload = [];
+        if (isset($context['request'])) {
+            try {
+                $payload = $context['request']->toArray();
+            } catch (Throwable $e) {
+                // Non-fatal: keep processing without payload.
+                $payload = [];
+            }
+        }
 
         if (\array_key_exists('qualification', $payload)) {
             $publication->setQualification((float) $payload['qualification']);
 
-            $user = $this->security->getUser();
-            if ($user instanceof User) {
-                $publication->setQualificatorId($user->getId());
+            // Store who graded (qualificator) and when.
+            if ($currentUser instanceof User) {
+                $publication->setQualificatorId($currentUser->getId());
                 $publication->setDateOfQualification(new DateTime());
             }
         }
@@ -101,10 +114,17 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
         if (null !== $assignment->getIid()) {
             $publication->setHasProperties($assignment->getIid());
         }
-        $publication
-            ->setViewProperties(true)
-            ->setUser($currentUser)
-        ;
+
+        $publication->setViewProperties(true);
+        if (!$isUpdate) {
+            if ($currentUser instanceof User) {
+                $publication->setUser($currentUser);
+            }
+        } else {
+            if ($originalUser instanceof User) {
+                $publication->setUser($originalUser);
+            }
+        }
 
         $this->entityManager->flush();
 

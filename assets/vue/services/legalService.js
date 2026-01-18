@@ -9,28 +9,41 @@ const legalExtensions = {
     })
     return fetch(`${ENTRYPOINT}legals?${params.toString()}`)
   },
+
+  async findLatestByLanguage(languageId) {
+    const params = new URLSearchParams({
+      languageId: languageId,
+      "order[version]": "desc",
+      itemsPerPage: "1",
+    })
+    return fetch(`${ENTRYPOINT}legals?${params.toString()}`)
+  },
+
+  async findByLanguageAndVersion(languageId, version) {
+    const params = new URLSearchParams({
+      languageId: languageId,
+      version: version,
+      "order[type]": "asc",
+      itemsPerPage: "50",
+    })
+    return fetch(`${ENTRYPOINT}legals?${params.toString()}`)
+  },
+
+  async findAllType0() {
+    const params = new URLSearchParams({
+      type: "0",
+      "order[version]": "desc",
+      itemsPerPage: "50",
+    })
+    return fetch(`${ENTRYPOINT}legals?${params.toString()}`)
+  },
+
   async saveOrUpdateLegal(payload) {
-    console.log("Saving or updating legal terms")
     return fetch(`/legal/save`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     })
-  },
-  async fetchExtraFields(termId = null) {
-    try {
-      const url = termId ? `/legal/extra-fields?termId=${termId}` : `/legal/extra-fields`
-      const response = await fetch(url)
-      if (!response.ok) {
-        throw new Error("Network response was not ok")
-      }
-      return await response.json()
-    } catch (error) {
-      console.error("Error loading extra fields:", error)
-      throw error
-    }
   },
 }
 

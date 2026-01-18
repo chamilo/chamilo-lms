@@ -10,7 +10,7 @@
       id="mailerDsn"
       :help-text="
         t(
-          'The DSN fully includes all parameters needed to connect to the mail service. You can learn more at %s. The default value is null://null and will disable e-mail sending. Use native://default to use the default PHP configuration on your server. Here are a few examples of supported DSN syntaxes: %s.',
+          'The DSN fully includes all parameters needed to connect to the mail service. You can learn more at {0}. The default value is null://null and will disable e-mail sending. Use native://default to use the default PHP configuration on your server. Here are a few examples of supported DSN syntaxes: {1}.',
           [
             'https://symfony.com/doc/6.4/mailer.html#using-built-in-transports',
             'https://symfony.com/doc/6.4/mailer.html#using-a-3rd-party-transport',
@@ -87,6 +87,7 @@ async function testSmtp() {
 
     const formData = new FormData()
     formData.append("mailerDsn", installerData.value.stepData.mailerDsn)
+    formData.append("mailer_dsn", installerData.value.stepData.mailerDsn)
     formData.append("mailerFromEmail", installerData.value.stepData.mailerFromEmail)
     formData.append("mailerFromName", installerData.value.stepData.mailerFromName)
     formData.append("mailerTestDestination", mailerTestDestination.value)

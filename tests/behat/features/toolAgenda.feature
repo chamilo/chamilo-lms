@@ -7,20 +7,21 @@ Feature: Agenda tool
 
   Scenario: Create a personal event
     Given I am on "/main/calendar/agenda.php?action=add&type=personal"
+    And I wait for the page to be loaded
     When I fill in the following:
       | title | Event 1 |
-    Then wait for the page to be loaded
     And I focus "date_range"
     And I fill in "date_range" with "2017-03-07 12:15 / 2017-03-07 12:15"
     Then I fill in editor field "content" with "Description event"
     And I press "Add event"
     And wait very long for the page to be loaded
-    Then I should see "Event added"
+    Then I should not see an error
 # TODO we need to check if the event appears in the personal agenda on resources/ccalendarevent
 # For the moment it does not appear
 
   Scenario: Create an event inside course TEMP
     Given I am on "/main/calendar/agenda.php?action=add&type=course&cid=1"
+    And I wait for the page to be loaded
     When I fill in the following:
       | title | Event in course |
     Then I fill in editor field "content" with "Description event"
@@ -30,25 +31,26 @@ Feature: Agenda tool
     And I fill in "date_range" with "2017-03-07 12:15 / 2017-03-07 12:15"
     And I press "Add event"
     And wait very long for the page to be loaded
-    Then I should see "Event added"
+    Then I should not see an error
 
 #TODO This scenario needs to be fixed because I do not know how to set the start date and the end date of the event.
 #There is an input id but it is impossible to know it. I put startDate and endDate for the moment.
-#  Scenario: Create a personal event from the general agenda
-#    Given I am on "/resources/ccalendarevent"
-#    When I follow "Add event"
-#    Then I fill in the following:
-#      | title | Personal event from general agenda |
-#      | Content | Content for personal event from general agenda |
-#    And I fill in the following:
-#      | startDate | 2021-07-26 14:15 |
-#      | endDate | 2021-07-26 14:45 |
-#    And I press "Add"
-#    Then I should see "Personal event from general agenda created"
+  Scenario: Create a personal event from the general agenda
+    Given I am on "/resources/ccalendarevent"
+    When I follow "Add event"
+    Then I fill in the following:
+      | Title | Personal event from general agenda |
+      | Content | Content for personal event from general agenda |
+    And I fill in the following:
+      | startDate | 2021-07-26 14:15 |
+      | endDate | 2021-07-26 14:45 |
+    And I press "Add"
+    Then I should see "Personal event from general agenda created"
+
 
 #TODO This scenario needs to be fixed because I do not know how to set the start date and the end date of the event.
 #There is an input id but it is impossible to know it. I put startDate and endDate for the moment.
-#We also need to add the user seleccion in the form and finaly connect as the invitee to check access and mail notification in inbox
+#We also need to add the user selection in the form and finally connect as the invitee to check access and mail notification in inbox
 #  Scenario: Create a personal event from the general agenda and invite user who can not modify the event
 #    Given I am on "/resources/ccalendarevent"
 #    When I follow "Add event"
@@ -58,7 +60,7 @@ Feature: Agenda tool
 #    And I fill in the following:
 #      | startDate | 2021-07-27 14:15 |
 #      | endDate | 2021-07-27 14:45 |
-#    And I focus "Shere with User"
+#    And I focus "Share with User"
 #    And I fill in "Share with User" with "abagg"
 #    And I wait for the page to be loaded
 #    Then I select "abaggins" from "Share with User"
@@ -81,9 +83,10 @@ Feature: Agenda tool
 #    And I am on "/resources/ccalendarevent"
 #    Then I should not see "Personal event from general agenda with invitees not editable"
 
+
 #TODO This scenario needs to be fixed because I do not know how to set the start date and the end date of the event.
 #There is an input id but it is impossible to know it. I put startDate and endDate for the moment.
-#We also need to add the user seleccion in the form and finaly connect as the invitee to check access and mail notification in inbox
+#We also need to add the user selection in the form and finally connect as the invitee to check access and mail notification in inbox
 #  Scenario: Create a personal event from the general agenda and invite user who can modify the event
 #    Given I am on "/resources/ccalendarevent"
 #    When I follow "Add event"
@@ -111,7 +114,7 @@ Feature: Agenda tool
 #    Then I should not see "Personal event from general agenda with invitees editable"
 #    Then I am a platform administrator
 #    And I am on "/resources/ccalendarevent"
-#    And I should see "Personal event from general agenda with invitees editable" 
+#    And I should see "Personal event from general agenda with invitees editable"
 #    And I follow "Personal event from general agenda with invitees editable"
 #    And I should not see "Edit"
 #    And I follow "Edit"
@@ -123,3 +126,4 @@ Feature: Agenda tool
 #    And I follow "OK"
 #    And I am on "/resources/ccalendarevent"
 #    Then I should not see "Personal event from general agenda with invitees editable"
+

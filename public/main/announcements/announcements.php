@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
+use Chamilo\CourseBundle\Entity\CGroup;
 
 /**
  * @author Frederik Vermeire <frederik.vermeire@pandora.be>, UGent Internship
@@ -57,12 +58,8 @@ $isTutor = false;
 if (!empty($group_id)) {
     $groupEntity = api_get_group_entity($group_id);
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
-        'name' => get_lang('Groups'),
-    ];
-    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$groupEntity->getTitle(),
+        'name' => $groupEntity->getTitle(),
     ];
 
     if (false === $allowToEdit) {
@@ -154,6 +151,12 @@ switch ($action) {
 
         break;
     case 'list':
+
+        $gid = (int) ($_GET['gid'] ?? 0);
+        $group = null;
+        if ($gid > 0) {
+            $group = Database::getManager()->getRepository(CGroup::class)->find($gid); // PK = iid
+        }
         $searchForm = new FormValidator(
             'search_simple',
             'post',

@@ -2,14 +2,16 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course as CourseEntity;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AiHelper;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -1640,7 +1642,7 @@ HTML;
             $hotspotColor = 0;
             if (HOT_SPOT_DELINEATION != $answerType) {
                 $answerList = '
-        <div class="p-4 rounded-md border border-gray-25">
+        <div class="card p-4 rounded-md border border-gray-25">
             <h5 class="font-bold text-lg mb-2 text-primary">'.get_lang('Image zones').'</h5>
             <ol class="list-decimal ml-6 space-y-2 text-primary">
         ';
@@ -1666,12 +1668,12 @@ HTML;
             if ($freeze) {
                 $relPath = api_get_path(WEB_CODE_PATH);
                 echo "
-        <div class=\"flex space-x-4\">
-            <div class=\"w-3/4\">
-                <div id=\"hotspot-preview-$questionId\" class=\"bg-gray-10 w-full bg-center bg-no-repeat bg-contain border border-gray-25\"></div>
-            </div>
-            <div class=\"w-1/4\">
+        <div class=\"w-100\">
                 $answerList
+            </div>
+        <div class=\"flex space-x-4\">
+            <div class=\"w-100\">
+                <div id=\"hotspot-preview-$questionId\" class=\"bg-gray-10 w-full bg-center bg-no-repeat bg-contain border border-gray-25\"></div>
             </div>
         </div>
         <script>
@@ -1701,12 +1703,15 @@ HTML;
         <input type="hidden" name="hidden_hotspot_id" value="$questionId" />
         <div class="exercise_questions">
             $questionDescription
+            <div class="mb-4">
+              $answerList
+            </div>
             <div class="flex space-x-4">
 HOTSPOT;
             }
 
             $relPath = api_get_path(WEB_CODE_PATH);
-            $s .= "<div class=\"w-3/4\">
+            $s .= "<div>
            <div class=\"hotspot-image bg-gray-10 border border-gray-25 bg-center bg-no-repeat bg-contain\"></div>
             <script>
                 $(function() {
@@ -1720,9 +1725,6 @@ HOTSPOT;
                     });
                 });
             </script>
-        </div>
-        <div class=\"w-1/4\">
-            $answerList
         </div>
     ";
 
@@ -2030,8 +2032,12 @@ HOTSPOT;
             $lp_id,
             $lp_item_id
         );
-        if (isset($_SESSION['expired_time']) && isset($_SESSION['expired_time'][$time_control_key])) {
-            $return_value = $_SESSION['expired_time'][$time_control_key];
+	if (isset($_SESSION['expired_time']) && isset($_SESSION['expired_time'][$time_control_key])) {
+            if ($_SESSION['expired_time'][$time_control_key] instanceof DateTimeInterface) {
+                $return_value = $_SESSION['expired_time'][$time_control_key]->format('Y-m-d H:i:s');
+            } else {
+                $return_value = $_SESSION['expired_time'][$time_control_key];
+            }
         }
 
         return $return_value;
@@ -3400,12 +3406,12 @@ EOT;
 
         $qb = $repo->getResourcesByCourse($course, $session);
 
-        $qb->andWhere('resourceLink.endVisibilityAt IS NULL');
-
+        $qb->andWhere('links.deletedAt IS NULL');
+        $qb->andWhere('links.endVisibilityAt IS NULL');
         if ($onlyActiveExercises) {
-            $qb->andWhere('resourceLink.visibility = 2');
+            $qb->andWhere('links.visibility = 2');
         } else {
-            $qb->andWhere('resourceLink.visibility IN (0,2)');
+            $qb->andWhere('links.visibility IN (0,2)');
         }
 
         $qb->orderBy('resource.title', 'ASC');
@@ -4451,24 +4457,48 @@ EOT;
         return $res;
     }
 
-    /**
-     * @param int $exe_id
-     */
     public static function create_chat_exercise_session($exe_id)
     {
-        if (!isset($_SESSION['current_exercises'])) {
+        $exeId = (int) $exe_id;
+        if ($exeId <= 0) {
+            return;
+        }
+
+        if (!isset($_SESSION['current_exercises']) || !is_array($_SESSION['current_exercises'])) {
             $_SESSION['current_exercises'] = [];
         }
-        $_SESSION['current_exercises'][$exe_id] = true;
+        $_SESSION['current_exercises'][$exeId] = true;
+
+        try {
+            /** @var AiHelper $aiHelper */
+            $aiHelper = Container::$container->get(AiHelper::class);
+            $aiHelper->markUserInTest((int) $exeId);
+        } catch (\Throwable $e) {
+            // Ignore on legacy context (no hard dependency).
+        }
     }
 
-    /**
-     * @param int $exe_id
-     */
     public static function delete_chat_exercise_session($exe_id)
     {
-        if (isset($_SESSION['current_exercises'])) {
-            $_SESSION['current_exercises'][$exe_id] = false;
+        $exeId = (int) $exe_id;
+        if ($exeId <= 0) {
+            return;
+        }
+
+        if (isset($_SESSION['current_exercises']) && is_array($_SESSION['current_exercises'])) {
+            unset($_SESSION['current_exercises'][$exeId]);
+
+            if (empty($_SESSION['current_exercises'])) {
+                unset($_SESSION['current_exercises']);
+            }
+        }
+
+        try {
+            /** @var AiHelper $aiHelper */
+            $aiHelper = Container::$container->get(AiHelper::class);
+            $aiHelper->clearUserInTest((int) $exeId);
+        } catch (\Throwable $e) {
+            // Ignore on legacy context (no hard dependency).
         }
     }
 
@@ -5525,26 +5555,34 @@ EOT;
     public static function getOralFeedbackForm($attemptId, $questionId)
     {
         $view = new Template('', false, false, false, false, false, false);
-        $view->assign('type', Asset::EXERCISE_FEEDBACK);
+
+        $view->assign('type', OralExpression::RECORDING_TYPE_FEEDBACK);
         $view->assign('question_id', $questionId);
         $view->assign('t_exercise_id', $attemptId);
+
         $template = $view->get_template('exercise/oral_expression.html.twig');
 
         return $view->fetch($template);
     }
 
     /**
-     * Retrieves the generated audio files for an oral question in an exercise attempt.
+     * Get oral file audio for a given exercise attempt and question.
      *
-     * @param int  $trackExerciseId The ID of the tracked exercise.
-     * @param int  $questionId      The ID of the question.
-     * @param bool $returnUrls      (Optional) If set to true, only the URLs of the audio files are returned. Default is false.
+     * If $returnUrls is true, returns an array of URLs.
+     * Otherwise returns the HTML string with <audio> players.
      *
-     * @return array|string If $returnUrls is true, returns an array of URLs of the audio files. Otherwise, returns an HTML string with audio tags.
+     * @param int  $trackExerciseId
+     * @param int  $questionId
+     * @param bool $returnUrls
+     *
+     * @return array|string
      */
-    public static function getOralFileAudio(int $trackExerciseId, int $questionId, bool $returnUrls = false): array|string
-    {
-        /** @var TrackEExercise $trackExercise */
+    public static function getOralFileAudio(
+        int $trackExerciseId,
+        int $questionId,
+        bool $returnUrls = false
+    ) {
+        /** @var TrackEExercise|null $trackExercise */
         $trackExercise = Container::getTrackEExerciseRepository()->find($trackExerciseId);
 
         if (null === $trackExercise) {
@@ -5557,93 +5595,214 @@ EOT;
             return $returnUrls ? [] : '';
         }
 
-        $basePath = rtrim(api_get_path(WEB_PATH), '/');
-        $assetRepo = Container::getAssetRepository();
+        $attemptId = method_exists($questionAttempt, 'getId')
+            ? (int) $questionAttempt->getId()
+            : 0;
+
+        // Collect feedback ResourceNode IDs to avoid duplicate players
+        $feedbackNodeIds = [];
+        if (method_exists($questionAttempt, 'getAttemptFeedbacks')) {
+            foreach ($questionAttempt->getAttemptFeedbacks() as $feedback) {
+                if (null === $feedback) {
+                    continue;
+                }
+
+                $feedbackNode = method_exists($feedback, 'getResourceNode')
+                    ? $feedback->getResourceNode()
+                    : null;
+
+                if (null === $feedbackNode) {
+                    continue;
+                }
+
+                if (method_exists($feedbackNode, 'getId')) {
+                    $feedbackNodeIds[] = (int) $feedbackNode->getId();
+                }
+            }
+
+            $feedbackNodeIds = array_unique($feedbackNodeIds);
+        }
+
+        $filesCollection = $questionAttempt->getAttemptFiles();
+        $filesCount = is_countable($filesCollection) ? count($filesCollection) : 0;
+
+        if (0 === $filesCount) {
+            return $returnUrls ? [] : '';
+        }
+
+        $urls = [];
+
+        foreach ($filesCollection as $attemptFile) {
+            if (!$attemptFile) {
+                continue;
+            }
+
+            $attemptFileId = method_exists($attemptFile, 'getId')
+                ? (string) $attemptFile->getId()
+                : 'n/a';
+
+            $resourceNode = method_exists($attemptFile, 'getResourceNode')
+                ? $attemptFile->getResourceNode()
+                : null;
+
+            if (null === $resourceNode) {
+                continue;
+            }
+
+            $nodeId = method_exists($resourceNode, 'getId')
+                ? (int) $resourceNode->getId()
+                : 0;
+
+            // Skip files whose ResourceNode is used by feedback (avoid duplicate players)
+            if (!empty($feedbackNodeIds) && in_array($nodeId, $feedbackNodeIds, true)) {
+                continue;
+            }
+
+            $url = self::getPublicUrlForResourceNode($resourceNode);
+            if (empty($url)) {
+                continue;
+            }
+
+            $urls[] = $url;
+        }
+
+        if (empty($urls)) {
+            return $returnUrls ? [] : '';
+        }
 
         if ($returnUrls) {
-            $urls = [];
-            foreach ($questionAttempt->getAttemptFiles() as $attemptFile) {
-                $urls[] = $basePath.$assetRepo->getAssetUrl($attemptFile->getAsset());
-            }
-
             return $urls;
-        } else {
-            $html = '';
-            foreach ($questionAttempt->getAttemptFiles() as $attemptFile) {
-                $html .= Display::tag(
-                    'audio',
-                    '',
-                    [
-                        'src' => $basePath.$assetRepo->getAssetUrl($attemptFile->getAsset()),
-                        'controls' => '',
-                    ]
-                );
-            }
-
-            return $html;
-        }
-    }
-
-    /**
-     * Get the audio component for a teacher audio feedback.
-     */
-    public static function getOralFeedbackAudio(int $attemptId, int $questionId): string
-    {
-        /** @var TrackEExercise $tExercise */
-        $tExercise = Container::getTrackEExerciseRepository()->find($attemptId);
-
-        if (null === $tExercise) {
-            return '';
         }
 
-        $qAttempt = $tExercise->getAttemptByQuestionId($questionId);
-
-        if (null === $qAttempt) {
-            return '';
-        }
-
+        // Build HTML <audio> tags using the resolved URLs (student attempts only)
         $html = '';
 
-        $assetRepo = Container::getAssetRepository();
-
-        foreach ($qAttempt->getAttemptFeedbacks() as $attemptFeedback) {
+        foreach ($urls as $url) {
             $html .= Display::tag(
                 'audio',
                 '',
                 [
-                    'src' => $assetRepo->getAssetUrl($attemptFeedback->getAsset()),
+                    'src' => $url,
                     'controls' => '',
                 ]
-
             );
         }
 
         return $html;
     }
 
-    public static function getUploadAnswerFiles(int $trackExerciseId, int $questionId, bool $returnUrls = false)
-    {
-        $trackExercise = Container::getTrackEExerciseRepository()->find($trackExerciseId);
-        if (!$trackExercise) { return $returnUrls ? [] : ''; }
-        $attempt = $trackExercise->getAttemptByQuestionId($questionId);
-        if (!$attempt) { return $returnUrls ? [] : ''; }
+    /**
+     * Returns the HTML audio player for the latest oral feedback
+     * of a given question attempt.
+     *
+     * @param int  $attemptId   TrackEExercise id (exercise attempt)
+     * @param int  $questionId  Question id inside the attempt
+     * @param bool $wrap        Kept for backward compatibility (currently unused)
+     *
+     * @return string           HTML <audio> tag or empty string if none
+     */
+    public static function getOralFeedbackAudio(
+        int $attemptId,
+        int $questionId,
+        bool $wrap = true
+    ): string {
+        /** @var TrackEExercise|null $exercise */
+        $exercise = Container::getTrackEExerciseRepository()->find($attemptId);
 
-        $assetRepo = Container::getAssetRepository();
-        $basePath = rtrim(api_get_path(WEB_PATH), '/');
+        if (null === $exercise) {
+            return '';
+        }
 
-        if ($returnUrls) {
-            $urls = [];
-            foreach ($attempt->getAttemptFiles() as $af) {
-                $urls[] = $basePath.$assetRepo->getAssetUrl($af->getAsset());
-            }
-            return $urls;
+        $attempt = $exercise->getAttemptByQuestionId($questionId);
+        if (null === $attempt) {
+            return '';
         }
 
         $html = '';
-        foreach ($attempt->getAttemptFiles() as $af) {
-            $url = $basePath.$assetRepo->getAssetUrl($af->getAsset());
-            $html .= Display::url(basename($url), $url, ['target' => '_blank']).'<br />';
+
+        // We keep only the latest feedback to avoid duplicated players.
+        foreach ($attempt->getAttemptFeedbacks() as $feedback) {
+            $node = $feedback->getResourceNode();
+
+            if (null === $node) {
+                // Old data might still be asset-based; migration can handle that later.
+                continue;
+            }
+
+            $url = self::getPublicUrlForResourceNode($node);
+
+            if ('' === $url) {
+                // URL could not be generated (missing file or routing issue).
+                continue;
+            }
+
+            // Override previous HTML so that only the last feedback is rendered.
+            $html = Display::tag(
+                'audio',
+                '',
+                [
+                    'src' => $url,
+                    'controls' => '',
+                ]
+            );
         }
+
+        return $html;
+    }
+
+    /**
+     * Get uploaded answer files (resource-based) for a given attempt/question.
+     *
+     * If $returnUrls is true, returns an array of URLs.
+     * Otherwise returns a simple HTML list of links.
+     *
+     * @param int  $trackExerciseId
+     * @param int  $questionId
+     * @param bool $returnUrls
+     *
+     * @return array|string
+     */
+    public static function getUploadAnswerFiles(int $trackExerciseId, int $questionId, bool $returnUrls = false)
+    {
+        /** @var TrackEExercise|null $trackExercise */
+        $trackExercise = Container::getTrackEExerciseRepository()->find($trackExerciseId);
+
+        if (null === $trackExercise) {
+            return $returnUrls ? [] : '';
+        }
+
+        $attempt = $trackExercise->getAttemptByQuestionId($questionId);
+
+        if (null === $attempt) {
+            return $returnUrls ? [] : '';
+        }
+
+        $urls = [];
+
+        // Loop over AttemptFile and use their ResourceNode to get public URLs
+        foreach ($attempt->getAttemptFiles() as $attemptFile) {
+            $resourceNode = $attemptFile->getResourceNode();
+            $url = self::getPublicUrlForResourceNode($resourceNode);
+
+            if (!empty($url)) {
+                $urls[] = $url;
+            }
+        }
+
+        if ($returnUrls) {
+            return $urls;
+        }
+
+        // Legacy simple HTML (used by some views)
+        $html = '';
+
+        foreach ($urls as $url) {
+            $path = parse_url($url, PHP_URL_PATH);
+            $name = $path ? basename($path) : $url;
+
+            $html .= Display::url($name, $url, ['target' => '_blank']).'<br />';
+        }
+
         return $html;
     }
 
@@ -6607,7 +6766,7 @@ EOT;
             return false;
         }
         if (!$quiz) {
-            Display::addFlash(Display::return_message(get_lang('Test not found'), 'warning', false));
+            Display::addFlash(Display::return_message(get_lang('Test not found or not visible'), 'warning', false));
             return false;
         }
         if ($sessionId > 0) {
@@ -6864,5 +7023,152 @@ EOT;
         }
 
         return $questionScore;
+    }
+
+    /**
+     * Build a public URL for a ResourceNode file used in exercises.
+     * Returns an empty string when the node is null or when the underlying
+     * file/route cannot be resolved (we do not want to break the exercise view).
+     *
+     * @param ResourceNode|null $resourceNode
+     * @param array                                        $extraParams
+     *
+     * @return string
+     */
+    public static function getPublicUrlForResourceNode(?ResourceNode $resourceNode): string
+    {
+        if (null === $resourceNode) {
+            return '';
+        }
+
+        try {
+            /** @var ResourceNodeRepository $resourceNodeRepo */
+            $resourceNodeRepo = Container::getResourceNodeRepository();
+            $resourceType = $resourceNode->getResourceType();
+            $tool         = $resourceType?->getTool();
+            $url = $resourceNodeRepo->getResourceFileUrl($resourceNode);
+
+            return $url;
+        } catch (Throwable $e) {
+            error_log(sprintf(
+                '[ORAL_FILE_AUDIO][node=%s] Exception in getPublicUrlForResourceNode(): %s (%s) at %s:%d',
+                $resourceNode?->getId() ?? 'null',
+                $e->getMessage(),
+                get_class($e),
+                $e->getFile(),
+                $e->getLine()
+            ));
+
+            return '';
+        }
+    }
+
+    /**
+     * Normalize the attempt question list:
+     * - Media questions are containers and must NOT be counted as real questions.
+     * - When random questions are enabled ($objExercise->random > 0),
+     *   ensure we have exactly N answerable questions by topping up from the exercise pool.
+     *
+     * @param Exercise $objExercise
+     * @param int[]    $ids
+     *
+     * @return int[]
+     */
+    public static function normalizeAttemptQuestionList(Exercise $objExercise, array $ids): array
+    {
+        $ids = array_values(array_unique(array_map('intval', $ids)));
+
+        $randomCount = isset($objExercise->random) ? (int) $objExercise->random : 0;
+
+        // Remove media questions from the list (and page breaks only in random mode).
+        $normalized = [];
+        foreach ($ids as $qid) {
+            $q = Question::read((int) $qid);
+            if (!$q) {
+                continue;
+            }
+
+            // Media questions are not answerable.
+            if ((int) $q->type === MEDIA_QUESTION) {
+                continue;
+            }
+
+            // Random selection applies to answerable questions, not structural breaks.
+            if ($randomCount > 0 && (int) $q->type === PAGE_BREAK) {
+                continue;
+            }
+
+            $normalized[] = (int) $qid;
+        }
+
+        if ($randomCount <= 0) {
+            return $normalized;
+        }
+
+        // Trim if we somehow have too many.
+        if (count($normalized) > $randomCount) {
+            return array_slice($normalized, 0, $randomCount);
+        }
+
+        // Top up if we have too few after removing media questions.
+        if (count($normalized) < $randomCount) {
+            $pool = [];
+            foreach ((array) $objExercise->getQuestionOrderedList() as $qid) {
+                $qid = (int) $qid;
+                $q = Question::read($qid);
+                if (!$q) {
+                    continue;
+                }
+
+                if ((int) $q->type === MEDIA_QUESTION || (int) $q->type === PAGE_BREAK) {
+                    continue;
+                }
+
+                $pool[] = $qid;
+            }
+
+            // Remove already selected.
+            $pool = array_values(array_diff($pool, $normalized));
+
+            if (!empty($pool)) {
+                shuffle($pool);
+            }
+
+            $needed = $randomCount - count($normalized);
+            if ($needed > 0) {
+                $normalized = array_merge($normalized, array_slice($pool, 0, $needed));
+            }
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * Persist corrected data_tracking back to DB so the attempt stays stable.
+     *
+     * @param int   $exeId
+     * @param int[] $questionList
+     * @param array $exerciseStatInfo
+     */
+    public static function updateAttemptDataTrackingIfNeeded(int $exeId, array $questionList, array &$exerciseStatInfo): void
+    {
+        if ($exeId <= 0) {
+            return;
+        }
+
+        $newTracking = implode(',', array_map('intval', $questionList));
+        $oldTracking = isset($exerciseStatInfo['data_tracking']) ? (string) $exerciseStatInfo['data_tracking'] : '';
+
+        if ($newTracking === $oldTracking) {
+            return;
+        }
+
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $sql = "UPDATE $table
+            SET data_tracking = '".Database::escape_string($newTracking)."'
+            WHERE exe_id = ".(int) $exeId;
+        Database::query($sql);
+
+        $exerciseStatInfo['data_tracking'] = $newTracking;
     }
 }

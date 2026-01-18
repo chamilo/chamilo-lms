@@ -23,13 +23,18 @@ export default {
     },
     {
       name: "ImportGlossary",
-      path: "",
+      path: "import",
       component: () => import("../views/glossary/GlossaryImport.vue"),
     },
     {
       name: "ExportGlossary",
-      path: "",
+      path: "export",
       component: () => import("../views/glossary/GlossaryExport.vue"),
+    },
+    {
+      name: "GenerateGlossaryTerms",
+      path: "generate",
+      component: () => import("../views/glossary/GlossaryGenerateTerms.vue"),
     },
   ],
 }

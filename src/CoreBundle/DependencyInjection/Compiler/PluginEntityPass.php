@@ -23,6 +23,11 @@ class PluginEntityPass implements CompilerPassInterface
 
         foreach ($entityDirs as $dir) {
             $pluginTitle = basename(\dirname($dir));
+
+            if ('src' === $pluginTitle) {
+                $pluginTitle = basename(\dirname($dir, 2));
+            }
+
             $namespace = "Chamilo\\PluginBundle\\$pluginTitle";
 
             $driverReference = new Reference('doctrine.orm.default_attribute_metadata_driver');

@@ -1831,12 +1831,6 @@ class SessionManager
             );
 
             return false;
-        } elseif (empty($coachesId)) {
-            Display::addFlash(
-                Display::return_message(get_lang('You must select a coach'), 'warning')
-            );
-
-            return false;
         } elseif (!empty($startDate) &&
             !api_is_valid_date($startDate, 'Y-m-d H:i') &&
             !api_is_valid_date($startDate, 'Y-m-d H:i:s')
@@ -2119,18 +2113,19 @@ class SessionManager
      *
      * @return bool
      */
-    public static function clear_session_ref_promotion($id)
+    public static function clear_session_ref_promotion(int $promotionId): bool
     {
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $id = intval($id);
-        $sql = "UPDATE $tbl_session
-                SET promotion_id = 0
-                WHERE promotion_id = $id";
-        if (Database::query($sql)) {
-            return true;
-        } else {
+        if ($promotionId <= 0) {
             return false;
         }
+
+        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+
+        return (bool) Database::update(
+            $sessionTable,
+            ['promotion_id' => null],
+            ['promotion_id = ?' => $promotionId]
+        );
     }
 
     /**
@@ -3276,7 +3271,7 @@ class SessionManager
         $sday_end
     ) {
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $name = html_filter(trim($sname));
+        $name = Security::remove_XSS(trim($sname));
         $year_start = intval($syear_start);
         $month_start = intval($smonth_start);
         $day_start = intval($sday_start);
@@ -3361,7 +3356,7 @@ class SessionManager
         $sday_end
     ) {
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $name = html_filter(trim($sname));
+        $name = trim((string) $sname);
         $year_start = intval($syear_start);
         $month_start = intval($smonth_start);
         $day_start = intval($sday_start);
@@ -8413,7 +8408,6 @@ class SessionManager
             }
         }
 
-        $form->addRule('coach_username', get_lang('Required field'), 'required');
         $form->addHtml('<div id="ajax_list_coachs"></div>');
 
         $form->addButtonAdvancedSettings('advanced_params');

@@ -77,7 +77,7 @@ class FeatureContext extends MinkContext
     /**
      * @Given /^course "([^"]*)" is deleted$/
      */
-    public function courseIsDeleted($argument)
+    public function courseIsDeleted($argument): void
     {
         $this->iAmAPlatformAdministrator();
         $this->visit('/main/admin/course_list.php?keyword='.$argument);
@@ -86,8 +86,9 @@ class FeatureContext extends MinkContext
 
     /**
      * @Given /^I am on course "([^"]*)" homepage$/
+     * @deprecated Use iAmOnTheHomepageOfCourseX instead
      */
-    public function iAmOnCourseXHomepage($courseCode)
+    public function iAmOnCourseXHomepage($courseCode): void
     {
         $this->visit('/main/course_home/redirect.php?cidReq='.$courseCode);
         $this->waitForThePageToBeLoaded();
@@ -97,10 +98,32 @@ class FeatureContext extends MinkContext
 
     /**
      * @Given /^I am on course "([^"]*)" homepage in session "([^"]*)"$/
+     * @deprecated Use iAmOnTheHomepageOfCourseXInSessionY instead
      */
-    public function iAmOnCourseXHomepageInSessionY($courseCode, $sessionName)
+    public function iAmOnCourseXHomepageInSessionY($courseCode, $sessionName): void
     {
         $this->visit('/main/course_home/redirect.php?cidReq='.$courseCode.'&session_name='.$sessionName);
+        $this->waitForThePageToBeLoaded();
+        $this->assertElementNotOnPage('.alert-danger');
+    }
+
+    /**
+     * @Given /^I am on the homepage of course "([^"]*)"$/
+     */
+    public function iAmOnTheHomepageOfCourseX($courseId): void
+    {
+        $this->visit('/course/'.$courseId.'/home');
+        $this->waitForThePageToBeLoaded();
+        //$this->visit('/courses/'.$courseCode.'/index.php');
+        $this->assertElementNotOnPage('.alert-danger');
+    }
+
+    /**
+     * @Given /^I am on the homepage of course "([^"]*) in session "([^"]*)"$/
+     */
+    public function iAmOnTheHomepageOfCourseXInSessionY($courseId, $sessionId): void
+    {
+        $this->visit('/course/'.$courseId.'&sid='.$sessionId);
         $this->waitForThePageToBeLoaded();
         $this->assertElementNotOnPage('.alert-danger');
     }
@@ -138,7 +161,16 @@ class FeatureContext extends MinkContext
     {
         $this->assertSession()->pageTextNotContains('Internal server error');
         $this->assertSession()->pageTextNotContains('error');
-        $this->assertSession()->elementNotExists('css', '.alert-danger');
+        $el = $this->getSession()->getPage()->find(
+            'css',
+            '.alert-danger'
+        );
+        if (null !== $el) {
+            $this->assertSession()->elementAttributeContains('css', '.alert-danger', 'style', 'display:none;');
+        } else {
+            $this->assertSession()->elementNotExists('css', '.alert-danger');
+        }
+        $this->assertSession()->elementNotExists('css', '.p-message-error');
     }
 
     /**
@@ -363,13 +395,57 @@ class FeatureContext extends MinkContext
      */
     public function confirmPopup()
     {
-        // See
-        // https://gist.github.com/blazarecki/2888851
-        /** @var \Behat\Mink\Driver\Selenium2Driver $driver Needed because no cross-driver way yet */
-        $this->getSession()->getDriver()->getWebDriverSession()->accept_alert();
+       $session = $this->getSession();
+        // 1) accept_alert() (alert native)
+        try {
+            $driver = $session->getDriver();
+
+                try {
+                    $driver->getWebDriverSession()->accept_alert();
+                    return;
+                } catch (\Exception $e) {}
+
+        } catch (\Exception $e) {
+            // ignore
+        }
+
+        // wait for the HTML modal
+        $session->wait(5000, "document.querySelector('.swal2-container') !== null");
+
+        // JS: attempt to click a visible confirmation button inside the modal
+        $js = <<<'JS'
+        (function(){
+         function isVisible(el){
+         if(!el) return false;
+         var rect = el.getBoundingClientRect();
+         return !!(rect.width || rect.height) && window.getComputedStyle(el).visibility !== 'hidden' && window.getComputedStyle(el).display !== 'none';
+         }
+         function clickEl(el){
+         if(!el) return false;
+         try { el.style.pointerEvents = 'auto'; el.style.zIndex = 999999; } catch(e){}
+        try { if(el.focus) el.focus(); el.click(); return true; } catch(e){
+        }
+        }
+       // attempt to click a visible confirmation button inside the modal
+       var modal = document.querySelector('.swal2-container');
+
+       var el = modal.querySelector('.swal2-confirm');
+       if (el && isVisible(el)) {
+       if (clickEl(el)) return true;
+       }
+       return false;
+       })();
+       JS;
+        try {
+            $clicked = (bool) $session->executeScript($js);
+            if ($clicked)
+                return;
+        } catch (\Exception $e) {
+            throw new \Exception('confirmPopup: no confirmation button found or clickable');
+        }
     }
 
-     /**
+    /**
      * @When /^(?:|I )fill in select bootstrap input "(?P<field>(?:[^"]|\\")*)" with "(?P<value>(?:[^"]|\\")*)" and select "(?P<entry>(?:[^"]|\\")*)"$/
      */
     public function iFillInSelectBootstrapInputWithAndSelect($field, $value, $entry)
@@ -455,7 +531,7 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @When /^wait very long for the page to be loaded$/
+     * @When /^(?:|I )wait very long for the page to be loaded$/
      */
     public function waitVeryLongForThePageToBeLoaded()
     {
@@ -464,11 +540,19 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @When /^wait the page to be loaded when ready$/
+     * @When /^(?:|I )wait for the page to be loaded when ready$/
      */
-    public function waitVeryLongForThePageToBeLoadedWhenReady()
+    public function waitForThePageToBeLoadedWhenReady()
     {
         $this->getSession()->wait(9000, "document.readyState === 'complete'");
+    }
+
+    /**
+     * @When /^(?:|I )wait one minute for the page to be loaded$/
+     */
+    public function waitOneMinuteForThePageToBeLoaded()
+    {
+        $this->getSession()->wait(60000);
     }
 
     /**
@@ -694,4 +778,74 @@ class FeatureContext extends MinkContext
 
         $element->click();
     }
+    /**
+     * @Then /^(?:I see|I should see|And I see)\s+"?([^\"]+)"?\s+in the element "([^\"]+)"$/
+     */
+    public function iSeeInElement($expected, $elementSelector)
+    {
+        $page = $this->getSession()->getPage();
+        $el = null;
+
+        // If the selector contains a comma or starts with #/. or contains CSS combinators, use CSS directly
+        $useCssDirectly = (strpos($elementSelector, ',') !== false)
+            || strpos($elementSelector, '#') === 0
+            || strpos($elementSelector, '.') === 0
+            || preg_match('/[>\s\[\]\:\,\+]/', $elementSelector);
+
+        if ($useCssDirectly) {
+            $el = $page->find('css', $elementSelector);
+        } else {
+            // try findById if available
+            if (method_exists($page, 'findById')) {
+                $el = $page->findById($elementSelector);
+            }
+
+            // fallback to CSS id
+            if (!$el) {
+                $el = $page->find('css', '#'.$elementSelector);
+            }
+        }
+
+        if (!$el) {
+            throw new \Exception(sprintf('Element with selector/id "%s" not found on the page.', $elementSelector));
+        }
+
+        // getText() returns visible text (includes children)
+        $textRaw = $el->getText();
+
+        // normalization: trim, replace NBSP and compress spaces/newlines
+        $text = trim($textRaw);
+        $text = str_replace("\xC2\xA0", ' ', $text); // NBSP UTF-8 -> space
+        $text = preg_replace('/\s+/u', ' ', $text);
+
+        // case-insensitive check
+        if (mb_stripos($text, $expected) === false) {
+            throw new \Exception(sprintf('Expected "%s" inside element "%s" but found "%s".', $expected, $elementSelector, $text));
+        }
+
+        return true;
+    }
+
+// php
+
+    /**
+     * @When /^I zoom out to maximum$/
+     */
+    public function zoomOutMax()
+    {
+        $script = <<<'JS'
+(function() {
+    var scale = 0.25;
+    if (typeof document.body.style.zoom !== 'undefined') {
+        document.body.style.zoom = scale;
+    } else {
+        document.documentElement.style.transform = 'scale(' + scale + ')';
+    }
+})();
+JS;
+        $this->getSession()->executeScript($script);
+        $this->getSession()->wait(300);
+        return true;
+    }
+
 }

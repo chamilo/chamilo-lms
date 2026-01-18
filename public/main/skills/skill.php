@@ -55,7 +55,12 @@ $formToDisplay = $form->returnForm();
 $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('Administration')];
 $interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('Manage skills levels')];
 
-$tpl = new Template($action);
+// Use a stable page title instead of the raw action name.
+$tpl = new Template('');
+
+// Active tab for the shared header navigation.
+$tpl->assign('current_tab', 'skills');
+
 switch ($action) {
     case 'edit':
         $tpl->assign('form', $formToDisplay);
@@ -82,7 +87,6 @@ switch ($action) {
         header('Location: '.$listAction);
         exit;
 
-        break;
     default:
         break;
 }

@@ -9,7 +9,7 @@
       <div>
         <h5 class="font-semibold text-base">{{ t('Header logo') }}</h5>
         <p class="text-xs opacity-70 mt-1">
-          {{ t('Preferred: SVG. PNG max 190×60 px.') }}
+          {{ t('Preferred: SVG. PNG max size: {0}px.', ['190×60']) }}
         </p>
       </div>
 
@@ -85,11 +85,11 @@
 
       <section class="grid grid-cols-1 gap-3">
         <div>
-          <label class="text-xs block mb-1">{{ t('Upload SVG for header') }}</label>
+          <label class="text-xs block mb-1">{{ t('Upload SVG logo to platform header') }}</label>
           <input type="file" accept=".svg,image/svg+xml" @change="onPick($event, 'headerSvg')" />
         </div>
         <div>
-          <label class="text-xs block mb-1">{{ t('Upload PNG for header (≤190×60)') }}</label>
+          <label class="text-xs block mb-1">{{ t('Upload PNG logo to platform header ({0})', ['≤190×60']) }}</label>
           <input type="file" accept="image/png" @change="onPick($event, 'headerPng', { maxW:190, maxH:60 })" />
         </div>
       </section>
@@ -106,7 +106,7 @@
       <div>
         <h5 class="font-semibold text-base">{{ t('Email logo') }}</h5>
         <p class="text-xs opacity-70 mt-1">
-          {{ t('Preferred: SVG. PNG recommended width: 540 px.') }}
+          {{ t('Preferred: SVG. PNG recommended width: {0}px.', ['540']) }}
         </p>
       </div>
 
@@ -182,11 +182,11 @@
 
       <section class="grid grid-cols-1 gap-3">
         <div>
-          <label class="text-xs block mb-1">{{ t('Upload email SVG') }}</label>
+          <label class="text-xs block mb-1">{{ t('Upload SVG logo for e-mails') }}</label>
           <input type="file" accept=".svg,image/svg+xml" @change="onPick($event, 'emailSvg')" />
         </div>
         <div>
-          <label class="text-xs block mb-1">{{ t('Upload email PNG (~540 px width)') }}</label>
+          <label class="text-xs block mb-1">{{ t('Upload PNG logo for e-mails (~{0}px width)', ['540']) }}</label>
           <input type="file" accept="image/png" @change="onPick($event, 'emailPng', { recommendW:540 })" />
         </div>
       </section>
@@ -282,7 +282,7 @@ function onPick(e, key, opts = {}) {
     const img = new Image()
     img.onload = () => {
       if (key === "headerPng" && (img.width > 190 || img.height > 60)) {
-        alert(t("Header PNG must be ≤ 190×60 px")); e.target.value=""; return
+        alert(t("Header PNG must be ≤ {0}px.",['190×60'])); e.target.value=""; return
       }
       if (key === "emailPng" && opts.recommendW && img.width !== opts.recommendW) {
         console.warn(`Email PNG width is ${img.width}, recommended ${opts.recommendW}px`)

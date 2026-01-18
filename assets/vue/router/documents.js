@@ -45,6 +45,12 @@ export default {
       component: () => import("../views/documents/DocumentShow.vue"),
     },
     {
+      name: "DocumentsGenerateMedia",
+      path: "generate_media",
+      component: () => import("../views/documents/DocumentsGenerateMedia.vue"),
+      meta: { breadcrumb: "Generate media" },
+    },
+    {
       name: "DocumentsAddVariation",
       path: "add_variation/:resourceFileId",
       component: () => import("../views/documents/AddVariation.vue"),

@@ -38,7 +38,7 @@ const { t } = useI18n()
       class="avatar-container"
     >
       <BaseUserAvatar
-        :alt="t('%s\'s picture', [user.username])"
+        :alt="t('{0}\'s picture', [user.username])"
         :image-url="user.illustrationUrl"
       />
       <div class="avatar-info">

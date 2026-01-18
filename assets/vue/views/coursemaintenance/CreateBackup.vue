@@ -72,8 +72,8 @@
           v-model="moodleVersion"
           class="w-full rounded border border-gray-25 p-2 text-sm"
         >
-          <option value="3">{{ t("Moodle 3.x") }}</option>
-          <option value="4">{{ t("Moodle 4.x") }}</option>
+          <option value="3">Moodle 3.x</option>
+          <option value="4">Moodle 4.x</option>
         </select>
 
         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -85,7 +85,7 @@
               :placeholder="t('Internal integer user id')"
             />
             <p class="mt-1 text-[11px] leading-4 text-gray-50">
-              {{ t("Moodle requires an internal user id stored in XML. If in doubt, write 1.") }}
+              {{ t("Moodle requires an internal user id stored in XML. If in doubt, use 1.") }}
             </p>
           </div>
 

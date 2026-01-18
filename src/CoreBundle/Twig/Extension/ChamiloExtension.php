@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Twig\Extension;
 
 use Chamilo\CoreBundle\Entity\ResourceIllustrationInterface;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Helpers\NameConventionHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
@@ -34,7 +35,8 @@ class ChamiloExtension extends AbstractExtension
         SettingsHelper $helper,
         RouterInterface $router,
         NameConventionHelper $nameConventionHelper,
-        private readonly ThemeHelper $themeHelper
+        private readonly ThemeHelper $themeHelper,
+        private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {
         $this->illustrationRepository = $illustrationRepository;
         $this->helper = $helper;
@@ -47,15 +49,15 @@ class ChamiloExtension extends AbstractExtension
         return [
             new TwigFilter('var_dump', 'var_dump'),
             new TwigFilter('icon', 'Display::get_icon_path'),
-            new TwigFilter('mdi_icon', 'Display::getMdiIconSimple'),
-            new TwigFilter('mdi_icon_t', 'Display::getMdiIconTranslate'),
+            new TwigFilter('mdi_icon', 'Display::getMdiIconSimple', ['is_safe' => ['html']]),
+            new TwigFilter('mdi_icon_t', 'Display::getMdiIconTranslate', ['is_safe' => ['html']]),
             new TwigFilter('get_lang', 'get_lang'),
             new TwigFilter('get_plugin_lang', 'get_plugin_lang'),
             new TwigFilter('api_get_local_time', 'api_get_local_time'),
             new TwigFilter('api_convert_and_format_date', 'api_convert_and_format_date'),
             new TwigFilter('format_date', 'api_format_date'),
             new TwigFilter('format_file_size', 'format_file_size'),
-            new TwigFilter('date_to_time_ago', 'Display::dateToStringAgoAndLongDate'),
+            new TwigFilter('date_to_time_ago', 'Display::dateToStringAgoAndLongDate', ['is_safe' => ['html']]),
             new TwigFilter('api_get_configuration_value', 'api_get_configuration_value'),
             new TwigFilter('remove_xss', 'Security::remove_XSS'),
             new TwigFilter('user_complete_name', 'UserManager::formatUserFullName'),
@@ -76,6 +78,7 @@ class ChamiloExtension extends AbstractExtension
             new TwigFunction('theme_asset_link_tag', $this->getThemeAssetLinkTag(...), ['is_safe' => ['html']]),
             new TwigFunction('theme_asset_base64', $this->getThemeAssetBase64Encoded(...)),
             new TwigFunction('theme_logo', $this->getThemeLogoUrl(...)),
+            new TwigFunction('is_allowed_to_edit', $this->isAllowedToEditHelper->check(...)),
         ];
     }
 

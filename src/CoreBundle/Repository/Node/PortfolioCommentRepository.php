@@ -11,16 +11,30 @@ use Chamilo\CoreBundle\Entity\PortfolioComment;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\Traits\Repository\ORM\NestedTreeRepositoryTrait;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ResourceRepository<PortfolioComment>
+ */
 class PortfolioCommentRepository extends ResourceRepository
 {
-    use NestedTreeRepositoryTrait;
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, PortfolioComment::class);
+    }
+
+    /**
+     * @return array<int, PortfolioComment>
+     */
+    public function findTemplatesByUser(User $user): array
+    {
+        $qb = $this->getResourcesByCreator($user);
+
+        $qb->andWhere(
+            $qb->expr()->eq('resource.isTemplate', true)
+        );
+
+        return $qb->getQuery()->getResult();
     }
 
     public function findCommentsByUser(User $user, ?Course $course, ?Session $session, ?array $orderBy = null): array

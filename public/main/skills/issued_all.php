@@ -23,9 +23,23 @@ if (!$userId || !$skillId) {
     api_not_allowed(true);
 }
 
-$currentUrl = api_get_self().'?user='.$userId.'&skill='.$skillId;
+$origin = isset($_GET['origin']) ? (string) $_GET['origin'] : '';
+$originUrl = SkillModel::sanitizeInternalUrl($origin);
+
+$query = [
+    'user' => $userId,
+    'skill' => $skillId,
+];
+if ($originUrl) {
+    $query['origin'] = $originUrl;
+}
+
+$currentUrl = api_get_self().'?'.http_build_query($query);
 
 SkillModel::isAllowed($userId);
+
+// Default badge image (fallback when skill has no badge).
+$defaultBadge = api_get_path(WEB_PATH).'img/icons/32/badges-default.png';
 
 $em = Database::getManager();
 $user = api_get_user_entity($userId);
@@ -59,15 +73,66 @@ if (null !== $currentUser) {
     $allowComment = SkillModel::userCanAddFeedbackToUser($currentUser, $user);
 }
 
+/**
+ * Direct download for a specific issue (recommended).
+ * Also keep support for legacy export=1 (optional ?issue=ID).
+ */
+$downloadIssueId = isset($_GET['download_issue']) ? (int) $_GET['download_issue'] : 0;
+
+// Legacy export support (kept to avoid breaking old URLs)
+$legacyIssueId = isset($_GET['issue']) ? (int) $_GET['issue'] : 0;
+if (!$downloadIssueId && $export) {
+    if ($legacyIssueId > 0) {
+        $downloadIssueId = $legacyIssueId;
+    } elseif (count($userSkills) === 1 && !empty($userSkills[0])) {
+        $downloadIssueId = (int) $userSkills[0]->getId();
+    } else {
+        Display::addFlash(
+            Display::return_message(
+                get_lang('Please select a specific badge issue to download'),
+                'warning'
+            )
+        );
+        api_location($currentUrl);
+    }
+}
+
+// If a download was requested, serve PNG and exit (no HTML response)
+if ($downloadIssueId && $allowDownloadExport) {
+    /** @var SkillRelUser|null $issue */
+    $issue = $skillUserRepo->find($downloadIssueId);
+
+    // Ensure the issue belongs to the requested user+skill
+    if ($issue && $issue->getUser()->getId() === $user->getId() && $issue->getSkill()->getId() === $skill->getId()) {
+        SkillModel::exportBadge($skill, $issue, $currentUrl);
+        exit;
+    }
+
+    api_not_allowed(true);
+}
+
 $allUserBadges = [];
+$backpackJsAdded = false;
+
 /** @var SkillRelUser $skillRelUser */
 foreach ($userSkills as $index => $skillRelUser) {
     $skillRelUserDate = api_get_local_time($skillRelUser->getAcquiredSkillAt());
     $currentSkillLevel = get_lang('No level acquired yet');
     if ($skillRelUser->getAcquiredLevel()) {
-        $currentSkillLevel = $skillLevelRepo->find($skillRelUser->getAcquiredLevel()->getId())->getTitle();
+        $levelEntity = $skillLevelRepo->find($skillRelUser->getAcquiredLevel()->getId());
+        if ($levelEntity) {
+            $currentSkillLevel = $levelEntity->getTitle();
+        }
     }
     $argumentationAuthor = api_get_user_info($skillRelUser->getArgumentationAuthorId());
+
+    // Resolve badge image and fallback to default when missing.
+    $badgeImage = SkillModel::getWebIconPath($skillRelUser->getSkill());
+
+    // Some skills may return an empty path or the legacy "unknown" image.
+    if (empty($badgeImage) || false !== strpos($badgeImage, 'unknown.png')) {
+        $badgeImage = $defaultBadge;
+    }
 
     $skillRelUserInfo = [
         'id' => $skillRelUser->getId(),
@@ -83,7 +148,7 @@ foreach ($userSkills as $index => $skillRelUser) {
         'user_id' => $skillRelUser->getUser()->getId(),
         'user_complete_name' => UserManager::formatUserFullName($skillRelUser->getUser()),
         'skill_id' => $skillRelUser->getSkill()->getId(),
-        'skill_badge_image' => SkillModel::getWebIconPath($skillRelUser->getSkill()),
+        'skill_badge_image' => $badgeImage,
         'skill_name' => $skillRelUser->getSkill()->getTitle(),
         'skill_short_code' => $skillRelUser->getSkill()->getShortCode(),
         'skill_description' => $skillRelUser->getSkill()->getDescription(),
@@ -108,6 +173,8 @@ foreach ($userSkills as $index => $skillRelUser) {
     }
 
     $acquiredLevel = [];
+    $profileLevels = []; // Prevent leaking values between loop iterations
+
     $profile = $skillRepo->find($skillId)->getLevelProfile();
 
     if (!$profile) {
@@ -205,11 +272,13 @@ foreach ($userSkills as $index => $skillRelUser) {
 
     $personalBadge = '';
     if ($allowDownloadExport) {
-        SkillModel::setBackPackJs($htmlHeadXtra);
-        $personalBadge = $currentUrl.'&export=1';
-        if ($export) {
-            SkillModel::exportBadge($skill, $skillRelUser, $currentUrl);
+        if (!$backpackJsAdded) {
+            SkillModel::setBackPackJs($htmlHeadXtra);
+            $backpackJsAdded = true;
         }
+
+        // Each issue has its own direct download URL
+        $personalBadge = $currentUrl.'&download_issue='.$skillRelUser->getId();
     }
 
     $allUserBadges[$index]['issue_info'] = $skillRelUserInfo;
@@ -223,6 +292,7 @@ foreach ($userSkills as $index => $skillRelUser) {
 $template = new Template(get_lang('Issued badge information'));
 $template->assign('user_badges', $allUserBadges);
 $template->assign('show_level', ('false' === api_get_setting('skill.hide_skill_levels')));
+$template->assign('origin_url', $originUrl);
 
 $content = $template->fetch($template->get_template('skill/issued_all.html.twig'));
 $template->assign('header', get_lang('Issued badge information'));

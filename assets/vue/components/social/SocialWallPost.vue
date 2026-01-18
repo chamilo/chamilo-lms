@@ -11,31 +11,47 @@
           :src="post.sender.illustrationUrl"
           class="h-12 w-12 border border-gray-25"
         />
-
         <div class="flex flex-col">
           <div v-if="!post.userReceiver || post.sender['@id'] === post.userReceiver?.['@id']">
-            <BaseAppLink :to="{ name: 'SocialWall', query: { id: post.sender['@id'] } }">
+            <BaseAppLink
+              v-if="post.sender?.id"
+              :to="{ name: 'SocialWall', query: { id: post.sender.id } }"
+            >
               {{ post.sender.fullName }}
             </BaseAppLink>
+            <span v-else>
+              {{ post.sender.fullName }}
+            </span>
           </div>
-
           <div v-else>
-            <BaseAppLink :to="{ name: 'SocialWall', query: { id: post.sender['@id'] } }">
+            <BaseAppLink
+              v-if="post.sender?.id"
+              :to="{ name: 'SocialWall', query: { id: post.sender.id } }"
+            >
               {{ post.sender.fullName }}
             </BaseAppLink>
+            <span v-else>
+              {{ post.sender.fullName }}
+            </span>
             &raquo;
-            <BaseAppLink :to="{ name: 'SocialWall', query: { id: post.userReceiver['@id'] } }">
+            <BaseAppLink
+              v-if="post.userReceiver?.id"
+              :to="{ name: 'SocialWall', query: { id: post.userReceiver.id } }"
+            >
               {{ post.userReceiver.fullName }}
             </BaseAppLink>
+            <span v-else>
+              {{ post.userReceiver?.fullName }}
+            </span>
           </div>
-
           <small>
             {{ relativeDatetime(post.sendDate) }}
           </small>
         </div>
 
         <WallActions
-          :is-owner="isOwner"
+          v-if="canShowActions"
+          :is-owner="canDelete"
           :social-post="post"
           class="ml-auto"
           @post-deleted="onPostDeleted(post)"
@@ -93,7 +109,7 @@
 
 <script setup>
 import WallCommentForm from "./SocialWallCommentForm.vue"
-import { computed, onMounted, reactive, ref } from "vue"
+import { computed, inject, onMounted, reactive, ref, watch } from "vue"
 import WallComment from "./SocialWallComment.vue"
 import WallActions from "./Actions"
 import axios from "axios"
@@ -110,27 +126,46 @@ const props = defineProps({
   },
 })
 const emit = defineEmits(["post-deleted"])
-
 const { relativeDatetime } = useFormatDate()
-
 let comments = reactive([])
 const attachments = ref([])
 const securityStore = useSecurityStore()
 const currentUser = securityStore.user
-
-const isOwner = computed(() => currentUser["@id"] === props.post.sender["@id"])
+const wallUser = inject("social-user", ref(null))
+const meIri = computed(() => currentUser?.["@id"] || null)
+const wallIri = computed(() => wallUser.value?.["@id"] || null)
+const isWallOwner = computed(() => {
+  return !!(meIri.value && wallIri.value && meIri.value === wallIri.value)
+})
+const canDelete = computed(() => {
+  if (!meIri.value) return false
+  if (securityStore.isAdmin) return true
+  return isWallOwner.value
+})
+const canShowActions = computed(() => canDelete.value)
 
 onMounted(() => {
   loadComments()
   loadAttachments()
 })
-const computedAttachments = computed(() => {
-  return attachments.value
-})
+
+// If the post changes (reused component), reload data safely.
+watch(
+  () => props.post?.["@id"],
+  () => {
+    comments.splice(0, comments.length)
+    attachments.value = []
+    loadComments()
+    loadAttachments()
+  },
+)
+
+const computedAttachments = computed(() => attachments.value)
 
 async function loadAttachments() {
   try {
-    const postIri = props.post["@id"]
+    const postIri = props.post?.["@id"]
+    if (!postIri) return
 
     const response = await axios.get(`${postIri}/attachments`)
     attachments.value = response.data
@@ -140,20 +175,27 @@ async function loadAttachments() {
 }
 
 async function loadComments() {
-  const { data } = await axios.get(ENTRYPOINT + "social_posts", {
-    params: {
-      parent: props.post["@id"],
-      "order[sendDate]": "desc",
-      itemsPerPage: 3,
-    },
-  })
+  try {
+    const postIri = props.post?.["@id"]
+    if (!postIri) return
 
-  comments.push(...data["hydra:member"])
+    const { data } = await axios.get(ENTRYPOINT + "social_posts", {
+      params: {
+        parent: postIri,
+        "order[sendDate]": "desc",
+        itemsPerPage: 3,
+      },
+    })
+
+    comments.push(...(data?.["hydra:member"] || []))
+  } catch (error) {
+    console.error("There was an error loading the comments!", error)
+  }
 }
 
 function onCommentDeleted(eventComment) {
   const index = comments.findIndex((comment) => comment["@id"] === eventComment["@id"])
-  if (-1 !== index) {
+  if (index !== -1) {
     comments.splice(index, 1)
   }
 }
@@ -167,19 +209,17 @@ function onPostDeleted(post) {
 }
 
 const isImageAttachment = (attachment) => {
-  if (attachment.filename) {
+  if (attachment?.filename) {
     const fileExtension = attachment.filename.split(".").pop().toLowerCase()
     return ["jpg", "jpeg", "png", "gif"].includes(fileExtension)
   }
-
   return false
 }
 const isVideoAttachment = (attachment) => {
-  if (attachment.filename) {
+  if (attachment?.filename) {
     const fileExtension = attachment.filename.split(".").pop().toLowerCase()
     return ["mp4", "webm", "ogg"].includes(fileExtension)
   }
-
   return false
 }
 </script>

@@ -25,24 +25,27 @@ if (!$allowToTrack) {
 
 $session = api_get_session_entity($sessionId);
 
-$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('Reporting')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
 
-if (isset($_GET["id_session"]) && "" != $_GET["id_session"]) {
-    $interbreadcrumb[] = ["url" => "session.php", "name" => get_lang('Course sessions')];
+if (isset($_GET['id_session']) && '' != $_GET['id_session']) {
+    $interbreadcrumb[] = ['url' => 'session.php', 'name' => get_lang('Course sessions')];
 }
 
-if (isset($_GET["user_id"]) && "" != $_GET["user_id"] && isset($_GET["type"]) && "coach" == $_GET["type"]) {
-    $interbreadcrumb[] = ["url" => "coaches.php", "name" => get_lang('Coaches')];
+if (isset($_GET['user_id']) && '' != $_GET['user_id'] && isset($_GET['type']) && 'coach' == $_GET['type']) {
+    $interbreadcrumb[] = ['url' => 'coaches.php', 'name' => get_lang('Coaches')];
 }
 
-if (isset($_GET["user_id"]) && "" != $_GET["user_id"] && isset($_GET["type"]) && "student" == $_GET["type"]) {
-    $interbreadcrumb[] = ["url" => "student.php", "name" => get_lang('Learners')];
+if (isset($_GET['user_id']) && '' != $_GET['user_id'] && isset($_GET['type']) && 'student' == $_GET['type']) {
+    $interbreadcrumb[] = ['url' => 'student.php', 'name' => get_lang('Learners')];
 }
 
-if (isset($_GET["user_id"]) && "" != $_GET["user_id"] && !isset($_GET["type"])) {
-    $interbreadcrumb[] = ["url" => "teachers.php", "name" => get_lang('Teachers')];
+if (isset($_GET['user_id']) && '' != $_GET['user_id'] && !isset($_GET['type'])) {
+    $interbreadcrumb[] = ['url' => 'teachers.php', 'name' => get_lang('Teachers')];
 }
 
+/**
+ * Legacy helper kept for backwards-compatibility.
+ */
 function count_courses()
 {
     global $nb_courses;
@@ -50,7 +53,12 @@ function count_courses()
     return $nb_courses;
 }
 
-// Checking if the current coach is the admin coach
+// Page header / toolbar helpers.
+$headerTitle = get_lang('Courses');
+$pageTitle = $headerTitle;
+$toolbar = '';
+
+// Checking if the current coach is the admin coach.
 $showImportIcon = false;
 if ('true' == api_get_setting('add_users_by_coach')) {
     if (!api_is_platform_admin()) {
@@ -60,17 +68,21 @@ if ('true' == api_get_setting('add_users_by_coach')) {
     }
 }
 
-Display :: display_header(get_lang('Courses'));
 $user_id = 0;
 $a_courses = [];
 $menu_items = [];
+
 if (api_is_platform_admin(true, true)) {
     $title = '';
+
     if (empty($sessionId)) {
         if (isset($_GET['user_id'])) {
-            $user_id = intval($_GET['user_id']);
+            $user_id = (int) $_GET['user_id'];
             $user_info = api_get_user_info($user_id);
-            $title = get_lang('Courses assigned to').' '.api_get_person_name($user_info['firstname'], $user_info['lastname']);
+            $title = get_lang('Courses assigned to').' '.api_get_person_name(
+                    $user_info['firstname'],
+                    $user_info['lastname']
+                );
             $courses = CourseManager::get_course_list_of_user_as_course_admin($user_id);
         } else {
             $title = get_lang('Your courses');
@@ -85,47 +97,115 @@ if (api_is_platform_admin(true, true)) {
     $a_courses = array_keys($courses);
 
     if (!api_is_session_admin()) {
+        // First icon: go back to "Follow up" (My space home)
+
+        // Keep existing navigation icons
         $menu_items[] = Display::url(
-            Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('View my progress')),
+            Display::getMdiIcon(
+                ToolIcon::TRACKING,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_MEDIUM,
+                get_lang('View my progress')
+            ),
             api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
         );
         $menu_items[] = Display::url(
-            Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Learners')),
+            Display::getMdiIcon(
+                ToolIcon::COURSE_PROGRESS,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_MEDIUM,
+                get_lang('Global view')
+            ),
+            api_get_path(WEB_CODE_PATH).'my_space/index.php'
+        );
+        $menu_items[] = Display::url(
+            Display::getMdiIcon(
+                ObjectIcon::USER,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_MEDIUM,
+                get_lang('Learners')
+            ),
             'index.php?view=drh_students&display=yourstudents'
         );
         $menu_items[] = Display::url(
-            Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Teachers')),
+            Display::getMdiIcon(
+                ObjectIcon::TEACHER,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_MEDIUM,
+                get_lang('Teachers')
+            ),
             'teachers.php'
         );
         $menu_items[] = Display::url(
-            Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Courses')),
+            Display::getMdiIcon(
+                ObjectIcon::COURSE,
+                'ch-tool-icon-disabled',
+                null,
+                ICON_SIZE_MEDIUM,
+                get_lang('Courses')
+            ),
             '#'
         );
         $menu_items[] = Display::url(
-            Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Sessions')),
+            Display::getMdiIcon(
+                ObjectIcon::SESSION,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_MEDIUM,
+                get_lang('Sessions')
+            ),
             api_get_path(WEB_CODE_PATH).'my_space/session.php'
         );
-        $menu_items[] = Display::url(
-            get_lang('Question stats'),
-            api_get_path(WEB_CODE_PATH).'my_space/question_stats_global.php'
-        );
 
-        $menu_items[] = Display::url(
-            get_lang('Detailed questions stats'),
-            api_get_path(WEB_CODE_PATH).'my_space/question_stats_global_detail.php'
-        );
+        // Question stats tabs (pill-style buttons)
+        $currentScript = basename($_SERVER['SCRIPT_NAME']);
+        $isGlobal = 'question_stats_global.php' === $currentScript;
+        $isDetail = 'question_stats_global_detail.php' === $currentScript;
+
+        $questionTabs =
+            '<div class="inline-flex items-center ml-4">'.
+            '<div class="inline-flex rounded-full bg-gray-10 border border-gray-25 px-1 py-1 text-body-2">'.
+            '<a href="'.api_get_path(WEB_CODE_PATH).'my_space/question_stats_global.php"'
+            .' class="px-3 py-1 rounded-full transition '
+            .($isGlobal
+                ? 'bg-white text-gray-90 shadow-sm'
+                : 'text-gray-50 hover:bg-gray-15 hover:text-gray-90').'"'
+            .'>'.get_lang('Question stats').'</a>'.
+            '<a href="'.api_get_path(WEB_CODE_PATH).'my_space/question_stats_global_detail.php"'
+            .' class="ml-1 px-3 py-1 rounded-full transition '
+            .($isDetail
+                ? 'bg-white text-gray-90 shadow-sm'
+                : 'text-gray-50 hover:bg-gray-15 hover:text-gray-90').'"'
+            .'>'.get_lang('Detailed questions stats').'</a>'.
+            '</div>'.
+            '</div>';
+
+        $menu_items[] = $questionTabs;
+
         if (api_can_login_as($user_id)) {
-            $link = '<a
-                    href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::get_existing_token().'">'.
-                    Display::getMdiIcon(ActionIcon::LOGIN_AS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Login as')).'</a>&nbsp;&nbsp;';
-            $menu_items[] = $link;
+            $menu_items[] = '<a href="'.
+                api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$user_id.
+                '&sec_token='.Security::get_existing_token().'">'.
+                Display::getMdiIcon(
+                    ActionIcon::LOGIN_AS,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_MEDIUM,
+                    get_lang('Login as')
+                ).
+                '</a>&nbsp;&nbsp;';
         }
     }
 
-    $actionsLeft = $actionsRight = '';
-    $nb_menu_items = count($menu_items);
-    if ($nb_menu_items > 1) {
-        foreach ($menu_items as $key => $item) {
+    $actionsLeft = '';
+    $actionsRight = '';
+
+    if (count($menu_items) > 1) {
+        foreach ($menu_items as $item) {
             $actionsLeft .= $item;
         }
     }
@@ -139,15 +219,23 @@ if (api_is_platform_admin(true, true)) {
     }
 
     $toolbar = Display::toolbarAction('toolbar-course', [$actionsLeft, $actionsRight]);
-    echo $toolbar;
-    echo Display::page_header($title);
+    $pageTitle = $title;
 }
 
+// Optional import link for general coaches.
+$importLink = '';
 if ($showImportIcon) {
-    echo "<div align=\"right\">";
-    echo '<a href="user_import.php?id_session='.$sessionId.'&action=export&type=xml">'.
-            Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Import users list')).'&nbsp;'.get_lang('Import users list').'</a>';
-    echo "</div><br />";
+    $importLink = '<a href="user_import.php?id_session='.$sessionId.'&action=export&type=xml">'.
+        Display::getMdiIcon(
+            ActionIcon::IMPORT_ARCHIVE,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Import users list')
+        ).
+        '&nbsp;'.
+        get_lang('Import users list').
+        '</a>';
 }
 
 /**
@@ -206,21 +294,22 @@ function get_count_courses()
 }
 
 /**
- * @param $from
- * @param $limit
- * @param $column
- * @param $direction
+ * @param int    $from
+ * @param int    $limit
+ * @param string $column
+ * @param string $direction
  *
  * @return array
  */
 function get_courses($from, $limit, $column, $direction)
 {
     $userId = api_get_user_id();
-    $sessionId = isset($_GET['sid']) ? intval($_GET['sid']) : 0;
+    $sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
     $session = api_get_session_entity($sessionId);
     $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : null;
     $follow = isset($_GET['follow']) ? true : false;
     $drhLoaded = false;
+
     if (api_is_drh()) {
         if (api_drh_can_access_all_session_content()) {
             $courses = SessionManager::getAllCoursesFollowedByUser(
@@ -238,7 +327,7 @@ function get_courses($from, $limit, $column, $direction)
     }
 
     if (false == $drhLoaded) {
-        // General coach can see all reports
+        // General coach can see all reports.
         if ($session && $session->hasUserAsGeneralCoach(api_get_user_entity())) {
             $courseList = SessionManager::getCoursesInSession($session->getId());
             $courses = [];
@@ -299,7 +388,7 @@ function get_courses($from, $limit, $column, $direction)
 
             if (count($userIdList) > 0) {
                 $countStudents = count($userIdList);
-                // tracking data
+                // Tracking data.
                 $avgProgressInCourse = Tracking::get_avg_student_progress($userIdList, $course, [], $session);
                 $avgScoreInCourse = Tracking::get_avg_student_score($userIdList, $course, [], $session);
                 $avgTimeSpentInCourse = Tracking::get_time_spent_on_the_course(
@@ -332,8 +421,15 @@ function get_courses($from, $limit, $column, $direction)
 
             $courseIcon = '<a
                 href="'.api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?cid='.$courseId.'&sid='.$sessionId.'">
-                '.Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Details')).'
+                '.Display::getMdiIcon(
+                    ActionIcon::VIEW_DETAILS,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('Details')
+                ).'
               </a>';
+
             $title = Display::url(
                 $data['title'],
                 $courseInfo['course_public_url'].'?id_session='.$sessionId
@@ -382,10 +478,43 @@ $table = new SortableTable(
 
 $table->set_header(0, get_lang('Course title'), false);
 $table->set_header(1, get_lang('Learners'), false);
-$table->set_header(2, get_lang('Time spent in the course').Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Time in course')), false);
+$table->set_header(
+    2,
+    get_lang('Time spent in the course').
+    Display::getMdiIcon(
+        ActionIcon::INFORMATION,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_SMALL,
+        get_lang('Time in course')
+    ),
+    false
+);
 $table->set_header(3, get_lang('Thematic advance'), false);
-$table->set_header(4, get_lang('Progress').Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Average of all learners in all courses')), false);
-$table->set_header(5, get_lang('Average score in learning paths').Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Average of all learners in all courses')), false);
+$table->set_header(
+    4,
+    get_lang('Progress').
+    Display::getMdiIcon(
+        ActionIcon::INFORMATION,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_SMALL,
+        get_lang('Average of all learners in all courses')
+    ),
+    false
+);
+$table->set_header(
+    5,
+    get_lang('Average score in learning paths').
+    Display::getMdiIcon(
+        ActionIcon::INFORMATION,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_SMALL,
+        get_lang('Average of all learners in all courses')
+    ),
+    false
+);
 $table->set_header(6, get_lang('Messages per learner'), false);
 $table->set_header(7, get_lang('Assignments'), false);
 $table->set_header(8, get_lang('Attendances'), false);
@@ -405,7 +534,46 @@ $params = [
 $table->set_additional_parameters($params);
 
 $form->setDefaults($params);
-$form->display();
-$table->display();
 
-Display :: display_footer();
+// === Render page layout with unified style ===
+Display::display_header($headerTitle);
+
+echo '<div class="w-full px-4 md:px-8 pb-8 space-y-6">';
+
+// Header row: title on the left, toolbar and optional import link on the right.
+echo '  <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">';
+echo '      <div class="space-y-1">';
+echo            Display::page_subheader($pageTitle);
+echo '      </div>';
+
+echo '      <div class="flex flex-col items-end gap-2">';
+echo '          <div class="flex justify-start md:justify-end gap-2">';
+echo                $toolbar;
+echo '          </div>';
+
+if (!empty($importLink)) {
+    echo '      <div class="mt-1 text-sm text-right">';
+    echo            $importLink;
+    echo '      </div>';
+}
+
+echo '      </div>';
+echo '  </div>';
+
+// Filters card.
+echo '  <section class="reporting-students-card bg-white rounded-xl shadow-sm w-full">';
+echo '      <div class="p-4 md:p-5">';
+$form->display();
+echo '      </div>';
+echo '  </section>';
+
+// Table card.
+echo '  <section class="reporting-students-card bg-white rounded-xl shadow-sm w-full">';
+echo '      <div class="overflow-x-auto">';
+$table->display();
+echo '      </div>';
+echo '  </section>';
+
+echo '</div>';
+
+Display::display_footer();

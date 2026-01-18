@@ -149,7 +149,7 @@ final class CStudentPublicationRepository extends ResourceRepository
         ;
     }
 
-    public function findVisibleAssignmentsForStudent(Course $course, ?Session $session = null): array
+    public function findVisibleAssignmentsForStudent(Course $course, ?Session $session = null, int $groupId = 0): array
     {
         $userId = api_get_user_id();
 
@@ -170,6 +170,7 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->setParameter('course', $course)
             ->setParameter('userId', $userId)
             ->orderBy('resource.sentDate', 'DESC')
+            ->distinct()
         ;
 
         if ($session) {
@@ -180,13 +181,33 @@ final class CStudentPublicationRepository extends ResourceRepository
             $qb->andWhere('rl.session IS NULL');
         }
 
+        // Group context filtering:
+        // - groupId > 0: only resources linked to that group
+        // - groupId = 0: exclude any resource that has at least one group link (avoid leaks into course context)
+        if ($groupId > 0) {
+            $qb->andWhere('IDENTITY(rl.group) = :gid')
+                ->setParameter('gid', $groupId)
+            ;
+        } else {
+            $with = 'rl_group.course = :course AND rl_group.group IS NOT NULL';
+            if ($session) {
+                $with .= ' AND rl_group.session = :session';
+            } else {
+                $with .= ' AND rl_group.session IS NULL';
+            }
+
+            $qb->leftJoin('rn.resourceLinks', 'rl_group', 'WITH', $with)
+                ->andWhere('rl_group.id IS NULL')
+            ;
+        }
+
         $qb->andWhere('
-            NOT EXISTS (
-                SELECT 1 FROM '.CStudentPublicationRelUser::class.' rel_all
-                WHERE rel_all.publication = resource
-            )
-            OR rel.iid IS NOT NULL
-        ');
+        NOT EXISTS (
+            SELECT 1 FROM '.CStudentPublicationRelUser::class.' rel_all
+            WHERE rel_all.publication = resource
+        )
+        OR rel.iid IS NOT NULL
+    ');
 
         return $qb->getQuery()->getResult();
     }

@@ -11,12 +11,30 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 SkillModel::isAllowed(api_get_user_id());
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Skills')];
+$origin = isset($_GET['origin']) ? strtolower((string) $_GET['origin']) : 'admin';
+if ('social' === $origin) {
+    $interbreadcrumb[] = [
+        'url' => '/social',
+        'name' => get_lang('Social'),
+    ];
+} elseif ('admin' === $origin) {
+    $interbreadcrumb[] = [
+        'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
+        'name' => get_lang('Administration'),
+    ];
+} else {
+    $interbreadcrumb[] = [
+        'url' => '/home',
+        'name' => get_lang('Home'),
+    ];
+}
+
+$pageTitle = get_lang('Your skill ranking');
 
 //jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_user_skill_ranking';
 
-//The order is important you need to check the the $column variable in the model.ajax.php file
+//The order is important you need to check the $column variable in the model.ajax.php file
 $columns = [
     get_lang('Photo'),
     get_lang('First name'),
@@ -71,28 +89,39 @@ $column_model = [
     ],
 ];
 
-//Autowidth
-//$extra_params['autowidth'] = 'true';
-
-//height auto
-//$extra_params['height'] = 'auto';
-//$extra_params['excel'] = 'excel';
-//$extra_params['rowList'] = array(10, 20 ,30);
+$extra_params = [];
+$extra_params['autowidth'] = 'true';
+$extra_params['height'] = 'auto';
+$extra_params['rowList'] = [10, 20, 50, 100];
 
 $jqgrid = Display::grid_js(
     'skill_ranking',
     $url,
     $columns,
     $column_model,
-    [],
+    $extra_params,
     [],
     null,
     true
 );
+
+$tpl = new Template(get_lang('Skills ranking'));
+$tpl->assign('jqgrid_html', $jqgrid);
+
 $content = Display::grid_html('skill_ranking');
 
-$tpl = new Template(get_lang('Ranking'));
-$tpl->assign('jqgrid_html', $jqgrid);
+$headerHtml = '
+  <div class="skill-ranking-header">
+    <h2 class="skill-ranking-title">'.htmlspecialchars($pageTitle, ENT_QUOTES).'</h2>
+  </div>
+';
+
+$content = $headerHtml.'
+  <div class="skill-ranking-grid">
+    '.$content.'
+  </div>
+';
+
 $template = $tpl->get_template('skill/skill_ranking.tpl');
 $content .= $tpl->fetch($template);
 $tpl->assign('content', $content);

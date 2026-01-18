@@ -25,6 +25,7 @@ $accessUrl = Container::getAccessUrlUtil()->getCurrent();
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 
 $message = null;
+$advancedPanelOpen = !empty($_POST);
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password');
 //$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 //$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
@@ -296,6 +297,12 @@ $form->addGroup($group, 'max_member_group', null, null, false);
 $form->addElement('radio', 'active', get_lang('Account'), get_lang('active'), 1);
 $form->addElement('radio', 'active', '', get_lang('inactive'), 0);
 
+$form->addElement('html', Display::advancedPanelStart(
+    'advanced_params',
+    get_lang('Advanced settings'),
+    $advancedPanelOpen
+));
+
 $extraField = new ExtraField('user');
 $returnParams = $extraField->addElements(
     $form,
@@ -318,6 +325,7 @@ $form->addEmailTemplate(
         'new_user_second_email_confirmation.tpl',
     ]
 );
+$form->addElement('html', Display::advancedPanelEnd());
 
 $jquery_ready_content = $returnParams['jquery_ready_content'];
 

@@ -97,7 +97,6 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
         }
 
         return 'login_ldap_check' === $request->attributes->get('_route')
-            && $request->headers->has('Authorization')
             && $request->isMethod('POST');
     }
 

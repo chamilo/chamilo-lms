@@ -98,6 +98,14 @@
       only-icon
       type="primary"
     />
+    <BaseButton
+      v-if="showGenerateMediaButton"
+      :label="t('Generate media')"
+      icon="robot"
+      only-icon
+      type="black"
+      @click="goToGenerateMedia"
+    />
   </SectionHeader>
 
   <BaseTable
@@ -146,7 +154,7 @@
     >
       <template #body="slotProps">
         {{
-          slotProps.data.resourceNode.firstResourceFile
+          slotProps.data.resourceNode && slotProps.data.resourceNode.firstResourceFile
             ? prettyBytes(slotProps.data.resourceNode.firstResourceFile.size)
             : ""
         }}
@@ -193,7 +201,14 @@
             type="primary"
             @click="btnShowInformationOnClick(slotProps.data)"
           />
-
+          <BaseButton
+            v-if="showAiFeedbackButton(slotProps.data)"
+            :title="t('Get AI feedback')"
+            icon="robot"
+            size="small"
+            type="secondary"
+            @click="openAiFeedback(slotProps.data)"
+          />
           <BaseButton
             v-if="canEdit(slotProps.data)"
             :icon="
@@ -349,10 +364,7 @@
         icon="alert"
         size="big"
       />
-      <span v-if="item"
-        >{{ t("Are you sure you want to delete") }} <b>{{ item.title }}</b
-        >?</span
-      >
+      <span v-if="item">{{ t("Are you sure you want to delete {0}?", [item.title]) }}</span>
     </div>
   </BaseDialogConfirmCancel>
 
@@ -392,7 +404,6 @@
     :style="{ width: '28rem' }"
     :title="t('Space available')"
   >
-    <p>This feature is in development, this is a mockup with placeholder data!</p>
     <BaseChart :data="usageData" />
   </BaseDialog>
 
@@ -408,6 +419,70 @@
       @document-not-saved="recordedAudioNotSaved"
     />
   </BaseDialog>
+  <BaseDialogConfirmCancel
+    v-model:is-visible="isAiFeedbackDialogVisible"
+    :title="t('Get AI feedback')"
+    :confirm-label="aiFeedbackLoading ? t('In progress') : t('Get AI feedback')"
+    :cancel-label="t('Close')"
+    @confirm-clicked="runAiFeedback"
+    @cancel-clicked="closeAiFeedbackDialog"
+  >
+    <div class="space-y-3">
+      <div class="text-sm">
+        <div class="font-semibold">
+          {{ aiFeedbackDocTitle }}
+        </div>
+        <div class="opacity-70">
+          {{ aiFeedbackCourseTitle }}
+        </div>
+      </div>
+
+      <div class="space-y-1">
+        <div class="text-sm font-semibold">Prompt</div>
+        <textarea
+          v-model="aiFeedbackPrompt"
+          class="w-full rounded border border-gray-300 p-2 text-sm"
+          rows="4"
+          placeholder="Write your question for the AI..."
+        />
+      </div>
+
+      <div class="flex flex-row gap-2">
+        <BaseButton
+          v-if="aiFeedbackAnswer"
+          :label="t('Copy answer to clipboard')"
+          icon="copy"
+          type="secondary"
+          @click="copyAiFeedbackToClipboard"
+        />
+        <BaseButton
+          v-if="aiFeedbackAnswer"
+          :disabled="aiFeedbackSaving"
+          :label="aiFeedbackSaving ? t('In progress') : t('Save answer to my inbox')"
+          icon="save"
+          type="primary"
+          @click="saveAiFeedbackToInbox"
+        />
+      </div>
+
+      <div
+        v-if="aiFeedbackAnswer"
+        class="rounded border border-gray-200 bg-gray-10 p-3"
+      >
+        <div class="text-sm font-semibold mb-2">Answer</div>
+        <div class="whitespace-pre-wrap text-sm">
+          {{ aiFeedbackAnswer }}
+        </div>
+      </div>
+
+      <div
+        v-if="aiFeedbackError"
+        class="text-sm text-red-600"
+      >
+        {{ aiFeedbackError }}
+      </div>
+    </div>
+  </BaseDialogConfirmCancel>
   <BaseDialogConfirmCancel
     v-model:is-visible="showTemplateFormModal"
     :cancel-label="t('Cancel')"
@@ -480,7 +555,7 @@ import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/en
 import { isEmpty } from "lodash"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import { computed, onMounted, ref, watch } from "vue"
+import { computed, onMounted, ref, unref, watch } from "vue"
 import { useCidReq } from "../../composables/cidReq"
 import { useDatatableList } from "../../composables/datatableList"
 import { useFormatDate } from "../../composables/formatDate"
@@ -504,23 +579,44 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 import { usePlatformConfig } from "../../store/platformConfig"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import { useCourseSettings } from "../../store/courseSettingStore"
+import { storeToRefs } from "pinia"
+import { useCidReqStore } from "../../store/cidReq"
 
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
 const securityStore = useSecurityStore()
-
+const courseSettingsStore = useCourseSettings()
 const platformConfigStore = usePlatformConfig()
+const { t, locale } = useI18n()
+const notification = useNotification()
+
+const aiHelpersEnabled = computed(() => {
+  return String(platformConfigStore.getSetting("ai_helpers.enable_ai_helpers")) === "true"
+})
+
+const imageGeneratorEnabled = computed(() => {
+  return String(courseSettingsStore?.getSetting?.("image_generator")) === "true"
+})
+
+const videoGeneratorEnabled = computed(() => {
+  return String(courseSettingsStore?.getSetting?.("video_generator")) === "true"
+})
+
+const contentAnalyzerEnabled = computed(() => {
+  const v = courseSettingsStore?.getSetting?.("content_analyzer")
+  if (v === null || v === undefined || v === "") return true
+  return String(v) === "true"
+})
+
 const allowAccessUrlFiles = computed(
   () => "false" !== platformConfigStore.getSetting("document.access_url_specific_files"),
 )
 
-const { t } = useI18n()
 const { filters, options, onUpdateOptions, deleteItem } = useDatatableList("Documents")
-const notification = useNotification()
 const { cid, sid, gid } = useCidReq()
 const { isImage, isHtml, isFile } = useFileUtils()
-
 const { relativeDatetime } = useFormatDate()
 const isAllowedToEdit = ref(false)
 const folders = ref([])
@@ -561,9 +657,7 @@ const selectedItems = ref([])
 
 const items = computed(() => store.getters["documents/getRecents"])
 const isLoading = computed(() => store.getters["documents/isLoading"])
-
 const totalItems = computed(() => store.getters["documents/getTotalItems"])
-
 const resourceNode = computed(() => store.getters["resourcenode/getResourceNode"])
 
 const hasImageInDocumentEntries = computed(() => {
@@ -586,15 +680,18 @@ function resolveDefaultRows(total = 0) {
 }
 
 const canEdit = (item) => {
-  const resourceLink = item.resourceLinkListFromEntity[0]
+  const resourceLink = item?.resourceLinkListFromEntity?.[0]
+  if (!resourceLink) {
+    return false
+  }
   const isSessionDocument = resourceLink.session && resourceLink.session["@id"] === `/api/sessions/${sid}`
   const isBaseCourse = !resourceLink.session
   return (isSessionDocument && isAllowedToEdit.value) || (isBaseCourse && !sid && isCurrentTeacher.value)
 }
 
 const isSessionDocument = (item) => {
-  const resourceLink = item.resourceLinkListFromEntity[0]
-  return resourceLink.session && resourceLink.session["@id"] === `/api/sessions/${sid}`
+  const resourceLink = item?.resourceLinkListFromEntity?.[0]
+  return resourceLink?.session && resourceLink.session["@id"] === `/api/sessions/${sid}`
 }
 
 const isHtmlFile = (fileData) => isHtml(fileData)
@@ -621,7 +718,30 @@ onMounted(async () => {
   await loadAllFolders()
   options.value.itemsPerPage = resolveDefaultRows(totalItems.value || 0)
   onUpdateOptions(options.value)
+
+  try {
+    await courseSettingsStore.loadCourseSettings(cid, sid)
+  } catch (e) {
+    console.error("[AI] loadCourseSettings failed:", e)
+  }
+
+  await loadAiCapabilities()
+  consumeAiSavedToast()
 })
+
+watch(
+  () => [
+    unref(cid),
+    unref(sid),
+    unref(gid),
+    aiHelpersEnabled.value,
+    imageGeneratorEnabled.value,
+    videoGeneratorEnabled.value,
+    contentAnalyzerEnabled.value,
+  ],
+  () => loadAiCapabilities(),
+  { immediate: true },
+)
 
 watch(totalItems, (n) => {
   const def = Number(platformConfigStore.getSetting("display.table_default_row", 10))
@@ -635,7 +755,6 @@ watch(
   () => route.params,
   () => {
     const nodeId = route.params.node
-
     const finderParams = { id: `/api/resource_nodes/${nodeId}`, cid, sid, gid }
 
     store.dispatch("resourcenode/findResourceNode", finderParams)
@@ -654,7 +773,14 @@ const showBackButtonIfNotRootFolder = computed(() => {
 })
 
 function goToAddVariation(item) {
-  const resourceFileId = item.resourceNode.firstResourceFile.id
+  const firstFile = item.resourceNode?.firstResourceFile
+  if (!firstFile) {
+    console.warn("[Documents] Missing firstResourceFile for document:", item?.iid)
+    return
+  }
+
+  const resourceFileId = firstFile.id
+
   router.push({
     name: "DocumentsAddVariation",
     params: { resourceFileId, node: route.params.node },
@@ -734,7 +860,7 @@ async function confirmDeleteItem(itemToDelete) {
       isDeleteItemDialogVisible.value = true
     }
   } catch (error) {
-    console.error("Error checking LP usage for individual item:", error)
+    console.error("[Documents] Error checking LP usage for individual item:", error)
   }
 }
 
@@ -750,7 +876,7 @@ async function forceDeleteItem() {
     unselectAll()
     onUpdateOptions(options.value)
   } catch (error) {
-    console.error("Error deleting documents forcibly:", error)
+    console.error("[Documents] Error deleting documents forcibly:", error)
     notification.showErrorNotification(t("Error deleting document(s)."))
   }
 }
@@ -790,7 +916,7 @@ async function downloadSelectedItems() {
 
     notification.showSuccessNotification(t("Download started"))
   } catch (error) {
-    console.error("Error downloading selected items:", error)
+    console.error("[Documents] Error downloading selected items:", error)
     notification.showErrorNotification(t("Error downloading selected items."))
   } finally {
     isDownloading.value = false
@@ -817,7 +943,7 @@ async function deleteMultipleItems() {
         itemsWithoutLp.push(item)
       }
     } catch (error) {
-      console.error(`Error checking LP usage for document ${item.iid}:`, error)
+      console.error(`[Documents] Error checking LP usage for document ${item.iid}:`, error)
     }
   }
 
@@ -827,7 +953,7 @@ async function deleteMultipleItems() {
     try {
       await store.dispatch("documents/delMultiple", itemsWithoutLp)
     } catch (e) {
-      console.error("Error deleting documents without LP:", e)
+      console.error("[Documents] Error deleting documents without LP:", e)
     }
   }
 
@@ -857,9 +983,7 @@ function unselectAll() {
 
 function deleteSingleItem() {
   deleteItem(item)
-
   item.value = {}
-
   isDeleteItemDialogVisible.value = false
 }
 
@@ -911,7 +1035,6 @@ function btnShowInformationOnClick(item) {
 
 function btnChangeVisibilityOnClick(item) {
   const folderParams = route.query
-
   folderParams.id = item["@id"]
 
   baseService
@@ -921,7 +1044,6 @@ function btnChangeVisibilityOnClick(item) {
 
 function btnEditOnClick(item) {
   const folderParams = route.query
-
   folderParams.id = item["@id"]
 
   if ("folder" === item.filetype || isEmpty(item.filetype)) {
@@ -930,7 +1052,6 @@ function btnEditOnClick(item) {
       params: { id: item["@id"] },
       query: folderParams,
     })
-
     return
   }
 
@@ -947,11 +1068,22 @@ function showSlideShowWithFirstImage() {
   document.querySelector("button.fancybox-button--play")?.click()
 }
 
-function showUsageDialog() {
-  usageData.value = {
-    datasets: [{ data: [83, 14, 5] }],
-    labels: ["Course", "Teacher", "Available space"],
+async function showUsageDialog() {
+  try {
+    const response = await axios.get(`/api/documents/${cid}/usage`, {
+      headers: { Accept: "application/json" },
+      params: { sid, gid },
+    })
+
+    usageData.value = response.data
+  } catch (error) {
+    console.error("[Documents] Error fetching documents quota usage:", error)
+    usageData.value = {
+      datasets: [{ data: [100] }],
+      labels: [t("Storage usage unavailable")],
+    }
   }
+
   isFileUsageDialogVisible.value = true
 }
 
@@ -970,11 +1102,176 @@ function recordedAudioNotSaved(error) {
   console.error(error)
 }
 
-function openMoveDialog(document) {
+/**
+ * -----------------------------------------
+ * MOVE: helpers + folders fetching
+ * -----------------------------------------
+ */
+function normalizeResourceNodeId(value) {
+  if (value == null) return null
+  if (typeof value === "number") return value
+
+  if (typeof value === "string") {
+    // Accept IRI like "/api/resource_nodes/123"
+    const iriMatch = value.match(/\/api\/resource_nodes\/(\d+)/)
+    if (iriMatch) return Number(iriMatch[1])
+
+    // Accept "123"
+    if (/^\d+$/.test(value)) return Number(value)
+  }
+
+  return null
+}
+
+function getDocumentsRootNodeId() {
+  // We want the top node of this documents tree (usually the course root node).
+  let node = resourceNode.value
+
+  const fallback = normalizeResourceNodeId(route.params.node || route.query.node)
+
+  if (!node) {
+    return fallback
+  }
+
+  // If current node is already the course root, use it.
+  if (node?.resourceType?.title === "courses") {
+    return normalizeResourceNodeId(node.id) || fallback
+  }
+
+  // Walk up until we reach the course root node.
+  let safety = 0
+  while (node?.parent && node?.resourceType?.title !== "courses" && safety < 30) {
+    node = node.parent
+    safety++
+  }
+
+  return normalizeResourceNodeId(node?.id) || fallback
+}
+
+async function fetchFolders(nodeId = null, parentPath = "") {
+  const rootId = normalizeResourceNodeId(nodeId) ?? getDocumentsRootNodeId()
+
+  const foldersList = [
+    {
+      label: t("Documents"),
+      value: rootId, // REAL root node id
+    },
+  ]
+
+  try {
+    let nodesToFetch = [{ id: rootId, path: parentPath }]
+    let depth = 0
+    const maxDepth = 10
+
+    while (nodesToFetch.length > 0 && depth < maxDepth) {
+      const currentNode = nodesToFetch.shift()
+      const currentNodeId = normalizeResourceNodeId(currentNode?.id)
+
+      if (!currentNodeId) {
+        depth++
+        continue
+      }
+
+      const response = await axios.get("/api/documents", {
+        params: {
+          loadNode: 1,
+          filetype: ["folder"],
+          "resourceNode.parent": currentNodeId,
+          cid: unref(cid),
+          sid: unref(sid),
+          gid: unref(gid),
+          page: 1,
+          itemsPerPage: 200,
+        },
+      })
+
+      const members = response.data?.["hydra:member"] || []
+
+      members.forEach((folder) => {
+        const folderNodeId =
+          normalizeResourceNodeId(folder?.resourceNode?.id) ?? normalizeResourceNodeId(folder?.resourceNodeId)
+
+        if (!folderNodeId) {
+          return
+        }
+
+        const fullPath = `${currentNode.path}/${folder.title}`.replace(/^\/+/, "")
+
+        foldersList.push({
+          label: fullPath,
+          value: folderNodeId,
+        })
+
+        nodesToFetch.push({ id: folderNodeId, path: fullPath })
+      })
+
+      depth++
+    }
+
+    return foldersList
+  } catch (error) {
+    console.error("[Documents] Error fetching folders:", error?.message || error)
+    return foldersList
+  }
+}
+
+async function loadAllFolders() {
+  const rootId = getDocumentsRootNodeId()
+  folders.value = await fetchFolders(rootId)
+}
+
+async function openMoveDialog(document) {
   item.value = document
+  selectedFolder.value = null
+  await loadAllFolders()
   isMoveDialogVisible.value = true
 }
 
+async function moveDocument() {
+  try {
+    const parentId = normalizeResourceNodeId(selectedFolder.value)
+
+    if (!parentId) {
+      notification.showErrorNotification(t("Select a folder"))
+      return
+    }
+
+    // Optional: avoid no-op moves
+    const currentParentId =
+      normalizeResourceNodeId(item.value?.resourceNode?.parent?.id) ??
+      normalizeResourceNodeId(item.value?.resourceNode?.parent)
+
+    if (currentParentId && String(currentParentId) === String(parentId)) {
+      notification.showErrorNotification(t("The document is already in this folder"))
+      return
+    }
+
+    await axios.put(
+      `/api/documents/${item.value.iid}/move`,
+      { parentResourceNodeId: parentId },
+      {
+        params: {
+          cid: unref(cid),
+          sid: unref(sid),
+          gid: unref(gid),
+        },
+      },
+    )
+
+    notification.showSuccessNotification(t("Document moved successfully"))
+    isMoveDialogVisible.value = false
+    onUpdateOptions(options.value)
+  } catch (error) {
+    console.error("[Documents] Error moving document:", error.response || error)
+    notification.showErrorNotification(t("Error moving the document"))
+  }
+}
+
+/**
+ * -----------------------------------------
+ * REPLACE
+ * -----------------------------------------
+ */
 function openReplaceDialog(document) {
   if (!canEdit(document)) {
     return
@@ -1012,73 +1309,11 @@ async function replaceDocument() {
   }
 }
 
-async function fetchFolders(nodeId = null, parentPath = "") {
-  const foldersList = [
-    {
-      label: t("Documents"),
-      value: nodeId || route.params.node || route.query.node || "root-node-id",
-    },
-  ]
-
-  try {
-    let nodesToFetch = [{ id: nodeId || route.params.node || route.query.node, path: parentPath }]
-    let depth = 0
-    const maxDepth = 5
-
-    while (nodesToFetch.length > 0 && depth < maxDepth) {
-      const currentNode = nodesToFetch.shift()
-
-      const response = await axios.get("/api/documents", {
-        params: {
-          filetype: "folder",
-          "resourceNode.parent": currentNode.id,
-          cid: route.query.cid,
-          sid: route.query.sid,
-        },
-      })
-
-      response.data["hydra:member"].forEach((folder) => {
-        const fullPath = `${currentNode.path}/${folder.title}`
-
-        foldersList.push({
-          label: fullPath,
-          value: folder.resourceNode?.id || folder.resourceNodeId || folder["@id"],
-        })
-
-        if (folder.resourceNode && folder.resourceNode.id) {
-          nodesToFetch.push({ id: folder.resourceNode.id, path: fullPath })
-        }
-      })
-
-      depth++
-    }
-
-    return foldersList
-  } catch (error) {
-    console.error("Error fetching folders:", error.message || error)
-    return []
-  }
-}
-
-async function loadAllFolders() {
-  folders.value = await fetchFolders()
-}
-
-async function moveDocument() {
-  try {
-    const response = await axios.put(`/api/documents/${item.value.iid}/move`, {
-      parentResourceNodeId: selectedFolder.value,
-    })
-
-    notification.showSuccessNotification(t("Document moved successfully"))
-    isMoveDialogVisible.value = false
-    onUpdateOptions(options.value)
-  } catch (error) {
-    console.error("Error moving document:", error.response || error)
-    notification.showErrorNotification(t("Error moving the document"))
-  }
-}
-
+/**
+ * -----------------------------------------
+ * CERTIFICATES
+ * -----------------------------------------
+ */
 async function selectAsDefaultCertificate(certificate) {
   try {
     const response = await axios.patch(`/gradebook/set_default_certificate/${cid}/${certificate.iid}`)
@@ -1098,14 +1333,19 @@ async function loadDefaultCertificate() {
     defaultCertificateId.value = response.data.certificateId
   } catch (error) {
     if (error.response?.status === 404) {
-      console.error("Default certificate not found.")
+      console.error("[Documents] Default certificate not found.")
       defaultCertificateId.value = null
     } else {
-      console.error("Error loading the certificate", error)
+      console.error("[Documents] Error loading the certificate:", error)
     }
   }
 }
 
+/**
+ * -----------------------------------------
+ * TEMPLATE
+ * -----------------------------------------
+ */
 const showTemplateFormModal = ref(false)
 const selectedFile = ref(null)
 const templateFormData = ref({
@@ -1120,7 +1360,7 @@ const isDocumentTemplate = async (documentId) => {
     const response = await axios.get(`/template/document-templates/${documentId}/is-template`)
     return response.data.isTemplate
   } catch (error) {
-    console.error("Error verifying the template status:", error)
+    console.error("[Documents] Error verifying template status:", error)
     return false
   }
 }
@@ -1131,7 +1371,7 @@ const deleteDocumentTemplate = async (documentId) => {
     onUpdateOptions(options.value)
     notification.showSuccessNotification(t("Template successfully deleted."))
   } catch (error) {
-    console.error("Error deleting the template:", error)
+    console.error("[Documents] Error deleting template:", error)
     notification.showErrorNotification(t("Error deleting the template."))
   }
 }
@@ -1184,8 +1424,277 @@ const submitTemplateForm = async () => {
       notification.showErrorNotification(t("Error creating the template."))
     }
   } catch (error) {
-    console.error("Error submitting the form:", error)
+    console.error("[Documents] Error submitting template form:", error)
     notification.showErrorNotification(t("Error submitting the form."))
   }
+}
+
+/**
+ * -----------------------------------------
+ * AI: capabilities + content analyzer dialog
+ * -----------------------------------------
+ */
+const hasAiImage = ref(false)
+const hasAiVideo = ref(false)
+const hasAiDocumentProcess = ref(false)
+
+const showGenerateMediaButton = computed(() => {
+  if (!isCurrentTeacher.value) return false
+  if (!aiHelpersEnabled.value) return false
+
+  const canImage = imageGeneratorEnabled.value && hasAiImage.value
+  const canVideo = !isCertificateMode.value && videoGeneratorEnabled.value && hasAiVideo.value
+
+  return canImage || canVideo
+})
+
+async function loadAiCapabilities() {
+  if (!aiHelpersEnabled.value) {
+    hasAiImage.value = false
+    hasAiVideo.value = false
+    hasAiDocumentProcess.value = false
+    return
+  }
+
+  // If nothing is enabled on frontend, skip backend call.
+  if (!imageGeneratorEnabled.value && !videoGeneratorEnabled.value && !contentAnalyzerEnabled.value) {
+    hasAiImage.value = false
+    hasAiVideo.value = false
+    hasAiDocumentProcess.value = false
+    return
+  }
+
+  try {
+    const { data } = await axios.get("/ai/capabilities", {
+      params: {
+        cid: unref(cid),
+        sid: unref(sid),
+        gid: unref(gid),
+      },
+      headers: { Accept: "application/json" },
+    })
+
+    console.warn("[AI] capabilities:", data)
+
+    const backendHasImage = !!(data?.has?.image ?? data?.image)
+    const backendHasVideo = !!(data?.has?.video ?? data?.video)
+    const backendHasDocProcess = !!(data?.has?.document_process ?? data?.document_process)
+
+    hasAiImage.value = imageGeneratorEnabled.value && backendHasImage
+    hasAiVideo.value = videoGeneratorEnabled.value && backendHasVideo
+    hasAiDocumentProcess.value = contentAnalyzerEnabled.value && backendHasDocProcess
+  } catch (e) {
+    console.error("[AI] Failed to load capabilities:", e?.response || e)
+    hasAiImage.value = false
+    hasAiVideo.value = false
+    hasAiDocumentProcess.value = false
+  }
+}
+
+function goToGenerateMedia() {
+  router.push({
+    name: "DocumentsGenerateMedia",
+    params: { node: route.params.node },
+    query: { ...route.query, cid, sid, gid },
+  })
+}
+
+function isSupportedForAnalyzer(doc) {
+  const rf = doc?.resourceNode?.firstResourceFile
+  const mime = String(rf?.mimeType || "").toLowerCase()
+  const name = String(rf?.originalName || doc?.title || "").toLowerCase()
+
+  const isPdf = mime === "application/pdf" || name.endsWith(".pdf")
+  const isTxt = mime.startsWith("text/plain") || name.endsWith(".txt")
+
+  return isPdf || isTxt
+}
+
+function showAiFeedbackButton(doc) {
+  if (!isCurrentTeacher.value) return false
+  if (!aiHelpersEnabled.value) return false
+  if (!contentAnalyzerEnabled.value) return false
+  if (!hasAiDocumentProcess.value) return false
+
+  // Only analyze items that have a real file attached.
+  const rfId = doc?.resourceNode?.firstResourceFile?.id
+  if (!rfId) return false
+
+  // Avoid folders.
+  const ft = String(doc?.filetype || "")
+  if (!["file", "video", "certificate"].includes(ft)) return false
+
+  if (!isSupportedForAnalyzer(doc)) return false
+  return true
+}
+
+const isAiFeedbackDialogVisible = ref(false)
+const aiFeedbackLoading = ref(false)
+const aiFeedbackSaving = ref(false)
+const aiFeedbackError = ref("")
+const aiFeedbackAnswer = ref("")
+const aiFeedbackPrompt = ref("")
+const aiFeedbackDoc = ref(null)
+
+const cidReqStore = useCidReqStore()
+const { course } = storeToRefs(cidReqStore)
+
+// Optional provider name (keep null to use backend default).
+const aiFeedbackProvider = ref(null)
+
+const aiFeedbackDocTitle = computed(() => {
+  return String(aiFeedbackDoc.value?.title || aiFeedbackDoc.value?.resourceNode?.title || "").trim()
+})
+
+const aiFeedbackCourseTitle = course.value.title
+
+function openAiFeedback(doc) {
+  aiFeedbackDoc.value = doc
+  aiFeedbackError.value = ""
+  aiFeedbackAnswer.value = ""
+  aiFeedbackProvider.value = null
+
+  // Default prompt can be changed by the teacher (spec: teacher confirms and provides a question).
+  aiFeedbackPrompt.value =
+    "Please provide feedback on clarity, structure, and improvement suggestions. If needed, propose a revised version."
+
+  isAiFeedbackDialogVisible.value = true
+}
+
+function closeAiFeedbackDialog() {
+  isAiFeedbackDialogVisible.value = false
+  aiFeedbackLoading.value = false
+  aiFeedbackSaving.value = false
+  aiFeedbackError.value = ""
+  aiFeedbackAnswer.value = ""
+  aiFeedbackPrompt.value = ""
+  aiFeedbackProvider.value = null
+  aiFeedbackDoc.value = null
+}
+
+async function runAiFeedback() {
+  aiFeedbackError.value = ""
+
+  if (!aiFeedbackDoc.value) {
+    aiFeedbackError.value = "Missing selected document."
+    return
+  }
+
+  if (!aiFeedbackPrompt.value.trim()) {
+    aiFeedbackError.value = "Prompt is required."
+    return
+  }
+
+  const resourceFileId = aiFeedbackDoc.value?.resourceNode?.firstResourceFile?.id
+  if (!resourceFileId) {
+    aiFeedbackError.value = "Missing resource file information for this document."
+    return
+  }
+
+  aiFeedbackLoading.value = true
+  aiFeedbackAnswer.value = ""
+
+  try {
+    const payload = {
+      cid: unref(cid),
+      sid: unref(sid),
+      gid: unref(gid),
+      document_iid: aiFeedbackDoc.value?.iid,
+      resource_file_id: resourceFileId,
+      document_title: aiFeedbackDocTitle.value,
+      prompt: aiFeedbackPrompt.value,
+      language: String(locale?.value || "en"),
+      ai_provider: aiFeedbackProvider.value,
+    }
+
+    const { data } = await axios.post("/ai/document_feedback", payload, {
+      headers: { Accept: "application/json" },
+    })
+
+    if (!data?.success) {
+      aiFeedbackError.value = String(data?.text || "AI feedback request failed.")
+      return
+    }
+
+    aiFeedbackAnswer.value = String(data?.text || "").trim()
+  } catch (e) {
+    console.error("[AI] document_feedback failed:", e?.response || e)
+    aiFeedbackError.value = "AI feedback request failed."
+  } finally {
+    aiFeedbackLoading.value = false
+  }
+}
+
+async function copyAiFeedbackToClipboard() {
+  try {
+    await navigator.clipboard.writeText(String(aiFeedbackAnswer.value || ""))
+    notification.showSuccessNotification(t("Copied"))
+  } catch (e) {
+    console.error("[AI] Failed to copy to clipboard:", e)
+    notification.showErrorNotification(t("Error"))
+  }
+}
+
+async function saveAiFeedbackToInbox() {
+  if (!aiFeedbackDoc.value || !aiFeedbackAnswer.value) {
+    aiFeedbackError.value = "Nothing to save."
+    return
+  }
+
+  aiFeedbackSaving.value = true
+  aiFeedbackError.value = ""
+
+  try {
+    const payload = {
+      cid: unref(cid),
+      sid: unref(sid),
+      gid: unref(gid),
+      document_iid: aiFeedbackDoc.value?.iid,
+      document_title: aiFeedbackDocTitle.value,
+      answer: aiFeedbackAnswer.value,
+    }
+
+    const { data } = await axios.post("/ai/document_feedback/save_to_inbox", payload, {
+      headers: { Accept: "application/json" },
+    })
+
+    if (!data?.success) {
+      aiFeedbackError.value = String(data?.text || "Failed to save the answer to inbox.")
+      return
+    }
+
+    notification.showSuccessNotification(t("Saved"))
+  } catch (e) {
+    console.error("[AI] save_to_inbox failed:", e?.response || e)
+    aiFeedbackError.value = "Failed to save the answer to inbox."
+  } finally {
+    aiFeedbackSaving.value = false
+  }
+}
+
+function consumeAiSavedToast() {
+  // Show toast only once after redirect from AI generator.
+  if (String(route.query.ai_saved || "") !== "1") {
+    return
+  }
+
+  const path = String(route.query.ai_saved_path || "").trim()
+  if (path) {
+    notification.showSuccessNotification(`${t("Saved")}: ${path}`)
+  } else {
+    notification.showSuccessNotification(t("Saved"))
+  }
+
+  // Remove params so it doesn't show again on refresh/back.
+  const newQuery = { ...route.query }
+  delete newQuery.ai_saved
+  delete newQuery.ai_saved_path
+  delete newQuery.ai_saved_iri
+
+  router.replace({
+    name: route.name,
+    params: route.params,
+    query: newQuery,
+  })
 }
 </script>

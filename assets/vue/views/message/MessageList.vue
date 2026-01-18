@@ -5,6 +5,8 @@
         icon="email-plus"
         only-icon
         type="black"
+        :title="t('New message')"
+        :aria-label="t('New message')"
         @click="goToCompose"
       />
 
@@ -13,6 +15,8 @@
         icon="refresh"
         only-icon
         type="black"
+        :title="t('Refresh')"
+        :aria-label="t('Refresh')"
         @click="refreshMessages"
       />
 
@@ -21,6 +25,8 @@
         icon="delete"
         only-icon
         type="black"
+        :title="t('Delete')"
+        :aria-label="t('Delete')"
         @click="showDlgConfirmDeleteMultiple"
       />
 
@@ -30,6 +36,8 @@
         only-icon
         popup-identifier="course-messages-list-tmenu"
         type="black"
+        :title="t('Mark as')"
+        :aria-label="t('Mark as')"
         @click="mToggleMessagesList"
       />
 
@@ -46,6 +54,8 @@
         class="w-full md:w-auto"
         icon="inbox"
         type="black"
+        :title="t('Inbox')"
+        :aria-label="t('Inbox')"
         @click="showInbox"
       />
 
@@ -54,6 +64,8 @@
         class="w-full md:w-auto"
         icon="email-unread"
         type="black"
+        :title="t('Unread')"
+        :aria-label="t('Unread')"
         @click="showUnread"
       />
 
@@ -62,6 +74,8 @@
         class="w-full md:w-auto"
         icon="sent"
         type="black"
+        :title="t('Sent')"
+        :aria-label="t('Sent')"
         @click="showSent"
       />
 
@@ -72,6 +86,8 @@
         class="w-full md:w-auto"
         icon="tag-outline"
         type="black"
+        :title="tag.tag"
+        :aria-label="tag.tag"
         @click="showInboxByTag(tag)"
       />
     </div>
@@ -107,10 +123,14 @@
                 icon="search"
                 is-submit
                 type="primary"
+                :title="t('Search')"
+                :aria-label="t('Search')"
               />
               <BaseButton
                 icon="close"
                 type="primary"
+                :title="t('Reset')"
+                :aria-label="t('Reset')"
                 @click="onResetSearch"
               />
             </InputGroup>
@@ -134,6 +154,7 @@
             />
           </template>
         </Column>
+
         <Column
           :header="t('Title')"
           :sortable="true"
@@ -161,6 +182,7 @@
             />
           </template>
         </Column>
+
         <Column
           :header="t('Sent date')"
           :sortable="true"
@@ -171,18 +193,22 @@
             {{ abbreviatedDatetime(slotProps.data.sendDate) }}
           </template>
         </Column>
+
         <Column :header="t('Actions')">
           <template #body="slotProps">
             <BaseButton
               icon="delete"
               size="small"
               type="danger"
+              :title="t('Delete')"
+              :aria-label="t('Delete')"
               @click="showDlgConfirmDeleteSingle(slotProps)"
             />
           </template>
         </Column>
       </BaseTable>
     </div>
+
     <!-- List for small screens with pagination -->
     <div class="block md:hidden">
       <ul class="space-y-4">
@@ -220,6 +246,7 @@
               </div>
             </div>
           </div>
+
           <div class="mt-4">
             <div class="text-sm font-bold">{{ t("Title") }}:</div>
             <BaseAppLink
@@ -235,6 +262,7 @@
               {{ item.title }}
             </BaseAppLink>
           </div>
+
           <div
             v-if="findMyReceiver(item)?.tags.length"
             class="mt-2"
@@ -249,34 +277,43 @@
               />
             </div>
           </div>
+
           <div class="mt-2">
             <div class="text-sm font-bold">{{ t("Sent date") }}:</div>
             <div class="text-base text-gray-500">{{ abbreviatedDatetime(item.sendDate) }}</div>
           </div>
+
           <div class="mt-4 flex space-x-2">
             <BaseButton
               icon="delete"
               size="small"
               type="danger"
+              :title="t('Delete')"
+              :aria-label="t('Delete')"
               @click="showDlgConfirmDeleteSingle(item)"
             />
           </div>
         </li>
       </ul>
+
       <div class="flex justify-between items-center mt-4">
         <BaseButton
           :disabled="isPrevDisabled"
           icon="back"
           type="black"
+          :title="t('Previous page')"
+          :aria-label="t('Previous page')"
           @click="prevPage"
         />
-        <span
-          >{{ t("Page") }} {{ currentPage }} {{ t("of") }} {{ totalPages }} ({{ totalItems }} {{ t("messages") }})</span
-        >
+        <span>
+          {{ t("Page") }} {{ currentPage }} {{ t("of") }} {{ totalPages }} ({{ totalItems }} {{ t("messages") }})
+        </span>
         <BaseButton
           :disabled="isNextDisabled"
           icon="next"
           type="black"
+          :title="t('Next page')"
+          :aria-label="t('Next page')"
           @click="nextPage"
         />
       </div>
@@ -607,7 +644,7 @@ function showDlgConfirmDeleteSingle(dataOrItem) {
 
   confirm.require({
     header: t("Confirmation"),
-    message: t("Are you sure you want to delete %s?", [item.title]),
+    message: t("Are you sure you want to delete {0}?", [item.title]),
     acceptLabel: t("Yes"),
     rejectLabel: t("No"),
     accept: async () => {

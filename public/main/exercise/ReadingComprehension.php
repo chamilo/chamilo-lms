@@ -10,7 +10,7 @@
  */
 class ReadingComprehension extends UniqueAnswer
 {
-    public $typePicture = 'reading-comprehension.png';
+    public $typePicture = 'reading_comprehension.png';
     public $explanationLangVar = 'Reading comprehension';
 
     /**

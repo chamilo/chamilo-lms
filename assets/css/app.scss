@@ -23,7 +23,7 @@
 
 @layer components {
   .card {
-    @apply rounded bg-white drop-shadow-lg w-full;
+    @apply rounded bg-white shadow-lg w-full;
   }
 
   // Buttons with icons.
@@ -644,9 +644,6 @@ form .field {
   td {
     padding: 12px;
   }
-  input[type="checkbox"] {
-    transform: scale(1.2);
-  }
   .save-button {
     background-color: #4CAF50;
     color: white;
@@ -658,10 +655,6 @@ form .field {
   }
   .save-button:hover {
     background-color: #45a049;
-  }
-  input[type="checkbox"] {
-    transform: scale(1);
-    margin: 0 auto;
   }
 }
 
@@ -985,6 +978,75 @@ img.course-tool__icon {
 }
 .app-breadcrumb .p-breadcrumb-separator { padding-inline: .25rem; }
 
+// Glossary auto-highlighted term
+.glossary-term {
+  position: relative;
+  cursor: help;
+  font-weight: 500;
+  color: #2563eb;
+  border-bottom: 1px dotted currentColor;
+  text-decoration: none;
+
+  &::after {
+    content: "ⓘ";
+    font-size: 0.7em;
+    margin-left: 0.15rem;
+    vertical-align: super;
+    opacity: 0.7;
+  }
+
+  &:hover {
+    color: #1d4ed8;
+    border-bottom-style: solid;
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+}
+
+.course-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.course-card :deep(.p-card-body) {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.course-card :deep(.p-card-footer) {
+  margin-top: auto;
+}
+
+@layer base {
+  .form-control,
+  input,
+  select,
+  textarea {
+    @apply focus:outline-0 focus:border-primary focus:rounded-md focus:transition;
+  }
+}
+@layer components {
+  .form-group:focus-within,
+  .field:focus-within,
+  fieldset:focus-within {
+    box-shadow: none !important;
+    outline: 0 !important;
+  }
+  .select2-container--default .select2-selection:focus,
+  .select2-container--default.select2-container--focus .select2-selection {
+    outline: 0 !important;
+    border-color: #1d4ed8 !important;
+    box-shadow: 0 0 0 2px rgba(29, 78, 216, .35) !important;
+    border-radius: .5rem !important;
+  }
+}
+
 @import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
 @import "~timepicker/jquery.timepicker.min.css";
 @import "~qtip2/dist/jquery.qtip.min.css";
+@import "primeicons/primeicons.css";

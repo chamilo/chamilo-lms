@@ -50,7 +50,7 @@
           <span class="text-gray-90">
             {{ formatDateTime(event.dateTime) }}
             <template v-if="event.duration !== null && event.duration !== undefined">
-              · {{ event.duration }} {{ t("min") }}
+              · {{ t("{0} min", [event.duration]) }}
             </template>
           </span>
         </div>

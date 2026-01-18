@@ -13,7 +13,9 @@ use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 #[AsController]
 class UpdateVisibilityDocument extends AbstractController
@@ -21,19 +23,27 @@ class UpdateVisibilityDocument extends AbstractController
     public function __construct(
         private readonly CidReqHelper $cidReqHelper,
         private readonly EntityManagerInterface $em,
+        private readonly RequestStack $requestStack,
     ) {}
 
     public function __invoke(CDocument $document, CDocumentRepository $repo): CDocument
     {
-        $course = $this->cidReqHelper->getCourseEntity();
-        $session = $this->cidReqHelper->getSessionEntity();
+        $request = $this->requestStack->getCurrentRequest();
 
-        if ($course) {
-            $course = $this->em->getRepository(Course::class)->find($course->getId());
-        }
+        $cid = $request?->query->getInt('cid', 0) ?? 0;
+        $sid = $request?->query->getInt('sid', 0) ?? 0;
 
-        if ($session) {
-            $session = $this->em->getRepository(Session::class)->find($session->getId());
+        $courseFromHelper = $this->cidReqHelper->getCourseEntity();
+        $sessionFromHelper = $this->cidReqHelper->getSessionEntity();
+
+        $courseId = $courseFromHelper?->getId() ?? $cid;
+        $sessionId = $sessionFromHelper?->getId() ?? $sid;
+
+        $course = $courseId > 0 ? $this->em->getRepository(Course::class)->find($courseId) : null;
+        $session = $sessionId > 0 ? $this->em->getRepository(Session::class)->find($sessionId) : null;
+
+        if (null === $course) {
+            throw new BadRequestHttpException('Course context is required to toggle visibility.');
         }
 
         $repo->toggleVisibilityPublishedDraft($document, $course, $session);

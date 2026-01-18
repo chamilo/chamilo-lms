@@ -39,6 +39,28 @@ use Symfony\Component\Validator\Constraints as Assert;
 class PageCategory
 {
     use TimestampableTypedEntity;
+
+    public const ADMIN_BLOCKS_CATEGORIES = [
+        'block-admin-users',
+        'block-admin-courses',
+        'block-admin-sessions',
+        'block-admin-gradebook',
+        'block-admin-skills',
+        'block-admin-privacy',
+        'block-admin-settings',
+        'block-admin-platform',
+        'block-admin-chamilo',
+    ];
+
+    public const ANONYMOUS_CATEGORIES = [
+        'faq',
+        'demo',
+        'home',
+        'public',
+        'footer_public',
+        'index',
+    ];
+
     #[Groups(['page_category:read', 'page_category:write'])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]

@@ -3,6 +3,24 @@
 {% block content %}
     {% autoescape false %}
 
+        {% set sid = session_id|default(0) %}
+        {% set hasSession = (sid is not empty) and (sid != 0) %}
+        {% set rootLabel = hasSession ? 'My sessions'|trans : 'My courses'|trans %}
+        {% set rootUrl   = hasSession ? '/sessions' : '/courses' %}
+        {% set courseLabel = course.title|default('Course') %}
+        {% set courseUrl = '/course/' ~ course.id ~ '/home?sid=' ~ sid %}
+
+        {% set aiEnabled = ai_enabled|default(false) %}
+        {% set aiDefaultProvider = ai_default_provider|default('openai') %}
+
+        <script>
+          window.breadcrumb = [
+            { name: "{{ rootLabel|e('js') }}", url: "{{ rootUrl|e('js') }}" },
+            { name: "{{ courseLabel|e('js') }}", url: "{{ courseUrl|e('js') }}" },
+            { name: "{{ 'Chat'|trans|e('js') }}" }
+          ];
+        </script>
+
         <div class="min-h-screen bg-support-2 course-tool-chat">
             <div class="mx-auto max-w-7xl p-4 md:p-6">
                 <div class="grid grid-cols-12 gap-4 md:gap-6">
@@ -13,9 +31,9 @@
                             <div class="flex items-center justify-between px-4 py-3 border-b border-gray-20">
                                 <h2 class="text-sm font-semibold text-gray-90">{{ 'Users'|trans }}</h2>
                                 <span class="inline-flex items-center gap-2 text-xs text-gray-50">
-              <span class="h-2 w-2 rounded-full bg-success"></span>
-              {{ 'Online'|trans }}
-            </span>
+                                  <span class="h-2 w-2 rounded-full bg-success"></span>
+                                  {{ 'Online'|trans }}
+                                </span>
                             </div>
                             <ul id="chat-users" class="divide-y divide-gray-20 max-h-[70vh] overflow-y-auto">
                                 {# Filled by JS #}
@@ -36,16 +54,30 @@
                                                 class="tab-btn active whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium"
                                         >{{ 'All'|trans }}</button>
                                     {% endif %}
+
+                                    {% if aiEnabled %}
+                                        <!--button
+                                                data-user="-1"
+                                                id="chat-tab--1"
+                                                class="tab-btn whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-50"
+                                        >🤖 {{ 'AI Tutor'|trans }}</button-->
+                                    {% endif %}
+
                                     {# Dynamic user tabs added by JS #}
                                 </div>
                             </div>
 
                             {# Histories (dedicated root so JS appends panels here) #}
                             <div class="p-4" id="histories-root">
-                                <div class="tab-panel" id="{{ restrict_to_coach ? '' : 'panel-0' }}">
-                                    <div class="chat-history" id="{{ restrict_to_coach ? '' : 'chat-history' }}"></div>
+                                <div class="tab-panel" id="panel-0">
+                                    <div class="chat-history" id="chat-history"></div>
                                 </div>
-                                {# Dynamic user panels added by JS #}
+
+                                {% if aiEnabled %}
+                                    <div class="tab-panel hidden" id="panel--1">
+                                        <div class="chat-history" id="chat-history--1"></div>
+                                    </div>
+                                {% endif %}
                             </div>
 
                             {# Composer #}
@@ -111,7 +143,11 @@
               startChat: '{{ "Start chat"|trans|e('js') }}',
               leaveMessage: '{{ "Leave a message"|trans|e('js') }}',
               chat: '{{ "Chat"|trans|e('js') }}',
-              confirmReset: '{{ "Are you sure you want to clear this chat?"|trans|e('js') }}'
+              confirmReset: '{{ "Are you sure you want to clear this chat?"|trans|e('js') }}',
+              loading: '{{ "Loading…"|trans|e('js') }}',
+              loadingPlain: 'Loading…',
+              aiTutorPlaceholder: 'Ask the AI Tutor…',
+              defaultPlaceholder: '{{ "Write…"|trans|e('js') }}'
             };
 
             // ---------- helpers ----------
@@ -120,35 +156,55 @@
             const restrictToCoach = {{ restrict_to_coach ? 'true' : 'false' }};
             const parentNodeId = {{ chat_parent_node_id|default('0') }};
 
+            const aiEnabled = {{ aiEnabled ? 'true' : 'false' }};
+            const aiDefaultProvider = '{{ aiDefaultProvider|e('js') }}';
+
             const $  = (sel, root=document) => root.querySelector(sel);
             const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
             const qs = (obj) => new URLSearchParams(obj).toString();
             const historiesRoot = document.getElementById('histories-root');
 
-            // Ensure parent node parameter travels with requests
-            const withNode = (params={}) => {
+            // Tracks the active conversation for node-binding decisions.
+            let currentFriendForNode = 0;
+
+            // Ensure node parameter travels with requests ONLY for general chat (friend=0).
+            // Privacy-by-default: do not associate private conversations (users) nor AI Tutor with a ResourceNode.
+            const withNode = (params = {}) => {
               const p = { ...params };
-              if (parentNodeId && String(parentNodeId) !== '0') p.node = parentNodeId;
+              const friend = Number(p.friend ?? currentFriendForNode ?? 0);
+              const isGeneral = (friend === 0);
+
+              if (isGeneral && parentNodeId && String(parentNodeId) !== '0') {
+                p.node = parentNodeId;
+              }
               return p;
             };
-
-            // GET helper
-            const getJSON = (params) =>
-              fetch(`${ajaxUrl}&${qs(withNode(params))}`, { credentials: 'same-origin' })
-                .then(r => r.ok ? r.json() : Promise.reject(r));
-
-            // POST helper (x-www-form-urlencoded)
-            const postForm = (params) =>
-              fetch(ajaxUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
-                body: new URLSearchParams(withNode(params)),
-                credentials: 'same-origin'
-              }).then(r => r.ok ? r.json() : Promise.reject(r));
 
             const escapeHTML = (s) => (s ?? '').toString().replace(/[&<>"']/g, (m) =>
               ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])
             );
+
+            const normalizeInt = (v, fallback = -1) => {
+              const n = Number.parseInt(String(v), 10);
+              return Number.isFinite(n) ? n : fallback;
+            };
+
+            // GET helper
+            const getJSON = (params, opts = {}) =>
+              fetch(`${ajaxUrl}&${qs(withNode(params))}`, {
+                credentials: 'same-origin',
+                signal: opts.signal
+              }).then(r => r.ok ? r.json() : Promise.reject(r));
+
+            // POST helper (x-www-form-urlencoded)
+            const postForm = (params, opts = {}) =>
+              fetch(ajaxUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+                body: new URLSearchParams(withNode(params)),
+                credentials: 'same-origin',
+                signal: opts.signal
+              }).then(r => r.ok ? r.json() : Promise.reject(r));
 
             function setActiveTab(btn) {
               $$('#chat-tabs .tab-btn').forEach(b => {
@@ -164,6 +220,24 @@
               const id = (userId === 0) ? 'panel-0' : ('panel-' + userId);
               const panel = document.getElementById(id);
               if (panel) panel.classList.remove('hidden');
+            }
+
+            function renderHistoryLoading(userId) {
+              const containerId = userId ? ('chat-history-' + userId) : 'chat-history';
+              const el = document.getElementById(containerId);
+              if (!el) return;
+              el.innerHTML = `<div class="text-sm text-gray-500">${escapeHTML(T.loading)}</div>`;
+              el.scrollTop = 0;
+            }
+
+            function updateComposerPlaceholder(userId) {
+              const ta = $('#chat-writer');
+              if (!ta) return;
+              if (userId === -1) {
+                ta.placeholder = T.aiTutorPlaceholder;
+              } else {
+                ta.placeholder = T.defaultPlaceholder;
+              }
             }
 
             // ---------- Emoji picker (Unicode only) ----------
@@ -211,6 +285,7 @@
               document.body.appendChild(pop);
               return (emojiPopover = pop);
             }
+
             function positionEmojiPopover() {
               const anchorBtn = $('#emojis');
               const pop = buildEmojiPopover();
@@ -225,46 +300,180 @@
               pop.style.top = `${top}px`;
               pop.style.left = `${left}px`;
             }
-            function showEmoji(){ buildEmojiPopover(); positionEmojiPopover(); emojiPopover.hidden = false; $('#emojis').setAttribute('aria-expanded','true'); emojiOpen = true; (emojiPopover.querySelector('.emoji-btn')||{}).focus?.(); }
-            function hideEmoji(){ if (!emojiPopover) return; emojiPopover.hidden = true; $('#emojis').setAttribute('aria-expanded','false'); emojiOpen = false; $('#emojis').focus(); }
+
+            function showEmoji(){
+              buildEmojiPopover();
+              positionEmojiPopover();
+              emojiPopover.hidden = false;
+              $('#emojis').setAttribute('aria-expanded','true');
+              emojiOpen = true;
+              (emojiPopover.querySelector('.emoji-btn')||{}).focus?.();
+            }
+            function hideEmoji(){
+              if (!emojiPopover) return;
+              emojiPopover.hidden = true;
+              $('#emojis').setAttribute('aria-expanded','false');
+              emojiOpen = false;
+              $('#emojis').focus();
+            }
             function toggleEmoji(){ emojiOpen ? hideEmoji() : showEmoji(); }
-            document.addEventListener('click', (e) => { if (!emojiOpen) return; const anchor = $('#emoji-anchor'); if (!anchor.contains(e.target) && !emojiPopover.contains(e.target)) hideEmoji(); });
-            document.addEventListener('keydown', (e) => { if (emojiOpen && e.key === 'Escape') { e.preventDefault(); hideEmoji(); }});
+
+            document.addEventListener('click', (e) => {
+              if (!emojiOpen) return;
+              const anchor = $('#emoji-anchor');
+              if (!anchor.contains(e.target) && !emojiPopover.contains(e.target)) hideEmoji();
+            });
+            document.addEventListener('keydown', (e) => {
+              if (emojiOpen && e.key === 'Escape') {
+                e.preventDefault();
+                hideEmoji();
+              }
+            });
             window.addEventListener('resize', () => { if (emojiOpen) positionEmojiPopover(); });
             window.addEventListener('scroll', () => { if (emojiOpen) positionEmojiPopover(); }, true);
 
             // ---------- App ----------
             const ChChat = {
+              _started: false,
+
               _historySize: -1,
               usersOnline: 0,
               currentFriend: 0,
-              _pollDelayMs: 2000,
+
+              // Progressive backoff state
+              _pollStartTs: 0,
               _loopHandle: null,
 
-              track() {
-                return getJSON({
+              // In-flight request guard
+              _trackInFlight: false,
+              _trackAbortCtrl: null,
+
+              // Jitter to avoid herd effect
+              _jitterMs() { return Math.floor(Math.random() * 200); },
+
+              _resetBackoff() {
+                this._pollStartTs = Date.now();
+              },
+
+              _getBackoffDelayMs() {
+                const start = this._pollStartTs || Date.now();
+                const elapsed = Date.now() - start;
+
+                // Progressive slowdown (legacy-like)
+                if (elapsed < 5000) return 1000;                 // 1s for 5s
+                if (elapsed < 5000 + 30000) return 5000;         // 5s for 30s
+                if (elapsed < 5000 + 30000 + 120000) return 10000; // 10s for 120s
+                return 30000;                                    // 30s afterwards
+              },
+
+              clearConversationUi(userId) {
+                const containerId = userId ? ('chat-history-' + userId) : 'chat-history';
+                const el = document.getElementById(containerId);
+                if (el) {
+                  el.innerHTML = `<div class="py-6 text-sm text-gray-500">${escapeHTML(T.loadingPlain)}</div>`;
+                  el.scrollTop = 0;
+                }
+
+                const textarea = document.getElementById('chat-writer');
+                if (textarea) textarea.value = '';
+
+                const preview = document.getElementById('html-preview');
+                if (preview) {
+                  preview.classList.add('hidden');
+                  preview.innerHTML = '';
+                }
+
+                const sendBtn = document.getElementById('chat-send-message');
+                if (sendBtn) {
+                  // Restrict-to-coach: general chat is disabled (friend=0).
+                  sendBtn.disabled = (restrictToCoach && userId === 0);
+                }
+
+                updateComposerPlaceholder(userId);
+
+                // Force server to re-send full history for the new tab
+                this._historySize = -1;
+              },
+
+              switchConversation(userId) {
+                // Reset size so the server returns the right conversation immediately.
+                this.currentFriend = userId;
+                currentFriendForNode = userId;
+                this._historySize = -1;
+
+                // User activity: reset backoff (poll faster again).
+                this._resetBackoff();
+
+                // UX: clear the visible history while the new one loads.
+                renderHistoryLoading(userId);
+
+                updateComposerPlaceholder(userId);
+
+                return this.track({ force: true });
+              },
+
+              track({ force = false } = {}) {
+                // Prevent overlapping calls (loop won't pile up).
+                if (this._trackInFlight && !force) {
+                  return Promise.resolve();
+                }
+
+                // If forced, abort previous request to prioritize the latest state.
+                if (force && this._trackAbortCtrl) {
+                  try { this._trackAbortCtrl.abort(); } catch (e) {}
+                }
+
+                this._trackAbortCtrl = new AbortController();
+                const signal = this._trackAbortCtrl.signal;
+
+                this._trackInFlight = true;
+
+                const prevSize = this._historySize;
+
+                const params = {
                   action: 'track',
                   size: this._historySize,
                   users_online: this.usersOnline,
                   friend: this.currentFriend
-                }).then(response => {
-                  if (!response || !response.status) return;
-                  if (response.data && response.data.history !== undefined) {
-                    this._historySize = response.data.oldFileSize ?? -1;
-                    this.setHistory(response.data.history);
-                  }
-                  if (response.data && response.data.userList) {
-                    this.usersOnline = response.data.usersOnline || 0;
-                    this.setConnectedUsers(response.data.userList);
-                  }
-                }).catch(() => {});
+                };
+
+                // AI Tutor: attach provider hint
+                if (this.currentFriend === -1) {
+                  params.ai_provider = aiDefaultProvider;
+                }
+
+                return getJSON(params, { signal })
+                  .then(response => {
+                    if (!response || !response.status) return;
+
+                    if (response.data && response.data.history !== undefined) {
+                      const nextSize = normalizeInt(response.data.oldFileSize, -1);
+                      // If history changed, consider it activity and reset backoff.
+                      if (nextSize !== prevSize) this._resetBackoff();
+
+                      this._historySize = nextSize;
+                      this.setHistory(response.data.history);
+                    }
+
+                    if (response.data && response.data.userList) {
+                      this.usersOnline = normalizeInt(response.data.usersOnline, 0);
+                      this.setConnectedUsers(response.data.userList);
+                    }
+                  })
+                  .catch(() => {})
+                  .finally(() => {
+                    this._trackInFlight = false;
+                  });
               },
 
               loop() {
                 if (this._loopHandle) clearTimeout(this._loopHandle);
-                this.track().finally(() => {
-                  this._loopHandle = setTimeout(() => this.loop(), this._pollDelayMs);
-                });
+
+                this.track()
+                  .finally(() => {
+                    const delay = this._getBackoffDelayMs() + this._jitterMs();
+                    this._loopHandle = setTimeout(() => this.loop(), delay);
+                  });
               },
 
               setHistory(html) {
@@ -309,6 +518,7 @@
 
               openTabForUser(userId, name) {
                 const tabsContainer = document.querySelector('#chat-tabs .flex');
+                if (!tabsContainer) return;
 
                 if (!document.getElementById('chat-tab-' + userId)) {
                   const btn = document.createElement('button');
@@ -326,18 +536,24 @@
                 }
 
                 const btnToActivate = document.getElementById('chat-tab-' + userId);
+                this.clearConversationUi(userId);
                 setActiveTab(btnToActivate);
                 showPanel(userId);
-                this.currentFriend = userId;
 
                 const sendBtn = document.getElementById('chat-send-message');
                 if (sendBtn) sendBtn.disabled = false;
+
+                // Load the correct conversation immediately (and clear history while waiting).
+                this.switchConversation(userId);
               },
 
               send() {
                 const textarea = document.getElementById('chat-writer');
                 const val = textarea ? textarea.value : '';
                 if (!val || !val.trim().length) return;
+
+                // User activity: reset backoff.
+                this._resetBackoff();
 
                 const btn = document.getElementById('chat-send-message');
                 if (btn) btn.disabled = true;
@@ -351,6 +567,10 @@
                   sid: {{ session_id|default(0) }}
                 };
 
+                if (this.currentFriend === -1) {
+                  params.ai_provider = aiDefaultProvider;
+                }
+
                 // Primary: POST
                 postForm(params)
                   .then(response => {
@@ -358,7 +578,7 @@
                     textarea.value = '';
                     const preview = document.getElementById('html-preview');
                     if (preview) { preview.classList.add('hidden'); preview.innerHTML = ''; }
-                    return this.track();
+                    return this.track({ force: true });
                   })
                   .catch(() => {
                     // Fallback: GET
@@ -367,29 +587,47 @@
                       textarea.value = '';
                       const preview = document.getElementById('html-preview');
                       if (preview) { preview.classList.add('hidden'); preview.innerHTML = ''; }
-                      return this.track();
+                      return this.track({ force: true });
                     });
                   })
                   .finally(() => { if (btn) btn.disabled = false; });
               },
 
               preview() {
+                // User activity: reset backoff.
+                this._resetBackoff();
+
                 const textarea = document.getElementById('chat-writer');
                 const val = textarea ? textarea.value : '';
-                postForm({ action: 'preview', message: val })
+                postForm({ action: 'preview', message: val, friend: this.currentFriend })
                   .then(response => {
                     if (!response || !response.status) return;
                     const preview = document.getElementById('html-preview');
                     if (preview) { preview.classList.remove('hidden'); preview.innerHTML = response.data.message || ''; }
-                  }).catch(() => {});
+                  })
+                  .catch(() => {});
               },
 
               reset() {
                 if (!confirm(T.confirmReset)) return;
-                getJSON({ action: 'reset', friend: this.currentFriend }).then(response => {
-                  if (!response || !response.status) return;
-                  this.setHistory(response.data);
-                }).catch(() => {});
+
+                // User activity: reset backoff.
+                this._resetBackoff();
+
+                const params = { action: 'reset', friend: this.currentFriend };
+                if (this.currentFriend === -1) {
+                  params.ai_provider = aiDefaultProvider;
+                }
+
+                getJSON(params)
+                  .then(response => {
+                    if (!response || !response.status) return;
+                    this.setHistory(response.data);
+                    // After reset, force history reload state
+                    this._historySize = -1;
+                    return this.track({ force: true });
+                  })
+                  .catch(() => {});
               },
 
               bind() {
@@ -398,10 +636,14 @@
                   tabsRoot.addEventListener('click', (e) => {
                     const btn = e.target.closest('.tab-btn');
                     if (!btn) return;
+
                     const userId = parseInt(btn.dataset.user || '0', 10) || 0;
+
                     setActiveTab(btn);
                     showPanel(userId);
-                    this.currentFriend = userId;
+
+                    // Activity: reset backoff and fetch immediately.
+                    this.switchConversation(userId);
                   });
                 }
 
@@ -412,9 +654,12 @@
                     const row = e.target.closest('.chat-user');
                     const node = btn || row;
                     if (!node) return;
+
                     const userId = parseInt(node.dataset.user || '0', 10) || 0;
                     const name = node.dataset.name || 'User';
                     if (!userId) return;
+
+                    // Activity: reset backoff via openTabForUser/switchConversation.
                     this.openTabForUser(userId, name);
                   });
                 }
@@ -431,6 +676,11 @@
                 const writer = document.getElementById('chat-writer');
                 if (writer) {
                   writer.addEventListener('keydown', (e) => {
+                    // User activity: reset backoff while typing.
+                    if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Delete') {
+                      this._resetBackoff();
+                    }
+
                     // Enter sends; Shift+Enter keeps newline
                     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.send(); }
                     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); this.send(); }
@@ -438,24 +688,60 @@
                 }
 
                 const emojiBtn = document.getElementById('emojis');
-                if (emojiBtn) emojiBtn.addEventListener('click', toggleEmoji);
+                if (emojiBtn) emojiBtn.addEventListener('click', () => {
+                  this._resetBackoff();
+                  toggleEmoji();
+                });
+
+                // When tab becomes hidden, slow down aggressively; when visible, go fast again.
+                document.addEventListener('visibilitychange', () => {
+                  if (document.hidden) {
+                    // Jump to "30s mode" without changing the algorithm code.
+                    this._pollStartTs = Date.now() - (5000 + 30000 + 120000);
+                  } else {
+                    this._resetBackoff();
+                    this.track({ force: true });
+                  }
+                });
               },
 
               start() {
+                // Prevent double initialization (avoids double polling loops).
+                if (this._started) return;
+                this._started = true;
+
                 const defaultTab = document.getElementById('chat-tab-0');
+                const aiTab = document.getElementById('chat-tab--1');
+
                 if (defaultTab) {
                   setActiveTab(defaultTab);
                   showPanel(0);
                   this.currentFriend = 0;
+                  currentFriendForNode = 0;
+                  updateComposerPlaceholder(0);
+                } else if (aiEnabled && aiTab) {
+                  setActiveTab(aiTab);
+                  showPanel(-1);
+                  this.currentFriend = -1;
+                  currentFriendForNode = -1;
+                  updateComposerPlaceholder(-1);
+                } else {
+                  // No "All" tab exists (restrict-to-coach mode). Keep state at 0, user must pick a peer.
+                  this.currentFriend = 0;
+                  currentFriendForNode = 0;
+                  updateComposerPlaceholder(0);
                 }
 
                 if (restrictToCoach) {
                   const sendBtn = document.getElementById('chat-send-message');
-                  if (sendBtn) sendBtn.disabled = true;
+                  if (sendBtn) sendBtn.disabled = (this.currentFriend === 0);
                 }
 
+                this._resetBackoff();
                 this.bind();
-                this.loop();
+
+                // Initial fetch immediately (force) then loop.
+                this.track({ force: true }).finally(() => this.loop());
               }
             };
 

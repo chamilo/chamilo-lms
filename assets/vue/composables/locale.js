@@ -14,7 +14,7 @@ export function useLocale() {
   const cidReqStore = useCidReqStore()
   const courseSettingsStore = useCourseSettings()
 
-  const appLocale = ref(document.querySelector("html").lang)
+  const appLocale = ref(document.documentElement.dataset.lang)
 
   const localeList = computed(() => {
     const list = {}
@@ -57,7 +57,7 @@ export function useLocale() {
     { immediate: true },
   )
 
-  const defaultLanguage = { originalName: "English", isocode: "en" }
+  const defaultLanguage = { originalName: "English", isocode: "en_US" }
 
   /**
    * @type {{originalName: string, isocode: string}[]}
@@ -68,7 +68,7 @@ export function useLocale() {
    * @type {{originalName: string, isocode: string}}
    */
   const currentLanguageFromList =
-    languageList.find((language) => document.querySelector("html").lang === language.isocode) || defaultLanguage
+    languageList.find((language) => document.documentElement.dataset.lang === language.isocode) || defaultLanguage
 
   /**
    * @param {string} isoCode
@@ -99,9 +99,9 @@ export function useLocale() {
     if (!iso) return { db: "", bcp47: "", parent: "" }
     const u = String(iso).trim()
     return {
-      db: u.replace("-", "_"),     // pt-BR -> pt_BR (DB)
-      bcp47: u.replace("_", "-"),  // pt_BR -> pt-BR (BCP-47)
-      parent: u.split(/[-_]/)[0],  // pt_BR -> pt
+      db: u.replace("-", "_"), // pt-BR -> pt_BR (DB)
+      bcp47: u.replace("_", "-"), // pt_BR -> pt-BR (BCP-47)
+      parent: u.split(/[-_]/)[0], // pt_BR -> pt
     }
   }
 
@@ -112,7 +112,7 @@ export function useLocale() {
   function getLanguageName(iso, displayLocale = null) {
     if (!iso) return "-"
     const tag = String(iso).replace("_", "-")
-    const ui = displayLocale || appLocale.value || document.documentElement.lang || "en"
+    const ui = displayLocale || appLocale.value || document.documentElement.dataset.lang || "en-US"
     try {
       const dn = new Intl.DisplayNames([ui], { type: "language" })
       return dn.of(tag) || iso.toUpperCase()
@@ -144,12 +144,7 @@ export function useLocale() {
     if (!row && bcp47 !== db) row = await hit(bcp47)
     if (!row && parent && parent !== db) row = await hit(parent)
 
-    const name =
-      row?.originalName ||
-      row?.original_name ||
-      row?.englishName ||
-      row?.english_name ||
-      iso.toUpperCase()
+    const name = row?.originalName || row?.original_name || row?.englishName || row?.english_name || iso.toUpperCase()
 
     __apiLangCache.set(iso, name)
     return name

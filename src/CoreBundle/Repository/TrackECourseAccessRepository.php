@@ -6,11 +6,15 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\User;
 use DateTime;
 use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -128,5 +132,35 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
             $this->_em->persist($newAccess);
             $this->_em->flush();
         }
+    }
+
+    public function getCourseVisits(Course $course, ?Session $session = null): int
+    {
+        $qb = $this->createQueryBuilder('tca');
+
+        $qb
+            ->select($qb->expr()->count('tca'))
+            ->where($qb->expr()->eq('tca.cId', ':courseId'))
+            ->setParameter('courseId', $course->getId())
+        ;
+
+        if ($session) {
+            $qb
+                ->andWhere($qb->expr()->eq('tca.sessionId', ':sessionId'))
+                ->setParameter('sessionId', $session->getId())
+            ;
+        }
+
+        try {
+            $result = $qb
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getSingleScalarResult()
+            ;
+        } catch (NonUniqueResultException|NoResultException) {
+            $result = 0;
+        }
+
+        return (int) $result;
     }
 }

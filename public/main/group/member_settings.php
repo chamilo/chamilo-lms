@@ -89,22 +89,14 @@ function check_group_members($value)
     return true;
 }
 
-$htmlHeadXtra[] = '<script>
-$(function() {
-    $("#max_member").on("focus", function() {
-        $("#max_member_selected").attr("checked", true);
-    });
-});
- </script>';
-
-// Build form
-$form = new FormValidator(
-    'group_edit',
-    'post',
-    api_get_self().'?'.api_get_cidreq()
-);
+$form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidreq());
 $form->addElement('hidden', 'action');
 $form->addElement('hidden', 'max_student', $groupEntity->getMaxStudent());
+$form->addFormRule('check_group_members');
+
+if (method_exists($form, 'updateAttributes')) {
+    $form->updateAttributes(['class' => 'space-y-8']);
+}
 
 $complete_user_list = CourseManager::get_user_list_from_course_code(
     api_get_course_id(),
@@ -122,7 +114,7 @@ $userGroup = new UserGroupModel();
 
 if (!empty($complete_user_list)) {
     usort($complete_user_list, 'sort_users');
-    foreach ($complete_user_list as $index => $user) {
+    foreach ($complete_user_list as $user) {
         if (in_array($user['user_id'], $subscribedTutors)) {
             continue;
         }
@@ -134,11 +126,15 @@ if (!empty($complete_user_list)) {
             $groupNameListToString = '';
             if (!empty($groups)) {
                 $groupNameList = array_column($groups, 'name');
-                $groupNameListToString = ' - ['.implode(', ', $groupNameList).']';
+                $groupNameList = array_values(array_filter($groupNameList, static function ($name) {
+                    return is_string($name) && '' !== trim($name);
+                }));
+                if (!empty($groupNameList)) {
+                    $groupNameListToString = ' - ['.implode(', ', $groupNameList).']';
+                }
             }
 
-            $name = api_get_person_name($user['firstname'], $user['lastname']).
-                    ' ('.$user['username'].')'.$officialCode;
+            $name = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')'.$officialCode;
 
             if ('true' === $orderUserListByOfficialCode) {
                 $officialCode = !empty($user['official_code']) ? $user['official_code'].' - ' : '? - ';
@@ -154,34 +150,42 @@ $group_member_list = GroupManager::get_subscribed_users($groupEntity);
 
 $selected_users = [];
 if (!empty($group_member_list)) {
-    foreach ($group_member_list as $index => $user) {
+    foreach ($group_member_list as $user) {
         $selected_users[] = $user['user_id'];
     }
 }
 
-$group_members_element = $form->addMultiSelect(
-    'group_members',
-    get_lang('Group members'),
-    $possible_users
-);
-$form->addFormRule('check_group_members');
+// UI wrapper: title + group title + tabs
+$form->addHtml('<div class="mx-auto wd-full px-4 sm:px-6 lg:px-8">');
+$form->addHtml('<div class="mb-6">');
+$form->addHtml('<h1 class="text-2xl font-semibold text-gray-900">'.Security::remove_XSS($nameTools).'</h1>');
+$form->addHtml('<p class="mt-1 text-sm text-gray-600">'.Security::remove_XSS($groupEntity->getTitle()).'</p>');
+$form->addHtml('</div>');
+$form->addHtml(GroupManager::renderGroupTabs('member'));
 
-// submit button
+// Card
+$form->addHtml('<div class="rounded-lg border border-gray-50 bg-white p-6 shadow-sm">');
+$form->addHtml('<h2 class="text-base font-semibold text-gray-900 mb-4">'.get_lang('Group members').'</h2>');
+
+$form->addMultiSelect('group_members', get_lang('Group members'), $possible_users);
+
+$form->addHtml('</div>');
+
+// Submit
+$form->addHtml('<div class="flex justify-end">');
 $form->addButtonSave(get_lang('Save settings'));
+$form->addHtml('</div>');
+
+$form->addHtml('</div>'); // container
 
 if ($form->validate()) {
     $values = $form->exportValues();
 
-    // Storing the users (we first remove all users and then add only those who were selected)
     GroupManager::unsubscribeAllUsers($groupEntity->getIid());
     if (isset($_POST['group_members']) && count($_POST['group_members']) > 0) {
-        GroupManager::subscribeUsers(
-            $values['group_members'],
-            $groupEntity
-        );
+        GroupManager::subscribeUsers($values['group_members'], $groupEntity);
     }
 
-    // Returning to the group area (note: this is inconsistent with the rest of chamilo)
     $cat = GroupManager::get_category_from_group($group_id);
     $categoryId = 0;
     if ($cat) {
@@ -203,30 +207,36 @@ if ($form->validate()) {
 }
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-switch ($action) {
-    case 'empty':
-        if (api_is_allowed_to_edit(false, true)) {
-            GroupManager::unsubscribeAllUsers($group_id);
-            echo Display::return_message(get_lang('The group is now empty'), 'confirm');
-        }
-
-        break;
+if ('empty' === $action) {
+    if (api_is_allowed_to_edit(false, true)) {
+        GroupManager::unsubscribeAllUsers($group_id);
+        Display::addFlash(Display::return_message(get_lang('The group is now empty'), 'confirm'));
+        header('Location: member_settings.php?'.api_get_cidreq(true, false));
+        exit;
+    }
 }
 
 $defaults = $current_group;
 $defaults['group_members'] = $selected_users;
-$action = isset($_GET['action']) ? $_GET['action'] : '';
-$defaults['action'] = $action;
+$defaults['action'] = isset($_GET['action']) ? $_GET['action'] : '';
 
+$searchAlertHtml = '';
 if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
     $keyword_name = Security::remove_XSS($_GET['keyword']);
-    echo '<br/>'.get_lang('Search results for:').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
+    $searchAlertHtml = '<div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 mt-4">'.
+        '<div class="rounded-md border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800">'.
+        get_lang('Search results for:').' <span class="font-medium italic">'.$keyword_name.'</span>'.
+        '</div>'.
+        '</div>';
 }
 
 Display::display_header($nameTools, 'Group');
 
+if (!empty($searchAlertHtml)) {
+    echo $searchAlertHtml;
+}
+
 $form->setDefaults($defaults);
-echo GroupManager::getSettingBar('member');
 $form->display();
 
 Display::display_footer();

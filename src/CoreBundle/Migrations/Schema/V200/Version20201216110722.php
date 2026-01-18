@@ -6,11 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
-use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Command\DoctrineMigrationsMigrateCommandDecorator;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CAttendance;
-use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
 use Database;
 use Doctrine\DBAL\Schema\Schema;
@@ -25,53 +24,98 @@ final class Version20201216110722 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $attendanceRepo = $this->container->get(CAttendanceRepository::class);
-        // $attendanceRepo = $container->get(CAttendanceCalendar::class);
         $courseRepo = $this->container->get(CourseRepository::class);
         $attendanceResourceType = $attendanceRepo->getResourceType();
-
         $admin = $this->getAdmin();
 
-        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $skipAttendances = (bool) getenv(DoctrineMigrationsMigrateCommandDecorator::SKIP_ATTENDANCES_FLAG);
 
-        // The title of the attendance table is used to create the slug in the resource_node table.
-        // Before creating a new registry in resource_node, Doctrine is looking for all the registries that start with the same name
-        // It then find the last one depending on the name and create new one with the "title-number"
-        // where title is the title of the attendance and the number is the max number already existing + 1
-        // Since in Chamilo 1.11.x the name of the first attendance is created automatically we have a lot of attendance with the same name
-        // This make the migration to take a really long time if we have many attendance because this process is taking more and more time
-        // when creating more registry with the same name.
-        // So to avoid this process taking so much time :
-        // * Save temporarily the title and the id of all the attendance in a PHP Array
-        // * we modify the title of the attendance to make it unique during the migration by adding the iid at the end
-        // * We then process the migration
-        // * At the end we restore the title without the iid and also the resource_node.title
+        // IDs linked to gradebook (type=7) -> normalized to attendance.iid
+        $gradebookIds = [];
+        if ($skipAttendances) {
+            $ids = $this->connection->fetchFirstColumn(
+                'SELECT DISTINCT a.iid
+         FROM gradebook_link gl
+         INNER JOIN c_attendance a ON (a.iid = gl.ref_id OR a.id = gl.ref_id)
+         WHERE gl.type = 7'
+            );
 
-        $sql = 'SELECT iid, title FROM c_attendance';
-        $result = $this->connection->executeQuery($sql);
-        $attendancesBackup = $result->fetchAllAssociative();
-        $sqlUpdateTitle = "UPDATE c_attendance SET title = CONCAT(title, '-', iid)";
-        $resultUpdate = $this->connection->executeQuery($sqlUpdateTitle);
+            $ids = array_map('intval', $ids);
+            $gradebookIds = array_fill_keys($ids, true);
+        }
 
-        /** @var Course $course */
-        foreach ($q->toIterable() as $course) {
-            $courseId = $course->getId();
+        /*
+         * Title/slug performance hack:
+         * Backup titles, temporarily make titles unique, migrate, then restore titles.
+         * We do it only for the attendances that WILL be migrated when skip is enabled.
+         */
+        if ($skipAttendances) {
+            $attendancesBackup = $this->connection->fetchAllAssociative(
+                'SELECT a.iid, a.title
+                 FROM c_attendance a
+                 WHERE a.iid IN (SELECT ref_id FROM gradebook_link WHERE type = 7)'
+            );
+
+            $this->connection->executeStatement(
+                "UPDATE c_attendance
+                 SET title = CONCAT(title, '-', iid)
+                 WHERE iid IN (SELECT ref_id FROM gradebook_link WHERE type = 7)"
+            );
+        } else {
+            $attendancesBackup = $this->connection->fetchAllAssociative('SELECT iid, title FROM c_attendance');
+            $this->connection->executeStatement("UPDATE c_attendance SET title = CONCAT(title, '-', iid)");
+        }
+
+        /**
+         * Instead of iterating ALL courses and relying on c_attendance.c_id,
+         * we iterate only course ids that have attendances through c_item_property.
+         */
+        $courseIds = $this->connection->fetchFirstColumn(
+            "SELECT DISTINCT c_id
+             FROM c_item_property
+             WHERE tool = 'attendance'
+             ORDER BY c_id"
+        );
+
+        foreach ($courseIds as $courseId) {
+            $courseId = (int) $courseId;
             $course = $courseRepo->find($courseId);
 
-            // c_thematic.
-            $sql = "SELECT * FROM c_attendance WHERE c_id = {$courseId}
-                    ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            foreach ($items as $itemData) {
-                $id = $itemData['iid'];
+            if (null === $course) {
+                $this->write(\sprintf('Course %s not found - skipping attendances migration', $courseId));
 
-                /** @var CAttendance $resource */
-                $resource = $attendanceRepo->find($id);
-                if ($resource->hasResourceNode()) {
+                continue;
+            }
+
+            // Fetch attendance IDs belonging to this course via c_item_property
+            $rows = $this->connection->fetchAllAssociative(
+                "SELECT a.iid
+                 FROM c_attendance a
+                 INNER JOIN c_item_property ip
+                    ON ip.tool = 'attendance'
+                   AND ip.ref = a.iid
+                   AND ip.c_id = :courseId
+                 ORDER BY a.iid",
+                ['courseId' => $courseId]
+            );
+
+            foreach ($rows as $row) {
+                $id = (int) $row['iid'];
+
+                // If skip enabled, we only migrate gradebook-linked attendances
+                if ($skipAttendances && !isset($gradebookIds[$id])) {
+                    $this->write(\sprintf('Attendance %s is not linked to gradebook - skipping', $id));
+
                     continue;
                 }
 
-                $result = $this->fixItemProperty(
+                /** @var CAttendance|null $resource */
+                $resource = $attendanceRepo->find($id);
+                if (null === $resource || $resource->hasResourceNode()) {
+                    continue;
+                }
+
+                $ok = $this->fixItemProperty(
                     'attendance',
                     $attendanceRepo,
                     $course,
@@ -82,7 +126,7 @@ final class Version20201216110722 extends AbstractMigrationChamilo
                     $attendanceResourceType
                 );
 
-                if (false === $result) {
+                if (false === $ok) {
                     continue;
                 }
 
@@ -90,15 +134,24 @@ final class Version20201216110722 extends AbstractMigrationChamilo
                 $this->entityManager->flush();
             }
         }
-        // Restoring attendance title and resource_node title
+
+        // Restore attendance title and resource_node title
         $db = new Database();
         $db->setManager($this->entityManager);
+
         foreach ($attendancesBackup as $attendance) {
-            $titleForDatabase = $db->escape_string($attendance['title']);
-            $sqlRestoreAttendance = "UPDATE c_attendance SET title = '{$titleForDatabase}' where iid = {$attendance['iid']}";
-            $resultUpdate = $this->connection->executeQuery($sqlRestoreAttendance);
-            $sqlUpdateResourceNode = "UPDATE resource_node SET title = '{$titleForDatabase}' where id in (SELECT resource_node_id FROM c_attendance where iid = {$attendance['iid']})";
-            $resultUpdate = $this->connection->executeQuery($sqlUpdateResourceNode);
+            $iid = (int) $attendance['iid'];
+            $titleForDatabase = $db->escape_string((string) $attendance['title']);
+
+            $this->connection->executeStatement(
+                "UPDATE c_attendance SET title = '{$titleForDatabase}' WHERE iid = {$iid}"
+            );
+
+            $this->connection->executeStatement(
+                "UPDATE resource_node
+                 SET title = '{$titleForDatabase}'
+                 WHERE id IN (SELECT resource_node_id FROM c_attendance WHERE iid = {$iid})"
+            );
         }
     }
 }

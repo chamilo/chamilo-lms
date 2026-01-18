@@ -43,7 +43,7 @@ class UpdateVueTranslations extends Command
         $dir = $this->parameterBag->get('kernel.project_dir');
 
         $vueLocalePath = $dir.'/assets/locales/';
-        $englishJson = file_get_contents($vueLocalePath.'en.json');
+        $englishJson = file_get_contents($vueLocalePath.'en_US.json');
         $translations = json_decode($englishJson, true);
 
         foreach ($languages as $language) {
@@ -53,11 +53,16 @@ class UpdateVueTranslations extends Command
                 // Only update with the same variables.
                 $newLanguage = [];
                 foreach ($translations as $variable => $translation) {
-                    $translated = $this->getTranslationWithFallback($variable, $language);
-                    $newLanguage[$variable] = $this->replaceMarkers($translated);
+                    $gettextVariable = $this->replaceMarkersVueToGettext($variable);
+                    $translated = $this->getTranslationWithFallback($gettextVariable, $language);
+                    if (empty($translated)) {
+                        $gettextVariable = $this->replaceMarkersVueToGettext($variable, true);
+                        $translated = $this->getTranslationWithFallback($gettextVariable, $language);
+                    }
+                    $newLanguage[$variable] = $this->replaceMarkersGettextToVue($translated);
                 }
                 $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT);
-                $fileToSave = $vueLocalePath.'en.json';
+                $fileToSave = $vueLocalePath.'en_US.json';
                 file_put_contents($fileToSave, $newLanguageToString);
 
                 continue;
@@ -66,8 +71,13 @@ class UpdateVueTranslations extends Command
             $newLanguage = [];
             foreach ($translations as $variable => $translation) {
                 // $translated = $this->translator->trans($variable, [], null, $iso);
-                $translated = $this->getTranslationWithFallback($variable, $language);
-                $newLanguage[$variable] = $this->replaceMarkers($translated);
+                $gettextVariable = $this->replaceMarkersVueToGettext($variable);
+                $translated = $this->getTranslationWithFallback($gettextVariable, $language);
+                if (empty($translated)) {
+                    $gettextVariable = $this->replaceMarkersVueToGettext($variable, true);
+                    $translated = $this->getTranslationWithFallback($gettextVariable, $language);
+                }
+                $newLanguage[$variable] = $this->replaceMarkersGettextToVue($translated);
             }
             $newLanguage = array_filter($newLanguage);
             $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
@@ -108,10 +118,10 @@ class UpdateVueTranslations extends Command
 
                 // Check if translation is still not found and use the base language (English)
                 if ($translated === $variable) {
-                    $translated = $this->translator->trans($variable, [], 'messages', 'en');
+                    $translated = $this->translator->trans($variable, [], 'messages', 'en_US');
                 }
             } else {
-                $translated = $this->translator->trans($variable, [], 'messages', 'en');
+                $translated = $this->translator->trans($variable, [], 'messages', 'en_US');
             }
         }
 
@@ -123,10 +133,10 @@ class UpdateVueTranslations extends Command
      *
      * <code>
      *     $txt = "Bonjour %s. Je m’appelle %s";
-     *     $replaced = replaceMarkers($txt); // Bonjour {0}. Je m’appelle {1}
+     *     $replaced = replaceMarkersGettextToVue($txt); // Bonjour {0}. Je m’appelle {1}
      * </code>
      */
-    private function replaceMarkers(string $text): string
+    private function replaceMarkersGettextToVue(string $text): string
     {
         $count = 0;
 
@@ -142,5 +152,25 @@ class UpdateVueTranslations extends Command
         $pattern = '/%([sdf])/';
 
         return preg_replace_callback($pattern, $replace, $text);
+    }
+
+    /**
+     * Replace specifiers in a Vue string to allow finding them in Gettext.
+     * This method only supports the %s specifier (%d will not be replaced).
+     *
+     * <code>
+     *     $txt = "Bonjour {0}. Je m'appelle {1};
+     *     $replaced = replaceMarkersVueToGettext($txt); // Bonjour %s. Je m'appelle %s
+     * </code>
+     */
+    private function replaceMarkersVueToGettext(string $text, bool $alternativeSpecifier = false): string
+    {
+        $pattern = '/\{([0-9]+)\}/';
+
+        if ($alternativeSpecifier) {
+            return preg_replace($pattern, '%d', $text);
+        }
+
+        return preg_replace($pattern, '%s', $text);
     }
 }

@@ -27,7 +27,7 @@
             v-if="confirmText && !canDelete"
             class="mt-1 text-xs text-rose-700"
           >
-            {{ t("The code must match exactly:") }} <strong>{{ courseCode }}</strong>
+            {{ t("The code must match '{0}' exactly.", [courseCode]) }}
           </p>
 
           <!-- Extra option: delete orphan documents too -->

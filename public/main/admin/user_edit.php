@@ -79,6 +79,7 @@ function confirmation(name) {
 }
 </script>';
 
+$advancedPanelOpen = !empty($_POST);
 $tool_name = get_lang('Edit user information');
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
@@ -112,6 +113,7 @@ $form = new FormValidator(
     api_get_self().'?user_id='.$user_id,
     ''
 );
+$form->protect();
 $form->addElement('header', $tool_name);
 $form->addElement('hidden', 'user_id', $user_id);
 
@@ -189,7 +191,7 @@ if ($hasPicture) {
 
 // Username
 if ('true' !== api_get_setting('login_is_email')) {
-    $form->addElement('text', 'username', get_lang('Login'), ['maxlength' => User::USERNAME_MAX_LENGTH]);
+    $form->addElement('text', 'username', get_lang('Username'), ['maxlength' => User::USERNAME_MAX_LENGTH]);
     $form->addRule('username', get_lang('Required field'), 'required');
     $form->addRule(
         'username',
@@ -346,6 +348,12 @@ if (!empty($studentBossList)) {
 $user_data['student_boss'] = $studentBossList;
 $form->addMultiSelect('student_boss', get_lang('Superior (n+1)'), $studentBossToSelect);
 
+$form->addElement('html', Display::advancedPanelStart(
+    'advanced_params',
+    get_lang('Advanced settings'),
+    $advancedPanelOpen
+));
+
 // EXTRA FIELDS
 $extraField = new ExtraField('user');
 $returnParams = $extraField->addElements(
@@ -363,6 +371,7 @@ $returnParams = $extraField->addElements(
 $jqueryReadyContent = $returnParams['jquery_ready_content'];
 
 $form->addEmailTemplate(['user_edit_content.tpl']);
+$form->addElement('html', Display::advancedPanelEnd());
 
 // the $jqueryReadyContent variable collects all functions that will be load in the
 $htmlHeadXtra[] = '<script>

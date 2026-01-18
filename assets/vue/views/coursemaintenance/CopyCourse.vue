@@ -54,7 +54,7 @@
             v-model="sourceCourseId"
             :options="courseOptions"
             :label="t('Course to copy from')"
-            :placeholder="t('Search by code or title…')"
+            :placeholder="t('Search by code or title...')"
             :emptyMessage="t('No courses match your search.')"
             :clearable="true"
             :virtual="true"
@@ -74,7 +74,7 @@
           <div class="relative">
             <input
               v-model.trim="courseQuery"
-              :placeholder="t('Search by code or title…')"
+              :placeholder="t('Search by code or title...')"
               class="w-full rounded border border-gray-25 p-2 pr-8 text-sm"
               type="text"
             />
@@ -121,7 +121,7 @@
               value="full_copy"
               v-model="copyOption"
             />
-            <span class="text-sm text-gray-90">{{ t("Everything (full copy)") }}</span>
+            <span class="text-sm text-gray-90">{{ t("Full copy") }}</span>
           </label>
           <label class="flex items-center gap-2">
             <input
@@ -230,7 +230,7 @@
           @click="doCopy"
           :disabled="loading"
         >
-          <i class="mdi mdi-content-copy"></i> {{ t("Start copy") }}
+          <i class="mdi mdi-content-copy"></i> {{ t("Start copying") }}
         </button>
       </div>
     </section>
@@ -274,7 +274,7 @@
 
     <!-- STEP 4: Done -->
     <section v-if="step === 4">
-      <CMInfo :title="t('Copy completed')" />
+      <CMInfo :title="t('Copy completed.')" />
     </section>
 
     <CMLoader v-if="loading" />
@@ -379,7 +379,7 @@ function resetAll() {
 async function nextFromStep1() {
   error.value = ""
   try {
-    if (!sourceCourseId.value) throw new Error(t("Please select a source course."))
+    if (!sourceCourseId.value) throw new Error(t("Select source course"))
     loading.value = true
 
     if (copyOption.value === "select_items") {
@@ -402,7 +402,7 @@ async function doCopy() {
   error.value = ""
   notice.value = ""
   try {
-    if (!sourceCourseId.value) throw new Error(t("Please select a source course."))
+    if (!sourceCourseId.value) throw new Error(t("Select source course"))
     loading.value = true
 
     const payload = {
@@ -415,7 +415,7 @@ async function doCopy() {
     }
 
     const res = await svc.copyFromCourse(node.value, payload)
-    notice.value = res.message || t("Copy finished.")
+    notice.value = res.message || t("Copy completed.")
     step.value = 4
 
     if (res.redirectUrl) {
@@ -426,7 +426,7 @@ async function doCopy() {
       router.push({ path: u.pathname, query: { ...backendQuery, ...keep } })
     }
   } catch (e) {
-    error.value = e?.response?.data?.error || t("Failed to copy course.")
+    error.value = e?.response?.data?.error || t("Copy failed")
   } finally {
     loading.value = false
   }

@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
@@ -39,6 +40,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -65,7 +67,8 @@ class CourseHelper
         private readonly EventLoggerHelper $eventLoggerHelper,
         private readonly ParameterBagInterface $parameterBag,
         private readonly RequestStack $requestStack,
-        private readonly AccessUrlHelper $accessUrlHelper
+        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly IllustrationRepository $illustrationRepository
     ) {}
 
     public function createCourse(array $params): ?Course
@@ -195,6 +198,26 @@ class CourseHelper
 
             $this->courseRepository->create($course);
             $this->debugLog('registerCourse:persisted', ['courseId' => $course->getId()]);
+
+            if (!empty($rawParams['illustration_path'])) {
+                if (file_exists($rawParams['illustration_path'])) {
+                    $mimeType = mime_content_type($rawParams['illustration_path']);
+                    $uploadedFile = new UploadedFile(
+                        $rawParams['illustration_path'],
+                        basename($rawParams['illustration_path']),
+                        $mimeType,
+                        null,
+                        true // test mode to allow local files
+                    );
+
+                    $this->illustrationRepository->addIllustration(
+                        $course,
+                        $currentUser,
+                        $uploadedFile
+                    );
+                    $this->debugLog('registerCourse:illustrationAdded', ['path' => $rawParams['illustration_path']]);
+                }
+            }
 
             if (!empty($rawParams['exemplary_content'])) {
                 $this->debugLog('registerCourse:willFillCourse', [

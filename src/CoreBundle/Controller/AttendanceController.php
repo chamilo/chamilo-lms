@@ -158,6 +158,7 @@ class AttendanceController extends AbstractController
                 'description' => $attendance->getDescription(),
                 'attendanceWeight' => $attendance->getAttendanceWeight(),
                 'attendanceQualifyTitle' => $attendance->getAttendanceQualifyTitle(),
+                'requireUnique' => $attendance->isRequireUnique(),
                 'resourceLinkListFromEntity' => $attendance->getResourceLinkListFromEntity(),
                 'doneCalendars' => $doneCount,
             ];

@@ -84,26 +84,47 @@ class ResourceListener
         }
 
         // 2. Set creator.
-        // Check if creator was set with $resource->setCreator()
+        // Priority order:
+        //   1) Resource node creator (if explicitly provided)
+        //   2) Resource creator (set via $resource->setCreator())
+        //   3) Current authenticated user (Security token)
+        // Then normalize to a managed reference to avoid duplicate INSERT on user.username.
         $creator = $resource->getResourceNodeCreator();
+        if (!$creator instanceof User) {
+            $creator = null;
+        }
 
-        $currentUser = null;
         if (null === $creator) {
-            // Get the creator from the current request.
-            /** @var User|null $currentUser */
-            $currentUser = $this->security->getUser();
-            if (null !== $currentUser) {
-                $creator = $currentUser;
-            }
-
-            // Check if user has a resource node.
-            if ($resource->hasResourceNode() && null !== $resource->getCreator()) {
-                $creator = $resource->getCreator();
+            $explicitCreator = $resource->getCreator();
+            if ($explicitCreator instanceof User) {
+                $creator = $explicitCreator;
             }
         }
 
         if (null === $creator) {
+            $currentUser = $this->security->getUser();
+            if ($currentUser instanceof User) {
+                $creator = $currentUser;
+            }
+        }
+
+        if (!$creator instanceof User) {
             throw new UserNotFoundException('User creator not found, use $resource->setCreator();');
+        }
+
+        // Ensure creator is managed by this EntityManager.
+        if (!$em->contains($creator)) {
+            $creatorId = $creator->getId();
+            if (null === $creatorId) {
+                throw new UserNotFoundException('Invalid creator user entity (missing ID).');
+            }
+
+            $creator = $em->getReference(User::class, (int) $creatorId);
+        }
+
+        // Ensure the resource itself has creator set (not only the ResourceNode).
+        if (null === $resource->getCreator()) {
+            $resource->setCreator($creator);
         }
 
         // 3. Set ResourceType.
@@ -341,9 +362,6 @@ class ResourceListener
         if (empty($extension)) {
             // $slug = $this->slugify->slugify($resourceName);
         }
-        /*$originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
-        $originalBasename = \basename($resourceName, $originalExtension);
-        $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);*/
         $resource->getResourceNode()->setTitle($resourceName);
     }
 
@@ -399,12 +417,6 @@ class ResourceListener
         }
 
         $em = $args->getObjectManager();
-        $resourceNode = $resource->getResourceNode();
-
-        if (!$resourceNode) {
-            return;
-        }
-
         $docID = $resource->getIid();
         $em->createQuery('DELETE FROM Chamilo\CourseBundle\Entity\CLpItem i WHERE i.path = :path AND i.itemType = :type')
             ->setParameter('path', $docID)

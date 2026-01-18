@@ -21,12 +21,18 @@ class ChatSettingsSchema extends AbstractSettingsSchema
                     'allow_global_chat' => 'false',
                     'hide_chat_video' => 'true',
                     'course_chat_restrict_to_coach' => 'false',
+                    'save_private_conversations_in_documents' => 'false',
                 ]
             )
         ;
         $allowedTypes = [
             'show_chat_folder' => ['string'],
+            'allow_global_chat' => ['string'],
+            'hide_chat_video' => ['string'],
+            'course_chat_restrict_to_coach' => ['string'],
+            'save_private_conversations_in_documents' => ['string'],
         ];
+
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
@@ -37,6 +43,7 @@ class ChatSettingsSchema extends AbstractSettingsSchema
             ->add('show_chat_folder', YesNoType::class)
             ->add('hide_chat_video', YesNoType::class)
             ->add('course_chat_restrict_to_coach', YesNoType::class)
+            ->add('save_private_conversations_in_documents', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

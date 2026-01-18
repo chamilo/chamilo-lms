@@ -6,11 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Framework;
 
-use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
 use Chamilo\CoreBundle\Component\Editor\Editor;
+use Chamilo\CoreBundle\Component\Editor\Tiny\TinyEditor;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\ContainerHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
+use Chamilo\CoreBundle\Helpers\PortfolioCategoryHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository;
 use Chamilo\CoreBundle\Repository\AssetRepository;
@@ -29,6 +30,7 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
+use Chamilo\CoreBundle\Repository\Node\PortfolioCommentRepository;
 use Chamilo\CoreBundle\Repository\Node\PortfolioRepository;
 use Chamilo\CoreBundle\Repository\Node\SocialPostAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\TicketMessageAttachmentRepository;
@@ -36,6 +38,7 @@ use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\PluginRepository;
 use Chamilo\CoreBundle\Repository\PromotionRepository;
+use Chamilo\CoreBundle\Repository\ResourceFileRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
@@ -48,6 +51,7 @@ use Chamilo\CoreBundle\Repository\TrackEDownloadsRepository;
 use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRepository;
+use Chamilo\CoreBundle\Search\Xapian\SearchIndexPathResolver;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
@@ -186,7 +190,7 @@ class Container
      */
     public static function getHtmlEditor()
     {
-        return self::$container->get(CkEditor::class);
+        return self::$container->get(TinyEditor::class);
     }
 
     /**
@@ -705,8 +709,28 @@ class Container
     public static function getPortfolioRepository(): PortfolioRepository
     {
         /** @var PortfolioRepository $repo */
-        $repo = self::$container->get(PortfolioRepository::class);
+        return self::$container->get(PortfolioRepository::class);
+    }
 
-        return $repo;
+    public static function getPortfolioCommentRepository(): PortfolioCommentRepository
+    {
+        /** @var PortfolioRepository $repo */
+        return self::$container->get(PortfolioCommentRepository::class);
+    }
+
+    public static function getPortfolioCategoryHelper(): PortfolioCategoryHelper
+    {
+        /** @var PortfolioCategoryHelper $helper */
+        return self::$container->get(PortfolioCategoryHelper::class);
+    }
+
+    public static function getSearchIndexPathResolver(): SearchIndexPathResolver
+    {
+        return self::$container->get(SearchIndexPathResolver::class);
+    }
+
+    public static function getResourceFileRepository(): ResourceFileRepository
+    {
+        return self::$container->get(ResourceFileRepository::class);
     }
 }

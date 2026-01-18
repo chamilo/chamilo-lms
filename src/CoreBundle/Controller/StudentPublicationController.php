@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
+use Chamilo\CoreBundle\AiProvider\AiTaskGraderService;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
@@ -15,6 +17,7 @@ use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
@@ -33,12 +36,16 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 use ZipArchive;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const PATHINFO_EXTENSION;
 use const PATHINFO_FILENAME;
 
 #[Route('/assignments')]
@@ -50,12 +57,13 @@ class StudentPublicationController extends AbstractController
     ) {}
 
     #[Route('/student', name: 'chamilo_core_assignment_student_list', methods: ['GET'])]
-    public function getStudentAssignments(SerializerInterface $serializer): JsonResponse
+    public function getStudentAssignments(Request $request, SerializerInterface $serializer): JsonResponse
     {
         $course = $this->cidReqHelper->getCourseEntity();
         $session = $this->cidReqHelper->getSessionEntity();
+        $gid = $request->query->getInt('gid', 0);
 
-        $assignments = $this->studentPublicationRepo->findVisibleAssignmentsForStudent($course, $session);
+        $assignments = $this->studentPublicationRepo->findVisibleAssignmentsForStudent($course, $session, $gid);
 
         $data = array_map(function ($row) use ($serializer) {
             $publication = $row[0] ?? null;
@@ -293,8 +301,6 @@ class StudentPublicationController extends AbstractController
             ? $students->toArray()
             : $students;
 
-        $studentIds = array_map(fn ($rel) => $rel->getUser()->getId(), $studentsArray);
-
         $submittedUserIds = $repo->findUserIdsWithSubmissions($assignmentId);
 
         $unsubmitted = array_filter(
@@ -433,7 +439,7 @@ class StudentPublicationController extends AbstractController
         $assignment = $repo->find($assignmentId);
 
         if (!$assignment) {
-            throw $this->createNotFoundException('Assignment not found');
+            throw $this->createNotFoundException('Assignment not found.');
         }
 
         [$submissions] = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10000);
@@ -457,7 +463,7 @@ class StudentPublicationController extends AbstractController
 
                     $filename = \sprintf('%s_%s_%s', $sentDate, $user->getUsername(), $resourceFile->getOriginalName());
                     $zip->addFromString($filename, $content);
-                } catch (Throwable $e) {
+                } catch (Throwable) {
                     continue;
                 }
             }
@@ -566,6 +572,215 @@ class StudentPublicationController extends AbstractController
         ]);
     }
 
+    #[Route('/ai/text-providers', name: 'chamilo_core_assignment_ai_text_providers', methods: ['GET'])]
+    public function getAiTextProviders(
+        SettingsManager $settingsManager,
+        AiProviderFactory $aiProviderFactory,
+        KernelInterface $kernel
+    ): JsonResponse {
+        $configJson = $settingsManager->getSetting('ai_helpers.ai_providers', true);
+
+        $config = \is_string($configJson)
+            ? (json_decode($configJson, true) ?? [])
+            : (\is_array($configJson) ? $configJson : []);
+
+        $providers = [];
+
+        foreach ($config as $name => $cfg) {
+            if (!\is_string($name) || !\is_array($cfg)) {
+                continue;
+            }
+
+            // Only list providers that declare "text"
+            if (!isset($cfg['text']) || !\is_array($cfg['text'])) {
+                continue;
+            }
+
+            // Extra safety: only list providers that can be instantiated
+            try {
+                $aiProviderFactory->create($name);
+                $providers[] = $name;
+            } catch (Throwable $e) {
+                // In debug, log why provider was not listed
+                if ($kernel->isDebug()) {
+                    error_log('[Assignments][AI][providers] Skipping provider "'.$name.'": '.$e->getMessage());
+                }
+
+                continue;
+            }
+        }
+
+        sort($providers);
+
+        return new JsonResponse(['providers' => $providers]);
+    }
+
+    #[Route('/submissions/{id}/ai-task-grader-default-prompt', name: 'chamilo_core_assignment_ai_task_grader_default_prompt', methods: ['GET'])]
+    public function getAiTaskGraderDefaultPrompt(
+        int $id,
+        Request $request,
+        CStudentPublicationRepository $repo
+    ): JsonResponse {
+        $submission = $repo->find($id);
+        if (!$submission) {
+            return new JsonResponse(['error' => 'Submission not found.'], 404);
+        }
+
+        // Only editors should request the prompt (same rule as grading).
+        $this->denyAccessUnlessGranted('EDIT', $submission->getResourceNode());
+
+        $language = (string) ($request->query->get('language') ?? 'en');
+
+        return new JsonResponse([
+            'prompt' => $this->buildDefaultTaskGraderPrompt($submission, $language),
+        ]);
+    }
+
+    #[Route('/submissions/{id}/ai-task-grade-capabilities', name: 'chamilo_core_assignment_ai_task_grade_capabilities', methods: ['GET'])]
+    public function aiTaskGradeCapabilities(
+        int $id,
+        CStudentPublicationRepository $repo,
+        ResourceNodeRepository $resourceNodeRepository
+    ): JsonResponse {
+        $submission = $repo->find($id);
+        if (!$submission) {
+            return new JsonResponse(['success' => false, 'message' => 'Submission not found.'], 404);
+        }
+
+        $this->denyAccessUnlessGranted('EDIT', $submission->getResourceNode());
+
+        $studentText = trim((string) ($submission->getDescription() ?? ''));
+        $hasText = '' !== $this->toPlainText($studentText);
+
+        $meta = $this->getSubmissionFileMeta($submission, $resourceNodeRepository);
+
+        $cap = [
+            'success' => true,
+            'hasText' => $hasText,
+            'hasFile' => (bool) ($meta['hasFile'] ?? false),
+            'filename' => (string) ($meta['filename'] ?? ''),
+            'mimeType' => (string) ($meta['mimeType'] ?? ''),
+            'extension' => (string) ($meta['extension'] ?? ''),
+            'fileSize' => (int) ($meta['fileSize'] ?? 0),
+            'documentSupported' => false,
+            'textFileSupported' => false,
+            'docxSupported' => false,
+            'recommendedMode' => 'text',
+            'reason' => '',
+        ];
+
+        if (!$cap['hasFile']) {
+            $cap['recommendedMode'] = $hasText ? 'text' : 'text';
+            $cap['reason'] = $hasText
+                ? 'No file attached. AI will grade the text submission.'
+                : 'No file attached and submission text is empty. AI will have little to grade.';
+
+            return new JsonResponse($cap);
+        }
+
+        $filename = $cap['filename'];
+        $mimeType = $cap['mimeType'];
+
+        if ($this->isPdfForDocumentProcess($filename, $mimeType)) {
+            $cap['documentSupported'] = true;
+            $cap['recommendedMode'] = 'document';
+            $cap['reason'] = 'PDF detected. AI will process the document.';
+
+            return new JsonResponse($cap);
+        }
+
+        if ($this->isDocxFile($filename, $mimeType)) {
+            $cap['docxSupported'] = true;
+            $cap['recommendedMode'] = 'text';
+            $cap['reason'] = 'DOCX detected. AI will extract the text content and grade it as text.';
+
+            return new JsonResponse($cap);
+        }
+
+        if ($this->isPlainTextFile($filename, $mimeType)) {
+            $cap['textFileSupported'] = true;
+            $cap['recommendedMode'] = 'text';
+            $cap['reason'] = 'Text-based file detected. AI will read the content and grade it as text.';
+
+            return new JsonResponse($cap);
+        }
+
+        if ($this->isImageFile($filename, $mimeType)) {
+            $cap['recommendedMode'] = $hasText ? 'text' : 'text';
+            $cap['reason'] = 'Image detected. Image grading is not supported by the document processor. Please upload a PDF or paste text.';
+
+            return new JsonResponse($cap);
+        }
+
+        $cap['recommendedMode'] = $hasText ? 'text' : 'text';
+        $cap['reason'] = 'Unsupported file type. Please upload a PDF (recommended) or a text-based file.';
+
+        return new JsonResponse($cap);
+    }
+
+    #[Route('/submissions/{id}/ai-task-grade', name: 'chamilo_core_assignment_ai_task_grade', methods: ['POST'])]
+    public function aiTaskGrade(
+        int $id,
+        Request $request,
+        CStudentPublicationRepository $repo,
+        AiTaskGraderService $aiTaskGraderService
+    ): JsonResponse {
+        $submission = $repo->find($id);
+        if (!$submission) {
+            return new JsonResponse(['success' => false, 'message' => 'Submission not found.'], 404);
+        }
+
+        $this->denyAccessUnlessGranted('EDIT', $submission->getResourceNode());
+
+        $teacher = $this->getUser();
+        if (!$teacher instanceof User) {
+            return new JsonResponse(['success' => false, 'message' => 'User is not authenticated.'], 401);
+        }
+
+        $data = json_decode($request->getContent(), true) ?? [];
+
+        $providerName = trim((string) ($data['ai_provider'] ?? ''));
+        $language = trim((string) ($data['language'] ?? 'en'));
+        $requestedMode = trim((string) ($data['mode'] ?? 'auto')); // auto|text|document
+        $userPrompt = trim((string) ($data['prompt'] ?? ''));
+
+        if ('' === $providerName) {
+            return new JsonResponse(['success' => false, 'message' => 'Missing ai_provider.'], 400);
+        }
+
+        $result = $aiTaskGraderService->gradeSubmission(
+            submission: $submission,
+            teacher: $teacher,
+            options: [
+                'ai_provider' => $providerName,
+                'language' => $language,
+                'mode' => $requestedMode,
+                'prompt' => $userPrompt,
+                'provider_options' => \is_array($data['options'] ?? null) ? $data['options'] : [],
+                'teacher_notes' => (string) ($data['teacher_notes'] ?? ''),
+                'rubric' => (string) ($data['rubric'] ?? ''),
+            ]
+        );
+
+        $status = (int) ($result['httpStatus'] ?? 200);
+
+        // Normalize payload (keep UI contract)
+        if (true !== ($result['success'] ?? false)) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => (string) ($result['message'] ?? 'AI grading failed.'),
+                'mode' => (string) ($result['mode'] ?? $requestedMode),
+            ], $status);
+        }
+
+        return new JsonResponse([
+            'success' => true,
+            'feedback' => (string) ($result['feedback'] ?? ''),
+            'suggestedScore' => $result['suggestedScore'] ?? null,
+            'mode' => (string) ($result['mode'] ?? $requestedMode),
+        ]);
+    }
+
     /**
      * Sanitize filenames.
      */
@@ -577,5 +792,179 @@ class StudentPublicationController extends AbstractController
         $name = preg_replace('/_+/', '_', $name);
 
         return trim($name, '_');
+    }
+
+    private function buildDefaultTaskGraderPrompt(CStudentPublication $submission, string $language): string
+    {
+        $language = '' !== trim($language) ? $language : 'en';
+
+        $max = $this->getMaxScore($submission);
+        $maxText = null !== $max ? (string) $max : 'N/A';
+
+        return \sprintf(
+            "You are an assignment grader.\n".
+            "Language: %s.\n".
+            "Provide constructive feedback and actionable improvements.\n".
+            "At the end, add a final line exactly like: SCORE: <number> (0 to %s).\n".
+            'Return plain text only.',
+            $language,
+            $maxText
+        );
+    }
+
+    private function buildTaskGraderContextBlock(
+        CStudentPublication $submission,
+        string $studentText,
+        string $fileText,
+        bool $hasFile
+    ): string {
+        $assignment = $submission->getPublicationParent();
+        $assignmentTitle = $assignment?->getTitle() ?? 'Assignment';
+        $assignmentInstructions = $this->toPlainText((string) ($assignment?->getDescription() ?? ''));
+
+        $max = $this->getMaxScore($submission);
+
+        $lines = [];
+        $lines[] = 'ASSIGNMENT TITLE: '.$assignmentTitle;
+        $lines[] = 'ASSIGNMENT INSTRUCTIONS:'.("\n".('' !== $assignmentInstructions ? $assignmentInstructions : '(none)'));
+        if (null !== $max) {
+            $lines[] = 'MAX SCORE: '.$max;
+        }
+
+        if ('' !== trim($studentText)) {
+            $lines[] = 'STUDENT SUBMISSION (TEXT):'.("\n".$studentText);
+        } else {
+            $lines[] = 'STUDENT SUBMISSION (TEXT): (empty)';
+        }
+
+        if ('' !== trim($fileText)) {
+            $lines[] = 'STUDENT SUBMISSION (FILE CONTENT):'.("\n".$this->safeTruncateText($fileText, 12000));
+        } elseif ($hasFile) {
+            $lines[] = 'STUDENT SUBMISSION (DOCUMENT): An attached file is available.';
+        }
+
+        return implode("\n\n", $lines);
+    }
+
+    private function getSubmissionFileMeta(CStudentPublication $submission, ResourceNodeRepository $resourceNodeRepository): array
+    {
+        $node = $submission->getResourceNode();
+        if (null === $node) {
+            return ['hasFile' => false];
+        }
+
+        $rf = $node->getFirstResourceFile();
+        if (null === $rf) {
+            return ['hasFile' => false];
+        }
+
+        $filename = (string) ($rf->getOriginalName() ?? 'submission.bin');
+        $mimeType = (string) ($rf->getMimeType() ?? 'application/octet-stream');
+        $ext = strtolower((string) pathinfo($filename, PATHINFO_EXTENSION));
+
+        $size = 0;
+        if (method_exists($rf, 'getSize')) {
+            $size = (int) ($rf->getSize() ?? 0);
+        }
+
+        return [
+            'hasFile' => true,
+            'filename' => $filename,
+            'mimeType' => $mimeType,
+            'extension' => $ext,
+            'fileSize' => $size,
+        ];
+    }
+
+    private function isPdfForDocumentProcess(string $filename, string $mimeType): bool
+    {
+        $ext = strtolower((string) pathinfo($filename, PATHINFO_EXTENSION));
+        if ('pdf' === $ext) {
+            return true;
+        }
+
+        return 'application/pdf' === strtolower(trim($mimeType));
+    }
+
+    private function isDocxFile(string $filename, string $mimeType): bool
+    {
+        $ext = strtolower((string) pathinfo($filename, PATHINFO_EXTENSION));
+        if ('docx' === $ext) {
+            return true;
+        }
+
+        return str_contains(strtolower($mimeType), 'officedocument.wordprocessingml.document');
+    }
+
+    private function isPlainTextFile(string $filename, string $mimeType): bool
+    {
+        $ext = strtolower((string) pathinfo($filename, PATHINFO_EXTENSION));
+        $mime = strtolower(trim($mimeType));
+
+        $allowedExt = ['txt', 'md', 'markdown', 'html', 'htm', 'json', 'xml', 'yaml', 'yml', 'csv', 'log', 'ini', 'env'];
+        if (\in_array($ext, $allowedExt, true)) {
+            return true;
+        }
+
+        return str_starts_with($mime, 'text/');
+    }
+
+    private function isImageFile(string $filename, string $mimeType): bool
+    {
+        $ext = strtolower((string) pathinfo($filename, PATHINFO_EXTENSION));
+        if (\in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'tiff'], true)) {
+            return true;
+        }
+
+        return str_starts_with(strtolower(trim($mimeType)), 'image/');
+    }
+
+    private function safeTruncateText(string $s, int $maxChars = 12000): string
+    {
+        $s = trim($s);
+        if (mb_strlen($s) <= $maxChars) {
+            return $s;
+        }
+
+        return mb_substr($s, 0, $maxChars)."\n\n[...truncated...]";
+    }
+
+    private function toPlainText(string $html): string
+    {
+        $s = trim($html);
+        if ('' === $s) {
+            return '';
+        }
+
+        $s = preg_replace('/<\s*br\s*\/?\s*>/i', "\n", $s);
+        $s = preg_replace('/<\/(p|div|li|h[1-6])\s*>/i', "\n", $s);
+
+        $s = strip_tags($s);
+        $s = html_entity_decode($s, ENT_QUOTES | ENT_HTML5);
+
+        $s = preg_replace("/[ \t]+\n/", "\n", $s);
+        $s = preg_replace("/\n{3,}/", "\n\n", $s);
+
+        return trim($s);
+    }
+
+    private function getMaxScore(CStudentPublication $submission): ?float
+    {
+        $assignment = $submission->getPublicationParent();
+        if (null === $assignment) {
+            return null;
+        }
+
+        $raw = $assignment->getQualification();
+        if (null === $raw || '' === (string) $raw) {
+            return null;
+        }
+
+        $n = (float) $raw;
+        if ($n <= 0) {
+            return null;
+        }
+
+        return $n;
     }
 }

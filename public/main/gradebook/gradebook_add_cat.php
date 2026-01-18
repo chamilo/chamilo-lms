@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $_in_course = true;
 $course_code = api_get_course_id();
@@ -12,14 +14,14 @@ if (empty($courseId)) {
 api_block_anonymous_users();
 GradebookUtils::block_students();
 
-$edit_cat = isset($_REQUEST['editcat']) ? intval($_REQUEST['editcat']) : '';
-$get_select_cat = (int) $_GET['selectcat'];
+$edit_cat = isset($_REQUEST['editcat']) ? (int) $_REQUEST['editcat'] : '';
+$get_select_cat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 
 $catadd = new Category();
 $my_user_id = api_get_user_id();
 $catadd->set_user_id($my_user_id);
 $catadd->set_parent_id($get_select_cat);
-$catcourse = Category :: load($get_select_cat);
+$catcourse = Category::load($get_select_cat);
 
 if ($_in_course) {
     $catadd->setCourseId($courseId);
@@ -117,6 +119,38 @@ if (!$_in_course) {
 }
 $interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq(), 'name' => get_lang('Assessments')];
 Display::display_header(get_lang('New category'));
+$defaultBackUrl = Category::getUrl().'selectcat='.$get_select_cat;
+if ($_in_course) {
+    $defaultBackUrl = 'index.php?selectcat='.$get_select_cat.'&'.api_get_cidreq();
+}
+
+$backUrl = $defaultBackUrl;
+
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+if (!empty($referer)) {
+    $platformHost = (string) parse_url(api_get_path(WEB_PATH), PHP_URL_HOST);
+    $refererHost = (string) parse_url($referer, PHP_URL_HOST);
+    if (empty($refererHost)) {
+        $backUrl = $referer;
+    } elseif (!empty($platformHost) && $refererHost === $platformHost) {
+        $backUrl = $referer;
+    }
+}
+
+echo '<div class="mb-4">';
+
+// Back icon only
+echo '<div class="mb-2">';
+echo Display::url(
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
+    $backUrl
+);
+echo '</div>';
+
+// Visible page title
+echo '<h1 class="text-xl font-semibold text-gray-90 m-0">'.get_lang('New category').'</h1>';
+
+echo '</div>';
 
 $display_form = true;
 if ($display_form) {

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -100,6 +102,30 @@ $interbreadcrumb[] = [
     'name' => get_lang('Assessments'),
 ];
 $this_section = SECTION_COURSES;
-Display::display_header(get_lang('Edit this category'));
+
+$pageTitle = get_lang('Edit this category');
+Display::display_header($pageTitle);
+
+$backUrl = Category::getUrl().'selectcat='.(int) $selectcat;
+
+echo '<div class="w-full mx-auto px-4 sm:px-6 lg:px-8">';
+echo '<div class="mb-4">';
+echo Display::toolbarAction('actions', [
+    Display::url(
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
+        $backUrl,
+        ['class' => 'inline-flex items-center']
+    ),
+]);
+echo '</div>';
+
+echo '<div class="mb-6">';
+echo Display::page_header($pageTitle);
+echo '</div>';
+
 $form->display();
+
+echo '</div>';
+
 Display::display_footer();
+

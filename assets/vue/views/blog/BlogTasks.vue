@@ -5,15 +5,15 @@
         <h3 class="text-lg font-semibold m-0">{{ t("Tasks") }}</h3>
       </template>
       <template #end>
-        <BaseButton type="primary" icon="plus" :label="t('New Task')" @click="openCreate" />
-        <BaseButton type="black" icon="account-plus" :label="t('Assign Task')" @click="showAssign = true" />
+        <BaseButton type="primary" icon="plus" :label="t('New task')" @click="openCreate" />
+        <BaseButton type="black" icon="account-plus" :label="t('Assign task')" @click="showAssign = true" />
       </template>
     </BaseToolbar>
 
     <div class="grid md:grid-cols-2 gap-4">
       <!-- Tasks list -->
       <div class="rounded-lg border bg-white shadow-sm">
-        <div class="p-3 border-b text-sm font-medium">{{ t("Tasks list") }}</div>
+        <div class="p-3 border-b text-sm font-medium">{{ t("Task list") }}</div>
         <div class="p-4 space-y-3">
           <div v-for="task in tasks" :key="task.id" class="p-3 border rounded bg-gray-20">
             <div class="flex items-start justify-between gap-3">
@@ -58,7 +58,7 @@
 
         <div class="p-4 space-y-2">
           <div v-if="!assignments.length" class="text-sm text-gray-500">
-            {{ t("No assignments yet.") }}
+            {{ t("No assignments available") }}
           </div>
 
           <div v-for="a in assignments" :key="a.id" class="flex items-center justify-between border rounded p-3 gap-3">
@@ -81,7 +81,7 @@
               >
                 <option :value="0">Open</option>
                 <option :value="1">In progress</option>
-                <option :value="2">Waiting for testing</option>
+                <option :value="2">Waiting for validation</option>
                 <option :value="3">Done</option>
               </select>
 
@@ -149,7 +149,7 @@ function taskTitle(id){ return tasks.value.find(t=>t.id===id)?.title || `#${id}`
 function statusLabel(s){
   switch(Number(s)){
     case 1: return t("In progress")
-    case 2: return t("Waiting for testing")
+    case 2: return t("Waiting for validation")
     case 3: return t("Done")
     default: return t("Open")
   }

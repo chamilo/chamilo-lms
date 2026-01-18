@@ -14,6 +14,7 @@ parameters:
     theme_fallback: '%env(THEME_FALLBACK)%'
     packager: '%env(PACKAGER)%'
     default_template: '%env(DEFAULT_TEMPLATE)%'
+    scim_token: '%env(SCIM_TOKEN)%'
     .container.dumper.inline_factories: true
     twig:
         form:
@@ -124,6 +125,15 @@ services:
         $security: '@security.helper'
       tags:
         - { name: 'api_platform.state_processor' }
+
+    Chamilo\CoreBundle\EventSubscriber\RememberMeSubscriber:
+      arguments:
+        $appSecret: '%kernel.secret%'
+      tags: [ 'kernel.event_subscriber' ]
+
+    Chamilo\CoreBundle\Security\Authenticator\RememberMeCookieAuthenticator:
+      arguments:
+        $appSecret: '%env(APP_SECRET)%'
 
     Chamilo\CoreBundle\EventSubscriber\AnonymousUserSubscriber:
       tags:

@@ -664,7 +664,7 @@ class Display
     ) {
         $code_path = api_get_path(SYS_PUBLIC_PATH);
         $w_code_path = api_get_path(WEB_PUBLIC_PATH);
-        // The following path is checked to see if the file exist. It's
+        // The following path is checked to see if the file exists. It's
         // important to use the public path (i.e. web/css/) rather than the
         // internal path (/app/Resource/public/css/) because the path used
         // in the end must be the public path
@@ -709,13 +709,7 @@ class Display
             }
         }
 
-        // Special code to enable SVG - refs #7359 - Needs more work
-        // The code below does something else to "test out" SVG: for each icon,
-        // it checks if there is an SVG version. If so, it uses it.
-        // When moving this to production, the return_icon() calls should
-        // ask for the SVG version directly
-        $svgIcons = api_get_setting('icons_mode_svg');
-        if ('true' == $svgIcons && false == $return_only_path) {
+        if ($return_only_path) {
             $svgImage = substr($image, 0, -3).'svg';
             if (is_file($code_path.$theme.'svg/'.$svgImage)) {
                 $icon = $w_code_path.$theme.'svg/'.$svgImage;
@@ -736,7 +730,7 @@ class Display
         }
 
         $img = self::img($icon, $alt_text, $additional_attributes);
-        if (SHOW_TEXT_NEAR_ICONS == true && !empty($alt_text)) {
+        if (SHOW_TEXT_NEAR_ICONS && !empty($alt_text)) {
             if ($show_text) {
                 $img = "$img $alt_text";
             }
@@ -746,23 +740,23 @@ class Display
     }
 
     /**
-     * Returns the htmlcode for an image.
+     * Returns the HTML code for an image.
      *
      * @param string $image_path            the filename of the file (in the main/img/ folder
-     * @param string $alt_text              the alt text (probably a language variable)
-     * @param array  $additional_attributes (for instance height, width, onclick, ...)
-     * @param bool   $filterPath            Optional. Whether filter the image path. Default is true
+     * @param ?string $alt_text              the alt text (probably a language variable)
+     * @param ?array  $additional_attributes (for instance, height, width, onclick, ...)
+     * @param ?bool   $filterPath            Optional. Whether filter the image path. Default is true
      *
      * @return string
      *
      * @author Julio Montoya 2010
      */
     public static function img(
-        $image_path,
-        $alt_text = '',
-        $additional_attributes = null,
-        $filterPath = true
-    ) {
+        string $image_path,
+        ?string $alt_text = '',
+        ?array $additional_attributes = null,
+        ?bool $filterPath = true
+    ): string {
         if (empty($image_path)) {
             return '';
         }
@@ -793,11 +787,11 @@ class Display
     }
 
     /**
-     * Returns the htmlcode for a tag (h3, h1, div, a, button), etc.
+     * Returns the HTML code for a tag (h3, h1, div, a, button), etc.
      *
      * @param string $tag                   the tag name
      * @param string $content               the tag's content
-     * @param array  $additional_attributes (for instance height, width, onclick, ...)
+     * @param array  $additional_attributes (for instance, height, width, onclick, ...)
      *
      * @return string
      *
@@ -827,12 +821,12 @@ class Display
      * Creates a URL anchor.
      *
      * @param string $name
-     * @param string $url
-     * @param array  $attributes
+     * @param ?string $url
+     * @param ?array  $attributes
      *
      * @return string
      */
-    public static function url($name, $url, $attributes = [])
+    public static function url(string $name, ?string $url, ?array $attributes = []): string
     {
         if (!empty($url)) {
             $url = preg_replace('#&amp;#', '&', $url);
@@ -847,11 +841,11 @@ class Display
      * Creates a div tag.
      *
      * @param string $content
-     * @param array  $attributes
+     * @param ?array  $attributes
      *
      * @return string
      */
-    public static function div($content, $attributes = [])
+    public static function div(string $content, ?array $attributes = []): string
     {
         return self::tag('div', $content, $attributes);
     }
@@ -859,7 +853,7 @@ class Display
     /**
      * Creates a span tag.
      */
-    public static function span($content, $attributes = [])
+    public static function span(string $content, ?array $attributes = []): string
     {
         return self::tag('span', $content, $attributes);
     }
@@ -877,6 +871,28 @@ class Display
         }
         if (isset($value)) {
             $attributes['value'] = $value;
+        }
+
+        if ('checkbox' === $type) {
+            $attributes['class'] ??= 'p-checkbox-input';
+        }
+
+        $inputBase = self::tag('input', '', $attributes);
+
+        if ('checkbox' === $type) {
+            $isChecked = isset($attributes['checked']) && 'checked' === $attributes['checked'];
+            $compontentCheckedClass = $isChecked ? 'p-checkbox-checked' : '';
+
+            return <<<HTML
+                <div class="p-checkbox p-component $compontentCheckedClass">
+                    $inputBase
+                    <div class="p-checkbox-box">
+                        <svg class="p-icon p-checkbox-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M4.86199 11.5948C4.78717 11.5923 4.71366 11.5745 4.64596 11.5426C4.57826 11.5107 4.51779 11.4652 4.46827 11.4091L0.753985 7.69483C0.683167 7.64891 0.623706 7.58751 0.580092 7.51525C0.536478 7.44299 0.509851 7.36177 0.502221 7.27771C0.49459 7.19366 0.506156 7.10897 0.536046 7.03004C0.565935 6.95111 0.613367 6.88 0.674759 6.82208C0.736151 6.76416 0.8099 6.72095 0.890436 6.69571C0.970973 6.67046 1.05619 6.66385 1.13966 6.67635C1.22313 6.68886 1.30266 6.72017 1.37226 6.76792C1.44186 6.81567 1.4997 6.8786 1.54141 6.95197L4.86199 10.2503L12.6397 2.49483C12.7444 2.42694 12.8689 2.39617 12.9932 2.40745C13.1174 2.41873 13.2343 2.47141 13.3251 2.55705C13.4159 2.64268 13.4753 2.75632 13.4938 2.87973C13.5123 3.00315 13.4888 3.1292 13.4271 3.23768L5.2557 11.4091C5.20618 11.4652 5.14571 11.5107 5.07801 11.5426C5.01031 11.5745 4.9368 11.5923 4.86199 11.5948Z" fill="currentColor"></path>
+                        </svg>
+                    </div>
+                </div>
+HTML;
         }
 
         if ('text' === $type) {
@@ -1577,7 +1593,7 @@ class Display
             $title .= "<small> $second_title</small>";
         }
 
-        return '<div class="page-header section-header"><'.$size.' class="section-header__title">'.$title.'</'.$size.'></div>';
+        return '<div class="page-header section-header mb-6"><'.$size.' class="section-header__title">'.$title.'</'.$size.'></div>';
     }
 
     public static function page_header_and_translate($title, $second_title = null)
@@ -2203,13 +2219,11 @@ class Display
             $end = $contentList[2];
         }
 
-
-        return '<div id="'.$id.'" class="toolbar-action p-toolbar p-component flex items-center justify-between flex-wrap" role="toolbar">
-                <div class="p-toolbar-group-start p-toolbar-group-left">'.$start.'</div>
-                <div class="p-toolbar-group-center">'.$center.'</div>
-                <div class="p-toolbar-group-end p-toolbar-group-right">'.$end.'</div>
-            </div>
-        ';
+        return '<div id="'.$id.'" class="toolbar-action p-toolbar p-component flex items-center justify-between flex-wrap w-full" role="toolbar">
+            <div class="p-toolbar-group-start p-toolbar-group-left">'.$start.'</div>
+            <div class="p-toolbar-group-center">'.$center.'</div>
+            <div class="p-toolbar-group-end p-toolbar-group-right">'.$end.'</div>
+        </div>';
     }
 
     /**
@@ -2759,5 +2773,176 @@ class Display
         }
 
         return $html;
+    }
+
+    /**
+     * Build the common MySpace / tracking menu (left part of the toolbar).
+     *
+     * $current can be:
+     *  - overview
+     *  - students
+     *  - teachers
+     *  - admin_view
+     *  - exams
+     *  - current_courses
+     *  - courses
+     *  - sessions
+     *  - company_reports
+     *  - company_reports_resumed
+     */
+    public static function mySpaceMenu(?string $current = 'overview'): string
+    {
+        $base = api_get_path(WEB_CODE_PATH).'my_space/';
+        $items = [];
+
+        $isPlatformAdmin = api_is_platform_admin();
+        $isDrh = api_is_drh();
+        if ('yourstudents' === $current) {
+            $current = 'students';
+        }
+
+        if ($isDrh) {
+            // DRH menu.
+            $items = [
+                'students' => [
+                    'icon' => ObjectIcon::USER,
+                    'title' => get_lang('Learners'),
+                    'url' => $base.'student.php',
+                ],
+                'teachers' => [
+                    'icon' => ObjectIcon::TEACHER,
+                    'title' => get_lang('Teachers'),
+                    'url' => $base.'teachers.php',
+                ],
+                'courses' => [
+                    'icon' => ObjectIcon::COURSE,
+                    'title' => get_lang('Courses'),
+                    'url' => $base.'course.php',
+                ],
+                'sessions' => [
+                    'icon' => ObjectIcon::SESSION,
+                    'title' => get_lang('Course sessions'),
+                    'url' => $base.'session.php',
+                ],
+                'company_reports' => [
+                    'icon' => ObjectIcon::REPORT,
+                    'title' => get_lang('Corporate report'),
+                    'url' => $base.'company_reports.php',
+                ],
+                'company_reports_resumed' => [
+                    'icon' => 'chart-box-outline',
+                    'title' => get_lang('Corporate report, short version'),
+                    'url' => $base.'company_reports_resumed.php',
+                ],
+            ];
+        } else {
+            // Teacher / platform admin menu.
+            $items = [
+                'overview' => [
+                    'icon' => 'chart-bar',
+                    'title' => get_lang('Global view'),
+                    'url' => $base.'index.php',
+                ],
+                'students' => [
+                    'icon' => 'account-star',
+                    'title' => get_lang('Learners'),
+                    'url' => $base.'student.php',
+                ],
+                'teachers' => [
+                    'icon' => 'human-male-board',
+                    'title' => get_lang('Teachers'),
+                    'url' => $base.'teachers.php',
+                ],
+            ];
+
+            if ($isPlatformAdmin) {
+                $items['admin_view'] = [
+                    'icon' => 'star-outline',
+                    'title' => get_lang('Admin view'),
+                    'url' => $base.'admin_view.php',
+                ];
+                $items['exams'] = [
+                    'icon' => 'order-bool-ascending-variant',
+                    'title' => get_lang('Exam tracking'),
+                    'url' => api_get_path(WEB_CODE_PATH).'tracking/exams.php',
+                ];
+                $items['current_courses'] = [
+                    'icon' => 'book-open-page-variant',
+                    'title' => get_lang('Current courses report'),
+                    'url' => $base.'current_courses.php',
+                ];
+                $items['certificate_report'] = [
+                    'icon' => 'certificate',
+                    'title' => get_lang('See list of learner certificates'),
+                    'url' => api_get_path(WEB_CODE_PATH).'gradebook/certificate_report.php',
+                ];
+            }
+        }
+
+        $html = '';
+
+        foreach ($items as $name => $item) {
+            $iconClass = $name === $current ? 'ch-tool-icon-disabled' : 'ch-tool-icon';
+            $url = $name === $current ? '' : $item['url'];
+
+            $html .= self::url(
+                self::getMdiIcon(
+                    $item['icon'],
+                    $iconClass,
+                    null,
+                    32,
+                    $item['title']
+                ),
+                $url
+            );
+        }
+
+        return $html;
+    }
+
+    /**
+     * Reusable collapsible wrapper for "advanced parameters" sections.
+     */
+    public static function advancedPanelStart(
+        string $id,
+        string $title,
+        bool $open = false,
+        array $options = []
+    ): string {
+        $safeId = preg_replace('/[^a-zA-Z0-9\-_:.]/', '_', $id);
+        $safeTitle = Security::remove_XSS($title);
+
+        $openAttr = $open ? ' open' : '';
+
+        $detailsClass = $options['details_class']
+            ?? 'display-advanced-panel mb-4';
+
+        // Button-like summary, fit to text (no full width)
+        $summaryClass = $options['summary_class']
+            ?? 'inline-flex w-fit items-center gap-2 cursor-pointer select-none whitespace-nowrap
+            bg-primary text-white
+            border border-primary rounded px-3 py-2 shadow-sm font-semibold
+            hover:opacity-90 transition
+            focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2';
+
+        $contentClass = $options['content_class']
+            ?? 'bg-white border border-gray-25 rounded mt-3 px-3 py-3';
+
+        return '
+            <details id="'.$safeId.'" class="'.$detailsClass.'"'.$openAttr.'>
+              <summary class="'.$summaryClass.'">
+                <span class="display-advanced-panel__chevron" aria-hidden="true">▸</span>
+                <span>'.$safeTitle.'</span>
+              </summary>
+              <div class="'.$contentClass.'">
+            ';
+    }
+
+    public static function advancedPanelEnd(): string
+    {
+        return '
+          </div>
+        </details>
+        ';
     }
 }

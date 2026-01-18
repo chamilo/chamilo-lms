@@ -521,11 +521,10 @@ class Category implements GradebookItem
             $category->setDescription($this->description);
             $userId = is_numeric($this->user_id) ? (int) $this->user_id : api_get_user_id();
             $category->setUser(api_get_user_entity($userId));
-            $category->setUser(api_get_user_entity($this->user_id));
             $category->setCourse($course);
             $category->setParent($parent);
             $category->setWeight(api_float_val($this->weight));
-            $category->setVisible($this->visible ? true : false);
+            $category->setVisible((bool) $this->visible);
             $category->setCertifMinScore($this->certificate_min_score);
             $category->setSession(api_get_session_entity($this->session_id));
             $category->setGenerateCertificates($this->generateCertificates);
@@ -1166,61 +1165,62 @@ class Category implements GradebookItem
 
         if (!api_is_allowed_to_edit()) {
             $sql .= ' AND visible = 1';
-            //proceed with checks on optional parameters course & session
+
+            // Proceed with checks on optional parameters course & session
             if (!empty($courseId)) {
                 // TODO: considering it highly improbable that a user would get here
                 // if he doesn't have the rights to view this course and this
                 // session, we don't check his registration to these, but this
                 // could be an improvement
+                $sql .= " AND c_id = $courseId";
+
                 if (!empty($session_id)) {
-                    $sql .= " AND c_id = '".$courseId."' AND session_id = ".$session_id;
+                    $sql .= " AND session_id = $session_id";
                 } else {
-                    $sql .= " AND c_id = '".$courseId."' AND session_id is null OR session_id=0";
+                    $sql .= " AND (session_id IS NULL OR session_id = 0)";
                 }
             } else {
-                //no optional parameter, proceed as usual
-                $sql .= ' AND c_id in
-                     (
-                        SELECT c.id
-                        FROM '.$main_course_user_table.' cu
-                        WHERE cu.user_id = '.intval($stud_id).'
-                        AND cu.status = '.STUDENT.'
-                    )';
+                // No optional parameter, proceed as usual
+                $sql .= ' AND c_id IN (
+                SELECT cu.c_id
+                FROM '.$main_course_user_table.' cu
+                WHERE cu.user_id = '.$stud_id.'
+                AND cu.status = '.STUDENT.'
+            )';
             }
         } elseif (!api_is_platform_admin()) {
-            //proceed with checks on optional parameters course & session
+            // Proceed with checks on optional parameters course & session
             if (!empty($courseId)) {
                 // TODO: considering it highly improbable that a user would get here
                 // if he doesn't have the rights to view this course and this
                 // session, we don't check his registration to these, but this
                 // could be an improvement
-                $sql .= " AND c_id  = $courseId";
+                $sql .= " AND c_id = $courseId";
                 if (!empty($session_id)) {
-                    $sql .= " AND session_id = ".$session_id;
+                    $sql .= " AND session_id = $session_id";
                 } else {
-                    $sql .= 'AND session_id IS NULL OR session_id = 0';
+                    $sql .= " AND (session_id IS NULL OR session_id = 0)";
                 }
             } else {
-                $sql .= ' AND c_id IN
-                     (
-                        SELECT c.id
-                        FROM '.$main_course_user_table.' cu
-                        WHERE
-                            cu.user_id = '.api_get_user_id().' AND
-                            cu.status = '.COURSEMANAGER.'
-                    )';
+                $sql .= ' AND c_id IN (
+                SELECT cu.c_id
+                FROM '.$main_course_user_table.' cu
+                WHERE cu.user_id = '.(int) api_get_user_id().'
+                AND cu.status = '.COURSEMANAGER.'
+            )';
             }
-        } elseif (api_is_platform_admin()) {
-            if (0 != $session_id) {
-                $sql .= ' AND session_id='.$session_id;
+        } else {
+            // Platform admin
+            if (!empty($session_id)) {
+                $sql .= " AND session_id = $session_id";
             } else {
-                $sql .= ' AND coalesce(session_id,0)=0';
+                $sql .= ' AND COALESCE(session_id, 0) = 0';
             }
         }
         $result = Database::query($sql);
         $cats = self::create_category_objects_from_sql_result($result);
 
-        // course independent categories
+        // Course independent categories
         if (empty($courseId)) {
             $cats = $this->getIndependentCategoriesWithStudentResult(
                 0,
@@ -1237,7 +1237,7 @@ class Category implements GradebookItem
      *
      * @param int    $user_id (to return everything, use 'null' here)
      * @param ?int   $courseId (optional)
-     * @param ?int    $session_id (optional)
+     * @param ?int   $session_id (optional)
      *
      * @return array
      * @throws \Doctrine\DBAL\Exception
@@ -1254,24 +1254,30 @@ class Category implements GradebookItem
         $main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
-        $sql = 'SELECT * FROM '.$tbl_grade_categories.'
-                WHERE parent_id = 0 ';
+        $user_id = (int) $user_id;
+        $courseId = isset($courseId) ? (int) $courseId : null;
+        $session_id = isset($session_id) ? (int) $session_id : null;
+
+        $sql = 'SELECT * FROM '.$tbl_grade_categories.' WHERE parent_id = 0';
+
         if (!empty($courseId)) {
-            $sql .= " AND c_id = $courseId ";
+            $sql .= " AND c_id = $courseId";
             if (!empty($session_id)) {
-                $sql .= " AND session_id = ".$session_id;
+                $sql .= " AND session_id = $session_id";
+            } else {
+                $sql .= ' AND (session_id IS NULL OR session_id = 0)';
             }
         } else {
-            $sql .= ' AND c_id in
-                 (
-                    SELECT cu.id
-                    FROM '.$main_course_user_table.' cu
-                    WHERE user_id = '.$user_id.'
-                )';
+            $sql .= ' AND c_id IN (
+            SELECT cu.c_id
+            FROM '.$main_course_user_table.' cu
+            WHERE cu.user_id = '.$user_id.'
+        )';
         }
         $result = Database::query($sql);
         $cats = self::create_category_objects_from_sql_result($result);
-        // course independent categories
+
+        // Course independent categories
         if (!empty($courseId)) {
             $indcats = self::load(
                 null,
@@ -2012,15 +2018,37 @@ class Category implements GradebookItem
         bool $sendNotification = false,
         bool $skipGenerationIfExists = false
     ) {
-        $categoryId = $category->getId();
-        $sessionId = $category->getSession() ? $category->getSession()->getId() : 0;
-        $courseId = $category->getCourse()->getId();
+        $categoryId = (int) $category->getId();
+        $sessionId  = $category->getSession() ? (int) $category->getSession()->getId() : 0;
+        $courseId   = (int) $category->getCourse()->getId();
 
-        // check if all min_score requirements are met
-        if (!self::userMeetsMinimumScores($user_id, $category)) {
-            return false; // Do not generate certificate if the user does not meet all min_score criteria
+        // Load legacy Category object to compute score safely.
+        $catArr = Category::load($categoryId);
+        $catObj = $catArr[0] ?? null;
+
+        $scoreForCertificate = 0.0;
+        if ($catObj) {
+            $scoreForCertificate = (float) self::calculateFlatViewTotalPercent($catObj, $user_id);
         }
 
+        // Guard: never generate certificate OR award skills if the global certificate threshold is not met.
+        $minCertificationScore = (float) $category->getCertifMinScore();
+        if ($minCertificationScore > 0.0 && $scoreForCertificate < $minCertificationScore) {
+            return false;
+        }
+
+        // Guard: per-item min_score requirements must be met.
+        if (!self::userMeetsMinimumScores($user_id, $category)) {
+            return false;
+        }
+
+        // If certificate already exists and we should skip regeneration, return false.
+        $my_certificate = GradebookUtils::get_certificate_by_user_id($categoryId, $user_id);
+        if ($skipGenerationIfExists && !empty($my_certificate)) {
+            return false;
+        }
+
+        // Award skills only after ALL requirements are met.
         $skillToolEnabled = SkillModel::hasAccessToUserSkill(api_get_user_id(), $user_id);
         $userHasSkills = false;
         if ($skillToolEnabled) {
@@ -2031,13 +2059,13 @@ class Category implements GradebookItem
             $userHasSkills = !empty($userSkills);
         }
 
-        // If certificate generation is disabled, return only badge link (if available)
+        // If certificate generation is disabled, return only badge link (if available).
         if (empty($category->getGenerateCertificates())) {
             if ($userHasSkills) {
                 return [
                     'badge_link' => Display::toolbarButton(
                         get_lang('Export badges'),
-                        api_get_path(WEB_CODE_PATH)."gradebook/get_badges.php?user=$user_id",
+                        api_get_path(WEB_CODE_PATH) . "gradebook/get_badges.php?user=$user_id",
                         'open-in-new'
                     ),
                 ];
@@ -2045,37 +2073,26 @@ class Category implements GradebookItem
 
             return false;
         }
+
+        // Store score info (used to display/track generation moment).
+        GradebookUtils::registerUserInfoAboutCertificate(
+            $categoryId,
+            $user_id,
+            $scoreForCertificate,
+            api_get_utc_datetime()
+        );
+
+        // Now fetch the (possibly existing) certificate.
         $my_certificate = GradebookUtils::get_certificate_by_user_id($categoryId, $user_id);
 
-        // If certificate already exists and we should skip regeneration, return false
-        if ($skipGenerationIfExists && !empty($my_certificate)) {
-            return false;
-        }
-
-        $categoryLegacy = self::load($categoryId);
-        $categoryLegacy = $categoryLegacy[0];
-
-        /** @var Category $categoryLegacy */
-        $totalScore = $categoryLegacy->calc_score($user_id);
-
-        // Do not remove this the gradebook/lib/fe/gradebooktable.class.php
-        // file load this variable as a global
-        $scoredisplay = ScoreDisplay::instance();
-        $my_score_in_gradebook = $scoredisplay->display_score($totalScore, SCORE_SIMPLE);
-
-        if (empty($my_certificate)) {
-            GradebookUtils::registerUserInfoAboutCertificate(
-                $categoryId,
-                $user_id,
-                $my_score_in_gradebook,
-                api_get_utc_datetime()
-            );
-            $my_certificate = GradebookUtils::get_certificate_by_user_id($categoryId, $user_id);
-        }
-
-        $html = [];
         if (!empty($my_certificate)) {
-            $pathToCertificate = $category->getDocument()->getResourceNode()->getResourceFiles()->first()->getFile()->getPathname();
+            $pathToCertificate = $category
+                ->getDocument()
+                ->getResourceNode()
+                ->getResourceFiles()
+                ->first()
+                ->getFile()
+                ->getPathname();
 
             $certificate_obj = new Certificate(
                 $my_certificate['id'],
@@ -2087,7 +2104,6 @@ class Category implements GradebookItem
 
             $fileWasGenerated = $certificate_obj->isHtmlFileGenerated();
 
-            // Fix when using a custom certificate plugin
             if ('true' === api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate')) {
                 $infoCertificate = CustomCertificatePlugin::getCertificateData($my_certificate['id'], $user_id);
                 if (!empty($infoCertificate)) {
@@ -2138,20 +2154,90 @@ class Category implements GradebookItem
                     'pdf_link' => $exportToPDF,
                     'pdf_url' => $pdfUrl,
                 ];
+
+                if ($skillToolEnabled && $userHasSkills) {
+                    $html['badge_link'] = Display::toolbarButton(
+                        get_lang('Export badges'),
+                        api_get_path(WEB_CODE_PATH) . "gradebook/get_badges.php?user=$user_id",
+                        'open-in-new'
+                    );
+                }
+
+                return $html;
             }
 
+            // If file not generated or cannot view, still allow badges if skills exist.
             if ($skillToolEnabled && $userHasSkills) {
-                $html['badge_link'] = Display::toolbarButton(
-                    get_lang('Export badges'),
-                    api_get_path(WEB_CODE_PATH)."gradebook/get_badges.php?user=$user_id",
-                    'open-in-new'
-                );
+                return [
+                    'badge_link' => Display::toolbarButton(
+                        get_lang('Export badges'),
+                        api_get_path(WEB_CODE_PATH) . "gradebook/get_badges.php?user=$user_id",
+                        'open-in-new'
+                    ),
+                ];
             }
-
-            return $html;
         }
 
         return false;
+    }
+
+    private static function calculateFlatViewTotalPercent(Category $cat, int $userId): float
+    {
+        $sessionId = api_get_session_id();
+        $courseId  = api_get_course_int_id();
+
+        $parentId = (int) $cat->get_parent_id();
+        $allcat   = $cat->get_subcategories(null, $courseId, $sessionId, 'ORDER BY id');
+
+        // Root category with visible subcategories.
+        if ($parentId === 0 && !empty($allcat)) {
+            $itemValueTotal = 0.0;
+            $itemTotal      = 0.0;
+
+            foreach ($allcat as $subCat) {
+                $isVisible = true;
+                if (method_exists($subCat, 'is_visible')) {
+                    $isVisible = (bool) $subCat->is_visible();
+                } elseif (method_exists($subCat, 'get_visible')) {
+                    $isVisible = (bool) $subCat->get_visible();
+                }
+
+                $subWeight = (float) $subCat->get_weight();
+                if (!$isVisible || $subWeight <= 0.0) {
+                    continue;
+                }
+
+                $score = $subCat->calc_score($userId);
+                if (!is_array($score)) {
+                    $score = [0, 0];
+                }
+
+                $den = (isset($score[1]) && (float) $score[1] > 0.0) ? (float) $score[1] : 0.0;
+                $num = isset($score[0]) ? (float) $score[0] : 0.0;
+
+                $ratio = ($den > 0.0) ? ($num / $den) : 0.0;
+
+                $itemValueTotal += $ratio * $subWeight;
+                $itemTotal      += $subWeight;
+            }
+
+            $percent = ($itemTotal > 0.0) ? (($itemValueTotal / $itemTotal) * 100.0) : 0.0;
+
+            return round($percent, 2);
+        }
+
+        // Fallback: use category calc_score for non-root or no-subcat cases.
+        $total = $cat->calc_score($userId);
+        if (!is_array($total)) {
+            $total = [0, 0];
+        }
+
+        $den = (isset($total[1]) && (float) $total[1] > 0.0) ? (float) $total[1] : 0.0;
+        $num = isset($total[0]) ? (float) $total[0] : 0.0;
+
+        $percent = ($den > 0.0) ? (($num / $den) * 100.0) : 0.0;
+
+        return round($percent, 2);
     }
 
     /**
@@ -2432,21 +2518,33 @@ class Category implements GradebookItem
             return '';
         }
 
-        $downloadLink = Display::toolbarButton(
-            get_lang('Download certificate in PDF'),
-            $certificate['pdf_url'],
-            'file-pdf-box'
-        );
-        $viewLink = $certificate['certificate_link'];
+        $pdfUrl = (string) $certificate['pdf_url'];
+        $viewLinkHtml = $certificate['certificate_link'] ?? '';
+
+        $downloadLink = "
+        <a
+            href='".htmlspecialchars($pdfUrl, ENT_QUOTES)."'
+            target='_blank'
+            rel='noopener noreferrer'
+            class='inline-flex items-center justify-center rounded-lg bg-gray-50 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-50'
+        >
+            ".get_lang('Download certificate in PDF')."
+        </a>
+    ";
 
         return "
-            <div class='panel panel-default'>
-                <div class='panel-body'>
-                    <h3 class='text-center'>".get_lang('You can now download your certificate by clicking here')."</h3>
-                    <div class='text-center'>$downloadLink $viewLink</div>
+        <section class='mx-auto max-w-5xl p-4'>
+            <div class='rounded-2xl bg-white ring-1 ring-gray-20 shadow-sm p-6'>
+                <h3 class='text-center text-xl font-semibold text-gray-900'>
+                    ".get_lang('You can now download your certificate by clicking here')."
+                </h3>
+                <div class='mt-4 flex flex-wrap items-center justify-center gap-3'>
+                    $downloadLink
+                    $viewLinkHtml
                 </div>
             </div>
-        ";
+        </section>
+    ";
     }
 
     /**
@@ -2724,21 +2822,13 @@ class Category implements GradebookItem
         ?int $courseId = null,
         ?int $sessionId = null,
     ): float|int {
-
         if (null === $category) {
             return 0;
         }
 
-        $categoryList = self::load(
-            null,
-            null,
-            $courseId,
-            null,
-            null,
-            $sessionId
-        );
+        $categoryList = self::load((int) $category->getId(), null, 0, null, null, null, null);
 
-        /* @var Category $category */
+        /** @var Category|null $category */
         $category = $categoryList[0] ?? null;
 
         if (null === $category) {
@@ -2749,23 +2839,42 @@ class Category implements GradebookItem
         $courseLinks = $category->get_links($userId, true);
         $evaluationsAndLinks = array_merge($courseEvaluations, $courseLinks);
         $count = count($evaluationsAndLinks);
-        if (empty($count)) {
+
+        if ($count === 0) {
             return 0;
         }
 
-        $categoryScore = 0;
+        $categoryScore = 0.0;
+
         for ($i = 0; $i < $count; $i++) {
             /** @var AbstractLink $item */
             $item = $evaluationsAndLinks[$i];
-            // Set session id from category
+
+            // Keep existing behavior: session comes from the legacy Category object.
             $item->set_session_id($category->get_session_id());
-            $score = $item->calc_score($userId);
-            $itemValue = 0;
-            if (!empty($score)) {
-                $divider = 0 == $score[1] ? 1 : $score[1];
-                $itemValue = $score[0] / $divider * $item->get_weight();
+
+            $weight = (float) $item->get_weight();
+            if ($weight <= 0.0) {
+                continue;
             }
 
+            $score = $item->calc_score($userId);
+
+            // calc_score() is expected to return [score, max], but can be null/false or incomplete.
+            if (!is_array($score) || !array_key_exists(0, $score) || !array_key_exists(1, $score)) {
+                continue;
+            }
+
+            $num = (float) $score[0];
+            $den = (float) $score[1];
+
+            // Critical guard: if max/denominator is 0, the item must NOT contribute.
+            // This prevents "free" eligibility when the learner hasn't done anything.
+            if ($den <= 0.0) {
+                continue;
+            }
+
+            $itemValue = ($num / $den) * $weight;
             $categoryScore += $itemValue;
         }
 

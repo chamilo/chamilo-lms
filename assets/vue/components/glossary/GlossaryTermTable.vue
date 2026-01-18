@@ -1,6 +1,6 @@
 <template>
   <BaseTable
-    :text-for-empty="t('There is no terms that matches the search: %s', [searchTerm])"
+    :text-for-empty="t('There are no terms that match the search: {0}', [searchTerm])"
     :values="glossaries"
     :total-items="glossaries.length"
     data-key="title"

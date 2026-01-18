@@ -10,10 +10,15 @@ use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
+/**
+ * @extends ServiceEntityRepository<Language>
+ */
 class LanguageRepository extends ServiceEntityRepository
 {
     public function __construct(
@@ -79,7 +84,7 @@ class LanguageRepository extends ServiceEntityRepository
         return $list;
     }
 
-    private function getPlatformDefaultIso(): ?string
+    public function getPlatformDefaultIso(): ?string
     {
         $iso = trim($this->settingsManager->getSetting('language.platform_language', true));
         if ('' !== $iso) {
@@ -135,6 +140,10 @@ class LanguageRepository extends ServiceEntityRepository
             ->setMaxResults(1)
         ;
 
-        return $qb->getQuery()->getSingleResult();
+        try {
+            return $qb->getQuery()->getSingleResult();
+        } catch (NonUniqueResultException|NoResultException) {
+            return null;
+        }
     }
 }

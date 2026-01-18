@@ -4,19 +4,19 @@
     icon="folder-generic"
   />
   <BaseIcon
-    v-else-if="resourceData.resourceNode.firstResourceFile.image"
+    v-else-if="isImage(resourceData)"
     icon="file-image"
   />
   <BaseIcon
-    v-else-if="resourceData.resourceNode.firstResourceFile.video"
+    v-else-if="isVideo(resourceData)"
     icon="file-video"
   />
   <BaseIcon
-    v-else-if="resourceData.resourceNode.firstResourceFile.text"
+    v-else-if="hasTextFlag"
     icon="file-text"
   />
   <BaseIcon
-    v-else-if="'application/pdf' === resourceData.resourceNode.firstResourceFile.mimeType"
+    v-else-if="isPdfFile"
     icon="file-pdf"
   />
   <BaseIcon
@@ -30,15 +30,33 @@
 </template>
 
 <script setup>
+import { computed } from "vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { useFileUtils } from "../../composables/fileUtils"
 
-const { isAudio } = useFileUtils()
+const { isImage, isVideo, isAudio } = useFileUtils()
 
-defineProps({
+const props = defineProps({
   resourceData: {
     type: Object,
     required: true,
   },
+})
+
+const hasTextFlag = computed(() => {
+  const file = props.resourceData?.resourceNode?.firstResourceFile
+  return !!file && !!file.text
+})
+
+const isPdfFile = computed(() => {
+  const file = props.resourceData?.resourceNode?.firstResourceFile
+
+  if (!file || !file.mimeType) {
+    return false
+  }
+
+  const mime = String(file.mimeType).split(";")[0].trim().toLowerCase()
+
+  return mime === "application/pdf"
 })
 </script>

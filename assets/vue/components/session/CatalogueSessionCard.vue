@@ -1,232 +1,5 @@
-<template>
-  <div
-    class="course-card relative hover:shadow-lg transition duration-300 rounded-2xl overflow-hidden border border-gray-300 bg-white flex flex-col"
-  >
-    <div
-      v-if="!hasThumbnail"
-      class="w-full h-40 bg-gray-30 flex items-center justify-center"
-    >
-      <i class="pi pi-calendar text-5xl text-gray-400" />
-    </div>
-    <img
-      v-else
-      :src="thumbnail"
-      :alt="session.title"
-      class="w-full h-40 object-cover"
-      @error="onImageError"
-    />
-    <Button
-      v-if="allowDescription"
-      icon="pi pi-info-circle"
-      @click="showDescriptionDialog = true"
-      class="absolute top-2 left-2 z-20"
-      size="small"
-      text
-      aria-label="Session info"
-    />
-    <span
-      v-if="languages.length"
-      class="absolute top-0 right-0 bg-primary text-white text-xs px-2 py-1 font-semibold rounded-bl-lg z-10"
-    >
-      {{ languages.length === 1 ? languages[0] : $t("Multilingual") }}
-    </span>
-    <div class="p-4 flex flex-col flex-grow gap-2">
-      <h3 class="text-xl font-semibold text-gray-800">{{ session.title }}</h3>
-      <div class="text-sm text-gray-700">
-        <strong>{{ $t("Duration") }}:</strong> {{ duration }}
-      </div>
-
-      <div class="text-sm text-gray-700">
-        <strong>{{ $t("Start date") }}:</strong> {{ formattedStartDate }}
-      </div>
-
-      <div class="text-sm text-gray-700">
-        <strong>{{ $t("End date") }}:</strong> {{ formattedEndDate }}
-      </div>
-
-      <div
-        class="text-sm text-blue-600 cursor-pointer underline"
-        @click="showCourseDialog = true"
-      >
-        {{ courseCount }} {{ $t("Course") }}<span v-if="courseCount !== 1">s</span>
-      </div>
-
-      <div
-        v-if="session.category"
-        class="text-sm text-gray-700"
-      >
-        <strong>{{ $t("Category") }}:</strong> {{ session.category.title }}
-      </div>
-
-      <div
-        v-if="teachers.length"
-        class="text-sm text-gray-700"
-      >
-        <strong>{{ $t("Teachers") }}:</strong> {{ teachers.join(", ") }}
-      </div>
-
-      <Rating
-        :model-value="session.userVote?.vote || 0"
-        :stars="5"
-        :cancel="false"
-        @change="emitRating"
-        class="mt-2"
-      />
-      <div class="text-xs text-gray-600 mt-1">
-        {{ session.popularity || 0 }} Vote<span v-if="session.popularity !== 1">s</span>
-        |
-        {{ session.nbVisits || 0 }} Visite<span v-if="session.nbVisits !== 1">s</span>
-        <span v-if="session.userVote?.vote">
-          |
-          {{ $t("Your vote") }} [{{ session.userVote.vote }}]
-        </span>
-      </div>
-
-      <div class="mt-auto pt-2">
-        <Button
-          v-if="requirementStatusLoading"
-          :label="$t('Loading...')"
-          icon="pi pi-spin pi-spinner"
-          class="w-full"
-          disabled
-        />
-
-        <Button
-          v-else-if="isPast"
-          :label="$t('Not available')"
-          icon="pi pi-lock"
-          class="w-full"
-          disabled
-        />
-
-        <template v-else-if="session.buyButtonHtml">
-          <div
-            v-html="session.buyButtonHtml"
-            class="w-full text-center mb-2"
-          ></div>
-        </template>
-
-        <Button
-          v-else-if="isSessionLocked"
-          :label="$t('Check requirements')"
-          icon="mdi mdi-shield-check"
-          class="w-full p-button-warning"
-          @click="openSessionRequirementModal"
-        />
-
-        <Button
-          v-else-if="allowAutoSubscription && !session.isSubscribed"
-          :label="isLoading ? $t('Subscribing...') : $t('Subscribe')"
-          :icon="isLoading ? 'pi pi-spin pi-spinner' : 'pi pi-user-plus'"
-          class="w-full p-button-success"
-          :disabled="isLoading"
-          @click="subscribeToSession"
-        />
-
-        <Button
-          v-else-if="session.isSubscribed && isFuture"
-          :label="$t('Registered')"
-          icon="pi pi-check"
-          class="w-full p-button-outlined"
-          disabled
-        />
-
-        <Button
-          v-else-if="session.isSubscribed"
-          :label="$t('Go to the session')"
-          icon="pi pi-external-link"
-          class="w-full"
-          @click="showGoDialog = true"
-        />
-
-        <Button
-          v-else
-          :label="$t('Not available')"
-          icon="pi pi-lock"
-          class="w-full"
-          disabled
-        />
-      </div>
-    </div>
-
-    <Dialog
-      v-model:visible="showCourseDialog"
-      :header="$t('Courses')"
-      modal
-      class="w-96"
-    >
-      <ul class="list-disc pl-5 text-sm text-gray-700">
-        <template v-if="validCourses.length">
-          <li
-            v-for="item in validCourses"
-            :key="item.id"
-          >
-            {{ item.title }}
-          </li>
-        </template>
-        <template v-else>
-          <li class="text-gray-500 italic">{{ $t("No course available") }}</li>
-        </template>
-      </ul>
-    </Dialog>
-    <Dialog
-      v-model:visible="showGoDialog"
-      :header="$t('Select a course')"
-      modal
-      class="w-96"
-    >
-      <ul class="pl-2 text-sm text-gray-800 space-y-3">
-        <template v-if="validCourses.length">
-          <li
-            v-for="item in validCourses"
-            :key="item.id"
-            class="flex justify-between items-center border-b pb-1"
-          >
-            <span class="w-2/3 truncate">{{ item.title }}</span>
-            <a
-              :href="`/course/${item.id}/home?sid=${session.id}`"
-              target="_blank"
-            >
-              <Button
-                icon="pi pi-sign-in"
-                :label="$t('Go')"
-                size="small"
-                class="p-button-sm p-button-text"
-              />
-            </a>
-          </li>
-        </template>
-        <template v-else>
-          <li class="text-gray-500 italic">{{ $t("No course available") }}</li>
-        </template>
-      </ul>
-    </Dialog>
-  </div>
-  <Dialog
-    v-model:visible="showDescriptionDialog"
-    :header="session.title"
-    modal
-    class="w-96"
-  >
-    <p
-      class="text-sm text-gray-700 whitespace-pre-line"
-      v-html="session.description || $t('No description')"
-    />
-  </Dialog>
-  <CatalogueRequirementModal
-    v-if="!requirementStatusLoading && isSessionLocked"
-    v-model="showRequirementModal"
-    :course-id="null"
-    :session-id="props.session.id"
-    :requirements="[
-      ...(sessionRequirementStatus.requirementList.value || []),
-      ...(sessionRequirementStatus.dependencyList.value || []),
-    ]"
-    :graph-image="sessionRequirementStatus.graphImage.value"
-  />
-</template>
 <script setup>
-import { ref, computed, watchEffect, onMounted } from "vue"
+import { computed, onMounted, ref, watchEffect } from "vue"
 import Rating from "primevue/rating"
 import Button from "primevue/button"
 import Dialog from "primevue/dialog"
@@ -262,14 +35,22 @@ const hasThumbnail = computed(() => !!props.session.imageUrl && !fallback.value)
 
 const now = new Date()
 const isPast = computed(() => {
-  if (!props.session.endDate) return false
+  if (!props.session.endDate) {
+    return false
+  }
+
   const date = new Date(props.session.endDate)
+
   return !isNaN(date) && date < now
 })
 
 const isFuture = computed(() => {
-  if (!props.session.startDate) return false
+  if (!props.session.startDate) {
+    return false
+  }
+
   const date = new Date(props.session.startDate)
+
   return !isNaN(date) && date > now
 })
 
@@ -390,3 +171,231 @@ function openSessionRequirementModal() {
   showRequirementModal.value = true
 }
 </script>
+
+<template>
+  <div
+    class="course-card relative hover:shadow-lg transition duration-300 rounded-2xl overflow-hidden border border-gray-300 bg-white flex flex-col"
+  >
+    <div
+      v-if="!hasThumbnail"
+      class="w-full h-40 bg-gray-30 flex items-center justify-center"
+    >
+      <i class="pi pi-calendar text-5xl text-gray-400" />
+    </div>
+    <img
+      v-else
+      :alt="session.title"
+      :src="thumbnail"
+      class="w-full h-40 object-cover"
+      @error="onImageError"
+    />
+    <Button
+      v-if="allowDescription"
+      aria-label="Session info"
+      class="absolute top-2 left-2 z-20"
+      icon="pi pi-info-circle"
+      size="small"
+      text
+      @click="showDescriptionDialog = true"
+    />
+    <span
+      v-if="languages.length"
+      class="absolute top-0 right-0 bg-primary text-white text-xs px-2 py-1 font-semibold rounded-bl-lg z-10"
+    >
+      {{ languages.length === 1 ? languages[0] : $t("Multilingual") }}
+    </span>
+    <div class="p-4 flex flex-col flex-grow gap-2">
+      <h3 class="text-xl font-semibold text-gray-800">{{ session.title }}</h3>
+      <div class="text-sm text-gray-700">
+        <strong>{{ $t("Duration") }}:</strong> {{ duration }}
+      </div>
+
+      <div class="text-sm text-gray-700">
+        <strong>{{ $t("Start date") }}:</strong> {{ formattedStartDate }}
+      </div>
+
+      <div class="text-sm text-gray-700">
+        <strong>{{ $t("End date") }}:</strong> {{ formattedEndDate }}
+      </div>
+
+      <div
+        class="text-sm text-blue-600 cursor-pointer underline"
+        @click="showCourseDialog = true"
+      >
+        {{ courseCount }} {{ $t("Course") }}<span v-if="courseCount !== 1">s</span>
+      </div>
+
+      <div
+        v-if="session.category"
+        class="text-sm text-gray-700"
+      >
+        <strong>{{ $t("Category") }}:</strong> {{ session.category.title }}
+      </div>
+
+      <div
+        v-if="teachers.length"
+        class="text-sm text-gray-700"
+      >
+        <strong>{{ $t("Teachers") }}:</strong> {{ teachers.join(", ") }}
+      </div>
+
+      <Rating
+        :cancel="false"
+        :model-value="session.userVote?.vote || 0"
+        :stars="5"
+        class="mt-2"
+        @change="emitRating"
+      />
+      <div class="text-xs text-gray-600 mt-1">
+        {{ session.popularity || 0 }} Vote<span v-if="session.popularity !== 1">s</span>
+        |
+        {{ session.nbVisits || 0 }} Visite<span v-if="session.nbVisits !== 1">s</span>
+        <span v-if="session.userVote?.vote">
+          |
+          {{ $t("Your vote") }} [{{ session.userVote.vote }}]
+        </span>
+      </div>
+
+      <div class="mt-auto pt-2">
+        <Button
+          v-if="requirementStatusLoading"
+          :label="$t('Loading...')"
+          class="w-full"
+          disabled
+          icon="pi pi-spin pi-spinner"
+        />
+
+        <Button
+          v-else-if="isPast"
+          :label="$t('Not available')"
+          class="w-full"
+          disabled
+          icon="pi pi-lock"
+        />
+
+        <template v-else-if="session.buyButtonHtml">
+          <div
+            class="w-full text-center mb-2"
+            v-html="session.buyButtonHtml"
+          />
+        </template>
+
+        <Button
+          v-else-if="isSessionLocked"
+          :label="$t('Check requirements')"
+          class="w-full p-button-warning"
+          icon="mdi mdi-shield-check"
+          @click="openSessionRequirementModal"
+        />
+
+        <Button
+          v-else-if="allowAutoSubscription && !session.isSubscribed"
+          :disabled="isLoading"
+          :icon="isLoading ? 'pi pi-spin pi-spinner' : 'pi pi-user-plus'"
+          :label="isLoading ? $t('Subscribing...') : $t('Subscribe')"
+          class="w-full p-button-success"
+          @click="subscribeToSession"
+        />
+
+        <Button
+          v-else-if="session.isSubscribed && isFuture"
+          :label="$t('Registered')"
+          class="w-full p-button-outlined"
+          disabled
+          icon="pi pi-check"
+        />
+
+        <Button
+          v-else-if="session.isSubscribed"
+          :label="$t('Go to the session')"
+          class="w-full"
+          icon="pi pi-external-link"
+          @click="showGoDialog = true"
+        />
+
+        <Button
+          v-else
+          :label="$t('Not available')"
+          class="w-full"
+          disabled
+          icon="pi pi-lock"
+        />
+      </div>
+    </div>
+
+    <Dialog
+      v-model:visible="showCourseDialog"
+      :header="$t('Courses')"
+      class="w-96"
+      modal
+    >
+      <ul class="list-disc pl-5 text-sm text-gray-700">
+        <template v-if="validCourses.length">
+          <li
+            v-for="item in validCourses"
+            :key="item.id"
+          >
+            {{ item.title }}
+          </li>
+        </template>
+        <template v-else>
+          <li class="text-gray-500 italic">{{ $t("No course available") }}</li>
+        </template>
+      </ul>
+    </Dialog>
+    <Dialog
+      v-model:visible="showGoDialog"
+      :header="$t('Select a course')"
+      class="w-96"
+      modal
+    >
+      <ul class="pl-2 text-sm text-gray-800 space-y-3">
+        <template v-if="validCourses.length">
+          <li
+            v-for="item in validCourses"
+            :key="item.id"
+            class="flex justify-between items-center border-b pb-1"
+          >
+            <span class="w-2/3 truncate">{{ item.title }}</span>
+            <a
+              :href="`/course/${item.id}/home?sid=${session.id}`"
+              target="_blank"
+            >
+              <Button
+                :label="$t('Go')"
+                class="p-button-sm p-button-text"
+                icon="pi pi-sign-in"
+                size="small"
+              />
+            </a>
+          </li>
+        </template>
+        <template v-else>
+          <li class="text-gray-500 italic">{{ $t("No course available") }}</li>
+        </template>
+      </ul>
+    </Dialog>
+  </div>
+  <Dialog
+    v-model:visible="showDescriptionDialog"
+    :header="session.title"
+    class="w-96"
+    modal
+  >
+    <p
+      class="text-sm text-gray-700 whitespace-pre-line"
+      v-html="session.description || $t('No description')"
+    />
+  </Dialog>
+  <CatalogueRequirementModal
+    v-if="!requirementStatusLoading && isSessionLocked"
+    v-model="showRequirementModal"
+    :course-id="null"
+    :graph-image="sessionRequirementStatus.graphImage.value"
+    :requirements="[
+      ...(sessionRequirementStatus.requirementList.value || []),
+      ...(sessionRequirementStatus.dependencyList.value || []),
+    ]"
+    :session-id="props.session.id"
+  />
+</template>

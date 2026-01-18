@@ -1,15 +1,15 @@
 {% autoescape false %}
-{% set edit_img = 'edit.png'|icon(22, 'Edit'|get_lang) %}
-{% set visible_img = 'visible.png'|icon(22, 'Invisible'|get_lang) %}
-{% set invisible_img = 'invisible.png'|icon(22, 'Visible'|get_lang) %}
-{% set delete_img = 'delete.png'|icon(22, 'Delete'|get_lang) %}
-{% set baseurl = _p.web_self ~ '?' ~ (_p.web_cid_query ? _p.web_cid_query ~ '&' : '') %}
+{% set edit_img = 'ActionIcon::EDIT'|mdi_icon_t(22, 'ch-tool-icon', 'Edit') %}
+{% set visible_img = 'ActionIcon::VISIBLE'|mdi_icon_t(22, 'ch-tool-icon', 'Invisible') %}
+{% set invisible_img = 'ActionIcon::INVISIBLE'|mdi_icon_t(22, 'ch-tool-icon', 'Visible') %}
+{% set delete_img = 'ActionIcon::DELETE'|mdi_icon_t(22, 'ch-tool-icon', 'Delete') %}
+{% set baseurl = '/main/portfolio/index.php?' ~ (_p.web_cid_query ? _p.web_cid_query ~ '&' : '') %}
 
 {% import '@ChamiloCore/Portfolio/items.html.twig' as items %}
 
-<div class="row">
+<div class="grid md:grid-cols-12 gap-4">
     {% if course %}
-        <div class="col-md-3">
+        <div class="md:col-span-3">
             {{ frm_student_list }}
 
             <hr>
@@ -18,7 +18,7 @@
         </div>
     {% endif %}
 
-    <div class="{{ course ? 'col-md-9' : 'col-xs-12'  }}">
+    <div class="{{ course ? 'md:col-span-9' : ''  }}">
         {% if (categories) %}
             <div class="btn-toolbar">
                 <div class="btn-group" data-toggle="buttons">
@@ -71,7 +71,7 @@
                         <article>
                             <footer class="fa-lg">
                                 <p>
-                                    {{ 'CommentByUserXInItemY'|get_lang|format(comment.author.completeName, commentItem.title) }}
+                                    {{ 'Comment by %s in %s'|get_lang|format(comment.resourceNode.creator.fullName, commentItem.title) }}
                                 </p>
                                 <p class="text-muted">
                                     <span class="fa fa-clock-o fa-fw" aria-hidden="true"></span>
@@ -80,7 +80,7 @@
                             </footer>
                             <p>
                                 {{ comment.excerpt(290) }}
-                                <a href="{{ baseurl ~ {'action':'view', 'id':commentItem.id}|url_encode ~ '#comment-' ~ comment.id }}">{{ 'SeeMore'|get_lang }}</a>
+                                <a href="{{ baseurl ~ {'action':'view', 'id':commentItem.id}|url_encode ~ '#comment-' ~ comment.id }}">{{ 'See more'|get_lang }}</a>
                             </p>
                         </article>
                     </div>
@@ -141,14 +141,14 @@
 <script>
     $(document).on('ready', function () {
         $('.btn-delete').on('click', function (e) {
-            if (!confirm('{{ 'NoteConfirmDelete'|get_lang }} ')) {
+            if (!confirm('{{ 'Confirm deletion'|get_lang }} ')) {
                 e.preventDefault();
             }
         });
 
         {% if course %}
             $('form#frm_student_list select[name="user"]').on('change', function (e) {
-                var newLocation = '{{ _p.web_self ~ '?' ~ _p.web_cid_query }}';
+                var newLocation = '{{ '/main/portfolio/index.php?' ~ _p.web_cid_query }}';
 
                 if (this.value) {
                     newLocation += '&user=' + this.value;

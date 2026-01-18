@@ -33,6 +33,7 @@
         <div class="relative">
           <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <InputText
+            id="search_catalogue"
             v-model="filters['global'].value"
             :placeholder="$t('Search')"
             class="pl-10 w-64"
@@ -97,7 +98,6 @@ import Button from "primevue/button"
 import Dropdown from "primevue/dropdown"
 import { FilterMatchMode } from "@primevue/core/api"
 import { useNotification } from "../../composables/notification"
-import { useLanguage } from "../../composables/language"
 import { useSecurityStore } from "../../store/securityStore"
 import CatalogueCourseCard from "../../components/course/CatalogueCourseCard.vue"
 import * as userRelCourseVoteService from "../../services/userRelCourseVoteService"
@@ -132,23 +132,40 @@ const isPrivilegedUser =
   securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin
 
 const allowCatalogueAccess = computed(() => {
-  if (isAnonymous) return platformConfigStore.getSetting("catalog.course_catalog_published") !== "false"
-  if (isPrivilegedUser) return true
-  if (securityStore.isStudent)
+  if (isAnonymous) {
+    return platformConfigStore.getSetting("catalog.course_catalog_published") !== "false"
+  }
+
+  if (isPrivilegedUser) {
+    return true
+  }
+
+  if (securityStore.isStudent) {
     return platformConfigStore.getSetting("catalog.allow_students_to_browse_courses") !== "false"
+  }
+
   return false
 })
 
-if (!allowCatalogueAccess.value) {
-  if (!securityStore.user?.id) {
-    router.push({ name: "Login" })
-  } else if (securityStore.isStudent) {
-    router.push({ name: "Home" })
-  } else {
-    router.push({ name: "Index" })
+watch(allowCatalogueAccess, async (newValue) => {
+  if (true !== newValue) {
+    return
   }
-  throw new Error("Catalogue access denied by settings")
-}
+
+  if (!securityStore.isAuthenticated) {
+    await router.push({ name: "Login" })
+
+    return
+  }
+
+  if (securityStore.isStudent) {
+    await router.push({ name: "Home" })
+
+    return
+  }
+
+  await router.push({ name: "Index" })
+})
 
 const currentUserId = securityStore.user?.id ?? null
 const status = ref(false)
@@ -162,8 +179,6 @@ const loadingMore = ref(false)
 
 const extraFields = ref([])
 const { showErrorNotification } = useNotification()
-const { languageList } = useLanguage()
-const languages = languageList
 
 const loadExtraFields = async () => {
   try {
@@ -259,7 +274,7 @@ function normalizeString(x) {
 
 function splitCandidates(str) {
   return normalizeString(str)
-    .split(/[:;,\|]+/)
+    .split(/[:;,|]+/)
     .map((s) => s.trim())
     .filter(Boolean)
 }
@@ -404,9 +419,9 @@ function applyAdvancedSearch() {
       ? true
       : extraFields.value.every((field) => {
           const present =
-            adv.hasOwnProperty(`extra_${field.variable}`) ||
-            adv.hasOwnProperty(`extra_${field.variable}_second`) ||
-            adv.hasOwnProperty(`extra_${field.variable}_third`)
+            Object.hasOwnProperty.call(adv, `extra_${field.variable}`) ||
+            Object.hasOwnProperty.call(adv, `extra_${field.variable}_second`) ||
+            Object.hasOwnProperty.call(adv, `extra_${field.variable}_third`)
           return present ? matchesExtraField(course, field, adv) : true
         })
 
@@ -423,8 +438,7 @@ const visibleCoursesBase = computed(() => {
   let list = filteredCourses.value.filter((course) => {
     const visibility = Number(course.visibility)
     if (visibility === 0 || visibility === 4) return false
-    if (visibility === 1 && hidePrivate) return false
-    return true
+    return !(visibility === 1 && hidePrivate)
   })
 
   if (sortOpt) {

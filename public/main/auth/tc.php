@@ -39,7 +39,7 @@ if ('true' === api_get_setting('registration.allow_terms_conditions') && !$isPla
                 if (false === $termActivated) {
                     $canAccept = false;
                     $infoMessage = Display::return_message(
-                        get_lang('The terms and conditions have not yet been validated by your tutor'),
+                        get_lang('The terms and conditions have not yet been validated by your tutor.'),
                         'warning',
                         false
                     );

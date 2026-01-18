@@ -145,8 +145,7 @@
         style="font-size: 2rem"
       />
       <span v-if="item"
-        >Are you sure you want to delete <b>{{ item.title }}</b
-        >?</span
+        >{{ t('Are you sure you want to delete {0}?', [item.title]) }}</span
       >
     </div>
     <template #footer>

@@ -11,23 +11,34 @@ use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceType;
+use Chamilo\CoreBundle\Form\TestEmailType;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\MailHelper;
 use Chamilo\CoreBundle\Helpers\QueryCacheHelper;
 use Chamilo\CoreBundle\Helpers\TempUploadHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\ResourceFileRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
+use MessageManager;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
+use UserManager;
 
 #[Route('/admin')]
 class AdminController extends BaseController
@@ -36,7 +47,9 @@ class AdminController extends BaseController
 
     public function __construct(
         private readonly ResourceNodeRepository $resourceNodeRepository,
-        private readonly AccessUrlHelper $accessUrlHelper
+        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly UserHelper $userHelper,
+        private readonly CidReqHelper $cidReqHelper
     ) {}
 
     #[IsGranted('ROLE_ADMIN')]
@@ -59,8 +72,11 @@ class AdminController extends BaseController
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/files_info', name: 'admin_files_info', methods: ['GET'])]
-    public function listFilesInfo(Request $request, ResourceFileRepository $resourceFileRepository): Response
-    {
+    public function listFilesInfo(
+        Request $request,
+        ResourceFileRepository $resourceFileRepository,
+        CourseRepository $courseRepository
+    ): Response {
         $page = $request->query->getInt('page', 1);
         $search = $request->query->get('search', '');
         $offset = ($page - 1) * self::ITEMS_PER_PAGE;
@@ -73,25 +89,73 @@ class AdminController extends BaseController
         $filePaths = [];
         $orphanFlags = [];
         $linksCount = [];
+        $coursesByFile = [];
 
+        /** @var ResourceFile $file */
         foreach ($files as $file) {
             $resourceNode = $file->getResourceNode();
             $count = 0;
+            $coursesForThisFile = [];
 
             if ($resourceNode) {
+                // Public URL to open/download this file
                 $fileUrls[$file->getId()] = $this->resourceNodeRepository->getResourceFileUrl($resourceNode);
 
-                // Count how many ResourceLinks still point to this node
+                // Count how many ResourceLinks still point to this node and collect courses.
                 $links = $resourceNode->getResourceLinks();
-                $count = $links ? $links->count() : 0;
+                if ($links) {
+                    $count = $links->count();
+
+                    foreach ($links as $link) {
+                        $course = $link->getCourse();
+                        if (!$course) {
+                            continue;
+                        }
+
+                        $courseId = $course->getId();
+
+                        // Root resource node of the course (used to build Documents URL in the template JS)
+                        $courseResourceNode = $course->getResourceNode();
+                        $courseResourceNodeId = $courseResourceNode ? $courseResourceNode->getId() : null;
+
+                        // Avoid duplicates for the same course.
+                        if (!isset($coursesForThisFile[$courseId])) {
+                            $coursesForThisFile[$courseId] = [
+                                'id' => $courseId,
+                                'code' => $course->getCode(),
+                                'title' => $course->getTitle(),
+                                'resourceNodeId' => $courseResourceNodeId,
+                            ];
+                        }
+                    }
+                }
             } else {
                 $fileUrls[$file->getId()] = null;
             }
 
+            // Physical path on disk (used only for display/copy)
             $filePaths[$file->getId()] = '/upload/resource'.$this->resourceNodeRepository->getFilename($file);
 
             $linksCount[$file->getId()] = $count;
             $orphanFlags[$file->getId()] = 0 === $count;
+            $coursesByFile[$file->getId()] = array_values($coursesForThisFile);
+        }
+
+        // Build course selector options for the "Attach to course" form.
+        $allCourses = $courseRepository->findBy([], ['title' => 'ASC']);
+        $courseOptions = [];
+
+        /** @var Course $course */
+        foreach ($allCourses as $course) {
+            $courseResourceNode = $course->getResourceNode();
+            $courseResourceNodeId = $courseResourceNode ? $courseResourceNode->getId() : null;
+
+            $courseOptions[] = [
+                'id' => $course->getId(),
+                'code' => $course->getCode(),
+                'title' => $course->getTitle(),
+                'resourceNodeId' => $courseResourceNodeId,
+            ];
         }
 
         return $this->render('@ChamiloCore/Admin/files_info.html.twig', [
@@ -103,6 +167,8 @@ class AdminController extends BaseController
             'search' => $search,
             'orphanFlags' => $orphanFlags,
             'linksCount' => $linksCount,
+            'coursesByFile' => $coursesByFile,
+            'courseOptions' => $courseOptions,
         ]);
     }
 
@@ -120,8 +186,6 @@ class AdminController extends BaseController
         }
 
         $fileId = $request->request->getInt('resource_file_id', 0);
-        $courseCode = trim((string) $request->request->get('course_code', ''));
-
         $page = $request->request->getInt('page', 1);
         $search = (string) $request->request->get('search', '');
 
@@ -134,8 +198,188 @@ class AdminController extends BaseController
             ]);
         }
 
-        if ('' === $courseCode) {
-            $this->addFlash('error', 'Please provide a course code.');
+        // Collect course codes from multi-select.
+        $courseCodes = [];
+        $multi = $request->request->all('course_codes');
+        if (\is_array($multi)) {
+            foreach ($multi as $code) {
+                $code = trim((string) $code);
+                if ('' !== $code) {
+                    $courseCodes[] = $code;
+                }
+            }
+        }
+
+        // Fallback to single value if any.
+        if (0 === \count($courseCodes)) {
+            $single = $request->request->get('course_code');
+            $single = null === $single ? '' : trim((string) $single);
+            if ('' !== $single) {
+                $courseCodes[] = $single;
+            }
+        }
+
+        // Normalize and remove duplicates.
+        $courseCodes = array_values(array_unique($courseCodes));
+
+        if (0 === \count($courseCodes)) {
+            $this->addFlash('error', 'Please select at least one course.');
+
+            return $this->redirectToRoute('admin_files_info', [
+                'page' => $page,
+                'search' => $search,
+            ]);
+        }
+
+        /** @var ResourceFile|null $resourceFile */
+        $resourceFile = $resourceFileRepository->find($fileId);
+        if (!$resourceFile) {
+            $this->addFlash('error', 'Resource file not found.');
+
+            return $this->redirectToRoute('admin_files_info', [
+                'page' => $page,
+                'search' => $search,
+            ]);
+        }
+
+        // Existing node for this file (can be null in some legacy cases).
+        $resourceNode = $resourceFile->getResourceNode();
+
+        // Hidden field in the template: always "1" now.
+        $createDocuments = (bool) $request->request->get('create_documents', false);
+
+        // Map existing links by course id to avoid duplicates.
+        $existingByCourseId = [];
+        if ($resourceNode) {
+            $links = $resourceNode->getResourceLinks();
+            if ($links) {
+                foreach ($links as $existingLink) {
+                    $course = $existingLink->getCourse();
+                    if ($course) {
+                        $existingByCourseId[$course->getId()] = true;
+                    }
+                }
+            }
+        }
+
+        // "Orphan" means: no links yet or no node at all.
+        $wasOrphan = (null === $resourceNode) || (0 === \count($existingByCourseId));
+        $attachedTitles = [];
+        $skippedTitles = [];
+
+        // Try to reuse an existing visible document for this node.
+        $documentRepo = Container::getDocumentRepository();
+
+        /** @var CDocument|null $sharedDocument */
+        $sharedDocument = $resourceNode
+            ? $documentRepo->findOneBy(['resourceNode' => $resourceNode])
+            : null;
+
+        foreach ($courseCodes as $code) {
+            /** @var Course|null $course */
+            $course = $courseRepository->findOneBy(['code' => $code]);
+            if (!$course) {
+                $skippedTitles[] = \sprintf('%s (not found)', $code);
+
+                continue;
+            }
+
+            $courseId = $course->getId();
+            if (isset($existingByCourseId[$courseId])) {
+                // Already attached to this course.
+                $skippedTitles[] = \sprintf('%s (already attached)', (string) $course->getTitle());
+
+                continue;
+            }
+
+            // If there is already a node but it was truly orphan (no links),
+            // re-parent the node once to the first target course root.
+            if ($wasOrphan && $resourceNode && method_exists($course, 'getResourceNode')) {
+                $courseRootNode = $course->getResourceNode();
+                if ($courseRootNode) {
+                    $resourceNode->setParent($courseRootNode);
+                }
+                $wasOrphan = false;
+            }
+
+            // Mark this course as now attached to avoid duplicates in this loop.
+            $existingByCourseId[$courseId] = true;
+            $attachedTitles[] = (string) $course->getTitle();
+
+            if ($createDocuments) {
+                // Ensure we have a shared document for this file.
+                if (null === $sharedDocument) {
+                    // This will create the ResourceNode if needed and the CDocument.
+                    $sharedDocument = $this->createVisibleDocumentFromResourceFile($resourceFile, $course, $em);
+
+                    // Refresh local node reference in case it was created inside the helper.
+                    $resourceNode = $resourceFile->getResourceNode();
+                }
+
+                // IMPORTANT: some legacy documents might not have a parent set.
+                // We must set a parent (owning course) before calling addCourseLink,
+                // or AbstractResource::addCourseLink() will throw.
+                if (null === $sharedDocument->getParent()) {
+                    $sharedDocument->setParent($course);
+                }
+
+                // For every course, share the same document via ResourceLinks.
+                $session = $this->cidReqHelper->getDoctrineSessionEntity();
+                $group = null;
+                $sharedDocument->addCourseLink($course, $session, $group);
+            }
+        }
+
+        // Single flush for all changes (links + optional new CDocument).
+        $em->flush();
+
+        if (!empty($attachedTitles)) {
+            $this->addFlash(
+                'success',
+                \sprintf(
+                    'File "%s" has been attached to %d course(s): %s.',
+                    (string) ($resourceFile->getOriginalName() ?? $resourceFile->getTitle() ?? $resourceFile->getId()),
+                    \count($attachedTitles),
+                    implode(', ', $attachedTitles)
+                )
+            );
+        }
+
+        if (!empty($skippedTitles)) {
+            $this->addFlash(
+                'warning',
+                \sprintf(
+                    'Some courses were skipped: %s.',
+                    implode(', ', $skippedTitles)
+                )
+            );
+        }
+
+        return $this->redirectToRoute('admin_files_info', [
+            'page' => $page,
+            'search' => $search,
+        ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/files_info/detach', name: 'admin_files_info_detach', methods: ['POST'])]
+    public function detachFileFromCourse(
+        Request $request,
+        ResourceFileRepository $resourceFileRepository,
+        EntityManagerInterface $em
+    ): Response {
+        $token = (string) $request->request->get('_token', '');
+        if (!$this->isCsrfTokenValid('detach_file_from_course', $token)) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
+        }
+
+        $fileId = $request->request->getInt('resource_file_id', 0);
+        $courseId = $request->request->getInt('course_id', 0);
+        $page = $request->request->getInt('page', 1);
+        $search = (string) $request->request->get('search', '');
+
+        if ($fileId <= 0 || $courseId <= 0) {
+            $this->addFlash('error', 'Missing file or course identifier.');
 
             return $this->redirectToRoute('admin_files_info', [
                 'page' => $page,
@@ -155,30 +399,8 @@ class AdminController extends BaseController
         }
 
         $resourceNode = $resourceFile->getResourceNode();
-        $linksCount = $resourceNode ? $resourceNode->getResourceLinks()->count() : 0;
-        if ($linksCount > 0) {
-            // Safety check: this file is not orphan anymore.
-            $this->addFlash('warning', 'This file is no longer orphan and cannot be attached.');
-
-            return $this->redirectToRoute('admin_files_info', [
-                'page' => $page,
-                'search' => $search,
-            ]);
-        }
-
-        /** @var Course|null $course */
-        $course = $courseRepository->findOneBy(['code' => $courseCode]);
-        if (!$course) {
-            $this->addFlash('error', \sprintf('Course with code "%s" was not found.', $courseCode));
-
-            return $this->redirectToRoute('admin_files_info', [
-                'page' => $page,
-                'search' => $search,
-            ]);
-        }
-
         if (!$resourceNode) {
-            $this->addFlash('error', 'This resource file has no resource node and cannot be attached.');
+            $this->addFlash('error', 'This resource file has no resource node and cannot be detached.');
 
             return $this->redirectToRoute('admin_files_info', [
                 'page' => $page,
@@ -186,31 +408,33 @@ class AdminController extends BaseController
             ]);
         }
 
-        // re-parent the ResourceNode to the course documents root
-        if (method_exists($course, 'getResourceNode')) {
-            $courseRootNode = $course->getResourceNode();
+        $links = $resourceNode->getResourceLinks();
+        $removed = 0;
 
-            if ($courseRootNode) {
-                $resourceNode->setParent($courseRootNode);
+        foreach ($links as $link) {
+            $course = $link->getCourse();
+            if ($course && $course->getId() === $courseId) {
+                $em->remove($link);
+                ++$removed;
             }
         }
 
-        // Create a new ResourceLink so that the file appears in the course context
-        $link = new ResourceLink();
-        $link->setResourceNode($resourceNode);
-        $link->setCourse($course);
-        $link->setSession(null);
-        $em->persist($link);
-        $em->flush();
+        if ($removed > 0) {
+            $em->flush();
 
-        $this->addFlash(
-            'success',
-            \sprintf(
-                'File "%s" has been attached to course "%s" (hidden in the documents root).',
-                (string) ($resourceFile->getOriginalName() ?? $resourceFile->getTitle() ?? $resourceFile->getId()),
-                (string) $course->getTitle()
-            )
-        );
+            $this->addFlash(
+                'success',
+                \sprintf(
+                    'File has been detached from %d course link(s).',
+                    $removed
+                )
+            );
+        } else {
+            $this->addFlash(
+                'warning',
+                'This file is not attached to the selected course.'
+            );
+        }
 
         return $this->redirectToRoute('admin_files_info', [
             'page' => $page,
@@ -371,14 +595,14 @@ class AdminController extends BaseController
                 $showUsers = array_reduce($seen, fn ($acc, $row) => $acc || !empty($row['users']), false);
             }
 
-            /** Normalize output */
-            $courses = array_values(array_map(function ($row) {
+            /** Normalize output. */
+            $courses = array_values(array_map(static function ($row) {
                 $row['items'] = array_values(array_unique($row['items']));
 
                 return $row;
             }, $seen));
 
-            usort($courses, fn ($a, $b) => strnatcasecmp($a['title'], $b['title']));
+            usort($courses, static fn ($a, $b) => strnatcasecmp($a['title'], $b['title']));
         }
 
         return $this->render('@ChamiloCore/Admin/resources_info.html.twig', [
@@ -484,7 +708,7 @@ class AdminController extends BaseController
             ));
         }
 
-        // Remove legacy build main.js and hashed variants (best effort)
+        // Remove legacy build main.js and hashed variants
         $publicBuild = $this->getParameter('kernel.project_dir').'/public/build';
         if (is_dir($publicBuild) && is_readable($publicBuild)) {
             @unlink($publicBuild.'/main.js');
@@ -506,6 +730,136 @@ class AdminController extends BaseController
         }
 
         return $this->redirectToRoute('admin_cleanup_temp_uploads', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/email_tester', name: 'admin_email_tester')]
+    public function testEmail(
+        Request $request,
+        MailHelper $mailHelper,
+        TranslatorInterface $translator,
+        SettingsManager $settingsManager,
+        UserHelper $userHelper,
+    ): Response {
+        $errorsInfo = MessageManager::failedSentMailErrors();
+
+        $form = $this->createForm(TestEmailType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            $mailHelper->send(
+                $translator->trans('User testing of e-mail configuration'),
+                $data['destination'],
+                $data['subject'],
+                $data['content'],
+                UserManager::formatUserFullName($userHelper->getCurrent()),
+                $settingsManager->getSetting('mail.mailer_from_email')
+            );
+
+            $this->addFlash(
+                'success',
+                $translator->trans('E-mail sent. This procedure works in all aspects similarly to the normal e-mail sending of Chamilo, but allows for more flexibility in terms of destination e-mail and message body.')
+            );
+
+            return $this->redirectToRoute('admin_email_tester');
+        }
+
+        return $this->render(
+            '@ChamiloCore/Admin/email_tester.html.twig',
+            [
+                'mailer_dsn' => $settingsManager->getSetting('mail.mailer_dsn'),
+                'form' => $form,
+                'errors' => $errorsInfo,
+            ]
+        );
+    }
+
+    /**
+     * Create a visible CDocument in a course from an existing ResourceFile.
+     */
+    private function createVisibleDocumentFromResourceFile(
+        ResourceFile $resourceFile,
+        Course $course,
+        EntityManagerInterface $em
+    ): CDocument {
+        $userEntity = $this->userHelper->getCurrent();
+        if (null === $userEntity) {
+            throw new RuntimeException('Current user is required to create or reuse a document.');
+        }
+
+        // Current node (may be null for truly orphan files).
+        $resourceNode = $resourceFile->getResourceNode();
+
+        if (null === $resourceNode) {
+            $courseRootNode = $course->getResourceNode();
+            if (null === $courseRootNode) {
+                throw new RuntimeException('Course root node is required to attach a resource node.');
+            }
+
+            // Create the node that will be shared by all courses.
+            $resourceNode = new ResourceNode();
+            $resourceNode
+                ->setCreator($userEntity)
+                ->setTitle(
+                    $resourceFile->getOriginalName()
+                    ?? $resourceFile->getTitle()
+                    ?? (string) $resourceFile->getId()
+                )
+                ->setParent($courseRootNode)
+                ->setResourceType(
+                    $this->resourceNodeRepository->getResourceTypeForClass(CDocument::class)
+                )
+            ;
+
+            // Link file <-> node so getFirstResourceFile() returns this file.
+            $resourceNode->addResourceFile($resourceFile);
+            $resourceFile->setResourceNode($resourceNode);
+
+            $em->persist($resourceNode);
+            $em->persist($resourceFile);
+        }
+
+        $documentRepo = Container::getDocumentRepository();
+
+        /** @var CDocument|null $document */
+        $document = $documentRepo->findOneBy([
+            'resourceNode' => $resourceNode,
+        ]);
+
+        if (null === $document) {
+            $title = $resourceFile->getOriginalName()
+                ?? $resourceFile->getTitle()
+                ?? (string) $resourceFile->getId();
+
+            $document = (new CDocument())
+                ->setFiletype('file')
+                ->setTitle($title)
+                ->setComment(null)
+                ->setReadonly(false)
+                ->setTemplate(false)
+                ->setCreator($userEntity)
+                // First course becomes the logical owner. The node is shared.
+                ->setParent($course)
+                ->setResourceNode($resourceNode)
+            ;
+
+            $em->persist($document);
+        }
+
+        // IMPORTANT: Always ensure the file is linked to the document's node,
+        // even if it already had a resource node.
+        $documentNode = $document->getResourceNode();
+        if (null !== $documentNode && $resourceFile->getResourceNode() !== $documentNode) {
+            // Move the file to the shared document node used by the document.
+            $documentNode->addResourceFile($resourceFile);
+            $resourceFile->setResourceNode($documentNode);
+            $em->persist($resourceFile);
+        }
+
+        // Do NOT create course links or flush here: this is handled by the caller.
+        return $document;
     }
 
     /**
@@ -590,7 +944,7 @@ class AdminController extends BaseController
             return [];
         }
 
-        $cids = array_values(array_unique(array_map(fn ($m) => (int) $m['cid'], $keysMeta)));
+        $cids = array_values(array_unique(array_map(static fn ($m) => (int) $m['cid'], $keysMeta)));
         if (!$cids) {
             return [];
         }

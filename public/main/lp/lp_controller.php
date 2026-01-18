@@ -56,20 +56,26 @@ if (isset($_GET['isStudentView'])) {
     $qs['isStudentView'] = Security::remove_XSS($_GET['isStudentView']);
 }
 $listUrl = api_get_path(WEB_PATH).'resources/lp/'.$nodeId.'?'.http_build_query($qs);
-$glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
-$showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
+$glossaryExtraTools        = api_get_setting('glossary.show_glossary_in_extra_tools');
+$glossaryDocumentsMode     = api_get_setting('document.show_glossary_in_documents');
+$glossaryDocumentsEnabled  = in_array(
+    $glossaryDocumentsMode,
+    ['ismanual', 'isautomatic'],
+    true
+);
+
+$showGlossary = $glossaryDocumentsEnabled && in_array(
+        $glossaryExtraTools,
+        ['true', 'lp', 'exercise_and_lp'],
+        true
+    );
+
 if ($showGlossary) {
-    if ('ismanual' === api_get_setting('show_glossary_in_documents') ||
-        'isautomatic' === api_get_setting('show_glossary_in_documents')
-    ) {
-        $htmlHeadXtra[] = '<script>
-    <!--
-        var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
-    -->
-    </script>';
-        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
-        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"></script>';
-    }
+    $htmlHeadXtra[] = api_get_glossary_auto_snippet(
+        (int) $courseId,
+        $sessionId ?: null,
+        null
+    );
 }
 
 $ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?lp_id='.$lpId.'&'.api_get_cidreq();
@@ -739,10 +745,29 @@ switch ($action) {
             api_not_allowed(true);
         }
         $cwdir = getcwd();
+        ob_start();
         require 'lp_upload.php';
-        // Reinit current working directory as many functions in upload change it.
         chdir($cwdir);
-        $goList();
+        $html = ob_get_clean();
+
+        $hasUploadedFile = false;
+        foreach ($_FILES as $f) {
+            if (is_array($f) && isset($f['error'])) {
+                if (is_array($f['error'])) {
+                    foreach ($f['error'] as $err) {
+                        if ((int)$err === UPLOAD_ERR_OK) { $hasUploadedFile = true; break 2; }
+                    }
+                } else {
+                    if ((int)$f['error'] === UPLOAD_ERR_OK) { $hasUploadedFile = true; break; }
+                }
+            }
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $hasUploadedFile) {
+            api_location(api_get_self().'?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq());
+        }
+
+        echo $html;
         break;
     case 'copy':
         if (!$is_allowed_to_edit) {
@@ -990,7 +1015,12 @@ switch ($action) {
             $goList();
         } else {
             $oLP->save_last();
-            $oLP->set_current_item($_GET['item_id']);
+
+            $requestedItemId = (int) ($_GET['item_id'] ?? $_GET['lp_item_id'] ?? $_GET['id'] ?? 0);
+            if ($requestedItemId > 0) {
+                $oLP->set_current_item($requestedItemId);
+            }
+
             $oLP->start_current_item();
             require 'lp_content.php';
         }
@@ -999,8 +1029,10 @@ switch ($action) {
         if (!$lp_found) {
             $goList();
         } else {
-            if (!empty($_REQUEST['item_id'])) {
-                $oLP->set_current_item($_REQUEST['item_id']);
+            // Accept multiple parameter names for the requested LP item (backward/legacy compat)
+            $requestedItemId = (int) ($_REQUEST['item_id'] ?? $_REQUEST['lp_item_id'] ?? $_REQUEST['id'] ?? 0);
+            if ($requestedItemId > 0) {
+                $oLP->set_current_item($requestedItemId);
             }
             require 'lp_view.php';
         }
@@ -1207,25 +1239,38 @@ switch ($action) {
         exit;
         break;
     case 'add_final_item':
-        if (!$lp_found) {
-            Display::addFlash(
-                Display::return_message(get_lang('No learning path found'), 'error')
-            );
-            break;
+        if (!$is_allowed_to_edit || !$lp_found) {
+            api_not_allowed(true);
         }
 
         Session::write('refresh', 1);
-        if (!isset($_POST['submit']) || empty($post_title)) {
-            break;
+        $htmlHeadXtra[] = '<style>
+      .lp-finalitem-wrap { padding-left: 24px; }
+      .lp-finalitem-title { font-size: 18px; font-weight: 600; margin: 0 0 12px 0; }
+    </style>';
+
+        $finalItemTitle = get_lang('Final item');
+        if (method_exists($oLP, 'getFinalItem')) {
+            $finalItem = $oLP->getFinalItem();
+            if ($finalItem && method_exists($finalItem, 'get_title')) {
+                $t = trim(strip_tags((string) $finalItem->get_title()));
+                if ($t !== '') {
+                    $finalItemTitle = $t;
+                }
+            }
         }
 
-        $oLP->getFinalItemForm();
-        $redirectTo = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
-            'action' => 'add_item',
-            'type' => 'step',
-            'lp_id' => $oLP->lp_id,
-        ]);
-        break;
+        $right = '<div class="lp-finalitem-wrap">'
+            . '<div class="lp-finalitem-title">'.Security::remove_XSS($finalItemTitle).'</div>'
+            . $oLP->getFinalItemForm()
+            . '</div>';
+
+        $tpl = new Template();
+        $tpl->assign('actions', $oLP->build_action_menu(true));
+        $tpl->assign('left', $oLP->showBuildSideBar(null, true, 'step'));
+        $tpl->assign('right', $right);
+        $tpl->displayTwoColTemplate();
+        exit;
     default:
         $goList();
         break;

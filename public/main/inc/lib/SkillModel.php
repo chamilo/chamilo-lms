@@ -145,16 +145,22 @@ class SkillModel extends Model
             if (isset($skill['data'])) {
                 $skill = $skill['data'];
             }
+
+            $targetUrl = $skill['url'] ?? null;
+            $badgeHtml = $skill[$imageSize] ?? '';
+            $titleText = $skill['title'] ?? '';
             $html .= '<li class="thumbnail">';
-            $item = $skill[$imageSize];
-            $item .= '<div class="caption">
-                        <p class="text-center">'.$skill['title'].'</p>
-                      </div>';
-            if (isset($skill['url'])) {
-                $html .= Display::url($item, $skill['url'], ['target' => '_blank']);
-            } else {
-                $html .= $item;
+            if (!empty($badgeHtml)) {
+                if (!empty($targetUrl)) {
+                    $badgeHtml = Display::url($badgeHtml, $targetUrl, ['target' => '_blank']);
+                }
+                $html .= $badgeHtml;
             }
+            $titleInner = $titleText;
+            if (!empty($targetUrl)) {
+                $titleInner = Display::url($titleText, $targetUrl, ['target' => '_blank']);
+            }
+            $html .= '<div class="caption"><p class="text-center">'.$titleInner.'</p></div>';
             $html .= '</li>';
         }
         $html .= '</ul>';
@@ -175,8 +181,13 @@ class SkillModel extends Model
      *
      * @return string
      */
-    public function processSkillListSimple($skills, string $imageSize = 'mini', string $style = '', bool $showBadge = true, bool $showTitle = true): string
-    {
+    public function processSkillListSimple(
+        $skills,
+        string $imageSize = 'mini',
+        string $style = '',
+        bool $showBadge = true,
+        bool $showTitle = true
+    ): string {
         if (empty($skills)) {
             return '';
         }
@@ -194,7 +205,6 @@ class SkillModel extends Model
                 break;
         }
 
-        $isHierarchicalTable = ('true' === api_get_setting('skill.skills_hierarchical_view_in_user_tracking'));
         $skillRepo = Container::getSkillRepository();
         $html = '';
         foreach ($skills as $skill) {
@@ -202,42 +212,81 @@ class SkillModel extends Model
                 $skill = $skill['data'];
             }
 
-            $item = '';
+            $targetUrl = $skill['url'] ?? null;
+            $wrapperStyle = !empty($style) ? ' style="'.$style.'"' : '';
+            $itemHtml = '<div class="skill-badge-wrapper"'.$wrapperStyle.'>';
+            // Badge (image)
             if ($showBadge) {
                 $skillEntity = $skillRepo->find($skill['id']);
-                $url = $this->getWebIconPath($skillEntity);
+                if (null !== $skillEntity) {
+                    $url = $this->getWebIconPath($skillEntity);
 
-                $badgeImage = Display::img(
-                    $url.$imageParams,
-                    $skillEntity->getTitle(),
-                    null,
-                    false
-                );
+                    $badgeImage = Display::img(
+                        $url.$imageParams,
+                        $skillEntity->getTitle(),
+                        null,
+                        false
+                    );
+                    if (!empty($targetUrl)) {
+                        $badgeImage = Display::url($badgeImage, $targetUrl, [
+                            'target' => '_blank',
+                            'style' => 'display:inline-block;width:auto;',
+                        ]);
+                    }
 
-                $item = '<div class="item">'.$badgeImage.'</div>';
+                    $itemHtml .= '<div class="item">'.$badgeImage.'</div>';
+                }
             }
 
-            $title = '<div class="caption">'.$skill['title'].'</div>';
-            if (!empty($skill['short_code'])) {
-                $title = $skill['short_code'];
-            }
-
-            if (!$isHierarchicalTable) {
-                //$item .= '<br />';
-            }
-
+            // Title
             if ($showTitle) {
-                $item .= $title;
+                $titleText = $skill['title'] ?? '';
+                if (!empty($skill['short_code'])) {
+                    $titleText = $skill['short_code'];
+                }
+
+                $titleInner = $titleText;
+
+                // Link only the title text (not the whole card)
+                if (!empty($targetUrl)) {
+                    $titleInner = Display::url($titleText, $targetUrl, [
+                        'target' => '_blank',
+                        'class' => 'skill-badge-title-link',
+                        'style' => 'display:inline-block;width:auto;',
+                    ]);
+                }
+
+                $itemHtml .= '<div class="caption">'.$titleInner.'</div>';
             }
 
-            if (isset($skill['url'])) {
-                $html .= Display::url($item, $skill['url'], ['target' => '_blank', 'style' => $style]);
-            } else {
-                $html .= Display::url($item, '#', ['target' => '_blank', 'style' => $style]);
+            if (!empty($targetUrl)) {
+                $viewLabel = get_lang('View badge');
+                $itemHtml .= '<div class="skill-badge-action">'
+                    .Display::url($viewLabel, $targetUrl, ['target' => '_blank'])
+                    .'</div>';
             }
+
+            $itemHtml .= '</div>';
+            $html .= $itemHtml;
         }
 
         return $html;
+    }
+
+
+
+    /**
+     * Append a query param string like "w=64" to a URL, preserving existing query strings.
+     */
+    private function appendQueryParam(string $url, string $param): string
+    {
+        if ('' === $param) {
+            return $url;
+        }
+
+        $separator = (false !== strpos($url, '?')) ? '&' : '?';
+
+        return $url.$separator.$param;
     }
 
     /**
@@ -345,20 +394,25 @@ class SkillModel extends Model
         $skills = [];
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_assoc($result)) {
-                $skillId = $row['id'];
+                $skillId = (int) $row['id'];
                 $skill = $skillRepo->find($skillId);
 
                 $row['asset'] = '';
-                if ($skill->getAsset()) {
+                if ($skill && $skill->getAsset()) {
                     $row['asset'] = $assetRepo->getAssetUrl($skill->getAsset());
                 }
 
-                $row['title'] = $skill->getTitle();
-                $row['short_code'] = $skill->getShortCode();
+                if ($skill) {
+                    $row['title'] = $skill->getTitle();
+                }
+
+                $row['short_code'] = isset($row['short_code']) ? trim((string) $row['short_code']) : '';
+
                 $skillRelSkill = new SkillRelSkillModel();
                 $parents = $skillRelSkill->getSkillParents($skillId);
                 $row['level'] = count($parents) - 1;
                 $row['gradebooks'] = $this->getGradebooksBySkill($skillId);
+
                 $skills[$row['id']] = $row;
             }
         }
@@ -587,6 +641,9 @@ class SkillModel extends Model
                         'acquired_skill_at' => api_get_utc_datetime(),
                         'course_id' => (int) $courseId,
                         'session_id' => $sessionId ? (int) $sessionId : null,
+                        'validation_status' => 1,
+                        'argumentation' => '',
+                        'argumentation_author_id' => $userId
                     ];
                     $skill_rel_user->save($params);
                 }
@@ -733,10 +790,10 @@ class SkillModel extends Model
             }
             foreach ($vertex->getVerticesEdgeTo() as $subVertex) {
                 $data = $subVertex->getAttribute('graphviz.data');
-                $passed = in_array($data['id'], array_keys($skills));
+                $passed = isset($skills[(int) $data['id']]);
                 $transparency = '';
                 if (false === $passed) {
-                    // @todo use css class
+                    // @todo use a css class
                     $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
                 }
 
@@ -756,13 +813,11 @@ class SkillModel extends Model
                     }
 
                     $label = $this->processSkillListSimple([$data], $imageSize, $transparency, true, $showTitle);
-                    $subTable .= '<div class="thumbnail" style="float:left; margin-right:5px; ">';
+                    $subTable .= '<div class="thumbnail" style="float:left; margin-right:5px;">';
                     $subTable .= '<div style="'.$transparency.'">';
-
                     $subTable .= '<div style="text-align: center">';
                     $subTable .= $label;
                     $subTable .= '</div>';
-
                     $subTable .= '</div>';
                     $subTable .= $this->processVertex($subVertex, $skills, $level + 1);
                     $subTable .= '</div>';
@@ -794,11 +849,25 @@ class SkillModel extends Model
         foreach ($skills as $resultData) {
             $parents = $this->get_parents($resultData['id']);
             foreach ($parents as $parentData) {
-                $parentData['passed'] = in_array($parentData['id'], array_keys($skills));
-                if ($parentData['passed'] && isset($skills[$parentData['id']]['url'])) {
-                    $parentData['data']['url'] = $skills[$parentData['id']]['url'];
+                $parentId = (int) $parentData['id'];
+                $parentData['passed'] = isset($skills[$parentId]);
+
+                if ($parentData['passed']) {
+                    // Keep url if available
+                    if (isset($skills[$parentId]['url'])) {
+                        $parentData['data']['url'] = $skills[$parentId]['url'];
+                    }
+                    if (isset($skills[$parentId]['asset_id'])) {
+                        $parentData['data']['asset_id'] = $skills[$parentId]['asset_id'];
+                    }
+                    if (isset($skills[$parentId]['title'])) {
+                        $parentData['data']['title'] = $skills[$parentId]['title'];
+                    }
+                    if (isset($skills[$parentId]['short_code'])) {
+                        $parentData['data']['short_code'] = $skills[$parentId]['short_code'];
+                    }
                 }
-                $skillParents[$resultData['id']][$parentData['id']] = $parentData;
+                $skillParents[$resultData['id']][$parentId] = $parentData;
             }
         }
 
@@ -857,7 +926,8 @@ class SkillModel extends Model
 
         if ($addTitle) {
             $tableResult .= Display::page_subheader(get_lang('Achieved skills'));
-            $tableResult .= '<div class="skills-badges">';
+            $wrapperClass = $isHierarchicalTable ? 'skills-badges skills-badges--tree' : 'skills-badges skills-badges--cards';
+            $tableResult .= '<div class="'.$wrapperClass.'">';
         }
 
         if (!empty($skillParents)) {
@@ -901,7 +971,7 @@ class SkillModel extends Model
                     foreach ($root->getVerticesEdgeTo() as $vertex) {
                         $data = $vertex->getAttribute('graphviz.data');
 
-                        $passed = in_array($data['id'], array_keys($skills));
+                        $passed = isset($skills[(int) $data['id']]);
                         $transparency = '';
                         if (false === $passed) {
                             // @todo use a css class
@@ -909,11 +979,11 @@ class SkillModel extends Model
                         }
 
                         $label = $this->processSkillListSimple([$data], 'mini', $transparency);
-                        $table .= '<td >';
 
-                        $table .= '<div class="skills_chart"> <ul><li>'.$label;
+                        $table .= '<td>';
+                        $table .= '<div class="skills_chart"><ul><li>'.$label;
                         $table .= $this->processVertex($vertex, $skills);
-                        $table .= '</ul></li></div>';
+                        $table .= '</li></ul></div>';
                         $table .= '</td>';
                     }
                     $table .= '</tr></table>';
@@ -925,7 +995,7 @@ class SkillModel extends Model
                     foreach ($root->getVerticesEdgeTo() as $vertex) {
                         $data = $vertex->getAttribute('graphviz.data');
 
-                        $passed = in_array($data['id'], array_keys($skills));
+                        $passed = isset($skills[(int) $data['id']]);
                         $transparency = '';
                         if (false === $passed) {
                             // @todo use a css class
@@ -939,13 +1009,8 @@ class SkillModel extends Model
 
                         if (!empty($skillTable)) {
                             $table .= '<table class ="table table-bordered">';
-                            $table .= '<tr>';
-                            $table .= '<td>';
-                            $table .= '<div>';
-                            $table .= $skillTable;
-                            $table .= '</div>';
-                            $table .= '</td>';
-                            $table .= '</tr></table>';
+                            $table .= '<tr><td><div>'.$skillTable.'</div></td></tr>';
+                            $table .= '</table>';
                         }
                     }
                 }
@@ -1364,7 +1429,11 @@ class SkillModel extends Model
 
         if ($courseId > 0) {
             $whereConditions['AND course_id = ? '] = $courseId;
-            $whereConditions['AND session_id = ? '] = $sessionId ? $sessionId : null;
+            if ($sessionId > 0) {
+                $whereConditions['AND session_id = ? '] = $sessionId ? $sessionId : null;
+            } else {
+                $whereConditions['AND session_id IS NULL'] = null;
+            }
         }
 
         $result = Database::select(
@@ -2310,7 +2379,7 @@ class SkillModel extends Model
      */
     public static function getWebIconPath(?Skill $skill): string
     {
-        $default = \Display::return_icon('badges-default.png', null, null, ICON_SIZE_HUGE, null, true);
+        $default = api_get_path(WEB_PATH).'img/icons/32/badges-default.png';
 
         if (null === $skill) {
             return $default;
@@ -2320,7 +2389,24 @@ class SkillModel extends Model
             return $default;
         }
 
-        return Container::getAssetRepository()->getAssetUrl($skill->getAsset());
+        $asset = $skill->getAsset();
+        if (null === $asset) {
+            return $default;
+        }
+
+        $assetRepo = Container::getAssetRepository();
+
+        // If the physical file is missing, fallback to default.
+        if (!$assetRepo->assetFileExists($asset)) {
+            return $default;
+        }
+
+        $url = (string) $assetRepo->getAssetUrl($asset);
+        if ('' === trim($url)) {
+            return $default;
+        }
+
+        return $url;
     }
 
     /**
@@ -2383,45 +2469,85 @@ class SkillModel extends Model
 
     public static function exportBadge(Skill $skill, SkillRelUser $skillRelUser, string $urlToRedirect)
     {
+        $imageContent = '';
         if ($skill->hasAsset()) {
             $assetRepo = Container::getAssetRepository();
             $imageContent = $assetRepo->getAssetContent($skill->getAsset());
         } else {
             $defaultBadge = api_get_path(SYS_PUBLIC_PATH).'img/icons/128/badges-default.png';
-            $imageContent = file_get_contents($defaultBadge);
+            $imageContent = @file_get_contents($defaultBadge) ?: '';
         }
 
-        $png = new PNGImageBaker($imageContent);
-
-        if ($png->checkChunks('tEXt', 'openbadges')) {
-            $result = $png->addChunk('tEXt', 'openbadges', SkillRelUserModel::getAssertionUrl($skillRelUser));
-            $verifyBadge = $png->extractBadgeInfo($result);
-
-            $error = true;
-            if (is_array($verifyBadge)) {
-                $error = false;
-            }
-
-            if (!$error) {
-                //header('Content-type: image/png');
-                header('Content-type: application/octet-stream');
-                header('Content-Type: application/force-download');
-                header('Content-Disposition: attachment; filename= '.api_get_unique_id());
-
-                echo $result;
-                exit;
-            }
+        if (empty($imageContent)) {
+            Display::addFlash(
+                Display::return_message(
+                    get_lang("Unable to load the badge's image."),
+                    'error'
+                )
+            );
+            api_location($urlToRedirect);
         }
 
-        Display::addFlash(
-            Display::return_message(
-                get_lang(
-                    'There was a problem embedding the badge assertion info into the badge image, but you can still use this page as a valid proof.'
-                ),
-                'warning'
-            )
-        );
-        api_location($urlToRedirect);
+        $output = $imageContent;
+
+        // Try to embed OpenBadges assertion. If it fails, still download a valid PNG.
+        try {
+            $png = new PNGImageBaker($imageContent);
+
+            // Always attempt to add/replace the OpenBadges chunk
+            $candidate = $png->addChunk('tEXt', 'openbadges', SkillRelUserModel::getAssertionUrl($skillRelUser));
+
+            // Verify the resulting PNG contains readable badge info
+            $verify = $png->extractBadgeInfo($candidate);
+            if (is_array($verify)) {
+                $output = $candidate;
+            }
+        } catch (\Throwable $e) {
+            // Keep original PNG on any error
+            $output = $imageContent;
+        }
+
+        // Build a friendly filename
+        $base = $skill->getShortCode() ?: ('skill-'.$skill->getId());
+        $base = preg_replace('/[^A-Za-z0-9_-]+/', '-', (string) $base);
+        $filename = $base.'.png';
+
+        header('Content-Type: image/png');
+        header('Content-Disposition: attachment; filename="'.$filename.'"');
+        header('X-Content-Type-Options: nosniff');
+        header('Cache-Control: private, max-age=0, must-revalidate');
+        header('Pragma: public');
+
+        echo $output;
+        exit;
     }
 
+    /**
+     * Allow only internal relative URLs (no protocol, no host).
+     */
+    public static function sanitizeInternalUrl(?string $url): ?string
+    {
+        if (empty($url)) {
+            return null;
+        }
+
+        $url = trim($url);
+
+        // Block protocols/hosts and javascript URLs
+        if (preg_match('#^(https?:)?//#i', $url) || preg_match('#^\s*javascript:#i', $url)) {
+            return null;
+        }
+
+        // Block control chars / header injection
+        if (preg_match('#[\x00-\x1F\x7F]#', $url)) {
+            return null;
+        }
+
+        // Force it to be a path
+        if ($url[0] !== '/') {
+            $url = '/'.$url;
+        }
+
+        return $url;
+    }
 }

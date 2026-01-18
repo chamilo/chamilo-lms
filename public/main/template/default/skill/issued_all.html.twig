@@ -1,11 +1,22 @@
 {% import '@ChamiloCore/Macros/box.html.twig' as display %}
 
+{% if origin_url %}
+    <div class="mb-4">
+        <a
+                href="{{ origin_url }}"
+                class="inline-flex items-center gap-2 px-3 py-2 bg-white hover:bg-gray-15 transition text-sm font-semibold"
+        >
+            <i class="mdi mdi-arrow-left-bold-box text-2xl" aria-hidden="true" title="{{ 'Back'|trans }}"></i>
+        </a>
+    </div>
+{% endif %}
+
 {% for badge in user_badges %}
     <div class="flex flex-col md:flex-row gap-6 issued">
         <div class="w-full md:w-1/5 flex flex-col items-center">
             <div class="border rounded-lg shadow-md p-4 w-full">
                 <figure class="flex flex-col items-center text-center">
-                    <img class="w-32 md:w-40" src="{{ badge.issue_info.skill_badge_image }}?w=120"
+                    <img class="w-32 md:w-40" src="{{ badge.issue_info.skill_badge_image }}?w=180"
                          alt="{{ badge.issue_info.skill_name }}" />
                     <figcaption class="mt-2">
                         <p class="text-lg font-semibold">{{ badge.issue_info.skill_name }}</p>
@@ -31,29 +42,31 @@
                                 class="btn btn--primary w-full block max-w-full text-center whitespace-normal break-words leading-snug"
                                 download
                         >
-                            <em class="fa fa-download fa-fw" aria-hidden="true"></em>
-                            {{ 'Download badges'|trans }}
+                            <i class="mdi mdi-download" aria-hidden="true"></i>
+                            {{ 'Download badge'|trans }}
                         </a>
 
-                        <button
-                                type="button"
+                        <a
+                                href="{{ badge.issue_info.badge_assertion }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 id="badge-export-button-{{ badge.issue_info.id }}"
                                 class="btn btn--success w-full block max-w-full text-center whitespace-normal break-words leading-snug"
                                 aria-label="{{ 'Export badge'|trans }}"
                         >
-                            <em class="fa fa-external-link-square fa-fw" aria-hidden="true"></em>
+                            <i class="mdi mdi-link-variant" aria-hidden="true"></i>
                             {{ 'Export badge'|trans }}
-                        </button>
+                        </a>
                     </div>
                     {% if "display.hide_social_media_links"|api_get_setting == 'false' %}
                         <div class="mt-4 text-center">
                             <h5 class="font-semibold">{{ 'Share with your friends'|trans }}</h5>
                             <div class="flex justify-center space-x-4">
                                 <a href="http://www.facebook.com/sharer.php?u={{ url('index') }}badge/{{ badge.issue_info.id }}" target="_new">
-                                    <em class='fa fa-facebook-square fa-2x text-blue-500'></em>
+                                    <em class='mdi mdi-facebook'></em>
                                 </a>
                                 <a href="https://twitter.com/home?status={{ 'I have achieved skill %s on %s'|trans |format(badge.issue_info.skill_name, chamilo_settings_get('platform.site_name')) }} - {{ url('index') }}badge/{{ badge.issue_info.id }}" target="_new">
-                                    <em class='fa fa-twitter-square fa-2x text-blue-400'></em>
+                                    <em class='mdi mdi-twitter'></em>
                                 </a>
                             </div>
                         </div>
@@ -68,9 +81,9 @@
             <h4 class="mt-4 font-bold">{{ 'Skill acquired at'|trans }}</h4>
             <ul class="list-none">
                 <li class="mt-2 flex items-center">
-                    <em class="fa fa-clock-o mr-2"></em>
+                    <i class="mdi mdi-progress-clock"></i>
                     {% if badge.issue_info.source_name %}
-                        <strong>{{ badge.issue_info.datetime }}</strong> {{ 'through'|trans }} <em>{{ badge.issue_info.source_name }}</em>
+                        {{ badge.issue_info.datetime }}&nbsp;{{ 'through'|trans }}&nbsp;<em>{{ badge.issue_info.source_name }}</em>
                     {% else %}
                         {{ badge.issue_info.datetime }}
                     {% endif %}
@@ -88,7 +101,7 @@
             {% if show_level %}
                 <h4 class="mt-4 font-bold">{{ 'Level acquired'|trans }}</h4>
                 <p class="flex items-center text-green-600">
-                    <em class="fa fa-check-circle-o mr-2"></em> {{ badge.issue_info.acquired_level }}
+                    <i class="mdi mdi-check-circle"></i> {{ badge.issue_info.acquired_level }}
                 </p>
             {% endif %}
 
@@ -96,7 +109,7 @@
                 <hr class="my-4">
                 <div class="border border-blue-300 rounded-lg bg-blue-100 p-4">
                     <div class="font-bold text-blue-700">
-                        <em class="fa fa-check-circle-o fa-fw"></em> {{ 'Change acquired level'|trans }}
+                        <i class="mdi mdi-check-circle"></i> {{ 'Change acquired level'|trans }}
                     </div>
                     <div class="mt-2">
                         {% autoescape false %}{{ badge.acquired_level_form }}{% endautoescape %}
@@ -107,10 +120,10 @@
                 <div class="border border-blue-300 rounded-lg bg-blue-100 p-4">
                     <div class="font-bold text-blue-700 flex justify-between items-center">
                         <span>
-                            <em class="fa fa-comment-o fa-fw"></em> {{ '%s comments'|trans|format(badge.issue_info.comments|length) }}
+                            <i class="mdi mdi-comment-quote"></i> {{ '%s comments'|trans|format(badge.issue_info.comments|length) }}
                         </span>
                         <span>
-                            <em class="fa fa-thumbs-o-up fa-fw"></em> {{ 'Average rating %s'|trans|format(badge.issue_info.feedback_average) }}
+                            <i class="mdi mdi-thumb-up-outline"></i> {{ 'Average rating %s'|trans|format(badge.issue_info.feedback_average) }}
                         </span>
                     </div>
                     <div class="mt-2">
@@ -138,11 +151,11 @@
                 <hr class="my-4" />
                 <p class="text-lg font-semibold flex flex-col sm:flex-row sm:justify-between gap-2">
                     <span>
-                        <em class="fa fa-comment-o fa-fw"></em>
+                        <i class="mdi mdi-comment-quote"></i>
                         {{ '%s comments'|trans|format(badge.issue_info.comments|length) }}
                     </span>
                     <span>
-                        <em class="fa fa-thumbs-o-up fa-fw"></em>
+                        <i class="mdi mdi-thumb-up-outline"></i>
                         {{ 'Average rating %s'|trans|format(badge.issue_info.feedback_average) }}
                     </span>
                 </p>
@@ -161,7 +174,7 @@
                             <div class="flex items-center justify-end shrink-0">
                                 {% if comment.value %}
                                     <span class="inline-flex items-center gap-1 text-sm font-semibold">
-                                        <em class="fa fa-certificate fa-fw"></em> {{ comment.value }}
+                                        <i class="mdi mdi-certificate"></i> {{ comment.value }}
                                     </span>
                                 {% endif %}
                             </div>
@@ -173,11 +186,37 @@
     </div>
     {% if badge.allow_download_export %}
         <script>
-          $(function() {
-            $('#badge-export-button-{{ badge.issue_info.id }}').on("click", function(e) {
-              e.preventDefault()
-              OpenBadges.issue('{{ badge.issue_info.badge_assertion|json_encode() }}')
-            })
+          $(function () {
+            function tryCopyToClipboard(text) {
+              try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                  navigator.clipboard.writeText(text).catch(function () {
+                    // Ignore clipboard errors
+                  })
+                }
+              } catch (e) {
+                // Ignore clipboard errors
+              }
+            }
+
+            var assertionUrl = {{ badge.issue_info.badge_assertion|json_encode|raw }}
+
+              $('#badge-export-button-{{ badge.issue_info.id }}').on('click', function (e) {
+                tryCopyToClipboard(assertionUrl)
+
+                if (window.OpenBadges && typeof window.OpenBadges.issue === 'function') {
+                  e.preventDefault()
+
+                  try {
+                    window.OpenBadges.issue([assertionUrl])
+                  } catch (err) {
+                    console.warn('OpenBadges.issue failed. Falling back to assertion URL.', err)
+                    window.open(assertionUrl, '_blank', 'noopener,noreferrer')
+                  }
+
+                  return
+                }
+              })
           })
         </script>
     {% endif %}

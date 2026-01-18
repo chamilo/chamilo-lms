@@ -7,7 +7,12 @@ use ChamiloSession as Session;
 /**
  * Class Chat.
  *
- * @todo ChamiloSession instead of $_SESSION
+ * Notes:
+ * - This is a legacy chat library used by the social network chat.
+ * - Some methods historically echo JSON/text directly. Keep that behavior for backward compatibility.
+ * - Symfony controllers should call methods with $printResult = false to avoid exit().
+ *
+ * @todo Use ChamiloSession instead of $_SESSION everywhere.
  */
 class Chat extends Model
 {
@@ -20,9 +25,10 @@ class Chat extends Model
         'recd',
     ];
     public $window_list = [];
+    public const USER_AI_TUTOR = -1;
 
     /**
-     * The contructor sets the chat table name and the window_list attribute.
+     * The constructor sets the chat table name and the window_list attribute.
      */
     public function __construct()
     {
@@ -46,7 +52,7 @@ class Chat extends Model
             true
         );
 
-        return $status['user_chat_status'];
+        return (int) ($status['user_chat_status'] ?? 0);
     }
 
     /**
@@ -59,7 +65,7 @@ class Chat extends Model
         UserManager::update_extra_field_value(
             api_get_user_id(),
             'user_chat_status',
-            $status
+            (int) $status
         );
     }
 
@@ -87,7 +93,23 @@ class Chat extends Model
      */
     public function getContacts(): string
     {
-        return (string) SocialManager::listMyFriendsBlock(api_get_user_id(), '', true);
+        $html = (string) SocialManager::listMyFriendsBlock(api_get_user_id(), '', true);
+
+        // Add AI Tutor contact when enabled (global chat).
+        if ('true' === api_get_setting('ai_helpers.tutor_chatbot') && api_get_course_int_id() > 0) {
+            // Hide AI when user is in an exam (best effort).
+            if (empty($_SESSION['is_in_a_test'])) {
+                $ai = ''
+                    .'<div class="chd-ai-contact" data-user="'.self::USER_AI_TUTOR.'" data-name="AI Tutor" style="cursor:pointer; padding:10px; border-bottom:1px solid #eee;">'
+                    .'<span style="margin-right:8px;">🤖</span>'
+                    .'<strong>'.get_lang('AI Tutor').'</strong>'
+                    .'<span style="float:right; color:#10B981;">●</span>'
+                    .'</div>';
+                $html = $ai.$html;
+            }
+        }
+
+        return (string) $html;
     }
 
     /**
@@ -113,32 +135,38 @@ class Chat extends Model
             }
             $items = $this->getMessages($userId, $currentUserId, $start, $latestMessages);
             $chats[$userId]['items'] = $items;
-            $chats[$userId]['window_user_info'] = api_get_user_info($userId);
+            $chats[$userId]['window_user_info'] = $this->getUserInfoSafe((int) $userId);
         }
 
         return $chats;
     }
 
     /**
-     * Starts a chat session and returns JSON array of status and chat history.
+     * Build the start session payload (no echo/exit).
+     * Symfony controllers should use this method.
+     */
+    public function startSessionData(): array
+    {
+        $chatList = Session::read('openChatBoxes');
+        $chats = $this->getAllLatestChats($chatList);
+
+        return [
+            'user_status' => $this->getUserStatus(),
+            'me' => get_lang('Me'),
+            'user_id' => (int) api_get_user_id(),
+            'items' => $chats,
+        ];
+    }
+
+    /**
+     * Starts a chat session and prints JSON (legacy behavior).
      *
      * @return bool (prints output in JSON format)
      */
     public function startSession()
     {
-        // ofaj
-        // $chat = new Chat();
-        // $chat->setUserStatus(1);
-
-        $chatList = Session::read('openChatBoxes');
-        $chats = $this->getAllLatestChats($chatList);
-        $return = [
-            'user_status' => $this->getUserStatus(),
-            'me' => get_lang('Me'),
-            'user_id' => api_get_user_id(),
-            'items' => $chats,
-        ];
-        echo json_encode($return);
+        // Legacy behavior: echo JSON for old AJAX entry points.
+        echo json_encode($this->startSessionData());
 
         return true;
     }
@@ -157,17 +185,17 @@ class Chat extends Model
             [
                 'where' => [
                     '(from_user = ? AND to_user = ?) OR (from_user = ? AND to_user = ?) ' => [
-                        $fromUserId,
-                        $toUserId,
-                        $toUserId,
-                        $fromUserId,
+                        (int) $fromUserId,
+                        (int) $toUserId,
+                        (int) $toUserId,
+                        (int) $fromUserId,
                     ],
                 ],
             ],
             'first'
         );
 
-        return (int) $row['count'];
+        return (int) ($row['count'] ?? 0);
     }
 
     /**
@@ -246,45 +274,50 @@ class Chat extends Model
                 ";
         $result = Database::query($sql);
         $rows = Database::store_result($result);
-        $fromUserInfo = api_get_user_info($fromUserId, true);
-        $toUserInfo = api_get_user_info($toUserId, true);
+
+        $fromUserInfo = $this->getUserInfoSafe((int) $fromUserId);
+        $toUserInfo   = $this->getUserInfoSafe((int) $toUserId);
+
         $users = [
             $fromUserId => $fromUserInfo,
             $toUserId => $toUserInfo,
         ];
+
         $items = [];
         $rows = array_reverse($rows);
-        foreach ($rows as $chat) {
-            $fromUserId = $chat['from_user'];
-            $userInfo = $users[$fromUserId];
-            $toUserInfo = $users[$toUserId];
 
-            $items[$chat['id']] = [
-                'id' => $chat['id'],
+        foreach ($rows as $chat) {
+            $rowFrom = (int) $chat['from_user'];
+            $userInfo = $users[$rowFrom] ?? api_get_user_info($rowFrom, true);
+            $toUserInfo = $users[$toUserId] ?? api_get_user_info($toUserId, true);
+
+            $items[(int) $chat['id']] = [
+                'id' => (int) $chat['id'],
                 'message' => Security::remove_XSS($chat['message']),
                 'date' => api_strtotime($chat['sent'], 'UTC'),
-                'recd' => $chat['recd'],
+                'recd' => (int) $chat['recd'],
                 'from_user_info' => $userInfo,
                 'to_user_info' => $toUserInfo,
             ];
-            $_SESSION['openChatBoxes'][$fromUserId] = api_strtotime($chat['sent'], 'UTC');
+
+            $_SESSION['openChatBoxes'][$rowFrom] = api_strtotime($chat['sent'], 'UTC');
         }
 
         return $items;
     }
 
     /**
-     * Refreshes the chat windows (usually called every x seconds through AJAX).
+     * Refreshes the chat windows (legacy full payload; echoes JSON).
      */
     public function heartbeat()
     {
         $chatHistory = Session::read('chatHistory');
         $currentUserId = api_get_user_id();
 
-        // update current chats
+        // Update current chats
         if (!empty($chatHistory) && is_array($chatHistory)) {
             foreach ($chatHistory as $fromUserId => &$data) {
-                $userInfo = api_get_user_info($fromUserId, true);
+                $userInfo = $this->getUserInfoSafe((int) $fromUserId);
                 $count = $this->getCountMessagesExchangeBetweenUsers($fromUserId, $currentUserId);
                 $chatItems = $this->getLatestChat($fromUserId, $currentUserId, 5);
                 $data['window_user_info'] = $userInfo;
@@ -301,11 +334,11 @@ class Chat extends Model
 
         $chatList = [];
         while ($chat = Database::fetch_assoc($result)) {
-            $chatList[$chat['from_user']][] = $chat;
+            $chatList[(int) $chat['from_user']][] = $chat;
         }
 
         foreach ($chatList as $fromUserId => $messages) {
-            $userInfo = api_get_user_info($fromUserId, true);
+            $userInfo = $this->getUserInfoSafe((int) $fromUserId);
             $count = $this->getCountMessagesExchangeBetweenUsers($fromUserId, $currentUserId);
             $chatItems = $this->getLatestChat($fromUserId, $currentUserId, 5);
 
@@ -340,7 +373,7 @@ class Chat extends Model
      */
     public function saveWindow($userId)
     {
-        $this->window_list[$userId] = true;
+        $this->window_list[(int) $userId] = true;
         Session::write('window_list', $this->window_list);
     }
 
@@ -350,8 +383,10 @@ class Chat extends Model
      * @param int    $fromUserId  The ID of the user sending the message
      * @param int    $to_user_id  The ID of the user receiving the message
      * @param string $message     Message
-     * @param bool   $printResult Optional. Whether print the result
+     * @param bool   $printResult Optional. Whether print the result (legacy behavior)
      * @param bool   $sanitize    Optional. Whether sanitize the message
+     *
+     * @return int Message id, or 0 on failure
      */
     public function send(
         $fromUserId,
@@ -359,25 +394,27 @@ class Chat extends Model
         $message,
         $printResult = true,
         $sanitize = true
-    ) {
+    ): int {
+        $fromUserId = (int) $fromUserId;
+        $to_user_id = (int) $to_user_id;
+
         $relation = SocialManager::get_relation_between_contacts($fromUserId, $to_user_id);
 
         if ($relation === UserRelUser::USER_RELATION_TYPE_FRIEND
-            || $relation === UserRelUser::USER_RELATION_TYPE_GOODFRIEND) {
+            || $relation === UserRelUser::USER_RELATION_TYPE_GOODFRIEND
+        ) {
             $now = api_get_utc_datetime();
             $user_info = api_get_user_info($to_user_id, true);
+
             $this->saveWindow($to_user_id);
             $_SESSION['openChatBoxes'][$to_user_id] = api_strtotime($now, 'UTC');
 
-            if ($sanitize) {
-                $messagesan = $this->sanitize($message);
-            } else {
-                $messagesan = $message;
-            }
+            $messagesan = $sanitize ? $this->sanitize($message) : $message;
 
             if (!isset($_SESSION['chatHistory'][$to_user_id])) {
                 $_SESSION['chatHistory'][$to_user_id] = [];
             }
+
             $item = [
                 's' => '1',
                 'f' => $fromUserId,
@@ -385,6 +422,7 @@ class Chat extends Model
                 'date' => api_strtotime($now, 'UTC'),
                 'username' => get_lang('Me'),
             ];
+
             $_SESSION['chatHistory'][$to_user_id]['items'][] = $item;
             $_SESSION['chatHistory'][$to_user_id]['user_info']['user_name'] = $user_info['complete_name'];
             $_SESSION['chatHistory'][$to_user_id]['user_info']['online'] = $user_info['user_is_online'];
@@ -394,18 +432,21 @@ class Chat extends Model
             unset($_SESSION['tsChatBoxes'][$to_user_id]);
 
             $params = [];
-            $params['from_user'] = (int) $fromUserId;
-            $params['to_user'] = (int) $to_user_id;
+            $params['from_user'] = $fromUserId;
+            $params['to_user'] = $to_user_id;
             $params['message'] = $messagesan;
             $params['sent'] = api_get_utc_datetime();
-            $params['recd']      = 0;
+            $params['recd'] = 0;
 
             if (!empty($fromUserId) && !empty($to_user_id)) {
-                $messageId = $this->save($params);
+                $messageId = (int) $this->save($params);
+
                 if ($printResult) {
-                    echo $messageId;
+                    echo (string) $messageId;
                     exit;
                 }
+
+                return $messageId;
             }
         }
 
@@ -413,6 +454,8 @@ class Chat extends Model
             echo '0';
             exit;
         }
+
+        return 0;
     }
 
     /**
@@ -422,6 +465,7 @@ class Chat extends Model
      */
     public function closeWindow($userId)
     {
+        $userId = (int) $userId;
         if (empty($userId)) {
             return false;
         }
@@ -461,7 +505,7 @@ class Chat extends Model
      */
     public function sanitize($text)
     {
-        $text = htmlspecialchars($text, ENT_QUOTES);
+        $text = htmlspecialchars((string) $text, ENT_QUOTES);
         $text = str_replace("\n\r", "\n", $text);
         $text = str_replace("\r\n", "\n", $text);
         $text = str_replace("\n", "<br>", $text);
@@ -515,11 +559,21 @@ class Chat extends Model
         return false;
     }
 
+    /**
+     * Mark messages as read up to a specific message id.
+     * recd = 0 => not delivered
+     * recd = 1 => delivered
+     * recd = 2 => read
+     */
     public function ackReadUpTo(int $fromUserId, int $toUserId, int $lastSeenMessageId): int
     {
         if ($fromUserId <= 0 || $toUserId <= 0 || $lastSeenMessageId <= 0) {
             return 0;
         }
+
+        $fromUserId = (int) $fromUserId;
+        $toUserId = (int) $toUserId;
+        $lastSeenMessageId = (int) $lastSeenMessageId;
 
         $sql = "UPDATE {$this->table}
             SET recd = 2
@@ -529,33 +583,82 @@ class Chat extends Model
               AND recd < 2";
 
         $res = Database::query($sql);
-        return $res ? Database::affected_rows($res) : 0;
+        if (!$res) {
+            return 0;
+        }
+
+        // Database::affected_rows() is used across Chamilo; keep it simple.
+        return (int) Database::affected_rows();
     }
 
+    /**
+     * Get unread counts grouped by peer (from_user).
+     *
+     * @return array<int,int> map: peerId => unreadCount
+     */
+    public function getUnreadByPeer(int $userId): array
+    {
+        $uid = (int) $userId;
+        if ($uid <= 0) {
+            return [];
+        }
+
+        $tbl = Database::get_main_table(TABLE_MAIN_CHAT);
+
+        // Index-friendly with (to_user, recd, from_user) or (to_user, recd, id)
+        $sql = "SELECT from_user, COUNT(*) AS c
+            FROM {$tbl}
+            WHERE to_user = {$uid}
+              AND recd < 2
+            GROUP BY from_user";
+        $res = Database::query($sql);
+        $rows = Database::store_result($res);
+
+        $map = [];
+        foreach ($rows as $r) {
+            $map[(int) $r['from_user']] = (int) ($r['c'] ?? 0);
+        }
+
+        return $map;
+    }
+
+    /**
+     * Minimal heartbeat: returns global last_id (> sinceId) and unread totals.
+     * Used by the docked chat when no peer is actively selected.
+     */
     public function heartbeatMin(int $userId, int $sinceId = 0): array
     {
         $uid = (int) $userId;
         $sinceId = max(0, (int) $sinceId);
 
         $tbl = Database::get_main_table(TABLE_MAIN_CHAT);
-        $sql = "
-        SELECT
-            MAX(id) AS last_id,
-            SUM(CASE WHEN recd < 2 THEN 1 ELSE 0 END) AS unread
-        FROM {$tbl}
-        WHERE to_user = {$uid} AND id > {$sinceId}
-    ";
-        $res = Database::query($sql);
-        $row = Database::fetch_array($res) ?: ['last_id' => 0, 'unread' => 0];
 
-        $lastId = (int) ($row['last_id'] ?? 0);
-        $unread = (int) ($row['unread'] ?? 0);
+        // Latest incoming id after sinceId
+        $sqlLast = "SELECT MAX(id) AS last_id
+            FROM {$tbl}
+            WHERE to_user = {$uid} AND id > {$sinceId}";
+        $resLast = Database::query($sqlLast);
+        $rowLast = Database::fetch_array($resLast) ?: ['last_id' => 0];
+        $lastId = (int) ($rowLast['last_id'] ?? 0);
+
+        // Unread total (independent from sinceId, so badges remain accurate)
+        $sqlUnread = "SELECT COUNT(*) AS unread
+            FROM {$tbl}
+            WHERE to_user = {$uid}
+              AND recd < 2";
+        $resUnread = Database::query($sqlUnread);
+        $rowUnread = Database::fetch_array($resUnread) ?: ['unread' => 0];
+        $unreadTotal = (int) ($rowUnread['unread'] ?? 0);
+
+        // Unread per peer (for per-contact dots)
+        $unreadByPeer = $this->getUnreadByPeer($uid);
 
         return [
-            'has_new'  => $lastId > $sinceId,
-            'last_id'  => $lastId,
-            'unread'   => $unread,
-            'since_id' => $sinceId,
+            'has_new'        => $lastId > $sinceId,
+            'last_id'        => $lastId,
+            'unread'         => $unreadTotal,
+            'unread_by_peer' => $unreadByPeer,
+            'since_id'       => $sinceId,
         ];
     }
 
@@ -565,9 +668,11 @@ class Chat extends Model
      */
     public function heartbeatTiny(int $userId, int $peerId, int $sinceId = 0): array
     {
-        $uid  = (int) $userId;
-        $pid  = (int) $peerId;
-        $tbl  = Database::get_main_table(TABLE_MAIN_CHAT);
+        $uid = (int) $userId;
+        $pid = (int) $peerId;
+        $sinceId = max(0, (int) $sinceId);
+
+        $tbl = Database::get_main_table(TABLE_MAIN_CHAT);
 
         $sql = "SELECT id
             FROM {$tbl}
@@ -578,11 +683,22 @@ class Chat extends Model
         $row = Database::fetch_assoc($res) ?: ['id' => 0];
         $last = (int) ($row['id'] ?? 0);
 
+        // Optional: unread from this peer only (cheap)
+        $sqlUnread = "SELECT COUNT(*) AS unread
+            FROM {$tbl}
+            WHERE to_user = {$uid}
+              AND from_user = {$pid}
+              AND recd < 2";
+        $resUnread = Database::query($sqlUnread);
+        $rowUnread = Database::fetch_array($resUnread) ?: ['unread' => 0];
+        $unreadPeer = (int) ($rowUnread['unread'] ?? 0);
+
         return [
-            'has_new'  => $last > max(0, (int) $sinceId),
-            'last_id'  => $last,
-            'peer_id'  => $pid,
-            'since_id' => (int) $sinceId,
+            'has_new'    => $last > $sinceId,
+            'last_id'    => $last,
+            'peer_id'    => $pid,
+            'since_id'   => $sinceId,
+            'unread_peer'=> $unreadPeer,
         ];
     }
 
@@ -597,6 +713,10 @@ class Chat extends Model
         $uid = (int) $meId;
         $sid = max(0, (int) $sinceId);
 
+        if ($pid <= 0 || $uid <= 0) {
+            return [];
+        }
+
         $sql = "SELECT id, from_user, to_user, message, sent, recd
             FROM {$tbl}
             WHERE from_user = {$pid}
@@ -607,15 +727,22 @@ class Chat extends Model
         $res = Database::query($sql);
         $rows = Database::store_result($res);
 
-        if (empty($rows)) return [];
+        if (empty($rows)) {
+            return [];
+        }
 
-        $fromUserInfo = api_get_user_info($pid, true);
-        $toUserInfo   = api_get_user_info($uid, true);
+        $fromUserInfo = $this->getUserInfoSafe((int) $pid);
+        $toUserInfo   = $this->getUserInfoSafe((int) $uid);
 
         $items = [];
+        $ids = [];
+
         foreach ($rows as $chat) {
+            $id = (int) $chat['id'];
+            $ids[] = $id;
+
             $items[] = [
-                'id'             => (int) $chat['id'],
+                'id'             => $id,
                 'message'        => Security::remove_XSS($chat['message']),
                 'date'           => api_strtotime($chat['sent'], 'UTC'),
                 'recd'           => (int) $chat['recd'],
@@ -624,13 +751,37 @@ class Chat extends Model
             ];
         }
 
-        // Mark as delivered
-        $ids = array_column($rows, 'id');
         if (!empty($ids)) {
             $idsCsv = implode(',', array_map('intval', $ids));
-            Database::query("UPDATE {$tbl} SET recd = GREATEST(recd,1) WHERE id IN ({$idsCsv})");
+            Database::query("UPDATE {$tbl} SET recd = GREATEST(recd, 1) WHERE id IN ({$idsCsv})");
         }
 
         return $items;
+    }
+
+    private function getAiUserInfo(): array
+    {
+        return [
+            'id' => self::USER_AI_TUTOR,
+            'user_id' => self::USER_AI_TUTOR,
+            'complete_name' => 'AI Tutor',
+            'user_is_online_in_chat' => 1,
+            'user_is_online' => 1,
+            'online' => 1,
+            'avatar_small' => '',
+        ];
+    }
+
+    private function getUserInfoSafe(int $userId): array
+    {
+        if (self::USER_AI_TUTOR === $userId) {
+            return $this->getAiUserInfo();
+        }
+
+        if ($userId <= 0) {
+            return [];
+        }
+
+        return api_get_user_info($userId, true);
     }
 }

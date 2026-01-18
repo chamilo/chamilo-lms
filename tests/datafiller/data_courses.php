@@ -10,6 +10,7 @@
  *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
+$style = 'psyche';
 $courses = [];
 // 1
 $courses[] = [
@@ -20,7 +21,8 @@ $courses[] = [
     'course_language' => 'en_US',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/'.$style.'/english101s.png',
 ];
 // 2
 $courses[] = [
@@ -31,7 +33,8 @@ $courses[] = [
     'course_language' => 'es',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/'.$style.'/spanish101s.png',
 ];
 // 3
 $courses[] = [
@@ -42,7 +45,8 @@ $courses[] = [
     'course_language' => 'fr_FR',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/'.$style.'/french101s.png',
 ];
 // 4
 $courses[] = [
@@ -53,7 +57,8 @@ $courses[] = [
     'course_language' => 'ar',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/'.$style.'/arabic101s.png',
 ];
 // 5
 $courses[] = [
@@ -64,7 +69,8 @@ $courses[] = [
     'course_language' => 'en_US',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/'.$style.'/solarsystems.png',
 ];
 // 6
 $courses[] = [
@@ -75,7 +81,8 @@ $courses[] = [
     'course_language' => 'en_US',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/'.$style.'/marnavigations.png',
 ];
 // 7
 $courses[] = [
@@ -86,7 +93,8 @@ $courses[] = [
     'course_language' => 'en_US',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/'.$style.'/natgeos.png',
 ];
 // 8
 $courses[] = [
@@ -97,7 +105,8 @@ $courses[] = [
     'course_language' => 'ja',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/'.$style.'/japanese101s.png',
 ];
 // 9
 $courses[] = [
@@ -108,7 +117,8 @@ $courses[] = [
     'course_language' => 'en_US',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/'.$style.'/timemgmts.png',
 ];
 // 10
 $courses[] = [
@@ -116,10 +126,11 @@ $courses[] = [
     'title' => 'עברית למתחילים',
     'description' => '',
     'category_code' => 'LANG',
-    'course_language' => 'he',
+    'course_language' => 'he_IL',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/'.$style.'/hebrew101s.png',
 ];
 // 11
 $courses[] = [
@@ -130,7 +141,8 @@ $courses[] = [
     'course_language' => 'zh_CN',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/'.$style.'/chinese101s.png',
 ];
 // 12
 $courses[] = [
@@ -141,5 +153,6 @@ $courses[] = [
     'course_language' => 'my_MM',
     'user_id' => 1,
     'expiration_date' => '2030-09-01 00:00:00',
-    'exemplary_content' => true,
+    'exemplary_content' => false,
+    'illustration_path' => __DIR__.'/images/'.$style.'/myanmar101s.png',
 ];

@@ -1,5 +1,8 @@
 <template>
-  <div v-if="isAuthenticated" class="q-card">
+  <div
+    v-if="isAuthenticated"
+    class="q-card"
+  >
     <div class="p-4 flex flex-row gap-1 mb-2">
       <div class="flex flex-row gap-2">
         <Button
@@ -40,7 +43,7 @@
   <BaseTable
     v-model:filters="filters"
     v-model:selected-items="selectedFiles"
-    :global-filter-fields="['resourceNode.title','resourceNode.updatedAt']"
+    :global-filter-fields="['resourceNode.title', 'resourceNode.updatedAt']"
     :is-loading="isLoading"
     :total-items="totalFiles"
     :values="files"
@@ -49,14 +52,25 @@
     @page="onFilesPage"
     @sort="sortingFilesChanged"
   >
-    <Column :header="$t('Title')" :sortable="true" field="resourceNode.title">
+    <Column
+      :header="$t('Title')"
+      :sortable="true"
+      field="resourceNode.title"
+    >
       <template #body="slotProps">
         <div v-if="slotProps.data?.resourceNode?.firstResourceFile">
           <ResourceFileLink :resource="slotProps.data" />
-          <v-icon v-if="slotProps.data.resourceLinkListFromEntity?.length" icon="mdi-link" />
+          <v-icon
+            v-if="slotProps.data.resourceLinkListFromEntity?.length"
+            icon="mdi-link"
+          />
         </div>
         <div v-else>
-          <a v-if="slotProps.data" class="cursor-pointer" @click="handleClickFile(slotProps.data)">
+          <a
+            v-if="slotProps.data"
+            class="cursor-pointer"
+            @click="handleClickFile(slotProps.data)"
+          >
             <v-icon icon="mdi-folder" />
             {{ slotProps.data.resourceNode.title }}
           </a>
@@ -64,13 +78,25 @@
       </template>
     </Column>
 
-    <Column :header="$t('Size')" :sortable="true" field="resourceNode.firstResourceFile.size">
+    <Column
+      :header="$t('Size')"
+      :sortable="true"
+      field="resourceNode.firstResourceFile.size"
+    >
       <template #body="slotProps">
-        {{ slotProps.data.resourceNode.firstResourceFile ? prettyBytes(slotProps.data.resourceNode.firstResourceFile.size) : "" }}
+        {{
+          slotProps.data.resourceNode.firstResourceFile
+            ? prettyBytes(slotProps.data.resourceNode.firstResourceFile.size)
+            : ""
+        }}
       </template>
     </Column>
 
-    <Column :header="$t('Modified')" :sortable="true" field="resourceNode.updatedAt">
+    <Column
+      :header="$t('Modified')"
+      :sortable="true"
+      field="resourceNode.updatedAt"
+    >
       <template #body="slotProps">
         {{ relativeDatetime(slotProps.data.resourceNode.updatedAt) }}
       </template>
@@ -79,7 +105,12 @@
     <Column :exportable="false">
       <template #body="slotProps">
         <div class="flex flex-row gap-2">
-          <Button v-if="isAuthenticated" class="btn btn--danger" icon="pi pi-trash" @click="confirmDeleteItem(slotProps.data)" />
+          <Button
+            v-if="isAuthenticated"
+            class="btn btn--danger"
+            icon="pi pi-trash"
+            @click="confirmDeleteItem(slotProps.data)"
+          />
         </div>
       </template>
     </Column>
@@ -87,55 +118,145 @@
     <Column :exportable="false">
       <template #body="slotProps">
         <div class="flex flex-row gap-2">
-          <Button v-if="isFromEditor" class="p-button-sm p-button p-mr-2" :label="$t('Select')" @click="returnToEditor(slotProps.data)" />
+          <Button
+            v-if="isFromEditor"
+            class="p-button-sm p-button p-mr-2"
+            :label="$t('Select')"
+            @click="returnToEditor(slotProps.data)"
+          />
         </div>
       </template>
     </Column>
   </BaseTable>
 
-  <Dialog v-model:visible="dialog" :header="$t('New folder')" :modal="true" :style="{ width: '450px' }" class="p-fluid">
+  <Dialog
+    v-model:visible="dialog"
+    :header="$t('New folder')"
+    :modal="true"
+    :style="{ width: '450px' }"
+    class="p-fluid"
+  >
     <div class="p-field">
       <label for="title">{{ $t("Name") }}</label>
-      <InputText id="title" v-model.trim="item.title" :class="{ 'p-invalid': submitted && !item.title }" autocomplete="off" autofocus required="true" />
-      <small v-if="submitted && !item.title" class="p-error">{{ $t("Title is required") }}</small>
+      <InputText
+        id="title"
+        v-model.trim="item.title"
+        :class="{ 'p-invalid': submitted && !item.title }"
+        autocomplete="off"
+        autofocus
+        required="true"
+      />
+      <small
+        v-if="submitted && !item.title"
+        class="p-error"
+        >{{ $t("Title is required") }}</small
+      >
     </div>
     <template #footer>
-      <Button class="p-button-text" icon="pi pi-times" :label="$t('Cancel')" @click="hideDialog" />
-      <Button class="p-button-text" icon="pi pi-check" :label="$t('Save')" @click="saveItem" />
+      <Button
+        class="p-button-text"
+        icon="pi pi-times"
+        :label="$t('Cancel')"
+        @click="hideDialog"
+      />
+      <Button
+        class="p-button-text"
+        icon="pi pi-check"
+        :label="$t('Save')"
+        @click="saveItem"
+      />
     </template>
   </Dialog>
 
-  <Dialog v-model:visible="deleteDialog" :modal="true" :style="{ width: '450px' }" :header="$t('Confirm')">
+  <Dialog
+    v-model:visible="deleteDialog"
+    :modal="true"
+    :style="{ width: '450px' }"
+    :header="$t('Confirm')"
+  >
     <div class="confirmation-content">
-      <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem"></i>
-      <span>{{ $t('Are you sure you want to delete') }} <b>{{ itemToDelete?.title }}</b>?</span>
+      <i
+        class="pi pi-exclamation-triangle p-mr-3"
+        style="font-size: 2rem"
+      ></i>
+      <span>{{ $t("Are you sure you want to delete {0}?", [itemToDelete?.title]) }}</span>
     </div>
     <template #footer>
-      <Button class="p-button-text" icon="pi pi-times" :label="$t('No')" @click="deleteDialog = false" />
-      <Button class="p-button-text" icon="pi pi-check" :label="$t('Yes')" @click="deleteItemButton" />
+      <Button
+        class="p-button-text"
+        icon="pi pi-times"
+        :label="$t('No')"
+        @click="deleteDialog = false"
+      />
+      <Button
+        class="p-button-text"
+        icon="pi pi-check"
+        :label="$t('Yes')"
+        @click="deleteItemButton"
+      />
     </template>
   </Dialog>
 
-  <Dialog v-model:visible="deleteMultipleDialog" :modal="true" :style="{ width: '450px' }" :header="$t('Confirm')">
+  <Dialog
+    v-model:visible="deleteMultipleDialog"
+    :modal="true"
+    :style="{ width: '450px' }"
+    :header="$t('Confirm')"
+  >
     <div class="confirmation-content">
-      <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem" />
-      <span v-if="item">{{ $t('Are you sure you want to delete the selected items?') }}</span>
+      <i
+        class="pi pi-exclamation-triangle p-mr-3"
+        style="font-size: 2rem"
+      />
+      <span v-if="item">{{ $t("Are you sure you want to delete the selected items?") }}</span>
     </div>
     <template #footer>
-      <Button class="p-button-text" icon="pi pi-times" :label="$t('No')" @click="deleteMultipleDialog = false" />
-      <Button class="p-button-text" icon="pi pi-check" :label="$t('Yes')" @click="deleteMultipleItems" />
+      <Button
+        class="p-button-text"
+        icon="pi pi-times"
+        :label="$t('No')"
+        @click="deleteMultipleDialog = false"
+      />
+      <Button
+        class="p-button-text"
+        icon="pi pi-check"
+        :label="$t('Yes')"
+        @click="deleteMultipleItems"
+      />
     </template>
   </Dialog>
 
-  <Dialog v-model:visible="detailsDialogVisible" :header="selectedItem.title || $t('Item details')" :modal="true" :style="{ width: '50%' }">
+  <Dialog
+    v-model:visible="detailsDialogVisible"
+    :header="selectedItem.title || $t('Item details')"
+    :modal="true"
+    :style="{ width: '50%' }"
+  >
     <div v-if="Object.keys(selectedItem).length > 0">
-      <p><strong>{{ $t('Title') }}:</strong> {{ selectedItem.resourceNode.title }}</p>
-      <p><strong>{{ $t('Modified') }}:</strong> {{ relativeDatetime(selectedItem.resourceNode.updatedAt) }}</p>
-      <p><strong>{{ $t('Size') }}:</strong> {{ prettyBytes(selectedItem.resourceNode.firstResourceFile.size) }}</p>
-      <p><strong>{{ $t('URL') }}:</strong> <a :href="selectedItem.contentUrl" target="_blank">{{ $t('Open file') }}</a></p>
+      <p>
+        <strong>{{ $t("Title") }}:</strong> {{ selectedItem.resourceNode.title }}
+      </p>
+      <p>
+        <strong>{{ $t("Modified") }}:</strong> {{ relativeDatetime(selectedItem.resourceNode.updatedAt) }}
+      </p>
+      <p>
+        <strong>{{ $t("Size") }}:</strong> {{ prettyBytes(selectedItem.resourceNode.firstResourceFile.size) }}
+      </p>
+      <p>
+        <strong>{{ $t("URL") }}:</strong>
+        <a
+          :href="selectedItem.contentUrl"
+          target="_blank"
+          >{{ $t("Open file") }}</a
+        >
+      </p>
     </div>
     <template #footer>
-      <Button class="p-button-text" :label="$t('Close')" @click="closeDetailsDialog" />
+      <Button
+        class="p-button-text"
+        :label="$t('Close')"
+        @click="closeDetailsDialog"
+      />
     </template>
   </Dialog>
   <Dialog
@@ -147,7 +268,7 @@
     @hide="refreshList"
   >
     <Upload
-      :key="'upload-'+String(filters['resourceNode.parent'])+'-'+String(uploadDialogVisible)"
+      :key="'upload-' + String(filters['resourceNode.parent']) + '-' + String(uploadDialogVisible)"
       embedded
       :parent-resource-node-id="filters['resourceNode.parent']"
       :filetype="'file'"
@@ -155,7 +276,12 @@
       @cancel="closeUploadDialog"
     />
     <template #footer>
-      <Button class="p-button-text" icon="pi pi-times" :label="$t('Cancel')" @click="closeUploadDialog" />
+      <Button
+        class="p-button-text"
+        icon="pi pi-times"
+        :label="$t('Cancel')"
+        @click="closeUploadDialog"
+      />
     </template>
   </Dialog>
 </template>

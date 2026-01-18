@@ -1,6 +1,5 @@
 export default {
   path: "/catalogue",
-  meta: { requiresAdmin: true, requiresSessionAdmin: true },
   component: () => import("../components/layout/SimpleRouterViewLayout.vue"),
   children: [
     {

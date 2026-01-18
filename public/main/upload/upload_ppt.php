@@ -22,26 +22,6 @@ if (isset($_POST['convert'])) {
         )) {
             require_once api_get_path(SYS_CODE_PATH).'lp/lp_upload.php';
             if (isset($o_ppt) && 0 != $first_item_id) {
-                if ('true' == api_get_setting('search_enabled')) {
-                    $specific_fields = get_specific_field_list();
-                    foreach ($specific_fields as $specific_field) {
-                        $values = explode(',', trim($_POST[$specific_field['code']]));
-                        if (!empty($values)) {
-                            foreach ($values as $value) {
-                                $value = trim($value);
-                                if (!empty($value)) {
-                                    add_specific_field_value(
-                                        $specific_field['id'],
-                                        api_get_course_id(),
-                                        TOOL_LEARNPATH,
-                                        $o_ppt->lp_id,
-                                        $value
-                                    );
-                                }
-                            }
-                        }
-                    }
-                }
                 header('Location: ../lp/lp_controller.php?'.api_get_cidreq().'&lp_id='.$o_ppt->lp_id.'&action=view_item&id='.$first_item_id);
                 exit;
             } else {

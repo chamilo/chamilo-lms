@@ -77,8 +77,9 @@ class CourseMaintenanceController extends AbstractController
             return $this->json(['error' => 'Invalid upload'], 400);
         }
 
-        $maxBytes = 1024 * 1024 * 512;
-        if ($file->getSize() > $maxBytes) {
+        $maxBytes = self::getPhpUploadLimitBytes();
+        $fileSize = (int) ($file->getSize() ?? 0);
+        if ($maxBytes > 0 && $fileSize > $maxBytes) {
             return $this->json(['error' => 'File too large'], 413);
         }
 
@@ -4120,5 +4121,66 @@ class CourseMaintenanceController extends AbstractController
             $allowed,
             $courseForThis
         );
+    }
+
+    private static function getPhpUploadLimitBytes(): int
+    {
+        // Use the strictest PHP limit (min of upload_max_filesize and post_max_size).
+        $limits = [];
+
+        $u = \ini_get('upload_max_filesize');
+        if (\is_string($u)) {
+            $limits[] = self::iniSizeToBytes($u);
+        }
+
+        $p = \ini_get('post_max_size');
+        if (\is_string($p)) {
+            $limits[] = self::iniSizeToBytes($p);
+        }
+
+        // Keep only positive limits. If both are 0, treat as "no limit".
+        $limits = array_values(array_filter($limits, static fn (int $v): bool => $v > 0));
+
+        return empty($limits) ? 0 : min($limits);
+    }
+
+    private static function iniSizeToBytes(string $val): int
+    {
+        // Parses values like "2G", "512M", "900K", "1048576".
+        $val = trim($val);
+        if ('' === $val) {
+            return 0;
+        }
+        if ('0' === $val) {
+            return 0; // "no limit" for upload/post.
+        }
+
+        if (!preg_match('/^([0-9]+(?:\.[0-9]+)?)\s*([kmgt])?b?$/i', $val, $m)) {
+            return (int) $val;
+        }
+
+        $num = (float) $m[1];
+        $unit = strtolower((string) ($m[2] ?? ''));
+
+        switch ($unit) {
+            case 't':
+                $num *= 1024;
+
+                // no break
+            case 'g':
+                $num *= 1024;
+
+                // no break
+            case 'm':
+                $num *= 1024;
+
+                // no break
+            case 'k':
+                $num *= 1024;
+
+                break;
+        }
+
+        return (int) round($num);
     }
 }

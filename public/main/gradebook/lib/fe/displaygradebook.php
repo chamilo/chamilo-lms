@@ -18,6 +18,25 @@ class DisplayGradebook
      */
     public static function display_header_result($evalobj, $selectcat, $page)
     {
+        $injectAnchorClasses = static function (string $html, string $classes): string {
+            if (false === strpos($html, '<a ')) {
+                return $html;
+            }
+
+            // If anchor already has class="", append.
+            if (preg_match('/<a\\b[^>]*\\bclass=(["\'])(.*?)\\1/i', $html)) {
+                return preg_replace(
+                    '/<a\\b([^>]*?)\\bclass=(["\'])(.*?)\\2/i',
+                    '<a$1class=$2$3 '.$classes.'$2',
+                    $html,
+                    1
+                );
+            }
+
+            // Otherwise inject new class=""
+            return preg_replace('/<a\\b/i', '<a class="'.$classes.'"', $html, 1);
+        };
+
         $links = [];
         if (api_is_allowed_to_edit(null, true)) {
             if ('statistics' !== $page) {
@@ -26,58 +45,79 @@ class DisplayGradebook
                     .'</a>';
                 if ('view_result' === $page) {
                     if (!empty($evalobj->getCourseId()) && !$evalobj->has_results()) {
-                        $links[] = '<a href="gradebook_add_result.php?'.api_get_cidreq().'&selectcat='.$selectcat.'&selecteval='.$evalobj->get_id().'">
-    				'.Display::getMdiIcon(ActionIcon::GRADE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Grade learners')).'</a>';
+                        $links[] = '<a href="gradebook_add_result.php?'.api_get_cidreq().'&selectcat='.$selectcat.'&selecteval='.$evalobj->get_id().'">'.
+                            Display::getMdiIcon(ActionIcon::GRADE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Grade learners')).
+                            '</a>';
                     }
 
                     if (api_is_platform_admin() || false == $evalobj->is_locked()) {
                         $links[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'&import=">'.
-                            Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import marks')).'</a>';
+                            Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import marks')).
+                            '</a>';
                     }
 
                     if ($evalobj->has_results()) {
                         $links[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'&export=">'.
-                            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('PDF Report')).'</a>';
+                            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('PDF Report')).
+                            '</a>';
 
                         if (api_is_platform_admin() || false == $evalobj->is_locked()) {
                             $links[] = '<a href="gradebook_edit_result.php?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'">'.
-                                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Grade learners')).'</a>';
+                                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Grade learners')).
+                                '</a>';
+
                             $links[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'&deleteall=" onclick="return confirmationall();">'.
-                                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete marks')).'</a>';
+                                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete marks')).
+                                '</a>';
                         }
                     }
+
                     $links[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&print=&selecteval='.$evalobj->get_id().'" target="_blank">'.
-                        Display::getMdiIcon(ActionIcon::PRINT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Print')).'</a>';
+                        Display::getMdiIcon(ActionIcon::PRINT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Print')).
+                        '</a>';
                 }
             } else {
-                $links[] = '<a href="gradebook_view_result.php?'.api_get_cidreq().'&selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.
-                    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assessment home')).'</a>';
+                $links[] = '<a href="gradebook_view_result.php?'.api_get_cidreq().'&selecteval='.Security::remove_XSS($_GET['selecteval']).'">'.
+                    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assessment home')).
+                    '</a>';
             }
         }
 
+        // Add "Graphical view" link (teacher only)
+        if ('statistics' != $page) {
+            if (api_is_allowed_to_edit(null, true)) {
+                $links[] = '<a href="gradebook_statistics.php?'.api_get_cidreq().'&selecteval='.Security::remove_XSS($_GET['selecteval']).'">'.
+                    Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Graphical view')).
+                    '</a>';
+            }
+        }
+
+        // Compute average / student score blocks using legacy logic.
         $scoredisplay = ScoreDisplay::instance();
-        $student_score = '';
-        $average = '';
+        $averageDisplay = null;
+        $studentScoreHtml = '';
+        $model = null;
+
         if ($evalobj->has_results()) {
-            // TODO this check needed ?
             $score = $evalobj->calc_score();
             if (null != $score) {
                 $model = ExerciseLib::getCourseScoreModel();
                 if (empty($model)) {
-                    $average = get_lang('Average').' :<b> '.$scoredisplay->display_score($score, SCORE_AVERAGE).'</b>';
+                    $averageDisplay = $scoredisplay->display_score($score, SCORE_AVERAGE);
+
                     $student_score = $evalobj->calc_score(api_get_user_id());
-                    $student_score = Display::tag(
-                        'h3',
-                        get_lang('Score').': '.$scoredisplay->display_score($student_score, SCORE_DIV_PERCENT)
+                    $studentScoreHtml = Display::tag(
+                        'div',
+                        get_lang('Score').': '.$scoredisplay->display_score($student_score, SCORE_DIV_PERCENT),
+                        ['class' => 'mt-3 text-sm text-gray-700']
                     );
 
                     $allowMultipleAttempts = ('true' === api_get_setting('gradebook.gradebook_multiple_evaluation_attempts'));
                     if ($allowMultipleAttempts) {
                         $results = Result::load(null, api_get_user_id(), $evalobj->get_id());
                         if (!empty($results)) {
-                            /** @var Result $resultData */
                             foreach ($results as $resultData) {
-                                $student_score .= ResultTable::getResultAttemptTable($resultData);
+                                $studentScoreHtml .= ResultTable::getResultAttemptTable($resultData);
                             }
                         }
                     }
@@ -85,40 +125,69 @@ class DisplayGradebook
             }
         }
 
-        $description = '';
+        // Description line
+        $descriptionValue = '';
         if ('' == !$evalobj->get_description()) {
-            $description = get_lang('Description').' :<b> '.$evalobj->get_description().'</b><br>';
+            $descriptionValue = $evalobj->get_description();
         }
 
-        if (!empty($evalobj->getCourseId())) {
-            $course = get_lang('Independent from course');
+        $courseId = (int) $evalobj->getCourseId();
+        if (empty($courseId)) {
+            $courseTitle = get_lang('Independent from course');
         } else {
-            $course = api_get_course_info_by_id($evalobj->getCourseId())['title'];
+            $courseInfo = api_get_course_info_by_id($courseId);
+            $courseTitle = !empty($courseInfo['title']) ? $courseInfo['title'] : get_lang('Unknown course');
+        }
+        $wrapStart = '<div class="px-4">';
+        $wrapEnd = '</div>';
+
+        // Toolbar
+        $buttonClasses = 'inline-flex items-center justify-center w-10 h-10 rounded-xl border border-gray-25 bg-white text-gray-700 hover:bg-gray-10 shadow-sm';
+        $linksStyled = [];
+        foreach ($links as $linkHtml) {
+            $linksStyled[] = $injectAnchorClasses($linkHtml, $buttonClasses);
         }
 
-        $evalinfo = '<h2>'.$evalobj->get_name().'</h2><hr>';
-        $evalinfo .= $description;
-        $evalinfo .= get_lang('Course').' :<b> '.$course.'</b><br />';
+        echo $wrapStart;
+        echo '<div class="mt-2 flex flex-wrap items-center gap-2">'.implode('', $linksStyled).'</div>';
+
+        // Info card
+        echo '<div class="mt-4 bg-white border border-gray-25 rounded-2xl shadow-sm overflow-hidden">';
+        echo '  <div class="p-6">';
+        echo '    <div class="flex items-start justify-between gap-4">';
+        echo '      <div class="min-w-0">';
+        echo '        <h1 class="text-2xl font-semibold text-gray-900">'.Security::remove_XSS($evalobj->get_name()).'</h1>';
+        echo '        <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-sm text-gray-700">';
+
+        if (!empty($descriptionValue)) {
+            echo '          <div><span class="font-medium text-gray-900">'.get_lang('Description').':</span> '.Security::remove_XSS($descriptionValue).'</div>';
+        }
+        echo '          <div><span class="font-medium text-gray-900">'.get_lang('Course').':</span> '.Security::remove_XSS($courseTitle).'</div>';
+
         if (empty($model)) {
-            $evalinfo .= get_lang('Maximum score').' :<b> '.$evalobj->get_max().'</b><br>'.$average;
-        }
-
-        if (!api_is_allowed_to_edit()) {
-            $evalinfo .= $student_score;
-        }
-
-        if (!$evalobj->has_results()) {
-            $evalinfo .= '<br /><i>'.get_lang('No results in evaluation for now').'</i>';
-        }
-        if ('statistics' != $page) {
-            if (api_is_allowed_to_edit(null, true)) {
-                $links[] = '<a href="gradebook_statistics.php?'.api_get_cidreq().'&selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.
-                    Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Graphical view')).'</a>';
+            echo '          <div><span class="font-medium text-gray-900">'.get_lang('Maximum score').':</span> '.Security::remove_XSS((string) $evalobj->get_max()).'</div>';
+            if (null !== $averageDisplay) {
+                echo '      <div><span class="font-medium text-gray-900">'.get_lang('Average').':</span> '.$averageDisplay.'</div>';
             }
         }
 
-        echo Display::toolbarGradeAction($links);
-        echo $evalinfo;
+        echo '        </div>';
+
+        if (!$evalobj->has_results()) {
+            echo '      <div class="mt-3 text-sm text-gray-500 italic">'.get_lang('No results in evaluation for now').'</div>';
+        }
+
+        if (!api_is_allowed_to_edit()) {
+            // Student view: show personal score
+            echo $studentScoreHtml;
+        }
+
+        echo '      </div>';
+        echo '    </div>';
+        echo '  </div>';
+        echo '</div>';
+
+        echo $wrapEnd;
     }
 
     /**

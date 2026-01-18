@@ -64,7 +64,7 @@ class Version20250927180002 extends AbstractMigrationChamilo
 
             $comment->setParent($resourceParent);
 
-            $resourceNode = $portfolioRepo->addResourceNode(
+            $resourceNode = $commentRepo->addResourceNode(
                 $comment,
                 $author,
                 $resourceParent,

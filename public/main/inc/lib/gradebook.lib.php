@@ -43,32 +43,64 @@ class Gradebook extends Model
     {
         $name = 'gradebook';
         $table = Database::get_main_table(TABLE_MAIN_SETTINGS);
-        $sql = "SELECT * from $table
-                WHERE variable='course_hide_tools' AND subkey='$name'
-                LIMIT 1";
+        $sql = "SELECT * FROM $table
+            WHERE variable='course_hide_tools' AND subkey='$name'
+            LIMIT 1";
         $result = Database::query($sql);
         $setting = Database::store_result($result);
-        $setting = isset($setting[0]) ? $setting[0] : null;
-        $setting = $setting ? $setting : [];
-        $inactive = isset($setting['selected_value']) && 'true' == $setting['selected_value'];
+        $setting = $setting[0] ?? [];
+        $inactive = isset($setting['selected_value']) && 'true' === $setting['selected_value'];
 
         if ($inactive) {
             return false;
         }
 
-        $c_id = $c_id ? intval($c_id) : api_get_course_int_id();
-        $table = Database::get_course_table(TABLE_TOOL_LIST);
-        $sql = "SELECT * from $table
-                WHERE c_id = $c_id and title = '$name'
-                LIMIT 1";
+        $c_id = $c_id ? (int) $c_id : api_get_course_int_id();
+        $toolTable = Database::get_course_table(TABLE_TOOL_LIST);
+        $sql = "SELECT resource_node_id, session_id
+            FROM $toolTable
+            WHERE c_id = $c_id AND title = '$name'
+            LIMIT 1";
         $result = Database::query($sql);
         $item = Database::store_result($result, 'ASSOC');
-        $item = isset($item[0]) ? $item[0] : null;
+        $item = $item[0] ?? null;
         if (empty($item)) {
             return true;
         }
 
-        return '1' == $item['visibility'];
+        $nodeId = (int) ($item['resource_node_id'] ?? 0);
+        if ($nodeId <= 0) {
+            return true;
+        }
+
+        // Visibility is now stored in resource_link.visibility
+        $rlTable = Database::get_main_table('resource_link');
+        $sessionId = $item['session_id'] ?? null;
+
+        $sessionCondition = empty($sessionId)
+            ? "session_id IS NULL"
+            : "session_id = ".((int) $sessionId);
+
+        $sql = "SELECT visibility
+            FROM $rlTable
+            WHERE resource_node_id = $nodeId
+              AND c_id = $c_id
+              AND $sessionCondition
+              AND user_id IS NULL
+              AND usergroup_id IS NULL
+              AND group_id IS NULL
+              AND deleted_at IS NULL
+            ORDER BY id DESC
+            LIMIT 1";
+        $result = Database::query($sql);
+        $link = Database::store_result($result, 'ASSOC');
+        $link = $link[0] ?? null;
+
+        if (empty($link) || !isset($link['visibility'])) {
+            return true;
+        }
+
+        return (int) $link['visibility'] === 2;
     }
 
     public function get_all(array $options = []): array
@@ -172,7 +204,7 @@ class Gradebook extends Model
         $skills = $skill->get_all();
         $clean_skill_list = [];
         foreach ($skills as $skill) {
-            $clean_skill_list[$skill['id']] = $skill['name'];
+            $clean_skill_list[$skill['id']] = $skill['title'];
         }
         $form->addSelect(
             'skill',

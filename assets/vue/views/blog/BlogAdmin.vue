@@ -17,7 +17,7 @@
             :label="t('Search')"
             label-position="invisible"
             class="search-input"
-            :placeholder="t('Search projects…')"
+            :placeholder="t('Search for projects...')"
           />
           <BaseButton
             type="primary"
@@ -168,7 +168,7 @@
       <span>{{ t("Access denied") }}</span>
     </div>
     <div class="text-sm">
-      {{ t("You need to be a course admin or teacher to manage projects.") }}
+      {{ t("You need to be a admin or teacher to manage projects.") }}
     </div>
   </div>
 </template>

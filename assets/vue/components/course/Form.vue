@@ -1,5 +1,8 @@
 <template>
-  <div class="course-form-container">
+  <form
+    class="course-form-container"
+    @submit.prevent="submitForm"
+  >
     <div class="form-header">
       <BaseInputText
         id="course-name"
@@ -10,7 +13,8 @@
         :label="t('Course name')"
         required
       />
-      <BaseAdvancedSettingsButton v-model="showAdvancedSettings"></BaseAdvancedSettingsButton>
+
+      <BaseAdvancedSettingsButton v-model="showAdvancedSettings" />
     </div>
     <div
       v-if="showAdvancedSettings"
@@ -34,33 +38,21 @@
         validation-message="Only letters (a-z) and numbers (0-9) are allowed."
       />
       <BaseSelect
+        id="language-dropdowns"
         v-model="courseLanguage"
         :label="t('Language')"
         :options="languageOptions"
-        id="language-dropdowns"
         name="language"
         option-label="name"
         option-value="id"
       />
-      <BaseCheckbox
-        id="demo-content"
-        v-model="fillDemoContent"
-        :label="t('Fill with demo content')"
-        name=""
-      />
-      <!--BaseAutocomplete
-        id="template"
-        v-model="courseTemplate"
-        :label="t('Course template')"
-        :search="searchTemplates"
-      /-->
     </div>
     <!-- Form Footer -->
     <div class="form-footer">
       <BaseButton
+        :label="t('Back')"
         class="mr-4"
         icon="back"
-        :label="t('Back')"
         type="secondary"
         @click="goBack"
       />
@@ -68,18 +60,17 @@
         :label="t('Create this course')"
         icon="plus"
         type="primary"
-        @click="submitForm"
+        :is-submit="true"
       />
     </div>
-  </div>
+  </form>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue"
+import { onMounted, ref, nextTick } from "vue"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
-import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useRouter } from "vue-router"
 import courseService from "../../services/courseService"
@@ -87,12 +78,25 @@ import languageService from "../../services/languageService"
 import BaseMultiSelect from "../basecomponents/BaseMultiSelect.vue"
 import { useI18n } from "vue-i18n"
 
-const { t } = useI18n()
+const props = defineProps({
+  values: {
+    type: Object,
+    default: () => ({}),
+  },
+  errors: {
+    type: [Array, Object, null],
+    default: null,
+  },
+})
+
+const emit = defineEmits(["submit"])
+
+const { t, locale } = useI18n()
+
 const courseName = ref("")
 const courseCategory = ref([])
 const courseCode = ref("")
 const courseLanguage = ref(null)
-const fillDemoContent = ref(false)
 const courseTemplate = ref(null)
 const showAdvancedSettings = ref(false)
 const router = useRouter()
@@ -107,7 +111,38 @@ const isCourseNameInvalid = ref(false)
 
 const formSubmitted = ref(false)
 
-const emit = defineEmits(["submit"])
+function normalizeLocale(value) {
+  return String(value || "")
+    .trim()
+    .replace("-", "_")
+    .toLowerCase()
+}
+
+function resolveDefaultLanguageId(options, desiredLocale) {
+  // Options are { name, id } where id is language.isocode (e.g. "en", "fr", "es")
+  const desired = normalizeLocale(desiredLocale)
+  const base = desired.split("_")[0] // e.g. "en_US" -> "en"
+
+  const byExact = options.find((opt) => normalizeLocale(opt.id) === desired)
+  if (byExact) return byExact.id
+
+  const byBase = options.find((opt) => normalizeLocale(opt.id) === base)
+  if (byBase) return byBase.id
+
+  return null
+}
+
+function applyDefaultLanguageIfEmpty() {
+  if (courseLanguage.value) return
+  if (!languageOptions.value || languageOptions.value.length === 0) return
+
+  const desired = props.values?.language || locale.value
+  const resolvedId = resolveDefaultLanguageId(languageOptions.value, desired)
+
+  if (resolvedId) {
+    courseLanguage.value = resolvedId
+  }
+}
 
 const validateCourseCode = () => {
   const pattern = /^[a-zA-Z0-9]*$/
@@ -116,6 +151,8 @@ const validateCourseCode = () => {
     courseCodeError.value = "Only letters (a-z) and numbers (0-9) are allowed."
     return false
   }
+
+  isCodeInvalid.value = false
   courseCodeError.value = ""
   return true
 }
@@ -128,6 +165,9 @@ const submitForm = () => {
     return
   }
 
+  isCourseNameInvalid.value = false
+  courseNameError.value = ""
+
   if (!validateCourseCode()) {
     return
   }
@@ -138,11 +178,34 @@ const submitForm = () => {
     code: courseCode.value,
     language: courseLanguage.value,
     template: courseTemplate.value ? courseTemplate.value.value : null,
-    fillDemoContent: fillDemoContent.value,
+    fillDemoContent: false,
   })
 }
 
+const focusCourseNameField = async () => {
+  // Focus the first meaningful field as soon as the component is mounted.
+  // BaseInputText may render different DOM structures, so we try multiple selectors.
+  await nextTick()
+
+  const candidates = [
+    "#course-name", // if id is applied to an <input>
+    "#course-name input", // if id is on a wrapper and the input is inside
+    'input[id="course-name"]',
+    'input[name="course-name"]',
+  ]
+
+  for (const selector of candidates) {
+    const el = document.querySelector(selector)
+    if (el && typeof el.focus === "function") {
+      el.focus()
+      return
+    }
+  }
+}
+
 onMounted(async () => {
+  await focusCourseNameField()
+
   try {
     const categoriesResponse = await courseService.getCategories("categories")
     categoryOptions.value = categoriesResponse.map((category) => ({
@@ -156,19 +219,13 @@ onMounted(async () => {
       name: language.originalName,
       id: language.isocode,
     }))
+    // Apply default language after options are loaded
+    applyDefaultLanguageIfEmpty()
   } catch (error) {
+    // Keep messages in English
     console.error("Failed to load dropdown data", error)
   }
 })
-
-const searchTemplates = async (query) => {
-  if (query && query.length >= 3) {
-    return courseService.searchTemplates(query)
-  } else {
-    return []
-  }
-}
-
 const goBack = () => {
   router.go(-1)
 }

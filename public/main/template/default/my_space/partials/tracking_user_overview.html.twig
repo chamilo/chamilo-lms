@@ -1,97 +1,188 @@
 {% autoescape false %}
-<div class="summary-height">
-    <div class="summary">
-        <div class="summary-body">
-            <div id="summary-user-{{ item.id }}" class="summary-item">
-                <div class="icon">
-                    <img src="{{ item.avatar }}" class="img-circle">
-                </div>
-                <div class="user">
-                    <a title="{{ item.complete_name }}"
-                       href="/main/social/profile.php?u={{ item.id }}"
-                       class="name">
-                        {{ item.complete_name }}
-                    </a>
-                    <div class="username">{{ item.username }}</div>
-                </div>
-                <div class="summary-course">
-                    {% if item.course %}
-                    {% for course in item.course %}
-                        <div id="course-{{ course.real_id }}" class="course-item">
-                            <div class="course-info">
-                                <h5>
-                                    <a title="{{ 'Course'|get_lang }} - {{ course.title }}"
-                                       href="{{ '/main/my_space/myStudents.php?details=true&course=' ~ course.code ~ '&origin=tracking_course&id_session=0&student=' ~ item.id }}"
-                                       target="_blank"
+    <div class="summary-height mt-4">
+        <div class="summary">
+            <div class="summary-body">
+                <div id="summary-user-{{ item.id }}" class="summary-item">
+                    <article class="rounded-2xl border border-gray-200 bg-white shadow-sm p-4 md:p-6 space-y-4">
+
+                        <header class="flex items-center gap-4">
+                            <div class="flex-shrink-0">
+                                <img
+                                        src="{{ item.avatar }}"
+                                        alt="{{ item.complete_name }}"
+                                        class="h-14 w-14 rounded-full border border-gray-200 object-cover"
+                                >
+                            </div>
+
+                            <div class="flex flex-col gap-1">
+                                <a
+                                        title="{{ item.complete_name }}"
+                                        href="/main/social/profile.php?u={{ item.id }}"
+                                        class="text-sm md:text-base font-semibold text-gray-900 hover:text-sky-600"
+                                >
+                                    {{ item.complete_name }}
+                                </a>
+                                <div class="text-xs text-gray-500">@{{ item.username }}</div>
+                            </div>
+                        </header>
+
+                        <section class="space-y-3">
+                            {% if item.course %}
+                                {% for course in item.course %}
+                                    <div
+                                            id="course-{{ course.real_id }}"
+                                            class="rounded-xl border border-gray-100 bg-gray-20 p-3 md:p-4 space-y-3"
                                     >
-                                        {{ course.title }}
-                                    </a>
-                                </h5>
-                                <span class="code">{{ course.code }}</span>
-                            </div>
-                            <div class="box time-spent" data-toggle="tooltip" data-placement="top"
-                                 title="{{ 'Time spent in the course'|get_lang }}">
-                                 {{ 'alarm' | mdi_icon }}
-                                 {{ course.time_spent }}
-                            </div>
-                            <div class="box" data-toggle="tooltip" data-placement="top"
-                                 title="{{ 'Progress'|get_lang }}">
-                                <span class="kt-badge student-progress">
-                                    {{ course.student_progress }} %
-                                </span>
-                            </div>
-                            <div class="box" data-toggle="tooltip" data-placement="top"
-                                 title="{{ 'Average score in learning paths'|get_lang }}">
-                                <span class="kt-badge student-score">
-                                    {{ course.student_score }}
-                                </span>
-                            </div>
-                            <div class="box" data-toggle="tooltip" data-placement="top"
-                                 title="{{ 'Total number of messages'|get_lang }}">
-                                <span class="kt-badge student-message">
-                                    {{ course.student_message }}
-                                </span>
-                            </div>
-                            <div class="box" data-toggle="tooltip" data-placement="top"
-                                 title="{{ 'Total number of assignments'|get_lang }}">
-                                <span class="kt-badge student-assignments">
-                                    {{ course.student_assignments }}
-                                </span>
-                            </div>
-                            <div class="box">
-                                <span class="kt-badge student-exercises" data-toggle="tooltip"
-                                      data-placement="top"
-                                      title="{{ 'Total score obtained for tests'|get_lang }}">
-                                    {{ course.student_assignments }}
-                                </span>
-                            </div>
-                            <div class="box">
-                                <span class="kt-badge questions-answered" data-toggle="tooltip"
-                                      data-placement="top"
-                                      title="{{ 'Number of tests answered'|get_lang }}">
-                                    {{ course.questions_answered }}
-                                </span>
-                            </div>
-                            <div class="box box-date" data-toggle="tooltip"
-                                 data-placement="top"
-                                 title="{{ 'Latest login'|get_lang }}">
-                                {% if course.last_connection  %}
-                                <span class="kt-badge last-connection">
-                                     {{ course.last_connection }}
-                                </span>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endfor %}
-                    {% else %}
-                        <div class="alert alert-warning" role="alert">
-                            {{ 'No course available'|trans }}
-                        </div>
-                    {% endif %}
+                                        <div class="flex flex-wrap items-baseline justify-between gap-2">
+                                            <div class="space-y-0.5">
+                                                <h5 class="text-sm md:text-base font-semibold text-gray-900">
+                                                    <a
+                                                            title="{{ 'Course'|get_lang }} - {{ course.title }}"
+                                                            href="{{ '/main/my_space/myStudents.php?details=true&course='
+                                                            ~ course.code
+                                                            ~ '&origin=tracking_course&id_session=0&student='
+                                                            ~ item.id }}"
+                                                            target="_blank"
+                                                            class="hover:text-sky-600"
+                                                    >
+                                                        {{ course.title }}
+                                                    </a>
+                                                </h5>
+                                                <span class="text-xs text-gray-500">
+                                                {{ 'Wanted course code'|get_lang }}:
+                                                <span class="font-medium text-gray-700">{{ course.code }}</span>
+                                            </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="grid gap-3 md:grid-cols-3">
+                                            <div class="flex items-center justify-between gap-2 text-xs md:text-sm">
+                                                <div class="flex items-center gap-2">
+                                                <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-sky-50 text-sky-500">
+                                                    {{ 'alarm' | mdi_icon }}
+                                                </span>
+                                                    <span class="text-gray-600">
+                                                    {{ 'Time spent in the course'|get_lang }}
+                                                </span>
+                                                </div>
+                                                <span class="font-semibold text-gray-900">
+                                                {{ course.time_spent }}
+                                            </span>
+                                            </div>
+
+                                            <div class="flex items-center justify-between gap-2 text-xs md:text-sm">
+                                                <div class="flex items-center gap-2">
+                                                <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+                                                    <i class="mdi mdi-progress-check ch-tool-icon text-base" aria-hidden="true"></i>
+                                                </span>
+                                                    <span class="text-gray-600">
+                                                    {{ 'Progress'|get_lang }}
+                                                </span>
+                                                </div>
+                                                <span class="font-semibold text-gray-900">
+                                                {{ course.student_progress }} %
+                                            </span>
+                                            </div>
+
+                                            <div class="flex items-center justify-between gap-2 text-xs md:text-sm">
+                                                <div class="flex items-center gap-2">
+                                                <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-indigo-50 text-indigo-600">
+                                                    <i class="mdi mdi-star-outline ch-tool-icon text-base" aria-hidden="true"></i>
+                                                </span>
+                                                    <span class="text-gray-600">
+                                                    {{ 'Average score in learning paths'|get_lang }}
+                                                </span>
+                                                </div>
+                                                <span class="font-semibold text-gray-900">
+                                                {{ course.student_score }}
+                                            </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="grid gap-3 md:grid-cols-3">
+                                            <div class="flex items-center justify-between gap-2 text-xs md:text-sm">
+                                                <div class="flex items-center gap-2">
+                                                <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-50 text-slate-600">
+                                                    <i class="mdi mdi-comment-text-outline ch-tool-icon text-base" aria-hidden="true"></i>
+                                                </span>
+                                                    <span class="text-gray-600">
+                                                    {{ 'Total number of messages'|get_lang }}
+                                                </span>
+                                                </div>
+                                                <span class="font-semibold text-gray-900">
+                                                {{ course.student_message }}
+                                            </span>
+                                            </div>
+
+                                            <div class="flex items-center justify-between gap-2 text-xs md:text-sm">
+                                                <div class="flex items-center gap-2">
+                                                <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-50 text-slate-600">
+                                                    <i class="mdi mdi-pencil-outline ch-tool-icon text-base" aria-hidden="true"></i>
+                                                </span>
+                                                    <span class="text-gray-600">
+                                                    {{ 'Total number of assignments'|get_lang }}
+                                                </span>
+                                                </div>
+                                                <span class="font-semibold text-gray-900">
+                                                {{ course.student_assignments }}
+                                            </span>
+                                            </div>
+
+                                            <div class="flex items-center justify-between gap-2 text-xs md:text-sm">
+                                                <div class="flex items-center gap-2">
+                                                <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-50 text-slate-600">
+                                                    <i class="mdi mdi-file-document-outline ch-tool-icon text-base" aria-hidden="true"></i>
+                                                </span>
+                                                    <span class="text-gray-600">
+                                                    {{ 'Number of tests answered'|get_lang }}
+                                                </span>
+                                                </div>
+                                                <span class="font-semibold text-gray-900">
+                                                {{ course.questions_answered }}
+                                            </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="grid gap-3 md:grid-cols-2">
+                                            <div class="flex items-center justify-between gap-2 text-xs md:text-sm">
+                                                <div class="flex items-center gap-2">
+                                                <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-purple-50 text-purple-600">
+                                                    <i class="mdi mdi-chart-bar ch-tool-icon text-base" aria-hidden="true"></i>
+                                                </span>
+                                                    <span class="text-gray-600">
+                                                    {{ 'Total score obtained for tests'|get_lang }}
+                                                </span>
+                                                </div>
+                                                <span class="font-semibold text-gray-900">
+                                                {{ course.student_assignments }}
+                                            </span>
+                                            </div>
+
+                                            <div class="flex items-center justify-between gap-2 text-xs md:text-sm">
+                                                <div class="flex items-center gap-2">
+                                                <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-50 text-slate-600">
+                                                    <i class="mdi mdi-calendar-clock ch-tool-icon text-base" aria-hidden="true"></i>
+                                                </span>
+                                                    <span class="text-gray-600">
+                                                    {{ 'Latest login'|get_lang }}
+                                                </span>
+                                                </div>
+                                                <span class="font-semibold text-gray-900">
+                                                {{ course.last_connection ?: '-' }}
+                                            </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+                                    {{ 'No course available'|trans }}
+                                </div>
+                            {% endif %}
+                        </section>
+                    </article>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
 {% endautoescape %}

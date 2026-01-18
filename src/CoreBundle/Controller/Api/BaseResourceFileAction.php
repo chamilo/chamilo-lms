@@ -13,7 +13,9 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Helpers\CreateUploadedFileHelper;
+use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -34,6 +36,17 @@ class BaseResourceFileAction
     public static function setLinks(AbstractResource $resource, EntityManagerInterface $em): void
     {
         $resourceNode = $resource->getResourceNode();
+        if (null === $resourceNode) {
+            // Nothing to do if there is no resource node.
+            return;
+        }
+
+        /** @var ResourceNode|null $parentNode */
+        $parentNode = $resourceNode->getParent();
+
+        /** @var ResourceLinkRepository $resourceLinkRepo */
+        $resourceLinkRepo = $em->getRepository(ResourceLink::class);
+
         $links = $resource->getResourceLinkArray();
         if ($links) {
             $groupRepo = $em->getRepository(CGroup::class);
@@ -44,13 +57,19 @@ class BaseResourceFileAction
             foreach ($links as $link) {
                 $resourceLink = new ResourceLink();
                 $linkSet = false;
+
+                $course = null;
+                $session = null;
+                $group = null;
+                $user = null;
+
                 if (isset($link['cid']) && !empty($link['cid'])) {
                     $course = $courseRepo->find($link['cid']);
                     if (null !== $course) {
                         $linkSet = true;
                         $resourceLink->setCourse($course);
                     } else {
-                        throw new InvalidArgumentException(\sprintf('Course #%s does not exists', $link['cid']));
+                        throw new InvalidArgumentException(\sprintf('Course #%s does not exist', $link['cid']));
                     }
                 }
 
@@ -60,7 +79,7 @@ class BaseResourceFileAction
                         $linkSet = true;
                         $resourceLink->setSession($session);
                     } else {
-                        throw new InvalidArgumentException(\sprintf('Session #%s does not exists', $link['sid']));
+                        throw new InvalidArgumentException(\sprintf('Session #%s does not exist', $link['sid']));
                     }
                 }
 
@@ -70,7 +89,7 @@ class BaseResourceFileAction
                         $linkSet = true;
                         $resourceLink->setGroup($group);
                     } else {
-                        throw new InvalidArgumentException(\sprintf('Group #%s does not exists', $link['gid']));
+                        throw new InvalidArgumentException(\sprintf('Group #%s does not exist', $link['gid']));
                     }
                 }
 
@@ -80,7 +99,7 @@ class BaseResourceFileAction
                         $linkSet = true;
                         $resourceLink->setUser($user);
                     } else {
-                        throw new InvalidArgumentException(\sprintf('User #%s does not exists', $link['uid']));
+                        throw new InvalidArgumentException(\sprintf('User #%s does not exist', $link['uid']));
                     }
                 }
 
@@ -91,10 +110,28 @@ class BaseResourceFileAction
                 }
 
                 if ($linkSet) {
+                    // Attach the node to the link.
+                    $resourceLink->setResourceNode($resourceNode);
+
+                    // If the resource has a parent node, try to resolve the parent link
+                    // in the same context so we can maintain a context-aware hierarchy.
+                    if ($parentNode instanceof ResourceNode) {
+                        $parentLink = $resourceLinkRepo->findParentLinkForContext(
+                            $parentNode,
+                            $course,
+                            $session,
+                            $group,
+                            null,
+                            $user
+                        );
+
+                        if (null !== $parentLink) {
+                            $resourceLink->setParent($parentLink);
+                        }
+                    }
+
                     $em->persist($resourceLink);
                     $resourceNode->addResourceLink($resourceLink);
-                    // $em->persist($resourceNode);
-                    // $em->persist($resource->getResourceNode());
                 }
             }
         }
@@ -102,30 +139,8 @@ class BaseResourceFileAction
         // Use by Chamilo not api platform.
         $links = $resource->getResourceLinkEntityList();
         if ($links) {
-            // error_log('$resource->getResourceLinkEntityList()');
             foreach ($links as $link) {
-                /*$rights = [];
-                 * switch ($link->getVisibility()) {
-                 * case ResourceLink::VISIBILITY_PENDING:
-                 * case ResourceLink::VISIBILITY_DRAFT:
-                 * $editorMask = ResourceNodeVoter::getEditorMask();
-                 * $resourceRight = new ResourceRight();
-                 * $resourceRight
-                 * ->setMask($editorMask)
-                 * ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
-                 * ;
-                 * $rights[] = $resourceRight;
-                 * break;
-                 * }
-                 * if (!empty($rights)) {
-                 * foreach ($rights as $right) {
-                 * $link->addResourceRight($right);
-                 * }
-                 * }*/
-                // error_log('link adding to node: '.$resource->getResourceNode()->getId());
-                // error_log('link with user : '.$link->getUser()->getUsername());
                 $resource->getResourceNode()->addResourceLink($link);
-
                 $em->persist($link);
             }
         }
@@ -141,7 +156,8 @@ class BaseResourceFileAction
         if (!empty($contentData)) {
             $contentData = json_decode($contentData, true);
             $title = $contentData['title'] ?? '';
-            $parentResourceNodeId = (int) ($contentData['parentResourceNodeId'] ?? 0);
+            $rawParent = $contentData['parentResourceNodeId'] ?? 0;
+            $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
             $resourceLinkList = $contentData['resourceLinkList'] ?? [];
             if (empty($resourceLinkList)) {
                 $resourceLinkList = $contentData['resourceLinkListFromEntity'] ?? [];
@@ -149,7 +165,8 @@ class BaseResourceFileAction
         } else {
             $contentData = $request->request->all();
             $title = $request->get('title');
-            $parentResourceNodeId = (int) $request->get('parentResourceNodeId');
+            $rawParent = $request->get('parentResourceNodeId');
+            $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
             $resourceLinkList = $request->get('resourceLinkList', []);
             if (!empty($resourceLinkList)) {
                 $resourceLinkList = !str_contains($resourceLinkList, '[') ? json_decode('['.$resourceLinkList.']', true) : json_decode($resourceLinkList, true);
@@ -181,9 +198,6 @@ class BaseResourceFileAction
         return $contentData;
     }
 
-    /**
-     * Handles the creation logic for a student publication comment resource.
-     */
     public function handleCreateCommentRequest(
         AbstractResource $resource,
         ResourceRepository $resourceRepository,
@@ -193,7 +207,8 @@ class BaseResourceFileAction
         ?TranslatorInterface $translator = null
     ): array {
         $title = $request->get('comment', '');
-        $parentResourceNodeId = (int) $request->get('parentResourceNodeId');
+        $rawParent = $request->get('parentResourceNodeId');
+        $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
         $fileType = $request->get('filetype');
         $uploadedFile = null;
 
@@ -220,9 +235,6 @@ class BaseResourceFileAction
         ];
     }
 
-    /**
-     * Function loaded when creating a resource using the api, then the ResourceListener is executed.
-     */
     public function handleCreateFileRequest(
         AbstractResource $resource,
         ResourceRepository $resourceRepository,
@@ -237,13 +249,15 @@ class BaseResourceFileAction
             $contentData = json_decode($contentData, true);
             $title = $contentData['title'] ?? '';
             $comment = $contentData['comment'] ?? '';
-            $parentResourceNodeId = (int) ($contentData['parentResourceNodeId'] ?? 0);
+            $rawParent = $contentData['parentResourceNodeId'] ?? 0;
+            $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
             $fileType = $contentData['filetype'] ?? '';
             $resourceLinkList = $contentData['resourceLinkList'] ?? [];
         } else {
             $title = $request->get('title');
             $comment = $request->get('comment');
-            $parentResourceNodeId = (int) $request->get('parentResourceNodeId');
+            $rawParent = $request->get('parentResourceNodeId');
+            $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
             $fileType = $request->get('filetype');
             $resourceLinkList = $request->get('resourceLinkList', []);
             if (!empty($resourceLinkList)) {
@@ -274,7 +288,7 @@ class BaseResourceFileAction
                     $content = $request->request->get('contentFile');
                 }
                 $fileParsed = false;
-                // File upload.
+
                 if ($request->files->count() > 0) {
                     if (!$request->files->has('uploadFile')) {
                         throw new BadRequestHttpException('"uploadFile" is required');
@@ -288,14 +302,13 @@ class BaseResourceFileAction
                         throw new InvalidArgumentException('title is required');
                     }
 
-                    // Handle the appropriate action based on the fileExistsOption
                     if (!empty($fileExistsOption)) {
-                        // Check if a document with the same title and parent resource node already exists
                         $existingDocument = $resourceRepository->findByTitleAndParentResourceNode($title, $parentResourceNodeId);
                         if ($existingDocument) {
                             if ('overwrite' === $fileExistsOption) {
                                 $existingDocument->setTitle($title);
                                 $existingDocument->setComment($comment);
+                                $existingDocument->setFiletype($fileType);
 
                                 $resourceNode = $existingDocument->getResourceNode();
 
@@ -313,17 +326,15 @@ class BaseResourceFileAction
                                 $em->persist($existingDocument);
                                 $em->flush();
 
-                                // Return any data you need for further processing
                                 return [
                                     'title' => $title,
-                                    'filetype' => 'file',
+                                    'filetype' => $fileType,
                                     'comment' => $comment,
                                 ];
                             }
 
                             if ('rename' == $fileExistsOption) {
-                                // Perform actions when file exists and 'rename' option is selected
-                                $newTitle = $this->generateUniqueTitle($title); // Generate a unique title
+                                $newTitle = $this->generateUniqueTitle($title);
                                 $resource->setResourceName($newTitle);
                                 $resource->setUploadFile($uploadedFile);
                                 if (!empty($resourceLinkList)) {
@@ -332,18 +343,14 @@ class BaseResourceFileAction
                                 $em->persist($resource);
                                 $em->flush();
 
-                                // Return any data you need for further processing
                                 return [
                                     'title' => $newTitle,
-                                    'filetype' => 'file',
+                                    'filetype' => $fileType,
                                     'comment' => $comment,
                                 ];
                             }
 
                             if ('nothing' == $fileExistsOption) {
-                                // Perform actions when file exists and 'nothing' option is selected
-                                // Display a message indicating that the file already exists
-                                // or perform any other desired actions based on your application's requirements
                                 $resource->setResourceName($title);
                                 $flashBag = $request->getSession()->getFlashBag();
                                 $message = $translator ? $translator->trans('The operation is impossible, a file with this name already exists.') : 'Upload already exists';
@@ -361,7 +368,6 @@ class BaseResourceFileAction
                     }
                 }
 
-                // Get data in content and create a HTML file.
                 if (!$fileParsed && $content) {
                     $uploadedFile = CreateUploadedFileHelper::fromString($title.'.html', 'text/html', $content);
                     $resource->setUploadFile($uploadedFile);
@@ -378,12 +384,10 @@ class BaseResourceFileAction
                 break;
         }
 
-        // Set resource link list if exists.
         if (!empty($resourceLinkList)) {
             $resource->setResourceLinkArray($resourceLinkList);
         }
 
-        // Detect if file is a video
         $filetypeResult = $fileType;
 
         if (isset($uploadedFile) && $uploadedFile instanceof UploadedFile) {
@@ -401,17 +405,28 @@ class BaseResourceFileAction
         ];
     }
 
-    protected function handleCreateFileRequestUncompress(AbstractResource $resource, Request $request, EntityManager $em, KernelInterface $kernel): array
-    {
-        // Get the parameters from the request
-        $parentResourceNodeId = (int) $request->get('parentResourceNodeId');
+    protected function handleCreateFileRequestUncompress(
+        AbstractResource $resource,
+        Request $request,
+        EntityManager $em,
+        KernelInterface $kernel
+    ): array {
+        // Accept both numeric IDs and IRIs like /api/resource_nodes/{id}
+        $rawParent = $request->get('parentResourceNodeId');
+        $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
+
         $fileType = $request->get('filetype');
         $resourceLinkList = $request->get('resourceLinkList', []);
         if (!empty($resourceLinkList)) {
-            $resourceLinkList = !str_contains($resourceLinkList, '[') ? json_decode('['.$resourceLinkList.']', true) : json_decode($resourceLinkList, true);
-            if (empty($resourceLinkList)) {
-                $message = 'resourceLinkList is not a valid json. Use for example: [{"cid":1, "visibility":1}]';
+            // Keep backward compatibility: allow string JSON or array
+            if (\is_string($resourceLinkList)) {
+                $resourceLinkList = !str_contains($resourceLinkList, '[')
+                    ? json_decode('['.$resourceLinkList.']', true)
+                    : json_decode($resourceLinkList, true);
+            }
 
+            if (empty($resourceLinkList) || !\is_array($resourceLinkList)) {
+                $message = 'resourceLinkList is not a valid json. Use for example: [{"cid":1, "visibility":1}]';
                 throw new InvalidArgumentException($message);
             }
         }
@@ -424,7 +439,7 @@ class BaseResourceFileAction
             throw new Exception('parentResourceNodeId int value needed');
         }
 
-        if ('file' == $fileType && $request->files->count() > 0) {
+        if ('file' === $fileType && $request->files->count() > 0) {
             if (!$request->files->has('uploadFile')) {
                 throw new BadRequestHttpException('"uploadFile" is required');
             }
@@ -434,12 +449,22 @@ class BaseResourceFileAction
             $resource->setResourceName($resourceTitle);
             $resource->setUploadFile($uploadedFile);
 
-            if ('zip' === $uploadedFile->getClientOriginalExtension()) {
-                // Extract the files and subdirectories
+            // If it is a ZIP, extract and create documents/folders preserving the same links.
+            if ('zip' === strtolower((string) $uploadedFile->getClientOriginalExtension())) {
                 $extractedData = $this->extractZipFile($uploadedFile, $kernel);
                 $folderStructure = $extractedData['folderStructure'];
                 $extractPath = $extractedData['extractPath'];
-                $documents = $this->saveZipContentsAsDocuments($folderStructure, $em, $resourceLinkList, $parentResourceNodeId, '', $extractPath, $processedItems);
+
+                $processedItems = [];
+                $this->saveZipContentsAsDocuments(
+                    $folderStructure,
+                    $em,
+                    $resourceLinkList,
+                    $parentResourceNodeId,
+                    '',
+                    $extractPath,
+                    $processedItems
+                );
             }
         }
 
@@ -455,26 +480,44 @@ class BaseResourceFileAction
     {
         $contentData = $request->getContent();
         $resourceLinkList = [];
+        $parentResourceNodeId = 0;
+        $title = null;
+        $content = null;
+
         if (!empty($contentData)) {
             $contentData = json_decode($contentData, true);
-            if (isset($contentData['parentResourceNodeId']) && 1 === \count($contentData)) {
-                $parentResourceNodeId = (int) $contentData['parentResourceNodeId'];
+
+            if (isset($contentData['parentResourceNodeId'])) {
+                $parentResourceNodeId = (int) ($this->normalizeNodeId($contentData['parentResourceNodeId']) ?? 0);
             }
-            $title = $contentData['title'] ?? '';
-            $content = $contentData['contentFile'] ?? '';
+
+            $title = $contentData['title'] ?? null;
+            $content = $contentData['contentFile'] ?? null;
             $resourceLinkList = $contentData['resourceLinkListFromEntity'] ?? [];
         } else {
             $title = $request->get('title');
             $content = $request->request->get('contentFile');
+
+            // Keep compatibility with form requests
+            if ($request->query->has('parentResourceNodeId') || $request->request->has('parentResourceNodeId')) {
+                $rawParent = $request->get('parentResourceNodeId');
+                $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
+            }
         }
 
-        $repo->setResourceName($resource, $title);
+        // Only update the name when a title is explicitly provided.
+        if (null !== $title) {
+            $repo->setResourceName($resource, $title);
+        }
 
         $resourceNode = $resource->getResourceNode();
+        if (null === $resourceNode) {
+            return $resource;
+        }
+
         $hasFile = $resourceNode->hasResourceFile();
 
         if ($hasFile && !empty($content)) {
-            // The content is updated by the ResourceNodeListener.php
             $resourceNode->setContent($content);
             foreach ($resourceNode->getResourceFiles() as $resourceFile) {
                 $resourceFile->setSize(\strlen($content));
@@ -485,13 +528,14 @@ class BaseResourceFileAction
         $link = null;
         if (!empty($resourceLinkList)) {
             foreach ($resourceLinkList as $key => &$linkArray) {
-                // Find the exact link.
                 $linkId = $linkArray['id'] ?? 0;
                 if (!empty($linkId)) {
-                    /** @var ResourceLink $link */
-                    $link = $resourceNode->getResourceLinks()->filter(fn ($link) => $link->getId() === $linkId)->first();
+                    $candidate = $resourceNode->getResourceLinks()->filter(
+                        static fn ($l) => $l instanceof ResourceLink && $l->getId() === $linkId
+                    )->first();
 
-                    if (null !== $link) {
+                    if ($candidate instanceof ResourceLink) {
+                        $link = $candidate;
                         $link->setVisibility((int) $linkArray['visibility']);
                         unset($resourceLinkList[$key]);
 
@@ -505,21 +549,118 @@ class BaseResourceFileAction
         }
 
         $isRecursive = !$hasFile;
-        // If it's a folder then change the visibility to the children (That have the same link).
-        if ($isRecursive && null !== $link) {
+        if ($isRecursive && $link instanceof ResourceLink) {
             $repo->copyVisibilityToChildren($resource->getResourceNode(), $link);
         }
 
-        if (!empty($parentResourceNodeId)) {
+        if ($parentResourceNodeId > 0) {
             $parentResourceNode = $em->getRepository(ResourceNode::class)->find($parentResourceNodeId);
-            if ($parentResourceNode) {
+
+            if ($parentResourceNode instanceof ResourceNode) {
                 $resourceNode->setParent($parentResourceNode);
+            }
+
+            if ($resource instanceof CDocument) {
+                /** @var ResourceLinkRepository $linkRepo */
+                $linkRepo = $em->getRepository(ResourceLink::class);
+
+                $course = null;
+                $session = null;
+                $group = null;
+                $usergroup = null;
+                $user = null;
+
+                $courseId = $request->query->getInt('cid', 0);
+                $sessionId = $request->query->getInt('sid', 0);
+                $groupId = $request->query->getInt('gid', 0);
+                $userId = $request->query->getInt('uid', 0);
+                $usergroupId = $request->query->getInt('ugid', 0);
+
+                if ($courseId > 0) {
+                    $course = $em->getRepository(Course::class)->find($courseId);
+                }
+
+                if ($sessionId > 0) {
+                    $session = $em->getRepository(Session::class)->find($sessionId);
+                }
+
+                if ($groupId > 0) {
+                    $group = $em->getRepository(CGroup::class)->find($groupId);
+                }
+
+                if ($userId > 0) {
+                    $user = $em->getRepository(User::class)->find($userId);
+                }
+
+                if ($usergroupId > 0) {
+                    $usergroup = $em->getRepository(Usergroup::class)->find($usergroupId);
+                }
+
+                $parentLink = null;
+                if ($parentResourceNode instanceof ResourceNode) {
+                    $parentLink = $linkRepo->findParentLinkForContext(
+                        $parentResourceNode,
+                        $course,
+                        $session,
+                        $group,
+                        $usergroup,
+                        $user
+                    );
+                }
+
+                $currentLink = $linkRepo->findLinkForResourceInContext(
+                    $resource,
+                    $course,
+                    $session,
+                    $group,
+                    $usergroup,
+                    $user
+                );
+
+                if (null !== $currentLink) {
+                    $currentLink->setParent($parentLink);
+                    $em->persist($currentLink);
+                }
             }
         }
 
         $resourceNode->setUpdatedAt(new DateTime());
 
         return $resource;
+    }
+
+    private function normalizeNodeId(mixed $value): ?int
+    {
+        if (\is_int($value)) {
+            return $value;
+        }
+
+        if (\is_string($value)) {
+            $value = trim($value);
+
+            if ('' === $value) {
+                return null;
+            }
+
+            if (ctype_digit($value)) {
+                return (int) $value;
+            }
+
+            if (preg_match('#/api/resource_nodes/(\d+)#', $value, $m)) {
+                return (int) $m[1];
+            }
+        }
+
+        if (null === $value) {
+            return null;
+        }
+
+        // Last resort: if it is numeric-like
+        if (is_numeric($value)) {
+            return (int) $value;
+        }
+
+        return null;
     }
 
     private function saveZipContentsAsDocuments(array $folderStructure, EntityManager $em, $resourceLinkList = [], $parentResourceId = null, $currentPath = '', $extractPath = '', &$processedItems = []): array

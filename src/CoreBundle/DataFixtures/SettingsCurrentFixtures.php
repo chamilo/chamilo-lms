@@ -11,8 +11,66 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+
 class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
 {
+    /**
+     * Settings candidates that must be locked at URL-level (access_url_locked = 1),
+     * based on the task list.
+     */
+    private const ACCESS_URL_LOCKED_YES = [
+        'permissions_for_new_directories',
+        'permissions_for_new_files',
+        'course_creation_form_set_extra_fields_mandatory',
+        'access_url_specific_files',
+        'cron_remind_course_finished_activate',
+        'cron_remind_course_expiration_frequency',
+        'cron_remind_course_expiration_activate',
+        'donotlistcampus',
+        'server_type',
+        'chamilo_database_version',
+        'unoconv_binaries',
+        'session_admin_access_to_all_users_on_all_urls',
+        'split_users_upload_directory',
+        'multiple_url_hide_disabled_settings',
+        'login_is_email',
+        'proxy_settings',
+        'login_max_attempt_before_blocking_account',
+        'permanently_remove_deleted_files',
+        'allow_use_sub_language',
+    ];
+
+    /**
+     * Settings candidates explicitly mentioned as "no" in the task list.
+     * We set them to access_url_locked = 0, but only for this candidate list.
+     */
+    private const ACCESS_URL_LOCKED_NO = [
+        'drh_allow_access_to_all_students',
+        'ticket_allow_category_edition',
+        'max_anonymous_users',
+        'enable_x_sendfile_headers',
+        'mailer_dsn',
+        'allow_send_message_to_all_platform_users',
+        'message_max_upload_filesize',
+        'use_custom_pages',
+        'security_strict_transport',
+        'security_content_policy',
+        'security_content_policy_report_only',
+        'security_public_key_pins',
+        'security_public_key_pins_report_only',
+        'security_x_frame_options',
+        'security_xss_protection',
+        'security_x_content_type_options',
+        'security_referrer_policy',
+        'security_session_cookie_samesite_none',
+        'allow_session_admins_to_manage_all_sessions',
+        'prevent_session_admins_to_manage_all_users',
+        'session_admins_edit_courses_content',
+        'assignment_base_course_teacher_access_to_all_session',
+    ];
+
     public static function getGroups(): array
     {
         return ['settings-update'];
@@ -20,13 +78,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
 
     public function load(ObjectManager $manager): void
     {
+        $repo = $manager->getRepository(SettingsCurrent::class);
+
         $existingSettings = $this->flattenConfigurationSettings(self::getExistingSettings());
         $newConfigurationSettings = $this->flattenConfigurationSettings(self::getNewConfigurationSettings());
 
         $allConfigurations = array_merge($existingSettings, $newConfigurationSettings);
 
+        // Keep current behavior: update title/comment from configuration arrays.
         foreach ($allConfigurations as $settingData) {
-            $setting = $manager->getRepository(SettingsCurrent::class)->findOneBy(['variable' => $settingData['name']]);
+            $setting = $repo->findOneBy(['variable' => $settingData['name']]);
 
             if (!$setting) {
                 continue;
@@ -35,7 +96,43 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             $setting->setTitle($settingData['title']);
             $setting->setComment($settingData['comment']);
 
+            // Only set default value when current value is empty (do not override admins)
+            if (\array_key_exists('selected_value', $settingData)) {
+                $currentValue = $setting->getSelectedValue();
+                if (null === $currentValue || '' === $currentValue) {
+                    $setting->setSelectedValue((string) $settingData['selected_value']);
+                }
+            }
+
             $manager->persist($setting);
+        }
+
+        // Reset all task candidates to access_url_locked = 0 (deterministic baseline).
+        $candidates = array_values(array_unique(array_merge(
+            self::ACCESS_URL_LOCKED_YES,
+            self::ACCESS_URL_LOCKED_NO
+        )));
+
+        /** @var SettingsCurrent[] $candidateSettings */
+        $candidateSettings = $repo->findBy(['variable' => $candidates]);
+
+        // Index by variable to avoid extra queries.
+        $byVariable = [];
+        foreach ($candidateSettings as $setting) {
+            $byVariable[$setting->getVariable()] = $setting;
+
+            $setting->setAccessUrlLocked(0);
+            $manager->persist($setting);
+        }
+
+        // Apply access_url_locked = 1 for the explicit YES list.
+        foreach (self::ACCESS_URL_LOCKED_YES as $variable) {
+            if (!isset($byVariable[$variable])) {
+                continue;
+            }
+
+            $byVariable[$variable]->setAccessUrlLocked(1);
+            $manager->persist($byVariable[$variable]);
         }
 
         $manager->flush();
@@ -55,6 +152,17 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
 
     public static function getExistingSettings(): array
     {
+        // registration.redirect_after_login (default for new installations only)
+        $redirectAfterLoginDefault = json_encode([
+            'COURSEMANAGER' => 'courses',
+            'STUDENT' => 'courses',
+            'DRH' => '',
+            'SESSIONADMIN' => 'admin-dashboard',
+            'STUDENT_BOSS' => 'main/my_space/student.php',
+            'INVITEE' => 'courses',
+            'ADMIN' => 'admin',
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
         return [
             'profile' => [
                 [
@@ -483,6 +591,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'redirect_after_login',
                     'title' => 'Redirect after login (per profile)',
                     'comment' => 'Define redirection per profile after login using a JSON object like {"STUDENT":"", "ADMIN":"admin-dashboard"}',
+                    'selected_value' => $redirectAfterLoginDefault,
                 ],
                 [
                     'name' => 'allow_lostpassword',
@@ -687,11 +796,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Hide logout button',
                     'comment' => 'Hide the logout button. This is usually only interesting when using an external login/logout method, for example when using Single Sign On of some sort.',
                 ],
-                [
-                    'name' => 'icons_mode_svg',
-                    'title' => 'SVG icons mode',
-                    'comment' => 'By enabling this option, all icons that have an SVG version will prefer the SVG format to PNG. This will give a much better icons quality but some icons might still have some rendering size issue, and some browsers might not support it.',
-                ],
             ],
             'language' => [
                 [
@@ -765,11 +869,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'permissions_for_new_files',
                     'title' => 'Permissions for new files',
                     'comment' => 'The ability to define the permissions settings to assign to every newly-created file lets you improve security against attacks by hackers uploading dangerous content to your portal. The default setting (0550) should be enough to give your server a reasonable protection level. The given format uses the UNIX terminology of Owner-Group-Others with Read-Write-Execute permissions. If you use Oogie, take care that the user who launch LibreOffice can write files in the course folder.',
-                ],
-                [
-                    'name' => 'show_glossary_in_documents',
-                    'title' => 'Show glossary terms in documents',
-                    'comment' => 'From here you can configure how to add links to the glossary terms from the documents',
                 ],
                 [
                     'name' => 'upload_extensions_blacklist',
@@ -1153,6 +1252,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Show the history folder of chat conversations',
                     'comment' => 'This will show to theacher the folder that contains all sessions that have been made in the chat, the teacher can make them visible or not learners and use them as a resource',
                 ],
+                [
+                    'name' => 'save_private_conversations_in_documents',
+                    'title' => 'Save private conversations in documents',
+                    'comment' => 'If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy.',
+                ],
             ],
             'skill' => [
                 [
@@ -1250,7 +1354,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'If an exercise is visible in the base course then it appears invisible in the session. If an exercise is invisible in the base course then it does not appear in the session.',
                 ],
                 [
-                    'name' => 'exercise_max_ckeditors_in_page',
+                    'name' => 'exercise_max_editors_in_page',
                     'title' => 'Max editors in exercise result screen',
                     'comment' => 'Because of the sheer number of questions that might appear in an exercise, the correction screen, allowing the teacher to add comments to each answer, might be very slow to load. Set this number to 5 to ask the platform to only show WYSIWYG editors up to a certain number of answers on the screen. This will speed up the correction page loading time considerably, but will remove WYSIWYG editors and leave only a plain text editor.',
                 ],
@@ -1493,7 +1597,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             'catalog' => [
                 [
                     'name' => 'course_catalog_settings',
-                    'title' => 'Course Catalog Settings',
+                    'title' => 'Course catalogue settings',
                     'comment' => 'JSON configuration for course catalog: link settings, filters, sort options, and more.',
                 ],
                 [
@@ -1975,7 +2079,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'editor' => [
                 [
-                    'name' => 'ck_editor_block_image_copy_paste',
+                    'name' => 'editor_block_image_copy_paste',
                     'title' => 'Prevent copy-pasting images in WYSIWYG editor',
                     'comment' => 'Prevent the use of images copy-paste as base64 in the editor to avoid filling the database with images.',
                 ],
@@ -1995,7 +2099,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Enable image upload as file when doing a copy in the content or a drag and drop.',
                 ],
                 [
-                    'name' => 'full_ckeditor_toolbar_set',
+                    'name' => 'full_editor_toolbar_set',
                     'title' => 'Full WYSIWYG editor toolbar',
                     'comment' => 'Show the full toolbar in all WYSIWYG editor boxes around the platform.',
                 ],
@@ -3543,6 +3647,21 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'image_generator',
                     'title' => 'Image generator',
                     'comment' => 'Generates images based on prompts or content using AI.',
+                ],
+                [
+                    'name' => 'glossary_terms_generator',
+                    'title' => 'Glossary terms generator',
+                    'comment' => 'Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services).',
+                ],
+                [
+                    'name' => 'video_generator',
+                    'title' => 'Video generator',
+                    'comment' => 'Generates videos based on prompts or content using AI (this might consume many tokens).',
+                ],
+                [
+                    'name' => 'course_analyser',
+                    'title' => 'Course analyser',
+                    'comment' => 'Analyses all resources in one or many courses and pre-trains the AI model to answer any question on this or these courses (make sure content can be shared with the configured AI services).',
                 ],
                 [
                     'name' => 'disclose_ai_assistance',

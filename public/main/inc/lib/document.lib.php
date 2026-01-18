@@ -5,9 +5,11 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -541,172 +543,51 @@ class DocumentManager
             return [];
         }
 
-        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $groupIid = (int) $groupIid;
-        $courseId = $courseInfo['real_id'];
         $sessionId = api_get_session_id();
 
-        $folders = [];
-        $students = CourseManager::get_user_list_from_course_code(
-            $courseInfo['code'],
-            api_get_session_id()
+        /** @var Course|null $course */
+        $course = api_get_course_entity();
+        if (!$course instanceof Course) {
+            return [];
+        }
+
+        /** @var Session|null $session */
+        $session = null;
+        if (!empty($sessionId)) {
+            $session = Container::$container
+                ->get('doctrine')
+                ->getRepository(Session::class)
+                ->find($sessionId);
+        }
+
+        /** @var CGroup|null $group */
+        $group = null;
+        if (!empty($groupIid)) {
+            $group = Container::$container
+                ->get('doctrine')
+                ->getRepository(CGroup::class)
+                ->find($groupIid);
+        }
+
+        /** @var CDocumentRepository $docRepo */
+        $docRepo = Container::$container->get('doctrine')
+            ->getRepository(CDocument::class);
+
+        $folders = $docRepo->getAllFoldersForContext(
+            $course,
+            $session,
+            $group,
+            (bool) $can_see_invisible,
+            (bool) $getInvisibleList
         );
 
-        $conditionList = [];
-        if (!empty($students)) {
-            foreach ($students as $studentId => $studentInfo) {
-                $conditionList[] = '/shared_folder/sf_user_'.$studentInfo['user_id'];
-            }
-        }
-
-        $groupCondition = " l.group_id = $groupIid";
-        if (empty($groupIid)) {
-            $groupCondition = ' (l.group_id = 0 OR l.group_id IS NULL)';
-        }
-
-        $show_users_condition = '';
-        if ($can_see_invisible) {
-            $sessionId = $sessionId ?: api_get_session_id();
-            $condition_session = " AND (l.session_id = '$sessionId' OR (l.session_id = '0' OR l.session_id IS NULL) )";
-            $condition_session .= self::getSessionFolderFilters($path, $sessionId);
-
-            $sql = "SELECT DISTINCT docs.iid, n.path
-                    FROM resource_node AS n
-                    INNER JOIN $TABLE_DOCUMENT AS docs
-                    ON (docs.resource_node_id = n.id)
-                    INNER JOIN resource_link l
-                    ON (l.resource_node_id = n.id)
-                    WHERE
-                        l.c_id = $courseId AND
-                        docs.filetype = 'folder' AND
-                        $groupCondition AND
-                        n.path NOT LIKE '%shared_folder%' AND
-                        l.deleted_at IS NULL
-                        $condition_session ";
-
-            if (0 != $groupIid) {
-                $sql .= " AND n.path NOT LIKE '%shared_folder%' ";
-            } else {
-                $sql .= $show_users_condition;
-            }
-
-            $result = Database::query($sql);
-            if ($result && 0 != Database::num_rows($result)) {
-                while ($row = Database::fetch_assoc($result)) {
-                    if (self::is_folder_to_avoid($row['path'])) {
-                        continue;
-                    }
-
-                    if (false !== strpos($row['path'], '/shared_folder/')) {
-                        if (!in_array($row['path'], $conditionList)) {
-                            continue;
-                        }
-                    }
-
-                    $folders[$row['iid']] = $row['path'];
-                }
-
-                if (!empty($folders)) {
-                    natsort($folders);
-                }
-
-                return $folders;
-            }
-
-            return false;
-        } else {
-            // No invisible folders
-            // Condition for the session
-            $condition_session = api_get_session_condition(
-                $sessionId,
-                true,
-                false,
-                'docs.session_id'
-            );
-
-            $visibilityCondition = 'l.visibility = 1';
-            $fileType = "docs.filetype = 'folder' AND";
-            if ($getInvisibleList) {
-                $visibilityCondition = 'l.visibility = 0';
-                $fileType = '';
-            }
-
-            //get visible folders
-            $sql = "SELECT DISTINCT docs.id
-                    FROM resource_node AS n
-                    INNER JOIN $TABLE_DOCUMENT  AS docs
-                    ON (docs.resource_node_id = n.id)
-                    INNER JOIN resource_link l
-                    ON (l.resource_node_id = n.id)
-                    WHERE
-                        $fileType
-                        $groupCondition AND
-                        $visibilityCondition
-                        $show_users_condition
-                        $condition_session AND
-                        l.c_id = $courseId ";
-            $result = Database::query($sql);
-            $visibleFolders = [];
-            while ($row = Database::fetch_assoc($result)) {
-                $visibleFolders[$row['id']] = $row['path'];
-            }
-
-            if ($getInvisibleList) {
-                return $visibleFolders;
-            }
-
-            // get invisible folders
-            $sql = "SELECT DISTINCT docs.iid, n.path
-                    FROM resource_node AS n
-                    INNER JOIN $TABLE_DOCUMENT  AS docs
-                    ON (docs.resource_node_id = n.id)
-                    INNER JOIN resource_link l
-                    ON (l.resource_node_id = n.id)
-                    WHERE
-                        docs.filetype = 'folder' AND
-                        $groupCondition AND
-                        l.visibility IN ('".ResourceLink::VISIBILITY_PENDING."')
-                        $condition_session AND
-                        l.c_id = $courseId ";
-            $result = Database::query($sql);
-            $invisibleFolders = [];
-            while ($row = Database::fetch_assoc($result)) {
-                //get visible folders in the invisible ones -> they are invisible too
-                $sql = "SELECT DISTINCT docs.iid, n.path
-                        FROM resource_node AS n
-                        INNER JOIN $TABLE_DOCUMENT  AS docs
-                        ON (docs.resource_node_id = n.id)
-                        INNER JOIN resource_link l
-                        ON (l.resource_node_id = n.id)
-                        WHERE
-                            docs.filetype = 'folder' AND
-                            $groupCondition AND
-                            l.deleted_at IS NULL
-                            $condition_session AND
-                            l.c_id = $courseId ";
-                $folder_in_invisible_result = Database::query($sql);
-                while ($folders_in_invisible_folder = Database::fetch_assoc($folder_in_invisible_result)) {
-                    $invisibleFolders[$folders_in_invisible_folder['id']] = $folders_in_invisible_folder['path'];
-                }
-            }
-
-            // If both results are arrays -> //calculate the difference between the 2 arrays -> only visible folders are left :)
-            if (is_array($visibleFolders) && is_array($invisibleFolders)) {
-                $folders = array_diff($visibleFolders, $invisibleFolders);
-                natsort($folders);
-
-                return $folders;
-            }
-
-            if (is_array($visibleFolders)) {
-                natsort($visibleFolders);
-
-                return $visibleFolders;
-            }
-
-            // no visible folders found
+        if (empty($folders)) {
+            // Keep backward compatibility: some legacy callers expect "false"
+            // when there are no visible folders.
             return false;
         }
+
+        return $folders;
     }
 
     /**
@@ -2396,11 +2277,14 @@ class DocumentManager
      * @param   string  Course code
      * @param   int     Session ID (not used yet)
      * @param   string  Language of document's content (defaults to course language)
-     * @param   array   Array of specific fields (['code'=>'value',...])
+     * @param   array   Array of specific fields (['code'=>'value',...]) @deprecated Not used anymore in Chamilo 2
      * @param   string  What to do if the file already exists (default or overwrite)
      * @param   bool    When set to true, this runs the indexer without actually saving anything to any database
      *
      * @return bool Returns true on presumed success, false on failure
+     *
+     * @deprecated since Chamilo 2.0. Specific fields indexing is removed in Chamilo 2.
+     *             Use the Xapian indexers (e.g. Chamilo\CoreBundle\Search\Xapian\DocumentXapianIndexer / LpXapianIndexer).
      */
     public static function index_document(
         $docid,
@@ -2780,28 +2664,38 @@ class DocumentManager
             return false;
         }
 
+        $courseRealId = (int) ($courseData['real_id'] ?? 0);
+        $sessionId = (int) $sessionId;
+        $existingDefaultCertificateId = self::get_default_certificate_id($courseRealId, $sessionId);
+        if (!empty($existingDefaultCertificateId)) {
+            return $existingDefaultCertificateId;
+        }
+
         global $css, $img_dir, $default_course_dir, $js;
         $codePath = api_get_path(REL_CODE_PATH);
-        $imgPath = api_get_path(WEB_PATH).'img/';
+        $imgPath = api_get_path(WEB_PATH) . 'img/';
         $dir = '/certificates';
         $comment = null;
         $title = get_lang('Default certificate');
         $fileName = api_replace_dangerous_char($title);
         $fileType = 'certificate';
-        $templateContent = file_get_contents(api_get_path(SYS_CODE_PATH).'gradebook/certificate_template/template.html');
+        $templateContent = file_get_contents(
+            api_get_path(SYS_CODE_PATH) . 'gradebook/certificate_template/template.html'
+        );
 
         $search = ['{CSS}', '{IMG_DIR}', '{REL_CODE_PATH}', '{IMG_PATH}'];
-        $replace = [$css.$js, $img_dir, $codePath, $imgPath];
+        $replace = [$css . $js, $img_dir, $codePath, $imgPath];
 
         $fileContent = str_replace($search, $replace, $templateContent);
         $saveFilePath = "$dir/$fileName.html";
 
         if ($fromBaseCourse) {
-            $defaultCertificateId = self::get_default_certificate_id($courseData['real_id'], 0);
-            if (!empty($defaultCertificateId)) {
+            $baseDefaultCertificateId = self::get_default_certificate_id($courseRealId, 0);
+
+            if (!empty($baseDefaultCertificateId)) {
                 // We have a certificate from the course base
                 $documentData = self::get_document_data_by_id(
-                    $defaultCertificateId,
+                    $baseDefaultCertificateId,
                     $courseData['code'],
                     false,
                     0
@@ -2820,24 +2714,30 @@ class DocumentManager
             0,
             $title,
             $comment,
-            0, //$readonly = 0,
-            true, //$save_visibility = true,
-            null, //$group_id = null,
+            0,      // $readonly = 0
+            true,   // $save_visibility = true
+            null,   // $group_id = null
             $sessionId,
             0,
             false,
             $fileContent
         );
 
-        $defaultCertificateId = self::get_default_certificate_id($courseData['real_id'], $sessionId);
+        // Re-check and attach only if still missing (and the document was created).
+        $defaultCertificateId = self::get_default_certificate_id($courseRealId, $sessionId);
 
-        if (!isset($defaultCertificateId)) {
+        // ✅ Use empty() (not isset) to avoid wrong truthiness edge cases
+        if (empty($defaultCertificateId) && $document) {
             self::attach_gradebook_certificate(
-                $courseData['real_id'],
-                $document->getIid(),
+                $courseRealId,
+                (int) $document->getIid(),
                 $sessionId
             );
+
+            $defaultCertificateId = (int) $document->getIid();
         }
+
+        return $defaultCertificateId ?: false;
     }
 
     /**
@@ -3382,6 +3282,9 @@ This folder contains all sessions that have been opened in the chat. Although th
 
         // Document already exists
         if (null !== $document) {
+            // Keep the contextual tree consistent: set ResourceLink.parent when needed.
+            self::syncResourceLinkParentForContext($document, $parentResource, $courseEntity, $session, $group);
+
             return $document;
         }
 
@@ -3399,6 +3302,9 @@ This folder contains all sessions that have been opened in the chat. Although th
         $em = Database::getManager();
         $em->persist($document);
         $em->flush();
+
+        // Ensure contextual hierarchy (course/session/group) uses ResourceLink.parent.
+        self::syncResourceLinkParentForContext($document, $parentResource, $courseEntity, $session, $group);
 
         $repo = Container::getDocumentRepository();
         if (!empty($content)) {
@@ -3436,5 +3342,109 @@ This folder contains all sessions that have been opened in the chat. Although th
         }
 
         return false;
+    }
+
+    private static function syncResourceLinkParentForContext(
+        CDocument $child,
+                  $parentResource,
+                  $courseEntity,
+                  $session,
+                  $group
+    ): void {
+        // Only set a parent link when the parent is another document (folder).
+        if (!$parentResource instanceof CDocument) {
+            return; // Root items must keep rl.parent = NULL
+        }
+
+        if (!method_exists($child, 'getResourceNode') || !method_exists($parentResource, 'getResourceNode')) {
+            return;
+        }
+
+        $childNode = $child->getResourceNode();
+        $parentNode = $parentResource->getResourceNode();
+
+        if (!$childNode instanceof ResourceNode || !$parentNode instanceof ResourceNode) {
+            return;
+        }
+
+        try {
+            $em = Database::getManager();
+
+            $childLink = self::findResourceLinkForContext($em, $childNode, $courseEntity, $session, $group);
+            $parentLink = self::findResourceLinkForContext($em, $parentNode, $courseEntity, $session, $group);
+
+            if (!$childLink instanceof ResourceLink || !$parentLink instanceof ResourceLink) {
+                // If a link is missing, we don't hard-fail the import.
+                error_log('[IMPORT] ResourceLink not found for context when syncing parent.', [
+                    'childNodeId' => method_exists($childNode, 'getId') ? $childNode->getId() : null,
+                    'parentNodeId' => method_exists($parentNode, 'getId') ? $parentNode->getId() : null,
+                ]);
+
+                return;
+            }
+
+            $currentParent = method_exists($childLink, 'getParent') ? $childLink->getParent() : null;
+
+            // Avoid useless flushes
+            if ($currentParent && method_exists($currentParent, 'getId') && method_exists($parentLink, 'getId')) {
+                if ((int) $currentParent->getId() === (int) $parentLink->getId()) {
+                    return;
+                }
+            }
+
+            $childLink->setParent($parentLink);
+            $em->persist($childLink);
+            $em->flush();
+        } catch (\Throwable $e) {
+            error_log('[IMPORT] Failed to sync ResourceLink.parent for context: '.$e->getMessage());
+        }
+    }
+
+    private static function findResourceLinkForContext(
+        $em,
+        ResourceNode $node,
+        $courseEntity,
+        $session,
+        $group
+    ): ?ResourceLink {
+        try {
+            $qb = $em->createQueryBuilder()
+                ->select('rl')
+                ->from(ResourceLink::class, 'rl')
+                ->andWhere('rl.resourceNode = :node')
+                ->setParameter('node', $node);
+
+            // Course context
+            if ($courseEntity) {
+                $qb->andWhere('rl.course = :course')->setParameter('course', $courseEntity);
+            } else {
+                $qb->andWhere('rl.course IS NULL');
+            }
+
+            // Session context
+            if ($session) {
+                $qb->andWhere('rl.session = :session')->setParameter('session', $session);
+            } else {
+                $qb->andWhere('rl.session IS NULL');
+            }
+
+            // Group context
+            if ($group) {
+                $qb->andWhere('rl.group = :group')->setParameter('group', $group);
+            } else {
+                $qb->andWhere('rl.group IS NULL');
+            }
+
+            $qb->setMaxResults(1);
+
+            /** @var ResourceLink|null $link */
+            $link = $qb->getQuery()->getOneOrNullResult();
+
+            return $link;
+        } catch (\Throwable $e) {
+            error_log('[IMPORT] Failed to find ResourceLink for context: '.$e->getMessage());
+
+            return null;
+        }
     }
 }

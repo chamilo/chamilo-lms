@@ -134,7 +134,7 @@ if ('definenewsublanguage' === $requestAction) {
                 } catch (Exception $e) {
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message.'),
+                            get_lang('The var/translations directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message.'),
                             'error'
                         )
                     );

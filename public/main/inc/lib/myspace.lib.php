@@ -111,22 +111,36 @@ class MySpace
     public static function getTopMenu()
     {
         $menuItems = [];
+
+        // Always available: student's own progress
         $menuItems[] = Display::url(
             Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 32, get_lang('View my progress')),
             api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
         );
-        $menuItems[] = Display::url(
-            Display::getMdiIcon('human-male-board', 'ch-tool-icon', null, 32, get_lang('Trainer View')),
-            api_get_path(WEB_CODE_PATH).'my_space/index.php?view=teacher'
-        );
-        $menuItems[] = Display::url(
-            Display::getMdiIcon('star', 'ch-tool-icon', null, 32, get_lang('Admin view')),
-            '#'
-        );
-        $menuItems[] = Display::url(
-            Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, 32, get_lang('Exam tracking')),
-            api_get_path(WEB_CODE_PATH).'tracking/exams.php'
-        );
+
+        // Trainer view: only for course teachers / coaches
+        if (api_is_allowed_to_edit(null, true)) {
+            $menuItems[] = Display::url(
+                Display::getMdiIcon('human-male-board', 'ch-tool-icon', null, 32, get_lang('Trainer View')),
+                api_get_path(WEB_CODE_PATH).'my_space/index.php?view=teacher'
+            );
+        }
+
+        // Admin view: only for platform admins and DRH
+        if (api_is_platform_admin() || api_is_drh()) {
+            $menuItems[] = Display::url(
+                Display::getMdiIcon('star', 'ch-tool-icon', null, 32, get_lang('Admin view')),
+                api_get_path(WEB_CODE_PATH).'my_space/index.php?view=admin'
+            );
+        }
+
+        // Exam tracking
+        if (api_is_platform_admin() || api_is_drh() || api_is_allowed_to_edit(null, true)) {
+            $menuItems[] = Display::url(
+                Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, 32, get_lang('Exam tracking')),
+                api_get_path(WEB_CODE_PATH).'tracking/exams.php'
+            );
+        }
 
         return Display::toolbarAction('myspace', $menuItems);
     }
@@ -1422,26 +1436,26 @@ class MySpace
      */
     public static function display_tracking_course_overview()
     {
-        $params = ['view' => 'admin', 'display' => 'courseoverview'];
+        $params = ['view' => 'admin', 'display' => 'course'];
+
         $table = new SortableTable(
-            'tracking_session_overview',
+            'tracking_course_overview',
             ['MySpace', 'get_total_number_courses'],
             ['MySpace', 'get_course_data_tracking_overview'],
             1,
             20,
             'ASC',
-            null, [
+            null,
+            [
                 'class' => 'table table-transparent',
             ]
         );
+
         $table->additional_parameters = $params;
         $table->set_column_filter(0, ['MySpace', 'course_tracking_filter']);
-        $tableContent = $table->return_table();
-
-        $tpl = new Template('', false, false, false, false, false, false);
-        $tpl->assign('table', $tableContent);
-        $templateName = $tpl->get_template('my_space/course_summary.tpl');
-        $tpl->display($templateName);
+        echo '<div class="summary-legend">';
+        echo $table->return_table();
+        echo '</div>';
     }
 
     /**
@@ -1506,135 +1520,142 @@ class MySpace
      *
      * @return string html code
      */
-    public static function course_tracking_filter($course_code, $url_params, $row)
+    public static function course_tracking_filter($courseCode, $urlParams, $row)
     {
-        $courseId = $row[0];
-        $course = api_get_course_entity($courseId);
-        $courseCode = $course->getCode();
+        $course = api_get_course_entity($courseCode);
+
+        if (null === $course) {
+            return '';
+        }
+
+        $courseId = (int) $course->getId();
 
         $tpl = new Template('', false, false, false, false, false, false);
-        $data = null;
 
-        $time_spent = 0;
-        $progress = 0;
-        $nb_progress_lp = 0;
-        $score = 0;
-        $nb_score_lp = 0;
-        $nb_messages = 0;
-        $nb_assignments = 0;
-        $last_login_date = false;
-        $total_score_obtained = 0;
-        $total_score_possible = 0;
-        $total_questions_answered = 0;
+        $timeSpent              = 0;
+        $progressSum            = 0;
+        $progressCount          = 0;
+        $scoreSum               = 0;
+        $scoreCount             = 0;
+        $messagesCount          = 0;
+        $assignmentsCount       = 0;
+        $lastLoginRaw           = null;
+        $totalScoreObtained     = 0;
+        $totalScorePossible     = 0;
+        $totalQuestionsAnswered = 0;
 
-        $courseId = $course->getId();
-        $courseCode = $course->getCode();
         $courseRelUsers = $course->getUsers();
-        foreach ($courseRelUsers as $courseRelUser) {
-            $user = $courseRelUser->getUser();
-            $userId = $user->getId();
 
-            // get time spent in the course and session
-            $time_spent += Tracking::get_time_spent_on_the_course(
+        foreach ($courseRelUsers as $courseRelUser) {
+            $user   = $courseRelUser->getUser();
+            $userId = (int) $user->getId();
+
+            $timeSpent += Tracking::get_time_spent_on_the_course(
                 $userId,
                 $courseId
             );
-            $progress_tmp = Tracking::get_avg_student_progress(
+
+            $progressTmp = Tracking::get_avg_student_progress(
                 $userId,
                 $course,
                 [],
                 null,
                 true
             );
-            if ($progress_tmp) {
-                $progress += $progress_tmp[0];
-                $nb_progress_lp += $progress_tmp[1];
+
+            if (!empty($progressTmp)) {
+                $progressSum   += $progressTmp[0];
+                $progressCount += $progressTmp[1];
             }
-            $score_tmp = Tracking::get_avg_student_score(
+
+            $scoreTmp = Tracking::get_avg_student_score(
                 $userId,
                 $course,
                 [],
                 null,
                 true
             );
-            if (is_array($score_tmp)) {
-                $score += $score_tmp[0];
-                $nb_score_lp += $score_tmp[1];
+
+            if (is_array($scoreTmp) && !empty($scoreTmp)) {
+                $scoreSum   += $scoreTmp[0];
+                $scoreCount += $scoreTmp[1];
             }
 
-            //$nb_messages += Container::getForumPostRepository($user, $course);
-            //$nb_assignments += Container::getStudentPublicationRepository($user, $course);
-
-            $last_login_date_tmp = Tracking::get_last_connection_date_on_the_course(
+            $lastLoginTmp = Tracking::get_last_connection_date_on_the_course(
                 $userId,
                 ['real_id' => $courseId],
                 null,
                 false
             );
-            if (false != $last_login_date_tmp &&
-                false == $last_login_date
-            ) { // TODO: To be cleaned
-                $last_login_date = $last_login_date_tmp;
-            } elseif (false != $last_login_date_tmp && false != $last_login_date) {
-                // TODO: Repeated previous condition. To be cleaned.
-                // Find the max and assign it to first_login_date
-                if (strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
-                    $last_login_date = $last_login_date_tmp;
+
+            if (!empty($lastLoginTmp)) {
+                if (null === $lastLoginRaw ||
+                    strtotime((string) $lastLoginTmp) > strtotime((string) $lastLoginRaw)
+                ) {
+                    $lastLoginRaw = $lastLoginTmp;
                 }
             }
 
-            $exercise_results_tmp = self::exercises_results($userId, $courseCode);
-            $total_score_obtained += $exercise_results_tmp['score_obtained'];
-            $total_score_possible += $exercise_results_tmp['score_possible'];
-            $total_questions_answered += $exercise_results_tmp['questions_answered'];
+            $exerciseResults = self::exercises_results($userId, $courseCode);
+
+            $totalScoreObtained     += $exerciseResults['score_obtained'] ?? 0;
+            $totalScorePossible     += $exerciseResults['score_possible'] ?? 0;
+            $totalQuestionsAnswered += $exerciseResults['questions_answered'] ?? 0;
         }
-        if ($nb_progress_lp > 0) {
-            $avg_progress = round($progress / $nb_progress_lp, 2);
-        } else {
-            $avg_progress = 0;
-        }
-        if ($nb_score_lp > 0) {
-            $avg_score = round($score / $nb_score_lp, 2);
-        } else {
-            $avg_score = '-';
-        }
-        if ($last_login_date) {
-            $last_login_date = api_convert_and_format_date(
-                $last_login_date,
+
+        $avgProgress = $progressCount > 0
+            ? round($progressSum / $progressCount, 2)
+            : 0;
+
+        $avgScore = $scoreCount > 0
+            ? round($scoreSum / $scoreCount, 2)
+            : '-';
+
+        if (!empty($lastLoginRaw)) {
+            $lastLogin = api_convert_and_format_date(
+                $lastLoginRaw,
                 DATE_FORMAT_SHORT,
                 date_default_timezone_get()
             );
         } else {
-            $last_login_date = '-';
+            $lastLogin = '-';
         }
-        if ($total_score_possible > 0) {
-            $total_score_percentage = round($total_score_obtained / $total_score_possible * 100, 2);
+
+        if ($totalScorePossible > 0) {
+            $totalScorePercentage = round(
+                ($totalScoreObtained / $totalScorePossible) * 100,
+                2
+            );
+
+            $totalScore = sprintf(
+                '%d/%d (%s %%)',
+                $totalScoreObtained,
+                $totalScorePossible,
+                $totalScorePercentage
+            );
         } else {
-            $total_score_percentage = 0;
-        }
-        if ($total_score_percentage > 0) {
-            $total_score = $total_score_obtained.'/'.$total_score_possible.' ('.$total_score_percentage.' %)';
-        } else {
-            $total_score = '-';
+            $totalScore = '-';
         }
 
         $data = [
-            'time_spent' => api_time_to_hms($time_spent),
-            'avg_progress' => $avg_progress,
-            'avg_score' => $avg_score,
-            'number_message' => $nb_messages,
-            'number_assignments' => $nb_assignments,
-            'total_score' => $total_score,
-            'questions_answered' => $total_questions_answered,
-            'last_login' => $last_login_date,
+            'time_spent'         => api_time_to_hms($timeSpent),
+            'avg_progress'       => $avgProgress,
+            'avg_score'          => $avgScore,
+            'number_message'     => $messagesCount,
+            'number_assignments' => $assignmentsCount,
+            'total_score'        => $totalScore,
+            'questions_answered' => $totalQuestionsAnswered,
+            'last_login'         => $lastLogin,
         ];
 
         $tpl->assign('data', $data);
         $tpl->assign('course', $course);
+
         $layout = $tpl->get_template('my_space/partials/tracking_course_overview.html.twig');
 
         return $tpl->fetch($layout);
     }
+
 
     /**
      * This function exports the table that we see in display_tracking_course_overview().
@@ -1818,20 +1839,48 @@ class MySpace
      */
     public static function display_tracking_session_overview()
     {
-        $head = '<table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
+        // Build header for the "metrics" column (course + stats).
+        // We keep the inner table because session_tracking_filter expects it,
+        // but we use a specific class to style it cleanly with CSS.
+        $head  = '<table class="session-metrics-header" '
+            .'style="width:100%;border:0;padding:0;border-collapse:collapse;">';
         $head .= '<tr>';
-        $head .= '<th width="155px" style="border-left:0;border-bottom:0"><span>'.get_lang('Course').'</span></th>';
-        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('Time'), 6, true).'</span></th>';
-        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('Progress'), 6, true).'</span></th>';
-        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('Average score in learning paths'), 6, true).'</span></th>';
-        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('Total number of messages'), 6, true).'</span></th>';
-        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('Total number of assignments'), 6, true).'</span></th>';
-        $head .= '<th width="105px" style="border-bottom:0"><span>'.get_lang('Total score obtained for tests').'</span></th>';
-        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('Number of tests answered'), 6, true).'</span></th>';
-        $head .= '<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('Latest login').'</span></th>';
-        $head .= '</tr></table>';
+        // Course (left aligned).
+        $head .= '<th style="border-left:0;border-bottom:0;">'
+            .'<span>'.get_lang('Course').'</span></th>';
+        // Time spent.
+        $head .= '<th style="padding:0;border-bottom:0;">'
+            .'<span>'.get_lang('Time').'</span></th>';
+        // Progress.
+        $head .= '<th style="padding:0;border-bottom:0;">'
+            .'<span>'.get_lang('Progress').'</span></th>';
+        // Average score in learning paths.
+        $head .= '<th style="padding:0;border-bottom:0;">'
+            .'<span>'.get_lang('Average score in learning paths').'</span></th>';
+        // Total number of messages.
+        $head .= '<th style="padding:0;border-bottom:0;">'
+            .'<span>'.get_lang('Total number of messages').'</span></th>';
+        // Total number of assignments.
+        $head .= '<th style="padding:0;border-bottom:0;">'
+            .'<span>'.get_lang('Total number of assignments').'</span></th>';
+        // Total score obtained for tests.
+        $head .= '<th style="padding:0;border-bottom:0;">'
+            .'<span>'.get_lang('Total score obtained for tests').'</span></th>';
+        // Number of tests answered.
+        $head .= '<th style="padding:0;border-bottom:0;">'
+            .'<span>'.get_lang('Number of tests answered').'</span></th>';
+        // Latest login.
+        $head .= '<th style="padding:0;border-bottom:0;border-right:0;">'
+            .'<span>'.get_lang('Latest login').'</span></th>';
+        $head .= '</tr>';
+        $head .= '</table>';
 
-        $params = ['view' => 'admin', 'display' => 'sessionoverview'];
+        // Keep display=session so paging keeps the same view.
+        $params = [
+            'view'    => 'admin',
+            'display' => 'session',
+        ];
+
         $table = new SortableTable(
             'tracking_session_overview',
             ['MySpace', 'get_total_number_sessions'],
@@ -1840,24 +1889,39 @@ class MySpace
         );
         $table->additional_parameters = $params;
 
-        $table->set_header(0, '', false, null, ['style' => 'display: none']);
+        // Hidden internal id column.
+        $table->set_header(
+            0,
+            '',
+            false,
+            ['style' => 'display:none'],
+            ['style' => 'display:none']
+        );
+
+        // Session name column.
         $table->set_header(
             1,
             get_lang('Session'),
             true,
-            ['style' => 'font-size:8pt'],
-            ['style' => 'font-size:8pt']
+            ['style' => 'font-size:0.875rem;font-weight:600;'],
+            ['style' => 'font-size:0.875rem;']
         );
+
+        // Metrics block column (course + stats table).
         $table->set_header(
             2,
             $head,
             false,
-            ['style' => 'width:90%;border:0;padding:0;font-size:7.5pt;'],
-            ['style' => 'width:90%;padding:0;font-size:7.5pt;']
+            ['style' => 'width:90%;border:0;padding:0;'],
+            ['style' => 'width:90%;padding:0;']
         );
+
+        // Use existing filter to render metrics table per session.
         $table->set_column_filter(2, ['MySpace', 'session_tracking_filter']);
+
         $table->display();
     }
+
 
     /**
      * Get the total number of sessions.
@@ -1903,8 +1967,8 @@ class MySpace
             $list[] = [
                 '0' => $session['id'],
                 'col0' => $session['id'],
-                '1' => strip_tags($session['name']),
-                'col1' => strip_tags($session['name']),
+                '1' => strip_tags($session['title']),
+                'col1' => strip_tags($session['title']),
             ];
         }
 
@@ -2951,17 +3015,17 @@ class MySpace
         $addedto = '';
         if ($sendMail) {
             foreach ($users as $index => $user) {
-                $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('Your registration on').' '.api_get_setting('siteName');
+                $emailsubject = '['.api_get_setting('site_name').'] '.sprintf(get_lang('Your registration on %s'), api_get_setting('site_name'));
                 $emailbody = get_lang('Dear').' '.
                     api_get_person_name($user['First name'], $user['Last name']).",\n\n".
-                    get_lang('You are registered to')." ".api_get_setting('siteName')." ".get_lang('with the following settings:')."\n\n".
+                    get_lang('You are registered to')." ".api_get_setting('site_name')." ".get_lang('with the following settings:')."\n\n".
                     get_lang('Username')." : $user[UserName]\n".
                     get_lang('Pass')." : $user[Password]\n\n".
-                    get_lang('The address of')." ".api_get_setting('siteName')." ".get_lang('is')." : ".api_get_path(WEB_PATH)." \n\n".
+                    get_lang('The address of')." ".api_get_setting('site_name')." ".get_lang('is')." : ".api_get_path(WEB_PATH)." \n\n".
                     get_lang('In case of trouble, contact us.')."\n\n".
                     get_lang('Sincerely').",\n\n".
                     api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
-                    get_lang('Administrator')." ".api_get_setting('siteName')."\nT. ".
+                    get_lang('Administrator')." ".api_get_setting('site_name')."\nT. ".
                     api_get_setting('administratorTelephone')."\n".get_lang('E-mail')." : ".api_get_setting('emailAdministrator');
 
                 api_mail_html(
@@ -3858,5 +3922,147 @@ class MySpace
         }
 
         return $sql;
+    }
+
+    /**
+     * Render the admin reports navigation cards (common layout for tracking pages).
+     *
+     * @param string|null $activeDisplay            Report key used in ?display=... (admin_view)
+     * @param string|null $currentScript            Current PHP script name (e.g. "tc_report.php")
+     * @param bool        $includeCurrentReportNote Append the "Current report" helper text
+     *
+     * @return string
+     */
+    public static function renderAdminReportCardsSection(
+        ?string $activeDisplay = null,
+        ?string $currentScriptName = null,
+        bool $includeNote = false
+    ): string {
+        $actions = self::generateAdminActionLinks();
+        $currentReportLabel = null;
+
+        // If there is no display parameter we fall back to script-based matching.
+        $useScriptMatching = null === $activeDisplay;
+
+        if ($useScriptMatching && empty($currentScriptName)) {
+            $currentScriptName = basename($_SERVER['SCRIPT_NAME'] ?? '');
+        } else {
+            // Normalize in case a full path is passed.
+            $currentScriptName = basename((string) $currentScriptName);
+        }
+
+        $html = '';
+
+        $html .= '<section class="bg-white rounded-xl shadow-sm border border-gray-50 reporting-admin-list w-full">';
+        $html .= '  <div class="p-4 md:p-5 space-y-4">';
+        $html .= '    <h2 class="text-base md:text-lg font-semibold text-gray-800">'.get_lang('Available reports').'</h2>';
+        $html .= '    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">';
+
+        foreach ($actions as $action) {
+            $url       = $action['url'];
+            $labelHtml = $action['content'];
+            $labelText = strip_tags($labelHtml);
+
+            $parsedUrl   = parse_url($url);
+            $queryParams = [];
+            if (!empty($parsedUrl['query'])) {
+                parse_str($parsedUrl['query'], $queryParams);
+            }
+            $reportKey = $queryParams['display'] ?? null;
+
+            // -------- Active state detection --------
+            $isActive = false;
+
+            // 1) Classic admin_view.php (?display=...)
+            if (null !== $activeDisplay && null !== $reportKey && $reportKey === $activeDisplay) {
+                $isActive = true;
+                // 2) Fallback: match by script name (tc_report.php, bosses report, etc.)
+            } elseif (
+                $useScriptMatching &&
+                !empty($parsedUrl['path']) &&
+                !empty($currentScriptName) &&
+                str_contains($parsedUrl['path'], $currentScriptName)
+            ) {
+                $isActive = true;
+            }
+
+            if ($isActive) {
+                $currentReportLabel = $labelText;
+            }
+
+            // -------- Icon selection --------
+            $iconName = 'file-chart';
+            switch ($reportKey) {
+                case 'coaches':
+                    $iconName = 'account-tie';
+                    break;
+                case 'user':
+                    $iconName = 'account-multiple';
+                    break;
+                case 'session':
+                    $iconName = 'calendar-multiple';
+                    break;
+                case 'course':
+                    $iconName = 'book-open-page-variant';
+                    break;
+                case 'company':
+                    $iconName = 'office-building';
+                    break;
+                case 'learningPath':
+                    $iconName = 'timeline-text';
+                    break;
+                case 'learningPathByItem':
+                    $iconName = 'format-list-bulleted';
+                    break;
+                case 'accessoverview':
+                    $iconName = 'eye';
+                    break;
+                default:
+                    // Special icon for the general coach report without ?display=...
+                    if (!empty($parsedUrl['path']) && basename($parsedUrl['path']) === 'tc_report.php') {
+                        $iconName = 'account-group';
+                    } else {
+                        $iconName = 'file-chart';
+                    }
+            }
+
+            $cardClass = 'admin-report-card block rounded-xl border border-gray-50 bg-gray-20 '.
+                'hover:bg-white hover:border-sky-400 shadow-sm hover:shadow-md transition';
+            if ($isActive) {
+                $cardClass .= ' admin-report-card-active';
+            }
+
+            $html .= '      <a href="'.$url.'" class="'.$cardClass.'">';
+            $html .= '        <div class="flex items-center gap-3 p-3 md:p-4">';
+            $html .= '          <div class="flex-shrink-0">';
+            $html .=                Display::getMdiIcon(
+                $iconName,
+                'ch-tool-icon',
+                null,
+                32,
+                $labelText
+            );
+            $html .= '          </div>';
+            $html .= '          <div class="text-sm md:text-base text-gray-800">';
+            $html .=                $labelHtml;
+            $html .= '          </div>';
+            $html .= '        </div>';
+            $html .= '      </a>';
+        }
+
+        $html .= '    </div>';
+        $html .= '  </div>';
+        $html .= '</section>';
+
+        if ($includeNote && !empty($currentReportLabel)) {
+            $html .= '<div class="mt-2">';
+            $html .= '  <p class="text-sm text-gray-600">'.
+                get_lang('Current report').': <span class="font-semibold text-gray-900">'.
+                $currentReportLabel.
+                '</span></p>';
+            $html .= '</div>';
+        }
+
+        return $html;
     }
 }

@@ -276,7 +276,17 @@ if ($form->validate()) {
     $displayEndDate = $params['display_end_date'];
     $coachStartDate = $params['coach_access_start_date'] ?? $displayStartDate;
     $coachEndDate = $params['coach_access_end_date'];
-    $coachUsername = $params['coach_username'];
+    $coachUsername = $params['coach_username'] ?? [];
+
+    if (empty($coachUsername)) {
+        // Keep the historical default behavior: current user becomes the coach
+        $coachUsername = [api_get_user_id()];
+    }
+
+    if (!is_array($coachUsername)) {
+        $coachUsername = [$coachUsername];
+    }
+
     $id_session_category = (int) $params['session_category'];
     $id_visibility = $params['session_visibility'];
     $duration = $params['duration'] ?? null;
@@ -328,6 +338,9 @@ if ($form->validate()) {
     $lastRepetition = isset($params['last_repetition']) ? true : false;
     $daysBeforeFinishingToCreateNewRepetition = $params['days_before_finishing_to_create_new_repetition'] ?? null;
     $validityInDays = $params['validity_in_days'] ?? null;
+    if (is_null($coachUsername)) {
+        $coachUsername = [];
+    }
 
     $return = SessionManager::create_session(
         $title,

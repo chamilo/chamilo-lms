@@ -222,16 +222,16 @@ if ('true' === api_get_setting('allow_course_theme')) {
 $form->addElement('label', get_lang('Space available'), format_file_size(DocumentManager::get_course_quota()));
 
 $aiOptions = [
-    'learning_path_generator' => 'Enable Learning Path Generator',
-    'exercise_generator' => 'Enable Exercise Generator',
-    'open_answers_grader' => 'Enable Open Answers Grader',
-    'tutor_chatbot' => 'Enable Tutor Chatbot',
-    'task_grader' => 'Enable Task Grader',
-    'content_analyser' => 'Enable Content Analyser',
-    'image_generator' => 'Enable Image Generator',
-    'glossary_terms_generator' => 'Enable Gloss Terms Generator',
-    'video_generator' => 'Enable Video Generator',
-    'course_analyser' => 'Enable Course Analyser',
+    'learning_path_generator' => 'Enable learning path generator',
+    'exercise_generator' => 'Enable exercise generator',
+    'open_answers_grader' => 'Enable open answers grader',
+    'tutor_chatbot' => 'Enable tutor chatbot',
+    'task_grader' => 'Enable task grader',
+    'content_analyser' => 'Enable content analyser',
+    'image_generator' => 'Enable image generator',
+    'glossary_terms_generator' => 'Enable glossary terms generator',
+    'video_generator' => 'Enable video generator',
+    'course_analyser' => 'Enable course analyser',
 ];
 
 // This global "Save settings" button belongs to the main course settings block

@@ -10,12 +10,15 @@ use Chamilo\CoreBundle\Enums\StateIcon;
 require_once __DIR__.'/../global.inc.php';
 
 api_protect_course_script(true);
+$isAllowedToEdit = api_is_allowed_to_edit(null, true);
+// Close the session as we don't need it any further
+session_write_close();
 
 $action = $_REQUEST['a'];
 
 switch ($action) {
     case 'check_url':
-        if (api_is_allowed_to_edit(null, true)) {
+        if ($isAllowedToEdit) {
             $url = $_REQUEST['url'];
             $result = \Link::checkUrl($url);
 

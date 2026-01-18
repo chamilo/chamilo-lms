@@ -21,6 +21,8 @@ $table = '';
 
 switch ($action) {
     case 'get_user_registration_by_month':
+        // Close the session as we don't need it any further
+        session_write_close();
         $dateStart = Security::remove_XSS($_POST['date_start']);
         $dateEnd = Security::remove_XSS($_POST['date_end']);
 
@@ -36,6 +38,8 @@ switch ($action) {
         echo json_encode(['labels' => $labels, 'data' => $data]);
         exit;
     case 'get_user_registration_by_day':
+        // Close the session as we don't need it any further
+        session_write_close();
         $year = intval($_POST['year']);
         $month = intval($_POST['month']);
 
@@ -152,6 +156,8 @@ switch ($action) {
         echo json_encode($list);
         break;
     case 'recent_logins':
+        // Close the session as we don't need it any further
+        session_write_close();
         // Give a JSON array to the stats page main/admin/statistics/index.php
         // for global recent logins
         header('Content-type: application/json');
@@ -194,6 +200,8 @@ switch ($action) {
     case 'users':
     case 'users_teachers':
     case 'users_students':
+        // Close the session as we don't need it any further
+        session_write_close();
         // Give a JSON array to the stats page main/admin/statistics/index.php
         // for global tools usage (number of clicks)
         $list = [];
@@ -326,6 +334,8 @@ switch ($action) {
 
                 break;
             case 'status':
+                // Close the session as we don't need it any further
+                session_write_close();
                 $extraFieldValueUser = new ExtraField('user');
                 $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('statusocial');
 
@@ -369,6 +379,8 @@ switch ($action) {
 
                 break;
             case 'language':
+                // Close the session as we don't need it any further
+                session_write_close();
                 $languages = api_get_languages();
                 $all = [];
                 foreach ($languages['folder'] as $language) {
@@ -394,6 +406,8 @@ switch ($action) {
 
                 break;
             case 'language_cible':
+                // Close the session as we don't need it any further
+                session_write_close();
                 $extraFieldValueUser = new ExtraField('user');
                 $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('langue_cible');
 
@@ -433,6 +447,8 @@ switch ($action) {
                 break;
 
             case 'age':
+                // Close the session as we don't need it any further
+                session_write_close();
                 $extraFieldValueUser = new ExtraField('user');
                 $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('terms_datedenaissance');
 
@@ -490,6 +506,8 @@ switch ($action) {
                 break;
 
             case 'career':
+                // Close the session as we don't need it any further
+                session_write_close();
                 $extraFieldValueUser = new ExtraField('user');
                 $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('filiere_user');
 
@@ -529,6 +547,8 @@ switch ($action) {
                 break;
 
             case 'contract':
+                // Close the session as we don't need it any further
+                session_write_close();
                 $extraFieldValueUser = new ExtraField('user');
                 $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('termactivated');
 
@@ -561,6 +581,8 @@ switch ($action) {
                 $all[get_lang('No')] = $total - $count;
                 break;
             case 'certificate':
+                // Close the session as we don't need it any further
+                session_write_close();
                 $extraFieldValueUser = new ExtraField('user');
                 $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('langue_cible');
 
@@ -613,6 +635,8 @@ switch ($action) {
         break;
 
     case 'session_by_date':
+        // Close the session as we don't need it any further
+        session_write_close();
         $list = [];
         $palette = ChamiloHelper::getColorPalette(true, true);
 
@@ -698,6 +722,8 @@ switch ($action) {
                     }
                     $all[$language]++;
                 }
+                // Close the session as we don't need it any further
+                session_write_close();
                 $table = Statistics::buildJsChartData($all, '');
                 $table = $table['table'];
                 break;
@@ -759,6 +785,8 @@ switch ($action) {
         echo json_encode($list);
         break;
    case 'report_quarterly_users':
+        // Close the session as we don't need it any further
+       session_write_close();
         $currentQuarterDates = getQuarterDates();
         $pre1QuarterDates = getQuarterDates(
             date_create($currentQuarterDates['quarter_start'])
@@ -921,6 +949,8 @@ switch ($action) {
         echo Display::label(get_lang('*: Current quarter, incomplete data'), 'warning');
         break;
     case 'report_quarterly_courses':
+        // Close the session as we don't need it any further
+        session_write_close();
         $currentQuarterDates = getQuarterDates();
         $pre1QuarterDates = getQuarterDates(
             date_create($currentQuarterDates['quarter_start'])
@@ -1032,6 +1062,8 @@ switch ($action) {
         echo Display::label(get_lang('*: Current quarter, incomplete data'), 'warning');
         break;
     case 'report_quarterly_hours_of_training':
+        // Close the session as we don't need it any further
+        session_write_close();
         $currentQuarterDates = getQuarterDates();
         $pre1QuarterDates = getQuarterDates(
             date_create($currentQuarterDates['quarter_start'])
@@ -1115,6 +1147,8 @@ switch ($action) {
         echo Display::label(get_lang('*: Current quarter, incomplete data'), 'warning');
         break;
     case 'report_quarterly_number_of_certificates_generated':
+        // Close the session as we don't need it any further
+        session_write_close();
         $currentQuarterDates = getQuarterDates();
         $pre1QuarterDates = getQuarterDates(
             date_create($currentQuarterDates['quarter_start'])
@@ -1198,6 +1232,8 @@ switch ($action) {
         echo Display::label(get_lang('*: Current quarter, incomplete data'), 'warning');
         break;
     case "report_quarterly_sessions_by_duration":
+        // Close the session as we don't need it any further
+        session_write_close();
         $currentQuarterDates = getQuarterDates();
         $pre1QuarterDates = getQuarterDates(
             date_create($currentQuarterDates['quarter_start'])
@@ -1351,6 +1387,8 @@ switch ($action) {
         echo Display::label(get_lang('*: Current quarter, incomplete data'), 'warning');
         break;
     case "report_quarterly_courses_and_sessions":
+        // Close the session as we don't need it any further
+        session_write_close();
         // Make the headers for the tables
         $headers = [
             [
@@ -1394,6 +1432,8 @@ switch ($action) {
         echo Display::label(get_lang('*: All users, including inactive, are included'), 'warning');
         break;
     case "report_quarterly_total_disk_usage":
+        // Close the session as we don't need it any further
+        session_write_close();
         $accessUrlId = api_get_current_access_url_id();
         if (api_is_windows_os()) {
             $message = get_lang('The space used on disk cannot be measured properly on Windows-based systems.');

@@ -15,6 +15,8 @@ switch ($action) {
             exit;
         }
         if (api_is_allowed_to_edit(null, true)) {
+            // Close the session as we don't need it any further
+            session_write_close();
             $userId = $_REQUEST['user_id'] ?? 0;
             $gradeBookId = $_REQUEST['gradebook_id'] ?? 0;
             $comment = $_REQUEST['comment'] ?? '';
@@ -69,6 +71,8 @@ switch ($action) {
 
         $courseCode = api_get_course_id();
         $sessionId = api_get_session_id();
+        // Close the session as we don't need it any further
+        session_write_close();
 
         $commandScript = api_get_path(SYS_CODE_PATH).'gradebook/cli/export_all_certificates.php';
 
@@ -80,6 +84,9 @@ switch ($action) {
         $categoryId = (int) $_GET['cat_id'];
         $courseCode = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : api_get_course_id();
         $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : api_get_session_id();
+        // Close the session as we don't need it any further
+        session_write_close();
+
         $date = api_get_utc_datetime(null, false, true);
 
         $pdfName = 'certs_'.$courseCode.'_'.$sessionId.'_'.$categoryId.'_'.$date->format('Y-m-d');

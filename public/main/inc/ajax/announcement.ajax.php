@@ -61,6 +61,9 @@ switch ($action) {
                 }
             }
         }
+        $currentCourseId = api_get_course_int_id();
+        // Close the session as we don't need it any further
+        session_write_close();
 
         if (false === $allowToEdit) {
             exit;
@@ -137,7 +140,7 @@ switch ($action) {
         }
 
         if (isset($formParams['send_to_users_in_session']) && 1 == $formParams['send_to_users_in_session']) {
-            $sessionList = SessionManager::get_session_by_course(api_get_course_int_id());
+            $sessionList = SessionManager::get_session_by_course($currentCourseId);
 
             if (!empty($sessionList)) {
                 foreach ($sessionList as $sessionInfo) {
@@ -169,7 +172,7 @@ switch ($action) {
         }
 
         if (isset($formParams['send_me_a_copy_by_email']) && 1 == $formParams['send_me_a_copy_by_email']) {
-            $previewUsers[] = api_get_user_id();
+            $previewUsers[] = $currentUserId;
         }
 
         $previewUserNames = [];
@@ -205,12 +208,13 @@ switch ($action) {
             if (!empty($sessionId) && false == api_is_allowed_to_session_edit(false, true) && empty($groupId)) {
                 return false;
             }
+            $isSessionGeneralCoach = api_is_session_general_coach();
 
             $list = explode(',', $_REQUEST['id']);
 
             $repo = Container::getAnnouncementRepository();
             foreach ($list as $itemId) {
-                if (!api_is_session_general_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $itemId)) {
+                if (!$isSessionGeneralCoach || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $itemId)) {
                     $announcement = $repo->find($itemId);
 
                     if (!empty($announcement)) {

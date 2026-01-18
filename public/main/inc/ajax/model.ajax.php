@@ -302,11 +302,17 @@ switch ($action) {
     case 'get_exercise_categories':
         $courseId = isset($_REQUEST['c_id']) ? $_REQUEST['c_id'] : 0;
         $repo = Container::getQuizCategoryRepository();
-        $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId));
+        $courseEntity = api_get_course_entity($courseId);
+        // Close the session as we don't need it any further
+        session_write_close();
+
+        $qb = $repo->getResourcesByCourse($courseEntity);
         $count = $qb->select('COUNT(resource)')->getQuery()->getSingleScalarResult();
 
         break;
     case 'get_calendar_users':
+        // Close the session as we don't need it any further
+        session_write_close();
         $calendarPlugin = LearningCalendarPlugin::create();
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
         $count = $calendarPlugin->getUsersPerCalendarCount($id);
@@ -330,6 +336,8 @@ switch ($action) {
         if (!api_is_allowed_to_edit()) {
             exit;
         }
+        // Close the session as we don't need it any further
+        session_write_close();
         $count = Statistics::getNumberOfActivities($courseId, $sessionId);
         break;
     case 'get_programmed_announcements':
@@ -547,9 +555,13 @@ switch ($action) {
         break;
     case 'get_course_exercise_medias':
         $course_id = api_get_course_int_id();
+        // Close the session as we don't need it any further
+        session_write_close();
         $count = Question::get_count_course_medias($course_id);
         break;
     case 'get_user_skill_ranking':
+        // Close the session as we don't need it any further
+        session_write_close();
         $skill = new SkillModel();
         $count = $skill->getUserListSkillRankingCount();
         break;
@@ -897,6 +909,8 @@ switch ($action) {
         $count = count($records);
         break;
     case 'get_session_access_overview':
+        // Close the session as we don't need it any further
+        session_write_close();
         //@TODO replace this for a more efficient function (not retrieving the whole data)
         $records = SessionManager::get_user_data_access_tracking_overview(
             $_GET['session_id'],
@@ -933,42 +947,60 @@ switch ($action) {
         $count = count($users);
         break;
     case 'get_extra_fields':
+        // Close the session as we don't need it any further
+        session_write_close();
         $type = $_REQUEST['type'];
         $obj = new ExtraField($type);
         $count = $obj->get_count();
         break;
     case 'get_extra_field_options':
+        // Close the session as we don't need it any further
+        session_write_close();
         $type = $_REQUEST['type'];
         $field_id = $_REQUEST['field_id'];
         $obj = new ExtraFieldOption($type);
         $count = $obj->get_count_by_field_id($field_id);
         break;
     case 'get_gradebooks':
+        // Close the session as we don't need it any further
+        session_write_close();
         $obj = new Gradebook();
         $count = $obj->get_count();
         break;
     case 'get_careers':
+        // Close the session as we don't need it any further
+        session_write_close();
         $obj = new Career();
         $count = $obj->get_count();
         break;
     case 'get_promotions':
+        // Close the session as we don't need it any further
+        session_write_close();
         $obj = new Promotion();
         $count = $obj->get_count();
         break;
     case 'get_mail_template':
+        // Close the session as we don't need it any further
+        session_write_close();
         $obj = new MailTemplateManager();
         $count = $obj->get_count();
         break;
     case 'get_grade_models':
+        // Close the session as we don't need it any further
+        session_write_close();
         $obj = new GradeModel();
         $count = $obj->get_count();
         break;
     case 'get_usergroups':
+        // Close the session as we don't need it any further
+        session_write_close();
         $obj = new UserGroupModel();
         $obj->protectScript();
         $count = $obj->get_count($whereCondition);
         break;
     case 'get_usergroups_teacher':
+        // Close the session as we don't need it any further
+        session_write_close();
         $obj = new UserGroupModel();
         $obj->protectScript(null, false, true);
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'registered';
@@ -977,6 +1009,8 @@ switch ($action) {
 
         $course_id = api_get_course_int_id();
         $sessionId = api_get_session_id();
+        // Close the session as we don't need it any further
+        session_write_close();
         $options = [];
         $options['course_id'] = $course_id;
         $options['session_id'] = $sessionId;

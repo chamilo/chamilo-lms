@@ -36,6 +36,8 @@ switch ($action) {
             $session_id,
             $onlyActiveExercises
         );
+        // Close the session as we don't need it any further
+        session_write_close();
 
         if (!empty($results)) {
             foreach ($results as $exercise) {
@@ -120,6 +122,9 @@ switch ($action) {
             );
             $durationFromObject = $attempt->getExeDuration();
             $previousTime = Session::read('duration_time_previous');
+            // Close the session as we don't need it any further
+            session_write_close();
+
             if (isset($previousTime[$key]) &&
                 !empty($previousTime[$key])
             ) {
@@ -163,6 +168,8 @@ switch ($action) {
         if (!api_is_allowed_to_edit(null, true)) {
             break;
         }
+        // Close the session as we don't need it any further
+        session_write_close();
 
         // 1. Setting variables needed by jqgrid
         $exercise_id = (int) $_GET['exercise_id'];
@@ -316,6 +323,9 @@ switch ($action) {
         break;
     case 'update_exercise_list_order':
         if (api_is_allowed_to_edit(null, true)) {
+            // Close the session as we don't need it any further
+            session_write_close();
+
             $new_list = $_REQUEST['exercise_list'];
             $table = Database::get_course_table(TABLE_QUIZ_ORDER);
             $counter = 1;
@@ -340,13 +350,17 @@ switch ($action) {
         break;
     case 'update_question_order':
         $course_info = api_get_course_info_by_id($course_id);
+        $isAllowedToEdit = api_is_allowed_to_edit(null, true);
+        // Close the session as we don't need it any further
+        session_write_close();
+
         $course_id = $course_info['real_id'];
         $exercise_id = isset($_REQUEST['exercise_id']) ? (int) $_REQUEST['exercise_id'] : null;
 
         if (empty($exercise_id)) {
             return Display::return_message(get_lang('Error'), 'error');
         }
-        if (api_is_allowed_to_edit(null, true)) {
+        if ($isAllowedToEdit) {
             $new_question_list = $_POST['question_id_list'];
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $counter = 1;
@@ -379,10 +393,16 @@ switch ($action) {
             switch ($option) {
                 case 'add_all':
                     $questionListInSession = Session::read('questionList');
-                $objExercise->addAllQuestionToRemind($exeId, $questionListInSession);
+                    // Close the session as we don't need it any further
+                    session_write_close();
+
+                    $objExercise->addAllQuestionToRemind($exeId, $questionListInSession);
                     break;
                 case 'remove_all':
-                $objExercise->removeAllQuestionToRemind($exeId);
+                    // Close the session as we don't need it any further
+                    session_write_close();
+
+                    $objExercise->removeAllQuestionToRemind($exeId);
                     break;
                 default:
                     $objExercise->editQuestionToRemind(
@@ -430,6 +450,8 @@ switch ($action) {
         if (empty($objExercise)) {
             exit;
         }
+        // Close the session as we don't need it any further
+        session_write_close();
 
         $questionId = isset($_REQUEST['question_id']) ? (int) $_REQUEST['question_id'] : null;
         $image = isset($_REQUEST['image']) ? $_REQUEST['image'] : '';
@@ -862,7 +884,7 @@ switch ($action) {
             if ($debug) {
                 error_log('---------- end question ------------');
             }
-        }
+        } // end foreach question_list
         if ($debug) {
             error_log('Finished questions loop in save_exercise_by_now');
         }
@@ -960,6 +982,8 @@ switch ($action) {
             api_get_session_id(),
             false
         );
+        // Close the session as we don't need it any further
+        session_write_close();
 
         $exercises = array_filter(
             $exercises,
@@ -985,6 +1009,8 @@ switch ($action) {
         echo json_encode($result);
         break;
     case 'browser_test':
+        // Close the session as we don't need it any further
+        session_write_close();
         $quizCheckButtonEnabled = ('true' === api_get_setting('exercise.quiz_check_button_enable'));
 
         if ($quizCheckButtonEnabled) {
@@ -1006,6 +1032,8 @@ switch ($action) {
         $sessionId = api_get_session_id();
         $userId = api_get_user_id();
         $confirmed = !empty($_POST['quiz_confirm_saved_answers_check']);
+        // Close the session as we don't need it any further
+        session_write_close();
 
         $em = Database::getManager();
         $repo = $em->getRepository(TrackEExerciseConfirmation::class);
@@ -1047,6 +1075,9 @@ switch ($action) {
         break;
     case 'sign_attempt':
         api_block_anonymous_users();
+        // Close the session as we don't need it any further
+        session_write_close();
+
         if (!Container::getPluginHelper()->isPluginEnabled('ExerciseSignature')) {
             exit;
         }
@@ -1192,6 +1223,9 @@ switch ($action) {
         echo json_encode(['files' => [], 'error' => 'No files']);
         exit;
     case 'audio-recording-help':
+        // Close the session as we don't need it any further
+        session_write_close();
+
         $content = get_lang('While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on “Stop recording” then select “End exercise”. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.');
 
         $html = '

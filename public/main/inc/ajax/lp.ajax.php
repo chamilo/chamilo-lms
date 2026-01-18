@@ -32,6 +32,8 @@ $sessionId = api_get_session_id();
 
 switch ($action) {
     case 'get_lp_export_items':
+        // Close the session as we don't need it any further
+        session_write_close();
         $lpItems = [];
         if ($lp) {
             $entries      = learnpath::get_flat_ordered_items_list($lp, 0, true);
@@ -81,6 +83,9 @@ switch ($action) {
         $onlyActiveLp = !(api_is_platform_admin(true) || api_is_course_admin());
         $course = api_get_course_entity();
         $session = api_get_session_entity();
+        // Close the session as we don't need it any further
+        session_write_close();
+
         $active = null;
         if ($onlyActiveLp) {
             $active = 1;
@@ -172,6 +177,8 @@ switch ($action) {
         break;
     case 'update_lp_item_order':
         if (api_is_allowed_to_edit(null, true)) {
+            // Close the session as we don't need it any further
+            session_write_close();
             $newOrder = $_REQUEST['new_order'] ?? [];
             $orderList = json_decode($newOrder);
             if (empty($orderList)) {
@@ -210,6 +217,8 @@ switch ($action) {
         $learningPath = new learnpath($lp, api_get_course_info(), api_get_user_id());
         $course_info = api_get_course_info();
         $lpPathInfo = $learningPath->generate_lp_folder($course_info);
+        // Close the session as we don't need it any further
+        session_write_close();
 
         if (empty($lpPathInfo)) {
             exit;
@@ -261,6 +270,8 @@ switch ($action) {
         $sessionId = api_get_session_id();
         $course = api_get_course_entity();
         $session = api_get_session_entity();
+        // Close the session as we don't need it any further
+        session_write_close();
 
         /** @var CLpItem $lpItem */
         $lpItem = $lpItemRepo->find($lpItemId);
@@ -341,6 +352,8 @@ switch ($action) {
         exit;
         /** @var learnpath $lp */
         $lp = Session::read('oLP');
+        // Close the session as we don't need it any further
+        session_write_close();
         $lpItemId = isset($_GET['lp_item']) ? intval($_GET['lp_item']) : 0;
         if ($lp) {
             $position = $lp->isFirstOrLastItem($lpItemId);
@@ -356,6 +369,8 @@ switch ($action) {
 
         /** @var \learnpath $lp */
         $lp = Session::read('oLP');
+        // Close the session as we don't need it any further
+        session_write_close();
         $parentNames = $lp->getCurrentItemParentNames($newItemId);
         $response = '';
         foreach ($parentNames as $parentName) {

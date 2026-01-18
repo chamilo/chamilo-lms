@@ -14,6 +14,8 @@ $fieldId = isset($_REQUEST['field_id']) ? (int) $_REQUEST['field_id'] : 0;
 switch ($action) {
     case 'delete_file':
         api_protect_admin_script();
+        // Close the session as we don't need it any further
+        session_write_close();
 
         $itemId = $_REQUEST['item_id'] ?? null;
         $extraFieldValue = new ExtraFieldValue($type);
@@ -26,6 +28,8 @@ switch ($action) {
         echo 0;
         break;
     case 'get_second_select_options':
+        // Close the session as we don't need it any further
+        session_write_close();
         $option_value_id = isset($_REQUEST['option_value_id']) ? $_REQUEST['option_value_id'] : null;
         if (!empty($type) && !empty($fieldId) && !empty($option_value_id)) {
             $field_options = new ExtraFieldOption($type);
@@ -48,6 +52,9 @@ switch ($action) {
         }
 
         $user = api_get_user_entity();
+        // Close the session as we don't need it any further
+        session_write_close();
+
         $tagRepo = Container::getTagRepository();
         $deleted = $tagRepo->deleteTagFromUser($user, $tag);
         if ($deleted) {
@@ -59,6 +66,9 @@ switch ($action) {
         }
         break;
     case 'search_tags':
+        // Close the session as we don't need it any further
+        session_write_close();
+
         header('Content-Type: application/json');
         $tag = isset($_REQUEST['q']) ? (string) $_REQUEST['q'] : '';
         $byId = !empty($_REQUEST['byid']);
@@ -84,6 +94,9 @@ switch ($action) {
         echo json_encode(['items' => $result]);
         break;
     case 'search_options_from_tags':
+        // Close the session as we don't need it any further
+        session_write_close();
+
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
         $fieldId = isset($_REQUEST['field_id']) ? $_REQUEST['field_id'] : null;
         $tag = isset($_REQUEST['tag']) ? $_REQUEST['tag'] : null;
@@ -124,13 +137,17 @@ switch ($action) {
         $variable = isset($_REQUEST['field_variable']) ? $_REQUEST['field_variable'] : '';
         $save = isset($_REQUEST['save']) ? $_REQUEST['save'] : '';
         $values = isset($_REQUEST['values']) ? json_decode($_REQUEST['values']) : '';
+        $userId = api_get_user_id();
+        // Close the session as we don't need it any further
+        session_write_close();
+
         $extraField = new ExtraField('session');
         $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(str_replace('extra_', '', $variable));
 
         $em = Database::getManager();
 
         $search = [
-            'user' => api_get_user_id(),
+            'user' => $userId,
             'field' => $extraFieldInfo['id'],
         ];
 

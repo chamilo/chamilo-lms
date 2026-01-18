@@ -20,6 +20,7 @@ $json = [
     'error' => true,
     'errorMessage' => 'ERROR',
 ];
+$isAllowedToEdit = api_is_allowed_to_edit(null, true);
 
 // Check if exist action
 if (!empty($action)) {
@@ -36,7 +37,7 @@ if (!empty($action)) {
                 // 3. if anonymous posts are not allowed
                 // The only exception is the course manager
                 // They are several pieces for clarity.
-                if (!api_is_allowed_to_edit(null, true) &&
+                if (!$isAllowedToEdit &&
                     (
                         ($current_forum_category && 0 == $current_forum_category['visibility']) ||
                         0 == $current_forum['visibility']
@@ -45,7 +46,7 @@ if (!empty($action)) {
                     $json['errorMessage'] = '1. the forum category, forum or thread is invisible (visibility==0)';
                     break;
                 }
-                if (!api_is_allowed_to_edit(null, true) &&
+                if (!$isAllowedToEdit &&
                     (
                         ($current_forum_category && 0 != $current_forum_category['locked']) ||
                         0 != $current_forum['locked'] || 0 != $current_thread['locked']
@@ -110,7 +111,7 @@ if (!empty($action)) {
                 // 4. if editing of replies is not allowed
                 // The only exception is the course manager
                 // They are several pieces for clarity.
-                if (!api_is_allowed_to_edit(null, true) &&
+                if (!$isAllowedToEdit &&
                     (
                         ($current_forum_category && 0 == $current_forum_category['visibility']) ||
                         0 == $current_forum['visibility']
@@ -119,7 +120,7 @@ if (!empty($action)) {
                     $json['errorMessage'] = '1. the forum category, forum or thread is invisible (visibility==0)';
                     break;
                 }
-                if (!api_is_allowed_to_edit(null, true) &&
+                if (!$isAllowedToEdit &&
                     (
                         ($current_forum_category && 0 != $current_forum_category['locked']) ||
                         0 != $current_forum['locked'] || 0 != $current_thread['locked']
@@ -134,7 +135,7 @@ if (!empty($action)) {
                 }
                 $group_id = api_get_group_id();
                 $groupEntity = api_get_group_entity();
-                if (!api_is_allowed_to_edit(null, true) &&
+                if (!$isAllowedToEdit &&
                     0 == $current_forum['allow_edit'] &&
                     ($group_id && !GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity))
                 ) {
@@ -155,6 +156,9 @@ if (!empty($action)) {
             break;
         case 'change_post_status':
             if (api_is_allowed_to_edit(false, true)) {
+                // Close the session as we don't need it any further
+                session_write_close();
+
                 $postId = isset($_GET['post_id']) ? $_GET['post_id'] : '';
                 if (empty($postId)) {
                     exit;

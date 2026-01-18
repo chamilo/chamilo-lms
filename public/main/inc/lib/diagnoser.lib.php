@@ -715,7 +715,7 @@ class Diagnoser
             'zlib' => ['link' => 'https://php.net/zlib', 'expected' => 1, 'comment' => get_lang('This extension must be loaded.')],
             'apcu' => ['link' => 'https://php.net/apcu', 'expected' => 2, 'comment' => get_lang('This extension should be loaded.')],
             'bcmath' => ['link' => 'https://php.net/bcmath', 'expected' => 2, 'comment' => get_lang('This extension should be loaded.')],
-            'OPcache' => ['link' => 'https://php.net/opcache', 'expected' => 2, 'comment' => get_lang('This extension should be loaded.')],
+            'Zend OPcache' => ['link' => 'https://php.net/opcache', 'expected' => 2, 'comment' => get_lang('This extension should be loaded.')],
             'openssl' => ['link' => 'https://php.net/openssl', 'expected' => 2, 'comment' => get_lang('This extension should be loaded.')],
             'xsl' => ['link' => 'https://php.net/xsl', 'expected' => 2, 'comment' => get_lang('This extension should be loaded.')],
             'xapian' => ['link' => 'https://xapian.org/docs/bindings/php/', 'expected' => 2, 'comment' => get_lang('This extension should be loaded.')],
@@ -739,6 +739,54 @@ class Diagnoser
                 $comment
             );
         }
+
+        $setting = ini_get('opcache.enable');
+        $req_setting = '1';
+        $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_WARNING;
+        $array[] = $this->build_setting(
+            $status,
+            '[opcache]',
+            'opcache.enable',
+            'https://www.php.net/manual/en/opcache.configuration.php#ini.opcache.enable',
+            $setting,
+            $req_setting,
+            null,
+            get_lang('The OPcache module needs to be both installed and enabled in order to be used.')
+        );
+
+        $setting = ini_get('opcache.memory_consumption');
+        $req_setting = '>= 128M';
+        $status = self::STATUS_INFORMATION;
+        if ((int) $setting >= 128) {
+            $status = self::STATUS_OK;
+        }
+        $array[] = $this->build_setting(
+            $status,
+            '[opcache]',
+            'opcache.memory_consumption',
+            'https://www.php.net/manual/en/opcache.configuration.php#ini.opcache.memory-consumption',
+            $setting,
+            $req_setting,
+            null,
+            get_lang('Allowing OPCache memory_consumption to reach 128MB of RAM at least is recommended.')
+        );
+
+        $setting = 0;
+        if (function_exists('apcu_enabled')) {
+            $setting = (int) apcu_enabled();
+        }
+        $req_setting = 1;
+        $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_INFORMATION;
+        $array[] = $this->build_setting(
+            $status,
+            '[apcu]',
+            'apc.enabled',
+            'https://www.php.net/manual/en/function.apcu-enabled.php',
+            $setting,
+            $req_setting,
+            null,
+            get_lang('The APCu extension needs to be both installed and enabled in order to be used.')
+        );
 
         return $array;
     }

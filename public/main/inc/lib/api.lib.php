@@ -2743,19 +2743,6 @@ function api_get_setting($variable, $isArray = false, $key = null)
             // These behave as disabled.
             return false;
         }
-
-        case 'tool_visible_by_default_at_creation': {
-            // Original semantics: return an array map of "<tool>" => "true"
-            $values = $settingsManager->getSetting($full);
-            $newResult = [];
-            if (is_array($values)) {
-                foreach ($values as $parameter) {
-                    $newResult[$parameter] = 'true';
-                }
-            }
-            return $newResult;
-        }
-
         default: {
             // Get typed value when possible
             $settingValue = $settingsManager->getSetting($full, true);
@@ -6257,35 +6244,34 @@ function api_set_default_visibility(
             $tool_id = 'quiz';
             break;
     }
-    $setting = api_get_setting('tool_visible_by_default_at_creation');
+
+    $tools = api_get_setting('course.active_tools_on_create', true);
+    $setting = array_fill_keys($tools, 'true');
 
     if (isset($setting[$tool_id])) {
+        $visibility = 'visible';
+    } else {
         $visibility = 'invisible';
-        if ('true' === $setting[$tool_id]) {
-            $visibility = 'visible';
-        }
+    }
 
-        // Read the portal and course default visibility
-        if ('documents' === $tool_id) {
-            $visibility = DocumentManager::getDocumentDefaultVisibility($courseInfo);
-        }
+    if ('documents' === $tool_id) {
+        $visibility = DocumentManager::getDocumentDefaultVisibility($courseInfo);
+    }
 
-        // Fixes default visibility for tests
-        switch ($original_tool_id) {
-            case TOOL_QUIZ:
-                if (empty($sessionId)) {
-                    $objExerciseTmp = new Exercise($courseId);
-                    $objExerciseTmp->read($item_id);
-                    if ('visible' === $visibility) {
-                        $objExerciseTmp->enable();
-                        $objExerciseTmp->save();
-                    } else {
-                        $objExerciseTmp->disable();
-                        $objExerciseTmp->save();
-                    }
+    switch ($original_tool_id) {
+        case TOOL_QUIZ:
+            if (empty($sessionId)) {
+                $objExerciseTmp = new Exercise($courseId);
+                $objExerciseTmp->read($item_id);
+                if ('visible' === $visibility) {
+                    $objExerciseTmp->enable();
+                    $objExerciseTmp->save();
+                } else {
+                    $objExerciseTmp->disable();
+                    $objExerciseTmp->save();
                 }
-                break;
-        }
+            }
+            break;
     }
 }
 

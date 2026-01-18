@@ -227,9 +227,10 @@ class LinkAddEditForm extends FormValidator
         }
 
         if (self::TYPE_ADD == $form_type) {
-            $setting = api_get_setting('tool_visible_by_default_at_creation');
+            $tools = api_get_setting('course.active_tools_on_create', true);
+
             $visibility_default = 1;
-            if (isset($setting['gradebook']) && 'false' == $setting['gradebook']) {
+            if (!in_array('gradebook', $tools, true)) {
                 $visibility_default = 0;
             }
             $defaults['visible'] = $visibility_default;

@@ -63,6 +63,29 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'display' => [
                 [
+                    'variable' => 'show_tabs',
+                    'json_example' => [
+                        'menu' => [
+                            'campus_homepage' => true,
+                            'my_courses' => true,
+                            'reporting' => true,
+                            'platform_administration' => true,
+                            'my_agenda' => true,
+                            'social' => true,
+                            'videoconference' => false,
+                            'diagnostics' => false,
+                            'catalogue' => true,
+                            'session_admin' => true,
+                            'search' => true,
+                            'question_manager' => false,
+                        ],
+                        'topbar' => [
+                            'topbar_certificate' => true,
+                            'topbar_skills' => true,
+                        ],
+                    ],
+                ],
+                [
                     'variable' => 'show_tabs_per_role',
                     'json_example' => [
                         'SESSIONADMIN' => ['session_admin', 'my_courses'],

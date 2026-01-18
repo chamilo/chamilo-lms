@@ -7,15 +7,21 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Chamilo\CoreBundle\Transformer\ArrayToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
+
 class DisplaySettingsSchema extends AbstractSettingsSchema
 {
+    /**
+     * Allowed tabs (whitelist) to prevent unsupported values in settings.
+     * Keys are internal i18n labels, values are tab identifiers used by the UI.
+     */
     private static array $tabs = [
         'MenuCampusHomepage' => 'campus_homepage',
         'MenuMyCourses' => 'my_courses',
@@ -27,54 +33,51 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
         'MenuDiagnostics' => 'diagnostics',
         'MenuCatalogue' => 'catalogue',
         'MenuSessionAdmin' => 'session_admin',
+        'MenuSearch' => 'search',
+        'MenuQuestionManager' => 'question_manager',
         'TopbarCertificate' => 'topbar_certificate',
         'TopbarSkills' => 'topbar_skills',
     ];
 
+
     public function buildSettings(AbstractSettingsBuilder $builder): void
     {
-        $builder
-            ->setDefaults(
-                [
-                    'enable_help_link' => 'true',
-                    'show_administrator_data' => 'true',
-                    'show_tutor_data' => 'true',
-                    'show_teacher_data' => 'true',
-                    'showonline' => 'world',
-                    'time_limit_whosonline' => '30',
-                    'show_email_addresses' => 'false',
-                    'show_number_of_courses' => 'false',
-                    'show_empty_course_categories' => 'true',
-                    'show_back_link_on_top_of_tree' => 'false',
-                    'display_categories_on_homepage' => 'false',
-                    'show_closed_courses' => 'false',
-                    'accessibility_font_resize' => 'false',
-                    'show_admin_toolbar' => 'do_not_show',
-                    'show_hot_courses' => 'true',
-                    'hide_home_top_when_connected' => 'false',
-                    'hide_logout_button' => 'false',
-                    'hide_social_media_links' => 'false',
-                    'gravatar_enabled' => 'false',
-                    'gravatar_type' => 'mm',
-                    'order_user_list_by_official_code' => 'false',
-                    'pdf_logo_header' => '',
-                    'show_tabs' => array_values(array_diff(self::$tabs, ['videoconference', 'diagnostics'])),
-                    'show_tabs_per_role' => '{}',
-                    'hide_main_navigation_menu' => 'false',
-                    'hide_complete_name_in_whoisonline' => 'false',
-                    'table_default_row' => '20',
-                    'table_row_list' => '[10,20,50,100]',
-                ]
-            )
-            ->setTransformer(
-                'show_tabs',
-                new ArrayToIdentifierTransformer()
-            )
-        ;
+        $builder->setDefaults(
+            [
+                'enable_help_link' => 'true',
+                'show_administrator_data' => 'true',
+                'show_tutor_data' => 'true',
+                'show_teacher_data' => 'true',
+                'showonline' => 'world',
+                'time_limit_whosonline' => '30',
+                'show_email_addresses' => 'false',
+                'show_number_of_courses' => 'false',
+                'show_empty_course_categories' => 'true',
+                'show_back_link_on_top_of_tree' => 'false',
+                'display_categories_on_homepage' => 'false',
+                'show_closed_courses' => 'false',
+                'accessibility_font_resize' => 'false',
+                'show_admin_toolbar' => 'do_not_show',
+                'show_hot_courses' => 'true',
+                'hide_home_top_when_connected' => 'false',
+                'hide_logout_button' => 'false',
+                'hide_social_media_links' => 'false',
+                'gravatar_enabled' => 'false',
+                'gravatar_type' => 'mm',
+                'order_user_list_by_official_code' => 'false',
+                'pdf_logo_header' => '',
+                'show_tabs' => self::getDefaultShowTabsJson(),
+                'show_tabs_per_role' => '{}',
+                'hide_main_navigation_menu' => 'false',
+                'hide_complete_name_in_whoisonline' => 'false',
+                'table_default_row' => '20',
+                'table_row_list' => '[10,20,50,100]',
+            ]
+        );
 
         $allowedTypes = [
             'time_limit_whosonline' => ['string'],
-            'show_tabs' => ['array', 'null'],
+            'show_tabs' => ['string', 'null'],
             'show_tabs_per_role' => ['string', 'null'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
@@ -103,7 +106,6 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
             ->add('show_number_of_courses', YesNoType::class)
             ->add('show_empty_course_categories', YesNoType::class)
             ->add('show_back_link_on_top_of_tree', YesNoType::class)
-            ->add('show_empty_course_categories', YesNoType::class)
             ->add('display_categories_on_homepage', YesNoType::class)
             ->add('show_closed_courses', YesNoType::class)
             ->add('accessibility_font_resize', YesNoType::class)
@@ -138,14 +140,7 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
             )
             ->add('order_user_list_by_official_code', YesNoType::class)
             ->add('pdf_logo_header')
-            ->add(
-                'show_tabs',
-                ChoiceType::class,
-                [
-                    'multiple' => true,
-                    'choices' => self::$tabs,
-                ],
-            )
+            ->add('show_tabs', TextareaType::class)
             ->add('show_tabs_per_role', TextareaType::class)
             ->add('hide_main_navigation_menu', YesNoType::class)
             ->add('hide_complete_name_in_whoisonline', YesNoType::class)
@@ -154,5 +149,41 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
+    }
+
+    private static function getDefaultShowTabsJson(): string
+    {
+        $default = self::getDefaultShowTabsArray();
+
+        $json = json_encode($default, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        if (!is_string($json) || '' === $json) {
+            // Fallback (should never happen)
+            return '{"menu":{},"topbar":{}}';
+        }
+
+        return $json;
+    }
+
+    private static function getDefaultShowTabsArray(): array
+    {
+        $menu = [];
+        $topbar = [];
+
+        foreach (self::$tabs as $label => $key) {
+            $isTopbar = 0 === strpos($label, 'Topbar') || 0 === strpos($key, 'topbar_');
+
+            if ($isTopbar) {
+                $topbar[$key] = true;
+                continue;
+            }
+
+            // Keep legacy default: videoconference + diagnostics disabled by default
+            $menu[$key] = !in_array($key, ['videoconference', 'diagnostics', 'question_manager'], true);
+        }
+
+        return [
+            'menu' => $menu,
+            'topbar' => $topbar,
+        ];
     }
 }

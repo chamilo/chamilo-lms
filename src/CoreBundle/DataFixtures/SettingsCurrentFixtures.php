@@ -941,11 +941,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'This feature is enabled by default, but in case of server overload abuse it, or specific learning environments, might want to disable it for all courses.',
                 ],
                 [
-                    'name' => 'tool_visible_by_default_at_creation',
-                    'title' => 'Tool visible at course creation',
-                    'comment' => 'Select the tools that will be visible when creating the courses - not yet available',
-                ],
-                [
                     'name' => 'users_copy_files',
                     'title' => 'Allow users to copy files from a course in your personal file area',
                     'comment' => 'Allows users to copy files from a course in your personal file area, visible through the Social Network or through the HTML editor when they are out of a course',

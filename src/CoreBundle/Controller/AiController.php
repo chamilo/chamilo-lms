@@ -107,7 +107,7 @@ class AiController extends AbstractController
         $desc = $this->getGenericCourseDescription($cid, $sid);
 
         $base = $this->translator->trans(
-            "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term."
+            "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
         );
 
         $prompt = \sprintf($base, $n, $courseTitle);

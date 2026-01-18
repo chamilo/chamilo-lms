@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Chamilo\CoreBundle\Transformer\ArrayToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -38,15 +37,6 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                 'show_users_folders' => 'true',
                 'show_default_folders' => 'true',
                 'show_documents_preview' => 'false',
-                'tool_visible_by_default_at_creation' => [
-                    'documents',
-                    'learning_path',
-                    'links',
-                    'announcements',
-                    'forums',
-                    'quiz',
-                    'gradebook',
-                ],
                 'documents_default_visibility_defined_in_course' => 'false',
                 'send_notification_when_document_added' => 'false',
                 'thematic_pdf_orientation' => 'landscape',
@@ -59,14 +49,9 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                 'access_url_specific_files' => 'false',
                 'video_features' => '',
             ])
-            ->setTransformer(
-                'tool_visible_by_default_at_creation',
-                new ArrayToIdentifierTransformer()
-            )
         ;
 
         $allowedTypes = [
-            'tool_visible_by_default_at_creation' => ['array'],
             'default_document_quotum' => ['string'],
             'default_group_quotum' => ['string'],
         ];
@@ -111,18 +96,6 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             ->add('show_users_folders', YesNoType::class)
             ->add('show_default_folders', YesNoType::class)
             ->add('show_documents_preview', YesNoType::class)
-            ->add('tool_visible_by_default_at_creation', ChoiceType::class, [
-                'multiple' => true,
-                'choices' => [
-                    'Documents' => 'documents',
-                    'LearningPath' => 'learning_path',
-                    'Links' => 'links',
-                    'Announcements' => 'announcements',
-                    'Forums' => 'forums',
-                    'Quiz' => 'quiz',
-                    'Gradebook' => 'gradebook',
-                ],
-            ])
             ->add('send_notification_when_document_added', YesNoType::class)
             ->add('thematic_pdf_orientation', ChoiceType::class, [
                 'choices' => [
@@ -140,7 +113,7 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             ->add('access_url_specific_files', YesNoType::class)
             ->add('video_features', TextareaType::class, [
                 'attr' => ['rows' => 4, 'style' => 'font-family: monospace;'],
-                'help' => 'JSON opcional. Ej: {"speed": true}',
+                'help' => 'Optional JSON. Example: {"speed": true}',
             ])
         ;
 

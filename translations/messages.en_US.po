@@ -32345,3 +32345,32 @@ msgstr "Custom certificate"
 msgid "Update profile"
 msgstr "Update profile"
 
+msgid "Enable learning path generator"
+msgstr "Enable learning path generator"
+
+msgid "Enable exercise generator"
+msgstr "Enable exercise generator"
+
+msgid "Enable open answers grader"
+msgstr "Enable open answers grader"
+
+msgid "Enable tutor chatbot"
+msgstr "Enable tutor chatbot"
+
+msgid "Enable task grader"
+msgstr "Enable task grader"
+
+msgid "Enable content analyser"
+msgstr "Enable content analyser"
+
+msgid "Enable image generator"
+msgstr "Enable image generator"
+
+msgid "Enable glossary terms generator"
+msgstr "Enable glossary terms generator"
+
+msgid "Enable video generator"
+msgstr "Enable video generator"
+
+msgid "Enable course analyser"
+msgstr "Enable course analyser"

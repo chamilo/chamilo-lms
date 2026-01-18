@@ -6,6 +6,134 @@ import { useEnrolledStore } from "../store/enrolledStore"
 import { useRoute } from "vue-router"
 import { useSocialMenuItems } from "./useSocialMenuItems"
 
+const ROLE_MAP = {
+  ROLE_ADMIN: "ADMIN",
+  ROLE_SESSION_MANAGER: "SESSIONADMIN",
+  ROLE_TEACHER: "COURSEMANAGER",
+  ROLE_STUDENT_BOSS: "STUDENT_BOSS",
+  ROLE_DRH: "DRH",
+  ROLE_INVITEE: "INVITEE",
+  ROLE_STUDENT: "STUDENT",
+}
+
+// We keep this list only to support legacy array -> full replacement behavior.
+// Unknown keys in JSON simply won't have any effect in the UI.
+const KNOWN_MENU_TABS = [
+  "campus_homepage",
+  "my_courses",
+  "reporting",
+  "platform_administration",
+  "my_agenda",
+  "social",
+  "videoconference",
+  "diagnostics",
+  "catalogue",
+  "session_admin",
+  "search",
+  "question_manager",
+]
+
+const KNOWN_TOPBAR_TABS = ["topbar_certificate", "topbar_skills"]
+
+function safeParseJson(value, warnLabel) {
+  if (!value || "string" !== typeof value) return null
+  try {
+    return JSON.parse(value)
+  } catch (e) {
+    console.warn(warnLabel, e)
+    return null
+  }
+}
+
+function makeEmptyConfig() {
+  return { menu: {}, topbar: {} }
+}
+
+function normalizeConfigObject(obj) {
+  const cfg = makeEmptyConfig()
+  if (!obj || "object" !== typeof obj) return cfg
+
+  if (obj.menu && "object" === typeof obj.menu) cfg.menu = { ...obj.menu }
+  if (obj.topbar && "object" === typeof obj.topbar) cfg.topbar = { ...obj.topbar }
+
+  return cfg
+}
+
+// Legacy list semantics: only listed tabs are enabled, all known tabs are disabled.
+function configFromLegacyList(list) {
+  const cfg = makeEmptyConfig()
+
+  for (const k of KNOWN_MENU_TABS) cfg.menu[k] = false
+  for (const k of KNOWN_TOPBAR_TABS) cfg.topbar[k] = false
+
+  const arr = Array.isArray(list) ? list : []
+  for (const key of arr) {
+    if ("string" !== typeof key) continue
+    if (KNOWN_MENU_TABS.includes(key)) cfg.menu[key] = true
+    if (KNOWN_TOPBAR_TABS.includes(key)) cfg.topbar[key] = true
+  }
+
+  return cfg
+}
+
+// Merge semantics: role config overrides default config (only for keys provided)
+function mergeConfig(baseCfg, overrideCfg) {
+  const out = makeEmptyConfig()
+
+  out.menu = { ...(baseCfg?.menu || {}) }
+  out.topbar = { ...(baseCfg?.topbar || {}) }
+
+  if (overrideCfg?.menu && "object" === typeof overrideCfg.menu) {
+    for (const [k, v] of Object.entries(overrideCfg.menu)) out.menu[k] = v
+  }
+  if (overrideCfg?.topbar && "object" === typeof overrideCfg.topbar) {
+    for (const [k, v] of Object.entries(overrideCfg.topbar)) out.topbar[k] = v
+  }
+
+  return out
+}
+
+function resolveDisplayTabsConfig(platformConfigStore, securityStore) {
+  // display.show_tabs (default)
+  const showTabsRaw = platformConfigStore.getSetting("display.show_tabs")
+  let defaultCfg = makeEmptyConfig()
+
+  if (Array.isArray(showTabsRaw)) {
+    // Very old installations may still provide an array
+    defaultCfg = configFromLegacyList(showTabsRaw)
+  } else if ("string" === typeof showTabsRaw && showTabsRaw.trim() !== "") {
+    const parsed = safeParseJson(showTabsRaw, "[Sidebar] Invalid JSON in display.show_tabs")
+    if (Array.isArray(parsed)) {
+      defaultCfg = configFromLegacyList(parsed)
+    } else {
+      defaultCfg = normalizeConfigObject(parsed)
+    }
+  }
+
+  // display.show_tabs_per_role (overrides)
+  const perRoleRaw = platformConfigStore.getSetting("display.show_tabs_per_role") || ""
+  const perRole = safeParseJson(perRoleRaw, "[Sidebar] Invalid JSON in display.show_tabs_per_role") || {}
+
+  const roles = securityStore.user?.roles || []
+  for (const role of roles) {
+    const mappedRole = ROLE_MAP[role] || role
+    const roleValue = perRole?.[mappedRole]
+    if (!roleValue) continue
+
+    // Backward compatible:
+    // - If role value is an array -> full replacement behavior (legacy)
+    // - If role value is an object with menu/topbar -> override behavior (recommended)
+    if (Array.isArray(roleValue)) {
+      return configFromLegacyList(roleValue)
+    }
+
+    const roleCfg = normalizeConfigObject(roleValue)
+    return mergeConfig(defaultCfg, roleCfg)
+  }
+
+  return defaultCfg
+}
+
 export function useSidebarMenu() {
   const { t } = useI18n()
   const route = useRoute()
@@ -15,40 +143,12 @@ export function useSidebarMenu() {
   const { items: socialItems } = useSocialMenuItems()
 
   const allowSocialTool = computed(() => platformConfigStore.getSetting("social.allow_social_tool") !== "false")
-
   const allowSearchFeature = computed(() => platformConfigStore.getSetting("search.search_enabled") === "true")
 
-  const showTabs = computed(() => {
-    const defaultTabs = platformConfigStore.getSetting("display.show_tabs") || []
-    const tabsPerRoleJson = platformConfigStore.getSetting("display.show_tabs_per_role") || ""
+  const displayTabs = computed(() => resolveDisplayTabsConfig(platformConfigStore, securityStore))
 
-    let tabsPerRole = {}
-    try {
-      tabsPerRole = JSON.parse(tabsPerRoleJson)
-    } catch (e) {
-      console.warn("[Sidebar] Invalid JSON in display.show_tabs_per_role", e)
-    }
-
-    const roleMap = {
-      ROLE_ADMIN: "ADMIN",
-      ROLE_SESSION_MANAGER: "SESSIONADMIN",
-      ROLE_TEACHER: "COURSEMANAGER",
-      ROLE_STUDENT_BOSS: "STUDENT_BOSS",
-      ROLE_DRH: "DRH",
-      ROLE_INVITEE: "INVITEE",
-      ROLE_STUDENT: "STUDENT",
-    }
-
-    const roles = securityStore.user?.roles || []
-    for (const role of roles) {
-      const mappedRole = roleMap[role] || role
-      if (tabsPerRole[mappedRole]) {
-        return tabsPerRole[mappedRole]
-      }
-    }
-
-    return defaultTabs
-  })
+  const isMenuTabEnabled = (key) => displayTabs.value?.menu?.[key] === true
+  const isTopbarTabEnabled = (key) => displayTabs.value?.topbar?.[key] === true // kept for completeness
 
   const rawShowCatalogue = platformConfigStore.getSetting("catalog.show_courses_sessions")
   const showCatalogue = Number(rawShowCatalogue)
@@ -81,23 +181,22 @@ export function useSidebarMenu() {
   }
 
   const createMenuItem = (key, icon, label, opts = null) => {
-    if (showTabs.value.indexOf(key) > -1) {
-      const item = {
-        icon: `mdi ${icon}`,
-        label: t(label),
-      }
+    if (!isMenuTabEnabled(key)) return null
 
-      if (typeof opts === "string") {
-        item.route = { name: opts }
-      } else if (opts) {
-        if (opts.url) item.url = opts.url
-        if (opts.routeName) item.route = { name: opts.routeName }
-        if (opts.subItems) item.items = opts.subItems
-      }
-
-      return item
+    const item = {
+      icon: `mdi ${icon}`,
+      label: t(label),
     }
-    return null
+
+    if (typeof opts === "string") {
+      item.route = { name: opts }
+    } else if (opts) {
+      if (opts.url) item.url = opts.url
+      if (opts.routeName) item.route = { name: opts.routeName }
+      if (opts.subItems) item.items = opts.subItems
+    }
+
+    return item
   }
 
   const menuItemsBeforeMyCourse = computed(() => {
@@ -109,7 +208,7 @@ export function useSidebarMenu() {
   const menuItemMyCourse = computed(() => {
     const items = []
 
-    if (securityStore.isAuthenticated && showTabs.value.indexOf("my_courses") > -1) {
+    if (securityStore.isAuthenticated && isMenuTabEnabled("my_courses")) {
       const courseItems = []
 
       if (enrolledStore.isEnrolledInCourses) {
@@ -143,7 +242,7 @@ export function useSidebarMenu() {
   const menuItemsAfterMyCourse = computed(() => {
     const items = []
 
-    if (allowStudentCatalogue.value && showTabs.value.indexOf("catalogue") > -1) {
+    if (allowStudentCatalogue.value && isMenuTabEnabled("catalogue")) {
       if (showCatalogue === 0 || showCatalogue === 2) {
         items.push(createMenuItem("catalogue", "mdi-bookmark-multiple", "Explore more courses", "CatalogueCourses"))
       }
@@ -156,8 +255,7 @@ export function useSidebarMenu() {
 
     items.push(createMenuItem("my_agenda", "mdi-calendar-text", "Events", "CCalendarEventList"))
 
-    // Global search (Xapian)
-    if (allowSearchFeature.value) {
+    if (allowSearchFeature.value && isMenuTabEnabled("search")) {
       items.push({
         icon: "mdi mdi-magnify",
         label: t("Search"),
@@ -165,7 +263,7 @@ export function useSidebarMenu() {
       })
     }
 
-    if (showTabs.value.indexOf("reporting") > -1) {
+    if (isMenuTabEnabled("reporting")) {
       const subItems = []
 
       if (securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin) {
@@ -192,7 +290,7 @@ export function useSidebarMenu() {
       })
     }
 
-    if (showTabs.value.indexOf("social") > -1) {
+    if (isMenuTabEnabled("social")) {
       if (allowSocialTool.value) {
         const styledSocialItems = socialItems.value.map((item) => {
           const newItem = {
@@ -222,7 +320,7 @@ export function useSidebarMenu() {
     }
 
     if (
-      showTabs.value.includes("videoconference") > -1 &&
+      isMenuTabEnabled("videoconference") &&
       platformConfigStore.plugins?.bbb?.show_global_conference_link &&
       platformConfigStore.plugins?.bbb?.listingURL
     ) {
@@ -242,7 +340,7 @@ export function useSidebarMenu() {
       }
     }
 
-    if (showTabs.value.indexOf("diagnostics") > -1) {
+    if (isMenuTabEnabled("diagnostics")) {
       const subItems = [
         {
           label: t("Diagnosis management"),
@@ -268,7 +366,7 @@ export function useSidebarMenu() {
       const roles = securityStore.user?.roles || []
       const isQuestionManager = securityStore.isAdmin || roles.includes("ROLE_QUESTION_MANAGER")
 
-      if (isQuestionManager) {
+      if (isQuestionManager && isMenuTabEnabled("question_manager")) {
         const questionAdminItems = [
           {
             label: t("Questions"),
@@ -287,7 +385,7 @@ export function useSidebarMenu() {
       }
     }
 
-    if (showTabs.value.includes("session_admin") && (securityStore.isAdmin || securityStore.isSessionAdmin)) {
+    if (isMenuTabEnabled("session_admin") && (securityStore.isAdmin || securityStore.isSessionAdmin)) {
       const sessionAdminItems = [
         {
           label: t("Dashboard"),
@@ -328,7 +426,7 @@ export function useSidebarMenu() {
       })
     }
 
-    if (showTabs.value.indexOf("platform_administration") > -1) {
+    if (isMenuTabEnabled("platform_administration")) {
       if (securityStore.isAdmin || securityStore.isSessionAdmin) {
         const adminItems = [
           { label: t("Administration"), route: { name: "AdminIndex" } },

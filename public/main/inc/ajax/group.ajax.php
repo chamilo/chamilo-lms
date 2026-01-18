@@ -10,6 +10,7 @@ $isAllowedToEdit = api_is_allowed_to_edit();
 switch ($action) {
     case 'search':
         if ($isAllowedToEdit) {
+            $courseEntity = api_get_course_entity();
             $groups = GroupManager::get_group_list(null, api_get_course_entity(), null, 0, false, $_REQUEST['q']);
             $list = [];
             foreach ($groups as $group) {

@@ -85,6 +85,8 @@ switch ($action) {
         echo $return[$_REQUEST['thematic_id']][$_REQUEST['thematic_advance_id']];*/
         break;
     case 'get_datetime_by_attendance':
+        // Close the session as we don't need it any further
+        session_write_close();
         $attendance_id = (int) $_REQUEST['attendance_id'];
         $thematic_advance_id = (int) $_REQUEST['thematic_advance_id'];
         $label = '';

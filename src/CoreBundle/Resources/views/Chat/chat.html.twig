@@ -492,6 +492,9 @@
                   const isMe = (user.id === myUserId);
                   const dotCls = user.isConnected ? 'bg-emerald-500' : 'bg-gray-300';
                   const btnTitle = user.isConnected ? T.startChat : T.leaveMessage;
+                 // Build a safe id from the complete_name
+                  const rawName = user.complete_name || '';
+                  const nameNormalized = rawName.replace(/\s+/g, '_')
 
                   return `
 <li class="px-4 py-3 hover:bg-gray-15">
@@ -505,7 +508,7 @@
       <p class="text-xs text-gray-500 truncate">${user.username ? escapeHTML(user.username) : '&nbsp;'}</p>
     </div>
     ${!isMe ? `
-      <button type="button" class="btn btn-tertiary user-chat-btn"
+      <button type="button" id="${escapeHTML(nameNormalized)}_chat" class="btn btn-tertiary user-chat-btn"
         title="${escapeHTML(btnTitle)}" data-name="${escapeHTML(user.complete_name)}" data-user="${user.id}">
         {{ 'Chat'|trans }}
       </button>` : ''}

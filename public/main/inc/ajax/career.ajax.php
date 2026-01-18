@@ -8,6 +8,8 @@
 require_once __DIR__.'/../global.inc.php';
 
 api_protect_admin_script();
+// Close the session as we don't need it any further
+session_write_close();
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 

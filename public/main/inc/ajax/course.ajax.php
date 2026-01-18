@@ -8,7 +8,8 @@
 require_once __DIR__.'/../global.inc.php';
 
 $action = $_REQUEST['a'];
-$user_id = api_get_user_id();
+$userId = api_get_user_id();
+$isPlatformAdmin = api_is_platform_admin();
 
 switch ($action) {
     case 'add_course_vote':
@@ -16,9 +17,11 @@ switch ($action) {
         $star = (int) $_REQUEST['star'];
 
         if (!api_is_anonymous()) {
-            CourseManager::add_course_vote($user_id, $star, $course_id, 0);
+            CourseManager::add_course_vote($userId, $star, $course_id, 0);
         }
         $point_info = CourseManager::get_course_ranking($course_id, 0);
+        // Close the session as we don't need it any further
+        session_write_close();
         $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
         $rating = Display::return_rating_system(
             'star_'.$course_id,
@@ -30,10 +33,10 @@ switch ($action) {
         break;
     case 'get_user_courses':
         // Only search my courses
-        if (api_is_platform_admin() || api_is_session_admin()) {
-            $userId = (int) $_REQUEST['user_id'];
+        if ($isPlatformAdmin || api_is_session_admin()) {
+            $requestUserId = (int) $_REQUEST['user_id'];
             $list = CourseManager::get_courses_list_by_user_id(
-                $userId,
+                $requestUserId,
                 false
             );
             if (!empty($list)) {
@@ -50,9 +53,9 @@ switch ($action) {
         // Search my courses and sessions allowed for admin, session admin, teachers
         $currentCourseId = api_get_course_int_id();
         $currentSessionId = api_get_session_id();
-        if (api_is_platform_admin() || api_is_session_admin() || api_is_allowed_to_edit()) {
+        if ($isPlatformAdmin || api_is_session_admin() || api_is_allowed_to_edit()) {
             $list = CourseManager::get_courses_list_by_user_id(
-                api_get_user_id(),
+                $userId,
                 true,
                 false,
                 false,
@@ -65,9 +68,14 @@ switch ($action) {
                 echo json_encode([]);
                 break;
             }
+            // Close the session as we don't need it any further
+            session_write_close();
 
             $courseList = [];
             foreach ($list as $course) {
+                if (empty($course['real_id'])) {
+                    continue;
+                }
                 $courseInfo = api_get_course_info_by_id($course['real_id']);
                 $sessionId = 0;
                 if (!empty($course['session_id'])) {
@@ -94,7 +102,11 @@ switch ($action) {
         }
         break;
     case 'search_category':
-        if (api_is_platform_admin() || api_is_allowed_to_create_course()) {
+        $isAllowedToCreateCourse = api_is_allowed_to_create_course();
+        // Close the session as we don't need it any further
+        session_write_close();
+
+        if ($isPlatformAdmin || $isAllowedToCreateCourse) {
             $categories = CourseCategory::searchCategoryByKeyword($_REQUEST['q']);
 
             if (empty($categories)) {
@@ -103,7 +115,7 @@ switch ($action) {
             }
 
             $categoryToAvoid = '';
-            if (!api_is_platform_admin()) {
+            if (!$isPlatformAdmin) {
                 $categoryToAvoid = api_get_setting('course.course_category_code_to_use_as_model');
             }
             $list = [];
@@ -122,7 +134,11 @@ switch ($action) {
         }
         break;
     case 'search_course':
-        if (api_is_teacher() || api_is_platform_admin()) {
+        $isTeacher = api_is_teacher();
+        // Close the session as we don't need it any further
+        session_write_close();
+
+        if ($isTeacher || $isPlatformAdmin) {
             if (!empty($_GET['session_id'])) {
                 //if session is defined, lets find only courses of this session
                 $courseList = SessionManager::get_course_list_by_session_id(
@@ -132,7 +148,7 @@ switch ($action) {
             } else {
                 //if session is not defined lets search all courses STARTING with $_GET['q']
                 //TODO change this function to search not only courses STARTING with $_GET['q']
-                if (api_is_platform_admin()) {
+                if ($isPlatformAdmin) {
                     $courseList = CourseManager::get_courses_list(
                         0,
                         0,
@@ -143,8 +159,8 @@ switch ($action) {
                         null,
                         true
                     );
-                } elseif (api_is_teacher()) {
-                    $courseList = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id(), $_GET['q']);
+                } elseif ($isTeacher) {
+                    $courseList = CourseManager::get_course_list_of_user_as_course_admin($userId, $_GET['q']);
                     $category = api_get_setting('course.course_category_code_to_use_as_model');
                     if (!empty($category)) {
                         $alreadyAdded = [];
@@ -186,7 +202,10 @@ switch ($action) {
         }
         break;
     case 'search_course_by_session':
-        if (api_is_platform_admin()) {
+        // Close the session as we don't need it any further
+        session_write_close();
+
+        if ($isPlatformAdmin) {
             $results = SessionManager::get_course_list_by_session_id($_GET['session_id'], $_GET['q']);
             $results2 = [];
             if (is_array($results) && !empty($results)) {
@@ -209,7 +228,10 @@ switch ($action) {
         }
         break;
     case 'search_course_by_session_all':
-        if (api_is_platform_admin()) {
+        // Close the session as we don't need it any further
+        session_write_close();
+
+        if ($isPlatformAdmin) {
             if ('TODOS' === $_GET['session_id'] || 'T' === $_GET['session_id']) {
                 $_GET['session_id'] = '%';
             }
@@ -241,9 +263,8 @@ switch ($action) {
         $sessionId = $_GET['session_id'];
         $course = api_get_course_info_by_id($_GET['course_id']);
 
-        $isPlatformAdmin = api_is_platform_admin();
         $userIsSubscribedInCourse = CourseManager::is_user_subscribed_in_course(
-            api_get_user_id(),
+            $userId,
             $course['code'],
             !empty($sessionId),
             $sessionId
@@ -276,6 +297,8 @@ switch ($action) {
                 [],
                 $_GET['q']
             );
+            // Close the session as we don't need it any further
+            session_write_close();
 
             foreach ($userList as $user) {
                 $userCompleteName = api_get_person_name($user['firstname'], $user['lastname']);
@@ -290,7 +313,10 @@ switch ($action) {
         }
         break;
     case 'search_survey_by_course':
-        if (api_is_platform_admin()) {
+        // Close the session as we don't need it any further
+        session_write_close();
+
+        if ($isPlatformAdmin) {
             $survey = Database::get_course_table(TABLE_SURVEY);
 
             $sql = "SELECT survey_id as id, title, anonymous
@@ -322,6 +348,9 @@ switch ($action) {
         }
         break;
     case 'display_sessions_courses':
+        // Close the session as we don't need it any further
+        session_write_close();
+
         $sessionId = (int) $_GET['session'];
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $coursesData = SessionManager::get_course_list_by_session_id($sessionId);
@@ -352,7 +381,7 @@ switch ($action) {
         break;
     case 'course_logout':
         $logoutInfo = [
-            'uid' => api_get_user_id(),
+            'uid' => $userId,
             'cid' => api_get_course_int_id(),
             'sid' => api_get_session_id(),
         ];
@@ -362,6 +391,8 @@ switch ($action) {
             'action' => 'exit',
         ];
         Event::registerLog($logInfo);
+        // Close the session as we don't need it any further
+        session_write_close();
 
         $result = (int) Event::courseLogout($logoutInfo);
         echo $result;

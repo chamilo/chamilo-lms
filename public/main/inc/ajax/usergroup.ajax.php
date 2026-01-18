@@ -20,6 +20,8 @@ switch ($action) {
         if ($groupId) {
             $users = Container::getUsergroupRepository()->getUsersByGroup($groupId, true);
             if (!empty($sessionId)) {
+                // Close the session as we don't need it any further
+                session_write_close();
                 $filtered = [];
                 foreach ($users as $user) {
                     $filtered[] = [
@@ -31,6 +33,8 @@ switch ($action) {
                 $courseCode = $_POST['course_code'];
                 $courseUsers = CourseManager::get_user_list_from_course_code($courseCode, 0);
                 $courseUserIds = array_column($courseUsers, 'user_id');
+                // Close the session as we don't need it any further
+                session_write_close();
 
                 $filtered = [];
                 foreach ($users as $user) {
@@ -49,6 +53,8 @@ switch ($action) {
     case 'get_class_by_keyword':
         $keyword = isset($_REQUEST['q']) ? $_REQUEST['q'] : '';
         if (api_is_platform_admin() && !empty($keyword)) {
+            // Close the session as we don't need it any further
+            session_write_close();
             $userGroup = new UserGroupModel();
             $where = ['where' => ['name like ?' => "%$keyword%"], 'order' => 'name '];
             $items = [];
@@ -64,6 +70,8 @@ switch ($action) {
         break;
     case 'delete_user_in_usergroup':
         if ($isAllowedToEdit) {
+            // Close the session as we don't need it any further
+            session_write_close();
             $userGroup = new UserGroupModel();
             $userId = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
             $userIdList = explode(',', $userId);

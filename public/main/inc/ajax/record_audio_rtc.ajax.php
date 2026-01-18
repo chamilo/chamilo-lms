@@ -137,6 +137,8 @@ switch ($type) {
         break;
 
     case OralExpression::RECORDING_TYPE_FEEDBACK:
+        // Close the session as we don't need it any further
+        session_write_close();
         // Teacher feedback → ResourceType "attempt_feedback".
         /** @var ResourceType|null $resourceType */
         $resourceType = $resourceTypeRepo->findOneBy(['title' => 'attempt_feedback']);

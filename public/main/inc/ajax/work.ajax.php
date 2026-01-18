@@ -19,6 +19,8 @@ $repo = Container::getStudentPublicationRepository();
 switch ($action) {
     case 'show_student_work':
         api_protect_course_script(true);
+        // Close the session as we don't need it any further
+        session_write_close();
         if ($isAllowedToEdit) {
             $itemList = isset($_REQUEST['item_list']) ? $_REQUEST['item_list'] : [];
             $itemList = explode(',', $itemList);
@@ -34,6 +36,8 @@ switch ($action) {
         break;
     case 'hide_student_work':
         api_protect_course_script(true);
+        // Close the session as we don't need it any further
+        session_write_close();
         if ($isAllowedToEdit) {
             $itemList = isset($_REQUEST['item_list']) ? $_REQUEST['item_list'] : [];
             $itemList = explode(',', $itemList);
@@ -70,6 +74,8 @@ switch ($action) {
         $sessionId = api_get_session_id();
         $userId = api_get_user_id();
         $groupId = api_get_group_id();
+        // Close the session as we don't need it any further
+        session_write_close();
 
         $onlyOnePublication = ('true' === api_get_setting('work.allow_only_one_student_publication_per_user'));
         if ($onlyOnePublication) {

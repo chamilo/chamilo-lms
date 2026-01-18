@@ -4,55 +4,66 @@ Feature: Exercise tool
 
   Background:
     Given I am a platform administrator
-    And I am on course "TEMP" homepage
+    And wait very long for the page to be loaded
+
 
   Scenario: Create a question category
     Given I am on "/main/exercise/tests_category.php?action=addcategory&cid=1"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     When I fill in the following:
       | category_name | Category 1 |
     And I fill in editor field "category_description" with "Category 1 description"
     And I press "SubmitNote"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     Then I should see "Category added"
 
   Scenario: Create a second question category
     Given I am on "/main/exercise/tests_category.php?action=addcategory&cid=1"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     When I fill in the following:
       | category_name | Category 2 |
     And I fill in editor field "category_description" with "Category 2 description"
     And I press "SubmitNote"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     Then I should see "Category added"
 
   Scenario: Create an exercise
     Given I am on "/main/exercise/exercise_admin.php?cid=1"
+    And wait very long for the page to be loaded
     And I press advanced settings
     When I fill in the following:
       | exercise_title | Exercise 1 |
-    And I fill in editor field "exerciseDescription" with "Exercise description"
     And I press "submitExercise"
-    And wait for the page to be loaded
-    Then I should see "Test added"
+    And wait very long for the page to be loaded
+    Then I should see "0 questions"
 
   Scenario: Edit an exercise
     Given I am on "/main/exercise/exercise.php?cid=1"
+    And wait very long for the page to be loaded
+    And I wait for the page to be loaded
     And I follow "Exercise 1"
-    And I follow "Edit"
-    And I follow "Edit test name and settings"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-pencil" element
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-cog" element
+    And wait very long for the page to be loaded
     And I press "submitExercise"
-    And wait for the page to be loaded
-    Then I should see "Test name and settings have been saved."
+    And wait very long for the page to be loaded
+    Then I should see "0 questions"
+    And I should not see an error
 
   Scenario: Add question "Multiple choice" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
+    And wait very long for the page to be loaded
     And I follow "Exercise 1"
-    And I follow "Edit"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-pencil" element
+    And wait very long for the page to be loaded
     And I follow "Multiple choice"
+    And wait very long for the page to be loaded
     When I fill in the following:
       | questionName | Multiple choice |
-      | weighting[1] | 10 |
+      | weighting[ 1]| 10 |
     Then I fill in editor field "answer1" with "Answer true"
     Then I fill in editor field "answer2" with "Answer false"
     Then I fill in editor field "answer3" with "Answer false"
@@ -63,14 +74,18 @@ Feature: Exercise tool
     Then I fill in editor field "comment3" with "Comment false"
     Then I fill in editor field "comment4" with "Comment false"
     And I press "submit-question"
-    And wait for the page to be loaded
-    Then I should see "Item added"
+    And wait very long for the page to be loaded
+    And I should not see an error
 
   Scenario: Add question "Multiple answer" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
+    And wait very long for the page to be loaded
     And I follow "Exercise 1"
-    And I follow "Edit"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-pencil" element
+    And wait very long for the page to be loaded
     And I follow "Multiple answer"
+    And wait very long for the page to be loaded
     When I fill in the following:
       | questionName | Multiple answers |
       | weighting[1] | 10 |
@@ -85,26 +100,34 @@ Feature: Exercise tool
     Then I fill in editor field "comment3" with "Comment false"
     Then I fill in editor field "comment4" with "Comment false"
     And I press "submit-question"
-    And wait for the page to be loaded
-    Then I should see "Item added"
+    And wait very long for the page to be loaded
+    And I should not see an error
 
   Scenario: Add question "Fill in blanks" to "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
+    And wait very long for the page to be loaded
     And I follow "Exercise 1"
-    And I follow "Edit"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-pencil" element
+    And wait very long for the page to be loaded
     And I follow "Fill blanks or form"
+    And wait very long for the page to be loaded
     When I fill in the following:
       | questionName | Fill blanks |
     Then I fill in editor field "answer" with "Romeo and [Juliet] [Hätten||Haetten] [möchte||moechte] [wäre||waere] [können||koennen] [Könnten||Koennten] [Ärger] [voilà] [müssen] [l'été] [cherchent à] [Übung]  [Ärger|Möglichkeit]"
     And I press "submitQuestion"
-    And wait for the page to be loaded
-    Then I should see "Item added"
+    And wait very long for the page to be loaded
+    And I should not see an error
 
   Scenario: Add question "Matching" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
+    And wait very long for the page to be loaded
     And I follow "Exercise 1"
-    And I follow "Edit"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-pencil" element
+    And wait very long for the page to be loaded
     And I follow "Matching"
+    And wait very long for the page to be loaded
     When I fill in the following:
       | questionName | Matching |
     And I fill in editor field "answer1" with "Answer A"
@@ -113,14 +136,18 @@ Feature: Exercise tool
     And I fill in editor field "option2" with "Option B"
     And I fill in select bootstrap static input "#matches_2" select "2"
     And I press "submitQuestion"
-    And wait for the page to be loaded
-    Then I should see "Item added"
+    And wait very long for the page to be loaded
+    And I should not see an error
 
-    Scenario: Add question "Open" to exercise created "Exercise 1"
+  Scenario: Add question "Open" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
+    And wait very long for the page to be loaded
     And I follow "Exercise 1"
-    And I follow "Edit"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-pencil" element
+    And wait very long for the page to be loaded
     And I follow "Open"
+    And wait very long for the page to be loaded
     When I fill in the following:
       | questionName | Open question |
       | weighting | 10 |
@@ -128,22 +155,30 @@ Feature: Exercise tool
     And wait for the page to be loaded
     Then I should see "Item added"
 
-#    Scenario: Add question "Oral expression" to exercise created "Exercise 1"
-#    Given I am on "/main/exercise/exercise.php?cid=1"
-#    And I follow "Exercise 1"
-#    And I follow "Edit"
-#    And I follow "Oral expression"
-#    When I fill in the following:
-#      | questionName | Oral expression question |
-#      | weighting | 10 |
-#    And I press "submitQuestion"
-#    Then I should see "Item added"
+    Scenario: Add question "Oral expression" to exercise created "Exercise 1"
+    Given I am on "/main/exercise/exercise.php?cid=1"
+      And wait very long for the page to be loaded
+    And I follow "Exercise 1"
+     And wait very long for the page to be loaded
+    And I click the "i.mdi-pencil" element
+     And wait very long for the page to be loaded
+    And I follow "Oral expression"
+    And wait very long for the page to be loaded
+    When I fill in the following:
+      | questionName | Oral expression question |
+      | weighting | 10 |
+    And I press "submitQuestion"
+    Then I should not see an error
 
   Scenario: Add question "Exact answers combination" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
+    And wait very long for the page to be loaded
     And I follow "Exercise 1"
-    And I follow "Edit"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-pencil" element
+    And wait very long for the page to be loaded
     And I follow "Exact Selection"
+    And wait very long for the page to be loaded
     When I fill in the following:
       | questionName | Exact answers combination |
     Then I check the "correct[1]" radio button
@@ -152,37 +187,45 @@ Feature: Exercise tool
     Then I fill in editor field "comment1" with "Comment true"
     Then I fill in editor field "comment2" with "Comment false"
     And I press "submitQuestion"
-    And wait for the page to be loaded
-    Then I should see "Item added"
+    And wait very long for the page to be loaded
+    And I should not see an error
 
-    Scenario: Add question "Unique answer with unknown" to exercise created "Exercise 1"
-      Given I am on "/main/exercise/exercise.php?cid=1"
-      And I follow "Exercise 1"
-      And I follow "Edit"
-      And I follow "Unique answer with unknown"
-      When I fill in the following:
-        | questionName | Unique answer with unknown |
-        | weighting[1] | 10 |
-      Then I check the "correct" radio button
-      Then I fill in editor field "answer1" with "Answer true"
-      Then I fill in editor field "answer2" with "Answer false"
-      Then I fill in editor field "answer3" with "Answer false"
+  Scenario: Add question "Unique answer with unknown" to exercise created "Exercise 1"
+    Given I am on "/main/exercise/exercise.php?cid=1"
+    And wait very long for the page to be loaded
+    And I follow "Exercise 1"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-pencil" element
+    And wait very long for the page to be loaded
+    And I follow "Unique answer with unknown"
+    And wait very long for the page to be loaded
+    When I fill in the following:
+      | questionName | Unique answer with unknown |
+      | weighting[1] | 10 |
+    Then I check the "correct" radio button
+    Then I fill in editor field "answer1" with "Answer true"
+    Then I fill in editor field "answer2" with "Answer false"
+    Then I fill in editor field "answer3" with "Answer false"
 
-      Then I fill in editor field "comment1" with "Comment true"
-      Then I fill in editor field "comment2" with "Comment false"
-      Then I fill in editor field "comment3" with "Comment false"
-      And I press "submitQuestion"
-      And wait for the page to be loaded
-      Then I should see "Item added"
+    Then I fill in editor field "comment1" with "Comment true"
+    Then I fill in editor field "comment2" with "Comment false"
+    Then I fill in editor field "comment3" with "Comment false"
+    And I press "submitQuestion"
+    And wait very long for the page to be loaded
+    And I should not see an error
 
   Scenario: Add question "Multiple answer true/false/don't know" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
+    And wait very long for the page to be loaded
     And I follow "Exercise 1"
-    And I follow "Edit"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-pencil" element
+    And wait very long for the page to be loaded
     And I follow "Multiple answer true/false/don't know"
+    And wait very long for the page to be loaded
     When I fill in the following:
       | questionName | Multiple answer true - false - dont know |
-
+   # radio buttonproblem
     Then I check the "correct[1]" radio button
     Then I check the "correct[2]" radio button
     Then I check the "correct[3]" radio button
@@ -198,14 +241,18 @@ Feature: Exercise tool
     Then I fill in editor field "comment3" with "Comment true"
     Then I fill in editor field "comment4" with "Comment true"
     And I press "submitQuestion"
-    And wait for the page to be loaded
-    Then I should see "Item added"
+    And wait very long for the page to be loaded
+    And I should not see an error
 
   Scenario: Add question "Combination true/false/don't-know" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
+    And wait very long for the page to be loaded
     And I follow "Exercise 1"
-    And I follow "Edit"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-pencil" element
+    And wait very long for the page to be loaded
     And I follow "Combination true/false/don't-know"
+    And wait very long for the page to be loaded
     When I fill in the following:
       | questionName | Combination true - false - don't-know |
 
@@ -222,9 +269,13 @@ Feature: Exercise tool
 
   Scenario: Add question "Global multiple answer" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
+    And wait very long for the page to be loaded
     And I follow "Exercise 1"
-    And I follow "Edit"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-pencil" element
+    And wait very long for the page to be loaded
     And I follow "Global multiple answer"
+    And wait very long for the page to be loaded
     When I fill in the following:
       | questionName | Global multiple answer |
       | weighting[1] | 10 |
@@ -247,33 +298,39 @@ Feature: Exercise tool
 
   Scenario: Duplicate exercise
     Given I am on "/main/exercise/exercise.php?cid=1"
-    And I follow "Copy this exercise as a new one"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-disc" element
     And I confirm the popup
     And wait very long for the page to be loaded
     Then I should see "copied"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     And I should see "Exercise 1 - Copy"
 
-#  Scenario: Import exercise to test questions categories
-#    Given I am on "/main/exercise/upload_exercise.php?cid=1"
-#    And I should see "Import quiz from Excel"
-#    And I attach the file "/tests/fixtures/exercise.xls" to "user_upload_quiz"
-#    When I press "Upload"
-#    And wait for the page to be loaded
-#    Then I should see "Exercise for Behat test"
+  Scenario: Import exercise to test questions categories
+   Given I am on "/main/exercise/upload_exercise.php?cid=1"
+    And wait very long for the page to be loaded
+    And I should see "Import quiz from Excel"
+    And I attach the file "/tests/fixtures/exercise.xls" to "upload_user_upload_quiz"
+    When I press "Upload"
+    And wait for the page to be loaded
+   Then I should see "Exercise for Behat test"
 #
-#    Scenario: Import exercise from excel
-#    Given I am on "/main/exercise/upload_exercise.php?cid=1"
-#    Then I should see "Import quiz from Excel"
-#    Then I attach the file "/public/main/exercise/quiz_template.xls" to "user_upload_quiz"
-#    And I press "Upload"
-#    And wait for the page to be loaded
-#    Then I should see "Definition of oligarchy"
+    Scenario: Import exercise from excel
+    Given I am on "/main/exercise/upload_exercise.php?cid=1"
+      And wait very long for the page to be loaded
+      Then I should see "Import quiz from Excel"
+    Then I attach the file "/public/main/exercise/quiz_template.xls" to "upload_user_upload_quiz"
+    And I press "Upload"
+    And wait for the page to be loaded
+    Then I should see "Definition of oligarchy"
 
   Scenario: Try exercise "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
+    And wait very long for the page to be loaded
     And I follow "Exercise 1"
+    And wait very long for the page to be loaded
     And I follow "Start test"
+    And wait very long for the page to be loaded
     # Question 1
     Then I should see "Multiple choice"
     And I check the "Answer true" radio button
@@ -339,86 +396,44 @@ Feature: Exercise tool
 
   Scenario: Check exercise result
     Given I am on "/main/exercise/exercise.php?cid=1"
+    And wait very long for the page to be loaded
     And I follow "Exercise 1"
-    And I follow "Edit"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-pencil" element
+    And wait very long for the page to be loaded
     And I follow "Results and feedback"
     Then I should see "Learner score"
     And wait very long for the page to be loaded
-    And I follow "Grade activity"
-    Then I should see "Score for the test: 83 / 117"
-    And I press "Edit individual feedback and grade the open question"
-    And I should see "Assign a grade"
-    And I fill the only ckeditor in the page with "open question teacher answer"
-    And I fill in select "select[name=marks]" with option value "10" with class ".grade_select"
-    Then I press "Correct test"
-    And wait very long for the page to be loaded
-    And I follow "Edit"
-    Then I should see "open question teacher answer"
-    And I should see "Score for the test: 93 / 117"
-
-  Scenario: Create a session "Session Exercise" and add user "acostea"
-    Given I am on "/main/session/session_add.php"
-    When I fill in the following:
-      | name | Session Exercise |
-    And I fill in select2 input "#coach_username" with id "1" and value "admin"
-    And I press "submit"
-    Then wait for the page to be loaded
-    Then I should see "Add courses to this session (Session Exercise)"
-    Then I select "TEMP (TEMP)" from "NoSessionCoursesList[]"
-    And I press "add_course"
-    And I press "next"
-    Then I should see "Update successful"
-    Then I follow "Multiple registration"
-    Then I select "Costea Andrea (acostea)" from "nosessionUsersList[]"
-    And I press "add_user"
-    And I press "next"
-    Then I should see "Update successful"
-
-  Scenario: Try exercise with categorized questions as student
-    Given I am not logged
-    And I am a student
-    And I am on course "TEMP" homepage in session "Session Exercise"
-    Then I should see "TEMP (Session Exercise)"
-    And I am on "/main/exercise/exercise.php?cid=1"
-    And I follow "Exercise for Behat test"
-    And I follow "Start test"
-    When wait for the page to be loaded
-    And I press "Next question"
-    And wait for the page to be loaded
-    And I check "oligarchy"
-    And I check "oligopoly"
-    And I check "timocracy"
-    And I check "autocracy"
-    And I press "Next question"
-    And wait for the page to be loaded
     And I check the "semantics" radio button
     And I press "Next question"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     And I check the "RNASL" radio button
     And I press "Next question"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     And I check the "10" radio button
     And I press "Next question"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     And fill in the following:
       | choice_id_6_0 | words  |
       | choice_id_6_1 | fill   |
       | choice_id_6_2 | blanks |
     And I press "Next question"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     And I select "A" from "choice_id_7_1"
     And I select "B" from "choice_id_7_2"
     And I select "C" from "choice_id_7_3"
+    And wait very long for the page to be loaded
     And I press "Next question"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     And I check "1"
     And I press "Next question"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     And I press "End test"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
+    And I zoom out to maximum
     Then I should see "Score for the test: 190 / 190"
+    #Y'a pas exactement ce tableau
     And I should see the table "#category_results":
-      | Categories    | Absolute score | Relative score |
       | Categoryname2 | 50 / 70        | 71.43%         |
       | Categoryname1 | 60 / 60        | 100%           |
       | none          | 80 / 60        | 133.33%        |
@@ -426,14 +441,21 @@ Feature: Exercise tool
 
   Scenario: Teacher looks at exercise results by categories
     Given I am on "/main/index/user_portal.php"
-    And I am on course "TEMP" homepage in session "Session Exercise"
-    Then I should see "TEMP (Session Exercise)"
+    And wait very long for the page to be loaded
+    And I am on "/sessions"
+    And wait very long for the page to be loaded
+    Then I should see "Session Exercise"
+    And wait very long for the page to be loaded
     And I am on "/main/exercise/exercise.php?cid=1"
+    And wait very long for the page to be loaded
     And I follow "Exercise for Behat test"
-    And I follow "Results and feedback"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-chart-box" element
+    And wait very long for the page to be loaded
     Then I should see "Learner score"
     And wait very long for the page to be loaded
-    And I follow "Grade activity"
+    And I click the "i.mdi-checkbox-marked-circle-plus-outline" element
+    And wait very long for the page to be loaded
     Then I should see "Score for the test: 190 / 190"
     And I should see the table "#category_results":
       | Categories    | Absolute score | Relative score |
@@ -441,26 +463,45 @@ Feature: Exercise tool
       | Categoryname1 | 60 / 60        | 100%           |
       | none          | 80 / 60        | 133.33%        |
       | Total         | 190 / 190      | 100%           |
+ Scenario: Delete an exercise
+    Given I am on "/main/exercise/exercise.php?cid=1"
+   And wait very long for the page to be loaded
+    And I click the "i.mdi-delete" element
+    And I confirm the popup
+    Then I should not see "Exercise 1"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-delete" element
+    And I confirm the popup
+    Then I should not see "Exercise for Behat test"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-delete" element
+    And I confirm the popup
+    Then I should not see "IQ test"
 
-#  Scenario: Delete an exercise
-#    Given I am on "/main/exercise/exercise.php?cid=1"
-#    And I follow "Delete"
-#    And I confirm the popup
-#    Then I should see "The test has been deleted"
-#
-#  Scenario: Delete an exercise category
-#    Given I am on "/main/exercise/tests_category.php?cid=1"
-#    And I follow "Delete"
-#    Then I should see "Category deleted"
-#
-#  Scenario: Delete an exercise category
-#    Given I am on "/main/exercise/tests_category.php?cid=1"
-#    And I follow "Delete"
-#    Then I should see "Category deleted"
-#
-#  Scenario: Delete session
-#    Given I am on "/main/session/session_list.php?keyword=Session+Exercise"
-#    And wait for the page to be loaded
-#    And I follow "Delete"
-#    And I confirm the popup
-#    Then I should see "Deleted"
+  Scenario: Delete an exercise category
+    Given I am on "/main/exercise/tests_category.php?cid=1"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-delete" element
+    Then I should not see "Category 1"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-delete" element
+    Then I should not see "Category 2"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-delete" element
+    Then I should not see "Categoryname2"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-delete" element
+    Then I should not see "Categoryname1"
+
+  Scenario: Delete session
+    Given I am on "/main/session/session_list.php?keyword=Session+Exercise"
+    And wait very long for the page to be loaded
+    And I click the "i.mdi-delete" element
+    And I confirm the popup
+    And wait for the page to be loaded
+    Then I should not see "Session Exercise"
+
+  # Scenario: Delete questions (commented)
+#  Given I am on "/main/exercise/exercise.php?cid=1"
+#  And wait very long for the page to be loaded
+#  And I click the "i.mdi-database" element

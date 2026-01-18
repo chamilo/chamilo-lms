@@ -100,6 +100,8 @@ switch ($action) {
         $range = Security::remove_XSS($_REQUEST['range']);
         $sessionId = isset($_REQUEST['session_id']) ? $_REQUEST['session_id'] : 0;
         $courseInfo = api_get_course_info($course_code);
+        // Close the session as we don't need it any further
+        session_write_close();
 
         if (1 == $range) {
             $start_date = Security::remove_XSS($_REQUEST['sd']);
@@ -133,6 +135,8 @@ switch ($action) {
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : '';
         $sessionId = isset($_REQUEST['session_id']) ? $_REQUEST['session_id'] : 0;
         $courseInfo = api_get_course_info($course_code);
+        // Close the session as we don't need it any further
+        session_write_close();
 
         $connections = MySpace::get_connections_to_course_by_date(
             $user_id,

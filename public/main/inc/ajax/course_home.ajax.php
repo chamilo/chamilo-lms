@@ -6,7 +6,6 @@
 /**
  * Responses to AJAX calls.
  */
-
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 
 $action = $_GET['a'];
@@ -100,7 +99,7 @@ switch ($action) {
                 $lp_url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
 
                 $last_date = Tracking::get_last_connection_date_on_the_course(
-                    api_get_user_id(),
+                    $userId,
                     $item,
                     $session_id,
                     false
@@ -151,6 +150,9 @@ switch ($action) {
                 $count++;
             }
         }
+        // Close the session as we don't need it any further
+        session_write_close();
+
         $temp = msort($temp, $sidx, $sord);
 
         $i = 0;
@@ -291,6 +293,8 @@ switch ($action) {
                 $count++;
             }
         }
+        // Close the session as we don't need it any further
+        session_write_close();
 
         if (!empty($sidx)) {
             $temp = msort($temp, $sidx, $sord);
@@ -424,6 +428,8 @@ switch ($action) {
                 $count++;
             }
         }
+        // Close the session as we don't need it any further
+        session_write_close();
 
         $temp = msort($temp, $sidx, $sord);
         $response = new stdClass();

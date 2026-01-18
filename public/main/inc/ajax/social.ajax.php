@@ -258,6 +258,8 @@ switch ($action) {
         }
 
         $user = api_get_user_entity($current_user_id);
+        // Close the session as we don't need it any further
+        session_write_close();
 
         $userLike = $messageLikesRepo->findOneBy(['post' => $message, 'user' => $user]);
 

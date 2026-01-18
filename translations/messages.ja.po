@@ -32410,3 +32410,231 @@ msgstr "カスタム証明書"
 msgid "Update profile"
 msgstr "プロフィールを更新"
 
+msgid "Enable learning path generator"
+msgstr "学習パスジェネレーターを有効化"
+
+msgid "Enable exercise generator"
+msgstr "演習ジェネレーターを有効化"
+
+msgid "Enable open answers grader"
+msgstr "自由回答採点器を有効化"
+
+msgid "Enable tutor chatbot"
+msgstr "チューター・チャットボットを有効化"
+
+msgid "Enable task grader"
+msgstr "タスク採点器を有効化"
+
+msgid "Enable content analyser"
+msgstr "コンテンツアナライザーを有効化"
+
+msgid "Enable image generator"
+msgstr "画像ジェネレーターを有効化"
+
+msgid "Enable glossary terms generator"
+msgstr "用語集用語ジェネレーターを有効化"
+
+msgid "Enable video generator"
+msgstr "ビデオジェネレーターを有効化"
+
+msgid "Enable course analyser"
+msgstr "コースアナライザーを有効化"
+
+msgid "The operation '%s' is not supported."
+msgstr "操作 '%s' はサポートされていません。"
+
+msgid "AI feedback on %s in course %s"
+msgstr "コース %s の %s に対する AI フィードバック"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "削除に失敗: コースコンテキストの欠如または無効な質問 ID。"
+
+msgid "AI Tutor"
+msgstr "AI チューター"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "APCu 拡張機能は、プラットフォームが使用するためにインストールおよび有効化されている必要があります。"
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "OPCache memory_consumption を少なくとも %sMB の RAM に設定することを推奨します。"
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "OPcache モジュールは、プラットフォームが使用するためにインストールおよび有効化されている必要があります。"
+
+msgid "You are here"
+msgstr "現在位置"
+
+msgid "Click an event type to filter results."
+msgstr "イベントタイプをクリックして結果をフィルタリングしてください。"
+
+msgid "Require unique presence"
+msgstr "一意の出席を要求"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "有効にすると、出席が少なくとも1回あれば学習者に100%を与えます。"
+
+msgid "AI feedback"
+msgstr "AI フィードバック"
+
+msgid "Prompt"
+msgstr "プロンプト"
+
+msgid "Tip"
+msgstr "ヒント"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "フィードバックを求める前にプロンプトを編集できます。"
+
+msgid "Result (you can apply it to the comment)"
+msgstr "結果（コメントに適用可能）"
+
+msgid "Apply to comment"
+msgstr "コメントに適用"
+
+msgid "Apply score"
+msgstr "スコアを適用"
+
+msgid "AI grade"
+msgstr "AI 採点"
+
+msgid "AI tutor is disabled during tests"
+msgstr "テスト中はAIチューターが無効です"
+
+msgid "Generate glossary terms"
+msgstr "用語集項目を生成"
+
+msgid "Generate media"
+msgstr "メディアを生成"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "このコースでAIメディアを生成する権限がありません。"
+
+msgid "AI helpers are disabled at platform level."
+msgstr "プラットフォームレベルでAIヘルパーが無効です。"
+
+msgid "AI media generation is disabled in course settings."
+msgstr "コース設定でAIメディア生成が無効です。"
+
+msgid "No AI media providers available."
+msgstr "利用可能なAIメディアプロバイダーがありません。"
+
+msgid "Provider"
+msgstr "プロバイダー"
+
+msgid "Select a provider"
+msgstr "プロバイダーを選択"
+
+msgid "Example: generated_media"
+msgstr "例: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "名前はプロンプトに追加されません。ファイル保存にのみ使用されます。"
+
+msgid "Describe what you want to generate..."
+msgstr "生成したいものを記述..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "ヒント: プリセットをクリックしてサイズを素早く設定"
+
+msgid "Generating..."
+msgstr "生成中..."
+
+msgid "Save to Documents"
+msgstr "ドキュメントに保存"
+
+msgid "Document IRI"
+msgstr "ドキュメントIRI"
+
+msgid "Go to folder"
+msgstr "フォルダに移動"
+
+msgid "Provider used"
+msgstr "使用プロバイダー"
+
+msgid "This video result cannot be saved yet"
+msgstr "このビデオ結果はまだ保存できません"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "プロバイダーが変更されたため、ビデオポーリングが停止されました。"
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "ビデオ生成に時間がかかっています。後でもう一度お試しください。"
+
+msgid "Failed to check video status."
+msgstr "ビデオの状態を確認できませんでした。"
+
+msgid "Video generated successfully. You can now save it."
+msgstr "ビデオが正常に生成されました。今すぐ保存できます。"
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "ビデオ生成は完了しましたが、再生可能なコンテンツが返されませんでした。"
+
+msgid "Video generation failed."
+msgstr "ビデオ生成に失敗しました。"
+
+msgid "Waiting for the video to be ready..."
+msgstr "ビデオの準備を待っています..."
+
+msgid "Please complete all fields."
+msgstr "すべてのフィールドを入力してください。"
+
+msgid "Image generation is not enabled for this course."
+msgstr "このコースで画像生成は有効になっていません。"
+
+msgid "Video generation is not enabled for this course."
+msgstr "このコースでビデオ生成は有効になっていません。"
+
+msgid "Generation failed."
+msgstr "生成に失敗しました。"
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "正常に生成されました。プレビューを確認し、準備ができたら保存してください。"
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "正常に生成されました。プロバイダーがURLを返したため保存は無効です。"
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "ビデオ生成を開始しました。結果を待っています..."
+
+msgid "AI returned an empty response."
+msgstr "AIが空の応答を返しました。"
+
+msgid "Nothing to save yet."
+msgstr "まだ保存するものがありません。"
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "このプロバイダーはbase64コンテンツを返しませんでした。別のプロバイダーをお試しください。"
+
+msgid "Saving failed."
+msgstr "保存に失敗しました。"
+
+msgid "Get AI feedback"
+msgstr "AIフィードバックを取得"
+
+msgid "Copy answer to clipboard"
+msgstr "回答をクリップボードにコピー"
+
+msgid "Save answer to my inbox"
+msgstr "回答をマイインボックスに保存"
+
+msgid "The document is already in this folder"
+msgstr "ドキュメントはこのフォルダに既に存在します"
+
+msgid "Copied"
+msgstr "コピーしました"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "用語集項目を生成する権限がありません。"
+
+msgid "Video generation is in progress"
+msgstr "ビデオ生成中"
+
+msgid "Job"
+msgstr "ジョブ"
+
+msgid "Modified prompt"
+msgstr "修正されたプロンプト"
+
+msgid "Saved in Documents"
+msgstr "ドキュメントに保存済み"
+

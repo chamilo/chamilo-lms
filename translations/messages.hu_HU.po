@@ -32344,3 +32344,231 @@ msgstr "Egyediigazolás"
 msgid "Update profile"
 msgstr "Profil frissítése"
 
+msgid "Enable learning path generator"
+msgstr "Tanulási útvonal generátor engedélyezése"
+
+msgid "Enable exercise generator"
+msgstr "Feladatgenerátor engedélyezése"
+
+msgid "Enable open answers grader"
+msgstr "Nyílt válaszok értékelő engedélyezése"
+
+msgid "Enable tutor chatbot"
+msgstr "Oktató csevegőrobot engedélyezése"
+
+msgid "Enable task grader"
+msgstr "Feladatértékelő engedélyezése"
+
+msgid "Enable content analyser"
+msgstr "Tartalomelemző engedélyezése"
+
+msgid "Enable image generator"
+msgstr "Képgenerátor engedélyezése"
+
+msgid "Enable glossary terms generator"
+msgstr "Szójegyzék kifejezések generátor engedélyezése"
+
+msgid "Enable video generator"
+msgstr "Videógenerátor engedélyezése"
+
+msgid "Enable course analyser"
+msgstr "Kurzus elemző engedélyezése"
+
+msgid "The operation '%s' is not supported."
+msgstr "A(z) „%s” művelet nincs támogatva."
+
+msgid "AI feedback on %s in course %s"
+msgstr "AI visszajelzés a(z) %s elemre a(z) %s kurzusban"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Törlés sikertelen: hiányzó kurzuskörnyezet vagy érvénytelen kérdés azonosító."
+
+msgid "AI Tutor"
+msgstr "AI tutor"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "Az APCu kiterjesztés telepítve és engedélyezve kell legyen a platform használatához."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Az OPCache memory_consumption legalább %sMB RAM elérésének engedélyezése ajánlott."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "Az OPcache modul telepítve és engedélyezve kell legyen a platform használatához."
+
+msgid "You are here"
+msgstr "Itt jár"
+
+msgid "Click an event type to filter results."
+msgstr "Kattintson egy eseménytípusra az eredmények szűréséhez."
+
+msgid "Require unique presence"
+msgstr "Egyedi jelenlét megkövetelése"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Ha engedélyezve van, a jegyzőkönyv 100%-ot ad a tanulónak, ha legalább egyszer jelen van."
+
+msgid "AI feedback"
+msgstr "AI visszajelzés"
+
+msgid "Prompt"
+msgstr "Prompt"
+
+msgid "Tip"
+msgstr "Tipp"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Szerkesztheti a promptot a visszajelzés kérése előtt."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Eredmény (alkalmazhatja a megjegyzésre)"
+
+msgid "Apply to comment"
+msgstr "Alkalmazás a megjegyzésre"
+
+msgid "Apply score"
+msgstr "Pont alkalmazása"
+
+msgid "AI grade"
+msgstr "AI értékelés"
+
+msgid "AI tutor is disabled during tests"
+msgstr "Az AI tutor letiltva a tesztek alatt"
+
+msgid "Generate glossary terms"
+msgstr "Glosszárium kifejezések generálása"
+
+msgid "Generate media"
+msgstr "Média generálása"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Nincs jogosultsága AI média generálására ebben a kurzusban."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "Az AI segédek letiltva a platform szintjén."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "Az AI média generálás letiltva a kurzus beállításaiban."
+
+msgid "No AI media providers available."
+msgstr "Nincs AI média szolgáltató elérhető."
+
+msgid "Provider"
+msgstr "Szolgáltató"
+
+msgid "Select a provider"
+msgstr "Válasszon szolgáltatót"
+
+msgid "Example: generated_media"
+msgstr "Példa: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "A név nincs hozzáadva a prompt-hoz; csak a fájl mentéséhez használatos."
+
+msgid "Describe what you want to generate..."
+msgstr "Írja le, mit szeretne generálni..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Tipp: kattintson egy előre beállítottra a méret gyors beállításához."
+
+msgid "Generating..."
+msgstr "Generálás..."
+
+msgid "Save to Documents"
+msgstr "Mentés a Dokumentumokba"
+
+msgid "Document IRI"
+msgstr "Dokumentum IRI"
+
+msgid "Go to folder"
+msgstr "Megnyitás a mappában"
+
+msgid "Provider used"
+msgstr "Használt szolgáltató"
+
+msgid "This video result cannot be saved yet"
+msgstr "Ezt a videó eredményt még nem lehet menteni"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "A videó lekérdezés leállt, mert a szolgáltató megváltozott."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "A videó generálás túl sokáig tart. Kérjük, próbálja később újra."
+
+msgid "Failed to check video status."
+msgstr "A videó állapotának ellenőrzése sikertelen."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Videó sikeresen generálva. Most már mentheti."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "A videó generálás befejeződött, de nem érkezett lejátszható tartalom."
+
+msgid "Video generation failed."
+msgstr "A videó generálás sikertelen."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Várakozás a videó elkészülésére..."
+
+msgid "Please complete all fields."
+msgstr "Töltse ki az összes mezőt."
+
+msgid "Image generation is not enabled for this course."
+msgstr "A kép generálás nincs engedélyezve ebben a kurzusban."
+
+msgid "Video generation is not enabled for this course."
+msgstr "A videó generálás nincs engedélyezve ebben a kurzusban."
+
+msgid "Generation failed."
+msgstr "A generálás sikertelen."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Sikeresen generálva. Nézze meg az előnézetet, és mentse, ha kész."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Sikeresen generálva. A mentés letiltva, mert a szolgáltató URL-t adott vissza."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Videó generálás elindítva. Várakozás az eredményre..."
+
+msgid "AI returned an empty response."
+msgstr "Az AI üres választ adott vissza."
+
+msgid "Nothing to save yet."
+msgstr "Még nincs mit menteni."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Ez a szolgáltató nem adott vissza base64 tartalmat. Próbáljon másik szolgáltatót."
+
+msgid "Saving failed."
+msgstr "A mentés sikertelen."
+
+msgid "Get AI feedback"
+msgstr "AI visszajelzés kérése"
+
+msgid "Copy answer to clipboard"
+msgstr "Válasz másolása a vágólapra"
+
+msgid "Save answer to my inbox"
+msgstr "Válasz mentése a bejövő üzenetekbe"
+
+msgid "The document is already in this folder"
+msgstr "A dokumentum már ebben a mappában van"
+
+msgid "Copied"
+msgstr "Másolva"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Nincs jogosultsága glosszárium kifejezések generálására."
+
+msgid "Video generation is in progress"
+msgstr "Videó generálás folyamatban"
+
+msgid "Job"
+msgstr "Feladat"
+
+msgid "Modified prompt"
+msgstr "Módosított prompt"
+
+msgid "Saved in Documents"
+msgstr "Mentve a Dokumentumokba"
+

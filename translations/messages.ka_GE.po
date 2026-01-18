@@ -32340,3 +32340,231 @@ msgstr "Customcertificate"
 msgid "Update profile"
 msgstr "პროფილის განახლება"
 
+msgid "Enable learning path generator"
+msgstr "სწავლების ბილიკის გენერატორის ჩართვა"
+
+msgid "Enable exercise generator"
+msgstr "ვარჯიშის გენერატორის ჩართვა"
+
+msgid "Enable open answers grader"
+msgstr "ღია პასუხების შემოწმებლის ჩართვა"
+
+msgid "Enable tutor chatbot"
+msgstr "ტუტორის ჩატბოტის ჩართვა"
+
+msgid "Enable task grader"
+msgstr "დავალების შემოწმებლის ჩართვა"
+
+msgid "Enable content analyser"
+msgstr "კონტენტის ანალიზატორის ჩართვა"
+
+msgid "Enable image generator"
+msgstr "სურათის გენერატორის ჩართვა"
+
+msgid "Enable glossary terms generator"
+msgstr "გლოსარის ტერმინების გენერატორის ჩართვა"
+
+msgid "Enable video generator"
+msgstr "ვიდეოს გენერატორის ჩართვა"
+
+msgid "Enable course analyser"
+msgstr "კურსის ანალიზატორის ჩართვა"
+
+msgid "The operation '%s' is not supported."
+msgstr "ოპერაცია „%s“ არ არის მხარდაჭერილი."
+
+msgid "AI feedback on %s in course %s"
+msgstr "სუბიექტური შეფასება %s-ზე კურსში %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "წაშლა ვერ მოხერხდა: კურსის კონტექსტი არ არის მითითებული ან შეკითხვის ID არასწორია."
+
+msgid "AI Tutor"
+msgstr "სუბიექტური შემოწმებელი"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "APCu გაფართოება უნდა იყოს დაინსტალირებული და ჩართული პლატფორმის მიერ მისი გამოყენებისთვის."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "OPCache-ის memory_consumption-ის %sMB RAM-მდე მისაღწევად ნებართვა რეკომენდებულია."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "OPcache მოდული უნდა იყოს დაინსტალირებული და ჩართული პლატფორმის მიერ მისი გამოყენებისთვის."
+
+msgid "You are here"
+msgstr "თქვენ აქ ხართ"
+
+msgid "Click an event type to filter results."
+msgstr "შედეგების ფილტრაციისთვის აირჩიეთ მოვლენის ტიპი."
+
+msgid "Require unique presence"
+msgstr "უნიკალური პრეზენტაციის მოთხოვნა"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "თუ ჩართულია, ჟურნალი მისცემს მოსწავლეს 100%-ს, თუ ის მინიმუმ ერთხელ იქნება პრეზენტაციაზე."
+
+msgid "AI feedback"
+msgstr "სუბიექტური შეფასება"
+
+msgid "Prompt"
+msgstr "საწყისი მოთხოვნა"
+
+msgid "Tip"
+msgstr "რჩევა"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "შეგიძლიათ შეცვალოთ საწყისი მოთხოვნა შეფასების მოთხოვნამდე."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "შედეგი (შეგიძლიათ გამოიყენოთ კომენტარში)"
+
+msgid "Apply to comment"
+msgstr "გამოყენება კომენტარში"
+
+msgid "Apply score"
+msgstr "შეფასების გამოყენება"
+
+msgid "AI grade"
+msgstr "სუბიექტური შეფასება"
+
+msgid "AI tutor is disabled during tests"
+msgstr "სუბიექტური შემოწმებელი გამორთულია ტესტების დროს"
+
+msgid "Generate glossary terms"
+msgstr "გლოსარის ტერმინების გენერირება"
+
+msgid "Generate media"
+msgstr "მედიის გენერირება"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "თქვენ არ გაქვთ ნებართვა AI მედიის გენერირებაზე ამ კურსში."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "AI მდგომარეობები გამორთულია პლატფორმის დონეზე."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "AI მედიის გენერირება გამორთულია კურსის პარამეტრებში."
+
+msgid "No AI media providers available."
+msgstr "AI მედიის პროვაიდერები არ არის ხელმისაწვდომი."
+
+msgid "Provider"
+msgstr "პროვაიდერი"
+
+msgid "Select a provider"
+msgstr "პროვაიდერის შერჩევა"
+
+msgid "Example: generated_media"
+msgstr "მაგ.: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "სახელი არ ემატება მოთხოვნას; ის მხოლოდ ფაილის შესანახად გამოიყენება."
+
+msgid "Describe what you want to generate..."
+msgstr "აღწერეთ რის გენერირებაც გსურთ..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "საბჭოთა: დააჭირეთ წინასწარი პარამეტრის ზომის სწრაფად დასაყენებლად."
+
+msgid "Generating..."
+msgstr "გენერირება მიმდინარეობს..."
+
+msgid "Save to Documents"
+msgstr "შენახვა დოკუმენტებში"
+
+msgid "Document IRI"
+msgstr "დოკუმენტის IRI"
+
+msgid "Go to folder"
+msgstr "ფოლდერში გადასვლა"
+
+msgid "Provider used"
+msgstr "გამოყენებული პროვაიდერი"
+
+msgid "This video result cannot be saved yet"
+msgstr "ამ ვიდეოს შედეგი ჯერ ვერ შეინახება"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "ვიდეოს გამოკითხვა შეწყდა პროვაიდერის შეცვლის გამო."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "ვიდეოს გენერირება ძალიან დიდხანს მიმდინარეობს. გთხოვთ, სცადოთ მოგვიანებით."
+
+msgid "Failed to check video status."
+msgstr "ვიდეოს სტატუსის შემოწმება ვერ მოხერხდა."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "ვიდეო წარმატებით გენერირებულია. ახლა შეგიძლიათ მისი შენახვა."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "ვიდეოს გენერირება დასრულდა, მაგრამ არ დაბრუნებულა შესაყვანი კონტენტი."
+
+msgid "Video generation failed."
+msgstr "ვიდეოს გენერირება ვერ მოხერხდა."
+
+msgid "Waiting for the video to be ready..."
+msgstr "ვიდეოს მზადყოფნის მოლოდინში ვართ..."
+
+msgid "Please complete all fields."
+msgstr "გთხოვთ, შეავსოთ ყველა ველი."
+
+msgid "Image generation is not enabled for this course."
+msgstr "სურათის გენერირება არ არის ჩართული ამ კურსისთვის."
+
+msgid "Video generation is not enabled for this course."
+msgstr "ვიდეოს გენერირება არ არის ჩართული ამ კურსისთვის."
+
+msgid "Generation failed."
+msgstr "გენერირება ვერ მოხერხდა."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "წარმატებით გენერირებულია. გადახედეთ წინასწარ გადაჯაჭვულს და შეინახეთ მზადყოფნისას."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "წარმატებით გენერირებულია. შენახვა გამორთულია, რადგან პროვაიდერმა URL დააბრუნა."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "ვიდეოს გენერირება დაწყებულია. შედეგის მოლოდინში ვართ..."
+
+msgid "AI returned an empty response."
+msgstr "AI დაბრუნა ცარიელი პასუხი."
+
+msgid "Nothing to save yet."
+msgstr "ჯერ არაფერია შესანახი."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "ამ პროვაიდერმა არ დააბრუნა base64 კონტენტი. გთხოვთ, სცადოთ სხვა პროვაიდერი."
+
+msgid "Saving failed."
+msgstr "შენახვა ვერ მოხერხდა."
+
+msgid "Get AI feedback"
+msgstr "მიიღეთ AI უკუკავშირი"
+
+msgid "Copy answer to clipboard"
+msgstr "პასუხის კოპირება ბუფერში"
+
+msgid "Save answer to my inbox"
+msgstr "პასუხის შენახვა ჩემს ფოსტის მისაღებში"
+
+msgid "The document is already in this folder"
+msgstr "დოკუმენტი უკვე ამ ფოლდერშია"
+
+msgid "Copied"
+msgstr "კოპირებულია"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "თქვენ არ გაქვთ ნებართვა გლოსარის ტერმინების გენერირებაზე."
+
+msgid "Video generation is in progress"
+msgstr "ვიდეოს გენერირება მიმდინარეობს"
+
+msgid "Job"
+msgstr "დავალება"
+
+msgid "Modified prompt"
+msgstr "შეცვლილი მოთხოვნა"
+
+msgid "Saved in Documents"
+msgstr "შენახულია დოკუმენტებში"
+

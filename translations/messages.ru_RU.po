@@ -32347,3 +32347,231 @@ msgstr "Customcertificate"
 msgid "Update profile"
 msgstr "Обновить профиль"
 
+msgid "Enable learning path generator"
+msgstr "Включить генератор учебных траекторий"
+
+msgid "Enable exercise generator"
+msgstr "Включить генератор упражнений"
+
+msgid "Enable open answers grader"
+msgstr "Включить проверяльщик открытых ответов"
+
+msgid "Enable tutor chatbot"
+msgstr "Включить чат-бот репетитора"
+
+msgid "Enable task grader"
+msgstr "Включить проверяльщик заданий"
+
+msgid "Enable content analyser"
+msgstr "Включить анализатор контента"
+
+msgid "Enable image generator"
+msgstr "Включить генератор изображений"
+
+msgid "Enable glossary terms generator"
+msgstr "Включить генератор терминов глоссария"
+
+msgid "Enable video generator"
+msgstr "Включить генератор видео"
+
+msgid "Enable course analyser"
+msgstr "Включить анализатор курса"
+
+msgid "The operation '%s' is not supported."
+msgstr "Операция «%s» не поддерживается."
+
+msgid "AI feedback on %s in course %s"
+msgstr "Обратная связь ИИ по %s в курсе %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Ошибка удаления: отсутствует контекст курса или неверный ID вопроса."
+
+msgid "AI Tutor"
+msgstr "Репетитор ИИ"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "Расширение APCu должно быть установлено и включено, чтобы платформа могла его использовать."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Рекомендуется установить memory_consumption OPCache как минимум на %s МБ ОЗУ."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "Модуль OPcache должен быть установлен и включен, чтобы платформа могла его использовать."
+
+msgid "You are here"
+msgstr "Вы здесь"
+
+msgid "Click an event type to filter results."
+msgstr "Нажмите на тип события, чтобы отфильтровать результаты."
+
+msgid "Require unique presence"
+msgstr "Требовать уникальное присутствие"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Если включено, журнал оценок присвоит учащемуся 100%, если он присутствовал хотя бы раз."
+
+msgid "AI feedback"
+msgstr "Обратная связь ИИ"
+
+msgid "Prompt"
+msgstr "Запрос"
+
+msgid "Tip"
+msgstr "Подсказка"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Вы можете отредактировать запрос перед запросом обратной связи."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Результат (вы можете применить его к комментарию)"
+
+msgid "Apply to comment"
+msgstr "Применить к комментарию"
+
+msgid "Apply score"
+msgstr "Применить оценку"
+
+msgid "AI grade"
+msgstr "Оценка ИИ"
+
+msgid "AI tutor is disabled during tests"
+msgstr "Репетитор ИИ отключен во время тестов"
+
+msgid "Generate glossary terms"
+msgstr "Генерировать термины глоссария"
+
+msgid "Generate media"
+msgstr "Генерировать медиа"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "У вас нет прав для генерации медиа ИИ в этом курсе."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "Помощники ИИ отключены на уровне платформы."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "Генерация ИИ-медиа отключена в настройках курса."
+
+msgid "No AI media providers available."
+msgstr "Нет доступных провайдеров ИИ-медиа."
+
+msgid "Provider"
+msgstr "Провайдер"
+
+msgid "Select a provider"
+msgstr "Выберите провайдер"
+
+msgid "Example: generated_media"
+msgstr "Пример: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "Имя не добавляется в запрос; оно используется только для сохранения файла."
+
+msgid "Describe what you want to generate..."
+msgstr "Опишите, что вы хотите сгенерировать..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Подсказка: нажмите на предустановку, чтобы быстро установить размер."
+
+msgid "Generating..."
+msgstr "Генерация..."
+
+msgid "Save to Documents"
+msgstr "Сохранить в Документы"
+
+msgid "Document IRI"
+msgstr "IRI документа"
+
+msgid "Go to folder"
+msgstr "Перейти в папку"
+
+msgid "Provider used"
+msgstr "Использованный провайдер"
+
+msgid "This video result cannot be saved yet"
+msgstr "Этот видеоролик пока нельзя сохранить"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Опрос статуса видео остановлен, поскольку провайдер изменился."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "Генерация видео занимает слишком много времени. Попробуйте позже."
+
+msgid "Failed to check video status."
+msgstr "Не удалось проверить статус видео."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Видео успешно сгенерировано. Теперь вы можете его сохранить."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Генерация видео завершена, но воспроизводимый контент не возвращен."
+
+msgid "Video generation failed."
+msgstr "Не удалось сгенерировать видео."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Ожидание готовности видео..."
+
+msgid "Please complete all fields."
+msgstr "Заполните все поля."
+
+msgid "Image generation is not enabled for this course."
+msgstr "Генерация изображений не включена для этого курса."
+
+msgid "Video generation is not enabled for this course."
+msgstr "Генерация видео не включена для этого курса."
+
+msgid "Generation failed."
+msgstr "Генерация не удалась."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Успешно сгенерировано. Проверьте предварительный просмотр и сохраните при готовности."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Успешно сгенерировано. Сохранение отключено, поскольку провайдер вернул URL."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Генерация видео начата. Ожидание результата..."
+
+msgid "AI returned an empty response."
+msgstr "ИИ вернул пустой ответ."
+
+msgid "Nothing to save yet."
+msgstr "Пока нечего сохранять."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Этот провайдер не вернул контент в формате base64. Попробуйте другой провайдер."
+
+msgid "Saving failed."
+msgstr "Сохранение не удалось."
+
+msgid "Get AI feedback"
+msgstr "Получить отзыв ИИ"
+
+msgid "Copy answer to clipboard"
+msgstr "Копировать ответ в буфер обмена"
+
+msgid "Save answer to my inbox"
+msgstr "Сохранить ответ в мой входящий"
+
+msgid "The document is already in this folder"
+msgstr "Документ уже находится в этой папке"
+
+msgid "Copied"
+msgstr "Скопировано"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "У вас нет прав для генерации терминов глоссария."
+
+msgid "Video generation is in progress"
+msgstr "Генерация видео в процессе"
+
+msgid "Job"
+msgstr "Задание"
+
+msgid "Modified prompt"
+msgstr "Измененный запрос"
+
+msgid "Saved in Documents"
+msgstr "Сохранено в Документах"
+

@@ -2020,7 +2020,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:berhak cipta,, no:tiada hak cipta"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Pastas,, application/msword:MsWord,, application/octet-stream:Aliran oktet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:latihan,,      simulation:simulasi,,      questionnaire:soal selidik,,      diagram:diagram,,      figure:gambar,,      graph:graf,,      index:indeks,,      slide:slaid,,      table:jadual,,      narrative text:teks naratif,,      exam:ujian,,      experiment:eksperimen,,      problem statement:penyata masalah,,      self assessment:penilaian diri,,      lecture:kuliah"
@@ -32343,4 +32343,232 @@ msgstr "Sijil tersuai"
 
 msgid "Update profile"
 msgstr "Kemas kini profil"
+
+msgid "Enable learning path generator"
+msgstr "Dayakan penjana laluan pembelajaran"
+
+msgid "Enable exercise generator"
+msgstr "Dayakan penjana latihan"
+
+msgid "Enable open answers grader"
+msgstr "Dayakan penanda jawapan terbuka"
+
+msgid "Enable tutor chatbot"
+msgstr "Dayakan chatbot tutor"
+
+msgid "Enable task grader"
+msgstr "Dayakan penanda tugas"
+
+msgid "Enable content analyser"
+msgstr "Dayakan penganalisis kandungan"
+
+msgid "Enable image generator"
+msgstr "Dayakan penjana imej"
+
+msgid "Enable glossary terms generator"
+msgstr "Dayakan penjana istilah glosari"
+
+msgid "Enable video generator"
+msgstr "Dayakan penjana video"
+
+msgid "Enable course analyser"
+msgstr "Dayakan penganalisis kursus"
+
+msgid "The operation '%s' is not supported."
+msgstr "Operasi '%s' tidak disokong."
+
+msgid "AI feedback on %s in course %s"
+msgstr "Maklum balas AI pada %s dalam kursus %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Padam gagal: konteks kursus hilang atau ID soalan tidak sah."
+
+msgid "AI Tutor"
+msgstr "Tutor AI"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "Sambungan APCu perlu dipasang dan diaktifkan supaya platform boleh menggunakannya."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Membenarkan penggunaan memori OPCache mencapai sekurang-kurangnya %sMB RAM adalah disyorkan."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "Modul OPcache perlu dipasang dan diaktifkan supaya platform boleh menggunakannya."
+
+msgid "You are here"
+msgstr "Anda berada di sini"
+
+msgid "Click an event type to filter results."
+msgstr "Klik jenis acara untuk menapis hasil."
+
+msgid "Require unique presence"
+msgstr "Mahu kehadiran unik"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Jika diaktifkan, buku markah akan memberikan 100% kepada pelajar apabila hadir sekurang-kurangnya sekali."
+
+msgid "AI feedback"
+msgstr "Maklum balas AI"
+
+msgid "Prompt"
+msgstr "Prompt"
+
+msgid "Tip"
+msgstr "Petua"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Anda boleh mengedit prompt sebelum meminta maklum balas."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Hasil (anda boleh mengaplikasikannya kepada komen)"
+
+msgid "Apply to comment"
+msgstr "Terapkan kepada komen"
+
+msgid "Apply score"
+msgstr "Terapkan skor"
+
+msgid "AI grade"
+msgstr "Gred AI"
+
+msgid "AI tutor is disabled during tests"
+msgstr "Tutor AI dilumpuhkan semasa ujian"
+
+msgid "Generate glossary terms"
+msgstr "Jana istilah glosari"
+
+msgid "Generate media"
+msgstr "Jana media"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Anda tidak mempunyai kebenaran untuk menjana media AI dalam kursus ini."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "Pembantu AI dilumpuhkan pada tahap platform."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "Penjanaan media AI dilumpuhkan dalam tetapan kursus."
+
+msgid "No AI media providers available."
+msgstr "Tiada penyedia media AI yang tersedia."
+
+msgid "Provider"
+msgstr "Penyedia"
+
+msgid "Select a provider"
+msgstr "Pilih penyedia"
+
+msgid "Example: generated_media"
+msgstr "Contoh: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "Nama tidak ditambah kepada prompt; ia hanya digunakan untuk menyimpan fail."
+
+msgid "Describe what you want to generate..."
+msgstr "Terangkan apa yang anda mahu jana..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Petua: klik tetapan pra untuk tetapkan saiz dengan cepat."
+
+msgid "Generating..."
+msgstr "Menjana..."
+
+msgid "Save to Documents"
+msgstr "Simpan ke Dokumen"
+
+msgid "Document IRI"
+msgstr "IRI Dokumen"
+
+msgid "Go to folder"
+msgstr "Pergi ke folder"
+
+msgid "Provider used"
+msgstr "Penyedia yang digunakan"
+
+msgid "This video result cannot be saved yet"
+msgstr "Hasil video ini belum boleh disimpan"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Pemantauan video dihentikan kerana penyedia berubah."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "Penjanaan video mengambil masa terlalu lama. Sila cuba lagi kemudian."
+
+msgid "Failed to check video status."
+msgstr "Gagal memeriksa status video."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Video dijana dengan berjaya. Anda boleh simpan sekarang."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Penjanaan video selesai, tetapi tiada kandungan yang boleh dimainkan dikembalikan."
+
+msgid "Video generation failed."
+msgstr "Penjanaan video gagal."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Menunggu video sedia..."
+
+msgid "Please complete all fields."
+msgstr "Sila lengkapkan semua medan."
+
+msgid "Image generation is not enabled for this course."
+msgstr "Penjanaan imej tidak diaktifkan untuk kursus ini."
+
+msgid "Video generation is not enabled for this course."
+msgstr "Penjanaan video tidak diaktifkan untuk kursus ini."
+
+msgid "Generation failed."
+msgstr "Penjanaan gagal."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Dijana dengan berjaya. Semak pratonton dan simpan apabila sedia."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Dijana dengan berjaya. Penyimpanan dilumpuhkan kerana penyedia mengembalikan URL."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Penjanaan video dimulakan. Menunggu hasil..."
+
+msgid "AI returned an empty response."
+msgstr "AI mengembalikan respons kosong."
+
+msgid "Nothing to save yet."
+msgstr "Tiada apa yang boleh disimpan lagi."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Penyedia ini tidak mengembalikan kandungan base64. Sila cuba penyedia lain."
+
+msgid "Saving failed."
+msgstr "Penyimpanan gagal."
+
+msgid "Get AI feedback"
+msgstr "Dapatkan maklum balas AI"
+
+msgid "Copy answer to clipboard"
+msgstr "Salin jawapan ke papan klip"
+
+msgid "Save answer to my inbox"
+msgstr "Simpan jawapan ke peti masuk saya"
+
+msgid "The document is already in this folder"
+msgstr "Dokumen sudah berada dalam folder ini"
+
+msgid "Copied"
+msgstr "Disalin"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Anda tidak mempunyai kebenaran untuk menjana istilah glosari."
+
+msgid "Video generation is in progress"
+msgstr "Penjanaan video sedang berlangsung"
+
+msgid "Job"
+msgstr "Tugas"
+
+msgid "Modified prompt"
+msgstr "Prompt yang diubah suai"
+
+msgid "Saved in Documents"
+msgstr "Disimpan dalam Dokumen"
 

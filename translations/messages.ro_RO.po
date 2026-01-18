@@ -32360,3 +32360,231 @@ msgstr "Customcertificate"
 msgid "Update profile"
 msgstr "Actualizează profilul"
 
+msgid "Enable learning path generator"
+msgstr "Activează generatorul de trasee de învățare"
+
+msgid "Enable exercise generator"
+msgstr "Activează generatorul de exerciții"
+
+msgid "Enable open answers grader"
+msgstr "Activează corectorul de răspunsuri deschise"
+
+msgid "Enable tutor chatbot"
+msgstr "Activează chatbot-ul tutorului"
+
+msgid "Enable task grader"
+msgstr "Activează corectorul de sarcini"
+
+msgid "Enable content analyser"
+msgstr "Activează analizatorul de conținut"
+
+msgid "Enable image generator"
+msgstr "Activează generatorul de imagini"
+
+msgid "Enable glossary terms generator"
+msgstr "Activează generatorul de termeni de glosar"
+
+msgid "Enable video generator"
+msgstr "Activează generatorul de videoclipuri"
+
+msgid "Enable course analyser"
+msgstr "Activează analizatorul de curs"
+
+msgid "The operation '%s' is not supported."
+msgstr "Operația '%s' nu este suportată."
+
+msgid "AI feedback on %s in course %s"
+msgstr "Feedback IA pentru %s în cursul %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Ștergere eșuată: lipsește contextul cursului sau ID întrebare invalid."
+
+msgid "AI Tutor"
+msgstr "Tutor IA"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "Extensia APCu trebuie instalată și activată pentru ca platforma să o poată folosi."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Se recomandă ca OPCache memory_consumption să atingă cel puțin %sMB de RAM."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "Modulul OPcache trebuie instalat și activat pentru ca platforma să îl poată folosi."
+
+msgid "You are here"
+msgstr "Sunteți aici"
+
+msgid "Click an event type to filter results."
+msgstr "Faceți clic pe un tip de eveniment pentru a filtra rezultatele."
+
+msgid "Require unique presence"
+msgstr "Cere prezență unică"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Dacă este activat, catalogul de note va acorda elevului 100% dacă este prezent cel puțin o dată."
+
+msgid "AI feedback"
+msgstr "Feedback IA"
+
+msgid "Prompt"
+msgstr "Prompt"
+
+msgid "Tip"
+msgstr "Sfat"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Puteți edita promptul înainte de a cere feedback."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Rezultat (îl puteți aplica la comentariu)"
+
+msgid "Apply to comment"
+msgstr "Aplică la comentariu"
+
+msgid "Apply score"
+msgstr "Aplică scorul"
+
+msgid "AI grade"
+msgstr "Notă AI"
+
+msgid "AI tutor is disabled during tests"
+msgstr "Tutorul AI este dezactivat în timpul testelor"
+
+msgid "Generate glossary terms"
+msgstr "Generează termeni de glosar"
+
+msgid "Generate media"
+msgstr "Generează media"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Nu aveți permisiunea de a genera media AI în acest curs."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "Asistenții AI sunt dezactivați la nivel de platformă."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "Generarea de media AI este dezactivată în setările cursului."
+
+msgid "No AI media providers available."
+msgstr "Niciun furnizor de media AI disponibil."
+
+msgid "Provider"
+msgstr "Furnizor"
+
+msgid "Select a provider"
+msgstr "Selectați un furnizor"
+
+msgid "Example: generated_media"
+msgstr "Exemplu: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "Numele nu este adăugat în prompt; este folosit doar pentru salvarea fișierului."
+
+msgid "Describe what you want to generate..."
+msgstr "Descrieți ce doriți să generați..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Sfat: faceți clic pe un preset pentru a seta rapid dimensiunea."
+
+msgid "Generating..."
+msgstr "Se generează..."
+
+msgid "Save to Documents"
+msgstr "Salvează în Documente"
+
+msgid "Document IRI"
+msgstr "IRI document"
+
+msgid "Go to folder"
+msgstr "Mergi la dosar"
+
+msgid "Provider used"
+msgstr "Furnizor utilizat"
+
+msgid "This video result cannot be saved yet"
+msgstr "Acest rezultat video nu poate fi salvat încă"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Sondajul video a fost oprit deoarece furnizorul s-a schimbat."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "Generarea video durează prea mult. Vă rugăm să încercați din nou mai târziu."
+
+msgid "Failed to check video status."
+msgstr "Eșec la verificarea stării video."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Video generat cu succes. Îl puteți salva acum."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Generarea video s-a finalizat, dar nu a fost returnat conținut redabil."
+
+msgid "Video generation failed."
+msgstr "Generarea video a eșuat."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Așteptăm ca video să fie gata..."
+
+msgid "Please complete all fields."
+msgstr "Vă rugăm să completați toate câmpurile."
+
+msgid "Image generation is not enabled for this course."
+msgstr "Generarea de imagini nu este activată pentru acest curs."
+
+msgid "Video generation is not enabled for this course."
+msgstr "Generarea de video nu este activată pentru acest curs."
+
+msgid "Generation failed."
+msgstr "Generarea a eșuat."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Generat cu succes. Revizuiți previzualizarea și salvați când sunteți gata."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Generat cu succes. Salvarea este dezactivată deoarece furnizorul a returnat un URL."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Generarea video a început. Așteptăm rezultatul..."
+
+msgid "AI returned an empty response."
+msgstr "AI a returnat un răspuns gol."
+
+msgid "Nothing to save yet."
+msgstr "Nimic de salvat încă."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Acest furnizor nu a returnat conținut base64. Vă rugăm să încercați un alt furnizor."
+
+msgid "Saving failed."
+msgstr "Salvarea a eșuat."
+
+msgid "Get AI feedback"
+msgstr "Obțineți feedback AI"
+
+msgid "Copy answer to clipboard"
+msgstr "Copiați răspunsul în clipboard"
+
+msgid "Save answer to my inbox"
+msgstr "Salvați răspunsul în căsuța mea poștală"
+
+msgid "The document is already in this folder"
+msgstr "Documentul este deja în acest dosar"
+
+msgid "Copied"
+msgstr "Copiat"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Nu aveți permisiunea de a genera termeni de glosar."
+
+msgid "Video generation is in progress"
+msgstr "Generarea video este în curs"
+
+msgid "Job"
+msgstr "Sarcină"
+
+msgid "Modified prompt"
+msgstr "Prompt modificat"
+
+msgid "Saved in Documents"
+msgstr "Salvat în Documente"
+

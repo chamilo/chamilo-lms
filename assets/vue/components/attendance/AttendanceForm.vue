@@ -29,7 +29,7 @@
           name="attendance_require_unique"
         />
         <p class="text-xs text-gray-500">
-          {{ t("If enabled, the gradebook will give 100% when the learner was present at least once.") }}
+          {{ t("If enabled, the gradebook will give a learner 100% when present at least once.") }}
         </p>
       </div>
 

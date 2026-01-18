@@ -108,14 +108,14 @@
 
       <!-- Name -->
       <div class="space-y-1">
-        <label class="font-semibold text-sm">{{ t("File name") }}</label>
+        <label class="font-semibold text-sm">{{ t("Filename") }}</label>
         <InputText
           v-model="fileName"
           class="w-full"
           :placeholder="t('Example: generated_media')"
         />
         <p class="text-xs text-gray-600">
-          {{ t("The name is not added to the prompt; it is only used for saving the file.") }}
+          {{ t("The name is not added to the prompt; it is only used to save the file.") }}
         </p>
       </div>
 
@@ -168,7 +168,7 @@
         </div>
 
         <p class="text-xs text-gray-600">
-          {{ t("Tip: click a preset to quickly fill the size.") }}
+          {{ t("Tip: click a preset to quickly set the size.") }}
         </p>
       </div>
 

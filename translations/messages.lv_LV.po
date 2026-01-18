@@ -32345,3 +32345,231 @@ msgstr "Customcertificate"
 msgid "Update profile"
 msgstr "Atjaunināt profilu"
 
+msgid "Enable learning path generator"
+msgstr "Iespējot mācību ceļa ģeneratoru"
+
+msgid "Enable exercise generator"
+msgstr "Iespējot uzdevumu ģeneratoru"
+
+msgid "Enable open answers grader"
+msgstr "Iespējot atklāto atbilžu vērtētāju"
+
+msgid "Enable tutor chatbot"
+msgstr "Iespējot tutora čatbotu"
+
+msgid "Enable task grader"
+msgstr "Iespējot uzdevumu vērtētāju"
+
+msgid "Enable content analyser"
+msgstr "Iespējot satura analizētāju"
+
+msgid "Enable image generator"
+msgstr "Iespējot attēlu ģeneratoru"
+
+msgid "Enable glossary terms generator"
+msgstr "Iespējot terminu vārdnīcas ģeneratoru"
+
+msgid "Enable video generator"
+msgstr "Iespējot video ģeneratoru"
+
+msgid "Enable course analyser"
+msgstr "Iespējot kursa analizētāju"
+
+msgid "The operation '%s' is not supported."
+msgstr "Darbība '%s' nav atbalstīta."
+
+msgid "AI feedback on %s in course %s"
+msgstr "AI atsauksme par %s kursā %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Dzēšana neizdevās: trūkst kursa konteksta vai nederīgs jautājuma ID."
+
+msgid "AI Tutor"
+msgstr "AI tutor"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "APCu paplašinājumam jābūt gan instalētam, gan iespējotam, lai platforma to izmantotu."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Ieteicams atļaut OPCache memory_consumption sasniegt vismaz %sMB RAM."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "OPcache modulim jābūt gan instalētam, gan iespējotam, lai platforma to izmantotu."
+
+msgid "You are here"
+msgstr "Jūs esat šeit"
+
+msgid "Click an event type to filter results."
+msgstr "Noklikšķiniet uz notikuma veida, lai filtrētu rezultātus."
+
+msgid "Require unique presence"
+msgstr "Pieprasīt unikālu klātbūtni"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Ja iespējots, atzīmju grāmatā mācībnieks saņems 100%, ja būs klāt vismaz reizi."
+
+msgid "AI feedback"
+msgstr "AI atsauksme"
+
+msgid "Prompt"
+msgstr "Uzvedne"
+
+msgid "Tip"
+msgstr "Padoms"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Jūs varat rediģēt uzvedni pirms atsauksmes pieprasīšanas."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Rezultāts (jūs varat to piemērot komentāram)"
+
+msgid "Apply to comment"
+msgstr "Piemērot komentāram"
+
+msgid "Apply score"
+msgstr "Piemērot vērtējumu"
+
+msgid "AI grade"
+msgstr "SAI vērtējums"
+
+msgid "AI tutor is disabled during tests"
+msgstr "SAI palīgs ir atspējots testa laikā"
+
+msgid "Generate glossary terms"
+msgstr "Ģenerēt vārdnīcas terminus"
+
+msgid "Generate media"
+msgstr "Ģenerēt mediju"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Jums nav atļaujas ģenerēt SAI mediju šajā kursā."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "SAI palīgi ir atspējoti platformas līmenī."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "SAI mediju ģenerēšana ir atspējota kursa iestatījumos."
+
+msgid "No AI media providers available."
+msgstr "Nav pieejamu SAI mediju sniedzēju."
+
+msgid "Provider"
+msgstr "Sniedzējs"
+
+msgid "Select a provider"
+msgstr "Izvēlēties sniedzēju"
+
+msgid "Example: generated_media"
+msgstr "Piemērs: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "Nosaukums netiek pievienots uzvednei; tas tiek izmantots tikai faila saglabāšanai."
+
+msgid "Describe what you want to generate..."
+msgstr "Aprakstiet, ko vēlaties ģenerēt..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Padoms: noklikšķiniet uz sagataves, lai ātri iestatītu izmēru."
+
+msgid "Generating..."
+msgstr "Ģenerē..."
+
+msgid "Save to Documents"
+msgstr "Saglabāt Dokumentos"
+
+msgid "Document IRI"
+msgstr "Dokumenta IRI"
+
+msgid "Go to folder"
+msgstr "Doties uz mapi"
+
+msgid "Provider used"
+msgstr "Izmantotais sniedzējs"
+
+msgid "This video result cannot be saved yet"
+msgstr "Šī video rezultāta vēl nevar saglabāt"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Video aptauja tika apturēta, jo sniedzējs mainījās."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "Video ģenerēšana ilgst pārāk ilgi. Lūdzu, mēģiniet vēlāk."
+
+msgid "Failed to check video status."
+msgstr "Neizdevās pārbaudīt video statusu."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Video veiksmīgi ģenerēts. Tagad to var saglabāt."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Video ģenerēšana pabeigta, bet netika atgriezts atskaņojams saturs."
+
+msgid "Video generation failed."
+msgstr "Video ģenerēšana neizdevās."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Gaida, kad video būs gatavs..."
+
+msgid "Please complete all fields."
+msgstr "Lūdzu, aizpildiet visus laukus."
+
+msgid "Image generation is not enabled for this course."
+msgstr "Attēlu ģenerēšana šim kursam nav iespējota."
+
+msgid "Video generation is not enabled for this course."
+msgstr "Video ģenerēšana šim kursam nav iespējota."
+
+msgid "Generation failed."
+msgstr "Ģenerēšana neizdevās."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Veiksmīgi ģenerēts. Pārskatiet priekšskatījumu un saglabājiet, kad gatavs."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Veiksmīgi ģenerēts. Saglabāšana ir atspējota, jo sniedzējs atgrieza URL."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Video ģenerēšana uzsākta. Gaida rezultātu..."
+
+msgid "AI returned an empty response."
+msgstr "SAI atgrieza tukšu atbildi."
+
+msgid "Nothing to save yet."
+msgstr "Vēl nav ko saglabāt."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Šis sniedzējs neatgrieza base64 saturu. Lūdzu, mēģiniet citu sniedzēju."
+
+msgid "Saving failed."
+msgstr "Saglabāšana neizdevās."
+
+msgid "Get AI feedback"
+msgstr "Saņemt SAI atsauksmi"
+
+msgid "Copy answer to clipboard"
+msgstr "Kopēt atbildi starpliktuvē"
+
+msgid "Save answer to my inbox"
+msgstr "Saglabāt atbildi manā iesūtītē"
+
+msgid "The document is already in this folder"
+msgstr "Dokuments jau ir šajā mapē"
+
+msgid "Copied"
+msgstr "Nokopēts"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Jums nav atļaujas ģenerēt vārdnīcas terminus."
+
+msgid "Video generation is in progress"
+msgstr "Video ģenerēšana norit"
+
+msgid "Job"
+msgstr "Darbs"
+
+msgid "Modified prompt"
+msgstr "Modificēts uzvedne"
+
+msgid "Saved in Documents"
+msgstr "Saglabāts Dokumentos"
+

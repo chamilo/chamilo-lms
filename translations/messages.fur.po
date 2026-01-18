@@ -32308,35 +32308,263 @@ msgid "There are no terms that match the search: %s"
 msgstr "Nons i è gnun termin che corisponde a la recerca: %s"
 
 msgid "Setting is globally locked (access_url_locked=1)"
-msgstr ""
+msgstr "Setting is globally locked (access_url_locked=1)"
 
 msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
-msgstr ""
+msgstr "Se ativât, i messadis di chat privât 1:1 saran spiegjâts neis documents de storiis dal chat dal curs. Al consigliâ di lassâ disativât par la privatessi."
 
 msgid "Save private conversations in documents"
-msgstr ""
+msgstr "Salve conversazions privadis ne documents"
 
 msgid "EU AI Act – Transparency & risk notice"
-msgstr ""
+msgstr "EU AI Act – Avîs di trasparence e risc"
 
 msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
-msgstr ""
+msgstr "Sot la Lis Regulativa UE sul Inteligence Artificiâl (Regolament (UE) 2024/1689), i sistemis AI doprâts in educazion a son generalment classificâts come \"di alt risc\". Chest sofuer luet par sé <strong>no je</strong> un sistem AI, ma lu podês integriê sistemis AI internâls o estarnâls opsionâls—diparî de la to configurazion—par mejôrâ la performance des dês tiestis dai utents. Chest sistemis a podaressin acessâ dâtis personâls <em>solament se</em> j utents includissin tai dâtis ne lur prompts. Par dizain, chest sofuer nol compart dâtis personâls coi sistemis AI senza l'input ativ dal utent. Par dutual, dutis lis funzions AI a son disativadis."
 
 msgid "Admin responsibility & disclosures"
-msgstr ""
+msgstr "Responsabilitât admin e divulgazions"
 
 msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
-msgstr ""
+msgstr "Cheste pâge di configurazion descrîf ogni funzion AI e il so scop. Come desploier, tu devi rivî dal ben e agiornâ lis to politiche di privatessi de dâts conforme al GDPR par rifletê lis opsions che ativis. Mentri che la maggior parte des funzions AI nol compart dutut dâtis personâls cu sistemis estarnâls, i prompts mandâts ai AI a podaressin inadvertentement includî informazions personâls. Come desploier, <strong>tu âs la responsabilitât</strong> di informar j utents di chest risc. Par trasparence, lis version futûris a podrân mostrâ etichetis par utents finâls no invasivis che indicjin che cûr contenuts o feedback a son stât generâts cun l'aiut di AI."
 
 msgid "Positioning"
-msgstr ""
+msgstr "Posizionament"
 
 msgid "Quiz"
-msgstr ""
+msgstr "Quiz"
 
 msgid "Customcertificate"
-msgstr ""
+msgstr "Customcertificate"
 
 msgid "Update profile"
-msgstr ""
+msgstr "Agiorne profîl"
+
+msgid "Enable learning path generator"
+msgstr "Ative generador di percors didatics"
+
+msgid "Enable exercise generator"
+msgstr "Ative generador di esercizi"
+
+msgid "Enable open answers grader"
+msgstr "Ative gradator di rispostis aviertas"
+
+msgid "Enable tutor chatbot"
+msgstr "Ative chatbot tutor"
+
+msgid "Enable task grader"
+msgstr "Ative gradator di dês"
+
+msgid "Enable content analyser"
+msgstr "Ativâ l'analizâtôr dal contignûi"
+
+msgid "Enable image generator"
+msgstr "Ativâ il generadôr di immagini"
+
+msgid "Enable glossary terms generator"
+msgstr "Ativâ il generadôr di terminis dal glosari"
+
+msgid "Enable video generator"
+msgstr "Ativâ il generadôr di videos"
+
+msgid "Enable course analyser"
+msgstr "Ativâ l'analizâtôr dal curs"
+
+msgid "The operation '%s' is not supported."
+msgstr "L'operazion '%s' no je suportade."
+
+msgid "AI feedback on %s in course %s"
+msgstr "Rispuestis AI su %s tal curs %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Eliminazion falîe: manca il contest dal curs o ID domande invalide."
+
+msgid "AI Tutor"
+msgstr "Tutor AI"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "L'estension APCu deve jessi instalade e ativade par che la plate-forme la pues utilizâ."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Si racumande di permitê che OPCache consumi al menu %sMB di RAM."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "Il modul OPcache deve jessi instalât e ativât par che la plate-forme la pues utilizâ."
+
+msgid "You are here"
+msgstr "Tu sês chi"
+
+msgid "Click an event type to filter results."
+msgstr "Cliche su un tipe di event par filtrâ i rezultâts."
+
+msgid "Require unique presence"
+msgstr "Richês presenze unice"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Se ativât, il registar dai votis darà al aprendizant 100% se presente al menu une volte."
+
+msgid "AI feedback"
+msgstr "Rispuestis AI"
+
+msgid "Prompt"
+msgstr "Prompt"
+
+msgid "Tip"
+msgstr "Consij"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Tu puest modificâ il prompt prime di cîr rispuestis."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Risultât (tu puest aplicâlu al coment)"
+
+msgid "Apply to comment"
+msgstr "Appliche al coment"
+
+msgid "Apply score"
+msgstr "Appliche il vot"
+
+msgid "AI grade"
+msgstr "Vot AI"
+
+msgid "AI tutor is disabled during tests"
+msgstr "Il tutor AI je disativât duranti i test"
+
+msgid "Generate glossary terms"
+msgstr "Generâ terminis dal glosari"
+
+msgid "Generate media"
+msgstr "Generâ media"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Tu n'âs no il permês di generâ media AI in chest curs."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "J ai aiutants AI a son disativâts a livel di plate-forme."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "La generazion di media AI je disativade intês ai parâmetris dal curs."
+
+msgid "No AI media providers available."
+msgstr "No gnulin fornidôr di media AI disponibil."
+
+msgid "Provider"
+msgstr "Fornidôr"
+
+msgid "Select a provider"
+msgstr "Scealt un fornidôr"
+
+msgid "Example: generated_media"
+msgstr "Esempi: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "Il non je no zontât al prompt; al è dopre sul par salvâ il file."
+
+msgid "Describe what you want to generate..."
+msgstr "Descrîv ce che vuês generâ..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Consij: cliche su un preimpostât par definî velocement la dimension."
+
+msgid "Generating..."
+msgstr "Generant..."
+
+msgid "Save to Documents"
+msgstr "Salve nei Document"
+
+msgid "Document IRI"
+msgstr "IRI dal document"
+
+msgid "Go to folder"
+msgstr "Va te cartelle"
+
+msgid "Provider used"
+msgstr "Fornidôr utilizât"
+
+msgid "This video result cannot be saved yet"
+msgstr "Chest risultât video nol si pues ancó salvâ"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Il sondagi dal video je stât interrot parché il fornidôr je cambiât."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "La generazion dal video al dee trop temp. Prova tornant pli tard."
+
+msgid "Failed to check video status."
+msgstr "Erôr nel controllâ lo stât dal video."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Video generât cun sucès. As lu puest salvâ orê."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Generazion video completade, ma no si è tornât nissun contignûi riproducibi."
+
+msgid "Video generation failed."
+msgstr "Generazion video falîe."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Spetant che il video siâ pront..."
+
+msgid "Please complete all fields."
+msgstr "Completez dutis lis camps."
+
+msgid "Image generation is not enabled for this course."
+msgstr "La generazion di immagini nol è ativade par chest curs."
+
+msgid "Video generation is not enabled for this course."
+msgstr "La generazion di videos nol è ativade par chest curs."
+
+msgid "Generation failed."
+msgstr "Generazion falîe."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Generât cu sucès. Revisait il antevis e salvait cuindi pront."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Generât cu sucès. Il salvidâtje è disativât parcè che il fornidor à tornât un URL."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Generazion video inizîe. Aspetant il risultât..."
+
+msgid "AI returned an empty response."
+msgstr "L'IA à tornât une rispueste vueide."
+
+msgid "Nothing to save yet."
+msgstr "Nissun agn a salvâ ancôr."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Chest fornidor nol à tornât contnûts base64. Proait un altri fornidor."
+
+msgid "Saving failed."
+msgstr "Salvidâtje falît."
+
+msgid "Get AI feedback"
+msgstr "Oten feedback IA"
+
+msgid "Copy answer to clipboard"
+msgstr "Copie rispueste su clipboard"
+
+msgid "Save answer to my inbox"
+msgstr "Salve rispueste in min caselle di pôst"
+
+msgid "The document is already in this folder"
+msgstr "Il document è già in cheste cartelle"
+
+msgid "Copied"
+msgstr "Copiât"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Nol ai permês di generar terminis dal glosari."
+
+msgid "Video generation is in progress"
+msgstr "Generazion video in cors"
+
+msgid "Job"
+msgstr "Siô"
+
+msgid "Modified prompt"
+msgstr "Prompt modificât"
+
+msgid "Saved in Documents"
+msgstr "Salvât tai Documents"
 

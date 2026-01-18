@@ -115,7 +115,7 @@
         </template>
       </Column>
 
-      <Column :header="t('Sender')" headerStyle="width:14rem">
+      <Column :header="t('sender')" headerStyle="width:14rem">
         <template #body="{ data }">
           <span v-if="data.kind==='file'">{{ data.uploaderName }}</span>
         </template>

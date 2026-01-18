@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":sí:copyright,, no:ensin copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpeta,, application/msword:MsWord,, application/octet-stream:Fluxu de octetos,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpeta,, application/msword:MsWord,, application/octet-stream:Fluxu octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exerciciu,, simulation:simulación,, questionnaire:cuestionariu,, diagram:diagrama,, figure:figura,, graph:gráficu,, index:índiz,, slide:diapositiva,, table:tabla,, narrative text:testu narrativu,, exam:exame,, experiment:esperimentu,, problem statement:problema,, self assessment:autoevaluación,, lecture:llectura"
@@ -32345,4 +32345,232 @@ msgstr "Customcertificate"
 
 msgid "Update profile"
 msgstr "Actualizar perfil"
+
+msgid "Enable learning path generator"
+msgstr "Activar xenerador de camín de aprendizaxe"
+
+msgid "Enable exercise generator"
+msgstr "Activar xenerador d'exercicios"
+
+msgid "Enable open answers grader"
+msgstr "Activar corrector de respuestes abiertes"
+
+msgid "Enable tutor chatbot"
+msgstr "Activar chatbot de tutor"
+
+msgid "Enable task grader"
+msgstr "Activar corrector de tares"
+
+msgid "Enable content analyser"
+msgstr "Activar analizador de conteníu"
+
+msgid "Enable image generator"
+msgstr "Activar xenerador d'imaxes"
+
+msgid "Enable glossary terms generator"
+msgstr "Activar xenerador de términos del glosariu"
+
+msgid "Enable video generator"
+msgstr "Activar xenerador de vídeo"
+
+msgid "Enable course analyser"
+msgstr "Activar analizador de cursu"
+
+msgid "The operation '%s' is not supported."
+msgstr "L'operación '%s' nun ye compatible."
+
+msgid "AI feedback on %s in course %s"
+msgstr "Comentariu d'IA sobre %s nel cursu %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Falló al desaniciar: falda el contestu del cursu o ID de pregunta inválidu."
+
+msgid "AI Tutor"
+msgstr "Tutor IA"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "La estensión APCu tiene de tar instalada y activada pa que la plataforma la pueda usar."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Recoméndase permitir que OPCache memory_consumption llegue al menos a %sMB de RAM."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "El módulu OPcache tiene de tar instaláu y activáu pa que la plataforma lo pueda usar."
+
+msgid "You are here"
+msgstr "Tas equí"
+
+msgid "Click an event type to filter results."
+msgstr "Ye quita un tipu d'eventu pa filtrar resultaos."
+
+msgid "Require unique presence"
+msgstr "Esixil presencia única"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Si s'activa,'l llibru de notes dará al aprendiz un 100% si ta presenten al menos una vegada."
+
+msgid "AI feedback"
+msgstr "Comentariu IA"
+
+msgid "Prompt"
+msgstr "Prompt"
+
+msgid "Tip"
+msgstr "Conseyu"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Pues editar el prompt enantes de pidir comentariu."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Resultáu (pues aplicalu al comentariu)"
+
+msgid "Apply to comment"
+msgstr "Aplicar al comentariu"
+
+msgid "Apply score"
+msgstr "Aplicar nota"
+
+msgid "AI grade"
+msgstr "Nota IA"
+
+msgid "AI tutor is disabled during tests"
+msgstr "El tutor IA ta desactiváu durante les proves"
+
+msgid "Generate glossary terms"
+msgstr "Xenerar términos del glosariu"
+
+msgid "Generate media"
+msgstr "Xenerar multimedia"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Nun tienes permisos pa xenerar multimedia IA neste cursu."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "Los ayudadores d'IA tán desactivados nel nivel de la plataforma."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "La generación de medios IA ta desactivada nes axustes del cursu."
+
+msgid "No AI media providers available."
+msgstr "Nun hai proveedores de medios IA disponibles."
+
+msgid "Provider"
+msgstr "Proveedor"
+
+msgid "Select a provider"
+msgstr "Seleicionar un provedor"
+
+msgid "Example: generated_media"
+msgstr "Exemplu: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "El nome nun s'añade al prompt; úsamese namái pa guardar el ficheru."
+
+msgid "Describe what you want to generate..."
+msgstr "Describe lo que quies xenerar..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Conseyu: calca una preconfiguración pa axustar rápidamentu'l tamañu."
+
+msgid "Generating..."
+msgstr "Xenerando..."
+
+msgid "Save to Documents"
+msgstr "Guardar en Documentos"
+
+msgid "Document IRI"
+msgstr "IRI del documentu"
+
+msgid "Go to folder"
+msgstr "Dir a la carpeta"
+
+msgid "Provider used"
+msgstr "Proveedor usáu"
+
+msgid "This video result cannot be saved yet"
+msgstr "Esti resultáu de vídeo nun se puede guardar encamu."
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "La sondaxe del vídeo paróse porque camudó el provedor."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "La xeneración del vídeo ye demasiau larda. Por favor, inténtalo más tarde."
+
+msgid "Failed to check video status."
+msgstr "Falló la comprobación del estáu del vídeo."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Vídeo xeneráu con èxitu. Dalmáis puedes guardalu."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "La xeneración del vídeo completose, pero nun se devolvió conteníu reproducible."
+
+msgid "Video generation failed."
+msgstr "Falló la xeneración del vídeo."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Aguardando a que'l vídeo esté preperáu..."
+
+msgid "Please complete all fields."
+msgstr "Compreta tolos campos."
+
+msgid "Image generation is not enabled for this course."
+msgstr "La xeneración d'imaxes nun ta activada pa esti cursu."
+
+msgid "Video generation is not enabled for this course."
+msgstr "La xeneración de videu nun ta activada pa esti cursu."
+
+msgid "Generation failed."
+msgstr "Falló la xeneración."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Xeneráu con èxitu. Revisa la previsualización y guarda cuando tea preperáu."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Xeneráu con èxitu. El guardáu ta desactiváu porque el provedor devolvió una URL."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "La xeneración del vídeo aniciose. Aguardando'l resultáu..."
+
+msgid "AI returned an empty response."
+msgstr "La IA devolvió una respuuesta balera."
+
+msgid "Nothing to save yet."
+msgstr "Nun hai nada que guardar encamu."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Esti provedor nun devolvió conteníu base64. Prueba con otru provedor."
+
+msgid "Saving failed."
+msgstr "Falló el guardáu."
+
+msgid "Get AI feedback"
+msgstr "Recuperar comentarios d'IA"
+
+msgid "Copy answer to clipboard"
+msgstr "Copiar la respuesta al portapapeles"
+
+msgid "Save answer to my inbox"
+msgstr "Guardar la respuesta nel meu buster"
+
+msgid "The document is already in this folder"
+msgstr "El documentu yá ta nesta carpeta"
+
+msgid "Copied"
+msgstr "Copiáu"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Nun tienes permisos pa xenerar términos del glosariu."
+
+msgid "Video generation is in progress"
+msgstr "La xeneración de videu ta en cursu"
+
+msgid "Job"
+msgstr "Tarea"
+
+msgid "Modified prompt"
+msgstr "Emblozu modificáu"
+
+msgid "Saved in Documents"
+msgstr "Guardáu en Documentos"
 

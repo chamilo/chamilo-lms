@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "सादर"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "फ़ॉर्मूला नमूना: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "सूत्र नमूना: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "चर सीमाएं"
@@ -32339,4 +32339,232 @@ msgstr "कस्टमसर्टिफ़िकेट"
 
 msgid "Update profile"
 msgstr "प्रोफ़ाइल अपडेट करें"
+
+msgid "Enable learning path generator"
+msgstr "लर्निंग पथ जनरेटर सक्षम करें"
+
+msgid "Enable exercise generator"
+msgstr "अभ्यास जनरेटर सक्षम करें"
+
+msgid "Enable open answers grader"
+msgstr "ओपन उत्तर ग्रेडर सक्षम करें"
+
+msgid "Enable tutor chatbot"
+msgstr "ट्यूटर चैटबॉट सक्षम करें"
+
+msgid "Enable task grader"
+msgstr "कार्य ग्रेडर सक्षम करें"
+
+msgid "Enable content analyser"
+msgstr "सामग्री विश्लेषक सक्षम करें"
+
+msgid "Enable image generator"
+msgstr "छवि जनरेटर सक्षम करें"
+
+msgid "Enable glossary terms generator"
+msgstr "शब्दकोश शब्द जनरेटर सक्षम करें"
+
+msgid "Enable video generator"
+msgstr "वीडियो जनरेटर सक्षम करें"
+
+msgid "Enable course analyser"
+msgstr "कोर्स विश्लेषक सक्षम करें"
+
+msgid "The operation '%s' is not supported."
+msgstr "क्रिया '%s' समर्थित नहीं है।"
+
+msgid "AI feedback on %s in course %s"
+msgstr "%s पर AI प्रतिपुष्टि कोर्स %s में"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "मिटाना विफल: कोर्स संदर्भ या अमान्य प्रश्न id की कमी।"
+
+msgid "AI Tutor"
+msgstr "AI ट्यूटर"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "प्लेटफ़ॉर्म द्वारा इसका उपयोग करने के लिए APCu एक्सटेंशन को स्थापित और सक्षम दोनों होना आवश्यक है।"
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "OPCache memory_consumption को कम से कम %sMB RAM तक पहुँचने की अनुमति देना अनुशंसित है।"
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "प्लेटफ़ॉर्म द्वारा इसका उपयोग करने के लिए OPcache मॉड्यूल को स्थापित और सक्षम दोनों होना आवश्यक है।"
+
+msgid "You are here"
+msgstr "आप यहाँ हैं"
+
+msgid "Click an event type to filter results."
+msgstr "परिणाम फ़िल्टर करने के लिए किसी घटना प्रकार पर क्लिक करें।"
+
+msgid "Require unique presence"
+msgstr "अद्वितीय उपस्थिति आवश्यक"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "यदि सक्षम किया गया, तो ग्रेडबुक कम से कम एक बार उपस्थित होने पर शिक्षार्थी को 100% देगी।"
+
+msgid "AI feedback"
+msgstr "AI प्रतिपुष्टि"
+
+msgid "Prompt"
+msgstr "प्रॉम्प्ट"
+
+msgid "Tip"
+msgstr "सुझाव"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "प्रतिपुष्टि मांगने से पहले आप प्रॉम्प्ट को संपादित कर सकते हैं।"
+
+msgid "Result (you can apply it to the comment)"
+msgstr "परिणाम (आप इसे टिप्पणी पर लागू कर सकते हैं)"
+
+msgid "Apply to comment"
+msgstr "टिप्पणी पर लागू करें"
+
+msgid "Apply score"
+msgstr "स्कोर लागू करें"
+
+msgid "AI grade"
+msgstr "एआई ग्रेड"
+
+msgid "AI tutor is disabled during tests"
+msgstr "परीक्षाओं के दौरान एआई ट्यूटर अक्षम है"
+
+msgid "Generate glossary terms"
+msgstr "शब्दकोश शब्द उत्पन्न करें"
+
+msgid "Generate media"
+msgstr "मीडिया उत्पन्न करें"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "आपको इस कोर्स में एआई मीडिया उत्पन्न करने की अनुमति नहीं है।"
+
+msgid "AI helpers are disabled at platform level."
+msgstr "प्लेटफ़ॉर्म स्तर पर एआई सहायक अक्षम हैं।"
+
+msgid "AI media generation is disabled in course settings."
+msgstr "कोर्स सेटिंग्स में एआई मीडिया उत्पन्न करना अक्षम है।"
+
+msgid "No AI media providers available."
+msgstr "कोई एआई मीडिया प्रदाता उपलब्ध नहीं है।"
+
+msgid "Provider"
+msgstr "प्रदाता"
+
+msgid "Select a provider"
+msgstr "प्रदाता चुनें"
+
+msgid "Example: generated_media"
+msgstr "उदाहरण: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "नाम को प्रॉम्प्ट में जोड़ा नहीं जाता; यह केवल फ़ाइल सहेजने के लिए उपयोग किया जाता है।"
+
+msgid "Describe what you want to generate..."
+msgstr "वर्णन करें कि आप क्या उत्पन्न करना चाहते हैं..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "सुझाव: आकार जल्दी सेट करने के लिए पूर्वनिर्धारित पर क्लिक करें।"
+
+msgid "Generating..."
+msgstr "उत्पन्न हो रहा है..."
+
+msgid "Save to Documents"
+msgstr "दस्तावेज़ों में सहेजें"
+
+msgid "Document IRI"
+msgstr "दस्तावेज़ IRI"
+
+msgid "Go to folder"
+msgstr "फ़ोल्डर पर जाएँ"
+
+msgid "Provider used"
+msgstr "प्रदाता उपयोग किया गया"
+
+msgid "This video result cannot be saved yet"
+msgstr "इस वीडियो परिणाम को अभी सहेजा नहीं जा सकता"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "प्रदाता बदलने के कारण वीडियो पोलिंग रोकी गई।"
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "वीडियो उत्पन्न करने में बहुत समय लग रहा है। कृपया बाद में पुनः प्रयास करें।"
+
+msgid "Failed to check video status."
+msgstr "वीडियो स्थिति जांच विफल रही।"
+
+msgid "Video generated successfully. You can now save it."
+msgstr "वीडियो सफलतापूर्वक उत्पन्न हुआ। अब आप इसे सहेज सकते हैं।"
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "वीडियो उत्पन्न पूरा हुआ, लेकिन कोई चलने योग्य सामग्री लौटाई नहीं गई।"
+
+msgid "Video generation failed."
+msgstr "वीडियो उत्पन्न विफल रहा।"
+
+msgid "Waiting for the video to be ready..."
+msgstr "वीडियो तैयार होने का इंतज़ार कर रहे हैं..."
+
+msgid "Please complete all fields."
+msgstr "कृपया सभी फ़ील्ड पूर्ण करें।"
+
+msgid "Image generation is not enabled for this course."
+msgstr "इस कोर्स के लिए छवि उत्पन्न सक्षम नहीं है।"
+
+msgid "Video generation is not enabled for this course."
+msgstr "इस कोर्स के लिए वीडियो उत्पन्न सक्षम नहीं है।"
+
+msgid "Generation failed."
+msgstr "उत्पन्न विफल रहा।"
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "सफलतापूर्वक उत्पन्न हुआ। पूर्वावलोकन की समीक्षा करें और तैयार होने पर सहेजें।"
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "सफलतापूर्वक उत्पन्न हुआ। प्रदाता ने URL लौटाया इसलिए सहेजना अक्षम है।"
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "वीडियो उत्पन्न शुरू हुआ। परिणाम का इंतज़ार कर रहे हैं..."
+
+msgid "AI returned an empty response."
+msgstr "एआई ने खाली प्रतिक्रिया लौटाई।"
+
+msgid "Nothing to save yet."
+msgstr "अभी सहेजने के लिए कुछ नहीं है।"
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "इस प्रदाता ने base64 सामग्री लौटाई नहीं। कृपया दूसरा प्रदाता आज़माएँ।"
+
+msgid "Saving failed."
+msgstr "सहेजना विफल रहा।"
+
+msgid "Get AI feedback"
+msgstr "एआई प्रतिपुष्टि प्राप्त करें"
+
+msgid "Copy answer to clipboard"
+msgstr "उत्तर को क्लिपबोर्ड में कॉपी करें"
+
+msgid "Save answer to my inbox"
+msgstr "उत्तर को मेरे इनबॉक्स में सहेजें"
+
+msgid "The document is already in this folder"
+msgstr "दस्तावेज़ पहले से इस फ़ोल्डर में है"
+
+msgid "Copied"
+msgstr "कॉपी किया गया"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "आपको शब्दकोश शब्द उत्पन्न करने की अनुमति नहीं है।"
+
+msgid "Video generation is in progress"
+msgstr "वीडियो उत्पन्न प्रगति पर है"
+
+msgid "Job"
+msgstr "कार्य"
+
+msgid "Modified prompt"
+msgstr "संशोधित प्रॉम्प्ट"
+
+msgid "Saved in Documents"
+msgstr "दस्तावेज़ों में सहेजा गया"
 

@@ -32359,3 +32359,231 @@ msgstr "Προσαρμοσμένοπιστοποιητικό"
 msgid "Update profile"
 msgstr "Ενημέρωση προφίλ"
 
+msgid "Enable learning path generator"
+msgstr "Ενεργοποίηση γεννήτριας διαδρομής μάθησης"
+
+msgid "Enable exercise generator"
+msgstr "Ενεργοποίηση γεννήτριας ασκήσεων"
+
+msgid "Enable open answers grader"
+msgstr "Ενεργοποίηση βαθμολογητή ανοιχτών απαντήσεων"
+
+msgid "Enable tutor chatbot"
+msgstr "Ενεργοποίηση chatbot επόπτη"
+
+msgid "Enable task grader"
+msgstr "Ενεργοποίηση βαθμολογητή εργασιών"
+
+msgid "Enable content analyser"
+msgstr "Ενεργοποίηση αναλυτή περιεχομένου"
+
+msgid "Enable image generator"
+msgstr "Ενεργοποίηση γεννήτριας εικόνων"
+
+msgid "Enable glossary terms generator"
+msgstr "Ενεργοποίηση γεννήτριας όρων γλωσσαρίου"
+
+msgid "Enable video generator"
+msgstr "Ενεργοποίηση γεννήτριας βίντεο"
+
+msgid "Enable course analyser"
+msgstr "Ενεργοποίηση αναλυτή μαθήματος"
+
+msgid "The operation '%s' is not supported."
+msgstr "Η λειτουργία '%s' δεν υποστηρίζεται."
+
+msgid "AI feedback on %s in course %s"
+msgstr "Σχόλιο AI για %s στο μάθημα %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Διαγραφή απέτυχε: λείπει το πλαίσιο μαθήματος ή άκυρο id ερώτησης."
+
+msgid "AI Tutor"
+msgstr "AI Επόπτης"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "Η επέκταση APCu πρέπει να είναι εγκατεστημένη και ενεργοποιημένη για να τη χρησιμοποιήσει η πλατφόρμα."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Συνιστάται η επιτρέποντας της OPCache memory_consumption να φτάσει τουλάχιστον %sMB RAM."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "Το άρθρωμα OPcache πρέπει να είναι εγκατεστημένο και ενεργοποιημένο για να το χρησιμοποιήσει η πλατφόρμα."
+
+msgid "You are here"
+msgstr "Βρίσκεστε εδώ"
+
+msgid "Click an event type to filter results."
+msgstr "Κάντε κλικ σε έναν τύπο συμβάντος για να φιλτράρετε τα αποτελέσματα."
+
+msgid "Require unique presence"
+msgstr "Απαίτηση μοναδικής παρουσίας"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Αν ενεργοποιηθεί, το βιβλίο βαθμών θα δώσει στον μαθητή 100% αν είναι παρών τουλάχιστον μία φορά."
+
+msgid "AI feedback"
+msgstr "Σχόλιο AI"
+
+msgid "Prompt"
+msgstr "Πρόθεση"
+
+msgid "Tip"
+msgstr "Συμβουλή"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Μπορείτε να επεξεργαστείτε την πρόθεση πριν ζητήσετε σχόλιο."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Αποτέλεσμα (μπορείτε να το εφαρμόσετε στο σχόλιο)"
+
+msgid "Apply to comment"
+msgstr "Εφαρμογή στο σχόλιο"
+
+msgid "Apply score"
+msgstr "Εφαρμογή βαθμού"
+
+msgid "AI grade"
+msgstr "Βαθμός AI"
+
+msgid "AI tutor is disabled during tests"
+msgstr "Ο AI επόπτης είναι απενεργοποιημένος κατά τις δοκιμές"
+
+msgid "Generate glossary terms"
+msgstr "Δημιουργία όρων γλωσσαρίου"
+
+msgid "Generate media"
+msgstr "Δημιουργία πολυμέσων"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Δεν έχετε άδεια να δημιουργήσετε πολυμέσα AI σε αυτό το μάθημα."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "Οι βοηθοί AI είναι απενεργοποιημένοι σε επίπεδο πλατφόρμας."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "Η δημιουργία πολυμέσων AI είναι απενεργοποιημένη στις ρυθμίσεις του μαθήματος."
+
+msgid "No AI media providers available."
+msgstr "Δεν υπάρχουν διαθέσιμοι πάροχοι πολυμέσων AI."
+
+msgid "Provider"
+msgstr "Πάροχος"
+
+msgid "Select a provider"
+msgstr "Επιλογή παρόχου"
+
+msgid "Example: generated_media"
+msgstr "Παράδειγμα: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "Το όνομα δεν προστίθεται στην εντολή· χρησιμοποιείται μόνο για την αποθήκευση του αρχείου."
+
+msgid "Describe what you want to generate..."
+msgstr "Περιγράψτε τι θέλετε να δημιουργήσετε..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Συμβουλή: κάντε κλικ σε προεπιλογή για γρήγορη ρύθμιση μεγέθους."
+
+msgid "Generating..."
+msgstr "Δημιουργείται..."
+
+msgid "Save to Documents"
+msgstr "Αποθήκευση στα Έγγραφα"
+
+msgid "Document IRI"
+msgstr "IRI εγγράφου"
+
+msgid "Go to folder"
+msgstr "Πήγαινε στον φάκελο"
+
+msgid "Provider used"
+msgstr "Πάροχος που χρησιμοποιήθηκε"
+
+msgid "This video result cannot be saved yet"
+msgstr "Το αποτέλεσμα αυτού του βίντεο δεν μπορεί ακόμα να αποθηκευτεί"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Η ψηφοφορία βίντεο σταμάτησε επειδή άλλαξε ο πάροχος."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "Η δημιουργία βίντεο διαρκεί πολύ. Παρακαλούμε δοκιμάστε ξανά αργότερα."
+
+msgid "Failed to check video status."
+msgstr "Αποτυχία ελέγχου κατάστασης βίντεο."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Το βίντεο δημιουργήθηκε επιτυχώς. Μπορείτε τώρα να το αποθηκεύσετε."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Η δημιουργία βίντεο ολοκληρώθηκε, αλλά δεν返θηκε αναπαραγώγιμο περιεχόμενο."
+
+msgid "Video generation failed."
+msgstr "Η δημιουργία βίντεο απέτυχε."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Περιμένουμε το βίντεο να είναι έτοιμο..."
+
+msgid "Please complete all fields."
+msgstr "Παρακαλούμε συμπληρώστε όλα τα πεδία."
+
+msgid "Image generation is not enabled for this course."
+msgstr "Η δημιουργία εικόνων δεν είναι ενεργοποιημένη για αυτό το μάθημα."
+
+msgid "Video generation is not enabled for this course."
+msgstr "Η δημιουργία βίντεο δεν είναι ενεργοποιημένη για αυτό το μάθημα."
+
+msgid "Generation failed."
+msgstr "Η δημιουργία απέτυχε."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Δημιουργήθηκε επιτυχώς. Ελέγξτε την προεπισκόπηση και αποθηκεύστε όταν είστε έτοιμοι."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Δημιουργήθηκε επιτυχώς. Η αποθήκευση είναι απενεργοποιημένη επειδή ο πάροχος επέστρεψε URL."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Η δημιουργία βίντεο ξεκίνησε. Περιμένουμε το αποτέλεσμα..."
+
+msgid "AI returned an empty response."
+msgstr "Το AI επέστρεψε κενή απάντηση."
+
+msgid "Nothing to save yet."
+msgstr "Δεν υπάρχει τίποτα να αποθηκευτεί ακόμα."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Αυτός ο πάροχος δεν επέστρεψε περιεχόμενο base64. Παρακαλούμε δοκιμάστε άλλον πάροχο."
+
+msgid "Saving failed."
+msgstr "Η αποθήκευση απέτυχε."
+
+msgid "Get AI feedback"
+msgstr "Λήψη ανατροφοδότησης AI"
+
+msgid "Copy answer to clipboard"
+msgstr "Αντιγραφή απάντησης στο πρόχειρο"
+
+msgid "Save answer to my inbox"
+msgstr "Αποθήκευση απάντησης στο εισερχόμενό μου"
+
+msgid "The document is already in this folder"
+msgstr "Το έγγραφο βρίσκεται ήδη σε αυτόν τον φάκελο"
+
+msgid "Copied"
+msgstr "Αντιγράφηκε"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Δεν έχετε άδεια να δημιουργήσετε όρους γλωσσαρίου."
+
+msgid "Video generation is in progress"
+msgstr "Η δημιουργία βίντεο βρίσκεται σε εξέλιξη"
+
+msgid "Job"
+msgstr "Εργασία"
+
+msgid "Modified prompt"
+msgstr "Τροποποιημένη εντολή"
+
+msgid "Saved in Documents"
+msgstr "Αποθηκεύτηκε στα Έγγραφα"
+

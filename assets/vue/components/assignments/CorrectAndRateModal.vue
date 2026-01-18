@@ -131,7 +131,7 @@
               @input="aiPromptDirty = true"
             />
             <p class="text-xs text-gray-500 mt-1">
-              {{ t("Tip") }}: {{ t("You can edit the prompt before generating feedback.") }}
+              {{ t("Tip") }}: {{ t("You can edit the prompt before asking for feedback.") }}
             </p>
 
             <div

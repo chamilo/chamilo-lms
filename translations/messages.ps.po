@@ -32340,3 +32340,231 @@ msgstr "د ګمرکي سند"
 msgid "Update profile"
 msgstr "پروفایل تازه کول"
 
+msgid "Enable learning path generator"
+msgstr "د زده کړې لار جوړونکي فعالول"
+
+msgid "Enable exercise generator"
+msgstr "د تمرین جوړونکي فعالول"
+
+msgid "Enable open answers grader"
+msgstr "د خلاصو ځوابونو درجې ورکونکي فعالول"
+
+msgid "Enable tutor chatbot"
+msgstr "د ښوونکي چټ بټ فعالول"
+
+msgid "Enable task grader"
+msgstr "د دندې درجې ورکونکي فعالول"
+
+msgid "Enable content analyser"
+msgstr "د منځپانګې تجزیه کوونکي فعالول"
+
+msgid "Enable image generator"
+msgstr "د انځور جوړونکي فعالول"
+
+msgid "Enable glossary terms generator"
+msgstr "د اصطلاحاتو لېږد لیست جوړونکي فعالول"
+
+msgid "Enable video generator"
+msgstr "د ویډیو جوړونکي فعالول"
+
+msgid "Enable course analyser"
+msgstr "د کورس تجزیه کوونکي فعالول"
+
+msgid "The operation '%s' is not supported."
+msgstr "د '%s' عمل ملاتړ نه کېږي."
+
+msgid "AI feedback on %s in course %s"
+msgstr "د %s په اړه د AI فیډبیک په کورس %s کې"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "ختمول ناکامه شو: د کورس زمینه نشته یا غلط پوښتنې آیدی."
+
+msgid "AI Tutor"
+msgstr "AI ښوونکی"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "د پلیټفارم لپاره چې له ځایي ذخیره څخه کار واخلي، APCu توسیعه باید نصب او فعاله وي."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "لږ تر لږه %sMB د RAM مصرف ته د OPCache memory_consumption اجازه ورکول وړاندیز کېږي."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "د پلیټفارم لپاره چې له OPcache څخه کار واخلي، OPcache ماډل باید نصب او فعاله وي."
+
+msgid "You are here"
+msgstr "تاسو دلته یاست"
+
+msgid "Click an event type to filter results."
+msgstr "د پايلو فلټر کولو لپاره یو پېښه ډول کلیک کړئ."
+
+msgid "Require unique presence"
+msgstr "بیاکره وړاندې کېدل غواړئ"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "که فعاله شي، درجې کتاب به زده کوونکي ۱۰۰٪ ورکړي کله چې لږ تر لږه یو ځل حاضر وي."
+
+msgid "AI feedback"
+msgstr "AI فیډبیک"
+
+msgid "Prompt"
+msgstr "ترغیب"
+
+msgid "Tip"
+msgstr "لارښوونې"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "تاسو کولی شئ ترغیب سم کړئ مخکې له دې چې د فیډبیک غوښتنه وکړئ."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "پايله (تاسو کولی شئ دا په تبصره کې تطبيق کړئ)"
+
+msgid "Apply to comment"
+msgstr "په تبصره کې تطبيق کول"
+
+msgid "Apply score"
+msgstr "درجه تطبيق کول"
+
+msgid "AI grade"
+msgstr "AI درجې"
+
+msgid "AI tutor is disabled during tests"
+msgstr "AI ښوونکی د ازموینو په وخت کې غیر فعال دی"
+
+msgid "Generate glossary terms"
+msgstr "اصطلاحاتو لېږد لیست جوړول"
+
+msgid "Generate media"
+msgstr "رسنۍ جوړول"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "تاسو د دې کورس کې د AI رسنۍ جوړولو اجازه نلرئ."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "AI مرستندوي په پلیټفارم کچه غیر فعال دي."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "AI رسنۍ تولید په ګډون تنظیماتو کې غیر فعال دی."
+
+msgid "No AI media providers available."
+msgstr "هیڅ AI رسنۍ چمتو کونکي شتون نلري."
+
+msgid "Provider"
+msgstr "چمتو کونکی"
+
+msgid "Select a provider"
+msgstr "یوه چمتو کونکی غوره کړئ"
+
+msgid "Example: generated_media"
+msgstr "بېلګه: تولید شوې_رسنۍ"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "نوم prompt ته اضافه نه کیږي؛ دا یوازې د فایل ساتلو لپاره کارول کیږي."
+
+msgid "Describe what you want to generate..."
+msgstr "واضح کړئ چې څه غواړئ تولید کړئ..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "لارښوونه: د اندازې چټک ټاکلو لپاره یو preset کلیک کړئ."
+
+msgid "Generating..."
+msgstr "تولید کیږي..."
+
+msgid "Save to Documents"
+msgstr "د اسنادو کې خوندي کړئ"
+
+msgid "Document IRI"
+msgstr "د اسنادو IRI"
+
+msgid "Go to folder"
+msgstr "د فولډر ته لاړ شئ"
+
+msgid "Provider used"
+msgstr "کارول شوی چمتو کونکی"
+
+msgid "This video result cannot be saved yet"
+msgstr "دا ویډیو پایله لا تر اوسه خوندي نه شي کیدی"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "د ویډیو نظرسنجي وځنډ شو ځکه چې چمتو کونکی بدل شو."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "د ویډیو تولید ډیر وخت نیسي. مهرباني وکړئ وروسته بیا هڅه وکړئ."
+
+msgid "Failed to check video status."
+msgstr "د ویډیو حالت چک کول پاتې راغلل."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "ویډیو په بریالیتوب سره تولید شو. اوس تاسو یې خوندي کولای شئ."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "د ویډیو تولید بشپړ شو، مګر هیڅ playable محتوا نه و برگشته شو."
+
+msgid "Video generation failed."
+msgstr "د ویډیو تولید ناکام شو."
+
+msgid "Waiting for the video to be ready..."
+msgstr "د ویډیو چمتو کیدو په تمه یو..."
+
+msgid "Please complete all fields."
+msgstr "مهرباني وکړئ ټول فیلډونه بشپړ کړئ."
+
+msgid "Image generation is not enabled for this course."
+msgstr "د دې ګډون لپاره انځور تولید فعال نه دی."
+
+msgid "Video generation is not enabled for this course."
+msgstr "د دې ګډون لپاره ویډیو تولید فعال نه دی."
+
+msgid "Generation failed."
+msgstr "تولید ناکام شو."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "په بریالیتوب سره تولید شو. پیش نظر وګورئ او چمتو وي خوندي کړئ."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "په بریالیتوب سره تولید شو. خوندي کول غیر فعال دي ځکه چې چمتو کونکي URL ورکړی."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "د ویډیو تولید پیل شو. د پایلې په تمه یو..."
+
+msgid "AI returned an empty response."
+msgstr "AI خالي ځواب ورکړ."
+
+msgid "Nothing to save yet."
+msgstr "لا تر اوسه هیڅ شی خوندي کولو ته نشته."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "دا چمتو کونکی base64 محتوا نه ورکړ. مهرباني وکړئ بل چمتو کونکی هڅه وکړئ."
+
+msgid "Saving failed."
+msgstr "خوندي کول ناکام شو."
+
+msgid "Get AI feedback"
+msgstr "د AI فیډبیک ترلاسه کړئ"
+
+msgid "Copy answer to clipboard"
+msgstr "ځواب کلیپ بورډ ته کاپي کړئ"
+
+msgid "Save answer to my inbox"
+msgstr "ځواب زما ان باکس کې خوندي کړئ"
+
+msgid "The document is already in this folder"
+msgstr "دا سند لا د دې فولډر کې دی"
+
+msgid "Copied"
+msgstr "کاپي شو"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "تاسو د ګلوسار اصطلاحاتو تولید کولو اجازه نلرئ."
+
+msgid "Video generation is in progress"
+msgstr "د ویډیو تولید په جریان کې دی"
+
+msgid "Job"
+msgstr "دنده"
+
+msgid "Modified prompt"
+msgstr "بدل شوی prompt"
+
+msgid "Saved in Documents"
+msgstr "د اسنادو کې خوندي شو"
+

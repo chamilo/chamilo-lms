@@ -32351,3 +32351,231 @@ msgstr "Customcertificate"
 msgid "Update profile"
 msgstr "Eguneratu profila"
 
+msgid "Enable learning path generator"
+msgstr "Gaitu ikaskide bide sortzailea"
+
+msgid "Enable exercise generator"
+msgstr "Gaitu ariketa sortzailea"
+
+msgid "Enable open answers grader"
+msgstr "Gaitu erantzun irekien kalifikatzailea"
+
+msgid "Enable tutor chatbot"
+msgstr "Gaitu tutore chatbot-a"
+
+msgid "Enable task grader"
+msgstr "Gaitu zeregineko kalifikatzailea"
+
+msgid "Enable content analyser"
+msgstr "Gaitu eduki analizatzailea"
+
+msgid "Enable image generator"
+msgstr "Gaitu irudi sortzailea"
+
+msgid "Enable glossary terms generator"
+msgstr "Gaitu glosario terminoen sortzailea"
+
+msgid "Enable video generator"
+msgstr "Gaitu bideo sortzailea"
+
+msgid "Enable course analyser"
+msgstr "Gaitu ikastaro analizatzailea"
+
+msgid "The operation '%s' is not supported."
+msgstr "'%s' eragiketa ez dago onartuta."
+
+msgid "AI feedback on %s in course %s"
+msgstr "AI feedback %s-ri ikastaroan %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Ezabatu huts egin du: falta da ikastaroaren testuingurua edo galdera id baliogabea."
+
+msgid "AI Tutor"
+msgstr "AI Tutorea"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "APCu hedapenak plataforma erabili dezan instalatuta eta gaituta egon behar du."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "OPCache memory_consumption %sMB RAM-ra iristeari utztea gomendatzen da gutxienez."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "OPcache modulua plataforma erabili dezan instalatuta eta gaituta egon behar du."
+
+msgid "You are here"
+msgstr "Hemen zaude"
+
+msgid "Click an event type to filter results."
+msgstr "Egin klik gertaera mota bati emaitzak iragazteko."
+
+msgid "Require unique presence"
+msgstr "Eskatu presentzia bakarra"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Gaituta badago, kalifikazio-liburuak ikasleari %100 emango dio behinik behin presente badago."
+
+msgid "AI feedback"
+msgstr "AI feedback"
+
+msgid "Prompt"
+msgstr "Prompt"
+
+msgid "Tip"
+msgstr "Aholku"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Feedback eskaiteko aurretik editatu dezakezu prompt-a."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Emaitza (komentarioan aplika dezakezu)"
+
+msgid "Apply to comment"
+msgstr "Aplikatu komentarioan"
+
+msgid "Apply score"
+msgstr "Aplikatu puntuazioa"
+
+msgid "AI grade"
+msgstr "AI kalifikazioa"
+
+msgid "AI tutor is disabled during tests"
+msgstr "AI tutorea desgaituta dago proba zehar"
+
+msgid "Generate glossary terms"
+msgstr "Sortu glosarioaren terminoak"
+
+msgid "Generate media"
+msgstr "Sortu multimedia"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Ez duzu baimenik AI multimedia sortzeko ikastarion."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "AI laguntzaileak plataforma mailan desgaituta daude."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "AI multimedia sortzea desgaituta dago ikastaroaren ezarpenetan."
+
+msgid "No AI media providers available."
+msgstr "Ez dago AI multimedia hornitzailerik eskuragarri."
+
+msgid "Provider"
+msgstr "Hornitzailea"
+
+msgid "Select a provider"
+msgstr "Hautatu hornitzailea"
+
+msgid "Example: generated_media"
+msgstr "Adibidea: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "Izena ez da prompt-era gehitzen; fitxategia gordetzeko soilik erabiltzen da."
+
+msgid "Describe what you want to generate..."
+msgstr "Deskribatu sortu nahi duzuna..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Aholku: klik egin aurrezarpen batean tamaina azkar ezartzeko."
+
+msgid "Generating..."
+msgstr "Sortzen..."
+
+msgid "Save to Documents"
+msgstr "Gorde Dokumentuetan"
+
+msgid "Document IRI"
+msgstr "Dokumentu IRI"
+
+msgid "Go to folder"
+msgstr "Joan karpetara"
+
+msgid "Provider used"
+msgstr "Erabilitako hornitzailea"
+
+msgid "This video result cannot be saved yet"
+msgstr "Bideo emaitza hau ezin da oraindik gorde"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Bideo inkesta gelditu egin da hornitzailea aldatu delako."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "Bideo sortzea denbora gehiegi darama. Mesedez, saiatu berriro geroago."
+
+msgid "Failed to check video status."
+msgstr "Hutsegitea bideoaren egoera egiaztatzean."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Bideoa ongi sortu da. Orain gorde dezakezu."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Bideo sortzea osatu da, baina ez da eduki erreproduzigaririk itzuli."
+
+msgid "Video generation failed."
+msgstr "Bideo sortzea huts egin du."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Itxaron bideoa prest egotea..."
+
+msgid "Please complete all fields."
+msgstr "Bete ezazu eremu guztiak."
+
+msgid "Image generation is not enabled for this course."
+msgstr "Irudi sortzea ez dago gaituta ikastaro honetarako."
+
+msgid "Video generation is not enabled for this course."
+msgstr "Bideo sortzea ez dago gaituta ikastaro honetarako."
+
+msgid "Generation failed."
+msgstr "Sortzea huts egin du."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Ongi sortu da. Berrikusi aurizkia eta gorde prest egon arte."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Ongi sortu da. Gordetzea desgaituta dago hornitzaileak URL bat itzuli duelako."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Bideo sortzea hasita. Itxaron emaitza..."
+
+msgid "AI returned an empty response."
+msgstr "AI-k erantzun huts bat itzuli du."
+
+msgid "Nothing to save yet."
+msgstr "Ez dago gordetzekorik oraindik."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Hornitzaile honek ez du base64 edukirik itzuli. Saia zaitez beste hornitzaile batekin."
+
+msgid "Saving failed."
+msgstr "Gordetzea huts egin du."
+
+msgid "Get AI feedback"
+msgstr "Lortu AI feedback-a"
+
+msgid "Copy answer to clipboard"
+msgstr "Kopiatu erantzuna arbelean"
+
+msgid "Save answer to my inbox"
+msgstr "Gorde erantzuna nire sarera"
+
+msgid "The document is already in this folder"
+msgstr "Dokumentua dagoeneko karpeta honetan dago"
+
+msgid "Copied"
+msgstr "Kopiatua"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Ez duzu glossaryko terminoak sortzeko baimenik."
+
+msgid "Video generation is in progress"
+msgstr "Bideoaren sorta sortzen ari da"
+
+msgid "Job"
+msgstr "Lan"
+
+msgid "Modified prompt"
+msgstr "Aldatutako prompt-a"
+
+msgid "Saved in Documents"
+msgstr "Gordeta Dokumentuetan"
+

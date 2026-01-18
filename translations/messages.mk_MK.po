@@ -32344,3 +32344,231 @@ msgstr "Customcertificate"
 msgid "Update profile"
 msgstr "Ажурирај профил"
 
+msgid "Enable learning path generator"
+msgstr "Овозможи генерирање на патека за учење"
+
+msgid "Enable exercise generator"
+msgstr "Овозможи генерирање на вежби"
+
+msgid "Enable open answers grader"
+msgstr "Овозможи оценувач на отворени одговори"
+
+msgid "Enable tutor chatbot"
+msgstr "Овозможи чатбот за tutor"
+
+msgid "Enable task grader"
+msgstr "Овозможи оценувач на задачи"
+
+msgid "Enable content analyser"
+msgstr "Овозможи анализатор на содржина"
+
+msgid "Enable image generator"
+msgstr "Овозможи генерирање на слики"
+
+msgid "Enable glossary terms generator"
+msgstr "Овозможи генерирање на термини од гласари"
+
+msgid "Enable video generator"
+msgstr "Овозможи генерирање на видео"
+
+msgid "Enable course analyser"
+msgstr "Овозможи анализатор на курс"
+
+msgid "The operation '%s' is not supported."
+msgstr "Операцијата '%s' не е поддржана."
+
+msgid "AI feedback on %s in course %s"
+msgstr "AI повратни информации за %s во курсот %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Бришењето не успеа: недостасува контекст на курс или невалиден ID на прашање."
+
+msgid "AI Tutor"
+msgstr "AI Тьютор"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "Екстензијата APCu мора да биде инсталирана и овозможена за платформата да ја користи."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Препорачливо е memory_consumption на OPCache да достигне барем %sMB RAM."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "Модулот OPcache мора да биде инсталиран и овозможен за платформата да го користи."
+
+msgid "You are here"
+msgstr "Вие сте тука"
+
+msgid "Click an event type to filter results."
+msgstr "Кликнете на тип на настан за да ги филтрирате резултатите."
+
+msgid "Require unique presence"
+msgstr "Барај уникатно присуство"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Ако е овозможено, дневникот на оценки ќе му даде на ученикот 100% ако е присутен барем еднаш."
+
+msgid "AI feedback"
+msgstr "AI повратни информации"
+
+msgid "Prompt"
+msgstr "Промпт"
+
+msgid "Tip"
+msgstr "Совет"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Можете да го уредите промптот пред да побарате повратни информации."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Резултат (можете да го примените на коментарот)"
+
+msgid "Apply to comment"
+msgstr "Примени на коментар"
+
+msgid "Apply score"
+msgstr "Примени оцена"
+
+msgid "AI grade"
+msgstr "Оценка од ИИ"
+
+msgid "AI tutor is disabled during tests"
+msgstr "ИИ асистентот е оневозможен за време на тестовите"
+
+msgid "Generate glossary terms"
+msgstr "Генерирај термини од гласар"
+
+msgid "Generate media"
+msgstr "Генерирај медиум"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Немате дозвола да генерирате ИИ медиуми во овој курс."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "ИИ помошниците се оневозможени на ниво на платформа."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "Генерирањето ИИ медиуми е оневозможено во поставките на курсот."
+
+msgid "No AI media providers available."
+msgstr "Нема достапни ИИ провајдери за медиуми."
+
+msgid "Provider"
+msgstr "Провајдер"
+
+msgid "Select a provider"
+msgstr "Избери провајдер"
+
+msgid "Example: generated_media"
+msgstr "Пример: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "Името не се додава во пораката; се користи само за зачувување на датотеката."
+
+msgid "Describe what you want to generate..."
+msgstr "Опишете што сакате да генерирате..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Совет: кликнете на предвидена вредност за брзо поставување на големината."
+
+msgid "Generating..."
+msgstr "Генерирање..."
+
+msgid "Save to Documents"
+msgstr "Зачувај во Документи"
+
+msgid "Document IRI"
+msgstr "IRI на документот"
+
+msgid "Go to folder"
+msgstr "Оди во папка"
+
+msgid "Provider used"
+msgstr "Користен провајдер"
+
+msgid "This video result cannot be saved yet"
+msgstr "Овој видео резултат сè уште не може да се зачува"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Анкетата за видео е стопирана поради промена на провајдерот."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "Генерирањето видео трае предолго. Обидете се повторно подоцна."
+
+msgid "Failed to check video status."
+msgstr "Неуспешно проверување на статусот на видеото."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Видеото е успешно генерирано. Сега можете да го зачувате."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Генерирањето видео е завршено, но нема вратено садење за репродукција."
+
+msgid "Video generation failed."
+msgstr "Генерирањето видео не успеа."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Чекање видеото да биде готово..."
+
+msgid "Please complete all fields."
+msgstr "Комплетирајте ги сите полиња."
+
+msgid "Image generation is not enabled for this course."
+msgstr "Генерирањето слики не е овозможено за овој курс."
+
+msgid "Video generation is not enabled for this course."
+msgstr "Генерирањето видео не е овозможено за овој курс."
+
+msgid "Generation failed."
+msgstr "Генерирањето не успеа."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Успешно генерирано. Прегледајте го прегледот и зачувајте кога ќе сте спремни."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Успешно генерирано. Зачувувањето е оневозможено бидејќи провајдерот врати URL."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Генерирањето видео започна. Чекање на резултатот..."
+
+msgid "AI returned an empty response."
+msgstr "ИИ врати празен одговор."
+
+msgid "Nothing to save yet."
+msgstr "Сè уште нема што да се зачува."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Овој провајдер не врати base64 содржина. Обидете се со друг провајдер."
+
+msgid "Saving failed."
+msgstr "Зачувувањето не успеа."
+
+msgid "Get AI feedback"
+msgstr "Добиј повратна информација од ИИ"
+
+msgid "Copy answer to clipboard"
+msgstr "Копирај одговор во клипборд"
+
+msgid "Save answer to my inbox"
+msgstr "Зачувај одговор во мојот inbox"
+
+msgid "The document is already in this folder"
+msgstr "Документот веќе е во оваа папка"
+
+msgid "Copied"
+msgstr "Копирано"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Немате дозвола да генерирате термини од гласар."
+
+msgid "Video generation is in progress"
+msgstr "Генерирањето видео е во тек"
+
+msgid "Job"
+msgstr "Задача"
+
+msgid "Modified prompt"
+msgstr "Модифицирана порака"
+
+msgid "Saved in Documents"
+msgstr "Зачувано во Документи"
+

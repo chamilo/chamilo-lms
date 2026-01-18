@@ -32344,3 +32344,231 @@ msgstr "Customcertificate"
 msgid "Update profile"
 msgstr "프로필 업데이트"
 
+msgid "Enable learning path generator"
+msgstr "학습 경로 생성기 활성화"
+
+msgid "Enable exercise generator"
+msgstr "연습 생성기 활성화"
+
+msgid "Enable open answers grader"
+msgstr "오픈 답변 채점기 활성화"
+
+msgid "Enable tutor chatbot"
+msgstr "튜터 챗봇 활성화"
+
+msgid "Enable task grader"
+msgstr "과제 채점기 활성화"
+
+msgid "Enable content analyser"
+msgstr "콘텐츠 분석기 활성화"
+
+msgid "Enable image generator"
+msgstr "이미지 생성기 활성화"
+
+msgid "Enable glossary terms generator"
+msgstr "용어집 용어 생성기 활성화"
+
+msgid "Enable video generator"
+msgstr "비디오 생성기 활성화"
+
+msgid "Enable course analyser"
+msgstr "강의 분석기 활성화"
+
+msgid "The operation '%s' is not supported."
+msgstr "'%s' 작업은 지원되지 않습니다."
+
+msgid "AI feedback on %s in course %s"
+msgstr "%s에 대한 AI 피드백 (강의 %s)"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "삭제 실패: 강의 컨텍스트 누락 또는 잘못된 질문 ID."
+
+msgid "AI Tutor"
+msgstr "AI 튜터"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "플랫폼이 이를 사용하려면 APCu 확장이 설치되고 활성화되어야 합니다."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "OPCache memory_consumption이 최소 %sMB RAM에 도달하도록 허용하는 것이 권장됩니다."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "플랫폼이 이를 사용하려면 OPcache 모듈이 설치되고 활성화되어야 합니다."
+
+msgid "You are here"
+msgstr "현재 위치"
+
+msgid "Click an event type to filter results."
+msgstr "결과를 필터링하려면 이벤트 유형을 클릭하세요."
+
+msgid "Require unique presence"
+msgstr "고유 출석 요구"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "활성화하면, 최소 한 번 출석 시 학습자에게 100%를 부여합니다."
+
+msgid "AI feedback"
+msgstr "AI 피드백"
+
+msgid "Prompt"
+msgstr "프롬프트"
+
+msgid "Tip"
+msgstr "팁"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "피드백을 요청하기 전에 프롬프트를 편집할 수 있습니다."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "결과 (댓글에 적용 가능)"
+
+msgid "Apply to comment"
+msgstr "댓글에 적용"
+
+msgid "Apply score"
+msgstr "점수 적용"
+
+msgid "AI grade"
+msgstr "AI 채점"
+
+msgid "AI tutor is disabled during tests"
+msgstr "테스트 중 AI 튜터가 비활성화됩니다"
+
+msgid "Generate glossary terms"
+msgstr "용어집 용어 생성"
+
+msgid "Generate media"
+msgstr "미디어 생성"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "이 강의에서 AI 미디어를 생성할 권한이 없습니다."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "플랫폼 수준에서 AI 도우미가 비활성화되었습니다."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "강의 설정에서 AI 미디어 생성이 비활성화되었습니다."
+
+msgid "No AI media providers available."
+msgstr "사용 가능한 AI 미디어 제공자가 없습니다."
+
+msgid "Provider"
+msgstr "제공자"
+
+msgid "Select a provider"
+msgstr "제공자 선택"
+
+msgid "Example: generated_media"
+msgstr "예: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "이름은 프롬프트에 추가되지 않습니다. 파일 저장에만 사용됩니다."
+
+msgid "Describe what you want to generate..."
+msgstr "생성할 내용을 설명하세요..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "팁: 크기를 빠르게 설정하려면 사전 설정을 클릭하세요."
+
+msgid "Generating..."
+msgstr "생성 중..."
+
+msgid "Save to Documents"
+msgstr "문서에 저장"
+
+msgid "Document IRI"
+msgstr "문서 IRI"
+
+msgid "Go to folder"
+msgstr "폴더로 이동"
+
+msgid "Provider used"
+msgstr "사용된 제공자"
+
+msgid "This video result cannot be saved yet"
+msgstr "이 비디오 결과는 아직 저장할 수 없습니다."
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "제공자가 변경되어 비디오 폴링이 중지되었습니다."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "비디오 생성이 너무 오래 걸립니다. 나중에 다시 시도하세요."
+
+msgid "Failed to check video status."
+msgstr "비디오 상태 확인에 실패했습니다."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "비디오가 성공적으로 생성되었습니다. 이제 저장할 수 있습니다."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "비디오 생성이 완료되었으나 재생 가능한 콘텐츠가 반환되지 않았습니다."
+
+msgid "Video generation failed."
+msgstr "비디오 생성에 실패했습니다."
+
+msgid "Waiting for the video to be ready..."
+msgstr "비디오가 준비될 때까지 대기 중..."
+
+msgid "Please complete all fields."
+msgstr "모든 필드를 입력하세요."
+
+msgid "Image generation is not enabled for this course."
+msgstr "이 강의에서 이미지 생성이 활성화되지 않았습니다."
+
+msgid "Video generation is not enabled for this course."
+msgstr "이 강의에서 비디오 생성이 활성화되지 않았습니다."
+
+msgid "Generation failed."
+msgstr "생성에 실패했습니다."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "성공적으로 생성되었습니다. 미리보기를 확인하고 준비되면 저장하세요."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "성공적으로 생성되었습니다. 제공자가 URL을 반환하여 저장이 비활성화되었습니다."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "비디오 생성이 시작되었습니다. 결과를 기다리는 중..."
+
+msgid "AI returned an empty response."
+msgstr "AI가 빈 응답을 반환했습니다."
+
+msgid "Nothing to save yet."
+msgstr "아직 저장할 내용이 없습니다."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "이 제공자는 base64 콘텐츠를 반환하지 않았습니다. 다른 제공자를 시도하세요."
+
+msgid "Saving failed."
+msgstr "저장에 실패했습니다."
+
+msgid "Get AI feedback"
+msgstr "AI 피드백 받기"
+
+msgid "Copy answer to clipboard"
+msgstr "답변을 클립보드에 복사"
+
+msgid "Save answer to my inbox"
+msgstr "답변을 내 받은편지함에 저장"
+
+msgid "The document is already in this folder"
+msgstr "문서가 이미 이 폴더에 있습니다."
+
+msgid "Copied"
+msgstr "복사됨"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "용어집 용어를 생성할 권한이 없습니다."
+
+msgid "Video generation is in progress"
+msgstr "비디오 생성 진행 중"
+
+msgid "Job"
+msgstr "작업"
+
+msgid "Modified prompt"
+msgstr "수정된 프롬프트"
+
+msgid "Saved in Documents"
+msgstr "문서에 저장됨"
+

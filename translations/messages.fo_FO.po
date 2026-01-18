@@ -32340,3 +32340,231 @@ msgstr "Customcertificate"
 msgid "Update profile"
 msgstr "Dagfør profil"
 
+msgid "Enable learning path generator"
+msgstr ""
+
+msgid "Enable exercise generator"
+msgstr ""
+
+msgid "Enable open answers grader"
+msgstr ""
+
+msgid "Enable tutor chatbot"
+msgstr ""
+
+msgid "Enable task grader"
+msgstr ""
+
+msgid "Enable content analyser"
+msgstr ""
+
+msgid "Enable image generator"
+msgstr ""
+
+msgid "Enable glossary terms generator"
+msgstr ""
+
+msgid "Enable video generator"
+msgstr ""
+
+msgid "Enable course analyser"
+msgstr ""
+
+msgid "The operation '%s' is not supported."
+msgstr ""
+
+msgid "AI feedback on %s in course %s"
+msgstr ""
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr ""
+
+msgid "AI Tutor"
+msgstr ""
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "APCu-framburaðan má vera íson sett og virkin fyri at plattformurin kann brúka hana."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Tað verður anbefalt at loyva OPCache memory_consumption at ná %sMB av RAM í minsta lagi."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "OPcache-modulin má vera íson sett og virkið fyri at plattformurin kann brúka tað."
+
+msgid "You are here"
+msgstr "Tú ert her"
+
+msgid "Click an event type to filter results."
+msgstr "Klikk á ein viðburðsstypur at fílgra úrslitini."
+
+msgid "Require unique presence"
+msgstr "Krafa einastandandi tilvera"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Um virkið, fær lærlingurin 100% í bókini tá ið tilfarin er til staðar í minsta lagi ein ferð."
+
+msgid "AI feedback"
+msgstr "AI endurgivan"
+
+msgid "Prompt"
+msgstr "Prompt"
+
+msgid "Tip"
+msgstr "Ráð"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Tú kanst broyta promptin áðrenn tú biðir um endurgivan."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Úrslit (tú kanst seta tað á viðmerkingina)"
+
+msgid "Apply to comment"
+msgstr "Set á viðmerking"
+
+msgid "Apply score"
+msgstr "Set stig"
+
+msgid "AI grade"
+msgstr "AI stigagivning"
+
+msgid "AI tutor is disabled during tests"
+msgstr "AI tutorin er óvirkin undir próvum"
+
+msgid "Generate glossary terms"
+msgstr "Finn orðatilskilaðir"
+
+msgid "Generate media"
+msgstr "Finn miðla"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Tú hevur ikki loyvi til at finna AI miðlar í hesum kursi."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "AI hjálpararnir eru óvirknir á plattformnivó."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "AI miðlaframleiðsla er óvirkin í kursinstillingum."
+
+msgid "No AI media providers available."
+msgstr "Ongir AI miðlaframleiðar til taks."
+
+msgid "Provider"
+msgstr "Framleiðari"
+
+msgid "Select a provider"
+msgstr "Vel ein framleiðara"
+
+msgid "Example: generated_media"
+msgstr "Dømi: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "Navnið verður ikki lagt afturat promptinum; tað verður bert brúkt til at goyma fílin."
+
+msgid "Describe what you want to generate..."
+msgstr " lýs hvað tú ynskir at fremja..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Ráð: klikk á eitt forval at seta støddina skjótt."
+
+msgid "Generating..."
+msgstr "Fremur..."
+
+msgid "Save to Documents"
+msgstr "Goym í Skjølum"
+
+msgid "Document IRI"
+msgstr "Skjal IRI"
+
+msgid "Go to folder"
+msgstr "Far til mappu"
+
+msgid "Provider used"
+msgstr "Framleiðari brúktur"
+
+msgid "This video result cannot be saved yet"
+msgstr "Hetta videóúrslitið kann ikki goymast enn"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Videóumspurning varð stöðvað tí framleiðararnaskiftði."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "Videóframleiðslan tekur ov langa tíð. Royn aftur seinni."
+
+msgid "Failed to check video status."
+msgstr "Miseygndist at síggja videóstøðu."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Videó framleitt við lukku. Tú kanst nú goyma tað."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Videóframleiðsla liðug, men ongin leikinligur innihaldur varð heimførdur."
+
+msgid "Video generation failed."
+msgstr "Videóframleiðsla miseygndist."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Vantar at videóið verða til reiðar..."
+
+msgid "Please complete all fields."
+msgstr "Fullfør allar teigar."
+
+msgid "Image generation is not enabled for this course."
+msgstr "Myndframleiðsla er ikki virkin fyri henda kursin."
+
+msgid "Video generation is not enabled for this course."
+msgstr "Videóframleiðsla er ikki virkin fyri henda kursin."
+
+msgid "Generation failed."
+msgstr "Framleiðsla miseygndist."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Framleitt við lukku. Dagføra forsýningina og goym tá ið til reiðar."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Framleitt við lukku. Goyming er óvirkin tí framleiðararnin hevði heimført ein URL."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Videóframleiðsla byrjað. Vantar útgávuna..."
+
+msgid "AI returned an empty response."
+msgstr "AI hevði heimført eitt tómt svar."
+
+msgid "Nothing to save yet."
+msgstr "Einki at goyma enn."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Hesin veitarin gav ikki base64-innihald. Vinarliga royn onnur veitar."
+
+msgid "Saving failed."
+msgstr "Goymslan miseygdist."
+
+msgid "Get AI feedback"
+msgstr "Fá AI endurgóvur"
+
+msgid "Copy answer to clipboard"
+msgstr "Avrita svar til knípiborðið"
+
+msgid "Save answer to my inbox"
+msgstr "Goym svar í mína innpakking"
+
+msgid "The document is already in this folder"
+msgstr "Skjalið er long tíð í hesi mappu"
+
+msgid "Copied"
+msgstr "Avritað"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Tú hevur ikki loyvi til at útbúgva orðabókartilfar."
+
+msgid "Video generation is in progress"
+msgstr "Myndbandsútgjørdan er í gongd"
+
+msgid "Job"
+msgstr "Verk"
+
+msgid "Modified prompt"
+msgstr "Broytt boð"
+
+msgid "Saved in Documents"
+msgstr "Goymt í Skjálum"
+

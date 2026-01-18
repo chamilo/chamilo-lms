@@ -32344,3 +32344,231 @@ msgstr "Customcertificate"
 msgid "Update profile"
 msgstr "Թարմացնել профիլը"
 
+msgid "Enable learning path generator"
+msgstr "Միացնել ուսուցման ուղու գեներատորը"
+
+msgid "Enable exercise generator"
+msgstr "Միացնել վարժության գեներատորը"
+
+msgid "Enable open answers grader"
+msgstr "Միացնել բաց պատասխանների գնահատողը"
+
+msgid "Enable tutor chatbot"
+msgstr "Միացնել ուսուցչական չաթբոտը"
+
+msgid "Enable task grader"
+msgstr "Միացնել առաջադրանքի գնահատողը"
+
+msgid "Enable content analyser"
+msgstr "Միացնել բովանդակության վերլուծիչը"
+
+msgid "Enable image generator"
+msgstr "Միացնել նկարի գեներատորը"
+
+msgid "Enable glossary terms generator"
+msgstr "Միացնել բառարանի տերմինների գեներատորը"
+
+msgid "Enable video generator"
+msgstr "Միացնել վիդեո գեներատորը"
+
+msgid "Enable course analyser"
+msgstr "Միացնել դասընթացի վերլուծիչը"
+
+msgid "The operation '%s' is not supported."
+msgstr "Գործողություն «%s» չի աջակցվում:"
+
+msgid "AI feedback on %s in course %s"
+msgstr "ԱԸ հետադարձ կապ %s-ի վերաբերյալ դասընթաց %s-ում"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Ջնջումը ձախողվեց. բացակայում է դասընթացի համատեքստը կամ անվավեր հարցի id:"
+
+msgid "AI Tutor"
+msgstr "ԱԸ ուսուցիչ"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "APCu ընդլայնումը պետք է տեղադրված և միացված լինի, որպեսզի հարթակը օգտագործի այն:"
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Առաջարկվում է թույլ տալ OPCache memory_consumption-ը հասնել առնվազն %sMB RAM-ի:"
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "OPcache մոդուլը պետք է տեղադրված և միացված լինի, որպեսզի հարթակը օգտագործի այն:"
+
+msgid "You are here"
+msgstr "Դուք այստեղ եք"
+
+msgid "Click an event type to filter results."
+msgstr "Սեղմեք իրադարձության տեսակը՝ արդյունքները ֆիլտրելու համար:"
+
+msgid "Require unique presence"
+msgstr "Պահանջել եզակի ներկայություն"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Եթե միացված է, գնահատանքային տետրը կտա աշակերտին 100%, եթե նա առնվազն մեկ անգամ ներկա է եղել:"
+
+msgid "AI feedback"
+msgstr "ԱԸ հետադարձ կապ"
+
+msgid "Prompt"
+msgstr "Հրահանգ"
+
+msgid "Tip"
+msgstr "Խորհուրդ"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Կարող եք խմբագրել հրահանգը նախքան արձագանք ստանալը:"
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Արդյունք (կարող եք կիրառել մեկնաբանությանը)"
+
+msgid "Apply to comment"
+msgstr "Կիրառել մեկնաբանությանը"
+
+msgid "Apply score"
+msgstr "Կիրառել գնահատականը"
+
+msgid "AI grade"
+msgstr "ԱԶ գնահատական"
+
+msgid "AI tutor is disabled during tests"
+msgstr "ԱԶ ուսուցիչը անջատված է թեստերի ընթացքում"
+
+msgid "Generate glossary terms"
+msgstr "Գեներացնել բառարանային տերմիններ"
+
+msgid "Generate media"
+msgstr "Գեներացնել մեդիա"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Դուք չունեք թույլտվություն ԱԶ մեդիա գեներացնելու այս դասընթացում:"
+
+msgid "AI helpers are disabled at platform level."
+msgstr "ԱԶ օգնիկները անջատված են հարթակի մակարդակով:"
+
+msgid "AI media generation is disabled in course settings."
+msgstr "ԱԶ մեդիայի գեներացումը անջատված է դասընթացի կարգավորումներում:"
+
+msgid "No AI media providers available."
+msgstr "ԱԶ մեդիա մատակարարներ չկան:"
+
+msgid "Provider"
+msgstr "Մատակարար"
+
+msgid "Select a provider"
+msgstr "Ընտրեք մատակարար"
+
+msgid "Example: generated_media"
+msgstr "Օրինակ՝ generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "Անունը չի ավելացվում հրահանգին. այն օգտագործվում է միայն ֆայլը պահպանելու համար:"
+
+msgid "Describe what you want to generate..."
+msgstr "Նկարագրեք, թե ինչ ուզում եք գեներացնել..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Խորհուրդ՝ սեղմեք նախապես կարգավորումը չափը արագ սահմանելու համար:"
+
+msgid "Generating..."
+msgstr "Գեներացնվում է..."
+
+msgid "Save to Documents"
+msgstr "Պահպանել Փաստաթղթերում"
+
+msgid "Document IRI"
+msgstr "Փաստաթղթի IRI"
+
+msgid "Go to folder"
+msgstr "Անցնել պանակին"
+
+msgid "Provider used"
+msgstr "Օգտագործված մատակարար"
+
+msgid "This video result cannot be saved yet"
+msgstr "Այս տեսանյութի արդյունքը դեռ չի կարող պահպանվել"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Տեսանյութի հարցումը դադարեցվել է, քանի որ մատակարարը փոխվել է:"
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "Տեսանյութի գեներացումը շատ երկար է տևում: Խնդրում ենք փորձեք հետո:"
+
+msgid "Failed to check video status."
+msgstr "Տեսանյութի կարգավիճակի ստուգումը ձախողվել է:"
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Տեսանյութը հաջողությամբ գեներացվել է: Այժմ կարող եք այն պահպանել:"
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Տեսանյութի գեներացումն ավարտվել է, սակայն չի վերադարձվել վերարտադրելի բովանդակություն:"
+
+msgid "Video generation failed."
+msgstr "Տեսանյութի գեներացումը ձախողվել է:"
+
+msgid "Waiting for the video to be ready..."
+msgstr "Սպասում ենք տեսանյութի պատրաստ լինելուն..."
+
+msgid "Please complete all fields."
+msgstr "Լրացրեք բոլոր դաշտերը:"
+
+msgid "Image generation is not enabled for this course."
+msgstr "Նկարի գեներացումը չի թույլատրվում այս դասընթացում:"
+
+msgid "Video generation is not enabled for this course."
+msgstr "Տեսանյութի գեներացումը չի թույլատրվում այս դասընթացում:"
+
+msgid "Generation failed."
+msgstr "Գեներացումը ձախողվել է:"
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Հաջողությամբ գեներացվել է: Նայեք նախադիտմանը և պահպանեք, երբ պատրաստ լինի:"
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Հաջողությամբ գեներացվել է: Պահպանումը անջատված է, քանի որ մատակարարը վերադարձրել է URL:"
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Տեսանյութի գեներացումը սկսվել է: Սպասում ենք արդյունքին..."
+
+msgid "AI returned an empty response."
+msgstr "ԱԶ-ն վերադարձրել է դատարկ պատասխան:"
+
+msgid "Nothing to save yet."
+msgstr "Չկա պահպանելու բան:"
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Այս մատակարարը չի վերադարձրել base64 բովանդակություն: Խնդրում ենք փորձեք մեկ այլ մատակարար:"
+
+msgid "Saving failed."
+msgstr "Պահպանումը ձախողվել է:"
+
+msgid "Get AI feedback"
+msgstr "Ստանալ ԱԶ արձագանք"
+
+msgid "Copy answer to clipboard"
+msgstr "Պատճենել պատասխանը մեկնարկնաբուֆերում"
+
+msgid "Save answer to my inbox"
+msgstr "Պահպանել պատասխանը իմ նամակագրությունում"
+
+msgid "The document is already in this folder"
+msgstr "Փաստաթուղթն արդեն այս պանակում է"
+
+msgid "Copied"
+msgstr "Պատճենվել է"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Դուք չունեք թույլտվություն բառարանային տերմիններ գեներացնելու:"
+
+msgid "Video generation is in progress"
+msgstr "Տեսանյութի գեներացումը ընթացքի մեջ է"
+
+msgid "Job"
+msgstr "Աշխատանք"
+
+msgid "Modified prompt"
+msgstr "Փոփոխված հրահանգ"
+
+msgid "Saved in Documents"
+msgstr "Պահպանված է Փաստաթղթերում"
+

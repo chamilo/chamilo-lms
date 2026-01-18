@@ -32374,3 +32374,201 @@ msgstr "Enable video generator"
 
 msgid "Enable course analyser"
 msgstr "Enable course analyser"
+
+msgid "The operation '%s' is not supported."
+msgstr "The operation '%s' is not supported."
+
+msgid "AI feedback on %s in course %s"
+msgstr "AI feedback on %s in course %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Delete failed: missing course context or invalid question id."
+
+msgid "AI Tutor"
+msgstr "AI Tutor"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+
+msgid "You are here"
+msgstr "You are here"
+
+msgid "Click an event type to filter results."
+msgstr "Click an event type to filter results."
+
+msgid "Require unique presence"
+msgstr "Require unique presence"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "If enabled, the gradebook will give a learner 100% when present at least once."
+
+msgid "AI feedback"
+msgstr "AI feedback"
+
+msgid "Prompt"
+msgstr "Prompt"
+
+msgid "Tip"
+msgstr "Tip"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "You can edit the prompt before asking for feedback."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Result (you can apply it to the comment)"
+
+msgid "Apply to comment"
+msgstr "Apply to comment"
+
+msgid "Apply score"
+msgstr "Apply score"
+
+msgid "AI grade"
+msgstr "AI grade"
+
+msgid "AI tutor is disabled during tests"
+msgstr "AI tutor is disabled during tests"
+
+msgid "Generate glossary terms"
+msgstr "Generate glossary terms"
+
+msgid "Generate media"
+msgstr "Generate media"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "You do not have permission to generate AI media in this course."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "AI helpers are disabled at platform level."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "AI media generation is disabled in course settings."
+
+msgid "No AI media providers available."
+msgstr "No AI media providers available."
+
+msgid "Provider"
+msgstr "Provider"
+
+msgid "Select a provider"
+msgstr "Select a provider"
+
+msgid "Example: generated_media"
+msgstr "Example: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "The name is not added to the prompt; it is only used to save the file."
+
+msgid "Describe what you want to generate..."
+msgstr "Describe what you want to generate..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Tip: click a preset to quickly set the size."
+
+msgid "Generating..."
+msgstr "Generating..."
+
+msgid "Save to Documents"
+msgstr "Save to Documents"
+
+msgid "Document IRI"
+msgstr "Document IRI"
+
+msgid "Go to folder"
+msgstr "Go to folder"
+
+msgid "Provider used"
+msgstr "Provider used"
+
+msgid "This video result cannot be saved yet"
+msgstr "This video result cannot be saved yet"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Video polling was stopped because the provider changed."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "Video generation is taking too long. Please try again later."
+
+msgid "Failed to check video status."
+msgstr "Failed to check video status."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Video generated successfully. You can now save it."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Video generation completed, but no playable content was returned."
+
+msgid "Video generation failed."
+msgstr "Video generation failed."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Waiting for the video to be ready..."
+
+msgid "Please complete all fields."
+msgstr "Please complete all fields."
+
+msgid "Image generation is not enabled for this course."
+msgstr "Image generation is not enabled for this course."
+
+msgid "Video generation is not enabled for this course."
+msgstr "Video generation is not enabled for this course."
+
+msgid "Generation failed."
+msgstr "Generation failed."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Generated successfully. Review the preview and save when ready."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Generated successfully. Saving is disabled because the provider returned a URL."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Video generation started. Waiting for the result..."
+
+msgid "AI returned an empty response."
+msgstr "AI returned an empty response."
+
+msgid "Nothing to save yet."
+msgstr "Nothing to save yet."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "This provider did not return base64 content. Please try another provider."
+
+msgid "Saving failed."
+msgstr "Saving failed."
+
+msgid "Get AI feedback"
+msgstr "Get AI feedback"
+
+msgid "Copy answer to clipboard"
+msgstr "Copy answer to clipboard"
+
+msgid "Save answer to my inbox"
+msgstr "Save answer to my inbox"
+
+msgid "The document is already in this folder"
+msgstr "The document is already in this folder"
+
+msgid "Copied"
+msgstr "Copied"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "You do not have permission to generate glossary terms."
+
+msgid "Video generation is in progress"
+msgstr "Video generation is in progress"
+
+msgid "Job"
+msgstr "Job"
+
+msgid "Modified prompt"
+msgstr "Modified prompt"
+
+msgid "Saved in Documents"
+msgstr "Saved in Documents"

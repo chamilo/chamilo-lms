@@ -751,13 +751,14 @@ class Diagnoser
             $setting,
             $req_setting,
             null,
-            get_lang('The OPcache module needs to be both installed and enabled in order to be used.')
+            get_lang('The OPcache module needs to be both installed and enabled in order for the platform to use it.')
         );
 
         $setting = ini_get('opcache.memory_consumption');
-        $req_setting = '>= 128M';
+        $req_limit = 128;
+        $req_setting = '>= '.$req_limit.'M';
         $status = self::STATUS_INFORMATION;
-        if ((int) $setting >= 128) {
+        if ((int) $setting >= $req_limit) {
             $status = self::STATUS_OK;
         }
         $array[] = $this->build_setting(
@@ -768,7 +769,7 @@ class Diagnoser
             $setting,
             $req_setting,
             null,
-            get_lang('Allowing OPCache memory_consumption to reach 128MB of RAM at least is recommended.')
+            sprintf(get_lang('Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended.'), $req_limit)
         );
 
         $setting = 0;
@@ -785,7 +786,7 @@ class Diagnoser
             $setting,
             $req_setting,
             null,
-            get_lang('The APCu extension needs to be both installed and enabled in order to be used.')
+            get_lang('The APCu extension needs to be both installed and enabled in order for the platform to use it.')
         );
 
         return $array;

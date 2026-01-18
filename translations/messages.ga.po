@@ -32344,3 +32344,231 @@ msgstr "Deimhniú saincheaptha"
 msgid "Update profile"
 msgstr "Nuashonraigh próifíl"
 
+msgid "Enable learning path generator"
+msgstr "Cumasaigh gineadóir cosán foghlama"
+
+msgid "Enable exercise generator"
+msgstr "Cumasaigh gineadóir cleachtaí"
+
+msgid "Enable open answers grader"
+msgstr "Cumasaigh grádóir freagraí oscailte"
+
+msgid "Enable tutor chatbot"
+msgstr "Cumasaigh chatbot teagascóra"
+
+msgid "Enable task grader"
+msgstr "Cumasaigh grádóir tascanna"
+
+msgid "Enable content analyser"
+msgstr "Cumasaigh anailísí ábhair"
+
+msgid "Enable image generator"
+msgstr "Cumasaigh gineadóir íomhánna"
+
+msgid "Enable glossary terms generator"
+msgstr "Cumasaigh gineadóir téarmaí gluais"
+
+msgid "Enable video generator"
+msgstr "Cumasaigh gineadóir físeáin"
+
+msgid "Enable course analyser"
+msgstr "Cumasaigh anailísí cúrsa"
+
+msgid "The operation '%s' is not supported."
+msgstr "Ní thacaítear leis an oibríocht '%s'."
+
+msgid "AI feedback on %s in course %s"
+msgstr "Aiseolas AI ar %s i gcúrsa %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Scriosadh theip: easpa acomharc cúrsa nó id ceiste neamhbhailí."
+
+msgid "AI Tutor"
+msgstr "Teagascóir AI"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "Caithfidh síneadh APCu a bheith suiteáilte agus cumasaithe le húsáid an ardáin é."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Moltar ceadú do OPCache memory_consumption %sMB de RAM ar a laghad a bhaint amach."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "Caithfidh modúl OPcache a bheith suiteáilte agus cumasaithe le húsáid an ardáin é."
+
+msgid "You are here"
+msgstr "Tá tú anseo"
+
+msgid "Click an event type to filter results."
+msgstr "Cliceáil ar chineál imeachta chun torthaí a scagadh."
+
+msgid "Require unique presence"
+msgstr "Éiligh láithreacht uathúil"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Má chumasaítear é, tabharfaidh an leabhar grád 100% d’fhoghlaimeoir nuair a bheith i láthair uair amháin ar a laghad."
+
+msgid "AI feedback"
+msgstr "Aiseolas AI"
+
+msgid "Prompt"
+msgstr "Práomhtheachtaireacht"
+
+msgid "Tip"
+msgstr "Tip"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Is féidir leat an práomhtheachtaireacht a eagarthóireacht sula n-iarrann tú aiseolas."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Toradh (is féidir iarratas a dhéanamh air ar an nóta)"
+
+msgid "Apply to comment"
+msgstr "Cuir iarratas ar an nóta"
+
+msgid "Apply score"
+msgstr "Cuir scór iarratas"
+
+msgid "AI grade"
+msgstr "Grád AI"
+
+msgid "AI tutor is disabled during tests"
+msgstr "Tá teagascóir AI díchumasaithe le linn tástálacha"
+
+msgid "Generate glossary terms"
+msgstr "Gina téarmaí gluais"
+
+msgid "Generate media"
+msgstr "Gina meáin"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Níl cead agat meáin AI a ghiniúint sa chúrsa seo."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "Tá cúnamh AI díchumasaithe ar leibhéal an ardáin."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "Tá giniúint meáin AI díchumasaithe i socruithe an chúrsa."
+
+msgid "No AI media providers available."
+msgstr "Níl aon soláthróirí meáin AI ar fáil."
+
+msgid "Provider"
+msgstr "Soláthróir"
+
+msgid "Select a provider"
+msgstr "Roghnaigh soláthróir"
+
+msgid "Example: generated_media"
+msgstr "Sampla: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "Ní chuirtear an t-ainm leis an pras; úsáidtear é chun an comhad a shábháil amháin."
+
+msgid "Describe what you want to generate..."
+msgstr "Cur síos ar cad ba mhaith leat a ghiniúint..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Tip: cliceáil ar réamhshocrú chun an méid a shocrú go tapa."
+
+msgid "Generating..."
+msgstr "Ag giniúint..."
+
+msgid "Save to Documents"
+msgstr "Sábháil go Doiciméid"
+
+msgid "Document IRI"
+msgstr "IRI an Doiciméid"
+
+msgid "Go to folder"
+msgstr "Téigh go fillteán"
+
+msgid "Provider used"
+msgstr "Soláthróir úsáidte"
+
+msgid "This video result cannot be saved yet"
+msgstr "Ní féidir an toradh físe seo a shábháil go fóill"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Stopadh vótaíocht físe toisc gur athraigh an soláthróir."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "Tá giniúint físe ag cur ró-fhada. Déan iarracht arís níos déanaí."
+
+msgid "Failed to check video status."
+msgstr "Theip ar stádas físe a sheiceáil."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Giniúint físe go rathúil. Is féidir anois é a shábháil."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Críochnaíodh giniúint físe, ach níor tugadh ábhar inimeartha ar ais."
+
+msgid "Video generation failed."
+msgstr "Theip ar giniúint físe."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Ag fanacht leis an bhfíseán a bheith réidh..."
+
+msgid "Please complete all fields."
+msgstr "Comhlánaigh gach réimse le do thoil."
+
+msgid "Image generation is not enabled for this course."
+msgstr "Níl giniúint íomhá cumasaithe don chúrsa seo."
+
+msgid "Video generation is not enabled for this course."
+msgstr "Níl giniúint físe cumasaithe don chúrsa seo."
+
+msgid "Generation failed."
+msgstr "Theip ar an giniúint."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Giniúint rathúil. Athbhreithníigh an réamhamharc agus sábháil nuair atá réidh."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Giniúint rathúil. Tá sábháil díchumasaithe toisc gur thug an soláthróir URL ar ais."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Tosaíodh giniúint físe. Ag fanacht leis an toradh..."
+
+msgid "AI returned an empty response."
+msgstr "Tháinig freagra folamh ó AI."
+
+msgid "Nothing to save yet."
+msgstr "Níl aon rud le sábháil go fóill."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Níor thug an soláthróir seo ábhar base64 ar ais. Déan iarracht soláthróir eile."
+
+msgid "Saving failed."
+msgstr "Theip ar an sábháil."
+
+msgid "Get AI feedback"
+msgstr "Faigh aiseolas AI"
+
+msgid "Copy answer to clipboard"
+msgstr "Cóipeáil freagra chuig an ngeamaire"
+
+msgid "Save answer to my inbox"
+msgstr "Sábháil freagra go mo bhosca isteach"
+
+msgid "The document is already in this folder"
+msgstr "Tá an doiciméad cheana sa fillteán seo"
+
+msgid "Copied"
+msgstr "Cóipeáilte"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Níl cead agat téarmaí gluais a ghiniúint."
+
+msgid "Video generation is in progress"
+msgstr "Tá giniúint físe ar siúl"
+
+msgid "Job"
+msgstr "Post"
+
+msgid "Modified prompt"
+msgstr "Pras athraithe"
+
+msgid "Saved in Documents"
+msgstr "Sábhálaithe i Doiciméid"
+

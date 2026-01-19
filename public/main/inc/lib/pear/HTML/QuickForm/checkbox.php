@@ -140,6 +140,12 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
             $name = $this->_attributes['name'];
             $id = $this->getAttribute('id');
 
+            // Ensure checkbox input has the expected class for styling.
+            $existingClass = (string) $this->getAttribute('class');
+            if (!str_contains($existingClass, 'p-checkbox-input')) {
+                $this->setAttribute('class', trim($existingClass.' p-checkbox-input'));
+            }
+
             return '<div id="'.$name.'" class="'.$checkClass.'">
                 <div class="p-checkbox p-component '.($this->getChecked() ? 'p-checkbox-checked' : '').'">
                     '.parent::toHtml().'

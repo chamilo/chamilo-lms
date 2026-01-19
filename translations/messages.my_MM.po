@@ -32141,154 +32141,154 @@ msgid "More actions"
 msgstr "အခြားလုပ်ဆောင်ချက်များ"
 
 msgid "Write something"
-msgstr ""
+msgstr "တစ်စုံတစ်ရာ ရေးပါ"
 
 msgid "Friends of %s"
-msgstr ""
+msgstr "%s ၏ မိတ်ဆွေများ"
 
 msgid "Error loading learning paths."
-msgstr ""
+msgstr "သင်ယူမှုလမ်းကြောင်းများ ဖွင့်ယူရန် အမှားတစ်ခု ဖြစ်ပေါ်ပါသည်။"
 
 msgid "You don't have any learning path."
-msgstr ""
+msgstr "သင့်တွင် သင်ယူမှုလမ်းကြောင်း မရှိပါ။"
 
 msgid "Create your first learning path to start organizing course content."
-msgstr ""
+msgstr "သင်ခန်းစာအကြောင်းအရာများကို စီစဉ်ရန် သင့်ပထမဆုံး သင်ယူမှုလမ်းကြောင်းကို ဖန်တီးပါ။"
 
 msgid "Could not save the new category order."
-msgstr ""
+msgstr "အမျိုးအစားအစဉ်အသစ်ကို သိမ်းရန် မအောင်မြင်ပါ။"
 
 msgid "Could not save the new order."
-msgstr ""
+msgstr "အစဉ်အသစ်ကို သိမ်းရန် မအောင်မြင်ပါ။"
 
 msgid "Assignment"
-msgstr ""
+msgstr "တာဝန်ပေးခြင်း"
 
 msgid "Allowed file formats: %s"
-msgstr ""
+msgstr "ခွင့်ပြုထားသော ဖိုင်ပုံစံများ။ %s"
 
 msgid "File type not allowed. Allowed extensions: %s"
-msgstr ""
+msgstr "ဖိုင်အမျိုးအစား ခွင့်မပြုပါ။ ခွင့်ပြုထားသော ချဲ့ထွင်မှုများ။ %s"
 
 msgid "Folder name"
-msgstr ""
+msgstr "ဖိုလ်ဒါအမည်"
 
 msgid "Rename folder"
-msgstr ""
+msgstr "ဖိုလ်ဒါ အမည်ပြန်ပေး"
 
 msgid "New name"
-msgstr ""
+msgstr "အမည်အသစ်"
 
 msgid "Choose an action"
-msgstr ""
+msgstr "လုပ်ဆောင်ချက်တစ်ခု ရွေးချယ်ပါ"
 
 msgid "New version"
-msgstr ""
+msgstr "ဗားရှင်းအသစ်"
 
 msgid "Change title to selected filename"
-msgstr ""
+msgstr "ရွေးချယ်ထားသော ဖိုင်အမည်ဖြင့် ခေါင်းစဉ်ပြောင်း"
 
 msgid "You can replace the file, move it to another folder, or both."
-msgstr ""
+msgstr "ဖိုင်ကို အစားထိုး၊ အခြားဖိုလ်ဒါသို့ ရွှေ့ပြောင်း သို့မဟုတ် နှစ်ခုလုံး လုပ်နိုင်ပါသည်။"
 
 msgid "Move %s"
-msgstr ""
+msgstr "%s ကို ရွှေ့"
 
 msgid "Only non-root folders are shown to avoid leaving items in root."
-msgstr ""
+msgstr "မူရင်း ဖိုလ်ဒါများမှလွဲ၍ မူရင်းတွင် အရာများ ထားခဲ့ရန် ရှောင်ရှားရန် ဖိုလ်ဒါများကိုသာ ပြသထားပါသည်။"
 
 msgid "No feedback yet."
-msgstr ""
+msgstr "အကြောင်းပြန်မှု မရှိသေးပါ။"
 
 msgid "Upload first, organize later"
-msgstr ""
+msgstr "အရင်တင်ပါ၊ နောက်မှ စီစဉ်ပါ"
 
 msgid "Drag & drop or browse to add files"
-msgstr ""
+msgstr "ဖိုင်များ ထပ်ထည့်ရန် ဆွဲချပါ သို့မဟုတ် ရှာဖွေပါ"
 
 msgid "Social wall..."
-msgstr ""
+msgstr "လူမှုရေးနံရံ..."
 
 msgid "Wall of %s"
-msgstr ""
+msgstr "%s ၏ နံရံ"
 
 msgid "Version currently loaded"
-msgstr ""
+msgstr "လက်ရှိ ဖွင့်ထားသော ဗားရှင်း"
 
 msgid "Completion"
-msgstr ""
+msgstr "ပြီးစီးမှု"
 
 msgid "Quick navigation"
-msgstr ""
+msgstr "လျင်မြန်စွာ သွားလာရန်"
 
 msgid "Filled"
-msgstr ""
+msgstr "ဖြည့်ထားသည်"
 
 msgid "Terms sections"
-msgstr ""
+msgstr "စည်းမျဉ်းအပိုင်းများ"
 
 msgid "Open a section to edit its content."
-msgstr ""
+msgstr "အကြောင်းအရာကို တည်းဖြတ်ရန် အပိုင်းကို ဖွင့်ပါ။"
 
 msgid "Open this section to load the editor."
-msgstr ""
+msgstr "တည်းဖြတ်ကိရိယာကို ဖွင့်ရန် ဤအပိုင်းကို ဖွင့်ပါ။"
 
 msgid "Danger zone: deleting an access URL is permanent."
-msgstr ""
+msgstr "အန္တရာယ်ရှိသော နေရာ။ ဝင်ရောက်ရန် URL ကို ဖျက်ခြင်းသည် ထာဝရဖြစ်ပါသည်။"
 
 msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
-msgstr ""
+msgstr "အတည်ပြုရန် အပြည့်အစုံ URL ကို ရိုက်ထည့်ပါ။ URL နှင့် ၎င်း၏ ဆက်နွယ်မှုများကို ထာဝရ ဖယ်ရှားပါမည်။"
 
 msgid "Unable to load the badge's image."
-msgstr ""
+msgstr "ဘက်ဇ်ရုပ်ပုံကို ဖွင့်ယူရန် မအောင်မြင်ပါ။"
 
 msgid "Invalid role selection"
-msgstr ""
+msgstr "အခန်းကဏ္ဍ ရွေးချယ်မှု မမှန်ကန်ပါ"
 
 msgid "Select relation type first to enable user management."
-msgstr ""
+msgstr "အသုံးပြုသူ စီမံခန့်ခွဲမှုကို ဖွင့်ရန် ဆက်နွယ်မှု အမျိုးအစားကို အရင်ရွေးချယ်ပါ။"
 
 msgid "This question has no course context. Preview is not available."
-msgstr ""
+msgstr "ဤမေးခွန်းတွင် သင်ခန်းစာ အကြောင်းအရာ မရှိပါ။ ကြည့်ရှုမှု မရရှိနိုင်ပါ။"
 
 msgid "Unknown test"
-msgstr ""
+msgstr "မသိနိုင်သော စာမေးပွဲ"
 
 msgid "Deletion is not allowed without a course context."
-msgstr ""
+msgstr "သင်ခန်းစာ အကြောင်းအရာ မရှိပါက ဖျက်ရန် ခွင့်မပြုပါ။"
 
 msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
-msgstr ""
+msgstr "ဖျက်ရန် မအောင်မြင်ပါ။ သင်ခန်းစာ အကြောင်းအရာ မရှိခြင်း သို့မဟုတ် ဤမေးခွန်းသည် စာမေးပွဲတစ်ခုနှင့် ဆက်နွယ်ပါသည်။ စာမေးပွဲအတွင်း တည်းဖြတ်ပါ သို့မဟုတ် မိသားစု မဲ့ မေးခွန်းများကိုသာ စစ်ထုတ်ပါ။ မမှန်ကန်သော မေးခွန်း ID ဖြစ်ပါသည်။"
 
 msgid "Delete failed: question not found."
-msgstr ""
+msgstr "ဖျက်ရန် မအောင်မြင်ပါ။ မေးခွန်း မတွေ့ရပါ။"
 
 msgid "Delete failed: this question is still referenced by other resources."
-msgstr ""
+msgstr "ဖျက်ရန် မအောင်မြင်ပါ။ ဤမေးခွန်းကို အခြားအရင်းအမြစ်များက ကိုးကားထားနေဆဲဖြစ်ပါသည်။"
 
 msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
-msgstr ""
+msgstr "ဤမေးခွန်းသည် စာမေးပွဲတစ်ခုနှင့် ဆက်နွယ်ပါသည်။ စာမေးပွဲအတွင်း တည်းဖြတ်ပါ သို့မဟုတ် မိသားစု မဲ့ မေးခွန်းများကိုသာ စစ်ထုတ်ပါ။"
 
 msgid "Access the group tools and resources"
-msgstr ""
+msgstr "အုပ်စုကိရိယာများနှင့် အရင်းအမြစ်များကို ဝင်ရောက်ပါ"
 
 msgid "%s members"
-msgstr ""
+msgstr "%s သာသနာ့ဝင်များ"
 
 msgid "View certificate (HTML)"
-msgstr ""
+msgstr "ဒါထောက် (HTML) ကြည့်ရှု"
 
 msgid "Link a skill to this gradebook"
-msgstr ""
+msgstr "ဤအမှတ်စာအုပ်သို့ ကျွမ်းကျင်မှု ချိတ်ဆက်ပါ"
 
 msgid "Manage the link between certificates and skills for each gradebook"
-msgstr ""
+msgstr "အမှတ်စာအုပ်တစ်ခုစီအတွက် ဒါထောက်များနှင့် ကျွမ်းကျင်မှုများ ကြားဆက်နွယ်မှုကို စီမံပါ"
 
 msgid "Please select a specific badge issue to download"
-msgstr ""
+msgstr "ဒေါင်းလုဒ်ဖို့ ဘက်ဇ်ထုတ်ပေးမှု တစ်ခုကို ရွေးချယ်ပါ"
 
 msgid "SCIM is not enabled."
-msgstr ""
+msgstr "SCIM ကို ဖွင့်မထားပါ။"
 
 msgid "Invalid token."
 msgstr "မမှန်ကန်သော token။"
@@ -32343,4 +32343,232 @@ msgstr "Customcertificate"
 
 msgid "Update profile"
 msgstr "ပရိုဖိုင်ကို အပ်ဒိတ်လုပ်ရန်"
+
+msgid "Enable learning path generator"
+msgstr ""
+
+msgid "Enable exercise generator"
+msgstr ""
+
+msgid "Enable open answers grader"
+msgstr ""
+
+msgid "Enable tutor chatbot"
+msgstr ""
+
+msgid "Enable task grader"
+msgstr ""
+
+msgid "Enable content analyser"
+msgstr ""
+
+msgid "Enable image generator"
+msgstr ""
+
+msgid "Enable glossary terms generator"
+msgstr ""
+
+msgid "Enable video generator"
+msgstr ""
+
+msgid "Enable course analyser"
+msgstr ""
+
+msgid "The operation '%s' is not supported."
+msgstr ""
+
+msgid "AI feedback on %s in course %s"
+msgstr ""
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr ""
+
+msgid "AI Tutor"
+msgstr ""
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr ""
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr ""
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr ""
+
+msgid "You are here"
+msgstr ""
+
+msgid "Click an event type to filter results."
+msgstr ""
+
+msgid "Require unique presence"
+msgstr ""
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr ""
+
+msgid "AI feedback"
+msgstr ""
+
+msgid "Prompt"
+msgstr ""
+
+msgid "Tip"
+msgstr ""
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr ""
+
+msgid "Result (you can apply it to the comment)"
+msgstr ""
+
+msgid "Apply to comment"
+msgstr ""
+
+msgid "Apply score"
+msgstr ""
+
+msgid "AI grade"
+msgstr ""
+
+msgid "AI tutor is disabled during tests"
+msgstr ""
+
+msgid "Generate glossary terms"
+msgstr ""
+
+msgid "Generate media"
+msgstr ""
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr ""
+
+msgid "AI helpers are disabled at platform level."
+msgstr ""
+
+msgid "AI media generation is disabled in course settings."
+msgstr ""
+
+msgid "No AI media providers available."
+msgstr ""
+
+msgid "Provider"
+msgstr ""
+
+msgid "Select a provider"
+msgstr ""
+
+msgid "Example: generated_media"
+msgstr ""
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr ""
+
+msgid "Describe what you want to generate..."
+msgstr ""
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr ""
+
+msgid "Generating..."
+msgstr ""
+
+msgid "Save to Documents"
+msgstr ""
+
+msgid "Document IRI"
+msgstr ""
+
+msgid "Go to folder"
+msgstr ""
+
+msgid "Provider used"
+msgstr ""
+
+msgid "This video result cannot be saved yet"
+msgstr ""
+
+msgid "Video polling was stopped because the provider changed."
+msgstr ""
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr ""
+
+msgid "Failed to check video status."
+msgstr "ဗီဒီယိုအခြေအနေစစ်ဆေးရန် မအောင်မြင်ပါ။"
+
+msgid "Video generated successfully. You can now save it."
+msgstr "ဗီဒီယိုထုတ်လုပ်မှု အောင်မြင်ပါသည်။ ယခုသိမ်းနိုင်ပါပြီ။"
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "ဗီဒီယိုထုတ်လုပ်မှု ပြီးဆုံးခဲ့သော်လည်း ဖျော်ဖြေနိုင်သော အကြောင်းအရာများ မပြန်ပေးပါ။"
+
+msgid "Video generation failed."
+msgstr "ဗီဒီယိုထုတ်လုပ်မှု မအောင်မြင်ပါ။"
+
+msgid "Waiting for the video to be ready..."
+msgstr "ဗီဒီယိုအဆင်သင့်ဖြစ်ရန် စောင့်နေသည်..."
+
+msgid "Please complete all fields."
+msgstr "စာရွက်စာတမ်အားလုံးဖြည့်စွမ်းပါ။"
+
+msgid "Image generation is not enabled for this course."
+msgstr "ဤကိုးစ်အတွက် ပုံပြင်ထုတ်လုပ်မှု မဖွင့်ထားပါ။"
+
+msgid "Video generation is not enabled for this course."
+msgstr "ဤကိုးစ်အတွက် ဗီဒီယိုထုတ်လုပ်မှု မဖွင့်ထားပါ။"
+
+msgid "Generation failed."
+msgstr "ထုတ်လုပ်မှု မအောင်မြင်ပါ။"
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "အောင်မြင်စွာ ထုတ်လုပ်ပြီးပါပြီ။ ကြည့်ရှုမှုကို ပြန်လည်သုံးသပ်ပြီး အဆင်သင့်ဖြစ်လျှင် သိမ်းပါ။"
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "အောင်မြင်စွာ ထုတ်လုပ်ပြီးပါပြီ။ ပံ့ပိုးသူက URL ပြန်ပေးသောကြောင့် သိမ်းခြင်း ပိတ်ထားပါသည်။"
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "ဗီဒီယိုထုတ်လုပ်မှု စတင်ပြီးပါပြီ။ ရလဒ်ကို စောင့်နေသည်..."
+
+msgid "AI returned an empty response."
+msgstr "AI က ဗလာဖြေကြားချက် ပြန်ပေးပါသည်။"
+
+msgid "Nothing to save yet."
+msgstr "သိမ်းရန် မရှိသေးပါ။"
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "ဤပံ့ပိုးသူက base64 အကြောင်းအရာ မပြန်ပေးပါ။ အခြားပံ့ပိုးသူကို စမ်းပါ။"
+
+msgid "Saving failed."
+msgstr "သိမ်းခြင်း မအောင်မြင်ပါ။"
+
+msgid "Get AI feedback"
+msgstr "AI အကြံပြုချက်ရယူရန်"
+
+msgid "Copy answer to clipboard"
+msgstr "ဖြေကြားချက်ကို ကလစ်ဘုတ်သို့ မိတ္တူကူးရန်"
+
+msgid "Save answer to my inbox"
+msgstr "ဖြေကြားချက်ကို ကျွန်ုပ်၏ စာရွက်စာတမ်သို့ သိမ်းရန်"
+
+msgid "The document is already in this folder"
+msgstr "စာရွက်စာတမ်သည် ဤဖိုလ်ဒါတွင် ရှိနေပါပြီ"
+
+msgid "Copied"
+msgstr "မိတ္တူကူးပြီး"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "စာလုံးစာရင်းအသုံးအနှုန်းများ ထုတ်လုပ်ရန် ခွင့်ပြုချက် မရှိပါ။"
+
+msgid "Video generation is in progress"
+msgstr "ဗီဒီယိုထုတ်လုပ်မှု ဆက်လက်ဖြစ်ပျက်နေသည်"
+
+msgid "Job"
+msgstr "အလုပ်"
+
+msgid "Modified prompt"
+msgstr "ပြုပြင်ထားသော တိုက်တွန်း"
+
+msgid "Saved in Documents"
+msgstr "စာရွက်စာတမ်များတွင် သိမ်းဆည်းပြီး"
 

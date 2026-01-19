@@ -716,9 +716,10 @@ class EvalForm extends FormValidator
         );
         $this->addRule('min_score', get_lang('Only numbers'), 'numeric');
         $this->addRule('min_score', get_lang('Negative value'), 'compare', '>=', 'server', false, false, 0);
-        $setting = api_get_setting('tool_visible_by_default_at_creation');
+        $tools = api_get_setting('course.active_tools_on_create', true);
+
         $visibility_default = 1;
-        if (isset($setting['gradebook']) && 'false' == $setting['gradebook']) {
+        if (!in_array('gradebook', $tools, true)) {
             $visibility_default = 0;
         }
         $this->setDefaults(['visible' => $visibility_default]);

@@ -32359,3 +32359,231 @@ msgstr "Certificatpersonalitzat"
 msgid "Update profile"
 msgstr "Actualitza el perfil"
 
+msgid "Enable learning path generator"
+msgstr "Activa el generador de camins d'aprenentatge"
+
+msgid "Enable exercise generator"
+msgstr "Activa el generador d'exercicis"
+
+msgid "Enable open answers grader"
+msgstr "Activa el corrector de respostes obertes"
+
+msgid "Enable tutor chatbot"
+msgstr "Activa el xatbot de tutor"
+
+msgid "Enable task grader"
+msgstr "Activa el corrector de tasques"
+
+msgid "Enable content analyser"
+msgstr "Activa l'analitzador de continguts"
+
+msgid "Enable image generator"
+msgstr "Activa el generador d'imatges"
+
+msgid "Enable glossary terms generator"
+msgstr "Activa el generador de termes del glossari"
+
+msgid "Enable video generator"
+msgstr "Activa el generador de vídeo"
+
+msgid "Enable course analyser"
+msgstr "Activa l'analitzador de curs"
+
+msgid "The operation '%s' is not supported."
+msgstr "L'operació '%s' no està suportada."
+
+msgid "AI feedback on %s in course %s"
+msgstr "Feedback d'IA sobre %s al curs %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Eliminació fallida: manca el context del curs o id de pregunta invàlid."
+
+msgid "AI Tutor"
+msgstr "Tutor IA"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "L'extensió APCu ha d'estar instal·lada i activada perquè la plataforma la pugui utilitzar."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Es recomana permetre que OPCache memory_consumption arribi almenys a %sMB de RAM."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "El mòdul OPcache ha d'estar instal·lat i activat perquè la plataforma el pugui utilitzar."
+
+msgid "You are here"
+msgstr "Sou aquí"
+
+msgid "Click an event type to filter results."
+msgstr "Feu clic en un tipus d'esdeveniment per filtrar els resultats."
+
+msgid "Require unique presence"
+msgstr "Requereix presència única"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Si s'activa, el llibre de notes donarà al participant un 100% si està present almenys una vegada."
+
+msgid "AI feedback"
+msgstr "Feedback d'IA"
+
+msgid "Prompt"
+msgstr "Prompt"
+
+msgid "Tip"
+msgstr "Consell"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Podeu editar el prompt abans de demanar feedback."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Resultat (podeu aplicar-lo al comentari)"
+
+msgid "Apply to comment"
+msgstr "Aplica al comentari"
+
+msgid "Apply score"
+msgstr "Aplica puntuació"
+
+msgid "AI grade"
+msgstr "Qualificació IA"
+
+msgid "AI tutor is disabled during tests"
+msgstr "El tutor d'IA està desactivat durant els tests"
+
+msgid "Generate glossary terms"
+msgstr "Generar termes del glossari"
+
+msgid "Generate media"
+msgstr "Generar multimèdia"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "No teniu permís per generar multimèdia d'IA en aquest curs."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "Els assistents d'IA estan desactivats al nivell de la plataforma."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "La generació de multimèdia d'IA està desactivada a la configuració del curs."
+
+msgid "No AI media providers available."
+msgstr "No hi ha proveïdors de multimèdia d'IA disponibles."
+
+msgid "Provider"
+msgstr "Proveïdor"
+
+msgid "Select a provider"
+msgstr "Seleccioneu un proveïdor"
+
+msgid "Example: generated_media"
+msgstr "Exemple: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "El nom no s'afegeix a l'instrucció; només s'utilitza per desar el fitxer."
+
+msgid "Describe what you want to generate..."
+msgstr "Descriviu què voleu generar..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Consell: feu clic en una mida predefinida per establir-la ràpidament."
+
+msgid "Generating..."
+msgstr "Generant..."
+
+msgid "Save to Documents"
+msgstr "Desar a Documents"
+
+msgid "Document IRI"
+msgstr "IRI del document"
+
+msgid "Go to folder"
+msgstr "Anar a la carpeta"
+
+msgid "Provider used"
+msgstr "Proveïdor utilitzat"
+
+msgid "This video result cannot be saved yet"
+msgstr "Aquest resultat de vídeo encara no es pot desar"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "S'ha aturat la consulta del vídeo perquè ha canviat el proveïdor."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "La generació del vídeo està trigant massa. Torneu-ho a provar més tard."
+
+msgid "Failed to check video status."
+msgstr "S'ha produït un error en comprovar l'estat del vídeo."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Vídeo generat correctament. Ara el podeu desar."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "S'ha completat la generació del vídeo, però no s'ha retornat contingut reproduïble."
+
+msgid "Video generation failed."
+msgstr "S'ha produït un error en la generació del vídeo."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Esperant que el vídeo estigui a punt..."
+
+msgid "Please complete all fields."
+msgstr "Ompliu tots els camps."
+
+msgid "Image generation is not enabled for this course."
+msgstr "La generació d'imatges no està habilitada per aquest curs."
+
+msgid "Video generation is not enabled for this course."
+msgstr "La generació de vídeo no està habilitada per aquest curs."
+
+msgid "Generation failed."
+msgstr "S'ha produït un error en la generació."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Generat correctament. Reviseu la previsualització i deseu quan estigui a punt."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Generat correctament. El desament està desactivat perquè el proveïdor ha retornat una URL."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "S'ha iniciat la generació del vídeo. Esperant el resultat..."
+
+msgid "AI returned an empty response."
+msgstr "L'IA ha retornat una resposta buida."
+
+msgid "Nothing to save yet."
+msgstr "Encara no hi ha res per desar."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Aquest proveïdor no ha retornat contingut base64. Proveu un altre proveïdor."
+
+msgid "Saving failed."
+msgstr "S'ha produït un error en el desament."
+
+msgid "Get AI feedback"
+msgstr "Obtenir retroacció d'IA"
+
+msgid "Copy answer to clipboard"
+msgstr "Copiar resposta al porta-retalls"
+
+msgid "Save answer to my inbox"
+msgstr "Desar resposta a la meva safata d'entrada"
+
+msgid "The document is already in this folder"
+msgstr "El document ja és en aquesta carpeta"
+
+msgid "Copied"
+msgstr "Copiat"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "No teniu permís per generar termes del glossari."
+
+msgid "Video generation is in progress"
+msgstr "La generació de vídeo està en curs"
+
+msgid "Job"
+msgstr "Tasques"
+
+msgid "Modified prompt"
+msgstr "Instrucció modificada"
+
+msgid "Saved in Documents"
+msgstr "Desat a Documents"
+

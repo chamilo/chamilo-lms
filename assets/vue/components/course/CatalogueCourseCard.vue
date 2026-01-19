@@ -4,6 +4,7 @@ import Button from "primevue/button"
 import Dialog from "primevue/dialog"
 import { computed, onMounted, ref, watch } from "vue"
 import { useRouter } from "vue-router"
+import BaseButton from "../basecomponents/BaseButton.vue"
 import { useNotification } from "../../composables/notification"
 import { usePlatformConfig } from "../../store/platformConfig"
 import CatalogueRequirementModal from "./CatalogueRequirementModal.vue"
@@ -315,38 +316,42 @@ onMounted(() => {
         {{ cat.title }}
       </span>
     </div>
-    <span
-      v-if="localCourse.courseLanguage"
-      class="absolute top-0 right-0 bg-support-4 text-white text-xs px-2 py-0.5 font-semibold rounded-bl-lg z-20"
-    >
-      {{ getOriginalLanguageName(localCourse.courseLanguage) }}
-    </span>
 
-    <Button
-      v-if="allowDescription && showInfoPopup"
-      aria-label="Course info"
-      class="absolute top-10 left-2 z-20"
-      icon="pi pi-info-circle"
-      size="small"
-      text
-      @click="showDescriptionDialog = true"
-    />
-    <router-link
-      v-if="imageLink"
-      :to="imageLink"
-    >
+    <div class="relative">
+      <span
+        v-if="localCourse.courseLanguage"
+        class="absolute top-0 right-0 bg-support-4 text-white text-xs px-2 py-0.5 font-semibold rounded-bl-lg z-20"
+        v-text="getOriginalLanguageName(localCourse.courseLanguage)"
+      />
+
+      <router-link
+        v-if="imageLink"
+        :to="imageLink"
+      >
+        <img
+          :alt="localCourse.title"
+          :src="localCourse.illustrationUrl"
+          class="w-full object-cover"
+        />
+      </router-link>
       <img
+        v-else
         :alt="localCourse.title"
         :src="localCourse.illustrationUrl"
         class="w-full object-cover"
       />
-    </router-link>
-    <img
-      v-else
-      :alt="localCourse.title"
-      :src="localCourse.illustrationUrl"
-      class="w-full object-cover"
-    />
+
+      <BaseButton
+        v-if="allowDescription && showInfoPopup"
+        icon="information"
+        only-icon
+        size="small"
+        type="black"
+        @click="showDescriptionDialog = true"
+        class="absolute bottom-0 left-0 rounded-none"
+      />
+    </div>
+
     <div class="p-4 flex flex-col flex-grow gap-2">
       <router-link
         v-if="showTitle && titleLink"

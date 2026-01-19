@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ñawpaq formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Rurasqa rakiy: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ari:copyright nisqawan,, mana:mana copyright nisqawan"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Puqyu,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Phuru,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación"
@@ -32314,35 +32314,263 @@ msgid "There are no terms that match the search: %s"
 msgstr "Manam kay imayna rimanakuna kay qhawarina %swan khuyrakunapaschu"
 
 msgid "Setting is globally locked (access_url_locked=1)"
-msgstr ""
+msgstr "Kutichisqa kawsaymanta qhapaq (access_url_locked=1)"
 
 msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
-msgstr ""
+msgstr "Yachachisqa kaptin, 1:1 qespisqa chat willakuykuna kursopi chat willakuy historia qillqakunapi qispichisqa kan. Kespisqatam qhapaq kaymanta yachachisqa."
 
 msgid "Save private conversations in documents"
-msgstr ""
+msgstr "Qespisqa willakuykuna qillqakunapi wañuchi"
 
 msgid "EU AI Act – Transparency & risk notice"
-msgstr ""
+msgstr "EU AI Act – Transparency & risk notice"
 
 msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
-msgstr ""
+msgstr "EU Artificial Intelligence Act (Regulation (EU) 2024/1689) suyupi, yachaypi llank'ay AI sistemakuna \"high-risk\" nisqa kasqakunata yachachisqa. Kay programa <strong>mana</strong> AI sistema, ichaqa, kay configurationmanta qhawarinakunata yachachisqa kaptin, optional ichuq yakiw AI sistemakuna qispichisqa kaptin, llank'anaq wasinpi yachachisqa. Kay sistemakuna runakunaq personal data <em>llainamanta</em> runakunaq promptsninpi qillqakunata qispichisqa kaptin. Kay programa designmanta, mana runakunaq active input illamanta AI sistemakunaman personal data qispichisqa. Tukuchiwan, tukuy AI features qhapaq."
 
 msgid "Admin responsibility & disclosures"
-msgstr ""
+msgstr "Kamachiq responsibility & disclosures"
 
 msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
-msgstr ""
+msgstr "Kay configuration p'aginapi, tuytukunaq AI feature yachachisqa. Kamachiq hina, tukuykuna qhaway yachachisqa, GDPR-compliant data privacy policiesni tukuchiy GDPR-compliant data privacy policiesni tukuchiy. Wakin AI features mana directly personal data qispichisqa external sistemakunaman, ichaqa runakunaq prompts AIman qispichisqa personal information includisqa kaptin. Kamachiq hina, <strong>qankuna responsibility</strong> runakunata kay riskmanta yachachispa. Transparency ukupi, future releases non-intrusive end-user tags willakusqa kaptin, sure content uk feedback AI yachachisqa kaptin."
 
 msgid "Positioning"
-msgstr ""
+msgstr "Phisuy"
 
 msgid "Quiz"
-msgstr ""
+msgstr "Yachachisqa"
 
 msgid "Customcertificate"
-msgstr ""
+msgstr "Customcertificate"
 
 msgid "Update profile"
-msgstr ""
+msgstr "Profile tukuchiy"
+
+msgid "Enable learning path generator"
+msgstr "Learning path generator qhapaq"
+
+msgid "Enable exercise generator"
+msgstr "Exercise generator qhapaq"
+
+msgid "Enable open answers grader"
+msgstr "Open answers grader qhapaq"
+
+msgid "Enable tutor chatbot"
+msgstr "Tutor chatbot qhapaq"
+
+msgid "Enable task grader"
+msgstr "Task grader qhapaq"
+
+msgid "Enable content analyser"
+msgstr "Content analyser qhapaq"
+
+msgid "Enable image generator"
+msgstr "Image generator qhapaq"
+
+msgid "Enable glossary terms generator"
+msgstr "Glossary terms generator qhapaq"
+
+msgid "Enable video generator"
+msgstr "Video generator qhapaq"
+
+msgid "Enable course analyser"
+msgstr "Course analyser qhapaq"
+
+msgid "The operation '%s' is not supported."
+msgstr "'%s' llamk'ay qhapaqchu."
+
+msgid "AI feedback on %s in course %s"
+msgstr "%s kursopi AI feedback"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Wañuchi: kursu context mana karu uk p'akisqa p'akichisqa id."
+
+msgid "AI Tutor"
+msgstr "Yachay Wasi Yachachisqa"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "APCu k'anchayniyuqqa platformakunaq usuq yachachinanpaqqa k'anchayniyuqmi karqan karqan."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "OPCache RAM %sMB nisqapiq yallinakuyta qhapaq yachachisqa."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "OPcache k'anchayniyuqqa platformakunaq usuq yachachinanpaqqa k'anchayniyuqmi karqan karqan."
+
+msgid "You are here"
+msgstr "Kallpachanki"
+
+msgid "Click an event type to filter results."
+msgstr "Rakinniywan phinchakuy rimayninkunata sarp'ay."
+
+msgid "Require unique presence"
+msgstr "Huk rakiyuq presensya qhapaq"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Qhapaq karqanqa, notakuna 100% qhapaq presensya huk kutipunichispa."
+
+msgid "AI feedback"
+msgstr "Yachachisqa willakuy"
+
+msgid "Prompt"
+msgstr "Willakuy"
+
+msgid "Tip"
+msgstr "Yapay"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Willakuyta willakusqaykita qhapaq qillqay."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Rima (willakuywan qhapaq)"
+
+msgid "Apply to comment"
+msgstr "Willakuywan qhapaq"
+
+msgid "Apply score"
+msgstr "P'akispa qhapaq"
+
+msgid "AI grade"
+msgstr "Yachachisqa p'aki"
+
+msgid "AI tutor is disabled during tests"
+msgstr "Yachay Wasi Yachachisqa pruibakunapi mana qhapaqchu"
+
+msgid "Generate glossary terms"
+msgstr "Rimayniykunata qhapaq"
+
+msgid "Generate media"
+msgstr "Willakuykunata qhapaq"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Kay kursopi Yachachisqa willakuykunata qhapaq qhapaqchu."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "Yachachisqa yanapakuna platforma suyupi mana qhapaqchu."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "Kursopi willakuy qhapaq mana qhapaqchu."
+
+msgid "No AI media providers available."
+msgstr "Mana Yachachisqa willakuy qhapaqkunata."
+
+msgid "Provider"
+msgstr "Qhapaq"
+
+msgid "Select a provider"
+msgstr "Huk qhapaqta suyay"
+
+msgid "Example: generated_media"
+msgstr "Ruruy: qhapaq_willakuy"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "Sutiqa willakuywan mana qhapaqchu; sutinta qhawarinaqmi."
+
+msgid "Describe what you want to generate..."
+msgstr "Kayta willakuy qhapaq..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Yapay: phinchakuy sukanaq huch'allaqta."
+
+msgid "Generating..."
+msgstr "Qhapaq..."
+
+msgid "Save to Documents"
+msgstr "Yachaypi qhawarina"
+
+msgid "Document IRI"
+msgstr "Yachay IRI"
+
+msgid "Go to folder"
+msgstr "Phinchakuy haku"
+
+msgid "Provider used"
+msgstr "Qhapaq"
+
+msgid "This video result cannot be saved yet"
+msgstr "Kay willakuy rimaqa qhawarinaqchu"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Willakuy willakuy qhapaq qhapaq qhapaqkunata."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "Willakuy qhapaqqa huk pachapi musuqmanta suyay."
+
+msgid "Failed to check video status."
+msgstr "Willakuy hallp'ata mana rurunki."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Willakuy qhapaq. Kunchay."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Willakuy qhapaq, mana rimaq rimaqchu."
+
+msgid "Video generation failed."
+msgstr "Willakuy qhapaq mana rurunkun."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Willakuy qhapaq..."
+
+msgid "Please complete all fields."
+msgstr "Huk kutipuni kamachiykunata."
+
+msgid "Image generation is not enabled for this course."
+msgstr "Kursopi willakuy qhapaq mana qhapaqchu."
+
+msgid "Video generation is not enabled for this course."
+msgstr "Kursopi willakuy qhapaq mana qhapaqchu."
+
+msgid "Generation failed."
+msgstr "Qhapaq mana rurunkun."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Qhapaq. Qhawarinaq qhawarillakuyta."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Qhapaq. Qhapaq URL nisqawan mana qhapaqchu."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Willakuy qhapaq. Riman qhapaq..."
+
+msgid "AI returned an empty response."
+msgstr "Yachachisqa willakuy mana willakuy."
+
+msgid "Nothing to save yet."
+msgstr "Mana imatapis rakiyta atinchu."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Kay provisor base64 contenido mana kutichusqan. Otrun provisor uyariy."
+
+msgid "Saving failed."
+msgstr "Rakiyta atikuy qunqalla."
+
+msgid "Get AI feedback"
+msgstr "AI willakuyta chaskiy"
+
+msgid "Copy answer to clipboard"
+msgstr "Respuesta clipboardman copiy"
+
+msgid "Save answer to my inbox"
+msgstr "Respuesta ñoqap inboxman rakiy"
+
+msgid "The document is already in this folder"
+msgstr "Pukyun kay phupichmanmi kashpan."
+
+msgid "Copied"
+msgstr "Copiyta"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Mana querisqayki glosario terminukuna kamachiyta."
+
+msgid "Video generation is in progress"
+msgstr "Video kamachiy ruruy"
+
+msgid "Job"
+msgstr "Kamachiq"
+
+msgid "Modified prompt"
+msgstr "Kutichisqa prompt"
+
+msgid "Saved in Documents"
+msgstr "Yachaykunaqpi rakisqa"
 

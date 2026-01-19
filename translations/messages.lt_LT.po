@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autoriaus teisės,, no:be autoriaus teisių"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplankas,, application/msword:MsWord,, application/octet-stream:Oktobaitų srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplanko,, application/msword:MsWord,, application/octet-stream:Oktobaitis,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":testas:testas,,      simuliacija:simuliacija,,      klausimynas:klausimynas,,      diagrama:diagrama,,      paveikslėlis:paveikslėlis,,      grafikas:grafikas,,      indeksas:indeksas,,      skaidrė:skaidrė,,      lentelė:lentelė,,      naratyvinis tekstas:naratyvinis tekstas,,      egzaminas:egzaminas,,      eksperimentas:eksperimentas,,      problemos teiginys:problemos teiginys,,      savęs vertinimas:savęs vertinimas,,      paskaita:paskaita"
@@ -32344,4 +32344,232 @@ msgstr "Pasirinktiniscertifikatas"
 
 msgid "Update profile"
 msgstr "Atnaujinti profilį"
+
+msgid "Enable learning path generator"
+msgstr "Įjungti mokymosi kelio generatorių"
+
+msgid "Enable exercise generator"
+msgstr "Įjungti pratimų generatorių"
+
+msgid "Enable open answers grader"
+msgstr "Įjungti atvirų atsakymų vertėją"
+
+msgid "Enable tutor chatbot"
+msgstr "Įjungti dėstytojo pokalbių robotą"
+
+msgid "Enable task grader"
+msgstr "Įjungti užduočių vertėją"
+
+msgid "Enable content analyser"
+msgstr "Įjungti turinio analizatorių"
+
+msgid "Enable image generator"
+msgstr "Įjungti paveikslėlių generatorių"
+
+msgid "Enable glossary terms generator"
+msgstr "Įjungti žodyno terminų generatorių"
+
+msgid "Enable video generator"
+msgstr "Įjungti vaizdo generatorių"
+
+msgid "Enable course analyser"
+msgstr "Įjungti kurso analizatorių"
+
+msgid "The operation '%s' is not supported."
+msgstr "Veiksmas „%s“ nepalaikomas."
+
+msgid "AI feedback on %s in course %s"
+msgstr "DI atsiliepimas apie %s kurse %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Pašalinimas nepavyko: trūksta kurso konteksto arba neteisingas klausimo ID."
+
+msgid "AI Tutor"
+msgstr "DI dėstytojas"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "APCu plėtinys turi būti įdiegtas ir įjungtas, kad platforma galėtų jį naudoti."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Rekomenduojama leisti OPCache atminties sąnaudoms pasiekti bent %sMB RAM."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "OPcache modulis turi būti įdiegtas ir įjungtas, kad platforma galėtų jį naudoti."
+
+msgid "You are here"
+msgstr "Jūs esate čia"
+
+msgid "Click an event type to filter results."
+msgstr "Spustelėkite įvykio tipą, kad filtruotumėte rezultatus."
+
+msgid "Require unique presence"
+msgstr "Reikalauti unikalios buvimo"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Jei įjungta, pažymių knygelė mokiniui suteiks 100 %, jei jis bent kartą dalyvavo."
+
+msgid "AI feedback"
+msgstr "DI atsiliepimas"
+
+msgid "Prompt"
+msgstr "Užklausa"
+
+msgid "Tip"
+msgstr "Patarimas"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Galite redaguoti užklausą prieš prašydami atsiliepimo."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Rezultatas (galite jį taikyti komentare)"
+
+msgid "Apply to comment"
+msgstr "Taikyti komentarui"
+
+msgid "Apply score"
+msgstr "Taikyti balą"
+
+msgid "AI grade"
+msgstr "DI pažymys"
+
+msgid "AI tutor is disabled during tests"
+msgstr "DI dėstytojas išjungtas testų metu"
+
+msgid "Generate glossary terms"
+msgstr "Generuoti žodyno terminus"
+
+msgid "Generate media"
+msgstr "Generuoti mediją"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Neturite leidimo generuoti DI mediją šiame kurse."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "DI pagalbininkai išjungti platformos lygmeniu."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "DI medijos generavimas išjungtas kurso nustatymuose."
+
+msgid "No AI media providers available."
+msgstr "Nėra prieinamų DI medijos teikėjų."
+
+msgid "Provider"
+msgstr "Teikėjas"
+
+msgid "Select a provider"
+msgstr "Pasirinkite teikėją"
+
+msgid "Example: generated_media"
+msgstr "Pavyzdys: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "Pavadinimas nėra pridedamas prie užklausos; jis naudojamas tik failui įrašyti."
+
+msgid "Describe what you want to generate..."
+msgstr "Aprašykite, ką norite generuoti..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Patarimas: spustelėkite iš anksto nustatytą dydį, kad greitai nustatytumėte dydį."
+
+msgid "Generating..."
+msgstr "Generuojama..."
+
+msgid "Save to Documents"
+msgstr "Įrašyti į Dokumentus"
+
+msgid "Document IRI"
+msgstr "Dokumento IRI"
+
+msgid "Go to folder"
+msgstr "Eiti į aplanką"
+
+msgid "Provider used"
+msgstr "Naudotas teikėjas"
+
+msgid "This video result cannot be saved yet"
+msgstr "Šio vaizdo rezultato dar negalima įrašyti"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Vaizdo užklausų gavimas sustabdytas, nes pasikeitė teikėjas."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "Vaizdo generavimas užtrunka per ilgai. Pabandykite vėliau."
+
+msgid "Failed to check video status."
+msgstr "Nepavyko patikrinti vaizdo būsenos."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Vaizdas sėkmingai sugeneruotas. Dabar galite jį įrašyti."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Vaizdo generavimas užbaigtas, bet negrąžintas grojamas turinys."
+
+msgid "Video generation failed."
+msgstr "Vaizdo generavimas nepavyko."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Laukiama, kol vaizdas bus paruoštas..."
+
+msgid "Please complete all fields."
+msgstr "Užpildykite visus laukus."
+
+msgid "Image generation is not enabled for this course."
+msgstr "Šiame kurse paveikslėlių generavimas neįjungtas."
+
+msgid "Video generation is not enabled for this course."
+msgstr "Šiame kurse vaizdo generavimas neįjungtas."
+
+msgid "Generation failed."
+msgstr "Generavimas nepavyko."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Sėkmingai sugeneruota. Peržiūrėkite peržiūrą ir įrašykite, kai būsite pasiruošę."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Sėkmingai sugeneruota. Įrašymas išjungtas, nes teikėjas grąžino URL."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Vaizdo generavimas pradėtas. Laukiama rezultato..."
+
+msgid "AI returned an empty response."
+msgstr "DI grąžino tuščią atsakymą."
+
+msgid "Nothing to save yet."
+msgstr "Dar nėra ko įrašyti."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Šis teikėjas negrąžino base64 turinio. Pabandykite kitą teikėją."
+
+msgid "Saving failed."
+msgstr "Įrašymas nepavyko."
+
+msgid "Get AI feedback"
+msgstr "Gauti DI atsiliepimą"
+
+msgid "Copy answer to clipboard"
+msgstr "Kopijuoti atsakymą į iškarpinę"
+
+msgid "Save answer to my inbox"
+msgstr "Įrašyti atsakymą į mano gautuosius"
+
+msgid "The document is already in this folder"
+msgstr "Dokumentas jau yra šiame aplanke"
+
+msgid "Copied"
+msgstr "Nukopijuota"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Neturite leidimo generuoti glosarės terminus."
+
+msgid "Video generation is in progress"
+msgstr "Vaizdo generavimas vyksta"
+
+msgid "Job"
+msgstr "Užduotis"
+
+msgid "Modified prompt"
+msgstr "Pakeista užklausa"
+
+msgid "Saved in Documents"
+msgstr "Įrašyta į Dokumentus"
 

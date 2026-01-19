@@ -32358,3 +32358,231 @@ msgstr "شهادة_مخصصة"
 msgid "Update profile"
 msgstr "تحديث الملف الشخصي"
 
+msgid "Enable learning path generator"
+msgstr "تفعيل مولد مسار التعلم"
+
+msgid "Enable exercise generator"
+msgstr "تفعيل مولد التمارين"
+
+msgid "Enable open answers grader"
+msgstr "تفعيل تصحيح الإجابات المفتوحة"
+
+msgid "Enable tutor chatbot"
+msgstr "تفعيل روبوت الدردشة للمعلم"
+
+msgid "Enable task grader"
+msgstr "تفعيل تصحيح المهام"
+
+msgid "Enable content analyser"
+msgstr "تفعيل محلل المحتوى"
+
+msgid "Enable image generator"
+msgstr "تفعيل مولد الصور"
+
+msgid "Enable glossary terms generator"
+msgstr "تفعيل مولد مصطلحات المصطلحات"
+
+msgid "Enable video generator"
+msgstr "تفعيل مولد الفيديو"
+
+msgid "Enable course analyser"
+msgstr "تفعيل محلل المقرر"
+
+msgid "The operation '%s' is not supported."
+msgstr "العملية '%s' غير مدعومة."
+
+msgid "AI feedback on %s in course %s"
+msgstr "تعليقات AI حول %s في المقرر %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "فشل الحذف: نقص سياق المقرر أو معرف سؤال غير صالح."
+
+msgid "AI Tutor"
+msgstr "مساعد AI"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "يجب تثبيت وتفعيل امتداد APCu لكي تستخدمه المنصة."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "يُوصى بلسماح لاستهلاك ذاكرة OPCache بالوصول إلى %s ميغابايت من الذاكرة العشوائية على الأقل."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "يجب تثبيت وتفعيل وحدة OPcache لكي تستخدمها المنصة."
+
+msgid "You are here"
+msgstr "أنت هنا"
+
+msgid "Click an event type to filter results."
+msgstr "انقر على نوع الحدث لتصفية النتائج."
+
+msgid "Require unique presence"
+msgstr "الحضور الفريد مطلوب"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "إذا تم تفعيله، سيعطي دفتر الدرجات المتعلم 100% عند الحضور مرة واحدة على الأقل."
+
+msgid "AI feedback"
+msgstr "تعليقات AI"
+
+msgid "Prompt"
+msgstr "الموجه"
+
+msgid "Tip"
+msgstr "تلميح"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "يمكنك تعديل الموجه قبل طلب التعليقات."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "النتيجة (يمكنك تطبيقها على التعليق)"
+
+msgid "Apply to comment"
+msgstr "تطبيق على التعليق"
+
+msgid "Apply score"
+msgstr "تطبيق الدرجة"
+
+msgid "AI grade"
+msgstr "درجة AI"
+
+msgid "AI tutor is disabled during tests"
+msgstr "مساعد AI معطل أثناء الاختبارات"
+
+msgid "Generate glossary terms"
+msgstr "توليد مصطلحات المصطلحات"
+
+msgid "Generate media"
+msgstr "توليد الوسائط"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "ليس لديك إذن لتوليد وسائط AI في هذا المقرر."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "مساعدي AI معطلون على مستوى المنصة."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "توليد وسائط AI معطل في إعدادات المقرر."
+
+msgid "No AI media providers available."
+msgstr "لا توجد مزودات وسائط AI متاحة."
+
+msgid "Provider"
+msgstr "المزود"
+
+msgid "Select a provider"
+msgstr "اختر مزودًا"
+
+msgid "Example: generated_media"
+msgstr "مثال: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "الاسم لا يُضاف إلى الطلب؛ يُستخدم فقط لحفظ الملف."
+
+msgid "Describe what you want to generate..."
+msgstr "صف ما تريد إنشاءه..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "نصيحة: انقر على إعداد مسبق لتحديد الحجم بسرعة."
+
+msgid "Generating..."
+msgstr "جاري الإنشاء..."
+
+msgid "Save to Documents"
+msgstr "حفظ في المستندات"
+
+msgid "Document IRI"
+msgstr "IRI المستند"
+
+msgid "Go to folder"
+msgstr "الذهاب إلى المجلد"
+
+msgid "Provider used"
+msgstr "المزود المستخدم"
+
+msgid "This video result cannot be saved yet"
+msgstr "لا يمكن حفظ نتيجة هذا الفيديو بعد"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "تم إيقاف استطلاع الفيديو لأن المزود تغير."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "إنشاء الفيديو يستغرق وقتًا طويلاً. يرجى المحاولة لاحقًا."
+
+msgid "Failed to check video status."
+msgstr "فشل في التحقق من حالة الفيديو."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "تم إنشاء الفيديو بنجاح. يمكنك الآن حفظه."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "اكتمل إنشاء الفيديو، لكن لم يُعاد محتوى قابل للتشغيل."
+
+msgid "Video generation failed."
+msgstr "فشل إنشاء الفيديو."
+
+msgid "Waiting for the video to be ready..."
+msgstr "في انتظار جاهزية الفيديو..."
+
+msgid "Please complete all fields."
+msgstr "يرجى إكمال جميع الحقول."
+
+msgid "Image generation is not enabled for this course."
+msgstr "إنشاء الصور غير مفعل لهذه المقرر الدراسي."
+
+msgid "Video generation is not enabled for this course."
+msgstr "إنشاء الفيديو غير مفعّل لهذا المقرر."
+
+msgid "Generation failed."
+msgstr "فشل الإنشاء."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "تم الإنشاء بنجاح. راجع المعاينة واحفظ عند الاستعداد."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "تم الإنشاء بنجاح. الحفظ معطل لأن المزود أعاد رابطًا."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "بدأ إنشاء الفيديو. في انتظار النتيجة..."
+
+msgid "AI returned an empty response."
+msgstr "أعاد الذكاء الاصطناعي ردًا فارغًا."
+
+msgid "Nothing to save yet."
+msgstr "لا يوجد شيء لحفظه بعد."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "هذا المزود لم يُعد محتوى base64. جرب مزودًا آخر."
+
+msgid "Saving failed."
+msgstr "فشل الحفظ."
+
+msgid "Get AI feedback"
+msgstr "الحصول على تعليقات الذكاء الاصطناعي"
+
+msgid "Copy answer to clipboard"
+msgstr "نسخ الإجابة إلى الحافظة"
+
+msgid "Save answer to my inbox"
+msgstr "حفظ الإجابة في صندوقي الوارد"
+
+msgid "The document is already in this folder"
+msgstr "المستند موجود بالفعل في هذا المجلد"
+
+msgid "Copied"
+msgstr "تم النسخ"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "ليس لديك صلاحية لإنشاء مصطلحات المصطلحات."
+
+msgid "Video generation is in progress"
+msgstr "إنشاء الفيديو قيد التقدم"
+
+msgid "Job"
+msgstr "مهمة"
+
+msgid "Modified prompt"
+msgstr "الموجه المُعدّل"
+
+msgid "Saved in Documents"
+msgstr "تم حفظها في المستندات"
+

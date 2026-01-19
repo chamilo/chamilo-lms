@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Karule"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Oftaj ekzemploj: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulo ekzemplo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervaloj de variabloj"
@@ -32345,4 +32345,232 @@ msgstr "Customcertificate"
 
 msgid "Update profile"
 msgstr "Ĝisdatigi profilon"
+
+msgid "Enable learning path generator"
+msgstr "Ŝalti generilon de lernvojoj"
+
+msgid "Enable exercise generator"
+msgstr "Ŝalti generilon de ekzercoj"
+
+msgid "Enable open answers grader"
+msgstr "Ŝalti gradilon de malfermaj respondoj"
+
+msgid "Enable tutor chatbot"
+msgstr "Ŝalti ĉatboton de tutoro"
+
+msgid "Enable task grader"
+msgstr "Ŝalti gradilon de taskoj"
+
+msgid "Enable content analyser"
+msgstr "Ŝalti analizilon de enhavo"
+
+msgid "Enable image generator"
+msgstr "Ŝalti generilon de bildoj"
+
+msgid "Enable glossary terms generator"
+msgstr "Ŝalti generilon de glosartemoj"
+
+msgid "Enable video generator"
+msgstr "Ŝalti generilon de videoj"
+
+msgid "Enable course analyser"
+msgstr "Ŝalti analizilon de kursoj"
+
+msgid "The operation '%s' is not supported."
+msgstr "La operacio '%s' ne estas subtenata."
+
+msgid "AI feedback on %s in course %s"
+msgstr "AI-retroinformo pri %s en kurso %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Forigi malsukcesis: mankas kursos kunteksto aŭ nevalida demando ID."
+
+msgid "AI Tutor"
+msgstr "AI Tutoro"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "La etendo APCu devas esti instalita kaj ŝaltita por ke la platformo povu uzi ĝin."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Oni rekomendas permesi al OPCache memory_consumption atingi almenaŭ %sMB da RAM."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "La modulo OPcache devas esti instalita kaj ŝaltita por ke la platformo povu uzi ĝin."
+
+msgid "You are here"
+msgstr "Vi estas ĉi tie"
+
+msgid "Click an event type to filter results."
+msgstr "Klaku tipon de evento por filtri rezultojn."
+
+msgid "Require unique presence"
+msgstr "Postuli unikan ĉeeston"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Se aktivigita, la notlibro donos al lernanto 100% kiam ĉeestas almenaŭ unu fojon."
+
+msgid "AI feedback"
+msgstr "AI-retpoŝto"
+
+msgid "Prompt"
+msgstr "Prompt"
+
+msgid "Tip"
+msgstr "Konsilo"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Vi povas redakti la prompton antaŭ ol peti retpoŝton."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Rizulto (vi povas apliki ĝin al la komento)"
+
+msgid "Apply to comment"
+msgstr "Apliki al komento"
+
+msgid "Apply score"
+msgstr "Apliki noton"
+
+msgid "AI grade"
+msgstr "AI-noto"
+
+msgid "AI tutor is disabled during tests"
+msgstr "AI-tutoro estas malaktivigita dum testoj"
+
+msgid "Generate glossary terms"
+msgstr "Generi glosartemojn"
+
+msgid "Generate media"
+msgstr "Generi amaskomunikilon"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Vi ne havas permeson generi AI-amaskomunikilon en ĉi tiu kurso."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "AI-helpiloj estas malaktivigitaj je platform-nivelo."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "Generado de AI-amaskomunikilo estas malaktivigita en kursaj agordoj."
+
+msgid "No AI media providers available."
+msgstr "Neniu provizanto de AI-amaskomunikilo havebla."
+
+msgid "Provider"
+msgstr "Provizanto"
+
+msgid "Select a provider"
+msgstr "Elektu provizanton's"
+
+msgid "Example: generated_media"
+msgstr "Ekzemplo: generita_amaskomunikilo"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "La nomo ne estas aldonita al la prompt; ĝi estas uzita nur por konservi la dosieron."
+
+msgid "Describe what you want to generate..."
+msgstr "Priskribu tion, kion vi volas generi..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Konsilo: klaku antaŭfikson por rapide agordi la grandecon."
+
+msgid "Generating..."
+msgstr "Generante..."
+
+msgid "Save to Documents"
+msgstr "Konservi en Dokumento"
+
+msgid "Document IRI"
+msgstr "Dokumenta IRI"
+
+msgid "Go to folder"
+msgstr "Iri al dosierujoj"
+
+msgid "Provider used"
+msgstr "Uzita provizanto"
+
+msgid "This video result cannot be saved yet"
+msgstr "Ĉi tiu videorizulto ne povas esti konservita ankoraŭ"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Vidbalaĝado estis haltigita ĉar la provizanto ŝanĝiĝis."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "Gendado de video daŭras tro longe. Bonvolu reprovi poste."
+
+msgid "Failed to check video status."
+msgstr "Malsukcesis kontroli la staton de la video."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Video sukcese generita. Vi povas nun konservi ĝin."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Gendado de video finita, sed neniu ludebla enhavo estis redonita."
+
+msgid "Video generation failed."
+msgstr "Malsukcesis generi videon."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Atendantas ke la video pretu..."
+
+msgid "Please complete all fields."
+msgstr "Bonvolu kompleti ĉiujn kampojn."
+
+msgid "Image generation is not enabled for this course."
+msgstr "Gendado de bildoj ne estas aktivigita por ĉi tiu kurso."
+
+msgid "Video generation is not enabled for this course."
+msgstr "Gendado de video ne estas aktivigita por ĉi tiu kurso."
+
+msgid "Generation failed."
+msgstr "Gendado malsukcesis."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Sukcese generita. Kontrolu la antaŭvidon kaj konservu kiam preta."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Sukcese generita. Konservado estas malaktivigita ĉar la provizanto redonis URL-on."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Gendado de video komenciĝis. Atendantas la rezulton..."
+
+msgid "AI returned an empty response."
+msgstr "AI redonis malplenan respondon."
+
+msgid "Nothing to save yet."
+msgstr "Neniu afero konservebla ankoraŭ."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Ĉi tiu provizanto ne redonis base64-enhavon. Bonvolu provi alian provizanton's."
+
+msgid "Saving failed."
+msgstr "Malsukcesis konservi."
+
+msgid "Get AI feedback"
+msgstr "Ricevi AI-retpoŝton"
+
+msgid "Copy answer to clipboard"
+msgstr "Kopii respondon al poŝtaranĝilo"
+
+msgid "Save answer to my inbox"
+msgstr "Konservi respondon en mian poŝtreton"
+
+msgid "The document is already in this folder"
+msgstr "La dokumento jam estas en ĉi tiu dosierujoj"
+
+msgid "Copied"
+msgstr "Kopita"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Vi ne havas permeson generi glosartikolojn."
+
+msgid "Video generation is in progress"
+msgstr "Generado de video progresas"
+
+msgid "Job"
+msgstr "Tasko"
+
+msgid "Modified prompt"
+msgstr "Modifita invitilo"
+
+msgid "Saved in Documents"
+msgstr "Konservita en Dokumento"
 

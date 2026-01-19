@@ -32346,3 +32346,231 @@ msgstr "Brugerdefineret certifikat"
 msgid "Update profile"
 msgstr "Opdater profil"
 
+msgid "Enable learning path generator"
+msgstr "Aktivér læringssti-generator"
+
+msgid "Enable exercise generator"
+msgstr "Aktivér øvelsesgenerator"
+
+msgid "Enable open answers grader"
+msgstr "Aktivér rettelse af åbne svar"
+
+msgid "Enable tutor chatbot"
+msgstr "Aktivér tutor-chatbot"
+
+msgid "Enable task grader"
+msgstr "Aktivér opgave-rettelse"
+
+msgid "Enable content analyser"
+msgstr "Aktivér indholdsanalysator"
+
+msgid "Enable image generator"
+msgstr "Aktivér billedegenerator"
+
+msgid "Enable glossary terms generator"
+msgstr "Aktivér generator for ordlisteord"
+
+msgid "Enable video generator"
+msgstr "Aktivér videogenerator"
+
+msgid "Enable course analyser"
+msgstr "Aktivér kursusanalysator"
+
+msgid "The operation '%s' is not supported."
+msgstr "Operationen '%s' understøttes ikke."
+
+msgid "AI feedback on %s in course %s"
+msgstr "AI-feedback på %s i kursus %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Sletning mislykkedes: manglende kursuskontekst eller ugyldig spørgsmål-id."
+
+msgid "AI Tutor"
+msgstr "AI-tutor"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "APCu-udvidelsen skal både være installeret og aktiveret for at platformen kan bruge den."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Det anbefales at tillade OPCache memory_consumption på mindst %s MB RAM."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "OPcache-modulen skal både være installeret og aktiveret for at platformen kan bruge den."
+
+msgid "You are here"
+msgstr "Du er her"
+
+msgid "Click an event type to filter results."
+msgstr "Klik på en begivenhedstype for at filtrere resultater."
+
+msgid "Require unique presence"
+msgstr "Krav om unik tilstedeværelse"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Hvis aktiveret, giver karakterbogen eleven 100 % ved tilstedeværelse mindst én gang."
+
+msgid "AI feedback"
+msgstr "AI-feedback"
+
+msgid "Prompt"
+msgstr "Prompt"
+
+msgid "Tip"
+msgstr "Tip"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Du kan redigere prompten, før du anmoder om feedback."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Resultat (du kan anvende det på kommentaren)"
+
+msgid "Apply to comment"
+msgstr "Anvend på kommentar"
+
+msgid "Apply score"
+msgstr "Anvend score"
+
+msgid "AI grade"
+msgstr "AI-karakter"
+
+msgid "AI tutor is disabled during tests"
+msgstr "AI-tutor er deaktiveret under tests"
+
+msgid "Generate glossary terms"
+msgstr "Generér ordlisteord"
+
+msgid "Generate media"
+msgstr "Generér medie"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Du har ikke tilladelse til at generere AI-medie i dette kursus."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "AI-hjælpere er deaktiveret på platformniveau."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "AI-mediegenerering er deaktiveret i kursusindstillinger."
+
+msgid "No AI media providers available."
+msgstr "Ingen AI-medieudbydere tilgængelige."
+
+msgid "Provider"
+msgstr "Udbyder"
+
+msgid "Select a provider"
+msgstr "Vælg en udbyder"
+
+msgid "Example: generated_media"
+msgstr "Eksempel: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "Navnet tilføjes ikke til prompten; det bruges kun til at gemme filen."
+
+msgid "Describe what you want to generate..."
+msgstr "Beskriv hvad du vil generere..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Tip: klik på en forudindstilling for hurtigt at indstille størrelsen."
+
+msgid "Generating..."
+msgstr "Genererer..."
+
+msgid "Save to Documents"
+msgstr "Gem i Dokumenter"
+
+msgid "Document IRI"
+msgstr "Dokument IRI"
+
+msgid "Go to folder"
+msgstr "Gå til mappe"
+
+msgid "Provider used"
+msgstr "Brugt udbyder"
+
+msgid "This video result cannot be saved yet"
+msgstr "Dette videorresultat kan endnu ikke gemmes"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Videopolling blev stoppet, fordi udbyderen blev ændret."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "Videogenerering tager for lang tid. Prøv igen senere."
+
+msgid "Failed to check video status."
+msgstr "Kunne ikke kontrollere videoens status."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Video genereret succesfuldt. Du kan nu gemme den."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Videogenerering færdig, men ingen afspilbart indhold blev returneret."
+
+msgid "Video generation failed."
+msgstr "Videogenerering mislykkedes."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Venter på at videoen bliver klar..."
+
+msgid "Please complete all fields."
+msgstr "Udfyld venligst alle felter."
+
+msgid "Image generation is not enabled for this course."
+msgstr "Billedgenerering er ikke aktiveret for dette kursus."
+
+msgid "Video generation is not enabled for this course."
+msgstr "Videogenerering er ikke aktiveret for dette kursus."
+
+msgid "Generation failed."
+msgstr "Generering mislykkedes."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Genereret succesfuldt. Gennemse forhåndsvisningen og gem når klar."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Genereret succesfuldt. Gemning er deaktiveret, fordi udbyderen returnerede en URL."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Videogenerering startet. Venter på resultatet..."
+
+msgid "AI returned an empty response."
+msgstr "AI returnerede et tomt svar."
+
+msgid "Nothing to save yet."
+msgstr "Intet at gemme endnu."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Denne udbyder returnerede ikke base64-indhold. Prøv en anden udbyder."
+
+msgid "Saving failed."
+msgstr "Gemning mislykkedes."
+
+msgid "Get AI feedback"
+msgstr "Få AI-feedback"
+
+msgid "Copy answer to clipboard"
+msgstr "Kopiér svar til udklipsholder"
+
+msgid "Save answer to my inbox"
+msgstr "Gem svar i min indbakke"
+
+msgid "The document is already in this folder"
+msgstr "Dokumentet er allerede i denne mappe"
+
+msgid "Copied"
+msgstr "Kopieret"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Du har ikke tilladelse til at generere ordlisten条目."
+
+msgid "Video generation is in progress"
+msgstr "Videogenerering i gang"
+
+msgid "Job"
+msgstr "Job"
+
+msgid "Modified prompt"
+msgstr "Ændret prompt"
+
+msgid "Saved in Documents"
+msgstr "Gem i Dokumenter"
+

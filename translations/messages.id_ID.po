@@ -32344,3 +32344,231 @@ msgstr "Sertifikat Khusus"
 msgid "Update profile"
 msgstr "Perbarui profil"
 
+msgid "Enable learning path generator"
+msgstr "Aktifkan pembuat jalur pembelajaran"
+
+msgid "Enable exercise generator"
+msgstr "Aktifkan pembuat latihan"
+
+msgid "Enable open answers grader"
+msgstr "Aktifkan penilai jawaban terbuka"
+
+msgid "Enable tutor chatbot"
+msgstr "Aktifkan chatbot tutor"
+
+msgid "Enable task grader"
+msgstr "Aktifkan penilai tugas"
+
+msgid "Enable content analyser"
+msgstr "Aktifkan analis konten"
+
+msgid "Enable image generator"
+msgstr "Aktifkan pembuat gambar"
+
+msgid "Enable glossary terms generator"
+msgstr "Aktifkan pembuat istilah glosarium"
+
+msgid "Enable video generator"
+msgstr "Aktifkan pembuat video"
+
+msgid "Enable course analyser"
+msgstr "Aktifkan analis kursus"
+
+msgid "The operation '%s' is not supported."
+msgstr "Operasi '%s' tidak didukung."
+
+msgid "AI feedback on %s in course %s"
+msgstr "Umpan balik AI pada %s di kursus %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Penghapusan gagal: konteks kursus hilang atau ID pertanyaan tidak valid."
+
+msgid "AI Tutor"
+msgstr "Tutor AI"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "Ekstensi APCu harus diinstal dan diaktifkan agar platform dapat menggunakannya."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Disarankan agar OPCache memory_consumption mencapai setidaknya %sMB RAM."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "Modul OPcache harus diinstal dan diaktifkan agar platform dapat menggunakannya."
+
+msgid "You are here"
+msgstr "Anda berada di sini"
+
+msgid "Click an event type to filter results."
+msgstr "Klik jenis acara untuk memfilter hasil."
+
+msgid "Require unique presence"
+msgstr "Wajibkan kehadiran unik"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Jika diaktifkan, buku nilai akan memberikan 100% kepada pelajar yang hadir setidaknya sekali."
+
+msgid "AI feedback"
+msgstr "Umpan balik AI"
+
+msgid "Prompt"
+msgstr "Prompt"
+
+msgid "Tip"
+msgstr "Tips"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Anda dapat mengedit prompt sebelum meminta umpan balik."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Hasil (Anda dapat menerapkannya ke komentar)"
+
+msgid "Apply to comment"
+msgstr "Terapkan ke komentar"
+
+msgid "Apply score"
+msgstr "Terapkan skor"
+
+msgid "AI grade"
+msgstr "Nilai AI"
+
+msgid "AI tutor is disabled during tests"
+msgstr "Tutor AI dinonaktifkan selama tes"
+
+msgid "Generate glossary terms"
+msgstr "Buat istilah glosarium"
+
+msgid "Generate media"
+msgstr "Buat media"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Anda tidak memiliki izin untuk membuat media AI di kursus ini."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "Pembantu AI dinonaktifkan di tingkat platform."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "Pembuatan media AI dinonaktifkan di pengaturan kursus."
+
+msgid "No AI media providers available."
+msgstr "Tidak ada penyedia media AI yang tersedia."
+
+msgid "Provider"
+msgstr "Penyedia"
+
+msgid "Select a provider"
+msgstr "Pilih penyedia"
+
+msgid "Example: generated_media"
+msgstr "Contoh: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "Nama tidak ditambahkan ke prompt; hanya digunakan untuk menyimpan file."
+
+msgid "Describe what you want to generate..."
+msgstr "Jelaskan apa yang ingin Anda buat..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Tips: klik preset untuk mengatur ukuran dengan cepat."
+
+msgid "Generating..."
+msgstr "Membuat..."
+
+msgid "Save to Documents"
+msgstr "Simpan ke Dokumen"
+
+msgid "Document IRI"
+msgstr "IRI Dokumen"
+
+msgid "Go to folder"
+msgstr "Pergi ke folder"
+
+msgid "Provider used"
+msgstr "Penyedia yang digunakan"
+
+msgid "This video result cannot be saved yet"
+msgstr "Hasil video ini belum dapat disimpan"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Polling video dihentikan karena penyedia berubah."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "Pembuatan video memakan waktu terlalu lama. Silakan coba lagi nanti."
+
+msgid "Failed to check video status."
+msgstr "Gagal memeriksa status video."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Video berhasil dibuat. Anda sekarang dapat menyimpannya."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Pembuatan video selesai, tetapi tidak ada konten yang dapat diputar yang dikembalikan."
+
+msgid "Video generation failed."
+msgstr "Pembuatan video gagal."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Menunggu video siap..."
+
+msgid "Please complete all fields."
+msgstr "Silakan lengkapi semua kolom."
+
+msgid "Image generation is not enabled for this course."
+msgstr "Pembuatan gambar tidak diaktifkan untuk kursus ini."
+
+msgid "Video generation is not enabled for this course."
+msgstr "Pembuatan video tidak diaktifkan untuk kursus ini."
+
+msgid "Generation failed."
+msgstr "Pembuatan gagal."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Berhasil dibuat. Tinjau pratinjau dan simpan saat siap."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Berhasil dibuat. Penyimpanan dinonaktifkan karena penyedia mengembalikan URL."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Pembuatan video dimulai. Menunggu hasil..."
+
+msgid "AI returned an empty response."
+msgstr "AI mengembalikan respons kosong."
+
+msgid "Nothing to save yet."
+msgstr "Belum ada yang bisa disimpan."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Penyedia ini tidak mengembalikan konten base64. Silakan coba penyedia lain."
+
+msgid "Saving failed."
+msgstr "Penyimpanan gagal."
+
+msgid "Get AI feedback"
+msgstr "Dapatkan umpan balik AI"
+
+msgid "Copy answer to clipboard"
+msgstr "Salin jawaban ke clipboard"
+
+msgid "Save answer to my inbox"
+msgstr "Simpan jawaban ke kotak masuk saya"
+
+msgid "The document is already in this folder"
+msgstr "Dokumen sudah ada di folder ini"
+
+msgid "Copied"
+msgstr "Disalin"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Anda tidak memiliki izin untuk membuat istilah glosarium."
+
+msgid "Video generation is in progress"
+msgstr "Pembuatan video sedang berlangsung"
+
+msgid "Job"
+msgstr "Pekerjaan"
+
+msgid "Modified prompt"
+msgstr "Prompt yang dimodifikasi"
+
+msgid "Saved in Documents"
+msgstr "Disimpan di Dokumen"
+

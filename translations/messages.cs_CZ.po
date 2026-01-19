@@ -32340,3 +32340,231 @@ msgstr "Vlastní osvědčení"
 msgid "Update profile"
 msgstr "Aktualizovat profil"
 
+msgid "Enable learning path generator"
+msgstr "Povolit generátor výukových cest"
+
+msgid "Enable exercise generator"
+msgstr "Povolit generátor cvičení"
+
+msgid "Enable open answers grader"
+msgstr "Povolit hodnotitele otevřených odpovědí"
+
+msgid "Enable tutor chatbot"
+msgstr "Povolit chatbota pro tutora"
+
+msgid "Enable task grader"
+msgstr "Povolit hodnotitele úkolů"
+
+msgid "Enable content analyser"
+msgstr "Povolit analyzátor obsahu"
+
+msgid "Enable image generator"
+msgstr "Povolit generátor obrázků"
+
+msgid "Enable glossary terms generator"
+msgstr "Povolit generátor pojmů glosáře"
+
+msgid "Enable video generator"
+msgstr "Povolit generátor videa"
+
+msgid "Enable course analyser"
+msgstr "Povolit analyzátor kurzu"
+
+msgid "The operation '%s' is not supported."
+msgstr "Operace '%s' není podporována."
+
+msgid "AI feedback on %s in course %s"
+msgstr "Zpětná vazba AI na %s v kurzu %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Smazání selhalo: chybí kontext kurzu nebo neplatné ID otázky."
+
+msgid "AI Tutor"
+msgstr "AI tutor"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "Rozšíření APCu musí být nainstalováno a povoleno, aby platforma mohla být použita."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Doporučuje se nastavit OPCache memory_consumption na alespoň %sMB RAM."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "Modul OPcache musí být nainstalován a povolen, aby platforma mohla být použita."
+
+msgid "You are here"
+msgstr "Nacházíte se zde"
+
+msgid "Click an event type to filter results."
+msgstr "Klikněte na typ události pro filtrování výsledků."
+
+msgid "Require unique presence"
+msgstr "Vyžadovat jedinečnou přítomnost"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Pokud je povoleno, známkový list studentovi přiřadí 100 %, pokud je přítomen nejméně jednou."
+
+msgid "AI feedback"
+msgstr "Zpětná vazba AI"
+
+msgid "Prompt"
+msgstr "Prompt"
+
+msgid "Tip"
+msgstr "Tip"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Prompt můžete upravit před požádáním o zpětnou vazbu."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Výsledek (můžete ho aplikovat na komentář)"
+
+msgid "Apply to comment"
+msgstr "Aplikovat na komentář"
+
+msgid "Apply score"
+msgstr "Aplikovat skóre"
+
+msgid "AI grade"
+msgstr "Hodnocení AI"
+
+msgid "AI tutor is disabled during tests"
+msgstr "AI tutor je vypnutý během testů"
+
+msgid "Generate glossary terms"
+msgstr "Generovat pojmy glosáře"
+
+msgid "Generate media"
+msgstr "Generovat média"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Nemáte oprávnění generovat AI média v tomto kurzu."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "Pomůcky AI jsou vypnuté na úrovni platformy."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "Generování AI médií je vypnuté v nastavení kurzu."
+
+msgid "No AI media providers available."
+msgstr "Žádní poskytovatelé AI médií nejsou k dispozici."
+
+msgid "Provider"
+msgstr "Poskytovatel"
+
+msgid "Select a provider"
+msgstr "Vybrat poskytovatele"
+
+msgid "Example: generated_media"
+msgstr "Příklad: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "Název se nepřidává do promptu; slouží pouze k uložení souboru."
+
+msgid "Describe what you want to generate..."
+msgstr "Popište, co chcete generovat..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Tip: kliknutím na přednastavení rychle nastavíte velikost."
+
+msgid "Generating..."
+msgstr "Generuji..."
+
+msgid "Save to Documents"
+msgstr "Uložit do Dokumentů"
+
+msgid "Document IRI"
+msgstr "IRI dokumentu"
+
+msgid "Go to folder"
+msgstr "Jít do složky"
+
+msgid "Provider used"
+msgstr "Použitý poskytovatel"
+
+msgid "This video result cannot be saved yet"
+msgstr "Tento video výsledek zatím nelze uložit"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Dotazování videa bylo zastaveno, protože se změnil poskytovatel."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "Generování videa trvá příliš dlouho. Zkuste to prosím později."
+
+msgid "Failed to check video status."
+msgstr "Nepodařilo se zkontrolovat stav videa."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Video bylo úspěšně vygenerováno. Nyní ho můžete uložit."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Generování videa dokončeno, ale nebylo vráceno žádné přehratelné obsahu."
+
+msgid "Video generation failed."
+msgstr "Generování videa selhalo."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Čekám, až bude video připraveno..."
+
+msgid "Please complete all fields."
+msgstr "Doplňte prosím všechna pole."
+
+msgid "Image generation is not enabled for this course."
+msgstr "Generování obrázků není pro tento kurz povoleno."
+
+msgid "Video generation is not enabled for this course."
+msgstr "Generování videí není pro tento kurz povoleno."
+
+msgid "Generation failed."
+msgstr "Generování selhalo."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Úspěšně vygenerováno. Zkontrolujte náhled a uložte, když budete připraveni."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Úspěšně vygenerováno. Ukládání je vypnuté, protože poskytovatel vrátil URL."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Generování videa zahájeno. Čekám na výsledek..."
+
+msgid "AI returned an empty response."
+msgstr "AI vrátilo prázdnou odpověď."
+
+msgid "Nothing to save yet."
+msgstr "Zatím není co ukládat."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Tento poskytovatel nevrátil obsah base64. Zkuste jiného poskytovatele."
+
+msgid "Saving failed."
+msgstr "Ukládání selhalo."
+
+msgid "Get AI feedback"
+msgstr "Získat zpětnou vazbu AI"
+
+msgid "Copy answer to clipboard"
+msgstr "Kopírovat odpověď do schránky"
+
+msgid "Save answer to my inbox"
+msgstr "Uložit odpověď do mé schránky"
+
+msgid "The document is already in this folder"
+msgstr "Dokument je již v tomto složce"
+
+msgid "Copied"
+msgstr "Zkopírováno"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Nemáte oprávnění generovat pojmy glosáře."
+
+msgid "Video generation is in progress"
+msgstr "Generování videa probíhá"
+
+msgid "Job"
+msgstr "Úloha"
+
+msgid "Modified prompt"
+msgstr "Upravený prompt"
+
+msgid "Saved in Documents"
+msgstr "Uloženo v Dokumentech"
+

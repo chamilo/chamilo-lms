@@ -32312,35 +32312,263 @@ msgid "There are no terms that match the search: %s"
 msgstr "هیچ اصطلاحی با جستجو مطابقت ندارد: %s"
 
 msgid "Setting is globally locked (access_url_locked=1)"
-msgstr ""
+msgstr "تنظیم به صورت سراسری قفل شده است (access_url_locked=1)"
 
 msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
-msgstr ""
+msgstr "اگر فعال باشد، پیام‌های چت خصوصی ۱:۱ در اسناد تاریخچه چت دوره منعکس می‌شوند. برای حفظ حریم خصوصی توصیه می‌شود غیرفعال نگه داشته شود."
 
 msgid "Save private conversations in documents"
-msgstr ""
+msgstr "ذخیره مکالمات خصوصی در اسناد"
 
 msgid "EU AI Act – Transparency & risk notice"
-msgstr ""
+msgstr "قانون هوش مصنوعی اتحادیه اروپا – اطلاعیه شفافیت و ریسک"
 
 msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
-msgstr ""
+msgstr "بر اساس قانون هوش مصنوعی اتحادیه اروپا (مقررات (EU) 2024/1689)، سیستم‌های هوش مصنوعی مورد استفاده در آموزش عموماً به عنوان «پرریسک» طبقه‌بندی می‌شوند. این نرم‌افزار خود <strong>هوش مصنوعی</strong> نیست، اما می‌تواند سیستم‌های هوش مصنوعی داخلی یا خارجی اختیاری را—بسته به پیکربندی شما—یکپارچه کند تا عملکرد وظایف کاربر را بهبود بخشد. این سیستم‌ها تنها <em>در صورتی</em> به داده‌های شخصی دسترسی خواهند داشت که کاربران چنین داده‌هایی را در پرسش‌های خود وارد کنند. این نرم‌افزار به طور پیش‌فرض داده‌های شخصی را بدون ورودی فعال کاربر با سیستم‌های هوش مصنوعی به اشتراک نمی‌گذارد. به طور پیش‌فرض، تمام ویژگی‌های هوش مصنوعی غیرفعال هستند."
 
 msgid "Admin responsibility & disclosures"
-msgstr ""
+msgstr "مسئولیت مدیر و افشاها"
 
 msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
-msgstr ""
+msgstr "این صفحه پیکربندی هر ویژگی هوش مصنوعی و هدف آن را شرح می‌دهد. به عنوان مستقرکننده، باید آن‌ها را با دقت بررسی کنید و سیاست‌های حفظ حریم خصوصی داده‌های مطابق با GDPR خود را به‌روزرسانی کنید تا گزینه‌های فعال‌شده را منعکس کند. در حالی که اکثر ویژگی‌های هوش مصنوعی داده‌های شخصی را مستقیماً با سیستم‌های خارجی به اشتراک نمی‌گذارند، پرسش‌های ارسالی کاربران به هوش مصنوعی ممکن است به طور ناخواسته شامل اطلاعات شخصی باشد. به عنوان مستقرکننده، <strong>شما مسئول</strong> اطلاع‌رسانی این ریسک به کاربران هستید. برای شفافیت، نسخه‌های آینده ممکن است برچسب‌های غیرمزاحم برای کاربران نهایی نمایش دهند که نشان‌دهنده تولید محتوا یا بازخورد با کمک هوش مصنوعی است."
 
 msgid "Positioning"
-msgstr ""
+msgstr "موقعیت‌یابی"
 
 msgid "Quiz"
-msgstr ""
+msgstr "کوئیز"
 
 msgid "Customcertificate"
-msgstr ""
+msgstr "گواهینامه سفارشی"
 
 msgid "Update profile"
-msgstr ""
+msgstr "به‌روزرسانی پروفایل"
+
+msgid "Enable learning path generator"
+msgstr "فعال‌سازی تولیدکننده مسیر یادگیری"
+
+msgid "Enable exercise generator"
+msgstr "فعال‌سازی تولیدکننده تمرین"
+
+msgid "Enable open answers grader"
+msgstr "فعال‌سازی نمره‌دهنده پاسخ‌های باز"
+
+msgid "Enable tutor chatbot"
+msgstr "فعال‌سازی چت‌بات مربی"
+
+msgid "Enable task grader"
+msgstr "فعال‌سازی نمره‌دهنده وظیفه"
+
+msgid "Enable content analyser"
+msgstr "فعال‌سازی تحلیل‌گر محتوا"
+
+msgid "Enable image generator"
+msgstr "فعال‌سازی تولیدکننده تصویر"
+
+msgid "Enable glossary terms generator"
+msgstr "فعال‌سازی تولیدکننده اصطلاحات واژه‌نامه"
+
+msgid "Enable video generator"
+msgstr "فعال‌سازی تولیدکننده ویدیو"
+
+msgid "Enable course analyser"
+msgstr "فعال‌سازی تحلیل‌گر دوره"
+
+msgid "The operation '%s' is not supported."
+msgstr "عملیات «%s» پشتیبانی نمی‌شود."
+
+msgid "AI feedback on %s in course %s"
+msgstr "بازخورد هوش مصنوعی در مورد %s در دوره %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "حذف ناموفق: زمینه دوره گم شده یا شناسه سؤال نامعتبر."
+
+msgid "AI Tutor"
+msgstr "مربی هوش مصنوعی"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "افزونه APCu باید هم نصب و هم فعال باشد تا پلتفرم بتواند از آن استفاده کند."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "توصیه می‌شود مصرف حافظه OPCache حداقل به %sMB RAM برسد."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "ماژول OPcache باید هم نصب و هم فعال باشد تا پلتفرم بتواند از آن استفاده کند."
+
+msgid "You are here"
+msgstr "شما اینجا هستید"
+
+msgid "Click an event type to filter results."
+msgstr "روی نوع رویداد کلیک کنید تا نتایج فیلتر شوند."
+
+msgid "Require unique presence"
+msgstr "نیاز به حضور منحصربه‌فرد"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "اگر فعال باشد، دفتر نمرات به یادگیرنده ۱۰۰٪ می‌دهد وقتی حداقل یک بار حضور داشته باشد."
+
+msgid "AI feedback"
+msgstr "بازخورد هوش مصنوعی"
+
+msgid "Prompt"
+msgstr "پرسش"
+
+msgid "Tip"
+msgstr "نکته"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "می‌توانید پرسش را قبل از درخواست بازخورد ویرایش کنید."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "نتیجه (می‌توانید آن را به نظر اعمال کنید)"
+
+msgid "Apply to comment"
+msgstr "اعمال به نظر"
+
+msgid "Apply score"
+msgstr "اعمال نمره"
+
+msgid "AI grade"
+msgstr "نمره هوش مصنوعی"
+
+msgid "AI tutor is disabled during tests"
+msgstr "معلم هوش مصنوعی در طول آزمون‌ها غیرفعال است"
+
+msgid "Generate glossary terms"
+msgstr "تولید اصطلاحات واژه‌نامه"
+
+msgid "Generate media"
+msgstr "تولید رسانه"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "شما اجازه تولید رسانه هوش مصنوعی در این درس را ندارید."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "راهنمایان هوش مصنوعی در سطح پلتفرم غیرفعال هستند."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "تولید رسانه هوش مصنوعی در تنظیمات درس غیرفعال است."
+
+msgid "No AI media providers available."
+msgstr "هیچ ارائه‌دهنده رسانه هوش مصنوعی در دسترس نیست."
+
+msgid "Provider"
+msgstr "ارائه‌دهنده"
+
+msgid "Select a provider"
+msgstr "انتخاب یک ارائه‌دهنده"
+
+msgid "Example: generated_media"
+msgstr "مثال: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "نام به پرامپت اضافه نمی‌شود؛ فقط برای ذخیره فایل استفاده می‌شود."
+
+msgid "Describe what you want to generate..."
+msgstr "توصیف کنید که چه چیزی می‌خواهید تولید کنید..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "نکته: روی یک پیش‌تنظیم کلیک کنید تا اندازه را سریع تنظیم کنید."
+
+msgid "Generating..."
+msgstr "در حال تولید..."
+
+msgid "Save to Documents"
+msgstr "ذخیره در اسناد"
+
+msgid "Document IRI"
+msgstr "IRI سند"
+
+msgid "Go to folder"
+msgstr "رفتن به پوشه"
+
+msgid "Provider used"
+msgstr "ارائه‌دهنده استفاده شده"
+
+msgid "This video result cannot be saved yet"
+msgstr "این نتیجه ویدیو هنوز قابل ذخیره نیست"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "نظرسنجی ویدیو متوقف شد زیرا ارائه‌دهنده تغییر کرد."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "تولید ویدیو بیش از حد طولانی است. لطفاً بعداً دوباره تلاش کنید."
+
+msgid "Failed to check video status."
+msgstr "بررسی وضعیت ویدیو ناموفق بود."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "ویدیو با موفقیت تولید شد. اکنون می‌توانید آن را ذخیره کنید."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "تولید ویدیو تکمیل شد، اما محتوای قابل پخش برگردانده نشد."
+
+msgid "Video generation failed."
+msgstr "تولید ویدیو ناموفق بود."
+
+msgid "Waiting for the video to be ready..."
+msgstr "در انتظار آماده شدن ویدیو..."
+
+msgid "Please complete all fields."
+msgstr "لطفاً تمام فیلدها را کامل کنید."
+
+msgid "Image generation is not enabled for this course."
+msgstr "تولید تصویر برای این درس فعال نیست."
+
+msgid "Video generation is not enabled for this course."
+msgstr "تولید ویدیو برای این درس فعال نیست."
+
+msgid "Generation failed."
+msgstr "تولید ناموفق بود."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "با موفقیت تولید شد. پیش‌نمایش را بررسی کنید و وقتی آماده بود ذخیره کنید."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "با موفقیت تولید شد. ذخیره غیرفعال است زیرا ارائه‌دهنده URL برگرداند."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "تولید ویدیو شروع شد. در انتظار نتیجه..."
+
+msgid "AI returned an empty response."
+msgstr "هوش مصنوعی پاسخی خالی برگرداند."
+
+msgid "Nothing to save yet."
+msgstr "هنوز چیزی برای ذخیره وجود ندارد."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "این ارائه‌دهنده محتوای base64 برنگرداند. لطفاً ارائه‌دهنده دیگری امتحان کنید."
+
+msgid "Saving failed."
+msgstr "ذخیره ناموفق بود."
+
+msgid "Get AI feedback"
+msgstr "دریافت بازخورد هوش مصنوعی"
+
+msgid "Copy answer to clipboard"
+msgstr "کپی پاسخ به کلیپ‌بورد"
+
+msgid "Save answer to my inbox"
+msgstr "ذخیره پاسخ در صندوق ورودی من"
+
+msgid "The document is already in this folder"
+msgstr "سند قبلاً در این پوشه است"
+
+msgid "Copied"
+msgstr "کپی شد"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "شما اجازه تولید اصطلاحات واژه‌نامه را ندارید."
+
+msgid "Video generation is in progress"
+msgstr "تولید ویدیو در حال انجام است"
+
+msgid "Job"
+msgstr "وظیفه"
+
+msgid "Modified prompt"
+msgstr "پرامپت تغییر یافته"
+
+msgid "Saved in Documents"
+msgstr "در اسناد ذخیره شد"
 

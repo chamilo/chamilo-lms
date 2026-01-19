@@ -32360,3 +32360,231 @@ msgstr "Customcertificate"
 msgid "Update profile"
 msgstr "Posodobi profil"
 
+msgid "Enable learning path generator"
+msgstr "Omogoči generator učne poti"
+
+msgid "Enable exercise generator"
+msgstr "Omogoči generator vaj"
+
+msgid "Enable open answers grader"
+msgstr "Omogoči ocenjevalnik odprtih odgovorov"
+
+msgid "Enable tutor chatbot"
+msgstr "Omogoči klepetalnega robota za tutorje"
+
+msgid "Enable task grader"
+msgstr "Omogoči ocenjevalnik nalog"
+
+msgid "Enable content analyser"
+msgstr "Omogoči analizator vsebine"
+
+msgid "Enable image generator"
+msgstr "Omogoči generator slik"
+
+msgid "Enable glossary terms generator"
+msgstr "Omogoči generator pojmov slovarja"
+
+msgid "Enable video generator"
+msgstr "Omogoči generator videov"
+
+msgid "Enable course analyser"
+msgstr "Omogoči analizator tečaja"
+
+msgid "The operation '%s' is not supported."
+msgstr "Dejanje '%s' ni podprto."
+
+msgid "AI feedback on %s in course %s"
+msgstr "AI povratne informacije o %s v tečaju %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Brisanje ni uspelo: manjka kontekst tečaja ali neveljaven ID vprašanja."
+
+msgid "AI Tutor"
+msgstr "AI tutor"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "Razširitev APCu mora biti nameščena in omogočena, da jo platforma lahko uporabi."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Priporočljivo je, da OPCache memory_consumption doseže vsaj %s MB RAM-a."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "Modul OPcache mora biti nameščen in omogočen, da ga platforma lahko uporabi."
+
+msgid "You are here"
+msgstr "Tukaj ste"
+
+msgid "Click an event type to filter results."
+msgstr "Kliknite vrsto dogodka za filtriranje rezultatov."
+
+msgid "Require unique presence"
+msgstr "Zahtevaj edinstveno prisotnost"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Če je omogočeno, bo dnevnik ocen udeležencu dodelil 100 %, če je prisoten vsaj enkrat."
+
+msgid "AI feedback"
+msgstr "AI povratne informacije"
+
+msgid "Prompt"
+msgstr "Sporočilo"
+
+msgid "Tip"
+msgstr "Nasvet"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Urejanje poziva pred zahtevo za povratne informacije je mogoče."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Rezultat (lahko ga uporabite za komentar)"
+
+msgid "Apply to comment"
+msgstr "Uporabi za komentar"
+
+msgid "Apply score"
+msgstr "Uporabi oceno"
+
+msgid "AI grade"
+msgstr "Ocena AI"
+
+msgid "AI tutor is disabled during tests"
+msgstr "AI tutor je onemogočen med testi"
+
+msgid "Generate glossary terms"
+msgstr "Ustvari pojme slovarja"
+
+msgid "Generate media"
+msgstr "Ustvari medijo"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Nimate dovoljenja za ustvarjanje AI medijev v tem tečaju."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "Pomočniki AI so onemogočeni na ravni platforme."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "Ustvarjanje AI medijev je onemogočeno v nastavitvah tečaja."
+
+msgid "No AI media providers available."
+msgstr "Noben ponudnik AI medijev ni na voljo."
+
+msgid "Provider"
+msgstr "Ponudnik"
+
+msgid "Select a provider"
+msgstr "Izberite ponudnika"
+
+msgid "Example: generated_media"
+msgstr "Primer: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "Ime ni dodano k pozivu; uporablja se samo za shranjevanje datoteke."
+
+msgid "Describe what you want to generate..."
+msgstr "Opisite, kaj želite ustvariti..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Nasvet: kliknite prednastavitev za hitro nastavitev velikosti."
+
+msgid "Generating..."
+msgstr "Ustvarjanje v teku..."
+
+msgid "Save to Documents"
+msgstr "Shrani v Dokumente"
+
+msgid "Document IRI"
+msgstr "IRI dokumenta"
+
+msgid "Go to folder"
+msgstr "Pojdi v mapo"
+
+msgid "Provider used"
+msgstr "Uporabljen ponudnik"
+
+msgid "This video result cannot be saved yet"
+msgstr "Težave z videom še ni mogoče shraniti"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Prašanje za video je bilo ustavljeno zaradi spremembe ponudnika."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "Ustvarjanje videa traja predolgo. Poskusite znova kasneje."
+
+msgid "Failed to check video status."
+msgstr "Napaka pri preverjanju stanja videa."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Video je uspešno ustvarjen. Zdaj ga lahko shranite."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Ustvarjanje videa je končano, vendar ni vrnjene predvajalnih vsebine."
+
+msgid "Video generation failed."
+msgstr "Ustvarjanje videa je spodletelo."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Čakanje na pripravljenost videa..."
+
+msgid "Please complete all fields."
+msgstr "Izpolnite vsa polja."
+
+msgid "Image generation is not enabled for this course."
+msgstr "Ustvarjanje slik ni omogočeno za ta tečaj."
+
+msgid "Video generation is not enabled for this course."
+msgstr "Ustvarjanje videov ni omogočeno za ta tečaj."
+
+msgid "Generation failed."
+msgstr "Ustvarjanje je spodletelo."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Uspešno ustvarjeno. Preglejte predogled in shranite, ko ste pripravljeni."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Uspešno ustvarjeno. Shranjevanje je onemogočeno, ker je ponudnik vrnil URL."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Ustvarjanje videa se je začelo. Čakanje na rezultat..."
+
+msgid "AI returned an empty response."
+msgstr "AI je vrnil prazen odgovor."
+
+msgid "Nothing to save yet."
+msgstr "Nič za shraniti še ni."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Ta ponudnik ni vrnil base64 vsebine. Poskusite z drugim ponudnikom."
+
+msgid "Saving failed."
+msgstr "Shranjevanje je spodletelo."
+
+msgid "Get AI feedback"
+msgstr "Pridobi povratne informacije AI"
+
+msgid "Copy answer to clipboard"
+msgstr "Kopiraj odgovor v odložišče"
+
+msgid "Save answer to my inbox"
+msgstr "Shrani odgovor v moj predal"
+
+msgid "The document is already in this folder"
+msgstr "Dokument je že v tej mapi"
+
+msgid "Copied"
+msgstr "Kopirano"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Nimate dovoljenja za ustvarjanje pojmov slovarja."
+
+msgid "Video generation is in progress"
+msgstr "Ustvarjanje videa je v teku"
+
+msgid "Job"
+msgstr "Delo"
+
+msgid "Modified prompt"
+msgstr "Spremenjen poziv"
+
+msgid "Saved in Documents"
+msgstr "Shranjeno v Dokumentih"
+

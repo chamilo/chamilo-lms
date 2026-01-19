@@ -32357,3 +32357,231 @@ msgstr "תעודה מותאמת אישית"
 msgid "Update profile"
 msgstr "עדכן פרופיל"
 
+msgid "Enable learning path generator"
+msgstr "הפעל מחולל מסלולי למידה"
+
+msgid "Enable exercise generator"
+msgstr "הפעל מחולל תרגילים"
+
+msgid "Enable open answers grader"
+msgstr "הפעל מדרג תשובות פתוחות"
+
+msgid "Enable tutor chatbot"
+msgstr "הפעל צ'אטבוט מדריך"
+
+msgid "Enable task grader"
+msgstr "הפעל מדרג משימות"
+
+msgid "Enable content analyser"
+msgstr "הפעל מנתח תוכן"
+
+msgid "Enable image generator"
+msgstr "הפעל מחולל תמונות"
+
+msgid "Enable glossary terms generator"
+msgstr "הפעל מחולל מונחי גלוסריום"
+
+msgid "Enable video generator"
+msgstr "הפעל מחולל סרטונים"
+
+msgid "Enable course analyser"
+msgstr "הפעל מנתח קורס"
+
+msgid "The operation '%s' is not supported."
+msgstr "הפעולה '%s' אינה נתמכת."
+
+msgid "AI feedback on %s in course %s"
+msgstr "משוב AI על %s בקורס %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "מחיקה נכשלה: חסר הקשר קורס או מזהה שאלה לא תקין."
+
+msgid "AI Tutor"
+msgstr "מדריך AI"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "הרחבת APCu חייבת להיות מותקנת ומופעלת כדי שהפלטפורמה תוכל להשתמש בה."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "מומלץ לאפשר ל-OPCache memory_consumption להגיע ל-%sMB זיכרון RAM לפחות."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "מודול OPcache חייב להיות מותקן ומופעל כדי שהפלטפורמה תוכל להשתמש בו."
+
+msgid "You are here"
+msgstr "אתה כאן"
+
+msgid "Click an event type to filter results."
+msgstr "לחץ על סוג אירוע כדי לסנן תוצאות."
+
+msgid "Require unique presence"
+msgstr "דרוש נוכחות ייחודית"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "אם מופעל, פנקס הציונים יתן ללומד 100% כאשר נוכח לפחות פעם אחת."
+
+msgid "AI feedback"
+msgstr "משוב AI"
+
+msgid "Prompt"
+msgstr "הנחיה"
+
+msgid "Tip"
+msgstr "טיפ"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "ניתן לערוך את ההנחיה לפני בקשת משוב."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "תוצאה (ניתן ליישם אותה על ההערות)"
+
+msgid "Apply to comment"
+msgstr "יישם על הערה"
+
+msgid "Apply score"
+msgstr "יישם ציון"
+
+msgid "AI grade"
+msgstr "ציון AI"
+
+msgid "AI tutor is disabled during tests"
+msgstr "מדריך AI מושבת במהלך מבחנים"
+
+msgid "Generate glossary terms"
+msgstr "ייצר מונחי גלוסריום"
+
+msgid "Generate media"
+msgstr "יצירת מדיה"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "אין לך הרשאה ליצור מדיה מבוססת AI בקורס זה."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "עוזרי AI מושבתים ברמת הפלטפורמה."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "יצירת מדיה מבוססת AI מושבתת בהגדרות הקורס."
+
+msgid "No AI media providers available."
+msgstr "אין ספקי מדיה מבוססי AI זמינים."
+
+msgid "Provider"
+msgstr "ספק"
+
+msgid "Select a provider"
+msgstr "בחר ספק"
+
+msgid "Example: generated_media"
+msgstr "דוגמה: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "השם אינו נוסף לפרומפט; הוא משמש רק לשמירת הקובץ."
+
+msgid "Describe what you want to generate..."
+msgstr "תאר מה ברצונך ליצור..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "טיפ: לחץ על מוכן מראש כדי להגדיר את הגודל במהירות."
+
+msgid "Generating..."
+msgstr "מייצר..."
+
+msgid "Save to Documents"
+msgstr "שמור למסמכים"
+
+msgid "Document IRI"
+msgstr "IRI של המסמך"
+
+msgid "Go to folder"
+msgstr "עבור לתיקייה"
+
+msgid "Provider used"
+msgstr "ספק בשימוש"
+
+msgid "This video result cannot be saved yet"
+msgstr "תוצאת הווידאו הזו אינה ניתנת לשמירה עדיין"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "סקר וידאו הופסק כי הספק השתנה."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "יצירת הווידאו לוקחת זמן רב מדי. נסה שוב מאוחר יותר."
+
+msgid "Failed to check video status."
+msgstr "נכשל בבדיקת סטטוס הווידאו."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "הווידאו נוצר בהצלחה. ניתן כעת לשמור אותו."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "יצירת הווידאו הושלמה, אך לא הוחזר תוכן ניתן להפעלה."
+
+msgid "Video generation failed."
+msgstr "יצירת הווידאו נכשלה."
+
+msgid "Waiting for the video to be ready..."
+msgstr "מחכה שהווידאו יהיה מוכן..."
+
+msgid "Please complete all fields."
+msgstr "אנא מלא את כל השדות."
+
+msgid "Image generation is not enabled for this course."
+msgstr "יצירת תמונות אינה מופעלת בקורס זה."
+
+msgid "Video generation is not enabled for this course."
+msgstr "יצירת וידאו אינה מופעלת בקורס זה."
+
+msgid "Generation failed."
+msgstr "יצירה נכשלה."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "נוצר בהצלחה. בדוק את התצוגה המקדימה ושמור כשמוכן."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "נוצר בהצלחה. שמירה מושבתת כי הספק החזיר כתובת URL."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "יצירת וידאו החלה. מחכה לתוצאה..."
+
+msgid "AI returned an empty response."
+msgstr "AI החזיר תגובה ריקה."
+
+msgid "Nothing to save yet."
+msgstr "אין מה לשמור עדיין."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "ספק זה לא החזיר תוכן base64. נסה ספק אחר."
+
+msgid "Saving failed."
+msgstr "שמירה נכשלה."
+
+msgid "Get AI feedback"
+msgstr "קבל משוב AI"
+
+msgid "Copy answer to clipboard"
+msgstr "העתק תשובה ללוח"
+
+msgid "Save answer to my inbox"
+msgstr "שמור תשובה לתיבת הדואר הנכנס שלי"
+
+msgid "The document is already in this folder"
+msgstr "המסמך כבר בתיקייה זו"
+
+msgid "Copied"
+msgstr "הועתק"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "אין לך הרשאה ליצור מונחי גלוסרי."
+
+msgid "Video generation is in progress"
+msgstr "יצירת וידאו בתהליך"
+
+msgid "Job"
+msgstr "משימה"
+
+msgid "Modified prompt"
+msgstr "פרומפט משונה"
+
+msgid "Saved in Documents"
+msgstr "נשמר במסמכים"
+

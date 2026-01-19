@@ -416,7 +416,7 @@ async function applyDefaultPrompt(force = false) {
 
     if (force || !promptDirty.value) {
       const title = course.value?.title || course.value?.name || ""
-      prompt.value = `Generate ${n.value} glossary terms for a course on '${title}', each term on a single line, with its definition on the next line and one blank line between each term.`
+      prompt.value = `Generate ${n.value} glossary terms for a course on '${title}', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition.`
       if (force) {
         promptDirty.value = false
       }

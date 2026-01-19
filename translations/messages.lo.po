@@ -34491,154 +34491,154 @@ msgid "More actions"
 msgstr "ການເຄື່ອງຫຼາຍກວ່າ"
 
 msgid "Write something"
-msgstr ""
+msgstr "ຂຽນບາງສິ່ງ"
 
 msgid "Friends of %s"
-msgstr ""
+msgstr "ເພື່ອນຂອງ %s"
 
 msgid "Error loading learning paths."
-msgstr ""
+msgstr "ຜິດພາດໃນການໂຫຼດເສັ້ນທາງການຮຽນ."
 
 msgid "You don't have any learning path."
-msgstr ""
+msgstr "ເຈົ້າບໍ່ມີເສັ້ນທາງການຮຽນໃດໆ."
 
 msgid "Create your first learning path to start organizing course content."
-msgstr ""
+msgstr "ສ້າງເສັ້ນທາງການຮຽນເລີ່ມຕົ້ນຂອງເຈົ້າເພື່ອເລີ່ມຈັດລະບຽບເນື້ອໃນກະສຽງ."
 
 msgid "Could not save the new category order."
-msgstr ""
+msgstr "ບໍ່ສາມາດບັນທຶກລຳດັບປະເພດໃໝ່ໄດ້."
 
 msgid "Could not save the new order."
-msgstr ""
+msgstr "ບໍ່ສາມາດບັນທຶກລຳດັບໃໝ່ໄດ້."
 
 msgid "Assignment"
-msgstr ""
+msgstr "ການກຳນົດງານ"
 
 msgid "Allowed file formats: %s"
-msgstr ""
+msgstr "ຮູບແບບໄຟລ໌ທີ່ອະນຸຍາດ: %s"
 
 msgid "File type not allowed. Allowed extensions: %s"
-msgstr ""
+msgstr "ປະເພດໄຟລ໌ບໍ່ໄດ້ຮັບອະນຸຍາດ. ເສັ້ນຂະແໜງທີ່ອະນຸຍາດ: %s"
 
 msgid "Folder name"
-msgstr ""
+msgstr "ຊື່ໂຟນເດີ"
 
 msgid "Rename folder"
-msgstr ""
+msgstr "ປ່ຽນຊື່ໂຟນເດີ"
 
 msgid "New name"
-msgstr ""
+msgstr "ຊື່ໃໝ່"
 
 msgid "Choose an action"
-msgstr ""
+msgstr "ເລືອກການກະທຳ"
 
 msgid "New version"
-msgstr ""
+msgstr "ລຸ້ນໃໝ່"
 
 msgid "Change title to selected filename"
-msgstr ""
+msgstr "ປ່ຽນຫົວຂໍ້ເປັນຊື່ໄຟລ໌ທີ່ເລືອກ"
 
 msgid "You can replace the file, move it to another folder, or both."
-msgstr ""
+msgstr "ເຈົ້າສາມາດແທນທີ່ໄຟລ໌, ເຄື່ອນຍ້າຍໄປໂຟນເດີອື່ນ, ຫຼືທັງສອງ."
 
 msgid "Move %s"
-msgstr ""
+msgstr "ເຄື່ອນຍ້າຍ %s"
 
 msgid "Only non-root folders are shown to avoid leaving items in root."
-msgstr ""
+msgstr "ພຽງໂຟນເດທີ່ບໍ່ແມ່ນຮາກຖືກສະແດງເພື່ອຫຼີກເວັ້ນປ່ອຍລາວຢູ່ຮາກ."
 
 msgid "No feedback yet."
-msgstr ""
+msgstr "ຍັງບໍ່ມີຄຳແນະນຳ."
 
 msgid "Upload first, organize later"
-msgstr ""
+msgstr "ອັບໂຫຼດກ່ອນ, ຈັດການຫຼັງ"
 
 msgid "Drag & drop or browse to add files"
-msgstr ""
+msgstr "ລากແລະປ່ອຍ ຫຼື ເລືອກເພື່ອເພີ່ມໄຟລ໌"
 
 msgid "Social wall..."
-msgstr ""
+msgstr "ກຳແນວສັງຄົມ..."
 
 msgid "Wall of %s"
-msgstr ""
+msgstr "ກຳແນວຂອງ %s"
 
 msgid "Version currently loaded"
-msgstr ""
+msgstr "ລຸ້ນທີ່ໂຫຼດຢູ່ດຽວນີ້"
 
 msgid "Completion"
-msgstr ""
+msgstr "ການສຳເລັດ"
 
 msgid "Quick navigation"
-msgstr ""
+msgstr "ການທີ່ຈະເດີນທາງໄວ"
 
 msgid "Filled"
-msgstr ""
+msgstr "ເຕັມ"
 
 msgid "Terms sections"
-msgstr ""
+msgstr "ພາກສ່ວນຂໍ້ກຳນົດ"
 
 msgid "Open a section to edit its content."
-msgstr ""
+msgstr "ເປີດພາກສ່ວນເພື່ອແກ້ໄຂເນື້ອໃນ."
 
 msgid "Open this section to load the editor."
-msgstr ""
+msgstr "ເປີດພາກສ່ວນນີ້ເພື່ອໂຫຼດຜູ້ແກ້ໄຂ."
 
 msgid "Danger zone: deleting an access URL is permanent."
-msgstr ""
+msgstr "ເຂດອັນຕະລາຍ: ການລຶບ URL ເຂົ້າເຖິງແມ່ນຖາວອິດ."
 
 msgid "Type the full URL to confirm. The URL and its relations will be permanently removed."
-msgstr ""
+msgstr "ພິມ URL ເຕັມເພື່ອຢັ້ງຢຶນ. URL ແລະຄວາມສຳພັນຈະຖືກລຶບຖາວອິດ."
 
 msgid "Unable to load the badge's image."
-msgstr ""
+msgstr "ບໍ່ສາມາດໂຫຼດຮູບພາບສິນທະຄ່າໄດ້."
 
 msgid "Invalid role selection"
-msgstr ""
+msgstr "ການເລືອກບົດບາດບໍ່ຖືກຕ້ອງ"
 
 msgid "Select relation type first to enable user management."
-msgstr ""
+msgstr "ເລືອກປະເພດຄວາມສຳພັນກ່ອນເພື່ອເປີດໃຊ້ການຈັດການຜູ້ໃຊ້."
 
 msgid "This question has no course context. Preview is not available."
-msgstr ""
+msgstr "ຄຳຖາມນີ້ບໍ່ມີບໍລິບົດກະສຽງ. ການດູລ່ວງໜ້າບໍ່ມີ."
 
 msgid "Unknown test"
-msgstr ""
+msgstr "ການທົດສອບທີ່ບໍ່ຮູ້ຈັກ"
 
 msgid "Deletion is not allowed without a course context."
-msgstr ""
+msgstr "ການລຶບບໍ່ໄດ້ຮັບອະນຸຍາດຖ້າບໍ່ມີບໍລິບົດກະສຽງ."
 
 msgid "Delete failed: missing course context or inThis question belongs to a test. Edit it from inside the test or filter for orphan questions only.valid question id."
-msgstr ""
+msgstr "ລຶບລົ້ມເຫຼວ: ຂາດບໍລິບົດກະສຽງ ຫຼື ຄຳຖາມນີ້ເປັນຂອງການທົດສອບ. ແກ້ໄຂຈາກໃນການທົດສອບ ຫຼື ກັດຈອດພຽງຄຳຖາມທີ່ບໍ່ມີພໍ່ມາດ.id ຄຳຖາມທີ່ຖືກຕ້ອງ."
 
 msgid "Delete failed: question not found."
-msgstr ""
+msgstr "ລຶບລົ້ມເຫຼວ: ບໍ່ພົບຄຳຖາມ."
 
 msgid "Delete failed: this question is still referenced by other resources."
-msgstr ""
+msgstr "ລຶບລົ້ມເຫຼວ: ຄຳຖາມນີ້ຍັງຖືກອ້າງອີງໂດຍຊັບພະຍາກອນອື່ນໆ."
 
 msgid "This question belongs to a test. Edit it from inside the test or filter for orphan questions only."
-msgstr ""
+msgstr "ຄຳຖາມນີ້ເປັນຂອງການທົດສອບ. ແກ້ໄຂຈາກໃນການທົດສອບ ຫຼື ກັດຈອດພຽງຄຳຖາມທີ່ບໍ່ມີພໍ່."
 
 msgid "Access the group tools and resources"
-msgstr ""
+msgstr "ເຂົ້າເຖິງເຄື່ອງມື ແລະ ຊັບພະຍາກອນຂອງກຸ່ມ"
 
 msgid "%s members"
-msgstr ""
+msgstr "%s ສະມາຊິກ"
 
 msgid "View certificate (HTML)"
-msgstr ""
+msgstr "ດູໃບຢັ້ງຢຶນ (HTML)"
 
 msgid "Link a skill to this gradebook"
-msgstr ""
+msgstr "ລິ້ງທັກສະກັບຕົວຈັດລັດນີ້"
 
 msgid "Manage the link between certificates and skills for each gradebook"
-msgstr ""
+msgstr "ຈັດການລິ້ງລະຫວ່າງໃບຢັ້ງຢຶນ ແລະ ທັກສະສຳລັບແຕ່ລະຕົວຈັດລັດ"
 
 msgid "Please select a specific badge issue to download"
-msgstr ""
+msgstr "ກະລຸນາເລືອກການອອກສິນທະຄ່າເປັນພິເສດເພື່ອດາວໂຫຼດ"
 
 msgid "SCIM is not enabled."
-msgstr ""
+msgstr "SCIM ບໍ່ໄດ້ເປີດໃຊ້."
 
 msgid "Invalid token."
 msgstr "ເຕັກໂຕເຄີນບໍ່ຖືກຕ້ອງ."
@@ -34693,4 +34693,232 @@ msgstr ""
 
 msgid "Update profile"
 msgstr ""
+
+msgid "Enable learning path generator"
+msgstr ""
+
+msgid "Enable exercise generator"
+msgstr ""
+
+msgid "Enable open answers grader"
+msgstr ""
+
+msgid "Enable tutor chatbot"
+msgstr ""
+
+msgid "Enable task grader"
+msgstr ""
+
+msgid "Enable content analyser"
+msgstr ""
+
+msgid "Enable image generator"
+msgstr ""
+
+msgid "Enable glossary terms generator"
+msgstr ""
+
+msgid "Enable video generator"
+msgstr ""
+
+msgid "Enable course analyser"
+msgstr ""
+
+msgid "The operation '%s' is not supported."
+msgstr ""
+
+msgid "AI feedback on %s in course %s"
+msgstr ""
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr ""
+
+msgid "AI Tutor"
+msgstr ""
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr ""
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr ""
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr ""
+
+msgid "You are here"
+msgstr ""
+
+msgid "Click an event type to filter results."
+msgstr ""
+
+msgid "Require unique presence"
+msgstr ""
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr ""
+
+msgid "AI feedback"
+msgstr ""
+
+msgid "Prompt"
+msgstr ""
+
+msgid "Tip"
+msgstr ""
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr ""
+
+msgid "Result (you can apply it to the comment)"
+msgstr ""
+
+msgid "Apply to comment"
+msgstr ""
+
+msgid "Apply score"
+msgstr ""
+
+msgid "AI grade"
+msgstr ""
+
+msgid "AI tutor is disabled during tests"
+msgstr ""
+
+msgid "Generate glossary terms"
+msgstr ""
+
+msgid "Generate media"
+msgstr ""
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr ""
+
+msgid "AI helpers are disabled at platform level."
+msgstr ""
+
+msgid "AI media generation is disabled in course settings."
+msgstr ""
+
+msgid "No AI media providers available."
+msgstr ""
+
+msgid "Provider"
+msgstr ""
+
+msgid "Select a provider"
+msgstr ""
+
+msgid "Example: generated_media"
+msgstr ""
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "ຊື່ບໍ່ໄດ້ເພີ່ມເຂົ້າໃນ prompt; ມັນຖືກໃຊ້ເພື່ອບັນທຶກໄຟລ໌ເທົ່ານັ້ນ."
+
+msgid "Describe what you want to generate..."
+msgstr "ອະທິບາຍວ່າທ່ານຕ້ອງການສ້າງຫຍັງ..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "ແນະນຳ: ກົດທີ່ຕັ້ງຄ່າລ່ວນເພື່ອກຳນົດຂະໜາດໄວ."
+
+msgid "Generating..."
+msgstr "ກຳລັງສ້າງ..."
+
+msgid "Save to Documents"
+msgstr "ບັນທຶກໄປທີ່ເອກະສານ"
+
+msgid "Document IRI"
+msgstr "IRI ເອກະສານ"
+
+msgid "Go to folder"
+msgstr "ໄປທີ່ໂຟນເດີ"
+
+msgid "Provider used"
+msgstr "ຜູ້ສະໜອບສະໜັບທີ່ໃຊ້"
+
+msgid "This video result cannot be saved yet"
+msgstr "ຜົນວິດີໂອນີ້ຍັງບໍ່ສາມາດບັນທຶກໄດ້"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "ການສຳຫຼວດວິດີໂອຖືກຢຸດເພາະຜູ້ສະໜອບສະໜັບປ່ຽນແລ້ວ."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "ການສ້າງວິດີໂອໃຊ້ເວລານານເກີນໄປ. ກະລຸນາລອງອີກຄັ້ງຕໍ່ມາ."
+
+msgid "Failed to check video status."
+msgstr "ລົ້ມເຫຼວໃນການກວດສອບສະຖານະວິດີໂອ."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "ສ້າງວິດີໂອສຳເລັດ. ດຽວນີ້ທ່ານສາມາດບັນທຶກມັນໄດ້."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "ການສ້າງວິດີໂອສຳເລັດ, ແຕ່ບໍ່ມີເນື້ອຫາທີ່ສາມາດຫມືນໄດ້ທີ່ຖືກສົ່ງກັບ."
+
+msgid "Video generation failed."
+msgstr "ການສ້າງວິດີໂອລົ້ມເຫຼວ."
+
+msgid "Waiting for the video to be ready..."
+msgstr "ກຳລັງລໍຖ້າວິດີໂອໃຫ້ເຕີບໂຕ..."
+
+msgid "Please complete all fields."
+msgstr "ກະລຸນາປ້ອນຄວາມຄົບທົ່ວທັງຫມົດ."
+
+msgid "Image generation is not enabled for this course."
+msgstr "ການສ້າງຮູບພາບບໍ່ໄດ້ເປີດໃຊ້ສຳລັບຄອສນີ້."
+
+msgid "Video generation is not enabled for this course."
+msgstr "ການສ້າງວິດີໂອບໍ່ໄດ້ເປີດໃຊ້ສຳລັບຄອສນີ້."
+
+msgid "Generation failed."
+msgstr "ການສ້າງລົ້ມເຫຼວ."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "ສ້າງສຳເລັດ. ກວດເບິ່ງການໂຊວ์ລ່ວນແລະບັນທຶກເມື່ອເຕີບໂຕ."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "ສ້າງສຳເລັດ. ການບັນທຶກຖືກປິດເພາະຜູ້ສະໜອບສະໜັບສົ່ງກັບ URL."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "ເລີ່ມການສ້າງວິດີໂອ. ກຳລັງລໍຖ້າຜົນ..."
+
+msgid "AI returned an empty response."
+msgstr "AI ສົ່ງກັບຄຳຕອບຫວ່າງ."
+
+msgid "Nothing to save yet."
+msgstr "ຍັງບໍ່ມີຫຍັງຕ້ອງບັນທຶກ."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "ຜູ້ສະໜອບສະໜັບນີ້ບໍ່ໄດ້ສົ່ງກັບເນື້ອຫາ base64. ກະລຸນາລອງຜູ້ສະໜອບສະໜັບອື່ນ."
+
+msgid "Saving failed."
+msgstr "ການບັນທຶກລົ້ມເຫຼວ."
+
+msgid "Get AI feedback"
+msgstr "ເອົາຄຳແນະນຳ AI"
+
+msgid "Copy answer to clipboard"
+msgstr "ສຳເນົາຄຳຕອບໄປ clipboard"
+
+msgid "Save answer to my inbox"
+msgstr "ບັນທຶກຄຳຕອບໄປຫ້ອງຈຳຂ້ອຍ"
+
+msgid "The document is already in this folder"
+msgstr "ເອກະສານນີ້ຢູ່ໃນໂຟນເດີນີ້ແລ້ວ"
+
+msgid "Copied"
+msgstr "ສຳເນົາແລ້ວ"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "ທ່ານບໍ່ມີສິດໃນການສ້າງຄຳສະໜາມຄຳສັບ."
+
+msgid "Video generation is in progress"
+msgstr "ການສ້າງວິດີໂອກຳລັງດຳເນີນ"
+
+msgid "Job"
+msgstr "ວຽກງານ"
+
+msgid "Modified prompt"
+msgstr "prompt ທີ່ປ່ຽນແປງ"
+
+msgid "Saved in Documents"
+msgstr "ບັນທຶກໄວ້ໃນເອກະສານ"
 

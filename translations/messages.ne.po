@@ -32344,3 +32344,231 @@ msgstr "अभिगृहीत प्रमाणपत्र"
 msgid "Update profile"
 msgstr "प्रोफाइल अपडेट गर्नुहोस्"
 
+msgid "Enable learning path generator"
+msgstr "सिकाइ मार्ग उत्पन्नकर्ता सक्षम गर्नुहोस्"
+
+msgid "Enable exercise generator"
+msgstr "व्यायाम उत्पन्नकर्ता सक्षम गर्नुहोस्"
+
+msgid "Enable open answers grader"
+msgstr "खुला उत्तर ग्रेडर सक्षम गर्नुहोस्"
+
+msgid "Enable tutor chatbot"
+msgstr "ट्यूटर च्याटबट सक्षम गर्नुहोस्"
+
+msgid "Enable task grader"
+msgstr "कार्य ग्रेडर सक्षम गर्नुहोस्"
+
+msgid "Enable content analyser"
+msgstr "सामग्री विश्लेषक सक्षम गर्नुहोस्"
+
+msgid "Enable image generator"
+msgstr "छवि उत्पन्नकर्ता सक्षम गर्नुहोस्"
+
+msgid "Enable glossary terms generator"
+msgstr "शब्दकोश शब्दहरू उत्पन्नकर्ता सक्षम गर्नुहोस्"
+
+msgid "Enable video generator"
+msgstr "भिडियो उत्पन्नकर्ता सक्षम गर्नुहोस्"
+
+msgid "Enable course analyser"
+msgstr "कोर्स विश्लेषक सक्षम गर्नुहोस्"
+
+msgid "The operation '%s' is not supported."
+msgstr "'%s' सञ्चालन समर्थित छैन।"
+
+msgid "AI feedback on %s in course %s"
+msgstr "%s मा कोर्स %s मा AI प्रतिक्रिया"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "हटाउन असफल: कोर्स सन्दर्भ वा अमान्य प्रश्न ID हराइरहेको छ।"
+
+msgid "AI Tutor"
+msgstr "AI ट्यूटर"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "APCu एक्सटेन्सन प्लेटफर्मले यसलाई प्रयोग गर्न दुवै स्थापित र सक्षम हुन आवश्यक छ।"
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "OPCache memory_consumption लाई कम्तीमा %sMB RAM पुग्न दिनु सिफारिस गरिन्छ।"
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "OPcache मोड्युल प्लेटफर्मले यसलाई प्रयोग गर्न दुवै स्थापित र सक्षम हुन आवश्यक छ।"
+
+msgid "You are here"
+msgstr "तपाईं यहाँ हुनुहुन्छ"
+
+msgid "Click an event type to filter results."
+msgstr "परिणाम फिल्टर गर्न घटना प्रकारमा क्लिक गर्नुहोस्।"
+
+msgid "Require unique presence"
+msgstr "अनौठो उपस्थिति आवश्यक"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "सक्षम गर्दा, ग्रेडबुकले कम्तीमा एकपटक उपस्थित हुँदा सिकारूलाई १००% दिन्छ।"
+
+msgid "AI feedback"
+msgstr "AI प्रतिक्रिया"
+
+msgid "Prompt"
+msgstr "प्रॉम्प्ट"
+
+msgid "Tip"
+msgstr "सुझाव"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "प्रतिक्रियाको लागि सोध्नु अघि तपाईं प्रॉम्प्ट सम्पादन गर्न सक्नुहुन्छ।"
+
+msgid "Result (you can apply it to the comment)"
+msgstr "परिणाम (तपाईं यसलाई टिप्पणीमा लागू गर्न सक्नुहुन्छ)"
+
+msgid "Apply to comment"
+msgstr "टिप्पणीमा लागू गर्नुहोस्"
+
+msgid "Apply score"
+msgstr "स्कोर लागू गर्नुहोस्"
+
+msgid "AI grade"
+msgstr "AI ग्रेड"
+
+msgid "AI tutor is disabled during tests"
+msgstr "परीक्षाहरूको समयमा AI ट्यूटर निष्क्रिय छ"
+
+msgid "Generate glossary terms"
+msgstr "ग्लोसरी शब्दहरू उत्पन्न गर्नुहोस्"
+
+msgid "Generate media"
+msgstr "मिडिया उत्पन्न गर्नुहोस्"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "यस कोर्समा AI मिडिया उत्पन्न गर्न अनुमति छैन।"
+
+msgid "AI helpers are disabled at platform level."
+msgstr "प्लेटफर्म स्तरमा AI सहायकहरू निष्क्रिय छन्।"
+
+msgid "AI media generation is disabled in course settings."
+msgstr "कोर्स सेटिङहरूमा AI मिडिया उत्पन्न निष्क्रिय छ।"
+
+msgid "No AI media providers available."
+msgstr "कुनै AI मिडिया प्रदायक उपलब्ध छैन।"
+
+msgid "Provider"
+msgstr "प्रदायक"
+
+msgid "Select a provider"
+msgstr "प्रदायक छान्नुहोस्"
+
+msgid "Example: generated_media"
+msgstr "उदाहरण: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "नाम प्रॉम्प्टमा थपिँदैन; यो फाइल बचत गर्न मात्र प्रयोग हुन्छ।"
+
+msgid "Describe what you want to generate..."
+msgstr "तपाईंले के उत्पन्न गर्न चाहनुहुन्छ वर्णन गर्नुहोस्..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "सुझाव: आकार छिट्टै सेट गर्न पूर्वनिर्धारित क्लिक गर्नुहोस्।"
+
+msgid "Generating..."
+msgstr "उत्पन्न भइरहेको छ..."
+
+msgid "Save to Documents"
+msgstr "कागजातहरूमा बचत गर्नुहोस्"
+
+msgid "Document IRI"
+msgstr "कागजात IRI"
+
+msgid "Go to folder"
+msgstr "फोल्डरमा जानुहोस्"
+
+msgid "Provider used"
+msgstr "प्रयोग गरिएको प्रदायक"
+
+msgid "This video result cannot be saved yet"
+msgstr "यो भिडियो परिणाम अझै बचत गर्न सकिँदैन"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "प्रदायक परिवर्तन भएकाले भिडियो पोलिङ रोक्�ियो।"
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "भिडियो उत्पन्न गर्न धेरै समय लागिरहेको छ। कृपया पछि प्रयास गर्नुहोस्।"
+
+msgid "Failed to check video status."
+msgstr "भिडियो स्थिति जाँच गर्न असफल।"
+
+msgid "Video generated successfully. You can now save it."
+msgstr "भिडियो सफलतापूर्वक उत्पन्न भयो। अब तपाईं यसलाई बचत गर्न सक्नुहुन्छ।"
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "भिडियो उत्पन्न सम्पन्न भयो, तर कुनै खेल्न सकिने सामग्री फर्काइएन।"
+
+msgid "Video generation failed."
+msgstr "भिडियो उत्पन्न असफल भयो।"
+
+msgid "Waiting for the video to be ready..."
+msgstr "भिडियो तयार हुन पर्खिरहेको छ..."
+
+msgid "Please complete all fields."
+msgstr "कृपया सबै क्षेत्रहरू पूरा गर्नुहोस्।"
+
+msgid "Image generation is not enabled for this course."
+msgstr "यो कोर्सका लागि छवि उत्पन्न सक्षम छैन।"
+
+msgid "Video generation is not enabled for this course."
+msgstr "यो कोर्सका लागि भिडियो उत्पन्न सक्षम छैन।"
+
+msgid "Generation failed."
+msgstr "उत्पन्न असफल भयो।"
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "सफलतापूर्वक उत्पन्न भयो। पूर्वावलोकन जाँच गर्नुहोस् र तयार हुँदा बचत गर्नुहोस्।"
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "सफलतापूर्वक उत्पन्न भयो। प्रदायकले URL फर्काएकाले बचत निष्क्रिय छ।"
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "भिडियो उत्पन्न सुरु भयो। परिणामको पर्खाइमा..."
+
+msgid "AI returned an empty response."
+msgstr "AI ले खाली प्रतिक्रिया फर्कायो।"
+
+msgid "Nothing to save yet."
+msgstr "अझै बचत गर्न केही छैन।"
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "यो प्रदायकले base64 सामग्री फर्काएन। कृपया अर्को प्रदायक प्रयास गर्नुहोस्।"
+
+msgid "Saving failed."
+msgstr "बचत असफल भयो।"
+
+msgid "Get AI feedback"
+msgstr "AI प्रतिक्रिया प्राप्त गर्नुहोस्"
+
+msgid "Copy answer to clipboard"
+msgstr "उत्तरलाई क्लिपबोर्डमा प्रतिलिपि गर्नुहोस्"
+
+msgid "Save answer to my inbox"
+msgstr "उत्तरलाई मेरो इनबक्समा बचत गर्नुहोस्"
+
+msgid "The document is already in this folder"
+msgstr "कागजात पहिल्यै यो फोल्डरमा छ"
+
+msgid "Copied"
+msgstr "प्रतिलिपि गरियो"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "ग्लोसरी शब्दहरू उत्पन्न गर्न अनुमति छैन।"
+
+msgid "Video generation is in progress"
+msgstr "भिडियो उत्पन्न भइरहेको छ"
+
+msgid "Job"
+msgstr "कार्य"
+
+msgid "Modified prompt"
+msgstr "संशोधित प्रॉम्प्ट"
+
+msgid "Saved in Documents"
+msgstr "कागजातहरूमा बचत गरियो"
+

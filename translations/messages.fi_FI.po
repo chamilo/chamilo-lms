@@ -32346,3 +32346,231 @@ msgstr "Mukautettuvarmenne"
 msgid "Update profile"
 msgstr "Päivitä profiili"
 
+msgid "Enable learning path generator"
+msgstr "Ota oppimispolun generaattori käyttöön"
+
+msgid "Enable exercise generator"
+msgstr "Ota harjoitusten generaattori käyttöön"
+
+msgid "Enable open answers grader"
+msgstr "Ota avoimien vastausten arvosana-anturi käyttöön"
+
+msgid "Enable tutor chatbot"
+msgstr "Ota opettajan chatbot käyttöön"
+
+msgid "Enable task grader"
+msgstr "Ota tehtävien arvosana-anturi käyttöön"
+
+msgid "Enable content analyser"
+msgstr "Ota sisällön analysoija käyttöön"
+
+msgid "Enable image generator"
+msgstr "Ota kuvageneraattori käyttöön"
+
+msgid "Enable glossary terms generator"
+msgstr "Ota sanasto-termien generaattori käyttöön"
+
+msgid "Enable video generator"
+msgstr "Ota videogeneraattori käyttöön"
+
+msgid "Enable course analyser"
+msgstr "Ota kurssin analysoija käyttöön"
+
+msgid "The operation '%s' is not supported."
+msgstr "Toimintoa '%s' ei tueta."
+
+msgid "AI feedback on %s in course %s"
+msgstr "Tekoälyn palaute kohteelle %s kurssilla %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Poisto epäonnistui: kurssikontekstia puuttuu tai kysymyksen tunnus on virheellinen."
+
+msgid "AI Tutor"
+msgstr "Tekoälyopettaja"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "APCu-laajennuksen on oltava asennettuna ja otettuna käyttöön, jotta alusta voi käyttää sitä."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Suositellaan sallimaan OPCache-muistin käyttö vähintään %s Mt RAM-muistia."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "OPcache-moduulin on oltava asennettuna ja otettuna käyttöön, jotta alusta voi käyttää sitä."
+
+msgid "You are here"
+msgstr "Olet täällä"
+
+msgid "Click an event type to filter results."
+msgstr "Valitse tapahtuman tyyppi suodattaaksesi tuloksia."
+
+msgid "Require unique presence"
+msgstr "Vaatii yksilöllisen läsnäolon"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Jos otettu käyttöön, arvosanakirja antaa oppijalle 100 % ainakin yhden läsnäolon jälkeen."
+
+msgid "AI feedback"
+msgstr "Tekoälyn palaute"
+
+msgid "Prompt"
+msgstr "Kehote"
+
+msgid "Tip"
+msgstr "Vinkki"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Voit muokata kehotetta ennen palautteen pyytämistä."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Tulos (voit soveltaa sitä kommenttiin)"
+
+msgid "Apply to comment"
+msgstr "Sovella kommenttiin"
+
+msgid "Apply score"
+msgstr "Sovella arvosanaa"
+
+msgid "AI grade"
+msgstr "Tekoälyn arvosana"
+
+msgid "AI tutor is disabled during tests"
+msgstr "Tekoälyopettaja on poistettu käytöstä testien aikana"
+
+msgid "Generate glossary terms"
+msgstr "Luo sanasto-termit"
+
+msgid "Generate media"
+msgstr "Luo mediaa"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "Sinulla ei ole oikeutta luoda tekoälymediaa tässä kurssissa."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "Tekoälyavustajat on poistettu käytöstä alustatasolla."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "Tekoälymedian luonti on poistettu käytöstä kurssin asetuksissa."
+
+msgid "No AI media providers available."
+msgstr "Ei AI-mediapalveluntarjoajia saatavilla."
+
+msgid "Provider"
+msgstr "Palveluntarjoaja"
+
+msgid "Select a provider"
+msgstr "Valitse palveluntarjoaja"
+
+msgid "Example: generated_media"
+msgstr "Esimerkki: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "Nimiä ei lisätä kehotteeseen; sitä käytetään vain tiedoston tallentamiseen."
+
+msgid "Describe what you want to generate..."
+msgstr "Kuvaa mitä haluat luoda..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Vinkki: napsauta esiasetusta asettaaksesi koon nopeasti."
+
+msgid "Generating..."
+msgstr "Luodaan..."
+
+msgid "Save to Documents"
+msgstr "Tallenna asiakirjoihin"
+
+msgid "Document IRI"
+msgstr "Asiakirjan IRI"
+
+msgid "Go to folder"
+msgstr "Siirry kansioon"
+
+msgid "Provider used"
+msgstr "Käytetty palveluntarjoaja"
+
+msgid "This video result cannot be saved yet"
+msgstr "Tätä videon tulosta ei voi vielä tallentaa"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "Videon kysely pysäytettiin, koska palveluntarjoaja muuttui."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "Videon luonti kestää liian kauan. Yritä uudelleen myöhemmin."
+
+msgid "Failed to check video status."
+msgstr "Videon tilan tarkistus epäonnistui."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Video luotiin onnistuneesti. Voit nyt tallentaa sen."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Videon luonti valmistui, mutta ei palautettu toistettavaa sisältöä."
+
+msgid "Video generation failed."
+msgstr "Videon luonti epäonnistui."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Odotetaan videon valmistumista..."
+
+msgid "Please complete all fields."
+msgstr "Täytä kaikki kentät."
+
+msgid "Image generation is not enabled for this course."
+msgstr "Kuvan luonti ei ole käytössä tässä kurssissa."
+
+msgid "Video generation is not enabled for this course."
+msgstr "Videon luonti ei ole käytössä tässä kurssissa."
+
+msgid "Generation failed."
+msgstr "Luonti epäonnistui."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Luotiin onnistuneesti. Tarkista esikatselu ja tallenna kun valmis."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Luotiin onnistuneesti. Tallennus on poistettu käytöstä, koska palveluntarjoaja palautti URL-osoitteen."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Videon luonti aloitettu. Odotetaan tulosta..."
+
+msgid "AI returned an empty response."
+msgstr "AI palautti tyhjän vastauksen."
+
+msgid "Nothing to save yet."
+msgstr "Ei vielä mitään tallennettavaa."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Tämä palveluntarjoaja ei palauttanut base64-sisältöä. Kokeile toista palveluntarjoajaa."
+
+msgid "Saving failed."
+msgstr "Tallennus epäonnistui."
+
+msgid "Get AI feedback"
+msgstr "Hae AI-palautetta"
+
+msgid "Copy answer to clipboard"
+msgstr "Kopioi vastaus leikepöydälle"
+
+msgid "Save answer to my inbox"
+msgstr "Tallenna vastaus saapuneisiin"
+
+msgid "The document is already in this folder"
+msgstr "Asiakirja on jo tässä kansiossa"
+
+msgid "Copied"
+msgstr "Kopioitu"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "Sinulla ei ole oikeutta luoda sanastotermejä."
+
+msgid "Video generation is in progress"
+msgstr "Videon luonti käynnissä"
+
+msgid "Job"
+msgstr "Työ"
+
+msgid "Modified prompt"
+msgstr "Muokattu kehotus"
+
+msgid "Saved in Documents"
+msgstr "Tallennettu asiakirjoihin"
+

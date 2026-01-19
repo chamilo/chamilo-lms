@@ -33484,3 +33484,231 @@ msgstr "Certificadopersonalizado"
 msgid "Update profile"
 msgstr "Actualizar perfil"
 
+msgid "Enable learning path generator"
+msgstr "Activar generador de itinerarios de aprendizaje"
+
+msgid "Enable exercise generator"
+msgstr "Activar generador de ejercicios"
+
+msgid "Enable open answers grader"
+msgstr "Activar corrector de respuestas abiertas"
+
+msgid "Enable tutor chatbot"
+msgstr "Activar chatbot de tutor"
+
+msgid "Enable task grader"
+msgstr "Activar corrector de tareas"
+
+msgid "Enable content analyser"
+msgstr "Activar analizador de contenido"
+
+msgid "Enable image generator"
+msgstr "Activar generador de imágenes"
+
+msgid "Enable glossary terms generator"
+msgstr "Activar generador de términos de glosario"
+
+msgid "Enable video generator"
+msgstr "Activar generador de videos"
+
+msgid "Enable course analyser"
+msgstr "Activar analizador de curso"
+
+msgid "The operation '%s' is not supported."
+msgstr "La operación '%s' no está soportada."
+
+msgid "AI feedback on %s in course %s"
+msgstr "Retroalimentación IA sobre %s en el curso %s"
+
+msgid "Delete failed: missing course context or invalid question id."
+msgstr "Error al eliminar: falta contexto del curso o id de pregunta inválido."
+
+msgid "AI Tutor"
+msgstr "Tutor IA"
+
+msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
+msgstr "La extensión APCu debe estar instalada y habilitada para que la plataforma la use."
+
+msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
+msgstr "Se recomienda permitir que OPCache memory_consumption alcance al menos %sMB de RAM."
+
+msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
+msgstr "El módulo OPcache debe estar instalado y habilitado para que la plataforma lo use."
+
+msgid "You are here"
+msgstr "Estás aquí"
+
+msgid "Click an event type to filter results."
+msgstr "Haz clic en un tipo de evento para filtrar resultados."
+
+msgid "Require unique presence"
+msgstr "Requerir presencia única"
+
+msgid "If enabled, the gradebook will give a learner 100% when present at least once."
+msgstr "Si está habilitado, el libro de calificaciones dará al aprendiz 100% cuando esté presente al menos una vez."
+
+msgid "AI feedback"
+msgstr "Retroalimentación IA"
+
+msgid "Prompt"
+msgstr "Instrucción"
+
+msgid "Tip"
+msgstr "Consejo"
+
+msgid "You can edit the prompt before asking for feedback."
+msgstr "Puedes editar la instrucción antes de solicitar retroalimentación."
+
+msgid "Result (you can apply it to the comment)"
+msgstr "Resultado (puedes aplicarlo al comentario)"
+
+msgid "Apply to comment"
+msgstr "Aplicar al comentario"
+
+msgid "Apply score"
+msgstr "Aplicar puntuación"
+
+msgid "AI grade"
+msgstr "Calificación IA"
+
+msgid "AI tutor is disabled during tests"
+msgstr "El tutor IA está deshabilitado durante las pruebas"
+
+msgid "Generate glossary terms"
+msgstr "Generar términos de glosario"
+
+msgid "Generate media"
+msgstr "Generar multimedia"
+
+msgid "You do not have permission to generate AI media in this course."
+msgstr "No tienes permiso para generar multimedia IA en este curso."
+
+msgid "AI helpers are disabled at platform level."
+msgstr "Los ayudantes IA están deshabilitados a nivel de plataforma."
+
+msgid "AI media generation is disabled in course settings."
+msgstr "La generación de medios con IA está desactivada en la configuración del curso."
+
+msgid "No AI media providers available."
+msgstr "No hay proveedores de medios con IA disponibles."
+
+msgid "Provider"
+msgstr "Proveedor"
+
+msgid "Select a provider"
+msgstr "Seleccionar un proveedor"
+
+msgid "Example: generated_media"
+msgstr "Ejemplo: generated_media"
+
+msgid "The name is not added to the prompt; it is only used to save the file."
+msgstr "El nombre no se añade al prompt; solo se usa para guardar el archivo."
+
+msgid "Describe what you want to generate..."
+msgstr "Describe lo que quieres generar..."
+
+msgid "Tip: click a preset to quickly set the size."
+msgstr "Consejo: haz clic en un preajuste para establecer rápidamente el tamaño."
+
+msgid "Generating..."
+msgstr "Generando..."
+
+msgid "Save to Documents"
+msgstr "Guardar en Documentos"
+
+msgid "Document IRI"
+msgstr "IRI del documento"
+
+msgid "Go to folder"
+msgstr "Ir a la carpeta"
+
+msgid "Provider used"
+msgstr "Proveedor utilizado"
+
+msgid "This video result cannot be saved yet"
+msgstr "Este resultado de video aún no se puede guardar"
+
+msgid "Video polling was stopped because the provider changed."
+msgstr "La consulta de video se detuvo porque cambió el proveedor."
+
+msgid "Video generation is taking too long. Please try again later."
+msgstr "La generación de video está tardando demasiado. Inténtalo de nuevo más tarde."
+
+msgid "Failed to check video status."
+msgstr "Error al verificar el estado del video."
+
+msgid "Video generated successfully. You can now save it."
+msgstr "Video generado correctamente. Ahora puedes guardarlo."
+
+msgid "Video generation completed, but no playable content was returned."
+msgstr "Generación de video completada, pero no se devolvió contenido reproducible."
+
+msgid "Video generation failed."
+msgstr "Error en la generación de video."
+
+msgid "Waiting for the video to be ready..."
+msgstr "Esperando a que el video esté listo..."
+
+msgid "Please complete all fields."
+msgstr "Por favor, completa todos los campos."
+
+msgid "Image generation is not enabled for this course."
+msgstr "La generación de imágenes no está habilitada para este curso."
+
+msgid "Video generation is not enabled for this course."
+msgstr "La generación de videos no está habilitada para este curso."
+
+msgid "Generation failed."
+msgstr "Error en la generación."
+
+msgid "Generated successfully. Review the preview and save when ready."
+msgstr "Generado correctamente. Revisa la vista previa y guarda cuando estés listo."
+
+msgid "Generated successfully. Saving is disabled because the provider returned a URL."
+msgstr "Generado correctamente. El guardado está desactivado porque el proveedor devolvió una URL."
+
+msgid "Video generation started. Waiting for the result..."
+msgstr "Generación de video iniciada. Esperando el resultado..."
+
+msgid "AI returned an empty response."
+msgstr "La IA devolvió una respuesta vacía."
+
+msgid "Nothing to save yet."
+msgstr "Aún no hay nada que guardar."
+
+msgid "This provider did not return base64 content. Please try another provider."
+msgstr "Este proveedor no devolvió contenido base64. Prueba con otro proveedor."
+
+msgid "Saving failed."
+msgstr "Error al guardar."
+
+msgid "Get AI feedback"
+msgstr "Obtener retroalimentación de IA"
+
+msgid "Copy answer to clipboard"
+msgstr "Copiar respuesta al portapapeles"
+
+msgid "Save answer to my inbox"
+msgstr "Guardar respuesta en mi bandeja de entrada"
+
+msgid "The document is already in this folder"
+msgstr "El documento ya está en esta carpeta"
+
+msgid "Copied"
+msgstr "Copiado"
+
+msgid "You do not have permission to generate glossary terms."
+msgstr "No tienes permiso para generar términos del glosario."
+
+msgid "Video generation is in progress"
+msgstr "Generación de video en progreso"
+
+msgid "Job"
+msgstr "Tarea"
+
+msgid "Modified prompt"
+msgstr "Prompt modificado"
+
+msgid "Saved in Documents"
+msgstr "Guardado en Documentos"
+

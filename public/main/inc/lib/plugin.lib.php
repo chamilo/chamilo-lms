@@ -111,14 +111,9 @@ class AppPlugin
         $this->installedPluginListObject = $pluginList;
     }
 
-    /**
-     * @param string $plugin
-     *
-     * @return bool
-     */
-    public function isInstalled($plugin)
+    public function isInstalled(string $plugin): bool
     {
-        $list = self::getInstalledPlugins(false);
+        $list = $this->getInstalledPlugins(false);
 
         return in_array($plugin, $list);
     }

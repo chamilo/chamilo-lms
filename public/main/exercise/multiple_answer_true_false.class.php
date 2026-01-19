@@ -24,7 +24,7 @@ class MultipleAnswerTrueFalse extends Question
         parent::__construct();
         $this->type = MULTIPLE_ANSWER_TRUE_FALSE;
         $this->isContent = $this->getIsContent();
-        $this->options = [1 => 'True', 2 => 'False', 3 => 'DoubtScore'];
+        $this->options = [1 => 'True', 2 => 'False', 3 => "Don't know"];
     }
 
     public function createAnswersForm($form)
@@ -218,7 +218,7 @@ class MultipleAnswerTrueFalse extends Question
 
         $renderer->setElementTemplate($scoreWrapperStart.$scoreInputTemplate(get_lang('Correct')), 'option[1]');
         $renderer->setElementTemplate($scoreInputTemplate(get_lang('Wrong')), 'option[2]');
-        $renderer->setElementTemplate($scoreInputTemplate(get_lang('Don\'t know')).$scoreWrapperEnd, 'option[3]');
+        $renderer->setElementTemplate($scoreInputTemplate(get_lang("Don't know")).$scoreWrapperEnd, 'option[3]');
 
         $scoreInputAttrs = [
             'class' => 'w-24 rounded-md border border-gray-300 px-2 py-1 text-sm',

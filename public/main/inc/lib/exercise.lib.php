@@ -855,7 +855,7 @@ class ExerciseLib
                                         }
                                     }
 
-                                    if ('True' == $item['name'] || 'False' == $item['name']) {
+                                    if ('True' == $item['title'] || 'False' == $item['title']) {
                                         $s .= Display::tag('td',
                                             Display::input('radio',
                                                 'choice['.$questionId.']['.$numAnswer.']',

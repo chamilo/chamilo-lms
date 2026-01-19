@@ -754,7 +754,7 @@ class ExerciseShowFunctions
 
         // Your choice
         if (isset($newOptions[$studentChoice])) {
-            echo get_lang($newOptions[$studentChoice]['name']);
+            echo get_lang($newOptions[$studentChoice]['title']);
         } else {
             echo '-';
         }
@@ -765,7 +765,7 @@ class ExerciseShowFunctions
             echo '<td width="5%">';
             if (!$hideExpectedAnswer) {
                 if (isset($newOptions[$answerCorrect])) {
-                    echo get_lang($newOptions[$answerCorrect]['name']);
+                    echo get_lang($newOptions[$answerCorrect]['title']);
                 } else {
                     echo '-';
                 }
@@ -779,7 +779,7 @@ class ExerciseShowFunctions
         echo $answer;
         echo '</td><td width="5%" style="text-align:center;">';
         if (isset($newOptions[$studentChoiceDegree])) {
-            echo $newOptions[$studentChoiceDegree]['name'];
+            echo $newOptions[$studentChoiceDegree]['title'];
         }
         echo '</td>';
 

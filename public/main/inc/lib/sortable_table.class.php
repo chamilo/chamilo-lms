@@ -1063,7 +1063,8 @@ class SortableTable extends HTML_Table
                 $checkboxParams['checked'] = 'checked';
             }
 
-            $row[0] = Display::input('checkbox', $this->checkbox_name.'[]', $row[0], $checkboxParams);
+            $value = $row[0]; // keep original id
+            $row[0] = Display::input('checkbox', $this->checkbox_name.'[]', $value, $checkboxParams);
         }
         if (is_array($row)) {
             $row = array_map(

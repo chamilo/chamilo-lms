@@ -1418,5 +1418,6 @@
     "For what purpose do we process personal data? Do we use it to filter the access users have to certain parts of our application? (negative or positive discrimination)": "F\u00f6r vilket syfte behandlar vi personuppgifter? Anv\u00e4nder vi det f\u00f6r att filtrera tillg\u00e5ngen anv\u00e4ndare har till vissa delar av v\u00e5r applikation? (negativ eller positiv diskriminering)",
     "Danger zone: deleting an access URL is permanent.": "Farozon: att radera en \u00e5tkomst-URL \u00e4r permanent.",
     "Type the full URL to confirm. The URL and its relations will be permanently removed.": "Skriv in hela URL:en f\u00f6r att bekr\u00e4fta. URL:en och dess relationer kommer att raderas permanent.",
-    "URL deleted.": "URL borttagen."
+    "URL deleted.": "URL borttagen.",
+    "sender": "avs\u00e4ndare"
 }

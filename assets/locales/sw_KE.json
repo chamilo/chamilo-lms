@@ -1418,5 +1418,6 @@
     "For what purpose do we process personal data? Do we use it to filter the access users have to certain parts of our application? (negative or positive discrimination)": "Tunauchambuzi data za kibinafsi kwa kusudi gani? Je, tunazitumia kufiltisha ufikiaji wa watumiaji katika sehemu fulani za programu yetu? (ubaguzi hasi au chanya)",
     "Danger zone: deleting an access URL is permanent.": "Eneo la hatari: kufuta URL ya ufikiaji ni la kudumu.",
     "Type the full URL to confirm. The URL and its relations will be permanently removed.": "Andika URL kamili ili kuthibitisha. URL na uhusiano wake utaondolewa kudumu.",
-    "URL deleted.": "URL imefutwa."
+    "URL deleted.": "URL imefutwa.",
+    "sender": "mtumaji"
 }

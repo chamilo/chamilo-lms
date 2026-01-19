@@ -1418,5 +1418,6 @@
     "For what purpose do we process personal data? Do we use it to filter the access users have to certain parts of our application? (negative or positive discrimination)": "\u00c8te wo ni a \u1e63e \u00ecl\u00f2 \u00ecd\u00e0p\u1ecd\u0300 ara \u1eb9ni? \u1e62\u00e9 a l\u00f2 \u00f3 l\u00e1ti \u1e63\u00e0\u00e0k\u00ed \u00ecw\u1ecdl\u00e9 \u00e0w\u00f9j\u1ecd \u00ecl\u00f2 s\u00ed \u00e0w\u00f9j\u1ecd \u00ecd\u00e0b\u1ecd\u0300 kan p\u00e0t\u00e0k\u00ec? (\u00ecy\u00e0 t\u00e0b\u00ed \u00ecd\u00e1r\u00ed \u00ecd\u00edw\u00f2)",
     "Danger zone: deleting an access URL is permanent.": "Agb\u00e8gb\u00e8 ewu: \u00ecpar\u1eb9\u0301 URL \u00ecw\u1ecdl\u00e9 j\u1eb9\u0301 \u00ecpar\u00ed.",
     "Type the full URL to confirm. The URL and its relations will be permanently removed.": "T\u1eb9 URL k\u00edk\u00fan l\u00e1ti f\u00ecd\u00ed m\u00fal\u1eb9\u0300. URL \u00e0ti \u00ecb\u00e1\u1e63ep\u1ecd\u0300 r\u1eb9\u0300 y\u00f3\u00f2 y\u1ecd k\u00far\u00f2 t\u00edt\u00ed.",
-    "URL deleted.": "URL ti paar\u1eb9."
+    "URL deleted.": "URL ti paar\u1eb9.",
+    "sender": "ol\u00f9r\u00e0n\u1e63\u1eb9\u0301"
 }

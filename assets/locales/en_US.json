@@ -1461,7 +1461,7 @@
     "Video generation is not enabled for this course.": "Video generation is not enabled for this course.",
     "Generation failed.": "Generation failed.",
     "Generated successfully. Review the preview and save when ready.": "Generated successfully. Review the preview and save when ready.",
-    "Generated successfully. Saving is disabled because the provider returned a URL.":  "Generated successfully. Saving is disabled because the provider returned a URL.",
+    "Generated successfully. Saving is disabled because the provider returned a URL.": "Generated successfully. Saving is disabled because the provider returned a URL.",
     "Video generation started. Waiting for the result...": "Video generation started. Waiting for the result...",
     "AI returned an empty response.": "AI returned an empty response.",
     "Nothing to save yet.": "Nothing to save yet.",
@@ -1476,5 +1476,5 @@
     "Video generation is in progress": "Video generation is in progress",
     "Job": "Job",
     "Modified prompt": "Modified prompt",
-    "Saved in Documents": "Saved in Documents",
+    "Saved in Documents": "Saved in Documents"
 }

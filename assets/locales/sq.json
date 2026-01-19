@@ -1418,5 +1418,9 @@
     "For what purpose do we process personal data? Do we use it to filter the access users have to certain parts of our application? (negative or positive discrimination)": "P\u00ebr \u00e7far\u00eb q\u00ebllimi p\u00ebrpunojm\u00eb t\u00eb dh\u00ebnat personale? A i p\u00ebrdorim ato p\u00ebr t\u00eb filtruar qasjen q\u00eb p\u00ebrdoruesit kan\u00eb n\u00eb pjes\u00eb t\u00eb caktuara t\u00eb aplikimit ton\u00eb? (diskriminim negativ ose pozitiv)",
     "Danger zone: deleting an access URL is permanent.": "Zona e rrezikut: fshirja e nj\u00eb URL hyrjeje \u00ebsht\u00eb e p\u00ebrhershme.",
     "Type the full URL to confirm. The URL and its relations will be permanently removed.": "Shkruaj URL-n\u00eb e plot\u00eb p\u00ebr t\u00eb konfirmuar. URL-ja dhe marr\u00ebdh\u00ebniet e saj do t\u00eb fshihen p\u00ebrgjithmon\u00eb.",
-    "URL deleted.": "URL fshir\u00eb."
+    "URL deleted.": "URL fshir\u00eb.",
+    "sender": "d\u00ebrgues",
+    "Require unique presence": "K\u00ebrkoj prani unike",
+    "If enabled, the gradebook will give a learner 100% when present at least once.": "N\u00ebse aktivizohet, libri i notave do t'i jap\u00eb nj\u00eb nx\u00ebn\u00ebsi 100% kur \u00ebsht\u00eb i pranish\u00ebm t\u00eb pakt\u00ebn nj\u00eb her\u00eb.",
+    "AI feedback": "P\u00ebrfshirje AI"
 }

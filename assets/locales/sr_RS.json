@@ -1418,5 +1418,6 @@
     "For what purpose do we process personal data? Do we use it to filter the access users have to certain parts of our application? (negative or positive discrimination)": "U kojoj svrsi obra\u0111ujemo li\u010dne podatke? Koristimo li ih da filtriramo pristup koji korisnici imaju odre\u0111enim delovima na\u0161e aplikacije? (negativna ili pozitivna diskriminacija)",
     "Danger zone: deleting an access URL is permanent.": "Opasna zona: brisanje URL-a pristupa je trajno.",
     "Type the full URL to confirm. The URL and its relations will be permanently removed.": "Upi\u0161ite punu URL adresu za potvrdu. URL i njegove relacije \u0107e biti trajno uklonjeni.",
-    "URL deleted.": "URL obrisan."
+    "URL deleted.": "URL obrisan.",
+    "sender": "po\u0161iljalac"
 }

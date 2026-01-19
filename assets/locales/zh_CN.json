@@ -1418,5 +1418,6 @@
     "For what purpose do we process personal data? Do we use it to filter the access users have to certain parts of our application? (negative or positive discrimination)": "\u6211\u4eec\u5904\u7406\u4e2a\u4eba\u6570\u636e\u7684\u76ee\u7684\u662f\u4ec0\u4e48\uff1f\u6211\u4eec\u662f\u5426\u7528\u5b83\u6765\u8fc7\u6ee4\u7528\u6237\u5bf9\u6211\u4eec\u5e94\u7528\u67d0\u4e9b\u90e8\u5206\u7684\u8bbf\u95ee\uff1f\uff08\u8d1f\u9762\u6216\u6b63\u9762\u6b67\u89c6\uff09",
     "Danger zone: deleting an access URL is permanent.": "\u5371\u9669\u533a\u57df\uff1a\u5220\u9664\u8bbf\u95ee URL \u662f\u6c38\u4e45\u6027\u7684\u3002",
     "Type the full URL to confirm. The URL and its relations will be permanently removed.": "\u8f93\u5165\u5b8c\u6574 URL \u4ee5\u786e\u8ba4\u3002URL \u53ca\u5176\u5173\u7cfb\u5c06\u88ab\u6c38\u4e45\u5220\u9664\u3002",
-    "URL deleted.": "URL \u5df2\u5220\u9664\u3002"
+    "URL deleted.": "URL \u5df2\u5220\u9664\u3002",
+    "sender": "\u53d1\u4ef6\u4eba"
 }

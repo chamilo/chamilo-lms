@@ -1401,5 +1401,6 @@
     "For what purpose do we process personal data? Do we use it to filter the access users have to certain parts of our application? (negative or positive discrimination)": "Para sa anong layunin namin pinoproseso ang personal na data? Ginagamit ba namin ito upang i-filter ang access ng mga gumagamit sa ilang bahagi ng aming application? (negatibong o positibong diskriminasyon)",
     "Danger zone: deleting an access URL is permanent.": "Danger zone: ang pag-delete ng access URL ay permanente.",
     "Type the full URL to confirm. The URL and its relations will be permanently removed.": "I-type ang buong URL upang kumpirmahin. Ang URL at mga relasyon nito ay mawawala nang permanente.",
-    "URL deleted.": "Na-delete ang URL."
+    "URL deleted.": "Na-delete ang URL.",
+    "sender": "padala"
 }

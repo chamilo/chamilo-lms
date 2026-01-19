@@ -1418,5 +1418,6 @@
     "For what purpose do we process personal data? Do we use it to filter the access users have to certain parts of our application? (negative or positive discrimination)": "Ngenjongo yeyiphi sisebenza ngayo idatha yobuqu? Siyayisebenzisela ukuhlunga ukufikelela kwabasebenzisi kwiindawo ezithile zesicelo sethu? (ucalucalulo olubi okanye olulungileyo)",
     "Danger zone: deleting an access URL is permanent.": "Indawo enobungozi: ukucima i-URL yokufikelela kungapheli.",
     "Type the full URL to confirm. The URL and its relations will be permanently removed.": "Chweta i-URL epheleleyo ukuqinisekisa. I-URL kunye nobudlelwane bayo baya kususwa ngokusisigxina.",
-    "URL deleted.": "I-URL iye yacinywa."
+    "URL deleted.": "I-URL iye yacinywa.",
+    "sender": "umthumeli"
 }

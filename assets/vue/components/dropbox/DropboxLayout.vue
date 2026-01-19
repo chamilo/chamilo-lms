@@ -1,22 +1,25 @@
 <template>
   <div class="dbx">
-    <BaseToolbar class="dbx-toolbar" :showTopBorder="true">
+    <BaseToolbar
+      class="dbx-toolbar"
+      :showTopBorder="true"
+    >
       <template #start>
-        <h2 class="text-lg font-semibold m-0">Dropbox</h2>
+        <h2 class="text-lg font-semibold m-0">{{ t("Dropbox") }}</h2>
       </template>
 
       <template #end>
         <RouterLink
           class="nav-link"
-          :to="{ name:'DropboxListSent', params:$route.params, query:$route.query }"
+          :to="{ name: 'DropboxListReceived', params: $route.params, query: { ...$route.query, tab: 'received' } }"
         >
-          Sent
+          {{ t("Received") }}
         </RouterLink>
         <RouterLink
           class="nav-link"
-          :to="{ name:'DropboxListReceived', params:$route.params, query:$route.query }"
+          :to="{ name: 'DropboxListSent', params: $route.params, query: { ...$route.query, tab: 'sent' } }"
         >
-          Received
+          {{ t("Sent") }}
         </RouterLink>
       </template>
     </BaseToolbar>
@@ -29,7 +32,11 @@
 
 <script setup>
 import BaseToolbar from "../basecomponents/BaseToolbar.vue"
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 </script>
+
 <style scoped>
 .dbx {
   width: 100%;

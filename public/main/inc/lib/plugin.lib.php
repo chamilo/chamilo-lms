@@ -257,22 +257,19 @@ class AppPlugin
         }
     }
 
-    /**
-     * @param string $pluginName
-     *
-     * @return array
-     */
-    public function get_areas_by_plugin($pluginName)
+    public function getAreasByPlugin(string $pluginName): array
     {
-        $result = api_get_settings('Plugins');
-        $areas = [];
-        foreach ($result as $row) {
-            if ($pluginName == $row['selected_value']) {
-                $areas[] = $row['variable'];
+        $currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
+        $installedPlugin = Container::getPluginRepository()->getInstalledByName($pluginName);
+        $regionList = [];
+
+        if ($pluginConfigurationInAccessUrl = $installedPlugin->getConfigurationsByAccessUrl($currentAccessUrl)) {
+            if ($pluginConfiguration = $pluginConfigurationInAccessUrl->getConfiguration()) {
+                $regionList = $pluginConfiguration['regions'] ?? [];
             }
         }
 
-        return $areas;
+        return $regionList;
     }
 
     /**

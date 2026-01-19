@@ -82,7 +82,7 @@ function handleRegions()
             echo '<h4>'.$plugin_info['title'].' <small>v'.$plugin_info['version'].'</small></h4>';
             echo '<p>'.$plugin_info['comment'].'</p>';
             echo '</td><td>';
-            $selected_plugins = $plugin_obj->get_areas_by_plugin($pluginName);
+            $selected_plugins = $plugin_obj->getAreasByPlugin($pluginName);
             $region_list = [];
             $isAdminPlugin = isset($plugin_info['is_admin_plugin']) && $plugin_info['is_admin_plugin'];
             $isCoursePlugin = isset($plugin_info['is_course_plugin']) && $plugin_info['is_course_plugin'];

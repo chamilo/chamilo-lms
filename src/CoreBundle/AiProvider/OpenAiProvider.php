@@ -106,16 +106,6 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
 
         $logPreview = $this->messagesForLog($normalizedMessages, 900);
 
-        error_log(\sprintf(
-            '[AI][OpenAI][chat] Request: userId=%d url=%s model=%s temperature=%.2f max_tokens=%d messages="%s"',
-            $userId,
-            $url,
-            $model,
-            $temperature,
-            $maxTokens,
-            $logPreview
-        ));
-
         try {
             $response = $this->httpClient->request('POST', $url, [
                 'headers' => $this->buildAuthHeaders(true),
@@ -197,16 +187,6 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             'temperature' => $temperature,
             'max_tokens' => $maxTokens,
         ];
-
-        error_log(\sprintf(
-            '[AI][OpenAI][generateText] Request: userId=%d url=%s model=%s temperature=%.2f max_tokens=%d prompt="%s"',
-            $userId,
-            $url,
-            $model,
-            $temperature,
-            $maxTokens,
-            mb_substr($prompt, 0, 200)
-        ));
 
         try {
             $response = $this->httpClient->request('POST', $url, [
@@ -679,18 +659,6 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             $payload['response_format'] = $responseFormat;
         }
 
-        error_log(\sprintf(
-            '[AI][OpenAI][image] Request: userId=%d tool=%s url=%s model=%s size=%s quality=%s n=%d prompt="%s"',
-            $userId,
-            $toolName,
-            $url,
-            $model,
-            $size,
-            $quality,
-            $n,
-            $promptForLog
-        ));
-
         try {
             $response = $this->httpClient->request('POST', $url, [
                 'headers' => $this->buildAuthHeaders(true),
@@ -712,39 +680,17 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                 $param = $decoded['error']['param'] ?? null;
 
                 $finalMsg = $msg ?: 'OpenAI returned an error response.';
-                error_log(\sprintf(
-                    '[AI][OpenAI][image] HTTP %d request_id=%s type=%s code=%s param=%s body=%s',
-                    $status,
-                    (string) $requestId,
-                    (string) $type,
-                    (string) $code,
-                    (string) $param,
-                    $rawForLog
-                ));
 
                 return 'Error: '.$finalMsg;
             }
 
             $data = json_decode((string) $raw, true);
             if (!\is_array($data)) {
-                error_log(\sprintf(
-                    '[AI][OpenAI][image] Invalid JSON response. HTTP %d request_id=%s body=%s',
-                    $status,
-                    (string) $requestId,
-                    $rawForLog
-                ));
 
                 return 'Error: Invalid JSON response from OpenAI.';
             }
 
             if (!isset($data['data'][0]) || !\is_array($data['data'][0])) {
-                error_log(\sprintf(
-                    '[AI][OpenAI][image] Missing image data[0]. HTTP %d request_id=%s keys=%s body=%s',
-                    $status,
-                    (string) $requestId,
-                    implode(',', array_keys($data)),
-                    $rawForLog
-                ));
 
                 return 'Error: OpenAI response missing image data.';
             }
@@ -766,12 +712,6 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                 $result['url'] = $item['url'];
                 $result['is_base64'] = false;
             } else {
-                error_log(\sprintf(
-                    '[AI][OpenAI][image] Response did not include b64_json or url. HTTP %d request_id=%s body=%s',
-                    $status,
-                    (string) $requestId,
-                    $rawForLog
-                ));
 
                 return 'Error: OpenAI response did not include image content.';
             }
@@ -785,15 +725,6 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                 (int) ($data['usage']['completion_tokens'] ?? 0),
                 (int) ($data['usage']['total_tokens'] ?? 0)
             );
-
-            error_log(\sprintf(
-                '[AI][OpenAI][image] Success. HTTP %d request_id=%s revised_prompt=%s returned_base64=%s returned_url=%s',
-                $status,
-                (string) $requestId,
-                isset($result['revised_prompt']) ? (string) $result['revised_prompt'] : '',
-                $result['is_base64'] ? 'yes' : 'no',
-                !empty($result['url']) ? 'yes' : 'no'
-            ));
 
             return $result;
         } catch (Exception $e) {
@@ -834,17 +765,6 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
 
         $promptTrimmed = trim($prompt);
         $promptForLog = mb_substr($promptTrimmed, 0, 200);
-
-        error_log(\sprintf(
-            '[AI][OpenAI][video] Request: userId=%d tool=%s url=%s model=%s seconds=%s size=%s prompt="%s"',
-            $userId,
-            $toolName,
-            $url,
-            $model,
-            $seconds,
-            $size,
-            $promptForLog
-        ));
 
         try {
             $fields = [
@@ -901,40 +821,16 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                     );
                 }
 
-                error_log(\sprintf(
-                    '[AI][OpenAI][video] HTTP %d request_id=%s type=%s code=%s param=%s error="%s" body=%s',
-                    $status,
-                    (string) $requestId,
-                    (string) ($err['type'] ?? ''),
-                    (string) ($err['code'] ?? ''),
-                    (string) ($err['param'] ?? ''),
-                    $finalMsg,
-                    '' !== $rawForLog ? $rawForLog : '(empty body)'
-                ));
-
                 return 'Error: '.$finalMsg;
             }
 
             $data = json_decode($raw, true);
             if (!\is_array($data)) {
-                error_log(\sprintf(
-                    '[AI][OpenAI][video] Invalid JSON response. HTTP %d request_id=%s body=%s',
-                    $status,
-                    (string) $requestId,
-                    '' !== $rawForLog ? $rawForLog : '(empty body)'
-                ));
 
                 return 'Error: Invalid JSON response from OpenAI.';
             }
 
             if (!isset($data['id']) || !\is_string($data['id']) || '' === trim($data['id'])) {
-                error_log(\sprintf(
-                    '[AI][OpenAI][video] Missing "id" in response. HTTP %d request_id=%s keys=%s body=%s',
-                    $status,
-                    (string) $requestId,
-                    implode(',', array_keys($data)),
-                    $rawForLog
-                ));
 
                 return 'Error: OpenAI response missing "id".';
             }
@@ -951,14 +847,6 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             ];
 
             $this->saveAiRequest($userId, $toolName, $promptTrimmed, 'openai', 0, 0, 0);
-
-            error_log(\sprintf(
-                '[AI][OpenAI][video] Job created. HTTP %d request_id=%s id=%s status=%s',
-                $status,
-                (string) $requestId,
-                (string) $result['id'],
-                (string) $result['status']
-            ));
 
             return $result;
         } catch (Exception $e) {
@@ -987,14 +875,6 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
 
             if ($status >= 400) {
                 $msg = $this->extractOpenAiErrorMessage($raw);
-                error_log(\sprintf(
-                    '[AI][OpenAI][video] Status HTTP %d request_id=%s id=%s error="%s" body=%s',
-                    $status,
-                    $requestId,
-                    $jobId,
-                    $msg,
-                    $this->safeTruncate($raw, 2000)
-                ));
 
                 return [
                     'id' => $jobId,
@@ -1062,14 +942,6 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
 
             if ($status >= 400) {
                 $msg = $this->extractOpenAiErrorMessage($raw);
-                error_log(\sprintf(
-                    '[AI][OpenAI][video] Content HTTP %d request_id=%s id=%s error="%s" body=%s',
-                    $status,
-                    $requestId,
-                    $jobId,
-                    $msg,
-                    $this->safeTruncate($raw, 2000)
-                ));
 
                 return [
                     'is_base64' => false,

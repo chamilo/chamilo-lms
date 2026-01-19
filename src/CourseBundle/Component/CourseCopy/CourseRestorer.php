@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-/* For licensing terms, see /license.txt */
-
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
 use AllowDynamicProperties;
@@ -184,13 +182,15 @@ class CourseRestorer
      */
     public function __construct($course)
     {
-        // Read env constant/course hint if present
-        if (\defined('COURSE_RESTORER_DEBUG')) {
-            $this->debug = (bool) \constant('COURSE_RESTORER_DEBUG');
+        $this->course = $course ?: (object)[];
+
+        $code = (string) ($this->course->code ?? '');
+        if ($code === '') {
+            $code = api_get_course_id();
+            $this->course->code = $code;
         }
 
-        $this->course = $course;
-        $courseInfo = api_get_course_info($this->course->code);
+        $courseInfo = $code !== '' ? api_get_course_info($code) : api_get_course_info();
         $this->course_origin_id = !empty($courseInfo) ? $courseInfo['real_id'] : null;
 
         $this->file_option = FILE_RENAME;
@@ -5551,115 +5551,189 @@ class CourseRestorer
      */
     private function rewriteHtmlForCourse(string $html, int $sessionId, string $dbgTag = ''): string
     {
-        // Nothing to do if the HTML is empty
         if ('' === $html) {
             return '';
         }
 
-        // Resolve context entities (course/session/group) and repositories
-        $course = api_get_course_entity($this->destination_course_id);
-        $session = api_get_session_entity((int) $sessionId);
-        $group = api_get_group_entity();
+        $courseEntity = api_get_course_entity($this->destination_course_id);
+        $sessionEntity = $sessionId ? api_get_session_entity($sessionId) : null;
+        $groupEntity = api_get_group_entity();
+
         $docRepo = Container::getDocumentRepository();
 
-        // Determine course directory and source root (when importing from a ZIP/package)
-        $courseDir = (string) ($this->course->info['path'] ?? '');
-        $srcRoot = rtrim((string) ($this->course->backup_path ?? ''), '/');
+        $courseDir = (string) ($this->course->courseDir ?? ($this->course->info['path'] ?? ''));
+        $courseDir = trim($courseDir, '/');
+        $courseDir = preg_replace('#^courses/#i', '', $courseDir) ?: $courseDir;
 
-        // Cache of created folder IIDs per course dir to avoid duplicate folder creation
-        if (!isset($this->htmlFoldersByCourseDir[$courseDir])) {
-            $this->htmlFoldersByCourseDir[$courseDir] = [];
-        }
-        $folders = &$this->htmlFoldersByCourseDir[$courseDir];
-
-        // Small debug helper bound to the current dbgTag
         $DBG = function (string $tag, array $ctx = []) use ($dbgTag): void {
             $this->dlog('HTMLRW'.$dbgTag.': '.$tag, $ctx);
         };
 
-        // Ensure a folder chain exists under /document and return parent IID (0 means root)
-        $ensureFolder = function (string $relPath) use (&$folders, $course, $session, $DBG) {
-            // Ignore empty/root markers
-            if ('/' === $relPath || '/document' === $relPath) {
-                return 0;
-            }
+        $srcRoot = $this->getHtmlRewriteSourceRoot($courseDir, $DBG);
 
-            // Reuse cached IID if we already created/resolved this path
-            if (!empty($folders[$relPath])) {
-                return (int) $folders[$relPath];
-            }
+        $DBG('html.rewrite.context', [
+            'courseDir' => $courseDir,
+            'srcRoot' => $srcRoot,
+            'srcRootIsDir' => ('' !== $srcRoot) && is_dir($srcRoot),
+        ]);
 
-            try {
-                // Create the folder via DocumentManager; parent is resolved by the path
-                $entity = DocumentManager::addDocument(
-                    ['real_id' => $course->getId(), 'code' => method_exists($course, 'getCode') ? $course->getCode() : null],
-                    $relPath,
-                    'folder',
-                    0,
-                    basename($relPath),
-                    null,
-                    0,
-                    null,
-                    0,
-                    (int) ($session?->getId() ?? 0)
-                );
-
-                // Cache the created IID if available
-                $iid = method_exists($entity, 'getIid') ? (int) $entity->getIid() : 0;
-                if ($iid > 0) {
-                    $folders[$relPath] = $iid;
-                }
-
-                return $iid;
-            } catch (Throwable $e) {
-                // Do not interrupt restore flow if folder creation fails
-                $DBG('ensureFolder.error', ['relPath' => $relPath, 'err' => $e->getMessage()]);
-
-                return 0;
-            }
-        };
-
-        // Only rewrite when we are importing from a package (ZIP) with a known source root
-        if ('' !== $srcRoot) {
-            try {
-                // Build a URL map for all legacy references found in the HTML
-                $mapDoc = ChamiloHelper::buildUrlMapForHtmlFromPackage(
-                    $html,
-                    $courseDir,
-                    $srcRoot,
-                    $folders,
-                    $ensureFolder,
-                    $docRepo,
-                    $course,
-                    $session,
-                    $group,
-                    (int) $sessionId,
-                    (int) $this->file_option,
-                    $DBG
-                );
-
-                // Rewrite the HTML using both exact (byRel) and basename (byBase) maps
-                $rr = ChamiloHelper::rewriteLegacyCourseUrlsWithMap(
-                    $html,
-                    $courseDir,
-                    $mapDoc['byRel'] ?? [],
-                    $mapDoc['byBase'] ?? []
-                );
-
-                // Log replacement stats for troubleshooting
-                $DBG('zip.rewrite', ['replaced' => $rr['replaced'] ?? 0, 'misses' => $rr['misses'] ?? 0]);
-
-                // Return rewritten HTML when available; otherwise the original
-                return (string) ($rr['html'] ?? $html);
-            } catch (Throwable $e) {
-                // Fall back to original HTML if anything fails during mapping/rewrite
-                $DBG('zip.error', ['err' => $e->getMessage()]);
-
-                return $html;
-            }
+        if ('' === $srcRoot || !is_dir($srcRoot)) {
+            $DBG('html.rewrite.skip', ['reason' => 'No valid srcRoot directory found']);
+            return $html;
         }
 
-        // If no package source root, return the original HTML unchanged
+        if (!isset($this->htmlFoldersByCourseDir[$courseDir]) || !is_array($this->htmlFoldersByCourseDir[$courseDir])) {
+            $this->htmlFoldersByCourseDir[$courseDir] = [];
+        }
+
+        // pass-by-reference array must be a variable (not an expression)
+        $folders = &$this->htmlFoldersByCourseDir[$courseDir];
+
+        // file_option (skip/overwrite/rename). Keep a safe default if not set.
+        $fileOption = 0;
+        if (isset($this->course->file_option)) {
+            $fileOption = (int) $this->course->file_option;
+        } elseif (isset($this->file_option)) {
+            $fileOption = (int) $this->file_option;
+        }
+
+        // Ensure folder callback expected by ChamiloHelper
+        $ensureFolder = function (string $parentRelPath) use (
+            &$folders,
+            $docRepo,
+            $courseEntity,
+            $sessionEntity,
+            $groupEntity,
+            $sessionId,
+            $DBG
+        ): int {
+            $parentRelPath = '/'.trim($parentRelPath, '/');
+            if ('/' === $parentRelPath) {
+                return 0;
+            }
+
+            // If already cached
+            if (!empty($folders[$parentRelPath])) {
+                return (int) $folders[$parentRelPath];
+            }
+
+            // Create nested folders progressively: /A, /A/B, /A/B/C
+            $parts = array_values(array_filter(explode('/', trim($parentRelPath, '/'))));
+            $currentPath = '';
+            $parentId = 0;
+
+            // Course info array for DocumentManager
+            $courseInfo = [
+                'real_id' => method_exists($courseEntity, 'getId') ? (int) $courseEntity->getId() : 0,
+                'code' => method_exists($courseEntity, 'getCode') ? (string) $courseEntity->getCode() : null,
+            ];
+
+            foreach ($parts as $p) {
+                $currentPath .= '/'.$p;
+
+                if (!empty($folders[$currentPath])) {
+                    $parentId = (int) $folders[$currentPath];
+                    continue;
+                }
+
+                $title = $p;
+
+                // Try to find existing folder under current parent
+                $parentRes = $parentId ? $docRepo->find($parentId) : $courseEntity;
+                $existing = $docRepo->findCourseResourceByTitle(
+                    $title,
+                    $parentRes->getResourceNode(),
+                    $courseEntity,
+                    $sessionEntity,
+                    $groupEntity
+                );
+
+                if ($existing && method_exists($existing, 'getIid')) {
+                    $parentId = (int) $existing->getIid();
+                    $folders[$currentPath] = $parentId;
+                    $DBG('html.ensureFolder.reuse', ['path' => $currentPath, 'iid' => $parentId]);
+                    continue;
+                }
+
+                // Create folder
+                try {
+                    $entity = DocumentManager::addDocument(
+                        $courseInfo,
+                        $currentPath,
+                        'folder',
+                        0,
+                        $title,
+                        null,
+                        0,
+                        null,
+                        0,
+                        (int) $sessionId,
+                        0,
+                        false,
+                        '',
+                        $parentId,
+                        null
+                    );
+
+                    $iid = ($entity && method_exists($entity, 'getIid')) ? (int) $entity->getIid() : 0;
+                    if ($iid > 0) {
+                        $folders[$currentPath] = $iid;
+                        $parentId = $iid;
+                        $DBG('html.ensureFolder.created', ['path' => $currentPath, 'iid' => $iid]);
+                    }
+                } catch (Throwable $e) {
+                    $DBG('html.ensureFolder.error', [
+                        'path' => $currentPath,
+                        'message' => $e->getMessage(),
+                        'class' => get_class($e),
+                    ]);
+                }
+            }
+
+            return $parentId;
+        };
+
+        try {
+            // Call with the EXACT signature you pasted:
+            // (html, courseDir, srcRoot, &$folders, $ensureFolder, $docRepo, $courseEntity, $session, $group, session_id, file_option, dbg)
+            $map = ChamiloHelper::buildUrlMapForHtmlFromPackage(
+                $html,
+                $courseDir,
+                $srcRoot,
+                $folders,
+                $ensureFolder,
+                $docRepo,
+                $courseEntity,
+                $sessionEntity,
+                $groupEntity,
+                (int) $sessionId,
+                (int) $fileOption,
+                $DBG
+            );
+
+            $byRel = $map['byRel'] ?? [];
+            $byBase = $map['byBase'] ?? [];
+
+            $DBG('html.rewrite.map', [
+                'byRel' => is_array($byRel) ? count($byRel) : 0,
+                'byBase' => is_array($byBase) ? count($byBase) : 0,
+            ]);
+
+            $result = ChamiloHelper::rewriteLegacyCourseUrlsWithMap($html, $courseDir, $byRel, $byBase);
+
+            $DBG('html.rewrite.result', [
+                'replaced' => (int) ($result['replaced'] ?? 0),
+                'misses' => (int) ($result['misses'] ?? 0),
+            ]);
+
+            return (string) ($result['html'] ?? $html);
+        } catch (Throwable $e) {
+            $DBG('html.rewrite.error', [
+                'message' => $e->getMessage(),
+                'class' => get_class($e),
+            ]);
+        }
+
         return $html;
     }
 
@@ -6181,4 +6255,76 @@ class CourseRestorer
 
         return rtrim(api_get_path(SYS_ARCHIVE_PATH), '/').'/course_backups';
     }
+
+    /**
+     * Returns the correct source root used to resolve legacy HTML dependencies
+     * from the extracted CourseArchiver folder (local), not from a legacy server absolute path.
+     */
+    private function getHtmlRewriteSourceRoot(string $courseDir, ?callable $DBG = null): string
+    {
+        $candidates = [];
+
+        // 1) Preferred: __meta.archiver_root (extracted CourseArchiver folder)
+        $meta = $this->course->resources['__meta'] ?? null;
+        if (is_array($meta) && !empty($meta['archiver_root'])) {
+            $candidates[] = (string) $meta['archiver_root'];
+        } elseif (is_object($meta) && !empty($meta->archiver_root)) {
+            $candidates[] = (string) $meta->archiver_root;
+        }
+
+        // 2) If your class has resolveImportRoot(), try it
+        if (method_exists($this, 'resolveImportRoot')) {
+            try {
+                $resolved = $this->resolveImportRoot();
+                if (is_array($resolved) && !empty($resolved['dir'])) {
+                    $candidates[] = (string) $resolved['dir'];
+                } elseif (is_string($resolved) && '' !== $resolved) {
+                    $candidates[] = $resolved;
+                }
+            } catch (Throwable $e) {
+                if (null !== $DBG) {
+                    $DBG('html.sourceRoot.resolveImportRoot.error', [
+                        'message' => $e->getMessage(),
+                        'class' => get_class($e),
+                    ]);
+                }
+            }
+        }
+
+        // 3) Legacy backup_path (only if it exists locally)
+        if (!empty($this->course->backup_path)) {
+            $candidates[] = (string) $this->course->backup_path;
+        }
+
+        foreach ($candidates as $candidate) {
+            $candidate = rtrim(trim((string) $candidate), '/');
+            if ('' === $candidate || !is_dir($candidate)) {
+                continue;
+            }
+
+            // Most common: extracted folder contains "document/" directly
+            if (is_dir($candidate.'/document')) {
+                if (null !== $DBG) {
+                    $DBG('html.sourceRoot.selected', ['srcRoot' => $candidate, 'reason' => 'has_document_dir']);
+                }
+                return $candidate;
+            }
+
+            // Alternative: candidate/<courseDir>/document/
+            if ('' !== $courseDir && is_dir($candidate.'/'.$courseDir.'/document')) {
+                $srcRoot = $candidate.'/'.$courseDir;
+                if (null !== $DBG) {
+                    $DBG('html.sourceRoot.selected', ['srcRoot' => $srcRoot, 'reason' => 'root_contains_courseDir']);
+                }
+                return $srcRoot;
+            }
+        }
+
+        if (null !== $DBG) {
+            $DBG('html.sourceRoot.notFound', ['courseDir' => $courseDir]);
+        }
+
+        return '';
+    }
+
 }

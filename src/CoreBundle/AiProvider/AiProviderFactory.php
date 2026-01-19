@@ -124,10 +124,6 @@ final class AiProviderFactory
                 if (!$obj) {
                     if ($baseObject && ($baseObject instanceof $iface)) {
                         $obj = $baseObject;
-
-                        if ($typeClass !== $baseClass && !class_exists($typeClass)) {
-                            error_log('[AI] Provider "'.$providerName.'" uses base provider for type "'.$type.'" (no dedicated type class found).');
-                        }
                     } else {
                         error_log('[AI] Provider "'.$providerName.'" is configured for type "'.$type.'" but no usable implementation was found (expected '.$iface.').');
 

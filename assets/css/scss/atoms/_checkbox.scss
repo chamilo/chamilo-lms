@@ -94,3 +94,27 @@
 .p-checkbox-input:checked + .p-checkbox-box .p-checkbox-icon {
   @apply block;
 }
+.p-checkbox.p-component {
+  @apply relative inline-flex items-center mr-2;
+}
+.p-checkbox.p-component input[type="checkbox"] {
+  @apply absolute top-0 left-0 w-5 h-5 m-0 opacity-0 cursor-pointer;
+  z-index: 2;
+}
+.p-checkbox-box {
+  @apply w-5 h-5 flex items-center justify-center border border-gray-30 rounded;
+  z-index: 1;
+}
+.p-checkbox.p-component + label,
+.p-checkbox.p-component ~ label {
+  @apply ml-2;
+}
+.p-checkbox-box .p-checkbox-icon {
+  @apply hidden;
+}
+.p-checkbox.p-component input[type="checkbox"]:checked + .p-checkbox-box {
+  @apply bg-primary border-primary;
+}
+.p-checkbox.p-component input[type="checkbox"]:checked + .p-checkbox-box .p-checkbox-icon {
+  @apply block text-white;
+}

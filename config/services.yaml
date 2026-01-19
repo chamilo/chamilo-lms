@@ -143,6 +143,12 @@ services:
       tags:
         - name: security.voter
 
+    Chamilo\CoreBundle\EventSubscriber\InstallDbGuardSubscriber:
+      arguments:
+        $connection: '@doctrine.dbal.default_connection'
+      tags:
+        - { name: kernel.event_subscriber }
+
     Chamilo\CoreBundle\Helpers\ContainerHelper:
         calls:
             - setAuthorizationChecker: [ '@security.authorization_checker' ]

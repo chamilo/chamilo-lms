@@ -23,8 +23,8 @@ This page will contain optimization hints in the future. At this time,
   <h2>Sessions</h2>
   Chamilo 2 uses sessions to store user data between requests. Sessions are stored on disk by default.<br>
   In comparison with Chamilo 1, Chamilo 2 uses many micro-service-type calls to retrieve data from the system and repaint parts of the pages as the underlying data changes.<br>
-  This has the damaging effect of requiring much more accesses to the session files, which can slow down the system significantly or generate losses of session (the system acting as if you are not logged in).<br>
-  To remove this impact, make sure you use a system to store sessions that will have a very small footprint and be able to manage session accesses very quickly (Redis, Memcached, etc.). This is described in the installation guide.
+  This has the negative effect of requiring much more accesses to the session files, which can slow down the system significantly or generate losses of session (the system acting as if you are not logged in).<br>
+  To remove this impact, make sure you use a system to store sessions that will have a very small footprint and be able to manage session accesses very quickly (Redis is likely the best solution here). This is described in the installation guide.
 
   <h2>Database</h2>
   Chamilo 2 uses a database to store most of its data (except for files). This means the database is very commonly used and can be a bottleneck in some cases.<br>

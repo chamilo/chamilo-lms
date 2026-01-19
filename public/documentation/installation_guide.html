@@ -96,7 +96,7 @@
 
     <h3>2.6. Sessions and Redis</h3>
     <a id="web-install-sessions" class="anchor"></a>
-      In this beta version, there are known issues with sessions not getting updated fast enough, which can be solved (temporarily) by using a Redis server. Check the command line instructions for more about this. This is a temporary situation that we expect to fix before the stable release.
+      Redis is an in-memory non-relational database server that can be used to manage PHP sessions. Under high loads, PHP sessions management can be a bottleneck. Using Redis can considerably alleviate that bottleneck but should not be an issue for low to moderate uses (up to 10 *simultaneous* users or so). Check the command line instructions for more about this.
 
     <h3>2.7. Clean up</h3>h3>
     <a id="web-cleanup" class="anchor"></a>
@@ -111,7 +111,11 @@
 
     <h3>3.1. Software stack</h3>
     <a id="cli-install-stack" class="anchor"></a>
-<p>Assuming you are using a dedicated Ubuntu 24.04 LTS, these commands should help you have the software stack installed in a breeze. Otherwise, please review the requirements above and make sure they are met before moving on to the next section.</p>
+<p>
+    Assuming you are using a dedicated Ubuntu 24.04 LTS, these commands should help you have the software stack installed in a breeze.
+    Otherwise, please review the requirements above and make sure they are met before moving on to the next section.
+    Please note Redis is optional. It is included for efficiency reasons for self-managed servers, but can be skipped on shared hosting.
+</p>
 <pre>
 sudo -s
 apt update && apt -y upgrade
@@ -119,10 +123,10 @@ apt -y install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis
 a2enmod rewrite
 cd /var/www/
 mkdir chamilo
-wget https://github.com/chamilo/chamilo-lms/releases/download/v2.0.0-beta.1/chamilo2.0.0-beta.1.tar.gz
+wget https://github.com/chamilo/chamilo-lms/releases/download/v2.0.0-rc.1/chamilo2.0.0-rc.1.tar.gz
 # about 400MB
-tar zxf chamilo2.0.0-beta.1.tar.gz
-rm chamilo2.0.0-beta.1.tar.gz
+tar zxf chamilo2.0.0-rc.1.tar.gz
+rm chamilo2.0.0-rc.1.tar.gz
 cd chamilo
 touch .env
 chown -R www-data: var/ config/ .env
@@ -156,6 +160,7 @@ Chamilo 2+ only requires a working web server setup to work. You can run it on l
 Here is an example Apache vhost configuration file for an installation on the http://my.chamilo.local/ URL (replace all values between brackets, including the brackets, to your custom values).<br>
 It includes PHP settings which will only affect this vhost. If you prefer to set those PHP settings in php.ini, you are welcome to do so.<br>
 We also assume you will be using a default Redis installation to manage sessions (see notes in the web panel install section).<br>
+Reminder: Redis is optional. If you don't use it, do not use the lines about "session.save_handler" and "session.save_path" below.<br>
   <pre>
 cd /etc/apache2/sites-available
 vim [my.chamilo.local].conf
@@ -478,7 +483,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
       want to install the PHP Redis extension from the official PHP website, for example (adapt PHP and Redis version numbers)
       https://downloads.php.net/~windows/pecl/releases/redis/6.*.*/php_redis-6.*.*-8.3-ts-vs16-x64.zip
 
-      This is not necessary to install Chamilo (so you can do it afterwards or never at all if you don't experience session issues).
+      This is not necessary to install Chamilo (so you can do it afterwards or never do it at all if you don't experience session issues).
 
       Download, unzip and place the .dll file into C:\wamp64\bin\php\php8.3.*\ext\
       then add "extension=php_redis.dll" at the end of C:\wamp64\bin\php\php8.3.*\php.ini
@@ -501,7 +506,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
 </pre>
 
       Inside your WampServer configuration, in the httpd-vhosts.conf file,
-      add the following lines *inside* the &lt;VirtualHost&gt; tag:
+      add the following lines *inside* the &lt;VirtualHost&gt; tag (only if you use Redis):
 <pre>
     php_admin_value session.save_handler "redis"
     php_admin_value session.save_path "tcp://192.168.1.100:6379"

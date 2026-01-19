@@ -7,9 +7,12 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder;
 
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\QuizExport;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\CalendarEvent;
 use Exception;
 
 use const PHP_EOL;
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 
 /**
  * Writes the course-level directory and XMLs inside the export root.
@@ -232,28 +235,79 @@ class CourseExport
     }
 
     /**
-     * Creates the calendar.xml file.
+     * Always writes course/calendar.xml (Moodle expects it).
+     * Priority:
+     *  1) Events pushed by the builder into $this->course->resources (truth source).
+     *  2) Fallback to $calendarData (legacy optional).
+     *  3) Minimal stub if none.
      *
      * @param array<int,array<string,mixed>> $calendarData
      */
     private function createCalendarXml(array $calendarData, string $destinationDir): void
     {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
-        $xmlContent .= '<calendar>'.PHP_EOL;
-        foreach ($calendarData as $event) {
-            $eventName = (string) ($event['name'] ?? 'Event');
-            $timestart = (int) ($event['timestart'] ?? time());
-            $duration = (int) ($event['duration'] ?? 3600);
+        $builderEvents = $this->collectCalendarEvents();
 
-            $xmlContent .= '  <event>'.PHP_EOL;
-            $xmlContent .= '    <name>'.htmlspecialchars($eventName).'</name>'.PHP_EOL;
-            $xmlContent .= '    <timestart>'.$timestart.'</timestart>'.PHP_EOL;
-            $xmlContent .= '    <duration>'.$duration.'</duration>'.PHP_EOL;
-            $xmlContent .= '  </event>'.PHP_EOL;
+        if (!empty($builderEvents)) {
+            $xml = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
+            $xml .= '<calendar>' . PHP_EOL;
+
+            foreach ($builderEvents as $ev) {
+                // Builder fields: iid, title, content, startDate, endDate, firstPath, firstName, firstSize, firstComment, allDay
+                $title   = (string) ($ev->title ?? 'Event');
+                $content = (string) ($ev->content ?? '');
+                $start   = $this->toTimestamp((string)($ev->startDate ?? ''), time());
+                $end     = $this->toTimestamp((string)($ev->endDate ?? ''), 0);
+                $allday  = (int) ($ev->allDay ?? 0);
+
+                $duration = 0;
+                if ($end > 0 && $end > $start) {
+                    $duration = $end - $start;
+                }
+
+                // Keep a Moodle-restore-friendly minimal shape
+                $xml .= "  <event>" . PHP_EOL;
+                $xml .= '    <name>'.htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</name>' . PHP_EOL;
+                $xml .= '    <description><![CDATA['.$content.']]></description>' . PHP_EOL;
+                $xml .= '    <format>1</format>' . PHP_EOL;          // HTML
+                $xml .= '    <eventtype>course</eventtype>' . PHP_EOL;
+                $xml .= '    <timestart>'.$start.'</timestart>' . PHP_EOL;
+                $xml .= '    <duration>'.$duration.'</duration>' . PHP_EOL;
+                $xml .= '    <visible>1</visible>' . PHP_EOL;
+                $xml .= '    <allday>'.$allday.'</allday>' . PHP_EOL;
+                $xml .= '    <repeatid>0</repeatid>' . PHP_EOL;
+                $xml .= '    <uuid>$@NULL@$</uuid>' . PHP_EOL;
+                $xml .= "  </event>" . PHP_EOL;
+            }
+
+            $xml .= '</calendar>' . PHP_EOL;
+            file_put_contents($destinationDir . '/calendar.xml', $xml);
+            return;
         }
-        $xmlContent .= '</calendar>';
 
-        file_put_contents($destinationDir.'/calendar.xml', $xmlContent);
+        if (!empty($calendarData)) {
+            $xml  = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
+            $xml .= '<calendar>' . PHP_EOL;
+
+            foreach ($calendarData as $e) {
+                $name      = htmlspecialchars((string)($e['name'] ?? 'Event'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+                $timestart = (int)($e['timestart'] ?? time());
+                $duration  = (int)($e['duration']  ?? 0);
+
+                $xml .= "  <event>" . PHP_EOL;
+                $xml .= "    <name>{$name}</name>" . PHP_EOL;
+                $xml .= "    <timestart>{$timestart}</timestart>" . PHP_EOL;
+                $xml .= "    <duration>{$duration}</duration>" . PHP_EOL;
+                $xml .= "  </event>" . PHP_EOL;
+            }
+
+            $xml .= '</calendar>' . PHP_EOL;
+            file_put_contents($destinationDir . '/calendar.xml', $xml);
+            return;
+        }
+
+        $xml  = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
+        $xml .= '<calendar/>' . PHP_EOL;
+        file_put_contents($destinationDir . '/calendar.xml', $xml);
     }
 
     /**
@@ -359,5 +413,56 @@ class CourseExport
         $xmlContent .= '</filters>';
 
         file_put_contents($destinationDir.'/filters.xml', $xmlContent);
+    }
+
+    /**
+     * Gather CalendarEvent objects pushed by the builder into $this->course->resources.
+     * We DO NOT invent types; we rely on the builder's CalendarEvent class in the same namespace.
+     *
+     * @return CalendarEvent[]  // from Builder namespace
+     */
+    private function collectCalendarEvents(): array
+    {
+        $out = [];
+        $resources = $this->course->resources ?? null;
+
+        if (!\is_array($resources)) {
+            return $out;
+        }
+
+        // Prefer a dedicated 'calendar' bucket if present; otherwise, scan all buckets.
+        if (isset($resources['calendar']) && \is_array($resources['calendar'])) {
+            foreach ($resources['calendar'] as $item) {
+                if ($item instanceof CalendarEvent) {
+                    $out[] = $item;
+                }
+            }
+            return $out;
+        }
+
+        foreach ($resources as $bucket) {
+            if (\is_array($bucket)) {
+                foreach ($bucket as $item) {
+                    if ($item instanceof CalendarEvent) {
+                        $out[] = $item;
+                    }
+                }
+            } elseif ($bucket instanceof CalendarEvent) {
+                $out[] = $bucket;
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * Convert a date-string ('Y-m-d H:i:s') or numeric to timestamp with fallback.
+     */
+    private function toTimestamp(string $value, int $fallback): int
+    {
+        if ($value === '') { return $fallback; }
+        if (\is_numeric($value)) { return (int) $value; }
+        $t = \strtotime($value);
+        return false !== $t ? (int) $t : $fallback;
     }
 }

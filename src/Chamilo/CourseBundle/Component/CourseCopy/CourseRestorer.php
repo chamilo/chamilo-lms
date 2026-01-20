@@ -3680,6 +3680,7 @@ class CourseRestorer
                 unset($obj->params['id']);
                 unset($obj->params['iid']);
                 $obj->params['c_id'] = $this->destination_course_id;
+                $obj->params['session_id'] = $sessionId;
                 $last_id = Database::insert($table_attendance, $obj->params);
 
                 if (is_numeric($last_id)) {

@@ -294,6 +294,10 @@
 
 .mdi {
   @apply font-normal text-base leading-none;
+
+  &::before {
+    vertical-align: bottom;
+  }
 }
 
 .field > small.p-error {

@@ -697,7 +697,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $userIdList = Session::read('user_id_list');
     if (isset($userIdList[0])) {
         $lpList = new LearnpathList(
-            $studentId,
+            $userIdList[0],
             $courseInfo,
             $sessionId,
             null,

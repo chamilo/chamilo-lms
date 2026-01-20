@@ -72,6 +72,12 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
 
         $this->dataCorrespondence = array_filter($ldapConfig['data_correspondence']) ?: [];
 
+        if (null !== $ldapConfig['password_attribute']) {
+            $dataCorrespondence = array_values($this->dataCorrespondence + [$ldapConfig['password_attribute']]);
+        } else {
+            $dataCorrespondence = $this->dataCorrespondence;
+        }
+
         $this->ldapBadge = new LdapBadge(Ldap::class, $dnString, $searchDn, $searchPassword, $queryString);
 
         $this->userProvider = new LdapUserProvider(
@@ -83,7 +89,7 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
             $ldapConfig['uid_key'] ?? null,
             $ldapConfig['filter'] ?? null,
             $ldapConfig['password_attribute'] ?? null,
-            array_values($this->dataCorrespondence + [$ldapConfig['password_attribute']]),
+            $dataCorrespondence,
         );
     }
 

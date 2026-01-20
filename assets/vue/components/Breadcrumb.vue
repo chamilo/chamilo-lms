@@ -1,12 +1,20 @@
 <template>
   <div
-    v-if="itemList.length > 0"
+    v-if="items.length > 0"
     class="app-breadcrumb"
   >
-    <Breadcrumb :model="itemList">
+    <Breadcrumb
+      :model="items"
+      :home="home"
+    >
       <template #item="{ item, props }">
+        <BaseIcon
+          v-if="item.icon"
+          :icon="item.icon"
+          size="small"
+        />
         <BaseAppLink
-          v-if="(item.route || item.url) && item !== itemList[itemList.length - 1]"
+          v-if="(item.route || item.url) && item !== items[items.length - 1]"
           :to="item.route"
           :url="item.url"
           v-bind="props.action"
@@ -17,7 +25,8 @@
         <span
           v-else
           v-text="stripHtml(item.label)"
-        ></span>
+          v-bind="props.action"
+        />
       </template>
 
       <template #separator> /</template>
@@ -38,6 +47,7 @@ import Breadcrumb from "primevue/breadcrumb"
 import { useCidReqStore } from "../store/cidReq"
 import { storeToRefs } from "pinia"
 import { useStore } from "vuex"
+import BaseIcon from "./basecomponents/BaseIcon.vue"
 
 const legacyItems = ref([])
 
@@ -62,7 +72,26 @@ const specialRouteNames = [
   "MessageCreate",
 ]
 
-const itemList = ref([])
+const calculatedList = ref([])
+
+const home = computed(() => {
+  if (calculatedList.value.length) {
+    return {
+      ...calculatedList.value[0],
+      icon: "compass",
+    }
+  }
+
+  return undefined
+})
+
+const items = computed(() => {
+  if (!calculatedList.value.length) {
+    return []
+  }
+
+  return calculatedList.value.slice(1)
+})
 
 /**
  * Group breadcrumb support (no API calls)
@@ -87,7 +116,7 @@ const formatToolName = (name) => {
 }
 
 const addToolWithResourceBreadcrumb = (toolName, listRouteName, detailRouteName) => {
-  itemList.value.push({
+  calculatedList.value.push({
     label: t(formatToolName(toolName)),
     route: {
       name: listRouteName,
@@ -104,7 +133,7 @@ const addToolWithResourceBreadcrumb = (toolName, listRouteName, detailRouteName)
     const resourceLabel = resourceNode.value.title
     const idParam = cleanIdParam(route.params.id)
 
-    itemList.value.push({
+    calculatedList.value.push({
       label: resourceLabel,
       route: idParam ? { name: detailRouteName, params: { id: idParam }, query: route.query } : undefined,
     })
@@ -114,7 +143,7 @@ const addToolWithResourceBreadcrumb = (toolName, listRouteName, detailRouteName)
   const label = currentMatched?.meta?.breadcrumb || formatToolName(route.name)
 
   if (route.name !== detailRouteName) {
-    itemList.value.push({
+    calculatedList.value.push({
       label: t(label),
       route: { name: route.name, params: route.params, query: route.query },
     })
@@ -125,10 +154,10 @@ function addRemainingMatchedBreadcrumbs() {
   route.matched.slice(1).forEach((r) => {
     const label = r.meta?.breadcrumb || formatToolName(r.name)
     const alreadyHasResource =
-      resourceNode.value?.title && itemList.value.some((item) => item.label === resourceNode.value.title)
+      resourceNode.value?.title && calculatedList.value.some((item) => item.label === resourceNode.value.title)
 
     if (!alreadyHasResource) {
-      itemList.value.push({
+      calculatedList.value.push({
         label: t(label),
         route: {
           name: r.name,
@@ -177,7 +206,7 @@ function addDocumentBreadcrumb() {
     current = current.parent
   }
   const first = folderTrail.shift()
-  itemList.value.push({
+  calculatedList.value.push({
     label: t("Documents"),
     route: {
       name: "DocumentsList",
@@ -186,7 +215,7 @@ function addDocumentBreadcrumb() {
     },
   })
   folderTrail.forEach((folder) => {
-    itemList.value.push({
+    calculatedList.value.push({
       label: folder.label,
       route: { name: "DocumentsList", params: { node: folder.nodeId }, query: route.query },
     })
@@ -196,9 +225,9 @@ function addDocumentBreadcrumb() {
   const label = currentMatched?.meta?.breadcrumb
   if (label !== "") {
     const finalLabel = label || formatToolName(currentMatched?.name)
-    const alreadyShown = itemList.value.some((item) => item.label === finalLabel)
+    const alreadyShown = calculatedList.value.some((item) => item.label === finalLabel)
     if (!alreadyShown) {
-      itemList.value.push({
+      calculatedList.value.push({
         label: t(finalLabel),
         route: { name: currentMatched.name, params: route.params, query: route.query },
       })
@@ -220,13 +249,13 @@ function addGroupBreadcrumbIfNeeded() {
   const label = `${labelBase} ${padded}`
 
   // Avoid duplicates (e.g. if some legacy breadcrumb already includes it)
-  const alreadyExists = itemList.value.some((it) => stripHtml(it.label) === stripHtml(label))
+  const alreadyExists = calculatedList.value.some((it) => stripHtml(it.label) === stripHtml(label))
   if (alreadyExists) return
 
   // Legacy group space URL, works even if there is no Vue route for group space
   const url = buildGroupSpaceUrl(currentGid)
 
-  itemList.value.push({
+  calculatedList.value.push({
     label,
     url: url || undefined,
   })
@@ -296,22 +325,22 @@ function resolveSettingsSectionLabel(nsRaw) {
 // Watch route changes to dynamically rebuild the breadcrumb trail
 watchEffect(() => {
   if ("/" === route.fullPath) return
-  itemList.value = []
-// special-case accessurl routes
+  calculatedList.value = []
+  // special-case accessurl routes
   if (/^\/resources\/accessurl\/[^\/]+\/delete(?:\/|$)/.test(route.path)) {
-    itemList.value = []
+    calculatedList.value = []
 
-    itemList.value.push({
+    calculatedList.value.push({
       label: t("Administration"),
       url: "/main/admin/index.php",
     })
 
-    itemList.value.push({
+    calculatedList.value.push({
       label: t("Multiple access URL / Branding"),
       url: "/main/admin/access_urls.php",
     })
 
-    itemList.value.push({ label: t("Delete access") })
+    calculatedList.value.push({ label: t("Delete access") })
 
     return
   }
@@ -320,10 +349,10 @@ watchEffect(() => {
 
   // Static route categories (must use "route" or "url" for our slot)
   if (route.name?.includes("Page")) {
-    itemList.value.push({ label: t("Pages"), route: { path: "/resources/pages" } })
+    calculatedList.value.push({ label: t("Pages"), route: { path: "/resources/pages" } })
   }
   if (route.name?.includes("Message")) {
-    itemList.value.push({ label: t("Messages"), route: { path: "/resources/messages" } })
+    calculatedList.value.push({ label: t("Messages"), route: { path: "/resources/messages" } })
   }
 
   // Do not build breadcrumb for top-level routes
@@ -331,7 +360,7 @@ watchEffect(() => {
 
   // Add course or session link
   if (course.value) {
-    itemList.value.push({
+    calculatedList.value.push({
       label: t(session.value ? "My sessions" : "My courses"),
       route: { name: session.value ? "MySessions" : "MyCourses" },
     })
@@ -345,7 +374,7 @@ watchEffect(() => {
       let newUrl = (item.url || "").toString()
       if (newUrl.indexOf("main/") > 0) newUrl = "/" + newUrl.substring(mainPath)
       if (newUrl === "/") newUrl = "#"
-      itemList.value.push({ label: item.name, url: newUrl || undefined })
+      calculatedList.value.push({ label: item.name, url: newUrl || undefined })
     })
     legacyItems.value = []
     return
@@ -353,7 +382,7 @@ watchEffect(() => {
 
   // Standard: add course title crumb
   if (course.value && route.name !== "CourseHome") {
-    itemList.value.push({
+    calculatedList.value.push({
       label: course.value.title,
       route: { name: "CourseHome", params: { id: course.value.id }, query: route.query },
     })
@@ -399,7 +428,7 @@ watchEffect(() => {
       const gidVal = Number(route.query?.gid || 0)
       toolLabel = gidVal > 0 ? "Group agenda" : cid > 0 ? "Agenda" : "Personal agenda"
     }
-    itemList.value.push({
+    calculatedList.value.push({
       label: t(toolLabel),
       route: { name: toolBase.name, params: route.params, query: route.query },
     })
@@ -407,9 +436,9 @@ watchEffect(() => {
     const label = currentMatched.meta?.breadcrumb
     if (label !== "") {
       const finalLabel = label || formatToolName(currentMatched.name)
-      const alreadyShown = itemList.value.some((item) => item.label === finalLabel)
+      const alreadyShown = calculatedList.value.some((item) => item.label === finalLabel)
       if (!alreadyShown) {
-        itemList.value.push({
+        calculatedList.value.push({
           label: t(finalLabel),
           route: { name: currentMatched.name, params: route.params, query: route.query },
         })
@@ -441,7 +470,7 @@ function buildManualBreadcrumbIfNeeded() {
       let newUrl = (item.url || "").toString()
       if (newUrl.indexOf("main/") > 0) newUrl = "/" + newUrl.substring(mainPath)
       if (newUrl === "/") newUrl = "#"
-      itemList.value.push({ label: item.name, url: newUrl || undefined })
+      calculatedList.value.push({ label: item.name, url: newUrl || undefined })
     })
     legacyItems.value = []
     return true
@@ -464,16 +493,16 @@ function buildManualBreadcrumbIfNeeded() {
   if (isAdminSettings) {
     const ns = pathSegments[2] || route.params?.namespace || route.query?.namespace || ""
     const adminLabel = t("Admin")
-    itemList.value.push({
+    calculatedList.value.push({
       label: adminLabel,
       route: { name: overrides.admin, params: route.params, query: route.query },
     })
-    itemList.value.push({
+    calculatedList.value.push({
       label: t("Settings"),
       route: { path: "/admin/settings" },
     })
     const section = resolveSettingsSectionLabel(ns)
-    itemList.value.push({ label: section })
+    calculatedList.value.push({ label: section })
     return true
   }
 
@@ -488,15 +517,15 @@ function buildManualBreadcrumbIfNeeded() {
     const label = t(segment.charAt(0).toUpperCase() + segment.slice(1))
     const override = overrides[segment]
     if (override === null) {
-      itemList.value.push({ label })
+      calculatedList.value.push({ label })
     } else if (override) {
-      itemList.value.push({
+      calculatedList.value.push({
         label,
         route: { name: override, params: route.params, query: route.query },
       })
     } else {
       const partialPath = "/" + pathSegments.slice(0, index + 1).join("/")
-      itemList.value.push({
+      calculatedList.value.push({
         label,
         route: { path: partialPath },
       })
@@ -567,7 +596,7 @@ function buildSkillBreadcrumbIfNeeded() {
 
   const rootUrl = origin || (isSocial ? "/social" : "/admin")
 
-  itemList.value.push({
+  calculatedList.value.push({
     label: rootLabel,
     url: rootUrl,
   })
@@ -576,7 +605,7 @@ function buildSkillBreadcrumbIfNeeded() {
   const lastLabel =
     route.name === "SkillWheel" ? translateOrFallback("Skills wheel", "Skills wheel") : formatToolName(route.name)
 
-  itemList.value.push({ label: lastLabel })
+  calculatedList.value.push({ label: lastLabel })
 
   return true
 }

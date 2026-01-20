@@ -1,5 +1,5 @@
 .app-breadcrumb {
-  @apply bg-white mb-3 md:px-6 px-4 text-tiny font-semibold leading-4 space-y-1;
+  @apply bg-white mb-3 text-tiny font-semibold leading-4 space-y-1;
 
   .p-breadcrumb-item-link {
     @apply text-tiny font-semibold;
@@ -8,13 +8,17 @@
   &__session-title {
     @apply text-tiny font-semibold text-gray-50 uppercase;
   }
+
+  .mdi {
+    @apply text-tiny leading-4;
+  }
 }
 
 .p-breadcrumb {
   @apply overflow-x-auto bg-white;
 
   &-list {
-    @apply p-0 m-0 flex gap-1 text-gray-90 list-none items-center flex-nowrap;
+    @apply p-0 m-0 flex gap-2 text-gray-90 list-none items-center flex-nowrap;
 
     li {
       .p-menuitem-link {
@@ -39,6 +43,10 @@
 
   &::-webkit-scrollbar {
     @apply hidden;
+  }
+
+  &-item {
+    @apply flex items-center gap-1;
   }
 
   &-item-link {

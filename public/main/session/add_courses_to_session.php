@@ -48,6 +48,7 @@ $form->addSelectAjax(
         'id' => 'courses',
         'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
         'multiple' => 'multiple',
+        'class' => 'w-full',
     ]
 );
 
@@ -102,6 +103,39 @@ if (!api_is_platform_admin() && api_is_teacher()) {
     );
 }
 
-echo Display::page_header($tool_name.' ('.$session->getTitle().')');
-echo $contentForm;
+$sessionTitle = $session ? (string) $session->getTitle() : '';
+$backUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId;
+$listUrl = api_get_path(WEB_CODE_PATH).'session/session_list.php';
+
+echo '<div class="mx-auto w-full p-4 space-y-4">';
+
+echo '  <div class="rounded-lg border border-gray-30 bg-white p-4 shadow-sm">';
+echo '    <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">';
+echo '      <div class="min-w-0">';
+echo '        <h1 class="text-lg font-semibold text-gray-90">'.htmlspecialchars($tool_name, ENT_QUOTES, api_get_system_encoding()).'</h1>';
+echo '        <p class="text-sm text-gray-50">'.htmlspecialchars($sessionTitle, ENT_QUOTES, api_get_system_encoding()).'</p>';
+echo '      </div>';
+echo '      <div class="flex items-center gap-2">';
+echo '        <a href="'.$backUrl.'" class="inline-flex items-center gap-2 rounded-md border border-gray-30 bg-white px-3 py-1.5 text-sm font-medium text-gray-90 shadow-sm hover:bg-gray-10">';
+echo              get_lang('Back');
+echo '        </a>';
+echo '        <a href="'.$listUrl.'" class="inline-flex items-center gap-2 rounded-md border border-gray-30 bg-white px-3 py-1.5 text-sm font-medium text-gray-90 shadow-sm hover:bg-gray-10">';
+echo              get_lang('Session list');
+echo '        </a>';
+echo '      </div>';
+echo '    </div>';
+echo '  </div>';
+
+echo '  <div class="rounded-lg border border-gray-30 bg-gray-10 p-4">';
+echo '    <p class="text-sm text-gray-70 leading-relaxed">';
+echo '      <span class="font-semibold text-gray-90">'.get_lang('Tip').':</span> '.get_lang('You can select multiple items').'. ';
+echo        get_lang('Use the search box to find courses quickly').'.';
+echo '    </p>';
+echo '  </div>';
+
+echo '  <div class="rounded-lg border border-gray-30 bg-white p-4 shadow-sm">';
+echo        $contentForm;
+echo '  </div>';
+
+echo '</div>';
 Display::display_footer();

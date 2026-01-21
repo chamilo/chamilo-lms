@@ -843,7 +843,7 @@ class IndexBlocksController extends BaseController
 
         $items[] = [
             'class' => 'item-session-course-copy',
-            'url' => '/main/coursecopy/copy_course_session.php',
+            'url' => '/main/course_copy/copy_course_session.php',
             'label' => $this->translator->trans('Copy from course in session to another session'),
         ];
 

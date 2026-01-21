@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Framework\Container;
@@ -64,11 +65,14 @@ use Database;
 use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use DocumentManager;
 use ReflectionProperty;
 use stdClass;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
+
+use const PHP_URL_PATH;
 
 /**
  * CourseBuilder focused on Doctrine/ResourceNode export (keeps legacy orchestration).
@@ -122,15 +126,30 @@ class CourseBuilder
     public array $specific_id_list = [];
 
     /**
-     * @var array<int, array{0:string,1:string,2:string}> Documents referenced inside HTML
+     * Documents referenced inside HTML.
+     *
+     * Stored as an associative array keyed by the URL to avoid duplicates:
+     *  - key: url
+     *  - value: [url, scope, type]
+     *
+     * @var array<string, array{0:string,1:string,2:string}>
      */
     public array $documentsAddedInText = [];
 
     /**
      * Doctrine services.
      */
-    private $em;       // Doctrine EntityManager
-    private $docRepo;  // CDocumentRepository
+    private EntityManagerInterface $em;
+    private CDocumentRepository $docRepo;
+
+    /**
+     * When exporting with a session context:
+     * - true  => include both base course content + session content
+     * - false => include only session-specific content
+     *
+     * This must be used consistently by all resource builders.
+     */
+    private bool $withBaseContent = false;
 
     /**
      * Constructor (keeps legacy init; wires Doctrine repositories).
@@ -138,7 +157,7 @@ class CourseBuilder
      * @param string     $type   'partial'|'complete'
      * @param array|null $course Optional course info array
      */
-    public function __construct($type = '', $course = null)
+    public function __construct(string $type = '', ?array $course = null)
     {
         // Legacy behavior preserved
         $_course = api_get_course_info();
@@ -152,10 +171,13 @@ class CourseBuilder
         $this->course->encoding = api_get_system_encoding();
         $this->course->info = $_course;
 
-        $this->em = Database::getManager();
-        $this->docRepo = Container::getDocumentRepository();
+        /** @var EntityManagerInterface $em */
+        $em = Database::getManager();
+        $this->em = $em;
 
-        // Use $this->em / $this->docRepo in build_documents() when needed.
+        /** @var CDocumentRepository $docRepo */
+        $docRepo = Container::getDocumentRepository();
+        $this->docRepo = $docRepo;
     }
 
     /**
@@ -166,16 +188,20 @@ class CourseBuilder
     public function addDocumentList(array $list): void
     {
         foreach ($list as $item) {
-            if (!\in_array($item[0], $this->documentsAddedInText, true)) {
-                $this->documentsAddedInText[$item[0]] = $item;
+            $url = (string) ($item[0] ?? '');
+            if ('' === $url) {
+                continue;
+            }
+
+            // Keep the first occurrence for a given URL (dedupe by URL key).
+            if (!isset($this->documentsAddedInText[$url])) {
+                $this->documentsAddedInText[$url] = $item;
             }
         }
     }
 
     /**
      * Parse HTML and collect referenced course documents.
-     *
-     * @param string $html HTML content
      */
     public function findAndSetDocumentsInText(string $html = ''): void
     {
@@ -187,106 +213,211 @@ class CourseBuilder
     }
 
     /**
-     * Resolve collected HTML links to CDocument iids via the ResourceNode tree and build them.
+     * Resolve collected HTML links to CDocument iids and build them.
      */
-    public function restoreDocumentsFromList(): void
+    public function restoreDocumentsFromList(?CourseEntity $course = null, ?SessionEntity $session = null): void
     {
         if (empty($this->documentsAddedInText)) {
             return;
         }
 
-        $courseInfo = api_get_course_info();
-        $courseCode = (string) ($courseInfo['code'] ?? '');
-        if ('' === $courseCode) {
-            return;
-        }
-
-        /** @var CourseEntity|null $course */
-        $course = $this->em->getRepository(CourseEntity::class)->findOneBy(['code' => $courseCode]);
+        // Resolve current course entity if not provided.
         if (!$course instanceof CourseEntity) {
-            return;
+            $courseInfo = api_get_course_info();
+            $courseCode = (string) ($courseInfo['code'] ?? '');
+            if ('' === $courseCode) {
+                return;
+            }
+
+            /** @var CourseEntity|null $resolved */
+            $resolved = $this->em->getRepository(CourseEntity::class)->findOneBy(['code' => $courseCode]);
+            if (!$resolved instanceof CourseEntity) {
+                return;
+            }
+
+            $course = $resolved;
         }
 
-        // Documents root under the course
-        $root = $this->docRepo->getCourseDocumentsRootNode($course);
-        if (!$root instanceof ResourceNode) {
-            return;
-        }
-
-        $iids = [];
+        $need = [];
 
         foreach ($this->documentsAddedInText as $item) {
             [$url, $scope, $type] = $item; // url, scope(local/remote), type(rel/abs/url)
+
+            // Only process local document-style URLs.
             if ('local' !== $scope || !\in_array($type, ['rel', 'abs'], true)) {
                 continue;
             }
 
-            $segments = $this->extractDocumentSegmentsFromUrl((string) $url);
-            if (!$segments) {
+            $rel = $this->extractRelativeDocumentPathFromUrl((string) $url);
+            $rel = $this->normalizeDocumentRelPath($rel);
+
+            if ('' === $rel) {
                 continue;
             }
 
-            // Walk the ResourceNode tree by matching child titles
-            $node = $this->resolveNodeBySegments($root, $segments);
-            if (!$node) {
-                continue;
-            }
+            // Include the file path itself.
+            $need[$rel] = true;
 
-            $resource = $this->docRepo->getResourceByResourceNode($node);
-            if ($resource instanceof CDocument && \is_int($resource->getIid())) {
-                $iids[] = $resource->getIid();
+            // Also include parent folders to preserve hierarchy on restore.
+            $parts = array_values(array_filter(explode('/', $rel), static fn ($s) => '' !== $s));
+            if (\count($parts) > 1) {
+                $prefix = '';
+                for ($i = 0; $i < \count($parts) - 1; $i++) {
+                    $prefix = '' === $prefix ? $parts[$i] : $prefix.'/'.$parts[$i];
+                    $need[$prefix] = true;
+                }
             }
         }
 
-        $iids = array_values(array_unique($iids));
-        if ($iids) {
-            $this->build_documents(
-                api_get_session_id(),
-                (int) $course->getId(),
-                true,
-                $iids
-            );
+        if (empty($need)) {
+            return;
         }
+
+        $paths = array_keys($need);
+
+        $iids = $this->resolveDocumentIidsByRelativePaths($course, $session, $paths);
+        if (empty($iids)) {
+            error_log('COURSE_BUILD: no referenced documents matched in repository (paths_count='.\count($paths).')');
+            return;
+        }
+
+        $sid = (int) ($session?->getId() ?? api_get_session_id());
+        $cid = (int) $course->getId();
+
+        $this->build_documents($sid, $cid, $this->withBaseContent, $iids);
     }
 
     /**
-     * Extract path segments after "/document".
-     *
-     * @return array<string>
+     * Extract path part after ".../document/" from a URL.
+     * Returns an empty string when not a document-like URL.
      */
-    private function extractDocumentSegmentsFromUrl(string $url): array
+    private function extractRelativeDocumentPathFromUrl(string $url): string
     {
+        if ('' === $url) {
+            return '';
+        }
+
+        // Remove fragment/query early, keep only path.
         $decoded = urldecode($url);
-        if (!preg_match('#/document(/.*)$#', $decoded, $m)) {
-            return [];
-        }
-        $tail = trim($m[1], '/'); // e.g. "Folder/Sub/file.pdf"
-        if ('' === $tail) {
-            return [];
+        $path = (string) (parse_url($decoded, PHP_URL_PATH) ?? '');
+        if ('' === $path) {
+            $path = $decoded;
         }
 
-        $parts = array_values(array_filter(explode('/', $tail), static fn ($s) => '' !== $s));
+        // Most common patterns:
+        // - /courses/COURSECODE/document/Folder/file.png
+        // - /document/Folder/file.png
+        // - document/Folder/file.png
+        $pos = stripos($path, '/document/');
+        if (false !== $pos) {
+            return substr($path, $pos + \strlen('/document/')) ?: '';
+        }
 
-        return array_map(static fn ($s) => trim($s), $parts);
+        if (str_starts_with($path, 'document/')) {
+            return substr($path, \strlen('document/')) ?: '';
+        }
+        if (str_starts_with($path, '/document/')) {
+            return substr($path, \strlen('/document/')) ?: '';
+        }
+
+        // Fallback: "/document" without trailing slash.
+        $pos2 = stripos($path, '/document');
+        if (false !== $pos2) {
+            $tail = substr($path, $pos2 + \strlen('/document')) ?: '';
+            return ltrim($tail, '/');
+        }
+
+        return '';
     }
 
     /**
-     * Walk children by title from a given parent node.
-     *
-     * @param array<int,string> $segments
+     * Normalize a relative document path for matching.
      */
-    private function resolveNodeBySegments(ResourceNode $parent, array $segments): ?ResourceNode
+    private function normalizeDocumentRelPath(string $path): string
     {
-        $node = $parent;
-        foreach ($segments as $title) {
-            $child = $this->docRepo->findChildNodeByTitle($node, $title);
-            if (!$child instanceof ResourceNode) {
-                return null;
-            }
-            $node = $child;
+        if ('' === $path) {
+            return '';
         }
 
-        return $node;
+        $path = urldecode($path);
+        $path = str_replace('\\', '/', $path);
+
+        // Remove "Documents" prefix if present (defensive).
+        $path = preg_replace('~^/?Documents/?~i', '', $path) ?? $path;
+
+        // Trim slashes and collapse duplicated slashes.
+        $path = trim($path, '/');
+        $path = preg_replace('~/{2,}~', '/', $path) ?? $path;
+
+        return (string) $path;
+    }
+
+    /**
+     * Resolve document IIDs by comparing computed "relative display paths" with the given list.
+     *
+     * @param array<int,string> $relativePaths
+     *
+     * @return array<int>
+     */
+    private function resolveDocumentIidsByRelativePaths(
+        CourseEntity $course,
+        ?SessionEntity $session,
+        array $relativePaths
+    ): array {
+        if (empty($relativePaths)) {
+            return [];
+        }
+
+        $need = [];
+        foreach ($relativePaths as $p) {
+            $p = $this->normalizeDocumentRelPath((string) $p);
+            if ('' !== $p) {
+                $need[$p] = true;
+            }
+        }
+        if (empty($need)) {
+            return [];
+        }
+
+        // IMPORTANT: always pass withBaseContent to the repository when supported.
+        $qb = $this->getResourcesByCourseQbFromRepo($this->docRepo, $course, $session, $this->withBaseContent);
+
+        /** @var CDocument[] $docs */
+        $docs = $qb->getQuery()->getResult();
+
+        $documentsRoot = $this->docRepo->getCourseDocumentsRootNode($course);
+
+        $iids = [];
+
+        foreach ($docs as $doc) {
+            $node = $doc->getResourceNode();
+            if (!$node instanceof ResourceNode) {
+                continue;
+            }
+
+            $rel = '';
+            if ($documentsRoot instanceof ResourceNode) {
+                $rel = (string) $node->getPathForDisplayRemoveBase((string) $documentsRoot->getPath());
+            } else {
+                $rel = (string) $node->convertPathForDisplay((string) $node->getPath());
+                $rel = preg_replace('~^/?Documents/?~i', '', (string) $rel) ?? $rel;
+            }
+
+            $rel = $this->normalizeDocumentRelPath($rel);
+
+            if ('' === $rel) {
+                continue;
+            }
+
+            if (isset($need[$rel])) {
+                $iid = (int) $doc->getIid();
+                if ($iid > 0) {
+                    $iids[] = $iid;
+                }
+            }
+        }
+
+        return array_values(array_unique($iids));
     }
 
     /**
@@ -322,6 +453,18 @@ class CourseBuilder
         array $parseOnlyToolList = [],
         array $toolsFromPost = []
     ): Course {
+
+        // Ensure course info exists before using it
+        if (empty($this->courseInfo) || !is_array($this->courseInfo)) {
+            $this->courseInfo = api_get_course_info($courseCode);
+        }
+
+        if (empty($this->courseInfo) || !is_array($this->courseInfo)) {
+            throw new \RuntimeException(sprintf('CourseBuilder cannot load course info for course code "%s".', $courseCode));
+        }
+
+        $this->withBaseContent = $withBaseContent;
+
         /** @var CourseEntity|null $courseEntity */
         $courseEntity = '' !== $courseCode
             ? $this->em->getRepository(CourseEntity::class)->findOneBy(['code' => $courseCode])
@@ -369,18 +512,11 @@ class CourseBuilder
                 $neededQuestionIds = $this->build_quizzes($legacyCourse, $courseEntity, $sessionEntity, $ids);
                 // Always export question bucket required by the quizzes
                 $this->build_quiz_questions($legacyCourse, $courseEntity, $sessionEntity, $neededQuestionIds);
-                error_log(
-                    'COURSE_BUILD: quizzes='.\count($legacyCourse->resources[RESOURCE_QUIZ] ?? []).
-                    ' quiz_questions='.\count($legacyCourse->resources[RESOURCE_QUIZQUESTION] ?? [])
-                );
             }
 
             if ('quiz_questions' === $toolKey) {
                 $ids = $this->specific_id_list['quiz_questions'] ?? [];
                 $this->build_quiz_questions($legacyCourse, $courseEntity, $sessionEntity, $ids);
-                error_log(
-                    'COURSE_BUILD: explicit quiz_questions='.\count($legacyCourse->resources[RESOURCE_QUIZQUESTION] ?? [])
-                );
             }
 
             if ('surveys' === $toolKey || 'survey' === $toolKey) {
@@ -448,6 +584,11 @@ class CourseBuilder
             }
         }
 
+        // Always try to include documents referenced inside HTML (images, attachments, etc.).
+        if ($courseEntity instanceof CourseEntity) {
+            $this->restoreDocumentsFromList($courseEntity, $sessionEntity);
+        }
+
         return $this->course;
     }
 
@@ -467,7 +608,9 @@ class CourseBuilder
         }
 
         $repo = Container::getLpCategoryRepository();
-        $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+
+        // propagate withBaseContent to repo when supported.
+        $qb = $this->getResourcesByCourseQbFromRepo($repo, $courseEntity, $sessionEntity, $this->withBaseContent);
 
         if (!empty($ids)) {
             $qb->andWhere('resource.iid IN (:ids)')
@@ -509,7 +652,9 @@ class CourseBuilder
         }
 
         $lpRepo = Container::getLpRepository();
-        $qb = $lpRepo->getResourcesByCourse($courseEntity, $sessionEntity);
+
+        // propagate withBaseContent to repo when supported.
+        $qb = $this->getResourcesByCourseQbFromRepo($lpRepo, $courseEntity, $sessionEntity, $this->withBaseContent);
 
         if (!empty($idList)) {
             $qb->andWhere('resource.iid IN (:ids)')
@@ -732,7 +877,7 @@ class CourseBuilder
         }
 
         $repo = Container::getStudentPublicationRepository();
-        $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+        $qb = $this->getResourcesByCourseQbFromRepo($repo, $courseEntity, $sessionEntity, $this->withBaseContent);
 
         $qb
             ->andWhere('resource.publicationParent IS NULL')
@@ -804,7 +949,7 @@ class CourseBuilder
         }
 
         $repo = Container::getAttendanceRepository();
-        $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+        $qb = $this->getResourcesByCourseQbFromRepo($repo, $courseEntity, $sessionEntity, $this->withBaseContent);
 
         if (!empty($ids)) {
             $qb->andWhere('resource.iid IN (:ids)')
@@ -870,7 +1015,7 @@ class CourseBuilder
         }
 
         $repo = Container::getThematicRepository();
-        $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+        $qb = $this->getResourcesByCourseQbFromRepo($repo, $courseEntity, $sessionEntity, $this->withBaseContent);
 
         if (!empty($ids)) {
             $qb->andWhere('resource.iid IN (:ids)')
@@ -962,7 +1107,7 @@ class CourseBuilder
         }
 
         $repo = Container::getWikiRepository();
-        $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+        $qb = $this->getResourcesByCourseQbFromRepo($repo, $courseEntity, $sessionEntity, $this->withBaseContent);
 
         if (!empty($ids)) {
             $qb->andWhere('resource.iid IN (:ids)')
@@ -1020,7 +1165,7 @@ class CourseBuilder
         }
 
         $repo = Container::getGlossaryRepository();
-        $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+        $qb = $this->getResourcesByCourseQbFromRepo($repo, $courseEntity, $sessionEntity, $this->withBaseContent);
 
         if (!empty($ids)) {
             $qb->andWhere('resource.iid IN (:ids)')
@@ -1038,13 +1183,7 @@ class CourseBuilder
 
             $this->findAndSetDocumentsInText($desc);
 
-            $legacy = new Glossary(
-                $iid,
-                $title,
-                $desc,
-                0
-            );
-
+            $legacy = new Glossary($iid, $title, $desc, 0);
             $this->course->add_resource($legacy);
         }
     }
@@ -1065,7 +1204,7 @@ class CourseBuilder
         }
 
         $repo = Container::getCourseDescriptionRepository();
-        $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+        $qb = $this->getResourcesByCourseQbFromRepo($repo, $courseEntity, $sessionEntity, $this->withBaseContent);
 
         if (!empty($ids)) {
             $qb->andWhere('resource.iid IN (:ids)')
@@ -1084,13 +1223,7 @@ class CourseBuilder
 
             $this->findAndSetDocumentsInText($html);
 
-            $export = new CourseDescription(
-                $iid,
-                $title,
-                $html,
-                $type
-            );
-
+            $export = new CourseDescription($iid, $title, $html, $type);
             $this->course->add_resource($export);
         }
     }
@@ -1111,7 +1244,7 @@ class CourseBuilder
         }
 
         $eventRepo = Container::getCalendarEventRepository();
-        $qb = $eventRepo->getResourcesByCourse($courseEntity, $sessionEntity);
+        $qb = $this->getResourcesByCourseQbFromRepo($eventRepo, $courseEntity, $sessionEntity, $this->withBaseContent);
 
         if (!empty($ids)) {
             $qb->andWhere('resource.iid IN (:ids)')
@@ -1211,12 +1344,12 @@ class CourseBuilder
         ?SessionEntity $sessionEntity,
         array $ids
     ): void {
-        if (!$courseEntity) {
+        if (!$courseEntity instanceof CourseEntity) {
             return;
         }
 
         $annRepo = Container::getAnnouncementRepository();
-        $qb = $annRepo->getResourcesByCourse($courseEntity, $sessionEntity);
+        $qb = $this->getResourcesByCourseQbFromRepo($annRepo, $courseEntity, $sessionEntity, $this->withBaseContent);
 
         if (!empty($ids)) {
             $qb->andWhere('resource.iid IN (:ids)')
@@ -1309,9 +1442,6 @@ class CourseBuilder
 
     /**
      * Register an asset to be packed into the export ZIP.
-     *
-     * @param string $relPath Relative path inside the ZIP
-     * @param string $absPath Absolute filesystem path
      */
     private function addAsset(string $relPath, string $absPath, int $size = 0): void
     {
@@ -1353,26 +1483,17 @@ class CourseBuilder
             return [];
         }
 
-        $qb = $this->em->createQueryBuilder()
-            ->select('s')
-            ->from(CSurvey::class, 's')
-            ->innerJoin('s.resourceNode', 'rn')
-            ->leftJoin('rn.resourceLinks', 'links')
-            ->andWhere('links.course = :course')->setParameter('course', $courseEntity)
-            ->andWhere(
-                $sessionEntity
-                ? '(links.session IS NULL OR links.session = :session)'
-                : 'links.session IS NULL'
-            )
-            ->andWhere('links.deletedAt IS NULL')
-            ->andWhere('links.endVisibilityAt IS NULL')
-        ;
+        // Context-aware query once (course/session + visibility rules).
+        $qb = $this->createContextQb(
+            CSurvey::class,
+            $courseEntity,
+            $sessionEntity,
+            's'
+        );
 
-        if ($sessionEntity) {
-            $qb->setParameter('session', $sessionEntity);
-        }
         if (!empty($surveyIds)) {
-            $qb->andWhere('s.iid IN (:ids)')->setParameter('ids', array_map('intval', $surveyIds));
+            $qb->andWhere('s.iid IN (:ids)')
+                ->setParameter('ids', array_map('intval', $surveyIds));
         }
 
         /** @var CSurvey[] $surveys */
@@ -1450,25 +1571,24 @@ class CourseBuilder
             ->select('q', 's')
             ->from(CSurveyQuestion::class, 'q')
             ->innerJoin('q.survey', 's')
-            ->innerJoin('s.resourceNode', 'rn')
-            ->leftJoin('rn.resourceLinks', 'links')
-            ->andWhere('links.course = :course')->setParameter('course', $courseEntity)
-            ->andWhere(
-                $sessionEntity
-                ? '(links.session IS NULL OR links.session = :session)'
-                : 'links.session IS NULL'
-            )
-            ->andWhere('links.deletedAt IS NULL')
-            ->andWhere('links.endVisibilityAt IS NULL')
+        ;
+
+        // Apply the same context rules on the survey alias "s".
+        $this->applyContextToQb(
+            $qb,
+            's',
+            $courseEntity,
+            $sessionEntity
+        );
+
+        $qb->distinct()
             ->orderBy('s.iid', 'ASC')
             ->addOrderBy('q.sort', 'ASC')
         ;
 
-        if ($sessionEntity) {
-            $qb->setParameter('session', $sessionEntity);
-        }
         if (!empty($questionIds)) {
-            $qb->andWhere('q.iid IN (:ids)')->setParameter('ids', array_map('intval', $questionIds));
+            $qb->andWhere('q.iid IN (:ids)')
+                ->setParameter('ids', array_map('intval', $questionIds));
         }
 
         /** @var CSurveyQuestion[] $questions */
@@ -1530,26 +1650,16 @@ class CourseBuilder
             return [];
         }
 
-        $qb = $this->em->createQueryBuilder()
-            ->select('q')
-            ->from(CQuiz::class, 'q')
-            ->innerJoin('q.resourceNode', 'rn')
-            ->leftJoin('rn.resourceLinks', 'links')
-            ->andWhere('links.course = :course')->setParameter('course', $courseEntity)
-            ->andWhere(
-                $sessionEntity
-                ? '(links.session IS NULL OR links.session = :session)'
-                : 'links.session IS NULL'
-            )
-            ->andWhere('links.deletedAt IS NULL')
-            ->andWhere('links.endVisibilityAt IS NULL')
-        ;
+        $qb = $this->createContextQb(
+            CQuiz::class,
+            $courseEntity,
+            $sessionEntity,
+            'q'
+        );
 
-        if ($sessionEntity) {
-            $qb->setParameter('session', $sessionEntity);
-        }
         if (!empty($quizIds)) {
-            $qb->andWhere('q.iid IN (:ids)')->setParameter('ids', array_map('intval', $quizIds));
+            $qb->andWhere('q.iid IN (:ids)')
+                ->setParameter('ids', array_map('intval', $quizIds));
         }
 
         /** @var CQuiz[] $quizzes */
@@ -1613,9 +1723,7 @@ class CourseBuilder
                 );
         }
 
-        error_log(
-            'COURSE_BUILD: build_quizzes done; total='.\count($quizzes)
-        );
+        error_log('COURSE_BUILD: build_quizzes done; total='.\count($quizzes));
 
         return array_keys($neededQuestionIds);
     }
@@ -1635,36 +1743,21 @@ class CourseBuilder
             return;
         }
 
-        error_log('COURSE_BUILD: build_quiz_questions start ids='.json_encode(array_values($questionIds)));
-        error_log('COURSE_BUILD: build_quiz_questions exported='.$this->safeCount($legacyCourse->resources[RESOURCE_QUIZQUESTION] ?? 0));
+        // use the common context builder so withBaseContent is applied consistently.
+        $qb = $this->createContextQb(
+            CQuizQuestion::class,
+            $courseEntity,
+            $sessionEntity,
+            'qq'
+        );
 
-        $qb = $this->em->createQueryBuilder()
-            ->select('qq')
-            ->from(CQuizQuestion::class, 'qq')
-            ->innerJoin('qq.resourceNode', 'qrn')
-            ->leftJoin('qrn.resourceLinks', 'qlinks')
-            ->andWhere('qlinks.course = :course')->setParameter('course', $courseEntity)
-            ->andWhere(
-                $sessionEntity
-                ? '(qlinks.session IS NULL OR qlinks.session = :session)'
-                : 'qlinks.session IS NULL'
-            )
-            ->andWhere('qlinks.deletedAt IS NULL')
-            ->andWhere('qlinks.endVisibilityAt IS NULL')
-        ;
-
-        if ($sessionEntity) {
-            $qb->setParameter('session', $sessionEntity);
-        }
         if (!empty($questionIds)) {
-            $qb->andWhere('qq.iid IN (:ids)')->setParameter('ids', array_map('intval', $questionIds));
+            $qb->andWhere('qq.iid IN (:ids)')
+                ->setParameter('ids', array_map('intval', $questionIds));
         }
 
         /** @var CQuizQuestion[] $questions */
         $questions = $qb->getQuery()->getResult();
-
-        error_log('COURSE_BUILD: build_quiz_questions start ids='.json_encode(array_values($questionIds)));
-        error_log('COURSE_BUILD: build_quiz_questions exported='.$this->safeCount($legacyCourse->resources[RESOURCE_QUIZQUESTION] ?? 0));
 
         $this->exportQuestionsWithAnswers($legacyCourse, $questions);
     }
@@ -1739,7 +1832,6 @@ class CourseBuilder
 
             error_log(
                 'COURSE_BUILD: QQ qid='.$qid.
-                ' quiz_type='.($legacyCourse->resources[RESOURCE_QUIZQUESTION][$qid]->quiz_type ?? 'missing').
                 ' answers='.\count($legacyCourse->resources[RESOURCE_QUIZQUESTION][$qid]->answers ?? [])
             );
         }
@@ -1788,15 +1880,16 @@ class CourseBuilder
             return;
         }
 
-        $linkRepo = Container::getLinkRepository();
-        $catRepo = Container::getLinkCategoryRepository();
-
-        $qb = $linkRepo->getResourcesByCourse($courseEntity, $sessionEntity);
+        $qb = $this->createContextQb(
+            CLink::class,
+            $courseEntity,
+            $sessionEntity,
+            'l'
+        );
 
         if (!empty($ids)) {
-            $qb->andWhere('resource.iid IN (:ids)')
-                ->setParameter('ids', array_values(array_unique(array_map('intval', $ids))))
-            ;
+            $qb->andWhere('l.iid IN (:ids)')
+                ->setParameter('ids', array_values(array_unique(array_map('intval', $ids))));
         }
 
         /** @var CLink[] $links */
@@ -1872,9 +1965,11 @@ class CourseBuilder
                 }
             }
         }
+
+        $objArr = (array) $obj;
         foreach ($arrayKeysToPromote as $k) {
-            if (isset($obj[$k]) && \is_array($obj[$k])) {
-                $o->{$k} = $obj[$k];
+            if (isset($objArr[$k]) && \is_array($objArr[$k])) {
+                $o->{$k} = $objArr[$k];
             }
         }
 
@@ -1908,10 +2003,10 @@ class CourseBuilder
         }
 
         if (!isset($o->name) || '' === $o->name || null === $o->name) {
-            if (isset($obj['name']) && '' !== $obj['name']) {
-                $o->name = (string) $obj['name'];
-            } elseif (isset($obj['title']) && '' !== $obj['title']) {
-                $o->name = (string) $obj['title'];
+            if (isset($objArr['name']) && '' !== (string) $objArr['name']) {
+                $o->name = (string) $objArr['name'];
+            } elseif (isset($objArr['title']) && '' !== (string) $objArr['title']) {
+                $o->name = (string) $objArr['title'];
             } else {
                 $o->name = $type.' '.$sourceId;
             }
@@ -1950,59 +2045,50 @@ class CourseBuilder
             return;
         }
 
-        $repo = $this->em->getRepository(CToolIntro::class);
+        $qb = $this->createContextQb(
+            CToolIntro::class,
+            $courseEntity,
+            $sessionEntity,
+            'ti'
+        );
 
-        // Base query: join with tool, filter by course and the specific title
-        $qb = $repo->createQueryBuilder('ti')
-            ->innerJoin('ti.courseTool', 'ct')
-            ->andWhere('ct.course = :course')
+        $linksAlias = $this->getContextLinksAlias('ti');
+
+        $qb->innerJoin('ti.courseTool', 'ct')
             ->andWhere('ct.title = :title')
-            ->setParameter('course', $courseEntity)
             ->setParameter('title', 'course_homepage');
 
-        // Session fallback: when a session is given, fetch both (session AND null)
         if ($sessionEntity) {
-            $qb->andWhere($qb->expr()->orX('ct.session = :session', 'ct.session IS NULL'))
-                ->setParameter('session', $sessionEntity);
+            $qb->andWhere('(ct.session = :session OR ct.session IS NULL)');
         } else {
             $qb->andWhere('ct.session IS NULL');
         }
 
+        if ($sessionEntity) {
+            $qb->addOrderBy('CASE WHEN '.$linksAlias.'.session IS NULL THEN 0 ELSE 1 END', 'DESC');
+        }
+
+        $qb->addOrderBy('ti.iid', 'ASC');
+
         /** @var CToolIntro[] $rows */
         $rows = $qb->getQuery()->getResult();
         if (!$rows) {
-            return; // Nothing to export
-        }
-
-        // Prefer the session-bound intro if present; otherwise, use the base (session IS NULL)
-        $selected = null;
-        foreach ($rows as $row) {
-            $tool = $row->getCourseTool();
-            if ($sessionEntity && $tool && $tool->getSession()) {
-                $selected = $row; // session-specific hit
-                break;
-            }
-            if (!$selected) {
-                $selected = $row; // keep the base as fallback
-            }
-        }
-
-        if (!$selected) {
             return;
         }
 
+        $selected = $rows[0];
+
         $ctool = $selected->getCourseTool();
         $titleKey = (string) ($ctool?->getTitle() ?? 'course_homepage');
-        if ($titleKey === '') {
-            $titleKey = 'course_homepage'; // safety net
+        if ('' === $titleKey) {
+            $titleKey = 'course_homepage';
         }
 
         $payload = [
-            'id'         => $titleKey,
+            'id' => $titleKey,
             'intro_text' => (string) $selected->getIntroText(),
         ];
 
-        // Use 0 as source_id (unused by restore)
         $legacyCourse->resources[RESOURCE_TOOL_INTRO][$titleKey] =
             $this->mkLegacyItem(RESOURCE_TOOL_INTRO, 0, $payload);
     }
@@ -2014,18 +2100,23 @@ class CourseBuilder
      */
     public function build_forum_category(
         object $legacyCourse,
-        CourseEntity $courseEntity,
+        ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
         array $ids
     ): void {
+        if (!$courseEntity instanceof CourseEntity) {
+            return;
+        }
+
         $repo = Container::getForumCategoryRepository();
-        $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+        $qb = $this->getResourcesByCourseQbFromRepo($repo, $courseEntity, $sessionEntity, $this->withBaseContent);
+
+        /** @var CForumCategory[] $categories */
         $categories = $qb->getQuery()->getResult();
 
         $keep = $this->makeIdFilter($ids);
 
         foreach ($categories as $cat) {
-            /** @var CForumCategory $cat */
             $id = (int) $cat->getIid();
             if (!$keep($id)) {
                 continue;
@@ -2050,18 +2141,32 @@ class CourseBuilder
      */
     public function build_forums(
         object $legacyCourse,
-        CourseEntity $courseEntity,
+        ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
         array $ids
     ): void {
-        $repo = Container::getForumRepository();
-        $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+        if (!$courseEntity instanceof CourseEntity) {
+            return;
+        }
+
+        $qb = $this->createContextQb(
+            CForum::class,
+            $courseEntity,
+            $sessionEntity,
+            'f'
+        );
+
+        if (!empty($ids)) {
+            $qb->andWhere('f.iid IN (:ids)')
+                ->setParameter('ids', array_values(array_unique(array_map('intval', $ids))));
+        }
+
+        /** @var CForum[] $forums */
         $forums = $qb->getQuery()->getResult();
 
         $keep = $this->makeIdFilter($ids);
 
         foreach ($forums as $f) {
-            /** @var CForum $f */
             $id = (int) $f->getIid();
             if (!$keep($id)) {
                 continue;
@@ -2098,18 +2203,23 @@ class CourseBuilder
      */
     public function build_forum_topics(
         object $legacyCourse,
-        CourseEntity $courseEntity,
+        ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
         array $ids
     ): void {
+        if (!$courseEntity instanceof CourseEntity) {
+            return;
+        }
+
         $repo = Container::getForumThreadRepository();
-        $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+        $qb = $this->getResourcesByCourseQbFromRepo($repo, $courseEntity, $sessionEntity, $this->withBaseContent);
+
+        /** @var CForumThread[] $threads */
         $threads = $qb->getQuery()->getResult();
 
         $keep = $this->makeIdFilter($ids);
 
         foreach ($threads as $t) {
-            /** @var CForumThread $t */
             $id = (int) $t->getIid();
             if (!$keep($id)) {
                 continue;
@@ -2141,20 +2251,24 @@ class CourseBuilder
      */
     public function build_forum_posts(
         object $legacyCourse,
-        CourseEntity $courseEntity,
+        ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
         array $ids
     ): void {
+        if (!$courseEntity instanceof CourseEntity) {
+            return;
+        }
+
         $repoThread = Container::getForumThreadRepository();
         $repoPost = Container::getForumPostRepository();
+        $qb = $this->getResourcesByCourseQbFromRepo($repoThread, $courseEntity, $sessionEntity, $this->withBaseContent);
 
-        $qb = $repoThread->getResourcesByCourse($courseEntity, $sessionEntity);
+        /** @var CForumThread[] $threads */
         $threads = $qb->getQuery()->getResult();
 
         $keep = $this->makeIdFilter($ids);
 
         foreach ($threads as $t) {
-            /** @var CForumThread $t */
             $threadId = (int) $t->getIid();
             if (!$keep($threadId)) {
                 continue;
@@ -2208,7 +2322,7 @@ class CourseBuilder
             return;
         }
 
-        $qb = $this->docRepo->getResourcesByCourse($course, $session, null, null, true, false);
+        $qb = $this->getResourcesByCourseQbFromRepo($this->docRepo, $course, $session, $withBaseContent);
 
         if (!empty($idList)) {
             $qb->andWhere('resource.iid IN (:ids)')
@@ -2242,15 +2356,15 @@ class CourseBuilder
             $rel = '';
             if ($node instanceof ResourceNode) {
                 if ($documentsRoot instanceof ResourceNode) {
-                    $rel = $node->getPathForDisplayRemoveBase((string) $documentsRoot->getPath()); // e.g. "folder001/file.ext"
+                    $rel = (string) $node->getPathForDisplayRemoveBase((string) $documentsRoot->getPath());
                 } else {
-                    $rel = $node->convertPathForDisplay((string) $node->getPath()); // e.g. "Documents/folder001/file.ext"
+                    $rel = (string) $node->convertPathForDisplay((string) $node->getPath());
                     $rel = preg_replace('~^/?Documents/?~i', '', (string) $rel) ?? $rel;
                 }
             }
             $rel = trim((string) $rel, '/');
             $pathForSelector = 'document' . ($rel !== '' ? '/'.$rel : '');
-            if ($filetype === 'folder') {
+            if ('folder' === $filetype) {
                 $pathForSelector = rtrim($pathForSelector, '/').'/';
             }
 
@@ -2285,5 +2399,181 @@ class CourseBuilder
         $session = $session_id ? $this->em->getRepository(SessionEntity::class)->find($session_id) : null;
 
         $this->build_documents_with_repo($course, $session, $withBaseContent, $idList);
+    }
+
+    /**
+     * Create a QueryBuilder pre-configured with course/session visibility constraints
+     * based on ResourceNode/ResourceLink associations.
+     *
+     * @param class-string $fromClass
+     */
+    private function createContextQb(
+        string $fromClass,
+        CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        string $alias = 'resource'
+    ): QueryBuilder {
+        $qb = $this->em->createQueryBuilder()
+            ->select($alias)
+            ->from($fromClass, $alias);
+
+        $this->applyContextToQb($qb, $alias, $courseEntity, $sessionEntity);
+
+        $qb->distinct();
+
+        return $qb;
+    }
+
+    /**
+     * Apply course/session constraints on an existing QueryBuilder.
+     *
+     * The method ensures the required joins exist with predictable aliases:
+     *  - "{$rootAlias}Node"  for ResourceNode
+     *  - "{$rootAlias}Links" for ResourceLink
+     *
+     * It returns the ResourceLink alias so callers can reference it (ORDER BY, etc).
+     */
+    private function applyContextToQb(
+        QueryBuilder $qb,
+        string $rootAlias,
+        CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity
+    ): string {
+        $nodeAlias = $this->getContextNodeAlias($rootAlias);
+        $linksAlias = $this->getContextLinksAlias($rootAlias);
+
+        // Ensure ResourceNode join exists.
+        if (!$this->hasJoinAlias($qb, $nodeAlias)) {
+            $qb->innerJoin($rootAlias.'.resourceNode', $nodeAlias);
+        }
+
+        // Ensure ResourceLinks join exists.
+        if (!$this->hasJoinAlias($qb, $linksAlias)) {
+            $qb->innerJoin($nodeAlias.'.resourceLinks', $linksAlias);
+        }
+
+        // Base constraints.
+        $qb
+            ->andWhere($linksAlias.'.course = :course')
+            ->setParameter('course', $courseEntity)
+            ->andWhere($linksAlias.'.deletedAt IS NULL')
+            ->andWhere($linksAlias.'.endVisibilityAt IS NULL')
+        ;
+
+        // Group constraint: avoid failing if "group" is mapped as an association.
+        $this->addNoGroupConstraint($qb, $linksAlias);
+
+        // Session constraints controlled by copy option.
+        if (null !== $sessionEntity) {
+            $qb->setParameter('session', $sessionEntity);
+
+            if ($this->withBaseContent) {
+                // Include both base course content + session content.
+                $qb->andWhere('('.$linksAlias.'.session IS NULL OR '.$linksAlias.'.session = :session)');
+            } else {
+                // Session-only.
+                $qb->andWhere($linksAlias.'.session = :session');
+            }
+        } else {
+            // Base-only when no session.
+            $qb->andWhere($linksAlias.'.session IS NULL');
+        }
+
+        return $linksAlias;
+    }
+
+    private function getContextNodeAlias(string $rootAlias): string
+    {
+        return $rootAlias.'Node';
+    }
+
+    private function getContextLinksAlias(string $rootAlias): string
+    {
+        return $rootAlias.'Links';
+    }
+
+    /**
+     * Detect whether a QB already contains a join alias.
+     */
+    private function hasJoinAlias(QueryBuilder $qb, string $alias): bool
+    {
+        $joins = $qb->getDQLPart('join');
+        if (!\is_array($joins)) {
+            return false;
+        }
+
+        foreach ($joins as $group) {
+            if (!\is_array($group)) {
+                continue;
+            }
+            foreach ($group as $j) {
+                if (method_exists($j, 'getAlias') && $j->getAlias() === $alias) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Add "no group" constraint without breaking when ResourceLink::group is an association.
+     */
+    private function addNoGroupConstraint(QueryBuilder $qb, string $linksAlias): void
+    {
+        try {
+            $meta = $this->em->getClassMetadata(ResourceLink::class);
+            if ($meta->hasAssociation('group')) {
+                // Association: only NULL is safe here.
+                $qb->andWhere($qb->expr()->isNull($linksAlias.'.group'));
+                return;
+            }
+        } catch (Throwable) {
+            // Fall back to the legacy condition below.
+        }
+
+        // Scalar mapping (or unknown): keep legacy behavior.
+        $qb->andWhere(
+            $qb->expr()->orX(
+                $qb->expr()->isNull($linksAlias.'.group'),
+                $qb->expr()->eq($linksAlias.'.group', 0)
+            )
+        );
+    }
+
+    /**
+     * Build a QueryBuilder from a repository implementing getResourcesByCourse(),
+     * passing $withBaseContent
+     */
+    private function getResourcesByCourseQbFromRepo(
+        object $repo,
+        CourseEntity $course,
+        ?SessionEntity $session,
+        bool $withBaseContent
+    ): QueryBuilder {
+        if (!method_exists($repo, 'getResourcesByCourse')) {
+            throw new \RuntimeException('Repository does not implement getResourcesByCourse().');
+        }
+
+        try {
+            /** @var QueryBuilder $qb */
+            $qb = $repo->getResourcesByCourse(
+                $course,
+                $session,
+                null,               // group
+                null,               // parentNode
+                true,               // displayOnlyPublished
+                false,              // displayOrder
+                $withBaseContent    // withBaseContentOverride
+            );
+
+            return $qb;
+        } catch (Throwable $e) {
+            throw new \RuntimeException(
+                'Failed to call getResourcesByCourse() with withBaseContentOverride as 7th parameter.',
+                0,
+                $e
+            );
+        }
     }
 }

@@ -44,6 +44,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use UserManager;
@@ -177,6 +178,8 @@ class SocialController extends AbstractController
     #[Route('/legal-status/{userId}', name: 'chamilo_core_social_legal_status')]
     public function getLegalStatus(
         int $userId,
+        #[CurrentUser]
+        User $currentUser,
         SettingsManager $settingsManager,
         TranslatorInterface $translator,
         UserRepository $userRepo,
@@ -185,17 +188,22 @@ class SocialController extends AbstractController
     ): JsonResponse {
         $allowTermsConditions = 'true' === $settingsManager->getSetting('registration.allow_terms_conditions');
         if (!$allowTermsConditions) {
-            return $this->json([
-                'message' => $translator->trans('No terms and conditions available', [], 'messages'),
-            ]);
+            throw $this->createAccessDeniedException(
+                $translator->trans('No terms and conditions available')
+            );
         }
 
-        $user = $userRepo->find($userId);
-        if (!$user) {
-            return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+        /*if (!$currentUser) {
+            throw $this->createAccessDeniedException(
+                $translator->trans('User not found')
+            );
+        }*/
+
+        if ($userId !== $currentUser->getId()) {
+            throw $this->createAccessDeniedException();
         }
 
-        $isoCode = $user->getLocale();
+        $isoCode = $currentUser->getLocale();
         $latestLanguageId = $this->resolveLegalLanguageId($languageRepo, $isoCode, $settingsManager);
         $latestVersion = 0 !== $latestLanguageId ? $legalTermsRepo->getLastVersionByLanguage($latestLanguageId) : null;
 
@@ -291,14 +299,19 @@ class SocialController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/delete-legal', name: 'chamilo_core_social_delete_legal')]
-    public function deleteLegal(Request $request, TranslatorInterface $translator): JsonResponse
-    {
+    public function deleteLegal(
+        #[CurrentUser]
+        User $currentUser,
+        Request $request,
+        TranslatorInterface $translator
+    ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         $userId = $data['userId'] ?? null;
 
-        if (!$userId) {
-            return $this->json(['error' => $translator->trans('User ID not provided')], Response::HTTP_BAD_REQUEST);
+        if ($userId !== $currentUser->getId()) {
+            throw $this->createAccessDeniedException();
         }
 
         $extraFieldValue = new ExtraFieldValue('user');

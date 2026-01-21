@@ -323,9 +323,15 @@ abstract class ResourceRepository extends ServiceEntityRepository
     public function addSessionAndBaseContentQueryBuilder(Session $session, QueryBuilder $qb): QueryBuilder
     {
         return $qb
-            ->andWhere('links.session = :session OR links.session IS NULL')
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->eq('links.session', ':session'),
+                    $qb->expr()->isNull('links.session'),
+                    $qb->expr()->eq('links.session', 0)
+                )
+            )
             ->setParameter('session', $session)
-        ;
+            ;
     }
 
     public function addSessionOnlyQueryBuilder(Session $session, QueryBuilder $qb): QueryBuilder
@@ -340,16 +346,20 @@ abstract class ResourceRepository extends ServiceEntityRepository
         ?Course $course = null,
         ?Session $session = null,
         ?CGroup $group = null,
-        ?QueryBuilder $qb = null
+        ?QueryBuilder $qb = null,
+        ?bool $withBaseContentOverride = null
     ): QueryBuilder {
         $reflectionClass = $this->getClassMetadata()->getReflectionClass();
 
-        // Check if this resource type requires to load the base course resources when using a session
-        $loadBaseSessionContent = \in_array(
+        // Default behavior based on interface (current logic).
+        $defaultWithBaseContent = \in_array(
             ResourceShowCourseResourcesInSessionInterface::class,
             $reflectionClass->getInterfaceNames(),
             true
         );
+
+        // Effective behavior can be overridden per call.
+        $withBaseContent = $withBaseContentOverride ?? $defaultWithBaseContent;
 
         if ($course) {
             $this->addCourseQueryBuilder($course, $qb);
@@ -357,8 +367,8 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
         if (null === $session) {
             $this->addSessionNullQueryBuilder($qb);
-        } elseif ($loadBaseSessionContent) {
-            // Load course base content.
+        } elseif ($withBaseContent) {
+            // Load course base content + session content.
             $this->addSessionAndBaseContentQueryBuilder($session, $qb);
         } else {
             // Load only session resources.
@@ -417,11 +427,20 @@ abstract class ResourceRepository extends ServiceEntityRepository
         ?CGroup $group = null,
         ?ResourceNode $parentNode = null,
         bool $displayOnlyPublished = true,
-        bool $displayOrder = false
+        bool $displayOrder = false,
+        ?bool $withBaseContentOverride = null
     ): QueryBuilder {
         $qb = $this->getResources($parentNode);
+
         $this->addVisibilityQueryBuilder($qb, true, $displayOnlyPublished);
-        $this->addCourseSessionGroupQueryBuilder($course, $session, $group, $qb);
+
+        $this->addCourseSessionGroupQueryBuilder(
+            $course,
+            $session,
+            $group,
+            $qb,
+            $withBaseContentOverride
+        );
 
         if ($displayOrder) {
             $qb->orderBy('links.displayOrder', 'ASC');
@@ -434,11 +453,20 @@ abstract class ResourceRepository extends ServiceEntityRepository
         ?Session $session = null,
         ?ResourceNode $parentNode = null,
         bool $displayOnlyPublished = true,
-        bool $displayOrder = false
+        bool $displayOrder = false,
+        ?bool $withBaseContentOverride = null
     ): QueryBuilder {
         $qb = $this->getResources($parentNode);
+
         $this->addVisibilityQueryBuilder($qb, true, $displayOnlyPublished);
-        $this->addCourseSessionGroupQueryBuilder(null, $session, null, $qb);
+
+        $this->addCourseSessionGroupQueryBuilder(
+            null,
+            $session,
+            null,
+            $qb,
+            $withBaseContentOverride
+        );
 
         if ($displayOrder) {
             $qb->orderBy('links.displayOrder', 'ASC');

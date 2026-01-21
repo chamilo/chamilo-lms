@@ -2945,4 +2945,122 @@ HTML;
         </details>
         ';
     }
+
+    /**
+     * Render a consistent "Subscribe users to this session" header + tabs layout
+     * reused across legacy admin pages (add users, usergroups, etc).
+     *
+     * $activeTab: users|classes|teachers|students
+     * $options:
+     *  - return_to: string (used to preserve the "Back" destination in the Classes tab)
+     *  - header_title: string (defaults to get_lang('Subscribe users to this session'))
+     *  - users_url/classes_url/teachers_url/students_url: override URLs if needed
+     *  - wrapper_class: string
+     *  - card_class: string
+     *  - tabs_bar_class: string
+     *  - content_class: string
+     */
+    public static function sessionSubscriptionPage(
+        int $sessionId,
+        string $sessionTitle,
+        string $backUrl,
+        string $activeTab,
+        string $contentHtml,
+        array $options = []
+    ): string {
+        $safeTitle = htmlspecialchars($sessionTitle, ENT_QUOTES, api_get_system_encoding());
+
+        $headerTitle = $options['header_title'] ?? get_lang('Subscribe users to this session');
+
+        $returnTo = (string) ($options['return_to'] ?? '');
+
+        $usersUrl = $options['users_url']
+            ?? api_get_path(WEB_CODE_PATH).'session/add_users_to_session.php?id_session='.$sessionId.'&add=true';
+
+        $classesUrl = $options['classes_url']
+            ?? api_get_path(WEB_CODE_PATH).'admin/usergroups.php?from_session='.$sessionId
+            .(!empty($returnTo) ? '&return_to='.rawurlencode($returnTo) : '');
+
+        $teachersUrl = $options['teachers_url']
+            ?? api_get_path(WEB_CODE_PATH).'session/add_teachers_to_session.php?id='.$sessionId;
+
+        $studentsUrl = $options['students_url']
+            ?? api_get_path(WEB_CODE_PATH).'session/add_students_to_session.php?id='.$sessionId;
+
+        $wrapperClass = $options['wrapper_class'] ?? 'mx-auto w-full p-4 space-y-4';
+        $cardClass = $options['card_class'] ?? 'rounded-lg border border-gray-30 bg-white shadow-sm';
+        $tabsBarClass = $options['tabs_bar_class'] ?? 'flex flex-wrap items-center gap-2 border-b border-gray-20 px-3 py-2';
+        $contentClass = $options['content_class'] ?? 'p-4';
+
+        $btnNeutral = 'inline-flex items-center gap-2 rounded-md border border-gray-30 bg-white px-3 py-1.5 text-sm font-medium text-gray-90 shadow-sm hover:bg-gray-10';
+
+        $tabBase = 'inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm';
+        $tabActive = 'font-semibold bg-gray-10 text-gray-90';
+        $tabIdle = 'font-medium text-gray-90 hover:bg-gray-10';
+
+        $tabs = [
+            'users' => [
+                'url' => $usersUrl,
+                'label' => get_lang('Users'),
+                'icon' => \Chamilo\CoreBundle\Enums\ObjectIcon::USER,
+            ],
+            'classes' => [
+                'url' => $classesUrl,
+                'label' => get_lang('Enrolment by classes'),
+                'icon' => \Chamilo\CoreBundle\Enums\ObjectIcon::MULTI_ELEMENT,
+            ],
+            'teachers' => [
+                'url' => $teachersUrl,
+                'label' => get_lang('Enroll trainers from existing sessions'),
+                'icon' => \Chamilo\CoreBundle\Enums\ObjectIcon::TEACHER,
+            ],
+            'students' => [
+                'url' => $studentsUrl,
+                'label' => get_lang('Enroll students from existing sessions'),
+                'icon' => \Chamilo\CoreBundle\Enums\ObjectIcon::USER,
+            ],
+        ];
+
+        if (!isset($tabs[$activeTab])) {
+            $activeTab = 'users';
+        }
+
+        $html = '';
+        $html .= '<div class="'.$wrapperClass.'">';
+
+        // Header card
+        $html .= '  <div class="'.$cardClass.' p-4">';
+        $html .= '    <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">';
+        $html .= '      <div class="min-w-0">';
+        $html .= '        <h1 class="text-lg font-semibold text-gray-90">'.htmlspecialchars($headerTitle, ENT_QUOTES, api_get_system_encoding()).'</h1>';
+        $html .= '        <p class="text-sm text-gray-50">'.$safeTitle.'</p>';
+        $html .= '      </div>';
+        $html .= '      <div class="flex items-center gap-2">';
+        $html .= '        <a href="'.htmlspecialchars($backUrl, ENT_QUOTES, api_get_system_encoding()).'" class="'.$btnNeutral.'">'.get_lang('Back').'</a>';
+        $html .= '      </div>';
+        $html .= '    </div>';
+        $html .= '  </div>';
+
+        // Tabs + content in the SAME card (so it looks like real tabs)
+        $html .= '  <div class="'.$cardClass.'">';
+        $html .= '    <div class="'.$tabsBarClass.'">';
+
+        foreach ($tabs as $key => $tab) {
+            $cls = $tabBase.' '.($key === $activeTab ? $tabActive : $tabIdle);
+            $ariaCurrent = $key === $activeTab ? ' aria-current="page"' : '';
+
+            $html .= '      <a href="'.htmlspecialchars($tab['url'], ENT_QUOTES, api_get_system_encoding()).'" class="'.$cls.'"'.$ariaCurrent.'>';
+            $html .=            self::getMdiIcon($tab['icon'], 'ch-tool-icon', null, ICON_SIZE_SMALL, $tab['label']);
+            $html .= '        <span>'.$tab['label'].'</span>';
+            $html .= '      </a>';
+        }
+
+        $html .= '    </div>';
+        $html .= '    <div class="'.$contentClass.'">'.$contentHtml.'</div>';
+        $html .= '  </div>';
+
+        $html .= '</div>';
+
+        return $html;
+    }
 }

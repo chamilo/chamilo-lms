@@ -63,6 +63,17 @@ class ResourceListener
         $em = $eventArgs->getObjectManager();
         $request = $this->request;
 
+        /**
+         * Current authenticated user (may be null in CLI/migrations).
+         * Always initialize to avoid "Undefined variable" warnings.
+         *
+         * @var User|null $currentUser
+         */
+        $currentUser = $this->security->getUser();
+        if (!$currentUser instanceof User) {
+            $currentUser = null;
+        }
+
         // 1. Set AccessUrl.
         if ($resource instanceof ResourceWithAccessUrlInterface) {
             // Checking if this resource is connected with a AccessUrl.
@@ -101,11 +112,8 @@ class ResourceListener
             }
         }
 
-        if (null === $creator) {
-            $currentUser = $this->security->getUser();
-            if ($currentUser instanceof User) {
-                $creator = $currentUser;
-            }
+        if (null === $creator && $currentUser instanceof User) {
+            $creator = $currentUser;
         }
 
         if (!$creator instanceof User) {
@@ -215,11 +223,19 @@ class ResourceListener
         }
 
         if ($resource instanceof PersonalFile) {
+            // In CLI/migrations there is no authenticated user, so fallback to the parent node creator.
             if (null === $currentUser) {
-                $currentUser = $parentNode->getCreator();
+                $currentUser = $parentNode?->getCreator();
             }
+
+            if (!$currentUser instanceof User) {
+                throw new UserNotFoundException('PersonalFile validation requires a user context (creator or parent node creator).');
+            }
+
+            $currentUserNode = $currentUser->getResourceNode();
+
             $valid = $parentNode->getCreator()->getUsername() === $currentUser->getUsername()
-                     || $parentNode->getId() === $currentUser->getResourceNode()->getId();
+                || (null !== $currentUserNode && $parentNode->getId() === $currentUserNode->getId());
 
             if (!$valid) {
                 $msg = \sprintf('User %s cannot add a file to another user', $currentUser->getUsername());

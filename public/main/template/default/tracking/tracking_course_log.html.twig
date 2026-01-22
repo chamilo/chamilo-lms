@@ -36,7 +36,7 @@
             position: "bottom",
             title: {
               display: true,
-              text: '{{ "Students"|get_lang|e('js') }}'
+              text: '{{ "Learners"|get_lang|e('js') }}'
             },
             ticks: { display: false },
             min: 0
@@ -87,7 +87,7 @@
           x: {
             position: "bottom",
             title: {
-              text: "{{ 'PercentileScoresDistribution'|get_lang|e('js') }}",
+              text: "{{ 'Percentile scores distribution'|get_lang|e('js') }}",
               display: true
             },
             gridLines: { display: true },
@@ -164,6 +164,53 @@
         .course-kpis {
             grid-template-columns: 1fr;
         }
+    }
+
+    /* Top students: avatar + name should be on the same row */
+    .tracking-top-student .list-top {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .tracking-top-student .list-top li {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .tracking-top-student .list-top li:last-child {
+        border-bottom: 0;
+    }
+
+    .tracking-top-student .list-top .avatar {
+        flex: 0 0 44px;
+    }
+
+    .tracking-top-student .list-top .avatar img {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        display: block;
+        object-fit: cover;
+    }
+
+    .tracking-top-student .list-top .info {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .tracking-top-student .list-top .name {
+        margin: 0 0 6px 0;
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .tracking-top-student .list-top .progress {
+        margin: 0;
     }
 </style>
 

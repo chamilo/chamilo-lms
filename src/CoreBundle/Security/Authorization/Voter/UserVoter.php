@@ -65,13 +65,13 @@ class UserVoter extends Voter
         /** @var User $user */
         $user = $subject;
 
-        if (self::VIEW === $attribute) {
-            // If the user is on the social page and is logged in, allow access
-            if ($this->isFromSocialPage() && null !== $currentUser->getId()) {
-                return true;
-            }
+        if (self::EDIT === $attribute) {
+            // Only the owner can edit private data
+            return (int) $currentUser->getId() === (int) $user->getId();
+        }
 
-            if ($currentUser === $user) {
+        if (self::VIEW === $attribute) {
+            if ((int) $currentUser->getId() === (int) $user->getId()) {
                 return true;
             }
 

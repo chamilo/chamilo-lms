@@ -26,6 +26,7 @@ use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\UserVoter;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
@@ -49,6 +50,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use UserManager;
 
+#[IsGranted('ROLE_USER')]
 #[Route('/social-network')]
 class SocialController extends AbstractController
 {
@@ -178,8 +180,7 @@ class SocialController extends AbstractController
     #[Route('/legal-status/{userId}', name: 'chamilo_core_social_legal_status')]
     public function getLegalStatus(
         int $userId,
-        #[CurrentUser]
-        User $currentUser,
+        #[CurrentUser] User $currentUser,
         SettingsManager $settingsManager,
         TranslatorInterface $translator,
         UserRepository $userRepo,
@@ -204,8 +205,17 @@ class SocialController extends AbstractController
         }
 
         $isoCode = $currentUser->getLocale();
-        $latestLanguageId = $this->resolveLegalLanguageId($languageRepo, $isoCode, $settingsManager);
-        $latestVersion = 0 !== $latestLanguageId ? $legalTermsRepo->getLastVersionByLanguage($latestLanguageId) : null;
+
+        $resolved = $this->resolveLatestTermsVersion($isoCode, $languageRepo, $legalTermsRepo, $settingsManager);
+        if (!$resolved) {
+            return $this->json([
+                'isAccepted' => false,
+                'message' => $translator->trans('No terms and conditions available', [], 'messages'),
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        $latestLanguageId = (int) $resolved['languageId'];
+        $latestVersion = (int) $resolved['version'];
 
         $extraFieldValue = new ExtraFieldValue('user');
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
@@ -239,9 +249,10 @@ class SocialController extends AbstractController
         ]);
     }
 
-    #[Route('/send-legal-term', name: 'chamilo_core_social_send_legal_term')]
+    #[Route('/send-legal-term', name: 'chamilo_core_social_send_legal_term', methods: ['POST'])]
     public function sendLegalTerm(
         Request $request,
+        #[CurrentUser] User $currentUser,
         SettingsManager $settingsManager,
         TranslatorInterface $translator,
         LegalRepository $legalTermsRepo,
@@ -249,36 +260,48 @@ class SocialController extends AbstractController
         LanguageRepository $languageRepo
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
-        $userId = $data['userId'] ?? null;
+        if (!is_array($data)) {
+            return $this->json(['error' => 'Invalid JSON body'], Response::HTTP_BAD_REQUEST);
+        }
 
-        $user = $userRepo->find($userId);
-        if (!$user) {
-            return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+        $requestedUserId = isset($data['userId']) ? (int) $data['userId'] : 0;
+
+        // Non-admin users can only accept terms for themselves.
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $targetUserId = $currentUser->getId();
+            $user = $currentUser;
+        } else {
+            $targetUserId = $requestedUserId > 0 ? $requestedUserId : 0;
+            if (0 === $targetUserId) {
+                return $this->json(['error' => 'Missing or invalid userId'], Response::HTTP_BAD_REQUEST);
+            }
+            $user = $userRepo->find($targetUserId);
+            if (!$user) {
+                return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+            }
         }
 
         $isoCode = $user->getLocale();
-        $languageId = $this->resolveLegalLanguageId($languageRepo, $isoCode, $settingsManager);
-        if (0 === $languageId) {
-            return $this->json(['error' => 'Language not found'], Response::HTTP_BAD_REQUEST);
-        }
-
-        $version = $legalTermsRepo->getLastVersionByLanguage($languageId);
-        if (null === $version) {
+        $resolved = $this->resolveLatestTermsVersion($isoCode, $languageRepo, $legalTermsRepo, $settingsManager);
+        if (!$resolved) {
             return $this->json(['error' => 'Terms not found'], Response::HTTP_NOT_FOUND);
         }
+        $languageId = (int) $resolved['languageId'];
+        $version = (int) $resolved['version'];
 
-        $legalAcceptType = $version.':'.$languageId.':'.time();
-        UserManager::update_extra_field_value((int) $userId, 'legal_accept', $legalAcceptType);
+        $legalAcceptType = $version . ':' . $languageId . ':' . time();
+        UserManager::update_extra_field_value($targetUserId, 'legal_accept', $legalAcceptType);
 
-        $bossList = UserManager::getStudentBossList((int) $userId);
+        // Notify bosses (kept as-is, now based on $targetUserId)
+        $bossList = UserManager::getStudentBossList($targetUserId);
         if (!empty($bossList)) {
             $bossList = array_column($bossList, 'boss_id');
             foreach ($bossList as $bossId) {
-                $subjectEmail = \sprintf(
+                $subjectEmail = sprintf(
                     $translator->trans('User %s signed the agreement.', [], 'messages'),
                     $user->getFullName()
                 );
-                $contentEmail = \sprintf(
+                $contentEmail = sprintf(
                     $translator->trans('User %s signed the agreement the %s.', [], 'messages'),
                     $user->getFullName(),
                     $this->dateTimeHelper->localTimeYmdHis(null, null, 'UTC')
@@ -288,7 +311,7 @@ class SocialController extends AbstractController
                     (int) $bossId,
                     $subjectEmail,
                     $contentEmail,
-                    (int) $userId
+                    $targetUserId
                 );
             }
         }
@@ -299,88 +322,123 @@ class SocialController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_ADMIN')]
-    #[Route('/delete-legal', name: 'chamilo_core_social_delete_legal')]
+    #[Route('/delete-legal', name: 'chamilo_core_social_delete_legal', methods: ['POST'])]
     public function deleteLegal(
-        #[CurrentUser]
-        User $currentUser,
+        #[CurrentUser] User $currentUser,
         Request $request,
         TranslatorInterface $translator
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
-        $userId = $data['userId'] ?? null;
+        if (!is_array($data)) {
+            return $this->json(['error' => 'Invalid JSON body'], Response::HTTP_BAD_REQUEST);
+        }
 
-        if ($userId !== $currentUser->getId()) {
-            throw $this->createAccessDeniedException();
+        // Backward compatible: if userId is not provided, default to current user.
+        $requestedUserId = isset($data['userId']) ? (int) $data['userId'] : 0;
+
+        // Non-admin users can only revoke their own consent (ignore provided userId if different).
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $targetUserId = $currentUser->getId();
+        } else {
+            // Admin must explicitly provide a valid userId.
+            $targetUserId = $requestedUserId > 0 ? $requestedUserId : 0;
+            if (0 === $targetUserId) {
+                return $this->json(['error' => 'Missing or invalid userId'], Response::HTTP_BAD_REQUEST);
+            }
         }
 
         $extraFieldValue = new ExtraFieldValue('user');
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
-        if ($value && isset($value['id'])) {
+
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($targetUserId, 'legal_accept');
+        if (!empty($value['id'])) {
             $extraFieldValue->delete($value['id']);
         }
 
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'termactivated');
-        if ($value && isset($value['id'])) {
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($targetUserId, 'termactivated');
+        if (!empty($value['id'])) {
             $extraFieldValue->delete($value['id']);
         }
 
-        return $this->json(['success' => true, 'message' => $translator->trans('Legal consent revoked successfully.')]);
+        return $this->json([
+            'success' => true,
+            'message' => $translator->trans('Legal consent revoked successfully.'),
+        ]);
     }
 
-    #[Route('/handle-privacy-request', name: 'chamilo_core_social_handle_privacy_request')]
+    #[Route('/handle-privacy-request', name: 'chamilo_core_social_handle_privacy_request', methods: ['POST'])]
     public function handlePrivacyRequest(
         Request $request,
+        #[CurrentUser] User $currentUser,
         SettingsManager $settingsManager,
         UserRepository $userRepo,
         TranslatorInterface $translator,
-        MailerInterface $mailer,
-        RequestStack $requestStack
+        MailerInterface $mailer
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
-        $userId = $data['userId'] ? (int) $data['userId'] : null;
-        $explanation = $data['explanation'] ?? '';
-        $requestType = $data['requestType'] ?? '';
-
-        /** @var User $user */
-        $user = $userRepo->find($userId);
-
-        if (!$user) {
-            return $this->json(['success' => false, 'message' => 'User not found']);
+        if (!is_array($data)) {
+            return $this->json(['success' => false, 'message' => 'Invalid JSON body'], Response::HTTP_BAD_REQUEST);
         }
 
-        $request = $requestStack->getCurrentRequest();
-        $baseUrl = $request->getSchemeAndHttpHost().$request->getBasePath();
-        $specificPath = '/main/admin/user_list_consent.php';
-        $link = $baseUrl.$specificPath;
+        $requestedUserId = isset($data['userId']) ? (int) $data['userId'] : 0;
+        $explanation = (string) ($data['explanation'] ?? '');
+        $requestType = (string) ($data['requestType'] ?? '');
+
+        // Non-admin users can only create requests for themselves
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $targetUserId = $currentUser->getId();
+            $user = $currentUser;
+        } else {
+            // Admin can create requests for another user if explicitly provided
+            $targetUserId = $requestedUserId > 0 ? $requestedUserId : 0;
+            if (0 === $targetUserId) {
+                return $this->json(['success' => false, 'message' => 'Missing or invalid userId'], Response::HTTP_BAD_REQUEST);
+            }
+            $user = $userRepo->find($targetUserId);
+            if (!$user) {
+                return $this->json(['success' => false, 'message' => 'User not found'], Response::HTTP_NOT_FOUND);
+            }
+        }
+
+        $baseUrl = $request->getSchemeAndHttpHost() . $request->getBasePath();
+        $link = $baseUrl . '/main/admin/user_list_consent.php';
 
         if ('delete_account' === $requestType) {
             $fieldToUpdate = 'request_for_delete_account';
             $justificationFieldToUpdate = 'request_for_delete_account_justification';
             $emailSubject = $translator->trans('Request for account removal');
-            $emailContent = \sprintf($translator->trans('User %s asked for the deletion of his/her account, explaining that "%s". You can process the request here: %s'), $user->getFullName(), $explanation, '<a href="'.$link.'">'.$link.'</a>');
+            $emailContent = sprintf(
+                $translator->trans('User %s asked for the deletion of his/her account, explaining that "%s". You can process the request here: %s'),
+                $user->getFullName(),
+                $explanation,
+                '<a href="'.$link.'">'.$link.'</a>'
+            );
         } elseif ('delete_legal' === $requestType) {
             $fieldToUpdate = 'request_for_legal_agreement_consent_removal';
             $justificationFieldToUpdate = 'request_for_legal_agreement_consent_removal_justification';
             $emailSubject = $translator->trans('Request for consent withdrawal on legal terms');
-            $emailContent = \sprintf($translator->trans('User %s asked for the removal of his/her consent to our legal terms, explaining that "%s". You can process the request here: %s'), $user->getFullName(), $explanation, '<a href="'.$link.'">'.$link.'</a>');
+            $emailContent = sprintf(
+                $translator->trans('User %s asked for the removal of his/her consent to our legal terms, explaining that "%s". You can process the request here: %s'),
+                $user->getFullName(),
+                $explanation,
+                '<a href="'.$link.'">'.$link.'</a>'
+            );
         } else {
-            return $this->json(['success' => false, 'message' => 'Invalid action type']);
+            return $this->json(['success' => false, 'message' => 'Invalid action type'], Response::HTTP_BAD_REQUEST);
         }
 
         UserManager::createDataPrivacyExtraFields();
-        UserManager::update_extra_field_value($userId, $fieldToUpdate, 1);
-        UserManager::update_extra_field_value($userId, $justificationFieldToUpdate, $explanation);
+        UserManager::update_extra_field_value($targetUserId, $fieldToUpdate, 1);
+        UserManager::update_extra_field_value($targetUserId, $justificationFieldToUpdate, $explanation);
 
-        $emailOfficer = $settingsManager->getSetting('profile.data_protection_officer_email');
-        if (!empty($emailOfficer)) {
-            $email = new Email();
-            $email
+        $emailOfficer = (string) $settingsManager->getSetting('profile.data_protection_officer_email');
+
+        if ('' !== trim($emailOfficer)) {
+            $email = (new Email())
                 ->from($user->getEmail())
                 ->to($emailOfficer)
                 ->subject($emailSubject)
-                ->html($emailContent)
-            ;
+                ->html($emailContent);
+
             $mailer->send($email);
         } else {
             MessageManager::sendMessageToAllAdminUsers($user->getId(), $emailSubject, $emailContent);
@@ -529,7 +587,6 @@ class SocialController extends AbstractController
         return $this->json(['invitedUsers' => $invitedUsersList]);
     }
 
-    #[IsGranted('ROLE_USER')]
     #[Route('/user-profile/{userId}', name: 'chamilo_core_social_user_profile')]
     public function getUserProfile(
         int $userId,

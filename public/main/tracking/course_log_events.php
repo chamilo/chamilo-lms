@@ -59,15 +59,40 @@ $extraParams = [
     'rowNum'      => 20,
     'rowList'     => [10, 20, 50, 100],
     'viewrecords' => true,
+    'shrinkToFit' => 'true',
+    'forceFit'    => 'true',
 ];
 
 $actionLinks = '';
+$htmlHeadXtra[] = <<<CSS
+<style>
+  /* Make jqGrid occupy full available width */
+  #course-log-events-grid-wrap,
+  #course-log-events-grid-wrap .ui-jqgrid,
+  #course-log-events-grid-wrap .ui-jqgrid-view,
+  #course-log-events-grid-wrap .ui-jqgrid-hdiv,
+  #course-log-events-grid-wrap .ui-jqgrid-bdiv,
+  #course-log-events-grid-wrap .ui-jqgrid-pager {
+    width: 100% !important;
+  }
 
-// jqGrid init.
+  #course-log-events-grid-wrap table.ui-jqgrid-htable,
+  #course-log-events-grid-wrap table.ui-jqgrid-btable {
+    width: 100% !important;
+  }
+
+  /* On very small screens, allow horizontal scroll rather than breaking layout */
+  #course-log-events-card {
+    overflow-x: auto;
+  }
+</style>
+CSS;
+
 $htmlHeadXtra[] = '
 <script>
 $(function() {
-'.Display::grid_js(
+    // Init jqGrid.
+    '.Display::grid_js(
         'course_log_events',
         $url,
         $columns,
@@ -77,6 +102,33 @@ $(function() {
         $actionLinks,
         true
     ).'
+
+    // Ensure the grid always fits its container width (initial + window resize).
+    var gridSelector = "#course_log_events";
+    var wrapSelector = "#course-log-events-grid-wrap";
+
+    function resizeCourseLogEventsGrid() {
+        var $wrap = $(wrapSelector);
+        if (!$wrap.length) {
+            return;
+        }
+        var w = $wrap.width();
+        if (!w || w < 50) {
+            return;
+        }
+        // The second parameter (true) recalculates column widths.
+        $(gridSelector).setGridWidth(w, true);
+    }
+
+    // Run once after the DOM and grid are ready.
+    setTimeout(resizeCourseLogEventsGrid, 0);
+
+    // Debounced resize handler.
+    var resizeTimer = null;
+    $(window).on("resize.courseLogEvents", function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(resizeCourseLogEventsGrid, 120);
+    });
 });
 </script>';
 
@@ -128,7 +180,7 @@ echo '      </div>';
 echo '  </div>';
 
 // Row 3: main card with title + grid.
-echo '  <section class="bg-white rounded-xl shadow-sm border border-gray-50 overflow-x-auto">';
+echo '  <section id="course-log-events-card" class="bg-white rounded-xl shadow-sm border border-gray-50">';
 echo '      <div class="flex items-center gap-2 px-4 pt-4">';
 echo            Display::getMdiIcon(
     'file-document-outline',
@@ -140,7 +192,9 @@ echo            Display::getMdiIcon(
 echo '          <h1 class="h4 mb-0">'.$pageTitle.'</h1>';
 echo '      </div>';
 echo '      <div class="p-4">';
-echo            Display::grid_html('course_log_events');
+echo '          <div id="course-log-events-grid-wrap" class="w-full">';
+echo                Display::grid_html('course_log_events');
+echo '          </div>';
 echo '      </div>';
 echo '  </section>';
 

@@ -127,19 +127,17 @@ class LegalRepository extends ServiceEntityRepository
 
     public function getLastVersionByLanguage(int $languageId): ?int
     {
-        try {
-            $result = $this->createQueryBuilder('l')
-                ->select('MAX(l.version)')
-                ->andWhere('l.languageId = :languageId')
-                ->setParameter('languageId', $languageId)
-                ->getQuery()
-                ->getSingleScalarResult()
-            ;
+        $result = $this->createQueryBuilder('l')
+            ->select('MAX(l.version) as maxVersion')
+            ->andWhere('l.languageId = :languageId')
+            ->setParameter('languageId', $languageId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
-            return null !== $result ? (int) $result : null;
-        } catch (NonUniqueResultException|NoResultException) {
-            return null;
-        }
+        $version = (int) $result;
+
+        return $version > 0 ? $version : null;
     }
 
     /**

@@ -261,3 +261,137 @@
         </div>
     {% endautoescape %}
 {% endmacro %}
+{# ------------------------------------------------------------------------- #}
+{# Reporting user box (v2)                                                    #}
+{# - Safer approach: keep old macros untouched to avoid regressions.           #}
+{# - Uses full width, aligns values to the right, and improves spacing.        #}
+{# ------------------------------------------------------------------------- #}
+
+{% macro reporting_user_details_v2(user) %}
+    {% autoescape false %}
+        <div class="parameters mt-4">
+            <dl class="space-y-2">
+
+                {# Status #}
+                {% if user.status is defined %}
+                    <div class="flex items-start justify-between gap-4">
+                        <dt class="flex items-center gap-2 text-xs font-semibold text-gray-600">
+                            <span class="mdi mdi-account-outline text-base text-gray-500"></span>
+                            {{ 'Status'|trans }}
+                        </dt>
+                        <dd class="text-sm font-semibold text-gray-900 text-right">
+                            {% if user.status == 1 %}
+                                {{ 'Trainer'|trans }}
+                            {% else %}
+                                {{ 'Learner'|trans }}
+                            {% endif %}
+                        </dd>
+                    </div>
+                {% endif %}
+
+                {# Official code #}
+                <div class="flex items-start justify-between gap-4">
+                    <dt class="flex items-center gap-2 text-xs font-semibold text-gray-600">
+                        <span class="mdi mdi-badge-account-outline text-base text-gray-500"></span>
+                        {{ 'Official code'|trans }}
+                    </dt>
+                    <dd class="text-sm font-semibold text-gray-900 text-right break-words">
+                        {% set code = (user.officialCode is defined ? user.officialCode : '') %}
+                        {{ code is not empty ? code : '—' }}
+                    </dd>
+                </div>
+
+                {# Online (kept as placeholder to avoid empty row) #}
+                <div class="flex items-start justify-between gap-4">
+                    <dt class="flex items-center gap-2 text-xs font-semibold text-gray-600">
+                        <span class="mdi mdi-access-point text-base text-gray-500"></span>
+                        {{ 'Online'|trans }}
+                    </dt>
+                    <dd class="text-sm font-semibold text-gray-900 text-right">
+                        —
+                    </dd>
+                </div>
+
+                {# Tel #}
+                <div class="flex items-start justify-between gap-4">
+                    <dt class="flex items-center gap-2 text-xs font-semibold text-gray-600">
+                        <span class="mdi mdi-phone-outline text-base text-gray-500"></span>
+                        {{ 'Tel'|trans }}
+                    </dt>
+                    <dd class="text-sm font-semibold text-gray-900 text-right break-words">
+                        {% set phone = user.phone|default('') %}
+                        {{ phone is empty ? 'No tel'|trans : phone }}
+                    </dd>
+                </div>
+
+                {# Timezone #}
+                {% if user.timezone is defined %}
+                    <div class="flex items-start justify-between gap-4">
+                        <dt class="flex items-center gap-2 text-xs font-semibold text-gray-600">
+                            <span class="mdi mdi-clock-outline text-base text-gray-500"></span>
+                            {{ 'Timezone'|trans }}
+                        </dt>
+                        <dd class="text-sm font-semibold text-gray-900 text-right break-words">
+                            {{ user.timezone }}
+                        </dd>
+                    </div>
+                {% endif %}
+
+                {# Legal (if injected in user object) #}
+                {% if user.legal is defined %}
+                    <div class="flex items-start justify-between gap-4">
+                        <dt class="flex items-center gap-2 text-xs font-semibold text-gray-600">
+                            <span class="mdi mdi-shield-check-outline text-base text-gray-500"></span>
+                            {{ 'Legal'|trans }}
+                        </dt>
+                        <dd class="text-sm font-semibold text-gray-900 text-right">
+                            {{ user.legal.url_send }}
+                        </dd>
+                    </div>
+                {% endif %}
+
+            </dl>
+        </div>
+    {% endautoescape %}
+{% endmacro %}
+
+{% macro reporting_user_box_v2(user) %}
+    {% autoescape false %}
+        {% import _self as display %}
+
+        <div class="user max-w-full">
+
+            {# Header: avatar + identity uses full width (removes the “dead space” feeling) #}
+            <div class="flex items-start gap-4">
+                <div class="avatar shrink-0">
+                    <img
+                            src="{{ user | illustration }}"
+                            width="96"
+                            height="96"
+                            class="img-responsive w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border border-gray-30 bg-white object-cover shadow-sm"
+                            alt=""
+                    >
+                </div>
+
+                <div class="name min-w-0 flex-1">
+                    <h3 class="text-lg font-semibold text-gray-900 leading-tight break-words">
+                        {% if user.complete_name_link is defined %}
+                            {{ user.complete_name_link }}
+                        {% else %}
+                            {{ user | user_complete_name }}
+                        {% endif %}
+                    </h3>
+                    <p class="email mt-1 text-sm text-gray-600 break-all">
+                        {{ user.email }}
+                    </p>
+                </div>
+            </div>
+
+            {# Details #}
+            <div class="mt-4 border-t border-gray-30 pt-4">
+                {{ display.reporting_user_details_v2(user) }}
+            </div>
+
+        </div>
+    {% endautoescape %}
+{% endmacro %}

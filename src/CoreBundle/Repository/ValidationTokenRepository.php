@@ -86,6 +86,7 @@ class ValidationTokenRepository extends ServiceEntityRepository
             ->setParameter('type', ValidationTokenHelper::TYPE_REMEMBER_ME)
             ->setParameter('userId', $userId)
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 }

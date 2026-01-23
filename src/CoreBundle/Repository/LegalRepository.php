@@ -10,8 +10,6 @@ use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Legal;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 

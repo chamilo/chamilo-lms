@@ -39,7 +39,6 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
         'TopbarSkills' => 'topbar_skills',
     ];
 
-
     public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder->setDefaults(
@@ -156,7 +155,7 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
         $default = self::getDefaultShowTabsArray();
 
         $json = json_encode($default, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        if (!is_string($json) || '' === $json) {
+        if (!\is_string($json) || '' === $json) {
             // Fallback (should never happen)
             return '{"menu":{},"topbar":{}}';
         }
@@ -170,15 +169,16 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
         $topbar = [];
 
         foreach (self::$tabs as $label => $key) {
-            $isTopbar = 0 === strpos($label, 'Topbar') || 0 === strpos($key, 'topbar_');
+            $isTopbar = str_starts_with($label, 'Topbar') || str_starts_with($key, 'topbar_');
 
             if ($isTopbar) {
                 $topbar[$key] = true;
+
                 continue;
             }
 
             // Keep legacy default: videoconference + diagnostics disabled by default
-            $menu[$key] = !in_array($key, ['videoconference', 'diagnostics', 'question_manager'], true);
+            $menu[$key] = !\in_array($key, ['videoconference', 'diagnostics', 'question_manager'], true);
         }
 
         return [

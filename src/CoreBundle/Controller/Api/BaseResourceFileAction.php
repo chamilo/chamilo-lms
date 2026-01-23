@@ -427,6 +427,7 @@ class BaseResourceFileAction
 
             if (empty($resourceLinkList) || !\is_array($resourceLinkList)) {
                 $message = 'resourceLinkList is not a valid json. Use for example: [{"cid":1, "visibility":1}]';
+
                 throw new InvalidArgumentException($message);
             }
         }

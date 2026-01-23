@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

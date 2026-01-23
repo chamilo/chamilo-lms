@@ -13,7 +13,6 @@ use Chamilo\CourseBundle\Entity\CLinkCategory;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Doctrine\ORM\EntityManager;
-use Export;
 use PDF;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\File;
@@ -22,6 +21,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
+use const ENT_QUOTES;
 
 readonly class ExportCLinksAction
 {
@@ -60,11 +61,13 @@ readonly class ExportCLinksAction
         // Links without category
         $qbNoCat = $repo->getResourcesByCourse($course, $session, null, null, true, true);
         $qbNoCat->andWhere('resource.category = 0 OR resource.category IS NULL');
+
         /** @var CLink[] $linksWithoutCategory */
         $linksWithoutCategory = $qbNoCat->getQuery()->getResult();
 
         // Categories
         $qbCat = $repoCategory->getResourcesByCourse($course, $session, null, null, true, true);
+
         /** @var CLinkCategory[] $categories */
         $categories = $qbCat->getQuery()->getResult();
 
@@ -155,7 +158,8 @@ readonly class ExportCLinksAction
                 null,
                 false,
                 true
-            );
+            )
+        ;
     }
 
     /**

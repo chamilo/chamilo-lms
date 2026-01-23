@@ -686,12 +686,10 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
 
             $data = json_decode((string) $raw, true);
             if (!\is_array($data)) {
-
                 return 'Error: Invalid JSON response from OpenAI.';
             }
 
             if (!isset($data['data'][0]) || !\is_array($data['data'][0])) {
-
                 return 'Error: OpenAI response missing image data.';
             }
 
@@ -712,7 +710,6 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
                 $result['url'] = $item['url'];
                 $result['is_base64'] = false;
             } else {
-
                 return 'Error: OpenAI response did not include image content.';
             }
 
@@ -826,12 +823,10 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
 
             $data = json_decode($raw, true);
             if (!\is_array($data)) {
-
                 return 'Error: Invalid JSON response from OpenAI.';
             }
 
             if (!isset($data['id']) || !\is_string($data['id']) || '' === trim($data['id'])) {
-
                 return 'Error: OpenAI response missing "id".';
             }
 

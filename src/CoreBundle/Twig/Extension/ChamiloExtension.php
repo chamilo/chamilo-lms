@@ -110,7 +110,7 @@ class ChamiloExtension extends AbstractExtension
     {
         $value = $this->helper->getSettingsParameter($name);
         // We only want to inject valid HTML snippets here.
-        if ($name === 'tracking.header_extra_content' || $name === 'tracking.footer_extra_content') {
+        if ('tracking.header_extra_content' === $name || 'tracking.footer_extra_content' === $name) {
             return $this->resolveTrackingExtraContentValue($name, $value);
         }
 
@@ -300,15 +300,15 @@ class ChamiloExtension extends AbstractExtension
     private function resolveTrackingExtraContentValue(string $settingName, mixed $value): string
     {
         if (!\in_array($settingName, ['tracking.header_extra_content', 'tracking.footer_extra_content'], true)) {
-            return is_string($value) ? $value : '';
+            return \is_string($value) ? $value : '';
         }
 
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             return '';
         }
 
         $value = trim($value);
-        if ($value === '') {
+        if ('' === $value) {
             return '';
         }
 

@@ -29,6 +29,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Throwable;
+use UnserializeApi;
 use ZipArchive;
 
 use const DIRECTORY_SEPARATOR;
@@ -947,10 +948,10 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
 
             $fileName = basename($imsccPath);
             $downloadUrl = $this->generateUrl(
-                    'cm_cc13_export_download',
-                    ['node' => $node],
-                    UrlGeneratorInterface::ABSOLUTE_URL
-                ).'?file='.rawurlencode($fileName);
+                'cm_cc13_export_download',
+                ['node' => $node],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            ).'?file='.rawurlencode($fileName);
 
             return $this->json([
                 'ok' => true,
@@ -1172,7 +1173,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     private function getJsonPayload(Request $req): array
     {
         $raw = (string) ($req->getContent() ?? '');
-        $data = json_decode($raw !== '' ? $raw : '{}', true);
+        $data = json_decode('' !== $raw ? $raw : '{}', true);
 
         return \is_array($data) ? $data : [];
     }
@@ -1204,7 +1205,8 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
      * Ensure selection map exists; if only types were selected, build the map from types.
      *
      * @param array<string,array> $selectedResources
-     * @param string[] $selectedTypes
+     * @param string[]            $selectedTypes
+     *
      * @return array<string,array>
      */
     private function ensureSelectionMap(object $course, array $selectedResources, array $selectedTypes): array
@@ -1217,6 +1219,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         foreach ($selectedResources as $ids) {
             if (\is_array($ids) && !empty($ids)) {
                 $hasAny = true;
+
                 break;
             }
         }
@@ -1309,8 +1312,8 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             set_error_handler(static function (): void {});
 
             try {
-                if (class_exists(\UnserializeApi::class)) {
-                    $c = \UnserializeApi::unserialize('course', $payload);
+                if (class_exists(UnserializeApi::class)) {
+                    $c = UnserializeApi::unserialize('course', $payload);
                 } else {
                     $c = @unserialize($payload, ['allowed_classes' => true]);
                 }
@@ -1593,15 +1596,19 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         switch ($unit) {
             case 't':
                 $num *= 1024;
-            // no break
+
+                // no break
             case 'g':
                 $num *= 1024;
-            // no break
+
+                // no break
             case 'm':
                 $num *= 1024;
-            // no break
+
+                // no break
             case 'k':
                 $num *= 1024;
+
                 break;
         }
 

@@ -230,7 +230,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         if ($value instanceof UploadedFile) {
             // Single upload
             $uploadedFile = $value;
-        } elseif (is_array($value)) {
+        } elseif (\is_array($value)) {
             // Multiple upload: select by index if provided
             if (null !== $index && isset($value[$index]) && $value[$index] instanceof UploadedFile) {
                 $uploadedFile = $value[$index];
@@ -239,6 +239,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
                 foreach ($value as $candidate) {
                     if ($candidate instanceof UploadedFile) {
                         $uploadedFile = $candidate;
+
                         break;
                     }
                 }
@@ -360,7 +361,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
                 )
             )
             ->setParameter('session', $session)
-            ;
+        ;
     }
 
     public function addSessionOnlyQueryBuilder(Session $session, QueryBuilder $qb): QueryBuilder

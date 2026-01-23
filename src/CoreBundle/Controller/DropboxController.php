@@ -766,7 +766,7 @@ class DropboxController extends AbstractController
         // Force strict ASCII-only fallback
         $baseAscii = preg_replace('/[^A-Za-z0-9._-]+/', '_', $baseAscii) ?? '';
         $baseAscii = preg_replace('/_+/', '_', $baseAscii) ?? '';
-        $baseAscii = trim($baseAscii, "._-");
+        $baseAscii = trim($baseAscii, '._-');
 
         if ('' === $baseAscii) {
             $baseAscii = 'download';

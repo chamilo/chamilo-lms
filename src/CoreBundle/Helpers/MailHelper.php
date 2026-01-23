@@ -123,8 +123,8 @@ final class MailHelper
             if (!empty($data_file)) {
                 // Normalize: allow a single attachment array instead of a list
                 $isSingleAttachment =
-                    is_array($data_file)
-                    && (array_key_exists('path', $data_file) || array_key_exists('stream', $data_file))
+                    \is_array($data_file)
+                    && (\array_key_exists('path', $data_file) || \array_key_exists('stream', $data_file))
                     && !array_is_list($data_file);
 
                 if ($isSingleAttachment) {
@@ -132,7 +132,7 @@ final class MailHelper
                 }
 
                 foreach ($data_file as $file_attach) {
-                    if (!is_array($file_attach)) {
+                    if (!\is_array($file_attach)) {
                         continue;
                     }
 
@@ -142,27 +142,28 @@ final class MailHelper
                     if (!empty($file_attach['path'])) {
                         $path = $file_attach['path'];
 
-                        if (is_string($path)) {
-                            if (!empty($filename) && is_string($filename)) {
+                        if (\is_string($path)) {
+                            if (!empty($filename) && \is_string($filename)) {
                                 $templatedEmail->attachFromPath($path, $filename);
                             } else {
                                 $templatedEmail->attachFromPath($path);
                             }
-                        } elseif (is_array($path)) {
+                        } elseif (\is_array($path)) {
                             // Multiple paths
                             $i = 0;
                             foreach ($path as $p) {
-                                if (!is_string($p) || '' === $p) {
+                                if (!\is_string($p) || '' === $p) {
                                     $i++;
+
                                     continue;
                                 }
 
                                 $nameForThis = null;
 
                                 // If filename is also an array, try to match by index
-                                if (is_array($filename) && isset($filename[$i]) && is_string($filename[$i]) && '' !== $filename[$i]) {
+                                if (\is_array($filename) && isset($filename[$i]) && \is_string($filename[$i]) && '' !== $filename[$i]) {
                                     $nameForThis = $filename[$i];
-                                } elseif (is_string($filename) && '' !== $filename) {
+                                } elseif (\is_string($filename) && '' !== $filename) {
                                     // Fallback: same filename for all (not ideal, but safe)
                                     $nameForThis = $filename;
                                 } else {
@@ -173,26 +174,25 @@ final class MailHelper
                                 $templatedEmail->attachFromPath($p, $nameForThis);
                                 $i++;
                             }
-                        } else {
-                            // Unexpected type, ignore safely
                         }
+                        // Unexpected type, ignore safely
                     }
 
                     // 2) Attach from stream(s)
                     if (!empty($file_attach['stream'])) {
                         $stream = $file_attach['stream'];
 
-                        if (!empty($filename) && is_string($filename)) {
-                            if (is_resource($stream) || is_string($stream)) {
+                        if (!empty($filename) && \is_string($filename)) {
+                            if (\is_resource($stream) || \is_string($stream)) {
                                 $templatedEmail->addPart(new DataPart($stream, $filename));
                             }
-                        } elseif (is_array($stream) && is_array($filename)) {
-                            $count = max(count($stream), count($filename));
+                        } elseif (\is_array($stream) && \is_array($filename)) {
+                            $count = max(\count($stream), \count($filename));
                             for ($i = 0; $i < $count; $i++) {
                                 $s = $stream[$i] ?? null;
                                 $n = $filename[$i] ?? null;
 
-                                if ((is_resource($s) || is_string($s)) && is_string($n) && '' !== $n) {
+                                if ((\is_resource($s) || \is_string($s)) && \is_string($n) && '' !== $n) {
                                     $templatedEmail->addPart(new DataPart($s, $n));
                                 }
                             }

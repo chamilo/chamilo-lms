@@ -26,7 +26,6 @@ use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
-use Chamilo\CoreBundle\Security\Authorization\Voter\UserVoter;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
@@ -180,7 +179,8 @@ class SocialController extends AbstractController
     #[Route('/legal-status/{userId}', name: 'chamilo_core_social_legal_status')]
     public function getLegalStatus(
         int $userId,
-        #[CurrentUser] User $currentUser,
+        #[CurrentUser]
+        User $currentUser,
         SettingsManager $settingsManager,
         TranslatorInterface $translator,
         UserRepository $userRepo,
@@ -189,9 +189,7 @@ class SocialController extends AbstractController
     ): JsonResponse {
         $allowTermsConditions = 'true' === $settingsManager->getSetting('registration.allow_terms_conditions');
         if (!$allowTermsConditions) {
-            throw $this->createAccessDeniedException(
-                $translator->trans('No terms and conditions available')
-            );
+            throw $this->createAccessDeniedException($translator->trans('No terms and conditions available'));
         }
 
         /*if (!$currentUser) {
@@ -252,7 +250,8 @@ class SocialController extends AbstractController
     #[Route('/send-legal-term', name: 'chamilo_core_social_send_legal_term', methods: ['POST'])]
     public function sendLegalTerm(
         Request $request,
-        #[CurrentUser] User $currentUser,
+        #[CurrentUser]
+        User $currentUser,
         SettingsManager $settingsManager,
         TranslatorInterface $translator,
         LegalRepository $legalTermsRepo,
@@ -260,7 +259,7 @@ class SocialController extends AbstractController
         LanguageRepository $languageRepo
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
-        if (!is_array($data)) {
+        if (!\is_array($data)) {
             return $this->json(['error' => 'Invalid JSON body'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -289,7 +288,7 @@ class SocialController extends AbstractController
         $languageId = (int) $resolved['languageId'];
         $version = (int) $resolved['version'];
 
-        $legalAcceptType = $version . ':' . $languageId . ':' . time();
+        $legalAcceptType = $version.':'.$languageId.':'.time();
         UserManager::update_extra_field_value($targetUserId, 'legal_accept', $legalAcceptType);
 
         // Notify bosses (kept as-is, now based on $targetUserId)
@@ -297,11 +296,11 @@ class SocialController extends AbstractController
         if (!empty($bossList)) {
             $bossList = array_column($bossList, 'boss_id');
             foreach ($bossList as $bossId) {
-                $subjectEmail = sprintf(
+                $subjectEmail = \sprintf(
                     $translator->trans('User %s signed the agreement.', [], 'messages'),
                     $user->getFullName()
                 );
-                $contentEmail = sprintf(
+                $contentEmail = \sprintf(
                     $translator->trans('User %s signed the agreement the %s.', [], 'messages'),
                     $user->getFullName(),
                     $this->dateTimeHelper->localTimeYmdHis(null, null, 'UTC')
@@ -324,12 +323,13 @@ class SocialController extends AbstractController
 
     #[Route('/delete-legal', name: 'chamilo_core_social_delete_legal', methods: ['POST'])]
     public function deleteLegal(
-        #[CurrentUser] User $currentUser,
+        #[CurrentUser]
+        User $currentUser,
         Request $request,
         TranslatorInterface $translator
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
-        if (!is_array($data)) {
+        if (!\is_array($data)) {
             return $this->json(['error' => 'Invalid JSON body'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -368,14 +368,15 @@ class SocialController extends AbstractController
     #[Route('/handle-privacy-request', name: 'chamilo_core_social_handle_privacy_request', methods: ['POST'])]
     public function handlePrivacyRequest(
         Request $request,
-        #[CurrentUser] User $currentUser,
+        #[CurrentUser]
+        User $currentUser,
         SettingsManager $settingsManager,
         UserRepository $userRepo,
         TranslatorInterface $translator,
         MailerInterface $mailer
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
-        if (!is_array($data)) {
+        if (!\is_array($data)) {
             return $this->json(['success' => false, 'message' => 'Invalid JSON body'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -399,14 +400,14 @@ class SocialController extends AbstractController
             }
         }
 
-        $baseUrl = $request->getSchemeAndHttpHost() . $request->getBasePath();
-        $link = $baseUrl . '/main/admin/user_list_consent.php';
+        $baseUrl = $request->getSchemeAndHttpHost().$request->getBasePath();
+        $link = $baseUrl.'/main/admin/user_list_consent.php';
 
         if ('delete_account' === $requestType) {
             $fieldToUpdate = 'request_for_delete_account';
             $justificationFieldToUpdate = 'request_for_delete_account_justification';
             $emailSubject = $translator->trans('Request for account removal');
-            $emailContent = sprintf(
+            $emailContent = \sprintf(
                 $translator->trans('User %s asked for the deletion of his/her account, explaining that "%s". You can process the request here: %s'),
                 $user->getFullName(),
                 $explanation,
@@ -416,7 +417,7 @@ class SocialController extends AbstractController
             $fieldToUpdate = 'request_for_legal_agreement_consent_removal';
             $justificationFieldToUpdate = 'request_for_legal_agreement_consent_removal_justification';
             $emailSubject = $translator->trans('Request for consent withdrawal on legal terms');
-            $emailContent = sprintf(
+            $emailContent = \sprintf(
                 $translator->trans('User %s asked for the removal of his/her consent to our legal terms, explaining that "%s". You can process the request here: %s'),
                 $user->getFullName(),
                 $explanation,
@@ -437,7 +438,8 @@ class SocialController extends AbstractController
                 ->from($user->getEmail())
                 ->to($emailOfficer)
                 ->subject($emailSubject)
-                ->html($emailContent);
+                ->html($emailContent)
+            ;
 
             $mailer->send($email);
         } else {

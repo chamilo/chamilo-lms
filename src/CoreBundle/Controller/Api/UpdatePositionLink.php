@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+use const PHP_INT_MAX;
+
 #[AsController]
 class UpdatePositionLink extends AbstractController
 {
@@ -149,14 +151,16 @@ class UpdatePositionLink extends AbstractController
 
         if ($parentNode) {
             $qb->andWhere('rn.parent = :parent')
-                ->setParameter('parent', $parentNode);
+                ->setParameter('parent', $parentNode)
+            ;
         } else {
             $qb->andWhere('rn.parent IS NULL');
         }
 
         if ($categoryId > 0) {
             $qb->andWhere('l.category = :cat')
-                ->setParameter('cat', $em->getReference(CLinkCategory::class, $categoryId));
+                ->setParameter('cat', $em->getReference(CLinkCategory::class, $categoryId))
+            ;
         } else {
             $qb->andWhere('l.category IS NULL');
         }
@@ -180,7 +184,7 @@ class UpdatePositionLink extends AbstractController
         });
 
         // If we are handling the moved link, place it at insertAt
-        if ($movedLink && $insertAt !== null) {
+        if ($movedLink && null !== $insertAt) {
             $movedId = (int) $movedLink->getIid();
 
             $links = array_values(array_filter($links, static fn (CLink $x): bool => (int) $x->getIid() !== $movedId));
@@ -189,8 +193,8 @@ class UpdatePositionLink extends AbstractController
             if ($pos < 0) {
                 $pos = 0;
             }
-            if ($pos > count($links)) {
-                $pos = count($links);
+            if ($pos > \count($links)) {
+                $pos = \count($links);
             }
 
             array_splice($links, $pos, 0, [$movedLink]);

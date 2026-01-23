@@ -5822,7 +5822,7 @@ function api_get_jquery_libraries_js($libraries)
 {
     $js = '';
 
-    //Document multiple upload funcionality
+    // Document multiple upload functionality
     if (in_array('jquery-upload', $libraries)) {
         $js .= api_get_asset('blueimp-load-image/js/load-image.all.min.js');
         $js .= api_get_asset('blueimp-canvas-to-blob/js/canvas-to-blob.min.js');
@@ -5834,8 +5834,19 @@ function api_get_jquery_libraries_js($libraries)
         $js .= api_get_asset('jquery-file-upload/js/jquery.fileupload-video.js');
         $js .= api_get_asset('jquery-file-upload/js/jquery.fileupload-validate.js');
 
-        $js .= api_get_css(api_get_path(WEB_PUBLIC_PATH).'assets/jquery-file-upload/css/jquery.fileupload.css');
-        $js .= api_get_css(api_get_path(WEB_PUBLIC_PATH).'assets/jquery-file-upload/css/jquery.fileupload-ui.css');
+        $cssBaseWeb = api_get_path(WEB_PUBLIC_PATH).'assets/jquery-file-upload/css/';
+        $cssBaseFs  = api_get_path(SYS_PUBLIC_PATH).'assets/jquery-file-upload/css/';
+
+        $cssFiles = [
+            'jquery.fileupload.css',
+            'jquery.fileupload-ui.css',
+        ];
+
+        foreach ($cssFiles as $file) {
+            if (is_file($cssBaseFs.$file)) {
+                $js .= api_get_css($cssBaseWeb.$file);
+            }
+        }
     }
 
     // jquery datepicker

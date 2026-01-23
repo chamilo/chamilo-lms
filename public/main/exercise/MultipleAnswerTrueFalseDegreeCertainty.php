@@ -62,12 +62,6 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
 
         $form->addHeader(get_lang('Answers'));
 
-        // Force native radios visibility even if global CSS resets form controls.
-        $choiceInputAttrs = [
-            'class' => 'h-4 w-4 cursor-pointer',
-            'style' => 'appearance:auto;-webkit-appearance:auto;',
-        ];
-
         // Determine if options exist already (edit) or not (first creation).
         $hasOptions = false;
         if (!empty($this->id)) {
@@ -161,8 +155,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $trueValue = $hasOptions ? (int) $tfIids[1] : 1;
             $falseValue = $hasOptions ? (int) $tfIids[2] : 2;
 
-            $form->addElement('radio', 'correct['.$i.']', null, null, $trueValue, $choiceInputAttrs);
-            $form->addElement('radio', 'correct['.$i.']', null, null, $falseValue, $choiceInputAttrs);
+            $form->addElement('radio', 'correct['.$i.']', null, null, $trueValue);
+            $form->addElement('radio', 'correct['.$i.']', null, null, $falseValue);
 
             $form->addHtmlEditor(
                 'answer['.$i.']',

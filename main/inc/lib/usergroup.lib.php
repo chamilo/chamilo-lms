@@ -153,7 +153,13 @@ class UserGroup extends Model
             while ($data = Database::fetch_array($result)) {
                 $userId = $data['user_id'];
                 $userInfo = api_get_user_info($userId);
-                $data['name'] = $userInfo['complete_name_with_username'];
+                if ('true' === api_get_setting('order_user_list_by_official_code')) {
+                    $officialCode = !empty($userInfo['official_code']) ? $userInfo['official_code'].' - ' : '? - ';
+                    $data['name'] = $officialCode.$userInfo['complete_name_with_username'];
+                } else {
+                    $officialCode = !empty($userInfo['official_code']) ? ' - '.$userInfo['official_code'] : null;
+                    $data['name'] = $userInfo['complete_name_with_username']." $officialCode";
+                }
 
                 if ($showCalendar) {
                     $calendar = $calendarPlugin->getUserCalendar($userId);

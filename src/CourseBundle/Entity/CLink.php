@@ -23,6 +23,7 @@ use Chamilo\CoreBundle\Controller\Api\CheckCLinkAction;
 use Chamilo\CoreBundle\Controller\Api\CLinkDetailsController;
 use Chamilo\CoreBundle\Controller\Api\CLinkImageController;
 use Chamilo\CoreBundle\Controller\Api\CreateCLinkAction;
+use Chamilo\CoreBundle\Controller\Api\ExportCLinksAction;
 use Chamilo\CoreBundle\Controller\Api\GetLinksCollectionController;
 use Chamilo\CoreBundle\Controller\Api\UpdateCLinkAction;
 use Chamilo\CoreBundle\Controller\Api\UpdatePositionLink;
@@ -125,6 +126,38 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ),
             ),
             security: "is_granted('EDIT', object.resourceNode)",
+            deserialize: false
+        ),
+        new Post(
+            uriTemplate: '/links/export',
+            controller: ExportCLinksAction::class,
+            openapi: new Operation(
+                summary: 'Export links',
+                parameters: [
+                    new Parameter(
+                        name: 'format',
+                        in: 'query',
+                        description: 'Export format',
+                        required: true,
+                        schema: ['type' => 'string', 'enum' => ['pdf']],
+                    ),
+                ],
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'cid' => ['type' => 'integer'],
+                                    'sid' => ['type' => 'integer'],
+                                ],
+                                'required' => ['cid'],
+                            ],
+                        ],
+                    ]),
+                ),
+            ),
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
             deserialize: false
         ),
         new Get(security: "is_granted('VIEW', object.resourceNode)"),

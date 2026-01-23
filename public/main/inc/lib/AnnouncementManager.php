@@ -462,13 +462,14 @@ class AnnouncementManager
     public static function displayAnnouncement($id)
     {
         $id = (int) $id;
-
-        if (empty($id)) {
+        if ($id <= 0) {
             return '';
         }
 
-        $stok = null;
+        $stok = Security::get_existing_token();
         $html = '';
+
+        /** @var CAnnouncement|null $announcement */
         $announcement = self::getAnnouncementInfoById(
             $id,
             api_get_course_int_id(),
@@ -483,39 +484,54 @@ class AnnouncementManager
         $title = $announcement->getTitle();
         $content = $announcement->getContent();
 
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+
+        // Teachers can "VIEW" invisible items, so isGranted(VIEW) is not a visibility flag.
+        $isVisible = $announcement->isVisible($course, $session);
+
+        // Base URL with course/session/group context + legacy nav context.
+        $baseUrl = api_get_self().'?'.api_get_cidreq();
+        if (!empty($_REQUEST['origin'])) {
+            $baseUrl .= '&origin='.rawurlencode((string) $_REQUEST['origin']);
+        }
+        if (!empty($_REQUEST['page'])) {
+            $baseUrl .= '&page='.rawurlencode((string) $_REQUEST['page']);
+        }
+
+        // Always return back to this view when actions are triggered from here.
+        $returnQs = '&return_action=view&return_id='.$id;
+
         $html .= "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";
         $html .= "<tr><td><h2>".$title."</h2></td></tr>";
 
-        $repo = Container::getAnnouncementRepository();
-        $isVisible = $repo->isGranted(ResourceNodeVoter::VIEW, $announcement);
-
-        $url = api_get_self()."?".api_get_cidreq();
-        if (api_is_allowed_to_edit(false, true) ||
+        if (
+            api_is_allowed_to_edit(false, true) ||
             (1 === (int) api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
         ) {
-            $modify_icons = "<a href=\"".$url."&action=modify&id=".$id."\">".
+            $modifyIcons = "<a href=\"".$baseUrl."&action=modify&id=".$id.$returnQs."\">".
                 Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))."</a>";
 
-            $image_visibility = StateIcon::INACTIVE;
-            $alt_visibility = get_lang('Visible');
+            $imageVisibility = StateIcon::INACTIVE;
+            $altVisibility = get_lang('Visible');
             $setNewStatus = 'visible';
             if ($isVisible) {
-                $image_visibility = StateIcon::ACTIVE;
-                $alt_visibility = get_lang('Hide');
+                $imageVisibility = StateIcon::ACTIVE;
+                $altVisibility = get_lang('Hide');
                 $setNewStatus = 'invisible';
             }
-            $modify_icons .= "<a
-                href=\"".$url."&action=set_visibility&status=".$setNewStatus."&id=".$id."&sec_token=".$stok."\">".
-                Display::getMdiIcon($image_visibility, 'ch-tool-icon', null, ICON_SIZE_SMALL, $alt_visibility)."</a>";
+
+            $modifyIcons .= "<a href=\"".$baseUrl."&action=set_visibility&status=".$setNewStatus."&id=".$id.$returnQs."&sec_token=".$stok."\">".
+                Display::getMdiIcon($imageVisibility, 'ch-tool-icon', null, ICON_SIZE_SMALL, $altVisibility)."</a>";
 
             if (api_is_allowed_to_edit(false, true)) {
-                $modify_icons .= "<a
-                    href=\"".$url."&action=delete&id=".$id."&sec_token=".$stok."\"
-                    onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."')) return false;\">".
+                $modifyIcons .= "<a
+                href=\"".$baseUrl."&action=delete&id=".$id."&sec_token=".$stok."\"
+                onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."')) return false;\">".
                     Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).
                     "</a>";
             }
-            $html .= "<tr><th style='text-align:right'>$modify_icons</th></tr>";
+            $html .= "<tr><th style='text-align:right'>".$modifyIcons."</th></tr>";
         } else {
             if (false === $isVisible) {
                 api_not_allowed(true);
@@ -531,9 +547,8 @@ class AnnouncementManager
             api_get_session_id()
         );
 
-        $html .= "<tr><td>$content</td></tr>";
-        $html .= "<tr>";
-        $html .= "<td class=\"announcements_datum\">".get_lang('Latest update')." : ";
+        $html .= "<tr><td>".$content."</td></tr>";
+        $html .= "<tr><td class=\"announcements_datum\">".get_lang('Latest update')." : ";
         $lastEdit = $announcement->getResourceNode()->getUpdatedAt();
         $html .= Display::dateToStringAgoAndLongDate($lastEdit);
         $html .= "</td></tr>";
@@ -554,24 +569,23 @@ class AnnouncementManager
         $attachments = $announcement->getAttachments();
         if (count($attachments) > 0) {
             $repo = Container::getAnnouncementAttachmentRepository();
-            $deleteUrl = api_get_self()."?".api_get_cidreq()."&action=delete_attachment";
             /** @var CAnnouncementAttachment $attachment */
             foreach ($attachments as $attachment) {
                 $attachmentId = $attachment->getIid();
-                $url = $repo->getResourceFileDownloadUrl($attachment).'?'.api_get_cidreq();
-                $html .= '<tr><td>';
-                $html .= '<br/>';
+                $downloadUrl = $repo->getResourceFileDownloadUrl($attachment).'?'.api_get_cidreq();
+
+                $html .= '<tr><td><br/>';
                 $html .= Display::getMdiIcon(ObjectIcon::ATTACHMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL);
-                $html .= '<a href="'.$url.' "> '.$attachment->getFilename().' </a>';
-                $html .= ' - <span class="forum_attach_comment" >'.$attachment->getComment().'</span>';
+                $html .= '<a href="'.$downloadUrl.'"> '.$attachment->getFilename().' </a>';
+                $html .= ' - <span class="forum_attach_comment">'.$attachment->getComment().'</span>';
                 if (api_is_allowed_to_edit(false, true)) {
-                    $url = $deleteUrl."&id_attach=".$attachmentId."&sec_token=".$stok;
+                    $deleteAttachmentUrl = $baseUrl.'&action=delete_attachment&id_attach='.$attachmentId.$returnQs.'&sec_token='.$stok;
                     $html .= Display::url(
                         Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Delete')),
-                        $url
+                        $deleteAttachmentUrl
                     );
                 }
-                $html .= '</td></tr>';
+                $html .= '<br/></td></tr>';
             }
         }
         $html .= '</table>';
@@ -705,7 +719,7 @@ class AnnouncementManager
             self::add_announcement_attachment_file(
                 $announcement,
                 $file_comment,
-                $_FILES['user_upload']
+                $file
             );
         }
 
@@ -1167,48 +1181,75 @@ class AnnouncementManager
      */
     public static function add_announcement_attachment_file(CAnnouncement $announcement, $file_comment, $file)
     {
-        $return = 0;
         $courseId = api_get_course_int_id();
         $em = Database::getManager();
-        if (is_array($file) && 0 == $file['error']) {
-            // Try to add an extension to the file if it hasn't one
-            $new_file_name = add_ext_on_mime(stripslashes($file['name']), $file['type']);
-            // user's file name
-            $file_name = $file['name'];
+        $repo = Container::getAnnouncementAttachmentRepository();
 
-            if (!filter_extension($new_file_name)) {
-                $return = -1;
+        if (!is_array($file) || !isset($file['error'])) {
+            return 0;
+        }
+
+        // Normalize to a list of single-file arrays (supports single and multiple)
+        $files = [];
+        if (is_array($file['error'])) {
+            $count = count($file['error']);
+            for ($i = 0; $i < $count; $i++) {
+                $files[] = [
+                    'name' => $file['name'][$i] ?? '',
+                    'type' => $file['type'][$i] ?? '',
+                    'tmp_name' => $file['tmp_name'][$i] ?? '',
+                    'error' => $file['error'][$i] ?? UPLOAD_ERR_NO_FILE,
+                    'size' => $file['size'][$i] ?? 0,
+                    '__index' => $i, // Used to pick the right UploadedFile from Request->files
+                ];
+            }
+        } else {
+            $files[] = $file;
+        }
+
+        $created = 0;
+
+        foreach ($files as $f) {
+            if (!is_array($f) || (int) ($f['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+                continue;
+            }
+
+            $newFileName = add_ext_on_mime(stripslashes((string) ($f['name'] ?? '')), (string) ($f['type'] ?? ''));
+            if (!filter_extension($newFileName)) {
                 Display::addFlash(
                     Display::return_message(
                         get_lang('File upload failed: this file extension or file type is prohibited'),
                         'error'
                     )
                 );
-            } else {
-                $repo = Container::getAnnouncementAttachmentRepository();
-                $attachment = (new CAnnouncementAttachment())
-                    ->setFilename($file_name)
-                    ->setPath(uniqid('announce_', true))
-                    ->setComment($file_comment)
-                    ->setAnnouncement($announcement)
-                    ->setSize((int) $file['size'])
-                    ->setParent($announcement)
-                    ->addCourseLink(
-                        api_get_course_entity($courseId),
-                        api_get_session_entity(api_get_session_id()),
-                        api_get_group_entity()
-                    )
-                ;
-                $em->persist($attachment);
-                $em->flush();
-
-                $repo->addFileFromFileRequest($attachment, 'user_upload');
-
-                $return = 1;
+                continue;
             }
+
+            $attachment = (new CAnnouncementAttachment())
+                ->setFilename((string) ($f['name'] ?? ''))
+                ->setPath(uniqid('announce_', true))
+                ->setComment($file_comment)
+                ->setAnnouncement($announcement)
+                ->setSize((int) ($f['size'] ?? 0))
+                ->setParent($announcement)
+                ->addCourseLink(
+                    api_get_course_entity($courseId),
+                    api_get_session_entity(api_get_session_id()),
+                    api_get_group_entity()
+                )
+            ;
+
+            $em->persist($attachment);
+            $em->flush();
+
+            // Pick correct file when the input is multiple
+            $index = isset($f['__index']) ? (int) $f['__index'] : null;
+            $repo->addFileFromFileRequest($attachment, 'user_upload', true, $index);
+
+            $created++;
         }
 
-        return $return;
+        return $created > 0 ? 1 : 0;
     }
 
     /**

@@ -119,15 +119,84 @@ final class MailHelper
                 }
             }
 
-            // Attachment
+            // Attachment (supports single/multiple, and legacy/new payloads)
             if (!empty($data_file)) {
+                // Normalize: allow a single attachment array instead of a list
+                $isSingleAttachment =
+                    is_array($data_file)
+                    && (array_key_exists('path', $data_file) || array_key_exists('stream', $data_file))
+                    && !array_is_list($data_file);
+
+                if ($isSingleAttachment) {
+                    $data_file = [$data_file];
+                }
+
                 foreach ($data_file as $file_attach) {
-                    if (!empty($file_attach['path']) && !empty($file_attach['filename'])) {
-                        $templatedEmail->attachFromPath($file_attach['path'], $file_attach['filename']);
+                    if (!is_array($file_attach)) {
+                        continue;
                     }
 
-                    if (!empty($file_attach['stream']) && !empty($file_attach['filename'])) {
-                        $templatedEmail->addPart(new DataPart($file_attach['stream'], $file_attach['filename']));
+                    $filename = $file_attach['filename'] ?? null;
+
+                    // 1) Attach from filesystem path(s)
+                    if (!empty($file_attach['path'])) {
+                        $path = $file_attach['path'];
+
+                        if (is_string($path)) {
+                            if (!empty($filename) && is_string($filename)) {
+                                $templatedEmail->attachFromPath($path, $filename);
+                            } else {
+                                $templatedEmail->attachFromPath($path);
+                            }
+                        } elseif (is_array($path)) {
+                            // Multiple paths
+                            $i = 0;
+                            foreach ($path as $p) {
+                                if (!is_string($p) || '' === $p) {
+                                    $i++;
+                                    continue;
+                                }
+
+                                $nameForThis = null;
+
+                                // If filename is also an array, try to match by index
+                                if (is_array($filename) && isset($filename[$i]) && is_string($filename[$i]) && '' !== $filename[$i]) {
+                                    $nameForThis = $filename[$i];
+                                } elseif (is_string($filename) && '' !== $filename) {
+                                    // Fallback: same filename for all (not ideal, but safe)
+                                    $nameForThis = $filename;
+                                } else {
+                                    // Fallback: derive from path
+                                    $nameForThis = basename($p);
+                                }
+
+                                $templatedEmail->attachFromPath($p, $nameForThis);
+                                $i++;
+                            }
+                        } else {
+                            // Unexpected type, ignore safely
+                        }
+                    }
+
+                    // 2) Attach from stream(s)
+                    if (!empty($file_attach['stream'])) {
+                        $stream = $file_attach['stream'];
+
+                        if (!empty($filename) && is_string($filename)) {
+                            if (is_resource($stream) || is_string($stream)) {
+                                $templatedEmail->addPart(new DataPart($stream, $filename));
+                            }
+                        } elseif (is_array($stream) && is_array($filename)) {
+                            $count = max(count($stream), count($filename));
+                            for ($i = 0; $i < $count; $i++) {
+                                $s = $stream[$i] ?? null;
+                                $n = $filename[$i] ?? null;
+
+                                if ((is_resource($s) || is_string($s)) && is_string($n) && '' !== $n) {
+                                    $templatedEmail->addPart(new DataPart($s, $n));
+                                }
+                            }
+                        }
                     }
                 }
             }

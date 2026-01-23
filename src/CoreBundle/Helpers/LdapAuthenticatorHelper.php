@@ -44,7 +44,7 @@ readonly class LdapAuthenticatorHelper
         $keywordType = trim($request->query->get('keyword_type', ''));
 
         $ldapQuery = [
-            '(objectClass=inetOrgPerson)',
+            "(objectClass={$this->ldapConfig['object_class']})",
         ];
 
         if ($keywordUsername) {
@@ -84,7 +84,10 @@ readonly class LdapAuthenticatorHelper
         }
 
         return $this->ldap
-            ->query("ou=$ou,".$this->ldapConfig['base_dn'], '(objectClass=inetOrgPerson)')
+            ->query(
+                "ou=$ou,".$this->ldapConfig['base_dn'],
+                "(objectClass={$this->ldapConfig['object_class']})"
+            )
             ->execute()
             ->toArray()
         ;

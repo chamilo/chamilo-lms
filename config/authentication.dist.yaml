@@ -92,6 +92,7 @@ parameters:
                     phone: null
                     active: null
                     admin: null
+                object_class: 'inetOrgPerson'
 
             scim:
                 enabled: false

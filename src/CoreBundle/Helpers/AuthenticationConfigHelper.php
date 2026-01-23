@@ -118,6 +118,7 @@ readonly class AuthenticationConfigHelper
             'data_correspondence' => $this->getLdapDataCorrespondenceConfig(
                 $ldapConfig['data_correspondence'] ?? []
             ),
+            'object_class' => $ldapConfig['object_class'] ?? 'inetOrgPerson',
         ];
     }
 

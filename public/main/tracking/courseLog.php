@@ -515,7 +515,7 @@ if ('resume_session' === $origin) {
 $view = isset($_REQUEST['view']) ? $_REQUEST['view'] : '';
 $nameTools = get_lang('Reporting');
 Event::event_access_tool(TOOL_TRACKING);
-$tpl = new Template($nameTools);
+$tpl = new Template('');
 
 // Getting all the students of the course.
 if (empty($sessionId)) {

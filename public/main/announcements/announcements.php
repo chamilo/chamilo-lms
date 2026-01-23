@@ -85,6 +85,56 @@ $homeUrl = api_get_self().'?action=list&'.api_get_cidreq();
 $content = '';
 $searchFormToString = '';
 
+/**
+ * Build a local URL for this announcements page.
+ * Keeps cidreq and preserves legacy navigation params (origin/page) when present.
+ */
+function announcements_build_url(string $action, ?int $id = null, array $extra = []): string
+{
+    $url = api_get_self().'?action='.$action;
+    if (null !== $id && $id > 0) {
+        $url .= '&id='.(int) $id;
+    }
+    $url .= '&'.api_get_cidreq();
+
+    // Preserve optional navigation context (legacy learnpath and similar flows).
+    if (!empty($_REQUEST['origin'])) {
+        $url .= '&origin='.rawurlencode((string) $_REQUEST['origin']);
+    }
+    if (!empty($_REQUEST['page'])) {
+        $url .= '&page='.rawurlencode((string) $_REQUEST['page']);
+    }
+
+    foreach ($extra as $key => $value) {
+        if (null === $value || '' === $value) {
+            continue;
+        }
+        $url .= '&'.rawurlencode((string) $key).'='.rawurlencode((string) $value);
+    }
+
+    return $url;
+}
+
+/**
+ * Resolve a safe return URL based only on explicit return_action/return_id params.
+ * If params are missing/invalid, fallback to the provided URL.
+ */
+function announcements_get_return_url(string $fallbackUrl): string
+{
+    $returnAction = (string) ($_REQUEST['return_action'] ?? '');
+    $returnId = (int) ($_REQUEST['return_id'] ?? 0);
+
+    if ('list' === $returnAction) {
+        return announcements_build_url('list');
+    }
+
+    if (in_array($returnAction, ['view', 'modify'], true) && $returnId > 0) {
+        return announcements_build_url($returnAction, $returnId);
+    }
+
+    return $fallbackUrl;
+}
+
 $logInfo = [
     'tool' => TOOL_ANNOUNCEMENT,
     'action' => $action,
@@ -94,7 +144,7 @@ Event::registerLog($logInfo);
 $announcementAttachmentIsDisabled = ('true' === api_get_setting('announcement.disable_announcement_attachment'));
 $thisAnnouncementId = null;
 $htmlHeadXtra[] = api_get_css_asset('select2/css/select2.min.css');
-$htmlHeadXtra[] = api_get_asset('select2/js/select2.min.j');
+$htmlHeadXtra[] = api_get_asset('select2/js/select2.min.js');
 
 switch ($action) {
     case 'move':
@@ -251,6 +301,35 @@ switch ($action) {
             ';
         }
 
+        // Safe responsive resize (ES5 only). This avoids blank pages caused by modern JS syntax.
+        $resizeJs = '
+            (function () {
+                function resizeAnnouncementsGrid() {
+                    var $grid = $("#announcements");
+                    if (!$grid.length) {
+                        return;
+                    }
+                    // jqGrid marks the grid on the DOM node when initialized
+                    if (!$grid[0].grid) {
+                        return;
+                    }
+                    var $wrap = $grid.closest(".ui-jqgrid").parent();
+                    if ($wrap.length && $wrap.width()) {
+                        $grid.jqGrid("setGridWidth", $wrap.width(), true);
+                    }
+                }
+
+                // Run after init + also after a short delay (layout may still be settling)
+                resizeAnnouncementsGrid();
+                setTimeout(resizeAnnouncementsGrid, 250);
+
+                // Keep it responsive on window resize
+                $(window).off("resize.announcementsGrid").on("resize.announcementsGrid", function () {
+                    resizeAnnouncementsGrid();
+                });
+            })();
+        ';
+
         $content = '<script>
         $(function() {'.
             Display::grid_js(
@@ -262,7 +341,7 @@ switch ($action) {
                 [],
                 '',
                 true
-            ).$editOptions.'
+            ).$editOptions.$resizeJs.'
         });
         </script>';
 
@@ -284,7 +363,8 @@ switch ($action) {
             }
             $content = $html;
         } else {
-            $content .= Display::grid_html('announcements');
+            // Use inline style (no Tailwind dependency) to allow horizontal scroll on small screens.
+            $content .= '<div style="width:100%; overflow-x:auto;">'.Display::grid_html('announcements').'</div>';
         }
 
         break;
@@ -309,8 +389,6 @@ switch ($action) {
         }
         header('Location: '.$homeUrl);
         exit;
-
-        break;
     case 'delete_all':
         if (api_is_allowed_to_edit()) {
             $allow = ('true' === api_get_setting('announcement.disable_delete_all_announcements'));
@@ -324,16 +402,15 @@ switch ($action) {
 
         break;
     case 'delete_attachment':
-        $id = (int) $_GET['id_attach'];
+        $id = (int) ($_GET['id_attach'] ?? 0);
 
-        if (api_is_allowed_to_edit()) {
+        if (api_is_allowed_to_edit() && $id > 0) {
             AnnouncementManager::delete_announcement_attachment_file($id);
         }
 
-        header('Location: '.$homeUrl);
+        $redirectUrl = announcements_get_return_url($homeUrl);
+        header('Location: '.$redirectUrl);
         exit;
-
-        break;
     case 'set_visibility':
         if (!empty($announcement_id)) {
             if (0 != $sessionId &&
@@ -357,7 +434,9 @@ switch ($action) {
                     $session
                 );
                 Display::addFlash(Display::return_message(get_lang('The visibility has been changed.')));
-                header('Location: '.$homeUrl);
+
+                $redirectUrl = announcements_get_return_url($homeUrl);
+                header('Location: '.$redirectUrl);
                 exit;
             }
         }
@@ -378,7 +457,15 @@ switch ($action) {
 
         // DISPLAY ADD ANNOUNCEMENT COMMAND
         $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-        $url = api_get_self().'?action='.$action.'&id='.$id.'&'.api_get_cidreq();
+
+        $url = announcements_build_url(
+            $action,
+            $id > 0 ? $id : null,
+            [
+                'return_action' => (string) ($_REQUEST['return_action'] ?? ''),
+                'return_id' => (int) ($_REQUEST['return_id'] ?? 0),
+            ]
+        );
 
         $form = new FormValidator(
             'announcement',
@@ -434,8 +521,6 @@ switch ($action) {
                     api_get_setting('siteName')
                 );
             } elseif (isset($_GET['remindallinactives']) && 'true' === $_GET['remindallinactives']) {
-                // we want to remind inactive users. The $_GET['since'] parameter
-                // determines which users have to be warned (i.e the users who have been inactive for x days or more
                 $since = 6;
                 if (isset($_GET['since'])) {
                     if ('never' === $_GET['since']) {
@@ -445,32 +530,25 @@ switch ($action) {
                     }
                 }
 
-                // Getting the users who have to be reminded
                 $to = Tracking::getInactiveStudentsInCourse(
                     api_get_course_int_id(),
                     $since,
                     $sessionId
                 );
 
-                // setting the variables for the form elements: the users who need to receive the message
                 foreach ($to as &$user) {
                     $user = 'USER:'.$user;
                 }
-                // setting the variables for the form elements: the message has to be sent by email
                 $email_ann = '1';
-                // setting the variables for the form elements: the title of the email
                 $title_to_modify = sprintf(
                     get_lang('Inactivity on %s'),
                     api_get_setting('siteName')
                 );
-                // setting the variables for the form elements: the message of the email
                 $content_to_modify = sprintf(
                     get_lang('Dear user,<br /><br /> you are not active on %s since more than %s days.'),
                     api_get_setting('siteName'),
                     $since
                 );
-                // when we want to remind the users who have never been active
-                // then we have a different subject and content for the announcement
                 if ('never' === $_GET['since']) {
                     $title_to_modify = sprintf(
                         get_lang('Inactivity on %s'),
@@ -525,7 +603,7 @@ switch ($action) {
             }
         }
 
-        $ajaxUrl = api_get_path(WEB_AJAX_PATH).'announcement.ajax.php?'.api_get_cidreq().'&a=preview';
+    $ajaxUrl = api_get_path(WEB_AJAX_PATH).'announcement.ajax.php?'.api_get_cidreq().'&a=preview';
         $ajaxUserGroupUrl = api_get_path(WEB_AJAX_PATH).'usergroup.ajax.php?'.api_get_cidreq();
         $form->addHtml("
         <script>
@@ -654,12 +732,57 @@ switch ($action) {
             ['ToolbarSet' => 'Announcements']
         );
 
-        if (!$announcementAttachmentIsDisabled) {
-            $form->addElement('file', 'user_upload', get_lang('Add attachment'));
-            $form->addElement('textarea', 'file_comment', get_lang('File comment'));
-        }
+    if (!$announcementAttachmentIsDisabled) {
+        // Allow multiple files in one selection
+        $form->addElement('file', 'user_upload[]', get_lang('Add attachment'), ['multiple' => 'multiple']);
+        $form->addElement('textarea', 'file_comment', get_lang('File comment'));
 
-        $form->addHidden('sec_token', $token);
+        // Existing attachments (edit mode)
+        if (!empty($announcementInfo)) {
+            $attachRepo = Container::getAnnouncementAttachmentRepository();
+            $stok = Security::get_existing_token();
+
+            $baseUrl = api_get_self().'?'.api_get_cidreq();
+            $returnQs = '&return_action=modify&return_id='.(int) $id;
+
+            $attachments = $announcementInfo->getAttachments();
+            if (count($attachments) > 0) {
+                $html = '<div class="announcement-attachments" style="margin:20px 0;">';
+                $html .= '<strong>'.get_lang('Attachments').'</strong>';
+                $html .= '<ul style="margin:6px 0 0 18px;">';
+
+                foreach ($attachments as $attachment) {
+                    $downloadUrl = $attachRepo->getResourceFileDownloadUrl($attachment).'?'.api_get_cidreq();
+                    $deleteUrl = $baseUrl
+                        .'&action=delete_attachment'
+                        .'&id_attach='.(int) $attachment->getIid()
+                        .$returnQs
+                        .'&sec_token='.$stok;
+
+                    $html .= '<li style="margin:4px 0;">';
+                    $html .= Display::getMdiIcon(ObjectIcon::ATTACHMENT, 'ch-tool-icon', null, ICON_SIZE_TINY);
+                    $html .= ' <a href="'.$downloadUrl.'">'.api_htmlentities($attachment->getFilename()).'</a>';
+
+                    $comment = trim((string) $attachment->getComment());
+                    if ('' !== $comment) {
+                        $html .= ' - <span class="forum_attach_comment">'.api_htmlentities($comment).'</span>';
+                    }
+
+                    $html .= ' '.Display::url(
+                            Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Delete')),
+                            $deleteUrl
+                        );
+                    $html .= '</li>';
+                }
+
+                $html .= '</ul></div><br />';
+                $form->addElement('html', $html);
+            }
+        }
+    }
+
+
+    $form->addHidden('sec_token', $token);
 
         if (empty($sessionId)) {
             $form->addCheckBox(
@@ -760,7 +883,6 @@ switch ($action) {
 
             $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
             if (!empty($id)) {
-                // there is an Id => the announcement already exists => update mode
                 $file_comment = $announcementAttachmentIsDisabled ? null : $_POST['file_comment'];
                 $file = $announcementAttachmentIsDisabled ? [] : $_FILES['user_upload'];
                 $announcement = AnnouncementManager::edit_announcement(
@@ -773,7 +895,6 @@ switch ($action) {
                     $sendToUsersInSession
                 );
 
-                // Send mail
                 $messageSentTo = [];
                 if (isset($_POST['email_ann']) && empty($_POST['onlyThoseMails'])) {
                     $messageSentTo = AnnouncementManager::sendEmail(
@@ -797,10 +918,10 @@ switch ($action) {
                     )
                 );
                 Security::clear_token();
-                header('Location: '.$homeUrl);
+                $redirectUrl = announcements_get_return_url($homeUrl);
+                header('Location: '.$redirectUrl);
                 exit;
             } else {
-                // Insert mode
                 $file = $_FILES['user_upload'];
                 $file_comment = $data['file_comment'];
 
@@ -850,7 +971,6 @@ switch ($action) {
                         )
                     );
 
-                    // Send mail
                     $messageSentTo = [];
                     if (isset($data['email_ann']) && $data['email_ann']) {
                         $messageSentTo = AnnouncementManager::sendEmail(
@@ -883,16 +1003,13 @@ if (!empty($_GET['remind_inactive'])) {
 }
 
 if (empty($_GET['origin']) || 'learnpath' !== $_GET['origin']) {
-    // We are not in the learning path
     Display::display_header($nameTools, get_lang('Announcements'));
 }
 
-// Tool introduction
 if (empty($_GET['origin']) || 'learnpath' !== $_GET['origin']) {
     Display::display_introduction_section(TOOL_ANNOUNCEMENT);
 }
 
-// Actions
 $show_actions = false;
 $actionsLeft = '';
 if (($allowToEdit || $allowStudentInGroupToSend) && (empty($_GET['origin']) || 'learnpath' !== $_GET['origin'])) {
@@ -913,19 +1030,6 @@ if (($allowToEdit || $allowStudentInGroupToSend) && (empty($_GET['origin']) || '
     }
 }
 
-/*
-if ($allowToEdit && 0 == api_get_group_id()) {
-    $allow = ('true' === api_get_setting('announcement.disable_delete_all_announcements'));
-    if (false === $allow && api_is_allowed_to_edit()) {
-        if (!isset($_GET['action']) ||
-            isset($_GET['action']) && 'list' == $_GET['action']
-        ) {
-            $actionsLeft .= '<a href="'.api_get_self().'?'.api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang('Please confirm your choice')."')) return false;\">".
-                Display::getMdiIcon('delete', 'ch-tool-icon', null, 32, get_lang('Clear list of announcements')).'</a>';
-        }
-    }
-}*/
-
 if ($show_actions) {
     echo Display::toolbarAction('toolbar', [$actionsLeft, $searchFormToString]);
 }
@@ -933,6 +1037,5 @@ if ($show_actions) {
 echo $content;
 
 if (empty($_GET['origin']) || 'learnpath' !== $_GET['origin']) {
-    //we are not in learnpath tool
     Display::display_footer();
 }

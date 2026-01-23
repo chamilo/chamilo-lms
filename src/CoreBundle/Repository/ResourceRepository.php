@@ -212,22 +212,51 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this->addFile($resource, $file, '', $flush);
     }
 
-    public function addFileFromFileRequest(ResourceInterface $resource, string $fileKey, bool $flush = true): ?ResourceFile
+    public function addFileFromFileRequest($resource, string $fileKey, bool $flush = true, ?int $index = null)
     {
-        $request = $this->getRequest();
-        if ($request->files->has($fileKey)) {
-            $file = $request->files->get($fileKey);
-            if (null !== $file) {
-                $resourceFile = $this->addFile($resource, $file);
-                if ($flush) {
-                    $this->getEntityManager()->flush();
-                }
+        // Pick current request safely
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return null;
+        }
 
-                return $resourceFile;
+        if (!$request->files->has($fileKey)) {
+            return null;
+        }
+
+        $value = $request->files->get($fileKey);
+        $uploadedFile = null;
+
+        if ($value instanceof UploadedFile) {
+            // Single upload
+            $uploadedFile = $value;
+        } elseif (is_array($value)) {
+            // Multiple upload: select by index if provided
+            if (null !== $index && isset($value[$index]) && $value[$index] instanceof UploadedFile) {
+                $uploadedFile = $value[$index];
+            } else {
+                // Fallback: first valid file
+                foreach ($value as $candidate) {
+                    if ($candidate instanceof UploadedFile) {
+                        $uploadedFile = $candidate;
+                        break;
+                    }
+                }
             }
         }
 
-        return null;
+        if (!$uploadedFile instanceof UploadedFile) {
+            return null;
+        }
+
+        // Attach the file to the resource
+        $resourceFile = $this->addFile($resource, $uploadedFile);
+
+        if ($flush) {
+            $this->_em->flush();
+        }
+
+        return $resourceFile;
     }
 
     public function addFile(ResourceInterface $resource, UploadedFile $file, string $description = '', bool $flush = false): ?ResourceFile

@@ -97,7 +97,10 @@
         </svg>
       </div>
       <h3 class="text-base font-semibold">{{ t("You don't have any learning path.") }}</h3>
-      <p class="text-body-2 text-gray-50 max-w-sm">
+      <p
+        v-if="canEdit"
+        class="text-body-2 text-gray-50 max-w-sm"
+      >
         {{ t("Create your first learning path to start organizing course content.") }}
       </p>
       <button

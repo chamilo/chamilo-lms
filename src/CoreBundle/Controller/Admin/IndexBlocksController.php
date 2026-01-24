@@ -990,6 +990,64 @@ class IndexBlocksController extends BaseController
             ];
         }
 
+        // ---------------------------------------------------------------------
+        // File permissions checks
+        // ---------------------------------------------------------------------
+        $projectDir = (string) $this->getParameter('kernel.project_dir');
+
+        // Help links (optional but avoids null URLs)
+        $securityGuideUrl = '/documentation/security.html';
+        $optimizationGuideUrl = '/documentation/optimization.html';
+
+        // .env should NOT be writable by the web server user
+        $envPath = $projectDir.'/.env';
+        $envIsWritable = is_file($envPath) && is_writable($envPath);
+
+        $items[] = [
+            'className' => 'item-health-check-env-perms '.($envIsWritable ? 'text-error' : 'text-success'),
+            'url' => $securityGuideUrl,
+            'label' => sprintf(
+                $this->translator->trans($envIsWritable ? '%s is writeable' : '%s is not writeable'),
+                '.env'
+            ),
+        ];
+
+        // config/ should NOT be writable by the web server user
+        $configPath = $projectDir.'/config';
+        $configIsWritable = is_dir($configPath) && is_writable($configPath);
+
+        $items[] = [
+            'className' => 'item-health-check-config-perms '.($configIsWritable ? 'text-error' : 'text-success'),
+            'url' => $securityGuideUrl,
+            'label' => sprintf(
+                $this->translator->trans($configIsWritable ? '%s is writeable' : '%s is not writeable'),
+                'config/'
+            ),
+        ];
+
+        // var/cache MUST be writable (Symfony cache)
+        $cachePath = $projectDir.'/var/cache';
+        $cacheIsWritable = is_dir($cachePath) && is_writable($cachePath);
+
+        $items[] = [
+            'className' => 'item-health-check-cache-perms '.($cacheIsWritable ? 'text-success' : 'text-error'),
+            'url' => $optimizationGuideUrl,
+            'label' => sprintf(
+                $this->translator->trans($cacheIsWritable ? '%s is writeable' : '%s is not writeable'),
+                'var/cache'
+            ),
+        ];
+
+        // public/main/install existence -> orange if present
+        $installPath = $projectDir.'/public/main/install';
+        $installExists = is_dir($installPath);
+
+        $items[] = [
+            'className' => 'item-health-check-install-folder '.($installExists ? 'text-warning' : 'text-success'),
+            'url' => $securityGuideUrl,
+            'label' => $this->translator->trans($installExists ? 'Install folder is still present' : 'Install folder is not present'),
+        ];
+
         return $items;
     }
 }

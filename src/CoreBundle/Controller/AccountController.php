@@ -92,9 +92,14 @@ class AccountController extends BaseController
             return new RedirectResponse($url);
         }
 
+        // Legacy Chamilo CSRF token (sec_token) used by old endpoints (extra fields/tags, etc).
+        // This prevents "CSRF error" warnings from legacy flows while the Symfony form still saves correctly.
+        $legacyToken = Security::get_token();
+
         return $this->render('@ChamiloCore/Account/edit.html.twig', [
             'form' => $form->createView(),
             'user' => $user,
+            'legacy_token' => $legacyToken,
         ]);
     }
 

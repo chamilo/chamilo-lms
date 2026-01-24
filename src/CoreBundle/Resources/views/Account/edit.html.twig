@@ -7,9 +7,14 @@
           document.addEventListener("DOMContentLoaded", function () {
             $('.select2_user_rel_tag').each(function(i, obj) {
               let fieldId = '&field_id=' + $(this).attr('data.field_id');
+
+              // Legacy CSRF token for old Chamilo AJAX endpoints.
+              // This prevents "CSRF error" warnings coming from legacy token checks.
+              let legacyToken = '&sec_token={{ legacy_token }}';
+
               $(this).select2({
                 ajax: {
-                  url: '/main/inc/ajax/extra_field.ajax.php?{{ { 'name' : '', 'a': 'search_tags', 'type': 'user'}|url_encode }}' + fieldId,
+                  url: '/main/inc/ajax/extra_field.ajax.php?{{ { 'name' : '', 'a': 'search_tags', 'type': 'user'}|url_encode }}' + fieldId + legacyToken,
                   processResults: function (data) { return { results: data.items } }
                 },
                 cache: false,
@@ -28,7 +33,7 @@
               $(this).on('select2:unselect', function (e) {
                 let fieldId = '&tag_id=' + e.params.data.element.dataset.id;
                 $.ajax({
-                  url: '/main/inc/ajax/extra_field.ajax.php?{{ { 'a': 'delete_tag', 'type': 'user'}|url_encode }}' + fieldId,
+                  url: '/main/inc/ajax/extra_field.ajax.php?{{ { 'a': 'delete_tag', 'type': 'user'}|url_encode }}' + fieldId + legacyToken,
                   success: function(data) {}
                 });
               });
@@ -49,6 +54,8 @@
             </div>
             <div class="flex-grow">
                 {{ form_start(form, { 'action': path('chamilo_core_account_edit'), 'attr': { 'class': 'edit' } }) }}
+                {# Legacy Chamilo CSRF token used by old token checks (sec_token). #}
+                <input type="hidden" name="sec_token" value="{{ legacy_token }}" />
                 {{ form_widget(form, {'attr': {'class': 'flex flex-col gap-4'}}) }}
 
                 <div>
@@ -58,9 +65,9 @@
             </div>
         </div>
 
-        {# Flatpickr JS desde /build #}
+        {# Flatpickr JS from /build #}
         <script src="{{ asset('build/flatpickr/flatpickr.min.js') }}"></script>
-        {# (Opcional) Localización, si quieres: <script src="/build/flatpickr/l10n/fr.js"></script> #}
+        {# Optional locale example: <script src="/build/flatpickr/l10n/fr.js"></script> #}
         <script>
           document.addEventListener('DOMContentLoaded', function () {
             if (window.flatpickr) {

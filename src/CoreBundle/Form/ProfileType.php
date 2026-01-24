@@ -76,6 +76,9 @@ class ProfileType extends AbstractType
         $editableHigh = $expand(\is_array($changeableOptions) ? $changeableOptions : []);
 
         $languages = array_flip($this->languageRepository->getAllAvailableToArray(true, true));
+        $ignoredKeys = [
+            'theme',
+        ];
 
         // Core fields map (keys must align with settings keys)
         $fieldsMap = [
@@ -117,6 +120,7 @@ class ProfileType extends AbstractType
                     ],
                 ],
             ],
+
             // Timezone will be added below if visible (fine JSON or fallback)
             'timezone' => [
                 'field' => 'timezone',
@@ -140,7 +144,10 @@ class ProfileType extends AbstractType
         // Visibility (core):
         // Strict when $hasFine: only keys present in $fieldsVisibility are visible.
         // Otherwise, fallback to visible_options.
-        $isCoreVisible = function (string $key) use ($fieldsVisibility, $visibleHigh, $hasFine): bool {
+        $isCoreVisible = function (string $key) use ($fieldsVisibility, $visibleHigh, $hasFine, $ignoredKeys): bool {
+            if (\in_array($key, $ignoredKeys, true)) {
+                return false;
+            }
             if ($hasFine) {
                 return \array_key_exists($key, $fieldsVisibility);
             }
@@ -150,7 +157,10 @@ class ProfileType extends AbstractType
 
         // Editability (core):
         // If key is in fine JSON, its boolean decides; otherwise fallback to changeable_options.
-        $isCoreEditable = function (string $key) use ($fieldsVisibility, $editableHigh): bool {
+        $isCoreEditable = function (string $key) use ($fieldsVisibility, $editableHigh, $ignoredKeys): bool {
+            if (\in_array($key, $ignoredKeys, true)) {
+                return false;
+            }
             if (\array_key_exists($key, $fieldsVisibility)) {
                 return (bool) $fieldsVisibility[$key];
             }
@@ -221,6 +231,9 @@ class ProfileType extends AbstractType
         if ($hasFine) {
             // Strict: only extras listed in fine JSON
             foreach ($fieldsVisibility as $key => $bool) {
+                if (\in_array($key, $ignoredKeys, true)) {
+                    continue;
+                }
                 if (!\in_array($key, $coreKeys, true)) {
                     $extraAllowlist[] = $key;               // visible
                     $extraEditableMap[$key] = (bool) $bool; // editable

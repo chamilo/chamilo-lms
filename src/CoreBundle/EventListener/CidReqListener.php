@@ -248,21 +248,27 @@ class CidReqListener
             ChamiloSession::erase('course_already_visited');
         }
 
-        $courseId = $sessionHandler->get('cid', 0);
-        $sessionId = $sessionHandler->get('sid', 0);
-        $ip = $request->getClientIp();
+        $courseId = (int) $sessionHandler->get('cid', 0);
+        $sessionId = (int) $sessionHandler->get('sid', 0);
+        $ip = (string) ($request->getClientIp() ?? '');
+
+        // Track course logout only when we have a valid course context and a valid Chamilo User entity.
         if (0 !== $courseId) {
             $token = $this->tokenStorage->getToken();
             if (null !== $token) {
-                /** @var User $user */
-                $user = $token->getUser();
-                if ($user instanceof UserInterface) {
-                    $this->entityManager->getRepository(TrackECourseAccess::class)
-                        ->logoutAccess($user, $courseId, $sessionId, $ip)
+                $tokenUser = $token->getUser();
+
+                // The token user might be a string (e.g., "anon.") or another UserInterface implementation.
+                // We must only log access when it is the Doctrine-backed Chamilo User entity with a valid ID.
+                if ($tokenUser instanceof User && (int) $tokenUser->getId() > 0) {
+                    $this->entityManager
+                        ->getRepository(TrackECourseAccess::class)
+                        ->logoutAccess($tokenUser, $courseId, $sessionId, $ip)
                     ;
                 }
             }
         }
+
         $sessionHandler->remove('toolgroup');
         $sessionHandler->remove('_cid');
         $sessionHandler->remove('cid');
@@ -276,6 +282,7 @@ class CidReqListener
         $sessionHandler->remove('session');
         $sessionHandler->remove('course_url_params');
         $sessionHandler->remove('origin');
+
         ChamiloSession::erase('toolgroup');
         ChamiloSession::erase('_cid');
         ChamiloSession::erase('cid');

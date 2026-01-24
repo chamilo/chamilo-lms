@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use ChamiloSession as Session;
@@ -57,7 +58,12 @@ class CourseAccessListener
             return;
         }
 
-        $ip = $request->getClientIp();
+        // only log access for the Doctrine-backed Chamilo User entity with a valid ID.
+        if (!$user instanceof User || (int) $user->getId() <= 0) {
+            return;
+        }
+
+        $ip = (string) ($request->getClientIp() ?? '');
 
         // --- Existing behavior: track_e_course_access ---
         $accessRepository = $this->em->getRepository(TrackECourseAccess::class);
@@ -68,17 +74,19 @@ class CourseAccessListener
         } else {
             if (!empty($session) && $session->getDuration() > 0) {
                 $subscription = $user->getSubscriptionToSession($session);
-                $duration = $session->getDuration() + $subscription->getDuration();
+                if ($subscription) {
+                    $duration = $session->getDuration() + $subscription->getDuration();
 
-                $startDate = new DateTime();
-                $endDate = (clone $startDate)->modify("+$duration days");
+                    $startDate = new DateTime();
+                    $endDate = (clone $startDate)->modify("+$duration days");
 
-                $subscription
-                    ->setAccessStartDate($startDate)
-                    ->setAccessEndDate($endDate)
-                ;
+                    $subscription
+                        ->setAccessStartDate($startDate)
+                        ->setAccessEndDate($endDate)
+                    ;
 
-                $this->em->flush();
+                    $this->em->flush();
+                }
             }
 
             $accessRepository->recordAccess($user, $courseId, $sessionId, $ip);

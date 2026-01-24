@@ -28,6 +28,25 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
     }
 
     /**
+     * Ensure the given User is managed by Doctrine.
+     */
+    private function toManagedUser(User $user): ?User
+    {
+        $id = (int) $user->getId();
+        if ($id <= 0) {
+            // do not track access for users without a persisted identifier.
+            return null;
+        }
+
+        if ($this->_em->contains($user)) {
+            return $user;
+        }
+
+        // Use a reference to avoid an extra database query.
+        return $this->_em->getReference(User::class, $id);
+    }
+
+    /**
      * Get the last registered access by an user.
      */
     public function getLastAccessByUser(?User $user = null): ?TrackECourseAccess
@@ -56,9 +75,14 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
     /**
      * Find existing access for a user.
      */
-    public function findExistingAccess(User $user, int $courseId, int $sessionId)
+    public function findExistingAccess(User $user, int $courseId, int $sessionId): ?TrackECourseAccess
     {
-        return $this->findOneBy(['user' => $user, 'cId' => $courseId, 'sessionId' => $sessionId]);
+        $userRef = $this->toManagedUser($user);
+        if (null === $userRef) {
+            return null;
+        }
+
+        return $this->findOneBy(['user' => $userRef, 'cId' => $courseId, 'sessionId' => $sessionId]);
     }
 
     /**
@@ -67,7 +91,10 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
     public function updateAccess(TrackECourseAccess $access): void
     {
         $now = new DateTime();
-        if (!$access->getLogoutCourseDate() || $now->getTimestamp() - $access->getLogoutCourseDate()->getTimestamp() > 300) {
+        if (
+            !$access->getLogoutCourseDate()
+            || $now->getTimestamp() - $access->getLogoutCourseDate()->getTimestamp() > 300
+        ) {
             $access->setLogoutCourseDate($now);
             $access->setCounter($access->getCounter() + 1);
             $this->_em->flush();
@@ -79,8 +106,14 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
      */
     public function recordAccess(User $user, int $courseId, int $sessionId, string $ip): void
     {
+        $userRef = $this->toManagedUser($user);
+        if (null === $userRef) {
+            // do not insert tracking rows for invalid users.
+            return;
+        }
+
         $access = new TrackECourseAccess();
-        $access->setUser($user);
+        $access->setUser($userRef);
         $access->setCId($courseId);
         $access->setSessionId($sessionId);
         $access->setUserIp($ip);
@@ -95,6 +128,12 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
      */
     public function logoutAccess(User $user, int $courseId, int $sessionId, string $ip): void
     {
+        $userRef = $this->toManagedUser($user);
+        if (null === $userRef) {
+            // do nothing if user is not persisted/valid.
+            return;
+        }
+
         $now = new DateTime('now', new DateTimeZone('UTC'));
         $sessionLifetime = 3600;
         $limitTime = (new DateTime())->setTimestamp(time() - $sessionLifetime);
@@ -103,7 +142,7 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
             ->where('a.user = :user AND a.cId = :courseId AND a.sessionId = :sessionId')
             ->andWhere('a.loginCourseDate > :limitTime')
             ->setParameters([
-                'user' => $user,
+                'user' => $userRef,
                 'courseId' => $courseId,
                 'sessionId' => $sessionId,
                 'limitTime' => $limitTime,
@@ -118,20 +157,22 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
             $access->setLogoutCourseDate($now);
             $access->setCounter($access->getCounter() + 1);
             $this->_em->flush();
-        } else {
-            // No access found or existing access is outside the session lifetime
-            // Insert new access record
-            $newAccess = new TrackECourseAccess();
-            $newAccess->setUser($user);
-            $newAccess->setCId($courseId);
-            $newAccess->setSessionId($sessionId);
-            $newAccess->setUserIp($ip);
-            $newAccess->setLoginCourseDate($now);
-            $newAccess->setLogoutCourseDate($now);
-            $newAccess->setCounter(1);
-            $this->_em->persist($newAccess);
-            $this->_em->flush();
+
+            return;
         }
+
+        // No access found or existing access is outside the session lifetime: insert a new access record.
+        $newAccess = new TrackECourseAccess();
+        $newAccess->setUser($userRef);
+        $newAccess->setCId($courseId);
+        $newAccess->setSessionId($sessionId);
+        $newAccess->setUserIp($ip);
+        $newAccess->setLoginCourseDate($now);
+        $newAccess->setLogoutCourseDate($now);
+        $newAccess->setCounter(1);
+
+        $this->_em->persist($newAccess);
+        $this->_em->flush();
     }
 
     public function getCourseVisits(Course $course, ?Session $session = null): int

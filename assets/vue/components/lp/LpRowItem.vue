@@ -28,7 +28,17 @@ const emit = defineEmits([
   "export-scorm",
   "export-pdf",
   "toggle-auto-launch",
+  "update-scorm",
 ])
+
+const lpType = computed(() => {
+  const v = props.lp?.lpType ?? props.lp?.lp_type ?? props.lp?.type ?? props.lp?.lpTypeId ?? props.lp?.lp_type_id ?? 0
+
+  return Number(v) || 0
+})
+
+// Only SCORM packages (type = 2 in Chamilo legacy)
+const canUpdateScorm = computed(() => props.canEdit && lpType.value === 2)
 
 const dateText = computed(() => {
   const v = props.buildDates ? props.buildDates(props.lp) : ""
@@ -213,6 +223,13 @@ const progressTextClass = computed(() => {
               {{ t("Export as SCORM") }}
             </button>
             <button
+              v-if="canUpdateScorm"
+              class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 md:hidden"
+              @click="emit('update-scorm', lp)"
+            >
+              {{ t("Update SCORM") }}
+            </button>
+            <button
               class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 md:hidden"
               @click="emit('settings', lp)"
             >
@@ -271,6 +288,15 @@ const progressTextClass = computed(() => {
             @click="emit('export-scorm', lp)"
           >
             <i class="mdi mdi-archive-arrow-down text-xl" />
+          </button>
+          <button
+            v-if="canUpdateScorm"
+            :aria-label="t('Update SCORM')"
+            :title="t('Update SCORM')"
+            class="row-start-1 col-start-5 opacity-70 hover:opacity-100 hidden md:block"
+            @click="emit('update-scorm', lp)"
+          >
+            <i class="mdi mdi-upload text-xl" />
           </button>
           <button
             v-if="canExportPdf"
@@ -332,6 +358,13 @@ const progressTextClass = computed(() => {
                   @click="emit('build', lp)"
                 >
                   {{ t("Edit learnpath") }}
+                </button>
+                <button
+                  v-if="canUpdateScorm"
+                  class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
+                  @click="emit('update-scorm', lp)"
+                >
+                  {{ t("Update SCORM") }}
                 </button>
                 <button
                   class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger"

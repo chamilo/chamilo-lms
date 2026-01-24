@@ -1120,8 +1120,40 @@ switch ($action) {
         }
         $goList();
         exit;
+    case 'update_scorm':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
 
-        break;
+        if (empty($lpId)) {
+            Display::addFlash(Display::return_message(get_lang('No learning path found'), 'error'));
+            $goList();
+            exit;
+        }
+
+        /** @var CLp|null $lp */
+        $lp = $lpRepo->find($lpId);
+        if (!$lp) {
+            Display::addFlash(Display::return_message(get_lang('No learning path found'), 'error'));
+            $goList();
+            exit;
+        }
+
+        if ((int) $lp->getLpType() !== CLp::SCORM_TYPE) {
+            Display::addFlash(Display::return_message(get_lang('Not a SCORM learning path'), 'error'));
+            $goList();
+            exit;
+        }
+
+        $script = 'lp_update_scorm.php';
+        if (!is_file(__DIR__.'/lp_update_scorm.php') && is_file(__DIR__.'/lp_upload_scorm.php')) {
+            $script = 'lp_upload_scorm.php';
+        }
+
+        $target = api_get_path(WEB_CODE_PATH).'lp/'.$script.'?'.api_get_cidreq().'&lp_id='.$lpId;
+        $target .= '&returnTo='.urlencode($listUrl);
+        header('Location: '.$target);
+        exit;
     case 'return_to_course_homepage':
         if (!$lp_found) {
             $goList();

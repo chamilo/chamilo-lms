@@ -149,6 +149,7 @@
               @toggle-publish="onTogglePublish"
               @export-scorm="onExportScorm"
               @export-pdf="onExportPdf"
+              @update-scorm="onUpdateScorm"
             />
           </template>
         </Draggable>
@@ -178,6 +179,8 @@
         @toggle-visible="onToggleVisible"
         @toggle-publish="onTogglePublish"
         @export-pdf="onExportPdf"
+        @export-scorm="onExportScorm"
+        @update-scorm="onUpdateScorm"
       />
     </template>
   </div>
@@ -227,19 +230,31 @@ const canEdit = computed(() => rawCanEdit.value && !isStudentView.value)
 
 const { course, session } = storeToRefs(cidReqStore)
 
+const legacyContext = computed(() => {
+  const node = Number(route.params?.node ?? 0) || undefined
+  const gid = Number(route.query?.gid ?? 0)
+  const gradebook = Number(route.query?.gradebook ?? 0)
+  const origin = String(route.query?.origin ?? "")
+
+  return {
+    cid: course.value?.id,
+    sid: session.value?.id ?? 0,
+    node,
+    gid,
+    gradebook,
+    origin,
+  }
+})
+
 const aiHelpersEnabled = computed(() => {
   const v = String(platformConfig.getSetting("ai_helpers.enable_ai_helpers"))
-
   return v === "true"
 })
 const lpGeneratorEnabled = computed(() => {
   const v = String(courseSettingsStore?.getSetting?.("learning_path_generator"))
-
   return v === "true"
 })
-const canUseAi = computed(() => {
-  return !!(canEdit.value && aiHelpersEnabled.value && lpGeneratorEnabled.value)
-})
+const canUseAi = computed(() => !!(canEdit.value && aiHelpersEnabled.value && lpGeneratorEnabled.value))
 
 const showExportDialog = ref(false)
 const exportTarget = ref(null)
@@ -269,8 +284,12 @@ const onToggleAutoLaunch = (lp) => {
   const next = Number(lp.autolaunch) === 1 ? 0 : 1
 
   window.location.href = lpService.buildLegacyActionUrl(lp.iid, "auto_launch", {
-    cid: course.value?.id,
-    sid: session.value?.id,
+    cid: legacyContext.value.cid,
+    sid: legacyContext.value.sid,
+    node: legacyContext.value.node,
+    gid: legacyContext.value.gid,
+    gradebook: legacyContext.value.gradebook,
+    origin: legacyContext.value.origin,
     params: { status: next },
   })
 }
@@ -311,24 +330,22 @@ const onCloseExportDialog = () => {
 async function loadVisibilityFor(lpIds) {
   if (canEdit.value) {
     visibilityMap.value = {}
-
     return
   }
 
   if (!Array.isArray(lpIds) || lpIds.length === 0) {
     visibilityMap.value = {}
-
     return
   }
 
   const params = new URLSearchParams({
     a: "lp_visibility_map",
     lp_ids: lpIds.join(","),
-    cid: course.value?.id,
+    cid: legacyContext.value.cid,
   })
 
-  if (session.value) {
-    params.append("sid", session.value?.id)
+  if (legacyContext.value.sid) {
+    params.append("sid", legacyContext.value.sid)
   }
 
   const res = await fetch(`/main/inc/ajax/lp.ajax.php?${params.toString()}`, {
@@ -358,12 +375,12 @@ const withCidSid = (url) => {
     const abs = isAbs ? url : window.location.origin + url
     const u = new URL(abs)
 
-    if (course.value) {
-      u.searchParams.set("cid", course.value?.id)
+    if (legacyContext.value.cid) {
+      u.searchParams.set("cid", legacyContext.value.cid)
     }
 
-    if (session.value) {
-      u.searchParams.set("sid", session.value?.id)
+    if (legacyContext.value.sid) {
+      u.searchParams.set("sid", legacyContext.value.sid)
     }
 
     return isAbs ? u.toString() : u.pathname + u.search
@@ -380,7 +397,7 @@ const load = async () => {
     const node = Number(route.params.node)
 
     try {
-      await courseSettingsStore.loadCourseSettings(course.value?.id, session.value?.id)
+      await courseSettingsStore.loadCourseSettings(legacyContext.value.cid, legacyContext.value.sid)
     } catch (err) {
       console.error("[LPList] loadCourseSettings FAILED:", err)
     }
@@ -395,8 +412,8 @@ const load = async () => {
     rawCanEdit.value = !!allowed
 
     const catRes = await lpService.getLpCategories({
-      cid: course.value?.id,
-      sid: session.value?.id ?? 0,
+      cid: legacyContext.value.cid,
+      sid: legacyContext.value.sid ?? 0,
     })
 
     const cats = catRes?.["hydra:member"] ?? catRes ?? []
@@ -404,7 +421,7 @@ const load = async () => {
 
     const res = await lpService.getLearningPaths({
       "resourceNode.parent": node,
-      sid: session.value?.id ?? 0,
+      sid: legacyContext.value.sid ?? 0,
       pagination: false,
     })
 
@@ -415,7 +432,6 @@ const load = async () => {
     }))
 
     await loadVisibilityFor(items.value.map((lp) => lp.iid))
-
     rebuildListsFromItems()
   } catch (e) {
     console.error(e)
@@ -512,9 +528,9 @@ function applyOrderWithinContext(predicate, orderedIds) {
 
 async function sendReorder(orderedIds, { categoryId } = {}) {
   const payload = {
-    courseId: course.value?.id,
-    sessionId: session.value?.id,
-    sid: session.value?.id,
+    courseId: legacyContext.value.cid,
+    sessionId: legacyContext.value.sid,
+    sid: legacyContext.value.sid,
     categoryId: categoryId ?? null,
     ids: orderedIds,
     order: orderedIds,
@@ -571,7 +587,6 @@ const circumference = 2 * Math.PI * 16
 const ringDash = (val) => {
   const n = Math.min(100, Math.max(0, Number(val || 0)))
   const d = (n / 100) * circumference
-
   return `${d} ${circumference}`
 }
 const ringValue = (val) => Math.round(Math.min(100, Math.max(0, Number(val || 0))))
@@ -585,7 +600,6 @@ const onStudentViewChange = async (val) => {
     })
   } else {
     const q = new URLSearchParams(window.location.search)
-
     q.delete("isStudentView")
 
     const newUrl = window.location.pathname + (q.toString() ? "?" + q.toString() : "") + window.location.hash
@@ -595,8 +609,8 @@ const onStudentViewChange = async (val) => {
 
 const openLegacy = (lp) => {
   window.location.href = lpService.buildLegacyViewUrl(lp.iid, {
-    cid: course.value?.id || 0,
-    sid: session.value?.id || 0,
+    cid: legacyContext.value.cid || 0,
+    sid: legacyContext.value.sid || 0,
     isStudentView: isStudentView.value ? "true" : "false",
   })
 }
@@ -613,42 +627,35 @@ const handleTopMenu = (action, ev) => {
     return
   }
 
-  const courseId = course.value?.id || undefined
-  const sidQ = session.value?.id || 0
-  const node = Number(route.params?.node ?? 0) || undefined
-  const gid = Number(route.query?.gid ?? 0)
-  const gradebook = Number(route.query?.gradebook ?? 0)
-  const origin = String(route.query?.origin ?? "")
-
   const url =
     action === "new"
-      ? lpService.buildLegacyActionUrl("add_lp", { cid: courseId, sid: sidQ, node, gid, gradebook, origin })
+      ? lpService.buildLegacyActionUrl("add_lp", { ...legacyContext.value })
       : action === "category"
-        ? lpService.buildLegacyActionUrl("add_lp_category", { cid: courseId, sid: sidQ, node, gid, gradebook, origin })
+        ? lpService.buildLegacyActionUrl("add_lp_category", { ...legacyContext.value })
         : action === "import"
           ? `/main/upload/index.php?${new URLSearchParams({
-              cid: courseId,
-              sid: sidQ,
+              cid: legacyContext.value.cid,
+              sid: legacyContext.value.sid,
               tool: "learnpath",
               curdirpath: "/",
-              node,
-              gid,
-              gradebook,
-              origin,
+              node: legacyContext.value.node,
+              gid: legacyContext.value.gid,
+              gradebook: legacyContext.value.gradebook,
+              origin: legacyContext.value.origin,
             }).toString()}`
           : action === "rapid"
             ? `/main/upload/upload_ppt.php?${new URLSearchParams({
-                cid: courseId,
-                sid: sidQ,
+                cid: legacyContext.value.cid,
+                sid: legacyContext.value.sid,
                 tool: "learnpath",
                 curdirpath: "/",
-                node,
-                gid,
-                gradebook,
-                origin,
+                node: legacyContext.value.node,
+                gid: legacyContext.value.gid,
+                gradebook: legacyContext.value.gradebook,
+                origin: legacyContext.value.origin,
               }).toString()}`
             : action === "ai"
-              ? lpService.buildLegacyActionUrl("ai_helper", { cid: courseId, sid: sidQ, node, gid, gradebook, origin })
+              ? lpService.buildLegacyActionUrl("ai_helper", { ...legacyContext.value })
               : null
 
   if (url) {
@@ -656,25 +663,35 @@ const handleTopMenu = (action, ev) => {
   }
 }
 
-const onReport = (lp) =>
-  (window.location.href = lpService.buildLegacyActionUrl(lp.iid, "report", {
-    cid: course.value?.id,
-    sid: session.value,
-  }))
-const onSettings = (lp) =>
-  (window.location.href = lpService.buildLegacyActionUrl(lp.iid, "edit", { cid: course.value?.id, sid: session.value }))
-const onBuild = (lp) =>
-  (window.location.href = lpService.buildLegacyActionUrl(lp.iid, "add_item", {
-    cid: course.value?.id,
-    sid: session.value?.id,
+const onReport = (lp) => {
+  window.location.href = lpService.buildLegacyActionUrl(lp.iid, "report", { ...legacyContext.value })
+}
+const onSettings = (lp) => {
+  window.location.href = lpService.buildLegacyActionUrl(lp.iid, "edit", { ...legacyContext.value })
+}
+const onBuild = (lp) => {
+  window.location.href = lpService.buildLegacyActionUrl(lp.iid, "add_item", {
+    ...legacyContext.value,
     params: { type: "step", isStudentView: "false" },
-  }))
+  })
+}
+
+function onUpdateScorm(lp) {
+  const node = Number(route.params?.node ?? 0) || undefined
+  const url = lpService.buildLegacyActionUrl("update_scorm", {
+    cid: course.value?.id,
+    sid: session.value?.id ?? 0,
+    node,
+    params: { lp_id: lp.iid },
+  })
+  window.location.assign(url)
+}
+
 const onToggleVisible = (lp) => {
   const newStatus = typeof lp.visible !== "undefined" ? (lp.visible ? 0 : 1) : 1
 
   window.location.href = lpService.buildLegacyActionUrl(lp.iid, "toggle_visible", {
-    cid: course.value?.id,
-    sid: session.value?.id,
+    ...legacyContext.value,
     params: { new_status: newStatus },
   })
 }
@@ -682,8 +699,7 @@ const onTogglePublish = (lp) => {
   const newStatus = lp.published === "v" ? "i" : "v"
 
   window.location.href = lpService.buildLegacyActionUrl(lp.iid, "toggle_publish", {
-    cid: course.value?.id,
-    sid: session.value?.id,
+    ...legacyContext.value,
     params: { new_status: newStatus },
   })
 }
@@ -692,10 +708,7 @@ const onDelete = (lp) => {
   const msg = `${t("Are you sure to delete")} ${label}?`
 
   if (confirm(msg)) {
-    window.location.href = lpService.buildLegacyActionUrl(lp.iid, "delete", {
-      cid: course.value?.id,
-      sid: session.value,
-    })
+    window.location.href = lpService.buildLegacyActionUrl(lp.iid, "delete", { ...legacyContext.value })
   }
 }
 
@@ -703,7 +716,6 @@ async function onEndUncat() {
   await nextTick()
   if (!canEdit.value) {
     draggingUncat.value = false
-
     return
   }
 
@@ -726,11 +738,21 @@ const onExportScorm = (lp) => {
     return
   }
 
-  const params = new URLSearchParams({ action: "export", lp_id: lp.iid, cid: course.value?.id })
+  const params = new URLSearchParams({
+    action: "export",
+    lp_id: lp.iid,
+    cid: legacyContext.value.cid,
+  })
 
-  if (session.value) {
-    params.append("sid", session.value)
+  // include sid even if 0 is not needed here; only append if > 0
+  if (legacyContext.value.sid) {
+    params.append("sid", String(legacyContext.value.sid))
   }
+
+  if (legacyContext.value.node) params.set("node", String(legacyContext.value.node))
+  params.set("gid", String(legacyContext.value.gid || 0))
+  params.set("gradebook", String(legacyContext.value.gradebook || 0))
+  if (legacyContext.value.origin) params.set("origin", legacyContext.value.origin)
 
   window.location.href = `/main/lp/lp_controller.php?${params.toString()}`
 }

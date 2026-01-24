@@ -22,6 +22,7 @@ const props = defineProps({
   buildDates: { type: Function, required: false },
   isSessionCategory: { type: Boolean, default: false },
 })
+
 const emit = defineEmits([
   "open",
   "edit",
@@ -33,6 +34,7 @@ const emit = defineEmits([
   "delete",
   "export-scorm",
   "export-pdf",
+  "update-scorm",
   "reorder",
   "toggle-auto-launch",
 ])
@@ -73,13 +75,16 @@ const goCat = (action, extraParams = {}) => {
   })
   window.location.assign(url)
 }
+
 const onCatEdit = () => goCat("add_lp_category")
 const onCatAddUsers = () => goCat("add_users_to_category")
+
 const onCatToggleVisibility = () => {
   const vis = props.category.visibility ?? props.category.visible
   const next = typeof vis === "number" ? (vis ? 0 : 1) : 1
   goCat("toggle_category_visibility", { new_status: next })
 }
+
 const onCatTogglePublish = () => {
   const pub = props.category.isPublished ?? props.category.published
   let next = 1
@@ -87,6 +92,7 @@ const onCatTogglePublish = () => {
   if (typeof pub === "string") next = pub === "v" ? 0 : 1
   goCat("toggle_category_publish", { new_status: next })
 }
+
 const onCatDelete = () => {
   // Do not allow deletion if category is not empty
   if (localList.value.length > 0) {
@@ -103,11 +109,14 @@ const onCatDelete = () => {
 
 const isOpen = ref(true)
 const storageKey = computed(() => `lpCatOpen:${props.category?.iid || props.title}`)
+
 onMounted(() => {
   const saved = localStorage.getItem(storageKey.value)
   if (saved !== null) isOpen.value = saved === "1"
 })
+
 watch(isOpen, (v) => localStorage.setItem(storageKey.value, v ? "1" : "0"))
+
 const panelId = computed(() => `cat-panel-${props.category?.iid || props.title}`)
 const toggleOpen = () => {
   if (localList.value.length) isOpen.value = !isOpen.value
@@ -207,6 +216,7 @@ const toggleOpen = () => {
               ></i>
             </span>
           </template>
+
           <template #menu>
             <div
               class="absolute right-0 top-full mt-2 w-60 bg-white border border-gray-25 rounded-xl shadow-xl p-1 z-50"
@@ -217,26 +227,32 @@ const toggleOpen = () => {
               >
                 {{ t("Edit category") }}
               </button>
+
               <button
                 class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
                 @click="onCatAddUsers"
               >
                 {{ t("Subscribe users to category") }}
               </button>
+
               <div class="my-1 h-px bg-gray-15"></div>
+
               <button
                 class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
                 @click="onCatToggleVisibility"
               >
                 {{ t("Toggle visibility") }}
               </button>
+
               <button
                 class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
                 @click="onCatTogglePublish"
               >
                 {{ t("Publish / Hide") }}
               </button>
+
               <div class="my-1 h-px bg-gray-15"></div>
+
               <button
                 class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger"
                 @click="onCatDelete"
@@ -309,17 +325,18 @@ const toggleOpen = () => {
             :lp="element"
             :ringDash="ringDash"
             :ringValue="ringValue"
-            @build="$emit('build', element)"
-            @delete="$emit('delete', element)"
-            @edit="$emit('edit', element)"
-            @open="$emit('open', element)"
-            @report="$emit('report', element)"
-            @settings="$emit('settings', element)"
-            @toggle-auto-launch="$emit('toggle-auto-launch', element)"
-            @toggle-visible="$emit('toggle-visible', element)"
-            @toggle-publish="$emit('toggle-publish', element)"
-            @export-scorm="$emit('export-scorm', element)"
-            @export-pdf="$emit('export-pdf', element)"
+            @build="emit('build', element)"
+            @delete="emit('delete', element)"
+            @edit="emit('edit', element)"
+            @open="emit('open', element)"
+            @report="emit('report', element)"
+            @settings="emit('settings', element)"
+            @toggle-auto-launch="emit('toggle-auto-launch', element)"
+            @toggle-visible="emit('toggle-visible', element)"
+            @toggle-publish="emit('toggle-publish', element)"
+            @export-scorm="emit('export-scorm', element)"
+            @export-pdf="emit('export-pdf', element)"
+            @update-scorm="emit('update-scorm', element)"
           />
         </template>
       </Draggable>

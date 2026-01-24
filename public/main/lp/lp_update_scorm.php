@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Asset;
@@ -11,30 +13,30 @@ $this_section = SECTION_COURSES;
 api_protect_course_script();
 
 $allow = api_is_allowed_to_edit(null, true);
-$lpId  = !empty($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
+$lpId = !empty($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
 
 if (!$allow || $lpId <= 0) {
     api_not_allowed(true);
 }
 
 $courseInfo = api_get_course_info();
-$userId     = api_get_user_id();
+$userId = api_get_user_id();
 
 // Prevent open redirects: allow only absolute URLs under WEB_PATH or relative paths.
 $sanitizeReturnTo = static function (?string $url): string {
     $url = trim((string) $url);
-    if ($url === '') {
+    if ('' === $url) {
         return '';
     }
 
     // Allow relative internal paths.
-    if (0 === strpos($url, '/')) {
+    if (str_starts_with($url, '/')) {
         return $url;
     }
 
     // Allow absolute URLs that start with the platform WEB_PATH.
     $webPath = api_get_path(WEB_PATH);
-    if ($webPath && 0 === strpos($url, $webPath)) {
+    if ($webPath && str_starts_with($url, $webPath)) {
         return $url;
     }
 
@@ -42,24 +44,25 @@ $sanitizeReturnTo = static function (?string $url): string {
 };
 
 $returnToRaw = $_GET['returnTo'] ?? '';
-$returnTo    = $sanitizeReturnTo($returnToRaw);
+$returnTo = $sanitizeReturnTo($returnToRaw);
 
 $lpRepo = Container::getLpRepository();
+
 /** @var CLp|null $lpEntity */
 $lpEntity = $lpRepo->find($lpId);
 
-if (!$lpEntity || (int) $lpEntity->getLpType() !== CLp::SCORM_TYPE) {
+if (!$lpEntity || CLp::SCORM_TYPE !== (int) $lpEntity->getLpType()) {
     Display::addFlash(Display::return_message(get_lang('No learning path found'), 'error'));
     api_not_allowed(true);
 }
 
 // Breadcrumbs.
 $interbreadcrumb[] = [
-    'url'  => 'lp_controller.php?action=list&'.api_get_cidreq(),
+    'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('Learning paths'),
 ];
 $interbreadcrumb[] = [
-    'url'  => api_get_self().'?'.api_get_cidreq().'&lp_id='.$lpId,
+    'url' => api_get_self().'?'.api_get_cidreq().'&lp_id='.$lpId,
     'name' => Security::remove_XSS((string) $lpEntity->getTitle()),
 ];
 
@@ -69,7 +72,7 @@ $form = new FormValidator(
     api_get_self().'?'.api_get_cidreq().'&lp_id='.$lpId.($returnTo ? '&returnTo='.urlencode($returnTo) : ''),
     '',
     [
-        'id'      => 'upload_form',
+        'id' => 'upload_form',
         'enctype' => 'multipart/form-data',
     ]
 );
@@ -90,23 +93,22 @@ $form->addButtonUpload(get_lang('Upload'));
 /**
  * Map PHP upload error codes to readable messages.
  */
-$uploadErrorToMessage = static function (int $code): string {
-    // Messages in English as requested.
+$uploadErrorToMessageKey = static function (int $code): string {
     return match ($code) {
-        UPLOAD_ERR_INI_SIZE   => 'The uploaded file exceeds upload_max_filesize.',
-        UPLOAD_ERR_FORM_SIZE  => 'The uploaded file exceeds the MAX_FILE_SIZE directive.',
-        UPLOAD_ERR_PARTIAL    => 'The uploaded file was only partially uploaded.',
-        UPLOAD_ERR_NO_FILE    => 'No file was uploaded.',
-        UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder on the server.',
-        UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
-        UPLOAD_ERR_EXTENSION  => 'A PHP extension stopped the file upload.',
-        default               => 'Unknown upload error.',
+        \UPLOAD_ERR_INI_SIZE => 'The uploaded file exceeds upload_max_filesize.',
+        \UPLOAD_ERR_FORM_SIZE => 'The uploaded file exceeds the MAX_FILE_SIZE directive.',
+        \UPLOAD_ERR_PARTIAL => 'The uploaded file was only partially uploaded.',
+        \UPLOAD_ERR_NO_FILE => 'No file was uploaded.',
+        \UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder on the server.',
+        \UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
+        \UPLOAD_ERR_EXTENSION => 'A PHP extension stopped the file upload.',
+        default => 'Unknown upload error.',
     };
 };
 
 $isPost = ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST';
 
-// detect the classic "post_max_size exceeded" case.
+// Detect the classic "post_max_size exceeded" case.
 // When that happens, PHP gives you empty $_POST and empty $_FILES.
 if ($isPost && empty($_POST) && empty($_FILES) && !empty($_SERVER['CONTENT_LENGTH'])) {
     $cl = (int) $_SERVER['CONTENT_LENGTH'];
@@ -116,7 +118,7 @@ if ($isPost && empty($_POST) && empty($_FILES) && !empty($_SERVER['CONTENT_LENGT
 
     Display::addFlash(
         Display::return_message(
-            'Upload failed. The file is likely larger than the server limit (post_max_size).',
+            get_lang('Upload failed. The file is likely larger than the server limit (post_max_size).'),
             'error'
         )
     );
@@ -127,34 +129,42 @@ if ($isPost && empty($_POST) && empty($_FILES) && !empty($_SERVER['CONTENT_LENGT
 
     if (!is_array($file)) {
         error_log("lp_update_scorm.php - No user_file found in \$_FILES. lp_id={$lpId}, user_id={$userId}");
-        Display::addFlash(Display::return_message('Update failed. No file received by the server.', 'error'));
+        Display::addFlash(Display::return_message(get_lang('Update failed. No file received by the server.'), 'error'));
     } else {
-        $fileErr = (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE);
-        if ($fileErr !== UPLOAD_ERR_OK) {
-            $msg = $uploadErrorToMessage($fileErr);
-            error_log("lp_update_scorm.php - Upload error: {$msg} (code={$fileErr}) lp_id={$lpId}, user_id={$userId}");
-            Display::addFlash(Display::return_message('Update failed. '.$msg, 'error'));
+        $fileErr = (int) ($file['error'] ?? \UPLOAD_ERR_NO_FILE);
+        if (\UPLOAD_ERR_OK !== $fileErr) {
+            $msgKey = $uploadErrorToMessageKey($fileErr);
+            $msgUi = get_lang($msgKey);
+
+            error_log("lp_update_scorm.php - Upload error: {$msgKey} (code={$fileErr}) lp_id={$lpId}, user_id={$userId}");
+
+            Display::addFlash(
+                Display::return_message(
+                    sprintf(get_lang('Update failed. %s'), $msgUi),
+                    'error'
+                )
+            );
         } else {
             $uploadedName = (string) ($file['name'] ?? '');
-            $tmpPath      = (string) ($file['tmp_name'] ?? '');
-            $size         = (int) ($file['size'] ?? 0);
+            $tmpPath = (string) ($file['tmp_name'] ?? '');
+            $size = (int) ($file['size'] ?? 0);
 
-            if ($tmpPath === '' || !is_uploaded_file($tmpPath) || $size <= 0) {
+            if ('' === $tmpPath || !is_uploaded_file($tmpPath) || $size <= 0) {
                 error_log("lp_update_scorm.php - Invalid upload payload. tmp='{$tmpPath}', size={$size} lp_id={$lpId}, user_id={$userId}");
-                Display::addFlash(Display::return_message('Update failed. Invalid uploaded file payload.', 'error'));
+                Display::addFlash(Display::return_message(get_lang('Update failed. Invalid uploaded file payload.'), 'error'));
             } else {
                 // Enforce same base name rule to ensure replacement targets the same folder.
-                $expectedPath     = trim((string) $lpEntity->getPath());
-                $expectedFirstDir = $expectedPath !== '' ? trim((string) strtok($expectedPath, '/')) : '';
+                $expectedPath = trim((string) $lpEntity->getPath());
+                $expectedFirstDir = '' !== $expectedPath ? trim((string) strtok($expectedPath, '/')) : '';
 
                 $pi = pathinfo($uploadedName);
                 $uploadedBase = trim((string) ($pi['filename'] ?? ''));
 
-                if ($expectedFirstDir !== '' && $uploadedBase !== '') {
+                if ('' !== $expectedFirstDir && '' !== $uploadedBase) {
                     $expectedSafe = api_replace_dangerous_char($expectedFirstDir);
                     $uploadedSafe = api_replace_dangerous_char($uploadedBase);
 
-                    if ($expectedSafe !== '' && $uploadedSafe !== '' && $expectedSafe !== $uploadedSafe) {
+                    if ('' !== $expectedSafe && '' !== $uploadedSafe && $expectedSafe !== $uploadedSafe) {
                         error_log(
                             "lp_update_scorm.php - Update rejected: zip base name mismatch. expected='{$expectedSafe}', got='{$uploadedSafe}' ".
                             "(lp_id={$lpId}, user_id={$userId})"
@@ -162,7 +172,7 @@ if ($isPost && empty($_POST) && empty($_FILES) && !empty($_SERVER['CONTENT_LENGT
 
                         Display::addFlash(
                             Display::return_message(
-                                'Update failed. The uploaded ZIP file name must match the original SCORM package name.',
+                                get_lang('Update failed. The uploaded ZIP file name must match the original SCORM package name.'),
                                 'error'
                             )
                         );
@@ -172,6 +182,7 @@ if ($isPost && empty($_POST) && empty($_FILES) && !empty($_SERVER['CONTENT_LENGT
                         $tpl = new Template(null);
                         $tpl->assign('content', $content);
                         $tpl->display_one_col_template();
+
                         exit;
                     }
                 }
@@ -187,10 +198,10 @@ if ($isPost && empty($_POST) && empty($_FILES) && !empty($_SERVER['CONTENT_LENGT
 
                 error_log(
                     "lp_update_scorm.php - Starting SCORM replace. lp_id={$lpId}, user_id={$userId}, file='{$uploadedName}', size={$size}, old_asset_id=".
-                    ($oldAssetId !== null ? $oldAssetId : 'null')
+                    (null !== $oldAssetId ? $oldAssetId : 'null')
                 );
 
-                // Replace mode
+                // Replace mode.
                 $oScorm = new scorm($lpEntity, $courseInfo, $userId);
 
                 try {
@@ -218,7 +229,7 @@ if ($isPost && empty($_POST) && empty($_FILES) && !empty($_SERVER['CONTENT_LENGT
 
                             $newAssetId = method_exists($oScorm->asset, 'getId') ? (string) $oScorm->asset->getId() : null;
                             error_log(
-                                "lp_update_scorm.php - Replace succeeded. LP asset linked. new_asset_id=".
+                                'lp_update_scorm.php - Replace succeeded. LP asset linked. new_asset_id='.
                                 (is_string($newAssetId) ? $newAssetId : 'null')
                             );
                         } else {
@@ -230,12 +241,14 @@ if ($isPost && empty($_POST) && empty($_FILES) && !empty($_SERVER['CONTENT_LENGT
 
                     Display::addFlash(Display::return_message(get_lang('Update successful')));
 
-                    if ($returnTo !== '') {
+                    if ('' !== $returnTo) {
                         header('Location: '.$returnTo);
+
                         exit;
                     }
 
                     header('Location: lp_controller.php?action=list&'.api_get_cidreq());
+
                     exit;
                 }
 

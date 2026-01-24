@@ -287,11 +287,11 @@ class H5pImportPlugin extends Plugin
         }
     }
 
-    private function deleteCourseToolLinks()
+    private function deleteCourseToolLinks(): void
     {
-        Database::getManager()
-            ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'authoring', 'link' => '../plugin/H5pImport/start.php%']);
+        $em = Database::getManager();
+        $em->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.title = :title')
+            ->execute(['title' => 'H5P import']);
     }
 
     /**

@@ -23,6 +23,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Event;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Throwable;
 
 /**
  * @template-implements ProviderInterface<CTool>
@@ -72,25 +73,39 @@ final class CToolStateProvider implements ProviderInterface
         $session = $this->getSession();
         $course = $this->getCourse();
 
-        [$restrictToPositioning, $allowedToolName] = $this->shouldRestrictToPositioningOnly($user, $course->getId(), $session?->getId());
+        [$restrictToPositioning, $allowedToolName] = $this->shouldRestrictToPositioningOnly(
+            $user,
+            $course->getId(),
+            $session?->getId()
+        );
 
         $results = [];
 
         /** @var CTool $cTool */
         foreach ($result as $cTool) {
-            if ($restrictToPositioning && $cTool->getTool()->getTitle() !== $allowedToolName) {
+            $resolved = $this->resolveToolModelFromCTool($cTool);
+            if (null === $resolved) {
                 continue;
             }
 
-            $toolModel = $this->toolChain->getToolFromName(
-                $cTool->getTool()->getTitle()
-            );
+            $toolModel = $resolved['model'];
+            $resolvedName = $resolved['name'];
+
+            // If a positioning restriction is active, keep only the allowed tool.
+            if ($restrictToPositioning && $allowedToolName && $resolvedName !== $allowedToolName) {
+                continue;
+            }
 
             if (!$isAllowToEdit && 'admin' === $toolModel->getCategory()) {
                 continue;
             }
 
-            $resourceLinks = $cTool->getResourceNode()->getResourceLinks();
+            $resourceNode = $cTool->getResourceNode();
+            if (!$resourceNode) {
+                continue;
+            }
+
+            $resourceLinks = $resourceNode->getResourceLinks();
 
             if ($session && $allowVisibilityInSession) {
                 $sessionLink = $resourceLinks->findFirst(
@@ -109,8 +124,12 @@ final class CToolStateProvider implements ProviderInterface
             }
 
             if (!$isAllowToEdit || 'studentview' === $studentView) {
-                $notPublishedLink = ResourceLink::VISIBILITY_PUBLISHED !== $resourceLinks->first()->getVisibility();
+                $firstLink = $resourceLinks->first();
+                if (!$firstLink) {
+                    continue;
+                }
 
+                $notPublishedLink = ResourceLink::VISIBILITY_PUBLISHED !== $firstLink->getVisibility();
                 if ($notPublishedLink) {
                     continue;
                 }
@@ -120,6 +139,85 @@ final class CToolStateProvider implements ProviderInterface
         }
 
         return $results;
+    }
+
+    /**
+     * Resolve a ToolChain model for a given CTool safely.
+     * Tries multiple candidate names derived from the stored tool title.
+     *
+     * @return array{model: object, name: string}|null
+     */
+    private function resolveToolModelFromCTool(CTool $cTool): ?array
+    {
+        $toolEntity = $cTool->getTool();
+        $rawTitle = $toolEntity ? (string) $toolEntity->getTitle() : '';
+
+        foreach ($this->buildToolNameCandidates($rawTitle) as $candidate) {
+            try {
+                $model = $this->toolChain->getToolFromName($candidate);
+
+                // Return the candidate we used so other logic can rely on a stable key.
+                return [
+                    'model' => $model,
+                    'name' => $candidate,
+                ];
+            } catch (Throwable) {
+                // Try next candidate
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Build candidate tool names from a DB title.
+     * This keeps backward compatibility while supporting human titles like "H5P import".
+     *
+     * @return string[]
+     */
+    private function buildToolNameCandidates(string $rawTitle): array
+    {
+        $rawTitle = trim($rawTitle);
+        if ('' === $rawTitle) {
+            return [];
+        }
+
+        $candidates = [];
+
+        // Prefer lowercase first (ToolChain commonly uses lowercase keys)
+        $lower = strtolower($rawTitle);
+        $candidates[] = $lower;
+
+        // Original as fallback
+        if ($rawTitle !== $lower) {
+            $candidates[] = $rawTitle;
+        }
+
+        // Replace spaces/dashes with underscores (e.g., "H5P import" -> "h5p_import")
+        $spaceSnake = strtolower(preg_replace('/[\s\-]+/', '_', $rawTitle) ?? $rawTitle);
+        $spaceSnake = trim($spaceSnake, '_');
+        $candidates[] = $spaceSnake;
+
+        // Replace any non-alnum with underscores
+        $alnumSnake = strtolower(preg_replace('/[^a-z0-9]+/i', '_', $rawTitle) ?? $rawTitle);
+        $alnumSnake = trim($alnumSnake, '_');
+        $candidates[] = $alnumSnake;
+
+        // CamelCase to snake_case (e.g., "CustomCertificate" -> "custom_certificate")
+        $camelSnake = preg_replace('/(?<!^)[A-Z]/', '_$0', $rawTitle) ?? $rawTitle;
+        $camelSnake = strtolower($camelSnake);
+        $camelSnake = strtolower(preg_replace('/[^a-z0-9]+/i', '_', $camelSnake) ?? $camelSnake);
+        $camelSnake = trim($camelSnake, '_');
+        $candidates[] = $camelSnake;
+
+        // Some tool keys might be stored without underscores
+        $candidates[] = str_replace('_', '', $camelSnake);
+        $candidates[] = str_replace('_', '', $alnumSnake);
+
+        // Unique + non-empty
+        $candidates = array_values(array_unique(array_filter($candidates, static fn ($v) => is_string($v) && '' !== trim($v))));
+
+        return $candidates;
     }
 
     private function shouldRestrictToPositioningOnly(?User $user, int $courseId, ?int $sessionId): array

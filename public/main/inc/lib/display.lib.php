@@ -877,14 +877,19 @@ class Display
             $attributes['class'] ??= 'p-checkbox-input';
         }
 
+        if ('radio' === $type) {
+            $attributes['class'] ??= 'p-radiobutton-input';
+            $attributes['onchange'] = "$('input[name=\'".(str_replace(['[', ']'], ['\\[', '\\]'], $attributes['name']))."\']').parent().removeClass('p-radiobutton-checked'); this.parentElement.classList.add('p-radiobutton-checked');";
+        }
+
         $inputBase = self::tag('input', '', $attributes);
 
         if ('checkbox' === $type) {
             $isChecked = isset($attributes['checked']) && 'checked' === $attributes['checked'];
-            $compontentCheckedClass = $isChecked ? 'p-checkbox-checked' : '';
+            $componentCheckedClass = $isChecked ? 'p-checkbox-checked' : '';
 
             return <<<HTML
-                <div class="p-checkbox p-component $compontentCheckedClass">
+                <div class="p-checkbox p-component $componentCheckedClass">
                     $inputBase
                     <div class="p-checkbox-box">
                         <svg class="p-icon p-checkbox-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -893,6 +898,21 @@ class Display
                     </div>
                 </div>
 HTML;
+        }
+
+        if ('radio' === $type) {
+            $isChecked = isset($attributes['checked']) && 'checked' === $attributes['checked'];
+            $componentCheckedClass = $isChecked ? 'p-radiobutton-checked' : '';
+
+            return <<<HTML
+                <div class="p-radiobutton p-component $componentCheckedClass">
+                    $inputBase
+                    <div class="p-radiobutton-box" >
+                        <div class="p-radiobutton-icon"></div>
+                    </div>
+                </div>
+HTML;
+
         }
 
         if ('text' === $type) {

@@ -711,7 +711,7 @@ class ExerciseLib
                         $userStatus = STUDENT;
                         // Allows to do a remove_XSS in question of exersice with user status COURSEMANAGER
                         // see BT#18242
-                        if (api_get_configuration_value('question_exercise_html_strict_filtering')) {
+                        if (api_get_setting('exercise.question_exercise_html_strict_filtering')) {
                             $userStatus = COURSEMANAGERLOWSECURITY;
                         }
                         $answer = Security::remove_XSS($answer, $userStatus);
@@ -735,8 +735,7 @@ class ExerciseLib
 
                         if (MULTIPLE_ANSWER == $answerType || GLOBAL_MULTIPLE_ANSWER == $answerType) {
                             $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-                            $attributes['class'] = 'checkradios';
-                            $answer_input = '<label class="checkbox">';
+                            $answer_input = '<div class="flex gap-2 items-center">';
                             $answer_input .= Display::input(
                                 'checkbox',
                                 'choice['.$questionId.']['.$numAnswer.']',
@@ -744,7 +743,7 @@ class ExerciseLib
                                 $attributes
                             );
                             $answer_input .= $answer;
-                            $answer_input .= '</label>';
+                            $answer_input .= '</div>';
 
                             if ($show_comment) {
                                 $s .= '<tr><td>';

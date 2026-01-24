@@ -85,6 +85,22 @@ const buildLegacyActionUrl = (arg1, arg2, arg3 = {}) => {
   return `/main/lp/lp_controller.php?${search.toString()}`
 }
 
+/** Build URL for updating/uploading SCORM package for an existing LP. */
+const buildLegacyUploadUrl = (lpId, { cid, sid, node, gid = 0, gradebook = 0, origin = "" } = {}) => {
+  return buildLegacyActionUrl(lpId, "upload", {
+    cid,
+    sid,
+    node,
+    gid,
+    gradebook,
+    origin,
+    params: {
+      // force teacher mode context
+      isStudentView: "false",
+    },
+  })
+}
+
 /** Navigates immediately to a legacy controller action. */
 const goLegacyAction = (lpId, action, opts = {}) => {
   window.location.href =
@@ -102,9 +118,7 @@ const goLegacyAction = (lpId, action, opts = {}) => {
  * @returns {Promise<Object[]>}
  */
 const getLpCategories = async (searchParams) => {
-  // API Platform resource for CLpCategory (GET collection)
   const { items } = await baseService.getCollection("/api/learning_path_categories/", searchParams)
-
   return items
 }
 
@@ -113,6 +127,7 @@ export default {
   getLearningPath,
   buildLegacyViewUrl,
   buildLegacyActionUrl,
+  buildLegacyUploadUrl,
   goLegacyAction,
   getLpCategories,
 }

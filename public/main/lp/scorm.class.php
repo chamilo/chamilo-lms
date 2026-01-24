@@ -470,99 +470,361 @@ class scorm extends learnpath
         $allowHtaccess = false
     ) {
         $this->debug = 100;
+
+        // -----------------------------
+        // Local helpers
+        // -----------------------------
+        $normalizePath = static function (string $p): string {
+            $p = str_replace('\\', '/', $p);
+            $p = preg_replace('#/{2,}#', '/', $p);
+            return rtrim($p, '/');
+        };
+
+        $safeIdToString = static function ($id): string {
+            if (is_object($id) && method_exists($id, 'toRfc4122')) {
+                return (string) $id->toRfc4122();
+            }
+            return (string) $id;
+        };
+
+        $rmDir = static function (?string $dir) use (&$rmDir, $normalizePath): void {
+            $dir = $dir ? $normalizePath($dir) : '';
+            if ($dir === '' || !is_dir($dir)) {
+                return;
+            }
+            $items = @scandir($dir);
+            if (!is_array($items)) {
+                return;
+            }
+            foreach ($items as $it) {
+                if ($it === '.' || $it === '..') {
+                    continue;
+                }
+                $path = $dir.'/'.$it;
+                if (is_dir($path)) {
+                    $rmDir($path);
+                } else {
+                    @unlink($path);
+                }
+            }
+            @rmdir($dir);
+        };
+
+        $acquireReplaceLock = static function (int $lpId) {
+            $lockFile = sys_get_temp_dir().'/chamilo_scorm_replace_'.$lpId.'.lock';
+            $fh = @fopen($lockFile, 'c');
+            if (!$fh) {
+                return null;
+            }
+            if (!@flock($fh, LOCK_EX)) {
+                @fclose($fh);
+                return null;
+            }
+            return $fh;
+        };
+
+        $releaseReplaceLock = static function ($fh): void {
+            if (is_resource($fh)) {
+                @flock($fh, LOCK_UN);
+                @fclose($fh);
+            }
+        };
+
+        /**
+         * Convert an Asset folder returned by AssetRepository::getFolder() (often a web path like "/scorm/asset-xxx.zip/")
+         * into a real filesystem path (like ".../var/upload/assets/scorm/asset-xxx.zip").
+         */
+        $resolveAssetFolderFs = static function (string $folder) use ($normalizePath): string {
+            $folder = $normalizePath($folder);
+            $folder = rtrim($folder, '/');
+
+            if ($folder === '') {
+                return '';
+            }
+
+            // If it's already a real FS directory, keep it.
+            if (is_dir($folder)) {
+                return $folder;
+            }
+
+            // Typical value from AssetRepository in your setup: "/scorm/asset-xxxx.zip/"
+            $rel      = ltrim($folder, '/');            // "scorm/asset-xxxx.zip"
+            $baseName = basename($folder);              // "asset-xxxx.zip"
+
+            // Detect project root by walking up until we find "vendor" and "var"
+            $projectDir = null;
+            $probe = __DIR__;
+            for ($i = 0; $i < 10; $i++) {
+                if (is_dir($probe.'/vendor') && is_dir($probe.'/var')) {
+                    $projectDir = $probe;
+                    break;
+                }
+                $parent = dirname($probe);
+                if ($parent === $probe) {
+                    break;
+                }
+                $probe = $parent;
+            }
+
+            if (!$projectDir) {
+                // Fallback: try 4 levels up (public/main/lp -> project root)
+                $projectDir = realpath(__DIR__.'/../../../../') ?: '';
+            }
+
+            $projectDir = $projectDir ? $normalizePath($projectDir) : '';
+
+            // Build real upload paths for Chamilo 2
+            $candidates = [];
+
+            if ($projectDir !== '') {
+                // The real one in your server: <project>/var/upload/assets/scorm/asset-xxxx.zip
+                $candidates[] = $normalizePath($projectDir.'/var/upload/assets/'.$rel);            // .../assets/scorm/asset-xxxx.zip
+                $candidates[] = $normalizePath($projectDir.'/var/upload/assets/scorm/'.$baseName); // .../assets/scorm/asset-xxxx.zip
+
+                // Some setups: <project>/var/upload/assets/scorm is the root
+                $candidates[] = $normalizePath($projectDir.'/var/upload/assets/'.$baseName);
+            }
+
+            // Optional: if you have a public symlink (some installs do)
+            if ($projectDir !== '') {
+                $candidates[] = $normalizePath($projectDir.'/public/'.$rel);
+            }
+
+            // Debug candidates to stop guessing
+            error_log("import_package() - resolveAssetFolderFs() raw='{$folder}', projectDir='{$projectDir}'");
+            error_log("import_package() - resolveAssetFolderFs() candidates=".implode(' | ', $candidates));
+
+            foreach ($candidates as $c) {
+                if ($c !== '' && is_dir($c)) {
+                    error_log("import_package() - resolveAssetFolderFs() matched='{$c}'");
+                    return $c;
+                }
+            }
+
+            error_log("import_package() - resolveAssetFolderFs() NO MATCH for raw='{$folder}'");
+            return $folder;
+        };
+
+        // Safe manual extraction (prevents path traversal)
+        $extractZipToDir = static function (ZipFile $zipFile, string $destDir) use ($normalizePath): bool {
+            $destDir = $normalizePath($destDir);
+
+            if ($destDir === '') {
+                error_log("import_package() - Manual unzip: empty destination directory.");
+                return false;
+            }
+
+            if (!is_dir($destDir)) {
+                if (!@mkdir($destDir, 0775, true) && !is_dir($destDir)) {
+                    error_log("import_package() - Manual unzip: cannot create destination directory '{$destDir}'.");
+                    return false;
+                }
+            }
+
+            $destReal = realpath($destDir);
+            if ($destReal === false) {
+                error_log("import_package() - Manual unzip: cannot resolve realpath for '{$destDir}'.");
+                return false;
+            }
+            $destReal = $normalizePath($destReal);
+
+            $entries = $zipFile->getEntries();
+            foreach ($entries as $entry) {
+                $rawName = (string) $entry->getName();
+                $name = ltrim(str_replace('\\', '/', $rawName), '/');
+
+                if ($name === '') {
+                    continue;
+                }
+
+                if (strpos($name, '../') !== false || strpos($name, '..\\') !== false) {
+                    error_log("import_package() - Manual unzip: blocked traversal entry '{$rawName}'.");
+                    continue;
+                }
+
+                if (substr($name, -1) === '/') {
+                    $dirPath = $normalizePath($destDir.'/'.$name);
+                    if (strpos($dirPath, $destReal) !== 0) {
+                        error_log("import_package() - Manual unzip: blocked outside dir '{$rawName}'.");
+                        continue;
+                    }
+                    @mkdir($dirPath, 0775, true);
+                    continue;
+                }
+
+                $targetPath = $normalizePath($destDir.'/'.$name);
+
+                if (strpos($targetPath, $destReal) !== 0) {
+                    error_log("import_package() - Manual unzip: blocked outside write '{$rawName}' -> '{$targetPath}'.");
+                    continue;
+                }
+
+                $parent = dirname($targetPath);
+                if (!is_dir($parent)) {
+                    @mkdir($parent, 0775, true);
+                }
+
+                $data = $zipFile->getEntryContents($rawName);
+                if ($data === null) {
+                    error_log("import_package() - Manual unzip: failed reading entry '{$rawName}'.");
+                    return false;
+                }
+
+                if (@file_put_contents($targetPath, $data) === false) {
+                    error_log("import_package() - Manual unzip: failed writing '{$targetPath}'.");
+                    return false;
+                }
+            }
+
+            return true;
+        };
+
+        // Start
         if ($this->debug) {
-            error_log('In scorm::import_package('.print_r($zipFileInfo, true).',"'.$currentDir.'") method');
+            error_log('import_package() - Called with zip payload: '.print_r($zipFileInfo, true));
         }
 
-        $zipFilePath = $zipFileInfo['tmp_name'];
-        $zipFileName = $zipFileInfo['name'];
-
-        $currentDir = str_replace('\\', '/', trim((string)$currentDir));
-        $currentDir = preg_replace('#/{2,}#', '/', $currentDir);
-        $currentDir = rtrim($currentDir, '/');
-
-        if ($this->debug > 1) {
-            error_log('import_package() - current_dir = '.$currentDir, 0);
+        if (!is_array($zipFileInfo) || empty($zipFileInfo['tmp_name']) || empty($zipFileInfo['name'])) {
+            $this->set_error_msg('Invalid upload payload.');
+            error_log('import_package() - Invalid upload payload.');
+            return false;
         }
+
+        $zipFilePath = (string) $zipFileInfo['tmp_name'];
+        $zipFileName = (string) $zipFileInfo['name'];
+        $currentDir  = $normalizePath((string) $currentDir);
+
+        if (!is_file($zipFilePath)) {
+            $this->set_error_msg('Uploaded file not found on disk.');
+            error_log("import_package() - Uploaded temp file not found: '{$zipFilePath}'");
+            return false;
+        }
+
+        $isReplace = (bool) $updateDirContents && ($lpToCheck instanceof CLp);
 
         $fileInfo     = pathinfo($zipFileName);
         $filename     = $fileInfo['basename'] ?? $zipFileName;
         $extension    = $fileInfo['extension'] ?? '';
         $fileBaseName = $extension !== '' ? str_replace('.'.$extension, '', $filename) : $filename;
         $this->zipname = $fileBaseName;
-        $newDir = api_replace_dangerous_char(trim($fileBaseName));
-        $this->subdir = $newDir;
 
-        if ($this->debug) {
-            error_log('$zipFileName: '.$zipFileName);
-            error_log('Received zip file name: '.$zipFilePath);
-            error_log('subdir is first set to : '.$this->subdir);
-            error_log('base file name is : '.$fileBaseName);
+        $targetRoot = '';
+        if ($isReplace) {
+            $lpPath = trim((string) $lpToCheck->getPath());
+            $first = $lpPath !== '' ? (string) strtok($lpPath, '/') : '';
+            $targetRoot = api_replace_dangerous_char(trim($first));
+            if ($targetRoot === '') {
+                $targetRoot = api_replace_dangerous_char(trim($fileBaseName));
+            }
+            if ($this->debug) {
+                error_log("import_package() - Replace mode: forcing target root folder to '{$targetRoot}'");
+            }
+        } else {
+            $targetRoot = api_replace_dangerous_char(trim($fileBaseName));
         }
+
+        if ($targetRoot === '') {
+            $this->set_error_msg('Invalid target folder name.');
+            error_log('import_package() - Target folder name is empty after sanitization.');
+            return false;
+        }
+
+        $this->subdir = $targetRoot;
 
         $zipFile = new ZipFile();
         $zipFile->openFile($zipFilePath);
         $zipContentArray = $zipFile->getEntries();
         $packageType = '';
         $manifestList = [];
-        // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
-        $realFileSize = 0;
-        foreach ($zipContentArray as $thisContent) {
-            $fileName = $thisContent->getName();
-            $size = $thisContent->getUncompressedSize();
-            if (preg_match('~.(php.*|phtml)$~i', $fileName)) {
-                $file = $fileName;
-                $this->set_error_msg("File $file contains a PHP script");
-            } elseif (stristr($fileName, 'imsmanifest.xml')) {
-                $packageType = 'scorm';
-                $manifestList[] = $fileName;
+
+        foreach ($zipContentArray as $entry) {
+            $entryName = (string) $entry->getName();
+
+            if (preg_match('~\.(php.*|phtml)$~i', $entryName)) {
+                $this->set_error_msg("ZIP contains a PHP script: {$entryName}");
+                error_log("import_package() - Rejected: ZIP contains PHP script '{$entryName}'");
+                return false;
             }
-            $realFileSize += $size;
+
+            if (stripos($entryName, 'imsmanifest.xml') !== false) {
+                $packageType = 'scorm';
+                $manifestList[] = $entryName;
+            }
         }
 
         $shortestPath = $manifestList[0] ?? '';
         if (!empty($manifestList)) {
-            $slashCount = substr_count($shortestPath, '/');
-            foreach ($manifestList as $manifestPath) {
-                $tmpSlashCount = substr_count($manifestPath, '/');
-                if ($tmpSlashCount < $slashCount) {
-                    $shortestPath = $manifestPath;
-                    $slashCount = $tmpSlashCount;
+            $minSlashes = substr_count($shortestPath, '/');
+            foreach ($manifestList as $mp) {
+                $slashes = substr_count($mp, '/');
+                if ($slashes < $minSlashes) {
+                    $shortestPath = $mp;
+                    $minSlashes = $slashes;
                 }
             }
         }
 
-        $firstDir = $this->subdir;
-        $this->subdir .= '/'.dirname($shortestPath);
         if ($this->debug) {
-            error_log('subdir is now (2): '.$this->subdir);
-        }
-        $this->manifestToString = $shortestPath ? $zipFile->getEntryContents($shortestPath) : '';
-
-        if ($this->debug) {
-            error_log("Package type is now: '$packageType'");
+            error_log("import_package() - Package type detected: '{$packageType}'");
+            error_log("import_package() - Shortest manifest path: '{$shortestPath}'");
         }
 
-        if ('' === $packageType) {
-            Display::addFlash(
-                Display::return_message(get_lang('This is not a valid SCORM ZIP file !'))
-            );
-
+        if ($packageType === '' || $shortestPath === '') {
+            Display::addFlash(Display::return_message(get_lang('This is not a valid SCORM ZIP file !')));
+            $this->set_error_msg('Not a valid SCORM ZIP (missing imsmanifest.xml).');
             return false;
         }
 
+        $manifestDir = dirname($shortestPath);
+        $manifestDir = ($manifestDir === '.' || $manifestDir === DIRECTORY_SEPARATOR) ? '' : trim($manifestDir, '/');
 
+        if ($this->debug && $isReplace) {
+            error_log("import_package() - Replace mode: manifest subdir detected = ".($manifestDir !== '' ? "'{$manifestDir}'" : "'(root)'"));
+        }
+
+        $this->manifestToString = $shortestPath ? $zipFile->getEntryContents($shortestPath) : '';
+        $this->subdir = $targetRoot.($manifestDir !== '' ? '/'.$manifestDir : '');
+
+        // Create/reuse Asset and store zip
+        $repo = Container::getAssetRepository();
         $request = Container::getRequest();
         $uploadFile = null;
         if ($request && $request->files->has('user_file')) {
             $uploadFile = $request->files->get('user_file');
         }
 
-        $repo = Container::getAssetRepository();
-        $asset = (new Asset())
-            ->setCategory(Asset::SCORM)
-            ->setTitle($zipFileName)
-            ->setCompressed(true);
+        $asset = null;
+        if ($isReplace && method_exists($lpToCheck, 'getAsset')) {
+            $maybeOld = $lpToCheck->getAsset();
+            if ($maybeOld instanceof Asset) {
+                $asset = $maybeOld;
+                if ($this->debug) {
+                    $oldId = method_exists($asset, 'getId') ? $safeIdToString($asset->getId()) : 'unknown';
+                    error_log("import_package() - Replace mode: reusing existing Asset (id={$oldId})");
+                }
+            }
+        }
+
+        if (!$asset instanceof Asset) {
+            $asset = (new Asset())
+                ->setCategory(Asset::SCORM)
+                ->setTitle($zipFileName)
+                ->setCompressed(true);
+
+            if ($this->debug) {
+                error_log('import_package() - Creating a new Asset for this upload.');
+            }
+        } else {
+            if (method_exists($asset, 'setTitle')) {
+                $asset->setTitle($zipFileName);
+            }
+            if (method_exists($asset, 'setCompressed')) {
+                $asset->setCompressed(true);
+            }
+            if (method_exists($asset, 'setCategory')) {
+                $asset->setCategory(Asset::SCORM);
+            }
+        }
 
         if ($uploadFile) {
             $asset->setFile($uploadFile);
@@ -571,30 +833,162 @@ class scorm extends learnpath
             $repo->createFromRequest($asset, $zipFileInfo);
         }
 
-        $repo->unZipFile($asset, $firstDir);
         $this->asset = $asset;
 
-        if (!empty($currentDir) && @is_file($currentDir.'/imsmanifest.xml')) {
+        if ($currentDir !== '' && @is_file($currentDir.'/imsmanifest.xml')) {
             $this->current_dir = $currentDir;
             if ($this->debug) {
-                error_log('Using caller-provided current_dir: '.$this->current_dir);
+                error_log("import_package() - Using caller-provided current_dir: '{$this->current_dir}'");
             }
             return true;
         }
 
-        $baseFolder  = rtrim((string) $repo->getFolder($asset), '/');
-        $manifestDir = dirname($shortestPath);
-
-        $resolved = $baseFolder.'/'.$firstDir;
-        if ($manifestDir !== '.' && $manifestDir !== DIRECTORY_SEPARATOR) {
-            $resolved .= '/'.$manifestDir;
-        }
-        $resolved = preg_replace('#/{2,}#', '/', str_replace('\\', '/', $resolved));
-        $this->current_dir = rtrim($resolved, '/');
+        // Decide base directory (must be the real asset folder)
+        $assetFolderRaw = (string) $repo->getFolder($asset); // often "/scorm/asset-xxx.zip/"
+        $assetFolderFs  = $resolveAssetFolderFs($assetFolderRaw);
 
         if ($this->debug) {
-            error_log('Resolved current_dir: '.$this->current_dir);
-            error_log('Expected imsmanifest.xml at: '.$this->current_dir.'/imsmanifest.xml');
+            $assetIdStr = method_exists($asset, 'getId') ? $safeIdToString($asset->getId()) : 'unknown';
+            error_log("import_package() - Asset folder raw='{$assetFolderRaw}', fs='{$assetFolderFs}' (asset_id={$assetIdStr})");
+        }
+
+        if ($assetFolderFs === '' || !is_dir($assetFolderFs)) {
+            $this->set_error_msg('Asset folder not found on filesystem.');
+            error_log("import_package() - ERROR: Asset folder not found on filesystem. raw='{$assetFolderRaw}', fs='{$assetFolderFs}'");
+            error_log("import_package() - HINT: Check if /scorm is mapped to var/upload/assets/scorm, or adjust resolveAssetFolderFs().");
+            return false;
+        }
+
+        $base = $normalizePath($assetFolderFs);
+
+        if ($this->debug) {
+            error_log("import_package() - Using base directory (asset folder): '{$base}'");
+        }
+
+        // REPLACE MODE: staging extraction + atomic swap (inside asset folder)
+        if ($isReplace) {
+            $lpIdForLock = (int) ($lpToCheck->getIid() ?? 0);
+            $lockHandle = $acquireReplaceLock($lpIdForLock);
+
+            if (!$lockHandle) {
+                error_log("import_package() - Replace mode: cannot acquire lock for lp_id={$lpIdForLock}");
+                $this->set_error_msg('Cannot acquire replace lock.');
+                return false;
+            }
+
+            if ($this->debug) {
+                error_log("import_package() - Replace lock acquired: ".sys_get_temp_dir()."/chamilo_scorm_replace_{$lpIdForLock}.lock");
+            }
+
+            $stagingRoot = $targetRoot.'__tmp_'.bin2hex(random_bytes(6));
+            $stagingPath = $normalizePath($base.'/'.$stagingRoot);
+
+            if ($this->debug) {
+                error_log("import_package() - Replace mode: extracting to staging '{$stagingPath}'");
+            }
+
+            if (is_dir($stagingPath)) {
+                $rmDir($stagingPath);
+            }
+            if (!@mkdir($stagingPath, 0775, true) && !is_dir($stagingPath)) {
+                error_log("import_package() - Replace mode: cannot create staging directory '{$stagingPath}'");
+                $releaseReplaceLock($lockHandle);
+                if ($this->debug) {
+                    error_log('import_package() - Replace lock released.');
+                }
+                return false;
+            }
+
+            $okExtract = false;
+            try {
+                $okExtract = $extractZipToDir($zipFile, $stagingPath);
+            } catch (Throwable $e) {
+                error_log("import_package() - Replace mode: manual extraction exception: ".$e->getMessage());
+                $okExtract = false;
+            }
+
+            if (!$okExtract) {
+                error_log("import_package() - Replace mode: staging extraction failed. staging='{$stagingPath}'");
+                $rmDir($stagingPath);
+                $releaseReplaceLock($lockHandle);
+                if ($this->debug) {
+                    error_log('import_package() - Replace lock released.');
+                }
+                return false;
+            }
+
+            $manifestCheck = $normalizePath($stagingPath.($manifestDir !== '' ? '/'.$manifestDir : '')).'/imsmanifest.xml';
+            if (!is_file($manifestCheck)) {
+                error_log("import_package() - Replace mode: imsmanifest.xml not found at '{$manifestCheck}'");
+                $rmDir($stagingPath);
+                $releaseReplaceLock($lockHandle);
+                if ($this->debug) {
+                    error_log('import_package() - Replace lock released.');
+                }
+                return false;
+            }
+
+            $targetPath = $normalizePath($base.'/'.$targetRoot);
+            $backupPath = $normalizePath($base.'/'.$targetRoot.'__bak_'.date('Ymd_His'));
+
+            if ($this->debug) {
+                error_log("import_package() - Replace mode: swapping target='{$targetPath}' staging='{$stagingPath}' backup='{$backupPath}'");
+            }
+
+            if (is_dir($targetPath)) {
+                if (!@rename($targetPath, $backupPath)) {
+                    error_log("import_package() - Replace mode: cannot move current folder to backup. from='{$targetPath}', to='{$backupPath}'");
+                    $rmDir($stagingPath);
+                    $releaseReplaceLock($lockHandle);
+                    if ($this->debug) {
+                        error_log('import_package() - Replace lock released.');
+                    }
+                    return false;
+                }
+            }
+
+            if (!@rename($stagingPath, $targetPath)) {
+                error_log("import_package() - Replace mode: cannot promote staging to target. from='{$stagingPath}', to='{$targetPath}'");
+
+                if (is_dir($backupPath)) {
+                    @rename($backupPath, $targetPath);
+                }
+
+                $rmDir($stagingPath);
+                $releaseReplaceLock($lockHandle);
+                if ($this->debug) {
+                    error_log('import_package() - Replace lock released.');
+                }
+                return false;
+            }
+
+            $rmDir($backupPath);
+
+            $this->current_dir = $normalizePath($targetPath.($manifestDir !== '' ? '/'.$manifestDir : ''));
+
+            if ($this->debug) {
+                error_log("import_package() - Replace mode: swap completed. current_dir='{$this->current_dir}'");
+            }
+
+            $releaseReplaceLock($lockHandle);
+            if ($this->debug) {
+                error_log('import_package() - Replace lock released.');
+            }
+
+            return true;
+        }
+
+        if ($this->debug) {
+            error_log("import_package() - Normal mode: unzipping via repository to folder '{$targetRoot}'");
+        }
+
+        $repo->unZipFile($asset, $targetRoot);
+
+        $this->current_dir = $normalizePath($base.'/'.$targetRoot.($manifestDir !== '' ? '/'.$manifestDir : ''));
+
+        if ($this->debug) {
+            error_log("import_package() - Normal mode: current_dir='{$this->current_dir}'");
+            error_log("import_package() - Normal mode: expected imsmanifest.xml at: '{$this->current_dir}/imsmanifest.xml'");
         }
 
         return true;

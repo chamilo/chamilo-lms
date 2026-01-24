@@ -180,7 +180,6 @@ $form->addElement(
     get_lang('Delete picture')
 );
 
-
 if ('true' === api_get_setting('pdf_export_watermark_by_course')) {
     $url = PDF::get_watermark($course_code);
     $form->addText('pdf_export_watermark_text', get_lang('PDF watermark text'), false, ['size' => '60']);
@@ -255,7 +254,6 @@ $form->addPanelOption(
     ActionIcon::INFORMATION,
     true
 );
-
 
 // --- End of legacy block, from here panels start as usual ---
 
@@ -1066,6 +1064,58 @@ $html = [
     ),
 ];
 
+// ---------------------------------------------------------------------
+// Default values
+// When a course setting is not stored yet, api_get_course_setting() returns -1.
+// We still want radios/selects to have a clear default selected in the UI.
+// This does NOT write anything to the database; it only affects form defaults.
+// ---------------------------------------------------------------------
+$defaultCourseSettings = [
+    // Documents (only used if the corresponding platform setting enables these fields)
+    'documents_default_visibility' => 'visible',
+    'show_system_folders' => 1,
+
+    // E-mail notifications (default to disabled)
+    'email_alert_to_teacher_on_new_user_in_course' => 0,
+    'email_alert_student_on_manual_subscription' => 0,
+    'email_alert_students_on_new_homework' => 0,
+    'email_alert_manager_on_new_doc' => 0,
+    'email_alert_on_new_doc_dropbox' => 0,
+    'email_to_teachers_on_new_work_feedback' => 2, // Yes=1, No=2
+
+    // User rights (default to disabled)
+    'allow_user_edit_agenda' => 0,
+    'allow_user_edit_announcement' => 0,
+    'allow_user_image_forum' => 0,
+    'allow_user_view_user_list' => 0,
+
+    // Chat settings
+    'allow_open_chat_window' => 0,
+
+    // Learning path settings
+    'allow_learning_path_theme' => 0,
+    'lp_return_link' => 0, // Redirect to Course home
+    'exercise_invisible_in_session' => 0,
+
+    // Thematic
+    'display_info_advance_inside_homecourse' => 0,
+
+    // Certificates
+    'allow_public_certificates' => 0,
+
+    // Forum settings (Yes=1, No=2)
+    'hide_forum_notifications' => 2,
+    'subscribe_users_to_forum_notifications' => 2,
+
+    // Assignments / Student publications
+    'show_score' => 0,
+    'student_delete_own_publication' => 0,
+
+    // Auto-launch (UI helper radio)
+    'auto_launch_option' => 'disable_auto_launch',
+    'show_course_in_user_language' => 2,
+];
+
 // Set default values
 $values = [];
 $values['title'] = $courseEntity->getTitle();
@@ -1083,8 +1133,16 @@ $values['show_score'] = $_course['show_score'] ?? 0;
 $courseSettings = CourseManager::getCourseSettingVariables();
 foreach ($courseSettings as $setting) {
     $result = api_get_course_setting($setting);
-    if ('-1' != $result) {
+
+    // Stored setting: use it.
+    if ('-1' !== (string) $result) {
         $values[$setting] = $result;
+        continue;
+    }
+
+    // Not stored yet: fallback to UI defaults when available.
+    if (!array_key_exists($setting, $values) && array_key_exists($setting, $defaultCourseSettings)) {
+        $values[$setting] = $defaultCourseSettings[$setting];
     }
 }
 
@@ -1097,6 +1155,7 @@ if (!isset($values['email_alert_student_on_manual_subscription'])) {
     $values['email_alert_student_on_manual_subscription'] = 0;
 }
 
+// Auto-launch: compute the selected UI option from stored flags
 $documentAutoLaunch = api_get_course_setting('enable_document_auto_launch');
 $lpAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
 $exerciseAutoLaunch = api_get_course_setting('enable_exercise_auto_launch');
@@ -1119,9 +1178,12 @@ if ($documentAutoLaunch == 1) {
 
 $values['auto_launch_option'] = $defaultAutoLaunchOption;
 
+// AI helpers: api_get_course_setting() can also return -1 for new courses.
+// We want radios to default to "No" ("false") to avoid an empty state.
 if ($enableAiHelpers) {
     foreach ($aiOptions as $key => $label) {
-        $values[$key] = api_get_course_setting($key);
+        $v = api_get_course_setting($key);
+        $values[$key] = ('-1' === (string) $v || $v === null || $v === '') ? 'false' : (string) $v;
     }
 }
 

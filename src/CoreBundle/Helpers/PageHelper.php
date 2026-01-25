@@ -16,6 +16,8 @@ use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+use const PHP_URL_PATH;
+
 class PageHelper
 {
     protected PageRepository $pageRepository;
@@ -212,7 +214,6 @@ class PageHelper
 
     /**
      * Returns CSS classes that identify the current "global page type".
-     * This is used as a stable theming hook (issue #6047).
      *
      * @return string[]
      */
@@ -251,7 +252,6 @@ class PageHelper
             return ['page-home'];
         }
 
-        // Canonical aliases requested in the issue
         if ('home' === $seg0) {
             return ['page-home'];
         }
@@ -405,7 +405,6 @@ class PageHelper
             return 'session';
         }
 
-        // Safe default: platform (best match for "everything else" in /main/admin).
         return 'platform';
     }
 

@@ -10,13 +10,15 @@
 {% block chamilo_head %}
     {%- include "@ChamiloCore/Layout/head.html.twig" %}
 {% endblock %}
-<body class="font-sans antialiased {{ section_name }}"
+{%- set page_type_classes = page_helper.getPageTypeCssClasses(app.request) -%}
+<body class="font-sans antialiased {{ section_name }} {{ page_type_classes|join(' ') }}"
       data-in-course="{{ course ? 'true' : 'false' }}"
       data-course-id="{{ course ? course.id : '' }}"
       data-session-id="{{ session ? session.id : '' }}"
 >
 <noscript>{{ "Your browser does not support Javascript"|trans }}</noscript>
 {%- block chamilo_wrap -%}
+    <div class="page-marker {{ page_type_classes|join(' ') }}" aria-hidden="true"></div>
     {%- block page_content %}
     {% endblock %}
 {% endblock -%}

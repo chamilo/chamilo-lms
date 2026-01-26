@@ -11,12 +11,21 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
+use ApiPlatform\Doctrine\Orm\Paginator;
 
 /**
  * @implements ProviderInterface<Course>
@@ -24,92 +33,90 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
 {
     public function __construct(
+        private UserHelper $userHelper,
         private CourseRepository $courseRepository,
         private SettingsManager $settingsManager,
-        private AccessUrlRepository $accessUrlRepository,
-        private RequestStack $requestStack,
-        private ExtraFieldValuesRepository $extraFieldValuesRepository,
-        private TokenStorageInterface $tokenStorage
+        private AccessUrlHelper $accessUrlHelper,
+        private TranslatorInterface $translator,
     ) {}
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
-        $user = $this->tokenStorage->getToken()?->getUser();
-        $isAuthenticated = \is_object($user);
+        $user = $this->userHelper->getCurrent();
+        $isAuthenticated = $user instanceof User;
 
-        if (!$isAuthenticated) {
-            $showCatalogue = 'false' !== $this->settingsManager->getSetting('catalog.course_catalog_published', true);
-            if (!$showCatalogue) {
-                return [];
-            }
+        if (!$isAuthenticated
+            && 'false' !== $this->settingsManager->getSetting('catalog.course_catalog_published', true)
+        ) {
+            throw new AccessDeniedHttpException(
+                $this->translator->trans('Not allowed')
+            );
         }
 
-        $onlyShowMatching = 'true' === $this->settingsManager->getSetting('catalog.only_show_selected_courses', true);
-        $onlyShowCoursesWithCategory = $this->settingsManager->getSetting('catalog.only_show_course_from_selected_category', true);
+        $itemsPerPage = (int) ($context['filters']['itemsPerPage'] ?? 9);
+        $currentPage = (int) ($context['filters']['page'] ?? 1);
 
-        $request = $this->requestStack->getCurrentRequest();
-        if (!$request) {
-            return [];
-        }
-
-        $host = $request->getSchemeAndHttpHost().'/';
-        $hidePrivateCourses = 'true' === $this->settingsManager->getSetting('catalog.course_catalog_hide_private', true);
-        $visibilities = $hidePrivateCourses
-            ? [Course::OPEN_WORLD, Course::OPEN_PLATFORM]
-            : [Course::OPEN_WORLD, Course::OPEN_PLATFORM, Course::REGISTERED];
-
-        /** @var AccessUrl $accessUrl */
-        $accessUrl = $this->accessUrlRepository->findOneBy(['url' => $host]) ?? $this->accessUrlRepository->find(1);
-        $courses = $this->courseRepository->createQueryBuilder('c')
-            ->innerJoin('c.urls', 'url_rel')
-            ->andWhere('url_rel.url = :accessUrl')
-            ->andWhere('c.visibility IN (:visibilities)')
-            ->setParameter('accessUrl', $accessUrl->getId())
-            ->setParameter('visibilities', $visibilities)
-            ->orderBy('c.title', 'ASC')
+        $query = $this
+            ->createQueryBuilder()
             ->getQuery()
-            ->getResult()
+            ->setFirstResult(($currentPage - 1) * $itemsPerPage)
+            ->setMaxResults($itemsPerPage)
         ;
 
-        if (!$onlyShowMatching && !$onlyShowCoursesWithCategory) {
-            if ($isAuthenticated) {
-                foreach ($courses as $course) {
-                    if ($course instanceof Course) {
-                        $course->subscribed = $course->hasSubscriptionByUser($user);
-                    }
-                }
-            }
-
-            return $courses;
+        foreach ($query as $course) {
+            $course->subscribed = $course->hasSubscriptionByUser($user);
         }
 
-        $filtered = [];
-        foreach ($courses as $course) {
-            $passesExtraField = true;
-            $passesCategory = true;
+        return new Paginator(new DoctrinePaginator($query));
+    }
 
-            if ($onlyShowMatching) {
-                $value = $this->extraFieldValuesRepository->getValueByVariableAndItem(
-                    'show_in_catalogue',
-                    $course->getId(),
-                    ExtraField::COURSE_FIELD_TYPE
-                );
-                $passesExtraField = '1' === $value?->getFieldValue();
-            }
+    private function createQueryBuilder(): QueryBuilder
+    {
+        $qb = $this->courseRepository->createQueryBuilder('c');
 
-            if ($onlyShowCoursesWithCategory) {
-                $passesCategory = $course->getCategories()->count() > 0;
-            }
-
-            if ($passesExtraField && $passesCategory) {
-                if ($isAuthenticated && $course instanceof Course) {
-                    $course->subscribed = $course->hasSubscriptionByUser($user);
-                }
-
-                $filtered[] = $course;
-            }
+        if ($accessUrl = $this->accessUrlHelper->getCurrent()) {
+            $qb
+                ->innerJoin('c.urls', 'aurc')
+                ->andWhere('aurc.url = :accessUrl')
+                ->setParameter('accessUrl', $accessUrl->getId())
+            ;
         }
 
-        return $filtered;
+        $onlyShowSelectedCourses = 'true' === $this->settingsManager->getSetting('catalog.only_show_selected_courses');
+        $selectedCategories = $this->settingsManager->getSetting('catalog.only_show_course_from_selected_category');
+
+        $visibilities = [Course::CLOSED, Course::HIDDEN];
+
+        if ('true' === $this->settingsManager->getSetting('catalog.course_catalog_hide_private', true)) {
+            $visibilities[] = Course::REGISTERED;
+        }
+
+        if (!empty($selectedCategories)) {
+            $qb
+                ->innerJoin('c.categories', 'cat')
+                ->andWhere(
+                    $qb->expr()->in('cat.code', ':selected_categories')
+                )
+                ->setParameter('selected_categories', $selectedCategories)
+            ;
+        }
+
+        if ($onlyShowSelectedCourses) {
+            $qb
+                ->innerJoin(
+                    ExtraFieldValues::class,
+                    'efv',
+                    Join::WITH,
+                    $qb->expr()->eq('efv.fieldValue', '1')
+                )
+            ;
+        }
+
+        $qb
+            ->andWhere($qb->expr()->notIn('c.visibility', ':visibilities'))
+            ->setParameter('visibilities', $visibilities)
+        ;
+
+        return $qb;
     }
 }

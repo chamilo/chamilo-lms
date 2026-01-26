@@ -6881,23 +6881,23 @@ function api_get_configuration_value($variable)
 }
 
 /**
- * Gets a specific hosting limit.
+ * Gets a specific hosting limit, as defined in config/settings_overrides.yaml
  *
  * @param int $urlId The URL ID.
  * @param string $limitName The name of the limit.
- * @return mixed The value of the limit, or null if not found.
+ * @return ?int The value of the limit, or null if not found.
  */
-function get_hosting_limit(int $urlId, string $limitName): mixed
+function get_hosting_limit(int $urlId, string $limitName): ?int
 {
     if (!Container::$container->hasParameter('settings_overrides')) {
-        return [];
+        return null;
     }
 
     $settingsOverrides = Container::$container->getParameter('settings_overrides') ?? [];
 
     // Defensive: ensure array
     if (!is_array($settingsOverrides)) {
-        return [];
+        return null;
     }
 
     $urlOverrides = (isset($settingsOverrides[$urlId]) && is_array($settingsOverrides[$urlId]))
@@ -6908,16 +6908,18 @@ function get_hosting_limit(int $urlId, string $limitName): mixed
         ? $settingsOverrides['default']
         : [];
 
-    $limits = $urlOverrides['hosting_limit'] ?? ($defaultOverrides['hosting_limit'] ?? []);
+    $limits = $urlOverrides['hosting_limit'] ?? ($defaultOverrides['hosting_limit'] ?? null);
 
     // Defensive: ensure iterable array
     if (!is_array($limits)) {
-        $limits = [];
+        $limits = null;
     }
 
-    foreach ($limits as $limitArray) {
-        if (is_array($limitArray) && array_key_exists($limitName, $limitArray)) {
-            return $limitArray[$limitName];
+    if (is_array($limits)) {
+        foreach ($limits as $limitArray) {
+            if (is_array($limitArray) && array_key_exists($limitName, $limitArray)) {
+                return (int) $limitArray[$limitName];
+            }
         }
     }
 

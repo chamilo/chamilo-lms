@@ -370,7 +370,7 @@ class Diagnoser
                     $limit = 0;
                 }
 
-                $message2 .= sprintf(get_lang('Total space used by portal %s limit is %s MB'), $size, $limit);
+                $message2 .= sprintf(get_lang('Total space used by portal %s limit is %s MB'), $size, (string) $limit);
             }
 
             $array[] = $this->build_setting(

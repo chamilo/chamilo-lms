@@ -54,6 +54,64 @@ import { customVueTemplateEnabled } from "../config/env"
 import { useCourseSettings } from "../store/courseSettingStore"
 import { checkIsAllowedToEdit, useUserSessionSubscription } from "../composables/userPermissions"
 
+/**
+ * Applies "page-*" marker classes on both the DOM marker and the <body>.
+ * This keeps stable theming hooks during SPA navigation (issue #6047).
+ *
+ * Note: Twig/PageHelper already sets initial classes on first load. This only syncs on route changes.
+ */
+function applyPageTypeClasses(classes) {
+  const marker = document.querySelector(".page-marker")
+  const body = document.body
+
+  const clearPageClasses = (el) => {
+    if (!el) return
+    ;[...el.classList].forEach((c) => {
+      if (c.startsWith("page-")) el.classList.remove(c)
+    })
+  }
+
+  clearPageClasses(marker)
+  clearPageClasses(body)
+  ;(classes || []).forEach((c) => {
+    if (!c || typeof c !== "string") return
+    if (marker) marker.classList.add(c)
+    body.classList.add(c)
+  })
+}
+
+/**
+ * Derives stable page marker classes from the current route.
+ * We intentionally avoid hardcoding all routes. PageHelper handles legacy PHP pages.
+ *
+ * @returns {string[]}
+ */
+function derivePageTypeClasses(to) {
+  const p = String(to?.path || "/")
+
+  // Canonical aliases requested by the issue
+  if (p === "/" || p.startsWith("/home")) return ["page-home"]
+  if (p.startsWith("/courses")) return ["page-my-courses"]
+  if (p.startsWith("/catalogue")) return ["page-catalogue"]
+  if (p.startsWith("/social")) return ["page-social"]
+  if (p.startsWith("/account")) return ["page-account-security"]
+  if (p.startsWith("/admin-dashboard")) return ["page-administration", "page-administration-session"]
+  if (p.startsWith("/admin")) return ["page-administration", "page-administration-platform"]
+  if (p.startsWith("/tracking")) return ["page-tracking"]
+
+  // Vue "resources" module routes -> optional tool markers (documents, lp, attendance, etc.)
+  if (p.startsWith("/resources/")) {
+    const segs = p.split("/").filter(Boolean) // ["resources", "<tool>", ...]
+    const tool = segs[1] || "generic"
+    const toolSlug = tool.replace(/[^a-z0-9\-_]+/gi, "-").toLowerCase()
+    return ["page-tool", `page-tool-${toolSlug}`]
+  }
+
+  // Generic fallback: page-<first segment>
+  const seg0 = p.split("/").filter(Boolean)[0] || "generic"
+  return [`page-${seg0.replace(/[^a-z0-9\-_]+/gi, "-").toLowerCase()}`]
+}
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -311,9 +369,7 @@ router.beforeEach(async (to, from, next) => {
   // Determine what the route requires
   const needsAuth = to.matched.some((record) => record.meta?.requiresAuth === true)
   const wantsAdmin = to.matched.some((record) => record.meta?.requiresAdmin === true)
-  const wantsSessionAdmin = to.matched.some(
-    (record) => record.meta?.requiresSessionAdmin === true,
-  )
+  const wantsSessionAdmin = to.matched.some((record) => record.meta?.requiresSessionAdmin === true)
 
   const mustBeLogged = needsAuth || wantsAdmin || wantsSessionAdmin
 
@@ -357,8 +413,18 @@ router.beforeEach(async (to, from, next) => {
   next()
 })
 
-router.afterEach(() => {
+router.afterEach((to) => {
+  // Always remove the loading cursor.
   document.body.classList.remove("cursor-wait")
+
+  // Keep page marker classes in sync for SPA navigation.
+  // This is required because Twig/PageHelper does not run on client-side route changes.
+  try {
+    applyPageTypeClasses(derivePageTypeClasses(to))
+  } catch (e) {
+    // Never block navigation because of marker updates.
+    console.error("Error applying page marker classes:", e)
+  }
 })
 
 router.beforeResolve(async (to) => {

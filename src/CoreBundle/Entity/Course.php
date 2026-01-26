@@ -74,7 +74,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"),
         new GetCollection(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"),
         new GetCollection(
-            uriTemplate: '/public_courses',
+            uriTemplate: '/public_courses.{_format}',
             normalizationContext: ['groups' => ['course:read']],
             provider: PublicCatalogueCourseStateProvider::class
         ),

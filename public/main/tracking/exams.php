@@ -16,7 +16,7 @@ $quizTable = Database::get_course_table(TABLE_QUIZ_TEST);
 $this_section = SECTION_TRACKING;
 
 $is_allowedToTrack =
-    api_is_course_admin() ||
+    api_is_allowed_to_edit() ||
     api_is_platform_admin(true) ||
     api_is_session_general_coach();
 
@@ -80,26 +80,33 @@ $form->addElement(
 if ($global) {
     $form->addElement('hidden', 'view', 'admin');
 } else {
-    // Course context – add optional test selector.
-    $courseId = api_get_course_int_id();
+    $courseId  = (int) api_get_course_int_id();
+    $sessionId = (int) api_get_session_id();
 
-    $sql = "SELECT quiz.title, iid
-            FROM $quizTable AS quiz
-            WHERE
-                c_id = $courseId AND
-                active = 1
-                $sessionCondition
-            ORDER BY quiz.title ASC";
-    $result = Database::query($sql);
+    $course  = api_get_course_entity($courseId);
+    $session = $sessionId ? api_get_session_entity($sessionId) : null;
 
-    if (Database::num_rows($result) > 0) {
-        $exerciseList = [get_lang('All')];
-        while ($row = Database::fetch_array($result)) {
-            $exerciseList[$row['iid']] = $row['title'];
-        }
+    $repo = Container::getQuizRepository();
+    $qb = $repo->getResourcesByCourse($course, $session);
 
-        $form->addSelect('exercise_id', get_lang('Test'), $exerciseList);
+    $qb->select('DISTINCT resource');
+
+    if ($session) {
+        $qb->andWhere('(links.session = :sess OR links.session IS NULL)')
+            ->setParameter('sess', $session);
+    } else {
+        $qb->andWhere('links.session IS NULL');
     }
+    $qb->orderBy('resource.title', 'ASC');
+    $quizzes = $qb->getQuery()->getResult();
+    $exerciseList = [0 => get_lang('All')];
+
+    foreach ($quizzes as $quiz) {
+        $id = method_exists($quiz, 'getIid') ? (int) $quiz->getIid() : (int) $quiz->getId();
+        $exerciseList[$id] = $quiz->getTitle();
+    }
+
+    $form->addSelect('exercise_id', get_lang('Test'), $exerciseList);
 }
 
 $form->addButton(

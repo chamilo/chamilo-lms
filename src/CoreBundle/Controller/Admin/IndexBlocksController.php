@@ -856,12 +856,12 @@ class IndexBlocksController extends BaseController
                                 'url' => '/main/admin/user_move_stats.php',
                                 'label' => $this->translator->trans('Move users results from/to a session'),
                             ];
-             */
             $items[] = [
                 'class' => 'item-session-user-move',
                 'url' => '/main/coursecopy/move_users_from_course_to_session.php',
                 'label' => $this->translator->trans('Move users results from base course to a session'),
             ];
+             */
 
             $items[] = [
                 'class' => 'item-career-dashboard',

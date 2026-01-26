@@ -158,6 +158,18 @@ $actions = '
 #session-table #gview_sessions .ui-jqgrid-pager {
   width: 100% !important;
 }
+#sessions_pager .ui-pg-button.ui-state-hover .ch-tool-icon,
+#sessions_pager .ui-pg-button:hover .ch-tool-icon,
+#sessions_pager .ui-pg-button.ui-state-hover .mdi,
+#sessions_pager .ui-pg-button:hover .mdi {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+#sessions_pager .ui-pg-button.ui-state-hover svg,
+#sessions_pager .ui-pg-button:hover svg {
+  fill: #fff !important;
+  stroke: #fff !important;
+}
 </style>
 <script>
 $(function() {
@@ -268,7 +280,9 @@ $iconDelete = addslashes(Display::getMdiIcon('delete', 'ch-tool-icon', null, 22,
 // Optional action: copy with session content
 $copyWithContentJs = '';
 if ($addSessionContent) {
-    $iconCopyWithContent = addslashes(Display::return_icon('copy.png', get_lang('Copy with session content')));
+    $iconCopyWithContent = addslashes(
+        Display::getMdiIcon('content-duplicate', 'ch-tool-icon', null, 22, get_lang('Copy with session content'))
+    );
     $copyWithContentJs =
         " + '&nbsp;<a onclick=\"if(!confirm(\\'{$confirmMsg}\\')) return false;\""
         ." href=\"session_list.php?copy_session_content=1&list_type={$listType}&action=copy&idChecked=' + options.rowId + '\">"
@@ -552,7 +566,7 @@ $extra_params['multiselect'] = true;
                 {reloadAfterSubmit:true, url: '<?php echo $deleteUrl; ?>' }, // del options
                 prmSearch
             ).navButtonAdd('#sessions_pager',{
-                caption:"<?php echo addslashes(Display::return_icon('copy.png', get_lang('Copy'))); ?>",
+                caption:"<?php echo addslashes(Display::getMdiIcon('content-duplicate', 'ch-tool-icon', null, 22, get_lang('Copy'))); ?>",
                 buttonicon:"ui-icon ui-icon-plus",
                 onClickButton: function(a) {
                     var list = $("#sessions").jqGrid('getGridParam', 'selarrrow');
@@ -563,7 +577,7 @@ $extra_params['multiselect'] = true;
                     }
                 }
             }).navButtonAdd('#sessions_pager',{
-                caption:"<?php echo addslashes(Display::return_icon('save_pack.png', get_lang('Courses reports'))); ?>",
+                caption:"<?php echo addslashes(Display::getMdiIcon('archive-arrow-down', 'ch-tool-icon', null, 22, get_lang('Courses reports'))); ?>",
                 buttonicon:"ui-icon ui-icon-plus",
                 onClickButton: function(a) {
                     var list = $("#sessions").jqGrid('getGridParam', 'selarrrow');
@@ -575,7 +589,7 @@ $extra_params['multiselect'] = true;
                 },
                 position:"last"
             }).navButtonAdd("#sessions_pager",{
-                caption:"<?php echo addslashes(Display::return_icon('export_csv.png', get_lang('Export courses reports complete'))); ?>",
+                caption:"<?php echo addslashes(Display::getMdiIcon('file-delimited-outline', 'ch-tool-icon', null, 22, get_lang('Export courses reports complete'))); ?>",
                 buttonicon:"ui-icon ui-icon-plus",
                 onClickButton: function(a) {
                     var list = $("#sessions").jqGrid("getGridParam", "selarrrow");

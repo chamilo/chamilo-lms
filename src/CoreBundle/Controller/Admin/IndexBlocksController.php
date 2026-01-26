@@ -455,11 +455,14 @@ class IndexBlocksController extends BaseController
             'route' => ['name' => 'CCalendarEventList', 'query' => ['type' => 'global']],
             'label' => $this->translator->trans('Global agenda'),
         ];
+        // Disabled until it is reemplemented to work with Chamilo 2
+        /*
         $items[] = [
             'class' => 'item-agenda-reminders',
             'url' => '/main/admin/import_course_agenda_reminders.php',
             'label' => $this->translator->trans('Import course events'),
         ];
+        */
         $items[] = [
             'class' => 'item-pages-list',
             'route' => ['name' => 'PageList'],
@@ -624,11 +627,13 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Tickets'),
         ];
 
+        // Disabled until it is reemplemented to work with Chamilo 2
+        /*
         $items[] = [
             'url' => '/main/session/cron_status.php',
             'label' => $this->translator->trans('Update session status'),
         ];
-
+        */
         $items[] = [
             'class' => 'item-colors',
             'route' => ['name' => 'AdminConfigurationColors'],

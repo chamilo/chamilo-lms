@@ -611,7 +611,10 @@ class CourseBuilder
 
         // Always try to include documents referenced inside HTML (images, attachments, etc.).
         if ($courseEntity instanceof CourseEntity) {
-            $this->restoreDocumentsFromList($courseEntity, $sessionEntity);
+            // Avoid pulling base documents into a session-only build (prevents duplicates on two-pass copy).
+            if ($withBaseContent || null === $sessionEntity) {
+                $this->restoreDocumentsFromList($courseEntity, $sessionEntity);
+            }
         }
 
         return $this->course;

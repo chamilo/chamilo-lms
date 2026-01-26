@@ -4375,25 +4375,69 @@ class CourseManager
         bool $withBaseContent = true,
         bool $copySessionContent = false
     ) {
-        $course_info = api_get_course_info($source_course_code);
+        $courseInfo = api_get_course_info($source_course_code);
 
-        if (!empty($course_info)) {
-            $cb = new CourseBuilder('', $course_info);
-            $course = $cb->build($source_session_id, $source_course_code, $withBaseContent);
-            $restorer = new CourseRestorer($course);
-            $restorer->copySessionContent = $copySessionContent;
-            $restorer->skip_content = $params;
-            $restorer->restore(
-                $destination_course_code,
-                $destination_session_id,
-                true,
-                $withBaseContent
-            );
-
-            return true;
+        if (empty($courseInfo)) {
+            return false;
         }
 
-        return false;
+        $source_session_id = (int) $source_session_id;
+        $destination_session_id = (int) $destination_session_id;
+
+        if (!is_array($params)) {
+            $params = [];
+        }
+
+        // If there is no valid session on source or destination, session content copy does not make sense.
+        if ($source_session_id <= 0 || $destination_session_id <= 0) {
+            $copySessionContent = false;
+        }
+
+        try {
+            // Copy base content (course-wide) into destination course base (session 0).
+            if ($withBaseContent) {
+                $cb = new CourseBuilder('', $courseInfo);
+
+                // Build only base content snapshot (session 0).
+                $baseCourse = $cb->build(0, $source_course_code, true);
+
+                $baseRestorer = new CourseRestorer($baseCourse);
+                $baseRestorer->copySessionContent = false;
+                $baseRestorer->skip_content = $params;
+
+                // Restore into destination base (session 0).
+                $baseRestorer->restore(
+                    $destination_course_code,
+                    0,
+                    true,
+                    true
+                );
+            }
+
+            // Copy session-specific content into destination session.
+            if ($copySessionContent) {
+                $cb = new CourseBuilder('', $courseInfo);
+
+                // Build only session content snapshot (no base to avoid duplicates).
+                $sessionCourse = $cb->build($source_session_id, $source_course_code, false);
+
+                $sessionRestorer = new CourseRestorer($sessionCourse);
+                $sessionRestorer->copySessionContent = true;
+                $sessionRestorer->skip_content = $params;
+
+                // Restore into destination session (no base).
+                $sessionRestorer->restore(
+                    $destination_course_code,
+                    $destination_session_id,
+                    true,
+                    false
+                );
+            }
+
+            return true;
+        } catch (\Throwable $e) {
+            return false;
+        }
     }
 
     /**

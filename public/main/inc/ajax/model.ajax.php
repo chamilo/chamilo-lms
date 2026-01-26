@@ -48,41 +48,51 @@ if (!in_array($sord, ['asc', 'desc'])) {
     $sord = 'desc';
 }
 
-// Actions allowed to other roles.
-if (!in_array(
-        $action,
-        [
-            'get_exercise_results',
-            'get_exercise_pending_results',
-            'get_exercise_results_report',
-            'get_work_student_list_overview',
-            'get_work_teacher',
-            'get_work_student',
-            'get_all_work_student',
-            'get_work_user_list',
-            'get_work_user_list_others',
-            'get_work_user_list_all',
-            'get_work_pending_list',
-            'get_user_skill_ranking',
-            'get_usergroups',
-            'get_usergroups_teacher',
-            'get_user_course_report_resumed',
-            'get_user_course_report',
-            'get_sessions_tracking',
-            'get_sessions',
-            'get_course_announcements',
-            'course_log_events',
-            'get_learning_path_calendars',
-            'get_usergroups_users',
-            'get_calendar_users',
-            'get_exercise_categories',
-        ]
-    ) && !isset($_REQUEST['from_course_session'])) {
+$courseActions = [
+    'get_exercise_results',
+    'get_exercise_pending_results',
+    'get_exercise_results_report',
+    'get_work_student_list_overview',
+    'get_work_teacher',
+    'get_work_student',
+    'get_all_work_student',
+    'get_work_user_list',
+    'get_work_user_list_others',
+    'get_work_user_list_all',
+    'get_work_pending_list',
+    'get_course_announcements',
+    'course_log_events',
+    'get_learning_path_calendars',
+    'get_usergroups_users',
+    'get_calendar_users',
+    'get_exercise_categories',
+    'get_usergroups_teacher',
+    'get_group_reporting',
+];
+
+$adminActions = [
+    'get_user_skill_ranking',
+    'get_usergroups',
+    'get_user_course_report_resumed',
+    'get_user_course_report',
+    'get_sessions_tracking',
+    'get_sessions',
+];
+
+if (in_array($action, $courseActions, true)) {
+    // Must be in a course context.
+    api_protect_course_script();
+
+    // In course context, require edit rights (teacher/coach/course admin).
+    // Some actions later check api_is_teacher() explicitly; keep this generic guard.
+    if (!api_is_allowed_to_edit(null, true)) {
+        api_not_allowed(true);
+    }
+} elseif (in_array($action, $adminActions, true)) {
     api_protect_admin_script(true);
-} elseif (isset($_REQUEST['from_course_session']) &&
-    1 == $_REQUEST['from_course_session']
-) {
-    api_protect_teacher_script(true);
+} else {
+    // Unknown / not whitelisted actions => block by default.
+    api_protect_admin_script(true);
 }
 
 $toRemove = ['extra_access_start_date', 'extra_access_end_date'];

@@ -24,14 +24,13 @@ if ('myspace' === $from) {
 $isAllowedToTrack = Tracking::isAllowToTrack($sessionId);
 if (!$isAllowedToTrack) {
     api_not_allowed(true);
-    exit;
 }
 
 $nameTools = get_lang('Group reporting');
 
 // jqGrid will use this URL to do the selects.
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_group_reporting&course_id='.
-    $courseId.'&session_id='.$sessionId;
+    $courseId.'&session_id='.$sessionId.'&'.api_get_cidreq();
 
 // The order is important; you need to check the $columns variable
 // in the model.ajax.php file.

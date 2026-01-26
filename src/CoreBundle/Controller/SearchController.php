@@ -415,10 +415,19 @@ final class SearchController extends AbstractController
             $tool = (string) ($data['tool'] ?? '');
             $isQuestion = ('question' === $kind) || ('quiz_question' === $tool);
 
-            $title = isset($data['title']) ? (string) $data['title'] : '';
+            $title = isset($data['title']) ? $this->normalizeDisplayText((string) $data['title']) : '';
+            $data['title'] = $title;
             $fullPath = isset($data['full_path']) ? (string) $data['full_path'] : '';
             $content = isset($data['content']) ? (string) $data['content'] : '';
 
+            if (isset($data['title']) && \is_string($data['title'])) {
+                $data['title'] = html_entity_decode($data['title'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            }
+
+            if (!empty($data['quiz_title']) && \is_string($data['quiz_title'])) {
+                $data['quiz_title'] = html_entity_decode($data['quiz_title'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            }
+            $title = isset($data['title']) ? (string) $data['title'] : $title;
             $ext = $this->guessFileExtension($fullPath, $title);
             $data['file_ext'] = $ext;
             $data['file_icon'] = $this->guessFileIconMdi($ext, (string) ($data['filetype'] ?? ''));
@@ -431,7 +440,7 @@ final class SearchController extends AbstractController
             if ($isQuestion) {
                 // Use quiz title as the main visible title if available.
                 if (!empty($data['quiz_title'])) {
-                    $data['title'] = (string) $data['quiz_title'];
+                    $data['title'] = $this->normalizeDisplayText((string) $data['quiz_title']);
                 }
 
                 // Show only a tiny context around the match, never the full question content.
@@ -474,7 +483,7 @@ final class SearchController extends AbstractController
         $matchedTerm = null;
 
         foreach ($terms as $t) {
-            $t = trim($t);
+            $t = trim((string) $t);
             if ('' === $t) {
                 continue;
             }
@@ -524,14 +533,14 @@ final class SearchController extends AbstractController
 
         $escaped = htmlspecialchars($snippet, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
-        // Highlight terms (small snippet, safe).
+        // Highlight terms
         foreach ($terms as $t) {
-            $t = trim($t);
+            $t = trim((string) $t);
             if ('' === $t) {
                 continue;
             }
             $pattern = '/('.preg_quote(htmlspecialchars($t, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), '/').')/iu';
-            $escaped = preg_replace($pattern, '<mark class="px-1 rounded bg-yellow-200">$1</mark>', $escaped) ?? $escaped;
+            $escaped = preg_replace($pattern, '<mark class="rounded bg-yellow-200">$1</mark>', $escaped) ?? $escaped;
         }
 
         if ($start > 0) {
@@ -542,6 +551,18 @@ final class SearchController extends AbstractController
         }
 
         return $escaped;
+    }
+
+    /**
+     * Normalize a UI text field coming from the index.
+     * It may contain HTML entities (e.g. &eacute;) depending on how it was indexed.
+     */
+    private function normalizeDisplayText(string $text): string
+    {
+        $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $text = preg_replace('/\s+/u', ' ', $text) ?? $text;
+
+        return trim($text);
     }
 
     /**
@@ -842,14 +863,16 @@ final class SearchController extends AbstractController
         }
 
         $pos = null;
-        $matchedTerm = null;
 
         foreach ($terms as $t) {
+            $t = trim((string) $t);
+            if ('' === $t) {
+                continue;
+            }
+
             $p = mb_stripos($plain, $t, 0, 'UTF-8');
             if (false !== $p) {
                 $pos = (int) $p;
-                $matchedTerm = $t;
-
                 break;
             }
         }
@@ -871,12 +894,12 @@ final class SearchController extends AbstractController
 
         // Highlight all terms in escaped string.
         foreach ($terms as $t) {
-            $t = trim($t);
+            $t = trim((string) $t);
             if ('' === $t) {
                 continue;
             }
             $pattern = '/('.preg_quote(htmlspecialchars($t, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), '/').')/iu';
-            $escaped = preg_replace($pattern, '<mark class="px-1 rounded bg-yellow-200">$1</mark>', $escaped) ?? $escaped;
+            $escaped = preg_replace($pattern, '<mark class="rounded bg-yellow-200">$1</mark>', $escaped) ?? $escaped;
         }
 
         if ($start > 0) {

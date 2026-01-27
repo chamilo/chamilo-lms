@@ -34,7 +34,7 @@ class ExerciseFocusedPlugin extends Plugin
         ];
 
         parent::__construct(
-            "0.0.1",
+            "0.1",
             "Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>",
             $settings
         );

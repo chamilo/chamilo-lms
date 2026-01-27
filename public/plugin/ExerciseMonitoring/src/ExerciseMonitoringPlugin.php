@@ -25,7 +25,7 @@ class ExerciseMonitoringPlugin extends Plugin
 
     protected function __construct()
     {
-        $version = '0.0.1';
+        $version = '0.1';
 
         $settings = [
             self::SETTING_TOOL_ENABLE => 'boolean',

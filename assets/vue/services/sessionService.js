@@ -4,13 +4,17 @@ import baseService from "./baseService"
 /**
  * @param {string} userIri
  * @param {string} listType
- * @param {params}
+ * @param {Object} params
  * @returns {Promise<{totalItems: number, items: Object[], nextPageParams: ({page: number, itemsPerPage: number}|null)}>}
  */
 async function findUserSubscriptions(userIri, listType, params = {}) {
   return baseService.getCollection(`${userIri}/session_subscriptions/${listType}`, params)
 }
 
+/**
+ * @param {Object} payload
+ * @returns {Promise<Object>}
+ */
 async function createWithCoursesAndUsers(payload) {
   return await baseService.post("/api/advanced/create-session-with-courses-and-users", payload)
 }

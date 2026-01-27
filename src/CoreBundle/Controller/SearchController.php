@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Throwable;
 
 use const ENT_HTML5;
@@ -32,6 +33,8 @@ use const ENT_QUOTES;
 use const ENT_SUBSTITUTE;
 use const PATHINFO_EXTENSION;
 
+#[IsGranted('ROLE_USER')]
+#[Route('/search')]
 final class SearchController extends AbstractController
 {
     public function __construct(
@@ -43,7 +46,7 @@ final class SearchController extends AbstractController
     ) {}
 
     #[Route(
-        path: '/search/xapian',
+        path: '/xapian',
         name: 'chamilo_core.search_xapian',
         methods: ['GET']
     )]
@@ -87,7 +90,7 @@ final class SearchController extends AbstractController
     }
 
     #[Route(
-        path: '/search/ui',
+        path: '/ui',
         name: 'chamilo_core.search_ui',
         methods: ['GET']
     )]
@@ -145,7 +148,7 @@ final class SearchController extends AbstractController
     }
 
     #[Route(
-        path: '/search/xapian/demo-index',
+        path: '/xapian/demo-index',
         name: 'chamilo_core.search_xapian_demo_index',
         methods: ['POST']
     )]

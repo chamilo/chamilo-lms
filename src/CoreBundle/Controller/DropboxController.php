@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\{BinaryFileResponse,
     StreamedResponse};
 use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Throwable;
 use ZipArchive;
@@ -32,6 +33,7 @@ use const DATE_ATOM;
 use const PATHINFO_EXTENSION;
 use const PATHINFO_FILENAME;
 
+#[IsGranted('ROLE_USER')]
 #[Route('/dropbox')]
 class DropboxController extends AbstractController
 {

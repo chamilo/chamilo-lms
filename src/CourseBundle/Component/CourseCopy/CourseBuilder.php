@@ -453,22 +453,47 @@ class CourseBuilder
         array $parseOnlyToolList = [],
         array $toolsFromPost = []
     ): Course {
-
-        // Ensure course info exists before using it
-        if (empty($this->courseInfo) || !is_array($this->courseInfo)) {
-            $this->courseInfo = api_get_course_info($courseCode);
-        }
-
-        if (empty($this->courseInfo) || !is_array($this->courseInfo)) {
-            throw new \RuntimeException(sprintf('CourseBuilder cannot load course info for course code "%s".', $courseCode));
-        }
-
         $this->withBaseContent = $withBaseContent;
 
+        // Resolve effective course code:
+        // - If caller did not pass a code, reuse the code already loaded in the constructor.
+        $effectiveCourseCode = '' !== trim($courseCode)
+            ? trim($courseCode)
+            : (string) ($this->course->code ?? '');
+
+        if ('' === $effectiveCourseCode) {
+            throw new \RuntimeException('CourseBuilder cannot determine a course code (empty effective code).');
+        }
+
+        // Prefer constructor-provided course info to avoid api_get_course_info() side effects.
+        if (empty($this->courseInfo) || !is_array($this->courseInfo)) {
+            $this->courseInfo = is_array($this->course->info ?? null) ? $this->course->info : [];
+        }
+
+        // Only fetch via api_get_course_info() if we still don't have matching info.
+        if (
+            empty($this->courseInfo)
+            || !is_array($this->courseInfo)
+            || (string) ($this->courseInfo['code'] ?? '') !== $effectiveCourseCode
+        ) {
+            $this->courseInfo = api_get_course_info($effectiveCourseCode);
+        }
+
+        if (empty($this->courseInfo) || !is_array($this->courseInfo) || '' === (string) ($this->courseInfo['code'] ?? '')) {
+            throw new \RuntimeException(sprintf(
+                'CourseBuilder cannot load course info for course code "%s".',
+                $effectiveCourseCode
+            ));
+        }
+
         /** @var CourseEntity|null $courseEntity */
-        $courseEntity = '' !== $courseCode
-            ? $this->em->getRepository(CourseEntity::class)->findOneBy(['code' => $courseCode])
-            : $this->em->getRepository(CourseEntity::class)->find(api_get_course_int_id());
+        $courseEntity = $this->em->getRepository(CourseEntity::class)->findOneBy(['code' => $effectiveCourseCode]);
+        if (!$courseEntity instanceof CourseEntity) {
+            throw new \RuntimeException(sprintf(
+                'CourseBuilder cannot resolve CourseEntity for course code "%s".',
+                $effectiveCourseCode
+            ));
+        }
 
         /** @var SessionEntity|null $sessionEntity */
         $sessionEntity = $session_id
@@ -586,7 +611,10 @@ class CourseBuilder
 
         // Always try to include documents referenced inside HTML (images, attachments, etc.).
         if ($courseEntity instanceof CourseEntity) {
-            $this->restoreDocumentsFromList($courseEntity, $sessionEntity);
+            // Avoid pulling base documents into a session-only build (prevents duplicates on two-pass copy).
+            if ($withBaseContent || null === $sessionEntity) {
+                $this->restoreDocumentsFromList($courseEntity, $sessionEntity);
+            }
         }
 
         return $this->course;

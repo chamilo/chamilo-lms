@@ -16,8 +16,18 @@ $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')
 $interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('Course list')];
 
 $em = Database::getManager();
-// Get all possible teachers.
-$accessUrlId = api_get_current_access_url_id();
+$accessUrlId = (int) api_get_current_access_url_id();
+
+/**
+ * Course template logic (DB-driven):
+ * - If a global default template is configured, do NOT show the selector.
+ * - If no global template is configured and teachers can select templates, show the selector.
+ */
+$globalTemplateSetting = api_get_setting('course.course_creation_use_template');
+$globalTemplateId = is_numeric($globalTemplateSetting) ? (int) $globalTemplateSetting : 0;
+
+$teacherCanSelectSetting = api_get_setting('workflows.teacher_can_select_course_template');
+$teacherCanSelectCourseTemplate = ('true' === strtolower($teacherCanSelectSetting));
 
 // Build the form.
 $form = new FormValidator('update_course');
@@ -112,7 +122,47 @@ if (1 === count($languages)) {
     $form->addSelectLanguage('course_language', get_lang('Language'));
 }
 
-if ('true' === api_get_setting('workflows.teacher_can_select_course_template')) {
+// Template field (UI)
+if ($globalTemplateId > 0) {
+    // Enforce global template without exposing selector.
+    $form->addElement('hidden', 'course_template', $globalTemplateId);
+
+    // Show an explicit notice for admins so it's clear where content comes from.
+    $tplInfo = api_get_course_info_by_id($globalTemplateId);
+
+    $tplLabel = get_lang('Course template');
+    $tplMsg   = get_lang('This course will be created using the platform default course template.');
+
+    $displayName = '';
+    if ($tplInfo['title'] !== '') {
+        $displayName = $tplInfo['title'];
+    } elseif ($tplInfo['code'] !== '') {
+        $displayName = $tplInfo['code'];
+    } else {
+        $displayName = '#'.$globalTemplateId;
+    }
+
+    if ($tplInfo['code'] !== '') {
+        $displayName .= ' ('.$tplInfo['code'].')';
+    }
+
+    // Optional link to open the template course.
+    $tplLink = '';
+    if ($tplInfo['code'] !== '') {
+        $url = api_get_path(WEB_CODE_PATH).'course_info/infocourse.php?cidReq='.urlencode($tplInfo['code']);
+        $tplLink = '<a href="'.Security::remove_XSS($url).'">'.Security::remove_XSS($displayName).'</a>';
+    } else {
+        $tplLink = Security::remove_XSS($displayName);
+    }
+
+    $form->addElement(
+        'html',
+        '<div class="alert alert-info" role="alert" style="margin-top:10px;">
+            <strong>'.$tplLabel.':</strong> '.$tplLink.'<br>
+            <span>'.$tplMsg.'</span>
+        </div>'
+    );
+} elseif ($teacherCanSelectCourseTemplate) {
     $form->addSelectAjax(
         'course_template',
         [
@@ -162,7 +212,6 @@ $extra = $extra_field->addElements($form);
 
 $htmlHeadXtra[] = '
 <script>
-
 $(function() {
     '.$extra['jquery_ready_content'].'
 });
@@ -171,7 +220,8 @@ $(function() {
 $form->addProgress();
 $form->addButtonCreate(get_lang('Create a course'));
 
-// Set some default values.
+// Defaults
+$values = [];
 $values['course_language'] = api_get_setting('platformLanguage');
 $values['disk_quota'] = round(api_get_setting('default_document_quotum'), 1);
 
@@ -186,6 +236,11 @@ $values['subscribe'] = 1;
 $values['unsubscribe'] = 0;
 $values['course_teachers'] = [$currentTeacher->getId()];
 
+// If global template exists, also set it as default value
+if ($globalTemplateId > 0) {
+    $values['course_template'] = $globalTemplateId;
+}
+
 $form->setDefaults($values);
 
 // Validate the form
@@ -197,6 +252,9 @@ if ($form->validate()) {
     $courseData['teachers'] = $course_teachers;
     $courseData['wanted_code'] = $courseData['visual_code'];
     $courseData['gradebook_model_id'] = isset($courseData['gradebook_model_id']) ? $courseData['gradebook_model_id'] : null;
+    if ($globalTemplateId > 0) {
+        $courseData['course_template'] = $globalTemplateId;
+    }
 
     if (isset($courseData['duration'])) {
         $courseData['duration'] = (int) $courseData['duration'] * 60; // Convert minutes to seconds

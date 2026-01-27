@@ -4375,25 +4375,69 @@ class CourseManager
         bool $withBaseContent = true,
         bool $copySessionContent = false
     ) {
-        $course_info = api_get_course_info($source_course_code);
+        $courseInfo = api_get_course_info($source_course_code);
 
-        if (!empty($course_info)) {
-            $cb = new CourseBuilder('', $course_info);
-            $course = $cb->build($source_session_id, $source_course_code, $withBaseContent);
-            $restorer = new CourseRestorer($course);
-            $restorer->copySessionContent = $copySessionContent;
-            $restorer->skip_content = $params;
-            $restorer->restore(
-                $destination_course_code,
-                $destination_session_id,
-                true,
-                $withBaseContent
-            );
-
-            return true;
+        if (empty($courseInfo)) {
+            return false;
         }
 
-        return false;
+        $source_session_id = (int) $source_session_id;
+        $destination_session_id = (int) $destination_session_id;
+
+        if (!is_array($params)) {
+            $params = [];
+        }
+
+        // If there is no valid session on source or destination, session content copy does not make sense.
+        if ($source_session_id <= 0 || $destination_session_id <= 0) {
+            $copySessionContent = false;
+        }
+
+        try {
+            // Copy base content (course-wide) into destination course base (session 0).
+            if ($withBaseContent) {
+                $cb = new CourseBuilder('', $courseInfo);
+
+                // Build only base content snapshot (session 0).
+                $baseCourse = $cb->build(0, $source_course_code, true);
+
+                $baseRestorer = new CourseRestorer($baseCourse);
+                $baseRestorer->copySessionContent = false;
+                $baseRestorer->skip_content = $params;
+
+                // Restore into destination base (session 0).
+                $baseRestorer->restore(
+                    $destination_course_code,
+                    0,
+                    true,
+                    true
+                );
+            }
+
+            // Copy session-specific content into destination session.
+            if ($copySessionContent) {
+                $cb = new CourseBuilder('', $courseInfo);
+
+                // Build only session content snapshot (no base to avoid duplicates).
+                $sessionCourse = $cb->build($source_session_id, $source_course_code, false);
+
+                $sessionRestorer = new CourseRestorer($sessionCourse);
+                $sessionRestorer->copySessionContent = true;
+                $sessionRestorer->skip_content = $params;
+
+                // Restore into destination session (no base).
+                $sessionRestorer->restore(
+                    $destination_course_code,
+                    $destination_session_id,
+                    true,
+                    false
+                );
+            }
+
+            return true;
+        } catch (\Throwable $e) {
+            return false;
+        }
     }
 
     /**
@@ -6415,30 +6459,58 @@ class CourseManager
      */
     public static function useTemplateAsBasisIfRequired(string $courseCode, int $courseTemplate): void
     {
-        $template = api_get_setting('course_creation_use_template');
-        $template = is_numeric($template) ? intval($template) : null;
-        $teacherCanSelectCourseTemplate = 'true' === api_get_setting('workflows.teacher_can_select_course_template');
-        $courseTemplate = isset($courseTemplate) ? intval($courseTemplate) : 0;
-
-        $useTemplate = false;
-
-        if ($teacherCanSelectCourseTemplate && $courseTemplate) {
-            $useTemplate = true;
-            $originCourse = api_get_course_info_by_id($courseTemplate);
-        } elseif (!empty($template)) {
-            $useTemplate = true;
-            $originCourse = api_get_course_info_by_id($template);
+        $courseCode = trim($courseCode);
+        if ('' === $courseCode) {
+            return;
         }
 
-        if ($useTemplate && !empty($originCourse)) {
-            // Include the necessary libraries to generate a course copy
-            // Call the course copy object
+        $globalTemplateSetting = api_get_setting('course.course_creation_use_template');
+        $globalTemplateId = is_numeric($globalTemplateSetting) ? (int) $globalTemplateSetting : 0;
+
+        $teacherCanSelectCourseTemplate = 'true' === api_get_setting('workflows.teacher_can_select_course_template');
+        $selectedTemplateId = $courseTemplate > 0 ? (int) $courseTemplate : 0;
+
+        $originTemplateId = 0;
+
+        if ($teacherCanSelectCourseTemplate && $selectedTemplateId > 0) {
+            $originTemplateId = $selectedTemplateId;
+        } elseif ($globalTemplateId > 0) {
+            $originTemplateId = $globalTemplateId;
+        }
+
+        if ($originTemplateId <= 0) {
+            return;
+        }
+
+        $originCourse = api_get_course_info_by_id($originTemplateId);
+        if (empty($originCourse) || empty($originCourse['code'])) {
+            error_log('COURSE_TEMPLATE: origin course not found or missing code (template_id='.$originTemplateId.')');
+            return;
+        }
+
+        if ((string) $originCourse['code'] === $courseCode) {
+            error_log('COURSE_TEMPLATE: origin and destination course code are the same, skipping (code='.$courseCode.')');
+            return;
+        }
+
+        try {
             $originCourse['official_code'] = $originCourse['code'];
-            $cb = new CourseBuilder(null, $originCourse);
-            $course = $cb->build(null, $originCourse['code']);
+            $cb = new CourseBuilder('complete', $originCourse);
+
+            // Call build() WITHOUT passing $courseCode, so CourseBuilder can use its own course info
+            // and avoid calling api_get_course_info($originCourseCode) (which can pollute globals).
+            $course = $cb->build();
+
             $cr = new CourseRestorer($course);
             $cr->set_file_option();
             $cr->restore($courseCode);
+        } catch (\Throwable $e) {
+            // Never block course creation if template copy fails
+            error_log('COURSE_TEMPLATE: template copy failed for new_course='.$courseCode
+                .' from_template_course='.$originCourse['code']
+                .' error='.$e->getMessage()
+            );
+            return;
         }
     }
 
@@ -6796,9 +6868,11 @@ class CourseManager
 
     /**
      * Fill course with all necessary items.
+     *
      * @param Course $course
      * @param array $params Parameters from the course creation form
-     * @param ?int   $authorId
+     * @param ?int  $authorId
+     *
      * @throws Exception
      */
     private static function fillCourse(Course $course, array $params, ?int $authorId = 0)
@@ -6818,19 +6892,22 @@ class CourseManager
             );
         }
 
-        // If parameter defined, copy the contents from a specific
-        // template course into this new course
-        if (isset($params['course_template'])) {
-            self::useTemplateAsBasisIfRequired(
-                $course->getCode(),
-                (int) $params['course_template']
-            );
-        }
+        /**
+         * Template copy:
+         * - Always evaluate template logic (selected template or global default).
+         * - This avoids relying on whether the form exported the "course_template" key.
+         */
+        $selectedTemplateId = isset($params['course_template']) ? (int) $params['course_template'] : 0;
+        self::useTemplateAsBasisIfRequired(
+            $course->getCode(),
+            $selectedTemplateId
+        );
+
         $params['course_code'] = $course->getCode();
         $params['item_id'] = $course->getId();
 
         $courseFieldValue = new ExtraFieldValue('course');
-        //$courseFieldValue->saveFieldValues($params);
+        // $courseFieldValue->saveFieldValues($params);
     }
 
     /**

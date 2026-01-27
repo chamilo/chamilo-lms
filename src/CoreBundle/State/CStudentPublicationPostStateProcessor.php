@@ -58,6 +58,20 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
             $currentUser = null;
         }
 
+        // Ensure we always assign a managed User reference BEFORE any persist/flush happens.
+        // This prevents Doctrine from treating the User as a new/unknown entity.
+        $targetUserId = null;
+        if ($isUpdate && $originalUser instanceof User && null !== $originalUser->getId()) {
+            $targetUserId = $originalUser->getId();
+        } elseif (!$isUpdate && $currentUser instanceof User && null !== $currentUser->getId()) {
+            $targetUserId = $currentUser->getId();
+        }
+
+        if (null !== $targetUserId) {
+            $publication->setUser($this->entityManager->getReference(User::class, $targetUserId));
+        }
+
+        // Persist/flush (ApiPlatform default processor)
         $result = $this->persistProcessor->process($publication, $operation, $uriVariables, $context);
 
         $assignment = $publication->getAssignment();
@@ -116,16 +130,6 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
         }
 
         $publication->setViewProperties(true);
-        if (!$isUpdate) {
-            if ($currentUser instanceof User) {
-                $publication->setUser($currentUser);
-            }
-        } else {
-            if ($originalUser instanceof User) {
-                $publication->setUser($originalUser);
-            }
-        }
-
         $this->entityManager->flush();
 
         $this->saveGradebookConfig($publication, $course, $session);
@@ -178,11 +182,16 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
             $color = $agendaColors['student_publication'];
         }
 
+        $creator = $publication->getCreator();
+        if ($creator instanceof User && null !== $creator->getId()) {
+            $creator = $this->entityManager->getReference(User::class, $creator->getId());
+        }
+
         $event = (new CCalendarEvent())
             ->setTitle($eventTitle)
             ->setContent($content)
             ->setParent($course)
-            ->setCreator($publication->getCreator())
+            ->setCreator($creator)
             ->addLink(clone $courseLink)
             ->setStartDate($startDate)
             ->setEndDate($endDate)

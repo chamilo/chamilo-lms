@@ -1013,14 +1013,6 @@ img.course-tool__icon {
   margin-top: auto;
 }
 
-@layer base {
-  .form-control,
-  input,
-  select,
-  textarea {
-    @apply focus:outline-0 focus:border-primary focus:rounded-md focus:transition;
-  }
-}
 @layer components {
   .form-group:focus-within,
   .field:focus-within,

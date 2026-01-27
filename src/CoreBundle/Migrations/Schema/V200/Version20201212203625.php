@@ -242,7 +242,21 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 $documentPath = ltrim($documentPath, '/');
                 $filePath = $this->getUpdateRootPath().'/app/courses/'.$course->getDirectory().'/document/'.$documentPath;
                 error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
-                $this->addLegacyFileToResource($filePath, $documentRepo, $document, $documentId);
+
+                // If this is an HTML document, rewrite legacy broken links before uploading.
+                $filePathToUpload = $this->rewriteHtmlFileLegacyLinksIfNeeded($filePath, (string) $course->getDirectory());
+
+                // Preserve original filename even if we upload a temp rewritten copy.
+                $originalFilename = basename($filePath);
+
+                $this->addLegacyFileToResource(
+                    $filePathToUpload,
+                    $documentRepo,
+                    $document,
+                    $documentId,
+                    $originalFilename
+                );
+
                 $this->entityManager->persist($document);
 
                 if (($counter % $batchSize) === 0) {

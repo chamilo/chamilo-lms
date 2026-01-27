@@ -32,6 +32,8 @@ use ApiPlatform\Doctrine\Orm\Paginator;
  */
 readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
 {
+    public const DEFAULT_PAGE_SIZE = 12;
+
     public function __construct(
         private UserHelper $userHelper,
         private CourseRepository $courseRepository,
@@ -53,7 +55,7 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
             );
         }
 
-        $itemsPerPage = (int) ($context['filters']['itemsPerPage'] ?? 9);
+        $itemsPerPage = (int) ($context['filters']['itemsPerPage'] ?? self::DEFAULT_PAGE_SIZE);
         $currentPage = (int) ($context['filters']['page'] ?? 1);
 
         $query = $this

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
@@ -127,22 +128,33 @@ class CertificateController extends AbstractController
         $allowPublic = 'true' === $this->settingsManager->getSetting('certificate.allow_public_certificates', true);
         $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
 
-        $user = $this->userHelper->getCurrent();
-        $securityUser = $this->getUser();
+        $currentUser = $this->userHelper->getCurrent(); // ?User (can be null for anonymous)
+        $securityUser = $this->getUser();               // ?UserInterface
 
-        $isOwner = $securityUser && method_exists($securityUser, 'getId') && $user->getId() === $securityUser->getId();
-        $isPlatformAdmin = method_exists($user, 'isAdmin') && $user->isAdmin();
+        // Owner (must match certificate->getUser())
+        $ownerId = (int) $certificate->getUser()->getId();
+        $securityUserId = ($securityUser instanceof User) ? (int) $securityUser->getId() : 0;
 
-        if ($isOwner || $isPlatformAdmin) {
+        if ($securityUserId > 0 && $securityUserId === $ownerId) {
             return;
         }
 
-        $isPublic = ($allowPublic && $certificate->getPublish());
-        $isSessAdminAllowed = ($allowSessionAdmin && method_exists($user, 'isSessionAdmin') && $user->isSessionAdmin());
-
-        if (!$isPublic && !$isSessAdminAllowed) {
-            throw new AccessDeniedHttpException('The requested certificate is not public.');
+        // Platform admin
+        if ($currentUser && $currentUser->isAdmin()) {
+            return;
         }
+
+        // Session admin (if allowed by setting)
+        if ($allowSessionAdmin && $currentUser && $currentUser->isSessionAdmin()) {
+            return;
+        }
+
+        // Public + published (anonymous allowed)
+        if ($allowPublic && $certificate->getPublish()) {
+            return;
+        }
+
+        throw new AccessDeniedHttpException('The requested certificate is not public.');
     }
 
     /**

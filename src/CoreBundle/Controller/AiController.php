@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
@@ -44,6 +45,7 @@ use const FILTER_VALIDATE_IP;
 use const FILTER_VALIDATE_URL;
 use const PATHINFO_EXTENSION;
 
+#[IsGranted('ROLE_USER')]
 #[Route('/ai')]
 class AiController extends AbstractController
 {

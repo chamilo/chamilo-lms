@@ -72,6 +72,9 @@ final class Version20210930130343 extends AbstractMigrationChamilo
                 $session = null;
                 if (!empty($sessionId)) {
                     $session = $sessionRepo->find($sessionId);
+                    if ($session === null) {
+                        continue;
+                    }
                 }
 
                 $admin = $this->getAdmin();

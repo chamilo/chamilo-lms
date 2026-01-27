@@ -57,7 +57,9 @@ if (typeof redirectValue === "string" && redirectValue.trim() !== "") {
   router.replace(`/${redirectValue}`)
 }
 
-const showCatalogue = computed(() => platformConfigStore.getSetting("catalog.course_catalog_display_in_home") === "true")
+const showCatalogue = computed(
+  () => platformConfigStore.getSetting("catalog.course_catalog_display_in_home") === "true",
+)
 const allCourses = ref([])
 const visibleCourses = ref([])
 const pageSize = 8
@@ -80,8 +82,8 @@ onMounted(async () => {
   if (showCatalogue.value) {
     try {
       const loaded = await courseService.loadCourseCatalogue()
-      allCourses.value = loaded
-      visibleCourses.value = loaded.slice(0, pageSize)
+      allCourses.value = loaded.items
+      visibleCourses.value = loaded.items.slice(0, pageSize)
 
       if (currentUserId) {
         const votes = await userRelCourseVoteService.getUserVotes({

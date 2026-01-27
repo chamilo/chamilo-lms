@@ -3,7 +3,7 @@
     <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
       <div>
         <strong>{{ $t("Total number of courses") }}:</strong>
-        {{ courses.length }}<br />
+        {{ totalCourses }}<br />
         <strong>{{ $t("Matching courses") }}:</strong>
         {{ totalVisibleCourses }}
       </div>
@@ -169,6 +169,7 @@ watch(allowCatalogueAccess, async (newValue) => {
 
 const currentUserId = securityStore.user?.id ?? null
 const status = ref(false)
+const totalCourses = ref(0)
 const courses = ref([])
 const filteredCourses = ref([])
 const filters = ref({ global: { value: null, matchMode: FilterMatchMode.CONTAINS } })
@@ -193,7 +194,10 @@ const loadExtraFields = async () => {
 const load = async () => {
   status.value = true
   try {
-    courses.value = await courseService.loadCourseCatalogue()
+    const courseCatalogue = await courseService.loadCourseCatalogue()
+
+    totalCourses.value = courseCatalogue.totalItems
+    courses.value = courseCatalogue.items
 
     const ids = courses.value.map((c) => c.id).join(",")
     if (ids) {

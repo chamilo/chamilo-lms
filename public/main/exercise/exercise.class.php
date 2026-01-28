@@ -9157,10 +9157,11 @@ class Exercise
         if ($is_allowedToEdit) {
             $qbPublished = clone $qb;
             $qbDraft = clone $qb;
+            $qbPublished->andWhere('links.visibility = :visibility')
+                ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED);
 
-            // If the query doesn't contain it, setting the parameter is harmless.
-            $qbPublished->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED);
-            $qbDraft->setParameter('visibility', ResourceLink::VISIBILITY_DRAFT);
+            $qbDraft->andWhere('links.visibility = :visibility')
+                ->setParameter('visibility', ResourceLink::VISIBILITY_DRAFT);
 
             $listPublished = $qbPublished->getQuery()->getResult();
             $listDraft = $qbDraft->getQuery()->getResult();

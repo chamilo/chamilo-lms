@@ -62,8 +62,6 @@ if (!$groupMember && !api_is_allowed_to_edit(false, true)) {
 $twInput = 'mt-1 block w-full rounded-md border border-gray-25 bg-white px-3 py-2 text-sm text-gray-90 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30';
 $twTextarea = $twInput.' min-h-[96px]';
 $twSelect = $twInput;
-$twRadio = 'h-4 w-4 border-gray-25 text-primary focus:ring-primary';
-$twCheckbox = 'h-4 w-4 rounded border-gray-25 text-primary focus:ring-primary';
 $twSmallInput = 'mt-1 block w-24 rounded-md border border-gray-25 bg-white px-3 py-2 text-sm text-gray-90 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30';
 
 // Build form
@@ -141,7 +139,6 @@ $limitGroup = [
         null,
         get_lang('No limitation'),
         GroupManager::MEMBER_PER_GROUP_NO_LIMIT,
-        ['class' => $twRadio]
     ),
     $form->createElement(
         'radio',
@@ -149,7 +146,7 @@ $limitGroup = [
         null,
         get_lang('Maximum number of members'),
         1,
-        ['id' => 'max_member_selected', 'class' => $twRadio]
+        ['id' => 'max_member_selected']
     ),
     $form->createElement('text', 'max_member', null, [
         'class' => $twSmallInput,
@@ -185,14 +182,12 @@ $registrationGroup = [
         'self_registration_allowed',
         null,
         get_lang('Learners are allowed to self-register in groups'),
-        ['class' => $twCheckbox]
     ),
     $form->createElement(
         'checkbox',
         'self_unregistration_allowed',
         null,
         get_lang('Learners are allowed to unregister themselves from groups'),
-        ['class' => $twCheckbox]
     ),
 ];
 
@@ -220,9 +215,9 @@ $form->addHtml(
 );
 
 $docGroup = [
-    $form->createElement('radio', 'doc_state', null, get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE, ['class' => $twRadio]),
-    $form->createElement('radio', 'doc_state', null, get_lang('Public access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC, ['class' => $twRadio]),
-    $form->createElement('radio', 'doc_state', null, get_lang('Private access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE, ['class' => $twRadio]),
+    $form->createElement('radio', 'doc_state', null, get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE),
+    $form->createElement('radio', 'doc_state', null, get_lang('Public access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC),
+    $form->createElement('radio', 'doc_state', null, get_lang('Private access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE),
 ];
 $form->addGroup($docGroup, '', null, '<br>', false);
 $form->addHtml('</div>');
@@ -239,9 +234,9 @@ if ($allowDocumentGroupAccess) {
     );
 
     $docAccessGroup = [
-        $form->createElement('radio', 'document_access', null, get_lang('Share mode'), GroupManager::DOCUMENT_MODE_SHARE, ['class' => $twRadio]),
-        $form->createElement('radio', 'document_access', null, get_lang('Collaboration mode'), GroupManager::DOCUMENT_MODE_COLLABORATION, ['class' => $twRadio]),
-        $form->createElement('radio', 'document_access', null, get_lang('Read only mode'), GroupManager::DOCUMENT_MODE_READ_ONLY, ['class' => $twRadio]),
+        $form->createElement('radio', 'document_access', null, get_lang('Share mode'), GroupManager::DOCUMENT_MODE_SHARE),
+        $form->createElement('radio', 'document_access', null, get_lang('Collaboration mode'), GroupManager::DOCUMENT_MODE_COLLABORATION),
+        $form->createElement('radio', 'document_access', null, get_lang('Read only mode'), GroupManager::DOCUMENT_MODE_READ_ONLY),
     ];
     $form->addGroup($docAccessGroup, '', null, '<br>', false);
     $form->addHtml('</div>');
@@ -257,9 +252,9 @@ $form->addHtml(
 );
 
 $workGroup = [
-    $form->createElement('radio', 'work_state', null, get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE, ['class' => $twRadio]),
-    $form->createElement('radio', 'work_state', null, get_lang('Public access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC, ['class' => $twRadio]),
-    $form->createElement('radio', 'work_state', null, get_lang('Private access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE, ['class' => $twRadio]),
+    $form->createElement('radio', 'work_state', null, get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE),
+    $form->createElement('radio', 'work_state', null, get_lang('Public access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC),
+    $form->createElement('radio', 'work_state', null, get_lang('Private access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE),
 ];
 $form->addGroup($workGroup, '', null, '<br>', false);
 $form->addHtml('</div>');
@@ -274,9 +269,9 @@ $form->addHtml(
 );
 
 $agendaGroup = [
-    $form->createElement('radio', 'calendar_state', null, get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE, ['class' => $twRadio]),
-    $form->createElement('radio', 'calendar_state', null, get_lang('Public access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC, ['class' => $twRadio]),
-    $form->createElement('radio', 'calendar_state', null, get_lang('Private access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE, ['class' => $twRadio]),
+    $form->createElement('radio', 'calendar_state', null, get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE),
+    $form->createElement('radio', 'calendar_state', null, get_lang('Public access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC),
+    $form->createElement('radio', 'calendar_state', null, get_lang('Private access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE),
 ];
 $form->addGroup($agendaGroup, '', null, '<br>', false);
 $form->addHtml('</div>');
@@ -291,10 +286,10 @@ $form->addHtml(
 );
 
 $announcementsGroup = [
-    $form->createElement('radio', 'announcements_state', null, get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE, ['class' => $twRadio]),
-    $form->createElement('radio', 'announcements_state', null, get_lang('Public access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC, ['class' => $twRadio]),
-    $form->createElement('radio', 'announcements_state', null, get_lang('Private access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE, ['class' => $twRadio]),
-    $form->createElement('radio', 'announcements_state', null, get_lang('Private between users'), GroupManager::TOOL_PRIVATE_BETWEEN_USERS, ['class' => $twRadio]),
+    $form->createElement('radio', 'announcements_state', null, get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE),
+    $form->createElement('radio', 'announcements_state', null, get_lang('Public access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC),
+    $form->createElement('radio', 'announcements_state', null, get_lang('Private access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE),
+    $form->createElement('radio', 'announcements_state', null, get_lang('Private between users'), GroupManager::TOOL_PRIVATE_BETWEEN_USERS),
 ];
 $form->addGroup($announcementsGroup, '', null, '<br>', false);
 $form->addHtml('</div>');
@@ -309,9 +304,9 @@ $form->addHtml(
 );
 
 $forumGroup = [
-    $form->createElement('radio', 'forum_state', null, get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE, ['class' => $twRadio]),
-    $form->createElement('radio', 'forum_state', null, get_lang('Public access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC, ['class' => $twRadio]),
-    $form->createElement('radio', 'forum_state', null, get_lang('Private access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE, ['class' => $twRadio]),
+    $form->createElement('radio', 'forum_state', null, get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE),
+    $form->createElement('radio', 'forum_state', null, get_lang('Public access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC),
+    $form->createElement('radio', 'forum_state', null, get_lang('Private access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE),
 ];
 $form->addGroup($forumGroup, '', null, '<br>', false);
 $form->addHtml('</div>');
@@ -326,9 +321,9 @@ $form->addHtml(
 );
 
 $wikiGroup = [
-    $form->createElement('radio', 'wiki_state', null, get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE, ['class' => $twRadio]),
-    $form->createElement('radio', 'wiki_state', null, get_lang('Public access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC, ['class' => $twRadio]),
-    $form->createElement('radio', 'wiki_state', null, get_lang('Private access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE, ['class' => $twRadio]),
+    $form->createElement('radio', 'wiki_state', null, get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE),
+    $form->createElement('radio', 'wiki_state', null, get_lang('Public access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC),
+    $form->createElement('radio', 'wiki_state', null, get_lang('Private access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE),
 ];
 $form->addGroup($wikiGroup, '', null, '<br>', false);
 $form->addHtml('</div>');
@@ -343,9 +338,9 @@ $form->addHtml(
 );
 
 $chatGroup = [
-    $form->createElement('radio', 'chat_state', null, get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE, ['class' => $twRadio]),
-    $form->createElement('radio', 'chat_state', null, get_lang('Public access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC, ['class' => $twRadio]),
-    $form->createElement('radio', 'chat_state', null, get_lang('Private access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE, ['class' => $twRadio]),
+    $form->createElement('radio', 'chat_state', null, get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE),
+    $form->createElement('radio', 'chat_state', null, get_lang('Public access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC),
+    $form->createElement('radio', 'chat_state', null, get_lang('Private access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE),
 ];
 $form->addGroup($chatGroup, '', null, '<br>', false);
 $form->addHtml('</div>');

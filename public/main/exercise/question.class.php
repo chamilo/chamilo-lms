@@ -1126,7 +1126,7 @@ abstract class Question
             // Duplicates the picture of the hotspot
             // @todo implement copy of hotspot question
             if (HOT_SPOT == $this->type) {
-                throw new Exception('implement copy of hotspot question');
+                @error_log('[Question::duplicate] Hotspot picture copy not implemented yet. Skipping to avoid fatal error.');
             }
         }
 

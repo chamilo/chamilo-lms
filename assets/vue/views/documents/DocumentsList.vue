@@ -112,7 +112,7 @@
     v-model:filters="filters"
     v-model:selected-items="selectedItems"
     :global-filter-fields="['resourceNode.title', 'resourceNode.updatedAt']"
-    :is-loading="isLoading"
+    :is-loading="tableIsLoading"
     v-model:rows="options.itemsPerPage"
     :total-items="totalItems"
     :values="items"
@@ -672,6 +672,44 @@ const defaultCertificateId = ref(null)
 
 const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher && !platformConfigStore.isStudentViewActive)
 
+/**
+ * Local loading flag to show the table spinner immediately.
+ * This prevents the "empty table" impression while the store is still preparing the request.
+ */
+const tableLoading = ref(true)
+const hasRequestedList = ref(false)
+
+const tableIsLoading = computed(() => {
+  return tableLoading.value || isLoading.value
+})
+
+function triggerTableLoad() {
+  // Make sure spinner appears immediately on any list refresh.
+  hasRequestedList.value = true
+  tableLoading.value = true
+  onUpdateOptions(options.value)
+}
+
+// Keep local loading in sync with the store loading state.
+watch(isLoading, (val) => {
+  if (val) {
+    tableLoading.value = true
+    return
+  }
+  // If we already triggered at least one load and the store is not loading anymore, hide spinner.
+  if (hasRequestedList.value) {
+    tableLoading.value = false
+  }
+})
+
+// if store loading toggles late (or not at all), stop local loading when data changes.
+watch([items, totalItems], () => {
+  if (!hasRequestedList.value) return
+  if (!isLoading.value) {
+    tableLoading.value = false
+  }
+})
+
 function resolveDefaultRows(total = 0) {
   const raw = platformConfigStore.getSetting("display.table_default_row", 10)
   const def = Number(raw)
@@ -701,6 +739,7 @@ const selectedReplaceFile = ref(null)
 const documentToReplace = ref(null)
 
 onMounted(async () => {
+  tableLoading.value = true
   isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
   filters.value.loadNode = 1
   filters.value.filetype = ["file", "folder", "video"]
@@ -714,18 +753,19 @@ onMounted(async () => {
 
   await store.dispatch("resourcenode/findResourceNode", { id: `/api/resource_nodes/${nodeId}` })
 
-  await loadDefaultCertificate()
-  await loadAllFolders()
-  options.value.itemsPerPage = resolveDefaultRows(totalItems.value || 0)
-  onUpdateOptions(options.value)
+  options.value.itemsPerPage = resolveDefaultRows(0)
+  triggerTableLoad()
+  void loadDefaultCertificate()
+  void loadAllFolders()
 
-  try {
-    await courseSettingsStore.loadCourseSettings(cid, sid)
-  } catch (e) {
-    console.error("[AI] loadCourseSettings failed:", e)
-  }
+  void courseSettingsStore
+    .loadCourseSettings(cid, sid)
+    .catch((e) => console.error("[AI] loadCourseSettings failed:", e))
+    .finally(() => {
+      void loadAiCapabilities()
+    })
 
-  await loadAiCapabilities()
+  void loadAiCapabilities()
   consumeAiSavedToast()
 })
 
@@ -747,6 +787,7 @@ watch(totalItems, (n) => {
   const def = Number(platformConfigStore.getSetting("display.table_default_row", 10))
   if (def === 0 && n) {
     options.value.itemsPerPage = n
+    tableLoading.value = true
     onUpdateOptions(options.value)
   }
 })
@@ -760,7 +801,7 @@ watch(
     store.dispatch("resourcenode/findResourceNode", finderParams)
 
     if ("DocumentsList" === route.name) {
-      onUpdateOptions(options.value)
+      triggerTableLoad()
     }
   },
 )
@@ -826,9 +867,10 @@ function createNewFolder() {
         },
       ])
 
+      tableLoading.value = true
       store.dispatch("documents/createWithFormData", item.value).then(() => {
         notification.showSuccessNotification(t("Saved"))
-        onUpdateOptions(options.value)
+        triggerTableLoad()
       })
     }
     isNewFolderDialogVisible.value = false
@@ -868,13 +910,14 @@ async function forceDeleteItem() {
   try {
     const docIdsToDelete = [...new Set(lpListWarning.value.map((lp) => lp.documentId))]
 
+    tableLoading.value = true
     await Promise.all(docIdsToDelete.map((iid) => axios.delete(`/api/documents/${iid}`)))
 
     notification.showSuccessNotification(t("Documents deleted"))
     isDeleteWarningLpDialogVisible.value = false
     item.value = {}
     unselectAll()
-    onUpdateOptions(options.value)
+    triggerTableLoad()
   } catch (error) {
     console.error("[Documents] Error deleting documents forcibly:", error)
     notification.showErrorNotification(t("Error deleting document(s)."))
@@ -927,6 +970,7 @@ async function deleteMultipleItems() {
   const itemsWithoutLp = []
   const documentsWithLpMap = {}
 
+  tableLoading.value = true
   for (const item of selectedItems.value) {
     try {
       const response = await axios.get(`/api/documents/${item.iid}/lp-usage`)
@@ -974,7 +1018,7 @@ async function deleteMultipleItems() {
   }
 
   isDeleteMultipleDialogVisible.value = false
-  onUpdateOptions(options.value)
+  triggerTableLoad()
 }
 
 function unselectAll() {
@@ -982,9 +1026,11 @@ function unselectAll() {
 }
 
 function deleteSingleItem() {
+  tableLoading.value = true
   deleteItem(item)
   item.value = {}
   isDeleteItemDialogVisible.value = false
+  triggerTableLoad()
 }
 
 function onPage(event) {
@@ -995,14 +1041,14 @@ function onPage(event) {
     sortDesc: event.sortOrder === -1,
   }
 
-  onUpdateOptions(options.value)
+  triggerTableLoad()
 }
 
 function sortingChanged(event) {
   options.value.sortBy = event.sortField
   options.value.sortDesc = event.sortOrder === -1
 
-  onUpdateOptions(options.value)
+  triggerTableLoad()
 }
 
 function goToNewDocument() {
@@ -1094,7 +1140,7 @@ function showRecordAudioDialog() {
 function recordedAudioSaved() {
   notification.showSuccessNotification(t("Saved"))
   isRecordAudioDialogVisible.value = false
-  onUpdateOptions(options.value)
+  triggerTableLoad()
 }
 
 function recordedAudioNotSaved(error) {
@@ -1260,7 +1306,7 @@ async function moveDocument() {
 
     notification.showSuccessNotification(t("Document moved successfully"))
     isMoveDialogVisible.value = false
-    onUpdateOptions(options.value)
+    triggerTableLoad()
   } catch (error) {
     console.error("[Documents] Error moving document:", error.response || error)
     notification.showErrorNotification(t("Error moving the document"))
@@ -1302,7 +1348,7 @@ async function replaceDocument() {
     })
     notification.showSuccessNotification(t("File replaced"))
     isReplaceDialogVisible.value = false
-    onUpdateOptions(options.value)
+    triggerTableLoad()
   } catch (error) {
     notification.showErrorNotification(t("Error replacing file."))
     console.error(error)
@@ -1319,7 +1365,7 @@ async function selectAsDefaultCertificate(certificate) {
     const response = await axios.patch(`/gradebook/set_default_certificate/${cid}/${certificate.iid}`)
     if (response.status === 200) {
       loadDefaultCertificate()
-      onUpdateOptions(options.value)
+      triggerTableLoad()
       notification.showSuccessNotification(t("Certificate set as default successfully"))
     }
   } catch {
@@ -1368,7 +1414,7 @@ const isDocumentTemplate = async (documentId) => {
 const deleteDocumentTemplate = async (documentId) => {
   try {
     await axios.post(`/template/document-templates/${documentId}/delete`)
-    onUpdateOptions(options.value)
+    triggerTableLoad()
     notification.showSuccessNotification(t("Template successfully deleted."))
   } catch (error) {
     console.error("[Documents] Error deleting template:", error)
@@ -1386,7 +1432,7 @@ const openTemplateForm = async (documentId) => {
 
   if (isTemplate) {
     await deleteDocumentTemplate(documentId)
-    onUpdateOptions(options.value)
+    triggerTableLoad()
   } else {
     currentDocumentId.value = documentId
     showTemplateFormModal.value = true
@@ -1419,7 +1465,7 @@ const submitTemplateForm = async () => {
       templateFormData.value.title = ""
       selectedFile.value = null
       showTemplateFormModal.value = false
-      onUpdateOptions(options.value)
+      triggerTableLoad()
     } else {
       notification.showErrorNotification(t("Error creating the template."))
     }

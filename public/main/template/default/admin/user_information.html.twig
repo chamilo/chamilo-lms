@@ -5,16 +5,16 @@
         <div class="bg-white border border-gray-30 rounded-2xl shadow-sm overflow-hidden">
             <div class="p-4 sm:p-6 lg:p-8">
 
-                {# Main layout: allow wrap on xl to avoid any horizontal overflow #}
-                <div class="flex flex-col gap-6 xl:flex-row xl:flex-wrap xl:items-stretch">
+                {# Main layout: 30% left / 70% right from lg and up #}
+                <div class="flex flex-col gap-6 lg:flex-row lg:items-stretch lg:flex-nowrap">
 
-                    {# LEFT: Profile card (keep macro output, override legacy dl-horizontal spacing) #}
-                    <div class="w-full min-w-0 xl:flex-[0_0_160px] xl:max-w-[160px] 2xl:flex-[0_0_200px] 2xl:max-w-[200px]">
-                    {{ display.reporting_user_box_v2(user) }}
+                    {# LEFT: Personal info  #}
+                    <div class="w-full min-w-0 lg:basis-[30%] lg:max-w-[30%]">
+                        {{ display.reporting_user_box_v2(user) }}
                     </div>
 
-                    {# RIGHT: Reporting card (unchanged) #}
-                    <div class="w-full min-w-0 xl:flex-[1_1_520px]">
+                    {# RIGHT: Reporting #}
+                    <div class="w-full min-w-0 lg:basis-[70%] lg:max-w-[70%]">
                         <div class="rounded-2xl border border-gray-30 bg-white p-5 shadow-sm overflow-hidden max-w-full h-full">
 
                             <div class="flex items-center gap-2 min-w-0">

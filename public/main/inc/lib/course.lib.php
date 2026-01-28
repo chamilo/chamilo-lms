@@ -6218,7 +6218,7 @@ class CourseManager
                         $form_data['message'] = sprintf(get_lang('You have been registered to course %s'), $course_info['title']);
                         $form_data['button'] = Display::button(
                             'next',
-                            get_lang('Go to the course', null, $_user['language']),
+                            get_lang('Go to the course', $_user['language']),
                             ['class' => 'btn btn--primary btn-large']
                         );
 
@@ -6234,7 +6234,7 @@ class CourseManager
                             $form_data['message'] .= '<br />'.get_lang('Go to the test');
                             $form_data['button'] = Display::button(
                                 'next',
-                                get_lang('Go', null, $_user['language']),
+                                get_lang('Go', $_user['language']),
                                 ['class' => 'btn btn--primary btn-large']
                             );
                         }

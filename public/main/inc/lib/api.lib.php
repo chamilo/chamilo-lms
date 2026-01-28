@@ -1257,8 +1257,8 @@ function api_get_navigator()
 function api_get_user_id()
 {
     $userInfo = Session::read('_user');
-    if ($userInfo && isset($userInfo['user_id'])) {
-        return (int) $userInfo['user_id'];
+    if ($userInfo && isset($userInfo['id'])) {
+        return (int) $userInfo['id'];
     }
 
     return 0;

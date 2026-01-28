@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
@@ -24,95 +26,151 @@ final class Version20210930130343 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        /** @var CToolIntroRepository $introRepo */
         $introRepo = $this->container->get(CToolIntroRepository::class);
+        /** @var CToolRepository $cToolRepo */
         $cToolRepo = $this->container->get(CToolRepository::class);
+        /** @var ToolRepository $toolRepo */
         $toolRepo = $this->container->get(ToolRepository::class);
+        /** @var SessionRepository $sessionRepo */
         $sessionRepo = $this->container->get(SessionRepository::class);
+        /** @var CourseRepository $courseRepo */
         $courseRepo = $this->container->get(CourseRepository::class);
+
+        /** @var Tool|null $homepageToolEntity */
+        $homepageToolEntity = $toolRepo->findOneBy(['title' => 'course_homepage']);
+        if (null === $homepageToolEntity) {
+            @error_log('[Migration Version20210930130343] Tool "course_homepage" not found. Skipping migration.');
+            return;
+        }
 
         $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
-            $courseId = $course->getId();
-            $sql = "SELECT * FROM c_tool_intro WHERE c_id = {$courseId}
-                    ORDER BY iid";
+            $courseId = (int) $course->getId();
+            $sql = "SELECT * FROM c_tool_intro WHERE c_id = {$courseId} ORDER BY iid";
             $result = $this->connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
 
+            // If the course had no legacy intro rows, we still ensure the base homepage tool exists.
             if (empty($items)) {
                 $admin = $this->getAdmin();
-                $tool = $toolRepo->findOneBy(['title' => 'course_homepage']);
-                $cTool = (new CTool())
+                $existingBaseTool = $cToolRepo->findOneBy([
+                    'title' => 'course_homepage',
+                    'course' => $course,
+                    'session' => null,
+                ]);
+
+                if ($existingBaseTool) {
+                    // Nothing else to do for this course.
+                    continue;
+                }
+
+                $baseTool = (new CTool())
                     ->setTitle('course_homepage')
                     ->setCourse($course)
-                    ->setTool($tool)
+                    ->setSession(null)
+                    ->setTool($homepageToolEntity)
                     ->setCreator($admin)
                     ->setParent($course)
                     ->addCourseLink($course)
                 ;
-                $this->entityManager->persist($cTool);
+                $this->entityManager->persist($baseTool);
                 $this->entityManager->flush();
 
                 continue;
             }
 
             foreach ($items as $itemData) {
-                $id = $itemData['iid'];
-                $sessionId = (int) $itemData['session_id'];
-                $toolName = $itemData['id'];
+                $id = (int) ($itemData['iid'] ?? 0);
+                if ($id <= 0) {
+                    @error_log('[Migration Version20210930130343] Skipping legacy row with invalid iid. course_id='.$courseId);
+                    continue;
+                }
 
-                /** @var CToolIntro $intro */
+                $sessionId = (int) ($itemData['session_id'] ?? 0);
+                $toolName = (string) ($itemData['id'] ?? '');
+
+                /** @var CToolIntro|null $intro */
                 $intro = $introRepo->find($id);
+                if (null === $intro) {
+                    @error_log('[Migration Version20210930130343] CToolIntro entity not found for iid='.$id.' course_id='.$courseId);
+                    continue;
+                }
 
+                // Already migrated.
                 if ($intro->hasResourceNode()) {
                     continue;
                 }
 
+                /** @var Session|null $session */
                 $session = null;
-                if (!empty($sessionId)) {
+                if ($sessionId > 0) {
                     $session = $sessionRepo->find($sessionId);
-                    if ($session === null) {
+                    if (null === $session) {
+                        @error_log('[Migration Version20210930130343] Skipping intro iid='.$id.' because session_id='.$sessionId.' does not exist.');
                         continue;
                     }
                 }
 
                 $admin = $this->getAdmin();
 
-                $cTool = null;
-                if ('course_homepage' === $toolName) {
-                    $tool = $toolRepo->findOneBy(['title' => $toolName]);
-
-                    if (null === $tool) {
-                        continue;
-                    }
-
-                    $course = $courseRepo->find($courseId);
-
-                    $cTool = (new CTool())
-                        ->setTitle('course_homepage')
-                        ->setCourse($course)
-                        ->setSession($session)
-                        ->setTool($tool)
-                        ->setCreator($admin)
-                        ->setParent($course)
-                        ->addCourseLink($course, $session)
-                    ;
-                    $this->entityManager->persist($cTool);
-                } else {
-                    $cTool = $cToolRepo->findCourseResourceByTitle($toolName, $course->getResourceNode(), $course, $session);
-                }
-
-                if (null === $cTool) {
+                // Reload course from repository to ensure it is managed in this context.
+                $managedCourse = $courseRepo->find($courseId);
+                if (null === $managedCourse) {
+                    @error_log('[Migration Version20210930130343] Course not found for course_id='.$courseId.'. Skipping.');
                     continue;
                 }
 
+                /** @var CTool|null $cTool */
+                $cTool = null;
+
+                if ('course_homepage' === $toolName) {
+                    // avoid creating duplicate homepage tools.
+                    // Reuse the existing tool for the same (course + session) context if it exists.
+                    $cTool = $cToolRepo->findOneBy([
+                        'title' => 'course_homepage',
+                        'course' => $managedCourse,
+                        'session' => $session,
+                    ]);
+
+                    if (null === $cTool) {
+                        $cTool = (new CTool())
+                            ->setTitle('course_homepage')
+                            ->setCourse($managedCourse)
+                            ->setSession($session)
+                            ->setTool($homepageToolEntity)
+                            ->setCreator($admin)
+                            ->setParent($managedCourse)
+                            ->addCourseLink($managedCourse, $session)
+                        ;
+
+                        $this->entityManager->persist($cTool);
+                        $this->entityManager->flush();
+                    }
+                } else {
+                    $cTool = $cToolRepo->findCourseResourceByTitle(
+                        $toolName,
+                        $managedCourse->getResourceNode(),
+                        $managedCourse,
+                        $session
+                    );
+                }
+
+                if (null === $cTool) {
+                    @error_log('[Migration Version20210930130343] Could not resolve CTool for tool="'.$toolName.'" course_id='.$courseId.' session_id='.$sessionId);
+                    continue;
+                }
+
+                // Attach intro to the correct tool/context and add resource node/links.
                 $intro
-                    ->setParent($course)
+                    ->setParent($managedCourse)
                     ->setCourseTool($cTool)
                 ;
-                $introRepo->addResourceNode($intro, $admin, $course);
-                $intro->addCourseLink($course, $session);
+
+                $introRepo->addResourceNode($intro, $admin, $managedCourse);
+                $intro->addCourseLink($managedCourse, $session);
 
                 $this->entityManager->persist($intro);
                 $this->entityManager->flush();

@@ -257,7 +257,7 @@ $form->addPanelOption(
 
 // --- End of legacy block, from here panels start as usual ---
 
-$url = api_get_path(WEB_CODE_PATH)."auth/inscription.php?c=$course_code&e=1";
+$url = api_get_path(WEB_CODE_PATH)."auth/registration.php?c=$courseId&e=1";
 $url = Display::url($url, $url);
 $label = $form->addLabel(
     get_lang('Direct link'),

@@ -114,7 +114,7 @@ switch ($action) {
         }
         if (Security::check_token('get')) {
             $courseInfo = api_get_course_info($courseCodeToSubscribe);
-            CourseManager::autoSubscribeToCourse($courseCodeToSubscribe);
+            CourseManager::autoSubscribeToCourse($courseInfo['id']);
             if ('course_home' === $redirectAfterSubscription) {
                 $redirectionTarget = $courseInfo['course_public_url'];
                 if ('true' === api_get_setting('catalog.course_subscription_in_user_s_session')) {
@@ -161,7 +161,8 @@ switch ($action) {
 
         if ($form->validate()) {
             if (sha1($_POST['course_registration_code']) === $courseInfo['registration_code']) {
-                CourseManager::autoSubscribeToCourse($_POST['subscribe_user_with_password']);
+                $subscribeCourseInfo = api_get_course_info($_POST['subscribe_user_with_password']);
+                CourseManager::autoSubscribeToCourse($subscribeCourseInfo['id']);
 
                 if ('course_home' === $redirectAfterSubscription) {
                     $redirectionTarget = $courseInfo['course_public_url'];

@@ -436,21 +436,20 @@ if ('true' === api_get_setting('session.allow_redirect_to_session_after_inscript
 }
 
 // Direct Link Subscription feature #5299
-$course_code_redirect = isset($_REQUEST['c']) && !empty($_REQUEST['c']) ? $_REQUEST['c'] : null;
-$exercise_redirect = isset($_REQUEST['e']) && !empty($_REQUEST['e']) ? $_REQUEST['e'] : null;
+$courseIdRedirect = isset($_REQUEST['c']) && !empty($_REQUEST['c']) ? (int) $_REQUEST['c'] : null;
+$exercise_redirect = isset($_REQUEST['e']) && !empty($_REQUEST['e']) ? (int) $_REQUEST['e'] : null;
 
-if (!empty($course_code_redirect)) {
+if (!empty($courseIdRedirect)) {
     if (!api_is_anonymous()) {
-        $course_info = api_get_course_info($course_code_redirect);
-        $subscribed = CourseManager::autoSubscribeToCourse($course_code_redirect);
+        $subscribed = CourseManager::autoSubscribeToCourse($courseIdRedirect);
         if ($subscribed) {
-            header('Location: ' . api_get_path(WEB_PATH) . 'course/'.$course_info['real_id'].'/home?sid=0');
+            header('Location: ' . api_get_path(WEB_PATH) . 'course/'.$courseIdRedirect.'/home?sid=0');
         } else {
-            header('Location: ' . api_get_path(WEB_PATH) . 'course/'.$course_info['real_id'].'/about');
+            header('Location: ' . api_get_path(WEB_PATH) . 'course/'.$courseIdRedirect.'/about');
         }
         exit;
     }
-    Session::write('course_redirect', $course_code_redirect);
+    Session::write('course_redirect', $courseIdRedirect);
     Session::write('exercise_redirect', $exercise_redirect);
 }
 
@@ -1182,7 +1181,7 @@ if ($blockButton) {
     $showTerms = true;
 }
 
-$course_code_redirect = Session::read('course_redirect');
+$courseIdRedirect = Session::read('course_redirect');
 $sessionToRedirect = Session::read('session_redirect');
 
 if ($extraConditions && $extraFieldsLoaded) {
@@ -1360,8 +1359,8 @@ if ($form->validate()) {
         }
 
         // Saving user to course if it was set.
-        if (!empty($course_code_redirect)) {
-            $course_info = api_get_course_info($course_code_redirect);
+        if (!empty($courseIdRedirect)) {
+            $course_info = api_get_course_info_by_id($courseIdRedirect);
             if (!empty($course_info)) {
                 if (in_array(
                     $course_info['visibility'],
@@ -1373,13 +1372,13 @@ if ($form->validate()) {
                 ) {
                     CourseManager::subscribeUser(
                         $userId,
-                        $course_info['real_id']
+                        $courseIdRedirect
                     );
                 }
             }
         }
 
-        /* If the account has to be approved then we set the account to inactive,
+        /* If the account has to be approved, then we set the account to inactive,
         sent a mail to the platform admin and exit the page.*/
         if ('approval' === api_get_setting('allow_registration')) {
             // 1. Send mail to all platform admin
@@ -1618,8 +1617,8 @@ if ($form->validate()) {
     } else {
         if (!api_is_anonymous()) {
             // Saving user to course if it was set.
-            if (!empty($course_code_redirect)) {
-                $course_info = api_get_course_info($course_code_redirect);
+            if (!empty($courseIdRedirect)) {
+                $course_info = api_get_course_info_by_id($courseIdRedirect);
                 if (!empty($course_info)) {
                     if (in_array(
                         $course_info['visibility'],
@@ -1631,7 +1630,7 @@ if ($form->validate()) {
                     ) {
                         CourseManager::subscribeUser(
                             api_get_user_id(),
-                            $course_info['real_id']
+                            $courseIdRedirect
                         );
                     }
                 }

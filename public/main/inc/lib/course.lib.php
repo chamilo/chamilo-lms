@@ -557,18 +557,18 @@ class CourseManager
     }
 
     /**
-     * @param string $courseCode
-     * @param int    $status
+     * @param int $courseId
+     * @param int $status
      *
      * @return bool
      */
-    public static function autoSubscribeToCourse($courseCode, $status = STUDENT)
+    public static function autoSubscribeToCourse(int $courseId, int $status = STUDENT): bool
     {
         if (api_is_anonymous()) {
             return false;
         }
 
-        $course = Container::getCourseRepository()->findOneBy(['code' => $courseCode]);
+        $course = Container::getCourseRepository()->findOneBy(['id' => $courseId]);
 
         if (null === $course) {
             return false;
@@ -6201,12 +6201,12 @@ class CourseManager
      */
     public static function redirectToCourse($form_data)
     {
-        $course_code_redirect = Session::read('course_redirect');
+        $courseIdRedirect = Session::read('course_redirect');
         $_user = api_get_user_info();
-        $userId = api_get_user_id();
+        $userId = $_user['id'];
 
-        if (!empty($course_code_redirect)) {
-            $course_info = api_get_course_info($course_code_redirect);
+        if (!empty($courseIdRedirect)) {
+            $course_info = api_get_course_info_by_id($courseIdRedirect);
             if (!empty($course_info)) {
                 if (in_array(
                     $course_info['visibility'],

@@ -26,43 +26,10 @@ $nameTools = get_lang('Edit this group');
 $interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
 $interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $groupEntity->getTitle()];
 
-$htmlHeadXtra[] = '<style>
-/* Hide the native input to avoid double radio */
-.p-radiobutton {
-  position: relative !important;
-  display: inline-flex;
-  align-items: center;
-}
-
-.p-radiobutton > input[type="radio"],
-.p-radiobutton-input--legacy {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  opacity: 0 !important;
-  margin: 0 !important;
-  z-index: 2 !important;
-  cursor: pointer !important;
-  pointer-events: auto !important;
-}
-
-.p-radiobutton-box {
-  position: relative;
-  z-index: 1;
-}
-</style>';
-
 $groupMember = GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity);
 if (!$groupMember && !api_is_allowed_to_edit(false, true)) {
     api_not_allowed(true);
 }
-
-$twInput = 'mt-1 block w-full rounded-md border border-gray-25 bg-white px-3 py-2 text-sm text-gray-90 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30';
-$twTextarea = $twInput.' min-h-[96px]';
-$twSelect = $twInput;
-$twSmallInput = 'mt-1 block w-24 rounded-md border border-gray-25 bg-white px-3 py-2 text-sm text-gray-90 shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30';
 
 // Build form
 $form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidreq());
@@ -89,7 +56,6 @@ $form->addHtml('<div class="grid grid-cols-1 gap-6 md:grid-cols-2">');
 // Group name
 $form->addHtml('<div>');
 $form->addElement('text', 'name', get_lang('Group name'), [
-    'class' => $twInput,
     'autocomplete' => 'off',
 ]);
 $form->addHtml('</div>');
@@ -103,9 +69,7 @@ if ('true' === api_get_setting('allow_group_categories')) {
     }
 
     $form->addHtml('<div>');
-    $form->addSelect('category_id', get_lang('Category'), $categoryList, [
-        'class' => $twSelect,
-    ]);
+    $form->addSelect('category_id', get_lang('Category'), $categoryList);
     $form->addHtml('</div>');
 } else {
     $form->addHidden('category_id', 0);
@@ -114,9 +78,7 @@ if ('true' === api_get_setting('allow_group_categories')) {
 
 // Description (full width)
 $form->addHtml('<div class="md:col-span-2">');
-$form->addElement('textarea', 'description', get_lang('Description'), [
-    'class' => $twTextarea,
-]);
+$form->addElement('textarea', 'description', get_lang('Description'));
 $form->addHtml('</div>');
 
 $form->addHtml('</div>');
@@ -149,7 +111,6 @@ $limitGroup = [
         ['id' => 'max_member_selected']
     ),
     $form->createElement('text', 'max_member', null, [
-        'class' => $twSmallInput,
         'id' => 'max_member',
         'inputmode' => 'numeric',
         'autocomplete' => 'off',

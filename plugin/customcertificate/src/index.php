@@ -51,7 +51,7 @@ if ($enableCourse && $useDefault) {
     api_not_allowed(true, $plugin->get_lang('ToolUseDefaultSettingCourse'));
 }
 
-$allow = api_is_platform_admin() || api_is_teacher();
+$allow = api_is_platform_admin() || api_is_teacher() || api_is_allowed_to_session_edit();
 if (!$allow) {
     api_not_allowed(true);
 }

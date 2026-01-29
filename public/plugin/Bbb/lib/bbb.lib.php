@@ -1248,12 +1248,17 @@ class Bbb
                 $recordings = $this->api->getRecordingsWithXmlResponseArray(['meetingId' => $meeting->getRemoteId()]);
                 if (!empty($recordings) && (!isset($recordings['messageKey']) || $recordings['messageKey'] !== 'noRecordings')) {
                     $record = end($recordings);
-                    if (isset($record['playbackFormatUrl'])) {
-                        $recordLink = Display::url(
-                            $this->plugin->get_lang('ViewRecord'),
-                            $record['playbackFormatUrl'],
-                            ['target' => '_blank', 'class' => 'btn btn--plain']
-                        );
+                    if (isset($record['playbackFormat'])) {
+                        $recordLink = array();
+                        foreach ($record['playbackFormat'] as $format) {
+                            $this->insertMeetingFormat(intval($meeting->getId()), $format->type->__toString(), $format->url->__toString());
+                            $recordLink['record'][] = 1;
+                            $recordLink[] = Display::url(
+                                $this->plugin->get_lang($format->type->__toString()),
+                                $format->url->__toString(),
+                                ['target' => '_blank', 'class' => 'btn btn--plain']
+                            );
+                        }
                         $this->updateMeetingVideoUrl($meeting->getId(), $record['playbackFormatUrl']);
                     }
                 }
@@ -1285,6 +1290,39 @@ class Bbb
         }
 
         return $result;
+    }
+    
+    /**
+     * @param int $meetingId
+     * @param string $formatType
+     * @param string $resourceUrl
+     *
+     * @return bool|int
+     */
+    public function insertMeetingFormat(int $meetingId, string $formatType, string $resourceUrl)
+    {
+        $em = Database::getManager();
+        $sm = $em->getConnection()->getSchemaManager();
+        if ($sm->tablesExist('conference_recording')) {
+            $params = [
+                'format_type = ? and meeting_id = ? and resource_url = ?' => [$formatType, $meetingId, $resourceUrl],
+            ];
+            $result = Database::select(
+                'id',
+                'conference_recording',
+                ['where' => $params]
+            );
+            if (empty($result)) {
+                return Database::insert(
+                    'conference_recording',
+                    [
+                        'format_type' => $formatType,
+                        'resource_url' => $resourceUrl,
+                        'meeting_id' => $meetingId
+                    ]
+                );
+            }
+        }
     }
 
     private function convertMeetingToArray(ConferenceMeeting $meeting): array

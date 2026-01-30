@@ -98,7 +98,7 @@ function course_copy_page_close(): string
 }
 
 /**
- * action bar
+ * Action bar
  */
 function course_copy_actions_bar(): string
 {
@@ -115,7 +115,7 @@ function course_copy_actions_bar(): string
 }
 
 /**
- * helper to keep selects consistent.
+ * Helper to keep selects consistent.
  */
 function tw_select_base_classes(): string
 {
@@ -707,7 +707,27 @@ if (Security::check_token('post') && (
     $destination_session = $_POST['sessions_list_destination'] ?? '';
     $origin_session = $_POST['sessions_list_origin'] ?? '';
 
-    if ((is_array($arr_course_origin) && count($arr_course_origin) > 0) && !empty($destination_session)) {
+    $originCourseCode = is_array($arr_course_origin) ? ($arr_course_origin[0] ?? '') : '';
+    $destinationCourseCode = is_array($arr_course_destination) ? ($arr_course_destination[0] ?? '') : '';
+
+    $sameTarget = ($originCourseCode === $destinationCourseCode)
+        && ((int) $origin_session === (int) $destination_session);
+
+    // Validate required inputs for selective copy
+    if (empty($originCourseCode) || empty($origin_session) || empty($destination_session) || empty($destinationCourseCode)) {
+        course_copy_push_notice(Display::return_message(
+            get_lang('You must select a course from the original session and select a destination session'),
+            'error'
+        ));
+        course_copy_push_notice(Display::return_message(
+            get_lang('You must select a destination course'),
+            'error'
+        ));
+        display_form();
+    } elseif ($sameTarget) {
+        course_copy_push_notice(Display::return_message(get_lang('Please select a different destination'), 'warning'));
+        display_form();
+    } else {
         course_copy_push_notice(Display::return_message(
             get_lang('If you want to export a course containing a test, you have to make sure the corresponding tests are included in the export, so you have to select them in the list of tests.'),
             'info'
@@ -724,11 +744,11 @@ if (Security::check_token('post') && (
         // Wrap CourseSelectForm output for scoped styles
         echo '<div class="course-copy-selective">';
 
-        $course_origin = api_get_course_info($arr_course_origin[0]);
+        $course_origin = api_get_course_info($originCourseCode);
         $cb = new CourseBuilder('', $course_origin);
-        $course = $cb->build($origin_session, $arr_course_origin[0], $with_base_content);
-        $hiddenFields['destination_course'] = $arr_course_destination[0] ?? '';
-        $hiddenFields['origin_course'] = $arr_course_origin[0] ?? '';
+        $course = $cb->build($origin_session, $originCourseCode, $with_base_content);
+        $hiddenFields['destination_course'] = $destinationCourseCode;
+        $hiddenFields['origin_course'] = $originCourseCode;
         $hiddenFields['destination_session'] = $destination_session;
         $hiddenFields['origin_session'] = $origin_session;
         $hiddenFields['copy_only_session_items'] = !empty($_POST['copy_only_session_items']) ? '1' : '0';
@@ -739,16 +759,13 @@ if (Security::check_token('post') && (
         echo '</div>'; // .course-copy-selective
 
         echo '<div class="mt-4 text-right">
-                <a href="javascript:window.history.go(-1);" class="inline-flex items-center gap-2 rounded-md bg-gray-10 px-3 py-2 text-sm font-medium text-gray-90 shadow-sm hover:bg-gray-20 focus:outline-none focus:ring-2 focus:ring-gray-30">
-                    <i class="mdi mdi-arrow-left"></i>
-                    <span>'.get_lang('Back').' '.get_lang('To').' '.get_lang('Administration').'</span>
-                </a>
-              </div>';
+            <a href="javascript:window.history.go(-1);" class="inline-flex items-center gap-2 rounded-md bg-gray-10 px-3 py-2 text-sm font-medium text-gray-90 shadow-sm hover:bg-gray-20 focus:outline-none focus:ring-2 focus:ring-gray-30">
+                <i class="mdi mdi-arrow-left"></i>
+                <span>'.get_lang('Back').' '.get_lang('To').' '.get_lang('Administration').'</span>
+            </a>
+          </div>';
 
         echo course_copy_page_close();
-    } else {
-        course_copy_push_notice(Display::return_message(get_lang('You must select a course from the original session and select a destination session'), 'error'));
-        display_form();
     }
 } else {
     display_form();

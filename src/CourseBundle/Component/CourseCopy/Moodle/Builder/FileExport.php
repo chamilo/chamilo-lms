@@ -235,15 +235,27 @@ class FileExport
      */
     private function copyFileToExportDir(array $file, string $filesDir, ?string $precomputedSubdir = null): void
     {
+        $id = (int)($file['id'] ?? 0);
         $fp = (string)($file['filepath'] ?? '.');
         if ($fp === '.') {
-            @error_log('[FileExport::copyFileToExportDir] Skipping file with filepath dot. id='.(int)($file['id'] ?? 0));
+            @error_log('[FileExport::copyFileToExportDir] Skipping entry with filepath dot. id='.$id);
             return;
         }
 
-        $contenthash = (string) $file['contenthash'];
+        $contenthash = (string)($file['contenthash'] ?? '');
+        if ($contenthash === '') {
+            @error_log('[FileExport::copyFileToExportDir] WARN missing contenthash, skipping. id='.$id);
+            return;
+        }
+
+        // Moodle-style files storage: first two chars as bucket dir.
         $subDir = $precomputedSubdir ?: substr($contenthash, 0, 2);
-        $exportSubDir = $filesDir.'/'.$subDir;
+        if ($subDir === '' || $subDir === false) {
+            @error_log('[FileExport::copyFileToExportDir] WARN invalid subdir derived from contenthash, skipping. id='.$id.' contenthash='.$contenthash);
+            return;
+        }
+
+        $exportSubDir = rtrim($filesDir, '/').'/'.$subDir;
 
         if (!is_dir($exportSubDir)) {
             mkdir($exportSubDir, api_get_permissions_for_new_directories(), true);
@@ -252,24 +264,23 @@ class FileExport
 
         $destinationFile = $exportSubDir.'/'.$contenthash;
 
+        // Resolve source path (prefer precomputed absolute path).
         $filePath = $file['abs_path'] ?? null;
-        if (!$filePath) {
-            $filePath = $this->course->path.$file['documentpath'];
+        if (empty($filePath)) {
+            $documentPath = (string)($file['documentpath'] ?? '');
+            $filePath = rtrim((string)$this->course->path, '/').$documentPath;
         }
 
-        if (is_file($filePath)) {
-            if (!is_file($destinationFile)) {
-                if (@copy($filePath, $destinationFile)) {
-                    @error_log('[FileExport::copyFileToExportDir] OK copy id='.(int)($file['id'] ?? 0).' -> '.$destinationFile);
-                } else {
-                    @error_log('[FileExport::copyFileToExportDir] ERROR copy failed id='.(int)($file['id'] ?? 0).' src='.$filePath.' dst='.$destinationFile);
-                }
-            } else {
-                @error_log('[FileExport::copyFileToExportDir] Already exists dst='.$destinationFile);
+        // do not abort the entire export if source is missing or is a directory.
+        // This prevents full exports from failing due to stale/bad entries.
+        if (!is_file($filePath)) {
+            return;
+        }
+
+        if (!is_file($destinationFile)) {
+            if (@copy($filePath, $destinationFile)) {
+                @error_log('[FileExport::copyFileToExportDir] OK copy id='.$id.' -> '.$destinationFile);
             }
-        } else {
-            @error_log('[FileExport::copyFileToExportDir] ERROR source not found: '.$filePath.' (id='.(int)($file['id'] ?? 0).')');
-            throw new Exception("Source file not found: {$filePath}");
         }
     }
 

@@ -110,8 +110,12 @@
                         {% endif %}
                     </td>
                     <td class="px-4 py-2">
-                        {% if meeting.record == 1 %}
-                        {{ meeting.show_links }}
+                        {% if meeting.show_links.record  %}
+                            {% for link in meeting.show_links %}
+                                {% if link is not iterable  %}
+                                    {{ link }}
+                                {% endif %}
+                            {% endfor %}
                         {% else %}
                         <span class="text-gray-400">{{ 'NoRecording'|get_plugin_lang('BBBPlugin') }}</span>
                         {% endif %}

@@ -358,6 +358,9 @@ class BigBlueButtonBN
 
         if (isset($xml->recordings->recording)) {
             foreach ($xml->recordings->recording as $rec) {
+                foreach ($rec->playback->format as $format) {
+                    $formats[] = $format;
+                }
                 $out[] = [
                     'recordId'             => (string) $rec->recordID,
                     'meetingId'            => (string) $rec->meetingID,
@@ -365,6 +368,7 @@ class BigBlueButtonBN
                     'published'            => (string) $rec->published,
                     'startTime'            => (string) $rec->startTime,
                     'endTime'              => (string) $rec->endTime,
+                    'playbackFormat'       => $formats,
                     'playbackFormatType'   => (string) $rec->playback->format->type,
                     'playbackFormatUrl'    => (string) $rec->playback->format->url,
                     'playbackFormatLength' => (string) $rec->playback->format->length,

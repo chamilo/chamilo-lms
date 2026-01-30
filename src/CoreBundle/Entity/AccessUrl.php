@@ -26,7 +26,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     normalizationContext: [
         'groups' => ['access_url:read'],
-        'swagger_definition_name' => 'Read',
     ],
     denormalizationContext: [
         'groups' => ['access_url:write', 'course_category:write'],

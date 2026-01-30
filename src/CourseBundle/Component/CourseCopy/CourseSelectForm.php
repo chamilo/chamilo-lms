@@ -70,6 +70,23 @@ class CourseSelectForm
     }
 
     /**
+     * Compatibility helper for PHP < 8 (avoid fatal if str_ends_with() is not available).
+     */
+    private static function endsWith(string $haystack, string $needle): bool
+    {
+        if ($needle === '') {
+            return true;
+        }
+
+        $len = strlen($needle);
+        if ($len > strlen($haystack)) {
+            return false;
+        }
+
+        return substr($haystack, -$len) === $needle;
+    }
+
+    /**
      * Normalize a raw document path-ish string into a course-relative path.
      *
      * Examples:
@@ -92,7 +109,6 @@ class CourseSelectForm
         }
 
         // Remove any repeated "/document" prefixes
-        // e.g. "/document/document/localhost/CS001/..." => "/localhost/CS001/..."
         while (preg_match('#^/document(/|$)#', $s) === 1) {
             $s = substr($s, strlen('/document'));
             if ($s === '') {
@@ -121,7 +137,10 @@ class CourseSelectForm
                 || (false !== strpos($host, '.'))
                 || (preg_match('/^\d+\.\d+\.\d+\.\d+$/', $host) === 1);
 
-            if ((self::$docCourseCode !== '' && $course === self::$docCourseCode) || $looksLikeHost) {
+            if (self::$docCourseCode !== '' && $course === self::$docCourseCode) {
+                $rest = array_slice($parts, 2);
+                $s = '/'.implode('/', $rest);
+            } elseif ($looksLikeHost && self::$docCourseCode !== '' && $course === self::$docCourseCode) {
                 $rest = array_slice($parts, 2);
                 $s = '/'.implode('/', $rest);
             }
@@ -208,7 +227,7 @@ class CourseSelectForm
                 $label = '/'.$title;
             } else {
                 // Otherwise, append title if not already present
-                if (!str_ends_with($label, '/'.$title) && !str_ends_with($label, $title)) {
+                if (!self::endsWith($label, '/'.$title) && !self::endsWith($label, $title)) {
                     $label = rtrim($label, '/').'/'.$title;
                 }
             }
@@ -314,7 +333,6 @@ class CourseSelectForm
     public static function getResourceTitleList()
     {
         $list = [];
-        $list[RESOURCE_LEARNPATH_CATEGORY] = get_lang('Courses').' '.get_lang('Category');
         $list[RESOURCE_ASSET] = get_lang('Assets');
         $list[RESOURCE_GRADEBOOK] = get_lang('Assessments');
         $list[RESOURCE_EVENT] = get_lang('Events');
@@ -380,99 +398,163 @@ class CourseSelectForm
 
         ?>
         <script>
+            function normalizeKey(key) {
+                return String(key).trim().replace(/[^A-Za-z0-9_-]/g, '_');
+            }
+
             function exp(item) {
-                var el = document.getElementById('div_' + item);
+                var safe = normalizeKey(item);
+
+                var el = document.getElementById('div_' + safe);
+                var icon = document.getElementById('img_' + safe);
+
                 if (!el) {
                     return;
                 }
 
-                if (el.style.display === 'none') {
-                    el.style.display = '';
-                    $('#img_' + item).removeClass().addClass('fa fa-minus-square-o fa-lg');
-                } else {
-                    el.style.display = 'none';
-                    $('#img_' + item).removeClass().addClass('fa fa-plus-square-o fa-lg');
+                var isHidden = (el.style.display === 'none');
+                el.style.display = isHidden ? '' : 'none';
+
+                if (icon) {
+                    icon.className = isHidden ? 'fa fa-minus-square-o fa-lg' : 'fa fa-plus-square-o fa-lg';
                 }
             }
 
             function setCheckboxForum(type, value, item_id) {
-                var d = document.course_select_form;
-                for (var i = 0; i < d.elements.length; i++) {
-                    if (d.elements[i].type === "checkbox") {
-                        var name = d.elements[i].attributes.getNamedItem('name').nodeValue;
-                        if (name.indexOf(type) > 0 || type === 'all') {
-                            if ($(d.elements[i]).attr('rel') == item_id) {
-                                d.elements[i].checked = value;
-                            }
+                var d = document.forms['course_select_form'];
+                if (!d) {
+                    return;
+                }
+
+                var elems = d.elements;
+                for (var i = 0; i < elems.length; i++) {
+                    var el = elems[i];
+
+                    if (!el || el.type !== 'checkbox') {
+                        continue;
+                    }
+
+                    var name = el.getAttribute('name') || '';
+                    if (name.indexOf(type) > 0 || type === 'all') {
+                        var rel = el.getAttribute('rel');
+                        if (String(rel) === String(item_id)) {
+                            el.checked = !!value;
                         }
                     }
                 }
             }
 
             function setCheckbox(type, value) {
-                var d = document.course_select_form;
-                for (var i = 0; i < d.elements.length; i++) {
-                    if (d.elements[i].type === "checkbox") {
-                        var name = d.elements[i].attributes.getNamedItem('name').nodeValue;
-                        if (name.indexOf(type) > 0 || type === 'all') {
-                            d.elements[i].checked = value;
-                        }
+                var d = document.forms['course_select_form'];
+                if (!d) {
+                    return;
+                }
+
+                var elems = d.elements;
+                for (var i = 0; i < elems.length; i++) {
+                    var el = elems[i];
+
+                    if (!el || el.type !== 'checkbox') {
+                        continue;
+                    }
+
+                    var name = el.getAttribute('name') || '';
+                    if (name.indexOf(type) > 0 || type === 'all') {
+                        el.checked = !!value;
                     }
                 }
             }
 
             function checkLearnPath(message) {
-                var d = document.course_select_form;
-                for (var i = 0; i < d.elements.length; i++) {
-                    if (d.elements[i].type === "checkbox") {
-                        var name = d.elements[i].attributes.getNamedItem('name').nodeValue;
-                        if (name.indexOf('learnpath') > 0) {
-                            if (d.elements[i].checked) {
-                                setCheckbox('document', true);
-                                alert(message);
-                                break;
-                            }
-                        }
+                var d = document.forms['course_select_form'];
+                if (!d) {
+                    return;
+                }
+
+                var elems = d.elements;
+                for (var i = 0; i < elems.length; i++) {
+                    var el = elems[i];
+
+                    if (!el || el.type !== 'checkbox') {
+                        continue;
+                    }
+
+                    var name = el.getAttribute('name') || '';
+                    if (name.indexOf('learnpath') > 0 && el.checked) {
+                        setCheckbox('document', true);
+                        alert(message);
+                        break;
                     }
                 }
             }
 
             function check_forum(obj) {
-                var id = $(obj).attr('rel');
-                var my_id = $(obj).attr('my_rel');
-                var checked = $('#resource_forum_' + my_id).prop('checked') === true;
+                if (!obj) {
+                    return;
+                }
+
+                var id = obj.getAttribute('rel');
+                var my_id = obj.getAttribute('my_rel');
+
+                var forumCheckbox = document.getElementById('resource_forum_' + my_id);
+                var checked = forumCheckbox ? forumCheckbox.checked === true : false;
 
                 setCheckboxForum('thread', checked, my_id);
-                $('#resource_Forum_Category_' + id).prop('checked', true);
+
+                var catCheckbox = document.getElementById('resource_Forum_Category_' + id);
+                if (catCheckbox) {
+                    catCheckbox.checked = true;
+                }
             }
 
             function check_category(obj) {
-                var my_id = $(obj).attr('my_rel');
-                var checked = $('#resource_Forum_Category_' + my_id).prop('checked') === true;
+                if (!obj) {
+                    return;
+                }
 
-                $('.resource_forum').each(function(index, value) {
-                    if ($(value).attr('rel') == my_id) {
-                        $(value).prop('checked', checked);
-                    }
-                });
+                var my_id = obj.getAttribute('my_rel');
+                var catCheckbox = document.getElementById('resource_Forum_Category_' + my_id);
+                var checked = catCheckbox ? catCheckbox.checked === true : false;
 
-                $('.resource_topic').each(function(index, value) {
-                    if ($(value).attr('cat_id') == my_id) {
-                        $(value).prop('checked', checked);
+                // Forums under this category
+                var forums = document.querySelectorAll('.resource_forum');
+                for (var i = 0; i < forums.length; i++) {
+                    var f = forums[i];
+                    if (String(f.getAttribute('rel')) === String(my_id)) {
+                        f.checked = checked;
                     }
-                });
+                }
+
+                // Topics under this category
+                var topics = document.querySelectorAll('.resource_topic');
+                for (var j = 0; j < topics.length; j++) {
+                    var t = topics[j];
+                    if (String(t.getAttribute('cat_id')) === String(my_id)) {
+                        t.checked = checked;
+                    }
+                }
             }
 
             function check_topic(obj) {
-                var my_id = $(obj).attr('cat_id');
-                var forum_id = $(obj).attr('forum_id');
-                $('#resource_Forum_Category_' + my_id).prop('checked', true);
-                $('#resource_forum_' + forum_id).prop('checked', true);
+                if (!obj) {
+                    return;
+                }
+
+                var my_id = obj.getAttribute('cat_id');
+                var forum_id = obj.getAttribute('forum_id');
+
+                var catCheckbox = document.getElementById('resource_Forum_Category_' + my_id);
+                if (catCheckbox) {
+                    catCheckbox.checked = true;
+                }
+
+                var forumCheckbox = document.getElementById('resource_forum_' + forum_id);
+                if (forumCheckbox) {
+                    forumCheckbox.checked = true;
+                }
             }
         </script>
         <?php
-
-        echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
 
         echo '<div class="space-y-4">';
 
@@ -514,8 +596,8 @@ class CourseSelectForm
 
         $resource_titles = self::getResourceTitleList();
 
-        // Main list
-        $element_count = self::parseResources($resource_titles, $course->resources, true, true);
+        $resourcesArray = (isset($course->resources) && is_array($course->resources)) ? $course->resources : [];
+        $element_count = self::parseResources($resource_titles, $resourcesArray, true, true);
 
         self::trace('UI: parseResources() completed.', [
             'elementCount' => (int) $element_count,
@@ -529,15 +611,17 @@ class CourseSelectForm
         if (!empty($forum_categories)) {
             $type = RESOURCE_FORUMCATEGORY;
 
+            $typeDom = preg_replace('/[^A-Za-z0-9_-]/', '_', (string) $type);
+
             echo '<div class="'.self::twCard('p-0').'">';
             echo '  <div class="'.self::twSectionHeader().'" onclick="javascript:exp('."'$type'".');">';
             echo '    <div class="flex items-center gap-2">';
-            echo '      <em id="img_'.$type.'" class="fa fa-minus-square-o fa-lg"></em>';
+            echo '      <em id="img_'.$typeDom.'" class="fa fa-minus-square-o fa-lg"></em>';
             echo '      <span class="text-sm font-semibold text-gray-90">'.$resource_titles[RESOURCE_FORUM].'</span>';
             echo '    </div>';
             echo '  </div>';
 
-            echo '  <div class="p-4" id="div_'.$type.'">';
+            echo '  <div class="p-4" id="div_'.$typeDom.'">';
             echo '    <ul class="space-y-2">';
 
             foreach ($forum_categories as $forum_category_id => $forum_category) {
@@ -550,7 +634,12 @@ class CourseSelectForm
                                 onclick="javascript:check_category(this);"
                                 name="resource['.RESOURCE_FORUMCATEGORY.']['.$forum_category_id.']" /> ';
                 echo '    <span class="text-sm text-gray-90">';
-                $forum_category->show();
+                if (is_object($forum_category) && method_exists($forum_category, 'show')) {
+                    $forum_category->show();
+                } else {
+                    $title = (string) ($forum_category->cat_title ?? $forum_category->title ?? $forum_category->name ?? '');
+                    echo api_htmlentities($title !== '' ? $title : get_lang('Untitled'), ENT_QUOTES);
+                }
                 echo '    </span>';
                 echo '  </label>';
 
@@ -569,7 +658,12 @@ class CourseSelectForm
                                         rel="'.$forum_category_id.'"
                                         name="resource['.RESOURCE_FORUM.']['.$forum_id.']" />';
                         echo '    <span class="text-sm text-gray-90">';
-                        $forum->show();
+                        if (is_object($forum) && method_exists($forum, 'show')) {
+                            $forum->show();
+                        } else {
+                            $title = (string) ($forum->cat_title ?? $forum->title ?? $forum->name ?? '');
+                            echo api_htmlentities($title !== '' ? $title : get_lang('Untitled'), ENT_QUOTES);
+                        }
                         echo '    </span>';
                         echo '  </label>';
 
@@ -590,7 +684,12 @@ class CourseSelectForm
                                                 cat_id="'.$forum_category_id.'"
                                                 name="resource['.RESOURCE_FORUMTOPIC.']['.$topic_id.']" />';
                                     echo '  <span class="text-sm text-gray-90">';
-                                    $topic->show();
+                                    if (is_object($topic) && method_exists($topic, 'show')) {
+                                        $topic->show();
+                                    } else {
+                                        $tTitle = (string) ($topic->title ?? $topic->name ?? '');
+                                        echo api_htmlentities($tTitle !== '' ? $tTitle : get_lang('Untitled'), ENT_QUOTES);
+                                    }
                                     echo '  </span>';
                                     echo '</label>';
                                     echo '</li>';
@@ -627,7 +726,7 @@ class CourseSelectForm
         }
 
         if (false === $avoidCourseInForm) {
-            /** @var Course $course */
+            // Course class is expected to exist in this namespace in legacy CourseCopy.
             $courseSerialized = base64_encode(Course::serialize($course));
             echo '<input type="hidden" name="course" value="'.$courseSerialized.'"/>';
         }
@@ -699,6 +798,10 @@ class CourseSelectForm
             return 0;
         }
 
+        $domKey = static function ($raw): string {
+            return preg_replace('/[^A-Za-z0-9_-]/', '_', (string) $raw);
+        };
+
         foreach ($resourceList as $type => $resources) {
             if (empty($resources) || !is_array($resources) || count($resources) === 0) {
                 continue;
@@ -714,14 +817,31 @@ class CourseSelectForm
 
                 case RESOURCE_FORUM:
                     foreach ($resources as $id => $resource) {
-                        $forums[$resource->obj->forum_category][$id] = $resource;
+                        // Guard against missing obj/category (avoid notices)
+                        $catId = null;
+                        if (is_object($resource) && isset($resource->obj) && is_object($resource->obj) && isset($resource->obj->forum_category)) {
+                            $catId = $resource->obj->forum_category;
+                        }
+                        if ($catId === null) {
+                            self::trace('parseResources(): forum missing forum_category, skipping.', ['forumId' => $id]);
+                            continue;
+                        }
+                        $forums[$catId][$id] = $resource;
                     }
                     $element_count++;
                     break;
 
                 case RESOURCE_FORUMTOPIC:
                     foreach ($resources as $id => $resource) {
-                        $forum_topics[$resource->obj->forum_id][$id] = $resource;
+                        $forumId = null;
+                        if (is_object($resource) && isset($resource->obj) && is_object($resource->obj) && isset($resource->obj->forum_id)) {
+                            $forumId = $resource->obj->forum_id;
+                        }
+                        if ($forumId === null) {
+                            self::trace('parseResources(): topic missing forum_id, skipping.', ['topicId' => $id]);
+                            continue;
+                        }
+                        $forum_topics[$forumId][$id] = $resource;
                     }
                     $element_count++;
                     break;
@@ -736,34 +856,35 @@ class CourseSelectForm
                     break;
 
                 default:
+                    $typeDom = $domKey($type);
                     if ($showHeader) {
                         $title = isset($resource_titles[$type]) ? $resource_titles[$type] : (string) $type;
 
                         echo '<div class="'.self::twCard('p-0').'">';
                         echo '  <div class="'.self::twSectionHeader().'" onclick="javascript:exp('."'$type'".');">';
                         echo '    <div class="flex items-center gap-2">';
-                        echo '      <em id="img_'.$type.'" class="fa fa-plus-square-o fa-lg"></em>';
+                        echo '      <em id="img_'.$typeDom.'" class="fa fa-plus-square-o fa-lg"></em>';
                         echo '      <span class="text-sm font-semibold text-gray-90">'.$title.'</span>';
                         echo '    </div>';
                         echo '  </div>';
-                        echo '  <div class="p-4" id="div_'.$type.'" style="display:none;">';
+                        echo '  <div class="p-4" id="div_'.$typeDom.'" style="display:none;">';
                     }
 
                     // Contextual warnings (kept)
                     if (RESOURCE_LEARNPATH == $type) {
                         echo '<div class="mb-3">'.Display::return_message(
-                                get_lang('ToExportCoursesWithQuizYouHaveToSelectQuiz'),
+                                get_lang('To export courses with quiz you have to select quiz'),
                                 'warning'
                             ).'</div>';
                         echo '<div class="mb-3">'.Display::return_message(
-                                get_lang('IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments'),
+                                get_lang('If your LPs have audio files included you should select them from the documents'),
                                 'warning'
                             ).'</div>';
                     }
 
                     if (RESOURCE_QUIZ == $type) {
                         echo '<div class="mb-3">'.Display::return_message(
-                                get_lang('IfYourQuizHaveHotspotQuestionsIncludedYouShouldSelectTheImagesFromTheDocuments'),
+                                get_lang('If your quiz have hotspot questions included you should select the images from the documents'),
                                 'warning'
                             ).'</div>';
                     }
@@ -796,21 +917,46 @@ class CourseSelectForm
                             }
 
                             $inputKeyStr = (string) $inputKey;
+                            $inputKeyDom = $domKey($inputKeyStr);
 
                             echo '<li>';
                             echo '  <label class="flex items-start gap-2">';
                             echo '    <input
-                                        type="checkbox"
-                                        class="'.self::twCheckbox().'"
-                                        name="resource['.$type.']['.$inputKeyStr.']"
-                                        id="resource_'.$type.'_'.$inputKeyStr.'" />';
+                                    type="checkbox"
+                                    class="'.self::twCheckbox().'"
+                                    name="resource['.$type.']['.$inputKeyStr.']"
+                                    id="resource_'.$typeDom.'_'.$inputKeyDom.'" />';
 
                             echo '    <span class="text-sm text-gray-90">';
 
                             if ($type === RESOURCE_DOCUMENT && $resource instanceof Document) {
                                 echo htmlspecialchars(self::normalizeDocumentLabel($resource), ENT_QUOTES, api_get_system_encoding());
                             } else {
-                                $resource->show();
+                                if (is_object($resource) && method_exists($resource, 'show')) {
+                                    $resource->show();
+                                } else {
+                                    $label = '';
+                                    if (is_object($resource)) {
+                                        foreach (['title', 'name', 'path', 'tool', 'id'] as $prop) {
+                                            if (isset($resource->$prop) && $resource->$prop !== '') {
+                                                $label = (string) $resource->$prop;
+                                                break;
+                                            }
+                                        }
+                                        if ($label === '' && method_exists($resource, '__toString')) {
+                                            $label = (string) $resource;
+                                        }
+                                        if ($label === '') {
+                                            $label = '['.get_class($resource).']';
+                                        }
+                                    } elseif (is_array($resource)) {
+                                        $label = (string) ($resource['title'] ?? $resource['name'] ?? $resource['path'] ?? '[resource]');
+                                    } else {
+                                        $label = (string) $resource;
+                                    }
+
+                                    echo htmlspecialchars($label, ENT_QUOTES, api_get_system_encoding());
+                                }
                             }
 
                             echo '    </span>';
@@ -824,7 +970,7 @@ class CourseSelectForm
                         echo '  </div>'; // div_type
                         echo '</div>'; // card
 
-                        // Default collapsed; keep the behavior consistent with exp()
+                        // Keep legacy behavior: auto-toggle using exp() with raw type key.
                         echo '<script type="text/javascript">exp('."'$type'".')</script>';
                     }
 
@@ -888,6 +1034,7 @@ class CourseSelectForm
 
     /**
      * Get the posted course (selected resources only).
+     *
      * @param string $from
      * @param int    $session_id
      * @param string $course_code
@@ -953,8 +1100,21 @@ class CourseSelectForm
             'typesToExport' => $typesToExport,
         ]);
 
+        $withBaseContent = false;
+        if (array_key_exists('copy_only_session_items', $_POST)) {
+            $copyOnlySessionItemsRaw = $_POST['copy_only_session_items'] ?? '';
+            $copyOnlySessionItems = in_array((string) $copyOnlySessionItemsRaw, ['1', 'on', 'true'], true);
+            // If copy_only_session_items is enabled => do NOT include base content
+            $withBaseContent = !$copyOnlySessionItems;
+
+            self::trace('get_posted_course(): base content flag resolved.', [
+                'copy_only_session_items' => (string) $copyOnlySessionItemsRaw,
+                'withBaseContent' => (bool) $withBaseContent,
+            ]);
+        }
+
         $cb = new CourseBuilder('partial', $course_info);
-        $course = $cb->build((int) $session_id, $course_code, false, $typesToExport, $postResource);
+        $course = $cb->build((int) $session_id, $course_code, $withBaseContent, $typesToExport, $postResource);
 
         if (empty($course) || !isset($course->resources) || !is_array($course->resources)) {
             self::trace('get_posted_course(): builder returned empty course/resources.');
@@ -992,26 +1152,39 @@ class CourseSelectForm
     ) {
         ?>
         <script>
+            function normalizeKey(key) {
+                return String(key).trim().replace(/[^A-Za-z0-9_-]/g, '_');
+            }
+
             function exp(item) {
-                var el = document.getElementById('div_' + item);
+                var safe = normalizeKey(item);
+
+                var el = document.getElementById('div_' + safe);
                 if (!el) {
                     return;
                 }
+
                 if (el.style.display === 'none') {
                     el.style.display = '';
-                    if (document.getElementById('img_' + item)) {
-                        document.getElementById('img_' + item).className = 'fa fa-minus-square-o fa-lg';
+                    var img = document.getElementById('img_' + safe);
+                    if (img) {
+                        img.className = 'fa fa-minus-square-o fa-lg';
                     }
                 } else {
                     el.style.display = 'none';
-                    if (document.getElementById('img_' + item)) {
-                        document.getElementById('img_' + item).className = 'fa fa-plus-square-o fa-lg';
+                    var img2 = document.getElementById('img_' + safe);
+                    if (img2) {
+                        img2.className = 'fa fa-plus-square-o fa-lg';
                     }
                 }
             }
 
             function setCheckbox(type, value) {
                 var d = document.course_select_form;
+                if (!d) {
+                    return;
+                }
+
                 for (var i = 0; i < d.elements.length; i++) {
                     if (d.elements[i].type === "checkbox") {
                         var name = d.elements[i].attributes.getNamedItem('name').nodeValue;
@@ -1024,6 +1197,10 @@ class CourseSelectForm
 
             function checkLearnPath(message) {
                 var d = document.course_select_form;
+                if (!d) {
+                    return;
+                }
+
                 for (var i = 0; i < d.elements.length; i++) {
                     if (d.elements[i].type === "checkbox") {
                         var name = d.elements[i].attributes.getNamedItem('name').nodeValue;
@@ -1053,61 +1230,84 @@ class CourseSelectForm
             echo '</div>';
         }
 
-        echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
-
         echo '<div class="tool-backups-options">';
         echo '<form method="post" id="upload_form" name="course_select_form">';
         echo '<input type="hidden" name="action" value="course_select_form"/>';
 
-        foreach ($list_course as $course) {
-            foreach ($course->resources as $type => $resources) {
-                if (!is_array($resources) || count($resources) === 0) {
+        $lastCourse = null;
+
+        if (is_array($list_course)) {
+            foreach ($list_course as $course) {
+                $lastCourse = $course;
+
+                if (!isset($course->resources) || !is_array($course->resources)) {
                     continue;
                 }
 
-                echo '<div class="'.self::twCard('p-0').'">';
-                echo '<div class="'.self::twSectionHeader().'" onclick="javascript:exp('."'$course->code'".');">';
-                echo '<em id="img_'.$course->code.'" class="fa fa-minus-square-o fa-lg"></em>';
-                echo '<span class="text-sm font-semibold text-gray-90"> '.$course->code.'</span>';
-                echo '</div>';
+                foreach ($course->resources as $type => $resources) {
+                    if (!is_array($resources) || count($resources) === 0) {
+                        continue;
+                    }
 
-                echo '<div class="p-4" id="div_'.$course->code.'">';
-                echo '<div class="mb-3 flex items-center justify-end gap-2">';
-                echo '<button type="button" class="'.self::twBtnNeutral().'" onclick="javascript:setCheckbox(\''.$course->code.'\',true);">'.get_lang('All').'</button>';
-                echo '<button type="button" class="'.self::twBtnNeutral().'" onclick="javascript:setCheckbox(\''.$course->code.'\',false);">'.get_lang('none').'</button>';
-                echo '</div>';
+                    $code = (string) ($course->code ?? '');
+                    if ($code === '') {
+                        $code = 'course';
+                    }
 
-                echo '<div class="space-y-2">';
-                foreach ($resources as $id => $resource) {
-                    echo '<label class="flex items-start gap-2" for="resource_'.$course->code.'_'.$id.'">';
-                    echo '<input class="'.self::twCheckbox().'" type="checkbox" name="resource['.$course->code.']['.$id.']" id="resource_'.$course->code.'_'.$id.'"/>';
-                    echo '<span class="text-sm text-gray-90">';
-                    $resource->show();
-                    echo '</span>';
-                    echo '</label>';
+                    echo '<div class="'.self::twCard('p-0').'">';
+                    echo '<div class="'.self::twSectionHeader().'" onclick="javascript:exp('."'$code'".');">';
+                    echo '<em id="img_'.$code.'" class="fa fa-minus-square-o fa-lg"></em>';
+                    echo '<span class="text-sm font-semibold text-gray-90"> '.$code.'</span>';
+                    echo '</div>';
+
+                    echo '<div class="p-4" id="div_'.$code.'">';
+                    echo '<div class="mb-3 flex items-center justify-end gap-2">';
+                    echo '<button type="button" class="'.self::twBtnNeutral().'" onclick="javascript:setCheckbox(\''.$code.'\',true);">'.get_lang('All').'</button>';
+                    echo '<button type="button" class="'.self::twBtnNeutral().'" onclick="javascript:setCheckbox(\''.$code.'\',false);">'.get_lang('none').'</button>';
+                    echo '</div>';
+
+                    echo '<div class="space-y-2">';
+                    foreach ($resources as $id => $resource) {
+                        if (!$resource) {
+                            continue;
+                        }
+                        echo '<label class="flex items-start gap-2" for="resource_'.$code.'_'.$id.'">';
+                        echo '<input class="'.self::twCheckbox().'" type="checkbox" name="resource['.$code.']['.$id.']" id="resource_'.$code.'_'.$id.'"/>';
+                        echo '<span class="text-sm text-gray-90">';
+                        if (is_object($resource) && method_exists($resource, 'show')) {
+                            $resource->show();
+                        } else {
+                            echo htmlspecialchars((string) $id, ENT_QUOTES, api_get_system_encoding());
+                        }
+                        echo '</span>';
+                        echo '</label>';
+                    }
+                    echo '</div>';
+
+                    echo '</div>';
+                    echo '</div>';
+
+                    echo '<script type="text/javascript">exp('."'$code'".')</script>';
                 }
-                echo '</div>';
-
-                echo '</div>';
-                echo '</div>';
-
-                echo '<script type="text/javascript">exp('."'$course->code'".')</script>';
             }
         }
 
         if ($avoidSerialize) {
-            if (isset($course->resources) && is_array($course->resources)) {
-                $course->resources[RESOURCE_DOCUMENT] = null;
+            if ($lastCourse && isset($lastCourse->resources) && is_array($lastCourse->resources)) {
+                $lastCourse->resources[RESOURCE_DOCUMENT] = null;
                 self::trace('UI: session export form nulled documents bucket before serializing (legacy behavior).');
             }
         }
 
-        echo '<input type="hidden" name="course" value="'.base64_encode(Course::serialize($course)).'"/>';
+        if ($lastCourse) {
+            echo '<input type="hidden" name="course" value="'.base64_encode(Course::serialize($lastCourse)).'"/>';
+        } else {
+            echo '<div class="mt-4">'.Display::return_message(get_lang('No data available'), 'warning').'</div>';
+        }
 
         if (is_array($hidden_fields)) {
             foreach ($hidden_fields as $key => $value) {
-                echo "\n";
-                echo '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
+                echo '<input type="hidden" name="'.htmlspecialchars((string) $key, ENT_QUOTES, api_get_system_encoding()).'" value="'.htmlspecialchars((string) $value, ENT_QUOTES, api_get_system_encoding()).'"/>';
             }
         }
 
@@ -1122,8 +1322,10 @@ class CourseSelectForm
             .'</button>';
         echo '</div>';
 
-        self::display_hidden_quiz_questions($course);
-        self::display_hidden_scorm_directories($course);
+        if ($lastCourse) {
+            self::display_hidden_quiz_questions($lastCourse);
+            self::display_hidden_scorm_directories($lastCourse);
+        }
 
         echo '</form>';
         echo '</div>';

@@ -1809,25 +1809,18 @@ function isUpdateAvailable(): bool
     try {
         $dotenv->loadEnv($envFile);
     } catch (\Throwable $e) {
-        // If .env cannot be parsed, play safe: no update banner
+        // Unable to load .env reliably -> do not assume update
+        error_log('Installer: Unable to load .env, update check disabled. Reason: ' . $e->getMessage());
         return false;
     }
 
     // Must be an installed platform
     if (($_ENV['APP_INSTALLED'] ?? '') !== '1') {
+        // Not marked as installed -> no update flow
         return false;
     }
 
-    // Compare DB version vs installer version
-    $versionInfo = require __DIR__.'/version.php';
-    $installerVersion = $versionInfo['new_version'] ?? null;
-
-    if (!$installerVersion) {
-        // If we cannot know installer version, do not show update banner
-        return false;
-    }
-
-    $dbVersion = null;
+    // DB connectivity and "looks installed" checks
     try {
         connectToDatabase(
             $_ENV['DATABASE_HOST'] ?? 'localhost',
@@ -1836,15 +1829,50 @@ function isUpdateAvailable(): bool
             $_ENV['DATABASE_NAME'] ?? '',
             (int) ($_ENV['DATABASE_PORT'] ?? 3306)
         );
-        $dbVersion = get_config_param_from_db('chamilo_database_version');
+
+        $conn = Database::getManager()->getConnection();
+        $schema = $conn->createSchemaManager();
+        $tables = $schema->listTableNames();
+
+        if (count($tables) === 0) {
+            // Empty database -> treat as not installed -> no update suggestion
+            return false;
+        }
+
+        // Must have at least one of the settings tables to consider it a Chamilo DB
+        $hasSettings = $schema->tablesExist(['settings']) || $schema->tablesExist(['settings_current']);
+        if (!$hasSettings) {
+            // Not a Chamilo database schema -> no update suggestion
+            return false;
+        }
     } catch (\Throwable $e) {
-        // If DB is unreachable but platform is marked installed, allow upgrade path
-        // so the UI can guide the admin.
-        return true;
+        // If DB does not exist or credentials are wrong, do NOT suggest update.
+        error_log('Installer: Database is not reachable, update is NOT available. Reason: ' . $e->getMessage());
+        return false;
     }
 
-    if (empty($dbVersion)) {
-        // No version recorded -> offer upgrade path to normalize state
+    // Compare versions (DB version vs installer version)
+    $versionInfo = require __DIR__ . '/version.php';
+    $installerVersion = $versionInfo['new_version'] ?? null;
+    if (!$installerVersion) {
+        // Cannot determine installer version -> do not assume update
+        error_log('Installer: Missing installer version info, update check disabled.');
+        return false;
+    }
+
+    $dbVersion = null;
+    try {
+        $dbVersion = get_config_param_from_db('chamilo_database_version');
+    } catch (\Throwable $e) {
+        // If we cannot read version, avoid false positives
+        error_log('Installer: Unable to read DB version, update check disabled. Reason: ' . $e->getMessage());
+        return false;
+    }
+
+    // If the DB looks like Chamilo (settings table exists) but version is missing,
+    // it is likely an old install (e.g., 1.11.x) -> update should be offered.
+    $dbVersion = is_string($dbVersion) ? trim($dbVersion) : '';
+    if ($dbVersion === '') {
         return true;
     }
 

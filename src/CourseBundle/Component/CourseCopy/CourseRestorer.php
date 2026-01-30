@@ -13,7 +13,6 @@ use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\GradeModel;
 use Chamilo\CoreBundle\Entity\ResourceLink;
-use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\Tool;
@@ -21,12 +20,9 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Tool\User;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\LearnPathCategory;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
-use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
-use Chamilo\CourseBundle\Entity\CAttendanceCalendarRelGroup;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CCalendarEventAttachment;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
@@ -58,17 +54,17 @@ use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiConf;
-use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
-use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
+use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
+use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 use CourseManager;
 use Database;
 use DateTime;
+use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use DocumentManager;
 use FilesystemIterator;
@@ -80,11 +76,8 @@ use stdClass;
 use SurveyManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
 use Throwable;
 
-use const ENT_QUOTES;
 use const FILEINFO_MIME_TYPE;
 use const JSON_PARTIAL_OUTPUT_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
@@ -105,7 +98,7 @@ class CourseRestorer
     /**
      * Debug flag (default: true). Toggle with setDebug().
      */
-    private bool $debug = true;
+    private bool $debug = false;
 
     /**
      * The course-object.
@@ -246,9 +239,10 @@ class CourseRestorer
         $update_course_settings = false,
         $respect_base_content = false
     ) {
+        $session_id = (int) $session_id;
         $this->dlog('Restore() called', [
             'destination_code' => $destination_course_code,
-            'session_id' => (int) $session_id,
+            'session_id' => $session_id,
             'update_course_settings' => (bool) $update_course_settings,
             'respect_base_content' => (bool) $respect_base_content,
         ]);
@@ -274,14 +268,12 @@ class CourseRestorer
         if (!empty($teacher_list)) {
             foreach ($teacher_list as $t) {
                 $this->first_teacher_id = (int) $t['user_id'];
-
                 break;
             }
         }
 
         if (empty($this->course)) {
             $this->dlog('No source course found');
-
             return false;
         }
 
@@ -300,31 +292,48 @@ class CourseRestorer
         $this->course->to_system_encoding();
         $this->dlog('Encoding resolved', ['encoding' => $this->course->encoding ?? '']);
 
-        // Normalize forum bags
+        // Normalize forum bags + snapshot helpers
         $this->normalizeForumKeys();
         $this->ensureDepsBagsFromSnapshot();
+
         // Dump a compact view of the resource bags before restoring
         $this->debug_course_resources_simple(null);
 
         // Restore tools
         foreach ($this->tools_to_restore as $tool) {
             $fn = 'restore_'.$tool;
-            if (method_exists($this, $fn)) {
-                $this->dlog('Starting tool restore', ['tool' => $tool]);
-
-                try {
-                    $this->{$fn}($session_id, $respect_base_content, $destination_course_code);
-                } catch (Throwable $e) {
-                    $this->dlog('Tool restore failed with exception', [
-                        'tool' => $tool,
-                        'error' => $e->getMessage(),
-                    ]);
-                    $this->resetDoctrineIfClosed();
-                }
-                $this->dlog('Finished tool restore', ['tool' => $tool]);
-            } else {
+            if (!method_exists($this, $fn)) {
                 $this->dlog('Restore method not found for tool (skipping)', ['tool' => $tool]);
+                continue;
             }
+
+            $this->dlog('Starting tool restore', ['tool' => $tool]);
+
+            try {
+                // call with the number of params the method actually accepts
+                $args = [$session_id, $respect_base_content, $destination_course_code];
+                $ref = new \ReflectionMethod($this, $fn);
+                $argc = $ref->getNumberOfParameters();
+
+                $callArgs = array_slice($args, 0, $argc);
+
+                $this->dlog('Calling restore method', [
+                    'method' => $fn,
+                    'argc' => $argc,
+                    'args' => $callArgs,
+                ]);
+
+                $this->{$fn}(...$callArgs);
+            } catch (Throwable $e) {
+                $this->dlog('Tool restore failed with exception', [
+                    'tool' => $tool,
+                    'method' => $fn,
+                    'error' => $e->getMessage(),
+                ]);
+                $this->resetDoctrineIfClosed();
+            }
+
+            $this->dlog('Finished tool restore', ['tool' => $tool]);
         }
 
         // Optionally restore safe course settings
@@ -412,10 +421,53 @@ class CourseRestorer
      */
     public function restore_documents($session_id = 0, $respect_base_content = false, $destination_course_code = ''): void
     {
-        if (!$this->course->has_resources(RESOURCE_DOCUMENT)) {
-            $this->dlog('restore_documents: no document resources');
+        // Resolve the documents bucket robustly (RESOURCE_DOCUMENT vs document(s))
+        $docBucketKey = null;
+        $bucketCandidates = [];
+
+        if (\defined('RESOURCE_DOCUMENT')) {
+            $bucketCandidates[] = RESOURCE_DOCUMENT;
+        }
+        $bucketCandidates[] = 'documents';
+        $bucketCandidates[] = 'document';
+
+        foreach ($bucketCandidates as $cand) {
+            if (isset($this->course->resources[$cand]) && \is_array($this->course->resources[$cand])) {
+                $docBucketKey = $cand;
+                break;
+            }
+        }
+
+        if (null === $docBucketKey) {
+            $this->dlog('restore_documents: no document bucket found', [
+                'available_keys' => \is_array($this->course->resources ?? null) ? array_keys($this->course->resources) : [],
+            ]);
 
             return;
+        }
+
+        /** @var array $docResources */
+        $docResources =& $this->course->resources[$docBucketKey];
+
+        if (empty($docResources)) {
+            $this->dlog('restore_documents: document bucket is empty', ['bucket' => $docBucketKey]);
+
+            return;
+        }
+
+        try {
+            if (\method_exists($this->course, 'has_resources') && \defined('RESOURCE_DOCUMENT')) {
+                if (!$this->course->has_resources(RESOURCE_DOCUMENT)) {
+                    $this->dlog('restore_documents: resource map did not declare documents; restoring anyway', [
+                        'bucket' => $docBucketKey,
+                    ]);
+                }
+            }
+        } catch (\Throwable $e) {
+            $this->dlog('restore_documents: has_resources check failed; restoring anyway', [
+                'bucket' => $docBucketKey,
+                'err'    => $e->getMessage(),
+            ]);
         }
 
         $courseInfo   = $this->destination_course_info;
@@ -423,6 +475,25 @@ class CourseRestorer
         $courseEntity = api_get_course_entity($this->destination_course_id);
         $session      = api_get_session_entity((int) $session_id);
         $group        = api_get_group_entity(0);
+
+        $DBG = function (string $msg, array $ctx = []): void {
+            error_log('[RESTORE:DOCS] '.$msg.(empty($ctx) ? '' : ' '.json_encode($ctx)));
+        };
+
+        // Normalize group context: the documents provider treats "no group" as rl.group IS NULL.
+        $normalizeGroupCtx = function ($groupEntity) {
+            if ($groupEntity instanceof \Chamilo\CourseBundle\Entity\CGroup) {
+                if (method_exists($groupEntity, 'getIid') && (int) $groupEntity->getIid() > 0) {
+                    return $groupEntity;
+                }
+
+                return null;
+            }
+
+            return null;
+        };
+
+        $groupCtx = $normalizeGroupCtx($group);
 
         // Resolve the import root deterministically:
         $resolveImportRoot = function (): string {
@@ -501,14 +572,56 @@ class CourseRestorer
         $srcRoot    = $copyMode ? null : ($backupRoot.'/');
 
         $this->dlog('restore_documents: begin', [
-            'files'   => \count($this->course->resources[RESOURCE_DOCUMENT] ?? []),
+            'bucket'  => $docBucketKey,
+            'files'   => \count($docResources),
             'session' => (int) $session_id,
             'mode'    => $copyMode ? 'copy' : 'import',
             'srcRoot' => $srcRoot,
         ]);
 
-        $DBG = function (string $msg, array $ctx = []): void {
-            error_log('[RESTORE:DOCS] '.$msg.(empty($ctx) ? '' : ' '.json_encode($ctx)));
+        // Ensure ResourceLink.parent is set for the current context (course+session+group null)
+        $syncContextLinkParent = function (int $childDocIid, int $parentFolderDocIid) use ($docRepo, $courseEntity, $session, $groupCtx, $DBG): void {
+            try {
+                if ($childDocIid <= 0) {
+                    return;
+                }
+
+                $em = Container::getEntityManager();
+
+                /** @var \Chamilo\CoreBundle\Repository\ResourceLinkRepository $linkRepo */
+                $linkRepo = $em->getRepository(\Chamilo\CoreBundle\Entity\ResourceLink::class);
+
+                $child = $docRepo->find($childDocIid);
+                if (!$child || null === $child->getResourceNode()) {
+                    return;
+                }
+
+                $usergroup = null;
+                $user = null;
+
+                $childLink = $linkRepo->findLinkForResourceInContext($child, $courseEntity, $session, $groupCtx, $usergroup, $user);
+                if (null === $childLink) {
+                    return;
+                }
+
+                $parentLink = null;
+                if ($parentFolderDocIid > 0) {
+                    $parent = $docRepo->find($parentFolderDocIid);
+                    if ($parent && null !== $parent->getResourceNode()) {
+                        $parentLink = $linkRepo->findLinkForResourceInContext($parent, $courseEntity, $session, $groupCtx, $usergroup, $user);
+                    }
+                }
+
+                if ($childLink->getParent() !== $parentLink) {
+                    $childLink->setParent($parentLink);
+                    $em->persist($childLink);
+                    $em->flush();
+
+                    $DBG('rl.parent.synced', ['iid' => $childDocIid, 'parentIid' => $parentFolderDocIid]);
+                }
+            } catch (\Throwable $e) {
+                $DBG('rl.parent.sync.failed', ['iid' => $childDocIid, 'err' => $e->getMessage()]);
+            }
         };
 
         // Helper: returns the logical path from source CDocument (starts with "/")
@@ -524,7 +637,7 @@ class CourseRestorer
         };
 
         // Hide the /learning_path folder in Documents (draft visibility on ResourceLink).
-        $forceDraftVisibilityForLearningPathRoot = function (int $docIid) use ($docRepo, $courseEntity, $session, $group, $DBG): void {
+        $forceDraftVisibilityForLearningPathRoot = function (int $docIid) use ($docRepo, $courseEntity, $session, $groupCtx, $DBG): void {
             try {
                 $doc = $docRepo->find($docIid);
                 if (!$doc || !method_exists($doc, 'getResourceNode') || null === $doc->getResourceNode()) {
@@ -532,13 +645,13 @@ class CourseRestorer
                 }
 
                 $em = Container::getEntityManager();
-                $rlRepo = $em->getRepository(ResourceLink::class);
+                $rlRepo = $em->getRepository(\Chamilo\CoreBundle\Entity\ResourceLink::class);
 
                 $link = $rlRepo->findOneBy([
                     'resourceNode' => $doc->getResourceNode(),
                     'course'       => $courseEntity,
                     'session'      => $session,
-                    'group'        => $group,
+                    'group'        => $groupCtx,
                 ]);
 
                 if ($link && method_exists($link, 'getVisibility') && method_exists($link, 'setVisibility')) {
@@ -602,7 +715,7 @@ class CourseRestorer
         };
 
         // Ensure a folder chain exists under Documents (skipping "document" as root)
-        $ensureFolder = function (string $relPath) use ($docRepo, $courseEntity, $courseInfo, $session_id, $DBG) {
+        $ensureFolder = function (string $relPath) use ($docRepo, $courseEntity, $courseInfo, $session_id, $session, $groupCtx, $DBG, $syncContextLinkParent) {
             $rel = '/'.ltrim($relPath, '/');
             if ('/' === $rel || '' === $rel) {
                 return 0;
@@ -628,8 +741,8 @@ class CourseRestorer
                     $title,
                     $parentRes->getResourceNode(),
                     $courseEntity,
-                    api_get_session_entity((int) $session_id),
-                    api_get_group_entity(0)
+                    $session,
+                    $groupCtx
                 );
 
                 if ($existing) {
@@ -637,7 +750,9 @@ class CourseRestorer
                     continue;
                 }
 
-                $entity   = DocumentManager::addDocument(
+                $oldParentId = $parentId;
+
+                $entity = DocumentManager::addDocument(
                     ['real_id' => $courseInfo['real_id'], 'code' => $courseInfo['code']],
                     $accum,
                     'folder',
@@ -655,6 +770,10 @@ class CourseRestorer
                     ''
                 );
                 $parentId = method_exists($entity, 'getIid') ? $entity->getIid() : 0;
+
+                if ($parentId > 0) {
+                    $syncContextLinkParent((int) $parentId, (int) $oldParentId);
+                }
 
                 $DBG('ensureFolder:create', ['accum' => $accum, 'iid' => $parentId]);
             }
@@ -694,12 +813,10 @@ class CourseRestorer
             return false;
         };
 
-        // -----------------------------
-        // 1) Create folders first
-        // -----------------------------
+        // Create folders first
         $folders = [];
 
-        foreach ($this->course->resources[RESOURCE_DOCUMENT] as $k => $item) {
+        foreach ($docResources as $k => $item) {
             if (FOLDER !== $item->file_type) {
                 continue;
             }
@@ -756,12 +873,13 @@ class CourseRestorer
                     $parentResource->getResourceNode(),
                     $courseEntity,
                     $session,
-                    $group
+                    $groupCtx
                 );
 
                 if ($existing) {
                     $iid = method_exists($existing, 'getIid') ? $existing->getIid() : 0;
                 } else {
+                    $oldParentId = $parentId;
                     $entity = DocumentManager::addDocument(
                         ['real_id' => $courseInfo['real_id'], 'code' => $courseInfo['code']],
                         $accum,
@@ -780,11 +898,15 @@ class CourseRestorer
                         ''
                     );
                     $iid = method_exists($entity, 'getIid') ? $entity->getIid() : 0;
+
+                    if ($iid > 0) {
+                        $syncContextLinkParent((int) $iid, (int) $oldParentId);
+                    }
                 }
 
                 $folders[$accum] = $iid;
                 if ($i === \count($parts) - 1) {
-                    $this->course->resources[RESOURCE_DOCUMENT][$k]->destination_id = $iid;
+                    $docResources[$k]->destination_id = $iid;
                 }
                 $parentId = $iid;
 
@@ -794,11 +916,8 @@ class CourseRestorer
             }
         }
 
-        // -----------------------------
-        // 2) Two-pass import:
         //    Pass A: non-HTML files (build URL maps)
         //    Pass B: HTML files (rewrite using URL maps)
-        // -----------------------------
         $urlMapByRel  = [];
         $urlMapByBase = [];
 
@@ -862,9 +981,9 @@ class CourseRestorer
             $courseEntity,
             $courseInfo,
             $session,
-            $group,
+            $groupCtx,
             $session_id,
-            $folders,
+            &$folders,
             $ensureFolder,
             $getLogicalPathFromSource,
             $normalizeRel,
@@ -875,7 +994,9 @@ class CourseRestorer
             &$urlMapByBase,
             $addToMaps,
             $resolveSrcPath,
-            $DBG
+            $DBG,
+            $syncContextLinkParent,
+            &$docResources
         ): void {
             if (DOCUMENT !== $item->file_type) {
                 return;
@@ -883,7 +1004,6 @@ class CourseRestorer
 
             $srcRelKey = (string) ($item->path ?? '');
 
-            // If already restored earlier, reuse and add to maps
             if (!empty($item->destination_id)) {
                 $existing = $docRepo->find((int) $item->destination_id);
                 if ($existing) {
@@ -906,7 +1026,6 @@ class CourseRestorer
                 return;
             }
 
-            // Build destination rel path
             if ($copyMode && !empty($item->source_id)) {
                 $rel = $getLogicalPathFromSource($item->source_id);
                 if ($rel === '') {
@@ -923,7 +1042,6 @@ class CourseRestorer
                 return;
             }
             if ($copyMode && \in_array($firstSeg, $reservedTopFolders, true)) {
-                // In copy mode we do not import these reserved roots as visible docs
                 return;
             }
 
@@ -939,8 +1057,8 @@ class CourseRestorer
             $baseTitle  = (string) $rawTitle;
             $finalTitle = $baseTitle;
 
-            $findExisting = function (string $t) use ($docRepo, $parentRes, $courseEntity, $session, $group) {
-                $e = $docRepo->findCourseResourceByTitle($t, $parentRes->getResourceNode(), $courseEntity, $session, $group);
+            $findExisting = function (string $t) use ($docRepo, $parentRes, $courseEntity, $session, $groupCtx) {
+                $e = $docRepo->findCourseResourceByTitle($t, $parentRes->getResourceNode(), $courseEntity, $session, $groupCtx);
 
                 return $e && method_exists($e, 'getIid') ? (int) $e->getIid() : null;
             };
@@ -948,13 +1066,12 @@ class CourseRestorer
             $existsIid = $findExisting($finalTitle);
             if ($existsIid) {
                 if (\defined('FILE_SKIP') && FILE_SKIP === (int) $this->file_option) {
-                    $this->course->resources[RESOURCE_DOCUMENT][$k]->destination_id = (int) $existsIid;
+                    $docResources[$k]->destination_id = (int) $existsIid;
                     $addToMaps($srcRelKey, (int) $existsIid);
 
                     return;
                 }
 
-                // Rename on collision
                 $pi   = pathinfo($baseTitle);
                 $name = $pi['filename'] ?? $baseTitle;
                 $ext2 = (isset($pi['extension']) && $pi['extension'] !== '') ? '.'.$pi['extension'] : '';
@@ -966,7 +1083,6 @@ class CourseRestorer
                 }
             }
 
-            // IMPORTANT: keep the path consistent with the final title
             if (basename($rel) !== $finalTitle) {
                 $rel = ($parentRel === '' || $parentRel === '/')
                     ? '/'.$finalTitle
@@ -994,9 +1110,9 @@ class CourseRestorer
                 $content = $rew['html'];
 
                 $DBG('html.rewrite', [
-                    'file' => $finalTitle,
+                    'file'     => $finalTitle,
                     'replaced' => (int) ($rew['replaced'] ?? 0),
-                    'misses' => (int) ($rew['misses'] ?? 0),
+                    'misses'   => (int) ($rew['misses'] ?? 0),
                 ]);
             } else {
                 $realPath = $srcPath;
@@ -1022,23 +1138,28 @@ class CourseRestorer
 
             $iid = method_exists($entity, 'getIid') ? (int) $entity->getIid() : 0;
 
-            $this->course->resources[RESOURCE_DOCUMENT][$k]->destination_id = $iid;
+            $docResources[$k]->destination_id = $iid;
             $addToMaps($srcRelKey, $iid);
+
+            if ($iid > 0) {
+                $syncContextLinkParent((int) $iid, (int) $parentId);
+            }
         };
 
         // Pass A: non-HTML
-        foreach ($this->course->resources[RESOURCE_DOCUMENT] as $k => $item) {
+        foreach ($docResources as $k => $item) {
             $processOne((int) $k, $item, false);
         }
 
         // Pass B: HTML
-        foreach ($this->course->resources[RESOURCE_DOCUMENT] as $k => $item) {
+        foreach ($docResources as $k => $item) {
             $processOne((int) $k, $item, true);
         }
 
         $this->dlog('restore_documents: end', [
-            'mapByRel' => \count($urlMapByRel),
-            'mapByBase' => \count($urlMapByBase),
+            'bucket'     => $docBucketKey,
+            'mapByRel'   => \count($urlMapByRel),
+            'mapByBase'  => \count($urlMapByBase),
         ]);
     }
 
@@ -1051,58 +1172,170 @@ class CourseRestorer
      */
     public function restore_forum_category($session_id = 0, $respect_base_content = false, $destination_course_code = ''): void
     {
-        $bag = $this->course->resources['Forum_Category']
-            ?? $this->course->resources['forum_category']
-            ?? [];
+        $bucketKeys = ['Forum_Category', 'forum_category', 'ForumCategory', 'FORUM_CATEGORY'];
 
+        // Resolve the real bucket key (so we write destination_id back consistently).
+        $bucketKey = null;
+        foreach ($bucketKeys as $k) {
+            if (isset($this->course->resources[$k]) && is_array($this->course->resources[$k])) {
+                $bucketKey = $k;
+                break;
+            }
+        }
+
+        $bag = $bucketKey ? ($this->course->resources[$bucketKey] ?? []) : [];
         if (empty($bag)) {
             $this->dlog('restore_forum_category: empty bag');
-
             return;
         }
 
         $em = Database::getManager();
         $catRepo = Container::getForumCategoryRepository();
-        $course = api_get_course_entity($this->destination_course_id);
-        $session = api_get_session_entity((int) $session_id);
 
-        foreach ($bag as $id => $res) {
+        /** @var CourseEntity|null $courseEntity */
+        $courseEntity = api_get_course_entity($this->destination_course_id);
+        if (!$courseEntity instanceof CourseEntity) {
+            $this->dlog('restore_forum_category: missing destination course entity', [
+                'course_id' => (int) $this->destination_course_id,
+            ]);
+            return;
+        }
+
+        /** @var SessionEntity|null $sessionEntity */
+        $sessionEntity = $session_id ? api_get_session_entity((int) $session_id) : null;
+
+        $resolvedSid = (int) ($sessionEntity?->getId() ?? 0);
+
+        $this->dlog('restore_forum_category: begin', [
+            'count' => count($bag),
+            'session_arg' => (int) $session_id,
+            'resolved_sid' => $resolvedSid,
+            'bucket' => (string) $bucketKey,
+            'respect_base_content' => (bool) $respect_base_content,
+            'policy' => (int) ($this->file_option ?? -1),
+        ]);
+
+        $findExistingCategory = function (string $title, ?SessionEntity $sess) use ($catRepo, $courseEntity): ?CForumCategory {
+            $qb = $catRepo->createQueryBuilder('c')
+                ->innerJoin('c.resourceNode', 'n')
+                ->innerJoin('n.resourceLinks', 'l')
+                ->andWhere('l.course = :course')->setParameter('course', $courseEntity)
+                ->andWhere('c.title = :title')->setParameter('title', $title)
+                ->setMaxResults(1);
+
+            if ($sess) {
+                $qb->andWhere('l.session = :session')->setParameter('session', $sess);
+            } else {
+                $qb->andWhere('l.session IS NULL');
+            }
+
+            return $qb->getQuery()->getOneOrNullResult();
+        };
+
+        $isTitleTaken = function (string $title, ?SessionEntity $sess) use ($findExistingCategory): bool {
+            return (bool) $findExistingCategory($title, $sess);
+        };
+
+        foreach ($bag as $srcCatId => $res) {
+            if (!is_object($res)) {
+                continue;
+            }
             if (!empty($res->destination_id)) {
                 continue;
             }
 
-            $obj = \is_object($res->obj ?? null) ? $res->obj : (object) [];
-            $title = (string) ($obj->cat_title ?? $obj->title ?? "Forum category #$id");
-            $comment = (string) ($obj->cat_comment ?? $obj->description ?? '');
+            $obj = is_object($res->obj ?? null) ? $res->obj : (object) [];
 
-            $comment = $this->rewriteHtmlForCourse($comment, (int) $session_id, '[forums.cat]');
-
-            $existing = $catRepo->findOneBy(['title' => $title, 'resourceNode.parent' => $course->getResourceNode()]);
-            if ($existing) {
-                $destIid = (int) $existing->getIid();
-                $this->course->resources['Forum_Category'][$id] ??= new stdClass();
-                $this->course->resources['Forum_Category'][$id]->destination_id = $destIid;
-                $this->dlog('restore_forum_category: reuse existing', ['title' => $title, 'iid' => $destIid]);
-
-                continue;
+            $title = trim((string) ($obj->cat_title ?? $obj->title ?? ''));
+            if ($title === '') {
+                $title = 'Forum category #'.(int) $srcCatId;
             }
 
-            $cat = (new CForumCategory())
-                ->setTitle($title)
-                ->setCatComment($comment)
-                ->setParent($course)
-                ->addCourseLink($course, $session)
-            ;
+            $comment = (string) ($obj->cat_comment ?? $obj->description ?? '');
+            $comment = $this->rewriteHtmlForCourse($comment, (int) $session_id, '[forums.cat]');
 
+            // same-session category first
+            $existing = $findExistingCategory($title, $sessionEntity);
+
+            // Optionally allow reuse from base content when restoring into a session
+            if (!$existing && $respect_base_content && $sessionEntity) {
+                $existing = $findExistingCategory($title, null);
+            }
+
+            if ($existing) {
+                $destIid = (int) $existing->getIid();
+
+                if ((int) ($this->file_option ?? FILE_RENAME) === FILE_SKIP) {
+                    $this->course->resources[$bucketKey][$srcCatId] ??= new stdClass();
+                    $this->course->resources[$bucketKey][$srcCatId]->destination_id = $destIid;
+                    $res->destination_id = $destIid;
+
+                    $this->dlog('restore_forum_category: exists -> skip', [
+                        'src_cat_id' => (int) $srcCatId,
+                        'dst_cat_iid' => $destIid,
+                        'title' => $title,
+                        'resolved_sid' => $resolvedSid,
+                    ]);
+                    continue;
+                }
+
+                if ((int) ($this->file_option ?? FILE_RENAME) === FILE_OVERWRITE) {
+                    // Safe overwrite: update the existing category content instead of deleting (forums may depend on it).
+                    $existing->setCatComment($comment);
+                    $em->flush();
+
+                    $this->course->resources[$bucketKey][$srcCatId] ??= new stdClass();
+                    $this->course->resources[$bucketKey][$srcCatId]->destination_id = $destIid;
+                    $res->destination_id = $destIid;
+
+                    $this->dlog('restore_forum_category: exists -> updated (overwrite)', [
+                        'src_cat_id' => (int) $srcCatId,
+                        'dst_cat_iid' => $destIid,
+                        'title' => $title,
+                        'resolved_sid' => $resolvedSid,
+                    ]);
+                    continue;
+                }
+
+                // FILE_RENAME (default): generate a unique title
+                $base = $title;
+                $i = 1;
+                $try = $base.' ('.$i.')';
+                while ($isTitleTaken($try, $sessionEntity)) {
+                    $i++;
+                    $try = $base.' ('.$i.')';
+                }
+                $title = $try;
+            }
+
+            $cat = new CForumCategory();
+            $cat->setTitle($title);
+            $cat->setCatComment($comment);
+            $cat->setParent($courseEntity);
+            $cat->addCourseLink($courseEntity, $sessionEntity);
+
+            // Use repository create to ensure resource node/link plumbing is created.
             $catRepo->create($cat);
             $em->flush();
 
-            $this->course->resources['Forum_Category'][$id] ??= new stdClass();
-            $this->course->resources['Forum_Category'][$id]->destination_id = (int) $cat->getIid();
-            $this->dlog('restore_forum_category: created', ['title' => $title, 'iid' => (int) $cat->getIid()]);
+            $destIid = (int) ($cat->getIid() ?? 0);
+
+            $this->course->resources[$bucketKey][$srcCatId] ??= new stdClass();
+            $this->course->resources[$bucketKey][$srcCatId]->destination_id = $destIid;
+            $res->destination_id = $destIid;
+
+            $this->dlog('restore_forum_category: created', [
+                'src_cat_id' => (int) $srcCatId,
+                'dst_cat_iid' => $destIid,
+                'title' => $title,
+                'resolved_sid' => $resolvedSid,
+            ]);
         }
 
-        $this->dlog('restore_forum_category: done', ['count' => \count($bag)]);
+        $this->dlog('restore_forum_category: done', [
+            'count' => count($bag),
+            'resolved_sid' => $resolvedSid,
+        ]);
     }
 
     /**
@@ -1110,168 +1343,300 @@ class CourseRestorer
      */
     public function restore_forums(int $sessionId = 0): void
     {
-        $forumsBag = $this->course->resources['forum'] ?? [];
+        $forumBucketKeys = ['forum', 'Forum', 'Forum_Forum', 'FORUM'];
+
+        // Resolve bucket key for forums (so we write destination_id back consistently).
+        $forumBucketKey = null;
+        foreach ($forumBucketKeys as $k) {
+            if (isset($this->course->resources[$k]) && is_array($this->course->resources[$k])) {
+                $forumBucketKey = $k;
+                break;
+            }
+        }
+
+        $forumsBag = $forumBucketKey ? ($this->course->resources[$forumBucketKey] ?? []) : [];
         if (empty($forumsBag)) {
             $this->dlog('restore_forums: empty forums bag');
-
             return;
+        }
+
+        $topicsBag = $this->getBag(['thread', 'Forum_Topic', 'forum_topic', 'FORUM_TOPIC']);
+        $postsBag  = $this->getBag(['post', 'Forum_Post', 'forum_post', 'FORUM_POST']);
+
+        // Index threads by source forum_id (one pass).
+        $threadsByForum = [];
+        foreach ($topicsBag as $srcThreadId => $topicRes) {
+            if (!is_object($topicRes) || !is_object($topicRes->obj)) {
+                continue;
+            }
+            $fid = (int) ($topicRes->obj->forum_id ?? 0);
+            if ($fid > 0) {
+                $threadsByForum[$fid][] = (int) $srcThreadId;
+            }
+        }
+
+        // Index posts by source thread_id (one pass).
+        $postsByThread = [];
+        foreach ($postsBag as $srcPostId => $postRes) {
+            if (!is_object($postRes) || !is_object($postRes->obj)) {
+                continue;
+            }
+            $tid = (int) ($postRes->obj->thread_id ?? 0);
+            if ($tid > 0) {
+                $postsByThread[$tid][] = (int) $srcPostId;
+            }
         }
 
         $em = Database::getManager();
         $catRepo = Container::getForumCategoryRepository();
         $forumRepo = Container::getForumRepository();
 
-        $course = api_get_course_entity($this->destination_course_id);
-        $session = api_get_session_entity($sessionId);
+        /** @var CourseEntity|null $courseEntity */
+        $courseEntity = api_get_course_entity($this->destination_course_id);
+        if (!$courseEntity instanceof CourseEntity) {
+            $this->dlog('restore_forums: missing destination course entity', [
+                'course_id' => (int) $this->destination_course_id,
+            ]);
+            return;
+        }
 
-        $catBag = $this->course->resources['Forum_Category'] ?? $this->course->resources['forum_category'] ?? [];
-        $catMap = [];
+        /** @var SessionEntity|null $sessionEntity */
+        $sessionEntity = $sessionId ? api_get_session_entity((int) $sessionId) : null;
+        $resolvedSid = (int) ($sessionEntity?->getId() ?? 0);
 
-        if (!empty($catBag)) {
-            foreach ($catBag as $srcCatId => $res) {
-                if ((int) $res->destination_id > 0) {
-                    $catMap[(int) $srcCatId] = (int) $res->destination_id;
-
-                    continue;
-                }
-
-                $obj = \is_object($res->obj ?? null) ? $res->obj : (object) [];
-                $title = (string) ($obj->cat_title ?? $obj->title ?? "Forum category #$srcCatId");
-                $comment = (string) ($obj->cat_comment ?? $obj->description ?? '');
-
-                $comment = $this->rewriteHtmlForCourse($comment, (int) $sessionId, '[forums.cat@forums]');
-
-                $cat = (new CForumCategory())
-                    ->setTitle($title)
-                    ->setCatComment($comment)
-                    ->setParent($course)
-                    ->addCourseLink($course, $session)
-                ;
-
-                $catRepo->create($cat);
-                $em->flush();
-
-                $destIid = (int) $cat->getIid();
-                $catMap[(int) $srcCatId] = $destIid;
-
-                $this->course->resources['Forum_Category'][$srcCatId] ??= new stdClass();
-                $this->course->resources['Forum_Category'][$srcCatId]->destination_id = $destIid;
-
-                $this->dlog('restore_forums: created category', [
-                    'src_id' => (int) $srcCatId, 'iid' => $destIid, 'title' => $title,
-                ]);
+        // Build category map from the forum-category bucket (source cat iid => destination cat iid).
+        $catBucketKeys = ['Forum_Category', 'forum_category', 'ForumCategory', 'FORUM_CATEGORY'];
+        $catBucketKey = null;
+        foreach ($catBucketKeys as $k) {
+            if (isset($this->course->resources[$k]) && is_array($this->course->resources[$k])) {
+                $catBucketKey = $k;
+                break;
             }
         }
 
-        $defaultCategory = null;
-        $ensureDefault = function () use (&$defaultCategory, $course, $session, $catRepo, $em): CForumCategory {
-            if ($defaultCategory instanceof CForumCategory) {
-                return $defaultCategory;
+        $catBag = $catBucketKey ? ($this->course->resources[$catBucketKey] ?? []) : [];
+        $catMap = [];
+        foreach ($catBag as $srcCatId => $res) {
+            $dst = (int) ($res->destination_id ?? 0);
+            if ($dst > 0) {
+                $catMap[(int) $srcCatId] = $dst;
             }
-            $defaultCategory = (new CForumCategory())
-                ->setTitle('General')
-                ->setCatComment('')
-                ->setParent($course)
-                ->addCourseLink($course, $session)
-            ;
-            $catRepo->create($defaultCategory);
+        }
+
+        $this->dlog('restore_forums: begin', [
+            'forums' => count($forumsBag),
+            'session_arg' => (int) $sessionId,
+            'resolved_sid' => $resolvedSid,
+            'forum_bucket' => (string) $forumBucketKey,
+            'cat_map_count' => count($catMap),
+            'policy' => (int) ($this->file_option ?? -1),
+        ]);
+
+        $findExistingForum = function (CForumCategory $category, string $title) use ($forumRepo, $courseEntity, $sessionEntity): ?CForum {
+            $qb = $forumRepo->createQueryBuilder('f')
+                ->innerJoin('f.resourceNode', 'n')
+                ->innerJoin('n.resourceLinks', 'l')
+                ->andWhere('l.course = :course')->setParameter('course', $courseEntity)
+                ->andWhere('f.forumCategory = :cat')->setParameter('cat', $category)
+                ->andWhere('f.title = :title')->setParameter('title', $title)
+                ->setMaxResults(1);
+
+            if ($sessionEntity) {
+                $qb->andWhere('l.session = :session')->setParameter('session', $sessionEntity);
+            } else {
+                $qb->andWhere('l.session IS NULL');
+            }
+
+            return $qb->getQuery()->getOneOrNullResult();
+        };
+
+        $ensureDefaultCategory = function () use ($catRepo, $em, $courseEntity, $sessionEntity): CForumCategory {
+            // Reuse "General" if it already exists in this (course, session) scope.
+            $qb = $catRepo->createQueryBuilder('c')
+                ->innerJoin('c.resourceNode', 'n')
+                ->innerJoin('n.resourceLinks', 'l')
+                ->andWhere('l.course = :course')->setParameter('course', $courseEntity)
+                ->andWhere('c.title = :title')->setParameter('title', 'General')
+                ->setMaxResults(1);
+
+            if ($sessionEntity) {
+                $qb->andWhere('l.session = :session')->setParameter('session', $sessionEntity);
+            } else {
+                $qb->andWhere('l.session IS NULL');
+            }
+
+            $existing = $qb->getQuery()->getOneOrNullResult();
+            if ($existing instanceof CForumCategory) {
+                return $existing;
+            }
+
+            $cat = new CForumCategory();
+            $cat->setTitle('General');
+            $cat->setCatComment('');
+            $cat->setParent($courseEntity);
+            $cat->addCourseLink($courseEntity, $sessionEntity);
+
+            $catRepo->create($cat);
             $em->flush();
 
-            return $defaultCategory;
+            return $cat;
         };
 
         foreach ($forumsBag as $srcForumId => $forumRes) {
-            if (!\is_object($forumRes) || !\is_object($forumRes->obj)) {
+            if (!is_object($forumRes) || !is_object($forumRes->obj)) {
                 continue;
             }
 
             if ((int) ($forumRes->destination_id ?? 0) > 0) {
-                $this->dlog('restore_forums: already mapped, skipping', [
-                    'src_forum_id' => (int) $srcForumId,
-                    'dst_forum_iid' => (int) $forumRes->destination_id,
-                ]);
                 continue;
             }
 
             $p = (array) $forumRes->obj;
 
+            // Resolve destination category.
             $dstCategory = null;
             $srcCatId = (int) ($p['forum_category'] ?? 0);
+
             if ($srcCatId > 0 && isset($catMap[$srcCatId])) {
-                $dstCategory = $catRepo->find($catMap[$srcCatId]);
+                $dstCategory = $catRepo->find((int) $catMap[$srcCatId]);
             }
-            if (!$dstCategory && 1 === \count($catMap)) {
-                $onlyDestIid = (int) reset($catMap);
-                $dstCategory = $catRepo->find($onlyDestIid);
+
+            if (!$dstCategory instanceof CForumCategory) {
+                $dstCategory = $ensureDefaultCategory();
             }
-            if (!$dstCategory) {
-                $dstCategory = $ensureDefault();
+
+            $title = trim((string) ($p['forum_title'] ?? ''));
+            if ($title === '') {
+                $title = 'Forum #'.(int) $srcForumId;
             }
 
             $forumComment = (string) ($p['forum_comment'] ?? '');
             $forumComment = $this->rewriteHtmlForCourse($forumComment, (int) $sessionId, '[forums.forum]');
 
-            $forum = (new CForum())
-                ->setTitle($p['forum_title'] ?? ('Forum #'.$srcForumId))
-                ->setForumComment($forumComment)
-                ->setForumCategory($dstCategory)
-                ->setAllowAnonymous((int) ($p['allow_anonymous'] ?? 0))
-                ->setAllowEdit((int) ($p['allow_edit'] ?? 0))
-                ->setApprovalDirectPost((string) ($p['approval_direct_post'] ?? '0'))
-                ->setAllowAttachments((int) ($p['allow_attachments'] ?? 1))
-                ->setAllowNewThreads((int) ($p['allow_new_threads'] ?? 1))
-                ->setDefaultView($p['default_view'] ?? 'flat')
-                ->setForumOfGroup((string) ($p['forum_of_group'] ?? 0))
-                ->setForumGroupPublicPrivate($p['forum_group_public_private'] ?? 'public')
-                ->setModerated((bool) ($p['moderated'] ?? false))
-                ->setStartTime(!empty($p['start_time']) && '0000-00-00 00:00:00' !== $p['start_time']
-                    ? api_get_utc_datetime($p['start_time'], true, true) : null)
-                ->setEndTime(!empty($p['end_time']) && '0000-00-00 00:00:00' !== $p['end_time']
-                    ? api_get_utc_datetime($p['end_time'], true, true) : null)
-                ->setParent($dstCategory ?: $course)
-                ->addCourseLink($course, $session)
-            ;
+            // Duplicate policy: match by (course+session link) + category + title
+            $existingForum = $findExistingForum($dstCategory, $title);
+            if ($existingForum) {
+                $dstForumIid = (int) $existingForum->getIid();
+
+                $policy = (int) ($this->file_option ?? FILE_RENAME);
+
+                if ($policy === FILE_SKIP) {
+                    $this->course->resources[$forumBucketKey][$srcForumId] ??= new stdClass();
+                    $this->course->resources[$forumBucketKey][$srcForumId]->destination_id = $dstForumIid;
+                    $forumRes->destination_id = $dstForumIid;
+
+                    $this->dlog('restore_forums: exists -> skip', [
+                        'src_forum_id' => (int) $srcForumId,
+                        'dst_forum_iid' => $dstForumIid,
+                        'title' => $title,
+                        'resolved_sid' => $resolvedSid,
+                    ]);
+                    continue;
+                }
+
+                if ($policy === FILE_OVERWRITE) {
+                    // Safe overwrite: update forum fields, avoid duplicating threads/posts.
+                    $existingForum->setForumComment($forumComment);
+                    $existingForum->setAllowAnonymous((int) ($p['allow_anonymous'] ?? 0));
+                    $existingForum->setAllowEdit((int) ($p['allow_edit'] ?? 0));
+                    $existingForum->setApprovalDirectPost((string) ($p['approval_direct_post'] ?? '0'));
+                    $existingForum->setAllowAttachments((int) ($p['allow_attachments'] ?? 1));
+                    $existingForum->setAllowNewThreads((int) ($p['allow_new_threads'] ?? 1));
+                    $existingForum->setDefaultView((string) ($p['default_view'] ?? 'flat'));
+                    $existingForum->setForumOfGroup((string) ($p['forum_of_group'] ?? '0'));
+                    $existingForum->setForumGroupPublicPrivate((string) ($p['forum_group_public_private'] ?? 'public'));
+                    $existingForum->setModerated((bool) ($p['moderated'] ?? false));
+                    $existingForum->setStartTime($this->toUtcDateTime($p['start_time'] ?? null));
+                    $existingForum->setEndTime($this->toUtcDateTime($p['end_time'] ?? null));
+
+                    $em->flush();
+
+                    $this->course->resources[$forumBucketKey][$srcForumId] ??= new stdClass();
+                    $this->course->resources[$forumBucketKey][$srcForumId]->destination_id = $dstForumIid;
+                    $forumRes->destination_id = $dstForumIid;
+
+                    $this->dlog('restore_forums: exists -> updated (overwrite)', [
+                        'src_forum_id' => (int) $srcForumId,
+                        'dst_forum_iid' => $dstForumIid,
+                        'title' => $title,
+                        'resolved_sid' => $resolvedSid,
+                    ]);
+                    continue;
+                }
+
+                // FILE_RENAME: generate a unique title within same scope+category
+                $base = $title;
+                $i = 1;
+                $try = $base.' ('.$i.')';
+                while ($findExistingForum($dstCategory, $try)) {
+                    $i++;
+                    $try = $base.' ('.$i.')';
+                }
+                $title = $try;
+            }
+
+            $forum = new CForum();
+            $forum->setTitle($title);
+            $forum->setForumComment($forumComment);
+            $forum->setForumCategory($dstCategory);
+            $forum->setAllowAnonymous((int) ($p['allow_anonymous'] ?? 0));
+            $forum->setAllowEdit((int) ($p['allow_edit'] ?? 0));
+            $forum->setApprovalDirectPost((string) ($p['approval_direct_post'] ?? '0'));
+            $forum->setAllowAttachments((int) ($p['allow_attachments'] ?? 1));
+            $forum->setAllowNewThreads((int) ($p['allow_new_threads'] ?? 1));
+            $forum->setDefaultView((string) ($p['default_view'] ?? 'flat'));
+            $forum->setForumOfGroup((string) ($p['forum_of_group'] ?? '0'));
+            $forum->setForumGroupPublicPrivate((string) ($p['forum_group_public_private'] ?? 'public'));
+            $forum->setModerated((bool) ($p['moderated'] ?? false));
+            $forum->setStartTime($this->toUtcDateTime($p['start_time'] ?? null));
+            $forum->setEndTime($this->toUtcDateTime($p['end_time'] ?? null));
+            $forum->setParent($dstCategory);
+
+            $forum->addCourseLink($courseEntity, $sessionEntity);
 
             $forumRepo->create($forum);
             $em->flush();
 
-            $this->course->resources['forum'][$srcForumId] ??= new stdClass();
-            $this->course->resources['forum'][$srcForumId]->destination_id = (int) $forum->getIid();
+            $dstForumIid = (int) ($forum->getIid() ?? 0);
+
+            $this->course->resources[$forumBucketKey][$srcForumId] ??= new stdClass();
+            $this->course->resources[$forumBucketKey][$srcForumId]->destination_id = $dstForumIid;
+            $forumRes->destination_id = $dstForumIid;
+
             $this->dlog('restore_forums: created forum', [
                 'src_forum_id' => (int) $srcForumId,
-                'dst_forum_iid' => (int) $forum->getIid(),
-                'category_iid' => (int) $dstCategory->getIid(),
+                'dst_forum_iid' => $dstForumIid,
+                'dst_cat_iid' => (int) $dstCategory->getIid(),
+                'title' => $title,
+                'resolved_sid' => $resolvedSid,
             ]);
 
-            $topicsBag = $this->course->resources['thread'] ?? [];
-            foreach ($topicsBag as $srcThreadId => $topicRes) {
-                if (!\is_object($topicRes) || !\is_object($topicRes->obj)) {
-                    continue;
-                }
-                if ((int) $topicRes->obj->forum_id === (int) $srcForumId) {
-                    $tid = $this->restore_topic((int) $srcThreadId, (int) $forum->getIid(), $sessionId);
-                    $this->dlog('restore_forums: topic restored', [
-                        'src_thread_id' => (int) $srcThreadId,
-                        'dst_thread_iid' => (int) ($tid ?? 0),
-                        'dst_forum_iid' => (int) $forum->getIid(),
-                    ]);
-                }
+            // Restore topics/posts
+            foreach (($threadsByForum[(int) $srcForumId] ?? []) as $srcThreadId) {
+                $this->restore_topic(
+                    (int) $srcThreadId,
+                    $dstForumIid,
+                    (int) $sessionId,
+                    $postsByThread[$srcThreadId] ?? null
+                );
             }
         }
 
-        $this->dlog('restore_forums: done', ['forums' => \count($forumsBag)]);
+        $this->dlog('restore_forums: done', [
+            'forums' => count($forumsBag),
+            'resolved_sid' => $resolvedSid,
+        ]);
     }
 
     /**
      * Restore a forum topic (thread).
      */
-    public function restore_topic(int $srcThreadId, int $dstForumId, int $sessionId = 0): ?int
+    public function restore_topic(int $srcThreadId, int $dstForumId, int $sessionId = 0, ?array $srcPostIds = null): ?int
     {
-        $topicsBag = $this->course->resources['thread'] ?? [];
+        $topicsBag = $this->getBag(['thread', 'Forum_Topic', 'forum_topic', 'FORUM_TOPIC']);
         $topicRes = $topicsBag[$srcThreadId] ?? null;
-        if (!$topicRes || !\is_object($topicRes->obj)) {
+        if (!$topicRes || !is_object($topicRes->obj)) {
             $this->dlog('restore_topic: missing topic object', ['src_thread_id' => $srcThreadId]);
-
             return null;
         }
 
@@ -1282,57 +1647,107 @@ class CourseRestorer
 
         $course = api_get_course_entity($this->destination_course_id);
         $session = api_get_session_entity((int) $sessionId);
+
+        // Fallback poster user (consistent with your current approach)
         $user = api_get_user_entity($this->first_teacher_id);
 
         /** @var CForum|null $forum */
         $forum = $forumRepo->find($dstForumId);
         if (!$forum) {
             $this->dlog('restore_topic: destination forum not found', ['dst_forum_id' => $dstForumId]);
-
             return null;
         }
 
         $p = (array) $topicRes->obj;
 
+        $threadDate = $this->toUtcDateTime($p['thread_date'] ?? null) ?: new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
+
         $thread = (new CForumThread())
             ->setTitle((string) ($p['thread_title'] ?? "Thread #$srcThreadId"))
             ->setForum($forum)
             ->setUser($user)
-            ->setThreadDate(new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC')))
+            ->setThreadDate($threadDate)
             ->setThreadSticky((bool) ($p['thread_sticky'] ?? false))
             ->setThreadTitleQualify((string) ($p['thread_title_qualify'] ?? ''))
             ->setThreadQualifyMax((float) ($p['thread_qualify_max'] ?? 0))
             ->setThreadWeight((float) ($p['thread_weight'] ?? 0))
             ->setThreadPeerQualify((bool) ($p['thread_peer_qualify'] ?? false))
             ->setParent($forum)
-            ->addCourseLink($course, $session)
-        ;
+            ->addCourseLink($course, $session);
 
         $threadRepo->create($thread);
         $em->flush();
 
+        $dstThreadIid = (int) $thread->getIid();
+
         $this->course->resources['thread'][$srcThreadId] ??= new stdClass();
-        $this->course->resources['thread'][$srcThreadId]->destination_id = (int) $thread->getIid();
+        $this->course->resources['thread'][$srcThreadId]->destination_id = $dstThreadIid;
+
         $this->dlog('restore_topic: created', [
             'src_thread_id' => $srcThreadId,
-            'dst_thread_iid' => (int) $thread->getIid(),
+            'dst_thread_iid' => $dstThreadIid,
             'dst_forum_iid' => (int) $forum->getIid(),
         ]);
 
-        $postsBag = $this->course->resources['post'] ?? [];
-        foreach ($postsBag as $srcPostId => $postRes) {
-            if (!\is_object($postRes) || !\is_object($postRes->obj)) {
-                continue;
-            }
-            if ((int) $postRes->obj->thread_id === (int) $srcThreadId) {
-                $pid = $this->restore_post((int) $srcPostId, (int) $thread->getIid(), (int) $forum->getIid(), $sessionId);
-                $this->dlog('restore_topic: post restored', [
-                    'src_post_id' => (int) $srcPostId,
-                    'dst_post_iid' => (int) ($pid ?? 0),
-                ]);
+        // Restore posts
+        $postsBag = $this->getBag(['post', 'Forum_Post', 'forum_post', 'FORUM_POST']);
+        if (null === $srcPostIds) {
+            // Fallback scan (only if caller didn't pass indexed post IDs)
+            $srcPostIds = [];
+            foreach ($postsBag as $srcPostId => $postRes) {
+                if (!is_object($postRes) || !is_object($postRes->obj)) {
+                    continue;
+                }
+                if ((int) ($postRes->obj->thread_id ?? 0) === $srcThreadId) {
+                    $srcPostIds[] = (int) $srcPostId;
+                }
             }
         }
 
+        // Sort by post_date then id (stable)
+        usort($srcPostIds, function (int $a, int $b) use ($postsBag): int {
+            $pa = is_object($postsBag[$a]->obj ?? null) ? (array) $postsBag[$a]->obj : [];
+            $pb = is_object($postsBag[$b]->obj ?? null) ? (array) $postsBag[$b]->obj : [];
+            $da = (string) ($pa['post_date'] ?? '');
+            $db = (string) ($pb['post_date'] ?? '');
+            if ($da === $db) {
+                return $a <=> $b;
+            }
+            return strcmp($da, $db);
+        });
+
+        foreach ($srcPostIds as $srcPostId) {
+            $this->restore_post($srcPostId, $dstThreadIid, $dstForumId, $sessionId);
+        }
+
+        // Second pass: ensure parents are linked even if order was weird
+        foreach ($srcPostIds as $srcPostId) {
+            $postRes = $postsBag[$srcPostId] ?? null;
+            if (!$postRes || !is_object($postRes->obj)) {
+                continue;
+            }
+
+            $pp = (array) $postRes->obj;
+            $srcParentId = (int) ($pp['post_parent_id'] ?? 0);
+            if ($srcParentId <= 0) {
+                continue;
+            }
+
+            $dstChildId = (int) (($this->course->resources['post'][$srcPostId]->destination_id ?? 0));
+            $dstParentId = (int) (($this->course->resources['post'][$srcParentId]->destination_id ?? 0));
+
+            if ($dstChildId > 0 && $dstParentId > 0) {
+                $child = $postRepo->find($dstChildId);
+                $parent = $postRepo->find($dstParentId);
+                if ($child && $parent) {
+                    $child->setPostParent($parent);
+                    $em->persist($child);
+                }
+            }
+        }
+        $em->flush();
+
+        // Update thread last post
         $last = $postRepo->findOneBy(['thread' => $thread], ['postDate' => 'DESC']);
         if ($last) {
             $thread->setThreadLastPost($last);
@@ -1340,7 +1755,7 @@ class CourseRestorer
             $em->flush();
         }
 
-        return (int) $thread->getIid();
+        return $dstThreadIid;
     }
 
     /**
@@ -1348,11 +1763,10 @@ class CourseRestorer
      */
     public function restore_post(int $srcPostId, int $dstThreadId, int $dstForumId, int $sessionId = 0): ?int
     {
-        $postsBag = $this->course->resources['post'] ?? [];
+        $postsBag = $this->getBag(['post', 'Forum_Post', 'forum_post', 'FORUM_POST']);
         $postRes = $postsBag[$srcPostId] ?? null;
-        if (!$postRes || !\is_object($postRes->obj)) {
+        if (!$postRes || !is_object($postRes->obj)) {
             $this->dlog('restore_post: missing post object', ['src_post_id' => $srcPostId]);
-
             return null;
         }
 
@@ -1363,6 +1777,8 @@ class CourseRestorer
 
         $course = api_get_course_entity($this->destination_course_id);
         $session = api_get_session_entity((int) $sessionId);
+
+        // Fallback poster user (consistent with current approach)
         $user = api_get_user_entity($this->first_teacher_id);
 
         $thread = $threadRepo->find($dstThreadId);
@@ -1381,29 +1797,27 @@ class CourseRestorer
         $postText = (string) ($p['post_text'] ?? '');
         $postText = $this->rewriteHtmlForCourse($postText, (int) $sessionId, '[forums.post]');
 
+        $postDate = $this->toUtcDateTime($p['post_date'] ?? null) ?: new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
+
+        $status = (int) ($p['status'] ?? CForumPost::STATUS_VALIDATED);
+        if (!in_array($status, [CForumPost::STATUS_VALIDATED, CForumPost::STATUS_WAITING_MODERATION, CForumPost::STATUS_REJECTED], true)) {
+            $status = CForumPost::STATUS_VALIDATED;
+        }
+
+        $visible = (bool) ($p['visible'] ?? true);
+
         $post = (new CForumPost())
             ->setTitle((string) ($p['post_title'] ?? "Post #$srcPostId"))
             ->setPostText($postText)
             ->setThread($thread)
             ->setForum($forum)
             ->setUser($user)
-            ->setPostDate(new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC')))
+            ->setPostDate($postDate)
             ->setPostNotification((bool) ($p['post_notification'] ?? false))
-            ->setVisible(true)
-            ->setStatus(CForumPost::STATUS_VALIDATED)
+            ->setVisible($visible)
+            ->setStatus($status)
             ->setParent($thread)
-            ->addCourseLink($course, $session)
-        ;
-
-        if (!empty($p['post_parent_id'])) {
-            $parentDestId = (int) ($postsBag[$p['post_parent_id']]->destination_id ?? 0);
-            if ($parentDestId > 0) {
-                $parent = $postRepo->find($parentDestId);
-                if ($parent) {
-                    $post->setPostParent($parent);
-                }
-            }
-        }
+            ->addCourseLink($course, $session);
 
         $postRepo->create($post);
         $em->flush();
@@ -1415,6 +1829,8 @@ class CourseRestorer
             'dst_post_iid' => (int) $post->getIid(),
             'dst_thread_id' => (int) $thread->getIid(),
             'dst_forum_id' => (int) $forum->getIid(),
+            'visible' => (int) $visible,
+            'status' => (int) $status,
         ]);
 
         return (int) $post->getIid();
@@ -1429,10 +1845,10 @@ class CourseRestorer
     public function restore_link_category($id, $sessionId = 0): int
     {
         $sessionId = (int) $sessionId;
+        $policy = $this->normalizeFilePolicy($this->file_option ?? null);
 
         if (0 === (int) $id) {
-            $this->dlog('restore_link_category: source category is 0 (no category), returning 0');
-
+            $this->dlog('restore_link_category: source category id=0 (no category), returning 0', []);
             return 0;
         }
 
@@ -1448,21 +1864,18 @@ class CourseRestorer
         foreach ($candidateKeys as $k) {
             if (isset($resources[$k]) && \is_array($resources[$k])) {
                 $catKey = $k;
-
                 break;
             }
         }
 
         if (null === $catKey) {
-            $this->dlog('restore_link_category: no category bucket in course->resources');
-
+            $this->dlog('restore_link_category: no category bucket found in course->resources', []);
             return 0;
         }
 
-        // Locate the category wrapper by 3 strategies: array key, wrapper->source_id, inner obj->id
         $bucket = $resources[$catKey];
 
-        // by integer array key
+        // Build indexes to locate wrapper reliably
         $byIntKey = [];
         foreach ($bucket as $k => $wrap) {
             $ik = is_numeric($k) ? (int) $k : 0;
@@ -1471,7 +1884,6 @@ class CourseRestorer
             }
         }
 
-        // by wrapper->source_id
         $bySourceId = [];
         foreach ($bucket as $wrap) {
             if (!\is_object($wrap)) {
@@ -1483,7 +1895,6 @@ class CourseRestorer
             }
         }
 
-        // by inner entity id (obj->id)
         $byObjId = [];
         foreach ($bucket as $wrap) {
             if (\is_object($wrap) && isset($wrap->obj) && \is_object($wrap->obj)) {
@@ -1504,23 +1915,16 @@ class CourseRestorer
             $this->dlog('restore_link_category: source category object not found', [
                 'asked_id' => $iid,
                 'bucket' => $catKey,
-                'keys_seen' => \array_slice(array_keys((array) $bucket), 0, 12),
-                'index_hit' => [
-                    'byIntKey' => isset($byIntKey[$iid]),
-                    'bySourceId' => isset($bySourceId[$iid]),
-                    'byObjId' => isset($byObjId[$iid]),
-                ],
             ]);
-
             return 0;
         }
 
         // Already mapped?
-        if ((int) $srcCat->destination_id > 0) {
+        if ((int) ($srcCat->destination_id ?? 0) > 0) {
             return (int) $srcCat->destination_id;
         }
 
-        // Unwrap/normalize fields
+        // Unwrap/normalize fields from mkLegacyItem wrapper
         $e = (isset($srcCat->obj) && \is_object($srcCat->obj)) ? $srcCat->obj : $srcCat;
         $title = trim((string) ($e->title ?? $e->category_title ?? ($srcCat->extra['title'] ?? '') ?? ''));
         if ('' === $title) {
@@ -1528,40 +1932,56 @@ class CourseRestorer
         }
         $description = (string) ($e->description ?? ($srcCat->extra['description'] ?? '') ?? '');
 
+        /** @var EntityManagerInterface $em */
         $em = Database::getManager();
-        $catRepo = Container::getLinkCategoryRepository();
-        $course = api_get_course_entity($this->destination_course_id);
-        $session = api_get_session_entity((int) $sessionId);
 
-        // Look for an existing category under the same course (by title)
+        /** @var CLinkCategoryRepository $catRepo */
+        $catRepo = Container::getLinkCategoryRepository();
+
+        /** @var CourseEntity $course */
+        $course = api_get_course_entity((int) $this->destination_course_id);
+
+        /** @var SessionEntity|null $session */
+        $session = $sessionId ? api_get_session_entity($sessionId) : null;
+
+        // Look for existing category under same course + session scope (by title)
         $existing = null;
         $candidates = $catRepo->findBy(['title' => $title]);
         if (!empty($candidates)) {
             $courseNode = $course->getResourceNode();
             foreach ($candidates as $cand) {
+                if (!$cand instanceof CLinkCategory) {
+                    continue;
+                }
+
                 $node = method_exists($cand, 'getResourceNode') ? $cand->getResourceNode() : null;
                 $parent = $node && method_exists($node, 'getParent') ? $node->getParent() : null;
-                if ($parent && $courseNode && $parent->getId() === $courseNode->getId()) {
-                    $existing = $cand;
+                if (!$parent || !$courseNode || $parent->getId() !== $courseNode->getId()) {
+                    continue;
+                }
 
+                $link = $cand->getFirstResourceLinkFromCourseSession($course, $session);
+                if (null !== $link) {
+                    $existing = $cand;
                     break;
                 }
             }
         }
 
-        if ($existing) {
-            if (FILE_SKIP === $this->file_option) {
+        if ($existing instanceof CLinkCategory) {
+            if (1 === $policy) { // SKIP
                 $destIid = (int) $existing->getIid();
-                // Write back to the SAME wrapper we located
                 $srcCat->destination_id = $destIid;
                 $this->dlog('restore_link_category: reuse (SKIP)', [
-                    'src_cat_id' => $iid, 'dst_cat_id' => $destIid, 'title' => $title,
+                    'src_cat_id' => $iid,
+                    'dst_cat_id' => $destIid,
+                    'title' => $title,
                 ]);
 
                 return $destIid;
             }
 
-            if (FILE_OVERWRITE === $this->file_option) {
+            if (3 === $policy) { // OVERWRITE => update existing
                 $existing->setDescription($description);
                 if (method_exists($existing, 'setParent')) {
                     $existing->setParent($course);
@@ -1574,30 +1994,64 @@ class CourseRestorer
 
                 $destIid = (int) $existing->getIid();
                 $srcCat->destination_id = $destIid;
-                $this->dlog('restore_link_category: overwrite', [
-                    'src_cat_id' => $iid, 'dst_cat_id' => $destIid, 'title' => $title,
+
+                $this->dlog('restore_link_category: overwritten', [
+                    'src_cat_id' => $iid,
+                    'dst_cat_id' => $destIid,
+                    'title' => $title,
                 ]);
 
                 return $destIid;
             }
 
-            // FILE_RENAME policy
+            // RENAME
             $base = $title;
-            $i = 1;
-            $exists = true;
-            do {
-                $title = $base.' ('.$i++.')';
-                $exists = false;
-                foreach ($catRepo->findBy(['title' => $title]) as $cand) {
-                    $node = method_exists($cand, 'getResourceNode') ? $cand->getResourceNode() : null;
-                    $parent = $node && method_exists($node, 'getParent') ? $node->getParent() : null;
-                    if ($parent && $parent->getId() === $course->getResourceNode()->getId()) {
-                        $exists = true;
+            $n = 2;
+            $candidate = $base.' ('.$n.')';
+            while (true) {
+                $dup = $catRepo->findBy(['title' => $candidate]);
+                $taken = false;
 
-                        break;
+                if (!empty($dup)) {
+                    $courseNode = $course->getResourceNode();
+                    foreach ($dup as $cand) {
+                        if (!$cand instanceof CLinkCategory) {
+                            continue;
+                        }
+                        $node = $cand->getResourceNode();
+                        $parent = $node && method_exists($node, 'getParent') ? $node->getParent() : null;
+                        if ($parent && $courseNode && $parent->getId() === $courseNode->getId()) {
+                            $link = $cand->getFirstResourceLinkFromCourseSession($course, $session);
+                            if (null !== $link) {
+                                $taken = true;
+                                break;
+                            }
+                        }
                     }
                 }
-            } while ($exists);
+
+                if (!$taken) {
+                    break;
+                }
+
+                $n++;
+                $candidate = $base.' ('.$n.')';
+                if ($n > 5000) {
+                    $this->dlog('restore_link_category: rename safeguard triggered, returning 0', [
+                        'src_cat_id' => $iid,
+                        'base_title' => $base,
+                    ]);
+                    return 0;
+                }
+            }
+
+            $this->dlog('restore_link_category: duplicate detected, policy=RENAME', [
+                'src_cat_id' => $iid,
+                'from' => $title,
+                'to' => $candidate,
+            ]);
+
+            $title = $candidate;
         }
 
         // Create new category
@@ -1606,6 +2060,7 @@ class CourseRestorer
             ->setDescription($description)
         ;
 
+        // Required order: setParent() before addCourseLink()
         if (method_exists($cat, 'setParent')) {
             $cat->setParent($course);
         }
@@ -1617,12 +2072,14 @@ class CourseRestorer
         $em->flush();
 
         $destIid = (int) $cat->getIid();
-
-        // Write back to the SAME wrapper we located (object is by reference)
         $srcCat->destination_id = $destIid;
 
         $this->dlog('restore_link_category: created', [
-            'src_cat_id' => $iid, 'dst_cat_id' => $destIid, 'title' => $title, 'bucket' => $catKey,
+            'src_cat_id' => $iid,
+            'dst_cat_id' => $destIid,
+            'title' => $title,
+            'bucket' => $catKey,
+            'session_id' => $sessionId,
         ]);
 
         return $destIid;
@@ -1639,29 +2096,68 @@ class CourseRestorer
             return;
         }
 
-        $resources = $this->course->resources;
-        $count = \is_array($resources[RESOURCE_LINK] ?? null) ? \count($resources[RESOURCE_LINK]) : 0;
+        $sessionId = (int) $session_id;
+        $policy = $this->normalizeFilePolicy($this->file_option ?? null);
 
-        $this->dlog('restore_links: begin', ['count' => $count]);
+        $resources = $this->course->resources ?? [];
+        $items = $resources[RESOURCE_LINK] ?? [];
+        $count = \is_array($items) ? \count($items) : 0;
 
+        $this->dlog('restore_links: begin', [
+            'count' => $count,
+            'policy' => $policy,
+            'session_id' => $sessionId,
+        ]);
+
+        /** @var EntityManagerInterface $em */
         $em = Database::getManager();
-        $linkRepo = Container::getLinkRepository();
-        $catRepo = Container::getLinkCategoryRepository();
-        $course = api_get_course_entity($this->destination_course_id);
-        $session = api_get_session_entity((int) $session_id);
 
-        // Safe duplicate finder (no dot-path in criteria; filter parent in PHP)
-        $findDuplicate = function (string $t, string $u, ?CLinkCategory $cat) use ($linkRepo, $course) {
-            $criteria = ['title' => $t, 'url' => $u, 'category' => ($cat instanceof CLinkCategory ? $cat : null)];
+        /** @var CLinkRepository $linkRepo */
+        $linkRepo = Container::getLinkRepository();
+
+        /** @var CLinkCategoryRepository $catRepo */
+        $catRepo = Container::getLinkCategoryRepository();
+
+        /** @var CourseEntity $course */
+        $course = api_get_course_entity((int) $this->destination_course_id);
+
+        /** @var SessionEntity|null $session */
+        $session = $sessionId ? api_get_session_entity($sessionId) : null;
+
+        if (!\is_array($items)) {
+            $this->dlog('restore_links: invalid bucket type, aborting', [
+                'bucket_type' => \gettype($items),
+            ]);
+            return;
+        }
+
+        // Duplicate finder for same course + session scope (title + url + category)
+        $findDuplicate = function (string $t, string $u, ?CLinkCategory $cat) use ($linkRepo, $course, $session): ?CLink {
+            $criteria = [
+                'title' => $t,
+                'url' => $u,
+                'category' => ($cat instanceof CLinkCategory ? $cat : null),
+            ];
+
             $candidates = $linkRepo->findBy($criteria);
             if (empty($candidates)) {
                 return null;
             }
+
             $courseNode = $course->getResourceNode();
             foreach ($candidates as $cand) {
-                $node = method_exists($cand, 'getResourceNode') ? $cand->getResourceNode() : null;
+                if (!$cand instanceof CLink) {
+                    continue;
+                }
+
+                $node = $cand->getResourceNode();
                 $parent = $node && method_exists($node, 'getParent') ? $node->getParent() : null;
-                if ($parent && $courseNode && $parent->getId() === $courseNode->getId()) {
+                if (!$parent || !$courseNode || $parent->getId() !== $courseNode->getId()) {
+                    continue;
+                }
+
+                $link = $cand->getFirstResourceLinkFromCourseSession($course, $session);
+                if (null !== $link) {
                     return $cand;
                 }
             }
@@ -1669,24 +2165,35 @@ class CourseRestorer
             return null;
         };
 
-        foreach ($resources[RESOURCE_LINK] as $oldLinkId => $link) {
+        foreach ($items as $oldLinkId => $link) {
+            $oldLinkId = (int) $oldLinkId;
 
-            $mapped = (int) ($this->course->resources[RESOURCE_LINK][$oldLinkId]->destination_id ?? 0);
+            if (!\is_object($link)) {
+                $this->dlog('restore_links: skipping invalid legacy item (not object)', [
+                    'src_link_id' => $oldLinkId,
+                ]);
+                continue;
+            }
+
+            $mapped = (int) ($link->destination_id ?? 0);
             if ($mapped > 0) {
                 $this->dlog('restore_links: already mapped, skipping', [
-                    'src_link_id' => (int) $oldLinkId,
+                    'src_link_id' => $oldLinkId,
                     'dst_link_id' => $mapped,
                 ]);
                 continue;
             }
 
+            // mkLegacyItem payload should be in ->extra (keep direct props as fallback)
             $rawUrl = (string) ($link->url ?? ($link->extra['url'] ?? ''));
             $rawTitle = (string) ($link->title ?? ($link->extra['title'] ?? ''));
             $rawDesc = (string) ($link->description ?? ($link->extra['description'] ?? ''));
-            $target = isset($link->target) ? (string) $link->target : null;
+            $target = isset($link->target) ? (string) $link->target : (string) ($link->extra['target'] ?? '');
 
-            // Prefer plain category_id, fallback to linked_resources if needed
-            $catSrcId = (int) ($link->category_id ?? 0);
+            // Prefer explicit category_id
+            $catSrcId = (int) ($link->category_id ?? ($link->extra['category_id'] ?? 0));
+
+            // Fallback to linked_resources (if present)
             if ($catSrcId <= 0 && isset($link->linked_resources['Link_Category'][0])) {
                 $catSrcId = (int) $link->linked_resources['Link_Category'][0];
             }
@@ -1694,81 +2201,77 @@ class CourseRestorer
                 $catSrcId = (int) $link->linked_resources['link_category'][0];
             }
 
-            $onHome = (bool) ($link->on_homepage ?? false);
+            $onHome = (bool) ($link->on_homepage ?? ($link->extra['on_homepage'] ?? false));
 
             $url = trim($rawUrl);
             $title = '' !== trim($rawTitle) ? trim($rawTitle) : $url;
 
             if ('' === $url) {
                 $this->dlog('restore_links: skipped (empty URL)', [
-                    'src_link_id' => (int) $oldLinkId,
-                    'has_obj' => !empty($link->has_obj),
+                    'src_link_id' => $oldLinkId,
                     'extra_keys' => isset($link->extra) ? implode(',', array_keys((array) $link->extra)) : '',
                 ]);
-
                 continue;
             }
 
-            // Resolve / create destination category if source had one; otherwise null
+            // Resolve/create category (optional)
             $category = null;
             if ($catSrcId > 0) {
-                $dstCatIid = (int) $this->restore_link_category($catSrcId, (int) $session_id);
+                $dstCatIid = (int) $this->restore_link_category($catSrcId, $sessionId);
                 if ($dstCatIid > 0) {
                     $category = $catRepo->find($dstCatIid);
                 } else {
                     $this->dlog('restore_links: category not available, using null', [
-                        'src_link_id' => (int) $oldLinkId,
-                        'src_cat_id' => (int) $catSrcId,
+                        'src_link_id' => $oldLinkId,
+                        'src_cat_id' => $catSrcId,
                     ]);
                 }
             }
 
-            // Dedup (title + url + category in same course)
+            // Dedupe (same course + session scope)
             $existing = $findDuplicate($title, $url, $category);
 
-            if ($existing) {
-                if (FILE_SKIP === $this->file_option) {
+            if ($existing instanceof CLink) {
+                if (1 === $policy) { // SKIP
                     $destIid = (int) $existing->getIid();
-                    $this->course->resources[RESOURCE_LINK][$oldLinkId] ??= new stdClass();
-                    $this->course->resources[RESOURCE_LINK][$oldLinkId]->destination_id = $destIid;
+                    $link->destination_id = $destIid;
 
                     $this->dlog('restore_links: reuse (SKIP)', [
-                        'src_link_id' => (int) $oldLinkId,
+                        'src_link_id' => $oldLinkId,
                         'dst_link_id' => $destIid,
                         'title' => $title,
                         'url' => $url,
                     ]);
-
                     continue;
                 }
 
-                if (FILE_OVERWRITE === $this->file_option) {
-                    $descHtml = $this->rewriteHtmlForCourse($rawDesc, (int) $session_id, '[links.link.overwrite]');
+                if (3 === $policy) { // OVERWRITE => update existing
+                    $descHtml = $this->rewriteHtmlForCourse($rawDesc, $sessionId, '[links.link.overwrite]');
 
                     $existing
                         ->setUrl($url)
                         ->setTitle($title)
                         ->setDescription($descHtml)
                         ->setTarget((string) ($target ?? ''))
+                        ->setCategory($category instanceof CLinkCategory ? $category : null)
                     ;
 
+                    // Required order: setParent() before addCourseLink()
                     if (method_exists($existing, 'setParent')) {
                         $existing->setParent($course);
                     }
                     if (method_exists($existing, 'addCourseLink')) {
                         $existing->addCourseLink($course, $session);
                     }
-                    $existing->setCategory($category); // may be null
 
                     $em->persist($existing);
                     $em->flush();
 
                     $destIid = (int) $existing->getIid();
-                    $this->course->resources[RESOURCE_LINK][$oldLinkId] ??= new stdClass();
-                    $this->course->resources[RESOURCE_LINK][$oldLinkId]->destination_id = $destIid;
+                    $link->destination_id = $destIid;
 
-                    $this->dlog('restore_links: overwrite', [
-                        'src_link_id' => (int) $oldLinkId,
+                    $this->dlog('restore_links: overwritten', [
+                        'src_link_id' => $oldLinkId,
                         'dst_link_id' => $destIid,
                         'title' => $title,
                         'url' => $url,
@@ -1777,18 +2280,34 @@ class CourseRestorer
                     continue;
                 }
 
-                // FILE_RENAME flow
+                // RENAME
                 $base = $title;
-                $i = 1;
-                do {
-                    $title = $base.' ('.$i.')';
-                    $i++;
-                } while ($findDuplicate($title, $url, $category));
+                $n = 2;
+                $candidate = $base.' ('.$n.')';
+                while ($findDuplicate($candidate, $url, $category)) {
+                    $n++;
+                    $candidate = $base.' ('.$n.')';
+                    if ($n > 5000) {
+                        $this->dlog('restore_links: rename safeguard triggered, skipping item', [
+                            'src_link_id' => $oldLinkId,
+                            'base_title' => $base,
+                        ]);
+                        continue 2;
+                    }
+                }
+
+                $this->dlog('restore_links: duplicate detected, policy=RENAME', [
+                    'src_link_id' => $oldLinkId,
+                    'from' => $title,
+                    'to' => $candidate,
+                ]);
+
+                $title = $candidate;
             }
 
-            $descHtml = $this->rewriteHtmlForCourse($rawDesc, (int) $session_id, '[links.link.create]');
+            $descHtml = $this->rewriteHtmlForCourse($rawDesc, $sessionId, '[links.link.create]');
 
-            // Create new link entity
+            // Create new link
             $entity = (new CLink())
                 ->setUrl($url)
                 ->setTitle($title)
@@ -1796,6 +2315,7 @@ class CourseRestorer
                 ->setTarget((string) ($target ?? ''))
             ;
 
+            // Required order: setParent() before addCourseLink()
             if (method_exists($entity, 'setParent')) {
                 $entity->setParent($course);
             }
@@ -1810,30 +2330,34 @@ class CourseRestorer
             $em->persist($entity);
             $em->flush();
 
-            // Map destination id back into resources
             $destIid = (int) $entity->getIid();
-            $this->course->resources[RESOURCE_LINK][$oldLinkId] ??= new stdClass();
-            $this->course->resources[RESOURCE_LINK][$oldLinkId]->destination_id = $destIid;
+            $link->destination_id = $destIid;
 
             $this->dlog('restore_links: created', [
-                'src_link_id' => (int) $oldLinkId,
+                'src_link_id' => $oldLinkId,
                 'dst_link_id' => $destIid,
                 'title' => $title,
                 'url' => $url,
                 'category' => $category ? $category->getTitle() : null,
             ]);
 
-            if (!empty($onHome)) {
-                try {
-                    $em->persist($entity);
-                    $em->flush();
-                } catch (Throwable $e) {
-                    error_log('COURSE_DEBUG: restore_links: homepage flag handling failed: '.$e->getMessage());
-                }
+            // Homepage flag: build exports it, but restoring the actual "shortcut/homepage" placement
+            // depends on how the platform stores it (not provided here). Keep only a trace log.
+            if ($onHome) {
+                $this->dlog('restore_links: on_homepage requested but no restore implementation provided, ignoring', [
+                    'dst_link_id' => $destIid,
+                    'title' => $title,
+                ]);
             }
         }
 
-        $this->dlog('restore_links: end');
+        // Write back mutated items
+        $this->course->resources[RESOURCE_LINK] = $items;
+
+        $this->dlog('restore_links: end', [
+            'policy' => $policy,
+            'session_id' => $sessionId,
+        ]);
     }
 
     /**
@@ -1850,7 +2374,6 @@ class CourseRestorer
     {
         $resources = $this->course->resources ?? [];
 
-        // Detect the right bucket key (be generous with aliases)
         $bagKey = null;
         $candidates = [];
 
@@ -1858,7 +2381,6 @@ class CourseRestorer
             $candidates[] = RESOURCE_TOOL_INTRO;
         }
 
-        // Common spellings seen in exports / normalizers
         $candidates = array_merge($candidates, [
             'Tool introduction',
             'tool introduction',
@@ -1885,6 +2407,7 @@ class CourseRestorer
         $this->dlog('restore_tool_intro: begin', [
             'bucket' => $bagKey,
             'count'  => \count($resources[$bagKey]),
+            'session_id' => $sessionId,
         ]);
 
         $em      = Database::getManager();
@@ -1896,40 +2419,33 @@ class CourseRestorer
         $introRepo  = $em->getRepository(CToolIntro::class);
 
         foreach ($resources[$bagKey] as $rawId => $tIntro) {
-            // Resolve tool key (id may be missing in some dumps)
             $toolKey = trim((string) ($tIntro->id ?? ''));
             if ('' === $toolKey || '0' === $toolKey) {
                 $toolKey = (string) $rawId;
             }
             $alias = strtolower($toolKey);
-
-            // Normalize common aliases to platform keys
             if ('homepage' === $alias || 'course_home' === $alias) {
                 $toolKey = 'course_homepage';
             }
 
-            $this->dlog('restore_tool_intro: resolving tool key', [
-                'raw_id'   => (string) $rawId,
-                'obj_id'   => isset($tIntro->id) ? (string) $tIntro->id : null,
-                'toolKey'  => $toolKey,
-            ]);
-
-            // Already mapped?
             $mapped = (int) ($tIntro->destination_id ?? 0);
             if ($mapped > 0) {
                 $this->dlog('restore_tool_intro: already mapped, skipping', [
-                    'src_id' => $toolKey, 'dst_id' => $mapped,
+                    'tool' => $toolKey,
+                    'dst_id' => $mapped,
                 ]);
                 continue;
             }
 
-            // Rewrite HTML using centralized helper (keeps document links consistent)
-            $introHtml = $this->rewriteHtmlForCourse((string) ($tIntro->intro_text ?? ''), $sessionId, '[tool_intro.intro]');
+            $introHtml = $this->rewriteHtmlForCourse(
+                (string) ($tIntro->intro_text ?? ''),
+                $sessionId,
+                '[tool_intro.intro]'
+            );
 
-            // Find platform Tool entity by title; try a couple of fallbacks
+            // Resolve global Tool entity
             $toolEntity = $toolRepo->findOneBy(['title' => $toolKey]);
             if (!$toolEntity) {
-                // Fallbacks: lower/upper case attempts
                 $toolEntity = $toolRepo->findOneBy(['title' => strtolower($toolKey)])
                     ?: $toolRepo->findOneBy(['title' => ucfirst(strtolower($toolKey))]);
             }
@@ -1938,7 +2454,7 @@ class CourseRestorer
                 continue;
             }
 
-            // Ensure a CTool exists for this course/session+tool
+            // Ensure CTool exists for destination course/session context
             $cTool = $cToolRepo->findOneBy([
                 'course'  => $course,
                 'session' => $session,
@@ -1946,14 +2462,24 @@ class CourseRestorer
             ]);
 
             if (!$cTool) {
+                // Try to reuse base tool position if it exists
+                $position = 1;
+                $baseTool = $cToolRepo->findOneBy([
+                    'course'  => $course,
+                    'session' => null,
+                    'title'   => $toolKey,
+                ]);
+                if ($baseTool) {
+                    $position = (int) $baseTool->getPosition();
+                }
+
                 $cTool = (new CTool())
                     ->setTool($toolEntity)
                     ->setTitle($toolKey)
                     ->setCourse($course)
                     ->setSession($session)
-                    ->setPosition(1)
+                    ->setPosition($position)
                     ->setParent($course)
-                    ->setCreator($course->getCreator() ?? null)
                     ->addCourseLink($course, $session);
                 $em->persist($cTool);
                 $em->flush();
@@ -1961,10 +2487,11 @@ class CourseRestorer
                 $this->dlog('restore_tool_intro: CTool created', [
                     'tool' => $toolKey,
                     'ctool_id' => (int) $cTool->getIid(),
+                    'position' => $position,
                 ]);
             }
 
-            // Create/overwrite intro according to file policy
+            // Find intro for this session-specific CTool
             $intro = $introRepo->findOneBy(['courseTool' => $cTool]);
 
             if ($intro) {
@@ -1975,6 +2502,11 @@ class CourseRestorer
                     ]);
                 } else {
                     $intro->setIntroText($introHtml);
+
+                    // Ensure session context link exists (important for future exports)
+                    $intro->setParent($course);
+                    $intro->addCourseLink($course, $session);
+
                     $em->persist($intro);
                     $em->flush();
 
@@ -1988,6 +2520,8 @@ class CourseRestorer
                     ->setCourseTool($cTool)
                     ->setIntroText($introHtml)
                     ->setParent($course);
+                $intro->addCourseLink($course, $session);
+
                 $em->persist($intro);
                 $em->flush();
 
@@ -1997,9 +2531,8 @@ class CourseRestorer
                 ]);
             }
 
-            // Map destination id back into the bucket used
-            $this->course->resources[$bagKey][$rawId] ??= new \stdClass();
-            $this->course->resources[$bagKey][$rawId]->destination_id = (int) $intro->getIid();
+            // Mark destination id on the exported object
+            $tIntro->destination_id = (int) $intro->getIid();
         }
 
         $this->dlog('restore_tool_intro: end');
@@ -2243,196 +2776,445 @@ class CourseRestorer
      *
      * @param mixed $session_id
      */
-    public function restore_course_descriptions($session_id = 0): void
+    public function restore_course_descriptions(int $sessionId = 0): void
     {
         if (!$this->course->has_resources(RESOURCE_COURSEDESCRIPTION)) {
             return;
         }
 
-        $resources = $this->course->resources ?? [];
-        $count = \is_array($resources[RESOURCE_COURSEDESCRIPTION] ?? null)
-            ? \count($resources[RESOURCE_COURSEDESCRIPTION]) : 0;
+        $sessionId = (int) $sessionId;
 
-        $this->dlog('restore_course_descriptions: begin', ['count' => $count]);
+        $items = $this->course->resources[RESOURCE_COURSEDESCRIPTION] ?? [];
+        $count = is_array($items) ? count($items) : 0;
 
-        $em = Database::getManager();
-        $repo = Container::getCourseDescriptionRepository();
-        $course = api_get_course_entity($this->destination_course_id);
-        $session = api_get_session_entity((int) $session_id);
+        $this->dlog('restore_course_descriptions: begin', [
+            'count' => $count,
+            'session_id' => $sessionId,
+        ]);
 
-        $findByTypeInCourse = function (int $type) use ($repo, $course, $session) {
-            if (method_exists($repo, 'findByTypeInCourse')) {
-                return $repo->findByTypeInCourse($type, $course, $session);
+        /** @var EntityManagerInterface $em */
+        $em = \Database::getManager();
+
+        $repo = \Chamilo\CoreBundle\Framework\Container::getCourseDescriptionRepository();
+
+        // ✅ IMPORTANT: Use the Doctrine entity FQCN explicitly (avoid CourseCopy\Course collision)
+        $courseEntity = null;
+        $destinationCourseId = (int) ($this->destination_course_id ?? 0);
+
+        if ($destinationCourseId > 0) {
+            $courseEntity = $em->find(CourseEntity::class, $destinationCourseId);
+        }
+
+        if (!$courseEntity instanceof CourseEntity) {
+            $destinationCode = (string) ($this->destination_course_code ?? $this->destination_code ?? '');
+            if ('' !== $destinationCode) {
+                $info = api_get_course_info($destinationCode);
+                $resolvedId = (int) ($info['real_id'] ?? $info['id'] ?? 0);
+                if ($resolvedId > 0) {
+                    $courseEntity = $em->find(CourseEntity::class, $resolvedId);
+                }
             }
-            $qb = $repo->getResourcesByCourse($course, $session)
-                ->andWhere('resource.descriptionType = :t')
-                ->setParameter('t', $type)
-            ;
+        }
 
-            return $qb->getQuery()->getResult();
-        };
+        if (!$courseEntity instanceof CourseEntity) {
+            $this->dlog('restore_course_descriptions: cannot resolve destination course entity, aborting', [
+                'destination_course_id' => $destinationCourseId,
+                'destination_course_code' => (string) ($this->destination_course_code ?? $this->destination_code ?? ''),
+            ]);
+            return;
+        }
 
-        $findByTitleInCourse = function (string $title) use ($repo, $course, $session) {
-            $qb = $repo->getResourcesByCourse($course, $session)
-                ->andWhere('resource.title = :t')
-                ->setParameter('t', $title)
-                ->setMaxResults(1)
-            ;
+        $sessionEntity = null;
+        if ($sessionId > 0) {
+            $sessionEntity = api_get_session_entity($sessionId);
+        }
 
-            return $qb->getQuery()->getOneOrNullResult();
-        };
+        $groupEntity = api_get_group_entity();
 
-        foreach ($resources[RESOURCE_COURSEDESCRIPTION] as $oldId => $cd) {
-            // Already mapped?
-            $mapped = (int) ($cd->destination_id ?? 0);
-            if ($mapped > 0) {
-                $this->dlog('restore_course_descriptions: already mapped, skipping', ['src_id' => (int) $oldId, 'dst_id' => $mapped]);
+        // Normalize file_option: 1=SKIP, 2=RENAME, 3=OVERWRITE
+        $policy = 1;
+        $rawPolicy = $this->file_option ?? null;
 
+        if (is_int($rawPolicy) || ctype_digit((string) $rawPolicy)) {
+            $policy = (int) $rawPolicy;
+        } else {
+            $raw = strtoupper(trim((string) $rawPolicy));
+            if ('FILE_SKIP' === $raw) {
+                $policy = 1;
+            } elseif ('FILE_RENAME' === $raw) {
+                $policy = 2;
+            } elseif ('FILE_OVERWRITE' === $raw) {
+                $policy = 3;
+            }
+        }
+
+        if (defined('FILE_SKIP') && $rawPolicy === FILE_SKIP) {
+            $policy = 1;
+        } elseif (defined('FILE_RENAME') && $rawPolicy === FILE_RENAME) {
+            $policy = 2;
+        } elseif (defined('FILE_OVERWRITE') && $rawPolicy === FILE_OVERWRITE) {
+            $policy = 3;
+        }
+
+        if (!in_array($policy, [1, 2, 3], true)) {
+            $this->dlog('restore_course_descriptions: invalid file_option, defaulting to SKIP', [
+                'raw' => $rawPolicy,
+            ]);
+            $policy = 1;
+        }
+
+        if (!is_array($items)) {
+            $this->dlog('restore_course_descriptions: invalid resource list, aborting', []);
+            return;
+        }
+
+        // Preload existing by type in SAME scope (session vs base)
+        $existingByType = [];
+        $existingTitles = [];
+
+        try {
+            $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+            $existing = $qb->getQuery()->getResult();
+
+            foreach ($existing as $e) {
+                if (!$e instanceof CCourseDescription) {
+                    continue;
+                }
+
+                // If restoring to a session, only consider items really linked to that session
+                if ($sessionId > 0 && $sessionEntity) {
+                    $link = $e->getFirstResourceLinkFromCourseSession($courseEntity, $sessionEntity);
+                    if (null === $link) {
+                        continue;
+                    }
+                }
+
+                $t = (int) $e->getDescriptionType();
+                if ($t < 1 || $t > 8) {
+                    $t = CCourseDescription::TYPE_DESCRIPTION;
+                }
+
+                if (!isset($existingByType[$t])) {
+                    $existingByType[$t] = $e;
+                }
+
+                $ttl = trim((string) $e->getTitle());
+                if ('' !== $ttl) {
+                    $existingTitles[$ttl] = true;
+                }
+            }
+        } catch (\Throwable $e) {
+            $this->dlog('restore_course_descriptions: failed to preload existing, continuing', [
+                'error' => $e->getMessage(),
+            ]);
+            $existingByType = [];
+            $existingTitles = [];
+        }
+
+        $created = 0;
+        $updated = 0;
+        $skipped = 0;
+        $renamed = 0;
+
+        foreach ($items as $oldId => $cd) {
+            $oldId = (int) $oldId;
+
+            if (!is_object($cd)) {
+                $this->dlog('restore_course_descriptions: skipping invalid item (not object)', [
+                    'src_id' => $oldId,
+                ]);
                 continue;
             }
 
-            // Normalize + rewrite
-            $rawTitle = (string) ($cd->title ?? '');
-            $rawContent = (string) ($cd->content ?? '');
-            $type = (int) ($cd->description_type ?? CCourseDescription::TYPE_DESCRIPTION);
-
-            $title = '' !== trim($rawTitle) ? trim($rawTitle) : $rawTitle;
-            $content = $this->rewriteHtmlForCourse($rawContent, (int) $session_id, '[course_description.content]');
-
-            // Policy by type
-            $existingByType = $findByTypeInCourse($type);
-            $existingOne = $existingByType[0] ?? null;
-
-            if ($existingOne) {
-                switch ($this->file_option) {
-                    case FILE_SKIP:
-                        $destIid = (int) $existingOne->getIid();
-                        $this->course->resources[RESOURCE_COURSEDESCRIPTION][$oldId] ??= new stdClass();
-                        $this->course->resources[RESOURCE_COURSEDESCRIPTION][$oldId]->destination_id = $destIid;
-
-                        $this->dlog('restore_course_descriptions: reuse (SKIP)', [
-                            'src_id' => (int) $oldId,
-                            'dst_id' => $destIid,
-                            'type' => $type,
-                            'title' => (string) $existingOne->getTitle(),
-                        ]);
-
-                        continue 2;
-
-                    case FILE_OVERWRITE:
-                        $existingOne
-                            ->setTitle('' !== $title ? $title : (string) $existingOne->getTitle())
-                            ->setContent($content)
-                            ->setDescriptionType($type)
-                            ->setProgress((int) ($cd->progress ?? 0))
-                        ;
-                        $existingOne->setParent($course)->addCourseLink($course, $session);
-
-                        $em->persist($existingOne);
-                        $em->flush();
-
-                        $destIid = (int) $existingOne->getIid();
-                        $this->course->resources[RESOURCE_COURSEDESCRIPTION][$oldId] ??= new stdClass();
-                        $this->course->resources[RESOURCE_COURSEDESCRIPTION][$oldId]->destination_id = $destIid;
-
-                        $this->dlog('restore_course_descriptions: overwrite', [
-                            'src_id' => (int) $oldId,
-                            'dst_id' => $destIid,
-                            'type' => $type,
-                            'title' => (string) $existingOne->getTitle(),
-                        ]);
-
-                        continue 2;
-
-                    case FILE_RENAME:
-                    default:
-                        $base = '' !== $title ? $title : (string) ($cd->extra['title'] ?? 'Description');
-                        $i = 1;
-                        $candidate = $base;
-                        while ($findByTitleInCourse($candidate)) {
-                            $candidate = $base.' ('.(++$i).')';
-                        }
-                        $title = $candidate;
-
-                        break;
-                }
+            $mapped = (int) ($cd->destination_id ?? 0);
+            if ($mapped > 0) {
+                $this->dlog('restore_course_descriptions: already mapped, skipping', [
+                    'src_id' => $oldId,
+                    'dst_id' => $mapped,
+                ]);
+                continue;
             }
 
-            // Create new
-            $entity = (new CCourseDescription())
+            $title = trim((string) ($cd->title ?? ''));
+            if ('' === $title) {
+                $title = 'Description';
+            }
+
+            $rawContent = (string) ($cd->content ?? '');
+            $content = $this->rewriteHtmlForCourse($rawContent, $sessionId, '[course_description.content]');
+
+            $type = (int) ($cd->description_type ?? CCourseDescription::TYPE_DESCRIPTION);
+            if ($type < 1 || $type > 8) {
+                $type = CCourseDescription::TYPE_DESCRIPTION;
+            }
+
+            $progress = (int) ($cd->progress ?? 0);
+            if ($progress < 0) {
+                $progress = 0;
+            }
+
+            $existing = $existingByType[$type] ?? null;
+
+            if ($existing instanceof CCourseDescription) {
+                if (1 === $policy) { // SKIP
+                    $destIid = (int) $existing->getIid();
+                    $this->course->resources[RESOURCE_COURSEDESCRIPTION][$oldId]->destination_id = $destIid;
+
+                    $this->dlog('restore_course_descriptions: reuse (SKIP)', [
+                        'src_id' => $oldId,
+                        'dst_id' => $destIid,
+                        'type' => $type,
+                        'title' => (string) $existing->getTitle(),
+                    ]);
+
+                    $skipped++;
+                    continue;
+                }
+
+                if (3 === $policy) { // OVERWRITE
+                    $existing->setSkipSearchIndex(true);
+
+                    $existing
+                        ->setTitle($title)
+                        ->setContent($content)
+                        ->setDescriptionType($type)
+                        ->setProgress($progress)
+                    ;
+
+                    $existing->setParent($courseEntity);
+                    $existing->addCourseLink($courseEntity, $sessionEntity, $groupEntity);
+
+                    $em->persist($existing);
+                    $em->flush();
+
+                    $destIid = (int) $existing->getIid();
+                    $this->course->resources[RESOURCE_COURSEDESCRIPTION][$oldId]->destination_id = $destIid;
+
+                    $this->dlog('restore_course_descriptions: overwrite', [
+                        'src_id' => $oldId,
+                        'dst_id' => $destIid,
+                        'type' => $type,
+                        'title' => (string) $existing->getTitle(),
+                    ]);
+
+                    $updated++;
+                    continue;
+                }
+
+                // RENAME => create new with unique title
+                $base = $title;
+                $candidate = $base;
+                $n = 2;
+                while (isset($existingTitles[$candidate])) {
+                    $candidate = $base.' ('.$n.')';
+                    $n++;
+                    if ($n > 5000) {
+                        $this->dlog('restore_course_descriptions: rename safeguard triggered, skipping', [
+                            'src_id' => $oldId,
+                            'base_title' => $base,
+                            'type' => $type,
+                        ]);
+                        continue 2;
+                    }
+                }
+
+                if ($candidate !== $title) {
+                    $this->dlog('restore_course_descriptions: duplicate detected, policy=RENAME', [
+                        'src_id' => $oldId,
+                        'from' => $title,
+                        'to' => $candidate,
+                        'type' => $type,
+                    ]);
+                    $renamed++;
+                }
+
+                $title = $candidate;
+                $existingTitles[$title] = true;
+            } else {
+                $existingTitles[$title] = true;
+            }
+
+            $entity = new CCourseDescription();
+            $entity->setSkipSearchIndex(true);
+
+            $entity
                 ->setTitle($title)
                 ->setContent($content)
                 ->setDescriptionType($type)
-                ->setProgress((int) ($cd->progress ?? 0))
-                ->setParent($course)
-                ->addCourseLink($course, $session)
+                ->setProgress($progress)
             ;
+
+            $entity->setParent($courseEntity);
+            $entity->addCourseLink($courseEntity, $sessionEntity, $groupEntity);
 
             $em->persist($entity);
             $em->flush();
 
             $destIid = (int) $entity->getIid();
-            $this->course->resources[RESOURCE_COURSEDESCRIPTION][$oldId] ??= new stdClass();
             $this->course->resources[RESOURCE_COURSEDESCRIPTION][$oldId]->destination_id = $destIid;
 
+            $existingByType[$type] = $entity;
+
             $this->dlog('restore_course_descriptions: created', [
-                'src_id' => (int) $oldId,
+                'src_id' => $oldId,
                 'dst_id' => $destIid,
                 'type' => $type,
                 'title' => $title,
             ]);
+
+            $created++;
         }
 
-        $this->dlog('restore_course_descriptions: end');
+        $this->dlog('restore_course_descriptions: end', [
+            'created' => $created,
+            'updated' => $updated,
+            'skipped' => $skipped,
+            'renamed' => $renamed,
+            'policy' => $policy,
+            'session_id' => $sessionId,
+        ]);
     }
 
     /**
      * Restore announcements into the destination course.
-     *
-     * @param mixed $sessionId
      */
-    public function restore_announcements($sessionId = 0): void
+    public function restore_announcements(int $sessionId = 0): void
     {
         if (!$this->course->has_resources(RESOURCE_ANNOUNCEMENT)) {
             return;
         }
 
         $sessionId = (int) $sessionId;
-        $resources = $this->course->resources;
+        $items = $this->course->resources[RESOURCE_ANNOUNCEMENT] ?? [];
+        $count = is_array($items) ? count($items) : 0;
 
-        $count = \is_array($resources[RESOURCE_ANNOUNCEMENT] ?? null)
-            ? \count($resources[RESOURCE_ANNOUNCEMENT])
-            : 0;
-
-        $this->dlog('restore_announcements: begin', ['count' => $count]);
+        $this->dlog('restore_announcements: begin', [
+            'count' => $count,
+            'session_id' => $sessionId,
+        ]);
 
         /** @var EntityManagerInterface $em */
-        $em = Database::getManager();
-        $course = api_get_course_entity($this->destination_course_id);
-        $session = api_get_session_entity($sessionId);
-        $group = api_get_group_entity();
-        $annRepo = Container::getAnnouncementRepository();
-        $attachRepo = Container::getAnnouncementAttachmentRepository();
+        $em = \Database::getManager();
 
-        // Origin path for ZIP/imported attachments (kept as-is)
-        $originPath = rtrim($this->course->backup_path ?? '', '/').'/upload/announcements/';
+        // Resolve destination course entity safely (avoid CourseCopy\Course collisions).
+        $courseEntity = null;
+        $destinationCourseId = (int) ($this->destination_course_id ?? 0);
 
-        // Finder: existing announcement by title in this course/session
-        $findExistingByTitle = function (string $title) use ($annRepo, $course, $session) {
-            $qb = $annRepo->getResourcesByCourse($course, $session);
-            $qb->andWhere('resource.title = :t')->setParameter('t', $title)->setMaxResults(1);
+        if ($destinationCourseId > 0) {
+            $courseEntity = $em->find(CourseEntity::class, $destinationCourseId);
+        }
 
-            return $qb->getQuery()->getOneOrNullResult();
-        };
+        if (!$courseEntity instanceof CourseEntity) {
+            $destinationCode = (string) ($this->destination_course_code ?? $this->destination_code ?? '');
+            if ('' !== $destinationCode) {
+                $info = api_get_course_info($destinationCode);
+                $resolvedId = (int) ($info['real_id'] ?? $info['id'] ?? 0);
+                if ($resolvedId > 0) {
+                    $courseEntity = $em->find(CourseEntity::class, $resolvedId);
+                }
+            }
+        }
 
-        foreach ($resources[RESOURCE_ANNOUNCEMENT] as $oldId => $a) {
-            // Already mapped?
+        if (!$courseEntity instanceof CourseEntity) {
+            $this->dlog('restore_announcements: cannot resolve destination course entity, aborting', [
+                'destination_course_id' => $destinationCourseId,
+                'destination_course_code' => (string) ($this->destination_course_code ?? $this->destination_code ?? ''),
+            ]);
+            return;
+        }
+
+        $sessionEntity = $sessionId > 0 ? api_get_session_entity($sessionId) : null;
+        $groupEntity = api_get_group_entity();
+
+        $annRepo = \Chamilo\CoreBundle\Framework\Container::getAnnouncementRepository();
+
+        // Normalize file_option (supports constants and numeric fallback 1/2/3).
+        $policy = 1;
+        $rawPolicy = $this->file_option ?? null;
+
+        if (is_int($rawPolicy) || ctype_digit((string) $rawPolicy)) {
+            $policy = (int) $rawPolicy;
+        } else {
+            $raw = strtoupper(trim((string) $rawPolicy));
+            if ('FILE_SKIP' === $raw) {
+                $policy = 1;
+            } elseif ('FILE_RENAME' === $raw) {
+                $policy = 2;
+            } elseif ('FILE_OVERWRITE' === $raw) {
+                $policy = 3;
+            }
+        }
+
+        if (defined('FILE_SKIP') && $rawPolicy === FILE_SKIP) {
+            $policy = 1;
+        } elseif (defined('FILE_RENAME') && $rawPolicy === FILE_RENAME) {
+            $policy = 2;
+        } elseif (defined('FILE_OVERWRITE') && $rawPolicy === FILE_OVERWRITE) {
+            $policy = 3;
+        }
+
+        if (!in_array($policy, [1, 2, 3], true)) {
+            $this->dlog('restore_announcements: invalid file_option, defaulting to SKIP', [
+                'raw' => $rawPolicy,
+            ]);
+            $policy = 1;
+        }
+
+        // Origin path inside extracted backup (ZIP/import mode). In copy mode this is empty.
+        $originPath = '';
+        if (!empty($this->course->backup_path)) {
+            $originPath = rtrim((string) $this->course->backup_path, '/').'/upload/announcements';
+        }
+
+        // Preload existing announcements by title in this course/session
+        $existingByTitle = [];
+        try {
+            $qb = $annRepo->getResourcesByCourse($courseEntity, $sessionEntity);
+            $existing = $qb->getQuery()->getResult();
+
+            foreach ($existing as $e) {
+                if (!$e instanceof CAnnouncement) {
+                    continue;
+                }
+                $t = trim((string) $e->getTitle());
+                if ('' !== $t && !isset($existingByTitle[$t])) {
+                    $existingByTitle[$t] = $e;
+                }
+            }
+        } catch (\Throwable $e) {
+            $this->dlog('restore_announcements: failed to preload existing announcements, continuing', [
+                'error' => $e->getMessage(),
+            ]);
+            $existingByTitle = [];
+        }
+
+        $created = 0;
+        $updated = 0;
+        $skipped = 0;
+        $renamed = 0;
+        $attachmentsCreated = 0;
+
+        if (!is_array($items)) {
+            $this->dlog('restore_announcements: invalid resource list, aborting', []);
+            return;
+        }
+
+        foreach ($items as $oldId => $a) {
+            $oldId = (int) $oldId;
+
+            if (!is_object($a)) {
+                $this->dlog('restore_announcements: skipping invalid item (not object)', [
+                    'src_id' => $oldId,
+                ]);
+                continue;
+            }
+
             $mapped = (int) ($a->destination_id ?? 0);
             if ($mapped > 0) {
                 $this->dlog('restore_announcements: already mapped, skipping', [
-                    'src_id' => (int) $oldId, 'dst_id' => $mapped,
+                    'src_id' => $oldId,
+                    'dst_id' => $mapped,
                 ]);
-
                 continue;
             }
 
@@ -2442,451 +3224,274 @@ class CourseRestorer
             }
 
             $contentHtml = (string) ($a->content ?? '');
-
-            // Parse optional end date
-            $endDate = null;
-
-            try {
-                $rawDate = (string) ($a->date ?? '');
-                if ('' !== $rawDate) {
-                    $endDate = new DateTime($rawDate);
-                }
-            } catch (Throwable $e) {
-                $endDate = null;
-            }
-
+            $rawDate = trim((string) ($a->date ?? ''));
             $emailSent = (bool) ($a->email_sent ?? false);
 
-            $existing = $findExistingByTitle($title);
-            if ($existing) {
-                switch ($this->file_option) {
-                    case FILE_SKIP:
-                        $destId = (int) $existing->getIid();
-                        $this->course->resources[RESOURCE_ANNOUNCEMENT][$oldId] ??= new stdClass();
-                        $this->course->resources[RESOURCE_ANNOUNCEMENT][$oldId]->destination_id = $destId;
-                        $this->dlog('restore_announcements: reuse (SKIP)', [
-                            'src_id' => (int) $oldId, 'dst_id' => $destId, 'title' => $existing->getTitle(),
-                        ]);
-                        // Still try to restore attachments on the reused entity
-                        $this->restoreAnnouncementAttachments($a, $existing, $originPath, $attachRepo, $em);
-
-                        continue 2;
-
-                    case FILE_OVERWRITE:
-                        // Continue to overwrite below
-                        break;
-
-                    case FILE_RENAME:
-                    default:
-                        // Rename to avoid collision
-                        $base = $title;
-                        $i = 1;
-                        $candidate = $base;
-                        while ($findExistingByTitle($candidate)) {
-                            $i++;
-                            $candidate = $base.' ('.$i.')';
-                        }
-                        $title = $candidate;
-
-                        break;
+            $endDate = null;
+            if ('' !== $rawDate) {
+                try {
+                    $endDate = new \DateTime($rawDate);
+                } catch (\Throwable) {
+                    $endDate = null;
+                    $this->dlog('restore_announcements: invalid end date, ignoring', [
+                        'src_id' => $oldId,
+                        'raw_date' => $rawDate,
+                    ]);
                 }
             }
 
-            // Rewrite HTML content using centralized helper (replaces manual mapping logic)
-            // Note: keeps attachments restoration logic unchanged.
+            $existing = $existingByTitle[$title] ?? null;
+
+            if ($existing instanceof CAnnouncement) {
+                if (1 === $policy) { // SKIP
+                    $destId = (int) $existing->getIid();
+                    $this->course->resources[RESOURCE_ANNOUNCEMENT][$oldId]->destination_id = $destId;
+
+                    $this->dlog('restore_announcements: reuse (SKIP)', [
+                        'src_id' => $oldId,
+                        'dst_id' => $destId,
+                        'title' => (string) $existing->getTitle(),
+                    ]);
+
+                    // Still ensure attachment rows exist (metadata only).
+                    $attachmentsCreated += $this->restoreAnnouncementAttachments(
+                        $a,
+                        $existing,
+                        $courseEntity,
+                        $sessionEntity,
+                        $groupEntity,
+                        $originPath,
+                        $em
+                    );
+
+                    $skipped++;
+                    continue;
+                }
+
+                if (2 === $policy) { // RENAME
+                    $base = $title;
+                    $n = 2;
+                    $candidate = $base.' ('.$n.')';
+                    while (isset($existingByTitle[$candidate])) {
+                        $n++;
+                        $candidate = $base.' ('.$n.')';
+                        if ($n > 5000) {
+                            $this->dlog('restore_announcements: rename safeguard triggered, skipping', [
+                                'src_id' => $oldId,
+                                'base_title' => $base,
+                            ]);
+                            continue 2;
+                        }
+                    }
+
+                    $this->dlog('restore_announcements: duplicate detected, policy=RENAME', [
+                        'src_id' => $oldId,
+                        'from' => $title,
+                        'to' => $candidate,
+                    ]);
+
+                    $title = $candidate;
+                    $renamed++;
+                    $existing = null; // force create new
+                }
+            }
+
             $contentRewritten = $this->rewriteHtmlForCourse($contentHtml, $sessionId, '[announcements.content]');
 
-            // Create or reuse entity
-            $entity = $existing ?: (new CAnnouncement());
-            $entity
-                ->setTitle($title)
-                ->setContent($contentRewritten) // content already rewritten
-                ->setParent($course)
-                ->addCourseLink($course, $session, $group)
-                ->setEmailSent($emailSent)
-            ;
+            $entity = null;
+            $mode = 'created';
 
-            if ($endDate instanceof DateTimeInterface) {
+            if ($existing instanceof CAnnouncement && 3 === $policy) {
+                $entity = $existing;
+                $mode = 'overwrite';
+            } else {
+                $entity = new CAnnouncement();
+                $mode = 'created';
+            }
+
+            $entity->setTitle($title);
+            $entity->setContent($contentRewritten);
+
+            // Keep linkage consistent
+            $entity->setParent($courseEntity);
+            $entity->addCourseLink($courseEntity, $sessionEntity, $groupEntity);
+
+            $entity->setEmailSent((bool) $emailSent);
+
+            if ($endDate instanceof \DateTimeInterface) {
                 $entity->setEndDate($endDate);
+            } elseif ('overwrite' === $mode) {
+                $entity->setEndDate(null);
             }
 
             $em->persist($entity);
             $em->flush();
 
             $destId = (int) $entity->getIid();
-            $this->course->resources[RESOURCE_ANNOUNCEMENT][$oldId] ??= new stdClass();
             $this->course->resources[RESOURCE_ANNOUNCEMENT][$oldId]->destination_id = $destId;
 
-            $this->dlog($existing ? 'restore_announcements: overwrite' : 'restore_announcements: created', [
-                'src_id' => (int) $oldId, 'dst_id' => $destId, 'title' => $title,
+            $existingByTitle[$title] = $entity;
+
+            if ('overwrite' === $mode) {
+                $updated++;
+            } else {
+                $created++;
+            }
+
+            $this->dlog('restore_announcements: '.$mode, [
+                'src_id' => $oldId,
+                'dst_id' => $destId,
+                'title' => $title,
             ]);
 
-            // Handle binary attachments from backup or source
-            $this->restoreAnnouncementAttachments($a, $entity, $originPath, $attachRepo, $em);
+            $attachmentsCreated += $this->restoreAnnouncementAttachments(
+                $a,
+                $entity,
+                $courseEntity,
+                $sessionEntity,
+                $groupEntity,
+                $originPath,
+                $em
+            );
         }
 
-        $this->dlog('restore_announcements: end');
+        $this->dlog('restore_announcements: end', [
+            'created' => $created,
+            'updated' => $updated,
+            'skipped' => $skipped,
+            'renamed' => $renamed,
+            'attachments_created' => $attachmentsCreated,
+            'policy' => $policy,
+            'session_id' => $sessionId,
+        ]);
     }
 
     /**
-     * Create/update CAnnouncementAttachment + ResourceFile for each attachment of an announcement.
-     * Sources:
-     *  - COPY mode (no ZIP):   from source announcement's ResourceFiles
-     *  - IMPORT mode (ZIP):    from /upload/announcements/* inside the package.
-     *
-     * Policies (by filename within the same announcement):
-     *  - FILE_SKIP:       skip if filename exists
-     *  - FILE_OVERWRITE:  reuse existing CAnnouncementAttachment and replace its ResourceFile
-     *  - FILE_RENAME:     create a new CAnnouncementAttachment with incremental suffix
+     * Restore announcement attachments (metadata).
+     * - Creates missing CAnnouncementAttachment rows
+     * - Avoids duplicates (path|filename)
+     * - Tries to verify file existence inside the extracted package (import mode)
      */
     private function restoreAnnouncementAttachments(
-        object $a,
-        CAnnouncement $entity,
-        string $originPath,
-        CAnnouncementAttachmentRepository $attachRepo,
-        EntityManagerInterface $em
-    ): void {
-        $copyMode = empty($this->course->backup_path);
+        object                              $payload,
+        CAnnouncement                       $announcement,
+        CourseEntity                        $courseEntity,
+        ?\Chamilo\CoreBundle\Entity\Session $sessionEntity,
+                                            $groupEntity,
+        string                              $originPath,
+        EntityManagerInterface              $em
+    ): int {
+        $created = 0;
 
-        $findExistingByName = static function (CAnnouncement $ann, string $name) {
-            foreach ($ann->getAttachments() as $att) {
-                if ($att->getFilename() === $name) {
-                    return $att;
-                }
-            }
+        // Build a normalized list of attachments from payload.
+        $attachments = [];
 
-            return null;
-        };
-
-        /**
-         * Decide target entity + final filename according to file policy.
-         * Returns [CAnnouncementAttachment|null $target, string|null $finalName, bool $isOverwrite].
-         */
-        $decideTarget = function (string $proposed, CAnnouncement $ann) use ($findExistingByName): array {
-            $policy = (int) $this->file_option;
-
-            $existing = $findExistingByName($ann, $proposed);
-            if (!$existing) {
-                return [null, $proposed, false];
-            }
-
-            if (\defined('FILE_SKIP') && FILE_SKIP === $policy) {
-                return [null, null, false];
-            }
-            if (\defined('FILE_OVERWRITE') && FILE_OVERWRITE === $policy) {
-                return [$existing, $proposed, true];
-            }
-
-            $pi = pathinfo($proposed);
-            $base = $pi['filename'] ?? $proposed;
-            $ext = isset($pi['extension']) && '' !== $pi['extension'] ? ('.'.$pi['extension']) : '';
-            $i = 1;
-            do {
-                $candidate = $base.'_'.$i.$ext;
-                $i++;
-            } while ($findExistingByName($ann, $candidate));
-
-            return [null, $candidate, false];
-        };
-
-        $createAttachment = function (string $filename, string $comment, int $size) use ($entity, $em) {
-            $att = (new CAnnouncementAttachment())
-                ->setFilename($filename)
-                ->setPath(uniqid('announce_', true))
-                ->setComment($comment)
-                ->setSize($size)
-                ->setAnnouncement($entity)
-                ->setParent($entity)
-                ->addCourseLink(
-                    api_get_course_entity($this->destination_course_id),
-                    api_get_session_entity(0),
-                    api_get_group_entity()
-                )
-            ;
-            $em->persist($att);
-            $em->flush();
-
-            return $att;
-        };
-
-        /**
-         * Search helper: try a list of absolute paths, then recursive search in a base dir by filename.
-         * Returns ['src'=>abs, 'filename'=>..., 'comment'=>..., 'size'=>int] or null.
-         */
-        $resolveSourceFile = function (array $candidates, array $fallbackDirs, string $filename) {
-            // 1) direct candidates (absolute paths)
-            foreach ($candidates as $meta) {
-                if (!empty($meta['src']) && is_file($meta['src']) && is_readable($meta['src'])) {
-                    $meta['filename'] = $meta['filename'] ?: basename($meta['src']);
-                    $meta['size'] = (int) ($meta['size'] ?: (filesize($meta['src']) ?: 0));
-
-                    return $meta;
-                }
-            }
-
-            // 2) recursive search by filename inside fallback dirs
-            $filename = trim($filename);
-            if ('' !== $filename) {
-                foreach ($fallbackDirs as $base) {
-                    $base = rtrim($base, '/').'/';
-                    if (!is_dir($base)) {
-                        continue;
-                    }
-                    $it = new RecursiveIteratorIterator(
-                        new RecursiveDirectoryIterator($base, FilesystemIterator::SKIP_DOTS),
-                        RecursiveIteratorIterator::SELF_FIRST
-                    );
-                    foreach ($it as $f) {
-                        if ($f->isFile() && $f->getFilename() === $filename) {
-                            return [
-                                'src' => $f->getRealPath(),
-                                'filename' => $filename,
-                                'comment' => (string) ($candidates[0]['comment'] ?? ''),
-                                'size' => (int) ($candidates[0]['size'] ?? (filesize($f->getRealPath()) ?: 0)),
-                            ];
-                        }
-                    }
-                }
-            }
-
-            return null;
-        };
-
-        $storeBinaryFromPath = function (
-            CAnnouncementAttachment $target,
-            string $absPath
-        ) use ($attachRepo): void {
-            // This exists in your ResourceRepository
-            $attachRepo->addFileFromPath($target, $target->getFilename(), $absPath, true);
-        };
-
-        // ---------------------- COPY MODE (course->course) ----------------------
-        if ($copyMode) {
-            $srcAttachmentIds = [];
-
-            if (!empty($a->attachment_source_id)) {
-                $srcAttachmentIds[] = (int) $a->attachment_source_id;
-            }
-            if (!empty($a->attachment_source_ids) && \is_array($a->attachment_source_ids)) {
-                foreach ($a->attachment_source_ids as $sid) {
-                    $sid = (int) $sid;
-                    if ($sid > 0) {
-                        $srcAttachmentIds[] = $sid;
-                    }
-                }
-            }
-            if (empty($srcAttachmentIds) && !empty($a->source_id)) {
-                $srcAnn = Container::getAnnouncementRepository()->find((int) $a->source_id);
-                if ($srcAnn) {
-                    $srcAtts = Container::getAnnouncementAttachmentRepository()->findBy(['announcement' => $srcAnn]);
-                    foreach ($srcAtts as $sa) {
-                        $srcAttachmentIds[] = (int) $sa->getIid();
-                    }
-                }
-            }
-
-            if (empty($srcAttachmentIds)) {
-                $this->dlog('restore_announcements: no source attachments found in COPY mode', [
-                    'dst_announcement_id' => (int) $entity->getIid(),
-                ]);
-
-                return;
-            }
-
-            $attRepo = Container::getAnnouncementAttachmentRepository();
-
-            foreach (array_unique($srcAttachmentIds) as $sid) {
-                /** @var CAnnouncementAttachment|null $srcAtt */
-                $srcAtt = $attRepo->find((int) $sid);
-                if (!$srcAtt) {
+        // New format: $payload->attachments = [ ['path'=>..., 'filename'=>..., 'size'=>..., 'comment'=>...], ... ]
+        if (isset($payload->attachments) && is_array($payload->attachments)) {
+            foreach ($payload->attachments as $row) {
+                if (!is_array($row)) {
                     continue;
                 }
 
-                $abs = $this->resourceFileAbsPathFromAnnouncementAttachment($srcAtt);
-                if (!$abs) {
-                    $this->dlog('restore_announcements: source attachment file not readable', ['src_att_id' => $sid]);
-
+                $p = trim((string) ($row['path'] ?? ''));
+                $f = trim((string) ($row['filename'] ?? ''));
+                if ('' === $p || '' === $f) {
                     continue;
                 }
 
-                $proposed = $srcAtt->getFilename() ?: basename($abs);
-                [$targetAttachment, $finalName, $isOverwrite] = $decideTarget($proposed, $entity);
-
-                if (null === $finalName) {
-                    $this->dlog('restore_announcements: skipped due to FILE_SKIP policy', [
-                        'src_att_id' => $sid,
-                        'filename' => $proposed,
-                    ]);
-
-                    continue;
-                }
-
-                if (null === $targetAttachment) {
-                    $targetAttachment = $createAttachment(
-                        $finalName,
-                        (string) $srcAtt->getComment(),
-                        (int) ($srcAtt->getSize() ?: (is_file($abs) ? filesize($abs) : 0))
-                    );
-                } else {
-                    $targetAttachment
-                        ->setComment((string) $srcAtt->getComment())
-                        ->setSize((int) ($srcAtt->getSize() ?: (is_file($abs) ? filesize($abs) : 0)))
-                    ;
-                    $em->persist($targetAttachment);
-                    $em->flush();
-                }
-
-                $storeBinaryFromPath($targetAttachment, $abs);
-
-                $this->dlog('restore_announcements: attachment '.($isOverwrite ? 'overwritten' : 'copied').' from ResourceFile', [
-                    'dst_announcement_id' => (int) $entity->getIid(),
-                    'filename' => $targetAttachment->getFilename(),
-                    'size' => $targetAttachment->getSize(),
-                ]);
-            }
-
-            return;
-        }
-
-        $candidates = [];
-
-        // Primary (from serialized record)
-        if (!empty($a->attachment_path)) {
-            $maybe = rtrim($originPath, '/').'/'.$a->attachment_path;
-            $filename = (string) ($a->attachment_filename ?? '');
-            if (is_file($maybe)) {
-                $candidates[] = [
-                    'src' => $maybe,
-                    'filename' => '' !== $filename ? $filename : basename($maybe),
-                    'comment' => (string) ($a->attachment_comment ?? ''),
-                    'size' => (int) ($a->attachment_size ?? (filesize($maybe) ?: 0)),
+                $attachments[] = [
+                    'path' => $p,
+                    'filename' => $f,
+                    'size' => (int) ($row['size'] ?? 0),
+                    'comment' => (string) ($row['comment'] ?? ''),
                 ];
-            } elseif (is_dir($maybe)) {
-                $try = '' !== $filename ? $maybe.'/'.$filename : '';
-                if ('' !== $try && is_file($try)) {
-                    $candidates[] = [
-                        'src' => $try,
-                        'filename' => $filename,
-                        'comment' => (string) ($a->attachment_comment ?? ''),
-                        'size' => (int) ($a->attachment_size ?? (filesize($try) ?: 0)),
-                    ];
-                } else {
-                    $files = [];
-                    foreach (new FilesystemIterator($maybe, FilesystemIterator::SKIP_DOTS) as $f) {
-                        if ($f->isFile()) {
-                            $files[] = $f->getRealPath();
-                        }
-                    }
-                    if (1 === \count($files)) {
-                        $one = $files[0];
-                        $candidates[] = [
-                            'src' => $one,
-                            'filename' => '' !== $filename ? $filename : basename($one),
-                            'comment' => (string) ($a->attachment_comment ?? ''),
-                            'size' => (int) ($a->attachment_size ?? (filesize($one) ?: 0)),
-                        ];
-                    }
-                }
             }
         }
 
-        // Fallback DB snapshot
-        if (!empty($this->course->orig)) {
-            $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
-            $sql = 'SELECT path, comment, size, filename
-                FROM '.$table.'
-                WHERE c_id = '.$this->destination_course_id.'
-                  AND announcement_id = '.(int) ($a->source_id ?? 0);
-            $res = Database::query($sql);
-            while ($row = Database::fetch_object($res)) {
-                $base = rtrim($originPath, '/').'/'.$row->path;
-                $abs = null;
+        // Legacy single attachment fields (optional)
+        if (empty($attachments) && !empty($payload->attachment_path) && !empty($payload->attachment_filename)) {
+            $attachments[] = [
+                'path' => trim((string) $payload->attachment_path),
+                'filename' => trim((string) $payload->attachment_filename),
+                'size' => (int) ($payload->attachment_size ?? 0),
+                'comment' => (string) ($payload->attachment_comment ?? ''),
+            ];
+        }
 
-                if (is_file($base)) {
-                    $abs = $base;
-                } elseif (is_dir($base)) {
-                    $try = $base.'/'.$row->filename;
-                    if (is_file($try)) {
-                        $abs = $try;
-                    } else {
-                        $files = [];
-                        foreach (new FilesystemIterator($base, FilesystemIterator::SKIP_DOTS) as $f) {
-                            if ($f->isFile()) {
-                                $files[] = $f->getRealPath();
-                            }
-                        }
-                        if (1 === \count($files)) {
-                            $abs = $files[0];
-                        }
-                    }
-                }
+        if (empty($attachments)) {
+            return 0;
+        }
 
-                if ($abs && is_readable($abs)) {
-                    $candidates[] = [
-                        'src' => $abs,
-                        'filename' => (string) $row->filename,
-                        'comment' => (string) $row->comment,
-                        'size' => (int) ($row->size ?: (filesize($abs) ?: 0)),
-                    ];
-                }
+        // Existing keys in destination announcement
+        $existingKeys = [];
+        foreach ($announcement->getAttachments() as $exAtt) {
+            if (!$exAtt instanceof \Chamilo\CourseBundle\Entity\CAnnouncementAttachment) {
+                continue;
+            }
+            $k = trim((string) $exAtt->getPath()).'|'.trim((string) $exAtt->getFilename());
+            if ('' !== $k) {
+                $existingKeys[$k] = true;
             }
         }
 
-        $fallbackDirs = [
-            rtrim($this->course->backup_path ?? '', '/').'/upload/announcements',
-            rtrim($this->course->backup_path ?? '', '/').'/upload',
-        ];
+        foreach ($attachments as $row) {
+            $p = trim((string) $row['path']);
+            $f = trim((string) $row['filename']);
+            if ('' === $p || '' === $f) {
+                continue;
+            }
 
-        $preferredFilename = (string) ($a->attachment_filename ?? '');
-        if ('' === $preferredFilename && !empty($candidates)) {
-            $preferredFilename = (string) ($candidates[0]['filename'] ?? '');
+            $key = $p.'|'.$f;
+            if (isset($existingKeys[$key])) {
+                continue;
+            }
+
+            $att = new \Chamilo\CourseBundle\Entity\CAnnouncementAttachment();
+            $att->setAnnouncement($announcement);
+            $att->setPath($p);
+            $att->setFilename($f);
+            $att->setSize((int) ($row['size'] ?? 0));
+            $att->setComment((string) ($row['comment'] ?? ''));
+
+            $att->setParent($courseEntity);
+            $att->addCourseLink($courseEntity, $sessionEntity, $groupEntity);
+
+            // Validate file presence in import mode (ZIP extracted).
+            if ('' !== $originPath) {
+                $abs = rtrim($originPath, '/').'/'.ltrim($p, '/');
+
+                $found = false;
+                if (is_file($abs) && is_readable($abs)) {
+                    // Some backups may store "path" as direct file.
+                    $found = true;
+                } elseif (is_dir($abs)) {
+                    // Most common: path is a folder; file is inside.
+                    $try = rtrim($abs, '/').'/'.$f;
+                    if (is_file($try) && is_readable($try)) {
+                        $found = true;
+                    }
+                }
+
+                $this->dlog('restore_announcements: attachment '.($found ? 'found' : 'missing').' in package', [
+                    'dst_announcement_id' => (int) $announcement->getIid(),
+                    'path' => $p,
+                    'filename' => $f,
+                    'originPath' => $originPath,
+                ]);
+            }
+
+            $em->persist($att);
+            $announcement->addAttachment($att);
+
+            $existingKeys[$key] = true;
+            $created++;
         }
 
-        $resolved = $resolveSourceFile($candidates, $fallbackDirs, $preferredFilename);
-        if (!$resolved) {
-            $this->dlog('restore_announcements: no ZIP attachments could be resolved', [
-                'dst_announcement_id' => (int) $entity->getIid(),
-                'originPath' => $originPath,
-                'hint' => 'Check upload/announcements and upload paths inside the package',
-            ]);
-
-            return;
-        }
-
-        $proposed = $resolved['filename'] ?: basename($resolved['src']);
-        [$targetAttachment, $finalName, $isOverwrite] = $decideTarget($proposed, $entity);
-
-        if (null === $finalName) {
-            $this->dlog('restore_announcements: skipped due to FILE_SKIP policy (ZIP)', [
-                'filename' => $proposed,
-            ]);
-
-            return;
-        }
-
-        if (null === $targetAttachment) {
-            $targetAttachment = $createAttachment(
-                $finalName,
-                (string) $resolved['comment'],
-                (int) $resolved['size']
-            );
-        } else {
-            $targetAttachment
-                ->setComment((string) $resolved['comment'])
-                ->setSize((int) $resolved['size'])
-            ;
-            $em->persist($targetAttachment);
+        if ($created > 0) {
             $em->flush();
         }
 
-        $storeBinaryFromPath($targetAttachment, $resolved['src']);
-
-        $this->dlog('restore_announcements: attachment '.($isOverwrite ? 'overwritten' : 'stored (ZIP)'), [
-            'announcement_id' => (int) $entity->getIid(),
-            'filename' => $targetAttachment->getFilename(),
-            'size' => $targetAttachment->getSize(),
-            'src' => $resolved['src'],
-        ]);
+        return $created;
     }
 
     /**
@@ -2899,13 +3504,16 @@ class CourseRestorer
     {
         if (!$this->course->has_resources(RESOURCE_QUIZ)) {
             error_log('RESTORE_QUIZ: No quiz resources in backup.');
-
             return;
         }
 
         $em = Database::getManager();
         $resources = $this->course->resources;
+
+        /** @var CourseEntity $courseEntity */
         $courseEntity = api_get_course_entity($this->destination_course_id);
+
+        /** @var SessionEntity|null $sessionEntity */
         $sessionEntity = !empty($session_id) ? api_get_session_entity((int) $session_id) : api_get_session_entity();
 
         // Safe wrapper around rewriteHtmlForCourse
@@ -2918,7 +3526,6 @@ class CourseRestorer
                 return $this->rewriteHtmlForCourse((string) $html, (int) $session_id, $dbgTag);
             } catch (Throwable $e) {
                 error_log('RESTORE_QUIZ: rewriteHtmlForCourse failed: '.$e->getMessage());
-
                 return (string) $html;
             }
         };
@@ -2960,50 +3567,62 @@ class CourseRestorer
             if (-1 === (int) $id) {
                 $this->course->resources[RESOURCE_QUIZ][$id]->destination_id = -1;
                 error_log('RESTORE_QUIZ: Skipping virtual quiz (id=-1).');
-
                 continue;
             }
 
+            $linkSession = $respect_base_content
+                ? $sessionEntity
+                : (!empty($session_id) ? $sessionEntity : api_get_session_entity());
+
             $entity = (new CQuiz())
                 ->setParent($courseEntity)
-                ->addCourseLink(
-                    $courseEntity,
-                    $respect_base_content ? $sessionEntity : (!empty($session_id) ? $sessionEntity : api_get_session_entity()),
-                    api_get_group_entity()
-                )
-                ->setTitle((string) $quiz->title)
+                ->addCourseLink($courseEntity, $linkSession, api_get_group_entity())
+                ->setTitle((string) ($quiz->title ?? ''))
                 ->setDescription($description)
-                ->setType(isset($quiz->quiz_type) ? (int) $quiz->quiz_type : (int) $quiz->type)
-                ->setRandom((int) $quiz->random)
-                ->setRandomAnswers((bool) $quiz->random_answers)
-                ->setResultsDisabled((int) $quiz->results_disabled)
-                ->setMaxAttempt((int) $quiz->max_attempt)
-                ->setFeedbackType((int) $quiz->feedback_type)
-                ->setExpiredTime((int) $quiz->expired_time)
-                ->setReviewAnswers((int) $quiz->review_answers)
-                ->setRandomByCategory((int) $quiz->random_by_category)
+                ->setType(isset($quiz->quiz_type) ? (int) $quiz->quiz_type : (int) ($quiz->type ?? 0))
+                ->setRandom((int) ($quiz->random ?? 0))
+                ->setRandomAnswers((bool) ($quiz->random_answers ?? false))
+                ->setResultsDisabled((int) ($quiz->results_disabled ?? 0))
+                ->setMaxAttempt((int) ($quiz->max_attempt ?? 1))
+                ->setFeedbackType((int) ($quiz->feedback_type ?? 0))
+                ->setExpiredTime((int) ($quiz->expired_time ?? 0))
+                ->setReviewAnswers((int) ($quiz->review_answers ?? 0))
+                ->setRandomByCategory((int) ($quiz->random_by_category ?? 0))
                 ->setTextWhenFinished($textFinished)
                 ->setTextWhenFinishedFailure($textFinishedKo)
                 ->setDisplayCategoryName((int) ($quiz->display_category_name ?? 0))
                 ->setSaveCorrectAnswers(isset($quiz->save_correct_answers) ? (int) $quiz->save_correct_answers : 0)
-                ->setPropagateNeg((int) $quiz->propagate_neg)
+                ->setPropagateNeg((int) ($quiz->propagate_neg ?? 0))
                 ->setHideQuestionTitle((bool) ($quiz->hide_question_title ?? false))
                 ->setHideQuestionNumber((int) ($quiz->hide_question_number ?? 0))
+                ->setPreventBackwards((int) ($quiz->prevent_backwards ?? 0))
+                ->setShowPreviousButton((bool) ($quiz->show_previous_button ?? true))
+                ->setHideAttemptsTable((bool) ($quiz->hide_attempts_table ?? false))
+                ->setPageResultConfiguration((array) ($quiz->page_result_configuration ?? []))
+                ->setDisplayChartDegreeCertainty((int) ($quiz->display_chart_degree_certainty ?? 0))
+                ->setSendEmailChartDegreeCertainty((int) ($quiz->send_email_chart_degree_certainty ?? 0))
+                ->setNotDisplayBalancePercentageCategorieQuestion((int) ($quiz->not_display_balance_percentage_categorie_question ?? 0))
+                ->setDisplayChartDegreeCertaintyCategory((int) ($quiz->display_chart_degree_certainty_category ?? 0))
+                ->setGatherQuestionsCategories((int) ($quiz->gather_questions_categories ?? 0))
+                ->setDuration(isset($quiz->duration) ? (int) $quiz->duration : null)
                 ->setStartTime(!empty($quiz->start_time) ? new DateTime((string) $quiz->start_time) : null)
                 ->setEndTime(!empty($quiz->end_time) ? new DateTime((string) $quiz->end_time) : null)
             ;
 
-            if (isset($quiz->access_condition) && '' !== $quiz->access_condition) {
-                $entity->setAccessCondition((string) $quiz->access_condition);
+            if (isset($quiz->access_condition) && '' !== (string) $quiz->access_condition) {
+                $entity->setAccessCondition($rw((string) $quiz->access_condition, 'QZ.access'));
             }
-            if (isset($quiz->pass_percentage) && '' !== $quiz->pass_percentage && null !== $quiz->pass_percentage) {
+            if (isset($quiz->pass_percentage) && '' !== (string) $quiz->pass_percentage && null !== $quiz->pass_percentage) {
                 $entity->setPassPercentage((int) $quiz->pass_percentage);
             }
-            if (isset($quiz->question_selection_type) && '' !== $quiz->question_selection_type && null !== $quiz->question_selection_type) {
+            if (isset($quiz->question_selection_type) && '' !== (string) $quiz->question_selection_type && null !== $quiz->question_selection_type) {
                 $entity->setQuestionSelectionType((int) $quiz->question_selection_type);
             }
             if ('true' === api_get_setting('exercise.allow_notification_setting_per_exercise')) {
                 $entity->setNotifications((string) ($quiz->notifications ?? ''));
+            }
+            if (isset($quiz->autolaunch)) {
+                $entity->setAutoLaunch((bool) $quiz->autolaunch);
             }
 
             $em->persist($entity);
@@ -3013,15 +3632,14 @@ class CourseRestorer
             $this->course->resources[RESOURCE_QUIZ][$id]->destination_id = $newQuizId;
 
             $qCount = isset($quiz->question_ids) ? \count((array) $quiz->question_ids) : 0;
-            error_log('RESTORE_QUIZ: Created quiz iid='.$newQuizId.' title="'.(string) $quiz->title.'" with '.$qCount.' question ids.');
+            error_log('RESTORE_QUIZ: Created quiz iid='.$newQuizId.' title="'.(string) ($quiz->title ?? '').'" with '.$qCount.' question ids.');
 
             $order = 0;
             if (!empty($quiz->question_ids)) {
                 foreach ($quiz->question_ids as $index => $question_id) {
-                    $qid = $this->restore_quiz_question($question_id, (int) $session_id);
+                    $qid = $this->restore_quiz_question((int) $question_id, (int) $session_id);
                     if (!$qid) {
-                        error_log('RESTORE_QUIZ: restore_quiz_question returned 0 for src_question_id='.$question_id);
-
+                        error_log('RESTORE_QUIZ: restore_quiz_question returned 0 for src_question_id='.(int) $question_id);
                         continue;
                     }
 
@@ -3033,8 +3651,7 @@ class CourseRestorer
 
                     $questionEntity = $em->getRepository(CQuizQuestion::class)->find($qid);
                     if (!$questionEntity) {
-                        error_log('RESTORE_QUIZ: Question entity not found after insert. qid='.$qid);
-
+                        error_log('RESTORE_QUIZ: Question entity not found after insert. qid='.(int) $qid);
                         continue;
                     }
 
@@ -3048,7 +3665,7 @@ class CourseRestorer
                     $em->flush();
                 }
             } else {
-                error_log('RESTORE_QUIZ: No questions bound to quiz src_id='.$id.' (title="'.(string) $quiz->title.'").');
+                error_log('RESTORE_QUIZ: No questions bound to quiz src_id='.(int) $id.' (title="'.(string) ($quiz->title ?? '').'").');
             }
         }
     }
@@ -3069,18 +3686,26 @@ class CourseRestorer
             error_log('RESTORE_QUESTION: Aliased Exercise_Question -> RESOURCE_QUIZQUESTION for restore.');
         }
 
-        /** @var object|null $question */
-        $question = $resources[RESOURCE_QUIZQUESTION][$id] ?? null;
-        if (!\is_object($question)) {
-            error_log('RESTORE_QUESTION: Question not found in resources. src_id='.$id);
-
+        $wrap = $resources[RESOURCE_QUIZQUESTION][$id] ?? null;
+        if (!\is_object($wrap)) {
+            error_log('RESTORE_QUESTION: Question not found in resources. src_id='.(int) $id);
             return 0;
         }
-        if (method_exists($question, 'is_restored') && $question->is_restored()) {
-            return (int) $question->destination_id;
+
+        // No method_exists: use destination_id as restore marker.
+        $already = (int) ($this->course->resources[RESOURCE_QUIZQUESTION][$id]->destination_id ?? 0);
+        if ($already > 0) {
+            return $already;
         }
 
+        /** @var CourseEntity $courseEntity */
         $courseEntity = api_get_course_entity($this->destination_course_id);
+
+        /** @var SessionEntity|null $sessionEntity */
+        $sessionEntity = !empty($session_id) ? api_get_session_entity((int) $session_id) : api_get_session_entity();
+
+        // Pick the actual payload object
+        $question = isset($wrap->obj) ? $wrap->obj : $wrap;
 
         // Safe wrapper around rewriteHtmlForCourse
         $rw = function (?string $html, string $dbgTag = 'QZ.Q') use ($session_id) {
@@ -3092,14 +3717,15 @@ class CourseRestorer
                 return $this->rewriteHtmlForCourse((string) $html, (int) $session_id, $dbgTag);
             } catch (Throwable $e) {
                 error_log('RESTORE_QUESTION: rewriteHtmlForCourse failed: '.$e->getMessage());
-
                 return (string) $html;
             }
         };
 
-        // Rewrite statement & description
-        $question->description = $rw($question->description ?? '', 'QZ.Q.desc');
-        $question->question = $rw($question->question ?? '', 'QZ.Q.text');
+        // Rewrite statement & description (+ feedback/extra)
+        $questionText = $rw($question->question ?? '', 'QZ.Q.text');
+        $descText = $rw($question->description ?? '', 'QZ.Q.desc');
+        $feedbackText = $rw($question->feedback ?? '', 'QZ.Q.feedback');
+        $extraText = $rw($question->extra ?? '', 'QZ.Q.extra');
 
         // Picture mapping (kept as in your code)
         $imageNewId = '';
@@ -3111,18 +3737,23 @@ class CourseRestorer
             }
         }
 
-        $qType = (int) ($question->quiz_type ?? $question->type);
+        $qType = (int) ($question->quiz_type ?? $question->type ?? 0);
+
         $entity = (new CQuizQuestion())
             ->setParent($courseEntity)
-            ->addCourseLink($courseEntity, api_get_session_entity(), api_get_group_entity())
-            ->setQuestion($question->question)
-            ->setDescription($question->description)
+            ->addCourseLink($courseEntity, $sessionEntity, api_get_group_entity())
+            ->setQuestion((string) $questionText)
+            ->setDescription((string) $descText)
             ->setPonderation((float) ($question->ponderation ?? 0))
             ->setPosition((int) ($question->position ?? 1))
             ->setType($qType)
-            ->setPicture($imageNewId)
+            ->setPicture((string) $imageNewId)
             ->setLevel((int) ($question->level ?? 1))
-            ->setExtra((string) ($question->extra ?? ''))
+            ->setExtra((string) $extraText)
+            ->setFeedback((string) $feedbackText)
+            ->setQuestionCode((string) ($question->question_code ?? ''))
+            ->setDuration(isset($question->duration) ? (int) $question->duration : null)
+            ->setParentMediaId(isset($question->parent_media_id) ? (int) $question->parent_media_id : null)
         ;
 
         $em->persist($entity);
@@ -3130,22 +3761,24 @@ class CourseRestorer
 
         $new_id = (int) $entity->getIid();
         if (!$new_id) {
-            error_log('RESTORE_QUESTION: Failed to obtain new question iid for src_id='.$id);
-
+            error_log('RESTORE_QUESTION: Failed to obtain new question iid for src_id='.(int) $id);
             return 0;
         }
 
         $answers = (array) ($question->answers ?? []);
-        error_log('RESTORE_QUESTION: Creating question src_id='.$id.' dst_iid='.$new_id.' answers_count='.\count($answers));
+        error_log('RESTORE_QUESTION: Creating question src_id='.(int) $id.' dst_iid='.$new_id.' answers_count='.\count($answers));
 
+        // Matching family remap support
         $isMatchingFamily = \in_array($qType, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE], true);
-        $correctMapSrcToDst = []; // dstAnsId => srcCorrectRef
-        $allSrcAnswersById = []; // srcAnsId => text
-        $dstAnswersByIdText = []; // dstAnsId => text
+        $correctMapDstToSrc = [];     // dstAnsId => srcCorrectRef
+        $allSrcAnswersById = [];      // srcAnsId => rewritten text
+        $dstAnswersByIdText = [];     // dstAnsId => rewritten text
 
         if ($isMatchingFamily) {
             foreach ($answers as $a) {
-                $allSrcAnswersById[$a['id']] = $rw($a['answer'] ?? '', 'QZ.Q.ans.all');
+                if (isset($a['id'])) {
+                    $allSrcAnswersById[(int) $a['id']] = $rw($a['answer'] ?? '', 'QZ.Q.ans.all');
+                }
             }
         }
 
@@ -3163,7 +3796,7 @@ class CourseRestorer
                 ->setHotspotType(isset($a['hotspot_type']) ? (string) $a['hotspot_type'] : null)
             ;
 
-            if (isset($a['correct']) && '' !== $a['correct'] && null !== $a['correct']) {
+            if (isset($a['correct']) && null !== $a['correct'] && '' !== (string) $a['correct']) {
                 $ans->setCorrect((int) $a['correct']);
             }
 
@@ -3171,57 +3804,88 @@ class CourseRestorer
             $em->flush();
 
             if ($isMatchingFamily) {
-                $correctMapSrcToDst[(int) $ans->getIid()] = $a['correct'] ?? null;
-                $dstAnswersByIdText[(int) $ans->getIid()] = $ansText;
+                $dstId = (int) $ans->getIid();
+                $correctMapDstToSrc[$dstId] = $a['correct'] ?? null;
+                $dstAnswersByIdText[$dstId] = (string) $ansText;
             }
         }
 
-        if ($isMatchingFamily && $correctMapSrcToDst) {
+        // Remap correct references (matching family)
+        if ($isMatchingFamily && !empty($correctMapDstToSrc)) {
             foreach ($entity->getAnswers() as $dstAns) {
                 $dstAid = (int) $dstAns->getIid();
-                $srcRef = $correctMapSrcToDst[$dstAid] ?? null;
+                $srcRef = $correctMapDstToSrc[$dstAid] ?? null;
                 if (null === $srcRef) {
                     continue;
                 }
 
-                if (isset($allSrcAnswersById[$srcRef])) {
-                    $needle = $allSrcAnswersById[$srcRef];
-                    $newDst = null;
-                    foreach ($dstAnswersByIdText as $candId => $txt) {
-                        if ($txt === $needle) {
-                            $newDst = $candId;
+                $srcRef = (int) $srcRef;
+                if (!isset($allSrcAnswersById[$srcRef])) {
+                    continue;
+                }
 
-                            break;
-                        }
+                $needle = $allSrcAnswersById[$srcRef];
+                $newDst = null;
+
+                foreach ($dstAnswersByIdText as $candId => $txt) {
+                    if ($txt === $needle) {
+                        $newDst = (int) $candId;
+                        break;
                     }
-                    if (null !== $newDst) {
-                        $dstAns->setCorrect((int) $newDst);
-                        $em->persist($dstAns);
-                    }
+                }
+
+                if (null !== $newDst) {
+                    $dstAns->setCorrect((int) $newDst);
+                    $em->persist($dstAns);
                 }
             }
             $em->flush();
         }
 
+        // MULTIPLE_ANSWER_TRUE_FALSE: restore options (supports array or object formats)
         if (\defined('MULTIPLE_ANSWER_TRUE_FALSE') && MULTIPLE_ANSWER_TRUE_FALSE === $qType) {
             $newOptByOld = [];
-            if (isset($question->question_options) && is_iterable($question->question_options)) {
-                foreach ($question->question_options as $optWrap) {
-                    $opt = $optWrap->obj ?? $optWrap;
-                    $optTitle = $rw($opt->name ?? '', 'QZ.Q.opt'); // rewrite option title too
+
+            $opts = $question->question_options ?? [];
+            if (is_iterable($opts)) {
+                foreach ($opts as $optItem) {
+                    $oldId = null;
+                    $name = '';
+                    $pos = 0;
+
+                    if (is_array($optItem)) {
+                        $oldId = isset($optItem['id']) ? (int) $optItem['id'] : null;
+                        $name = (string) ($optItem['name'] ?? '');
+                        $pos = (int) ($optItem['position'] ?? 0);
+                    } elseif (is_object($optItem)) {
+                        $optObj = $optItem->obj ?? $optItem;
+                        $oldId = isset($optObj->id) ? (int) $optObj->id : null;
+                        $name = (string) ($optObj->name ?? '');
+                        $pos = (int) ($optObj->position ?? 0);
+                    }
+
+                    if (null === $oldId) {
+                        continue;
+                    }
+
+                    $optTitle = $rw($name, 'QZ.Q.opt');
+
                     $optEntity = (new CQuizQuestionOption())
                         ->setQuestion($entity)
                         ->setTitle((string) $optTitle)
-                        ->setPosition((int) $opt->position)
+                        ->setPosition((int) $pos)
                     ;
+
                     $em->persist($optEntity);
                     $em->flush();
-                    $newOptByOld[$opt->id] = (int) $optEntity->getIid();
+
+                    $newOptByOld[$oldId] = (int) $optEntity->getIid();
                 }
+
                 foreach ($entity->getAnswers() as $dstAns) {
                     $corr = $dstAns->getCorrect();
-                    if (null !== $corr && isset($newOptByOld[$corr])) {
-                        $dstAns->setCorrect((int) $newOptByOld[$corr]);
+                    if (null !== $corr && isset($newOptByOld[(int) $corr])) {
+                        $dstAns->setCorrect((int) $newOptByOld[(int) $corr]);
                         $em->persist($dstAns);
                     }
                 }
@@ -3243,7 +3907,6 @@ class CourseRestorer
     {
         if (!$this->course->has_resources(RESOURCE_SURVEY)) {
             $this->debug && error_log('COURSE_DEBUG: restore_surveys: no survey resources in backup.');
-
             return;
         }
 
@@ -3268,7 +3931,18 @@ class CourseRestorer
 
         $resources = $this->course->resources;
 
-        foreach ($resources[RESOURCE_SURVEY] as $legacySurveyId => $surveyObj) {
+        foreach ($resources[RESOURCE_SURVEY] as $legacySurveyId => $surveyWrap) {
+            if (isset($surveyWrap->destination_id) && (int) $surveyWrap->destination_id > 0) {
+                $this->debug && error_log(
+                    'COURSE_DEBUG: restore_surveys: already restored, skipping legacy_survey_id='
+                    .(int) $legacySurveyId.' dst_id='.(int) $surveyWrap->destination_id
+                );
+                continue;
+            }
+
+            // Prefer payload in ->obj when present (consistent with other tools)
+            $surveyObj = (isset($surveyWrap->obj) && \is_object($surveyWrap->obj)) ? $surveyWrap->obj : $surveyWrap;
+
             try {
                 $code = (string) ($surveyObj->code ?? '');
                 $lang = (string) ($surveyObj->lang ?? '');
@@ -3277,6 +3951,14 @@ class CourseRestorer
                 $subtitle = $rewrite($surveyObj->subtitle ?? '', ':survey.subtitle');
                 $intro = $rewrite($surveyObj->intro ?? '', ':survey.intro');
                 $surveyThanks = $rewrite($surveyObj->surveythanks ?? '', ':survey.thanks');
+                $inviteMail = $rewrite($surveyObj->invite_mail ?? '', ':survey.invite_mail');
+                $reminderMail = $rewrite($surveyObj->reminder_mail ?? '', ':survey.reminder_mail');
+                $mailSubject = $rewrite($surveyObj->mail_subject ?? '', ':survey.mail_subject');
+
+                $accessCondition = '';
+                if (isset($surveyObj->access_condition) && '' !== (string) $surveyObj->access_condition) {
+                    $accessCondition = $rewrite((string) $surveyObj->access_condition, ':survey.access_condition');
+                }
 
                 $onePerPage = !empty($surveyObj->one_question_per_page);
                 $shuffle = isset($surveyObj->shuffle) ? (bool) $surveyObj->shuffle : (!empty($surveyObj->suffle));
@@ -3302,14 +3984,21 @@ class CourseRestorer
 
                 $visibleResults = isset($surveyObj->visible_results) ? (int) $surveyObj->visible_results : null;
                 $displayQuestionNumber = isset($surveyObj->display_question_number) ? (bool) $surveyObj->display_question_number : true;
+                $surveyType = isset($surveyObj->survey_type) ? (int) $surveyObj->survey_type : null;
+                $showFormProfile = isset($surveyObj->show_form_profile) ? (int) $surveyObj->show_form_profile : null;
+                $formFields = isset($surveyObj->form_fields) ? (string) $surveyObj->form_fields : null;
+                $duration = isset($surveyObj->duration) ? (int) $surveyObj->duration : null;
+                $surveyVersion = isset($surveyObj->survey_version) ? (string) $surveyObj->survey_version : '';
+                $isMandatory = isset($surveyObj->is_mandatory) ? (bool) $surveyObj->is_mandatory : false;
 
                 $existing = null;
-
                 try {
-                    if (method_exists($surveyRepo, 'findOneByCodeAndLangInCourse')) {
-                        $existing = $surveyRepo->findOneByCodeAndLangInCourse($courseEntity, $code, $lang);
-                    } else {
-                        $existing = $surveyRepo->findOneBy(['code' => $code, 'lang' => $lang]);
+                    $candidate = $surveyRepo->findOneBy(['code' => $code, 'lang' => $lang]);
+                    if ($candidate instanceof CSurvey) {
+                        $link = $candidate->getFirstResourceLinkFromCourseSession($courseEntity, $sessionEntity);
+                        if (null !== $link) {
+                            $existing = $candidate;
+                        }
                     }
                 } catch (Throwable $e) {
                     $this->debug && error_log('COURSE_DEBUG: restore_surveys: duplicate check skipped: '.$e->getMessage());
@@ -3320,7 +4009,6 @@ class CourseRestorer
                         case FILE_SKIP:
                             $this->course->resources[RESOURCE_SURVEY][$legacySurveyId]->destination_id = (int) $existing->getIid();
                             $this->debug && error_log("COURSE_DEBUG: restore_surveys: survey exists code='$code' (skip).");
-
                             continue 2;
 
                         case FILE_RENAME:
@@ -3332,19 +4020,16 @@ class CourseRestorer
                             }
                             $code = $try;
                             $this->debug && error_log("COURSE_DEBUG: restore_surveys: renaming to '$code'.");
-
                             break;
 
                         case FILE_OVERWRITE:
                             SurveyManager::deleteSurvey($existing);
                             $em->flush();
                             $this->debug && error_log('COURSE_DEBUG: restore_surveys: existing survey deleted (overwrite).');
-
                             break;
 
                         default:
                             $this->course->resources[RESOURCE_SURVEY][$legacySurveyId]->destination_id = (int) $existing->getIid();
-
                             continue 2;
                     }
                 }
@@ -3356,8 +4041,6 @@ class CourseRestorer
                     ->setTitle($title)
                     ->setSubtitle($subtitle)
                     ->setLang($lang)
-                    ->setAvailFrom($availFrom)
-                    ->setAvailTill($availTill)
                     ->setIsShared((string) ($surveyObj->is_shared ?? '0'))
                     ->setTemplate((string) ($surveyObj->template ?? 'template'))
                     ->setIntro($intro)
@@ -3365,34 +4048,58 @@ class CourseRestorer
                     ->setCreationDate($creationDate)
                     ->setInvited(0)
                     ->setAnswered(0)
-                    ->setInviteMail((string) ($surveyObj->invite_mail ?? ''))
-                    ->setReminderMail((string) ($surveyObj->reminder_mail ?? ''))
+                    ->setInviteMail((string) $inviteMail)
+                    ->setReminderMail((string) $reminderMail)
+                    ->setMailSubject((string) $mailSubject)
                     ->setOneQuestionPerPage($onePerPage)
                     ->setShuffle($shuffle)
                     ->setAnonymous($anonymous)
                     ->setDisplayQuestionNumber($displayQuestionNumber)
+                    ->setIsMandatory($isMandatory)
                 ;
 
-                if (method_exists($newSurvey, 'setParent')) {
-                    $newSurvey->setParent($courseEntity);
+                // Avoid setting "now" when null (entity setters default null->now).
+                if ($availFrom instanceof DateTime) {
+                    $newSurvey->setAvailFrom($availFrom);
                 }
-                if (method_exists($newSurvey, 'addCourseLink')) {
-                    $newSurvey->addCourseLink($courseEntity, $sessionEntity);
-                }
-
-                if (method_exists($surveyRepo, 'create')) {
-                    $surveyRepo->create($newSurvey);
-                } else {
-                    $em->persist($newSurvey);
-                    $em->flush();
+                if ($availTill instanceof DateTime) {
+                    $newSurvey->setAvailTill($availTill);
                 }
 
-                if (null !== $visibleResults && method_exists($newSurvey, 'setVisibleResults')) {
+                if ('' !== $accessCondition) {
+                    $newSurvey->setAccessCondition($accessCondition);
+                }
+
+                if ('' !== $surveyVersion) {
+                    $newSurvey->setSurveyVersion($surveyVersion);
+                }
+
+                if (null !== $surveyType) {
+                    $newSurvey->setSurveyType($surveyType);
+                }
+                if (null !== $showFormProfile) {
+                    $newSurvey->setShowFormProfile($showFormProfile);
+                }
+                if (null !== $formFields) {
+                    $newSurvey->setFormFields($formFields);
+                }
+                if (null !== $duration) {
+                    $newSurvey->setDuration($duration);
+                }
+                if (null !== $visibleResults) {
                     $newSurvey->setVisibleResults($visibleResults);
-                    $em->flush();
                 }
+
+                // Required by AbstractResource::addCourseLink()
+                $newSurvey->setParent($courseEntity);
+                $newSurvey->addCourseLink($courseEntity, $sessionEntity);
+
+                $em->persist($newSurvey);
+                $em->flush();
 
                 $newId = (int) $newSurvey->getIid();
+
+                // Mark restored (this is the key to prevent second copy)
                 $this->course->resources[RESOURCE_SURVEY][$legacySurveyId]->destination_id = $newId;
 
                 // Restore questions
@@ -3430,11 +4137,12 @@ class CourseRestorer
 
         if (!$qWrap || !\is_object($qWrap)) {
             $this->debug && error_log("COURSE_DEBUG: restore_survey_question: legacy question $id not found.");
-
             return 0;
         }
-        if (method_exists($qWrap, 'is_restored') && $qWrap->is_restored()) {
-            return $qWrap->destination_id;
+
+        // No method_exists: use destination_id as restoration marker.
+        if (isset($qWrap->destination_id) && (int) $qWrap->destination_id > 0) {
+            return (int) $qWrap->destination_id;
         }
 
         $surveyRepo = Container::getSurveyRepository();
@@ -3443,7 +4151,6 @@ class CourseRestorer
         $survey = $surveyRepo->find((int) $survey_id);
         if (!$survey instanceof CSurvey) {
             $this->debug && error_log("COURSE_DEBUG: restore_survey_question: target survey $survey_id not found.");
-
             return 0;
         }
 
@@ -3463,28 +4170,29 @@ class CourseRestorer
         $commentText = $rewrite($q->survey_question_comment ?? '', ':survey.qc');
 
         try {
+            $type = 'open';
+            if (isset($q->survey_question_type) && '' !== (string) $q->survey_question_type) {
+                $type = (string) $q->survey_question_type;
+            } elseif (isset($q->type) && '' !== (string) $q->type) {
+                $type = (string) $q->type;
+            }
+
             $question = new CSurveyQuestion();
             $question
                 ->setSurvey($survey)
-                ->setSurveyQuestion($questionText)
-                ->setSurveyQuestionComment($commentText)
-                ->setType((string) ($q->survey_question_type ?? $q->type ?? 'open'))
+                ->setSurveyQuestion((string) $questionText)
+                ->setSurveyQuestionComment((string) $commentText)
+                ->setType($type)
                 ->setDisplay((string) ($q->display ?? 'vertical'))
                 ->setSort((int) ($q->sort ?? 0))
+                ->setIsMandatory((bool) ($q->is_required ?? false))
             ;
 
-            if (isset($q->shared_question_id) && method_exists($question, 'setSharedQuestionId')) {
+            if (isset($q->shared_question_id) && null !== $q->shared_question_id) {
                 $question->setSharedQuestionId((int) $q->shared_question_id);
             }
-            if (isset($q->max_value) && method_exists($question, 'setMaxValue')) {
+            if (isset($q->max_value) && null !== $q->max_value) {
                 $question->setMaxValue((int) $q->max_value);
-            }
-            if (isset($q->is_required)) {
-                if (method_exists($question, 'setIsMandatory')) {
-                    $question->setIsMandatory((bool) $q->is_required);
-                } elseif (method_exists($question, 'setIsRequired')) {
-                    $question->setIsRequired((bool) $q->is_required);
-                }
             }
 
             $em->persist($question);
@@ -3501,7 +4209,7 @@ class CourseRestorer
                 $opt
                     ->setSurvey($survey)
                     ->setQuestion($question)
-                    ->setOptionText($optText)
+                    ->setOptionText((string) $optText)
                     ->setSort($sort)
                     ->setValue($value)
                 ;
@@ -3515,7 +4223,6 @@ class CourseRestorer
             return (int) $question->getIid();
         } catch (Throwable $e) {
             error_log('COURSE_DEBUG: restore_survey_question: failed: '.$e->getMessage());
-
             return 0;
         }
     }
@@ -3535,15 +4242,16 @@ class CourseRestorer
         $tblLpCategory = Database::get_course_table(TABLE_LP_CATEGORY);
         $resources = $this->course->resources;
 
-        /** @var LearnPathCategory $item */
         foreach ($resources[RESOURCE_LEARNPATH_CATEGORY] as $id => $item) {
-            /** @var CLpCategory|null $lpCategory */
-            $lpCategory = $item->object;
-            if (!$lpCategory) {
-                continue;
+            // Support both: $item->object (entity) or plain exported payload fields.
+            $title = '';
+
+            if (isset($item->object) && $item->object instanceof CLpCategory) {
+                $title = trim((string) $item->object->getTitle());
+            } else {
+                $title = trim((string) ($item->title ?? $item->name ?? ''));
             }
 
-            $title = trim((string) $lpCategory->getTitle());
             if ('' === $title) {
                 continue;
             }
@@ -3648,10 +4356,9 @@ class CourseRestorer
         foreach ($entries as $sc) {
             // Locate package (zip or folder → temp zip)
             $srcLpId = (int) ($sc->source_lp_id ?? 0);
-            $pkg = $this->findScormPackageForLp($srcLpId);
+            $pkg = $this->findScormPackageForEntry($sc);
             if (empty($pkg['zip'])) {
                 error_log($logp.'No package (zip/folder) found for a SCORM entry');
-
                 continue;
             }
             $zipAbs = $pkg['zip'];
@@ -3668,6 +4375,11 @@ class CourseRestorer
             $lpEntity = $lpId ? Container::getLpRepository()->find($lpId) : null;
             if ($lpEntity) {
                 $lpTitle = $lpEntity->getTitle() ?: $lpTitle;
+            } else {
+                $lpTitle = (string) ($sc->name ?? $lpTitle);
+                if ('' === trim($lpTitle)) {
+                    $lpTitle = 'Untitled';
+                }
             }
 
             $cleanTitle = preg_replace('/\s+/', ' ', trim(str_replace(['/', '\\'], '-', (string) $lpTitle))) ?: 'Untitled';
@@ -3739,24 +4451,24 @@ class CourseRestorer
      */
     public function restore_learnpaths($session_id = 0, $respect_base_content = false, $destination_course_code = ''): void
     {
-        // 0) Ensure we have a resources snapshot (either internal or from the course)
+        // Ensure we have a resources snapshot (either internal or from the course)
         $this->ensureDepsBagsFromSnapshot();
-        $all = $this->getAllResources(); // <- uses snapshot if available
+        $all = $this->getAllResources(); // Uses snapshot if available
 
-        $docBag = $all[RESOURCE_DOCUMENT] ?? [];
+        $docBag  = $all[RESOURCE_DOCUMENT] ?? [];
         $quizBag = $all[RESOURCE_QUIZ] ?? [];
         $linkBag = $all[RESOURCE_LINK] ?? [];
         $survBag = $all[RESOURCE_SURVEY] ?? [];
         $workBag = $all[RESOURCE_WORK] ?? [];
-        $forumB = $all['forum'] ?? [];
+        $forumB  = $all['forum'] ?? [];
 
         $this->dlog('LP: deps (after ensure/snapshot)', [
-            'document' => \count($docBag),
-            'quiz' => \count($quizBag),
-            'link' => \count($linkBag),
+            'document'            => \count($docBag),
+            'quiz'                => \count($quizBag),
+            'link'                => \count($linkBag),
             'student_publication' => \count($workBag),
-            'survey' => \count($survBag),
-            'forum' => \count($forumB),
+            'survey'              => \count($survBag),
+            'forum'               => \count($forumB),
         ]);
 
         // Quick exit if no LPs selected
@@ -3773,27 +4485,27 @@ class CourseRestorer
 
         // Map normalized resource types to bags (no extra validations)
         $type2bags = [
-            'document' => ['document', RESOURCE_DOCUMENT],
-            'quiz' => ['quiz', RESOURCE_QUIZ],
-            'exercise' => ['quiz', RESOURCE_QUIZ],
-            'link' => ['link', RESOURCE_LINK],
-            'weblink' => ['link', RESOURCE_LINK],
-            'url' => ['link', RESOURCE_LINK],
-            'work' => ['works', RESOURCE_WORK],
+            'document'            => ['document', RESOURCE_DOCUMENT],
+            'quiz'                => ['quiz', RESOURCE_QUIZ],
+            'exercise'            => ['quiz', RESOURCE_QUIZ],
+            'link'                => ['link', RESOURCE_LINK],
+            'weblink'             => ['link', RESOURCE_LINK],
+            'url'                 => ['link', RESOURCE_LINK],
+            'work'                => ['works', RESOURCE_WORK],
             'student_publication' => ['works', RESOURCE_WORK],
-            'survey' => ['survey', RESOURCE_SURVEY],
-            'forum' => ['forum', 'forum'],
-            // scorm/sco not handled here
+            'survey'              => ['survey', RESOURCE_SURVEY],
+            'forum'               => ['forum', 'forum'],
+            // scorm/sco are not resolved here
         ];
 
         // ID collectors per dependency kind
         $need = [
             RESOURCE_DOCUMENT => [],
-            RESOURCE_QUIZ => [],
-            RESOURCE_LINK => [],
-            RESOURCE_WORK => [],
-            RESOURCE_SURVEY => [],
-            'forum' => [],
+            RESOURCE_QUIZ     => [],
+            RESOURCE_LINK     => [],
+            RESOURCE_WORK     => [],
+            RESOURCE_SURVEY   => [],
+            'forum'           => [],
         ];
 
         $takeId = static function ($v) {
@@ -3801,14 +4513,14 @@ class CourseRestorer
                 return null;
             }
 
-            return ctype_digit((string) $v) ? (int) $v : null;
+            return \ctype_digit((string) $v) ? (int) $v : null;
         };
 
         // Collect deps from LP items
         foreach ($lpBag as $srcLpId => $lpWrap) {
             $items = \is_array($lpWrap->items ?? null) ? $lpWrap->items : [];
             foreach ($items as $it) {
-                $itype = strtolower((string) ($it['item_type'] ?? ''));
+                $itype = \strtolower((string) ($it['item_type'] ?? ''));
                 $raw = $it['path'] ?? ($it['ref'] ?? ($it['identifierref'] ?? ''));
                 $id = $takeId($raw);
 
@@ -3828,12 +4540,11 @@ class CourseRestorer
         foreach ($lpBag as $srcLpId => $lpWrap) {
             $linked = \is_array($lpWrap->linked_resources ?? null) ? $lpWrap->linked_resources : [];
             foreach ($linked as $k => $ids) {
-                // normalize key to a known bag with $type2bags
-                $kk = strtolower($k);
+                $kk = \strtolower((string) $k);
                 if (isset($type2bags[$kk])) {
                     [, $bag] = $type2bags[$kk];
                 } else {
-                    // sometimes exporter uses bag names directly (document/quiz/link/works/survey/forum)
+                    // Sometimes exporter uses bag names directly (document/quiz/link/works/survey/forum)
                     $bag = $kk;
                 }
 
@@ -3876,8 +4587,7 @@ class CourseRestorer
         if (!isset($this->course->resources[RESOURCE_QUIZ])) {
             $src = $all[RESOURCE_QUIZ] ?? [];
             $this->course->resources[RESOURCE_QUIZ] = $filterBag($src, $need[RESOURCE_QUIZ]);
-            if (!empty($this->course->resources[RESOURCE_QUIZ])
-                && !isset($this->course->resources[RESOURCE_QUIZQUESTION])) {
+            if (!empty($this->course->resources[RESOURCE_QUIZ]) && !isset($this->course->resources[RESOURCE_QUIZQUESTION])) {
                 $this->course->resources[RESOURCE_QUIZQUESTION] =
                     $all[RESOURCE_QUIZQUESTION] ?? ($all['Exercise_Question'] ?? []);
             }
@@ -3903,7 +4613,8 @@ class CourseRestorer
         if (!isset($this->course->resources['forum'])) {
             $src = $all['forum'] ?? [];
             $this->course->resources['forum'] = $filterBag($src, $need['forum']);
-            // minimal forum support if LP points to forums
+
+            // Minimal forum support if LP points to forums
             if (!empty($this->course->resources['forum'])) {
                 foreach (['Forum_Category', 'thread', 'post'] as $k) {
                     if (!isset($this->course->resources[$k]) && isset($all[$k])) {
@@ -3914,20 +4625,20 @@ class CourseRestorer
         }
 
         $this->dlog('LP: minimal deps prepared', [
-            'document' => \count($this->course->resources[RESOURCE_DOCUMENT] ?? []),
-            'quiz' => \count($this->course->resources[RESOURCE_QUIZ] ?? []),
-            'link' => \count($this->course->resources[RESOURCE_LINK] ?? []),
+            'document'            => \count($this->course->resources[RESOURCE_DOCUMENT] ?? []),
+            'quiz'                => \count($this->course->resources[RESOURCE_QUIZ] ?? []),
+            'link'                => \count($this->course->resources[RESOURCE_LINK] ?? []),
             'student_publication' => \count($this->course->resources[RESOURCE_WORK] ?? []),
-            'survey' => \count($this->course->resources[RESOURCE_SURVEY] ?? []),
-            'forum' => \count($this->course->resources['forum'] ?? []),
+            'survey'              => \count($this->course->resources[RESOURCE_SURVEY] ?? []),
+            'forum'               => \count($this->course->resources['forum'] ?? []),
         ]);
 
-        // --- 3) Restore ONLY those minimal bags ---
+        // Restore ONLY those minimal bags ---
         if (!empty($this->course->resources[RESOURCE_DOCUMENT])) {
-            $this->restore_documents($session_id, false, $destination_course_code);
+            $this->restore_documents($session_id, (bool) $respect_base_content, $destination_course_code);
         }
         if (!empty($this->course->resources[RESOURCE_QUIZ])) {
-            $this->restore_quizzes($session_id, false);
+            $this->restore_quizzes($session_id, (bool) $respect_base_content);
         }
         if (!empty($this->course->resources[RESOURCE_LINK])) {
             $this->restore_links($session_id);
@@ -3942,25 +4653,33 @@ class CourseRestorer
             $this->restore_forums($session_id);
         }
 
-        // --- 4) Create LP + items with resolved paths to new destination iids ---
+        // Create LP + items with resolved paths to new destination iids ---
         $em = Database::getManager();
-        $courseEnt = api_get_course_entity($this->destination_course_id);
+
+        $courseEnt = api_get_course_entity((int) $this->destination_course_id);
+        if (!$courseEnt) {
+            $this->dlog('LP: destination course entity not found', ['course_id' => (int) $this->destination_course_id]);
+
+            return;
+        }
+
         $sessionEnt = api_get_session_entity((int) $session_id);
         $lpRepo = Container::getLpRepository();
         $lpItemRepo = Container::getLpItemRepository();
         $docRepo = Container::getDocumentRepository();
+        $lpCatRepo = method_exists(Container::class, 'getLpCategoryRepository') ? Container::getLpCategoryRepository() : null;
 
-        // Optional repos for title fallbacks
-        $quizRepo = method_exists(Container::class, 'getQuizRepository') ? Container::getQuizRepository() : null;
-        $linkRepo = method_exists(Container::class, 'getLinkRepository') ? Container::getLinkRepository() : null;
+        // Optional repos for title fallbacks (defensive)
+        $quizRepo  = method_exists(Container::class, 'getQuizRepository') ? Container::getQuizRepository() : null;
+        $linkRepo  = method_exists(Container::class, 'getLinkRepository') ? Container::getLinkRepository() : null;
         $forumRepo = method_exists(Container::class, 'getForumRepository') ? Container::getForumRepository() : null;
         $surveyRepo = method_exists(Container::class, 'getSurveyRepository') ? Container::getSurveyRepository() : null;
-        $workRepo = method_exists(Container::class, 'getStudentPublicationRepository') ? Container::getStudentPublicationRepository() : null;
+        $workRepo  = method_exists(Container::class, 'getStudentPublicationRepository') ? Container::getStudentPublicationRepository() : null;
 
         $getDst = function (string $bag, $legacyId): int {
             $wrap = $this->course->resources[$bag][$legacyId] ?? null;
 
-            return $wrap && isset($wrap->destination_id) ? (int) $wrap->destination_id : 0;
+            return ($wrap && isset($wrap->destination_id)) ? (int) $wrap->destination_id : 0;
         };
 
         $findDocIidByTitle = function (string $title) use ($docRepo, $courseEnt, $sessionEnt): int {
@@ -3977,9 +4696,9 @@ class CourseRestorer
                     api_get_group_entity()
                 );
 
-                return $hit && method_exists($hit, 'getIid') ? (int) $hit->getIid() : 0;
-            } catch (Throwable $e) {
-                $this->dlog('LP: doc title lookup failed', ['title' => $title, 'err' => $e->getMessage()]);
+                return ($hit && method_exists($hit, 'getIid')) ? (int) $hit->getIid() : 0;
+            } catch (\Throwable $e) {
+                $this->dlog('LP: document title lookup failed', ['title' => $title, 'err' => $e->getMessage()]);
 
                 return 0;
             }
@@ -3997,8 +4716,8 @@ class CourseRestorer
                         ? $quizRepo->findOneByTitleInCourse($title, $courseEnt, $sessionEnt)
                         : $quizRepo->findOneBy(['title' => $title]);
 
-                    return $hit && method_exists($hit, 'getIid') ? (int) $hit->getIid() : 0;
-                } catch (Throwable $e) {
+                    return ($hit && method_exists($hit, 'getIid')) ? (int) $hit->getIid() : 0;
+                } catch (\Throwable $e) {
                     return 0;
                 }
             },
@@ -4012,8 +4731,8 @@ class CourseRestorer
                         ? $linkRepo->findOneByTitleInCourse($title, $courseEnt, null)
                         : $linkRepo->findOneBy(['title' => $title]);
 
-                    return $hit && method_exists($hit, 'getIid') ? (int) $hit->getIid() : 0;
-                } catch (Throwable $e) {
+                    return ($hit && method_exists($hit, 'getIid')) ? (int) $hit->getIid() : 0;
+                } catch (\Throwable $e) {
                     return 0;
                 }
             },
@@ -4025,10 +4744,10 @@ class CourseRestorer
                 try {
                     $hit = method_exists($forumRepo, 'findOneByTitleInCourse')
                         ? $forumRepo->findOneByTitleInCourse($title, $courseEnt, null)
-                        : $forumRepo->findOneBy(['forum_title' => $title]) ?? $forumRepo->findOneBy(['title' => $title]);
+                        : ($forumRepo->findOneBy(['forum_title' => $title]) ?? $forumRepo->findOneBy(['title' => $title]));
 
-                    return $hit && method_exists($hit, 'getIid') ? (int) $hit->getIid() : 0;
-                } catch (Throwable $e) {
+                    return ($hit && method_exists($hit, 'getIid')) ? (int) $hit->getIid() : 0;
+                } catch (\Throwable $e) {
                     return 0;
                 }
             },
@@ -4042,8 +4761,8 @@ class CourseRestorer
                         ? $surveyRepo->findOneByTitleInCourse($title, $courseEnt, null)
                         : $surveyRepo->findOneBy(['title' => $title]);
 
-                    return $hit && method_exists($hit, 'getIid') ? (int) $hit->getIid() : 0;
-                } catch (Throwable $e) {
+                    return ($hit && method_exists($hit, 'getIid')) ? (int) $hit->getIid() : 0;
+                } catch (\Throwable $e) {
                     return 0;
                 }
             },
@@ -4057,26 +4776,26 @@ class CourseRestorer
                         ? $workRepo->findOneByTitleInCourse($title, $courseEnt, null)
                         : $workRepo->findOneBy(['title' => $title]);
 
-                    return $hit && method_exists($hit, 'getIid') ? (int) $hit->getIid() : 0;
-                } catch (Throwable $e) {
+                    return ($hit && method_exists($hit, 'getIid')) ? (int) $hit->getIid() : 0;
+                } catch (\Throwable $e) {
                     return 0;
                 }
             },
         ];
 
         $resolvePath = function (array $it) use ($getDst, $findDocIidByTitle, $findByTitle): string {
-            $itype = strtolower((string) ($it['item_type'] ?? ''));
+            $itype = \strtolower((string) ($it['item_type'] ?? ''));
             $raw = $it['path'] ?? ($it['ref'] ?? ($it['identifierref'] ?? ''));
-            $title = trim((string) ($it['title'] ?? ''));
+            $title = \trim((string) ($it['title'] ?? ''));
 
             switch ($itype) {
                 case 'document':
-                    if (ctype_digit((string) $raw)) {
+                    if (\ctype_digit((string) $raw)) {
                         $nid = $getDst(RESOURCE_DOCUMENT, (int) $raw);
 
                         return $nid ? (string) $nid : '';
                     }
-                    if (\is_string($raw) && str_starts_with((string) $raw, 'document/')) {
+                    if (\is_string($raw) && \str_starts_with((string) $raw, 'document/')) {
                         return (string) $raw;
                     }
                     $maybe = $findDocIidByTitle('' !== $title ? $title : (string) $raw);
@@ -4085,7 +4804,7 @@ class CourseRestorer
 
                 case 'quiz':
                 case 'exercise':
-                    $id = ctype_digit((string) $raw) ? (int) $raw : 0;
+                    $id = \ctype_digit((string) $raw) ? (int) $raw : 0;
                     $nid = $id ? $getDst(RESOURCE_QUIZ, $id) : 0;
                     if ($nid) {
                         return (string) $nid;
@@ -4097,7 +4816,7 @@ class CourseRestorer
                 case 'link':
                 case 'weblink':
                 case 'url':
-                    $id = ctype_digit((string) $raw) ? (int) $raw : 0;
+                    $id = \ctype_digit((string) $raw) ? (int) $raw : 0;
                     $nid = $id ? $getDst(RESOURCE_LINK, $id) : 0;
                     if ($nid) {
                         return (string) $nid;
@@ -4108,7 +4827,7 @@ class CourseRestorer
 
                 case 'work':
                 case 'student_publication':
-                    $id = ctype_digit((string) $raw) ? (int) $raw : 0;
+                    $id = \ctype_digit((string) $raw) ? (int) $raw : 0;
                     $nid = $id ? $getDst(RESOURCE_WORK, $id) : 0;
                     if ($nid) {
                         return (string) $nid;
@@ -4118,7 +4837,7 @@ class CourseRestorer
                     return $nid ? (string) $nid : '';
 
                 case 'survey':
-                    $id = ctype_digit((string) $raw) ? (int) $raw : 0;
+                    $id = \ctype_digit((string) $raw) ? (int) $raw : 0;
                     $nid = $id ? $getDst(RESOURCE_SURVEY, $id) : 0;
                     if ($nid) {
                         return (string) $nid;
@@ -4128,7 +4847,7 @@ class CourseRestorer
                     return $nid ? (string) $nid : '';
 
                 case 'forum':
-                    $id = ctype_digit((string) $raw) ? (int) $raw : 0;
+                    $id = \ctype_digit((string) $raw) ? (int) $raw : 0;
                     $nid = $id ? $getDst('forum', $id) : 0;
                     if ($nid) {
                         return (string) $nid;
@@ -4138,27 +4857,86 @@ class CourseRestorer
                     return $nid ? (string) $nid : '';
 
                 default:
-                    // keep whatever was exported
+                    // Keep whatever was exported (SCORM/SCO, directories, unknown types, etc.)
                     return (string) $raw;
             }
         };
 
         foreach ($lpBag as $srcLpId => $lpWrap) {
-            $title = (string) ($lpWrap->name ?? $lpWrap->title ?? ('LP '.$srcLpId));
-            $desc = (string) ($lpWrap->description ?? '');
-            $lpType = (int) ($lpWrap->lp_type ?? $lpWrap->type ?? 1);
+            // Support both object and array wrappers
+            $title  = (string) ($lpWrap->title ?? $lpWrap->name ?? ('LP '.$srcLpId));
+            $desc   = (string) ($lpWrap->description ?? '');
+            $lpType = (int) ($lpWrap->lp_type ?? $lpWrap->type ?? ($lpWrap->lpType ?? 1));
 
             $lp = (new CLp())
                 ->setLpType($lpType)
                 ->setTitle($title)
-                ->setParent($courseEnt)
-            ;
+                ->setParent($courseEnt);
 
-            if (method_exists($lp, 'addCourseLink')) {
-                $lp->addCourseLink($courseEnt, $sessionEnt);
+            // Optional: hydrate more LP fields (safe via method_exists)
+            if (method_exists($lp, 'setRef') && isset($lpWrap->ref)) {
+                $lp->setRef((string) $lpWrap->ref);
+            }
+            if (method_exists($lp, 'setPath') && isset($lpWrap->path)) {
+                $lp->setPath((string) $lpWrap->path);
             }
             if (method_exists($lp, 'setDescription')) {
                 $lp->setDescription($desc);
+            }
+            if (method_exists($lp, 'setAutolaunch') && isset($lpWrap->autolaunch)) {
+                $lp->setAutolaunch((int) $lpWrap->autolaunch);
+            }
+            if (method_exists($lp, 'setPreventReinit') && isset($lpWrap->prevent_reinit)) {
+                $lp->setPreventReinit((bool) $lpWrap->prevent_reinit);
+            }
+            if (method_exists($lp, 'setForceCommit') && isset($lpWrap->force_commit)) {
+                $lp->setForceCommit((bool) $lpWrap->force_commit);
+            }
+            if (method_exists($lp, 'setDefaultViewMod') && isset($lpWrap->default_view_mod)) {
+                $lp->setDefaultViewMod((string) $lpWrap->default_view_mod);
+            }
+            if (method_exists($lp, 'setDefaultEncoding') && isset($lpWrap->default_encoding)) {
+                $lp->setDefaultEncoding((string) $lpWrap->default_encoding);
+            }
+            if (method_exists($lp, 'setContentLocal') && isset($lpWrap->content_local)) {
+                $lp->setContentLocal((string) $lpWrap->content_local);
+            }
+            if (method_exists($lp, 'setContentMaker') && isset($lpWrap->content_maker)) {
+                $lp->setContentMaker((string) $lpWrap->content_maker);
+            }
+            if (method_exists($lp, 'setContentLicense') && isset($lpWrap->content_license)) {
+                $lp->setContentLicense((string) $lpWrap->content_license);
+            }
+            if (method_exists($lp, 'setJsLib') && isset($lpWrap->js_lib)) {
+                $lp->setJsLib((string) $lpWrap->js_lib);
+            }
+            if (method_exists($lp, 'setDebug') && isset($lpWrap->debug)) {
+                $lp->setDebug((bool) $lpWrap->debug);
+            }
+            if (method_exists($lp, 'setAuthor') && isset($lpWrap->author)) {
+                $lp->setAuthor((string) $lpWrap->author);
+            }
+            if (method_exists($lp, 'setUseMaxScore') && isset($lpWrap->use_max_score)) {
+                $lp->setUseMaxScore((int) $lpWrap->use_max_score);
+            }
+
+            // Optional: set category if categories were restored and repo exists
+            if ($lpCatRepo && method_exists($lp, 'setCategory')) {
+                $srcCatId = (int) ($lpWrap->category_id ?? 0);
+                if ($srcCatId > 0) {
+                    $dstCatId = $getDst(RESOURCE_LEARNPATH_CATEGORY, $srcCatId);
+                    if ($dstCatId > 0) {
+                        $catEnt = $lpCatRepo->find($dstCatId);
+                        if ($catEnt) {
+                            $lp->setCategory($catEnt);
+                        }
+                    }
+                }
+            }
+
+            // Create links (kept defensive)
+            if (method_exists($lp, 'addCourseLink')) {
+                $lp->addCourseLink($courseEnt, $sessionEnt);
             }
 
             $lpRepo->createLp($lp);
@@ -4166,51 +4944,241 @@ class CourseRestorer
 
             $this->course->resources[RESOURCE_LEARNPATH][$srcLpId]->destination_id = (int) $lp->getIid();
 
+            // Root container item (created by repo/service)
             $root = $lpItemRepo->getRootItem($lp->getIid());
-            $parents = [0 => $root];
-            $items = \is_array($lpWrap->items ?? null) ? $lpWrap->items : [];
-            $order = 0;
+            if (!$root) {
+                $this->dlog('LP: root item not found, skip items creation', ['lp_iid' => (int) $lp->getIid(), 'title' => $title]);
 
-            foreach ($items as $it) {
-                $lvl = (int) ($it['level'] ?? 0);
-                $pItem = $parents[$lvl] ?? $root;
-
-                $itype = (string) ($it['item_type'] ?? 'dir');
-                $itTitle = (string) ($it['title'] ?? '');
-                $path = $resolvePath($it);
-
-                $item = (new CLpItem())
-                    ->setLp($lp)
-                    ->setParent($pItem)
-                    ->setItemType($itype)
-                    ->setTitle($itTitle)
-                    ->setPath($path)
-                    ->setRef((string) ($it['identifier'] ?? ''))
-                    ->setDisplayOrder(++$order)
-                ;
-
-                if (isset($it['parameters'])) {
-                    $item->setParameters((string) $it['parameters']);
-                }
-                if (isset($it['prerequisite'])) {
-                    $item->setPrerequisite((string) $it['prerequisite']);
-                }
-                if (isset($it['launch_data'])) {
-                    $item->setLaunchData((string) $it['launch_data']);
-                }
-
-                $lpItemRepo->create($item);
-                $parents[$lvl + 1] = $item;
+                continue;
             }
 
-            $em->flush();
+            $items = \is_array($lpWrap->items ?? null) ? $lpWrap->items : [];
+
+            // Compatibility mode: if exporter provides "level/lvl", keep the old logic.
+            $hasLevel = false;
+            foreach ($items as $it) {
+                if (isset($it['level']) || isset($it['lvl'])) {
+                    $hasLevel = true;
+                    break;
+                }
+            }
+
+            $createdCount = 0;
+
+            if ($hasLevel) {
+                // ---- Old logic (level-based), kept for backward compatibility ----
+                $parents = [0 => $root];
+                $order = 0;
+
+                foreach ($items as $it) {
+                    $lvl = (int) ($it['level'] ?? $it['lvl'] ?? 0);
+                    $pItem = $parents[$lvl] ?? $root;
+
+                    $itype   = (string) ($it['item_type'] ?? 'dir');
+                    $itTitle = (string) ($it['title'] ?? '');
+                    $path    = $resolvePath($it);
+                    $ref     = (string) ($it['ref'] ?? ($it['identifier'] ?? ''));
+
+                    $item = (new CLpItem())
+                        ->setLp($lp)
+                        ->setParent($pItem)
+                        ->setItemType($itype)
+                        ->setTitle($itTitle)
+                        ->setPath($path)
+                        ->setRef($ref)
+                        ->setDisplayOrder(++$order);
+
+                    // Optional fields (only if present in payload)
+                    if (isset($it['description']) && method_exists($item, 'setDescription')) {
+                        $item->setDescription((string) $it['description']);
+                    }
+                    if (isset($it['min_score']) && method_exists($item, 'setMinScore')) {
+                        $item->setMinScore((float) $it['min_score']);
+                    }
+                    if (array_key_exists('max_score', $it) && method_exists($item, 'setMaxScore')) {
+                        $item->setMaxScore(null !== $it['max_score'] ? (float) $it['max_score'] : 0.0);
+                    }
+                    if (array_key_exists('mastery_score', $it) && method_exists($item, 'setMasteryScore')) {
+                        if (null !== $it['mastery_score']) {
+                            $item->setMasteryScore((float) $it['mastery_score']);
+                        }
+                    }
+                    if (isset($it['parameters'])) {
+                        $item->setParameters((string) $it['parameters']);
+                    }
+                    if (isset($it['prerequisite'])) {
+                        $item->setPrerequisite((string) $it['prerequisite']);
+                    }
+                    if (isset($it['launch_data'])) {
+                        $item->setLaunchData((string) $it['launch_data']);
+                    }
+                    if (isset($it['audio']) && method_exists($item, 'setAudio')) {
+                        $item->setAudio((string) $it['audio']);
+                    }
+
+                    $lpItemRepo->create($item);
+                    $parents[$lvl + 1] = $item;
+                    $createdCount++;
+                }
+
+                $em->flush();
+            } else {
+                // Index items by legacy "id" and group children by legacy "parent_item_id"
+                $byId = [];
+                $children = [];
+
+                foreach ($items as $it) {
+                    $legacyItemId = (int) ($it['id'] ?? 0);
+                    if ($legacyItemId <= 0) {
+                        continue;
+                    }
+
+                    $byId[$legacyItemId] = $it;
+
+                    $pLegacyId = (int) ($it['parent_item_id'] ?? 0);
+                    if (!isset($children[$pLegacyId])) {
+                        $children[$pLegacyId] = [];
+                    }
+                    $children[$pLegacyId][] = $legacyItemId;
+                }
+
+                // Sort children lists by "display_order" if present (fallback to legacy id)
+                foreach ($children as $pId => $list) {
+                    \usort($list, function (int $a, int $b) use ($byId): int {
+                        $da = (int) ($byId[$a]['display_order'] ?? $a);
+                        $db = (int) ($byId[$b]['display_order'] ?? $b);
+
+                        return $da <=> $db;
+                    });
+                    $children[$pId] = $list;
+                }
+
+                $createdMap = []; // legacyItemId => CLpItem
+                $fallbackOrder = 0;
+
+                $createBranch = function (int $parentLegacyId, CLpItem $parentEntity) use (
+                    &$createBranch,
+                    &$createdMap,
+                    &$children,
+                    &$byId,
+                    &$fallbackOrder,
+                    $lp,
+                    $lpItemRepo,
+                    $resolvePath
+                ): void {
+                    $kids = $children[$parentLegacyId] ?? [];
+                    foreach ($kids as $legacyChildId) {
+                        $it = $byId[$legacyChildId] ?? null;
+                        if (!$it) {
+                            continue;
+                        }
+
+                        $itype   = (string) ($it['item_type'] ?? 'dir');
+                        $itTitle = (string) ($it['title'] ?? '');
+                        $path    = $resolvePath($it);
+                        $ref     = (string) ($it['ref'] ?? ($it['identifier'] ?? ''));
+
+                        $order = isset($it['display_order']) ? (int) $it['display_order'] : (++$fallbackOrder);
+
+                        $item = (new CLpItem())
+                            ->setLp($lp)
+                            ->setParent($parentEntity)
+                            ->setItemType($itype)
+                            ->setTitle($itTitle)
+                            ->setPath($path)
+                            ->setRef($ref)
+                            ->setDisplayOrder($order);
+
+                        // Optional fields (only if present in payload)
+                        if (isset($it['description']) && method_exists($item, 'setDescription')) {
+                            $item->setDescription((string) $it['description']);
+                        }
+                        if (isset($it['min_score']) && method_exists($item, 'setMinScore')) {
+                            $item->setMinScore((float) $it['min_score']);
+                        }
+                        if (array_key_exists('max_score', $it) && method_exists($item, 'setMaxScore')) {
+                            $item->setMaxScore(null !== $it['max_score'] ? (float) $it['max_score'] : 0.0);
+                        }
+                        if (array_key_exists('mastery_score', $it) && method_exists($item, 'setMasteryScore')) {
+                            if (null !== $it['mastery_score']) {
+                                $item->setMasteryScore((float) $it['mastery_score']);
+                            }
+                        }
+                        if (isset($it['parameters'])) {
+                            $item->setParameters((string) $it['parameters']);
+                        }
+                        if (isset($it['prerequisite'])) {
+                            $item->setPrerequisite((string) $it['prerequisite']);
+                        }
+                        if (isset($it['launch_data'])) {
+                            $item->setLaunchData((string) $it['launch_data']);
+                        }
+                        if (isset($it['audio']) && method_exists($item, 'setAudio')) {
+                            $item->setAudio((string) $it['audio']);
+                        }
+
+                        $lpItemRepo->create($item);
+
+                        $createdMap[$legacyChildId] = $item;
+
+                        // Recurse into its children (if any)
+                        $createBranch($legacyChildId, $item);
+                    }
+                };
+
+                // Build the tree from legacy parent id = 0 (root level in your payload)
+                $createBranch(0, $root);
+
+                $createdCount = \count($createdMap);
+
+                $em->flush();
+            }
 
             $this->dlog('LP: items created', [
                 'lp_iid' => (int) $lp->getIid(),
-                'items' => $order,
-                'title' => $title,
+                'items'  => (int) $createdCount,
+                'title'  => $title,
             ]);
         }
+    }
+
+    /**
+     * Normalize file policy to: 1=SKIP, 2=RENAME, 3=OVERWRITE.
+     * Accepts ints, numeric strings, "FILE_SKIP|FILE_RENAME|FILE_OVERWRITE", or constants.
+     */
+    private function normalizeFilePolicy($rawPolicy): int
+    {
+        $policy = 1;
+
+        if (\is_int($rawPolicy) || \ctype_digit((string) $rawPolicy)) {
+            $policy = (int) $rawPolicy;
+        } else {
+            $raw = \strtoupper(\trim((string) $rawPolicy));
+            if ('FILE_SKIP' === $raw) {
+                $policy = 1;
+            } elseif ('FILE_RENAME' === $raw) {
+                $policy = 2;
+            } elseif ('FILE_OVERWRITE' === $raw) {
+                $policy = 3;
+            }
+        }
+
+        if (\defined('FILE_SKIP') && $rawPolicy === FILE_SKIP) {
+            $policy = 1;
+        } elseif (\defined('FILE_RENAME') && $rawPolicy === FILE_RENAME) {
+            $policy = 2;
+        } elseif (\defined('FILE_OVERWRITE') && $rawPolicy === FILE_OVERWRITE) {
+            $policy = 3;
+        }
+
+        if (!\in_array($policy, [1, 2, 3], true)) {
+            $this->dlog('normalizeFilePolicy: invalid file_option, defaulting to SKIP', [
+                'raw' => $rawPolicy,
+            ]);
+            $policy = 1;
+        }
+
+        return $policy;
     }
 
     /**
@@ -4221,134 +5189,220 @@ class CourseRestorer
     public function restore_glossary($sessionId = 0): void
     {
         if (!$this->course->has_resources(RESOURCE_GLOSSARY)) {
-            $this->debug && error_log('COURSE_DEBUG: restore_glossary: no glossary resources in backup.');
-
+            $this->dlog('restore_glossary: no glossary resources in backup, skipping', []);
             return;
         }
 
+        $sessionId = (int) $sessionId;
+        $policy = $this->normalizeFilePolicy($this->file_option ?? null);
+
+        /** @var EntityManagerInterface $em */
         $em = Database::getManager();
+
+        /** @var CourseEntity $course */
+        $course = api_get_course_entity((int) $this->destination_course_id);
+
+        /** @var SessionEntity|null $session */
+        $session = $sessionId ? api_get_session_entity($sessionId) : null;
 
         /** @var CGlossaryRepository $repo */
         $repo = $em->getRepository(CGlossary::class);
 
-        /** @var CourseEntity $courseEntity */
-        $courseEntity = api_get_course_entity($this->destination_course_id);
+        $items = $this->course->resources[RESOURCE_GLOSSARY] ?? [];
+        $count = \is_array($items) ? \count($items) : 0;
 
-        /** @var SessionEntity|null $sessionEntity */
-        $sessionEntity = $sessionId ? api_get_session_entity((int) $sessionId) : null;
+        $this->dlog('restore_glossary: begin', [
+            'count' => $count,
+            'policy' => $policy,
+            'session_id' => $sessionId,
+        ]);
 
-        $resources = $this->course->resources;
+        if (!\is_array($items)) {
+            $this->dlog('restore_glossary: invalid bucket type, aborting', [
+                'bucket_type' => \gettype($items),
+            ]);
+            return;
+        }
 
-        foreach ($resources[RESOURCE_GLOSSARY] as $legacyId => $gls) {
+        // Duplicate finder within same course + session scope (by title)
+        $findDuplicate = function (string $title) use ($repo, $course, $session): ?CGlossary {
+            $candidates = $repo->findBy(['title' => $title]);
+            if (empty($candidates)) {
+                return null;
+            }
+
+            $courseNode = $course->getResourceNode();
+            foreach ($candidates as $cand) {
+                if (!$cand instanceof CGlossary) {
+                    continue;
+                }
+
+                $node = $cand->getResourceNode();
+                $parent = $node && method_exists($node, 'getParent') ? $node->getParent() : null;
+                if (!$parent || !$courseNode || $parent->getId() !== $courseNode->getId()) {
+                    continue;
+                }
+
+                // Must match the same course/session link scope
+                $link = $cand->getFirstResourceLinkFromCourseSession($course, $session);
+                if (null !== $link) {
+                    return $cand;
+                }
+            }
+
+            return null;
+        };
+
+        $setMapped = function (int $legacyId, int $destIid) use (&$items): void {
+            if (isset($items[$legacyId]) && \is_object($items[$legacyId])) {
+                $items[$legacyId]->destination_id = $destIid;
+                return;
+            }
+
+            // Fallback if legacy entry isn't an object
+            $items[$legacyId] ??= new \stdClass();
+            $items[$legacyId]->destination_id = $destIid;
+        };
+
+        foreach ($items as $legacyId => $gls) {
+            $legacyId = (int) $legacyId;
+
             try {
-                $title = (string) ($gls->name ?? $gls->title ?? '');
-                $desc = (string) ($gls->description ?? '');
-                $order = (int) ($gls->display_order ?? 0);
+                if (!\is_object($gls)) {
+                    $this->dlog('restore_glossary: skipping invalid legacy item (not object)', [
+                        'src_id' => $legacyId,
+                    ]);
+                    continue;
+                }
 
-                // Normalize title
+                $mapped = (int) ($gls->destination_id ?? 0);
+                if ($mapped > 0) {
+                    $this->dlog('restore_glossary: already mapped, skipping', [
+                        'src_id' => $legacyId,
+                        'dst_id' => $mapped,
+                    ]);
+                    continue;
+                }
+
+                // build_glossary created a Glossary legacy object (not mkLegacyItem),
+                // so prefer ->name / ->title / ->description, but keep fallbacks.
+                $title = \trim((string) ($gls->name ?? $gls->title ?? ($gls->extra['title'] ?? '')));
                 if ('' === $title) {
                     $title = 'Glossary term';
                 }
 
-                // HTML rewrite (always)
-                $desc = $this->rewriteHtmlForCourse($desc, (int) $sessionId, '[glossary.term]');
+                $desc = (string) ($gls->description ?? ($gls->extra['description'] ?? ''));
 
-                // Look up existing by title in this course + (optional) session
-                if (method_exists($repo, 'getResourcesByCourse')) {
-                    $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity)
-                        ->andWhere('resource.title = :title')->setParameter('title', $title)
-                        ->setMaxResults(1)
-                    ;
-                    $existing = $qb->getQuery()->getOneOrNullResult();
-                } else {
-                    $existing = $repo->findOneBy(['title' => $title]);
-                }
+                // Rewrite HTML always
+                $desc = $this->rewriteHtmlForCourse($desc, $sessionId, '[glossary.term]');
+
+                $existing = $findDuplicate($title);
 
                 if ($existing instanceof CGlossary) {
-                    switch ($this->file_option) {
-                        case FILE_SKIP:
-                            $this->course->resources[RESOURCE_GLOSSARY][$legacyId] ??= new stdClass();
-                            $this->course->resources[RESOURCE_GLOSSARY][$legacyId]->destination_id = (int) $existing->getIid();
-                            $this->debug && error_log("COURSE_DEBUG: restore_glossary: exists title='{$title}' (skip).");
+                    if (1 === $policy) { // SKIP
+                        $destIid = (int) $existing->getIid();
+                        $setMapped($legacyId, $destIid);
 
-                            continue 2;
+                        $this->dlog('restore_glossary: reuse (SKIP)', [
+                            'src_id' => $legacyId,
+                            'dst_id' => $destIid,
+                            'title' => $title,
+                        ]);
+                        continue;
+                    }
 
-                        case FILE_RENAME:
-                            // Generate a unique title inside the course/session
-                            $base = $title;
-                            $try = $base;
-                            $i = 1;
-                            $isTaken = static function ($repo, $courseEntity, $sessionEntity, $titleTry) {
-                                if (method_exists($repo, 'getResourcesByCourse')) {
-                                    $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity)
-                                        ->andWhere('resource.title = :t')->setParameter('t', $titleTry)
-                                        ->setMaxResults(1)
-                                    ;
+                    if (3 === $policy) { // OVERWRITE => update existing (do NOT delete)
+                        $existing->setDescription($desc);
 
-                                    return (bool) $qb->getQuery()->getOneOrNullResult();
-                                }
+                        // Ensure linkage for this scope
+                        if (method_exists($existing, 'setParent')) {
+                            $existing->setParent($course);
+                        }
+                        if (method_exists($existing, 'addCourseLink')) {
+                            $existing->addCourseLink($course, $session);
+                        }
 
-                                return (bool) $repo->findOneBy(['title' => $titleTry]);
-                            };
-                            while ($isTaken($repo, $courseEntity, $sessionEntity, $try)) {
-                                $try = $base.' ('.($i++).')';
+                        $em->persist($existing);
+                        $em->flush();
+
+                        $destIid = (int) $existing->getIid();
+                        $setMapped($legacyId, $destIid);
+
+                        $this->dlog('restore_glossary: overwritten', [
+                            'src_id' => $legacyId,
+                            'dst_id' => $destIid,
+                            'title' => $title,
+                        ]);
+                        continue;
+                    }
+
+                    // RENAME
+                    if (2 === $policy) {
+                        $base = $title;
+                        $n = 2;
+                        $candidate = $base.' ('.$n.')';
+                        while ($findDuplicate($candidate)) {
+                            $n++;
+                            $candidate = $base.' ('.$n.')';
+                            if ($n > 5000) {
+                                $this->dlog('restore_glossary: rename safeguard triggered, skipping item', [
+                                    'src_id' => $legacyId,
+                                    'base_title' => $base,
+                                ]);
+                                continue 2;
                             }
-                            $title = $try;
-                            $this->debug && error_log("COURSE_DEBUG: restore_glossary: renaming to '{$title}'.");
-
-                            break;
-
-                        case FILE_OVERWRITE:
-                            $em->remove($existing);
-                            $em->flush();
-                            $this->debug && error_log('COURSE_DEBUG: restore_glossary: existing term deleted (overwrite).');
-
-                            break;
-
-                        default:
-                            $this->course->resources[RESOURCE_GLOSSARY][$legacyId] ??= new stdClass();
-                            $this->course->resources[RESOURCE_GLOSSARY][$legacyId]->destination_id = (int) $existing->getIid();
-
-                            continue 2;
+                        }
+                        $this->dlog('restore_glossary: duplicate detected, policy=RENAME', [
+                            'src_id' => $legacyId,
+                            'from' => $title,
+                            'to' => $candidate,
+                        ]);
+                        $title = $candidate;
+                        $existing = null;
                     }
                 }
 
-                // Create
+                // Create new
                 $entity = (new CGlossary())
                     ->setTitle($title)
                     ->setDescription($desc)
                 ;
 
+                // Required order: setParent() before addCourseLink()
                 if (method_exists($entity, 'setParent')) {
-                    $entity->setParent($courseEntity);
+                    $entity->setParent($course);
                 }
                 if (method_exists($entity, 'addCourseLink')) {
-                    $entity->addCourseLink($courseEntity, $sessionEntity);
+                    $entity->addCourseLink($course, $session);
                 }
 
-                if (method_exists($repo, 'create')) {
-                    $repo->create($entity);
-                } else {
-                    $em->persist($entity);
-                    $em->flush();
-                }
+                $em->persist($entity);
+                $em->flush();
 
-                if ($order && method_exists($entity, 'setDisplayOrder')) {
-                    $entity->setDisplayOrder($order);
-                    $em->flush();
-                }
+                $destIid = (int) $entity->getIid();
+                $setMapped($legacyId, $destIid);
 
-                $newId = (int) $entity->getIid();
-                $this->course->resources[RESOURCE_GLOSSARY][$legacyId] ??= new stdClass();
-                $this->course->resources[RESOURCE_GLOSSARY][$legacyId]->destination_id = $newId;
-
-                $this->debug && error_log("COURSE_DEBUG: restore_glossary: created term iid={$newId}, title='{$title}'");
-            } catch (Throwable $e) {
-                error_log('COURSE_DEBUG: restore_glossary: failed: '.$e->getMessage());
-
+                $this->dlog('restore_glossary: created', [
+                    'src_id' => $legacyId,
+                    'dst_id' => $destIid,
+                    'title' => $title,
+                ]);
+            } catch (\Throwable $e) {
+                $this->dlog('restore_glossary: failed (ignored)', [
+                    'src_id' => $legacyId,
+                    'error' => $e->getMessage(),
+                ]);
                 continue;
             }
         }
+
+        // Write back possibly updated array (for safety if $items was local copy)
+        $this->course->resources[RESOURCE_GLOSSARY] = $items;
+
+        $this->dlog('restore_glossary: end', [
+            'policy' => $policy,
+            'session_id' => $sessionId,
+        ]);
     }
 
     /**
@@ -4358,9 +5412,18 @@ class CourseRestorer
      */
     public function restore_wiki($sessionId = 0): void
     {
-        if (!$this->course->has_resources(RESOURCE_WIKI)) {
-            $this->debug && error_log('COURSE_DEBUG: restore_wiki: no wiki resources in backup.');
+        // Detect which bucket exists and use it consistently for destination_id mapping.
+        $bucketKey = null;
+        if (isset($this->course->resources[RESOURCE_WIKI]) && is_array($this->course->resources[RESOURCE_WIKI])) {
+            $bucketKey = RESOURCE_WIKI;
+        } elseif (isset($this->course->resources['wiki']) && is_array($this->course->resources['wiki'])) {
+            $bucketKey = 'wiki';
+        }
 
+        $bag = $bucketKey !== null ? ($this->course->resources[$bucketKey] ?? []) : [];
+
+        if (empty($bag)) {
+            $this->dlog('restore_wiki: empty bag');
             return;
         }
 
@@ -4369,8 +5432,14 @@ class CourseRestorer
         /** @var CWikiRepository $repo */
         $repo = $em->getRepository(CWiki::class);
 
-        /** @var CourseEntity $courseEntity */
+        /** @var CourseEntity|null $courseEntity */
         $courseEntity = api_get_course_entity($this->destination_course_id);
+        if (!$courseEntity instanceof CourseEntity) {
+            $this->dlog('restore_wiki: missing destination course entity', [
+                'course_id' => (int) $this->destination_course_id,
+            ]);
+            return;
+        }
 
         /** @var SessionEntity|null $sessionEntity */
         $sessionEntity = $sessionId ? api_get_session_entity((int) $sessionId) : null;
@@ -4378,30 +5447,72 @@ class CourseRestorer
         $cid = (int) $this->destination_course_id;
         $sid = (int) ($sessionEntity?->getId() ?? 0);
 
-        $resources = $this->course->resources;
+        // Preserve wiki version history: map source page_id -> destination page_id
+        $pageIdMap = [];
+        $confCreatedForPage = [];
 
-        foreach ($resources[RESOURCE_WIKI] as $legacyId => $w) {
+        $this->dlog('restore_wiki: begin', [
+            'count' => count($bag),
+            'session_arg' => (int) $sessionId,
+            'resolved_sid' => $sid,
+            'bucket' => (string) $bucketKey,
+            'policy' => (int) ($this->file_option ?? -1),
+        ]);
+
+        foreach ($bag as $legacyId => $res) {
+            if (!is_object($res)) {
+                $this->dlog('restore_wiki: skip non-object resource', [
+                    'legacy_id' => (string) $legacyId,
+                    'type' => gettype($res),
+                    'resolved_sid' => $sid,
+                ]);
+                continue;
+            }
+
+            // In backups, destination_id is often -1 meaning "not restored yet".
+            // Only skip if destination_id is a real mapped id (> 0).
+            $destId = $res->destination_id ?? null;
+            if (null !== $destId && (int) $destId > 0) {
+                $this->dlog('restore_wiki: skip already mapped', [
+                    'legacy_id' => (string) $legacyId,
+                    'destination_id' => (int) $destId,
+                    'resolved_sid' => $sid,
+                ]);
+                continue;
+            }
+
+            // Prefer res->obj; fallback to res fields directly (legacy/old backups).
+            $obj = is_object($res->obj ?? null) ? $res->obj : (object) [];
+            $src = !empty((array) $obj) ? $obj : $res;
+
             try {
-                $rawTitle = (string) ($w->title ?? $w->name ?? '');
-                $reflink = (string) ($w->reflink ?? '');
-                $content = (string) ($w->content ?? '');
-                $comment = (string) ($w->comment ?? '');
-                $progress = (string) ($w->progress ?? '');
-                $version = (int) ($w->version ?? 1);
-                $groupId = (int) ($w->group_id ?? 0);
-                $userId = (int) ($w->user_id ?? api_get_user_id());
+                $rawTitle = (string) ($src->title ?? $src->name ?? '');
+                $reflink = (string) ($src->reflink ?? '');
+                $content = (string) ($src->content ?? '');
+                $comment = (string) ($src->comment ?? '');
+                $progress = (string) ($src->progress ?? '');
+                $version = (int) ($src->version ?? 1);
+
+                $groupId = (int) ($src->group_id ?? $src->groupId ?? 0);
+                $userId = (int) ($src->user_id ?? $src->userId ?? api_get_user_id());
+
+                // Source page_id (used to keep versions grouped).
+                $srcPageId = (int) ($src->page_id ?? $src->pageId ?? 0);
+                if ($srcPageId <= 0) {
+                    $srcPageId = (int) $legacyId;
+                }
 
                 // HTML rewrite
                 $content = $this->rewriteHtmlForCourse($content, (int) $sessionId, '[wiki.page]');
 
-                if ('' === $rawTitle) {
+                if ('' === trim($rawTitle)) {
                     $rawTitle = 'Wiki page';
                 }
-                if ('' === $content) {
+                if ('' === trim($content)) {
                     $content = '<p>&nbsp;</p>';
                 }
 
-                // slug maker
+                // Slug maker
                 $makeSlug = static function (string $s): string {
                     $s = strtolower(trim($s));
                     $s = preg_replace('/[^\p{L}\p{N}]+/u', '-', $s) ?: '';
@@ -4409,15 +5520,15 @@ class CourseRestorer
 
                     return '' === $s ? 'page' : $s;
                 };
-                $reflink = '' !== $reflink ? $makeSlug($reflink) : $makeSlug($rawTitle);
+                $reflink = '' !== trim($reflink) ? $makeSlug($reflink) : $makeSlug($rawTitle);
 
-                // existence check
+                // Existence check by (course + session + group + reflink)
                 $qbExists = $repo->createQueryBuilder('w')
                     ->select('w.iid')
                     ->andWhere('w.cId = :cid')->setParameter('cid', $cid)
                     ->andWhere('w.reflink = :r')->setParameter('r', $reflink)
-                    ->andWhere('COALESCE(w.groupId,0) = :gid')->setParameter('gid', $groupId)
-                ;
+                    ->andWhere('COALESCE(w.groupId,0) = :gid')->setParameter('gid', $groupId);
+
                 if ($sid > 0) {
                     $qbExists->andWhere('COALESCE(w.sessionId,0) = :sid')->setParameter('sid', $sid);
                 } else {
@@ -4429,13 +5540,14 @@ class CourseRestorer
                 if ($exists) {
                     switch ($this->file_option) {
                         case FILE_SKIP:
-                            // map to latest page id
+                            // Map to latest page id
                             $qbLast = $repo->createQueryBuilder('w')
                                 ->andWhere('w.cId = :cid')->setParameter('cid', $cid)
                                 ->andWhere('w.reflink = :r')->setParameter('r', $reflink)
                                 ->andWhere('COALESCE(w.groupId,0) = :gid')->setParameter('gid', $groupId)
-                                ->orderBy('w.version', 'DESC')->setMaxResults(1)
-                            ;
+                                ->orderBy('w.version', 'DESC')
+                                ->setMaxResults(1);
+
                             if ($sid > 0) {
                                 $qbLast->andWhere('COALESCE(w.sessionId,0) = :sid')->setParameter('sid', $sid);
                             } else {
@@ -4446,49 +5558,59 @@ class CourseRestorer
                             $last = $qbLast->getQuery()->getOneOrNullResult();
                             $dest = $last ? (int) ($last->getPageId() ?: $last->getIid()) : 0;
 
-                            $this->course->resources[RESOURCE_WIKI][$legacyId] ??= new stdClass();
-                            $this->course->resources[RESOURCE_WIKI][$legacyId]->destination_id = $dest;
+                            $this->course->resources[$bucketKey][$legacyId] ??= new stdClass();
+                            $this->course->resources[$bucketKey][$legacyId]->destination_id = $dest;
+                            $res->destination_id = $dest;
 
-                            $this->debug && error_log("COURSE_DEBUG: restore_wiki: exists → skip (page_id={$dest}).");
-
+                            $this->dlog('restore_wiki: exists -> skip', [
+                                'reflink' => $reflink,
+                                'page_id' => $dest,
+                                'resolved_sid' => $sid,
+                            ]);
                             continue 2;
 
                         case FILE_RENAME:
                             $baseSlug = $reflink;
                             $baseTitle = $rawTitle;
                             $i = 1;
-                            $trySlug = $baseSlug.'-'.$i;
+
                             $isTaken = function (string $slug) use ($repo, $cid, $sid, $groupId): bool {
                                 $qb = $repo->createQueryBuilder('w')
                                     ->select('w.iid')
                                     ->andWhere('w.cId = :cid')->setParameter('cid', $cid)
                                     ->andWhere('w.reflink = :r')->setParameter('r', $slug)
                                     ->andWhere('COALESCE(w.groupId,0) = :gid')->setParameter('gid', $groupId)
-                                ;
+                                    ->setMaxResults(1);
+
                                 if ($sid > 0) {
                                     $qb->andWhere('COALESCE(w.sessionId,0) = :sid')->setParameter('sid', $sid);
                                 } else {
                                     $qb->andWhere('COALESCE(w.sessionId,0) = 0');
                                 }
-                                $qb->setMaxResults(1);
 
                                 return (bool) $qb->getQuery()->getOneOrNullResult();
                             };
+
+                            $trySlug = $baseSlug.'-'.$i;
                             while ($isTaken($trySlug)) {
                                 $trySlug = $baseSlug.'-'.(++$i);
                             }
                             $reflink = $trySlug;
                             $rawTitle = $baseTitle.' ('.$i.')';
-                            $this->debug && error_log("COURSE_DEBUG: restore_wiki: renamed to '{$reflink}' / '{$rawTitle}'.");
 
+                            $this->dlog('restore_wiki: renamed', [
+                                'reflink' => $reflink,
+                                'title' => $rawTitle,
+                                'resolved_sid' => $sid,
+                            ]);
                             break;
 
                         case FILE_OVERWRITE:
                             $qbAll = $repo->createQueryBuilder('w')
                                 ->andWhere('w.cId = :cid')->setParameter('cid', $cid)
                                 ->andWhere('w.reflink = :r')->setParameter('r', $reflink)
-                                ->andWhere('COALESCE(w.groupId,0) = :gid')->setParameter('gid', $groupId)
-                            ;
+                                ->andWhere('COALESCE(w.groupId,0) = :gid')->setParameter('gid', $groupId);
+
                             if ($sid > 0) {
                                 $qbAll->andWhere('COALESCE(w.sessionId,0) = :sid')->setParameter('sid', $sid);
                             } else {
@@ -4498,53 +5620,60 @@ class CourseRestorer
                                 $em->remove($old);
                             }
                             $em->flush();
-                            $this->debug && error_log('COURSE_DEBUG: restore_wiki: removed old pages (overwrite).');
 
+                            $this->dlog('restore_wiki: removed old pages (overwrite)', [
+                                'reflink' => $reflink,
+                                'resolved_sid' => $sid,
+                            ]);
                             break;
 
                         default:
-                            $this->debug && error_log('COURSE_DEBUG: restore_wiki: unknown file_option → skip.');
-
+                            $this->dlog('restore_wiki: unknown file_option -> skip', [
+                                'file_option' => (int) ($this->file_option ?? -1),
+                                'resolved_sid' => $sid,
+                            ]);
                             continue 2;
                     }
                 }
 
-                // Create new page (one version)
+                // Create new wiki row (possibly a version).
                 $wiki = new CWiki();
                 $wiki->setCId($cid);
                 $wiki->setSessionId($sid);
                 $wiki->setGroupId($groupId);
                 $wiki->setReflink($reflink);
                 $wiki->setTitle($rawTitle);
-                $wiki->setContent($content);  // already rewritten
+                $wiki->setContent($content);
                 $wiki->setComment($comment);
                 $wiki->setProgress($progress);
                 $wiki->setVersion($version > 0 ? $version : 1);
                 $wiki->setUserId($userId);
 
-                // timestamps
+                // Timestamps (best-effort)
                 try {
-                    $dtimeStr = (string) ($w->dtime ?? '');
-                    $wiki->setDtime('' !== $dtimeStr ? new DateTime($dtimeStr) : new DateTime('now', new DateTimeZone('UTC')));
+                    $dtimeStr = (string) ($src->dtime ?? '');
+                    $wiki->setDtime('' !== trim($dtimeStr) ? new DateTime($dtimeStr) : new DateTime('now', new DateTimeZone('UTC')));
                 } catch (Throwable) {
                     $wiki->setDtime(new DateTime('now', new DateTimeZone('UTC')));
                 }
 
+                // Defaults
                 $wiki->setIsEditing(0);
                 $wiki->setTimeEdit(null);
-                $wiki->setHits((int) ($w->hits ?? 0));
-                $wiki->setAddlock((int) ($w->addlock ?? 1));
-                $wiki->setEditlock((int) ($w->editlock ?? 0));
-                $wiki->setVisibility((int) ($w->visibility ?? 1));
-                $wiki->setAddlockDisc((int) ($w->addlock_disc ?? 1));
-                $wiki->setVisibilityDisc((int) ($w->visibility_disc ?? 1));
-                $wiki->setRatinglockDisc((int) ($w->ratinglock_disc ?? 1));
-                $wiki->setAssignment((int) ($w->assignment ?? 0));
-                $wiki->setScore(isset($w->score) ? (int) $w->score : 0);
-                $wiki->setLinksto((string) ($w->linksto ?? ''));
-                $wiki->setTag((string) ($w->tag ?? ''));
-                $wiki->setUserIp((string) ($w->user_ip ?? api_get_real_ip()));
+                $wiki->setHits((int) ($src->hits ?? 0));
+                $wiki->setAddlock((int) ($src->addlock ?? 1));
+                $wiki->setEditlock((int) ($src->editlock ?? 0));
+                $wiki->setVisibility((int) ($src->visibility ?? 1));
+                $wiki->setAddlockDisc((int) ($src->addlock_disc ?? 1));
+                $wiki->setVisibilityDisc((int) ($src->visibility_disc ?? 1));
+                $wiki->setRatinglockDisc((int) ($src->ratinglock_disc ?? 1));
+                $wiki->setAssignment((int) ($src->assignment ?? 0));
+                $wiki->setScore(isset($src->score) ? (int) $src->score : 0);
+                $wiki->setLinksto((string) ($src->linksto ?? ''));
+                $wiki->setTag((string) ($src->tag ?? ''));
+                $wiki->setUserIp((string) ($src->user_ip ?? api_get_real_ip()));
 
+                // Optional linking (keep what already works)
                 if (method_exists($wiki, 'setParent')) {
                     $wiki->setParent($courseEntity);
                 }
@@ -4559,210 +5688,74 @@ class CourseRestorer
                 $em->persist($wiki);
                 $em->flush();
 
-                // Page id
-                if (empty($w->page_id)) {
-                    $wiki->setPageId((int) $wiki->getIid());
-                } else {
-                    $pid = (int) $w->page_id;
-                    $wiki->setPageId($pid > 0 ? $pid : (int) $wiki->getIid());
+                // Ensure destination page_id is consistent across versions.
+                $destPageId = $pageIdMap[$srcPageId] ?? 0;
+                if ($destPageId <= 0) {
+                    $destPageId = (int) ($wiki->getIid() ?? 0);
+                    $pageIdMap[$srcPageId] = $destPageId;
                 }
+                $wiki->setPageId($destPageId);
                 $em->flush();
 
-                // Conf row
-                $conf = new CWikiConf();
-                $conf->setCId($cid);
-                $conf->setPageId((int) $wiki->getPageId());
-                $conf->setTask((string) ($w->task ?? ''));
-                $conf->setFeedback1((string) ($w->feedback1 ?? ''));
-                $conf->setFeedback2((string) ($w->feedback2 ?? ''));
-                $conf->setFeedback3((string) ($w->feedback3 ?? ''));
-                $conf->setFprogress1((string) ($w->fprogress1 ?? ''));
-                $conf->setFprogress2((string) ($w->fprogress2 ?? ''));
-                $conf->setFprogress3((string) ($w->fprogress3 ?? ''));
-                $conf->setMaxText(isset($w->max_text) ? (int) $w->max_text : 0);
-                $conf->setMaxVersion(isset($w->max_version) ? (int) $w->max_version : 0);
-
-                try {
-                    $conf->setStartdateAssig(!empty($w->startdate_assig) ? new DateTime((string) $w->startdate_assig) : null);
-                } catch (Throwable) {
-                    $conf->setStartdateAssig(null);
-                }
-
-                try {
-                    $conf->setEnddateAssig(!empty($w->enddate_assig) ? new DateTime((string) $w->enddate_assig) : null);
-                } catch (Throwable) {
-                    $conf->setEnddateAssig(null);
-                }
-                $conf->setDelayedsubmit(isset($w->delayedsubmit) ? (int) $w->delayedsubmit : 0);
-
-                $em->persist($conf);
-                $em->flush();
-
-                $this->course->resources[RESOURCE_WIKI][$legacyId] ??= new stdClass();
-                $this->course->resources[RESOURCE_WIKI][$legacyId]->destination_id = (int) $wiki->getPageId();
-
-                $this->debug && error_log('COURSE_DEBUG: restore_wiki: created page iid='.(int) $wiki->getIid().' page_id='.(int) $wiki->getPageId()." reflink='{$reflink}'");
-            } catch (Throwable $e) {
-                error_log('COURSE_DEBUG: restore_wiki: failed: '.$e->getMessage());
-
-                continue;
-            }
-        }
-    }
-
-    /**
-     * Restore "Thematic" resources for the destination course.
-     *
-     * @param mixed $sessionId
-     */
-    public function restore_thematic($sessionId = 0): void
-    {
-        if (!$this->course->has_resources(RESOURCE_THEMATIC)) {
-            $this->debug && error_log('COURSE_DEBUG: restore_thematic: no thematic resources.');
-
-            return;
-        }
-
-        $em = Database::getManager();
-
-        /** @var CourseEntity $courseEntity */
-        $courseEntity = api_get_course_entity($this->destination_course_id);
-
-        /** @var SessionEntity|null $sessionEntity */
-        $sessionEntity = $sessionId ? api_get_session_entity((int) $sessionId) : null;
-
-        $resources = $this->course->resources;
-
-        foreach ($resources[RESOURCE_THEMATIC] as $legacyId => $t) {
-            try {
-                $p = (array) ($t->params ?? []);
-
-                $title = trim((string) ($p['title'] ?? $p['name'] ?? ''));
-                $content = (string) ($p['content'] ?? '');
-                $active = (bool) ($p['active'] ?? true);
-
-                if ('' === $title) {
-                    $title = 'Thematic';
-                }
-
-                // Rewrite embedded HTML so referenced files/images are valid in the new course
-                $content = $this->rewriteHtmlForCourse($content, (int) $sessionId, '[thematic.main]');
-
-                // Create Thematic root
-                $thematic = (new CThematic())
-                    ->setTitle($title)
-                    ->setContent($content)
-                    ->setActive($active)
-                ;
-
-                // Set ownership and course linkage if available
-                if (method_exists($thematic, 'setParent')) {
-                    $thematic->setParent($courseEntity);
-                }
-                if (method_exists($thematic, 'setCreator')) {
-                    $thematic->setCreator(api_get_user_entity());
-                }
-                if (method_exists($thematic, 'addCourseLink')) {
-                    $thematic->addCourseLink($courseEntity, $sessionEntity);
-                }
-
-                $em->persist($thematic);
-                $em->flush();
-
-                // Map new IID back to resources
-                $this->course->resources[RESOURCE_THEMATIC][$legacyId] ??= new stdClass();
-                $this->course->resources[RESOURCE_THEMATIC][$legacyId]->destination_id = (int) $thematic->getIid();
-
-                // Restore "advances" (timeline slots)
-                $advList = (array) ($t->thematic_advance_list ?? []);
-                foreach ($advList as $adv) {
-                    if (!\is_array($adv)) {
-                        $adv = (array) $adv;
-                    }
-
-                    $advContent = (string) ($adv['content'] ?? '');
-                    // Rewrite HTML inside advance content
-                    $advContent = $this->rewriteHtmlForCourse($advContent, (int) $sessionId, '[thematic.advance]');
-
-                    $rawStart = (string) ($adv['start_date'] ?? $adv['startDate'] ?? '');
+                // Create conf row once per destination page_id (avoid duplicates per version)
+                if (!isset($confCreatedForPage[$destPageId])) {
+                    $conf = new CWikiConf();
+                    $conf->setCId($cid);
+                    $conf->setPageId($destPageId);
+                    $conf->setTask((string) ($src->task ?? ''));
+                    $conf->setFeedback1((string) ($src->feedback1 ?? ''));
+                    $conf->setFeedback2((string) ($src->feedback2 ?? ''));
+                    $conf->setFeedback3((string) ($src->feedback3 ?? ''));
+                    $conf->setFprogress1((string) ($src->fprogress1 ?? ''));
+                    $conf->setFprogress2((string) ($src->fprogress2 ?? ''));
+                    $conf->setFprogress3((string) ($src->fprogress3 ?? ''));
+                    $conf->setMaxText(isset($src->max_text) ? (int) $src->max_text : 0);
+                    $conf->setMaxVersion(isset($src->max_version) ? (int) $src->max_version : 0);
 
                     try {
-                        $startDate = '' !== $rawStart ? new DateTime($rawStart) : new DateTime('now', new DateTimeZone('UTC'));
+                        $conf->setStartdateAssig(!empty($src->startdate_assig) ? new DateTime((string) $src->startdate_assig) : null);
                     } catch (Throwable) {
-                        $startDate = new DateTime('now', new DateTimeZone('UTC'));
+                        $conf->setStartdateAssig(null);
                     }
 
-                    $duration = (int) ($adv['duration'] ?? 1);
-                    $doneAdvance = (bool) ($adv['done_advance'] ?? $adv['doneAdvance'] ?? false);
-
-                    $advance = (new CThematicAdvance())
-                        ->setThematic($thematic)
-                        ->setContent($advContent)
-                        ->setStartDate($startDate)
-                        ->setDuration($duration)
-                        ->setDoneAdvance($doneAdvance)
-                    ;
-
-                    // Optional links to attendance/room if present
-                    $attId = (int) ($adv['attendance_id'] ?? 0);
-                    if ($attId > 0) {
-                        $att = $em->getRepository(CAttendance::class)->find($attId);
-                        if ($att) {
-                            $advance->setAttendance($att);
-                        }
-                    }
-                    $roomId = (int) ($adv['room_id'] ?? 0);
-                    if ($roomId > 0) {
-                        $room = $em->getRepository(Room::class)->find($roomId);
-                        if ($room) {
-                            $advance->setRoom($room);
-                        }
+                    try {
+                        $conf->setEnddateAssig(!empty($src->enddate_assig) ? new DateTime((string) $src->enddate_assig) : null);
+                    } catch (Throwable) {
+                        $conf->setEnddateAssig(null);
                     }
 
-                    $em->persist($advance);
+                    $conf->setDelayedsubmit(isset($src->delayedsubmit) ? (int) $src->delayedsubmit : 0);
+
+                    $em->persist($conf);
+                    $em->flush();
+
+                    $confCreatedForPage[$destPageId] = true;
                 }
 
-                // Restore "plans" (structured descriptions)
-                $planList = (array) ($t->thematic_plan_list ?? []);
-                foreach ($planList as $pl) {
-                    if (!\is_array($pl)) {
-                        $pl = (array) $pl;
-                    }
+                // Map destination id back to the resource bag
+                $this->course->resources[$bucketKey][$legacyId] ??= new stdClass();
+                $this->course->resources[$bucketKey][$legacyId]->destination_id = $destPageId;
+                $res->destination_id = $destPageId;
 
-                    $plTitle = trim((string) ($pl['title'] ?? ''));
-                    if ('' === $plTitle) {
-                        $plTitle = 'Plan';
-                    }
-
-                    $plDesc = (string) ($pl['description'] ?? '');
-                    // Rewrite HTML inside plan description
-                    $plDesc = $this->rewriteHtmlForCourse($plDesc, (int) $sessionId, '[thematic.plan]');
-
-                    $descType = (int) ($pl['description_type'] ?? $pl['descriptionType'] ?? 0);
-
-                    $plan = (new CThematicPlan())
-                        ->setThematic($thematic)
-                        ->setTitle($plTitle)
-                        ->setDescription($plDesc)
-                        ->setDescriptionType($descType)
-                    ;
-
-                    $em->persist($plan);
-                }
-
-                // Flush once per thematic (advances + plans)
-                $em->flush();
-
-                $this->debug && error_log(
-                    'COURSE_DEBUG: restore_thematic: created thematic iid='.(int) $thematic->getIid().
-                    ' (advances='.\count($advList).', plans='.\count($planList).')'
-                );
+                $this->dlog('restore_wiki: created', [
+                    'iid' => (int) ($wiki->getIid() ?? 0),
+                    'page_id' => $destPageId,
+                    'reflink' => $reflink,
+                    'title' => $rawTitle,
+                    'version' => (int) ($wiki->getVersion() ?? 0),
+                    'resolved_sid' => $sid,
+                ]);
             } catch (Throwable $e) {
-                error_log('COURSE_DEBUG: restore_thematic: failed: '.$e->getMessage());
-
+                $this->dlog('restore_wiki: failed', [
+                    'error' => $e->getMessage(),
+                    'legacy_id' => (string) $legacyId,
+                    'resolved_sid' => $sid,
+                ]);
                 continue;
             }
         }
+
+        $this->dlog('restore_wiki: done', ['count' => count($bag), 'resolved_sid' => $sid]);
     }
 
     /**
@@ -4774,7 +5767,6 @@ class CourseRestorer
     {
         if (!$this->course->has_resources(RESOURCE_ATTENDANCE)) {
             $this->debug && error_log('COURSE_DEBUG: restore_attendance: no attendance resources.');
-
             return;
         }
 
@@ -4786,125 +5778,180 @@ class CourseRestorer
         /** @var SessionEntity|null $sessionEntity */
         $sessionEntity = $sessionId ? api_get_session_entity((int) $sessionId) : null;
 
+        $repo = Container::getAttendanceRepository();
         $resources = $this->course->resources;
 
-        foreach ($resources[RESOURCE_ATTENDANCE] as $legacyId => $att) {
+        $this->debug && error_log('COURSE_DEBUG: restore_attendance: begin count='.count($resources[RESOURCE_ATTENDANCE] ?? []).' session='.(int) $sessionId);
+
+        $findExisting = function (string $title) use ($repo, $courseEntity, $sessionEntity): ?CAttendance {
+            $qb = $repo->createQueryBuilder('resource')
+                ->innerJoin('resource.resourceNode', 'n')
+                ->innerJoin('n.resourceLinks', 'l')
+                ->andWhere('l.course = :course')->setParameter('course', $courseEntity)
+                ->andWhere('resource.title = :title')->setParameter('title', $title)
+                ->setMaxResults(1);
+
+            if ($sessionEntity) {
+                $qb->andWhere('l.session = :session')->setParameter('session', $sessionEntity);
+            } else {
+                $qb->andWhere('l.session IS NULL');
+            }
+
+            return $qb->getQuery()->getOneOrNullResult();
+        };
+
+        $makeUniqueTitle = function (string $base) use ($findExisting): string {
+            $base = trim($base) !== '' ? $base : 'Attendance';
+            if (!$findExisting($base)) {
+                return $base;
+            }
+
+            $i = 1;
+            do {
+                $try = $base.' ('.$i.')';
+                $i++;
+            } while ($findExisting($try));
+
+            return $try;
+        };
+
+        foreach (($resources[RESOURCE_ATTENDANCE] ?? []) as $legacyId => $att) {
             try {
                 $p = (array) ($att->params ?? []);
 
-                $title = trim((string) ($p['title'] ?? 'Attendance'));
-                $desc = (string) ($p['description'] ?? '');
-                $active = (int) ($p['active'] ?? 1);
-
-                // Normalize title
+                $title = trim((string) ($p['title'] ?? $p['name'] ?? ''));
                 if ('' === $title) {
                     $title = 'Attendance';
                 }
 
-                // Rewrite HTML in description (links to course files, etc.)
+                $desc = (string) ($p['description'] ?? '');
                 $desc = $this->rewriteHtmlForCourse($desc, (int) $sessionId, '[attendance.main]');
 
-                // Optional grading attributes
-                $qualTitle = isset($p['attendance_qualify_title']) ? (string) $p['attendance_qualify_title'] : null;
+                $active = (int) ($p['active'] ?? 1);
+                $qualTitle = (string) ($p['attendance_qualify_title'] ?? '');
                 $qualMax = (int) ($p['attendance_qualify_max'] ?? 0);
                 $weight = (float) ($p['attendance_weight'] ?? 0.0);
                 $locked = (int) ($p['locked'] ?? 0);
+                $requireUnique = (bool) ($p['require_unique'] ?? false);
 
-                // Create attendance entity
-                $a = (new CAttendance())
-                    ->setTitle($title)
-                    ->setDescription($desc)
-                    ->setActive($active)
-                    ->setAttendanceQualifyTitle($qualTitle ?? '')
-                    ->setAttendanceQualifyMax($qualMax)
-                    ->setAttendanceWeight($weight)
-                    ->setLocked($locked)
-                ;
+                $existing = $findExisting($title);
+                $policy = (int) ($this->file_option ?? FILE_RENAME);
 
-                // Link to course & creator if supported
-                if (method_exists($a, 'setParent')) {
+                if ($existing) {
+                    $dstIid = (int) $existing->getIid();
+
+                    if ($policy === FILE_SKIP) {
+                        $this->course->resources[RESOURCE_ATTENDANCE][$legacyId] ??= new stdClass();
+                        $this->course->resources[RESOURCE_ATTENDANCE][$legacyId]->destination_id = $dstIid;
+                        $att->destination_id = $dstIid;
+
+                        $this->debug && error_log('COURSE_DEBUG: restore_attendance: exists -> skip src='.(int)$legacyId.' dst='.$dstIid);
+                        continue;
+                    }
+
+                    if ($policy === FILE_OVERWRITE) {
+                        // Update fields
+                        $existing
+                            ->setTitle($title)
+                            ->setDescription($desc)
+                            ->setActive($active)
+                            ->setAttendanceQualifyTitle($qualTitle)
+                            ->setAttendanceQualifyMax($qualMax)
+                            ->setAttendanceWeight($weight)
+                            ->setLocked($locked)
+                            ->setRequireUnique($requireUnique);
+
+                        // Remove old calendars (and their sheets via DB cascades)
+                        foreach ($existing->getCalendars() as $oldCal) {
+                            $em->remove($oldCal);
+                        }
+
+                        $em->flush();
+
+                        // Map
+                        $this->course->resources[RESOURCE_ATTENDANCE][$legacyId] ??= new stdClass();
+                        $this->course->resources[RESOURCE_ATTENDANCE][$legacyId]->destination_id = $dstIid;
+                        $att->destination_id = $dstIid;
+
+                        // Re-create calendars below using $target = $existing
+                        $target = $existing;
+                    } else {
+                        // RENAME
+                        $title = $makeUniqueTitle($title);
+                        $target = null;
+                    }
+                } else {
+                    $target = null;
+                }
+
+                if (!$target instanceof CAttendance) {
+                    $a = (new CAttendance())
+                        ->setTitle($title)
+                        ->setDescription($desc)
+                        ->setActive($active)
+                        ->setAttendanceQualifyTitle($qualTitle)
+                        ->setAttendanceQualifyMax($qualMax)
+                        ->setAttendanceWeight($weight)
+                        ->setLocked($locked)
+                        ->setRequireUnique($requireUnique);
+
                     $a->setParent($courseEntity);
-                }
-                if (method_exists($a, 'setCreator')) {
                     $a->setCreator(api_get_user_entity());
-                }
-                if (method_exists($a, 'addCourseLink')) {
                     $a->addCourseLink($courseEntity, $sessionEntity);
+
+                    $repo->create($a);
+                    $em->flush();
+
+                    $target = $a;
+
+                    $this->course->resources[RESOURCE_ATTENDANCE][$legacyId] ??= new stdClass();
+                    $this->course->resources[RESOURCE_ATTENDANCE][$legacyId]->destination_id = (int) $a->getIid();
+                    $att->destination_id = (int) $a->getIid();
+
+                    $this->debug && error_log('COURSE_DEBUG: restore_attendance: created iid='.(int)$a->getIid().' title="'.$title.'"');
                 }
 
-                $em->persist($a);
-                $em->flush();
-
-                // Map new IID back
-                $this->course->resources[RESOURCE_ATTENDANCE][$legacyId] ??= new stdClass();
-                $this->course->resources[RESOURCE_ATTENDANCE][$legacyId]->destination_id = (int) $a->getIid();
-
-                // Restore calendar entries (slots)
-                $calList = (array) ($att->attendance_calendar ?? []);
+                // Calendars
+                $calList = (array) ($att->attendance_calendar ?? $att->attendance_calendar_list ?? []);
                 foreach ($calList as $c) {
-                    if (!\is_array($c)) {
-                        $c = (array) $c;
-                    }
+                    $c = is_array($c) ? $c : (array) $c;
 
-                    // Date/time normalization with fallbacks
-                    $rawDt = (string) ($c['date_time'] ?? $c['dateTime'] ?? $c['start_date'] ?? '');
-
-                    try {
-                        $dt = '' !== $rawDt ? new DateTime($rawDt) : new DateTime('now', new DateTimeZone('UTC'));
-                    } catch (Throwable) {
-                        $dt = new DateTime('now', new DateTimeZone('UTC'));
-                    }
-
+                    $dt = $this->toUtcDateTime($c['date_time'] ?? $c['dateTime'] ?? $c['start_date'] ?? null);
                     $done = (bool) ($c['done_attendance'] ?? $c['doneAttendance'] ?? false);
                     $blocked = (bool) ($c['blocked'] ?? false);
-                    $duration = isset($c['duration']) ? (int) $c['duration'] : null;
+                    $duration = array_key_exists('duration', $c) ? (null !== $c['duration'] ? (int) $c['duration'] : null) : null;
 
                     $cal = (new CAttendanceCalendar())
-                        ->setAttendance($a)
+                        ->setAttendance($target)
                         ->setDateTime($dt)
                         ->setDoneAttendance($done)
                         ->setBlocked($blocked)
-                        ->setDuration($duration)
-                    ;
+                        ->setDuration($duration);
 
                     $em->persist($cal);
-                    $em->flush();
-
-                    // Optionally attach a group to the calendar slot
-                    $groupId = (int) ($c['group_id'] ?? 0);
-                    if ($groupId > 0) {
-                        try {
-                            $repo = $em->getRepository(CAttendanceCalendarRelGroup::class);
-                            if (method_exists($repo, 'addGroupToCalendar')) {
-                                $repo->addGroupToCalendar((int) $cal->getIid(), $groupId);
-                            }
-                        } catch (Throwable $e) {
-                            $this->debug && error_log('COURSE_DEBUG: restore_attendance: calendar group link skipped: '.$e->getMessage());
-                        }
-                    }
                 }
 
-                // Flush at the end for this attendance
                 $em->flush();
-                $this->debug && error_log('COURSE_DEBUG: restore_attendance: created attendance iid='.(int) $a->getIid().' (cal='.\count($calList).')');
+
+                $this->debug && error_log('COURSE_DEBUG: restore_attendance: calendars restored count='.count($calList).' attendance_iid='.(int)$target->getIid());
             } catch (Throwable $e) {
                 error_log('COURSE_DEBUG: restore_attendance: failed: '.$e->getMessage());
-
                 continue;
             }
         }
+
+        $this->debug && error_log('COURSE_DEBUG: restore_attendance: end');
     }
 
     /**
-     * Restore Student Publications (works) from backup selection.
-     * - Honors file policy: FILE_SKIP (1), FILE_RENAME (2), FILE_OVERWRITE (3)
-     * - Creates a fresh ResourceNode for new items to avoid unique key collisions
-     * - Keeps existing behavior: HTML rewriting, optional calendar event, destination_id mapping
-     * - NO entity manager reopen helper (we avoid violations proactively).
+     * Restore "Thematic" resources for the destination course.
+     *
+     * @param mixed $sessionId
      */
-    public function restore_works(int $sessionId = 0): void
+    public function restore_thematic($sessionId = 0): void
     {
-        if (!$this->course->has_resources(RESOURCE_WORK)) {
+        if (!$this->course->has_resources(RESOURCE_THEMATIC)) {
+            $this->debug && error_log('COURSE_DEBUG: restore_thematic: no thematic resources.');
             return;
         }
 
@@ -4914,64 +5961,325 @@ class CourseRestorer
         $courseEntity = api_get_course_entity($this->destination_course_id);
 
         /** @var SessionEntity|null $sessionEntity */
-        $sessionEntity = $sessionId ? api_get_session_entity($sessionId) : null;
+        $sessionEntity = $sessionId ? api_get_session_entity((int) $sessionId) : null;
 
-        /** @var CStudentPublicationRepository $pubRepo */
-        $pubRepo = Container::getStudentPublicationRepository();
+        $repo = Container::getThematicRepository();
+        $resources = $this->course->resources;
 
-        // Same-name policy already mapped at controller/restorer level
-        $filePolicy = $this->file_option ?? (\defined('FILE_RENAME') ? FILE_RENAME : 2);
+        $this->debug && error_log('COURSE_DEBUG: restore_thematic: begin count='.count($resources[RESOURCE_THEMATIC] ?? []).' session='.(int) $sessionId);
+
+        $findExisting = function (string $title) use ($repo, $courseEntity, $sessionEntity): ?CThematic {
+            $qb = $repo->createQueryBuilder('resource')
+                ->innerJoin('resource.resourceNode', 'n')
+                ->innerJoin('n.resourceLinks', 'l')
+                ->andWhere('l.course = :course')->setParameter('course', $courseEntity)
+                ->andWhere('resource.title = :title')->setParameter('title', $title)
+                ->setMaxResults(1);
+
+            if ($sessionEntity) {
+                $qb->andWhere('l.session = :session')->setParameter('session', $sessionEntity);
+            } else {
+                $qb->andWhere('l.session IS NULL');
+            }
+
+            return $qb->getQuery()->getOneOrNullResult();
+        };
+
+        $makeUniqueTitle = function (string $base) use ($findExisting): string {
+            $base = trim($base) !== '' ? $base : 'Thematic';
+            if (!$findExisting($base)) {
+                return $base;
+            }
+
+            $i = 1;
+            do {
+                $try = $base.' ('.$i.')';
+                $i++;
+            } while ($findExisting($try));
+
+            return $try;
+        };
+
+        foreach (($resources[RESOURCE_THEMATIC] ?? []) as $legacyId => $t) {
+            try {
+                $p = (array) ($t->params ?? []);
+
+                $title = trim((string) ($p['title'] ?? $p['name'] ?? ''));
+                if ('' === $title) {
+                    $title = 'Thematic';
+                }
+
+                $content = (string) ($p['content'] ?? '');
+                $active = (bool) ($p['active'] ?? true);
+
+                $content = $this->rewriteHtmlForCourse($content, (int) $sessionId, '[thematic.main]');
+
+                $existing = $findExisting($title);
+                $policy = (int) ($this->file_option ?? FILE_RENAME);
+
+                if ($existing) {
+                    $dstIid = (int) $existing->getIid();
+
+                    if ($policy === FILE_SKIP) {
+                        $this->course->resources[RESOURCE_THEMATIC][$legacyId] ??= new stdClass();
+                        $this->course->resources[RESOURCE_THEMATIC][$legacyId]->destination_id = $dstIid;
+                        $t->destination_id = $dstIid;
+
+                        $this->debug && error_log('COURSE_DEBUG: restore_thematic: exists -> skip src='.(int)$legacyId.' dst='.$dstIid);
+                        continue;
+                    }
+
+                    if ($policy === FILE_OVERWRITE) {
+                        // Update root fields
+                        $existing->setTitle($title)->setContent($content)->setActive($active);
+
+                        // Remove old children to avoid duplication
+                        foreach ($existing->getAdvances() as $oldAdv) {
+                            $em->remove($oldAdv);
+                        }
+                        foreach ($existing->getPlans() as $oldPlan) {
+                            $em->remove($oldPlan);
+                        }
+                        $em->flush();
+
+                        $thematic = $existing;
+
+                        $this->course->resources[RESOURCE_THEMATIC][$legacyId] ??= new stdClass();
+                        $this->course->resources[RESOURCE_THEMATIC][$legacyId]->destination_id = $dstIid;
+                        $t->destination_id = $dstIid;
+                    } else {
+                        // RENAME
+                        $title = $makeUniqueTitle($title);
+                        $thematic = null;
+                    }
+                } else {
+                    $thematic = null;
+                }
+
+                if (!$thematic instanceof CThematic) {
+                    $thematic = (new CThematic())
+                        ->setTitle($title)
+                        ->setContent($content)
+                        ->setActive($active);
+
+                    $thematic->setParent($courseEntity);
+                    $thematic->setCreator(api_get_user_entity());
+                    $thematic->addCourseLink($courseEntity, $sessionEntity);
+
+                    $repo->create($thematic);
+                    $em->flush();
+
+                    $this->course->resources[RESOURCE_THEMATIC][$legacyId] ??= new stdClass();
+                    $this->course->resources[RESOURCE_THEMATIC][$legacyId]->destination_id = (int) $thematic->getIid();
+                    $t->destination_id = (int) $thematic->getIid();
+
+                    $this->debug && error_log('COURSE_DEBUG: restore_thematic: created iid='.(int)$thematic->getIid().' title="'.$title.'"');
+                }
+
+                // Advances
+                $advList = (array) ($t->thematic_advance_list ?? $t->thematic_advance ?? []);
+                foreach ($advList as $adv) {
+                    $adv = is_array($adv) ? $adv : (array) $adv;
+
+                    $advContent = (string) ($adv['content'] ?? '');
+                    $advContent = $this->rewriteHtmlForCourse($advContent, (int) $sessionId, '[thematic.advance]');
+
+                    $startDate = $this->toUtcDateTime($adv['start_date'] ?? $adv['startDate'] ?? null);
+
+                    $duration = (int) ($adv['duration'] ?? 1);
+                    $doneAdvance = (bool) ($adv['done_advance'] ?? $adv['doneAdvance'] ?? false);
+
+                    $advance = (new CThematicAdvance())
+                        ->setThematic($thematic)
+                        ->setContent($advContent)
+                        ->setStartDate($startDate)
+                        ->setDuration($duration)
+                        ->setDoneAdvance($doneAdvance);
+
+                    // Link attendance (SOURCE id -> DESTINATION iid)
+                    $srcAttId = (int) ($adv['attendance_id'] ?? 0);
+                    if ($srcAttId > 0) {
+                        $dstAttIid = $this->resolveDestinationIid(RESOURCE_ATTENDANCE, $srcAttId);
+                        if ($dstAttIid > 0) {
+                            $dstAtt = $em->getRepository(CAttendance::class)->find($dstAttIid);
+                            if ($dstAtt instanceof CAttendance) {
+                                $advance->setAttendance($dstAtt);
+                            }
+                        }
+                    }
+
+                    // Room is global id (keep as-is)
+                    $roomId = (int) ($adv['room_id'] ?? 0);
+                    if ($roomId > 0) {
+                        $room = $em->getRepository(Room::class)->find($roomId);
+                        if ($room instanceof Room) {
+                            $advance->setRoom($room);
+                        }
+                    }
+
+                    $em->persist($advance);
+                }
+
+                // Plans
+                $planList = (array) ($t->thematic_plan_list ?? $t->thematic_plan ?? []);
+                foreach ($planList as $pl) {
+                    $pl = is_array($pl) ? $pl : (array) $pl;
+
+                    $plTitle = trim((string) ($pl['title'] ?? ''));
+                    if ('' === $plTitle) {
+                        $plTitle = 'Plan';
+                    }
+
+                    $plDesc = (string) ($pl['description'] ?? '');
+                    $plDesc = $this->rewriteHtmlForCourse($plDesc, (int) $sessionId, '[thematic.plan]');
+
+                    $descType = (int) ($pl['description_type'] ?? $pl['descriptionType'] ?? 0);
+
+                    $plan = (new CThematicPlan())
+                        ->setThematic($thematic)
+                        ->setTitle($plTitle)
+                        ->setDescription($plDesc)
+                        ->setDescriptionType($descType);
+
+                    $em->persist($plan);
+                }
+
+                $em->flush();
+
+                $this->debug && error_log(
+                    'COURSE_DEBUG: restore_thematic: restored iid='.(int)$thematic->getIid().
+                    ' advances='.count($advList).' plans='.count($planList)
+                );
+            } catch (Throwable $e) {
+                error_log('COURSE_DEBUG: restore_thematic: failed: '.$e->getMessage());
+                continue;
+            }
+        }
+
+        $this->debug && error_log('COURSE_DEBUG: restore_thematic: end');
+    }
+
+    /**
+     * Normalize any value (string|DateTimeInterface|timestamp|null) into a UTC DateTime.
+     */
+    private function toUtcDateTime($value): DateTime
+    {
+        $tz = new DateTimeZone('UTC');
+
+        if ($value instanceof DateTimeInterface) {
+            $dt = DateTimeImmutable::createFromInterface($value)->setTimezone($tz);
+            return new DateTime($dt->format('Y-m-d H:i:s'), $tz);
+        }
+
+        if (is_int($value) || (is_string($value) && ctype_digit($value))) {
+            $ts = (int) $value;
+            $dt = (new DateTimeImmutable('@'.$ts))->setTimezone($tz);
+            return new DateTime($dt->format('Y-m-d H:i:s'), $tz);
+        }
+
+        $s = trim((string) $value);
+        if ($s === '') {
+            return new DateTime('now', $tz);
+        }
+
+        try {
+            $dt = new DateTime($s, $tz);
+            $dt->setTimezone($tz);
+            return $dt;
+        } catch (Throwable) {
+            return new DateTime('now', $tz);
+        }
+    }
+
+    /**
+     * Resolve destination iid for a source id within a bucket using destination_id + params['id'] fallback.
+     */
+    private function resolveDestinationIid(string $bucket, int $srcId): int
+    {
+        $bag = $this->course->resources[$bucket] ?? [];
+        if (isset($bag[$srcId]) && is_object($bag[$srcId]) && !empty($bag[$srcId]->destination_id)) {
+            return (int) $bag[$srcId]->destination_id;
+        }
+
+        foreach ($bag as $key => $res) {
+            if (!is_object($res)) {
+                continue;
+            }
+            $p = (array) ($res->params ?? []);
+            $id = (int) ($p['id'] ?? $key);
+            if ($id === $srcId && !empty($res->destination_id)) {
+                return (int) $res->destination_id;
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * Restore Student Publications (works) from backup selection.
+     * - Honors file policy: FILE_SKIP (1), FILE_RENAME (2), FILE_OVERWRITE (3)
+     * - Keeps existing behavior: HTML rewriting, optional calendar event, destination_id mapping
+     */
+    public function restore_works(int $sessionId = 0): void
+    {
+        if (!$this->course->has_resources(RESOURCE_WORK)) {
+            return;
+        }
+
+        /** @var EntityManagerInterface $em */
+        $em = \Database::getManager();
+
+        // Resolve destination course entity safely (avoid wrong class collisions).
+        $courseEntity = api_get_course_entity((int) $this->destination_course_id);
+        if (!$courseEntity instanceof CourseEntity) {
+            $destinationCourseId = (int) ($this->destination_course_id ?? 0);
+            if ($destinationCourseId > 0) {
+                $courseEntity = $em->find(CourseEntity::class, $destinationCourseId);
+            }
+        }
+
+        if (!$courseEntity instanceof CourseEntity) {
+            $destinationCode = (string) ($this->destination_course_code ?? $this->destination_code ?? '');
+            if ('' !== $destinationCode) {
+                $info = api_get_course_info($destinationCode);
+                $resolvedId = (int) ($info['real_id'] ?? $info['id'] ?? 0);
+                if ($resolvedId > 0) {
+                    $courseEntity = $em->find(CourseEntity::class, $resolvedId);
+                }
+            }
+        }
+
+        if (!$courseEntity instanceof CourseEntity) {
+            $this->dlog('restore_works: cannot resolve destination course entity, aborting', [
+                'destination_course_id' => (int) ($this->destination_course_id ?? 0),
+                'destination_course_code' => (string) ($this->destination_course_code ?? $this->destination_code ?? ''),
+            ]);
+            return;
+        }
+
+        $sessionEntity = $sessionId ? api_get_session_entity((int) $sessionId) : null;
+
+        /** @var \Chamilo\CoreBundle\Repository\CStudentPublicationRepository $pubRepo */
+        $pubRepo = \Chamilo\CoreBundle\Framework\Container::getStudentPublicationRepository();
+
+        $FILE_SKIP = \defined('FILE_SKIP') ? (int) FILE_SKIP : 1;
+        $FILE_RENAME = \defined('FILE_RENAME') ? (int) FILE_RENAME : 2;
+        $FILE_OVERWRITE = \defined('FILE_OVERWRITE') ? (int) FILE_OVERWRITE : 3;
+
+        $filePolicy = (int) ($this->file_option ?? $FILE_RENAME);
 
         $this->dlog('restore_works: begin', [
             'count' => \count($this->course->resources[RESOURCE_WORK] ?? []),
             'policy' => $filePolicy,
+            'session_id' => (int) $sessionId,
         ]);
 
-        // Helper: generate a unique title within (course, session) scope
-        $makeUniqueTitle = function (string $base) use ($pubRepo, $courseEntity, $sessionEntity): string {
-            $t = '' !== $base ? $base : 'Work';
-            $n = 0;
-            $title = $t;
-            while (true) {
-                $qb = $pubRepo->findAllByCourse($courseEntity, $sessionEntity, $title, null, 'folder');
-                $exists = $qb
-                    ->andWhere('resource.publicationParent IS NULL')
-                    ->andWhere('resource.active IN (0,1)')
-                    ->setMaxResults(1)
-                    ->getQuery()
-                    ->getOneOrNullResult()
-                ;
-                if (!$exists) {
-                    return $title;
-                }
-                $n++;
-                $title = $t.' ('.$n.')';
-            }
-        };
+        // IMPORTANT: Use the Doctrine entity FQCN explicitly (avoid Tool\User collision).
+        $creatorRef = $em->getReference(\Chamilo\CoreBundle\Entity\User::class, (int) api_get_user_id());
 
-        // Helper: create a fresh ResourceNode for the publication
-        $createResourceNode = function (string $title) use ($em, $courseEntity, $sessionEntity) {
-            $nodeClass = ResourceNode::class;
-            $node = new $nodeClass();
-            if (method_exists($node, 'setTitle')) {
-                $node->setTitle($title);
-            }
-            if (method_exists($node, 'setCourse')) {
-                $node->setCourse($courseEntity);
-            }
-            if (method_exists($node, 'addCourseLink')) {
-                $node->addCourseLink($courseEntity, $sessionEntity);
-            }
-            if (method_exists($node, 'setResourceType')) {
-                $node->setResourceType('student_publication');
-            }
-            $em->persist($node);
+        foreach (($this->course->resources[RESOURCE_WORK] ?? []) as $legacyId => $obj) {
+            $legacyId = (int) $legacyId;
 
-            // flush is deferred to the publication flush
-            return $node;
-        };
-
-        foreach ($this->course->resources[RESOURCE_WORK] as $legacyId => $obj) {
             try {
                 $p = (array) ($obj->params ?? []);
 
@@ -4979,61 +6287,106 @@ class CourseRestorer
                 if ('' === $title) {
                     $title = 'Work';
                 }
-                $originalTitle = $title;
+                $baseTitle = $title;
 
                 $description = (string) ($p['description'] ?? '');
-                // HTML rewrite (assignment description)
                 $description = $this->rewriteHtmlForCourse($description, (int) $sessionId, '[work.description]');
 
-                $enableQualification = (bool) ($p['enable_qualification'] ?? false);
-                $addToCalendar = 1 === (int) ($p['add_to_calendar'] ?? 0);
+                $enableQualification = filter_var(($p['enable_qualification'] ?? false), FILTER_VALIDATE_BOOLEAN);
+                $addToCalendar = filter_var(($p['add_to_calendar'] ?? false), FILTER_VALIDATE_BOOLEAN);
 
-                $expiresOn = !empty($p['expires_on']) ? new DateTime($p['expires_on']) : null;
-                $endsOn = !empty($p['ends_on']) ? new DateTime($p['ends_on']) : null;
+                $expiresOn = null;
+                if (!empty($p['expires_on'])) {
+                    try {
+                        $expiresOn = new \DateTime((string) $p['expires_on']);
+                    } catch (\Throwable) {
+                        $expiresOn = null;
+                    }
+                }
+
+                $endsOn = null;
+                if (!empty($p['ends_on'])) {
+                    try {
+                        $endsOn = new \DateTime((string) $p['ends_on']);
+                    } catch (\Throwable) {
+                        $endsOn = null;
+                    }
+                }
+
+                if ($expiresOn && $endsOn && $endsOn < $expiresOn) {
+                    $endsOn = clone $expiresOn;
+                }
 
                 $weight = isset($p['weight']) ? (float) $p['weight'] : 0.0;
                 $qualification = isset($p['qualification']) ? (float) $p['qualification'] : 0.0;
-                $allowText = (int) ($p['allow_text_assignment'] ?? 0);
-                $defaultVisibility = (bool) ($p['default_visibility'] ?? 0);
-                $studentMayDelete = (bool) ($p['student_delete_own_publication'] ?? 0);
-                $extensions = isset($p['extensions']) ? (string) $p['extensions'] : null;
-                $groupCategoryWorkId = (int) ($p['group_category_work_id'] ?? 0);
-                $postGroupId = (int) ($p['post_group_id'] ?? 0);
+                $allowText = isset($p['allow_text_assignment']) ? (int) $p['allow_text_assignment'] : 0;
 
-                // Check for existing root folder with same title
-                $existingQb = $pubRepo->findAllByCourse($courseEntity, $sessionEntity, $title, null, 'folder');
-                $existing = $existingQb
+                $defaultVisibility = filter_var(($p['default_visibility'] ?? false), FILTER_VALIDATE_BOOLEAN);
+                $studentMayDelete = filter_var(($p['student_delete_own_publication'] ?? false), FILTER_VALIDATE_BOOLEAN);
+
+                $extensions = isset($p['extensions']) ? trim((string) $p['extensions']) : '';
+                $extensions = '' !== $extensions ? $extensions : null;
+
+                $groupCategoryWorkId = isset($p['group_category_work_id']) ? (int) $p['group_category_work_id'] : 0;
+                $postGroupId = isset($p['post_group_id']) ? (int) $p['post_group_id'] : 0;
+
+                // Find existing root folder with same title (course + session scope)
+                $existing = $pubRepo->findAllByCourse($courseEntity, $sessionEntity, $title, null, 'folder')
                     ->andWhere('resource.publicationParent IS NULL')
                     ->andWhere('resource.active IN (0,1)')
                     ->setMaxResults(1)
                     ->getQuery()
-                    ->getOneOrNullResult()
-                ;
+                    ->getOneOrNullResult();
 
-                // Apply same-name policy proactively (avoid unique violations)
                 if ($existing) {
-                    if ($filePolicy === (\defined('FILE_SKIP') ? FILE_SKIP : 1)) {
-                        $this->dlog('WORK: skip existing title', ['title' => $title, 'src_id' => $legacyId]);
-                        $this->course->resources[RESOURCE_WORK][$legacyId] ??= new stdClass();
+                    if ($filePolicy === $FILE_SKIP) {
+                        $this->course->resources[RESOURCE_WORK][$legacyId] ??= new \stdClass();
                         $this->course->resources[RESOURCE_WORK][$legacyId]->destination_id = (int) $existing->getIid();
 
+                        $this->dlog('restore_works: skipped (exists)', [
+                            'src_id' => $legacyId,
+                            'dst_iid' => (int) $existing->getIid(),
+                            'title' => (string) $existing->getTitle(),
+                        ]);
                         continue;
                     }
-                    if ($filePolicy === (\defined('FILE_RENAME') ? FILE_RENAME : 2)) {
-                        $title = $makeUniqueTitle($title);
-                        $existing = null; // force a new one
+
+                    if ($filePolicy === $FILE_RENAME) {
+                        $n = 1;
+                        while (true) {
+                            $candidate = $baseTitle.' ('.$n.')';
+
+                            $dup = $pubRepo->findAllByCourse($courseEntity, $sessionEntity, $candidate, null, 'folder')
+                                ->andWhere('resource.publicationParent IS NULL')
+                                ->andWhere('resource.active IN (0,1)')
+                                ->setMaxResults(1)
+                                ->getQuery()
+                                ->getOneOrNullResult();
+
+                            if (!$dup) {
+                                $title = $candidate;
+                                break;
+                            }
+                            $n++;
+                            if ($n > 5000) {
+                                $this->dlog('restore_works: rename safeguard triggered, skipping', [
+                                    'src_id' => $legacyId,
+                                    'base_title' => $baseTitle,
+                                ]);
+                                continue 2;
+                            }
+                        }
+
+                        $existing = null; // force create
                     }
-                // FILE_OVERWRITE: keep $existing and update below
-                } else {
-                    // No existing — still ensure uniqueness to avoid slug/node collisions
-                    $title = $makeUniqueTitle($title);
+                    // FILE_OVERWRITE keeps $existing
                 }
 
                 if (!$existing) {
-                    // Create NEW publication (folder) + NEW resource node
+                    // Create new work folder
                     $pub = (new CStudentPublication())
                         ->setTitle($title)
-                        ->setDescription($description)  // already rewritten
+                        ->setDescription($description)
                         ->setFiletype('folder')
                         ->setContainsFile(0)
                         ->setWeight($weight)
@@ -5044,180 +6397,169 @@ class CourseRestorer
                         ->setExtensions($extensions)
                         ->setGroupCategoryWorkId($groupCategoryWorkId)
                         ->setPostGroupId($postGroupId)
+                        ->setUser($creatorRef)
                     ;
 
-                    if (method_exists($pub, 'setParent')) {
-                        $pub->setParent($courseEntity);
-                    }
-                    if (method_exists($pub, 'setCreator')) {
-                        $pub->setCreator(api_get_user_entity());
-                    }
-                    if (method_exists($pub, 'addCourseLink')) {
-                        $pub->addCourseLink($courseEntity, $sessionEntity);
-                    }
-                    if (method_exists($pub, 'setResourceNode')) {
-                        $pub->setResourceNode($createResourceNode($title));
-                    }
+                    $pub->setParent($courseEntity);
+                    $pub->addCourseLink($courseEntity, $sessionEntity);
 
                     $em->persist($pub);
+                    $em->flush();
 
-                    try {
-                        $em->flush();
-                    } catch (UniqueConstraintViolationException $e) {
-                        // As a last resort, rename once and retry quickly (no EM reopen)
-                        $this->dlog('WORK: unique violation on create, retry once with renamed title', [
-                            'src_id' => $legacyId,
-                            'err' => $e->getMessage(),
-                        ]);
-                        $newTitle = $makeUniqueTitle($title);
-                        if (method_exists($pub, 'setTitle')) {
-                            $pub->setTitle($newTitle);
-                        }
-                        if (method_exists($pub, 'setResourceNode')) {
-                            $pub->setResourceNode($createResourceNode($newTitle));
-                        }
-                        $em->persist($pub);
-                        $em->flush();
-                    }
-
-                    // Create Assignment row
                     $assignment = (new CStudentPublicationAssignment())
                         ->setPublication($pub)
-                        ->setEnableQualification($enableQualification || $qualification > 0)
+                        ->setEnableQualification($enableQualification || $qualification > 0.0)
+                        ->setExpiresOn($expiresOn)
+                        ->setEndsOn($endsOn)
                     ;
-                    if ($expiresOn) {
-                        $assignment->setExpiresOn($expiresOn);
-                    }
-                    if ($endsOn) {
-                        $assignment->setEndsOn($endsOn);
-                    }
 
                     $em->persist($assignment);
                     $em->flush();
 
-                    // Optional calendar entry
                     if ($addToCalendar) {
-                        $eventTitle = \sprintf(get_lang('Handing over of task %s'), $pub->getTitle());
+                        try {
+                            $link = $pub->getFirstResourceLink();
+                            if ($link) {
+                                $eventTitle = sprintf(get_lang('Handing over of task %s'), $pub->getTitle());
 
-                        $publicationUrl = null;
-                        $uuid = $pub->getResourceNode()?->getUuid();
-                        if ($uuid) {
-                            if (property_exists($this, 'router') && $this->router instanceof RouterInterface) {
-                                try {
-                                    $publicationUrl = $this->router->generate(
-                                        'student_publication_view',
-                                        ['uuid' => (string) $uuid],
-                                        UrlGeneratorInterface::ABSOLUTE_PATH
-                                    );
-                                } catch (Throwable) {
-                                    $publicationUrl = '/r/student_publication/'.$uuid;
-                                }
-                            } else {
-                                $publicationUrl = '/r/student_publication/'.$uuid;
+                                $content = (string) $pub->getDescription();
+                                $content = $this->rewriteHtmlForCourse($content, (int) $sessionId, '[work.calendar]');
+
+                                $start = $expiresOn ? clone $expiresOn : new \DateTime('now', new \DateTimeZone('UTC'));
+                                $end = $expiresOn ? clone $expiresOn : new \DateTime('now', new \DateTimeZone('UTC'));
+
+                                $event = (new CCalendarEvent())
+                                    ->setTitle($eventTitle)
+                                    ->setContent($content)
+                                    ->setParent($courseEntity)
+                                    ->setCreator($creatorRef)
+                                    ->addLink(clone $link)
+                                    ->setStartDate($start)
+                                    ->setEndDate($end)
+                                    ->setColor(CCalendarEvent::COLOR_STUDENT_PUBLICATION)
+                                ;
+
+                                $em->persist($event);
+                                $em->flush();
+
+                                $assignment->setEventCalendarId((int) $event->getIid());
+                                $em->flush();
                             }
+                        } catch (\Throwable $e) {
+                            $this->dlog('restore_works: calendar failed (ignored)', [
+                                'src_id' => $legacyId,
+                                'dst_iid' => (int) $pub->getIid(),
+                                'err' => $e->getMessage(),
+                            ]);
                         }
-
-                        $contentBlock = \sprintf(
-                            '<div>%s</div> %s',
-                            $publicationUrl
-                                ? \sprintf('<a href="%s">%s</a>', $publicationUrl, htmlspecialchars($pub->getTitle(), ENT_QUOTES))
-                                : htmlspecialchars($pub->getTitle(), ENT_QUOTES),
-                            $pub->getDescription()
-                        );
-                        $contentBlock = $this->rewriteHtmlForCourse($contentBlock, (int) $sessionId, '[work.calendar]');
-
-                        $start = $expiresOn ? clone $expiresOn : new DateTime('now', new DateTimeZone('UTC'));
-                        $end = $expiresOn ? clone $expiresOn : new DateTime('now', new DateTimeZone('UTC'));
-
-                        $color = CCalendarEvent::COLOR_STUDENT_PUBLICATION;
-                        if ($colors = api_get_setting('agenda.agenda_colors')) {
-                            if (!empty($colors['student_publication'])) {
-                                $color = $colors['student_publication'];
-                            }
-                        }
-
-                        $event = (new CCalendarEvent())
-                            ->setTitle($eventTitle)
-                            ->setContent($contentBlock)
-                            ->setParent($courseEntity)
-                            ->setCreator($pub->getCreator())
-                            ->addLink(clone $pub->getFirstResourceLink())
-                            ->setStartDate($start)
-                            ->setEndDate($end)
-                            ->setColor($color)
-                        ;
-
-                        $em->persist($event);
-                        $em->flush();
-
-                        $assignment->setEventCalendarId((int) $event->getIid());
-                        $em->flush();
                     }
 
-                    // Map destination for LP path resolution
-                    $this->course->resources[RESOURCE_WORK][$legacyId] ??= new stdClass();
+                    $this->course->resources[RESOURCE_WORK][$legacyId] ??= new \stdClass();
                     $this->course->resources[RESOURCE_WORK][$legacyId]->destination_id = (int) $pub->getIid();
 
                     $this->dlog('restore_works: created', [
-                        'src_id' => (int) $legacyId,
+                        'src_id' => $legacyId,
                         'dst_iid' => (int) $pub->getIid(),
-                        'title' => $pub->getTitle(),
+                        'title' => (string) $pub->getTitle(),
                     ]);
-                } else {
-                    // FILE_OVERWRITE: update existing
-                    $existing
-                        ->setDescription($this->rewriteHtmlForCourse((string) $description, (int) $sessionId, '[work.description.overwrite]'))
-                        ->setWeight($weight)
-                        ->setQualification($qualification)
-                        ->setAllowTextAssignment($allowText)
-                        ->setDefaultVisibility($defaultVisibility)
-                        ->setStudentDeleteOwnPublication($studentMayDelete)
-                        ->setExtensions($extensions)
-                        ->setGroupCategoryWorkId($groupCategoryWorkId)
-                        ->setPostGroupId($postGroupId)
-                    ;
 
-                    // Ensure it has a ResourceNode
-                    if (method_exists($existing, 'getResourceNode') && method_exists($existing, 'setResourceNode')) {
-                        if (!$existing->getResourceNode()) {
-                            $existing->setResourceNode($createResourceNode($existing->getTitle() ?: $originalTitle));
-                        }
-                    }
-
-                    $em->persist($existing);
-                    $em->flush();
-
-                    // Assignment row
-                    $assignment = $existing->getAssignment();
-                    if (!$assignment) {
-                        $assignment = new CStudentPublicationAssignment();
-                        $assignment->setPublication($existing);
-                        $em->persist($assignment);
-                    }
-                    $assignment->setEnableQualification($enableQualification || $qualification > 0);
-                    $assignment->setExpiresOn($expiresOn);
-                    $assignment->setEndsOn($endsOn);
-                    if (!$addToCalendar) {
-                        $assignment->setEventCalendarId(0);
-                    }
-                    $em->flush();
-
-                    $this->course->resources[RESOURCE_WORK][$legacyId] ??= new stdClass();
-                    $this->course->resources[RESOURCE_WORK][$legacyId]->destination_id = (int) $existing->getIid();
-
-                    $this->dlog('restore_works: overwritten existing', [
-                        'src_id' => (int) $legacyId,
-                        'dst_iid' => (int) $existing->getIid(),
-                        'title' => $existing->getTitle(),
-                    ]);
+                    continue;
                 }
-            } catch (Throwable $e) {
+
+                // Overwrite existing
+                $existing
+                    ->setDescription($this->rewriteHtmlForCourse($description, (int) $sessionId, '[work.description.overwrite]'))
+                    ->setWeight($weight)
+                    ->setQualification($qualification)
+                    ->setAllowTextAssignment($allowText)
+                    ->setDefaultVisibility($defaultVisibility)
+                    ->setStudentDeleteOwnPublication($studentMayDelete)
+                    ->setExtensions($extensions)
+                    ->setGroupCategoryWorkId($groupCategoryWorkId)
+                    ->setPostGroupId($postGroupId)
+                ;
+
+                try {
+                    if (!$existing->getFirstResourceLinkFromCourseSession($courseEntity, $sessionEntity)) {
+                        $existing->setParent($courseEntity);
+                        $existing->addCourseLink($courseEntity, $sessionEntity);
+                    }
+                } catch (\Throwable) {
+                    // Ignore link issues
+                }
+
+                $em->persist($existing);
+                $em->flush();
+
+                $assignment = $existing->getAssignment();
+                if (!$assignment) {
+                    $assignment = (new CStudentPublicationAssignment())->setPublication($existing);
+                    $em->persist($assignment);
+                }
+
+                $assignment
+                    ->setEnableQualification($enableQualification || $qualification > 0.0)
+                    ->setExpiresOn($expiresOn)
+                    ->setEndsOn($endsOn)
+                ;
+
+                if (!$addToCalendar) {
+                    $assignment->setEventCalendarId(0);
+                }
+
+                $em->flush();
+
+                if ($addToCalendar && $assignment->getEventCalendarId() <= 0) {
+                    try {
+                        $link = $existing->getFirstResourceLink();
+                        if ($link) {
+                            $eventTitle = sprintf(get_lang('Handing over of task %s'), $existing->getTitle());
+
+                            $content = (string) $existing->getDescription();
+                            $content = $this->rewriteHtmlForCourse($content, (int) $sessionId, '[work.calendar.overwrite]');
+
+                            $start = $expiresOn ? clone $expiresOn : new \DateTime('now', new \DateTimeZone('UTC'));
+                            $end = $expiresOn ? clone $expiresOn : new \DateTime('now', new \DateTimeZone('UTC'));
+
+                            $event = (new CCalendarEvent())
+                                ->setTitle($eventTitle)
+                                ->setContent($content)
+                                ->setParent($courseEntity)
+                                ->setCreator($creatorRef)
+                                ->addLink(clone $link)
+                                ->setStartDate($start)
+                                ->setEndDate($end)
+                                ->setColor(CCalendarEvent::COLOR_STUDENT_PUBLICATION)
+                            ;
+
+                            $em->persist($event);
+                            $em->flush();
+
+                            $assignment->setEventCalendarId((int) $event->getIid());
+                            $em->flush();
+                        }
+                    } catch (\Throwable $e) {
+                        $this->dlog('restore_works: calendar failed on overwrite (ignored)', [
+                            'src_id' => $legacyId,
+                            'dst_iid' => (int) $existing->getIid(),
+                            'err' => $e->getMessage(),
+                        ]);
+                    }
+                }
+
+                $this->course->resources[RESOURCE_WORK][$legacyId] ??= new \stdClass();
+                $this->course->resources[RESOURCE_WORK][$legacyId]->destination_id = (int) $existing->getIid();
+
+                $this->dlog('restore_works: overwritten', [
+                    'src_id' => $legacyId,
+                    'dst_iid' => (int) $existing->getIid(),
+                    'title' => (string) $existing->getTitle(),
+                ]);
+            } catch (\Throwable $e) {
                 $this->dlog('restore_works: failed', [
-                    'src_id' => (int) $legacyId,
+                    'src_id' => $legacyId,
                     'err' => $e->getMessage(),
                 ]);
-
-                // Do NOT try to reopen EM here (as requested) — just continue gracefully
                 continue;
             }
         }
@@ -5872,7 +7214,7 @@ class CourseRestorer
         $out = ['zip' => null, 'temp' => false];
         $base = rtrim($this->course->backup_path, '/');
 
-        // 1) Direct mapping from SCORM bucket
+        // Direct mapping from SCORM bucket
         if (!empty($this->course->resources[RESOURCE_SCORM]) && \is_array($this->course->resources[RESOURCE_SCORM])) {
             foreach ($this->course->resources[RESOURCE_SCORM] as $sc) {
                 $src = isset($sc->source_lp_id) ? (int) $sc->source_lp_id : 0;
@@ -5918,7 +7260,7 @@ class CourseRestorer
             }
         }
 
-        // 2) Heuristic: typical folders with *.zip
+        // typical folders with *.zip
         foreach (['/scorm', '/document/scorm', '/documents/scorm'] as $dir) {
             $full = $base.$dir;
             if (!is_dir($full)) {
@@ -5933,7 +7275,7 @@ class CourseRestorer
             }
         }
 
-        // 3) Heuristic: look for imsmanifest.xml anywhere, then zip that folder
+        // look for imsmanifest.xml anywhere, then zip that folder
         $riiFlags = FilesystemIterator::SKIP_DOTS;
 
         try {
@@ -5983,39 +7325,6 @@ class CourseRestorer
 
             return true;
         }
-    }
-
-    /**
-     * Resolve absolute filesystem path for an announcement attachment.
-     */
-    private function resourceFileAbsPathFromAnnouncementAttachment(CAnnouncementAttachment $att): ?string
-    {
-        // Get the resource node linked to this attachment
-        $node = $att->getResourceNode();
-        if (!$node) {
-            return null; // No node, nothing to resolve
-        }
-
-        // Get the first physical resource file
-        $file = $node->getFirstResourceFile();
-        if (!$file) {
-            return null; // No physical file bound
-        }
-
-        /** @var ResourceNodeRepository $rnRepo */
-        $rnRepo = Container::$container->get(ResourceNodeRepository::class);
-
-        // Relative path stored by the repository
-        $rel = $rnRepo->getFilename($file);
-        if (!$rel) {
-            return null; // Missing relative path
-        }
-
-        // Compose absolute path inside the project upload base
-        $abs = $this->projectUploadBase().$rel;
-
-        // Return only if readable to avoid runtime errors
-        return is_readable($abs) ? $abs : null;
     }
 
     /**
@@ -6327,4 +7636,121 @@ class CourseRestorer
         return '';
     }
 
+    /**
+     * Return the first non-empty resource bag found for the given keys.
+     *
+     * @param array<int, string> $keys
+     */
+    private function getBag(array $keys): array
+    {
+        foreach ($keys as $k) {
+            $bag = $this->course->resources[$k] ?? null;
+            if (!empty($bag) && is_array($bag)) {
+                return $bag;
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * Best-effort resolver for SCORM package zip.
+     * - If $srcLpId > 0: uses existing findScormPackageForLp()
+     * - Else: uses scorm bucket entry path/name (folder or zip)
+     *
+     * @return array{zip:string,temp:bool}
+     */
+    private function findScormPackageForEntry(object $sc): array
+    {
+        $srcLpId = (int) ($sc->source_lp_id ?? 0);
+        if ($srcLpId > 0 && method_exists($this, 'findScormPackageForLp')) {
+            /** @var array{zip:string,temp:bool} $pkg */
+            $pkg = $this->findScormPackageForLp($srcLpId);
+            if (!empty($pkg['zip'])) {
+                return $pkg;
+            }
+        }
+
+        $backupPath = (string) ($this->course->backup_path ?? '');
+        if ('' === $backupPath) {
+            return ['zip' => '', 'temp' => false];
+        }
+
+        $scormDir = rtrim($backupPath, '/').'/scorm';
+
+        $name = trim((string) ($sc->name ?? ''));
+        $path = trim((string) ($sc->path ?? ''));
+        $folder = trim(str_replace('\\', '/', $path), '/');
+        if ('' === $folder) {
+            $folder = $name;
+        }
+        if ('' === $folder) {
+            return ['zip' => '', 'temp' => false];
+        }
+
+        $abs = $scormDir.'/'.$folder;
+
+        // Direct zip file
+        if (is_file($abs) && str_ends_with(strtolower($abs), '.zip')) {
+            return ['zip' => $abs, 'temp' => false];
+        }
+        if (is_file($abs.'.zip')) {
+            return ['zip' => $abs.'.zip', 'temp' => false];
+        }
+
+        // Folder -> temp zip
+        if (is_dir($abs)) {
+            return $this->zipDirectoryToTemp($abs, 'scorm_'.$folder);
+        }
+
+        return ['zip' => '', 'temp' => false];
+    }
+
+    /**
+     * Zip a directory to a temporary zip file.
+     *
+     * @return array{zip:string,temp:bool}
+     */
+    private function zipDirectoryToTemp(string $dirAbs, string $prefix): array
+    {
+        if (!class_exists(\ZipArchive::class)) {
+            error_log('RESTORE_SCORM_ZIP: ZipArchive is not available, cannot zip directory');
+            return ['zip' => '', 'temp' => false];
+        }
+
+        $tmp = rtrim(sys_get_temp_dir(), '/').'/'.$prefix.'_'.uniqid('', true).'.zip';
+
+        $zip = new \ZipArchive();
+        if (true !== $zip->open($tmp, \ZipArchive::CREATE | \ZipArchive::OVERWRITE)) {
+            error_log('RESTORE_SCORM_ZIP: Failed to create temp zip: '.$tmp);
+            return ['zip' => '', 'temp' => false];
+        }
+
+        $dirAbs = rtrim($dirAbs, '/');
+        $baseLen = strlen($dirAbs) + 1;
+
+        $it = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($dirAbs, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach ($it as $fs) {
+            /** @var \SplFileInfo $fs */
+            $abs = $fs->getPathname();
+            $rel = substr($abs, $baseLen);
+
+            if ($fs->isDir()) {
+                $zip->addEmptyDir(rtrim($rel, '/'));
+                continue;
+            }
+
+            if ($fs->isFile()) {
+                $zip->addFile($abs, $rel);
+            }
+        }
+
+        $zip->close();
+
+        return ['zip' => $tmp, 'temp' => true];
+    }
 }

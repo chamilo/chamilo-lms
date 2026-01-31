@@ -12,6 +12,84 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script();
+
+/**
+ * Imports a Chamilo CourseBackup zip that contains LP data into the current course.
+ * Returns true only if something was actually restored (basic DB verification).
+ */
+function chamilo_lp_import_from_zip(string $zipPath, int $sessionId): bool
+{
+    $cid = (int) api_get_course_int_id();
+
+    // Basic input validation
+    if (!is_file($zipPath) || !is_readable($zipPath)) {
+        return false;
+    }
+
+    // Minimal snapshot to detect real changes
+    $snapshot = static function () use ($cid): array {
+        $lp = Database::fetch_array(Database::query(
+            "SELECT COUNT(*) AS cnt, COALESCE(MAX(iid), 0) AS max_iid
+             FROM c_lp WHERE c_id = ".$cid
+        ));
+        $lpItem = Database::fetch_array(Database::query(
+            "SELECT COUNT(*) AS cnt, COALESCE(MAX(iid), 0) AS max_iid
+             FROM c_lp_item WHERE c_id = ".$cid
+        ));
+
+        return [
+            'lp_cnt' => (int) ($lp['cnt'] ?? 0),
+            'lp_max' => (int) ($lp['max_iid'] ?? 0),
+            'lpi_cnt' => (int) ($lpItem['cnt'] ?? 0),
+            'lpi_max' => (int) ($lpItem['max_iid'] ?? 0),
+        ];
+    };
+
+    $before = $snapshot();
+
+    // Store inside course_backups/
+    $backupFile = CourseArchiver::importUploadedFile($zipPath);
+    if ($backupFile === false || $backupFile === '') {
+        return false;
+    }
+
+    // Guard: ensure file is really there before readCourse()
+    $backupAbs = CourseArchiver::getBackupDir().$backupFile;
+    if (!is_file($backupAbs) || !is_readable($backupAbs)) {
+        return false;
+    }
+
+    // true => delete backup zip after extracting
+    $course = CourseArchiver::readCourse($backupFile, true);
+    if (!is_object($course)) {
+        return false;
+    }
+
+    $restorer = new CourseRestorer($course);
+    $restorer->set_file_option(FILE_OVERWRITE);
+
+    // Restore only what LP import needs (avoid side effects from full course restore)
+    $allowedTools = ['documents', 'learnpath_category', 'learnpaths', 'scorm_documents', 'assets'];
+    if (isset($restorer->tools_to_restore) && is_array($restorer->tools_to_restore)) {
+        $restorer->tools_to_restore = array_values(array_intersect($restorer->tools_to_restore, $allowedTools));
+    }
+
+    // Destination MUST be course code (api_get_course_id)
+    $destination = (string) api_get_course_id();
+    if ($destination === '') {
+        return false;
+    }
+
+    $res = $restorer->restore($destination, (int) $sessionId);
+    if ($res === false) {
+        return false;
+    }
+
+    $after = $snapshot();
+
+    return $after !== $before;
+}
+
 $course_dir = api_get_course_path().'/scorm';
 $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_dir;
 if (empty($_POST['current_dir'])) {
@@ -68,14 +146,17 @@ if (isset($_POST) && $is_error) {
 
     switch ($type) {
         case 'chamilo':
-            $filename = CourseArchiver::importUploadedFile($_FILES['user_file']['tmp_name']);
-            if ($filename) {
-                $course = CourseArchiver::readCourse($filename, false);
-                $courseRestorer = new CourseRestorer($course);
-                // FILE_SKIP, FILE_RENAME or FILE_OVERWRITE
-                $courseRestorer->set_file_option(FILE_OVERWRITE);
-                $courseRestorer->restore('', api_get_session_id());
-                Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
+            if (empty($_configuration['allow_lp_chamilo_export'])) {
+                Display::addFlash(Display::return_message(get_lang('ScormUnknownPackageFormat'), 'warning'));
+                break;
+            }
+
+            $ok = chamilo_lp_import_from_zip($_FILES['user_file']['tmp_name'], api_get_session_id());
+
+            if ($ok) {
+                Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded'), 'confirmation'));
+            } else {
+                Display::addFlash(Display::return_message(get_lang('UploadError'), 'error'));
             }
             break;
         case 'scorm':
@@ -168,6 +249,23 @@ if (isset($_POST) && $is_error) {
     $type = learnpath::getPackageType($s, basename($s));
 
     switch ($type) {
+        case 'chamilo':
+            if (empty($_configuration['allow_lp_chamilo_export'])) {
+                $is_error = true;
+                Display::addFlash(Display::return_message(get_lang('UnknownPackageFormat'), 'error'));
+                break;
+            }
+
+            $ok = chamilo_lp_import_from_zip($s, api_get_session_id());
+            @unlink($s);
+
+            if ($ok) {
+                Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded'), 'confirmation'));
+            } else {
+                $is_error = true;
+                Display::addFlash(Display::return_message(get_lang('UploadError'), 'error'));
+            }
+            break;
         case 'scorm':
             $oScorm = new scorm();
             $manifest = $oScorm->import_local_package($s, $current_dir);

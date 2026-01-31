@@ -39,6 +39,10 @@ class ProfileType extends AbstractType
         $changeableOptions = $this->settingsManager->getSetting('profile.changeable_options', true) ?? [];
         $visibleOptions = $this->settingsManager->getSetting('profile.visible_options', true) ?? [];
 
+        // When enabled, the timezone field must be visible and editable in the profile form,
+        // regardless of profile field visibility JSON/lists.
+        $usersTimezonesEnabled = 'true' === (string) $this->settingsManager->getSetting('profile.use_users_timezone', true);
+
         // Fine-grained JSON (authoritative if present)
         $rawFine = $this->settingsManager->getSetting('profile.profile_fields_visibility', true) ?? [];
         if (\is_string($rawFine)) {
@@ -121,7 +125,7 @@ class ProfileType extends AbstractType
                 ],
             ],
 
-            // Timezone will be added below if visible (fine JSON or fallback)
+            // Timezone will be added below if visible (fine JSON or fallback), unless forced by setting.
             'timezone' => [
                 'field' => 'timezone',
                 'type' => ChoiceType::class,
@@ -144,10 +148,17 @@ class ProfileType extends AbstractType
         // Visibility (core):
         // Strict when $hasFine: only keys present in $fieldsVisibility are visible.
         // Otherwise, fallback to visible_options.
-        $isCoreVisible = function (string $key) use ($fieldsVisibility, $visibleHigh, $hasFine, $ignoredKeys): bool {
+        // Special case: timezone must be visible when users timezones are enabled.
+        $isCoreVisible = function (string $key) use ($fieldsVisibility, $visibleHigh, $hasFine, $ignoredKeys, $usersTimezonesEnabled): bool {
             if (\in_array($key, $ignoredKeys, true)) {
                 return false;
             }
+
+            // Force timezone field visibility when the feature is enabled.
+            if ('timezone' === $key) {
+                return $usersTimezonesEnabled;
+            }
+
             if ($hasFine) {
                 return \array_key_exists($key, $fieldsVisibility);
             }
@@ -157,10 +168,17 @@ class ProfileType extends AbstractType
 
         // Editability (core):
         // If key is in fine JSON, its boolean decides; otherwise fallback to changeable_options.
-        $isCoreEditable = function (string $key) use ($fieldsVisibility, $editableHigh, $ignoredKeys): bool {
+        // Special case: timezone must be editable when users timezones are enabled.
+        $isCoreEditable = function (string $key) use ($fieldsVisibility, $editableHigh, $ignoredKeys, $usersTimezonesEnabled): bool {
             if (\in_array($key, $ignoredKeys, true)) {
                 return false;
             }
+
+            // Force timezone field editability when the feature is enabled.
+            if ('timezone' === $key) {
+                return $usersTimezonesEnabled;
+            }
+
             if (\array_key_exists($key, $fieldsVisibility)) {
                 return (bool) $fieldsVisibility[$key];
             }
@@ -207,7 +225,7 @@ class ProfileType extends AbstractType
             $builder->add($fieldConfig['field'], $fieldConfig['type'], $opts);
         }
 
-        // Timezone: only show if visible (fine JSON present with key, or fallback says visible)
+        // Timezone: show when users timezones are enabled (forced), otherwise follow visibility rules.
         if ($isCoreVisible('timezone')) {
             $tzCfg = $fieldsMap['timezone'];
             $opts = [

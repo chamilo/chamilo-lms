@@ -61,6 +61,8 @@ $actions = [
 ];
 
 if (api_can_login_as($userId)) {
+    // Using get_token() is safe here because it generates the token if missing.
+    $secToken = Security::get_token();
     $actions[] = Display::url(
         Display::getMdiIcon(
             ActionIcon::LOGIN_AS,
@@ -70,7 +72,7 @@ if (api_can_login_as($userId)) {
             get_lang('Login as')
         ),
         api_get_path(WEB_CODE_PATH).
-        'admin/user_list.php?action=login_as&user_id='.$userId.'&sec_token='.Security::getTokenFromSession()
+        'admin/user_list.php?action=login_as&user_id='.$userId.'&sec_token='.$secToken
     );
 }
 

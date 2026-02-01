@@ -927,10 +927,10 @@ EOD;
     $settingRequiredFields = api_get_setting('registration.required_extra_fields_in_inscription', true);
     $requiredExtraFieldVars = $normalizeSettingList($settingRequiredFields);
 
-// Load extra fields if:
-// - extra fields are enabled in allow_fields_inscription OR
-// - there are required extra fields configured OR
-// - conditions extra fields exist (profile.show_conditions_to_user)
+    // Load extra fields if:
+    // - extra fields are enabled in allow_fields_inscription OR
+    // - there are required extra fields configured OR
+    // - conditions extra fields exist (profile.show_conditions_to_user)
     $shouldLoadExtraFields = (
         array_key_exists('extra_fields', $allowedFields) ||
         in_array('extra_fields', $allowedFields, true) ||
@@ -1156,8 +1156,16 @@ if ($blockButton) {
     );
 } else {
     $allow = ('true' === api_get_setting('registration.allow_double_validation_in_registration'));
+    $termsEnabled = ('true' === api_get_setting('allow_terms_conditions'));
+
     ChamiloHelper::addLegalTermsFields($form, $userAlreadyRegisteredShowTerms);
-    if ($allow && !$termActivated) {
+
+    /**
+     * The "double validation" (Validate -> Register) is legacy UX.
+     * When Terms & Conditions are enabled, it becomes redundant and may create a confusing 2-step flow.
+     * Keep it only for platforms that explicitly want it without T&C.
+     */
+    if ($allow && !$termsEnabled && !$termActivated) {
         $htmlHeadXtra[] = '<script>
             $(document).ready(function() {
                 $("#pre_validation").click(function() {
@@ -1420,7 +1428,6 @@ if ($form->validate()) {
             exit;
         }
     }
-
 
     /* SESSION REGISTERING */
     /* @todo move this in a function */

@@ -12,21 +12,24 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\DBAL\Schema\Schema;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 
 use const PHP_URL_PATH;
 use const PREG_SET_ORDER;
 
 final class Version20260116085001 extends AbstractMigrationChamilo
 {
-    private ?CDocumentRepository $documentRepo;
-    private ?CourseRepository $courseRepo;
-    private ?PersonalFileRepository $personalRepo;
-    private ?UserRepository $userRepo;
+    private ?CDocumentRepository $documentRepo = null;
+    private ?CourseRepository $courseRepo = null;
+    private ?PersonalFileRepository $personalRepo = null;
+    private ?UserRepository $userRepo = null;
+
+    /**
+     * keep false to avoid creating new documents during link rewrite migrations,
+     * which may generate duplicates at the root folder.
+     */
+    private const ENABLE_DOCUMENT_CREATION = false;
 
     public function getDescription(): string
     {
@@ -49,14 +52,13 @@ final class Version20260116085001 extends AbstractMigrationChamilo
 
         foreach ($updateConfigurations as $config) {
             $this->updateContentForUserFiles($config);
-
             $this->updateContentForCourseFile($config['table'], $config['field']);
         }
     }
 
     private function updateContentForUserFiles(array $config): void
     {
-        $fields = isset($config['field']) ? [$config['field']] : $config['fields'] ?? [];
+        $fields = isset($config['field']) ? [$config['field']] : ($config['fields'] ?? []);
 
         foreach ($fields as $field) {
             $items = $this->connection
@@ -65,15 +67,20 @@ final class Version20260116085001 extends AbstractMigrationChamilo
             ;
 
             foreach ($items as $item) {
-                $originalText = $item[$field];
+                $originalText = (string) ($item[$field] ?? '');
 
-                if (!empty($originalText)) {
-                    $updatedText = $this->replaceUserFilePaths($originalText);
+                if ('' === trim($originalText)) {
+                    continue;
+                }
 
-                    if ($originalText !== $updatedText) {
-                        $updateSql = "UPDATE {$config['table']} SET {$field} = :newText WHERE id = :id";
-                        $this->connection->executeQuery($updateSql, ['newText' => $updatedText, 'id' => $item['id']]);
-                    }
+                $updatedText = $this->replaceUserFilePaths($originalText);
+
+                if ($originalText !== $updatedText) {
+                    $updateSql = "UPDATE {$config['table']} SET {$field} = :newText WHERE id = :id";
+                    $this->connection->executeQuery($updateSql, [
+                        'newText' => $updatedText,
+                        'id' => (int) $item['id'],
+                    ]);
                 }
             }
         }
@@ -82,55 +89,52 @@ final class Version20260116085001 extends AbstractMigrationChamilo
     private function replaceUserFilePaths(string $content): string
     {
         $pattern = '/(src|href)=["\']?(https?:\/\/[^\/]+)?(\/app\/upload\/users\/(\d+)\/(\d+)\/my_files\/([^\/"\']+))["\']?/i';
-
         preg_match_all($pattern, $content, $matches, PREG_SET_ORDER);
 
         foreach ($matches as $match) {
-            $attribute = $match[1];
             $baseUrlWithApp = $match[2] ? $match[2].$match[3] : $match[3];
-            $folderId = (int) $match[4];
             $userId = (int) $match[5];
-            $filename = $match[6];
+            $filename = (string) $match[6];
 
-            // Decode the filename to handle special characters
             $decodedFilename = urldecode($filename);
-            $user = $this->userRepo->find($userId);
-            if (null !== $user) {
-                /** @var AbstractResource $personalFile */
-                $personalFile = $this->personalRepo->getResourceByCreatorFromTitle(
-                    $decodedFilename,
-                    $user,
-                    $user->getResourceNode()
-                );
+            $user = $this->userRepo?->find($userId);
+            if (null === $user) {
+                continue;
+            }
 
-                if (!$personalFile) {
-                    continue;
-                }
+            /** @var AbstractResource|null $personalFile */
+            $personalFile = $this->personalRepo?->getResourceByCreatorFromTitle(
+                $decodedFilename,
+                $user,
+                $user->getResourceNode()
+            );
 
-                $newUrl = $this->personalRepo->getResourceFileUrl($personalFile);
+            if (!$personalFile) {
+                continue;
+            }
 
-                if ($newUrl) {
-                    $content = str_replace($baseUrlWithApp, $newUrl, $content);
-
-                    $this->write("Replaced old URL: {$baseUrlWithApp} with new URL: {$newUrl}");
-                }
+            $newUrl = $this->personalRepo?->getResourceFileUrl($personalFile);
+            if (!empty($newUrl)) {
+                $content = str_replace($baseUrlWithApp, $newUrl, $content);
+                $this->write("Replaced old user file URL with new URL: {$newUrl}");
             }
         }
 
         return $content;
     }
 
-    private function updateContentForCourseFile($tableName, $fieldName): void
+    private function updateContentForCourseFile(string $tableName, string $fieldName): void
     {
+        // NOTE: portfolio tables use "id" (not "iid").
         $items = $this->connection
-            ->executeQuery("SELECT id, $fieldName FROM $tableName")
+            ->executeQuery("SELECT id, {$fieldName} FROM {$tableName}")
             ->fetchAllAssociative()
         ;
 
         foreach ($items as $item) {
-            $originalText = $item[$fieldName];
+            $originalText = (string) ($item[$fieldName] ?? '');
 
-            if (empty($originalText)) {
+            if ('' === trim($originalText)) {
                 continue;
             }
 
@@ -138,149 +142,80 @@ final class Version20260116085001 extends AbstractMigrationChamilo
 
             if ($originalText !== $updatedText) {
                 $this->connection->executeQuery(
-                    "UPDATE $tableName SET $fieldName = :newText WHERE iid = :id",
-                    ['newText' => $updatedText, 'id' => $item['iid']]
+                    "UPDATE {$tableName} SET {$fieldName} = :newText WHERE id = :id",
+                    [
+                        'newText' => $updatedText,
+                        'id' => (int) $item['id'],
+                    ]
                 );
             }
         }
     }
 
-    private function replaceCourseFilePaths($itemDataText): string
+    private function replaceCourseFilePaths(string $itemDataText): string
     {
         $contentText = $itemDataText;
-        $specificCoursePattern = '/(src|href)=["\']((https?:\/\/[^\/]+)?(\/courses\/([^\/]+)\/document\/[^"\']+\.\w+))["\']/i';
 
-        preg_match_all($specificCoursePattern, $contentText, $matches);
+        $pattern = '/(src|href)=["\']((https?:\/\/[^\/]+)?(\/courses\/([^\/]+)\/document\/[^"\']+\.\w+))["\']/i';
+        preg_match_all($pattern, $contentText, $matches);
 
-        foreach ($matches[2] as $index => $fullUrl) {
-            $videoPath = parse_url($fullUrl, PHP_URL_PATH) ?: $fullUrl;
-            $fileName = basename($videoPath);
+        foreach (($matches[2] ?? []) as $index => $fullUrl) {
+            $path = parse_url((string) $fullUrl, PHP_URL_PATH) ?: (string) $fullUrl;
+            $fileName = urldecode(basename($path));
+            $courseDirectory = (string) ($matches[5][$index] ?? '');
 
-            $actualCourseDirectory = $matches[5][$index];
+            if ('' === $courseDirectory || '' === $fileName) {
+                continue;
+            }
 
-            /** @var Course $course */
-            $course = $this->courseRepo->findOneBy(['directory' => $actualCourseDirectory]);
-
+            /** @var Course|null $course */
+            $course = $this->courseRepo?->findOneBy(['directory' => $courseDirectory]);
             if (!$course) {
                 continue;
             }
 
-            $resourcesQb = $this->documentRepo->getResources();
+            // Best match: ResourceFile.originalName
+            $doc = $this->documentRepo?->findResourceByOriginalNameInCourse($fileName, $course);
 
-            $documents = $this->documentRepo
-                ->addCourseQueryBuilder($course, $resourcesQb)
-                ->andWhere('node.title = :title')
-                ->setParameter('title', $fileName)
-                ->getQuery()
-                ->getResult()
-            ;
+            // Fallback: node.title (ignore visibility)
+            if (!$doc) {
+                $doc = $this->documentRepo?->findResourceByTitleInCourseIgnoreVisibility($fileName, $course);
 
-            if (!empty($documents)) {
-                $this->replaceDocumentLinks($documents, $matches, $index, $contentText);
+                if (!$doc) {
+                    $withoutExt = pathinfo($fileName, PATHINFO_FILENAME);
+                    if ('' !== $withoutExt && $withoutExt !== $fileName) {
+                        $doc = $this->documentRepo?->findResourceByTitleInCourseIgnoreVisibility($withoutExt, $course);
+                    }
+                }
+            }
+
+            if (!$doc) {
+                if (self::ENABLE_DOCUMENT_CREATION) {
+                    // Intentionally left disabled by default.
+                    $this->write("Document creation is disabled. Skipping '{$fileName}'.");
+                } else {
+                    $this->write("Skipped embedded course file '{$fileName}' (document not found).");
+                }
 
                 continue;
             }
 
-            if ($document = $this->createNewDocument($videoPath, $course)) {
-                if ($newUrl = $this->documentRepo->getResourceFileUrl($document)) {
-                    $replacement = $matches[1][$index].'="'.$newUrl.'"';
-                    $contentText = str_replace($matches[0][$index], $replacement, $contentText);
-                }
-            }
-        }
-
-        return $contentText;
-    }
-
-    /**
-     * @param array<int, CDocument> $documents
-     * @param array                 $matches
-     * @param int                   $index
-     * @param string                $contentText
-     */
-    private function replaceDocumentLinks(array $documents, $matches, $index, $contentText): void
-    {
-        foreach ($documents as $document) {
-            $newUrl = $this->documentRepo->getResourceFileUrl($document);
-
+            $newUrl = $this->documentRepo?->getResourceFileUrl($doc);
             if (empty($newUrl)) {
                 continue;
             }
 
-            $this->write("Replacing old URL with new URL: $newUrl");
+            $replacement = (string) $matches[1][$index].'="'.$newUrl.'"';
+            $contentText = preg_replace(
+                '/'.preg_quote((string) $matches[0][$index], '/').'/',
+                $replacement,
+                $contentText,
+                1
+            ) ?? $contentText;
 
-            $patternForReplacement = '/'.preg_quote($matches[0][$index], '/').'/';
-            $replacement = $matches[1][$index].'="'.$newUrl.'"';
-
-            preg_replace($patternForReplacement, $replacement, $contentText, 1);
-        }
-    }
-
-    private function createNewDocument($videoPath, Course $course)
-    {
-        $rootPath = $this->getUpdateRootPath();
-        $appCourseOldPath = $rootPath.'/app'.$videoPath;
-        $title = basename($appCourseOldPath);
-
-        if (file_exists($appCourseOldPath) && !is_dir($appCourseOldPath)) {
-            $document = new CDocument();
-            $document->setFiletype('file')
-                ->setTitle($title)
-                ->setComment(null)
-                ->setReadonly(false)
-                ->setCreator($this->getAdmin())
-                ->setParent($course)
-                ->addCourseLink($course)
-            ;
-
-            $this->entityManager->persist($document);
-            $this->entityManager->flush();
-
-            $this->documentRepo->addFileFromPath($document, $title, $appCourseOldPath);
-
-            $this->write("Document '$title' successfully created for course ".$course->getId());
-
-            return $document;
+            $this->write("Replaced old course file URL with new URL: {$newUrl}");
         }
 
-        if ($foundPath = $this->recursiveFileSearch($rootPath.'/app/courses/', $title)) {
-            $document = new CDocument();
-            $document->setFiletype('file')
-                ->setTitle($title)
-                ->setComment(null)
-                ->setReadonly(false)
-                ->setCreator($this->getAdmin())
-                ->setParent($course)
-                ->addCourseLink($course)
-            ;
-
-            $this->entityManager->persist($document);
-            $this->entityManager->flush();
-
-            $this->documentRepo->addFileFromPath($document, $title, $foundPath);
-
-            $this->write("File found in new location: $foundPath");
-
-            return $document;
-        }
-
-        $this->write("File '$title' not found for course ".$course->getId());
-
-        return null;
-    }
-
-    private function recursiveFileSearch($directory, $title)
-    {
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($directory)
-        );
-
-        foreach ($iterator as $file) {
-            if ($file->isFile() && $file->getFilename() === $title) {
-                return $file->getRealPath();
-            }
-        }
-
-        return null;
+        return $contentText;
     }
 }

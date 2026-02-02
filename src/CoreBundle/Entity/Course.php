@@ -19,6 +19,7 @@ use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\Controller\Api\GetCourseStatsAction;
 use Chamilo\CoreBundle\Entity\Listener\CourseListener;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
+use Chamilo\CoreBundle\Filter\ExtraFieldFilter;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\State\PublicCatalogueCourseStateProvider;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -76,6 +77,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(
             uriTemplate: '/public_courses.{_format}',
             normalizationContext: ['groups' => ['course:read']],
+            filters: [ ExtraFieldFilter::class ],
             provider: PublicCatalogueCourseStateProvider::class
         ),
     ],

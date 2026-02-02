@@ -28,7 +28,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -199,7 +198,7 @@ class AccountController extends BaseController
                         // 2FA activation
                         if ($twoFaEnabledGlobally && $enable2FA && !$user->getMfaSecret()) {
                             $secret = (string) $session->get('temporary_mfa_secret', '');
-                            if ($secret !== '') {
+                            if ('' !== $secret) {
                                 $encryptedSecret = $this->encryptTOTPSecret($secret, $_ENV['APP_SECRET']);
                                 $user->setMfaSecret($encryptedSecret);
                                 $user->setMfaEnabled(true);
@@ -222,7 +221,7 @@ class AccountController extends BaseController
                         }
 
                         // Password change flow
-                        if ($newPassword !== '' || $confirmPassword !== '' || $currentPassword !== '') {
+                        if ('' !== $newPassword || '' !== $confirmPassword || '' !== $currentPassword) {
                             if (!$userRepository->isPasswordValid($user, $currentPassword)) {
                                 $form->get('currentPassword')->addError(new FormError(
                                     $this->translator->trans('The current password is incorrect')

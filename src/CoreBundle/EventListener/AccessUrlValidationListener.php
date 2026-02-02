@@ -68,7 +68,7 @@ class AccessUrlValidationListener
                 return;
             }
         } catch (Throwable $e) {
-            error_log('AccessUrlValidationListener: DB not ready, skipping access URL validation. ' . $e->getMessage());
+            error_log('AccessUrlValidationListener: DB not ready, skipping access URL validation. '.$e->getMessage());
 
             return;
         }
@@ -85,7 +85,7 @@ class AccessUrlValidationListener
             // Log host and URI for debugging (avoid exposing details to the user)
             $host = $request->getHost();
             $uri = $request->getUri();
-            error_log(sprintf('AccessUrlValidationListener: undefined access URL for host "%s", uri "%s". %s', $host, $uri, $e->getMessage()));
+            error_log(\sprintf('AccessUrlValidationListener: undefined access URL for host "%s", uri "%s". %s', $host, $uri, $e->getMessage()));
 
             // Redirect to custom error page
             $url = $this->router->generate('undefined_url_error');

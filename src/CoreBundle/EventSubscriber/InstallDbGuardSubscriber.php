@@ -11,12 +11,17 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Throwable;
+
+use const PHP_SAPI;
 
 final class InstallDbGuardSubscriber implements EventSubscriberInterface
 {
     private const VERSION_KEY = 'chamilo_database_version';
 
-    public function __construct(private readonly Connection $connection) {}
+    public function __construct(
+        private readonly Connection $connection
+    ) {}
 
     public static function getSubscribedEvents(): array
     {
@@ -51,8 +56,9 @@ final class InstallDbGuardSubscriber implements EventSubscriberInterface
         );
         $installedFlag = trim($installedFlag, " \t\n\r\0\x0B'\"");
 
-        if ($installedFlag !== '1') {
+        if ('1' !== $installedFlag) {
             $this->redirectToInstaller($event);
+
             return;
         }
 
@@ -69,18 +75,20 @@ final class InstallDbGuardSubscriber implements EventSubscriberInterface
             // If DB is down/unreachable, this will fail quickly
             $this->connection->executeQuery($this->connection->getDatabasePlatform()->getDummySelectSQL());
 
-            if ($settingsTable === null) {
+            if (null === $settingsTable) {
                 $settingsTable = $this->detectSettingsTable();
-                if ($settingsTable === null) {
+                if (null === $settingsTable) {
                     $this->redirectToInstaller($event);
+
                     return;
                 }
             }
 
             // Cheap proof: at least 1 row
             $hasRow = $this->connection->fetchOne("SELECT 1 FROM {$settingsTable} LIMIT 1");
-            if ($hasRow === false || $hasRow === null) {
+            if (false === $hasRow || null === $hasRow) {
                 $this->redirectToInstaller($event);
+
                 return;
             }
 
@@ -95,18 +103,19 @@ final class InstallDbGuardSubscriber implements EventSubscriberInterface
                     if (!empty($version)) {
                         break;
                     }
-                } catch (\Throwable) {
+                } catch (Throwable) {
                     // Try next column
                 }
             }
 
             if (empty($version)) {
                 $this->redirectToInstaller($event);
+
                 return;
             }
 
             $isHealthy = true;
-        } catch (\Throwable) {
+        } catch (Throwable) {
             $this->redirectToInstaller($event);
         }
     }
@@ -116,8 +125,9 @@ final class InstallDbGuardSubscriber implements EventSubscriberInterface
         // Fallback to settings
         try {
             $this->connection->fetchOne('SELECT 1 FROM settings LIMIT 1');
+
             return 'settings';
-        } catch (\Throwable) {
+        } catch (Throwable) {
         }
 
         return null;

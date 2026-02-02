@@ -73,18 +73,20 @@ use Symfony\Component\Validator\Constraints as Assert;
             deserialize: false,
         ),
         new Post(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"),
-        new GetCollection(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"),
+        new GetCollection(
+            paginationClientEnabled: true,
+            security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"
+        ),
         new GetCollection(
             uriTemplate: '/public_courses.{_format}',
             normalizationContext: ['groups' => ['course:read']],
-            filters: [ ExtraFieldFilter::class ],
+            filters: [ExtraFieldFilter::class],
             provider: PublicCatalogueCourseStateProvider::class
         ),
     ],
     normalizationContext: ['groups' => ['course:read']],
     denormalizationContext: ['groups' => ['course:write']],
     filters: ['course.sticky_boolean_filter'],
-    paginationClientEnabled: true
 )]
 #[ORM\Table(name: 'course')]
 #[ORM\Index(columns: ['sticky'], name: 'idx_course_sticky')]

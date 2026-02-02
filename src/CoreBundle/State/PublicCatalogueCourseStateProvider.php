@@ -40,7 +40,7 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         private TranslatorInterface $translator,
     ) {}
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
         $user = $this->userHelper->getCurrent();
         $isAuthenticated = $user instanceof User;
@@ -48,9 +48,7 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         if (!$isAuthenticated
             && 'false' !== $this->settingsManager->getSetting('catalog.course_catalog_published', true)
         ) {
-            throw new AccessDeniedHttpException(
-                $this->translator->trans('Not allowed')
-            );
+            throw new AccessDeniedHttpException($this->translator->trans('Not allowed'));
         }
 
         $queryBuilder = $this->createQueryBuilder();

@@ -1114,6 +1114,7 @@ $defaultCourseSettings = [
     // Auto-launch (UI helper radio)
     'auto_launch_option' => 'disable_auto_launch',
     'show_course_in_user_language' => 2,
+    'email_alert_manager_on_new_quiz' => [],
 ];
 
 // Set default values
@@ -1134,8 +1135,15 @@ $courseSettings = CourseManager::getCourseSettingVariables();
 foreach ($courseSettings as $setting) {
     $result = api_get_course_setting($setting);
 
-    // Stored setting: use it.
-    if ('-1' !== (string) $result) {
+    // Some settings can legitimately be arrays (e.g. multi-checkbox values).
+    // Casting arrays to string triggers "Array to string conversion".
+    if (\is_array($result)) {
+        $values[$setting] = $result;
+        continue;
+    }
+
+    // Stored setting: use it (api_get_course_setting returns -1 when not stored yet).
+    if ($result !== null && '-1' !== (string) $result) {
         $values[$setting] = $result;
         continue;
     }

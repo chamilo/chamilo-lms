@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLinkCategory;
@@ -21,7 +22,11 @@ use const PHP_INT_MAX;
 #[AsController]
 class UpdatePositionLink extends AbstractController
 {
-    public function __invoke(CLink $link, Request $request, EntityManagerInterface $em): CLink
+    public function __construct(
+        private readonly EntityManagerInterface $em,
+    ) {}
+
+    public function __invoke(CLink $link, Request $request): CLink
     {
         $payload = json_decode((string) $request->getContent(), true) ?: [];
 
@@ -38,14 +43,14 @@ class UpdatePositionLink extends AbstractController
             throw new BadRequestHttpException('Missing or invalid "cid" for link move operation.');
         }
 
-        $course = $em->find(Course::class, $cid);
+        $course = $this->em->find(Course::class, $cid);
         if (!$course) {
             throw new BadRequestHttpException('Course not found for provided "cid".');
         }
 
         $session = null;
         if ($sid > 0) {
-            $session = $em->find(Session::class, $sid);
+            $session = $this->em->find(Session::class, $sid);
             if (!$session) {
                 throw new BadRequestHttpException('Session not found for provided "sid".');
             }
@@ -59,7 +64,7 @@ class UpdatePositionLink extends AbstractController
         $parentNode = $resourceNode->getParent();
 
         $oldCategory = $link->getCategory();
-        $oldCategoryId = $oldCategory ? (int) $oldCategory->getIid() : 0;
+        $oldCategoryId = (int) $oldCategory?->getIid();
 
         $targetCategoryId = $oldCategoryId;
         $targetCategory = $oldCategory;
@@ -73,7 +78,7 @@ class UpdatePositionLink extends AbstractController
                 $targetCategory = null;
             } else {
                 /** @var CLinkCategory|null $category */
-                $category = $em->getRepository(CLinkCategory::class)->find($targetCategoryId);
+                $category = $this->em->getRepository(CLinkCategory::class)->find($targetCategoryId);
                 if (!$category) {
                     throw new BadRequestHttpException('Target category not found.');
                 }
@@ -100,34 +105,32 @@ class UpdatePositionLink extends AbstractController
             $link->setCategory($targetCategory);
 
             // Flush now so subsequent bucket queries reflect the new category assignment
-            $em->flush();
+            $this->em->flush();
         }
 
         // Reindex destination bucket (with moved link inserted at desired position)
         $this->reindexBucket(
-            em: $em,
-            parentNode: $parentNode,
-            categoryId: $targetCategoryId,
-            course: $course,
-            session: $session,
-            movedLink: $link,
-            insertAt: $newPosition
+            $parentNode,
+            $targetCategoryId,
+            $course,
+            $session,
+            $link,
+            $newPosition
         );
 
         // If moved across categories, reindex source bucket too
         if ($oldCategoryId !== $targetCategoryId) {
             $this->reindexBucket(
-                em: $em,
-                parentNode: $parentNode,
-                categoryId: $oldCategoryId,
-                course: $course,
-                session: $session,
-                movedLink: null,
-                insertAt: null
+                $parentNode,
+                $oldCategoryId,
+                $course,
+                $session,
+                null,
+                null
             );
         }
 
-        $em->flush();
+        $this->em->flush();
 
         return $link;
     }
@@ -137,21 +140,20 @@ class UpdatePositionLink extends AbstractController
      * Bucket = same parent node + same category (or NULL category).
      */
     private function reindexBucket(
-        EntityManagerInterface $em,
-        ?object $parentNode,
+        ?ResourceNode $parentNode,
         int $categoryId,
         Course $course,
         ?Session $session,
         ?CLink $movedLink,
         ?int $insertAt
     ): void {
-        $qb = $em->getRepository(CLink::class)->createQueryBuilder('l')
+        $qb = $this->em->getRepository(CLink::class)->createQueryBuilder('l')
             ->join('l.resourceNode', 'rn')
         ;
 
         if ($parentNode) {
             $qb->andWhere('rn.parent = :parent')
-                ->setParameter('parent', $parentNode)
+                ->setParameter('parent', $parentNode->getId())
             ;
         } else {
             $qb->andWhere('rn.parent IS NULL');
@@ -159,7 +161,7 @@ class UpdatePositionLink extends AbstractController
 
         if ($categoryId > 0) {
             $qb->andWhere('l.category = :cat')
-                ->setParameter('cat', $em->getReference(CLinkCategory::class, $categoryId))
+                ->setParameter('cat', $this->em->getReference(CLinkCategory::class, $categoryId))
             ;
         } else {
             $qb->andWhere('l.category IS NULL');

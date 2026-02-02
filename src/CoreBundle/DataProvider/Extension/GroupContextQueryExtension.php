@@ -30,6 +30,9 @@ final class GroupContextQueryExtension implements QueryCollectionExtensionInterf
         $this->applyGroupRestriction($queryBuilder, $queryNameGenerator, $resourceClass, $operation);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function applyToItem(
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,

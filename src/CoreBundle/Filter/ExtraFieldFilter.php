@@ -108,6 +108,12 @@ class ExtraFieldFilter extends AbstractFilter
                         "$alias.id = $efvAlias.itemId"
                     )
                     ->innerJoin("$efvAlias.field", $efAlias)
+                    ->andWhere(
+                        $queryBuilder->expr()->andX(
+                            $queryBuilder->expr()->eq("$efAlias.filter", true),
+                            $queryBuilder->expr()->eq("$efAlias.visibleToSelf", true)
+                        )
+                    )
                     ->andWhere($queryBuilder->expr()->eq("$efAlias.itemType", ":$itemTypeName"))
                     ->andWhere($queryBuilder->expr()->eq("$efAlias.variable", ":$variableName"))
                     ->andWhere($queryBuilder->expr()->eq("$efvAlias.fieldValue", ":valueName_$idx"))

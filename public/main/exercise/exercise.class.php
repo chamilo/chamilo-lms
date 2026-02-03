@@ -147,12 +147,12 @@ class Exercise
         $this->hideExpectedAnswer = false;
         $this->disableHideCorrectAnsweredQuestions = false;
 
-        if (empty($course_id)) {
-            $course_id = api_get_course_int_id();
+        if (empty($courseId)) {
+            $courseId = api_get_course_int_id();
         }
 
-        $this->course = api_get_course_info_by_id($course_id);
-        $this->course_id = $course_id;
+        $this->course = api_get_course_info_by_id($courseId);
+        $this->course_id = $courseId;
 
         $this->sessionId = api_get_session_id();
 

@@ -928,10 +928,10 @@ switch ($action) {
         $rows[] = [
             get_lang('Number of users registered (new vs previous quarter)'),
             '-',
-            '+'.($countUsersPre1Quarter - $countUsersPre2Quarter),
-            '+'.($countUsersPre2Quarter - $countUsersPre3Quarter),
-            '+'.($countUsersPre3Quarter - $countUsersPre4Quarter),
             '+'.($countUsersPre4Quarter - $countUsersPre5Quarter),
+            '+'.($countUsersPre3Quarter - $countUsersPre4Quarter),
+            '+'.($countUsersPre2Quarter - $countUsersPre3Quarter),
+            '+'.($countUsersPre1Quarter - $countUsersPre2Quarter),
             '-',
             '+'.($countUsersTotal - $countUsersPre1Quarter),
         ];

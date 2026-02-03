@@ -353,7 +353,10 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
             return [];
         }
 
-        $categoryNameList = TestCategory::getListOfCategoriesNameForTest($exercise->iId);
+        $categoryNameList = TestCategory::getListOfCategoriesNameForTest(
+            $exercise->iId,
+            $exerciseTracking->getCourse()->getId()
+        );
 
         if (empty($categoryNameList)) {
             return [];

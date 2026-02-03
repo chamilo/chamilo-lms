@@ -656,10 +656,7 @@ class Exercise
         $extraFields = []
     ) {
         if (!empty($this->id)) {
-            $category_list = TestCategory::getListOfCategoriesNameForTest(
-                $this->id,
-                false
-            );
+            $category_list = TestCategory::getListOfCategoriesNameForTest($this->id);
             $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 

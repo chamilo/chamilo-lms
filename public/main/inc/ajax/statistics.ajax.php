@@ -1447,7 +1447,7 @@ switch ($action) {
         if (api_is_windows_os()) {
             $message = get_lang('The space used on disk cannot be measured properly on Windows-based systems.');
         } else {
-            $dir = api_get_path(SYS_PATH);
+            $dir = api_get_path(SYS_VAR_PATH);
             $du = exec('du -sh '.$dir, $err);
             list($size, $none) = explode("\t", $du);
             unset($none);

@@ -38,16 +38,16 @@ class ValidationToken
     protected DateTime $createdAt;
 
     /**
-     * @param string|null $hash A 64-char SHA-256 hex hash. If null, a secure random hash is generated.
+     * @param  string|null  $hash  A 64-char SHA-256 hex hash. If null, a secure random hash is generated.
      */
     public function __construct(int $type, int $resourceId, ?string $hash = null)
     {
         $this->type = $type;
         $this->resourceId = $resourceId;
 
-        // If a hash is provided (e.g. remember-me), use it. Otherwise generate one.
+        // If a hash is provided (e.g., remember-me), use it. Otherwise, generate one.
         $this->hash = $hash ?? hash('sha256', uniqid((string) random_int(0, PHP_INT_MAX), true));
-        $this->createdAt = $createdAt ?? new DateTime();
+        $this->createdAt = $this->createdAt ?? new DateTime();
     }
 
     public function getId(): ?int

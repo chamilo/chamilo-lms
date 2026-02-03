@@ -1575,129 +1575,61 @@ function reinit_updatable_vars_list() {
  */
 function switch_item(current_item, next_item)
 {
-    logit_lms('switch_item() called with params '+olms.lms_item_id+' and '+next_item+'',2);
+    logit_lms('switch_item() called with current=' + olms.lms_item_id + ' next=' + next_item, 2);
 
     if (olms.lms_initialized == 0) {
-        // Fix error when flash is not loaded and SCO is not started BT#14944
         olms.G_LastError = G_NotInitialized;
         olms.G_LastErrorMessage = G_NotInitializedMessage;
-        logit_scorm('Error '+ G_NotInitialized + G_NotInitializedMessage, 0);
-        //window.location.reload(false);
+        logit_scorm('Error ' + G_NotInitialized + ' ' + G_NotInitializedMessage, 0);
 
-        var url = window.location.href + '&item_id='  + parseInt(next_item);
-        window.location.replace(url);
-
+        var fallback = window.location.href + '&item_id=' + parseInt(next_item, 10);
+        window.location.replace(fallback);
         return false;
     }
 
-    /**
-    * Because of SCORM 1.2's special rule about unsent commits and the fact
-    * that a SCO should be SET TO 'completed' IF NO STATUS WAS SENT (and
-    * then some checks have to be done on score), we have to force a
-    * special commit here to avoid getting to the next element with a
-    * missing prerequisite. The 'onunload' event is treated with
-    * savedata_onunload(), and doesn't need to be triggered at any
-    * particular time, but here we are in the case of switching to another
-    * item, so this is particularly important to complete the element in
-    * time.
-    * However, this cannot be initiated from the JavaScript, mainly
-    * because another onunload event can be triggered by the SCO itself,
-    * which can set, for example, the status to incomplete while the
-    * status has already been set to "completed" by the hand-made
-    * savedata() (and then the status cannot be "incompleted"
-    * anymore)
-    */
+    // Resolve target item id
+    var targetItemId = next_item;
+    if (next_item === 'next') {
+        targetItemId = olms.lms_next_item;
+    } else if (next_item === 'previous') {
+        targetItemId = olms.lms_previous_item;
+    }
 
+    targetItemId = parseInt(targetItemId, 10);
+    var currentItemId = parseInt(olms.lms_item_id, 10);
+
+    if (!targetItemId || targetItemId <= 0) {
+        logit_lms('switch_item(): invalid target item id: ' + targetItemId, 1);
+        return false;
+    }
+    if (currentItemId === targetItemId) {
+        logit_lms('switch_item(): ignoring switch to the same item id: ' + targetItemId, 2);
+        return false;
+    }
+
+    // Mark switching in progress (used by savedata() to decide what to save)
+    olms.switch_finished = 0;
     olms.execute_stats = false;
-    // Considering info_lms_item[0] is initially the oldest and info_lms_item[1]
-    // is the newest item, and considering we are done switching the items now,
-    // we need to update these markers so that the new item is loaded when
-    // changing the document in the content frame
-    olms.execute_stats = false;
-    // Considering info_lms_item[0] is initially the oldest and info_lms_item[1]
-    // is the newest item, and considering we are done switching the items now,
-    // we need to update these markers so that the new item is loaded when
-    // changing the document in the content frame
-    if (olms.info_lms_item[1]==next_item && next_item!='next' && next_item!='previous') {
-        olms.info_lms_item[0]=next_item;
-        olms.info_lms_item[1]=next_item;
-    } else {
-        if (next_item!='next' && next_item!='previous') {
-            olms.info_lms_item[0]=olms.info_lms_item[1];
-            olms.info_lms_item[1]=next_item;
-        }
-    }
 
-    if (olms.info_lms_item[0]==next_item && next_item!='next' && next_item!='previous') {
-        olms.info_lms_item[0]=next_item;
-        olms.info_lms_item[1]=next_item;
-    } else {
-        if (next_item!='next' && next_item!='previous') {
-            olms.info_lms_item[0]=olms.info_lms_item[0];
-            olms.info_lms_item[1]=next_item;
-        }
-    }
+    // Keep markers coherent (avoid duplicated/conflicting blocks)
+    olms.info_lms_item[0] = currentItemId;   // previous/current
+    olms.info_lms_item[1] = targetItemId;    // next
 
-    // open the new item in the content_id frame
-    switch (next_item) {
-        case 'next':
-            next_item = olms.lms_next_item;
-            olms.info_lms_item[0] = olms.info_lms_item[1];
-            olms.info_lms_item[1] = olms.lms_next_item;
-            break;
-        case 'previous':
-            next_item = olms.lms_previous_item;
-            olms.info_lms_item[0] = olms.info_lms_item[1];
-            olms.info_lms_item[1] = olms.lms_previous_item;
-            break;
-        default:
-            break;
-    }
+    var currentItemType = olms.lms_item_types['i' + currentItemId] || '';
+    var targetItemType  = olms.lms_item_types['i' + targetItemId] || '';
 
-    olms.switch_finished = 0; //only changed back once LMSInitialize() happens
-
-    // backup these params
-    var orig_current_item   = current_item;
-    var orig_next_item      = next_item;
-    var orig_lesson_status  = olms.lesson_status;
-    var orig_item_type      = olms.lms_item_types['i'+current_item];
-    var next_item_type      = olms.lms_item_types['i'+next_item];
-    if (olms.statusSignalReceived == 0 && olms.lesson_status != 'not attempted') {
-        // In this situation, the status can be considered set as it was clearly
-        // set in a previous stage
+    // If status was set in a previous stage, keep it consistent
+    if (olms.statusSignalReceived == 0 && olms.lesson_status !== 'not attempted') {
         olms.statusSignalReceived = 1;
     }
 
-    /*
-     There are four "cases" for switching items:
-     (1) asset switching to asset
-         We need to save, then switch
-     (2) asset switching to sco
-         We need to save, switching not necessary (LMSInitialize does the job)
-     (3) sco switching to asset
-         We need to switch the document in the content frame, but we cannot
-         switch the item details, otherwise the LMSFinish() call (that *must*
-         be triggered by the SCO when it unloads) will use bad values. However,
-         we need to load the new asset's context once the SCO has unloaded
-     (4) sco switching to sco
-         We don't need to switch nor commit, LMSFinish() on unload and
-         LMSInitialize on load will do the job
-     In any case, we need to change the current document frame.
-     These cases, although clear here, are however very difficult to implement
-    */
-
-    if (orig_item_type != 'sco') {
-        if (next_item_type != 'sco' ) {
-            logit_lms('Case 1 - current != sco and next != sco');
-        } else {
-            logit_lms('Case 2 - current != sco but next == sco');
-        }
-
-        var saveAjax = xajax_save_item(
+    // (1) Save current item (keep your existing behavior)
+    if (currentItemType !== 'sco') {
+        xajax_save_item(
             olms.lms_lp_id,
             olms.lms_user_id,
             olms.lms_view_id,
-            olms.lms_item_id,
+            currentItemId,
             olms.score,
             olms.max,
             olms.min,
@@ -1707,135 +1639,76 @@ function switch_item(current_item, next_item)
             olms.lesson_location,
             olms.interactions,
             olms.lms_item_core_exit,
-            orig_item_type,
+            currentItemType,
             olms.session_id,
             olms.course_id,
             olms.finishSignalReceived,
             1,
             olms.statusSignalReceived,
-            next_item,
+            targetItemId,
             1
         );
-
-        // Keep TOC highlight and LMS context in sync when switching from non-SCO items
-        xajax_switch_item_toc(
-            olms.lms_lp_id,
-            olms.lms_user_id,
-            olms.lms_view_id,
-            olms.lms_item_id,
-            next_item
-        );
-
-        /*if (saveAjax) {
-            $.when(saveAjax).done(function(results) {
-                xajax_switch_item_details(
-                    olms.lms_lp_id,
-                    olms.lms_user_id,
-                    olms.lms_view_id,
-                    olms.lms_item_id,
-                    next_item
-                );
-            });
-        }*/
-
-
-
     } else {
-        if (next_item_type != 'sco') {
-            logit_lms('Case 3 - current == sco but next != sco');
-        } else {
-            logit_lms('Case 4 - current == sco and next == sco');
-        }
-        // Setting userNavigatesAway = 1
-        var saveAjax = xajax_save_item_scorm(
+        // For SCO, saving is async; we still proceed with switching.
+        xajax_save_item_scorm(
             olms.lms_lp_id,
             olms.lms_user_id,
             olms.lms_view_id,
-            olms.lms_item_id,
+            currentItemId,
             olms.lms_session_id,
             olms.lms_course_id,
             olms.finishSignalReceived,
             1,
             olms.statusSignalReceived
         );
-
-        if (saveAjax) {
-            $.when(saveAjax).done(function(result) {
-            reinit_updatable_vars_list();
-            xajax_switch_item_toc(
-                olms.lms_lp_id,
-                olms.lms_user_id,
-                olms.lms_view_id,
-                olms.lms_item_id,
-                next_item
-            );
-
-            if (olms.item_objectives.length>0) {
-                    xajax_save_objectives(
-                        olms.lms_lp_id,
-                        olms.lms_user_id,
-                        olms.lms_view_id,
-                        olms.lms_item_id,
-                        olms.item_objectives
-                    );
-                }
-            });
-        }
+        reinit_updatable_vars_list();
     }
 
+    // (2) Refresh JS context for the NEXT item (critical for next/prev to keep moving)
+        xajax_switch_item_details_sync(
+        olms.lms_lp_id,
+        olms.lms_user_id,
+        olms.lms_view_id,
+        currentItemId,
+        targetItemId
+    );
+
+    // (3) Update TOC/progress (keep it)
+    xajax_switch_item_toc(
+        olms.lms_lp_id,
+        olms.lms_user_id,
+        olms.lms_view_id,
+        currentItemId,
+        targetItemId
+    );
+
+    // (4) Update parent titles (relies on refreshed olms.lms_lp_item_parents)
     updateItemParentNames();
-    var mysrc = '<?php echo api_get_path(WEB_CODE_PATH); ?>lp/lp_controller.php?action=content&lp_id=' + olms.lms_lp_id +
-                '&item_id=' + next_item + '&cid=' + olms.lms_course_id + '&sid=' + olms.lms_session_id;
-    var cont_f = $("#content_id");
-    <?php if ('fullscreen' === $oLP->mode) {
-        ?>
-        cont_f = window.open('' + mysrc, 'content_id', 'toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
-        cont_f.onload=function(){
-            olms.info_lms_item[0]=olms.info_lms_item[1];
+
+    // (5) Load next content inside the iframe.
+    // IMPORTANT: include origin=learnpath + lp_item_id to keep security/voter context.
+    var mysrc = buildLpContentSrc(targetItemId);
+
+    <?php if ('fullscreen' === $oLP->mode) { ?>
+        var w = window.open('' + mysrc, 'content_id', 'toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
+        if (w) {
+            w.onload = function () {
+            olms.info_lms_item[0] = currentItemId;
+        };
+        w.onunload = function () {
+            olms.info_lms_item[0] = currentItemId;
+        };
         }
-        cont_f.onunload=function(){
-            olms.info_lms_item[0]=olms.info_lms_item[1];
-        }
-    <?php
-    } else {
-        ?>
-            log_in_log('loading '+mysrc+' in frame');
-            cont_f.attr("src",mysrc);
-    <?php
-    } ?>
+    <?php } else { ?>
+        log_in_log('Loading ' + mysrc + ' in iframe', 2);
+        $("#content_id").attr("src", mysrc);
+    <?php } ?>
 
-    let startTime = 0;
-    if (olms.lms_lp_type==1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document' || olms.lms_item_type == 'video') {
-        startTime = 1;
-        //xajax_start_timer();
-    }
+    // (6) Update nav buttons visibility
+    checkCurrentItemPosition(targetItemId);
 
-    // (4) refresh the audio player if needed
-    /*$.ajax({
-        type: "POST",
-        url: "lp_nav.php"+courseUrl+ "&lp_id=" + olms.lms_lp_id,
-        data: {
-            lp_item: next_item,
-            start_time: startTime,
-        },
-        beforeSend: function() {
-            $.each($('audio'), function () {
-                if (this.player && this.player !== undefined) {
-                    this.player.pause();
-                }
-            });
-        },
-        success: function(result) {
-            if ($("#lp_media_file").length != 0) {
-                $("#lp_media_file").html(result);
-            }
-        }
-    });*/
-
-    // @todo add loadForumThread inside lp_nav.php to do only one request instead of 3!
-    //loadForumThread(olms.lms_lp_id, next_item);
-    checkCurrentItemPosition(next_item);
-
+    // Switching is considered finished once LMSInitialize() runs for the new item.
+    // For non-SCO items, LMSInitialize() is auto-triggered on iframe load in your code.
     return true;
 }
 
@@ -2732,4 +2605,48 @@ function save_suspend_data_in_local()
             }
         }
     }
+}
+
+/**
+* Build the LP content URL for the iframe.
+* Keep legacy params (lp_id + item_id) and add the "origin" context for security voters.
+*/
+function buildLpContentSrc(targetItemId) {
+    var base = '<?php echo api_get_path(WEB_CODE_PATH); ?>lp/lp_controller.php';
+
+    // IMPORTANT: Keep both item_id (legacy) and lp_item_id (context)
+    var q =
+    'action=content' +
+    '&cid=' + encodeURIComponent(olms.lms_course_id) +
+    '&sid=' + encodeURIComponent(olms.lms_session_id) +
+    '&origin=learnpath' +
+    '&lp_id=' + encodeURIComponent(olms.lms_lp_id) +
+    '&lp_item_id=' + encodeURIComponent(targetItemId) +
+    '&item_id=' + encodeURIComponent(targetItemId);
+
+    return base + '?' + q;
+}
+
+/**
+* Sync variant: we need the returned JS to be applied immediately
+* so olms.lms_item_id / next / previous get updated before the next click.
+*/
+function xajax_switch_item_details_sync(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, next_item) {
+    var params = {
+        'lid': lms_lp_id,
+        'uid': lms_user_id,
+        'vid': lms_view_id,
+        'iid': lms_item_id,
+        'next': next_item
+    };
+
+    logit_lms('xajax_switch_item_details_sync with params: ' + JSON.stringify(params), 3);
+
+    return $.ajax({
+        type: "POST",
+        data: params,
+        url: "lp_ajax_switch_item.php" + courseUrl,
+        dataType: "script",
+        async: false
+    });
 }

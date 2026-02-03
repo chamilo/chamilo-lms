@@ -3978,12 +3978,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"alpinejs@npm:^3.15.4":
-  version: 3.15.4
-  resolution: "alpinejs@npm:3.15.4"
+"alpinejs@npm:^3.15.5":
+  version: 3.15.5
+  resolution: "alpinejs@npm:3.15.5"
   dependencies:
     "@vue/reactivity": "npm:~3.1.1"
-  checksum: 10c0/3248cb35a0a5bf51f829ead760c0b1c680a1355f081fc4883a879a0a7404ee0fc6f107717a02a0afce1648c5bd6206d43cae85ff4796f6851379ffb540e68780
+  checksum: 10c0/fc2b404e914320690578fce43c87d0cff1796107c2a476b715edaa1462c6b838b6178f33c5a479d0b404cc5609fee83919b918626ce14358c6c4b8601035498c
   languageName: node
   linkType: hard
 
@@ -4123,14 +4123,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.13.2":
-  version: 1.13.2
-  resolution: "axios@npm:1.13.2"
+"axios@npm:^1.13.4":
+  version: 1.13.4
+  resolution: "axios@npm:1.13.4"
   dependencies:
     follow-redirects: "npm:^1.15.6"
     form-data: "npm:^4.0.4"
     proxy-from-env: "npm:^1.1.0"
-  checksum: 10c0/e8a42e37e5568ae9c7a28c348db0e8cf3e43d06fcbef73f0048669edfe4f71219664da7b6cc991b0c0f01c28a48f037c515263cb79be1f1ae8ff034cd813867b
+  checksum: 10c0/474c00b7d71f4de4ad562589dae6b615149df7c2583bbc5ebba96229f3f85bfb0775d23705338df072f12e48d3e85685c065a3cf6855d58968a672d19214c728
   languageName: node
   linkType: hard
 
@@ -4205,12 +4205,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"baseline-browser-mapping@npm:^2.9.17":
-  version: 2.9.17
-  resolution: "baseline-browser-mapping@npm:2.9.17"
+"baseline-browser-mapping@npm:^2.9.19":
+  version: 2.9.19
+  resolution: "baseline-browser-mapping@npm:2.9.19"
   bin:
     baseline-browser-mapping: dist/cli.js
-  checksum: 10c0/c0d344bc43aabe2d2f26de1b5831423ae7dc5da5ffb0f68404d07847901f1df81f3645a939dd76b1b7328fded13bcd72d86da46913839d10d20e51df162639de
+  checksum: 10c0/569928db78bcd081953d7db79e4243a59a579a34b4ae1806b9b42d3b7f84e5bc40e6e82ae4fa06e7bef8291bf747b33b3f9ef5d3c6e1e420cb129d9295536129
   languageName: node
   linkType: hard
 
@@ -4567,10 +4567,10 @@ __metadata:
     "@vue/compiler-sfc": "npm:^3.5.27"
     "@vuelidate/core": "npm:^2.0.3"
     "@vuelidate/validators": "npm:^2.0.4"
-    alpinejs: "npm:^3.15.4"
+    alpinejs: "npm:^3.15.5"
     autoprefixer: "npm:^10.4.23"
-    axios: "npm:^1.13.2"
-    baseline-browser-mapping: "npm:^2.9.17"
+    axios: "npm:^1.13.4"
+    baseline-browser-mapping: "npm:^2.9.19"
     blueimp-file-upload: "npm:^10.32.0"
     blueimp-load-image: "npm:^5.16.0"
     bootstrap-daterangepicker: "npm:^3.1.0"
@@ -4603,7 +4603,7 @@ __metadata:
     html2canvas: "npm:^1.4.1"
     image-map-resizer: "npm:^1.0.10"
     jquery: "npm:^3.7.1"
-    jquery-ui: "npm:^1.14.1"
+    jquery-ui: "npm:^1.14.2"
     jquery-ui-timepicker-addon: "npm:^1.6.3"
     jquery-ui-touch-punch: "npm:^0.2.3"
     js-cookie: "npm:^2.2.1"
@@ -7515,12 +7515,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jquery-ui@npm:^1.14.1":
-  version: 1.14.1
-  resolution: "jquery-ui@npm:1.14.1"
+"jquery-ui@npm:^1.14.2":
+  version: 1.14.2
+  resolution: "jquery-ui@npm:1.14.2"
   dependencies:
     jquery: "npm:>=1.12.0 <5.0.0"
-  checksum: 10c0/cf7a3c0aac369e513d78bc5864bbafb6ddf85a43513ca5d00b11d65e2890a6618ff2ef5b8cb2925db9a6b7d0c2482d717fb10cc813e419024ae8bc457e18f51d
+  checksum: 10c0/83b65744c4f4f2e9fa12833feb76c964f9565ef8301ef4e224e93e6c867e10a45d7da3e93bc7bcaec5227a61e09a2a6d1ce0198d9c38de08e4ada3d53a628615
   languageName: node
   linkType: hard
 
@@ -10674,15 +10674,15 @@ __metadata:
   linkType: hard
 
 "tar@npm:^7.5.2":
-  version: 7.5.6
-  resolution: "tar@npm:7.5.6"
+  version: 7.5.7
+  resolution: "tar@npm:7.5.7"
   dependencies:
     "@isaacs/fs-minipass": "npm:^4.0.0"
     chownr: "npm:^3.0.0"
     minipass: "npm:^7.1.2"
     minizlib: "npm:^3.1.0"
     yallist: "npm:^5.0.0"
-  checksum: 10c0/08af3807035957650ad5f2a300c49ca4fe0566ac0ea5a23741a5b5103c6da42891a9eeaed39bc1fbcf21c5cac4dc846828a004727fb08b9d946322d3144d1fd2
+  checksum: 10c0/51f261afc437e1112c3e7919478d6176ea83f7f7727864d8c2cce10f0b03a631d1911644a567348c3063c45abdae39718ba97abb073d22aa3538b9a53ae1e31c
   languageName: node
   linkType: hard
 

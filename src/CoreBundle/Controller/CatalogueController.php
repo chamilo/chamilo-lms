@@ -194,7 +194,7 @@ class CatalogueController extends AbstractController
                 'endDate' => $session->getAccessEndDate()?->format('Y-m-d'),
                 'courses' => $courses,
                 'popularity' => $voteCount,
-                'isSubscribed' =>  $isSubscribed,
+                'isSubscribed' => $isSubscribed,
                 'priceHtml' => $buyData['html'] ?? '',
                 'buyButtonHtml' => $buyData['buy_button'] ?? '',
             ];

@@ -477,7 +477,9 @@ $template->assign('toc_list', $get_toc_list);
 $template->assign('teacher_toc_buttons', $get_teacher_buttons);
 $template->assign('iframe_src', $src);
 $template->assign('navigation_bar_bottom', $navigation_bar_bottom);
-$template->assign('show_left_column', !$lp->getHideTocFrame());
+$tocHidden = (bool) $lp->getHideTocFrame();
+$template->assign('toc_hidden', (int) $tocHidden);
+$template->assign('show_left_column', $tocHidden ? 0 : 1);
 
 $showMenu = 0;
 $settings = api_get_setting('lp.lp_view_settings', true);

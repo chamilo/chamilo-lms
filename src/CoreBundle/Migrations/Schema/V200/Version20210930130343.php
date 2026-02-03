@@ -28,12 +28,16 @@ final class Version20210930130343 extends AbstractMigrationChamilo
     {
         /** @var CToolIntroRepository $introRepo */
         $introRepo = $this->container->get(CToolIntroRepository::class);
+
         /** @var CToolRepository $cToolRepo */
         $cToolRepo = $this->container->get(CToolRepository::class);
+
         /** @var ToolRepository $toolRepo */
         $toolRepo = $this->container->get(ToolRepository::class);
+
         /** @var SessionRepository $sessionRepo */
         $sessionRepo = $this->container->get(SessionRepository::class);
+
         /** @var CourseRepository $courseRepo */
         $courseRepo = $this->container->get(CourseRepository::class);
 
@@ -41,6 +45,7 @@ final class Version20210930130343 extends AbstractMigrationChamilo
         $homepageToolEntity = $toolRepo->findOneBy(['title' => 'course_homepage']);
         if (null === $homepageToolEntity) {
             @error_log('[Migration Version20210930130343] Tool "course_homepage" not found. Skipping migration.');
+
             return;
         }
 
@@ -86,6 +91,7 @@ final class Version20210930130343 extends AbstractMigrationChamilo
                 $id = (int) ($itemData['iid'] ?? 0);
                 if ($id <= 0) {
                     @error_log('[Migration Version20210930130343] Skipping legacy row with invalid iid. course_id='.$courseId);
+
                     continue;
                 }
 
@@ -96,6 +102,7 @@ final class Version20210930130343 extends AbstractMigrationChamilo
                 $intro = $introRepo->find($id);
                 if (null === $intro) {
                     @error_log('[Migration Version20210930130343] CToolIntro entity not found for iid='.$id.' course_id='.$courseId);
+
                     continue;
                 }
 
@@ -110,6 +117,7 @@ final class Version20210930130343 extends AbstractMigrationChamilo
                     $session = $sessionRepo->find($sessionId);
                     if (null === $session) {
                         @error_log('[Migration Version20210930130343] Skipping intro iid='.$id.' because session_id='.$sessionId.' does not exist.');
+
                         continue;
                     }
                 }
@@ -120,6 +128,7 @@ final class Version20210930130343 extends AbstractMigrationChamilo
                 $managedCourse = $courseRepo->find($courseId);
                 if (null === $managedCourse) {
                     @error_log('[Migration Version20210930130343] Course not found for course_id='.$courseId.'. Skipping.');
+
                     continue;
                 }
 
@@ -160,6 +169,7 @@ final class Version20210930130343 extends AbstractMigrationChamilo
 
                 if (null === $cTool) {
                     @error_log('[Migration Version20210930130343] Could not resolve CTool for tool="'.$toolName.'" course_id='.$courseId.' session_id='.$sessionId);
+
                     continue;
                 }
 

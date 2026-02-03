@@ -9,8 +9,6 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Entity\Legal;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use ExtraField;
-use ExtraFieldValue;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

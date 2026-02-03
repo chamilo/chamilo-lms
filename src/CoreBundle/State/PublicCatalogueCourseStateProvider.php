@@ -6,26 +6,22 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\State;
 
+use ApiPlatform\Doctrine\Orm\Extension\FilterExtension;
+use ApiPlatform\Doctrine\Orm\Extension\PaginationExtension;
+use ApiPlatform\Doctrine\Orm\Util\QueryNameGenerator;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
-use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
-use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
-use ApiPlatform\Doctrine\Orm\Paginator;
 
 /**
  * @implements ProviderInterface<Course>
@@ -35,6 +31,8 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
     public const DEFAULT_PAGE_SIZE = 12;
 
     public function __construct(
+        private FilterExtension $filterExtension,
+        private PaginationExtension $paginationExtension,
         private UserHelper $userHelper,
         private CourseRepository $courseRepository,
         private SettingsManager $settingsManager,
@@ -42,7 +40,7 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         private TranslatorInterface $translator,
     ) {}
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
         $user = $this->userHelper->getCurrent();
         $isAuthenticated = $user instanceof User;
@@ -50,26 +48,42 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         if (!$isAuthenticated
             && 'false' !== $this->settingsManager->getSetting('catalog.course_catalog_published', true)
         ) {
-            throw new AccessDeniedHttpException(
-                $this->translator->trans('Not allowed')
-            );
+            throw new AccessDeniedHttpException($this->translator->trans('Not allowed'));
         }
 
-        $itemsPerPage = (int) ($context['filters']['itemsPerPage'] ?? self::DEFAULT_PAGE_SIZE);
-        $currentPage = (int) ($context['filters']['page'] ?? 1);
+        $queryBuilder = $this->createQueryBuilder();
+        $queryNameGenerator = new QueryNameGenerator();
 
-        $query = $this
-            ->createQueryBuilder()
-            ->getQuery()
-            ->setFirstResult(($currentPage - 1) * $itemsPerPage)
-            ->setMaxResults($itemsPerPage)
-        ;
+        $this->filterExtension->applyToCollection(
+            $queryBuilder,
+            $queryNameGenerator,
+            Course::class,
+            $operation,
+            $context
+        );
 
-        foreach ($query as $course) {
+        $this->paginationExtension->applyToCollection(
+            $queryBuilder,
+            $queryNameGenerator,
+            Course::class,
+            $operation,
+            $context
+        );
+
+        /** @var object $paginator */
+        $paginator = $this->paginationExtension->getResult(
+            $queryBuilder,
+            Course::class,
+            $operation,
+            $context
+        );
+
+        /** @var Course $course */
+        foreach ($paginator as $course) {
             $course->subscribed = $course->hasSubscriptionByUser($user);
         }
 
-        return new Paginator(new DoctrinePaginator($query));
+        return $paginator;
     }
 
     private function createQueryBuilder(): QueryBuilder

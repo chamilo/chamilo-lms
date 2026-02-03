@@ -1,42 +1,50 @@
 {% autoescape false %}
+    {% set toc_hidden = (toc_hidden|default(0) + 0) %}
+    {% set show_left_column = (show_left_column|default(1) + 0) %}
+    {% set show_toolbar_by_default = (show_toolbar_by_default|default(0) + 0) %}
+    {# Force the toolbar open when TOC is hidden so navigation is always visible #}
+    {% set force_open = (show_toolbar_by_default == 1) or (toc_hidden == 1) %}
     {% if navigation_in_the_middle %}
         <style>
-            .c-menu-left {
-                top: 50% !important;
-            }
-            .menu-button a {
-                text-underline: none !important;
-            }
+            .c-menu-left { top: 50% !important; }
+            .menu-button a { text-decoration: none !important; }
         </style>
     {% endif %}
-    <nav id="btn-menu-float" class="c-menu-{{ menu_location }}">
-        <div class="circle {{ show_toolbar_by_default == 1 ? 'open' : '' }}">
-            {% if show_left_column == 1 %}
-                {% set label = "Collapse" | trans %}
+    <nav id="btn-menu-float" class="c-menu-{{ menu_location }}" data-lp-menu="floating">
+        <div class="circle {{ force_open ? 'open' : '' }}" data-lp-menu="circle">
+            {# Expand/collapse only if TOC is actually visible #}
+            {% if show_left_column == 1 and toc_hidden != 1 %}
+                {% set label = "Collapse"|trans %}
                 {% set icon_expand = "arrow-collapse-horizontal" %}
                 {% if lp_mode == 'embedframe' %}
-                    {% set label = "Expand" | trans %}
+                    {% set label = "Expand"|trans %}
                     {% set icon_expand = "arrow-expand-horizontal" %}
                 {% endif %}
-                <button type="button"
-                   id="lp-view-expand-toggle"
-                   class="icon-toolbar expand"
-                   role="button"
-                   title="{{ label }}"
+                <button
+                        type="button"
+                        id="lp-view-expand-toggle"
+                        class="icon-toolbar expand"
+                        title="{{ label }}"
+                        aria-label="{{ label }}"
+                        data-lp-action="expand-toggle"
                 >
                     <i class="mdi-{{ icon_expand }} mdi" aria-hidden="true"></i>
                 </button>
             {% endif %}
-            <a id="home-course"
-               title="{{ 'Home'|trans }}"
-               href="{{ button_home_url }}"
-               class="icon-toolbar" target="_self"
-               onclick="javascript: window.parent.API.save_asset();">
+            <a
+                    id="home-course"
+                    title="{{ 'Home'|trans }}"
+                    href="{{ button_home_url }}"
+                    class="icon-toolbar"
+                    target="_self"
+                    data-lp-action="home"
+                    onclick="javascript: if (window.parent && window.parent.API && window.parent.API.save_asset) { window.parent.API.save_asset(); }"
+            >
                 <i class="mdi-home mdi" aria-hidden="true"></i>
             </a>
             {{ navigation_bar }}
         </div>
-        <button title="{{ 'Options'|trans }}" class="menu-button icons" type="button">
+        <button title="{{ 'Options'|trans }}" class="menu-button icons" type="button" data-lp-menu="toggle">
             <i class="mdi-menu mdi" aria-hidden="true"></i>
         </button>
     </nav>

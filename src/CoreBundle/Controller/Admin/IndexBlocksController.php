@@ -1011,7 +1011,7 @@ class IndexBlocksController extends BaseController
         $items[] = [
             'className' => 'item-health-check-env-perms '.($envIsWritable ? 'text-error' : 'text-success'),
             'url' => $securityGuideUrl,
-            'label' => sprintf(
+            'label' => \sprintf(
                 $this->translator->trans($envIsWritable ? '%s is writeable' : '%s is not writeable'),
                 '.env'
             ),
@@ -1024,7 +1024,7 @@ class IndexBlocksController extends BaseController
         $items[] = [
             'className' => 'item-health-check-config-perms '.($configIsWritable ? 'text-error' : 'text-success'),
             'url' => $securityGuideUrl,
-            'label' => sprintf(
+            'label' => \sprintf(
                 $this->translator->trans($configIsWritable ? '%s is writeable' : '%s is not writeable'),
                 'config/'
             ),
@@ -1037,7 +1037,7 @@ class IndexBlocksController extends BaseController
         $items[] = [
             'className' => 'item-health-check-cache-perms '.($cacheIsWritable ? 'text-success' : 'text-error'),
             'url' => $optimizationGuideUrl,
-            'label' => sprintf(
+            'label' => \sprintf(
                 $this->translator->trans($cacheIsWritable ? '%s is writeable' : '%s is not writeable'),
                 'var/cache'
             ),

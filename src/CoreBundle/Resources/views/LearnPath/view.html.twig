@@ -3,21 +3,148 @@
 {% set lp_view = true %}
 
 {% block content %}
+    {% set toc_hidden = (toc_hidden|default(0) + 0) %}
+    {% set show_left_column = (show_left_column|default(1) + 0) %}
+    {% set lp_id_num = (lp_id|default(0) + 0) %}
+    {% set lp_current_item_id_num = (lp_current_item_id|default(0) + 0) %}
+    {% set render_left_zone = (show_left_column == 1) or (toc_hidden == 1) %}
+    <script>
+      window.lpId = {{ lp_id_num }};
+      window.lpCurrentItemId = {{ lp_current_item_id_num }};
+    </script>
     {# Build iframe src including learning path context so the ResourceNodeVoter can detect LP access #}
     {% set iframe_src_with_lp = iframe_src %}
-    {% if lp_id is defined and lp_current_item_id is defined %}
+    {% if lp_id_num > 0 and lp_current_item_id_num > 0 %}
         {% if '?' in iframe_src_with_lp %}
-            {% set iframe_src_with_lp = iframe_src_with_lp ~ '&origin=learnpath&lp_id=' ~ lp_id ~ '&lp_item_id=' ~ lp_current_item_id %}
+            {% set iframe_src_with_lp = iframe_src_with_lp ~ '&origin=learnpath&lp_id=' ~ lp_id_num ~ '&lp_item_id=' ~ lp_current_item_id_num %}
         {% else %}
-            {% set iframe_src_with_lp = iframe_src_with_lp ~ '?origin=learnpath&lp_id=' ~ lp_id ~ '&lp_item_id=' ~ lp_current_item_id %}
+            {% set iframe_src_with_lp = iframe_src_with_lp ~ '?origin=learnpath&lp_id=' ~ lp_id_num ~ '&lp_item_id=' ~ lp_current_item_id_num %}
         {% endif %}
     {% endif %}
 
     {% autoescape false %}
-        <div id="learning_path_main"
-             class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' : '' }}">
-            {% if show_left_column == 1 %}
-                <div id="learning_path_left_zone" class="sidebar-scorm">
+        <style>
+            html, body { height: 100%; }
+            #learning_path_main {
+                display: flex !important;
+                flex-direction: row !important;
+                width: 100% !important;
+                height: 100vh !important;
+                min-height: 100vh !important;
+                overflow: hidden !important;
+            }
+            #learning_path_left_zone {
+                flex: 0 0 360px !important;
+                width: 360px !important;
+                height: 100% !important;
+                overflow: hidden !important;
+            }
+            #learning_path_left_zone .lp-view-zone-container {
+                height: 100% !important;
+                display: flex !important;
+                flex-direction: column !important;
+                overflow: hidden !important;
+            }
+            #toc_id.scorm-body {
+                flex: 1 1 auto !important;
+                min-height: 0 !important;
+                overflow: auto !important;
+            }
+            #learning_path_right_zone {
+                flex: 1 1 auto !important;
+                height: 100% !important;
+                overflow: hidden !important;
+            }
+            #learning_path_right_zone .lp-view-zone-container {
+                height: 100% !important;
+                display: flex !important;
+                flex-direction: column !important;
+                overflow: hidden !important;
+            }
+            #learning_path_right_zone .lp-view-tabs {
+                flex: 1 1 auto !important;
+                min-height: 0 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                overflow: hidden !important;
+            }
+            #tab-iframe {
+                flex: 1 1 auto !important;
+                min-height: 0 !important;
+                overflow: hidden !important;
+            }
+            #lp-view-content, #wrapper-iframe {
+                height: 100% !important;
+                min-height: 0 !important;
+                overflow: hidden !important;
+            }
+            #content_id, #content_id_blank {
+                width: 100% !important;
+                height: 100% !important;
+            }
+            #learning_path_main.lp-toc-hidden #learning_path_left_zone {
+                flex: 0 0 0 !important;
+                width: 0 !important;
+                min-width: 0 !important;
+                overflow: hidden !important;
+            }
+            #learning_path_main.lp-toc-hidden #learning_path_left_zone .lp-view-zone-container {
+                position: fixed !important;
+                left: -10000px !important;
+                top: 0 !important;
+                width: 360px !important;
+                height: 100vh !important;
+                overflow: auto !important;
+            }
+            #learning_path_right_zone.lp-content-full {
+                flex: 1 1 auto !important;
+                width: 100% !important;
+                margin-left: 0 !important;
+            }
+            #btn-menu-float {
+                z-index: 9999 !important;
+            }
+            #wrapper-iframe { position: relative !important; }
+            #lp-iframe-loader {
+                position: absolute;
+                inset: 0;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                background: rgba(255,255,255,0.75);
+                z-index: 50;
+            }
+            #lp-iframe-loader.is-visible {
+                display: flex;
+            }
+            .lp-loader-box {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 10px 14px;
+                border-radius: 10px;
+                background: rgba(0,0,0,0.65);
+                color: #fff;
+                font-size: 14px;
+            }
+            .lp-spinner {
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+                border: 2px solid rgba(255,255,255,0.35);
+                border-top-color: rgba(255,255,255,0.95);
+                animation: lpSpin 0.8s linear infinite;
+            }
+            @keyframes lpSpin {
+                to { transform: rotate(360deg); }
+            }
+        </style>
+        <div
+                id="learning_path_main"
+                class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' : '' }} {{ toc_hidden == 1 ? 'lp-toc-hidden' : '' }}"
+        >
+            {% if render_left_zone %}
+                <div id="learning_path_left_zone" class="sidebar-scorm" aria-hidden="{{ toc_hidden == 1 ? 'true' : 'false' }}">
                     <div class="lp-view-zone-container">
                         <div id="scorm-info">
                             <div id="panel-scorm">
@@ -53,14 +180,12 @@
                                             text-align: center;
                                             text-shadow: 1px 1px 4px #999;
                                         }
-
                                         #timer .container div {
                                             display: table-cell;
                                             font-size: 24px;
                                             padding: 0px;
                                             width: 20px;
                                         }
-
                                         #timer .container .divider {
                                             width: 10px;
                                             color: #ddd;
@@ -69,21 +194,15 @@
                                     <script>
                                       $(function () {
                                         var timerData = {
-                                          hour: parseInt($("#hour").text()),
-                                          minute: parseInt($("#minute").text()),
-                                          second: parseInt($("#second").text())
+                                          hour: parseInt($("#hour").text(), 10),
+                                          minute: parseInt($("#minute").text(), 10),
+                                          second: parseInt($("#second").text(), 10)
                                         }
                                         clearInterval(window.timerInterval)
                                         window.timerInterval = setInterval(function () {
                                           timerData.second++
-                                          if (timerData.second >= 60) {
-                                            timerData.second = 0
-                                            timerData.minute++
-                                          }
-                                          if (timerData.minute >= 60) {
-                                            timerData.minute = 0
-                                            timerData.hour++
-                                          }
+                                          if (timerData.second >= 60) { timerData.second = 0; timerData.minute++ }
+                                          if (timerData.minute >= 60) { timerData.minute = 0; timerData.hour++ }
                                           $("#hour").text(timerData.hour < 10 ? "0" + timerData.hour : timerData.hour)
                                           $("#minute").text(timerData.minute < 10 ? "0" + timerData.minute : timerData.minute)
                                           $("#second").text(timerData.second < 10 ? "0" + timerData.second : timerData.second)
@@ -95,9 +214,7 @@
                                             <b>{{ "Progress"|trans|format(lp_accumulate_work_time) }}</b>
                                         </div>
                                         <div class="col-xs-8">
-                                            <div id="progress_bar">
-                                                {{ progress_bar }}
-                                            </div>
+                                            <div id="progress_bar">{{ progress_bar }}</div>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -121,9 +238,7 @@
                                     {% endset %}
                                 {% else %}
                                     {% set lp_progress %}
-                                    <div id="progress_bar">
-                                        {{ progress_bar }}
-                                    </div>
+                                    <div id="progress_bar">{{ progress_bar }}</div>
                                     {% endset %}
                                 {% endif %}
 
@@ -167,9 +282,10 @@
                     </div>
                 </div>
             {% endif %}
-
-            <div id="learning_path_right_zone"
-                 class="{{ show_left_column == 1 ? 'content-scorm' : 'no-right-col' }}">
+            <div
+                    id="learning_path_right_zone"
+                    class="content-scorm {{ (show_left_column != 1 or toc_hidden == 1) ? 'lp-content-full' : '' }}"
+            >
                 <div class="lp-view-zone-container">
                     <div class="lp-view-tabs">
                         <div id="navTabBar" class="nav-tabs-bar">
@@ -188,6 +304,12 @@
                         <div id="tab-iframe" class="auto tab-content">
                             <div role="tabpanel" id="lp-view-content">
                                 <div id="wrapper-iframe">
+                                    <div id="lp-iframe-loader" aria-hidden="true">
+                                        <div class="lp-loader-box">
+                                            <div class="lp-spinner" aria-hidden="true"></div>
+                                            <div>Loading…</div>
+                                        </div>
+                                    </div>
                                     {% if lp_mode == 'fullscreen' %}
                                         <iframe id="content_id_blank" name="content_name_blank" src="blank.php"
                                                 style="width:100%; height:100%" border="0" frameborder="0"
@@ -206,117 +328,377 @@
                     </div>
                 </div>
             </div>
-            {# end right Zone #}
         </div>
 
         <script>
-          $(function() {
-            $(".menu-button").on("click", function() {
-              $(".circle").toggleClass("open")
-              $(".menu-button").toggleClass("menu-button-selected")
-            })
-            if (/iPhone|iPod|iPad|Safari/.test(navigator.userAgent)) {
-              if (!/Chrome/.test(navigator.userAgent)) {
-                // Fix an issue where you cannot scroll below first screen in
-                // learning paths on Apple devices
-                /*document.getElementById("wrapper-iframe").setAttribute(
-                  "style",
-                  "width:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;"
-                )*/
-                $("#wrapper-iframe").before('<a class="btn-open-pdf" target="_blank" href="{{ iframe_src_with_lp }}" >Open PDF on Safari</a>')
+          $(function () {
+            var $main = $("#learning_path_main");
+            var tocHidden = $main.hasClass("lp-toc-hidden") ? 1 : 0;
 
-                // Fix another issue whereby buttons do not react to click below
-                // second screen in learning paths on Apple devices
-                document.getElementById("content_id").style.overflow = 'auto';
+            var $menu = $("#btn-menu-float");
+            if (!$menu.length) {
+              console.warn("LP: floating menu not found (#btn-menu-float).");
+              return;
+            }
+
+            var $circle = $menu.find("[data-lp-menu='circle']").first();
+            var $toggle = $menu.find("[data-lp-menu='toggle']").first();
+
+            // Ensure toolbar is visible when TOC is hidden
+            if (tocHidden === 1 && $circle.length) {
+              $circle.addClass("open");
+              $toggle.addClass("menu-button-selected");
+            }
+
+            // Toggle only this LP menu (avoid global selectors)
+            $toggle.off("click.lpMenu").on("click.lpMenu", function () {
+              $circle.toggleClass("open");
+              $toggle.toggleClass("menu-button-selected");
+            });
+
+            // Expand/collapse only when TOC is visible
+              {% if toc_hidden != 1 %}
+              {% if lp_mode == 'embedframe' %}
+            $("#lp-view-expand-toggle").off("click.lpExpand").on("click.lpExpand", function (e) {
+              e.preventDefault();
+              $main.toggleClass("lp-view-collapsed");
+              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-expand-horizontal");
+              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-collapse-horizontal");
+            });
+              {% else %}
+            $("#lp-view-expand-toggle").off("click.lpExpand").on("click.lpExpand", function (e) {
+              e.preventDefault();
+              $main.toggleClass("lp-view-collapsed");
+              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-collapse-horizontal");
+              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-expand-horizontal");
+            });
+              {% endif %}
+              {% endif %}
+
+            // Debug: show what iframe is currently loading
+            try {
+              var iframeSrc = $("#content_id").attr("src") || $("#content_id_blank").attr("src") || "";
+              console.info("LP: current iframe src =", iframeSrc);
+            } catch (e) {
+              console.warn("LP: cannot read iframe src:", e);
+            }
+
+            function isRealHref(href) {
+              return href && href !== "#" && href.indexOf("javascript:") !== 0;
+            }
+
+            function extractUrlFromOnclick(onclickValue) {
+              if (!onclickValue) return "";
+
+              // 1) frames.content_name.location='...'
+              var m1 = onclickValue.match(/content_name(?:_blank)?\.location(?:\.href)?\s*=\s*['"]([^'"]+)['"]/);
+              if (m1 && m1[1]) return m1[1];
+
+              // 2) Any direct lp_controller.php... in onclick
+              var m2 = onclickValue.match(/(lp_controller\.php[^'"]+)/);
+              if (m2 && m2[1]) return m2[1];
+
+              // 3) Fallback: any lp_view.php / lp_content.php inside onclick
+              var m3 = onclickValue.match(/(lp_(?:view|content)\.php[^'"]+)/);
+              if (m3 && m3[1]) return m3[1];
+
+              return "";
+            }
+
+            function resolveUrl(el) {
+              var $el = $(el);
+
+              // Prefer patched URL if present
+              var patched = $el.attr("data-lp-nav-url") || "";
+              if (patched) return patched;
+
+              var href = $el.attr("href") || "";
+              if (isRealHref(href)) return href;
+
+              var onclickValue = $el.attr("onclick") || "";
+              return extractUrlFromOnclick(onclickValue);
+            }
+
+            function getNumeric(v) {
+              var n = Number(v);
+              return Number.isFinite(n) ? n : 0;
+            }
+
+            function getSearchParam(name) {
+              try {
+                var sp = new URLSearchParams(window.location.search || "");
+                return sp.get(name) || "";
+              } catch (e) {
+                return "";
               }
             }
-              {% if lp_mode == 'embedframe' %}
-            $("#lp-view-expand-button, #lp-view-expand-toggle").on("click", function(e) {
-              e.preventDefault()
-              $("#learning_path_main").toggleClass("lp-view-collapsed")
-              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-expand-horizontal")
-              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-collapse-horizontal")
-              var className = $("#lp-view-expand-toggle i.mdi").attr("class")
-              if (className == "mdi-arrow-collapse-horizontal") {
-                $(this).attr("title", '{{ "Expand" | trans }}')
-              } else {
-                $(this).attr("title", '{{ "Collapse" | trans }}')
+
+            function collectTocItemIds() {
+              var ids = [];
+              var seen = {};
+
+              // Common: elements with id="toc_123"
+              $("#toc_id [id^='toc_']").each(function () {
+                var raw = (this.id || "").replace("toc_", "");
+                var n = parseInt(raw, 10);
+                if (!Number.isFinite(n) || n <= 0) return;
+                if (seen[n]) return;
+                seen[n] = true;
+                ids.push(n);
+              });
+
+              // Fallback: parse item_id from hrefs inside toc
+              if (!ids.length) {
+                $("#toc_id a[href*='item_id=']").each(function () {
+                  try {
+                    var href = $(this).attr("href") || "";
+                    var m = href.match(/[?&]item_id=(\d+)/);
+                    if (!m) return;
+                    var n = parseInt(m[1], 10);
+                    if (!Number.isFinite(n) || n <= 0) return;
+                    if (seen[n]) return;
+                    seen[n] = true;
+                    ids.push(n);
+                  } catch (e) {}
+                });
               }
 
-              if ($("#navTabBar").is(":hidden")) {
-                $("#navTabBar").show()
-              } else {
-                $("#navTabBar").hide()
+              return ids;
+            }
+
+            function computePrevNext(currentId) {
+              var ids = collectTocItemIds();
+              if (!ids.length) {
+                console.warn("LP NAV: no TOC item ids found. Cannot compute prev/next.");
+                return { ids: ids, prev: 0, next: 0 };
               }
-            })
-              {% else %}
-            $("#lp-view-expand-button, #lp-view-expand-toggle").on("click", function(e) {
-              e.preventDefault()
-              $("#learning_path_main").toggleClass("lp-view-collapsed")
-              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-collapse-horizontal")
-              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-expand-horizontal")
 
-              var className = $("#lp-view-expand-toggle i.mdi").attr("class")
-              if (className == "mdi-arrow-expand-horizontal") {
-                $(this).attr("title", '{{ "Expand" | trans }}')
-              } else {
-                $(this).attr("title", '{{ "Collapse" | trans }}')
+              var idx = ids.indexOf(currentId);
+              if (idx === -1) {
+                console.warn("LP NAV: current item not found in TOC list. Falling back to first item.", { currentId: currentId, count: ids.length });
+                return { ids: ids, prev: 0, next: ids.length > 1 ? ids[1] : 0 };
               }
-            })
-              {% endif %}
 
-            $(".lp-view-tabs").on("click", ".disabled", function(e) {
-              e.preventDefault()
-            })
+              var prev = (idx > 0) ? ids[idx - 1] : 0;
+              var next = (idx < ids.length - 1) ? ids[idx + 1] : 0;
+              return { ids: ids, prev: prev, next: next };
+            }
 
-            $("a#ui-option").on("click", function(e) {
-              e.preventDefault()
-              var icon = $(this).children(".mdi")
-              if (icon.is(".mdi-chevron-up")) {
-                icon.removeClass("mdi-chevron-up").addClass("mdi-chevron-down")
+            function buildViewUrlForItem(itemId) {
+              // Keep cid/sid/etc from current URL; only enforce action/view + lp_id + item_id
+              var u = new URL(window.location.href);
 
-                return
+              u.searchParams.set("action", "view");
+              u.searchParams.set("lp_id", String(getNumeric(window.lpId) || {{ lp_id_num }}));
+              u.searchParams.set("item_id", String(itemId));
+
+              // Avoid conflicting params used in other contexts
+              u.searchParams.delete("id");
+              u.searchParams.delete("lp_item_id");
+
+              return u.pathname + "?" + u.searchParams.toString();
+            }
+
+            function looksLikePrev(el) {
+              var $el = $(el);
+              var t = ($el.attr("title") || "").toLowerCase();
+              var a = ($el.attr("aria-label") || "").toLowerCase();
+              var h = ($el.html() || "").toLowerCase();
+              var s = [t, a, h].join(" ");
+
+              return (
+                s.indexOf("previous") !== -1 ||
+                s.indexOf("prev") !== -1 ||
+                s.indexOf("anterior") !== -1 ||
+                s.indexOf("mdi-chevron-left") !== -1 ||
+                s.indexOf("mdi-arrow-left") !== -1
+              );
+            }
+
+            function looksLikeNext(el) {
+              var $el = $(el);
+              var t = ($el.attr("title") || "").toLowerCase();
+              var a = ($el.attr("aria-label") || "").toLowerCase();
+              var h = ($el.html() || "").toLowerCase();
+              var s = [t, a, h].join(" ");
+
+              return (
+                s.indexOf("next") !== -1 ||
+                s.indexOf("siguiente") !== -1 ||
+                s.indexOf("mdi-chevron-right") !== -1 ||
+                s.indexOf("mdi-arrow-right") !== -1
+              );
+            }
+
+            function patchNavArrowsWhenTocHidden() {
+              // Only needed when TOC is hidden; when visible, legacy navigation works as designed (iframe-based)
+              if (tocHidden !== 1) return;
+
+              var currentId = getNumeric(window.lpCurrentItemId) || getNumeric({{ lp_current_item_id_num }});
+              if (!currentId) {
+                currentId = parseInt(getSearchParam("item_id"), 10) || 0;
               }
-              icon.removeClass("mdi-chevron-down").addClass("mdi-chevron-up")
-            })
 
-            $(".scorm_item_normal a, #scorm-previous, #scorm-next").on("click", function() {
-              //$('.lp-view-tabs').animate({opacity: 0}, 500);
-            })
+              var pn = computePrevNext(currentId);
+              console.info("LP NAV: computed prev/next from TOC.", { currentId: currentId, prev: pn.prev, next: pn.next, count: pn.ids.length });
 
-            $("#learning_path_right_zone #lp-view-content iframe").on("load", function() {
-              //$('.lp-view-tabs a[href="#lp-view-content"]').tab('show');
-              //$('.lp-view-tabs').animate({opacity: 1}, 500);
-            })
+              if (!pn.prev && !pn.next) {
+                console.warn("LP NAV: prev/next not available. Navigation arrows will not be patched.");
+                return;
+              }
 
-              {% if lp_mode == 'embedded' %}
-            /*$('.scorm_item_normal a, #scorm-previous, #scorm-next').on('click', function () {
-                $('.lp-view-tabs').animate({opacity: 0}, 500);
-                if ($('#flag-mobile').is(':visible') && !$('#learning_path_main').is('.lp-view-collapsed')) {
-                    $('#lp-view-expand-toggle').trigger('click');
+              var $candidates = $menu
+                .find("a, button")
+                .not("#home-course")
+                .not("#lp-view-expand-toggle")
+                .not("[data-lp-menu='toggle']");
+
+              var $prevEl = $();
+              var $nextEl = $();
+
+              $candidates.each(function () {
+                if (!$prevEl.length && looksLikePrev(this)) $prevEl = $(this);
+                if (!$nextEl.length && looksLikeNext(this)) $nextEl = $(this);
+              });
+
+              // Additional fallback: anything that explicitly contains "item_id=NaN"
+              if (!$prevEl.length || !$nextEl.length) {
+                var $nan = $menu.find("a[href*='item_id=NaN'], a[onclick*='item_id'][onclick*='NaN'], button[onclick*='NaN']");
+                if ($nan.length) {
+                  if (!$prevEl.length) $prevEl = $($nan.get(0));
+                  if (!$nextEl.length && $nan.length > 1) $nextEl = $($nan.get(1));
                 }
-            });*/
-              {% endif %}
+              }
 
-            //loadForumThread({{ lp_id }}, {{ lp_current_item_id }});
-            checkCurrentItemPosition({{ lp_current_item_id }});
+              function applyPatch($el, url, label) {
+                if (!$el || !$el.length || !url) {
+                  console.warn("LP NAV: cannot patch " + label + " arrow (element or url missing).");
+                  return;
+                }
 
-            // Glossary highlighting is now handled by api_get_glossary_auto_snippet()
-            // based on "show_glossary_in_extra_tools". Legacy per-document frameReady
-            // injection was removed from this template.
+                // Remove broken legacy onclick (often builds NaN)
+                $el.removeAttr("onclick");
+
+                if ($el.is("a")) {
+                  $el.attr("href", url);
+                  $el.attr("target", "_self");
+                } else {
+                  // For buttons, store url for our resolver
+                  $el.attr("data-lp-nav-url", url);
+                }
+
+                // Always enforce click navigation for visible feedback
+                $el.off("click.lpNav").on("click.lpNav", function (e) {
+                  e.preventDefault();
+                  console.info("LP NAV: navigating to " + label + " item.", url);
+                  window.location.href = url;
+                  return false;
+                });
+              }
+
+              if (pn.prev) applyPatch($prevEl, buildViewUrlForItem(pn.prev), "previous");
+              if (pn.next) applyPatch($nextEl, buildViewUrlForItem(pn.next), "next");
+            }
+
+            // When TOC is hidden, do NOT force navigation to _self.
+            // LP navigation must keep loading inside the iframe named "content_name".
+            if (tocHidden === 1) {
+              $menu.find("a").each(function () {
+                var url = resolveUrl(this);
+                if (!url) return;
+
+                // If it's LP content navigation, ensure it targets the content iframe.
+                var isLpContent =
+                  url.indexOf("lp_controller.php") !== -1 &&
+                  url.indexOf("action=content") !== -1;
+
+                if (!isLpContent) return;
+
+                var $a = $(this);
+                var target = ($a.attr("target") || "").toLowerCase();
+
+                if (!target || target === "_self" || target === "_top") {
+                  $a.attr("target", "content_name");
+                }
+              });
+            }
+
+            // Keep original hook (guarded)
+            try {
+              if (typeof checkCurrentItemPosition === "function") {
+                checkCurrentItemPosition({{ lp_current_item_id_num }});
+              } else {
+                console.warn("LP: checkCurrentItemPosition() is not available.");
+              }
+            } catch (err) {
+              console.warn("LP: checkCurrentItemPosition() failed:", err);
+            }
 
               {% if disable_js_in_lp_view == 0 %}
-            $(function() {
-              var arr = ["link", "sco"]
-              if ($.inArray(olms.lms_item_type, arr) === -1) {
-                  {{ frame_ready }}
+            try {
+              var allowedTypes = ["link", "sco"];
+              if (window.olms && typeof olms.lms_item_type !== "undefined") {
+                if ($.inArray(olms.lms_item_type, allowedTypes) === -1) {
+                    {{ frame_ready }}
+                }
+              } else {
+                console.warn("LP: olms is not ready; skipping frame_ready hook.");
               }
-            })
+            } catch (err) {
+              console.warn("LP: frame_ready hook failed:", err);
+            }
               {% endif %}
-          })
+
+
+            // Iframe loading overlay (safe: does not cancel navigation)
+            var $loader = $("#lp-iframe-loader");
+            var $iframe = $("#content_id");
+            if (!$iframe.length) {
+              $iframe = $("#content_id_blank");
+            }
+
+            var loaderTimer = null;
+            var maxHideTimer = null;
+
+            function showLoader(reason) {
+              if (!$loader.length) return;
+
+              $loader.addClass("is-visible").attr("aria-hidden", "false");
+
+              clearTimeout(maxHideTimer);
+              maxHideTimer = setTimeout(function () {
+                hideLoader("timeout");
+              }, 15000);
+            }
+
+            function hideLoader(reason) {
+              if (!$loader.length) return;
+
+              console.info("LP: hide loader", reason || "");
+
+              $loader.removeClass("is-visible").attr("aria-hidden", "true");
+              clearTimeout(maxHideTimer);
+            }
+
+            // Show loader for the initial iframe load
+            if ($iframe.length) {
+              showLoader("initial");
+              $iframe.off("load.lpLoader").on("load.lpLoader", function () {
+                hideLoader("iframe load");
+              });
+            } else {
+              console.warn("LP: iframe not found (#content_id / #content_id_blank).");
+            }
+
+            // Show loader on any navigation click (TOC + toolbar) WITHOUT preventing default
+            $(document).off("click.lpLoaderNav").on("click.lpLoaderNav", "#toc_id a, #btn-menu-float a, #btn-menu-float button", function () {
+              clearTimeout(loaderTimer);
+              loaderTimer = setTimeout(function () {
+                showLoader("nav click");
+              }, 0);
+            });
+
+          });
         </script>
     {% endautoescape %}
-    <script>
-      window.lpCurrentItemId = {{ lp_current_item_id }};
-    </script>
 {% endblock %}

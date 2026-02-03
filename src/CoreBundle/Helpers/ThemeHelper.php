@@ -167,6 +167,17 @@ final class ThemeHelper
         return \sprintf('<link rel="stylesheet" href="%s">', $url);
     }
 
+    public function getThemeAssetScriptTag(string $path, bool $absoluteUrl = false): string
+    {
+        $url = $this->getThemeAssetUrl($path, $absoluteUrl);
+
+        if ('' === $url) {
+            return '';
+        }
+
+        return \sprintf('<script src="%s"></script>', $url);
+    }
+
     /**
      * Read raw contents from the themed filesystem.
      */

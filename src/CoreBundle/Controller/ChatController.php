@@ -735,9 +735,9 @@ final class ChatController extends AbstractController
             return JsonResponse::fromJsonString($echoed);
         }
 
-        if (\is_string($ret)) {
+        /*if (\is_string($ret)) {
             return JsonResponse::fromJsonString($ret);
-        }
+        } */
 
         return new JsonResponse($ret ?? ['id' => 0]);
     }

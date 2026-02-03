@@ -876,6 +876,7 @@ final class SearchController extends AbstractController
             $p = mb_stripos($plain, $t, 0, 'UTF-8');
             if (false !== $p) {
                 $pos = (int) $p;
+
                 break;
             }
         }

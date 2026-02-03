@@ -215,7 +215,7 @@ final class CToolStateProvider implements ProviderInterface
         $candidates[] = str_replace('_', '', $alnumSnake);
 
         // Unique + non-empty
-        $candidates = array_values(array_unique(array_filter($candidates, static fn ($v) => is_string($v) && '' !== trim($v))));
+        $candidates = array_values(array_unique(array_filter($candidates, static fn ($v) => \is_string($v) && '' !== trim($v))));
 
         return $candidates;
     }

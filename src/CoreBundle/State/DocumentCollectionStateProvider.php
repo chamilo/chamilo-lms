@@ -11,6 +11,7 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -54,6 +55,16 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         $gid = (int) ($query['gid'] ?? 0);
 
         $hasContext = $cid > 0 || $sid > 0 || $gid > 0;
+
+        // By default, documents must be visible in session context including base course content,
+        // because CDocument implements ResourceShowCourseResourcesInSessionInterface.
+        $includeBaseContent = $sid > 0
+            && \is_a(CDocument::class, ResourceShowCourseResourcesInSessionInterface::class, true);
+
+        // Allow API clients to override behavior (withBaseContent=0/1).
+        if (\array_key_exists('withBaseContent', $query)) {
+            $includeBaseContent = 1 === (int) $query['withBaseContent'];
+        }
 
         // Gradebook mode (e.g. gradebook=1)
         $isGradebook = !empty($query['gradebook']) && 1 === (int) $query['gradebook'];
@@ -110,9 +121,35 @@ final class DocumentCollectionStateProvider implements ProviderInterface
             if ($cid > 0) {
                 $qb->andWhere('IDENTITY(rl.course) = :cid')->setParameter('cid', $cid);
             }
+
             if ($sid > 0) {
-                $qb->andWhere('IDENTITY(rl.session) = :sid')->setParameter('sid', $sid);
+                if ($includeBaseContent) {
+                    // Include both session content and base course content.
+                    $qb
+                        ->andWhere(
+                            $qb->expr()->orX(
+                                'IDENTITY(rl.session) = :sid',
+                                'rl.session IS NULL',
+                                'IDENTITY(rl.session) = 0'
+                            )
+                        )
+                        ->setParameter('sid', $sid)
+                    ;
+                } else {
+                    $qb
+                        ->andWhere('IDENTITY(rl.session) = :sid')
+                        ->setParameter('sid', $sid)
+                    ;
+                }
+            } else {
+                $qb->andWhere(
+                    $qb->expr()->orX(
+                        'rl.session IS NULL',
+                        'IDENTITY(rl.session) = 0'
+                    )
+                );
             }
+
             if ($gid > 0) {
                 $qb->andWhere('IDENTITY(rl.group) = :gid')->setParameter('gid', $gid);
             } else {
@@ -134,8 +171,12 @@ final class DocumentCollectionStateProvider implements ProviderInterface
                     $sessionEntity = $sid > 0 ? $this->entityManager->getRepository(Session::class)->find($sid) : null;
                     $groupEntity = $gid > 0 ? $this->entityManager->getRepository(CGroup::class)->find($gid) : null;
 
-                    // Find the folder link in current context
-                    $parentLink = $linkRepo->findParentLinkForContext(
+                    // Resolve possible folder links:
+                    // - session link (sid=current session)
+                    // - base link (sid=NULL), when base content is enabled in session view
+                    $parentLinkIds = [];
+
+                    $sessionParentLink = $linkRepo->findParentLinkForContext(
                         $folderNode,
                         $courseEntity,
                         $sessionEntity,
@@ -143,26 +184,45 @@ final class DocumentCollectionStateProvider implements ProviderInterface
                         null,
                         null
                     );
+                    if (null !== $sessionParentLink) {
+                        $parentLinkIds[] = (int) $sessionParentLink->getId();
+                    }
 
-                    if (null !== $parentLink) {
-                        // If a contextual parent link exists, we must prioritize rl.parent.
-                        // The rn.parent fallback should only include items that don't have a contextual hierarchy (rl.parent IS NULL),
-                        // otherwise moved items may still appear in the old folder due to rn.parent not changing.
+                    if ($sid > 0 && $includeBaseContent && null !== $courseEntity) {
+                        $baseParentLink = $linkRepo->findParentLinkForContext(
+                            $folderNode,
+                            $courseEntity,
+                            null,
+                            $groupEntity,
+                            null,
+                            null
+                        );
+                        if (null !== $baseParentLink) {
+                            $parentLinkIds[] = (int) $baseParentLink->getId();
+                        }
+                    }
+
+                    $parentLinkIds = array_values(array_unique($parentLinkIds));
+
+                    if (!empty($parentLinkIds)) {
+                        // If contextual parent links exist, prioritize rl.parent.
+                        // The rn.parent fallback must only include items without contextual hierarchy (rl.parent IS NULL),
+                        // otherwise moved items might appear in old folders due to rn.parent not changing.
                         $qb
                             ->andWhere(
                                 $qb->expr()->orX(
-                                    'IDENTITY(rl.parent) = :parentLinkId',
+                                    'IDENTITY(rl.parent) IN (:parentLinkIds)',
                                     $qb->expr()->andX(
                                         'IDENTITY(rn.parent) = :parentNodeId',
                                         'rl.parent IS NULL'
                                     )
                                 )
                             )
-                            ->setParameter('parentLinkId', (int) $parentLink->getId())
+                            ->setParameter('parentLinkIds', $parentLinkIds)
                             ->setParameter('parentNodeId', $parentNodeId)
                         ;
                     } else {
-                        // No parent link in this context -> fallback to legacy tree
+                        // No parent link resolved -> fallback to legacy tree
                         $qb
                             ->andWhere('IDENTITY(rn.parent) = :parentNodeId')
                             ->setParameter('parentNodeId', $parentNodeId)

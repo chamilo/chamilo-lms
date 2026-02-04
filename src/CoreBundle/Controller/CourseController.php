@@ -262,7 +262,6 @@ class CourseController extends ToolBaseController
             $sid = $this->getSessionId() ?: null;
 
             /** @var CShortcut $shortcut */
-            /** @var CShortcut $shortcut */
             foreach ($shortcuts as $shortcut) {
                 $resourceNode = $shortcut->getShortCutNode();
 
@@ -1377,7 +1376,8 @@ class CourseController extends ToolBaseController
             ->setParent($course)
             ->setCreator($course->getCreator())
             ->setSession($session)
-            ->addCourseLink($course);
+            ->addCourseLink($course)
+        ;
 
         $em->persist($ctool);
         $em->flush();

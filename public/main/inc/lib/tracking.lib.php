@@ -8222,7 +8222,8 @@ class Tracking
      */
     public static function getTotalTimeSpentInCourses(
         string $dateFrom = '',
-        string $dateUntil = ''
+        string $dateUntil = '',
+        ?int $maxTimeSpent = 6
     ): int {
         $tableTrackLogin = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $tableUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -8240,12 +8241,21 @@ class Tracking
             $dateUntil = Database::escape_string($dateUntil);
             $conditionTime = " (login_course_date >= '$dateFrom' AND logout_course_date <= '$dateUntil' ) ";
         }
-        $sql = "SELECT SUM(TIMESTAMPDIFF(HOUR, login_course_date, logout_course_date)) diff
+        $sql = "SELECT TIMESTAMPDIFF(HOUR, login_course_date, logout_course_date) diff
     	        FROM $tableTrackLogin u $tableUrl
                 WHERE $conditionTime $urlCondition";
         $rs = Database::query($sql);
-        $row = Database::fetch_array($rs, 'ASSOC');
-        $diff = $row['diff'];
+        $diff = 0;
+        if (!empty($rs)) {
+            while ($row = Database::fetch_array($rs)) {
+                // Anything above $maxTimeSpent is rounded down to $maxTimeSpent hours
+                if ($row['diff'] <= $maxTimeSpent) {
+                    $diff += $row['diff'];
+                } else {
+                    $diff += $maxTimeSpent;
+                }
+            }
+        }
         if ($diff >= 0 and !empty($diff)) {
             return $diff;
         }

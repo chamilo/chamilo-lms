@@ -9,29 +9,19 @@ namespace Chamilo\CoreBundle\Filter;
 use ApiPlatform\Doctrine\Orm\Filter\AbstractFilter;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\Persistence\ManagerRegistry;
 use InvalidArgumentException;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 
 class ExtraFieldFilter extends AbstractFilter
 {
     private string $fieldProperty = 'extrafield';
     private string $fieldValueProperty = 'extrafieldvalue';
-
-    public function __construct(
-        ManagerRegistry $managerRegistry,
-        private readonly int $itemType = ExtraField::USER_FIELD_TYPE,
-        ?LoggerInterface $logger = null,
-        ?array $properties = null,
-        ?NameConverterInterface $nameConverter = null
-    ) {
-        parent::__construct($managerRegistry, $logger, $properties, $nameConverter);
-    }
 
     public function getDescription(string $resourceClass): array
     {
@@ -91,6 +81,8 @@ class ExtraFieldFilter extends AbstractFilter
             throw new InvalidArgumentException('Extra field variables and values must have the same length.');
         }
 
+        $itemType = $this->getItemTypeFromResource($resourceClass);
+
         $alias = $queryBuilder->getRootAliases()[0];
 
         if ($property === $this->fieldProperty) {
@@ -108,10 +100,16 @@ class ExtraFieldFilter extends AbstractFilter
                         "$alias.id = $efvAlias.itemId"
                     )
                     ->innerJoin("$efvAlias.field", $efAlias)
+                    ->andWhere(
+                        $queryBuilder->expr()->andX(
+                            $queryBuilder->expr()->eq("$efAlias.filter", true),
+                            $queryBuilder->expr()->eq("$efAlias.visibleToSelf", true)
+                        )
+                    )
                     ->andWhere($queryBuilder->expr()->eq("$efAlias.itemType", ":$itemTypeName"))
                     ->andWhere($queryBuilder->expr()->eq("$efAlias.variable", ":$variableName"))
                     ->andWhere($queryBuilder->expr()->eq("$efvAlias.fieldValue", ":valueName_$idx"))
-                    ->setParameter($itemTypeName, $this->itemType)
+                    ->setParameter($itemTypeName, $itemType)
                     ->setParameter($variableName, $fieldVariable)
                 ;
             }
@@ -124,5 +122,15 @@ class ExtraFieldFilter extends AbstractFilter
                 $queryBuilder->setParameter("valueName_$idx", $fieldValue);
             }
         }
+    }
+
+    private function getItemTypeFromResource(string $resourceClass): int
+    {
+        return match ($resourceClass) {
+            User::class => ExtraField::USER_FIELD_TYPE,
+            Course::class => ExtraField::COURSE_FIELD_TYPE,
+            Session::class => ExtraField::SESSION_FIELD_TYPE,
+            default => throw new InvalidArgumentException('Invalid resource class.'),
+        };
     }
 }

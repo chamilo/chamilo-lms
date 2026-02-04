@@ -35,6 +35,7 @@ use Throwable;
 
 use const FILE_APPEND;
 use const LOCK_EX;
+use const PATHINFO_EXTENSION;
 
 abstract class AbstractMigrationChamilo extends AbstractMigration
 {
@@ -570,11 +571,11 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
     protected function legacyCourseExistsByCodeOrDirectory(string $token): bool
     {
         $token = trim($token);
-        if ($token === '') {
+        if ('' === $token) {
             return false;
         }
 
-        if (array_key_exists($token, $this->legacyCourseExistsCache)) {
+        if (\array_key_exists($token, $this->legacyCourseExistsCache)) {
             return $this->legacyCourseExistsCache[$token];
         }
 
@@ -593,7 +594,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
     {
         $ext = strtolower((string) pathinfo($filePath, PATHINFO_EXTENSION));
 
-        return in_array($ext, ['html', 'htm'], true);
+        return \in_array($ext, ['html', 'htm'], true);
     }
 
     /**
@@ -604,12 +605,12 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         string $html,
         string $currentCourseDirectory
     ): string {
-        if ($html === '' || $currentCourseDirectory === '') {
+        if ('' === $html || '' === $currentCourseDirectory) {
             return $html;
         }
 
         // Fast pre-check.
-        if (false === strpos($html, '/courses/') || false === strpos($html, '/document/')) {
+        if (!str_contains($html, '/courses/') || !str_contains($html, '/document/')) {
             return $html;
         }
 
@@ -652,12 +653,14 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
             // Safety: avoid traversal.
             if (str_contains($relDecoded, '..')) {
                 @error_log('[Migration][Documents] Skipping suspicious legacy link containing "..": '.$url);
+
                 return $url;
             }
 
             $fsPath = $updateRootPath.'/app/courses/'.$currentCourseDirectory.'/document/'.$relDecoded;
             if (!is_file($fsPath)) {
                 @error_log('[Migration][Documents] Legacy token "'.$token.'" does not exist and file not found in current course "'.$currentCourseDirectory.'": '.$url);
+
                 return $url;
             }
 
@@ -674,7 +677,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
                 $quote = (string) $m[1];
                 $url = (string) $m[2];
 
-                if (false === strpos($url, '/courses/') || false === strpos($url, '/document/')) {
+                if (!str_contains($url, '/courses/') || !str_contains($url, '/document/')) {
                     return $m[0];
                 }
 
@@ -689,12 +692,12 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         );
 
         // Pass 2: url(...)
-        $html = (string) preg_replace_callback(
+        return (string) preg_replace_callback(
             '~\burl\(\s*([\'"]?)([^\'")]+)\1\s*\)~i',
             function (array $m) use ($rewriteUrl) {
                 $url = (string) $m[2];
 
-                if (false === strpos($url, '/courses/') || false === strpos($url, '/document/')) {
+                if (!str_contains($url, '/courses/') || !str_contains($url, '/document/')) {
                     return $m[0];
                 }
 
@@ -707,8 +710,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
             },
             $html
         );
-
-        return $html;
     }
 
     /**
@@ -724,7 +725,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         }
 
         $html = (string) @file_get_contents($filePath);
-        if ($html === '') {
+        if ('' === $html) {
             return $filePath;
         }
 

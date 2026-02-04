@@ -28,12 +28,16 @@ final class Version20210930130343 extends AbstractMigrationChamilo
     {
         /** @var CToolIntroRepository $introRepo */
         $introRepo = $this->container->get(CToolIntroRepository::class);
+
         /** @var CToolRepository $cToolRepo */
         $cToolRepo = $this->container->get(CToolRepository::class);
+
         /** @var ToolRepository $toolRepo */
         $toolRepo = $this->container->get(ToolRepository::class);
+
         /** @var SessionRepository $sessionRepo */
         $sessionRepo = $this->container->get(SessionRepository::class);
+
         /** @var CourseRepository $courseRepo */
         $courseRepo = $this->container->get(CourseRepository::class);
 

@@ -180,7 +180,7 @@ if (isset($exerciseId) && $exerciseId > 0) {
             <div id="question_list">
         ';
 
-        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->id, false);
+        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->id);
 
         if (is_array($questionList)) {
             foreach ($questionList as $id) {

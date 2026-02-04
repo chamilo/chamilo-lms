@@ -435,18 +435,61 @@ if ('true' === api_get_setting('session.allow_redirect_to_session_after_inscript
     }
 }
 
-// Direct Link Subscription feature #5299
+/**
+ * Build the redirect URL for a "direct registration" link.
+ * - Default: course home.
+ * - If an exercise ID is provided: redirect to the exercise tool inside the course.
+ */
+$buildDirectLinkRedirectUrl = static function (int $courseId, int $exerciseId = 0): string {
+    // Course home
+    $courseHomeUrl = api_get_path(WEB_PATH) . 'course/' . $courseId . '/home?sid=0';
+
+    if ($exerciseId <= 0) {
+        return $courseHomeUrl;
+    }
+
+    $courseInfo = api_get_course_info_by_id($courseId);
+    $courseCode = $courseInfo['code'] ?? $courseInfo['course_code'] ?? $courseInfo['directory'] ?? '';
+
+    if (empty($courseCode)) {
+        return $courseHomeUrl;
+    }
+
+    // Go to the exercise entrypoint
+    $query = http_build_query([
+        'cid' => $courseId,
+        'sid' => 0,
+        'gid' => 0,
+        'exerciseId' => $exerciseId,
+    ]);
+
+    return api_get_path(WEB_CODE_PATH) . 'exercise/overview.php?' . $query;
+};
+
 $courseIdRedirect = isset($_REQUEST['c']) && !empty($_REQUEST['c']) ? (int) $_REQUEST['c'] : null;
-$exercise_redirect = isset($_REQUEST['e']) && !empty($_REQUEST['e']) ? (int) $_REQUEST['e'] : null;
+$exercise_redirect = isset($_REQUEST['e']) && !empty($_REQUEST['e']) ? (int) $_REQUEST['e'] : 0;
 
 if (!empty($courseIdRedirect)) {
+    $courseInfo = api_get_course_info_by_id($courseIdRedirect);
+    $visibility = (int) ($courseInfo['visibility'] ?? -1);
+
+    $isOpenCourse = in_array(
+        $visibility,
+        [COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD],
+        true
+    );
+
     if (!api_is_anonymous()) {
-        $subscribed = CourseManager::autoSubscribeToCourse($courseIdRedirect);
-        if ($subscribed) {
-            header('Location: ' . api_get_path(WEB_PATH) . 'course/'.$courseIdRedirect.'/home?sid=0');
-        } else {
-            header('Location: ' . api_get_path(WEB_PATH) . 'course/'.$courseIdRedirect.'/about');
+        if ($isOpenCourse) {
+            if ($exercise_redirect > 0) {
+                CourseManager::autoSubscribeToCourse($courseIdRedirect);
+            }
+
+            header('Location: ' . $buildDirectLinkRedirectUrl($courseIdRedirect, $exercise_redirect));
+            exit;
         }
+
+        header('Location: ' . api_get_path(WEB_PATH) . 'course/' . $courseIdRedirect . '/about');
         exit;
     }
     Session::write('course_redirect', $courseIdRedirect);
@@ -927,10 +970,10 @@ EOD;
     $settingRequiredFields = api_get_setting('registration.required_extra_fields_in_inscription', true);
     $requiredExtraFieldVars = $normalizeSettingList($settingRequiredFields);
 
-// Load extra fields if:
-// - extra fields are enabled in allow_fields_inscription OR
-// - there are required extra fields configured OR
-// - conditions extra fields exist (profile.show_conditions_to_user)
+    // Load extra fields if:
+    // - extra fields are enabled in allow_fields_inscription OR
+    // - there are required extra fields configured OR
+    // - conditions extra fields exist (profile.show_conditions_to_user)
     $shouldLoadExtraFields = (
         array_key_exists('extra_fields', $allowedFields) ||
         in_array('extra_fields', $allowedFields, true) ||
@@ -1156,8 +1199,16 @@ if ($blockButton) {
     );
 } else {
     $allow = ('true' === api_get_setting('registration.allow_double_validation_in_registration'));
+    $termsEnabled = ('true' === api_get_setting('allow_terms_conditions'));
+
     ChamiloHelper::addLegalTermsFields($form, $userAlreadyRegisteredShowTerms);
-    if ($allow && !$termActivated) {
+
+    /**
+     * The "double validation" (Validate -> Register) is legacy UX.
+     * When Terms & Conditions are enabled, it becomes redundant and may create a confusing 2-step flow.
+     * Keep it only for platforms that explicitly want it without T&C.
+     */
+    if ($allow && !$termsEnabled && !$termActivated) {
         $htmlHeadXtra[] = '<script>
             $(document).ready(function() {
                 $("#pre_validation").click(function() {
@@ -1421,7 +1472,6 @@ if ($form->validate()) {
         }
     }
 
-
     /* SESSION REGISTERING */
     /* @todo move this in a function */
     $user['firstName'] = stripslashes($values['firstname']);
@@ -1467,6 +1517,39 @@ if ($form->validate()) {
 
     // Stats
     Container::getTrackELoginRepository()->createLoginRecord($userEntity, new DateTime(), $request->getClientIp());
+
+    /**
+     * Direct link redirect (course + optional exercise).
+     */
+    $directCourseId = (int) Session::read('course_redirect');
+    $directExerciseId = (int) Session::read('exercise_redirect');
+
+    if ($directCourseId > 0) {
+        Session::erase('course_redirect');
+        Session::erase('exercise_redirect');
+
+        $courseInfo = api_get_course_info_by_id($directCourseId);
+        $visibility = (int) ($courseInfo['visibility'] ?? -1);
+
+        $isOpenCourse = in_array(
+            $visibility,
+            [COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD],
+            true
+        );
+
+        if ($isOpenCourse) {
+            // Only for exercises: helps tracking, but must not gate redirect.
+            if ($directExerciseId > 0) {
+                CourseManager::autoSubscribeToCourse($directCourseId);
+            }
+
+            header('Location: ' . $buildDirectLinkRedirectUrl($directCourseId, $directExerciseId));
+            exit;
+        }
+
+        header('Location: ' . api_get_path(WEB_PATH) . 'course/' . $directCourseId . '/about');
+        exit;
+    }
 
     // last user login date is now
     $user_last_login_datetime = 0; // used as a unix timestamp it will correspond to : 1 1 1970

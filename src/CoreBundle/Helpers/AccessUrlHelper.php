@@ -30,7 +30,7 @@ readonly class AccessUrlHelper
         } catch (Throwable $e) {
             // During a fresh install, DB/tables may not exist yet.
             // Treat as single URL and do not crash.
-            error_log('AccessUrlHelper::isMultiple(): DB not ready, treating as single URL. ' . $e->getMessage());
+            error_log('AccessUrlHelper::isMultiple(): DB not ready, treating as single URL. '.$e->getMessage());
 
             return false;
         }
@@ -47,7 +47,7 @@ readonly class AccessUrlHelper
             return $this->accessUrlRepository->find($urlId) ?: null;
         } catch (Throwable $e) {
             // During installation, the access_url table may not exist yet.
-            error_log('AccessUrlHelper::getFirstAccessUrl(): DB not ready, returning null. ' . $e->getMessage());
+            error_log('AccessUrlHelper::getFirstAccessUrl(): DB not ready, returning null. '.$e->getMessage());
 
             return null;
         }
@@ -71,14 +71,14 @@ readonly class AccessUrlHelper
             }
 
             try {
-                $url = $request->getSchemeAndHttpHost() . '/';
+                $url = $request->getSchemeAndHttpHost().'/';
                 $matched = $this->accessUrlRepository->findOneBy(['url' => $url]);
 
                 if ($matched instanceof AccessUrl) {
                     return $matched;
                 }
             } catch (Throwable $e) {
-                error_log('AccessUrlHelper::getCurrent(): failed to resolve current URL, using fallback. ' . $e->getMessage());
+                error_log('AccessUrlHelper::getCurrent(): failed to resolve current URL, using fallback. '.$e->getMessage());
             }
         }
 

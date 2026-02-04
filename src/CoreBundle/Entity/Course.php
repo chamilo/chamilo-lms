@@ -19,6 +19,7 @@ use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\Controller\Api\GetCourseStatsAction;
 use Chamilo\CoreBundle\Entity\Listener\CourseListener;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
+use Chamilo\CoreBundle\Filter\ExtraFieldFilter;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\State\PublicCatalogueCourseStateProvider;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -72,17 +73,20 @@ use Symfony\Component\Validator\Constraints as Assert;
             deserialize: false,
         ),
         new Post(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"),
-        new GetCollection(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"),
+        new GetCollection(
+            paginationClientEnabled: true,
+            security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"
+        ),
         new GetCollection(
             uriTemplate: '/public_courses.{_format}',
             normalizationContext: ['groups' => ['course:read']],
+            filters: [ExtraFieldFilter::class],
             provider: PublicCatalogueCourseStateProvider::class
         ),
     ],
     normalizationContext: ['groups' => ['course:read']],
     denormalizationContext: ['groups' => ['course:write']],
     filters: ['course.sticky_boolean_filter'],
-    paginationClientEnabled: true
 )]
 #[ORM\Table(name: 'course')]
 #[ORM\Index(columns: ['sticky'], name: 'idx_course_sticky')]

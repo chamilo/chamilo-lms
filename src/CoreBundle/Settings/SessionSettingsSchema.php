@@ -79,7 +79,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'enable_auto_reinscription' => 'false',
                     'enable_session_replication' => 'false',
                     'session_list_view_remaining_days' => 'false',
-                    'user_session_display_mode' => 'card',
+                    'user_session_display_mode' => 'list',
                     'show_simple_session_info' => 'true',
                     'show_all_sessions_on_my_course_page' => 'true',
                     'courses_list_session_title_link' => '1',

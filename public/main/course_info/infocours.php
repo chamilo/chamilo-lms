@@ -257,17 +257,20 @@ $form->addPanelOption(
 
 // --- End of legacy block, from here panels start as usual ---
 
-$url = api_get_path(WEB_CODE_PATH)."auth/registration.php?c=$courseId&e=1";
-$url = Display::url($url, $url);
-$label = $form->addLabel(
-    get_lang('Direct link'),
-    sprintf(
-        get_lang(
-            'If your course is public or open, you can use the direct link below to send an invitation to new users, so after registration, they will be sent directly to the course. Also, you can add the e=1 parameter to the URL, replacing "1" by an exercise ID to send them directly to a specific exam. The exercise ID can be discovered in the URL when clicking on an exercise to open it.<br/>%s'
-        ),
-        $url
+$directUrl = api_get_path(WEB_CODE_PATH)."auth/registration.php?c=$courseId&e=1";
+$directUrlLink = Display::url($directUrl, $directUrl);
+
+$directLinkHtml = sprintf(
+    get_lang(
+        'If your course is public or open, you can use the direct link below to send an invitation to new users, so after registration, they will be sent directly to the course. Also, you can add the e=1 parameter to the URL, replacing "1" by an exercise ID to send them directly to a specific exam. The exercise ID can be discovered in the URL when clicking on an exercise to open it.<br/>%s'
     ),
-    true
+    $directUrlLink
+);
+$directLinkElement = $form->createElement(
+    'static',
+    'direct_link',
+    get_lang('Direct link'),
+    '<div class="course-settings-direct-link">'.$directLinkHtml.'</div>'
 );
 
 $groupAccess = [];
@@ -379,7 +382,7 @@ $courseAccessAnchor = $form->createElement('html', '<div id="course-access-panel
 $elements = [
     '' => array_values(array_filter([$courseAccessAnchor, $courseVisibilityHelp])),
     get_lang('Course access') => $groupAccess,
-    $label,
+    $directLinkElement,
     get_lang('Subscription') => $group2,
     get_lang('Unsubscribe') => $group3,
     $text,
@@ -1114,6 +1117,7 @@ $defaultCourseSettings = [
     // Auto-launch (UI helper radio)
     'auto_launch_option' => 'disable_auto_launch',
     'show_course_in_user_language' => 2,
+    'email_alert_manager_on_new_quiz' => [],
 ];
 
 // Set default values
@@ -1134,8 +1138,15 @@ $courseSettings = CourseManager::getCourseSettingVariables();
 foreach ($courseSettings as $setting) {
     $result = api_get_course_setting($setting);
 
-    // Stored setting: use it.
-    if ('-1' !== (string) $result) {
+    // Some settings can legitimately be arrays (e.g. multi-checkbox values).
+    // Casting arrays to string triggers "Array to string conversion".
+    if (\is_array($result)) {
+        $values[$setting] = $result;
+        continue;
+    }
+
+    // Stored setting: use it (api_get_course_setting returns -1 when not stored yet).
+    if ($result !== null && '-1' !== (string) $result) {
         $values[$setting] = $result;
         continue;
     }
@@ -1244,6 +1255,9 @@ $htmlHeadXtra[] = '
 
     .course-picture-preview .help-block {
         margin-bottom: 0.25rem;
+    }
+    .field-checkbox, .field-radiobutton {
+      margin-top: 10px;
     }
 </style>
 ';

@@ -251,6 +251,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'user_session_display_mode',
                     'title' => 'My Sessions display mode',
                     'comment' => 'Choose how the "My Sessions" page is displayed: as a modern visual block (card) view or the classic list style.',
+                    'selected_value' => 'list',
                 ],
                 [
                     'name' => 'session_list_view_remaining_days',

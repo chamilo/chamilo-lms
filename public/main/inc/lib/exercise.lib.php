@@ -631,7 +631,7 @@ class ExerciseLib
 
                         if ($debug_mark_answer) {
                             if ($answerCorrect) {
-                                $attributes['checked'] = 1;
+                                $attributes['checked'] = 'checked';
                                 $attributes['selected'] = 1;
                             }
                         }
@@ -671,14 +671,12 @@ class ExerciseLib
                         );
 
                         $answer_input = null;
-                        $attributes['class'] = 'checkradios';
                         if (UNIQUE_ANSWER_IMAGE == $answerType) {
-                            $attributes['class'] = '';
                             $attributes['style'] = 'display: none;';
                             $answer = '<div class="thumbnail">'.$answer.'</div>';
                         }
 
-                        $answer_input .= '<label class="radio '.$hidingClass.'">';
+                        $answer_input .= '<label class="flex gap-2 items-center '.$hidingClass.'">';
                         $answer_input .= Display::input(
                             'radio',
                             'choice['.$questionId.']',
@@ -728,14 +726,14 @@ class ExerciseLib
 
                         if ($debug_mark_answer) {
                             if ($answerCorrect) {
-                                $attributes['checked'] = 1;
+                                $attributes['checked'] = 'checked';
                                 $attributes['selected'] = 1;
                             }
                         }
 
                         if (MULTIPLE_ANSWER == $answerType || GLOBAL_MULTIPLE_ANSWER == $answerType) {
                             $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-                            $answer_input = '<div class="flex gap-2 items-center">';
+                            $answer_input = '<label class="flex gap-2 items-center">';
                             $answer_input .= Display::input(
                                 'checkbox',
                                 'choice['.$questionId.']['.$numAnswer.']',
@@ -743,7 +741,7 @@ class ExerciseLib
                                 $attributes
                             );
                             $answer_input .= $answer;
-                            $answer_input .= '</div>';
+                            $answer_input .= '</label>';
 
                             if ($show_comment) {
                                 $s .= '<tr><td>';
@@ -784,7 +782,7 @@ class ExerciseLib
 
                                     if ($debug_mark_answer) {
                                         if ($j == $answerCorrect) {
-                                            $attributes['checked'] = 1;
+                                            $attributes['checked'] = 'checked';
                                             $attributes['selected'] = 1;
                                         }
                                     }
@@ -849,7 +847,7 @@ class ExerciseLib
 
                                     if ($debug_mark_answer) {
                                         if ($j == $answerCorrect) {
-                                            $attributes['checked'] = 1;
+                                            $attributes['checked'] = 'checked';
                                             $attributes['selected'] = 1;
                                         }
                                     }
@@ -909,7 +907,7 @@ class ExerciseLib
 
                         if ($debug_mark_answer) {
                             if ($answerCorrect) {
-                                $attributes['checked'] = 1;
+                                $attributes['checked'] = 'checked';
                                 $attributes['selected'] = 1;
                             }
                         }
@@ -977,7 +975,7 @@ class ExerciseLib
 
                             if ($debug_mark_answer) {
                                 if ($key == $answerCorrect) {
-                                    $attributes['checked'] = 1;
+                                    $attributes['checked'] = 'checked';
                                     $attributes['selected'] = 1;
                                 }
                             }

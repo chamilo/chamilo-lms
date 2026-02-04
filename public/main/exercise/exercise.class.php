@@ -147,12 +147,12 @@ class Exercise
         $this->hideExpectedAnswer = false;
         $this->disableHideCorrectAnsweredQuestions = false;
 
-        if (empty($course_id)) {
-            $course_id = api_get_course_int_id();
+        if (empty($courseId)) {
+            $courseId = api_get_course_int_id();
         }
 
-        $this->course = api_get_course_info_by_id($course_id);
-        $this->course_id = $course_id;
+        $this->course = api_get_course_info_by_id($courseId);
+        $this->course_id = $courseId;
 
         $this->sessionId = api_get_session_id();
 
@@ -656,10 +656,7 @@ class Exercise
         $extraFields = []
     ) {
         if (!empty($this->id)) {
-            $category_list = TestCategory::getListOfCategoriesNameForTest(
-                $this->id,
-                false
-            );
+            $category_list = TestCategory::getListOfCategoriesNameForTest($this->id);
             $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
@@ -6519,7 +6516,7 @@ class Exercise
 
         $user_info = api_get_user_info(api_get_user_id());
         $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_show.php?'.
-            api_get_cidreq(true, true, 'qualify').'&id='.$exe_id.'&action=qualify';
+            api_get_cidreq(true, true, 'qualify').'&id='.$exe_id.'&action=qualify&isStudentView=false';
 
         if (!empty($sessionId)) {
             $addGeneralCoach = true;

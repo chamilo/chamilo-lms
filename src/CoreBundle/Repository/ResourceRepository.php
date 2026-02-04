@@ -1083,4 +1083,47 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getOneOrNullResult();
     }
+
+    protected function addOriginalNameQueryBuilder(?string $originalName, ?QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb);
+        if (null === $originalName || '' === trim($originalName)) {
+            return $qb;
+        }
+
+        $qb
+            ->andWhere('file.originalName = :originalName')
+            ->setParameter('originalName', $originalName)
+        ;
+
+        return $qb;
+    }
+
+    public function findResourceByOriginalNameInCourse(
+        string $originalName,
+        Course $course,
+        ?Session $session = null,
+        ?CGroup $group = null
+    ): ?ResourceInterface {
+        $qb = $this->getResourcesByCourseIgnoreVisibility($course, $session, $group);
+
+        $this->addOriginalNameQueryBuilder($originalName, $qb);
+        $qb->setMaxResults(1);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function findResourceByTitleInCourseIgnoreVisibility(
+        string $title,
+        Course $course,
+        ?Session $session = null,
+        ?CGroup $group = null
+    ): ?ResourceInterface {
+        $qb = $this->getResourcesByCourseIgnoreVisibility($course, $session, $group);
+
+        $this->addTitleQueryBuilder($title, $qb);
+        $qb->setMaxResults(1);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }

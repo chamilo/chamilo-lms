@@ -64,19 +64,19 @@ class PageHelper
         ;
         $this->pageCategoryRepository->update($indexCategory);
 
-        $indexCategory = (new PageCategory())
+        $faqCategory = (new PageCategory())
             ->setTitle('faq')
             ->setType('grid')
             ->setCreator($user)
         ;
-        $this->pageCategoryRepository->update($indexCategory);
+        $this->pageCategoryRepository->update($faqCategory);
 
-        $indexCategory = (new PageCategory())
+        $demoCategory = (new PageCategory())
             ->setTitle('demo')
             ->setType('grid')
             ->setCreator($user)
         ;
-        $this->pageCategoryRepository->update($indexCategory);
+        $this->pageCategoryRepository->update($demoCategory);
 
         $page = (new Page())
             ->setTitle('Welcome')
@@ -87,7 +87,6 @@ class PageHelper
             ->setEnabled(true)
             ->setUrl($url)
         ;
-
         $this->pageRepository->update($page);
 
         $indexPage = (new Page())
@@ -106,7 +105,6 @@ class PageHelper
             ->setType('grid')
             ->setCreator($user)
         ;
-
         $this->pageCategoryRepository->update($footerPublicCategory);
 
         $footerPrivateCategory = (new PageCategory())
@@ -114,8 +112,14 @@ class PageHelper
             ->setType('grid')
             ->setCreator($user)
         ;
-
         $this->pageCategoryRepository->update($footerPrivateCategory);
+
+        $menuLinksCategory = (new PageCategory())
+            ->setTitle('menu_links')
+            ->setType('grid')
+            ->setCreator($user)
+        ;
+        $this->pageCategoryRepository->update($menuLinksCategory);
 
         // Categories for extra content in admin blocks.
         foreach (PageCategory::ADMIN_BLOCKS_CATEGORIES as $nameBlock) {
@@ -132,7 +136,6 @@ class PageHelper
             ->setType('grid')
             ->setCreator($user)
         ;
-
         $this->pageCategoryRepository->update($publicCategory);
 
         $introductionCategory = (new PageCategory())

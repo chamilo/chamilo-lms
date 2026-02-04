@@ -17,8 +17,64 @@ This page will contain optimization hints in the future. At this time,
   </p>
   <h2>Avoid dev mode</h2>
   The .env file contains an environment variable called APP_ENV, which is set to "prod" by default
-  on packaged Chamilo systems. This setting can be changed to "dev" to enable development mode.
+  on packaged Chamilo systems. This setting can be changed to "dev" to enable development mode.<br>
   Doing so can have disastrous performance implications, though. If observing performance issues, check the APP_ENV variable in .env as a first step.
+
+  <h2>Avoid debug mode</h2>
+  The .env file contains an environment variable called APP_DEBUG, which is set to "false" by default.<br>
+  Make sure it has not been changed to "true" in production.<br>
+  Debug mode will trigger a lot of extra checks and can slow down the system significantly.<br>
+
+  <h2>HTTP Caching</h2>
+  Thanks to Chamilo 2's integration with the Symfony controller, you can now use HTTP caching relatively easily to improve performance.<br>
+  This is still experimental, so please report any issues you encounter.<br>
+  To enable, edit the config/packages/framework.yaml file and add the following lines at the end of the file:<br>
+      <pre>
+          when@prod:
+            framework:
+              http_cache: true
+      </pre>
+
+  <h2>Enabling OpCache</h2>
+  OpCache is a PHP extension that can speed up the execution of PHP scripts by pre-interpreting parts of scripts that are relatively static.<br>
+  This is great for performance, but it is kind of tricky to set up correctly.<br>
+  When installing the php-opcache extension (which can also be packaged into your PHP installation from the start),
+  you will find a .ini file in the php configuration folder (on Ubuntu <em>/etc/php/8.3/apache2/conf.d/10-opcache.ini</em>) that looks like this:<br>
+  <pre>
+      zend_extension=opcache.so
+      opcache.jit=off
+  </pre>
+  This probably gives you the false impression that OpCache is enabled by default.<br>
+  This is not the case. You still have to add at least the "enable" option set to "1" for OpCache to be working.<br>
+  This is our recommendation for moderately-sized Chamilo systems:<br>
+  <pre>
+      zend_extension=opcache.so
+      opcache.jit=off
+      opcache.enable=1
+      opcache.memory_consumption=128
+      opcache.max_accelerated_files=10000
+  </pre>
+  Once you have done this, you will need to restart PHP for the changes to take effect.<br>
+
+  <h2>Enabling APCu</h2>
+  APCu is a userland caching extension for PHP.<br>
+  It works at a different level than OpCache and allows you to *share* values between PHP processes.<br>
+  So in fact it allows Chamilo to share pre-calculated values between users of the same PHP server.<br>
+  This is particularly useful when some data is not fixed but is particularly heavy to calculate.<br>
+  For example, showing the current number of users online at the same time normally requires a database query that becomes heavier as more users are online.<br>
+  With APCu, this value can be calculated once every 5 minutes instead of once per request, and shared between all users.<br>
+  It does require some specific coding at the Chamilo level, though, and Chamilo 2.0 doesn't do much with that yet,
+  so for now it's a very mild optimization, but as new versions come out, we plan to use it more heavily.<br>
+
+  APCu is normally enabled by default when you install it in your PHP setup, so there's nothing else to do.<br>
+  You can check if APCu is enabled by running <code>php -i | grep apcu</code>
+
+  <h2>PHP-FPM and MPM_EVENT</h2>
+  This is more complex to setup and requires some knowledge of the PHP internals, but it is possible to use PHP-FPM with the MPM_EVENT mode to improve performance.<br>
+  PHP-FPM gives you more control and flexibility, together with a possibility to be moe efficient as it works as a separate process from Apache (unlike modPHP which is the default for PHP + Apache).<br>
+  MPM_EVENT is another process management mode that is more efficient than the default MM_PREFORK mode used when installed with modPHP.<br></br>
+  Using PHP-FPM can be done independently from using MPM_EVENT, but if you use PHP-FPM, there's nothing preventing you from using MPM_EVENT as well, and that's a good thing.<br>
+  We might publish more information on this in the future, but if you do this, don't forget to match the number of workers Apache provides to the pm.max_children setting in the pool configuration, otherwise your web server might hang without much explanation.</br>
 
   <h2>Sessions</h2>
   Chamilo 2 uses sessions to store user data between requests. Sessions are stored on disk by default.<br>

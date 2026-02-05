@@ -95,6 +95,9 @@
     </form>
 
     <LoginOAuth2Buttons />
+    <div class="mt-3">
+      <CategoryLinks category="menu_links" />
+    </div>
   </div>
 </template>
 
@@ -125,6 +128,7 @@ import { useLogin } from "../composables/auth/login"
 import LoginOAuth2Buttons from "./login/LoginOAuth2Buttons.vue"
 import { usePlatformConfig } from "../store/platformConfig"
 import { useRouter } from "vue-router"
+import CategoryLinks from "./page/CategoryLinks.vue"
 
 const { t } = useI18n()
 const router = useRouter()

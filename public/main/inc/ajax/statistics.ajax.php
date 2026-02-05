@@ -1461,7 +1461,7 @@ switch ($action) {
             $dir = api_get_path(SYMFONY_SYS_PATH).'var/';
             $du = exec('du -s '.$dir, $err);
             list($size, $none) = explode("\t", $du);
-            $size = round($size / (1024*1024), 1);
+            $size = round((int) $size / (1024*1024), 1);
             unset($none);
             $limit = '';
             $url = api_get_access_url($accessUrlId)['url'];

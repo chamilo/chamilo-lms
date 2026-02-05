@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\DBAL\Schema\Schema;
 
+use const PATHINFO_FILENAME;
 use const PHP_URL_PATH;
 use const PREG_SET_ORDER;
 

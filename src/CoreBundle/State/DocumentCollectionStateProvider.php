@@ -61,7 +61,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         // By default, documents must be visible in session context including base course content,
         // because CDocument implements ResourceShowCourseResourcesInSessionInterface.
         $includeBaseContent = $sid > 0
-            && \is_a(CDocument::class, ResourceShowCourseResourcesInSessionInterface::class, true);
+            && is_a(CDocument::class, ResourceShowCourseResourcesInSessionInterface::class, true);
 
         // Allow API clients to override behavior (withBaseContent=0/1).
         if (\array_key_exists('withBaseContent', $query)) {

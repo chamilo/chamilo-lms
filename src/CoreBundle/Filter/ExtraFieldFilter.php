@@ -16,10 +16,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\Persistence\ManagerRegistry;
 use InvalidArgumentException;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 
 class ExtraFieldFilter extends AbstractFilter
 {
@@ -100,9 +97,7 @@ class ExtraFieldFilter extends AbstractFilter
                 ]);
 
                 if (!$ef) {
-                    throw new InvalidArgumentException(
-                        sprintf('Extra field "%s" not found.', $fieldVariable)
-                    );
+                    throw new InvalidArgumentException(\sprintf('Extra field "%s" not found.', $fieldVariable));
                 }
 
                 $efvAlias = $queryNameGenerator->generateJoinAlias('efv');

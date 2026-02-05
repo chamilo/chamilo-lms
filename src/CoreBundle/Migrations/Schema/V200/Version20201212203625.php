@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
+use DateTimeImmutable;
 use Doctrine\DBAL\Schema\Schema;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Uid\Uuid;
@@ -63,6 +64,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 $attemptId = isset($matches[1]) && '' !== $matches[1] ? (int) $matches[1] : 0;
                 if ($attemptId <= 0) {
                     error_log('[MIGRATION][teacher_audio] Could not parse attempt id from path, skipping.');
+
                     continue;
                 }
 
@@ -80,6 +82,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 $userId = $this->getAttemptUserId($attempt);
                 if (null === $userId || $userId <= 0) {
                     error_log('[MIGRATION][teacher_audio] Missing attempt user id, skipping.');
+
                     continue;
                 }
 
@@ -91,7 +94,8 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     $asset = (new Asset())
                         ->setCategory(Asset::EXERCISE_FEEDBACK)
                         ->setTitle($fileName)
-                        ->setFile($file);
+                        ->setFile($file)
+                    ;
 
                     $this->entityManager->persist($asset);
                     $this->entityManager->flush();
@@ -171,7 +175,8 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     $asset = (new Asset())
                         ->setCategory(Asset::EXERCISE_ATTEMPT)
                         ->setTitle($fileName)
-                        ->setFile($file);
+                        ->setFile($file)
+                    ;
 
                     $this->entityManager->persist($asset);
                     $this->entityManager->flush();
@@ -242,7 +247,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     if ('folder' === $effectiveFiletype) {
                         $document->setFiletype($systemFolderType);
 
-                        error_log(sprintf(
+                        error_log(\sprintf(
                             '[MIGRATION][documents] Marked system folder (iid=%d, legacyPath=%s, legacySid=%d, type=%s).',
                             $documentId,
                             $normalizedLegacyPath,
@@ -271,6 +276,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 }
                 if (null === $parent->getResourceNode()) {
                     $this->logItemPropertyInconsistency('document', $documentId, $documentPath);
+
                     continue;
                 }
                 $admin = $this->getAdmin();
@@ -309,9 +315,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
         $this->entityManager->clear();
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 
     private function attemptHasFeedback(int $attemptId): bool
     {
@@ -338,7 +342,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
         if (method_exists($attempt, 'getUser')) {
             $u = $attempt->getUser();
 
-            if (is_object($u) && method_exists($u, 'getId')) {
+            if (\is_object($u) && method_exists($u, 'getId')) {
                 return (int) $u->getId();
             }
 
@@ -359,7 +363,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
 
     private function insertAttemptFeedbackRow(int $attemptId, int $userId, Asset $asset): void
     {
-        $now = (new \DateTimeImmutable())->format('Y-m-d H:i:s');
+        $now = (new DateTimeImmutable())->format('Y-m-d H:i:s');
 
         // asset_id column is intentionally not mapped in the entity anymore,
         // but it still exists for the later migration that converts it to ResourceNode/ResourceFile.
@@ -374,12 +378,12 @@ final class Version20201212203625 extends AbstractMigrationChamilo
             'updated_at' => $now,
         ]);
 
-        error_log(sprintf('[MIGRATION][attempt_feedback] Linked asset to attempt (attemptId=%d).', $attemptId));
+        error_log(\sprintf('[MIGRATION][attempt_feedback] Linked asset to attempt (attemptId=%d).', $attemptId));
     }
 
     private function insertAttemptFileRow(int $attemptId, Asset $asset): void
     {
-        $now = (new \DateTimeImmutable())->format('Y-m-d H:i:s');
+        $now = (new DateTimeImmutable())->format('Y-m-d H:i:s');
 
         $this->connection->insert('attempt_file', [
             'id' => Uuid::v4()->toBinary(),
@@ -391,7 +395,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
             'updated_at' => $now,
         ]);
 
-        error_log(sprintf('[MIGRATION][attempt_file] Linked asset to attempt (attemptId=%d).', $attemptId));
+        error_log(\sprintf('[MIGRATION][attempt_file] Linked asset to attempt (attemptId=%d).', $attemptId));
     }
 
     /**
@@ -443,7 +447,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
         }
 
         // Base course shared folder.
-        if (0 === strpos($legacyPath, '/shared_folder')) {
+        if (str_starts_with($legacyPath, '/shared_folder')) {
             return 'user_folder';
         }
 
@@ -451,13 +455,13 @@ final class Version20201212203625 extends AbstractMigrationChamilo
             return 'media_folder';
         }
 
-        if (0 === strpos($legacyPath, '/certificates')) {
+        if (str_starts_with($legacyPath, '/certificates')) {
             return 'cert_folder'; // <= 15 chars
         }
 
         if (
-            0 === strpos($legacyPath, '/chat_history')
-            || 0 === strpos($legacyPath, '/chat_files')
+            str_starts_with($legacyPath, '/chat_history')
+            || str_starts_with($legacyPath, '/chat_files')
         ) {
             return 'chat_folder';
         }

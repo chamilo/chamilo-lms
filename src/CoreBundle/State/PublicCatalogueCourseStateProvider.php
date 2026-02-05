@@ -12,7 +12,6 @@ use ApiPlatform\Doctrine\Orm\Util\QueryNameGenerator;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\CourseCatalogueHelper;

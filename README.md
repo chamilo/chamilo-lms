@@ -51,7 +51,7 @@ Note: AI features (with support for OpenAI, Grok, Gemini, Claude and DeepSeek
 models) and other integrations do require active subscriptions to, or
 availability of, external services/applications.
 
-## Trying out
+## Try it out
 
 You can try out Chamilo at https://campus.chamilo.net/ (use the "Teach courses" option to give yourself creation rights).
 

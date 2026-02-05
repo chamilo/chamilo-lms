@@ -40,6 +40,7 @@
         <BaseSidebarPanelMenu v-model="menuItemsAfterMyCourse" />
       </div>
       <div class="app-sidebar__bottom">
+        <CategoryLinks category="menu_links" />
         <PageList category-title="footer_private" />
 
         <p v-html="t('Created with Chamilo copyright year', [currentYear])" />
@@ -82,6 +83,7 @@ import PageList from "../page/PageList.vue"
 import { useEnrolledStore } from "../../store/enrolledStore"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseSidebarPanelMenu from "../basecomponents/BaseSidebarPanelMenu.vue"
+import CategoryLinks from "../page/CategoryLinks.vue"
 
 const { t } = useI18n()
 const securityStore = useSecurityStore()

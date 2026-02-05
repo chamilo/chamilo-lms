@@ -1,6 +1,7 @@
 <template>
   <div class="p-inputgroup">
     <InputText
+      :id="id"
       :name="inputName"
       :placeholder="inputPlaceholder"
       type="text"
@@ -8,6 +9,7 @@
     <BaseButton
       :icon="buttonIcon"
       :label="buttonLabel"
+      :id="buttonId"
       is-submit
       type="primary"
       @click="$emit('button-click', $event)"
@@ -35,6 +37,16 @@ defineProps({
   buttonIcon: {
     type: String,
     required: true,
+  },
+  id: {
+    type: String,
+    required: false,
+    default: undefined,
+  },
+  buttonId: {
+    type: String,
+    required: false,
+    default: undefined,
   },
 })
 

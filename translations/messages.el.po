@@ -19428,9 +19428,6 @@ msgstr "Διαγραφή παλαιάς βάσης δεδομένων"
 msgid "Remove old tables"
 msgstr "Διαγραφή παλαιών πινάκων"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Συνολικός χώρος που χρησιμοποιείται από το portal %s το όριο είναι %s MB"
-
 msgid "Event message management"
 msgstr "Διαχείριση μηνυμάτων γεγονότων"
 

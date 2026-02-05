@@ -19410,9 +19410,6 @@ msgstr "Yọ ipilẹ data atijọ kuro"
 msgid "Remove old tables"
 msgstr "Yọ awọn tabili atijọ kuro"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Aaye lapapọ ti a lo nipasẹ ẹnu-ọna %s opin jẹ %s MB"
-
 msgid "Event message management"
 msgstr "Ṣiṣakoso ifọrọran iṣẹlẹ"
 

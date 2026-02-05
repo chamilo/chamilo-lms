@@ -19428,9 +19428,6 @@ msgstr "ازالة قاعدة البيانات القديمة"
 msgid "Remove old tables"
 msgstr "ازالة الجداول القديمة"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "مجموع المساحة المستخدمة من قبل النظام %s الحد الاقصى هو %s MB"
-
 msgid "Event message management"
 msgstr "ادارة رسالة الحدث"
 

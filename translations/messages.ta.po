@@ -19414,9 +19414,6 @@ msgstr "பழைய தரவுத்தளத்தை நீக்கு"
 msgid "Remove old tables"
 msgstr "பழைய அட்டவணைகளை நீக்கு"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "போர்ட்டல் %s ஆல் பயன்படுத்தப்பட்ட மொத்த இடம் வரம்பு %s MB"
-
 msgid "Event message management"
 msgstr "நிகழ்வு செய்தி மேலாண்மை"
 

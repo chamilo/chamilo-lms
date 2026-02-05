@@ -19426,9 +19426,6 @@ msgstr "הסר מסד נתונים ישן"
 msgid "Remove old tables"
 msgstr "הסר טבלאות ישנות"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "שטח כולל בשימוש על ידי הפורטל %s מגבלה היא %s MB"
-
 msgid "Event message management"
 msgstr "ניהול הודעות אירועים"
 

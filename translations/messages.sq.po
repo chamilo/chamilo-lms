@@ -19414,9 +19414,6 @@ msgstr "Fshij bazën e të dhënave të vjetër"
 msgid "Remove old tables"
 msgstr "Fshij tabelat e vjetra"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Hapësira totale e përdorur nga portali %s kufiri është %s MB"
-
 msgid "Event message management"
 msgstr "Menaxhimi i mesazheve të ngjarjeve"
 

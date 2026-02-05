@@ -19414,9 +19414,6 @@ msgstr "Հեռացնել հին տվյալների բազան"
 msgid "Remove old tables"
 msgstr "Հեռացնել հին աղյուսակները"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Պորտալի %s օգտագործված տարածքը %s ՄԲ-ն է"
-
 msgid "Event message management"
 msgstr "Իրադարձության հաղորդագրության կառավարում"
 

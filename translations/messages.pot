@@ -19405,9 +19405,6 @@ msgstr ""
 msgid "Remove old tables"
 msgstr ""
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr ""
-
 msgid "Event message management"
 msgstr ""
 
@@ -32482,4 +32479,10 @@ msgid "Modified prompt"
 msgstr ""
 
 msgid "Saved in Documents"
+msgstr ""
+
+msgid "Total space used by %s is %sGB"
+msgstr ""
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr ""

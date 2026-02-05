@@ -19429,9 +19429,6 @@ msgstr "Eliminați baze de date vechi"
 msgid "Remove old tables"
 msgstr "Eliminați tabele vechi"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Spațiul total utilizat de către portalul% limita este% MB"
-
 msgid "Event message management"
 msgstr "Organizare de evenimente"
 

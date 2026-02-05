@@ -14,6 +14,7 @@
     :title="tooltip || (onlyIcon ? label : undefined)"
     :type="isSubmit ? 'submit' : 'button'"
     :name="name"
+    :id="id"
     class="cursor-pointer"
     @click="$emit('click', $event)"
   />
@@ -73,6 +74,11 @@ const props = defineProps({
   },
   name: {
     type: String || undefined,
+    required: false,
+    default: undefined,
+  },
+  id: {
+    type: String,
     required: false,
     default: undefined,
   },

@@ -19413,9 +19413,6 @@ msgstr "حذف پایگاه داده قدیمی"
 msgid "Remove old tables"
 msgstr "حذف جداول قدیمی"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "فضای کل استفاده شده توسط پورتال %s حد %s مگابایت است"
-
 msgid "Event message management"
 msgstr "مدیریت پیام رویداد"
 

@@ -19410,9 +19410,6 @@ msgstr "Tanggalin ang lumang database"
 msgid "Remove old tables"
 msgstr "Tanggalin ang lumang mga table"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Kabuuan ng espasyong ginamit ng portal %s ang limit ay %s MB"
-
 msgid "Event message management"
 msgstr "Pamamahala ng event message"
 

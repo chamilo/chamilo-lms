@@ -19410,9 +19410,6 @@ msgstr "Susa isizuko sedatha esidala"
 msgid "Remove old tables"
 msgstr "Susa iitheyibhile ezindala"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Indawo epheleleyo esetyenzisiweyo yi-portal %s umda ngu %s MB"
-
 msgid "Event message management"
 msgstr "Ulawulo lwemiyeziso yeSiganelo"
 

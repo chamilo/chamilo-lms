@@ -23,6 +23,8 @@
         method="get"
       >
         <BaseInputGroup
+          :id="inputId"
+          :button-id="buttonId"
           :button-label="t('Search')"
           :input-placeholder="t('Keyword')"
           button-icon="search"
@@ -98,6 +100,15 @@ const props = defineProps({
   searchUrl: { type: String, required: false, default: () => null },
   items: { type: Array, required: true, default: () => [] },
 })
+
+// computed IDs for search input and button derived from the title
+const inputId = computed(() => {
+  const raw = (props.title || "").toString().trim()
+  const normalized = raw.replace(/\s+/g, "_").toLowerCase()
+  return (normalized || "search") + "_search"
+})
+
+const buttonId = computed(() => `${inputId.value}_button`)
 
 const visibleItems = computed(() =>
   props.items

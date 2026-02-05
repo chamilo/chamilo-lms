@@ -19415,9 +19415,6 @@ msgstr "Poista vanha tietokanta"
 msgid "Remove old tables"
 msgstr "Poista vanhat taulut"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Portaalin %s kokonaiskäyttö on %s MB rajan verran"
-
 msgid "Event message management"
 msgstr "Tapahtumaviestien hallinta"
 

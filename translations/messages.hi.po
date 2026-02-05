@@ -19410,9 +19410,6 @@ msgstr "पुरानी डेटाबेस हटाएं"
 msgid "Remove old tables"
 msgstr "पुरानी तालिकाएँ हटाएँ"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "पोर्टल %s द्वारा उपयोग की गई कुल जगह %s MB सीमा है"
-
 msgid "Event message management"
 msgstr "घटना संदेश प्रबंधन"
 

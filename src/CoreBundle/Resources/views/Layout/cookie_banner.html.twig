@@ -1,0 +1,101 @@
+{# Cookie banner (C1-compatible behavior) #}
+{% set cookieWarningRaw = chamilo_settings_get('platform.cookie_warning')|default('')|trim|lower %}
+{% set cookieWarningEnabled = (cookieWarningRaw == 'true') %}
+{% set cookieAck = app.request.cookies.get('ChamiloUsesCookies') %}
+{% set youAcceptCookiesText =
+    'By continuing to use this site, you declare you accept its use of cookies.'|trans
+%}
+{% set helpCookieUsageValidationHtml =
+    "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />\nIf needed, the Help section of your browser indicates how to configure cookies.<br /><br />\nFor more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website."|trans
+%}
+{% set noCookiesText =
+    'You do not have cookies support enabled in your browser. Chamilo relies on the feature called "cookies" to store your connection details. This means you will not be able to login if cookies are not enabled. Please change your browser configuration (generally in the Edit -> Preferences menu) and reload this page.'|trans
+%}
+{% if cookieWarningEnabled and cookieAck != 'ok' %}
+    <div id="chamilo-cookie-banner"
+         class="fixed inset-x-0 bottom-0 z-50 border-t border-warning/30 bg-warning/15 backdrop-blur shadow-lg">
+        <div class="mx-auto max-w-7xl px-4 py-3">
+            <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div class="flex items-start gap-3">
+          <span class="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-warning/30 text-xs font-bold text-gray-90"
+                aria-hidden="true">!</span>
+
+                    <div class="text-sm text-gray-90">
+                        <div class="leading-snug">
+                            {{ youAcceptCookiesText }}
+                        </div>
+
+                        <div id="chamilo-cookie-banner-more"
+                             class="mt-2 hidden text-sm leading-relaxed text-gray-90">
+                            {{ helpCookieUsageValidationHtml|raw }}
+                        </div>
+
+                        <div id="chamilo-cookie-banner-nocookies"
+                             class="mt-2 hidden text-sm font-semibold text-danger">
+                            {{ noCookiesText }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 self-start md:self-auto">
+                    <button type="button"
+                            id="chamilo-cookie-banner-toggle"
+                            class="inline-flex items-center gap-1 rounded-md border border-warning/40 bg-white px-3 py-1.5 text-xs font-semibold text-gray-90 shadow-sm hover:bg-warning/10 focus:outline-none focus:ring-2 focus:ring-warning/40">
+                        <span aria-hidden="true">+</span>
+                        <span>{{ 'More'|trans }}</span>
+                    </button>
+
+                    <button type="button"
+                            id="chamilo-cookie-banner-accept"
+                            class="inline-flex items-center gap-1 rounded-md bg-warning px-3 py-1.5 text-xs font-semibold text-warning-button-text shadow-sm hover:bg-warning/90 focus:outline-none focus:ring-2 focus:ring-warning/40">
+                        <span>{{ 'Accept'|trans }}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+
+        const banner = document.getElementById("chamilo-cookie-banner");
+        if (!banner) {
+          return;
+        }
+
+        const more = document.getElementById("chamilo-cookie-banner-more");
+        const toggle = document.getElementById("chamilo-cookie-banner-toggle");
+        const accept = document.getElementById("chamilo-cookie-banner-accept");
+        const noCookies = document.getElementById("chamilo-cookie-banner-nocookies");
+
+        // If cookies are disabled, show warning and disable accept action.
+        if (typeof navigator !== "undefined" && navigator.cookieEnabled === false) {
+          if (noCookies) noCookies.classList.remove("hidden");
+          if (accept) accept.setAttribute("disabled", "disabled");
+          if (accept) accept.classList.add("opacity-50", "cursor-not-allowed");
+          return;
+        }
+
+        if (toggle && more) {
+          toggle.addEventListener("click", function () {
+            more.classList.toggle("hidden");
+          });
+        }
+
+        if (accept) {
+          accept.addEventListener("click", function () {
+            const maxAge = 60 * 60 * 24 * 365; // 1 year
+            let cookie = "ChamiloUsesCookies=ok; Path=/; Max-Age=" + maxAge + "; SameSite=Lax";
+
+            if (window.location && window.location.protocol === "https:") {
+              cookie += "; Secure";
+            }
+
+            document.cookie = cookie;
+            banner.remove();
+          });
+        }
+      })();
+    </script>
+{% endif %}

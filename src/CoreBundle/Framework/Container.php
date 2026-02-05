@@ -170,6 +170,11 @@ class Container
         return str_replace('\\', '/', realpath(__DIR__.'/../../../')).'/';
     }
 
+    public static function getVarDir(): string
+    {
+        return self::getProjectDir().'var/';
+    }
+
     public static function isInstalled(): bool
     {
         return self::getLegacyHelper()->getKernel()->isInstalled();

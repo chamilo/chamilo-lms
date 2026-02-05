@@ -19415,9 +19415,6 @@ msgstr "移除舊資料庫"
 msgid "Remove old tables"
 msgstr "移除舊資料表"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "入口網站 %s 使用的總空間限制為 %s MB"
-
 msgid "Event message management"
 msgstr "事件訊息管理"
 

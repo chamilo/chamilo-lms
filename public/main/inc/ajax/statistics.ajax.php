@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
+use League\Flysystem\FilesystemOperator;
 
 /**
  * Responses to AJAX calls.
@@ -1447,15 +1448,29 @@ switch ($action) {
         if (api_is_windows_os()) {
             $message = get_lang('The space used on disk cannot be measured properly on Windows-based systems.');
         } else {
-            $dir = api_get_path(SYS_PATH);
-            $du = exec('du -sh '.$dir, $err);
+            // @TODO Scanning the var folder should be done through oneup_flysystem
+            /** @var FilesystemOperator $assetFS */
+            //$assetFS = Container::$container->get('oneup_flysystem.asset_filesystem');
+            /** @var FilesystemOperator $resourceFS */
+            //$resourceFS = Container::$container->get('oneup_flysystem.resource_filesystem');
+            /** @var FilesystemOperator $themesFS */
+            //$themesFS = Container::$container->get('oneup_flysystem.themes_filesystem');
+            /** @var FilesystemOperator $pluginsFS */
+            //$pluginsFS = Container::$container->get('oneup_flysystem.plugins_filesystem');
+
+            $dir = api_get_path(SYMFONY_SYS_PATH).'var/';
+            $du = exec('du -s '.$dir, $err);
             list($size, $none) = explode("\t", $du);
+            $size = round((int) $size / (1024*1024), 1);
             unset($none);
-            $limit = 0;
-            if (isset($_configuration[$accessUrlId]['hosting_limit_disk_space'])) {
-                $limit = $_configuration[$accessUrlId]['hosting_limit_disk_space'];
+            $limit = '';
+            $url = api_get_access_url($accessUrlId)['url'];
+            if (!empty($_configuration[$accessUrlId]['hosting_limit_disk_space'])) {
+                $limit = round($_configuration[$accessUrlId]['hosting_limit_disk_space'] / (1024), 1);
+                $message = sprintf(get_lang('Total space used by portal %s is %sGB (limit is set to %sGB)'), $url, $size, $limit);
+            } else {
+                $message = sprintf(get_lang('Total space used by %s is %sGB'), $url, $size);
             }
-            $message = sprintf(get_lang('Total space used by portal %s limit is %s MB'), $size, $limit);
         }
         echo Display::tag('H5', $message, ['style' => 'margin-bottom: 25px;']);
         break;

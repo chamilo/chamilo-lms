@@ -19410,9 +19410,6 @@ msgstr "পুরানো ডাটাবেস মুছুন"
 msgid "Remove old tables"
 msgstr "পুরানো টেবিল মুছুন"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "পোর্টাল %s দ্বারা ব্যবহৃত মোট স্থান %s MB সীমা"
-
 msgid "Event message management"
 msgstr "ঘটনা বার্তা ব্যবস্থাপনা"
 

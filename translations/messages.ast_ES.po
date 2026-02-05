@@ -19415,9 +19415,6 @@ msgstr "Eliminar base de datos antigua"
 msgid "Remove old tables"
 msgstr "Eliminar tables antiguas"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Espaciu total usáu pol portal %s llimitáu a %s MB"
-
 msgid "Event message management"
 msgstr "Xestión de mensaxes d'eventos"
 

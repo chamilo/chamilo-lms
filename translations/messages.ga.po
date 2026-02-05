@@ -19414,9 +19414,6 @@ msgstr "Bain seanbhunachar sonraí"
 msgid "Remove old tables"
 msgstr "Bain sean-táblaí"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Spás iomlán úsáidte ag an tairseach %s tá teorainn %s MB"
-
 msgid "Event message management"
 msgstr "Bainistíocht teachtaireachtaí imeachta"
 

@@ -19413,9 +19413,6 @@ msgstr "Padam pangkalan data lama"
 msgid "Remove old tables"
 msgstr "Padam jadual lama"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Jumlah ruang digunakan oleh portal %s had adalah %s MB"
-
 msgid "Event message management"
 msgstr "Pengurusan mesej peristiwa"
 

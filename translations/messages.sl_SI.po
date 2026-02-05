@@ -19429,9 +19429,6 @@ msgstr "Odstrani stare podatkovne baze"
 msgid "Remove old tables"
 msgstr "Odstrani stare tabele"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Celoten s strani portala porabljen prostor %s omejitev znaša %s MiB"
-
 msgid "Event message management"
 msgstr "Upravljanje dogodkovnih sporočil"
 

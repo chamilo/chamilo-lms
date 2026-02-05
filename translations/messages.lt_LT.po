@@ -19415,9 +19415,6 @@ msgstr "Pašalinti seną duomenų bazę"
 msgid "Remove old tables"
 msgstr "Pašalinti senas lenteles"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Portalas %s užima iš viso %s MB vietos"
-
 msgid "Event message management"
 msgstr "Įvykio pranešimų valdymas"
 

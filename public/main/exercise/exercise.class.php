@@ -6516,7 +6516,7 @@ class Exercise
 
         $user_info = api_get_user_info(api_get_user_id());
         $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_show.php?'.
-            api_get_cidreq(true, true, 'qualify').'&id='.$exe_id.'&action=qualify';
+            api_get_cidreq(true, true, 'qualify').'&id='.$exe_id.'&action=qualify&isStudentView=false';
 
         if (!empty($sessionId)) {
             $addGeneralCoach = true;

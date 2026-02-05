@@ -19413,9 +19413,6 @@ msgstr "Régi adatbázis törlése"
 msgid "Remove old tables"
 msgstr "Régi táblák törlése"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "A portál által használt teljes hely %s limit %s MB"
-
 msgid "Event message management"
 msgstr "Esemény üzenet kezelés"
 

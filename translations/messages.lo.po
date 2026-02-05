@@ -21044,9 +21044,6 @@ msgstr "ລຶບຖານຂໍ້ມູນເກົ່າ"
 msgid "Remove old tables"
 msgstr "ລຶບຕາຕະລາງເກົ່າ"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "ພື້ນທີ່ທັງໝົດທີ່ໃຊ້ໂດຍປະຕູ %s ມີຂີດຈຳກັດຢູ່ທີ່ %s ເມກະໄບຕ໌"
-
 #, fuzzy
 msgid "Event message management"
 msgstr "ການຈັດການຂໍ້ຄວາມເຫດການ"

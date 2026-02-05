@@ -44,16 +44,32 @@ final class Version20210930130343 extends AbstractMigrationChamilo
         /** @var Tool|null $homepageToolEntity */
         $homepageToolEntity = $toolRepo->findOneBy(['title' => 'course_homepage']);
         if (null === $homepageToolEntity) {
-            @error_log('[Migration Version20210930130343] Tool "course_homepage" not found. Skipping migration.');
-
+            error_log('[Migration Version20210930130343] Tool "course_homepage" not found. Skipping migration.');
             return;
         }
+
+        // We store the Tool ID and always re-create a managed reference after EntityManager::clear().
+        // Otherwise Doctrine may treat the Tool as a "new/detached entity" and fail on flush.
+        $homepageToolId = (int) $homepageToolEntity->getId();
 
         $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = (int) $course->getId();
+
+            // Re-load course from repository to ensure it is managed in this context.
+            /** @var Course|null $managedCourse */
+            $managedCourse = $courseRepo->find($courseId);
+            if (null === $managedCourse) {
+                error_log('[Migration Version20210930130343] Course not found for course_id='.$courseId.'. Skipping.');
+                continue;
+            }
+
+            // Always get a managed reference for the homepage Tool (safe after clear()).
+            /** @var Tool $homepageToolRef */
+            $homepageToolRef = $this->entityManager->getReference(Tool::class, $homepageToolId);
+
             $sql = "SELECT * FROM c_tool_intro WHERE c_id = {$courseId} ORDER BY iid";
             $result = $this->connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
@@ -63,7 +79,7 @@ final class Version20210930130343 extends AbstractMigrationChamilo
                 $admin = $this->getAdmin();
                 $existingBaseTool = $cToolRepo->findOneBy([
                     'title' => 'course_homepage',
-                    'course' => $course,
+                    'course' => $managedCourse,
                     'session' => null,
                 ]);
 
@@ -74,12 +90,12 @@ final class Version20210930130343 extends AbstractMigrationChamilo
 
                 $baseTool = (new CTool())
                     ->setTitle('course_homepage')
-                    ->setCourse($course)
+                    ->setCourse($managedCourse)
                     ->setSession(null)
-                    ->setTool($homepageToolEntity)
+                    ->setTool($homepageToolRef)
                     ->setCreator($admin)
-                    ->setParent($course)
-                    ->addCourseLink($course)
+                    ->setParent($managedCourse)
+                    ->addCourseLink($managedCourse)
                 ;
                 $this->entityManager->persist($baseTool);
                 $this->entityManager->flush();
@@ -90,8 +106,7 @@ final class Version20210930130343 extends AbstractMigrationChamilo
             foreach ($items as $itemData) {
                 $id = (int) ($itemData['iid'] ?? 0);
                 if ($id <= 0) {
-                    @error_log('[Migration Version20210930130343] Skipping legacy row with invalid iid. course_id='.$courseId);
-
+                    error_log('[Migration Version20210930130343] Skipping legacy row with invalid iid. course_id='.$courseId);
                     continue;
                 }
 
@@ -101,8 +116,7 @@ final class Version20210930130343 extends AbstractMigrationChamilo
                 /** @var CToolIntro|null $intro */
                 $intro = $introRepo->find($id);
                 if (null === $intro) {
-                    @error_log('[Migration Version20210930130343] CToolIntro entity not found for iid='.$id.' course_id='.$courseId);
-
+                    error_log('[Migration Version20210930130343] CToolIntro entity not found for iid='.$id.' course_id='.$courseId);
                     continue;
                 }
 
@@ -116,27 +130,23 @@ final class Version20210930130343 extends AbstractMigrationChamilo
                 if ($sessionId > 0) {
                     $session = $sessionRepo->find($sessionId);
                     if (null === $session) {
-                        @error_log('[Migration Version20210930130343] Skipping intro iid='.$id.' because session_id='.$sessionId.' does not exist.');
-
+                        error_log('[Migration Version20210930130343] Skipping intro iid='.$id.' because session_id='.$sessionId.' does not exist.');
                         continue;
                     }
                 }
 
                 $admin = $this->getAdmin();
 
-                // Reload course from repository to ensure it is managed in this context.
-                $managedCourse = $courseRepo->find($courseId);
-                if (null === $managedCourse) {
-                    @error_log('[Migration Version20210930130343] Course not found for course_id='.$courseId.'. Skipping.');
-
-                    continue;
-                }
+                // We may have cleared the EntityManager at the end of a previous course.
+                // So we must always use a managed Tool reference for associations.
+                /** @var Tool $homepageToolRef */
+                $homepageToolRef = $this->entityManager->getReference(Tool::class, $homepageToolId);
 
                 /** @var CTool|null $cTool */
                 $cTool = null;
 
                 if ('course_homepage' === $toolName) {
-                    // avoid creating duplicate homepage tools.
+                    // Avoid creating duplicate homepage tools.
                     // Reuse the existing tool for the same (course + session) context if it exists.
                     $cTool = $cToolRepo->findOneBy([
                         'title' => 'course_homepage',
@@ -149,7 +159,7 @@ final class Version20210930130343 extends AbstractMigrationChamilo
                             ->setTitle('course_homepage')
                             ->setCourse($managedCourse)
                             ->setSession($session)
-                            ->setTool($homepageToolEntity)
+                            ->setTool($homepageToolRef)
                             ->setCreator($admin)
                             ->setParent($managedCourse)
                             ->addCourseLink($managedCourse, $session)
@@ -168,8 +178,7 @@ final class Version20210930130343 extends AbstractMigrationChamilo
                 }
 
                 if (null === $cTool) {
-                    @error_log('[Migration Version20210930130343] Could not resolve CTool for tool="'.$toolName.'" course_id='.$courseId.' session_id='.$sessionId);
-
+                    error_log('[Migration Version20210930130343] Could not resolve CTool for tool="'.$toolName.'" course_id='.$courseId.' session_id='.$sessionId);
                     continue;
                 }
 

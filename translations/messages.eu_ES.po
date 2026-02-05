@@ -19420,9 +19420,6 @@ msgstr "Kendu datu base zaharra"
 msgid "Remove old tables"
 msgstr "Kendu taula zaharrak"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "%s atariak erabiltzen duen memoriaren muga, guztira, %s MB-koa da"
-
 msgid "Event message management"
 msgstr "Gertaeren gaineko mezuen kudeaketa"
 

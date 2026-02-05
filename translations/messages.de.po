@@ -19480,9 +19480,6 @@ msgstr "Alte Datenbank entfernen"
 msgid "Remove old tables"
 msgstr "Alte Tabellen entfernen"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Gesamtspeicherplatz des Plattformlimits von %s beträgt %s MB"
-
 msgid "Event message management"
 msgstr "Verwaltung Email-Templates"
 

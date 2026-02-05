@@ -19413,9 +19413,6 @@ msgstr "Hapus database lama"
 msgid "Remove old tables"
 msgstr "Hapus tabel lama"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Total ruang yang digunakan oleh portal %s batas adalah %s MB"
-
 msgid "Event message management"
 msgstr "Manajemen pesan acara"
 

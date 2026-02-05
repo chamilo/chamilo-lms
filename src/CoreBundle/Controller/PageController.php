@@ -103,4 +103,25 @@ class PageController extends AbstractController
             'page' => $page,
         ]);
     }
+
+    /**
+     * Public endpoint used by Vue (sidebar + login page) to render legal menu links.
+     *
+     * GET /pages/_category-links?category=menu_links&locale=fr_FR
+     */
+    #[Route('/_category-links', name: 'public_page_category_links', methods: ['GET'])]
+    public function categoryLinks(Request $request, PageRepository $pageRepo): JsonResponse
+    {
+        $accessUrl = $this->accessUrlHelper->getCurrent();
+        $locale = trim((string) $request->query->get('locale', ''));
+        $category = trim((string) $request->query->get('category', ''));
+
+        if ('' === $category) {
+            return $this->json(['items' => []]);
+        }
+
+        $items = $pageRepo->findPublicLinksByCategoryWithLocaleFallback($accessUrl, $category, $locale);
+
+        return $this->json(['items' => $items]);
+    }
 }

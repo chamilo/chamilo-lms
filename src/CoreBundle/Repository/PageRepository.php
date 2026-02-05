@@ -102,4 +102,71 @@ final class PageRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    public function findPublicLinksByCategoryWithLocaleFallback(
+        AccessUrl $accessUrl,
+        string $categoryTitle,
+        string $locale
+    ): array {
+        $locale = trim($locale);
+        $prefix = '' !== $locale ? substr($locale, 0, 2) : '';
+
+        // Exact locale
+        if ('' !== $locale) {
+            $items = $this->createQueryBuilder('p')
+                ->select('p.title AS title, p.slug AS slug')
+                ->innerJoin('p.category', 'c')
+                ->andWhere('p.enabled = true')
+                ->andWhere('p.url = :url')
+                ->andWhere('c.title = :cat')
+                ->andWhere('p.locale = :loc')
+                ->setParameter('url', $accessUrl)
+                ->setParameter('cat', $categoryTitle)
+                ->setParameter('loc', $locale)
+                ->orderBy('p.title', 'ASC')
+                ->getQuery()
+                ->getArrayResult()
+            ;
+
+            if (!empty($items)) {
+                return $items;
+            }
+        }
+
+        // Prefix locale (e.g. "fr")
+        if ('' !== $prefix) {
+            $items = $this->createQueryBuilder('p')
+                ->select('p.title AS title, p.slug AS slug')
+                ->innerJoin('p.category', 'c')
+                ->andWhere('p.enabled = true')
+                ->andWhere('p.url = :url')
+                ->andWhere('c.title = :cat')
+                ->andWhere('p.locale LIKE :prefix')
+                ->setParameter('url', $accessUrl)
+                ->setParameter('cat', $categoryTitle)
+                ->setParameter('prefix', $prefix.'%')
+                ->orderBy('p.title', 'ASC')
+                ->getQuery()
+                ->getArrayResult()
+            ;
+
+            if (!empty($items)) {
+                return $items;
+            }
+        }
+
+        // Any locale
+        return $this->createQueryBuilder('p')
+            ->select('p.title AS title, p.slug AS slug')
+            ->innerJoin('p.category', 'c')
+            ->andWhere('p.enabled = true')
+            ->andWhere('p.url = :url')
+            ->andWhere('c.title = :cat')
+            ->setParameter('url', $accessUrl)
+            ->setParameter('cat', $categoryTitle)
+            ->orderBy('p.title', 'ASC')
+            ->getQuery()
+            ->getArrayResult()
+            ;
+    }
 }

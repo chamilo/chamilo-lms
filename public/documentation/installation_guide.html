@@ -7,14 +7,26 @@
 </head>
 <body>
 <h1>Chamilo 2 installation guide</h1>
-  <p>
+
       This is the official Chamilo installation guide for version 2+.
-  </p>
+      There are many ways to install Chamilo, depending on your needs. Some of these ways, from easiest but less flexible, to most complex but most flexible, are:
+      <ul>
+        <li>Softaculous (3rd party installer)</li>
+        <li>Installatron (3rd party installer)</li>
+        <li>Web panel (managed hosting)</li>
+        <li>Docker image (with or without Kubernetes or equivalent)</li>
+        <li>Dedicated Windows server/Virtual machine</li>
+        <li>Dedicated Linux server/Virtual machine</li>
+      </ul>
+      The instructions below focus on the most difficult installation procedures.<br>
+      We believe third-party installers will make it easier for you by abstracting the complexities of your own setup.<br>
+      This ease of installation is usually balanced with a lower scalability or adaptability, but they are good solutions to start.<br>
+
   <h2>1. Requirements</h2>
   <a id="requirements" class="anchor"></a>
 
   This version of Chamilo requires the following software stack.
-  It might be installed in other contexts as PHP is very portable, but the following has been thoroughly tested for production environments.
+  It might be installed in other contexts, as PHP is very portable, but the following has been thoroughly tested for production environments.
   <ul>
       <li>Apache 2.4+ (with mod-rewrite enabled)</li>
       <li>MariaDB 10+ or MySQL 5+</li>

@@ -74,7 +74,6 @@ class CkEditor extends Editor
             $style .= api_get_css(ChamiloApi::getEditorDocStylePath());
             $style .= api_get_css_asset('ckeditor/plugins/codesnippet/lib/highlight/styles/default.css');
             $style .= api_get_asset('ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js');
-            $style .= '<script>hljs.initHighlightingOnLoad();</script>';
         }
 
         $html = '<textarea id="'.$this->getTextareaId().'" name="'.$this->getName().'" class="ckeditor">

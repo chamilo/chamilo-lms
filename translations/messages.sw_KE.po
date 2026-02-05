@@ -19410,9 +19410,6 @@ msgstr "Ondoa hifadhidata ya zamani"
 msgid "Remove old tables"
 msgstr "Ondoa majedwali ya zamani"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Naibu wa jumla wa nafasi inayotumiwa na lango %s kikomo ni %s MB"
-
 msgid "Event message management"
 msgstr "Usimamizi wa ujumbe wa tukio"
 

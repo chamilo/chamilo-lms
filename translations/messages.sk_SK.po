@@ -19428,9 +19428,6 @@ msgstr "Odstrániť staré databázy"
 msgid "Remove old tables"
 msgstr "Odstrániť staré tabuľky"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Celkové miesto používané portálom %s limit je %s MB"
-
 msgid "Event message management"
 msgstr "Správa správ udalosti"
 

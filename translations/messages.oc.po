@@ -19410,9 +19410,6 @@ msgstr "Suprimir la basa de donadas anciana"
 msgid "Remove old tables"
 msgstr "Suprimir las taulas ancianas"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Espaci total utilizat pel portal %s limit es %s MB"
-
 msgid "Event message management"
 msgstr "Gestion dels messatges d'esdeveniments"
 

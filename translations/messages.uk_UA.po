@@ -19410,9 +19410,6 @@ msgstr "Видалити стару базу даних"
 msgid "Remove old tables"
 msgstr "Видалити старі таблиці"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Загальний простір, використаний порталом %s, ліміт %s МБ"
-
 msgid "Event message management"
 msgstr "Керування повідомленнями подій"
 

@@ -19429,9 +19429,6 @@ msgstr "Rimuovi database obsoleto"
 msgid "Remove old tables"
 msgstr "Rimuovi tabelle obsolete"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Limite dello spazio totale usato dal portale %s è pari a %sMB"
-
 msgid "Event message management"
 msgstr "Gestione messaggistica eventi"
 

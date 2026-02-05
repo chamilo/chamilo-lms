@@ -19415,9 +19415,6 @@ msgstr "删除旧数据库"
 msgid "Remove old tables"
 msgstr "删除旧表"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "门户 %s 使用的总空间限制为 %s MB"
-
 msgid "Event message management"
 msgstr "事件消息管理"
 

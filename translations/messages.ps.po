@@ -19410,9 +19410,6 @@ msgstr "زوړ ډیټابیس له منځه یوسئ"
 msgid "Remove old tables"
 msgstr "زوړې میزونه له منځه یوسئ"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "د پورټل %s لخوا کارول شوی ټول فضای %s MB حد دی"
-
 msgid "Event message management"
 msgstr "د پیښې پیغام مدیریت"
 

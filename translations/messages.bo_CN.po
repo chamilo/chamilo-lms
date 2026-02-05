@@ -19410,9 +19410,6 @@ msgstr ""
 msgid "Remove old tables"
 msgstr ""
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr ""
-
 msgid "Event message management"
 msgstr ""
 

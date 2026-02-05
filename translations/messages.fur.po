@@ -19410,9 +19410,6 @@ msgstr "Scjare il database vecjo"
 msgid "Remove old tables"
 msgstr "Scjare les tabellis vecjis"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Spazi total doprât dal portal %s limit e %s MB"
-
 msgid "Event message management"
 msgstr "Gestiyon des messadis dai events"
 

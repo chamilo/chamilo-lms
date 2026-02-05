@@ -19410,9 +19410,6 @@ msgstr "Tirtir keydka hore"
 msgid "Remove old tables"
 msgstr "Tirtir miisaska hore"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Wadarta meel bannaan ee portal %s xadku waa %s MB"
-
 msgid "Event message management"
 msgstr "Maamulka farriinta dhacdada"
 

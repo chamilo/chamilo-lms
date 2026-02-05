@@ -19415,9 +19415,6 @@ msgstr "ลบฐานข้อมูลเก่า"
 msgid "Remove old tables"
 msgstr "ลบตารางเก่า"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "พื้นที่ทั้งหมดที่ใช้โดยพอร์ทัล %s จำกัดที่ %s MB"
-
 msgid "Event message management"
 msgstr "การจัดการข้อความเหตุการณ์"
 

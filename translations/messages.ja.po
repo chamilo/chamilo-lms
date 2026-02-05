@@ -19479,9 +19479,6 @@ msgstr "古いデータベースを削除"
 msgid "Remove old tables"
 msgstr "古いテーブルを削除"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "ポータル %s の使用総容量は %s MB の制限です"
-
 msgid "Event message management"
 msgstr "イベントメッセージ管理"
 

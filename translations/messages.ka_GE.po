@@ -19410,9 +19410,6 @@ msgstr "ძველი მონაცემთა ბაზის წაშლ
 msgid "Remove old tables"
 msgstr "ძველი ცხრილების წაშლა"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "პორტალ %s-ის მიერ გამოყენებული საერთო ადგილი %s MB-ია"
-
 msgid "Event message management"
 msgstr "მოვლენის შეტყობინების მართვა"
 

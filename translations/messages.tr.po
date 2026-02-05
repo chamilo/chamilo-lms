@@ -19415,9 +19415,6 @@ msgstr "Eski veritabanını kaldır"
 msgid "Remove old tables"
 msgstr "Eski tabloları kaldır"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Portal %s tarafından kullanılan toplam alan %s MB limitidir"
-
 msgid "Event message management"
 msgstr "Olay mesajı yönetimi"
 

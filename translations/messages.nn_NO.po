@@ -19413,9 +19413,6 @@ msgstr "Fjern gamal database"
 msgid "Remove old tables"
 msgstr "Fjern gamle tabellar"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Totalt plass brukt av portal %s grense er %s MB"
-
 msgid "Event message management"
 msgstr "Hendelsesmeldingadministrering"
 

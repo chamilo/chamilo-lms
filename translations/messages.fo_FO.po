@@ -19410,9 +19410,6 @@ msgstr "Fjarne gamlan dátagrunn"
 msgid "Remove old tables"
 msgstr "Fjarne gamlar tabellir"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Heildar pláss brúkt av portali %s tak er %s MB"
-
 msgid "Event message management"
 msgstr "Viðburða boðastýring"
 

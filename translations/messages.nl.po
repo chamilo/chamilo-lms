@@ -19659,9 +19659,6 @@ msgstr "Verwijder oude database"
 msgid "Remove old tables"
 msgstr "Verwijder oude tabellen"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Totale ruimte gebruikt door portaal %s limiet is %s MB"
-
 msgid "Event message management"
 msgstr "Beheer van evenementberichten"
 

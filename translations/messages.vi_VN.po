@@ -19415,9 +19415,6 @@ msgstr "Xóa cơ sở dữ liệu cũ"
 msgid "Remove old tables"
 msgstr "Xóa bảng cũ"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Tổng không gian sử dụng bởi cổng %s giới hạn là %s MB"
-
 msgid "Event message management"
 msgstr "Quản lý thông điệp sự kiện"
 

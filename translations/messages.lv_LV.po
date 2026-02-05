@@ -19414,9 +19414,6 @@ msgstr "Dzēst veco datubāzi"
 msgid "Remove old tables"
 msgstr "Dzēst vecās tabulas"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Portāla %s izmantotās vietas kopums ir %s MB"
-
 msgid "Event message management"
 msgstr "Notikuma ziņojumu pārvaldība"
 

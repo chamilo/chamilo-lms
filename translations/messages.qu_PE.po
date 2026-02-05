@@ -19415,9 +19415,6 @@ msgstr "Ñawpaq yachaykuyta qichuy"
 msgid "Remove old tables"
 msgstr "Ñawpaq tablakunata qichuy"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Portal %s nisqap %s MB kimsakuy hallpʼapiq"
-
 msgid "Event message management"
 msgstr "Willakuy willakuy kamachisqa"
 

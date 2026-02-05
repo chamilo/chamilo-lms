@@ -19415,9 +19415,6 @@ msgstr "Forigi malnovan datumbazon"
 msgid "Remove old tables"
 msgstr "Forigi malnovajn tabelojn"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Totala spaco uzita de portalo %s limo estas %s MB"
-
 msgid "Event message management"
 msgstr "Administrado de mesaĝoj de eventoj"
 

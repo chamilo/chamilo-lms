@@ -19414,9 +19414,6 @@ msgstr "ဒေတာဘေ့စ်ဟောင်းကို ဖယ်ရှ�
 msgid "Remove old tables"
 msgstr "ဇယားဟောင်းများကို ဖယ်ရှားပါ"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "ပေါ်တယ် %s မှ အသုံးပြုထားသော စုစုပေါင်းနေရာသည် %s MB ဖြစ်သည်"
-
 msgid "Event message management"
 msgstr "ဖြစ်ရပ်စာစီမံခန့်ခွဲမှု"
 

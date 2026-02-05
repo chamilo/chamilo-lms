@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\CourseCatalogueHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -38,6 +39,7 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         private SettingsManager $settingsManager,
         private AccessUrlHelper $accessUrlHelper,
         private TranslatorInterface $translator,
+        private CourseCatalogueHelper $courseCatalogueHelper,
     ) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
@@ -78,6 +80,11 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
             $context
         );
 
+        /*dd(
+            $queryBuilder->getQuery()->getSQL(),
+            $queryBuilder->getParameters()->toArray(),
+        );*/
+
         /** @var Course $course */
         foreach ($paginator as $course) {
             $course->subscribed = $course->hasSubscriptionByUser($user);
@@ -90,48 +97,22 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
     {
         $qb = $this->courseRepository->createQueryBuilder('c');
 
-        if ($accessUrl = $this->accessUrlHelper->getCurrent()) {
-            $qb
-                ->innerJoin('c.urls', 'aurc')
-                ->andWhere('aurc.url = :accessUrl')
-                ->setParameter('accessUrl', $accessUrl->getId())
-            ;
-        }
-
-        $onlyShowSelectedCourses = 'true' === $this->settingsManager->getSetting('catalog.only_show_selected_courses');
-        $selectedCategories = $this->settingsManager->getSetting('catalog.only_show_course_from_selected_category');
-
-        $visibilities = [Course::CLOSED, Course::HIDDEN];
-
-        if ('true' === $this->settingsManager->getSetting('catalog.course_catalog_hide_private', true)) {
-            $visibilities[] = Course::REGISTERED;
-        }
-
-        if (!empty($selectedCategories)) {
-            $qb
-                ->innerJoin('c.categories', 'cat')
-                ->andWhere(
-                    $qb->expr()->in('cat.code', ':selected_categories')
-                )
-                ->setParameter('selected_categories', $selectedCategories)
-            ;
-        }
-
-        if ($onlyShowSelectedCourses) {
+        if ($this->accessUrlHelper->isMultiple()) {
             $qb
                 ->innerJoin(
-                    ExtraFieldValues::class,
-                    'efv',
+                    'c.urls',
+                    'aurc',
                     Join::WITH,
-                    $qb->expr()->eq('efv.fieldValue', '1')
+                    $qb->expr()->eq('aurc.url', ':accessUrl')
                 )
+                ->setParameter('accessUrl', $this->accessUrlHelper->getCurrent()->getId())
             ;
         }
 
-        $qb
-            ->andWhere($qb->expr()->notIn('c.visibility', ':visibilities'))
-            ->setParameter('visibilities', $visibilities)
-        ;
+        $this->courseCatalogueHelper->addAvoidedCoursesCondition($qb);
+        $this->courseCatalogueHelper->addOnlySelectedCategoriesCondition($qb);
+        $this->courseCatalogueHelper->addShowInCatalogueCondition($qb);
+        $this->courseCatalogueHelper->addVisibilityCondition($qb, true);
 
         return $qb;
     }

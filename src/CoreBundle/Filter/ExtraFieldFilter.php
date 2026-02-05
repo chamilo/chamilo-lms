@@ -16,7 +16,10 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 use InvalidArgumentException;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 
 class ExtraFieldFilter extends AbstractFilter
 {
@@ -74,6 +77,8 @@ class ExtraFieldFilter extends AbstractFilter
             return;
         }
 
+        $efRepo = $this->managerRegistry->getRepository(ExtraField::class);
+
         $countExtraFields = \count($context['filters'][$this->fieldProperty] ?? []);
         $countExtraFieldValues = \count($context['filters'][$this->fieldValueProperty] ?? []);
 
@@ -87,30 +92,32 @@ class ExtraFieldFilter extends AbstractFilter
 
         if ($property === $this->fieldProperty) {
             foreach ($value as $idx => $fieldVariable) {
+                $ef = $efRepo->findOneBy([
+                    'itemType' => $itemType,
+                    'variable' => $fieldVariable,
+                    'filter' => true,
+                    'visibleToSelf' => true,
+                ]);
+
+                if (!$ef) {
+                    throw new InvalidArgumentException(
+                        sprintf('Extra field "%s" not found.', $fieldVariable)
+                    );
+                }
+
                 $efvAlias = $queryNameGenerator->generateJoinAlias('efv');
-                $efAlias = $queryNameGenerator->generateJoinAlias('ef');
-                $itemTypeName = $queryNameGenerator->generateParameterName('itemType');
-                $variableName = $queryNameGenerator->generateParameterName('variable');
 
                 $queryBuilder
                     ->innerJoin(
                         ExtraFieldValues::class,
                         $efvAlias,
                         Join::WITH,
-                        "$alias.id = $efvAlias.itemId"
-                    )
-                    ->innerJoin("$efvAlias.field", $efAlias)
-                    ->andWhere(
                         $queryBuilder->expr()->andX(
-                            $queryBuilder->expr()->eq("$efAlias.filter", true),
-                            $queryBuilder->expr()->eq("$efAlias.visibleToSelf", true)
+                            $queryBuilder->expr()->eq("$efvAlias.field", $ef->getId()),
+                            $queryBuilder->expr()->eq("$alias.id", "$efvAlias.itemId")
                         )
                     )
-                    ->andWhere($queryBuilder->expr()->eq("$efAlias.itemType", ":$itemTypeName"))
-                    ->andWhere($queryBuilder->expr()->eq("$efAlias.variable", ":$variableName"))
                     ->andWhere($queryBuilder->expr()->eq("$efvAlias.fieldValue", ":valueName_$idx"))
-                    ->setParameter($itemTypeName, $itemType)
-                    ->setParameter($variableName, $fieldVariable)
                 ;
             }
 

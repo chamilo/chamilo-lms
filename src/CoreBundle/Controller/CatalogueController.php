@@ -232,7 +232,7 @@ class CatalogueController extends AbstractController
         $allowed = array_map('strval', $settings['extra_fields_in_search_form'] ?? []);
 
         $ef = new ExtraField('course');
-        $raw = $ef->get_all();
+        $raw = $ef->get_all(['filter = ?' => 1, 'AND visible_to_self = ?' => 1], 'option_order');
 
         $mapped = array_map(function ($f) {
             $type = (int) $f['value_type'];

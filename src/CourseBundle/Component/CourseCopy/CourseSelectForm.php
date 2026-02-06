@@ -40,9 +40,24 @@ class CourseSelectForm
         return 'inline-flex items-center gap-2 rounded-md border border-gray-30 bg-white px-3 py-1.5 text-sm font-medium text-gray-90 shadow-sm hover:bg-gray-10 focus:outline-none focus:ring-2 focus:ring-primary/20';
     }
 
+    private static function twBtnPrimary(): string
+    {
+        return 'inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold shadow-sm hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/20';
+    }
+
+    private static function twBtnPrimaryStyle(): string
+    {
+        return 'background: rgb(var(--color-primary-base, 37 99 235)); color: rgb(var(--color-primary-button-text, 255 255 255));';
+    }
+
     private static function twCheckbox(): string
     {
         return 'h-4 w-4 rounded border-gray-30 text-primary focus:ring-primary/20';
+    }
+
+    private static function twItemRow(): string
+    {
+        return 'rounded-md border border-gray-20 bg-white px-3 py-2 hover:bg-gray-10';
     }
 
     private static function traceEnabled(): bool
@@ -103,12 +118,10 @@ class CourseSelectForm
             return '/';
         }
 
-        // Ensure leading slash
         if ($s[0] !== '/') {
             $s = '/'.$s;
         }
 
-        // Remove any repeated "/document" prefixes
         while (preg_match('#^/document(/|$)#', $s) === 1) {
             $s = substr($s, strlen('/document'));
             if ($s === '') {
@@ -122,7 +135,6 @@ class CourseSelectForm
 
         $s = preg_replace('#/+#', '/', $s) ?: $s;
 
-        // Remove "/{host}/{courseCode}/" when it clearly matches
         $trim = trim($s, '/');
         if ($trim === '') {
             return '/';
@@ -148,7 +160,6 @@ class CourseSelectForm
 
         $s = preg_replace('#/+#', '/', $s) ?: $s;
 
-        // Always return a rooted path
         return '/'.ltrim($s, '/');
     }
 
@@ -157,13 +168,11 @@ class CourseSelectForm
      */
     private static function extractDocumentNumericId($resource, $fallbackKey): ?int
     {
-        // Already numeric key
         if (is_int($fallbackKey) || (is_string($fallbackKey) && ctype_digit($fallbackKey))) {
             $id = (int) $fallbackKey;
             return $id > 0 ? $id : null;
         }
 
-        // Direct properties
         foreach (['iid', 'id', 'document_id'] as $prop) {
             if (is_object($resource) && isset($resource->{$prop}) && (is_int($resource->{$prop}) || ctype_digit((string) $resource->{$prop}))) {
                 $id = (int) $resource->{$prop};
@@ -171,7 +180,6 @@ class CourseSelectForm
             }
         }
 
-        // Under ->obj
         if (is_object($resource) && isset($resource->obj)) {
             $obj = $resource->obj;
 
@@ -216,17 +224,14 @@ class CourseSelectForm
         $path = str_replace('\\', '/', $path);
         $path = preg_replace('#/+#', '/', $path) ?: $path;
 
-        // Build a label candidate
         $label = $path;
 
         if ($title !== '') {
             $p = rtrim($label, '/');
 
-            // If it's a pseudo root bucket, display title as folder
             if ($p === '' || $p === '/' || $p === '/document' || $p === '/document/document') {
                 $label = '/'.$title;
             } else {
-                // Otherwise, append title if not already present
                 if (!self::endsWith($label, '/'.$title) && !self::endsWith($label, $title)) {
                     $label = rtrim($label, '/').'/'.$title;
                 }
@@ -236,6 +241,148 @@ class CourseSelectForm
         $label = self::normalizeDocumentPathString($label);
 
         return $label;
+    }
+
+    private static function documentDepth(string $normalizedPath): int
+    {
+        $trim = trim($normalizedPath, '/');
+        if ($trim === '') {
+            return 0;
+        }
+        return substr_count($trim, '/');
+    }
+
+    private static function safeStr($s): string
+    {
+        return htmlspecialchars((string) $s, ENT_QUOTES, api_get_system_encoding());
+    }
+
+    /**
+     * Extract a best-effort title from generic resource wrappers (stdClass, arrays, etc.).
+     * This is especially useful for RESOURCE_WORK where the objects can be stdClass with ->params.
+     */
+    private static function extractGenericTitle($resource, $fallbackId = ''): string
+    {
+        // params['title']
+        if (is_object($resource) && isset($resource->params) && is_array($resource->params) && !empty($resource->params['title'])) {
+            $t = trim((string) $resource->params['title']);
+            if ($t !== '') {
+                return $t;
+            }
+        }
+
+        if (is_array($resource) && !empty($resource['params']['title'])) {
+            $t = trim((string) $resource['params']['title']);
+            if ($t !== '') {
+                return $t;
+            }
+        }
+
+        // direct common fields
+        if (is_object($resource)) {
+            foreach (['title', 'name', 'tool', 'path'] as $prop) {
+                if (isset($resource->{$prop}) && (string) $resource->{$prop} !== '') {
+                    return trim((string) $resource->{$prop});
+                }
+            }
+        }
+
+        if (is_array($resource)) {
+            foreach (['title', 'name', 'tool', 'path'] as $k) {
+                if (!empty($resource[$k])) {
+                    return trim((string) $resource[$k]);
+                }
+            }
+        }
+
+        // fallback id
+        $fallbackId = trim((string) $fallbackId);
+        if ($fallbackId !== '') {
+            return $fallbackId;
+        }
+
+        return get_lang('Untitled');
+    }
+
+    /**
+     * Render a consistent label block for the selection list.
+     */
+    private static function renderLabelHtml(int $type, $resource, $id): string
+    {
+        // Documents: show basename + parent path in monospace.
+        if ($type === RESOURCE_DOCUMENT && $resource instanceof Document) {
+            $full = self::normalizeDocumentLabel($resource);
+            $full = $full !== '' ? $full : '/';
+
+            $base = basename($full);
+            $dir = dirname($full);
+
+            // If it is a folder-like path ending with '/', basename() can be empty.
+            if ($base === '' || $base === '/' || $base === '.') {
+                $base = trim($full, '/');
+                if ($base === '') {
+                    $base = '/';
+                }
+                $dir = '';
+            } else {
+                if ($dir === '/' || $dir === '.') {
+                    $dir = '';
+                }
+            }
+
+            $depth = self::documentDepth($full);
+            $pad = min(7, max(0, $depth)) * 14; // px
+            $padStyle = 'style="padding-left: '.$pad.'px"';
+
+            $html = '<div class="flex min-w-0 flex-col" '.$padStyle.'>';
+            $html .= '  <span class="truncate text-sm font-medium text-gray-90">'.self::safeStr($base).'</span>';
+            if ($dir !== '') {
+                $html .= '  <span class="truncate text-xs font-mono text-gray-50">'.self::safeStr($dir).'</span>';
+            }
+            $html .= '</div>';
+
+            return $html;
+        }
+
+        // Works: stdClass wrapper -> use params['title'] when possible.
+        if ($type === RESOURCE_WORK) {
+            $t = self::extractGenericTitle($resource, (string) $id);
+
+            $html = '<div class="flex min-w-0 flex-col">';
+            $html .= '  <span class="truncate text-sm font-medium text-gray-90">'.self::safeStr($t).'</span>';
+
+            // Optional: show deadline hints if present.
+            $expires = null;
+            if (is_object($resource) && isset($resource->params) && is_array($resource->params) && !empty($resource->params['expires_on'])) {
+                $expires = (string) $resource->params['expires_on'];
+            } elseif (is_array($resource) && !empty($resource['params']['expires_on'])) {
+                $expires = (string) $resource['params']['expires_on'];
+            }
+
+            if ($expires) {
+                $html .= '  <span class="truncate text-xs text-gray-50">'.self::safeStr(get_lang('Deadline')).': '.self::safeStr($expires).'</span>';
+            }
+
+            $html .= '</div>';
+
+            return $html;
+        }
+
+        // If resource has show(), capture it (it often echoes HTML).
+        if (is_object($resource) && method_exists($resource, 'show')) {
+            ob_start();
+            $resource->show();
+            $out = trim((string) ob_get_clean());
+
+            if ($out !== '') {
+                return '<div class="min-w-0 truncate text-sm text-gray-90">'.$out.'</div>';
+            }
+        }
+
+        // Generic fallback.
+        $label = self::extractGenericTitle($resource, (string) $id);
+
+        return '<div class="min-w-0 truncate text-sm text-gray-90">'.self::safeStr($label).'</div>';
     }
 
     /**
@@ -250,7 +397,6 @@ class CourseSelectForm
         $p1 = $normalizedPath;
         $p2 = ltrim($normalizedPath, '/');
 
-        // Try with leading slash, then without
         $pathsToTry = array_values(array_unique([$p1, $p2]));
 
         foreach ($pathsToTry as $p) {
@@ -295,7 +441,6 @@ class CourseSelectForm
         $normalized = [];
 
         foreach ($selection as $k => $v) {
-            // Keep numeric keys
             if (is_int($k) || (is_string($k) && ctype_digit($k))) {
                 $id = (int) $k;
                 if ($id > 0) {
@@ -304,7 +449,6 @@ class CourseSelectForm
                 continue;
             }
 
-            // Try to resolve path-like keys
             $rawKey = (string) $k;
             $path = self::normalizeDocumentPathString($rawKey);
             $id = self::resolveDocumentIdByPath($courseRealId, $path);
@@ -360,12 +504,6 @@ class CourseSelectForm
 
     /**
      * Display the form.
-     *
-     * @param array $course
-     * @param array $hidden_fields     hidden fields to add to the form
-     * @param bool  $avoidSerialize    the document array will be serialize.
-     *                                 This is used in the course_copy.php file
-     * @param bool  $avoidCourseInForm
      */
     public static function display_form(
         $course,
@@ -375,13 +513,11 @@ class CourseSelectForm
     ) {
         global $charset;
 
-        // These need to be global because parseResources() fills them.
         global $forum_categories, $forums, $forum_topics;
         $forum_categories = [];
         $forums = [];
         $forum_topics = [];
 
-        // Cache course metadata for document normalization
         self::$docCourseCode = isset($course->code) ? (string) $course->code : '';
         self::$docCourseRealId = 0;
         if (isset($course->info) && is_array($course->info) && isset($course->info['real_id'])) {
@@ -516,7 +652,6 @@ class CourseSelectForm
                 var catCheckbox = document.getElementById('resource_Forum_Category_' + my_id);
                 var checked = catCheckbox ? catCheckbox.checked === true : false;
 
-                // Forums under this category
                 var forums = document.querySelectorAll('.resource_forum');
                 for (var i = 0; i < forums.length; i++) {
                     var f = forums[i];
@@ -525,7 +660,6 @@ class CourseSelectForm
                     }
                 }
 
-                // Topics under this category
                 var topics = document.querySelectorAll('.resource_topic');
                 for (var j = 0; j < topics.length; j++) {
                     var t = topics[j];
@@ -558,7 +692,6 @@ class CourseSelectForm
 
         echo '<div class="space-y-4">';
 
-        // Destination course header
         if (!empty($hidden_fields['destination_course'])) {
             $sessionTitle = !empty($hidden_fields['destination_session'])
                 ? ' ('.api_get_session_name($hidden_fields['destination_session']).')'
@@ -587,7 +720,6 @@ class CourseSelectForm
         echo '<form method="post" id="upload_form" name="course_select_form" class="space-y-4">';
         echo '<input type="hidden" name="action" value="course_select_form"/>';
 
-        // Hidden fields (single pass, avoid duplicates)
         if (is_array($hidden_fields)) {
             foreach ($hidden_fields as $key => $value) {
                 echo '<input type="hidden" name="'.htmlspecialchars((string) $key, ENT_QUOTES, api_get_system_encoding()).'" value="'.htmlspecialchars((string) $value, ENT_QUOTES, api_get_system_encoding()).'"/>';
@@ -604,10 +736,9 @@ class CourseSelectForm
             'avoidSerialize' => (bool) $avoidSerialize,
         ]);
 
-        /**
-         * Forums special ordering (kept for legacy behavior).
-         * parseResources() fills global arrays ($forum_categories/$forums/$forum_topics).
-         */
+        // Forums special ordering (kept for legacy behavior).
+        global $forum_categories, $forums, $forum_topics;
+
         if (!empty($forum_categories)) {
             $type = RESOURCE_FORUMCATEGORY;
 
@@ -715,10 +846,6 @@ class CourseSelectForm
         }
 
         if ($avoidSerialize) {
-            /**
-             * Documents are avoided due to memory usage when serializing huge folder trees.
-             * Known limitation of PHP serialize on very large arrays.
-             */
             if (isset($course->resources) && is_array($course->resources)) {
                 $course->resources[RESOURCE_DOCUMENT] = null;
                 self::trace('UI: documents bucket nulled before serializing course snapshot.');
@@ -726,7 +853,6 @@ class CourseSelectForm
         }
 
         if (false === $avoidCourseInForm) {
-            // Course class is expected to exist in this namespace in legacy CourseCopy.
             $courseSerialized = base64_encode(Course::serialize($course));
             echo '<input type="hidden" name="course" value="'.$courseSerialized.'"/>';
         }
@@ -736,13 +862,14 @@ class CourseSelectForm
             echo '<div class="mt-4">'.Display::return_message(get_lang('No data available'), 'warning').'</div>';
         } else {
             $confirm = addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES));
+
             echo '<div class="mt-4 flex items-center justify-end gap-2">';
-            $btnStyle = 'background: rgb(var(--color-primary-base)); color: rgb(var(--color-primary-button-text));';
+
             if (!empty($hidden_fields['destination_session'])) {
                 echo '<button
                         type="submit"
-                        class="inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-                        style="'.$btnStyle.'"
+                        class="'.self::twBtnPrimary().'"
+                        style="'.self::twBtnPrimaryStyle().'"
                         onclick="javascript:if(!confirm(\''.$confirm.'\')) return false;">'
                     .get_lang('Validate')
                     .'</button>';
@@ -750,15 +877,15 @@ class CourseSelectForm
                 if ($recycleOption) {
                     echo '<button
                             type="submit"
-                            class="inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-                            style="'.$btnStyle.'">'
+                            class="'.self::twBtnPrimary().'"
+                            style="'.self::twBtnPrimaryStyle().'">'
                         .get_lang('Validate')
                         .'</button>';
                 } else {
                     echo '<button
                             type="submit"
-                            class="inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-                            style="'.$btnStyle.'"
+                            class="'.self::twBtnPrimary().'"
+                            style="'.self::twBtnPrimaryStyle().'"
                             onclick="checkLearnPath(\''.addslashes(get_lang('Documents will be added too')).'\')">'
                         .get_lang('Validate')
                         .'</button>';
@@ -770,10 +897,11 @@ class CourseSelectForm
 
         self::display_hidden_quiz_questions($course);
         self::display_hidden_scorm_directories($course);
+
         echo '</form>';
         echo '</div>';
         echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';
-        echo '</div>'; // space-y-4 wrapper
+        echo '</div>';
     }
 
     /**
@@ -817,7 +945,6 @@ class CourseSelectForm
 
                 case RESOURCE_FORUM:
                     foreach ($resources as $id => $resource) {
-                        // Guard against missing obj/category (avoid notices)
                         $catId = null;
                         if (is_object($resource) && isset($resource->obj) && is_object($resource->obj) && isset($resource->obj->forum_category)) {
                             $catId = $resource->obj->forum_category;
@@ -857,20 +984,22 @@ class CourseSelectForm
 
                 default:
                     $typeDom = $domKey($type);
+
                     if ($showHeader) {
                         $title = isset($resource_titles[$type]) ? $resource_titles[$type] : (string) $type;
+                        $count = is_array($resources) ? count($resources) : 0;
 
                         echo '<div class="'.self::twCard('p-0').'">';
                         echo '  <div class="'.self::twSectionHeader().'" onclick="javascript:exp('."'$type'".');">';
                         echo '    <div class="flex items-center gap-2">';
                         echo '      <em id="img_'.$typeDom.'" class="fa fa-plus-square-o fa-lg"></em>';
                         echo '      <span class="text-sm font-semibold text-gray-90">'.$title.'</span>';
+                        echo '      <span class="ml-2 inline-flex items-center rounded-full bg-gray-20 px-2 py-0.5 text-xs font-semibold text-gray-70">'.$count.'</span>';
                         echo '    </div>';
                         echo '  </div>';
                         echo '  <div class="p-4" id="div_'.$typeDom.'" style="display:none;">';
                     }
 
-                    // Contextual warnings (kept)
                     if (RESOURCE_LEARNPATH == $type) {
                         echo '<div class="mb-3">'.Display::return_message(
                                 get_lang('To export courses with quiz you have to select quiz'),
@@ -890,13 +1019,13 @@ class CourseSelectForm
                     }
 
                     if ($showItems) {
-                        // All / None actions
                         echo '<div class="mb-3 flex items-center justify-end gap-2">';
                         echo '  <button type="button" class="'.self::twBtnNeutral().'" onclick="javascript:setCheckbox(\''.$type.'\',true);">'.get_lang('All').'</button>';
-                        echo '  <button type="button" class="'.self::twBtnNeutral().'" onclick="javascript:setCheckbox(\''.$type.'\',false);">'.get_lang('none').'</button>';
+                        echo '  <button type="button" class="'.self::twBtnNeutral().'" onclick="javascript:setCheckbox(\''.$type.'\',false);">'.get_lang('None').'</button>';
                         echo '</div>';
 
                         echo '<ul class="space-y-2">';
+
                         foreach ($resources as $id => $resource) {
                             if (!$resource) {
                                 continue;
@@ -914,63 +1043,34 @@ class CourseSelectForm
                                 } else {
                                     $inputKey = (string) $id;
                                 }
+                            } else {
+                                $inputKey = (string) $id;
                             }
 
                             $inputKeyStr = (string) $inputKey;
                             $inputKeyDom = $domKey($inputKeyStr);
 
-                            echo '<li>';
-                            echo '  <label class="flex items-start gap-2">';
+                            echo '<li class="'.self::twItemRow().'">';
+                            echo '  <label class="flex items-start gap-3">';
                             echo '    <input
                                     type="checkbox"
-                                    class="'.self::twCheckbox().'"
+                                    class="'.self::twCheckbox().' mt-0.5"
                                     name="resource['.$type.']['.$inputKeyStr.']"
                                     id="resource_'.$typeDom.'_'.$inputKeyDom.'" />';
-
-                            echo '    <span class="text-sm text-gray-90">';
-
-                            if ($type === RESOURCE_DOCUMENT && $resource instanceof Document) {
-                                echo htmlspecialchars(self::normalizeDocumentLabel($resource), ENT_QUOTES, api_get_system_encoding());
-                            } else {
-                                if (is_object($resource) && method_exists($resource, 'show')) {
-                                    $resource->show();
-                                } else {
-                                    $label = '';
-                                    if (is_object($resource)) {
-                                        foreach (['title', 'name', 'path', 'tool', 'id'] as $prop) {
-                                            if (isset($resource->$prop) && $resource->$prop !== '') {
-                                                $label = (string) $resource->$prop;
-                                                break;
-                                            }
-                                        }
-                                        if ($label === '' && method_exists($resource, '__toString')) {
-                                            $label = (string) $resource;
-                                        }
-                                        if ($label === '') {
-                                            $label = '['.get_class($resource).']';
-                                        }
-                                    } elseif (is_array($resource)) {
-                                        $label = (string) ($resource['title'] ?? $resource['name'] ?? $resource['path'] ?? '[resource]');
-                                    } else {
-                                        $label = (string) $resource;
-                                    }
-
-                                    echo htmlspecialchars($label, ENT_QUOTES, api_get_system_encoding());
-                                }
-                            }
-
-                            echo '    </span>';
+                            echo '    <div class="min-w-0 flex-1">';
+                            echo          self::renderLabelHtml((int) $type, $resource, $id);
+                            echo '    </div>';
                             echo '  </label>';
                             echo '</li>';
                         }
+
                         echo '</ul>';
                     }
 
                     if ($showHeader) {
-                        echo '  </div>'; // div_type
-                        echo '</div>'; // card
+                        echo '  </div>';
+                        echo '</div>';
 
-                        // Keep legacy behavior: auto-toggle using exp() with raw type key.
                         echo '<script type="text/javascript">exp('."'$type'".')</script>';
                     }
 
@@ -982,9 +1082,6 @@ class CourseSelectForm
         return $element_count;
     }
 
-    /**
-     * @param $course
-     */
     public static function display_hidden_quiz_questions($course)
     {
         if (!isset($course->resources) || !is_array($course->resources)) {
@@ -1007,9 +1104,6 @@ class CourseSelectForm
         }
     }
 
-    /**
-     * @param $course
-     */
     public static function display_hidden_scorm_directories($course)
     {
         if (!isset($course->resources) || !is_array($course->resources)) {
@@ -1034,13 +1128,6 @@ class CourseSelectForm
 
     /**
      * Get the posted course (selected resources only).
-     *
-     * @param string $from
-     * @param int    $session_id
-     * @param string $course_code
-     * @param Course $postedCourse
-     *
-     * @return Course|false
      */
     public static function get_posted_course(
         $from = '',
@@ -1065,20 +1152,16 @@ class CourseSelectForm
             return false;
         }
 
-        // Trace selection counts early
         $selCounts = [];
         foreach ($postResource as $t => $ids) {
             $selCounts[$t] = is_array($ids) ? count($ids) : 0;
         }
         self::trace('get_posted_course(): selection counts.', $selCounts);
 
-        // CRITICAL FIX: normalize document selection keys to numeric ids
         if (isset($postResource[RESOURCE_DOCUMENT]) && is_array($postResource[RESOURCE_DOCUMENT]) && !empty($postResource[RESOURCE_DOCUMENT])) {
             $beforeKeys = array_slice(array_keys($postResource[RESOURCE_DOCUMENT]), 0, 10);
 
             $postResource[RESOURCE_DOCUMENT] = self::normalizePostedDocumentSelection($postResource[RESOURCE_DOCUMENT], $course_info);
-
-            // Re-write $_POST too, because later filters rely on $_POST selection
             $_POST['resource'][RESOURCE_DOCUMENT] = $postResource[RESOURCE_DOCUMENT];
 
             $afterKeys = array_slice(array_keys($postResource[RESOURCE_DOCUMENT]), 0, 10);
@@ -1090,7 +1173,6 @@ class CourseSelectForm
             ]);
         }
 
-        // Build only what the user selected (types are keys of the selection map).
         $typesToExport = array_keys($postResource);
 
         self::trace('get_posted_course(): start build.', [
@@ -1104,7 +1186,7 @@ class CourseSelectForm
         if (array_key_exists('copy_only_session_items', $_POST)) {
             $copyOnlySessionItemsRaw = $_POST['copy_only_session_items'] ?? '';
             $copyOnlySessionItems = in_array((string) $copyOnlySessionItemsRaw, ['1', 'on', 'true'], true);
-            // If copy_only_session_items is enabled => do NOT include base content
+
             $withBaseContent = !$copyOnlySessionItems;
 
             self::trace('get_posted_course(): base content flag resolved.', [
@@ -1119,7 +1201,6 @@ class CourseSelectForm
         if (empty($course) || !isset($course->resources) || !is_array($course->resources)) {
             self::trace('get_posted_course(): builder returned empty course/resources.');
 
-            // Fallback to postedCourse if available (legacy safety)
             if ($postedCourse instanceof Course && isset($postedCourse->resources) && is_array($postedCourse->resources)) {
                 self::trace('get_posted_course(): falling back to postedCourse snapshot.');
                 $course = $postedCourse;
@@ -1128,7 +1209,6 @@ class CourseSelectForm
             }
         }
 
-        // Trace resource counts by type
         $counts = [];
         foreach ($course->resources as $t => $list) {
             $counts[$t] = is_array($list) ? count($list) : 0;
@@ -1314,7 +1394,7 @@ class CourseSelectForm
         $btnStyle = 'background: rgb(var(--color-primary-base)); color: rgb(var(--color-primary-button-text));';
 
         echo '<div class="mt-4 flex items-center justify-end">';
-        echo '<button class="inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+        echo '<button class="inline-flex items-center gap-2 text-white rounded-md px-4 py-2 text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
                 style="'.$btnStyle.'"
                 type="submit"
                 onclick="checkLearnPath(\''.addslashes(get_lang('Documents will be added too')).'\')">'

@@ -6218,7 +6218,8 @@ class CourseRestorer
     /**
      * Restore Student Publications (works) from backup selection.
      * - Honors file policy: FILE_SKIP (1), FILE_RENAME (2), FILE_OVERWRITE (3)
-     * - Keeps existing behavior: HTML rewriting, optional calendar event, destination_id mapping
+     * - Dedupe across multiple restore calls: if the same item was already restored, reuse it and adjust links.
+     * - If "copy only session items" is enabled: skip base restore (sid=0) and enforce session-only link.
      */
     public function restore_works(int $sessionId = 0): void
     {
@@ -6229,7 +6230,19 @@ class CourseRestorer
         /** @var EntityManagerInterface $em */
         $em = \Database::getManager();
 
-        // Resolve destination course entity safely (avoid wrong class collisions).
+        $copyOnlySessionItems = (bool) (
+            $this->course->copy_only_session_items
+            ?? $this->course->copyOnlySessionItems
+            ?? false
+        );
+
+        // If user asked to copy only session items, never restore works for sid=0.
+        if ($copyOnlySessionItems && 0 === (int) $sessionId) {
+            $this->dlog('restore_works: skipped base restore because copy_only_session_items is enabled', []);
+            return;
+        }
+
+        // Resolve destination course entity safely.
         $courseEntity = api_get_course_entity((int) $this->destination_course_id);
         if (!$courseEntity instanceof CourseEntity) {
             $destinationCourseId = (int) ($this->destination_course_id ?? 0);
@@ -6268,14 +6281,84 @@ class CourseRestorer
 
         $filePolicy = (int) ($this->file_option ?? $FILE_RENAME);
 
+        $mappedBySource = [];
+        // enforce session-only link when copy_only_session_items is enabled.
+        $ensureSessionOnlyLink = function (CStudentPublication $pub) use ($em, $courseEntity, $sessionEntity, $copyOnlySessionItems): void {
+            if (!$copyOnlySessionItems || !$sessionEntity) {
+                return;
+            }
+
+            // Ensure session link exists.
+            try {
+                if (!$pub->getFirstResourceLinkFromCourseSession($courseEntity, $sessionEntity)) {
+                    $pub->addCourseLink($courseEntity, $sessionEntity);
+                }
+            } catch (\Throwable) {
+                // Ignore link creation failures.
+            }
+
+            // Remove base link (session IS NULL) to avoid showing it in base course and causing "exists" conflicts.
+            try {
+                if (method_exists($pub, 'getResourceNode') && $pub->getResourceNode()) {
+                    $node = $pub->getResourceNode();
+                    if (method_exists($node, 'getResourceLinks')) {
+                        foreach ($node->getResourceLinks() as $rl) {
+                            // Defensive checks
+                            if (!method_exists($rl, 'getCourse') || !method_exists($rl, 'getSession')) {
+                                continue;
+                            }
+                            $rlCourse = $rl->getCourse();
+                            $rlSession = $rl->getSession();
+
+                            $sameCourse = $rlCourse && method_exists($rlCourse, 'getId') && (int) $rlCourse->getId() === (int) $courseEntity->getId();
+                            $isBase = null === $rlSession;
+
+                            if ($sameCourse && $isBase) {
+                                $em->remove($rl);
+                            }
+                        }
+                        $em->flush();
+                    }
+                }
+            } catch (\Throwable) {
+                // Ignore base-link removal failures.
+            }
+        };
+
+        // strict "exists" check, avoiding "session IS NULL" when we are restoring session-only.
+        $findExistingStrict = function (string $title) use ($em, $courseEntity, $sessionEntity, $sessionId): ?CStudentPublication {
+            $qb = $em->createQueryBuilder();
+            $qb
+                ->select('w')
+                ->from(CStudentPublication::class, 'w')
+                ->innerJoin('w.resourceNode', 'rn')
+                ->innerJoin('rn.resourceLinks', 'rl')
+                ->andWhere('w.filetype = :ft')
+                ->andWhere('w.publicationParent IS NULL')
+                ->andWhere('w.active IN (0,1)')
+                ->andWhere('w.title = :title')
+                ->andWhere('rl.course = :course')
+                ->setParameter('ft', 'folder')
+                ->setParameter('title', $title)
+                ->setParameter('course', $courseEntity)
+                ->setMaxResults(1)
+            ;
+
+            if ((int) $sessionId > 0) {
+                $qb->andWhere('rl.session = :session')->setParameter('session', $sessionEntity);
+            } else {
+                $qb->andWhere('rl.session IS NULL');
+            }
+
+            return $qb->getQuery()->getOneOrNullResult();
+        };
+
         $this->dlog('restore_works: begin', [
             'count' => \count($this->course->resources[RESOURCE_WORK] ?? []),
             'policy' => $filePolicy,
             'session_id' => (int) $sessionId,
+            'copy_only_session_items' => (bool) $copyOnlySessionItems,
         ]);
-
-        // IMPORTANT: Use the Doctrine entity FQCN explicitly (avoid Tool\User collision).
-        $creatorRef = $em->getReference(\Chamilo\CoreBundle\Entity\User::class, (int) api_get_user_id());
 
         foreach (($this->course->resources[RESOURCE_WORK] ?? []) as $legacyId => $obj) {
             $legacyId = (int) $legacyId;
@@ -6283,34 +6366,58 @@ class CourseRestorer
             try {
                 $p = (array) ($obj->params ?? []);
 
+                // Use explicit source iid if present.
+                $sourceIid = (int) ($p['iid'] ?? $legacyId);
+
+                // If already restored earlier (even in another call), don't create again.
+                $alreadyDst = (int) (($obj->destination_id ?? -1) ?: -1);
+                if ($alreadyDst > 0) {
+                    $pub = $em->find(CStudentPublication::class, $alreadyDst);
+                    if ($pub instanceof CStudentPublication) {
+                        $ensureSessionOnlyLink($pub);
+                    }
+
+                    $this->dlog('restore_works: reused already restored item', [
+                        'src_id' => $legacyId,
+                        'src_iid' => $sourceIid,
+                        'dst_iid' => $alreadyDst,
+                    ]);
+                    continue;
+                }
+
+                // Dedupe within this call (in case build produced duplicates).
+                if (isset($mappedBySource[$sourceIid])) {
+                    $this->course->resources[RESOURCE_WORK][$legacyId] ??= new \stdClass();
+                    $this->course->resources[RESOURCE_WORK][$legacyId]->destination_id = (int) $mappedBySource[$sourceIid];
+
+                    $this->dlog('restore_works: duplicate source entry ignored', [
+                        'src_id' => $legacyId,
+                        'src_iid' => $sourceIid,
+                        'dst_iid' => (int) $mappedBySource[$sourceIid],
+                    ]);
+                    continue;
+                }
+
                 $title = trim((string) ($p['title'] ?? 'Work'));
                 if ('' === $title) {
                     $title = 'Work';
                 }
                 $baseTitle = $title;
 
-                $description = (string) ($p['description'] ?? '');
-                $description = $this->rewriteHtmlForCourse($description, (int) $sessionId, '[work.description]');
+                $rawDescription = (string) ($p['description'] ?? '');
+                $rewrittenDescription = $this->rewriteHtmlForCourse($rawDescription, (int) $sessionId, '[work.description]');
 
                 $enableQualification = filter_var(($p['enable_qualification'] ?? false), FILTER_VALIDATE_BOOLEAN);
                 $addToCalendar = filter_var(($p['add_to_calendar'] ?? false), FILTER_VALIDATE_BOOLEAN);
 
                 $expiresOn = null;
                 if (!empty($p['expires_on'])) {
-                    try {
-                        $expiresOn = new \DateTime((string) $p['expires_on']);
-                    } catch (\Throwable) {
-                        $expiresOn = null;
-                    }
+                    try { $expiresOn = new \DateTime((string) $p['expires_on']); } catch (\Throwable) { $expiresOn = null; }
                 }
 
                 $endsOn = null;
                 if (!empty($p['ends_on'])) {
-                    try {
-                        $endsOn = new \DateTime((string) $p['ends_on']);
-                    } catch (\Throwable) {
-                        $endsOn = null;
-                    }
+                    try { $endsOn = new \DateTime((string) $p['ends_on']); } catch (\Throwable) { $endsOn = null; }
                 }
 
                 if ($expiresOn && $endsOn && $endsOn < $expiresOn) {
@@ -6330,22 +6437,29 @@ class CourseRestorer
                 $groupCategoryWorkId = isset($p['group_category_work_id']) ? (int) $p['group_category_work_id'] : 0;
                 $postGroupId = isset($p['post_group_id']) ? (int) $p['post_group_id'] : 0;
 
-                // Find existing root folder with same title (course + session scope)
-                $existing = $pubRepo->findAllByCourse($courseEntity, $sessionEntity, $title, null, 'folder')
-                    ->andWhere('resource.publicationParent IS NULL')
-                    ->andWhere('resource.active IN (0,1)')
-                    ->setMaxResults(1)
-                    ->getQuery()
-                    ->getOneOrNullResult();
+                $creatorId = (int) ($p['user_id'] ?? 0);
+                if ($creatorId <= 0) {
+                    $creatorId = (int) api_get_user_id();
+                }
+                $creatorRef = $em->getReference(\Chamilo\CoreBundle\Entity\User::class, $creatorId);
+
+                // Strict exists check: session-only must NOT match base (session NULL).
+                $existing = $findExistingStrict($title);
 
                 if ($existing) {
                     if ($filePolicy === $FILE_SKIP) {
+                        $dstIid = (int) $existing->getIid();
+                        $mappedBySource[$sourceIid] = $dstIid;
+
                         $this->course->resources[RESOURCE_WORK][$legacyId] ??= new \stdClass();
-                        $this->course->resources[RESOURCE_WORK][$legacyId]->destination_id = (int) $existing->getIid();
+                        $this->course->resources[RESOURCE_WORK][$legacyId]->destination_id = $dstIid;
+
+                        $ensureSessionOnlyLink($existing);
 
                         $this->dlog('restore_works: skipped (exists)', [
                             'src_id' => $legacyId,
-                            'dst_iid' => (int) $existing->getIid(),
+                            'src_iid' => $sourceIid,
+                            'dst_iid' => $dstIid,
                             'title' => (string) $existing->getTitle(),
                         ]);
                         continue;
@@ -6355,22 +6469,18 @@ class CourseRestorer
                         $n = 1;
                         while (true) {
                             $candidate = $baseTitle.' ('.$n.')';
-
-                            $dup = $pubRepo->findAllByCourse($courseEntity, $sessionEntity, $candidate, null, 'folder')
-                                ->andWhere('resource.publicationParent IS NULL')
-                                ->andWhere('resource.active IN (0,1)')
-                                ->setMaxResults(1)
-                                ->getQuery()
-                                ->getOneOrNullResult();
+                            $dup = $findExistingStrict($candidate);
 
                             if (!$dup) {
                                 $title = $candidate;
                                 break;
                             }
+
                             $n++;
                             if ($n > 5000) {
                                 $this->dlog('restore_works: rename safeguard triggered, skipping', [
                                     'src_id' => $legacyId,
+                                    'src_iid' => $sourceIid,
                                     'base_title' => $baseTitle,
                                 ]);
                                 continue 2;
@@ -6383,10 +6493,9 @@ class CourseRestorer
                 }
 
                 if (!$existing) {
-                    // Create new work folder
                     $pub = (new CStudentPublication())
                         ->setTitle($title)
-                        ->setDescription($description)
+                        ->setDescription($rewrittenDescription)
                         ->setFiletype('folder')
                         ->setContainsFile(0)
                         ->setWeight($weight)
@@ -6404,7 +6513,6 @@ class CourseRestorer
                     $pub->addCourseLink($courseEntity, $sessionEntity);
 
                     $em->persist($pub);
-                    $em->flush();
 
                     $assignment = (new CStudentPublicationAssignment())
                         ->setPublication($pub)
@@ -6416,6 +6524,7 @@ class CourseRestorer
                     $em->persist($assignment);
                     $em->flush();
 
+                    $ensureSessionOnlyLink($pub);
                     if ($addToCalendar) {
                         try {
                             $link = $pub->getFirstResourceLink();
@@ -6454,12 +6563,16 @@ class CourseRestorer
                         }
                     }
 
+                    $dstIid = (int) $pub->getIid();
+                    $mappedBySource[$sourceIid] = $dstIid;
+
                     $this->course->resources[RESOURCE_WORK][$legacyId] ??= new \stdClass();
-                    $this->course->resources[RESOURCE_WORK][$legacyId]->destination_id = (int) $pub->getIid();
+                    $this->course->resources[RESOURCE_WORK][$legacyId]->destination_id = $dstIid;
 
                     $this->dlog('restore_works: created', [
                         'src_id' => $legacyId,
-                        'dst_iid' => (int) $pub->getIid(),
+                        'src_iid' => $sourceIid,
+                        'dst_iid' => $dstIid,
                         'title' => (string) $pub->getTitle(),
                     ]);
 
@@ -6468,7 +6581,7 @@ class CourseRestorer
 
                 // Overwrite existing
                 $existing
-                    ->setDescription($this->rewriteHtmlForCourse($description, (int) $sessionId, '[work.description.overwrite]'))
+                    ->setDescription($rewrittenDescription)
                     ->setWeight($weight)
                     ->setQualification($qualification)
                     ->setAllowTextAssignment($allowText)
@@ -6479,80 +6592,21 @@ class CourseRestorer
                     ->setPostGroupId($postGroupId)
                 ;
 
-                try {
-                    if (!$existing->getFirstResourceLinkFromCourseSession($courseEntity, $sessionEntity)) {
-                        $existing->setParent($courseEntity);
-                        $existing->addCourseLink($courseEntity, $sessionEntity);
-                    }
-                } catch (\Throwable) {
-                    // Ignore link issues
-                }
-
                 $em->persist($existing);
                 $em->flush();
 
-                $assignment = $existing->getAssignment();
-                if (!$assignment) {
-                    $assignment = (new CStudentPublicationAssignment())->setPublication($existing);
-                    $em->persist($assignment);
-                }
+                $ensureSessionOnlyLink($existing);
 
-                $assignment
-                    ->setEnableQualification($enableQualification || $qualification > 0.0)
-                    ->setExpiresOn($expiresOn)
-                    ->setEndsOn($endsOn)
-                ;
-
-                if (!$addToCalendar) {
-                    $assignment->setEventCalendarId(0);
-                }
-
-                $em->flush();
-
-                if ($addToCalendar && $assignment->getEventCalendarId() <= 0) {
-                    try {
-                        $link = $existing->getFirstResourceLink();
-                        if ($link) {
-                            $eventTitle = sprintf(get_lang('Handing over of task %s'), $existing->getTitle());
-
-                            $content = (string) $existing->getDescription();
-                            $content = $this->rewriteHtmlForCourse($content, (int) $sessionId, '[work.calendar.overwrite]');
-
-                            $start = $expiresOn ? clone $expiresOn : new \DateTime('now', new \DateTimeZone('UTC'));
-                            $end = $expiresOn ? clone $expiresOn : new \DateTime('now', new \DateTimeZone('UTC'));
-
-                            $event = (new CCalendarEvent())
-                                ->setTitle($eventTitle)
-                                ->setContent($content)
-                                ->setParent($courseEntity)
-                                ->setCreator($creatorRef)
-                                ->addLink(clone $link)
-                                ->setStartDate($start)
-                                ->setEndDate($end)
-                                ->setColor(CCalendarEvent::COLOR_STUDENT_PUBLICATION)
-                            ;
-
-                            $em->persist($event);
-                            $em->flush();
-
-                            $assignment->setEventCalendarId((int) $event->getIid());
-                            $em->flush();
-                        }
-                    } catch (\Throwable $e) {
-                        $this->dlog('restore_works: calendar failed on overwrite (ignored)', [
-                            'src_id' => $legacyId,
-                            'dst_iid' => (int) $existing->getIid(),
-                            'err' => $e->getMessage(),
-                        ]);
-                    }
-                }
+                $dstIid = (int) $existing->getIid();
+                $mappedBySource[$sourceIid] = $dstIid;
 
                 $this->course->resources[RESOURCE_WORK][$legacyId] ??= new \stdClass();
-                $this->course->resources[RESOURCE_WORK][$legacyId]->destination_id = (int) $existing->getIid();
+                $this->course->resources[RESOURCE_WORK][$legacyId]->destination_id = $dstIid;
 
                 $this->dlog('restore_works: overwritten', [
                     'src_id' => $legacyId,
-                    'dst_iid' => (int) $existing->getIid(),
+                    'src_iid' => $sourceIid,
+                    'dst_iid' => $dstIid,
                     'title' => (string) $existing->getTitle(),
                 ]);
             } catch (\Throwable $e) {

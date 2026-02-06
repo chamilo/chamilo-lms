@@ -53,12 +53,12 @@ switch ($action) {
         exit();
     case 'copy':
         $result = SessionManager::copy(
-          (int) $idChecked,
-          true,
-          true,
-          false,
-          false,
-          $copySessionContent
+            (int) $idChecked,
+            true,
+            true,
+            false,
+            false,
+            $copySessionContent
         );
         if ($result) {
             Display::addFlash(Display::return_message(get_lang('Item copied')));
@@ -138,6 +138,36 @@ $actions = '
 #session-table .ui-jqgrid {
     max-width: 100%;
 }
+#session-table.sessions-grid-wrap .ui-jqgrid tr.jqgrow,
+#session-table.sessions-grid-wrap .ui-jqgrid tr.jqgrow td {
+    height: auto !important;
+}
+#session-table.sessions-grid-wrap .ui-jqgrid tr.jqgrow td {
+    white-space: normal !important;
+    line-height: 1.25 !important;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+    vertical-align: top !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+#session-table.sessions-grid-wrap .ui-jqgrid-htable th div {
+    white-space: normal !important;
+    height: auto !important;
+    line-height: 1.2 !important;
+}
+#session-table.sessions-grid-wrap .ui-jqgrid .ui-jqgrid-bdiv {
+    overflow-x: auto !important;
+}
+#session-table #gbox_sessions,
+#session-table #gview_sessions,
+#session-table #gview_sessions .ui-jqgrid-hdiv,
+#session-table #gview_sessions .ui-jqgrid-bdiv,
+#session-table #gview_sessions .ui-jqgrid-pager {
+  width: 100% !important;
+}
 .sessions-advanced-search-float {
     position: fixed !important;
     z-index: 3000 !important;
@@ -150,13 +180,6 @@ $actions = '
 }
 .sessions-advanced-search-float .ui-jqgrid {
     font-size: 13px;
-}
-#session-table #gbox_sessions,
-#session-table #gview_sessions,
-#session-table #gview_sessions .ui-jqgrid-hdiv,
-#session-table #gview_sessions .ui-jqgrid-bdiv,
-#session-table #gview_sessions .ui-jqgrid-pager {
-  width: 100% !important;
 }
 #sessions_pager .ui-pg-button.ui-state-hover .ch-tool-icon,
 #sessions_pager .ui-pg-button:hover .ch-tool-icon,
@@ -249,8 +272,8 @@ $columns = $result['columns'];
 $column_model = $result['column_model'];
 $extra_params['autowidth'] = 'true';
 $extra_params['height'] = 'auto';
-$extra_params['shrinkToFit'] = true;
-$extra_params['forceFit'] = true;
+$extra_params['shrinkToFit'] = false;
+$extra_params['forceFit'] = false;
 
 switch ($listType) {
     case 'custom':
@@ -346,7 +369,7 @@ $extra_params['multiselect'] = true;
                 $(elem).datetimepicker('setDate', next_month);
             }
 
-            //Great hack
+            // Great hack
             register_second_select = function(elem) {
                 second_filters[$(elem).val()] = $(elem);
             }
@@ -391,11 +414,47 @@ $extra_params['multiselect'] = true;
             setSearchSelect("status");
             var grid = $("#sessions");
 
-            // Re-apply width after each data render (jqGrid sometimes resets widths)
+            function resizeSessionsGrid() {
+                var container = document.getElementById("session-table");
+                if (!container) {
+                    return;
+                }
+
+                var rect = container.getBoundingClientRect();
+                var newWidth = Math.floor(rect.width);
+
+                // Avoid applying invalid widths (e.g. while hidden inside a tab)
+                if (!newWidth || newWidth < 200) {
+                    return;
+                }
+
+                grid.jqGrid("setGridWidth", newWidth, true);
+            }
+
+            function applySessionsTooltips() {
+                // Add a tooltip with full text to each simple cell (skip action/icon cells).
+                var $cells = grid.closest("#gbox_sessions").find("tr.jqgrow td");
+                $cells.each(function() {
+                    var $td = $(this);
+                    if ($td.attr("title")) {
+                        return;
+                    }
+                    if ($td.find("a,button,svg,i").length) {
+                        return;
+                    }
+                    var text = $.trim($td.text());
+                    if (text) {
+                        $td.attr("title", text);
+                    }
+                });
+            }
+
+            // Re-apply width and tooltips after each data render
             grid.jqGrid("setGridParam", {
                 gridComplete: function () {
                     setTimeout(function () {
                         resizeSessionsGrid();
+                        applySessionsTooltips();
                     }, 0);
                 }
             });
@@ -403,6 +462,7 @@ $extra_params['multiselect'] = true;
             // Ensure width is correct after page load (fonts/tabs/layout final width)
             $(window).on("load", function () {
                 resizeSessionsGrid();
+                applySessionsTooltips();
             });
 
             // If tabs affect layout, recalc when tab is shown (Bootstrap) + fallback click
@@ -468,23 +528,6 @@ $extra_params['multiselect'] = true;
                 }
 
                 grid.jqGrid("searchGrid", prmSearch);
-            }
-
-            function resizeSessionsGrid() {
-                var container = document.getElementById("session-table");
-                if (!container) {
-                    return;
-                }
-
-                var rect = container.getBoundingClientRect();
-                var newWidth = Math.floor(rect.width);
-
-                // Avoid applying invalid widths (e.g. while hidden inside a tab)
-                if (!newWidth || newWidth < 200) {
-                    return;
-                }
-
-                grid.jqGrid("setGridWidth", newWidth, true);
             }
 
             var prmSearch = {
@@ -622,6 +665,7 @@ $extra_params['multiselect'] = true;
             // Initial paint adjustments
             setTimeout(function() {
                 resizeSessionsGrid();
+                applySessionsTooltips();
             }, 0);
         });
     </script>
@@ -667,7 +711,7 @@ if (api_is_platform_admin()) {
 
 echo Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
 echo SessionManager::getSessionListTabs($listType);
-echo '<div id="session-table" class="table-responsive">';
+echo '<div id="session-table" class="table-responsive sessions-grid-wrap">';
 echo Display::grid_html('sessions');
 echo '</div>';
 

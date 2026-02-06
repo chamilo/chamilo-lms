@@ -1,13 +1,13 @@
 .p-card {
-  @apply rounded-lg bg-white shadow-lg;
+  @apply rounded-lg bg-white drop-shadow-lg;
 
   .p-card-body {
-    @apply flex flex-col space-y-4 p-4;
+    @apply h-full flex flex-col space-y-4 p-4  border-b border-r border-l border-b-support-1 border-r-support-1 border-l-support-1 rounded-b-lg rounded-r-lg rounded-l-lg;
   }
 
   .p-card-header {
     img {
-      @apply rounded-t-lg;
+      @apply rounded-t-lg aspect-video;
     }
   }
 

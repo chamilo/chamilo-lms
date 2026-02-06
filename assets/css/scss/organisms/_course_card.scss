@@ -3,7 +3,7 @@
     @apply bg-gray-15;
 
     &__title {
-      @apply text-gray-90 text-body-1 font-semibold space-y-2;
+      @apply text-gray-90 text-body-1 font-semibold space-y-2 flex items-center gap-2;
 
       .session {
         &__title {

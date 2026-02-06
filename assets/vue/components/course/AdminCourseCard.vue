@@ -1,7 +1,7 @@
 <template>
   <Card class="course-card rounded-2xl overflow-hidden bg-white shadow-sm">
     <template #header>
-      <div class="relative aspect-[16/9] w-full overflow-hidden bg-gray-100">
+      <div class="relative aspect-video w-full overflow-hidden bg-gray-100">
         <img
           :alt="course.title || 'Course illustration'"
           :src="imageUrl"

@@ -4638,15 +4638,15 @@ Luodaksesi MAQ / MCQ :
 •	Anna painotus jokaiselle vastaukselle. Painotus voi olla mikä tahansa positiivinen tai negatiivinen kokonaisluku (tai nolla).
 •	Tallenna vastaukset
 •	Täytä tyhjät kohdat
-•	Tämän avulla voit luoda pätkän. Tarkoituksena on kehottaa käyttäjää etsimään sanoja, jotka olet poistanut tekstistä.<Br/>	
-•	Jos haluat poistaa sanan tekstistä ja siten luoda tyhjän kohdan, laita sen ympärille sulkeet [näin].<Br/>	
-•	Kun teksti on kirjoitettu ja tyhjät kohdat määritetty, voit lisätä kommentin, jonka oppija näkee sen mukaan, miten hän vastaa kysymykseen.	
+•	Tämän avulla voit luoda pätkän. Tarkoituksena on kehottaa käyttäjää etsimään sanoja, jotka olet poistanut tekstistä.<Br/>
+•	Jos haluat poistaa sanan tekstistä ja siten luoda tyhjän kohdan, laita sen ympärille sulkeet [näin].<Br/>
+•	Kun teksti on kirjoitettu ja tyhjät kohdat määritetty, voit lisätä kommentin, jonka oppija näkee sen mukaan, miten hän vastaa kysymykseen.
 •	Tallenna teksti, niin pääset seuraavaan vaiheeseen, jossa voit määrittää painotuksen kullekin tyhjälle kohdalle. Jos kysymys on esimerkiksi 10 pisteen arvoinen ja sinulla on 5 tyhjää kohtaa, voit antaa kullekin tyhjälle kohdalle 2 pisteen painoarvon.
 •	Matching
 •	Tämä vastaustyyppi voidaan valita, kun halutaan luoda kysymys, jossa käyttäjän on yhdistettävä luettelon A elementit luettelon B elementteihin.
-•	Sitä voidaan käyttää myös pyytämään käyttäjää järjestämään elementit tiettyyn järjestykseen.	
-•	Määrittele ensin vaihtoehdot, joista käyttäjä voi valita parhaan vastauksen. Määrittele sitten kysymykset, jotka on yhdistettävä johonkin aiemmin määritellyistä vaihtoehdoista. Yhdistä lopuksi ensimmäisen luettelon elementit toisen luettelon elementteihin pudotusvalikon avulla.	
-•	Huomautus: Useat ensimmäisen yksikön elementit saattavat viitata samaan elementtiin toisessa yksikössä.	
+•	Sitä voidaan käyttää myös pyytämään käyttäjää järjestämään elementit tiettyyn järjestykseen.
+•	Määrittele ensin vaihtoehdot, joista käyttäjä voi valita parhaan vastauksen. Määrittele sitten kysymykset, jotka on yhdistettävä johonkin aiemmin määritellyistä vaihtoehdoista. Yhdistä lopuksi ensimmäisen luettelon elementit toisen luettelon elementteihin pudotusvalikon avulla.
+•	Huomautus: Useat ensimmäisen yksikön elementit saattavat viitata samaan elementtiin toisessa yksikössä.
 •	Määritä painotus jokaiselle oikealle vastaavuudelle ja tallenna vastaus.
 •	Testin muuttaminen
 •	Testiä muokattaessa periaate on sama kuin testiä luotaessa. Napsauta muutettavan testin vieressä olevaa kuvaa ja noudata yllä olevia ohjeita.
@@ -4658,12 +4658,12 @@ Luodaksesi MAQ / MCQ :
 •	Voit kokeilla testiäsi napsauttamalla sen nimeä testiluettelossa.
 •	Satunnaisia kysymyksiä
 •	Aina kun luot tai muokkaat testiä, voit päättää, haluatko, että kysymykset arvotaan satunnaisessa järjestyksessä kaikkien testikysymysten joukosta.
-•	Jos otat tämän vaihtoehdon käyttöön, kysymykset arvotaan eri järjestyksessä joka kerta, kun käyttäjä suorittaa testin.	
+•	Jos otat tämän vaihtoehdon käyttöön, kysymykset arvotaan eri järjestyksessä joka kerta, kun käyttäjä suorittaa testin.
 •	Jos sinulla on suuri määrä kysymyksiä, voit valita, että käytettävissä olevista kysymyksistä arvotaan satunnaisesti vain x-määrä kysymyksiä.
 •	Kysymykset allas
-•	Kun poistat testin, sen kysymyksiä ei poisteta tietokannasta, joten ne voidaan kierrättää takaisin toiseen testiin kysymyspoolista.	
+•	Kun poistat testin, sen kysymyksiä ei poisteta tietokannasta, joten ne voidaan kierrättää takaisin toiseen testiin kysymyspoolista.
 •	Kysymyspooli mahdollistaa myös saman kysymyksen uudelleenkäytön useissa testeissä.
-•	Oletusarvoisesti kaikki kurssia koskevat kysymykset on piilotettu. Voit näyttää testiin liittyvät kysymykset valitsemalla 'suodattaa' avattavasta valikosta.	
+•	Oletusarvoisesti kaikki kurssia koskevat kysymykset on piilotettu. Voit näyttää testiin liittyvät kysymykset valitsemalla 'suodattaa' avattavasta valikosta.
 •	Orvokysymykset ovat kysymyksiä, jotka eivät kuulu mihinkään testiin.
 HotPotatoes Testit
 Voit tuoda HotPotatoes-testejä Chamilo-portaaliin käytettäväksi Testit-työkalussa. Näiden testien tulokset tallennetaan samalla tavalla kuin Chamilo-testien tulokset, joten niitä voidaan helposti seurata raportointityökalun avulla. Yksinkertaisissa testeissä suosittelemme html- tai htm-muodossa; jos testi sisältää kuvia, zip-tiedoston lataaminen on kätevin tapa.
@@ -4731,7 +4731,7 @@ $LinksContent = "Linkit-työkalun avulla voit luoda kirjaston, jossa on resursse
 Luettelon kasvaessa voi olla hyödyllistä järjestää se luokkiin, jotta oppilaat löytävät oikeat tiedot oikeasta paikasta. Voit muokata jokaista linkkiä ja määrittää sen uudelleen uuteen luokkaan (luokka on luotava ensin).
 
 Kuvaus-kenttää voidaan käyttää antamaan ennakkotietoja kohdesivuista, mutta myös kuvaamaan, mitä odotat opiskelijan tekevän linkin avulla. Jos esimerkiksi osoitat Aristoteleesta kertovalle verkkosivulle, kuvauskentässä voidaan pyytää oppilasta tutkimaan synteesin ja analyysin välistä eroa.";
-$MycoursesContent = "Kun kirjaudut järjestelmään, pääset omalle pääsivullesi. Täällä näet seuraavat asiat: 
+$MycoursesContent = "Kun kirjaudut järjestelmään, pääset omalle pääsivullesi. Täällä näet seuraavat asiat:
 - Omat kurssit sivun keskiosassa luetellaan kurssit, joille olet ilmoittautunut, ja voit luoda uusia kursseja (käyttämällä oikeassa valikossa olevaa painiketta)Otsikon osassa Oma profiili antaa sinulle mahdollisuuden vaihtaa salasanasi, ladata kuvasi järjestelmään tai vaihtaa käyttäjätunnuksesi, Oma kalenteri : sisältää tapahtumat niillä kursseilla, joille olet ilmoittautunut, oikeassa valikossa: Muokkaa kurssiluetteloani voit ilmoittautua kursseille oppijana, (edellyttäen, että kouluttaja/opettaja on valtuuttanut sisäänpääsyn. täällä voit myös peruuttaa kurssin, Linkit Tukifoorumi ja dokumentaatio viittaavat Chamilon pääsivustolle, jossa voit esittää kysymyksiä tai löytää ajantasaista tietoa Chamilosta. Pääset kurssille (näytön vasemmassa reunassa) klikkaamalla sen otsikkoa. Profiilisi voi vaihdella kurssikohtaisesti. Voi olla, että olet opettajana yhdellä kurssilla ja oppijana toisella kurssilla. Niillä kursseilla, joista olet vastuussa, sinulla on pääsy muokkaustyökaluihin, jotka on suunniteltu opiskelijoiden kirjoittamiseen ja hallintaan, kun taas kursseilla, joilla opit, sinulla on pääsy rajoitetumpaan valikoimaan kurssin suorittamiseen sopivia työkaluja.
 Oman pääsivun muoto voi vaihdella alustasta toiseen järjestelmänvalvojan sallimien vaihtoehtojen mukaan. Näin ollen voi esimerkiksi olla tapauksia, joissa sinulla ei ole pääsyä kurssin luomiseen edes opettajana, koska tätä toimintoa hallinnoivat muut oppilaitoksessasi.";
 $AgendaContent = "Agenda-työkalu näkyy sekä kalenterina kullakin kurssilla että kunkin opiskelijan henkilökohtaisena päiväkirjatyökaluna, joka antaa yleiskatsauksen niiden kurssien tapahtumiin, joille hän on ilmoittautunut. (Ryhmillä voi olla myös oma Agenda.) Käyttäjät voivat käyttää Agenda-työkalua, joka näyttää kurssin sisällön ja aktiviteetit, viitteellisenä työkaluna organisoidakseen päivittäistä tai viikoittaista oppimistaan.
@@ -7938,7 +7938,7 @@ $IconsModeSVGComment = "Jos otat tämän vaihtoehdon käyttöön, kaikki kuvakke
 $FilterByTags = "Suodata tunnisteiden mukaan";
 $ImportFromMoodle = "Tuo Moodlesta";
 $ImportFromMoodleInfo = "Tuo Moodle-kurssin varmuuskopiotiedosto (.mbz) tähän Chamilo-kurssiin.";
-$ImportFromMoodleInstructions = "Moodlen tuontiominaisuus ei välttämättä tue kaikkia Moodlen sisältötyyppejä, koska kaikki ominaisuudet eivät ole samanlaisia ja koska Moodle ja Chamilo kehittyvät jatkuvasti ja nopeasti. Tätä tuontiominaisuutta on pidettävä keskeneräisenä työnä. Tarkista lisätietoja osoitteesta https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import.";
+$ImportFromMoodleInstructions = "Moodlen tuontiominaisuus ei välttämättä tue kaikkia Moodlen sisältötyyppejä, koska kaikki ominaisuudet eivät ole samanlaisia ja koska Moodle ja Chamilo kehittyvät jatkuvasti ja nopeasti. Tätä tuontiominaisuutta on pidettävä keskeneräisenä työnä. Tarkista lisätietoja osoitteesta https://github.com/chamilo/chamilo-lms/wiki/Import-from-Moodle.";
 $MoodleFile = "Moodle-kurssin tiedosto";
 $FailedToImportThisIsNotAMoodleFile = "Tuonti epäonnistui: tämä ei näytä olevan Moodle-kurssin varmuuskopiotiedosto (.mbz).";
 $ThisQuestionIsNotSupportedYet = "Tätä kysymystyyppiä ei vielä tueta";

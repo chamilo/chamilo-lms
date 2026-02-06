@@ -5832,7 +5832,7 @@ $Item = "Item";
 $ConfigureDashboardPlugin = "Configure Dashboard Plugin";
 $EditBlocks = "Edit blocks";
 $Never = "Never";
-$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Dear user, 
+$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Dear user,
 
 Your account has now been activated on the platform. Please login and enjoy your courses.";
 $SessionFields = "Session fields";
@@ -7807,7 +7807,7 @@ $IconsModeSVGComment = "By enabling this option, all icons that have an SVG vers
 $FilterByTags = "Filter by tags";
 $ImportFromMoodle = "Import from Moodle";
 $ImportFromMoodleInfo = "Import a Moodle course backup file (.mbz) into this Chamilo course";
-$ImportFromMoodleInstructions = "The Moodle import feature might not support all content types from Moodle, given the fact that not all features are the same, and that Moodle and Chamilo both evolve continuously and rapidly. This import feature should be considered a work in progress. Please check https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import for more information.";
+$ImportFromMoodleInstructions = "The Moodle import feature might not support all content types from Moodle, given the fact that not all features are the same, and that Moodle and Chamilo both evolve continuously and rapidly. This import feature should be considered a work in progress. Please check https://github.com/chamilo/chamilo-lms/wiki/Import-from-Moodle for more information.";
 $MoodleFile = "Moodle course file";
 $FailedToImportThisIsNotAMoodleFile = "Failed to import: this doesn't seem to be a Moodle course backup file (.mbz)";
 $ThisQuestionIsNotSupportedYet = "This question type is not supported yet";
@@ -8007,11 +8007,11 @@ $SpecificDate = "Specific dispatch date";
 $BaseDate = "Dispatch based on the session's start/end dates";
 $AfterOrBefore = "After or before";
 $Before = "Before";
-$ScheduleAnnouncementDescription = "This form allows scheduling announcements to be sent automatically to the students who are taking a course in a session. 
+$ScheduleAnnouncementDescription = "This form allows scheduling announcements to be sent automatically to the students who are taking a course in a session.
 
-There are two types of announcements that can be sent: 
+There are two types of announcements that can be sent:
 
-Specific date: In this case a specific day is selected to make the announcement. 
+Specific date: In this case a specific day is selected to make the announcement.
 
 Based on the start / end date of the session: in this case the number of days to pass before sending the announcement must be indicated. And those days can be associated to before or after the start / end date. For example: 3 days after the start date.";
 $MandatorySurveyNoAnswered = "A mandatory survey is waiting your answer. To enter the course, you must first complete the survey.";

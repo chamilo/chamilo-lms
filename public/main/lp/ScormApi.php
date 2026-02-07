@@ -466,14 +466,14 @@ class ScormApi
             // If this object's JS status has not been updated by the SCORM API, update now.
             $return .= "olms.lesson_status='".$myStatus."';";
         }
-        $return .= "update_toc('".$myStatus."','".$item_id."');";
+        $return .= "if (typeof update_toc === 'function') { try { update_toc('".$myStatus."','".$item_id."'); } catch (e) {} }";
         $update_list = $myLP->get_update_queue();
 
         foreach ($update_list as $my_upd_id => $my_upd_status) {
             if ($my_upd_id != $item_id) {
                 /* Only update the status from other items (i.e. parents and brothers),
                 do not update current as we just did it already. */
-                $return .= "update_toc('".$my_upd_status."','".$my_upd_id."');";
+                $return .= "if (typeof update_toc === 'function') { try { update_toc('".$my_upd_status."','".$my_upd_id."'); } catch (e) {} }";
             }
         }
         $progressBarSpecial = false;
@@ -819,9 +819,13 @@ class ScormApi
         }
 
         $return .=
-            "update_toc('unhighlight','".$current_item."');
-            update_toc('highlight','".$new_item_id."');
-            update_toc('$mylesson_status','".$new_item_id."');
+            "if (typeof update_toc === 'function') {
+                try {
+                    update_toc('unhighlight','".$current_item."');
+                    update_toc('highlight','".$new_item_id."');
+                    update_toc('$mylesson_status','".$new_item_id."');
+                } catch (e) {}
+            }
             update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');
             $updateMinTime"
         ;

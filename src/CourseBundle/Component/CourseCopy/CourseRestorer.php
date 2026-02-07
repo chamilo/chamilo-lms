@@ -66,6 +66,7 @@ use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectRepository;
 use DocumentManager;
 use FilesystemIterator;
 use learnpath;
@@ -298,26 +299,47 @@ class CourseRestorer
 
         // Dump a compact view of the resource bags before restoring
         $this->debug_course_resources_simple(null);
+        $deferredTools = ['gradebook'];
+        $tools = $this->tools_to_restore ?? [];
+        if (!is_array($tools)) {
+            $tools = (array) $tools;
+        }
 
-        // Restore tools
-        foreach ($this->tools_to_restore as $tool) {
+        $toolsNow = [];
+        $toolsLater = [];
+
+        foreach ($tools as $tool) {
+            if (in_array($tool, $deferredTools, true)) {
+                $toolsLater[] = $tool;
+            } else {
+                $toolsNow[] = $tool;
+            }
+        }
+
+        $this->dlog('Tool restore order resolved', [
+            'tools_now' => $toolsNow,
+            'tools_later' => $toolsLater,
+        ]);
+
+        // Local helper to call restore methods with the correct argument count
+        $callRestore = function (string $tool) use ($session_id, $respect_base_content, $destination_course_code): void {
             $fn = 'restore_'.$tool;
             if (!method_exists($this, $fn)) {
-                $this->dlog('Restore method not found for tool (skipping)', ['tool' => $tool]);
-                continue;
+                $this->dlog('Restore method not found for tool (skipping)', ['tool' => $tool, 'method' => $fn]);
+                return;
             }
 
-            $this->dlog('Starting tool restore', ['tool' => $tool]);
+            $this->dlog('Starting tool restore', ['tool' => $tool, 'method' => $fn]);
 
             try {
                 // call with the number of params the method actually accepts
                 $args = [$session_id, $respect_base_content, $destination_course_code];
                 $ref = new \ReflectionMethod($this, $fn);
                 $argc = $ref->getNumberOfParameters();
-
                 $callArgs = array_slice($args, 0, $argc);
 
                 $this->dlog('Calling restore method', [
+                    'tool' => $tool,
                     'method' => $fn,
                     'argc' => $argc,
                     'args' => $callArgs,
@@ -333,7 +355,19 @@ class CourseRestorer
                 $this->resetDoctrineIfClosed();
             }
 
-            $this->dlog('Finished tool restore', ['tool' => $tool]);
+            $this->dlog('Finished tool restore', ['tool' => $tool, 'method' => $fn]);
+        };
+
+        // Restore tools (except deferred ones)
+        foreach ($toolsNow as $tool) {
+            $callRestore((string) $tool);
+        }
+
+        // Restore deferred tools LAST (gradebook)
+        foreach ($toolsLater as $tool) {
+            $this->dlog('Starting deferred tool restore (must run last)', ['tool' => (string) $tool]);
+            $callRestore((string) $tool);
+            $this->dlog('Finished deferred tool restore', ['tool' => (string) $tool]);
         }
 
         // Optionally restore safe course settings
@@ -5427,10 +5461,14 @@ class CourseRestorer
             return;
         }
 
+        /** @var EntityManagerInterface $em */
         $em = Database::getManager();
 
         /** @var CWikiRepository $repo */
         $repo = $em->getRepository(CWiki::class);
+
+        /** @var ObjectRepository $confRepo */
+        $confRepo = $em->getRepository(CWikiConf::class);
 
         /** @var CourseEntity|null $courseEntity */
         $courseEntity = api_get_course_entity($this->destination_course_id);
@@ -5447,9 +5485,11 @@ class CourseRestorer
         $cid = (int) $this->destination_course_id;
         $sid = (int) ($sessionEntity?->getId() ?? 0);
 
-        // Preserve wiki version history: map source page_id -> destination page_id
-        $pageIdMap = [];
-        $confCreatedForPage = [];
+        // Preserve wiki version grouping inside this restore run.
+        $pageIdMap = [];            // source page_id -> destination page_id
+        $logicalPageIdMap = [];     // reflink|groupId -> destination page_id
+        $basePageIdCache = [];      // reflink|groupId -> base destination page_id (session=0)
+        $confCreatedForPage = [];   // destination page_id -> bool
 
         $this->dlog('restore_wiki: begin', [
             'count' => count($bag),
@@ -5458,6 +5498,35 @@ class CourseRestorer
             'bucket' => (string) $bucketKey,
             'policy' => (int) ($this->file_option ?? -1),
         ]);
+
+        // Helper: find base page_id for the same reflink+group (session=0).
+        $resolveBasePageId = function (string $reflink, int $groupId) use ($repo, $cid, &$basePageIdCache): int {
+            $key = $reflink.'|'.$groupId;
+            if (array_key_exists($key, $basePageIdCache)) {
+                return (int) $basePageIdCache[$key];
+            }
+
+            $qb = $repo->createQueryBuilder('w')
+                ->andWhere('w.cId = :cid')->setParameter('cid', $cid)
+                ->andWhere('w.reflink = :r')->setParameter('r', $reflink)
+                ->andWhere('COALESCE(w.groupId,0) = :gid')->setParameter('gid', $groupId)
+                ->andWhere('COALESCE(w.sessionId,0) = 0')
+                ->addOrderBy('w.version', 'DESC')
+                ->addOrderBy('w.iid', 'DESC')
+                ->setMaxResults(1);
+
+            /** @var CWiki|null $base */
+            $base = $qb->getQuery()->getOneOrNullResult();
+            $basePid = 0;
+
+            if ($base instanceof CWiki) {
+                $basePid = (int) (($base->getPageId() ?: $base->getIid()) ?: 0);
+            }
+
+            $basePageIdCache[$key] = $basePid;
+
+            return $basePid;
+        };
 
         foreach ($bag as $legacyId => $res) {
             if (!is_object($res)) {
@@ -5521,6 +5590,7 @@ class CourseRestorer
                     return '' === $s ? 'page' : $s;
                 };
                 $reflink = '' !== trim($reflink) ? $makeSlug($reflink) : $makeSlug($rawTitle);
+                $logicalKey = $reflink.'|'.$groupId;
 
                 // Existence check by (course + session + group + reflink)
                 $qbExists = $repo->createQueryBuilder('w')
@@ -5597,6 +5667,9 @@ class CourseRestorer
                             }
                             $reflink = $trySlug;
                             $rawTitle = $baseTitle.' ('.$i.')';
+
+                            // Recompute logical key after rename
+                            $logicalKey = $reflink.'|'.$groupId;
 
                             $this->dlog('restore_wiki: renamed', [
                                 'reflink' => $reflink,
@@ -5688,46 +5761,96 @@ class CourseRestorer
                 $em->persist($wiki);
                 $em->flush();
 
-                // Ensure destination page_id is consistent across versions.
-                $destPageId = $pageIdMap[$srcPageId] ?? 0;
+                // Decide destination page_id:
+                // - If session restore and base page exists for same reflink+group, reuse the base page_id.
+                // - Otherwise keep internal mapping by source page_id.
+                $destPageId = (int) ($logicalPageIdMap[$logicalKey] ?? 0);
+
+                if ($destPageId <= 0 && $sid > 0) {
+                    $basePid = (int) $resolveBasePageId($reflink, $groupId);
+                    if ($basePid > 0) {
+                        $destPageId = $basePid;
+                        $logicalPageIdMap[$logicalKey] = $destPageId;
+                        $this->dlog('restore_wiki: using base page_id for session override', [
+                            'reflink' => $reflink,
+                            'gid' => $groupId,
+                            'base_page_id' => $basePid,
+                            'sid' => $sid,
+                        ]);
+                    }
+                }
+
                 if ($destPageId <= 0) {
+                    $destPageId = (int) ($pageIdMap[$srcPageId] ?? 0);
+                }
+
+                if ($destPageId <= 0) {
+                    // First time we see this page in this restore run.
                     $destPageId = (int) ($wiki->getIid() ?? 0);
                     $pageIdMap[$srcPageId] = $destPageId;
                 }
+
+                // Keep logical mapping consistent too
+                if ($destPageId > 0) {
+                    $logicalPageIdMap[$logicalKey] = $destPageId;
+                }
+
                 $wiki->setPageId($destPageId);
                 $em->flush();
 
-                // Create conf row once per destination page_id (avoid duplicates per version)
+                // CWikiConf has no session/group columns: only create if missing in DB.
                 if (!isset($confCreatedForPage[$destPageId])) {
-                    $conf = new CWikiConf();
-                    $conf->setCId($cid);
-                    $conf->setPageId($destPageId);
-                    $conf->setTask((string) ($src->task ?? ''));
-                    $conf->setFeedback1((string) ($src->feedback1 ?? ''));
-                    $conf->setFeedback2((string) ($src->feedback2 ?? ''));
-                    $conf->setFeedback3((string) ($src->feedback3 ?? ''));
-                    $conf->setFprogress1((string) ($src->fprogress1 ?? ''));
-                    $conf->setFprogress2((string) ($src->fprogress2 ?? ''));
-                    $conf->setFprogress3((string) ($src->fprogress3 ?? ''));
-                    $conf->setMaxText(isset($src->max_text) ? (int) $src->max_text : 0);
-                    $conf->setMaxVersion(isset($src->max_version) ? (int) $src->max_version : 0);
+                    $existingConf = $confRepo->findOneBy([
+                        'cId' => $cid,
+                        'pageId' => $destPageId,
+                    ]);
 
-                    try {
-                        $conf->setStartdateAssig(!empty($src->startdate_assig) ? new DateTime((string) $src->startdate_assig) : null);
-                    } catch (Throwable) {
-                        $conf->setStartdateAssig(null);
+                    if (!$existingConf) {
+                        $conf = new CWikiConf();
+                        $conf->setCId($cid);
+                        $conf->setPageId($destPageId);
+
+                        $conf->setTask((string) ($src->task ?? ''));
+                        $conf->setFeedback1((string) ($src->feedback1 ?? ''));
+                        $conf->setFeedback2((string) ($src->feedback2 ?? ''));
+                        $conf->setFeedback3((string) ($src->feedback3 ?? ''));
+                        $conf->setFprogress1((string) ($src->fprogress1 ?? ''));
+                        $conf->setFprogress2((string) ($src->fprogress2 ?? ''));
+                        $conf->setFprogress3((string) ($src->fprogress3 ?? ''));
+
+                        if (isset($src->max_size)) {
+                            $conf->setMaxSize((int) $src->max_size);
+                        }
+                        $conf->setMaxText(isset($src->max_text) ? (int) $src->max_text : 0);
+                        $conf->setMaxVersion(isset($src->max_version) ? (int) $src->max_version : 0);
+
+                        try {
+                            $conf->setStartdateAssig(!empty($src->startdate_assig) ? new DateTime((string) $src->startdate_assig) : null);
+                        } catch (Throwable) {
+                            $conf->setStartdateAssig(null);
+                        }
+
+                        try {
+                            $conf->setEnddateAssig(!empty($src->enddate_assig) ? new DateTime((string) $src->enddate_assig) : null);
+                        } catch (Throwable) {
+                            $conf->setEnddateAssig(null);
+                        }
+
+                        $conf->setDelayedsubmit(isset($src->delayedsubmit) ? (int) $src->delayedsubmit : 0);
+
+                        $em->persist($conf);
+                        $em->flush();
+
+                        $this->dlog('restore_wiki: conf created', [
+                            'page_id' => $destPageId,
+                            'cid' => $cid,
+                        ]);
+                    } else {
+                        $this->dlog('restore_wiki: conf already exists in DB', [
+                            'page_id' => $destPageId,
+                            'cid' => $cid,
+                        ]);
                     }
-
-                    try {
-                        $conf->setEnddateAssig(!empty($src->enddate_assig) ? new DateTime((string) $src->enddate_assig) : null);
-                    } catch (Throwable) {
-                        $conf->setEnddateAssig(null);
-                    }
-
-                    $conf->setDelayedsubmit(isset($src->delayedsubmit) ? (int) $src->delayedsubmit : 0);
-
-                    $em->persist($conf);
-                    $em->flush();
 
                     $confCreatedForPage[$destPageId] = true;
                 }
@@ -5755,7 +5878,10 @@ class CourseRestorer
             }
         }
 
-        $this->dlog('restore_wiki: done', ['count' => count($bag), 'resolved_sid' => $sid]);
+        $this->dlog('restore_wiki: done', [
+            'count' => count($bag),
+            'resolved_sid' => $sid,
+        ]);
     }
 
     /**
@@ -6622,259 +6748,6 @@ class CourseRestorer
     }
 
     /**
-     * Restore the Gradebook structure (categories, evaluations, links).
-     * Overwrites destination gradebook for the course/session.
-     */
-    public function restore_gradebook(int $sessionId = 0): void
-    {
-        // Only meaningful with OVERWRITE semantics (skip/rename make little sense here)
-        if (\in_array($this->file_option, [FILE_SKIP, FILE_RENAME], true)) {
-            return;
-        }
-
-        if (!$this->course->has_resources(RESOURCE_GRADEBOOK)) {
-            $this->dlog('restore_gradebook: no gradebook resources');
-
-            return;
-        }
-
-        /** @var EntityManagerInterface $em */
-        $em = Database::getManager();
-
-        /** @var Course $courseEntity */
-        $courseEntity = api_get_course_entity($this->destination_course_id);
-
-        /** @var SessionEntity|null $sessionEntity */
-        $sessionEntity = $sessionId ? api_get_session_entity($sessionId) : null;
-
-        /** @var User $currentUser */
-        $currentUser = api_get_user_entity();
-
-        $catRepo = $em->getRepository(GradebookCategory::class);
-
-        // Clean destination categories when overwriting
-        try {
-            $existingCats = $catRepo->findBy([
-                'course' => $courseEntity,
-                'session' => $sessionEntity,
-            ]);
-            foreach ($existingCats as $cat) {
-                $em->remove($cat);
-            }
-            $em->flush();
-            $this->dlog('restore_gradebook: destination cleaned', ['removed' => \count($existingCats)]);
-        } catch (Throwable $e) {
-            $this->dlog('restore_gradebook: clean failed (continuing)', ['error' => $e->getMessage()]);
-        }
-
-        $oldIdToNewCat = [];
-
-        // First pass: create categories
-        foreach ($this->course->resources[RESOURCE_GRADEBOOK] as $gbItem) {
-            $categories = (array) ($gbItem->categories ?? []);
-            foreach ($categories as $rawCat) {
-                $c = \is_array($rawCat) ? $rawCat : (array) $rawCat;
-
-                $oldId = (int) ($c['id'] ?? $c['iid'] ?? 0);
-                $title = (string) ($c['title'] ?? 'Category');
-                $desc = (string) ($c['description'] ?? '');
-                $weight = (float) ($c['weight'] ?? 0.0);
-                $visible = (bool) ($c['visible'] ?? true);
-                $locked = (int) ($c['locked'] ?? 0);
-
-                // Rewrite HTML in category description
-                $desc = $this->rewriteHtmlForCourse($desc, (int) $sessionId, '[gradebook.category]');
-
-                $new = (new GradebookCategory())
-                    ->setCourse($courseEntity)
-                    ->setSession($sessionEntity)
-                    ->setUser($currentUser)
-                    ->setTitle($title)
-                    ->setDescription($desc)
-                    ->setWeight($weight)
-                    ->setVisible($visible)
-                    ->setLocked($locked)
-                ;
-
-                // Optional flags (mirror legacy fields)
-                if (isset($c['generate_certificates'])) {
-                    $new->setGenerateCertificates((bool) $c['generate_certificates']);
-                }
-                if (isset($c['generateCertificates'])) {
-                    $new->setGenerateCertificates((bool) $c['generateCertificates']);
-                }
-                if (isset($c['certificate_validity_period'])) {
-                    $new->setCertificateValidityPeriod((int) $c['certificate_validity_period']);
-                }
-                if (isset($c['certificateValidityPeriod'])) {
-                    $new->setCertificateValidityPeriod((int) $c['certificateValidityPeriod']);
-                }
-                if (isset($c['is_requirement'])) {
-                    $new->setIsRequirement((bool) $c['is_requirement']);
-                }
-                if (isset($c['isRequirement'])) {
-                    $new->setIsRequirement((bool) $c['isRequirement']);
-                }
-                if (isset($c['default_lowest_eval_exclude'])) {
-                    $new->setDefaultLowestEvalExclude((bool) $c['default_lowest_eval_exclude']);
-                }
-                if (isset($c['defaultLowestEvalExclude'])) {
-                    $new->setDefaultLowestEvalExclude((bool) $c['defaultLowestEvalExclude']);
-                }
-                if (\array_key_exists('minimum_to_validate', $c)) {
-                    $new->setMinimumToValidate((int) $c['minimum_to_validate']);
-                }
-                if (\array_key_exists('minimumToValidate', $c)) {
-                    $new->setMinimumToValidate((int) $c['minimumToValidate']);
-                }
-                if (\array_key_exists('gradebooks_to_validate_in_dependence', $c)) {
-                    $new->setGradeBooksToValidateInDependence((int) $c['gradebooks_to_validate_in_dependence']);
-                }
-                if (\array_key_exists('gradeBooksToValidateInDependence', $c)) {
-                    $new->setGradeBooksToValidateInDependence((int) $c['gradeBooksToValidateInDependence']);
-                }
-                if (\array_key_exists('allow_skills_by_subcategory', $c)) {
-                    $new->setAllowSkillsBySubcategory((int) $c['allow_skills_by_subcategory']);
-                }
-                if (\array_key_exists('allowSkillsBySubcategory', $c)) {
-                    $new->setAllowSkillsBySubcategory((int) $c['allowSkillsBySubcategory']);
-                }
-                if (!empty($c['grade_model_id'])) {
-                    $gm = $em->find(GradeModel::class, (int) $c['grade_model_id']);
-                    if ($gm) {
-                        $new->setGradeModel($gm);
-                    }
-                }
-
-                $em->persist($new);
-                $em->flush();
-
-                if ($oldId > 0) {
-                    $oldIdToNewCat[$oldId] = $new;
-                }
-            }
-        }
-
-        // Second pass: wire category parents
-        foreach ($this->course->resources[RESOURCE_GRADEBOOK] as $gbItem) {
-            $categories = (array) ($gbItem->categories ?? []);
-            foreach ($categories as $rawCat) {
-                $c = \is_array($rawCat) ? $rawCat : (array) $rawCat;
-                $oldId = (int) ($c['id'] ?? $c['iid'] ?? 0);
-                $parentOld = (int) ($c['parent_id'] ?? $c['parentId'] ?? 0);
-                if ($oldId > 0 && isset($oldIdToNewCat[$oldId]) && $parentOld > 0 && isset($oldIdToNewCat[$parentOld])) {
-                    $cat = $oldIdToNewCat[$oldId];
-                    $cat->setParent($oldIdToNewCat[$parentOld]);
-                    $em->persist($cat);
-                }
-            }
-        }
-        $em->flush();
-
-        // Evaluations and Links per category
-        foreach ($this->course->resources[RESOURCE_GRADEBOOK] as $gbItem) {
-            $categories = (array) ($gbItem->categories ?? []);
-            foreach ($categories as $rawCat) {
-                $c = \is_array($rawCat) ? $rawCat : (array) $rawCat;
-                $oldId = (int) ($c['id'] ?? $c['iid'] ?? 0);
-                if ($oldId <= 0 || !isset($oldIdToNewCat[$oldId])) {
-                    continue;
-                }
-
-                $dstCat = $oldIdToNewCat[$oldId];
-
-                // Evaluations (rewrite description HTML)
-                foreach ((array) ($c['evaluations'] ?? []) as $rawEval) {
-                    $e = \is_array($rawEval) ? $rawEval : (array) $rawEval;
-
-                    $evalDesc = (string) ($e['description'] ?? '');
-                    $evalDesc = $this->rewriteHtmlForCourse($evalDesc, (int) $sessionId, '[gradebook.evaluation]');
-
-                    $eval = (new GradebookEvaluation())
-                        ->setCourse($courseEntity)
-                        ->setCategory($dstCat)
-                        ->setTitle((string) ($e['title'] ?? 'Evaluation'))
-                        ->setDescription($evalDesc)
-                        ->setWeight((float) ($e['weight'] ?? 0.0))
-                        ->setMax((float) ($e['max'] ?? 100.0))
-                        ->setType((string) ($e['type'] ?? 'manual'))
-                        ->setVisible((int) ($e['visible'] ?? 1))
-                        ->setLocked((int) ($e['locked'] ?? 0))
-                    ;
-
-                    // Optional statistics fields
-                    if (isset($e['best_score'])) {
-                        $eval->setBestScore((float) $e['best_score']);
-                    }
-                    if (isset($e['average_score'])) {
-                        $eval->setAverageScore((float) $e['average_score']);
-                    }
-                    if (isset($e['score_weight'])) {
-                        $eval->setScoreWeight((float) $e['score_weight']);
-                    }
-                    if (isset($e['min_score'])) {
-                        $eval->setMinScore((float) $e['min_score']);
-                    }
-
-                    $em->persist($eval);
-                }
-
-                // Links to course tools (resolve destination IID for each)
-                foreach ((array) ($c['links'] ?? []) as $rawLink) {
-                    $l = \is_array($rawLink) ? $rawLink : (array) $rawLink;
-
-                    $linkType = (int) ($l['type'] ?? $l['link_type'] ?? 0);
-                    $legacyRef = (int) ($l['ref_id'] ?? $l['refId'] ?? 0);
-                    if ($linkType <= 0 || $legacyRef <= 0) {
-                        $this->dlog('restore_gradebook: skipping link (missing type/ref)', $l);
-
-                        continue;
-                    }
-
-                    // Map link type → resource bucket, then resolve legacyId → newId
-                    $resourceType = $this->gb_guessResourceTypeByLinkType($linkType);
-                    $newRefId = $this->gb_resolveDestinationId($resourceType, $legacyRef);
-                    if ($newRefId <= 0) {
-                        $this->dlog('restore_gradebook: skipping link (no destination id)', ['type' => $linkType, 'legacyRef' => $legacyRef]);
-
-                        continue;
-                    }
-
-                    $link = (new GradebookLink())
-                        ->setCourse($courseEntity)
-                        ->setCategory($dstCat)
-                        ->setType($linkType)
-                        ->setRefId($newRefId)
-                        ->setWeight((float) ($l['weight'] ?? 0.0))
-                        ->setVisible((int) ($l['visible'] ?? 1))
-                        ->setLocked((int) ($l['locked'] ?? 0))
-                    ;
-
-                    // Optional statistics fields
-                    if (isset($l['best_score'])) {
-                        $link->setBestScore((float) $l['best_score']);
-                    }
-                    if (isset($l['average_score'])) {
-                        $link->setAverageScore((float) $l['average_score']);
-                    }
-                    if (isset($l['score_weight'])) {
-                        $link->setScoreWeight((float) $l['score_weight']);
-                    }
-                    if (isset($l['min_score'])) {
-                        $link->setMinScore((float) $l['min_score']);
-                    }
-
-                    $em->persist($link);
-                }
-
-                $em->flush();
-            }
-        }
-
-        $this->dlog('restore_gradebook: done');
-    }
-
-    /**
      * Restore course assets (not included in documents).
      */
     public function restore_assets(): void
@@ -7167,9 +7040,9 @@ class CourseRestorer
     /**
      * Given a RESOURCE_* bucket and legacy id, return destination id (if that item was restored).
      */
-    private function gb_resolveDestinationId(?int $type, int $legacyId): int
+    private function gb_resolveDestinationId($type, int $legacyId): int
     {
-        if (null === $type) {
+        if (empty($type)) {
             return 0;
         }
         if (!$this->course->has_resources($type)) {
@@ -7180,7 +7053,15 @@ class CourseRestorer
             return 0;
         }
         $res = $bucket[$legacyId];
-        $destId = (int) ($res->destination_id ?? 0);
+
+        // Most resources use destination_id, but some may store destination_iid
+        $destId = 0;
+        if (isset($res->destination_id)) {
+            $destId = (int) $res->destination_id;
+        }
+        if ($destId <= 0 && isset($res->destination_iid)) {
+            $destId = (int) $res->destination_iid;
+        }
 
         return $destId > 0 ? $destId : 0;
     }
@@ -7188,18 +7069,316 @@ class CourseRestorer
     /**
      * Map GradebookLink type → RESOURCE_* bucket used in $this->course->resources.
      */
-    private function gb_guessResourceTypeByLinkType(int $linkType): ?int
+    private function gb_guessResourceTypeByLinkType(int $linkType): ?string
     {
         return match ($linkType) {
             LINK_EXERCISE => RESOURCE_QUIZ,
-            LINK_STUDENTPUBLICATION => RESOURCE_WORK,
-            LINK_LEARNPATH => RESOURCE_LEARNPATH,
-            LINK_FORUM_THREAD => RESOURCE_FORUMTOPIC,
-            LINK_ATTENDANCE => RESOURCE_ATTENDANCE,
-            LINK_SURVEY => RESOURCE_SURVEY,
             LINK_HOTPOTATOES => RESOURCE_QUIZ,
+
+            // Student publications / works (assignments)
+            LINK_STUDENTPUBLICATION => RESOURCE_WORK,
+
+            // Learning paths
+            LINK_LEARNPATH => RESOURCE_LEARNPATH,
+
+            // Attendance
+            LINK_ATTENDANCE => RESOURCE_ATTENDANCE,
+
+            // Surveys
+            LINK_SURVEY => RESOURCE_SURVEY,
+
+            // Forum thread links require a thread/topic restore + mapping.
+            // If you don't restore topics/threads, keep it null to avoid broken links.
+            LINK_FORUM_THREAD => null,
+
+            // Not supported / not mapped
+            LINK_DROPBOX => null,
+            LINK_PORTFOLIO => null,
+
             default => null,
         };
+    }
+
+    public function restore_gradebook(int $sessionId = 0): void
+    {
+        // Always restore it in destination to avoid an empty gradebook.
+        if (\in_array($this->file_option, [FILE_SKIP, FILE_RENAME], true)) {
+            $this->dlog('restore_gradebook: forcing overwrite policy', ['file_option' => (int) $this->file_option]);
+        }
+
+        if (!$this->course->has_resources(RESOURCE_GRADEBOOK)) {
+            $this->dlog('restore_gradebook: no gradebook resources');
+            return;
+        }
+
+        /** @var EntityManagerInterface $em */
+        $em = Database::getManager();
+
+        /** @var Course $courseEntity */
+        $courseEntity = api_get_course_entity($this->destination_course_id);
+
+        /** @var SessionEntity|null $sessionEntity */
+        $sessionEntity = $sessionId ? api_get_session_entity($sessionId) : null;
+
+        /** @var User $currentUser */
+        $currentUser = api_get_user_entity();
+
+        $catRepo = $em->getRepository(GradebookCategory::class);
+
+        // Debug payload overview (helps detect empty export)
+        $payloadCats = 0;
+        $payloadEvals = 0;
+        $payloadLinks = 0;
+        foreach ($this->course->resources[RESOURCE_GRADEBOOK] as $gbItem) {
+            $categories = (array) ($gbItem->categories ?? []);
+            $payloadCats += \count($categories);
+
+            foreach ($categories as $rawCat) {
+                $c = \is_array($rawCat) ? $rawCat : (array) $rawCat;
+                $payloadEvals += \count((array) ($c['evaluations'] ?? []));
+                $payloadLinks += \count((array) ($c['links'] ?? []));
+            }
+        }
+        $this->dlog('restore_gradebook: payload overview', [
+            'session_id' => (int) $sessionId,
+            'categories' => $payloadCats,
+            'evaluations' => $payloadEvals,
+            'links' => $payloadLinks,
+        ]);
+
+        // Clean destination categories for this course/session (overwrite semantics)
+        try {
+            $existingCats = $catRepo->findBy([
+                'course' => $courseEntity,
+                'session' => $sessionEntity,
+            ]);
+
+            foreach ($existingCats as $cat) {
+                $em->remove($cat);
+            }
+            $em->flush();
+
+            $this->dlog('restore_gradebook: destination cleaned', ['removed' => \count($existingCats)]);
+        } catch (Throwable $e) {
+            $this->dlog('restore_gradebook: clean failed (continuing)', ['error' => $e->getMessage()]);
+        }
+
+        $oldIdToNewCat = [];
+
+        // Create categories
+        foreach ($this->course->resources[RESOURCE_GRADEBOOK] as $gbItem) {
+            $categories = (array) ($gbItem->categories ?? []);
+            foreach ($categories as $rawCat) {
+                $c = \is_array($rawCat) ? $rawCat : (array) $rawCat;
+
+                $oldId = (int) ($c['id'] ?? $c['iid'] ?? 0);
+                $title = (string) ($c['title'] ?? 'Category');
+                $desc = (string) ($c['description'] ?? '');
+                $weight = (float) ($c['weight'] ?? 0.0);
+                $visible = (bool) ($c['visible'] ?? true);
+                $locked = (int) ($c['locked'] ?? 0);
+
+                $desc = $this->rewriteHtmlForCourse($desc, (int) $sessionId, '[gradebook.category]');
+
+                $new = (new GradebookCategory())
+                    ->setCourse($courseEntity)
+                    ->setSession($sessionEntity)
+                    ->setUser($currentUser)
+                    ->setTitle($title)
+                    ->setDescription($desc)
+                    ->setWeight($weight)
+                    ->setVisible($visible)
+                    ->setLocked($locked)
+                ;
+
+                // Optional fields
+                if (isset($c['generate_certificates'])) {
+                    $new->setGenerateCertificates((bool) $c['generate_certificates']);
+                }
+                if (isset($c['generateCertificates'])) {
+                    $new->setGenerateCertificates((bool) $c['generateCertificates']);
+                }
+                if (isset($c['certificate_validity_period'])) {
+                    $new->setCertificateValidityPeriod((int) $c['certificate_validity_period']);
+                }
+                if (isset($c['certificateValidityPeriod'])) {
+                    $new->setCertificateValidityPeriod((int) $c['certificateValidityPeriod']);
+                }
+                if (isset($c['is_requirement'])) {
+                    $new->setIsRequirement((bool) $c['is_requirement']);
+                }
+                if (isset($c['isRequirement'])) {
+                    $new->setIsRequirement((bool) $c['isRequirement']);
+                }
+                if (isset($c['default_lowest_eval_exclude'])) {
+                    $new->setDefaultLowestEvalExclude((bool) $c['default_lowest_eval_exclude']);
+                }
+                if (isset($c['defaultLowestEvalExclude'])) {
+                    $new->setDefaultLowestEvalExclude((bool) $c['defaultLowestEvalExclude']);
+                }
+                if (\array_key_exists('minimum_to_validate', $c)) {
+                    $new->setMinimumToValidate((int) $c['minimum_to_validate']);
+                }
+                if (\array_key_exists('minimumToValidate', $c)) {
+                    $new->setMinimumToValidate((int) $c['minimumToValidate']);
+                }
+                if (\array_key_exists('gradebooks_to_validate_in_dependence', $c)) {
+                    $new->setGradeBooksToValidateInDependence((int) $c['gradebooks_to_validate_in_dependence']);
+                }
+                if (\array_key_exists('gradeBooksToValidateInDependence', $c)) {
+                    $new->setGradeBooksToValidateInDependence((int) $c['gradeBooksToValidateInDependence']);
+                }
+                if (\array_key_exists('allow_skills_by_subcategory', $c)) {
+                    $new->setAllowSkillsBySubcategory((int) $c['allow_skills_by_subcategory']);
+                }
+                if (\array_key_exists('allowSkillsBySubcategory', $c)) {
+                    $new->setAllowSkillsBySubcategory((int) $c['allowSkillsBySubcategory']);
+                }
+                if (!empty($c['grade_model_id'])) {
+                    $gm = $em->find(GradeModel::class, (int) $c['grade_model_id']);
+                    if ($gm) {
+                        $new->setGradeModel($gm);
+                    }
+                }
+
+                $em->persist($new);
+                $em->flush();
+
+                if ($oldId > 0) {
+                    $oldIdToNewCat[$oldId] = $new;
+                }
+            }
+        }
+
+        // Wire parents
+        foreach ($this->course->resources[RESOURCE_GRADEBOOK] as $gbItem) {
+            $categories = (array) ($gbItem->categories ?? []);
+            foreach ($categories as $rawCat) {
+                $c = \is_array($rawCat) ? $rawCat : (array) $rawCat;
+
+                $oldId = (int) ($c['id'] ?? $c['iid'] ?? 0);
+                $parentOld = (int) ($c['parent_id'] ?? $c['parentId'] ?? 0);
+
+                if ($oldId > 0 && $parentOld > 0 && isset($oldIdToNewCat[$oldId], $oldIdToNewCat[$parentOld])) {
+                    $cat = $oldIdToNewCat[$oldId];
+                    $cat->setParent($oldIdToNewCat[$parentOld]);
+                    $em->persist($cat);
+                }
+            }
+        }
+        $em->flush();
+
+        // Evaluations and Links
+        foreach ($this->course->resources[RESOURCE_GRADEBOOK] as $gbItem) {
+            $categories = (array) ($gbItem->categories ?? []);
+            foreach ($categories as $rawCat) {
+                $c = \is_array($rawCat) ? $rawCat : (array) $rawCat;
+
+                $oldId = (int) ($c['id'] ?? $c['iid'] ?? 0);
+                if ($oldId <= 0 || !isset($oldIdToNewCat[$oldId])) {
+                    continue;
+                }
+
+                $dstCat = $oldIdToNewCat[$oldId];
+
+                // Evaluations
+                foreach ((array) ($c['evaluations'] ?? []) as $rawEval) {
+                    $e = \is_array($rawEval) ? $rawEval : (array) $rawEval;
+
+                    $evalDesc = (string) ($e['description'] ?? '');
+                    $evalDesc = $this->rewriteHtmlForCourse($evalDesc, (int) $sessionId, '[gradebook.evaluation]');
+
+                    $eval = (new GradebookEvaluation())
+                        ->setCourse($courseEntity)
+                        ->setCategory($dstCat)
+                        ->setTitle((string) ($e['title'] ?? 'Evaluation'))
+                        ->setDescription($evalDesc)
+                        ->setWeight((float) ($e['weight'] ?? 0.0))
+                        ->setMax((float) ($e['max'] ?? 100.0))
+                        ->setType((string) ($e['type'] ?? 'evaluation'))
+                        ->setVisible((int) ($e['visible'] ?? 1))
+                        ->setLocked((int) ($e['locked'] ?? 0))
+                    ;
+
+                    if (isset($e['best_score'])) {
+                        $eval->setBestScore((float) $e['best_score']);
+                    }
+                    if (isset($e['average_score'])) {
+                        $eval->setAverageScore((float) $e['average_score']);
+                    }
+                    if (isset($e['score_weight'])) {
+                        $eval->setScoreWeight((float) $e['score_weight']);
+                    }
+                    if (isset($e['min_score'])) {
+                        $eval->setMinScore((float) $e['min_score']);
+                    }
+
+                    $em->persist($eval);
+                }
+
+                // Links
+                foreach ((array) ($c['links'] ?? []) as $rawLink) {
+                    $l = \is_array($rawLink) ? $rawLink : (array) $rawLink;
+
+                    $linkType = (int) ($l['type'] ?? $l['link_type'] ?? 0);
+                    $legacyRef = (int) ($l['ref_id'] ?? $l['refId'] ?? 0);
+
+                    if ($linkType <= 0 || $legacyRef <= 0) {
+                        $this->dlog('restore_gradebook: skipping link (missing type/ref)', $l);
+                        continue;
+                    }
+
+                    $resourceType = $this->gb_guessResourceTypeByLinkType($linkType);
+                    $newRefId = $this->gb_resolveDestinationId($resourceType, $legacyRef);
+
+                    if ($resourceType === null) {
+                        $this->dlog('restore_gradebook: skipping link (type not mapped)', [
+                            'type' => $linkType,
+                            'legacyRef' => $legacyRef,
+                        ]);
+                        continue;
+                    }
+
+                    if ($newRefId <= 0) {
+                        $this->dlog('restore_gradebook: skipping link (no destination id)', [
+                            'type' => $linkType,
+                            'legacyRef' => $legacyRef,
+                            'resourceType' => (string) $resourceType,
+                        ]);
+                        continue;
+                    }
+
+                    $link = (new GradebookLink())
+                        ->setCourse($courseEntity)
+                        ->setCategory($dstCat)
+                        ->setType($linkType)
+                        ->setRefId($newRefId)
+                        ->setWeight((float) ($l['weight'] ?? 0.0))
+                        ->setVisible((int) ($l['visible'] ?? 1))
+                        ->setLocked((int) ($l['locked'] ?? 0))
+                    ;
+
+                    if (isset($l['best_score'])) {
+                        $link->setBestScore((float) $l['best_score']);
+                    }
+                    if (isset($l['average_score'])) {
+                        $link->setAverageScore((float) $l['average_score']);
+                    }
+                    if (isset($l['score_weight'])) {
+                        $link->setScoreWeight((float) $l['score_weight']);
+                    }
+                    if (isset($l['min_score'])) {
+                        $link->setMinScore((float) $l['min_score']);
+                    }
+
+                    $em->persist($link);
+                }
+
+                $em->flush();
+            }
+        }
+
+        $this->dlog('restore_gradebook: done');
     }
 
     /**

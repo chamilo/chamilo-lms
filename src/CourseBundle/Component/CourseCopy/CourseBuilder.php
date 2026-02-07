@@ -974,13 +974,34 @@ class CourseBuilder
         $em = Database::getManager();
         $catRepo = $em->getRepository(GradebookCategory::class);
 
-        $criteria = ['course' => $courseEntity];
-        if ($sessionEntity) {
-            $criteria['session'] = $sessionEntity;
+        $qb = $catRepo->createQueryBuilder('cat')
+            ->andWhere('cat.course = :course')
+            ->setParameter('course', $courseEntity);
+
+        if ($sessionEntity instanceof SessionEntity) {
+            if ($this->withBaseContent) {
+                // Include base categories (session IS NULL) + session categories
+                $qb->andWhere(
+                    $qb->expr()->orX(
+                        'cat.session = :session',
+                        'cat.session IS NULL'
+                    )
+                )->setParameter('session', $sessionEntity);
+            } else {
+                // Only session-specific categories
+                $qb->andWhere('cat.session = :session')
+                    ->setParameter('session', $sessionEntity);
+            }
+        } else {
+            // No session context => base only
+            $qb->andWhere('cat.session IS NULL');
         }
 
+        $qb->addOrderBy('cat.id', 'ASC');
+
         /** @var GradebookCategory[] $cats */
-        $cats = $catRepo->findBy($criteria);
+        $cats = $qb->getQuery()->getResult();
+
         if (!$cats) {
             return;
         }
@@ -999,74 +1020,55 @@ class CourseBuilder
      *
      * @return array<string,mixed>
      */
-    private function serializeGradebookCategory(GradebookCategory $c): array
+    private function serializeGradebookCategory(GradebookCategory $cat): array
     {
-        $arr = [
-            'id' => (int) $c->getId(),
-            'title' => (string) $c->getTitle(),
-            'description' => (string) ($c->getDescription() ?? ''),
-            'weight' => (float) $c->getWeight(),
-            'visible' => (bool) $c->getVisible(),
-            'locked' => (int) $c->getLocked(),
-            'parent_id' => $c->getParent() ? (int) $c->getParent()->getId() : 0,
-            'generate_certificates' => (bool) $c->getGenerateCertificates(),
-            'certificate_validity_period' => $c->getCertificateValidityPeriod(),
-            'is_requirement' => (bool) $c->getIsRequirement(),
-            'default_lowest_eval_exclude' => (bool) $c->getDefaultLowestEvalExclude(),
-            'minimum_to_validate' => $c->getMinimumToValidate(),
-            'gradebooks_to_validate_in_dependence' => $c->getGradeBooksToValidateInDependence(),
-            'allow_skills_by_subcategory' => $c->getAllowSkillsBySubcategory(),
-            // camelCase duplicates (future-proof)
-            'generateCertificates' => (bool) $c->getGenerateCertificates(),
-            'certificateValidityPeriod' => $c->getCertificateValidityPeriod(),
-            'isRequirement' => (bool) $c->getIsRequirement(),
-            'defaultLowestEvalExclude' => (bool) $c->getDefaultLowestEvalExclude(),
-            'minimumToValidate' => $c->getMinimumToValidate(),
-            'gradeBooksToValidateInDependence' => $c->getGradeBooksToValidateInDependence(),
-            'allowSkillsBySubcategory' => $c->getAllowSkillsBySubcategory(),
+        $em = Database::getManager();
+
+        $evalRepo = $em->getRepository(GradebookEvaluation::class);
+        $linkRepo = $em->getRepository(GradebookLink::class);
+
+        $id = method_exists($cat, 'getId') ? (int) $cat->getId() : 0;
+
+        $parentId = 0;
+        if (method_exists($cat, 'getParent') && $cat->getParent()) {
+            $parentId = method_exists($cat->getParent(), 'getId') ? (int) $cat->getParent()->getId() : 0;
+        }
+
+        $evaluations = [];
+        foreach ($evalRepo->findBy(['category' => $cat]) as $e) {
+            $evaluations[] = [
+                'title' => method_exists($e, 'getTitle') ? (string) $e->getTitle() : 'Evaluation',
+                'description' => method_exists($e, 'getDescription') ? (string) $e->getDescription() : '',
+                'weight' => method_exists($e, 'getWeight') ? (float) $e->getWeight() : 0.0,
+                'max' => method_exists($e, 'getMax') ? (float) $e->getMax() : 100.0,
+                'type' => method_exists($e, 'getType') ? (string) $e->getType() : 'manual',
+                'visible' => method_exists($e, 'getVisible') ? (int) $e->getVisible() : 1,
+                'locked' => method_exists($e, 'getLocked') ? (int) $e->getLocked() : 0,
+            ];
+        }
+
+        $links = [];
+        foreach ($linkRepo->findBy(['category' => $cat]) as $l) {
+            $links[] = [
+                'type' => method_exists($l, 'getType') ? (int) $l->getType() : 0,
+                'ref_id' => method_exists($l, 'getRefId') ? (int) $l->getRefId() : 0,
+                'weight' => method_exists($l, 'getWeight') ? (float) $l->getWeight() : 0.0,
+                'visible' => method_exists($l, 'getVisible') ? (int) $l->getVisible() : 1,
+                'locked' => method_exists($l, 'getLocked') ? (int) $l->getLocked() : 0,
+            ];
+        }
+
+        return [
+            'id' => $id,
+            'parent_id' => $parentId,
+            'title' => method_exists($cat, 'getTitle') ? (string) $cat->getTitle() : 'Category',
+            'description' => method_exists($cat, 'getDescription') ? (string) $cat->getDescription() : '',
+            'weight' => method_exists($cat, 'getWeight') ? (float) $cat->getWeight() : 0.0,
+            'visible' => method_exists($cat, 'getVisible') ? (bool) $cat->getVisible() : true,
+            'locked' => method_exists($cat, 'getLocked') ? (int) $cat->getLocked() : 0,
+            'evaluations' => $evaluations,
+            'links' => $links,
         ];
-
-        if ($c->getGradeModel()) {
-            $arr['grade_model_id'] = (int) $c->getGradeModel()->getId();
-        }
-
-        // Evaluations
-        $arr['evaluations'] = [];
-        foreach ($c->getEvaluations() as $e) {
-            /** @var GradebookEvaluation $e */
-            $arr['evaluations'][] = [
-                'title' => (string) $e->getTitle(),
-                'description' => (string) ($e->getDescription() ?? ''),
-                'weight' => (float) $e->getWeight(),
-                'max' => (float) $e->getMax(),
-                'type' => (string) $e->getType(),
-                'visible' => (int) $e->getVisible(),
-                'locked' => (int) $e->getLocked(),
-                'best_score' => $e->getBestScore(),
-                'average_score' => $e->getAverageScore(),
-                'score_weight' => $e->getScoreWeight(),
-                'min_score' => $e->getMinScore(),
-            ];
-        }
-
-        // Links
-        $arr['links'] = [];
-        foreach ($c->getLinks() as $l) {
-            /** @var GradebookLink $l */
-            $arr['links'][] = [
-                'type' => (int) $l->getType(),
-                'ref_id' => (int) $l->getRefId(),
-                'weight' => (float) $l->getWeight(),
-                'visible' => (int) $l->getVisible(),
-                'locked' => (int) $l->getLocked(),
-                'best_score' => $l->getBestScore(),
-                'average_score' => $l->getAverageScore(),
-                'score_weight' => $l->getScoreWeight(),
-                'min_score' => $l->getMinScore(),
-            ];
-        }
-
-        return $arr;
     }
 
     /**

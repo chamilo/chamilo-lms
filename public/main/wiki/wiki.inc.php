@@ -1565,29 +1565,54 @@ final class WikiManager
             }
         }
 
-        /** @var CWiki|null $first */
-        $first = $repo->createQueryBuilder('w')
+        // Resolve FIRST row in the right scope (session-aware)
+        $effectiveSid = (int) $ctx['sessionId'];
+
+        $firstQb = $repo->createQueryBuilder('w')
             ->andWhere('w.cId = :cid')->setParameter('cid', $ctx['courseId'])
             ->andWhere('w.reflink = :reflink')->setParameter('reflink', $pageKey)
-            ->andWhere('COALESCE(w.groupId,0) = :gid')->setParameter('gid', (int)$ctx['groupId'])
+            ->andWhere('COALESCE(w.groupId,0) = :gid')->setParameter('gid', (int) $ctx['groupId'])
             ->orderBy('w.version', 'ASC')
-            ->setMaxResults(1)
-            ->getQuery()->getOneOrNullResult();
+            ->setMaxResults(1);
+
+        if ($effectiveSid > 0) {
+            $firstQb->andWhere('COALESCE(w.sessionId,0) = :sid')->setParameter('sid', $effectiveSid);
+        } else {
+            $firstQb->andWhere('COALESCE(w.sessionId,0) = 0');
+        }
+
+        /** @var CWiki|null $first */
+        $first = $firstQb->getQuery()->getOneOrNullResult();
+
+        // if we are in session and no session page exists, show base course wiki
+        if (!$first && $effectiveSid > 0) {
+            $effectiveSid = 0;
+
+            $first = $repo->createQueryBuilder('w')
+                ->andWhere('w.cId = :cid')->setParameter('cid', $ctx['courseId'])
+                ->andWhere('w.reflink = :reflink')->setParameter('reflink', $pageKey)
+                ->andWhere('COALESCE(w.groupId,0) = :gid')->setParameter('gid', (int) $ctx['groupId'])
+                ->andWhere('COALESCE(w.sessionId,0) = 0')
+                ->orderBy('w.version', 'ASC')
+                ->setMaxResults(1)
+                ->getQuery()->getOneOrNullResult();
+        }
 
         $keyVisibility = $first?->getVisibility();
         $pageId = $first?->getPageId() ?? 0;
 
+        // When loading LAST version, use the same effective scope we used above
         $last = null;
         if ($pageId) {
             $qb = $repo->createQueryBuilder('w')
                 ->andWhere('w.cId = :cid')->setParameter('cid', $ctx['courseId'])
                 ->andWhere('w.pageId = :pid')->setParameter('pid', $pageId)
-                ->andWhere('COALESCE(w.groupId,0) = :gid')->setParameter('gid', (int)$ctx['groupId'])
+                ->andWhere('COALESCE(w.groupId,0) = :gid')->setParameter('gid', (int) $ctx['groupId'])
                 ->orderBy('w.version', 'DESC')
                 ->setMaxResults(1);
 
-            if ($ctx['sessionId'] > 0) {
-                $qb->andWhere('COALESCE(w.sessionId,0) = :sid')->setParameter('sid', (int)$ctx['sessionId']);
+            if ($effectiveSid > 0) {
+                $qb->andWhere('COALESCE(w.sessionId,0) = :sid')->setParameter('sid', $effectiveSid);
             } else {
                 $qb->andWhere('COALESCE(w.sessionId,0) = 0');
             }
@@ -2876,13 +2901,13 @@ final class WikiManager
 
             // Simple icon map
             $icons = [
-                'mactiveusers' => \Chamilo\CoreBundle\Enums\ActionIcon::STAR,
-                'mvisited'     => \Chamilo\CoreBundle\Enums\ActionIcon::HISTORY,
-                'mostchanged'  => \Chamilo\CoreBundle\Enums\ActionIcon::REFRESH,
-                'orphaned'     => \Chamilo\CoreBundle\Enums\ActionIcon::LINKS,
-                'wanted'       => \Chamilo\CoreBundle\Enums\ActionIcon::SEARCH,
-                'mostlinked'   => \Chamilo\CoreBundle\Enums\ActionIcon::LINKS,
-                'statistics'   => \Chamilo\CoreBundle\Enums\ActionIcon::INFORMATION,
+                'mactiveusers' => ActionIcon::STAR,
+                'mvisited'     => ActionIcon::HISTORY,
+                'mostchanged'  => ActionIcon::REFRESH,
+                'orphaned'     => ActionIcon::LINKS,
+                'wanted'       => ActionIcon::SEARCH,
+                'mostlinked'   => ActionIcon::LINKS,
+                'statistics'   => ActionIcon::INFORMATION,
             ];
 
             if (!$wikiHdrCssInjected) {
@@ -2895,7 +2920,7 @@ final class WikiManager
             foreach ($items as $key => $label) {
                 $isActive = ($key === $activeKey);
                 $href     = $url.'&action='.$key;
-                $icon     = Display::getMdiIcon($icons[$key] ?? \Chamilo\CoreBundle\Enums\ActionIcon::VIEW_DETAILS,
+                $icon     = Display::getMdiIcon($icons[$key] ?? ActionIcon::VIEW_DETAILS,
                     'mdi-inline', null, ICON_SIZE_SMALL, $label);
                 echo '<a class="pill'.($isActive ? ' active' : '').'" href="'.$href.'"'.
                     ($isActive ? ' aria-current="page"' : '').'>'.$icon.'<span>'.api_htmlentities($label).'</span></a>';
@@ -5007,18 +5032,18 @@ final class WikiManager
               <li class="breadcrumb-item">
                 <a href="'.
                     $this->url(['action'=>'showpage','title'=>'index']).'">'.
-                    Display::getMdiIcon(\Chamilo\CoreBundle\Enums\ActionIcon::HOME, 'mdi-inline', null, ICON_SIZE_SMALL, get_lang('Home')).
+                    Display::getMdiIcon(ActionIcon::HOME, 'mdi-inline', null, ICON_SIZE_SMALL, get_lang('Home')).
                     '<span>'.get_lang('Wiki').'</span>
                 </a>
               </li>
               <li class="breadcrumb-item active" aria-current="page">'.
-                    Display::getMdiIcon(\Chamilo\CoreBundle\Enums\ActionIcon::VIEW_MORE, 'mdi-inline', null, ICON_SIZE_SMALL, get_lang('More')).
+                    Display::getMdiIcon(ActionIcon::VIEW_MORE, 'mdi-inline', null, ICON_SIZE_SMALL, get_lang('More')).
                     '<span>'.get_lang('More').'</span>
               </li>
 
               <div class="breadcrumb-actions">
                 <a class="btn btn-default btn-xs" href="'.$this->url().'">'.
-                    Display::getMdiIcon(\Chamilo\CoreBundle\Enums\ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Back')).
+                    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Back')).
                     ' '.get_lang('Back').'
                 </a>
               </div>

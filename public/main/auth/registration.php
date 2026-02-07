@@ -1199,16 +1199,15 @@ if ($blockButton) {
     );
 } else {
     $allow = ('true' === api_get_setting('registration.allow_double_validation_in_registration'));
-    $termsEnabled = ('true' === api_get_setting('allow_terms_conditions'));
 
     ChamiloHelper::addLegalTermsFields($form, $userAlreadyRegisteredShowTerms);
 
     /**
-     * The "double validation" (Validate -> Register) is legacy UX.
-     * When Terms & Conditions are enabled, it becomes redundant and may create a confusing 2-step flow.
-     * Keep it only for platforms that explicitly want it without T&C.
+     * Double validation must be controlled ONLY by:
+     * registration.allow_double_validation_in_registration
+     * It must not depend on Terms & Conditions activation.
      */
-    if ($allow && !$termsEnabled && !$termActivated) {
+    if ($allow && !$termActivated) {
         $htmlHeadXtra[] = '<script>
             $(document).ready(function() {
                 $("#pre_validation").click(function() {
@@ -1479,6 +1478,7 @@ if ($form->validate()) {
     $user['mail'] = $values['email'];
     $user['language'] = $values['language'];
     $user['user_id'] = $userId;
+    $user['id'] = $userId;
     Session::write('_user', $user);
 
     $is_allowedCreateCourse = isset($values['status']) && 1 == $values['status'];
@@ -1509,6 +1509,7 @@ if ($form->validate()) {
         'mail' => $values['email'],
         'language' => $values['language'],
         'user_id' => $userId,
+        'id' => $userId,
     ];
 
     $sessionHandler->set('_user', $userData);

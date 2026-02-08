@@ -264,18 +264,18 @@ namenjen javni, pol-javni razpravi na določeno temo, ali pa je omejen na izbran
 
 Za uporabo foruma znotraj platforme Chamilo, potrebujejo uporabniki zgolj svoj brskalnik.<p/>
 
-Organizacijo forumov pričnete s klikom na orodje Forumi. Razprave so organizirane hierarhično 
+Organizacijo forumov pričnete s klikom na orodje Forumi. Razprave so organizirane hierarhično
 glede na naslednjo strukturo: Kategorija &gt; Forum &gt; Tema &gt; Objava . <p/>
 Da bi člani lahko sodelovali v forumu in the forum urejeno in učinkovito, je bistvenega pomena, da ustvarite prvi primer kategorije in forumov; nato je pričakovati od udeležencev, da bodo ustvarili teme in objave. Privzeto forum vsebuje eno samo (javno) kategorijo, primer teme in znotraj primer objave. Dodate lahko nove forume kategoriji, spremenite njen naslov ali kreirate nove kategorije znotraj katerih lahko kreirate nove forume. (Ne mešajte kategorij in forumov; pomnite pa, da je kategorija, ki ne vsebuje forumov kot
-taka nekoristna in ne bo prikazana.)<p/> 
+taka nekoristna in ne bo prikazana.)<p/>
 
 Opis foruma lahko vsebuje seznam njegovih članov, definicijo njegovega namena, opredelitev cilja, teme, itd.<p/>
 
 Forum skupine naj bo kreiran preko orodja Skupine, kjer se lahko odločite, ali bo forum privaten za člane skupine ali javen, s sočasnim zagotavljanjem lokacije za skupno rabo skupin dokumentov.<p/>
 
-Namig za poučevanje: Učni forum ni popolnoma enak forumom, ki jih običajno uporabljamo na spletu: <br /> 
-recimo, učečim je onemogočeno spreminjanje njihovih objav, ko jih enkrat dokončno objavijo, ker se tečaj logično arhivira za to, da je mogoče slediti temu, kar je bilo izrečeno/zapisanov preteklosti.<br /> 
-Nadalje, Chamilo forumi omogočajo nekaj specifičnih rab v zgolj učne namene:<br /> 
+Namig za poučevanje: Učni forum ni popolnoma enak forumom, ki jih običajno uporabljamo na spletu: <br />
+recimo, učečim je onemogočeno spreminjanje njihovih objav, ko jih enkrat dokončno objavijo, ker se tečaj logično arhivira za to, da je mogoče slediti temu, kar je bilo izrečeno/zapisanov preteklosti.<br />
+Nadalje, Chamilo forumi omogočajo nekaj specifičnih rab v zgolj učne namene:<br />
 npr., nekateri učitelji/trenerji objavljajo poprave/korekcije direktno v objave forumov kot: učeči se zaprosi za objavo poročila direktno na forum, učitelj objavo popravi/uredi z uporabo orodja Uredi (rumeno pisalo) in ga označi z uporabo grafičnega urejevalnika (barva, podčrtavanje, idr...) z namenom: drugi učeči imajo korist od vpogleda v popravke izdelka nekoga izmed njih. <br />Pomnite, da se enak postopek lahko uporabi tudi med samimi učečimi, kjer kolegi izvedejo korekcijo drugemu kolegu. Vendar bo tak način zahteval prepis (kopiraj/prilepi) popravljane vsebine, ker pač učeči ne morejo urejati/popravljati objav drugih učečih.";
 $HForum = "Pomoč: forum (diskusije)";
 $LoginToGoToThisCourse = "Prosim da se prijavite za dostop do tega tečaja";
@@ -739,7 +739,7 @@ $ArchivesDirectoryNotWriteableContactAdmin = "Arhivska mapa, ki jo uporablja to 
 $DestinationCourse = "Ciljni tečaj";
 $ConvertToMultipleAnswer = "Pretvori v večkraten odgovor";
 $CasMainActivateComment = "Omogočanje CAS avtentifikacije omogoči uporabnikom avtentifikacijo z njihovimi obstoječimi CAS avtentifikacijskimi podatki.<br>
-Obiščite 
+Obiščite
 <a href=\"settings.php?category=Plugins\">Vtičniki</a>
 za dodajanje in prilagoditev 'CAS Prijava' gumba za vaš Chamilo portal.";
 $UsersRegisteredInAnyGroup = "Uporabniki vpisani v katerokoli skupino";
@@ -6982,7 +6982,7 @@ $GradebookEnableLockingTitle = "Dovoli zaklepanje ocenjevanja s strani učitelja
 $GradebookEnableLockingComment = "Ko je omogočena, ta možnost omogoči zaklepanje poljubnega ocenjevanja s strani učitelja tečaja. Zaklepanje onemogoči vse nadaljne spremembe rezultatov s strani učitelja v tečaju in vseh virih, ki so uporabljeni pri ocenjevanju: testov, učnih poti, nalog, ... Edina vloga v okviru portala, ki ima možnost odklepanja je vloga administratorja. Učitelj bo pri zaklepanju informiran o tej možnosti. Odklepanje in zaklepanje redovalnic bo vedno registrirano v poročilih pomembnih aktivnosti sistema.";
 $LdapDescriptionComment = "<div class=\"normal-message\"><br><ul><li>LDAP autentifikacija : <br>Glej I. spodaj za nastavitev LDAP <br>Glej II. spodaj za aktivacijo LDAP autentifikacije </li><br><br><li> Ažurirajte uporabnikove atribute, z LDAP podatki, po CAS autentifikaciji(glej <a href=\"settings.php?category=CAS\">CAS nastavitve </a>) : <br>Glej I. spodaj za nastavitev LDAP <br>CAS upravlja uporabnikovo autentifikacijo, LDAP aktivacija ni zahtevana. </li><br></ul></div><br><h4>I. LDAP nastavitev</h4><h5>Uredite datoteko main/auth/external_login/ldap.conf.php </h5>-&gt; Spremenite vrednosti tabele <code>&#36;extldap_config</code> <br><br>Parametri so <br><ul><li>base domain string (ex : 'base_dn' =&gt; 'DC=cblue,DC=be') </li><li>admin distinguished name (ex : 'admin_dn' =&gt;'CN=admin,dc=cblue,dc=be') </li><li>admin password (ex : 'admin_password' =&gt; '123456') </li><li>ldap host (ex : 'host' =&gt; array('1.2.3.4', '2.3.4.5', '3.4.5.6')) </li><li>filter (ex : 'filter' =&gt; '') </li><li>port (ex : 'port' =&gt; 389) </li><li>protocol version (2 or 3) (ex : 'protocol_version' =&gt; 3) </li><li>user_search (ex : 'user_search' =&gt; 'sAMAccountName=%username%') </li><li>encoding (ex : 'encoding' =&gt; 'UTF-8') </li><li>update_userinfo (ex : 'update_userinfo' =&gt; true) </li></ul>-&gt; Za nastavitev soodvisnosti med uporabnikom in LDAP atributi, vnesite spremembe v tabelo <code>&#36;extldap_user_correspondance</code> <br>Vrednosti v tabeli so &lt;chamilo_field&gt; =&gt; &gt;ldap_field&gt; <br>Struktura tabele je razložena v datoteki main/auth/external_login/ldap.conf.php<br><br><br><h4>II. Aktivacija LDAP autentifikacije </h4><h5>Odprite datoteko main/inc/conf/configuration.php </h5>-&gt; Odstranite komentar z vrstic <br>&#36;extAuthSource[\"extldap\"][\"login\"] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].\"auth/external_login/login.ldap.php\";<br>&#36;extAuthSource[\"extldap\"][\"newUser\"] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].\"auth/external_login/newUser.ldap.php\";<br><br>op. 1 : LDAP uporabniki uporabljajo ista polja za prijavo kot uporabniki platforme. <br>op. 2 : LDAP aktivacija doda menu Zunanja autentifikacija [LDAP] v \"dodaj ali spremeni\" uporabniške strani.";
 $ShibbolethMainActivateTitle = "<h3>Shibboleth avtentifikacija</h3>";
-$ShibbolethMainActivateComment = "Najrej morate nastavit Shibboleth za vaš spletni strežnik. 
+$ShibbolethMainActivateComment = "Najrej morate nastavit Shibboleth za vaš spletni strežnik.
 Za nastavitev delovanja s Chamilo, prilagodite vsebino datoteke
 <h5>main/auth/shibboleth/config/aai.class.php</h5>
 V skladu v danimi Shibboleth atributi, spremenite vrednosti objektov &#36;result
@@ -7754,7 +7754,7 @@ $IconsModeSVGComment = "Z aktiviranjem te možnosti omogočite prikaz ikon, ki v
 $FilterByTags = "Filter po oznakah";
 $ImportFromMoodle = "Uvozi iz Moodle";
 $ImportFromMoodleInfo = "Uvozi Moodle datoteko tečaja (.mbz) v ta Chamilo tečaj";
-$ImportFromMoodleInstructions = "Uvoz z zmožnostjo uvoza Moodle-ovih tečajev lahko ne podpira vseh vsebin definiranih v Moodle, hkrati pa vse zmožnosti niso nujno enake in se obnašajo drugače na Chamilo platformi. Ta možnost smatramo kot zmožnost v razvoju. Preverite <a href=\"https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import\">https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import</a> glede dodatnih informacij.";
+$ImportFromMoodleInstructions = "Uvoz z zmožnostjo uvoza Moodle-ovih tečajev lahko ne podpira vseh vsebin definiranih v Moodle, hkrati pa vse zmožnosti niso nujno enake in se obnašajo drugače na Chamilo platformi. Ta možnost smatramo kot zmožnost v razvoju. Preverite <a href=\"https://github.com/chamilo/chamilo-lms/wiki/Import-from-Moodle\">https://github.com/chamilo/chamilo-lms/wiki/Import-from-Moodle</a> glede dodatnih informacij.";
 $MoodleFile = "Moodle-ova datoteka s tečajem";
 $FailedToImportThisIsNotAMoodleFile = "Uvoz ni uspel: videti je, da datoteka ni Moodle-ova datoteka (.mbz)";
 $ThisQuestionIsNotSupportedYet = "Ta vrsta vprašanja ni podprta";

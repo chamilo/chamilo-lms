@@ -10,6 +10,10 @@ declare(strict_types=1);
 // Usage: php grok_translate.php [lang1] [lang2] ...
 // If no languages provided, processes all messages.*.po except messages.en.po
 
+if (PHP_SAPI != 'cli') {
+    die('This script can only be executed from the command line');
+}
+
 $translationSourceLanguageCode = 'en_US';
 $translationAPIEndpoint = 'https://api.x.ai/v1/chat/completions';
 

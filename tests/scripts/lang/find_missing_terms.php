@@ -2,7 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
-exit;
+if (PHP_SAPI != 'cli') {
+    die('This script can only be executed from the command line');
+}
 
 /**
  * Script to scan Chamilo LMS master branch for translatable terms and compare with messages.pot

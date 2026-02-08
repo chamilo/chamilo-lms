@@ -8,7 +8,10 @@
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 
-exit(); //remove before execution
+if (PHP_SAPI != 'cli') {
+    die('This script can only be executed from the command line');
+}
+
 //require_once __DIR__.'/../../../public/main/inc/global.inc.php';
 ini_set('memory_limit', '600M');
 $partial = false; //if set to true, do not add empty strings to .po files

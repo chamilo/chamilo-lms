@@ -6,7 +6,10 @@
  *
  */
 
-die();
+if (PHP_SAPI != 'cli') {
+    die('This script can only be executed from the command line');
+}
+
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 $path = api_get_path(SYS_LANG_PATH).'english';
 ini_set('memory_limit', '128M');

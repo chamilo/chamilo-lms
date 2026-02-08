@@ -3,15 +3,22 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-// This script completes translations for Chamilo LMS using the Grok API.
+// This script completes translations for Chamilo LMS using the Grok (or other AI) API.
 // Run from tests/scripts/lang/ with access to ../../../translations/
 // Requires curl and JSON extensions.
 // Set the $apiKey variable with your Grok API key.
 // Usage: php grok_translate.php [lang1] [lang2] ...
 // If no languages provided, processes all messages.*.po except messages.en.po
 
-exit;
-$apiKey = '{some-api-key-here}';
+$translationSourceLanguageCode = 'en_US';
+$translationAPIEndpoint = 'https://api.x.ai/v1/chat/completions';
+
+$configFile = __DIR__ . '/config.php';
+if (!is_file(__DIR__ . '/config.php')) {
+    exit('No config.php file found in this directory. Please copy config.php.dist to config.php and fill in your API key.');
+}
+require_once __DIR__ . '/config.php';
+$apiKey = $translationAPIKey ?? '';
 
 /**
  * Chamilo Gettext auto-translator using Grok (grok-4-1-fast-non-reasoning)
@@ -36,11 +43,11 @@ $apiKey = '{some-api-key-here}';
  */
 
 // ===================== CONFIGURATION =====================
-// Grok chat-completions-like endpoint URL
-$apiUrl = 'https://api.x.ai/v1/chat/completions';
+// AI chat-completions-like endpoint URL
+$apiUrl = $translationAPIEndpoint;
 
 // Base (source) language and file
-$sourceLanguageCode = 'en_US';
+$sourceLanguageCode = $translationSourceLanguageCode;
 $translationsDir = __DIR__ . "/../../../translations/";
 $basePoFile = $translationsDir . "messages.{$sourceLanguageCode}.po";
 
@@ -416,7 +423,7 @@ function parseTargetPoFile(string $filePath): array {
  *   -> considered mostly English, needs translation
  */
 function needsTranslationUpdate(string $msgid, string $msgstr, string $targetLang): bool {
-    if ($targetLang === 'en') {
+    if ($targetLang === 'en_US') {
         return false;
     }
 
@@ -718,7 +725,7 @@ if (empty($argvCopy)) {
 
         // Skip English and any template (.pot disguised as .po)
         // Tibetan (bo) is skipped because error-prone. Might be "unskipped" in the future. Execute manually (add 'po' parameter to command) to update.
-        if ($code === 'en' || $code === 'bo' || $code === 'pot') {
+        if ($code === 'en_US' || $code === 'bo_CN' || $code === 'pot') {
             continue;
         }
 

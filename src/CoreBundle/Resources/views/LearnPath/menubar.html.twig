@@ -3,7 +3,7 @@
     {% set show_left_column = (show_left_column|default(1) + 0) %}
     {% set show_toolbar_by_default = (show_toolbar_by_default|default(0) + 0) %}
     {# Force the toolbar open when TOC is hidden so navigation is always visible #}
-    {% set force_open = (show_toolbar_by_default == 1) or (toc_hidden == 1) %}
+    {% set force_open = (show_toolbar_by_default == 1) or (toc_hidden == 1 and menu_location != 'top') %}
     {% if navigation_in_the_middle %}
         <style>
             .c-menu-left { top: 50% !important; }

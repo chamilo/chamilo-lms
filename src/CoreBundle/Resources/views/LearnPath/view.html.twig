@@ -101,9 +101,75 @@
                 width: 100% !important;
                 margin-left: 0 !important;
             }
+            /* -----------------------------
+             * Floating menu positioning
+             * ----------------------------- */
             #btn-menu-float {
-                z-index: 9999 !important;
+                position: fixed !important;
+                top: 8px !important;
+                left: 8px !important;
+                right: auto !important;
+                width: auto !important;
+                height: auto !important;
+                padding: 0 !important;
+                background: transparent !important;
+                box-shadow: none !important;
+                z-index: 999999 !important;
             }
+            #btn-menu-float,
+            #btn-menu-float > div,
+            #btn-menu-float > ul {
+                background: transparent !important;
+                box-shadow: none !important;
+            }
+            #btn-menu-float .circle,
+            #btn-menu-float .circle.open {
+                width: auto !important;
+                height: auto !important;
+                padding: 4px 6px !important;
+                border-radius: 12px !important;
+                background: rgba(255,255,255,0.92) !important;
+                box-shadow: none !important;
+            }
+            #btn-menu-float .circle:not(.open) {
+                background: transparent !important;
+                box-shadow: none !important;
+            }
+            /* -----------------------------------------------------------------
+             * TOC hidden mode: move menu to TOP-RIGHT and use compact behavior.
+             * This class is toggled by JS only when tocHidden === 1.
+             * ----------------------------------------------------------------- */
+            #btn-menu-float.c-menu-top {
+                position: fixed !important;
+                top: 8px !important;
+                right: 8px !important;
+                left: auto !important;
+                width: auto !important;
+                z-index: 999999 !important;
+            }
+            #btn-menu-float.c-menu-top .circle {
+                display: inline-flex !important;
+                align-items: center !important;
+                gap: 6px !important;
+                width: auto !important;
+                padding: 0 !important;
+                background: transparent !important;
+                box-shadow: none !important;
+            }
+            #btn-menu-float.c-menu-top .icon-toolbar,
+            #btn-menu-float.c-menu-top .menu-button {
+                background: rgba(255,255,255,0.92) !important;
+                border-radius: 10px !important;
+            }
+            #btn-menu-float.c-menu-top .circle:not(.open) {
+                display: none !important;
+            }
+            #btn-menu-float.c-menu-top .menu-button {
+                z-index: 1000000 !important;
+            }
+            /* -----------------------------
+             * Loader overlay
+             * ----------------------------- */
             #wrapper-iframe { position: relative !important; }
             #lp-iframe-loader {
                 position: absolute;
@@ -341,20 +407,50 @@
               return;
             }
 
-            var $circle = $menu.find("[data-lp-menu='circle']").first();
-            var $toggle = $menu.find("[data-lp-menu='toggle']").first();
+            /*
+             * Menu positioning rule:
+             * - TOC visible  -> keep menu on the LEFT (default CSS)
+             * - TOC hidden   -> move menu to TOP-RIGHT to avoid covering the title
+             */
+            $menu.toggleClass("c-menu-top", tocHidden === 1);
 
-            // Ensure toolbar is visible when TOC is hidden
-            if (tocHidden === 1 && $circle.length) {
-              $circle.addClass("open");
-              $toggle.addClass("menu-button-selected");
+            // Prefer data attributes (if you added them), fallback to legacy classes.
+            var $circle = $menu.find("[data-lp-menu='circle']").first();
+            if (!$circle.length) {
+              $circle = $menu.find(".circle").first();
             }
 
-            // Toggle only this LP menu (avoid global selectors)
-            $toggle.off("click.lpMenu").on("click.lpMenu", function () {
-              $circle.toggleClass("open");
-              $toggle.toggleClass("menu-button-selected");
-            });
+            var $toggle = $menu.find("[data-lp-menu='toggle']").first();
+            if (!$toggle.length) {
+              $toggle = $menu.find(".menu-button").first();
+            }
+
+            // Ensure toolbar is visible when TOC is hidden
+            if ($circle.length && $toggle.length) {
+              if (tocHidden === 1) {
+                $circle.addClass("open");
+                $toggle.addClass("menu-button-selected");
+              } else {
+                // Keep it collapsed on normal (TOC visible) mode.
+                $circle.removeClass("open");
+                $toggle.removeClass("menu-button-selected");
+              }
+            }
+
+            // Toggle only this LP menu (avoid global selectors) - and NEVER navigate on toggle.
+            if ($toggle.length && $circle.length) {
+              $toggle.off("click.lpMenu").on("click.lpMenu", function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                $circle.toggleClass("open");
+                $toggle.toggleClass("menu-button-selected");
+
+                return false;
+              });
+            } else {
+              console.warn("LP: menu toggle/circle not found. Toggle binding skipped.");
+            }
 
             // Expand/collapse only when TOC is visible
               {% if toc_hidden != 1 %}
@@ -433,70 +529,183 @@
               }
             }
 
-            function collectTocItemIds() {
-              var ids = [];
-              var seen = {};
+            /* -----------------------------------------------------------
+             * When TOC is hidden, navigation must NOT rely on
+             * TOC DOM ordering. Use backend/runtime directions ('next'/'previous')
+             * to guarantee correct sequencing.
+             * ----------------------------------------------------------- */
+            function getCurrentItemIdSafe() {
+              // Prefer runtime value (always the most reliable after switches)
+              try {
+                if (window.olms && typeof olms.lms_item_id !== "undefined") {
+                  var n = parseInt(olms.lms_item_id, 10);
+                  if (Number.isFinite(n) && n > 0) return n;
+                }
+              } catch (e) {}
 
-              // Common: elements with id="toc_123"
-              $("#toc_id [id^='toc_']").each(function () {
-                var raw = (this.id || "").replace("toc_", "");
-                var n = parseInt(raw, 10);
-                if (!Number.isFinite(n) || n <= 0) return;
-                if (seen[n]) return;
-                seen[n] = true;
-                ids.push(n);
+              var fromWindow = getNumeric(window.lpCurrentItemId);
+              if (fromWindow > 0) return fromWindow;
+
+              var fromUrl = parseInt(getSearchParam("item_id"), 10);
+              return Number.isFinite(fromUrl) ? fromUrl : 0;
+            }
+
+            function buildContentUrlForItem(itemId) {
+              var cid = getSearchParam("cid") || "";
+              var sid = getSearchParam("sid") || "0";
+              var lpId = String(getNumeric(window.lpId) || {{ lp_id_num }});
+              return "lp_controller.php?action=content"
+                + "&cid=" + encodeURIComponent(cid)
+                + "&sid=" + encodeURIComponent(sid)
+                + "&origin=learnpath"
+                + "&lp_id=" + encodeURIComponent(lpId)
+                + "&lp_item_id=" + encodeURIComponent(String(itemId))
+                + "&item_id=" + encodeURIComponent(String(itemId));
+            }
+
+            // Iframe loading overlay (safe: does not cancel navigation)
+            var $loader = $("#lp-iframe-loader");
+            var $iframe = $("#content_id");
+            if (!$iframe.length) {
+              $iframe = $("#content_id_blank");
+            }
+
+            var loaderTimer = null;
+            var maxHideTimer = null;
+
+            function showLoader(reason) {
+              if (!$loader.length) return;
+
+              $loader.addClass("is-visible").attr("aria-hidden", "false");
+
+              clearTimeout(maxHideTimer);
+              maxHideTimer = setTimeout(function () {
+                hideLoader("timeout");
+              }, 15000);
+            }
+
+            function hideLoader(reason) {
+              if (!$loader.length) return;
+              console.info("LP: hide loader", reason || "");
+              $loader.removeClass("is-visible").attr("aria-hidden", "true");
+              clearTimeout(maxHideTimer);
+            }
+
+            // Show loader for the initial iframe load
+            if ($iframe.length) {
+              showLoader("initial");
+              $iframe.off("load.lpLoader").on("load.lpLoader", function () {
+                hideLoader("iframe load");
               });
+            } else {
+              console.warn("LP: iframe not found (#content_id / #content_id_blank).");
+            }
 
-              // Fallback: parse item_id from hrefs inside toc
-              if (!ids.length) {
-                $("#toc_id a[href*='item_id=']").each(function () {
-                  try {
-                    var href = $(this).attr("href") || "";
-                    var m = href.match(/[?&]item_id=(\d+)/);
-                    if (!m) return;
-                    var n = parseInt(m[1], 10);
-                    if (!Number.isFinite(n) || n <= 0) return;
-                    if (seen[n]) return;
-                    seen[n] = true;
-                    ids.push(n);
-                  } catch (e) {}
+            $(document).off("click.lpLoaderNav").on(
+              "click.lpLoaderNav",
+              "#toc_id a, #btn-menu-float a, #btn-menu-float button",
+              function () {
+                var $t = $(this);
+
+                // Do NOT show loader for the menu toggle (open/close).
+                if ($toggle.length && ($t.is($toggle) || $t.closest($toggle).length)) {
+                  return;
+                }
+
+                // Only show loader when this looks like REAL navigation (prev/next/home/content links).
+                var href = ($t.attr("href") || "");
+                var onclickValue = ($t.attr("onclick") || "");
+
+                var isKnownNavButton = $t.is("#scorm-next, #scorm-previous, #home-course");
+                var isTocClick = $t.closest("#toc_id").length > 0;
+
+                var isLpContentLink =
+                  href.indexOf("lp_controller.php") !== -1 ||
+                  href.indexOf("lp_view.php") !== -1 ||
+                  href.indexOf("lp_content.php") !== -1 ||
+                  onclickValue.indexOf("lp_controller.php") !== -1 ||
+                  onclickValue.indexOf("lp_view.php") !== -1 ||
+                  onclickValue.indexOf("lp_content.php") !== -1 ||
+                  onclickValue.indexOf("content_name") !== -1;
+
+                if (!isKnownNavButton && !isTocClick && !isLpContentLink) {
+                  return;
+                }
+
+                clearTimeout(loaderTimer);
+                loaderTimer = setTimeout(function () {
+                  showLoader("nav click");
+                }, 0);
+              }
+            );
+
+            function lpNavigateToItem(target, label) {
+              var isDirection = (target === "next" || target === "previous" || target === "first" || target === "last");
+              var targetItemId = 0;
+
+              if (!isDirection) {
+                targetItemId = parseInt(target, 10);
+                if (!Number.isFinite(targetItemId) || targetItemId <= 0) {
+                  console.warn("LP NAV: invalid target item id for " + label + ":", target);
+                  return false;
+                }
+              }
+
+              showLoader("navigate " + label);
+
+              var currentItemId = getCurrentItemIdSafe();
+
+              // Use switch_item if the runtime is ready (preferred, preserves SCORM state)
+              if (window.olms && typeof switch_item === "function" && Number(olms.lms_initialized) === 1) {
+                console.info("LP NAV: switching item via runtime", {
+                  currentItemId: currentItemId,
+                  target: isDirection ? target : targetItemId
                 });
+
+                try {
+                  // NOTE: when target is 'next'/'previous', the backend computes the real next/prev.
+                  switch_item(currentItemId || 0, isDirection ? target : targetItemId);
+
+                  // Keep window var in sync only when we know the numeric target.
+                  if (!isDirection) {
+                    window.lpCurrentItemId = targetItemId;
+                  }
+                  return true;
+                } catch (e) {
+                  console.warn("LP NAV: switch_item() failed, fallback to iframe src update.", e);
+                }
               }
 
-              return ids;
-            }
+              // update iframe src (works, but may not update full LMS runtime state)
+              if ($iframe && $iframe.length) {
+                // If direction was requested, try to map it to a numeric id from runtime
+                if (isDirection && window.olms) {
+                  var fallbackId = 0;
+                  try {
+                    if (target === "next") fallbackId = parseInt(olms.lms_next_item, 10);
+                    if (target === "previous") fallbackId = parseInt(olms.lms_previous_item, 10);
+                  } catch (e) {}
 
-            function computePrevNext(currentId) {
-              var ids = collectTocItemIds();
-              if (!ids.length) {
-                console.warn("LP NAV: no TOC item ids found. Cannot compute prev/next.");
-                return { ids: ids, prev: 0, next: 0 };
+                  if (Number.isFinite(fallbackId) && fallbackId > 0 && fallbackId !== currentItemId) {
+                    targetItemId = fallbackId;
+                  } else {
+                    console.warn("LP NAV: cannot resolve numeric item for direction fallback:", target, fallbackId);
+                    hideLoader("nav failed");
+                    return false;
+                  }
+                }
+
+                if (targetItemId > 0) {
+                  var src = buildContentUrlForItem(targetItemId);
+                  console.info("LP NAV: updating iframe src (fallback).", src);
+                  $iframe.attr("src", src);
+                  window.lpCurrentItemId = targetItemId;
+                  return true;
+                }
               }
 
-              var idx = ids.indexOf(currentId);
-              if (idx === -1) {
-                console.warn("LP NAV: current item not found in TOC list. Falling back to first item.", { currentId: currentId, count: ids.length });
-                return { ids: ids, prev: 0, next: ids.length > 1 ? ids[1] : 0 };
-              }
-
-              var prev = (idx > 0) ? ids[idx - 1] : 0;
-              var next = (idx < ids.length - 1) ? ids[idx + 1] : 0;
-              return { ids: ids, prev: prev, next: next };
-            }
-
-            function buildViewUrlForItem(itemId) {
-              // Keep cid/sid/etc from current URL; only enforce action/view + lp_id + item_id
-              var u = new URL(window.location.href);
-
-              u.searchParams.set("action", "view");
-              u.searchParams.set("lp_id", String(getNumeric(window.lpId) || {{ lp_id_num }}));
-              u.searchParams.set("item_id", String(itemId));
-
-              // Avoid conflicting params used in other contexts
-              u.searchParams.delete("id");
-              u.searchParams.delete("lp_item_id");
-
-              return u.pathname + "?" + u.searchParams.toString();
+              hideLoader("nav failed");
+              return false;
             }
 
             function looksLikePrev(el) {
@@ -531,77 +740,56 @@
             }
 
             function patchNavArrowsWhenTocHidden() {
-              // Only needed when TOC is hidden; when visible, legacy navigation works as designed (iframe-based)
               if (tocHidden !== 1) return;
 
-              var currentId = getNumeric(window.lpCurrentItemId) || getNumeric({{ lp_current_item_id_num }});
-              if (!currentId) {
-                currentId = parseInt(getSearchParam("item_id"), 10) || 0;
-              }
+              // Prefer known IDs if present (most reliable on top menu)
+              var $prevEl = $("#scorm-previous");
+              var $nextEl = $("#scorm-next");
 
-              var pn = computePrevNext(currentId);
-              console.info("LP NAV: computed prev/next from TOC.", { currentId: currentId, prev: pn.prev, next: pn.next, count: pn.ids.length });
-
-              if (!pn.prev && !pn.next) {
-                console.warn("LP NAV: prev/next not available. Navigation arrows will not be patched.");
-                return;
-              }
-
-              var $candidates = $menu
-                .find("a, button")
-                .not("#home-course")
-                .not("#lp-view-expand-toggle")
-                .not("[data-lp-menu='toggle']");
-
-              var $prevEl = $();
-              var $nextEl = $();
-
-              $candidates.each(function () {
-                if (!$prevEl.length && looksLikePrev(this)) $prevEl = $(this);
-                if (!$nextEl.length && looksLikeNext(this)) $nextEl = $(this);
-              });
-
-              // Additional fallback: anything that explicitly contains "item_id=NaN"
+              // If not found, fallback to heuristics inside the floating menu
               if (!$prevEl.length || !$nextEl.length) {
-                var $nan = $menu.find("a[href*='item_id=NaN'], a[onclick*='item_id'][onclick*='NaN'], button[onclick*='NaN']");
-                if ($nan.length) {
-                  if (!$prevEl.length) $prevEl = $($nan.get(0));
-                  if (!$nextEl.length && $nan.length > 1) $nextEl = $($nan.get(1));
-                }
+                var $candidates = $menu
+                  .find("a, button")
+                  .not("#home-course")
+                  .not("#lp-view-expand-toggle")
+                  .not("[data-lp-menu='toggle']");
+
+                $prevEl = $prevEl.length ? $prevEl : $();
+                $nextEl = $nextEl.length ? $nextEl : $();
+
+                $candidates.each(function () {
+                  if (!$prevEl.length && looksLikePrev(this)) $prevEl = $(this);
+                  if (!$nextEl.length && looksLikeNext(this)) $nextEl = $(this);
+                });
               }
 
-              function applyPatch($el, url, label) {
-                if (!$el || !$el.length || !url) {
-                  console.warn("LP NAV: cannot patch " + label + " arrow (element or url missing).");
+              function applyPatchDirection($el, direction, label) {
+                if (!$el || !$el.length) {
+                  console.warn("LP NAV: cannot patch " + label + " (element not found).");
                   return;
                 }
 
-                // Remove broken legacy onclick (often builds NaN)
-                $el.removeAttr("onclick");
+                // Remove legacy inline handlers and targets
+                $el.removeAttr("onclick").removeAttr("target");
 
                 if ($el.is("a")) {
-                  $el.attr("href", url);
-                  $el.attr("target", "_self");
-                } else {
-                  // For buttons, store url for our resolver
-                  $el.attr("data-lp-nav-url", url);
+                  $el.attr("href", "#");
                 }
 
-                // Always enforce click navigation for visible feedback
                 $el.off("click.lpNav").on("click.lpNav", function (e) {
                   e.preventDefault();
-                  console.info("LP NAV: navigating to " + label + " item.", url);
-                  window.location.href = url;
+                  e.stopPropagation();
+                  console.info("LP NAV: " + label + " clicked -> navigating direction", direction);
+                  lpNavigateToItem(direction, label);
                   return false;
                 });
               }
 
-              if (pn.prev) applyPatch($prevEl, buildViewUrlForItem(pn.prev), "previous");
-              if (pn.next) applyPatch($nextEl, buildViewUrlForItem(pn.next), "next");
+              applyPatchDirection($prevEl, "previous", "previous");
+              applyPatchDirection($nextEl, "next", "next");
             }
 
-            // When TOC is hidden, do NOT force navigation to _self.
-            // LP navigation must keep loading inside the iframe named "content_name".
+            // When TOC is hidden, keep LP content navigation inside the iframe named "content_name".
             if (tocHidden === 1) {
               $menu.find("a").each(function () {
                 var url = resolveUrl(this);
@@ -649,54 +837,22 @@
             }
               {% endif %}
 
+            function patchNavArrowsWhenTocHiddenSafe() {
+              if (tocHidden !== 1) return;
 
-            // Iframe loading overlay (safe: does not cancel navigation)
-            var $loader = $("#lp-iframe-loader");
-            var $iframe = $("#content_id");
-            if (!$iframe.length) {
-              $iframe = $("#content_id_blank");
+              try {
+                patchNavArrowsWhenTocHidden();
+              } catch (e) {
+                console.warn("LP NAV: patchNavArrowsWhenTocHidden() failed:", e);
+              }
             }
 
-            var loaderTimer = null;
-            var maxHideTimer = null;
-
-            function showLoader(reason) {
-              if (!$loader.length) return;
-
-              $loader.addClass("is-visible").attr("aria-hidden", "false");
-
-              clearTimeout(maxHideTimer);
-              maxHideTimer = setTimeout(function () {
-                hideLoader("timeout");
-              }, 15000);
+            if (tocHidden === 1) {
+              // Run immediately + retries (menu markup sometimes arrives late)
+              patchNavArrowsWhenTocHiddenSafe();
+              setTimeout(patchNavArrowsWhenTocHiddenSafe, 200);
+              setTimeout(patchNavArrowsWhenTocHiddenSafe, 600);
             }
-
-            function hideLoader(reason) {
-              if (!$loader.length) return;
-
-              console.info("LP: hide loader", reason || "");
-
-              $loader.removeClass("is-visible").attr("aria-hidden", "true");
-              clearTimeout(maxHideTimer);
-            }
-
-            // Show loader for the initial iframe load
-            if ($iframe.length) {
-              showLoader("initial");
-              $iframe.off("load.lpLoader").on("load.lpLoader", function () {
-                hideLoader("iframe load");
-              });
-            } else {
-              console.warn("LP: iframe not found (#content_id / #content_id_blank).");
-            }
-
-            // Show loader on any navigation click (TOC + toolbar) WITHOUT preventing default
-            $(document).off("click.lpLoaderNav").on("click.lpLoaderNav", "#toc_id a, #btn-menu-float a, #btn-menu-float button", function () {
-              clearTimeout(loaderTimer);
-              loaderTimer = setTimeout(function () {
-                showLoader("nav click");
-              }, 0);
-            });
 
           });
         </script>

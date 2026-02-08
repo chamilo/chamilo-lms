@@ -7,7 +7,7 @@
       <a
         v-for="it in items"
         :key="it.slug"
-        class="text-sm text-gray-90 hover:underline"
+        class="text-sm text-gray-50 hover:text-gray-30 hover:underline"
         :href="`/pages/${it.slug}`"
       >
         {{ it.title }}

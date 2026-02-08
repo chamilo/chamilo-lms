@@ -41,7 +41,7 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
     /**
      * @throws Exception
      */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
         /** @var User|null $user */
         $user = $this->userRepository->find($uriVariables['id'] ?? null);

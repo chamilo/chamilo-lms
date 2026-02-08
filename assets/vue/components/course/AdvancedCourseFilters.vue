@@ -212,7 +212,10 @@
       <!-- TEXT / INTEGER / FLOAT / DURATION  -->
       <div v-else>
         <label class="block text-sm font-medium mb-1">{{ f.title }}</label>
-        <InputText v-model="model.extra[f.variable]" :id="`extra-${f.variable}`" />
+        <InputText
+          v-model="model.extra[f.variable]"
+          :id="`extra-${f.variable}`"
+        />
       </div>
     </template>
 
@@ -328,15 +331,33 @@ function clear() {
 }
 
 function apply() {
-  const payload = {}
-  if (model.title?.trim()) payload.title = model.title.trim()
+  const payload = {
+    title: "",
+    extraFields: [],
+    extraFieldValues: [],
+  }
 
-  Object.entries(model.extra).forEach(([k, v]) => {
-    if (v === null || v === undefined) return
-    if (Array.isArray(v) && v.length === 0) return
-    if (typeof v === "string" && v.trim() === "") return
-    payload[`extra_${k}`] = v
-  })
+  payload.title = model.title.trim()
+
+  for (let [key, value] of Object.entries(model.extra)) {
+    const fieldInfo = props.fields.find((f) => f.variable === key)
+
+    if (!fieldInfo) {
+      continue
+    }
+
+    if (isCheckbox(fieldInfo)) {
+      if (value === true) {
+        value = "1"
+      } else {
+        key = undefined
+        value = undefined
+      }
+    }
+
+    payload.extraFields.push(key)
+    payload.extraFieldValues.push(value)
+  }
 
   emit("apply", payload)
 }

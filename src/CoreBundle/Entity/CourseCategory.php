@@ -56,6 +56,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     uriVariables: [
         'id' => new Link(
+            fromProperty: 'categories',
             fromClass: Course::class,
             identifiers: ['id']
         ),

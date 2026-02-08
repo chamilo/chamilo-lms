@@ -6203,7 +6203,7 @@ class CourseManager
     {
         $courseIdRedirect = Session::read('course_redirect');
         $_user = api_get_user_info();
-        $userId = $_user['id'];
+        $userId = (int) ($_user['id'] ?? ($_user['user_id'] ?? 0));
 
         if (!empty($courseIdRedirect)) {
             $course_info = api_get_course_info_by_id($courseIdRedirect);

@@ -167,6 +167,6 @@ final class PageRepository extends ServiceEntityRepository
             ->orderBy('p.title', 'ASC')
             ->getQuery()
             ->getArrayResult()
-            ;
+        ;
     }
 }

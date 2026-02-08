@@ -1,7 +1,7 @@
 <template>
   <Card class="course-card">
     <template #header>
-      <div class="relative aspect-[16/9] w-full overflow-hidden rounded-t-2xl bg-gray-100">
+      <div class="relative aspect-video w-full overflow-hidden rounded-t-2xl bg-gray-100">
         <img
           v-if="isLocked"
           :alt="course.title || 'Course illustration'"
@@ -27,7 +27,7 @@
       </div>
     </template>
     <template #title>
-      <div class="course-card__title flex items-center gap-2">
+      <div class="course-card__title">
         <div v-if="isLocked">
           <div
             v-if="session"

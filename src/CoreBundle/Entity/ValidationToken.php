@@ -38,7 +38,7 @@ class ValidationToken
     protected DateTime $createdAt;
 
     /**
-     * @param  string|null  $hash  A 64-char SHA-256 hex hash. If null, a secure random hash is generated.
+     * @param string|null $hash A 64-char SHA-256 hex hash. If null, a secure random hash is generated.
      */
     public function __construct(int $type, int $resourceId, ?string $hash = null)
     {

@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
+use DateTimeImmutable;
 use Doctrine\DBAL\Schema\Schema;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Uid\Uuid;
@@ -27,6 +28,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        $this->ensureCDocumentFiletypeVarchar15();
         $documentRepo = $this->container->get(CDocumentRepository::class);
         $courseRepo = $this->container->get(CourseRepository::class);
         $attemptRepo = $this->entityManager->getRepository(TrackEAttempt::class);
@@ -62,6 +64,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 $attemptId = isset($matches[1]) && '' !== $matches[1] ? (int) $matches[1] : 0;
                 if ($attemptId <= 0) {
                     error_log('[MIGRATION][teacher_audio] Could not parse attempt id from path, skipping.');
+
                     continue;
                 }
 
@@ -79,6 +82,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 $userId = $this->getAttemptUserId($attempt);
                 if (null === $userId || $userId <= 0) {
                     error_log('[MIGRATION][teacher_audio] Missing attempt user id, skipping.');
+
                     continue;
                 }
 
@@ -90,7 +94,8 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     $asset = (new Asset())
                         ->setCategory(Asset::EXERCISE_FEEDBACK)
                         ->setTitle($fileName)
-                        ->setFile($file);
+                        ->setFile($file)
+                    ;
 
                     $this->entityManager->persist($asset);
                     $this->entityManager->flush();
@@ -170,7 +175,8 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     $asset = (new Asset())
                         ->setCategory(Asset::EXERCISE_ATTEMPT)
                         ->setTitle($fileName)
-                        ->setFile($file);
+                        ->setFile($file)
+                    ;
 
                     $this->entityManager->persist($asset);
                     $this->entityManager->flush();
@@ -195,7 +201,9 @@ final class Version20201212203625 extends AbstractMigrationChamilo
             $counter = 1;
             $courseId = (int) $course->getId();
 
-            $sql = "SELECT iid, path FROM c_document
+            // We fetch session_id and filetype for debugging/consistency checks during migration.
+            // The legacy "path" is the only reliable identifier for system folders (language-independent).
+            $sql = "SELECT iid, path, session_id, filetype FROM c_document
                     WHERE c_id = {$courseId}
                       AND path NOT LIKE '/../exercises/%'
                       AND path NOT LIKE '/chat_files/%'
@@ -203,8 +211,14 @@ final class Version20201212203625 extends AbstractMigrationChamilo
             $documents = $this->connection->executeQuery($sql)->fetchAllAssociative();
 
             foreach ($documents as $documentData) {
-                $documentId = (int) $documentData['iid'];
-                $documentPath = (string) $documentData['path'];
+                $documentId = (int) ($documentData['iid'] ?? 0);
+                $documentPath = (string) ($documentData['path'] ?? '');
+                $legacySessionId = (int) ($documentData['session_id'] ?? 0);
+                $legacyFiletype = (string) ($documentData['filetype'] ?? '');
+
+                if ($documentId <= 0 || '' === $documentPath) {
+                    continue;
+                }
 
                 $courseEntity = $courseRepo->find($courseId);
                 if (!$courseEntity) {
@@ -219,6 +233,28 @@ final class Version20201212203625 extends AbstractMigrationChamilo
 
                 if ($document->hasResourceNode()) {
                     continue;
+                }
+
+                // Detect and mark legacy system folders before linking/persisting.
+                // This avoids relying on translated titles and keeps identification stable over time.
+                $normalizedLegacyPath = $this->normalizeLegacyDocumentPath($documentPath);
+                $systemFolderType = $this->detectSystemFolderType($normalizedLegacyPath);
+
+                // Only overwrite filetype for folders to keep behavior safe and predictable.
+                if (null !== $systemFolderType) {
+                    $effectiveFiletype = $document->getFiletype() ?? $legacyFiletype;
+
+                    if ('folder' === $effectiveFiletype) {
+                        $document->setFiletype($systemFolderType);
+
+                        error_log(\sprintf(
+                            '[MIGRATION][documents] Marked system folder (iid=%d, legacyPath=%s, legacySid=%d, type=%s).',
+                            $documentId,
+                            $normalizedLegacyPath,
+                            $legacySessionId,
+                            $systemFolderType
+                        ));
+                    }
                 }
 
                 $parent = null;
@@ -240,6 +276,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 }
                 if (null === $parent->getResourceNode()) {
                     $this->logItemPropertyInconsistency('document', $documentId, $documentPath);
+
                     continue;
                 }
                 $admin = $this->getAdmin();
@@ -278,9 +315,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
         $this->entityManager->clear();
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 
     private function attemptHasFeedback(int $attemptId): bool
     {
@@ -307,7 +342,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
         if (method_exists($attempt, 'getUser')) {
             $u = $attempt->getUser();
 
-            if (is_object($u) && method_exists($u, 'getId')) {
+            if (\is_object($u) && method_exists($u, 'getId')) {
                 return (int) $u->getId();
             }
 
@@ -328,7 +363,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
 
     private function insertAttemptFeedbackRow(int $attemptId, int $userId, Asset $asset): void
     {
-        $now = (new \DateTimeImmutable())->format('Y-m-d H:i:s');
+        $now = (new DateTimeImmutable())->format('Y-m-d H:i:s');
 
         // asset_id column is intentionally not mapped in the entity anymore,
         // but it still exists for the later migration that converts it to ResourceNode/ResourceFile.
@@ -343,12 +378,12 @@ final class Version20201212203625 extends AbstractMigrationChamilo
             'updated_at' => $now,
         ]);
 
-        error_log(sprintf('[MIGRATION][attempt_feedback] Linked asset to attempt (attemptId=%d).', $attemptId));
+        error_log(\sprintf('[MIGRATION][attempt_feedback] Linked asset to attempt (attemptId=%d).', $attemptId));
     }
 
     private function insertAttemptFileRow(int $attemptId, Asset $asset): void
     {
-        $now = (new \DateTimeImmutable())->format('Y-m-d H:i:s');
+        $now = (new DateTimeImmutable())->format('Y-m-d H:i:s');
 
         $this->connection->insert('attempt_file', [
             'id' => Uuid::v4()->toBinary(),
@@ -360,6 +395,77 @@ final class Version20201212203625 extends AbstractMigrationChamilo
             'updated_at' => $now,
         ]);
 
-        error_log(sprintf('[MIGRATION][attempt_file] Linked asset to attempt (attemptId=%d).', $attemptId));
+        error_log(\sprintf('[MIGRATION][attempt_file] Linked asset to attempt (attemptId=%d).', $attemptId));
+    }
+
+    /**
+     * Ensure c_document.filetype is large enough BEFORE we update it during data migration.
+     * Execute the ALTER immediately to avoid truncation during flush().
+     */
+    private function ensureCDocumentFiletypeVarchar15(): void
+    {
+        try {
+            // We run this upfront because this migration updates c_document.filetype during flush().
+            $this->connection->executeStatement('ALTER TABLE c_document MODIFY filetype VARCHAR(15);');
+            error_log('[MIGRATION][documents] Ensured c_document.filetype is VARCHAR(15) before data migration.');
+        } catch (Throwable $e) {
+            error_log('[MIGRATION][documents] Failed to resize c_document.filetype: '.$e->getMessage());
+        }
+    }
+
+    /**
+     * Normalize legacy paths so system folders can be detected reliably.
+     * Keep it strict and language-independent (do not use titles).
+     */
+    private function normalizeLegacyDocumentPath(string $path): string
+    {
+        $p = str_replace('//', '/', trim($path));
+        if ('' === $p) {
+            return '';
+        }
+
+        // Ensure leading slash for consistent prefix checks.
+        if ('/' !== $p[0]) {
+            $p = '/'.$p;
+        }
+
+        return $p;
+    }
+
+    /**
+     * Detect legacy system folder type from the original C1 document path.
+     */
+    private function detectSystemFolderType(string $legacyPath): ?string
+    {
+        if ('' === $legacyPath) {
+            return null;
+        }
+
+        // Session-scoped shared folders: keep a distinct type to hide them in base course views.
+        if (preg_match('#^/shared_folder_session_\d+(/|$)#', $legacyPath)) {
+            return 'user_folder_ses'; // <= 15 chars
+        }
+
+        // Base course shared folder.
+        if (str_starts_with($legacyPath, '/shared_folder')) {
+            return 'user_folder';
+        }
+
+        if (preg_match('#^/(images|audio|flash|video)(/|$)#', $legacyPath)) {
+            return 'media_folder';
+        }
+
+        if (str_starts_with($legacyPath, '/certificates')) {
+            return 'cert_folder'; // <= 15 chars
+        }
+
+        if (
+            str_starts_with($legacyPath, '/chat_history')
+            || str_starts_with($legacyPath, '/chat_files')
+        ) {
+            return 'chat_folder';
+        }
+
+        return null;
     }
 }

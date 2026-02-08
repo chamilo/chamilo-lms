@@ -14,6 +14,7 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\DBAL\Schema\Schema;
 use Exception;
 
+use const PATHINFO_FILENAME;
 use const PHP_URL_PATH;
 
 final class Version20230913162700 extends AbstractMigrationChamilo
@@ -215,6 +216,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
             if (!$doc) {
                 if (!self::ENABLE_DOCUMENT_CREATION) {
                     error_log("[MIGRATION] Skipped embedded file '{$fileName}' (document not found; creation disabled).");
+
                     continue;
                 }
 
@@ -227,6 +229,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
 
                 if (!$foundPath) {
                     error_log("[MIGRATION] Missing embedded file '{$fileName}' (not found on disk).");
+
                     continue;
                 }
 
@@ -243,6 +246,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
                     $doc = $this->createNewDocumentFromPath($course, $foundPath, $fileName, $documentRepo);
                     if (!$doc) {
                         error_log("[MIGRATION] Failed to create document for '{$fileName}'.");
+
                         continue;
                     }
                 }
@@ -268,7 +272,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
      * Try to locate the file exactly in:
      * - referenced course dir + relativeDocPath
      * - referenced course dir + basename
-     * - current course dir + relativeDocPath (optional)
+     * - current course dir + relativeDocPath (optional).
      */
     private function findEmbeddedFileDeterministically(
         string $currentCourseDir,
@@ -318,7 +322,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
         string $fileName,
         CDocumentRepository $documentRepo
     ): ?CDocument {
-        $sql = "
+        $sql = '
             SELECT d.iid
             FROM c_document d
             INNER JOIN resource_file rf ON rf.resource_node_id = d.resource_node_id
@@ -327,7 +331,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
               AND rl.deleted_at IS NULL
               AND rf.original_name = :name
             LIMIT 1
-        ";
+        ';
 
         $iid = $this->connection->fetchOne($sql, [
             'cid' => (int) $course->getId(),
@@ -346,7 +350,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
         int $size,
         CDocumentRepository $documentRepo
     ): ?CDocument {
-        $sql = "
+        $sql = '
             SELECT d.iid
             FROM c_document d
             INNER JOIN resource_file rf ON rf.resource_node_id = d.resource_node_id
@@ -356,7 +360,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
               AND rf.original_name = :name
               AND rf.size = :size
             LIMIT 1
-        ";
+        ';
 
         $iid = $this->connection->fetchOne($sql, [
             'cid' => (int) $course->getId(),
@@ -380,6 +384,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
         try {
             if (!is_file($filePath)) {
                 error_log("[MIGRATION] File path is not a file: {$filePath}");
+
                 return null;
             }
 
@@ -406,6 +411,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
             return $document;
         } catch (Exception $e) {
             error_log('[MIGRATION] Document creation failed: '.$e->getMessage());
+
             return null;
         }
     }

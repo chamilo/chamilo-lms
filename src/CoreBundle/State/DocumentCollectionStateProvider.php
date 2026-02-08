@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,6 +28,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly RequestStack $requestStack,
+        private readonly SettingsManager $settingsManager,
     ) {}
 
     /**
@@ -59,7 +61,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         // By default, documents must be visible in session context including base course content,
         // because CDocument implements ResourceShowCourseResourcesInSessionInterface.
         $includeBaseContent = $sid > 0
-            && \is_a(CDocument::class, ResourceShowCourseResourcesInSessionInterface::class, true);
+            && is_a(CDocument::class, ResourceShowCourseResourcesInSessionInterface::class, true);
 
         // Allow API clients to override behavior (withBaseContent=0/1).
         if (\array_key_exists('withBaseContent', $query)) {
@@ -68,6 +70,10 @@ final class DocumentCollectionStateProvider implements ProviderInterface
 
         // Gradebook mode (e.g. gradebook=1)
         $isGradebook = !empty($query['gradebook']) && 1 === (int) $query['gradebook'];
+        $showUsersFolders = 'true' === (string) ($this->settingsManager->getSetting('document.show_users_folders', true) ?? '');
+        $showDefaultFolders = 'false' !== (string) ($this->settingsManager->getSetting('document.show_default_folders', true) ?? '');
+        $showChatFolder = 'true' === (string) ($this->settingsManager->getSetting('chat.show_chat_folder', true) ?? '');
+
         $rawFiletype = $query['filetype'] ?? null;
         $filetypes = [];
 
@@ -78,21 +84,32 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         }
 
         // Normalize & unique
-        $filetypes = array_values(array_unique(array_filter(array_map('strval', $filetypes))));
+        $requestedFiletypes = array_values(array_unique(array_filter(array_map('strval', $filetypes))));
 
         // Compatibility: treat "html" as a subtype of "file"
-        if (\in_array('file', $filetypes, true) && !\in_array('html', $filetypes, true)) {
-            $filetypes[] = 'html';
+        $effectiveFiletypes = $requestedFiletypes;
+        if (\in_array('file', $effectiveFiletypes, true) && !\in_array('html', $effectiveFiletypes, true)) {
+            $effectiveFiletypes[] = 'html';
         }
 
-        if (!empty($filetypes)) {
+        // System folder subtypes
+        $systemFolderTypes = ['user_folder', 'user_folder_ses', 'media_folder', 'chat_folder', 'cert_folder'];
+
+        // If the client asks for "folder", include system folder subtypes as well.
+        // This keeps folder browsing working after migration (system folders have custom filetypes).
+        if (\in_array('folder', $effectiveFiletypes, true)) {
+            $effectiveFiletypes = array_values(array_unique(array_merge($effectiveFiletypes, $systemFolderTypes)));
+        }
+
+        if (!empty($effectiveFiletypes)) {
             $qb
                 ->andWhere($qb->expr()->in('d.filetype', ':filetypes'))
-                ->setParameter('filetypes', $filetypes)
+                ->setParameter('filetypes', $effectiveFiletypes)
             ;
         }
 
-        $wantsCertificateList = \in_array('certificate', $filetypes, true);
+        // NOTE: this is for "certificate" filetype lists, not the certificates folder filetype.
+        $wantsCertificateList = \in_array('certificate', $effectiveFiletypes, true);
         $showSystemCertificates = !empty($query['showSystemCertificates']) && 1 === (int) $query['showSystemCertificates'];
 
         if (!$showSystemCertificates && !($isGradebook && $wantsCertificateList)) {
@@ -103,6 +120,45 @@ final class DocumentCollectionStateProvider implements ProviderInterface
                     ->setParameter('certificatesPath', '%/certificates-%')
                 ;
             }
+        }
+
+        // Hide system folders depending on settings.
+        $explicitSystemTypes = array_values(array_intersect($requestedFiletypes, $systemFolderTypes));
+        $hiddenSystemTypes = [];
+
+        // User folders
+        if (!$showUsersFolders) {
+            $hiddenSystemTypes[] = 'user_folder';
+            $hiddenSystemTypes[] = 'user_folder_ses';
+        } else {
+            // When enabled, never show session-scoped shared folders in base course context.
+            if ($sid <= 0) {
+                $hiddenSystemTypes[] = 'user_folder_ses';
+            }
+        }
+
+        // Default media folders
+        if (!$showDefaultFolders) {
+            $hiddenSystemTypes[] = 'media_folder';
+        }
+
+        // Chat history folder (controlled by chat.show_chat_folder)
+        if (!$showChatFolder) {
+            $hiddenSystemTypes[] = 'chat_folder';
+        }
+
+        // Certificates folder: hide unless explicitly requested.
+        if (!$showSystemCertificates && !($isGradebook && $wantsCertificateList)) {
+            $hiddenSystemTypes[] = 'cert_folder';
+        }
+
+        $hiddenSystemTypes = array_values(array_unique(array_diff($hiddenSystemTypes, $explicitSystemTypes)));
+
+        if (!empty($hiddenSystemTypes)) {
+            $qb
+                ->andWhere($qb->expr()->notIn('d.filetype', ':hiddenFiletypes'))
+                ->setParameter('hiddenFiletypes', $hiddenSystemTypes)
+            ;
         }
 
         $loadNode = !empty($query['loadNode']) && 1 === (int) $query['loadNode'];

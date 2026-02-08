@@ -207,10 +207,12 @@ export default {
   },
 
   /**
-   * @returns {Promise<{totalItems: number, items: (*&{userVote: null, extra_fields})[]}>}
+   *
+   * @param {Object} params
+   * @returns {Promise<{totalItems: number, items: (*&{userVote: null, extra_fields})[], nextPageParams: {page: number, itemsPerPage: number}|null}>}
    */
-  loadCourseCatalogue: async () => {
-    const { totalItems, items } = await baseService.getCollection("/api/public_courses")
+  loadCourseCatalogue: async (params = {}) => {
+    const { totalItems, items, nextPageParams } = await baseService.getCollection("/api/public_courses", params)
 
     const mappedItems = items.map((course) => ({
       ...course,
@@ -218,7 +220,7 @@ export default {
       extra_fields: course.extra_fields || {},
     }))
 
-    return { totalItems, items: mappedItems }
+    return { totalItems, items: mappedItems, nextPageParams }
   },
 
   fetchDashboardCourses: async () => {

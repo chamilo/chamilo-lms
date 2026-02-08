@@ -48,6 +48,7 @@ use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CourseBundle\Entity\CStudentPublicationAssignment;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
 use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
@@ -973,13 +974,34 @@ class CourseBuilder
         $em = Database::getManager();
         $catRepo = $em->getRepository(GradebookCategory::class);
 
-        $criteria = ['course' => $courseEntity];
-        if ($sessionEntity) {
-            $criteria['session'] = $sessionEntity;
+        $qb = $catRepo->createQueryBuilder('cat')
+            ->andWhere('cat.course = :course')
+            ->setParameter('course', $courseEntity);
+
+        if ($sessionEntity instanceof SessionEntity) {
+            if ($this->withBaseContent) {
+                // Include base categories (session IS NULL) + session categories
+                $qb->andWhere(
+                    $qb->expr()->orX(
+                        'cat.session = :session',
+                        'cat.session IS NULL'
+                    )
+                )->setParameter('session', $sessionEntity);
+            } else {
+                // Only session-specific categories
+                $qb->andWhere('cat.session = :session')
+                    ->setParameter('session', $sessionEntity);
+            }
+        } else {
+            // No session context => base only
+            $qb->andWhere('cat.session IS NULL');
         }
 
+        $qb->addOrderBy('cat.id', 'ASC');
+
         /** @var GradebookCategory[] $cats */
-        $cats = $catRepo->findBy($criteria);
+        $cats = $qb->getQuery()->getResult();
+
         if (!$cats) {
             return;
         }
@@ -998,74 +1020,55 @@ class CourseBuilder
      *
      * @return array<string,mixed>
      */
-    private function serializeGradebookCategory(GradebookCategory $c): array
+    private function serializeGradebookCategory(GradebookCategory $cat): array
     {
-        $arr = [
-            'id' => (int) $c->getId(),
-            'title' => (string) $c->getTitle(),
-            'description' => (string) ($c->getDescription() ?? ''),
-            'weight' => (float) $c->getWeight(),
-            'visible' => (bool) $c->getVisible(),
-            'locked' => (int) $c->getLocked(),
-            'parent_id' => $c->getParent() ? (int) $c->getParent()->getId() : 0,
-            'generate_certificates' => (bool) $c->getGenerateCertificates(),
-            'certificate_validity_period' => $c->getCertificateValidityPeriod(),
-            'is_requirement' => (bool) $c->getIsRequirement(),
-            'default_lowest_eval_exclude' => (bool) $c->getDefaultLowestEvalExclude(),
-            'minimum_to_validate' => $c->getMinimumToValidate(),
-            'gradebooks_to_validate_in_dependence' => $c->getGradeBooksToValidateInDependence(),
-            'allow_skills_by_subcategory' => $c->getAllowSkillsBySubcategory(),
-            // camelCase duplicates (future-proof)
-            'generateCertificates' => (bool) $c->getGenerateCertificates(),
-            'certificateValidityPeriod' => $c->getCertificateValidityPeriod(),
-            'isRequirement' => (bool) $c->getIsRequirement(),
-            'defaultLowestEvalExclude' => (bool) $c->getDefaultLowestEvalExclude(),
-            'minimumToValidate' => $c->getMinimumToValidate(),
-            'gradeBooksToValidateInDependence' => $c->getGradeBooksToValidateInDependence(),
-            'allowSkillsBySubcategory' => $c->getAllowSkillsBySubcategory(),
+        $em = Database::getManager();
+
+        $evalRepo = $em->getRepository(GradebookEvaluation::class);
+        $linkRepo = $em->getRepository(GradebookLink::class);
+
+        $id = method_exists($cat, 'getId') ? (int) $cat->getId() : 0;
+
+        $parentId = 0;
+        if (method_exists($cat, 'getParent') && $cat->getParent()) {
+            $parentId = method_exists($cat->getParent(), 'getId') ? (int) $cat->getParent()->getId() : 0;
+        }
+
+        $evaluations = [];
+        foreach ($evalRepo->findBy(['category' => $cat]) as $e) {
+            $evaluations[] = [
+                'title' => method_exists($e, 'getTitle') ? (string) $e->getTitle() : 'Evaluation',
+                'description' => method_exists($e, 'getDescription') ? (string) $e->getDescription() : '',
+                'weight' => method_exists($e, 'getWeight') ? (float) $e->getWeight() : 0.0,
+                'max' => method_exists($e, 'getMax') ? (float) $e->getMax() : 100.0,
+                'type' => method_exists($e, 'getType') ? (string) $e->getType() : 'manual',
+                'visible' => method_exists($e, 'getVisible') ? (int) $e->getVisible() : 1,
+                'locked' => method_exists($e, 'getLocked') ? (int) $e->getLocked() : 0,
+            ];
+        }
+
+        $links = [];
+        foreach ($linkRepo->findBy(['category' => $cat]) as $l) {
+            $links[] = [
+                'type' => method_exists($l, 'getType') ? (int) $l->getType() : 0,
+                'ref_id' => method_exists($l, 'getRefId') ? (int) $l->getRefId() : 0,
+                'weight' => method_exists($l, 'getWeight') ? (float) $l->getWeight() : 0.0,
+                'visible' => method_exists($l, 'getVisible') ? (int) $l->getVisible() : 1,
+                'locked' => method_exists($l, 'getLocked') ? (int) $l->getLocked() : 0,
+            ];
+        }
+
+        return [
+            'id' => $id,
+            'parent_id' => $parentId,
+            'title' => method_exists($cat, 'getTitle') ? (string) $cat->getTitle() : 'Category',
+            'description' => method_exists($cat, 'getDescription') ? (string) $cat->getDescription() : '',
+            'weight' => method_exists($cat, 'getWeight') ? (float) $cat->getWeight() : 0.0,
+            'visible' => method_exists($cat, 'getVisible') ? (bool) $cat->getVisible() : true,
+            'locked' => method_exists($cat, 'getLocked') ? (int) $cat->getLocked() : 0,
+            'evaluations' => $evaluations,
+            'links' => $links,
         ];
-
-        if ($c->getGradeModel()) {
-            $arr['grade_model_id'] = (int) $c->getGradeModel()->getId();
-        }
-
-        // Evaluations
-        $arr['evaluations'] = [];
-        foreach ($c->getEvaluations() as $e) {
-            /** @var GradebookEvaluation $e */
-            $arr['evaluations'][] = [
-                'title' => (string) $e->getTitle(),
-                'description' => (string) ($e->getDescription() ?? ''),
-                'weight' => (float) $e->getWeight(),
-                'max' => (float) $e->getMax(),
-                'type' => (string) $e->getType(),
-                'visible' => (int) $e->getVisible(),
-                'locked' => (int) $e->getLocked(),
-                'best_score' => $e->getBestScore(),
-                'average_score' => $e->getAverageScore(),
-                'score_weight' => $e->getScoreWeight(),
-                'min_score' => $e->getMinScore(),
-            ];
-        }
-
-        // Links
-        $arr['links'] = [];
-        foreach ($c->getLinks() as $l) {
-            /** @var GradebookLink $l */
-            $arr['links'][] = [
-                'type' => (int) $l->getType(),
-                'ref_id' => (int) $l->getRefId(),
-                'weight' => (float) $l->getWeight(),
-                'visible' => (int) $l->getVisible(),
-                'locked' => (int) $l->getLocked(),
-                'best_score' => $l->getBestScore(),
-                'average_score' => $l->getAverageScore(),
-                'score_weight' => $l->getScoreWeight(),
-                'min_score' => $l->getMinScore(),
-            ];
-        }
-
-        return $arr;
     }
 
     /**
@@ -1076,116 +1079,130 @@ class CourseBuilder
     public function build_works(
         object $legacyCourse,
         ?CourseEntity $courseEntity,
-        ?SessionEntity $sessionEntity,
-        array $ids
+        ?SessionEntity $sessionEntity
     ): void {
         if (!$courseEntity instanceof CourseEntity) {
             return;
         }
 
-        $repo = Container::getStudentPublicationRepository();
-        $qb = $this->getResourcesByCourseQbFromRepo($repo, $courseEntity, $sessionEntity, $this->withBaseContent);
+        $this->course->resources[RESOURCE_WORK] ??= [];
 
-        // Export folders only (assignments are folders). Keep active only.
-        $qb
-            ->andWhere('resource.filetype = :ft')
-            ->setParameter('ft', 'folder')
-            ->andWhere('resource.active = 1')
-        ;
+        // Try to read the flag from the backup/copy context
+        $copyOnlySessionItems = (bool) (
+            $this->course->copy_only_session_items
+            ?? $this->course->copyOnlySessionItems
+            ?? false
+        );
 
-        $or = $qb->expr()->orX('resource.publicationParent IS NULL');
-
-        try {
-            $meta = $this->em->getClassMetadata(CStudentPublication::class);
-
-            if ($meta->hasAssociation('assignment')) {
-                $asgmtAlias = 'asgmt';
-
-                if (!$this->hasJoinAlias($qb, $asgmtAlias)) {
-                    $qb->leftJoin('resource.assignment', $asgmtAlias);
-                    $qb->addSelect($asgmtAlias);
-                }
-
-                $targetClass = $meta->getAssociationTargetClass('assignment');
-                $targetMeta = $this->em->getClassMetadata($targetClass);
-                $idField = $targetMeta->getSingleIdentifierFieldName(); // e.g. "id" / "iid"
-
-                // Assignment folder => joined assignment id is not null
-                $or->add($qb->expr()->isNotNull($asgmtAlias.'.'.$idField));
-            } else {
-                // Legacy/scalar mapping fallback
-                $or->add('resource.assignment IS NOT NULL');
+        // If we only want session items, don't export base-course works (sid=0).
+        if ($copyOnlySessionItems && null === $sessionEntity) {
+            if (method_exists($this, 'dlog')) {
+                $this->dlog('build_works: skipped for base course because copy_only_session_items is enabled', [
+                    'course_id' => (int) $courseEntity->getId(),
+                ]);
             }
-        } catch (Throwable) {
-            // keep legacy behavior if metadata access fails
-            $or->add('resource.assignment IS NOT NULL');
+            return;
         }
 
-        $qb->andWhere($or)
-            ->addOrderBy('resource.iid', 'ASC')
+        $qb = $this->createContextQb(
+            CStudentPublication::class,
+            $courseEntity,
+            $sessionEntity,
+            'w'
+        );
+
+        $linksAlias = $this->getContextLinksAlias('w');
+
+        $qb
+            ->andWhere('w.filetype = :ft')
+            ->setParameter('ft', 'folder')
+            ->andWhere('w.publicationParent IS NULL')
+            ->andWhere('w.active IN (0,1)')
+            ->distinct()
+            ->groupBy('w.iid')
+            ->orderBy('w.iid', 'ASC')
         ;
 
-        if (!empty($ids)) {
-            $qb->andWhere('resource.iid IN (:ids)')
-                ->setParameter('ids', array_values(array_unique(array_map('intval', $ids))));
+        // Force strict session links when copying only session items.
+        if ($copyOnlySessionItems && $sessionEntity) {
+            $qb
+                ->andWhere($linksAlias.'.session = :session')
+                ->setParameter('session', $sessionEntity)
+            ;
         }
 
-        /** @var CStudentPublication[] $rows */
-        $rows = $qb->getQuery()->getResult();
+        $results = $qb->getQuery()->getResult();
 
-        $exported = 0;
-
-        foreach ($rows as $row) {
-            $iid = (int) $row->getIid();
-            if ($iid <= 0) {
+        $seen = [];
+        foreach ($results as $pub) {
+            if (!$pub instanceof CStudentPublication) {
                 continue;
             }
 
-            $title = (string) $row->getTitle();
-            $desc = (string) ($row->getDescription() ?? '');
+            $iid = (int) $pub->getIid();
+            if ($iid <= 0 || isset($seen[$iid])) {
+                continue;
+            }
+            $seen[$iid] = true;
 
-            // Detect documents linked in description
-            $this->findAndSetDocumentsInText($desc);
-
-            $asgmt = $row->getAssignment();
-
-            // These fields are meaningful only when the folder is an actual assignment folder.
-            $expiresOn = $asgmt?->getExpiresOn()?->format('Y-m-d H:i:s');
-            $endsOn = $asgmt?->getEndsOn()?->format('Y-m-d H:i:s');
-            $addToCal = $asgmt && (int) $asgmt->getEventCalendarId() > 0 ? 1 : 0;
-            $enableQ = (bool) ($asgmt?->getEnableQualification() ?? false);
+            $assignment = $pub->getAssignment();
 
             $params = [
-                'id' => $iid,
-                'title' => $title,
-                'description' => $desc,
-                'weight' => (float) $row->getWeight(),
-                'qualification' => (float) $row->getQualification(),
-                'allow_text_assignment' => (int) $row->getAllowTextAssignment(),
-                'default_visibility' => (bool) ($row->getDefaultVisibility() ?? false),
-                'student_delete_own_publication' => (bool) ($row->getStudentDeleteOwnPublication() ?? false),
-                'extensions' => $row->getExtensions(),
-                'group_category_work_id' => (int) $row->getGroupCategoryWorkId(),
-                'post_group_id' => (int) $row->getPostGroupId(),
-                'enable_qualification' => $enableQ,
-                'add_to_calendar' => $addToCal ? 1 : 0,
-                'expires_on' => $expiresOn ?: null,
-                'ends_on' => $endsOn ?: null,
-                'name' => $title,
-                'url' => null,
+                'iid' => $iid,
+                'title' => (string) $pub->getTitle(),
+                'description' => (string) $pub->getDescription(),
+
+                'weight' => (float) ($pub->getWeight() ?? 0.0),
+                'qualification' => (float) ($pub->getQualification() ?? 0.0),
+                'allow_text_assignment' => (int) ($pub->getAllowTextAssignment() ?? 0),
+
+                'default_visibility' => (bool) ($pub->getDefaultVisibility() ?? false),
+                'student_delete_own_publication' => (bool) ($pub->getStudentDeleteOwnPublication() ?? false),
+
+                'extensions' => (string) ($pub->getExtensions() ?? ''),
+                'group_category_work_id' => (int) ($pub->getGroupCategoryWorkId() ?? 0),
+                'post_group_id' => (int) ($pub->getPostGroupId() ?? 0),
             ];
 
-            $legacy = new Work($params);
-            $legacyCourse->add_resource($legacy);
-            $exported++;
-            $this->trace(
-                '[CourseBuilder::build_works] Exported work folder iid='.$iid
-                .' is_assignment='.( $asgmt ? '1' : '0' )
-                .' title="'.$title.'"'
-            );
+            try {
+                $u = $pub->getUser();
+                $params['user_id'] = $u ? (int) $u->getId() : 0;
+            } catch (\Throwable) {
+                $params['user_id'] = 0;
+            }
+
+            if ($assignment instanceof CStudentPublicationAssignment) {
+                $params['enable_qualification'] = (bool) ($assignment->getEnableQualification() ?? false);
+
+                $expiresOn = $assignment->getExpiresOn();
+                $endsOn = $assignment->getEndsOn();
+
+                $params['expires_on'] = $expiresOn instanceof \DateTimeInterface ? $expiresOn->format('Y-m-d H:i:s') : null;
+                $params['ends_on'] = $endsOn instanceof \DateTimeInterface ? $endsOn->format('Y-m-d H:i:s') : null;
+
+                $params['add_to_calendar'] = ((int) ($assignment->getEventCalendarId() ?? 0)) > 0;
+            } else {
+                $params['enable_qualification'] = false;
+                $params['expires_on'] = null;
+                $params['ends_on'] = null;
+                $params['add_to_calendar'] = false;
+            }
+
+            $work = new \stdClass();
+            $work->params = $params;
+            $work->destination_id = -1;
+
+            // Key by iid = stable and unique.
+            $this->course->resources[RESOURCE_WORK][$iid] = $work;
         }
 
-        $this->trace('[CourseBuilder::build_works] Done. Exported='.$exported.' session_id='.(int) ($sessionEntity?->getId() ?? 0));
+        if (method_exists($this, 'dlog')) {
+            $this->dlog('build_works: done', [
+                'count' => count($this->course->resources[RESOURCE_WORK]),
+                'copy_only_session_items' => (bool) $copyOnlySessionItems,
+                'session_id' => (int) ($sessionEntity?->getId() ?? 0),
+            ]);
+        }
     }
 
     /**

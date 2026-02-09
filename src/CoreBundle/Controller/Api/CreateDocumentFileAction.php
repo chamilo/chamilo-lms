@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Helpers\CourseHelper;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManager;
@@ -20,7 +22,9 @@ class CreateDocumentFileAction extends BaseResourceFileAction
         CDocumentRepository $repo,
         EntityManager $em,
         KernelInterface $kernel,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        CourseRepository $courseRepository,
+        CourseHelper $courseHelper,
     ): CDocument {
         $isUncompressZipEnabled = $request->get('isUncompressZipEnabled', 'false');
         $fileExistsOption = $request->get('fileExistsOption', 'rename');
@@ -28,14 +32,31 @@ class CreateDocumentFileAction extends BaseResourceFileAction
         $document = new CDocument();
 
         if ('true' === $isUncompressZipEnabled) {
-            $result = $this->handleCreateFileRequestUncompress($document, $request, $em, $kernel);
+            $result = $this->handleCreateFileRequestUncompress(
+                $document,
+                $request,
+                $em,
+                $kernel,
+                $courseRepository,
+                $repo,
+                $courseHelper
+            );
         } else {
-            $result = $this->handleCreateFileRequest($document, $repo, $request, $em, $fileExistsOption, $translator);
+            $result = $this->handleCreateFileRequest(
+                $document,
+                $repo,
+                $request,
+                $em,
+                $fileExistsOption,
+                $translator,
+                $courseRepository,
+                $courseHelper
+            );
         }
 
-        $document->setTitle($result['title']);
-        $document->setFiletype($result['filetype']);
-        $document->setComment($result['comment']);
+        $document->setTitle($result['title'] ?? $document->getResourceName());
+        $document->setFiletype($result['filetype'] ?? 'file');
+        $document->setComment($result['comment'] ?? '');
 
         return $document;
     }

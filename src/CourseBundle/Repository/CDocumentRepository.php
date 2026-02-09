@@ -908,73 +908,42 @@ final class CDocumentRepository extends ResourceRepository
     public function getDocumentUsageBreakdownByCourse(Course $course): array
     {
         $courseId = (int) $course->getId();
-        $typeGroupId = (int) $this->getResourceType()->getId();
-
         $conn = $this->getEntityManager()->getConnection();
-
         $sql = <<<'SQL'
-SELECT
-    rf.id        AS file_id,
-    rf.size      AS file_size,
-    rl.session_id AS session_id,
-    rl.group_id   AS group_id
-FROM resource_file rf
-INNER JOIN resource_node rn ON rn.id = rf.resource_node_id
-INNER JOIN resource_link rl ON rl.resource_node_id = rn.id
-WHERE rl.deleted_at IS NULL
-  AND rl.c_id = :courseId
-  AND rl.resource_type_group = :typeGroupId
-  AND rf.size IS NOT NULL
-SQL;
+        SELECT
+            rf.id          AS file_id,
+            MAX(rf.size)   AS file_size,
+            MAX(COALESCE(rl.session_id, 0)) AS session_id,
+            MAX(COALESCE(rl.group_id, 0))   AS group_id
+        FROM resource_file rf
+        INNER JOIN resource_node rn ON rn.id = rf.resource_node_id
+        INNER JOIN c_document d ON d.resource_node_id = rn.id
+        INNER JOIN resource_link rl ON rl.resource_node_id = rn.id
+        WHERE rl.deleted_at IS NULL
+          AND rl.c_id = :courseId
+          AND rf.size IS NOT NULL
+          AND d.filetype <> 'folder'
+        GROUP BY rf.id
+        SQL;
 
-        $rows = $conn->fetchAllAssociative($sql, [
-            'courseId' => $courseId,
-            'typeGroupId' => $typeGroupId,
-        ]);
-
-        $fileSizes = [];   // file_id => size
-        $hasSession = [];  // file_id => bool
-        $hasGroup = [];    // file_id => bool
-
-        foreach ($rows as $row) {
-            $fileId = (int) ($row['file_id'] ?? 0);
-            if ($fileId <= 0) {
-                continue;
-            }
-
-            $size = (int) ($row['file_size'] ?? 0);
-
-            if (!isset($fileSizes[$fileId])) {
-                $fileSizes[$fileId] = $size;
-                $hasSession[$fileId] = false;
-                $hasGroup[$fileId] = false;
-            }
-
-            $sid = (int) ($row['session_id'] ?? 0);
-            $gid = (int) ($row['group_id'] ?? 0);
-
-            if ($sid > 0) {
-                $hasSession[$fileId] = true;
-            }
-            if ($gid > 0) {
-                $hasGroup[$fileId] = true;
-            }
-        }
+        $rows = $conn->fetchAllAssociative($sql, ['courseId' => $courseId]);
 
         $bytesCourse = 0;
         $bytesSessions = 0;
         $bytesGroups = 0;
 
-        foreach ($fileSizes as $fileId => $size) {
-            if (($hasGroup[$fileId] ?? false) === true) {
-                $bytesGroups += $size;
+        foreach ($rows as $row) {
+            $size = (int) ($row['file_size'] ?? 0);
+            $sid = (int) ($row['session_id'] ?? 0);
+            $gid = (int) ($row['group_id'] ?? 0);
 
+            if ($gid > 0) {
+                $bytesGroups += $size;
                 continue;
             }
 
-            if (($hasSession[$fileId] ?? false) === true) {
+            if ($sid > 0) {
                 $bytesSessions += $size;
-
                 continue;
             }
 
@@ -989,5 +958,34 @@ SQL;
             'groups' => $bytesGroups,
             'used' => $used,
         ];
+    }
+
+    public function getCourseStorageUsedBytes(Course $course): int
+    {
+        $courseId = (int) $course->getId();
+        if ($courseId <= 0) {
+            return 0;
+        }
+
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = <<<'SQL'
+        SELECT COALESCE(SUM(t.size), 0) AS used_bytes
+        FROM (
+            SELECT rf.id AS file_id, MAX(rf.size) AS size
+            FROM resource_file rf
+            INNER JOIN resource_node rn ON rn.id = rf.resource_node_id
+            INNER JOIN resource_link rl ON rl.resource_node_id = rn.id
+            WHERE rl.deleted_at IS NULL
+              AND rl.c_id = :courseId
+              AND rf.size IS NOT NULL
+            GROUP BY rf.id
+        ) t
+        SQL;
+
+        $used = $conn->fetchOne($sql, [
+            'courseId' => $courseId,
+        ]);
+
+        return (int) ($used ?? 0);
     }
 }

@@ -199,6 +199,8 @@ const load = async () => {
   try {
     const courseCatalogue = await courseService.loadCourseCatalogue(loadParams)
 
+    loadParams = {}
+
     if (courseCatalogue.nextPageParams) {
       loadParams = courseCatalogue.nextPageParams
     }

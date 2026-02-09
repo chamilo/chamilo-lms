@@ -1,14 +1,15 @@
 <template>
   <Tag
-    :severity="type"
+    :severity="normalizedType"
     :value="label"
   />
 </template>
 
 <script setup>
 import Tag from "primevue/tag"
+import { computed } from "vue"
 
-defineProps({
+const props = defineProps({
   type: {
     type: String,
     required: true,
@@ -17,5 +18,13 @@ defineProps({
     type: String,
     required: true,
   },
+})
+
+const normalizedType = computed(() => {
+  if ("warning" === props.type) {
+    return "warn"
+  }
+
+  return props.type
 })
 </script>

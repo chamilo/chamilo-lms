@@ -507,13 +507,10 @@ class Statistics
         ?bool $isFileSize = false,
         ?bool $barRelativeToMax = false
     ): string {
-        $total = 0;
-        $max = 0;
+        static $cssAdded = false;
 
-        $content = '<table class="table table-hover table-striped data_table stats_table" cellspacing="0" cellpadding="3" width="90%">
-        <thead><tr><th colspan="'.($showTotal ? '4' : '3').'">'.$title.'</th></tr></thead><tbody>';
-
-        $i = 0;
+        $total = 0.0;
+        $max = 0.0;
 
         foreach ($stats as $subtitle => $number) {
             $number = (float) $number;
@@ -523,30 +520,88 @@ class Statistics
             }
         }
 
+        $colspan = $showTotal ? 4 : 3;
+
+        $css = '';
+        if (!$cssAdded) {
+            $cssAdded = true;
+            $css = '<style>
+            .ch-stats-table{ width:100%; }
+            .ch-statbar-wrap{ display:flex; align-items:center; gap:10px; }
+            .ch-statbar{
+                flex: 1 1 auto;
+                height: 10px;
+                background: #e9eef5;
+                border-radius: 999px;
+                overflow: hidden;
+                min-width: 140px;
+            }
+            .ch-statbar__fill{
+                height: 100%;
+                width: 0%;
+                background: #3b82f6;
+                border-radius: 999px;
+            }
+            .ch-statbar__label{
+                font-size: 12px;
+                color: #5f6b7a;
+                white-space: nowrap;
+                min-width: 48px;
+                text-align: right;
+            }
+            .ch-stats-cols th{ vertical-align: middle; }
+        </style>';
+        }
+
+        $content = $css;
+        $content .= '<table class="table table-hover table-striped data_table stats_table ch-stats-table" cellspacing="0" cellpadding="3">
+        <thead>
+            <tr><th colspan="'.$colspan.'">'.$title.'</th></tr>
+            <tr class="ch-stats-cols">
+                <th>'.get_lang('Name').'</th>
+                <th>'.get_lang('Distribution').'</th>
+                <th class="text-end">'.get_lang('Count').'</th>';
+
+        if ($showTotal) {
+            $content .= '<th class="text-end">'.get_lang('Percentage').'</th>';
+        }
+
+        $content .= '</tr>
+        </thead>
+        <tbody>';
+
+        $i = 0;
         foreach ($stats as $subtitle => $number) {
             $number = (float) $number;
 
-            if (!$isFileSize) {
-                $numberLabel = number_format($number, 0, ',', '.');
-            } else {
-                $numberLabel = self::makeSizeString($number);
-            }
+            $numberLabel = !$isFileSize
+                ? number_format($number, 0, ',', '.')
+                : self::makeSizeString((int) $number);
 
             $percentageRaw = ($total > 0) ? (100 * $number / $total) : 0.0;
             $percentageDisplay = ($total > 0) ? number_format($percentageRaw, 1, ',', '.') : '0';
 
-            // Bar size: either relative to max (wanted for "1 vs 7") or relative to total (legacy behavior)
             $barPercent = $barRelativeToMax
                 ? (($max > 0) ? (100 * $number / $max) : 0.0)
                 : $percentageRaw;
 
+            $barPercent = max(0.0, min(100.0, $barPercent));
+            $barHtml = '
+            <div class="ch-statbar-wrap" title="'.$percentageDisplay.'%">
+                <div class="ch-statbar">
+                    <div class="ch-statbar__fill" style="width: '.$barPercent.'%"></div>
+                </div>
+                <div class="ch-statbar__label">'.$percentageDisplay.'%</div>
+            </div>
+        ';
+
             $content .= '<tr class="row_'.(0 == $i % 2 ? 'odd' : 'even').'">
-            <td width="25%" style="vertical-align:top;">'.$subtitle.'</td>
-            <td width="60%">'.Display::bar_progress($barPercent, false).'</td>
-            <td width="5%" align="right" style="vertical-align:top;">'.$numberLabel.'</td>';
+            <td style="vertical-align:top;">'.$subtitle.'</td>
+            <td style="vertical-align:middle;">'.$barHtml.'</td>
+            <td class="text-end" style="vertical-align:top;">'.$numberLabel.'</td>';
 
             if ($showTotal) {
-                $content .= '<td width="5%" align="right"> '.$percentageDisplay.'%</td>';
+                $content .= '<td class="text-end" style="vertical-align:top;">'.$percentageDisplay.'%</td>';
             }
 
             $content .= '</tr>';
@@ -634,7 +689,7 @@ class Statistics
                 $stat_date = ('day' === $type) ? $periodCollection[$obj->stat_date] : $obj->stat_date;
                 $result_last_x[$stat_date] = $obj->number_of_logins;
             }
-            $content .= self::printStats(get_lang('Last logins').' ('.$period.')', $result_last_x, true);
+            $content .= self::printStats(get_lang('Last logins').' ('.$period.')', $result_last_x, false);
             flush(); //flush web request at this point to see something already while the full data set is loading
             $content .= '<br />';
         }
@@ -654,7 +709,7 @@ class Statistics
             }
             $result[$stat_date] = $obj->number_of_logins;
         }
-        $content .= self::printStats(get_lang('All logins').' ('.$period.')', $result, true);
+        $content .= self::printStats(get_lang('All logins').' ('.$period.')', $result, false);
 
         return $content;
     }
@@ -744,9 +799,9 @@ class Statistics
         }
 
         if ($distinct) {
-            $content = self::printStats(get_lang('Distinct users logins'), $totalLogin, false, false, true);
+            $content = self::printStats(get_lang('Distinct users logins'), $totalLogin, false, false, false);
         } else {
-            $content = self::printStats(get_lang('Logins'), $totalLogin, false, false, true);
+            $content = self::printStats(get_lang('Logins'), $totalLogin, false, false, false);
         }
 
         return $content;
@@ -882,7 +937,7 @@ class Statistics
             $result = self::getToolsStats();
         }
 
-        return self::printStats(get_lang('Tools access'), $result, true);
+        return self::printStats(get_lang('Tools access'), $result, false);
     }
 
     /**
@@ -951,7 +1006,7 @@ class Statistics
         $result[get_lang('No')] = $count1->n - $count2->n;
         $result[get_lang('Yes')] = $count2->n; // #users with picture
 
-        return self::printStats(get_lang('Number of users').' ('.get_lang('Picture').')', $result, true);
+        return self::printStats(get_lang('Number of users').' ('.get_lang('Picture').')', $result, false);
     }
 
     /**
@@ -2387,25 +2442,25 @@ class Statistics
             $cssPrinted = true;
 
             $out .= '<style>
-            .stats-menu-wrap{ overflow-x:auto; padding-bottom:2px; }
-            .stats-menu-grid{
-              --stats-cols: 5;
-              display:grid;
-              gap:1rem;
-              align-items:start;
-              grid-template-columns: repeat(1, minmax(0, 1fr));
-            }
-            .p-inputtext, .p-select { width: auto !important; }
-            @media (min-width:640px){
-              .stats-menu-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            }
-            @media (min-width:768px){
-              .stats-menu-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
-            }
-            @media (min-width:1024px){
-              .stats-menu-grid{ grid-template-columns: repeat(var(--stats-cols), minmax(240px, 1fr)); }
-            }
-            </style>';
+        .stats-menu-wrap{ overflow-x:auto; padding-bottom:2px; }
+        .stats-menu-grid{
+          --stats-cols: 5;
+          display:grid;
+          gap:1rem;
+          align-items:start;
+          grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+        .p-inputtext, .p-select { width: auto !important; }
+        @media (min-width:640px){
+          .stats-menu-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (min-width:768px){
+          .stats-menu-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+        @media (min-width:1024px){
+          .stats-menu-grid{ grid-template-columns: repeat(var(--stats-cols), minmax(240px, 1fr)); }
+        }
+        </style>';
         }
 
         $out .= '<div class="stats-menu-wrap">';
@@ -2425,15 +2480,15 @@ class Statistics
 
             $sectionCardClass = $sectionHasActive
                 ? 'border-primary/30 ring-1 ring-primary/20'
-                : 'border-surface-200';
+                : 'border-gray-25';
 
-            $dotClass = $sectionHasActive ? 'bg-primary' : 'bg-surface-300';
+            $dotClass = $sectionHasActive ? 'bg-primary' : 'bg-gray-50';
 
-            $out .= '<section class="self-start h-fit min-w-0 rounded-2xl border ' . $sectionCardClass . ' bg-surface-50 p-4 shadow-sm">';
-            $out .= '  <h3 class="flex items-center gap-2 text-sm font-semibold text-surface-900">
-                <span class="h-2 w-2 rounded-full ' . $dotClass . '"></span>
-                ' . htmlspecialchars($section, ENT_QUOTES) . '
-            </h3>';
+            $out .= '<section class="self-start h-fit min-w-0 rounded-2xl border ' . $sectionCardClass . ' bg-white p-4 shadow-sm">';
+            $out .= '  <h3 class="flex items-center gap-2 text-sm font-semibold text-gray-90">
+            <span class="h-2 w-2 rounded-full ' . $dotClass . '"></span>
+            ' . htmlspecialchars($section, ENT_QUOTES) . '
+        </h3>';
 
             $out .= '  <ul class="mt-3 space-y-1">';
 
@@ -2445,22 +2500,21 @@ class Statistics
                 if ($active) {
                     $activeInfo = ['section' => $section, 'label' => (string) $label];
                 }
-
                 $aClass = $active
                     ? 'bg-primary/10 text-primary ring-1 ring-primary/25'
-                    : 'text-surface-700 hover:bg-surface-100 hover:text-surface-900';
+                    : 'text-gray-50 hover:bg-gray-15 hover:text-gray-90';
 
-                $itemDotClass = $active ? 'bg-primary' : 'bg-surface-300 group-hover:bg-primary/60';
+                $itemDotClass = $active ? 'bg-primary' : 'bg-gray-50 group-hover:bg-primary/60';
 
                 $out .= '<li>
-                <a href="' . htmlspecialchars($url, ENT_QUOTES) . '"
-                   ' . ($active ? 'aria-current="page"' : '') . '
-                   class="group flex items-start justify-between gap-3 rounded-xl px-3 py-2 text-sm font-medium transition
-                          focus:outline-none focus:ring-2 focus:ring-primary/30 ' . $aClass . '">
-                  <span class="flex items-start gap-2 min-w-0">
-                    <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full ' . $itemDotClass . '"></span>
-                    <span class="leading-5 break-words">' . htmlspecialchars((string) $label, ENT_QUOTES) . '</span>
-                  </span>';
+            <a href="' . htmlspecialchars($url, ENT_QUOTES) . '"
+               ' . ($active ? 'aria-current="page"' : '') . '
+               class="group flex items-start justify-between gap-3 rounded-xl px-3 py-2 text-sm font-medium transition
+                      focus:outline-none focus:ring-2 focus:ring-primary/30 ' . $aClass . '">
+              <span class="flex items-start gap-2 min-w-0">
+                <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full ' . $itemDotClass . '"></span>
+                <span class="leading-5 break-words">' . htmlspecialchars((string) $label, ENT_QUOTES) . '</span>
+              </span>';
 
                 if ($active) {
                     $out .= '<span class="inline-flex items-center rounded-full bg-primary/15 px-2 py-0.5 text-xs font-semibold text-primary">'
@@ -2478,16 +2532,16 @@ class Statistics
         $out .= '</div></div>';
 
         if (!empty($activeInfo)) {
-            $out .= '<div class="mt-4 flex flex-wrap items-center gap-2 text-sm text-surface-700">
-            <span class="font-semibold">' . htmlspecialchars(get_lang('You are here'), ENT_QUOTES) . ':</span>
-            <span class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">'
+            $out .= '<div class="mt-4 flex flex-wrap items-center gap-2 text-sm text-gray-50">
+        <span class="font-semibold">' . htmlspecialchars(get_lang('You are here'), ENT_QUOTES) . ':</span>
+        <span class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">'
                 . htmlspecialchars($activeInfo['section'], ENT_QUOTES) . ' · ' . htmlspecialchars($activeInfo['label'], ENT_QUOTES) .
                 '</span>
-        </div>';
+    </div>';
         }
 
         $out .= '</nav>';
-        $out .= '<div class="my-6 h-px w-full bg-surface-200"></div>';
+        $out .= '<div class="my-6 h-px w-full bg-gray-25"></div>';
 
         return $out;
     }

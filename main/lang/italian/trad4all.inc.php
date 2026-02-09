@@ -5977,7 +5977,7 @@ $SessionListIn = "Elenco delle sessioni in";
 $GoToStudentDetails = "Vai alle informazioni sui corsisti";
 $DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Mostra l'ultimo passo compiuto e il primo ancora da compiere";
 $FillUsers = "Riempi con utenti";
-$ThisSectionIsOnlyVisibleOnSourceInstalls = "La sezione è visibile solo in fase di installazione e permette di popolare la piattaforma di dati ai fini di effettuare test. 
+$ThisSectionIsOnlyVisibleOnSourceInstalls = "La sezione è visibile solo in fase di installazione e permette di popolare la piattaforma di dati ai fini di effettuare test.
 NON USARE in una piatta forma di erogazione, in quanto i dati sono effettivamente inseriti come reali.
 Usarla SOLO in fase di sviluppo o test.";
 $UsersFillingReport = "Report sul riempimento di dati";
@@ -6146,7 +6146,7 @@ $AverageScore = "Punteggio medio";
 $LastConnexionDate = "Data dell'ultimo accesso";
 $ToolVideoconference = "Videoconferenza";
 $BigBlueButtonEnableTitle = "Videoconferenza BigBlueButton";
-$BigBlueButtonEnableComment = "Scegli se vuoi abilitare le videoconferenze BigBlueButton. 
+$BigBlueButtonEnableComment = "Scegli se vuoi abilitare le videoconferenze BigBlueButton.
 L'abilitazione rende visibile una scelta ulteriore tra gli strumenti della pagina principale di ogni corso. I docenti potranno in ogni momento iniziare una videoconferenza, mentre i corsisti potranno accedervi solamente.
 Se non è presente un server BigBlueButton, <a href=\"http://bigbluebutton.org/\">installane uno</a> o richiedi le condizioni di accesso ai <a href=\"http://www.chamilo.org/en/providers\">provider ufficiali</a> di Chamilo.
 
@@ -6168,7 +6168,7 @@ Le cartelle individuali contengono cartelle separate per ogni corsista entrato n
 
 Le cartelle individuali possono essere rese invisibili agli altri corsisti, esclusi i propreitari; tuttavia - conoscendone l'URL - i singoli file saranno accessibili agli altri.
 
-Se le cartelle individuali sono rese visibili tutti i corsisti potranno vedere il contenuto ma solo il proprietario potrà creare, modificare, eliminare ed effettuare il back.up di documenti, immagini (SVG o PNG) e sotto-cartelle; potrà anche convertire documenti in modelli personali, 
+Se le cartelle individuali sono rese visibili tutti i corsisti potranno vedere il contenuto ma solo il proprietario potrà creare, modificare, eliminare ed effettuare il back.up di documenti, immagini (SVG o PNG) e sotto-cartelle; potrà anche convertire documenti in modelli personali,
 
 Le cartelli individuali non sono quindi solo un deposito di materiali.
 
@@ -6577,7 +6577,7 @@ $ExtensionSessionsNotAvailable = "Estensione delle Sessioni non disponibile";
 $ExtensionZlibNotAvailable = "Estensione Zlib non disponibile";
 $ExtensionPCRENotAvailable = "Estensione PCRE non disponibile";
 $ToGroup = "Al gruppo social";
-$XWroteY = "%s ha scritto: 
+$XWroteY = "%s ha scritto:
 %s";
 $BackToGroup = "Torna al gruppo";
 $GoAttendance = "Vai alle presenze";
@@ -7726,7 +7726,7 @@ $LoadTermConditionsSectionTitle = "Carica la sezione termini legali e condizioni
 $LoadTermConditionsSectionDescription = "I termini legali appariranno nel corso dell'accesso al corso";
 $SendTermsSubject = "Il contratto di apprendimento è pronto per essere firmato";
 $SendTermsDescriptionToUrlX = "Buongiorno,
-il Tutor Ti ha inviato il contratto di apprendimento. 
+il Tutor Ti ha inviato il contratto di apprendimento.
 Puoi firmarlo cliccando sul seguente collegamento %s";
 $UserXSignedTheAgreement = "L'utente %s ha firmato l'accordo";
 $UserXSignedTheAgreementTheY = "L'utente %s ha firmato l'accordo %s";
@@ -7826,7 +7826,7 @@ $IconsModeSVGComment = "Abilitando questa opzione, tutte le icone che hanno una 
 $FilterByTags = "Filtra per tag";
 $ImportFromMoodle = "Importa da Moodle";
 $ImportFromMoodleInfo = "Importa un file di backup del corso Moodle (.mbz) in questo corso Chamilo";
-$ImportFromMoodleInstructions = "La funzione di importazione di Moodle potrebbe non supportare tutti i tipi di contenuto di Moodle, dato che non tutte le funzionalità sono uguali e che Moodle e Chamilo si evolvono entrambi continuamente e rapidamente. Questa funzione di importazione deve essere considerata un work in progress. Si prega di controllare https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import per ulteriori informazioni.";
+$ImportFromMoodleInstructions = "La funzione di importazione di Moodle potrebbe non supportare tutti i tipi di contenuto di Moodle, dato che non tutte le funzionalità sono uguali e che Moodle e Chamilo si evolvono entrambi continuamente e rapidamente. Questa funzione di importazione deve essere considerata un work in progress. Si prega di controllare https://github.com/chamilo/chamilo-lms/wiki/Import-from-Moodle per ulteriori informazioni.";
 $MoodleFile = "Archivio Corsi Moodle";
 $FailedToImportThisIsNotAMoodleFile = "Impossibile importare: questo non sembra essere un file di backup del corso Moodle (.mbz)";
 $ThisQuestionIsNotSupportedYet = "Questo tipo di domanda non è ancora supportato";

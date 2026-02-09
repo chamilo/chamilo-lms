@@ -6598,7 +6598,7 @@ $ExtensionSessionsNotAvailable = "اضافات الدورة غير متوفرة"
 $ExtensionZlibNotAvailable = "Zlib لا تتوفر اضافة";
 $ExtensionPCRENotAvailable = "PCRE لا تتوفر اضافة";
 $ToGroup = "الذهاب الى المجموعة الاجتماعية";
-$XWroteY = "%s مكتوب: 
+$XWroteY = "%s مكتوب:
 %s";
 $BackToGroup = "العودة الى المجموعة";
 $GoAttendance = "الذهاب الى الحضور";
@@ -7025,11 +7025,11 @@ $ResourceLockedByGradebook = "هذا الخيار غير متوفر بسبب ا�
 $GradebookLockedAlert = "تم قفل التقييم، اذا اردت الغاء القفل فعليك الاتصال بمدير النظام موضحا سبب الغاء القفل";
 $GradebookEnableLockingTitle = "تفعيل قفل التقييمات من قبل المدرسين";
 $GradebookEnableLockingComment = "ان تفعيل ذلك سوف يؤدي الى قفل كافة التقييمات من قبل المدرس، وهذا سوف يمنع اي محاولة لتغيير النتائج من قبل المدرس، والشخص الوحيد المخول بالغاء القفل هو مدير النظام، كما ان القفل والغاء القفل سوف يذكر في تقرير الاحداث الهامة في للنظام";
-$LdapDescriptionComment = "LDAP authentication : 
-See I. below to configure LDAP 
+$LdapDescriptionComment = "LDAP authentication :
+See I. below to configure LDAP
 See II. below to activate LDAP authentication
-Update user attributes, with LDAP data, after CAS authentication(see CAS configuration ) : 
-See I. below to configure LDAP 
+Update user attributes, with LDAP data, after CAS authentication(see CAS configuration ) :
+See I. below to configure LDAP
 CAS manage user authentication, LDAP activation isn't required.
 I. LDAP configuration
 Edit file app/config/auth.conf.php
@@ -7055,7 +7055,7 @@ Edit file app/config/configuration.php
 
 \$extAuthSource['extldap']['login'] = \$_configuration['root_sys'].'main/auth/external_login/login.ldap.php';
 \$extAuthSource['extldap']['newUser'] = \$_configuration['root_sys'].'main/auth/external_login/newUser.ldap.php';
-N.B.: LDAP users use same fields than platform users to login. 
+N.B.: LDAP users use same fields than platform users to login.
 N.B.: LDAP activation adds a menu External authentication [LDAP] in \"add or modify\" user pages.";
 $ShibbolethMainActivateTitle = "Shibboleth توثيق";
 $ShibbolethMainActivateComment = "First of all, you have to configure Shibboleth for your web server.
@@ -7856,7 +7856,7 @@ $FilterByTags = "تصفية وفقا للوسوم";
 $ImportFromMoodle = "Moodle استيراد من الموودل";
 $ImportFromMoodleInfo = "استيراد النسخة الاحتياطية من مقرر الموودل في مقرر كاميلو";
 $ImportFromMoodleInstructions = "ان خاصية استيراد الموودل قد لا تدعم كافة انواع المحتوى من الموودل، وهي خاصية ما زالت في وضع التطوير، يرجى مراجعة الرابط
-https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import for more information";
+https://github.com/chamilo/chamilo-lms/wiki/Import-from-Moodle for more information";
 $MoodleFile = "Moodle ملف مقرر الموودل";
 $FailedToImportThisIsNotAMoodleFile = ".mbz فشل الاستيراد: هذا الملف لا يبدو بصيغة ملف الاستعادة لمقرر موودل";
 $ThisQuestionIsNotSupportedYet = "هذا النوع من السؤال غير مدعوم حتى الان";
@@ -8229,7 +8229,7 @@ $YourResultsByDiscipline = "نتائجك وفقا للمقرر";
 $ForComparisonYourLastResultToThisTest = "كمقارنةـ فان نتائجك المؤخرة لهذا الاختبار";
 $YourOverallResultForTheTest = "نتائجك الكلية لهذا الاختبار";
 $QuestionDegreeCertaintyHTMLMail = "سوف تجد نتائجك للاختبار %s ادناه.
-لمشاهدة تفاصيل هذه النتائج: 
+لمشاهدة تفاصيل هذه النتائج:
 
 1. قم بتسجيل الدخول الى النظام %s
 

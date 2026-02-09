@@ -7707,7 +7707,7 @@ $IconsModeSVGComment = "Ao ativar esta opção, todos os ícones que têm uma ve
 $FilterByTags = "Filtrar por tags";
 $ImportFromMoodle = "Importar do Moodle";
 $ImportFromMoodleInfo = "Importar um arquivo de backup curso Moodle (.mbz) para este curso doChamilo";
-$ImportFromMoodleInstructions = "O recurso de importação Moodle pode não suportar todos os tipos de conteúdo a partir de Moodle, dado o fato de que nem todas as características são as mesmas, e que Moodle e Chamilo tanto evoluir continuamente e rapidamente. Este recurso de importação deve ser considerado um trabalho em andamento. Por favor, verifique https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import para mais informações.";
+$ImportFromMoodleInstructions = "O recurso de importação Moodle pode não suportar todos os tipos de conteúdo a partir de Moodle, dado o fato de que nem todas as características são as mesmas, e que Moodle e Chamilo tanto evoluir continuamente e rapidamente. Este recurso de importação deve ser considerado um trabalho em andamento. Por favor, verifique https://github.com/chamilo/chamilo-lms/wiki/Import-from-Moodle para mais informações.";
 $MoodleFile = "Arquivo do curso Moodle";
 $FailedToImportThisIsNotAMoodleFile = "Falha ao importar: este não parece ser um arquivo de backup do curso Moodle (.mbz).";
 $ThisQuestionIsNotSupportedYet = "Este tipo de pergunta ainda não é suportada";
@@ -8032,9 +8032,9 @@ $RedirectToTheDocumentList = "Redirecionar para a lista de documentos";
 $TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToTheExerciseList = "A configuração do recurso de início automático de exercícios está ativada. Os alunos serão automaticamente redirecionados para a lista de exercícios.";
 $PostedExpirationDate = "Prazo publicado para envio do trabalho (visível ao aluno)";
 $BossAlertMsgSentToUserXTitle = "Mensagem de acompanhamento sobre o aluno %s";
-$BossAlertUserXSentMessageToUserYWithLinkZ = "Oi, o 
+$BossAlertUserXSentMessageToUserYWithLinkZ = "Oi, o
 
-usuário %s enviou uma mensagem de acompanhamento sobre o aluno %s. 
+usuário %s enviou uma mensagem de acompanhamento sobre o aluno %s.
 
 A mensagem pode ser vista aqui %s";
 $include_services = "Incluir serviços";
@@ -8077,10 +8077,10 @@ $ResultAccomplishedTest = "Resultados para o teste realizado";
 $YourResultsByDiscipline = "Seus resultados por disciplina";
 $ForComparisonYourLastResultToThisTest = "Em comparação, seus resultados mais recentes para este teste";
 $YourOverallResultForTheTest = "Seus resultados gerais para o teste";
-$QuestionDegreeCertaintyHTMLMail = "Você encontrará seus resultados para o teste %s abaixo. 
-Para ver os detalhes destes resultados: 
+$QuestionDegreeCertaintyHTMLMail = "Você encontrará seus resultados para o teste %s abaixo.
+Para ver os detalhes destes resultados:
 
-1. Conecte-se à plataforma (login/senha): Para a plataforma. 
+1. Conecte-se à plataforma (login/senha): Para a plataforma.
 
 2. Clique neste link: veja os resultados detalhados.";
 $DegreeOfCertaintyVerySure = "Muita certeza";
@@ -8143,9 +8143,9 @@ $SubSkill = "Sub-skill";
 $AddMultipleUsersToCalendar = "Adicione vários usuários ao calendário";
 $UpdateCalendar = "Atualizar calendário";
 $ControlPoint = "Ponto de controlo";
-$MessageQuestionCertainty = "Por favor, siga as instruções abaixo para verificar seus resultados para o teste %s. 
+$MessageQuestionCertainty = "Por favor, siga as instruções abaixo para verificar seus resultados para o teste %s.
 
-1. Conecte-se à plataforma (nome de usuário/senha) em: %s 
+1. Conecte-se à plataforma (nome de usuário/senha) em: %s
 2. Clique no link a seguir: %s";
 $SessionMinDuration = "Duração mínima da sessão";
 $CanNotTranslate = "Não foi possível traduzir";
@@ -8170,8 +8170,8 @@ $RemoveTerms = "Remover acordo legal";
 $InformationRightToBeForgottenLinkX = "Você pode encontrar mais informações sobre o direito do usuário de ser esquecido na seguinte página: %s";
 $ExplanationDeleteLegal = "Por favor, diga-nos por que você deseja retirar os direitos que você nos deu anteriormente, para que possamos fazê-lo da maneira mais suave possível.";
 $ExplanationDeleteAccount = "Explique nesta caixa porque você quer que sua conta seja excluída";
-$WhyYouWantToDeleteYourLegalAgreement = "Você pode perguntar abaixo se seu contrato legal foi excluído ou se sua conta foi excluída. 
-No caso do contrato legal, uma vez excluído, você terá que aceitá-lo novamente em seu próximo login para poder acessar a plataforma e recuperar seu acesso, porque não podemos, ao mesmo tempo, fornecer um ambiente pessoal e não tratar sua conta. dados pessoais. 
+$WhyYouWantToDeleteYourLegalAgreement = "Você pode perguntar abaixo se seu contrato legal foi excluído ou se sua conta foi excluída.
+No caso do contrato legal, uma vez excluído, você terá que aceitá-lo novamente em seu próximo login para poder acessar a plataforma e recuperar seu acesso, porque não podemos, ao mesmo tempo, fornecer um ambiente pessoal e não tratar sua conta. dados pessoais.
 No caso de uma exclusão de conta, sua conta será excluída juntamente com todas as suas assinaturas de curso e todas as informações relacionadas à sua conta. Por favor, selecione a opção correspondente com cuidado. Em ambos os casos, um dos nossos administradores analisará sua solicitação antes de ser eficaz, para evitar qualquer mal-entendido e perda definitiva de seus dados.";
 $PersonalDataPrivacy = "Proteção de dados pessoais";
 $RequestForAccountDeletion = "Pedido de remoção da conta";

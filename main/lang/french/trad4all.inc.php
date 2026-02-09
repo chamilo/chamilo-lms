@@ -342,7 +342,7 @@ ANSWER_EXPLANATION: C'est un commentaire facultatif de retour qui apparaîtra à
 SCORE: 20";
 $ImportAikenQuizExplanation = "Le format Aiken est un fichier (.txt) avec un texte simple, avec plusieurs blocs de questions, chacune séparée par une ligne blanche. La première ligne est la question, les lignes de réponse sont préfixés par une lettre et un point, et la bonne réponse vient avec le préfixe 'ANSWER'.
 Voir l'exemple ci-dessous.";
-$ExerciseAikenErrorNoAnswerOptionGiven = "Le fichier importé comporte au moins une question sans réponse (ou les réponses ne comprennent pas la lettre de préfixe requis). Assurez-vous que chaque question a au moins une réponse et qu'elle est précédée par une lettre et un point ou une parenthèse, comme ceci: 
+$ExerciseAikenErrorNoAnswerOptionGiven = "Le fichier importé comporte au moins une question sans réponse (ou les réponses ne comprennent pas la lettre de préfixe requis). Assurez-vous que chaque question a au moins une réponse et qu'elle est précédée par une lettre et un point ou une parenthèse, comme ceci:
 A. Réponse 1";
 $ExerciseAikenErrorNoCorrectAnswerDefined = "Le fichier importé comporte au moins une question sans réponse correcte définie. Assurez-vous que toutes les questions comprennent la réponse: [Lettre] ligne.";
 $SearchCourseBySession = "Recherche de cours par session";
@@ -2637,7 +2637,7 @@ $MailCronCourseExpirationReminderBody = "Cher/Chère %s,
 
 Nous avons remarqué que vous n'avez pas terminé le cours %s alors que sa date de fin a été établie au %s, vous laissant %s jour(s) pour le terminer. Nous vous rappelons que vous ne disposez de la possibilité de suivre ce cours qu'une fois par an. Nous vous invitons donc avec insistance à le compléter dans le délai qu'il vous reste. Vous pouvez retrouver le cours en vous connectant à la plate-forme à cette adresse: %s
 
--- 
+--
 
 Cordialement,
 
@@ -7757,7 +7757,7 @@ $IconsModeSVGComment = "Cette option, lorsqu'elle est activée, préférera les 
 $FilterByTags = "Filtrer par tag";
 $ImportFromMoodle = "Importer depuis Moodle";
 $ImportFromMoodleInfo = "Importer un fichier de sauvegarde de cours de Moodle (.mbz) dans ce cours de Chamilo";
-$ImportFromMoodleInstructions = "La fonctionnalité d'importation peut ne pas supporter tous les types de contenus de Moodle, étant donné le fait que les fonctionnalités ne sont pas toutes identiques, et que Moodle et Chamilo continuent d'évoluer continuellement et rapidement. Cette fonctionnalité d'import devrait être considérée comme un travail en cours. Merci de réviser la page suivante pour plus d'information: <a href='https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import'>https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import</a>";
+$ImportFromMoodleInstructions = "La fonctionnalité d'importation peut ne pas supporter tous les types de contenus de Moodle, étant donné le fait que les fonctionnalités ne sont pas toutes identiques, et que Moodle et Chamilo continuent d'évoluer continuellement et rapidement. Cette fonctionnalité d'import devrait être considérée comme un travail en cours. Merci de réviser la page suivante pour plus d'information: <a href='https://github.com/chamilo/chamilo-lms/wiki/Import-from-Moodle'>https://github.com/chamilo/chamilo-lms/wiki/Import-from-Moodle</a>";
 $MoodleFile = "Fichier de cours de Moodle";
 $FailedToImportThisIsNotAMoodleFile = "Problème rencontré lors de l'import: le fichier soumis ne semble pas être un fichier de sauvegarde de cours de Moodle (.mbz)";
 $ThisQuestionIsNotSupportedYet = "Ce type de question n'est pas encore supporté";

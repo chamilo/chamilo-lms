@@ -1,25 +1,158 @@
 {% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
-{% import '@ChamiloCore/Macros/box.html.twig' as display %}
 
 {% block content %}
     {% autoescape false %}
-        {{ toolbar }}
-        {{ form }}
+        <style>
+            details > summary::-webkit-details-marker { display: none; }
+            details > summary { list-style: none; }
+            .ch-q-preview a { color: rgb(var(--color-primary-base)); text-decoration: underline; }
+            .ch-q-preview img { max-width: 100%; height: auto; border-radius: 12px; }
+            .ch-q-preview table { width: 100%; border-collapse: separate; border-spacing: 0; }
+            .ch-q-preview th, .ch-q-preview td { border: 1px solid #e4e9ed; padding: 8px; vertical-align: top; }
+            .ch-q-preview th { background: #f7f8f9; font-weight: 700; }
+            .ch-q-preview code { background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 8px; }
+        </style>
 
-        {% if pagination %}
-            {% for question in pagination %}
-                {{ display.collapse(
-                    question.iid,
-                    '#' ~ question.courseCode ~ '-' ~ question.iid ~ ' - ' ~ question.question,
-                    question.questionData,
-                    false,
-                    false
-                ) }}
-            {% endfor %}
-        {% endif %}
+        <div class="space-y-6">
 
-        {% if question_count > pagination_length %}
-            {{ pagination }}
-        {% endif %}
+            {{ toolbar }}
+
+            {# Filters box (keep FormValidator output intact) #}
+            <div class="rounded-2xl border border-gray-25 bg-white shadow-sm">
+                <div class="border-b border-gray-25 px-5 py-4">
+                    <div class="text-body-1 font-semibold text-gray-90">
+                        {{ 'Search'|get_lang }}
+                    </div>
+                    <div class="mt-1 text-body-2 text-gray-50">
+                        {{ 'Use filters to narrow down questions.'|get_lang }}
+                    </div>
+                </div>
+
+                <div class="px-5 py-4">
+                    {{ form }}
+                </div>
+            </div>
+
+            {# Results header #}
+            {% if question_count > 0 %}
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="text-body-2 text-gray-50">
+                        <span class="font-semibold text-gray-90">{{ question_count }}</span>
+                        <span>{{ 'Questions'|get_lang }}</span>
+
+                        {% if start > 0 and end > 0 %}
+                            <span class="mx-2 text-gray-50">•</span>
+                            <span>{{ 'Showing'|get_lang }}</span>
+                            <span class="font-semibold text-gray-90">{{ start }}</span>–<span class="font-semibold text-gray-90">{{ end }}</span>
+                        {% endif %}
+                    </div>
+
+                    {% if question_count > pagination_length %}
+                        <div class="sm:shrink-0">
+                            {{ pagination }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Results list #}
+                <div class="space-y-3">
+                    {% if pagination %}
+                        {% for question in pagination %}
+                            <details class="group overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-sm">
+                                <summary class="cursor-pointer select-none px-5 py-4 hover:bg-gray-15">
+                                    <div class="flex items-start gap-4">
+
+                                        {# Type icon (HTML) #}
+                                        {% if question.typeIconHtml is defined and question.typeIconHtml %}
+                                            <div class="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-gray-25 bg-gray-10">
+                                                {{ question.typeIconHtml }}
+                                            </div>
+                                        {% else %}
+                                            <div class="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-gray-25 bg-gray-10 text-gray-50">
+                                                <span class="text-sm font-semibold">?</span>
+                                            </div>
+                                        {% endif %}
+
+                                        <div class="min-w-0 flex-1">
+                                            <div class="flex flex-wrap items-center gap-2">
+
+                                                <span class="inline-flex items-center rounded-lg border border-primary/20 bg-primary/10 px-2 py-0.5 text-tiny font-semibold text-primary">
+                                                    #{{ question.iid|e }}
+                                                </span>
+
+                                                <span class="inline-flex items-center rounded-lg border border-gray-25 bg-gray-15 px-2 py-0.5 text-tiny font-semibold text-gray-90">
+                                                    {{ question.courseCode|default('-')|e }}
+                                                </span>
+
+                                                <span class="inline-flex items-center rounded-lg border border-support-3 bg-support-1 px-2 py-0.5 text-tiny font-semibold text-support-4">
+                                                    {{ question.typeLabel|default('-')|e }}
+                                                </span>
+
+                                                {% if question.level is defined %}
+                                                    <span class="inline-flex items-center rounded-lg border border-gray-25 bg-gray-10 px-2 py-0.5 text-tiny font-semibold text-gray-90">
+                                                        {{ 'Difficulty'|get_lang }}: {{ question.level }}
+                                                    </span>
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="mt-2 break-words text-body-1 font-semibold text-gray-90">
+                                                {{ question.question|default('')|e }}
+                                            </div>
+
+                                            {% set desc = (question.description is defined ? question.description : '') %}
+                                            {% if desc %}
+                                                {% set descText = desc|striptags %}
+                                                <div class="mt-1 break-words text-caption text-gray-50">
+                                                    {{ (descText|length > 180) ? (descText|slice(0, 180) ~ '…') : descText }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="flex shrink-0 items-center gap-2">
+                                            <span class="hidden text-caption font-semibold text-gray-50 sm:inline group-open:hidden">
+                                                {{ 'Show'|get_lang }}
+                                            </span>
+                                            <span class="hidden text-caption font-semibold text-gray-50 sm:inline group-open:inline">
+                                                {{ 'Hide'|get_lang }}
+                                            </span>
+
+                                            <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-gray-25 bg-white text-gray-90 transition group-open:rotate-180">
+                                                ▾
+                                            </span>
+                                        </div>
+                                    </div>
+                                </summary>
+
+                                <div class="px-5 pb-5">
+                                    <div class="rounded-2xl border border-gray-25 bg-gray-10 p-4">
+                                        <div class="ch-q-preview text-body-2 text-gray-90 leading-6">
+                                            {{ question.questionData }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                {# Pagination bottom #}
+                {% if question_count > pagination_length %}
+                    <div class="pt-2">
+                        {{ pagination }}
+                    </div>
+                {% endif %}
+
+            {% else %}
+                {# Empty state #}
+                <div class="rounded-2xl border border-gray-25 bg-white p-8 text-center shadow-sm">
+                    <div class="text-body-1 font-semibold text-gray-90">
+                        {{ 'No results found'|get_lang }}
+                    </div>
+                    <div class="mt-1 text-body-2 text-gray-50">
+                        {{ 'Try adjusting your filters and search again.'|get_lang }}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
     {% endautoescape %}
 {% endblock %}

@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
@@ -31,7 +32,7 @@ Session::erase('objQuestion');
 Session::erase('objAnswer');
 
 $deleteTokenPrefix = 'admin_questions_delete';
-$deleteTokenVar = $deleteTokenPrefix . '_sec_token';
+$deleteTokenVar = $deleteTokenPrefix.'_sec_token';
 $deleteToken = Security::get_existing_token($deleteTokenPrefix);
 
 // Ensure a CSRF token exists for destructive actions (delete, etc).
@@ -84,6 +85,30 @@ $fetchAllAssociative = static function ($connection, string $sql, array $params 
 
     return [];
 };
+
+/**
+ * Build question type icon HTML without requiring a course context.
+ */
+function build_question_type_icon_html(int $type): string
+{
+    $instance = Question::getInstance($type);
+    if (!$instance instanceof Question) {
+        return '';
+    }
+
+    $typeImg = $instance->getTypePicture();
+    $typeExpl = $instance->getExplanation();
+
+    if (empty($typeImg)) {
+        return '';
+    }
+
+    return Display::tag(
+        'div',
+        Display::return_icon($typeImg, $typeExpl, [], 32),
+        []
+    );
+}
 
 /**
  * Find the best relation table and column names to map question -> exercises across courses.
@@ -272,6 +297,141 @@ $fetchExerciseRefsForQuestionIds = static function ($connection, array $question
     return $result;
 };
 
+/**
+ * Extract "filterable" Question ExtraFields values from form values.
+ * Mirrors question_pool.php behavior (checkbox/double_select handling).
+ *
+ * Returns:
+ *  - hasFilters: bool (true if at least one extra field filter is set)
+ *  - filters: array of ['variable' => string, 'value' => string]
+ */
+$extractQuestionExtraFieldFilters = static function (array $formValues): array {
+    $extraField = new ExtraField('question');
+
+    $fields = $extraField->get_all(
+        ['visible_to_self = ? AND filter = ?' => [1, 1]],
+        'display_text'
+    );
+
+    $filters = [];
+
+    foreach ($fields as $field) {
+        $variable = (string) ($field['variable'] ?? '');
+        if ($variable === '') {
+            continue;
+        }
+
+        $key = "extra_$variable";
+        if (!array_key_exists($key, $formValues)) {
+            continue;
+        }
+
+        $value = $formValues[$key];
+        switch ((int) ($field['value_type'] ?? 0)) {
+            case ExtraField::FIELD_TYPE_CHECKBOX:
+                // Some forms wrap checkbox in nested array
+                if (is_array($value) && isset($value[$key])) {
+                    $value = $value[$key];
+                }
+                break;
+
+            case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
+                if (!is_array($value) || !isset($value["extra_{$variable}_second"])) {
+                    $value = null;
+                    break;
+                }
+                $first = $value[$key] ?? null;
+                $second = $value["extra_{$variable}_second"] ?? null;
+                if (empty($first) || empty($second)) {
+                    $value = null;
+                    break;
+                }
+                $value = $first.'::'.$second;
+                break;
+
+            default:
+                break;
+        }
+
+        if (is_array($value)) {
+            // Avoid unexpected arrays
+            $value = null;
+        }
+
+        $value = (string) $value;
+        if ($value === '' || $value === '0') {
+            // Keep '0' if you want it as a valid filter; by default treat it as empty.
+            // If your extrafields use '0' meaningfully, remove this condition.
+            if ($value === '0') {
+                // Treat as empty by default.
+                continue;
+            }
+            continue;
+        }
+
+        $filters[] = [
+            'variable' => $variable,
+            'value' => $value,
+        ];
+    }
+
+    return [
+        'hasFilters' => count($filters) > 0,
+        'filters' => $filters,
+    ];
+};
+
+$getQuestionIdsByExtraFields = static function ($connection, array $formValues) use (
+    $extractQuestionExtraFieldFilters,
+    $fetchAllAssociative
+): array {
+    $extracted = $extractQuestionExtraFieldFilters($formValues);
+    if (empty($extracted['hasFilters'])) {
+        return ['hasFilters' => false, 'ids' => []];
+    }
+
+    $filters = $extracted['filters'] ?? [];
+    if (empty($filters)) {
+        return ['hasFilters' => false, 'ids' => []];
+    }
+
+    $orParts = [];
+    $params = [
+        'itemType' => (int) ExtraFieldEntity::QUESTION_FIELD_TYPE,
+        'expected' => (int) count($filters),
+    ];
+
+    $i = 0;
+    foreach ($filters as $f) {
+        $i++;
+        $orParts[] = "(ef.variable = :var{$i} AND efv.field_value = :val{$i})";
+        $params["var{$i}"] = (string) $f['variable'];
+        $params["val{$i}"] = (string) $f['value'];
+    }
+
+    $sql = "
+        SELECT efv.item_id AS qid
+        FROM extra_field_values efv
+        INNER JOIN extra_field ef ON ef.id = efv.field_id
+        WHERE ef.item_type = :itemType
+          AND (".implode(' OR ', $orParts).")
+        GROUP BY efv.item_id
+        HAVING COUNT(DISTINCT ef.variable) = :expected
+    ";
+
+    $rows = $fetchAllAssociative($connection, $sql, $params);
+
+    $ids = [];
+    foreach ($rows as $row) {
+        $qid = (int) ($row['qid'] ?? 0);
+        if ($qid > 0) {
+            $ids[] = $qid;
+        }
+    }
+
+    return ['hasFilters' => true, 'ids' => array_values(array_unique($ids))];
+};
+
 // -----------------------------
 // Prepare lists for form
 // -----------------------------
@@ -368,6 +528,9 @@ $form
     )
     ->setSelected($answerType);
 
+// Extra fields filters (Question type)
+$extraField = new ExtraField('question');
+$jsForExtraFields = $extraField->addElements($form, 0, [], true);
 $form->addHidden('form_sent', 1);
 $form->addHidden('course_id_changed', '0');
 $form->addButtonSearch(get_lang('Search'));
@@ -393,6 +556,13 @@ $params = [
     'question_level' => $questionLevel,
     'answer_type' => $answerType,
 ];
+
+$formValues = $form->validate() ? $form->exportValues() : [];
+foreach ($formValues as $k => $v) {
+    if (is_string($k) && str_starts_with($k, 'extra_')) {
+        $params[$k] = $v;
+    }
+}
 
 if ($formSent) {
     $params['form_sent'] = 1;
@@ -427,15 +597,28 @@ if ($formSent) {
         $criteria->andWhere($criteria->expr()->eq('type', $answerType));
     }
 
-    // ---------------------------------------------------------
-    // 2) Text filters (OR grouped) and then ANDed with the rest
-    // ---------------------------------------------------------
+    // Extra fields filters (AND across selected extra fields)
+    $connectionForExtra = Database::getConnection();
+    $extraFieldResult = $getQuestionIdsByExtraFields($connectionForExtra, $formValues);
+
+    if (!empty($extraFieldResult['hasFilters'])) {
+        $ids = $extraFieldResult['ids'] ?? [];
+
+        if (empty($ids)) {
+            // If extra field filters exist but no matches, force empty result fast.
+            $criteria->andWhere($criteria->expr()->eq('iid', 0));
+        } else {
+            $criteria->andWhere($criteria->expr()->in('iid', $ids));
+        }
+    }
+
+    // Text filters (OR grouped) and then ANDed with the rest
     $searchExpressions = [];
 
     if (!empty($description)) {
-        $searchExpressions[] = $criteria->expr()->contains('description', $description . "\r");
+        $searchExpressions[] = $criteria->expr()->contains('description', $description."\r");
         $searchExpressions[] = $criteria->expr()->eq('description', $description);
-        $searchExpressions[] = $criteria->expr()->eq('description', '<p>' . $description . '</p>');
+        $searchExpressions[] = $criteria->expr()->eq('description', '<p>'.$description.'</p>');
     }
 
     if (!empty($title)) {
@@ -462,7 +645,7 @@ if ($formSent) {
 
     $questions = $repo->matching($criteria);
 
-    $url = api_get_self() . '?' . http_build_query($params);
+    $url = api_get_self().'?'.http_build_query($params);
     $form->setDefaults($params);
 
     $questionCount = count($questions);
@@ -481,7 +664,6 @@ if ($formSent) {
     $pagination->setItemNumberPerPage($length);
     $pagination->setCurrentPageNumber($page);
 
-    // Render a pagination bar that looks decent even if the theme doesn't style .pagination.
     $pagination->renderer = function ($data) use ($url) {
         $pageCount = (int) ($data['pageCount'] ?? 1);
         $current = (int) ($data['current'] ?? 1);
@@ -490,60 +672,61 @@ if ($formSent) {
             return '';
         }
 
-        $mk = static function (int $p, string $label = null, bool $active = false) use ($url): string {
+        $mk = static function (int $p, ?string $label = null, bool $disabled = false, bool $active = false) use ($url): string {
             $label = $label ?? (string) $p;
-            $href = $active ? '#' : ($url . '&page=' . $p);
-            $style = $active
-                ? 'background:#0f172a;color:#fff;border-color:#0f172a;'
-                : 'background:#fff;color:#0f172a;border-color:#e5e7eb;';
-            $cursor = $active ? 'default' : 'pointer';
 
-            return '<li style="margin:0;list-style:none;">'
-                . '<a href="' . $href . '" style="display:inline-flex;align-items:center;justify-content:center;min-width:36px;height:34px;padding:0 10px;border:1px solid;border-radius:10px;text-decoration:none;font-weight:600;'
-                . $style . 'cursor:' . $cursor . ';">'
-                . htmlspecialchars($label, ENT_QUOTES) . '</a></li>';
+            $base = 'inline-flex items-center justify-center min-w-[36px] h-9 px-3 rounded-lg border text-sm font-semibold';
+            if ($active) {
+                $cls = $base.' bg-primary text-white border-primary cursor-default';
+                $href = '#';
+            } elseif ($disabled) {
+                $cls = $base.' bg-white text-gray-50 border-gray-25 opacity-60 cursor-not-allowed';
+                $href = '#';
+            } else {
+                $cls = $base.' bg-white text-gray-90 border-gray-25 hover:bg-gray-10';
+                $href = $url.'&page='.$p;
+            }
+
+            return '<li class="list-none">'
+                .'<a href="'.$href.'" class="'.$cls.'">'.htmlspecialchars($label, ENT_QUOTES).'</a>'
+                .'</li>';
         };
 
-        $render = '<nav aria-label="Pagination" style="width:100%;">';
-        $render .= '<ul style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;padding:0;margin:10px 0;">';
+        $render = '<nav aria-label="Pagination" class="w-full">';
+        $render .= '<ul class="flex flex-wrap gap-2 justify-center items-center p-0 my-4">';
 
-        // Prev
-        $prev = max(1, $current - 1);
-        $render .= $mk($prev, '«', $current === 1);
+        $render .= $mk(max(1, $current - 1), '«', $current === 1, false);
 
-        // Windowed pages
         $window = 2;
         $start = max(1, $current - $window);
         $end = min($pageCount, $current + $window);
 
         if ($start > 1) {
-            $render .= $mk(1, '1', $current === 1);
+            $render .= $mk(1, '1', false, $current === 1);
             if ($start > 2) {
-                $render .= '<li style="list-style:none;padding:0 6px;color:#64748b;">…</li>';
+                $render .= '<li class="list-none px-2 text-gray-50">…</li>';
             }
         }
 
         for ($p = $start; $p <= $end; $p++) {
-            $render .= $mk($p, (string) $p, $p === $current);
+            $render .= $mk($p, (string) $p, false, $p === $current);
         }
 
         if ($end < $pageCount) {
             if ($end < $pageCount - 1) {
-                $render .= '<li style="list-style:none;padding:0 6px;color:#64748b;">…</li>';
+                $render .= '<li class="list-none px-2 text-gray-50">…</li>';
             }
-            $render .= $mk($pageCount, (string) $pageCount, $current === $pageCount);
+            $render .= $mk($pageCount, (string) $pageCount, false, $current === $pageCount);
         }
 
-        // Next
-        $next = min($pageCount, $current + 1);
-        $render .= $mk($next, '»', $current === $pageCount);
+        $render .= $mk(min($pageCount, $current + 1), '»', $current === $pageCount, false);
 
         $render .= '</ul></nav>';
 
         return $render;
     };
 
-    $urlExercise = api_get_path(WEB_CODE_PATH) . 'exercise/admin.php?';
+    $urlExercise = api_get_path(WEB_CODE_PATH).'exercise/admin.php?';
     $warningText = addslashes(api_htmlentities(get_lang('Please confirm your choice')));
 
     $items = $pagination->getItems();
@@ -622,6 +805,7 @@ if ($formSent) {
             $question->typeLabel = $questionTypesList[$question->getType()] ?? (string) $question->getType();
             $question->exerciseRefs = $exerciseRefs;
             $question->resolvedCourseId = $resolvedCourseId;
+            $question->typeIconHtml = build_question_type_icon_html((int) $question->getType());
 
             // ---------------------------------------------------------
             // Preview rendering
@@ -634,7 +818,7 @@ if ($formSent) {
                 $exercise->course = $courseInfo;
 
                 $questionObject = Question::read($questionId, $courseInfo);
-
+                $question->typeIconHtml = build_question_type_icon_html((int) $question->getType());
                 // Pick an exercise for preview rendering when possible
                 $previewExerciseId = 0;
 
@@ -674,9 +858,9 @@ if ($formSent) {
 
             // PDF export: just append content and continue
             if ('export_pdf' === $action) {
-                $pdfContent .= '<span style="color:#000; font-weight:bold; font-size:x-large;">#' . $questionId . '. ' . $question->getQuestion() . '</span><br />';
-                $pdfContent .= '<span style="color:#444;">(' . ($questionTypesList[$question->getType()] ?? '-') . ') [' . get_lang('Source') . ': ' . $courseCode . ']</span><br />';
-                $pdfContent .= $question->getDescription() . '<br />';
+                $pdfContent .= '<span style="color:#000; font-weight:bold; font-size:x-large;">#'.$questionId.'. '.$question->getQuestion().'</span><br />';
+                $pdfContent .= '<span style="color:#444;">('.($questionTypesList[$question->getType()] ?? '-').') ['.get_lang('Source').': '.$courseCode.']</span><br />';
+                $pdfContent .= $question->getDescription().'<br />';
                 $pdfContent .= $question->questionData;
 
                 continue;
@@ -687,7 +871,7 @@ if ($formSent) {
             // ---------------------------------------------------------
             $deleteUrl = '';
             if ($resolvedCourseId > 0 && !empty($courseInfo)) {
-                $deleteUrl = $url . '&' . http_build_query([
+                $deleteUrl = $url.'&'.http_build_query([
                         'courseId' => $resolvedCourseId,
                         'questionId' => $questionId,
                         'action' => 'delete',
@@ -696,12 +880,12 @@ if ($formSent) {
             }
 
             // ---------------------------------------------------------
-            // Exercises list: GLOBAL across courses
+            // Exercises list: GLOBAL across courses (Tailwind-ish markup)
             // ---------------------------------------------------------
-            $exerciseData = '';
             if (!empty($exerciseRefs)) {
-                $exerciseData .= '<div class="aq-exercises">';
-                $exerciseData .= '<p><strong>' . get_lang('Tests') . '</strong></p>';
+                $exerciseData = '<div class="mt-3 rounded-xl border border-gray-25 bg-white p-3">';
+                $exerciseData .= '<p class="mb-2 text-body-2 font-semibold text-gray-90">'.get_lang('Tests').'</p>';
+                $exerciseData .= '<div class="space-y-2">';
 
                 foreach ($exerciseRefs as $ref) {
                     $refCourseId = (int) ($ref['course_id'] ?? 0);
@@ -717,7 +901,7 @@ if ($formSent) {
                     $ex = new Exercise($refCourseId);
                     $ex->course_id = $refCourseId;
 
-                    $exerciseTitle = get_lang('Unknown test') . ' #' . $refExerciseId;
+                    $exerciseTitle = get_lang('Unknown test').' #'.$refExerciseId;
                     $sessionId = 0;
 
                     if ($ex->read($refExerciseId)) {
@@ -728,58 +912,55 @@ if ($formSent) {
                     $cid = (int) ($refCourseInfo['real_id'] ?? $refCourseId);
 
                     $editLink = $urlExercise
-                        . api_get_cidreq_params($cid, $sessionId)
-                        . '&' . http_build_query([
+                        .api_get_cidreq_params($cid, $sessionId)
+                        .'&'.http_build_query([
                             'exerciseId' => $refExerciseId,
                             'type' => $question->getType(),
                             'editQuestion' => $questionId,
                         ]);
 
-                    $exerciseData .= '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0;">';
-                    $exerciseData .= '<span style="display:inline-flex;align-items:center;gap:8px;">';
-                    $exerciseData .= '<span style="font-weight:700;color:#0f172a;">[' . htmlspecialchars($refCourseCode) . ']</span>';
-                    $exerciseData .= '<span>' . htmlspecialchars($exerciseTitle) . '</span>';
-                    $exerciseData .= '</span>';
+                    $exerciseData .= '<div class="flex flex-wrap items-center gap-2">';
+                    $exerciseData .= '<span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700">['.htmlspecialchars($refCourseCode).']</span>';
+                    $exerciseData .= '<span class="text-sm text-slate-900">'.htmlspecialchars($exerciseTitle).'</span>';
                     $exerciseData .= Display::url(
                         Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
                         $editLink,
-                        ['target' => '_blank']
+                        [
+                            'target' => '_blank',
+                            'class' => 'ml-auto inline-flex items-center rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50',
+                        ]
                     );
                     $exerciseData .= '</div>';
                 }
 
-                $exerciseData .= '</div>';
+                $exerciseData .= '</div></div>';
 
-                $question->questionData .= '<br />' . $exerciseData;
+                $question->questionData .= '<br />'.$exerciseData;
             } else {
                 // Fallback to legacy behavior if we have a readable Question object
                 if ($questionObject && $questionObject->getCountExercise() > 0) {
                     $exerciseList = $questionObject->getExerciseListWhereQuestionExists();
                     if (!empty($exerciseList)) {
-                        $question->questionData .= '<p><strong>' . get_lang('Tests') . '</strong></p>';
+                        $question->questionData .= '<p><strong>'.get_lang('Tests').'</strong></p>';
                         foreach ($exerciseList as $exerciseEntity) {
-                            // Some installations return legacy Exercise-like objects, others return Doctrine entities (CQuiz).
                             // Avoid hard-calling methods that might not exist (e.g. getActive()).
                             $exerciseTitle = '';
                             $exerciseIid = 0;
                             $activeFlag = null; // Only used if we can reliably read a "deleted" marker (-1)
 
                             if (is_object($exerciseEntity)) {
-                                // Title
                                 if (method_exists($exerciseEntity, 'getTitle')) {
                                     $exerciseTitle = (string) $exerciseEntity->getTitle();
                                 } elseif (method_exists($exerciseEntity, 'getName')) {
                                     $exerciseTitle = (string) $exerciseEntity->getName();
                                 }
 
-                                // ID (Chamilo often uses iid, but some entities use id)
                                 if (method_exists($exerciseEntity, 'getIid')) {
                                     $exerciseIid = (int) $exerciseEntity->getIid();
                                 } elseif (method_exists($exerciseEntity, 'getId')) {
                                     $exerciseIid = (int) $exerciseEntity->getId();
                                 }
 
-                                // Active/deleted flag (not always available on Doctrine entities)
                                 if (method_exists($exerciseEntity, 'getActive')) {
                                     $activeFlag = (int) $exerciseEntity->getActive();
                                 } elseif (method_exists($exerciseEntity, 'getStatus')) {
@@ -790,27 +971,25 @@ if ($formSent) {
                             if ($exerciseTitle === '') {
                                 $exerciseTitle = get_lang('Unknown test');
                                 if ($exerciseIid > 0) {
-                                    $exerciseTitle .= ' #' . $exerciseIid;
+                                    $exerciseTitle .= ' #'.$exerciseIid;
                                 }
                             }
 
                             $question->questionData .= htmlspecialchars($exerciseTitle, ENT_QUOTES);
 
-                            // Keep the old "deleted" UX only when we can reliably detect the legacy marker (-1)
                             if (null !== $activeFlag && -1 === $activeFlag) {
-                                $question->questionData .= ' - (' . get_lang('The test has been deleted');
+                                $question->questionData .= ' - ('.get_lang('The test has been deleted');
                                 if ($exerciseIid > 0) {
-                                    $question->questionData .= ' #' . $exerciseIid;
+                                    $question->questionData .= ' #'.$exerciseIid;
                                 }
                                 $question->questionData .= ') ';
                             }
 
                             $question->questionData .= '<br />';
                         }
-
                     }
                 } else {
-                    $question->questionData .= '&nbsp;' . get_lang('Orphan question');
+                    $question->questionData .= '&nbsp;'.get_lang('Orphan question');
                 }
             }
 
@@ -821,18 +1000,21 @@ if ($formSent) {
                 $cid = (int) ($courseInfo['real_id'] ?? $resolvedCourseId);
 
                 $editQuestionUrl = $urlExercise
-                    . api_get_cidreq_params($cid)
-                    . '&' . http_build_query([
+                    .api_get_cidreq_params($cid)
+                    .'&'.http_build_query([
                         'exerciseId' => 0,
                         'type' => $question->getType(),
                         'editQuestion' => $questionId,
                     ]);
 
-                $question->questionData .= '<div style="margin-top:10px;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;">';
+                $question->questionData .= '<div class="mt-3 flex flex-wrap justify-end gap-2">';
                 $question->questionData .= Display::url(
-                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
+                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).' '.get_lang('Edit'),
                     $editQuestionUrl,
-                    ['target' => '_blank', 'class' => 'btn btn--plain']
+                    [
+                        'target' => '_blank',
+                        'class' => 'inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-50',
+                    ]
                 );
 
                 if (!empty($deleteUrl)) {
@@ -840,13 +1022,13 @@ if ($formSent) {
                         get_lang('Delete'),
                         $deleteUrl,
                         [
-                            'class' => 'btn btn--danger',
-                            'onclick' => 'javascript: if(!confirm(\'' . $warningText . '\')) return false',
+                            'class' => 'inline-flex items-center rounded-lg bg-danger px-3 py-1.5 text-sm font-semibold text-white hover:bg-danger/90',
+                            'onclick' => 'javascript: if(!confirm(\''.$warningText.'\')) return false',
                         ]
                     );
                 } else {
-                    $question->questionData .= '<span class="btn btn--disabled" title="' . api_htmlentities(get_lang('Deletion is not allowed without a course context.')) . '">'
-                        . get_lang('Delete') . '</span>';
+                    $question->questionData .= '<span class="inline-flex items-center rounded-lg bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-400" title="'.api_htmlentities(get_lang('Deletion is not allowed without a course context.')).'">'
+                        .get_lang('Delete').'</span>';
                 }
 
                 $question->questionData .= '</div>';
@@ -856,12 +1038,27 @@ if ($formSent) {
 }
 
 $formContent = $form->returnForm();
+if (!empty($jsForExtraFields['jquery_ready_content'])) {
+    $safeJs = (string) $jsForExtraFields['jquery_ready_content'];
+    $formContent .= "\n".'<script>
+(function () {
+  function run() {
+    try { '.$safeJs.' } catch (e) {}
+  }
+  if (window.jQuery) {
+    window.jQuery(function(){ run(); });
+  } else {
+    document.addEventListener("DOMContentLoaded", function(){ run(); });
+  }
+})();
+</script>'."\n";
+}
 
 switch ($action) {
     case 'export_pdf':
         $pdfContent = Security::remove_XSS($pdfContent);
         $pdfParams = [
-            'filename' => 'questions-export-' . api_get_local_time(),
+            'filename' => 'questions-export-'.api_get_local_time(),
             'pdf_date' => api_get_local_time(),
             'orientation' => 'P',
         ];
@@ -884,7 +1081,7 @@ switch ($action) {
         if (empty($courseInfo) || $questionId <= 0) {
             Display::addFlash(Display::return_message(get_lang('Delete failed: missing course context or invalid question id.'), 'warning'));
             Security::clear_token($deleteTokenPrefix);
-            header('Location: ' . $url);
+            header('Location: '.$url);
             exit;
         }
 
@@ -898,7 +1095,7 @@ switch ($action) {
             if (!$questionEntity) {
                 Display::addFlash(Display::return_message(get_lang('Delete failed: question not found.'), 'warning'));
                 Security::clear_token($deleteTokenPrefix);
-                header('Location: ' . $url);
+                header('Location: '.$url);
                 exit;
             }
 
@@ -920,14 +1117,13 @@ switch ($action) {
 
             // Reindex question_order per quiz to avoid gaps (legacy behavior)
             foreach ($toReindex as $quizId => $orders) {
-                // If the same question is linked multiple times (shouldn't), reindex from highest order first
                 rsort($orders);
 
                 foreach ($orders as $order) {
                     $conn->executeStatement(
                         'UPDATE c_quiz_rel_question
-                     SET question_order = question_order - 1
-                     WHERE quiz_id = :quizId AND question_order > :order',
+                         SET question_order = question_order - 1
+                         WHERE quiz_id = :quizId AND question_order > :order',
                         ['quizId' => $quizId, 'order' => $order]
                     );
                 }
@@ -958,7 +1154,7 @@ switch ($action) {
 
             $conn->commit();
 
-            Display::addFlash(Display::return_message(get_lang('Deleted') . ' #' . $questionId, 'confirmation'));
+            Display::addFlash(Display::return_message(get_lang('Deleted').' #'.$questionId, 'confirmation'));
         } catch (\Throwable $e) {
             try {
                 if ($conn->isTransactionActive()) {
@@ -968,11 +1164,11 @@ switch ($action) {
                 // Ignore rollback errors
             }
 
-            error_log('Admin questions delete failed: ' . $e->getMessage());
+            error_log('Admin questions delete failed: '.$e->getMessage());
 
             $debug = 'test' === api_get_setting('server_type');
             $msg = $debug
-                ? ('Delete failed: ' . $e->getMessage())
+                ? ('Delete failed: '.$e->getMessage())
                 : get_lang('Delete failed: this question is still referenced by other resources.');
 
             Display::addFlash(Display::return_message($msg, 'warning'));

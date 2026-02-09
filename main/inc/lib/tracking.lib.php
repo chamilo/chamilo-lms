@@ -6535,10 +6535,7 @@ class Tracking
                         $user_id,
                         $course_code,
                         [],
-                        $session_id_from_get,
-                        false,
-                        false,
-                        $lpShowMaxProgress
+                        $session_id_from_get
                     );
 
                     $total_time_login = self::get_time_spent_on_the_course(

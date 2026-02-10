@@ -1,4 +1,3 @@
-{# Cookie banner (C1-compatible behavior) #}
 {% set cookieWarningRaw = chamilo_settings_get('platform.cookie_warning')|default('')|trim|lower %}
 {% set cookieWarningEnabled = (cookieWarningRaw == 'true') %}
 {% set cookieAck = app.request.cookies.get('ChamiloUsesCookies') %}
@@ -21,12 +20,19 @@
                 aria-hidden="true">!</span>
 
                     <div class="text-sm text-gray-90">
-                        <div class="leading-snug">
-                            {{ youAcceptCookiesText }}
+                        <div class="leading-snug
+                            [&_a]:font-semibold
+                            [&_a]:underline [&_a]:underline-offset-2
+                            [&_a]:text-primary hover:[&_a]:text-primary/80">
+                            {{ youAcceptCookiesText|raw }}
                         </div>
 
                         <div id="chamilo-cookie-banner-more"
-                             class="mt-2 hidden text-sm leading-relaxed text-gray-90">
+                             class="mt-2 hidden text-sm leading-relaxed text-gray-90
+                               [&_a]:font-semibold
+                               [&_a]:underline [&_a]:underline-offset-2
+                               [&_a]:text-primary hover:[&_a]:text-primary/80
+                               [&_a:hover]:opacity-90">
                             {{ helpCookieUsageValidationHtml|raw }}
                         </div>
 

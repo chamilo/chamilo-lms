@@ -1,5 +1,12 @@
+#app {
+  @apply overflow-hidden
+    sm:overflow-auto;
+}
+
 .app-main {
-  @apply flex flex-col h-screen md:pb-8 md:px-8 transition-[margin-left] duration-150;
+  @apply flex flex-col h-screen transition-[margin-left] duration-150 pb-4 px-4
+    sm:min-h-screen
+    md:h-auto md:pb-8 md:px-8;
   padding-top: calc(4.5rem + 1rem + 1px);
 
   &:not(.app-main--no-sidebar) {
@@ -8,6 +15,12 @@
 }
 
 #app.app--sidebar-inactive {
+  @apply overflow-auto;
+
+  .app-main {
+    @apply h-auto;
+  }
+
   .app-main:not(.app-main--no-sidebar) {
     @apply sm:ml-[88px];
   }

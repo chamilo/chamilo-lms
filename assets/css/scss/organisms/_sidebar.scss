@@ -187,10 +187,6 @@
 }
 
 #app {
-  .app-main {
-     // @apply overflow-hidden;
-  }
-
   &.app--sidebar-inactive {
     .app-sidebar {
       @apply hidden
@@ -234,7 +230,7 @@
     }
 
     .app-main {
-      @apply overflow-auto;
+      // @apply overflow-auto;
     }
   }
 }

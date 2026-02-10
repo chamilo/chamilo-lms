@@ -22,7 +22,7 @@
 
       .p-menubar-root-list {
         @apply pt-8;
-        height: calc(100vh - 3.5rem - 1px);
+        height: calc(100vh - 4.5rem - 1px);
 
         > .p-menubar-item {
           @apply w-full px-6 pb-2 text-gray-50;

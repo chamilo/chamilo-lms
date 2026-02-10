@@ -69,7 +69,12 @@ class CourseRelUser implements Stringable
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[Groups(['course:read', 'user:read', 'course_rel_user:read'])]
+    #[Groups([
+        'course:read',
+        'user:read',
+        'course_rel_user:read',
+        'course_catalogue:read',
+    ])]
     #[MaxDepth(1)]
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'courses')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]

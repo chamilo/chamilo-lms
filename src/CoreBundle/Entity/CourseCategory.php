@@ -68,7 +68,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 class CourseCategory implements Stringable
 {
-    #[Groups(['course_category:read', 'course:read'])]
+    #[Groups([
+        'course_category:read',
+        'course:read',
+        'course_catalogue:read',
+    ])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -80,11 +84,21 @@ class CourseCategory implements Stringable
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     protected Collection $children;
     #[Assert\NotBlank]
-    #[Groups(['course_category:read', 'course_category:write', 'course:read', 'session:read'])]
+    #[Groups([
+        'course_category:read',
+        'course_category:write',
+        'course:read',
+        'session:read',
+        'course_catalogue:read',
+    ])]
     #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
     #[Assert\NotBlank]
-    #[Groups(['course_category:read', 'course_category:write', 'course:read'])]
+    #[Groups([
+        'course_category:read',
+        'course_category:write',
+        'course:read',
+    ])]
     #[ORM\Column(name: 'code', type: 'string', length: 40, nullable: false)]
     protected string $code;
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]

@@ -422,7 +422,7 @@ class SortableTable extends HTML_Table
         $html .= '<div class="flex w-full items-center justify-between">';
 
         if (count($this->actionButtons) > 0) {
-            $html .= '<div class="btn-toolbar flex space-x-2">';
+            $html .= '<div class="btn-toolbar flex gap-4">';
             $html .= '<div class="btn-group">';
 
             foreach ($this->actionButtons as $action => $data) {
@@ -435,17 +435,17 @@ class SortableTable extends HTML_Table
         }
 
         if (count($this->form_actions) > 0) {
-            $html .= '<div class="flex space-x-2">';
-            $html .= '<a class="btn btn--action mr-2" href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'
+            $html .= '<div class="grow flex gap-4">';
+            $html .= '<a class="btn btn--plain-outline btn--sm" href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="setCheckbox(true, \''.$table_id.'\'); return false;">'
                 .get_lang('Select all').'</a>';
-            $html .= '<a class="btn btn--action mr-2" href="?'.$params.'" onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'
+            $html .= '<a class="btn btn--plain-outline btn--sm" href="?'.$params.'" onclick="setCheckbox(false, \''.$table_id.'\'); return false;">'
                 .get_lang('Deselect all').'</a>';
 
             $items = [];
             foreach ($this->form_actions as $action => $label) {
                 $items[] = [
-                    'href' => 'javascript:void();',
-                    'onclick' => "javascript:action_click(this, '$table_id');",
+                    'type' => 'button',
+                    'onclick' => "action_click(this, '$table_id');",
                     'title' => $label,
                     'data-action' => $action,
                     'data-confirm' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
@@ -784,7 +784,7 @@ class SortableTable extends HTML_Table
             $result[] = '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
         }
         $result[] = '<select style="width: auto;" class="form-control" name="'.$this->param_prefix
-            .'per_page" onchange="javascript: this.form.submit();">';
+            .'per_page" onchange="this.form.submit();">';
         $list = [10, 20, 50, 100, 500, 1000];
 
         $rowList = api_get_setting('display.table_row_list', true);

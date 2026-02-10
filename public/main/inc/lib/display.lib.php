@@ -1797,44 +1797,46 @@ HTML;
     {
         $id = uniqid('dropdown', false);
         $html = '
-        <div class="dropdown inline-block relative">
+        <div class="dropdown inline-block relative grow">
             <button
                 id="'.$id.'"
                 type="button"
-                class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                class="btn btn--plain-outline btn--sm"
                 aria-expanded="false"
                 aria-haspopup="true"
                 onclick="document.querySelector(\'#'.$id.'_menu\').classList.toggle(\'hidden\')"
             >
               '.$title.'
-              <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
               </svg>
             </button>
             <div
                 id="'.$id.'_menu"
-                class=" dropdown-menu hidden origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                class="dropdown-menu hidden absolute mt-1 py-2 bg-white border-0 drop-shadow-lg rounded-lg "
                 role="menu"
                 aria-orientation="vertical"
                 aria-labelledby="menu-button"
                 tabindex="-1"
-            >
-            <div class="py-1" role="none">';
+            >';
         foreach ($elements as $item) {
-            $html .= self::url(
-                    $item['title'],
-                    $item['href'],
-                    [
-                        'class' => 'text-gray-700 block px-4 py-2 text-sm',
-                        'role' => 'menuitem',
-                        'onclick' => $item['onclick'] ?? '',
-                        'data-action' => $item['data-action'] ?? '',
-                        'data-confirm' => $item['data-confirm'] ?? '',
-                    ]
-                );
+            $attrs = [
+                'class' => 'rounded-none py-1 px-4 transition-none select-none w-full text-start text-body-2 gap-1 hover:text-primary hover:bg-support-1 focus:text-primary focus:bg-support-1',
+                'role' => 'menuitem',
+                'onclick' => $item['onclick'] ?? '',
+                'data-action' => $item['data-action'] ?? '',
+                'data-confirm' => $item['data-confirm'] ?? '',
+            ];
+
+            if (empty($item['type'])) {
+                $html .= self::url($item['title'], $item['href'], $attrs);
+            } elseif('button' === $item['type']) {
+                $attrs['type'] = 'button';
+
+                $html .= self::button('', $item['title'], $attrs);
+            }
         }
         $html .= '
-            </div>
             </div>
             </div>
         ';

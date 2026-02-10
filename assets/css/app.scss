@@ -104,20 +104,7 @@
   }
 
   .sortable-buttons-actions {
-    @apply bg-gray-5 border border-gray-20 rounded shadow;
-
-    .btn {
-      @apply px-4 bg-white border border-gray-30 py-2 mr-2 text-gray-90 rounded cursor-pointer transition-all;
-      height: 35px;
-    }
-
-    .btn--action {
-      @apply bg-white border border-gray-30 py-1 px-3 text-sm rounded cursor-pointer text-gray-90;
-    }
-
-    .btn:hover, .plane:hover {
-      @apply bg-gray-25 text-gray-90;
-    }
+    @apply bg-white border-l border-b border-r border-support-1 rounded-b drop-shadow-lg;
   }
 
   .card .flex {

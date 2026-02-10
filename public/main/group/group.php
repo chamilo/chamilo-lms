@@ -242,7 +242,20 @@ echo UserManager::getUserSubscriptionTab(3);
 if ('true' === api_get_setting('allow_group_categories')) {
     if (empty($categories)) {
         $defaultCategoryId = GroupManager::create_category(
-            get_lang('Default groups')
+            get_lang('Default groups'),
+            '',
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
         );
         $defaultCategory = GroupManager::get_category($defaultCategoryId);
         $categories = [$defaultCategory];
@@ -272,7 +285,10 @@ if ('true' === api_get_setting('allow_group_categories')) {
             $actions .= '<a
                 href="group_category.php?'.api_get_cidreq().'&id='.$categoryId.'" title="'.get_lang('Edit').'">'.
                 Display::getMdiIcon('pencil', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit this category')).'</a>';
-
+            // Add group
+            $actions .= ' <a
+                href="group_creation.php?'.api_get_cidreq().'&category_id='.$categoryId.'">'.
+                Display::getMdiIcon(ActionIcon::SUBSCRIBE_GROUP_USERS_TO_RESOURCE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Create new group(s)')).'</a>';
             // Delete
             $actions .= Display::url(
                 Display::getMdiIcon(ActionIcon::DELETE, count($categories) == 1 ? 'ch-tool-icon-disabled' : 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),

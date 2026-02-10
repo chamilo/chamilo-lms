@@ -1,13 +1,16 @@
 @layer components {
   .course-card {
-    @apply bg-gray-15;
 
     &__header {
-      @apply relative aspect-video w-full overflow-hidden rounded-t-2xl bg-gray-25;
+      @apply relative aspect-video w-full overflow-hidden rounded-t-lg bg-gray-25 ;
+    }
+
+    .p-card-header {
+      @apply relative;
     }
 
     &__category-list {
-      @apply absolute top-2 left-2 flex flex-wrap gap-1 z-30;
+      @apply absolute top-2 left-2 flex flex-wrap gap-1 z-10;
     }
 
     &__title {
@@ -22,6 +25,10 @@
           @apply text-gray-50 font-normal text-caption;
         }
       }
+    }
+
+    &__language {
+      @apply absolute bottom-2 right-2 z-10;
     }
   }
 }

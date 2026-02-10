@@ -70,16 +70,19 @@
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      <CatalogueCourseCard
+      <div
         v-for="course in visibleCoursesBase"
         :key="course.id"
-        :card-extra-fields="cardExtraFields"
-        :course="course"
-        :current-user-id="currentUserId"
-        :show-title="showCourseTitle"
-        @rate="onRatingChange"
-        @subscribed="onUserSubscribed"
-      />
+      >
+        <CatalogueCourseCard
+          :card-extra-fields="cardExtraFields"
+          :course="course"
+          :current-user-id="currentUserId"
+          :show-title="showCourseTitle"
+          @rate="onRatingChange"
+          @subscribed="onUserSubscribed"
+        />
+      </div>
     </div>
 
     <div ref="sentinel">

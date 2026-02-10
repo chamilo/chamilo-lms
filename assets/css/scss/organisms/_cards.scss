@@ -1,8 +1,9 @@
 .p-card {
-  @apply rounded-lg bg-white drop-shadow-lg;
+  @apply rounded-lg bg-white border border-gray-30
+    hover:drop-shadow-lg;
 
   .p-card-body {
-    @apply h-full flex flex-col space-y-4 p-4  border-b border-r border-l border-b-support-1 border-r-support-1 border-l-support-1 rounded-b-lg rounded-r-lg rounded-l-lg;
+    @apply h-full flex flex-col space-y-4 p-4 rounded-b-lg;
   }
 
   .p-card-header {
@@ -20,12 +21,15 @@
   }
 
   .p-card-content {
+    @apply space-y-2;
+
     &:empty {
       @apply hidden;
     }
   }
 
   .p-card-footer {
+    @apply rounded-b-lg;
   }
 
   .p-menu {

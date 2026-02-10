@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CourseBundle\Entity\CGroup;
 
 // resetting the course id
 
@@ -182,6 +183,39 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             true,
             (int) $normalizedRelation
         );
+
+        // update course group linked to class population
+        $linkedGroupInfos = GroupManager::getGroupsLinkedToUsergroup($id);
+
+        foreach ($linkedGroupInfos as $linkedGroupInfo) {
+            $cGroup = $linkedGroupInfo['group'];
+            /** @var Chamilo\CoreBundle\Entity\Course $course */
+            $course = $linkedGroupInfo['course'];
+            $cId = $course->getId();
+
+            /** @var $cGroup CGroup */
+            // get user list in group
+            $users = $cGroup->getMembers();
+            $groupUserIds = [];
+            foreach ($users as $user) {
+                // user de type Chamilo\CourseBundle\Entity\CGroupRelUser
+                /** @var $user Chamilo\CourseBundle\Entity\CGroupRelUser */
+                $groupUserIds[] = $user->getUser()->getId();
+            }
+
+            $addIds = array_diff($elements_posted, $groupUserIds);
+            $removeIds = array_diff($groupUserIds, $elements_posted);
+
+            if (count($addIds) > 0) {
+                GroupManager::subscribeUsers($addIds, $cGroup, $cId);
+            }
+
+            if (count($removeIds) > 0) {
+                GroupManager::unsubscribeUsers($removeIds, $cGroup);
+            }
+        }
+
+
         $_SESSION['usergroup_flash_message'] = get_lang('Update successful');
         $_SESSION['usergroup_flash_type'] = 'success';
         header('Location: usergroups.php');

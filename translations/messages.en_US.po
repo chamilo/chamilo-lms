@@ -32575,3 +32575,20 @@ msgstr "Total space used by %s is %sGB"
 
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Total space used by portal %s is %sGB (limit is set to %sGB)"
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+
+msgid "Link classes to created groups ?"
+msgstr "Link classes to created groups ?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+
+msgid "New groups creation in category %s"
+msgstr "New groups creation in category %s"
+
+
+
+
+

@@ -46,6 +46,7 @@ class UserGroupModel extends Model
     public $access_url_rel_user;
     public $table_course;
     public $table_user;
+    public $group_rel_usergroup;
     private string $usergroup_table;
 
     public function __construct()
@@ -62,6 +63,7 @@ class UserGroupModel extends Model
         $this->access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $this->table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $this->table_user = Database::get_main_table(TABLE_MAIN_USER);
+        $this->group_rel_usergroup = Database::get_course_table(TABLE_GROUP_CLASS);
         $this->useMultipleUrl = api_get_multiple_access_url();
         if ($this->allowTeachers()) {
             $this->columns[] = 'author_id';
@@ -1396,7 +1398,89 @@ class UserGroupModel extends Model
                 Database::insert($this->usergroup_rel_user_table, $params);
             }
         }
+
+        // if in courses some groups are linked to this usergroup, update group users list
+        $groups = self::getGroupsByUsergroup($usergroup_id);
+        foreach ($groups as $groupDatas) {
+            // [groupId, cId]
+            GroupManager::subscribeUsers($new_items, api_get_group_entity($groupDatas['groupId']));
+            GroupManager::unsubscribeUsers($delete_items, api_get_group_entity($groupDatas['groupId']));
+        }
+
     }
+
+    /**
+     * Gets a list of groups ids by user group
+     * @param   int  $id   user group id
+     * @return  array
+     */
+    public function getGroupsByUsergroup($id, $c_id = null, $category_id = null, $id_session = null) : array
+    {
+        is_null($id_session) ? $id_session = 0 : $id_session = intval($id_session);
+        $categoryCondition = ' = '.$category_id;
+
+        if (is_null($category_id)) {
+            $categoryCondition = 'IS NOT NULL';
+        }
+
+        $finalArray = [];
+
+        if (is_null($c_id)) {
+            $condition = ['usergroup_id = ?' => $id, ' AND session_id = ?' => $id_session];
+            $firstCondition = [' category_id ?' => $categoryCondition];
+        } else {
+            $condition = ['usergroup_id = ?' => $id, ' AND c_id = ?' => $c_id, ' AND session_id = ?' => $id_session];
+            $firstCondition = ['c_id = ?' => $c_id, ' AND category_id ?' => $categoryCondition];
+        }
+
+        // error if $categoryCondition == 'IS NOT NULL'
+        // in this case, query is SELECT iid FROM c_group_info  WHERE  category_id 'IS NOT NULL'
+        // and quote in 'IS NOT NULL' is an error
+
+
+        // select id from group where category_id=X or all category id
+        $firstResults = Database::select(
+            'iid',
+            Database::get_course_table(TABLE_GROUP),
+            array('where'=> $firstCondition )
+        );
+
+        // firstarray is ids of group for cId and categoryId
+        $firstArray = array();
+        if (!empty($firstResults)){
+            foreach ($firstResults as $row){
+                $firstArray[] = $row['iid'];
+            }
+        }
+
+        // select group_id, c_id from group_rel_usergroup where usergroup_id, c_id, session_id
+        $results = Database::select(
+            'group_id, c_id',
+            $this->group_rel_usergroup,
+            array('where' => $condition)
+        );
+
+        $array = array();
+        if (!empty($results)){
+            foreach ($results as $row){
+
+                $array[] = array(
+                    'groupId'=> $row['group_id'],
+                    'cId'=> $row['c_id']
+                );
+            }
+        }
+        foreach ($array as $group_rel_usergroup ){
+            if(in_array($group_rel_usergroup['groupId'], $firstArray)){
+                $finalArray[] = $group_rel_usergroup;
+            }
+        }
+
+        return $finalArray; // groupId, cId
+    }
+
+
+
 
     /**
      * @deprecated Use UsergroupRepository::getByTitleInUrl().

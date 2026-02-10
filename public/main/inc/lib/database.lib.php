@@ -417,6 +417,10 @@ class Database
         }
         $conditions = self::parse_conditions($conditions);
 
+        if (str_contains($conditions, "'IS NOT NULL'")) {
+            $conditions = preg_replace("/'IS NOT NULL'/", "IS NOT NULL", $conditions);
+        }
+
         //@todo we could do a describe here to check the columns ...
         if (is_array($columns)) {
             $clean_columns = implode(',', $columns);

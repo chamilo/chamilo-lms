@@ -25,7 +25,6 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use ExtraField;
-use ExtraFieldValue;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -327,7 +326,7 @@ class CatalogueController extends AbstractController
                 continue;
             }
             if (!\in_array($var, $allowedVars, true)) {
-                //continue; // only expose what we explicitly allow
+                // continue; // only expose what we explicitly allow
             }
 
             $type = (int) ($f['value_type'] ?? 0);
@@ -357,7 +356,7 @@ class CatalogueController extends AbstractController
         $out = [];
 
         foreach ($ids as $courseId) {
-            $out[$courseId] = $ef->getDataAndFormattedValues($courseId, false, array_keys($byVar));;
+            $out[$courseId] = $ef->getDataAndFormattedValues($courseId, false, array_keys($byVar));
         }
 
         return $this->json($out);

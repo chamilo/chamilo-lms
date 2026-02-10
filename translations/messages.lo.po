@@ -34919,3 +34919,18 @@ msgstr "prompt ທີ່ປ່ຽນແປງ"
 msgid "Saved in Documents"
 msgstr "ບັນທຶກໄວ້ໃນເອກະສານ"
 
+msgid "Total space used by %s is %sGB"
+msgstr "ພື້ນທີ່ທັງໝົດທີ່ %s ໃຊ້ແມ່ນ %sGB"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "ພື້ນທີ່ທັງໝົດທີ່ portal %s ໃຊ້ແມ່ນ %sGB (ຈຳກັດໄດ້ຕັ້ງເປັນ %sGB)"
+
+msgid "Confirm your e-mail on %s"
+msgstr "ຢືນຢັນອີເມວຂອງເຈົ້າທີ່ %s"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "ສະບາຍດີ %s,\n\nເພື່ອຢືນຢັນອີເມວຂອງເຈົ້າແລະເປີດໃຊ້ບັນຊີຂອງເຈົ້າທີ່ %s, ກະລຸນາກົດລິ້ງດ້ານລຸ່ມນີ້."
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "ຖ້າເຈົ້າບໍ່ໄດ້ລົງທະບຽນບັນຊີນີ້, ເຈົ້າສາມາດບໍ່ສົນໃຈອີເມວນີ້. ຈະບໍ່ມີການກະທຳໃດໆ."
+

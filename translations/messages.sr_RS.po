@@ -32345,230 +32345,245 @@ msgid "Update profile"
 msgstr "Ažuriraj profil"
 
 msgid "Enable learning path generator"
-msgstr ""
+msgstr "Omogući generator staza učenja"
 
 msgid "Enable exercise generator"
-msgstr ""
+msgstr "Omogući generator vežbi"
 
 msgid "Enable open answers grader"
-msgstr ""
+msgstr "Omogući ocenjivač otvorenih odgovora"
 
 msgid "Enable tutor chatbot"
-msgstr ""
+msgstr "Omogući chatbot za tutore"
 
 msgid "Enable task grader"
-msgstr ""
+msgstr "Omogući ocenjivač zadataka"
 
 msgid "Enable content analyser"
-msgstr ""
+msgstr "Omogući analizator sadržaja"
 
 msgid "Enable image generator"
-msgstr ""
+msgstr "Omogući generator slika"
 
 msgid "Enable glossary terms generator"
-msgstr ""
+msgstr "Omogući generator termina glosara"
 
 msgid "Enable video generator"
-msgstr ""
+msgstr "Omogući generator videa"
 
 msgid "Enable course analyser"
-msgstr ""
+msgstr "Omogući analizator kursa"
 
 msgid "The operation '%s' is not supported."
-msgstr ""
+msgstr "Operacija '%s' nije podržana."
 
 msgid "AI feedback on %s in course %s"
-msgstr ""
+msgstr "AI povratna informacija o %s u kursu %s"
 
 msgid "Delete failed: missing course context or invalid question id."
-msgstr ""
+msgstr "Brisanje nije uspelo: nedostaje kontekst kursa ili nevažeći ID pitanja."
 
 msgid "AI Tutor"
-msgstr ""
+msgstr "AI tutor"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "APCu ekstenzija mora biti instalirana i omogućena kako bi platforma mogla da je koristi."
 
 msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
-msgstr ""
+msgstr "Preporučuje se da OPCache memory_consumption dozvoli bar %sMB RAM-a."
 
 msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "OPcache modul mora biti instaliran i omogućen kako bi platforma mogla da ga koristi."
 
 msgid "You are here"
-msgstr ""
+msgstr "Vi ste ovde"
 
 msgid "Click an event type to filter results."
-msgstr ""
+msgstr "Kliknite na tip događaja da filtrirate rezultate."
 
 msgid "Require unique presence"
-msgstr ""
+msgstr "Zahtevaj jedinstveno prisustvo"
 
 msgid "If enabled, the gradebook will give a learner 100% when present at least once."
-msgstr ""
+msgstr "Ako je omogućeno, dnevnik ocena će polazniku dati 100% ako je barem jednom prisutan."
 
 msgid "AI feedback"
-msgstr ""
+msgstr "AI povratna informacija"
 
 msgid "Prompt"
-msgstr ""
+msgstr "Prompt"
 
 msgid "Tip"
-msgstr ""
+msgstr "Savet"
 
 msgid "You can edit the prompt before asking for feedback."
-msgstr ""
+msgstr "Možete izmeniti prompt pre traženja povratne informacije."
 
 msgid "Result (you can apply it to the comment)"
-msgstr ""
+msgstr "Rezultat (možete ga primeniti na komentar)"
 
 msgid "Apply to comment"
-msgstr ""
+msgstr "Primeni na komentar"
 
 msgid "Apply score"
-msgstr ""
+msgstr "Primeni ocenu"
 
 msgid "AI grade"
-msgstr ""
+msgstr "AI ocena"
 
 msgid "AI tutor is disabled during tests"
-msgstr ""
+msgstr "AI tutor je onemogućen tokom testova"
 
 msgid "Generate glossary terms"
-msgstr ""
+msgstr "Generiši termine glosara"
 
 msgid "Generate media"
-msgstr ""
+msgstr "Generiši medije"
 
 msgid "You do not have permission to generate AI media in this course."
-msgstr ""
+msgstr "Nemate dozvolu da generišete AI medije u ovom kursu."
 
 msgid "AI helpers are disabled at platform level."
-msgstr ""
+msgstr "AI pomoćnici su onemogućeni na nivou platforme."
 
 msgid "AI media generation is disabled in course settings."
-msgstr ""
+msgstr "Generisanje AI medija je onemogućeno u podešavanjima kursa."
 
 msgid "No AI media providers available."
-msgstr ""
+msgstr "Nema dostupnih AI pružalaca medija."
 
 msgid "Provider"
-msgstr ""
+msgstr "Pružalac"
 
 msgid "Select a provider"
-msgstr ""
+msgstr "Izaberite pružalca"
 
 msgid "Example: generated_media"
-msgstr ""
+msgstr "Primer: generated_media"
 
 msgid "The name is not added to the prompt; it is only used to save the file."
-msgstr ""
+msgstr "Ime se ne dodaje u prompt; koristi se samo za čuvanje datoteke."
 
 msgid "Describe what you want to generate..."
-msgstr ""
+msgstr "Opišite šta želite da generišete..."
 
 msgid "Tip: click a preset to quickly set the size."
-msgstr ""
+msgstr "Savet: kliknite na unapred podešenu vrednost da brzo postavite veličinu."
 
 msgid "Generating..."
-msgstr ""
+msgstr "Generišem..."
 
 msgid "Save to Documents"
-msgstr ""
+msgstr "Sačuvaj u Dokumente"
 
 msgid "Document IRI"
-msgstr ""
+msgstr "IRI dokumenta"
 
 msgid "Go to folder"
-msgstr ""
+msgstr "Idi u fasciklu"
 
 msgid "Provider used"
-msgstr ""
+msgstr "Korišćeni pružalac"
 
 msgid "This video result cannot be saved yet"
-msgstr ""
+msgstr "Ovaj video rezultat još uvek ne može biti sačuvan"
 
 msgid "Video polling was stopped because the provider changed."
-msgstr ""
+msgstr "Anketa za video je zaustavljena jer se promenio pružalac."
 
 msgid "Video generation is taking too long. Please try again later."
-msgstr ""
+msgstr "Generisanje videa traje predugo. Pokušajte ponovo kasnije."
 
 msgid "Failed to check video status."
-msgstr ""
+msgstr "Neuspešna provera statusa videa."
 
 msgid "Video generated successfully. You can now save it."
-msgstr ""
+msgstr "Video je uspešno generisan. Sada ga možete sačuvati."
 
 msgid "Video generation completed, but no playable content was returned."
-msgstr ""
+msgstr "Generisanje videa je završeno, ali nije vraćen sadržaj koji se može pustiti."
 
 msgid "Video generation failed."
-msgstr ""
+msgstr "Generisanje videa nije uspelo."
 
 msgid "Waiting for the video to be ready..."
-msgstr ""
+msgstr "Čekam da video bude spreman..."
 
 msgid "Please complete all fields."
-msgstr ""
+msgstr "Molimo popunite sva polja."
 
 msgid "Image generation is not enabled for this course."
-msgstr ""
+msgstr "Generisanje slika nije omogućeno za ovaj kurs."
 
 msgid "Video generation is not enabled for this course."
-msgstr ""
+msgstr "Generisanje videa nije omogućeno za ovaj kurs."
 
 msgid "Generation failed."
-msgstr ""
+msgstr "Generisanje nije uspelo."
 
 msgid "Generated successfully. Review the preview and save when ready."
-msgstr ""
+msgstr "Uspešno generisano. Pregledajte pretpregled i sačuvajte kada budete spremni."
 
 msgid "Generated successfully. Saving is disabled because the provider returned a URL."
-msgstr ""
+msgstr "Uspešno generisano. Čuvanje je onemogućeno jer je pružalac vratio URL."
 
 msgid "Video generation started. Waiting for the result..."
-msgstr ""
+msgstr "Generisanje videa je započeto. Čekam rezultat..."
 
 msgid "AI returned an empty response."
-msgstr ""
+msgstr "AI je vratio prazan odgovor."
 
 msgid "Nothing to save yet."
-msgstr ""
+msgstr "Ništa za čuvanje još uvek."
 
 msgid "This provider did not return base64 content. Please try another provider."
-msgstr ""
+msgstr "Ovaj provajder nije vratio base64 sadržaj. Molimo pokušajte sa drugim provajderom."
 
 msgid "Saving failed."
-msgstr ""
+msgstr "Čuvanje nije uspelo."
 
 msgid "Get AI feedback"
-msgstr ""
+msgstr "Dobij AI povratnu informaciju"
 
 msgid "Copy answer to clipboard"
-msgstr ""
+msgstr "Kopiraj odgovor u clipboard"
 
 msgid "Save answer to my inbox"
-msgstr ""
+msgstr "Sačuvaj odgovor u moj sandučić"
 
 msgid "The document is already in this folder"
-msgstr ""
+msgstr "Dokument je već u ovoj fascikli"
 
 msgid "Copied"
-msgstr ""
+msgstr "Kopirano"
 
 msgid "You do not have permission to generate glossary terms."
-msgstr ""
+msgstr "Nemate dozvolu za generisanje pojmova iz rečnika."
 
 msgid "Video generation is in progress"
-msgstr ""
+msgstr "Generisanje videa je u toku"
 
 msgid "Job"
-msgstr ""
+msgstr "Zadatak"
 
 msgid "Modified prompt"
-msgstr ""
+msgstr "Izmenjeni upit"
 
 msgid "Saved in Documents"
-msgstr ""
+msgstr "Sačuvano u Dokumentima"
+
+msgid "Total space used by %s is %sGB"
+msgstr "Ukupno korišćenog prostora od %s je %sGB"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "Ukupno korišćenog prostora portala %s je %sGB (limit je postavljen na %sGB)"
+
+msgid "Confirm your e-mail on %s"
+msgstr "Potvrdite svoju e-poštu na %s"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Ćao %s,\n\nDa biste verifikovali svoju e-poštu i omogućili nalog na %s, kliknite na link ispod."
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "Ako niste registrovali ovaj nalog, možete zanemariti ovu e-poštu. Neće biti preduzeta nikakva akcija."
 

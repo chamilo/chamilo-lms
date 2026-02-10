@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "সূত্র নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "সূত্রের নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -32564,4 +32564,19 @@ msgstr "পরিবর্তিত প্রম্পট"
 
 msgid "Saved in Documents"
 msgstr "ডকুমেন্টসে সংরক্ষিত"
+
+msgid "Total space used by %s is %sGB"
+msgstr "%s দ্বারা ব্যবহৃত মোট স্থান %sজিবি"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "পোর্টাল %s দ্বারা ব্যবহৃত মোট স্থান %sজিবি (সীমা নির্ধারিত %sজিবি)"
+
+msgid "Confirm your e-mail on %s"
+msgstr "%s তে আপনার ইমেইল নিশ্চিত করুন"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "হাই %s,\n\n%s তে আপনার ইমেইল যাচাই করতে এবং আপনার অ্যাকাউন্ট সক্রিয় করতে, নিচের লিঙ্কে ক্লিক করুন।"
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "যদি আপনি এই অ্যাকাউন্টটি নিবন্ধন না করেন, তাহলে আপনি এই ইমেইলটি উপেক্ষা করতে পারেন। কোনো কার্যকর করা হবে না।"
 

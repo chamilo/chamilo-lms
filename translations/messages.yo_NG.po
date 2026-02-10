@@ -32338,230 +32338,245 @@ msgid "Update profile"
 msgstr "Ṣe ìmú padà sí ìpìlẹ̀ ìdàrúkọ"
 
 msgid "Enable learning path generator"
-msgstr ""
+msgstr "Ṣiṣẹda ẹlẹda ọna ẹkọ"
 
 msgid "Enable exercise generator"
-msgstr ""
+msgstr "Ṣiṣẹda ẹlẹda adaṣe"
 
 msgid "Enable open answers grader"
-msgstr ""
+msgstr "Ṣiṣẹda onipò awọn idahun ṣiṣi"
 
 msgid "Enable tutor chatbot"
-msgstr ""
+msgstr "Ṣiṣẹda chatbot olùkọni"
 
 msgid "Enable task grader"
-msgstr ""
+msgstr "Ṣiṣẹda onipò iṣẹ́-ṣiṣe"
 
 msgid "Enable content analyser"
-msgstr ""
+msgstr "Ṣiṣẹda aṣàwárí àkóónù"
 
 msgid "Enable image generator"
-msgstr ""
+msgstr "Ṣiṣẹda ẹlẹda aworan"
 
 msgid "Enable glossary terms generator"
-msgstr ""
+msgstr "Ṣiṣẹda ẹlẹda awọn ọrọ iṣàpẹẹrẹ"
 
 msgid "Enable video generator"
-msgstr ""
+msgstr "Ṣiṣẹda ẹlẹda fidio"
 
 msgid "Enable course analyser"
-msgstr ""
+msgstr "Ṣiṣẹda aṣàwárí iṣẹ́-ẹ̀kọ́"
 
 msgid "The operation '%s' is not supported."
-msgstr ""
+msgstr "Iṣẹ́ '%s' kò ṣe ìdúróṣinṣin."
 
 msgid "AI feedback on %s in course %s"
-msgstr ""
+msgstr "Àwùsí AI lori %s ninu iṣẹ́-ẹ̀kọ́ %s"
 
 msgid "Delete failed: missing course context or invalid question id."
-msgstr ""
+msgstr "Ìparẹ́ kùnà: kò sí ìṣàpẹẹrẹ iṣẹ́-ẹ̀kọ́ tàbí ID ìbéèrè tí kò ṣe ìdí."
 
 msgid "AI Tutor"
-msgstr ""
+msgstr "Olùkọni AI"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "Àfidípò APCu gbọ́dọ̀ fi ìdọwọ́sí àti ìdènà fún ìlò pẹ̀lẹ́."
 
 msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
-msgstr ""
+msgstr "Fúnni ni ìdùnnú ìrònú OPCache láti de ìpinnu %sMB RAM ó dára jùlọ."
 
 msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "Àkọ́ APCu gbọ́dọ̀ fi ìdọwọ́sí àti ìdènà fún ìlò pẹ̀lẹ́."
 
 msgid "You are here"
-msgstr ""
+msgstr "Ẹ yìí"
 
 msgid "Click an event type to filter results."
-msgstr ""
+msgstr "Tẹ ìrùu ìṣẹ́lẹ̀ kan láti ṣààkí ìdàbọ̀."
 
 msgid "Require unique presence"
-msgstr ""
+msgstr "Beèrè ìwàláàyù ìhùwàsí"
 
 msgid "If enabled, the gradebook will give a learner 100% when present at least once."
-msgstr ""
+msgstr "Tí a bá ṣiṣẹ́, ìwé ìdíbọ̀ yóò fún akẹ́kọ̀ọ́ 100% nígbà tí ó wà níbẹ̀ ó kéré jù lọ ẹ̀kà kan."
 
 msgid "AI feedback"
-msgstr ""
+msgstr "Àwùsí AI"
 
 msgid "Prompt"
-msgstr ""
+msgstr "Ìdásílẹ̀"
 
 msgid "Tip"
-msgstr ""
+msgstr "Ìmọ̀ràn"
 
 msgid "You can edit the prompt before asking for feedback."
-msgstr ""
+msgstr "Ẹ lè ṣàtúnṣe ìdásílẹ̀ ṣáájú ìbéèrè fún ìdàbọ̀."
 
 msgid "Result (you can apply it to the comment)"
-msgstr ""
+msgstr "Àbájáde (ẹ lè lò ó fún ìwòye)"
 
 msgid "Apply to comment"
-msgstr ""
+msgstr "Lò fún ìwòye"
 
 msgid "Apply score"
-msgstr ""
+msgstr "Lò ìdíbọ̀"
 
 msgid "AI grade"
-msgstr ""
+msgstr "Ìdíbọ̀ AI"
 
 msgid "AI tutor is disabled during tests"
-msgstr ""
+msgstr "Olùkọni AI ti di ìdíwọ̀ lákòókò ìdánwò"
 
 msgid "Generate glossary terms"
-msgstr ""
+msgstr "Ṣẹ̀dá àwùjọ ọrọ iṣàpẹẹrẹ"
 
 msgid "Generate media"
-msgstr ""
+msgstr "Ṣẹ̀dá àwùn-ọnà"
 
 msgid "You do not have permission to generate AI media in this course."
-msgstr ""
+msgstr "Ẹ kò ní ìyọ̀nda láti ṣẹ̀dá àwùn-ọnà AI nínú iṣẹ́-ẹ̀kọ́ yìí."
 
 msgid "AI helpers are disabled at platform level."
-msgstr ""
+msgstr "Àwùràn ìrànlọ́wọ́ AI ti di ìdíwọ̀ ní ìpele pẹ̀lẹ́."
 
 msgid "AI media generation is disabled in course settings."
-msgstr ""
+msgstr "Ìdá àwùn-ọnà AI ti di ìdíwọ̀ nínú ìṣètò iṣẹ́-ẹ̀kọ́."
 
 msgid "No AI media providers available."
-msgstr ""
+msgstr "Kò sí àwùràn ìpèsè àwùn-ọnà AI."
 
 msgid "Provider"
-msgstr ""
+msgstr "Olùpèsè"
 
 msgid "Select a provider"
-msgstr ""
+msgstr "Yan olùpèsè kan"
 
 msgid "Example: generated_media"
-msgstr ""
+msgstr "Àpẹẹrẹ: generated_media"
 
 msgid "The name is not added to the prompt; it is only used to save the file."
-msgstr ""
+msgstr "Orúkọ kò ṣàfikún ìdásílẹ̀; a lò ó fún ìdásílẹ̀ fáìlù nìkan."
 
 msgid "Describe what you want to generate..."
-msgstr ""
+msgstr "Ṣàlààyé ohun tí ẹ fẹ́ ṣẹ̀dá..."
 
 msgid "Tip: click a preset to quickly set the size."
-msgstr ""
+msgstr "Ìmọ̀ràn: tẹ ìdásílẹ̀ ìdàbọ̀ kan láti ṣètò ìwọ̀n yí lọ́nà yára."
 
 msgid "Generating..."
-msgstr ""
+msgstr "Ợ́mùṣẹ..."
 
 msgid "Save to Documents"
-msgstr ""
+msgstr "Fipamọ́ sínú Àwùjọ Ìwé"
 
 msgid "Document IRI"
-msgstr ""
+msgstr "Ìwé IRI Ìwé"
 
 msgid "Go to folder"
-msgstr ""
+msgstr "Lọ sí ìkà"
 
 msgid "Provider used"
-msgstr ""
+msgstr "Olùpèsè tí a lò"
 
 msgid "This video result cannot be saved yet"
-msgstr ""
+msgstr "Àbájáde fidio yìí kò ṣe ìdásílẹ̀ lónìí"
 
 msgid "Video polling was stopped because the provider changed."
-msgstr ""
+msgstr "Ìdíwò fidio ti dá ìdúróṣinṣin nítorí olùpèsè yí padà."
 
 msgid "Video generation is taking too long. Please try again later."
-msgstr ""
+msgstr "Ìdá fidio gba ìgbà pípẹ́ jù. Jọ̀wọ́ gbìyànjú lẹ́yìn ìgbà díẹ̀."
 
 msgid "Failed to check video status."
-msgstr ""
+msgstr "Kò ṣàyẹ̀wò ìpò fídíò."
 
 msgid "Video generated successfully. You can now save it."
-msgstr ""
+msgstr "Fídíò ti ṣẹlẹ̀ àṣeyọrí. O le fipamọ́ rẹ̀ bayi."
 
 msgid "Video generation completed, but no playable content was returned."
-msgstr ""
+msgstr "Ìdá fídíò ti parí, ṣùgbọ́n kò sí àkópa ìdárayá tí a fi padà."
 
 msgid "Video generation failed."
-msgstr ""
+msgstr "Ìdá fídíò kùnà."
 
 msgid "Waiting for the video to be ready..."
-msgstr ""
+msgstr "Ndúróde fídíò yóò ṣetan..."
 
 msgid "Please complete all fields."
-msgstr ""
+msgstr "Jọ̀wọ́ kún gbogbo àwùjọ."
 
 msgid "Image generation is not enabled for this course."
-msgstr ""
+msgstr "Ìdá àwòrán kò ṣiṣẹ́ fún ìdìí yìí."
 
 msgid "Video generation is not enabled for this course."
-msgstr ""
+msgstr "Ìdá fídíò kò ṣiṣẹ́ fún ìdìí yìí."
 
 msgid "Generation failed."
-msgstr ""
+msgstr "Ìdá kùnà."
 
 msgid "Generated successfully. Review the preview and save when ready."
-msgstr ""
+msgstr "A ṣẹlẹ̀ àṣeyọrí. Ṣàyẹ̀wò ìdàwò ìdí ìdàhùn àti fipamọ́ nigbati o bá ṣetan."
 
 msgid "Generated successfully. Saving is disabled because the provider returned a URL."
-msgstr ""
+msgstr "A ṣẹlẹ̀ àṣeyọrí. Ìfipamọ́ kò ṣiṣẹ́ nítorí olùpèsè fi URL padà."
 
 msgid "Video generation started. Waiting for the result..."
-msgstr ""
+msgstr "Ìdá fídíò ti bẹ̀rẹ̀. Ndúróde ìdí ìdàhùn..."
 
 msgid "AI returned an empty response."
-msgstr ""
+msgstr "AI fi ìdáhùn òfo padà."
 
 msgid "Nothing to save yet."
-msgstr ""
+msgstr "Kò sí ohun tí yóò fipamọ́ lónìí."
 
 msgid "This provider did not return base64 content. Please try another provider."
-msgstr ""
+msgstr "Olùpèsè yìí kò fi àkópa base64 padà. Jọ̀wọ́ gbìyànjú olùpèsè mìíràn."
 
 msgid "Saving failed."
-msgstr ""
+msgstr "Ìfipamọ́ kùnà."
 
 msgid "Get AI feedback"
-msgstr ""
+msgstr "Gba ìdáhùn AI"
 
 msgid "Copy answer to clipboard"
-msgstr ""
+msgstr "Ẹ̀ka ìdáhùn sí bọọ̀lù ìkọ̀rọ̀"
 
 msgid "Save answer to my inbox"
-msgstr ""
+msgstr "Fipamọ́ ìdáhùn sí àpò ìnòwọ̀ mi"
 
 msgid "The document is already in this folder"
-msgstr ""
+msgstr "Àwòrán náà ti wà nínú ìkọ́ yìí tẹ́lẹ̀"
 
 msgid "Copied"
-msgstr ""
+msgstr "A ẹ̀ka"
 
 msgid "You do not have permission to generate glossary terms."
-msgstr ""
+msgstr "O kò ní ìyọ̀nda láti ṣẹlẹ̀ àwùjọ ìtumọ̀."
 
 msgid "Video generation is in progress"
-msgstr ""
+msgstr "Ìdá fídíò ń lọ lọ́wọ́"
 
 msgid "Job"
-msgstr ""
+msgstr "Iṣẹ́"
 
 msgid "Modified prompt"
-msgstr ""
+msgstr "Ìdí ìdásí tí a yí padà"
 
 msgid "Saved in Documents"
-msgstr ""
+msgstr "A fipamọ́ nínú Àwòrán Ìwé"
+
+msgid "Total space used by %s is %sGB"
+msgstr "Àyè ìpapà gbogbogbò tí %s lò jẹ́ %sGB"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "Àyè ìpapà gbogbogbò tí ọ̀dà %s lò jẹ́ %sGB (ààlì lòdì sí %sGB)"
+
+msgid "Confirm your e-mail on %s"
+msgstr "Fìdí ìmeèlì rẹ̀ lọ́wọ́ %s"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Bawo ni %s,\n\nLati fi ìmeèlì rẹ̀ ṣe ìdíwò àti ṣiṣẹ́ ìdí ìdàhùn rẹ lọ́wọ́ %s, jọ̀wọ́ tẹ ìnọ́kà ìsàlẹ̀ yìí."
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "Ti o kò ba ṣe ìforúkọ sílẹ̀ ìdí ìdàhùn yìí, o le kọ ìmeèlì yìí silẹ̀. Kò sí ìṣe yóò ṣẹlẹ̀."
 

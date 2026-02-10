@@ -32382,7 +32382,7 @@ msgid "Delete failed: missing course context or invalid question id."
 msgstr "Dzēšana neizdevās: trūkst kursa konteksta vai nederīgs jautājuma ID."
 
 msgid "AI Tutor"
-msgstr "AI tutor"
+msgstr "AI Tutor"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
 msgstr "APCu paplašinājumam jābūt gan instalētam, gan iespējotam, lai platforma to izmantotu."
@@ -32569,4 +32569,19 @@ msgstr "Modificēts uzvedne"
 
 msgid "Saved in Documents"
 msgstr "Saglabāts Dokumentos"
+
+msgid "Total space used by %s is %sGB"
+msgstr "Kopējā vieta, ko izmanto %s, ir %sGB"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "Kopējā vieta, ko izmanto portāls %s, ir %sGB (limits ir iestatīts uz %sGB)"
+
+msgid "Confirm your e-mail on %s"
+msgstr "Apstipriniet savu e-pastu %s"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Sveiks %s,\n\nLai verificētu savu e-pastu un aktivizētu savu kontu %s, lūdzu noklikšķiniet uz saites zemāk."
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "Ja jūs neizveidojāt šo kontu, varat ignorēt šo e-pastu. Nekādas darbības netiks veiktas."
 

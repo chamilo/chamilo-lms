@@ -34139,3 +34139,18 @@ msgstr "Geänderter Prompt"
 msgid "Saved in Documents"
 msgstr "In Dokumente gespeichert"
 
+msgid "Total space used by %s is %sGB"
+msgstr "Von %s genutzter Speicherplatz insgesamt: %s GB"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "Von Portal %s genutzter Speicherplatz insgesamt: %s GB (Limit: %s GB)"
+
+msgid "Confirm your e-mail on %s"
+msgstr "Bestätigen Sie Ihre E-Mail bei %s"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Hallo %s,\n\nUm Ihre E-Mail zu verifizieren und Ihr Konto bei %s zu aktivieren, klicken Sie bitte auf den folgenden Link."
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "Falls Sie dieses Konto nicht registriert haben, können Sie diese E-Mail ignorieren. Es wird keine Aktion durchgeführt."
+

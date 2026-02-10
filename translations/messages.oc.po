@@ -32565,3 +32565,18 @@ msgstr "Invite modificada"
 msgid "Saved in Documents"
 msgstr "Enregistrat dins los Documents"
 
+msgid "Total space used by %s is %sGB"
+msgstr "Espaci total utilizat per %s es %sGB"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "Espaci total utilizat pel portal %s es %sGB (limite fixada a %sGB)"
+
+msgid "Confirm your e-mail on %s"
+msgstr "Confirmatz vòstre e-mail sul %s"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Bonjorn %s,\n\nPer verificar vòstre e-mail e activar vòstre compte sul %s, clicatz sul ligam çaijós."
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "Se vosètz pas registrat aqueste compte, podètz ignorar aqueste e-mail. Cap accion serà presa."
+

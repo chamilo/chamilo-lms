@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "உண்மையாகவே"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "சூத்திர நட样: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "பூமுலை மாதிரி: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "மாறியின் வரம்புகள்"
@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:பதிப்புரிமை,, no:பதிப்புரிமை இல்லை"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:பாக்கெட்,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:பாக்கெடு,, application/msword:MsWord,, application/octet-stream:அக்டெட் ஸ்ட்ரீம்,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:பயிற்சி,,      simulation:மெய்யப்படுத்தல்,,      questionnaire:கேள்வித்தாள்,,      diagram:சித்திரம்,,      figure:உருவம்,,      graph:படம்,,      index:அட்டவணை,,      slide:இன்னுசைடு,,      table:அட்டவணை,,      narrative text:கதை உரை,,      exam:தேர்வு,,      experiment:பரிசோதனை,,      problem statement:பிரச்சினை அறிக்கை,,      self assessment:சுய மதிப்பீடு,,      lecture:உபதேசம்"
@@ -32342,230 +32342,245 @@ msgid "Update profile"
 msgstr "சுயவிவரத்தை புதுப்பி"
 
 msgid "Enable learning path generator"
-msgstr ""
+msgstr "கற்றல் பாதை உருவாக்கியை செயல்படுத்து"
 
 msgid "Enable exercise generator"
-msgstr ""
+msgstr "ப்‌பயிற்சி உருவாக்கியை செயல்படுத்து"
 
 msgid "Enable open answers grader"
-msgstr ""
+msgstr "திறந்த பதில்கள் மதிப்பீட்டாளரை செயல்படுத்து"
 
 msgid "Enable tutor chatbot"
-msgstr ""
+msgstr "பயிற்சியாளர் சாட்பாட்டை செயல்படுத்து"
 
 msgid "Enable task grader"
-msgstr ""
+msgstr "பணி மதிப்பீட்டாளரை செயல்படுத்து"
 
 msgid "Enable content analyser"
-msgstr ""
+msgstr "உள்ளடக்க பகுப்பாய்வாளரை செயல்படுத்து"
 
 msgid "Enable image generator"
-msgstr ""
+msgstr "பட உருவாக்கியை செயல்படுத்து"
 
 msgid "Enable glossary terms generator"
-msgstr ""
+msgstr "கியாசரி சொற்கள் உருவாக்கியை செயல்படுத்து"
 
 msgid "Enable video generator"
-msgstr ""
+msgstr "வீடியோ உருவாக்கியை செயல்படுத்து"
 
 msgid "Enable course analyser"
-msgstr ""
+msgstr "பாடநெறி பகுப்பாய்வாளரை செயல்படுத்து"
 
 msgid "The operation '%s' is not supported."
-msgstr ""
+msgstr "'%s' செயல் ஆதரிக்கப்படவில்லை."
 
 msgid "AI feedback on %s in course %s"
-msgstr ""
+msgstr "%s இல் %s பாடநெறியில் AI கருத்து"
 
 msgid "Delete failed: missing course context or invalid question id."
-msgstr ""
+msgstr "அழித்தல் தோல்வி: பாடநெறி சூழல் இல்லை அல்லது செல்லுபடியற்ற கேள்வி id."
 
 msgid "AI Tutor"
-msgstr ""
+msgstr "AI பயிற்சியாளர்"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "தளம் அதைப் பயன்படுத்துவதற்கு APCu நீட்சி நிறுவப்பட்டும் செயல்படுத்தப்பட்டும் இருக்க வேண்டும்."
 
 msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
-msgstr ""
+msgstr "OPCache நினைவக_உட்கொள்ளல் குறைந்தது %sMB RAM-ஐ அடைய அனுமதிப்பது பரிந்துரைக்கப்படுகிறது."
 
 msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "தளம் அதைப் பயன்படுத்துவதற்கு OPcache தொகுதி நிறுவப்பட்டும் செயல்படுத்தப்பட்டும் இருக்க வேண்டும்."
 
 msgid "You are here"
-msgstr ""
+msgstr "நீ இங்கே இருக்கிறாய்"
 
 msgid "Click an event type to filter results."
-msgstr ""
+msgstr "முடிவுகளை வடிகட்டுவதற்கு ஒரு நிகழ்வு வகையை கிளிக் செய்."
 
 msgid "Require unique presence"
-msgstr ""
+msgstr "தனித்துவமான இருப்பை தேவைப்படுத்து"
 
 msgid "If enabled, the gradebook will give a learner 100% when present at least once."
-msgstr ""
+msgstr "செயல்படுத்தப்பட்டால், மதிப்பெண் புத்தகம் குறைந்தது ஒரு முறை இருந்தால் பயனர் 100% அளிக்கும்."
 
 msgid "AI feedback"
-msgstr ""
+msgstr "AI கருத்து"
 
 msgid "Prompt"
-msgstr ""
+msgstr "குறிப்பு"
 
 msgid "Tip"
-msgstr ""
+msgstr "குறிப்பு"
 
 msgid "You can edit the prompt before asking for feedback."
-msgstr ""
+msgstr "கருத்துக்கு கேட்கும் முன் குறிப்பைத் திருத்தலாம்."
 
 msgid "Result (you can apply it to the comment)"
-msgstr ""
+msgstr "முடிவு (கருத்துக்கு பயன்படுத்தலாம்)"
 
 msgid "Apply to comment"
-msgstr ""
+msgstr "கருத்துக்கு பயன்படுத்து"
 
 msgid "Apply score"
-msgstr ""
+msgstr "மதிப்பெண் பயன்படுத்து"
 
 msgid "AI grade"
-msgstr ""
+msgstr "AI மதிப்பெண்"
 
 msgid "AI tutor is disabled during tests"
-msgstr ""
+msgstr "சோதனைகளின்போது AI பயிற்சியாளர் முடக்கப்பட்டுள்ளது"
 
 msgid "Generate glossary terms"
-msgstr ""
+msgstr "க்ராஸ்ஸரி சொற்களை உருவாக்கு"
 
 msgid "Generate media"
-msgstr ""
+msgstr "மீடியாவை உருவாக்கு"
 
 msgid "You do not have permission to generate AI media in this course."
-msgstr ""
+msgstr "இந்த பாடத்தில் AI மீடியாவை உருவாக்க அனுமதி இல்லை."
 
 msgid "AI helpers are disabled at platform level."
-msgstr ""
+msgstr "AI உதவியாளர்கள் தள அளவில் முடக்கப்பட்டுள்ளன."
 
 msgid "AI media generation is disabled in course settings."
-msgstr ""
+msgstr "பாட அமைப்புகளில் AI மீடியா உருவாக்கம் முடக்கப்பட்டுள்ளது."
 
 msgid "No AI media providers available."
-msgstr ""
+msgstr "எந்த AI மீடியா வழங்குநரும் கிடைக்கவில்லை."
 
 msgid "Provider"
-msgstr ""
+msgstr "வழங்குநர்"
 
 msgid "Select a provider"
-msgstr ""
+msgstr "ஒரு வழங்குநரை தேர்ந்தெடுக்கவும்"
 
 msgid "Example: generated_media"
-msgstr ""
+msgstr "எடுத்துக்காட்டு: generated_media"
 
 msgid "The name is not added to the prompt; it is only used to save the file."
-msgstr ""
+msgstr "பெயர் ப்ராம்ப்ட்டில் சேர்க்கப்படாது; கோப்பை சேமிக்க பயன்படுத்தப்படுகிறது மட்டுமே."
 
 msgid "Describe what you want to generate..."
-msgstr ""
+msgstr "உருவாக்க விரும்புவதை விவரிக்கவும்..."
 
 msgid "Tip: click a preset to quickly set the size."
-msgstr ""
+msgstr "குறிப்பு: அளவை விரைவாக அமைக்க ஒரு முன்னமைப்பை கிளிக் செய்யவும்."
 
 msgid "Generating..."
-msgstr ""
+msgstr "உருவாக்கப்படுகிறது..."
 
 msgid "Save to Documents"
-msgstr ""
+msgstr "ஆவணங்களில் சேமிக்கவும்"
 
 msgid "Document IRI"
-msgstr ""
+msgstr "ஆவண IRI"
 
 msgid "Go to folder"
-msgstr ""
+msgstr "படுக்கையில் செல்லவும்"
 
 msgid "Provider used"
-msgstr ""
+msgstr "பயன்படுத்தப்பட்ட வழங்குநர்"
 
 msgid "This video result cannot be saved yet"
-msgstr ""
+msgstr "இந்த வீடியோ முடிவை இன்னும் சேமிக்க முடியாது"
 
 msgid "Video polling was stopped because the provider changed."
-msgstr ""
+msgstr "வழங்குநர் மாற்றப்பட்டதால் வீடியோ பொலிங் நிறுத்தப்பட்டது."
 
 msgid "Video generation is taking too long. Please try again later."
-msgstr ""
+msgstr "வீடியோ உருவாக்கம் நீண்ட நேரம் எடுக்கிறது. தயவு செய்து பின்னர் மீண்டும் முயற்சிக்கவும்."
 
 msgid "Failed to check video status."
-msgstr ""
+msgstr "வீடியோ நிலையை சரிபார்க்கத் தோல்வி."
 
 msgid "Video generated successfully. You can now save it."
-msgstr ""
+msgstr "வீடியோ வெற்றிகரமாக உருவாக்கப்பட்டது. இப்போது சேமிக்கலாம்."
 
 msgid "Video generation completed, but no playable content was returned."
-msgstr ""
+msgstr "வீடியோ உருவாக்கம் முடிந்தது, ஆனால் எந்த பிளே செய்யக்கூடிய உள்ளடக்கமும் திரும்ப அனுப்பப்படவில்லை."
 
 msgid "Video generation failed."
-msgstr ""
+msgstr "வீடியோ உருவாக்கம் தோல்வியுற்றது."
 
 msgid "Waiting for the video to be ready..."
-msgstr ""
+msgstr "வீடியோ தயாராக இருக்க காத்திருக்கிறோம்..."
 
 msgid "Please complete all fields."
-msgstr ""
+msgstr "எல்லா கள்களையும் நிரப்பவும்."
 
 msgid "Image generation is not enabled for this course."
-msgstr ""
+msgstr "இந்த பாடத்திற்கு பட உருவாக்கம் இயல்புநிலைப்படுத்தப்படவில்லை."
 
 msgid "Video generation is not enabled for this course."
-msgstr ""
+msgstr "இந்த பாடத்திற்கு வீடியோ உருவாக்கம் இயல்புநிலைப்படுத்தப்படவில்லை."
 
 msgid "Generation failed."
-msgstr ""
+msgstr "உருவாக்கம் தோல்வியுற்றது."
 
 msgid "Generated successfully. Review the preview and save when ready."
-msgstr ""
+msgstr "வெற்றிகரமாக உருவாக்கப்பட்டது. முன்னோட்டத்தை சோதித்து தயாராக இருந்தால் சேமிக்கவும்."
 
 msgid "Generated successfully. Saving is disabled because the provider returned a URL."
-msgstr ""
+msgstr "வெற்றிகரமாக உருவாக்கப்பட்டது. வழங்குநர் URL திரும்ப அனுப்பியதால் சேமிப்பு முடக்கப்பட்டுள்ளது."
 
 msgid "Video generation started. Waiting for the result..."
-msgstr ""
+msgstr "வீடியோ உருவாக்கம் தொடங்கியது. முடிவிற்காக காத்திருக்கிறோம்..."
 
 msgid "AI returned an empty response."
-msgstr ""
+msgstr "AI வெற்றிட பதிலை திரும்ப அனுப்பியது."
 
 msgid "Nothing to save yet."
-msgstr ""
+msgstr "இன்னும் சேமிக்க ஒன்றுமில்லை."
 
 msgid "This provider did not return base64 content. Please try another provider."
-msgstr ""
+msgstr "இந்த வழங்குநர் base64 உள்ளடக்கத்தை திரும்ப அனுப்பவில்லை. வேறு வழங்குநரை முயற்சிக்கவும்."
 
 msgid "Saving failed."
-msgstr ""
+msgstr "சேமிப்பு தோல்வியுற்றது."
 
 msgid "Get AI feedback"
-msgstr ""
+msgstr "AI கருத்துரையைப் பெறவும்"
 
 msgid "Copy answer to clipboard"
-msgstr ""
+msgstr "பதிலை கிளிப்ப்போர்ட்டில் நகல் செய்யவும்"
 
 msgid "Save answer to my inbox"
-msgstr ""
+msgstr "பதிலை என் இன்பாக்ஸில் சேமிக்கவும்"
 
 msgid "The document is already in this folder"
-msgstr ""
+msgstr "ஆவணம் ஏற்கனவே இந்த படுக்கையில் உள்ளது"
 
 msgid "Copied"
-msgstr ""
+msgstr "நகல் செய்யப்பட்டது"
 
 msgid "You do not have permission to generate glossary terms."
-msgstr ""
+msgstr "க்ராஸ்ஸரி சொற்களை உருவாக்க அனுமதி இல்லை."
 
 msgid "Video generation is in progress"
-msgstr ""
+msgstr "வீடியோ உருவாக்கம் நடைபெறுகிறது"
 
 msgid "Job"
-msgstr ""
+msgstr "வேலை"
 
 msgid "Modified prompt"
-msgstr ""
+msgstr "மாற்றப்பட்ட ப்ராம்ப்ட்"
 
 msgid "Saved in Documents"
-msgstr ""
+msgstr "ஆவணங்களில் சேமிக்கப்பட்டது"
+
+msgid "Total space used by %s is %sGB"
+msgstr "%s ஆல் பயன்படுத்தப்படும் மொத்த இடம் %sGB"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "போர்ட்டல் %s ஆல் பயன்படுத்தப்படும் மொத்த இடம் %sGB (அளவு %sGB என்று அமைக்கப்பட்டுள்ளது)"
+
+msgid "Confirm your e-mail on %s"
+msgstr "%s இல் உங்கள் மின்னஞ்சலை உறுதிப்படுத்தவும்"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "வணக்கம் %s,\n\nஉங்கள் மின்னஞ்சலை உறுதிப்படுத்தி %s இல் உங்கள் கணக்கை செயல்படுத்த, கீழே உள்ள இணைப்பைக் கிளிக் செய்யவும்."
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "இந்த கணக்கை நீங்கள் பதிவு செய்யவில்லை என்றால், இந்த மின்னஞ்சலை புறக்கணிக்கலாம். எந்த செயலும் எடுக்கப்படாது."
 

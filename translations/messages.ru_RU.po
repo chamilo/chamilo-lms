@@ -32572,3 +32572,18 @@ msgstr "Измененный запрос"
 msgid "Saved in Documents"
 msgstr "Сохранено в Документах"
 
+msgid "Total space used by %s is %sGB"
+msgstr "Общий объём места, используемый %s, составляет %s ГБ"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "Общий объём места, используемый порталом %s, составляет %s ГБ (лимит установлен на %s ГБ)"
+
+msgid "Confirm your e-mail on %s"
+msgstr "Подтвердите вашу электронную почту на %s"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Привет %s,\n\nЧтобы подтвердить вашу электронную почту и активировать аккаунт на %s, пожалуйста, перейдите по ссылке ниже."
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "Если вы не регистрировали этот аккаунт, можете проигнорировать это письмо. Никаких действий предпринято не будет."
+

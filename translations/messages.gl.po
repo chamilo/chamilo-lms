@@ -32584,3 +32584,18 @@ msgstr "Prompt modificado"
 msgid "Saved in Documents"
 msgstr "Gardado en Documentos"
 
+msgid "Total space used by %s is %sGB"
+msgstr "Espazo total usado por %s é %sGB"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "Espazo total usado polo portal %s é %sGB (o límite está fixado en %sGB)"
+
+msgid "Confirm your e-mail on %s"
+msgstr "Confirme o seu correo en %s"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Ola %s,\n\nPara verificar o seu correo e activar a súa conta en %s, prema no seguinte enlace."
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "Se non rexistrou esta conta, pode ignorar este correo. Non se tomará ningunha acción."
+

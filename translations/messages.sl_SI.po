@@ -2031,7 +2031,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":da:avtorske pravice,, ne:brez avtorskih pravic"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Okteetni tok,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Oktečni tok,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":vaja:vaja,,      simulacija:simulacija,,      vprašalnik:vprašalnik,,      diagram:diagram,,      slika:slika,,      graf:graf,,      kazalo:kazalo,,      diapozitiv:diapozitiv,,      tabela:tabela,,      pripovedno besedilo:narrativno besedilo,,      izpit:izpit,,      poskus:poskus,,      izjava problema:izjava problema,,      samopredstavitev:samopredstavitev,,      predavanje:predavanje"
@@ -32397,7 +32397,7 @@ msgid "Delete failed: missing course context or invalid question id."
 msgstr "Brisanje ni uspelo: manjka kontekst tečaja ali neveljaven ID vprašanja."
 
 msgid "AI Tutor"
-msgstr "AI tutor"
+msgstr "AI Tutor"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
 msgstr "Razširitev APCu mora biti nameščena in omogočena, da jo platforma lahko uporabi."
@@ -32584,4 +32584,19 @@ msgstr "Spremenjen poziv"
 
 msgid "Saved in Documents"
 msgstr "Shranjeno v Dokumentih"
+
+msgid "Total space used by %s is %sGB"
+msgstr "Skupni prostor, ki ga uporablja %s, je %s GB"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "Skupni prostor, ki ga uporablja portal %s, je %s GB (omejitev je nastavljena na %s GB)"
+
+msgid "Confirm your e-mail on %s"
+msgstr "Potrdite svoj e-poštni naslov na %s"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Pozdravljeni %s,\n\nZa preverjanje vašega e-poštnega naslova in omogočanje računa na %s kliknite spodnjo povezavo."
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "Če tega računa niste registrirali, lahko to e-poštno sporočilo prezrete. Nobena dejanja ne bodo izvedena."
 

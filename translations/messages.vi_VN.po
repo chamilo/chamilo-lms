@@ -32344,230 +32344,245 @@ msgid "Update profile"
 msgstr "Cập nhật hồ sơ"
 
 msgid "Enable learning path generator"
-msgstr ""
+msgstr "Bật trình tạo lộ trình học tập"
 
 msgid "Enable exercise generator"
-msgstr ""
+msgstr "Bật trình tạo bài tập"
 
 msgid "Enable open answers grader"
-msgstr ""
+msgstr "Bật trình chấm câu trả lời mở"
 
 msgid "Enable tutor chatbot"
-msgstr ""
+msgstr "Bật chatbot gia sư"
 
 msgid "Enable task grader"
-msgstr ""
+msgstr "Bật trình chấm nhiệm vụ"
 
 msgid "Enable content analyser"
-msgstr ""
+msgstr "Bật trình phân tích nội dung"
 
 msgid "Enable image generator"
-msgstr ""
+msgstr "Bật trình tạo hình ảnh"
 
 msgid "Enable glossary terms generator"
-msgstr ""
+msgstr "Bật trình tạo thuật ngữ từ điển"
 
 msgid "Enable video generator"
-msgstr ""
+msgstr "Bật trình tạo video"
 
 msgid "Enable course analyser"
-msgstr ""
+msgstr "Bật trình phân tích khóa học"
 
 msgid "The operation '%s' is not supported."
-msgstr ""
+msgstr "Thao tác '%s' không được hỗ trợ."
 
 msgid "AI feedback on %s in course %s"
-msgstr ""
+msgstr "Phản hồi AI về %s trong khóa học %s"
 
 msgid "Delete failed: missing course context or invalid question id."
-msgstr ""
+msgstr "Xóa thất bại: thiếu ngữ cảnh khóa học hoặc id câu hỏi không hợp lệ."
 
 msgid "AI Tutor"
-msgstr ""
+msgstr "Gia sư AI"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "Phần mở rộng APCu cần được cài đặt và kích hoạt để nền tảng sử dụng nó."
 
 msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
-msgstr ""
+msgstr "Nên cho phép OPCache memory_consumption đạt ít nhất %sMB RAM."
 
 msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "Mô-đun OPcache cần được cài đặt và kích hoạt để nền tảng sử dụng nó."
 
 msgid "You are here"
-msgstr ""
+msgstr "Bạn đang ở đây"
 
 msgid "Click an event type to filter results."
-msgstr ""
+msgstr "Nhấp vào loại sự kiện để lọc kết quả."
 
 msgid "Require unique presence"
-msgstr ""
+msgstr "Yêu cầu sự hiện diện duy nhất"
 
 msgid "If enabled, the gradebook will give a learner 100% when present at least once."
-msgstr ""
+msgstr "Nếu bật, sổ điểm sẽ cho học viên 100% khi hiện diện ít nhất một lần."
 
 msgid "AI feedback"
-msgstr ""
+msgstr "Phản hồi AI"
 
 msgid "Prompt"
-msgstr ""
+msgstr "Lời nhắc"
 
 msgid "Tip"
-msgstr ""
+msgstr "Gợi ý"
 
 msgid "You can edit the prompt before asking for feedback."
-msgstr ""
+msgstr "Bạn có thể chỉnh sửa lời nhắc trước khi yêu cầu phản hồi."
 
 msgid "Result (you can apply it to the comment)"
-msgstr ""
+msgstr "Kết quả (bạn có thể áp dụng vào bình luận)"
 
 msgid "Apply to comment"
-msgstr ""
+msgstr "Áp dụng vào bình luận"
 
 msgid "Apply score"
-msgstr ""
+msgstr "Áp dụng điểm số"
 
 msgid "AI grade"
-msgstr ""
+msgstr "Điểm AI"
 
 msgid "AI tutor is disabled during tests"
-msgstr ""
+msgstr "Trợ giảng AI bị vô hiệu hóa trong các bài kiểm tra"
 
 msgid "Generate glossary terms"
-msgstr ""
+msgstr "Tạo thuật ngữ từ điển"
 
 msgid "Generate media"
-msgstr ""
+msgstr "Tạo phương tiện"
 
 msgid "You do not have permission to generate AI media in this course."
-msgstr ""
+msgstr "Bạn không có quyền tạo phương tiện AI trong khóa học này."
 
 msgid "AI helpers are disabled at platform level."
-msgstr ""
+msgstr "Trợ giúp AI bị vô hiệu hóa ở cấp độ nền tảng."
 
 msgid "AI media generation is disabled in course settings."
-msgstr ""
+msgstr "Tạo phương tiện AI bị vô hiệu hóa trong cài đặt khóa học."
 
 msgid "No AI media providers available."
-msgstr ""
+msgstr "Không có nhà cung cấp phương tiện AI nào khả dụng."
 
 msgid "Provider"
-msgstr ""
+msgstr "Nhà cung cấp"
 
 msgid "Select a provider"
-msgstr ""
+msgstr "Chọn nhà cung cấp"
 
 msgid "Example: generated_media"
-msgstr ""
+msgstr "Ví dụ: generated_media"
 
 msgid "The name is not added to the prompt; it is only used to save the file."
-msgstr ""
+msgstr "Tên không được thêm vào lời nhắc; nó chỉ được sử dụng để lưu tệp."
 
 msgid "Describe what you want to generate..."
-msgstr ""
+msgstr "Mô tả những gì bạn muốn tạo..."
 
 msgid "Tip: click a preset to quickly set the size."
-msgstr ""
+msgstr "Mẹo: nhấp vào mẫu để nhanh chóng đặt kích thước."
 
 msgid "Generating..."
-msgstr ""
+msgstr "Đang tạo..."
 
 msgid "Save to Documents"
-msgstr ""
+msgstr "Lưu vào Tài liệu"
 
 msgid "Document IRI"
-msgstr ""
+msgstr "IRI Tài liệu"
 
 msgid "Go to folder"
-msgstr ""
+msgstr "Đi đến thư mục"
 
 msgid "Provider used"
-msgstr ""
+msgstr "Nhà cung cấp đã sử dụng"
 
 msgid "This video result cannot be saved yet"
-msgstr ""
+msgstr "Kết quả video này chưa thể lưu"
 
 msgid "Video polling was stopped because the provider changed."
-msgstr ""
+msgstr "Bỏ thăm dò video vì nhà cung cấp đã thay đổi."
 
 msgid "Video generation is taking too long. Please try again later."
-msgstr ""
+msgstr "Tạo video đang mất quá nhiều thời gian. Vui lòng thử lại sau."
 
 msgid "Failed to check video status."
-msgstr ""
+msgstr "Không thể kiểm tra trạng thái video."
 
 msgid "Video generated successfully. You can now save it."
-msgstr ""
+msgstr "Video đã được tạo thành công. Bạn có thể lưu nó ngay bây giờ."
 
 msgid "Video generation completed, but no playable content was returned."
-msgstr ""
+msgstr "Tạo video hoàn tất, nhưng không có nội dung có thể phát được."
 
 msgid "Video generation failed."
-msgstr ""
+msgstr "Tạo video thất bại."
 
 msgid "Waiting for the video to be ready..."
-msgstr ""
+msgstr "Đang chờ video sẵn sàng..."
 
 msgid "Please complete all fields."
-msgstr ""
+msgstr "Vui lòng hoàn tất tất cả các trường."
 
 msgid "Image generation is not enabled for this course."
-msgstr ""
+msgstr "Tạo hình ảnh chưa được kích hoạt cho khóa học này."
 
 msgid "Video generation is not enabled for this course."
-msgstr ""
+msgstr "Tạo video chưa được kích hoạt cho khóa học này."
 
 msgid "Generation failed."
-msgstr ""
+msgstr "Tạo thất bại."
 
 msgid "Generated successfully. Review the preview and save when ready."
-msgstr ""
+msgstr "Đã tạo thành công. Xem trước và lưu khi sẵn sàng."
 
 msgid "Generated successfully. Saving is disabled because the provider returned a URL."
-msgstr ""
+msgstr "Đã tạo thành công. Lưu bị vô hiệu hóa vì nhà cung cấp trả về URL."
 
 msgid "Video generation started. Waiting for the result..."
-msgstr ""
+msgstr "Bắt đầu tạo video. Đang chờ kết quả..."
 
 msgid "AI returned an empty response."
-msgstr ""
+msgstr "AI trả về phản hồi trống."
 
 msgid "Nothing to save yet."
-msgstr ""
+msgstr "Chưa có gì để lưu."
 
 msgid "This provider did not return base64 content. Please try another provider."
-msgstr ""
+msgstr "Nhà cung cấp này không trả về nội dung base64. Vui lòng thử nhà cung cấp khác."
 
 msgid "Saving failed."
-msgstr ""
+msgstr "Lưu thất bại."
 
 msgid "Get AI feedback"
-msgstr ""
+msgstr "Nhận phản hồi AI"
 
 msgid "Copy answer to clipboard"
-msgstr ""
+msgstr "Sao chép câu trả lời vào bảng tạm"
 
 msgid "Save answer to my inbox"
-msgstr ""
+msgstr "Lưu câu trả lời vào hộp thư của tôi"
 
 msgid "The document is already in this folder"
-msgstr ""
+msgstr "Tài liệu đã có trong thư mục này"
 
 msgid "Copied"
-msgstr ""
+msgstr "Đã sao chép"
 
 msgid "You do not have permission to generate glossary terms."
-msgstr ""
+msgstr "Bạn không có quyền tạo thuật ngữ từ điển."
 
 msgid "Video generation is in progress"
-msgstr ""
+msgstr "Đang tạo video"
 
 msgid "Job"
-msgstr ""
+msgstr "Công việc"
 
 msgid "Modified prompt"
-msgstr ""
+msgstr "Lời nhắc đã sửa đổi"
 
 msgid "Saved in Documents"
-msgstr ""
+msgstr "Đã lưu trong Tài liệu"
+
+msgid "Total space used by %s is %sGB"
+msgstr "Tổng không gian sử dụng bởi %s là %sGB"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "Tổng không gian sử dụng bởi cổng %s là %sGB (giới hạn được đặt là %sGB)"
+
+msgid "Confirm your e-mail on %s"
+msgstr "Xác nhận email của bạn trên %s"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Xin chào %s,\n\nĐể xác minh email và kích hoạt tài khoản của bạn trên %s, vui lòng nhấp vào liên kết bên dưới."
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "Nếu bạn không đăng ký tài khoản này, bạn có thể bỏ qua email này. Không có hành động nào sẽ được thực hiện."
 

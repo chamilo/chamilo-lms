@@ -32408,164 +32408,179 @@ msgid "AI feedback"
 msgstr "Përfshirje AI"
 
 msgid "Prompt"
-msgstr ""
+msgstr "Prompt"
 
 msgid "Tip"
-msgstr ""
+msgstr "Ndihmëz"
 
 msgid "You can edit the prompt before asking for feedback."
-msgstr ""
+msgstr "Mund të editoni prompt-in para se të kërkoni feedback."
 
 msgid "Result (you can apply it to the comment)"
-msgstr ""
+msgstr "Rezultat (mund ta aplikoni në koment)"
 
 msgid "Apply to comment"
-msgstr ""
+msgstr "Apliko në koment"
 
 msgid "Apply score"
-msgstr ""
+msgstr "Apliko notë"
 
 msgid "AI grade"
-msgstr ""
+msgstr "Notë AI"
 
 msgid "AI tutor is disabled during tests"
-msgstr ""
+msgstr "Tutor AI është i çaktivizuar gjatë testeve"
 
 msgid "Generate glossary terms"
-msgstr ""
+msgstr "Gjenero terma fjalori"
 
 msgid "Generate media"
-msgstr ""
+msgstr "Gjenero media"
 
 msgid "You do not have permission to generate AI media in this course."
-msgstr ""
+msgstr "Nuk keni leje për të gjeneruar media AI në këtë kurs."
 
 msgid "AI helpers are disabled at platform level."
-msgstr ""
+msgstr "Ndihmësit AI janë të çaktivizuar në nivel platforme."
 
 msgid "AI media generation is disabled in course settings."
-msgstr ""
+msgstr "Gjenerimi i medias AI është i çaktivizuar në cilësimet e kursit."
 
 msgid "No AI media providers available."
-msgstr ""
+msgstr "Asnjë ofrues medias AI i disponueshëm."
 
 msgid "Provider"
-msgstr ""
+msgstr "Ofrues"
 
 msgid "Select a provider"
-msgstr ""
+msgstr "Zgjidhni një ofrues"
 
 msgid "Example: generated_media"
-msgstr ""
+msgstr "Shembull: generated_media"
 
 msgid "The name is not added to the prompt; it is only used to save the file."
-msgstr ""
+msgstr "Emri nuk shtohet në prompt; përdoret vetëm për të ruajtur skedarin."
 
 msgid "Describe what you want to generate..."
-msgstr ""
+msgstr "Përshkruani çfarë dëshironi të gjeneroni..."
 
 msgid "Tip: click a preset to quickly set the size."
-msgstr ""
+msgstr "Ndihmëz: klikoni një preset për të vendosur shpejt madhësinë."
 
 msgid "Generating..."
-msgstr ""
+msgstr "Duke gjeneruar..."
 
 msgid "Save to Documents"
-msgstr ""
+msgstr "Ruaj në Dokumente"
 
 msgid "Document IRI"
-msgstr ""
+msgstr "IRI e Dokumentit"
 
 msgid "Go to folder"
-msgstr ""
+msgstr "Shko te dosja"
 
 msgid "Provider used"
-msgstr ""
+msgstr "Ofruesi i përdorur"
 
 msgid "This video result cannot be saved yet"
-msgstr ""
+msgstr "Kjo rezultat video nuk mund të ruhet ende"
 
 msgid "Video polling was stopped because the provider changed."
-msgstr ""
+msgstr "Anketimi i videove u ndal sepse ofruesi ndryshoi."
 
 msgid "Video generation is taking too long. Please try again later."
-msgstr ""
+msgstr "Gjenerimi i videove po zgjat shumë. Ju lutemi riprovoni më vonë."
 
 msgid "Failed to check video status."
-msgstr ""
+msgstr "Deshtoi kontrolli i statusit të videos."
 
 msgid "Video generated successfully. You can now save it."
-msgstr ""
+msgstr "Videoja u gjenerua me sukses. Tani mund ta ruani."
 
 msgid "Video generation completed, but no playable content was returned."
-msgstr ""
+msgstr "Gjenerimi i videos përfundoi, por nuk u kthye përmbajtje e luajtshme."
 
 msgid "Video generation failed."
-msgstr ""
+msgstr "Gjenerimi i videos deshtoi."
 
 msgid "Waiting for the video to be ready..."
-msgstr ""
+msgstr "Duke pritur videoja të jetë gati..."
 
 msgid "Please complete all fields."
-msgstr ""
+msgstr "Ju lutemi plotësoni të gjitha fushat."
 
 msgid "Image generation is not enabled for this course."
-msgstr ""
+msgstr "Gjenerimi i imazheve nuk është i aktivizuar për këtë kurs."
 
 msgid "Video generation is not enabled for this course."
-msgstr ""
+msgstr "Gjenerimi i videove nuk është i aktivizuar për këtë kurs."
 
 msgid "Generation failed."
-msgstr ""
+msgstr "Gjenerimi deshtoi."
 
 msgid "Generated successfully. Review the preview and save when ready."
-msgstr ""
+msgstr "U gjenerua me sukses. Rishikoni parashikimin dhe ruajeni kur të jeni gati."
 
 msgid "Generated successfully. Saving is disabled because the provider returned a URL."
-msgstr ""
+msgstr "U gjenerua me sukses. Ruajtja është e çaktivizuar sepse ofruesi ktheu një URL."
 
 msgid "Video generation started. Waiting for the result..."
-msgstr ""
+msgstr "Gjenerimi i videos filloi. Duke pritur rezultatin..."
 
 msgid "AI returned an empty response."
-msgstr ""
+msgstr "AI ktheu një përgjigje bosh."
 
 msgid "Nothing to save yet."
-msgstr ""
+msgstr "Nuk ka ende çfarë të ruhet."
 
 msgid "This provider did not return base64 content. Please try another provider."
-msgstr ""
+msgstr "Ky ofrues nuk ktheu përmbajtje base64. Ju lutemi provoni një ofrues tjetër."
 
 msgid "Saving failed."
-msgstr ""
+msgstr "Ruajtja deshtoi."
 
 msgid "Get AI feedback"
-msgstr ""
+msgstr "Merrni reagime nga AI"
 
 msgid "Copy answer to clipboard"
-msgstr ""
+msgstr "Kopjo përgjigjen në clipboard"
 
 msgid "Save answer to my inbox"
-msgstr ""
+msgstr "Ruaj përgjigjen në inbox-in tim"
 
 msgid "The document is already in this folder"
-msgstr ""
+msgstr "Dokumenti është tashmë në këtë dosje"
 
 msgid "Copied"
-msgstr ""
+msgstr "U kopjua"
 
 msgid "You do not have permission to generate glossary terms."
-msgstr ""
+msgstr "Ju nuk keni leje për të gjeneruar terma fjalori."
 
 msgid "Video generation is in progress"
-msgstr ""
+msgstr "Gjenerimi i videos është në vazhdim"
 
 msgid "Job"
-msgstr ""
+msgstr "Punë"
 
 msgid "Modified prompt"
-msgstr ""
+msgstr "Prompt i modifikuar"
 
 msgid "Saved in Documents"
-msgstr ""
+msgstr "Ruajtur në Dokumente"
+
+msgid "Total space used by %s is %sGB"
+msgstr "Hapësira totale e përdorur nga %s është %sGB"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "Hapësira totale e përdorur nga portali %s është %sGB (limiti është vendosur në %sGB)"
+
+msgid "Confirm your e-mail on %s"
+msgstr "Konfirmoni email-in tuaj në %s"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Përshëndetje %s,\n\nPër të verifikuar email-in tuaj dhe për të aktivizuar llogarinë tuaj në %s, ju lutemi klikoni në lidhjen më poshtë."
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "Nëse nuk keni regjistruar këtë llogari, mund ta injoroni këtë email. Nuk do të merren masa."
 

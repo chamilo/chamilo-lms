@@ -26607,7 +26607,7 @@ msgid "Selective display of roles"
 msgstr "Exibição seletiva de papéis"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "Um array de role => true/false que define se esse papel deve ser mostrado ou ocultado.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "Um array de role => true/false que define se esse papel deve ser mostrado ou oculto.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Opções de exibição de papéis"
@@ -32576,4 +32576,19 @@ msgstr "Prompt modificado"
 
 msgid "Saved in Documents"
 msgstr "Guardado em Documentos"
+
+msgid "Total space used by %s is %sGB"
+msgstr "Espaço total usado por %s é %sGB"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "Espaço total usado pelo portal %s é %sGB (limite definido em %sGB)"
+
+msgid "Confirm your e-mail on %s"
+msgstr "Confirme o seu e-mail em %s"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Olá %s,\n\nPara verificar o seu e-mail e ativar a sua conta em %s, clique no link abaixo."
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "Se não se registou nesta conta, pode ignorar este e-mail. Nenhuma ação será tomada."
 

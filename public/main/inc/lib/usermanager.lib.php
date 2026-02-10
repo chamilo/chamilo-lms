@@ -5665,10 +5665,14 @@ SQL;
         if (!empty($sessionToRedirect)) {
             $url .= '&s='.$sessionToRedirect;
         }
-        $mailSubject = get_lang('Registration confirmation');
-        $mailBody = get_lang('To complete your platform registration you need to confirm your account by clicking the following link')
+        $siteName = api_get_setting('platform.site_name');
+        $mailSubject = sprintf(get_lang('Confirm your e-mail on %s'), $siteName);
+        $firstName = $user->getFirstname();
+        $mailBody = sprintf(get_lang('Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below.'), $firstName)
             .PHP_EOL
-            .Display::url($url, $url);
+            .Display::url($url, $url)
+            .PHP_EOL
+            .get_lang('If you did not register this account, you can ignore this e-mail. No action will be taken.');
 
         api_mail_html(
             self::formatUserFullName($user),

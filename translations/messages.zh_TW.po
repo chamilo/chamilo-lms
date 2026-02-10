@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":是:有版權,, 否:無版權"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:資料夾,, application/msword:MsWord,, application/octet-stream:八位元組流,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:資料夾,, application/msword:MsWord,, application/octet-stream:八位元位元組流,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":練習:練習,, 類比:類比,, 問卷:問卷,, 圖表:圖表,, 圖:圖,, 圖:圖,, 索引:索引,, 幻燈:幻燈,, 表:表,, 描述文本:描述文本,, 考試:考試,, 實驗:實驗,, 問題聲明:問題聲明,, 自我評價:自我評價,, 演講:演講"
@@ -32344,230 +32344,245 @@ msgid "Update profile"
 msgstr "更新個人檔案"
 
 msgid "Enable learning path generator"
-msgstr ""
+msgstr "啟用學習路徑產生器"
 
 msgid "Enable exercise generator"
-msgstr ""
+msgstr "啟用測驗產生器"
 
 msgid "Enable open answers grader"
-msgstr ""
+msgstr "啟用開放式答案評分器"
 
 msgid "Enable tutor chatbot"
-msgstr ""
+msgstr "啟用導師聊天機器人"
 
 msgid "Enable task grader"
-msgstr ""
+msgstr "啟用任務評分器"
 
 msgid "Enable content analyser"
-msgstr ""
+msgstr "啟用內容分析器"
 
 msgid "Enable image generator"
-msgstr ""
+msgstr "啟用圖像產生器"
 
 msgid "Enable glossary terms generator"
-msgstr ""
+msgstr "啟用術語表條目產生器"
 
 msgid "Enable video generator"
-msgstr ""
+msgstr "啟用影片產生器"
 
 msgid "Enable course analyser"
-msgstr ""
+msgstr "啟用課程分析器"
 
 msgid "The operation '%s' is not supported."
-msgstr ""
+msgstr "操作「%s」不被支援。"
 
 msgid "AI feedback on %s in course %s"
-msgstr ""
+msgstr "課程 %s 中 %s 的 AI 回饋"
 
 msgid "Delete failed: missing course context or invalid question id."
-msgstr ""
+msgstr "刪除失敗：缺少課程上下文或無效的題目 ID。"
 
 msgid "AI Tutor"
-msgstr ""
+msgstr "AI 導師"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "平台使用 APCu 擴充功能前，需要安裝並啟用它。"
 
 msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
-msgstr ""
+msgstr "建議 OPCache memory_consumption 至少達到 %sMB RAM。"
 
 msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "平台使用 OPcache 模組前，需要安裝並啟用它。"
 
 msgid "You are here"
-msgstr ""
+msgstr "您目前位置"
 
 msgid "Click an event type to filter results."
-msgstr ""
+msgstr "點擊事件類型來篩選結果。"
 
 msgid "Require unique presence"
-msgstr ""
+msgstr "要求唯一出席"
 
 msgid "If enabled, the gradebook will give a learner 100% when present at least once."
-msgstr ""
+msgstr "啟用時，成績簿將在學習者至少出席一次時給予 100%。"
 
 msgid "AI feedback"
-msgstr ""
+msgstr "AI 回饋"
 
 msgid "Prompt"
-msgstr ""
+msgstr "提示"
 
 msgid "Tip"
-msgstr ""
+msgstr "提示"
 
 msgid "You can edit the prompt before asking for feedback."
-msgstr ""
+msgstr "在請求回饋前，您可以編輯提示。"
 
 msgid "Result (you can apply it to the comment)"
-msgstr ""
+msgstr "結果（您可以將其套用至評論）"
 
 msgid "Apply to comment"
-msgstr ""
+msgstr "套用至評論"
 
 msgid "Apply score"
-msgstr ""
+msgstr "套用分數"
 
 msgid "AI grade"
-msgstr ""
+msgstr "AI 評分"
 
 msgid "AI tutor is disabled during tests"
-msgstr ""
+msgstr "測驗期間 AI 導師已停用"
 
 msgid "Generate glossary terms"
-msgstr ""
+msgstr "產生詞彙表術語"
 
 msgid "Generate media"
-msgstr ""
+msgstr "產生媒體"
 
 msgid "You do not have permission to generate AI media in this course."
-msgstr ""
+msgstr "您沒有權限在本課程中產生 AI 媒體。"
 
 msgid "AI helpers are disabled at platform level."
-msgstr ""
+msgstr "平台層級已停用 AI 助手。"
 
 msgid "AI media generation is disabled in course settings."
-msgstr ""
+msgstr "課程設定中已停用 AI 媒體產生。"
 
 msgid "No AI media providers available."
-msgstr ""
+msgstr "沒有可用的 AI 媒體提供者。"
 
 msgid "Provider"
-msgstr ""
+msgstr "提供者"
 
 msgid "Select a provider"
-msgstr ""
+msgstr "選擇提供者"
 
 msgid "Example: generated_media"
-msgstr ""
+msgstr "範例：generated_media"
 
 msgid "The name is not added to the prompt; it is only used to save the file."
-msgstr ""
+msgstr "名稱不會加入提示中；僅用於儲存檔案。"
 
 msgid "Describe what you want to generate..."
-msgstr ""
+msgstr "描述您想要產生的內容…"
 
 msgid "Tip: click a preset to quickly set the size."
-msgstr ""
+msgstr "提示：點擊預設值快速設定尺寸。"
 
 msgid "Generating..."
-msgstr ""
+msgstr "產生中…"
 
 msgid "Save to Documents"
-msgstr ""
+msgstr "儲存至文件"
 
 msgid "Document IRI"
-msgstr ""
+msgstr "文件 IRI"
 
 msgid "Go to folder"
-msgstr ""
+msgstr "前往資料夾"
 
 msgid "Provider used"
-msgstr ""
+msgstr "使用的提供者"
 
 msgid "This video result cannot be saved yet"
-msgstr ""
+msgstr "此影片結果暫時無法儲存"
 
 msgid "Video polling was stopped because the provider changed."
-msgstr ""
+msgstr "因為提供者變更，影片輪詢已停止。"
 
 msgid "Video generation is taking too long. Please try again later."
-msgstr ""
+msgstr "影片產生耗時過長。請稍後再試。"
 
 msgid "Failed to check video status."
-msgstr ""
+msgstr "檢查影片狀態失敗。"
 
 msgid "Video generated successfully. You can now save it."
-msgstr ""
+msgstr "影片產生成功。您現在可以儲存它。"
 
 msgid "Video generation completed, but no playable content was returned."
-msgstr ""
+msgstr "影片產生完成，但未傳回可播放內容。"
 
 msgid "Video generation failed."
-msgstr ""
+msgstr "影片產生失敗。"
 
 msgid "Waiting for the video to be ready..."
-msgstr ""
+msgstr "等待影片準備就緒…"
 
 msgid "Please complete all fields."
-msgstr ""
+msgstr "請填寫所有欄位。"
 
 msgid "Image generation is not enabled for this course."
-msgstr ""
+msgstr "本課程未啟用圖像產生。"
 
 msgid "Video generation is not enabled for this course."
-msgstr ""
+msgstr "本課程未啟用影片產生。"
 
 msgid "Generation failed."
-msgstr ""
+msgstr "產生失敗。"
 
 msgid "Generated successfully. Review the preview and save when ready."
-msgstr ""
+msgstr "產生成功。檢視預覽並準備好時儲存。"
 
 msgid "Generated successfully. Saving is disabled because the provider returned a URL."
-msgstr ""
+msgstr "產生成功。由於提供者傳回 URL，儲存已停用。"
 
 msgid "Video generation started. Waiting for the result..."
-msgstr ""
+msgstr "影片產生已開始。等待結果…"
 
 msgid "AI returned an empty response."
-msgstr ""
+msgstr "AI 傳回空回應。"
 
 msgid "Nothing to save yet."
-msgstr ""
+msgstr "暫無可儲存內容。"
 
 msgid "This provider did not return base64 content. Please try another provider."
-msgstr ""
+msgstr "此提供者未傳回 base64 內容。請試另一個提供者。"
 
 msgid "Saving failed."
-msgstr ""
+msgstr "儲存失敗。"
 
 msgid "Get AI feedback"
-msgstr ""
+msgstr "取得 AI 回饋"
 
 msgid "Copy answer to clipboard"
-msgstr ""
+msgstr "複製答案至剪貼簿"
 
 msgid "Save answer to my inbox"
-msgstr ""
+msgstr "儲存答案至我的收件匣"
 
 msgid "The document is already in this folder"
-msgstr ""
+msgstr "文件已在該資料夾中"
 
 msgid "Copied"
-msgstr ""
+msgstr "已複製"
 
 msgid "You do not have permission to generate glossary terms."
-msgstr ""
+msgstr "您沒有權限產生詞彙表術語。"
 
 msgid "Video generation is in progress"
-msgstr ""
+msgstr "影片產生中"
 
 msgid "Job"
-msgstr ""
+msgstr "工作"
 
 msgid "Modified prompt"
-msgstr ""
+msgstr "修改後的提示"
 
 msgid "Saved in Documents"
-msgstr ""
+msgstr "已儲存至文件"
+
+msgid "Total space used by %s is %sGB"
+msgstr "%s 使用的總空間為 %sGB"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "入口網站 %s 使用的總空間為 %sGB（限制為 %sGB）"
+
+msgid "Confirm your e-mail on %s"
+msgstr "在 %s 上確認您的電子郵件"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "嗨 %s，\n\n要驗證您的電子郵件並在 %s 上啟用您的帳戶，請點擊下方連結。"
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "如果您未註冊此帳戶，您可以忽略此電子郵件。不會採取任何行動。"
 

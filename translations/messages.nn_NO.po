@@ -32569,3 +32569,18 @@ msgstr "Endra spørsmål"
 msgid "Saved in Documents"
 msgstr "Lagra i Dokument"
 
+msgid "Total space used by %s is %sGB"
+msgstr "Total plass brukt av %s er %sGB"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "Total plass brukt av portal %s er %sGB (grense er sett til %sGB)"
+
+msgid "Confirm your e-mail on %s"
+msgstr "Bekreft e-posten din på %s"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Hei %s,\n\nFor å verifisere e-posten din og aktivere kontoen din på %s, vennlegst klikk på lenken under."
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "Hvis du ikkje registrerte denne kontoen, kan du ignorere denne e-posten. Ingen handling vil bli tatt."
+

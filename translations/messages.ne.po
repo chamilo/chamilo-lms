@@ -32569,3 +32569,18 @@ msgstr "संशोधित प्रॉम्प्ट"
 msgid "Saved in Documents"
 msgstr "कागजातहरूमा बचत गरियो"
 
+msgid "Total space used by %s is %sGB"
+msgstr "%s ले प्रयोग गरेको कुल स्थान %sGB छ"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "पोर्टल %s ले प्रयोग गरेको कुल स्थान %sGB छ (सीमा %sGB तोकिएको छ)"
+
+msgid "Confirm your e-mail on %s"
+msgstr "%s मा आफ्नो इमेल पुष्टि गर्नुहोस्"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "नमस्ते %s,\n\n%s मा आफ्नो इमेल प्रमाणित गर्न र खाता सक्रिय गर्न तलको लिङ्कमा क्लिक गर्नुहोस्।"
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "यदि तपाईंले यो खाता दर्ता गर्नुभएको छैन भने, यो इमेल बेवास्ता गर्न सक्नुहुन्छ। कुनै कार्य गरिने छैन।"
+

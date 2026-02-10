@@ -32344,230 +32344,245 @@ msgid "Update profile"
 msgstr "更新个人资料"
 
 msgid "Enable learning path generator"
-msgstr ""
+msgstr "启用学习路径生成器"
 
 msgid "Enable exercise generator"
-msgstr ""
+msgstr "启用练习生成器"
 
 msgid "Enable open answers grader"
-msgstr ""
+msgstr "启用开放答案评分器"
 
 msgid "Enable tutor chatbot"
-msgstr ""
+msgstr "启用导师聊天机器人"
 
 msgid "Enable task grader"
-msgstr ""
+msgstr "启用任务评分器"
 
 msgid "Enable content analyser"
-msgstr ""
+msgstr "启用内容分析器"
 
 msgid "Enable image generator"
-msgstr ""
+msgstr "启用图像生成器"
 
 msgid "Enable glossary terms generator"
-msgstr ""
+msgstr "启用术语表术语生成器"
 
 msgid "Enable video generator"
-msgstr ""
+msgstr "启用视频生成器"
 
 msgid "Enable course analyser"
-msgstr ""
+msgstr "启用课程分析器"
 
 msgid "The operation '%s' is not supported."
-msgstr ""
+msgstr "操作“%s”不受支持。"
 
 msgid "AI feedback on %s in course %s"
-msgstr ""
+msgstr "课程 %s 中 %s 的 AI 反馈"
 
 msgid "Delete failed: missing course context or invalid question id."
-msgstr ""
+msgstr "删除失败：缺少课程上下文或无效的问题 ID。"
 
 msgid "AI Tutor"
-msgstr ""
+msgstr "AI 导师"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "平台使用 APCu 扩展需要安装并启用该扩展。"
 
 msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
-msgstr ""
+msgstr "建议 OPCache memory_consumption 至少达到 %sMB RAM。"
 
 msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "平台使用 OPcache 模块需要安装并启用该模块。"
 
 msgid "You are here"
-msgstr ""
+msgstr "您当前的位置"
 
 msgid "Click an event type to filter results."
-msgstr ""
+msgstr "点击事件类型过滤结果。"
 
 msgid "Require unique presence"
-msgstr ""
+msgstr "要求唯一出勤"
 
 msgid "If enabled, the gradebook will give a learner 100% when present at least once."
-msgstr ""
+msgstr "启用后，成绩簿将为至少出勤一次的学习者给予 100% 分数。"
 
 msgid "AI feedback"
-msgstr ""
+msgstr "AI 反馈"
 
 msgid "Prompt"
-msgstr ""
+msgstr "提示"
 
 msgid "Tip"
-msgstr ""
+msgstr "提示"
 
 msgid "You can edit the prompt before asking for feedback."
-msgstr ""
+msgstr "您可以在请求反馈前编辑提示。"
 
 msgid "Result (you can apply it to the comment)"
-msgstr ""
+msgstr "结果（可应用于评论）"
 
 msgid "Apply to comment"
-msgstr ""
+msgstr "应用于评论"
 
 msgid "Apply score"
-msgstr ""
+msgstr "应用分数"
 
 msgid "AI grade"
-msgstr ""
+msgstr "AI评分"
 
 msgid "AI tutor is disabled during tests"
-msgstr ""
+msgstr "测试期间AI导师已禁用"
 
 msgid "Generate glossary terms"
-msgstr ""
+msgstr "生成术语表条目"
 
 msgid "Generate media"
-msgstr ""
+msgstr "生成媒体"
 
 msgid "You do not have permission to generate AI media in this course."
-msgstr ""
+msgstr "您没有权限在此课程中生成AI媒体。"
 
 msgid "AI helpers are disabled at platform level."
-msgstr ""
+msgstr "平台级别已禁用AI助手。"
 
 msgid "AI media generation is disabled in course settings."
-msgstr ""
+msgstr "课程设置中已禁用AI媒体生成。"
 
 msgid "No AI media providers available."
-msgstr ""
+msgstr "没有可用的AI媒体提供商。"
 
 msgid "Provider"
-msgstr ""
+msgstr "提供商"
 
 msgid "Select a provider"
-msgstr ""
+msgstr "选择提供商"
 
 msgid "Example: generated_media"
-msgstr ""
+msgstr "示例：generated_media"
 
 msgid "The name is not added to the prompt; it is only used to save the file."
-msgstr ""
+msgstr "名称不会添加到提示中；它仅用于保存文件。"
 
 msgid "Describe what you want to generate..."
-msgstr ""
+msgstr "描述您想要生成的内容..."
 
 msgid "Tip: click a preset to quickly set the size."
-msgstr ""
+msgstr "提示：点击预设快速设置尺寸。"
 
 msgid "Generating..."
-msgstr ""
+msgstr "生成中..."
 
 msgid "Save to Documents"
-msgstr ""
+msgstr "保存到文档"
 
 msgid "Document IRI"
-msgstr ""
+msgstr "文档IRI"
 
 msgid "Go to folder"
-msgstr ""
+msgstr "转到文件夹"
 
 msgid "Provider used"
-msgstr ""
+msgstr "使用的提供商"
 
 msgid "This video result cannot be saved yet"
-msgstr ""
+msgstr "此视频结果尚无法保存"
 
 msgid "Video polling was stopped because the provider changed."
-msgstr ""
+msgstr "由于提供商更改，视频轮询已停止。"
 
 msgid "Video generation is taking too long. Please try again later."
-msgstr ""
+msgstr "视频生成时间过长。请稍后重试。"
 
 msgid "Failed to check video status."
-msgstr ""
+msgstr "检查视频状态失败。"
 
 msgid "Video generated successfully. You can now save it."
-msgstr ""
+msgstr "视频生成成功。您现在可以保存它。"
 
 msgid "Video generation completed, but no playable content was returned."
-msgstr ""
+msgstr "视频生成完成，但未返回可播放内容。"
 
 msgid "Video generation failed."
-msgstr ""
+msgstr "视频生成失败。"
 
 msgid "Waiting for the video to be ready..."
-msgstr ""
+msgstr "等待视频就绪..."
 
 msgid "Please complete all fields."
-msgstr ""
+msgstr "请填写所有字段。"
 
 msgid "Image generation is not enabled for this course."
-msgstr ""
+msgstr "此课程未启用图像生成。"
 
 msgid "Video generation is not enabled for this course."
-msgstr ""
+msgstr "此课程未启用视频生成。"
 
 msgid "Generation failed."
-msgstr ""
+msgstr "生成失败。"
 
 msgid "Generated successfully. Review the preview and save when ready."
-msgstr ""
+msgstr "生成成功。查看预览并在准备好时保存。"
 
 msgid "Generated successfully. Saving is disabled because the provider returned a URL."
-msgstr ""
+msgstr "生成成功。由于提供商返回了URL，保存已禁用。"
 
 msgid "Video generation started. Waiting for the result..."
-msgstr ""
+msgstr "视频生成已开始。等待结果..."
 
 msgid "AI returned an empty response."
-msgstr ""
+msgstr "AI返回了空响应。"
 
 msgid "Nothing to save yet."
-msgstr ""
+msgstr "尚无可保存的内容。"
 
 msgid "This provider did not return base64 content. Please try another provider."
-msgstr ""
+msgstr "此提供商未返回base64内容。请尝试其他提供商。"
 
 msgid "Saving failed."
-msgstr ""
+msgstr "保存失败。"
 
 msgid "Get AI feedback"
-msgstr ""
+msgstr "获取AI反馈"
 
 msgid "Copy answer to clipboard"
-msgstr ""
+msgstr "复制答案到剪贴板"
 
 msgid "Save answer to my inbox"
-msgstr ""
+msgstr "保存答案到我的收件箱"
 
 msgid "The document is already in this folder"
-msgstr ""
+msgstr "文档已在该文件夹中"
 
 msgid "Copied"
-msgstr ""
+msgstr "已复制"
 
 msgid "You do not have permission to generate glossary terms."
-msgstr ""
+msgstr "您没有权限生成术语表条目。"
 
 msgid "Video generation is in progress"
-msgstr ""
+msgstr "视频生成正在进行中"
 
 msgid "Job"
-msgstr ""
+msgstr "任务"
 
 msgid "Modified prompt"
-msgstr ""
+msgstr "修改后的提示"
 
 msgid "Saved in Documents"
-msgstr ""
+msgstr "已保存到文档"
+
+msgid "Total space used by %s is %sGB"
+msgstr "%s 总共使用了 %sGB 空间"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "门户 %s 使用的总空间为 %sGB（限制为 %sGB）"
+
+msgid "Confirm your e-mail on %s"
+msgstr "在 %s 确认您的电子邮件"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "您好 %s，\n\n要验证您的电子邮件并在 %s 启用您的账户，请点击下面的链接。"
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "如果您没有注册此账户，您可以忽略此电子邮件。不会采取任何行动。"
 

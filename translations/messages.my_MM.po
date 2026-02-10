@@ -32342,154 +32342,154 @@ msgid "Update profile"
 msgstr "ပရိုဖိုင်ကို အပ်ဒိတ်လုပ်ရန်"
 
 msgid "Enable learning path generator"
-msgstr ""
+msgstr "သင်သင်ခန်းဆပင်ထုတ်လုပ်ကိရက်ကို ဖွင့်ရန်"
 
 msgid "Enable exercise generator"
-msgstr ""
+msgstr "လေ့ကျင့်ခန်း ထုတ်လုပ်ကိရက်ကို ဖွင့်ရန်"
 
 msgid "Enable open answers grader"
-msgstr ""
+msgstr "ဖွင့်လှစ်ဖြေဆိုချက်များ အမှတ်ပေးကိရက်ကို ဖွင့်ရန်"
 
 msgid "Enable tutor chatbot"
-msgstr ""
+msgstr "ကျွမ်းကျင်သူ ချက်ဘော့ကို ဖွင့်ရန်"
 
 msgid "Enable task grader"
-msgstr ""
+msgstr "အလုပ်တာဝန် အမှတ်ပေးကိရက်ကို ဖွင့်ရန်"
 
 msgid "Enable content analyser"
-msgstr ""
+msgstr "အကြောင်းအရာ ခွဲခြမ်းစိတ်ဖြာကိရက်ကို ဖွင့်ရန်"
 
 msgid "Enable image generator"
-msgstr ""
+msgstr "ပုံများ ထုတ်လုပ်ကိရက်ကို ဖွင့်ရန်"
 
 msgid "Enable glossary terms generator"
-msgstr ""
+msgstr "စကားလုံး အဓိပ္ပါယ်ဖွင့်စာလုံး အသုံးအနှုန်းများ ထုတ်လုပ်ကိရက်ကို ဖွင့်ရန်"
 
 msgid "Enable video generator"
-msgstr ""
+msgstr "ဗီဒီယို ထုတ်လုပ်ကိရက်ကို ဖွင့်ရန်"
 
 msgid "Enable course analyser"
-msgstr ""
+msgstr "သင်တန်း ခွဲခြမ်းစိတ်ဖြာကိရက်ကို ဖွင့်ရန်"
 
 msgid "The operation '%s' is not supported."
-msgstr ""
+msgstr "'%s' လုပ်ငန်းစဉ်ကို မထောက်ပံ့ပါ။"
 
 msgid "AI feedback on %s in course %s"
-msgstr ""
+msgstr "%s တွင် သင်တန်း %s အတွက် AI အကြံပြုချက်"
 
 msgid "Delete failed: missing course context or invalid question id."
-msgstr ""
+msgstr "ဖျက်မရပါ။ သင်တန်း အကြောင်းအရာ မရှိခြင်း သို့မဟုတ် မမှန်ကန်သော မေးခွန်း ID ကြောင့်။"
 
 msgid "AI Tutor"
-msgstr ""
+msgstr "AI ကျွမ်းကျင်သူ"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "ပလက်ဖောင်း အသုံးပြုရန် APCu တိုးချဲ့မှုကို ထည့်သွင်းပြီး ဖွင့်ရပါမည်။"
 
 msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
-msgstr ""
+msgstr "OPCache memory_consumption ကို %sMB RAM အနည်းဆုံး ရောက်ရှိစေရန် ခွင့်ပြုရန် အကြံပြုပါသည်။"
 
 msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "ပလက်ဖောင်း အသုံးပြုရန် OPcache မော်ဂျူးကို ထည့်သွင်းပြီး ဖွင့်ရပါမည်။"
 
 msgid "You are here"
-msgstr ""
+msgstr "သင်ရှိနေသည့်နေရာ"
 
 msgid "Click an event type to filter results."
-msgstr ""
+msgstr "ရလဒ်များကို စစ်ထုတ်ရန် ဖြစ်ရပ်အမျိုးအစားကို နှိပ်ပါ။"
 
 msgid "Require unique presence"
-msgstr ""
+msgstr "ထူးခြားသော ရှိနေမှု လိုအပ်သည်"
 
 msgid "If enabled, the gradebook will give a learner 100% when present at least once."
-msgstr ""
+msgstr "ဖွင့်ထားပါက ရှိနေမှု အနည်းဆုံး တစ်ကြိမ်ရှိလျှင် အမှတ်စာအုပ်က သင်သင်ကြားသူကို ၁၀၀% ပေးပါမည်။"
 
 msgid "AI feedback"
-msgstr ""
+msgstr "AI အကြံပြုချက်"
 
 msgid "Prompt"
-msgstr ""
+msgstr "တိုင်းညှိမှု"
 
 msgid "Tip"
-msgstr ""
+msgstr "အကြံပြုချက်"
 
 msgid "You can edit the prompt before asking for feedback."
-msgstr ""
+msgstr "အကြံပြုချက်တောင်းခံမီ တိုင်းညှိမှုကို ပြင်ဆင်နိုင်ပါသည်။"
 
 msgid "Result (you can apply it to the comment)"
-msgstr ""
+msgstr "ရလဒ် (မှတ်ချက်သို့ အသုံးပြုနိုင်သည်)"
 
 msgid "Apply to comment"
-msgstr ""
+msgstr "မှတ်ချက်သို့ အသုံးပြုရန်"
 
 msgid "Apply score"
-msgstr ""
+msgstr "အမှတ်အသုံးပြုရန်"
 
 msgid "AI grade"
-msgstr ""
+msgstr "AI အမှတ်"
 
 msgid "AI tutor is disabled during tests"
-msgstr ""
+msgstr "စမ်းသပ်မှုအတွင်း AI ကျွမ်းကျင်သူ ပိတ်ထားသည်"
 
 msgid "Generate glossary terms"
-msgstr ""
+msgstr "စကားလုံး အဓိပ္ပါယ်ဖွင့်စာလုံး အသုံးအနှုန်းများ ထုတ်လုပ်ရန်"
 
 msgid "Generate media"
-msgstr ""
+msgstr "မီဒီယာ ထုတ်လုပ်ရန်"
 
 msgid "You do not have permission to generate AI media in this course."
-msgstr ""
+msgstr "ဤသင်တန်းတွင် AI မီဒီယာ ထုတ်လုပ်ရန် ခွင့်ပြုချက် မရှိပါ။"
 
 msgid "AI helpers are disabled at platform level."
-msgstr ""
+msgstr "ပလက်ဖောင်း အဆင့်တွင် AI အကူအညီကိရိယာများ ပိတ်ထားသည်။"
 
 msgid "AI media generation is disabled in course settings."
-msgstr ""
+msgstr "သင်တန်း ဆက်တင်များတွင် AI မီဒီယာ ထုတ်လုပ်မှု ပိတ်ထားသည်။"
 
 msgid "No AI media providers available."
-msgstr ""
+msgstr "AI မီဒီယာ ပေးသည့်သူများ မရှိပါ။"
 
 msgid "Provider"
-msgstr ""
+msgstr "ပေးသည့်သူ"
 
 msgid "Select a provider"
-msgstr ""
+msgstr "ပေးသည့်သူ ရွေးချယ်ပါ"
 
 msgid "Example: generated_media"
-msgstr ""
+msgstr "ဥပမာ။ generated_media"
 
 msgid "The name is not added to the prompt; it is only used to save the file."
-msgstr ""
+msgstr "အမည်ကို တိုင်းညှိမှုသို့ မထည့်ပါ။ ဖိုင်သိမ်းရန်သာ အသုံးပြုသည်။"
 
 msgid "Describe what you want to generate..."
-msgstr ""
+msgstr "ထုတ်လုပ်လိုသည်များကို ဖော်ပြပါ..."
 
 msgid "Tip: click a preset to quickly set the size."
-msgstr ""
+msgstr "အကြံပြုချက်။ အရွယ်အစားကို လျင်မြန်စွာ သတ်မှတ်ရန် သတ်မှတ်ထားသော အရာကို နှိပ်ပါ။"
 
 msgid "Generating..."
-msgstr ""
+msgstr "ထုတ်လုပ်နေသည်..."
 
 msgid "Save to Documents"
-msgstr ""
+msgstr "စာရွက်စာတမ်းများသို့ သိမ်းရန်"
 
 msgid "Document IRI"
-msgstr ""
+msgstr "စာရွက်စာတမ်း IRI"
 
 msgid "Go to folder"
-msgstr ""
+msgstr "ဖိုလ်ဒါသို့ သွားရန်"
 
 msgid "Provider used"
-msgstr ""
+msgstr "အသုံးပြုသော ပေးသည့်သူ"
 
 msgid "This video result cannot be saved yet"
-msgstr ""
+msgstr "ဤဗီဒီယို ရလဒ်ကို မသိမ်းနိုင်သေးပါ"
 
 msgid "Video polling was stopped because the provider changed."
-msgstr ""
+msgstr "ပေးသည့်သူ ပြောင်းလဲသွားခြင်းကြောင့် ဗီဒီယို စုဆောင်းမှု ရပ်ထားသည်။"
 
 msgid "Video generation is taking too long. Please try again later."
-msgstr ""
+msgstr "ဗီဒီယို ထုတ်လုပ်မှု အလွန်ကြာနေသည်။ နောက်မှ ထပ်မံကြိုးစားပါ။"
 
 msgid "Failed to check video status."
 msgstr "ဗီဒီယိုအခြေအနေစစ်ဆေးရန် မအောင်မြင်ပါ။"
@@ -32568,4 +32568,19 @@ msgstr "ပြုပြင်ထားသော တိုက်တွန်း"
 
 msgid "Saved in Documents"
 msgstr "စာရွက်စာတမ်များတွင် သိမ်းဆည်းပြီး"
+
+msgid "Total space used by %s is %sGB"
+msgstr "%s မှ အသုံးပြုထားသော စုစုပေါင်း နေရာပေါင်း %sGB ဖြစ်သည်"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "ပေါ်တယ် %s မှ အသုံးပြုထားသော စုစုပေါင်း နေရာပေါင်း %sGB ဖြစ်သည် (အကန့်အသတ်ကို %sGB ထားရှိထားသည်)"
+
+msgid "Confirm your e-mail on %s"
+msgstr "%s တွင် သင့်အီးမေးလ်ကို အတည်ပြုပါ"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "မဂင်္လာပါ %s၊\n\nသင့်အကောင့်ကို %s တွင် စတင်အသုံးပြုနိုင်ရန် သင့်အီးမေးလ်ကို အတည်ပြုရန် အောက်ပါလင့်ခ်ကို နှိပ်ပါ။"
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "ဤအကောင့်ကို သင်မှမကြေညာထားပါက ဤအီးမေးလ်ကို လျစ်လျူရှုနိုင်ပါသည်။ ဘာမှလုပ်ဆောင်မည်မဟုတ်ပါ။"
 

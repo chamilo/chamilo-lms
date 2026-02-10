@@ -32338,230 +32338,245 @@ msgid "Update profile"
 msgstr "Оновити профіль"
 
 msgid "Enable learning path generator"
-msgstr ""
+msgstr "Увімкнути генератор навчальних шляхів"
 
 msgid "Enable exercise generator"
-msgstr ""
+msgstr "Увімкнути генератор вправ"
 
 msgid "Enable open answers grader"
-msgstr ""
+msgstr "Увімкнути оцінювач відкритих відповідей"
 
 msgid "Enable tutor chatbot"
-msgstr ""
+msgstr "Увімкнути чат-бот викладача"
 
 msgid "Enable task grader"
-msgstr ""
+msgstr "Увімкнути оцінювач завдань"
 
 msgid "Enable content analyser"
-msgstr ""
+msgstr "Увімкнути аналізатор контенту"
 
 msgid "Enable image generator"
-msgstr ""
+msgstr "Увімкнути генератор зображень"
 
 msgid "Enable glossary terms generator"
-msgstr ""
+msgstr "Увімкнути генератор термінів глосарію"
 
 msgid "Enable video generator"
-msgstr ""
+msgstr "Увімкнути генератор відео"
 
 msgid "Enable course analyser"
-msgstr ""
+msgstr "Увімкнути аналізатор курсу"
 
 msgid "The operation '%s' is not supported."
-msgstr ""
+msgstr "Операція '%s' не підтримується."
 
 msgid "AI feedback on %s in course %s"
-msgstr ""
+msgstr "Зворотний зв’язок ШІ щодо %s у курсі %s"
 
 msgid "Delete failed: missing course context or invalid question id."
-msgstr ""
+msgstr "Видалення не вдалося: відсутній контекст курсу або некоректний ідентифікатор запитання."
 
 msgid "AI Tutor"
-msgstr ""
+msgstr "ШІ-викладач"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "Розширення APCu має бути встановленим і увімкненим, щоб платформа могла його використовувати."
 
 msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
-msgstr ""
+msgstr "Рекомендується дозволити OPCache memory_consumption щонайменше %sMB оперативної пам’яті."
 
 msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "Модуль OPcache має бути встановленим і увімкненим, щоб платформа могла його використовувати."
 
 msgid "You are here"
-msgstr ""
+msgstr "Ви тут"
 
 msgid "Click an event type to filter results."
-msgstr ""
+msgstr "Клацніть тип події, щоб відфільтрувати результати."
 
 msgid "Require unique presence"
-msgstr ""
+msgstr "Вимагати унікальну присутність"
 
 msgid "If enabled, the gradebook will give a learner 100% when present at least once."
-msgstr ""
+msgstr "Якщо увімкнено, журнал оцінок надасть учневі 100%, якщо той був присутній принаймні один раз."
 
 msgid "AI feedback"
-msgstr ""
+msgstr "Зворотний зв’язок ШІ"
 
 msgid "Prompt"
-msgstr ""
+msgstr "Запит"
 
 msgid "Tip"
-msgstr ""
+msgstr "Порада"
 
 msgid "You can edit the prompt before asking for feedback."
-msgstr ""
+msgstr "Ви можете відредагувати запит перед запитом зворотного зв’язку."
 
 msgid "Result (you can apply it to the comment)"
-msgstr ""
+msgstr "Результат (ви можете застосувати його до коментаря)"
 
 msgid "Apply to comment"
-msgstr ""
+msgstr "Застосувати до коментаря"
 
 msgid "Apply score"
-msgstr ""
+msgstr "Застосувати оцінку"
 
 msgid "AI grade"
-msgstr ""
+msgstr "Оцінка ШІ"
 
 msgid "AI tutor is disabled during tests"
-msgstr ""
+msgstr "ШІ-викладач вимкнено під час тестів"
 
 msgid "Generate glossary terms"
-msgstr ""
+msgstr "Генерувати терміни глосарію"
 
 msgid "Generate media"
-msgstr ""
+msgstr "Генерувати медіа"
 
 msgid "You do not have permission to generate AI media in this course."
-msgstr ""
+msgstr "У вас немає дозволу генерувати AI-медіа в цьому курсі."
 
 msgid "AI helpers are disabled at platform level."
-msgstr ""
+msgstr "Допоміжні засоби ШІ відключено на рівні платформи."
 
 msgid "AI media generation is disabled in course settings."
-msgstr ""
+msgstr "Генерація AI-медіа відключена в налаштуваннях курсу."
 
 msgid "No AI media providers available."
-msgstr ""
+msgstr "Немає доступних постачальників AI-медіа."
 
 msgid "Provider"
-msgstr ""
+msgstr "Постачальник"
 
 msgid "Select a provider"
-msgstr ""
+msgstr "Виберіть постачальника"
 
 msgid "Example: generated_media"
-msgstr ""
+msgstr "Наприклад: generated_media"
 
 msgid "The name is not added to the prompt; it is only used to save the file."
-msgstr ""
+msgstr "Назва не додається до запиту; вона використовується лише для збереження файлу."
 
 msgid "Describe what you want to generate..."
-msgstr ""
+msgstr "Опишіть, що ви хочете згенерувати..."
 
 msgid "Tip: click a preset to quickly set the size."
-msgstr ""
+msgstr "Порада: клацніть на пресет, щоб швидко встановити розмір."
 
 msgid "Generating..."
-msgstr ""
+msgstr "Генерування..."
 
 msgid "Save to Documents"
-msgstr ""
+msgstr "Зберегти в Документи"
 
 msgid "Document IRI"
-msgstr ""
+msgstr "IRI документа"
 
 msgid "Go to folder"
-msgstr ""
+msgstr "Перейти до папки"
 
 msgid "Provider used"
-msgstr ""
+msgstr "Використаний постачальник"
 
 msgid "This video result cannot be saved yet"
-msgstr ""
+msgstr "Цей результат відео ще не можна зберегти"
 
 msgid "Video polling was stopped because the provider changed."
-msgstr ""
+msgstr "Опитування відео було зупинено, оскільки постачальник змінився."
 
 msgid "Video generation is taking too long. Please try again later."
-msgstr ""
+msgstr "Генерація відео займає забагато часу. Спробуйте пізніше."
 
 msgid "Failed to check video status."
-msgstr ""
+msgstr "Не вдалося перевірити статус відео."
 
 msgid "Video generated successfully. You can now save it."
-msgstr ""
+msgstr "Відео згенеровано успішно. Тепер ви можете його зберегти."
 
 msgid "Video generation completed, but no playable content was returned."
-msgstr ""
+msgstr "Генерація відео завершена, але не повернуто відтворюваний вміст."
 
 msgid "Video generation failed."
-msgstr ""
+msgstr "Генерація відео не вдалася."
 
 msgid "Waiting for the video to be ready..."
-msgstr ""
+msgstr "Очікування готовності відео..."
 
 msgid "Please complete all fields."
-msgstr ""
+msgstr "Заповніть всі поля."
 
 msgid "Image generation is not enabled for this course."
-msgstr ""
+msgstr "Генерація зображень не увімкнена для цього курсу."
 
 msgid "Video generation is not enabled for this course."
-msgstr ""
+msgstr "Генерація відео не увімкнена для цього курсу."
 
 msgid "Generation failed."
-msgstr ""
+msgstr "Генерація не вдалася."
 
 msgid "Generated successfully. Review the preview and save when ready."
-msgstr ""
+msgstr "Згенеровано успішно. Перегляньте попередній перегляд і збережіть, коли готові."
 
 msgid "Generated successfully. Saving is disabled because the provider returned a URL."
-msgstr ""
+msgstr "Згенеровано успішно. Збереження відключено, оскільки постачальник повернув URL."
 
 msgid "Video generation started. Waiting for the result..."
-msgstr ""
+msgstr "Генерація відео розпочата. Очікування результату..."
 
 msgid "AI returned an empty response."
-msgstr ""
+msgstr "ШІ повернув порожню відповідь."
 
 msgid "Nothing to save yet."
-msgstr ""
+msgstr "Немає що зберігати."
 
 msgid "This provider did not return base64 content. Please try another provider."
-msgstr ""
+msgstr "Цей постачальник не повернув вміст base64. Спробуйте іншого постачальника."
 
 msgid "Saving failed."
-msgstr ""
+msgstr "Збереження не вдалося."
 
 msgid "Get AI feedback"
-msgstr ""
+msgstr "Отримати зворотний зв’язок від ШІ"
 
 msgid "Copy answer to clipboard"
-msgstr ""
+msgstr "Копіювати відповідь у буфер обміну"
 
 msgid "Save answer to my inbox"
-msgstr ""
+msgstr "Зберегти відповідь у мою поштову скриньку"
 
 msgid "The document is already in this folder"
-msgstr ""
+msgstr "Документ уже в цій папці"
 
 msgid "Copied"
-msgstr ""
+msgstr "Скопійовано"
 
 msgid "You do not have permission to generate glossary terms."
-msgstr ""
+msgstr "У вас немає дозволу генерувати терміни глосарію."
 
 msgid "Video generation is in progress"
-msgstr ""
+msgstr "Генерація відео триває"
 
 msgid "Job"
-msgstr ""
+msgstr "Завдання"
 
 msgid "Modified prompt"
-msgstr ""
+msgstr "Змінений запит"
 
 msgid "Saved in Documents"
-msgstr ""
+msgstr "Збережено в Документах"
+
+msgid "Total space used by %s is %sGB"
+msgstr "Загалом використано місця %s: %sГБ"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "Загалом використано місця порталом %s: %sГБ (обмеження встановлено на %sГБ)"
+
+msgid "Confirm your e-mail on %s"
+msgstr "Підтвердіть свою електронну пошту на %s"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Привіт %s,\n\nЩоб підтвердити свою електронну пошту та активувати обліковий запис на %s, клацніть посилання нижче."
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "Якщо ви не реєстрували цей обліковий запис, можете ігнорувати цей лист. Жодних дій не буде вжито."
 

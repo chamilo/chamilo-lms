@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala iBody Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala iBody Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Esini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -32338,230 +32338,245 @@ msgid "Update profile"
 msgstr "Hlaziya iprofayili"
 
 msgid "Enable learning path generator"
-msgstr ""
+msgstr "Enable learning path generator"
 
 msgid "Enable exercise generator"
-msgstr ""
+msgstr "Enable exercise generator"
 
 msgid "Enable open answers grader"
-msgstr ""
+msgstr "Enable open answers grader"
 
 msgid "Enable tutor chatbot"
-msgstr ""
+msgstr "Enable tutor chatbot"
 
 msgid "Enable task grader"
-msgstr ""
+msgstr "Vula umthambo wemisebenzi"
 
 msgid "Enable content analyser"
-msgstr ""
+msgstr "Vula umhlalutyi womquwebedu"
 
 msgid "Enable image generator"
-msgstr ""
+msgstr "Vula umvelisi wemifanekiso"
 
 msgid "Enable glossary terms generator"
-msgstr ""
+msgstr "Vula umvelisi wamagama eglowski"
 
 msgid "Enable video generator"
-msgstr ""
+msgstr "Vula umvelisi wevidiyo"
 
 msgid "Enable course analyser"
-msgstr ""
+msgstr "Vula umhlalutyi wekosi"
 
 msgid "The operation '%s' is not supported."
-msgstr ""
+msgstr "Umsebenzi '%s' awuxhaswanga."
 
 msgid "AI feedback on %s in course %s"
-msgstr ""
+msgstr "Ingxelo ye-AI kwi-%s kwikosi %s"
 
 msgid "Delete failed: missing course context or invalid question id."
-msgstr ""
+msgstr "Ukucima akuphumelelanga: ukungabikho kwemvelaphi yekosi okanye idhihibhodi yombuzo engasebenziyo."
 
 msgid "AI Tutor"
-msgstr ""
+msgstr "Umfundisi we-AI"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "Ison prolongation se-APCu kufuneka sifakwe kwaye sivulwe ukuze i-platform iyisebenzise."
 
 msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
-msgstr ""
+msgstr "Ukuvumela ukusetyenziswa kwememori ye-OPCache ukuya kwi-%sMB ye-RAM okungenani kuyacekwawa."
 
 msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "Imodyuli ye-OPcache kufuneka ifakwe kwaye ivulwe ukuze i-platform iyisebenzise."
 
 msgid "You are here"
-msgstr ""
+msgstr "Ulapha"
 
 msgid "Click an event type to filter results."
-msgstr ""
+msgstr "Cofa uhlobo lwesiganeko ukuze uhlele iziphumo."
 
 msgid "Require unique presence"
-msgstr ""
+msgstr "Funa ubukho obukodwa"
 
 msgid "If enabled, the gradebook will give a learner 100% when present at least once."
-msgstr ""
+msgstr "Ukuba ivuliwe, incwadi yamanqaku iya kunika umfundi i-100% xa ekhona okungenani kube kanye."
 
 msgid "AI feedback"
-msgstr ""
+msgstr "Ingxelo ye-AI"
 
 msgid "Prompt"
-msgstr ""
+msgstr "Isikhuthazo"
 
 msgid "Tip"
-msgstr ""
+msgstr "Icebiso"
 
 msgid "You can edit the prompt before asking for feedback."
-msgstr ""
+msgstr "Ungayihlela isikhuthazo ngaphambi kokucela ingxelo."
 
 msgid "Result (you can apply it to the comment)"
-msgstr ""
+msgstr "Isiphumo (ungayisebenzisa kwizichazi)"
 
 msgid "Apply to comment"
-msgstr ""
+msgstr "Sebenzisa kwizichazi"
 
 msgid "Apply score"
-msgstr ""
+msgstr "Sebenzisa amanqaku"
 
 msgid "AI grade"
-msgstr ""
+msgstr "Amanqaku e-AI"
 
 msgid "AI tutor is disabled during tests"
-msgstr ""
+msgstr "Umfundisi we-AI ukhutshelwe ngenxa yovavanyo"
 
 msgid "Generate glossary terms"
-msgstr ""
+msgstr "Yenza amagama eglowski"
 
 msgid "Generate media"
-msgstr ""
+msgstr "Yenza imidiya"
 
 msgid "You do not have permission to generate AI media in this course."
-msgstr ""
+msgstr "Awunamvumo wokuvelisa imidiya ye-AI kule kosi."
 
 msgid "AI helpers are disabled at platform level."
-msgstr ""
+msgstr "Abancedisi be-AI bakhutshelwe kwinqanaba le-platform."
 
 msgid "AI media generation is disabled in course settings."
-msgstr ""
+msgstr "Ukuvelisa imidiya ye-AI kukhuselwe kusetingi zekosi."
 
 msgid "No AI media providers available."
-msgstr ""
+msgstr "Akukho baboneleli bendalo be-AI abakhoyo."
 
 msgid "Provider"
-msgstr ""
+msgstr "Baboneleli"
 
 msgid "Select a provider"
-msgstr ""
+msgstr "Khetha umboneleli"
 
 msgid "Example: generated_media"
-msgstr ""
+msgstr "Umzekelo: generated_media"
 
 msgid "The name is not added to the prompt; it is only used to save the file."
-msgstr ""
+msgstr "Igama alibhalwanga kwisikhuthazo; lisetyenziselwa nje ukugcina ifayile."
 
 msgid "Describe what you want to generate..."
-msgstr ""
+msgstr "Chaza into ofuna ukuyivelisa..."
 
 msgid "Tip: click a preset to quickly set the size."
-msgstr ""
+msgstr "Icebiso: cofa isetingi esicwangciswe ukuze usete ubungakanani ngokukhawuleza."
 
 msgid "Generating..."
-msgstr ""
+msgstr "Kuyaveliswa..."
 
 msgid "Save to Documents"
-msgstr ""
+msgstr "Gcina kwiMikwazo"
 
 msgid "Document IRI"
-msgstr ""
+msgstr "IRI yoXwebhu"
 
 msgid "Go to folder"
-msgstr ""
+msgstr "Iya kwifolda"
 
 msgid "Provider used"
-msgstr ""
+msgstr "Umboneli osetyenzisiweyo"
 
 msgid "This video result cannot be saved yet"
-msgstr ""
+msgstr "Esi siphumo sevidiyo asikwazeki ukugcinwa okwangoku"
 
 msgid "Video polling was stopped because the provider changed."
-msgstr ""
+msgstr "Ukupolwa kwevidiyo kumisiwe ngenxa yokutshintsha komboneleli."
 
 msgid "Video generation is taking too long. Please try again later."
-msgstr ""
+msgstr "Ukuvelisa ividiyo kuthatha ixesha elide kakhulu. Nceda uzame kwakhona emva kwexesha."
 
 msgid "Failed to check video status."
-msgstr ""
+msgstr "Akuphumelelanganga ukujonga imeko yevidiyo."
 
 msgid "Video generated successfully. You can now save it."
-msgstr ""
+msgstr "Ividiyo iyeveliswe ngempumelelo. Ngoku uyinokugcina."
 
 msgid "Video generation completed, but no playable content was returned."
-msgstr ""
+msgstr "Ukuvelisa ividiyo kugqityiwe, kodwa akukho nomquwebedu odlalwayo ubuyiselweyo."
 
 msgid "Video generation failed."
-msgstr ""
+msgstr "Ukuvelisa ividiyo akuphumelelanganga."
 
 msgid "Waiting for the video to be ready..."
-msgstr ""
+msgstr "Ndilinde ividiyo ukuba ilungele..."
 
 msgid "Please complete all fields."
-msgstr ""
+msgstr "Nceda ugcwalise zonke iindawo."
 
 msgid "Image generation is not enabled for this course."
-msgstr ""
+msgstr "Ukuveliswa komfanekiso akavulwanga kwesi sifundo."
 
 msgid "Video generation is not enabled for this course."
-msgstr ""
+msgstr "Ukuveliswa kwevidiyo akavulwanga kwesi sifundo."
 
 msgid "Generation failed."
-msgstr ""
+msgstr "Ukuvelisa kwaphumelela."
 
 msgid "Generated successfully. Review the preview and save when ready."
-msgstr ""
+msgstr "Kuveliswe ngempumelelo. Jonga umbono wangaphambili kwaye ugcine xa ulungile."
 
 msgid "Generated successfully. Saving is disabled because the provider returned a URL."
-msgstr ""
+msgstr "Kuveliswe ngempumelelo. Ukugcina akavulwanga kuba umnikezeli ubuyisele i-URL."
 
 msgid "Video generation started. Waiting for the result..."
-msgstr ""
+msgstr "Ukuvelisa ividiyo kuqalile. Ndilinde isiphumo..."
 
 msgid "AI returned an empty response."
-msgstr ""
+msgstr "I-AI ibuyisele impendulo engenanto."
 
 msgid "Nothing to save yet."
-msgstr ""
+msgstr "Akukho nto yokugcina okwangoku."
 
 msgid "This provider did not return base64 content. Please try another provider."
-msgstr ""
+msgstr "Lo mnikezeli awuzange abuyisele umxholo we-base64. Nceda zama omnye umnikezeli."
 
 msgid "Saving failed."
-msgstr ""
+msgstr "Ukugcina kwaphumelela."
 
 msgid "Get AI feedback"
-msgstr ""
+msgstr "Fumana ingxelo ye-AI"
 
 msgid "Copy answer to clipboard"
-msgstr ""
+msgstr "Kopisha impendulo kwibhodi yokubhala"
 
 msgid "Save answer to my inbox"
-msgstr ""
+msgstr "Gcina impendulo kwibhokisi yam yam"
 
 msgid "The document is already in this folder"
-msgstr ""
+msgstr "Uxwebhu lusele kule fodile"
 
 msgid "Copied"
-msgstr ""
+msgstr "Ikopiwe"
 
 msgid "You do not have permission to generate glossary terms."
-msgstr ""
+msgstr "Awunamvumo wokwenza amagama eglowski."
 
 msgid "Video generation is in progress"
-msgstr ""
+msgstr "Ukuvelisa ividiyo kuqhubeka"
 
 msgid "Job"
-msgstr ""
+msgstr "Umsebenzi"
 
 msgid "Modified prompt"
-msgstr ""
+msgstr "Isikhuthazo esilungisiweyo"
 
 msgid "Saved in Documents"
-msgstr ""
+msgstr "Igcinwe kwiXwebhu"
+
+msgid "Total space used by %s is %sGB"
+msgstr "Indawo ephelweyo ngu %s yi %sGB"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "Indawo ephelweyo yeportal %s yi %sGB (umda umiselwe %sGB)"
+
+msgid "Confirm your e-mail on %s"
+msgstr "Qinisekisa i-imeyile yakho kwi %s"
+
+msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Mhlekazi %s,\n\nUkuqinisekisa i-imeyile yakho kwaye uvule i-akhawunti yakho kwi %s, nceda cofa ikhonkco elingezantsi."
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "Ukuba awubhalanga le akhawunti, ungayityeshela le imeyile. Akukho nto iya kwenziwa."
 

@@ -371,7 +371,7 @@ class SortableTable extends HTML_Table
             return '';
         }
 
-        $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
+        $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring().'&'.api_get_cidreq();
         $table_id = 'form_'.$this->table_name.'_id';
         $html = '';
         $form = '';
@@ -398,7 +398,7 @@ class SortableTable extends HTML_Table
         }
 
         if (count($this->form_actions) > 0) {
-            $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
+            $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring().'&'.api_get_cidreq();
             $html .= '<form
                 id ="'.$table_id.'"
                 class="form-search"

@@ -108,6 +108,45 @@ class ZombieReport implements Countable
     {
         $form = $this->get_parameters_form();
         $result = $form->returnForm();
+        $iso = $this->get_ceiling('Y-m-d');
+
+        $result .= "
+        <script>
+        window.addEventListener('load', function () {
+          var container = document.getElementById('ceiling_container');
+          if (!container) return;
+
+          var input = container.querySelector('input[data-input]');
+          if (!input) return;
+
+          function syncDate() {
+            var fp = input._flatpickr;
+            if (!fp) return;
+
+            // Ensure picker opens on the real current value (ISO).
+            fp.setDate('{$iso}', true, 'Y-m-d');
+
+            // On submit, guarantee the submitted value is ISO (Y-m-d).
+            var form = input.form;
+            if (form && !form.__zombieCeilingBound) {
+              form.__zombieCeilingBound = true;
+              form.addEventListener('submit', function () {
+                try {
+                  var inst = input._flatpickr;
+                  if (inst && inst.selectedDates && inst.selectedDates[0]) {
+                    input.value = inst.formatDate(inst.selectedDates[0], 'Y-m-d');
+                  }
+                } catch (e) {}
+              });
+            }
+          }
+
+          // Flatpickr is initialized by DatePicker on load too, so defer sync slightly.
+          setTimeout(syncDate, 0);
+          setTimeout(syncDate, 50);
+        });
+        </script>
+    ";
 
         if ($return) {
             return $result;
@@ -126,7 +165,7 @@ class ZombieReport implements Countable
     public function get_ceiling($format = null)
     {
         $result = $this->request->get('ceiling');
-        $result = $result ? $result : ZombieManager::last_year();
+        $result = $result ? $result : strtotime('today');
 
         $result = is_array($result) && 1 == count($result) ? reset($result) : $result;
         $result = is_array($result) ? mktime(0, 0, 0, $result['F'], $result['d'], $result['Y']) : $result;

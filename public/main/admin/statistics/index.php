@@ -20,12 +20,28 @@ $report = $_REQUEST['report'] ?? '';
 $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : '';
 $validated = false;
 
+$statusId = 0;
 if (
-in_array(
-    $report,
-    ['recentlogins', 'tools', 'courses', 'coursebylanguage', 'users', 'users_active', 'session_by_date', 'new_user_registrations']
-)
+    in_array(
+        $report,
+        ['recentlogins', 'tools', 'courses', 'coursebylanguage', 'users', 'users_active', 'session_by_date', 'new_user_registrations']
+    )
 ) {
+    $htmlHeadXtra[] = '<style>
+      [id$="_chart_wrap"], #courses_chart_wrap, #tools_chart_wrap, #coursebylanguage_chart_wrap,
+      #recentlogins_chart_wrap, #subscriptions_chart_wrap {
+        position: relative;
+      }
+      [id$="_chart_wrap"] > canvas,
+      #courses_chart_wrap > canvas, #tools_chart_wrap > canvas, #coursebylanguage_chart_wrap > canvas,
+      #recentlogins_chart_wrap > canvas, #subscriptions_chart_wrap > canvas {
+        position: absolute;
+        inset: 0;
+        width: 100% !important;
+        height: 100% !important;
+        display: block;
+      }
+    </style>';
     $htmlHeadXtra[] = api_get_build_js('libs/chartjs/chart.js');
     //$htmlHeadXtra[] = api_get_asset('chartjs-plugin-labels/build/chartjs-plugin-labels.min.js');
     // Prepare variables for the JS charts
@@ -96,7 +112,7 @@ in_array(
                 }
             </style>';
 
-                    $reportOptions = '
+            $reportOptions = '
                 legend: {
                     position: "left"
                 },
@@ -332,29 +348,47 @@ in_array(
                 }
             </style>';
 
-            $validated = $form->validate() || isset($_REQUEST['range']);
+            $validated = $form->validate()
+                || isset($_REQUEST['range'])
+                || isset($_REQUEST['range_start'])
+                || isset($_REQUEST['range_end']);
+
             if ($validated) {
                 $values = $form->getSubmitValues();
                 $urlBase = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?';
-                $dateStart = null;
-                $dateEnd = null;
-
-                if (isset($values['range_start'])) {
-                    $dateStart = Security::remove_XSS($values['range_start']);
-                }
-                if (isset($values['range_end'])) {
-                    $dateEnd = Security::remove_XSS($values['range_end']);
+                $rangeRaw = (string) ($_REQUEST['range'] ?? ($values['range'] ?? ''));
+                if (!empty($rangeRaw)) {
+                    $form->setDefaults(['range' => Security::remove_XSS($rangeRaw)]);
                 }
 
-                if (isset($_REQUEST['range_start'])) {
-                    $dateStart = Security::remove_XSS($_REQUEST['range_start']);
+                $statusId = (int) ($_REQUEST['status_id'] ?? ($values['status_id'] ?? 0));
+                if (!empty($statusId)) {
+                    $form->setDefaults(['status_id' => $statusId]);
                 }
 
-                if (isset($_REQUEST['range_end'])) {
-                    $dateEnd = Security::remove_XSS($_REQUEST['range_end']);
+                $dateStart = (string) ($_REQUEST['range_start'] ?? ($values['range_start'] ?? ''));
+                $dateEnd = (string) ($_REQUEST['range_end'] ?? ($values['range_end'] ?? ''));
+
+                $dateStart = Security::remove_XSS($dateStart);
+                $dateEnd = Security::remove_XSS($dateEnd);
+                $isValidStart = false;
+                $isValidEnd = false;
+
+                if (!empty($dateStart)) {
+                    $dt = DateTime::createFromFormat('Y-m-d', $dateStart);
+                    $isValidStart = $dt && $dt->format('Y-m-d') === $dateStart;
+                }
+                if (!empty($dateEnd)) {
+                    $dt = DateTime::createFromFormat('Y-m-d', $dateEnd);
+                    $isValidEnd = $dt && $dt->format('Y-m-d') === $dateEnd;
                 }
 
-                $statusId = (int) ($_REQUEST['status_id'] ?? 0);
+                if (!$isValidStart) {
+                    $dateStart = '';
+                }
+                if (!$isValidEnd) {
+                    $dateEnd = '';
+                }
 
                 $conditions = "&date_start=$dateStart&date_end=$dateEnd&status=$statusId";
 
@@ -614,15 +648,19 @@ switch ($report) {
         break;
     case 'session_by_date':
         $sessions = [];
+        $values = [];
         if ($validated) {
             $values = $form->getSubmitValues();
-            $dateStart = $values['range_start'];
-            $dateEnd = $values['range_end'];
+            $dateStart = (string) ($_REQUEST['range_start'] ?? ($values['range_start'] ?? ''));
+            $dateEnd = (string) ($_REQUEST['range_end'] ?? ($values['range_end'] ?? ''));
+            $statusId = (int) ($_REQUEST['status_id'] ?? ($values['status_id'] ?? 0));
+            $dateStart = Security::remove_XSS($dateStart);
+            $dateEnd = Security::remove_XSS($dateEnd);
             $first = DateTime::createFromFormat('Y-m-d', $dateStart);
             $second = DateTime::createFromFormat('Y-m-d', $dateEnd);
             $numberOfWeeks = 0;
-            if ($first) {
-                $numberOfWeeks = floor($first->diff($second)->days / 7);
+            if ($first && $second) {
+                $numberOfWeeks = (int) floor($first->diff($second)->days / 7);
             }
 
             $statusCondition = '';
@@ -820,12 +858,20 @@ switch ($report) {
 
         $link = '';
         if ($validated) {
-            $url = api_get_self().'?report=session_by_date&action=export';
-            if (!empty($values)) {
-                foreach ($values as $index => $value) {
-                    $url .= '&'.$index.'='.$value;
+            $exportParams = [
+                'report' => 'session_by_date',
+                'action' => 'export',
+                'range_start' => (string) ($_REQUEST['range_start'] ?? ($values['range_start'] ?? '')),
+                'range_end' => (string) ($_REQUEST['range_end'] ?? ($values['range_end'] ?? '')),
+                'status_id' => (string) ((int) ($_REQUEST['status_id'] ?? ($values['status_id'] ?? 0))),
+            ];
+            foreach ($exportParams as $k => $v) {
+                if ($v === '' || $v === '0') {
+                    unset($exportParams[$k]);
                 }
             }
+
+            $url = api_get_self().'?'.http_build_query($exportParams);
             $link = Display::url(
                 Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon').'&nbsp;'.get_lang('Export to XLS'),
                 $url,
@@ -837,6 +883,63 @@ switch ($report) {
 
         break;
     case 'user_session':
+        $htmlHeadXtra[] = <<<HTML
+        <style>
+          #user_session input[name="range"]{
+            min-width: 320px;
+          }
+          @media (max-width: 768px){
+            #user_session input[name="range"]{
+              width: 100%;
+              min-width: 0;
+            }
+          }
+        </style>
+        HTML;
+
+        $labelLastWeek = addslashes(get_lang('Last week'));
+        $labelNextWeek = addslashes(get_lang('Next week'));
+
+        $htmlHeadXtra[] = <<<JS
+        <script>
+        (function () {
+          "use strict";
+          function patchUserSessionRanges() {
+            var \$input = $('input[name="range"]');
+            if (!\$input.length) return;
+
+            var drp = \$input.data('daterangepicker');
+            if (!drp) return;
+
+            var lastWeekLabel = "{$labelLastWeek}";
+            var nextWeekLabel = "{$labelNextWeek}";
+
+            drp.ranges = drp.ranges || {};
+
+            // Add "Last week"
+            drp.ranges[lastWeekLabel] = [
+              moment().subtract(1,'week').startOf('week'),
+              moment().subtract(1,'week').endOf('week')
+            ];
+
+            if (drp.ranges[nextWeekLabel]) {
+              delete drp.ranges[nextWeekLabel];
+            }
+
+            \$input.on('show.daterangepicker', function () {
+              var drp2 = \$input.data('daterangepicker');
+              if (!drp2) return;
+              drp2.ranges = drp.ranges;
+            });
+          }
+
+          $(function () {
+            patchUserSessionRanges();
+            setTimeout(patchUserSessionRanges, 150);
+          });
+        })();
+        </script>
+        JS;
         $form = new FormValidator('user_session', 'get');
         $form->addDateRangePicker('range', get_lang('Date range'), true);
         $form->addHidden('report', 'user_session');
@@ -1058,6 +1161,18 @@ switch ($report) {
             $values = $form->getSubmitValues();
             $toolIds = $values['tool_ids'];
             $reportData = Statistics::getToolUsageReportByTools($toolIds);
+            usort($reportData, static function (array $a, array $b): int {
+                $c1 = (int) ($a['resource_count'] ?? 0);
+                $c2 = (int) ($b['resource_count'] ?? 0);
+
+                if ($c1 === $c2) {
+                    $d1 = (string) ($a['last_updated'] ?? '');
+                    $d2 = (string) ($b['last_updated'] ?? '');
+                    return strcmp($d2, $d1);
+                }
+
+                return $c2 <=> $c1;
+            });
 
             $table = new HTML_Table(['class' => 'table table-hover table-striped data_table stats_table']);
             $headers = [
@@ -1077,7 +1192,7 @@ switch ($report) {
             foreach ($reportData as $data) {
                 $linkHtml = $data['link'] !== '-'
                     ? sprintf(
-                        '<a href="%s" class="text-blue-500 underline hover:text-blue-700" target="_self">%s</a>',
+                        '<a href="%s" class="text-primary underline hover:text-primary/80" target="_self">%s</a>',
                         $data['link'],
                         htmlspecialchars($data['tool_name'])
                     )
@@ -1104,6 +1219,12 @@ switch ($report) {
     case 'users_active':
         $content = '';
         if ($validated) {
+            $htmlHeadXtra[] = '<style>
+                .users-active-wrap .stats_table,
+                .users-active-wrap .data_table,
+                .users-active-wrap table.table{ margin-bottom: 18px !important; }
+            </style>';
+
             $startDate = $values['daterange_start'];
             $endDate = $values['daterange_end'];
 
@@ -1129,9 +1250,32 @@ switch ($report) {
 
             $conditions = [];
             $extraConditions = '';
-            if (!empty($startDate) && !empty($endDate)) {
-                // $extraConditions is already cleaned inside the function getUserListExtraConditions
-                $extraConditions .= " AND created_at BETWEEN '$startDate' AND '$endDate' ";
+            $userTable = Database::get_main_table(TABLE_MAIN_USER);
+            $dateColumn = '';
+            try {
+                $candidates = ['created_at', 'registration_date'];
+                foreach ($candidates as $candidate) {
+                    $q = Database::query("SHOW COLUMNS FROM $userTable LIKE '$candidate'");
+                    if ($q && Database::num_rows($q) > 0) {
+                        $dateColumn = $candidate;
+                        break;
+                    }
+                }
+            } catch (\Throwable $e) {
+                $dateColumn = '';
+            }
+
+            if (!empty($startDate) && !empty($endDate) && !empty($dateColumn)) {
+                $startDay = Security::remove_XSS((string) $startDate);
+                $endDay = Security::remove_XSS((string) $endDate);
+                $dtStart = DateTime::createFromFormat('Y-m-d', $startDay);
+                $dtEnd = DateTime::createFromFormat('Y-m-d', $endDay);
+
+                if ($dtStart && $dtEnd && $dtStart->format('Y-m-d') === $startDay && $dtEnd->format('Y-m-d') === $endDay) {
+                    $startUtc = api_get_utc_datetime($startDay.' 00:00:00');
+                    $endUtc = api_get_utc_datetime($endDay.' 23:59:59');
+                    $extraConditions .= " AND $dateColumn BETWEEN '$startUtc' AND '$endUtc' ";
+                }
             }
 
             $totalCount = UserManager::getUserListExtraConditions(
@@ -1699,7 +1843,7 @@ switch ($report) {
             $content = $header.$extraTables.$graph.$content;
         }
 
-        $content = $form->returnForm().$content;
+        $content = '<div class="users-active-wrap">'.$form->returnForm().$content.'</div>';
 
         break;
     case 'users_online':
@@ -1731,19 +1875,30 @@ switch ($report) {
         }
 
         $now = api_get_local_time();
+        $tones = [
+            3 =>  ['border' => 'border-danger/20',  'bg' => 'bg-danger/10',  'iconBg' => 'bg-danger/20',  'text' => 'text-danger'],
+            5 =>  ['border' => 'border-warning/20', 'bg' => 'bg-warning/10', 'iconBg' => 'bg-warning/20', 'text' => 'text-warning'],
+            30 => ['border' => 'border-info/20',    'bg' => 'bg-info/10',    'iconBg' => 'bg-info/20',    'text' => 'text-info'],
+            120=> ['border' => 'border-success/20', 'bg' => 'bg-success/10', 'iconBg' => 'bg-success/20', 'text' => 'text-success'],
+        ];
 
-        $renderCard = static function (string $label, int $value, string $iconClass): string {
+        $renderCard = static function (string $label, int $value, string $iconClass, array $tone): string {
             $labelEsc = htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
             $valueEsc = (int) $value;
 
+            $border = $tone['border'] ?? 'border-gray-25';
+            $bg     = $tone['bg'] ?? 'bg-white';
+            $iconBg = $tone['iconBg'] ?? 'bg-gray-20';
+            $text   = $tone['text'] ?? 'text-gray-90';
+
             return '
-            <div class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
+            <div class="rounded-xl border '.$border.' '.$bg.' p-4 shadow-sm">
                 <div class="flex items-center gap-3">
-                    <div class="shrink-0 w-10 h-10 rounded-lg bg-gray-10 flex items-center justify-center">
+                    <div class="shrink-0 w-10 h-10 rounded-lg '.$iconBg.' flex items-center justify-center '.$text.'">
                         <i class="'.$iconClass.'" aria-hidden="true"></i>
                     </div>
                     <div class="min-w-0">
-                        <div class="text-sm text-gray-60">'.$labelEsc.'</div>
+                        <div class="text-sm text-gray-50">'.$labelEsc.'</div>
                         <div class="text-2xl font-semibold text-gray-90">'.$valueEsc.'</div>
                     </div>
                 </div>
@@ -1754,49 +1909,52 @@ switch ($report) {
         $cardsOnline = '';
         $cardsTest = '';
 
-        // Use distinct icons per interval (optional, but looks nicer).
         $icons = [
             3   => 'fa fa-bolt',
-            5   => 'fa fa-thermometer-4',
-            30  => 'fa fa-thermometer-2',
-            120 => 'fa fa-clock-o',
+            5   => 'fa fa-exclamation-triangle',
+            30  => 'fa fa-info-circle',
+            120 => 'fa fa-check-circle',
         ];
 
         foreach ($intervals as $minutes) {
             $minutes = (int) $minutes;
-            $suffix = ' ('.$minutes.'&prime;)';
+            $suffix = " ({$minutes}')";
+
+            $tone = $tones[$minutes] ?? [];
 
             $cardsOnline .= $renderCard(
                 get_lang('Users online').$suffix,
                 $onlineCounts[$minutes] ?? 0,
-                $icons[$minutes] ?? 'fa fa-user'
+                $icons[$minutes] ?? 'fa fa-user',
+                $tone
             );
 
             $cardsTest .= $renderCard(
                 get_lang('Users active in a test').$suffix,
                 $testCounts[$minutes] ?? 0,
-                $icons[$minutes] ?? 'fa fa-pencil'
+                $icons[$minutes] ?? 'fa fa-pencil',
+                $tone
             );
         }
 
         $content = '
-        <div class="max-w-6xl mx-auto">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-lg font-semibold text-gray-90">'.get_lang('Users online').'</h2>
-                <div class="text-sm text-gray-60">'.htmlspecialchars((string) $now, ENT_QUOTES, "UTF-8").'</div>
-            </div>
+            <div class="max-w-6xl mx-auto">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold text-gray-90">'.get_lang('Users online').'</h2>
+                    <div class="text-sm text-gray-50">'.htmlspecialchars((string) $now, ENT_QUOTES, "UTF-8").'</div>
+                </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                '.$cardsOnline.'
-            </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    '.$cardsOnline.'
+                </div>
 
-            <h3 class="text-lg font-semibold text-gray-90 mb-4">'.get_lang('Users active in a test').'</h3>
+                <h3 class="text-lg font-semibold text-gray-90 mb-4">'.get_lang('Users active in a test').'</h3>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                '.$cardsTest.'
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    '.$cardsTest.'
+                </div>
             </div>
-        </div>
-    ';
+        ';
         break;
     case 'new_user_registrations':
         $form = new FormValidator('new_user_registrations', 'get', api_get_self());
@@ -1812,6 +1970,26 @@ switch ($report) {
         $chartContent = '';
         $chartCreatorContent = '';
         $textChart = '';
+        $htmlHeadXtra[] = '
+            <style>
+                .js-chart-container {
+                    position: relative;
+                    height: 360px;
+                    max-height: 360px;
+                    overflow: hidden;
+                }
+                .js-chart-container--pie {
+                    height: 520px;
+                    max-height: 520px;
+                }
+                .js-chart-container canvas {
+                    width: 100% !important;
+                    height: 100% !important;
+                    display: block;
+                }
+            </style>
+        ';
+
         if ($validated) {
             $values = $form->getSubmitValues();
             $dateStart = Security::remove_XSS($values['daterange_start']);
@@ -1847,11 +2025,11 @@ switch ($report) {
                                 chart.data.datasets[0].data = dailyData.data;
                                 chart.data.datasets[0].label = "User Registrations for " + year + "-" + month;
                                 chart.update();
-
                                 $("#backButton").show();
                             }
                         });
-                    }';
+                    }
+                ';
                 } else {
                     $textChart = get_lang('User registrations by day');
                     foreach ($registrations as $registration) {
@@ -1864,42 +2042,54 @@ switch ($report) {
                     $onClickHandler = '';
                 }
 
+                $options = '
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    plugins: {
+                        title: { text: "'.$textChart.'", display: true }
+                    },
+                    scales: {
+                        x: { beginAtZero: true },
+                        y: { barPercentage: 0.4, categoryPercentage: 0.5, barThickness: 10, maxBarThickness: 15 }
+                    },
+                    layout: {
+                        padding: { left: 10, right: 10, top: 10, bottom: 10 }
+                    }
+                ';
                 $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
                     $chartData['chart'],
                     'bar',
-                    'title: { text: "'.$textChart.'", display: true },
-                            scales: {
-                                x: { beginAtZero: true },
-                                y: { barPercentage: 0.4, categoryPercentage: 0.5, barThickness: 10, maxBarThickness: 15 }
-                            },
-                            layout: {
-                                padding: { left: 10, right: 10, top: 10, bottom: 10 }
-                            }',
+                    $options,
                     'user_registration_chart',
                     true,
                     $onClickHandler,
                     '
-                            $("#backButton").click(function() {
-                                $.ajax({
-                                    url: "/main/inc/ajax/statistics.ajax.php?a=get_user_registration_by_month",
-                                    type: "POST",
-                                    data: { date_start: "'.$dateStart.'", date_end: "'.$dateEnd.'" },
-                                    success: function(response) {
-                                        var monthlyData = JSON.parse(response);
-                                        chart.data.labels = monthlyData.labels;
-                                        chart.data.datasets[0].data = monthlyData.data;
-                                        chart.data.datasets[0].label = "'.get_lang('User registrations by month').'";
-                                        chart.update();
-                                        $("#backButton").hide();
-                                    }
-                                });
-                            });
-                        '
+                    $("#backButton").click(function() {
+                        $.ajax({
+                            url: "/main/inc/ajax/statistics.ajax.php?a=get_user_registration_by_month",
+                            type: "POST",
+                            data: { date_start: "'.$dateStart.'", date_end: "'.$dateEnd.'" },
+                            success: function(response) {
+                                var monthlyData = JSON.parse(response);
+                                chart.data.labels = monthlyData.labels;
+                                chart.data.datasets[0].data = monthlyData.data;
+                                chart.data.datasets[0].label = "'.get_lang('User registrations by month').'";
+                                chart.update();
+                                $("#backButton").hide();
+                            }
+                        });
+                    });
+                ',
+                    ['width' => 900, 'height' => 360]
                 );
 
+                $chartContent .= '<div class="js-chart-container">';
                 $chartContent .= '<canvas id="user_registration_chart"></canvas>';
+                $chartContent .= '</div>';
+                $chartContent .= '<div class="mt-2">';
                 $chartContent .= '<button id="backButton" style="display:none;" class="btn btn--info">'.get_lang('Back to months').'</button>';
-
+                $chartContent .= '</div>';
                 $creators = Statistics::getUserRegistrationsByCreator($dateStart, $dateEnd);
                 if (!empty($creators)) {
                     $chartCreatorContent = '<hr />';
@@ -1910,31 +2100,42 @@ switch ($report) {
                         $creatorData[] = $creator['count'];
                     }
 
+                    $creatorOptions = '
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: false,
+                        plugins: {
+                            title: { text: "'.get_lang('User registrations by creator').'", display: true },
+                            legend: { position: "top" }
+                        },
+                        layout: {
+                            padding: { left: 10, right: 10, top: 10, bottom: 10 }
+                        }
+                    ';
+
                     $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
                         ['labels' => $creatorLabels, 'datasets' => [['label' => get_lang('User registrations by creator'), 'data' => $creatorData]]],
                         'pie',
-                        'title: { text: "'.get_lang('User registrations by creator').'", display: true },
-                        legend: { position: "top" },
-                        layout: {
-                            padding: { left: 10, right: 10, top: 10, bottom: 10 }
-                        }',
+                        $creatorOptions,
                         'user_registration_by_creator_chart',
-                        false,
+                        true,
                         '',
                         '',
-                        ['width' => 700, 'height' => 700]
+                        ['width' => 700, 'height' => 520]
                     );
 
+                    $chartCreatorContent .= '<div class="js-chart-container js-chart-container--pie">';
                     $chartCreatorContent .= '<canvas id="user_registration_by_creator_chart"></canvas>';
+                    $chartCreatorContent .= '</div>';
+                }
             }
         }
-    }
 
-    $content .= $form->returnForm();
-    $content .= $chartContent;
-    $content .= $chartCreatorContent;
+        $content .= $form->returnForm();
+        $content .= $chartContent;
+        $content .= $chartCreatorContent;
 
-    break;
+        break;
     case 'users':
         $content .= '<div class="grid grid-cols-3 gap-4">';
         $content .= '<div><canvas id="canvas1" class="mb-5"></canvas></div>';
@@ -2004,12 +2205,34 @@ switch ($report) {
         $content .= Statistics::printUserPicturesStats();
         break;
     case 'no_login_users':
+        $totalUsers = Statistics::countUsers(null, null, true, false);
+        $content .= Display::page_subheader2(get_lang('Number of users').': '.(int) $totalUsers);
         $content .= Statistics::printUsersNotLoggedInStats();
         break;
     case 'zombies':
-        $content .= ZombieReport::create(['report' => 'zombies'])->display(true);
+        $htmlHeadXtra[] = <<<'HTML'
+        <style>
+        .ch-zombies-wrap { margin-top: 0.75rem; }
+        .ch-zombies-wrap .table-responsive { overflow-x: auto; }
+        .ch-zombies-wrap table { width: 100%; table-layout: fixed; }
+        .ch-zombies-wrap th, .ch-zombies-wrap td { overflow-wrap: anywhere; word-break: break-word; }
+        .ch-zombies-wrap .pagination { margin: 0; }
+        .ch-zombies-wrap .row, .ch-zombies-wrap .col, .ch-zombies-wrap .col-12 { max-width: 100%; }
+        </style>
+        HTML;
+        $content .= '<div class="ch-zombies-wrap">'.ZombieReport::create(['report' => 'zombies'])->display(true).'</div>';
         break;
     case 'activities':
+        $htmlHeadXtra[] = <<<JS
+        <script>
+        (function () {
+          "use strict";
+          $(document).on("click", "a.js-user-details-link", function (e) {
+            e.stopImmediatePropagation();
+          });
+        })();
+        </script>
+        JS;
         $content .= Statistics::printActivitiesStats();
         break;
     case 'messagesent':
@@ -2026,7 +2249,18 @@ switch ($report) {
         $content .= Statistics::printStats(get_lang('Contacts count'), $friends, false);
         break;
     case 'logins_by_date':
-        $content .= Statistics::printLoginsByDate();
+        $htmlHeadXtra[] = '<script>
+        $(function () {
+            var $wrap = $("#ch-logins-by-date");
+            if (!$wrap.length) return;
+            var $form = $wrap.find("form").first();
+            var $table = $wrap.find("table").first();
+            if ($form.length && $table.length) {
+                $form.insertBefore($table);
+            }
+        });
+        </script>';
+        $content .= '<div id="ch-logins-by-date">'.Statistics::printLoginsByDate().'</div>';
         break;
     case 'quarterly_report':
         global $htmlHeadXtra;
@@ -2082,11 +2316,11 @@ switch ($report) {
 
         $ajaxEndpointJs = json_encode($ajaxEndpoint, JSON_UNESCAPED_SLASHES);
         $loadingHtml = '
-        <div class="flex items-center gap-2 text-sm text-gray-600 py-3">
-            '.$waitIcon.'
-            <span>Loading report…</span>
-        </div>
-    ';
+            <div class="flex items-center gap-2 text-sm text-gray-50 py-3">
+                '.$waitIcon.'
+                <span>Loading report…</span>
+            </div>
+        ';
         $loadingHtmlJs = json_encode($loadingHtml, JSON_UNESCAPED_SLASHES);
 
         $htmlHeadXtra[] = <<<JS
@@ -2164,20 +2398,18 @@ switch ($report) {
         JS;
         // Header
         $content .= '
-    <div class="w-full">
-      <div class="flex items-start justify-between gap-4 mb-4">
-        <div>
-          <h2 class="text-xl font-semibold text-gray-900">'.get_lang('Quarterly report').'</h2>
-          <p class="text-sm text-gray-600">'.get_lang('Show').': '.get_lang('All').'</p>
-        </div>
-        <div class="shrink-0">
-          <a href="#" id="js-quarterly-load-all"
-             class="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700">
-            '.get_lang('Show').': '.get_lang('All').'
-          </a>
-        </div>
-      </div>
-    ';
+          <div class="w-full">
+            <div class="flex items-start justify-between gap-4 mb-4">
+              <div>
+                <h2 class="text-xl font-semibold text-gray-90">'.get_lang('Quarterly report').'</h2>
+                <a href="#"
+                   id="js-quarterly-load-all"
+                   class="inline-flex items-center text-sm text-blue-700 hover:underline">
+                  '.get_lang('Show').': '.get_lang('All').'
+                </a>
+              </div>
+            </div>
+        ';
         $content .= '<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">';
 
         foreach ($cards as $card) {
@@ -2189,31 +2421,31 @@ switch ($report) {
             $action = $card['action'];
             $target = $card['target'];
             $content .= '
-        <div class="rounded-xl border border-gray-50 bg-white shadow-sm">
-          <div class="flex items-start justify-between gap-3 px-4 py-3 border-b border-gray-20">
-            <div class="min-w-0">
-              <h3 class="text-base font-semibold text-gray-900 leading-snug">'.$title.'</h3>
-            </div>
+            <div class="rounded-xl border border-gray-50 bg-white shadow-sm">
+              <div class="flex items-start justify-between gap-3 px-4 py-3 border-b border-gray-20">
+                <div class="min-w-0">
+                  <h3 class="text-base font-semibold text-gray-90 leading-snug">'.$title.'</h3>
+                </div>
 
-            <div class="flex items-center gap-2">
-              <a href="#"
-                 class="js-quarterly-load inline-flex items-center rounded-md border border-gray-50 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
-                 data-action="'.$action.'" data-target="'.$target.'">
-                '.get_lang('Show').'
-              </a>
-              <a href="#"
-                 class="js-quarterly-reload inline-flex items-center rounded-md border border-blue-200 bg-blue-50 px-2.5 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-100"
-                 data-action="'.$action.'" data-target="'.$target.'">
-                '.get_lang('Refresh').'
-              </a>
-            </div>
-          </div>
+                <div class="flex items-center gap-2">
+                  <a href="#"
+                     class="js-quarterly-load inline-flex items-center rounded-md border border-gray-50 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                     data-action="'.$action.'" data-target="'.$target.'">
+                    '.get_lang('Show').'
+                  </a>
+                  <a href="#"
+                     class="js-quarterly-reload inline-flex items-center rounded-md border border-blue-200 bg-blue-50 px-2.5 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-100"
+                     data-action="'.$action.'" data-target="'.$target.'">
+                    '.get_lang('Refresh').'
+                  </a>
+                </div>
+              </div>
 
-          <div class="px-4 pb-4">
-            <div id="'.$target.'" class="hidden mt-3" data-loaded="0"></div>
-          </div>
-        </div>
-        ';
+              <div class="px-4 pb-4">
+                <div id="'.$target.'" class="hidden mt-3" data-loaded="0"></div>
+              </div>
+            </div>
+            ';
         }
         $content .= '</div></div>';
         break;

@@ -6,8 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Helpers\CourseHelper;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
@@ -30,7 +34,10 @@ class ReplaceDocumentFileAction extends BaseResourceFileAction
         CDocument $document,
         Request $request,
         ResourceNodeRepository $resourceNodeRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        CourseRepository $courseRepository,
+        CDocumentRepository $documentRepository,
+        CourseHelper $courseHelper
     ): Response {
         $uploadedFile = $request->files->get('file');
         if (!$uploadedFile) {
@@ -47,10 +54,37 @@ class ReplaceDocumentFileAction extends BaseResourceFileAction
             throw new BadRequestHttpException('No file found in the resource node.');
         }
 
-        $filePath = $this->uploadBasePath.$resourceNodeRepository->getFilename($resourceFile);
-        if (!$filePath) {
+        // Quota check BEFORE moving the file
+        $oldBytes = (int) ($resourceFile->getSize() ?? 0);
+        $newBytes = (int) ($uploadedFile->getSize() ?? 0);
+        $deltaBytes = $newBytes - $oldBytes;
+
+        if ($deltaBytes > 0) {
+            $courses = [];
+            foreach ($resourceNode->getResourceLinks() as $rl) {
+                if ($rl instanceof ResourceLink && null !== $rl->getCourse()) {
+                    $course = $rl->getCourse();
+                    $courses[(int) $course->getId()] = $course;
+                }
+            }
+
+            foreach ($courses as $course) {
+                try {
+                    $courseHelper->assertCanStoreDocumentBytes($course, $deltaBytes);
+                } catch (\Throwable $e) {
+                    throw new BadRequestHttpException(\sprintf(
+                        'Not enough space in course #%d.',
+                        (int) $course->getId()
+                    ));
+                }
+            }
+        }
+
+        $rel = (string) $resourceNodeRepository->getFilename($resourceFile);
+        if ('' === $rel) {
             throw new BadRequestHttpException('File path could not be resolved.');
         }
+        $filePath = $this->uploadBasePath.$rel;
 
         $this->prepareDirectory($filePath);
 
@@ -64,17 +98,13 @@ class ReplaceDocumentFileAction extends BaseResourceFileAction
             throw new RuntimeException('The moved file does not exist at the expected location.');
         }
 
-        $fileSize = filesize($filePath);
+        $fileSize = (int) filesize($filePath);
         $resourceFile->setSize($fileSize);
-
-        $newFileName = $uploadedFile->getClientOriginalName();
-
-        // Keep titles consistent: entity title + node title.
+        $newFileName = (string) $uploadedFile->getClientOriginalName();
         $document->setTitle($newFileName);
         $resourceNode->setTitle($newFileName);
 
         $resourceFile->setOriginalName($newFileName);
-
         $resourceNode->setUpdatedAt(new DateTime());
 
         $em->persist($document);

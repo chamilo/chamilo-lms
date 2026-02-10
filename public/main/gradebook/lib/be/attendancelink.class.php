@@ -101,8 +101,8 @@ class AttendanceLink extends AbstractLink
 
         // Load attendance settings (qualify max + require unique mode)
         $sql = 'SELECT attendance_qualify_max, require_unique
-        FROM '.$this->get_attendance_table().'
-        WHERE iid = '.$attendanceId;
+            FROM '.$this->get_attendance_table().'
+            WHERE iid = '.(int) $attendanceId;
         $query = Database::query($sql);
         $attendance = Database::fetch_assoc($query);
 
@@ -110,9 +110,21 @@ class AttendanceLink extends AbstractLink
         $requireUnique = !empty($attendance['require_unique']);
 
         // Avoid gradebook showing 0/0 in require-unique mode when qualify max was never set.
-        if ($requireUnique && $qualifyMax <= 0) {
+        if ($requireUnique && $qualifyMax <= 0.0) {
             // Using 100 matches the UI expectation ("100% when present at least once").
             $qualifyMax = 100.0;
+        }
+
+        if (!$requireUnique && $qualifyMax <= 0.0) {
+            $sqlTotal = 'SELECT COUNT(*) AS total
+                     FROM '.$tbl_calendar.'
+                     WHERE attendance_id = '.(int) $attendanceId;
+            $rowTotal = Database::fetch_assoc(Database::query($sqlTotal));
+            $totalDates = (int) ($rowTotal['total'] ?? 0);
+
+            if ($totalDates > 0) {
+                $qualifyMax = (float) $totalDates;
+            }
         }
 
         // ------------------------------------------------------------
@@ -130,8 +142,8 @@ class AttendanceLink extends AbstractLink
                 $sqlHasPresence = 'SELECT 1
                 FROM '.$tbl_sheet.' s
                 INNER JOIN '.$tbl_calendar.' c ON c.iid = s.attendance_calendar_id
-                WHERE c.attendance_id = '.$attendanceId.'
-                  AND s.user_id = '.$studentId.'
+                WHERE c.attendance_id = '.(int) $attendanceId.'
+                  AND s.user_id = '.(int) $studentId.'
                   AND s.presence IN (1, 2, 3)
                 LIMIT 1';
 
@@ -156,7 +168,7 @@ class AttendanceLink extends AbstractLink
                       MAX(CASE WHEN s.presence IN (1, 2, 3) THEN 1 ELSE 0 END) AS has_presence
                FROM '.$tbl_sheet.' s
                INNER JOIN '.$tbl_calendar.' c ON c.iid = s.attendance_calendar_id
-               WHERE c.attendance_id = '.$attendanceId.'
+               WHERE c.attendance_id = '.(int) $attendanceId.'
                GROUP BY s.user_id';
 
             $rs = Database::query($sqlAll);
@@ -173,7 +185,7 @@ class AttendanceLink extends AbstractLink
 
             // Compute stats (keep legacy behavior when qualifyMax is 0)
             foreach ($students as $uid => $finalScore) {
-                if (0 != $qualifyMax) {
+                if (0.0 != $qualifyMax) {
                     $resultCount++;
                     $sumRatio += $finalScore / $qualifyMax;
                     $sumScore += $finalScore;
@@ -205,8 +217,8 @@ class AttendanceLink extends AbstractLink
         }
 
         $sql = 'SELECT user_id, score
-        FROM '.$tbl_attendance_result.'
-        WHERE attendance_id = '.$attendanceId;
+            FROM '.$tbl_attendance_result.'
+            WHERE attendance_id = '.(int) $attendanceId;
 
         if (null !== $studentId) {
             $sql .= ' AND user_id = '.(int) $studentId;
@@ -219,7 +231,7 @@ class AttendanceLink extends AbstractLink
             if ($row = Database::fetch_assoc($scores)) {
                 $score = (float) ($row['score'] ?? 0);
                 if ('default' === $type) {
-                    return [$qualifyMax > 0 ? ($score / $qualifyMax) : 0.0, 1];
+                    return [$qualifyMax > 0.0 ? ($score / $qualifyMax) : 0.0, 1];
                 }
 
                 return [$score, $qualifyMax];
@@ -256,7 +268,7 @@ class AttendanceLink extends AbstractLink
 
         // Compute stats
         foreach ($students as $uid => $finalScore) {
-            if (0 != $qualifyMax) {
+            if (0.0 != $qualifyMax) {
                 $resultCount++;
                 $sumRatio += $finalScore / $qualifyMax;
                 $sumScore += $finalScore;

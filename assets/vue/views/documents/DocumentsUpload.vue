@@ -183,6 +183,31 @@ const uppy = new Uppy({ autoProceed: false })
     endpoint: ENTRYPOINT + "documents",
     formData: true,
     fieldName: "uploadFile",
+    getResponseError: (responseText, xhr) => {
+      const status = xhr?.status
+
+      if (!responseText) {
+        return new Error(`Upload failed (HTTP ${status ?? "unknown"}).`)
+      }
+
+      try {
+        const json = JSON.parse(responseText)
+        const msg =
+          json.error ||
+          json.message ||
+          json.detail ||
+          json["hydra:description"] ||
+          (Array.isArray(json.violations) && json.violations.length ? json.violations[0].message : null)
+
+        return new Error(msg || `Upload failed (HTTP ${status ?? "unknown"}).`)
+      } catch {
+        return new Error(String(responseText))
+      }
+    },
+  })
+  .on("upload-error", (_file, error) => {
+    const msg = error?.message || "Upload failed."
+    uppy.info(msg, "error", 9000)
   })
   .on("upload-success", (_item, response) => {
     onCreated(response.body)

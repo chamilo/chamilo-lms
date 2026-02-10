@@ -25,6 +25,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CGroupCategory;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\EntityManager;
@@ -68,7 +69,8 @@ class CourseHelper
         private readonly ParameterBagInterface $parameterBag,
         private readonly RequestStack $requestStack,
         private readonly AccessUrlHelper $accessUrlHelper,
-        private readonly IllustrationRepository $illustrationRepository
+        private readonly IllustrationRepository $illustrationRepository,
+        private readonly CDocumentRepository $documentRepository
     ) {}
 
     public function createCourse(array $params): ?Course
@@ -878,8 +880,8 @@ class CourseHelper
         if ($useTemplate && !empty($originCourse)) {
             try {
                 $originCourse['official_code'] = $originCourse['code'];
-                $cb = new CourseBuilder(null, $originCourse);
-                $course = $cb->build(null, $originCourse['code']);
+                $cb = new CourseBuilder('', $originCourse);
+                $course = $cb->build(0, $originCourse['code']);
                 $cr = new CourseRestorer($course);
                 $cr->set_file_option();
                 $cr->restore($courseCode);
@@ -1031,6 +1033,191 @@ class CourseHelper
         }
 
         return $user;
+    }
+
+    /**
+     * Enforces quotas for a DOCUMENT upload (deltaBytes > 0):
+     * 1) Global course storage quota (course.diskQuota fallback platform default)
+     * 2) Documents tool quota (platform default_document_quotum / document.default_document_quotum)
+     */
+    public function assertCanStoreDocumentBytes(Course $course, int $deltaBytes): void
+    {
+        if ($deltaBytes <= 0) {
+            return;
+        }
+
+        // Global course storage quota
+        $courseQuotaMb = $this->resolveCourseStorageQuotaMbForCourse($course);
+        $courseUsedBytes = $this->getCourseStorageUsedBytes($course);
+
+        if ($courseQuotaMb > 0) {
+            $courseQuotaBytes = $courseQuotaMb * 1024 * 1024;
+            $courseNextUsed = $courseUsedBytes + $deltaBytes;
+
+            $this->debugLog('quota:course:check', [
+                'courseId' => (int) $course->getId(),
+                'deltaBytes' => $deltaBytes,
+                'quotaMb' => $courseQuotaMb,
+                'quotaBytes' => $courseQuotaBytes,
+                'usedBytes' => $courseUsedBytes,
+                'nextUsedBytes' => $courseNextUsed,
+            ]);
+
+            if ($courseNextUsed > $courseQuotaBytes) {
+                throw new RuntimeException('Course storage quota exceeded.');
+            }
+        } else {
+            $this->debugLog('quota:course:unlimited', [
+                'courseId' => (int) $course->getId(),
+                'deltaBytes' => $deltaBytes,
+                'usedBytes' => $courseUsedBytes,
+            ]);
+        }
+
+        // Documents tool quota (Documents-only usage, excluding groups if requested by policy)
+        $docsQuotaMb = $this->resolveDocumentsToolQuotaMb();
+        $docUsedBytes = $this->getCourseDocumentUsedBytes($course);
+
+        if ($docsQuotaMb > 0) {
+            $docQuotaBytes = $docsQuotaMb * 1024 * 1024;
+            $docNextUsed = $docUsedBytes + $deltaBytes;
+
+            $this->debugLog('quota:documents:check', [
+                'courseId' => (int) $course->getId(),
+                'deltaBytes' => $deltaBytes,
+                'quotaMb' => $docsQuotaMb,
+                'quotaBytes' => $docQuotaBytes,
+                'usedBytes' => $docUsedBytes,
+                'nextUsedBytes' => $docNextUsed,
+            ]);
+
+            if ($docNextUsed > $docQuotaBytes) {
+                throw new RuntimeException('Course documents quota exceeded.');
+            }
+        } else {
+            $this->debugLog('quota:documents:unlimited', [
+                'courseId' => (int) $course->getId(),
+                'deltaBytes' => $deltaBytes,
+                'usedBytes' => $docUsedBytes,
+            ]);
+        }
+    }
+
+    /**
+     * Global course storage quota (MB):
+     * - If course.diskQuota is set (>0) use it.
+     * - Else fallback to platform default document quota.
+     */
+    public function resolveCourseStorageQuotaMbForCourse(Course $course): int
+    {
+        $quotaMb = (int) ($course->getDiskQuota() ?? 0);
+        if ($quotaMb > 0) {
+            return $quotaMb;
+        }
+
+        return $this->resolveDefaultDocumentQuotaMb();
+    }
+
+    /**
+     * Documents tool base quota (MB) from platform settings.
+     * Prefer canonical keys first; keep compatibility keys as fallback.
+     */
+    public function resolveDocumentsToolQuotaMb(): int
+    {
+        return $this->resolveDefaultDocumentQuotaMb();
+    }
+
+    private function resolveDefaultDocumentQuotaMb(): int
+    {
+        // Prefer canonical keys first (avoid accidental overrides).
+        $preferred = [
+            'document.default_document_quotum',
+            'default_document_quotum', // legacy / DB variable
+        ];
+
+        // Keep old compatibility candidates as fallback (do not break existing installs).
+        $compat = [
+            'document.default_document_quota',
+            'document.default_course_quota',
+            'course.course_quota',
+        ];
+
+        foreach ([$preferred, $compat] as $candidates) {
+            foreach ($candidates as $key) {
+                $raw = $this->settingsManager->getSetting($key, true);
+                if (null !== $raw && '' !== (string) $raw) {
+                    $mb = $this->parseQuotaRawToMb((string) $raw);
+                    if ($mb > 0) {
+                        return $mb;
+                    }
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * Returns used bytes for Documents in a course.
+     *
+     * Policy requested: do NOT count group-context documents here (only course + session).
+     * (The repository breakdown still returns groups, but we ignore them for the quota.)
+     */
+    private function getCourseDocumentUsedBytes(Course $course): int
+    {
+        $usage = $this->documentRepository->getDocumentUsageBreakdownByCourse($course);
+
+        $courseBytes = (int) ($usage['course'] ?? 0);
+        $sessionBytes = (int) ($usage['sessions'] ?? 0);
+
+        return $courseBytes + $sessionBytes;
+    }
+
+    /**
+     * Parses quota raw value into MB.
+     * Accepts:
+     *  - "500" -> 500 MB
+     *  - "200M", "200MB" -> 200 MB
+     *  - "1G", "1GB" -> 1024 MB
+     *  - large integers that look like bytes -> converted to MB
+     */
+    private function parseQuotaRawToMb(string $raw): int
+    {
+        $s = strtolower(trim($raw));
+
+        // Pure integer?
+        if (preg_match('/^\d+$/', $s)) {
+            $num = (int) $s;
+
+            // Heuristic: if it looks like bytes (>= 1MB in bytes), convert to MB
+            return ($num >= 1048576) ? (int) ceil($num / 1048576) : $num;
+        }
+
+        // <number><unit> where unit is m/mb or g/gb
+        if (preg_match('/^\s*(\d+)\s*([mg])(?:b)?\s*$/i', $s, $m)) {
+            $num = (int) $m[1];
+            $unit = strtolower($m[2]);
+
+            return 'g' === $unit ? $num * 1024 : $num;
+        }
+
+        // Extract digits from noisy strings
+        if (preg_match('/(\d+)/', $s, $m)) {
+            $num = (int) $m[1];
+
+            return ($num >= 1048576) ? (int) ceil($num / 1048576) : $num;
+        }
+
+        return 0;
+    }
+
+    /**
+     * Returns used bytes for the whole course storage (all tools),
+     * based on ResourceFile sizes linked to the course.
+     */
+    private function getCourseStorageUsedBytes(Course $course): int
+    {
+        return $this->documentRepository->getCourseStorageUsedBytes($course);
     }
 
     private function debugLog(string $message, array $context = []): void

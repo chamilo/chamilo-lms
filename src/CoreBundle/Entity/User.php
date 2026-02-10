@@ -1275,7 +1275,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->confirmationToken;
     }
 
-    public function setConfirmationToken(string $confirmationToken): self
+    public function setConfirmationToken(?string $confirmationToken): self
     {
         $this->confirmationToken = $confirmationToken;
 

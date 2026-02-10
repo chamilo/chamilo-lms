@@ -1,0 +1,29 @@
+<?php
+
+/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
+
+namespace Chamilo\CoreBundle\Migrations\Schema\V200;
+
+use Chamilo\CoreBundle\Entity\PageCategory;
+use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Doctrine\DBAL\Schema\Schema;
+
+final class Version20260210133800 extends AbstractMigrationChamilo
+{
+    public function getDescription(): string
+    {
+        return 'Fixes the setting "course.course_category_code_to_use_as_model" by setting it to NULL if it was set to "false".';
+    }
+
+    public function up(Schema $schema): void
+    {
+        $this->addSql("UPDATE settings SET selected_value = NULL WHERE selected_value = 'false' AND variable = 'course_category_code_to_use_as_model' AND category = 'course'");
+    }
+
+    public function down(Schema $schema): void
+    {
+        // Intentionally left empty (non-destructive migration).
+    }
+}

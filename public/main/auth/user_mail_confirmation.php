@@ -1,37 +1,45 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$token = $_GET['token'] ?? '';
+$token = (string) ($_GET['token'] ?? '');
+$token = trim($token);
 
-if (!ctype_alnum($token)) {
+// Allow typical tokens (alnum, "_" and "-") to avoid rejecting UUID-like tokens.
+if ($token === '' || !preg_match('/^[a-zA-Z0-9_-]+$/', $token)) {
     $token = '';
 }
 
-/** @var \Chamilo\CoreBundle\Entity\User $user */
-$user = Container::getUserRepository()->findUserByConfirmationToken($token);
+/** @var User|null $user */
+$user = null;
+if ($token !== '') {
+    $user = Container::getUserRepository()->findOneBy(['confirmationToken' => $token]);
+}
 
 if ($user) {
-    $user->setActive(1); // Set to 1 to activate the user
+    $user->setActive(1);
     $user->setConfirmationToken(null);
 
     Database::getManager()->persist($user);
     Database::getManager()->flush();
 
-    // See where to redirect the user to, if any redirection has been set
+    // Default redirect
     $url = api_get_path(WEB_PATH);
 
-    if (!empty($_GET['c'])) {
-        $courseCode = Security::remove_XSS($_GET['c']);
-    }
-    if (!empty($_GET['s'])) {
-        $sessionId = (int) $_GET['s'];
+    $courseId = !empty($_GET['c']) ? (int) $_GET['c'] : 0;
+    $sessionId = !empty($_GET['s']) ? (int) $_GET['s'] : 0;
+
+    $courseCode = '';
+    if ($courseId > 0) {
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $courseCode = (string) ($courseInfo['code'] ?? $courseInfo['course_code'] ?? $courseInfo['directory'] ?? '');
     }
 
-    // Get URL to a course, to a session, or an empty string
+    // Get URL to a course (in session), to a session, or empty.
     $courseUrl = api_get_course_url($courseCode, $sessionId);
     if (!empty($courseUrl)) {
         $url = $courseUrl;
@@ -47,12 +55,13 @@ if ($user) {
     Display::addFlash(
         Display::return_message(get_lang('User confirmed. Now you can login the platform.'), 'success')
     );
+
     header('Location: '.$url);
     exit;
-} else {
-    Display::addFlash(
-        Display::return_message(get_lang('Link expired, please try again.'))
-    );
-    header('Location: '.api_get_path(WEB_PATH));
-    exit;
 }
+
+Display::addFlash(
+    Display::return_message(get_lang('Link expired, please try again.'))
+);
+header('Location: '.api_get_path(WEB_PATH));
+exit;

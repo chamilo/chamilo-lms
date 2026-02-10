@@ -1019,7 +1019,7 @@ if ($formSent) {
 
                 if (!empty($deleteUrl)) {
                     $question->questionData .= Display::url(
-                        get_lang('Delete'),
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon text-white', null, ICON_SIZE_SMALL, get_lang('Delete')).' '.get_lang('Delete'),
                         $deleteUrl,
                         [
                             'class' => 'inline-flex items-center rounded-lg bg-danger px-3 py-1.5 text-sm font-semibold text-white hover:bg-danger/90',

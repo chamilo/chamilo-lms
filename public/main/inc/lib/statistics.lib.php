@@ -468,11 +468,18 @@ class Statistics
                     $row[4] = '-';
                 }
 
-                // User id.
+                // User details (plain link - avoid legacy "send message" popups)
+                $userId = (int) ($row[6] ?? 0);
+                $userLabel = htmlspecialchars((string) ($row[5] ?? ''), ENT_QUOTES, 'UTF-8');
+
                 $row[5] = Display::url(
-                    $row[5],
-                    api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$row[6],
-                    ['class' => 'ajax']
+                    $userLabel,
+                    api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId,
+                    [
+                        'class' => 'js-user-details-link text-primary underline hover:text-primary/80',
+                        'target' => '_self',
+                        'rel' => 'noopener',
+                    ]
                 );
 
                 $row[6] = Tracking::get_ip_from_user_event(
@@ -520,6 +527,10 @@ class Statistics
             }
         }
 
+        if (false === $showTotal) {
+            $barRelativeToMax = true;
+        }
+
         $colspan = $showTotal ? 4 : 3;
 
         $css = '';
@@ -546,7 +557,7 @@ class Statistics
                 font-size: 12px;
                 color: #5f6b7a;
                 white-space: nowrap;
-                min-width: 48px;
+                min-width: 52px;
                 text-align: right;
             }
             .ch-stats-cols th{ vertical-align: middle; }
@@ -579,13 +590,13 @@ class Statistics
                 : self::makeSizeString((int) $number);
 
             $percentageRaw = ($total > 0) ? (100 * $number / $total) : 0.0;
-            $percentageDisplay = ($total > 0) ? number_format($percentageRaw, 1, ',', '.') : '0';
+            $percentageDisplay = ($total > 0) ? number_format($percentageRaw, 1, ',', '.') : '0,0';
 
             $barPercent = $barRelativeToMax
                 ? (($max > 0) ? (100 * $number / $max) : 0.0)
                 : $percentageRaw;
 
-            $barPercent = max(0.0, min(100.0, $barPercent));
+            $barPercent = max(0.0, min(100.0, (float) $barPercent));
             $barHtml = '
             <div class="ch-statbar-wrap" title="'.$percentageDisplay.'%">
                 <div class="ch-statbar">
@@ -899,25 +910,26 @@ class Statistics
         if ($accessUrlUtil->isMultiple()) {
             $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
-            $sql = "SELECT access_tool, count( access_id ) AS number_of_logins
-                    FROM $table t , $access_url_rel_course_table a
-                    WHERE
-                        access_tool IN ('".implode("','", $tools)."') AND
-                        t.c_id = a.c_id AND
-                        access_url_id = $urlId
-                        GROUP BY access_tool
-                    ";
+            $sql = "SELECT access_tool, count(access_id) AS number_of_logins
+                FROM $table t, $access_url_rel_course_table a
+                WHERE
+                    access_tool IN ('".implode("','", $tools)."') AND
+                    t.c_id = a.c_id AND
+                    access_url_id = $urlId
+                GROUP BY access_tool
+                ORDER BY number_of_logins DESC";
         } else {
-            $sql = "SELECT access_tool, count( access_id ) AS number_of_logins
-                    FROM $table
-                    WHERE access_tool IN ('".implode("','", $tools)."')
-                    GROUP BY access_tool ";
+            $sql = "SELECT access_tool, count(access_id) AS number_of_logins
+                FROM $table
+                WHERE access_tool IN ('".implode("','", $tools)."')
+                GROUP BY access_tool
+                ORDER BY number_of_logins DESC";
         }
 
         $res = Database::query($sql);
         $result = [];
         while ($obj = Database::fetch_object($res)) {
-            $result[$tool_names[$obj->access_tool]] = $obj->number_of_logins;
+            $result[$tool_names[$obj->access_tool]] = (int) $obj->number_of_logins;
         }
 
         return $result;
@@ -973,38 +985,78 @@ class Statistics
     }
 
     /**
-     * Shows the number of users having their picture uploaded in Dokeos.
+     * Shows the number of users having their picture uploaded.
+     * Compatible with different schemas (picture, picture_uri, picture_resource_node_id).
      * @throws Exception
      */
     public static function printUserPicturesStats(): string
     {
-        $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $url_condition = null;
-        $url_condition2 = null;
-        $table = null;
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $accessUrlRelUserTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
         $accessUrlUtil = Container::getAccessUrlUtil();
+        $cols = [];
+        try {
+            $conn = Database::getManager()->getConnection();
+            $sm = method_exists($conn, 'createSchemaManager') ? $conn->createSchemaManager() : $conn->getSchemaManager();
+            $cols = $sm->listTableColumns($userTable);
+        } catch (\Throwable $e) {
+            $cols = [];
+        }
+
+        $hasPicture = isset($cols['picture']);
+        $hasPictureUri = isset($cols['picture_uri']);
+        $hasPictureNodeId = isset($cols['picture_resource_node_id']);
+
+        $joins = '';
+        $where = 'WHERE u.active <> '.USER_SOFT_DELETED;
 
         if ($accessUrlUtil->isMultiple()) {
             $accessUrl = $accessUrlUtil->getCurrent();
-            $urlId = $accessUrl->getId();
-            $url_condition = ", $access_url_rel_user_table as url WHERE url.user_id=u.id AND access_url_id='".$urlId."'";
-            $url_condition2 = " AND url.user_id=u.id AND access_url_id = $urlId";
-            $table = ", $access_url_rel_user_table as url ";
+            $urlId = (int) $accessUrl->getId();
+            $joins .= " INNER JOIN $accessUrlRelUserTable url
+                    ON url.user_id = u.id AND url.access_url_id = $urlId ";
         }
-        $sql = "SELECT COUNT(*) AS n FROM $user_table as u ".$url_condition;
-        $res = Database::query($sql);
-        $count1 = Database::fetch_object($res);
-        $sql = "SELECT COUNT(*) AS n FROM $user_table as u $table
-               WHERE LENGTH(picture_uri) > 0 $url_condition2";
 
-        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> '.USER_SOFT_DELETED : ' AND u.active <> '.USER_SOFT_DELETED;
-
+        // Total users (within current URL if multi-url).
+        $sql = "SELECT COUNT(*) AS n FROM $userTable u $joins $where";
         $res = Database::query($sql);
-        $count2 = Database::fetch_object($res);
-        // #users without picture
-        $result[get_lang('No')] = $count1->n - $count2->n;
-        $result[get_lang('Yes')] = $count2->n; // #users with picture
+        $totalObj = Database::fetch_object($res);
+        $totalUsers = (int) ($totalObj->n ?? 0);
+
+        // Users with a picture (build conditions depending on available columns).
+        $pictureWhereParts = [];
+
+        if ($hasPictureUri) {
+            $pictureWhereParts[] = "(u.picture_uri IS NOT NULL AND u.picture_uri <> '')";
+        }
+
+        if ($hasPicture) {
+            // Exclude common "empty" values.
+            $pictureWhereParts[] = "(u.picture IS NOT NULL AND u.picture <> '' AND u.picture <> '0' AND u.picture <> 'unknown.jpg' AND u.picture <> 'unknown.png')";
+        }
+
+        if ($hasPictureNodeId) {
+            $pictureWhereParts[] = "(u.picture_resource_node_id IS NOT NULL AND u.picture_resource_node_id <> 0)";
+        }
+
+        $withPicture = 0;
+        if (!empty($pictureWhereParts)) {
+            $pictureWhere = implode(' OR ', $pictureWhereParts);
+
+            $sql = "SELECT COUNT(*) AS n
+                FROM $userTable u
+                $joins
+                $where
+                AND ($pictureWhere)";
+            $res = Database::query($sql);
+            $obj = Database::fetch_object($res);
+            $withPicture = (int) ($obj->n ?? 0);
+        }
+
+        $result = [];
+        $result[get_lang('No')] = max(0, $totalUsers - $withPicture);
+        $result[get_lang('Yes')] = max(0, $withPicture);
 
         return self::printStats(get_lang('Number of users').' ('.get_lang('Picture').')', $result, false);
     }
@@ -1722,7 +1774,7 @@ class Statistics
 
         $options = trim($options);
         if ($isCircular) {
-            $baseOptions = 'responsive: true, maintainAspectRatio: true,';
+            $baseOptions = 'responsive: true, maintainAspectRatio: false, devicePixelRatio: Math.min(2, window.devicePixelRatio || 1),';
         } else {
             $baseOptions = $fullSize
                 ? 'responsive: true, maintainAspectRatio: false,'
@@ -1802,6 +1854,9 @@ class Statistics
                         data: data,
                         options: options
                     });
+
+                    setTimeout(function(){ if (chart) chart.resize(); }, 80);
+                    setTimeout(function(){ if (chart) chart.resize(); }, 280);
 
                     $afterInitBlock
                 });

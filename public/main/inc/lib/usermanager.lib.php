@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues as EntityExtraFieldValues;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\User;
@@ -6362,7 +6363,7 @@ SQL;
                 if (!empty($gradebook)) {
                     $finished = 0;
                     Database::getManager()->persist($gradebook);
-                    $certificateRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\GradebookCertificate::class);
+                    $certificateRepo = $entityManager->getRepository(GradebookCertificate::class);
                     $finished = $certificateRepo->getCertificateByUserId($gradebook->getId(), $row['user_id']);
                     if (!empty($finished)) {
                         $courses[$row['code']]['finished']++;
@@ -6384,46 +6385,84 @@ SQL;
     public static function countUsersWhoFinishedCoursesInSessions()
     {
         $coursesInSessions = [];
-        $currentAccessUrlId = api_get_current_access_url_id();
-        $sql = "SELECT course.code, srcru.session_id, srcru.user_id, session.title
-                FROM session_rel_course_rel_user srcru
-                    JOIN course ON srcru.c_id = course.id
-                    JOIN access_url_rel_session aurs on srcru.session_id = aurs.session_id
-                    JOIN session ON srcru.session_id = session.id
-                WHERE aurs.access_url_id = $currentAccessUrlId
-                ORDER BY course.code, session.title
-        ";
+        $currentAccessUrlId = (int) api_get_current_access_url_id();
+
+        $sql = "SELECT
+                course.id AS cid,
+                course.code,
+                srcru.session_id,
+                srcru.user_id,
+                session.title
+            FROM session_rel_course_rel_user srcru
+                INNER JOIN course ON srcru.c_id = course.id
+                INNER JOIN access_url_rel_session aurs ON srcru.session_id = aurs.session_id
+                INNER JOIN session ON srcru.session_id = session.id
+            WHERE aurs.access_url_id = $currentAccessUrlId
+            ORDER BY course.code, session.title";
+
         $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            while ($row = Database::fetch_array($res)) {
-                $index = $row['code'].' ('.$row['title'].')';
-                if (!isset($coursesInSessions[$index])) {
-                    $coursesInSessions[$index] = [
-                        'subscribed' => 0,
-                        'finished' => 0,
-                    ];
+        if (false === $res || 0 === Database::num_rows($res)) {
+            return $coursesInSessions;
+        }
+
+        $entityManager = Database::getManager();
+        $gradebookRepo = $entityManager->getRepository(GradebookCategory::class);
+        $gbMeta = $entityManager->getClassMetadata(GradebookCategory::class);
+        $certificateRepo = $entityManager->getRepository(GradebookCertificate::class);
+        $gradebookCache = [];
+
+        while ($row = Database::fetch_array($res)) {
+            $courseId = (int) ($row['cid'] ?? 0);
+            $sessionId = (int) ($row['session_id'] ?? 0);
+            $userId = (int) ($row['user_id'] ?? 0);
+
+            if ($courseId <= 0 || $sessionId <= 0 || $userId <= 0) {
+                continue;
+            }
+
+            $index = $row['code'].' ('.$row['title'].')';
+
+            if (!isset($coursesInSessions[$index])) {
+                $coursesInSessions[$index] = [
+                    'subscribed' => 0,
+                    'finished' => 0,
+                ];
+            }
+
+            $coursesInSessions[$index]['subscribed']++;
+            $cacheKey = $courseId.':'.$sessionId;
+            if (!array_key_exists($cacheKey, $gradebookCache)) {
+                $criteria = [
+                    'course' => $courseId,
+                ];
+
+                if ($gbMeta->hasAssociation('session')) {
+                    $criteria['session'] = $entityManager->getReference(
+                        SessionEntity::class,
+                        $sessionId
+                    );
+                } elseif ($gbMeta->hasField('session')) {
+                    $criteria['session'] = $sessionId;
+                } elseif ($gbMeta->hasField('session_id')) {
+                    $criteria['session_id'] = $sessionId;
+                } elseif ($gbMeta->hasField('sid')) {
+                    $criteria['sid'] = $sessionId;
                 }
-                $coursesInSessions[$index]['subscribed']++;
-                $entityManager = Database::getManager();
-                $repository = $entityManager->getRepository(GradebookCategory::class);
-                /** @var GradebookCategory $gradebook */
-                $gradebook = $repository->findOneBy(
-                    [
-                        'course' => $row['cid'],
-                        'sessionId' => $row['session_id'],
-                    ]
-                );
-                if (!empty($gradebook)) {
-                    $finished = 0;
-                    Database::getManager()->persist($gradebook);
-                    $certificateRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\GradebookCertificate::class);
-                    $finished = $certificateRepo->getCertificateByUserId($gradebook->getId(), $row['user_id']);
-                    if (!empty($finished)) {
-                        $coursesInSessions[$index]['finished']++;
-                    }
-                }
+
+                $gradebookCache[$cacheKey] = $gradebookRepo->findOneBy($criteria) ?: null;
+            }
+
+            $gradebook = $gradebookCache[$cacheKey];
+            if (null === $gradebook) {
+                continue;
+            }
+
+            $certificate = $certificateRepo->getCertificateByUserId($gradebook->getId(), $userId);
+            if (!empty($certificate)) {
+                $coursesInSessions[$index]['finished']++;
             }
         }
+
         return $coursesInSessions;
     }
 

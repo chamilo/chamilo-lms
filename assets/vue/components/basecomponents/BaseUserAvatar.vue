@@ -1,7 +1,7 @@
 <template>
   <Avatar
     :aria-label="alt"
-    :image="`${imageUrl}?w=${imageSize}&h=${imageSize}&fit=crop`"
+    :image="finalImageUrl"
     :shape="shape"
     :size="'normal' !== size ? size : undefined"
   />
@@ -37,7 +37,7 @@ const props = defineProps({
 })
 
 const imageSize = computed(() => {
-  // these numbers are approximate, they were calculated with a size
+  // these numbers are approximate; they were calculated with a size
   // allowing to see the image clearly
   if (props.size === "xlarge") {
     return 112
@@ -48,5 +48,13 @@ const imageSize = computed(() => {
   }
 
   return 32
+})
+
+const finalImageUrl = computed(() => {
+  if (!props.imageUrl) {
+    return `/img/icons/${imageSize.value}/unknown.png`
+  }
+
+  return `${props.imageUrl}?w=${imageSize.value}&h=${imageSize.value}&fit=crop`
 })
 </script>

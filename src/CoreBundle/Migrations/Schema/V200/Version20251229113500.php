@@ -76,6 +76,7 @@ final class Version20251229113500 extends AbstractMigrationChamilo
         $this->write(\sprintf('Updated resource_link rows: %d', $affected));
 
         //  Create missing links (rare, but safe)
+        //  Could be optimized by grouping by course
         $sqlMissing = \sprintf(
             'SELECT ct.iid, ct.c_id, ct.session_id, ct.%s AS node_id, ct.visibility
                FROM c_tool ct
@@ -114,7 +115,8 @@ final class Version20251229113500 extends AbstractMigrationChamilo
                 continue;
             }
 
-            $courseRef = $this->entityManager->getReference(Course::class, $courseId);
+            // Could be optimized by fetching only the resource_node_id of the course
+            $courseRef = $this->entityManager->find(Course::class, $courseId);
             $sessionRef = $sessionId > 0
                 ? $this->entityManager->getReference(Session::class, $sessionId)
                 : null;
@@ -124,6 +126,7 @@ final class Version20251229113500 extends AbstractMigrationChamilo
                 : ResourceLink::VISIBILITY_DRAFT;
 
             // Create link for the exact same context (course + session, group/user null)
+            $ctool->setParent($courseRef);
             $ctool->addCourseLink($courseRef, $sessionRef, null, $linkVisibility);
 
             $this->entityManager->persist($ctool);

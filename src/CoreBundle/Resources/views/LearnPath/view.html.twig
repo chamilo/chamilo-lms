@@ -414,7 +414,7 @@
              */
             $menu.toggleClass("c-menu-top", tocHidden === 1);
 
-            // Prefer data attributes (if you added them), fallback to legacy classes.
+            // Prefer data attributes, fallback to legacy classes.
             var $circle = $menu.find("[data-lp-menu='circle']").first();
             if (!$circle.length) {
               $circle = $menu.find(".circle").first();
@@ -529,13 +529,67 @@
               }
             }
 
+            /* -----------------------------
+             * Iframe helpers
+             * ----------------------------- */
+            function getLpIframe() {
+              var $i = $("#content_id");
+              if (!$i.length) {
+                $i = $("#content_id_blank");
+              }
+              return $i;
+            }
+
+            function syncCurrentItemFromIframe() {
+              try {
+                var $i = getLpIframe();
+                if (!$i.length) {
+                  return;
+                }
+                var src = $i.attr("src") || "";
+                var m = src.match(/[?&]item_id=(\d+)/);
+                if (m && m[1]) {
+                  window.lpCurrentItemId = parseInt(m[1], 10) || window.lpCurrentItemId;
+                }
+              } catch (e) {}
+            }
+
             /* -----------------------------------------------------------
-             * When TOC is hidden, navigation must NOT rely on
-             * TOC DOM ordering. Use backend/runtime directions ('next'/'previous')
-             * to guarantee correct sequencing.
+             * TOC-based navigation helpers
              * ----------------------------------------------------------- */
+            function collectTocItemIds() {
+              var ids = [];
+              var seen = {};
+
+              $("#toc_id [id^='toc_']").each(function () {
+                var raw = (this.id || "").replace("toc_", "");
+                var n = parseInt(raw, 10);
+                if (!Number.isFinite(n) || n <= 0) return;
+                if (seen[n]) return;
+                seen[n] = true;
+                ids.push(n);
+              });
+
+              if (!ids.length) {
+                $("#toc_id a[href*='item_id=']").each(function () {
+                  try {
+                    var href = $(this).attr("href") || "";
+                    var m = href.match(/[?&]item_id=(\d+)/);
+                    if (!m) return;
+                    var n = parseInt(m[1], 10);
+                    if (!Number.isFinite(n) || n <= 0) return;
+                    if (seen[n]) return;
+                    seen[n] = true;
+                    ids.push(n);
+                  } catch (e) {}
+                });
+              }
+
+              return ids;
+            }
+
             function getCurrentItemIdSafe() {
-              // Prefer runtime value (always the most reliable after switches)
+              // Prefer runtime value (most reliable when available)
               try {
                 if (window.olms && typeof olms.lms_item_id !== "undefined") {
                   var n = parseInt(olms.lms_item_id, 10);
@@ -548,6 +602,26 @@
 
               var fromUrl = parseInt(getSearchParam("item_id"), 10);
               return Number.isFinite(fromUrl) ? fromUrl : 0;
+            }
+
+            function resolveDirectionToId(direction, currentId) {
+              var ids = collectTocItemIds();
+              if (!ids.length) {
+                return 0;
+              }
+
+              var idx = ids.indexOf(currentId);
+              if (idx === -1) {
+                return direction === "next" ? (ids[0] || 0) : 0;
+              }
+
+              if (direction === "next") {
+                return ids[idx + 1] || 0;
+              }
+              if (direction === "previous") {
+                return ids[idx - 1] || 0;
+              }
+              return 0;
             }
 
             function buildContentUrlForItem(itemId) {
@@ -565,10 +639,7 @@
 
             // Iframe loading overlay (safe: does not cancel navigation)
             var $loader = $("#lp-iframe-loader");
-            var $iframe = $("#content_id");
-            if (!$iframe.length) {
-              $iframe = $("#content_id_blank");
-            }
+            var $iframe = getLpIframe();
 
             var loaderTimer = null;
             var maxHideTimer = null;
@@ -595,6 +666,7 @@
             if ($iframe.length) {
               showLoader("initial");
               $iframe.off("load.lpLoader").on("load.lpLoader", function () {
+                syncCurrentItemFromIframe();
                 hideLoader("iframe load");
               });
             } else {
@@ -643,62 +715,61 @@
               var isDirection = (target === "next" || target === "previous" || target === "first" || target === "last");
               var targetItemId = 0;
 
+              showLoader("navigate " + label);
+              var currentItemId = getCurrentItemIdSafe();
+
+              // If target is numeric, validate it.
               if (!isDirection) {
                 targetItemId = parseInt(target, 10);
                 if (!Number.isFinite(targetItemId) || targetItemId <= 0) {
                   console.warn("LP NAV: invalid target item id for " + label + ":", target);
+                  hideLoader("nav failed");
                   return false;
                 }
               }
 
-              showLoader("navigate " + label);
+              // If direction, first resolve it from TOC order (best for Chamilo LP).
+              if (isDirection && (target === "next" || target === "previous")) {
+                var tocResolved = resolveDirectionToId(target, currentItemId);
+                if (tocResolved > 0 && tocResolved !== currentItemId) {
+                  targetItemId = tocResolved;
+                }
+              }
 
-              var currentItemId = getCurrentItemIdSafe();
-
-              // Use switch_item if the runtime is ready (preferred, preserves SCORM state)
+              // Prefer switch_item if runtime is ready (keeps SCORM/LP state).
               if (window.olms && typeof switch_item === "function" && Number(olms.lms_initialized) === 1) {
                 console.info("LP NAV: switching item via runtime", {
                   currentItemId: currentItemId,
-                  target: isDirection ? target : targetItemId
+                  target: isDirection ? (targetItemId > 0 ? targetItemId : target) : targetItemId
                 });
 
                 try {
-                  // NOTE: when target is 'next'/'previous', the backend computes the real next/prev.
-                  switch_item(currentItemId || 0, isDirection ? target : targetItemId);
-
-                  // Keep window var in sync only when we know the numeric target.
-                  if (!isDirection) {
+                  // If we resolved a numeric target, pass numeric. Otherwise pass direction.
+                  switch_item(currentItemId || 0, isDirection ? (targetItemId > 0 ? targetItemId : target) : targetItemId);
+                  if (!isDirection || targetItemId > 0) {
                     window.lpCurrentItemId = targetItemId;
                   }
                   return true;
                 } catch (e) {
-                  console.warn("LP NAV: switch_item() failed, fallback to iframe src update.", e);
+                  console.warn("LP NAV: switch_item() failed, falling back to iframe src update.", e);
                 }
               }
 
-              // update iframe src (works, but may not update full LMS runtime state)
-              if ($iframe && $iframe.length) {
-                // If direction was requested, try to map it to a numeric id from runtime
-                if (isDirection && window.olms) {
-                  var fallbackId = 0;
-                  try {
-                    if (target === "next") fallbackId = parseInt(olms.lms_next_item, 10);
-                    if (target === "previous") fallbackId = parseInt(olms.lms_previous_item, 10);
-                  } catch (e) {}
+              // Fallback: resolve direction from runtime vars only if TOC resolution failed.
+              if (isDirection && targetItemId <= 0 && window.olms) {
+                try {
+                  if (target === "next") targetItemId = parseInt(olms.lms_next_item, 10) || 0;
+                  if (target === "previous") targetItemId = parseInt(olms.lms_previous_item, 10) || 0;
+                } catch (e) {}
+              }
 
-                  if (Number.isFinite(fallbackId) && fallbackId > 0 && fallbackId !== currentItemId) {
-                    targetItemId = fallbackId;
-                  } else {
-                    console.warn("LP NAV: cannot resolve numeric item for direction fallback:", target, fallbackId);
-                    hideLoader("nav failed");
-                    return false;
-                  }
-                }
-
-                if (targetItemId > 0) {
+              // Final fallback: update iframe src directly.
+              if (targetItemId > 0) {
+                var $i = getLpIframe();
+                if ($i.length) {
                   var src = buildContentUrlForItem(targetItemId);
                   console.info("LP NAV: updating iframe src (fallback).", src);
-                  $iframe.attr("src", src);
+                  $i.attr("src", src);
                   window.lpCurrentItemId = targetItemId;
                   return true;
                 }
@@ -706,6 +777,44 @@
 
               hideLoader("nav failed");
               return false;
+            }
+
+            /* -----------------------------------------------------------
+             * Deterministic bindings for Next/Previous (Chamilo LP safe)
+             * ----------------------------------------------------------- */
+            function bindPrimaryNavButtons() {
+              var $prev = $("#scorm-previous");
+              var $next = $("#scorm-next");
+
+              function bind($el, direction, label) {
+                if (!$el || !$el.length) return;
+
+                // Tag for easier debugging
+                $el.attr("data-lp-nav", direction);
+
+                // Remove legacy inline handlers to prevent NaN or dead navigation.
+                // We still keep behavior via lpNavigateToItem().
+                $el.removeAttr("onclick").removeAttr("target");
+
+                if ($el.is("a")) {
+                  $el.attr("href", "#");
+                }
+
+                $el.off("click.lpNavPrimary").on("click.lpNavPrimary", function (e) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  console.info("LP NAV: " + label + " clicked -> navigating", direction);
+                  lpNavigateToItem(direction, label);
+                  return false;
+                });
+              }
+
+              if (!$prev.length || !$next.length) {
+                console.warn("LP NAV: primary #scorm-previous/#scorm-next elements not found. Will rely on heuristic patching.");
+              }
+
+              bind($prev, "previous", "previous");
+              bind($next, "next", "next");
             }
 
             function looksLikePrev(el) {
@@ -742,7 +851,7 @@
             function patchNavArrowsWhenTocHidden() {
               if (tocHidden !== 1) return;
 
-              // Prefer known IDs if present (most reliable on top menu)
+              // Prefer known IDs if present (most reliable)
               var $prevEl = $("#scorm-previous");
               var $nextEl = $("#scorm-next");
 
@@ -769,9 +878,7 @@
                   return;
                 }
 
-                // Remove legacy inline handlers and targets
                 $el.removeAttr("onclick").removeAttr("target");
-
                 if ($el.is("a")) {
                   $el.attr("href", "#");
                 }
@@ -847,6 +954,10 @@
               }
             }
 
+            // Bind primary next/prev always (safe for Chamilo LP + SCORM)
+            bindPrimaryNavButtons();
+            setTimeout(bindPrimaryNavButtons, 200);
+            setTimeout(bindPrimaryNavButtons, 600);
             if (tocHidden === 1) {
               // Run immediately + retries (menu markup sometimes arrives late)
               patchNavArrowsWhenTocHiddenSafe();

@@ -1358,7 +1358,7 @@ class learnpath
         $reportingIcon = '
             <a class="icon-toolbar"
                 id="stats_link"
-                href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lpId.'"
+                href="lp_controller.php?action=stats&origin=learnpath&'.api_get_cidreq(true).'&lp_id='.$lpId.'"
                 onclick="window.parent.API.save_asset(); return true;"
                 target="content_name" title="'.$reportingText.'">
                 '.$icon.'<span class="sr-only">'.$reportingText.'</span>

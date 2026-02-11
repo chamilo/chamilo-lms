@@ -2,8 +2,8 @@
     {% set toc_hidden = (toc_hidden|default(0) + 0) %}
     {% set show_left_column = (show_left_column|default(1) + 0) %}
     {% set show_toolbar_by_default = (show_toolbar_by_default|default(0) + 0) %}
-    {# Force the toolbar open when TOC is hidden so navigation is always visible #}
-    {% set force_open = (show_toolbar_by_default == 1) or (toc_hidden == 1 and menu_location != 'top') %}
+    {# Do not force-open the toolbar; user controls it via hamburger #}
+    {% set force_open = (show_toolbar_by_default == 1) %}
     {% if navigation_in_the_middle %}
         <style>
             .c-menu-left { top: 50% !important; }
@@ -42,7 +42,7 @@
             >
                 <i class="mdi-home mdi" aria-hidden="true"></i>
             </a>
-            <span data-lp-menu="nav">
+            <span data-lp-menu="nav" class="lp-menu-nav">
                 {{ navigation_bar }}
             </span>
         </div>

@@ -5668,7 +5668,7 @@ SQL;
         $siteName = api_get_setting('platform.site_name');
         $mailSubject = sprintf(get_lang('Confirm your e-mail on %s'), $siteName);
         $firstName = $user->getFirstname();
-        $mailBody = sprintf(get_lang('Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below.'), $firstName)
+        $mailBody = sprintf(get_lang('Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below.'), $firstName, $siteName)
             .PHP_EOL
             .Display::url($url, $url)
             .PHP_EOL

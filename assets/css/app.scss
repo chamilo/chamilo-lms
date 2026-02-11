@@ -104,7 +104,7 @@
   }
 
   .sortable-buttons-actions {
-    @apply bg-white border-l border-b border-r border-support-1 rounded-b drop-shadow-lg;
+    @apply bg-white border-l border-b border-r border-support-1 rounded-b shadow-xl;
   }
 
   .card .flex {

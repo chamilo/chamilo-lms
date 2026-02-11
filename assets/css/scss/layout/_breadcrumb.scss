@@ -51,7 +51,7 @@
 
   &-item-link {
     @apply no-underline flex items-center text-black gap-0 outline-none outline-0
-      focus-visible:outline-none focus-visible:drop-shadow-none
+      focus-visible:outline-none focus-visible:shadow-none
       hover:text-black;
   }
 

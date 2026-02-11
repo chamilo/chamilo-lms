@@ -1,6 +1,6 @@
 .p-card {
   @apply rounded-lg bg-white border border-gray-25 transition
-    hover:drop-shadow-lg;
+    hover:shadow-xl;
 
   .p-card-body {
     @apply h-full flex flex-col gap-4 p-4 rounded-b-lg;

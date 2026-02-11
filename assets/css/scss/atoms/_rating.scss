@@ -3,7 +3,7 @@
 
   &-item {
     @apply inline-flex items-center cursor-pointer outline-none rounded-lg
-      hover:outline-none hover:drop-shadow-lg;
+      hover:outline-none hover:shadow-xl;
 
     .p-rating-icon {
       @apply transition-none text-gray-50;
@@ -20,7 +20,7 @@
     }
 
     &.p-focus {
-      @apply outline-none drop-shadow-lg;
+      @apply outline-none shadow-xl;
     }
 
     &.p-rating-item-active {

@@ -84,7 +84,7 @@
   }
 
   .p-menubar-submenu {
-    @apply bg-white outline-none rounded-lg drop-shadow-lg py-3;
+    @apply bg-white outline-none rounded-lg shadow-xl py-3;
 
     .p-menubar-item {
       .p-menubar-item-content {
@@ -157,7 +157,7 @@
   }
 
   &__user-submenu {
-    @apply mt-1 border-0 drop-shadow-lg rounded-lg;
+    @apply mt-1 border-0 shadow-xl rounded-lg;
 
 
     ul.p-menu-list {

@@ -1813,7 +1813,7 @@ HTML;
             </button>
             <div
                 id="'.$id.'_menu"
-                class="dropdown-menu hidden absolute mt-1 py-2 bg-white border-0 drop-shadow-lg rounded-lg "
+                class="dropdown-menu hidden absolute mt-1 py-2 bg-white border-0 shadow-xl rounded-lg "
                 role="menu"
                 aria-orientation="vertical"
                 aria-labelledby="menu-button"

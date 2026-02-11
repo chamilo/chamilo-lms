@@ -1,5 +1,5 @@
 .p-select {
-  @apply inline-flex cursor-pointer relative select-none bg-white border border-gray-50 transition rounded-lg outline-none shadow-none drop-shadow-none w-full;
+  @apply inline-flex cursor-pointer relative select-none bg-white border border-gray-50 transition rounded-lg outline-none shadow-none w-full;
 
   &:not(.p-disabled) {
     @apply hover:border-primary hover:text-gray-90;
@@ -71,7 +71,7 @@
   }
 
   &-overlay {
-    @apply absolute top-0 left-0 mt-2 bg-white text-gray-90 border-0 border-none rounded-lg drop-shadow-lg;
+    @apply absolute top-0 left-0 mt-2 bg-white text-gray-90 border-0 border-none rounded-lg shadow-xl;
   }
 
   &-header {}

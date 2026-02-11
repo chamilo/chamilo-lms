@@ -15,7 +15,7 @@
 
   & &-remove-icon {
     @apply text-caption cursor-pointer ml-2 rounded-full transition-none outline-none
-      focus-visible:outline-none focus-visible:drop-shadow-lg
+      focus-visible:outline-none focus-visible:shadow-xl
       focus:outline-none;
   }
 

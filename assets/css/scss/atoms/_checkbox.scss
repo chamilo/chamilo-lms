@@ -17,7 +17,7 @@
     }
 
     .p-checkbox:not(.p-disabled):has(.p-checkbox-input:focus-visible) & {
-      @apply border-primary drop-shadow-lg outline-none outline-0
+      @apply border-primary shadow-xl outline-none outline-0
     }
 
     .p-checkbox-checked:not(.p-disabled):has(.p-checkbox-input:focus-visible) & {

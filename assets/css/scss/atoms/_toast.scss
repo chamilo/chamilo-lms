@@ -10,7 +10,7 @@
   }
 
   .p-toast-message {
-    @apply m-0 mb-4 drop-shadow-lg rounded-lg;
+    @apply m-0 mb-4 shadow-xl rounded-lg;
 
     &.p-toast-message-enter-from {
       @apply opacity-0 translate-y-1/2;
@@ -91,7 +91,7 @@
     .p-toast-icon-close {
       @apply flex items-center justify-center overflow-hidden relative w-8 h-8 rounded-lg bg-transparent transition-none outline-none
         hover:bg-white/50
-        focus-visible:outline-none drop-shadow-none;
+        focus-visible:outline-none shadow-none;
 
       &.p-link {
         @apply cursor-pointer;

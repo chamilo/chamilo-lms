@@ -6,7 +6,7 @@
   }
 
   &-box {
-    @apply flex justify-center items-center rounded-full border border-gray-50 bg-white w-4 h-4 transition outline-transparent drop-shadow-none;
+    @apply flex justify-center items-center rounded-full border border-gray-50 bg-white w-4 h-4 transition outline-transparent shadow-none;
   }
 
   &-icon {
@@ -51,7 +51,7 @@
   }
 
   &:not(.p-disabled):has(&-input:focus-visible) &-box {
-    @apply border-primary drop-shadow-lg outline-none outline-0;
+    @apply border-primary shadow-xl outline-none outline-0;
   }
 
   .p-radiobutton.p-invalid > .p-radiobutton-box {

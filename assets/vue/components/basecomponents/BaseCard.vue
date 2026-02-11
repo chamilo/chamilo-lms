@@ -13,6 +13,12 @@
       <slot name="title"></slot>
     </template>
     <template
+      v-if="slots.subtitle"
+      #subtitle
+    >
+      <slot name="subtitle"></slot>
+    </template>
+    <template
       v-if="slots.footer"
       #footer
     >

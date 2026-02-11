@@ -1,5 +1,5 @@
 .p-card {
-  @apply rounded-lg bg-white border border-gray-30
+  @apply rounded-lg bg-white border border-gray-25 transition
     hover:drop-shadow-lg;
 
   .p-card-body {
@@ -33,7 +33,7 @@
   }
 
   .p-card-footer {
-    @apply rounded-b-lg;
+    @apply mt-auto rounded-b-lg;
   }
 
   .p-menu {

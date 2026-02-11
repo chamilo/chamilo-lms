@@ -1,73 +1,72 @@
 <template>
-  <div
+  <BaseCard
     :class="id"
     class="admin-index__block-container"
   >
-    <div class="admin-index__block">
-      <div class="flex gap-2 justify-between">
-        <h4>
-          <BaseIcon :icon="icon" />
-          {{ props.title }}
-        </h4>
-      </div>
+    <template #title>
+      <BaseIcon :icon="icon" />
+      {{ title }}
+    </template>
 
-      <p
-        v-if="props.description"
-        class="text-body-4"
-        v-text="props.description"
-      />
+    <template
+      #subtitle
+      v-if="description"
+    >
+      {{ description }}
+    </template>
 
-      <form
-        v-if="props.searchUrl"
-        :action="props.searchUrl"
-        method="get"
-      >
-        <BaseInputGroup
-          :id="inputId"
-          :button-id="buttonId"
-          :button-label="t('Search')"
-          :input-placeholder="t('Keyword')"
-          button-icon="search"
-          input-name="keyword"
-        />
-      </form>
-
-      <div class="p-menu p-component p-ripple-disabled">
-        <ul
-          class="p-menu-list p-reset"
-          role="menu"
-        >
-          <li
-            v-for="(item, index) in visibleItems"
-            :key="index"
-            :aria-label="t(item.label)"
-            :class="item.className"
-            class="p-menuitem"
-            role="menuitem"
-          >
-            <div class="p-menuitem-content">
-              <BaseAppLink
-                :to="item.route"
-                :url="item.url"
-                class="p-menuitem-link"
-              >
-                <span
-                  class="p-menuitem-text"
-                  v-text="item.label"
-                />
-              </BaseAppLink>
-            </div>
-          </li>
-        </ul>
-      </div>
-
+    <template #footer>
       <AdminBlockExtraContent
         :id="id"
         v-model="modelExtraContent"
         :editable="editable"
       />
+    </template>
+
+    <form
+      v-if="props.searchUrl"
+      :action="props.searchUrl"
+      method="get"
+    >
+      <BaseInputGroup
+        :id="inputId"
+        :button-id="buttonId"
+        :button-label="t('Search')"
+        :input-placeholder="t('Keyword')"
+        button-icon="search"
+        input-name="keyword"
+      />
+    </form>
+
+    <div class="p-menu p-component p-ripple-disabled">
+      <ul
+        class="p-menu-list p-reset"
+        role="menu"
+      >
+        <li
+          v-for="(item, index) in visibleItems"
+          :key="index"
+          :aria-label="t(item.label)"
+          :class="item.className"
+          class="p-menuitem"
+          role="menuitem"
+        >
+          <div class="p-menuitem-content">
+            <BaseAppLink
+              :to="item.route"
+              :url="item.url"
+              class="p-menuitem-link"
+            >
+              <span
+                class="p-menuitem-text"
+                v-text="item.label"
+              />
+            </BaseAppLink>
+          </div>
+        </li>
+      </ul>
     </div>
-  </div>
+  </BaseCard>
 </template>
 
 <script setup>
@@ -75,6 +74,7 @@ import { computed } from "vue"
 import { useI18n } from "vue-i18n"
 import BaseInputGroup from "../basecomponents/BaseInputGroup.vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
+import BaseCard from "../basecomponents/BaseCard.vue"
 import AdminBlockExtraContent from "./AdminBlockExtraContent.vue"
 
 const { t } = useI18n()

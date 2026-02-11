@@ -5,10 +5,6 @@
     @apply h-full;
   }
 
-  &__block {
-    @apply flex flex-col h-full p-4 gap-4 rounded-lg shadow-md border border-solid border-gray-25 bg-white;
-  }
-
   &__block-container--full {
     @apply col-span-1 md:col-span-2 xl:col-span-3;
   }

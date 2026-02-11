@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "ด้วยความเคารพ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ตัวอย่างสูตร: sqrt( [x] / [ย] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ตัวอย่างสูตร: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ช่วงตัวแปร"
@@ -22139,14 +22139,8 @@ msgstr "รายงานการออกกำลังกายตามห
 msgid "Require e-mail confirmation"
 msgstr "ต้องการการยืนยันทางอีเมล"
 
-msgid "Registration confirmation"
-msgstr "การยืนยันการลงทะเบียน"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "บัญชีของคุณไม่ใช้งานเพราะคุณยังไม่ได้ยืนยัน ตรวจสอบอีเมลของคุณและทำตามคำแนะนำหรือคลิกลิงก์ต่อไปนี้เพื่อส่งอีเมลใหม่"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "เพื่อให้การลงทะเบียนแพลตฟอร์มของคุณสมบูรณ์ คุณต้องยืนยันบัญชีโดยคลิกลิงก์ต่อไปนี้"
 
 msgid "Confirmation for new account"
 msgstr "การยืนยันบัญชีใหม่"
@@ -32577,8 +32571,11 @@ msgstr "พื้นที่ทั้งหมดที่ใช้โดย %s
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "พื้นที่ทั้งหมดที่ใช้โดยพอร์ทัล %s คือ %sGB (จำกัดที่ %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "ยืนยันอีเมลของคุณบน %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] ยืนยันอีเมลของคุณ"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "เพื่อยืนยันอีเมลของคุณและเปิดใช้งานบัญชีของคุณใน %s โปรดคลิกที่ลิงก์ด้านล่าง"
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "หากคุณไม่ได้ลงทะเบียนบัญชีนี้ คุณสามารถเพิกเฉยอีเมลนี้ได้ จะไม่มีการดำเนินการใดๆ"

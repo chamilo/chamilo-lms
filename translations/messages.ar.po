@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "مع التقدير"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "مثال على الصيغة: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "نموذج صيغة: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "مدى المتغير"
@@ -22152,14 +22152,8 @@ msgstr "تقرير التمرين وفقا للفئة لكافة الدورات"
 msgid "Require e-mail confirmation"
 msgstr "يتطلب تأكيد عبر البريد"
 
-msgid "Registration confirmation"
-msgstr "تأكيد التسجيل"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "حسابك معطل بسبب انك لم تقم بتأكيده، تحقق من بريدك واتبع التعليمات او انقر على الرابط التالي لاعادة ارسال البريد"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "من اجل اكمال التسجيل في النظام فان عليك تأكيد حسابك عبر النقر على الرابط التالي"
 
 msgid "Confirmation for new account"
 msgstr "تأكيد الحساب الجديد"
@@ -32589,8 +32583,11 @@ msgstr "إجمالي المساحة المستخدمة بواسطة %s هو %s �
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "إجمالي المساحة المستخدمة بواسطة البوابة %s هو %s جيجابايت (الحد المحدد هو %s جيجابايت)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "تأكيد بريدك الإلكتروني على %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] قم بتأكيد بريدك الإلكتروني"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "للتحقق من بريدك الإلكتروني وتفعيل حسابك على %s، يرجى النقر على الرابط أدناه."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "إذا لم تقم بتسجيل هذا الحساب، يمكنك تجاهل هذا البريد الإلكتروني. لن يتم اتخاذ أي إجراء."

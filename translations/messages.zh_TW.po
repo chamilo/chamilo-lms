@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":是:有版權,, 否:無版權"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:資料夾,, application/msword:MsWord,, application/octet-stream:八位元位元組流,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:資料夾,, application/msword:MsWord,, application/octet-stream:八位元組串流,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":練習:練習,, 類比:類比,, 問卷:問卷,, 圖表:圖表,, 圖:圖,, 圖:圖,, 索引:索引,, 幻燈:幻燈,, 表:表,, 描述文本:描述文本,, 考試:考試,, 實驗:實驗,, 問題聲明:問題聲明,, 自我評價:自我評價,, 演講:演講"
@@ -22139,14 +22139,8 @@ msgstr "所有工作階段的類別測驗報告"
 msgid "Require e-mail confirmation"
 msgstr "需要電子郵件確認"
 
-msgid "Registration confirmation"
-msgstr "註冊確認"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "您的帳戶未啟用，因為您尚未確認。請檢查電子郵件並遵循指示，或點擊以下連結重新發送郵件"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "要完成平台註冊，您需點擊以下連結確認帳戶"
 
 msgid "Confirmation for new account"
 msgstr "新帳戶確認"
@@ -32577,8 +32571,11 @@ msgstr "%s 使用的總空間為 %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "入口網站 %s 使用的總空間為 %sGB（限制為 %sGB）"
 
-msgid "Confirm your e-mail on %s"
-msgstr "在 %s 上確認您的電子郵件"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] 確認您的電子郵件"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "為了驗證您的電子郵件並在 %s 上啟用您的帳戶，請點擊下方連結。"
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "如果您未註冊此帳戶，您可以忽略此電子郵件。不會採取任何行動。"

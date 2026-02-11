@@ -22134,14 +22134,8 @@ msgstr ""
 msgid "Require e-mail confirmation"
 msgstr ""
 
-msgid "Registration confirmation"
-msgstr "ཐོ་རིམ་གསལ་བཀོད།"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "ཁྱེད་ཀྱི་རེམ་ཤོག་འདི་མ་གསལ་བཀོད་པས་མ་ལྕོག་སྒྲིབས། ཁྱེད་ཀྱི་གློག་འཕྲིན་ལ་སྐོར་བའི་གནས་ཚུལ་བལྟ་ནས་ལམ་སྀར་འབྲེལ་འབྱོར་ལྷབ་པར་གཏོང་རྒྱུ་ལྷུ་ནས་གློག་འཕྲིན་ཡང་སྤྲད་རྒྱུ་ལྷུ།"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "ཁྱེད་ཀྱི་སྤྲོད་མཁན་གྱི་ཐོ་རིམ་གཏོང་ནས་ལམ་སྀར་འབྲེལ་འབྱོར་ལྷབ་པར་རེམ་ཤོག་གསལ་བཀོད་རྒྱུ་ཡོད།"
 
 msgid "Confirmation for new account"
 msgstr "རེམ་ཤོག་གསར་པའི་གསལ་བཀོད།"

@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autoriaus teisės,, no:be autoriaus teisių"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplankas ,, application/msword:MsWord,, application/octet-stream:Oktobinis srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplankas ,, application/msword:MsWord,, application/octet-stream:Oktobinė srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":testas:testas,,      simuliacija:simuliacija,,      klausimynas:klausimynas,,      diagrama:diagrama,,      paveikslėlis:paveikslėlis,,      grafikas:grafikas,,      indeksas:indeksas,,      skaidrė:skaidrė,,      lentelė:lentelė,,      naratyvinis tekstas:naratyvinis tekstas,,      egzaminas:egzaminas,,      eksperimentas:eksperimentas,,      problemos teiginys:problemos teiginys,,      savęs vertinimas:savęs vertinimas,,      paskaita:paskaita"
@@ -22139,14 +22139,8 @@ msgstr "Užduočių ataskaita pagal kategoriją visoms sesijoms"
 msgid "Require e-mail confirmation"
 msgstr "Reikalauti el. pašto patvirtinimo"
 
-msgid "Registration confirmation"
-msgstr "Registracijos patvirtinimas"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Jūsų paskyra neaktyvi, nes dar nepatvirtinote jos. Patikrinkite el. paštą ir vykdykite nurodymus arba spustelėkite šią nuorodą el. paštui persiųsti"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "Norėdami užbaigti platformos registraciją, turite patvirtinti paskyrą spustelėdami šią nuorodą"
 
 msgid "Confirmation for new account"
 msgstr "Patvirtinimas naujai paskyrai"
@@ -32576,8 +32570,11 @@ msgstr "Iš viso vietos, naudojamos %s, yra %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Iš viso vietos, naudojamos portale %s, yra %sGB (limitą nustatyta %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Patvirtinkite savo el. paštą %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Patvirtinkite savo el. paštą"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Norėdami patvirtinti savo el. paštą ir suaktyvinti paskyrą %s, spustelėkite nuorodą žemiau."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Jei jūs neregistravote šios paskyros, galite nepaisyti šio el. laiško. Jokia veiksma bus neatliekta."

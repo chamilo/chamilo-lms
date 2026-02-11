@@ -22143,14 +22143,8 @@ msgstr "Raport z ćwiczeń według kategorii dla wszystkich sesji"
 msgid "Require e-mail confirmation"
 msgstr "Wymagaj potwierdzenia e-mail"
 
-msgid "Registration confirmation"
-msgstr "Potwierdzenie rejestracji"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Twoje konto jest nieaktywne, ponieważ nie zostało jeszcze potwierdzone. Sprawdź swój e-mail i postępuj zgodnie z instrukcjami lub kliknij poniższy link, aby wysłać e-mail ponownie"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "Aby dokończyć rejestrację na platformie, potwierdź swoje konto, klikając poniższy link"
 
 msgid "Confirmation for new account"
 msgstr "Potwierdzenie nowego konta"
@@ -32581,8 +32575,11 @@ msgstr "Całkowita przestrzeń wykorzystana przez %s to %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Całkowita przestrzeń wykorzystana przez portal %s to %sGB (limit ustawiony na %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Potwierdź swój e-mail na %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Potwierdź swój e-mail"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Aby zweryfikować swój e-mail i aktywować konto w %s, kliknij poniższy link."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Jeśli nie rejestrowałeś tego konta, możesz zignorować tego e-maila. Żadne działanie nie zostanie podjęte."

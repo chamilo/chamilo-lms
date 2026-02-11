@@ -22134,14 +22134,8 @@ msgstr "Ulat ng ehersisyo ayon sa kategorya para sa lahat ng session"
 msgid "Require e-mail confirmation"
 msgstr "Kailangan ng kumpirmasyon ng e-mail"
 
-msgid "Registration confirmation"
-msgstr "Kumpirmasyon ng pagpaparehistro"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Hindi aktibo ang iyong account dahil hindi mo pa ito nakumpirma. Suriin ang iyong email at sundin ang mga tagubilin o i-click ang sumusunod na link upang muling ipadala ang email"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "Upang makumpleto ang iyong pagpaparehistro sa plataporma kailangan mong kumpirmahin ang iyong account sa pamamagitan ng pag-klik sa sumusunod na link"
 
 msgid "Confirmation for new account"
 msgstr "Kumpirmasyon para sa bagong account"
@@ -32571,8 +32565,11 @@ msgstr "Kabuuang espasyong ginamit ng %s ay %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Kabuuang espasyong ginamit ng portal %s ay %sGB (ang limit ay nakatakda sa %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Kumpirmahin ang iyong e-mail sa %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Kumpirmahin ang iyong e-mail"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Upang i-verify ang iyong e-mail at i-activate ang iyong account sa %s, mangyaring i-klik ang link sa ibaba."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Kung hindi mo inirehistro ang account na ito, maaari mong balewalain ang e-mail na ito. Walang aksyon ang magaganap."

@@ -22139,14 +22139,8 @@ msgstr "Báo cáo bài tập theo danh mục cho tất cả phiên"
 msgid "Require e-mail confirmation"
 msgstr "Yêu cầu xác nhận email"
 
-msgid "Registration confirmation"
-msgstr "Xác nhận đăng ký"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Tài khoản của bạn không hoạt động vì bạn chưa xác nhận. Kiểm tra email và làm theo hướng dẫn hoặc nhấp liên kết sau để gửi lại email"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "Để hoàn tất đăng ký nền tảng, bạn cần xác nhận tài khoản bằng cách nhấp liên kết sau"
 
 msgid "Confirmation for new account"
 msgstr "Xác nhận tài khoản mới"
@@ -32577,8 +32571,11 @@ msgstr "Tổng không gian sử dụng bởi %s là %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Tổng không gian sử dụng bởi cổng %s là %sGB (giới hạn được đặt là %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Xác nhận email của bạn trên %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Xác nhận email của bạn"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Để xác thực email và kích hoạt tài khoản của bạn trên %s, vui lòng nhấp vào liên kết bên dưới."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Nếu bạn không đăng ký tài khoản này, bạn có thể bỏ qua email này. Không có hành động nào sẽ được thực hiện."

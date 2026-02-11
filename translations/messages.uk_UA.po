@@ -22134,14 +22134,8 @@ msgstr "Звіт вправ за категоріями для всіх сесі
 msgid "Require e-mail confirmation"
 msgstr "Вимагати підтвердження email"
 
-msgid "Registration confirmation"
-msgstr "Підтвердження реєстрації"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Ваш обліковий запис неактивний, оскільки ви ще не підтвердили його. Перевірте email та дотримуйтесь інструкцій або натисніть на посилання нижче, щоб надіслати email ще раз"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "Щоб завершити реєстрацію на платформі, вам потрібно підтвердити обліковий запис, клацнувши на таке посилання"
 
 msgid "Confirmation for new account"
 msgstr "Підтвердження нового облікового запису"
@@ -32571,8 +32565,11 @@ msgstr "Загалом використано місця %s: %sГБ"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Загалом використано місця порталом %s: %sГБ (обмеження встановлено на %sГБ)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Підтвердіть свою електронну пошту на %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Підтвердіть вашу електронну пошту"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Щоб підтвердити вашу електронну пошту та активувати обліковий запис на %s, будь ласка, натисніть посилання нижче."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Якщо ви не реєстрували цей обліковий запис, можете ігнорувати цей лист. Жодних дій не буде вжито."

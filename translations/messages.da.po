@@ -22139,14 +22139,8 @@ msgstr "Øvelsesrapport efter kategori for alle sessioner"
 msgid "Require e-mail confirmation"
 msgstr "Kræv e-mail-bekræftelse"
 
-msgid "Registration confirmation"
-msgstr "Registreringsbekræftelse"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Din konto er inaktiv, fordi du endnu ikke har bekræftet den. Tjek din e-mail og følg instruktionerne eller klik på følgende link for at gensende e-mailen"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "For at fuldføre din platformregistrering skal du bekræfte din konto ved at klikke på følgende link"
 
 msgid "Confirmation for new account"
 msgstr "Bekræftelse for ny konto"
@@ -32577,8 +32571,11 @@ msgstr "Samlet plads brugt af %s er %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Samlet plads brugt af portal %s er %sGB (grænse sat til %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Bekræft din e-mail på %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Bekræft din e-mail"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "For at verificere din e-mail og aktivere din konto på %s, skal du klikke på linket nedenfor."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Hvis du ikke har registreret denne konto, kan du ignorere denne e-mail. Ingen handling vil blive taget."

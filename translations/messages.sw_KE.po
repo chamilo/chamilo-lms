@@ -22134,14 +22134,8 @@ msgstr "Ripoti ya mazoezi kwa jamii kwa vipindi vyote"
 msgid "Require e-mail confirmation"
 msgstr "Hitaji uthibitisho wa barua pepe"
 
-msgid "Registration confirmation"
-msgstr "Uthibitisho wa usajili"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Akaunti yako haifanyi kazi kwa sababu bado hauijathibitisha. Angalia barua pepe yako na ufuate maagizo au bonyeza kiungo hapa chini ili kutuma tena barua pepe"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "Ili kukamilisha usajili wako wa jukwaa unahitaji kuthibitisha akaunti yako kwa kubofya kiungo hiki kinachofuata"
 
 msgid "Confirmation for new account"
 msgstr "Thibitisho la akaunti mpya"
@@ -32571,8 +32565,11 @@ msgstr "Nauli ya jumla inayotumika na %s ni %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Nauli ya jumla inayotumika na lango %s ni %sGB (kiwango kimewekwa %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Thibitisha barua pepe yako kwenye %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Thibitisha barua pepe yako"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Iliethibitisha barua pepe yako na kuwezesha akaunti yako kwenye %s, tafadhali bonyeza kiungo hapa chini."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Ikiwa haukuandikisha akaunti hii, unaweza kupuuza barua pepe hii. Hakuna hatua itakayochukuliwa."

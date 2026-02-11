@@ -22138,14 +22138,8 @@ msgstr "အစည်းအဝေးအားလုံးအတွက် အမ�
 msgid "Require e-mail confirmation"
 msgstr "အီးမေးလ်အတည်ပြုချက် လိုအပ်သည်"
 
-msgid "Registration confirmation"
-msgstr "မှတ်ပုံတင်ခြင်း အတည်ပြုချက်"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "သင့်အကောင့်သည် အတည်မပြုရသေးသောကြောင့် မလှုပ်ရှားပါ။ သင့်အီးမေးလ်ကို စစ်ဆေးပြီး ညွှန်ကြားချက်များကို လိုက်နာပါ သို့မဟုတ် အီးမေးလ်ကို ပြန်လည်ပေးပို့ရန် အောက်ပါလင့်ခ်ကို နှိပ်ပါ"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "သင့်ပလပ်ဖောင်းမှတ်ပုံတင်ခြင်းကို ပြီးစီးရန်၊ အောက်ပါလင့်ခ်ကို နှိပ်၍ သင့်အကောင့်ကို အတည်ပြုရန် လိုအပ်သည်"
 
 msgid "Confirmation for new account"
 msgstr "အကောင့်အသစ်အတွက် အတည်ပြုချက်"
@@ -32575,8 +32569,11 @@ msgstr "%s မှ အသုံးပြုထားသော စုစုပေ�
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "ပေါ်တယ် %s မှ အသုံးပြုထားသော စုစုပေါင်း နေရာပေါင်း %sGB ဖြစ်သည် (အကန့်အသတ်ကို %sGB ထားရှိထားသည်)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "%s တွင် သင့်အီးမေးလ်ကို အတည်ပြုပါ"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] သင့်အီးမေးလ်ကို အတည်ပြုပါ"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "%s တွင် သင်၏ အကောင့်ကို စတင်အသုံးပြုရန်နှင့် သင့်အီးမေးလ်ကို အတည်ပြုရန် အောက်ပါ လင့်ခ်ကို နှိပ်ပါ။"
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "ဤအကောင့်ကို သင်မှမကြေညာထားပါက ဤအီးမေးလ်ကို လျစ်လျူရှုနိုင်ပါသည်။ ဘာမှလုပ်ဆောင်မည်မဟုတ်ပါ။"

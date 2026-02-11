@@ -22145,14 +22145,8 @@ msgstr "Relatório de exercício por categoria para todas as sessões"
 msgid "Require e-mail confirmation"
 msgstr "Exigir confirmação por e-mail"
 
-msgid "Registration confirmation"
-msgstr "Confirmação de registro"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Sua conta está inativa porque você ainda não a confirmou. Verifique seu e-mail e siga as instruções ou clique no link abaixo para reenviar o e-mail"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "Para completar seu registro na plataforma, você precisa confirmar sua conta clicando no link abaixo"
 
 msgid "Confirmation for new account"
 msgstr "Confirmação para nova conta"
@@ -26607,7 +26601,7 @@ msgid "Selective display of roles"
 msgstr "Exibição seletiva de papéis"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "Um array de role => true/false que define se esse papel deve ser mostrado ou oculto.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "Um array de role => true/false que define se esse papel deve ser mostrado ou ocultado.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Opções de exibição de papéis"
@@ -32583,8 +32577,11 @@ msgstr "Espaço total usado por %s é %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Espaço total usado pelo portal %s é %sGB (limite definido em %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Confirme o seu e-mail em %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Confirme o seu e-mail"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Para verificar o seu e-mail e ativar a sua conta em %s, clique no link abaixo."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Se não se registou nesta conta, pode ignorar este e-mail. Nenhuma ação será tomada."

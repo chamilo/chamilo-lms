@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:запазени права,, no:свободен"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Octet поток,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Поток от октети,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:тест (упражнение),,      simulation:симулация,,      questionnaire:въпросник,,      diagram:диаграма,,      figure:фигура,,      graph:графика,,      index:индекс,,      slide:слайд,,      table:таблица,,      narrative text:обзор,,      exam:изпит,,      experiment:експеримент,,      problem statement:постановка на проблем,,      self assessment:самостоятелно оценяване,,      lecture:лекция"
@@ -22139,14 +22139,8 @@ msgstr "Доклад за упражнения по категории за вс
 msgid "Require e-mail confirmation"
 msgstr "Изисква потвърждение по имейл"
 
-msgid "Registration confirmation"
-msgstr "Потвърждение за регистрация"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Акаунтът ви е неактивен, защото още не сте го потвърдили. Проверете имейла си и следвайте инструкциите или кликнете на следващата връзка, за да изпратите имейла отново"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "За да завършите регистрацията си в платформата, трябва да потвърдите акаунта си чрез кликване на следващата връзка"
 
 msgid "Confirmation for new account"
 msgstr "Потвърждение за нов акаунт"
@@ -32577,8 +32571,11 @@ msgstr "Общо използвано място от %s е %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Общо използвано място от портала %s е %sGB (лимитът е %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Потвърдете имейла си на %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Потвърдете имейл адреса си"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "За да потвърдите имейл адреса си и активирате акаунта си в %s, моля, кликнете върху връзката по-долу."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Ако не сте регистрирали този акаунт, можете да игнорирате това писмо. Няма да бъде предприето действие."

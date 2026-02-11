@@ -22169,14 +22169,8 @@ msgstr "Informe de ejercicio por categoría en todas las sesiones"
 msgid "Require e-mail confirmation"
 msgstr "Requerir confirmación por correo electrónico"
 
-msgid "Registration confirmation"
-msgstr "Confirmación de registro"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Su cuenta está inactiva porque aún no la ha confirmado. Revise su correo electrónico y siga las instrucciones o haga click en el siguiente enlace para volver a enviar el correo electrónico de confirmación."
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "Para completar su registro en la plataforma, necesita confirmar su cuenta haciendo click en el siguiente enlace"
 
 msgid "Confirmation for new account"
 msgstr "Confirmación de nueva cuenta"
@@ -33715,8 +33709,11 @@ msgstr "Espacio total usado por %s es %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Espacio total usado por el portal %s es %sGB (límite establecido en %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Confirma tu correo electrónico en %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Confirme su correo electrónico"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Para verificar su correo electrónico y activar su cuenta en %s, haga clic en el enlace de abajo."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Si no te registraste en esta cuenta, puedes ignorar este correo. No se tomará ninguna acción."

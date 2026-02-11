@@ -22139,14 +22139,8 @@ msgstr "所有会话的按类别练习报告"
 msgid "Require e-mail confirmation"
 msgstr "要求电子邮件确认"
 
-msgid "Registration confirmation"
-msgstr "注册确认"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "您的帐户处于非活动状态，因为您尚未确认。请检查您的电子邮件并按照指示操作，或点击以下链接重新发送电子邮件"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "要完成平台注册，您需要点击以下链接确认您的帐户"
 
 msgid "Confirmation for new account"
 msgstr "新帐户确认"
@@ -32577,8 +32571,11 @@ msgstr "%s 总共使用了 %sGB 空间"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "门户 %s 使用的总空间为 %sGB（限制为 %sGB）"
 
-msgid "Confirm your e-mail on %s"
-msgstr "在 %s 确认您的电子邮件"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] 确认您的电子邮件"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "要验证您的电子邮件并在 %s 上启用您的账户，请点击下面的链接。"
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "如果您没有注册此账户，您可以忽略此电子邮件。不会采取任何行动。"

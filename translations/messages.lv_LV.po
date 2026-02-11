@@ -22138,14 +22138,8 @@ msgstr "Vingrinājumu pārskats pa kategorijām visām sesijām"
 msgid "Require e-mail confirmation"
 msgstr "Nepieciešams e-pasta apstiprinājums"
 
-msgid "Registration confirmation"
-msgstr "Reģistrācijas apstiprinājums"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Jūsu konts ir neaktīvs, jo jūs vēl neesat to apstiprinājis. Pārbaudiet savu e-pastu un sekojiet instrukcijām vai noklikšķiniet uz šīs saites, lai atkārtoti nosūtītu e-pastu"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "Lai pabeigtu platformas reģistrāciju, jums jāapstiprina konts, noklikšķinot uz šīs saites"
 
 msgid "Confirmation for new account"
 msgstr "Apstiprinājums jaunam kontam"
@@ -32576,8 +32570,11 @@ msgstr "Kopējā vieta, ko izmanto %s, ir %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Kopējā vieta, ko izmanto portāls %s, ir %sGB (limits ir iestatīts uz %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Apstipriniet savu e-pastu %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Apstipriniet savu e-pastu"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Lai verificētu jūsu e-pastu un aktivizētu savu kontu %s, lūdzu, noklikšķiniet uz saites zemāk."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Ja jūs neizveidojāt šo kontu, varat ignorēt šo e-pastu. Nekādas darbības netiks veiktas."

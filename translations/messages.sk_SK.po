@@ -22152,14 +22152,8 @@ msgstr "Hlásenie cvičenia podľa kategórie pre všetky relácie"
 msgid "Require e-mail confirmation"
 msgstr "Vyžadovať potvrdenie e-mailom"
 
-msgid "Registration confirmation"
-msgstr "Potvrdenie registrácie"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Váš účet je neaktívny, pretože ste ho ešte nepotvrdili. Skontrolujte svoj e-mail a postupujte podľa pokynov alebo kliknite na nasledujúci odkaz na opätovné odoslanie e-mailu"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "Na dokončenie registrácie na platforme musíte potvrdiť svoj účet kliknutím na nasledujúci odkaz"
 
 msgid "Confirmation for new account"
 msgstr "Potvrdenie pre nový účet"
@@ -32590,8 +32584,11 @@ msgstr "Celkový priestor použitý %s je %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Celkový priestor použitý portálom %s je %sGB (limit je nastavený na %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Potvrďte svoj e-mail na %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Potvrďte svoj e-mail"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Pre overenie vašej e-mailovej adresy a aktiváciu účtu na %s kliknite prosím na odkaz nižšie."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Ak ste tento účet neregistrovali, môžete tento e-mail ignorovať. Žiadna akcia nebude vykonaná."

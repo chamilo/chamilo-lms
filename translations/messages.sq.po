@@ -22138,14 +22138,8 @@ msgstr "Raport ushtrimesh sipas kategorisë për të gjitha sesionet"
 msgid "Require e-mail confirmation"
 msgstr "Kërko konfirmim me email"
 
-msgid "Registration confirmation"
-msgstr "Konfirmim regjistrimi"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Llogaria juaj është e paaktivizuar sepse nuk e keni konfirmuar ende. Kontrolloni email-in tuaj dhe ndiqni udhëzimet ose klikoni në lidhjen vijuese për të dërguar përsëri email-in"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "Për të plotësuar regjistrimin tuaj në platformë duhet të konfirmoni llogarinë duke klikuar në lidhjen vijuese"
 
 msgid "Confirmation for new account"
 msgstr "Konfirmim për llogari të re"
@@ -32575,8 +32569,11 @@ msgstr "Hapësira totale e përdorur nga %s është %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Hapësira totale e përdorur nga portali %s është %sGB (limiti është vendosur në %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Konfirmoni email-in tuaj në %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Konfirmoni email-in tuaj"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Për të verifikuar email-in tuaj dhe për të aktivizuar llogarinë tuaj në %s, ju lutemi klikoni në lidhjen më poshtë."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Nëse nuk keni regjistruar këtë llogari, mund ta injoroni këtë email. Nuk do të merren masa."

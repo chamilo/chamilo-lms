@@ -22144,14 +22144,8 @@ msgstr "Ariketen txostena kategoriaren arabera saio guztietarako"
 msgid "Require e-mail confirmation"
 msgstr "Eskatu e-posta baieztapena"
 
-msgid "Registration confirmation"
-msgstr "Izen emateko baieztapena"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Zure kontua inaktiboa dago oraindik baieztatu ez duelako. Egiaztatu zure posta eta jarraitu argibideak edo klik egin lotura honetan posta berriro bidaltzeko"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "Plataformaren izen ematea osatzeko kontua baieztatu behar duzu lotura honetan klik eginez"
 
 msgid "Confirmation for new account"
 msgstr "Kontu berriaren baieztapena"
@@ -32582,8 +32576,11 @@ msgstr "%s(r)en erabilitako guztizko lekua %sGB da"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Atari %s(r)en erabilitako guztizko lekua %sGB da (muga %sGB-ra ezarrita)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Baieztatu zure e-posta %s(e)n"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Berretsi zure e-posta"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Zure e-posta egiaztatzeko eta %s-en zure kontua gaitzeko, mesedez, egin klik beheko estekan."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Kontu hau ez baduzu erregistratu, alde batera utzi dezakezu e-posta hau. Ez da ekintzarik hartuko."

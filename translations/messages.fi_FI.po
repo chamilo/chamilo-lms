@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavan esimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavamalli: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -22139,14 +22139,8 @@ msgstr "Harjoitusten raportti kategoriakohtaisesti kaikille istunnoille"
 msgid "Require e-mail confirmation"
 msgstr "Vaatii sähköpostivahvistuksen"
 
-msgid "Registration confirmation"
-msgstr "Rekisteröitymisvahvistus"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Tili on toimimaton, koska et ole vielä vahvistanut sitä. Tarkista sähköpostisi ja noudata ohjeita tai napsauta seuraavaa linkkiä lähettääksesi sähköpostin uudelleen"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "Vahvista tilisi napsauttamalla seuraavaa linkkiä alustan rekisteröinnin täydentämiseksi"
 
 msgid "Confirmation for new account"
 msgstr "Vahvistus uudelle tilille"
@@ -32577,8 +32571,11 @@ msgstr "%s käyttämä kokonaistila on %s Gt"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Portaalin %s käyttämä kokonaistila on %s Gt (raja on %s Gt)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Vahvista sähköpostisi %s:ssä"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Vahvista sähköpostisi"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Vahvistaaksesi sähköpostiosoitteesi ja aktivoidaksesi tilisi %s:ssä napsauta alla olevaa linkkiä."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Jos et rekisteröinyt tätä tiliä, voit jättää tämän sähköpostin huomiotta. Mitään toimenpiteitä ei tehdä."

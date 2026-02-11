@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala iBody Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Esini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala iBody Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -22134,14 +22134,8 @@ msgstr "Ingxelo yesilayelo ngendidi kuzo zonke iiseshini"
 msgid "Require e-mail confirmation"
 msgstr "Funa ukuqinisekiswa kwe-imeyile"
 
-msgid "Registration confirmation"
-msgstr "Ukuqinisekiswa kobhaliso"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "I-akhawunti yakho ayisebenzi kuba awukayiqinisekisanga. Jonga i-imeyile yakho kwaye ulandele imiyalelo okanye cofa kuwo olu khonkco lulandelayo ukuze uthumele i-imeyile kwakhona"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "Ukugqibezela ubhaliso lwakho lwe-platform kufuneka uqinisekise i-akhawunti yakho ngokucofa kuwo olu khonkco lulandelayo"
 
 msgid "Confirmation for new account"
 msgstr "Ukuqinisekiswa kwe-akhawunti entsha"
@@ -32305,7 +32299,7 @@ msgid "There are no terms that match the search: %s"
 msgstr "Akukho magama ahambelana nokukhangela: %s"
 
 msgid "Setting is globally locked (access_url_locked=1)"
-msgstr "Setting is globally locked (access_url_locked=1)"
+msgstr "Isethiwe ikhiyewe kwihlabathi jikelele (access_url_locked=1)"
 
 msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
 msgstr "Ukuba ivulwe, imiyalezo yechat yangasese ye-1:1 iya kufaniswa kumaxwebhu embali wekursi. Kuyanconyelwa ukuyigcina ivaliwe ukuze kukhuselwe ubumdla wangasese."
@@ -32338,16 +32332,16 @@ msgid "Update profile"
 msgstr "Hlaziya iprofayili"
 
 msgid "Enable learning path generator"
-msgstr "Enable learning path generator"
+msgstr "Vula umvelisi wendlela yokufunda"
 
 msgid "Enable exercise generator"
-msgstr "Enable exercise generator"
+msgstr "Vula umvelisi wemisebenzi"
 
 msgid "Enable open answers grader"
-msgstr "Enable open answers grader"
+msgstr "Vula umvavanyi weempendulo ezivulekileyo"
 
 msgid "Enable tutor chatbot"
-msgstr "Enable tutor chatbot"
+msgstr "Vula i-chatbot yomfundisi"
 
 msgid "Enable task grader"
 msgstr "Vula umthambo wemisebenzi"
@@ -32571,8 +32565,11 @@ msgstr "Indawo ephelweyo ngu %s yi %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Indawo ephelweyo yeportal %s yi %sGB (umda umiselwe %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Qinisekisa i-imeyile yakho kwi %s"
+msgid "[%s] Confirm your e-mail"
+msgstr ""
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Ukuze uqinise i-imeyile yakho kwaye uvule i-akhawunti yakho kwi %s, nceda ucofe ikhonkco elingezantsi."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Ukuba awubhalanga le akhawunti, ungayityeshela le imeyile. Akukho nto iya kwenziwa."

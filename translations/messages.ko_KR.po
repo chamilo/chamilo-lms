@@ -22137,14 +22137,8 @@ msgstr "모든 세션의 카테고리별 연습 보고서"
 msgid "Require e-mail confirmation"
 msgstr "이메일 확인 필요"
 
-msgid "Registration confirmation"
-msgstr "등록 확인"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "계정이 아직 확인되지 않아 비활성 상태입니다. 이메일을 확인하고 지침을 따르거나 다음 링크를 클릭하여 이메일을 재발송하세요"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "플랫폼 등록을 완료하려면 다음 링크를 클릭하여 계정을 확인해야 합니다"
 
 msgid "Confirmation for new account"
 msgstr "새 계정 확인"
@@ -32575,8 +32569,11 @@ msgstr "%s이(가) 사용하는 총 공간: %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "포털 %s이(가) 사용하는 총 공간: %sGB (제한: %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "%s에서 이메일 확인"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] 이메일 확인"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "%s에서 이메일을 확인하고 계정을 활성화하려면 아래 링크를 클릭하십시오."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "이 계정을 등록하지 않았다면 이 이메일을 무시하셔도 됩니다. 아무런 조치가 취해지지 않습니다."

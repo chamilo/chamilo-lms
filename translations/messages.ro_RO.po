@@ -22153,14 +22153,8 @@ msgstr "Raport exercițiu pe categorii pentru toate sesiunile"
 msgid "Require e-mail confirmation"
 msgstr "Cere confirmare prin e-mail"
 
-msgid "Registration confirmation"
-msgstr "Confirmare înregistrare"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Contul dvs. este inactiv deoarece nu l-ați confirmat încă. Verificați e-mailul și urmați instrucțiunile sau faceți clic pe linkul următor pentru a retrimite e-mailul"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "Pentru a finaliza înregistrarea pe platformă, trebuie să vă confirmați contul făcând clic pe linkul următor"
 
 msgid "Confirmation for new account"
 msgstr "Confirmare pentru cont nou"
@@ -32591,8 +32585,11 @@ msgstr "Spațiu total utilizat de %s este %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Spațiu total utilizat de portalul %s este %sGB (limita este setată la %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Confirmați-vă e-mailul pe %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Confirmați-vă e-mailul"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Pentru a vă verifica adresa de e-mail și a vă activa contul pe %s, vă rugăm să faceți clic pe linkul de mai jos."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Dacă nu ați înregistrat acest cont, puteți ignora acest e-mail. Nu va fi întreprinsă nicio acțiune."

@@ -22134,14 +22134,8 @@ msgstr "د ټولو غونډو لپاره د کټګورۍ له مخې د تمر�
 msgid "Require e-mail confirmation"
 msgstr "د برېښلي پیغام تایید غواړي"
 
-msgid "Registration confirmation"
-msgstr "د ثبتګ تائید"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "ستاسو حساب غیر فعال دی ځکه چې تاسو یې لا تایید کړی نه دی. خپل برېښنالیک وګورئ او لارښوونې تعقیب کړئ یا لاندې لینک کلیک کړئ ترڅو برېښنالیک بیا واستول شي"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "د پلیټفارم د ثبتګ بشپړولو لپاره تاسو باید خپل حساب د لاندې لینک په کلیک کولو تایید کړئ"
 
 msgid "Confirmation for new account"
 msgstr "د نوي حساب لپاره تائید"
@@ -32571,8 +32565,11 @@ msgstr "د %s لخوا کارول شوی ټول ځای %sGB دی"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "د پورتل %s لخوا کارول شوی ټول ځای %sGB دی (حد %sGB ته ټاکل شوی دی)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "خپل برېښنالیک په %s کې تایید کړئ"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] خپل برېښنالیک تایید کړئ"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "ستاسو بریښنالیک تصدیق کول او ستاسو حساب فعالول په %s کې، مهرباني وکړئ لاندې لینک باندې کلیک وکړئ."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "که تاسو دا حساب نه وي ثبت کړی، تاسو کولی شئ دا برېښنالیک نادیده ونیسئ. هیڅ عمل به ونه شي نیول شوی."

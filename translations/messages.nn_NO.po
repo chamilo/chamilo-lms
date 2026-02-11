@@ -22137,14 +22137,8 @@ msgstr "Øvingsrapport etter kategori for alle samlingar"
 msgid "Require e-mail confirmation"
 msgstr "Krev e-post-stadfesting"
 
-msgid "Registration confirmation"
-msgstr "Registreringsstadfesting"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Kontoen din er inaktiv fordi du ikkje har stadfesta den enno. Sjekk e-posten din og følg instruksjonane eller klikk på lenka under for å sende e-posten på ny"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "For å fullføre registreringa di på plattforma må du stadfeste kontoen din ved å klikke på lenka under"
 
 msgid "Confirmation for new account"
 msgstr "Stadfesting for ny konto"
@@ -32575,8 +32569,11 @@ msgstr "Total plass brukt av %s er %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Total plass brukt av portal %s er %sGB (grense er sett til %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Bekreft e-posten din på %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Bekreft e-posten din"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "For å verifisere e-posten din og aktivere kontoen din på %s, vennleg klikk på lenka nedanfor."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Hvis du ikkje registrerte denne kontoen, kan du ignorere denne e-posten. Ingen handling vil bli tatt."

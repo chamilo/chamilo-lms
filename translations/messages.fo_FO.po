@@ -22134,14 +22134,8 @@ msgstr "Æfinga skýrsla eftir bólkum fyri allar tessiónir"
 msgid "Require e-mail confirmation"
 msgstr "Krev staðfestils t-post"
 
-msgid "Registration confirmation"
-msgstr "Staðfestils tilskráning"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Talið er óvirkið, tí at tú hevur ikki staðfest tað enn. Tak undir við t-postinum og fylg leiðreglunum ella klikk á henda leinkjuna fyri at senda t-postin aftur"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "Til at fullfølja tilskráningina á talgvirkinum mást tú staðfesta talið við at klikka á henda leinkju"
 
 msgid "Confirmation for new account"
 msgstr "Staðfestils fyri nýtt talið"
@@ -32571,8 +32565,11 @@ msgstr "Heildar pláss brúkt av %s er %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Heildar pláss brúkt av portali %s er %sGB (mátið er sett til %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Støðga tína t-post á %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Staðfest t-postin tín"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Til at staðfesta t-post tín og virkja kontu á %s, klikk á leinkjuna niðanfyri."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Um tú ikki hevur gjørt upp hesa kontu, kanst tú forstøðga henda t-post. Ongin handling verður tikin."

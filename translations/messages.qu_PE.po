@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Rurasqa rakiy: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ñawpaq formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ari:copyright nisqawan,, mana:mana copyright nisqawan"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Phuqlla,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Phuru,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación"
@@ -22139,14 +22139,8 @@ msgstr "Tukuy sesionkunamanta kategoriapi ejercicio wasi"
 msgid "Require e-mail confirmation"
 msgstr "Email confirmacionta mañakuy"
 
-msgid "Registration confirmation"
-msgstr "Inscripcion confirmacion"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Kutichisqaykiman ruraqniq inactivo, emailni qhawachin yachachisqakunata suyaychu, o hunt'a email kutichinapaq iskuqchata p'akispa"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "Platapormaman inscribitsiyta tukuchinapaq, iskuqchata p'akispa ruraqniq kutichiy"
 
 msgid "Confirmation for new account"
 msgstr "Maway ruraqpaq confirmacion"
@@ -32577,8 +32571,11 @@ msgstr "%s nisqap qhapaq hallpʼa %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Portal %s nisqap qhapaq hallpʼa %sGB (kʼanchay %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "%s pi nisqapi e-mail imakuna qhapaq"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] E-mail imayna kasqata yachachinaykipaq"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Rima yachanayki imayna %s-manta rimaq yachanaykita churayta atikunata yachanaykita churayta, qatiq willakuyta thaqapuy."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Kay cuenta nisqata mañakunqanchu, kay e-mailta mana yuyarichunki. Manam imayna ruwaychu."

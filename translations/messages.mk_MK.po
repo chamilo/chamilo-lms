@@ -22137,14 +22137,8 @@ msgstr "Извештај за вежби по категорија за сите
 msgid "Require e-mail confirmation"
 msgstr "Барај потврда со е-пошта"
 
-msgid "Registration confirmation"
-msgstr "Потврда за регистрација"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Вашиот профил е неактивен бидејќи сè уште не сте го потврдиле. Проверете ја вашата е-пошта и следете ги инструкциите или кликнете на следната врска за да ја пратите е-поштата повторно"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "За да ја завршите вашата регистрација на платформата, треба да го потврдите вашиот профил со кликнување на следната врска"
 
 msgid "Confirmation for new account"
 msgstr "Потврда за нов кориснички профил"
@@ -32575,8 +32569,11 @@ msgstr "Вкупно користено место од %s е %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Вкупно користено место од порталот %s е %sGB (лимитот е поставен на %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Потврдете ја вашата е-пошта на %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Потврдете ја вашата е-пошта"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "За да ја потврдите вашата е-пошта и да го активирате вашиот профил на %s, ве молиме кликнете на линкот подолу."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Ако не сте регистрирале овој профил, можете да го игнорирате овој е-пошта. Нема да се преземе никаква акција."

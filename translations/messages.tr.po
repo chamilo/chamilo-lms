@@ -22139,14 +22139,8 @@ msgstr "Tüm oturumlar için kategoriye göre egzersiz raporu"
 msgid "Require e-mail confirmation"
 msgstr "E-posta onayı gerektir"
 
-msgid "Registration confirmation"
-msgstr "Kayıt onayı"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Hesabınız henüz onaylanmadığı için pasif durumda. E-postanızı kontrol edin ve talimatları izleyin veya e-postayı yeniden göndermek için aşağıdaki bağlantıya tıklayın"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "Platform kaydınızı tamamlamak için aşağıdaki bağlantıya tıklayarak hesabınızı onaylamanız gerekiyor"
 
 msgid "Confirmation for new account"
 msgstr "Yeni hesap onayı"
@@ -32577,8 +32571,11 @@ msgstr "%s tarafından kullanılan toplam alan %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Portal %s tarafından kullanılan toplam alan %sGB (sınır %sGB olarak ayarlandı)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "%s üzerinde e-postanızı onaylayın"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] E-postanızı onaylayın"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "E-postanızı doğrulamak ve %s üzerindeki hesabınızı etkinleştirmek için aşağıdaki bağlantıya tıklayın."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Bu hesabı siz kaydetmediyseniz, bu e-postayı yoksayabilirsiniz. Hiçbir işlem yapılmayacaktır."

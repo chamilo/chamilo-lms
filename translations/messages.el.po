@@ -22152,14 +22152,8 @@ msgstr "Έκθεση άσκησης ανά κατηγορία για όλες τ
 msgid "Require e-mail confirmation"
 msgstr "Απαιτείται επιβεβαίωση email"
 
-msgid "Registration confirmation"
-msgstr "Επιβεβαίωση εγγραφής"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Ο λογαριασμός σας είναι ανενεργός επειδή δεν τον έχετε επιβεβαιώσει ακόμα. Ελέγξτε το email σας και ακολουθήστε τις οδηγίες ή κάντε κλικ στον παρακάτω σύνδεσμο για να επαναποσταλεί το email"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "Για να ολοκληρώσετε την εγγραφή σας στην πλατφόρμα πρέπει να επιβεβαιώσετε τον λογαριασμό σας κάνοντας κλικ στον παρακάτω σύνδεσμο"
 
 msgid "Confirmation for new account"
 msgstr "Επιβεβαίωση νέου λογαριασμού"
@@ -32590,8 +32584,11 @@ msgstr "Συνολικός χώρος που χρησιμοποιείται απ
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Συνολικός χώρος που χρησιμοποιείται από το portal %s είναι %sGB (το όριο ορίζεται σε %sGB)"
 
-msgid "Confirm your e-mail on %s"
-msgstr "Επιβεβαιώστε το e-mail σας στο %s"
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Επιβεβαιώστε το email σας"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Για να επιβεβαιώσετε το e-mail σας και να ενεργοποιήσετε τον λογαριασμό σας στο %s, κάντε κλικ στον παρακάτω σύνδεσμο."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Αν δεν εγγράψατε αυτόν τον λογαριασμό, μπορείτε να αγνοήσετε αυτό το e-mail. Δεν θα ληφθεί καμία ενέργεια."

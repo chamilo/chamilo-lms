@@ -217,7 +217,7 @@ olms.lms_lp_item_parents = '';
 olms.lms_auto_forward_video = <?php echo (int) $oLP->auto_forward_video; ?>;
 
 var courseUrl = '?cid='+olms.lms_course_id+'&sid='+olms.lms_session_id+'&lp_id='+olms.lms_lp_id;
-var statsUrl = 'lp_controller.php' + courseUrl + '&action=stats';
+var statsUrl = 'lp_controller.php' + courseUrl + '&action=stats&origin=learnpath';
 
 /**
  * Add the "addListeners" function to the "onload" event of the window and
@@ -247,6 +247,16 @@ $(function() {
             $f = $("#content_id_blank");
         }
         return $f;
+    }
+
+    function setContentFrameSrc(src) {
+        var $frame = getContentFrame();
+        if (!$frame.length) {
+        logit_lms("[LP] Content iframe not found (#content_id / #content_id_blank).", 0);
+            return false;
+        }
+        $frame.attr("src", src);
+        return true;
     }
 
     $(function() {
@@ -1723,18 +1733,18 @@ function switch_item(current_item, next_item) {
     var mysrc = buildLpContentSrc(targetItemId);
 
     <?php if ('fullscreen' === $oLP->mode) { ?>
-    var w = window.open("" + mysrc, "content_id", "toolbar=0,location=0,status=0,scrollbars=1,resizable=1");
-    if (w) {
-        w.onload = function () {
-        olms.info_lms_item[0] = currentItemId;
-    };
-    w.onunload = function () {
-        olms.info_lms_item[0] = currentItemId;
-    };
-    }
+        var w = window.open("" + mysrc, "content_id", "toolbar=0,location=0,status=0,scrollbars=1,resizable=1");
+        if (w) {
+            w.onload = function () {
+                olms.info_lms_item[0] = currentItemId;
+            };
+            w.onunload = function () {
+                olms.info_lms_item[0] = currentItemId;
+            };
+        }
     <?php } else { ?>
-    log_in_log("Loading " + mysrc + " in iframe", 2);
-    $("#content_id").attr("src", mysrc);
+        log_in_log("Loading " + mysrc + " in iframe", 2);
+        setContentFrameSrc(mysrc);
     <?php } ?>
 
     // (6) Update nav buttons visibility

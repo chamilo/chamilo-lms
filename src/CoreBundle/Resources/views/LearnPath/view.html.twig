@@ -101,72 +101,155 @@
                 width: 100% !important;
                 margin-left: 0 !important;
             }
-            /* -----------------------------
-             * Floating menu positioning
-             * ----------------------------- */
-            #btn-menu-float {
-                position: fixed !important;
-                top: 8px !important;
-                left: 8px !important;
-                right: auto !important;
-                width: auto !important;
-                height: auto !important;
-                padding: 0 !important;
-                background: transparent !important;
-                box-shadow: none !important;
-                z-index: 999999 !important;
-            }
+
+            /* ============================================================
+             * Floating menu (stable anchor + responsive layout)
+             *
+             * Requirements:
+             * - Hamburger must NEVER move when opening/closing the panel.
+             * - TOC expanded (normal): panel is horizontal, aligned with hamburger.
+             * - TOC collapsed by expand-toggle (.lp-view-collapsed): panel is vertical under hamburger.
+             * - TOC hidden by setting (.lp-toc-hidden): menu goes top-right + panel vertical under hamburger.
+             * ============================================================ */
+
+            /* Reset inherited legacy styling */
             #btn-menu-float,
             #btn-menu-float > div,
             #btn-menu-float > ul {
                 background: transparent !important;
+                border: 0 !important;
                 box-shadow: none !important;
             }
-            #btn-menu-float .circle,
-            #btn-menu-float .circle.open {
-                width: auto !important;
-                height: auto !important;
-                padding: 4px 6px !important;
-                border-radius: 12px !important;
-                background: rgba(255,255,255,0.92) !important;
-                box-shadow: none !important;
-            }
-            #btn-menu-float .circle:not(.open) {
-                background: transparent !important;
-                box-shadow: none !important;
-            }
-            /* -----------------------------------------------------------------
-             * TOC hidden mode: move menu to TOP-RIGHT and use compact behavior.
-             * This class is toggled by JS only when tocHidden === 1.
-             * ----------------------------------------------------------------- */
-            #btn-menu-float.c-menu-top {
+
+            /* Base anchor: top-left */
+            #btn-menu-float {
                 position: fixed !important;
-                top: 8px !important;
-                right: 8px !important;
-                left: auto !important;
-                width: auto !important;
+                top: 12px !important;
+                left: 12px !important;
+                right: auto !important;
+                width: 40px !important;
+                height: 40px !important;
+                padding: 0 !important;
+                margin: 0 !important;
                 z-index: 999999 !important;
             }
-            #btn-menu-float.c-menu-top .circle {
+
+            /* Top-right mode (only when .lp-toc-hidden is active) */
+            #btn-menu-float.lp-menu-top-right {
+                left: auto !important;
+                right: 12px !important;
+            }
+
+            /* Hamburger button: absolute so it never shifts */
+            #btn-menu-float .menu-button {
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+
+                width: 40px !important;
+                height: 40px !important;
                 display: inline-flex !important;
                 align-items: center !important;
-                gap: 6px !important;
-                width: auto !important;
-                padding: 0 !important;
-                background: transparent !important;
-                box-shadow: none !important;
-            }
-            #btn-menu-float.c-menu-top .icon-toolbar,
-            #btn-menu-float.c-menu-top .menu-button {
-                background: rgba(255,255,255,0.92) !important;
+                justify-content: center !important;
+
                 border-radius: 10px !important;
+                border: 1px solid rgba(0,0,0,0.10) !important;
+                background: rgba(255,255,255,0.94) !important;
+                box-shadow: 0 1px 6px rgba(0,0,0,0.14) !important;
+                padding: 0 !important;
+                margin: 0 !important;
             }
-            #btn-menu-float.c-menu-top .circle:not(.open) {
+
+            #btn-menu-float.lp-menu-top-right .menu-button {
+                left: auto !important;
+                right: 0 !important;
+            }
+
+            #btn-menu-float .menu-button.menu-button-selected {
+                background: rgba(255,255,255,0.98) !important;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.16) !important;
+            }
+
+            /* Panel container */
+            #btn-menu-float .circle {
+                position: absolute !important;
+                top: 0 !important;
+                left: 48px !important;
+                right: auto !important;
                 display: none !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                gap: 8px !important;
+                padding: 0px !important;
+                border-radius: 12px !important;
+                border: 1px solid rgba(0,0,0,0.10) !important;
+                background: rgba(255,255,255,0.94) !important;
+                box-shadow: 0 10px 22px rgba(0,0,0,0.14) !important;
+                white-space: nowrap !important;
             }
-            #btn-menu-float.c-menu-top .menu-button {
-                z-index: 1000000 !important;
+            #btn-menu-float .circle.open {
+                display: inline-flex !important;
             }
+
+            /* Vertical panel: under the hamburger, aligned to it */
+            #btn-menu-float.lp-menu-vertical .circle {
+                top: 48px !important;
+                left: 0 !important;
+                right: auto !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 8px !important;
+                padding: 6px 0 !important;
+                white-space: normal !important;
+            }
+
+            /* Vertical + top-right: under the hamburger, right aligned */
+            #btn-menu-float.lp-menu-top-right.lp-menu-vertical .circle {
+                left: auto !important;
+                right: 0 !important;
+                align-items: flex-end !important;
+            }
+
+            /* Toolbar items */
+            #btn-menu-float .circle .icon-toolbar,
+            #btn-menu-float .circle a.icon-toolbar,
+            #btn-menu-float .circle button.icon-toolbar,
+            #btn-menu-float .circle .lp-menu-nav a,
+            #btn-menu-float .circle .lp-menu-nav button {
+                width: 40px !important;
+                height: 40px !important;
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                border-radius: 10px !important;
+                border: 1px solid rgba(0,0,0,0.08) !important;
+                background: rgba(255,255,255,0.98) !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            #btn-menu-float .circle .icon-toolbar:hover,
+            #btn-menu-float .circle .lp-menu-nav a:hover,
+            #btn-menu-float .circle .lp-menu-nav button:hover {
+                background: #fff !important;
+            }
+
+            /* Navigation bar wrapper - force layout (avoid "square" grouping) */
+            #btn-menu-float .circle .lp-menu-nav {
+                display: flex !important;
+                flex-direction: row !important;      /* horizontal by default */
+                align-items: center !important;
+                gap: 8px !important;
+            }
+            #btn-menu-float.lp-menu-vertical .circle .lp-menu-nav {
+                flex-direction: column !important;   /* vertical when TOC is collapsed/hidden */
+                align-items: flex-start !important;
+                gap: 8px !important;
+            }
+            #btn-menu-float.lp-menu-top-right.lp-menu-vertical .circle .lp-menu-nav {
+                align-items: flex-end !important;
+            }
+
             /* -----------------------------
              * Loader overlay
              * ----------------------------- */
@@ -399,20 +482,13 @@
         <script>
           $(function () {
             var $main = $("#learning_path_main");
-            var tocHidden = $main.hasClass("lp-toc-hidden") ? 1 : 0;
+            var tocHiddenSetting = $main.hasClass("lp-toc-hidden") ? 1 : 0;
 
             var $menu = $("#btn-menu-float");
             if (!$menu.length) {
               console.warn("LP: floating menu not found (#btn-menu-float).");
               return;
             }
-
-            /*
-             * Menu positioning rule:
-             * - TOC visible  -> keep menu on the LEFT (default CSS)
-             * - TOC hidden   -> move menu to TOP-RIGHT to avoid covering the title
-             */
-            $menu.toggleClass("c-menu-top", tocHidden === 1);
 
             // Prefer data attributes, fallback to legacy classes.
             var $circle = $menu.find("[data-lp-menu='circle']").first();
@@ -425,15 +501,34 @@
               $toggle = $menu.find(".menu-button").first();
             }
 
-            // Ensure toolbar is visible when TOC is hidden
-            if ($circle.length && $toggle.length) {
-              if (tocHidden === 1) {
+            function updateMenuLayout() {
+              // Layout rules:
+              // - Real TOC hidden setting -> top-right + vertical panel
+              // - Collapsed TOC (lp-view-collapsed) -> left + vertical panel
+              // - Normal mode -> left + horizontal panel
+              var isTocHidden = $main.hasClass("lp-toc-hidden");
+              var isCollapsed = $main.hasClass("lp-view-collapsed");
+              $menu.toggleClass("lp-menu-top-right", isTocHidden);
+              $menu.toggleClass("lp-menu-vertical", isTocHidden || isCollapsed);
+            }
+
+            updateMenuLayout();
+            // Observe class changes to keep menu layout consistent (covers expand/collapse toggles).
+            try {
+              var mo = new MutationObserver(function () {
+                updateMenuLayout();
+              });
+              mo.observe($main.get(0), { attributes: true, attributeFilter: ["class"] });
+            } catch (e) {
+              console.warn("LP: MutationObserver not available, menu layout will update only on known actions.");
+            }
+
+            // Auto-open only once when TOC is hidden by setting (do not fight the user after that).
+            if (tocHiddenSetting === 1 && $circle.length && $toggle.length) {
+              if (!$menu.data("lpAutoOpened")) {
                 $circle.addClass("open");
                 $toggle.addClass("menu-button-selected");
-              } else {
-                // Keep it collapsed on normal (TOC visible) mode.
-                $circle.removeClass("open");
-                $toggle.removeClass("menu-button-selected");
+                $menu.data("lpAutoOpened", true);
               }
             }
 
@@ -452,7 +547,7 @@
               console.warn("LP: menu toggle/circle not found. Toggle binding skipped.");
             }
 
-            // Expand/collapse only when TOC is visible
+            // Expand/collapse only when TOC is visible (setting != 1)
               {% if toc_hidden != 1 %}
               {% if lp_mode == 'embedframe' %}
             $("#lp-view-expand-toggle").off("click.lpExpand").on("click.lpExpand", function (e) {
@@ -460,6 +555,7 @@
               $main.toggleClass("lp-view-collapsed");
               $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-expand-horizontal");
               $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-collapse-horizontal");
+              updateMenuLayout();
             });
               {% else %}
             $("#lp-view-expand-toggle").off("click.lpExpand").on("click.lpExpand", function (e) {
@@ -467,6 +563,7 @@
               $main.toggleClass("lp-view-collapsed");
               $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-collapse-horizontal");
               $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-expand-horizontal");
+              updateMenuLayout();
             });
               {% endif %}
               {% endif %}
@@ -849,7 +946,7 @@
             }
 
             function patchNavArrowsWhenTocHidden() {
-              if (tocHidden !== 1) return;
+              if (tocHiddenSetting !== 1) return;
 
               // Prefer known IDs if present (most reliable)
               var $prevEl = $("#scorm-previous");
@@ -897,7 +994,7 @@
             }
 
             // When TOC is hidden, keep LP content navigation inside the iframe named "content_name".
-            if (tocHidden === 1) {
+            if (tocHiddenSetting === 1) {
               $menu.find("a").each(function () {
                 var url = resolveUrl(this);
                 if (!url) return;
@@ -945,7 +1042,7 @@
               {% endif %}
 
             function patchNavArrowsWhenTocHiddenSafe() {
-              if (tocHidden !== 1) return;
+              if (tocHiddenSetting !== 1) return;
 
               try {
                 patchNavArrowsWhenTocHidden();
@@ -958,7 +1055,7 @@
             bindPrimaryNavButtons();
             setTimeout(bindPrimaryNavButtons, 200);
             setTimeout(bindPrimaryNavButtons, 600);
-            if (tocHidden === 1) {
+            if (tocHiddenSetting === 1) {
               // Run immediately + retries (menu markup sometimes arrives late)
               patchNavArrowsWhenTocHiddenSafe();
               setTimeout(patchNavArrowsWhenTocHiddenSafe, 200);

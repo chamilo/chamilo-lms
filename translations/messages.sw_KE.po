@@ -32574,9 +32574,6 @@ msgstr "Nauli ya jumla inayotumika na lango %s ni %sGB (kiwango kimewekwa %sGB)"
 msgid "Confirm your e-mail on %s"
 msgstr "Thibitisha barua pepe yako kwenye %s"
 
-msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
-msgstr "Habari %s,\n\nIliethibitisha barua pepe yako na kuwezesha akaunti yako kwenye %s, tafadhali bonyeza kiungo hapa chini."
-
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Ikiwa haukuandikisha akaunti hii, unaweza kupuuza barua pepe hii. Hakuna hatua itakayochukuliwa."
 

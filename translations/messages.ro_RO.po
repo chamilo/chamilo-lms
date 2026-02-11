@@ -32594,9 +32594,6 @@ msgstr "Spațiu total utilizat de portalul %s este %sGB (limita este setată la 
 msgid "Confirm your e-mail on %s"
 msgstr "Confirmați-vă e-mailul pe %s"
 
-msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
-msgstr "Salut %s,\n\nPentru a vă verifica e-mailul și a activa contul pe %s, vă rugăm să faceți clic pe linkul de mai jos."
-
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Dacă nu ați înregistrat acest cont, puteți ignora acest e-mail. Nu va fi întreprinsă nicio acțiune."
 

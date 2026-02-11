@@ -5668,10 +5668,12 @@ SQL;
         $siteName = api_get_setting('platform.site_name');
         $mailSubject = sprintf(get_lang('Confirm your e-mail on %s'), $siteName);
         $firstName = $user->getFirstname();
-        $mailBody = sprintf(get_lang('Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below.'), $firstName, $siteName)
-            .PHP_EOL
+        $mailBody = sprintf(get_lang('Dear %s,'), $firstName)
+            ."\n\n"
+            .sprintf(get_lang('To verify your e-mail and enable your account on %s, please click the link below.'), $siteName)
+            ."\n\n"
             .Display::url($url, $url)
-            .PHP_EOL
+            ."\n\n"
             .get_lang('If you did not register this account, you can ignore this e-mail. No action will be taken.');
 
         api_mail_html(

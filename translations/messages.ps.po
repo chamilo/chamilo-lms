@@ -32574,9 +32574,6 @@ msgstr "د پورتل %s لخوا کارول شوی ټول ځای %sGB دی (ح�
 msgid "Confirm your e-mail on %s"
 msgstr "خپل برېښنالیک په %s کې تایید کړئ"
 
-msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
-msgstr "سلام %s,\n\nد خپل برېښنالیک د تاییدولو او د خپل حساب فعالولو لپاره په %s کې، مهرباني وکړئ لاندې لینک باندې کلیک وکړئ."
-
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "که تاسو دا حساب نه وي ثبت کړی، تاسو کولی شئ دا برېښنالیک نادیده ونیسئ. هیڅ عمل به ونه شي نیول شوی."
 

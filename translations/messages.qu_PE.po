@@ -32580,9 +32580,6 @@ msgstr "Portal %s nisqap qhapaq hallpʼa %sGB (kʼanchay %sGB)"
 msgid "Confirm your e-mail on %s"
 msgstr "%s pi nisqapi e-mail imakuna qhapaq"
 
-msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
-msgstr "Allillay %s,\n\n%s pi nisqapi e-mail imakuna qhapaqykupaq willaykupaq, iskay yuraq chinkachiyta ritʼay."
-
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Kay cuenta nisqata mañakunqanchu, kay e-mailta mana yuyarichunki. Manam imayna ruwaychu."
 

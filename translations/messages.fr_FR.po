@@ -34460,9 +34460,6 @@ msgstr "Espace total utilisé par le portail %s est %sGo (limite fixée à %sGo)
 msgid "Confirm your e-mail on %s"
 msgstr "Confirmez votre e-mail sur %s"
 
-msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
-msgstr "Bonjour %s,\n\nPour vérifier votre e-mail et activer votre compte sur %s, veuillez cliquer sur le lien ci-dessous."
-
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Si vous n'avez pas enregistré ce compte, vous pouvez ignorer cet e-mail. Aucune action ne sera prise."
 

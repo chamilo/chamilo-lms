@@ -32580,9 +32580,6 @@ msgstr "Portal %s tarafından kullanılan toplam alan %sGB (sınır %sGB olarak 
 msgid "Confirm your e-mail on %s"
 msgstr "%s üzerinde e-postanızı onaylayın"
 
-msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
-msgstr "Merhaba %s,\n\n%s üzerinde e-postanızı doğrulamak ve hesabınızı etkinleştirmek için aşağıdaki bağlantıyı tıklayın."
-
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Bu hesabı siz kaydetmediyseniz, bu e-postayı yoksayabilirsiniz. Hiçbir işlem yapılmayacaktır."
 

@@ -32578,9 +32578,6 @@ msgstr "포털 %s이(가) 사용하는 총 공간: %sGB (제한: %sGB)"
 msgid "Confirm your e-mail on %s"
 msgstr "%s에서 이메일 확인"
 
-msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
-msgstr "안녕하세요 %s님,\n\n%s에서 이메일을 확인하고 계정을 활성화하려면 아래 링크를 클릭하세요."
-
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "이 계정을 등록하지 않았다면 이 이메일을 무시하셔도 됩니다. 아무런 조치가 취해지지 않습니다."
 

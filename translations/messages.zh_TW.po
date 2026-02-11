@@ -32580,9 +32580,6 @@ msgstr "入口網站 %s 使用的總空間為 %sGB（限制為 %sGB）"
 msgid "Confirm your e-mail on %s"
 msgstr "在 %s 上確認您的電子郵件"
 
-msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
-msgstr "嗨 %s，\n\n要驗證您的電子郵件並在 %s 上啟用您的帳戶，請點擊下方連結。"
-
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "如果您未註冊此帳戶，您可以忽略此電子郵件。不會採取任何行動。"
 

@@ -32578,9 +32578,6 @@ msgstr "Jumlah ruang digunakan oleh portal %s ialah %sGB (had ditetapkan kepada 
 msgid "Confirm your e-mail on %s"
 msgstr "Sahkan e-mel anda pada %s"
 
-msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
-msgstr "Hai %s,\n\nUntuk mengesahkan e-mel anda dan mengaktifkan akaun anda pada %s, sila klik pautan di bawah."
-
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Jika anda tidak mendaftar akaun ini, anda boleh abaikan e-mel ini. Tiada tindakan akan diambil."
 

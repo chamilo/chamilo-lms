@@ -32593,9 +32593,6 @@ msgstr "Espai total utilitzat pel portal %s és %sGB (el límit està fixat a %s
 msgid "Confirm your e-mail on %s"
 msgstr "Confirma el teu correu electrònic a %s"
 
-msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
-msgstr "Hola %s,\n\nPer verificar el teu correu electrònic i activar el teu compte a %s, fes clic al següent enllaç."
-
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Si no has registrat aquest compte, pots ignorar aquest correu electrònic. No es prendrà cap acció."
 

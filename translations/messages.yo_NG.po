@@ -32574,9 +32574,6 @@ msgstr "Àyè ìpapà gbogbogbò tí ọ̀dà %s lò jẹ́ %sGB (ààlì lòdì
 msgid "Confirm your e-mail on %s"
 msgstr "Fìdí ìmeèlì rẹ̀ lọ́wọ́ %s"
 
-msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
-msgstr "Bawo ni %s,\n\nLati fi ìmeèlì rẹ̀ ṣe ìdíwò àti ṣiṣẹ́ ìdí ìdàhùn rẹ lọ́wọ́ %s, jọ̀wọ́ tẹ ìnọ́kà ìsàlẹ̀ yìí."
-
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Ti o kò ba ṣe ìforúkọ sílẹ̀ ìdí ìdàhùn yìí, o le kọ ìmeèlì yìí silẹ̀. Kò sí ìṣe yóò ṣẹlẹ̀."
 

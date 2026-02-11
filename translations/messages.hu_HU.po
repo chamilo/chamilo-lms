@@ -32578,9 +32578,6 @@ msgstr "A %s portál által használt teljes hely %sGB (a limit %sGB-ra van áll
 msgid "Confirm your e-mail on %s"
 msgstr "Erősítse meg e-mail címét a %s oldalon"
 
-msgid "Hi %s,\n\nTo verify your e-mail and enable your account on %s, please click the link below."
-msgstr "Szia %s,\n\nA %s oldalon lévő fiókod e-mail címének ellenőrzéséhez és aktiválásához kérjük, kattints az alábbi linkre."
-
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Ha nem te regisztráltad ezt a fiókot, akkor figyelmen kívül hagyhatod ezt az e-mailt. Semmilyen művelet nem fog történni."
 

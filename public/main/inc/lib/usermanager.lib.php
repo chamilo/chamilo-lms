@@ -5666,7 +5666,7 @@ SQL;
             $url .= '&s='.$sessionToRedirect;
         }
         $siteName = api_get_setting('platform.site_name');
-        $mailSubject = sprintf(get_lang('Confirm your e-mail on %s'), $siteName);
+        $mailSubject = sprintf(get_lang('[%s] Confirm your e-mail'), $siteName);
         $firstName = $user->getFirstname();
         $mailBody = sprintf(get_lang('Dear %s,'), $firstName)
             ."\n\n"

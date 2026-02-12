@@ -31,11 +31,6 @@ $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password');
 //$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $htmlHeadXtra[] = '
 <script>
-$("#status_select").ready(function() {
-    if ($(this).attr("value") != '.STUDENT.') {
-        $("#id_platform_admin").hide();
-    }
-});
 function enable_expiration_date() { //v2.0
     document.user_add.radio_expiration_date[0].checked=false;
     document.user_add.radio_expiration_date[1].checked=true;
@@ -47,24 +42,6 @@ function password_switch_radio_button() {
         if (input_elements.item(i).name == "password[password_auto]" && input_elements.item(i).value == "0") {
             input_elements.item(i).checked = true;
         }
-    }
-}
-
-var is_platform_id = "'.$is_platform_admin.'";
-
-function updateStatus(){
-    if (document.getElementById("status_select").value=='.STUDENT.') {
-        if (is_platform_id == 1)
-            document.getElementById("id_platform_admin").style.display="none";
-
-    } else if (document.getElementById("status_select").value=='.COURSEMANAGER.') {
-
-        if (is_platform_id == 1)
-            document.getElementById("id_platform_admin").style.display="block";
-    } else {
-
-        if (is_platform_id == 1)
-            document.getElementById("id_platform_admin").style.display="none";
     }
 }
 </script>';
@@ -160,8 +137,6 @@ if ('true' === api_get_setting('login_is_email')) {
     $form->addRule('email', get_lang('This login is already in use'), 'username_available');
 }
 
-// Phone
-$form->addText('phone', get_lang('Phone number'), false, ['autocomplete' => 'off', 'id' => 'phone']);
 // Picture
 $form->addFile(
     'picture',
@@ -174,7 +149,7 @@ $form->addRule('picture', get_lang('Only PNG, JPG or GIF images allowed').' ('.i
 
 // Username
 if ('true' !== api_get_setting('login_is_email')) {
-    $form->addElement('text', 'username', get_lang('Login'), ['id' => 'username', 'maxlength' => User::USERNAME_MAX_LENGTH, 'autocomplete' => 'off']);
+    $form->addElement('text', 'username', get_lang('Username'), ['id' => 'username', 'maxlength' => User::USERNAME_MAX_LENGTH, 'autocomplete' => 'off']);
     $form->addRule('username', get_lang('Required field'), 'required');
     $form->addRule('username', sprintf(get_lang('The login needs to be maximum %s characters long'), (string) User::USERNAME_MAX_LENGTH), 'maxlength', User::USERNAME_MAX_LENGTH);
     $form->addRule('username', get_lang('Only letters and numbers allowed'), 'username');
@@ -200,7 +175,7 @@ if (count($extAuthSource) > 0) {
     }
     if ($nb_ext_auth_source_added > 0) {
         $group[] = $form->createElement('radio', 'password_auto', null, get_lang('External authentification').' ', 2);
-        $group[] = $form->createElement('select', 'auth_source', null, $auth_sources, ['multiple' => 'multiple']);
+        $group[] = $form->createElement('select', 'auth_source', null, $auth_sources, ['multiple' => 'multiple', 'size' => 2]);;
         $group[] = $form->createElement('static', '', '', '<br />');
     }
 }
@@ -252,7 +227,7 @@ $form->addElement(
     api_get_roles(),
     [
         'multiple' => 'multiple',
-        'size' => 8,
+        'size' => 9,
     ]
 );
 $form->addRule('roles', get_lang('Required field'), 'required');
@@ -261,16 +236,6 @@ $form->addRule('roles', get_lang('Required field'), 'required');
 $display = 'none';
 if (isset($_POST['roles']) && is_array($_POST['roles'])) {
     $display = in_array('ROLE_TEACHER', $_POST['roles']) || in_array('ROLE_SESSION_MANAGER', $_POST['roles']) ? 'block' : 'none';
-}
-
-if (api_is_platform_admin()) {
-    // Platform admin
-    $group = [];
-    $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('Yes'), 1);
-    $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('No'), 0);
-    $form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.';">');
-    $form->addGroup($group, 'admin', get_lang('Administration'));
-    $form->addElement('html', '</div>');
 }
 
 $form->addSelectLanguage('locale', get_lang('Language'));
@@ -302,6 +267,10 @@ $form->addElement('html', Display::advancedPanelStart(
     get_lang('Advanced settings'),
     $advancedPanelOpen
 ));
+
+// Phone
+$form->addText('phone', get_lang('Phone number'), false, ['autocomplete' => 'off', 'id' => 'phone']);
+
 
 $extraField = new ExtraField('user');
 $returnParams = $extraField->addElements(
@@ -337,7 +306,6 @@ $(function () {
 </script>';
 
 // Set default values
-$defaults['admin']['platform_admin'] = 0;
 $defaults['mail']['send_mail'] = 1;
 $defaults['password']['password_auto'] = 1;
 $defaults['active'] = 1;
@@ -352,8 +320,8 @@ $defaults['locale'] = api_get_language_isocode();
 $form->setDefaults($defaults);
 
 // Submit button
-$html_results_enabled[] = $form->createElement('button', 'submit', get_lang('Add'), 'plus', 'primary');
-$html_results_enabled[] = $form->createElement('button', 'submit_plus', get_lang('Add').'+', 'plus', 'primary');
+$html_results_enabled[] = $form->createElement('button', 'submit', get_lang('Add'), 'plus', 'success');
+$html_results_enabled[] = $form->createElement('button', 'submit_plus', get_lang('Add').'+', 'plus', 'success');
 $form->addGroup($html_results_enabled);
 
 // Validate form
@@ -369,10 +337,6 @@ if ($form->validate()) {
         $username = 'true' !== api_get_setting('login_is_email') ? $user['username'] : '';
         $language = $user['locale'];
         $picture = $_FILES['picture'];
-        $platform_admin = 0;
-        if (isset($user['admin']) && isset($user['admin']['platform_admin'])) {
-            $platform_admin = (int) $user['admin']['platform_admin'];
-        }
         $send_mail = 0;
         if (isset($user['mail']) && isset($user['mail']['send_mail'])) {
             $send_mail = (int) $user['mail']['send_mail'];
@@ -413,9 +377,6 @@ if ($form->validate()) {
         $roles = $user['roles'] ?? [];
         $roles = array_values(array_unique(array_map('api_normalize_role_code', $roles)));
         $status = api_status_from_roles($roles);
-        if ((int) ($user['admin']['platform_admin'] ?? 0) === 1) {
-            $status = COURSEMANAGER;
-        }
 
         $user_id = UserManager::create_user(
             $firstname,
@@ -435,7 +396,7 @@ if ($form->validate()) {
             $extra,
             null,
             $send_mail,
-            $platform_admin,
+            null,
             '',
             false,
             null,
@@ -482,12 +443,6 @@ if ($form->validate()) {
             if ($userEntity) {
                 $userEntity->setRoles($roles);
                 $repo->updateUser($userEntity);
-            }
-
-            if (api_has_admin_role($roles)) {
-                UserManager::addUserAsAdmin($userEntity);
-            } else {
-                UserManager::removeUserAdmin($userEntity);
             }
 
             $extraFieldValues = new ExtraFieldValue('user');

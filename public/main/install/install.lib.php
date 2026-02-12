@@ -1556,12 +1556,6 @@ function finishInstallationWithContainer(
     $admin->setRoles($roles);
     $repo->updateUser($admin);
 
-    if (in_array('ROLE_ADMIN', $roles, true) || in_array('ROLE_GLOBAL_ADMIN', $roles, true)) {
-        UserManager::addUserAsAdmin($admin);
-    } else {
-        UserManager::removeUserAdmin($admin);
-    }
-
     /** @var User $anonUser */
     $anonUser = $repo->findOneBy(['username' => 'anon']);
     if ($anonUser) {

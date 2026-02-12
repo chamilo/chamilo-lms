@@ -30,7 +30,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class UserManager
 {
-    // This constants are deprecated use the constants located in ExtraField
+    // These constants are deprecated use the constants located in ExtraField
     public const USER_FIELD_TYPE_TEXT = 1;
     public const USER_FIELD_TYPE_TEXTAREA = 2;
     public const USER_FIELD_TYPE_RADIO = 3;
@@ -77,39 +77,43 @@ class UserManager
     /**
      * Creates a new user for the platform.
      *
-     * @param string        $firstName
-     * @param string        $lastName
-     * @param int           $status                  (1 for course tutor, 5 for student, 6 for anonymous)
-     * @param string        $email
-     * @param string        $loginName
-     * @param string        $password
-     * @param string        $officialCode           Any official code (optional)
-     * @param string        $language                User language    (optional)
-     * @param string        $phone                   Phone number    (optional)
-     * @param string        $pictureUri             Picture URI        (optional)
-     * @param string        $authSources              Authentication source (defaults to 'platform', dependind on constant)
-     * @param string $expirationDate          Account expiration date (optional, defaults to null)
-     * @param int           $active                  Whether the account is enabled or disabled by default
-     * @param int           $hrDeptId              The department of HR in which the user is registered (defaults to 0)
-     * @param array         $extra                   Extra fields (labels must be prefixed by "extra_")
-     * @param string        $encryptMethod          Used if password is given encrypted. Set to an empty string by default
-     * @param bool          $sendMail
-     * @param bool          $isAdmin
-     * @param string        $address
-     * @param bool          $sendEmailToAllAdmins
-     * @param FormValidator $form
-     * @param int           $creatorId
-     * @param array         $emailTemplate
-     * @param string        $redirectToURLAfterLogin
+     * @param string $firstName
+     * @param string $lastName
+     * @param int    $status (1 for course tutor, 5 for student, 6 for anonymous)
+     * @param string $email
+     * @param string $loginName
+     * @param string $password
+     * @param string $officialCode Any official code (optional)
+     * @param string $language User language    (optional)
+     * @param string $phone Phone number    (optional)
+     * @param string $pictureUri Picture URI        (optional)
+     * @param ?array $authSources Authentication source (defaults to 'platform', dependind on constant)
+     * @param string $expirationDate Account expiration date (optional, defaults to null)
+     * @param int    $active Whether the account is enabled or disabled by default
+     * @param int    $hrDeptId The department of HR in which the user is registered (defaults to 0)
+     * @param array  $extra Extra fields (labels must be prefixed by "extra_")
+     * @param string $encryptMethod Used if password is given encrypted. Set to an empty string by default
+     * @param bool   $sendMail
+     * @param bool   $isAdmin
+     * @param string $address
+     * @param bool   $sendEmailToAllAdmins
+     * @param null   $form
+     * @param int    $creatorId
+     * @param array  $emailTemplate
+     * @param string $redirectToURLAfterLogin
      *
      * @return mixed new user id - if the new user creation succeeds, false otherwise
+     * @throws \Doctrine\DBAL\Exception
+     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      * @desc The function tries to retrieve user id from the session.
      * If it exists, the current user id is the creator id. If a problem arises,
      * @assert ('Sam','Gamegie',5,'sam@example.com','jo','jo') > 1
      * @assert ('Pippin','Took',null,null,'jo','jo') === false
-     *@author Hugues Peeters <peeters@ipm.ucl.ac.be>,
+     * @author Hugues Peeters <peeters@ipm.ucl.ac.be>,
      * @author Roan Embrechts <roan_embrechts@yahoo.com>
-     *
      */
     public static function create_user(
         $firstName,

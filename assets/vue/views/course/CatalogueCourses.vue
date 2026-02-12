@@ -51,7 +51,6 @@
         :allowTitle="courseCatalogueSettings.filters?.by_title ?? true"
         :fields="extraFields"
         @apply="onAdvancedApply"
-        @clear="onAdvancedClear"
       />
     </div>
 
@@ -194,9 +193,14 @@ const loadExtraFields = async () => {
 
 let loadParams = {
   itemsPerPage: "12",
+  order: { [sortField.value]: "asc" },
 }
 
 const load = async () => {
+  if (0 === Object.entries(loadParams).length) {
+    return
+  }
+
   status.value = true
 
   try {
@@ -287,7 +291,10 @@ const showAdvancedSearch = ref(false)
 const advancedFormKey = ref(0)
 
 function onAdvancedApply(payload) {
-  loadParams = {}
+  loadParams = {
+    itemsPerPage: "12",
+    order: { [sortField.value]: "asc" },
+  }
 
   if (payload.title) {
     loadParams.title = payload.title
@@ -301,10 +308,6 @@ function onAdvancedApply(payload) {
   courses.value = []
 
   load()
-}
-
-function onAdvancedClear() {
-  loadParams = {}
 }
 
 const visibleCoursesBase = computed(() => {

@@ -31893,7 +31893,7 @@ msgid "Action failed"
 msgstr "Action échouée"
 
 msgid "Available courses in this URL"
-msgstr "Cours disponible sur cette URL"
+msgstr "Cours disponibles sur cette URL"
 
 msgid "Loading courses..."
 msgstr "Chargement des cours..."

@@ -32489,3 +32489,6 @@ msgstr ""
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr ""
+
+msgid "Current authentication method"
+msgstr ""

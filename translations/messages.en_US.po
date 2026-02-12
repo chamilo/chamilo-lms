@@ -32578,3 +32578,6 @@ msgstr "To verify your e-mail and enable your account on %s, please click the li
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "If you did not register this account, you can ignore this e-mail. No action will be taken."
+
+msgid "Current authentication method"
+msgstr "Current authentication method"

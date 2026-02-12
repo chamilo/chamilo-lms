@@ -208,8 +208,8 @@ $extAuthSource = $authenticationConfigHelper->getAuthSourceAuthentications($acce
 if (!empty($extAuthSource) && count($extAuthSource) > 0) {
     foreach ($userInfo['auth_sources'] as $userAuthSource) {
         $form->addLabel(
-            get_lang('External authentification'),
-            $userAuthSource
+            get_lang('Current authentication method'),
+            '<em>'.$userAuthSource.'</em>'
         );
     }
 }
@@ -232,7 +232,7 @@ if (!empty($extAuthSource) && count($extAuthSource) > 0) {
     if ($nb_ext_auth_source_added > 0) {
         // @todo check the radio button for external authentification and select the external authentication in the menu
         $group[] = $form->createElement('radio', 'reset_password', null, get_lang('External authentification').' ', 3);
-        $group[] = $form->createElement('select', 'auth_source', null, $auth_sources, ['multiple' => 'multiple']);
+        $group[] = $form->createElement('select', 'auth_source', null, $auth_sources, ['multiple' => 'multiple', 'size' => 2]);;
         $group[] = $form->createElement('static', '', '', '<br />', []);
         $form->addGroup($group, 'password', null, null, false);
     }
@@ -261,7 +261,7 @@ $form->addElement(
     api_get_roles(),
     [
         'multiple' => 'multiple',
-        'size' => 8,
+        'size' => 9,
     ]
 );
 $form->addRule('roles', get_lang('Required field'), 'required');

@@ -6328,9 +6328,25 @@ function api_get_roles(): array
         'USER'                  => 'User',
     ];
 
+    // Set a fixed order for roles (ANONYMOUS is excluded by get_user_roles())
+    $sortedRoles = [
+        'STUDENT',
+        'TEACHER',
+        'SESSION_MANAGER',
+        'HR',
+        'ADMIN',
+        'INVITEE',
+        'STUDENT_BOSS',
+        'QUESTION_MANAGER',
+        'GLOBAL_ADMIN',
+    ];
+    // Make sure any custom role is added at the end
+    $diff = array_diff($codes, $sortedRoles);
+    $sortedRoles = array_merge($sortedRoles, $diff);
+
     $out = [];
-    foreach ((array) $codes as $code) {
-        $canon = strtoupper(trim((string) $code));
+    foreach ($sortedRoles as $code) {
+        $canon = strtoupper(trim($code));
         $label =
             ($labels[$canon] ?? null) ??
             ($labels['ROLE_'.$canon] ?? null) ??
@@ -6338,7 +6354,6 @@ function api_get_roles(): array
         $out[$code] = $label;
     }
 
-    ksort($out, SORT_STRING);
     return $cache = $out;
 }
 

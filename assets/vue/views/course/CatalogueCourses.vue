@@ -194,9 +194,14 @@ const loadExtraFields = async () => {
 
 let loadParams = {
   itemsPerPage: "12",
+  order: { [sortField.value]: "asc" },
 }
 
 const load = async () => {
+  if (0 === Object.entries(loadParams).length) {
+    return
+  }
+
   status.value = true
 
   try {
@@ -304,7 +309,10 @@ function onAdvancedApply(payload) {
 }
 
 function onAdvancedClear() {
-  loadParams = {}
+  loadParams = {
+    itemsPerPage: "12",
+    order: { [sortField.value]: "asc" },
+  }
 }
 
 const visibleCoursesBase = computed(() => {

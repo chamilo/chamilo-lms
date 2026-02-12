@@ -142,7 +142,7 @@ if (api_is_western_name_order()) {
 }
 
 // Official code
-$form->addElement('text', 'official_code', get_lang('Code'), ['size' => '40']);
+$form->addElement('text', 'official_code', get_lang('Official code'), ['size' => '40']);
 $form->applyFilter('official_code', 'html_filter');
 $form->applyFilter('official_code', 'trim');
 
@@ -162,9 +162,6 @@ if ('true' == api_get_setting('login_is_email')) {
     );
     $form->addRule('email', get_lang('This login is already in use'), 'username_available', $user_data['username']);
 }
-
-// Phone
-$form->addElement('text', 'phone', get_lang('Phone number'));
 
 // Picture
 $form->addFile(
@@ -328,6 +325,16 @@ if (!$hideFields) {
     $form->addElement('hidden', 'active', $user_data['active']);
     $form->addElement('hidden', 'expiration_date', $user_data['expiration_date']);
 }
+
+$form->addElement('html', Display::advancedPanelStart(
+    'advanced_params',
+    get_lang('Advanced settings'),
+    $advancedPanelOpen
+));
+
+// Phone
+$form->addElement('text', 'phone', get_lang('Phone number'));
+
 $studentBossList = UserManager::getStudentBossList($user_id);
 
 $conditions = ['status' => STUDENT_BOSS];
@@ -347,12 +354,6 @@ if (!empty($studentBossList)) {
 
 $user_data['student_boss'] = $studentBossList;
 $form->addMultiSelect('student_boss', get_lang('Superior (n+1)'), $studentBossToSelect);
-
-$form->addElement('html', Display::advancedPanelStart(
-    'advanced_params',
-    get_lang('Advanced settings'),
-    $advancedPanelOpen
-));
 
 // EXTRA FIELDS
 $extraField = new ExtraField('user');

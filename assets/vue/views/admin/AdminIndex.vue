@@ -146,9 +146,9 @@
 
     <div
       v-if="securityStore.isAdmin"
-      class="admin-index__block-container block-admin-version"
+      class="p-card p-component block-admin-version admin-index__block-container"
     >
-      <div class="admin-index__block">
+      <div class="p-card-body">
         <h4><i class="mdi mdi-checkbox-multiple-marked text-xl" /> {{t('Version check')}}</h4>
 
         <div
@@ -211,9 +211,9 @@
 
     <div
       v-if="securityStore.isAdmin"
-      class="admin-index__block-container block-admin-support"
+      class="p-card p-component block-admin-support admin-index__block-container"
     >
-      <div class="admin-index__block">
+      <div class="p-card-body">
         <h4><i class="mdi mdi-face-agent text-xl" /> {{t('Professional support')}}</h4>
 
         <div
@@ -237,9 +237,9 @@
 
     <div
       v-if="securityStore.isAdmin"
-      class="admin-index__block-container block-admin-news"
+      class="p-card p-component block-admin-news admin-index__block-container"
     >
-      <div class="admin-index__block">
+      <div class="p-card-body">
         <h4><i class="mdi mdi-bullhorn text-xl" /> {{t('News from Chamilo')}}</h4>
 
         <div

@@ -333,12 +333,12 @@ onMounted(() => {
 
         <BaseButton
           v-if="allowDescription && showInfoPopup"
+          :label="t('Show description')"
+          class="absolute bottom-0 left-0 rounded-none"
           icon="information"
           only-icon
           size="small"
-          type="black"
           @click="showDescriptionDialog = true"
-          class="absolute bottom-0 left-0 rounded-none"
         />
       </div>
 

@@ -54,9 +54,10 @@
 
         <BaseButton
           v-if="isLocked && hasRequirements"
+          :label="t('Requirements')"
           class="!bg-support-1 !text-support-3 !rounded-md !shadow-sm hover:!bg-support-2"
           icon="shield-check"
-          onlyIcon
+          only-icon
           size="large"
           type="black"
           @click="openRequirementsModal"

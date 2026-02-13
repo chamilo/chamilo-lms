@@ -900,6 +900,7 @@ class Statistics
             'student_publication',
             'user',
             'forum',
+            'glossary'
         ];
         $tool_names = [];
         foreach ($tools as $tool) {
@@ -1635,11 +1636,11 @@ class Statistics
         // - For circular charts, keep aspect ratio to avoid massive charts on tall wrappers.
         $options = trim($options);
         if ($isCircular) {
-            $baseOptions = 'responsive: true, maintainAspectRatio: true,';
+            $baseOptions = 'responsive: true, maintainAspectRatio: true, devicePixelRatio: Math.min(2, window.devicePixelRatio || 1),';
         } else {
             $baseOptions = $fullSize
-                ? 'responsive: true, maintainAspectRatio: false,'
-                : 'responsive: true,';
+                ? 'responsive: true, maintainAspectRatio: false, devicePixelRatio: Math.min(2, window.devicePixelRatio || 1),'
+                : 'responsive: true, devicePixelRatio: Math.min(2, window.devicePixelRatio || 1),';
         }
 
         $finalOptions = trim($baseOptions.' '.$options);
@@ -1735,6 +1736,9 @@ class Statistics
                         data: data,
                         options: options
                     });
+
+                    setTimeout(function(){ if (chart) chart.resize(); }, 80);
+                    setTimeout(function(){ if (chart) chart.resize(); }, 280);
 
                     $afterInitBlock
                 });
@@ -2557,7 +2561,7 @@ class Statistics
                 }
                 $aClass = $active
                     ? 'bg-primary/10 text-primary ring-1 ring-primary/25'
-                    : 'text-gray-50 hover:bg-gray-15 hover:text-gray-90';
+                    : 'text-gray-90 hover:bg-gray-15 hover:text-gray-90';
 
                 $itemDotClass = $active ? 'bg-primary' : 'bg-gray-50 group-hover:bg-primary/60';
 
@@ -2587,7 +2591,7 @@ class Statistics
         $out .= '</div></div>';
 
         if (!empty($activeInfo)) {
-            $out .= '<div class="mt-4 flex flex-wrap items-center gap-2 text-sm text-gray-50">
+            $out .= '<div class="mt-4 flex flex-wrap items-center gap-2 text-sm text-gray-90">
         <span class="font-semibold">' . htmlspecialchars(get_lang('You are here'), ENT_QUOTES) . ':</span>
         <span class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">'
                 . htmlspecialchars($activeInfo['section'], ENT_QUOTES) . ' · ' . htmlspecialchars($activeInfo['label'], ENT_QUOTES) .

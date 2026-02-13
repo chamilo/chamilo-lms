@@ -14,10 +14,8 @@
 
   <!-- Regular courses -->
   <div class="relative min-h-[300px]">
-    <!-- Full-screen / page loading only until first page is received -->
     <Loading :visible="!isInitialLoaded" />
 
-    <!-- Skeleton only for the very first paint -->
     <div
       v-if="loading && courses.length === 0"
       class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
@@ -37,15 +35,13 @@
       />
     </div>
 
-    <!-- Courses grid -->
     <div
       v-else-if="courses.length > 0"
       class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
       <CourseCardList :courses="courses" />
-      <!-- Footer slot of the grid (spans all columns) -->
+
       <div class="col-span-full">
-        <!-- Loading more indicator -->
         <div
           v-if="isLoadingMore"
           class="flex items-center justify-center gap-3 py-6 text-gray-600"
@@ -55,11 +51,11 @@
           ></span>
           <span>{{ t("Loading more courses...") }}</span>
         </div>
-        <!-- Sentinel (keep it always there so it can be observed) -->
+
         <div ref="lastCourseRef"></div>
       </div>
     </div>
-    <!-- Empty state -->
+
     <EmptyState
       v-else-if="!loading && isInitialLoaded && courses.length === 0"
       :detail="t('Go to Explore to find a topic of interest, or wait for someone to subscribe you')"
@@ -70,7 +66,7 @@
 </template>
 
 <script setup>
-import { nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue"
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import { useQuery } from "@vue/apollo-composable"
 import { useI18n } from "vue-i18n"
 import { GET_COURSE_REL_USER } from "../../../graphql/queries/CourseRelUser.js"
@@ -79,21 +75,21 @@ import CourseCardList from "../../../components/course/CourseCardList.vue"
 import EmptyState from "../../../components/EmptyState"
 import { useSecurityStore } from "../../../store/securityStore"
 import Loading from "../../../components/Loading.vue"
+import { usePlatformConfig } from "../../../store/platformConfig"
 
 const securityStore = useSecurityStore()
+const platformConfigStore = usePlatformConfig()
 const { t } = useI18n()
 
 const courses = ref([])
-const isLoadingMore = ref(false) // only for fetchMore
-const isInitialLoaded = ref(false) // first page received
+const isLoadingMore = ref(false)
+const isInitialLoaded = ref(false)
 const endCursor = ref(null)
 const hasMore = ref(true)
 const lastCourseRef = ref(null)
 
-// Fast dedupe
 const courseIds = new Set()
 
-// Faster sorting (and more correct with numbers)
 const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" })
 let sortScheduled = false
 const scheduleSort = () => {
@@ -105,11 +101,124 @@ const scheduleSort = () => {
     courses.value.sort((a, b) => collator.compare(a?.title || "", b?.title || ""))
   }
 
-  // Do not block UI thread if possible
   if (typeof window !== "undefined" && "requestIdleCallback" in window) {
     window.requestIdleCallback(run, { timeout: 200 })
   } else {
     setTimeout(run, 0)
+  }
+}
+
+const toBool = (v) => v === true || v === "true" || v === 1 || v === "1"
+const studentInfoFlags = computed(() => {
+  const raw = platformConfigStore.getSetting("course.course_student_info")
+  const defaults = { score: false, progress: false, certificate: false }
+
+  if (!raw) return defaults
+
+  if (typeof raw === "object") {
+    return {
+      score: toBool(raw.score),
+      progress: toBool(raw.progress),
+      certificate: toBool(raw.certificate),
+    }
+  }
+
+  if (typeof raw === "string") {
+    try {
+      const parsed = JSON.parse(raw)
+      if (parsed && typeof parsed === "object") {
+        return {
+          score: toBool(parsed.score),
+          progress: toBool(parsed.progress),
+          certificate: toBool(parsed.certificate),
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  return defaults
+})
+
+const isAnyStudentInfoEnabled = computed(() => {
+  const f = studentInfoFlags.value
+  return !!(f.progress || f.score || f.certificate)
+})
+
+const getNumericCourseId = (c) => {
+  const v = c?.id ?? c?._id ?? 0
+  const n = Number(v)
+  return Number.isFinite(n) ? n : 0
+}
+
+const getNumericSessionId = (c, edgeNode) => {
+  const v = edgeNode?.session?.id ?? edgeNode?.sessionId ?? c?.session?.id ?? c?.sessionId ?? 0
+  const n = Number(v)
+  return Number.isFinite(n) ? n : 0
+}
+
+/**
+ * Batch student-info loader
+ * - Queues items and sends them in a single POST to avoid N requests
+ * - Stores result in course.studentInfo
+ */
+const pendingStudentInfoKeys = new Set()
+let batchTimer = null
+let batchAbort = null
+
+const makeStudentInfoKey = (courseId, sessionId) => `${courseId}:${sessionId}`
+const applyStudentInfoToCourses = (items = []) => {
+  if (!Array.isArray(items) || items.length === 0) return
+
+  const byKey = new Map()
+  for (const it of items) {
+    const courseId = Number(it?.courseId ?? 0)
+    const sessionId = Number(it?.sessionId ?? 0)
+    if (!Number.isFinite(courseId) || courseId <= 0) continue
+
+    const key = makeStudentInfoKey(courseId, Number.isFinite(sessionId) ? sessionId : 0)
+    byKey.set(key, it?.data ?? it)
+  }
+
+  for (const c of courses.value) {
+    const cid = getNumericCourseId(c)
+    if (!cid) continue
+
+    const sid = Number(c?.sessionId ?? c?.session?.id ?? 0) || 0
+    const key = makeStudentInfoKey(cid, sid)
+
+    if (byKey.has(key)) {
+      const data = byKey.get(key)
+
+      // Attach to course object without breaking existing fields
+      c.studentInfo = data
+
+      // Optional mirrors (keep compatibility if older UI reads these)
+      if (data && typeof data === "object") {
+        if (typeof data.hasNewContent === "boolean") c.hasNewContent = data.hasNewContent
+        if (typeof data.completed === "boolean") c.completed = data.completed
+        if (typeof data.certificateAvailable === "boolean") c.certificateAvailable = data.certificateAvailable
+        if (typeof data.progress === "number") c.trackingProgress = data.progress
+        if (typeof data.score === "number") c.score = data.score
+        if (typeof data.bestScore === "number") c.bestScore = data.bestScore
+      }
+    }
+  }
+}
+
+// Build a normalized studentInfo object from CourseRelUser node (GraphQL)
+const buildStudentInfoFromEdgeNode = (edgeNode) => {
+  const progressRaw = edgeNode?.trackingProgress ?? edgeNode?.progress ?? 0
+  const progress = Number(progressRaw)
+  return {
+    progress: Number.isFinite(progress) ? progress : 0,
+    score: typeof edgeNode?.score === "number" ? edgeNode.score : null,
+    bestScore: typeof edgeNode?.bestScore === "number" ? edgeNode.bestScore : null,
+    timeSpentSeconds: Number.isFinite(Number(edgeNode?.timeSpentSeconds)) ? Number(edgeNode.timeSpentSeconds) : null,
+    certificateAvailable: !!edgeNode?.certificateAvailable,
+    completed: !!edgeNode?.completed,
+    hasNewContent: !!edgeNode?.hasNewContent,
   }
 }
 
@@ -123,9 +232,25 @@ const mergeCoursesFromEdges = (edges) => {
     const key = c._id ?? c.id
     if (!key) continue
 
+    const sid = getNumericSessionId(c, node)
+    const studentInfoFromGraph = buildStudentInfoFromEdgeNode(node)
+    const mergedCourse = {
+      ...c,
+      session: node?.session ?? c.session ?? null,
+      sessionId: sid,
+      studentInfo: studentInfoFromGraph,
+      hasNewContent: studentInfoFromGraph.hasNewContent,
+      completed: studentInfoFromGraph.completed,
+      certificateAvailable: studentInfoFromGraph.certificateAvailable,
+      trackingProgress: studentInfoFromGraph.progress,
+      score: studentInfoFromGraph.score,
+      bestScore: studentInfoFromGraph.bestScore,
+      timeSpentSeconds: studentInfoFromGraph.timeSpentSeconds,
+    }
+
     if (!courseIds.has(key)) {
       courseIds.add(key)
-      courses.value.push(c)
+      courses.value.push(mergedCourse)
       added++
     }
   }
@@ -137,7 +262,7 @@ const { result, loading, fetchMore } = useQuery(
   GET_COURSE_REL_USER,
   () => ({
     user: securityStore.user["@id"],
-    first: 20, // smaller first paint (tune: 12/16/20)
+    first: 20,
     after: null,
   }),
   {
@@ -146,7 +271,6 @@ const { result, loading, fetchMore } = useQuery(
   },
 )
 
-// Observer (infinite scroll)
 let observer = null
 
 const ensureObserver = () => {
@@ -210,7 +334,6 @@ watch(result, async (newResult) => {
   const cr = newResult?.courseRelUsers
   if (!cr) return
 
-  // First page merge
   mergeCoursesFromEdges(cr.edges || [])
 
   endCursor.value = cr.pageInfo?.endCursor || null
@@ -224,7 +347,6 @@ watch(result, async (newResult) => {
 })
 
 onMounted(() => {
-  // Reset local state (optional)
   courses.value = []
   courseIds.clear()
   endCursor.value = null
@@ -237,5 +359,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   if (observer) observer.disconnect()
+  if (batchTimer) clearTimeout(batchTimer)
+  if (batchAbort) batchAbort.abort()
 })
 </script>

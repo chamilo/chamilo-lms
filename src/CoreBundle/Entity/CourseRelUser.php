@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -60,8 +61,6 @@ class CourseRelUser implements Stringable
     use UserTrait;
 
     public const TEACHER = 1;
-    // public const SESSION_ADMIN = 3;
-    // public const DRH = 4;
     public const STUDENT = 5;
 
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -106,10 +105,32 @@ class CourseRelUser implements Stringable
     #[ORM\Column(name: 'legal_agreement', type: 'integer', nullable: true, unique: false)]
     protected ?int $legalAgreement = null;
 
-    #[Groups(['course:read', 'user:read'])]
+    #[Groups(['course:read', 'user:read', 'course_rel_user:read'])]
     #[Assert\Range(min: 0, max: 100, notInRangeMessage: 'Progress from {{ min }} to {{ max }} only')]
     #[ORM\Column(name: 'progress', type: 'integer')]
     protected int $progress;
+
+    #[Groups(['course_rel_user:read'])]
+    private ?float $trackingProgress = null;
+
+    #[Groups(['course_rel_user:read'])]
+    private ?float $score = null;
+
+    #[Groups(['course_rel_user:read'])]
+    private ?float $bestScore = null;
+
+    #[Groups(['course_rel_user:read'])]
+    private ?int $timeSpentSeconds = null;
+
+    #[Groups(['course_rel_user:read'])]
+    private ?bool $certificateAvailable = null;
+
+    #[Groups(['course_rel_user:read'])]
+    private ?bool $completed = null;
+
+    #[ApiProperty(readable: true, writable: false)]
+    #[Groups(['course_rel_user:read'])]
+    private ?bool $hasNewContent = null;
 
     public function __construct()
     {
@@ -237,5 +258,85 @@ class CourseRelUser implements Stringable
         $this->progress = $progress;
 
         return $this;
+    }
+
+    public function getTrackingProgress(): ?float
+    {
+        return $this->trackingProgress;
+    }
+
+    public function setTrackingProgress(?float $trackingProgress): void
+    {
+        $this->trackingProgress = $trackingProgress;
+    }
+
+    public function getScore(): ?float
+    {
+        return $this->score;
+    }
+
+    public function setScore(?float $score): void
+    {
+        $this->score = $score;
+    }
+
+    public function getBestScore(): ?float
+    {
+        return $this->bestScore;
+    }
+
+    public function setBestScore(?float $bestScore): void
+    {
+        $this->bestScore = $bestScore;
+    }
+
+    public function getTimeSpentSeconds(): ?int
+    {
+        return $this->timeSpentSeconds;
+    }
+
+    public function setTimeSpentSeconds(?int $timeSpentSeconds): void
+    {
+        $this->timeSpentSeconds = $timeSpentSeconds;
+    }
+
+    public function isCertificateAvailable(): ?bool
+    {
+        return $this->certificateAvailable;
+    }
+
+    public function setCertificateAvailable(?bool $certificateAvailable): void
+    {
+        $this->certificateAvailable = $certificateAvailable;
+    }
+
+    public function isCompleted(): ?bool
+    {
+        return $this->completed;
+    }
+
+    public function setCompleted(?bool $completed): void
+    {
+        $this->completed = $completed;
+    }
+
+    public function hasNewContent(): ?bool
+    {
+        return $this->hasNewContent;
+    }
+
+    public function setHasNewContent(?bool $hasNewContent): void
+    {
+        $this->hasNewContent = $hasNewContent;
+    }
+
+    public function getHasNewContent(): ?bool
+    {
+        return $this->hasNewContent;
+    }
+
+    public function isHasNewContent(): ?bool
+    {
+        return $this->hasNewContent;
     }
 }

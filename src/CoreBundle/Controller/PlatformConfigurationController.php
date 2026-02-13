@@ -97,6 +97,8 @@ class PlatformConfigurationController extends AbstractController
         $configuration['settings']['platform.session_admin_access_to_all_users_on_all_urls'] = $settingsManager->getSetting('platform.session_admin_access_to_all_users_on_all_urls', true);
         $configuration['settings']['profile.login_is_email'] = $settingsManager->getSetting('profile.login_is_email', true);
         $configuration['settings']['platform.timepicker_increment'] = $settingsManager->getSetting('platform.timepicker_increment', true);
+        $rawCourseStudentInfoSetting = $settingsManager->getSetting('course.course_student_info', true);
+        $configuration['settings']['course.course_student_info'] = 'false' !== $rawCourseStudentInfoSetting ? $this->decodeSettingArray($rawCourseStudentInfoSetting) : 'false';
 
         $variables = [];
 

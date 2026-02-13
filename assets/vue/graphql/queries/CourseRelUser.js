@@ -6,11 +6,24 @@ export const GET_COURSE_REL_USER = gql`
       edges {
         cursor
         node {
+          id
+          status
+          progress
+          trackingProgress
+          score
+          bestScore
+          timeSpentSeconds
+          certificateAvailable
+          completed
+          hasNewContent
           course {
             _id
+            id
             title
             illustrationUrl
             duration
+            courseLanguage
+            categoryTitles
             users(status: 1, first: 4) {
               edges {
                 node {

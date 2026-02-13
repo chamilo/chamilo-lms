@@ -34,20 +34,24 @@ export function useSocialInfo() {
         groupInfo.value = {}
         isGroup.value = false
       }
-      isLoading.value = false
     } else {
       isGroup.value = false
       groupInfo.value = {}
     }
+    isLoading.value = false
   }
   const loadUser = async () => {
     try {
-      if (route.query.id) {
+      const uid = route.query.uid
+      if (uid) {
         const params = { ...route.query }
+        // Ensure id is never used even if present.
+        delete params.id
+
         if (route.path.includes("/social")) {
           params.page_origin = "social"
         }
-        const response = await axios.get(`/api/users/${route.query.id}`, { params })
+        const response = await axios.get(`/api/users/${uid}`, { params })
         user.value = response.data
         isCurrentUser.value = false
       } else {
@@ -61,9 +65,8 @@ export function useSocialInfo() {
   }
   onMounted(async () => {
     try {
-      //if (!route.params.group_id) {
       await loadUser()
-      //}
+
       if (route.params.group_id) {
         await loadGroup(route.params.group_id)
       }

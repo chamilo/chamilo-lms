@@ -5672,19 +5672,29 @@ SQL;
         $siteName = api_get_setting('platform.site_name');
         $mailSubject = sprintf(get_lang('[%s] Confirm your e-mail'), $siteName);
         $firstName = $user->getFirstname();
-        $mailBody = sprintf(get_lang('Dear %s,'), $firstName)
-            ."\n\n"
-            .sprintf(get_lang('To verify your e-mail and enable your account on %s, please click the link below.'), $siteName)
-            ."\n\n"
-            .Display::url($url, $url)
-            ."\n\n"
-            .get_lang('If you did not register this account, you can ignore this e-mail. No action will be taken.');
+        $greeting = sprintf(get_lang('Dear %s,'), $firstName);
+        $intro = sprintf(
+            get_lang('To verify your e-mail and enable your account on %s, please click the link below.'),
+            $siteName
+        );
+        $outro = get_lang('If you did not register this account, you can ignore this e-mail. No action will be taken.');
+
+        $tpl = Container::getTwig();
+        $mailBodyHtml = $tpl->render(
+            '@ChamiloCore/Mailer/Legacy/user_email_confirmation.html.twig',
+            [
+                'greeting' => $greeting,
+                'intro' => $intro,
+                'outro' => $outro,
+                'url' => $url,
+            ]
+        );
 
         api_mail_html(
             self::formatUserFullName($user),
             $user->getEmail(),
             $mailSubject,
-            $mailBody
+            $mailBodyHtml
         );
         Display::addFlash(Display::return_message(get_lang('Check your e-mail and follow the instructions.')));
     }

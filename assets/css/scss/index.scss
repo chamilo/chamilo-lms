@@ -26,6 +26,7 @@
 }
 
 @include meta.load-css("settings/typography");
+@include meta.load-css("settings/component");
 
 @include meta.load-css("atoms/form");
 @include meta.load-css("atoms/autocomplete");

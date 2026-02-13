@@ -2,9 +2,7 @@
     {% set src = theme_logo('email', true) %}
     {% if not src %}
         {% set candidates = [
-            'images/email-logo.svg',
             'images/email-logo.png',
-            'images/header-logo.svg',
             'images/header-logo.png'
         ] %}
         {% for c in candidates %}

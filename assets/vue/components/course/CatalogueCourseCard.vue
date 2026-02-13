@@ -314,12 +314,10 @@ onMounted(() => {
           v-if="imageLink"
           :to="imageLink"
           aria-label="Open course"
-          class="absolute inset-0 block"
         >
           <img
             :alt="localCourse.title"
             :src="localCourse.illustrationUrl"
-            class="h-full w-full object-cover"
             loading="lazy"
             referrerpolicy="no-referrer"
           />
@@ -328,7 +326,6 @@ onMounted(() => {
           v-else
           :alt="localCourse.title"
           :src="localCourse.illustrationUrl"
-          class="w-full object-cover"
         />
 
         <BaseButton
@@ -421,22 +418,22 @@ onMounted(() => {
           {{ t("Your vote") }} [{{ localVote }}]
         </span>
       </div>
+    </template>
 
+    <template #footer>
       <template
         v-for="extraField in localCourse.extra_fields"
         :key="extraField.variable"
       >
         <div
           v-if="extraField.value"
-          class="text-caption flex gap-2"
+          class="text-caption space-x-2"
         >
           <strong v-text="extraField.text" />
           <span v-text="extraField.value" />
         </div>
       </template>
-    </template>
 
-    <template #footer>
       <BaseAppLink
         v-if="localCourse.subscribed"
         :to="{ name: 'CourseHome', params: { id: localCourse.id } }"

@@ -42,15 +42,15 @@ export function useSocialInfo() {
   }
   const loadUser = async () => {
     try {
+      const isSocialRoute = route.path.includes("/social")
       const uid = route.query.uid
-      if (uid) {
+
+      // Only allow uid usage inside /social
+      if (isSocialRoute && uid) {
         const params = { ...route.query }
-        // Ensure id is never used even if present.
         delete params.id
 
-        if (route.path.includes("/social")) {
-          params.page_origin = "social"
-        }
+        params.page_origin = "social"
         const response = await axios.get(`/api/users/${uid}`, { params })
         user.value = response.data
         isCurrentUser.value = false
@@ -58,8 +58,9 @@ export function useSocialInfo() {
         user.value = securityStore.user
         isCurrentUser.value = true
       }
-    } catch (e) {
-      user.value = {}
+    } catch (error) {
+      console.error("Error loading user:", error)
+      user.value = securityStore.user
       isCurrentUser.value = true
     }
   }

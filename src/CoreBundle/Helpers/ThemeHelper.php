@@ -230,8 +230,9 @@ final class ThemeHelper
      */
     public function getPreferredLogoUrl(string $type = 'header', bool $absoluteUrl = false): string
     {
+        // For e-mails, prefer PNG only (Gmail often blocks SVG rendering in emails).
         $candidates = 'email' === $type
-            ? ['images/email-logo.svg', 'images/email-logo.png']
+            ? ['images/email-logo.png', 'images/header-logo.png']
             : ['images/header-logo.svg', 'images/header-logo.png'];
 
         foreach ($candidates as $relPath) {

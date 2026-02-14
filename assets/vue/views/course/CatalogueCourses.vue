@@ -1,23 +1,21 @@
 <template>
-  <div class="catalogue-courses p-4">
+  <div class="catalogue-courses">
+    <SectionHeader :title="t('Course catalogue')" />
+
     <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
       <div>
-        <strong>{{ t("Total number of courses") }}:</strong>
-        {{ totalCourses }}<br />
-        <strong>{{ t("Matching courses") }}:</strong>
-        {{ courses.length }}
+        <p>
+          <strong>{{ t("Total number of courses") }}:</strong> {{ totalCourses }}
+        </p>
+        <p>
+          <strong>{{ t("Matching courses") }}:</strong> {{ courses.length }}
+        </p>
       </div>
       <div class="flex gap-3 items-center">
-        <Button
-          :label="t('Clear filter results')"
-          class="p-button-outlined"
-          icon="pi pi-filter-slash"
-          @click="clearFilter"
-        />
-        <Button
+        <BaseButton
           :label="t('Advanced search')"
-          class="p-button-outlined"
-          icon="pi pi-sliders-h"
+          icon="filter"
+          type="black"
           @click="showAdvancedSearch = !showAdvancedSearch"
         />
 
@@ -30,15 +28,6 @@
           optionLabel="label"
           optionValue="value"
         />
-        <div class="relative">
-          <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <InputText
-            id="search_catalogue"
-            v-model="filters['global'].value"
-            :placeholder="t('Search')"
-            class="pl-10 w-64"
-          />
-        </div>
       </div>
     </div>
 
@@ -94,9 +83,9 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref, watch } from "vue"
 import api from "../../config/api"
-import InputText from "primevue/inputtext"
-import Button from "primevue/button"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import Dropdown from "primevue/dropdown"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { useNotification } from "../../composables/notification"
 import { useSecurityStore } from "../../store/securityStore"
 import CatalogueCourseCard from "../../components/course/CatalogueCourseCard.vue"
@@ -171,7 +160,6 @@ const currentUserId = securityStore.user?.id ?? null
 const status = ref(false)
 const totalCourses = ref(0)
 const courses = ref([])
-const filters = ref({ global: { value: null } })
 
 const loadingMore = ref(false)
 
@@ -285,7 +273,6 @@ const cardExtraFields = computed(() => {
 const showCourseTitle = computed(() => courseCatalogueSettings.value.hide_course_title !== true)
 
 const showAdvancedSearch = ref(false)
-const advancedFormKey = ref(0)
 
 function onAdvancedApply(payload) {
   loadParams = {
@@ -390,11 +377,6 @@ onMounted(async () => {
 onUnmounted(() => {
   observer?.disconnect()
 })
-
-function clearFilter() {
-  filters.value.global.value = null
-  advancedFormKey.value++
-}
 
 const saveOrUpdateVote = async (course, value) => {
   try {

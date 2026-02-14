@@ -4,11 +4,10 @@
     @submit.prevent="apply"
   >
     <div v-if="allowTitle">
-      <label class="block text-sm font-medium mb-1">{{ $t("Title") }}</label>
-      <InputText
-        v-model="model.title"
-        :placeholder="$t('Search by title')"
+      <BaseInputText
         id="search_by_title"
+        v-model="model.title"
+        :label="t('Title')"
       />
     </div>
 
@@ -24,7 +23,7 @@
         <Dropdown
           v-model="model.extra[f.variable]"
           :options="toDropdown(f.options)"
-          :placeholder="$t('Select')"
+          :placeholder="t('Select')"
           class="w-full"
           optionLabel="label"
           optionValue="value"
@@ -38,7 +37,7 @@
         <MultiSelect
           v-model="model.extra[f.variable]"
           :options="toDropdown(f.options)"
-          :placeholder="$t('Select')"
+          :placeholder="t('Select')"
           class="w-full"
           display="chip"
           optionLabel="label"
@@ -95,7 +94,7 @@
             :inputId="f.variable"
             binary
           />
-          <label :for="f.variable">{{ $t("Yes") }}</label>
+          <label :for="f.variable">{{ t("Yes") }}</label>
         </div>
       </div>
 
@@ -137,7 +136,7 @@
           />
           <InputText
             v-model="model.extra[`${f.variable}_second`]"
-            :placeholder="$t('Enter a value here')"
+            :placeholder="t('Enter a value here')"
           />
         </div>
       </div>
@@ -207,7 +206,7 @@
         <label class="block text-sm font-medium mb-1">{{ f.title }}</label>
         <Chips
           v-model="model.extra[f.variable]"
-          :placeholder="$t('Add tags')"
+          :placeholder="t('Add tags')"
         />
       </div>
 
@@ -223,13 +222,13 @@
 
     <div class="md:col-span-4 flex flex-wrap gap-2 justify-end">
       <Button
-        :label="$t('Clear')"
+        :label="t('Clear')"
         class="p-button-outlined"
         type="button"
         @click="clear"
       />
       <Button
-        :label="$t('Apply advanced filters')"
+        :label="t('Apply advanced filters')"
         icon="pi pi-filter"
         type="submit"
       />
@@ -239,6 +238,7 @@
 
 <script setup>
 import { reactive } from "vue"
+import { useI18n } from "vue-i18n"
 import Dropdown from "primevue/dropdown"
 import MultiSelect from "primevue/multiselect"
 import Calendar from "primevue/calendar"
@@ -247,7 +247,10 @@ import Checkbox from "primevue/checkbox"
 import RadioButton from "primevue/radiobutton"
 import Chips from "primevue/chips"
 import Button from "primevue/button"
+import BaseInputText from "../basecomponents/BaseInputText.vue"
 import CourseCategorySelect from "../coursecategory/CourseCategorySelect.vue"
+
+const { t } = useI18n()
 
 const TYPE = {
   TEXT: 1,

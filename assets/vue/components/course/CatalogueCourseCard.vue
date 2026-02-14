@@ -372,7 +372,10 @@ onMounted(() => {
       </div>
     </template>
 
-    <template #subtitle>
+    <template
+      #subtitle
+      v-if="localCourse.duration || localCourse.dependencies?.length || localCourse.price"
+    >
       <div v-if="localCourse.duration">
         <strong>{{ t("Duration") }}:</strong> {{ durationInHours }}
       </div>

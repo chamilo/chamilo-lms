@@ -297,6 +297,10 @@ function onAdvancedApply(payload) {
     loadParams.title = payload.title
   }
 
+  if (payload.categories.length > 0) {
+    loadParams.categories = payload.categories
+  }
+
   if (payload.extraFields.length > 0 && payload.extraFieldValues) {
     loadParams.extrafield = payload.extraFields
     loadParams.extrafieldvalue = payload.extraFieldValues

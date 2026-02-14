@@ -12,6 +12,8 @@
       />
     </div>
 
+    <CourseCategorySelect v-model="model.categories" />
+
     <template
       v-for="f in fields"
       :key="f.variable"
@@ -245,6 +247,7 @@ import Checkbox from "primevue/checkbox"
 import RadioButton from "primevue/radiobutton"
 import Chips from "primevue/chips"
 import Button from "primevue/button"
+import CourseCategorySelect from "../coursecategory/CourseCategorySelect.vue"
 
 const TYPE = {
   TEXT: 1,
@@ -286,6 +289,7 @@ const emit = defineEmits(["apply", "clear"])
 
 const model = reactive({
   title: "",
+  categories: [],
   extra: {},
 })
 
@@ -326,6 +330,7 @@ function onTripleL2Change(f) {
 
 function clear() {
   model.title = ""
+  model.categories = []
   model.extra = {}
   emit("clear")
 }
@@ -333,11 +338,13 @@ function clear() {
 function apply() {
   const payload = {
     title: "",
+    categories: [],
     extraFields: [],
     extraFieldValues: [],
   }
 
   payload.title = model.title.trim()
+  payload.categories = model.categories
 
   for (let [key, value] of Object.entries(model.extra)) {
     const fieldInfo = props.fields.find((f) => f.variable === key)

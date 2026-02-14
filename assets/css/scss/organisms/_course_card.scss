@@ -2,15 +2,11 @@
   .course-card {
 
     &__header {
-      @apply relative aspect-video w-full overflow-hidden rounded-t-lg bg-gray-25 ;
-    }
-
-    .p-card-header {
-      @apply relative;
+      @apply aspect-video w-full overflow-hidden rounded-t-lg bg-gray-25 ;
     }
 
     &__category-list {
-      @apply absolute top-2 left-2 flex flex-wrap gap-1 z-10;
+      @apply absolute top-2 left-2 flex flex-wrap gap-1;
     }
 
     &__title {
@@ -28,7 +24,7 @@
     }
 
     &__language {
-      @apply absolute bottom-2 right-2 z-10;
+      @apply absolute bottom-2 right-2;
     }
   }
 }

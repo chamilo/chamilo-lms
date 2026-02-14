@@ -4,11 +4,11 @@
       <template #start>
         <div class="flex gap-2">
           <BaseButton
-            icon="arrow-up"
-            type="black"
-            onlyIcon
-            :label="t('Up')"
             v-if="categoryId !== 0"
+            :label="t('Up')"
+            icon="arrow-up"
+            only-icon
+            type="black"
             @click="goRoot"
           />
           <BaseButton
@@ -189,17 +189,17 @@
           <template v-if="data.kind === 'file'">
             <div class="inline-flex items-center gap-1 whitespace-nowrap">
               <BaseButton
-                icon="comment"
-                type="black"
-                onlyIcon
                 :label="t('Feedback')"
+                icon="comment"
+                only-icon
+                type="black"
                 @click="openFeedback(data)"
               />
               <BaseButton
-                icon="file-swap"
-                type="black"
-                onlyIcon
                 :label="t('Move')"
+                icon="file-swap"
+                only-icon
+                type="black"
                 @click="openMove(data)"
               />
               <a
@@ -208,17 +208,17 @@
                 rel="noopener"
               >
                 <BaseButton
-                  icon="download"
-                  type="black"
-                  onlyIcon
                   :label="t('Download')"
+                  icon="download"
+                  only-icon
+                  type="black"
                 />
               </a>
               <BaseButton
-                icon="delete"
-                type="danger"
-                onlyIcon
                 :label="t('Delete')"
+                icon="delete"
+                only-icon
+                type="danger"
                 @click="remove([data.id])"
               />
             </div>

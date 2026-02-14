@@ -1,12 +1,11 @@
 <template>
   <Card class="course-card">
     <template #header>
-      <div class="relative aspect-video w-full overflow-hidden rounded-t-2xl bg-gray-100">
+      <div class="course-card__header">
         <img
           v-if="isLocked"
           :alt="course.title || 'Course illustration'"
           :src="imageUrl"
-          class="absolute inset-0 h-full w-full object-cover"
           loading="lazy"
           referrerpolicy="no-referrer"
         />
@@ -14,12 +13,10 @@
           v-else
           :to="{ name: 'CourseHome', params: { id: course._id }, query: { sid: sessionId } }"
           aria-label="Open course"
-          class="absolute inset-0 block"
         >
           <img
             :alt="course.title || 'Course illustration'"
             :src="imageUrl"
-            class="h-full w-full object-cover"
             loading="lazy"
             referrerpolicy="no-referrer"
           />
@@ -54,9 +51,10 @@
 
         <BaseButton
           v-if="isLocked && hasRequirements"
+          :label="t('Requirements')"
           class="!bg-support-1 !text-support-3 !rounded-md !shadow-sm hover:!bg-support-2"
           icon="shield-check"
-          onlyIcon
+          only-icon
           size="large"
           type="black"
           @click="openRequirementsModal"

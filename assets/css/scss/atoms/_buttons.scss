@@ -183,7 +183,7 @@ $border-color_12: #9333EA;
 }
 
 @mixin text-style($color) {
-  @apply bg-white text-#{$color};
+  @apply bg-white text-#{$color} border-transparent;
 
   &:enabled {
     &:hover,

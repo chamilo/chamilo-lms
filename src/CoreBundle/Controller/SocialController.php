@@ -832,7 +832,7 @@ class SocialController extends AbstractController
                     'avatar' => $userRepository->getUserPicture($item['id']),
                     'role' => 5 === $item['status'] ? 'student' : 'teacher',
                     'status' => $isUserOnline ? 'online' : 'offline',
-                    'url' => '/social?id='.$item['id'],
+                    'url' => '/social?uid='.$item['id'],
                     'relationType' => $relation['relationType'] ?? null,
                     'existingInvitations' => $existingInvitations,
                 ];

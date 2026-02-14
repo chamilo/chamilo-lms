@@ -8,8 +8,7 @@
     :variant="primeOutlinedProperty"
     :severity="primeSeverityProperty"
     :size="size"
-    :text="onlyIcon"
-    :title="tooltip || (onlyIcon ? label : undefined)"
+    :title="onlyIcon ? label : undefined"
     :type="isSubmit ? 'submit' : 'button'"
     :name="name"
     :id="id"
@@ -27,6 +26,7 @@ const props = defineProps({
   label: {
     type: String,
     default: "",
+    required: true,
   },
   isSubmit: {
     type: Boolean,
@@ -40,12 +40,8 @@ const props = defineProps({
   },
   type: {
     type: String,
-    required: true,
+    required: false,
     validator: buttonTypeValidator,
-  },
-  tooltip: {
-    type: String,
-    default: "",
   },
   onlyIcon: {
     type: Boolean,
@@ -110,8 +106,9 @@ const primeSeverityProperty = computed(() => {
 
 const primeOutlinedProperty = computed(() => {
   if (props.onlyIcon) {
-    return undefined
+    return "text"
   }
+
   switch (props.type) {
     case "primary-alternative":
     case "black":

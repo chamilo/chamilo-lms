@@ -4,11 +4,11 @@
       <template #start>
         <div class="flex gap-2">
           <BaseButton
-            icon="arrow-up"
-            type="black"
-            onlyIcon
+            v-if="categoryId !== 0"
             :label="t('Up')"
-            v-if="categoryId!==0"
+            icon="arrow-up"
+            only-icon
+            type="black"
             @click="goRoot"
           />
           <BaseButton
@@ -45,8 +45,18 @@
     >
       <template #header>
         <div class="flex items-center gap-2">
-          <BaseButton type="black" :label="t('Select all')" icon="check" @click="selectAll" />
-          <BaseButton type="black" :label="t('Unselect all')" icon="xmark" @click="clearAll" />
+          <BaseButton
+            type="black"
+            :label="t('Select all')"
+            icon="check"
+            @click="selectAll"
+          />
+          <BaseButton
+            type="black"
+            :label="t('Unselect all')"
+            icon="xmark"
+            @click="clearAll"
+          />
           <BaseSelect
             v-model="bulk"
             :options="bulkOptions"
@@ -126,37 +136,70 @@
           <!-- Folder actions -->
           <template v-if="data.kind==='folder'">
             <BaseButton
-              icon="download"
-              type="black"
-              onlyIcon
               :label="t('Download as ZIP')"
+              icon="download"
+              only-icon
+              type="black"
               @click="downloadCategoryZip(data.catId)"
             />
             <BaseButton
-              icon="pencil"
-              type="black"
-              onlyIcon
               :label="t('Rename')"
+              icon="pencil"
+              only-icon
+              type="black"
               @click="openRenameFolder(data)"
             />
             <BaseButton
-              icon="trash"
-              type="danger"
-              onlyIcon
               :label="t('Delete')"
+              icon="trash"
+              only-icon
+              type="danger"
               @click="deleteFolder(data)"
             />
           </template>
 
           <!-- File actions -->
           <template v-else>
-            <BaseButton icon="comment" type="black" onlyIcon :label="t('Feedback')" @click.stop="openFeedback(data)" />
-            <BaseButton icon="file-upload" type="black" onlyIcon :label="t('Update')" @click.stop="openUpdate(data)" />
-            <BaseButton icon="file-swap" type="black" onlyIcon :label="t('Move')" @click.stop="openMove(data)" />
-            <a :href="downloadUrl(data.id)" target="_blank" rel="noopener">
-              <BaseButton icon="download" type="black" onlyIcon :label="t('Download')" />
+            <BaseButton
+              :label="t('Feedback')"
+              icon="comment"
+              only-icon
+              type="black"
+              @click.stop="openFeedback(data)"
+            />
+            <BaseButton
+              :label="t('Update')"
+              icon="file-upload"
+              only-icon
+              type="black"
+              @click.stop="openUpdate(data)"
+            />
+            <BaseButton
+              :label="t('Move')"
+              icon="file-swap"
+              only-icon
+              type="black"
+              @click.stop="openMove(data)"
+            />
+            <a
+              :href="downloadUrl(data.id)"
+              target="_blank"
+              rel="noopener"
+            >
+              <BaseButton
+                :label="t('Download')"
+                icon="download"
+                only-icon
+                type="black"
+              />
             </a>
-            <BaseButton icon="delete" type="danger" onlyIcon :label="t('Delete')" @click="remove([data.id])" />
+            <BaseButton
+              :label="t('Delete')"
+              icon="delete"
+              only-icon
+              type="danger"
+              @click="remove([data.id])"
+            />
           </template>
         </template>
       </Column>
@@ -191,8 +234,18 @@
         :is-invalid="!catName"
       />
       <template #footer>
-        <BaseButton type="black" :label="t('Cancel')" icon="xmark" @click="closeCatDialog" />
-        <BaseButton type="primary" :label="t('Create folder')" icon="check" @click="saveCategory" />
+        <BaseButton
+          type="black"
+          :label="t('Cancel')"
+          icon="xmark"
+          @click="closeCatDialog"
+        />
+        <BaseButton
+          type="primary"
+          :label="t('Create folder')"
+          icon="check"
+          @click="saveCategory"
+        />
       </template>
     </BaseDialog>
 
@@ -206,8 +259,18 @@
         :is-invalid="!renameName"
       />
       <template #footer>
-        <BaseButton type="black" :label="t('Cancel')" icon="xmark" @click="closeRenameDialog" />
-        <BaseButton type="primary" :label="t('Save')" icon="check" @click="saveRename" />
+        <BaseButton
+          type="black"
+          :label="t('Cancel')"
+          icon="xmark"
+          @click="closeRenameDialog"
+        />
+        <BaseButton
+          type="primary"
+          :label="t('Save')"
+          icon="check"
+          @click="saveRename"
+        />
       </template>
     </BaseDialog>
 

@@ -69,7 +69,7 @@ const wallUser = ref(null)
 provide("social-user", wallUser)
 
 const wallIdFromRoute = computed(() => {
-  const raw = route.query.id
+  const raw = route.query.uid
   if (!raw) return null
   const n = Number(raw)
   return Number.isFinite(n) && n > 0 ? n : null
@@ -85,12 +85,12 @@ const wallName = computed(() => {
 const isWallLoading = computed(() => !isOwnWallByRoute.value && !wallName.value)
 
 const wallTitle = computed(() => {
-  if (isOwnWallByRoute.value) return ''
+  if (isOwnWallByRoute.value) return ""
   if (isWallLoading.value) return `${t("Social wall")}`
   return `${t("Wall of {0}", [wallName.value])}`.trim()
 })
 
-// Remount children when wall id or filter changes (prevents stale state reuse)
+// Remount children when wall id or filter changes
 const wallKey = computed(() => `wall:${wallIdFromRoute.value || "me"}:${filterType.value || "all"}`)
 
 async function loadWallUser() {
@@ -105,7 +105,7 @@ async function loadWallUser() {
     return
   }
 
-  // Stub user to prevent null-access while loading.
+  // Stub user to prevent null-access while loading
   wallUser.value = {
     id: targetId,
     "@id": `/api/users/${targetId}`,
@@ -132,15 +132,19 @@ async function hasFriendship(meIri, wallIri) {
 
   try {
     const [a, b] = await Promise.all([
-      axios.get(`${ENTRYPOINT}user_rel_users`, { params: { relationType: 3, user: meIri, friend: wallIri } }),
-      axios.get(`${ENTRYPOINT}user_rel_users`, { params: { relationType: 3, user: wallIri, friend: meIri } }),
+      axios.get(`${ENTRYPOINT}user_rel_users`, {
+        params: { relationType: 3, user: meIri, friend: wallIri },
+      }),
+      axios.get(`${ENTRYPOINT}user_rel_users`, {
+        params: { relationType: 3, user: wallIri, friend: meIri },
+      }),
     ])
 
     const aCount = Array.isArray(a.data?.["hydra:member"]) ? a.data["hydra:member"].length : 0
     const bCount = Array.isArray(b.data?.["hydra:member"]) ? b.data["hydra:member"].length : 0
     return aCount + bCount > 0
   } catch (e) {
-    console.warn("Friendship check failed; posting on other wall disabled.", e)
+    console.warn("Friendship check failed; posting disabled.", e)
     return false
   }
 }
@@ -162,32 +166,18 @@ async function refreshOtherWallPermission() {
     return
   }
 
-  // Reset immediately so UI doesn't reuse previous wall permission
   canWriteOnOtherWall.value = null
   const allowed = await hasFriendship(meIri, wallIri)
 
-  // Ignore outdated results (race condition guard)
-  if (seq !== permissionSeq) {
-    console.debug("Ignoring outdated friendship result (race condition).")
-    return
-  }
+  if (seq !== permissionSeq) return
+  if (targetWallId !== wallIdFromRoute.value) return
 
-  // Also ensure we are still on the same wall
-  if (targetWallId !== wallIdFromRoute.value) {
-    console.debug("Ignoring friendship result: wall changed during request.")
-    return
-  }
   canWriteOnOtherWall.value = allowed
 }
 
-watch(
-  [() => currentUserIri.value, () => wallIdFromRoute.value],
-  () => {
-    canWriteOnOtherWall.value = isOwnWallByRoute.value ? null : null
-    refreshOtherWallPermission()
-  },
-  { immediate: true },
-)
+watch([() => currentUserIri.value, () => wallIdFromRoute.value], () => refreshOtherWallPermission(), {
+  immediate: true,
+})
 
 watch(
   () => route.query.filterType,
@@ -216,16 +206,19 @@ function refreshPosts() {
 
 function filterMessages(type) {
   const nextQuery = { ...route.query }
+
   if (type === null) {
     delete nextQuery.filterType
   } else {
     nextQuery.filterType = type
   }
+
   router.push({ path: "/social", query: nextQuery })
 }
 
 function tabClasses(type) {
   const isActive = type ? filterType.value === type : !filterType.value
+
   return [
     "inline-flex items-center rounded-full border px-4 py-2 text-body-2 font-medium transition-colors duration-150",
     "focus:outline-none focus:ring-2 focus:ring-primary",

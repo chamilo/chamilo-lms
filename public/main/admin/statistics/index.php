@@ -34,13 +34,9 @@ if (
       }
       [id$="_chart_wrap"] > canvas,
       #courses_chart_wrap > canvas, #tools_chart_wrap > canvas, #coursebylanguage_chart_wrap > canvas,
-      #recentlogins_chart_wrap > canvas, #subscriptions_chart_wrap > canvas {
-        position: absolute;
-        inset: 0;
-        width: 100% !important;
-        height: 100% !important;
-        display: block;
-      }
+      #recentlogins_chart_wrap > canvas, #subscriptions_chart_wrap > canvas {display: block;width: 100%;height: 100%;}
+      #courses_chart_wrap{display:flex;align-items:center;justify-content:center;}
+      #courses_chart_wrap > canvas{max-height: 100%;width: auto;}
     </style>';
     $htmlHeadXtra[] = api_get_build_js('libs/chartjs/chart.js');
     //$htmlHeadXtra[] = api_get_asset('chartjs-plugin-labels/build/chartjs-plugin-labels.min.js');
@@ -269,6 +265,19 @@ if (
 
             break;
         case 'session_by_date':
+            $htmlHeadXtra[] = '<style>
+              .sbd-filters form{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 14px}
+              .sbd-filters form :is(.form-group,.control-group,.form-row,.form-actions){margin:0!important}
+              .sbd-filters form .form-actions{padding:0!important;border:0!important;background:transparent!important}
+              .sbd-filters .form-group {visibility: hidden;}
+              .sbd-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:16px 0}
+              @media (max-width:1200px){.sbd-cards{grid-template-columns:repeat(2,1fr)}}
+              @media (max-width:768px){.sbd-filters form{display:block}.sbd-cards{grid-template-columns:1fr}}
+              .sbd-card{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:12px}
+              .sbd-chart-wrap{position:relative;width:100%;max-width:360px;aspect-ratio:1/1;margin:0 auto}
+              .sbd-chart-wrap--wide{max-width:none;aspect-ratio:auto;height:420px}
+              .sbd-chart-wrap canvas{width:100%!important;height:100%!important;display:block}
+            </style>';
             $form = new FormValidator('session_by_date', 'get');
             $form->addDateRangePicker(
                 'range',
@@ -278,75 +287,8 @@ if (
             );
             $options = SessionManager::getStatusList();
             $form->addSelect('status_id', get_lang('Session status'), $options, ['placeholder' => get_lang('All')]);
-
             $form->addHidden('report', 'session_by_date');
             $form->addButtonSearch(get_lang('Search'));
-            $htmlHeadXtra[] = '<style>
-                .sbd-filters{
-                    max-width: 760px;
-                    margin: 0 0 16px 0;
-                }
-
-                .sbd-cards{
-                    display: grid;
-                    grid-template-columns: repeat(3, minmax(0, 1fr));
-                    gap: 16px;
-                    margin: 14px 0 18px 0;
-                }
-                @media (max-width: 992px){
-                    .sbd-cards{ grid-template-columns: 1fr; }
-                }
-
-                .sbd-card{
-                    background: #fff;
-                    border: 1px solid rgba(0,0,0,.08);
-                    border-radius: 12px;
-                    padding: 12px;
-                    box-shadow: 0 1px 2px rgba(0,0,0,.03);
-                }
-
-                .sbd-card h4{
-                    margin: 0 0 10px 0;
-                    font-size: 14px;
-                    font-weight: 600;
-                    text-align: center;
-                }
-
-                .sbd-chart-wrap{
-                    width: 100%;
-                    height: 320px;
-                    position: relative;
-                }
-                @media (max-width: 768px){
-                    .sbd-chart-wrap{ height: 260px; }
-                }
-
-                .sbd-chart-wrap canvas{
-                    width: 100% !important;
-                    height: 100% !important;
-                    display: block;
-                }
-
-                .sbd-table-responsive{
-                    width: 100%;
-                    overflow-x: auto;
-                    -webkit-overflow-scrolling: touch;
-                }
-
-                .sbd-table-responsive table{
-                    min-width: 780px;
-                }
-
-                .sbd-mini-table table{
-                    width: 100% !important;
-                    margin: 0 !important;
-                }
-                .sbd-mini-table td, .sbd-mini-table th{
-                    padding: 6px 8px !important;
-                    vertical-align: top;
-                    white-space: normal !important;
-                }
-            </style>';
 
             $validated = $form->validate()
                 || isset($_REQUEST['range'])
@@ -404,14 +346,11 @@ if (
 
                 $reportType = 'pie';
                 $reportOptions = '
-                    legend: {
-                        position: "left"
-                    },
-                    title: {
-                        text: "%s",
-                        display: true
-                    },
-                    cutoutPercentage: 25
+                  legend: { position: "bottom" },
+                  title:{ text:"%s", display:true },
+                  responsive:true,
+                  maintainAspectRatio:false,
+                  cutoutPercentage:25
                 ';
                 $reportOptions1 = sprintf($reportOptions, $reportName1);
                 $reportOptions2 = sprintf($reportOptions, $reportName2);
@@ -467,13 +406,6 @@ if (
                         }
                     }
                 ';
-
-                $htmlHeadXtra[] = Statistics::getJSChartTemplate(
-                    $url4,
-                    $reportType,
-                    $reportOptions,
-                    'canvas4'
-                );
             }
             break;
     }
@@ -767,11 +699,13 @@ switch ($report) {
             $row++;
 
             $content .= '<div class="sbd-table-responsive">'.$table->toHtml().'</div>';
-            $content .= '<div class="sbd-cards">';
-            $content .= '  <div class="sbd-card sbd-mini-table"><h4 id="canvas1_title"></h4><div id="canvas1_table"></div></div>';
-            $content .= '  <div class="sbd-card sbd-mini-table"><h4 id="canvas2_title"></h4><div id="canvas2_table"></div></div>';
-            $content .= '  <div class="sbd-card sbd-mini-table"><h4 id="canvas3_title"></h4><div id="canvas3_table"></div></div>';
-            $content .= '</div>';
+            if ($sessionCount > 0) {
+                $content .= '<div class="sbd-cards">';
+                $content .= '  <div class="sbd-card sbd-mini-table"><h4 id="canvas1_title"></h4><div id="canvas1_table"></div></div>';
+                $content .= '  <div class="sbd-card sbd-mini-table"><h4 id="canvas2_title"></h4><div id="canvas2_table"></div></div>';
+                $content .= '  <div class="sbd-card sbd-mini-table"><h4 id="canvas3_title"></h4><div id="canvas3_table"></div></div>';
+                $content .= '</div>';
+            }
 
             // Courses table
             $tableCourse = new HTML_Table(['class' => 'table table-hover table-striped table-bordered']);
@@ -800,15 +734,13 @@ switch ($report) {
             }
 
             $content .= '<div class="sbd-table-responsive">'.$tableCourse->toHtml().'</div>';
-            $content .= '<div class="sbd-cards">';
-            $content .= '  <div class="sbd-card"><div class="sbd-chart-wrap"><canvas id="canvas1"></canvas></div></div>';
-            $content .= '  <div class="sbd-card"><div class="sbd-chart-wrap"><canvas id="canvas2"></canvas></div></div>';
-            $content .= '  <div class="sbd-card"><div class="sbd-chart-wrap"><canvas id="canvas3"></canvas></div></div>';
-            $content .= '</div>';
-
-            $content .= '<div class="sbd-card">';
-            $content .= '  <div class="sbd-chart-wrap" style="height:420px;"><canvas id="canvas4"></canvas></div>';
-            $content .= '</div>';
+            if ($sessionCount > 0) {
+                $content .= '<div class="sbd-cards">';
+                $content .= '  <div class="sbd-card"><div class="sbd-chart-wrap"><canvas id="canvas1"></canvas></div></div>';
+                $content .= '  <div class="sbd-card"><div class="sbd-chart-wrap"><canvas id="canvas2"></canvas></div></div>';
+                $content .= '  <div class="sbd-card"><div class="sbd-chart-wrap"><canvas id="canvas3"></canvas></div></div>';
+                $content .= '</div>';
+            }
         }
 
         $table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table']);
@@ -872,11 +804,13 @@ switch ($report) {
             }
 
             $url = api_get_self().'?'.http_build_query($exportParams);
-            $link = Display::url(
-                Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon').'&nbsp;'.get_lang('Export to XLS'),
-                $url,
-                ['class' => 'btn btn--plain']
-            );
+            if ($sessionCount > 0) {
+                $link = Display::url(
+                    Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon').'&nbsp;'.get_lang('Export to XLS'),
+                    $url,
+                    ['class' => 'btn btn--plain']
+                );
+            }
         }
 
         $content = '<div class="sbd-filters">'.$form->returnForm().'</div>'.$content.$link;

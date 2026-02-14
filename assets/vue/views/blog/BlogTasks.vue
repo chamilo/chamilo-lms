@@ -5,8 +5,18 @@
         <h3 class="text-lg font-semibold m-0">{{ t("Tasks") }}</h3>
       </template>
       <template #end>
-        <BaseButton type="primary" icon="plus" :label="t('New task')" @click="openCreate" />
-        <BaseButton type="black" icon="account-plus" :label="t('Assign task')" @click="showAssign = true" />
+        <BaseButton
+          type="primary"
+          icon="plus"
+          :label="t('New task')"
+          @click="openCreate"
+        />
+        <BaseButton
+          type="black"
+          icon="account-plus"
+          :label="t('Assign task')"
+          @click="showAssign = true"
+        />
       </template>
     </BaseToolbar>
 
@@ -31,18 +41,18 @@
                 <div class="flex gap-1" v-if="canEditTask(task) || canDeleteTask(task)">
                   <BaseButton
                     v-if="canEditTask(task)"
-                    type="black"
-                    :onlyIcon="true"
+                    :label="t('Edit')"
                     icon="edit"
-                    :tooltip="t('Edit')"
+                    only-icon
+                    type="black"
                     @click="openEdit(task)"
                   />
                   <BaseButton
                     v-if="canDeleteTask(task)"
-                    type="danger"
-                    :onlyIcon="true"
+                    :label="t('Delete')"
+                    only-icon
                     icon="trash"
-                    :tooltip="t('Delete')"
+                    type="danger"
                     @click="removeTask(task)"
                   />
                 </div>

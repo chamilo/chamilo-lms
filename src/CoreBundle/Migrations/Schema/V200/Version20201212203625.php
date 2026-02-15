@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -21,6 +20,20 @@ use Throwable;
 
 final class Version20201212203625 extends AbstractMigrationChamilo
 {
+    /**
+     * System folder filetypes (no file upload for these).
+     *
+     * @var string[]
+     */
+    private const FOLDER_LIKE_FILETYPES = [
+        'folder',
+        'user_folder',
+        'user_folder_ses',
+        'media_folder',
+        'cert_folder',
+        'chat_folder',
+    ];
+
     public function getDescription(): string
     {
         return 'Migrate c_document';
@@ -29,60 +42,99 @@ final class Version20201212203625 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $this->ensureCDocumentFiletypeVarchar15();
+
+        /** @var CDocumentRepository $documentRepo */
         $documentRepo = $this->container->get(CDocumentRepository::class);
+
+        /** @var CourseRepository $courseRepo */
         $courseRepo = $this->container->get(CourseRepository::class);
-        $attemptRepo = $this->entityManager->getRepository(TrackEAttempt::class);
 
         $batchSize = self::BATCH_SIZE;
+        $updateRootPath = $this->getUpdateRootPath();
 
-        // Migrate teacher exercise audio.
+        // Prepared statements.
+        $stmtTeacherAudioDocs = $this->connection->prepare(
+            "SELECT iid, path
+             FROM c_document
+             WHERE c_id = :cid
+               AND path LIKE :pattern"
+        );
+
+        $stmtAttemptUserId = $this->connection->prepare(
+            "SELECT user_id
+             FROM track_e_attempt
+             WHERE id = :id"
+        );
+
+        $stmtStudentAudioDocs = $this->connection->prepare(
+            "SELECT iid, path
+             FROM c_document
+             WHERE c_id = :cid
+               AND path NOT LIKE :notPattern
+               AND path LIKE :pattern"
+        );
+
+        $stmtFindAttemptId = $this->connection->prepare(
+            "SELECT id
+             FROM track_e_attempt
+             WHERE user_id = :uid
+               AND question_id = :qid
+               AND filename = :fn"
+        );
+
+        $stmtCourseDocuments = $this->connection->prepare(
+            "SELECT iid, path, session_id, filetype
+             FROM c_document
+             WHERE c_id = :cid
+               AND path NOT LIKE :exPattern
+               AND path NOT LIKE :chatPattern
+             ORDER BY filetype DESC, path"
+        );
+
+        // --------------------------
+        // 1) Teacher exercise audio
+        // --------------------------
         $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = (int) $course->getId();
-            $sql = "SELECT iid, path
-                    FROM c_document
-                    WHERE c_id = $courseId
-                      AND path LIKE '/../exercises/teacher_audio%'";
-            $documents = $this->connection->executeQuery($sql)->fetchAllAssociative();
+            $courseDirectory = (string) $course->getDirectory();
+
+            $documents = $stmtTeacherAudioDocs->executeQuery([
+                'cid' => $courseId,
+                'pattern' => '/../exercises/teacher_audio%',
+            ])->fetchAllAssociative();
+
+            $baseTeacherAudioPath = $updateRootPath.'/app/courses/'.$courseDirectory.'/exercises/teacher_audio/';
 
             foreach ($documents as $documentData) {
                 $path = (string) ($documentData['path'] ?? '');
+                if ('' === $path) {
+                    continue;
+                }
 
                 $path = str_replace('//', '/', $path);
                 $path = str_replace('/../exercises/teacher_audio/', '', $path);
 
-                $filePath = $this->getUpdateRootPath().'/app/courses/'.$course->getDirectory().'/exercises/teacher_audio/'.$path;
-                error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
+                $filePath = $baseTeacherAudioPath.$path;
                 if (!$this->fileExists($filePath)) {
                     continue;
                 }
 
-                // attemptId is the first folder name in the path
-                preg_match('#^/([^/]+)/#', '/'.$path, $matches);
-                $attemptId = isset($matches[1]) && '' !== $matches[1] ? (int) $matches[1] : 0;
+                // attemptId is the first folder name in the relative path.
+                $attemptIdStr = \strtok(ltrim($path, '/'), '/');
+                $attemptId = (\is_string($attemptIdStr) && ctype_digit($attemptIdStr)) ? (int) $attemptIdStr : 0;
                 if ($attemptId <= 0) {
-                    error_log('[MIGRATION][teacher_audio] Could not parse attempt id from path, skipping.');
-
                     continue;
                 }
 
-                /** @var TrackEAttempt|null $attempt */
-                $attempt = $attemptRepo->find($attemptId);
-                if (null === $attempt) {
-                    continue;
-                }
-
-                // Avoid duplicates even within the same EM (we insert via DBAL)
                 if ($this->attemptHasFeedback($attemptId)) {
                     continue;
                 }
 
-                $userId = $this->getAttemptUserId($attempt);
-                if (null === $userId || $userId <= 0) {
-                    error_log('[MIGRATION][teacher_audio] Missing attempt user id, skipping.');
-
+                $userId = (int) $stmtAttemptUserId->executeQuery(['id' => $attemptId])->fetchOne();
+                if ($userId <= 0) {
                     continue;
                 }
 
@@ -94,72 +146,73 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     $asset = (new Asset())
                         ->setCategory(Asset::EXERCISE_FEEDBACK)
                         ->setTitle($fileName)
-                        ->setFile($file)
-                    ;
+                        ->setFile($file);
 
                     $this->entityManager->persist($asset);
                     $this->entityManager->flush();
 
                     $this->insertAttemptFeedbackRow($attemptId, $userId, $asset);
-                } catch (Throwable $e) {
-                    error_log('[MIGRATION][teacher_audio] Failed processing audio: '.$e->getMessage());
+                } catch (Throwable) {
+                    // Ignore single-file failures to keep the migration running.
                 }
             }
-            $this->entityManager->flush();
+
             $this->entityManager->clear();
         }
 
-        $this->entityManager->flush();
-        $this->entityManager->clear();
-
-        // Migrate student exercise audio.
+        // --------------------------
+        // 2) Student exercise audio
+        // --------------------------
         $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = (int) $course->getId();
+            $courseDirectory = (string) $course->getDirectory();
 
-            $sql = "SELECT iid, path
-                    FROM c_document
-                    WHERE c_id = $courseId
-                      AND path NOT LIKE '/../exercises/teacher_audio%'
-                      AND path LIKE '/../exercises/%'";
-            $documents = $this->connection->executeQuery($sql)->fetchAllAssociative();
+            $documents = $stmtStudentAudioDocs->executeQuery([
+                'cid' => $courseId,
+                'notPattern' => '/../exercises/teacher_audio%',
+                'pattern' => '/../exercises/%',
+            ])->fetchAllAssociative();
+
+            $baseStudentAudioPath = $updateRootPath.'/app/courses/'.$courseDirectory.'/exercises/';
 
             foreach ($documents as $documentData) {
                 $path = (string) ($documentData['path'] ?? '');
+                if ('' === $path) {
+                    continue;
+                }
 
                 $path = str_replace('//', '/', $path);
                 $path = str_replace('/../exercises/', '', $path);
 
-                $filePath = $this->getUpdateRootPath().'/app/courses/'.$course->getDirectory().'/exercises/'.$path;
-                error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
+                $filePath = $baseStudentAudioPath.$path;
                 if (!$this->fileExists($filePath)) {
                     continue;
                 }
 
                 $fileName = basename($filePath);
 
-                preg_match('#/(.*)/(.*)/(.*)/(.*)/#', '/'.$path, $matches);
-                $questionId = isset($matches[3]) ? (int) $matches[3] : 0;
-                $userId = isset($matches[4]) ? (int) $matches[4] : 0;
+                // Expected: .../<something>/<something>/<questionId>/<userId>/<file>
+                $parts = explode('/', trim($path, '/'));
+                if (\count($parts) < 5) {
+                    continue;
+                }
+
+                $questionId = (int) ($parts[2] ?? 0);
+                $userId = (int) ($parts[3] ?? 0);
 
                 if ($questionId <= 0 || $userId <= 0) {
                     continue;
                 }
 
-                /** @var TrackEAttempt|null $attempt */
-                $attempt = $attemptRepo->findOneBy([
-                    'user' => $userId,
-                    'questionId' => $questionId,
-                    'filename' => $fileName,
-                ]);
+                $attemptId = (int) $stmtFindAttemptId->executeQuery([
+                    'uid' => $userId,
+                    'qid' => $questionId,
+                    'fn' => $fileName,
+                ])->fetchOne();
 
-                if (null === $attempt) {
-                    continue;
-                }
-
-                $attemptId = (int) $attempt->getId();
                 if ($attemptId <= 0) {
                     continue;
                 }
@@ -175,198 +228,254 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     $asset = (new Asset())
                         ->setCategory(Asset::EXERCISE_ATTEMPT)
                         ->setTitle($fileName)
-                        ->setFile($file)
-                    ;
+                        ->setFile($file);
 
                     $this->entityManager->persist($asset);
                     $this->entityManager->flush();
 
                     $this->insertAttemptFileRow($attemptId, $asset);
-                } catch (Throwable $e) {
-                    error_log('[MIGRATION][student_audio] Failed processing audio: '.$e->getMessage());
+                } catch (Throwable) {
+                    // Ignore single-file failures to keep the migration running.
                 }
             }
-            $this->entityManager->flush();
+
             $this->entityManager->clear();
         }
 
-        $this->entityManager->flush();
-        $this->entityManager->clear();
-
-        // Migrate normal documents.
+        // --------------------------
+        // 3) Normal documents
+        // --------------------------
         $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+
+        $docMeta = $this->entityManager->getClassMetadata(CDocument::class);
+        $docIdField = (string) $docMeta->getSingleIdentifierFieldName();
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
-            $counter = 1;
             $courseId = (int) $course->getId();
+            $courseDirectory = (string) $course->getDirectory();
 
-            // We fetch session_id and filetype for debugging/consistency checks during migration.
-            // The legacy "path" is the only reliable identifier for system folders (language-independent).
-            $sql = "SELECT iid, path, session_id, filetype FROM c_document
-                    WHERE c_id = {$courseId}
-                      AND path NOT LIKE '/../exercises/%'
-                      AND path NOT LIKE '/chat_files/%'
-                    ORDER BY filetype DESC, path";
-            $documents = $this->connection->executeQuery($sql)->fetchAllAssociative();
+            $rows = $stmtCourseDocuments->executeQuery([
+                'cid' => $courseId,
+                'exPattern' => '/../exercises/%',
+                'chatPattern' => '/chat_files/%',
+            ])->fetchAllAssociative();
 
-            foreach ($documents as $documentData) {
-                $documentId = (int) ($documentData['iid'] ?? 0);
-                $documentPath = (string) ($documentData['path'] ?? '');
-                $legacySessionId = (int) ($documentData['session_id'] ?? 0);
-                $legacyFiletype = (string) ($documentData['filetype'] ?? '');
+            if (empty($rows)) {
+                continue;
+            }
 
-                if ($documentId <= 0 || '' === $documentPath) {
-                    continue;
+            // Local map per course: path => iid (removes parent SQL per document).
+            $pathToIid = [];
+            foreach ($rows as $r) {
+                $iid = (int) ($r['iid'] ?? 0);
+                $p = (string) ($r['path'] ?? '');
+                if ($iid > 0 && '' !== $p) {
+                    $pathToIid[$p] = $iid;
                 }
+            }
 
+            $baseDocumentsPath = $updateRootPath.'/app/courses/'.$courseDirectory.'/document/';
+
+            $total = \count($rows);
+            for ($offset = 0; $offset < $total; $offset += $batchSize) {
+                /** @var Course|null $courseEntity */
                 $courseEntity = $courseRepo->find($courseId);
-                if (!$courseEntity) {
-                    continue;
+                if (null === $courseEntity) {
+                    break;
                 }
 
-                /** @var CDocument|null $document */
-                $document = $documentRepo->find($documentId);
-                if (null === $document) {
-                    continue;
+                // Must be loaded in the current EM because we clear() between batches.
+                $admin = $this->getAdmin();
+
+                $chunk = \array_slice($rows, $offset, $batchSize);
+
+                // Prefetch item properties for this batch to avoid N+1 queries in fixItemProperty().
+                $refs = [];
+                foreach ($chunk as $r) {
+                    $iid = (int) ($r['iid'] ?? 0);
+                    if ($iid > 0) {
+                        $refs[] = $iid;
+                    }
                 }
+                $itemPropsMap = $this->fetchItemPropertiesMap('document', $courseId, $refs);
 
-                if ($document->hasResourceNode()) {
-                    continue;
-                }
+                // Batch-load documents (+ parents) to avoid per-row find().
+                $idsToLoad = [];
+                foreach ($chunk as $r) {
+                    $iid = (int) ($r['iid'] ?? 0);
+                    $p = (string) ($r['path'] ?? '');
+                    if ($iid > 0) {
+                        $idsToLoad[] = $iid;
+                    }
 
-                // Detect and mark legacy system folders before linking/persisting.
-                // This avoids relying on translated titles and keeps identification stable over time.
-                $normalizedLegacyPath = $this->normalizeLegacyDocumentPath($documentPath);
-                $systemFolderType = $this->detectSystemFolderType($normalizedLegacyPath);
-
-                // Only overwrite filetype for folders to keep behavior safe and predictable.
-                if (null !== $systemFolderType) {
-                    $effectiveFiletype = $document->getFiletype() ?? $legacyFiletype;
-
-                    if ('folder' === $effectiveFiletype) {
-                        $document->setFiletype($systemFolderType);
-
-                        error_log(\sprintf(
-                            '[MIGRATION][documents] Marked system folder (iid=%d, legacyPath=%s, legacySid=%d, type=%s).',
-                            $documentId,
-                            $normalizedLegacyPath,
-                            $legacySessionId,
-                            $systemFolderType
-                        ));
+                    if ('' !== $p) {
+                        $parentPath = \dirname($p);
+                        if ('.' !== $parentPath && '/' !== $parentPath && '\\' !== $parentPath) {
+                            $pid = (int) ($pathToIid[$parentPath] ?? 0);
+                            if ($pid > 0) {
+                                $idsToLoad[] = $pid;
+                            }
+                        }
                     }
                 }
 
-                $parent = null;
-                if ('.' !== \dirname($documentPath)) {
+                $idsToLoad = array_values(array_unique(array_filter($idsToLoad, static function ($v): bool {
+                    return is_int($v) && $v > 0;
+                })));
+
+                /** @var CDocument[] $docs */
+                $docs = !empty($idsToLoad) ? $documentRepo->findBy([$docIdField => $idsToLoad]) : [];
+
+                $docMap = [];
+                foreach ($docs as $d) {
+                    $idValues = $docMeta->getIdentifierValues($d);
+                    $iid = (int) ($idValues[$docIdField] ?? 0);
+                    if ($iid > 0) {
+                        $docMap[$iid] = $d;
+                    }
+                }
+
+                foreach ($chunk as $documentData) {
+                    $documentId = (int) ($documentData['iid'] ?? 0);
+                    $documentPath = (string) ($documentData['path'] ?? '');
+                    $legacyFiletype = (string) ($documentData['filetype'] ?? '');
+
+                    if ($documentId <= 0 || '' === $documentPath) {
+                        continue;
+                    }
+
+                    /** @var CDocument|null $document */
+                    $document = $docMap[$documentId] ?? null;
+                    if (null === $document) {
+                        continue;
+                    }
+
+                    if ($document->hasResourceNode()) {
+                        continue;
+                    }
+
+                    // Mark system folders safely (folder only).
+                    $normalizedLegacyPath = $this->normalizeLegacyDocumentPath($documentPath);
+                    $systemFolderType = $this->detectSystemFolderType($normalizedLegacyPath);
+
+                    if (null !== $systemFolderType) {
+                        $effectiveFiletype = (string) ($document->getFiletype() ?? $legacyFiletype);
+                        if ('folder' === $effectiveFiletype) {
+                            $document->setFiletype($systemFolderType);
+                        }
+                    }
+
+                    // Resolve parent using the local map (no SQL).
+                    $parent = null;
                     $currentPath = \dirname($documentPath);
 
-                    $sqlParent = "SELECT iid FROM c_document
-                                  WHERE c_id = {$courseId}
-                                    AND path LIKE '$currentPath'";
-                    $parentId = $this->connection->executeQuery($sqlParent)->fetchOne();
-
-                    if (!empty($parentId)) {
-                        $parent = $documentRepo->find((int) $parentId);
+                    if ('.' !== $currentPath && '/' !== $currentPath && '\\' !== $currentPath) {
+                        $parentId = (int) ($pathToIid[$currentPath] ?? 0);
+                        if ($parentId > 0) {
+                            $parent = $docMap[$parentId] ?? null;
+                        }
                     }
+
+                    if (null === $parent) {
+                        $parent = $courseEntity;
+                    }
+
+                    if (null === $parent->getResourceNode()) {
+                        $this->logItemPropertyInconsistency('document', $documentId, $documentPath);
+                        continue;
+                    }
+
+                    $items = $itemPropsMap[$documentId] ?? [];
+                    $ok = $this->fixItemProperty(
+                        'document',
+                        $documentRepo,
+                        $courseEntity,
+                        $admin,
+                        $document,
+                        $parent,
+                        $items
+                    );
+                    if (false === $ok) {
+                        continue;
+                    }
+
+                    // Folders/system folders: no file upload step.
+                    $effectiveFiletype = (string) ($document->getFiletype() ?? $legacyFiletype);
+                    if (\in_array($effectiveFiletype, self::FOLDER_LIKE_FILETYPES, true)) {
+                        $this->entityManager->persist($document);
+                        continue;
+                    }
+
+                    $documentPathRel = ltrim($documentPath, '/');
+                    $filePath = $baseDocumentsPath.$documentPathRel;
+
+                    if (!$this->fileExists($filePath)) {
+                        $this->entityManager->persist($document);
+                        continue;
+                    }
+
+                    $filePathToUpload = $filePath;
+
+                    $ext = strtolower((string) pathinfo($filePath, \PATHINFO_EXTENSION));
+                    if ('html' === $ext || 'htm' === $ext) {
+                        $filePathToUpload = $this->rewriteHtmlFileLegacyLinksIfNeeded($filePath, $courseDirectory);
+                        if (!$this->fileExists($filePathToUpload)) {
+                            $this->entityManager->persist($document);
+                            continue;
+                        }
+                    }
+
+                    $originalFilename = basename($filePath);
+
+                    $this->addLegacyFileToResource(
+                        $filePathToUpload,
+                        $documentRepo,
+                        $document,
+                        $documentId,
+                        $originalFilename
+                    );
+
+                    $this->entityManager->persist($document);
                 }
 
-                if (null === $parent) {
-                    $parent = $courseEntity;
-                }
-                if (null === $parent->getResourceNode()) {
-                    $this->logItemPropertyInconsistency('document', $documentId, $documentPath);
-
-                    continue;
-                }
-                $admin = $this->getAdmin();
-                $ok = $this->fixItemProperty('document', $documentRepo, $courseEntity, $admin, $document, $parent);
-                if (false === $ok) {
-                    continue;
-                }
-                $documentPath = ltrim($documentPath, '/');
-                $filePath = $this->getUpdateRootPath().'/app/courses/'.$courseEntity->getDirectory().'/document/'.$documentPath;
-                error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
-
-                $filePathToUpload = $this->rewriteHtmlFileLegacyLinksIfNeeded($filePath, (string) $courseEntity->getDirectory());
-                $originalFilename = basename($filePath);
-
-                $this->addLegacyFileToResource(
-                    $filePathToUpload,
-                    $documentRepo,
-                    $document,
-                    $documentId,
-                    $originalFilename
-                );
-
-                $this->entityManager->persist($document);
-
-                if (0 === ($counter % $batchSize)) {
-                    $this->entityManager->flush();
-                    $this->entityManager->clear();
-                }
-                $counter++;
+                $this->entityManager->flush();
+                $this->entityManager->clear();
             }
-            $this->entityManager->flush();
-            $this->entityManager->clear();
         }
 
         $this->entityManager->flush();
         $this->entityManager->clear();
     }
 
-    public function down(Schema $schema): void {}
+    public function down(Schema $schema): void
+    {
+    }
 
     private function attemptHasFeedback(int $attemptId): bool
     {
-        $count = (int) $this->connection->fetchOne(
-            'SELECT COUNT(*) FROM attempt_feedback WHERE attempt_id = :aid AND asset_id IS NOT NULL',
+        $v = $this->connection->fetchOne(
+            'SELECT 1 FROM attempt_feedback WHERE attempt_id = :aid AND asset_id IS NOT NULL LIMIT 1',
             ['aid' => $attemptId]
         );
 
-        return $count > 0;
+        return false !== $v;
     }
 
     private function attemptHasFiles(int $attemptId): bool
     {
-        $count = (int) $this->connection->fetchOne(
-            'SELECT COUNT(*) FROM attempt_file WHERE attempt_id = :aid AND asset_id IS NOT NULL',
+        $v = $this->connection->fetchOne(
+            'SELECT 1 FROM attempt_file WHERE attempt_id = :aid AND asset_id IS NOT NULL LIMIT 1',
             ['aid' => $attemptId]
         );
 
-        return $count > 0;
-    }
-
-    private function getAttemptUserId(TrackEAttempt $attempt): ?int
-    {
-        if (method_exists($attempt, 'getUser')) {
-            $u = $attempt->getUser();
-
-            if (\is_object($u) && method_exists($u, 'getId')) {
-                return (int) $u->getId();
-            }
-
-            if (is_numeric($u)) {
-                return (int) $u;
-            }
-        }
-
-        if (method_exists($attempt, 'getUserId')) {
-            $v = $attempt->getUserId();
-            if (null !== $v && is_numeric($v)) {
-                return (int) $v;
-            }
-        }
-
-        return null;
+        return false !== $v;
     }
 
     private function insertAttemptFeedbackRow(int $attemptId, int $userId, Asset $asset): void
     {
         $now = (new DateTimeImmutable())->format('Y-m-d H:i:s');
 
-        // asset_id column is intentionally not mapped in the entity anymore,
-        // but it still exists for the later migration that converts it to ResourceNode/ResourceFile.
         $this->connection->insert('attempt_feedback', [
             'id' => Uuid::v4()->toBinary(),
             'attempt_id' => $attemptId,
@@ -377,8 +486,6 @@ final class Version20201212203625 extends AbstractMigrationChamilo
             'created_at' => $now,
             'updated_at' => $now,
         ]);
-
-        error_log(\sprintf('[MIGRATION][attempt_feedback] Linked asset to attempt (attemptId=%d).', $attemptId));
     }
 
     private function insertAttemptFileRow(int $attemptId, Asset $asset): void
@@ -394,29 +501,17 @@ final class Version20201212203625 extends AbstractMigrationChamilo
             'created_at' => $now,
             'updated_at' => $now,
         ]);
-
-        error_log(\sprintf('[MIGRATION][attempt_file] Linked asset to attempt (attemptId=%d).', $attemptId));
     }
 
-    /**
-     * Ensure c_document.filetype is large enough BEFORE we update it during data migration.
-     * Execute the ALTER immediately to avoid truncation during flush().
-     */
     private function ensureCDocumentFiletypeVarchar15(): void
     {
         try {
-            // We run this upfront because this migration updates c_document.filetype during flush().
             $this->connection->executeStatement('ALTER TABLE c_document MODIFY filetype VARCHAR(15);');
-            error_log('[MIGRATION][documents] Ensured c_document.filetype is VARCHAR(15) before data migration.');
-        } catch (Throwable $e) {
-            error_log('[MIGRATION][documents] Failed to resize c_document.filetype: '.$e->getMessage());
+        } catch (Throwable) {
+            // Ignore schema errors to keep migrations resilient across DB variants.
         }
     }
 
-    /**
-     * Normalize legacy paths so system folders can be detected reliably.
-     * Keep it strict and language-independent (do not use titles).
-     */
     private function normalizeLegacyDocumentPath(string $path): string
     {
         $p = str_replace('//', '/', trim($path));
@@ -424,7 +519,6 @@ final class Version20201212203625 extends AbstractMigrationChamilo
             return '';
         }
 
-        // Ensure leading slash for consistent prefix checks.
         if ('/' !== $p[0]) {
             $p = '/'.$p;
         }
@@ -432,21 +526,16 @@ final class Version20201212203625 extends AbstractMigrationChamilo
         return $p;
     }
 
-    /**
-     * Detect legacy system folder type from the original C1 document path.
-     */
     private function detectSystemFolderType(string $legacyPath): ?string
     {
         if ('' === $legacyPath) {
             return null;
         }
 
-        // Session-scoped shared folders: keep a distinct type to hide them in base course views.
         if (preg_match('#^/shared_folder_session_\d+(/|$)#', $legacyPath)) {
-            return 'user_folder_ses'; // <= 15 chars
+            return 'user_folder_ses';
         }
 
-        // Base course shared folder.
         if (str_starts_with($legacyPath, '/shared_folder')) {
             return 'user_folder';
         }
@@ -456,7 +545,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
         }
 
         if (str_starts_with($legacyPath, '/certificates')) {
-            return 'cert_folder'; // <= 15 chars
+            return 'cert_folder';
         }
 
         if (

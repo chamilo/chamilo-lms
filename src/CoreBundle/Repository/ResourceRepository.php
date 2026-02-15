@@ -278,7 +278,12 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->setResourceNode($resourceNode)
         ;
         $resourceNode->addResourceFile($resourceFile);
-        $em->persist($resourceNode);
+        $em->persist($resourceFile);
+
+        // Avoid re-persisting an already managed node (tiny but real win in migrations).
+        if (!$em->contains($resourceNode)) {
+            $em->persist($resourceNode);
+        }
 
         if ($flush) {
             $em->flush();

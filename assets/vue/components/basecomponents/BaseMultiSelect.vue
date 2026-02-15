@@ -7,12 +7,12 @@
         display="chip"
         fluid
         input-id="multiSelect"
-        optionLabel="name"
-        optionValue="id"
-        panelClass="multi-select-panel"
+        :option-label="optionLabel"
+        :option-value="optionValue"
         @blur="isFocused = false"
         @focus="isFocused = true"
         @update:model-value="updateModelValue"
+        :loading="isLoading"
       />
       <label
         :for="inputId"
@@ -61,6 +61,21 @@ const props = defineProps({
     type: Boolean,
     required: false,
     default: false,
+  },
+  isLoading: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  optionLabel: {
+    type: String,
+    required: false,
+    default: "name",
+  },
+  optionValue: {
+    type: String,
+    required: false,
+    default: "id",
   },
 })
 const emit = defineEmits(["update:modelValue"])

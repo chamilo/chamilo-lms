@@ -11,8 +11,10 @@
   }
 
   .p-card-header {
+    @apply relative;
+
     img {
-      @apply rounded-t-lg aspect-video;
+      @apply rounded-t-lg object-cover;
     }
   }
 
@@ -33,7 +35,7 @@
   }
 
   .p-card-footer {
-    @apply mt-auto rounded-b-lg;
+    @apply mt-auto rounded-b-lg space-y-2;
   }
 
   .p-menu {

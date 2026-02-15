@@ -79,42 +79,34 @@
             class="no-underline"
           >
             <BaseButton
-              type="primary"
-              :onlyIcon="true"
+              :label="t('Open')"
               icon="link-external"
-              :tooltip="t('Open')"
-              aria-label="open"
-              class="icon-btn icon-btn--primary"
+              only-icon
             />
           </RouterLink>
 
           <BaseButton
-            type="black"
-            :onlyIcon="true"
-            icon="edit"
-            :tooltip="t('Rename')"
+            :label="t('Rename')"
             aria-label="rename"
-            class="icon-btn"
+            icon="edit"
+            only-icon
+            type="black"
             @click="openRename(proj)"
           />
 
           <BaseButton
             type="black"
-            :onlyIcon="true"
+            only-icon
             :icon="proj.visible ? 'eye-on' : 'eye-off'"
-            :tooltip="proj.visible ? t('Hide') : t('Show')"
-            aria-label="toggle-visibility"
-            class="icon-btn"
+            :label="proj.visible ? t('Hide') : t('Show')"
             @click="toggleVisibility(proj)"
           />
 
           <BaseButton
             type="danger"
-            :onlyIcon="true"
+            only-icon
             icon="trash"
-            :tooltip="t('Delete')"
-            aria-label="delete"
-            class="icon-btn icon-btn--danger"
+            :label="t('Delete')"
             @click="remove(proj)"
           />
         </div>

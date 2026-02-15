@@ -23,7 +23,15 @@ export const buttonTypeValidator = (value) => {
     return false
   }
 
-  return ["primary", "primary-alternative", "secondary", "black", "success", "info", "warning", "danger"].includes(
-    value,
-  )
+  return [
+    "primary",
+    "primary-alternative",
+    "secondary",
+    "black",
+    "success",
+    "info",
+    "warning",
+    "danger",
+    "tertiary",
+  ].includes(value)
 }

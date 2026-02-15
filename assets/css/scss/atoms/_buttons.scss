@@ -1,5 +1,7 @@
 .btn {
-  @apply cursor-pointer font-semibold gap-2 inline-flex justify-center items-center px-6 py-2 rounded-md transition flex-none text-base;
+  @apply cursor-pointer font-semibold gap-2 inline-flex justify-center items-center rounded-md transition flex-none text-base
+    disabled:cursor-default;
+  padding: calc(0.5rem - 1px) calc(1rem - 1px);
 
   .mdi {
     @apply text-base;
@@ -131,34 +133,9 @@
     }
   }
 
-  &--primary,
-  &--secondary,
-  &--plain,
-  &--success,
-  &--info,
-  &--warning,
-  &--danger {
-    &:disabled {
-      @apply bg-gray-25 cursor-default select-none text-gray-50;
-    }
-  }
-
-  &--primary-outline,
-  &--secondary-outline,
-  &--plain-outline,
-  &--success-outline,
-  &--info-outline,
-  &--warning-outline,
-  &--danger-outline {
-    &:disabled,
-    &.disabled {
-      @apply bg-gray-10 border-gray-25 cursor-default select-none text-gray-50;
-    }
-  }
-
   &-sm,
   &--sm{
-    @apply px-3 py-1;
+    padding: calc(0.25rem - 1px) calc(0.5rem - 1px);
     font-size: 13px;
   }
 }
@@ -176,7 +153,7 @@ $border-color_12: #9333EA;
     $textColor: 'gray-90';
   }
 
-  @apply bg-#{$color} text-#{$textColor};
+  @apply bg-#{$color} text-#{$textColor} border-#{$color};
 
   &:enabled {
     &:hover,
@@ -185,15 +162,10 @@ $border-color_12: #9333EA;
       @apply bg-#{$hoverColor};
     }
   }
-
-  &:disabled,
-  &.p-disabled {
-    @apply bg-gray-25 text-gray-50;
-  }
 }
 
 @mixin outlined-style($color) {
-  @apply bg-white border border-solid border-#{$color} text-#{$color};
+  @apply bg-white border-#{$color} text-#{$color};
 
   &:enabled {
     &:hover,
@@ -208,15 +180,10 @@ $border-color_12: #9333EA;
       }
     }
   }
-
-  &:disabled,
-  &.p-disabled {
-    @apply bg-gray-10 border-gray-25 text-gray-50;
-  }
 }
 
 @mixin text-style($color) {
-  @apply bg-white text-#{$color};
+  @apply bg-white text-#{$color} border-transparent;
 
   &:enabled {
     &:hover,
@@ -232,8 +199,10 @@ $border-color_12: #9333EA;
 }
 
 .p-button {
-  @include filled-style('primary', 'support-4');
-  @apply cursor-pointer font-semibold gap-2 inline-flex justify-center items-center px-4 py-2 rounded-md transition;
+  @include filled-style('primary', 'primary-gradient');
+  @apply cursor-pointer font-semibold gap-2 inline-flex justify-center items-center rounded-md transition select-none border border-solid
+    disabled:cursor-default;
+  padding: calc(0.5rem - 1px) calc(1rem - 1px);
 
   &:focus {
     @apply outline-none;
@@ -260,7 +229,7 @@ $border-color_12: #9333EA;
   }
 
   &.p-button-sm {
-    @apply px-2 py-1;
+    padding: calc(0.25rem - 1px) calc(0.5rem - 1px);
 
     .p-button-icon,
     .p-button-label {
@@ -269,7 +238,7 @@ $border-color_12: #9333EA;
   }
 
   &.p-button-lg {
-    @apply px-8 py-4;
+    padding: calc(1rem - 1px) calc(2rem - 1px);
 
     .p-button-icon,
     .p-button-label {
@@ -294,7 +263,7 @@ $border-color_12: #9333EA;
   }
 
   &.p-button-link {
-    @apply cursor-pointer bg-transparent text-primary;
+    @apply bg-transparent text-primary;
 
     &:enabled {
       &:hover,
@@ -312,7 +281,7 @@ $border-color_12: #9333EA;
 
 // secondary button
 .p-button.p-button-secondary {
-  @include filled-style('secondary', 'secondary-hover');
+  @include filled-style('secondary', 'secondary-gradient');
 
   &.p-button-outlined {
     @include outlined-style('secondary');
@@ -325,7 +294,7 @@ $border-color_12: #9333EA;
 
 .p-buttonset.p-button-secondary {
   > .p-button {
-    @include filled-style('secondary', 'secondary-hover');
+    @include filled-style('secondary', 'secondary-gradient');
 
     &.p-button-outlined {
       @include outlined-style('secondary');
@@ -337,8 +306,8 @@ $border-color_12: #9333EA;
   }
 }
 
-// plain button
-.p-button.p-button-plain {
+// contrast button
+.p-button.p-button-contrast {
   @include filled-style('gray-90', 'black');
 
   &.p-button-outlined {
@@ -350,7 +319,7 @@ $border-color_12: #9333EA;
   }
 }
 
-.p-buttonset.p-button-plain {
+.p-buttonset.p-button-contrast {
   > .p-button {
     @include filled-style('gray-90', 'black');
 
@@ -366,7 +335,7 @@ $border-color_12: #9333EA;
 
 // info button
 .p-button.p-button-info {
-  @include filled-style('info', 'info');
+  @include filled-style('info', 'info-gradient');
 
   &.p-button-outlined {
     @include outlined-style('info');
@@ -379,7 +348,7 @@ $border-color_12: #9333EA;
 
 .p-buttonset.p-button-info {
   > .p-button {
-    @include filled-style('info', 'info');
+    @include filled-style('info', 'info-gradient');
 
     &.p-button-outlined {
       @include outlined-style('info');
@@ -393,7 +362,7 @@ $border-color_12: #9333EA;
 
 // success button
 .p-button.p-button-success {
-  @include filled-style('success', 'success');
+  @include filled-style('success', 'success-gradient');
 
   &.p-button-outlined {
     @include outlined-style('success');
@@ -406,7 +375,7 @@ $border-color_12: #9333EA;
 
 .p-buttonset.p-button-success {
   > .p-button {
-    @include filled-style('success', 'success');
+    @include filled-style('success', 'success-gradient');
 
     &.p-button-outlined {
       @include outlined-style('success');
@@ -419,8 +388,8 @@ $border-color_12: #9333EA;
 }
 
 // warning button
-.p-button.p-button-warning {
-  @include filled-style('warning', 'warning');
+.p-button.p-button-warn {
+  @include filled-style('warning', 'warning-gradient');
 
   &.p-button-outlined {
     @include outlined-style('warning');
@@ -431,9 +400,9 @@ $border-color_12: #9333EA;
   }
 }
 
-.p-buttonset.p-button-warning {
+.p-buttonset.p-button-warn {
   > .p-button {
-    @include filled-style('warning', 'warning');
+    @include filled-style('warning', 'warning-gradient');
 
     &.p-button-outlined {
       @include outlined-style('warning');
@@ -447,141 +416,54 @@ $border-color_12: #9333EA;
 
 // help button
 .p-button.p-button-help {
-  color: $color_7;
-  background: #A855F7;
-  border: 1px solid #A855F7;
+  @include filled-style('tertiary', 'tertiary-gradient');
 
-  &:enabled {
-    &:hover {
-      background: #9333EA;
-      color: $color_7;
-      border-color: $border-color_12;
-    }
+  &.p-button-outlined {
+    @include outlined-style('tertiary');
+  }
 
-    &:active {
-      background: #9333EA;
-      color: $color_7;
-      border-color: $border-color_12;
-    }
+  &.p-button-text {
+    @include text-style('tertiary');
   }
 }
 
 .p-buttonset.p-button-help {
   > .p-button {
-    color: $color_7;
-    background: #A855F7;
-    border: 1px solid #A855F7;
-
-    &:enabled {
-      &:hover {
-        background: #9333EA;
-        color: $color_7;
-        border-color: $border-color_12;
-      }
-
-      &:active {
-        background: #9333EA;
-        color: $color_7;
-        border-color: $border-color_12;
-      }
-    }
+    @include filled-style('tertiary', 'tertiary-gradient');
   }
 
   > .p-button.p-button-outlined {
-    background-color: $background-color_4;
-    color: $color_15;
-    border: 1px solid;
-
-    &:enabled {
-      &:hover {
-        background: rgba(168, 85, 247, 0.04);
-        color: $color_15;
-        border: 1px solid;
-      }
-
-      &:active {
-        background: rgba(168, 85, 247, 0.16);
-        color: $color_15;
-        border: 1px solid;
-      }
-    }
+    @include outlined-style('tertiary');
   }
 
   > .p-button.p-button-text {
-    background-color: $background-color_4;
-    color: $color_15;
-    border-color: $border-color_4;
-
-    &:enabled {
-      &:hover {
-        background: rgba(168, 85, 247, 0.04);
-        border-color: $border-color_4;
-        color: $color_15;
-      }
-
-      &:active {
-        background: rgba(168, 85, 247, 0.16);
-        border-color: $border-color_4;
-        color: $color_15;
-      }
-    }
-  }
-}
-
-.p-button.p-button-help.p-button-outlined {
-  background-color: $background-color_4;
-  color: $color_15;
-  border: 1px solid;
-
-  &:enabled {
-    &:hover {
-      background: rgba(168, 85, 247, 0.04);
-      color: $color_15;
-      border: 1px solid;
-    }
-
-    &:active {
-      background: rgba(168, 85, 247, 0.16);
-      color: $color_15;
-      border: 1px solid;
-    }
-  }
-}
-
-.p-button.p-button-help.p-button-text {
-  @apply bg-white text-gray-90;
-
-  &:enabled {
-    &:hover,
-    &:active {
-      @apply bg-gray-10;
-    }
+    @include text-style('tertiary');
   }
 }
 
 // danger button
 .p-button.p-button-danger {
-  @include filled-style('error', 'error');
+  @include filled-style('danger', 'danger-gradient');
 
   &.p-button-outlined {
-    @include outlined-style('error');
+    @include outlined-style('danger');
   }
 
   &.p-button-text {
-    @include text-style('error');
+    @include text-style('danger');
   }
 }
 
 .p-buttonset.p-button-danger {
   > .p-button {
-    @include filled-style('error', 'error');
+    @include filled-style('danger', 'danger-gradient');
 
     &.p-button-outlined {
-      @include outlined-style('error');
+      @include outlined-style('danger');
     }
 
     &.p-button-text {
-      @include text-style('error');
+      @include text-style('danger');
     }
   }
 }
@@ -591,7 +473,7 @@ $border-color_12: #9333EA;
   &.p-button {
     &.p-highlight {
 
-      &.p-button-plain {
+      &.p-button-contrast {
         @apply bg-support-1 text-primary;
       }
     }

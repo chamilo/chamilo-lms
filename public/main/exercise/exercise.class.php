@@ -1611,8 +1611,8 @@ class Exercise
         }
 
         $exercise
-            ->setStartTime($start_time)
-            ->setEndTime($end_time)
+            ->setStartTime(!empty($start_time) ? new \DateTime((string) $start_time) : null)
+            ->setEndTime(!empty($end_time) ? new \DateTime((string) $end_time) : null)
             ->setTitle($title)
             ->setDescription($description)
             ->setSound($sound)

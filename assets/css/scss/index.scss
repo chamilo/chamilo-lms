@@ -1,5 +1,4 @@
 @use "sass:meta";
-//@import 'variables';
 //@import 'base_theme';
 //
 //// Tools
@@ -26,6 +25,7 @@
 }
 
 @include meta.load-css("settings/typography");
+@include meta.load-css("settings/component");
 
 @include meta.load-css("atoms/form");
 @include meta.load-css("atoms/autocomplete");

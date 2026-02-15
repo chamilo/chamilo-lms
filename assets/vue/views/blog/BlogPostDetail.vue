@@ -110,7 +110,12 @@
     <div class="rounded-lg border bg-white shadow-sm p-5">
       <div class="flex items-center justify-between mb-3">
         <h3 class="text-lg font-semibold">{{ t("Comments") }}</h3>
-        <BaseButton type="primary" icon="comment" :label="t('Add comment')" @click="openComment" />
+        <BaseButton
+          type="primary"
+          icon="comment"
+          :label="t('Add comment')"
+          @click="openComment"
+        />
       </div>
 
       <div v-if="loadingComments" class="space-y-3">
@@ -126,19 +131,17 @@
             <div class="text-sm whitespace-pre-wrap">{{ c.text }}</div>
             <div v-if="canEditComment(c)" class="shrink-0 flex gap-1">
               <BaseButton
-                type="black"
-                :onlyIcon="true"
+                :label="t('Edit')"
                 icon="edit"
-                :tooltip="t('Edit')"
-                aria-label="Edit comment"
+                only-icon
+                type="black"
                 @click="openEditComment(c)"
               />
               <BaseButton
-                type="danger"
-                :onlyIcon="true"
+                :label="t('Delete')"
                 icon="trash"
-                :tooltip="t('Delete')"
-                aria-label="Delete comment"
+                only-icon
+                type="danger"
                 @click="confirmDeleteComment(c)"
               />
             </div>

@@ -41,7 +41,7 @@
         icon="alert"
         only-icon
         type="danger"
-        :tooltip="
+        :label="
           t(
             'By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust.',
           )
@@ -49,14 +49,14 @@
       />
 
       <BaseButton
-        :tooltip="t('Accept invitation')"
+        :label="t('Accept invitation')"
         icon="user-add"
         only-icon
         type="black"
         @click="acceptFriendRequest(request)"
       />
       <BaseButton
-        :tooltip="t('Reject invitation')"
+        :label="t('Reject invitation')"
         class="ml-2"
         icon="user-delete"
         only-icon

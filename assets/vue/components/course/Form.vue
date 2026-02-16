@@ -22,6 +22,7 @@
     >
       <CourseCategorySelect
         v-model="courseCategory"
+        action="course-creation"
         option-value="id"
       />
       <BaseInputText

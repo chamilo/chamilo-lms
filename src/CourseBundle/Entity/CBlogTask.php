@@ -21,8 +21,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity]
 #[ApiResource(
     operations: [
-        new Get(),
-        new GetCollection(),
+        new Get(security: "is_granted('ROLE_USER')"),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
         new Post(
             security: "is_granted('ROLE_USER')",
             processor: CBlogAssignAuthorProcessor::class

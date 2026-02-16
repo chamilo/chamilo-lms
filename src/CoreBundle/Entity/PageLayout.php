@@ -16,7 +16,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
  */
 #[ApiResource(
     normalizationContext: ['groups' => ['page_layout:read']],
-    denormalizationContext: ['groups' => ['page_layout:write']]
+    denormalizationContext: ['groups' => ['page_layout:write']],
+    security: "is_granted('ROLE_ADMIN')",
 )]
 #[ORM\Table(name: 'page_layout')]
 #[ORM\Entity]

@@ -37,7 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'c_blog')]
 #[ApiResource(
     operations: [
-        new GetCollection(),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
         new Post(
             controller: CreateCBlogAction::class,
             openapi: new Operation(

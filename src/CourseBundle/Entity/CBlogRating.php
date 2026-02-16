@@ -18,7 +18,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     normalizationContext: ['groups' => ['blog_rating:read']],
     denormalizationContext: ['groups' => ['blog_rating:write']],
-    paginationEnabled: true
+    paginationEnabled: true,
+    security: "is_granted('ROLE_USER')",
 )]
 #[ApiFilter(SearchFilter::class, properties: [
     'blog' => 'exact',

@@ -38,7 +38,7 @@ use Vich\UploaderBundle\Mapping\Attribute as Vich;
 #[ApiResource(
     types: ['http://schema.org/MediaObject'],
     operations: [
-        new Get(),
+        new Get(security: "is_granted('ROLE_USER')"),
         new Post(
             controller: CreateResourceFileAction::class,
             openapi: new Operation(
@@ -96,7 +96,7 @@ use Vich\UploaderBundle\Mapping\Attribute as Vich;
             deserialize: false,
             name: 'add_variant'
         ),
-        new GetCollection(),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
     ],
     normalizationContext: [
         'groups' => [

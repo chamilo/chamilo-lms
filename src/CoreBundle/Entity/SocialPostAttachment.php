@@ -22,8 +22,8 @@ use Stringable;
 #[ApiResource(
     types: ['http://schema.org/MediaObject'],
     operations: [
-        new Get(),
-        new GetCollection(),
+        new Get(security: "is_granted('ROLE_USER')"),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
         new Post(
             controller: CreateSocialPostAttachmentAction::class,
             openapi: new Operation(

@@ -50,7 +50,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             ],
             security: "is_granted('VIEW', object.resourceNode)",
         ),
-        new GetCollection(),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
         new Delete(
             security: "is_granted('DELETE', object.resourceNode)",
             processor: CStudentPublicationDeleteProcessor::class

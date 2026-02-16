@@ -21,6 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['skill_profile:write'],
     ],
     paginationEnabled: false,
+    security: "is_granted('ROLE_ADMIN')",
 )]
 #[ORM\Table(name: 'skill_profile')]
 #[ORM\Entity]

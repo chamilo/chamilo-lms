@@ -9,6 +9,11 @@ namespace Chamilo\CoreBundle\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -21,6 +26,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'gradebook_category')]
 #[ORM\Entity]
 #[ApiResource(
+    operations: [
+        new Get(security: "is_granted('ROLE_USER')"),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new Post(security: "is_granted('ROLE_TEACHER')"),
+        new Put(security: "is_granted('ROLE_TEACHER')"),
+        new Delete(security: "is_granted('ROLE_TEACHER')"),
+    ],
     normalizationContext: [
         'groups' => ['gradebookCategory:read'],
     ],

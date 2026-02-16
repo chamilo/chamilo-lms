@@ -11,7 +11,10 @@
       />
     </div>
 
-    <CourseCategorySelect v-model="model.categories" />
+    <CourseCategorySelect
+      v-model="model.categories"
+      action="catalogue"
+    />
 
     <template
       v-for="f in fields"

@@ -1,17 +1,19 @@
 <script setup>
-import { ref } from "vue"
+import { watch } from "vue"
 import { useI18n } from "vue-i18n"
 import BaseMultiSelect from "../basecomponents/BaseMultiSelect.vue"
-import * as courseCategoryService from "../../services/coursecategory"
+import { useCourseCategories } from "../../composables/courseCategory"
+import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
+const { showErrorNotification } = useNotification()
 
 const modelValue = defineModel({
   type: Array,
   required: true,
 })
 
-defineProps({
+const props = defineProps({
   id: {
     type: String,
     required: false,
@@ -27,16 +29,20 @@ defineProps({
     required: false,
     default: "@id",
   },
+  action: {
+    type: String,
+    required: true,
+    validator: (value) => ["catalogue", "course-creation"].includes(value),
+  },
 })
 
-const isLoading = ref(true)
+const { isLoading, categories, error } = useCourseCategories(props.action)
 
-const categories = ref([])
-
-courseCategoryService
-  .findAll()
-  .then((items) => (categories.value = items))
-  .finally(() => (isLoading.value = false))
+watch(error, (value) => {
+  if (value) {
+    showErrorNotification(value)
+  }
+})
 </script>
 
 <template>

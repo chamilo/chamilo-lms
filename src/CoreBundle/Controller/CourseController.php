@@ -1023,37 +1023,6 @@ class CourseController extends ToolBaseController
         ]);
     }
 
-    #[Route('/categories', name: 'chamilo_core_course_form_lists')]
-    public function getCategories(
-        SettingsManager $settingsManager,
-        AccessUrlHelper $accessUrlHelper,
-        CourseCategoryRepository $courseCategoriesRepo
-    ): JsonResponse {
-        $allowBaseCourseCategory = 'true' === $settingsManager->getSetting('course.allow_base_course_category');
-        $accessUrlId = $accessUrlHelper->getCurrent()->getId();
-
-        $categories = $courseCategoriesRepo->findAllInAccessUrl(
-            $accessUrlId,
-            $allowBaseCourseCategory
-        );
-
-        $data = [];
-        $categoryToAvoid = '';
-        if (!$this->isGranted('ROLE_ADMIN')) {
-            $categoryToAvoid = $settingsManager->getSetting('course.course_category_code_to_use_as_model');
-        }
-
-        foreach ($categories as $category) {
-            $categoryCode = $category->getCode();
-            if (!empty($categoryToAvoid) && $categoryToAvoid == $categoryCode) {
-                continue;
-            }
-            $data[] = ['id' => $category->getId(), 'name' => $category->__toString()];
-        }
-
-        return new JsonResponse($data);
-    }
-
     #[Route('/search_templates', name: 'chamilo_core_course_search_templates')]
     public function searchCourseTemplates(
         Request $request,

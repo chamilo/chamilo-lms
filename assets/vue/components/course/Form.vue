@@ -20,12 +20,9 @@
       v-if="showAdvancedSettings"
       class="advanced-settings"
     >
-      <BaseMultiSelect
-        id="category-multiselect"
+      <CourseCategorySelect
         v-model="courseCategory"
-        :label="t('Category')"
-        :options="categoryOptions"
-        input-id="multiselect-category"
+        option-value="id"
       />
       <BaseInputText
         id="course-code"
@@ -73,9 +70,8 @@ import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsBu
 import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useRouter } from "vue-router"
-import courseService from "../../services/courseService"
 import languageService from "../../services/languageService"
-import BaseMultiSelect from "../basecomponents/BaseMultiSelect.vue"
+import CourseCategorySelect from "../coursecategory/CourseCategorySelect.vue"
 import { useI18n } from "vue-i18n"
 
 const props = defineProps({
@@ -101,7 +97,6 @@ const courseTemplate = ref(null)
 const showAdvancedSettings = ref(false)
 const router = useRouter()
 
-const categoryOptions = ref([])
 const languageOptions = ref([])
 
 const courseNameError = ref("")
@@ -207,12 +202,6 @@ onMounted(async () => {
   await focusCourseNameField()
 
   try {
-    const categoriesResponse = await courseService.getCategories("categories")
-    categoryOptions.value = categoriesResponse.map((category) => ({
-      name: category.name,
-      id: category.id,
-    }))
-
     const languagesResponse = await languageService.findAll()
     const data = await languagesResponse.json()
     languageOptions.value = data["hydra:member"].map((language) => ({

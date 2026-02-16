@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:հեղինակային իրավունք,, no:առանց հեղինակային իրավունքի"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Փաստաթղթի պանակ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Թղթապանակ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:վարժություն,,      simulation:մոդելավորում,,      questionnaire:հարցաթերթիկ,,      diagram:սխեմա,,      figure:նկար,,      graph:գրաֆիկ,,      index:հիմնական ցուցիչ,,      slide:սլայդ,,      table:तालिका,,      narrative text:նարատիվ տեքստ,,      exam:քննություն,,      experiment:փորձ,,      problem statement:պրոբլեմի ձևակերպում,,      self assessment:ինքնագնահատում,,      lecture:դասախոսություն"
@@ -8603,10 +8603,10 @@ msgid "Numbered"
 msgstr "Թվարկված"
 
 msgid "en"
-msgstr "en"
+msgstr "hy"
 
 msgid "eng"
-msgstr "eng"
+msgstr "hy"
 
 msgid "iso-8859-1"
 msgstr "iso-8859-1"
@@ -31004,7 +31004,7 @@ msgid "Create your first note to get started."
 msgstr "Ստեղծեք ձեր առաջին նշումը՝ սկսելու համար:"
 
 msgid "F d, Y"
-msgstr "F d, Y"
+msgstr "d F, Y"
 
 msgid "Could not load support info at this time."
 msgstr "Այս պահին չկարողացա բեռնել աջակցության տեղեկատվությունը:"
@@ -32577,4 +32577,7 @@ msgstr "Ձեր էլ. փոստը հաստատելու և %s-ում Ձեր հաշ�
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Եթե Դուք չեք գրանցել այս հաշիվը, կարող եք անտեսել այս նամակը: Ոչ մի գործողություն չի իրականացվի:"
+
+msgid "Current authentication method"
+msgstr "Ներկայիս մուտքգրման մեթոդ"
 

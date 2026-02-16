@@ -2019,7 +2019,7 @@ msgid "in VCARD format"
 msgstr "v VCARD formatu"
 
 msgid "Format"
-msgstr "format"
+msgstr "Oblika"
 
 msgid ":draft:draft,,      final:final,,      revised:revised,,      unavailable:unavailable"
 msgstr ":osnutek:osnutek,,      končno:končno,,      revidirano:revidirano,,      nedosegljivo:nedosegljivo"
@@ -2031,7 +2031,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":da:avtorske pravice,, ne:brez avtorskih pravic"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Oktečni tok,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Octetni tok,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":vaja:vaja,,      simulacija:simulacija,,      vprašalnik:vprašalnik,,      diagram:diagram,,      slika:slika,,      graf:graf,,      kazalo:kazalo,,      diapozitiv:diapozitiv,,      tabela:tabela,,      pripovedno besedilo:narrativno besedilo,,      izpit:izpit,,      poskus:poskus,,      izjava problema:izjava problema,,      samopredstavitev:samopredstavitev,,      predavanje:predavanje"
@@ -2550,7 +2550,7 @@ msgid "Shuffle selection in available languages"
 msgstr "Premešaj izbiro v možnih jezikih"
 
 msgid "english"
-msgstr "english"
+msgstr "angleščina"
 
 msgid "New course"
 msgstr "Nov tečaj"
@@ -6054,7 +6054,7 @@ msgid "Set language as default"
 msgstr "Nastavi jezik kot privzeti"
 
 msgid "Filter"
-msgstr "Filter"
+msgstr "Filtr"
 
 msgid "Filter on"
 msgstr "Filter aktiven"
@@ -6981,7 +6981,7 @@ msgid "Category created"
 msgstr "Kategorija ustvarjena"
 
 msgid "Agenda"
-msgstr "Agenda"
+msgstr "Koledar"
 
 msgid "Announcements"
 msgstr "Obvestila"
@@ -8763,67 +8763,67 @@ msgid "Total time"
 msgstr "Skupen čas"
 
 msgid "arabic"
-msgstr "arabic"
+msgstr "arabščina"
 
 msgid "brazilian"
-msgstr "brazilian"
+msgstr "brazilska"
 
 msgid "bulgarian"
-msgstr "bulgarian"
+msgstr "bolgarščina"
 
 msgid "catalan"
-msgstr "catalan"
+msgstr "katalonščina"
 
 msgid "croatian"
-msgstr "croatian"
+msgstr "hrvaščina"
 
 msgid "danish"
-msgstr "danish"
+msgstr "danščina"
 
 msgid "dutch"
-msgstr "dutch"
+msgstr "nizozemščina"
 
 msgid "finnish"
-msgstr "finnish"
+msgstr "finščina"
 
 msgid "french"
-msgstr "french"
+msgstr "francoščina"
 
 msgid "french_corporate"
-msgstr "french_corporate"
+msgstr "francoščina_podjetje"
 
 msgid "french_KM"
-msgstr "french_KM"
+msgstr "francoščina_KM"
 
 msgid "galician"
-msgstr "galician"
+msgstr "galicijščina"
 
 msgid "german"
-msgstr "german"
+msgstr "nemščina"
 
 msgid "greek"
-msgstr "greek"
+msgstr "grščina"
 
 msgid "italian"
-msgstr "italian"
+msgstr "italijanščina"
 
 msgid "japanese"
-msgstr "japanese"
+msgstr "japonščina"
 
 msgid "polish"
-msgstr "polish"
+msgstr "poljščina"
 
 msgid "portuguese"
-msgstr "portuguese"
+msgstr "portugalščina"
 
 msgid "russian"
-msgstr "russian"
+msgstr "ruščina"
 
 msgid "simpl_chinese"
-msgstr "simpl_chinese"
+msgstr "poenostavljena kitajščina"
 
 msgid "spanish"
-msgstr "spanish"
+msgstr "španščina"
 
 msgid "Close"
 msgstr "zapri"
@@ -8853,7 +8853,7 @@ msgid "Page"
 msgstr "Stran"
 
 msgid "English"
-msgstr "English"
+msgstr "Angleščina"
 
 msgid "Home"
 msgstr "Domov"
@@ -8874,31 +8874,31 @@ msgid "Online"
 msgstr "Aktivnih:"
 
 msgid "hungarian"
-msgstr "hungarian"
+msgstr "madžarščina"
 
 msgid "indonesian"
-msgstr "indonesian"
+msgstr "indonezijščina"
 
 msgid "malay"
-msgstr "malay"
+msgstr "malajščina"
 
 msgid "slovenian"
 msgstr "Slovenščina"
 
 msgid "spanish_latin"
-msgstr "spanish_latin"
+msgstr "španščina_latinska"
 
 msgid "swedisch"
-msgstr "swedisch"
+msgstr "švedščina"
 
 msgid "thai"
-msgstr "thai"
+msgstr "tajščina"
 
 msgid "turkish"
-msgstr "turkish"
+msgstr "turško"
 
 msgid "vietnamese"
-msgstr "vietnamese"
+msgstr "vietnamsko"
 
 msgid "user information"
 msgstr "informacije o uporabniku"
@@ -9000,10 +9000,10 @@ msgid "Sunday"
 msgstr "Nedelja"
 
 msgid "J"
-msgstr "J"
+msgstr "Č"
 
 msgid "A"
-msgstr "A"
+msgstr "P"
 
 msgid "O"
 msgstr "O"
@@ -9015,40 +9015,40 @@ msgid "D"
 msgstr "D"
 
 msgid "Jan"
-msgstr "Jan"
+msgstr "jan"
 
 msgid "Feb"
-msgstr "Feb"
+msgstr "feb"
 
 msgid "Mar"
-msgstr "Mar"
+msgstr "mar"
 
 msgid "Apr"
-msgstr "Apr"
+msgstr "apr"
 
 msgid "May"
 msgstr "Maj"
 
 msgid "Jun"
-msgstr "Jun"
+msgstr "jun"
 
 msgid "Jul"
-msgstr "Jul"
+msgstr "jul"
 
 msgid "Aug"
 msgstr "Avg"
 
 msgid "Sep"
-msgstr "Sep"
+msgstr "sep"
 
 msgid "Oct"
 msgstr "Okt"
 
 msgid "Nov"
-msgstr "Nov"
+msgstr "nov"
 
 msgid "Dec"
-msgstr "Dec"
+msgstr "dec"
 
 msgid "January"
 msgstr "Januar"
@@ -9060,7 +9060,7 @@ msgid "March"
 msgstr "Marec"
 
 msgid "April"
-msgstr "April"
+msgstr "april"
 
 msgid "June"
 msgstr "Junij"
@@ -9072,16 +9072,16 @@ msgid "August"
 msgstr "Avgust"
 
 msgid "September"
-msgstr "September"
+msgstr "september"
 
 msgid "October"
 msgstr "Oktober"
 
 msgid "November"
-msgstr "November"
+msgstr "november"
 
 msgid "December"
-msgstr "December"
+msgstr "december"
 
 msgid "My competences"
 msgstr "Moje kompetence"
@@ -9804,7 +9804,7 @@ msgid "Group area"
 msgstr "Področje skupine"
 
 msgid "Wiki"
-msgstr "Wiki"
+msgstr "Viki"
 
 msgid "Export to PDF"
 msgstr "Izvozi v PDF"
@@ -9936,7 +9936,7 @@ msgid "View changes history"
 msgstr "Poglej zgodovino sprememb"
 
 msgid "asturian"
-msgstr "asturian"
+msgstr "asturijsko"
 
 msgid "Go to course"
 msgstr "Pojdi na učno pot"
@@ -11901,7 +11901,7 @@ msgid "Browsers"
 msgstr "Brkljalniki"
 
 msgid "Referers"
-msgstr "Referers"
+msgstr "Sklicatelji"
 
 msgid "(When an user open the index of the portal)"
 msgstr "(Ko uporabnik odpre indeks skupnosti)"
@@ -14487,13 +14487,13 @@ msgid "Questions' overall report"
 msgstr "Pregledno poročilo vprašanj"
 
 msgid "bosnian"
-msgstr "bosnian"
+msgstr "bosansko"
 
 msgid "czech"
-msgstr "czech"
+msgstr "češko"
 
 msgid "dari"
-msgstr "dari"
+msgstr "daríjščina"
 
 msgid "dutch corporate"
 msgstr "nizozemsko korporativno"
@@ -14502,49 +14502,49 @@ msgid "english for organisations"
 msgstr "angleščina za organizacije"
 
 msgid "friulian"
-msgstr "friulian"
+msgstr "friulijščina"
 
 msgid "georgian"
-msgstr "georgian"
+msgstr "gruzijščina"
 
 msgid "hebrew"
-msgstr "hebrew"
+msgstr "hebrejščina"
 
 msgid "korean"
-msgstr "korean"
+msgstr "korejščina"
 
 msgid "latvian"
-msgstr "latvian"
+msgstr "latvijščina"
 
 msgid "lithuanian"
-msgstr "lithuanian"
+msgstr "litovščina"
 
 msgid "macedonian"
-msgstr "macedonian"
+msgstr "makedonščina"
 
 msgid "norwegian"
-msgstr "norwegian"
+msgstr "norveščina"
 
 msgid "pashto"
-msgstr "pashto"
+msgstr "paštu"
 
 msgid "persian"
-msgstr "persian"
+msgstr "perzijščina"
 
 msgid "quechua from Cusco"
 msgstr "kečua iz Cusc-a"
 
 msgid "romanian"
-msgstr "romanian"
+msgstr "romunščina"
 
 msgid "serbian"
-msgstr "serbian"
+msgstr "srbohrvaščina"
 
 msgid "slovak"
-msgstr "slovak"
+msgstr "slovaščina"
 
 msgid "swahili"
-msgstr "swahili"
+msgstr "svahili"
 
 msgid "traditional chinese"
 msgstr "tradicionalna kitajščina"
@@ -14988,7 +14988,7 @@ msgid "The exercise time limit has expired"
 msgstr "Čas predviden za ta test je potekel"
 
 msgid "ukrainian"
-msgstr "ukrainian"
+msgstr "ukrajinščina"
 
 msgid "yoruba"
 msgstr "yoruba"
@@ -16401,7 +16401,7 @@ msgid "A student has obtained the number of sub-skills needed to validate the mo
 msgstr "Učenec je pridobil število podspretnosti, potrebnih za potrditev matične spretnosti."
 
 msgid "Off"
-msgstr "Off"
+msgstr "Izklopljeno"
 
 msgid "Web server"
 msgstr "Spletni strežnik"
@@ -17706,7 +17706,7 @@ msgid "Tests in learning paths"
 msgstr "Testi v učnih poteh"
 
 msgid "Id"
-msgstr "Id"
+msgstr "ID"
 
 msgid "There was an error."
 msgstr "Napaka"
@@ -17955,7 +17955,7 @@ msgid "LaTeX code"
 msgstr "LaTeX koda"
 
 msgid "LaTeX formula"
-msgstr "LaTeX formula"
+msgstr "LaTeX enačba"
 
 msgid "Are you sure you want to lock the attendance?"
 msgstr "Ste prepričani, da želite zakleniti prisotnost?"
@@ -19682,7 +19682,7 @@ msgid "A new session has been created"
 msgstr "Nova seja je bila ustvarjena"
 
 msgid "Offline"
-msgstr "Offline"
+msgstr "Brez povezave"
 
 msgid "Caption"
 msgstr "Napis"
@@ -21935,7 +21935,7 @@ msgid "Avatar"
 msgstr "Avatar"
 
 msgid "Semester"
-msgstr "Semester"
+msgstr "Semestar"
 
 msgid "Reading comprehension"
 msgstr "Bralno razumevanje"
@@ -28143,37 +28143,37 @@ msgid "Menucampushomepage"
 msgstr "Menucampushomepage"
 
 msgid "Menumycourses"
-msgstr "Menumycourses"
+msgstr "Moje tečaje"
 
 msgid "Menureporting"
-msgstr "Menureporting"
+msgstr "Poročila"
 
 msgid "Menuplatformadministration"
-msgstr "Menuplatformadministration"
+msgstr "Upravljanje platforme"
 
 msgid "Menumyagenda"
-msgstr "Menumyagenda"
+msgstr "Moj koledar"
 
 msgid "Menusocial"
-msgstr "Menusocial"
+msgstr "Družbeno"
 
 msgid "Menuvideoconference"
-msgstr "Menuvideoconference"
+msgstr "Videokonference"
 
 msgid "Menudiagnostics"
-msgstr "Menudiagnostics"
+msgstr "Diagnostika"
 
 msgid "Menucatalogue"
-msgstr "Menucatalogue"
+msgstr "Katalog"
 
 msgid "Topbarcertificate"
-msgstr "Topbarcertificate"
+msgstr "Potrdilo"
 
 msgid "Topbarskills"
-msgstr "Topbarskills"
+msgstr "Veščine"
 
 msgid "Ai_helpers"
-msgstr "Ai_helpers"
+msgstr "Pomočniki AI"
 
 msgid "ID of the user who officially sends the agenda reminders"
 msgstr "ID uporabnika, ki uradno pošilja opomnike koledarja"
@@ -28524,7 +28524,7 @@ msgid "No available options"
 msgstr "Ni razpoložljivih možnosti"
 
 msgid "Cc"
-msgstr "Cc"
+msgstr "Kopija"
 
 msgid "Send"
 msgstr "Pošlji"
@@ -32346,7 +32346,7 @@ msgid "Quiz"
 msgstr "Kviza"
 
 msgid "Customcertificate"
-msgstr "Customcertificate"
+msgstr "Po meri potrdilo"
 
 msgid "Update profile"
 msgstr "Posodobi profil"
@@ -32593,4 +32593,7 @@ msgstr "Za preverjanje vašega e-pošta in omogočanje vašega računa na %s, pr
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Če tega računa niste registrirali, lahko to e-poštno sporočilo prezrete. Nobena dejanja ne bodo izvedena."
+
+msgid "Current authentication method"
+msgstr "Trenutna metoda preverjanja pristnosti"
 

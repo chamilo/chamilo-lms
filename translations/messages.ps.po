@@ -8599,16 +8599,16 @@ msgid "Numbered"
 msgstr "شمېرل شوی"
 
 msgid "en"
-msgstr "en"
+msgstr "ps"
 
 msgid "eng"
-msgstr "eng"
+msgstr "psg"
 
 msgid "iso-8859-1"
 msgstr "iso-8859-1"
 
 msgid "ltr"
-msgstr "ltr"
+msgstr "rtl"
 
 msgid "verdana, helvetica, arial, geneva, sans-serif"
 msgstr "verdana, helvetica, arial, geneva, sans-serif"
@@ -8617,16 +8617,16 @@ msgid "helvetica, arial, geneva, sans-serif"
 msgstr "helvetica, arial, geneva, sans-serif"
 
 msgid ","
-msgstr ","
+msgstr "،"
 
 msgid "."
 msgstr "."
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%b %d، %Y"
 
 msgid "%A %B %d, %Y"
-msgstr "%A %B %d, %Y"
+msgstr "%A %B %d، %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
 msgstr "%B %d, %Y په %I:%M %p"
@@ -9829,7 +9829,7 @@ msgid "Category added"
 msgstr "کټګوري اضافه شوه"
 
 msgid "IP"
-msgstr "IP"
+msgstr "آی پی"
 
 msgid "Grade activity"
 msgstr "د نمرې فعالیت"
@@ -11881,7 +11881,7 @@ msgid "Providers"
 msgstr "وړاندې کوونکي"
 
 msgid "OS"
-msgstr "OS"
+msgstr "د عملیاتي سیسټم"
 
 msgid "Browsers"
 msgstr "براوزرونه"
@@ -16219,7 +16219,7 @@ msgid "NP"
 msgstr "NP"
 
 msgid "P"
-msgstr "P"
+msgstr "پ"
 
 msgid "Session calendar"
 msgstr "د غونډې تقویم"
@@ -20527,7 +20527,7 @@ msgid "Input size of box to fill"
 msgstr "د ډکې د ډکولو اندازه داخل کړئ"
 
 msgid "MM dd, yy"
-msgstr "MM dd, yy"
+msgstr "MM dd، yy"
 
 msgid "HH:mm"
 msgstr "HH:mm"
@@ -22042,7 +22042,7 @@ msgid "Certificate notification"
 msgstr "د سرٹیفیکیټ اعلان"
 
 msgid "((user_first_name)),"
-msgstr "((user_first_name)),"
+msgstr "((user_first_name))،"
 
 msgid "Send certificate notification to all users"
 msgstr "ټولو کاروونکو ته د سرٹیفیکیټ اعلان واستوئ"
@@ -31000,7 +31000,7 @@ msgid "Create your first note to get started."
 msgstr "خپل لومړنی یادښت جوړ کړئ ترڅو پیل کړئ."
 
 msgid "F d, Y"
-msgstr "F d, Y"
+msgstr "F d، Y"
 
 msgid "Could not load support info at this time."
 msgstr "د دې وخت په جریان کې د ملاتړ معلومات نشي بار کیدی."
@@ -31450,7 +31450,7 @@ msgid "SCIM external ID"
 msgstr "SCIM بهرنۍ ID"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "OAuth2 آیدی"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "مهموه، د شرایطو او ضوابطو وروستی نسخه ومنئ."
@@ -32573,4 +32573,7 @@ msgstr "ستاسو بریښنالیک تصدیق کول او ستاسو حساب
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "که تاسو دا حساب نه وي ثبت کړی، تاسو کولی شئ دا برېښنالیک نادیده ونیسئ. هیڅ عمل به ونه شي نیول شوی."
+
+msgid "Current authentication method"
+msgstr "اوسې مهال تصدیقي طريقې"
 

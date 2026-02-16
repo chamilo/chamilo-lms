@@ -70,37 +70,37 @@ msgid "Student's superior"
 msgstr "مشرف الطالب"
 
 msgid "Cosecant:\t\t\t\tcsc(x)"
-msgstr "Cosecant:\t\t\t\tcsc(x)"
+msgstr "كوسيكانت:\t\t\t\tcsc(x)"
 
 msgid "Hyperbolic cosecant:\t\tcsch(x)"
 msgstr "Arccosecant:\t\t\tarccsc(x)"
 
 msgid "Arccosecant:\t\t\tarccsc(x)"
-msgstr "Arccosecant:\t\t\tarccsc(x)"
+msgstr "الكوسيكانت العكسي:\t\t\tarccsc(x)"
 
 msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
 msgstr "القاطع المكمل الزائدي:\t\tarccsch(x)"
 
 msgid "Secant:\t\t\t\tsec(x)"
-msgstr "Secant:\t\t\t\tsec(x)"
+msgstr "سيكانت:\t\t\t\tsec(x)"
 
 msgid "Hyperbolic secant:\t\tsech(x)"
 msgstr "القاطع الزائدي:\t\tsech(x)"
 
 msgid "Arcsecant:\t\t\tarcsec(x)"
-msgstr "Arcsecant:\t\t\tarcsec(x)"
+msgstr "السيكانت العكسي:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
 msgstr "القاطع المكمل الزائدي:\t\tarcsech(x)"
 
 msgid "Cotangent:\t\t\tcot(x)"
-msgstr "Cotangent:\t\t\tcot(x)"
+msgstr "كوتانجنت:\t\t\tcot(x)"
 
 msgid "Hyperbolic cotangent:\t\tcoth(x)"
 msgstr "الظل الزائدي:\t\tcoth(x)"
 
 msgid "Arccotangent:\t\t\tarccot(x)"
-msgstr "Arccotangent:\t\t\tarccot(x)"
+msgstr "الكوتانجنت العكسي:\t\t\tarccot(x)"
 
 msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
 msgstr "الظل المكمل الزائدي:\t\tarccoth(x)"
@@ -238,13 +238,13 @@ msgid "Session duration"
 msgstr "مدة الدورة"
 
 msgid "Arctangent:\t\t\tarctan(x)"
-msgstr "Arctangent:\t\t\tarctan(x)"
+msgstr "التانجنت العكسي:\t\t\tarctan(x)"
 
 msgid "Hyperbolic tangent:\t\ttanh(x)"
 msgstr "الظل الزائدي:\t\ttanh(x)"
 
 msgid "Tangent:\t\t\ttan(x)"
-msgstr "Tangent:\t\t\ttan(x)"
+msgstr "تانجنت:\t\t\ttan(x)"
 
 msgid "Coach and student"
 msgstr "المعلم والطالب"
@@ -256,13 +256,13 @@ msgid "Hyperbolic arccosine:\t\tarccosh(x)"
 msgstr "الجيب المكمل الزائدي:\t\tarccosh(x)"
 
 msgid "Arccosine:\t\t\tarccos(x)"
-msgstr "Arccosine:\t\t\tarccos(x)"
+msgstr "الكوساينوس العكسي:\t\t\tarccos(x)"
 
 msgid "Hyperbolic cosine:\t\tcosh(x)"
 msgstr "الجيب الزائدي:\t\tcosh(x)"
 
 msgid "Cosine:\t\t\t\tcos(x)"
-msgstr "Cosine:\t\t\t\tcos(x)"
+msgstr "كوساينوس:\t\t\t\tcos(x)"
 
 msgid "Teachers time report"
 msgstr "تقرير الوقت للمدرسين"
@@ -274,13 +274,13 @@ msgid "Cannot find your language in the list? Contact us at info@chamilo.org to 
 msgstr "info@chamilo.org لا يمكن العثور على لغتك في القائمة؟ يمكنك الاتصال بنا والمساهمة كمترجم"
 
 msgid "Arcsine:\t\t\tarcsin(x)"
-msgstr "Arcsine:\t\t\tarcsin(x)"
+msgstr "الساينوس العكسي:\t\t\tarcsin(x)"
 
 msgid "Hyperbolic sine:\t\tsinh(x)"
 msgstr "الجيب الزائدي:\t\tsinh(x)"
 
 msgid "Sine:\t\t\t\tsin(x)"
-msgstr "Sine:\t\t\t\tsin(x)"
+msgstr "ساينوس:\t\t\t\tsin(x)"
 
 msgid "Pi number:\t\t\tpi"
 msgstr "\t\t\tpi النسبة الثابتة"
@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "مع التقدير"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "نموذج صيغة: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "عينة صيغة: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "مدى المتغير"
@@ -1560,7 +1560,7 @@ msgid "Close windows"
 msgstr "أغلق النافذة"
 
 msgid "Browsed"
-msgstr "Browsed"
+msgstr "تم تصفحه"
 
 msgid "Back to normal screen"
 msgstr "الرجوع إلى الشاشة العادية"
@@ -2031,7 +2031,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":نعم:حقوق الطبع والنشر,, لا:لا حقوق طبع ونشر"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:مجلد,, application/msword:MsWord,, application/octet-stream:تدفق أوكتيت,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:مجلد,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":تمرين:تمرين,,      محاكاة:محاكاة,,      استبيان:استبيان,,      رسم تخطيطي:رسم تخطيطي,,      شكل:شكل,,      رسم بياني:رسم بياني,,      فهرس:فهرس,,      شريحة:شريحة,,      جدول:جدول,,      نص سردي:نص سردي,,      امتحان:امتحان,,      تجربة:تجربة,,      بيان المشكلة:بيان المشكلة,,      تقييم ذاتي:تقييم ذاتي,,      محاضرة:محاضرة"
@@ -3225,7 +3225,7 @@ msgid "Allow self-registration as a trainer"
 msgstr "السماح بالتسجيل الذاتي كمدرب"
 
 msgid "ex."
-msgstr "ex."
+msgstr "مثال"
 
 msgid "Database Host"
 msgstr "مضيف قاعدة البيانات"
@@ -8610,7 +8610,7 @@ msgid "Add new question type"
 msgstr "أضف نوع سؤال جديد"
 
 msgid "Numbered"
-msgstr "Numbered"
+msgstr "مرقم"
 
 msgid "en"
 msgstr "ar"
@@ -8631,7 +8631,7 @@ msgid "helvetica, arial, geneva, sans-serif"
 msgstr "tahoma, arial, geneva, sans-serif"
 
 msgid ","
-msgstr ","
+msgstr "،"
 
 msgid "."
 msgstr "."
@@ -8943,19 +8943,19 @@ msgid "User"
 msgstr "مستخدم"
 
 msgid "M"
-msgstr "M"
+msgstr "ا"
 
 msgid "T"
-msgstr "T"
+msgstr "ث"
 
 msgid "W"
-msgstr "W"
+msgstr "أ"
 
 msgid "F"
-msgstr "F"
+msgstr "خ"
 
 msgid "S"
-msgstr "S"
+msgstr "س"
 
 msgid "Mon"
 msgstr "الإثنين"
@@ -9000,55 +9000,55 @@ msgid "Sunday"
 msgstr "الأحد"
 
 msgid "J"
-msgstr "J"
+msgstr "ح"
 
 msgid "A"
-msgstr "A"
+msgstr "ك"
 
 msgid "O"
-msgstr "O"
+msgstr "ل"
 
 msgid "N"
-msgstr "N"
+msgstr "م"
 
 msgid "D"
-msgstr "D"
+msgstr "ن"
 
 msgid "Jan"
-msgstr "Jan"
+msgstr "يناير"
 
 msgid "Feb"
-msgstr "Feb"
+msgstr "فبراير"
 
 msgid "Mar"
-msgstr "Mar"
+msgstr "مارس"
 
 msgid "Apr"
-msgstr "Apr"
+msgstr "أبريل"
 
 msgid "May"
-msgstr "May"
+msgstr "مايو"
 
 msgid "Jun"
-msgstr "Jun"
+msgstr "يونيو"
 
 msgid "Jul"
-msgstr "Jul"
+msgstr "يوليو"
 
 msgid "Aug"
-msgstr "Aug"
+msgstr "أغسطس"
 
 msgid "Sep"
-msgstr "Sep"
+msgstr "سبتمبر"
 
 msgid "Oct"
-msgstr "Oct"
+msgstr "أكتوبر"
 
 msgid "Nov"
-msgstr "Nov"
+msgstr "نوفمبر"
 
 msgid "Dec"
-msgstr "Dec"
+msgstr "ديسمبر"
 
 msgid "January"
 msgstr "يناير"
@@ -9096,7 +9096,7 @@ msgid "What I can teach"
 msgstr "المقررات التي استطيع تدريسها"
 
 msgid "h"
-msgstr "h"
+msgstr "س"
 
 msgid "Please Try Again!"
 msgstr "فضلا كرر المحاولة"
@@ -9264,7 +9264,7 @@ msgid "Time report for session %s"
 msgstr "تقرير الوقت لمقرر %s"
 
 msgid "Error"
-msgstr "Error"
+msgstr "خطأ"
 
 msgid "Anonymous"
 msgstr "مجهول"
@@ -9780,7 +9780,7 @@ msgid "Border"
 msgstr "حدود"
 
 msgid "Alt"
-msgstr "Alt"
+msgstr "بديل"
 
 msgid "Height"
 msgstr "الإرتفاع"
@@ -9843,7 +9843,7 @@ msgid "Category added"
 msgstr "تم اضافة الفئة"
 
 msgid "IP"
-msgstr "IP"
+msgstr "عنوان IP"
 
 msgid "Grade activity"
 msgstr "تقييم النشاط"
@@ -10815,7 +10815,7 @@ msgid "Action"
 msgstr "الحركة"
 
 msgid "Preserved"
-msgstr "Preserved"
+msgstr "محفوظ"
 
 msgid "Confirm user unsubscription"
 msgstr "تأكيد إلغاء تسجيل العضو"
@@ -10929,7 +10929,7 @@ msgid "In case of trouble, contact us."
 msgstr "في حال حصول أي مشكلة , اتصل بنا"
 
 msgid "is"
-msgstr "is"
+msgstr "هو"
 
 msgid "The address of"
 msgstr "عنوان الـ"
@@ -11763,7 +11763,7 @@ msgid "Hits"
 msgstr "النقرات"
 
 msgid "h."
-msgstr "h."
+msgstr "س."
 
 msgid "In the last 31 days"
 msgstr " في ال 31 يوم الأخيرة"
@@ -12795,7 +12795,7 @@ msgid "Latest sent on"
 msgstr "آخر إعادة إرسال على"
 
 msgid "kB"
-msgstr "kB"
+msgstr "ك.بايت"
 
 msgid "Your account %s has been completely removed from this portal. Thank you for staying with us for a while. We hope to see you again later."
 msgstr "حسابك %s قد تم ازالته بشكل كامل من النظام. شكرا لبقاءك معنا لبعض الوقت. نأمل ان نراك مرة لاحقا"
@@ -12921,7 +12921,7 @@ msgid "the language in which this learning object was made"
 msgstr "اللغة بنفس لغة كائن التعليم"
 
 msgid "Identifier"
-msgstr "Identifier"
+msgstr "معرف"
 
 msgid "unique identification for this learning object, composed of letters, digits, _-.()'!*"
 msgstr "معرف فريد لهذا الكائن التعليمي، مكون من حروف، أرقام، _-.()\'!*"
@@ -12948,7 +12948,7 @@ msgid "If you change the description language, do not add keywords at the same t
 msgstr "اذا قمت بتغيير لغة الشرح, لا تقم بتغيير الكلمات المفتاحية في نفس الوقت"
 
 msgid "URL/URI"
-msgstr "URL/URI"
+msgstr "رابط URL/URI"
 
 msgid "click to open object"
 msgstr "انقر لفتح الكائن"
@@ -14316,7 +14316,7 @@ msgid "PHP version"
 msgstr "إصدار PHP"
 
 msgid "Support"
-msgstr "support"
+msgstr "دعم"
 
 msgid "Your PHP version matches the minimum requirement:"
 msgstr "إصدار PHP الخاص بك يتوافق مع الحد الأدنى المطلوب:"
@@ -15546,7 +15546,7 @@ msgid "Graph of evaluations"
 msgstr "رسم بياني للتقييمات"
 
 msgid "URL"
-msgstr "URL"
+msgstr "رابط URL"
 
 msgid "Learning path"
 msgstr "المسار التعليمي"
@@ -18922,7 +18922,7 @@ msgid "You cannot upload this assignment. Please delete the previous one first."
 msgstr "لا يمكنك رفع هذا الواجب، يرجى حذف الملف السابق اولا"
 
 msgid "MB"
-msgstr "MB"
+msgstr "م.بايت"
 
 msgid "Shows a global toolbar on top of the page to the designated user roles. This toolbar, very similar to Wordpress and Google's black toolbars, can really speed up complicated actions and improve the space you have available for the learning content, but it might be confusing for some users"
 msgstr "يعرض لك شريط اعلى الصفحة لبعض المستخدمين، يهدف الى سرعة الوصول الى الاجراءات المعقدة وتحسين المساحة المتاحة لك للتعلم، الا انه قد يكون معقدا لبعض المستخدمين"
@@ -20938,7 +20938,7 @@ msgid "Click or drop one file here"
 msgstr "انقر او قم باسقاط ملف واحد هنا"
 
 msgid "Modulo:\t\t\t%"
-msgstr "Modulo:\t\t\t%"
+msgstr "وحدة:\t\t\t%"
 
 msgid "Last %s days"
 msgstr "اخر %s يوم"
@@ -21625,7 +21625,7 @@ msgid "User testing of e-mail configuration"
 msgstr "اختبار المستخدم لتهيئة البريد"
 
 msgid "CMS"
-msgstr "CMS"
+msgstr "نظام إدارة المحتوى"
 
 msgid "Legal conditions"
 msgstr "الشروط القانونية"
@@ -23053,7 +23053,7 @@ msgid "General total"
 msgstr "المجموع العام"
 
 msgid "Domains"
-msgstr "Domains"
+msgstr "النطاقات"
 
 msgid "Logins by date"
 msgstr "تسجيلات الدخول وفقا للتاريخ"
@@ -28138,40 +28138,40 @@ msgid "Generates images based on prompts or content using AI."
 msgstr "يولد صورًا بناءً على التلميحات أو المحتوى باستخدام الذكاء الاصطناعي."
 
 msgid "Menucampushomepage"
-msgstr "Menucampushomepage"
+msgstr "صفحة_الرئيسية_الحرم"
 
 msgid "Menumycourses"
-msgstr "Menumycourses"
+msgstr "دوراتي"
 
 msgid "Menureporting"
-msgstr "Menureporting"
+msgstr "التقارير"
 
 msgid "Menuplatformadministration"
-msgstr "Menuplatformadministration"
+msgstr "إدارة_المنصة"
 
 msgid "Menumyagenda"
-msgstr "Menumyagenda"
+msgstr "جدولي"
 
 msgid "Menusocial"
-msgstr "Menusocial"
+msgstr "اجتماعي"
 
 msgid "Menuvideoconference"
-msgstr "Menuvideoconference"
+msgstr "مؤتمر_فيديو"
 
 msgid "Menudiagnostics"
-msgstr "Menudiagnostics"
+msgstr "تشخيص"
 
 msgid "Menucatalogue"
-msgstr "Menucatalogue"
+msgstr "كتالوج"
 
 msgid "Topbarcertificate"
-msgstr "Topbarcertificate"
+msgstr "شهادة_شريط_الأعلى"
 
 msgid "Topbarskills"
-msgstr "Topbarskills"
+msgstr "مهارات_شريط_الأعلى"
 
 msgid "Ai_helpers"
-msgstr "Ai_helpers"
+msgstr "مساعدي_الذكاء_الاصطناعي"
 
 msgid "ID of the user who officially sends the agenda reminders"
 msgstr "معرف المستخدم الذي يرسل تذكيرات الجدول الزمني رسميًا"
@@ -30739,7 +30739,7 @@ msgid "Organisation e-mail"
 msgstr "بريد إلكتروني المنظمة"
 
 msgid "UID"
-msgstr "UID"
+msgstr "معرف المستخدم"
 
 msgid "Office phone extension"
 msgstr "امتداد هاتف المكتب"
@@ -32591,4 +32591,7 @@ msgstr "للتحقق من بريدك الإلكتروني وتفعيل حساب�
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "إذا لم تقم بتسجيل هذا الحساب، يمكنك تجاهل هذا البريد الإلكتروني. لن يتم اتخاذ أي إجراء."
+
+msgid "Current authentication method"
+msgstr "طريقة المصادقة الحالية"
 

@@ -1755,10 +1755,10 @@ msgid "Deleting this area will permanently delete all the content (documents, li
 msgstr "Xóa website khóa học này sẽ xóa vĩnh viễn tất cả dữ liệu(không xóa chúng từ khóa học khác).<p>Bạn có thực sự muốn xóa khóa học này"
 
 msgid "YES"
-msgstr "YES"
+msgstr "CÓ"
 
 msgid "NO"
-msgstr "NO"
+msgstr "KHÔNG"
 
 msgid "Department URL"
 msgstr "Đương dẫn trang chủ của khoa"
@@ -1785,7 +1785,7 @@ msgid "Restore a course"
 msgstr "Restore khóa học"
 
 msgid "Restore"
-msgstr "Restore"
+msgstr "Khôi phục"
 
 msgid "created in"
 msgstr "Tạo mới"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:bản quyền,, no:không bản quyền"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Thư mục,, application/msword:MsWord,, application/octet-stream:Dòng octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:bài tập,,      simulation:mô phỏng,,      questionnaire:bảng câu hỏi,,      diagram:sơ đồ,,      figure:hình vẽ,,      graph:đồ thị,,      index:chỉ mục,,      slide:slide,,      table:bảng,,      narrative text:văn bản kể chuyện,,      exam:kỳ thi,,      experiment:thí nghiệm,,      problem statement:đề bài,,      self assessment:tự đánh giá,,      lecture:bài giảng"
@@ -2160,7 +2160,7 @@ msgid "Users registered in any group"
 msgstr "Người dùng đăng ký trong bất kỳ nhóm nào"
 
 msgid "Camera"
-msgstr "Camera"
+msgstr "Máy ảnh"
 
 msgid "Microphone"
 msgstr "Micro"
@@ -3282,7 +3282,7 @@ msgid "Main language"
 msgstr "Ngôn ngữ chính"
 
 msgid "License"
-msgstr "License"
+msgstr "Giấy phép"
 
 msgid "Last check before install"
 msgstr "Kiểm tra cuối cùng trước khi cài đặt"
@@ -3720,7 +3720,7 @@ msgid "Show a link to go back in the courses hierarchy. A link is available at t
 msgstr "Hiển thị liên kết quay lại trong hệ thống phân cấp khóa học. Liên kết luôn có sẵn ở cuối danh sách."
 
 msgid "used"
-msgstr "used"
+msgstr "đã sử dụng"
 
 msgid "existing"
 msgstr "Thoát ra"
@@ -4134,7 +4134,7 @@ msgid "Status of MySQL server :"
 msgstr "Trạng thái MySQL server :"
 
 msgid "Database"
-msgstr "Database"
+msgstr "Cơ sở dữ liệu"
 
 msgid "works"
 msgstr "work"
@@ -4146,7 +4146,7 @@ msgid "MySql Server"
 msgstr "MySql Server"
 
 msgid "Owner"
-msgstr "Owner"
+msgstr "Chủ sở hữu"
 
 msgid "Upgrade database"
 msgstr "nâng cấp cơ sở dữ liệu"
@@ -4161,7 +4161,7 @@ msgid "Upgrade Chamilo"
 msgstr "Nâng cấp"
 
 msgid "Website"
-msgstr "Website"
+msgstr "Trang web"
 
 msgid "Documentation"
 msgstr "Tài liệu"
@@ -4740,7 +4740,7 @@ msgid "Should the navigation menu show the different tool icons?"
 msgstr "Thanh điều hướng có hiển thị các biểu tượng công cụ khác nhau không?"
 
 msgid "Plugin"
-msgstr "Plugin"
+msgstr "Tiện ích mở rộng"
 
 msgid "Main menu"
 msgstr "Menu chính"
@@ -6471,7 +6471,7 @@ msgid "Send this announcement by email to selected groups/users"
 msgstr "Gá»­i thĂ´ng bĂ¡o nĂ y cho cĂ¡c há»"
 
 msgid "On"
-msgstr "On"
+msgstr "Bật"
 
 msgid "registered users of the site"
 msgstr "người dùng đã đăng ký"
@@ -6822,7 +6822,7 @@ msgid "Group tutor"
 msgstr "Tutor"
 
 msgid "(none)"
-msgstr "(none)"
+msgstr "(không có)"
 
 msgid "Admin users list"
 msgstr "Danh sách quản trị viên"
@@ -6834,7 +6834,7 @@ msgid "my supervision"
 msgstr "giám sát của tôi"
 
 msgid "register"
-msgstr "register"
+msgstr "đăng ký"
 
 msgid "Add me to this group"
 msgstr "Thêm tôi vào nhóm này"
@@ -7572,7 +7572,7 @@ msgid "Answers"
 msgstr "Trả lời"
 
 msgid "True"
-msgstr "True"
+msgstr "Đúng"
 
 msgid "Answer"
 msgstr "Trả lời"
@@ -7659,16 +7659,16 @@ msgid "use square brackets [...] to define one or more blanks"
 msgstr "dùng ngoặc vuông [...] để định nghĩa các chỗ cần điền"
 
 msgid "+answ"
-msgstr "+answ"
+msgstr "+trả lời"
 
 msgid "-answ"
-msgstr "-answ"
+msgstr "-trả lời"
 
 msgid "+elem"
-msgstr "+elem"
+msgstr "+phần tử"
 
 msgid "-elem"
-msgstr "-elem"
+msgstr "-phần tử"
 
 msgid "Please type your text below"
 msgstr "Nhập vào phần sau đây"
@@ -8460,7 +8460,7 @@ msgid "Download"
 msgstr "Tải xuống"
 
 msgid "Group"
-msgstr "Group"
+msgstr "Nhóm"
 
 msgid "Group Forum"
 msgstr "Forum"
@@ -8469,7 +8469,7 @@ msgid "Do you want audio file to START automatically?"
 msgstr "Bạn có muốn tệp âm thanh TỰ ĐỘNG BẮT ĐẦU không?"
 
 msgid "Forum"
-msgstr "Forum"
+msgstr "Diễn đàn"
 
 msgid "Remove picture"
 msgstr "Xóa hình ảnh"
@@ -8511,7 +8511,7 @@ msgid "Hide"
 msgstr "Ẩn"
 
 msgid "Dear"
-msgstr "Dear"
+msgstr "Kính gửi"
 
 msgid "archive"
 msgstr "lưu trữ"
@@ -8754,64 +8754,64 @@ msgid "Total time"
 msgstr "Tổng thời gian"
 
 msgid "arabic"
-msgstr "arabic"
+msgstr "tiếng Ả Rập"
 
 msgid "brazilian"
-msgstr "brazilian"
+msgstr "tiếng Bồ Đào Nha (Brazil)"
 
 msgid "bulgarian"
-msgstr "bulgarian"
+msgstr "tiếng Bulgaria"
 
 msgid "catalan"
-msgstr "catalan"
+msgstr "tiếng Catalan"
 
 msgid "croatian"
-msgstr "croatian"
+msgstr "tiếng Croatia"
 
 msgid "danish"
-msgstr "danish"
+msgstr "tiếng Đan Mạch"
 
 msgid "dutch"
-msgstr "dutch"
+msgstr "tiếng Hà Lan"
 
 msgid "finnish"
-msgstr "finnish"
+msgstr "tiếng Phần Lan"
 
 msgid "french"
-msgstr "french"
+msgstr "tiếng Pháp"
 
 msgid "french_corporate"
-msgstr "french_corporate"
+msgstr "tiếng Pháp doanh nghiệp"
 
 msgid "french_KM"
-msgstr "french_KM"
+msgstr "tiếng Pháp KM"
 
 msgid "galician"
-msgstr "galician"
+msgstr "tiếng Galicia"
 
 msgid "german"
-msgstr "german"
+msgstr "tiếng Đức"
 
 msgid "greek"
-msgstr "greek"
+msgstr "tiếng Hy Lạp"
 
 msgid "italian"
-msgstr "italian"
+msgstr "tiếng Ý"
 
 msgid "japanese"
-msgstr "japanese"
+msgstr "tiếng Nhật"
 
 msgid "polish"
-msgstr "polish"
+msgstr "tiếng Ba Lan"
 
 msgid "portuguese"
-msgstr "portuguese"
+msgstr "tiếng Bồ Đào Nha"
 
 msgid "russian"
-msgstr "russian"
+msgstr "tiếng Nga"
 
 msgid "simpl_chinese"
-msgstr "simpl_chinese"
+msgstr "tiếng Trung giản thể"
 
 msgid "spanish"
 msgstr "tiếng Tây Ban Nha"
@@ -9927,7 +9927,7 @@ msgid "View changes history"
 msgstr "Xem lịch sử thay đổi"
 
 msgid "asturian"
-msgstr "asturian"
+msgstr "tiếng Asturia"
 
 msgid "Go to course"
 msgstr "Chuyển đến khóa học"
@@ -10689,7 +10689,7 @@ msgid "Pass"
 msgstr "Password"
 
 msgid "Advises"
-msgstr "Advises"
+msgstr "Tư vấn"
 
 msgid "<b>Warning :</b> This course does not exist"
 msgstr "<b>Cảnh báo:</b> Khóa học này không tồn tại"
@@ -10920,7 +10920,7 @@ msgid "In case of trouble, contact us."
 msgstr "Trong trường hợp có lỗi xảy ra, hãy liên hệ với chúng tôi"
 
 msgid "is"
-msgstr "is"
+msgstr "là"
 
 msgid "The address of"
 msgstr "địa chỉ của"
@@ -10953,7 +10953,7 @@ msgid "Login request"
 msgstr "Cần phải đăng nhập"
 
 msgid "Admin"
-msgstr "admin"
+msgstr "Quản trị"
 
 msgid "User of course"
 msgstr "normal"
@@ -11751,10 +11751,10 @@ msgid "There is no result yet"
 msgstr "Chưa có kết quả"
 
 msgid "Hits"
-msgstr "Hits"
+msgstr "Lượt truy cập"
 
 msgid "h."
-msgstr "h."
+msgstr "g."
 
 msgid "In the last 31 days"
 msgstr "Trong 31 ngày gần đây"
@@ -11886,13 +11886,13 @@ msgid "Providers"
 msgstr "Người cung cấp"
 
 msgid "OS"
-msgstr "OS"
+msgstr "HĐH"
 
 msgid "Browsers"
-msgstr "Browsers"
+msgstr "Trình duyệt"
 
 msgid "Referers"
-msgstr "Referers"
+msgstr "Nguồn tham chiếu"
 
 msgid "(When an user open the index of the portal)"
 msgstr "(When an user open the index of the campus)"
@@ -13662,7 +13662,7 @@ msgid "Brochure"
 msgstr "Tài liệu giới thiệu"
 
 msgid "Slideshow"
-msgstr "Slideshow"
+msgstr "Trình chiếu"
 
 msgid "Published end date"
 msgstr "Ngày kết thúc công bố"
@@ -14484,7 +14484,7 @@ msgid "czech"
 msgstr "séc"
 
 msgid "dari"
-msgstr "dari"
+msgstr "tiếng Dari"
 
 msgid "dutch corporate"
 msgstr "tiếng Hà Lan doanh nghiệp"
@@ -14499,7 +14499,7 @@ msgid "georgian"
 msgstr "gruzia"
 
 msgid "hebrew"
-msgstr "hebrew"
+msgstr "tiếng Do Thái"
 
 msgid "korean"
 msgstr "hàn quốc"
@@ -14517,7 +14517,7 @@ msgid "norwegian"
 msgstr "nauy"
 
 msgid "pashto"
-msgstr "pashto"
+msgstr "tiếng Pashto"
 
 msgid "persian"
 msgstr "ba tư"
@@ -14535,7 +14535,7 @@ msgid "slovak"
 msgstr "slovakia"
 
 msgid "swahili"
-msgstr "swahili"
+msgstr "tiếng Swahili"
 
 msgid "traditional chinese"
 msgstr "tiếng Trung truyền thống"
@@ -14979,10 +14979,10 @@ msgid "The exercise time limit has expired"
 msgstr "Thời gian giới hạn bài tập đã hết"
 
 msgid "ukrainian"
-msgstr "ukrainian"
+msgstr "tiếng Ukraina"
 
 msgid "yoruba"
-msgstr "yoruba"
+msgstr "tiếng Yoruba"
 
 msgid "New"
 msgstr "Mới"
@@ -22053,7 +22053,7 @@ msgid "Send certificate notification to all users"
 msgstr "Gửi thông báo chứng chỉ đến tất cả người dùng"
 
 msgid "Fwd"
-msgstr "Fwd"
+msgstr "Chuyển tiếp"
 
 msgid "Forwarded message"
 msgstr "Tin nhắn được chuyển tiếp"
@@ -28126,40 +28126,40 @@ msgid "Generates images based on prompts or content using AI."
 msgstr "Tạo hình ảnh dựa trên gợi ý hoặc nội dung bằng AI."
 
 msgid "Menucampushomepage"
-msgstr "Menucampushomepage"
+msgstr "Trang chủ Campus"
 
 msgid "Menumycourses"
-msgstr "Menumycourses"
+msgstr "Khóa học của tôi"
 
 msgid "Menureporting"
-msgstr "Menureporting"
+msgstr "Báo cáo"
 
 msgid "Menuplatformadministration"
-msgstr "Menuplatformadministration"
+msgstr "Quản trị nền tảng"
 
 msgid "Menumyagenda"
-msgstr "Menumyagenda"
+msgstr "Lịch của tôi"
 
 msgid "Menusocial"
-msgstr "Menusocial"
+msgstr "Mạng xã hội"
 
 msgid "Menuvideoconference"
-msgstr "Menuvideoconference"
+msgstr "Hội nghị video"
 
 msgid "Menudiagnostics"
-msgstr "Menudiagnostics"
+msgstr "Chẩn đoán"
 
 msgid "Menucatalogue"
-msgstr "Menucatalogue"
+msgstr "Danh mục"
 
 msgid "Topbarcertificate"
-msgstr "Topbarcertificate"
+msgstr "Chứng chỉ"
 
 msgid "Topbarskills"
-msgstr "Topbarskills"
+msgstr "Thanh kỹ năng"
 
 msgid "Ai_helpers"
-msgstr "Ai_helpers"
+msgstr "Trợ giúp AI"
 
 msgid "ID of the user who officially sends the agenda reminders"
 msgstr "ID của người dùng chính thức gửi nhắc nhở lịch"
@@ -28510,7 +28510,7 @@ msgid "No available options"
 msgstr "Không có tùy chọn nào có sẵn"
 
 msgid "Cc"
-msgstr "Cc"
+msgstr "Giấy phép"
 
 msgid "Send"
 msgstr "Gửi"
@@ -31456,7 +31456,7 @@ msgid "SCIM external ID"
 msgstr "SCIM ID bên ngoài"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "ID OAuth2"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "Vui lòng chấp nhận phiên bản mới nhất của điều khoản và điều kiện."
@@ -31747,7 +31747,7 @@ msgid "Test/development"
 msgstr "Kiểm tra/phát triển"
 
 msgid "Crons"
-msgstr "Crons"
+msgstr "Nhiệm vụ định kỳ"
 
 msgid "Editor"
 msgstr "Trình soạn thảo"
@@ -32579,4 +32579,7 @@ msgstr "Để xác thực email và kích hoạt tài khoản của bạn trên 
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Nếu bạn không đăng ký tài khoản này, bạn có thể bỏ qua email này. Không có hành động nào sẽ được thực hiện."
+
+msgid "Current authentication method"
+msgstr "Phương thức xác thực hiện tại"
 

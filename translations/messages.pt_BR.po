@@ -81,25 +81,25 @@ msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
 msgstr "Hiperbólica Arccossecant:\t\tarccsch(x)"
 
 msgid "Secant:\t\t\t\tsec(x)"
-msgstr "Secant:\t\t\t\tsec(x)"
+msgstr "Secante:\t\t\t\tsec(x)"
 
 msgid "Hyperbolic secant:\t\tsech(x)"
 msgstr "Hiperbólica secant:\t\tsech(x)"
 
 msgid "Arcsecant:\t\t\tarcsec(x)"
-msgstr "Arcsecant:\t\t\tarcsec(x)"
+msgstr "Arco secante:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
 msgstr "Hiperbólica Arcsecant:\t\tarcsech(x)"
 
 msgid "Cotangent:\t\t\tcot(x)"
-msgstr "Cotangent:\t\t\tcot(x)"
+msgstr "Cotangente:\t\t\tcot(x)"
 
 msgid "Hyperbolic cotangent:\t\tcoth(x)"
 msgstr "Hiperbólica cotangent:\t\tcoth(x)"
 
 msgid "Arccotangent:\t\t\tarccot(x)"
-msgstr "Arccotangent:\t\t\tarccot(x)"
+msgstr "Arco cotangente:\t\t\tarccot(x)"
 
 msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
 msgstr "Hiperbólica arccotangent:\t\tarccoth(x)"
@@ -237,7 +237,7 @@ msgid "Session duration"
 msgstr "Duração da sessão"
 
 msgid "Arctangent:\t\t\tarctan(x)"
-msgstr "Arctangent:\t\t\tarctan(x)"
+msgstr "Arco tangente:\t\t\tarctan(x)"
 
 msgid "Hyperbolic tangent:\t\ttanh(x)"
 msgstr "Tangente hiperbólica:\t\ttanh(x)"
@@ -249,13 +249,13 @@ msgid "Coach and student"
 msgstr "Treinador e aluno"
 
 msgid "Series"
-msgstr "Series"
+msgstr "Séries"
 
 msgid "Hyperbolic arccosine:\t\tarccosh(x)"
 msgstr "Arccosine hiperbólica:\t\tarccosh(x)"
 
 msgid "Arccosine:\t\t\tarccos(x)"
-msgstr "Arccosine:\t\t\tarccos(x)"
+msgstr "Arco cosseno:\t\t\tarccos(x)"
 
 msgid "Hyperbolic cosine:\t\tcosh(x)"
 msgstr "co-seno hiperbólico:\t\tcosh (x)"
@@ -273,13 +273,13 @@ msgid "Cannot find your language in the list? Contact us at info@chamilo.org to 
 msgstr "Não é possível encontrar o seu idioma na lista? Contacte-nos em info@chamilo.org contribuir como um tradutor."
 
 msgid "Arcsine:\t\t\tarcsin(x)"
-msgstr "arcsine:\t\t\tarcsin(x)"
+msgstr "Arco seno:\t\t\tarcsin(x)"
 
 msgid "Hyperbolic sine:\t\tsinh(x)"
 msgstr "Seno hiperbólico:\t\tsinh(x)"
 
 msgid "Sine:\t\t\t\tsin(x)"
-msgstr "Sine:\t\t\t\tsin(x)"
+msgstr "Seno:\t\t\t\tsin(x)"
 
 msgid "Pi number:\t\t\tpi"
 msgstr "Número Pi:\t\t\tpi"
@@ -309,7 +309,7 @@ msgid "Multiplication:\t\t\t*"
 msgstr "Multiplicação:\t\t\t*"
 
 msgid "Substraction:\t\t\t-"
-msgstr "Substraction:\t\t\t-"
+msgstr "Subtração:\t\t\t-"
 
 msgid "Summation:\t\t\t+"
 msgstr "Soma:\t\t\t+"
@@ -1205,7 +1205,7 @@ msgid "Strong"
 msgstr "Forte"
 
 msgid "Medium"
-msgstr "Medium"
+msgstr "Médio"
 
 msgid "Normal"
 msgstr "Normal"
@@ -1250,7 +1250,7 @@ msgid "Your version is not up-to-date"
 msgstr "A sua versão não é up-to-date"
 
 msgid "Hotpotatoes"
-msgstr "HotPotatoes"
+msgstr "Hotpotatoes"
 
 msgid "-1 = All questions will be selected."
 msgstr "-1 = Todas as perguntas serão selecionadas.0 = Sem perguntas serão selecionadas."
@@ -1784,7 +1784,7 @@ msgid "Trainer"
 msgstr "Professor"
 
 msgid "Description"
-msgstr "Description"
+msgstr "Descrição"
 
 msgid "Course backup"
 msgstr "backup de Curso"
@@ -3698,7 +3698,7 @@ msgid "Show status"
 msgstr "Mostrar o estado"
 
 msgid "Mode"
-msgstr "Mode"
+msgstr "Modo"
 
 msgid "Schedule"
 msgstr "Cronograma"
@@ -7034,10 +7034,10 @@ msgid "Prerequisites"
 msgstr "Pré-requisitos"
 
 msgid "Up"
-msgstr "Up"
+msgstr "Acima"
 
 msgid "Down"
-msgstr "Down"
+msgstr "Abaixo"
 
 msgid "this learning object"
 msgstr "Esta  rota de aprendizagem"
@@ -7670,7 +7670,7 @@ msgid "+answ"
 msgstr "+resp"
 
 msgid "-answ"
-msgstr "-answ"
+msgstr "-resp"
 
 msgid "+elem"
 msgstr "+elem"
@@ -8054,7 +8054,7 @@ msgid "Add individual feedback"
 msgstr "Adicionar feedback individual"
 
 msgid "N°"
-msgstr "N°"
+msgstr "Nº"
 
 msgid "To create a new question, choose the type above"
 msgstr "Para criar uma nova pergunta, escolher o tipo de cima"
@@ -8561,7 +8561,7 @@ msgid "Reporting"
 msgstr "Relatórios"
 
 msgid "Update"
-msgstr "Update"
+msgstr "Atualizar"
 
 msgid "Select question type"
 msgstr "Selecione o tipo de pergunta"
@@ -8612,10 +8612,10 @@ msgid "Numbered"
 msgstr "Numerado"
 
 msgid "en"
-msgstr "en"
+msgstr "pt_BR"
 
 msgid "eng"
-msgstr "eng"
+msgstr "pt"
 
 msgid "iso-8859-1"
 msgstr "iso-8859-1"
@@ -8714,7 +8714,7 @@ msgid "Previous page"
 msgstr "Página anterior"
 
 msgid "Use"
-msgstr "Use"
+msgstr "Usar"
 
 msgid "Total"
 msgstr "Total"
@@ -8777,7 +8777,7 @@ msgid "croatian"
 msgstr "croata"
 
 msgid "danish"
-msgstr "danish"
+msgstr "dinamarquês"
 
 msgid "dutch"
 msgstr "alemão"
@@ -8810,7 +8810,7 @@ msgid "japanese"
 msgstr "japonês"
 
 msgid "polish"
-msgstr "polish"
+msgstr "polonês"
 
 msgid "portuguese"
 msgstr "português"
@@ -8999,7 +8999,7 @@ msgid "Sunday"
 msgstr "Domingo"
 
 msgid "J"
-msgstr "J"
+msgstr "Q"
 
 msgid "A"
 msgstr "A"
@@ -10019,7 +10019,7 @@ msgid "Shared documents folder"
 msgstr "pasta Documentos compartilhados"
 
 msgid "Audio"
-msgstr "Audio"
+msgstr "Áudio"
 
 msgid "Go to question"
 msgstr "Passar para a pergunta"
@@ -12920,7 +12920,7 @@ msgid "the language in which this learning object was made"
 msgstr "a língua na qual este  Rota de aprendizagem foi feito"
 
 msgid "Identifier"
-msgstr "Identifier"
+msgstr "Identificador"
 
 msgid "unique identification for this learning object, composed of letters, digits, _-.()'!*"
 msgstr "identificação única para esse  Rota de aprendizagem, composto por letras, dígitos, _- () '*.!"
@@ -13331,7 +13331,7 @@ msgid "Answer options"
 msgstr "Opções de resposta"
 
 msgid "Dropdown"
-msgstr "Dropdown"
+msgstr "Lista suspensa"
 
 msgid "Page break"
 msgstr "fim da página"
@@ -13394,7 +13394,7 @@ msgid "User report"
 msgstr "relatório de Usuário"
 
 msgid "Graphic"
-msgstr "Graphic"
+msgstr "Gráfico"
 
 msgid "Absolute total"
 msgstr "absoluta total"
@@ -14462,7 +14462,7 @@ msgid "Fruity orange"
 msgstr "Laranja"
 
 msgid "Medical"
-msgstr "Medical"
+msgstr "Médico"
 
 msgid "Royal purple"
 msgstr "Roxo Royal"
@@ -14543,7 +14543,7 @@ msgid "slovak"
 msgstr "Eslovaco"
 
 msgid "swahili"
-msgstr "Swahili"
+msgstr "suaíli"
 
 msgid "traditional chinese"
 msgstr "Chinês tradicional"
@@ -16199,7 +16199,7 @@ msgid "%d %B %Y"
 msgstr "%d %B %Y"
 
 msgid "%A"
-msgstr " %A"
+msgstr "%A"
 
 msgid "Return to the course list"
 msgstr "Voltar para a lista de cursos"
@@ -16400,7 +16400,7 @@ msgid "A student has obtained the number of sub-skills needed to validate the mo
 msgstr "Um aluno obteve o número de sub-habilidades necessárias para validar a habilidade da mãe."
 
 msgid "Off"
-msgstr "Off"
+msgstr "Desligado"
 
 msgid "Web server"
 msgstr "servidor Web"
@@ -17660,7 +17660,7 @@ msgid "Update session"
 msgstr "Atualizar sessão"
 
 msgid "Path"
-msgstr "Path"
+msgstr "Caminho"
 
 msgid "Over 100"
 msgstr "Mais de 100"
@@ -17705,7 +17705,7 @@ msgid "Tests in learning paths"
 msgstr "Exercícios em percursos de aprendizagem"
 
 msgid "Id"
-msgstr "Id"
+msgstr "ID"
 
 msgid "There was an error."
 msgstr "Ocorreu um erro."
@@ -17783,7 +17783,7 @@ msgid "New image"
 msgstr "Nova Imagem"
 
 msgid "Untitled"
-msgstr "Untitled"
+msgstr "Sem título"
 
 msgid "Cannot delete files that are configured in read-only mode."
 msgstr "Não é possível excluir arquivos que estão configurados em modo de somente leitura."
@@ -19900,10 +19900,10 @@ msgid "Not readable"
 msgstr "Não pode ser lido"
 
 msgid "John"
-msgstr "John"
+msgstr "João"
 
 msgid "Doe"
-msgstr "Doe"
+msgstr "Silva"
 
 msgid "Attendances updated"
 msgstr "Presenças atualizadas"
@@ -20938,7 +20938,7 @@ msgid "Click or drop one file here"
 msgstr "Clique ou soltar um arquivo aqui"
 
 msgid "Modulo:\t\t\t%"
-msgstr "Modulo:\t\t\t%"
+msgstr "Módulo:\t\t\t%"
 
 msgid "Last %s days"
 msgstr "Último %s dias"
@@ -22060,7 +22060,7 @@ msgid "Certificate notification"
 msgstr "Notificação de Certificado"
 
 msgid "((user_first_name)),"
-msgstr "((user_first_name)),"
+msgstr "((nome_do_usuário)),"
 
 msgid "Send certificate notification to all users"
 msgstr "Enviar notificação de certificado para todos os usuários"
@@ -22651,7 +22651,7 @@ msgid "If you want to get the certificate and/or skills associated with this cou
 msgstr "Se você deseja obter o certificado e / ou habilidades associadas a este curso, você precisa comprar o serviço de certificado. Você pode ir para o catálogo de serviços clicando neste link: %s"
 
 msgid "Sub-skill"
-msgstr "Sub-skill"
+msgstr "Sub-habilidade"
 
 msgid "Add multiple users to calendar"
 msgstr "Adicione vários usuários ao calendário"
@@ -22993,10 +22993,10 @@ msgid "Sorry, you have reached the maximum number of questions (%s) for the day.
 msgstr "Desculpe, você atingiu o número máximo de perguntas (%s) do dia. Por favor, tente novamente amanhã."
 
 msgid "Like"
-msgstr "Like"
+msgstr "Gostar"
 
 msgid "Dislike"
-msgstr "Dislike"
+msgstr "Não gostar"
 
 msgid "Generate statistics"
 msgstr "Gerar estatísticas"
@@ -23047,7 +23047,7 @@ msgid "Resume import"
 msgstr "Retomar a importação"
 
 msgid "Candidate"
-msgstr "Candidate"
+msgstr "Candidato"
 
 msgid "General total"
 msgstr "Total geral"
@@ -28139,7 +28139,7 @@ msgid "Generates images based on prompts or content using AI."
 msgstr "Gera imagens com base em prompts ou conteúdo usando IA."
 
 msgid "Menucampushomepage"
-msgstr "Menucampushomepage"
+msgstr "MenuPáginaInicialCampus"
 
 msgid "Menumycourses"
 msgstr "Menumycursos"
@@ -28151,10 +28151,10 @@ msgid "Menuplatformadministration"
 msgstr "Menuadministraçãoplataforma"
 
 msgid "Menumyagenda"
-msgstr "Menumyagenda"
+msgstr "MenuMinhaAgenda"
 
 msgid "Menusocial"
-msgstr "Menusocial"
+msgstr "MenuSocial"
 
 msgid "Menuvideoconference"
 msgstr "Menuvideoconferência"
@@ -28172,7 +28172,7 @@ msgid "Topbarskills"
 msgstr "Topbarhabilidades"
 
 msgid "Ai_helpers"
-msgstr "Ai_helpers"
+msgstr "AssistentesIA"
 
 msgid "ID of the user who officially sends the agenda reminders"
 msgstr "ID do usuário que envia oficialmente os lembretes da agenda"
@@ -28238,7 +28238,7 @@ msgid "You're subscribed to push notifications in this browser."
 msgstr "Você está inscrito em notificações push neste navegador."
 
 msgid "Endpoint"
-msgstr "Endpoint"
+msgstr "Ponto de Extremidade"
 
 msgid "Push notifications are not enabled in this browser."
 msgstr "Notificações push não estão ativadas neste navegador."
@@ -32345,7 +32345,7 @@ msgid "Quiz"
 msgstr "Questionário"
 
 msgid "Customcertificate"
-msgstr "Customcertificate"
+msgstr "Certificadopersonalizado"
 
 msgid "Update profile"
 msgstr "Atualizar perfil"
@@ -32592,4 +32592,7 @@ msgstr "Para verificar seu e-mail e ativar sua conta em %s, clique no link abaix
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Se você não registrou esta conta, pode ignorar este e-mail. Nenhuma ação será tomada."
+
+msgid "Current authentication method"
+msgstr "Método de autenticação atual"
 

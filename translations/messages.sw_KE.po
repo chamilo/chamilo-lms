@@ -64,37 +64,37 @@ msgid "Student's superior"
 msgstr "Msimamizi wa juu wa mwanafunzi"
 
 msgid "Cosecant:\t\t\t\tcsc(x)"
-msgstr "Cosecant:\t\t\t\tcsc(x)"
+msgstr "Kosikanti:\t\t\t\tcsc(x)"
 
 msgid "Hyperbolic cosecant:\t\tcsch(x)"
 msgstr "Cosecant hyperbolic:\t\tcsch(x)"
 
 msgid "Arccosecant:\t\t\tarccsc(x)"
-msgstr "Arccosecant:\t\t\tarccsc(x)"
+msgstr "Arkokosikanti:\t\t\tarccsc(x)"
 
 msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
 msgstr "Arc cosecant hyperbolic:\t\tarccsch(x)"
 
 msgid "Secant:\t\t\t\tsec(x)"
-msgstr "Secant:\t\t\t\tsec(x)"
+msgstr "Sekanti:\t\t\t\tsec(x)"
 
 msgid "Hyperbolic secant:\t\tsech(x)"
 msgstr "Secant hyperbolic:\t\tsech(x)"
 
 msgid "Arcsecant:\t\t\tarcsec(x)"
-msgstr "Arcsecant:\t\t\tarcsec(x)"
+msgstr "Arkosekanti:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
 msgstr "Arc secant hyperbolic:\t\tarcsech(x)"
 
 msgid "Cotangent:\t\t\tcot(x)"
-msgstr "Cotangent:\t\t\tcot(x)"
+msgstr "Kotanjenti:\t\t\tcot(x)"
 
 msgid "Hyperbolic cotangent:\t\tcoth(x)"
 msgstr "Cotangent hyperbolic:\t\tcoth(x)"
 
 msgid "Arccotangent:\t\t\tarccot(x)"
-msgstr "Arccotangent:\t\t\tarccot(x)"
+msgstr "Arkokotanjenti:\t\t\tarccot(x)"
 
 msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
 msgstr "Arc cotangent hyperbolic:\t\tarccoth(x)"
@@ -232,13 +232,13 @@ msgid "Session duration"
 msgstr "Muda wa sesheni"
 
 msgid "Arctangent:\t\t\tarctan(x)"
-msgstr "Arctangent:\t\t\tarctan(x)"
+msgstr "Arkotanjenti:\t\t\tarctan(x)"
 
 msgid "Hyperbolic tangent:\t\ttanh(x)"
 msgstr "Tangent hyperbolic:\t\ttanh(x)"
 
 msgid "Tangent:\t\t\ttan(x)"
-msgstr "Tangent:\t\t\ttan(x)"
+msgstr "Tanjenti:\t\t\ttan(x)"
 
 msgid "Coach and student"
 msgstr "Mkufunzi na mwanafunzi"
@@ -250,13 +250,13 @@ msgid "Hyperbolic arccosine:\t\tarccosh(x)"
 msgstr "Arc cosine hyperbolic:\t\tarccosh(x)"
 
 msgid "Arccosine:\t\t\tarccos(x)"
-msgstr "Arccosine:\t\t\tarccos(x)"
+msgstr "Arkoko:\t\t\tarccos(x)"
 
 msgid "Hyperbolic cosine:\t\tcosh(x)"
 msgstr "Cosine hyperbolic:\t\tcosh(x)"
 
 msgid "Cosine:\t\t\t\tcos(x)"
-msgstr "Cosine:\t\t\t\tcos(x)"
+msgstr "Ko:\t\t\t\tcos(x)"
 
 msgid "Teachers time report"
 msgstr "Ripoti ya muda wa walimu"
@@ -268,13 +268,13 @@ msgid "Cannot find your language in the list? Contact us at info@chamilo.org to 
 msgstr "Haukuona lugha yako katika orodha? Wasiliana nasi kwa info@chamilo.org ili kuchangia kama mtafsiri."
 
 msgid "Arcsine:\t\t\tarcsin(x)"
-msgstr "Arcsine:\t\t\tarcsin(x)"
+msgstr "Arkosini:\t\t\tarcsin(x)"
 
 msgid "Hyperbolic sine:\t\tsinh(x)"
 msgstr "Sine hyperbolic:\t\tsinh(x)"
 
 msgid "Sine:\t\t\t\tsin(x)"
-msgstr "Sine:\t\t\t\tsin(x)"
+msgstr "Sini:\t\t\t\tsin(x)"
 
 msgid "Pi number:\t\t\tpi"
 msgstr "Nambari ya Pi:\t\t\tpi"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ndiyo:nakala,, hapana:hakuna nakala"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folda,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":mazoezi:mazoezi,,      uigaji:uigaji,,      dodoso:dodoso,,      mchoro:mchoro,,      picha:picha,,      grafu:grafu,,      faharasa:faharasa,,      slaidi:slaidi,,      jedwali:jedwali,,      maandishi ya hadithi:maandishi ya hadithi,,      mtihani:mtihani,,      majaribio:majaribio,,      taarifa ya tatizo:taarifa ya tatizo,,      tathmini ya kibinafsi:tathmini ya kibinafsi,,      mhadhara:mhadhara"
@@ -8989,13 +8989,13 @@ msgid "J"
 msgstr "J"
 
 msgid "A"
-msgstr "A"
+msgstr "F"
 
 msgid "O"
-msgstr "O"
+msgstr "M"
 
 msgid "N"
-msgstr "N"
+msgstr "A"
 
 msgid "D"
 msgstr "D"
@@ -10711,7 +10711,7 @@ msgid "Opinion"
 msgstr "Maoni"
 
 msgid "Intranet"
-msgstr "Intranet"
+msgstr "Intraneti"
 
 msgid "My account"
 msgstr "Akaunti yangu"
@@ -11887,7 +11887,7 @@ msgid "Browsers"
 msgstr "Vivinjari"
 
 msgid "Referers"
-msgstr "Referers"
+msgstr "Rejea"
 
 msgid "(When an user open the index of the portal)"
 msgstr "(Wakati mtumiaji anafungua fahirisi ya lango)"
@@ -14434,7 +14434,7 @@ msgid "Cool blue"
 msgstr "Cool blue"
 
 msgid "Corporate"
-msgstr "Corporate"
+msgstr "Shirika"
 
 msgid "Cosmic campus"
 msgstr "Cosmic campus"
@@ -14449,7 +14449,7 @@ msgid "Fruity orange"
 msgstr "Fruity orange"
 
 msgid "Medical"
-msgstr "Medical"
+msgstr "Tiba"
 
 msgid "Royal purple"
 msgstr "Royal purple"
@@ -14473,10 +14473,10 @@ msgid "Questions' overall report"
 msgstr "Ripoti ya jumla ya maswali"
 
 msgid "bosnian"
-msgstr "bosnian"
+msgstr "bosnia"
 
 msgid "czech"
-msgstr "czech"
+msgstr "kicheki"
 
 msgid "dari"
 msgstr "dari"
@@ -14491,22 +14491,22 @@ msgid "friulian"
 msgstr "friulian"
 
 msgid "georgian"
-msgstr "georgian"
+msgstr "jorgia"
 
 msgid "hebrew"
 msgstr "hebrew"
 
 msgid "korean"
-msgstr "korean"
+msgstr "korea"
 
 msgid "latvian"
-msgstr "latvian"
+msgstr "latvia"
 
 msgid "lithuanian"
-msgstr "lithuanian"
+msgstr "lithuania"
 
 msgid "macedonian"
-msgstr "macedonian"
+msgstr "makedonia"
 
 msgid "norwegian"
 msgstr "norwegian"
@@ -14515,25 +14515,25 @@ msgid "pashto"
 msgstr "pashto"
 
 msgid "persian"
-msgstr "persian"
+msgstr "kipersia"
 
 msgid "quechua from Cusco"
 msgstr "kiquechua kutoka Cusco"
 
 msgid "romanian"
-msgstr "romanian"
+msgstr "kiromania"
 
 msgid "serbian"
-msgstr "serbian"
+msgstr "kisербia"
 
 msgid "slovak"
-msgstr "slovak"
+msgstr "slovakia"
 
 msgid "swahili"
-msgstr "swahili"
+msgstr "kiswahili"
 
 msgid "traditional chinese"
-msgstr "traditional chinese"
+msgstr "kichina cha kitamaduni"
 
 msgid "Chamilo installation"
 msgstr "Uwekaji wa Chamilo"
@@ -32573,4 +32573,7 @@ msgstr "Iliethibitisha barua pepe yako na kuwezesha akaunti yako kwenye %s, tafa
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Ikiwa haukuandikisha akaunti hii, unaweza kupuuza barua pepe hii. Hakuna hatua itakayochukuliwa."
+
+msgid "Current authentication method"
+msgstr "Njia ya sasa ya uthibitisho"
 

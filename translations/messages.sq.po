@@ -494,7 +494,7 @@ msgid "Question ID"
 msgstr "ID e pyetjes"
 
 msgid "ExerciseId"
-msgstr "ExerciseId"
+msgstr "IdUshtrimi"
 
 msgid "Excel export"
 msgstr "Eksport Excel"
@@ -1199,7 +1199,7 @@ msgid "Medium"
 msgstr "Mesatar"
 
 msgid "Normal"
-msgstr "Normal"
+msgstr "Normale"
 
 msgid "Weak"
 msgstr "I dobët"
@@ -1496,7 +1496,7 @@ msgid "Learning object name"
 msgstr "Emri i objektit të mësimit"
 
 msgid "Status"
-msgstr "Status"
+msgstr "Statusi"
 
 msgid "To enter"
 msgstr "Për të hyrë"
@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:të drejtat e autorit,, no:pa të drejtat e autorit"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dosje,, application/msword:MsWord,, application/octet-stream:Rrjedhë octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dosje,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ushtrim,,      simulation:simulim,,      questionnaire:pyetësor,,      diagram:diagramë,,      figure:figurë,,      graph:grafik,,      index:indeks,,      slide:slide,,      table:tabelë,,      narrative text:tekst narrativ,,      exam:provim,,      experiment:eksperiment,,      problem statement:përmbajtja e problemit,,      self assessment:vëtëvlerësim,,      lecture:ligjëratë"
@@ -8603,7 +8603,7 @@ msgid "Numbered"
 msgstr "Me numra"
 
 msgid "en"
-msgstr "en"
+msgstr "sq"
 
 msgid "eng"
 msgstr "eng"
@@ -8945,7 +8945,7 @@ msgid "F"
 msgstr "E"
 
 msgid "S"
-msgstr "S"
+msgstr "E"
 
 msgid "Mon"
 msgstr "Hën"
@@ -8990,7 +8990,7 @@ msgid "Sunday"
 msgstr "E diel"
 
 msgid "J"
-msgstr "J"
+msgstr "H"
 
 msgid "A"
 msgstr "S"
@@ -8999,10 +8999,10 @@ msgid "O"
 msgstr "K"
 
 msgid "N"
-msgstr "N"
+msgstr "J"
 
 msgid "D"
-msgstr "D"
+msgstr "E"
 
 msgid "Jan"
 msgstr "Jan"
@@ -9128,7 +9128,7 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 msgid "Chat"
-msgstr "Chat"
+msgstr "Bisedë"
 
 msgid "Add link to this page"
 msgstr "Shto lidhje në këtë faqe"
@@ -23981,10 +23981,10 @@ msgid "Send diagnostic finalization message"
 msgstr "Dërgo mesazhin e përfundimit të diagnostikimit"
 
 msgid "DiagnosticfinalizationmessageTitle"
-msgstr "DiagnosticfinalizationmessageTitle"
+msgstr "Titulli i mesazhit të përfundimit të diagnostikimit"
 
 msgid "DiagnosticfinalizationmessageContent"
-msgstr "DiagnosticfinalizationmessageContent"
+msgstr "Përmbajtja e mesazhit të përfundimit të diagnostikimit"
 
 msgid "Add a forumCategory"
 msgstr "Shto një forumKategori"
@@ -28124,40 +28124,40 @@ msgid "Generates images based on prompts or content using AI."
 msgstr "Gjeneron imazhe bazuar në urdhra ose përmbajtje duke përdorur AI."
 
 msgid "Menucampushomepage"
-msgstr "Menucampushomepage"
+msgstr "Faqja kryesore e kampusit"
 
 msgid "Menumycourses"
-msgstr "Menumycourses"
+msgstr "Kursimet e mia"
 
 msgid "Menureporting"
-msgstr "Menureporting"
+msgstr "Raportimi"
 
 msgid "Menuplatformadministration"
-msgstr "Menuplatformadministration"
+msgstr "Administrimi i platformës"
 
 msgid "Menumyagenda"
-msgstr "Menumyagenda"
+msgstr "Agjenda ime"
 
 msgid "Menusocial"
-msgstr "Menusocial"
+msgstr "Social"
 
 msgid "Menuvideoconference"
-msgstr "Menuvideoconference"
+msgstr "Videokonferencë"
 
 msgid "Menudiagnostics"
-msgstr "Menudiagnostics"
+msgstr "Diagnostikime"
 
 msgid "Menucatalogue"
-msgstr "Menucatalogue"
+msgstr "Katalogu"
 
 msgid "Topbarcertificate"
-msgstr "Topbarcertificate"
+msgstr "Certifikata"
 
 msgid "Topbarskills"
-msgstr "Topbarskills"
+msgstr "Aftësitë"
 
 msgid "Ai_helpers"
-msgstr "Ai_helpers"
+msgstr "Ndihmësit e AI-së"
 
 msgid "ID of the user who officially sends the agenda reminders"
 msgstr "ID e përdoruesit që dërgon zyrtarisht kujtesat e axhendës"
@@ -29843,7 +29843,7 @@ msgid "Is used for data exchange?"
 msgstr "Përdoret për këmbim të dhënash?"
 
 msgid "Event"
-msgstr "Event"
+msgstr "Ngjarje"
 
 msgid "Go to session"
 msgstr "Shko te sesioni"
@@ -32330,7 +32330,7 @@ msgid "Quiz"
 msgstr "Test"
 
 msgid "Customcertificate"
-msgstr "Customcertificate"
+msgstr "Certifikatë e personalizuar"
 
 msgid "Update profile"
 msgstr "Përditëso profilin"
@@ -32577,4 +32577,7 @@ msgstr "Për të verifikuar email-in tuaj dhe për të aktivizuar llogarinë tua
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Nëse nuk keni regjistruar këtë llogari, mund ta injoroni këtë email. Nuk do të merren masa."
+
+msgid "Current authentication method"
+msgstr "Metoda aktuale e autentikimit"
 

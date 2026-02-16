@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med vänliga hälsningar,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formel exempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formel-exempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervall"
@@ -1080,7 +1080,7 @@ msgid "Roles"
 msgstr "Roller"
 
 msgid "Curriculum"
-msgstr "Curriculum"
+msgstr "Läroplan"
 
 msgid "%s to review (%s)"
 msgstr "%s att granska (%s)"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:copyright,, nej:ingen copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapp,, application/msword:MsWord,, application/octet-stream:Okettström,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapp,, application/msword:MsWord,, application/octet-stream:Octetströmmar,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:övning,, simulation:simulering,, questionnaire:frågeställningar,, diagram:diagram,, figure:figur,, graph:graf,, index:index,, slide:slide,, table:bordläggning,, narrative text:berättartext,, exam:examen,, experiment:experiment,, problem statement:problemställning,, self assessment:självbedömning,, lecture:föreläsning"
@@ -4155,7 +4155,7 @@ msgid "errors found"
 msgstr "Fel funna"
 
 msgid "Backup"
-msgstr "Backup"
+msgstr "Säkerhetskopiering"
 
 msgid "Upgrade Chamilo"
 msgstr "Uppgradera Chamilo"
@@ -8709,7 +8709,7 @@ msgid "Use"
 msgstr "Använda"
 
 msgid "Total"
-msgstr "Total"
+msgstr "Totalt"
 
 msgid "take"
 msgstr "ta"
@@ -9024,7 +9024,7 @@ msgid "Jun"
 msgstr "Jun"
 
 msgid "Jul"
-msgstr "jul"
+msgstr "Jul"
 
 msgid "Aug"
 msgstr "Aug"
@@ -9129,7 +9129,7 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 msgid "Chat"
-msgstr "Chat"
+msgstr "Chatt"
 
 msgid "Add link to this page"
 msgstr "Lägg till länk till sidan"
@@ -9189,7 +9189,7 @@ msgid "Book resource"
 msgstr "Reservation"
 
 msgid "Start"
-msgstr "Start"
+msgstr "Starta"
 
 msgid "End"
 msgstr "Slut"
@@ -9759,7 +9759,7 @@ msgid "Align"
 msgstr "Justera"
 
 msgid "Width"
-msgstr "Width"
+msgstr "Bredd"
 
 msgid "V Space"
 msgstr "V-avstånd"
@@ -9774,7 +9774,7 @@ msgid "Alt"
 msgstr "Alt"
 
 msgid "Height"
-msgstr "Height"
+msgstr "Höjd"
 
 msgid "Image manager"
 msgstr "Bildhanterare"
@@ -10953,7 +10953,7 @@ msgid "Login request"
 msgstr "Inloggningsförfrågan"
 
 msgid "Admin"
-msgstr "admin"
+msgstr "Admin"
 
 msgid "User of course"
 msgstr "normal"
@@ -11754,7 +11754,7 @@ msgid "Hits"
 msgstr "Träffar"
 
 msgid "h."
-msgstr "h."
+msgstr "t."
 
 msgid "In the last 31 days"
 msgstr "Inom de senaste 31 dagarna"
@@ -13641,7 +13641,7 @@ msgid "Resize the image to the following dimensions (in pixels)"
 msgstr "Ändra storlek på bilden till följande dimensioner (i pixlar)"
 
 msgid "RESIZE"
-msgstr "RESIZE"
+msgstr "MINSKA"
 
 msgid "Show all images in their original size. No resizing is done. Scrollbars will automatically appear if the image is larger than your monitor size."
 msgstr "Visa alla bilder i originalstorlek. Ingen storleksändring görs. Rullningslistar visas automatiskt om bilden är större än skärmstorleken."
@@ -13662,7 +13662,7 @@ msgid "Brochure"
 msgstr "Broschyr"
 
 msgid "Slideshow"
-msgstr "Slideshow"
+msgstr "Bildspel"
 
 msgid "Published end date"
 msgstr "Publicerad slutdatum"
@@ -13677,7 +13677,7 @@ msgid "My projects"
 msgstr "Mina favorit bloggar"
 
 msgid "Navigation"
-msgstr "Navigation"
+msgstr "Navigering"
 
 msgid "Top ten"
 msgstr "Topp 10 bloggar"
@@ -14307,7 +14307,7 @@ msgid "PHP version"
 msgstr "PHP-version"
 
 msgid "Support"
-msgstr "support"
+msgstr "Support"
 
 msgid "Your PHP version matches the minimum requirement:"
 msgstr "PHP-versionen är OK"
@@ -17739,7 +17739,7 @@ msgid "The attendance sheet is locked."
 msgstr "Närvarolistan är låst."
 
 msgid "Assistance"
-msgstr "Assistance"
+msgstr "Hjälp"
 
 msgid "A course category with the same name already exists."
 msgstr "En kurskategori med samma namn finns redan."
@@ -32305,70 +32305,70 @@ msgid "There are no terms that match the search: %s"
 msgstr "Det finns inga termer som matchar sökningen: %s"
 
 msgid "Setting is globally locked (access_url_locked=1)"
-msgstr ""
+msgstr "Inställningen är globalt låst (access_url_locked=1)"
 
 msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
-msgstr ""
+msgstr "Om aktiverat kommer 1:1 privata chattmeddelanden att speglas i kursens chattloggar. Rekommenderas att hålla inaktiverat för integritet."
 
 msgid "Save private conversations in documents"
-msgstr ""
+msgstr "Spara privata konversationer i dokument"
 
 msgid "EU AI Act – Transparency & risk notice"
-msgstr ""
+msgstr "EU AI Act – Transparens & riskmeddelande"
 
 msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
-msgstr ""
+msgstr "Enligt EU:s artificiella intelligensförordning (förordning (EU) 2024/1689) klassas AI-system som används i utbildning generellt som ”hög risk”. Denna programvara i sig är <strong>inte</strong> ett AI-system, men den kan integrera valfria interna eller externa AI-system – beroende på din konfiguration – för att förbättra användaruppgifters prestanda. Dessa system kan komma åt personuppgifter <em>endast om</em> användare inkluderar sådana uppgifter i sina prompts. Enligt designen delar denna programvara inte personuppgifter med AI-system utan användarens aktiva inmatning. Som standard är alla AI-funktioner inaktiverade."
 
 msgid "Admin responsibility & disclosures"
-msgstr ""
+msgstr "Administratörsansvar & upplysningar"
 
 msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
-msgstr ""
+msgstr "Denna konfigurationssida beskriver varje AI-funktion och dess syfte. Som driftsättare bör du noggrant granska dem och uppdatera dina GDPR-anpassade dataskyddspolicyer för att återspegla de alternativ du aktiverar. Medan de flesta AI-funktioner inte delar personuppgifter direkt med externa system kan användarprompts till AI oavsiktligt inkludera personlig information. Som driftsättare är <strong>du ansvarig</strong> för att informera användare om denna risk. För transparens kan framtida releaser visa icke-intrusiva etiketter för slutanvändare som indikerar att visst innehåll eller feedback genererats med hjälp av AI."
 
 msgid "Positioning"
-msgstr ""
+msgstr "Positionering"
 
 msgid "Quiz"
-msgstr ""
+msgstr "Kvot"
 
 msgid "Customcertificate"
-msgstr ""
+msgstr "Anpassatintyg"
 
 msgid "Update profile"
-msgstr ""
+msgstr "Uppdatera profil"
 
 msgid "Enable learning path generator"
-msgstr ""
+msgstr "Aktivera lärandestegs-generator"
 
 msgid "Enable exercise generator"
-msgstr ""
+msgstr "Aktivera övningsgenerator"
 
 msgid "Enable open answers grader"
-msgstr ""
+msgstr "Aktivera rättare för öppna svar"
 
 msgid "Enable tutor chatbot"
-msgstr ""
+msgstr "Aktivera tutor-chattbot"
 
 msgid "Enable task grader"
-msgstr ""
+msgstr "Aktivera uppgiftsrättare"
 
 msgid "Enable content analyser"
-msgstr ""
+msgstr "Aktivera innehållsanalysator"
 
 msgid "Enable image generator"
-msgstr ""
+msgstr "Aktivera bildgenerator"
 
 msgid "Enable glossary terms generator"
-msgstr ""
+msgstr "Aktivera glossarieord-generator"
 
 msgid "Enable video generator"
-msgstr ""
+msgstr "Aktivera videgenerator"
 
 msgid "Enable course analyser"
-msgstr ""
+msgstr "Aktivera kursanalysator"
 
 msgid "The operation '%s' is not supported."
-msgstr ""
+msgstr "Operationen '%s' stöds inte."
 
 msgid "AI feedback on %s in course %s"
 msgstr "AI-feedback på %s i kurs %s"
@@ -32579,4 +32579,7 @@ msgstr "För att verifiera din e-post och aktivera ditt konto på %s, klicka på
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Om du inte registrerade detta konto kan du ignorera detta e-postmeddelande. Inga åtgärder kommer att vidtas."
+
+msgid "Current authentication method"
+msgstr "Nuvarande autentiseringsmetod"
 

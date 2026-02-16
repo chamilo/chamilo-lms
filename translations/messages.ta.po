@@ -2816,7 +2816,7 @@ msgid "This is a sticky message (appears always on top and has a special sticky 
 msgstr "இது ஒரு ஒட்டு செய்தி (எப்போதும் மேலே தோன்றும் மற்றும் சிறப்பு ஒட்டு சின்னத்தைக் கொண்டிருக்கும்)"
 
 msgid "Re:"
-msgstr "Re:"
+msgstr "மறு:"
 
 msgid "Are you sure you want to delete this post? Deleting this post will also delete the replies on this post. Please check the threaded view to see which posts will also be deleted"
 msgstr "இந்த பதிவை நீக்க விரும்புகிறீர்களா? இந்த பதிவை நீக்குவது இந்த பதிவுக்கு உள்ள பதில்களையும் நீக்கும். எந்த பதிவுகள் நீக்கப்படும் என்பதைப் பார்க்க நெடுகல் பார்வையைச் சரிபார்க்கவும்"
@@ -31454,7 +31454,7 @@ msgid "SCIM external ID"
 msgstr "SCIM வெளி ID"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "OAuth2 ஐடி"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "விதிமுறைகள் மற்றும் நிபந்தனைகளின் சமீபத்திய பதிப்பை ஏற்பத் தயாராகவும்."
@@ -32330,7 +32330,7 @@ msgid "Quiz"
 msgstr "சோதனை"
 
 msgid "Customcertificate"
-msgstr "Customcertificate"
+msgstr "தனிப்பயன் சான்றிதழ்"
 
 msgid "Update profile"
 msgstr "சுயவிவரத்தை புதுப்பி"
@@ -32577,4 +32577,7 @@ msgstr "%s இல் உங்கள் கணக்கை உறுதிப்
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "இந்த கணக்கை நீங்கள் பதிவு செய்யவில்லை என்றால், இந்த மின்னஞ்சலை புறக்கணிக்கலாம். எந்த செயலும் எடுக்கப்படாது."
+
+msgid "Current authentication method"
+msgstr "தற்போதைய அங்கீகார முறை"
 

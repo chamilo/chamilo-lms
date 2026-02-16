@@ -494,7 +494,7 @@ msgid "Question ID"
 msgstr "ID Ceiste"
 
 msgid "ExerciseId"
-msgstr "ExerciseId"
+msgstr "AoisCleachtaidh"
 
 msgid "Excel export"
 msgstr "Easportáil Excel"
@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:cóipcheart,, no:gan cóipcheart"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fillteán,, application/msword:MsWord,, application/octet-stream:Sruth octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fillteán,, application/msword:MsWord,, application/octet-stream:Sruth Octad,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:cleachtadh,,      simulation:insamhal,,      questionnaire:fiosrúchán,,      diagram:léaráid,,      figure:figiúr,,      graph:graf,,      index:innéacs,,      slide:sleamhnán,,      table:tábla,,      narrative text:téacs insinte,,      exam:scrúdú,,      experiment:turgnamh,,      problem statement:ráiteas fadhb,,      self assessment:féimmeasúnú,,      lecture:léacht"
@@ -5225,10 +5225,10 @@ msgid "Whether you want to use the blacklist or whitelist filtering. See blackli
 msgstr "Cé acu blacklist nó whitelist scagtha atá uait a úsáid. Féach cur síos blacklist nó whitelist thíos le haghaidh tuilleadh sonraí."
 
 msgid "Blacklist"
-msgstr "Blacklist"
+msgstr "Liosta Dubh"
 
 msgid "Whitelist"
-msgstr "Whitelist"
+msgstr "Liosta Bán"
 
 msgid "Blacklist - setting"
 msgstr "Blacklist - socrú"
@@ -10715,7 +10715,7 @@ msgid "Opinion"
 msgstr "Tuairim"
 
 msgid "Intranet"
-msgstr "Intranet"
+msgstr "Innealt"
 
 msgid "My account"
 msgstr "Mo chuntas"
@@ -14000,7 +14000,7 @@ msgid "Filter on groups/users"
 msgstr "Scagaire ar ghrúpaí/úsáideoirí"
 
 msgid "Ascending"
-msgstr "Ascending"
+msgstr "Ascaineach"
 
 msgid "Current month"
 msgstr "An mhí reatha"
@@ -14483,7 +14483,7 @@ msgid "czech"
 msgstr "Seis"
 
 msgid "dari"
-msgstr "Dari"
+msgstr "dari"
 
 msgid "dutch corporate"
 msgstr "Corparáideach Ollannais"
@@ -14981,7 +14981,7 @@ msgid "ukrainian"
 msgstr "úcráinis"
 
 msgid "yoruba"
-msgstr "yoruba"
+msgstr "ioruba"
 
 msgid "New"
 msgstr "Nua"
@@ -20891,7 +20891,7 @@ msgid "Use right-click to close the delineation"
 msgstr "Úsáid cliceáil dheis chun an delineation a dhúnadh"
 
 msgid "Beta"
-msgstr "Beta"
+msgstr "Beite"
 
 msgid "Crop your picture"
 msgstr "Barr an pictiúr"
@@ -32577,4 +32577,7 @@ msgstr "Chun do r-phost a fhíorú agus do chuntas a chumasaú ar %s, cliceáil 
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Mura ndearna tú an cuntas seo a chlárú, is féidir leat an r-phost seo a ignóir. Ní ghlactar aon ghníomh."
+
+msgid "Current authentication method"
+msgstr "Modh fíordheimhnithe reatha"
 

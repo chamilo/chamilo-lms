@@ -490,7 +490,7 @@ msgid "Question ID"
 msgstr "კითხვის ID"
 
 msgid "ExerciseId"
-msgstr "ExerciseId"
+msgstr "ვარჯიშის ID"
 
 msgid "Excel export"
 msgstr "ექსპორტი Excel-ში"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:საავტორო უფლება,, no:საავტორო უფლება არა"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:ფოლდერი,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ვარჯიში,,      simulation:სიმულაცია,,      questionnaire:ანკეტა,,      diagram:დიაგრამა,,      figure:ფიგურა,,      graph:გრაფიკი,,      index:ინდექსი,,      slide:სლაიდი,,      table:ცხრილი,,      narrative text:ნარატიული ტექსტი,,      exam:გამოცდა,,      experiment:ექსპერიმენტი,,      problem statement:პრობლემის ჩამონათვალი,,      self assessment:თვითშეფასება,,      lecture:ლექცია"
@@ -8599,7 +8599,7 @@ msgid "Numbered"
 msgstr "ნუმერაციული"
 
 msgid "en"
-msgstr "en"
+msgstr "ka"
 
 msgid "eng"
 msgstr "eng"
@@ -28120,40 +28120,40 @@ msgid "Generates images based on prompts or content using AI."
 msgstr "ქმნის სურათებს შეკითხვებზე ან კონტენტზე სუფთა ინტელექტის გამოყენებით."
 
 msgid "Menucampushomepage"
-msgstr "Menucampushomepage"
+msgstr "მენიუსკამპუსისმთავარიგვერდი"
 
 msgid "Menumycourses"
-msgstr "Menumycourses"
+msgstr "ჩემიკურსები"
 
 msgid "Menureporting"
-msgstr "Menureporting"
+msgstr "ანგარიშგება"
 
 msgid "Menuplatformadministration"
-msgstr "Menuplatformadministration"
+msgstr "პლატფორმისადმენისტრირება"
 
 msgid "Menumyagenda"
-msgstr "Menumyagenda"
+msgstr "ჩემიაგენდა"
 
 msgid "Menusocial"
-msgstr "Menusocial"
+msgstr "სოციალური"
 
 msgid "Menuvideoconference"
-msgstr "Menuvideoconference"
+msgstr "ვიდეოკონფერენცია"
 
 msgid "Menudiagnostics"
-msgstr "Menudiagnostics"
+msgstr "დიაგნოსტიკა"
 
 msgid "Menucatalogue"
-msgstr "Menucatalogue"
+msgstr "კატალოგი"
 
 msgid "Topbarcertificate"
-msgstr "Topbarcertificate"
+msgstr "სერტიფიკატი"
 
 msgid "Topbarskills"
-msgstr "Topbarskills"
+msgstr "უნარები"
 
 msgid "Ai_helpers"
-msgstr "Ai_helpers"
+msgstr "AI დამხმარეები"
 
 msgid "ID of the user who officially sends the agenda reminders"
 msgstr "მომხმარებლის ID, რომელიც ოფიციალურად იგზავნის აგენდის შეხსენებებს"
@@ -28504,7 +28504,7 @@ msgid "No available options"
 msgstr "ხელმისაწვდომი ვარიანტები არ არის"
 
 msgid "Cc"
-msgstr "Cc"
+msgstr "კოპია"
 
 msgid "Send"
 msgstr "გაგზავნა"
@@ -32326,7 +32326,7 @@ msgid "Quiz"
 msgstr "ვიქტორინა"
 
 msgid "Customcertificate"
-msgstr "Customcertificate"
+msgstr "მორგებული სერტიფიკატი"
 
 msgid "Update profile"
 msgstr "პროფილის განახლება"
@@ -32573,4 +32573,7 @@ msgstr "შენი ელფოსტის დასამოწმებლ�
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "თუ არ დაარეგისტრირები ამ ანგარიშს, შეგიძლია უგულებელყო ეს ელფოსტა. ვერანერთი ქმედება არ მოხდება."
+
+msgid "Current authentication method"
+msgstr "მიმდინარე აუთენტიფიკაციის მეთოდი"
 

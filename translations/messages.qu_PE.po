@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ñawpaq formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Rurasqa rakina: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ari:copyright nisqawan,, mana:mana copyright nisqawan"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Phuru,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Puqyu,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación"
@@ -4749,7 +4749,7 @@ msgid "Main menu after login"
 msgstr "Menú principal después de autentificarse"
 
 msgid "Banner"
-msgstr "Banner"
+msgstr "Pukyu"
 
 msgid "Resize uploaded user images"
 msgstr "Redimensionar las imágenes enviadas por los usuarios"
@@ -5226,10 +5226,10 @@ msgid "Whether you want to use the blacklist or whitelist filtering. See blackli
 msgstr "Utilizar un filtrado blacklist o whitelist. Para más detalles, vea más abajo la descripción ambos filtros."
 
 msgid "Blacklist"
-msgstr "Blacklist"
+msgstr "Lista negra"
 
 msgid "Whitelist"
-msgstr "Whitelist"
+msgstr "Lista blanka"
 
 msgid "Blacklist - setting"
 msgstr "Blacklist - imaymanankuna"
@@ -6138,7 +6138,7 @@ msgid "Add LDAP users"
 msgstr "Añadir usuarios LDAP"
 
 msgid "Academica"
-msgstr "Academica"
+msgstr "Akademik"
 
 msgid "Add news"
 msgstr "Agregar noticias"
@@ -9009,34 +9009,34 @@ msgid "Jan"
 msgstr "Ene"
 
 msgid "Feb"
-msgstr "Feb"
+msgstr "Hatun puquy"
 
 msgid "Mar"
-msgstr "Mar"
+msgstr "Paway"
 
 msgid "Apr"
 msgstr "Abr"
 
 msgid "May"
-msgstr "May"
+msgstr "Maway"
 
 msgid "Jun"
-msgstr "Jun"
+msgstr "Pituy"
 
 msgid "Jul"
-msgstr "Jul"
+msgstr "Anqay"
 
 msgid "Aug"
 msgstr "Ago"
 
 msgid "Sep"
-msgstr "Sep"
+msgstr "Sitembre"
 
 msgid "Oct"
-msgstr "Oct"
+msgstr "Oktobre"
 
 msgid "Nov"
-msgstr "Nov"
+msgstr "Nobembre"
 
 msgid "Dec"
 msgstr "Dic"
@@ -9129,7 +9129,7 @@ msgid "Dropbox"
 msgstr "Qelqa khipukunata t'aqapay"
 
 msgid "Chat"
-msgstr "Chat"
+msgstr "Hatun rima"
 
 msgid "Add link to this page"
 msgstr "Yapay hoq waskhanata yachachinaq raphi qallariyninman"
@@ -9255,7 +9255,7 @@ msgid "Time report for session %s"
 msgstr "%s sessionpa pacha riwichikuyna"
 
 msgid "Error"
-msgstr "Error"
+msgstr "Pantasqa"
 
 msgid "Anonymous"
 msgstr "Mana sutiyuq"
@@ -9405,10 +9405,10 @@ msgid "You can now return to the"
 msgstr "Kunaqa kutiwaq kayman"
 
 msgid "Horizontal"
-msgstr "Horizontal"
+msgstr "Kimsayku"
 
 msgid "Vertical"
-msgstr "Vertical"
+msgstr "Sut'iy"
 
 msgid "Display search results"
 msgstr "Qhawarichiy maskhasqamanta tarisqakunata"
@@ -9795,7 +9795,7 @@ msgid "Group area"
 msgstr "Huñusqaq k'itin"
 
 msgid "Wiki"
-msgstr "Wiki"
+msgstr "Wiq'i"
 
 msgid "Export to PDF"
 msgstr "Apachiy PDF nisqaman"
@@ -11766,7 +11766,7 @@ msgid "This day"
 msgstr "Kay  p'unchaypi"
 
 msgid "Logins"
-msgstr "Logins"
+msgstr "Rakinakuna"
 
 msgid "Here is the list of your latest logins with the tools you visited during these sessions."
 msgstr "Esta es la lista de sus accesos, junto con las herramientas que ha visitado en esas sesiones."
@@ -14256,7 +14256,7 @@ msgid "Content of the groups"
 msgstr "<p>Esta herramienta le permite crear áreas para grupos de estudiantes y  asignarles dos herramientas de colaboración: un foro de debate y una  sección de documentación común donde pueden compartir,  subir y organizar sus propios archivos (independiente del módulo Documentos,  exclusivo para profesores y tutores). El área de documentos es privada,  y el foro puede ser<br>  público o privado.</p><p>Esta puede ser una opción muy útil para tener secciones privadas  de documentación y discusión para subgrupos de participantes en  su curso. (Incluso podría hacer que cada alumno tuviese su area  de documentos privada mediante esta herramienta, creando tantos grupos  como alumnos y asignándoles un área de documentos privada a cada  grupo.) </p>"
 
 msgid "Manual"
-msgstr "Manual"
+msgstr "Kamay"
 
 msgid "You should write a message"
 msgstr "Willayta qillqay"
@@ -14718,7 +14718,7 @@ msgid "Note: This test has been setup to hide the expected answers."
 msgstr "Nota: Kay pruibakunata kutichisqakuna qhawarinaq mana munakun."
 
 msgid "Social"
-msgstr "Social"
+msgstr "Iskay yaku"
 
 msgid "Create a group"
 msgstr "Grupu yaratay"
@@ -15036,7 +15036,7 @@ msgid "See blog"
 msgstr "Blogta qhaway"
 
 msgid "Blog"
-msgstr "Blog"
+msgstr "Yachaykuna"
 
 msgid "Blog Posts"
 msgstr "Blog yachaykuna"
@@ -15114,7 +15114,7 @@ msgid "Thematic advance"
 msgstr "Temakuna risqay"
 
 msgid "Dashboard"
-msgstr "Dashboard"
+msgstr "Rakinakuna"
 
 msgid "Dashboard blocks"
 msgstr "Dashboard killakuna"
@@ -28159,7 +28159,7 @@ msgid "Topbarskills"
 msgstr "Topbarskills"
 
 msgid "Ai_helpers"
-msgstr "Ai_helpers"
+msgstr "Yapay ñawpaq yachaykuna"
 
 msgid "ID of the user who officially sends the agenda reminders"
 msgstr "Agenda willakuykunata huk pachakusqan runa ID nisqa"
@@ -28366,7 +28366,7 @@ msgid "The DSN fully includes all parameters needed to connect to the mail servi
 msgstr "DSNqa manam mail servisiymanta tinkiykuy paramétrukunaqa. Yachakuy %s. Predeterminad valor null://null nisqa imayna iletu utsakuyta qhallichkan. native://default nisqa servidormanta PHP willakuy usakuy. Kaykuna DSN sintaksisqa: %s."
 
 msgid "Mail DSN"
-msgstr "Mail DSN"
+msgstr "Pishtu DSN"
 
 msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header. We recommend using a 'no-reply' e-mail address here, to avoid excessive filling of an e-mail box. The support e-mail address defined in the Platform section should be used to contact you, but replying to automatic notifications should not be encouraged."
 msgstr "Iletu direksion platapam iletu utsasqanman, 'reply-to' header nisqamanta. 'no-reply' iletu direksion usakuy recomendakun, iletu kaxramanta qhallichkan. Platapaq support iletu direksion contactokunaykipaq, mana automatic notificacioneskuna reply qhapaq."
@@ -29833,7 +29833,7 @@ msgid "Add third party"
 msgstr "Piñaku yapay"
 
 msgid "Recruiter"
-msgstr "Recruiter"
+msgstr "Reclutador"
 
 msgid "Send data"
 msgstr "Yachay kachay"
@@ -30175,7 +30175,7 @@ msgid "You can use the tags {{class_name}} and {{student_full_name}} in the ques
 msgstr "{{class_name}} ukhu {{student_full_name}} tagkunata qhawayta atinapaq paqopinpi. Encuesta lista p'aginapi, acción nisqapi, {{class_name}} tagta qhawayta atinapaq botón kanchu, paqopinni yachaywasiman inscritoq turakunaq tukuykunapaq copiaq, turan sutinwan sutiyta cambian. Chaysnaq p'aginapi qhipa yapay turakunaq tukuykunapaq. Kayllapi {{student_full_name}} tagta qhaway, paqopinni turapiq yachakuq runakunapaq (tukuy turakunapaq) copiaq ukhu sutinwan sutiyta cambian."
 
 msgid "Serie"
-msgstr "Serie"
+msgstr "Sirri"
 
 msgid "Add learner"
 msgstr "Yachakuytam yapay"
@@ -31645,7 +31645,7 @@ msgid "JSON configuration for course catalog: link settings, filters, sort optio
 msgstr "JSON configuration course catalogpaq: link settings, filters, sort options, imataq."
 
 msgid "Session Catalog Settings"
-msgstr "Session Catalog Settings"
+msgstr "Sutiykuna katalogi saruchakuna"
 
 msgid "JSON configuration for session catalog: filters and display options."
 msgstr "JSON configuration session catalogpaq: filterswan display options."
@@ -31750,7 +31750,7 @@ msgid "Crons"
 msgstr "Cronkuna"
 
 msgid "Editor"
-msgstr "Editor"
+msgstr "Ruwanakuy"
 
 msgid "Gradebook"
 msgstr "Notakuna"
@@ -32092,7 +32092,7 @@ msgid "Selected items will be the only ones included in the exported file."
 msgstr "Riqsikuy imaykuna export willakuypi qhapaq kasqan."
 
 msgid "Moodle export"
-msgstr "Moodle export"
+msgstr "Moodle eksportakuy"
 
 msgid "Moodle version"
 msgstr "Versión Moodle"
@@ -32314,7 +32314,7 @@ msgid "Save private conversations in documents"
 msgstr "Qespisqa willakuykuna qillqakunapi wañuchi"
 
 msgid "EU AI Act – Transparency & risk notice"
-msgstr "EU AI Act – Transparency & risk notice"
+msgstr "EU AI Act – Killasqachisqa & pilchukuna avispa"
 
 msgid "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”. This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance. These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input. By default, all AI features are disabled."
 msgstr "EU Artificial Intelligence Act (Regulation (EU) 2024/1689) suyupi, yachaypi llank'ay AI sistemakuna \"high-risk\" nisqa kasqakunata yachachisqa. Kay programa <strong>mana</strong> AI sistema, ichaqa, kay configurationmanta qhawarinakunata yachachisqa kaptin, optional ichuq yakiw AI sistemakuna qispichisqa kaptin, llank'anaq wasinpi yachachisqa. Kay sistemakuna runakunaq personal data <em>llainamanta</em> runakunaq promptsninpi qillqakunata qispichisqa kaptin. Kay programa designmanta, mana runakunaq active input illamanta AI sistemakunaman personal data qispichisqa. Tukuchiwan, tukuy AI features qhapaq."
@@ -32332,7 +32332,7 @@ msgid "Quiz"
 msgstr "Yachachisqa"
 
 msgid "Customcertificate"
-msgstr "Customcertificate"
+msgstr "Sapaq rakin"
 
 msgid "Update profile"
 msgstr "Profile tukuchiy"
@@ -32579,4 +32579,7 @@ msgstr "Rima yachanayki imayna %s-manta rimaq yachanaykita churayta atikunata ya
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Kay cuenta nisqata mañakunqanchu, kay e-mailta mana yuyarichunki. Manam imayna ruwaychu."
+
+msgid "Current authentication method"
+msgstr "Kunan hallpallaq hallpachisqa kamachiy"
 

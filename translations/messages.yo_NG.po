@@ -304,7 +304,7 @@ msgid "Multiplication:\t\t\t*"
 msgstr "Multiplication:\t\t\t*"
 
 msgid "Substraction:\t\t\t-"
-msgstr "Substraction:\t\t\t-"
+msgstr "Subtraction:\t\t\t-"
 
 msgid "Summation:\t\t\t+"
 msgstr "Àpọ̀dù:\t\t\t+"
@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Pẹ̀lẹ́"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Àpẹẹrẹ fọ́ọ̀mùlà: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Àpẹẹrẹ fọọmu: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Àwùjọ ìdípadì ìyàtọ̀"
@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Jọwọ kọ ọrọ rẹ si isalẹ"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Àpẹẹrẹ ṣiṣe fọọmu iṣẹ : ṣe ìṣirò Ìdí Ìdí Ìdí Ara</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ọjọ-ori</strong></td>            <td width=\"75%\" style=\"\">[25] ọdún</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ìbálòpọ̀</strong></td>            <td style=\"\" text-align:=\"\">[M] (M tabi F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ìdí</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Giga</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ìdí Ìdí Ara</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ìdí/Gig<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Àtẹ̀wé Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Àpẹẹrẹ ìdí ìwà ìfúnwò fọọmu : ṣe ìṣirò Ìdí Ìpọ̀n Ara</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ọjọ́-ori</strong></td>            <td width=\"75%\" style=\"\">[25] ọdún</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ìbẹ̀rẹ̀</strong></td>            <td style=\"\" text-align:=\"\">[M] (M tabi F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ìdí</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ìdàgbàsókè</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ìdí Ìpọ̀n Ara</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Ìdí/Ìdàgbàsókè<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Àtẹ̀wò Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Kọ adirẹẹsi silẹ"
@@ -8602,7 +8602,7 @@ msgid "en"
 msgstr "en"
 
 msgid "eng"
-msgstr "eng"
+msgstr "Gẹ̀ẹ́sì"
 
 msgid "iso-8859-1"
 msgstr "iso-8859-1"
@@ -8935,7 +8935,7 @@ msgid "T"
 msgstr "T"
 
 msgid "W"
-msgstr "W"
+msgstr "Àj"
 
 msgid "F"
 msgstr "Àj"
@@ -8989,7 +8989,7 @@ msgid "J"
 msgstr "J"
 
 msgid "A"
-msgstr "A"
+msgstr "À"
 
 msgid "O"
 msgstr "O"
@@ -8998,7 +8998,7 @@ msgid "N"
 msgstr "N"
 
 msgid "D"
-msgstr "D"
+msgstr "Àì"
 
 msgid "Jan"
 msgstr "Ján"
@@ -9082,7 +9082,7 @@ msgid "What I can teach"
 msgstr "Ohun ti mo le kọ"
 
 msgid "h"
-msgstr "h"
+msgstr "w"
 
 msgid "Please Try Again!"
 msgstr "Jọwọ gbiyanju lẹẹkansi!"
@@ -9253,7 +9253,7 @@ msgid "Error"
 msgstr "Aṣiṣe"
 
 msgid "Anonymous"
-msgstr "Anonymous"
+msgstr "Àìdárúkọ"
 
 msgid "Create new global role"
 msgstr "Ṣẹda ipa agbaye tuntun"
@@ -9262,7 +9262,7 @@ msgid "Create new local role"
 msgstr "Ṣẹda ipa agbegbe tuntun"
 
 msgid "Inbox"
-msgstr "Inbox"
+msgstr "Àpò Ìfiwọ̀ránṣẹ̀"
 
 msgid "Compose message"
 msgstr "Kọ ifọrọranṣẹ"
@@ -9535,70 +9535,70 @@ msgid "Assessments"
 msgstr "Àwòye Ìdí Ìdí"
 
 msgid "What is OpenID?"
-msgstr ""
+msgstr "Kini OpenID?"
 
 msgid "OpenID eliminates the need for multiple logins across different websites, simplifying your online experience. You get to choose the OpenID Provider that best meets your needs and most importantly that you trust. At the same time, your OpenID can stay with you, no matter which Provider you move to. And best of all, the OpenID technology is not proprietary and is completely free.For businesses, this means a lower cost of password and account management, while drawing new web traffic. OpenID lowers user frustration by letting users have control of their login.<br /><br /><a href=\"http://openid.net/what/\">Read on...</a>"
-msgstr ""
+msgstr "OpenID yọ ìdí ìwọle lọ́pọ̀lọpọ̀ kúrò láàrín àwùjọ wẹ́ẹ̀bù tí ó yàtọ̀, tí ń ṣe ìrọrun ìrírí ìsọfúnni rẹ lori ayelujára. O ni láti yan Olùpese OpenID tí ó dára jù fún àwùjẹ rẹ àti pé pàápàá tí o fẹ́ gbẹ́kẹ̀lé. Lákòókò kan náà, OpenID rẹ lè ṣe pẹ̀lú rẹ, kò ṣe ìyípadà sí èyí tí Olùpese kò yàtọ̀ sí. Àti pé dára jùlọ, ìmọ̀-ẹrọ OpenID kò ṣe ìní àti pé ó ṣe ìdàbọ̀ pátápátá.Fún àwùjọ iṣòwò, èyí túmọ̀ ìdí ìní ìfòtò ìsọfúnni àti ìdarí ìdí ìwọle, lákòókò tí ń fa ìwọle wẹ́ẹ̀bù tuntun. OpenID dín ìbẹ̀rù ìlò kù nípa jíjẹ kí àwùjọ ìlò ni ìdarí ìwọle wọn.<br /><br /><a href=\"http://openid.net/what/\">Ka lọ́wọ́…</a>"
 
 msgid "No administrator"
-msgstr ""
+msgstr "Kò sí olùdarí"
 
 msgid "iCal export"
-msgstr ""
+msgstr "Ìtàn iCal"
 
 msgid "Export in iCal format as public event"
-msgstr ""
+msgstr "Ìtàn ìwà ìfitàn iCal gẹ́gẹ́ ìfitàn gbogbogbò"
 
 msgid "Export in iCal format as private event"
-msgstr ""
+msgstr "Ìtàn ìwà ìfitàn iCal gẹ́gẹ́ ìfitàn àdáni"
 
 msgid "Export in iCal format as confidential event"
-msgstr ""
+msgstr "Ìtàn ìwà ìfitàn iCal gẹ́gẹ́ ìfitàn ìkọ́kọ̀"
 
 msgid "More stats"
-msgstr ""
+msgstr "Àwò ìṣirò púpọ̀ síi"
 
 msgid "decade"
-msgstr ""
+msgstr "ọdún mẹ́wàá"
 
 msgid "month"
-msgstr ""
+msgstr "osu"
 
 msgid "week"
-msgstr ""
+msgstr "ọ̀sẹ̀"
 
 msgid "day"
-msgstr ""
+msgstr "ọjọ́"
 
 msgid "hour"
-msgstr ""
+msgstr "wákati"
 
 msgid "decades"
-msgstr ""
+msgstr "ọdún mẹ́wàá"
 
 msgid "months"
-msgstr ""
+msgstr "osu"
 
 msgid "weeks"
-msgstr ""
+msgstr "ọ̀sẹ̀"
 
 msgid "hours"
-msgstr ""
+msgstr "wákàtì"
 
 msgid "minutes"
-msgstr ""
+msgstr "ìṣẹ́jú"
 
 msgid "Document created"
-msgstr ""
+msgstr "Ìwé tí a ṣẹ̀dá"
 
 msgid "The forum has been added"
-msgstr ""
+msgstr "Fọ́ọ̀mù ìfọ̀rọ̀wérọ̀ ti a fi kun"
 
 msgid "Forum thread added"
-msgstr ""
+msgstr "Òpó ìfọ̀rọ̀wérọ̀ fọ́ọ̀mù tí a fi kun"
 
 msgid "Forum attachment added"
-msgstr ""
+msgstr "Ìsopọ̀ fọ́ọ̀mù ìfọ̀rọ̀wérọ̀ tí a fi kun"
 
 msgid "directory"
 msgstr "folda"
@@ -13654,10 +13654,10 @@ msgid "NO RESIZING"
 msgstr "KO SI ATUNṢE"
 
 msgid "Brochure"
-msgstr "Brochure"
+msgstr "Ìwé ìròyìn"
 
 msgid "Slideshow"
-msgstr "Slideshow"
+msgstr "Àwòrán ìfọwọ́sowọ́pọ̀"
 
 msgid "Published end date"
 msgstr "Ọjọ ipari ti a tẹjade"
@@ -13672,7 +13672,7 @@ msgid "My projects"
 msgstr "Awọn iṣẹ akanṣe mi"
 
 msgid "Navigation"
-msgstr "Navigation"
+msgstr "Ìdarí"
 
 msgid "Top ten"
 msgstr "Ọkan mẹwa oke"
@@ -14476,10 +14476,10 @@ msgid "bosnian"
 msgstr "Bosnia"
 
 msgid "czech"
-msgstr "Czech"
+msgstr "czech"
 
 msgid "dari"
-msgstr "Dari"
+msgstr "dari"
 
 msgid "dutch corporate"
 msgstr "dutch ajumọṣe"
@@ -14488,10 +14488,10 @@ msgid "english for organisations"
 msgstr "Èdè Gẹ̀ẹ́sì fún àwùjọ"
 
 msgid "friulian"
-msgstr "Friulian"
+msgstr "friulian"
 
 msgid "georgian"
-msgstr "Georgian"
+msgstr "georgian"
 
 msgid "hebrew"
 msgstr "Heberu"
@@ -14512,7 +14512,7 @@ msgid "norwegian"
 msgstr "Norway"
 
 msgid "pashto"
-msgstr "Pashto"
+msgstr "pashto"
 
 msgid "persian"
 msgstr "Persia"
@@ -14530,7 +14530,7 @@ msgid "slovak"
 msgstr "Slovakia"
 
 msgid "swahili"
-msgstr "Swahili"
+msgstr "swahili"
 
 msgid "traditional chinese"
 msgstr "Èdè Cantonese ìpilẹ̀ṣẹ̀"
@@ -14974,7 +14974,7 @@ msgid "The exercise time limit has expired"
 msgstr "Àkókò ìdíwò ìdíwò ti parí"
 
 msgid "ukrainian"
-msgstr "Ukrainian"
+msgstr "ukrainian"
 
 msgid "yoruba"
 msgstr "Èdè Yorùbá"
@@ -15031,7 +15031,7 @@ msgid "See blog"
 msgstr "Wo ìwé ìròyìn"
 
 msgid "Blog"
-msgstr "Blog"
+msgstr "Bọ̀ǹgì"
 
 msgid "Blog Posts"
 msgstr "Àwùn ìwé ìròyìn"
@@ -20059,19 +20059,19 @@ msgid "Courses custom icons"
 msgstr "Awọn aami ẹkọ aṣa"
 
 msgid "Use course images as the course icon in courses lists (instead of the default green blackboard icon)."
-msgstr ""
+msgstr "Lo aworan akoko bi aami akoko ni akojo aworan akoko (dipò aami blackboard alawọ ewe."
 
 msgid "Assignment considered for gradebook"
-msgstr ""
+msgstr "Iṣẹ́ ṣe ìdíwò fún ìwé ìdíbọ̀ ìdíbọ̀"
 
 msgid "In the assignments tool, students can upload more than one file. In case there is more than one for a single assignment, which one should be considered when ranking them in the gradebook? This depends on your methodology. Use 'first' to put the accent on attention to detail (like handling in time and handling the right work first). Use 'last' to highlight collaborative and adaptative work."
-msgstr ""
+msgstr "Nínú ohun èlò ìṣẹ́ ṣe, ọmọ ẹlẹ́yẹ̀ le gbeẹ̀wọ̀n ju ọkan faili. Bí kò ṣe pe ọkan wà fún ìṣẹ́ ṣe kan, kini yí yẹ kí a ṣàyẹ̀wò nigba ìdíwò wọn nínú ìwé ìdíbọ̀ ìdíbọ̀? Eyi gbẹkẹ̀lé lori ọna rẹ. Lo 'àkọ́kọ́' láti fi ìdààmú lórí ìfòye sí ìjẹ́kùjẹ̀ (bí ìdùbúlẹ̀ lákòókò àti ìdí ìṣẹ́ ṣe àkọ́kọ́). Lo 'gbẹhin' láti fi ìdààmú lórí ìṣiṣẹpọ̀ àti ìṣàtúnṣe ìṣẹ́."
 
 msgid "Certificates filter by official code"
-msgstr ""
+msgstr "Àwò ìwàfà ìyàwòán lọ́fíìsì koodu"
 
 msgid "Add a filter on the students official code to the certificates list."
-msgstr ""
+msgstr "Ṣàfikún ìdíwò lórí koodu ìdààmú ọmọ ẹlẹ́yẹ̀ ìyàwòán lọ́fíìsì si akojo ìwàfà ìyàwòán."
 
 msgid "Max editors in exercise result screen"
 msgstr "Maxi awon onipinnu ni iboju abajade adaṣe"
@@ -20920,7 +20920,7 @@ msgid "Click or drop one file here"
 msgstr "Tẹ̀ tàbí fi faili kan síbẹ̀"
 
 msgid "Modulo:\t\t\t%"
-msgstr "Modulo:\t\t\t%"
+msgstr "Modulo:			%"
 
 msgid "Last %s days"
 msgstr "Ọjọ́ %s tí ó kẹ́yìn"
@@ -25864,10 +25864,10 @@ msgid "Define an array of score ranges and colors to display reports using this 
 msgstr ""
 
 msgid "Enable time per question in tests"
-msgstr ""
+msgstr "Ṣiṣẹ akoko fun ibeere kọọkan ninu awọn idanwo"
 
 msgid "By default, it is only possible to limit the time per test. Limiting it per question adds an extra layer of possibilities, and you can (carefully) combine both."
-msgstr ""
+msgstr "Nipasẹ aiyipada, o ṣee ṣe nikan lati ṣe idiwọn akoko fun idanwo kan. Ṣiṣe idiwọn rẹ fun ibeere kọọkan ṣafikun ipele afikun ti awọn iṣeeṣe, ati pe o le (pẹlẹ) dapọ mejeeji."
 
 msgid "Global pending tests list"
 msgstr "Àkójọ àwọn ìdánwò tí kò tíì ṣe pátápátá"
@@ -28123,37 +28123,37 @@ msgid "Menucampushomepage"
 msgstr "Menucampushomepage"
 
 msgid "Menumycourses"
-msgstr "Menumycourses"
+msgstr "Awọn ẹkọ mi"
 
 msgid "Menureporting"
-msgstr "Menureporting"
+msgstr "Ijabọ"
 
 msgid "Menuplatformadministration"
-msgstr "Menuplatformadministration"
+msgstr "Ṣiṣakoso pẹpẹ"
 
 msgid "Menumyagenda"
-msgstr "Menumyagenda"
+msgstr "Eto mi"
 
 msgid "Menusocial"
-msgstr "Menusocial"
+msgstr "Awujọ"
 
 msgid "Menuvideoconference"
-msgstr "Menuvideoconference"
+msgstr "Ipade fidio"
 
 msgid "Menudiagnostics"
-msgstr "Menudiagnostics"
+msgstr "Awọn ayẹwo"
 
 msgid "Menucatalogue"
-msgstr "Menucatalogue"
+msgstr "Akatalogi"
 
 msgid "Topbarcertificate"
-msgstr "Topbarcertificate"
+msgstr "Iwe-ẹri oke"
 
 msgid "Topbarskills"
-msgstr "Topbarskills"
+msgstr "Awọn ọgbọn oke"
 
 msgid "Ai_helpers"
-msgstr "Ai_helpers"
+msgstr "Awọn oluranlọwọ AI"
 
 msgid "ID of the user who officially sends the agenda reminders"
 msgstr "ID olùpẹ̀yìndà tí ó fi ìfipamọ́ ìṣẹ́lẹ̀ ránṣẹ́ ìfipamọ́"
@@ -31579,124 +31579,124 @@ msgid "Limit identical email usage"
 msgstr "Dinku lilo imeeli kanna"
 
 msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
-msgstr ""
+msgstr "Nọmba ti o pọ julọ ti awọn iroyin ti a gba laaye lati pin kọkọ si imeeli kan naa. Ṣeto si 0 lati pa idiwọn yii."
 
 msgid "Allow session admins to see all users on all URLs"
-msgstr ""
+msgstr "Gba awọn alabojuto igba lati rii gbogbo awọn olumulo lori gbogbo awọn URL"
 
 msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
-msgstr ""
+msgstr "Ti a ba ṣiṣẹ, awọn alabojuto igba le wa ati ṣe akojọ awọn olumulo lati gbogbo awọn URL iraye si, laibikita URL lọwọlọwọ wọn."
 
 msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
-msgstr ""
+msgstr "Ṣiṣẹ iṣeeṣe fun awọn olumulo lati yan agbegbe wọn. Ni kete ti a ṣe atunto, awọn olumulo yoo ni anfani lati rii awọn akoko ipari iṣẹ-ṣiṣe ati awọn itọkasi akoko miiran ni agbegbe wọn, eyiti yoo dinku awọn aṣiṣe ni akoko ifijiṣẹ."
 
 msgid "Redirect after login (per profile)"
-msgstr ""
+msgstr "Ṣe atunṣe lẹhin iwọle (fun profaili)"
 
 msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
-msgstr ""
+msgstr "Ṣe asopọ atunṣe fun profaili lẹhin iwọle nipa lilo nkan JSON bii {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
 
 msgid "Hide legal accept checkbox in Terms and Conditions page"
-msgstr ""
+msgstr "Fi pamọ apoti idanilawọ ofin ni oju-iwe Awọn Ipin ati Awọn Majemu"
 
 msgid "If set to true, removes the \"I have read and accept\" checkbox in the Terms and Conditions page flow."
-msgstr ""
+msgstr "Ti a ba ṣeto si otitọ, yoo yọ apoti \"Mo ti ka ati gba\" kuro ni ṣiṣan oju-iwe Awọn Ipin ati Awọn Majemu."
 
 msgid "Array defining host and port for the LDAP server."
-msgstr ""
+msgstr "Ipilẹ ti n ṣalaye oluṣewadi ati ibudo fun olupin LDAP."
 
 msgid "Enable 2FA"
-msgstr ""
+msgstr "Ṣiṣẹ 2FA"
 
 msgid "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously."
-msgstr ""
+msgstr "Fi awọn aaye kun si oju-iwe imudojade ọrọ igbaniwọle lati ṣiṣẹ 2FA nipa lilo app oludasile TOTP. Nigbati a ba pa ni agbegbe, awọn olumulo kii yoo rii awọn aaye 2FA ati kii yoo beere fun 2FA ni iwọle, paapaa ti wọn ti ṣiṣẹ tẹlẹ."
 
 msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
-msgstr ""
+msgstr "Diẹ ninu awọn ẹya Chamilo yoo sopọ si ita lati olupin. Fun apẹẹrẹ lati rii daju pe akoonu ita wa nigbati o ṣẹda ọna asopọ tabi fifihan oju-iwe ti a fi sinu ọna ẹkọ. Ti olupin Chamilo rẹ nlo aṣoju lati jade kuro ninu nẹtiwọọki rẹ, eyi yoo jẹ ibi lati ṣe atunto rẹ."
 
 msgid "Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated."
-msgstr ""
+msgstr "Ṣiṣẹ tabi pa atunwọle alaifọwọ nigbati ifọwọsi ẹkọ pari. Iṣẹ cron ti o ni ibatan gbọdọ tun wa ni ṣiṣẹ."
 
 msgid "Show remaining days in My Sessions"
-msgstr ""
+msgstr "Fi awọn ọjọ ti o kù han ni Awọn Akoko Mi"
 
 msgid "If enabled, the session dates on the \"My Sessions\" page will be replaced by the number of remaining days."
-msgstr ""
+msgstr "Ti a ba ṣiṣẹ, awọn ọjọ igba ni oju-iwe \"Awọn Akoko Mi\" yoo rọpo nipasẹ nọmba awọn ọjọ ti o kù."
 
 msgid "Show \"Pending surveys\" in menu"
-msgstr ""
+msgstr "Fi \"Awọn iwadii ti o wa ni isunmọ\" han ni akojọ"
 
 msgid "Display a menu item that lets users access their pending surveys."
-msgstr ""
+msgstr "Ṣafihan ohun elo akojọ ti o jẹ ki awọn olumulo wọle si awọn iwadii wọn ti o wa ni isunmọ."
 
 msgid "Disclose AI assistance"
-msgstr ""
+msgstr "Ṣafihan iranlọwọ AI"
 
 msgid "Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user."
-msgstr ""
+msgstr "Fi aami han lori eyikeyi akoonu tabi esi ti a ṣẹda tabi ṣẹda-apapọ nipasẹ eyikeyi eto AI, ti n ṣafihan fun olumulo pe akoonu naa ni a kọ pẹlu iranlọwọ eto AI diẹ ninu. Awọn alaye nipa eto AI wo ti a lo ninu ẹjọ wo ni a tọju sinu ipilẹ data fun ayẹwo, ṣugbọn kii ṣe iraye si taara nipasẹ olumulo ikẹhin."
 
 msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
-msgstr ""
+msgstr "Atunto JSON fun katalogi ẹkọ: awọn eto ọna asopọ, awọn àlẹ̀, awọn aṣayan títọ, ati bẹbẹ lọ."
 
 msgid "Session Catalog Settings"
-msgstr ""
+msgstr "Eto Katalogi Igba"
 
 msgid "JSON configuration for session catalog: filters and display options."
-msgstr ""
+msgstr "JSON ìfìdàsílẹ̀ fún ìwádìí ìpàdé: àwà ìdíwọ̀ àti àwàyà ìfihan."
 
 msgid "Show Course Descriptions"
-msgstr ""
+msgstr "Fi Ìwé Ìdáhùn Ẹ̀kọ́ Hàn"
 
 msgid "Display course descriptions within the catalog listing."
-msgstr ""
+msgstr "Fi ìwé ìdáhùn ẹ̀kọ́ hàn nínú ìwádìí ìpàdé."
 
 msgid "Published Courses Only"
-msgstr ""
+msgstr "Ẹ̀kọ́ Ti A Ti Ṣe Ìtẹ̀wé Pèlú"
 
 msgid "Limit the catalog to only courses marked as published."
-msgstr ""
+msgstr "Dá ìwádìí ìpàdé sí ẹ̀kọ́ tí a ṣe ìtẹ̀wé pèlú nìkan."
 
 msgid "Display Catalog on Homepage"
-msgstr ""
+msgstr "Fi Ìwádìí Ìpàdé Hàn Lórí Ìkọ́ni Ìpìlẹ̀"
 
 msgid "Show the course catalog block on the platform homepage."
-msgstr ""
+msgstr "Fi ìdí ìwádìí ìpàdé ẹ̀kọ́ hàn lórí ìkọ́ni ìpìlẹ̀ ìsàlẹ̀."
 
 msgid "Hide Public Link"
-msgstr ""
+msgstr "Pa Ìdọ̀dọ̀ Ìkọ́ni Gbangba Bò"
 
 msgid "Remove the public URL link from course cards."
-msgstr ""
+msgstr "Yọ ìdọ̀dọ̀ URL ti gbogbo ènìyàn kúrò nínú awọn kaadi ẹ̀kọ́."
 
 msgid "Only Selected Courses"
-msgstr ""
+msgstr "Ẹ̀kọ́ Ti A Yan Pèlú"
 
 msgid "Show only manually selected courses in the catalog."
-msgstr ""
+msgstr "Fi ẹ̀kọ́ tí a yàn pẹ̀lú hàn nínú ìwádìí ìpàdé."
 
 msgid "Allow Student Browsing"
-msgstr ""
+msgstr "Gba Ìwádìí Ọmọ Ẹ̀kọ́ Laaye"
 
 msgid "Permit students to browse and filter the course catalog."
-msgstr ""
+msgstr "Gba àwọn ọmọ ẹ̀kọ́ láyè láti ṣàwádìí àti ìdíwọ̀ ìwádìí ìpàdé ẹ̀kọ́."
 
 msgid "Hide Private Courses"
-msgstr ""
+msgstr "Pa Ẹ̀kọ́ Ìkọ́kọ́ Bò"
 
 msgid "Exclude private courses from the catalog display."
-msgstr ""
+msgstr "Yọ ẹ̀kọ́ ìkọ́kọ́ kúrò nínú ìfihan ìwádìí ìpàdé."
 
 msgid "Show Courses & Sessions"
-msgstr ""
+msgstr "Fi Ẹ̀kọ́ & Ìpàdé Hàn"
 
 msgid "Include both courses and sessions in catalog results."
-msgstr ""
+msgstr "Kọ̀wé mejeeji ẹ̀kọ́ àti ìpàdé nínú àwọn ìdí ìwádìí ìpàdé."
 
 msgid "Auto Session Subscription"
-msgstr ""
+msgstr "Ìdọsílẹ̀ Ìpàdé Àtọ́nà"
 
 msgid "Enable automatic subscription to sessions for users."
-msgstr ""
+msgstr "Ṣí ìdọsílẹ̀ àtọ́nà ìpàdé fún àwùjọ oníṣẹ́ ṣí."
 
 msgid "Subscription in Session View"
 msgstr "Ẹfiwe ni Wiwo Igbakọ"
@@ -32573,4 +32573,7 @@ msgstr "Láti ṣàyẹ̀wò ìmeẹ̀lì rẹ̀ àti ṣí àkọ̀ọ́lẹ̀ 
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Ti o kò ba ṣe ìforúkọ sílẹ̀ ìdí ìdàhùn yìí, o le kọ ìmeèlì yìí silẹ̀. Kò sí ìṣe yóò ṣẹlẹ̀."
+
+msgid "Current authentication method"
+msgstr "Ọ̀nà ìdáwò lọ́wọ́ lọ́wọ́"
 

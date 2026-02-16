@@ -490,7 +490,7 @@ msgid "Question ID"
 msgstr "ID de la question"
 
 msgid "ExerciseId"
-msgstr "ExerciseId"
+msgstr "ID de l’exercici"
 
 msgid "Excel export"
 msgstr "Exportar en Excel"
@@ -4621,7 +4621,7 @@ msgid "If this setting is on, a user can fill in the following (optional) fields
 msgstr "Se aquesta opcion es activada, l'utilizaire pòt emplir los camps opcionals seguents : 'Ma zòna pèrsonala d'evolviment', 'Mas competéncias', 'Mes diplòmas', 'Çò que sabi enseirar'"
 
 msgid "Classes"
-msgstr "Classes"
+msgstr "Classas"
 
 msgid "User is now unsubscribed"
 msgstr "L'utilizaire es ara desinscrit"
@@ -5803,7 +5803,7 @@ msgid "Find a training session"
 msgstr "Trobatz una session de formacion"
 
 msgid "Session session"
-msgstr "Session session"
+msgstr "Session de session"
 
 msgid "Add URL"
 msgstr "Apondre una URL"
@@ -6610,7 +6610,7 @@ msgid "Friends"
 msgstr "Amics"
 
 msgid "Contacts"
-msgstr "Contacts"
+msgstr "Contactes"
 
 msgid "This screen allows you to organise your contacts"
 msgstr "Aqueste ecran vos permet d'organizar vòstres contacts"
@@ -17734,7 +17734,7 @@ msgid "The attendance sheet is locked."
 msgstr "La feuille de preséncia es blocada."
 
 msgid "Assistance"
-msgstr "Assistance"
+msgstr "Assistent"
 
 msgid "A course category with the same name already exists."
 msgstr "Una categoria de cors amb lo meteis nom existís ja."
@@ -24976,7 +24976,7 @@ msgid "Click to view details"
 msgstr "Clicatz per veire los detajhs"
 
 msgid "dd/mm/yyyy"
-msgstr "dd/mm/yyyy"
+msgstr "jj/mm/aaaa"
 
 msgid "Export certificates issue report"
 msgstr "Exportar lo rapòrt d'emission dels certificats"
@@ -32573,4 +32573,7 @@ msgstr "Per verificar vòstre corrièr electronic e activar vòstre compte sus %
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Se vosètz pas registrat aqueste compte, podètz ignorar aqueste e-mail. Cap accion serà presa."
+
+msgid "Current authentication method"
+msgstr "Metòde d'autentificacion actual"
 

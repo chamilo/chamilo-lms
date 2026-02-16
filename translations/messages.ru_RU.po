@@ -496,7 +496,7 @@ msgid "Question ID"
 msgstr "ID вопроса"
 
 msgid "ExerciseId"
-msgstr "ExerciseId"
+msgstr "Идентификатор упражнения"
 
 msgid "Excel export"
 msgstr "Экспорт в Excel"
@@ -3667,7 +3667,7 @@ msgid "Mark as read"
 msgstr "Отметить как прочтенное"
 
 msgid "RE:"
-msgstr "RE:"
+msgstr "РЕ:"
 
 msgid "Advanced edit"
 msgstr "Расширенное редактирование"
@@ -6139,7 +6139,7 @@ msgid "Add LDAP users"
 msgstr "Добавить пользователей LDAP"
 
 msgid "Academica"
-msgstr "Academica"
+msgstr "Академика"
 
 msgid "Add news"
 msgstr "Добавить новости"
@@ -20536,7 +20536,7 @@ msgid "MM dd, yy"
 msgstr "dd.MM.yy"
 
 msgid "HH:mm"
-msgstr "HH:mm"
+msgstr "ЧЧ:мм"
 
 msgid " at"
 msgstr " в"
@@ -28136,31 +28136,31 @@ msgid "Menureporting"
 msgstr "Menureporting"
 
 msgid "Menuplatformadministration"
-msgstr "Menuplatformadministration"
+msgstr "Менюадминистрированиплатформы"
 
 msgid "Menumyagenda"
-msgstr "Menumyagenda"
+msgstr "Менюмойкалендарь"
 
 msgid "Menusocial"
-msgstr "Menusocial"
+msgstr "Менюсоциальные"
 
 msgid "Menuvideoconference"
-msgstr "Menuvideoconference"
+msgstr "Менювидеоконференции"
 
 msgid "Menudiagnostics"
-msgstr "Menudiagnostics"
+msgstr "Менюдиагностика"
 
 msgid "Menucatalogue"
-msgstr "Menucatalogue"
+msgstr "Менюкаталог"
 
 msgid "Topbarcertificate"
-msgstr "Topbarcertificate"
+msgstr "Панельсертификаты"
 
 msgid "Topbarskills"
-msgstr "Topbarskills"
+msgstr "Панельнавыки"
 
 msgid "Ai_helpers"
-msgstr "Ai_helpers"
+msgstr "ПомощникиИИ"
 
 msgid "ID of the user who officially sends the agenda reminders"
 msgstr "ID пользователя, который официально отправляет напоминания о повестке дня"
@@ -32333,7 +32333,7 @@ msgid "Quiz"
 msgstr "Тест"
 
 msgid "Customcertificate"
-msgstr "Customcertificate"
+msgstr "Пользовательскийсертификат"
 
 msgid "Update profile"
 msgstr "Обновить профиль"
@@ -32580,4 +32580,7 @@ msgstr "Чтобы подтвердить вашу электронную поч
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Если вы не регистрировали этот аккаунт, можете проигнорировать это письмо. Никаких действий предпринято не будет."
+
+msgid "Current authentication method"
+msgstr "Текущийметодаутентификации"
 

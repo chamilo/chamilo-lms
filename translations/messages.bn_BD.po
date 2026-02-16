@@ -7654,16 +7654,16 @@ msgid "use square brackets [...] to define one or more blanks"
 msgstr "এক বা একাধিক শূন্যস্থান নির্ধারণের জন্য বর্গ ক্যাব্রাকেট [...] ব্যবহার করুন"
 
 msgid "+answ"
-msgstr "+answ"
+msgstr "+উত্তর"
 
 msgid "-answ"
-msgstr "-answ"
+msgstr "-উত্তর"
 
 msgid "+elem"
-msgstr "+elem"
+msgstr "+উপাদান"
 
 msgid "-elem"
-msgstr "-elem"
+msgstr "-উপাদান"
 
 msgid "Please type your text below"
 msgstr "দয়া করে নিচে আপনার টেক্সট লিখুন"
@@ -32573,4 +32573,7 @@ msgstr "আপনার ইমেইল যাচাই করতে এবং %
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "যদি আপনি এই অ্যাকাউন্টটি নিবন্ধন না করেন, তাহলে আপনি এই ইমেইলটি উপেক্ষা করতে পারেন। কোনো কার্যকর করা হবে না।"
+
+msgid "Current authentication method"
+msgstr "বর্তমান প্রমাণীকরণ পদ্ধতি"
 

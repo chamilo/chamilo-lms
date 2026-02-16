@@ -69,25 +69,25 @@ msgid "Student's superior"
 msgstr "Študent šéf"
 
 msgid "Cosecant:\t\t\t\tcsc(x)"
-msgstr "Cosecant:\t\t\t\tcsc(x)"
+msgstr "Kosecans:\t\t\t\tcsc(x)"
 
 msgid "Hyperbolic cosecant:\t\tcsch(x)"
 msgstr "Hyperbolický cosecant:\t\tcsch(x)"
 
 msgid "Arccosecant:\t\t\tarccsc(x)"
-msgstr "Arccosecant:\t\t\tarccsc(x)"
+msgstr "Arkuskosecans:\t\t\tarccsc(x)"
 
 msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
 msgstr "Hyperbolický arccosecant:\t\tarccsch(x)"
 
 msgid "Secant:\t\t\t\tsec(x)"
-msgstr "Secant:\t\t\t\tsec(x)"
+msgstr "Sekans:\t\t\t\tsec(x)"
 
 msgid "Hyperbolic secant:\t\tsech(x)"
 msgstr "Hyperbolický secant:\t\tsech(x)"
 
 msgid "Arcsecant:\t\t\tarcsec(x)"
-msgstr "Arcsecant:\t\t\tarcsec(x)"
+msgstr "Arkussekans:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
 msgstr "Hyperbolický arcsecant:\t\tarcsech(x)"
@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Úprimne"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Vzorková formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Vzorkový vzorec: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy premennej"
@@ -8612,7 +8612,7 @@ msgid "Numbered"
 msgstr "Číslovaný"
 
 msgid "en"
-msgstr "en"
+msgstr "sk"
 
 msgid "eng"
 msgstr "eng"
@@ -8870,7 +8870,7 @@ msgid "With selected"
 msgstr "Označené"
 
 msgid "Online"
-msgstr "Online"
+msgstr "Pripojený"
 
 msgid "hungarian"
 msgstr "ma&#271;arsky"
@@ -8954,7 +8954,7 @@ msgid "F"
 msgstr "P"
 
 msgid "S"
-msgstr "S"
+msgstr "P"
 
 msgid "Mon"
 msgstr "Po"
@@ -8999,7 +8999,7 @@ msgid "Sunday"
 msgstr "Nedela"
 
 msgid "J"
-msgstr "J"
+msgstr "Ú"
 
 msgid "A"
 msgstr "A"
@@ -9170,7 +9170,7 @@ msgid "Visible to"
 msgstr "Viditeľný pre"
 
 msgid "Export"
-msgstr "Export"
+msgstr "Exportovať"
 
 msgid "Modules"
 msgstr "Nástroje"
@@ -14447,7 +14447,7 @@ msgid "Cool blue"
 msgstr "Chladná modrá"
 
 msgid "Corporate"
-msgstr "Corporate"
+msgstr "Firemný"
 
 msgid "Cosmic campus"
 msgstr "Kozmický kampus"
@@ -14660,7 +14660,7 @@ msgid "Enable button bars extended when the WYSIWYG editor is maximized"
 msgstr "Povoliť tlačidlo rozšírené, pokiaľ je editor WYSIWYG maximalizovaný"
 
 msgid "HTML Editor"
-msgstr "HTML Editor"
+msgstr "HTML editor"
 
 msgid "Go directly to the course after login"
 msgstr "Priamo prejdite do kurzu po prihlásení"
@@ -15122,7 +15122,7 @@ msgid "Thematic advance"
 msgstr "Cieľ témy"
 
 msgid "Dashboard"
-msgstr "Dashboard"
+msgstr "Plocha"
 
 msgid "Dashboard blocks"
 msgstr "Dashboard bloky"
@@ -19900,10 +19900,10 @@ msgid "Not readable"
 msgstr "Nie je čitateľný"
 
 msgid "John"
-msgstr "John"
+msgstr "Ján"
 
 msgid "Doe"
-msgstr "Doe"
+msgstr "Novák"
 
 msgid "Attendances updated"
 msgstr "Návštevnosť aktualizovaná"
@@ -20545,7 +20545,7 @@ msgid "Input size of box to fill"
 msgstr "Vstupná veľkosť náplne krabice"
 
 msgid "MM dd, yy"
-msgstr "MM dd, yy"
+msgstr "dd.MM.yy"
 
 msgid "HH:mm"
 msgstr "HH:mm"
@@ -32592,4 +32592,7 @@ msgstr "Pre overenie vašej e-mailovej adresy a aktiváciu účtu na %s kliknite
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Ak ste tento účet neregistrovali, môžete tento e-mail ignorovať. Žiadna akcia nebude vykonaná."
+
+msgid "Current authentication method"
+msgstr ""
 

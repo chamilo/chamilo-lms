@@ -5596,7 +5596,7 @@ msgid "If you are using an LDAP server that does not support or accept anonymous
 msgstr "Ha olyan LDAP szervert használ, amely nem támogatja vagy nem fogadja el a névtelen hozzáférést, töltse ki a következő mezőt a használandó felhasználói jelszóval."
 
 msgid "LDAP Import"
-msgstr "LDAP import"
+msgstr "LDAP Import"
 
 msgid "Notify subscribed users by e-mail"
 msgstr "Feliratkozott felhasználók értesítése e-mailben"
@@ -10747,7 +10747,7 @@ msgid "What s/he can teach"
 msgstr "Amit tanít"
 
 msgid "Productions"
-msgstr "Productions"
+msgstr "Művek"
 
 msgid "Send a chat proposal to this person"
 msgstr "Chat-felhívás küldése"
@@ -32375,7 +32375,7 @@ msgid "Delete failed: missing course context or invalid question id."
 msgstr "Törlés sikertelen: hiányzó kurzuskörnyezet vagy érvénytelen kérdés azonosító."
 
 msgid "AI Tutor"
-msgstr "AI tutor"
+msgstr "AI Tutor"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
 msgstr "Az APCu kiterjesztés telepítve és engedélyezve kell legyen a platform használatához."
@@ -32577,4 +32577,7 @@ msgstr "E-mail címének ellenőrzéséhez és fiókja aktiválásához a %s old
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Ha nem te regisztráltad ezt a fiókot, akkor figyelmen kívül hagyhatod ezt az e-mailt. Semmilyen művelet nem fog történni."
+
+msgid "Current authentication method"
+msgstr "Jelenlegi hitelesítési mód"
 

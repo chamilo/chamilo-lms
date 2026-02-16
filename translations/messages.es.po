@@ -1088,7 +1088,7 @@ msgid "Roles"
 msgstr "Roles"
 
 msgid "Curriculum"
-msgstr "Curriculum"
+msgstr "Currículo"
 
 msgid "%s to review (%s)"
 msgstr "%s por revisar (%s)"
@@ -5237,10 +5237,10 @@ msgid "Whether you want to use the blacklist or whitelist filtering. See blackli
 msgstr "Utilizar un filtrado blacklist o whitelist. Para más detalles, vea más abajo la descripción ambos filtros."
 
 msgid "Blacklist"
-msgstr "Blacklist"
+msgstr "Lista negra"
 
 msgid "Whitelist"
-msgstr "Whitelist"
+msgstr "Lista blanca"
 
 msgid "Blacklist - setting"
 msgstr "Blacklist - parámetros"
@@ -8414,7 +8414,7 @@ msgid "Excessive area"
 msgstr "Zona excesiva"
 
 msgid "Minimum"
-msgstr "Minimum"
+msgstr "Mínimo"
 
 msgid "Requirements"
 msgstr "Requerido"
@@ -8426,7 +8426,7 @@ msgid "Too many iterations while calculating your answer. Please try drawing you
 msgstr "Demasiadas iteraciones al intentar calcular la respuesta. Por favor intente dibujar su delineación otra vez"
 
 msgid "Thresholds"
-msgstr "Thresholds"
+msgstr "Umbrales"
 
 msgid "Delineation"
 msgstr "Delineación"
@@ -8663,7 +8663,7 @@ msgid "Proposals for an improvement of"
 msgstr "Propuestas de mejora de"
 
 msgid "invisible"
-msgstr "Invisible"
+msgstr "invisible"
 
 msgid "Save"
 msgstr "Guardar"
@@ -8957,7 +8957,7 @@ msgid "F"
 msgstr "V"
 
 msgid "S"
-msgstr "S"
+msgstr "E"
 
 msgid "Mon"
 msgstr "Lun"
@@ -11777,7 +11777,7 @@ msgid "This day"
 msgstr "Este día"
 
 msgid "Logins"
-msgstr "Logins"
+msgstr "Inicios de sesión"
 
 msgid "Here is the list of your latest logins with the tools you visited during these sessions."
 msgstr "Este es el listado de sus accesos junto con las herramientas que ha visitado en esas sesiones."
@@ -13670,7 +13670,7 @@ msgid "NO RESIZING"
 msgstr "Presentación en su tamaño original"
 
 msgid "Brochure"
-msgstr "Brochure"
+msgstr "Folleto"
 
 msgid "Slideshow"
 msgstr "Presentación"
@@ -14495,7 +14495,7 @@ msgid "czech"
 msgstr "checo"
 
 msgid "dari"
-msgstr "dari"
+msgstr "Dari"
 
 msgid "dutch corporate"
 msgstr "holandés corporativo"
@@ -14546,7 +14546,7 @@ msgid "slovak"
 msgstr "eslovaco"
 
 msgid "swahili"
-msgstr "swahili"
+msgstr "Suajili"
 
 msgid "traditional chinese"
 msgstr "chino tradicional"
@@ -14993,7 +14993,7 @@ msgid "ukrainian"
 msgstr "ucraniano"
 
 msgid "yoruba"
-msgstr "yoruba"
+msgstr "Yoruba"
 
 msgid "New"
 msgstr "Nuevo"
@@ -15548,7 +15548,7 @@ msgid "Graph of evaluations"
 msgstr "Gráficos de las evaluaciones"
 
 msgid "URL"
-msgstr "Url"
+msgstr "URL"
 
 msgid "Learning path"
 msgstr "Lecciones"
@@ -16916,7 +16916,7 @@ msgid "Flash"
 msgstr "Flash"
 
 msgid "Video"
-msgstr "Video"
+msgstr "Vídeo"
 
 msgid "Images"
 msgstr "Imágenes"
@@ -19479,7 +19479,7 @@ msgid "Global multiple answer"
 msgstr "Respuesta múltiple global"
 
 msgid "Zombies"
-msgstr "Zombies"
+msgstr "Zombis"
 
 msgid "Active only"
 msgstr "Solo activo"
@@ -23775,7 +23775,7 @@ msgid "Compilatio anti-plagiarism module"
 msgstr "Módulo anti-plagio de Compilatio"
 
 msgid "Quotas"
-msgstr "Quotas"
+msgstr "Cuotas"
 
 msgid "Credits: %s on %s"
 msgstr "Créditos: %s sobre %s"
@@ -24112,7 +24112,7 @@ msgid "Mark as promoted message"
 msgstr "Marcar como mensaje importante"
 
 msgid "FAQ"
-msgstr "FAQ"
+msgstr "Preguntas frecuentes"
 
 msgid "Created with Chamilo copyright year"
 msgstr "Creado con Chamilo © %s"
@@ -29310,7 +29310,7 @@ msgid "You're subscribed to push notifications in this browser."
 msgstr "Estás suscrito a notificaciones push en este navegador."
 
 msgid "Endpoint"
-msgstr "Endpoint"
+msgstr "Punto de conexión"
 
 msgid "Push notifications are not enabled in this browser."
 msgstr "Las notificaciones push no están habilitadas en este navegador."
@@ -30338,7 +30338,7 @@ msgid "Search URL"
 msgstr "Buscar URL"
 
 msgid "Videos"
-msgstr "Videos"
+msgstr "Vídeos"
 
 msgid "Course unregistered from the URL"
 msgstr "Curso dado de baja de la URL"
@@ -33717,4 +33717,7 @@ msgstr "Para verificar su correo electrónico y activar su cuenta en %s, haga cl
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Si no te registraste en esta cuenta, puedes ignorar este correo. No se tomará ninguna acción."
+
+msgid "Current authentication method"
+msgstr "Método de autenticación actual"
 

@@ -67,37 +67,37 @@ msgid "Student's superior"
 msgstr "Atasan pelajar"
 
 msgid "Cosecant:\t\t\t\tcsc(x)"
-msgstr "Cosecant:\t\t\t\tcsc(x)"
+msgstr "Kosecan:\t\t\t\tcsc(x)"
 
 msgid "Hyperbolic cosecant:\t\tcsch(x)"
 msgstr "Koseken hiperbolik:\t\tcsch(x)"
 
 msgid "Arccosecant:\t\t\tarccsc(x)"
-msgstr "Arccosecant:\t\t\tarccsc(x)"
+msgstr "Arkkosecan:\t\t\tarccsc(x)"
 
 msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
 msgstr "Koseken hiperbolik songsang:\t\tarccsch(x)"
 
 msgid "Secant:\t\t\t\tsec(x)"
-msgstr "Secant:\t\t\t\tsec(x)"
+msgstr "Secan:\t\t\t\tsec(x)"
 
 msgid "Hyperbolic secant:\t\tsech(x)"
 msgstr "Sekan hiperbolik:\t\tsech(x)"
 
 msgid "Arcsecant:\t\t\tarcsec(x)"
-msgstr "Arcsecant:\t\t\tarcsec(x)"
+msgstr "Arksecan:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
 msgstr "Sekan hiperbolik songsang:\t\tarcsech(x)"
 
 msgid "Cotangent:\t\t\tcot(x)"
-msgstr "Cotangent:\t\t\tcot(x)"
+msgstr "Kotangen:\t\t\tcot(x)"
 
 msgid "Hyperbolic cotangent:\t\tcoth(x)"
 msgstr "Kotangen hiperbolik:\t\tcoth(x)"
 
 msgid "Arccotangent:\t\t\tarccot(x)"
-msgstr "Arccotangent:\t\t\tarccot(x)"
+msgstr "Arkkotangen:\t\t\tarccot(x)"
 
 msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
 msgstr "Kotangen hiperbolik songsang:\t\tarccoth(x)"
@@ -493,7 +493,7 @@ msgid "Question ID"
 msgstr "ID Soalan"
 
 msgid "ExerciseId"
-msgstr "ExerciseId"
+msgstr "ID Latihan"
 
 msgid "Excel export"
 msgstr "Eksport Excel"
@@ -1324,13 +1324,13 @@ msgid "All events"
 msgstr "Show All Agenda Items"
 
 msgid "Month"
-msgstr "Month"
+msgstr "Bulan"
 
 msgid "Hour"
-msgstr "Hour"
+msgstr "Jam"
 
 msgid "Minutes"
-msgstr "Minutes"
+msgstr "Minit"
 
 msgid "Event added"
 msgstr "Agenda item added"
@@ -2020,7 +2020,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:berhak cipta,, no:tiada hak cipta"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Pasta,, application/msword:MsWord,, application/octet-stream:Aliran oktet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:latihan,,      simulation:simulasi,,      questionnaire:soal selidik,,      diagram:diagram,,      figure:gambar,,      graph:graf,,      index:indeks,,      slide:slaid,,      table:jadual,,      narrative text:teks naratif,,      exam:ujian,,      experiment:eksperimen,,      problem statement:penyata masalah,,      self assessment:penilaian diri,,      lecture:kuliah"
@@ -2362,7 +2362,7 @@ msgid "You are not moderator."
 msgstr "Anda bukan moderator."
 
 msgid "Moderator"
-msgstr "Moderator"
+msgstr "Pemoderator"
 
 msgid "This Room is full. Sorry please try again later."
 msgstr "Bilik ini penuh. Maaf sila cuba lagi kemudian."
@@ -2554,7 +2554,7 @@ msgid "Show score"
 msgstr "Paparkan Markah"
 
 msgid "Visibility"
-msgstr "Visibility"
+msgstr "Kebolehlihatan"
 
 msgid "Database version used at archive time"
 msgstr "Version de la base de donnée lors de l'archivage"
@@ -3280,7 +3280,7 @@ msgid "Main language"
 msgstr "Bahasa utama"
 
 msgid "License"
-msgstr "License"
+msgstr "Lesen"
 
 msgid "Last check before install"
 msgstr "Pemeriksaan terakhir sebelum pasang"
@@ -3304,7 +3304,7 @@ msgid "Allow self-registration"
 msgstr "Benarkan pendaftaran sendiri"
 
 msgid "(recommended)"
-msgstr "(recommended)"
+msgstr "(disyorkan)"
 
 msgid "SCORM DB"
 msgstr "DB SCORM"
@@ -3718,7 +3718,7 @@ msgid "Show a link to go back in the courses hierarchy. A link is available at t
 msgstr "Tunjuk pautan untuk kembali dalam hierarki kursus. Pautan tersedia di bahagian bawah senarai."
 
 msgid "used"
-msgstr "used"
+msgstr "digunakan"
 
 msgid "existing"
 msgstr "exists"
@@ -4132,7 +4132,7 @@ msgid "Status of MySQL server :"
 msgstr "Status pelayan MySQL :"
 
 msgid "Database"
-msgstr "Database"
+msgstr "Pangkalan Data"
 
 msgid "works"
 msgstr "work"
@@ -4159,7 +4159,7 @@ msgid "Upgrade Chamilo"
 msgstr "Naik taraf Chamilo"
 
 msgid "Website"
-msgstr "Website"
+msgstr "Laman Web"
 
 msgid "Documentation"
 msgstr "Dokumentasi"
@@ -8602,10 +8602,10 @@ msgid "Numbered"
 msgstr "Bernombor"
 
 msgid "en"
-msgstr "en"
+msgstr "ms"
 
 msgid "eng"
-msgstr "eng"
+msgstr "ms"
 
 msgid "iso-8859-1"
 msgstr "iso-8859-1"
@@ -8761,7 +8761,7 @@ msgid "bulgarian"
 msgstr "bulgaria"
 
 msgid "catalan"
-msgstr "catalan"
+msgstr "katalan"
 
 msgid "croatian"
 msgstr "kroasia"
@@ -8800,19 +8800,19 @@ msgid "japanese"
 msgstr "jepun"
 
 msgid "polish"
-msgstr "polish"
+msgstr "poland"
 
 msgid "portuguese"
 msgstr "portugis"
 
 msgid "russian"
-msgstr "russian"
+msgstr "russia"
 
 msgid "simpl_chinese"
-msgstr "simpl_chinese"
+msgstr "cina_ringkas"
 
 msgid "spanish"
-msgstr "spanish"
+msgstr "sepanyol"
 
 msgid "Close"
 msgstr "Tutup"
@@ -8863,31 +8863,31 @@ msgid "Online"
 msgstr "Atas talian"
 
 msgid "hungarian"
-msgstr "hungarian"
+msgstr "hungaria"
 
 msgid "indonesian"
-msgstr "indonesian"
+msgstr "indonesia"
 
 msgid "malay"
-msgstr "malay"
+msgstr "melayu"
 
 msgid "slovenian"
-msgstr "slovenian"
+msgstr "slovenia"
 
 msgid "spanish_latin"
-msgstr "spanish_latin"
+msgstr "sepanyol_amerika_latin"
 
 msgid "swedisch"
-msgstr "swedisch"
+msgstr "sweden"
 
 msgid "thai"
 msgstr "thai"
 
 msgid "turkish"
-msgstr "turkish"
+msgstr "turki"
 
 msgid "vietnamese"
-msgstr "vietnamese"
+msgstr "vietnam"
 
 msgid "user information"
 msgstr "maklumat pengguna"
@@ -9757,7 +9757,7 @@ msgid "Align"
 msgstr "Ratakan"
 
 msgid "Width"
-msgstr "Width"
+msgstr "Lebar"
 
 msgid "V Space"
 msgstr "Ruang M"
@@ -9772,7 +9772,7 @@ msgid "Alt"
 msgstr "Alt"
 
 msgid "Height"
-msgstr "Height"
+msgstr "Tinggi"
 
 msgid "Image manager"
 msgstr "Pengurus imej"
@@ -9925,7 +9925,7 @@ msgid "View changes history"
 msgstr "Lihat sejarah perubahan"
 
 msgid "asturian"
-msgstr "asturian"
+msgstr "asturia"
 
 msgid "Go to course"
 msgstr "Pergi ke kursus"
@@ -11749,7 +11749,7 @@ msgid "There is no result yet"
 msgstr "Tiada keputusan carian"
 
 msgid "Hits"
-msgstr "Hits"
+msgstr "Hitungan"
 
 msgid "h."
 msgstr "j."
@@ -13639,7 +13639,7 @@ msgid "Resize the image to the following dimensions (in pixels)"
 msgstr "Ubah saiz imej kepada dimensi berikut (dalam piksel)"
 
 msgid "RESIZE"
-msgstr "RESIZE"
+msgstr "SAIZ SEMULA"
 
 msgid "Show all images in their original size. No resizing is done. Scrollbars will automatically appear if the image is larger than your monitor size."
 msgstr "Tunjuk semua imej dalam saiz asal. Tiada pembesaran saiz dilakukan. Bar skrol akan muncul secara automatik jika imej lebih besar daripada saiz monitor anda."
@@ -13660,7 +13660,7 @@ msgid "Brochure"
 msgstr "Brosur"
 
 msgid "Slideshow"
-msgstr "Slideshow"
+msgstr "Slaydot"
 
 msgid "Published end date"
 msgstr "Tarikh tamat penerbitan"
@@ -17695,7 +17695,7 @@ msgid "Tests in learning paths"
 msgstr "Ujian dalam laluan pembelajaran"
 
 msgid "Id"
-msgstr "ID"
+msgstr "Id"
 
 msgid "There was an error."
 msgstr "Terdapat ralat."
@@ -18589,7 +18589,7 @@ msgid "Result not reviewed"
 msgstr "Keputusan belum disemak"
 
 msgid "%m/%d/%Y"
-msgstr "%m/%d/%Y"
+msgstr "%d/%m/%Y"
 
 msgid "%B %d, %Y at %H:%M"
 msgstr "%d %B, %Y pada %H:%M"
@@ -23983,7 +23983,7 @@ msgid "DiagnosticfinalizationmessageTitle"
 msgstr "DiagnosticfinalizationmessageTitle"
 
 msgid "DiagnosticfinalizationmessageContent"
-msgstr "DiagnosticfinalizationmessageContent"
+msgstr "KandunganMesejPenyelesaianDiagnostik"
 
 msgid "Add a forumCategory"
 msgstr "Tambah forumKategori"
@@ -24088,7 +24088,7 @@ msgid "Latest login in a course"
 msgstr "Log masuk terkini dalam kursus"
 
 msgid "The"
-msgstr "The"
+msgstr "Yang"
 
 msgid "Multiply questions by class"
 msgstr "Gandakan soalan mengikut kelas"
@@ -27241,7 +27241,7 @@ msgid "Right"
 msgstr "Kanan"
 
 msgid "Month"
-msgstr "Month"
+msgstr "Bulan"
 
 msgid "Week"
 msgstr "Minggu"
@@ -28124,37 +28124,37 @@ msgid "Generates images based on prompts or content using AI."
 msgstr "Menjana imej berdasarkan prompt atau kandungan menggunakan AI."
 
 msgid "Menucampushomepage"
-msgstr "Menucampushomepage"
+msgstr "MenuLamanUtamaKampus"
 
 msgid "Menumycourses"
-msgstr "Menumycourses"
+msgstr "MenuKursusSaya"
 
 msgid "Menureporting"
-msgstr "Menureporting"
+msgstr "MenuLaporan"
 
 msgid "Menuplatformadministration"
-msgstr "Menuplatformadministration"
+msgstr "MenuPentadbiranPlatform"
 
 msgid "Menumyagenda"
-msgstr "Menumyagenda"
+msgstr "MenuAgendaSaya"
 
 msgid "Menusocial"
-msgstr "Menusocial"
+msgstr "MenuSosial"
 
 msgid "Menuvideoconference"
-msgstr "Menuvideoconference"
+msgstr "MenuPersidanganVideo"
 
 msgid "Menudiagnostics"
-msgstr "Menudiagnostics"
+msgstr "MenuDiagnostik"
 
 msgid "Menucatalogue"
-msgstr "Menucatalogue"
+msgstr "MenuKatalog"
 
 msgid "Topbarcertificate"
-msgstr "Topbarcertificate"
+msgstr "SijisAtasSijil"
 
 msgid "Topbarskills"
-msgstr "Topbarskills"
+msgstr "SijisAtasKemahiran"
 
 msgid "Ai_helpers"
 msgstr "Pembantu AI"
@@ -32577,4 +32577,7 @@ msgstr "Untuk mengesahkan e-mel anda dan mengaktifkan akaun anda di %s, sila kli
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Jika anda tidak mendaftar akaun ini, anda boleh abaikan e-mel ini. Tiada tindakan akan diambil."
+
+msgid "Current authentication method"
+msgstr "Kaedah pengesahan semasa"
 

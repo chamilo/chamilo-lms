@@ -32578,3 +32578,6 @@ msgstr "तपाईंको ईमेल प्रमाणीकरण गर
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "यदि तपाईंले यो खाता दर्ता गर्नुभएको छैन भने, यो इमेल बेवास्ता गर्न सक्नुहुन्छ। कुनै कार्य गरिने छैन।"
 
+msgid "Current authentication method"
+msgstr "हालको प्रमाणीकरण विधि"
+

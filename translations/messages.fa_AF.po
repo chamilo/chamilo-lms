@@ -1237,7 +1237,7 @@ msgid "Your version is not up-to-date"
 msgstr "نسخه شما به‌روز نیست"
 
 msgid "Hotpotatoes"
-msgstr "Hotpotatoes"
+msgstr "هات‌پاتِیتوز"
 
 msgid "-1 = All questions will be selected."
 msgstr "-1 = همه سوالات انتخاب خواهند شد."
@@ -32573,4 +32573,7 @@ msgstr "برای تأیید ایمیل خود و فعال‌سازی حسابت�
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "اگر این حساب را ثبت نکرده‌اید، می‌توانید این ایمیل را نادیده بگیرید. هیچ اقدامی انجام نخواهد شد."
+
+msgid "Current authentication method"
+msgstr "روش احراز هویت کنونی"
 

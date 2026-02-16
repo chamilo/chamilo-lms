@@ -409,11 +409,11 @@ import { useRouter } from "vue-router"
 import { useFormatDate } from "../../composables/formatDate"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useI18n } from "vue-i18n"
-import { useCourseRequirementStatus } from "../../composables/course/useCourseRequirementStatus"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import CatalogueRequirementModal from "./CatalogueRequirementModal.vue"
 import { useUserSessionSubscription } from "../../composables/userPermissions"
 import { useLocale } from "../../composables/locale"
+import courseService from "../../services/courseService"
 
 function createStudentInfoBatcher() {
   const cache = shallowReactive(new Map()) // key -> studentInfo
@@ -806,18 +806,51 @@ const sessionDisplayDate = computed(() => {
   return parts.join(" — ")
 })
 
-const internalLocked = ref(false)
+/**
+ * Requirements status (no more per-card /next-course calls on mount).
+ * These fields must come from /me/courses provider:
+ * - hasRequirements
+ * - allowSubscription
+ */
+const hasRequirements = computed(() => {
+  const c = props.course || {}
+  const v = c.hasRequirements ?? c.has_requirements ?? null
+  return typeof v === "boolean" ? v : false
+})
+
+const allowSubscription = computed(() => {
+  const c = props.course || {}
+  const v = c.allowSubscription ?? c.allow_subscription ?? null
+  return typeof v === "boolean" ? v : true
+})
+
+const isLockedByRequirements = computed(() => hasRequirements.value && !allowSubscription.value)
+const isLocked = computed(() => props.disabled || isLockedByRequirements.value)
+
 const showDependenciesModal = ref(false)
+const requirementList = ref([])
+const graphImage = ref(null)
+const requirementsLoading = ref(false)
 
-const { hasRequirements, requirementList, graphImage, fetchStatus } = useCourseRequirementStatus(
-  courseNumericId.value,
-  props.sessionId,
-  (locked) => {
-    internalLocked.value = locked
-  },
-)
+async function loadRequirementsDetails() {
+  if (requirementsLoading.value) return
+  if (!hasRequirements.value) return
+  if (courseNumericId.value <= 0) return
 
-const isLocked = computed(() => props.disabled || internalLocked.value)
+  requirementsLoading.value = true
+
+  try {
+    const data = await courseService.getNextCourse(courseNumericId.value, props.sessionId || 0, false)
+    requirementList.value = Array.isArray(data?.sequenceList) ? data.sequenceList : []
+    graphImage.value = data?.graph || null
+  } catch (e) {
+    requirementList.value = []
+    graphImage.value = null
+    console.warn("[CourseCard] Failed to load requirements details.", e)
+  } finally {
+    requirementsLoading.value = false
+  }
+}
 
 const imageUrl = computed(
   () =>
@@ -1037,9 +1070,6 @@ const ui = computed(() => {
 })
 
 onMounted(() => {
-  if (courseNumericId.value > 0) {
-    fetchStatus()
-  }
   ensureStudentInfoLoaded()
 })
 
@@ -1072,5 +1102,6 @@ watch(
 
 function openRequirementsModal() {
   showDependenciesModal.value = true
+  loadRequirementsDetails()
 }
 </script>

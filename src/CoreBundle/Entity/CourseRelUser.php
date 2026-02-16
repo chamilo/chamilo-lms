@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Filter\PartialSearchOrFilter;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
+use Chamilo\CoreBundle\State\UserCourseSubscriptionsStateProvider;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
@@ -30,6 +31,20 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(security: "is_granted('ROLE_ADMIN') or object.user == user"),
         new GetCollection(security: "is_granted('ROLE_ADMIN')"),
         new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')"),
+        new GetCollection(
+            uriTemplate: '/me/courses',
+            paginationEnabled: true,
+            paginationItemsPerPage: 20,
+            paginationClientEnabled: true,
+            paginationClientItemsPerPage: true,
+            normalizationContext: [
+                'groups' => ['course_rel_user:read'],
+                'enable_max_depth' => true,
+            ],
+            security: "is_granted('ROLE_USER')",
+            name: 'me_courses',
+            provider: UserCourseSubscriptionsStateProvider::class
+        ),
     ],
     normalizationContext: [
         'groups' => ['course_rel_user:read'],
@@ -131,6 +146,20 @@ class CourseRelUser implements Stringable
     #[ApiProperty(readable: true, writable: false)]
     #[Groups(['course_rel_user:read'])]
     private ?bool $hasNewContent = null;
+
+    /**
+     * Indicates if the course has dependency requirements (computed at runtime, not persisted).
+     */
+    #[ApiProperty(readable: true, writable: false)]
+    #[Groups(['course_rel_user:read'])]
+    private ?bool $hasRequirements = null;
+
+    /**
+     * Indicates if subscription/access is allowed based on requirements (computed at runtime, not persisted).
+     */
+    #[ApiProperty(readable: true, writable: false)]
+    #[Groups(['course_rel_user:read'])]
+    private ?bool $allowSubscription = null;
 
     public function __construct()
     {
@@ -338,5 +367,35 @@ class CourseRelUser implements Stringable
     public function isHasNewContent(): ?bool
     {
         return $this->hasNewContent;
+    }
+
+    public function getHasRequirements(): ?bool
+    {
+        return $this->hasRequirements;
+    }
+
+    public function isHasRequirements(): ?bool
+    {
+        return $this->hasRequirements;
+    }
+
+    public function setHasRequirements(?bool $hasRequirements): void
+    {
+        $this->hasRequirements = $hasRequirements;
+    }
+
+    public function getAllowSubscription(): ?bool
+    {
+        return $this->allowSubscription;
+    }
+
+    public function isAllowSubscription(): ?bool
+    {
+        return $this->allowSubscription;
+    }
+
+    public function setAllowSubscription(?bool $allowSubscription): void
+    {
+        $this->allowSubscription = $allowSubscription;
     }
 }

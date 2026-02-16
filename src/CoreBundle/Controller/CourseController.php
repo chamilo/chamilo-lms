@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
+use Chamilo\CoreBundle\Helpers\CourseStudentInfoHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
@@ -1165,6 +1166,194 @@ class CourseController extends ToolBaseController
         $autoLaunchLPId = $lpRepository->findAutoLaunchableLPByCourseAndSession($course, $session);
 
         return new JsonResponse(['lpId' => $autoLaunchLPId], Response::HTTP_OK);
+    }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/{cid}/student-info.json', name: 'chamilo_core_course_student_info_json', methods: ['GET'])]
+    public function studentInfoJson(
+        Request $request,
+        #[MapEntity(expr: 'repository.find(cid)')]
+        Course $course,
+        CourseStudentInfoHelper $studentInfoHelper
+    ): JsonResponse {
+        $user = $this->userHelper->getCurrent();
+
+        if (!$user || !method_exists($user, 'getId')) {
+            return new JsonResponse(['error' => 'Authentication required.'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $userId = (int) $user->getId();
+        $sessionId = (int) $request->query->get('sid', 0);
+
+        if (0 === $sessionId) {
+            $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+        }
+
+        // Extra safety for invitees (same logic as home.json).
+        if (method_exists($user, 'isInvitee') && $user->isInvitee()) {
+            $isSubscribed = CourseManager::is_user_subscribed_in_course(
+                $userId,
+                $course->getCode(),
+                $sessionId > 0,
+                $sessionId
+            );
+
+            if (!$isSubscribed) {
+                throw $this->createAccessDeniedException('User is not subscribed to the course.');
+            }
+        }
+
+        $payload = $studentInfoHelper->getStudentInfoForCourse($userId, $course, $sessionId);
+
+        return new JsonResponse($payload, Response::HTTP_OK);
+    }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/student-info-batch.json', name: 'chamilo_core_course_student_info_batch_json', methods: ['POST'])]
+    public function studentInfoBatchJson(
+        Request $request,
+        CourseStudentInfoHelper $studentInfoHelper
+    ): JsonResponse {
+        $user = $this->userHelper->getCurrent();
+
+        if (!$user || !method_exists($user, 'getId')) {
+            return new JsonResponse(['error' => 'Authentication required.'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $payload = json_decode($request->getContent() ?: '', true) ?? [];
+        $sessionId = (int) ($payload['sid'] ?? 0);
+
+        $courseIds = $payload['courseIds'] ?? [];
+        if (!is_array($courseIds)) {
+            $courseIds = [];
+        }
+
+        $courseIds = array_values(array_unique(array_map('intval', $courseIds)));
+        $courseIds = array_filter($courseIds, static fn (int $id) => $id > 0);
+        if (count($courseIds) > 300) {
+            $courseIds = array_slice($courseIds, 0, 300);
+        }
+
+        if (empty($courseIds)) {
+            return new JsonResponse([
+                'sid' => $sessionId,
+                'items' => [],
+            ], Response::HTTP_OK);
+        }
+
+        // Load courses in one go.
+        /** @var Course[] $courses */
+        $courses = $this->em->getRepository(Course::class)->findBy(['id' => $courseIds]);
+
+        $allowedCourseIds = [];
+        $courseMap = [];
+        foreach ($courses as $course) {
+            $cid = (int) $course->getId();
+            $courseMap[$cid] = $course;
+        }
+
+        $userId = (int) $user->getId();
+
+        foreach ($courseIds as $cid) {
+            $course = $courseMap[$cid] ?? null;
+            if (!$course instanceof Course) {
+                continue;
+            }
+
+            if (0 === $sessionId) {
+                try {
+                    $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+                } catch (\Throwable $e) {
+                    // Skip unauthorized courses without failing the whole batch.
+                    continue;
+                }
+            }
+
+            // Extra safety for invitees (same logic as home.json / studentInfoJson).
+            if (method_exists($user, 'isInvitee') && $user->isInvitee()) {
+                $isSubscribed = CourseManager::is_user_subscribed_in_course(
+                    $userId,
+                    $course->getCode(),
+                    $sessionId > 0,
+                    $sessionId
+                );
+
+                if (!$isSubscribed) {
+                    continue;
+                }
+            }
+
+            $allowedCourseIds[] = $cid;
+        }
+
+        if (empty($allowedCourseIds)) {
+            return new JsonResponse([
+                'sid' => $sessionId,
+                'items' => [],
+            ], Response::HTTP_OK);
+        }
+
+        // Compute in batch
+        $items = $studentInfoHelper->getStudentInfoBatchForCourses($userId, $allowedCourseIds, $sessionId);
+
+        return new JsonResponse([
+            'sid' => $sessionId,
+            'items' => $items, // courseId => studentInfo
+        ], Response::HTTP_OK);
+    }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/{cid}/new-content-tools.json', name: 'chamilo_core_course_new_content_tools_json', methods: ['GET'])]
+    public function newContentToolsJson(
+        Request $request,
+        #[MapEntity(expr: 'repository.find(cid)')]
+        Course $course,
+        CourseStudentInfoHelper $studentInfoHelper
+    ): JsonResponse {
+        $user = $this->userHelper->getCurrent();
+
+        if (!$user || !method_exists($user, 'getId')) {
+            return new JsonResponse(['error' => 'Authentication required.'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $userId = (int) $user->getId();
+        $sessionId = (int) $request->query->get('sid', 0);
+        $limit = (int) $request->query->get('limit', 20);
+        if ($limit <= 0) {
+            $limit = 20;
+        }
+        if ($limit > 50) {
+            $limit = 50;
+        }
+
+        if (0 === $sessionId) {
+            $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+        }
+
+        if (method_exists($user, 'isInvitee') && $user->isInvitee()) {
+            $isSubscribed = CourseManager::is_user_subscribed_in_course(
+                $userId,
+                $course->getCode(),
+                $sessionId > 0,
+                $sessionId
+            );
+
+            if (!$isSubscribed) {
+                throw $this->createAccessDeniedException('User is not subscribed to the course.');
+            }
+        }
+
+        $items = $studentInfoHelper->getNewContentToolsForCourse($userId, $course, $sessionId, $limit);
+
+        return new JsonResponse([
+            'cid' => (int) $course->getId(),
+            'sid' => $sessionId,
+            'items' => $items,
+            'meta' => [
+                // Optional debug/help info for UI:
+                'lastAccess' => $studentInfoHelper->getLastAccessLabelForCourse($userId, (int) $course->getId(), $sessionId),
+            ],
+        ], Response::HTTP_OK);
     }
 
     private function autoLaunch(): void

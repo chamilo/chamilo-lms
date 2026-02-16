@@ -14,10 +14,8 @@
 
   <!-- Regular courses -->
   <div class="relative min-h-[300px]">
-    <!-- Full-screen / page loading only until first page is received -->
     <Loading :visible="!isInitialLoaded" />
 
-    <!-- Skeleton only for the very first paint -->
     <div
       v-if="loading && courses.length === 0"
       class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
@@ -37,15 +35,13 @@
       />
     </div>
 
-    <!-- Courses grid -->
     <div
       v-else-if="courses.length > 0"
       class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
       <CourseCardList :courses="courses" />
-      <!-- Footer slot of the grid (spans all columns) -->
+
       <div class="col-span-full">
-        <!-- Loading more indicator -->
         <div
           v-if="isLoadingMore"
           class="flex items-center justify-center gap-3 py-6 text-gray-600"
@@ -55,11 +51,11 @@
           ></span>
           <span>{{ t("Loading more courses...") }}</span>
         </div>
-        <!-- Sentinel (keep it always there so it can be observed) -->
+
         <div ref="lastCourseRef"></div>
       </div>
     </div>
-    <!-- Empty state -->
+
     <EmptyState
       v-else-if="!loading && isInitialLoaded && courses.length === 0"
       :detail="t('Go to Explore to find a topic of interest, or wait for someone to subscribe you')"
@@ -70,30 +66,43 @@
 </template>
 
 <script setup>
-import { nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue"
-import { useQuery } from "@vue/apollo-composable"
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
-import { GET_COURSE_REL_USER } from "../../../graphql/queries/CourseRelUser.js"
 import StickyCourses from "../../../views/user/courses/StickyCourses.vue"
 import CourseCardList from "../../../components/course/CourseCardList.vue"
 import EmptyState from "../../../components/EmptyState"
 import { useSecurityStore } from "../../../store/securityStore"
 import Loading from "../../../components/Loading.vue"
+import { usePlatformConfig } from "../../../store/platformConfig"
+
+const ME_COURSES_ENDPOINT = "/api/me/courses"
 
 const securityStore = useSecurityStore()
+const platformConfigStore = usePlatformConfig()
 const { t } = useI18n()
 
-const courses = ref([])
-const isLoadingMore = ref(false) // only for fetchMore
-const isInitialLoaded = ref(false) // first page received
-const endCursor = ref(null)
-const hasMore = ref(true)
+const loading = ref(false)
+const isInitialLoaded = ref(false)
+
+const allCourses = ref([]) // loaded pages merged here
+const courses = ref([]) // visible slice for UI
+const isLoadingMore = ref(false)
 const lastCourseRef = ref(null)
 
-// Fast dedupe
-const courseIds = new Set()
+const observer = ref(null)
+let fetchAbort = null
 
-// Faster sorting (and more correct with numbers)
+// Hybrid strategy:
+// - Server paging loads PAGE_SIZE items each time.
+// - Client-side chunking reveals gradually (visibleCount).
+const PAGE_SIZE = 20
+const visibleCount = ref(PAGE_SIZE)
+
+// Server paging state
+const serverPage = ref(1)
+const serverHasMore = ref(true)
+const serverFetching = ref(false)
+const uniqueKeys = new Set()
 const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" })
 let sortScheduled = false
 const scheduleSort = () => {
@@ -102,10 +111,10 @@ const scheduleSort = () => {
 
   const run = () => {
     sortScheduled = false
-    courses.value.sort((a, b) => collator.compare(a?.title || "", b?.title || ""))
+    allCourses.value.sort((a, b) => collator.compare(a?.title || "", b?.title || ""))
+    applyVisibleSlice()
   }
 
-  // Do not block UI thread if possible
   if (typeof window !== "undefined" && "requestIdleCallback" in window) {
     window.requestIdleCallback(run, { timeout: 200 })
   } else {
@@ -113,46 +122,148 @@ const scheduleSort = () => {
   }
 }
 
-const mergeCoursesFromEdges = (edges) => {
-  let added = 0
+const applyVisibleSlice = () => {
+  const n = Math.max(PAGE_SIZE, Number(visibleCount.value) || PAGE_SIZE)
+  courses.value = allCourses.value.slice(0, n)
+}
 
-  for (const { node } of edges) {
-    const c = node?.course
-    if (!c) continue
+const toBool = (v) => v === true || v === "true" || v === 1 || v === "1"
+const studentInfoFlags = computed(() => {
+  const raw = platformConfigStore.getSetting("course.course_student_info")
+  const defaults = { score: false, progress: false, certificate: false }
 
-    const key = c._id ?? c.id
-    if (!key) continue
+  if (!raw) return defaults
 
-    if (!courseIds.has(key)) {
-      courseIds.add(key)
-      courses.value.push(c)
-      added++
+  if (typeof raw === "object") {
+    return {
+      score: toBool(raw.score),
+      progress: toBool(raw.progress),
+      certificate: toBool(raw.certificate),
     }
   }
 
-  if (added > 0) scheduleSort()
+  if (typeof raw === "string") {
+    try {
+      const parsed = JSON.parse(raw)
+      if (parsed && typeof parsed === "object") {
+        return {
+          score: toBool(parsed.score),
+          progress: toBool(parsed.progress),
+          certificate: toBool(parsed.certificate),
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  return defaults
+})
+computed(() => {
+  const f = studentInfoFlags.value
+  return !!(f.progress || f.score || f.certificate)
+})
+
+function extractNumericId(value) {
+  if (typeof value === "number" && Number.isFinite(value)) return value
+
+  if (typeof value === "string") {
+    const m = value.match(/(\d+)(?!.*\d)/)
+    return m ? Number(m[1]) : 0
+  }
+
+  if (value && typeof value === "object") {
+    const candidates = [value.id, value._id, value["@id"]]
+    for (const c of candidates) {
+      const n = extractNumericId(c)
+      if (n > 0) return n
+    }
+  }
+
+  return 0
 }
 
-const { result, loading, fetchMore } = useQuery(
-  GET_COURSE_REL_USER,
-  () => ({
-    user: securityStore.user["@id"],
-    first: 20, // smaller first paint (tune: 12/16/20)
-    after: null,
-  }),
-  {
-    fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-first",
-  },
-)
+const getCourseNumericId = (course) => extractNumericId(course?.id ?? course?._id ?? course?.["@id"])
+const getSessionNumericId = (cru) => extractNumericId(cru?.session?.id ?? cru?.sessionId ?? cru?.session?.["@id"] ?? 0)
 
-// Observer (infinite scroll)
-let observer = null
+const normalizeCollection = (data) => {
+  if (Array.isArray(data)) return data
+  if (data && Array.isArray(data["hydra:member"])) return data["hydra:member"]
+  if (data && Array.isArray(data.member)) return data.member
+  if (data && Array.isArray(data.items)) return data.items
+  return []
+}
+
+const buildStudentInfoFromCru = (cru) => {
+  const progressRaw = cru?.trackingProgress ?? cru?.progress ?? 0
+  const progress = Number(progressRaw)
+  return {
+    progress: Number.isFinite(progress) ? progress : 0,
+    score: typeof cru?.score === "number" ? cru.score : null,
+    bestScore: typeof cru?.bestScore === "number" ? cru.bestScore : null,
+    timeSpentSeconds: Number.isFinite(Number(cru?.timeSpentSeconds)) ? Number(cru.timeSpentSeconds) : null,
+    certificateAvailable: !!cru?.certificateAvailable,
+    completed: !!cru?.completed,
+    hasNewContent: !!cru?.hasNewContent,
+  }
+}
+
+const buildMergedCourse = (cru) => {
+  const c = cru?.course
+  if (!c) return null
+
+  const cid = getCourseNumericId(c)
+  const sid = getSessionNumericId(cru)
+  const studentInfo = buildStudentInfoFromCru(cru)
+
+  return {
+    ...c,
+    session: cru?.session ?? c.session ?? null,
+    sessionId: sid,
+
+    studentInfo,
+
+    hasNewContent: studentInfo.hasNewContent,
+    completed: studentInfo.completed,
+    certificateAvailable: studentInfo.certificateAvailable,
+    trackingProgress: studentInfo.progress,
+    score: studentInfo.score,
+    bestScore: studentInfo.bestScore,
+    timeSpentSeconds: studentInfo.timeSpentSeconds,
+
+    __key: `${cid || c._id || c.id}:${sid || 0}`,
+  }
+}
+
+const mergeCoursesFromProvider = (items, { reset = false } = {}) => {
+  if (reset) {
+    uniqueKeys.clear()
+    allCourses.value = []
+  }
+
+  const merged = []
+  for (const cru of items) {
+    const m = buildMergedCourse(cru)
+    if (!m) continue
+
+    const k = String(m.__key || "")
+    if (!k) continue
+
+    if (uniqueKeys.has(k)) continue
+    uniqueKeys.add(k)
+    merged.push(m)
+  }
+
+  if (merged.length > 0) {
+    allCourses.value = allCourses.value.concat(merged)
+    scheduleSort()
+  }
+}
 
 const ensureObserver = () => {
-  if (observer) return
+  if (observer.value) return
 
-  observer = new IntersectionObserver(
+  observer.value = new IntersectionObserver(
     (entries) => {
       if (entries[0]?.isIntersecting) {
         loadMoreCourses()
@@ -167,75 +278,152 @@ const observeLast = async () => {
   if (!lastCourseRef.value) return
 
   ensureObserver()
-  observer.disconnect()
-  observer.observe(lastCourseRef.value)
+  observer.value.disconnect()
+  observer.value.observe(lastCourseRef.value)
 }
 
-const loadMoreCourses = () => {
-  if (!hasMore.value || isLoadingMore.value) return
-  if (loading.value) return
-  if (!endCursor.value) return
+const buildPagedUrl = (page) => {
+  const p = Math.max(1, Number(page) || 1)
+  const qs = new URLSearchParams()
+  qs.set("page", String(p))
+  qs.set("itemsPerPage", String(PAGE_SIZE))
+  return `${ME_COURSES_ENDPOINT}?${qs.toString()}`
+}
+
+const fetchServerPage = async (pageToLoad, { reset = false } = {}) => {
+  if (!securityStore.user) return
+  if (serverFetching.value) return
+  if (!serverHasMore.value && !reset) return
+
+  serverFetching.value = true
+
+  if (fetchAbort) fetchAbort.abort()
+  fetchAbort = new AbortController()
+
+  try {
+    const resp = await fetch(buildPagedUrl(pageToLoad), {
+      method: "GET",
+      credentials: "same-origin",
+      headers: { Accept: "application/ld+json, application/json" },
+      signal: fetchAbort.signal,
+    })
+
+    if (!resp.ok) {
+      serverHasMore.value = false
+      return
+    }
+
+    const data = await resp.json()
+    const items = normalizeCollection(data)
+
+    // If the server returns less than PAGE_SIZE, we assume no more pages.
+    serverHasMore.value = Array.isArray(items) && items.length >= PAGE_SIZE
+    serverPage.value = Math.max(1, Number(pageToLoad) || 1)
+
+    mergeCoursesFromProvider(items, { reset })
+    applyVisibleSlice()
+    await observeLast()
+  } catch (e) {
+    if (e?.name !== "AbortError") {
+      console.warn("[CoursesList] Failed to fetch /me/courses page.", e)
+    }
+    serverHasMore.value = false
+  } finally {
+    serverFetching.value = false
+  }
+}
+
+const loadMyCourses = async () => {
+  if (!securityStore.user) return
+
+  loading.value = true
+  isInitialLoaded.value = false
+
+  // Reset paging + visible slice
+  serverPage.value = 1
+  serverHasMore.value = true
+  visibleCount.value = PAGE_SIZE
+  allCourses.value = []
+  courses.value = []
+  uniqueKeys.clear()
+
+  try {
+    await fetchServerPage(1, { reset: true })
+  } finally {
+    loading.value = false
+    isInitialLoaded.value = true
+  }
+}
+
+const hasMoreVisible = computed(() => visibleCount.value < allCourses.value.length)
+
+const loadMoreCourses = async () => {
+  if (isLoadingMore.value) return
 
   isLoadingMore.value = true
 
-  fetchMore({
-    variables: {
-      user: securityStore.user["@id"],
-      first: 20,
-      after: endCursor.value,
-    },
-    updateQuery: (previousResult, { fetchMoreResult }) => {
-      if (!fetchMoreResult?.courseRelUsers) return previousResult
+  try {
+    // First reveal already-loaded items (client-side)
+    if (hasMoreVisible.value) {
+      visibleCount.value = Math.min(allCourses.value.length, (Number(visibleCount.value) || PAGE_SIZE) + PAGE_SIZE)
+      applyVisibleSlice()
+      await observeLast()
+      return
+    }
 
-      const edges = fetchMoreResult.courseRelUsers.edges || []
-      mergeCoursesFromEdges(edges)
-
-      endCursor.value = fetchMoreResult.courseRelUsers.pageInfo.endCursor
-      hasMore.value = fetchMoreResult.courseRelUsers.pageInfo.hasNextPage
-
-      return {
-        ...previousResult,
-        courseRelUsers: {
-          ...fetchMoreResult.courseRelUsers,
-          edges: [...previousResult.courseRelUsers.edges, ...edges],
-        },
-      }
-    },
-  }).finally(() => {
-    isLoadingMore.value = false
-  })
+    // If everything loaded is already visible, fetch next server page
+    if (serverHasMore.value && !serverFetching.value) {
+      const next = (Number(serverPage.value) || 1) + 1
+      await fetchServerPage(next)
+      // After fetching, reveal the newly added items too
+      visibleCount.value = Math.min(allCourses.value.length, (Number(visibleCount.value) || PAGE_SIZE) + PAGE_SIZE)
+      applyVisibleSlice()
+      await observeLast()
+    }
+  } finally {
+    window.setTimeout(() => {
+      isLoadingMore.value = false
+    }, 120)
+  }
 }
 
-watch(result, async (newResult) => {
-  const cr = newResult?.courseRelUsers
-  if (!cr) return
+watch(
+  () => securityStore.user?.["@id"],
+  () => {
+    allCourses.value = []
+    courses.value = []
+    uniqueKeys.clear()
+    visibleCount.value = PAGE_SIZE
+    serverPage.value = 1
+    serverHasMore.value = true
+    isInitialLoaded.value = false
+    loadMyCourses()
+  },
+)
 
-  // First page merge
-  mergeCoursesFromEdges(cr.edges || [])
-
-  endCursor.value = cr.pageInfo?.endCursor || null
-  hasMore.value = !!cr.pageInfo?.hasNextPage
-
-  if (!isInitialLoaded.value) {
-    isInitialLoaded.value = true
-  }
-
-  await observeLast()
-})
+watch(
+  () => allCourses.value.length,
+  async () => {
+    applyVisibleSlice()
+    await observeLast()
+  },
+)
 
 onMounted(() => {
-  // Reset local state (optional)
+  allCourses.value = []
   courses.value = []
-  courseIds.clear()
-  endCursor.value = null
-  hasMore.value = true
-  isLoadingMore.value = false
+  uniqueKeys.clear()
+  visibleCount.value = PAGE_SIZE
+  serverPage.value = 1
+  serverHasMore.value = true
   isInitialLoaded.value = false
 
   ensureObserver()
+  loadMyCourses()
 })
 
 onBeforeUnmount(() => {
-  if (observer) observer.disconnect()
+  if (observer.value) observer.value.disconnect()
+  if (fetchAbort) fetchAbort.abort()
 })
 </script>

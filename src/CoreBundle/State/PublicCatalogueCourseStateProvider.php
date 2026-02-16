@@ -79,11 +79,6 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
             $context
         );
 
-        /*dd(
-            $queryBuilder->getQuery()->getSQL(),
-            $queryBuilder->getParameters()->toArray(),
-        );*/
-
         /** @var Course $course */
         foreach ($paginator as $course) {
             $course->subscribed = $course->hasSubscriptionByUser($user);

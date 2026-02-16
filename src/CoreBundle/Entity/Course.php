@@ -96,7 +96,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity('visualCode')]
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
 #[ORM\EntityListeners([ResourceListener::class, CourseListener::class])]
-#[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial', 'code' => 'partial'])]
+#[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial', 'code' => 'partial', 'categories' => 'exact'])]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title'])]
 class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface, ResourceIllustrationInterface, ExtraFieldItemInterface, Stringable
 {

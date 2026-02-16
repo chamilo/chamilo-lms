@@ -1,5 +1,8 @@
 <template>
-  <Card class="course-card">
+  <Card
+    class="course-card"
+    role="region"
+  >
     <template #header>
       <div class="course-card__header">
         <img

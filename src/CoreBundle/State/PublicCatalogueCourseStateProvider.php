@@ -46,9 +46,10 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         $user = $this->userHelper->getCurrent();
         $isAuthenticated = $user instanceof User;
 
-        if (!$isAuthenticated
-            && 'false' !== $this->settingsManager->getSetting('catalog.course_catalog_published', true)
-        ) {
+        $catalogIsPublic = 'true' === (string) $this->settingsManager->getSetting('catalog.course_catalog_published', true);
+
+        // If the catalogue is not public, anonymous users must be blocked.
+        if (!$isAuthenticated && !$catalogIsPublic) {
             throw new AccessDeniedHttpException($this->translator->trans('Not allowed'));
         }
 
@@ -81,7 +82,7 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
 
         /** @var Course $course */
         foreach ($paginator as $course) {
-            $course->subscribed = $course->hasSubscriptionByUser($user);
+            $course->subscribed = $isAuthenticated ? $course->hasSubscriptionByUser($user) : false;
         }
 
         return $paginator;

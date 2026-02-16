@@ -182,6 +182,3 @@ services:
     Chamilo\CoreBundle\AiProvider\AiChatCompletionClientInterface:
       class: Chamilo\CoreBundle\AiProvider\DefaultAiChatCompletionClient
       public: true
-
-    Chamilo\CoreBundle\Serializer\Normalizer\CourseRelUserStudentInfoNormalizer:
-      tags: [ 'serializer.normalizer' ]

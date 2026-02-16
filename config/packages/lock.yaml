@@ -1,0 +1,38 @@
+# Symfony Lock Component Configuration
+# Docs: https://symfony.com/doc/6.4/components/lock.html
+#
+# This configures the default lock store used by:
+# - Login throttling (rate limiting) - see security.yaml for login_throttling configuration
+# - Rate limiters - custom rate limiters can be defined in framework.yaml under rate_limiter
+# - Manual lock usage via LockFactory service
+#
+# The LOCK_DSN environment variable (defined in .env) determines the lock store backend.
+#
+# Available lock store options:
+#
+# 1. Flock (file-based) - good for development and single-server setups
+#    LOCK_DSN=flock
+#
+# 2. Redis - recommended for production, multi-server environments
+#    LOCK_DSN=redis://localhost:6379
+#    LOCK_DSN=redis://password@redis-host:6379
+#    LOCK_DSN=redis://localhost:6379?timeout=3
+#
+# 3. Memcached - alternative to Redis
+#    LOCK_DSN=memcached://localhost:11211
+#
+# 4. Database (PDO) - uses your database for locks
+#    LOCK_DSN=mysql://user:password@localhost/dbname
+#    LOCK_DSN=pgsql://user:password@localhost/dbname
+#
+# 5. Semaphore - system-level locks (requires ext-sysvsem)
+#    LOCK_DSN=semaphore
+#
+# 6. Combined stores - try multiple backends in order
+#    LOCK_DSN=redis://localhost|memcached://localhost|flock
+#
+# For multi-server deployments, always use Redis, Memcached, or a database.
+# File-based locks (flock) only work on a single server.
+
+framework:
+    lock: '%env(LOCK_DSN)%'

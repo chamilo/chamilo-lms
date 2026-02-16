@@ -2808,7 +2808,7 @@ msgid "Latest post"
 msgstr "กระทู้ล่าสุด"
 
 msgid "Quoting"
-msgstr "Quoting"
+msgstr "การอ้างอิง"
 
 msgid "Notify me by e-mail when somebody replies"
 msgstr "แจ้งข่าวทางอีเมลเมื่อมีผู้ตอบกระทู้"
@@ -2829,13 +2829,13 @@ msgid "Unlocked: learners can post new messages in this forum category, forum or
 msgstr "ปลดล๊อค:ผู้เรียนสามารถส่งกระทู้และอภิปรายเข้าหมวดหมู่ต่างๆได้"
 
 msgid "Flat"
-msgstr "Flat"
+msgstr "แบบแบน"
 
 msgid "Threaded"
 msgstr "ส่งเข้าแล้ว"
 
 msgid "Nested"
-msgstr "Nested"
+msgstr "แบบซ้อน"
 
 msgid "List View"
 msgstr "Flat View"
@@ -12234,7 +12234,7 @@ msgid "... SCORM Directory with SD-id (and split manifest - or leave empty)"
 msgstr "...สมุดบัญชีรายชื่อของScorm กับรหัส SD(แยกรายการที่มีหรือปล่อยว่างไว้)"
 
 msgid "root"
-msgstr "root"
+msgstr "รูท"
 
 msgid "Split manifests, and #MDe, if any:"
 msgstr "แยกรายการที่มี,และ#MDe ถ้ามี"
@@ -13608,7 +13608,7 @@ msgid "How does the course progress? Where should the learner pay special care? 
 msgstr "หลักสูตรดำเนินการอย่างไร? ผู้เรียนควรใส่ใจส่วนใดเป็นพิเศษ? มีปัญหาการเข้าใจในพื้นที่ต่างๆ หรือไม่? ควรใช้เวลากับส่วนต่างๆ ของหลักสูตรเท่าไร?"
 
 msgid "Methodology"
-msgstr "Methodology"
+msgstr "ระเบียบวิธี"
 
 msgid "What methods and activities help achieve the objectives of the course?  What would the schedule be?"
 msgstr "วิธีการและกิจกรรมใดช่วยให้บรรลุวัตถุประสงค์ของหลักสูตร? ตารางเวลาจะเป็นอย่างไร?"
@@ -24981,7 +24981,7 @@ msgid "Click to view details"
 msgstr "คลิกเพื่อดูรายละเอียด"
 
 msgid "dd/mm/yyyy"
-msgstr "dd/mm/yyyy"
+msgstr "วว/ดด/ปปปป"
 
 msgid "Export certificates issue report"
 msgstr "ส่งออกรายงานการออกใบรับรอง"
@@ -28225,7 +28225,7 @@ msgid "You're subscribed to push notifications in this browser."
 msgstr "คุณได้สมัครรับการแจ้งเตือนแบบ push ในเบราว์เซอร์นี้แล้ว"
 
 msgid "Endpoint"
-msgstr "Endpoint"
+msgstr "จุดสิ้นสุด"
 
 msgid "Push notifications are not enabled in this browser."
 msgstr "การแจ้งเตือนแบบ push ไม่ได้เปิดใช้งานในเบราว์เซอร์นี้"
@@ -29719,7 +29719,7 @@ msgid "Back to layouts"
 msgstr "กลับไปยังเค้าโครง"
 
 msgid "ID"
-msgstr "ID"
+msgstr "รหัสประจำตัว"
 
 msgid "Columns"
 msgstr "คอลัมน์"
@@ -31453,7 +31453,7 @@ msgid "Reply to all"
 msgstr "ตอบกลับทั้งหมด"
 
 msgid "SCIM external ID"
-msgstr "SCIM external ID"
+msgstr "SCIM รหัสภายนอก"
 
 msgid "OAuth2 ID"
 msgstr "OAuth2 ID"
@@ -31747,7 +31747,7 @@ msgid "Test/development"
 msgstr "ทดสอบ/พัฒนา"
 
 msgid "Crons"
-msgstr "Crons"
+msgstr "งานครอน"
 
 msgid "Editor"
 msgstr "ตัวแก้ไข"
@@ -31765,7 +31765,7 @@ msgid "Support tickets"
 msgstr "ตั๋วสนับสนุน"
 
 msgid "Webservices"
-msgstr "Webservices"
+msgstr "เว็บเซอร์วิส"
 
 msgid "Catalogue"
 msgstr "แคตตาล็อก"
@@ -32299,7 +32299,7 @@ msgid "The '%s' operation is not supported."
 msgstr "การดำเนินการ '%s' ไม่รองรับ"
 
 msgid "Drupal user ID"
-msgstr "Drupal user ID"
+msgstr "Drupal รหัสผู้ใช้"
 
 msgid "There are no terms that match the search: %s"
 msgstr "ไม่มีคำศัพท์ที่ตรงกับการค้นหา: %s"
@@ -32579,4 +32579,7 @@ msgstr "เพื่อยืนยันอีเมลของคุณแล
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "หากคุณไม่ได้ลงทะเบียนบัญชีนี้ คุณสามารถเพิกเฉยอีเมลนี้ได้ จะไม่มีการดำเนินการใดๆ"
+
+msgid "Current authentication method"
+msgstr "วิธีการรับรองตัวตนปัจจุบัน"
 

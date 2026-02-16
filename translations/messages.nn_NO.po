@@ -2020,7 +2020,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:opphavsrett,, nei:ingen opphavsrett"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappe,, application/msword:MsWord,, application/octet-stream:Okettstrøm,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":øving:øving,,      simulering:simulering,,      spørreskjema:spørreskjema,,      diagram:diagram,,      figur:figur,,      graf:graf,,      indeks:indeks,,      lysbilete:lysbilete,,      tabell:tabell,,      forteljande tekst:forteljande tekst,,      eksamen:eksamen,,      eksperiment:eksperiment,,      problemstilling:problemstilling,,      sjølvoppgåve:sjølvoppgåve,,      forelesning:forelesning"
@@ -3319,7 +3319,7 @@ msgid "New note"
 msgstr "Ny note"
 
 msgid "Note"
-msgstr "Note"
+msgstr "Notat"
 
 msgid "Note created"
 msgstr "Note oppretta"
@@ -8860,7 +8860,7 @@ msgid "With selected"
 msgstr "Med valgte"
 
 msgid "Online"
-msgstr "Online"
+msgstr "På nettet"
 
 msgid "hungarian"
 msgstr "ungarsk"
@@ -9010,31 +9010,31 @@ msgid "Feb"
 msgstr "Feb"
 
 msgid "Mar"
-msgstr "Mar"
+msgstr "mar"
 
 msgid "Apr"
-msgstr "Apr"
+msgstr "apr"
 
 msgid "May"
 msgstr "Mai"
 
 msgid "Jun"
-msgstr "Jun"
+msgstr "jun"
 
 msgid "Jul"
-msgstr "Jul"
+msgstr "jul"
 
 msgid "Aug"
-msgstr "Aug"
+msgstr "aug"
 
 msgid "Sep"
-msgstr "Sep"
+msgstr "sep"
 
 msgid "Oct"
 msgstr "Okt"
 
 msgid "Nov"
-msgstr "Nov"
+msgstr "nov"
 
 msgid "Dec"
 msgstr "Des"
@@ -9049,7 +9049,7 @@ msgid "March"
 msgstr "Mars"
 
 msgid "April"
-msgstr "April"
+msgstr "april"
 
 msgid "June"
 msgstr "Juni"
@@ -9058,16 +9058,16 @@ msgid "July"
 msgstr "Juli"
 
 msgid "August"
-msgstr "August"
+msgstr "august"
 
 msgid "September"
-msgstr "September"
+msgstr "september"
 
 msgid "October"
 msgstr "Oktober"
 
 msgid "November"
-msgstr "November"
+msgstr "november"
 
 msgid "December"
 msgstr "Desember"
@@ -9127,7 +9127,7 @@ msgid "Dropbox"
 msgstr "Dropboks"
 
 msgid "Chat"
-msgstr "Chat"
+msgstr "Prat"
 
 msgid "Add link to this page"
 msgstr "Tilføy lenke til denne siden"
@@ -13657,7 +13657,7 @@ msgid "NO RESIZING"
 msgstr "INGEN ENDING AV STORLEIK"
 
 msgid "Brochure"
-msgstr "Brochure"
+msgstr "Broskyrje"
 
 msgid "Slideshow"
 msgstr "Lysbildevising"
@@ -14686,7 +14686,7 @@ msgid "Chamilo homepage"
 msgstr "Chamilo hovudsida"
 
 msgid "Chamilo forum"
-msgstr "Chamilo forum"
+msgstr "Chamilo-forum"
 
 msgid "Chamilo extensions"
 msgstr "Chamilo utvidingar"
@@ -18274,7 +18274,7 @@ msgid "The local time in the portal timezone (%s) is %s"
 msgstr "Lokal tid i portaltidsona (%s) er %s"
 
 msgid "Start test"
-msgstr "Start test"
+msgstr "Start testar"
 
 msgid "Export as .doc"
 msgstr "Eksporter som .doc"
@@ -20530,7 +20530,7 @@ msgid "Input size of box to fill"
 msgstr "Inndata-størrelse på rute å fylle"
 
 msgid "MM dd, yy"
-msgstr "MM dd, yy"
+msgstr "dd. MM yy"
 
 msgid "HH:mm"
 msgstr "HH:mm"
@@ -31004,7 +31004,7 @@ msgid "Create your first note to get started."
 msgstr "Opprett det første notatet ditt for å kome i gang."
 
 msgid "F d, Y"
-msgstr "F d, Y"
+msgstr "d. F Y"
 
 msgid "Could not load support info at this time."
 msgstr "Kunne ikkje lade støtteinfo no."
@@ -32577,4 +32577,7 @@ msgstr "For å verifisere e-posten din og aktivere kontoen din på %s, vennleg k
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Hvis du ikkje registrerte denne kontoen, kan du ignorere denne e-posten. Ingen handling vil bli tatt."
+
+msgid "Current authentication method"
+msgstr "Noverande autentiseringsmetode"
 

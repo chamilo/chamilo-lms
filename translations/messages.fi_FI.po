@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavamalli: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavan esimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -2541,7 +2541,7 @@ msgid "Shuffle selection in available languages"
 msgstr "Sekoita valinta mahdollisissa kielissä"
 
 msgid "english"
-msgstr "english"
+msgstr "englanti"
 
 msgid "New course"
 msgstr "Uusi kurssialue"
@@ -4155,7 +4155,7 @@ msgid "errors found"
 msgstr "virheitä löydetty"
 
 msgid "Backup"
-msgstr "Backup"
+msgstr "Varmuuskopio"
 
 msgid "Upgrade Chamilo"
 msgstr "Päivitä Chamilo"
@@ -6471,7 +6471,7 @@ msgid "Send this announcement by email to selected groups/users"
 msgstr "Lähetä tämä ilmoitus sähköpostilla rekisteröityneille käyttäjille"
 
 msgid "On"
-msgstr "On"
+msgstr "Päällä"
 
 msgid "registered users of the site"
 msgstr "kurssin rekisteröityneet käyttäjät"
@@ -8835,7 +8835,7 @@ msgid "The target folder does not exist"
 msgstr "Kohde hakemistoa ei ole olemassa"
 
 msgid "in"
-msgstr "in"
+msgstr "sisällä"
 
 msgid "Show all"
 msgstr "Näytä kaikki"
@@ -9759,7 +9759,7 @@ msgid "Align"
 msgstr "Tasaus"
 
 msgid "Width"
-msgstr "Width"
+msgstr "Leveys"
 
 msgid "V Space"
 msgstr "V-väli"
@@ -9771,10 +9771,10 @@ msgid "Border"
 msgstr "Raja"
 
 msgid "Alt"
-msgstr "Alt"
+msgstr "Vaihtoehto"
 
 msgid "Height"
-msgstr "Height"
+msgstr "Korkeus"
 
 msgid "Image manager"
 msgstr "Kuvien hallinta"
@@ -13641,7 +13641,7 @@ msgid "Resize the image to the following dimensions (in pixels)"
 msgstr "Muuta kuvan koko seuraaviin mittoihin (pikseleissä)"
 
 msgid "RESIZE"
-msgstr "RESIZE"
+msgstr "MUUTA KOKOA"
 
 msgid "Show all images in their original size. No resizing is done. Scrollbars will automatically appear if the image is larger than your monitor size."
 msgstr "Näytä kaikki kuvat alkuperäisessä koossa. Ei muuteta kokoa. Vierityspalkit ilmestyvät automaattisesti, jos kuva on suurempi kuin näytön koko."
@@ -15000,7 +15000,7 @@ msgid "Updated on"
 msgstr "Päivitetty"
 
 msgid "Metadata"
-msgstr "Metadata"
+msgstr "Metatiedot"
 
 msgid "View/Edit Metadata"
 msgstr "Näytä/Muokkaa Metadataa"
@@ -22047,13 +22047,13 @@ msgid "Certificate notification"
 msgstr "Varmennekilpailutus"
 
 msgid "((user_first_name)),"
-msgstr "((user_first_name)),"
+msgstr "((etunimi)),"
 
 msgid "Send certificate notification to all users"
 msgstr "Lähetä varmenneilmoitus kaikille käyttäjille"
 
 msgid "Fwd"
-msgstr "Fwd"
+msgstr "Välit"
 
 msgid "Forwarded message"
 msgstr "Viestin välitetty versio"
@@ -24090,7 +24090,7 @@ msgid "Latest login in a course"
 msgstr "Viimeisin kurssikirjautuminen"
 
 msgid "The"
-msgstr "The"
+msgstr "Artikkeli"
 
 msgid "Multiply questions by class"
 msgstr "Kerro kysymykset luokittain"
@@ -27234,7 +27234,7 @@ msgid "Carbon copy receiver profile picture"
 msgstr "Kopio vastaanottajan profiilikuva"
 
 msgid "Ppt_to_lp"
-msgstr "Ppt_to_lp"
+msgstr "Ppt_oppimispolkuun"
 
 msgid "Left"
 msgstr "Vasemmalle"
@@ -32579,4 +32579,7 @@ msgstr "Vahvistaaksesi sähköpostiosoitteesi ja aktivoidaksesi tilisi %s:ssä n
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Jos et rekisteröinyt tätä tiliä, voit jättää tämän sähköpostin huomiotta. Mitään toimenpiteitä ei tehdä."
+
+msgid "Current authentication method"
+msgstr "Nykyinen tunnistautumismenetelmä"
 

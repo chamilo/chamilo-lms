@@ -2333,10 +2333,10 @@ msgid "Become moderator"
 msgstr "Postani moderator"
 
 msgid "Italic"
-msgstr "Italic"
+msgstr "Kurziv"
 
 msgid "Bold"
-msgstr "Bold"
+msgstr "Podebljano"
 
 msgid "Waiting"
 msgstr "Čekanje...."
@@ -4739,7 +4739,7 @@ msgid "Should the navigation menu show the different tool icons?"
 msgstr "Treba li navigacijski izbornik prikazivati različite ikone alata?"
 
 msgid "Plugin"
-msgstr "Plugin"
+msgstr "Priključak"
 
 msgid "Main menu"
 msgstr "Glavni izbornik"
@@ -5393,7 +5393,7 @@ msgid "Videoconference streaming server password"
 msgstr "Lozinka poslužitelja za streaming videokonferencija"
 
 msgid "Port"
-msgstr "Port"
+msgstr "Mrežni priključak"
 
 msgid "Click here for a demo account"
 msgstr "Kliknite ovdje za demo račun"
@@ -6044,7 +6044,7 @@ msgid "Set language as default"
 msgstr "Postavi jezik kao defaultni izbor"
 
 msgid "Filter"
-msgstr "Filter"
+msgstr "Filtar"
 
 msgid "Filter on"
 msgstr "Filter uključen"
@@ -8045,7 +8045,7 @@ msgid "Add individual feedback"
 msgstr "Dodaj opasku"
 
 msgid "N°"
-msgstr "N°"
+msgstr "Br."
 
 msgid "To create a new question, choose the type above"
 msgstr "Za kreiranje novog pitanja, odaberite jedan tip gore ponuđen"
@@ -9128,7 +9128,7 @@ msgid "Dropbox"
 msgstr "Pretinac"
 
 msgid "Chat"
-msgstr "Chat"
+msgstr "Razgovor"
 
 msgid "Add link to this page"
 msgstr "Dodaj poveznicu na ovu stranicu"
@@ -11753,7 +11753,7 @@ msgid "Hits"
 msgstr "Pogodci"
 
 msgid "h."
-msgstr "h."
+msgstr "s."
 
 msgid "In the last 31 days"
 msgstr "U posljednji 31 dan"
@@ -17816,7 +17816,7 @@ msgid "Acceptable"
 msgstr "Prihvatljivo"
 
 msgid "Hotspot"
-msgstr "Hotspot"
+msgstr "Točka"
 
 msgid "Change the visibility of the current image"
 msgstr "Promijeni vidljivost trenutne slike"
@@ -19376,7 +19376,7 @@ msgid "Clip sent"
 msgstr "Snimka poslana"
 
 msgid "Auto"
-msgstr "Auto"
+msgstr "Automatski"
 
 msgid "Stop"
 msgstr "Zaustavi"
@@ -19886,10 +19886,10 @@ msgid "Not readable"
 msgstr "Nečitljivo"
 
 msgid "John"
-msgstr "John"
+msgstr "Ivan"
 
 msgid "Doe"
-msgstr "Doe"
+msgstr "Horvat"
 
 msgid "Attendances updated"
 msgstr "Prisutnosti ažurirane"
@@ -28152,13 +28152,13 @@ msgid "Menucatalogue"
 msgstr "Menucatalogue"
 
 msgid "Topbarcertificate"
-msgstr "Topbarcertificate"
+msgstr "GornjiPojasCertifikat"
 
 msgid "Topbarskills"
-msgstr "Topbarskills"
+msgstr "GornjiPojasVještine"
 
 msgid "Ai_helpers"
-msgstr "Ai_helpers"
+msgstr "AI_pomoćnici"
 
 msgid "ID of the user who officially sends the agenda reminders"
 msgstr "ID korisnika koji službeno šalje podsjetnike agende"
@@ -32578,4 +32578,7 @@ msgstr "Za verifikaciju vaše e-pošte i omogućavanje računa na %s, molimo kli
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Ako niste registrirali ovaj račun, možete zanemariti ovu e-poštu. Neće se poduzeti nikakva akcija."
+
+msgid "Current authentication method"
+msgstr "Trenutna metoda autentifikacije"
 

@@ -495,7 +495,7 @@ msgid "Question ID"
 msgstr "Galderaren ID"
 
 msgid "ExerciseId"
-msgstr "ExerciseId"
+msgstr "Ariketaren ID"
 
 msgid "Excel export"
 msgstr "Excel-era esportatu"
@@ -3666,7 +3666,7 @@ msgid "Mark as read"
 msgstr "Markatu irakurrita dagoela"
 
 msgid "RE:"
-msgstr "RE:"
+msgstr "Er:"
 
 msgid "Advanced edit"
 msgstr "Edizio aurreratua"
@@ -4740,7 +4740,7 @@ msgid "Should the navigation menu show the different tool icons?"
 msgstr "Erakutsi behar al ditu nabigazio menuak tresnen ikonoak?"
 
 msgid "Plugin"
-msgstr "Plugin"
+msgstr "Plugina"
 
 msgid "Main menu"
 msgstr "Menu nagusia"
@@ -6972,7 +6972,7 @@ msgid "Category created"
 msgstr "Kategoria sortu da"
 
 msgid "Agenda"
-msgstr "Agenda"
+msgstr "Egunerakoa"
 
 msgid "Announcements"
 msgstr "Abisuak"
@@ -7665,10 +7665,10 @@ msgid "-answ"
 msgstr "-erantz"
 
 msgid "+elem"
-msgstr "+elem"
+msgstr "+elementu"
 
 msgid "-elem"
-msgstr "-elem"
+msgstr "-elementu"
 
 msgid "Please type your text below"
 msgstr "Mesdez, idatzi azpian testua"
@@ -8403,7 +8403,7 @@ msgid "Excessive area"
 msgstr "Gehiegizko area"
 
 msgid "Minimum"
-msgstr "Minimum"
+msgstr "Gutxieneko"
 
 msgid "Requirements"
 msgstr "Eskakizunak"
@@ -8628,7 +8628,7 @@ msgid "."
 msgstr "."
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%d %b, %Y"
 
 msgid "%A %B %d, %Y"
 msgstr "%A %B %d, %Y"
@@ -8862,7 +8862,7 @@ msgid "With selected"
 msgstr "Hautatukoarekin"
 
 msgid "Online"
-msgstr "Online"
+msgstr "Linean"
 
 msgid "hungarian"
 msgstr "hungariera"
@@ -14823,7 +14823,7 @@ msgid "Waiting for admin response"
 msgstr "Itxaroten kudeatzailearen erantzunari"
 
 msgid "Re"
-msgstr "Re"
+msgstr "Er"
 
 msgid "Files attachments"
 msgstr "Fitxategiak erantsi dira"
@@ -15036,7 +15036,7 @@ msgid "See blog"
 msgstr "Ikusi bloga"
 
 msgid "Blog"
-msgstr "Blog"
+msgstr "Bloga"
 
 msgid "Blog Posts"
 msgstr "Berri-mezuak blogean"
@@ -16221,10 +16221,10 @@ msgid "Session tutors reports visibility"
 msgstr "Saioko arduradunentzat txostenak ikusgai egon"
 
 msgid "NP"
-msgstr "NP"
+msgstr "EZ"
 
 msgid "P"
-msgstr "P"
+msgstr "B"
 
 msgid "Session calendar"
 msgstr "Saio egutegia"
@@ -17697,7 +17697,7 @@ msgid "Tests in learning paths"
 msgstr "Ariketak ikaskuntza ibilbideetan"
 
 msgid "Id"
-msgstr "Id"
+msgstr "ID"
 
 msgid "There was an error."
 msgstr "Errorea gertatu da"
@@ -32584,4 +32584,7 @@ msgstr "Zure e-posta egiaztatzeko eta %s-en zure kontua gaitzeko, mesedez, egin 
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Kontu hau ez baduzu erregistratu, alde batera utzi dezakezu e-posta hau. Ez da ekintzarik hartuko."
+
+msgid "Current authentication method"
+msgstr "Une metodorik egungo autentifikazioa"
 

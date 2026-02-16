@@ -43,7 +43,7 @@ msgid "Create badge"
 msgstr "Crea badge"
 
 msgid "Badges"
-msgstr "Badges"
+msgstr "Distins"
 
 msgid "Students who acquired skill %s"
 msgstr "Students che a àn akirû l'abilitât %s"
@@ -157,7 +157,7 @@ msgid "Number of hidden courses"
 msgstr "Nûmar di cors ascondûts"
 
 msgid "Post"
-msgstr "Post"
+msgstr "Publicâ"
 
 msgid "Write"
 msgstr "Scrivî"
@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Cori lis rispetts"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Esempi di formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Esempi formulis: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rangs variabii"
@@ -2050,7 +2050,7 @@ msgid "Import finished"
 msgstr "Import finî"
 
 msgid "Tests"
-msgstr "Tests"
+msgstr "Test"
 
 msgid "Courses"
 msgstr "Curs"
@@ -3316,7 +3316,7 @@ msgid "New note"
 msgstr "Gnove note"
 
 msgid "Note"
-msgstr "Note"
+msgstr "Notis"
 
 msgid "Note created"
 msgstr "Note creade"
@@ -8443,7 +8443,7 @@ msgid "Name"
 msgstr "Non"
 
 msgid "Comment"
-msgstr "Comment"
+msgstr "Coment"
 
 msgid "Visible"
 msgstr "Visìl"
@@ -8986,7 +8986,7 @@ msgid "Sunday"
 msgstr "Duminie"
 
 msgid "J"
-msgstr "J"
+msgstr "G"
 
 msgid "A"
 msgstr "A"
@@ -17692,7 +17692,7 @@ msgid "Tests in learning paths"
 msgstr "Testês tai percors didatics"
 
 msgid "Id"
-msgstr "ID"
+msgstr "Id"
 
 msgid "There was an error."
 msgstr "J è stât un erôr."
@@ -18373,7 +18373,7 @@ msgid "Total different IP addresses that have contributed to Wiki"
 msgstr "Total indiris IP diferents che à contribuî a la Wiki"
 
 msgid "Pages"
-msgstr "Pages"
+msgstr "Pâgis"
 
 msgid "Versions"
 msgstr "Version"
@@ -19426,7 +19426,7 @@ msgid "Available event keys. Use them between (( ))."
 msgstr "Çjavels dai events disponibis. Doprile tra (( ))"
 
 msgid "Events"
-msgstr "Events"
+msgstr "Event"
 
 msgid "Event type name"
 msgstr "Non dal tip di event"
@@ -22582,7 +22582,7 @@ msgid "Personal data officer's role"
 msgstr "Rool dal responsabil dai dâts personâls"
 
 msgid "Assets"
-msgstr "Assets"
+msgstr "Risorses"
 
 msgid "Total learnpath time"
 msgstr "Temp tôtaç dal percors di aprit"
@@ -28123,28 +28123,28 @@ msgid "Menucampushomepage"
 msgstr "Menucampushomepage"
 
 msgid "Menumycourses"
-msgstr "Menumycourses"
+msgstr "Menu cors i miei"
 
 msgid "Menureporting"
-msgstr "Menureporting"
+msgstr "Menu rapuarts"
 
 msgid "Menuplatformadministration"
-msgstr "Menuplatformadministration"
+msgstr "Menu aministrazion platfome"
 
 msgid "Menumyagenda"
-msgstr "Menumyagenda"
+msgstr "Menu agenda mia"
 
 msgid "Menusocial"
-msgstr "Menusocial"
+msgstr "Menu social"
 
 msgid "Menuvideoconference"
-msgstr "Menuvideoconference"
+msgstr "Menu videoconference"
 
 msgid "Menudiagnostics"
-msgstr "Menudiagnostics"
+msgstr "Menu diagnostichis"
 
 msgid "Menucatalogue"
-msgstr "Menucatalogue"
+msgstr "Menu catalog"
 
 msgid "Topbarcertificate"
 msgstr "Topbarcertificate"
@@ -28219,7 +28219,7 @@ msgid "You're subscribed to push notifications in this browser."
 msgstr "Tu si abonât ai notifiche push in chescj browser."
 
 msgid "Endpoint"
-msgstr "Endpoint"
+msgstr "Punt final"
 
 msgid "Push notifications are not enabled in this browser."
 msgstr "Le notifiche push no son ativadis in chescj browser."
@@ -31438,7 +31438,7 @@ msgid "For more details visit %s"
 msgstr "Par plui detals visitâ %s"
 
 msgid "Manager"
-msgstr "Manager"
+msgstr "Menager"
 
 msgid "Mark as"
 msgstr "Marcî come"
@@ -31447,7 +31447,7 @@ msgid "Reply to all"
 msgstr "Rispondi a tuti"
 
 msgid "SCIM external ID"
-msgstr "SCIM external ID"
+msgstr "SCIM ID esterne"
 
 msgid "OAuth2 ID"
 msgstr "OAuth2 ID"
@@ -31792,7 +31792,7 @@ msgid "Cleanup temporary uploads and cache"
 msgstr "Pulizia uploads temporaneis e cache"
 
 msgid "Directory"
-msgstr "Directory"
+msgstr "Cartela"
 
 msgid "Only delete files older than (minutes)"
 msgstr "Scancele scjampe pli vecjis che (minuts)"
@@ -31867,7 +31867,7 @@ msgid "Click to insert"
 msgstr "Clic par inserir"
 
 msgid "Preferred: SVG. PNG max size: %spx."
-msgstr "Preferred: SVG. PNG max size: %spx."
+msgstr "Preferìt: SVG. Dimensiun massime PNG: %spx."
 
 msgid "View badge"
 msgstr "Visualize il badge"
@@ -32299,7 +32299,7 @@ msgid "There are no terms that match the search: %s"
 msgstr "Nons i è gnun termin che corisponde a la recerca: %s"
 
 msgid "Setting is globally locked (access_url_locked=1)"
-msgstr "Setting is globally locked (access_url_locked=1)"
+msgstr "Impòst blochet globâlment (access_url_locked=1)"
 
 msgid "If enabled, 1:1 private chat messages will be mirrored in the course chat history documents. Recommended to keep disabled for privacy."
 msgstr "Se ativât, i messadis di chat privât 1:1 saran spiegjâts neis documents de storiis dal chat dal curs. Al consigliâ di lassâ disativât par la privatessi."
@@ -32326,7 +32326,7 @@ msgid "Quiz"
 msgstr "Quiz"
 
 msgid "Customcertificate"
-msgstr "Customcertificate"
+msgstr "Certificât personalizât"
 
 msgid "Update profile"
 msgstr "Agiorne profîl"
@@ -32560,10 +32560,10 @@ msgid "Saved in Documents"
 msgstr "Salvât tai Documents"
 
 msgid "Total space used by %s is %sGB"
-msgstr "Total space used by %s is %sGB"
+msgstr "Spazi total dopradiât da %s e %sGB"
 
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
-msgstr "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "Spazi total dopradiât dal portal %s e %sGB (limit e %sGB)"
 
 msgid "[%s] Confirm your e-mail"
 msgstr "[%s] Conferme il to e-mail"
@@ -32573,4 +32573,7 @@ msgstr "Par verificar il to e-mail e ativar il cont su %s, plê clic sul leam ch
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Se no tu âs registrât chest cont, puôt ignorâ chest e-mail. No si farà gnul atu."
+
+msgid "Current authentication method"
+msgstr "Metôd di autenticazion atuâl"
 

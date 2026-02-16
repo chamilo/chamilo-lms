@@ -1998,7 +1998,7 @@ msgid "Usage Rights"
 msgstr "Kullanım Hakları"
 
 msgid "Version"
-msgstr "Version"
+msgstr "Sürüm"
 
 msgid "select from list"
 msgstr "listeden seç"
@@ -2010,7 +2010,7 @@ msgid "in VCARD format"
 msgstr "VCARD formatında"
 
 msgid "Format"
-msgstr "Format"
+msgstr "Biçim"
 
 msgid ":draft:draft,,      final:final,,      revised:revised,,      unavailable:unavailable"
 msgstr ":taslak:taslak,,      nihai:nihai,,      revize:revize,,      kullanılamaz:kullanılamaz"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":evet:telif hakkı,, hayır:telif hakkı yok"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Klasör,, application/msword:MsWord,, application/octet-stream:Octet akışı,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Klasör,, application/msword:MsWord,, application/octet-stream:Octet akış,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":egzersiz:egzersiz,,      simülasyon:simülasyon,,      anket:anket,,      diyagram:diyagram,,      şekil:şekil,,      grafik:grafik,,      indeks:indeks,,      slayt:slayt,,      tablo:tablo,,      anlatı metni:anlatı metni,,      sınav:sınav,,      deney:deney,,      problem ifadesi:problem ifadesi,,      öz değerlendirme:öz değerlendirme,,      ders:ders"
@@ -2505,7 +2505,7 @@ msgid "Groups forums"
 msgstr "Gruplar forumlar"
 
 msgid "Language"
-msgstr "Language"
+msgstr "Dil"
 
 msgid "All fields required"
 msgstr "Tüm alanlar zorunludur"
@@ -4749,7 +4749,7 @@ msgid "Main menu after login"
 msgstr "Oturum açtıktan sonra ana menü"
 
 msgid "Banner"
-msgstr "Banner"
+msgstr "Açılış Bayrağı"
 
 msgid "Resize uploaded user images"
 msgstr "Gönderilen resimleri yeniden boyutlandır"
@@ -8769,16 +8769,16 @@ msgid "croatian"
 msgstr "H&#305;rvatça"
 
 msgid "danish"
-msgstr "danish"
+msgstr "danca"
 
 msgid "dutch"
-msgstr "dutch"
+msgstr "flemenkçe"
 
 msgid "finnish"
-msgstr "finnish"
+msgstr "fince"
 
 msgid "french"
-msgstr "french"
+msgstr "fransızca"
 
 msgid "french_corporate"
 msgstr "Frans&#305;zca ortak"
@@ -8790,31 +8790,31 @@ msgid "galician"
 msgstr "Glaktik Portekizce"
 
 msgid "german"
-msgstr "german"
+msgstr "almanca"
 
 msgid "greek"
-msgstr "greek"
+msgstr "yunanca"
 
 msgid "italian"
-msgstr "italian"
+msgstr "italyanca"
 
 msgid "japanese"
-msgstr "japanese"
+msgstr "japonca"
 
 msgid "polish"
-msgstr "polish"
+msgstr "lehçe"
 
 msgid "portuguese"
 msgstr "Portekizce"
 
 msgid "russian"
-msgstr "russian"
+msgstr "rusça"
 
 msgid "simpl_chinese"
 msgstr "Temel Çince"
 
 msgid "spanish"
-msgstr "spanish"
+msgstr "ispanyolca"
 
 msgid "Close"
 msgstr "Kapat"
@@ -8835,7 +8835,7 @@ msgid "The target folder does not exist"
 msgstr "Hedef klasör mevcut değil"
 
 msgid "in"
-msgstr "in"
+msgstr "içinde"
 
 msgid "Show all"
 msgstr "Hepsini göster"
@@ -8862,34 +8862,34 @@ msgid "With selected"
 msgstr "Seçilenler ile"
 
 msgid "Online"
-msgstr "Online"
+msgstr "Çevrimiçi"
 
 msgid "hungarian"
-msgstr "hungarian"
+msgstr "macarca"
 
 msgid "indonesian"
-msgstr "indonesian"
+msgstr "endonezce"
 
 msgid "malay"
-msgstr "malay"
+msgstr "malayca"
 
 msgid "slovenian"
-msgstr "slovenian"
+msgstr "slovence"
 
 msgid "spanish_latin"
-msgstr "spanish_latin"
+msgstr "ispanyolca_latin"
 
 msgid "swedisch"
-msgstr "swedisch"
+msgstr "isveççe"
 
 msgid "thai"
-msgstr "thai"
+msgstr "tayca"
 
 msgid "turkish"
 msgstr "Türkçe"
 
 msgid "vietnamese"
-msgstr "vietnamese"
+msgstr "vietnamca"
 
 msgid "user information"
 msgstr "kullanıcı bilgisi"
@@ -9162,7 +9162,7 @@ msgid "Visible to"
 msgstr "Kim görebilir"
 
 msgid "Export"
-msgstr "Export"
+msgstr "Dışa Aktar"
 
 msgid "Modules"
 msgstr "Araçlar"
@@ -10716,7 +10716,7 @@ msgid "Opinion"
 msgstr "Görüş"
 
 msgid "Intranet"
-msgstr "Intranet"
+msgstr "İntranet"
 
 msgid "My account"
 msgstr "Kullanıcı"
@@ -12930,7 +12930,7 @@ msgid "comma-separated (letters, digits, -.)"
 msgstr "virgül ile ayırın ( harfler, sayılar, -,)"
 
 msgid "Coverage"
-msgstr "Coverage"
+msgstr "Kapsam"
 
 msgid "for example bachelor of xxx: yyy"
 msgstr "örneğin xxx lisansı: yyy"
@@ -13986,7 +13986,7 @@ msgid "In a new window"
 msgstr "Yeni bir pencerede"
 
 msgid "This"
-msgstr "This"
+msgstr "Bu"
 
 msgid "item was deleted in that tool."
 msgstr "o araçta öğe silindi."
@@ -27624,7 +27624,7 @@ msgid "%s's picture"
 msgstr "%s'in resmi"
 
 msgid "+%d"
-msgstr "+%d"
+msgstr "+ %d"
 
 msgid "Delete permanently"
 msgstr "Kalıcı sil"
@@ -29719,7 +29719,7 @@ msgid "Back to layouts"
 msgstr "Düzenlere dön"
 
 msgid "ID"
-msgstr "ID"
+msgstr "KİMLİK"
 
 msgid "Columns"
 msgstr "Sütunlar"
@@ -30721,7 +30721,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (dahili ID)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "Azure KİMLİK (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Kuruluş e-postası"
@@ -31456,7 +31456,7 @@ msgid "SCIM external ID"
 msgstr "SCIM harici ID"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "OAuth2 KİMLİK"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "Lütfen şartlar ve koşulların en son sürümünü kabul edin."
@@ -32579,4 +32579,7 @@ msgstr "E-postanızı doğrulamak ve %s üzerindeki hesabınızı etkinleştirme
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Bu hesabı siz kaydetmediyseniz, bu e-postayı yoksayabilirsiniz. Hiçbir işlem yapılmayacaktır."
+
+msgid "Current authentication method"
+msgstr "Mevcut kimlik doğrulama yöntemi"
 

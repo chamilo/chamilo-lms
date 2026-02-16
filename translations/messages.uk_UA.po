@@ -490,7 +490,7 @@ msgid "Question ID"
 msgstr "ID запитання"
 
 msgid "ExerciseId"
-msgstr "ExerciseId"
+msgstr "Ідентифікатор вправи"
 
 msgid "Excel export"
 msgstr "Експорт в Excel"
@@ -3661,7 +3661,7 @@ msgid "Mark as read"
 msgstr "Позначити як прочитане"
 
 msgid "RE:"
-msgstr "RE:"
+msgstr "Re:"
 
 msgid "Advanced edit"
 msgstr "Розширене редагування"
@@ -9121,7 +9121,7 @@ msgid "Average"
 msgstr "Середнє"
 
 msgid "Dropbox"
-msgstr "Dropbox"
+msgstr "Сховище файлів"
 
 msgid "Chat"
 msgstr "Чат"
@@ -23977,10 +23977,10 @@ msgid "Send diagnostic finalization message"
 msgstr "Надіслати повідомлення про завершення діагностики"
 
 msgid "DiagnosticfinalizationmessageTitle"
-msgstr "DiagnosticfinalizationmessageTitle"
+msgstr "Заголовок повідомлення про завершення діагностики"
 
 msgid "DiagnosticfinalizationmessageContent"
-msgstr "DiagnosticfinalizationmessageContent"
+msgstr "Вміст повідомлення про завершення діагностики"
 
 msgid "Add a forumCategory"
 msgstr "Додати категорію форуму"
@@ -28120,19 +28120,19 @@ msgid "Generates images based on prompts or content using AI."
 msgstr "Генерує зображення на основі підказок або вмісту за допомогою ШІ."
 
 msgid "Menucampushomepage"
-msgstr "Menucampushomepage"
+msgstr "Меню головної сторінки кампусу"
 
 msgid "Menumycourses"
-msgstr "Menumycourses"
+msgstr "Меню мої курси"
 
 msgid "Menureporting"
-msgstr "Menureporting"
+msgstr "Меню звітність"
 
 msgid "Menuplatformadministration"
-msgstr "Menuplatformadministration"
+msgstr "Меню адміністрування платформи"
 
 msgid "Menumyagenda"
-msgstr "Menumyagenda"
+msgstr "Меню мій календар"
 
 msgid "Menusocial"
 msgstr "Меню соціальне"
@@ -29713,7 +29713,7 @@ msgid "Back to layouts"
 msgstr "Повернутися до макетів"
 
 msgid "ID"
-msgstr "ID"
+msgstr "ІД"
 
 msgid "Columns"
 msgstr "Стовпці"
@@ -32326,7 +32326,7 @@ msgid "Quiz"
 msgstr "Тест"
 
 msgid "Customcertificate"
-msgstr "Customcertificate"
+msgstr "Користувацький сертифікат"
 
 msgid "Update profile"
 msgstr "Оновити профіль"
@@ -32573,4 +32573,7 @@ msgstr "Щоб підтвердити вашу електронну пошту �
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Якщо ви не реєстрували цей обліковий запис, можете ігнорувати цей лист. Жодних дій не буде вжито."
+
+msgid "Current authentication method"
+msgstr "Поточний метод автентифікації"
 

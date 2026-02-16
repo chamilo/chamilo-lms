@@ -2235,7 +2235,7 @@ msgid "You've already voted for this poll"
 msgstr "Já votou nesta votação"
 
 msgid "Vote!"
-msgstr "Vote!"
+msgstr "Votar!"
 
 msgid "Your answer"
 msgstr "A sua resposta"
@@ -3672,7 +3672,7 @@ msgid "Mark as read"
 msgstr "Marcar como lida"
 
 msgid "RE:"
-msgstr "Re:"
+msgstr "RE:"
 
 msgid "Advanced edit"
 msgstr "Edição avançada"
@@ -7854,7 +7854,7 @@ msgid "number of errors by the learner"
 msgstr "número de erros por aluno"
 
 msgid "Determine"
-msgstr "Determine"
+msgstr "Determinar"
 
 msgid "a non numeric value"
 msgstr "um valor não numérico"
@@ -8997,7 +8997,7 @@ msgid "Sunday"
 msgstr "Domingo"
 
 msgid "J"
-msgstr "J"
+msgstr "T"
 
 msgid "A"
 msgstr "A"
@@ -9222,7 +9222,7 @@ msgid "Only letters and numbers allowed"
 msgstr "Apenas é permitido utilizar letras e números"
 
 msgid "Organize"
-msgstr "Organize"
+msgstr "Organizar"
 
 msgid "Course admin"
 msgstr "Administrador do curso"
@@ -11760,7 +11760,7 @@ msgid "Hits"
 msgstr "Tentativas"
 
 msgid "h."
-msgstr "h."
+msgstr "h"
 
 msgid "In the last 31 days"
 msgstr "Nos últimos 31 dias"
@@ -12792,7 +12792,7 @@ msgid "Latest sent on"
 msgstr "Último envio em"
 
 msgid "kB"
-msgstr "KB"
+msgstr "kB"
 
 msgid "Your account %s has been completely removed from this portal. Thank you for staying with us for a while. We hope to see you again later."
 msgstr "A sua conta % foi completamente removida deste portal. Obrigado por ter estado connosco por este período. Esperamos voltar a vê-lo(a)."
@@ -13329,7 +13329,7 @@ msgid "Answer options"
 msgstr "Opções de resposta"
 
 msgid "Dropdown"
-msgstr "Dropdown"
+msgstr "Lista suspensa"
 
 msgid "Page break"
 msgstr "Final da página"
@@ -14445,7 +14445,7 @@ msgid "Cool blue"
 msgstr "Azul frio"
 
 msgid "Corporate"
-msgstr "Corporate"
+msgstr "Empresarial"
 
 msgid "Cosmic campus"
 msgstr "Campus cósmico"
@@ -14460,7 +14460,7 @@ msgid "Fruity orange"
 msgstr "Laranja frutada"
 
 msgid "Medical"
-msgstr "Medical"
+msgstr "Médico"
 
 msgid "Royal purple"
 msgstr "Roxo real"
@@ -18597,7 +18597,7 @@ msgid "Result not reviewed"
 msgstr "Resultado não revisto"
 
 msgid "%m/%d/%Y"
-msgstr "%m/%d/%Y"
+msgstr "%d/%m/%Y"
 
 msgid "%B %d, %Y at %H:%M"
 msgstr "%d de %B de %Y às %H:%M"
@@ -23988,10 +23988,10 @@ msgid "Send diagnostic finalization message"
 msgstr "Enviar mensagem de finalização do diagnóstico"
 
 msgid "DiagnosticfinalizationmessageTitle"
-msgstr "DiagnosticfinalizationmessageTitle"
+msgstr "Título da Mensagem de Finalização do Diagnóstico"
 
 msgid "DiagnosticfinalizationmessageContent"
-msgstr "DiagnosticfinalizationmessageContent"
+msgstr "Conteúdo da Mensagem de Finalização do Diagnóstico"
 
 msgid "Add a forumCategory"
 msgstr "Adicionar uma categoria de fórum"
@@ -24987,7 +24987,7 @@ msgid "Click to view details"
 msgstr "Clique para ver detalhes"
 
 msgid "dd/mm/yyyy"
-msgstr "dd/mm/yyyy"
+msgstr "dd/mm/aaaa"
 
 msgid "Export certificates issue report"
 msgstr "Relatório de emissão de certificados para exportação"
@@ -26601,7 +26601,7 @@ msgid "Selective display of roles"
 msgstr "Exibição seletiva de papéis"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "Um array de role => true/false que define se esse papel deve ser mostrado ou ocultado.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "Um array de role => true/false que define se esse role deve ser mostrado ou oculto.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Opções de exibição de papéis"
@@ -27240,7 +27240,7 @@ msgid "Carbon copy receiver profile picture"
 msgstr "Foto do perfil do destinatário em cópia carbono"
 
 msgid "Ppt_to_lp"
-msgstr "Ppt_to_lp"
+msgstr "Ppt_para_lp"
 
 msgid "Left"
 msgstr "Esquerda"
@@ -28132,40 +28132,40 @@ msgid "Generates images based on prompts or content using AI."
 msgstr "Gera imagens baseadas em prompts ou conteúdo usando IA."
 
 msgid "Menucampushomepage"
-msgstr "Menucampushomepage"
+msgstr "MenuPáginaInicialCampus"
 
 msgid "Menumycourses"
 msgstr "Menumycursos"
 
 msgid "Menureporting"
-msgstr "Menureporting"
+msgstr "MenuRelatórios"
 
 msgid "Menuplatformadministration"
-msgstr "Menuplatformadministration"
+msgstr "MenuAdministraçãodaPlataforma"
 
 msgid "Menumyagenda"
-msgstr "Menumyagenda"
+msgstr "MenuMinhaAgenda"
 
 msgid "Menusocial"
-msgstr "Menusocial"
+msgstr "MenuSocial"
 
 msgid "Menuvideoconference"
-msgstr "Menuvideoconference"
+msgstr "MenuVideoconferência"
 
 msgid "Menudiagnostics"
-msgstr "Menudiagnostics"
+msgstr "MenuDiagnósticos"
 
 msgid "Menucatalogue"
-msgstr "Menucatalogue"
+msgstr "MenuCatálogo"
 
 msgid "Topbarcertificate"
-msgstr "Topbarcertificate"
+msgstr "CertificadoBarraSuperior"
 
 msgid "Topbarskills"
-msgstr "Topbarskills"
+msgstr "CompetênciasBarraSuperior"
 
 msgid "Ai_helpers"
-msgstr "Ai_helpers"
+msgstr "AssistentesIA"
 
 msgid "ID of the user who officially sends the agenda reminders"
 msgstr "ID do utilizador que envia oficialmente os lembretes da agenda"
@@ -28231,7 +28231,7 @@ msgid "You're subscribed to push notifications in this browser."
 msgstr "Você está inscrito em notificações push neste navegador."
 
 msgid "Endpoint"
-msgstr "Endpoint"
+msgstr "Ponto de Extremidade"
 
 msgid "Push notifications are not enabled in this browser."
 msgstr "Notificações push não estão habilitadas neste navegador."
@@ -31462,7 +31462,7 @@ msgid "SCIM external ID"
 msgstr "SCIM ID externo"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "ID OAuth2"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "Por favor, aceite a versão mais recente dos termos e condições."
@@ -32338,7 +32338,7 @@ msgid "Quiz"
 msgstr "Questionário"
 
 msgid "Customcertificate"
-msgstr "Customcertificate"
+msgstr "Certificadopersonalizado"
 
 msgid "Update profile"
 msgstr "Atualizar perfil"
@@ -32585,4 +32585,7 @@ msgstr "Para verificar o seu e-mail e ativar a sua conta em %s, clique no link a
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Se não se registou nesta conta, pode ignorar este e-mail. Nenhuma ação será tomada."
+
+msgid "Current authentication method"
+msgstr "Método de autenticação atual"
 

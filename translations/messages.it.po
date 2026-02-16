@@ -516,7 +516,7 @@ msgid "Corporate report"
 msgstr "Report aziendale"
 
 msgid "Report"
-msgstr "Report"
+msgstr "Rapporto"
 
 msgid "Trace IP"
 msgstr "Traccia l'IP"
@@ -1263,7 +1263,7 @@ msgid "E-mail notification template"
 msgstr "Modello email di notifica"
 
 msgid "Logout"
-msgstr "Logout"
+msgstr "Disconnetti"
 
 msgid "Exercise list."
 msgstr "Lista esercitazione."
@@ -1506,7 +1506,7 @@ msgid "Learning object name"
 msgstr "Elemento"
 
 msgid "Status"
-msgstr "Status"
+msgstr "Stato"
 
 msgid "To enter"
 msgstr "Per entrare in"
@@ -1767,7 +1767,7 @@ msgid "YES"
 msgstr "Sì"
 
 msgid "NO"
-msgstr "No"
+msgstr "NO"
 
 msgid "Department URL"
 msgstr "URL del Dipartimento"
@@ -8955,7 +8955,7 @@ msgid "F"
 msgstr "V"
 
 msgid "S"
-msgstr "S"
+msgstr "D"
 
 msgid "Mon"
 msgstr "Lun"
@@ -9003,16 +9003,16 @@ msgid "J"
 msgstr "G"
 
 msgid "A"
-msgstr "A"
+msgstr "L"
 
 msgid "O"
-msgstr "O"
+msgstr "M"
 
 msgid "N"
-msgstr "N"
+msgstr "M"
 
 msgid "D"
-msgstr "D"
+msgstr "G"
 
 msgid "Jan"
 msgstr "Gen"
@@ -14448,7 +14448,7 @@ msgid "Cool blue"
 msgstr "Blu freddo"
 
 msgid "Corporate"
-msgstr "Corporate"
+msgstr "Aziendale"
 
 msgid "Cosmic campus"
 msgstr "Campus cosmico"
@@ -14463,7 +14463,7 @@ msgid "Fruity orange"
 msgstr "Arancione fruttato"
 
 msgid "Medical"
-msgstr "Medical"
+msgstr "Medico"
 
 msgid "Royal purple"
 msgstr "Viola reale"
@@ -14526,7 +14526,7 @@ msgid "norwegian"
 msgstr "Norvegese"
 
 msgid "pashto"
-msgstr "Pashto"
+msgstr "pashto"
 
 msgid "persian"
 msgstr "Persiano"
@@ -14544,7 +14544,7 @@ msgid "slovak"
 msgstr "Slovacco"
 
 msgid "swahili"
-msgstr "Swahili"
+msgstr "swahili"
 
 msgid "traditional chinese"
 msgstr "Cinese tradizionale"
@@ -14991,7 +14991,7 @@ msgid "ukrainian"
 msgstr "Ucraino"
 
 msgid "yoruba"
-msgstr "Yoruba"
+msgstr "yoruba"
 
 msgid "New"
 msgstr "Nuovo"
@@ -19229,7 +19229,7 @@ msgid "Last Name and First Name"
 msgstr "Cognome e Nome"
 
 msgid "Plugins"
-msgstr "Plugins"
+msgstr "Plugin"
 
 msgid "Detailed"
 msgstr "Dettagliato"
@@ -19688,7 +19688,7 @@ msgid "Caption"
 msgstr "Didascalia"
 
 msgid "Credits"
-msgstr "Credits"
+msgstr "Credit"
 
 msgid "Slider title"
 msgstr "Titolo presentazione"
@@ -20939,7 +20939,7 @@ msgid "Click or drop one file here"
 msgstr "Click o trascina qui un file"
 
 msgid "Modulo:\t\t\t%"
-msgstr "Modulo:\t\t\t%"
+msgstr "Modulo:			%"
 
 msgid "Last %s days"
 msgstr "Ultimi %s giorni"
@@ -32593,4 +32593,7 @@ msgstr "Per verificare la tua e-mail e attivare il tuo account su %s, fai clic s
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Se non hai registrato questo account, puoi ignorare questa e-mail. Non verrà intrapresa alcuna azione."
+
+msgid "Current authentication method"
+msgstr "Metodo di autenticazione corrente"
 

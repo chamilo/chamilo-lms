@@ -372,7 +372,7 @@ msgid "Sincerely"
 msgstr "ດ້ວຍຄວາມຈິງໃຈ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ຕົວຢ່າງສູດ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ຕົວอย่างສູດ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ຊ່ວງຂອງຕົວປ່ຽນ"
@@ -17585,7 +17585,6 @@ msgstr "%A"
 msgid "Return to the course list"
 msgstr "ກັບໄປທີ່ລາຍການລາຍວິຊາ"
 
-#, fuzzy
 msgid "%d/%m"
 msgstr "%d/%m"
 
@@ -20156,7 +20155,6 @@ msgstr "ຜົນທີ່ຍັງບໍ່ໄດ້ກວດສອບ"
 msgid "Result not reviewed"
 msgstr "ຜົນທີ່ຍັງບໍ່ໄດ້ກວດສອບ"
 
-#, fuzzy
 msgid "%m/%d/%Y"
 msgstr "%m/%d/%Y"
 
@@ -26029,7 +26027,7 @@ msgid "Latest login in a course"
 msgstr "ການເຂົ້າສູ່ລະບົບຫຼ້າສຸດໃນຫຼັກສູດ"
 
 msgid "The"
-msgstr "The"
+msgstr "ບົດ"
 
 msgid "Multiply questions by class"
 msgstr "ທະວີຄູນຄຳຖາມຕາມຫ້ອງຮຽນ"
@@ -28918,7 +28916,6 @@ msgstr "X-XSS-Protection"
 msgid "X-XSS-Protection sets the configuration for the cross-site scripting filter built into most browsers. Recommended value '1; mode=block'."
 msgstr "X-XSS-Protection ຕັ້ງຄ່າການກັ່ນຕອງ cross-site scripting ທີ່ມີຢູ່ໃນບຣາວເຊີສ່ວນໃຫຍ່. ຄ່າທີ່ແນະນຳ '1; mode=block'."
 
-#, fuzzy
 msgid "X-Content-Type-Options"
 msgstr "X-Content-Type-Options"
 
@@ -29703,7 +29700,6 @@ msgstr "ເພີ່ມໝູ່"
 msgid "%s's picture"
 msgstr "ຮູບຂອງ %s"
 
-#, fuzzy
 msgid "+%d"
 msgstr "+%d"
 
@@ -33933,22 +33929,22 @@ msgid "Limit identical email usage"
 msgstr "ຈຳກັດການໃຊ້ອີເມວທີ່ເທົ່າເທົ່າກັນ"
 
 msgid "Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit."
-msgstr ""
+msgstr "ຈຳນວນສູງສຸດຂອງບັນຊີທີ່ອະນຸຍາດໃຫ້ແບ່ງປັນທີ່ຢູ່ອີເມວດຽວກັນ. ຕັ້ງເປັນ 0 ເພື່ອປິດການຈຳກັດນີ້."
 
 msgid "Allow session admins to see all users on all URLs"
-msgstr ""
+msgstr "ອະນຸຍາດໃຫ້ຜູ້ດູແລຊັ້ນເຫັນຜູ້ໃຊ້ທັງໝົດໃນທຸກ URL"
 
 msgid "If enabled, session admins can search and list users from all access URLs, regardless of their current URL."
-msgstr ""
+msgstr "ຖ້າເປີດໃຊ້, ຜູ້ດູແລຊັ້ນສາມາດຄົ້ນຫາແລະລະຫົ່ງຜູ້ໃຊ້ຈາກທຸກ URL ການເຂ້າເຖິງ, ໂດຍບໍ່ພິຈານຈາກ URL ປະຈຸບັນຂອງເຂົາເຈົ້າ."
 
 msgid "Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time."
-msgstr ""
+msgstr "ເປີດໃຊ້ຄວາມສາມາດໃຫ້ຜູ້ໃຊ້ເລືອກເວລາທ້ອງຖິ່ນຂອງຕົນເອງ. ເມື່ອການຕັ້ງຄ່າແລ້ວ, ຜູ້ໃຊ້ຈະສາມາດເຫັນກຳນົດເວລາສົ່ງງານແລະອ້າງອີງເວລາອື່ນໆໃນເວລາທ້ອງຖິ່ນຂອງຕົນເອງ, ເຊິ່ງຈະຫຼຸດຜົນຜິດພາດໃນເວລາສົ່ງ."
 
 msgid "Redirect after login (per profile)"
-msgstr ""
+msgstr "ຊີ້ນຳຫຼັງເຂົ້າສູ່ລະບົບ (ຕາມໂປຣໄຟล์)"
 
 msgid "Define redirection per profile after login using a JSON object like {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
-msgstr ""
+msgstr "ກຳນົດການຊີ້ນຳຕາມໂປຣໄຟล์ຫຼັງເຂົ້າສູ່ລະບົບໂດຍໃຊ້ອຸບເຈັກ JSON ເຊັ່ນ {\"STUDENT\":\"\", \"ADMIN\":\"admin-dashboard\"}"
 
 msgid "Hide legal accept checkbox in Terms and Conditions page"
 msgstr ""
@@ -34731,76 +34727,76 @@ msgid "The APCu extension needs to be both installed and enabled in order for th
 msgstr ""
 
 msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
-msgstr ""
+msgstr "ແນະນຳໃຫ້ອະນຸຍາດໃຫ້ OPCache memory_consumption ເຖິງ %sMB ຂອງ RAM ຢ່າງນ້ອຍ"
 
 msgid "The OPcache module needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "ໂມດູນ OPcache ຕ້ອງຖືກຕິດຕັ້ງ ແລະ ເປີດໃຊ້ເພື່ອໃຫ້ແພລັດຟອມໃຊ້ມັນໄດ້"
 
 msgid "You are here"
-msgstr ""
+msgstr "ເຈົ້າຢູ່ທີ່ນີ້"
 
 msgid "Click an event type to filter results."
-msgstr ""
+msgstr "ກົດປຶດປ້າຍເຫດການເພື່ອຟິລເຕີຜົນ"
 
 msgid "Require unique presence"
-msgstr ""
+msgstr "ຕ້ອງການຄວາມປະຈຳຢູ່ທີ່ເປັນພິເສດ"
 
 msgid "If enabled, the gradebook will give a learner 100% when present at least once."
-msgstr ""
+msgstr "ຖ້າເປີດໃຊ້, ສຽງຈັດລັດຈະໃຫ້ນັກຮຽນ 100% ເມື່ອປະຈຳຢູ່ຢ່າງນ້ອຍເທື່ອນຶ່ງ"
 
 msgid "AI feedback"
-msgstr ""
+msgstr "ຄຳແນະນຳ AI"
 
 msgid "Prompt"
-msgstr ""
+msgstr "Prompt"
 
 msgid "Tip"
-msgstr ""
+msgstr "ຄຳແນະນຳ"
 
 msgid "You can edit the prompt before asking for feedback."
-msgstr ""
+msgstr "ເຈົ້າສາມາດແກ້ໄຂ prompt ກ່ອນທີ່ຈະຂໍຄຳແນະນຳ"
 
 msgid "Result (you can apply it to the comment)"
-msgstr ""
+msgstr "ຜົນ (ເຈົ້າສາມາດນຳໃຊ້ກັບຄຳພັນທະນາ)"
 
 msgid "Apply to comment"
-msgstr ""
+msgstr "ນຳໃຊ້ກັບຄຳພັນທະນາ"
 
 msgid "Apply score"
-msgstr ""
+msgstr "ນຳໃຊ້ຄະແນນ"
 
 msgid "AI grade"
-msgstr ""
+msgstr "ການຈັດລັດ AI"
 
 msgid "AI tutor is disabled during tests"
-msgstr ""
+msgstr "ຄູສອນ AI ຖືກປິດໃຊ້ໃນລະຫວ່າງການທົດສອບ"
 
 msgid "Generate glossary terms"
-msgstr ""
+msgstr "ສ້າງຄຳສາສະຫຼຸບ"
 
 msgid "Generate media"
-msgstr ""
+msgstr "ສ້າງສື່"
 
 msgid "You do not have permission to generate AI media in this course."
-msgstr ""
+msgstr "ເຈົ້າບໍ່ມີສິດສ້າງສື່ AI ໃນວິຊານີ້"
 
 msgid "AI helpers are disabled at platform level."
-msgstr ""
+msgstr "ຜູ້ຊ່ວຍ AI ຖືກປິດໃຊ້ໃນລະດັບແພລັດຟອມ"
 
 msgid "AI media generation is disabled in course settings."
-msgstr ""
+msgstr "ການສ້າງສື່ AI ຖືກປິດໃຊ້ໃນຕັ້ງຄ່າວິຊາ"
 
 msgid "No AI media providers available."
-msgstr ""
+msgstr "ບໍ່ມີຜູ້ສະໜອງສື່ AI"
 
 msgid "Provider"
-msgstr ""
+msgstr "ຜູ້ສະໜອງ"
 
 msgid "Select a provider"
-msgstr ""
+msgstr "ເລືອກຜູ້ສະໜອງ"
 
 msgid "Example: generated_media"
-msgstr ""
+msgstr "ຕົວຢ່າງ: generated_media"
 
 msgid "The name is not added to the prompt; it is only used to save the file."
 msgstr "ຊື່ບໍ່ໄດ້ເພີ່ມເຂົ້າໃນ prompt; ມັນຖືກໃຊ້ເພື່ອບັນທຶກໄຟລ໌ເທົ່ານັ້ນ."
@@ -34927,4 +34923,7 @@ msgstr "ເພື່ອກວດສອບອີເມວຂອງເຈົ້າ
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "ຖ້າເຈົ້າບໍ່ໄດ້ລົງທະບຽນບັນຊີນີ້, ເຈົ້າສາມາດບໍ່ສົນໃຈອີເມວນີ້. ຈະບໍ່ມີການກະທຳໃດໆ."
+
+msgid "Current authentication method"
+msgstr "ວິທີການຢັ້ງຕົວປະຈຳປີ"
 

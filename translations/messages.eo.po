@@ -243,7 +243,7 @@ msgid "Hyperbolic tangent:\t\ttanh(x)"
 msgstr "Hiperbola tangent:\t\ttanh(x)"
 
 msgid "Tangent:\t\t\ttan(x)"
-msgstr "Tangent:\t\t\ttan(x)"
+msgstr "Tango:\t\t\ttan(x)"
 
 msgid "Coach and student"
 msgstr "Trejnisto kaj studento"
@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Karule"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulo ekzemplo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ekzemplo de formulon: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervaloj de variabloj"
@@ -495,7 +495,7 @@ msgid "Question ID"
 msgstr "ID de demando"
 
 msgid "ExerciseId"
-msgstr "ExerciseId"
+msgstr "EkzercoId"
 
 msgid "Excel export"
 msgstr "Eksporto al Excel"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:kopirajto,, no:ne kopirajto"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Okta flugo,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory;Dossiero,, application/msword:MsWord,, application/octet-stream:Okteto flugo,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ekzerco,, simulation:simulado,, questionnaire:enketo,, diagram:diagramo,, figure:figuro,, graph:grafiko,, index:indekso,, slide:diapozitivo,, table:tabelo,, narrative text:rakonta teksto,, exam:ekzameno,, experiment:eksperimento,, problem statement:problemstarigo,, self assessment:memtesto,, lecture:prelego"
@@ -3666,7 +3666,7 @@ msgid "Mark as read"
 msgstr "Marki kiel legitan"
 
 msgid "RE:"
-msgstr "RE:"
+msgstr "Re:"
 
 msgid "Advanced edit"
 msgstr "Progresa redakto"
@@ -8946,7 +8946,7 @@ msgid "F"
 msgstr "v"
 
 msgid "S"
-msgstr "s"
+msgstr "D"
 
 msgid "Mon"
 msgstr "lu"
@@ -8991,55 +8991,55 @@ msgid "Sunday"
 msgstr "dimanĉo"
 
 msgid "J"
-msgstr "j"
+msgstr "L"
 
 msgid "A"
-msgstr "a"
+msgstr "M"
 
 msgid "O"
-msgstr "o"
+msgstr "O"
 
 msgid "N"
-msgstr "n"
+msgstr "N"
 
 msgid "D"
-msgstr "d"
+msgstr "D"
 
 msgid "Jan"
-msgstr "jan"
+msgstr "Jan"
 
 msgid "Feb"
-msgstr "feb"
+msgstr "Feb"
 
 msgid "Mar"
-msgstr "mar"
+msgstr "Mar"
 
 msgid "Apr"
-msgstr "apr"
+msgstr "Apr"
 
 msgid "May"
 msgstr "maj"
 
 msgid "Jun"
-msgstr "jun"
+msgstr "Jun"
 
 msgid "Jul"
-msgstr "jul"
+msgstr "Jul"
 
 msgid "Aug"
 msgstr "aŭg"
 
 msgid "Sep"
-msgstr "sep"
+msgstr "Sep"
 
 msgid "Oct"
 msgstr "okt"
 
 msgid "Nov"
-msgstr "nov"
+msgstr "Nov"
 
 msgid "Dec"
-msgstr "dec"
+msgstr "Dec"
 
 msgid "January"
 msgstr "januaro"
@@ -20283,7 +20283,7 @@ msgid "Start video call"
 msgstr "Komenci videklakon"
 
 msgid "Video URL"
-msgstr "Video URL"
+msgstr "Video-URL"
 
 msgid "Insert a valid URL"
 msgstr "Enmetu validan URL-on"
@@ -32404,7 +32404,7 @@ msgid "AI feedback"
 msgstr "AI-retpoŝto"
 
 msgid "Prompt"
-msgstr "Prompt"
+msgstr "Invito"
 
 msgid "Tip"
 msgstr "Konsilo"
@@ -32579,4 +32579,7 @@ msgstr "Por kontroli vian retpoŝton kaj aktivigi vian konton en %s, bonvolu kla
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Se vi ne registris ĉi tiun konton, vi povas ignori ĉi tiun retmesaĝon. Neniu ago estos farita."
+
+msgid "Current authentication method"
+msgstr "Nuna metodo de aŭtentigo"
 

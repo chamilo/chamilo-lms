@@ -1758,7 +1758,7 @@ msgid "YES"
 msgstr "Si"
 
 msgid "NO"
-msgstr "No"
+msgstr "NO"
 
 msgid "Department URL"
 msgstr "URL del Departmento"
@@ -2055,7 +2055,7 @@ msgid "Import finished"
 msgstr "Importación finalizada"
 
 msgid "Tests"
-msgstr "Tests"
+msgstr "Pruebas"
 
 msgid "Courses"
 msgstr "Itinerarios formativos"
@@ -8469,7 +8469,7 @@ msgid "Do you want audio file to START automatically?"
 msgstr "¿Quieres que el archivo de audio INICIE automáticamente?"
 
 msgid "Forum"
-msgstr "Forum"
+msgstr "Foro"
 
 msgid "Remove picture"
 msgstr "Eliminar fotografía"
@@ -11754,7 +11754,7 @@ msgid "Hits"
 msgstr "Accesos"
 
 msgid "h."
-msgstr "h."
+msgstr "h"
 
 msgid "In the last 31 days"
 msgstr "En los últimos 31 días"
@@ -11766,7 +11766,7 @@ msgid "This day"
 msgstr "Hoy"
 
 msgid "Logins"
-msgstr "Logins"
+msgstr "Inicios de sesión"
 
 msgid "Here is the list of your latest logins with the tools you visited during these sessions."
 msgstr "Esta es la lista de sus últimos accesos con las herramientas que ha visitado durante esas sesiones."
@@ -11886,7 +11886,7 @@ msgid "Providers"
 msgstr "Proveedores"
 
 msgid "OS"
-msgstr "OS"
+msgstr "SO"
 
 msgid "Browsers"
 msgstr "Navegadores"
@@ -17817,7 +17817,7 @@ msgid "Acceptable"
 msgstr "Aceptable"
 
 msgid "Hotspot"
-msgstr "Hotspot"
+msgstr "Punto caliente"
 
 msgid "Change the visibility of the current image"
 msgstr "Cambiar la visibilidad de la imagen actual"
@@ -19215,7 +19215,7 @@ msgid "Last Name and First Name"
 msgstr "Apellido y Nombre"
 
 msgid "Plugins"
-msgstr "Plugins"
+msgstr "Complementos"
 
 msgid "Detailed"
 msgstr "Detallado"
@@ -19377,7 +19377,7 @@ msgid "Clip sent"
 msgstr "Clip enviado"
 
 msgid "Auto"
-msgstr "Auto"
+msgstr "Automático"
 
 msgid "Stop"
 msgstr "Detener"
@@ -22047,7 +22047,7 @@ msgid "Certificate notification"
 msgstr "Notificación de certificado"
 
 msgid "((user_first_name)),"
-msgstr "((user_first_name)),"
+msgstr "((nombre_del_usuario)),"
 
 msgid "Send certificate notification to all users"
 msgstr "Enviar notificación de certificado a todos los usuarios"
@@ -24981,7 +24981,7 @@ msgid "Click to view details"
 msgstr "Haz clic para ver detalles"
 
 msgid "dd/mm/yyyy"
-msgstr "dd/mm/yyyy"
+msgstr "dd/mm/aaaa"
 
 msgid "Export certificates issue report"
 msgstr "Exportar informe de emisión de certificados"
@@ -28129,34 +28129,34 @@ msgid "Menucampushomepage"
 msgstr "Menucampushomepage"
 
 msgid "Menumycourses"
-msgstr "Menumycourses"
+msgstr "Menumis cursos"
 
 msgid "Menureporting"
 msgstr "Menureporting"
 
 msgid "Menuplatformadministration"
-msgstr "Menuplatformadministration"
+msgstr "Menuadministración de la plataforma"
 
 msgid "Menumyagenda"
-msgstr "Menumyagenda"
+msgstr "Menumi agenda"
 
 msgid "Menusocial"
 msgstr "Menusocial"
 
 msgid "Menuvideoconference"
-msgstr "Menuvideoconference"
+msgstr "Menuvideoconferencia"
 
 msgid "Menudiagnostics"
-msgstr "Menudiagnostics"
+msgstr "Menudiagnósticos"
 
 msgid "Menucatalogue"
-msgstr "Menucatalogue"
+msgstr "Menucatálogo"
 
 msgid "Topbarcertificate"
-msgstr "Topbarcertificate"
+msgstr "Topbarcertificado"
 
 msgid "Topbarskills"
-msgstr "Topbarskills"
+msgstr "Topbarhabilidades"
 
 msgid "Ai_helpers"
 msgstr "Ai_helpers"
@@ -28225,7 +28225,7 @@ msgid "You're subscribed to push notifications in this browser."
 msgstr "Estás suscrito a notificaciones push en este navegador."
 
 msgid "Endpoint"
-msgstr "Endpoint"
+msgstr "Punto de conexión"
 
 msgid "Push notifications are not enabled in this browser."
 msgstr "Las notificaciones push no están habilitadas en este navegador."
@@ -32579,4 +32579,7 @@ msgstr "Para verificar tu correo electrónico y activar tu cuenta en %s, haz cli
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Si no registraste esta cuenta, puedes ignorar este correo. No se tomará ninguna acción."
+
+msgid "Current authentication method"
+msgstr "Método de autenticación actual"
 

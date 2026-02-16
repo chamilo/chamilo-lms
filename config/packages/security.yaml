@@ -91,6 +91,7 @@ security:
             pattern: ^/
             context: main
             provider: app_user_provider
+            # set throttling through the rate-limit package (uses Lock for persistence, see config/packages/lock.yaml)
             login_throttling:
                 max_attempts: 5
                 interval: '1 minute'

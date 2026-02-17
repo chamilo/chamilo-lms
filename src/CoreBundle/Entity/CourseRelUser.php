@@ -32,7 +32,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(security: "is_granted('ROLE_ADMIN')"),
         new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')"),
         new GetCollection(
-            uriTemplate: '/me/courses',
+            uriTemplate: '/me/courses.{_format}',
             paginationEnabled: true,
             paginationItemsPerPage: 20,
             paginationClientEnabled: true,

@@ -1,14 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\State;
 
+use ApiPlatform\Doctrine\Orm\Extension\PaginationExtension;
+use ApiPlatform\Doctrine\Orm\Util\QueryNameGenerator;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\SequenceResource;
@@ -19,7 +20,6 @@ use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use RuntimeException;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
@@ -36,7 +36,7 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
         private readonly CourseRelUserRepository $courseRelUserRepository,
         private readonly CourseStudentInfoHelper $courseStudentInfoHelper,
         private readonly SequenceResourceRepository $sequenceResourceRepository,
-        private readonly RequestStack $requestStack,
+        private readonly PaginationExtension $paginationExtension,
     ) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
@@ -46,31 +46,12 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
             throw new AccessDeniedException('User not authenticated');
         }
 
-        $url = $this->accessUrlHelper->getCurrent() ?? $this->accessUrlHelper->getFirstAccessUrl();
-        if (!$url instanceof AccessUrl) {
+        $url = $this->accessUrlHelper->getCurrent();
+        if (!$url) {
             throw new RuntimeException('Access URL not found');
         }
 
         $filters = $context['filters'] ?? [];
-        $request = $this->requestStack->getCurrentRequest();
-
-        // Pagination:
-        // - Prefer Api Platform filters when available
-        // - Fallback to query params for robustness
-        $page = (int) ($filters['page'] ?? ($request?->query->getInt('page', 1) ?? 1));
-        $itemsPerPage = (int) ($filters['itemsPerPage'] ?? ($request?->query->getInt('itemsPerPage', self::DEFAULT_ITEMS_PER_PAGE) ?? self::DEFAULT_ITEMS_PER_PAGE));
-
-        if ($page < 1) {
-            $page = 1;
-        }
-
-        if ($itemsPerPage < 1) {
-            $itemsPerPage = self::DEFAULT_ITEMS_PER_PAGE;
-        } elseif ($itemsPerPage > self::MAX_ITEMS_PER_PAGE) {
-            $itemsPerPage = self::MAX_ITEMS_PER_PAGE;
-        }
-
-        $offset = ($page - 1) * $itemsPerPage;
 
         // Optional filters (kept for compatibility).
         $status = isset($filters['status']) ? (int) $filters['status'] : null;
@@ -86,8 +67,6 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
             ->andWhere('u = :url')
             ->setParameter('user', $currentUser)
             ->setParameter('url', $url)
-            ->setFirstResult($offset)
-            ->setMaxResults($itemsPerPage)
             ->addOrderBy('cru.sort', 'ASC')
             ->addOrderBy('c.title', 'ASC');
 
@@ -106,8 +85,21 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
                 ->setParameter('q', '%'.mb_strtolower($search).'%');
         }
 
-        /** @var CourseRelUser[] $items */
-        $items = $qb->getQuery()->getResult();
+        $this->paginationExtension->applyToCollection(
+            $qb,
+            new QueryNameGenerator(),
+            CourseRelUser::class,
+            $operation,
+            $context
+        );
+
+        /** @var array<int, CourseRelUser> $items */
+        $items = $this->paginationExtension->getResult(
+            $qb,
+            CourseRelUser::class,
+            $operation,
+            $context
+        );
 
         if (empty($items)) {
             return [];

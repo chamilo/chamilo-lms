@@ -14,7 +14,7 @@
     @apply relative;
 
     img {
-      @apply rounded-t-lg object-cover;
+      @apply rounded-t-lg object-cover w-full h-auto;
     }
   }
 

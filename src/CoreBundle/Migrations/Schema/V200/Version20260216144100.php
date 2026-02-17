@@ -31,9 +31,9 @@ final class Version20260216144100 extends AbstractMigrationChamilo
         $conn = $this->connection;
 
         foreach (self::UPDATES as $var => $meta) {
-            $sql = "UPDATE settings
+            $sql = 'UPDATE settings
                        SET title = ?, comment = ?, category = ?
-                     WHERE variable = ?";
+                     WHERE variable = ?';
 
             $params = [
                 $meta['title'],

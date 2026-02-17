@@ -1179,7 +1179,7 @@ class CourseHelper
      *  - "500" -> 500 MB
      *  - "200M", "200MB" -> 200 MB
      *  - "1G", "1GB" -> 1024 MB
-     *  - large integers that look like bytes -> converted to MB
+     *  - large integers that look like bytes -> converted to MB.
      */
     private function parseQuotaRawToMb(string $raw): int
     {

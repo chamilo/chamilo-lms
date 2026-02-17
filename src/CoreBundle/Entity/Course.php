@@ -36,6 +36,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use const SORT_FLAG_CASE;
+use const SORT_NATURAL;
+
 #[ApiResource(
     types: ['https://schema.org/Course'],
     operations: [
@@ -1266,19 +1269,19 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
                 continue;
             }
 
-            $title = \method_exists($category, 'getTitle')
+            $title = method_exists($category, 'getTitle')
                 ? (string) $category->getTitle()
                 : (string) $category;
 
-            $title = \trim(\strip_tags($title));
+            $title = trim(strip_tags($title));
 
             if ('' !== $title) {
                 $titles[] = $title;
             }
         }
 
-        $titles = \array_values(\array_unique($titles));
-        \sort($titles, \SORT_NATURAL | \SORT_FLAG_CASE);
+        $titles = array_values(array_unique($titles));
+        sort($titles, SORT_NATURAL | SORT_FLAG_CASE);
 
         return $titles;
     }

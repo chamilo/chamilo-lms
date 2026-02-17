@@ -939,11 +939,13 @@ final class CDocumentRepository extends ResourceRepository
 
             if ($gid > 0) {
                 $bytesGroups += $size;
+
                 continue;
             }
 
             if ($sid > 0) {
                 $bytesSessions += $size;
+
                 continue;
             }
 

@@ -63,7 +63,8 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
             ->setParameter('user', $currentUser)
             ->setParameter('url', $url)
             ->addOrderBy('cru.sort', 'ASC')
-            ->addOrderBy('c.title', 'ASC');
+            ->addOrderBy('c.title', 'ASC')
+        ;
 
         $queryNameGenerator = new QueryNameGenerator();
 
@@ -128,6 +129,7 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
         foreach ($courseIdsBySid as $sid => $ids) {
             if (empty($ids)) {
                 $batchBySid[$sid] = [];
+
                 continue;
             }
 
@@ -157,7 +159,7 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
 
             // Hydrate student-info fields (existing logic).
             $stats = $batchBySid[$sid][(string) $courseId] ?? null;
-            if (is_array($stats)) {
+            if (\is_array($stats)) {
                 $cru->setTrackingProgress($stats['progress'] ?? null);
                 $cru->setScore($stats['score'] ?? null);
                 $cru->setBestScore($stats['bestScore'] ?? null);
@@ -169,9 +171,10 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
 
             // Hydrate lightweight course requirements flags (no graph, no list).
             // Teachers should not be locked by requirements in UI lists.
-            if ((int) $cru->getStatus() !== CourseRelUser::STUDENT) {
+            if (CourseRelUser::STUDENT !== (int) $cru->getStatus()) {
                 $cru->setHasRequirements(false);
                 $cru->setAllowSubscription(true);
+
                 continue;
             }
 
@@ -186,6 +189,7 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
                     foreach ($sequence['requirements'] ?? [] as $resource) {
                         if ($resource instanceof Course) {
                             $hasValidRequirement = true;
+
                             break 2;
                         }
                     }

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Helpers;
 
+use Category;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use DateTimeImmutable;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception as DbalException;
@@ -17,6 +19,12 @@ use Doctrine\ORM\NoResultException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
+use Throwable;
+use Tracking;
+
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+use const WEB_PATH;
 
 final class CourseStudentInfoHelper
 {
@@ -47,7 +55,7 @@ final class CourseStudentInfoHelper
         bool $showDebug = false
     ) {
         // Single flag: enable debug logs either explicitly or when Symfony kernel is in debug mode.
-        $this->showDebug = $showDebug || (\method_exists($this->kernel, 'isDebug') && $this->kernel->isDebug());
+        $this->showDebug = $showDebug || (method_exists($this->kernel, 'isDebug') && $this->kernel->isDebug());
     }
 
     /**
@@ -81,7 +89,7 @@ final class CourseStudentInfoHelper
         try {
             /** @var Course|null $course */
             $course = $this->em->getRepository(Course::class)->find($courseId);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->log('getStudentInfo: failed loading course, returning emptyResult', [
                 'course_id' => $courseId,
                 'exception' => $e->getMessage(),
@@ -101,7 +109,7 @@ final class CourseStudentInfoHelper
         $this->log('getStudentInfo: course loaded', [
             'course_id' => (int) $course->getId(),
             'course_code' => (string) $course->getCode(),
-            'course_title' => \method_exists($course, 'getTitle') ? (string) $course->getTitle() : null,
+            'course_title' => method_exists($course, 'getTitle') ? (string) $course->getTitle() : null,
         ]);
 
         return $this->getStudentInfoForCourse($userId, $course, $sessionId);
@@ -132,10 +140,10 @@ final class CourseStudentInfoHelper
 
         // Add flags bitmask to avoid serving stale values when toggling the JSON setting.
         $mask = $this->flagsBitmask($flags);
-        $cacheKey = sprintf('course_student_info_u%d_c%d_s%d_f%d', $userId, $courseId, $sessionId, $mask);
+        $cacheKey = \sprintf('course_student_info_u%d_c%d_s%d_f%d', $userId, $courseId, $sessionId, $mask);
 
-        $start = \microtime(true);
-        $memStart = \memory_get_usage(true);
+        $start = microtime(true);
+        $memStart = memory_get_usage(true);
 
         $computed = false;
 
@@ -169,7 +177,7 @@ final class CourseStudentInfoHelper
                         'session_id' => $sessionId,
                         'session_found' => (bool) $session,
                     ]);
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     $this->log('compute: failed loading session (will continue with null session)', [
                         'session_id' => $sessionId,
                         'exception' => $e->getMessage(),
@@ -215,8 +223,8 @@ final class CourseStudentInfoHelper
             return $payload;
         });
 
-        $durationMs = (int) \round((\microtime(true) - $start) * 1000);
-        $memEnd = \memory_get_usage(true);
+        $durationMs = (int) round((microtime(true) - $start) * 1000);
+        $memEnd = memory_get_usage(true);
 
         $this->log('getStudentInfoForCourse: cache get end', [
             'computed' => $computed ? 'MISS' : 'HIT',
@@ -273,8 +281,8 @@ final class CourseStudentInfoHelper
         }
 
         // Safety limit.
-        if (count($courseIds) > 300) {
-            $courseIds = array_slice($courseIds, 0, 300);
+        if (\count($courseIds) > 300) {
+            $courseIds = \array_slice($courseIds, 0, 300);
         }
 
         // Compute hasNewContent in batch.
@@ -297,9 +305,9 @@ final class CourseStudentInfoHelper
                 continue;
             }
 
-            $cacheKey = sprintf('course_student_info_u%d_c%d_s%d_f%d', $userId, $cid, $sessionId, $mask);
+            $cacheKey = \sprintf('course_student_info_u%d_c%d_s%d_f%d', $userId, $cid, $sessionId, $mask);
 
-            $payload = $this->cache->get($cacheKey, function (ItemInterface $item) use ($userId, $course, $cid, $sessionId, $flags) {
+            $payload = $this->cache->get($cacheKey, function (ItemInterface $item) use ($userId, $course, $sessionId, $flags) {
                 // Short TTL to keep UI fresh while browsing.
                 $item->expiresAfter(300);
 
@@ -308,7 +316,7 @@ final class CourseStudentInfoHelper
                     try {
                         /** @var Session|null $session */
                         $session = $this->em->getRepository(Session::class)->find($sessionId);
-                    } catch (\Throwable $e) {
+                    } catch (Throwable $e) {
                         $session = null;
                     }
                 }
@@ -332,7 +340,7 @@ final class CourseStudentInfoHelper
                 ];
             });
 
-            $safe = $this->sanitizeResult(is_array($payload) ? $payload : []);
+            $safe = $this->sanitizeResult(\is_array($payload) ? $payload : []);
             $safe = $this->applyFlagsToResult($safe, $flags);
 
             // Inject hasNewContent from the batch map (near real-time, without per-course queries).
@@ -356,7 +364,7 @@ final class CourseStudentInfoHelper
         }
 
         $firstCourseAccess = $this->getFirstCourseAccessDateTime($userId, $courseId, $sessionId);
-        if (!$firstCourseAccess instanceof \DateTimeImmutable) {
+        if (!$firstCourseAccess instanceof DateTimeImmutable) {
             return [];
         }
 
@@ -370,7 +378,7 @@ final class CourseStudentInfoHelper
             $typeTitle = (string) ($row['type_title'] ?? '');
             $lastChange = $this->parseDateTime((string) ($row['last_change'] ?? ''));
 
-            if (!$lastChange instanceof \DateTimeImmutable) {
+            if (!$lastChange instanceof DateTimeImmutable) {
                 continue;
             }
 
@@ -380,7 +388,7 @@ final class CourseStudentInfoHelper
             }
 
             $key = trim((string) ($toolInfo['key'] ?? ''));
-            if ($key === '') {
+            if ('' === $key) {
                 continue;
             }
 
@@ -405,7 +413,7 @@ final class CourseStudentInfoHelper
 
             $cnt = (int) ($cntRow['cnt'] ?? 0);
             $lastChangeRaw = (string) ($cntRow['last_change'] ?? '');
-            $lastChangeUsed = trim($lastChangeRaw) !== '' ? $lastChangeRaw : $lastChange->format('Y-m-d H:i:s');
+            $lastChangeUsed = '' !== trim($lastChangeRaw) ? $lastChangeRaw : $lastChange->format('Y-m-d H:i:s');
 
             if (!isset($toolMap[$key])) {
                 $toolMap[$key] = [
@@ -415,17 +423,18 @@ final class CourseStudentInfoHelper
                     'count' => $cnt > 0 ? $cnt : null,
                     'lastChange' => $lastChangeUsed,
                 ];
+
                 continue;
             }
 
             $existing = $toolMap[$key];
 
-            $prevCount = isset($existing['count']) && \is_numeric($existing['count']) ? (int) $existing['count'] : 0;
+            $prevCount = isset($existing['count']) && is_numeric($existing['count']) ? (int) $existing['count'] : 0;
             $newCount = $prevCount + max(0, $cnt);
             $existing['count'] = $newCount > 0 ? $newCount : null;
 
-            $existingTs = isset($existing['lastChange']) ? (\strtotime((string) $existing['lastChange']) ?: 0) : 0;
-            $newTs = trim($lastChangeUsed) !== '' ? (\strtotime($lastChangeUsed) ?: 0) : 0;
+            $existingTs = isset($existing['lastChange']) ? (strtotime((string) $existing['lastChange']) ?: 0) : 0;
+            $newTs = '' !== trim($lastChangeUsed) ? (strtotime($lastChangeUsed) ?: 0) : 0;
             if ($newTs > $existingTs) {
                 $existing['lastChange'] = $lastChangeUsed;
             }
@@ -440,13 +449,14 @@ final class CourseStudentInfoHelper
         $out = array_values($toolMap);
 
         usort($out, static function (array $a, array $b): int {
-            $tsa = isset($a['lastChange']) ? (\strtotime((string) $a['lastChange']) ?: 0) : 0;
-            $tsb = isset($b['lastChange']) ? (\strtotime((string) $b['lastChange']) ?: 0) : 0;
+            $tsa = isset($a['lastChange']) ? (strtotime((string) $a['lastChange']) ?: 0) : 0;
+            $tsb = isset($b['lastChange']) ? (strtotime((string) $b['lastChange']) ?: 0) : 0;
+
             return $tsb <=> $tsa;
         });
 
-        if ($limit > 0 && count($out) > $limit) {
-            $out = array_slice($out, 0, $limit);
+        if ($limit > 0 && \count($out) > $limit) {
+            $out = \array_slice($out, 0, $limit);
         }
 
         return $out;
@@ -459,7 +469,7 @@ final class CourseStudentInfoHelper
     public function getLastAccessLabelForCourse(int $userId, int $courseId, int $sessionId = 0): ?string
     {
         $dt = $this->getLastCourseAccessDateTime($userId, $courseId, $sessionId);
-        if (!$dt instanceof \DateTimeImmutable) {
+        if (!$dt instanceof DateTimeImmutable) {
             return null;
         }
 
@@ -471,7 +481,7 @@ final class CourseStudentInfoHelper
         $t = $this->normalizeTitle($typeTitle);
         $toolTitle = $this->normalizeTitle($this->getToolTitleById($toolId) ?? '');
 
-        if ($toolTitle === '' || $toolTitle === 'user') {
+        if ('' === $toolTitle || 'user' === $toolTitle) {
             return null;
         }
 
@@ -480,7 +490,7 @@ final class CourseStudentInfoHelper
         }
 
         // Introductions
-        if ($t === 'tool_intro' || $t === 'introductions' || $toolTitle === 'tool_intro') {
+        if ('tool_intro' === $t || 'introductions' === $t || 'tool_intro' === $toolTitle) {
             return [
                 'key' => 'tool_intro',
                 'label' => 'Course introduction',
@@ -490,8 +500,8 @@ final class CourseStudentInfoHelper
         }
 
         // Links: count ONLY real link items (resource_type.title = "links")
-        if ($toolTitle === 'link') {
-            if ($t !== 'links') {
+        if ('link' === $toolTitle) {
+            if ('links' !== $t) {
                 return null;
             }
 
@@ -504,7 +514,7 @@ final class CourseStudentInfoHelper
         }
 
         // Learning paths
-        if ($toolTitle === 'learnpath' || $t === 'lps' || \str_starts_with($t, 'lp_')) {
+        if ('learnpath' === $toolTitle || 'lps' === $t || str_starts_with($t, 'lp_')) {
             return [
                 'key' => 'learnpaths',
                 'label' => 'Learning paths',
@@ -515,11 +525,11 @@ final class CourseStudentInfoHelper
 
         // Exercises / Quiz
         if (
-            $toolTitle === 'quiz'
-            || $t === 'exercises'
-            || $t === 'questions'
-            || $t === 'attempt_file'
-            || $t === 'attempt_feedback'
+            'quiz' === $toolTitle
+            || 'exercises' === $t
+            || 'questions' === $t
+            || 'attempt_file' === $t
+            || 'attempt_feedback' === $t
         ) {
             return [
                 'key' => 'exercises',
@@ -530,7 +540,7 @@ final class CourseStudentInfoHelper
         }
 
         // Forums
-        if ($toolTitle === 'forum' || $t === 'forums' || \str_starts_with($t, 'forum_')) {
+        if ('forum' === $toolTitle || 'forums' === $t || str_starts_with($t, 'forum_')) {
             return [
                 'key' => 'forums',
                 'label' => 'Forums',
@@ -540,7 +550,7 @@ final class CourseStudentInfoHelper
         }
 
         // Wikis
-        if ($toolTitle === 'wiki' || $t === 'wikis' || $t === 'wiki') {
+        if ('wiki' === $toolTitle || 'wikis' === $t || 'wiki' === $t) {
             return [
                 'key' => 'wikis',
                 'label' => 'Wikis',
@@ -550,7 +560,7 @@ final class CourseStudentInfoHelper
         }
 
         // Gradebook
-        if ($toolTitle === 'gradebook' || $t === 'gradebooks' || $t === 'gradebook_links' || $t === 'gradebook_evaluations') {
+        if ('gradebook' === $toolTitle || 'gradebooks' === $t || 'gradebook_links' === $t || 'gradebook_evaluations' === $t) {
             return [
                 'key' => 'gradebook',
                 'label' => 'Gradebook',
@@ -560,7 +570,7 @@ final class CourseStudentInfoHelper
         }
 
         // Groups
-        if ($toolTitle === 'group' || $t === 'groups') {
+        if ('group' === $toolTitle || 'groups' === $t) {
             return [
                 'key' => 'groups',
                 'label' => 'Groups',
@@ -570,7 +580,7 @@ final class CourseStudentInfoHelper
         }
 
         // Documents
-        if ($toolTitle === 'document' || $t === 'files' || $t === 'documents') {
+        if ('document' === $toolTitle || 'files' === $t || 'documents' === $t) {
             return [
                 'key' => 'documents',
                 'label' => 'Documents',
@@ -580,7 +590,7 @@ final class CourseStudentInfoHelper
         }
 
         // Surveys
-        if ($toolTitle === 'survey' || $t === 'surveys' || $t === 'survey_questions') {
+        if ('survey' === $toolTitle || 'surveys' === $t || 'survey_questions' === $t) {
             return [
                 'key' => 'surveys',
                 'label' => 'Surveys',
@@ -590,7 +600,7 @@ final class CourseStudentInfoHelper
         }
 
         // Attendance
-        if ($toolTitle === 'attendance' || $t === 'attendances') {
+        if ('attendance' === $toolTitle || 'attendances' === $t) {
             return [
                 'key' => 'attendances',
                 'label' => 'Attendances',
@@ -600,7 +610,7 @@ final class CourseStudentInfoHelper
         }
 
         // Dropbox
-        if ($toolTitle === 'dropbox' || $t === 'dropbox') {
+        if ('dropbox' === $toolTitle || 'dropbox' === $t) {
             return [
                 'key' => 'dropbox',
                 'label' => 'Dropbox',
@@ -681,7 +691,7 @@ final class CourseStudentInfoHelper
 
     private function mapToolFallbackByTitles(int $toolId, string $titles, int $courseId, int $sessionId): array
     {
-        if ($titles === '') {
+        if ('' === $titles) {
             return ['key' => 'other', 'label' => 'Other', 'url' => null];
         }
 
@@ -720,7 +730,7 @@ final class CourseStudentInfoHelper
         int $userId,
         int $courseId,
         int $sessionId,
-        \DateTimeImmutable $since,
+        DateTimeImmutable $since,
         int $limit
     ): array {
         $sinceStr = $since->format('Y-m-d H:i:s');
@@ -771,11 +781,11 @@ final class CourseStudentInfoHelper
             ]);
 
             $this->log('fetchNewContentToolsSince: done', [
-                'rows' => count($rows),
+                'rows' => \count($rows),
             ]);
 
             return $rows;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->log('fetchNewContentToolsSince: query failed', [
                 'course_id' => $courseId,
                 'session_id' => $sessionId,
@@ -794,7 +804,7 @@ final class CourseStudentInfoHelper
         int $userId,
         int $courseId,
         int $sessionId,
-        \DateTimeImmutable $since,
+        DateTimeImmutable $since,
         int $limit
     ): array {
         $sinceStr = $since->format('Y-m-d H:i:s');
@@ -846,7 +856,7 @@ final class CourseStudentInfoHelper
                 'sid' => $sessionId,
                 'since' => $sinceStr,
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return [];
         }
     }
@@ -857,7 +867,7 @@ final class CourseStudentInfoHelper
      */
     private function buildLegacyToolUrl(string $toolKey, int $courseId, int $sessionId): ?string
     {
-        $base = function_exists('api_get_path') ? (string) \api_get_path(\WEB_PATH) : '/';
+        $base = \function_exists('api_get_path') ? (string) api_get_path(WEB_PATH) : '/';
 
         $qs = http_build_query([
             'cid' => $courseId,
@@ -961,12 +971,12 @@ final class CourseStudentInfoHelper
                 $cid = (int) ($row['c_id'] ?? 0);
                 $raw = (string) ($row['last_access'] ?? '');
                 if ($cid > 0 && '' !== trim($raw)) {
-                    $out[$cid] = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $raw) ?: new \DateTimeImmutable($raw);
+                    $out[$cid] = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $raw) ?: new DateTimeImmutable($raw);
                 }
             }
 
             return $out;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return [];
         }
     }
@@ -994,12 +1004,12 @@ final class CourseStudentInfoHelper
                 $cid = (int) ($row['c_id'] ?? 0);
                 $raw = (string) ($row['last_access'] ?? '');
                 if ($cid > 0 && '' !== trim($raw)) {
-                    $out[$cid] = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $raw) ?: new \DateTimeImmutable($raw);
+                    $out[$cid] = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $raw) ?: new DateTimeImmutable($raw);
                 }
             }
 
             return $out;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return [];
         }
     }
@@ -1060,12 +1070,12 @@ final class CourseStudentInfoHelper
                 $cid = (int) ($row['c_id'] ?? 0);
                 $raw = (string) ($row['last_change'] ?? '');
                 if ($cid > 0 && '' !== trim($raw)) {
-                    $out[$cid] = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $raw) ?: new \DateTimeImmutable($raw);
+                    $out[$cid] = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $raw) ?: new DateTimeImmutable($raw);
                 }
             }
 
             return $out;
-        } catch (DbalException|\Throwable $e) {
+        } catch (DbalException|Throwable $e) {
             return [];
         }
     }
@@ -1085,13 +1095,13 @@ final class CourseStudentInfoHelper
 
     private function sanitizeResult(array $result): array
     {
-        $progress = isset($result['progress']) && \is_numeric($result['progress']) ? (float) $result['progress'] : 0.0;
+        $progress = isset($result['progress']) && is_numeric($result['progress']) ? (float) $result['progress'] : 0.0;
         $progress = $this->clampPercent($progress);
 
-        $score = (isset($result['score']) && \is_numeric($result['score'])) ? (float) $result['score'] : null;
-        $bestScore = (isset($result['bestScore']) && \is_numeric($result['bestScore'])) ? (float) $result['bestScore'] : null;
+        $score = (isset($result['score']) && is_numeric($result['score'])) ? (float) $result['score'] : null;
+        $bestScore = (isset($result['bestScore']) && is_numeric($result['bestScore'])) ? (float) $result['bestScore'] : null;
 
-        $time = (isset($result['timeSpentSeconds']) && \is_numeric($result['timeSpentSeconds'])) ? (int) $result['timeSpentSeconds'] : null;
+        $time = (isset($result['timeSpentSeconds']) && is_numeric($result['timeSpentSeconds'])) ? (int) $result['timeSpentSeconds'] : null;
         if (null !== $time && $time < 0) {
             $time = null;
         }
@@ -1102,8 +1112,8 @@ final class CourseStudentInfoHelper
 
         return [
             'progress' => $progress,
-            'score' => null !== $score ? \round($score, 2) : null,
-            'bestScore' => null !== $bestScore ? \round($bestScore, 2) : null,
+            'score' => null !== $score ? round($score, 2) : null,
+            'bestScore' => null !== $bestScore ? round($bestScore, 2) : null,
             'timeSpentSeconds' => $time,
             'certificateAvailable' => $cert,
             'completed' => $completed,
@@ -1130,7 +1140,7 @@ final class CourseStudentInfoHelper
         if (!($flags['progress'] || $flags['certificate'])) {
             $result['completed'] = false;
         } else {
-            $progress = \is_numeric($result['progress'] ?? null) ? (float) $result['progress'] : 0.0;
+            $progress = is_numeric($result['progress'] ?? null) ? (float) $result['progress'] : 0.0;
             $cert = (bool) ($result['certificateAvailable'] ?? false);
 
             $result['completed'] = ($flags['certificate'] && $cert) || ($flags['progress'] && $progress >= 100.0);
@@ -1156,7 +1166,7 @@ final class CourseStudentInfoHelper
         ]);
 
         try {
-            $value = \Tracking::get_avg_student_progress(
+            $value = Tracking::get_avg_student_progress(
                 $userId,
                 $course,
                 [],
@@ -1167,13 +1177,13 @@ final class CourseStudentInfoHelper
 
             $this->log('computeProgress: Tracking returned', [
                 'raw' => $value,
-                'is_numeric' => \is_numeric($value),
+                'is_numeric' => is_numeric($value),
             ]);
 
-            if (\is_numeric($value)) {
+            if (is_numeric($value)) {
                 return $this->clampPercent((float) $value);
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->log('computeProgress: exception (returning 0)', [
                 'exception' => $e->getMessage(),
             ]);
@@ -1192,7 +1202,7 @@ final class CourseStudentInfoHelper
         ]);
 
         try {
-            $value = \Tracking::get_avg_student_score(
+            $value = Tracking::get_avg_student_score(
                 $userId,
                 $course,
                 [],
@@ -1205,18 +1215,18 @@ final class CourseStudentInfoHelper
             $this->log('computeScoreLatest: Tracking returned', [
                 'raw' => $value,
                 'type' => \gettype($value),
-                'is_numeric' => \is_numeric($value),
+                'is_numeric' => is_numeric($value),
             ]);
 
-            if (\is_numeric($value)) {
+            if (is_numeric($value)) {
                 return round((float) $value, 2);
             }
 
             // Common legacy return is '-' (string) when no score can be computed.
-            if ($value === '-') {
+            if ('-' === $value) {
                 $this->log('computeScoreLatest: legacy "-" returned (no score)', []);
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->log('computeScoreLatest: exception (returning null)', [
                 'exception' => $e->getMessage(),
             ]);
@@ -1235,7 +1245,7 @@ final class CourseStudentInfoHelper
         ]);
 
         try {
-            $value = \Tracking::get_avg_student_score(
+            $value = Tracking::get_avg_student_score(
                 $userId,
                 $course,
                 [],
@@ -1248,17 +1258,17 @@ final class CourseStudentInfoHelper
             $this->log('computeScoreBest: Tracking returned', [
                 'raw' => $value,
                 'type' => \gettype($value),
-                'is_numeric' => \is_numeric($value),
+                'is_numeric' => is_numeric($value),
             ]);
 
-            if (\is_numeric($value)) {
+            if (is_numeric($value)) {
                 return round((float) $value, 2);
             }
 
-            if ($value === '-') {
+            if ('-' === $value) {
                 $this->log('computeScoreBest: legacy "-" returned (no score)', []);
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->log('computeScoreBest: exception (returning null)', [
                 'exception' => $e->getMessage(),
             ]);
@@ -1277,17 +1287,17 @@ final class CourseStudentInfoHelper
 
         try {
             $courseCode = $course->getCode();
-            $value = \Tracking::get_time_spent_on_the_course($userId, $courseCode, $sessionId);
+            $value = Tracking::get_time_spent_on_the_course($userId, $courseCode, $sessionId);
 
             $this->log('computeTimeSpentSeconds: Tracking returned', [
                 'raw' => $value,
-                'is_numeric' => \is_numeric($value),
+                'is_numeric' => is_numeric($value),
             ]);
 
-            $n = \is_numeric($value) ? (int) $value : null;
+            $n = is_numeric($value) ? (int) $value : null;
 
-            return ($n !== null && $n >= 0) ? $n : null;
-        } catch (\Throwable $e) {
+            return (null !== $n && $n >= 0) ? $n : null;
+        } catch (Throwable $e) {
             $this->log('computeTimeSpentSeconds: exception (returning null)', [
                 'exception' => $e->getMessage(),
             ]);
@@ -1315,7 +1325,7 @@ final class CourseStudentInfoHelper
         }
 
         try {
-            $category = \Category::load($categoryId);
+            $category = Category::load($categoryId);
             if (!$category) {
                 $this->log('computeCertificateAvailable: Category::load returned empty', [
                     'category_id' => $categoryId,
@@ -1324,14 +1334,14 @@ final class CourseStudentInfoHelper
                 return false;
             }
 
-            if (\method_exists($category, 'setCourseId')) {
+            if (method_exists($category, 'setCourseId')) {
                 $category->setCourseId((int) $course->getId());
             }
-            if (\method_exists($category, 'set_session_id')) {
+            if (method_exists($category, 'set_session_id')) {
                 $category->set_session_id($sessionId);
             }
 
-            if (\method_exists($category, 'is_certificate_available')) {
+            if (method_exists($category, 'is_certificate_available')) {
                 $available = (bool) $category->is_certificate_available($userId);
 
                 $this->log('computeCertificateAvailable: is_certificate_available returned', [
@@ -1342,7 +1352,7 @@ final class CourseStudentInfoHelper
             }
 
             $this->log('computeCertificateAvailable: missing is_certificate_available method', []);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->log('computeCertificateAvailable: exception', [
                 'exception' => $e->getMessage(),
             ]);
@@ -1371,12 +1381,13 @@ final class CourseStudentInfoHelper
 
         try {
             $firstCourseAccess = $this->getFirstCourseAccessDateTime($userId, $courseId, $sessionId);
-            if (!$firstCourseAccess instanceof \DateTimeImmutable) {
+            if (!$firstCourseAccess instanceof DateTimeImmutable) {
                 $this->log('computeHasNewContent: no first course access found (returning false)', [
                     'user_id' => $userId,
                     'course_id' => $courseId,
                     'session_id' => $sessionId,
                 ]);
+
                 return false;
             }
 
@@ -1388,7 +1399,7 @@ final class CourseStudentInfoHelper
                 $typeTitle = (string) ($row['type_title'] ?? '');
                 $lastChange = $this->parseDateTime((string) ($row['last_change'] ?? ''));
 
-                if (!$lastChange instanceof \DateTimeImmutable) {
+                if (!$lastChange instanceof DateTimeImmutable) {
                     continue;
                 }
 
@@ -1409,13 +1420,14 @@ final class CourseStudentInfoHelper
             }
 
             return false;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->log('computeHasNewContent: exception (returning false)', [
                 'user_id' => $userId,
                 'course_id' => $courseId,
                 'session_id' => $sessionId,
                 'exception' => $e->getMessage(),
             ]);
+
             return false;
         }
     }
@@ -1427,7 +1439,7 @@ final class CourseStudentInfoHelper
         int $courseId,
         int $userId,
         int $sessionId,
-        \DateTimeImmutable $since
+        DateTimeImmutable $since
     ): bool {
         $sinceStr = $since->format('Y-m-d H:i:s');
         $nowSql = 'NOW()';
@@ -1464,7 +1476,6 @@ final class CourseStudentInfoHelper
               '.$sessionSql.'
             LIMIT 1';
 
-
         $params = [
             'cid' => $courseId,
             'uid' => $userId,
@@ -1480,7 +1491,7 @@ final class CourseStudentInfoHelper
 
         try {
             $row = $this->connection->fetchOne($sql, $params);
-            $hasNew = $row !== false && $row !== null;
+            $hasNew = false !== $row && null !== $row;
 
             // Extra debug context (only when showDebug is enabled).
             if ($this->showDebug) {
@@ -1515,7 +1526,7 @@ final class CourseStudentInfoHelper
             }
 
             return $hasNew;
-        } catch (DbalException|\Throwable $e) {
+        } catch (DbalException|Throwable $e) {
             $this->log('existsNewResourceLinkSince: query failed (returning false)', [
                 'course_id' => $courseId,
                 'session_id' => $sessionId,
@@ -1534,7 +1545,7 @@ final class CourseStudentInfoHelper
      * 1) track_e_lastaccess (tool-level, Chamilo-style)
      * 2) track_e_course_access (fallback)
      */
-    private function getLastCourseAccessDateTime(int $userId, int $courseId, int $sessionId): ?\DateTimeImmutable
+    private function getLastCourseAccessDateTime(int $userId, int $courseId, int $sessionId): ?DateTimeImmutable
     {
         $tableLastAccess = 'track_e_lastaccess';
         if ($this->tableExists($tableLastAccess)) {
@@ -1545,7 +1556,7 @@ final class CourseStudentInfoHelper
             ]);
 
             $dt = $this->getLastAccessFromTrackLastAccess($userId, $courseId, $sessionId);
-            if ($dt instanceof \DateTimeImmutable) {
+            if ($dt instanceof DateTimeImmutable) {
                 return $dt;
             }
 
@@ -1572,7 +1583,7 @@ final class CourseStudentInfoHelper
             ]);
 
             $dt = $this->getLastAccessFromTrackCourseAccess($userId, $courseId, $sessionId);
-            if ($dt instanceof \DateTimeImmutable) {
+            if ($dt instanceof DateTimeImmutable) {
                 return $dt;
             }
 
@@ -1598,7 +1609,7 @@ final class CourseStudentInfoHelper
         return null;
     }
 
-    private function getLastAccessFromTrackLastAccess(int $userId, int $courseId, int $sessionId): ?\DateTimeImmutable
+    private function getLastAccessFromTrackLastAccess(int $userId, int $courseId, int $sessionId): ?DateTimeImmutable
     {
         try {
             $sql = 'SELECT MAX(access_date) AS last_access
@@ -1621,7 +1632,7 @@ final class CourseStudentInfoHelper
                 return null;
             }
 
-            $dt = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $raw) ?: new \DateTimeImmutable($raw);
+            $dt = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $raw) ?: new DateTimeImmutable($raw);
 
             $this->log('getLastCourseAccessDateTime: resolved from track_e_lastaccess', [
                 'user_id' => $userId,
@@ -1631,7 +1642,7 @@ final class CourseStudentInfoHelper
             ]);
 
             return $dt;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->log('getLastCourseAccessDateTime: track_e_lastaccess query failed', [
                 'user_id' => $userId,
                 'course_id' => $courseId,
@@ -1643,7 +1654,7 @@ final class CourseStudentInfoHelper
         }
     }
 
-    private function getLastAccessFromTrackCourseAccess(int $userId, int $courseId, int $sessionId): ?\DateTimeImmutable
+    private function getLastAccessFromTrackCourseAccess(int $userId, int $courseId, int $sessionId): ?DateTimeImmutable
     {
         try {
             $sql = 'SELECT MAX(login_course_date) AS last_access
@@ -1666,7 +1677,7 @@ final class CourseStudentInfoHelper
                 return null;
             }
 
-            $dt = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $raw) ?: new \DateTimeImmutable($raw);
+            $dt = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $raw) ?: new DateTimeImmutable($raw);
 
             $this->log('getLastCourseAccessDateTime: resolved from track_e_course_access', [
                 'user_id' => $userId,
@@ -1676,7 +1687,7 @@ final class CourseStudentInfoHelper
             ]);
 
             return $dt;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->log('getLastCourseAccessDateTime: track_e_course_access query failed', [
                 'user_id' => $userId,
                 'course_id' => $courseId,
@@ -1696,7 +1707,7 @@ final class CourseStudentInfoHelper
                 : $this->connection->getSchemaManager();
 
             return $sm->tablesExist([$tableName]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->log('tableExists: schema lookup failed (assuming false)', [
                 'table' => $tableName,
                 'exception' => $e->getMessage(),
@@ -1722,19 +1733,22 @@ final class CourseStudentInfoHelper
                 ->andWhere('gc.course = :course')
                 ->setParameter('course', $course)
                 // Root category: parent is NULL, but support legacy parent_id=0 safely
-                ->andWhere('(gc.parent IS NULL OR IDENTITY(gc.parent) = 0)');
+                ->andWhere('(gc.parent IS NULL OR IDENTITY(gc.parent) = 0)')
+            ;
 
             if ($sessionId > 0) {
                 // Session specific: match exactly (support id compare even if relation hydration is tricky)
                 $qb->andWhere('IDENTITY(gc.session) = :sid')
-                    ->setParameter('sid', $sessionId);
+                    ->setParameter('sid', $sessionId)
+                ;
             } else {
                 // Non-session: allow NULL or 0
                 $qb->andWhere('(gc.session IS NULL OR IDENTITY(gc.session) = 0)');
             }
 
             $qb->orderBy('gc.id', 'DESC')
-                ->setMaxResults(1);
+                ->setMaxResults(1)
+            ;
 
             $id = (int) $qb->getQuery()->getSingleScalarResult();
 
@@ -1743,13 +1757,13 @@ final class CourseStudentInfoHelper
             ]);
 
             return $id;
-        } catch (NoResultException|NonUniqueResultException $e) {
+        } catch (NonUniqueResultException|NoResultException $e) {
             $this->log('findRootGradebookCategoryId: no result', [
                 'exception' => $e->getMessage(),
             ]);
 
             return null;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->log('findRootGradebookCategoryId: exception', [
                 'exception' => $e->getMessage(),
             ]);
@@ -1769,7 +1783,7 @@ final class CourseStudentInfoHelper
 
         try {
             $raw = $this->settingsManager->getSetting('course.course_student_info');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->log('getStudentInfoFlags: failed reading setting (using defaults)', [
                 'exception' => $e->getMessage(),
             ]);
@@ -1782,7 +1796,7 @@ final class CourseStudentInfoHelper
         if (\is_array($raw)) {
             $data = $raw;
         } elseif (\is_string($raw) && '' !== trim($raw)) {
-            $decoded = \json_decode($raw, true);
+            $decoded = json_decode($raw, true);
             if (\is_array($decoded)) {
                 $data = $decoded;
             }
@@ -1811,6 +1825,7 @@ final class CourseStudentInfoHelper
 
         if (\is_string($value)) {
             $v = strtolower(trim($value));
+
             return 'true' === $v || '1' === $v || 'yes' === $v || 'on' === $v;
         }
 
@@ -1856,7 +1871,7 @@ final class CourseStudentInfoHelper
         ];
 
         foreach ($needles as $needle) {
-            if (false !== strpos($message, $needle)) {
+            if (str_contains($message, $needle)) {
                 return true;
             }
         }
@@ -1883,26 +1898,26 @@ final class CourseStudentInfoHelper
 
         $payload = '';
         if (!empty($context)) {
-            $json = \json_encode($context, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
-            if ($json !== false) {
-                $payload = ' ' . $json;
+            $json = json_encode($context, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            if (false !== $json) {
+                $payload = ' '.$json;
             }
         }
 
-        \error_log(self::LOG_PREFIX . ' ' . $message . $payload);
+        error_log(self::LOG_PREFIX.' '.$message.$payload);
     }
 
-    private function parseDateTime(string $raw): ?\DateTimeImmutable
+    private function parseDateTime(string $raw): ?DateTimeImmutable
     {
         $raw = trim($raw);
-        if ($raw === '') {
+        if ('' === $raw) {
             return null;
         }
 
-        return \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $raw) ?: new \DateTimeImmutable($raw);
+        return DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $raw) ?: new DateTimeImmutable($raw);
     }
 
-    private function getFirstCourseAccessDateTime(int $userId, int $courseId, int $sessionId): ?\DateTimeImmutable
+    private function getFirstCourseAccessDateTime(int $userId, int $courseId, int $sessionId): ?DateTimeImmutable
     {
         // First prefer track_e_lastaccess (tool-level), taking MIN() across tools.
         if ($this->tableExists('track_e_lastaccess')) {
@@ -1917,10 +1932,10 @@ final class CourseStudentInfoHelper
                     'sid' => $sessionId,
                 ]);
 
-                if (is_string($raw) && trim($raw) !== '') {
+                if (\is_string($raw) && '' !== trim($raw)) {
                     return $this->parseDateTime($raw);
                 }
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 // Ignore and fallback
             }
         }
@@ -1938,10 +1953,10 @@ final class CourseStudentInfoHelper
                     'sid' => $sessionId,
                 ]);
 
-                if (is_string($raw) && trim($raw) !== '') {
+                if (\is_string($raw) && '' !== trim($raw)) {
                     return $this->parseDateTime($raw);
                 }
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 return null;
             }
         }
@@ -1971,7 +1986,7 @@ final class CourseStudentInfoHelper
             foreach ($rows as $r) {
                 $tool = (string) ($r['access_tool'] ?? '');
                 $raw = (string) ($r['last_access'] ?? '');
-                if (trim($tool) === '' || trim($raw) === '') {
+                if ('' === trim($tool) || '' === trim($raw)) {
                     continue;
                 }
                 $dt = $this->parseDateTime($raw);
@@ -1981,22 +1996,22 @@ final class CourseStudentInfoHelper
             }
 
             return $out;
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return [];
         }
     }
 
-    private function pickBestToolAccessOrFallback(array $toolAccessMap, array $trackTools, \DateTimeImmutable $fallback): \DateTimeImmutable
+    private function pickBestToolAccessOrFallback(array $toolAccessMap, array $trackTools, DateTimeImmutable $fallback): DateTimeImmutable
     {
         $best = null;
 
         foreach ($trackTools as $name) {
-            $name = is_string($name) ? trim($name) : '';
-            if ($name === '') {
+            $name = \is_string($name) ? trim($name) : '';
+            if ('' === $name) {
                 continue;
             }
             $dt = $toolAccessMap[$name] ?? null;
-            if ($dt instanceof \DateTimeImmutable) {
+            if ($dt instanceof DateTimeImmutable) {
                 if (null === $best || $dt->getTimestamp() > $best->getTimestamp()) {
                     $best = $dt;
                 }
@@ -2045,12 +2060,13 @@ final class CourseStudentInfoHelper
                 'uid' => $userId,
                 'sid' => $sessionId,
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->log('fetchLastChangeByTypeForCourse: query failed', [
                 'course_id' => $courseId,
                 'session_id' => $sessionId,
                 'exception' => $e->getMessage(),
             ]);
+
             return [];
         }
     }
@@ -2064,7 +2080,7 @@ final class CourseStudentInfoHelper
         int $userId,
         int $courseId,
         int $sessionId,
-        \DateTimeImmutable $since,
+        DateTimeImmutable $since,
         int $toolId,
         string $typeTitle
     ): array {
@@ -2113,7 +2129,7 @@ final class CourseStudentInfoHelper
             ]);
 
             return \is_array($row) ? $row : [];
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->log('fetchNewContentTypeCountSince: query failed', [
                 'course_id' => $courseId,
                 'session_id' => $sessionId,
@@ -2122,6 +2138,7 @@ final class CourseStudentInfoHelper
                 'type_title' => $typeTitle,
                 'exception' => $e->getMessage(),
             ]);
+
             return [];
         }
     }
@@ -2159,7 +2176,7 @@ final class CourseStudentInfoHelper
             }
 
             return $out;
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return [];
         }
     }
@@ -2192,7 +2209,7 @@ final class CourseStudentInfoHelper
                 $tool = (string) ($r['access_tool'] ?? '');
                 $raw = (string) ($r['last_access'] ?? '');
 
-                if ($cid <= 0 || trim($tool) === '') {
+                if ($cid <= 0 || '' === trim($tool)) {
                     continue;
                 }
 
@@ -2204,7 +2221,7 @@ final class CourseStudentInfoHelper
             }
 
             return $out;
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return [];
         }
     }
@@ -2251,11 +2268,12 @@ final class CourseStudentInfoHelper
             ], [
                 'cids' => ArrayParameterType::INTEGER,
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->log('fetchLastChangeByTypeForCourses: query failed', [
                 'session_id' => $sessionId,
                 'exception' => $e->getMessage(),
             ]);
+
             return [];
         }
     }
@@ -2265,8 +2283,7 @@ final class CourseStudentInfoHelper
      */
     private function normalizeTitle(?string $value): string
     {
-        $v = strtolower(trim((string) $value));
-        return $v;
+        return strtolower(trim((string) $value));
     }
 
     /**
@@ -2288,17 +2305,17 @@ final class CourseStudentInfoHelper
                 foreach ($rows as $r) {
                     $id = isset($r['id']) ? (int) $r['id'] : 0;
                     $title = $this->normalizeTitle((string) ($r['title'] ?? ''));
-                    if ($id > 0 && $title !== '') {
+                    if ($id > 0 && '' !== $title) {
                         $map[$id] = $title;
                     }
                 }
 
                 $this->log('getToolIdToTitleMap: loaded tool titles', [
-                    'count' => count($map),
+                    'count' => \count($map),
                 ]);
 
                 return $map;
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $this->log('getToolIdToTitleMap: failed loading tool titles', [
                     'exception' => $e->getMessage(),
                 ]);
@@ -2307,7 +2324,7 @@ final class CourseStudentInfoHelper
             }
         });
 
-        return is_array($value) ? $value : [];
+        return \is_array($value) ? $value : [];
     }
 
     /**
@@ -2322,7 +2339,7 @@ final class CourseStudentInfoHelper
         $map = $this->getToolIdToTitleMap();
         $title = $map[$toolId] ?? null;
 
-        return ($title !== null && $title !== '') ? $title : null;
+        return (null !== $title && '' !== $title) ? $title : null;
     }
 
     private function computeHasNewContentBatch(int $userId, array $courseIds, int $sessionId): array
@@ -2339,6 +2356,7 @@ final class CourseStudentInfoHelper
             foreach ($courseIds as $cid) {
                 $out[$cid] = false;
             }
+
             return $out;
         }
 
@@ -2357,7 +2375,7 @@ final class CourseStudentInfoHelper
             }
 
             $firstCourseAccess = $firstAccessMap[$cid] ?? null;
-            if (!$firstCourseAccess instanceof \DateTimeImmutable) {
+            if (!$firstCourseAccess instanceof DateTimeImmutable) {
                 continue;
             }
 
@@ -2365,7 +2383,7 @@ final class CourseStudentInfoHelper
             $typeTitle = (string) ($row['type_title'] ?? '');
             $lastChange = $this->parseDateTime((string) ($row['last_change'] ?? ''));
 
-            if (!$lastChange instanceof \DateTimeImmutable) {
+            if (!$lastChange instanceof DateTimeImmutable) {
                 continue;
             }
 
@@ -2393,12 +2411,12 @@ final class CourseStudentInfoHelper
     {
         $t = $this->normalizeTitle($typeTitle);
 
-        if ($t === '') {
+        if ('' === $t) {
             return false;
         }
 
         // Generic rule: category types are not "content items" in the UI.
-        if (\str_ends_with($t, '_categories')) {
+        if (str_ends_with($t, '_categories')) {
             return false;
         }
 

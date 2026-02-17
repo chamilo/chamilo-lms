@@ -6,13 +6,15 @@
     }
 
     &__category-list {
-      @apply absolute top-2 left-2 flex flex-wrap gap-1;
+      @apply absolute top-2 left-2 flex flex-wrap gap-1 pointer-events-none;
     }
 
     &__title {
-      @apply text-gray-90 text-body-1 font-semibold space-y-2 flex items-center gap-2;
+      @apply text-gray-90 text-body-1 font-semibold flex flex-col flex-1 justify-center gap-1;
 
       .session {
+        @apply flex flex-col;
+
         &__title {
           @apply text-body-2 font-semibold;
         }
@@ -20,6 +22,23 @@
         &__display-date {
           @apply text-gray-50 font-normal text-caption;
         }
+      }
+    }
+
+    &__notification-button {
+      @apply absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full text-gray-50 pointer-events-auto
+        hover:bg-white/90 ;
+
+      &--badge::before {
+        @apply absolute right-0 top-0 h-4 w-4 rounded-full bg-danger;
+      }
+    }
+
+    &__completed-overlay {
+      @apply absolute rounded-t-lg pointer-events-none bg-support-3 w-full h-full flex items-center justify-center;
+
+      .mdi {
+        @apply text-white opacity-90 text-7xl/4;
       }
     }
 

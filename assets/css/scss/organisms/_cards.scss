@@ -1,5 +1,5 @@
 .p-card {
-  @apply rounded-lg bg-white border border-gray-25 transition
+  @apply rounded-lg bg-white border border-gray-25 transition isolate
     hover:shadow-xl;
 
   .p-card-body {

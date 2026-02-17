@@ -26,10 +26,10 @@
     }
 
     &__notification-button {
-      @apply absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full text-gray-50 pointer-events-auto
-        hover:bg-white/90 ;
+      @apply absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full text-gray-50 pointer-events-auto hover:bg-white/90;
 
       &--badge::before {
+        content: "";
         @apply absolute right-0 top-0 h-4 w-4 rounded-full bg-danger;
       }
     }

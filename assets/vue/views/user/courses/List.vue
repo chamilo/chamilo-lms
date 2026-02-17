@@ -84,50 +84,28 @@ const { t } = useI18n()
 const loading = ref(false)
 const isInitialLoaded = ref(false)
 
-const allCourses = ref([]) // loaded pages merged here
-const courses = ref([]) // visible slice for UI
+const allCourses = ref([])
+const courses = ref([])
 const isLoadingMore = ref(false)
 const lastCourseRef = ref(null)
 
 const observer = ref(null)
 let fetchAbort = null
 
-// Hybrid strategy:
-// - Server paging loads PAGE_SIZE items each time.
-// - Client-side chunking reveals gradually (visibleCount).
+// Server paging
 const PAGE_SIZE = 20
-const visibleCount = ref(PAGE_SIZE)
-
-// Server paging state
 const serverPage = ref(1)
 const serverHasMore = ref(true)
 const serverFetching = ref(false)
 const uniqueKeys = new Set()
-const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" })
-let sortScheduled = false
-const scheduleSort = () => {
-  if (sortScheduled) return
-  sortScheduled = true
 
-  const run = () => {
-    sortScheduled = false
-    allCourses.value.sort((a, b) => collator.compare(a?.title || "", b?.title || ""))
-    applyVisibleSlice()
-  }
-
-  if (typeof window !== "undefined" && "requestIdleCallback" in window) {
-    window.requestIdleCallback(run, { timeout: 200 })
-  } else {
-    setTimeout(run, 0)
-  }
+const toBool = (v) => {
+  if (v === true) return true
+  if (v === false) return false
+  if (typeof v === "string") return v.trim().toLowerCase() === "true"
+  return false
 }
 
-const applyVisibleSlice = () => {
-  const n = Math.max(PAGE_SIZE, Number(visibleCount.value) || PAGE_SIZE)
-  courses.value = allCourses.value.slice(0, n)
-}
-
-const toBool = (v) => v === true || v === "true" || v === 1 || v === "1"
 const studentInfoFlags = computed(() => {
   const raw = platformConfigStore.getSetting("course.course_student_info")
   const defaults = { score: false, progress: false, certificate: false }
@@ -159,9 +137,10 @@ const studentInfoFlags = computed(() => {
 
   return defaults
 })
-computed(() => {
+
+const showAnyStudentInfo = computed(() => {
   const f = studentInfoFlags.value
-  return !!(f.progress || f.score || f.certificate)
+  return Boolean(f.progress || f.score || f.certificate)
 })
 
 function extractNumericId(value) {
@@ -199,12 +178,12 @@ const buildStudentInfoFromCru = (cru) => {
   const progress = Number(progressRaw)
   return {
     progress: Number.isFinite(progress) ? progress : 0,
-    score: typeof cru?.score === "number" ? cru.score : null,
-    bestScore: typeof cru?.bestScore === "number" ? cru.bestScore : null,
+    score: Number.isFinite(Number(cru?.score)) ? Number(cru.score) : null,
+    bestScore: Number.isFinite(Number(cru?.bestScore)) ? Number(cru.bestScore) : null,
     timeSpentSeconds: Number.isFinite(Number(cru?.timeSpentSeconds)) ? Number(cru.timeSpentSeconds) : null,
-    certificateAvailable: !!cru?.certificateAvailable,
-    completed: !!cru?.completed,
-    hasNewContent: !!cru?.hasNewContent,
+    certificateAvailable: toBool(cru?.certificateAvailable),
+    completed: toBool(cru?.completed),
+    hasNewContent: toBool(cru?.hasNewContent),
   }
 }
 
@@ -256,7 +235,9 @@ const mergeCoursesFromProvider = (items, { reset = false } = {}) => {
 
   if (merged.length > 0) {
     allCourses.value = allCourses.value.concat(merged)
-    scheduleSort()
+    courses.value = allCourses.value
+  } else if (reset) {
+    courses.value = []
   }
 }
 
@@ -321,7 +302,6 @@ const fetchServerPage = async (pageToLoad, { reset = false } = {}) => {
     serverPage.value = Math.max(1, Number(pageToLoad) || 1)
 
     mergeCoursesFromProvider(items, { reset })
-    applyVisibleSlice()
     await observeLast()
   } catch (e) {
     if (e?.name !== "AbortError") {
@@ -339,10 +319,9 @@ const loadMyCourses = async () => {
   loading.value = true
   isInitialLoaded.value = false
 
-  // Reset paging + visible slice
+  // Reset paging
   serverPage.value = 1
   serverHasMore.value = true
-  visibleCount.value = PAGE_SIZE
   allCourses.value = []
   courses.value = []
   uniqueKeys.clear()
@@ -355,31 +334,16 @@ const loadMyCourses = async () => {
   }
 }
 
-const hasMoreVisible = computed(() => visibleCount.value < allCourses.value.length)
-
 const loadMoreCourses = async () => {
   if (isLoadingMore.value) return
+  if (!serverHasMore.value) return
+  if (serverFetching.value) return
 
   isLoadingMore.value = true
 
   try {
-    // First reveal already-loaded items (client-side)
-    if (hasMoreVisible.value) {
-      visibleCount.value = Math.min(allCourses.value.length, (Number(visibleCount.value) || PAGE_SIZE) + PAGE_SIZE)
-      applyVisibleSlice()
-      await observeLast()
-      return
-    }
-
-    // If everything loaded is already visible, fetch next server page
-    if (serverHasMore.value && !serverFetching.value) {
-      const next = (Number(serverPage.value) || 1) + 1
-      await fetchServerPage(next)
-      // After fetching, reveal the newly added items too
-      visibleCount.value = Math.min(allCourses.value.length, (Number(visibleCount.value) || PAGE_SIZE) + PAGE_SIZE)
-      applyVisibleSlice()
-      await observeLast()
-    }
+    const next = (Number(serverPage.value) || 1) + 1
+    await fetchServerPage(next)
   } finally {
     window.setTimeout(() => {
       isLoadingMore.value = false
@@ -393,7 +357,6 @@ watch(
     allCourses.value = []
     courses.value = []
     uniqueKeys.clear()
-    visibleCount.value = PAGE_SIZE
     serverPage.value = 1
     serverHasMore.value = true
     isInitialLoaded.value = false
@@ -404,7 +367,8 @@ watch(
 watch(
   () => allCourses.value.length,
   async () => {
-    applyVisibleSlice()
+    // Keep courses in sync
+    courses.value = allCourses.value
     await observeLast()
   },
 )
@@ -413,7 +377,6 @@ onMounted(() => {
   allCourses.value = []
   courses.value = []
   uniqueKeys.clear()
-  visibleCount.value = PAGE_SIZE
   serverPage.value = 1
   serverHasMore.value = true
   isInitialLoaded.value = false

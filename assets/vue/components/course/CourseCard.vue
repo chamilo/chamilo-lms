@@ -129,15 +129,6 @@
                 {{ ui.scoreLabel }}
               </span>
             </div>
-            <div
-              v-if="ui.bestScoreLabel"
-              class="flex items-center justify-between"
-            >
-              <span class="text-gray-70">{{ t("Best score") }}</span>
-              <span class="font-semibold text-gray-90">
-                {{ ui.bestScoreLabel }}
-              </span>
-            </div>
           </div>
           <!-- Certificate -->
           <div

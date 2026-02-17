@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
@@ -1246,41 +1247,6 @@ class UserGroupModel extends Model
                             ],
                         ]
                     );
-                }
-                if (0 != $sessionId && 0 != $groupId) {
-                    $this->subscribe_sessions_to_usergroup($groupId, [0]);
-                } else {
-                    $s = $sessionId;
-                }
-            }
-        }
-    }
-
-    public function unsubscribe_only_courses_from_usergroup($usergroup_id, $delete_items, $sessionId = 0)
-    {
-        $sessionId = (int) $sessionId;
-        // Deleting items.
-        if (!empty($delete_items)) {
-            $user_list = $this->get_users_by_usergroup($usergroup_id);
-
-            $groupId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-            foreach ($delete_items as $course_id) {
-                $course_info = api_get_course_info_by_id($course_id);
-                if ($course_info) {
-                    Database::delete(
-                        $this->usergroup_rel_course_table,
-                        [
-                            'usergroup_id = ? AND course_id = ?' => [
-                                $usergroup_id,
-                                $course_id,
-                            ],
-                        ]
-                    );
-                }
-                if (0 != $sessionId && 0 != $groupId) {
-                    $this->subscribe_sessions_to_usergroup($groupId, [0]);
-                } else {
-                    $s = $sessionId;
                 }
             }
         }
@@ -3250,16 +3216,14 @@ class UserGroupModel extends Model
 
         if (sizeof($usersInUsergroup) > 0) {
 
-            $userManager = new UserManager();
-            $userRepository = $userManager->getRepository();
-
             $courseManager = new CourseManager();
             $usersInCourse = $courseManager->get_user_list_from_course_code($courseId);
+            $em = Container::getEntityManager();
 
             $usersSubscribedToCourse = [];
             $usersNotSubscribedToCourse = [];
             foreach ($usersInUsergroup as $userId) {
-                $user = $userRepository->find($userId);
+                $user = $em->getRepository(User::class)->find($userId);
                 if (array_key_exists($userId, $usersInCourse)) {
                     $usersSubscribedToCourse[] = $user;
                 } else {
@@ -3285,16 +3249,18 @@ class UserGroupModel extends Model
         $data['coursesSubscribedToUsergroup'] = [];
 
         $usergroupLib = new UserGroupModel();
+        $em = Container::getEntityManager();
 
-        $userManager = new UserManager();
-        $userRepository = $userManager->getRepository();
         $usersSubscribedToUsergroupIds = $usergroupLib->get_users_by_usergroup($usergroupId);
         if (count($usersSubscribedToUsergroupIds) > 0) {
             $usersSubscribedToUsergroup = [];
             foreach ($usersSubscribedToUsergroupIds as $userId) {
-                $usersSubscribedToUsergroup[] = $userRepository->find($userId);
+                $usersSubscribedToUsergroup[] = $em->getRepository(User::class)->find($userId);
             }
+
+
             $data['usersSubscribedToUsergroup'] = StandardizationService::sortByNameByCountryAndStandardizeName($usersSubscribedToUsergroup, true);
+
         }
 
         $courseManager = new CourseManager();

@@ -38,7 +38,7 @@
                     </nav>
                 </div>
                 <a href="/main/user/class.php?cid={{ courseId }}"
-                   title="{{ 'Go back to the list of classes subscribed to the course'|trans }}">
+                   title="{{ 'Go back to course classes'|trans }}">
                     <i class="ch-tool-icon mdi mdi-arrow-left-bold-box" style="font-size: 32px"></i>
                 </a>
                 <h2>{{ 'Overview class'|trans }} : {{ usergroupName }}</h2>
@@ -59,17 +59,17 @@
             {% endif %}
 
             {% if (usersSubscribedToCourse|length + usersNotSubscribedToCourse|length) > 0 %}
-                <div style="display: flex">
+                <div style="display: flex; margin: 20px 0;">
                     <input style="height: 32px; width: 20vw" id="search-input" type="text"
-                           placeholder="Barre de recherche">
-                    <i class="ch-tool-icon mdi mdi-account-search" style="font-size: 32px"></i>
+                           placeholder="{{ 'Search'|trans }}">
+                    <i class="ch-tool-icon mdi mdi-text-search" style="font-size: 32px"></i>
                 </div>
             {% endif %}
 
             {% if usersSubscribedToCourse|length > 0 %}
                 <div>
-                <b>{{ 'Users subscribed to this course'|trans }}</b>
-                <ul style='list-style-type: disc; padding-left: 1.5vw;'>
+                <b>{{ 'Users subscribed to the course'|trans }}</b>
+                <ul style='list-style-type: disc; padding-left: 1.5vw;margin: 20px 0;'>
                     {% for user in usersSubscribedToCourse %}
                             <li class="user-display">{{ user.identity }} ( {{ user.email }} )</li>
                     {% endfor %}
@@ -79,8 +79,8 @@
 
             {% if usersNotSubscribedToCourse|length > 0 %}
                 <div>
-                <b>{{ 'Users not subscribed to this course'|trans }}</b>
-                <ul style='list-style-type: disc; padding-left: 1.5vw;'>
+                <b>{{ 'Users not subscribed to the course'|trans }}</b>
+                <ul style='list-style-type: disc; padding-left: 1.5vw; margin: 20px'>
                     {% for user in usersNotSubscribedToCourse %}
                             <li class="user-display">{{ user.identity }} ( {{ user.email }} )</li>
                     {% endfor %}

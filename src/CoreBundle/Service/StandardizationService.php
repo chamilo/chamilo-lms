@@ -59,7 +59,7 @@ class StandardizationService
             $countryCode = api_get_language_isocode();
         }
 
-        return ucwords(api_get_person_name($user->getFirstName(), $user->getLastName(), null, null, $countryCode));
+        return ucwords(api_get_person_name($user->getFirstName(), $user->getLastName(), null, null , $countryCode));
     }
 
     public static function standardizeString(string $string): string

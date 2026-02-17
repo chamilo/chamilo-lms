@@ -19,9 +19,11 @@ use UserGroupModel;
 /**
  * @author Julio Montoya <gugli100@gmail.com>
  */
+#[Route('/user')]
 class UserController extends AbstractController
 {
-    #[Route(path: '/main/user/overview', name: 'overview_class', methods: ['GET'])]
+    // #[Route(path: '/overview', name: 'overview_class', methods: ['GET'])]
+    #[Route(path: '/main/overview', name: 'overview_class', methods: ['GET'])]
     public function overview(Request $request): Response
     {
         $usergroupId = $request->query->get('usergroup');
@@ -49,7 +51,7 @@ class UserController extends AbstractController
     /**
      * Public profile.
      */
-    #[Route(path: '/user/{username}', name: 'chamilo_core_user_profile', methods: ['GET'])]
+    #[Route(path: '/{username}', methods: ['GET'], name: 'chamilo_core_user_profile')]
     public function profile(string $username, UserRepository $userRepository, IllustrationRepository $illustrationRepository): Response
     {
         $user = $userRepository->findByUsername($username);

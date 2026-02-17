@@ -48,19 +48,19 @@
             {% endif %}
 
             {% if (usersSubscribedToUsergroup|length + coursesSubscribedToUsergroup|length) > 0 %}
-                <div style="display: flex">
+                <div style="display: flex; margin: 20px 0;">
                     <input style="height: 32px; width: 20vw" id="search-input" type="text"
-                           placeholder="Barre de recherche">
-                    <i class="ch-tool-icon mdi mdi-account-search" style="font-size: 32px"></i>
+                           placeholder="{{ 'Search'|trans }}">
+                    <i class="ch-tool-icon mdi mdi-text-search" style="font-size: 32px"></i>
                 </div>
             {% endif %}
 
             {% if usersSubscribedToUsergroup|length > 0 %}
                 <div>
-                    <b>{{ 'Users subscribed to this class'|trans }}</b>
-                    <ul style='list-style-type: disc; padding-left: 1.5vw;'>
+                    <b>{{ 'Users subscribed to the class'|trans }}</b>
+                    <ul style='list-style-type: disc; padding-left: 1.5vw; margin: 20px 0;'>
                         {% for user in usersSubscribedToUsergroup %}
-                            <li class="user-display">{{ user.identity }} ( {{ user.email }} )</li>
+                            <li class="user-display">{{ user.identity }} ({{ user.email }})</li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -69,9 +69,9 @@
             {% if coursesSubscribedToUsergroup|length > 0 %}
                 <div>
                     <b>{{ 'Courses subscribed to the class'|trans }}</b>
-                    <ul style='list-style-type: disc; padding-left: 1.5vw;'>
+                    <ul style='list-style-type: disc; padding-left: 1.5vw; margin: 20px 0'>
                         {% for course in coursesSubscribedToUsergroup %}
-                            <li class="user-display">[{{ course.code }}] {{ course.name }}</li>
+                            <li class="user-display">{{ course.name }} ({{ course.code }})</li>
                         {% endfor %}
                     </ul>
                 </div>

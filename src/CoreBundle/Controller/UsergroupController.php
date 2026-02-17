@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use UserGroupModel;
 
-class ClassController extends AbstractController
+class UsergroupController extends AbstractController
 {
     #[Route('/main/admin/classes/{id}/overview', name: 'class_overview')]
     public function overview(int $id): Response

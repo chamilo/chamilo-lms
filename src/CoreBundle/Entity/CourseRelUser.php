@@ -70,6 +70,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     'user.username',
     'user.firstname',
     'user.lastname',
+    'course.title',
+    'course.code',
 ])]
 class CourseRelUser implements Stringable
 {

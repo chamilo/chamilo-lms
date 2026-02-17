@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\State;
 
+use ApiPlatform\Doctrine\Orm\Extension\FilterExtension;
 use ApiPlatform\Doctrine\Orm\Extension\PaginationExtension;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGenerator;
 use ApiPlatform\Metadata\Operation;
@@ -36,6 +37,7 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
         private readonly CourseRelUserRepository $courseRelUserRepository,
         private readonly CourseStudentInfoHelper $courseStudentInfoHelper,
         private readonly SequenceResourceRepository $sequenceResourceRepository,
+        private readonly FilterExtension $filterExtension,
         private readonly PaginationExtension $paginationExtension,
     ) {}
 
@@ -51,13 +53,6 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
             throw new RuntimeException('Access URL not found');
         }
 
-        $filters = $context['filters'] ?? [];
-
-        // Optional filters (kept for compatibility).
-        $status = isset($filters['status']) ? (int) $filters['status'] : null;
-        $special = isset($filters['special']) ? (int) $filters['special'] : 0;
-        $search = isset($filters['q']) ? trim((string) $filters['q']) : '';
-
         $qb = $this->courseRelUserRepository->createQueryBuilder('cru')
             ->innerJoin('cru.course', 'c')
             ->addSelect('c')
@@ -70,24 +65,19 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
             ->addOrderBy('cru.sort', 'ASC')
             ->addOrderBy('c.title', 'ASC');
 
-        if (null !== $status) {
-            $qb->andWhere('cru.status = :status')->setParameter('status', $status);
-        }
+        $queryNameGenerator = new QueryNameGenerator();
 
-        // Example: special=1 defaults to teacher subscriptions when status is not explicitly provided.
-        if (1 === $special && null === $status) {
-            $qb->andWhere('cru.status = :teacherStatus')
-                ->setParameter('teacherStatus', CourseRelUser::TEACHER);
-        }
-
-        if ('' !== $search) {
-            $qb->andWhere('(LOWER(c.title) LIKE :q OR LOWER(c.code) LIKE :q)')
-                ->setParameter('q', '%'.mb_strtolower($search).'%');
-        }
+        $this->filterExtension->applyToCollection(
+            $qb,
+            $queryNameGenerator,
+            CourseRelUser::class,
+            $operation,
+            $context
+        );
 
         $this->paginationExtension->applyToCollection(
             $qb,
-            new QueryNameGenerator(),
+            $queryNameGenerator,
             CourseRelUser::class,
             $operation,
             $context

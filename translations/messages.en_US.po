@@ -22139,8 +22139,14 @@ msgstr "Exercise report by category for all sessions"
 msgid "Require e-mail confirmation"
 msgstr "Require e-mail confirmation"
 
+msgid "Registration confirmation"
+msgstr "Registration confirmation"
+
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
+
+msgid "To complete your platform registration you need to confirm your account by clicking the following link"
+msgstr "To complete your platform registration you need to confirm your account by clicking the following link"
 
 msgid "Confirmation for new account"
 msgstr "Confirmation for new account"
@@ -32570,14 +32576,41 @@ msgstr "Total space used by %s is %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Total space used by portal %s is %sGB (limit is set to %sGB)"
 
-msgid "[%s] Confirm your e-mail"
-msgstr "[%s] Confirm your e-mail"
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
 
-msgid "To verify your e-mail and enable your account on %s, please click the link below."
-msgstr "To verify your e-mail and enable your account on %s, please click the link below."
+msgid "Link classes to created groups ?"
+msgstr "Link classes to created groups ?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+
+msgid "New groups creation in category %s"
+msgstr "New groups creation in category %s"
+
+msgid "Users subscribed to the class"
+msgstr "Users subscribed to the class"
+
+msgid "Courses subscribed to the class"
+msgstr "Courses subscribed to the class"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "No user and no course are subscribed to this class"
+
+msgid "No user are subscribed to this class"
+msgstr "No user are subscribed to this class"
+
+msgid "No course are subscribed to this class"
+msgstr "No course are subscribed to this class"
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "If you did not register this account, you can ignore this e-mail. No action will be taken."
 
 msgid "Current authentication method"
 msgstr "Current authentication method"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Are you sure you want to remove the class?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Are you sure you want to remove the class without removing users?"

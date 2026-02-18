@@ -112,6 +112,27 @@ $form->applyFilter('department_name', 'trim');
 $form->addText('department_url', get_lang('Department URL'), false);
 $form->applyFilter('department_url', 'html_filter');
 
+// Room.
+$em = Database::getManager();
+$roomCount = $em->getRepository(\Chamilo\CoreBundle\Entity\Room::class)->count([]);
+if ($roomCount > 0) {
+    $roomOptions = [];
+    $courseEntity = api_get_course_entity();
+    if ($courseEntity && $courseEntity->getRoom()) {
+        $currentRoom = $courseEntity->getRoom();
+        $roomOptions[$currentRoom->getId()] = $currentRoom->getTitle();
+    }
+    $form->addSelectAjax(
+        'room_id',
+        get_lang('Default room'),
+        $roomOptions,
+        [
+            'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_room',
+            'placeholder' => get_lang('Select'),
+        ]
+    );
+}
+
 // Extra fields
 $extra_field = new ExtraField('course');
 $extraFieldAdminPermissions = false;

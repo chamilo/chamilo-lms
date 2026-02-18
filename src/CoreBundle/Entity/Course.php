@@ -172,7 +172,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     #[Groups([
         'course:read',
         'user:read',
-        'course_rel_user:read',
     ])]
     #[ORM\OneToMany(mappedBy: 'course', targetEntity: CourseRelUser::class, cascade: ['persist'], orphanRemoval: true)]
     protected Collection $users;

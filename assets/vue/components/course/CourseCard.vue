@@ -153,6 +153,11 @@
       </template>
       <template #footer>
         <div class="flex flex-col gap-2">
+          <div
+            v-if="ui.showAnyStudentInfo"
+            class="mt-2 h-px w-full bg-gray-10"
+            aria-hidden="true"
+          ></div>
           <BaseAvatarList :users="teachers" />
           <div
             v-if="languageLabel"
@@ -226,7 +231,7 @@
               </span>
             </div>
           </div>
-          <!-- Body -->
+
           <div class="px-4 py-3">
             <div
               v-if="notificationsLoading"
@@ -307,7 +312,7 @@
               </div>
             </div>
           </div>
-          <!-- Footer -->
+
           <div class="px-4 py-3 flex items-center justify-end gap-2 border-t border-gray-10">
             <BaseButton
               :label="t('Close')"
@@ -640,7 +645,6 @@ function extractNumericId(value) {
   if (typeof value === "number" && Number.isFinite(value)) return value
 
   if (typeof value === "string") {
-    // Extract last number from strings like "/api/courses/123"
     const m = value.match(/(\d+)(?!.*\d)/)
     return m ? Number(m[1]) : 0
   }
@@ -660,7 +664,6 @@ const courseNumericId = computed(() => {
   return extractNumericId(props.course?.id ?? props.course?._id ?? props.course?.["@id"])
 })
 
-// Prefer numeric ID for routing when available.
 const courseRouteId = computed(() => {
   const n = Number(courseNumericId.value) || 0
   return n > 0 ? n : (props.course?._id ?? props.course?.id)
@@ -728,19 +731,45 @@ const sessionDurationText = computed(() => {
 
 const showCourseDuration = computed(() => toBool(platformConfigStore.getSetting("course.show_course_duration")))
 
+function normalizeTeacher(user, fallbackRoleKey) {
+  if (!user || typeof user !== "object") return null
+
+  const rawRole = (user.roleKey || user.roleLabel || fallbackRoleKey || "Teacher").toString().trim()
+
+  return {
+    ...user,
+    roleLabel: t(rawRole),
+  }
+}
+
 const teachers = computed(() => {
+  const fromLite = props.course?.teachersLite ?? props.course?.teachers_lite ?? null
+  if (Array.isArray(fromLite) && fromLite.length > 0) {
+    return fromLite.map((u) => normalizeTeacher(u, "Teacher")).filter(Boolean)
+  }
+
   const courseIri = props.course?.["@id"]
   if (props.session?.courseCoachesSubscriptions && courseIri) {
     return props.session.courseCoachesSubscriptions
       .filter((srcru) => srcru.course?.["@id"] === courseIri)
-      .map((srcru) => srcru.user)
+      .map((srcru) => normalizeTeacher(srcru.user, "Coach"))
+      .filter(Boolean)
   }
 
   if (props.course?.users?.edges) {
-    return props.course.users.edges.map((edge) => ({
-      id: edge.node.id,
-      ...edge.node.user,
-    }))
+    return props.course.users.edges
+      .map((edge) => {
+        const node = edge?.node ?? {}
+        const isTutor = Boolean(node?.isTutor ?? node?.tutor ?? false)
+        return normalizeTeacher(
+          {
+            id: node?.id,
+            ...node?.user,
+          },
+          isTutor ? "Coach" : "Teacher",
+        )
+      })
+      .filter(Boolean)
   }
 
   return []
@@ -756,12 +785,6 @@ const sessionDisplayDate = computed(() => {
   return parts.join(" — ")
 })
 
-/**
- * Requirements status (no more per-card /next-course calls on mount).
- * These fields must come from /me/courses provider:
- * - hasRequirements
- * - allowSubscription
- */
 const hasRequirements = computed(() => {
   const c = props.course || {}
   const v = c.hasRequirements ?? c.has_requirements ?? null

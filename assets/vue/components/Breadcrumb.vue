@@ -525,6 +525,15 @@ watchEffect(() => {
     return
   }
 
+  // Admin resource routes (rooms, branches) — prepend Administration crumb
+  const adminResourceRoutes = ["rooms", "branches"]
+  if (adminResourceRoutes.includes(mainToolName)) {
+    calculatedList.value.push({
+      label: t("Administration"),
+      route: { name: "AdminIndex" },
+    })
+  }
+
   // Generic tool fallback
   if (mainToolName && !["documents", "assignments", "attendance"].includes(mainToolName)) {
     const matchedRoutes = route.matched

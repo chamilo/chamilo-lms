@@ -8622,10 +8622,10 @@ msgid "helvetica, arial, geneva, sans-serif"
 msgstr "helvetica, arial, geneva, sans-serif"
 
 msgid ","
-msgstr ","
+msgstr "，"
 
 msgid "."
-msgstr "."
+msgstr "。"
 
 msgid "%b %d, %Y"
 msgstr "%b %d, %Y"
@@ -14823,7 +14823,7 @@ msgid "Waiting for admin response"
 msgstr "等待管理員回應"
 
 msgid "Re"
-msgstr "Re"
+msgstr "回覆"
 
 msgid "Files attachments"
 msgstr "檔案附件"
@@ -17697,7 +17697,7 @@ msgid "Tests in learning paths"
 msgstr "學習路徑中的測驗"
 
 msgid "Id"
-msgstr "ID"
+msgstr "編號"
 
 msgid "There was an error."
 msgstr "發生錯誤。"
@@ -32579,4 +32579,7 @@ msgstr "為了驗證您的電子郵件並在 %s 上啟用您的帳戶，請點�
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "如果您未註冊此帳戶，您可以忽略此電子郵件。不會採取任何行動。"
+
+msgid "Current authentication method"
+msgstr "目前認證方法"
 

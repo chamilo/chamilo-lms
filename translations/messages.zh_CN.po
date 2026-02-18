@@ -3666,7 +3666,7 @@ msgid "Mark as read"
 msgstr "标记为已读"
 
 msgid "RE:"
-msgstr "Re:"
+msgstr "回覆："
 
 msgid "Advanced edit"
 msgstr "高级编辑"
@@ -8424,7 +8424,7 @@ msgid "Question type does not belong to feedback type in exercise"
 msgstr "问题类型不属于练习中的反馈类型"
 
 msgid "By"
-msgstr "By"
+msgstr "由"
 
 msgid "Users online"
 msgstr "在线用户"
@@ -8622,10 +8622,10 @@ msgid "helvetica, arial, geneva, sans-serif"
 msgstr "helvetica, arial, geneva, sans-serif"
 
 msgid ","
-msgstr ","
+msgstr "，"
 
 msgid "."
-msgstr "."
+msgstr "。"
 
 msgid "%b %d, %Y"
 msgstr "%b %d, %Y"
@@ -8634,7 +8634,7 @@ msgid "%A %B %d, %Y"
 msgstr "%A %B %d, %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
-msgstr "%B %d, %Y at %I:%M %p"
+msgstr "%B %d, %Y %I:%M %p"
 
 msgid "%I:%M %p"
 msgstr "%I:%M %p"
@@ -8844,7 +8844,7 @@ msgid "Page"
 msgstr "页"
 
 msgid "English"
-msgstr "English"
+msgstr "英语"
 
 msgid "Home"
 msgstr "主页"
@@ -14292,7 +14292,7 @@ msgid "Install"
 msgstr "安装"
 
 msgid "of"
-msgstr "of"
+msgstr "的"
 
 msgid "For more details"
 msgstr "要求更多详情"
@@ -18594,7 +18594,7 @@ msgid "%m/%d/%Y"
 msgstr "%m/%d/%Y"
 
 msgid "%B %d, %Y at %H:%M"
-msgstr "%B %d, %Y at %H:%M"
+msgstr "%B %d, %Y %H:%M"
 
 msgid "Enable legal terms"
 msgstr "启用法律条款"
@@ -32332,7 +32332,7 @@ msgid "Quiz"
 msgstr "测验"
 
 msgid "Customcertificate"
-msgstr "Customcertificate"
+msgstr "自定义证书"
 
 msgid "Update profile"
 msgstr "更新个人资料"
@@ -32579,4 +32579,7 @@ msgstr "要验证您的电子邮件并在 %s 上启用您的账户，请点击�
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "如果您没有注册此账户，您可以忽略此电子邮件。不会采取任何行动。"
+
+msgid "Current authentication method"
+msgstr "当前认证方法"
 

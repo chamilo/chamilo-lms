@@ -120,16 +120,6 @@ export default {
   },
 
   /**
-   * Fetches available categories for courses.
-   * @returns {Promise<Array>} A list of available categories.
-   */
-  getCategories: async () => {
-    const response = await api.get(`/course/categories`)
-
-    return response.data
-  },
-
-  /**
    * Searches for templates based on a provided search term.
    * @param {string} searchTerm - The search term for the templates.
    * @returns {Promise<Array>} A list of templates matching the search term.

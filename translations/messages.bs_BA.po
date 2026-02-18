@@ -238,7 +238,7 @@ msgid "Hyperbolic tangent:\t\ttanh(x)"
 msgstr "Hiperbolični tangent:\t\ttanh(x)"
 
 msgid "Tangent:\t\t\ttan(x)"
-msgstr "Tangent:\t\t\ttan(x)"
+msgstr "Tangens:\t\t\ttan(x)"
 
 msgid "Coach and student"
 msgstr "Trener i student"
@@ -8998,7 +8998,7 @@ msgid "N"
 msgstr "A"
 
 msgid "D"
-msgstr "D"
+msgstr "N"
 
 msgid "Jan"
 msgstr "Jan"
@@ -9046,7 +9046,7 @@ msgid "March"
 msgstr "Mart"
 
 msgid "April"
-msgstr "April"
+msgstr "april"
 
 msgid "June"
 msgstr "Juni"
@@ -31447,7 +31447,7 @@ msgid "Reply to all"
 msgstr "Odgovori svima"
 
 msgid "SCIM external ID"
-msgstr "SCIM external ID"
+msgstr "SCIM vanjski ID"
 
 msgid "OAuth2 ID"
 msgstr "OAuth2 ID"
@@ -32573,4 +32573,7 @@ msgstr "Da biste potvrdili svoju e-poštu i aktivirali račun na %s, kliknite na
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Ako niste registrovali ovaj račun, možete zanemariti ovu e-poštu. Neće se preduzeti nikakva akcija."
+
+msgid "Current authentication method"
+msgstr "Trenutni način autentifikacije"
 

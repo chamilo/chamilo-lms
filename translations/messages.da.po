@@ -8763,7 +8763,7 @@ msgid "bulgarian"
 msgstr "bulgarsk"
 
 msgid "catalan"
-msgstr "catalan"
+msgstr "katalansk"
 
 msgid "croatian"
 msgstr "kroatisk"
@@ -8787,7 +8787,7 @@ msgid "french_KM"
 msgstr "fransk_KM"
 
 msgid "galician"
-msgstr "galician"
+msgstr "galicisk"
 
 msgid "german"
 msgstr "tysk"
@@ -8991,7 +8991,7 @@ msgid "Sunday"
 msgstr "Søndag"
 
 msgid "J"
-msgstr "J"
+msgstr "T"
 
 msgid "A"
 msgstr "A"
@@ -11751,7 +11751,7 @@ msgid "There is no result yet"
 msgstr "Der er endnu intet resultat"
 
 msgid "Hits"
-msgstr "Hits"
+msgstr "Ramninger"
 
 msgid "h."
 msgstr "t."
@@ -11889,7 +11889,7 @@ msgid "OS"
 msgstr "OS"
 
 msgid "Browsers"
-msgstr "Browsers"
+msgstr "Browsere"
 
 msgid "Referers"
 msgstr "Referencer"
@@ -11964,7 +11964,7 @@ msgid "Administrators"
 msgstr "Administratorer"
 
 msgid "Tracks"
-msgstr "Tracks"
+msgstr "Spor"
 
 msgid "Success"
 msgstr "Succes"
@@ -13662,7 +13662,7 @@ msgid "Brochure"
 msgstr "Brochure"
 
 msgid "Slideshow"
-msgstr "Slideshow"
+msgstr "Lysbilleder"
 
 msgid "Published end date"
 msgstr "Udgivelses slutdato"
@@ -16188,7 +16188,7 @@ msgid "Quarterly report"
 msgstr "Kvartalsrapport"
 
 msgid "%d %B %Y"
-msgstr "%d %B %Y"
+msgstr "%d. %B %Y"
 
 msgid "%A"
 msgstr "%A"
@@ -19215,7 +19215,7 @@ msgid "Last Name and First Name"
 msgstr "Efternavn og Fornavn"
 
 msgid "Plugins"
-msgstr "Plugins"
+msgstr "Tilføjelser"
 
 msgid "Detailed"
 msgstr "Detaljeret"
@@ -21522,7 +21522,7 @@ msgid "Allow category edition by administrators."
 msgstr "Tillad administratorer at redigere kategorier."
 
 msgid "Tickets"
-msgstr "Tickets"
+msgstr "Billetter"
 
 msgid "The Moodle course file has been imported successfully."
 msgstr "Moodle-kursets fil er blevet importeret succesfuldt."
@@ -21648,7 +21648,7 @@ msgid "Generate"
 msgstr "Generér"
 
 msgid "Ticket"
-msgstr "Ticket"
+msgstr "Billet"
 
 msgid "Invalid API key"
 msgstr "Ugyldig API-nøgle"
@@ -21921,7 +21921,7 @@ msgid "Avatar"
 msgstr "Avatar"
 
 msgid "Semester"
-msgstr "Semester"
+msgstr "Semestre"
 
 msgid "Reading comprehension"
 msgstr "Læseforståelse"
@@ -27465,7 +27465,7 @@ msgid "Danger"
 msgstr "Fare"
 
 msgid "Dropdowns"
-msgstr "Dropdowns"
+msgstr "Nedrullningslister"
 
 msgid "Checkbox and radio buttons"
 msgstr "Afkrydsningsfelter og radioknapper"
@@ -28129,37 +28129,37 @@ msgid "Menucampushomepage"
 msgstr "Menucampushomepage"
 
 msgid "Menumycourses"
-msgstr "Menumycourses"
+msgstr "Menucourses"
 
 msgid "Menureporting"
-msgstr "Menureporting"
+msgstr "Menurapportering"
 
 msgid "Menuplatformadministration"
 msgstr "Menuplatformadministration"
 
 msgid "Menumyagenda"
-msgstr "Menumyagenda"
+msgstr "Menuagenda"
 
 msgid "Menusocial"
 msgstr "Menusocial"
 
 msgid "Menuvideoconference"
-msgstr "Menuvideoconference"
+msgstr "Menuvideokonference"
 
 msgid "Menudiagnostics"
-msgstr "Menudiagnostics"
+msgstr "Menudiagnostik"
 
 msgid "Menucatalogue"
-msgstr "Menucatalogue"
+msgstr "Menukatalog"
 
 msgid "Topbarcertificate"
-msgstr "Topbarcertificate"
+msgstr "Topbarcertifikat"
 
 msgid "Topbarskills"
-msgstr "Topbarskills"
+msgstr "Topbarfærdigheder"
 
 msgid "Ai_helpers"
-msgstr "Ai_helpers"
+msgstr "Ai_hjælpere"
 
 msgid "ID of the user who officially sends the agenda reminders"
 msgstr "ID på brugeren, der officielt sender agenda-påmindelser"
@@ -28225,7 +28225,7 @@ msgid "You're subscribed to push notifications in this browser."
 msgstr "Du er abonneret på push-notifikationer i denne browser."
 
 msgid "Endpoint"
-msgstr "Endpoint"
+msgstr "Slutpunkt"
 
 msgid "Push notifications are not enabled in this browser."
 msgstr "Push-notifikationer er ikke aktiveret i denne browser."
@@ -28417,7 +28417,7 @@ msgid "In person"
 msgstr "Fysisk undervisning"
 
 msgid "Blended learning"
-msgstr "Blended learning"
+msgstr "Blandet læring"
 
 msgid "Centralised"
 msgstr "Centraliseret"
@@ -31432,7 +31432,7 @@ msgid "What general terms and conditions are given to users to use this platform
 msgstr "Hvilke generelle vilkår og betingelser gives til brugerne for at bruge denne platform?"
 
 msgid "ex. {examplePassword}"
-msgstr ""
+msgstr "fx. {examplePassword}"
 
 msgid "Welcome to Chamilo!"
 msgstr "Velkommen til Chamilo!"
@@ -31771,7 +31771,7 @@ msgid "Catalogue"
 msgstr "Katalog"
 
 msgid "Workflows"
-msgstr "Workflows"
+msgstr "Worksheets"
 
 msgid "Setting is editable on sub-URLs"
 msgstr "Indstillingen kan redigeres på under-URL'er"
@@ -32579,4 +32579,7 @@ msgstr "For at verificere din e-mail og aktivere din konto på %s, skal du klikk
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Hvis du ikke har registreret denne konto, kan du ignorere denne e-mail. Ingen handling vil blive taget."
+
+msgid "Current authentication method"
+msgstr "Nuværende godkendelsesmetode"
 

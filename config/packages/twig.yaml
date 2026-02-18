@@ -12,6 +12,7 @@ twig:
 
     globals:
         software_name: Chamilo
+        page_helper: '@Chamilo\CoreBundle\Helpers\PageHelper'
         messages_count:
         message_link:
         execution_stats:

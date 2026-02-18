@@ -10948,7 +10948,7 @@ msgid "Login request"
 msgstr "Innloging beiðan"
 
 msgid "Admin"
-msgstr "Admin"
+msgstr "Stjórna"
 
 msgid "User of course"
 msgstr "Brúkari í bólki"
@@ -11746,7 +11746,7 @@ msgid "There is no result yet"
 msgstr "Tað er ongin niðurstøða enn"
 
 msgid "Hits"
-msgstr "Hits"
+msgstr "Hitt"
 
 msgid "h."
 msgstr "klst."
@@ -12961,7 +12961,7 @@ msgid "Add new glossary term"
 msgstr "Legg afturat nýggjum orðabókartermi"
 
 msgid "Term"
-msgstr "Term"
+msgstr "Orð"
 
 msgid "Term definition"
 msgstr "Orðskýring"
@@ -32332,46 +32332,46 @@ msgid "Update profile"
 msgstr "Dagfør profil"
 
 msgid "Enable learning path generator"
-msgstr ""
+msgstr "Virkna lærugangageru"
 
 msgid "Enable exercise generator"
-msgstr ""
+msgstr "Virkna uppgávugeru"
 
 msgid "Enable open answers grader"
-msgstr ""
+msgstr "Virkna greiðari fyri opið svar"
 
 msgid "Enable tutor chatbot"
-msgstr ""
+msgstr "Virkna tutor chatbot"
 
 msgid "Enable task grader"
-msgstr ""
+msgstr "Virkna uppgávugreiðari"
 
 msgid "Enable content analyser"
-msgstr ""
+msgstr "Virkna innihaldsanalysur"
 
 msgid "Enable image generator"
-msgstr ""
+msgstr "Virkna myndageru"
 
 msgid "Enable glossary terms generator"
-msgstr ""
+msgstr "Virkna orðabókstermageru"
 
 msgid "Enable video generator"
-msgstr ""
+msgstr "Virkna videogeru"
 
 msgid "Enable course analyser"
-msgstr ""
+msgstr "Virkna kursusanalysur"
 
 msgid "The operation '%s' is not supported."
-msgstr ""
+msgstr "Støðuls '%s' er ikki loypt."
 
 msgid "AI feedback on %s in course %s"
-msgstr ""
+msgstr "AI endurgoldur um %s í kursi %s"
 
 msgid "Delete failed: missing course context or invalid question id."
-msgstr ""
+msgstr "Sletta miseyknaðist: vantar kursus samanhang ella ógilt spurning ID."
 
 msgid "AI Tutor"
-msgstr ""
+msgstr "AI Tutor"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
 msgstr "APCu-framburaðan má vera íson sett og virkin fyri at plattformurin kann brúka hana."
@@ -32573,4 +32573,7 @@ msgstr "Til at staðfesta t-post tín og virkja kontu á %s, klikk á leinkjuna 
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Um tú ikki hevur gjørt upp hesa kontu, kanst tú forstøðga henda t-post. Ongin handling verður tikin."
+
+msgid "Current authentication method"
+msgstr "Núverandi innlogingarháttur"
 

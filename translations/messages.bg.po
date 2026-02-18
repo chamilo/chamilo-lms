@@ -495,7 +495,7 @@ msgid "Question ID"
 msgstr "ID на въпроса"
 
 msgid "ExerciseId"
-msgstr "ExerciseId"
+msgstr "Идентификатор на упражнението"
 
 msgid "Excel export"
 msgstr "Експорт към Excel"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:запазени права,, no:свободен"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Поток от октети,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Octet поток,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:тест (упражнение),,      simulation:симулация,,      questionnaire:въпросник,,      diagram:диаграма,,      figure:фигура,,      graph:графика,,      index:индекс,,      slide:слайд,,      table:таблица,,      narrative text:обзор,,      exam:изпит,,      experiment:експеримент,,      problem statement:постановка на проблем,,      self assessment:самостоятелно оценяване,,      lecture:лекция"
@@ -2817,7 +2817,7 @@ msgid "This is a sticky message (appears always on top and has a special sticky 
 msgstr "Това е \"лепкаво\" съобщение - появява се винаги най-отгоре."
 
 msgid "Re:"
-msgstr "Re:"
+msgstr "Относно:"
 
 msgid "Are you sure you want to delete this post? Deleting this post will also delete the replies on this post. Please check the threaded view to see which posts will also be deleted"
 msgstr "Изтриването на това съобщение ще изтрие и отговорите към него. Моля, направете структуриран преглед, за да видите, кои отговори ще се изтрият.<br/>Наистина ли искате да изтриете това съобщение?"
@@ -9795,7 +9795,7 @@ msgid "Group area"
 msgstr "Страница на групата"
 
 msgid "Wiki"
-msgstr "Wiki"
+msgstr "Уики"
 
 msgid "Export to PDF"
 msgstr "Експортиране в PDF"
@@ -12786,7 +12786,7 @@ msgid "Latest sent on"
 msgstr "Отново изпратен на"
 
 msgid "kB"
-msgstr "kB"
+msgstr "кБ"
 
 msgid "Your account %s has been completely removed from this portal. Thank you for staying with us for a while. We hope to see you again later."
 msgstr "Акаунтът ви %s е напълно премахнат от този портал. Благодаря ви, че останахте с нас известно време. Надяваме се да ви видим отново по-късно."
@@ -16392,7 +16392,7 @@ msgid "A student has obtained the number of sub-skills needed to validate the mo
 msgstr "Студентът е постигнал нужния брой под-умения за валидиране на основното умение."
 
 msgid "Off"
-msgstr "Off"
+msgstr "Изкл."
 
 msgid "Web server"
 msgstr "Уеб-сървър"
@@ -22047,13 +22047,13 @@ msgid "Certificate notification"
 msgstr "Известие за сертификат"
 
 msgid "((user_first_name)),"
-msgstr "((user_first_name)),"
+msgstr "((име_на_потребител_първо_име)),"
 
 msgid "Send certificate notification to all users"
 msgstr "Изпрати известие за сертификат на всички потребители"
 
 msgid "Fwd"
-msgstr "Fwd"
+msgstr "Препр."
 
 msgid "Forwarded message"
 msgstr "Препратено съобщение"
@@ -23982,10 +23982,10 @@ msgid "Send diagnostic finalization message"
 msgstr "Изпрати съобщение за финализиране на диагностиката"
 
 msgid "DiagnosticfinalizationmessageTitle"
-msgstr "DiagnosticfinalizationmessageTitle"
+msgstr "ДиагностичноЗавършванеСъобщениеЗаглавие"
 
 msgid "DiagnosticfinalizationmessageContent"
-msgstr "DiagnosticfinalizationmessageContent"
+msgstr "ДиагностичноЗавършванеСъобщениеСъдържание"
 
 msgid "Add a forumCategory"
 msgstr "Добави категория на форум"
@@ -24981,7 +24981,7 @@ msgid "Click to view details"
 msgstr "Кликнете за детайли"
 
 msgid "dd/mm/yyyy"
-msgstr "dd/mm/yyyy"
+msgstr "дд/мм/гггг"
 
 msgid "Export certificates issue report"
 msgstr "Износ на доклад за издадени сертификати"
@@ -28126,40 +28126,40 @@ msgid "Generates images based on prompts or content using AI."
 msgstr "Генерира изображения на базата на подсказки или съдържание с помощта на ИИ."
 
 msgid "Menucampushomepage"
-msgstr "Menucampushomepage"
+msgstr "МенюНачалоНаКампуса"
 
 msgid "Menumycourses"
-msgstr "Menumycourses"
+msgstr "МенюМоитеКурсове"
 
 msgid "Menureporting"
-msgstr "Menureporting"
+msgstr "МенюДокладване"
 
 msgid "Menuplatformadministration"
-msgstr "Menuplatformadministration"
+msgstr "МенюАдминистриранеНаПлатформата"
 
 msgid "Menumyagenda"
-msgstr "Menumyagenda"
+msgstr "МенюМоятКалендар"
 
 msgid "Menusocial"
-msgstr "Menusocial"
+msgstr "МенюСоциално"
 
 msgid "Menuvideoconference"
-msgstr "Menuvideoconference"
+msgstr "МенюВидеоконференции"
 
 msgid "Menudiagnostics"
-msgstr "Menudiagnostics"
+msgstr "Диагностика на менюто"
 
 msgid "Menucatalogue"
-msgstr "Menucatalogue"
+msgstr "Каталог на менюто"
 
 msgid "Topbarcertificate"
-msgstr "Topbarcertificate"
+msgstr "Сертификат на горната лента"
 
 msgid "Topbarskills"
-msgstr "Topbarskills"
+msgstr "Умения на горната лента"
 
 msgid "Ai_helpers"
-msgstr "Ai_helpers"
+msgstr "Помощници за ИИ"
 
 msgid "ID of the user who officially sends the agenda reminders"
 msgstr "ID на потребителя, който официално изпраща напомнянията за агендата"
@@ -30472,7 +30472,7 @@ msgid "Please check the following error:"
 msgstr "Моля, проверете следната грешка:"
 
 msgid "OK"
-msgstr "OK"
+msgstr "ОК"
 
 msgid "Migration failed!"
 msgstr "Миграцията неуспешна!"
@@ -30862,7 +30862,7 @@ msgid "Account locked until"
 msgstr "Сметката е заключена до"
 
 msgid "Google Calendar URL"
-msgstr "Google Calendar URL"
+msgstr "URL на Google Календар"
 
 msgid "User chat status"
 msgstr "Статус на чат на потребителя"
@@ -32332,7 +32332,7 @@ msgid "Quiz"
 msgstr "Тест"
 
 msgid "Customcertificate"
-msgstr "Customcertificate"
+msgstr "Персонализиран сертификат"
 
 msgid "Update profile"
 msgstr "Актуализиране на профила"
@@ -32377,7 +32377,7 @@ msgid "Delete failed: missing course context or invalid question id."
 msgstr "Изтриването неуспя: липсва контекст на курс или невалиден ID на въпрос."
 
 msgid "AI Tutor"
-msgstr "AI Tutor"
+msgstr "ИИ tutor"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
 msgstr "Разширението APCu трябва да бъде инсталирано и активирано, за да може платформата да го използва."
@@ -32579,4 +32579,7 @@ msgstr "За да потвърдите имейл адреса си и акти�
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Ако не сте регистрирали този акаунт, можете да игнорирате това писмо. Няма да бъде предприето действие."
+
+msgid "Current authentication method"
+msgstr "Текущ метод за автентикация"
 

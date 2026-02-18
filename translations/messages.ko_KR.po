@@ -2440,7 +2440,7 @@ msgid "Sample test"
 msgstr "샘플 테스트"
 
 msgid "Irony"
-msgstr "Irony"
+msgstr "아이러니"
 
 msgid "Socratic irony is..."
 msgstr "소크라테스적 아이러니는..."
@@ -2533,7 +2533,7 @@ msgid "Conference description"
 msgstr "컨퍼런스 설명"
 
 msgid "Only"
-msgstr "Only"
+msgstr "단독"
 
 msgid "Shuffle selection in available languages"
 msgstr "적절한 언어로 선택을 변경"
@@ -2815,7 +2815,7 @@ msgid "This is a sticky message (appears always on top and has a special sticky 
 msgstr "고정 메시지입니다 (항상 상단에 표시되고 특별한 고정 아이콘이 있습니다)"
 
 msgid "Re:"
-msgstr "Re:"
+msgstr "답:"
 
 msgid "Are you sure you want to delete this post? Deleting this post will also delete the replies on this post. Please check the threaded view to see which posts will also be deleted"
 msgstr "이 게시물을 삭제하시겠습니까? 이 게시물을 삭제하면 이 게시물에 대한 답변도 삭제됩니다. 어떤 게시물이 함께 삭제될지 확인하려면 스레드 보기를 확인하세요"
@@ -3664,7 +3664,7 @@ msgid "Mark as read"
 msgstr "읽음으로 표시"
 
 msgid "RE:"
-msgstr "RE:"
+msgstr "답:"
 
 msgid "Advanced edit"
 msgstr "고급 편집"
@@ -4135,7 +4135,7 @@ msgid "Database"
 msgstr "데이터베이스"
 
 msgid "works"
-msgstr "works"
+msgstr "작동"
 
 msgid "MySql Client"
 msgstr "MySql 클라이언트"
@@ -6469,7 +6469,7 @@ msgid "Send this announcement by email to selected groups/users"
 msgstr "이 공지사항을 지정한 그룹과 유저에게 메일로 전송"
 
 msgid "On"
-msgstr "On"
+msgstr "켜짐"
 
 msgid "registered users of the site"
 msgstr "이 사이트에 회원가입한 유저"
@@ -6820,7 +6820,7 @@ msgid "Group tutor"
 msgstr "그룹 튜터"
 
 msgid "(none)"
-msgstr "(none)"
+msgstr "(없음)"
 
 msgid "Admin users list"
 msgstr "관리자 목록"
@@ -7636,7 +7636,7 @@ msgid "Fill blanks or form"
 msgstr "Fill in blanks"
 
 msgid "Matching"
-msgstr "Matching"
+msgstr "일치"
 
 msgid "Replace the picture"
 msgstr "그림 대체"
@@ -7657,16 +7657,16 @@ msgid "use square brackets [...] to define one or more blanks"
 msgstr "하나 또는 그 이상의 공란을 지정할 때는 대괄호[...]를 사용하십시요"
 
 msgid "+answ"
-msgstr "+answ"
+msgstr "+답"
 
 msgid "-answ"
-msgstr "-answ"
+msgstr "-답"
 
 msgid "+elem"
-msgstr "+elem"
+msgstr "+요소"
 
 msgid "-elem"
-msgstr "-elem"
+msgstr "-요소"
 
 msgid "Please type your text below"
 msgstr "답을 아래에 입력하십시요"
@@ -8509,7 +8509,7 @@ msgid "Hide"
 msgstr "숨기기"
 
 msgid "Dear"
-msgstr "Dear"
+msgstr "친애하는"
 
 msgid "archive"
 msgstr "아카이브"
@@ -8710,7 +8710,7 @@ msgid "Total"
 msgstr "전체"
 
 msgid "take"
-msgstr "take"
+msgstr "참여"
 
 msgid "Several"
 msgstr "여럿"
@@ -8719,7 +8719,7 @@ msgid "Notice"
 msgstr "공지"
 
 msgid "among"
-msgstr "among"
+msgstr "중에서"
 
 msgid "Show"
 msgstr "보여주기"
@@ -8752,67 +8752,67 @@ msgid "Total time"
 msgstr "총 시간"
 
 msgid "arabic"
-msgstr "arabic"
+msgstr "아랍어"
 
 msgid "brazilian"
-msgstr "brazilian"
+msgstr "브라질 포르투갈어"
 
 msgid "bulgarian"
-msgstr "bulgarian"
+msgstr "불가리아어"
 
 msgid "catalan"
-msgstr "catalan"
+msgstr "카탈로니아어"
 
 msgid "croatian"
-msgstr "croatian"
+msgstr "크로아티아어"
 
 msgid "danish"
-msgstr "danish"
+msgstr "덴마크어"
 
 msgid "dutch"
-msgstr "dutch"
+msgstr "네덜란드어"
 
 msgid "finnish"
-msgstr "finnish"
+msgstr "핀란드어"
 
 msgid "french"
-msgstr "french"
+msgstr "프랑스어"
 
 msgid "french_corporate"
-msgstr "french_corporate"
+msgstr "프랑스어_기업"
 
 msgid "french_KM"
-msgstr "french_KM"
+msgstr "프랑스어_KM"
 
 msgid "galician"
-msgstr "galician"
+msgstr "갈리시아어"
 
 msgid "german"
-msgstr "german"
+msgstr "독일어"
 
 msgid "greek"
-msgstr "greek"
+msgstr "그리스어"
 
 msgid "italian"
-msgstr "italian"
+msgstr "이탈리아어"
 
 msgid "japanese"
-msgstr "japanese"
+msgstr "일본어"
 
 msgid "polish"
-msgstr "polish"
+msgstr "폴란드어"
 
 msgid "portuguese"
-msgstr "portuguese"
+msgstr "포르투갈어"
 
 msgid "russian"
-msgstr "russian"
+msgstr "러시아어"
 
 msgid "simpl_chinese"
-msgstr "simpl_chinese"
+msgstr "중국어(간체)"
 
 msgid "spanish"
-msgstr "spanish"
+msgstr "스페인어"
 
 msgid "Close"
 msgstr "닫기"
@@ -8842,7 +8842,7 @@ msgid "Page"
 msgstr "페이지"
 
 msgid "English"
-msgstr "English"
+msgstr "영어"
 
 msgid "Home"
 msgstr "홈"
@@ -8863,31 +8863,31 @@ msgid "Online"
 msgstr "온라인 상의"
 
 msgid "hungarian"
-msgstr "hungarian"
+msgstr "헝가리어"
 
 msgid "indonesian"
-msgstr "indonesian"
+msgstr "인도네시아어"
 
 msgid "malay"
-msgstr "malay"
+msgstr "말레이어"
 
 msgid "slovenian"
-msgstr "slovenian"
+msgstr "슬로베니아어"
 
 msgid "spanish_latin"
-msgstr "spanish_latin"
+msgstr "스페인어(라틴)"
 
 msgid "swedisch"
-msgstr "swedisch"
+msgstr "스웨덴어"
 
 msgid "thai"
-msgstr "thai"
+msgstr "태국어"
 
 msgid "turkish"
-msgstr "turkish"
+msgstr "터키어"
 
 msgid "vietnamese"
-msgstr "vietnamese"
+msgstr "베트남어"
 
 msgid "user information"
 msgstr "유저 정보"
@@ -8914,7 +8914,7 @@ msgid "Portal Admin"
 msgstr "플랫폼 관리자"
 
 msgid "none"
-msgstr "none"
+msgstr "없음"
 
 msgid "First select a course"
 msgstr "과정을 먼저 선택하십시요"
@@ -10714,7 +10714,7 @@ msgid "Opinion"
 msgstr "오피니언"
 
 msgid "Intranet"
-msgstr "Intranet"
+msgstr "인트라넷"
 
 msgid "My account"
 msgstr "유저"
@@ -11773,7 +11773,7 @@ msgid "Score for the tests done"
 msgstr "종료된 테스트의 점수"
 
 msgid "at"
-msgstr "at"
+msgstr "@"
 
 msgid "Visits"
 msgstr "방문"
@@ -11890,7 +11890,7 @@ msgid "Browsers"
 msgstr "브라우저"
 
 msgid "Referers"
-msgstr "Referers"
+msgstr "참조자"
 
 msgid "(When an user open the index of the portal)"
 msgstr "(유저가 포털의 인덱스를 오픈할 때)"
@@ -12232,7 +12232,7 @@ msgid "... SCORM Directory with SD-id (and split manifest - or leave empty)"
 msgstr ".....SD-id와 스콤 디렉토리(and split manifest - or leave empty)"
 
 msgid "root"
-msgstr "root"
+msgstr "루트"
 
 msgid "Split manifests, and #MDe, if any:"
 msgstr "분할 매니페스트 및 #MDe (있는 경우):"
@@ -12289,7 +12289,7 @@ msgid "A PowerPoint to SCORM Courses converter"
 msgstr "PowerPoint에서 SCORM 과정 변환기"
 
 msgid "Go"
-msgstr "Go"
+msgstr "이동"
 
 msgid "The quota for this course is"
 msgstr "이 과정의 제한 용량"
@@ -32577,4 +32577,7 @@ msgstr "%s에서 이메일을 확인하고 계정을 활성화하려면 아래 �
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "이 계정을 등록하지 않았다면 이 이메일을 무시하셔도 됩니다. 아무런 조치가 취해지지 않습니다."
+
+msgid "Current authentication method"
+msgstr "현재 인증 방법"
 

@@ -4748,7 +4748,7 @@ msgid "Should the navigation menu show the different tool icons?"
 msgstr "¿Deben mostrar o menú de navegación as iconas das ferramentas ?"
 
 msgid "Plugin"
-msgstr "Plugin"
+msgstr "Complemento"
 
 msgid "Main menu"
 msgstr "Menú principal"
@@ -4757,7 +4757,7 @@ msgid "Main menu after login"
 msgstr "Menú principal despois de autentificarse"
 
 msgid "Banner"
-msgstr "Banner"
+msgstr "Lenda"
 
 msgid "Resize uploaded user images"
 msgstr "Redimensionar as imaxes enviadas polos usuarios"
@@ -5234,10 +5234,10 @@ msgid "Whether you want to use the blacklist or whitelist filtering. See blackli
 msgstr "Utilizar un filtrado blacklist ou whitelist. Para máis detalles, vexa máis abaixo a descrición ambos os filtros."
 
 msgid "Blacklist"
-msgstr "Blacklist"
+msgstr "Lista negra"
 
 msgid "Whitelist"
-msgstr "Whitelist"
+msgstr "Lista branca"
 
 msgid "Blacklist - setting"
 msgstr "Blacklist - parámetros"
@@ -8714,7 +8714,7 @@ msgid "Previous page"
 msgstr "Páxina anterior"
 
 msgid "Use"
-msgstr "Use"
+msgstr "Usar"
 
 msgid "Total"
 msgstr "Total"
@@ -9863,7 +9863,7 @@ msgid "Forum threads"
 msgstr "Fíos do foro"
 
 msgid "Invisible"
-msgstr "Invisible"
+msgstr "Invisíbel"
 
 msgid "Phone"
 msgstr "Teléfono"
@@ -14501,7 +14501,7 @@ msgid "english for organisations"
 msgstr "inglés para organizacións"
 
 msgid "friulian"
-msgstr "friulian"
+msgstr "friulano"
 
 msgid "georgian"
 msgstr "xeorxiano"
@@ -14525,7 +14525,7 @@ msgid "norwegian"
 msgstr "noruego"
 
 msgid "pashto"
-msgstr "pashto"
+msgstr "paxto"
 
 msgid "persian"
 msgstr "persa"
@@ -14990,7 +14990,7 @@ msgid "ukrainian"
 msgstr "ukraniano"
 
 msgid "yoruba"
-msgstr "yoruba"
+msgstr "ioruba"
 
 msgid "New"
 msgstr "Novo"
@@ -15470,7 +15470,7 @@ msgid "Show only final score, with categories if available"
 msgstr "Amosar só o resultado final, con categorías, se estas están dispoñibles"
 
 msgid "Media"
-msgstr "Media"
+msgstr "Medios"
 
 msgid "You are authorized to edit this exercise, although already used in the learning path. If you edit it, try to avoid changing the score and focus on editing content, not values nor categorization, to avoid affecting the results of previous users having taken this test."
 msgstr "Está autorizado a editar este exercicio, aínda que xa estea usado nunha lección. Se o edita, trate de evitar modificar a puntuación e concéntrese en modificar o contido, pero non os valores e a clasificación, para evitar afectar aos resultados dos estudantes que xa tiveran pasado esta proba con anterioridade."
@@ -15917,7 +15917,7 @@ msgid "Date & time"
 msgstr "Data & hora"
 
 msgid "Item"
-msgstr "Item"
+msgstr "Elemento"
 
 msgid "Configure Dashboard Plugin"
 msgstr "Configurar o plugin do Panel de control"
@@ -19228,7 +19228,7 @@ msgid "Last Name and First Name"
 msgstr "Apelidos e nome"
 
 msgid "Plugins"
-msgstr "Plugins"
+msgstr "Complementos"
 
 msgid "Detailed"
 msgstr "Detallado"
@@ -19462,7 +19462,7 @@ msgid "Global multiple answer"
 msgstr "Resposta múltiple global"
 
 msgid "Zombies"
-msgstr "Zombies"
+msgstr "Zombis"
 
 msgid "Active only"
 msgstr "Só activo"
@@ -28238,7 +28238,7 @@ msgid "You're subscribed to push notifications in this browser."
 msgstr "Está subscrito ás notificacións push neste navegador."
 
 msgid "Endpoint"
-msgstr "Endpoint"
+msgstr "Endpozo"
 
 msgid "Push notifications are not enabled in this browser."
 msgstr "As notificacións push non están activadas neste navegador."
@@ -32592,4 +32592,7 @@ msgstr "Para verificar o teu correo-e e activar a túa conta en %s, preme no seg
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Se non rexistrou esta conta, pode ignorar este correo. Non se tomará ningunha acción."
+
+msgid "Current authentication method"
+msgstr "Método de autenticación actual"
 

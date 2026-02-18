@@ -490,7 +490,7 @@ msgid "Question ID"
 msgstr "ID otázky"
 
 msgid "ExerciseId"
-msgstr "ExerciseId"
+msgstr "ID cvičení"
 
 msgid "Excel export"
 msgstr "Export do Excelu"
@@ -1375,7 +1375,7 @@ msgid "Save the event"
 msgstr "Přidej událost"
 
 msgid "Detail"
-msgstr "detail"
+msgstr "Podrobnosti"
 
 msgid "Month view"
 msgstr "Měsíční pohled"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autorské právo,, no:bez autorského práva"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Složka,, application/msword:MsWord,, application/octet-stream:Okteťový proud,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Složka,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:cvičení,,      simulation:simulace,,      questionnaire:dotazník,,      diagram:diagram,,      figure:obrázek,,      graph:graf,,      index:index,,      slide:slide,,      table:tabulka,,      narrative text:narrativní text,,      exam:zkouška,,      experiment:experiment,,      problem statement:zadání problému,,      self assessment:sám sebehodnocení,,      lecture:přednáška"
@@ -4744,7 +4744,7 @@ msgid "Main menu after login"
 msgstr "Hlavní menu po přihlášení"
 
 msgid "Banner"
-msgstr "Banner"
+msgstr "Baner"
 
 msgid "Resize uploaded user images"
 msgstr "Změnit velikost nahraných uživatelských obrázků"
@@ -5221,10 +5221,10 @@ msgid "Whether you want to use the blacklist or whitelist filtering. See blackli
 msgstr "Použití funkce blacklist - whitelist filtrování. <br/>Pro více informací si prohlédněte popis níže."
 
 msgid "Blacklist"
-msgstr "Blacklist"
+msgstr "Černá listina"
 
 msgid "Whitelist"
-msgstr "Whitelist"
+msgstr "Bílá listina"
 
 msgid "Blacklist - setting"
 msgstr "Blacklist - nastavení"
@@ -8599,7 +8599,7 @@ msgid "Numbered"
 msgstr "Číslované"
 
 msgid "en"
-msgstr "en"
+msgstr "cs"
 
 msgid "eng"
 msgstr "eng"
@@ -12676,10 +12676,10 @@ msgid "Mailing content files have not yet been sent out..."
 msgstr "Obsahové soubory pro mailing ještě nebyly odeslány..."
 
 msgid "---Mailing---"
-msgstr "---Mailing---"
+msgstr "---E-mailový rozesiláč---"
 
 msgid "Mailing"
-msgstr "Mailing"
+msgstr "E-mailový rozesiláč"
 
 msgid "sender"
 msgstr "odesílatel"
@@ -19882,10 +19882,10 @@ msgid "Not readable"
 msgstr "Nečitelné"
 
 msgid "John"
-msgstr "John"
+msgstr "Jan"
 
 msgid "Doe"
-msgstr "Doe"
+msgstr "Novák"
 
 msgid "Attendances updated"
 msgstr "Účasti aktualizovány"
@@ -22042,7 +22042,7 @@ msgid "Certificate notification"
 msgstr "Oznámení o certifikátu"
 
 msgid "((user_first_name)),"
-msgstr "((user_first_name)),"
+msgstr "((jméno uživatele)),"
 
 msgid "Send certificate notification to all users"
 msgstr "Odeslat oznámení o certifikátu všem uživatelům"
@@ -32573,4 +32573,7 @@ msgstr "Pro ověření vašeho e-mailu a aktivaci účtu na %s klikněte na odka
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Pokud jste tento účet neregistrovali, můžete tento e-mail ignorovat. Žádná akce nebude provedená."
+
+msgid "Current authentication method"
+msgstr ""
 

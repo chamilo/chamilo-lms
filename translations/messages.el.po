@@ -75,7 +75,7 @@ msgid "Hyperbolic cosecant:\t\tcsch(x)"
 msgstr "Υπερβολική συντέμνουσα:\t\tcsch(x)"
 
 msgid "Arccosecant:\t\t\tarccsc(x)"
-msgstr "Arccosecant:\t\t\tarccsc(x)"
+msgstr "Αντίσυνεπαρκετική:\t\t\tarccsc(x)"
 
 msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
 msgstr "Υπερβολική συντέμνουσα:\t\tarccsch(x)"
@@ -87,7 +87,7 @@ msgid "Hyperbolic secant:\t\tsech(x)"
 msgstr "Υπερβολική τέμνουσα:\t\tsech(x)"
 
 msgid "Arcsecant:\t\t\tarcsec(x)"
-msgstr "Arcsecant:\t\t\tarcsec(x)"
+msgstr "Αντίσεκαντ:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
 msgstr "Υπερβολική συντέμνουσα:\t\tarcsech(x)"
@@ -99,7 +99,7 @@ msgid "Hyperbolic cotangent:\t\tcoth(x)"
 msgstr "Υπερβολική συνεφαπτομένη:\t\tcoth(x)"
 
 msgid "Arccotangent:\t\t\tarccot(x)"
-msgstr "Arccotangent:\t\t\tarccot(x)"
+msgstr "Αντίσυμπέρασμα:\t\t\tarccot(x)"
 
 msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
 msgstr "Υπερβολική συνεφαπτομένη"
@@ -135,7 +135,7 @@ msgid "Request access"
 msgstr "Αίτημα πρόσβασης"
 
 msgid "Formula"
-msgstr "Formula"
+msgstr "Τύπος"
 
 msgid "This user is already logged in"
 msgstr "Αυτός ο χρήστης έχει ήδη συνδεθεί"
@@ -162,7 +162,7 @@ msgid "Number of hidden courses"
 msgstr "Αριθμός κρυφών εργασιών"
 
 msgid "Post"
-msgstr "Post"
+msgstr "Δημοσίευση"
 
 msgid "Write"
 msgstr "Γράψτε"
@@ -171,7 +171,7 @@ msgid "You have not yet achieved skills"
 msgstr "Δεν έχουν επιτευχθεί ακόμα δεξιότητες"
 
 msgid "Corn"
-msgstr "Corn"
+msgstr "Καλαμπόκι"
 
 msgid "Gray"
 msgstr "Γκρι"
@@ -2030,7 +2030,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ναι:πνευματικά δικαιώματα,, όχι:χωρίς πνευματικά δικαιώματα"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Φάκελος,, application/msword:MsWord,, application/octet-stream:Ροή οκτέττων,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Φάκελος,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":άσκηση:άσκηση,, προσομοίωση:προσομοίωση,, ερωτηματολόγιο:ερωτηματολόγιο,, διάγραμμα:διάγραμμα,, σχήμα:σχήμα,, γράφημα:γράφημα,, ευρετήριο:ευρετήριο,, διαφάνεια:διαφάνεια,, πίνακας:πίνακας,, αφηγηματικό κείμενο:αφηγηματικό κείμενο,, εξέταση:εξέταση,, πείραμα:πείραμα,, διατύπωση προβλήματος:διατύπωση προβλήματος,, αυτοαξιολόγηση:αυτοαξιολόγηση,, διάλεξη:διάλεξη"
@@ -8771,7 +8771,7 @@ msgid "bulgarian"
 msgstr "âïõëãáñéêÜ"
 
 msgid "catalan"
-msgstr "catalan"
+msgstr "katalanika"
 
 msgid "croatian"
 msgstr "êñïáôéêÜ"
@@ -8813,7 +8813,7 @@ msgid "polish"
 msgstr "ðïëùíéêÜ"
 
 msgid "portuguese"
-msgstr "portuguese"
+msgstr "portugalka"
 
 msgid "russian"
 msgstr "ñùóéêÜ"
@@ -13202,7 +13202,7 @@ msgid "Share survey with others"
 msgstr "Κοινοποίηση έρευνας σε άλλους"
 
 msgid "Proceed"
-msgstr "Proceed"
+msgstr "Συνέχεια"
 
 msgid "Please fill numeric values for points."
 msgstr "Πληκτρολογήστε αριθμητικές τιμές για πόντους."
@@ -13331,7 +13331,7 @@ msgid "Answer options"
 msgstr "Επιλογές απάντησης"
 
 msgid "Dropdown"
-msgstr "Dropdown"
+msgstr "Κατάλογος"
 
 msgid "Page break"
 msgstr "Κενό σελίδας"
@@ -13346,7 +13346,7 @@ msgid "Invitation date"
 msgstr "Ημερομηνία πρόσκλησης"
 
 msgid "Answered"
-msgstr "Answered"
+msgstr "Απαντήθηκε"
 
 msgid "You can invite additional users to fill the survey. To do so you can type their e-mail addresses here separated by either , (comma) or ; (semi-column)"
 msgstr "Μπορείτε να προσκαλέσετε επιπλέον χρήστες να συμπληρώσουν την έρευνα. Για να το κάνετε, πληκτρολογήστε τις διευθύνσεις email τους εδώ χωρισμένες με κόμμα ή ερωτηματικό."
@@ -13364,7 +13364,7 @@ msgid "No surveys have been selected."
 msgstr "Δεν επιλέχθηκαν έρευνες."
 
 msgid "Invited"
-msgstr "Invited"
+msgstr "Προσκλήθηκε"
 
 msgid "Reset filter"
 msgstr "Επαναφορά φίλτρου"
@@ -13394,7 +13394,7 @@ msgid "User report"
 msgstr "Αναφορά χρήστη"
 
 msgid "Graphic"
-msgstr "Graphic"
+msgstr "Γραφική"
 
 msgid "Absolute total"
 msgstr "Απόλυτο σύνολο"
@@ -13442,7 +13442,7 @@ msgid "Remind all users of the survey. If you do not check this checkbox only th
 msgstr "Υπενθυμίστε σε όλους τους χρήστες της έρευνας. Αν δεν επιλέξετε αυτό το πλαίσιο ελέγχου, μόνο οι νέα προστιθέμενοι χρήστες θα λάβουν email."
 
 msgid "Invite"
-msgstr "Invite"
+msgstr "Πρόσκληση"
 
 msgid "View invited"
 msgstr "Προβολή προσκεκλημένων"
@@ -13520,7 +13520,7 @@ msgid "Select type"
 msgstr "Επιλογή τύπου"
 
 msgid "Conditional"
-msgstr "Conditional"
+msgstr "Συνθήκη"
 
 msgid "Parent Survey"
 msgstr "Γονική Έρευνα"
@@ -13547,13 +13547,13 @@ msgid "Group need name"
 msgstr "Η ομάδα χρειάζεται όνομα"
 
 msgid "Personalize"
-msgstr "Personalize"
+msgstr "Προσαρμογή"
 
 msgid "Primary"
-msgstr "Primary"
+msgstr "Πρωτοβάθμια"
 
 msgid "Secondary"
-msgstr "Secondary"
+msgstr "Δευτεροβάθμια"
 
 msgid "Please choose a condition"
 msgstr "Παρακαλούμε επιλέξτε μια συνθήκη"
@@ -13670,7 +13670,7 @@ msgid "Brochure"
 msgstr "Κατάλογος"
 
 msgid "Slideshow"
-msgstr "Slideshow"
+msgstr "Διαφάνειες"
 
 msgid "Published end date"
 msgstr "Λήξη ημερομηνίας δημοσίευσης"
@@ -14264,7 +14264,7 @@ msgid "Content of the groups"
 msgstr "Περιεχόμενο των ομάδων"
 
 msgid "Manual"
-msgstr "Manual"
+msgstr "Εγχειρίδιο"
 
 msgid "You should write a message"
 msgstr "Πρέπει να γράψετε ένα μήνυμα"
@@ -14297,10 +14297,10 @@ msgid "Show Overview"
 msgstr "Εμφάνιση επισκόπησης"
 
 msgid "Install"
-msgstr "Install"
+msgstr "Εγκατάσταση"
 
 msgid "of"
-msgstr "of"
+msgstr "του"
 
 msgid "For more details"
 msgstr "Για περισσότερες λεπτομέρειες"
@@ -14315,7 +14315,7 @@ msgid "PHP version"
 msgstr "Έκδοση PHP"
 
 msgid "Support"
-msgstr "support"
+msgstr "Υποστήριξη"
 
 msgid "Your PHP version matches the minimum requirement:"
 msgstr "Η έκδοση PHP σας ταιριάζει με την ελάχιστη απαίτηση:"
@@ -14327,7 +14327,7 @@ msgid "Recommended settings for your server configuration. These settings are se
 msgstr "Συνιστώμενες ρυθμίσεις για τη διαμόρφωση του εξυπηρετητή σας. Αυτές οι ρυθμίσεις ορίζονται στο αρχείο διαμόρφωσης php.ini στον εξυπηρετητή σας."
 
 msgid "Currently"
-msgstr "Currently"
+msgstr "Τώρα"
 
 msgid "Directory and files permissions"
 msgstr "Δικαιώματα καταλόγων και αρχείων"
@@ -14339,7 +14339,7 @@ msgid "Not writable"
 msgstr "Μη εγγράψιμο"
 
 msgid "Writable"
-msgstr "Writable"
+msgstr "Γραφτό"
 
 msgid "LDAP Extension not available"
 msgstr "Η επέκταση LDAP δεν είναι διαθέσιμη"
@@ -14447,7 +14447,7 @@ msgid "Cool blue"
 msgstr "Κρύο μπλε"
 
 msgid "Corporate"
-msgstr "Corporate"
+msgstr "Εταιρικό"
 
 msgid "Cosmic campus"
 msgstr "Κοσμική πανεπιστημιούπολη"
@@ -14462,7 +14462,7 @@ msgid "Fruity orange"
 msgstr "Φρουτώδες πορτοκάλι"
 
 msgid "Medical"
-msgstr "Medical"
+msgstr "Ιατρικό"
 
 msgid "Royal purple"
 msgstr "Βασιλικό μωβ"
@@ -14486,13 +14486,13 @@ msgid "Questions' overall report"
 msgstr "Συνολική ανάλυση ερωτήσεων"
 
 msgid "bosnian"
-msgstr "bosnian"
+msgstr "βοσνιακά"
 
 msgid "czech"
-msgstr "czech"
+msgstr "τσεχικά"
 
 msgid "dari"
-msgstr "dari"
+msgstr "νταρί"
 
 msgid "dutch corporate"
 msgstr "dutch"
@@ -14501,49 +14501,49 @@ msgid "english for organisations"
 msgstr "αγγλικά για οργανισμούς"
 
 msgid "friulian"
-msgstr "friulian"
+msgstr "φριουλιανό"
 
 msgid "georgian"
-msgstr "georgian"
+msgstr "γεωργιανά"
 
 msgid "hebrew"
-msgstr "hebrew"
+msgstr "εβραϊκά"
 
 msgid "korean"
-msgstr "korean"
+msgstr "κορεατικά"
 
 msgid "latvian"
-msgstr "latvian"
+msgstr "λατβιακά"
 
 msgid "lithuanian"
-msgstr "lithuanian"
+msgstr "λιθουανικά"
 
 msgid "macedonian"
-msgstr "macedonian"
+msgstr "μακεδονικά"
 
 msgid "norwegian"
-msgstr "norwegian"
+msgstr "νορβηγικά"
 
 msgid "pashto"
-msgstr "pashto"
+msgstr "παστό"
 
 msgid "persian"
-msgstr "persian"
+msgstr "περσικά"
 
 msgid "quechua from Cusco"
 msgstr "κέτσουα από Κούσκο"
 
 msgid "romanian"
-msgstr "romanian"
+msgstr "ρουμανικά"
 
 msgid "serbian"
-msgstr "serbian"
+msgstr "σερβικά"
 
 msgid "slovak"
-msgstr "slovak"
+msgstr "σλοβακικά"
 
 msgid "swahili"
-msgstr "swahili"
+msgstr "σουαχίλι"
 
 msgid "traditional chinese"
 msgstr "Παραδοσιακά κινέζικα"
@@ -14987,10 +14987,10 @@ msgid "The exercise time limit has expired"
 msgstr "Έληξε το όριο χρόνου της άσκησης"
 
 msgid "ukrainian"
-msgstr "ukrainian"
+msgstr "ουκρανικά"
 
 msgid "yoruba"
-msgstr "yoruba"
+msgstr "γιορούμπα"
 
 msgid "New"
 msgstr "Νέο"
@@ -15008,7 +15008,7 @@ msgid "Updated on"
 msgstr "Ενημερώθηκε στις"
 
 msgid "Metadata"
-msgstr "Metadata"
+msgstr "Μεταδεδομένα"
 
 msgid "View/Edit Metadata"
 msgstr "Εμφάνιση/επεξεργασία μεταδεδομένων"
@@ -15044,7 +15044,7 @@ msgid "See blog"
 msgstr "Εμφάνιση Blog"
 
 msgid "Blog"
-msgstr "Blog"
+msgstr "Μπλογκ"
 
 msgid "Blog Posts"
 msgstr "Αναρτήσεις Blog"
@@ -15122,7 +15122,7 @@ msgid "Thematic advance"
 msgstr "Θεματική πρόοδος"
 
 msgid "Dashboard"
-msgstr "Dashboard"
+msgstr "Ταμπλό"
 
 msgid "Dashboard blocks"
 msgstr "Μπλοκ πίνακα ελέγχου"
@@ -15158,7 +15158,7 @@ msgid "There is no enabled dashboard plugin"
 msgstr "Δεν υπάρχει ενεργοποιημένο πρόσθετο πίνακα ελέγχου"
 
 msgid "Enabled"
-msgstr "Enabled"
+msgstr "Ενεργοποιημένο"
 
 msgid "What is the current progress you have reached with your learners inside your course? How much do you think is remaining in comparison to the complete program?"
 msgstr "Ποια είναι η τρέχουσα πρόοδος που έχετε επιτύχει με τους εκπαιδευόμενους σας μέσα στο μάθημά σας; Πόσο νομίζετε ότι απομένει σε σύγκριση με το πλήρες πρόγραμμα;"
@@ -17756,7 +17756,7 @@ msgid "OpenID redirect"
 msgstr "Ανακατεύθυνση OpenID"
 
 msgid "Blogs"
-msgstr "Blogs"
+msgstr "Μπλογκ"
 
 msgid "Select a course"
 msgstr "Επιλογή μαθήματος"
@@ -18922,7 +18922,7 @@ msgid "You cannot upload this assignment. Please delete the previous one first."
 msgstr "Δεν μπορείτε να ανεβάσετε αυτή την εργασία. Παρακαλούμε διαγράψτε πρώτα την προηγούμενη."
 
 msgid "MB"
-msgstr "MB"
+msgstr "ΜΒ"
 
 msgid "Shows a global toolbar on top of the page to the designated user roles. This toolbar, very similar to Wordpress and Google's black toolbars, can really speed up complicated actions and improve the space you have available for the learning content, but it might be confusing for some users"
 msgstr "Εμφανίζει μια καθολική γραμμή εργαλείων στην κορυφή της σελίδας για τους καθορισμένους ρόλους χρηστών. Αυτή η γραμμή εργαλείων, πολύ παρόμοια με αυτή του Wordpress και της Google, μπορεί να επιταχύνει πολύπλοκες ενέργειες και να βελτιώσει τον χώρο που έχετε διαθέσιμο για το περιεχόμενο εκπαίδευσης, αλλά μπορεί να είναι μπερδευτική για ορισμένους χρήστες"
@@ -22600,7 +22600,7 @@ msgid "Personal data officer's role"
 msgstr "Ρόλος υπευθύνου προσωπικών δεδομένων"
 
 msgid "Assets"
-msgstr "Assets"
+msgstr "Περιουσιακά στοιχεία"
 
 msgid "Total learnpath time"
 msgstr "Συνολικός χρόνος διαδρομής μάθησης"
@@ -26860,13 +26860,13 @@ msgid "Check password strength"
 msgstr "Έλεγχος ισχύος κωδικού"
 
 msgid "HTTP Strict Transport Security"
-msgstr "HTTP Strict Transport Security"
+msgstr "Αυστηρή Ασφάλεια Μεταφοράς HTTP"
 
 msgid "HTTP Strict Transport Security is an excellent feature to support on your site and strengthens your implementation of TLS by getting the User Agent to enforce the use of HTTPS. Recommended value: 'strict-transport-security: max-age=63072000; includeSubDomains'. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. You can include the 'preload' suffix, but this has consequences on the top level domain (TLD), so probably not to be done lightly. See https://hstspreload.org/. Leave blank to disable."
 msgstr "Το HTTP Strict Transport Security είναι εξαιρετικό χαρακτηριστικό που ενισχύει την εφαρμογή TLS αναγκάζοντας τον User Agent να χρησιμοποιεί HTTPS. Προτεινόμενη τιμή: 'strict-transport-security: max-age=63072000; includeSubDomains'. Δείτε https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. Μπορείτε να προσθέσετε 'preload', αλλά έχει συνέπειες στο TLD. Δείτε https://hstspreload.org/. Αφήστε κενό για απενεργοποίηση."
 
 msgid "Content Security Policy"
-msgstr "Content Security Policy"
+msgstr "Πολιτική Ασφάλειας Περιεχομένου"
 
 msgid "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the 'script-src' argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
 msgstr "Το Content Security Policy προστατεύει από XSS επιτρέποντας πηγές εγκεκριμένου περιεχομένου. Ιδιαίτερα περίπλοκο με WYSIWYG editors, αλλά προσθέτοντας domains για iframes στο child-src λειτουργεί. Αποτρέψτε JavaScript από εξωτερικές πηγές με αυστηρή λίστα στο 'script-src'. Αφήστε κενό για απενεργοποίηση. Παράδειγμα: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
@@ -27247,7 +27247,7 @@ msgid "Carbon copy receiver profile picture"
 msgstr "Φωτογραφία προφίλ παραλήπτη αντιγράφου"
 
 msgid "Ppt_to_lp"
-msgstr "Ppt_to_lp"
+msgstr "Ppt_σε_lp"
 
 msgid "Left"
 msgstr "Αριστερά"
@@ -28139,40 +28139,40 @@ msgid "Generates images based on prompts or content using AI."
 msgstr "Γεννά εικόνες βασισμένες σε προτροπές ή περιεχόμενο χρησιμοποιώντας ΤΝ."
 
 msgid "Menucampushomepage"
-msgstr "Menucampushomepage"
+msgstr "ΜενούΑρχικήΣελίδαCampus"
 
 msgid "Menumycourses"
-msgstr "Menumycourses"
+msgstr "ΜενούΤαΜαθήματάΜου"
 
 msgid "Menureporting"
-msgstr "Menureporting"
+msgstr "ΜενούΑναφορές"
 
 msgid "Menuplatformadministration"
-msgstr "Menuplatformadministration"
+msgstr "ΜενούΔιαχείρισηΠλατφόρμας"
 
 msgid "Menumyagenda"
-msgstr "Menumyagenda"
+msgstr "ΜενούΗΗμερήσιάΜου"
 
 msgid "Menusocial"
-msgstr "Menusocial"
+msgstr "ΜενούΚοινωνικά"
 
 msgid "Menuvideoconference"
-msgstr "Menuvideoconference"
+msgstr "ΜενούΒιντεοδιάσκεψη"
 
 msgid "Menudiagnostics"
-msgstr "Menudiagnostics"
+msgstr "ΜενούΔιαγνωστικά"
 
 msgid "Menucatalogue"
-msgstr "Menucatalogue"
+msgstr "ΜενούΚατάλογος"
 
 msgid "Topbarcertificate"
-msgstr "Topbarcertificate"
+msgstr "ΓραμμήΚορυφήςΠιστοποιητικό"
 
 msgid "Topbarskills"
-msgstr "Topbarskills"
+msgstr "ΓραμμήΚορυφήςΔεξιότητες"
 
 msgid "Ai_helpers"
-msgstr "Ai_helpers"
+msgstr "ΒοηθοίΤεχνητήςΝοημοσύνης"
 
 msgid "ID of the user who officially sends the agenda reminders"
 msgstr "ID του χρήστη που στέλνει επίσημα τις υπενθυμίσεις ημερήσιας διάθεσης"
@@ -28238,7 +28238,7 @@ msgid "You're subscribed to push notifications in this browser."
 msgstr "Είστε εγγεγραμμένος σε ειδοποιήσεις push σε αυτό το πρόγραμμα περιήγησης."
 
 msgid "Endpoint"
-msgstr "Endpoint"
+msgstr "ΤερματικόΣημείο"
 
 msgid "Push notifications are not enabled in this browser."
 msgstr "Οι ειδοποιήσεις push δεν είναι ενεργοποιημένες σε αυτό το πρόγραμμα περιήγησης."
@@ -31760,7 +31760,7 @@ msgid "Test/development"
 msgstr "Δοκιμές/Ανάπτυξη"
 
 msgid "Crons"
-msgstr "Crons"
+msgstr "Cron εργασίες"
 
 msgid "Editor"
 msgstr "Επεξεργαστής"
@@ -32312,7 +32312,7 @@ msgid "The '%s' operation is not supported."
 msgstr "Η λειτουργία '%s' δεν υποστηρίζεται."
 
 msgid "Drupal user ID"
-msgstr "Drupal user ID"
+msgstr "ID χρήστη Drupal"
 
 msgid "There are no terms that match the search: %s"
 msgstr "Δεν υπάρχουν όροι που ταιριάζουν με την αναζήτηση: %s"
@@ -32592,4 +32592,7 @@ msgstr "Για να επιβεβαιώσετε το e-mail σας και να ε
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Αν δεν εγγράψατε αυτόν τον λογαριασμό, μπορείτε να αγνοήσετε αυτό το e-mail. Δεν θα ληφθεί καμία ενέργεια."
+
+msgid "Current authentication method"
+msgstr "Τρέχουσα μέθοδος πιστοποίησης"
 

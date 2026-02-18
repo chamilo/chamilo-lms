@@ -170,7 +170,7 @@ msgid "Number of hidden courses"
 msgstr "Aantal verborgen cursussen"
 
 msgid "Post"
-msgstr "Post"
+msgstr "Bericht"
 
 msgid "Write"
 msgstr "Schrijf"
@@ -502,7 +502,7 @@ msgid "Human Resources Manager"
 msgstr "HR-manager"
 
 msgid "Global"
-msgstr "Global"
+msgstr "Globaal"
 
 msgid "Question title"
 msgstr "Vraagtitel"
@@ -1219,7 +1219,7 @@ msgid "Strong"
 msgstr "Sterk"
 
 msgid "Medium"
-msgstr "Medium"
+msgstr "Gemiddeld"
 
 msgid "Normal"
 msgstr "Normaal"
@@ -1280,7 +1280,7 @@ msgid "E-mail notification template"
 msgstr "E-mail notificatie sjabloon"
 
 msgid "Logout"
-msgstr "Logout"
+msgstr "Uitloggen"
 
 msgid "Exercise list."
 msgstr "Oefeningenlijst"
@@ -2048,7 +2048,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:geen copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Map,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:oefening,,      simulation:simulatie,,      questionnaire:enquête,,      diagram:diagram,,      figure:figuur,,      graph:grafiek,,      index:index,,      slide:dia,,      table:tabel,,      narrative text:vertellende tekst,,      exam:examen,,      experiment:experiment,,      problem statement:probleemstelling,,      self assessment:zelftest,,      lecture:voordracht"
@@ -2243,7 +2243,7 @@ msgid "Numeric 1-10"
 msgstr "Numeriek 1-10"
 
 msgid "Poll"
-msgstr "Poll"
+msgstr "Enquête"
 
 msgid "You have to become Moderator of this Room to make polls."
 msgstr "U dient moderator te zijn van deze ruimte om polls te kunnen aanmaken."
@@ -2405,7 +2405,7 @@ msgid "Teacher"
 msgstr "Coach"
 
 msgid "Slides"
-msgstr "Slides"
+msgstr "Dia’s"
 
 msgid "Waiting for participants"
 msgstr "Wachten op deelnemers"
@@ -4194,7 +4194,7 @@ msgid "Documentation"
 msgstr "Documentatie"
 
 msgid "Contribute"
-msgstr "Contribute"
+msgstr "Bijdragen"
 
 msgid "Server Information"
 msgstr "Serverinformatie"
@@ -5258,10 +5258,10 @@ msgid "Whether you want to use the blacklist or whitelist filtering. See blackli
 msgstr "Gebruik van blacklist of whitelist filtering. Zie beschrijving blacklist of whitelist voor meer informatie."
 
 msgid "Blacklist"
-msgstr "Blacklist"
+msgstr "Zwarte lijst"
 
 msgid "Whitelist"
-msgstr "Whitelist"
+msgstr "Witte lijst"
 
 msgid "Blacklist - setting"
 msgstr "Blacklist - instellingen"
@@ -7940,7 +7940,7 @@ msgid "is not the valid file !"
 msgstr "is geen geldig bestand!"
 
 msgid "Index"
-msgstr "index"
+msgstr "Index"
 
 msgid "Indexes"
 msgstr "Indexen"
@@ -8615,7 +8615,7 @@ msgid "Advanced search"
 msgstr "Geavanceerd zoeken"
 
 msgid "Open"
-msgstr "open"
+msgstr "Open"
 
 msgid "Import"
 msgstr "Importeer"
@@ -8951,13 +8951,13 @@ msgid "Display certificate"
 msgstr "Toon certificaat"
 
 msgid "Document"
-msgstr "document"
+msgstr "Document"
 
 msgid "Portal Admin"
 msgstr "Platformbeheerder"
 
 msgid "none"
-msgstr "None"
+msgstr "geen"
 
 msgid "First select a course"
 msgstr "Selecteer eerst een cursus"
@@ -8975,13 +8975,13 @@ msgid "User"
 msgstr "Gebruikers"
 
 msgid "M"
-msgstr "m"
+msgstr "M"
 
 msgid "T"
 msgstr "d"
 
 msgid "W"
-msgstr "w"
+msgstr "W"
 
 msgid "F"
 msgstr "v"
@@ -9032,19 +9032,19 @@ msgid "Sunday"
 msgstr "zondag"
 
 msgid "J"
-msgstr "j"
+msgstr "do"
 
 msgid "A"
-msgstr "a"
+msgstr "A"
 
 msgid "O"
-msgstr "o"
+msgstr "O"
 
 msgid "N"
-msgstr "n"
+msgstr "N"
 
 msgid "D"
-msgstr "d"
+msgstr "D"
 
 msgid "Jan"
 msgstr "jan"
@@ -9722,7 +9722,7 @@ msgid "The field cannot be made unchangeable"
 msgstr "Kan het veld niet onaanpasbaar maken."
 
 msgid "Folder"
-msgstr "Folder"
+msgstr "Map"
 
 msgid "The chat is not available because another course has been opened in another page. To avoid this, please make sure you remain inside the same course for the duration of your chat session. To join the chat session again, please re-launch the chat from the course homepage."
 msgstr "De chat is niet beschikbaar omdat een andere cursus geopend is in een andere pagina. Om dit te voorkomen dient u te verifiëren dat u in dezelfde cursus blijft voor de ganse chatsessie. Om de chat sessie opnieuw te laden dient u deze te herstarten van de cursusstartpagina."
@@ -10751,7 +10751,7 @@ msgid "Latest announcements"
 msgstr "Recente aankondigingen"
 
 msgid "menu"
-msgstr "Menu"
+msgstr "menu"
 
 msgid "Opinion"
 msgstr "Mening"
@@ -11933,7 +11933,7 @@ msgid "Browsers"
 msgstr "Browsers"
 
 msgid "Referers"
-msgstr "Referers"
+msgstr "Verwijzers"
 
 msgid "(When an user open the index of the portal)"
 msgstr "(Als een gebruiker de index van de campus opent)"
@@ -12332,7 +12332,7 @@ msgid "A PowerPoint to SCORM Courses converter"
 msgstr "Een conversie applicatie die een Powerpoint presentatie omzet in een leerpad."
 
 msgid "Go"
-msgstr "Go"
+msgstr "Ga"
 
 msgid "The quota for this course is"
 msgstr "Het quotum voor deze cursus is"
@@ -13705,7 +13705,7 @@ msgid "Brochure"
 msgstr "Brochure"
 
 msgid "Slideshow"
-msgstr "Slideshow"
+msgstr "Diavoorstelling"
 
 msgid "Published end date"
 msgstr "Gepubliceerde einddatum"
@@ -14484,7 +14484,7 @@ msgid "Cool blue"
 msgstr "Koel blauw"
 
 msgid "Corporate"
-msgstr "Corporate"
+msgstr "Bedrijfs"
 
 msgid "Cosmic campus"
 msgstr "Kosmos campus"
@@ -14499,7 +14499,7 @@ msgid "Fruity orange"
 msgstr "Fris oranje"
 
 msgid "Medical"
-msgstr "Medical"
+msgstr "Medisch"
 
 msgid "Royal purple"
 msgstr "Koninklijk paars"
@@ -15024,10 +15024,10 @@ msgid "The exercise time limit has expired"
 msgstr "De oefentijd is voorbij"
 
 msgid "ukrainian"
-msgstr "ukrainian"
+msgstr "Oekraïens"
 
 msgid "yoruba"
-msgstr "yoruba"
+msgstr "Yoruba"
 
 msgid "New"
 msgstr "Nieuw"
@@ -15497,7 +15497,7 @@ msgid "You have to add %s as a friend first"
 msgstr "U dient %s eerst als een vriend toe te voegen."
 
 msgid "Excellent"
-msgstr "Excellent"
+msgstr "Uitstekend"
 
 msgid "Outstanding"
 msgstr "Uitstekend"
@@ -16001,7 +16001,7 @@ msgid "Session fields"
 msgstr "Sessievelden"
 
 msgid "Copy"
-msgstr "Copy"
+msgstr "Kopiëren"
 
 msgid "Date on which the session is closed to coaches. The additional delay will allow them to export all relevant tracking information"
 msgstr ""
@@ -16121,7 +16121,7 @@ msgid "Enable session link in courses list"
 msgstr "Activeer de sessie link in de cursussenlijst"
 
 msgid "Root"
-msgstr "Root"
+msgstr "Hoofd"
 
 msgid "Skill information"
 msgstr "Skill informatie"
@@ -17873,7 +17873,7 @@ msgid "New image"
 msgstr "Nieuwe afbeelding"
 
 msgid "Untitled"
-msgstr "Untitled"
+msgstr "Zonder titel"
 
 msgid "Cannot delete files that are configured in read-only mode."
 msgstr "Kan geen bestanden verwijderen die in de read-only modus staan"
@@ -18611,7 +18611,7 @@ msgid "See results"
 msgstr "Bekijk resultaten"
 
 msgid "Loading"
-msgstr "Loading"
+msgstr "Laden"
 
 msgid "Are you sure you want to restore this element?"
 msgstr "Weet u zeker dat u dit element wil herstellen?"
@@ -21879,7 +21879,7 @@ msgid "Priority"
 msgstr "Prioriteit"
 
 msgid "Source"
-msgstr "Source"
+msgstr "Bron"
 
 msgid "Platform"
 msgstr "Platform"
@@ -29234,7 +29234,7 @@ msgid "Show glossary in documents is automatic"
 msgstr "Toon woordenlijst in documenten is automatisch"
 
 msgid "None"
-msgstr "None"
+msgstr "Geen"
 
 msgid "Score average"
 msgstr "Gemiddelde score"
@@ -33525,49 +33525,49 @@ msgid "Manager"
 msgstr "Beheerder"
 
 msgid "Mark as"
-msgstr ""
+msgstr "Markeren als"
 
 msgid "Reply to all"
-msgstr ""
+msgstr "Antwoorden aan iedereen"
 
 msgid "SCIM external ID"
-msgstr ""
+msgstr "SCIM externe ID"
 
 msgid "OAuth2 ID"
-msgstr ""
+msgstr "OAuth2 ID"
 
 msgid "Please accept the latest version of the terms and conditions."
-msgstr ""
+msgstr "Accepteer de nieuwste versie van de algemene voorwaarden."
 
 msgid "Required value for operation without path"
-msgstr ""
+msgstr "Vereiste waarde voor bewerking zonder pad"
 
 msgid "Available space (%s)"
-msgstr ""
+msgstr "Beschikbare ruimte (%s)"
 
 msgid "Index this description for the global search"
-msgstr ""
+msgstr "Deze beschrijving indexeren voor de globale zoekopdracht"
 
 msgid "Unknown course"
-msgstr ""
+msgstr "Onbekende cursus"
 
 msgid "Certificate not found."
-msgstr ""
+msgstr "Certificaat niet gevonden."
 
 msgid "Security token expired. Please reload the page and try again."
-msgstr ""
+msgstr "Beveiligingstoken verlopen. Laad de pagina opnieuw en probeer het opnieuw."
 
 msgid "Only platform administrators can change the course visibility."
-msgstr ""
+msgstr "Alleen platformbeheerders kunnen de cursuszichtbaarheid wijzigen."
 
 msgid "Unexpected error while subscribing the user"
-msgstr ""
+msgstr "Onverwachte fout bij het inschrijven van de gebruiker"
 
 msgid "Search in resource logs"
-msgstr ""
+msgstr "Zoeken in bronlogs"
 
 msgid "Include this learning path in the global search results"
-msgstr ""
+msgstr "Dit leerpad opnemen in de globale zoekresultaten"
 
 msgid "The course code already exists"
 msgstr "De cursuscode bestaat al"
@@ -34524,7 +34524,7 @@ msgid "No AI media providers available."
 msgstr "Geen KI-mediaproviders beschikbaar."
 
 msgid "Provider"
-msgstr "Provider"
+msgstr "Aanbieder"
 
 msgid "Select a provider"
 msgstr "Selecteer een provider"
@@ -34657,4 +34657,7 @@ msgstr "Om uw e-mail te verifiëren en uw account op %s in te schakelen, klikt u
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Als je dit account niet hebt geregistreerd, kun je deze e-mail negeren. Er wordt geen actie ondernomen."
+
+msgid "Current authentication method"
+msgstr "Huidige authenticatiemethode"
 

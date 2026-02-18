@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Srdačno"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula primer: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Opsezi varijabli"
@@ -496,7 +496,7 @@ msgid "Question ID"
 msgstr "ID pitanja"
 
 msgid "ExerciseId"
-msgstr "ExerciseId"
+msgstr "ID vežbe"
 
 msgid "Excel export"
 msgstr "Izvoz u Excel"
@@ -4750,7 +4750,7 @@ msgid "Main menu after login"
 msgstr "Glavni menu nakon prijave"
 
 msgid "Banner"
-msgstr "Banner"
+msgstr "Baner"
 
 msgid "Resize uploaded user images"
 msgstr "Promeni veličinu prenesene korisničke slike"
@@ -6139,7 +6139,7 @@ msgid "Add LDAP users"
 msgstr "Dodaj LDAP korisnike"
 
 msgid "Academica"
-msgstr "Academica"
+msgstr "Akademika"
 
 msgid "Add news"
 msgstr "Dodaj vesti"
@@ -8605,10 +8605,10 @@ msgid "Numbered"
 msgstr "Нумерисано"
 
 msgid "en"
-msgstr "en"
+msgstr "sr"
 
 msgid "eng"
-msgstr "eng"
+msgstr "srp"
 
 msgid "iso-8859-1"
 msgstr "iso-8859-1"
@@ -8863,7 +8863,7 @@ msgid "With selected"
 msgstr "Sa selektovanim"
 
 msgid "Online"
-msgstr "Online"
+msgstr "Na liniji"
 
 msgid "hungarian"
 msgstr "ma&#273;arski"
@@ -8947,7 +8947,7 @@ msgid "F"
 msgstr "P"
 
 msgid "S"
-msgstr "S"
+msgstr "П"
 
 msgid "Mon"
 msgstr "Pon"
@@ -8992,55 +8992,55 @@ msgid "Sunday"
 msgstr "Nedelja"
 
 msgid "J"
-msgstr "J"
+msgstr "У"
 
 msgid "A"
-msgstr "A"
+msgstr "М"
 
 msgid "O"
-msgstr "O"
+msgstr "О"
 
 msgid "N"
-msgstr "N"
+msgstr "Н"
 
 msgid "D"
-msgstr "D"
+msgstr "С"
 
 msgid "Jan"
-msgstr "Jan"
+msgstr "јан"
 
 msgid "Feb"
-msgstr "Feb"
+msgstr "феб"
 
 msgid "Mar"
-msgstr "Mar"
+msgstr "мар"
 
 msgid "Apr"
-msgstr "Apr"
+msgstr "апр"
 
 msgid "May"
 msgstr "Maj"
 
 msgid "Jun"
-msgstr "Jun"
+msgstr "јун"
 
 msgid "Jul"
-msgstr "Jul"
+msgstr "јул"
 
 msgid "Aug"
 msgstr "Avg"
 
 msgid "Sep"
-msgstr "Sep"
+msgstr "сеп"
 
 msgid "Oct"
 msgstr "Okt"
 
 msgid "Nov"
-msgstr "Nov"
+msgstr "нов"
 
 msgid "Dec"
-msgstr "Dec"
+msgstr "дец"
 
 msgid "January"
 msgstr "Januar"
@@ -9052,7 +9052,7 @@ msgid "March"
 msgstr "Mart"
 
 msgid "April"
-msgstr "April"
+msgstr "април"
 
 msgid "June"
 msgstr "Juni"
@@ -9088,7 +9088,7 @@ msgid "What I can teach"
 msgstr "Šta sam u mogućnosti da predajem"
 
 msgid "h"
-msgstr "h"
+msgstr "ч"
 
 msgid "Please Try Again!"
 msgstr "Molim Vas, probajte ponovo!"
@@ -9130,7 +9130,7 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 msgid "Chat"
-msgstr "Chat"
+msgstr "Čet"
 
 msgid "Add link to this page"
 msgstr "Dodaj link na ovu stranu"
@@ -11755,7 +11755,7 @@ msgid "Hits"
 msgstr "Pogoci"
 
 msgid "h."
-msgstr "h."
+msgstr "č."
 
 msgid "In the last 31 days"
 msgstr "Poslednjih 31 dana"
@@ -13663,7 +13663,7 @@ msgid "Brochure"
 msgstr "Брошурa"
 
 msgid "Slideshow"
-msgstr "Slideshow"
+msgstr "Slajdšou"
 
 msgid "Published end date"
 msgstr "Datum završetka objave"
@@ -14518,7 +14518,7 @@ msgid "norwegian"
 msgstr "norveki"
 
 msgid "pashto"
-msgstr "pashto"
+msgstr "paštu"
 
 msgid "persian"
 msgstr "persijski"
@@ -17698,7 +17698,7 @@ msgid "Tests in learning paths"
 msgstr "Testovi u putanjama učenja"
 
 msgid "Id"
-msgstr "ID"
+msgstr "Id"
 
 msgid "There was an error."
 msgstr "Došlo je do greške."
@@ -18592,7 +18592,7 @@ msgid "Result not reviewed"
 msgstr "Rezultat nije pregledan"
 
 msgid "%m/%d/%Y"
-msgstr "%m/%d/%Y"
+msgstr "%d/%m/%Y"
 
 msgid "%B %d, %Y at %H:%M"
 msgstr "%B %d, %Y u %H:%M"
@@ -19888,7 +19888,7 @@ msgid "Not readable"
 msgstr "Nečitljivo"
 
 msgid "John"
-msgstr "John"
+msgstr "Đon"
 
 msgid "Doe"
 msgstr "Do"
@@ -21919,7 +21919,7 @@ msgid "You can't edit this question because answers by students have already bee
 msgstr "Ne možete menjati ovo pitanje jer su već registrovani odgovori studenata"
 
 msgid "Avatar"
-msgstr "Avatar"
+msgstr "Аватар"
 
 msgid "Semester"
 msgstr "Semestar"
@@ -22048,7 +22048,7 @@ msgid "Certificate notification"
 msgstr "Obaveštenje o sertifikatu"
 
 msgid "((user_first_name)),"
-msgstr "((user_first_name)),"
+msgstr "((име_корисника)),"
 
 msgid "Send certificate notification to all users"
 msgstr "Pošalji obaveštenje o sertifikatu svim korisnicima"
@@ -24091,7 +24091,7 @@ msgid "Latest login in a course"
 msgstr "Najnovji ulog u kurs"
 
 msgid "The"
-msgstr "The"
+msgstr "Član"
 
 msgid "Multiply questions by class"
 msgstr "Pomnoži pitanja po klasi"
@@ -32580,4 +32580,7 @@ msgstr "Da biste verifikovali svoju e-poštu i aktivirali nalog na %s, kliknite 
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Ako niste registrovali ovaj nalog, možete zanemariti ovu e-poštu. Neće biti preduzeta nikakva akcija."
+
+msgid "Current authentication method"
+msgstr "Trenutni metod autentifikacije"
 

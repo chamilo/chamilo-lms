@@ -493,7 +493,7 @@ msgid "Question ID"
 msgstr "ID Pertanyaan"
 
 msgid "ExerciseId"
-msgstr "ExerciseId"
+msgstr "ID Latihan"
 
 msgid "Excel export"
 msgstr "Ekspor Excel"
@@ -1567,7 +1567,7 @@ msgid "Remote"
 msgstr "Remote/jauh"
 
 msgid "Auto-detect"
-msgstr "Auto-detect"
+msgstr "Deteksi otomatis"
 
 msgid "Total of completed learning objects"
 msgstr "Jumlah total langkah yang telah dilakukan"
@@ -1768,7 +1768,7 @@ msgid "Archive this course area"
 msgstr "Arsipkan mata kuliah ini"
 
 msgid "Groups"
-msgstr "Groups"
+msgstr "Grup"
 
 msgid "Trainer"
 msgstr "Pengajar"
@@ -1783,7 +1783,7 @@ msgid "Restore a course"
 msgstr "Restore mata kuliah"
 
 msgid "Restore"
-msgstr "Restore"
+msgstr "Pulihkan"
 
 msgid "created in"
 msgstr "dibuat dalam"
@@ -2296,10 +2296,10 @@ msgid "Clear Draw Area"
 msgstr "Hapus Area Gambar"
 
 msgid "Undo"
-msgstr "Undo"
+msgstr "Batalkan"
 
 msgid "Redo"
-msgstr "Redo"
+msgstr "Ulangi"
 
 msgid "Select an Object"
 msgstr "Pilih Objek"
@@ -2581,7 +2581,7 @@ msgid "minimum"
 msgstr "minimum"
 
 msgid "maximum"
-msgstr "maximum"
+msgstr "maksimum"
 
 msgid "Recycle course"
 msgstr "Daur ulang mata kuliah"
@@ -2752,7 +2752,7 @@ msgid "Add a forum"
 msgstr "Tambah sebuah forum baru"
 
 msgid "Posts"
-msgstr "Posts"
+msgstr "Postingan"
 
 msgid "Latest Post"
 msgstr "Post terakhir"
@@ -2827,7 +2827,7 @@ msgid "Unlocked: learners can post new messages in this forum category, forum or
 msgstr "Tridak terkunci: siswa dapat memposting pesan pada kategori forum, forum atau thread"
 
 msgid "Flat"
-msgstr "Flat"
+msgstr "Datar"
 
 msgid "Threaded"
 msgstr "Ber-thread"
@@ -3031,7 +3031,7 @@ msgid "Thread statistics"
 msgstr "Statistik thread"
 
 msgid "Thread"
-msgstr "Thread"
+msgstr "Utas"
 
 msgid "Notify me"
 msgstr "Beritahu saya"
@@ -4132,7 +4132,7 @@ msgid "Status of MySQL server :"
 msgstr "Status server MySQL :"
 
 msgid "Database"
-msgstr "Database"
+msgstr "Basis data"
 
 msgid "works"
 msgstr "bekerja"
@@ -4225,7 +4225,7 @@ msgid "Login as"
 msgstr "Login sebagai"
 
 msgid "Login"
-msgstr "Login"
+msgstr "Masuk"
 
 msgid "Select picture..."
 msgstr "Pilih gambar..."
@@ -4261,7 +4261,7 @@ msgid "Chamilo folder"
 msgstr "Folder Chamilo"
 
 msgid "Properties"
-msgstr "Properties"
+msgstr "Properti"
 
 msgid "Configuration settings"
 msgstr "Seting Konfigurasi Chamilo"
@@ -4486,7 +4486,7 @@ msgid "This class isn't subscribed in a course"
 msgstr "Klas ini tidak terdaftar pada mata kuliah"
 
 msgid "Tool"
-msgstr "Tool"
+msgstr "Alat"
 
 msgid "Number of items"
 msgstr "jumlah item"
@@ -4510,7 +4510,7 @@ msgid "My courses default view"
 msgstr "Tampilan default kursus saya"
 
 msgid "Password"
-msgstr "Password"
+msgstr "Kata sandi"
 
 msgid "Registr. allowed"
 msgstr "Pendaftaran diijinkan"
@@ -4747,7 +4747,7 @@ msgid "Main menu after login"
 msgstr "Menu Utama setelah login"
 
 msgid "Banner"
-msgstr "Banner"
+msgstr "Spanduk"
 
 msgid "Resize uploaded user images"
 msgstr "Resize gambar-gambar yang di-upload user"
@@ -7897,7 +7897,7 @@ msgid "is not the valid file !"
 msgstr "bukan file yang sah !"
 
 msgid "Index"
-msgstr "Index"
+msgstr "Indeks"
 
 msgid "Indexes"
 msgstr "Index-index"
@@ -8458,7 +8458,7 @@ msgid "Download"
 msgstr "Upload"
 
 msgid "Group"
-msgstr "Group"
+msgstr "Grup"
 
 msgid "Group Forum"
 msgstr "Forum"
@@ -8602,10 +8602,10 @@ msgid "Numbered"
 msgstr "Berurutan"
 
 msgid "en"
-msgstr "en"
+msgstr "id"
 
 msgid "eng"
-msgstr "eng"
+msgstr "ing"
 
 msgid "iso-8859-1"
 msgstr "iso-8859-1"
@@ -8686,7 +8686,7 @@ msgid "Quit test"
 msgstr "Selesai"
 
 msgid "Cancel"
-msgstr "Cancel"
+msgstr "Batal"
 
 msgid "You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges."
 msgstr "Tidak diijinkan"
@@ -8761,7 +8761,7 @@ msgid "bulgarian"
 msgstr "bulgaria"
 
 msgid "catalan"
-msgstr "catalan"
+msgstr "katalan"
 
 msgid "croatian"
 msgstr "kroasia"
@@ -8779,13 +8779,13 @@ msgid "french"
 msgstr "prancis"
 
 msgid "french_corporate"
-msgstr "french_corporate"
+msgstr "perancis_korporat"
 
 msgid "french_KM"
-msgstr "french_KM"
+msgstr "perancis_KM"
 
 msgid "galician"
-msgstr "galician"
+msgstr "galisia"
 
 msgid "german"
 msgstr "jerman"
@@ -8845,7 +8845,7 @@ msgid "English"
 msgstr "Inggris"
 
 msgid "Home"
-msgstr "Home"
+msgstr "Beranda"
 
 msgid "Are you sure you want to delete"
 msgstr "Apakah anda sungguh-sungguh ingin menghapus"
@@ -8860,7 +8860,7 @@ msgid "With selected"
 msgstr "dengan pilihan"
 
 msgid "Online"
-msgstr "Online"
+msgstr "Daring"
 
 msgid "hungarian"
 msgstr "hungaria"
@@ -8929,7 +8929,7 @@ msgid "Attachment"
 msgstr "lampiran"
 
 msgid "User"
-msgstr "User"
+msgstr "Pengguna"
 
 msgid "M"
 msgstr "S"
@@ -8989,10 +8989,10 @@ msgid "Sunday"
 msgstr "Minggu"
 
 msgid "J"
-msgstr "J"
+msgstr "S"
 
 msgid "A"
-msgstr "A"
+msgstr "R"
 
 msgid "O"
 msgstr "O"
@@ -9001,7 +9001,7 @@ msgid "N"
 msgstr "N"
 
 msgid "D"
-msgstr "D"
+msgstr "K"
 
 msgid "Jan"
 msgstr "Jan"
@@ -9127,7 +9127,7 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 msgid "Chat"
-msgstr "Chat"
+msgstr "Obrolan"
 
 msgid "Add link to this page"
 msgstr "Tambah link ke halaman ini"
@@ -9160,7 +9160,7 @@ msgid "Visible to"
 msgstr "Nampak bagi"
 
 msgid "Export"
-msgstr "Export"
+msgstr "Ekspor"
 
 msgid "Modules"
 msgstr "Tools"
@@ -10726,7 +10726,7 @@ msgid "total users online"
 msgstr "jumlah user yang online"
 
 msgid "Refresh"
-msgstr "Refresh"
+msgstr "Muat ulang"
 
 msgid "Portal news"
 msgstr "Pengumuman System"
@@ -10801,7 +10801,7 @@ msgid "Enter the e-mail address that you used to register and we will send you y
 msgstr "Masukkan alamat e-mail yang anda gunakan untuk mendaftar dan kami akan mengirimkan  password anda."
 
 msgid "Action"
-msgstr "Action"
+msgstr "Aksi"
 
 msgid "Preserved"
 msgstr "Dipertahankan"
@@ -10951,7 +10951,7 @@ msgid "Login request"
 msgstr "Permohonan Login"
 
 msgid "Admin"
-msgstr "admin"
+msgstr "Admin"
 
 msgid "User of course"
 msgstr "normal"
@@ -11725,7 +11725,7 @@ msgid "Total Clicks"
 msgstr "Jumlah Klik"
 
 msgid "Link"
-msgstr "Link"
+msgstr "Tautan"
 
 msgid "Users Downloads"
 msgstr "User"
@@ -11749,7 +11749,7 @@ msgid "There is no result yet"
 msgstr "Sementara belum ada hasil"
 
 msgid "Hits"
-msgstr "Hits"
+msgstr "Kunjungan"
 
 msgid "h."
 msgstr "Pkl."
@@ -13660,7 +13660,7 @@ msgid "Brochure"
 msgstr "Brosur"
 
 msgid "Slideshow"
-msgstr "Slideshow"
+msgstr "Tayangan geser"
 
 msgid "Published end date"
 msgstr "Tanggal akhir diterbitkan"
@@ -14254,7 +14254,7 @@ msgid "Content of the groups"
 msgstr "Isi group"
 
 msgid "Manual"
-msgstr "Manual"
+msgstr "Panduan"
 
 msgid "You should write a message"
 msgstr "Anda harus menulis pesan"
@@ -14287,7 +14287,7 @@ msgid "Show Overview"
 msgstr "Tampilkan Overview"
 
 msgid "Install"
-msgstr "Install"
+msgstr "Pasang"
 
 msgid "of"
 msgstr "dari"
@@ -14437,7 +14437,7 @@ msgid "Cool blue"
 msgstr "Cool blue"
 
 msgid "Corporate"
-msgstr "Corporate"
+msgstr "Korporat"
 
 msgid "Cosmic campus"
 msgstr "Cosmic campus"
@@ -14452,7 +14452,7 @@ msgid "Fruity orange"
 msgstr "Fruity orange"
 
 msgid "Medical"
-msgstr "Medical"
+msgstr "Medis"
 
 msgid "Royal purple"
 msgstr "Royal purple"
@@ -17695,7 +17695,7 @@ msgid "Tests in learning paths"
 msgstr "Tes dalam jalur pembelajaran"
 
 msgid "Id"
-msgstr "ID"
+msgstr "Id"
 
 msgid "There was an error."
 msgstr "Terjadi kesalahan."
@@ -18937,7 +18937,7 @@ msgid "Me"
 msgstr "Saya"
 
 msgid "Vote"
-msgstr "Vote"
+msgstr "Suara"
 
 msgid "Votes"
 msgstr "Vote"
@@ -19345,7 +19345,7 @@ msgid "The requested certificate exists on this portal, but it has not been made
 msgstr "Sertifikat yang diminta ada di portal ini, tetapi belum dibuat publik. Silakan login untuk melihatnya."
 
 msgid "Default"
-msgstr "Default"
+msgstr "Bawaan"
 
 msgid "A test course has been created successfully"
 msgstr "Kursus uji telah dibuat dengan sukses"
@@ -28148,16 +28148,16 @@ msgid "Menudiagnostics"
 msgstr "Menudiagnostics"
 
 msgid "Menucatalogue"
-msgstr "Menucatalogue"
+msgstr "KatalogMenu"
 
 msgid "Topbarcertificate"
-msgstr "Topbarcertificate"
+msgstr "SertifikatBilahAtas"
 
 msgid "Topbarskills"
-msgstr "Topbarskills"
+msgstr "KeterampilanBilahAtas"
 
 msgid "Ai_helpers"
-msgstr "Ai_helpers"
+msgstr "PembantuAI"
 
 msgid "ID of the user who officially sends the agenda reminders"
 msgstr "ID pengguna yang secara resmi mengirim pengingat agenda"
@@ -28223,7 +28223,7 @@ msgid "You're subscribed to push notifications in this browser."
 msgstr "Anda berlangganan pemberitahuan push di browser ini."
 
 msgid "Endpoint"
-msgstr "Endpoint"
+msgstr "Titik akhir"
 
 msgid "Push notifications are not enabled in this browser."
 msgstr "Pemberitahuan push tidak diaktifkan di browser ini."
@@ -31451,10 +31451,10 @@ msgid "Reply to all"
 msgstr "Balas ke semua"
 
 msgid "SCIM external ID"
-msgstr "SCIM external ID"
+msgstr "ID eksternal SCIM"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "ID OAuth2"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "Silakan terima versi terbaru dari syarat dan ketentuan."
@@ -32577,4 +32577,7 @@ msgstr "Untuk memverifikasi e-mail Anda dan mengaktifkan akun Anda di %s, silaka
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Jika Anda tidak mendaftarkan akun ini, Anda dapat mengabaikan email ini. Tidak ada tindakan yang akan diambil."
+
+msgid "Current authentication method"
+msgstr "Metode autentikasi saat ini"
 

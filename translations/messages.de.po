@@ -48,7 +48,7 @@ msgid "Create badge"
 msgstr "Badge erstellen"
 
 msgid "Badges"
-msgstr "Badges"
+msgstr "Abzeichen"
 
 msgid "Students who acquired skill %s"
 msgstr "Studierende die Fähigkeiten erworben haben %s"
@@ -303,7 +303,7 @@ msgid "Exponentiation:\t\t\t^"
 msgstr "Potenzierung:\t\t\t^"
 
 msgid "Division:\t\t\t/"
-msgstr "Division:\t\t\t/"
+msgstr "Abteilung:\t\t\t/"
 
 msgid "Multiplication:\t\t\t*"
 msgstr "Multiplikation:\t\t\t*"
@@ -552,7 +552,7 @@ msgid "Modification date"
 msgstr "Änderungsdatum"
 
 msgid "Weep"
-msgstr "Weep"
+msgstr "Weinen"
 
 msgid "Latest changes"
 msgstr "Letzte Änderungen"
@@ -2360,7 +2360,7 @@ msgid "Undo"
 msgstr "Zurücknehmen"
 
 msgid "Redo"
-msgstr "Redo"
+msgstr "Wiederholen"
 
 msgid "Select an Object"
 msgstr "Objekt auswählen"
@@ -2438,13 +2438,13 @@ msgid "Teacher"
 msgstr "Kursleiter"
 
 msgid "Slides"
-msgstr "Slides"
+msgstr "Folien"
 
 msgid "Waiting for participants"
 msgstr "Auf Teilnehmer warten"
 
 msgid "Browse"
-msgstr "Browse"
+msgstr "Durchsuchen"
 
 msgid "Choose a file to import"
 msgstr "Datei zum Importieren auswählen"
@@ -2735,7 +2735,7 @@ msgid "Assign sessions to"
 msgstr "Kurs-Session zuordnen zu"
 
 msgid "Upload"
-msgstr "Upload"
+msgstr "Hochladen"
 
 msgid "New user on ((sitename))"
 msgstr "Neue Benutzer auf ((sitename))"
@@ -4172,7 +4172,7 @@ msgid "Manage Todo list"
 msgstr "Verwaltung der ToDo-Liste"
 
 msgid "Administration"
-msgstr "Administration"
+msgstr "Verwaltung"
 
 msgid "Info about the System"
 msgstr "Systeminformation"
@@ -4469,7 +4469,7 @@ msgid "Can one register as a teacher (with the ability to create courses)?"
 msgstr "Soll sich ein neuer Benutzer selbst als Kursleiter anmelden können?  (d.h. Der Benutzer kann dann Kurse erstellen)"
 
 msgid "Tuning"
-msgstr "Tuning"
+msgstr "Feinabstimmung"
 
 msgid "Split users' upload directory"
 msgstr "Benutzer Upload-Verzeichnis aufteilen"
@@ -5285,10 +5285,10 @@ msgid "Whether you want to use the blacklist or whitelist filtering. See blackli
 msgstr "Auswahl der Blacklist oder Whitelist  als Filter. Weitere Details dazu in den Blacklist und Whitelist Beschreibungen unten"
 
 msgid "Blacklist"
-msgstr "Blacklist"
+msgstr "Schwarze Liste"
 
 msgid "Whitelist"
-msgstr "Whitelist"
+msgstr "Weiße Liste"
 
 msgid "Blacklist - setting"
 msgstr "Blacklist - Einstellungen"
@@ -8516,7 +8516,7 @@ msgid "Folder created"
 msgstr "Verzeichnis erstellt"
 
 msgid "Download"
-msgstr "Download"
+msgstr "Herunterladen"
 
 msgid "Group"
 msgstr "Gruppen"
@@ -8636,7 +8636,7 @@ msgid "Open"
 msgstr "offen"
 
 msgid "Import"
-msgstr "Import"
+msgstr "Importieren"
 
 msgid "Add another"
 msgstr "weitere hinzufügen"
@@ -8663,10 +8663,10 @@ msgid "Numbered"
 msgstr "nummeriert"
 
 msgid "en"
-msgstr "en"
+msgstr "de"
 
 msgid "eng"
-msgstr "eng"
+msgstr "deu"
 
 msgid "iso-8859-1"
 msgstr "iso-8859-1"
@@ -8906,7 +8906,7 @@ msgid "English"
 msgstr "Name der Sprache auf Englisch"
 
 msgid "Home"
-msgstr "Home"
+msgstr "Startseite"
 
 msgid "Are you sure you want to delete"
 msgstr "Wollen Sie wirklich löschen"
@@ -8942,7 +8942,7 @@ msgid "swedisch"
 msgstr "Schwedisch"
 
 msgid "thai"
-msgstr "Thai"
+msgstr "thai"
 
 msgid "turkish"
 msgstr "türkisch"
@@ -8993,7 +8993,7 @@ msgid "User"
 msgstr "Benutzer"
 
 msgid "M"
-msgstr "M"
+msgstr "Mo"
 
 msgid "T"
 msgstr "D"
@@ -9002,10 +9002,10 @@ msgid "W"
 msgstr "M"
 
 msgid "F"
-msgstr "F"
+msgstr "Fr"
 
 msgid "S"
-msgstr "S"
+msgstr "Sa"
 
 msgid "Mon"
 msgstr "Mo"
@@ -9050,19 +9050,19 @@ msgid "Sunday"
 msgstr "Sonntag"
 
 msgid "J"
-msgstr "J"
+msgstr "So"
 
 msgid "A"
-msgstr "A"
+msgstr "Jan"
 
 msgid "O"
-msgstr "O"
+msgstr "Okt"
 
 msgid "N"
-msgstr "N"
+msgstr "Nov"
 
 msgid "D"
-msgstr "D"
+msgstr "Dez"
 
 msgid "Jan"
 msgstr "Jan"
@@ -9296,7 +9296,7 @@ msgid "Focus on right"
 msgstr "Alle Rollen und Bereiche für ein spezifisches Recht ansehen"
 
 msgid "Authoring"
-msgstr "Authoring"
+msgstr "Erstellung"
 
 msgid "The value has been modified."
 msgstr "Wert wurde geändert"
@@ -9464,7 +9464,7 @@ msgid "You can now return to the"
 msgstr "Sie können nun zurückgehen zu"
 
 msgid "Horizontal"
-msgstr "horizontal"
+msgstr "Horizontal"
 
 msgid "Vertical"
 msgstr "vertikal"
@@ -10076,7 +10076,7 @@ msgid "Go to question"
 msgstr "Gehe zu Frage"
 
 msgid "Level"
-msgstr "Level"
+msgstr "Stufe"
 
 msgid "Duration"
 msgstr "Dauer"
@@ -11810,7 +11810,7 @@ msgid "There is no result yet"
 msgstr "Es liegt noch kein Ergebnis vor"
 
 msgid "Hits"
-msgstr "Hits"
+msgstr "Zugriffe"
 
 msgid "h."
 msgstr "h"
@@ -11825,7 +11825,7 @@ msgid "This day"
 msgstr "heute"
 
 msgid "Logins"
-msgstr "Logins"
+msgstr "Anmeldungen"
 
 msgid "Here is the list of your latest logins with the tools you visited during these sessions."
 msgstr "Liste Ihrer letzten Logins und der Werkzeuge, die Sie dabei benutzt haben."
@@ -11951,7 +11951,7 @@ msgid "Browsers"
 msgstr "Browser"
 
 msgid "Referers"
-msgstr "Referers"
+msgstr "Referrer"
 
 msgid "(When an user open the index of the portal)"
 msgstr "(Wenn ein Teilnehmer den Index aufruft)"
@@ -14498,7 +14498,7 @@ msgid "Cool blue"
 msgstr "Cool Blau"
 
 msgid "Corporate"
-msgstr "Corporate"
+msgstr "Unternehmen"
 
 msgid "Cosmic campus"
 msgstr "Kosmische Campus"
@@ -14513,7 +14513,7 @@ msgid "Fruity orange"
 msgstr "Fruchtige Orange"
 
 msgid "Medical"
-msgstr "Medical"
+msgstr "Medizin"
 
 msgid "Royal purple"
 msgstr "Royal Purpur"
@@ -14543,7 +14543,7 @@ msgid "czech"
 msgstr "tschechisch"
 
 msgid "dari"
-msgstr "dari"
+msgstr "Dari"
 
 msgid "dutch corporate"
 msgstr "niederländisch förmlich"
@@ -15041,7 +15041,7 @@ msgid "ukrainian"
 msgstr "ukrainisch"
 
 msgid "yoruba"
-msgstr "yoruba"
+msgstr "Yoruba"
 
 msgid "New"
 msgstr "Neu"
@@ -19445,7 +19445,7 @@ msgid "Auto"
 msgstr "Auto"
 
 msgid "Stop"
-msgstr "Stop"
+msgstr "Stopp"
 
 msgid "Enable Webcam Clip"
 msgstr "Webcam-Clip aktivieren"
@@ -19496,7 +19496,7 @@ msgid "Available event keys. Use them between (( ))."
 msgstr "Verfügbare Event Keys. Bitte zwischen (( )) benutzen."
 
 msgid "Events"
-msgstr "Events"
+msgstr "Ereignisse"
 
 msgid "Event type name"
 msgstr "Eventtyp Name"
@@ -33898,7 +33898,7 @@ msgid "Quiz"
 msgstr "Test"
 
 msgid "Customcertificate"
-msgstr "Customcertificate"
+msgstr "Benutzerdefiniertes Zertifikat"
 
 msgid "Update profile"
 msgstr "Profil aktualisieren"
@@ -34145,4 +34145,7 @@ msgstr "Um Ihre E-Mail zu verifizieren und Ihr Konto auf %s zu aktivieren, klick
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Falls Sie dieses Konto nicht registriert haben, können Sie diese E-Mail ignorieren. Es wird keine Aktion durchgeführt."
+
+msgid "Current authentication method"
+msgstr "Aktuelle Authentifizierungsmethode"
 

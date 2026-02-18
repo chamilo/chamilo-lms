@@ -494,7 +494,7 @@ msgid "Question ID"
 msgstr "ID pytania"
 
 msgid "ExerciseId"
-msgstr "ExerciseId"
+msgstr "IdĆwiczenia"
 
 msgid "Excel export"
 msgstr "Eksport do Excela"
@@ -4226,7 +4226,7 @@ msgid "Login as"
 msgstr "Loguj jako"
 
 msgid "Login"
-msgstr "Login"
+msgstr "Zaloguj"
 
 msgid "Select picture..."
 msgstr "Wybierz obrazek..."
@@ -4409,7 +4409,7 @@ msgid "Can one register as a teacher (with the ability to create courses)?"
 msgstr "Czy można zarejestrować się jako nauczyciel (tak, aby móc tworzyć kursy)?"
 
 msgid "Tuning"
-msgstr "Tuning"
+msgstr "Dostrajanie"
 
 msgid "Split users' upload directory"
 msgstr "Podziel katalog wgranych danych użytkowników"
@@ -8045,7 +8045,7 @@ msgid "Add individual feedback"
 msgstr "Dodaj komentarz"
 
 msgid "N°"
-msgstr "N°"
+msgstr "Nr"
 
 msgid "To create a new question, choose the type above"
 msgstr "Aby utworzyć nowe pytanie, wybierz typ powyżej"
@@ -14981,7 +14981,7 @@ msgid "ukrainian"
 msgstr "ukraiński"
 
 msgid "yoruba"
-msgstr "yoruba"
+msgstr "joruba"
 
 msgid "New"
 msgstr "Nowy"
@@ -22057,7 +22057,7 @@ msgid "Send certificate notification to all users"
 msgstr "Wyślij powiadomienie o certyfikacie do wszystkich użytkowników"
 
 msgid "Fwd"
-msgstr "Fwd"
+msgstr "Przek."
 
 msgid "Forwarded message"
 msgstr "Przekazana wiadomość"
@@ -24337,7 +24337,7 @@ msgid "Upload any IMS CC (.imscc or .zip) file in the right version and it will 
 msgstr "Wgraj dowolny plik IMS CC (.imscc lub .zip) w odpowiedniej wersji, a zostanie on bezpośrednio rozpakowany do Twojego kursu."
 
 msgid "IMS Common Cartridge v1.3"
-msgstr "IMS Common Cartridge v1.3"
+msgstr "IMS Common Cartridge w1.3"
 
 msgid "Hide question number"
 msgstr "Ukryj numer pytania"
@@ -28148,22 +28148,22 @@ msgid "Menusocial"
 msgstr "Menusocial"
 
 msgid "Menuvideoconference"
-msgstr "Menuvideoconference"
+msgstr "Menu wideokonferencji"
 
 msgid "Menudiagnostics"
-msgstr "Menudiagnostics"
+msgstr "Menu diagnostyki"
 
 msgid "Menucatalogue"
-msgstr "Menucatalogue"
+msgstr "Menu katalogu"
 
 msgid "Topbarcertificate"
-msgstr "Topbarcertificate"
+msgstr "Pasek certyfikatu"
 
 msgid "Topbarskills"
-msgstr "Topbarskills"
+msgstr "Pasek umiejętności"
 
 msgid "Ai_helpers"
-msgstr "Ai_helpers"
+msgstr "Asystenci AI"
 
 msgid "ID of the user who officially sends the agenda reminders"
 msgstr "ID użytkownika, który oficjalnie wysyła przypomnienia o agendzie"
@@ -28514,7 +28514,7 @@ msgid "No available options"
 msgstr "Brak dostępnych opcji"
 
 msgid "Cc"
-msgstr "Cc"
+msgstr "DW"
 
 msgid "Send"
 msgstr "Wyślij"
@@ -30515,13 +30515,13 @@ msgid "ex. root"
 msgstr "np. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "TWORZĘ TABELĘ works"
 
 msgid "ALTER TABLE works"
 msgstr "ALTER TABLE works"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "USUŃ KOLUMNĘ works"
 
 msgid "Theme selected as current"
 msgstr "Motyw wybrany jako aktualny"
@@ -30725,7 +30725,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (ID wewnętrzne)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "ID Azure (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "E-mail organizacji"
@@ -31457,10 +31457,10 @@ msgid "Reply to all"
 msgstr "Odpowiedz wszystkim"
 
 msgid "SCIM external ID"
-msgstr "SCIM external ID"
+msgstr "Zewnętrzne ID SCIM"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "ID OAuth2"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "Proszę zaakceptować najnowszą wersję regulaminu."
@@ -32336,7 +32336,7 @@ msgid "Quiz"
 msgstr "Test"
 
 msgid "Customcertificate"
-msgstr "Customcertificate"
+msgstr "Własnycertyfikat"
 
 msgid "Update profile"
 msgstr "Aktualizuj profil"
@@ -32583,4 +32583,7 @@ msgstr "Aby zweryfikować swój e-mail i aktywować konto w %s, kliknij poniższ
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Jeśli nie rejestrowałeś tego konta, możesz zignorować tego e-maila. Żadne działanie nie zostanie podjęte."
+
+msgid "Current authentication method"
+msgstr "Aktualna metoda uwierzytelniania"
 

@@ -1160,10 +1160,10 @@ msgid "Special courses"
 msgstr "Cours spéciaux"
 
 msgid "Roles"
-msgstr "Roles"
+msgstr "Rôles"
 
 msgid "Curriculum"
-msgstr "Curriculum"
+msgstr "Programme"
 
 msgid "%s to review (%s)"
 msgstr "%s à vérifier (%s)"
@@ -1823,7 +1823,7 @@ msgid "Chamilo LIVE"
 msgstr "Vidéo"
 
 msgid "Contributions"
-msgstr "contributions"
+msgstr "Contributions"
 
 msgid "Course program"
 msgstr "Cahier des charges"
@@ -2675,7 +2675,7 @@ msgid "File on your local computer"
 msgstr "Fichier sur votre ordinateur local"
 
 msgid "minimum"
-msgstr "Minimum"
+msgstr "minimum"
 
 msgid "maximum"
 msgstr "maximum"
@@ -8878,7 +8878,7 @@ msgid "Proposals for an improvement of"
 msgstr "Propositions d'amélioration de"
 
 msgid "invisible"
-msgstr "Invisible"
+msgstr "invisible"
 
 msgid "Save"
 msgstr "Enregistrer"
@@ -9172,7 +9172,7 @@ msgid "F"
 msgstr "V"
 
 msgid "S"
-msgstr "S"
+msgstr "L"
 
 msgid "Mon"
 msgstr "Lun"
@@ -9217,19 +9217,19 @@ msgid "Sunday"
 msgstr "Dimanche"
 
 msgid "J"
-msgstr "J"
+msgstr "M"
 
 msgid "A"
-msgstr "A"
+msgstr "M"
 
 msgid "O"
-msgstr "O"
+msgstr "J"
 
 msgid "N"
-msgstr "N"
+msgstr "V"
 
 msgid "D"
-msgstr "D"
+msgstr "S"
 
 msgid "Jan"
 msgstr "Jan"
@@ -10949,7 +10949,7 @@ msgid "menu"
 msgstr "menu"
 
 msgid "Opinion"
-msgstr "Opinion"
+msgstr "Avis"
 
 msgid "Intranet"
 msgstr "Intranet"
@@ -11999,7 +11999,7 @@ msgid "There is no result yet"
 msgstr "Il n'y a pas encore de résultats"
 
 msgid "Hits"
-msgstr "Hits"
+msgstr "Vues"
 
 msgid "h."
 msgstr "h."
@@ -12014,7 +12014,7 @@ msgid "This day"
 msgstr "Aujourd'hui"
 
 msgid "Logins"
-msgstr "Logins"
+msgstr "Connexions"
 
 msgid "Here is the list of your latest logins with the tools you visited during these sessions."
 msgstr "Voici la liste de vos derniers logins ainsi que les outils utilisés pendant ces sessions."
@@ -12539,7 +12539,7 @@ msgid "A PowerPoint to SCORM Courses converter"
 msgstr "Un convertisseur de PowerPoint en parcours pédagogiques SCORM"
 
 msgid "Go"
-msgstr "Go"
+msgstr "Aller"
 
 msgid "The quota for this course is"
 msgstr "Le quota pour ce cours est de"
@@ -13036,7 +13036,7 @@ msgid "Latest sent on"
 msgstr "Renvoyé pour la dernière fois le"
 
 msgid "kB"
-msgstr "Kb"
+msgstr "ko"
 
 msgid "Your account %s has been completely removed from this portal. Thank you for staying with us for a while. We hope to see you again later."
 msgstr "Votre compte %s a été complètement effacer de ce portail. Merci d'avoir utiliser notre portail. Nous espérons vous revoir bientôt."
@@ -14909,7 +14909,7 @@ msgid "Cool blue"
 msgstr "Bleu Frais"
 
 msgid "Corporate"
-msgstr "Corporate"
+msgstr "Entreprise"
 
 msgid "Cosmic campus"
 msgstr "Campus Cosmique"
@@ -14987,7 +14987,7 @@ msgid "norwegian"
 msgstr "norvégien"
 
 msgid "pashto"
-msgstr "pashto"
+msgstr "pachto"
 
 msgid "persian"
 msgstr "perse"
@@ -16945,7 +16945,7 @@ msgid "A student has obtained the number of sub-skills needed to validate the mo
 msgstr "Un apprenant a obtenu le nombre de sous compétences nécessaire pour valider la compétence mère."
 
 msgid "Off"
-msgstr "Off"
+msgstr "Désactivé"
 
 msgid "Web server"
 msgstr "serveur Web"
@@ -18664,7 +18664,7 @@ msgid "Your message has been sent."
 msgstr "Votre message a été envoyé."
 
 msgid "Tags"
-msgstr "Tags"
+msgstr "Étiquettes"
 
 msgid "Survey type unknown"
 msgstr "Type d'enquête inconnu"
@@ -19827,7 +19827,7 @@ msgid "Last Name and First Name"
 msgstr "Prénom et nom de famille"
 
 msgid "Plugins"
-msgstr "Plugins"
+msgstr "Extensions"
 
 msgid "Detailed"
 msgstr "Détaillé"
@@ -19995,7 +19995,7 @@ msgid "Auto"
 msgstr "Automatique"
 
 msgid "Stop"
-msgstr "Stop"
+msgstr "Arrêter"
 
 msgid "Enable Webcam Clip"
 msgstr "Activer la webcam"
@@ -21523,7 +21523,7 @@ msgid "Use right-click to close the delineation"
 msgstr "Utilisez le clic-droit pour fermer la délinéation"
 
 msgid "Beta"
-msgstr "Beta"
+msgstr "Bêta"
 
 msgid "Crop your picture"
 msgstr "Découpez votre photo"
@@ -25408,7 +25408,7 @@ msgstr ""
 "commentaire dans le port-folio"
 
 msgid "Tag"
-msgstr "Tag"
+msgstr "Étiquette"
 
 msgid "Tag saved"
 msgstr "Tag enregistré"
@@ -34212,7 +34212,7 @@ msgid "Quiz"
 msgstr "Questionnaire"
 
 msgid "Customcertificate"
-msgstr "Customcertificate"
+msgstr "Certificats personnalisés"
 
 msgid "Update profile"
 msgstr "Mettre à jour le profil"
@@ -34459,4 +34459,7 @@ msgstr "Pour vérifier votre e-mail et activer votre compte sur %s, veuillez cli
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Si vous n'avez pas enregistré ce compte, vous pouvez ignorer cet e-mail. Aucune action ne sera prise."
+
+msgid "Current authentication method"
+msgstr "Méthode d'authentification actuelle"
 

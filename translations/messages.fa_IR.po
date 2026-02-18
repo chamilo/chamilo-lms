@@ -1240,7 +1240,7 @@ msgid "Your version is not up-to-date"
 msgstr "نسخه شما به‌روز نیست"
 
 msgid "Hotpotatoes"
-msgstr "Hotpotatoes"
+msgstr "هات‌پاتاتوز"
 
 msgid "-1 = All questions will be selected."
 msgstr "-1 = همه سؤالات انتخاب خواهند شد."
@@ -2020,7 +2020,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:حق مالکیت,, no:بدون حق مالکیت"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوشه,, application/msword:MsWord,, application/octet-stream:جریان اکتت,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوشه,, application/msword:ورد مایکروسافت,, application/octet-stream:جریان اکتت,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:اکسل مایکروسافت,, application/vnd.ms-powerpoint:پاورپوینت مایکروسافت,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr "exercise:آزمون,, simulation:شبیه سازی,, questionnaire:پرسشنامه,, diagram:دیاگرام,, figure:شکل,, graph:گراف,, index:صفحۀ اصلی,, slide:اسلاید,, table:جدول,, narrative text:متن روایی,, exam:امتحان,, experiment:تجربه,, problem statement:صورت مسئله,, self assessment:خودآزمایی,, lecture:سخنرانی"
@@ -6253,7 +6253,7 @@ msgid "Show the teacher reference (name and e-mail if available) in the footer?"
 msgstr "آیا ارجاع معلم (نام و ایمیل در صورت موجود بودن) را در پاورقی نمایش دهیم؟"
 
 msgid "HTML"
-msgstr "HTML"
+msgstr "اچ‌تی‌ام‌ال"
 
 msgid "Page Link"
 msgstr "پیوند صفحه"
@@ -8620,7 +8620,7 @@ msgid "helvetica, arial, geneva, sans-serif"
 msgstr "tahoma, arial, geneva, sans-serif"
 
 msgid ","
-msgstr ","
+msgstr "،"
 
 msgid "."
 msgstr "."
@@ -8989,19 +8989,19 @@ msgid "Sunday"
 msgstr "یکشنبه"
 
 msgid "J"
-msgstr "J"
+msgstr "ج"
 
 msgid "A"
-msgstr "A"
+msgstr "ا"
 
 msgid "O"
-msgstr "O"
+msgstr "ا"
 
 msgid "N"
-msgstr "N"
+msgstr "ن"
 
 msgid "D"
-msgstr "D"
+msgstr "د"
 
 msgid "Jan"
 msgstr "ژان"
@@ -9769,7 +9769,7 @@ msgid "Border"
 msgstr "حاشیه"
 
 msgid "Alt"
-msgstr "Alt"
+msgstr "آلت"
 
 msgid "Height"
 msgstr "ارتفاع"
@@ -21610,7 +21610,7 @@ msgid "User testing of e-mail configuration"
 msgstr "آزمایش کاربر پیکربندی ایمیل"
 
 msgid "CMS"
-msgstr "CMS"
+msgstr "سی‌ام‌اس"
 
 msgid "Legal conditions"
 msgstr "شرایط قانونی"
@@ -22045,13 +22045,13 @@ msgid "Certificate notification"
 msgstr "اطلاع‌رسانی گواهینامه"
 
 msgid "((user_first_name)),"
-msgstr "((user_first_name)),"
+msgstr "((user_first_name))،"
 
 msgid "Send certificate notification to all users"
 msgstr "ارسال اطلاع‌رسانی گواهینامه به همه کاربران"
 
 msgid "Fwd"
-msgstr "Fwd"
+msgstr "فوروارد"
 
 msgid "Forwarded message"
 msgstr "پیام ارجاع‌شده"
@@ -23110,7 +23110,7 @@ msgid "Extraction from %s"
 msgstr "استخراج از %s"
 
 msgid "Compilatio"
-msgstr "Compilatio"
+msgstr "کامپیلاتیو"
 
 msgid "Verify that it contains text (and not only images)"
 msgstr "بررسی کنید که حاوی متن است (و نه فقط تصاویر)"
@@ -27232,7 +27232,7 @@ msgid "Carbon copy receiver profile picture"
 msgstr "تصویر پروفایل گیرنده کپی"
 
 msgid "Ppt_to_lp"
-msgstr "Ppt_to_lp"
+msgstr "پاورپوینت_به_مسیر_یادگیری"
 
 msgid "Left"
 msgstr "چپ"
@@ -27364,7 +27364,7 @@ msgid "Obtained the following skills"
 msgstr "مهارت‌های زیر کسب شده‌اند"
 
 msgid "Chamilo LMS"
-msgstr "Chamilo LMS"
+msgstr "چامیلو ال‌ام‌اس"
 
 msgid "No course sessions for this user"
 msgstr "هیچ جلسه دوره‌ای برای این کاربر وجود ندارد"
@@ -32577,4 +32577,7 @@ msgstr "برای تأیید ایمیل و فعال‌سازی حساب خود د
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "اگر این حساب را ثبت نکرده‌اید، می‌توانید این ایمیل را نادیده بگیرید. هیچ اقدامی انجام نخواهد شد."
+
+msgid "Current authentication method"
+msgstr "روش احراز هویت کنونی"
 

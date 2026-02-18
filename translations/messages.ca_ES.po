@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Sincerament"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemple de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Mostra de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervals de variables"
@@ -8870,7 +8870,7 @@ msgid "With selected"
 msgstr "Amb els seleccionats"
 
 msgid "Online"
-msgstr "Online"
+msgstr "En línia"
 
 msgid "hungarian"
 msgstr "Hongarès"
@@ -9038,7 +9038,7 @@ msgid "Aug"
 msgstr "Ag"
 
 msgid "Sep"
-msgstr "Sep"
+msgstr "Set"
 
 msgid "Oct"
 msgstr "Oct"
@@ -9047,7 +9047,7 @@ msgid "Nov"
 msgstr "Nov"
 
 msgid "Dec"
-msgstr "Dec"
+msgstr "Des"
 
 msgid "January"
 msgstr "Gener"
@@ -10019,7 +10019,7 @@ msgid "Shared documents folder"
 msgstr "Directori de documents compartits"
 
 msgid "Audio"
-msgstr "Audio"
+msgstr "Àudio"
 
 msgid "Go to question"
 msgstr "Anar a la qüestió"
@@ -11894,7 +11894,7 @@ msgid "Providers"
 msgstr "Proveïdors"
 
 msgid "OS"
-msgstr "OS"
+msgstr "SO"
 
 msgid "Browsers"
 msgstr "Navegadors"
@@ -12794,7 +12794,7 @@ msgid "Latest sent on"
 msgstr "Darrer reenviament en"
 
 msgid "kB"
-msgstr "Kb"
+msgstr "kB"
 
 msgid "Your account %s has been completely removed from this portal. Thank you for staying with us for a while. We hope to see you again later."
 msgstr "El seu compte %s ha estat eliminat per complet d'aquest portal. Gràcies pel temps que heu estat amb nosaltres. En el futur esperem tornar-lo a veure un altre cop amb nosaltres."
@@ -14492,7 +14492,7 @@ msgid "czech"
 msgstr "Txec"
 
 msgid "dari"
-msgstr "Dari"
+msgstr "dari"
 
 msgid "dutch corporate"
 msgstr "Holandès corporatiu"
@@ -18643,7 +18643,7 @@ msgid "Contains a file"
 msgstr "Conté un fitxer"
 
 msgid "Discussions"
-msgstr "Discussions"
+msgstr "Discussió"
 
 msgid "Exercise progress"
 msgstr "Progrés de l'exercici"
@@ -20548,7 +20548,7 @@ msgid "MM dd, yy"
 msgstr "dd 'de' MM 'de' yy"
 
 msgid "HH:mm"
-msgstr "hh:mm"
+msgstr "HH:mm"
 
 msgid " at"
 msgstr "a les"
@@ -32592,4 +32592,7 @@ msgstr "Per verificar el teu correu electrònic i activar el teu compte a %s, fe
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Si no has registrat aquest compte, pots ignorar aquest correu electrònic. No es prendrà cap acció."
+
+msgid "Current authentication method"
+msgstr ""
 

@@ -1,5 +1,5 @@
 .p-card {
-  @apply rounded-lg bg-white border border-gray-25 transition
+  @apply rounded-lg bg-white border border-gray-25 transition isolate
     hover:shadow-xl;
 
   .p-card-body {
@@ -14,7 +14,7 @@
     @apply relative;
 
     img {
-      @apply rounded-t-lg object-cover;
+      @apply rounded-t-lg object-cover w-full h-auto;
     }
   }
 

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Foomilada tusaalaha: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Foomulaha tusaale: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -1075,7 +1075,7 @@ msgid "Roles"
 msgstr "Doorarka"
 
 msgid "Curriculum"
-msgstr "Curriculum"
+msgstr "Manaahijta"
 
 msgid "%s to review (%s)"
 msgstr "%s dib u eeg (%s)"
@@ -2824,7 +2824,7 @@ msgid "Unlocked: learners can post new messages in this forum category, forum or
 msgstr "La furay: ardaydu waxay ku dhejin karaan farriimo cusub qaybta madasha, madal ama dunta"
 
 msgid "Flat"
-msgstr "Flat"
+msgstr "Fidsan"
 
 msgid "Threaded"
 msgstr "Dunta"
@@ -14452,19 +14452,19 @@ msgid "Medical"
 msgstr "Caafimaad"
 
 msgid "Royal purple"
-msgstr "Royal purple"
+msgstr "Gaduud boqor"
 
 msgid "Silver line"
-msgstr "Silver line"
+msgstr "Khadii qalin"
 
 msgid "Sober brown"
-msgstr "Sober brown"
+msgstr "Brown sober"
 
 msgid "Steel grey"
-msgstr "Steel grey"
+msgstr "Cawr birta"
 
 msgid "Tasty olive"
-msgstr "Tasty olive"
+msgstr "Zaytuun dhadhan"
 
 msgid "In this report you see the results of all questions"
 msgstr "Wararkaan waxaad aragtaa natiijooyinka dhammaan su'aalaha"
@@ -14473,13 +14473,13 @@ msgid "Questions' overall report"
 msgstr "Wararka guud ee su'aalaha"
 
 msgid "bosnian"
-msgstr "bosnian"
+msgstr "Bosniyaan"
 
 msgid "czech"
-msgstr "czech"
+msgstr "Jeeg"
 
 msgid "dari"
-msgstr "dari"
+msgstr "Dari"
 
 msgid "dutch corporate"
 msgstr "shirkadda holland"
@@ -14488,34 +14488,34 @@ msgid "english for organisations"
 msgstr "Ingiriisiga ururada"
 
 msgid "friulian"
-msgstr "friulian"
+msgstr "Friulian"
 
 msgid "georgian"
-msgstr "georgian"
+msgstr "Georgian"
 
 msgid "hebrew"
-msgstr "hebrew"
+msgstr "Cibraaniga"
 
 msgid "korean"
-msgstr "korean"
+msgstr "Kuuriya"
 
 msgid "latvian"
-msgstr "latvian"
+msgstr "Latvia"
 
 msgid "lithuanian"
-msgstr "lithuanian"
+msgstr "Lithuania"
 
 msgid "macedonian"
-msgstr "macedonian"
+msgstr "Masedooniya"
 
 msgid "norwegian"
-msgstr "norwegian"
+msgstr "Norwey"
 
 msgid "pashto"
-msgstr "pashto"
+msgstr "Baasto"
 
 msgid "persian"
-msgstr "persian"
+msgstr "Faaris"
 
 msgid "quechua from Cusco"
 msgstr "Quechua ka Cusco"
@@ -14977,7 +14977,7 @@ msgid "ukrainian"
 msgstr "ukrayn"
 
 msgid "yoruba"
-msgstr "yoruba"
+msgstr "Yoruba"
 
 msgid "New"
 msgstr "Cusub"
@@ -15193,7 +15193,7 @@ msgid "Enable the possibility for users to select their own timezone. The timezo
 msgstr "Awood u si isticmaale inay doortaan timezone-kooda. Goobta timezone-ka waa in lagu dejiyaa muuqda oo la beddeli karo Profiling menu-ka qaybta maamulka ka hor intaanay isticmaale dooran karin. Marka la sameeyo, isticmaale waxay awoodi doonaan inay arkaan kala baxarka shaqada iyo tixraacyada kale ee wakhtiga iyaga u gaar ah, taas oo yarayn doonta khaladaadka wakhtiga la bixinayo."
 
 msgid "Timezone"
-msgstr "Timezone"
+msgstr "Awaa-dhaca"
 
 msgid "The assigned sessions have been updated"
 msgstr "Fadhiyada loo qabtay ayaa la cusboonaysiiyay"
@@ -15307,7 +15307,7 @@ msgid "Setting"
 msgstr "Dejinta"
 
 msgid "Current"
-msgstr "Current"
+msgstr "Hadda"
 
 msgid "The session garbage collector maximum lifetime indicates which maximum time is given between two runs of the garbage collector."
 msgstr "Waqtiga ugu badan ee ururiyaha qashinka fadhiga uu tilmaamo waa waqtiga ugu badan ee la siiyo inta u dhaxaysa laba orod ee ururiyaha qashinka."
@@ -22048,7 +22048,7 @@ msgid "Send certificate notification to all users"
 msgstr "U dir ogeysiiska shahaadada dhammaan isticmaale"
 
 msgid "Fwd"
-msgstr "Fwd"
+msgstr "Dib u soo gudbi"
 
 msgid "Forwarded message"
 msgstr "Farriinta la gudbiyay"
@@ -22123,7 +22123,7 @@ msgid "This e-mail was sent via course %s in session %s"
 msgstr "Iimaylkani waxaa loo soo diray iyadoo loo marayo koorsada %s ee fadhiga %s"
 
 msgid "Diagram"
-msgstr "Diagram"
+msgstr "Shaxda"
 
 msgid "Career %s doesn't have a diagram."
 msgstr "Xirfadda %s ma leh diagram."
@@ -28120,37 +28120,37 @@ msgid "Generates images based on prompts or content using AI."
 msgstr "Waxay soo saartaa sawarro ku saleysan tilmaamaha ama waxyaabaha iyadoo la isticmaalayo AI."
 
 msgid "Menucampushomepage"
-msgstr "Menucampushomepage"
+msgstr "Bogagga guriga campuska"
 
 msgid "Menumycourses"
-msgstr "Menumycourses"
+msgstr "Koorsooyinkayga"
 
 msgid "Menureporting"
-msgstr "Menureporting"
+msgstr "War-bixinta"
 
 msgid "Menuplatformadministration"
-msgstr "Menuplatformadministration"
+msgstr "Maamulka platformka"
 
 msgid "Menumyagenda"
-msgstr "Menumyagenda"
+msgstr "Agenda-gayga"
 
 msgid "Menusocial"
-msgstr "Menusocial"
+msgstr "Bulshada"
 
 msgid "Menuvideoconference"
-msgstr "Menuvideoconference"
+msgstr "Shirka muuqaalka"
 
 msgid "Menudiagnostics"
-msgstr "Menudiagnostics"
+msgstr "Cilad-sookhiishiyada"
 
 msgid "Menucatalogue"
-msgstr "Menucatalogue"
+msgstr "Kataloogga"
 
 msgid "Topbarcertificate"
-msgstr "Topbarcertificate"
+msgstr "Shahaadada"
 
 msgid "Topbarskills"
-msgstr "Topbarskills"
+msgstr "Xirfadaha"
 
 msgid "Ai_helpers"
 msgstr "Caawimadii AI"
@@ -31447,10 +31447,10 @@ msgid "Reply to all"
 msgstr "Ka jawaab dhammaan"
 
 msgid "SCIM external ID"
-msgstr "SCIM external ID"
+msgstr "ID dibadda ah ee SCIM"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "ID OAuth2"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "Fadlan aqbal nooca ugu dambeeyay ee shuruudaha iyo xaaladaha."
@@ -31726,7 +31726,7 @@ msgid "Allow teachers to ask for AI-generated glossary terms in their course. Th
 msgstr "Oggolow macallimiinta inay weydiistaan tilmaamo AI-gu-soo-saaray ee koorsadooda. Tani waxay soo saari doontaa 20 tilmaamo ku salaysan ciwaanka koorsada iyo sharaxaadda guud ee qalabka sharaxaada koorsada. Haddii la isticmaalo in ka badan hal jeer, waxay ka saari doontaa tilmaamo horeba uga jiray glossary-gaas (hubi in nuxulka la la heli karo adeegyada AI ee la habeeyay)."
 
 msgid "Video generator"
-msgstr "Video generator"
+msgstr "Sawir- sameeyaha video"
 
 msgid "Generates videos based on prompts or content using AI (this might consume many tokens)."
 msgstr "Waxay soo saartaa fiidiyowyada ku salaysan tilmaamo ama nuxul isticoolaya AI (tani waxay cuni kartaa calaamooyin badan)."
@@ -31759,13 +31759,13 @@ msgid "Support tickets"
 msgstr "Tikitooyinka taageerada"
 
 msgid "Webservices"
-msgstr "Webservices"
+msgstr "Adeegyada web"
 
 msgid "Catalogue"
 msgstr "Kataloog"
 
 msgid "Workflows"
-msgstr "Workflows"
+msgstr "Sallalka shaqada"
 
 msgid "Setting is editable on sub-URLs"
 msgstr "Dejinta waa la beddeli karaa ee URL-yada hoose"
@@ -31792,7 +31792,7 @@ msgid "Cleanup temporary uploads and cache"
 msgstr "Nadiifinta kaydka ku meel gaarka ah iyo cache"
 
 msgid "Directory"
-msgstr "Directory"
+msgstr "Galka"
 
 msgid "Only delete files older than (minutes)"
 msgstr "Tirtir faylalka ka da'da badan (daqiiqado)"
@@ -31870,7 +31870,7 @@ msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Favored: SVG. PNG max size: %spx."
 
 msgid "View badge"
-msgstr "View badge"
+msgstr "Eeg calaamadda"
 
 msgid "%d min"
 msgstr "%d daqiiqo"
@@ -32464,7 +32464,7 @@ msgid "Save to Documents"
 msgstr "Keydi Documents"
 
 msgid "Document IRI"
-msgstr "Document IRI"
+msgstr "IRI dukumentiga"
 
 msgid "Go to folder"
 msgstr "Tag folderka"
@@ -32573,4 +32573,7 @@ msgstr "Si aad u xaqiijiso e-mailkaaga oo aad u shaqeyso akoonkaaga %s, fadlan r
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Haddii aadan diiwaan gelin akoonkan, waad iska indhatiri kartaa emailkan. Wax tallaabo ah lama qaadi doono."
+
+msgid "Current authentication method"
+msgstr "Habka xaqiijinta hadda"
 

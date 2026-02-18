@@ -36,6 +36,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use const SORT_FLAG_CASE;
+use const SORT_NATURAL;
+
 #[ApiResource(
     types: ['https://schema.org/Course'],
     operations: [
@@ -267,6 +270,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         'course:read',
         'session:read',
         'course_catalogue:read',
+        'course_rel_user:read',
     ])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'course_language', type: 'string', length: 20, unique: false, nullable: false)]
@@ -1248,6 +1252,38 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->popularity = $popularity;
 
         return $this;
+    }
+
+    #[SerializedName('categoryTitles')]
+    #[Groups([
+        'course:read',
+        'course_rel_user:read',
+        'course_catalogue:read',
+    ])]
+    public function getCategoryTitles(): array
+    {
+        $titles = [];
+
+        foreach ($this->categories as $category) {
+            if (null === $category) {
+                continue;
+            }
+
+            $title = method_exists($category, 'getTitle')
+                ? (string) $category->getTitle()
+                : (string) $category;
+
+            $title = trim(strip_tags($title));
+
+            if ('' !== $title) {
+                $titles[] = $title;
+            }
+        }
+
+        $titles = array_values(array_unique($titles));
+        sort($titles, SORT_NATURAL | SORT_FLAG_CASE);
+
+        return $titles;
     }
 
     public function getResourceIdentifier(): int

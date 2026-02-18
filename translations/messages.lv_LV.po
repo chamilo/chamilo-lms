@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Ar cieņu"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulas paraugs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulas piemērs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Mainīgo diapazoni"
@@ -1568,7 +1568,7 @@ msgid "Remote"
 msgstr "Attālināts"
 
 msgid "Auto-detect"
-msgstr "Auto-detect"
+msgstr "Automātiska noteikšana"
 
 msgid "Total of completed learning objects"
 msgstr "<b>Kopējais rezultāts / izpilde</b>"
@@ -8603,10 +8603,10 @@ msgid "Numbered"
 msgstr "Numurēts"
 
 msgid "en"
-msgstr "en"
+msgstr "lv"
 
 msgid "eng"
-msgstr "eng"
+msgstr "lat"
 
 msgid "iso-8859-1"
 msgstr "utf-8"
@@ -8945,7 +8945,7 @@ msgid "F"
 msgstr "P"
 
 msgid "S"
-msgstr "S"
+msgstr "Sv"
 
 msgid "Mon"
 msgstr "Pirm"
@@ -8990,19 +8990,19 @@ msgid "Sunday"
 msgstr "Svētdiena"
 
 msgid "J"
-msgstr "J"
+msgstr "Pr"
 
 msgid "A"
-msgstr "A"
+msgstr "Ot"
 
 msgid "O"
-msgstr "O"
+msgstr "Tr"
 
 msgid "N"
-msgstr "N"
+msgstr "Ce"
 
 msgid "D"
-msgstr "D"
+msgstr "Pk"
 
 msgid "Jan"
 msgstr "Jan"
@@ -11960,7 +11960,7 @@ msgid "Follow-up"
 msgstr "Sekošana padarītajam"
 
 msgid "Administrators"
-msgstr "Administrators"
+msgstr "Administratori"
 
 msgid "Tracks"
 msgstr "Fiksētās darbības"
@@ -14516,7 +14516,7 @@ msgid "norwegian"
 msgstr "norvēģu"
 
 msgid "pashto"
-msgstr "pashto"
+msgstr "paštūniešu"
 
 msgid "persian"
 msgstr "persiešu"
@@ -14534,7 +14534,7 @@ msgid "slovak"
 msgstr "slovāku"
 
 msgid "swahili"
-msgstr "swahili"
+msgstr "svahilu"
 
 msgid "traditional chinese"
 msgstr "tradicionālā_ķīniešu"
@@ -14822,7 +14822,7 @@ msgid "Waiting for admin response"
 msgstr "Gaida admin atbildi"
 
 msgid "Re"
-msgstr "Re"
+msgstr "Atb"
 
 msgid "Files attachments"
 msgstr "Failu pielikumi"
@@ -14981,7 +14981,7 @@ msgid "ukrainian"
 msgstr "ukraiņu"
 
 msgid "yoruba"
-msgstr "yoruba"
+msgstr "joruba"
 
 msgid "New"
 msgstr "Jauns"
@@ -16196,7 +16196,7 @@ msgid "Return to the course list"
 msgstr "Atgriezties kursu sarakstā"
 
 msgid "%d/%m"
-msgstr "%d/%m"
+msgstr "%d.%m"
 
 msgid "Course tutor"
 msgstr "Kursa skolotājs"
@@ -16220,10 +16220,10 @@ msgid "Session tutors reports visibility"
 msgstr "Sesijas skolotāju ziņojumu redzamība"
 
 msgid "NP"
-msgstr "NP"
+msgstr "N"
 
 msgid "P"
-msgstr "P"
+msgstr "J"
 
 msgid "Session calendar"
 msgstr "Sesijas kalendārs"
@@ -17747,7 +17747,7 @@ msgid "OpenID redirect"
 msgstr "Pārstūtīt OpenID"
 
 msgid "Blogs"
-msgstr "Blogs"
+msgstr "Emisija"
 
 msgid "Select a course"
 msgstr "Izvēlēties kursu"
@@ -19379,7 +19379,7 @@ msgid "Auto"
 msgstr "Auto"
 
 msgid "Stop"
-msgstr "Stop"
+msgstr "Apturēt"
 
 msgid "Enable Webcam Clip"
 msgstr "Iespējot Webcam Clip"
@@ -28158,7 +28158,7 @@ msgid "Topbarskills"
 msgstr "Topbarskills"
 
 msgid "Ai_helpers"
-msgstr "Ai_helpers"
+msgstr "AI palīghi"
 
 msgid "ID of the user who officially sends the agenda reminders"
 msgstr "Lietotāja ID, kurš oficiāli sūta darba kārtības atgādinājumus"
@@ -30861,7 +30861,7 @@ msgid "Account locked until"
 msgstr "Konts bloķēts līdz"
 
 msgid "Google Calendar URL"
-msgstr "Google Calendar URL"
+msgstr "Google kalendāra URL"
 
 msgid "User chat status"
 msgstr "Lietotāja čata statuss"
@@ -32376,7 +32376,7 @@ msgid "Delete failed: missing course context or invalid question id."
 msgstr "Dzēšana neizdevās: trūkst kursa konteksta vai nederīgs jautājuma ID."
 
 msgid "AI Tutor"
-msgstr "AI Tutor"
+msgstr "AI mācību palīgs"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
 msgstr "APCu paplašinājumam jābūt gan instalētam, gan iespējotam, lai platforma to izmantotu."
@@ -32578,4 +32578,7 @@ msgstr "Lai verificētu jūsu e-pastu un aktivizētu savu kontu %s, lūdzu, nokl
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Ja jūs neizveidojāt šo kontu, varat ignorēt šo e-pastu. Nekādas darbības netiks veiktas."
+
+msgid "Current authentication method"
+msgstr "Pašreizējā autentifikācijas metode"
 

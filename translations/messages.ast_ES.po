@@ -495,7 +495,7 @@ msgid "Question ID"
 msgstr "ID de pregunta"
 
 msgid "ExerciseId"
-msgstr "ExerciseId"
+msgstr "ID d'eserciciu"
 
 msgid "Excel export"
 msgstr "Esportación a Excel"
@@ -579,7 +579,7 @@ msgid "No action available"
 msgstr "Nun hai axón disponible"
 
 msgid "Coaches"
-msgstr "Coaches"
+msgstr "Entronadores"
 
 msgid "Show description"
 msgstr "Amosar descripción"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":sí:copyright,, no:ensin copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpeta,, application/msword:MsWord,, application/octet-stream:Fluxu octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exerciciu,, simulation:simulación,, questionnaire:cuestionariu,, diagram:diagrama,, figure:figura,, graph:gráficu,, index:índiz,, slide:diapositiva,, table:tabla,, narrative text:testu narrativu,, exam:exame,, experiment:esperimentu,, problem statement:problema,, self assessment:autoevaluación,, lecture:llectura"
@@ -16224,7 +16224,7 @@ msgid "NP"
 msgstr "NP"
 
 msgid "P"
-msgstr "P"
+msgstr "Aprob."
 
 msgid "Session calendar"
 msgstr "Calendariu de sesión"
@@ -16557,7 +16557,7 @@ msgid "All logins"
 msgstr "Toes les identifications"
 
 msgid "Draw"
-msgstr "Draw"
+msgstr "Empate"
 
 msgid "No course at this category level"
 msgstr "Nun hai cursos nesta categoría"
@@ -17817,7 +17817,7 @@ msgid "Acceptable"
 msgstr "Aceptable"
 
 msgid "Hotspot"
-msgstr "Hotspot"
+msgstr "Puntú puntal"
 
 msgid "Change the visibility of the current image"
 msgstr "Camudar la visibilidá de la imaxe actual"
@@ -30472,7 +30472,7 @@ msgid "Please check the following error:"
 msgstr "Por favor, comprueba'l siguiente error:"
 
 msgid "OK"
-msgstr "OK"
+msgstr "Aceptar"
 
 msgid "Migration failed!"
 msgstr "¡Falló la migración!"
@@ -32404,7 +32404,7 @@ msgid "AI feedback"
 msgstr "Comentariu IA"
 
 msgid "Prompt"
-msgstr "Prompt"
+msgstr "Solicitú"
 
 msgid "Tip"
 msgstr "Conseyu"
@@ -32579,4 +32579,7 @@ msgstr "Pa verificar el to corréu-y activar la to cuenta en %s, calque na enlla
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "Si nun rexistraste esta cuenta, pues ignorar este corréu. Nun se tomará denguna axón."
+
+msgid "Current authentication method"
+msgstr "Métodu d'autenticación actual"
 

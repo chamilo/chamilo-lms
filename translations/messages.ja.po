@@ -299,7 +299,7 @@ msgstr "リストにご使用の言語が見つからない場合は、翻訳者
 "。info@chamilo.orgまでご連絡ください。"
 
 msgid "Arcsine:\t\t\tarcsin(x)"
-msgstr "Arcsine:\t\t\tarcsin(x)"
+msgstr "アークサイン:\t\t\tarcsin(x)"
 
 msgid "Hyperbolic sine:\t\tsinh(x)"
 msgstr "双曲線正弦:\t\tsinh(x)"
@@ -1393,10 +1393,10 @@ msgid "Month"
 msgstr "月"
 
 msgid "Hour"
-msgstr "Hour"
+msgstr "時間"
 
 msgid "Minutes"
-msgstr "Minutes"
+msgstr "分"
 
 msgid "Event added"
 msgstr "Agenda item added"
@@ -6535,7 +6535,7 @@ msgid "Send this announcement by email to selected groups/users"
 msgstr "このお知らせを選択したグループ/ユーザーに電子メールで送信する"
 
 msgid "On"
-msgstr "On"
+msgstr "オン"
 
 msgid "registered users of the site"
 msgstr "サイトの登録ユーザー"
@@ -7723,16 +7723,16 @@ msgid "use square brackets [...] to define one or more blanks"
 msgstr "角括弧 [...] を使用して1つ以上の空欄を定義"
 
 msgid "+answ"
-msgstr "+answ"
+msgstr "+回答"
 
 msgid "-answ"
-msgstr "-answ"
+msgstr "-回答"
 
 msgid "+elem"
-msgstr "+elem"
+msgstr "+要素"
 
 msgid "-elem"
-msgstr "-elem"
+msgstr "-要素"
 
 msgid "Please type your text below"
 msgstr "下にテキストを入力してください"
@@ -8686,10 +8686,10 @@ msgid "helvetica, arial, geneva, sans-serif"
 msgstr "sans-serif"
 
 msgid ","
-msgstr ","
+msgstr "、"
 
 msgid "."
-msgstr "."
+msgstr "。"
 
 msgid "%b %d, %Y"
 msgstr "%Y/%m/%d"
@@ -9823,7 +9823,7 @@ msgid "Align"
 msgstr "配置"
 
 msgid "Width"
-msgstr "Width"
+msgstr "幅"
 
 msgid "V Space"
 msgstr "垂直余白"
@@ -9838,7 +9838,7 @@ msgid "Alt"
 msgstr "代替テキスト"
 
 msgid "Height"
-msgstr "Height"
+msgstr "高さ"
 
 msgid "Image manager"
 msgstr "画像マネージャー"
@@ -13705,7 +13705,7 @@ msgid "Resize the image to the following dimensions (in pixels)"
 msgstr "画像を次の寸法（ピクセル）にリサイズ"
 
 msgid "RESIZE"
-msgstr "RESIZE"
+msgstr "リサイズ"
 
 msgid "Show all images in their original size. No resizing is done. Scrollbars will automatically appear if the image is larger than your monitor size."
 msgstr "すべての画像を元のサイズで表示。リサイズは行われません。画像がモニターサイズより大きい場合、スクロールバーが自動的に表示されます。"
@@ -13726,7 +13726,7 @@ msgid "Brochure"
 msgstr "パンフレット"
 
 msgid "Slideshow"
-msgstr "Slideshow"
+msgstr "スライドショー"
 
 msgid "Published end date"
 msgstr "公開終了日"
@@ -16261,7 +16261,7 @@ msgid "Return to the course list"
 msgstr "コース一覧に戻る"
 
 msgid "%d/%m"
-msgstr "%d/%m"
+msgstr "%m/%d"
 
 msgid "Course tutor"
 msgstr "コースチューター"
@@ -32643,4 +32643,7 @@ msgstr "%s でメールアドレスを確認し、アカウントを有効にす
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "このアカウントを登録していない場合は、このメールを無視してください。操作は行われません。"
+
+msgid "Current authentication method"
+msgstr "現在の認証方法"
 

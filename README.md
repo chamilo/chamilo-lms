@@ -147,6 +147,16 @@ chown -R root: .env config/
 
 Your Chamilo is ready to use!
 
+## Configuration
+
+Most configuration changes are made through the administration page inside Chamilo's web interface, but the database connection
+and other settings critical to the Symfony layer are located in the `.env` file at the root of Chamilo.
+
+Other core, Symfony-related, settings for advanced administration are located in the `config/packages/` folder (`*.yaml` files),
+but remember that these files are updated with each new version of Chamilo. Instead of modifying those directly, it is
+highly recommended to copy them into the `config/packages/prod/` folder and modifying them there (for your production 
+environment). This will improve maintainability through different Chamilo upgrades in the future.
+
 ## Documentation
 
 For more information on Chamilo 2, visit https://2.chamilo.org/documentation/index.html

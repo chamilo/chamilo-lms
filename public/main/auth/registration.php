@@ -333,32 +333,14 @@ document.addEventListener('DOMContentLoaded', function () {
   // Form container
   form.classList.add('max-w-4xl','mx-auto','bg-white','rounded-2xl','border','border-gray-25','shadow-sm','p-6','md:p-8');
 
-  // Inputs / selects / textareas
-  const controls = form.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], input[type="tel"], select, textarea');
-  controls.forEach(el => {
-    // Skip hidden fields
-    if (el.type === 'hidden') return;
-
-    el.classList.add(
-      'w-full','rounded-xl','border','border-gray-25','bg-white',
-      'px-4','py-3','text-gray-90',
-      'focus:outline-none','focus:ring-2','focus:ring-gray-60','focus:border-gray-60'
-    );
-  });
-
-  // Labels
-  form.querySelectorAll('label').forEach(l => {
-    l.classList.add('text-sm','font-medium','text-gray-90');
-  });
-
   // Required markers often appear as <span class="form_required">*</span>
   form.querySelectorAll('.form_required').forEach(s => {
-    s.classList.add('text-red-60','font-semibold');
+    s.classList.add('text-danger','font-semibold');
   });
 
   // Error messages
   form.querySelectorAll('.form_error, .error').forEach(err => {
-    err.classList.add('text-red-60','text-sm','mt-1');
+    err.classList.add('text-danger','text-sm','mt-1');
   });
 
   // Improve spacing between rows (best-effort)
@@ -530,7 +512,7 @@ if (false === $userAlreadyRegisteredShowTerms && 'false' !== api_get_setting('al
         // Title (with required asterisk) above cards.
         $form->addHtml('
             <div class="mb-3">
-                <div class="text-lg font-semibold text-gray-90">'.$title.' <span class="text-red-60">*</span></div>
+                <div class="text-lg font-semibold text-gray-90">'.$title.' <span class="text-danger">*</span></div>
             </div>
         ');
 

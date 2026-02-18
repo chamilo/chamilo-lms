@@ -445,8 +445,8 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
 
             $lastEdit = (string) ($item['lastedit_date'] ?? '');
             $lastUpdatedAt = '' === $lastEdit
-                ? new DateTimeImmutable('now', $utc)
-                : new DateTimeImmutable($lastEdit, $utc);
+                ? new \DateTime('now', $utc)
+                : new \DateTime($lastEdit, $utc);
 
             $newVisibility = ResourceLink::VISIBILITY_DRAFT;
 

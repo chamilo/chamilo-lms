@@ -1446,6 +1446,13 @@ if ($form->validate()) {
         ->setActivateLegal($activeLegal)
         ->setRegistrationCode($updateValues['course_registration_password']);
 
+    if (!empty($updateValues['room_id'])) {
+        $room = $em->find(\Chamilo\CoreBundle\Entity\Room::class, (int) $updateValues['room_id']);
+        $courseEntity->setRoom($room ?: null);
+    } else {
+        $courseEntity->setRoom(null);
+    }
+
     $em->persist($courseEntity);
     $em->flush();
 

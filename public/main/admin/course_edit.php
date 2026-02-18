@@ -412,6 +412,13 @@ if ($form->validate()) {
         $courseEntity->setDuration($course['duration']);
     }
 
+    if (!empty($course['room_id'])) {
+        $room = $em->find(\Chamilo\CoreBundle\Entity\Room::class, (int) $course['room_id']);
+        $courseEntity->setRoom($room ?: null);
+    } else {
+        $courseEntity->setRoom(null);
+    }
+
     $em->persist($courseEntity);
     $em->flush();
 

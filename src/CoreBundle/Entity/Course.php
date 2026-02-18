@@ -970,7 +970,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->room;
     }
 
-    public function setRoom(Room $room): self
+    public function setRoom(?Room $room): self
     {
         $this->room = $room;
 

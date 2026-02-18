@@ -282,6 +282,14 @@ if ($form->validate()) {
 
     $course = CourseManager::create_course($courseData);
     if (null !== $course) {
+        if (!empty($courseData['room_id'])) {
+            $room = $em->find(\Chamilo\CoreBundle\Entity\Room::class, (int) $courseData['room_id']);
+            if ($room) {
+                $course->setRoom($room);
+                $em->persist($course);
+                $em->flush();
+            }
+        }
         header('Location: course_list.php?new_course_id=' . $course->getId());
         exit;
     }

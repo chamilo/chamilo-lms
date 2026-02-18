@@ -120,7 +120,9 @@ if ($roomCount > 0) {
     $courseEntity = api_get_course_entity();
     if ($courseEntity && $courseEntity->getRoom()) {
         $currentRoom = $courseEntity->getRoom();
-        $roomOptions[$currentRoom->getId()] = $currentRoom->getTitle();
+        $branch = $currentRoom->getBranch();
+        $roomLabel = $branch ? $branch->getTitle().' - '.$currentRoom->getTitle() : $currentRoom->getTitle();
+        $roomOptions[$currentRoom->getId()] = $roomLabel;
     }
     $form->addSelectAjax(
         'room_id',

@@ -239,14 +239,16 @@ $form->addSelectLanguage('course_language', get_lang('Course language'));
 
 // Room.
 $em = Database::getManager();
+$courseEntityForDefaults = api_get_course_entity($courseId);
 $roomCount = $em->getRepository(\Chamilo\CoreBundle\Entity\Room::class)->count([]);
 if ($roomCount > 0) {
     $roomOptions = [];
-    if (!empty($courseInfo['room_id'])) {
-        $room = $em->find(\Chamilo\CoreBundle\Entity\Room::class, $courseInfo['room_id']);
-        if ($room) {
-            $roomOptions[$room->getId()] = $room->getTitle();
-        }
+    if ($courseEntityForDefaults && $courseEntityForDefaults->getRoom()) {
+        $currentRoom = $courseEntityForDefaults->getRoom();
+        $branch = $currentRoom->getBranch();
+        $roomLabel = $branch ? $branch->getTitle().' - '.$currentRoom->getTitle() : $currentRoom->getTitle();
+        $roomOptions[$currentRoom->getId()] = $roomLabel;
+        $courseInfo['room_id'] = $currentRoom->getId();
     }
     $form->addSelectAjax(
         'room_id',
@@ -326,11 +328,6 @@ $courseInfo['add_teachers_to_sessions_courses'] = $courseInfo['add_teachers_to_s
 // Set default duration in minutes
 if (isset($courseInfo['duration'])) {
     $courseInfo['duration'] = $courseInfo['duration'] / 60;
-}
-
-$courseEntityForDefaults = api_get_course_entity($courseId);
-if ($courseEntityForDefaults && $courseEntityForDefaults->getRoom()) {
-    $courseInfo['room_id'] = $courseEntityForDefaults->getRoom()->getId();
 }
 
 $form->setDefaults($courseInfo);

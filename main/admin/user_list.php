@@ -155,6 +155,7 @@ function trimVariables()
         'keyword_username',
         'keyword_email',
         'keyword_officialcode',
+        'keyword_phone',
     ];
 
     foreach ($filterVariables as $variable) {
@@ -235,6 +236,7 @@ function prepare_user_sql_query($getCount)
         'keyword_username',
         'keyword_email',
         'keyword_officialcode',
+        'keyword_phone',
         'keyword_status',
         'keyword_active',
         'keyword_inactive',
@@ -264,7 +266,8 @@ function prepare_user_sql_query($getCount)
                     concat(u.lastname,' ',u.firstname) LIKE '$keywordFiltered' OR
                     u.username LIKE '$keywordFiltered' OR
                     u.official_code LIKE '$keywordFiltered' OR
-                    u.email LIKE '$keywordFiltered'
+                    u.email LIKE '$keywordFiltered' OR
+                    u.phone LIKE '$keywordFiltered'
                 )
         ";
     } elseif (isset($keywordListValues) && !empty($keywordListValues)) {
@@ -307,6 +310,9 @@ function prepare_user_sql_query($getCount)
 
         if (!empty($keywordListValues['keyword_officialcode'])) {
             $sql .= " AND u.official_code LIKE '".Database::escape_string("%".$keywordListValues['keyword_officialcode']."%")."' ";
+        }
+        if (!empty($keywordListValues['keyword_phone'])) {
+            $sql .= " AND u.phone LIKE '".Database::escape_string("%".$keywordListValues['keyword_phone']."%")."' ";
         }
 
         $sql .= " $keyword_admin $keyword_extra_value ";
@@ -989,6 +995,9 @@ if (isset($_GET['keyword'])) {
     $parameters['keyword_email'] = Security::remove_XSS($_GET['keyword_email']);
     $parameters['keyword_officialcode'] = Security::remove_XSS($_GET['keyword_officialcode']);
     $parameters['keyword_status'] = Security::remove_XSS($_GET['keyword_status']);
+    if (isset($_GET['keyword_phone'])) {
+        $parameters['keyword_phone'] = Security::remove_XSS($_GET['keyword_phone']);
+    }
     if (isset($_GET['keyword_active'])) {
         $parameters['keyword_active'] = Security::remove_XSS($_GET['keyword_active']);
     }
@@ -1018,6 +1027,7 @@ $form->addText('keyword_lastname', get_lang('LastName'), false);
 $form->addText('keyword_username', get_lang('LoginName'), false);
 $form->addText('keyword_email', get_lang('Email'), false);
 $form->addText('keyword_officialcode', get_lang('OfficialCode'), false);
+$form->addText('keyword_phone', get_lang('Phone'), false);
 
 $classId = isset($_REQUEST['class_id']) && !empty($_REQUEST['class_id']) ? (int) $_REQUEST['class_id'] : 0;
 $options = [];

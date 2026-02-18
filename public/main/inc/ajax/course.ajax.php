@@ -413,7 +413,7 @@ switch ($action) {
         $rooms = $qb->getQuery()->getArrayResult();
         $result = [];
         foreach ($rooms as $room) {
-            $result[] = [
+            $result['items'][] = [
                 'id' => $room['id'],
                 'text' => $room['title'],
             ];

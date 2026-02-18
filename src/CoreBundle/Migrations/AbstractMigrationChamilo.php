@@ -20,10 +20,11 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
-use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\Migrations\AbstractMigration;
 use Doctrine\ORM\EntityManagerInterface;
@@ -53,6 +54,37 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
      * @var array<string,bool>
      */
     private array $legacyCourseExistsCache = [];
+
+    /**
+     * Cached repositories (avoid container->get per call).
+     */
+    private ?SessionRepository $sessionRepoCache = null;
+    private ?CGroupRepository $groupRepoCache = null;
+    private ?UserRepository $userRepoCache = null;
+
+    /**
+     * Internal finfo handler for faster MIME detection (optional).
+     */
+    private ?\finfo $mimeFinfo = null;
+
+    /**
+     * Existence caches to avoid repeated lookups during migration.
+     * We cache only when the check succeeds (true/false). If a DB error happens,
+     * we return null and fallback to the original repository->find() behavior.
+     *
+     * @var array<int,bool>
+     */
+    private array $userExistsCache = [];
+
+    /**
+     * @var array<int,bool>
+     */
+    private array $sessionExistsCache = [];
+
+    /**
+     * @var array<int,bool>
+     */
+    private array $groupExistsCache = [];
 
     public function __construct(Connection $connection, LoggerInterface $logger)
     {
@@ -98,25 +130,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         return $admin->getUser();
     }
 
-    /**
-     * Speeds up SettingsCurrent creation.
-     *
-     * @param string $variable            The variable itself
-     * @param string $subKey              The subkey
-     * @param string $type                The type of setting (text, radio, select, etc)
-     * @param string $category            The category (Platform, User, etc)
-     * @param string $selectedValue       The default value
-     * @param string $title               The setting title string name
-     * @param string $comment             The setting comment string name
-     * @param string $scope               The scope
-     * @param string $subKeyText          Text if there is a subKey
-     * @param int    $accessUrl           What URL it is for
-     * @param bool   $accessUrlChangeable Whether it can be changed on each url
-     * @param bool   $accessUrlLocked     Whether the setting for the current URL is
-     *                                    locked to the current value
-     * @param array  $options             Optional array in case of a radio-type field,
-     *                                    to insert options
-     */
     public function addSettingCurrent(
         $variable,
         $subKey,
@@ -175,10 +188,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         $this->entityManager->flush();
     }
 
-    /**
-     * @param string     $variable
-     * @param null|mixed $configuration
-     */
     public function getConfigurationValue($variable, $configuration = null)
     {
         global $_configuration;
@@ -209,16 +218,15 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         return false;
     }
 
-    /**
-     * Remove a setting completely.
-     *
-     * @param string $variable The setting variable name
-     */
     public function removeSettingCurrent($variable): void
     {
         // to be implemented
     }
 
+    /**
+     * Optimized: skip directories, require readable regular files, robust MIME type detection.
+     * Logic stays the same: if file missing => warn & return false.
+     */
     public function addLegacyFileToResource(
         string $filePath,
         ResourceRepository $repo,
@@ -230,22 +238,141 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         $class = $resource::class;
         $documentPath = basename($filePath);
 
-        if (is_dir($filePath) || (!is_dir($filePath) && !file_exists($filePath))) {
-            $this->warnIf(true, "Cannot migrate {$class} #'.{$id}.' file not found: {$documentPath}");
-
+        if (!is_file($filePath) || !is_readable($filePath)) {
+            $this->warnIf(true, "Cannot migrate {$class} #{$id} file not found: {$documentPath}");
             return false;
         }
 
-        $mimeType = mime_content_type($filePath);
-        if (empty($fileName)) {
-            $fileName = basename($documentPath);
+        if ('' === (string) $fileName) {
+            $fileName = $documentPath;
         }
+
+        $mimeType = $this->detectMimeTypeInternal($filePath);
+
         $file = new UploadedFile($filePath, $fileName, $mimeType, null, true);
-        $repo->addFile($resource, $file, $description);
+
+        // Explicit false for clarity (no behavior change).
+        $repo->addFile($resource, $file, $description, false);
 
         return true;
     }
 
+    /**
+     * Prefetch c_item_property rows for many refs in one shot (chunked IN()).
+     * This is intentionally implemented here to:
+     * - avoid "IN (?)" parameter binding issues
+     * - avoid N+1 queries in fixItemProperty()
+     *
+     * @param string     $tool
+     * @param int        $courseId
+     * @param array<int> $refs
+     *
+     * @return array<int, array<int, array<string,mixed>>> Map: ref => rows[]
+     */
+    protected function fetchItemPropertiesMap(string $tool, int $courseId, array $refs): array
+    {
+        $tool = (string) $tool;
+        $courseId = (int) $courseId;
+
+        if ($courseId <= 0 || empty($refs)) {
+            return [];
+        }
+
+        $refs = array_values(array_unique(array_map('intval', $refs)));
+
+        $map = [];
+        $chunkSize = 500;
+
+        for ($i = 0; $i < \count($refs); $i += $chunkSize) {
+            $chunk = \array_slice($refs, $i, $chunkSize);
+
+            $sql = 'SELECT ref, visibility, insert_user_id, session_id, to_group_id, lastedit_date
+                    FROM c_item_property
+                    WHERE tool = :tool AND c_id = :cid AND ref IN (:refs)';
+
+            try {
+                $rows = $this->connection->executeQuery(
+                    $sql,
+                    [
+                        'tool' => $tool,
+                        'cid' => $courseId,
+                        'refs' => $chunk,
+                    ],
+                    [
+                        'refs' => ArrayParameterType::INTEGER,
+                    ]
+                )->fetchAllAssociative();
+            } catch (Throwable) {
+                return [];
+            }
+
+            foreach ($rows as $r) {
+                $ref = (int) ($r['ref'] ?? 0);
+                if ($ref > 0) {
+                    $map[$ref][] = $r;
+                }
+            }
+        }
+
+        return $map;
+    }
+
+    /**
+     * Fast existence check with caching.
+     * Returns:
+     * - true/false if the query ran successfully
+     * - null if a DB error happened (caller should fallback to repository->find() to preserve behavior)
+     */
+    private function idExistsFast(string $table, int $id, array &$cache): ?bool
+    {
+        if ($id <= 0) {
+            return false;
+        }
+
+        if (\array_key_exists($id, $cache)) {
+            return $cache[$id];
+        }
+
+        try {
+            $exists = (bool) $this->connection->fetchOne(
+                "SELECT 1 FROM {$table} WHERE id = :id LIMIT 1",
+                ['id' => $id]
+            );
+        } catch (Throwable) {
+            // Do not cache failures. Fallback to the original ORM find() logic.
+            return null;
+        }
+
+        $cache[$id] = $exists;
+
+        return $exists;
+    }
+
+    private function userIdExistsFast(int $userId): ?bool
+    {
+        return $this->idExistsFast('user', $userId, $this->userExistsCache);
+    }
+
+    private function sessionIdExistsFast(int $sessionId): ?bool
+    {
+        return $this->idExistsFast('session', $sessionId, $this->sessionExistsCache);
+    }
+
+    private function groupIdExistsFast(int $groupId): ?bool
+    {
+        // Most Chamilo installs use "c_group". If your schema differs, adjust here.
+        return $this->idExistsFast('c_group', $groupId, $this->groupExistsCache);
+    }
+
+    /**
+     * Optimized:
+     * - If $items already passed => no query.
+     * - Fallback query is parametrized + selects only needed columns.
+     * - Uses getReference() when the related ID exists, avoiding heavy hydration via find().
+     * - If the fast existence check fails (DB error), falls back to repository->find() to preserve behavior.
+     * - persist($resource) is done once (not inside loop).
+     * Logic is the same.
+     */
     public function fixItemProperty(
         $tool,
         ResourceRepository $repo,
@@ -256,88 +383,158 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         array $items = [],
         ?ResourceType $resourceType = null,
     ) {
-        $courseId = $course->getId();
-        $id = $resource->getResourceIdentifier();
+        $courseId = (int) $course->getId();
+        $id = (int) $resource->getResourceIdentifier();
+        $tool = (string) $tool;
 
         if (empty($items)) {
-            $sql = "SELECT * FROM c_item_property
-                    WHERE tool = '{$tool}' AND c_id = {$courseId} AND ref = {$id}";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
+            $sql = 'SELECT visibility, insert_user_id, session_id, to_group_id, lastedit_date
+                    FROM c_item_property
+                    WHERE tool = :tool AND c_id = :cid AND ref = :ref';
+
+            $items = $this->connection->fetchAllAssociative($sql, [
+                'tool' => $tool,
+                'cid' => $courseId,
+                'ref' => $id,
+            ]);
         }
 
-        // The resource has no c_item_property row in the legacy database: skip it and log the inconsistency.
         if (empty($items)) {
             $path = $this->guessResourcePathForLog($resource);
-            $this->logItemPropertyInconsistency((string) $tool, (int) $id, $path);
+            $this->logItemPropertyInconsistency($tool, $id, $path);
 
             $this->warnIf(true, "Missing c_item_property for tool '{$tool}', ref '{$id}'. Resource skipped.");
 
             return false;
         }
 
-        $sessionRepo = $this->container->get(SessionRepository::class);
-        $groupRepo = $this->container->get(CGroupRepository::class);
-        $userRepo = $this->container->get(UserRepository::class);
+        // Keep original repository caching (fallback path).
+        if (null === $this->sessionRepoCache) {
+            $this->sessionRepoCache = $this->container->get(SessionRepository::class);
+        }
+        if (null === $this->groupRepoCache) {
+            $this->groupRepoCache = $this->container->get(CGroupRepository::class);
+        }
+        if (null === $this->userRepoCache) {
+            $this->userRepoCache = $this->container->get(UserRepository::class);
+        }
+
+        $sessionRepo = $this->sessionRepoCache;
+        $groupRepo = $this->groupRepoCache;
+        $userRepo = $this->userRepoCache;
 
         $resourceType = $resourceType ?: $repo->getResourceType();
 
         $resource->setParent($parentResource);
+
         $resourceNode = null;
+
+        // Per-call caches (safe even with entityManager->clear in migration loops).
+        // Values can be real entities or proxies (getReference()).
         $userList = [];
         $groupList = [];
         $sessionList = [];
+
+        $utc = new DateTimeZone('UTC');
+
         foreach ($items as $item) {
-            $visibility = (int) $item['visibility'];
-            $userId = (int) $item['insert_user_id'];
-            $sessionId = $item['session_id'] ?? 0;
-            $groupId = $item['to_group_id'] ?? 0;
-            if (empty($item['lastedit_date'])) {
-                $lastUpdatedAt = new DateTime('now', new DateTimeZone('UTC'));
-            } else {
-                $lastUpdatedAt = new DateTime($item['lastedit_date'], new DateTimeZone('UTC'));
-            }
+            $visibility = (int) ($item['visibility'] ?? 0);
+            $userId = (int) ($item['insert_user_id'] ?? 0);
+            $sessionId = (int) ($item['session_id'] ?? 0);
+            $groupId = (int) ($item['to_group_id'] ?? 0);
+
+            $lastEdit = (string) ($item['lastedit_date'] ?? '');
+            $lastUpdatedAt = '' === $lastEdit
+                ? new \DateTime('now', $utc)
+                : new \DateTime($lastEdit, $utc);
+
             $newVisibility = ResourceLink::VISIBILITY_DRAFT;
 
-            // Old 1.11.x visibility (item property) is based in this switch:
+            // Old 1.11.x visibility (item property) is based on this switch:
             switch ($visibility) {
                 case 0:
                     $newVisibility = ResourceLink::VISIBILITY_DRAFT;
-
                     break;
-
                 case 1:
                     $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
-
+                    break;
+                default:
+                    // Keep legacy behavior: anything else becomes DRAFT unless explicitly handled.
+                    $newVisibility = ResourceLink::VISIBILITY_DRAFT;
                     break;
             }
 
             // If c_item_property.insert_user_id doesn't exist we use the first admin id.
             $user = $admin;
 
-            if ($userId) {
+            if ($userId > 0) {
                 if (isset($userList[$userId])) {
                     $user = $userList[$userId];
-                } elseif ($userFound = $userRepo->find($userId)) {
-                    $user = $userList[$userId] = $userFound;
+                } else {
+                    $exists = $this->userIdExistsFast($userId);
+
+                    if (true === $exists) {
+                        // Fast path: create a managed proxy without loading the full entity.
+                        $userRef = $this->entityManager->getReference(User::class, $userId);
+                        $userList[$userId] = $userRef;
+                        $user = $userRef;
+                    } elseif (null === $exists) {
+                        // DB error: fallback to original behavior (find()).
+                        $userFound = $userRepo->find($userId);
+                        if ($userFound) {
+                            $userList[$userId] = $userFound;
+                            $user = $userFound;
+                        }
+                    }
+                    // If $exists is false => keep $admin (same as before when find() returned null).
                 }
             }
 
             $session = null;
-            if (!empty($sessionId)) {
+            if ($sessionId > 0) {
                 if (isset($sessionList[$sessionId])) {
                     $session = $sessionList[$sessionId];
                 } else {
-                    $session = $sessionList[$sessionId] = $sessionRepo->find($sessionId);
+                    $exists = $this->sessionIdExistsFast($sessionId);
+
+                    if (true === $exists) {
+                        $sessionRef = $this->entityManager->getReference(Session::class, $sessionId);
+                        $sessionList[$sessionId] = $sessionRef;
+                        $session = $sessionRef;
+                    } elseif (null === $exists) {
+                        // DB error: fallback to original behavior (find()).
+                        $sessionFound = $sessionRepo->find($sessionId);
+                        $sessionList[$sessionId] = $sessionFound;
+                        $session = $sessionFound;
+                    } else {
+                        // Not found => null (same as before).
+                        $sessionList[$sessionId] = null;
+                        $session = null;
+                    }
                 }
             }
 
             $group = null;
-            if (!empty($groupId)) {
+            if ($groupId > 0) {
                 if (isset($groupList[$groupId])) {
                     $group = $groupList[$groupId];
                 } else {
-                    $group = $groupList[$groupId] = $groupRepo->find($groupId);
+                    $exists = $this->groupIdExistsFast($groupId);
+
+                    if (true === $exists) {
+                        $groupRef = $this->entityManager->getReference(CGroup::class, $groupId);
+                        $groupList[$groupId] = $groupRef;
+                        $group = $groupRef;
+                    } elseif (null === $exists) {
+                        // DB error: fallback to original behavior (find()).
+                        $groupFound = $groupRepo->find($groupId);
+                        $groupList[$groupId] = $groupFound;
+                        $group = $groupFound;
+                    } else {
+                        // Not found => null (same as before).
+                        $groupList[$groupId] = null;
+                        $group = null;
+                    }
                 }
             }
 
@@ -350,22 +547,27 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
                 );
                 $this->entityManager->persist($resourceNode);
             }
+
             $resource->addCourseLink($course, $session, $group, $newVisibility);
 
             if (2 === $visibility) {
                 $link = $resource->getResourceNode()->getResourceLinkByContext($course, $session, $group);
                 $link->setDeletedAt($lastUpdatedAt);
             }
-
-            $this->entityManager->persist($resource);
         }
+
+        // Persist once (same result, less overhead).
+        $this->entityManager->persist($resource);
 
         return true;
     }
 
+    /**
+     * Keep behavior but slightly stricter: only regular readable files.
+     */
     public function fileExists($filePath): bool
     {
-        return file_exists($filePath) && !is_dir($filePath) && is_readable($filePath);
+        return is_file($filePath) && is_readable($filePath);
     }
 
     public function findCourse(int $id): ?Course
@@ -430,7 +632,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         $fullFilename = $this->generateFilePath($filename);
 
         if ($this->fileExists($fullFilename)) {
-            return file_get_contents($fullFilename);
+            return (string) file_get_contents($fullFilename);
         }
 
         return '';
@@ -565,9 +767,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         return '';
     }
 
-    /**
-     * Checks whether a legacy token matches an existing course by code or directory.
-     */
     protected function legacyCourseExistsByCodeOrDirectory(string $token): bool
     {
         $token = trim($token);
@@ -587,9 +786,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         return $exists;
     }
 
-    /**
-     * Quick HTML file check based on extension.
-     */
     protected function isHtmlFile(string $filePath): bool
     {
         $ext = strtolower((string) pathinfo($filePath, PATHINFO_EXTENSION));
@@ -597,10 +793,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         return \in_array($ext, ['html', 'htm'], true);
     }
 
-    /**
-     * Rewrites legacy "/courses/{TOKEN}/document/{REL_PATH}" links when TOKEN is not an existing course,
-     * falling back to the current course directory if the referenced file exists there.
-     */
     protected function rewriteLegacyCoursesDocumentLinksFallbackToCurrentCourse(
         string $html,
         string $currentCourseDirectory
@@ -609,7 +801,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
             return $html;
         }
 
-        // Fast pre-check.
         if (!str_contains($html, '/courses/') || !str_contains($html, '/document/')) {
             return $html;
         }
@@ -618,7 +809,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         $currentCourseDirectory = trim($currentCourseDirectory);
 
         $rewriteUrl = function (string $url) use ($updateRootPath, $currentCourseDirectory): string {
-            // Extract optional prefix (scheme+host), keep it if present.
             $prefix = '';
             $rest = $url;
 
@@ -627,7 +817,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
                 $rest = (string) $m[2];
             }
 
-            // Only handle /courses/{TOKEN}/document/{REL...}
             if (!preg_match('~^\/courses\/([^\/]+)\/document\/(.+)$~i', $rest, $m)) {
                 return $url;
             }
@@ -635,12 +824,10 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
             $token = (string) $m[1];
             $relWithSuffix = (string) $m[2];
 
-            // If course exists, do not touch it.
             if ($this->legacyCourseExistsByCodeOrDirectory($token)) {
                 return $url;
             }
 
-            // Split REL from query/fragment to check filesystem path.
             $rel = $relWithSuffix;
             $suffix = '';
             if (preg_match('~^([^?#]+)([?#].*)$~', $relWithSuffix, $mm)) {
@@ -650,17 +837,14 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
 
             $relDecoded = rawurldecode($rel);
 
-            // Safety: avoid traversal.
             if (str_contains($relDecoded, '..')) {
                 @error_log('[Migration][Documents] Skipping suspicious legacy link containing "..": '.$url);
-
                 return $url;
             }
 
             $fsPath = $updateRootPath.'/app/courses/'.$currentCourseDirectory.'/document/'.$relDecoded;
             if (!is_file($fsPath)) {
                 @error_log('[Migration][Documents] Legacy token "'.$token.'" does not exist and file not found in current course "'.$currentCourseDirectory.'": '.$url);
-
                 return $url;
             }
 
@@ -670,11 +854,9 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
             return $newUrl;
         };
 
-        // Pass 1: src/href="..."
         $html = (string) preg_replace_callback(
             '~\b(?:src|href)\s*=\s*([\'"])([^\'"]+)\1~i',
             function (array $m) use ($rewriteUrl) {
-                $quote = (string) $m[1];
                 $url = (string) $m[2];
 
                 if (!str_contains($url, '/courses/') || !str_contains($url, '/document/')) {
@@ -691,7 +873,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
             $html
         );
 
-        // Pass 2: url(...)
         return (string) preg_replace_callback(
             '~\burl\(\s*([\'"]?)([^\'")]+)\1\s*\)~i',
             function (array $m) use ($rewriteUrl) {
@@ -729,21 +910,57 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
             return $filePath;
         }
 
+        // Cheap pre-check (avoid regex passes when not needed).
+        if (!str_contains($html, '/courses/') || !str_contains($html, '/document/')) {
+            return $filePath;
+        }
+
         $newHtml = $this->rewriteLegacyCoursesDocumentLinksFallbackToCurrentCourse($html, $currentCourseDirectory);
         if ($newHtml === $html) {
             return $filePath;
         }
 
-        // Write a temp copy under cache dir (same as other migration temp files).
         $ext = strtolower((string) pathinfo($filePath, PATHINFO_EXTENSION));
-        $tmpName = 'rewrite_html_'.sha1($filePath).'.'.$ext;
+        $tmpName = 'rewrite_html_'.sha1($currentCourseDirectory.'|'.$filePath).'.'.$ext;
 
         $tmpPath = $this->container->get('kernel')->getCacheDir().'/migration_'.$tmpName;
-        $fs = new Filesystem();
-        $fs->dumpFile($tmpPath, $newHtml);
+
+        @file_put_contents($tmpPath, $newHtml);
 
         @error_log('[Migration][Documents] Created rewritten HTML temp file: '.$tmpPath);
 
         return $tmpPath;
+    }
+
+    /**
+     * Internal MIME detector with cached finfo instance.
+     */
+    private function detectMimeTypeInternal(string $filePath): string
+    {
+        if (null === $this->mimeFinfo && \class_exists(\finfo::class)) {
+            try {
+                $this->mimeFinfo = new \finfo(\FILEINFO_MIME_TYPE);
+            } catch (Throwable) {
+                $this->mimeFinfo = null;
+            }
+        }
+
+        if ($this->mimeFinfo instanceof \finfo) {
+            try {
+                $mime = $this->mimeFinfo->file($filePath);
+                if (\is_string($mime) && '' !== $mime) {
+                    return $mime;
+                }
+            } catch (Throwable) {
+                // Ignore and fallback.
+            }
+        }
+
+        $mime = @mime_content_type($filePath);
+        if (\is_string($mime) && '' !== $mime) {
+            return $mime;
+        }
+
+        return 'application/octet-stream';
     }
 }

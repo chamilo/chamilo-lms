@@ -13,15 +13,13 @@ import BaseToggleButton from "../basecomponents/BaseToggleButton.vue"
 
 const { t } = useI18n()
 
-// properties for example components
+// Properties for sample components
 const menu = ref("menu")
 const menuItems = [{ label: t("Item 1") }, { label: t("Item 2") }, { label: t("Item 3") }]
 
 const toggle = (event) => {
   menu.value.toggle(event)
 }
-
-const dropdown = ref("")
 
 const checkbox1 = ref(true)
 const checkbox2 = ref(false)

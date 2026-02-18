@@ -47,73 +47,241 @@ provide("isCustomizing", isCustomizing)
   <div class="admin-colors__settings-preview">
     <h6>{{ t("You can see examples of how chamilo will look here") }}</h6>
 
-    <div>
-      <p class="mb-3 text-lg">{{ t("Buttons") }}</p>
-      <div class="flex flex-row flex-wrap mb-3">
+    <div class="space-y-2">
+      <p class="text-lg">{{ t("Buttons") }}</p>
+
+      <div class="flex gap-2 flex-wrap">
         <BaseButton
           :label="t('Primary')"
-          class="mr-2 mb-2"
-          icon="eye-on"
+          icon="search"
+          only-icon
+          size="small"
           type="primary"
         />
         <BaseButton
           :label="t('Primary alternative')"
-          class="mr-2 mb-2"
-          icon="eye-on"
+          icon="search"
+          only-icon
+          size="small"
           type="primary-alternative"
         />
         <BaseButton
           :label="t('Secondary')"
-          class="mr-2 mb-2"
-          icon="eye-on"
+          icon="search"
+          only-icon
+          size="small"
           type="secondary"
         />
         <BaseButton
           :label="t('Tertiary')"
-          class="mr-2 mb-2"
-          icon="eye-on"
+          icon="search"
+          only-icon
+          size="small"
+          type="tertiary"
+        />
+        <BaseButton
+          :label="t('Black')"
+          icon="search"
+          only-icon
+          size="small"
           type="black"
         />
-      </div>
-      <div class="flex flex-row flex-wrap mb-3">
         <BaseButton
           :label="t('Success')"
-          class="mr-2 mb-2"
-          icon="send"
+          icon="search"
+          only-icon
+          size="small"
           type="success"
         />
         <BaseButton
           :label="t('Info')"
-          class="mr-2 mb-2"
-          icon="send"
+          icon="search"
+          only-icon
+          size="small"
           type="info"
         />
         <BaseButton
           :label="t('Warning')"
-          class="mr-2 mb-2"
-          icon="send"
+          icon="search"
+          only-icon
+          size="small"
           type="warning"
         />
         <BaseButton
           :label="t('Danger')"
-          class="mr-2 mb-2"
-          icon="delete"
+          icon="search"
+          only-icon
+          size="small"
           type="danger"
         />
       </div>
-      <div class="flex flex-row flex-wrap mb-3">
+      <div class="flex gap-2 flex-wrap">
         <BaseButton
-          :label="t('Disabled')"
-          class="mr-2 mb-2"
-          disabled
-          icon="eye-on"
+          :label="t('Primary')"
+          icon="search"
+          size="small"
+          type="primary-text"
+        />
+        <BaseButton
+          :label="t('Secondary')"
+          icon="search"
+          size="small"
+          type="secondary-text"
+        />
+        <BaseButton
+          :label="t('Tertiary')"
+          icon="search"
+          size="small"
+          type="tertiary-text"
+        />
+        <BaseButton
+          :label="t('Success')"
+          icon="search"
+          size="small"
+          type="success-text"
+        />
+        <BaseButton
+          :label="t('Info')"
+          icon="search"
+          size="small"
+          type="info-text"
+        />
+        <BaseButton
+          :label="t('Warning')"
+          icon="search"
+          size="small"
+          type="warning-text"
+        />
+        <BaseButton
+          :label="t('Danger')"
+          icon="search"
+          size="small"
+          type="danger-text"
+        />
+      </div>
+      <div class="flex gap-2 flex-wrap">
+        <BaseButton
+          :label="t('Primary')"
+          icon="search"
+          size="small"
           type="primary"
         />
         <BaseButton
-          class="mr-2 mb-2"
-          icon="cog"
-          only-icon
+          :label="t('Secondary')"
+          icon="search"
+          size="small"
+          type="secondary"
+        />
+        <BaseButton
+          :label="t('Tertiary')"
+          icon="search"
+          size="small"
+          type="tertiary"
+        />
+        <BaseButton
+          :label="t('Success')"
+          icon="search"
+          size="small"
+          type="success"
+        />
+        <BaseButton
+          :label="t('Info')"
+          icon="search"
+          size="small"
+          type="info"
+        />
+        <BaseButton
+          :label="t('Warning')"
+          icon="search"
+          size="small"
+          type="warning"
+        />
+        <BaseButton
+          :label="t('Danger')"
+          icon="search"
+          size="small"
+          type="danger"
+        />
+      </div>
+      <div class="flex gap-2 flex-wrap">
+        <BaseButton
+          :label="t('Primary alternative')"
+          icon="search"
+          size="small"
+          type="primary-alternative"
+        />
+        <BaseButton
+          :label="t('Black')"
+          icon="search"
+          size="small"
+          type="black"
+        />
+      </div>
+      <div class="flex gap-2 flex-wrap">
+        <BaseButton
+          :label="t('Primary')"
+          disabled
+          icon="search"
+          size="small"
           type="primary"
+        />
+        <BaseButton
+          :label="t('Secondary')"
+          disabled
+          icon="search"
+          size="small"
+          type="secondary"
+        />
+        <BaseButton
+          :label="t('Tertiary')"
+          disabled
+          icon="search"
+          size="small"
+          type="tertiary"
+        />
+        <BaseButton
+          :label="t('Success')"
+          disabled
+          icon="search"
+          size="small"
+          type="success"
+        />
+        <BaseButton
+          :label="t('Info')"
+          disabled
+          icon="search"
+          size="small"
+          type="info"
+        />
+        <BaseButton
+          :label="t('Warning')"
+          disabled
+          icon="search"
+          size="small"
+          type="warning"
+        />
+        <BaseButton
+          :label="t('Danger')"
+          disabled
+          icon="search"
+          size="small"
+          type="danger"
+        />
+      </div>
+      <div class="flex gap-2 flex-wrap">
+        <BaseButton
+          :label="t('Primary alternative')"
+          disabled
+          icon="search"
+          size="small"
+          type="primary-alternative"
+        />
+        <BaseButton
+          :label="t('Black')"
+          disabled
+          icon="search"
+          size="small"
+          type="black"
         />
       </div>
     </div>

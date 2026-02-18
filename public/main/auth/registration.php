@@ -1173,11 +1173,6 @@ if (!empty($_GET['openid_msg']) && 'idnotfound' == $_GET['openid_msg']) {
     $content .= Display::return_message(get_lang('This OpenID could not be found in our database. Please register for a new account. If you have already an account with us, please edit your profile inside your account to add this OpenID'));
 }
 
-if ($extraConditions) {
-    $form->addCheckBox('extra_platformuseconditions', null, get_lang('Platform use conditions'));
-    $form->addRule('extra_platformuseconditions', get_lang('Required field'), 'required');
-}
-
 $blockButton = false;
 $termActivated = false;
 $showTerms = false;
@@ -1200,7 +1195,9 @@ if ($blockButton) {
 } else {
     $allow = ('true' === api_get_setting('registration.allow_double_validation_in_registration'));
 
-    ChamiloHelper::addLegalTermsFields($form, $userAlreadyRegisteredShowTerms);
+    if ('login' === api_get_setting('workflows.load_term_conditions_section')) {
+        ChamiloHelper::addLegalTermsFields($form, $userAlreadyRegisteredShowTerms);
+    }
 
     /**
      * Double validation must be controlled ONLY by:

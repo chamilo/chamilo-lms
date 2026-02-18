@@ -32492,3 +32492,57 @@ msgstr ""
 
 msgid "Current authentication method"
 msgstr ""
+
+msgid "Branches"
+msgstr ""
+
+msgid "Rooms"
+msgstr ""
+
+msgid "Room availability finder"
+msgstr ""
+
+msgid "New branch"
+msgstr ""
+
+msgid "New room"
+msgstr ""
+
+msgid "Branch"
+msgstr ""
+
+msgid "Default room"
+msgstr ""
+
+msgid "Room occupation: %s"
+msgstr ""
+
+msgid "Find available rooms"
+msgstr ""
+
+msgid "Available rooms"
+msgstr ""
+
+msgid "Occupied rooms"
+msgstr ""
+
+msgid "No available rooms found for this time range"
+msgstr ""
+
+msgid "No rooms have been created yet"
+msgstr ""
+
+msgid "No branches have been created yet"
+msgstr ""
+
+msgid "Occupation"
+msgstr ""
+
+msgid "Cannot delete branch with rooms attached"
+msgstr ""
+
+msgid "Cannot delete room with courses attached"
+msgstr ""
+
+msgid "Conflicts"
+msgstr ""

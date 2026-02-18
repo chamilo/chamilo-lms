@@ -397,6 +397,29 @@ switch ($action) {
         $result = (int) Event::courseLogout($logoutInfo);
         echo $result;
         break;
+    case 'search_room':
+        $em = Database::getManager();
+        $term = isset($_REQUEST['q']) ? trim($_REQUEST['q']) : '';
+        $qb = $em->createQueryBuilder()
+            ->select('r.id, r.title')
+            ->from(\Chamilo\CoreBundle\Entity\Room::class, 'r')
+            ->orderBy('r.title', 'ASC');
+
+        if (!empty($term)) {
+            $qb->where('r.title LIKE :term')
+                ->setParameter('term', '%'.$term.'%');
+        }
+
+        $rooms = $qb->getQuery()->getArrayResult();
+        $result = [];
+        foreach ($rooms as $room) {
+            $result[] = [
+                'id' => $room['id'],
+                'text' => $room['title'],
+            ];
+        }
+        echo json_encode($result);
+        break;
     default:
         echo '';
 }

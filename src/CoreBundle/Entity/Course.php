@@ -386,6 +386,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      */
     // protected $curriculumCategories;
 
+    #[Groups(['course:read', 'course:write'])]
     #[ORM\ManyToOne(targetEntity: Room::class)]
     #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id')]
     protected ?Room $room;

@@ -6,37 +6,76 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Room.
  */
+#[ApiResource(
+    operations: [
+        new GetCollection(
+            normalizationContext: ['groups' => ['room:list']],
+        ),
+        new Get(
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            normalizationContext: ['groups' => ['room:read']],
+        ),
+        new Post(
+            security: "is_granted('ROLE_ADMIN')",
+            denormalizationContext: ['groups' => ['room:write']],
+        ),
+        new Put(
+            security: "is_granted('ROLE_ADMIN')",
+            denormalizationContext: ['groups' => ['room:write']],
+        ),
+        new Delete(
+            security: "is_granted('ROLE_ADMIN')",
+        ),
+    ],
+)]
+#[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
 #[ORM\Table(name: 'room')]
 #[ORM\Entity]
 class Room
 {
+    #[Groups(['room:list', 'room:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
+    #[Groups(['room:list', 'room:read', 'room:write'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255)]
     protected string $title;
 
+    #[Groups(['room:read', 'room:write'])]
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
+    #[Groups(['room:read', 'room:write'])]
     #[ORM\Column(name: 'geolocation', type: 'string', length: 255, nullable: true, unique: false)]
     protected ?string $geolocation = null;
 
+    #[Groups(['room:read', 'room:write'])]
     #[ORM\Column(name: 'ip', type: 'string', length: 45, nullable: true, unique: false)]
     protected ?string $ip = null;
 
+    #[Groups(['room:read', 'room:write'])]
     #[ORM\Column(name: 'ip_mask', type: 'string', length: 6, nullable: true, unique: false)]
     protected ?string $ipMask = null;
 
+    #[Groups(['room:read', 'room:write'])]
     #[ORM\ManyToOne(targetEntity: BranchSync::class)]
     #[ORM\JoinColumn(name: 'branch_id', referencedColumnName: 'id')]
     protected BranchSync $branch;

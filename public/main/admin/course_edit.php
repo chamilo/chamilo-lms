@@ -237,6 +237,28 @@ $form->applyFilter('department_url', 'trim');
 
 $form->addSelectLanguage('course_language', get_lang('Course language'));
 
+// Room.
+$em = Database::getManager();
+$roomCount = $em->getRepository(\Chamilo\CoreBundle\Entity\Room::class)->count([]);
+if ($roomCount > 0) {
+    $roomOptions = [];
+    if (!empty($courseInfo['room_id'])) {
+        $room = $em->find(\Chamilo\CoreBundle\Entity\Room::class, $courseInfo['room_id']);
+        if ($room) {
+            $roomOptions[$room->getId()] = $room->getTitle();
+        }
+    }
+    $form->addSelectAjax(
+        'room_id',
+        get_lang('Default room'),
+        $roomOptions,
+        [
+            'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_room',
+            'placeholder' => get_lang('Select'),
+        ]
+    );
+}
+
 CourseManager::addVisibilityOptions($form);
 
 $group = [];

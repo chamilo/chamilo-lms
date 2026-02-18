@@ -6,21 +6,55 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Repository\BranchSyncRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * BranchSync.
  */
+#[ApiResource(
+    shortName: 'Branch',
+    operations: [
+        new GetCollection(
+            normalizationContext: ['groups' => ['branch:list']],
+        ),
+        new Get(
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            normalizationContext: ['groups' => ['branch:read']],
+        ),
+        new Post(
+            security: "is_granted('ROLE_ADMIN')",
+            denormalizationContext: ['groups' => ['branch:write']],
+        ),
+        new Put(
+            security: "is_granted('ROLE_ADMIN')",
+            denormalizationContext: ['groups' => ['branch:write']],
+        ),
+        new Delete(
+            security: "is_granted('ROLE_ADMIN')",
+        ),
+    ],
+)]
+#[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
 #[ORM\Table(name: 'branch_sync')]
 #[ORM\Entity(repositoryClass: BranchSyncRepository::class)]
 #[Gedmo\Tree(type: 'nested')]
 class BranchSync
 {
+    #[Groups(['branch:list', 'branch:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -33,9 +67,11 @@ class BranchSync
     #[ORM\Column(name: 'unique_id', type: 'string', length: 50, nullable: false, unique: true)]
     protected string $uniqueId;
 
+    #[Groups(['branch:list', 'branch:read', 'branch:write'])]
     #[ORM\Column(name: 'title', type: 'string', length: 250)]
     protected string $title;
 
+    #[Groups(['branch:read', 'branch:write'])]
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 

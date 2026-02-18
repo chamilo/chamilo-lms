@@ -11,7 +11,7 @@ $plugin = CustomCertificatePlugin::create();
 $enable = $plugin->get('enable_plugin_customcertificate') == 'true';
 
 if ($enable) {
-    if (api_is_platform_admin() || api_is_teacher()) {
+    if (api_is_platform_admin() || api_is_teacher() || api_is_allowed_to_session_edit()) {
         $url = 'src/index.php?';
         $url .= (isset($_GET['cidReq']) ? api_get_cidreq() : 'default=1');
         header('Location: '.$url);

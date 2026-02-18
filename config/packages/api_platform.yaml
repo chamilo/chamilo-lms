@@ -29,7 +29,7 @@ api_platform:
         invalidation:
             enabled: true
     enable_docs: true
-    enable_entrypoint: true
+    enable_entrypoint: '%env(bool:APP_ENABLE_API_ENTRYPOINT)%'
     show_webby: false
     messenger: true
     defaults:

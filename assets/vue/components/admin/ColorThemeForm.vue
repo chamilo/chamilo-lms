@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted } from "vue"
+import { onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import Color from "colorjs.io"
 import SectionHeader from "../layout/SectionHeader.vue"
@@ -70,7 +70,10 @@ function toColorSafe(input, fallback = "#000") {
     const s = String(input).trim()
     if (!s) return new Color(fallback)
     if (s.startsWith("#") || s.includes("(")) return new Color(s)
-    const parts = s.split(/[,\s/]+/).filter(Boolean).map(Number)
+    const parts = s
+      .split(/[,\s/]+/)
+      .filter(Boolean)
+      .map(Number)
     if (parts.length >= 3 && parts.every((n) => Number.isFinite(n))) {
       const [r, g, b, a] = parts
       const css = a != null ? `rgb(${r} ${g} ${b} / ${a})` : `rgb(${r} ${g} ${b})`
@@ -141,7 +144,11 @@ function applyOneColor(varName, valueLike) {
 function safeApplyColors(varsFromTheme) {
   let incoming = varsFromTheme
   if (typeof incoming === "string") {
-    try { incoming = JSON.parse(incoming) } catch { incoming = {} }
+    try {
+      incoming = JSON.parse(incoming)
+    } catch {
+      incoming = {}
+    }
   }
   if (!incoming || typeof incoming !== "object") return
   for (const [k, v] of Object.entries(incoming)) {
@@ -215,11 +222,20 @@ async function onClickCreate() {
 const colorPrimaryButtonTextError = ref("")
 watch(colorPrimaryButtonText, (nv) => (colorPrimaryButtonTextError.value = checkColorContrast(new Color("white"), nv)))
 const colorPrimaryButtonAlternativeTextError = ref("")
-watch(colorPrimaryButtonAlternativeText, (nv) => (colorPrimaryButtonAlternativeTextError.value = checkColorContrast(colorPrimary.value, nv)))
+watch(
+  colorPrimaryButtonAlternativeText,
+  (nv) => (colorPrimaryButtonAlternativeTextError.value = checkColorContrast(colorPrimary.value, nv)),
+)
 const colorSecondaryButtonTextError = ref("")
-watch(colorSecondaryButtonText, (nv) => (colorSecondaryButtonTextError.value = checkColorContrast(colorSecondary.value, nv)))
+watch(
+  colorSecondaryButtonText,
+  (nv) => (colorSecondaryButtonTextError.value = checkColorContrast(colorSecondary.value, nv)),
+)
 const colorTertiaryButtonTextError = ref("")
-watch(colorTertiaryButtonText, (nv) => (colorTertiaryButtonTextError.value = checkColorContrast(colorTertiary.value, nv)))
+watch(
+  colorTertiaryButtonText,
+  (nv) => (colorTertiaryButtonTextError.value = checkColorContrast(colorTertiary.value, nv)),
+)
 const colorSuccessButtonTextError = ref("")
 watch(colorSuccessButtonText, (nv) => (colorSuccessButtonTextError.value = checkColorContrast(colorSuccess.value, nv)))
 const colorInfoButtonTextError = ref("")
@@ -272,7 +288,10 @@ watch(colorDanger, (nv) => {
     @change="onChangeTheme"
   />
 
-  <SectionHeader :title="t('Modify color theme')" size="6">
+  <SectionHeader
+    :title="t('Modify color theme')"
+    size="6"
+  >
     <BaseButton
       :label="isAdvancedMode ? t('Hide advanced mode') : t('Show advanced mode')"
       icon="cog"
@@ -285,68 +304,161 @@ watch(colorDanger, (nv) => {
     <!-- Advanced mode -->
     <div v-show="isAdvancedMode">
       <div class="field-group">
-        <BaseColorPicker v-model="colorPrimary" :label="t('Primary color')" />
-        <BaseColorPicker v-model="colorPrimaryGradient" :label="t('Primary color hover/background')" />
-        <BaseColorPicker v-model="colorPrimaryButtonText" :error="colorPrimaryButtonTextError" :label="t('Primary color button text')" />
-        <BaseColorPicker v-model="colorPrimaryButtonAlternativeText" :error="colorPrimaryButtonAlternativeTextError" :label="t('Primary color button alternative text')" />
+        <BaseColorPicker
+          v-model="colorPrimary"
+          :label="t('Primary color')"
+        />
+        <BaseColorPicker
+          v-model="colorPrimaryGradient"
+          :label="t('Primary color hover/background')"
+        />
+        <BaseColorPicker
+          v-model="colorPrimaryButtonText"
+          :error="colorPrimaryButtonTextError"
+          :label="t('Primary color button text')"
+        />
+        <BaseColorPicker
+          v-model="colorPrimaryButtonAlternativeText"
+          :error="colorPrimaryButtonAlternativeTextError"
+          :label="t('Primary color button alternative text')"
+        />
       </div>
 
       <div class="field-group">
-        <BaseColorPicker v-model="colorSecondary" :label="t('Secondary color')" />
-        <BaseColorPicker v-model="colorSecondaryGradient" :label="t('Secondary color hover/background')" />
-        <BaseColorPicker v-model="colorSecondaryButtonText" :error="colorSecondaryButtonTextError" :label="t('Secondary color button text')" />
+        <BaseColorPicker
+          v-model="colorSecondary"
+          :label="t('Secondary color')"
+        />
+        <BaseColorPicker
+          v-model="colorSecondaryGradient"
+          :label="t('Secondary color hover/background')"
+        />
+        <BaseColorPicker
+          v-model="colorSecondaryButtonText"
+          :error="colorSecondaryButtonTextError"
+          :label="t('Secondary color button text')"
+        />
       </div>
 
       <div class="field-group">
-        <BaseColorPicker v-model="colorTertiary" :label="t('Tertiary color')" />
-        <BaseColorPicker v-model="colorTertiaryGradient" :label="t('Tertiary color hover/background')" />
+        <BaseColorPicker
+          v-model="colorTertiary"
+          :label="t('Tertiary color')"
+        />
+        <BaseColorPicker
+          v-model="colorTertiaryGradient"
+          :label="t('Tertiary color hover/background')"
+        />
       </div>
 
       <div class="field-group">
-        <BaseColorPicker v-model="colorSuccess" :label="t('Success color')" />
-        <BaseColorPicker v-model="colorSuccessGradient" :label="t('Success color hover/background')" />
-        <BaseColorPicker v-model="colorSuccessButtonText" :error="colorSuccessButtonTextError" :label="t('Success color button text')" />
+        <BaseColorPicker
+          v-model="colorSuccess"
+          :label="t('Success color')"
+        />
+        <BaseColorPicker
+          v-model="colorSuccessGradient"
+          :label="t('Success color hover/background')"
+        />
+        <BaseColorPicker
+          v-model="colorSuccessButtonText"
+          :error="colorSuccessButtonTextError"
+          :label="t('Success color button text')"
+        />
       </div>
 
       <div class="field-group">
-        <BaseColorPicker v-model="colorInfo" :label="t('Info color')" />
-        <BaseColorPicker v-model="colorInfoGradient" :label="t('Info color hover/background')" />
-        <BaseColorPicker v-model="colorInfoButtonText" :error="colorInfoButtonTextError" :label="t('Info color button text')" />
+        <BaseColorPicker
+          v-model="colorInfo"
+          :label="t('Info color')"
+        />
+        <BaseColorPicker
+          v-model="colorInfoGradient"
+          :label="t('Info color hover/background')"
+        />
+        <BaseColorPicker
+          v-model="colorInfoButtonText"
+          :error="colorInfoButtonTextError"
+          :label="t('Info color button text')"
+        />
       </div>
 
       <div class="field-group">
-        <BaseColorPicker v-model="colorWarning" :label="t('Warning color')" />
-        <BaseColorPicker v-model="colorWarningGradient" :label="t('Warning color hover/background')" />
-        <BaseColorPicker v-model="colorWarningButtonText" :error="colorWarningButtonTextError" :label="t('Warning color button text')" />
+        <BaseColorPicker
+          v-model="colorWarning"
+          :label="t('Warning color')"
+        />
+        <BaseColorPicker
+          v-model="colorWarningGradient"
+          :label="t('Warning color hover/background')"
+        />
+        <BaseColorPicker
+          v-model="colorWarningButtonText"
+          :error="colorWarningButtonTextError"
+          :label="t('Warning color button text')"
+        />
       </div>
 
       <div class="field-group">
-        <BaseColorPicker v-model="colorDanger" :label="t('Danger color')" />
-        <BaseColorPicker v-model="colorDangerGradient" :label="t('Danger color hover/background')" />
+        <BaseColorPicker
+          v-model="colorDanger"
+          :label="t('Danger color')"
+        />
+        <BaseColorPicker
+          v-model="colorDangerGradient"
+          :label="t('Danger color hover/background')"
+        />
       </div>
 
       <div class="field-group">
-        <BaseColorPicker v-model="formColor" :label="t('Form outline color')" />
+        <BaseColorPicker
+          v-model="formColor"
+          :label="t('Form outline color')"
+        />
       </div>
     </div>
 
     <!-- Simple mode -->
     <div v-show="!isAdvancedMode">
       <div class="field-group">
-        <BaseColorPicker v-model="colorPrimary" :label="t('Primary color')" />
-        <BaseColorPicker v-model="colorSecondary" :label="t('Secondary color')" />
-        <BaseColorPicker v-model="colorTertiary" :label="t('Tertiary color')" />
+        <BaseColorPicker
+          v-model="colorPrimary"
+          :label="t('Primary color')"
+        />
+        <BaseColorPicker
+          v-model="colorSecondary"
+          :label="t('Secondary color')"
+        />
+        <BaseColorPicker
+          v-model="colorTertiary"
+          :label="t('Tertiary color')"
+        />
       </div>
 
       <div class="field-group">
-        <BaseColorPicker v-model="colorSuccess" :label="t('Success color')" />
-        <BaseColorPicker v-model="colorInfo" :label="t('Info color')" />
-        <BaseColorPicker v-model="colorWarning" :label="t('Warning color')" />
-        <BaseColorPicker v-model="colorDanger" :label="t('Danger color')" />
+        <BaseColorPicker
+          v-model="colorSuccess"
+          :label="t('Success color')"
+        />
+        <BaseColorPicker
+          v-model="colorInfo"
+          :label="t('Info color')"
+        />
+        <BaseColorPicker
+          v-model="colorWarning"
+          :label="t('Warning color')"
+        />
+        <BaseColorPicker
+          v-model="colorDanger"
+          :label="t('Danger color')"
+        />
       </div>
 
       <div class="field-group">
-        <BaseColorPicker v-model="formColor" :label="t('Form outline color')" />
+        <BaseColorPicker
+          v-model="formColor"
+          :label="t('Form outline color')"
+        />
       </div>
     </div>
 
@@ -382,6 +494,10 @@ watch(colorDanger, (nv) => {
     @confirm-clicked="onClickCreate"
     @cancel-clicked="() => (dialogCreateVisible.value = false)"
   >
-    <BaseInputText v-model="themeTitle" :label="t('Title')" />
+    <BaseInputText
+      id="sample-title"
+      v-model="themeTitle"
+      :label="t('Title')"
+    />
   </BaseDialogConfirmCancel>
 </template>

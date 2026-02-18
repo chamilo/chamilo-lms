@@ -189,7 +189,7 @@ $border-color_12: #9333EA;
     &:hover,
     &:focus,
     &:active {
-      @if('black' == $color) {
+      @if('tertiary' == $color) {
         @apply bg-support-1 text-primary;
       } @else {
         @apply bg-gray-10;

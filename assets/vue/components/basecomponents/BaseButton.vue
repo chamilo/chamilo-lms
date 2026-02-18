@@ -5,7 +5,7 @@
     :icon="chamiloIconToClass[icon]"
     :label="onlyIcon ? undefined : label"
     :loading="isLoading"
-    :variant="primeOutlinedProperty"
+    :variant="primerVariantProperty"
     :severity="primeSeverityProperty"
     :size="size"
     :title="onlyIcon ? label : undefined"
@@ -42,6 +42,7 @@ const props = defineProps({
     type: String,
     required: false,
     validator: buttonTypeValidator,
+    default: "primary",
   },
   onlyIcon: {
     type: Boolean,
@@ -85,27 +86,29 @@ const props = defineProps({
 defineEmits(["click"])
 
 const primeSeverityProperty = computed(() => {
-  if (["primary", "secondary", "success", "danger", "info"].includes(props.type)) {
-    return props.type
+  const type = props.type.replace("-text", "")
+
+  if (["primary", "secondary", "success", "danger", "info"].includes(type)) {
+    return type
   }
 
-  if ("warning" === props.type) {
+  if ("warning" === type) {
     return "warn"
   }
 
-  if ("black" === props.type) {
+  if ("black" === type) {
     return "contrast"
   }
 
-  if ("tertiary" === props.type) {
+  if ("tertiary" === type) {
     return "help"
   }
 
   return undefined
 })
 
-const primeOutlinedProperty = computed(() => {
-  if (props.onlyIcon) {
+const primerVariantProperty = computed(() => {
+  if (props.type.endsWith("-text")) {
     return "text"
   }
 

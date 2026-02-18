@@ -328,6 +328,11 @@ if (isset($courseInfo['duration'])) {
     $courseInfo['duration'] = $courseInfo['duration'] / 60;
 }
 
+$courseEntityForDefaults = api_get_course_entity($courseId);
+if ($courseEntityForDefaults && $courseEntityForDefaults->getRoom()) {
+    $courseInfo['room_id'] = $courseEntityForDefaults->getRoom()->getId();
+}
+
 $form->setDefaults($courseInfo);
 
 // Validate form

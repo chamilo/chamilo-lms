@@ -1145,6 +1145,7 @@ $defaultCourseSettings = [
 $values = [];
 $values['title'] = $courseEntity->getTitle();
 $values['course_language'] = $courseEntity->getCourseLanguage();
+$values['room_id'] = $courseEntity->getRoom() ? $courseEntity->getRoom()->getId() : null;
 $values['department_name'] = $courseEntity->getDepartmentName();
 $values['department_url'] = $courseEntity->getDepartmentUrl();
 $values['visibility'] = $courseEntity->getVisibility();

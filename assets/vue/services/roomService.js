@@ -7,6 +7,10 @@ roomService.fetchWithCounts = async () => {
   return baseService.get("/admin/rooms/with-counts")
 }
 
+roomService.getInfo = async (id) => {
+  return baseService.get(`/admin/rooms/${id}/info`)
+}
+
 roomService.getOccupation = async (id, start, end) => {
   return baseService.get(`/admin/rooms/${id}/occupation`, {
     start: start.toISOString(),

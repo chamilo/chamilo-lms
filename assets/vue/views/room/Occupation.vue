@@ -1,5 +1,11 @@
 <template>
   <div class="flex flex-col gap-4">
+    <h2
+      v-if="roomTitle"
+      class="text-xl font-semibold"
+    >
+      {{ branchTitle ? `${branchTitle} - ${roomTitle}` : roomTitle }}
+    </h2>
     <FullCalendar
       ref="cal"
       :options="calendarOptions"
@@ -8,7 +14,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, onMounted } from "vue"
 import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import FullCalendar from "@fullcalendar/vue3"
@@ -26,6 +32,18 @@ const { appLocale } = useLocale()
 
 const roomId = route.params.id
 const cal = ref(null)
+const roomTitle = ref(null)
+const branchTitle = ref(null)
+
+onMounted(async () => {
+  try {
+    const info = await roomService.getInfo(roomId)
+    roomTitle.value = info.title
+    branchTitle.value = info.branchTitle
+  } catch (e) {
+    console.error("Failed to load room info", e)
+  }
+})
 
 const timezone = getCurrentTimezone()
 

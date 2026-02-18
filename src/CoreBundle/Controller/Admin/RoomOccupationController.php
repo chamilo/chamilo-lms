@@ -18,6 +18,17 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 class RoomOccupationController extends BaseController
 {
+    #[Route('/admin/rooms/{id}/info', name: 'admin_room_info', methods: ['GET'])]
+    public function info(Room $room): JsonResponse
+    {
+        $branch = $room->getBranch();
+
+        return $this->json([
+            'title' => $room->getTitle(),
+            'branchTitle' => $branch ? $branch->getTitle() : null,
+        ]);
+    }
+
     #[Route('/admin/rooms/{id}/occupation', name: 'admin_room_occupation', methods: ['GET'])]
     public function occupation(Room $room, Request $request, EntityManagerInterface $em): JsonResponse
     {

@@ -210,7 +210,7 @@ final class CourseStudentInfoHelper
                 'timeSpentSeconds' => $timeSpentSeconds,
                 'certificateAvailable' => $certificateAvailable,
                 'completed' => $completed,
-                'hasNewContent' => $hasNewContent,
+                'hasNewContent' => false,
             ];
 
             $this->log('cache MISS: computed result', [
@@ -382,7 +382,8 @@ final class CourseStudentInfoHelper
                 continue;
             }
 
-            $toolInfo = $this->mapToolIdAndTypeTitleToTool($toolId, $typeTitle, $courseId, $sessionId);
+            $toolTitleRow = (string) ($row['tool_title'] ?? '');
+            $toolInfo = $this->mapToolFromRow($toolId, $toolTitleRow, $typeTitle, $courseId, $sessionId);
             if (!$toolInfo || empty($toolInfo['trackTools'])) {
                 continue;
             }
@@ -474,158 +475,6 @@ final class CourseStudentInfoHelper
         }
 
         return $dt->format('Y-m-d H:i:s');
-    }
-
-    private function mapToolIdAndTypeTitleToTool(int $toolId, string $typeTitle, int $courseId, int $sessionId): ?array
-    {
-        $t = $this->normalizeTitle($typeTitle);
-        $toolTitle = $this->normalizeTitle($this->getToolTitleById($toolId) ?? '');
-
-        if ('' === $toolTitle || 'user' === $toolTitle) {
-            return null;
-        }
-
-        if (!$this->isCountableTypeTitle($t)) {
-            return null;
-        }
-
-        // Introductions
-        if ('tool_intro' === $t || 'introductions' === $t || 'tool_intro' === $toolTitle) {
-            return [
-                'key' => 'tool_intro',
-                'label' => 'Course introduction',
-                'url' => $this->buildLegacyToolUrl('course_home', $courseId, $sessionId),
-                'trackTools' => ['ctoolintro', 'course_home'],
-            ];
-        }
-
-        // Links: count ONLY real link items (resource_type.title = "links")
-        if ('link' === $toolTitle) {
-            if ('links' !== $t) {
-                return null;
-            }
-
-            return [
-                'key' => 'links',
-                'label' => 'Links',
-                'url' => $this->buildLegacyToolUrl('links', $courseId, $sessionId),
-                'trackTools' => ['link'],
-            ];
-        }
-
-        // Learning paths
-        if ('learnpath' === $toolTitle || 'lps' === $t || str_starts_with($t, 'lp_')) {
-            return [
-                'key' => 'learnpaths',
-                'label' => 'Learning paths',
-                'url' => $this->buildLegacyToolUrl('learnpaths', $courseId, $sessionId),
-                'trackTools' => ['learnpath'],
-            ];
-        }
-
-        // Exercises / Quiz
-        if (
-            'quiz' === $toolTitle
-            || 'exercises' === $t
-            || 'questions' === $t
-            || 'attempt_file' === $t
-            || 'attempt_feedback' === $t
-        ) {
-            return [
-                'key' => 'exercises',
-                'label' => 'Exercises',
-                'url' => $this->buildLegacyToolUrl('exercises', $courseId, $sessionId),
-                'trackTools' => ['quiz', 'exercise'],
-            ];
-        }
-
-        // Forums
-        if ('forum' === $toolTitle || 'forums' === $t || str_starts_with($t, 'forum_')) {
-            return [
-                'key' => 'forums',
-                'label' => 'Forums',
-                'url' => $this->buildLegacyToolUrl('forums', $courseId, $sessionId),
-                'trackTools' => ['forum'],
-            ];
-        }
-
-        // Wikis
-        if ('wiki' === $toolTitle || 'wikis' === $t || 'wiki' === $t) {
-            return [
-                'key' => 'wikis',
-                'label' => 'Wikis',
-                'url' => $this->buildLegacyToolUrl('wikis', $courseId, $sessionId),
-                'trackTools' => ['wiki'],
-            ];
-        }
-
-        // Gradebook
-        if ('gradebook' === $toolTitle || 'gradebooks' === $t || 'gradebook_links' === $t || 'gradebook_evaluations' === $t) {
-            return [
-                'key' => 'gradebook',
-                'label' => 'Gradebook',
-                'url' => $this->buildLegacyToolUrl('gradebook', $courseId, $sessionId),
-                'trackTools' => ['gradebook'],
-            ];
-        }
-
-        // Groups
-        if ('group' === $toolTitle || 'groups' === $t) {
-            return [
-                'key' => 'groups',
-                'label' => 'Groups',
-                'url' => $this->buildLegacyToolUrl('groups', $courseId, $sessionId),
-                'trackTools' => ['group'],
-            ];
-        }
-
-        // Documents
-        if ('document' === $toolTitle || 'files' === $t || 'documents' === $t) {
-            return [
-                'key' => 'documents',
-                'label' => 'Documents',
-                'url' => $this->buildLegacyToolUrl('documents', $courseId, $sessionId),
-                'trackTools' => ['document'],
-            ];
-        }
-
-        // Surveys
-        if ('survey' === $toolTitle || 'surveys' === $t || 'survey_questions' === $t) {
-            return [
-                'key' => 'surveys',
-                'label' => 'Surveys',
-                'url' => $this->buildLegacyToolUrl('surveys', $courseId, $sessionId),
-                'trackTools' => ['survey'],
-            ];
-        }
-
-        // Attendance
-        if ('attendance' === $toolTitle || 'attendances' === $t) {
-            return [
-                'key' => 'attendances',
-                'label' => 'Attendances',
-                'url' => $this->buildLegacyToolUrl('attendances', $courseId, $sessionId),
-                'trackTools' => ['attendance'],
-            ];
-        }
-
-        // Dropbox
-        if ('dropbox' === $toolTitle || 'dropbox' === $t) {
-            return [
-                'key' => 'dropbox',
-                'label' => 'Dropbox',
-                'url' => $this->buildLegacyToolUrl('dropbox', $courseId, $sessionId),
-                'trackTools' => ['dropbox'],
-            ];
-        }
-
-        // Default: do not guess track tool names.
-        return [
-            'key' => $toolTitle,
-            'label' => ucfirst($toolTitle),
-            'url' => null,
-            'trackTools' => [],
-        ];
     }
 
     private function mapToolIdToTool(int $toolId, string $resourceTitles, int $courseId, int $sessionId): array
@@ -724,141 +573,6 @@ final class CourseStudentInfoHelper
             'label' => 'Tool '.$toolId,
             'url' => null,
         ];
-    }
-
-    private function fetchNewContentToolsSince(
-        int $userId,
-        int $courseId,
-        int $sessionId,
-        DateTimeImmutable $since,
-        int $limit
-    ): array {
-        $sinceStr = $since->format('Y-m-d H:i:s');
-        $nowSql = 'NOW()';
-
-        $sessionSql = '';
-        if ($sessionId > 0) {
-            $sessionSql = ' AND (rl.session_id IS NULL OR rl.session_id = 0 OR rl.session_id = :sid)';
-        } else {
-            $sessionSql = ' AND (rl.session_id IS NULL OR rl.session_id = 0)';
-        }
-
-        $sql = 'SELECT
-                COALESCE(rt.tool_id, -1) AS tool_id,
-                COUNT(*) AS cnt,
-                MAX(GREATEST(COALESCE(rl.updated_at, rl.created_at), rl.created_at)) AS last_change,
-                GROUP_CONCAT(DISTINCT COALESCE(NULLIF(TRIM(rt.title), \'\'), CONCAT(\'type_\', rn.resource_type_id)) ORDER BY rt.title SEPARATOR \', \') AS resource_titles
-            FROM '.self::RESOURCE_LINK_TABLE.' rl
-            INNER JOIN resource_node rn ON rn.id = rl.resource_node_id
-            LEFT JOIN resource_type rt ON rt.id = rn.resource_type_id
-            WHERE rl.c_id = :cid
-              AND rl.deleted_at IS NULL
-              AND (rl.visibility IS NULL OR rl.visibility <> 0)
-              AND (rl.start_visibility_at IS NULL OR rl.start_visibility_at <= '.$nowSql.')
-              AND (rl.end_visibility_at IS NULL OR rl.end_visibility_at >= '.$nowSql.')
-              AND (rl.updated_at > :since OR rl.created_at > :since)
-              AND (rl.user_id IS NULL OR rl.user_id = 0 OR rl.user_id = :uid)
-              AND (rl.group_id IS NULL OR rl.group_id = 0)
-              AND (rl.usergroup_id IS NULL OR rl.usergroup_id = 0)
-              '.$sessionSql.'
-            GROUP BY COALESCE(rt.tool_id, -1)
-            ORDER BY last_change DESC
-            LIMIT '.(int) $limit;
-
-        $this->log('fetchNewContentToolsSince: executing', [
-            'course_id' => $courseId,
-            'session_id' => $sessionId,
-            'since' => $sinceStr,
-            'limit' => (int) $limit,
-        ]);
-
-        try {
-            $rows = $this->connection->fetchAllAssociative($sql, [
-                'cid' => $courseId,
-                'uid' => $userId,
-                'sid' => $sessionId,
-                'since' => $sinceStr,
-            ]);
-
-            $this->log('fetchNewContentToolsSince: done', [
-                'rows' => \count($rows),
-            ]);
-
-            return $rows;
-        } catch (Throwable $e) {
-            $this->log('fetchNewContentToolsSince: query failed', [
-                'course_id' => $courseId,
-                'session_id' => $sessionId,
-                'since' => $sinceStr,
-                'exception' => $e->getMessage(),
-            ]);
-
-            return [];
-        }
-    }
-
-    /**
-     * Query resource_link entries changed since $since, grouped by resource_node.resource_type.
-     */
-    private function fetchNewContentTypesSince(
-        int $userId,
-        int $courseId,
-        int $sessionId,
-        DateTimeImmutable $since,
-        int $limit
-    ): array {
-        $sinceStr = $since->format('Y-m-d H:i:s');
-        $nowSql = 'NOW()';
-
-        $sessionSql = '';
-        if ($sessionId > 0) {
-            $sessionSql = ' AND (rl.session_id IS NULL OR rl.session_id = 0 OR rl.session_id = :sid)';
-        } else {
-            $sessionSql = ' AND (rl.session_id IS NULL OR rl.session_id = 0)';
-        }
-
-        // SAFER:
-        // We group by tool_id + resource_type.title to avoid mixing different types under the same tool_id (e.g. tool_id=11).
-        $sql = 'SELECT
-            COALESCE(rt.tool_id, -1) AS tool_id,
-            COALESCE(rt.title, \'\') AS type_title,
-            COUNT(DISTINCT rn.id) AS cnt,
-            MAX(GREATEST(
-                COALESCE(rn.updated_at, rn.created_at),
-                rn.created_at,
-                rl.created_at
-            )) AS last_change
-        FROM '.self::RESOURCE_LINK_TABLE.' rl
-        INNER JOIN resource_node rn ON rn.id = rl.resource_node_id
-        LEFT JOIN resource_type rt ON rt.id = rn.resource_type_id
-        WHERE rl.c_id = :cid
-          AND rl.deleted_at IS NULL
-          AND rl.visibility = 2
-          AND (rl.start_visibility_at IS NULL OR rl.start_visibility_at <= '.$nowSql.')
-          AND (rl.end_visibility_at IS NULL OR rl.end_visibility_at >= '.$nowSql.')
-          AND (
-              rn.updated_at > :since
-              OR rn.created_at > :since
-              OR rl.created_at > :since
-          )
-          AND (rl.user_id IS NULL OR rl.user_id = 0 OR rl.user_id = :uid)
-          AND (rl.group_id IS NULL OR rl.group_id = 0)
-          AND (rl.usergroup_id IS NULL OR rl.usergroup_id = 0)
-          '.$sessionSql.'
-        GROUP BY COALESCE(rt.tool_id, -1), COALESCE(rt.title, \'\')
-        ORDER BY last_change DESC
-        LIMIT '.(int) $limit;
-
-        try {
-            return $this->connection->fetchAllAssociative($sql, [
-                'cid' => $courseId,
-                'uid' => $userId,
-                'sid' => $sessionId,
-                'since' => $sinceStr,
-            ]);
-        } catch (Throwable $e) {
-            return [];
-        }
     }
 
     /**
@@ -1010,72 +724,6 @@ final class CourseStudentInfoHelper
 
             return $out;
         } catch (Throwable $e) {
-            return [];
-        }
-    }
-
-    private function getResourceLinkLastChangeMapForCourses(int $userId, array $courseIds, int $sessionId): array
-    {
-        $courseIds = array_values(array_unique(array_map('intval', $courseIds)));
-        $courseIds = array_filter($courseIds, static fn (int $id) => $id > 0);
-
-        if (empty($courseIds)) {
-            return [];
-        }
-
-        $nowSql = 'NOW()';
-
-        // Session filter:
-        // - When sessionId > 0: accept global rows (NULL/0) OR session-specific rows
-        // - When sessionId = 0: accept only global rows (NULL/0)
-        $sessionSql = '';
-        if ($sessionId > 0) {
-            $sessionSql = ' AND (rl.session_id IS NULL OR rl.session_id = 0 OR rl.session_id = :sid)';
-        } else {
-            $sessionSql = ' AND (rl.session_id IS NULL OR rl.session_id = 0)';
-        }
-
-        // We compute the latest change timestamp per course (created_at/updated_at).
-        $sql = 'SELECT
-            rl.c_id,
-            MAX(GREATEST(
-                COALESCE(rn.updated_at, rn.created_at),
-                rn.created_at,
-                rl.created_at
-            )) AS last_change
-        FROM '.self::RESOURCE_LINK_TABLE.' rl
-        INNER JOIN resource_node rn ON rn.id = rl.resource_node_id
-        WHERE rl.c_id IN (:cids)
-          AND rl.deleted_at IS NULL
-          AND rl.visibility = 2
-          AND (rl.start_visibility_at IS NULL OR rl.start_visibility_at <= '.$nowSql.')
-          AND (rl.end_visibility_at IS NULL OR rl.end_visibility_at >= '.$nowSql.')
-          AND (rl.user_id IS NULL OR rl.user_id = 0 OR rl.user_id = :uid)
-          AND (rl.group_id IS NULL OR rl.group_id = 0)
-          AND (rl.usergroup_id IS NULL OR rl.usergroup_id = 0)
-          '.$sessionSql.'
-        GROUP BY rl.c_id';
-
-        try {
-            $rows = $this->connection->fetchAllAssociative($sql, [
-                'cids' => $courseIds,
-                'uid' => $userId,
-                'sid' => $sessionId,
-            ], [
-                'cids' => ArrayParameterType::INTEGER,
-            ]);
-
-            $out = [];
-            foreach ($rows as $row) {
-                $cid = (int) ($row['c_id'] ?? 0);
-                $raw = (string) ($row['last_change'] ?? '');
-                if ($cid > 0 && '' !== trim($raw)) {
-                    $out[$cid] = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $raw) ?: new DateTimeImmutable($raw);
-                }
-            }
-
-            return $out;
-        } catch (DbalException|Throwable $e) {
             return [];
         }
     }
@@ -1403,7 +1051,9 @@ final class CourseStudentInfoHelper
                     continue;
                 }
 
-                $toolInfo = $this->mapToolIdAndTypeTitleToTool($toolId, $typeTitle, $courseId, $sessionId);
+                $toolTitleRow = (string) ($row['tool_title'] ?? '');
+                $toolInfo = $this->mapToolFromRow($toolId, $toolTitleRow, $typeTitle, $courseId, $sessionId);
+
                 if (!$toolInfo || empty($toolInfo['trackTools'])) {
                     continue;
                 }
@@ -1435,98 +1085,43 @@ final class CourseStudentInfoHelper
     /**
      * Checks if there exists any resource_link entry newer than $since.
      */
-    private function existsNewResourceLinkSince(
-        int $courseId,
-        int $userId,
-        int $sessionId,
-        DateTimeImmutable $since
-    ): bool {
+    private function existsNewResourceLinkSince(int $courseId, int $userId, int $sessionId, DateTimeImmutable $since): bool
+    {
         $sinceStr = $since->format('Y-m-d H:i:s');
         $nowSql = 'NOW()';
 
-        // Session filter:
-        // - When sessionId > 0: accept global rows (NULL/0) OR session-specific rows
-        // - When sessionId = 0: accept only global rows (NULL/0)
-        $sessionSql = '';
-        if ($sessionId > 0) {
-            $sessionSql = ' AND (rl.session_id IS NULL OR rl.session_id = 0 OR rl.session_id = :sid)';
-        } else {
-            $sessionSql = ' AND (rl.session_id IS NULL OR rl.session_id = 0)';
-        }
+        $sessionSql = ($sessionId > 0)
+            ? ' AND (rl.session_id IS NULL OR rl.session_id = 0 OR rl.session_id = :sid)'
+            : ' AND (rl.session_id IS NULL OR rl.session_id = 0)';
 
-        // Visibility:
-        // In practice, resource_link.visibility is not always binary; do not hardcode "= 1".
-        // Treat any non-zero visibility as "not hidden" for this detection.
         $sql = 'SELECT 1
-            FROM '.self::RESOURCE_LINK_TABLE.' rl
-            INNER JOIN resource_node rn ON rn.id = rl.resource_node_id
-            WHERE rl.c_id = :cid
-              AND rl.deleted_at IS NULL
-              AND rl.visibility = 2
-              AND (rl.start_visibility_at IS NULL OR rl.start_visibility_at <= '.$nowSql.')
-              AND (rl.end_visibility_at IS NULL OR rl.end_visibility_at >= '.$nowSql.')
-              AND (
-                  rn.updated_at > :since
-                  OR rn.created_at > :since
-                  OR rl.created_at > :since
-              )
-              AND (rl.user_id IS NULL OR rl.user_id = 0 OR rl.user_id = :uid)
-              AND (rl.group_id IS NULL OR rl.group_id = 0)
-              AND (rl.usergroup_id IS NULL OR rl.usergroup_id = 0)
-              '.$sessionSql.'
-            LIMIT 1';
-
-        $params = [
-            'cid' => $courseId,
-            'uid' => $userId,
-            'sid' => $sessionId,
-            'since' => $sinceStr,
-        ];
-
-        $this->log('existsNewResourceLinkSince: executing probe query', [
-            'course_id' => $courseId,
-            'session_id' => $sessionId,
-            'since' => $sinceStr,
-        ]);
+        FROM '.self::RESOURCE_LINK_TABLE.' rl
+        INNER JOIN resource_node rn ON rn.id = rl.resource_node_id
+        WHERE rl.c_id = :cid
+          AND rl.deleted_at IS NULL
+          AND rl.visibility = 2
+          AND (rl.start_visibility_at IS NULL OR rl.start_visibility_at <= '.$nowSql.')
+          AND (rl.end_visibility_at IS NULL OR rl.end_visibility_at > '.$nowSql.')
+          AND (
+                COALESCE(rl.updated_at, rl.created_at) > :since
+             OR COALESCE(rn.updated_at, rn.created_at) > :since
+          )
+          AND (rl.user_id IS NULL OR rl.user_id = 0 OR rl.user_id = :uid)
+          AND (rl.group_id IS NULL OR rl.group_id = 0)
+          AND (rl.usergroup_id IS NULL OR rl.usergroup_id = 0)
+          '.$sessionSql.'
+        LIMIT 1';
 
         try {
-            $row = $this->connection->fetchOne($sql, $params);
-            $hasNew = false !== $row && null !== $row;
+            $row = $this->connection->fetchOne($sql, [
+                'cid' => $courseId,
+                'uid' => $userId,
+                'sid' => $sessionId,
+                'since' => $sinceStr,
+            ]);
 
-            // Extra debug context (only when showDebug is enabled).
-            if ($this->showDebug) {
-                $sqlAgg = 'SELECT
-                              COUNT(*) AS cnt,
-                              MAX(rl.updated_at) AS max_updated_at,
-                              MAX(rl.created_at) AS max_created_at
-                           FROM '.self::RESOURCE_LINK_TABLE.' rl
-                           WHERE rl.c_id = :cid
-                             AND rl.deleted_at IS NULL
-                             AND (rl.visibility IS NULL OR rl.visibility <> 0)
-                             AND (rl.start_visibility_at IS NULL OR rl.start_visibility_at <= '.$nowSql.')
-                             AND (rl.end_visibility_at IS NULL OR rl.end_visibility_at >= '.$nowSql.')
-                             AND (rl.user_id IS NULL OR rl.user_id = 0 OR rl.user_id = :uid)
-                             AND (rl.group_id IS NULL OR rl.group_id = 0)
-                             AND (rl.usergroup_id IS NULL OR rl.usergroup_id = 0)
-                             '.$sessionSql;
-
-                $agg = $this->connection->fetchAssociative($sqlAgg, [
-                    'cid' => $courseId,
-                    'uid' => $userId,
-                    'sid' => $sessionId,
-                ]);
-
-                $this->log('existsNewResourceLinkSince: probe result', [
-                    'course_id' => $courseId,
-                    'session_id' => $sessionId,
-                    'since' => $sinceStr,
-                    'has_new' => $hasNew,
-                    'agg' => $agg ?: null,
-                ]);
-            }
-
-            return $hasNew;
-        } catch (DbalException|Throwable $e) {
+            return false !== $row && null !== $row;
+        } catch (Throwable $e) {
             $this->log('existsNewResourceLinkSince: query failed (returning false)', [
                 'course_id' => $courseId,
                 'session_id' => $sessionId,
@@ -2023,6 +1618,7 @@ final class CourseStudentInfoHelper
 
     /**
      * Fetch the latest change timestamp per (tool_title, resource_type.title) for ONE course.
+     * Includes tool.title as a stable identifier.
      */
     private function fetchLastChangeByTypeForCourse(int $userId, int $courseId, int $sessionId): array
     {
@@ -2033,26 +1629,30 @@ final class CourseStudentInfoHelper
             : ' AND (rl.session_id IS NULL OR rl.session_id = 0)';
 
         $sql = 'SELECT
-        COALESCE(rt.tool_id, -1) AS tool_id,
-        COALESCE(rt.title, \'\') AS type_title,
-        MAX(GREATEST(
-            COALESCE(rn.updated_at, rn.created_at),
-            rn.created_at,
-            rl.created_at
-        )) AS last_change
-    FROM '.self::RESOURCE_LINK_TABLE.' rl
-    INNER JOIN resource_node rn ON rn.id = rl.resource_node_id
-    LEFT JOIN resource_type rt ON rt.id = rn.resource_type_id
-    WHERE rl.c_id = :cid
-      AND rl.deleted_at IS NULL
-      AND rl.visibility = 2
-      AND (rl.start_visibility_at IS NULL OR rl.start_visibility_at <= '.$nowSql.')
-      AND (rl.end_visibility_at IS NULL OR rl.end_visibility_at >= '.$nowSql.')
-      AND (rl.user_id IS NULL OR rl.user_id = 0 OR rl.user_id = :uid)
-      AND (rl.group_id IS NULL OR rl.group_id = 0)
-      AND (rl.usergroup_id IS NULL OR rl.usergroup_id = 0)
-      '.$sessionSql.'
-    GROUP BY COALESCE(rt.tool_id, -1), COALESCE(rt.title, \'\')';
+            COALESCE(rt.tool_id, -1) AS tool_id,
+            COALESCE(t.title, \'\') AS tool_title,
+            COALESCE(rt.title, \'\') AS type_title,
+            MAX(GREATEST(
+                COALESCE(rl.updated_at, rl.created_at),
+                COALESCE(rn.updated_at, rn.created_at)
+            )) AS last_change
+        FROM '.self::RESOURCE_LINK_TABLE.' rl
+        INNER JOIN resource_node rn ON rn.id = rl.resource_node_id
+        LEFT JOIN resource_type rt ON rt.id = rn.resource_type_id
+        LEFT JOIN '.self::TOOL_TABLE.' t ON t.id = rt.tool_id
+        WHERE rl.c_id = :cid
+          AND rl.deleted_at IS NULL
+          AND rl.visibility = 2
+          AND (rl.start_visibility_at IS NULL OR rl.start_visibility_at <= '.$nowSql.')
+          AND (rl.end_visibility_at IS NULL OR rl.end_visibility_at > '.$nowSql.')
+          AND (rl.user_id IS NULL OR rl.user_id = 0 OR rl.user_id = :uid)
+          AND (rl.group_id IS NULL OR rl.group_id = 0)
+          AND (rl.usergroup_id IS NULL OR rl.usergroup_id = 0)
+          '.$sessionSql.'
+        GROUP BY
+          COALESCE(rt.tool_id, -1),
+          COALESCE(t.title, \'\'),
+          COALESCE(rt.title, \'\')';
 
         try {
             return $this->connection->fetchAllAssociative($sql, [
@@ -2073,8 +1673,7 @@ final class CourseStudentInfoHelper
 
     /**
      * Count a specific (tool_title, type_title) since $since.
-     * We keep tool_title as an OPTIONAL filter, because some installations may have
-     * types mapped under unexpected tools (we don't want false negatives).
+     * Uses tool.title when available to keep mapping stable across installations.
      */
     private function fetchNewContentTypeCountSince(
         int $userId,
@@ -2092,31 +1691,29 @@ final class CourseStudentInfoHelper
             : ' AND (rl.session_id IS NULL OR rl.session_id = 0)';
 
         $sql = 'SELECT
-        COUNT(DISTINCT rn.id) AS cnt,
-        MAX(GREATEST(
-            COALESCE(rn.updated_at, rn.created_at),
-            rn.created_at,
-            rl.created_at
-        )) AS last_change
-    FROM '.self::RESOURCE_LINK_TABLE.' rl
-    INNER JOIN resource_node rn ON rn.id = rl.resource_node_id
-    LEFT JOIN resource_type rt ON rt.id = rn.resource_type_id
-    WHERE rl.c_id = :cid
-      AND rl.deleted_at IS NULL
-      AND rl.visibility = 2
-      AND (rl.start_visibility_at IS NULL OR rl.start_visibility_at <= '.$nowSql.')
-      AND (rl.end_visibility_at IS NULL OR rl.end_visibility_at >= '.$nowSql.')
-      AND (
-            rn.updated_at > :since
-         OR rn.created_at > :since
-         OR rl.created_at > :since
-      )
-      AND COALESCE(rt.tool_id, -1) = :tool_id
-      AND COALESCE(rt.title, \'\') = :type_title
-      AND (rl.user_id IS NULL OR rl.user_id = 0 OR rl.user_id = :uid)
-      AND (rl.group_id IS NULL OR rl.group_id = 0)
-      AND (rl.usergroup_id IS NULL OR rl.usergroup_id = 0)
-      '.$sessionSql;
+            COUNT(DISTINCT rn.id) AS cnt,
+            MAX(GREATEST(
+                COALESCE(rl.updated_at, rl.created_at),
+                COALESCE(rn.updated_at, rn.created_at)
+            )) AS last_change
+        FROM '.self::RESOURCE_LINK_TABLE.' rl
+        INNER JOIN resource_node rn ON rn.id = rl.resource_node_id
+        LEFT JOIN resource_type rt ON rt.id = rn.resource_type_id
+        WHERE rl.c_id = :cid
+          AND rl.deleted_at IS NULL
+          AND rl.visibility = 2
+          AND (rl.start_visibility_at IS NULL OR rl.start_visibility_at <= '.$nowSql.')
+          AND (rl.end_visibility_at IS NULL OR rl.end_visibility_at > '.$nowSql.')
+          AND (
+                COALESCE(rl.updated_at, rl.created_at) > :since
+             OR COALESCE(rn.updated_at, rn.created_at) > :since
+          )
+          AND COALESCE(rt.tool_id, -1) = :tool_id
+          AND COALESCE(rt.title, \'\') = :type_title
+          AND (rl.user_id IS NULL OR rl.user_id = 0 OR rl.user_id = :uid)
+          AND (rl.group_id IS NULL OR rl.group_id = 0)
+          AND (rl.usergroup_id IS NULL OR rl.usergroup_id = 0)
+          '.$sessionSql;
 
         try {
             $row = $this->connection->fetchAssociative($sql, [
@@ -2228,6 +1825,7 @@ final class CourseStudentInfoHelper
 
     /**
      * Fetch the latest change timestamp per (course_id, tool_title, resource_type.title) for MANY courses.
+     * Includes tool.title as a stable identifier.
      */
     private function fetchLastChangeByTypeForCourses(int $userId, array $courseIds, int $sessionId): array
     {
@@ -2238,27 +1836,32 @@ final class CourseStudentInfoHelper
             : ' AND (rl.session_id IS NULL OR rl.session_id = 0)';
 
         $sql = 'SELECT
-        rl.c_id,
-        COALESCE(rt.tool_id, -1) AS tool_id,
-        COALESCE(rt.title, \'\') AS type_title,
-        MAX(GREATEST(
-            COALESCE(rn.updated_at, rn.created_at),
-            rn.created_at,
-            rl.created_at
-        )) AS last_change
-    FROM '.self::RESOURCE_LINK_TABLE.' rl
-    INNER JOIN resource_node rn ON rn.id = rl.resource_node_id
-    LEFT JOIN resource_type rt ON rt.id = rn.resource_type_id
-    WHERE rl.c_id IN (:cids)
-      AND rl.deleted_at IS NULL
-      AND rl.visibility = 2
-      AND (rl.start_visibility_at IS NULL OR rl.start_visibility_at <= '.$nowSql.')
-      AND (rl.end_visibility_at IS NULL OR rl.end_visibility_at >= '.$nowSql.')
-      AND (rl.user_id IS NULL OR rl.user_id = 0 OR rl.user_id = :uid)
-      AND (rl.group_id IS NULL OR rl.group_id = 0)
-      AND (rl.usergroup_id IS NULL OR rl.usergroup_id = 0)
-      '.$sessionSql.'
-    GROUP BY rl.c_id, COALESCE(rt.tool_id, -1), COALESCE(rt.title, \'\')';
+            rl.c_id,
+            COALESCE(rt.tool_id, -1) AS tool_id,
+            COALESCE(t.title, \'\') AS tool_title,
+            COALESCE(rt.title, \'\') AS type_title,
+            MAX(GREATEST(
+                COALESCE(rl.updated_at, rl.created_at),
+                COALESCE(rn.updated_at, rn.created_at)
+            )) AS last_change
+        FROM '.self::RESOURCE_LINK_TABLE.' rl
+        INNER JOIN resource_node rn ON rn.id = rl.resource_node_id
+        LEFT JOIN resource_type rt ON rt.id = rn.resource_type_id
+        LEFT JOIN '.self::TOOL_TABLE.' t ON t.id = rt.tool_id
+        WHERE rl.c_id IN (:cids)
+          AND rl.deleted_at IS NULL
+          AND rl.visibility = 2
+          AND (rl.start_visibility_at IS NULL OR rl.start_visibility_at <= '.$nowSql.')
+          AND (rl.end_visibility_at IS NULL OR rl.end_visibility_at > '.$nowSql.')
+          AND (rl.user_id IS NULL OR rl.user_id = 0 OR rl.user_id = :uid)
+          AND (rl.group_id IS NULL OR rl.group_id = 0)
+          AND (rl.usergroup_id IS NULL OR rl.usergroup_id = 0)
+          '.$sessionSql.'
+        GROUP BY
+          rl.c_id,
+          COALESCE(rt.tool_id, -1),
+          COALESCE(t.title, \'\'),
+          COALESCE(rt.title, \'\')';
 
         try {
             return $this->connection->fetchAllAssociative($sql, [
@@ -2387,7 +1990,9 @@ final class CourseStudentInfoHelper
                 continue;
             }
 
-            $toolInfo = $this->mapToolIdAndTypeTitleToTool($toolId, $typeTitle, $cid, $sessionId);
+            $toolTitleRow = (string) ($row['tool_title'] ?? '');
+            $toolInfo = $this->mapToolFromRow($toolId, $toolTitleRow, $typeTitle, $cid, $sessionId);
+
             if (!$toolInfo || empty($toolInfo['trackTools'])) {
                 continue;
             }
@@ -2415,11 +2020,276 @@ final class CourseStudentInfoHelper
             return false;
         }
 
-        // Generic rule: category types are not "content items" in the UI.
+        // Categories are not content items in the UI.
         if (str_ends_with($t, '_categories')) {
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * Per-tool allowlist to match what the UI tool actually lists.
+     * Example: quiz tool has many resource types, but the UI tool list corresponds to "exercises" only.
+     */
+    private function isAllowedTypeForTool(string $toolTitle, string $typeTitle): bool
+    {
+        $toolTitle = $this->normalizeTitle($toolTitle);
+        $t = $this->normalizeTitle($typeTitle);
+
+        if (!$this->isCountableTypeTitle($t)) {
+            return false;
+        }
+
+        return match ($toolTitle) {
+            // Quiz tool: count ONLY "exercises" to match the UI tool list.
+            'quiz' => 'exercises' === $t,
+
+            // Documents tool: only "files".
+            'document' => 'files' === $t,
+
+            // Links tool: only "links".
+            'link' => 'links' === $t,
+
+            // Attendance tool: only "attendances".
+            'attendance' => 'attendances' === $t,
+
+            // Learnpath: allow lps + internal lp_* types (but categories are excluded above).
+            'learnpath' => 'lps' === $t || str_starts_with($t, 'lp_'),
+
+            // Forum: allow forums + forum_* (categories excluded above).
+            'forum' => 'forums' === $t || str_starts_with($t, 'forum_'),
+
+            // Survey: surveys + survey_questions.
+            'survey' => 'surveys' === $t || 'survey_questions' === $t,
+
+            // Gradebook: the main types.
+            'gradebook' => \in_array($t, ['gradebooks', 'gradebook_links', 'gradebook_evaluations'], true),
+
+            // Groups: groups + group_* (categories excluded above).
+            'group' => 'groups' === $t || str_starts_with($t, 'group_'),
+
+            // Wiki: wikis only.
+            'wiki' => 'wikis' === $t,
+
+            // Glossary: glossaries only.
+            'glossary' => 'glossaries' === $t,
+
+            // Shortcuts: shortcuts + external_tools.
+            'shortcuts' => 'shortcuts' === $t || 'external_tools' === $t,
+
+            // Student publications: allow all student_publications* (categories excluded above).
+            'student_publication' => str_starts_with($t, 'student_publications'),
+
+            // Default: allow, but mapping may still ignore if no trackTools are defined.
+            default => true,
+        };
+    }
+
+    /**
+     * Builds tool mapping using the stable tool title when available.
+     * Falls back to tool_id->tool.title lookup when tool_title is missing.
+     */
+    private function mapToolFromRow(
+        int $toolId,
+        string $toolTitleFromRow,
+        string $typeTitle,
+        int $courseId,
+        int $sessionId
+    ): ?array {
+        $toolTitle = $this->normalizeTitle($toolTitleFromRow);
+
+        if ('' === $toolTitle && $toolId > 0) {
+            $toolTitle = $this->normalizeTitle($this->getToolTitleById($toolId) ?? '');
+        }
+
+        if ('' === $toolTitle || 'user' === $toolTitle) {
+            return null;
+        }
+
+        return $this->mapToolTitleAndTypeTitleToTool($toolTitle, $typeTitle, $courseId, $sessionId);
+    }
+
+    /**
+     * Core mapping based on stable tool.title + resource_type.title.
+     * All strings are expected to be normalized/lowercase by the caller.
+     */
+    private function mapToolTitleAndTypeTitleToTool(string $toolTitle, string $typeTitle, int $courseId, int $sessionId): ?array
+    {
+        $t = $this->normalizeTitle($typeTitle);
+        $toolTitle = $this->normalizeTitle($toolTitle);
+
+        if ('' === $toolTitle || 'user' === $toolTitle) {
+            return null;
+        }
+
+        // Introduction can come from course_tool introductions.
+        if ('tool_intro' === $t || 'introductions' === $t) {
+            return [
+                'key' => 'tool_intro',
+                'label' => 'Course introduction',
+                'url' => $this->buildLegacyToolUrl('course_home', $courseId, $sessionId),
+                'trackTools' => ['ctoolintro', 'course_home'],
+            ];
+        }
+
+        // Enforce per-tool allowlist (this fixes Quiz inflated counts by questions).
+        if (!$this->isAllowedTypeForTool($toolTitle, $t)) {
+            return null;
+        }
+
+        return match ($toolTitle) {
+            'link' => [
+                'key' => 'links',
+                'label' => 'Links',
+                'url' => $this->buildLegacyToolUrl('links', $courseId, $sessionId),
+                'trackTools' => ['link'],
+            ],
+
+            'learnpath' => [
+                'key' => 'learnpaths',
+                'label' => 'Learning paths',
+                'url' => $this->buildLegacyToolUrl('learnpaths', $courseId, $sessionId),
+                'trackTools' => ['learnpath'],
+            ],
+
+            // Quiz tool: only "exercises" can arrive here due to allowlist.
+            'quiz' => [
+                'key' => 'exercises',
+                'label' => 'Exercises',
+                'url' => $this->buildLegacyToolUrl('exercises', $courseId, $sessionId),
+                'trackTools' => ['quiz', 'exercise'],
+            ],
+
+            'forum' => [
+                'key' => 'forums',
+                'label' => 'Forums',
+                'url' => $this->buildLegacyToolUrl('forums', $courseId, $sessionId),
+                'trackTools' => ['forum'],
+            ],
+
+            'wiki' => [
+                'key' => 'wikis',
+                'label' => 'Wikis',
+                'url' => $this->buildLegacyToolUrl('wikis', $courseId, $sessionId),
+                'trackTools' => ['wiki'],
+            ],
+
+            'gradebook' => [
+                'key' => 'gradebook',
+                'label' => 'Gradebook',
+                'url' => $this->buildLegacyToolUrl('gradebook', $courseId, $sessionId),
+                'trackTools' => ['gradebook'],
+            ],
+
+            'group' => [
+                'key' => 'groups',
+                'label' => 'Groups',
+                'url' => $this->buildLegacyToolUrl('groups', $courseId, $sessionId),
+                'trackTools' => ['group'],
+            ],
+
+            // Documents tool: only "files" can arrive here due to allowlist.
+            'document' => [
+                'key' => 'documents',
+                'label' => 'Documents',
+                'url' => $this->buildLegacyToolUrl('documents', $courseId, $sessionId),
+                'trackTools' => ['document'],
+            ],
+
+            'survey' => [
+                'key' => 'surveys',
+                'label' => 'Surveys',
+                'url' => $this->buildLegacyToolUrl('surveys', $courseId, $sessionId),
+                'trackTools' => ['survey'],
+            ],
+
+            'attendance' => [
+                'key' => 'attendances',
+                'label' => 'Attendances',
+                'url' => $this->buildLegacyToolUrl('attendances', $courseId, $sessionId),
+                'trackTools' => ['attendance'],
+            ],
+
+            'dropbox' => [
+                'key' => 'dropbox',
+                'label' => 'Dropbox',
+                'url' => $this->buildLegacyToolUrl('dropbox', $courseId, $sessionId),
+                'trackTools' => ['dropbox'],
+            ],
+
+            default => null, // Do not guess unknown track tools.
+        };
+    }
+
+    /**
+     * Returns a map [tool_title => tool_id] using the cached id->title map.
+     * Tool titles are normalized to lowercase.
+     */
+    private function getToolTitleToIdMap(): array
+    {
+        $idToTitle = $this->getToolIdToTitleMap();
+        $out = [];
+
+        foreach ($idToTitle as $id => $title) {
+            $t = $this->normalizeTitle($title);
+            if ($id > 0 && '' !== $t) {
+                $out[$t] = (int) $id;
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * Returns tool.id by tool.title (stable identifier), or null if unknown.
+     */
+    private function getToolIdByTitle(string $toolTitle): ?int
+    {
+        $toolTitle = $this->normalizeTitle($toolTitle);
+        if ('' === $toolTitle) {
+            return null;
+        }
+
+        $map = $this->getToolTitleToIdMap();
+        $id = $map[$toolTitle] ?? null;
+
+        return (\is_int($id) && $id > 0) ? $id : null;
+    }
+
+    /**
+     * Returns resource_type ids for a given tool.title.
+     * Useful if you ever want to filter resource_node/resource_link by tool.
+     */
+    private function getResourceTypeIdsByToolTitle(string $toolTitle): array
+    {
+        $toolId = $this->getToolIdByTitle($toolTitle);
+        if (!$toolId) {
+            return [];
+        }
+
+        try {
+            $rows = $this->connection->fetchAllAssociative(
+                'SELECT id FROM resource_type WHERE tool_id = :tid',
+                ['tid' => $toolId]
+            );
+
+            $out = [];
+            foreach ($rows as $r) {
+                $id = isset($r['id']) ? (int) $r['id'] : 0;
+                if ($id > 0) {
+                    $out[] = $id;
+                }
+            }
+
+            return $out;
+        } catch (Throwable $e) {
+            $this->log('getResourceTypeIdsByToolTitle: query failed', [
+                'tool_title' => $toolTitle,
+                'exception' => $e->getMessage(),
+            ]);
+
+            return [];
+        }
     }
 }

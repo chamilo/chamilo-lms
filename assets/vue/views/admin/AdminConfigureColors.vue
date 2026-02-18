@@ -7,6 +7,7 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import ColorThemePreview from "../../components/admin/ColorThemePreview.vue"
 import ColorThemeForm from "../../components/admin/ColorThemeForm.vue"
 import BrandingSection from "../../components/admin/BrandingSection.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 
 const { t } = useI18n()
@@ -33,10 +34,16 @@ function goBranding() {
     id="top"
     class="admin-colors"
   >
-    <SectionHeader :title="t('Configure Chamilo colors')" />
+    <SectionHeader :title="t('Configure Chamilo colors')">
+      <BaseButton
+        :label="t('Go to branding (logos)')"
+        icon="customize"
+        @click="goBranding"
+      />
+    </SectionHeader>
 
-    <div class="sticky top-0 z-10 bg-white/75 backdrop-blur-sm border-b border-gray-100 shadow-sm py-2 mb-6">
-      <div class="flex flex-wrap items-center gap-2 px-3">
+    <div class="section-header section-header--h2">
+      <div class="flex flex-wrap items-center gap-2">
         <span
           class="inline-flex items-center rounded-full bg-gray-50 border border-gray-200 text-gray-700 px-2.5 py-1 text-xs"
         >
@@ -49,26 +56,17 @@ function goBranding() {
           {{ t("Visual theme (assets)") }}:
           <code class="ml-1">{{ effectiveSlug }}</code>
         </span>
-
-        <button
-          class="btn btn--primary btn--small ml-auto"
-          @click="goBranding"
-        >
-          {{ t("Go to branding (logos)") }}
-        </button>
       </div>
 
       <div
         v-if="showDefaultWarning"
-        class="px-3 mt-2"
+        class="rounded-md border border-amber-200 bg-amber-50 text-amber-900 text-xs p-2"
       >
-        <div class="rounded-md border border-amber-200 bg-amber-50 text-amber-900 text-xs p-2">
-          {{
-            t(
-              "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults.",
-            )
-          }}
-        </div>
+        {{
+          t(
+            "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults.",
+          )
+        }}
       </div>
     </div>
 

@@ -1,8 +1,8 @@
 <?php
 
-/* For licensing terms, see /license.txt */
-
 declare(strict_types=1);
+
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\State;
 
@@ -28,9 +28,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 final class UserCourseSubscriptionsStateProvider implements ProviderInterface
 {
-    private const DEFAULT_ITEMS_PER_PAGE = 20;
-    private const MAX_ITEMS_PER_PAGE = 100;
-
     public function __construct(
         private readonly UserHelper $userHelper,
         private readonly AccessUrlHelper $accessUrlHelper,
@@ -96,9 +93,24 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
             return [];
         }
 
+        $courseIds = [];
+        foreach ($items as $cru) {
+            $courseId = (int) $cru->getCourse()->getId();
+            if ($courseId > 0) {
+                $courseIds[] = $courseId;
+            }
+        }
+        $courseIds = array_values(array_unique($courseIds));
+
+        // Teachers per course (User[]).
+        $teacherUsersByCourseId = [];
+        if (!empty($courseIds)) {
+            $teacherUsersByCourseId = $this->courseRelUserRepository->getTeacherUsersByCourseIds($courseIds);
+        }
+
         $userId = (int) $currentUser->getId();
 
-        // Build buckets by session id when available (defensive, keeps compatibility).
+        // Build buckets by session id when available (defensive).
         $courseIdsBySid = [];
 
         foreach ($items as $cru) {
@@ -108,8 +120,6 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
             }
 
             $sid = 0;
-
-            // Not all installs expose session on CourseRelUser. Be defensive.
             if (method_exists($cru, 'getSession') && $cru->getSession()) {
                 $sid = (int) $cru->getSession()->getId();
             } elseif (method_exists($cru, 'getSessionId')) {
@@ -133,7 +143,6 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
                 continue;
             }
 
-            // Returns array keyed by (string) courseId.
             $batchBySid[$sid] = $this->courseStudentInfoHelper->getStudentInfoBatchForCourses(
                 $userId,
                 $ids,
@@ -141,7 +150,6 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
             );
         }
 
-        // Per-request cache for requirements checks to avoid repeated work.
         $requirementsCache = [];
 
         foreach ($items as $cru) {
@@ -150,6 +158,27 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
                 continue;
             }
 
+            // Teachers per course (User[]).
+            $teacherUsers = $teacherUsersByCourseId[$courseId] ?? [];
+
+            // Guard against non-object results.
+            $teacherUsers = array_values(array_filter($teacherUsers, static fn ($t): bool => $t instanceof User));
+
+            $seenTeacherIds = [];
+            $normalizedTeachers = [];
+
+            foreach ($teacherUsers as $teacher) {
+                /** @var User $teacher */
+                $tid = (int) $teacher->getId();
+                if ($tid <= 0 || isset($seenTeacherIds[$tid])) {
+                    continue;
+                }
+
+                $seenTeacherIds[$tid] = true;
+                $normalizedTeachers[] = $this->normalizeTeacher($teacher);
+            }
+
+            $cru->setTeachersLite($normalizedTeachers);
             $sid = 0;
             if (method_exists($cru, 'getSession') && $cru->getSession()) {
                 $sid = (int) $cru->getSession()->getId();
@@ -157,7 +186,7 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
                 $sid = (int) $cru->getSessionId();
             }
 
-            // Hydrate student-info fields (existing logic).
+            // Student-info fields
             $stats = $batchBySid[$sid][(string) $courseId] ?? null;
             if (\is_array($stats)) {
                 $cru->setTrackingProgress($stats['progress'] ?? null);
@@ -169,8 +198,7 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
                 $cru->setHasNewContent($stats['hasNewContent'] ?? null);
             }
 
-            // Hydrate lightweight course requirements flags (no graph, no list).
-            // Teachers should not be locked by requirements in UI lists.
+            // Requirements flags
             if (CourseRelUser::STUDENT !== (int) $cru->getStatus()) {
                 $cru->setHasRequirements(false);
                 $cru->setAllowSubscription(true);
@@ -222,5 +250,33 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
         }
 
         return $items;
+    }
+
+    private function normalizeTeacher(User $u): array
+    {
+        $id = (int) $u->getId();
+
+        $fullName = '';
+        if (method_exists($u, 'getCompleteName')) {
+            $fullName = (string) $u->getCompleteName();
+        } else {
+            $fullName = trim((string) ($u->getFirstname() ?? '').' '.(string) ($u->getLastname() ?? ''));
+        }
+
+        $illustrationUrl = '';
+        if (method_exists($u, 'getIllustrationUrl')) {
+            $illustrationUrl = (string) $u->getIllustrationUrl();
+        } elseif (method_exists($u, 'getIllustration')) {
+            $illustrationUrl = (string) $u->getIllustration();
+        }
+
+        return [
+            'id' => $id,
+            '@id' => '/api/users/'.$id,
+            'username' => (string) $u->getUsername(),
+            'fullName' => $fullName !== '' ? $fullName : (string) $u->getUsername(),
+            'illustrationUrl' => $illustrationUrl,
+            'roleLabel' => 'Teacher',
+        ];
     }
 }

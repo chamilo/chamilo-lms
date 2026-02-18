@@ -163,6 +163,10 @@ class CourseRelUser implements Stringable
     #[Groups(['course_rel_user:read'])]
     private ?bool $allowSubscription = null;
 
+    #[ApiProperty(readable: true, writable: false)]
+    #[Groups(['course_rel_user:read', 'my_courses:read'])]
+    private array $teachersLite = [];
+
     public function __construct()
     {
         $this->progress = 0;
@@ -399,5 +403,17 @@ class CourseRelUser implements Stringable
     public function setAllowSubscription(?bool $allowSubscription): void
     {
         $this->allowSubscription = $allowSubscription;
+    }
+
+    public function getTeachersLite(): array
+    {
+        return $this->teachersLite;
+    }
+
+    public function setTeachersLite(array $teachersLite): self
+    {
+        $this->teachersLite = $teachersLite;
+
+        return $this;
     }
 }

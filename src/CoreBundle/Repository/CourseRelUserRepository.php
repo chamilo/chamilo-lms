@@ -58,4 +58,59 @@ class CourseRelUserRepository extends ServiceEntityRepository
             ->getSingleScalarResult()
         ;
     }
+
+    /**
+     * Returns teachers grouped by courseId.
+     *
+     * Output:
+     * [
+     *   12 => [User, User, ...],
+     *   45 => [User, ...],
+     * ]
+     */
+    public function getTeacherUsersByCourseIds(array $courseIds, ?int $sessionId = null): array
+    {
+        $courseIds = array_values(array_unique(array_filter(array_map('intval', $courseIds), static fn (int $id) => $id > 0)));
+        if (empty($courseIds)) {
+            return [];
+        }
+
+        $qb = $this->createQueryBuilder('cru')
+            ->innerJoin('cru.course', 'c')->addSelect('c')
+            ->innerJoin('cru.user', 'u')->addSelect('u')
+            ->andWhere('c.id IN (:courseIds)')
+            ->andWhere('cru.status = :teacher')
+            ->setParameter('courseIds', $courseIds)
+            ->setParameter('teacher', CourseRelUser::TEACHER);
+
+        if (null !== $sessionId && $sessionId > 0) {
+            $meta = $this->getClassMetadata();
+            if ($meta->hasAssociation('session')) {
+                $qb->andWhere('cru.session = :sid')->setParameter('sid', $sessionId);
+            } elseif ($meta->hasField('sessionId')) {
+                $qb->andWhere('cru.sessionId = :sid')->setParameter('sid', $sessionId);
+            }
+        }
+
+        /** @var CourseRelUser[] $crus */
+        $crus = $qb->getQuery()->getResult();
+
+        $out = [];
+        foreach ($crus as $cru) {
+            $courseId = (int) $cru->getCourse()->getId();
+            $user = $cru->getUser();
+            $userId = (int) $user->getId();
+
+            if ($courseId <= 0 || $userId <= 0) {
+                continue;
+            }
+            $out[$courseId][$userId] = $user;
+        }
+
+        foreach ($out as $cid => $usersById) {
+            $out[$cid] = array_values($usersById);
+        }
+
+        return $out;
+    }
 }

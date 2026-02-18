@@ -76,7 +76,6 @@ import Loading from "../../../components/Loading.vue"
 import { usePlatformConfig } from "../../../store/platformConfig"
 
 const ME_COURSES_ENDPOINT = "/api/me/courses"
-
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
 const { t } = useI18n()
@@ -195,13 +194,18 @@ const buildMergedCourse = (cru) => {
   const sid = getSessionNumericId(cru)
   const studentInfo = buildStudentInfoFromCru(cru)
 
+  const teachersLite = Array.isArray(cru?.teachersLite)
+    ? cru.teachersLite
+    : Array.isArray(c?.teachersLite)
+      ? c.teachersLite
+      : []
+
   return {
     ...c,
+    teachersLite,
     session: cru?.session ?? c.session ?? null,
     sessionId: sid,
-
     studentInfo,
-
     hasNewContent: studentInfo.hasNewContent,
     completed: studentInfo.completed,
     certificateAvailable: studentInfo.certificateAvailable,
@@ -209,7 +213,6 @@ const buildMergedCourse = (cru) => {
     score: studentInfo.score,
     bestScore: studentInfo.bestScore,
     timeSpentSeconds: studentInfo.timeSpentSeconds,
-
     __key: `${cid || c._id || c.id}:${sid || 0}`,
   }
 }
@@ -282,7 +285,8 @@ const fetchServerPage = async (pageToLoad, { reset = false } = {}) => {
   fetchAbort = new AbortController()
 
   try {
-    const resp = await fetch(buildPagedUrl(pageToLoad), {
+    const url = buildPagedUrl(pageToLoad)
+    const resp = await fetch(url, {
       method: "GET",
       credentials: "same-origin",
       headers: { Accept: "application/ld+json, application/json" },
@@ -297,7 +301,6 @@ const fetchServerPage = async (pageToLoad, { reset = false } = {}) => {
     const data = await resp.json()
     const items = normalizeCollection(data)
 
-    // If the server returns less than PAGE_SIZE, we assume no more pages.
     serverHasMore.value = Array.isArray(items) && items.length >= PAGE_SIZE
     serverPage.value = Math.max(1, Number(pageToLoad) || 1)
 
@@ -319,7 +322,6 @@ const loadMyCourses = async () => {
   loading.value = true
   isInitialLoaded.value = false
 
-  // Reset paging
   serverPage.value = 1
   serverHasMore.value = true
   allCourses.value = []
@@ -367,7 +369,6 @@ watch(
 watch(
   () => allCourses.value.length,
   async () => {
-    // Keep courses in sync
     courses.value = allCourses.value
     await observeLast()
   },

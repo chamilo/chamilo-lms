@@ -15,7 +15,6 @@ async function findAll(params) {
  */
 async function searchUserTags(userIri, searchTerm) {
   return await findAll({
-    user: userIri,
     tag: searchTerm,
   })
 }

@@ -8,6 +8,7 @@
           show-time
           hour-format="24"
           date-format="yy-mm-dd"
+          :step-minute="timeIncrement"
         />
       </div>
       <div class="flex flex-col">
@@ -17,6 +18,7 @@
           show-time
           hour-format="24"
           date-format="yy-mm-dd"
+          :step-minute="timeIncrement"
         />
       </div>
       <Button
@@ -96,11 +98,14 @@ import { useI18n } from "vue-i18n"
 import DatePicker from "primevue/datepicker"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import roomService from "../../services/roomService"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const { t } = useI18n()
+const platformConfigStore = usePlatformConfig()
+const timeIncrement = Number(platformConfigStore.getSetting("platform.timepicker_increment")) || 30
 
 const startDate = ref(new Date())
-const endDate = ref(new Date(Date.now() + 3600000))
+const endDate = ref(new Date(Date.now() + timeIncrement * 60 * 1000))
 const isLoading = ref(false)
 const searched = ref(false)
 const results = ref({ available: [], occupied: [] })

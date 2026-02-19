@@ -9,6 +9,28 @@
 # The admin interface is available at /admin/security/simple-ids.
 #
 # Override any value in your .env (or .env.local for dev) without touching this file.
+#
+# Here are a few safe, harmless GET requests you can paste directly into your
+#  browser (no tools needed) to trigger IDS logging.
+#  Each targets a different pattern group:
+#
+#  XSS — a <script> tag in a query parameter:
+#  https://your-host/?q=<script>alert(1)</script>
+#
+#  SQLi — a UNION SELECT in a query parameter:
+#  https://your-host/?q=UNION+SELECT+1+FROM+users
+#
+#  Path traversal — double ../ in a query parameter:
+#  https://your-host/?file=../../etc/passwd
+#
+#  Scanner probe — accessing a well-known sensitive path:
+#  https://your-host/.env
+#
+#  After hitting any of these, check var/logs/ids/ids_events.log — you should see a line like:
+#
+#  [2026-02-19 14:23:01] [XSS] [IP 127.0.0.1] [URI /?q=%3Cscript%3Ealert(1)%3C%2Fscript%3E] [PARAM q] Detected XSS pattern in param 'q': '<script'
+#
+#  And the admin UI at /admin/security/simple-ids should reflect it in both the table and the "Events by day" chart.
 ##
 
 parameters:

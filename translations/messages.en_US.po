@@ -32707,3 +32707,36 @@ msgstr "Branch type"
 
 msgid "Room"
 msgstr "Room"
+
+msgid "Simple IDS"
+msgstr "Simple IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+
+msgid "All event types"
+msgstr "All event types"
+
+msgid "Events by day (last 7 days)"
+msgstr "Events by day (last 7 days)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Events by type (last 30 days)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Top attacking IPs (last 30 days)"
+
+msgid "Flagged IDS events"
+msgstr "Flagged IDS events"
+
+msgid "No suspicious events detected."
+msgstr "No suspicious events detected."
+
+msgid "Detection type"
+msgstr "Detection type"
+
+msgid "Parameter"
+msgstr "Parameter"
+
+msgid "URI"
+msgstr "URI"

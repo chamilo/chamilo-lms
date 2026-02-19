@@ -1,0 +1,51 @@
+##
+# Chamilo Minimal Intrusion Detection System (IDS)
+#
+# Controls the IntrusionDetectionSubscriber which scans URL query parameters,
+# the request URI and selected HTTP headers for common attack signatures
+# (SQLi, XSS, PathTraversal, CmdInjection, Scanner probes).
+#
+# Events are logged to var/logs/ids/ids_events.log with daily rotation.
+# The admin interface is available at /admin/security/simple-ids.
+#
+# Override any value in your .env (or .env.local for dev) without touching this file.
+#
+# Here are a few safe, harmless GET requests you can paste directly into your
+#  browser (no tools needed) to trigger IDS logging.
+#  Each targets a different pattern group:
+#
+#  XSS — a <script> tag in a query parameter:
+#  https://your-host/?q=<script>alert(1)</script>
+#
+#  SQLi — a UNION SELECT in a query parameter:
+#  https://your-host/?q=UNION+SELECT+1+FROM+users
+#
+#  Path traversal — double ../ in a query parameter:
+#  https://your-host/?file=../../etc/passwd
+#
+#  Scanner probe — accessing a well-known sensitive path:
+#  https://your-host/.env
+#
+#  After hitting any of these, check var/logs/ids/ids_events.log — you should see a line like:
+#
+#  [2026-02-19 14:23:01] [XSS] [IP 127.0.0.1] [URI /?q=%3Cscript%3Ealert(1)%3C%2Fscript%3E] [PARAM q] Detected XSS pattern in param 'q': '<script'
+#
+#  And the admin UI at /admin/security/simple-ids should reflect it in both the table and the "Events by day" chart.
+##
+
+parameters:
+    # Defaults applied when the env vars are absent.
+    env(IDS_ENABLED): 'true'
+    env(IDS_BLOCK): 'false'
+    env(IDS_SECURITY_HEADERS): 'false'
+
+    # IDS_ENABLED: set to 'false' to disable all scanning (logging and headers).
+    chamilo.ids.enabled: '%env(bool:IDS_ENABLED)%'
+
+    # IDS_BLOCK: set to 'true' to reject detected requests with HTTP 400.
+    #            When 'false' (default) suspicious requests are only logged.
+    chamilo.ids.block_on_detection: '%env(bool:IDS_BLOCK)%'
+
+    # IDS_SECURITY_HEADERS: set to 'false' to skip OWASP response-header injection
+    #            (X-Frame-Options, X-Content-Type-Options, Referrer-Policy, etc.).
+    chamilo.ids.security_headers: '%env(bool:IDS_SECURITY_HEADERS)%'

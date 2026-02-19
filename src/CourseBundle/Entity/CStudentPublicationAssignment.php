@@ -13,7 +13,7 @@ use Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_student_publication_assignment')]

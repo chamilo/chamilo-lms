@@ -8,7 +8,7 @@ namespace Chamilo\CoreBundle\ApiResource;
 
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Tool\AbstractTool;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 class CourseTool extends AbstractResource
 {

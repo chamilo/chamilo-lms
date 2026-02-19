@@ -18,7 +18,7 @@ use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\EventListener\UserRelCourseVoteListener;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 /**
  * UserRelCourseVote Entity - Stores user votes for courses.

@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use DateInterval;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'agenda_reminder')]

@@ -19,7 +19,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\State\CBlogAssignAuthorProcessor;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     operations: [

@@ -62,7 +62,6 @@
 <script setup>
 import { computed, defineAsyncComponent, onMounted, onUpdated, provide, ref, watch, watchEffect } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { DefaultApolloClient } from "@vue/apollo-composable"
 import axios from "axios"
 import { capitalize, isEmpty } from "lodash"
 import ConfirmDialog from "primevue/confirmdialog"
@@ -79,7 +78,6 @@ import DashboardLayout from "./components/layout/DashboardLayout.vue"
 import AccessUrlChooserLayout from "./components/layout/AccessUrlChooserLayout.vue"
 import { useMediaElementLoader } from "./composables/mediaElementLoader"
 
-import apolloClient from "./config/apolloClient"
 import { useAccessUrlChooser } from "./composables/accessurl/accessUrlChooser"
 import AccessUrlChooser from "./components/accessurl/AccessUrlChooser.vue"
 import { setLocale } from "./i18n"
@@ -87,8 +85,6 @@ import { useStore } from "vuex"
 
 const vuex = useStore()
 const forbiddenMsg = computed(() => vuex.state.ux?.forbiddenMessage)
-
-provide(DefaultApolloClient, apolloClient)
 
 const route = useRoute()
 const router = useRouter()

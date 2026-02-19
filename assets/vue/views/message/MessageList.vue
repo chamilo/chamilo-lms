@@ -334,9 +334,7 @@ import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseTag from "../../components/basecomponents/BaseTag.vue"
 import Column from "primevue/column"
 import { useConfirm } from "primevue/useconfirm"
-import { useQuery } from "@vue/apollo-composable"
 import { MESSAGE_TYPE_INBOX, MESSAGE_TYPE_SENDER } from "../../constants/entity/message"
-import { GET_USER_MESSAGE_TAGS } from "../../graphql/queries/MessageTag"
 import { useNotification } from "../../composables/notification"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 import { useSecurityStore } from "../../store/securityStore"
@@ -344,6 +342,7 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import InputGroup from "primevue/inputgroup"
 import InputText from "primevue/inputtext"
 import messageRelUserService from "../../services/messagereluser"
+import { findAll as findAllMessageTags } from "../../services/messageTagService"
 import { useMessageReceiverFormatter } from "../../composables/message/messageFormatter"
 import { usePlatformConfig } from "../../store/platformConfig"
 
@@ -423,13 +422,7 @@ const goToCompose = () => {
   })
 }
 
-const { result: messageTagsResult } = useQuery(
-  GET_USER_MESSAGE_TAGS,
-  { user: securityStore.user["@id"] },
-  { fetchPolicy: "cache-and-network" },
-)
-
-const tags = computed(() => messageTagsResult.value?.messageTags?.edges.map(({ node }) => node) ?? [])
+const tags = ref([])
 
 const items = computed(() => store.getters["message/getRecents"])
 const isLoading = computed(() => store.getters["message/isLoading"])
@@ -698,6 +691,10 @@ function onResetSearch() {
 
   loadMessages()
 }
+
+findAllMessageTags({ pagination: false })
+  .then((messageTags) => (tags.value = messageTags))
+  .catch(notification.showErrorNotification)
 
 let onMessageRead
 

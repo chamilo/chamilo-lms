@@ -1,25 +1,24 @@
 import baseService from "./baseService"
 
 /**
- * @param {Object} params
- * @returns {Promise<{totalItems, items}>}
+ * @param {Object} [params]
+ * @returns {Promise<Object[]>}
  */
-async function findAll(params) {
-  return await baseService.getCollection("/api/message_tags", params)
+export async function findAll(params = {}) {
+  const { items } = await baseService.getCollection("/api/message_tags", params)
+
+  return items
 }
 
 /**
- * @param {string} userIri
  * @param {string} searchTerm
  * @returns {Promise<{totalItems, items}>}
  */
-async function searchUserTags(userIri, searchTerm) {
-  return await findAll({
+export async function searchUserTags(searchTerm) {
+  const { items } = await findAll({
     tag: searchTerm,
+    pagination: false,
   })
-}
 
-export default {
-  findAll,
-  searchUserTags,
+  return items
 }

@@ -167,7 +167,7 @@ import BaseChip from "../../components/basecomponents/BaseChip.vue"
 import BaseAutocomplete from "../../components/basecomponents/BaseAutocomplete.vue"
 import { useFormatDate } from "../../composables/formatDate"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
-import messageTagService from "../../services/messageTagService"
+import { searchUserTags } from "../../services/messageTagService"
 import messageRelUserService from "../../services/messagereluser"
 import { useSecurityStore } from "../../store/securityStore"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
@@ -322,7 +322,7 @@ const foundTag = ref("")
 async function onSearchTags(query) {
   isLoadingSelect.value = true
 
-  const { items } = await messageTagService.searchUserTags(securityStore.user["@id"], query)
+  const items = await searchUserTags(query)
 
   if (!items.length) {
     items.push({ tag: query })

@@ -38,6 +38,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: [
         'groups' => ['message_tag:write'],
     ],
+    paginationClientEnabled: true,
     security: 'is_granted("ROLE_USER") or object.user == user'
 )]
 #[UniqueEntity(

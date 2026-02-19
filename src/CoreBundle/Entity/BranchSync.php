@@ -6,21 +6,56 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Repository\BranchSyncRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * BranchSync.
  */
+#[ApiResource(
+    shortName: 'Branch',
+    operations: [
+        new GetCollection(
+            normalizationContext: ['groups' => ['branch:list']],
+        ),
+        new Get(
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            normalizationContext: ['groups' => ['branch:read']],
+        ),
+        new Post(
+            security: "is_granted('ROLE_ADMIN')",
+            denormalizationContext: ['groups' => ['branch:write']],
+        ),
+        new Put(
+            security: "is_granted('ROLE_ADMIN')",
+            denormalizationContext: ['groups' => ['branch:write']],
+        ),
+        new Delete(
+            security: "is_granted('ROLE_ADMIN')",
+        ),
+    ],
+)]
+#[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
 #[ORM\Table(name: 'branch_sync')]
 #[ORM\Entity(repositoryClass: BranchSyncRepository::class)]
 #[Gedmo\Tree(type: 'nested')]
 class BranchSync
 {
+    #[Groups(['branch:list', 'branch:read', 'room:list', 'room:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -30,54 +65,82 @@ class BranchSync
     #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id')]
     protected AccessUrl $url;
 
+    #[Groups(['branch:read'])]
     #[ORM\Column(name: 'unique_id', type: 'string', length: 50, nullable: false, unique: true)]
     protected string $uniqueId;
 
+    #[Groups(['branch:list', 'branch:read', 'branch:write', 'room:list', 'room:read'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 250)]
     #[ORM\Column(name: 'title', type: 'string', length: 250)]
     protected string $title;
 
+    #[Groups(['branch:read', 'branch:write'])]
+    #[Assert\Length(max: 2000)]
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
+    #[Assert\Length(max: 40)]
     #[ORM\Column(name: 'branch_ip', type: 'string', length: 40, nullable: true, unique: false)]
     protected ?string $branchIp = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
+    #[Assert\Range(min: -90, max: 90)]
     #[ORM\Column(name: 'latitude', type: 'decimal', nullable: true, unique: false)]
     protected ?string $latitude = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
+    #[Assert\Range(min: -180, max: 180)]
     #[ORM\Column(name: 'longitude', type: 'decimal', nullable: true, unique: false)]
     protected ?string $longitude = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
     #[ORM\Column(name: 'dwn_speed', type: 'integer', nullable: true, unique: false)]
     protected ?int $dwnSpeed = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
     #[ORM\Column(name: 'up_speed', type: 'integer', nullable: true, unique: false)]
     protected ?int $upSpeed = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
     #[ORM\Column(name: 'delay', type: 'integer', nullable: true, unique: false)]
     protected ?int $delay = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
+    #[Assert\Email]
+    #[Assert\Length(max: 250)]
     #[ORM\Column(name: 'admin_mail', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $adminMail = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
+    #[Assert\Length(max: 250)]
     #[ORM\Column(name: 'admin_name', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $adminName = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
+    #[Assert\Length(max: 40)]
+    #[Assert\Regex(pattern: '/^[\d\s\+\-\(\)\.]*$/', message: 'Only digits, spaces, +, -, (, ), and . are allowed.')]
     #[ORM\Column(name: 'admin_phone', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $adminPhone = null;
 
+    #[Groups(['branch:read'])]
     #[ORM\Column(name: 'last_sync_trans_id', type: 'integer', nullable: true, unique: false)]
     protected ?int $lastSyncTransId = null;
 
+    #[Groups(['branch:read'])]
     #[ORM\Column(name: 'last_sync_trans_date', type: 'datetime', nullable: true, unique: false)]
     protected ?DateTime $lastSyncTransDate = null;
 
+    #[Groups(['branch:read'])]
     #[ORM\Column(name: 'last_sync_type', type: 'string', length: 20, nullable: true, unique: false)]
     protected ?string $lastSyncType = null;
 
+    #[Groups(['branch:read'])]
     #[ORM\Column(name: 'ssl_pub_key', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $sslPubKey;
 
+    #[Groups(['branch:read'])]
     #[ORM\Column(name: 'branch_type', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $branchType = null;
 
@@ -97,6 +160,7 @@ class BranchSync
     #[ORM\Column(name: 'root', type: 'integer', nullable: true, unique: false)]
     protected ?int $root = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
     #[Gedmo\TreeParent]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'SET NULL')]

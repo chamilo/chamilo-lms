@@ -84,6 +84,12 @@ class IndexBlocksController extends BaseController
                 'extraContent' => $this->getExtraContent('block-admin-courses'),
             ];
 
+            $json['rooms'] = [
+                'id' => 'block-admin-rooms',
+                'editable' => false,
+                'items' => $this->getItemsRooms(),
+            ];
+
             $json['platform'] = [
                 'id' => 'block-admin-platform',
                 'searchUrl' => $this->generateUrl('chamilo_platform_settings_search'),
@@ -1054,5 +1060,26 @@ class IndexBlocksController extends BaseController
         ];
 
         return $items;
+    }
+
+    private function getItemsRooms(): array
+    {
+        return [
+            [
+                'class' => 'item-branch-list',
+                'route' => ['name' => 'BranchList'],
+                'label' => $this->translator->trans('Branches'),
+            ],
+            [
+                'class' => 'item-room-list',
+                'route' => ['name' => 'RoomList'],
+                'label' => $this->translator->trans('Rooms'),
+            ],
+            [
+                'class' => 'item-room-availability',
+                'route' => ['name' => 'RoomAvailability'],
+                'label' => $this->translator->trans('Room availability finder'),
+            ],
+        ];
     }
 }

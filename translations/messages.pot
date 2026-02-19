@@ -32492,3 +32492,129 @@ msgstr ""
 
 msgid "Current authentication method"
 msgstr ""
+
+msgid "Branches"
+msgstr ""
+
+msgid "Rooms"
+msgstr ""
+
+msgid "Room availability finder"
+msgstr ""
+
+msgid "New branch"
+msgstr ""
+
+msgid "New room"
+msgstr ""
+
+msgid "Branch"
+msgstr ""
+
+msgid "Default room"
+msgstr ""
+
+msgid "Room occupation: %s"
+msgstr ""
+
+msgid "Find available rooms"
+msgstr ""
+
+msgid "Available rooms"
+msgstr ""
+
+msgid "Occupied rooms"
+msgstr ""
+
+msgid "No available rooms found for this time range"
+msgstr ""
+
+msgid "No rooms have been created yet"
+msgstr ""
+
+msgid "Courses linked to %s"
+msgstr ""
+
+msgid "No branches have been created yet"
+msgstr ""
+
+msgid "Occupation"
+msgstr ""
+
+msgid "Cannot delete branch with rooms attached"
+msgstr ""
+
+msgid "Cannot delete room with courses attached"
+msgstr ""
+
+msgid "Conflicts"
+msgstr ""
+
+msgid "Geolocation"
+msgstr ""
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr ""
+
+msgid "IPv4 or IPv6"
+msgstr ""
+
+msgid "IP mask"
+msgstr ""
+
+msgid "e.g. /24"
+msgstr ""
+
+msgid "Parent branch"
+msgstr ""
+
+msgid "Unique identifier"
+msgstr ""
+
+msgid "Latitude"
+msgstr ""
+
+msgid "e.g. 48.8566"
+msgstr ""
+
+msgid "Longitude"
+msgstr ""
+
+msgid "e.g. 2.3522"
+msgstr ""
+
+msgid "Download speed (KB/s)"
+msgstr ""
+
+msgid "Upload speed (KB/s)"
+msgstr ""
+
+msgid "Delay (ms)"
+msgstr ""
+
+msgid "admin@example.com"
+msgstr ""
+
+msgid "Administrator name"
+msgstr ""
+
+msgid "Administrator phone number"
+msgstr ""
+
+msgid "ID of last synch transaction"
+msgstr ""
+
+msgid "Time of last synchronization"
+msgstr ""
+
+msgid "Last synchronization type"
+msgstr ""
+
+msgid "SSL public key"
+msgstr ""
+
+msgid "Branch type"
+msgstr ""
+
+msgid "Room"
+msgstr ""

@@ -237,6 +237,30 @@ $form->applyFilter('department_url', 'trim');
 
 $form->addSelectLanguage('course_language', get_lang('Course language'));
 
+// Room.
+$em = Database::getManager();
+$courseEntityForDefaults = api_get_course_entity($courseId);
+$roomCount = $em->getRepository(\Chamilo\CoreBundle\Entity\Room::class)->count([]);
+if ($roomCount > 0) {
+    $roomOptions = [];
+    if ($courseEntityForDefaults && $courseEntityForDefaults->getRoom()) {
+        $currentRoom = $courseEntityForDefaults->getRoom();
+        $branch = $currentRoom->getBranch();
+        $roomLabel = $branch ? $branch->getTitle().' - '.$currentRoom->getTitle() : $currentRoom->getTitle();
+        $roomOptions[$currentRoom->getId()] = $roomLabel;
+        $courseInfo['room_id'] = $currentRoom->getId();
+    }
+    $form->addSelectAjax(
+        'room_id',
+        get_lang('Default room'),
+        $roomOptions,
+        [
+            'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_room',
+            'placeholder' => get_lang('Select'),
+        ]
+    );
+}
+
 CourseManager::addVisibilityOptions($form);
 
 $group = [];
@@ -388,6 +412,13 @@ if ($form->validate()) {
 
     if (isset($course['duration'])) {
         $courseEntity->setDuration($course['duration']);
+    }
+
+    if (!empty($course['room_id'])) {
+        $room = $em->find(\Chamilo\CoreBundle\Entity\Room::class, (int) $course['room_id']);
+        $courseEntity->setRoom($room ?: null);
+    } else {
+        $courseEntity->setRoom(null);
     }
 
     $em->persist($courseEntity);

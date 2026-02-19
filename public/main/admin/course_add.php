@@ -122,6 +122,21 @@ if (1 === count($languages)) {
     $form->addSelectLanguage('course_language', get_lang('Language'));
 }
 
+// Room.
+$em = Database::getManager();
+$roomCount = $em->getRepository(\Chamilo\CoreBundle\Entity\Room::class)->count([]);
+if ($roomCount > 0) {
+    $form->addSelectAjax(
+        'room_id',
+        get_lang('Default room'),
+        [],
+        [
+            'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_room',
+            'placeholder' => get_lang('Select'),
+        ]
+    );
+}
+
 // Template field (UI)
 if ($globalTemplateId > 0) {
     // Enforce global template without exposing selector.
@@ -267,6 +282,14 @@ if ($form->validate()) {
 
     $course = CourseManager::create_course($courseData);
     if (null !== $course) {
+        if (!empty($courseData['room_id'])) {
+            $room = $em->find(\Chamilo\CoreBundle\Entity\Room::class, (int) $courseData['room_id']);
+            if ($room) {
+                $course->setRoom($room);
+                $em->persist($course);
+                $em->flush();
+            }
+        }
         header('Location: course_list.php?new_course_id=' . $course->getId());
         exit;
     }

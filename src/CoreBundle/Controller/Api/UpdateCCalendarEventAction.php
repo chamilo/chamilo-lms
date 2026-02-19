@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\AgendaReminder;
+use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
@@ -36,6 +37,17 @@ class UpdateCCalendarEventAction extends BaseResourceFileAction
             // ->setAllDay($result['allDay'] ?? false)
             ->setCollective($result['collective'] ?? false)
         ;
+
+        if (isset($result['room'])) {
+            if (!empty($result['room'])) {
+                $roomIri = $result['room'];
+                $roomId = (int) preg_replace('/.*\/(\d+)$/', '$1', $roomIri);
+                $room = $em->find(Room::class, $roomId);
+                $calendarEvent->setRoom($room);
+            } else {
+                $calendarEvent->setRoom(null);
+            }
+        }
 
         $calendarEvent->getReminders()->clear();
 

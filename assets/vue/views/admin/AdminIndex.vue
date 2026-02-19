@@ -85,6 +85,16 @@
     />
 
     <AdminBlock
+      v-if="blockRooms"
+      :id="blockRooms.id"
+      v-model:extra-content="blockRooms.extraContent"
+      :editable="blockRooms.editable"
+      :items="blockRooms.items"
+      :title="t('Rooms')"
+      icon="seat"
+    />
+
+    <AdminBlock
       v-if="blockSettings"
       :id="blockSettings.id"
       v-model:extra-content="blockSettings.extraContent"
@@ -294,6 +304,7 @@ const {
   blockSupportStatusEl,
   blockPlugins,
   blockHealthCheck,
+  blockRooms,
 } = useIndexBlocks()
 
 function checkVersionOnSubmit() {

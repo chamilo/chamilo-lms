@@ -388,6 +388,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      */
     // protected $curriculumCategories;
 
+    #[Groups(['course:read', 'course:write'])]
     #[ORM\ManyToOne(targetEntity: Room::class)]
     #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id')]
     protected ?Room $room;
@@ -971,7 +972,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->room;
     }
 
-    public function setRoom(Room $room): self
+    public function setRoom(?Room $room): self
     {
         $this->room = $room;
 

@@ -32581,3 +32581,129 @@ msgstr "If you did not register this account, you can ignore this e-mail. No act
 
 msgid "Current authentication method"
 msgstr "Current authentication method"
+
+msgid "Branches"
+msgstr "Branches"
+
+msgid "Rooms"
+msgstr "Rooms"
+
+msgid "Room availability finder"
+msgstr "Room availability finder"
+
+msgid "New branch"
+msgstr "New branch"
+
+msgid "New room"
+msgstr "New room"
+
+msgid "Branch"
+msgstr "Branch"
+
+msgid "Default room"
+msgstr "Default room"
+
+msgid "Room occupation: %s"
+msgstr "Room occupation: %s"
+
+msgid "Find available rooms"
+msgstr "Find available rooms"
+
+msgid "Available rooms"
+msgstr "Available rooms"
+
+msgid "Occupied rooms"
+msgstr "Occupied rooms"
+
+msgid "No available rooms found for this time range"
+msgstr "No available rooms found for this time range"
+
+msgid "No rooms have been created yet"
+msgstr "No rooms have been created yet"
+
+msgid "Courses linked to %s"
+msgstr "Courses linked to %s"
+
+msgid "No branches have been created yet"
+msgstr "No branches have been created yet"
+
+msgid "Occupation"
+msgstr "Occupation"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Cannot delete branch with rooms attached"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Cannot delete room with courses attached"
+
+msgid "Conflicts"
+msgstr "Conflicts"
+
+msgid "Geolocation"
+msgstr "Geolocation"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 or IPv6"
+
+msgid "IP mask"
+msgstr "IP mask"
+
+msgid "e.g. /24"
+msgstr "e.g. /24"
+
+msgid "Parent branch"
+msgstr "Parent branch"
+
+msgid "Unique identifier"
+msgstr "Unique identifier"
+
+msgid "Latitude"
+msgstr "Latitude"
+
+msgid "e.g. 48.8566"
+msgstr "e.g. 48.8566"
+
+msgid "Longitude"
+msgstr "Longitude"
+
+msgid "e.g. 2.3522"
+msgstr "e.g. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Download speed (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Upload speed (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Delay (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Administrator name"
+
+msgid "Administrator phone number"
+msgstr "Administrator phone number"
+
+msgid "ID of last synch transaction"
+msgstr "ID of last synch transaction"
+
+msgid "Time of last synchronization"
+msgstr "Time of last synchronization"
+
+msgid "Last synchronization type"
+msgstr "Last synchronization type"
+
+msgid "SSL public key"
+msgstr "SSL public key"
+
+msgid "Branch type"
+msgstr "Branch type"
+
+msgid "Room"
+msgstr "Room"

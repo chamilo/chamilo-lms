@@ -1,16 +1,6 @@
 <template>
   <!-- Special / sticky courses -->
-  <div class="mb-8">
-    <StickyCourses />
-    <div
-      aria-hidden="true"
-      class="mt-8 flex items-center gap-4"
-    >
-      <div class="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
-      <div class="h-2 w-2 rounded-full bg-gray-300"></div>
-      <div class="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
-    </div>
-  </div>
+  <StickyCourses />
 
   <!-- Regular courses -->
   <div class="relative min-h-[300px]">

@@ -309,3 +309,12 @@ export default {
     return data
   },
 }
+
+export async function getStickyCourses() {
+  const { items } = await baseService.getCollection("/api/courses", {
+    pagination: false,
+    sticky: true,
+  })
+
+  return items
+}

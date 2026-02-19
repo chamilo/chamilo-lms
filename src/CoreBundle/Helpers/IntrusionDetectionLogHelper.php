@@ -49,7 +49,7 @@ class IntrusionDetectionLogHelper
         $cleanParam = substr(preg_replace('/[\r\n\t\[\]]/', '', $param) ?: '', 0, 60);
         $cleanDetail = substr(preg_replace('/[\r\n]/', ' ', $detail) ?: '', 0, 300);
 
-        $line = sprintf(
+        $line = \sprintf(
             "[%s] [%s] [IP %s] [URI %s] [PARAM %s] %s\n",
             (new DateTime())->format('Y-m-d H:i:s'),
             strtoupper($cleanType),
@@ -99,7 +99,7 @@ class IntrusionDetectionLogHelper
         $offset = ($page - 1) * $pageSize;
 
         return [
-            'items' => array_slice($parsed, $offset, $pageSize),
+            'items' => \array_slice($parsed, $offset, $pageSize),
             'total' => $total,
             'page' => $page,
             'pageSize' => $pageSize,
@@ -109,7 +109,7 @@ class IntrusionDetectionLogHelper
     /**
      * Events count grouped by day for the last $days days.
      *
-     * @return array<string, int>  e.g. ['2024-03-01' => 5, '2024-03-02' => 3]
+     * @return array<string, int> e.g. ['2024-03-01' => 5, '2024-03-02' => 3]
      */
     public function getStatsByDay(int $days = 7): array
     {
@@ -134,7 +134,7 @@ class IntrusionDetectionLogHelper
     /**
      * Events count grouped by attack type for the last $days days.
      *
-     * @return array<string, int>  e.g. ['SQLi' => 10, 'XSS' => 5]
+     * @return array<string, int> e.g. ['SQLi' => 10, 'XSS' => 5]
      */
     public function getStatsByType(int $days = 30): array
     {
@@ -242,7 +242,8 @@ class IntrusionDetectionLogHelper
     }
 
     /**
-     * @param  string[]                                                                                                   $lines
+     * @param string[] $lines
+     *
      * @return array<int, array{date: string, type: string, ip: string, uri: string, param: string, detail: string}>
      */
     private function parseLines(array $lines): array

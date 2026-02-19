@@ -15,6 +15,8 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
+use const PHP_URL_PATH;
+
 /**
  * Minimal in-application Intrusion Detection System.
  *
@@ -39,12 +41,14 @@ class IntrusionDetectionSubscriber implements EventSubscriberInterface
     // Attack pattern definitions
     // -------------------------------------------------------------------------
 
-    /** Patterns applied to URL query-parameter values. */
+    /**
+     * Patterns applied to URL query-parameter values.
+     */
     private const PARAM_PATTERNS = [
         // SQL Injection -------------------------------------------------------
         ['pattern' => '/UNION\s+(ALL\s+)?SELECT\s/i', 'type' => 'SQLi'],
         ['pattern' => '/SELECT\s+[\w\s,*\'`]+\s+FROM\s+\w/i', 'type' => 'SQLi'],
-        ['pattern' => "/'\s*(OR|AND)\s+'?[\d']/i", 'type' => 'SQLi'],
+        ['pattern' => "/'\\s*(OR|AND)\\s+'?[\\d']/i", 'type' => 'SQLi'],
         ['pattern' => '/\bSLEEP\s*\(\s*\d+\s*\)/i', 'type' => 'SQLi'],
         ['pattern' => '/\bBENCHMARK\s*\(\s*\d+/i', 'type' => 'SQLi'],
         ['pattern' => '/;\s*(SELECT|UPDATE|INSERT|DELETE|DROP|CREATE|ALTER|TRUNCATE|EXEC)\s/i', 'type' => 'SQLi'],
@@ -61,8 +65,8 @@ class IntrusionDetectionSubscriber implements EventSubscriberInterface
         ['pattern' => '/data\s*:\s*text\/html/i', 'type' => 'XSS'],
 
         // Path traversal ------------------------------------------------------
-        ['pattern' => '/(?:\.\.[\\/]){2,}/', 'type' => 'PathTraversal'],             // ../../
-        ['pattern' => '/%2e%2e[%\\/]/i', 'type' => 'PathTraversal'],                 // %2e%2e/
+        ['pattern' => '/(?:\.\.[\/]){2,}/', 'type' => 'PathTraversal'],             // ../../
+        ['pattern' => '/%2e%2e[%\/]/i', 'type' => 'PathTraversal'],                 // %2e%2e/
         ['pattern' => '/%252e%252e/i', 'type' => 'PathTraversal'],                   // double-encoded
         ['pattern' => '/\/etc\/(?:passwd|shadow|group|hosts)\b/', 'type' => 'PathTraversal'],
         ['pattern' => '/[Cc]:[\\\\\/](?:Windows|Users|Program Files)/', 'type' => 'PathTraversal'],
@@ -74,11 +78,13 @@ class IntrusionDetectionSubscriber implements EventSubscriberInterface
         ['pattern' => '/\|\s*(?:ls|cat|id|whoami|bash|sh|python)\s/i', 'type' => 'CmdInjection'],
     ];
 
-    /** Patterns applied to the raw request URI (path + query string). */
+    /**
+     * Patterns applied to the raw request URI (path + query string).
+     */
     private const URI_PATTERNS = [
         // Path traversal in URI
-        ['pattern' => '/(?:\.\.[\\/]){2,}/', 'type' => 'PathTraversal'],
-        ['pattern' => '/%2e%2e[%\\/]/i', 'type' => 'PathTraversal'],
+        ['pattern' => '/(?:\.\.[\/]){2,}/', 'type' => 'PathTraversal'],
+        ['pattern' => '/%2e%2e[%\/]/i', 'type' => 'PathTraversal'],
         ['pattern' => '/%252e%252e/i', 'type' => 'PathTraversal'],
         // Common sensitive-file probes
         ['pattern' => '/\/\.git\/(?:config|HEAD|COMMIT_EDITMSG)/i', 'type' => 'Scanner'],
@@ -89,7 +95,9 @@ class IntrusionDetectionSubscriber implements EventSubscriberInterface
         ['pattern' => '/\/(?:\.htaccess|\.htpasswd|web\.config)\b/i', 'type' => 'Scanner'],
     ];
 
-    /** Patterns applied to the User-Agent header only. */
+    /**
+     * Patterns applied to the User-Agent header only.
+     */
     private const UA_PATTERNS = [
         ['pattern' => '/sqlmap/i', 'type' => 'Scanner'],
         ['pattern' => '/nikto/i', 'type' => 'Scanner'],
@@ -103,7 +111,9 @@ class IntrusionDetectionSubscriber implements EventSubscriberInterface
         ['pattern' => '/havij/i', 'type' => 'Scanner'],
     ];
 
-    /** Patterns applied to the Referer header. */
+    /**
+     * Patterns applied to the Referer header.
+     */
     private const REFERER_PATTERNS = [
         ['pattern' => '/<script[^>]*>/i', 'type' => 'XSS'],
         ['pattern' => '/javascript\s*:/i', 'type' => 'XSS'],
@@ -219,7 +229,8 @@ class IntrusionDetectionSubscriber implements EventSubscriberInterface
      * Match a value against a list of pattern definitions.
      * Returns ['type' => ..., 'match' => ...] for the first match, or null.
      *
-     * @param  array<int, array{pattern: string, type: string}> $patterns
+     * @param array<int, array{pattern: string, type: string}> $patterns
+     *
      * @return array{type: string, match: string}|null
      */
     private function matchPatterns(string $value, array $patterns): ?array

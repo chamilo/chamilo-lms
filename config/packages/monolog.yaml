@@ -9,7 +9,12 @@ when@dev:
                 type: stream
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
                 level: debug
-                channels: ["!event", "!doctrine", "!security"]
+                channels: ["!event", "!doctrine", "!security", "!deprecation"]
+            deprecation:
+                type: stream
+                path: "%kernel.logs_dir%/%kernel.environment%.deprecations.log"
+                level: warning
+                channels: [deprecation]
             # uncomment to get logging in your browser
             # you may have to allow bigger header sizes in your Web server configuration
             #firephp:

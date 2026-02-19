@@ -36,8 +36,9 @@ Chamilo offers a wide range of features, including:
 - Plugins for advanced features
 - Quizzes (20+ question types, random selection with categories, adaptative tests, time limits, co-creation with AI, proctoring tools integration, ...)
 - Roles and permissions management (beta)
+- Rooms and branches for in-person courses
 - SCORM 1.2, QTI, LTI, xAPI CMI 5, Aiken, and other standards compliant formats
-- Security features (password policy and rotation, 2FA/MFA authentication, HSTS, regular updates, ...)
+- Security features (password policy and rotation, 2FA/MFA authentication, HSTS, regular updates, IDS, ...)
 - Sessions management (re-use courses multiple times, add structure to long-term courses management chaos)
 - Skills management (create, edit, delete, assign to users, scale/levels of acquisition, ...)
 - Student profiles (edit personal data, change password, subscribe to push notifications, ...)

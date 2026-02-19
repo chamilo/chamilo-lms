@@ -55,6 +55,9 @@ async function updateItem(formData) {
       title: formData.title,
       description: formData.description,
       branch: formData.branch,
+      geolocation: formData.geolocation || null,
+      ip: formData.ip || null,
+      ipMask: formData.ipMask || null,
     })
     toast.add({ severity: "success", detail: t("{resource} updated", { resource: formData["@id"] }), life: 3500 })
     router.push({ name: "RoomList" })

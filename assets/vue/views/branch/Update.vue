@@ -51,7 +51,20 @@ onMounted(async () => {
 async function updateItem(formData) {
   isLoading.value = true
   try {
-    await baseService.put(formData["@id"], { title: formData.title, description: formData.description })
+    await baseService.put(formData["@id"], {
+      title: formData.title,
+      description: formData.description,
+      parent: formData.parent || null,
+      branchIp: formData.branchIp || null,
+      latitude: formData.latitude || null,
+      longitude: formData.longitude || null,
+      dwnSpeed: formData.dwnSpeed ?? null,
+      upSpeed: formData.upSpeed ?? null,
+      delay: formData.delay ?? null,
+      adminMail: formData.adminMail || null,
+      adminName: formData.adminName || null,
+      adminPhone: formData.adminPhone || null,
+    })
     toast.add({ severity: "success", detail: t("{resource} updated", { resource: formData["@id"] }), life: 3500 })
     router.push({ name: "BranchList" })
   } catch (e) {

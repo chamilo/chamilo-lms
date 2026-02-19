@@ -64,6 +64,7 @@ class BranchSync
     #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id')]
     protected AccessUrl $url;
 
+    #[Groups(['branch:read'])]
     #[ORM\Column(name: 'unique_id', type: 'string', length: 50, nullable: false, unique: true)]
     protected string $uniqueId;
 
@@ -75,45 +76,59 @@ class BranchSync
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
     #[ORM\Column(name: 'branch_ip', type: 'string', length: 40, nullable: true, unique: false)]
     protected ?string $branchIp = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
     #[ORM\Column(name: 'latitude', type: 'decimal', nullable: true, unique: false)]
     protected ?string $latitude = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
     #[ORM\Column(name: 'longitude', type: 'decimal', nullable: true, unique: false)]
     protected ?string $longitude = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
     #[ORM\Column(name: 'dwn_speed', type: 'integer', nullable: true, unique: false)]
     protected ?int $dwnSpeed = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
     #[ORM\Column(name: 'up_speed', type: 'integer', nullable: true, unique: false)]
     protected ?int $upSpeed = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
     #[ORM\Column(name: 'delay', type: 'integer', nullable: true, unique: false)]
     protected ?int $delay = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
     #[ORM\Column(name: 'admin_mail', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $adminMail = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
     #[ORM\Column(name: 'admin_name', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $adminName = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
     #[ORM\Column(name: 'admin_phone', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $adminPhone = null;
 
+    #[Groups(['branch:read'])]
     #[ORM\Column(name: 'last_sync_trans_id', type: 'integer', nullable: true, unique: false)]
     protected ?int $lastSyncTransId = null;
 
+    #[Groups(['branch:read'])]
     #[ORM\Column(name: 'last_sync_trans_date', type: 'datetime', nullable: true, unique: false)]
     protected ?DateTime $lastSyncTransDate = null;
 
+    #[Groups(['branch:read'])]
     #[ORM\Column(name: 'last_sync_type', type: 'string', length: 20, nullable: true, unique: false)]
     protected ?string $lastSyncType = null;
 
+    #[Groups(['branch:read'])]
     #[ORM\Column(name: 'ssl_pub_key', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $sslPubKey;
 
+    #[Groups(['branch:read'])]
     #[ORM\Column(name: 'branch_type', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $branchType = null;
 
@@ -133,6 +148,7 @@ class BranchSync
     #[ORM\Column(name: 'root', type: 'integer', nullable: true, unique: false)]
     protected ?int $root = null;
 
+    #[Groups(['branch:read', 'branch:write'])]
     #[Gedmo\TreeParent]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'SET NULL')]

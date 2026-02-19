@@ -25,7 +25,44 @@
       option-value="id"
     />
 
-    <div class="text-right">
+    <div class="mt-4">
+      <button
+        type="button"
+        class="flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+        @click="showAdvanced = !showAdvanced"
+      >
+        <i :class="showAdvanced ? 'mdi mdi-chevron-up' : 'mdi mdi-chevron-down'" />
+        {{ t("Advanced settings") }}
+      </button>
+
+      <div
+        v-if="showAdvanced"
+        class="mt-4 flex flex-col gap-2 border-l-2 border-gray-200 pl-4"
+      >
+        <BaseInputText
+          id="item_geolocation"
+          v-model="v$.item.geolocation.$model"
+          :label="t('Geolocation')"
+          :placeholder="t('Latitude, Longitude (e.g. 48.8566, 2.3522)')"
+        />
+
+        <BaseInputText
+          id="item_ip"
+          v-model="v$.item.ip.$model"
+          :label="t('IP address')"
+          :placeholder="t('IPv4 or IPv6')"
+        />
+
+        <BaseInputText
+          id="item_ip_mask"
+          v-model="v$.item.ipMask.$model"
+          :label="t('IP mask')"
+          :placeholder="t('e.g. /24')"
+        />
+      </div>
+    </div>
+
+    <div class="text-right mt-4">
       <Button
         :disabled="v$.item.$invalid"
         :label="t('Save')"
@@ -55,6 +92,7 @@ const emit = defineEmits(["update:modelValue", "submit"])
 const { t } = useI18n()
 
 const branchOptions = ref([])
+const showAdvanced = ref(false)
 
 onMounted(async () => {
   try {
@@ -73,6 +111,9 @@ const validations = {
     title: { required },
     description: {},
     branch: { required },
+    geolocation: {},
+    ip: {},
+    ipMask: {},
   },
 }
 
@@ -86,6 +127,10 @@ watch(
 
     if (newValue.branch && typeof newValue.branch === "object" && newValue.branch["@id"]) {
       emit("update:modelValue", { ...newValue, branch: newValue.branch["@id"] })
+    }
+
+    if (newValue.geolocation || newValue.ip || newValue.ipMask) {
+      showAdvanced.value = true
     }
   },
   { immediate: true },

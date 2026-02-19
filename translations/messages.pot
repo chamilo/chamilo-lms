@@ -32546,3 +32546,78 @@ msgstr ""
 
 msgid "Conflicts"
 msgstr ""
+
+msgid "Advanced settings"
+msgstr ""
+
+msgid "Geolocation"
+msgstr ""
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr ""
+
+msgid "IP address"
+msgstr ""
+
+msgid "IPv4 or IPv6"
+msgstr ""
+
+msgid "IP mask"
+msgstr ""
+
+msgid "e.g. /24"
+msgstr ""
+
+msgid "Parent branch"
+msgstr ""
+
+msgid "Unique identifier"
+msgstr ""
+
+msgid "Latitude"
+msgstr ""
+
+msgid "e.g. 48.8566"
+msgstr ""
+
+msgid "Longitude"
+msgstr ""
+
+msgid "e.g. 2.3522"
+msgstr ""
+
+msgid "Download speed (KB/s)"
+msgstr ""
+
+msgid "Upload speed (KB/s)"
+msgstr ""
+
+msgid "Delay (ms)"
+msgstr ""
+
+msgid "Administrator e-mail"
+msgstr ""
+
+msgid "admin@example.com"
+msgstr ""
+
+msgid "Administrator name"
+msgstr ""
+
+msgid "Administrator phone number"
+msgstr ""
+
+msgid "ID of last synch transaction"
+msgstr ""
+
+msgid "Time of last synchronization"
+msgstr ""
+
+msgid "Last synchronization type"
+msgstr ""
+
+msgid "SSL public key"
+msgstr ""
+
+msgid "Branch type"
+msgstr ""

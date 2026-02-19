@@ -234,10 +234,12 @@ onMounted(async () => {
     const hasRooms = await roomService.exists()
     if (hasRooms) {
       const { items } = await baseService.getCollection("/api/rooms")
-      roomOptions.value = items.map((r) => ({
-        name: r.title,
-        id: r["@id"],
-      }))
+      roomOptions.value = items.map((r) => {
+        const branch = r.branch
+        const branchTitle = branch && typeof branch === "object" ? branch.title : null
+        const label = branchTitle ? `${branchTitle} - ${r.title}` : r.title
+        return { name: label, id: r["@id"] }
+      })
     }
   } catch (error) {
     console.error("Failed to load rooms", error)

@@ -50,7 +50,7 @@ class RoomOccupationController extends BaseController
         $colorIndex = 0;
 
         foreach ($courses as $course) {
-            $color = $colors[$colorIndex % count($colors)];
+            $color = $colors[$colorIndex % \count($colors)];
             $colorIndex++;
 
             // Find CAttendance linked to this course via resource links

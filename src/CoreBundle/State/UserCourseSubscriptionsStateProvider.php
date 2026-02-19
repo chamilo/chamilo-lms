@@ -274,7 +274,7 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
             'id' => $id,
             '@id' => '/api/users/'.$id,
             'username' => (string) $u->getUsername(),
-            'fullName' => $fullName !== '' ? $fullName : (string) $u->getUsername(),
+            'fullName' => '' !== $fullName ? $fullName : (string) $u->getUsername(),
             'illustrationUrl' => $illustrationUrl,
             'roleLabel' => 'Teacher',
         ];

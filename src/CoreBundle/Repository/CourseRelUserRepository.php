@@ -81,7 +81,8 @@ class CourseRelUserRepository extends ServiceEntityRepository
             ->andWhere('c.id IN (:courseIds)')
             ->andWhere('cru.status = :teacher')
             ->setParameter('courseIds', $courseIds)
-            ->setParameter('teacher', CourseRelUser::TEACHER);
+            ->setParameter('teacher', CourseRelUser::TEACHER)
+        ;
 
         if (null !== $sessionId && $sessionId > 0) {
             $meta = $this->getClassMetadata();

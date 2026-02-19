@@ -173,8 +173,7 @@
         "twig/intl-extra": "^3.0",
         "twig/twig": "^3.0",
         "vich/uploader-bundle": "^2.8",
-        "webit/eval-math": "^1.0",
-        "webonyx/graphql-php": "^14.8"
+        "webit/eval-math": "^1.0"
     },
     "extra": {
         "symfony": {

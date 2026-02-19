@@ -74,6 +74,10 @@ security:
             jwt: ~
             context: main
             provider: app_user_provider
+            # set throttling through the rate-limit package (uses Lock for persistence, see config/packages/lock.yaml)
+            login_throttling:
+                max_attempts: 10
+                interval: '1 minute'
             json_login:
                 check_path: /api/authentication_token
                 success_handler: lexik_jwt_authentication.handler.authentication_success
@@ -87,8 +91,10 @@ security:
             pattern: ^/
             context: main
             provider: app_user_provider
-#            login_throttling:
-#                max_attempts: 5
+            # set throttling through the rate-limit package (uses Lock for persistence, see config/packages/lock.yaml)
+            login_throttling:
+                max_attempts: 5
+                interval: '1 minute'
             #            form_login:
             #                csrf_token_generator: security.csrf.token_manager
             #                login_path: /login

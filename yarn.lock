@@ -2896,7 +2896,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/qs@npm:*, @types/qs@npm:^6.14.0":
+"@types/qs@npm:*":
   version: 6.14.0
   resolution: "@types/qs@npm:6.14.0"
   checksum: 10c0/5b3036df6e507483869cdb3858201b2e0b64b4793dc4974f188caa5b5732f2333ab9db45c08157975054d3b070788b35088b4bc60257ae263885016ee2131310
@@ -4633,7 +4633,6 @@ __metadata:
     "@tinymce/tinymce-vue": "npm:^5.1.1"
     "@types/d3": "npm:^7.4.3"
     "@types/lodash": "npm:^4.17.23"
-    "@types/qs": "npm:^6.14.0"
     "@uppy/audio": "npm:^2.2.2"
     "@uppy/core": "npm:^4.5.3"
     "@uppy/dashboard": "npm:^4.4.3"
@@ -4714,7 +4713,6 @@ __metadata:
     primevue: "npm:^4.5.4"
     purgecss-webpack-plugin: "npm:^7.0.2"
     pwstrength-bootstrap: "npm:3.1.3"
-    qs: "npm:^6.15.0"
     qtip2: "npm:3.0.3"
     readmore-js: "npm:^2.2.1"
     recordrtc: "npm:^5.6.2"
@@ -9652,15 +9650,6 @@ __metadata:
     bootstrap: ">=2.0.0"
     jquery: ">=1.7.0"
   checksum: 10c0/5e19def59998bcf1ada989f73da581e95a1211eac224293e2cc8c471ee66d2607c566a0c0faff9510b5cbd2553bc5e53d393af03e263c4e498145a70848d1081
-  languageName: node
-  linkType: hard
-
-"qs@npm:^6.15.0":
-  version: 6.15.0
-  resolution: "qs@npm:6.15.0"
-  dependencies:
-    side-channel: "npm:^1.1.0"
-  checksum: 10c0/ff341078a78a991d8a48b4524d52949211447b4b1ad907f489cac0770cbc346a28e47304455c0320e5fb000f8762d64b03331e3b71865f663bf351bcba8cdb4b
   languageName: node
   linkType: hard
 

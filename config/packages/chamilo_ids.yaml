@@ -15,7 +15,7 @@ parameters:
     # Defaults applied when the env vars are absent.
     env(IDS_ENABLED): 'true'
     env(IDS_BLOCK): 'false'
-    env(IDS_SECURITY_HEADERS): 'true'
+    env(IDS_SECURITY_HEADERS): 'false'
 
     # IDS_ENABLED: set to 'false' to disable all scanning (logging and headers).
     chamilo.ids.enabled: '%env(bool:IDS_ENABLED)%'

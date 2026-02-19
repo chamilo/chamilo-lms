@@ -4551,7 +4551,7 @@ __metadata:
     litepicker: "npm:^2.0.12"
     lodash: "npm:^4.17.23"
     luxon: "npm:^2.5.2"
-    mathjax: "npm:^2.7.9"
+    mathjax: "npm:^3.0.0"
     mediaelement: "npm:^7.1.0"
     mediaelement-plugins: "git+https://github.com/AngelFQC/mediaelement-plugins.git#0bbb4eaad7673725b94ab955bba1790c8a4ddc3c"
     mini-css-extract-plugin: "npm:^2.10.0"
@@ -4584,7 +4584,7 @@ __metadata:
     textcomplete: "npm:^0.18.2"
     timeago: "npm:^1.6.7"
     timepicker: "npm:^1.14.1"
-    tinymce: "npm:^5.10.9"
+    tinymce: "npm:^7.2.0"
     ts-loader: "npm:^9.5.4"
     typescript: "npm:^5.9.3"
     video.js: "npm:^7.21.7"
@@ -7724,10 +7724,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mathjax@npm:^2.7.9":
-  version: 2.7.9
-  resolution: "mathjax@npm:2.7.9"
-  checksum: 10c0/fb2da4c34000d11e43844f0ebdec09a5e9e4be748e9d3eadc1fde5318746adf635680ec1b7aa33a8a31f82eff4c2428082c9e36e409da0cb214dffa9fd51273b
+"mathjax@npm:^3.0.0":
+  version: 3.2.2
+  resolution: "mathjax@npm:3.2.2"
+  checksum: 10c0/26c8557f948d1ef76ce2b0bc1ad66128c9a78a7e4f3d96587f90b23dd25cfbf14c9b58a1c75a7d8d35f92b72bab054eab61873443babe646b7bfd6b40bb717e6
   languageName: node
   linkType: hard
 
@@ -10438,15 +10438,15 @@ __metadata:
   linkType: hard
 
 "tar@npm:^7.5.2":
-  version: 7.5.7
-  resolution: "tar@npm:7.5.7"
+  version: 7.5.9
+  resolution: "tar@npm:7.5.9"
   dependencies:
     "@isaacs/fs-minipass": "npm:^4.0.0"
     chownr: "npm:^3.0.0"
     minipass: "npm:^7.1.2"
     minizlib: "npm:^3.1.0"
     yallist: "npm:^5.0.0"
-  checksum: 10c0/51f261afc437e1112c3e7919478d6176ea83f7f7727864d8c2cce10f0b03a631d1911644a567348c3063c45abdae39718ba97abb073d22aa3538b9a53ae1e31c
+  checksum: 10c0/e870beb1b2477135ca2abe86b2d18f7b35d0a4e3a37bbc523d3b8f7adca268dfab543f26528a431d569897f8c53a7cac745cdfbc4411c2f89aeeacc652b81b0a
   languageName: node
   linkType: hard
 
@@ -10575,17 +10575,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tinymce@npm:^5.10.9":
-  version: 5.10.9
-  resolution: "tinymce@npm:5.10.9"
-  checksum: 10c0/8b0d8602259d54ab89ffbf7bc4ea08f1bb35fa1f523748358d22550fed1abbffda3a2168af7c7a562a6bb8828c1c9dedb41e8ed1cd63b21a00f31ef39e708443
-  languageName: node
-  linkType: hard
-
 "tinymce@npm:^6.0.0 || ^5.5.1":
   version: 6.8.6
   resolution: "tinymce@npm:6.8.6"
   checksum: 10c0/69d48677366fa95dc7126f8474db92f2903ebc8b1f287541ac0c3a19e9fcd0eee8515278d6424a4a4c9fb7e6313de985c00dc37fcaa01ae676139634d793e2ee
+  languageName: node
+  linkType: hard
+
+"tinymce@npm:^7.2.0":
+  version: 7.9.2
+  resolution: "tinymce@npm:7.9.2"
+  checksum: 10c0/38a79ab73295683bdbf0c2f94f0d905e14016b93a6a0de1e18b1ed30ea19bb94c75006cff24f3d1a49da3fbd5826904212ee0cc6275283f3ec2cac488ef4dc16
   languageName: node
   linkType: hard
 

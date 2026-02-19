@@ -7,7 +7,10 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Room;
+use Chamilo\CourseBundle\Entity\CAttendance;
+use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,7 +28,7 @@ class RoomOccupationController extends BaseController
 
         return $this->json([
             'title' => $room->getTitle(),
-            'branchTitle' => $branch ? $branch->getTitle() : null,
+            'branchTitle' => $branch?->getTitle(),
         ]);
     }
 
@@ -38,7 +41,7 @@ class RoomOccupationController extends BaseController
         // Find all courses assigned to this room
         $courses = $em->createQueryBuilder()
             ->select('c.id, c.title')
-            ->from('Chamilo\CoreBundle\Entity\Course', 'c')
+            ->from(Course::class, 'c')
             ->where('c.room = :room')
             ->setParameter('room', $room->getId())
             ->getQuery()
@@ -56,7 +59,7 @@ class RoomOccupationController extends BaseController
             // Find CAttendance linked to this course via resource links
             $attendances = $em->createQueryBuilder()
                 ->select('a.iid, a.title')
-                ->from('Chamilo\CourseBundle\Entity\CAttendance', 'a')
+                ->from(CAttendance::class, 'a')
                 ->innerJoin('a.resourceNode', 'rn')
                 ->innerJoin('rn.resourceLinks', 'rl')
                 ->where('rl.course = :courseId')
@@ -69,13 +72,13 @@ class RoomOccupationController extends BaseController
                 // Get calendar entries in the date range
                 $calendars = $em->createQueryBuilder()
                     ->select('cal.iid, cal.dateTime, cal.duration')
-                    ->from('Chamilo\CourseBundle\Entity\CAttendanceCalendar', 'cal')
+                    ->from(CAttendanceCalendar::class, 'cal')
                     ->where('cal.attendance = :attendanceId')
                     ->andWhere('cal.dateTime >= :start')
                     ->andWhere('cal.dateTime <= :end')
                     ->setParameter('attendanceId', $attendance['iid'])
-                    ->setParameter('start', $start)
-                    ->setParameter('end', $end)
+                    ->setParameter('start', $start->format('Y-m-d H:i:s'))
+                    ->setParameter('end', $end->format('Y-m-d H:i:s'))
                     ->getQuery()
                     ->getArrayResult()
                 ;

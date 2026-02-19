@@ -7,6 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Room;
+use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,7 +29,7 @@ class RoomAvailabilityController extends BaseController
         // Get all rooms with their branches
         $rooms = $em->createQueryBuilder()
             ->select('r.id, r.title, b.id AS branchId, b.title AS branchTitle')
-            ->from('Chamilo\CoreBundle\Entity\Room', 'r')
+            ->from(Room::class, 'r')
             ->leftJoin('r.branch', 'b')
             ->orderBy('r.title', 'ASC')
             ->getQuery()
@@ -40,7 +43,7 @@ class RoomAvailabilityController extends BaseController
             // Find courses assigned to this room
             $courses = $em->createQueryBuilder()
                 ->select('c.id, c.title')
-                ->from('Chamilo\CoreBundle\Entity\Course', 'c')
+                ->from(Course::class, 'c')
                 ->where('c.room = :room')
                 ->setParameter('room', $room['id'])
                 ->getQuery()
@@ -53,14 +56,14 @@ class RoomAvailabilityController extends BaseController
                 // Find attendance calendars that overlap with the requested range
                 $calendars = $em->createQueryBuilder()
                     ->select('cal.iid, cal.dateTime, cal.duration, a.title AS attendanceTitle')
-                    ->from('Chamilo\CourseBundle\Entity\CAttendanceCalendar', 'cal')
+                    ->from(CAttendanceCalendar::class, 'cal')
                     ->innerJoin('cal.attendance', 'a')
                     ->innerJoin('a.resourceNode', 'rn')
                     ->innerJoin('rn.resourceLinks', 'rl')
                     ->where('rl.course = :courseId')
                     ->andWhere('cal.dateTime < :end')
                     ->setParameter('courseId', $course['id'])
-                    ->setParameter('end', $end)
+                    ->setParameter('end', $end->format('Y-m-d H:i:s'))
                     ->getQuery()
                     ->getArrayResult()
                 ;

@@ -57,8 +57,8 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
             ->innerJoin('cur.url', 'u')
             ->andWhere('cru.user = :user')
             ->andWhere('u = :url')
-            ->setParameter('user', $currentUser)
-            ->setParameter('url', $url)
+            ->setParameter('user', $currentUser->getId())
+            ->setParameter('url', $url->getId())
             ->addOrderBy('cru.sort', 'ASC')
             ->addOrderBy('c.title', 'ASC')
         ;
@@ -103,6 +103,7 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
         $courseIds = array_values(array_unique($courseIds));
 
         // Teachers per course (User[]).
+        /** @var array<int, array<int, User>> $teacherUsersByCourseId */
         $teacherUsersByCourseId = [];
         if (!empty($courseIds)) {
             $teacherUsersByCourseId = $this->courseRelUserRepository->getTeacherUsersByCourseIds($courseIds);
@@ -162,13 +163,13 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
             $teacherUsers = $teacherUsersByCourseId[$courseId] ?? [];
 
             // Guard against non-object results.
+            /** @var array<int, User> $teacherUsers */
             $teacherUsers = array_values(array_filter($teacherUsers, static fn ($t): bool => $t instanceof User));
 
             $seenTeacherIds = [];
             $normalizedTeachers = [];
 
             foreach ($teacherUsers as $teacher) {
-                /** @var User $teacher */
                 $tid = (int) $teacher->getId();
                 if ($tid <= 0 || isset($seenTeacherIds[$tid])) {
                     continue;

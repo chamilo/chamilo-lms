@@ -1325,7 +1325,7 @@ final class CourseStudentInfoHelper
                 ->select('gc.id')
                 ->from(GradebookCategory::class, 'gc')
                 ->andWhere('gc.course = :course')
-                ->setParameter('course', $course)
+                ->setParameter('course', $course->getId())
                 // Root category: parent is NULL, but support legacy parent_id=0 safely
                 ->andWhere('(gc.parent IS NULL OR IDENTITY(gc.parent) = 0)')
             ;

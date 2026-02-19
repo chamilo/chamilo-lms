@@ -20,7 +20,6 @@ api_platform:
         yaml: ['application/x-yaml']
         csv: ['text/csv']
         html: ['text/html']
-        graphql: ['application/graphql']
 
     collection:
         pagination:
@@ -56,6 +55,8 @@ api_platform:
     keep_legacy_inflector: false
 
     graphql:
+        graphiql:
+            enabled: false
         graphql_playground:
             enabled: false
 

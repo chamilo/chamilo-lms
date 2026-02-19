@@ -148,11 +148,6 @@ services:
       factory: [ '@Chamilo\CoreBundle\AiProvider\AiProviderFactory', 'getProvider' ]
       arguments: [ 'deepseek' ]
 
-    api_platform.graphql.executor:
-      class: Chamilo\CoreBundle\GraphQL\LoggingExecutor
-      arguments:
-        $logger: '@logger'
-
     Chamilo\CourseBundle\Repository\CAttendanceCalendarRepository:
       arguments:
         $registry: '@doctrine'

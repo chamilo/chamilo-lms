@@ -32618,3 +32618,36 @@ msgstr ""
 
 msgid "Room"
 msgstr ""
+
+msgid "Simple IDS"
+msgstr ""
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr ""
+
+msgid "All event types"
+msgstr ""
+
+msgid "Events by day (last 7 days)"
+msgstr ""
+
+msgid "Events by type (last 30 days)"
+msgstr ""
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr ""
+
+msgid "Flagged IDS events"
+msgstr ""
+
+msgid "No suspicious events detected."
+msgstr ""
+
+msgid "Detection type"
+msgstr ""
+
+msgid "Parameter"
+msgstr ""
+
+msgid "URI"
+msgstr ""

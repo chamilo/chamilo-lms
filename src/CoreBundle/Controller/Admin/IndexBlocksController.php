@@ -190,6 +190,11 @@ class IndexBlocksController extends BaseController
                 'url' => $this->generateUrl('admin_security_login_attempts'),
                 'label' => $this->translator->trans('Login attempts'),
             ],
+            [
+                'class' => 'item-security-simple-ids',
+                'url' => $this->generateUrl('admin_security_simple_ids'),
+                'label' => $this->translator->trans('Simple IDS'),
+            ],
         ];
     }
 

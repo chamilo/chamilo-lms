@@ -91,7 +91,7 @@
       :editable="blockRooms.editable"
       :items="blockRooms.items"
       :title="t('Rooms')"
-      icon="seat"
+      icon="room"
     />
 
     <AdminBlock

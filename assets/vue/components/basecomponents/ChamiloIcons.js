@@ -162,4 +162,5 @@ export const chamiloIconToClass = {
   "compass": "mdi mdi-compass-outline",
   "globe": "mdi mdi-web",
   "notification": "mdi mdi-bell",
+  "room": "mdi mdi-seat",
 }

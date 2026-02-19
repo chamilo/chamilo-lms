@@ -32636,17 +32636,11 @@ msgstr "Cannot delete room with courses attached"
 msgid "Conflicts"
 msgstr "Conflicts"
 
-msgid "Advanced settings"
-msgstr "Advanced settings"
-
 msgid "Geolocation"
 msgstr "Geolocation"
 
 msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
 msgstr "Latitude, Longitude (e.g. 48.8566, 2.3522)"
-
-msgid "IP address"
-msgstr "IP address"
 
 msgid "IPv4 or IPv6"
 msgstr "IPv4 or IPv6"
@@ -32683,9 +32677,6 @@ msgstr "Upload speed (KB/s)"
 
 msgid "Delay (ms)"
 msgstr "Delay (ms)"
-
-msgid "Administrator e-mail"
-msgstr "Administrator e-mail"
 
 msgid "admin@example.com"
 msgstr "admin@example.com"

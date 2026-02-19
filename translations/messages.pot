@@ -32547,16 +32547,10 @@ msgstr ""
 msgid "Conflicts"
 msgstr ""
 
-msgid "Advanced settings"
-msgstr ""
-
 msgid "Geolocation"
 msgstr ""
 
 msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
-msgstr ""
-
-msgid "IP address"
 msgstr ""
 
 msgid "IPv4 or IPv6"
@@ -32593,9 +32587,6 @@ msgid "Upload speed (KB/s)"
 msgstr ""
 
 msgid "Delay (ms)"
-msgstr ""
-
-msgid "Administrator e-mail"
 msgstr ""
 
 msgid "admin@example.com"

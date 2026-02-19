@@ -85,16 +85,6 @@
     />
 
     <AdminBlock
-      v-if="blockRooms"
-      :id="blockRooms.id"
-      v-model:extra-content="blockRooms.extraContent"
-      :editable="blockRooms.editable"
-      :items="blockRooms.items"
-      :title="t('Rooms')"
-      icon="room"
-    />
-
-    <AdminBlock
       v-if="blockSettings"
       :id="blockSettings.id"
       v-model:extra-content="blockSettings.extraContent"
@@ -103,6 +93,16 @@
       :items="blockSettings.items"
       :title="t('System')"
       icon="settings"
+    />
+
+    <AdminBlock
+      v-if="blockRooms"
+      :id="blockRooms.id"
+      v-model:extra-content="blockRooms.extraContent"
+      :editable="blockRooms.editable"
+      :items="blockRooms.items"
+      :title="t('Rooms')"
+      icon="room"
     />
 
     <AdminBlock
@@ -117,14 +117,13 @@
     />
 
     <AdminBlock
-      v-if="blockChamilo"
-      :id="blockChamilo.id"
-      v-model:extra-content="blockChamilo.extraContent"
-      :description="t('Learn more about Chamilo and its use, official references links')"
-      :editable="blockChamilo.editable"
-      :items="blockChamilo.items"
-      icon="promotion"
-      title="Chamilo.org"
+      v-if="blockPrivacy"
+      :id="blockPrivacy.id"
+      v-model:extra-content="blockPrivacy.extraContent"
+      :editable="blockPrivacy.editable"
+      :items="blockPrivacy.items"
+      :title="t('Personal data protection')"
+      icon="anonymous"
     />
 
     <AdminBlock
@@ -136,13 +135,14 @@
     />
 
     <AdminBlock
-      v-if="blockPrivacy"
-      :id="blockPrivacy.id"
-      v-model:extra-content="blockPrivacy.extraContent"
-      :editable="blockPrivacy.editable"
-      :items="blockPrivacy.items"
-      :title="t('Personal data protection')"
-      icon="anonymous"
+      v-if="blockChamilo"
+      :id="blockChamilo.id"
+      v-model:extra-content="blockChamilo.extraContent"
+      :description="t('Learn more about Chamilo and its use, official references links')"
+      :editable="blockChamilo.editable"
+      :items="blockChamilo.items"
+      icon="promotion"
+      title="Chamilo.org"
     />
 
     <!-- Small / secondary blocks: sent to the bottom -->
